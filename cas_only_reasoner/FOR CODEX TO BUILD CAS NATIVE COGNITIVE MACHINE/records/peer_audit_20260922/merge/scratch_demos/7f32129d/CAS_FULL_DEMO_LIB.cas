@@ -1,0 +1,12 @@
+# Library module: exports reusable cognitive primitives
+# Demonstrates: export let, export fn, typed params, typed returns
+
+# Two base states, one in Cognitive domain and one in Evaluative.
+export let principle: state[C] = CO-2^C_{F2};
+export let judgment: state[E] = CO-5^E_{F4};
+
+# Reusable typed function: build a dependency relation.
+export fn link(source: state[C], target: state[E]): relation = source -> target;
+
+# Reusable typed function: build a fractal motif from two cognitive states.
+export fn chain(a: state[C], b: state[C]): fractal = a circ b;

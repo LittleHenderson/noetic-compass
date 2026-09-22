@@ -1,0 +1,192 @@
+{
+  "schema": "cas.peer-audit.artifact-manifest/1.0",
+  "audited_source_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "parallel_feature_source_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "scope": "Raw artifact integrity only. Not scientific acceptance or proof of model execution.",
+  "excluded": [
+    "AUDIT_MANIFEST.json",
+    "__pycache__ directories"
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 419,
+      "sha256": "2d5d681011202fc7ad03687277910ac9d31785a45e9cf26fe72d50a5cc443b28"
+    },
+    {
+      "path": "assemble_claims.py",
+      "bytes": 5993,
+      "sha256": "7fbe2607c59df428cb44bfa9dcca6986fd9293c70c368fc16d1db5bee2e2ded2"
+    },
+    {
+      "path": "audit_package.py",
+      "bytes": 6236,
+      "sha256": "3cf33ae5de90b0fe15bc8c2c1a080af5454502810f153644b0617d30b6fab072"
+    },
+    {
+      "path": "book/book_probe.json",
+      "bytes": 119574,
+      "sha256": "5f00c057de76e2f58733c4eb6a58d4bf9d2d18e9db0ca4fdbfa72db3744e3926"
+    },
+    {
+      "path": "book/findings.json",
+      "bytes": 5063,
+      "sha256": "d990e4fa1d580e5437b6c5798f62bb6828e7999b8e8cd64368d1296b4dd2e03d"
+    },
+    {
+      "path": "book/probe_book.py",
+      "bytes": 10728,
+      "sha256": "005e0aabfd4aecf059635b7eb21cfb1401f858165d339b726e83ef9e9dde5cc4"
+    },
+    {
+      "path": "book/REPORT.md",
+      "bytes": 7105,
+      "sha256": "4a4edb62bf2ce5767e1fa1e2f2cf5df6b8fca7182d1754ef72732cea715ebd9e"
+    },
+    {
+      "path": "CLAIM_VERDICTS.json",
+      "bytes": 20855,
+      "sha256": "b08447e0b62cec2d386fe6b82fd70cfce7808bcddf1eb6880ab6eaa6ca2b7f9e"
+    },
+    {
+      "path": "compiler_partial_checkout_tests.xml",
+      "bytes": 66435,
+      "sha256": "4abdce731d8b2ddf0f41ae7db612d630ffedb783abfbabc2f81fd1bc84f1e6e5"
+    },
+    {
+      "path": "compiler_tests.xml",
+      "bytes": 145900,
+      "sha256": "ce96178a05ca7aaae5e4a6aab50cc43190b0f97065a6350c695d004c1df69816"
+    },
+    {
+      "path": "lab_incomplete_sparse_retry_tests.xml",
+      "bytes": 66316,
+      "sha256": "81b09557f3131e232b2449fa0f2ad6a362e019bb8760de78de7aa82f0277b4b0"
+    },
+    {
+      "path": "lab_partial_checkout_tests.xml",
+      "bytes": 66291,
+      "sha256": "34cc21d99ead892b490d11de92bc728cee25a24e66f66c78b16b761c593af692"
+    },
+    {
+      "path": "lab_tests.xml",
+      "bytes": 56096,
+      "sha256": "983eec4436137269c80265c960abd0e8aa6f294d7c42cca98fdd90cceddff409"
+    },
+    {
+      "path": "merge/audit_merge.py",
+      "bytes": 9050,
+      "sha256": "9f12d4b0c3ea16ab9d60c366414cc701a0a334389ba67c57531f3911b949469d"
+    },
+    {
+      "path": "merge/claim_verdicts.json",
+      "bytes": 6638,
+      "sha256": "e119ff43ff31cd53472869b074f38e7c75a03799232ced29291282e27615e461"
+    },
+    {
+      "path": "merge/merge_results.json",
+      "bytes": 365868,
+      "sha256": "33eb71157ab40f6f1d6edca02db531da9c9a58119adf1bc1cbeb0cda06d67633"
+    },
+    {
+      "path": "merge/original_test_canon_7f32129d.py.txt",
+      "bytes": 7043,
+      "sha256": "684c116f901a1bb10999995108189e556a1a6c027d1b7849119a61feac5bba42"
+    },
+    {
+      "path": "merge/original_test_nesting_d50abbbc.py.txt",
+      "bytes": 15921,
+      "sha256": "30b651831351ca494ce6a2d4d9285566568828acee82cc86186e5fae02683757"
+    },
+    {
+      "path": "merge/REPORT.md",
+      "bytes": 6366,
+      "sha256": "ee6daf6315ff56fb48017b4a903078ad24ae1587b6b2c161b49d30a4ddb1bf26"
+    },
+    {
+      "path": "merge/run_receipt.txt",
+      "bytes": 4637,
+      "sha256": "484a633163ba1e8b54a2c380c9d7ca80c7f43e02333ae497318383ea8b0f3fb4"
+    },
+    {
+      "path": "merge/scratch_demos/04547c55/CAS_FULL_DEMO_APP.cas",
+      "bytes": 1088,
+      "sha256": "f0f1df4aeebd3cba3802a4755527639607559a5ab03b9d84d1cea3ef3db8aeaa"
+    },
+    {
+      "path": "merge/scratch_demos/04547c55/CAS_FULL_DEMO_LIB.cas",
+      "bytes": 558,
+      "sha256": "aff5fc5e08e2510773dbf20791dc2d96bda7d622c5c87b4600bcff34b7aad181"
+    },
+    {
+      "path": "merge/scratch_demos/7f32129d/CAS_FULL_DEMO_APP.cas",
+      "bytes": 1086,
+      "sha256": "a1cee0d4d0738c5a850599956b47c4e76c92e8e41956aca2a3f7ae62edf8acc1"
+    },
+    {
+      "path": "merge/scratch_demos/7f32129d/CAS_FULL_DEMO_LIB.cas",
+      "bytes": 559,
+      "sha256": "ab116cee0108031f98a2849765cd4f366bdf4feaa6e0b13adbd8d33a989fa8ad"
+    },
+    {
+      "path": "ohm/audit_ohm.py",
+      "bytes": 15282,
+      "sha256": "46b8f06234908c68b8edc85973cc4b831f6c2f553d6a037805f8e70517ee7d5a"
+    },
+    {
+      "path": "ohm/boundary_failures.txt",
+      "bytes": 14952,
+      "sha256": "ef751c8a3005cb7497b3f348a0cb51e5ff35687a6e060740759a38607bef0c68"
+    },
+    {
+      "path": "ohm/CLAIM_VERDICTS.json",
+      "bytes": 6267,
+      "sha256": "5e85b3bf8d16c6192f0775668f3543146c026aa0d113d2876eb78cde3d995870"
+    },
+    {
+      "path": "ohm/contract_boundary_probes.py",
+      "bytes": 2953,
+      "sha256": "a6242fce13e6896512635b4ec05d4771ad6d733309c2eabc244cf5d67022105f"
+    },
+    {
+      "path": "ohm/FINDINGS.md",
+      "bytes": 12390,
+      "sha256": "b22e3e14b84881c900db1516a785f723bb67bfc7e6b3029b93b2cde12db56a2d"
+    },
+    {
+      "path": "ohm/results.json",
+      "bytes": 111751,
+      "sha256": "1e796e8512397822d3db72a10e7fceb8b740334b2143610ab79007eca0164eff"
+    },
+    {
+      "path": "package_results.json",
+      "bytes": 53069,
+      "sha256": "b7e90b3acc5bb0d1fcd380309bb13b405abd2548dfea2666f9769aa408801e48"
+    },
+    {
+      "path": "parallel_branch_result.json",
+      "bytes": 9994,
+      "sha256": "02a8ca507e36f34463744565ee9bf50909d4911b9adfe6a86025d5fec549a400"
+    },
+    {
+      "path": "probe_parallel_branch.py",
+      "bytes": 2552,
+      "sha256": "4fb409063a6351b2fa6c133294db64523025439017b8084428b03b1de7f7ce79"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 11984,
+      "sha256": "387d6f39f4af32588661e0b14e7165c4ceb231460467412061cf0ee4f7c345fb"
+    },
+    {
+      "path": "REPRODUCE.md",
+      "bytes": 5626,
+      "sha256": "2ca599066669ba3136280b32d9065b9de5aca566101140dc7c86384a0ba7cd7e"
+    },
+    {
+      "path": "verify_manifest.py",
+      "bytes": 1956,
+      "sha256": "3a9c7f07088a2fe8e75e12029e63b1242c069bca188aa64432b71fcf80cf4710"
+    }
+  ]
+}

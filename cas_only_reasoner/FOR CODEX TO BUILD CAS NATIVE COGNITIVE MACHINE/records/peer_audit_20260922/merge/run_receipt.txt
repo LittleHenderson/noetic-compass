@@ -1,0 +1,112 @@
+{
+  "evidence": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\peer_audit_20260922\\merge\\merge_results.json",
+  "missing_parent_paths": 0,
+  "dropped_test_runs": [
+    {
+      "ref": "078d00ed",
+      "test": "test_review_a_deep_flat_chain_fails_cleanly_and_still_serialises",
+      "original_line": 270,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "078d00ed",
+      "test": "test_review_fn_names_are_not_reserved_but_let_names_and_parameters_are",
+      "original_line": 277,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "078d00ed",
+      "test": "test_review_no_cross_domain_warning_when_a_side_has_no_known_domain_at_typecheck",
+      "original_line": 285,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "078d00ed",
+      "test": "test_review_the_worlds_warning_comes_from_the_alias_not_from_the_word",
+      "original_line": 290,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "test": "test_review_a_deep_flat_chain_fails_cleanly_and_still_serialises",
+      "original_line": 270,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "test": "test_review_fn_names_are_not_reserved_but_let_names_and_parameters_are",
+      "original_line": 277,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "test": "test_review_no_cross_domain_warning_when_a_side_has_no_known_domain_at_typecheck",
+      "original_line": 285,
+      "outcome": "PASS"
+    },
+    {
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "test": "test_review_the_worlds_warning_comes_from_the_alias_not_from_the_word",
+      "original_line": 290,
+      "outcome": "PASS"
+    }
+  ],
+  "demo_matrix": [
+    {
+      "compiler": "7f32129d",
+      "demo": "7f32129d",
+      "filename": "CAS_FULL_DEMO_APP.cas",
+      "valid": false,
+      "error": "parsing@333: 'difference' is reserved in CAS notation and cannot be used as a let name. Reserved: domain letters P C E O; register letters T A f E; S (state vector); state refs like P1 and drive tokens like F1 or F_1; keywords let fn use export RPM Phi Y_T Y_A union intersect intersection setminus difference diff; names that start with Theta Omega Lambda kappa iota eta; built-in sets Domains, DriveRegisterPositions, Drives, EmptySet, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7, Foundations, Noetics, Registers, States, SubFoundationPositions, SubFoundations, Worlds"
+    },
+    {
+      "compiler": "7f32129d",
+      "demo": "7f32129d",
+      "filename": "CAS_FULL_DEMO_LIB.cas",
+      "valid": false,
+      "error": "typecheck: function chain return: expected fractal, got state[C]"
+    },
+    {
+      "compiler": "7f32129d",
+      "demo": "04547c55",
+      "filename": "CAS_FULL_DEMO_APP.cas",
+      "valid": true,
+      "error": null
+    },
+    {
+      "compiler": "7f32129d",
+      "demo": "04547c55",
+      "filename": "CAS_FULL_DEMO_LIB.cas",
+      "valid": true,
+      "error": null
+    },
+    {
+      "compiler": "04547c55",
+      "demo": "7f32129d",
+      "filename": "CAS_FULL_DEMO_APP.cas",
+      "valid": false,
+      "error": "parsing@333: 'difference' is reserved in CAS notation and cannot be used as a let name. Reserved: domain letters P C E O; register letters T A f E; S (state vector); state refs like P1 and drive tokens like F1 or F_1; keywords let fn use export RPM Phi Y_T Y_A union intersect intersection setminus difference diff; names that start with Theta Omega Lambda kappa iota eta; built-in sets Domains, DriveRegisterPositions, Drives, EmptySet, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7, Foundations, Noetics, Registers, States, SubFoundationPositions, SubFoundations, Worlds"
+    },
+    {
+      "compiler": "04547c55",
+      "demo": "7f32129d",
+      "filename": "CAS_FULL_DEMO_LIB.cas",
+      "valid": false,
+      "error": "typecheck: function chain return: expected fractal, got state[C]"
+    },
+    {
+      "compiler": "04547c55",
+      "demo": "04547c55",
+      "filename": "CAS_FULL_DEMO_APP.cas",
+      "valid": true,
+      "error": null
+    },
+    {
+      "compiler": "04547c55",
+      "demo": "04547c55",
+      "filename": "CAS_FULL_DEMO_LIB.cas",
+      "valid": true,
+      "error": null
+    }
+  ]
+}

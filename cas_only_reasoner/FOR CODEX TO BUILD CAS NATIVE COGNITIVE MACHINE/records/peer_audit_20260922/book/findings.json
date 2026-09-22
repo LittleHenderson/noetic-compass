@@ -1,0 +1,71 @@
+{
+  "schema": "cas.peer-audit.book-findings/1.0",
+  "frozen_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "canon_pin": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+  "findings": [
+    {
+      "id": "BOOK-AUDIT-1",
+      "priority": "P2",
+      "title": "The canon still gives incompatible rules for CJT breakdown",
+      "new_to_handover": true,
+      "introduced_by_change": "The old unconditional rule remains; OD-A changes Appendix_B to require an explicit rule but does not reconcile the rest of the canon.",
+      "evidence": [
+        "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md:59",
+        "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md:40",
+        "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md:121",
+        "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md:549",
+        "book/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md:101",
+        "book/CAS_PCBA_Engineer/Appendix_G_Glossary.md:47"
+      ],
+      "impact": "A board checker or lesson generator cannot derive one canon-backed breakdown rule. Implementations following different authoritative chapters can return different outcomes.",
+      "recommended_action": "Reconcile the unconditional statements with the explicit-rule requirement, or explicitly document which rule has precedence; keep runtime behavior unimplemented or openly qualified until resolved."
+    },
+    {
+      "id": "BOOK-AUDIT-2",
+      "priority": "P2",
+      "title": "XOR and XNOR have contradictory input-count rules",
+      "new_to_handover": true,
+      "introduced_by_change": "The old XOR arity ambiguity survives; adding XNOR extends the same conflict to a new gate.",
+      "evidence": [
+        "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md:447",
+        "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md:115",
+        "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md:116",
+        "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md:389",
+        "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md:390"
+      ],
+      "impact": "Appendix C permits two or more operands; the chapter and datasheet require two. For three active inputs, a parity XOR and the specified exactly-one predicate also diverge, so silently generalizing cannot preserve both interpretations.",
+      "recommended_action": "Specify whether XOR/XNOR are binary or variadic, and if variadic define their truth functions. Do not infer an owner choice from the two-input correction."
+    },
+    {
+      "id": "BOOK-AUDIT-3",
+      "priority": "P2",
+      "title": "The gain-3 example claims an exact observed result that its equation does not yield",
+      "new_to_handover": true,
+      "introduced_by_change": "Pre-existing and byte-unchanged by OD-A; not an error introduced by the audited agent. It remains a defect in the book being pinned and inspected.",
+      "evidence": [
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:17",
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:25",
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:198",
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:199",
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:211",
+        "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md:213"
+      ],
+      "impact": "The text calls 3 an observed gain and says it is immune to forward-gain drift. Its formula gives 2.401921537229784 at A=12 and feedback=0.333, and 2.3094688221709005 at A=10. Including the displayed 1.5 evaluation stage gives 2.5736345438947668 at A=18, also not 3. The result could be copied into a validator or viewer as measured evidence despite being an approximation.",
+      "recommended_action": "Label the value as a limiting design approximation, use the finite-gain formula for the example, and distinguish predictions from actual recorded measurements."
+    },
+    {
+      "id": "BOOK-AUDIT-4",
+      "priority": "P3",
+      "title": "GOV-3 points the auditor to the wrong refusal document",
+      "new_to_handover": true,
+      "introduced_by_change": "The owner-decision artifact and claim table cite the verification file; the quoted paragraph is in CODEX_CONTINUATION_20260921.md.",
+      "evidence": [
+        "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_package_20260922/01_CLAIMS_TO_CHECK.json:GOV-3",
+        "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json:101",
+        "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/CODEX_CONTINUATION_20260921.md:53"
+      ],
+      "impact": "The specified reproduction path cannot show the quoted refusal. The historical refusal itself is present elsewhere and is not fabricated.",
+      "recommended_action": "Point GOV-3 and OD-9's provenance note at the continuation document. Keep owner-chat authenticity separate from the existence of an agent-authored record."
+    }
+  ]
+}

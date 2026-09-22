@@ -1,5 +1,22 @@
 # tksCAS — Changelog
 
+## 2026-09-22 — Independent audit of parallel CAS work at 626cc84b
+
+Audited the compiler merge, legacy CAS-Ohm hardening, book canon and all 33
+claims from the peer audit package in an isolated checkout. Current suites
+reproduce: 639 compiler cases, 348 lab cases and 51/51 legacy Ohm checks.
+All 125 historical manifest hashes and the cross-repository canon files match.
+Eight independent numeric-boundary probes retain seven failures and one error.
+Four additional passing compiler regression tests remain deleted by the merge,
+beyond the three guards already restored. Book rule conflicts and an unsupported
+observed-gain statement also remain. Numeric defects are inherited gaps, not
+new regressions from the September hardening. No production source, original
+evidence, owner ruling or active peer worktree was changed; no model ran.
+
+Exact scope, attribution, commands, corrected audit setup errors, source hashes,
+per-claim verdicts and negative results:
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/peer_audit_20260922/REPORT.md`.
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - The fourth checker found the worst one: MY MERGE DELETED THREE OF MY OWN CANON
 GUARD TESTS WHILE THEY WERE PASSING. Restored. Two of my five merge-comparison points were FALSE. 458 -> 639.
 

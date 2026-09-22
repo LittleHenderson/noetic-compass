@@ -1,0 +1,187 @@
+{
+  "schema": "cas.peer-audit.parallel-branch/1.0",
+  "commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "board_source": "board audit_board { node a: ^8^C|A; resistor r1: Resistor<a, R=4.00>; }",
+  "board_source_sha256": "598533279d959ab1fd006b9a2339636e33204b2672219a0ed392a3fa7ef5c4cc",
+  "compiler": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\cas_ohm_connections.py",
+  "result": {
+    "schema": "cas.pcba.ohm-resistor-flow/0.1",
+    "status": "CALCULATED_DECLARED_SINGLE_RESISTOR",
+    "board_source_sha256": "598533279d959ab1fd006b9a2339636e33204b2672219a0ed392a3fa7ef5c4cc",
+    "resistor_name": "r1",
+    "resistance_literal": "4.00",
+    "resistor_terminal": "a",
+    "quantity_report": {
+      "kind": "cas_ohm_quantity",
+      "convention": "cas.ohm.declared-linear/0.1",
+      "quantity": "attention",
+      "value": "3",
+      "exact_value": {
+        "numerator": "3",
+        "denominator": "1"
+      },
+      "decimal_is_rounded": false,
+      "unit": "declared_attention",
+      "scale": {
+        "kind": "cas_ohm_scale",
+        "convention": "cas.ohm.declared-linear/0.1",
+        "id": "peer-audit-declared",
+        "drive_unit": "declared_drive",
+        "attention_unit": "declared_attention",
+        "constraint_unit": "(declared_drive)/(declared_attention)",
+        "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+        "calibration_status": "NOT_VERIFIED",
+        "descriptor_sha256": "99f38082d7521a768128b4599300ce31dae43e7914d1eabe7a38ba938b9a33d4"
+      },
+      "origin": "calculated",
+      "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+      "numeric_representation": "exact_rational",
+      "input_literal": null,
+      "operation": "attention_flow",
+      "inputs": [
+        {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "drive",
+          "value": "12",
+          "exact_value": {
+            "numerator": "12",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "declared_drive",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "peer-audit-declared",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "99f38082d7521a768128b4599300ce31dae43e7914d1eabe7a38ba938b9a33d4"
+          },
+          "origin": "design",
+          "reference": "audit:declared-drive",
+          "numeric_representation": "exact_decimal_text",
+          "input_literal": "12",
+          "operation": null,
+          "inputs": [],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "ba22cb5f59e3ec71684de4cd4bc172285ad0e03c800b6fc595711b2ee0618924"
+        },
+        {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "constraint",
+          "value": "4",
+          "exact_value": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "(declared_drive)/(declared_attention)",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "peer-audit-declared",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "99f38082d7521a768128b4599300ce31dae43e7914d1eabe7a38ba938b9a33d4"
+          },
+          "origin": "design",
+          "reference": "audit:declared-resistance",
+          "numeric_representation": "exact_decimal_text",
+          "input_literal": "4.00",
+          "operation": null,
+          "inputs": [],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "097ed12d90d0ea80c833aa80e0a3c45fb3820c9cd3e75e87b6debbef4ecccdf8"
+        }
+      ],
+      "notes": [],
+      "measurement_status": "NO_MEASUREMENT_PERFORMED",
+      "observation_status": "NOT_AN_OBSERVATION",
+      "control_status": "NOT_CONNECTED",
+      "semantic_outcome": "NOT_ASSESSED",
+      "record_sha256": "906b76efbdfc2736cf4ccdedbfdfa72489f63fd6c6a41764ec4dafe932016aec"
+    },
+    "implementation_sha256_lf": {
+      "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    "pcba_check": {
+      "parse_status": "PASS",
+      "structural_status": "PASS",
+      "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+      "sources": {
+        "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+        "implementation_sha256_lf": {
+          "pcba_check.py": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb",
+          "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+          "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+        },
+        "component_frontends": [
+          {
+            "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+            "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+            "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+            "bytes": 7741,
+            "use": "syntax_parser_with_isolated_enum_import"
+          },
+          {
+            "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+            "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+            "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+            "bytes": 4943,
+            "use": "syntax_parser_with_isolated_enum_import"
+          },
+          {
+            "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+            "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+            "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+            "bytes": 5998,
+            "use": "enum_class_only"
+          },
+          {
+            "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+            "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+            "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+            "bytes": 5771,
+            "use": "enum_class_only"
+          }
+        ],
+        "book_authority": {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+          "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+          "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+          "sections": [
+            "Passive Components",
+            "One-Way and Threshold Components",
+            "CJT Parameter Block Grammar"
+          ]
+        }
+      },
+      "diagnostics": []
+    },
+    "topology_status": "NO_SERIES_PARALLEL_OR_TOTAL_INFERENCE",
+    "integration_status": "PREPARATORY_NOT_RUNTIME_CONNECTED",
+    "measurement_status": "NO_MEASUREMENT_PERFORMED",
+    "helm_status": "NOT_TRAINED",
+    "control_status": "NOT_CONNECTED"
+  },
+  "boundary": "Uses the existing declared-scale compiler helper, not api/cas_ohm/quantifiers.py.",
+  "model_execution": "NOT_RUN",
+  "source_changes": "NONE"
+}

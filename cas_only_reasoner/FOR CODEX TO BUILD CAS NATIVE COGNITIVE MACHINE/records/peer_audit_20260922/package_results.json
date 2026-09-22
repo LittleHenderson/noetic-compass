@@ -1,0 +1,1176 @@
+{
+  "schema": "cas.peer-audit.package-check/1.0",
+  "observed_utc": "2026-09-22T16:40:55.614538+00:00",
+  "frozen_source": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "claim_count": 33,
+  "manifest_named_files": 19,
+  "historical_hash_checks": [
+    {
+      "path": "CHANGELOG.md",
+      "ref": "dbb388ee",
+      "expected": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "actual": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "d50abbbc",
+      "expected": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "actual": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "c3855275",
+      "expected": "976a42abe40b799e4dd97798c762f4120d70450b899327a46d8e9bbd58fb00e2",
+      "actual": "976a42abe40b799e4dd97798c762f4120d70450b899327a46d8e9bbd58fb00e2",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "86ba3d75",
+      "expected": "403d93e1e4169da60ddce4656ab9ee0e4be3681230054dc4d3abeb2e82f5472d",
+      "actual": "403d93e1e4169da60ddce4656ab9ee0e4be3681230054dc4d3abeb2e82f5472d",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "078d00ed",
+      "expected": "702ec77843687bb6936aa8b98b0f89c46f7ceb415914cf7692d48c14bd4c8eab",
+      "actual": "702ec77843687bb6936aa8b98b0f89c46f7ceb415914cf7692d48c14bd4c8eab",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "7f32129d",
+      "expected": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "actual": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+      "match": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "ref": "04547c55",
+      "expected": "25bb371bbe9730b6c6ec5c224868d355268c5f93cfc282a2c6117aa18bc39d6c",
+      "actual": "25bb371bbe9730b6c6ec5c224868d355268c5f93cfc282a2c6117aa18bc39d6c",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "dbb388ee",
+      "expected": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "actual": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "d50abbbc",
+      "expected": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "actual": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "c3855275",
+      "expected": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "actual": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "86ba3d75",
+      "expected": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "actual": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "078d00ed",
+      "expected": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "actual": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "7f32129d",
+      "expected": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "actual": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "ref": "04547c55",
+      "expected": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "actual": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "dbb388ee",
+      "expected": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "actual": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "d50abbbc",
+      "expected": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "actual": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "c3855275",
+      "expected": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "actual": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "86ba3d75",
+      "expected": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "actual": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "078d00ed",
+      "expected": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "actual": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "7f32129d",
+      "expected": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "actual": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "ref": "04547c55",
+      "expected": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "actual": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "dbb388ee",
+      "expected": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "actual": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "d50abbbc",
+      "expected": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "actual": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "c3855275",
+      "expected": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "actual": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "86ba3d75",
+      "expected": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "actual": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "078d00ed",
+      "expected": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "actual": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "7f32129d",
+      "expected": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "actual": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "ref": "04547c55",
+      "expected": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "actual": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "dbb388ee",
+      "expected": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "actual": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "d50abbbc",
+      "expected": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "actual": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "c3855275",
+      "expected": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "actual": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "86ba3d75",
+      "expected": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "actual": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "078d00ed",
+      "expected": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "actual": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "7f32129d",
+      "expected": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "actual": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "ref": "04547c55",
+      "expected": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "actual": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "dbb388ee",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "d50abbbc",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "c3855275",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "86ba3d75",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "078d00ed",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "7f32129d",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "ref": "04547c55",
+      "expected": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "dbb388ee",
+      "expected": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "actual": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "d50abbbc",
+      "expected": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "actual": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "c3855275",
+      "expected": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "actual": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "86ba3d75",
+      "expected": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "actual": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "078d00ed",
+      "expected": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "actual": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "7f32129d",
+      "expected": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "actual": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "ref": "04547c55",
+      "expected": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "actual": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "dbb388ee",
+      "expected": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "actual": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "d50abbbc",
+      "expected": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "actual": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "c3855275",
+      "expected": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "actual": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "86ba3d75",
+      "expected": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "actual": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "078d00ed",
+      "expected": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "actual": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "7f32129d",
+      "expected": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "actual": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "ref": "04547c55",
+      "expected": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "actual": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "dbb388ee",
+      "expected": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "actual": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "d50abbbc",
+      "expected": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "actual": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "c3855275",
+      "expected": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "actual": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "86ba3d75",
+      "expected": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "actual": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "078d00ed",
+      "expected": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "actual": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "7f32129d",
+      "expected": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "actual": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "ref": "04547c55",
+      "expected": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "actual": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "dbb388ee",
+      "expected": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "actual": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "d50abbbc",
+      "expected": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "actual": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "c3855275",
+      "expected": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "actual": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "86ba3d75",
+      "expected": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "actual": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "078d00ed",
+      "expected": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "actual": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "7f32129d",
+      "expected": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "actual": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "ref": "04547c55",
+      "expected": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "actual": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "dbb388ee",
+      "expected": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "actual": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "d50abbbc",
+      "expected": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "actual": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "86ba3d75",
+      "expected": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "actual": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "078d00ed",
+      "expected": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "actual": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "7f32129d",
+      "expected": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "actual": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "ref": "04547c55",
+      "expected": "43abe69fc3cb914275d3d0f554f8a1083fba7c1d39ab9f2415a6d43efedaeae8",
+      "actual": "43abe69fc3cb914275d3d0f554f8a1083fba7c1d39ab9f2415a6d43efedaeae8",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md",
+      "ref": "86ba3d75",
+      "expected": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "actual": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md",
+      "ref": "078d00ed",
+      "expected": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "actual": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md",
+      "ref": "04547c55",
+      "expected": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "actual": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md",
+      "ref": "dbb388ee",
+      "expected": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "actual": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md",
+      "ref": "d50abbbc",
+      "expected": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "actual": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md",
+      "ref": "86ba3d75",
+      "expected": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb",
+      "actual": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md",
+      "ref": "078d00ed",
+      "expected": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "actual": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "dbb388ee",
+      "expected": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "actual": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "d50abbbc",
+      "expected": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "actual": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "c3855275",
+      "expected": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "actual": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "86ba3d75",
+      "expected": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "actual": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "078d00ed",
+      "expected": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "actual": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "7f32129d",
+      "expected": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "actual": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "ref": "04547c55",
+      "expected": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "actual": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "dbb388ee",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "d50abbbc",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "c3855275",
+      "expected": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "actual": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "86ba3d75",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "078d00ed",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "7f32129d",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "ref": "04547c55",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "dbb388ee",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "d50abbbc",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "c3855275",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "86ba3d75",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "078d00ed",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "7f32129d",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "ref": "04547c55",
+      "expected": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "dbb388ee",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "d50abbbc",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "c3855275",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "86ba3d75",
+      "expected": "65b9c171323bff99bc37288a73465d28c47acac33995924a0dc906fdfb9757a4",
+      "actual": "65b9c171323bff99bc37288a73465d28c47acac33995924a0dc906fdfb9757a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "078d00ed",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "7f32129d",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "ref": "04547c55",
+      "expected": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "actual": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "dbb388ee",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "d50abbbc",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "c3855275",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "86ba3d75",
+      "expected": "b8c4df7d9a88dc53b9a58e4c3148fae2aecc9f71408a5b37de7615bfc5d00836",
+      "actual": "b8c4df7d9a88dc53b9a58e4c3148fae2aecc9f71408a5b37de7615bfc5d00836",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "078d00ed",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "7f32129d",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "ref": "04547c55",
+      "expected": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "actual": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "dbb388ee",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "d50abbbc",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "c3855275",
+      "expected": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "actual": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "86ba3d75",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "078d00ed",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "7f32129d",
+      "expected": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "actual": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "ref": "04547c55",
+      "expected": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "match": true
+    }
+  ],
+  "current_manifest_checks": [
+    {
+      "path": "CHANGELOG.md",
+      "expected_sha256_lf": "a2ed50c0929952c2601130c4c2c5f5c3529a61852ddbae6a164b7c30eec74380",
+      "actual_sha256_lf": "a2ed50c0929952c2601130c4c2c5f5c3529a61852ddbae6a164b7c30eec74380",
+      "expected_bytes": 724894,
+      "actual_bytes": 724894,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "expected_sha256_lf": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "actual_sha256_lf": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "expected_bytes": 8254,
+      "actual_bytes": 8254,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "expected_sha256_lf": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "actual_sha256_lf": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "expected_bytes": 36779,
+      "actual_bytes": 36779,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "expected_sha256_lf": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "actual_sha256_lf": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "expected_bytes": 81004,
+      "actual_bytes": 81004,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "expected_sha256_lf": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "actual_sha256_lf": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "expected_bytes": 88175,
+      "actual_bytes": 88175,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "expected_sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "actual_sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "expected_bytes": 21165,
+      "actual_bytes": 21165,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+      "expected_sha256_lf": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "actual_sha256_lf": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+      "expected_bytes": 29298,
+      "actual_bytes": 29298,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "expected_sha256_lf": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "actual_sha256_lf": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "expected_bytes": 34037,
+      "actual_bytes": 34037,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "expected_sha256_lf": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "actual_sha256_lf": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "expected_bytes": 29377,
+      "actual_bytes": 29377,
+      "match": true
+    },
+    {
+      "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+      "expected_sha256_lf": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "actual_sha256_lf": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+      "expected_bytes": 53417,
+      "actual_bytes": 53417,
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "expected_sha256_lf": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "actual_sha256_lf": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+      "expected_bytes": 23027,
+      "actual_bytes": 23027,
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md",
+      "expected_sha256_lf": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "actual_sha256_lf": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+      "expected_bytes": 4213,
+      "actual_bytes": 4213,
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md",
+      "expected_sha256_lf": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb",
+      "actual_sha256_lf": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb",
+      "expected_bytes": 7220,
+      "actual_bytes": 7220,
+      "match": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json",
+      "expected_sha256_lf": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "actual_sha256_lf": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "expected_bytes": 12809,
+      "actual_bytes": 12809,
+      "match": true
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "expected_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "expected_bytes": 270085,
+      "actual_bytes": 270085,
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "expected_sha256_lf": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "actual_sha256_lf": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "expected_bytes": 1941,
+      "actual_bytes": 1941,
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "expected_sha256_lf": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+      "actual_sha256_lf": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+      "expected_bytes": 40676,
+      "actual_bytes": 40676,
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "expected_sha256_lf": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+      "actual_sha256_lf": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+      "expected_bytes": 24013,
+      "actual_bytes": 24013,
+      "match": true
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "expected_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "actual_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "expected_bytes": 270085,
+      "actual_bytes": 270085,
+      "match": true
+    }
+  ],
+  "packaged_copy_checks": [
+    {
+      "name": "cas_ohm_quantifiers_BEFORE.py",
+      "ref": "078d00ed",
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "copy_sha256_lf": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "source_sha256_lf": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "match": true
+    },
+    {
+      "name": "cas_ohm_quantifiers_AFTER.py",
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "copy_sha256_lf": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+      "source_sha256_lf": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+      "match": true
+    },
+    {
+      "name": "cas_ohm_test_BEFORE.py",
+      "ref": "078d00ed",
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "copy_sha256_lf": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "source_sha256_lf": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "match": true
+    },
+    {
+      "name": "cas_ohm_test_AFTER.py",
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "copy_sha256_lf": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+      "source_sha256_lf": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+      "match": true
+    },
+    {
+      "name": "Chapter_10_BEFORE.md",
+      "ref": "dbb388ee",
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "copy_sha256_lf": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "source_sha256_lf": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "match": true
+    },
+    {
+      "name": "Chapter_10_AFTER.md",
+      "ref": "d50abbbc",
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "copy_sha256_lf": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "source_sha256_lf": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "match": true
+    },
+    {
+      "name": "CANON_Appendix_I_CAS_Ohm.md",
+      "ref": "d50abbbc",
+      "path": "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "copy_sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "source_sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+      "match": true
+    },
+    {
+      "name": "canon_guard_RESTORED.py",
+      "ref": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_offline_help_text_canon.py",
+      "copy_sha256_lf": "6b26e27ac789ccda4e4db9313da8ba1dbcd5266d029a9cd755180da11d884518",
+      "source_sha256_lf": "6b26e27ac789ccda4e4db9313da8ba1dbcd5266d029a9cd755180da11d884518",
+      "match": true
+    }
+  ],
+  "main_repository_observations": {
+    "head": {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "eb3c9b1eac98853b2065c98b08987918e8e7d936",
+      "stderr": ""
+    },
+    "branch": {
+      "command": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stdout": "codex/casformer-v0.2-release",
+      "stderr": ""
+    },
+    "not_in_local_remote_refs": {
+      "command": [
+        "git",
+        "rev-list",
+        "--count",
+        "HEAD",
+        "--not",
+        "--remotes"
+      ],
+      "returncode": 0,
+      "stdout": "3",
+      "stderr": ""
+    },
+    "upstream": {
+      "command": [
+        "git",
+        "rev-parse",
+        "--abbrev-ref",
+        "--symbolic-full-name",
+        "@{u}"
+      ],
+      "returncode": 128,
+      "stdout": "",
+      "stderr": "fatal: no upstream configured for branch 'codex/casformer-v0.2-release'"
+    }
+  },
+  "parallel_branch_observations": [
+    {
+      "commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "has_ohm_flow_builtin": false,
+      "has_ohm_required_drive_builtin": false,
+      "has_ohm_effective_constraint_builtin": false,
+      "pcba_reader_exists": false
+    },
+    {
+      "commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "compiler_sha256_lf": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "has_ohm_flow_builtin": true,
+      "has_ohm_required_drive_builtin": true,
+      "has_ohm_effective_constraint_builtin": true,
+      "pcba_reader_exists": true
+    }
+  ],
+  "preexisting_compiler_test_unchanged": true,
+  "limitations": [
+    "Local remote refs are not proof of historical non-publication.",
+    "Absence of run receipts cannot prove no historical model/cloud execution.",
+    "Source feature presence is checked here; runtime probes are recorded separately."
+  ]
+}

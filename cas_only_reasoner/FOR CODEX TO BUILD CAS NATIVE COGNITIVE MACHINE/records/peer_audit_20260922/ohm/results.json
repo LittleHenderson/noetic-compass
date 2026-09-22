@@ -1,0 +1,2350 @@
+{
+  "schema": "cas.peer-audit.ohm/1.0",
+  "source_snapshot": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "source_scope": "noetic-compass-scaffold/noetic-compass/api/cas_ohm",
+  "environment": {
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Python314\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "pins": {
+    "pre": "078d00edc85fe97570b6aa3c4ea47b0ad2dad248",
+    "first_fix": "86ba3d75431c56147f229f24794805a3d8504f76",
+    "second_fix": "a4b2e0d7c6726968903b99c714b7b5a6b15d401f",
+    "frozen": "626cc84b574e60217a103b72d2f09388d7aa5e34"
+  },
+  "files": {
+    "pre": {
+      "quantifiers.py": {
+        "sha256": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+        "lf_sha256": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+        "bytes": 39003
+      },
+      "__init__.py": {
+        "sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "lf_sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "bytes": 1941
+      },
+      "test_quantifiers.py": {
+        "sha256": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+        "lf_sha256": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+        "bytes": 20863
+      }
+    },
+    "first_fix": {
+      "quantifiers.py": {
+        "sha256": "65b9c171323bff99bc37288a73465d28c47acac33995924a0dc906fdfb9757a4",
+        "lf_sha256": "65b9c171323bff99bc37288a73465d28c47acac33995924a0dc906fdfb9757a4",
+        "bytes": 40193
+      },
+      "__init__.py": {
+        "sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "lf_sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "bytes": 1941
+      },
+      "test_quantifiers.py": {
+        "sha256": "b8c4df7d9a88dc53b9a58e4c3148fae2aecc9f71408a5b37de7615bfc5d00836",
+        "lf_sha256": "b8c4df7d9a88dc53b9a58e4c3148fae2aecc9f71408a5b37de7615bfc5d00836",
+        "bytes": 22930
+      }
+    },
+    "second_fix": {
+      "quantifiers.py": {
+        "sha256": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+        "lf_sha256": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+        "bytes": 40676
+      },
+      "__init__.py": {
+        "sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "lf_sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "bytes": 1941
+      },
+      "test_quantifiers.py": {
+        "sha256": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+        "lf_sha256": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+        "bytes": 24013
+      }
+    },
+    "frozen": {
+      "quantifiers.py": {
+        "sha256": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+        "lf_sha256": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284",
+        "bytes": 40676
+      },
+      "__init__.py": {
+        "sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "lf_sha256": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+        "bytes": 1941
+      },
+      "test_quantifiers.py": {
+        "sha256": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+        "lf_sha256": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb",
+        "bytes": 24013
+      }
+    }
+  },
+  "suites": [
+    {
+      "name": "pre",
+      "implementation_commit": "078d00edc85fe97570b6aa3c4ea47b0ad2dad248",
+      "tests_commit": "078d00edc85fe97570b6aa3c4ea47b0ad2dad248",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASSED 39/39\n",
+      "stderr": ""
+    },
+    {
+      "name": "first_fix",
+      "implementation_commit": "86ba3d75431c56147f229f24794805a3d8504f76",
+      "tests_commit": "86ba3d75431c56147f229f24794805a3d8504f76",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASSED 48/48\n",
+      "stderr": ""
+    },
+    {
+      "name": "second_fix",
+      "implementation_commit": "a4b2e0d7c6726968903b99c714b7b5a6b15d401f",
+      "tests_commit": "a4b2e0d7c6726968903b99c714b7b5a6b15d401f",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASSED 51/51\n",
+      "stderr": ""
+    },
+    {
+      "name": "frozen",
+      "implementation_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "tests_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASSED 51/51\n",
+      "stderr": ""
+    },
+    {
+      "name": "pre_implementation_with_first_fix_tests",
+      "implementation_commit": "078d00edc85fe97570b6aa3c4ea47b0ad2dad248",
+      "tests_commit": "86ba3d75431c56147f229f24794805a3d8504f76",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 1,
+      "stdout": "FAILED test_i_pred_refuses_infinite_drive: AssertionError: i_pred returned inf instead of refusing\nFAILED test_i_pred_refuses_infinite_resistance: AssertionError: i_pred returned 0.0 instead of refusing\nFAILED test_i_pred_refuses_nan_drive: AssertionError: i_pred returned nan instead of refusing\nFAILED test_i_pred_refuses_nan_resistance: AssertionError: i_pred returned nan instead of refusing\nFAILED test_r_total_refuses_an_overflowing_sum: AssertionError: r_total returned inf instead of refusing\nFAILED test_r_total_refuses_non_finite_component: AssertionError: r_total returned nan instead of refusing\nPASSED 42/48\n",
+      "stderr": ""
+    },
+    {
+      "name": "pre_implementation_with_frozen_tests",
+      "implementation_commit": "078d00edc85fe97570b6aa3c4ea47b0ad2dad248",
+      "tests_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "api/cas_ohm/test_quantifiers.py"
+      ],
+      "exit_code": 1,
+      "stdout": "FAILED test_i_pred_refuses_infinite_drive: AssertionError: i_pred returned inf instead of refusing\nFAILED test_i_pred_refuses_infinite_resistance: AssertionError: i_pred returned 0.0 instead of refusing\nFAILED test_i_pred_refuses_nan_drive: AssertionError: i_pred returned nan instead of refusing\nFAILED test_i_pred_refuses_nan_resistance: AssertionError: i_pred returned nan instead of refusing\nFAILED test_r_hidden_refuses_non_finite_drive: AssertionError: r_hidden accepted drive nan and returned RHidden(magnitude=nan, r_apparent=nan, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>, probe_shortlist=('capability', 'policy', 'context', 'resource', 'miswired-branch'), identifies_mechanism=False, causal_identity_note=\"The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.\", name_override_note=\"NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary.\")\nFAILED test_r_total_refuses_an_overflowing_sum: AssertionError: r_total returned inf instead of refusing\nFAILED test_r_total_refuses_non_finite_component: AssertionError: r_total returned nan instead of refusing\nPASSED 44/51\n",
+      "stderr": ""
+    }
+  ],
+  "historical_cases": {
+    "pre": [
+      {
+        "call": "m.i_pred(nan, 4.0)",
+        "status": "RETURNED",
+        "result": {
+          "nonfinite": "nan"
+        }
+      },
+      {
+        "call": "m.i_pred(8.0, nan)",
+        "status": "RETURNED",
+        "result": {
+          "nonfinite": "nan"
+        }
+      },
+      {
+        "call": "m.i_pred(8.0, inf)",
+        "status": "RETURNED",
+        "result": 0.0
+      },
+      {
+        "call": "m.i_pred(inf, 4.0)",
+        "status": "RETURNED",
+        "result": {
+          "nonfinite": "inf"
+        }
+      },
+      {
+        "call": "m.r_total(1e308,1e308,1.0,1.0)",
+        "status": "RETURNED",
+        "result": {
+          "nonfinite": "inf"
+        }
+      },
+      {
+        "call": "m.i_pred(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.y_hat(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.r_total(1,2,3,4)",
+        "status": "RETURNED",
+        "result": 10.0
+      },
+      {
+        "call": "m.r_hidden(v=8.0,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": 2.0,
+          "r_apparent": 4.0,
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.i_pred(8.0,0.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): 0.0"
+      },
+      {
+        "call": "m.i_pred(8.0,-2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): -2.0"
+      },
+      {
+        "call": "m.r_hidden(v=nan,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": {
+            "nonfinite": "nan"
+          },
+          "r_apparent": {
+            "nonfinite": "nan"
+          },
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.r_hidden(v=inf,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": {
+            "nonfinite": "inf"
+          },
+          "r_apparent": {
+            "nonfinite": "inf"
+          },
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.asom(0.0,m.Outcome.INTENDED)",
+        "status": "RETURNED",
+        "result": null
+      },
+      {
+        "call": "m.delta_current(2.0,2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 0.0,
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,0.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 2.0,
+          "sign": "OVERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,nan)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "nan"
+          },
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,inf)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "-inf"
+          },
+          "sign": "UNDERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      }
+    ],
+    "first_fix": [
+      {
+        "call": "m.i_pred(nan, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got nan. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0, nan)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got nan. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(8.0, inf)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got inf. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(inf, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got inf. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.r_total(1e308,1e308,1.0,1.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_total: the sum of the four constraint terms overflowed to inf; a non-finite total is refused rather than carried into a prediction (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.y_hat(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.r_total(1,2,3,4)",
+        "status": "RETURNED",
+        "result": 10.0
+      },
+      {
+        "call": "m.r_hidden(v=8.0,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": 2.0,
+          "r_apparent": 4.0,
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.i_pred(8.0,0.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): 0.0"
+      },
+      {
+        "call": "m.i_pred(8.0,-2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): -2.0"
+      },
+      {
+        "call": "m.r_hidden(v=nan,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": {
+            "nonfinite": "nan"
+          },
+          "r_apparent": {
+            "nonfinite": "nan"
+          },
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.r_hidden(v=inf,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": {
+            "nonfinite": "inf"
+          },
+          "r_apparent": {
+            "nonfinite": "inf"
+          },
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.asom(0.0,m.Outcome.INTENDED)",
+        "status": "RETURNED",
+        "result": null
+      },
+      {
+        "call": "m.delta_current(2.0,2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 0.0,
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,0.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 2.0,
+          "sign": "OVERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,nan)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "nan"
+          },
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,inf)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "-inf"
+          },
+          "sign": "UNDERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      }
+    ],
+    "second_fix": [
+      {
+        "call": "m.i_pred(nan, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got nan. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0, nan)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got nan. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(8.0, inf)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got inf. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(inf, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got inf. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.r_total(1e308,1e308,1.0,1.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_total: the sum of the four constraint terms overflowed to inf; a non-finite total is refused rather than carried into a prediction (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.y_hat(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.r_total(1,2,3,4)",
+        "status": "RETURNED",
+        "result": 10.0
+      },
+      {
+        "call": "m.r_hidden(v=8.0,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": 2.0,
+          "r_apparent": 4.0,
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.i_pred(8.0,0.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): 0.0"
+      },
+      {
+        "call": "m.i_pred(8.0,-2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): -2.0"
+      },
+      {
+        "call": "m.r_hidden(v=nan,i_obs=2.0,r_known=2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_hidden: drive must be a finite number; got nan. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring). The drive is the value the caller applied, so a non-finite drive is a caller error rather than an observation too uncertain to support a conclusion, and it raises rather than censoring."
+      },
+      {
+        "call": "m.r_hidden(v=inf,i_obs=2.0,r_known=2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_hidden: drive must be a finite number; got inf. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring). The drive is the value the caller applied, so a non-finite drive is a caller error rather than an observation too uncertain to support a conclusion, and it raises rather than censoring."
+      },
+      {
+        "call": "m.asom(0.0,m.Outcome.INTENDED)",
+        "status": "RETURNED",
+        "result": null
+      },
+      {
+        "call": "m.delta_current(2.0,2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 0.0,
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,0.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 2.0,
+          "sign": "OVERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,nan)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "nan"
+          },
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,inf)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "-inf"
+          },
+          "sign": "UNDERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      }
+    ],
+    "frozen": [
+      {
+        "call": "m.i_pred(nan, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got nan. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0, nan)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got nan. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(8.0, inf)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be a finite number; got inf. An undefined quantity is refused with a reason, never carried into arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular would pass a strictly-positive test, because NaN compares False against every operator."
+      },
+      {
+        "call": "m.i_pred(inf, 4.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: drive must be a finite number; got inf. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring)."
+      },
+      {
+        "call": "m.r_total(1e308,1e308,1.0,1.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_total: the sum of the four constraint terms overflowed to inf; a non-finite total is refused rather than carried into a prediction (ch10:def:censoring)."
+      },
+      {
+        "call": "m.i_pred(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.y_hat(8.0,4.0)",
+        "status": "RETURNED",
+        "result": 2.0
+      },
+      {
+        "call": "m.r_total(1,2,3,4)",
+        "status": "RETURNED",
+        "result": 10.0
+      },
+      {
+        "call": "m.r_hidden(v=8.0,i_obs=2.0,r_known=2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "RHidden",
+          "magnitude": 2.0,
+          "r_apparent": 4.0,
+          "r_known": 2.0,
+          "role": "APPARENT_SAME_SAMPLE",
+          "probe_shortlist": [
+            "capability",
+            "policy",
+            "context",
+            "resource",
+            "miswired-branch"
+          ],
+          "identifies_mechanism": false,
+          "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+          "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+        }
+      },
+      {
+        "call": "m.i_pred(8.0,0.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): 0.0"
+      },
+      {
+        "call": "m.i_pred(8.0,-2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "i_pred: effective resistance must be strictly positive (non-positive rejected before arithmetic, ch06:54-60): -2.0"
+      },
+      {
+        "call": "m.r_hidden(v=nan,i_obs=2.0,r_known=2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_hidden: drive must be a finite number; got nan. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring). The drive is the value the caller applied, so a non-finite drive is a caller error rather than an observation too uncertain to support a conclusion, and it raises rather than censoring."
+      },
+      {
+        "call": "m.r_hidden(v=inf,i_obs=2.0,r_known=2.0)",
+        "status": "RAISED",
+        "type": "ValueError",
+        "message": "r_hidden: drive must be a finite number; got inf. An undefined quantity is refused with a reason, never emitted (ch10:def:censoring). The drive is the value the caller applied, so a non-finite drive is a caller error rather than an observation too uncertain to support a conclusion, and it raises rather than censoring."
+      },
+      {
+        "call": "m.asom(0.0,m.Outcome.INTENDED)",
+        "status": "RETURNED",
+        "result": null
+      },
+      {
+        "call": "m.delta_current(2.0,2.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 0.0,
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,0.0)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": 2.0,
+          "sign": "OVERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,nan)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "nan"
+          },
+          "sign": "WITHIN_TOLERANCE",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      },
+      {
+        "call": "m.delta_current(2.0,inf)",
+        "status": "RETURNED",
+        "result": {
+          "type": "DeltaCurrent",
+          "value": {
+            "nonfinite": "-inf"
+          },
+          "sign": "UNDERSHOOT",
+          "tolerance": 0.05,
+          "region": "ACTIVE",
+          "identifies_mechanism": false,
+          "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+          "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+        }
+      }
+    ]
+  },
+  "adversarial": [
+    {
+      "id": "FINITE_PREDICTION_OVERFLOW",
+      "call": "m.i_pred(1e308,1e-308)",
+      "status": "RETURNED",
+      "result": {
+        "nonfinite": "inf"
+      }
+    },
+    {
+      "id": "FINITE_PREDICTION_OVERFLOW_ALIAS",
+      "call": "m.y_hat(1e308,1e-308)",
+      "status": "RETURNED",
+      "result": {
+        "nonfinite": "inf"
+      }
+    },
+    {
+      "id": "PREDICTION_OVERFLOW_CONSUMER",
+      "call": "m.delta_current(2.0,m.i_pred(1e308,1e-308))",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": {
+          "nonfinite": "-inf"
+        },
+        "sign": "UNDERSHOOT",
+        "tolerance": 0.05,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "FINITE_HIDDEN_RATIO_OVERFLOW",
+      "call": "m.r_hidden(v=1e308,i_obs=0.1,r_known=2.0)",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": {
+          "nonfinite": "inf"
+        },
+        "r_apparent": {
+          "nonfinite": "inf"
+        },
+        "r_known": 2.0,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "FINITE_HIDDEN_DIFFERENCE_OVERFLOW",
+      "call": "m.r_hidden(v=-1e308,i_obs=1.0,r_known=1e308)",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": {
+          "nonfinite": "-inf"
+        },
+        "r_apparent": -1e+308,
+        "r_known": 1e+308,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "FINITE_DELTA_OVERFLOW",
+      "call": "m.delta_current(1e308,-1e308)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": {
+          "nonfinite": "inf"
+        },
+        "sign": "OVERSHOOT",
+        "tolerance": 0.05,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "NAN_OBSERVATION_FALSE_ALIGNMENT",
+      "call": "m.delta_current(nan,2.0)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": {
+          "nonfinite": "nan"
+        },
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": 0.05,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "NAN_PREDICTION_FALSE_ALIGNMENT",
+      "call": "m.delta_current(2.0,nan)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": {
+          "nonfinite": "nan"
+        },
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": 0.05,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "INF_MINUS_INF_FALSE_ALIGNMENT",
+      "call": "m.delta_current(inf,inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": {
+          "nonfinite": "nan"
+        },
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": 0.05,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "NAN_TOLERANCE_FALSE_ALIGNMENT",
+      "call": "m.delta_current(100.0,0.0,tolerance=nan)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": 100.0,
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": {
+          "nonfinite": "nan"
+        },
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "INF_TOLERANCE_FALSE_ALIGNMENT",
+      "call": "m.delta_current(100.0,0.0,tolerance=inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": 100.0,
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": {
+          "nonfinite": "inf"
+        },
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "NEGATIVE_TOLERANCE_NORMALIZED",
+      "call": "m.delta_current(1.0,0.0,tolerance=-2.0)",
+      "status": "RETURNED",
+      "result": {
+        "type": "DeltaCurrent",
+        "value": 1.0,
+        "sign": "WITHIN_TOLERANCE",
+        "tolerance": 2.0,
+        "region": "ACTIVE",
+        "identifies_mechanism": false,
+        "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+        "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+      }
+    },
+    {
+      "id": "NAN_EPS_ZERO_DIVISION",
+      "call": "m.r_hidden(v=8,i_obs=0,r_known=2,zero_compat_eps=nan)",
+      "status": "RAISED",
+      "type": "ZeroDivisionError",
+      "message": "division by zero"
+    },
+    {
+      "id": "INF_EPS_CENSORS_VALID_POINT",
+      "call": "m.r_hidden(v=8,i_obs=2,r_known=2,zero_compat_eps=inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "CensoredResult",
+        "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+        "reason": "i_obs=2.0 is zero-compatible (|i_obs| <= inf); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+        "censored": true,
+        "identifies_mechanism": false
+      }
+    },
+    {
+      "id": "INTERVAL_ZERO_POINT_DIVISION",
+      "call": "m.r_hidden(v=8,i_obs=0,r_known=2,i_obs_interval=(1,2))",
+      "status": "RAISED",
+      "type": "ZeroDivisionError",
+      "message": "division by zero"
+    },
+    {
+      "id": "REVERSED_INTERVAL_ACCEPTED",
+      "call": "m.r_hidden(v=8,i_obs=2,r_known=2,i_obs_interval=(3,1))",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": 2.0,
+        "r_apparent": 4.0,
+        "r_known": 2.0,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "INTERVAL_EXCLUDES_POINT_ACCEPTED",
+      "call": "m.r_hidden(v=8,i_obs=-2,r_known=2,i_obs_interval=(1,3))",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": -6.0,
+        "r_apparent": -4.0,
+        "r_known": 2.0,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "INTERVAL_EXTRA_ELEMENTS_ACCEPTED",
+      "call": "m.r_hidden(v=8,i_obs=2,r_known=2,i_obs_interval=(1,3,99))",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": 2.0,
+        "r_apparent": 4.0,
+        "r_known": 2.0,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "INTERVAL_VALID_TINY_POINT",
+      "call": "m.r_hidden(v=1,i_obs=1e-12,r_known=2,i_obs_interval=(0.5e-12,1.5e-12))",
+      "status": "RETURNED",
+      "result": {
+        "type": "RHidden",
+        "magnitude": 999999999998.0,
+        "r_apparent": 1000000000000.0,
+        "r_known": 2.0,
+        "role": "APPARENT_SAME_SAMPLE",
+        "probe_shortlist": [
+          "capability",
+          "policy",
+          "context",
+          "resource",
+          "miswired-branch"
+        ],
+        "identifies_mechanism": false,
+        "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+        "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+      }
+    },
+    {
+      "id": "POINT_ZERO_CENSORED",
+      "call": "m.r_hidden(v=8,i_obs=0,r_known=2)",
+      "status": "RETURNED",
+      "result": {
+        "type": "CensoredResult",
+        "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+        "reason": "i_obs=0.0 is zero-compatible (|i_obs| <= 1e-09); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+        "censored": true,
+        "identifies_mechanism": false
+      }
+    },
+    {
+      "id": "POINT_NAN_CENSORED",
+      "call": "m.r_hidden(v=8,i_obs=nan,r_known=2)",
+      "status": "RETURNED",
+      "result": {
+        "type": "CensoredResult",
+        "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+        "reason": "i_obs=nan is zero-compatible (|i_obs| <= 1e-09); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+        "censored": true,
+        "identifies_mechanism": false
+      }
+    },
+    {
+      "id": "CENSORED_IS_NOT_NUMERIC",
+      "call": "m.delta_current(2,m.r_hidden(v=8,i_obs=0,r_known=2))",
+      "status": "RAISED",
+      "type": "TypeError",
+      "message": "float() argument must be a string or a real number, not 'CensoredResult'"
+    },
+    {
+      "id": "RCAP_INFINITY_BOUND",
+      "call": "m.r_cap(10,r_min=1,r_max=inf)",
+      "status": "RETURNED",
+      "result": {
+        "nonfinite": "inf"
+      }
+    },
+    {
+      "id": "RCAP_BOTH_INFINITY",
+      "call": "m.r_cap(5,r_min=inf,r_max=inf)",
+      "status": "RETURNED",
+      "result": {
+        "nonfinite": "inf"
+      }
+    },
+    {
+      "id": "RCAP_NAN_SCORE",
+      "call": "m.r_cap(nan,r_min=1,r_max=5)",
+      "status": "RAISED",
+      "type": "ValueError",
+      "message": "p_cap must be a Q10 score in [0,10], got nan"
+    },
+    {
+      "id": "RCAP_FINITE_EXTREMES",
+      "call": "m.r_cap(10,r_min=1e-308,r_max=1e308)",
+      "status": "RETURNED",
+      "result": 1e-308
+    },
+    {
+      "id": "MATURITY_INFINITY",
+      "call": "m.maturity_q4(inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q4",
+        "i_q_exact": "Infinity",
+        "trend": null,
+        "minimum_effect": 0.0
+      }
+    },
+    {
+      "id": "MATURITY_NEGATIVE_INFINITY",
+      "call": "m.maturity_q4(-inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q1",
+        "i_q_exact": "-Infinity",
+        "trend": null,
+        "minimum_effect": 0.0
+      }
+    },
+    {
+      "id": "MATURITY_NEGATIVE",
+      "call": "m.maturity_q4(-1)",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q1",
+        "i_q_exact": "-1",
+        "trend": null,
+        "minimum_effect": 0.0
+      }
+    },
+    {
+      "id": "MATURITY_NAN",
+      "call": "m.maturity_q4(nan)",
+      "status": "RAISED",
+      "type": "InvalidOperation",
+      "message": "[<class 'decimal.InvalidOperation'>]"
+    },
+    {
+      "id": "MATURITY_TOLERANCE_INFINITY",
+      "call": "m.maturity_q4(8,prev_i_q=2,minimum_effect=inf)",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q4",
+        "i_q_exact": "8",
+        "trend": "STABLE",
+        "minimum_effect": {
+          "nonfinite": "inf"
+        }
+      }
+    },
+    {
+      "id": "MATURITY_TOLERANCE_NAN",
+      "call": "m.maturity_q4(8,prev_i_q=2,minimum_effect=nan)",
+      "status": "RAISED",
+      "type": "InvalidOperation",
+      "message": "[<class 'decimal.InvalidOperation'>]"
+    },
+    {
+      "id": "MATURITY_EXACT_CUT_BELOW",
+      "call": "m.maturity_q4(Decimal('2.49999999999999999999999999999999999999999999999999999'))",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q1",
+        "i_q_exact": "2.5",
+        "trend": null,
+        "minimum_effect": 0.0
+      }
+    },
+    {
+      "id": "MATURITY_EXACT_CUT_AT",
+      "call": "m.maturity_q4(Decimal('2.5'))",
+      "status": "RETURNED",
+      "result": {
+        "type": "MaturityQ4",
+        "band": "Q2",
+        "i_q_exact": "2.5",
+        "trend": null,
+        "minimum_effect": 0.0
+      }
+    },
+    {
+      "id": "TREND_NAN_POINT_NO_TREND",
+      "call": "m.admissible_trend(nan,8,axis='I_Q/test/profile',earlier_interval=(1,2),later_interval=(7,9),minimum_effect=0.1)",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "NO_TREND",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": 0.1,
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "TREND_NAN_INTERVAL_NO_TREND",
+      "call": "m.admissible_trend(1.5,8,axis='I_Q/test/profile',earlier_interval=(nan,nan),later_interval=(7,9),minimum_effect=0.1)",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "NO_TREND",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": 0.1,
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "TREND_NAN_THRESHOLD_NO_TREND",
+      "call": "m.admissible_trend(1.5,8,axis='I_Q/test/profile',earlier_interval=(1,2),later_interval=(7,9),minimum_effect=nan)",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "NO_TREND",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": {
+          "nonfinite": "nan"
+        },
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "TREND_REVERSED_INTERVAL_ACCEPTED",
+      "call": "m.admissible_trend(2,8,axis='I_Q/test/profile',earlier_interval=(3,1),later_interval=(9,7),minimum_effect=0.1)",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "RISING",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": 0.1,
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "TREND_UNSUPPORTED_RULE_ACCEPTED",
+      "call": "m.admissible_trend(1.5,8,axis='I_Q/test/profile',earlier_interval=(1,2),later_interval=(7,9),minimum_effect=0.1,uncertainty_rule='made-up-rule')",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "RISING",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": 0.1,
+        "uncertainty_rule": "made-up-rule"
+      }
+    },
+    {
+      "id": "TREND_EMPTY_AXIS_ACCEPTED",
+      "call": "m.admissible_trend(1.5,8,axis='',earlier_interval=(1,2),later_interval=(7,9),minimum_effect=0.1)",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "RISING",
+        "axis": "",
+        "minimum_effect": 0.1,
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "TREND_FLOAT_LOSS",
+      "call": "m.admissible_trend(Decimal('1.00000000000000000001'),Decimal('1.00000000000000000004'),axis='I_Q/test/profile',earlier_interval=(Decimal('1.00000000000000000000'),Decimal('1.00000000000000000002')),later_interval=(Decimal('1.00000000000000000003'),Decimal('1.00000000000000000005')),minimum_effect=Decimal('0.000000000000000000001'))",
+      "status": "RETURNED",
+      "result": {
+        "type": "TrendTag",
+        "verdict": "NO_TREND",
+        "axis": "I_Q/test/profile",
+        "minimum_effect": 1e-21,
+        "uncertainty_rule": "interval-non-overlap"
+      }
+    },
+    {
+      "id": "ELIGIBILITY_MISSING_STALENESS",
+      "call": "m.check_eligibility(m.Region.ACTIVE,True,True,None)",
+      "status": "RETURNED",
+      "result": {
+        "type": "Eligibility",
+        "admitted": true,
+        "reason": "all preconditions satisfied"
+      }
+    },
+    {
+      "id": "ELIGIBILITY_MISSING_OUTCOME",
+      "call": "m.check_eligibility(m.Region.ACTIVE,True,True,False,outcome=None)",
+      "status": "RETURNED",
+      "result": {
+        "type": "Eligibility",
+        "admitted": true,
+        "reason": "all preconditions satisfied"
+      }
+    },
+    {
+      "id": "ELIGIBILITY_STRING_FLAGS",
+      "call": "m.check_eligibility(m.Region.ACTIVE,'false','false',False)",
+      "status": "RETURNED",
+      "result": {
+        "type": "Eligibility",
+        "admitted": true,
+        "reason": "all preconditions satisfied"
+      }
+    },
+    {
+      "id": "PREDICTION_NO_PROVENANCE_FIELD",
+      "call": "m.i_pred(12,4)",
+      "status": "RETURNED",
+      "result": 3.0
+    },
+    {
+      "id": "TRACE_MISSING_PROVENANCE",
+      "call": "m.CjtQRecord(i_pred=3.0,region=m.Region.ACTIVE,outcome=m.Outcome.INTENDED)",
+      "status": "RETURNED",
+      "result": {
+        "type": "CjtQRecord",
+        "cause": null,
+        "bias": null,
+        "effect": null,
+        "v": null,
+        "r_cap": null,
+        "r_policy": null,
+        "r_context": null,
+        "r_resource": null,
+        "r_total": null,
+        "i_pred": 3.0,
+        "i_obs": null,
+        "delta_i": null,
+        "beta": null,
+        "saturation": null,
+        "region": "ACTIVE",
+        "outcome": "INTENDED",
+        "test_point": null,
+        "timestamp": null,
+        "id": null,
+        "created_at": null,
+        "version": "cas-ohm-quantifiers-0.1.0-DRAFT",
+        "source": null,
+        "trace_id": null
+      }
+    },
+    {
+      "id": "TRACE_UNPROVEN_ALIGNED_LABEL",
+      "call": "m.CjtQRecord(i_pred=3.0,region=m.Region.ACTIVE,outcome=m.Outcome.INTENDED).asom_label",
+      "status": "RETURNED",
+      "result": "ALIGNED"
+    },
+    {
+      "id": "MATURITY_DECIMAL_SENTINEL_NAN",
+      "call": "m.maturity_q4(Decimal('NaN'))",
+      "status": "RAISED",
+      "type": "InvalidOperation",
+      "message": "[<class 'decimal.InvalidOperation'>]"
+    },
+    {
+      "id": "RESISTANCE_POSITIVE_SUBNORMAL",
+      "call": "m.i_pred(1.0,5e-324)",
+      "status": "RETURNED",
+      "result": {
+        "nonfinite": "inf"
+      }
+    },
+    {
+      "id": "DEFAULT_REGION_ASSUMPTION",
+      "call": "m.delta_current(2.0,2.0).region",
+      "status": "RETURNED",
+      "result": "ACTIVE"
+    }
+  ],
+  "no_neural_execution": true,
+  "attribution": {
+    "original_module_commit": "3ea9dbe67a09a4e71c38b8d2a7330229a3a0aff9",
+    "original_module_committed_date": "2026-08-18T20:50:18-07:00",
+    "original_and_pre_fix_blob_id": "2c98a77378ef4abe31449c55fc0f904227e4bbd3",
+    "original_equals_pre_fix": true,
+    "probes": [
+      {
+        "id": "FINITE_PREDICTION_OVERFLOW",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "nonfinite": "inf"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "FINITE_PREDICTION_OVERFLOW_ALIAS",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "nonfinite": "inf"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "PREDICTION_OVERFLOW_CONSUMER",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": {
+              "nonfinite": "-inf"
+            },
+            "sign": "UNDERSHOOT",
+            "tolerance": 0.05,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "FINITE_HIDDEN_RATIO_OVERFLOW",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": {
+              "nonfinite": "inf"
+            },
+            "r_apparent": {
+              "nonfinite": "inf"
+            },
+            "r_known": 2.0,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "FINITE_HIDDEN_DIFFERENCE_OVERFLOW",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": {
+              "nonfinite": "-inf"
+            },
+            "r_apparent": -1e+308,
+            "r_known": 1e+308,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "FINITE_DELTA_OVERFLOW",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": {
+              "nonfinite": "inf"
+            },
+            "sign": "OVERSHOOT",
+            "tolerance": 0.05,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "NAN_OBSERVATION_FALSE_ALIGNMENT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": {
+              "nonfinite": "nan"
+            },
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": 0.05,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "NAN_PREDICTION_FALSE_ALIGNMENT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": {
+              "nonfinite": "nan"
+            },
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": 0.05,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INF_MINUS_INF_FALSE_ALIGNMENT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": {
+              "nonfinite": "nan"
+            },
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": 0.05,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "NAN_TOLERANCE_FALSE_ALIGNMENT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": 100.0,
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": {
+              "nonfinite": "nan"
+            },
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INF_TOLERANCE_FALSE_ALIGNMENT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": 100.0,
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": {
+              "nonfinite": "inf"
+            },
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "NEGATIVE_TOLERANCE_NORMALIZED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "DeltaCurrent",
+            "value": 1.0,
+            "sign": "WITHIN_TOLERANCE",
+            "tolerance": 2.0,
+            "region": "ACTIVE",
+            "identifies_mechanism": false,
+            "method_identity": "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL",
+            "note": "The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "NAN_EPS_ZERO_DIVISION",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "ZeroDivisionError",
+          "message": "division by zero"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INF_EPS_CENSORS_VALID_POINT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "CensoredResult",
+            "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+            "reason": "i_obs=2.0 is zero-compatible (|i_obs| <= inf); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+            "censored": true,
+            "identifies_mechanism": false
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INTERVAL_ZERO_POINT_DIVISION",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "ZeroDivisionError",
+          "message": "division by zero"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "REVERSED_INTERVAL_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": 2.0,
+            "r_apparent": 4.0,
+            "r_known": 2.0,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INTERVAL_EXCLUDES_POINT_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": -6.0,
+            "r_apparent": -4.0,
+            "r_known": 2.0,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INTERVAL_EXTRA_ELEMENTS_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": 2.0,
+            "r_apparent": 4.0,
+            "r_known": 2.0,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "INTERVAL_VALID_TINY_POINT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "RHidden",
+            "magnitude": 999999999998.0,
+            "r_apparent": 1000000000000.0,
+            "r_known": 2.0,
+            "role": "APPARENT_SAME_SAMPLE",
+            "probe_shortlist": [
+              "capability",
+              "policy",
+              "context",
+              "resource",
+              "miswired-branch"
+            ],
+            "identifies_mechanism": false,
+            "causal_identity_note": "The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.",
+            "name_override_note": "NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "POINT_ZERO_CENSORED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "CensoredResult",
+            "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+            "reason": "i_obs=0.0 is zero-compatible (|i_obs| <= 1e-09); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+            "censored": true,
+            "identifies_mechanism": false
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "POINT_NAN_CENSORED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "CensoredResult",
+            "marker": "OBSERVED_INTERVAL_INCLUDES_ZERO",
+            "reason": "i_obs=nan is zero-compatible (|i_obs| <= 1e-09); the ratio v/i_obs has no finite moments and no usable interval, so the apparent resistance and any resistance delta are CENSORED (ch10:def:censoring). The residual itself remains computable elsewhere; only the ratio quantity is refused.",
+            "censored": true,
+            "identifies_mechanism": false
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "CENSORED_IS_NOT_NUMERIC",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "TypeError",
+          "message": "float() argument must be a string or a real number, not 'CensoredResult'"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "RCAP_INFINITY_BOUND",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "nonfinite": "inf"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "RCAP_BOTH_INFINITY",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "nonfinite": "inf"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "RCAP_NAN_SCORE",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "ValueError",
+          "message": "p_cap must be a Q10 score in [0,10], got nan"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "RCAP_FINITE_EXTREMES",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": 1e-308
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_INFINITY",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q4",
+            "i_q_exact": "Infinity",
+            "trend": null,
+            "minimum_effect": 0.0
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_NEGATIVE_INFINITY",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q1",
+            "i_q_exact": "-Infinity",
+            "trend": null,
+            "minimum_effect": 0.0
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_NEGATIVE",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q1",
+            "i_q_exact": "-1",
+            "trend": null,
+            "minimum_effect": 0.0
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_NAN",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "InvalidOperation",
+          "message": "[<class 'decimal.InvalidOperation'>]"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_TOLERANCE_INFINITY",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q4",
+            "i_q_exact": "8",
+            "trend": "STABLE",
+            "minimum_effect": {
+              "nonfinite": "inf"
+            }
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_TOLERANCE_NAN",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "InvalidOperation",
+          "message": "[<class 'decimal.InvalidOperation'>]"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_EXACT_CUT_BELOW",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q1",
+            "i_q_exact": "2.5",
+            "trend": null,
+            "minimum_effect": 0.0
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_EXACT_CUT_AT",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "MaturityQ4",
+            "band": "Q2",
+            "i_q_exact": "2.5",
+            "trend": null,
+            "minimum_effect": 0.0
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_NAN_POINT_NO_TREND",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "NO_TREND",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": 0.1,
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_NAN_INTERVAL_NO_TREND",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "NO_TREND",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": 0.1,
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_NAN_THRESHOLD_NO_TREND",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "NO_TREND",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": {
+              "nonfinite": "nan"
+            },
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_REVERSED_INTERVAL_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "RISING",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": 0.1,
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_UNSUPPORTED_RULE_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "RISING",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": 0.1,
+            "uncertainty_rule": "made-up-rule"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_EMPTY_AXIS_ACCEPTED",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "RISING",
+            "axis": "",
+            "minimum_effect": 0.1,
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TREND_FLOAT_LOSS",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "TrendTag",
+            "verdict": "NO_TREND",
+            "axis": "I_Q/test/profile",
+            "minimum_effect": 1e-21,
+            "uncertainty_rule": "interval-non-overlap"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "ELIGIBILITY_MISSING_STALENESS",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "Eligibility",
+            "admitted": true,
+            "reason": "all preconditions satisfied"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "ELIGIBILITY_MISSING_OUTCOME",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "Eligibility",
+            "admitted": true,
+            "reason": "all preconditions satisfied"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "ELIGIBILITY_STRING_FLAGS",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "Eligibility",
+            "admitted": true,
+            "reason": "all preconditions satisfied"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "PREDICTION_NO_PROVENANCE_FIELD",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": 3.0
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TRACE_MISSING_PROVENANCE",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "type": "CjtQRecord",
+            "cause": null,
+            "bias": null,
+            "effect": null,
+            "v": null,
+            "r_cap": null,
+            "r_policy": null,
+            "r_context": null,
+            "r_resource": null,
+            "r_total": null,
+            "i_pred": 3.0,
+            "i_obs": null,
+            "delta_i": null,
+            "beta": null,
+            "saturation": null,
+            "region": "ACTIVE",
+            "outcome": "INTENDED",
+            "test_point": null,
+            "timestamp": null,
+            "id": null,
+            "created_at": null,
+            "version": "cas-ohm-quantifiers-0.1.0-DRAFT",
+            "source": null,
+            "trace_id": null
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "TRACE_UNPROVEN_ALIGNED_LABEL",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": "ALIGNED"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "MATURITY_DECIMAL_SENTINEL_NAN",
+        "pre_fix_observation": {
+          "status": "RAISED",
+          "type": "InvalidOperation",
+          "message": "[<class 'decimal.InvalidOperation'>]"
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "RESISTANCE_POSITIVE_SUBNORMAL",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": {
+            "nonfinite": "inf"
+          }
+        },
+        "same_at_frozen": true
+      },
+      {
+        "id": "DEFAULT_REGION_ASSUMPTION",
+        "pre_fix_observation": {
+          "status": "RETURNED",
+          "result": "ACTIVE"
+        },
+        "same_at_frozen": true
+      }
+    ]
+  },
+  "public_function_lines": {
+    "Region": 94,
+    "Outcome": 109,
+    "AsomLabel": 121,
+    "ResistanceRole": 129,
+    "SignReading": 137,
+    "Band": 154,
+    "Trend": 162,
+    "KindError": 177,
+    "Score": 182,
+    "_is_finite": 198,
+    "_as_resistance": 203,
+    "r_total": 233,
+    "r_cap": 272,
+    "i_pred": 303,
+    "y_hat": 321,
+    "DeltaCurrent": 335,
+    "delta_current": 355,
+    "RHidden": 435,
+    "CensoredResult": 460,
+    "r_hidden": 469,
+    "MaturityQ4": 591,
+    "_to_decimal": 600,
+    "_band_of": 607,
+    "maturity_q4": 620,
+    "TrendVerdict": 674,
+    "InadmissibleTrendError": 683,
+    "TrendTag": 690,
+    "admissible_trend": 697,
+    "asom": 754,
+    "EligibilityError": 786,
+    "Eligibility": 792,
+    "check_eligibility": 797,
+    "require_eligible": 823,
+    "CjtQRecord": 836
+  },
+  "declarations": {
+    "exported_symbols": [
+      "delta_current",
+      "r_hidden",
+      "maturity_q4",
+      "i_pred",
+      "y_hat",
+      "r_total",
+      "r_cap",
+      "Region",
+      "Outcome",
+      "AsomLabel",
+      "asom",
+      "admissible_trend",
+      "TrendTag",
+      "TrendVerdict",
+      "InadmissibleTrendError",
+      "check_eligibility",
+      "require_eligible",
+      "Eligibility",
+      "EligibilityError",
+      "DeltaCurrent",
+      "RHidden",
+      "CensoredResult",
+      "MaturityQ4",
+      "CjtQRecord",
+      "Score",
+      "ResistanceRole",
+      "SignReading",
+      "Band",
+      "Trend",
+      "KindError",
+      "RESIDUAL_METHOD_IDENTITY",
+      "R_HIDDEN_PROBE_SHORTLIST",
+      "R_HIDDEN_NAME_OVERRIDE_NOTE",
+      "WITHDRAWN_CAUSAL_IDENTITY_NOTE"
+    ],
+    "module_honesty_rule": "CAS-Ohm quantifier module — the three headline quantifiers plus the\nsurrounding discipline that makes them usable and honest.\n\nMONOGRAPH HONESTY RULE (read this first, in spirit verbatim)\n------------------------------------------------------------\nEvery quantity produced here is a DESIGN SCORE, a CALIBRATION VALUE, or an\nOBSERVED RATING recorded under a single calibration profile by tested\nsoftware.  NONE of it is a voltmeter reading from a brain or from a language\nmodel.  The electrical vocabulary (current, resistance, breakdown, overload)\nis a MODELLING ANALOGY: it names structural roles, it does not assert that any\ndeployed system was measured.  Units are MODEL units (ALPHA, ACTIVATION,\nALPHA_PER_ACTIVATION, Q10, ...); volt / ampere / ohm are forbidden aliases and\nnever appear.\n\nSTATUS: WORKING DRAFT.  This is a PROPOSED-NOT-VALIDATED instrument.  Its whole\ncontent is RING 4 / NOT LICENSED / HELD — a data contract plus a registered\nhypothesis with an implemented guard apparatus, NOT an established law.  No\nlive calibration exists; every worked number in the sources and in the tests is\nFABRICATED for exposition.  Passing tests is evidence about code<->spec, never\nabout spec<->world (V&V separation, ch06:328-379).\n\nSources reconciled into this module (CAS-Ohm 1.0 monograph,\ndocs/whitepapers/monograph/cas_ohm1/chapters/):\n  * ch05_calibration.tex   — calibration profile, I_FS methods, tolerances,\n                             currency assertion, region enumeration.\n  * ch06_response_model.tex — the response model y_hat = a / r_eff, the\n                             admissibility rule, anti-circularity, resistance\n                             role typing, the REJECTED legacy form I=V/R_total.\n  * ch07_classification.tex — Region axis, Outcome axis, the derived-only ASOM\n                             overlay, the fail-closed no-diagnosis gate, the 16\n                             typed quantity kinds.\n  * ch08_quantization.tex   — exact Q10 normalization, the half-open Q1..Q4\n                             bands with cut points 2.5 / 5 / 7.5, overload.\n  * ch10_residuals.tex      — the residual delta_y = y_obs - y_pred, censoring\n                             at a zero-compatible observation, NON-IDENTIFICATION\n                             (a residual sign ranks probes, never a mechanism).\n\nCAVEATS on constructs the owner asked for that are NOT in the extracted\nchapters (ch05/06/07/08/10) and had to be sourced from the broader design:\n  * R_total = R_cap + R_policy + R_context + R_resource additive decomposition\n    is NOT in ch05/06.  There R_total appears ONLY inside the REJECTED legacy\n    form I_pred = V/R_total (ch06:48).  Implemented here per the owner's\n    named contract; flagged as extra-chapter.\n  * R_cap(P_cap) capability->resistance inversion with R_min/R_max bounds is\n    NOT in ch05/06/07/08/10.  Implemented per the owner's named contract as a\n    monotone-decreasing inversion; flagged as extra-chapter.\nThese two are provided because the owner named them as required callables; they\nare marked in their docstrings as extra-chapter so no reader mistakes them for\nreconciled monograph text.\n\nNAMING-OVERRIDE DISCLOSURE (r_hidden / RHidden)\n-----------------------------------------------\nch10 states the candidate \"does NOT expose R_hidden = V/I_obs - R_known as a\ndiagnostic\" and places hidden-resistance vocabulary on the forbidden-wording\nlist for EMITTED quantities.  The monograph's own neutral name for the same\narithmetic is the RESISTANCE_DELTA = a/y_obs - r_eff, emitted uncensored-only,\nwith r_apparent = a/y_obs tagged role APPARENT_SAME_SAMPLE.  The owner named a\nHEADLINE quantifier ``r_hidden`` and DELIBERATELY overrides the ch10\nforbidden-wording rule for that one caller-facing symbol.  The override is\ndisclosed here and in-code (WITHDRAWN_CAUSAL_IDENTITY_NOTE,\nR_HIDDEN_NAME_OVERRIDE_NOTE) so no reader takes the name ``r_hidden`` as\nmonograph-reconciled: the SUBSTANCE is monograph-faithful (role\nAPPARENT_SAME_SAMPLE, identifies_mechanism=False, censored at zero-compatible\nobservation), only the caller-facing NAME departs from ch10, by owner decision.\nThe neutral monograph field name ``resistance_delta`` is exposed alongside\n``magnitude`` on the result so downstream code can use the reconciled vocabulary.\n",
+    "delta_current_default_region": "ACTIVE"
+  },
+  "pre_guard_source": "def _as_resistance(name: str, r: Number) -> float:\n    \"\"\"Coerce a resistance argument, rejecting Score wrappers and non-positive\n    values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60).\"\"\"\n    if isinstance(r, Score):\n        raise KindError(\n            f\"{name}: a {r.unit} Score cannot occupy the resistance position \"\n            f\"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a \"\n            f\"type error, not a smaller numeric error (ch06:47-52).\"\n        )\n    rf = float(r)\n    if rf <= 0.0:\n        raise ValueError(\n            f\"{name}: effective resistance must be strictly positive \"\n            f\"(non-positive rejected before arithmetic, ch06:54-60): {rf}\"\n        )\n    return rf",
+  "pre_nonfinite_test": "def test_r_hidden_censors_non_finite():\n    r = r_hidden(v=8.0, i_obs=float(\"nan\"), r_known=2.0)\n    assert isinstance(r, CensoredResult)\n    r2 = r_hidden(v=8.0, i_obs=float(\"inf\"), r_known=2.0)\n    assert isinstance(r2, CensoredResult)",
+  "peer_compiler_ohm_references": [],
+  "script_sha256": "46b8f06234908c68b8edc85973cc4b831f6c2f553d6a037805f8e70517ee7d5a"
+}

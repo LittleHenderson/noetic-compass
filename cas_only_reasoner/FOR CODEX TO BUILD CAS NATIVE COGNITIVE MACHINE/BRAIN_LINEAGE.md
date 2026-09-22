@@ -1,5 +1,15 @@
 # The learning brain — lineage record
 
+## 2026-09-22 independent peer audit: no new learned result
+
+An isolated audit of commit `626cc84b574e60217a103b72d2f09388d7aa5e34`
+reproduced the compiler/lab/legacy Ohm test counts and retained additional
+failing numeric probes, lost regression guards and book/source findings.
+Scope and evidence: `records/peer_audit_20260922/REPORT.md`.
+These are engineering audit observations. No Helm model was loaded, trained,
+evaluated or promoted. No acceptance certificate, owner authorization or new
+learning result was created. Original source and evidence remained unchanged.
+
 ## 2026-09-21 Codex continuation: engineering only
 
 Compiler recovery/corrections, Q3 loader hardening and versioned data rebuilds,

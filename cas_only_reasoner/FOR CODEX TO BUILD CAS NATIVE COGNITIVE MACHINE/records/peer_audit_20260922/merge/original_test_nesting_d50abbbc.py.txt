@@ -1,0 +1,298 @@
+"""Regression tests for the 2026-09-21 compiler change: the book's meaning for the Nesting Operator, eight measured
+defects fixed, `Worlds` clarified without changing what it evaluates to, and a tuple found in a Product set.
+
+Book = "Thinking in Cognitive Architecture" (canon), Chapter 26 (Definition 26.1, Theorem 26.2, the Classification
+Theorem) and Chapter 10. Where the book is in two minds the compiler must say so by id, never pick silently.
+"""
+from __future__ import annotations
+
+import pytest
+
+from api.notation.compiler import (
+    NESTING_CROSS_DOMAIN_WARNING,
+    NESTING_OPEN_QUESTIONS,
+    WORLDS_ALIAS_WARNING,
+    compile_expression,
+)
+
+RING = "∘"
+IN = "∈"
+SUBSET_EQ = "⊆"
+UNION = "∪"
+
+
+def run(text):
+    artifact = compile_expression(text).to_dict()
+    result = artifact.get("result")
+    if isinstance(result, dict) and result.get("kind") == "program":
+        result = result.get("final_result")
+    return artifact, result
+
+
+def ring(*parts):
+    return (" %s " % RING).join(parts)
+
+
+def nesting(text):
+    artifact, result = run(text)
+    assert artifact["valid"], artifact["error"]
+    return artifact, result["nesting"]
+
+
+# ---------------------------------------------------------------- the legacy value is untouched
+def test_the_legacy_fractal_fields_are_unchanged():
+    _, value = run(ring("^8^C", "^9^C"))
+    assert value["sequence"] == [8, 9] and value["composed_operator"] == "CO-7" and value["orbit_length"] == 2 and value["domain"] == "C"
+    assert set(value) == {"kind", "sequence", "composed_operator", "orbit_length", "domain", "nesting"}
+
+
+# ---------------------------------------------------------------- Definition 26.1: direction
+def test_definition_26_1_first_written_is_innermost_last_written_governs():
+    _, n = nesting(ring("^8^C", "^3^C"))
+    assert n["innermost"] == "^8^C" and n["governing"] == "^3^C"
+    assert [t["role"] for t in n["terms"]] == ["innermost", "governing"]
+    _, other = nesting(ring("^3^C", "^8^C"))
+    assert other["innermost"] == "^3^C" and other["governing"] == "^8^C"          # order is kept: f o g != g o f
+
+
+def test_every_term_keeps_its_own_domain_drive_and_register():
+    _, n = nesting(ring("^8^C_{F2}|A", "^9^O_{F4}|f"))
+    assert [(t["noetic"], t["name"], t["domain"], t["drive"], t["register"]) for t in n["terms"]] == [
+        (8, "Above/Cause", "C", "F2", "A"),
+        (9, "Below/Effect", "O", "F4", "f"),
+    ]
+    assert n["crosses_domains"] is True and "N8" in n["open_questions"]
+
+
+def test_grouping_does_not_change_the_value_as_the_associativity_law_says():
+    _, left = run("(%s) %s ^2^C" % (ring("^8^C", "^3^C"), RING))
+    _, right = run("^8^C %s (%s)" % (RING, ring("^3^C", "^2^C")))
+    assert left == right and left["sequence"] == [8, 3, 2]
+
+
+# ---------------------------------------------------------------- identity and Dual Cancellation
+def test_idea_is_the_identity_and_is_dropped_from_the_canonical_form():
+    _, n = nesting(ring("^8^C", "^0^C", "^9^C"))
+    assert n["identity_terms"] == [1] and n["canonical_form"]["form"] == ["^0^C"] and "N2" in n["open_questions"]
+
+
+@pytest.mark.parametrize("text,form", [
+    (ring("^8^C", "^9^C"), ["^0^C"]),
+    (ring("^2^C", "^3^C"), ["^0^C"]),
+    (ring("^5^E", "^6^E"), ["^0^E"]),
+    (ring("^8^C_{F2}", "^9^C_{F2}"), ["^0^C"]),
+    ("Phi<8:9>", ["^0"]),
+    ("fractal(^8^C, ^9^C)", ["^0^C"]),
+])
+def test_dual_cancellation_a_surfacing_thought_inside_its_landing_partner_returns_to_idea(text, form):
+    _, n = nesting(text)
+    assert n["canonical_form"]["agreed"] is True and n["canonical_form"]["form"] == form
+    assert n["dual_cancellation_criterion"]["met"] is True and n["orbit_class"] == "stabilizing"
+
+
+@pytest.mark.parametrize("text", [ring("^8^C", "^9^O"), ring("^8^C_{F2}", "^9^C_{F4}")])
+def test_no_cancellation_across_domains_or_across_drives(text):
+    _, n = nesting(text)
+    assert n["canonical_form"]["form"] and n["canonical_form"]["form"] != ["^0^C"]
+    assert n["dual_cancellation_criterion"]["met"] is False
+
+
+def test_the_other_order_inside_a_pair_is_reported_under_both_readings_not_decided():
+    _, n = nesting(ring("^9^C", "^8^C"))
+    cf = n["canonical_form"]
+    assert cf["surfacing_member_first"]["form"] == ["^9^C", "^8^C"] and cf["either_order"]["form"] == ["^0^C"]
+    assert cf["agreed"] is False and cf["form"] is None and "N3" in n["open_questions"]
+    assert n["orbit_class"] == "NOT_DECIDED_BY_THE_BOOK"
+
+
+# ---------------------------------------------------------------- the Classification Theorem's own examples
+@pytest.mark.parametrize("text,orbit", [
+    (ring("^2^C", "^3^C", "^2^C", "^3^C"), "stabilizing"),
+    (ring("^8^C", "^8^C", "^8^C"), "amplifying"),
+])
+def test_two_of_the_three_orbit_classes_on_the_books_own_examples(text, orbit):
+    _, n = nesting(text)
+    assert n["orbit_class"] == orbit and set(n["orbit_class_by_reading"].values()) == {orbit}
+
+
+def test_the_books_own_oscillatory_example_is_oscillatory_only_under_the_exact_partner_reading():
+    # line 6093 says ^8 'should be matched with ^9, not ^6'; lines 6151, 3015, 3061, 2902-2904 let ^6 resolve an ^8.
+    _, n = nesting(ring("^8^C", "^6^C", "^8^C", "^6^C"))
+    assert n["orbit_class"] == "NOT_DECIDED_BY_THE_BOOK" and "N11" in n["open_questions"]
+    assert n["orbit_class_by_reading"] == {"exact_partner_written_to_the_right": "oscillatory", "either_order": "oscillatory", "any_landing_side": "stabilizing"}
+    # with the wrong partner in ANOTHER Domain every reading agrees
+    _, other = nesting(ring("^8^C", "^6^O", "^8^C", "^6^O"))
+    assert other["orbit_class"] == "oscillatory"
+
+
+def test_the_criterion_is_computed_under_three_readings_and_names_the_ids():
+    _, n = nesting("Phi<8:6:9>")                       # Chapter 10 line 2904 calls ^8 -> ^6 -> ^9 'Stabilizing'
+    d = n["dual_cancellation_criterion"]
+    assert d["met"] is True and d["unpartnered_landing"] == [1] and d["by_any_landing"]["resolved"] == [[0, 1]]
+    assert d["non_adjacent_pairs"] == [[0, 2]] and {"N10", "N11", "N12"} <= set(n["open_questions"])
+    assert n["chapter_10_analyses"].startswith("NOT_REPRODUCED")
+    _, plain = nesting(ring("^8^C", "^0^C", "^9^C"))    # an identity term between the two does not make them non-adjacent
+    assert plain["dual_cancellation_criterion"]["non_adjacent_pairs"] == [] and "N10" not in plain["open_questions"]
+
+
+def test_rhythm_never_vetoes_a_class_earned_by_the_other_thoughts():
+    _, n = nesting(ring("^8^C", "^7^C", "^8^C", "^7^C"))
+    assert n["orbit_class"] == "amplifying" and "N4" in n["open_questions"]
+    _, pure = nesting(ring("^7^C", "^7^C"))
+    assert pure["orbit_class"] == "NOT_DECIDED_BY_THE_BOOK" and "N4" in pure["open_questions"]
+
+
+@pytest.mark.parametrize("text,ids", [
+    (ring("^9^C", "^9^C", "^9^C"), {"N12"}),
+    (ring("^7^C", "^7^C"), {"N4"}),
+    (ring("^8^C", "^3^C"), {"N9", "N11", "N12"}),
+    (ring("^1^C", "^4^C"), {"N4"}),
+])
+def test_cases_the_book_does_not_settle_are_not_classified_and_name_why(text, ids):
+    _, n = nesting(text)
+    assert n["orbit_class"] == "NOT_DECIDED_BY_THE_BOOK" and ids <= set(n["open_questions"])
+
+
+def test_open_questions_are_named_by_id_and_every_id_is_defined():
+    _, n = nesting(ring("^2^C", "^3^C", "^2^C", "^3^C"))
+    assert set(n["open_questions"]) <= set(NESTING_OPEN_QUESTIONS) and {"N1", "N5", "N6", "N7", "N13"} <= set(n["open_questions"])
+    assert set(NESTING_OPEN_QUESTIONS) == {"N%d" % k for k in range(1, 14)}
+    assert n["assumed"] == ["equal intensity (the notation has no intensity field)"]
+
+
+# ---------------------------------------------------------------- nesting across Domains (the book does it)
+@pytest.mark.parametrize("text", [
+    ring("^7^C|A", "^7^O|E", "^7^C|A", "^7^O|E"),
+    ring("^6^C|A", "^4|f", "^9^O|E"),
+    ring("CO-7^P", "CO-7^C", "CO-7^E", "CO-7^O"),
+    ring("^8^P", "^3^C"),
+])
+def test_the_books_cross_domain_nestings_now_compile_with_a_warning(text):
+    artifact, result = run(text)
+    assert artifact["valid"] and result["kind"] == "fractal"
+    assert NESTING_CROSS_DOMAIN_WARNING in artifact["warnings"] and result["nesting"]["crosses_domains"] is True
+
+
+def test_same_domain_nesting_carries_no_cross_domain_warning():
+    artifact, _ = run(ring("^8^C", "^9^C"))
+    assert artifact["warnings"] == []
+
+
+def test_the_cross_domain_warning_fires_on_the_fractal_paths_too():
+    for text in ("(%s) %s ^2^P" % (ring("^8^C", "^3^C"), RING), "^2^P %s (%s)" % (RING, ring("^8^C", "^3^C")), "(%s) %s (%s)" % (ring("^8^C", "^3^C"), RING, ring("^2^P", "^1^P"))):
+        artifact, result = run(text)
+        assert artifact["valid"] and NESTING_CROSS_DOMAIN_WARNING in artifact["warnings"] and result["nesting"]["crosses_domains"] is True
+
+
+# ---------------------------------------------------------------- Worlds: alias kept, meaning stated
+def test_worlds_still_evaluates_to_domains_and_now_says_so():
+    for text, holds in (("|Worlds| = 4", True), ("P %s Worlds" % IN, True), ("T %s Worlds" % IN, False)):
+        artifact, result = run(text)
+        assert result["holds"] is holds and WORLDS_ALIAS_WARNING in artifact["warnings"]
+    artifact, result = run("Worlds")
+    assert result["name"] == "Domains" and sorted(result["elements"]) == ["C", "E", "O", "P"]
+    artifact, _ = run("|Domains| = 4")
+    assert artifact["warnings"] == []
+
+
+# ---------------------------------------------------------------- the eight defects
+def test_defect_1_a_relation_is_found_in_a_relation_set():
+    assert run("let R1 = ^5^P -> ^5^C; let Q = {R1}; R1 %s Q" % IN)[1]["holds"] is True
+    assert run("(^5^P -> ^5^C) %s RelationCluster{^5^P -> ^5^C}" % IN)[1]["holds"] is True
+    assert run("(^5^C -> ^5^E) %s RelationCluster{^5^P -> ^5^C}" % IN)[1]["holds"] is False
+
+
+def test_defect_1b_a_tuple_is_found_in_a_product_set():
+    assert run("<^2, P> %s Product(Noetics, Domains)" % IN)[1]["holds"] is True
+    assert run("<^2, F2> %s Product(Noetics, Domains)" % IN)[1]["holds"] is False
+    assert run("|Product(Noetics, Domains)| = 40")[1]["holds"] is True
+
+
+def test_defect_2_a_ring_result_in_a_set_has_a_readable_label_and_is_found_with_its_order_domains_drives_and_registers():
+    program = "let X = %s; let Q = {X}; " % ring("^8^C", "^3^C")
+    assert run(program + "Q")[1]["elements"] == ["Phi<^8^C:^3^C>"]
+    assert run(program + "X %s Q" % IN)[1]["holds"] is True
+    assert run(program + "(%s) %s Q" % (ring("^3^C", "^8^C"), IN))[1]["holds"] is False        # order
+    assert run(program + "(%s) %s Q" % (ring("^8^P", "^3^C"), IN))[1]["holds"] is False        # a term's Domain
+    assert run(program + "(%s) %s Q" % (ring("^8^C_{F2}|A", "^3^C|f"), IN))[1]["holds"] is False   # Drive and Register
+    assert run("|{%s, %s}| = 2" % (ring("^8^C_{F2}|A", "^3^C|f"), ring("^8^C", "^3^C")))[1]["holds"] is True
+    assert run("Phi<8:3> %s {%s}" % (IN, ring("^8^C", "^3^C")))[1]["holds"] is False           # a bare literal has no Domains
+
+
+def test_known_limit_a_set_used_as_an_element_is_still_known_by_its_binding_name_pending_the_owners_decision():
+    """NOT fixed on purpose. A content-keyed version was built and then withdrawn after review: it made a typed set equal an
+    untyped set with the same members, turned an untyped literal into a built-in with the same members, changed CoverOf
+    family sizes and flipped `"CO-2" IN Noetics`. Whether two differently named sets with the same members are ONE element
+    is the owner's call (decision 'set identity' in COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md)."""
+    program = "let Alpha = NoeticSet{^2, ^7}; let Beta = NoeticSet{^7, ^2}; let Q = {Alpha, NoeticSet{^3}}; "
+    assert run(program + "Alpha %s Q" % IN)[1]["holds"] is True
+    assert run(program + "Beta %s Q" % IN)[1]["holds"] is False                    # same members, other name: not found (limit)
+    assert run(program + '"Alpha" %s Q' % IN)[1]["holds"] is True                  # text can forge a set (limit)
+    assert sorted(run(program + "Q")[1]["elements"]) == ["Alpha", "NoeticSet{CO-3}"]
+    deep = "let S1 = NoeticSet{^2}; let S2 = {S1}; let S3 = {S2}; "
+    assert run(deep + "S2 %s S3" % IN)[1]["holds"] is True and run(deep + "S1 %s S3" % IN)[1]["holds"] is False   # not flattened
+    assert run("Foundation_1 %s Foundations" % IN)[1]["holds"] is True
+
+
+def test_defect_5a_names_starting_with_a_domain_letter_are_whole_words():
+    assert run("Cluster{^2, ^7}")[1]["elements"] == ["CO-2", "CO-7"]
+    assert run("|EmptySet| = 0")[1]["holds"] is True
+    assert run("let Charlie = NoeticSet{^2}; |Charlie| = 1")[1]["holds"] is True
+    assert run("^2^P_{F2}")[0]["valid"] and run("P2 -> C2")[0]["valid"]          # single letters and state refs still lex
+
+
+def test_defect_5b_cardinality_bars_around_a_call_or_a_set_expression():
+    assert run("|Product(Noetics, Domains)| = 40")[1]["holds"] is True
+    assert run("|Pullback(NoeticSet{^2, ^7}, NoeticSet{^7, ^8})| = 1")[1]["holds"] is True
+    assert run("|Noetics %s Noetics| = 10" % UNION)[1]["holds"] is True
+    assert run("^3^P|A")[0]["valid"] and run("F_1|T")[0]["valid"]                # register suffixes still lex
+
+
+def test_defect_5c_a_chained_comparison_gets_a_clear_error():
+    artifact, _ = run("NoeticSet{^2} %s NoeticSet{^2, ^7} %s Noetics" % (SUBSET_EQ, SUBSET_EQ))
+    assert not artifact["valid"] and "chained set comparisons are not supported" in artifact["error"]
+
+
+def test_defect_6_deep_input_is_a_compiler_error_not_a_python_crash():
+    text = "^1^C"
+    for _ in range(400):
+        text = "(%s %s ^2^C)" % (text, RING)
+    artifact = compile_expression(text)
+    assert artifact.valid is False and "too deeply nested" in artifact.error
+
+
+@pytest.mark.parametrize("text", ["let C = NoeticSet{^2}; C", "let A = NoeticSet{^2}; |A| = 1", "let Noetics = NoeticSet{^2}; |Noetics| = 1", "fn g(A) = A; g(^2^C)"])
+def test_defect_7_reserved_names_are_refused_with_a_clear_message(text):
+    artifact, _ = run(text)
+    assert not artifact["valid"] and "is reserved in CAS notation" in artifact["error"]
+
+
+def test_review_a_deep_flat_chain_fails_cleanly_and_still_serialises():
+    import json
+    artifact = compile_expression(" + ".join(["^2^C"] * 1000))
+    assert artifact.valid is False and "too deeply nested" in artifact.error and artifact.ast is None
+    assert json.dumps(artifact.to_dict())                              # to_dict() used to crash on the kept tree
+
+
+def test_review_fn_names_are_not_reserved_but_let_names_and_parameters_are():
+    assert run("fn f(x: state): state = x; f(^2^C)")[1]["dominant_state"] == "C2"
+    assert run("fn Noetics(x: state): state = x; Noetics(^2^C)")[1]["dominant_state"] == "C2"
+    assert "is reserved" in run("let f = ^2^C; f")[0]["error"]
+    assert "is reserved" in run("fn h(f: state): state = f; h(^2^C)")[0]["error"]
+    assert run("let 1 = ^2^C")[0]["error"] == "parsing@4: expected IDENT, got NUMBER"
+
+
+def test_review_no_cross_domain_warning_when_a_side_has_no_known_domain_at_typecheck():
+    artifact, result = run("fn id(s: state): state = s; id(^8^C) %s ^3^C" % RING)
+    assert artifact["valid"] and artifact["warnings"] == [] and result["nesting"]["crosses_domains"] is False
+
+
+def test_review_the_worlds_warning_comes_from_the_alias_not_from_the_word():
+    artifact, _ = run("(^3^P|A × ^3^P|f) = Worlds")            # an emergent-result label spelled Worlds is not the alias
+    assert artifact["valid"] and artifact["warnings"] == []
+
+
+def test_defect_8_the_parse_tree_survives_a_typecheck_failure():
+    artifact = compile_expression("^9^O -> ^2^P")
+    assert artifact.valid is False and artifact.ast is not None
+    assert artifact.activations() == [] and artifact.diagram()["nodes"] == []

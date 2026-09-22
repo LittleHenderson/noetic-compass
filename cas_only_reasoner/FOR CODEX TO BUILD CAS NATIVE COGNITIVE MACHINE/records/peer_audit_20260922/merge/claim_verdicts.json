@@ -1,0 +1,83 @@
+{
+  "schema": "cas.peer-merge-claims/1",
+  "frozen_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "evidence": "merge_results.json",
+  "scope": "Independent merge/compiler preservation audit; no audited source edits, neural execution, or cloud requests.",
+  "claims": [
+    {
+      "id": "MERGE-1",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Corrected comparison reproduces. 7f32129d labels Phi<^8^C_{F2}:^3^C>;04547c55 labels Phi<^8^C_{F2|A}:^3^C>. Runtime cross-Domain warnings are added for functions/fractal. ^2^C ∘ ^5^C changes amplifying -> NOT_DECIDED_BY_THE_BOOK. Both compilers reject both old demos and accept both fixed demos (8 matrix calls). P1_count was refused before7f32129d. Note: the old function example has an any-typed-contract warning; 'no warning' means no cross-Domain warning."
+    },
+    {
+      "id": "MERGE-2",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "At7f32129d^ /7f32129d /04547c55 respectively: P1_count,F2_total -> REFUSED,REFUSED,accepted; A,T,Noetics,Worlds -> accepted,REFUSED,REFUSED; Charlie -> REFUSED,accepted,accepted."
+    },
+    {
+      "id": "MERGE-3",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Full tree union of d50abbbc and04547c55 has0 paths missing from078d00ed and0 from626cc84b. This validates literal file presence only. File contents were replaced; four additional test bodies are still absent. See PEER-MERGE-1."
+    },
+    {
+      "id": "MERGE-4",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "The commit message asserts pre-merge execution, but no independently dated pre-merge command receipt was identified. Fresh reruns can prove reproducibility, not that the checks happened before the merge."
+    },
+    {
+      "id": "MERGE-5",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Three named canon guards are absent at078d00ed and restored at626cc84b.9 original functions with454 parameter cases executed against byte-verified merged help sources:454 passed,0 failed. Additional discovery: FOUR other test functions were deleted and remain absent; all4 pass verbatim at both078d00ed and626cc84b (8/8 invocations). Thus the correction is real but incomplete."
+    },
+    {
+      "id": "GOV-4",
+      "auditor_verdict": "OVERSTATED",
+      "auditor_observed": "N1-N13 are declared and selected questions are surfaced by ID; section5 lists W-A/W-B/W-C and set identity. However 'rather than choosing' is too broad: compiler explicitly chooses Definition26.1 direction, drops identity terms, and reports stabilizing for the alternating ^2/^3 word while tagging N6. These are documented provisional readings, not silent owner rulings. PCBA route is already labeled RULED in that report, with placement still open. Drive-register-only mixing omits N8 (see qualified observation), so blanket exhaustive disclosure is not established."
+    },
+    {
+      "id": "GOV-5",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Documentation at COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md:45 records withdrawal. Frozen compiler.py:4140 returns frozenset({value.name}) for MetaSetValue. let Alpha={^2}; let Beta={^2}; Beta∈{Alpha} compiles with holds=false; let Alpha={^2}; \"Alpha\"∈{Alpha} compiles with holds=true. Current behavior is binding identity, with the disclosed text-forgery limitation. A first audit probe using numeric set elements was refused because CAS sets require CAS objects; that diagnostic is retained."
+    }
+  ],
+  "findings": [
+    {
+      "id": "PEER-MERGE-1",
+      "severity": "P2",
+      "status": "new confirmed, unresolved at frozen commit",
+      "title": "Restore the four other regression guards deleted by the merge",
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_notation_compiler_nesting_and_defects.py",
+      "line": 270,
+      "original_parent_lines": [
+        270,
+        277,
+        285,
+        290
+      ],
+      "description": "The wholesale theirs resolution removed four existing passing tests beyond the three restored help-text guards. They protect flat-chain error serialization; legal function names versus reserved let/parameters and malformed names; a same-Domain call path; and Worlds used as an emergent-result label. All four pass against merge078d00ed and current626cc84b. Existing tests partly cover same-Domain calls and reserved bindings, but omit the exact1000-term serialization, fn Noetics positive case, numeric-name diagnostic, and Worlds-label false-warning guards.",
+      "test_names": [
+        "test_review_a_deep_flat_chain_fails_cleanly_and_still_serialises",
+        "test_review_fn_names_are_not_reserved_but_let_names_and_parameters_are",
+        "test_review_no_cross_domain_warning_when_a_side_has_no_known_domain_at_typecheck",
+        "test_review_the_worlds_warning_comes_from_the_alias_not_from_the_word"
+      ],
+      "impact": "Coverage was lost; this audit does not claim the compiler currently fails those behaviors.",
+      "remediation": "Restore the original four tests intentionally and rerun the compiler suite; update audit correction to cover all seven dropped functions."
+    }
+  ],
+  "qualified_observations": [
+    {
+      "id": "PEER-MERGE-O1",
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "line": 1085,
+      "description": "Mixed-axis detection checks domain, drive and state register but omits drive_register. ^2^C_{F2|T} ∘ ^3^C_{F2|A} reports stabilizing/form[^0^C] and open_questions[N1,N5,N7,N13], without N8, despite preserved distinct drive registers. Both merge parents share this behavior; it is not a merge regression. Whether the N8 scope includes both Register positions needs a precise canonical decision. Record the omission without pretending the numeric/semantic answer has been disproven."
+    }
+  ],
+  "non_findings": [
+    "No entire path from either parent was lost.",
+    "No additional lost production compiler behavior was identified in the complete parent compiler diff and targeted before/after probes.",
+    "q3_v0_5 compiler/manifest/export pins differ between parents. The merge intentionally selects the recovered branch's consistent version, both historical versions remain in Git, and fresh v0.6/v0.7 versions exist. This content conflict alone is not evidence of a broken pin or lost learned result.",
+    "The99-test original test_notation_compiler.py is unchanged from merge basec3855275 to626cc84b (empty Git diff).",
+    "Set identity withdrawal is real; the known name/text collision remains disclosed, not newly introduced by this merge."
+  ]
+}

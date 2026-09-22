@@ -1,0 +1,251 @@
+{
+  "schema": "cas.peer-audit.claim-verdicts/1.0",
+  "source_commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "verdict_meaning": "REPRODUCES is limited to the stated revision and observed cases. Historical results are not silently promoted to current HEAD; UNVERIFIABLE does not mean false.",
+  "counts": {
+    "REPRODUCES": 26,
+    "FALSE": 1,
+    "UNVERIFIABLE": 5,
+    "OVERSTATED": 1
+  },
+  "compiler_case_counts": {
+    "tests.test_notation_compiler": 99,
+    "tests.test_notation_compiler_nesting_and_defects": 44,
+    "tests.test_notation_compiler_continuation": 41,
+    "tests.test_offline_help_text_canon": 454,
+    "tests.test_full_demo_program": 1
+  },
+  "claims": [
+    {
+      "id": "OHM-1",
+      "original_claim": "Before commit 86ba3d75, i_pred returned nan for i_pred(nan, 4.0) and for i_pred(8.0, nan), 0.0 for i_pred(8.0, inf), and inf for i_pred(inf, 4.0); r_total(1e308, 1e308, 1.0, 1.0) returned inf.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Pre-fix returns nan, nan, 0.0, inf, inf.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-2",
+      "original_claim": "After commit 86ba3d75 all five of those calls are refused with a ValueError whose message contains the word 'finite'.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Five ValueError refusals each containing finite at first_fix and frozen.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-3",
+      "original_claim": "The fix changed nothing else: i_pred(8.0, 4.0) == 2.0, y_hat(8.0, 4.0) == 2.0, r_total(1,2,3,4) == 10.0, r_hidden(v=8.0, i_obs=2.0, r_known=2.0) gives magnitude 2.0 and r_apparent 4.0, and resistance 0.0 or -2.0 is still refused.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Listed good examples and zero/negative refusals reproduce before/after. This is bounded to those examples, not a universal unchanged-behavior proof.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-4",
+      "original_claim": "The module passed 39/39 before my change and passes 48/48 after it. AND, because that commit wrote its own tests, the count alone proves nothing: running HEAD's test file against the PRE-FIX implementation gives PASSED 42/48 with six tests failing by name.",
+      "auditor_verdict": "FALSE",
+      "auditor_observed": "Historical matched39/39 and48/48 reproduce, as does42/48 using exact86ba tests against oldcode. Frozen HEADtests instead give51/51 or44/51 against oldcode: floatingHEAD instruction stale.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-5",
+      "original_claim": "The cause was that the guard read 'if rf <= 0.0', which NaN passes because NaN compares False against every ordering and equality operator (it returns True against !=), and which infinity passes because infinity is legitimately positive; and the module already contained a _is_finite helper that _as_resistance never called.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Pre-change resistance guard only tests rf<=0 and does not call the existing finite helper.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-6",
+      "original_claim": "WITHDRAWN BY THE AUTHOR BEFORE HANDOVER. I called i_pred(8.0, inf) -> 0.0 the dangerous one because a zero flow reads downstream as a starved path, and the changelog went further and called it an ASOM classification produced from garbage. BOTH ARE WRONG. There is no code path from a flow number to an ASOM label: asom() takes two enums, asom(0.0, INTENDED) returns None, and Region is always a caller judgement. Measured through delta_current, the module's only numeric consumer of a flow value: 0.0 -> OVERSHOOT (visible), nan -> WITHIN_TOLERANCE (the SAME sign reading as a perfectly correct prediction), inf -> UNDERSHOOT. NaN is the dangerous value, not 0.0. I picked the wrong value and stated the wrong mechanism.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "asom(0.0,INTENDED)->None; delta prediction2,0,nan,inf gives WITHIN_TOLERANCE,OVERSHOOT,WITHIN_TOLERANCE,UNDERSHOOT. Known NaN defect remains live.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-7",
+      "original_claim": "The CAS-Ohm module is NOT connected to the CAS compiler. None of the three operations is reachable from a compiled expression today.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Frozen peer compiler lacks quantifier imports/calls. Scoped only to626cc84b and this cas_ohm package; does not negate separate Codex compiler helper at eb998556.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-8",
+      "original_claim": "Of the owner's three operations, I = V/R exists as i_pred; R = V/I exists only as a private step inside r_hidden (surfaced as RHidden.r_apparent, tagged APPARENT_SAME_SAMPLE); V = I x R does not exist anywhere in the module.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "No V=IxR function exported; apparent R=V/I is within r_hidden and tagged APPARENT_SAME_SAMPLE.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "BOOK-1",
+      "original_claim": "Commit d50abbbc is the canon pin, and its eight changed book files are byte-identical (over LF-normalised bytes) to commit eb3c9b1e in the SEPARATE main repository.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "All eight canon files match main eb3c9b1e and all sixteen expected LF hashes; no book changes since d50abbbc.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-1"
+    },
+    {
+      "id": "BOOK-2",
+      "original_claim": "The true content change is 202 insertions and 95 deletions across 8 files. The 1765/1658 figure in commit 0fc6bb30 is a line-ending mistake, fixed by d50abbbc. SCOPE CORRECTION: 'all book .md files are LF' is true in the helm3-lab worktree and FALSE in the main repository, where core.autocrlf=true leaves 24 CRLF files in the working tree. The committed blobs are identical either way.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "8 files,202 insertions,95 deletions. Original noisy commit1765/1658.39 top-level Markdown files; recursive Git pathspec includes one build Markdown file.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-2"
+    },
+    {
+      "id": "BOOK-3",
+      "original_claim": "The committed book called XOR a both-active detector, which is wrong because XOR fires when its inputs differ; AND is the both-active detector. I called this 'plainly wrong'.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Original text calls XOR both-active; independent truth table gives XOR(true,true)=false and AND(true,true)=true. Correction is justified.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-3"
+    },
+    {
+      "id": "BOOK-4",
+      "original_claim": "MY SELF-CORRECTION: the gate prefix/leader clash was ALREADY reachable in the committed book at Chapter_10:278 and in Chapter_14; my original published claim that the edits made it reachable was FALSE.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "At dbb388ee Chapter10:278 already uses gate; Chapter14:80 and326 also use gate. Self-correction reproduces.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-4"
+    },
+    {
+      "id": "BOOK-5",
+      "original_claim": "In the committed book, Chapter_10:278 uses the 'gate' prefix while its own answer key at Appendix_E:327 uses the 'xor' prefix for the same declaration \u2014 so the edits fix an internal inconsistency.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "At dbb388ee Chapter10:278 uses gate; AppendixE:327 uses xor. Corrected canon uses gate conflict:AND in both.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-5"
+    },
+    {
+      "id": "BOOK-6",
+      "original_claim": "Two further one-line defects existed in the owner's edited text and I fixed them before committing: Appendix_B:374 still showed the old NOT meaning and contradicted its own table at :386; Appendix_A:137 omitted XNOR and said gates act on 'states'.",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "Final text is corrected, but the intermediate owner-edited pre-fix copy and exclusive authorship are not independently retained.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-6"
+    },
+    {
+      "id": "BOOK-7",
+      "original_claim": "The book contains 58 circuit/board listing blocks across 42 distinct names (an earlier investigator reported 60).",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "58 circuit/board blocks,42 distinct names at both pre-edit and canon pins, using the published anchored regex.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-7"
+    },
+    {
+      "id": "TEST-1",
+      "original_claim": "458 compiler tests pass on the merged tree.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "458 is the historical merged-suite count before restoration: current639 minus restored181. At frozen626 the prescribed current-tree command actually yields639; see stale-instruction finding. Historical comparison and function inventory are retained.",
+      "evidence": "compiler_tests.xml; merge/merge_results.json"
+    },
+    {
+      "id": "TEST-2",
+      "original_claim": "348 lab tests pass on the merged tree.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Final exact nine-file lab command:348 passed,0 failures,0 errors. Earlier six failures were missing-schema sparse-checkout setup errors, corrected without source edits and retained separately.",
+      "evidence": "lab_tests.xml"
+    },
+    {
+      "id": "TEST-3",
+      "original_claim": "The 99 pre-existing compiler tests were not modified by this work.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Original test_notation_compiler.py bytes are identical from c3855275 to626; current XML contains99 cases from that file.",
+      "evidence": "package_results.json; compiler_tests.xml"
+    },
+    {
+      "id": "MERGE-1",
+      "original_claim": "THREE of the five points stand; TWO WERE FALSE and are corrected here. Standing: (a) a ring result used as a set element keeps a term's Drive Register in theirs and drops it in mine; (b) the cross-Domain warning fires through a function and through fractal(...) in theirs and not mine; (e) N9 is stricter in theirs. FALSE: (d) 'both demo files compile under theirs and not mine' - the compiler was never the variable; the second agent edited the .cas files, and all four combinations show both compilers failing on the old files and both compiling the fixed ones. FALSE: (c) 'a regression I introduced' - P1_count was already refused before my commit; I changed the message, not the answer.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Corrected comparison reproduces. 7f32129d labels Phi<^8^C_{F2}:^3^C>;04547c55 labels Phi<^8^C_{F2|A}:^3^C>. Runtime cross-Domain warnings are added for functions/fractal. ^2^C \u2218 ^5^C changes amplifying -> NOT_DECIDED_BY_THE_BOOK. Both compilers reject both old demos and accept both fixed demos (8 matrix calls). P1_count was refused before7f32129d. Note: the old function example has an any-typed-contract warning; 'no warning' means no cross-Domain warning.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "MERGE-2",
+      "original_claim": "WITHDRAWN. I said my compiler wrongly refused P1_count and F2_total and called it 'a regression I introduced'. It was not mine: both names were already refused before my commit, by lexer patterns that predate it. My commit changed the error message only. What my commit DID change: it newly refused A, T, Noetics, Worlds (intended; theirs kept them refused) and newly ACCEPTED Charlie. I over-blamed myself and made the other agent's work look like a rescue.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "At7f32129d^ /7f32129d /04547c55 respectively: P1_count,F2_total -> REFUSED,REFUSED,accepted; A,T,Noetics,Worlds -> accepted,REFUSED,REFUSED; Charlie -> REFUSED,accepted,accepted.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "MERGE-3",
+      "original_claim": "The merge kept every unique file from both lines.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Full tree union of d50abbbc and04547c55 has0 paths missing from078d00ed and0 from626cc84b. This validates literal file presence only. File contents were replaced; four additional test bodies are still absent. See PEER-MERGE-1.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "MERGE-4",
+      "original_claim": "I verified the second agent's claims by re-running their commands before merging, and every count reproduced: 458, 304, 92, 27, 2 passed; Q3 v0.5 vs v0.7 all 24 row files identical. NOTE: an independent checker marked this UNVERIFIABLE and I accept that verdict - see the note.",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "The commit message asserts pre-merge execution, but no independently dated pre-merge command receipt was identified. Fresh reruns can prove reproducibility, not that the checks happened before the merge.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "GOV-1",
+      "original_claim": "No model was run in any of this work: no training, no inference, no GPU, no CPU inference, no cloud job, no money spent.",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "No new neural-run evidence was found in the reviewed changes; the recorded checks are symbolic. Local source/artifact absence cannot prove that no historical inference, provider action or spending occurred. This audit itself ran no model/cloud workload.",
+      "evidence": "package_results.json; audit scope in REPORT.md"
+    },
+    {
+      "id": "GOV-2",
+      "original_claim": "I did not push another agent's unpushed commits. The main repository's branch codex/casformer-v0.2-release carries my commit eb3c9b1e but was deliberately left unpushed because it also carries two of their unfinished commits.",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "Main repo currently at eb3c9b1e on codex/casformer-v0.2-release;3 commits not in local remote refs; upstream missing. Fresh ls-remote returns no branch of that name. These observations reproduce the local state, not a historical never-pushed guarantee.",
+      "evidence": "package_results.json#/main_repository_observations"
+    },
+    {
+      "id": "GOV-3",
+      "original_claim": "An owner ruling that existed only in my prose was recorded as an artifact (OD-9) after a second agent correctly refused to treat my report as authorization.",
+      "auditor_verdict": "UNVERIFIABLE",
+      "auditor_observed": "OD9/10 agent-written artifacts exist; actual owner chat authenticity is not independently available. Prior refusal exists at CODEX_CONTINUATION_20260921.md:53-55, not the named verification file.",
+      "evidence": "book/book_probe.json#/claim_checks/GOV-3"
+    },
+    {
+      "id": "GOV-4",
+      "original_claim": "Where an owner decision is unmade, the work reports it as open rather than choosing. Open items include the PCBA route, set identity, N1-N13, and W-A/W-B/W-C.",
+      "auditor_verdict": "OVERSTATED",
+      "auditor_observed": "N1-N13 are declared and selected questions are surfaced by ID; section5 lists W-A/W-B/W-C and set identity. However 'rather than choosing' is too broad: compiler explicitly chooses Definition26.1 direction, drops identity terms, and reports stabilizing for the alternating ^2/^3 word while tagging N6. These are documented provisional readings, not silent owner rulings. PCBA route is already labeled RULED in that report, with placement still open. Drive-register-only mixing omits N8 (see qualified observation), so blanket exhaustive disclosure is not established.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "GOV-5",
+      "original_claim": "A change I had built (set-element identity by contents) was WITHDRAWN after review showed it changed more than claimed.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Documentation at COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md:45 records withdrawal. Frozen compiler.py:4140 returns frozenset({value.name}) for MetaSetValue. let Alpha={^2}; let Beta={^2}; Beta\u2208{Alpha} compiles with holds=false; let Alpha={^2}; \"Alpha\"\u2208{Alpha} compiles with holds=true. Current behavior is binding identity, with the disclosed text-forgery limitation. A first audit probe using numeric set elements was refused because CAS sets require CAS objects; that diagnostic is retained.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "OHM-9",
+      "original_claim": "A defect of the same class survived my first fix: r_hidden never checked its drive argument. At commit 86ba3d75, r_hidden(v=nan, i_obs=2.0, r_known=2.0) returned RHidden magnitude=nan, and v=inf returned magnitude=inf. It is fixed now and the suite is 51/51.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "NaN/infinite drives return nonfinite RHidden at86ba; ValueError containing finite at a4b2/frozen.48/48 then51/51.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "OHM-10",
+      "original_claim": "My statement 'no test covered a non-finite input' was FALSE. The pre-fix test file already had test_r_hidden_censors_non_finite, passing nan and inf as i_obs at lines 156 and 158. The accurate claim is: no test covered a non-finite input TO i_pred OR r_total.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Original test already covers nan/inf as i_obs; correction accurately limits missing coverage to i_pred/r_total.",
+      "evidence": "ohm/CLAIM_VERDICTS.json"
+    },
+    {
+      "id": "TEST-4",
+      "original_claim": "The 458 figure is not 458 independent compiler behaviours: 99 pre-date this work, 359 do not, and 270 of the 458 come from three parametrized functions swept over 90 help-text rows in a single file.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Historical merged help file:6 functions,273 cases,including270 parameter rows. Current restored file:9 functions,454 cases; current fullsuite639. Current checkout must contain allthree help sources to reproduce counts.",
+      "evidence": "merge/merge_results.json; compiler_tests.xml"
+    },
+    {
+      "id": "BOOK-8",
+      "original_claim": "The OD-A edits left two instances of the defect they were made to remove: the op-amp is still called a CJT at Chapter_10:322 and Appendix_B:65, contradicting the headings those same edits changed. REPORTED TO THE OWNER, NOT FIXED.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Both disclosed CJT/op-amp sentences remain at Chapter10:322 and AppendixB:65, despite changed headings.",
+      "evidence": "book/book_probe.json#/claim_checks/BOOK-8"
+    },
+    {
+      "id": "MERGE-5",
+      "original_claim": "MY MERGE DELETED THREE OF MY OWN CANON GUARD TESTS WHILE THEY WERE PASSING. tests/test_offline_help_text_canon.py went from 9 test functions and 454 collected cases to 6 and 273. The three dropped guards are test_no_bare_nickname_word_stands_in_for_a_noetic, test_every_noetic_named_in_the_sentence_is_in_the_expression and test_dictionary_entries_carry_the_canonical_notation. Restored 2026-09-22; the five-file suite is now 639, up from 458.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Three named canon guards are absent at078d00ed and restored at626cc84b.9 original functions with454 parameter cases executed against byte-verified merged help sources:454 passed,0 failed. Additional discovery: FOUR other test functions were deleted and remain absent; all4 pass verbatim at both078d00ed and626cc84b (8/8 invocations). Thus the correction is real but incomplete.",
+      "evidence": "merge/claim_verdicts.json"
+    },
+    {
+      "id": "TEST-5",
+      "original_claim": "With the three guards restored, the five-file compiler suite is 639 passed, not 458.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Frozen626 current five-file compiler command:639 passed,0 failures,0 errors;454 are help/canon cases. One unknown asyncio_mode config warning under disabled plugins.",
+      "evidence": "compiler_tests.xml"
+    }
+  ]
+}

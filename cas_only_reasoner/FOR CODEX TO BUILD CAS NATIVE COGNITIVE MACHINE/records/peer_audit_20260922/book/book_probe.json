@@ -1,0 +1,2724 @@
+{
+  "schema": "cas.peer-audit.book/1.0",
+  "audit_target": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "source_refs": {
+    "canon": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+    "before": "dbb388ee42d70c993e241dd35b4167413634872a",
+    "main_pin": "eb3c9b1eac98853b2065c98b08987918e8e7d936"
+  },
+  "repositories": {
+    "audited_git_common_dir": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git",
+    "main_git_common_dir": ".git"
+  },
+  "claim_checks": {
+    "BOOK-1": {
+      "verdict": "REPRODUCES",
+      "all_eight_identical": true,
+      "all_manifest_hashes_match": true,
+      "rows": [
+        {
+          "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+          "lab_lf_sha256": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+          "main_lf_sha256": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+          "lab_lf_sha256": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+          "main_lf_sha256": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+          "lab_lf_sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+          "main_lf_sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+          "lab_lf_sha256": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+          "main_lf_sha256": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/CHANGELOG.md",
+          "lab_lf_sha256": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+          "main_lf_sha256": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+          "lab_lf_sha256": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+          "main_lf_sha256": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+          "lab_lf_sha256": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+          "main_lf_sha256": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        },
+        {
+          "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+          "lab_lf_sha256": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+          "main_lf_sha256": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+          "identical": true,
+          "matches_manifest": true,
+          "raw_identical": true
+        }
+      ],
+      "book_changes_since_pin": ""
+    },
+    "BOOK-2": {
+      "verdict": "REPRODUCES",
+      "files": 8,
+      "insertions": 202,
+      "deletions": 95,
+      "numstat_stdout": "1\t1\tbook/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md\n49\t43\tbook/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md\n12\t11\tbook/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md\n6\t6\tbook/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md\n97\t0\tbook/CAS_PCBA_Engineer/CHANGELOG.md\n35\t32\tbook/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md\n1\t1\tbook/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md\n1\t1\tbook/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md\n",
+      "original_noisy_commit_stdout": "0fc6bb30 book(pcba): separate Boolean logic gates from Noetic involution (owner decision OD-A)\n .../Appendix_A_Notation_Quick_Reference.md         |    2 +-\n .../Appendix_B_Component_Datasheets.md             |   92 +-\n .../Appendix_C_CCDL_Language_Reference.md          |   23 +-\n .../Appendix_E_Exercise_Answers.md                 | 1804 ++++++++++----------\n book/CAS_PCBA_Engineer/CHANGELOG.md                |  775 +++++----\n .../Chapter_10_Special_Purpose_Components.md       |   67 +-\n .../Chapter_15_Mixed_Signal_Design.md              |    2 +-\n .../Chapter_18_CSB_Cognitive_Safety_Board.md       |  658 +++----\n 8 files changed, 1765 insertions(+), 1658 deletions(-)\n",
+      "audit_checkout_eol_stdout": "i/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/00_Front_Matter.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/About_the_Author.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_G_Glossary.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_H_Further_Reading.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/CHANGELOG.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_01_Why_Build_Cognitive_Circuits.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_02_CAS_Notation_in_One_Chapter.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_05_Resistors.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_06_Capacitors.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_07_Inductors.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_08_Diodes.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_12_Filters.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_13_Oscillators.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_14_Power_Management.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_23_Testing_Cognitive_Circuits.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_24_Debugging_Cognitive_Circuits.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_25_Production_Deployment.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_26_Governance.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/STYLE_GUIDE.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/build/BUILD_README.md\n",
+      "main_checkout_eol_stdout": "i/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/00_Front_Matter.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/About_the_Author.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_G_Glossary.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Appendix_H_Further_Reading.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md\ni/lf    w/mixed attr/                 \tbook/CAS_PCBA_Engineer/CHANGELOG.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_01_Why_Build_Cognitive_Circuits.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_02_CAS_Notation_in_One_Chapter.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_05_Resistors.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_06_Capacitors.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_07_Inductors.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_08_Diodes.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_12_Filters.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_13_Oscillators.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_14_Power_Management.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_23_Testing_Cognitive_Circuits.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_24_Debugging_Cognitive_Circuits.md\ni/lf    w/crlf  attr/                 \tbook/CAS_PCBA_Engineer/Chapter_25_Production_Deployment.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/Chapter_26_Governance.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/STYLE_GUIDE.md\ni/lf    w/lf    attr/                 \tbook/CAS_PCBA_Engineer/build/BUILD_README.md\n",
+      "note": "39 top-level files; git pathspec also includes build/BUILD_README.md, yielding 40. This count caveat was disclosed by the pre-handover checker."
+    },
+    "BOOK-3": {
+      "verdict": "REPRODUCES",
+      "truth_table": [
+        {
+          "a": false,
+          "b": false,
+          "XOR": false,
+          "AND": false
+        },
+        {
+          "a": false,
+          "b": true,
+          "XOR": true,
+          "AND": false
+        },
+        {
+          "a": true,
+          "b": false,
+          "XOR": true,
+          "AND": false
+        },
+        {
+          "a": true,
+          "b": true,
+          "XOR": false,
+          "AND": true
+        }
+      ],
+      "note": "Original prose contradicts its own correct truth-table column. Two active inputs give XOR false, AND true."
+    },
+    "BOOK-4": {
+      "verdict": "REPRODUCES",
+      "declarations": [
+        {
+          "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+          "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+          "lf_sha256": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+          "lines": [
+            {
+              "line": 96,
+              "text": "| **XOR** | true if inputs *differ* | **dissonance detector** — both `^2` and `^3` firing → conflict flag |"
+            },
+            {
+              "line": 98,
+              "text": "The two that earn the most use in safety circuits are **NOT** and **XOR**. NOT is the involution operator made discrete: `NOT< ^2^E >` yields `^3^E`, flipping attraction to aversion — exactly the breakdown-flip a CJT performs under overload, but here deliberate and controlled. XOR is the **dissonance detector**: if a stimulus makes *both* the `^2` Positive (attraction) and the `^3` Negative (aversion) states fire at once, something is genuinely conflicted, and XOR raises a flag. A clean stimulus fires one or the other; a manipulative or ambiguous one fires both."
+            },
+            {
+              "line": 104,
+              "text": "XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                 // both attraction AND aversion firing → dissonance flag"
+            },
+            {
+              "line": 278,
+              "text": "    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict"
+            }
+          ]
+        },
+        {
+          "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+          "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+          "lf_sha256": "a148ef9f3af7ead10b07ad2e72bc69db24bba188fcab44a6bc8ba1199fe1112c",
+          "lines": [
+            {
+              "line": 80,
+              "text": "    gate o_enable: o_rail requires (p_rail within 0.10)"
+            },
+            {
+              "line": 326,
+              "text": "    gate o_enable: o_rail requires (e_rail within 0.1);"
+            }
+          ]
+        }
+      ]
+    },
+    "BOOK-5": {
+      "verdict": "REPRODUCES",
+      "before": [
+        {
+          "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+          "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+          "lf_sha256": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+          "lines": [
+            {
+              "line": 96,
+              "text": "| **XOR** | true if inputs *differ* | **dissonance detector** — both `^2` and `^3` firing → conflict flag |"
+            },
+            {
+              "line": 98,
+              "text": "The two that earn the most use in safety circuits are **NOT** and **XOR**. NOT is the involution operator made discrete: `NOT< ^2^E >` yields `^3^E`, flipping attraction to aversion — exactly the breakdown-flip a CJT performs under overload, but here deliberate and controlled. XOR is the **dissonance detector**: if a stimulus makes *both* the `^2` Positive (attraction) and the `^3` Negative (aversion) states fire at once, something is genuinely conflicted, and XOR raises a flag. A clean stimulus fires one or the other; a manipulative or ambiguous one fires both."
+            },
+            {
+              "line": 104,
+              "text": "XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                 // both attraction AND aversion firing → dissonance flag"
+            },
+            {
+              "line": 278,
+              "text": "    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict"
+            }
+          ]
+        },
+        {
+          "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+          "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+          "lf_sha256": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+          "lines": [
+            {
+              "line": 327,
+              "text": "    xor dissonance: XOR< attract, averse >;       // fires only when both active (ambiguity)"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+          "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+          "lf_sha256": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+          "lines": [
+            {
+              "line": 37,
+              "text": "## Op-Amp — High-Gain Differential Stage with Feedback"
+            },
+            {
+              "line": 39,
+              "text": "An **operational amplifier** (op-amp) has two inputs — a `+` non-inverting input and a `−` inverting input — and one output. It amplifies their arithmetic difference with large open-loop gain. On its own, a tiny difference can drive the output to a rail. Feedback turns that raw gain into a precise closed-loop response, often `1 + Rf/Rg` in the non-inverting configuration."
+            },
+            {
+              "line": 41,
+              "text": "The CAS mapping compares two commensurable cognitive quantities. The non-inverting input contributes positively to the arithmetic difference; the inverting input contributes negatively. This subtraction is not a Noetic involution. The output is the designed landing. Four common configurations are:"
+            },
+            {
+              "line": 96,
+              "text": "| **XOR** | true if inputs *differ* | exclusivity detector — exactly one fires |"
+            },
+            {
+              "line": 99,
+              "text": "The two safety rules to memorize are **AND detects both-active conflict; XOR detects exactly-one exclusivity**. NOT is a Boolean complement. It maps to a Noetic involution only for `^2↔^3`, `^5↔^6`, or `^8↔^9`; the self-duals remain themselves. If attraction and aversion firing flags are both active, an AND gate raises the conflict flag. XOR is false in that case."
+            },
+            {
+              "line": 111,
+              "text": "| `AND< s₁, …, sₙ >` | n states | fires only if all n fire |"
+            },
+            {
+              "line": 112,
+              "text": "| `OR< s₁, …, sₙ >` | n states | fires if any fire |"
+            },
+            {
+              "line": 115,
+              "text": "| `XOR< s₁, s₂ >` | 2 firing flags | fires iff exactly one fires |"
+            },
+            {
+              "line": 116,
+              "text": "| `XNOR< s₁, s₂ >` | 2 firing flags | fires iff the inputs agree, including both-inactive |"
+            },
+            {
+              "line": 278,
+              "text": "    node settled:  ^9^E_{F2}|A;   // a settled, reasoned verdict"
+            },
+            {
+              "line": 322,
+              "text": "- **Transformer** matches domains by trading abstraction for actionability (`ratio`); a step-down is Domain Descent, not a violation. **Op-Amp** is an ultra-high-gain CJT tamed by feedback — set the *closed-loop* gain (`1 + Rf/Rg`), never run reasoning open-loop."
+            }
+          ]
+        },
+        {
+          "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+          "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+          "lf_sha256": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+          "lines": [
+            {
+              "line": 327,
+              "text": "    gate conflict: AND< attract, averse >;        // fires only when both are active"
+            }
+          ]
+        }
+      ]
+    },
+    "BOOK-6": {
+      "verdict": "UNVERIFIABLE",
+      "verified": "Final two corrected lines exist, Appendix_A diff is 1/1.",
+      "not_verified": "The uncommitted owner-edited pre-fix Appendix_B text and authorship-only attribution are not independently retained. Old committed NOT is line372; line374 is XOR. The pre-handover report already disclosed this.",
+      "appendix_a_numstat": "1\t1\tbook/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md\n"
+    },
+    "BOOK-7": {
+      "verdict": "REPRODUCES",
+      "before": {
+        "top_level_markdown_files": 39,
+        "blocks": 58,
+        "distinct_names": 42,
+        "rows": [
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+            "line": 147,
+            "kind": "circuit",
+            "name": "name"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+            "line": 569,
+            "kind": "board",
+            "name": "csb_v0"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+            "line": 987,
+            "kind": "circuit",
+            "name": "safety_filter_v1"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 60,
+            "kind": "board",
+            "name": "cognitive_safety_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 214,
+            "kind": "circuit",
+            "name": "compulsive_checking_loop"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 339,
+            "kind": "circuit",
+            "name": "cdab_compare"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 454,
+            "kind": "circuit",
+            "name": "cognitive_memory_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 585,
+            "kind": "circuit",
+            "name": "CPMB"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 613,
+            "kind": "circuit",
+            "name": "cpmb_regulators"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 629,
+            "kind": "circuit",
+            "name": "cpmb_limiters"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 646,
+            "kind": "circuit",
+            "name": "cpmb_brownout"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 666,
+            "kind": "circuit",
+            "name": "cpmb_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 687,
+            "kind": "circuit",
+            "name": "cpmb_thermal"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 134,
+            "kind": "circuit",
+            "name": "agency_limiter"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 179,
+            "kind": "circuit",
+            "name": "memory_cell_praise"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 219,
+            "kind": "circuit",
+            "name": "safe_habit_taper"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 244,
+            "kind": "circuit",
+            "name": "governed_descent"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 323,
+            "kind": "circuit",
+            "name": "decisive_commit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 377,
+            "kind": "circuit",
+            "name": "injection_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 401,
+            "kind": "circuit",
+            "name": "daily_loop_bandpass"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 456,
+            "kind": "circuit",
+            "name": "startup"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 527,
+            "kind": "circuit",
+            "name": "damped_expansion"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 565,
+            "kind": "board",
+            "name": "mini"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 655,
+            "kind": "board",
+            "name": "nail_biting_cob"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md",
+            "line": 94,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_05_Resistors.md",
+            "line": 186,
+            "kind": "circuit",
+            "name": "agency_divider"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_06_Capacitors.md",
+            "line": 149,
+            "kind": "circuit",
+            "name": "memory_cell_criticism"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_07_Inductors.md",
+            "line": 115,
+            "kind": "circuit",
+            "name": "compulsive_checking"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_08_Diodes.md",
+            "line": 162,
+            "kind": "circuit",
+            "name": "domain_descent_stack"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md",
+            "line": 128,
+            "kind": "circuit",
+            "name": "biased_amplifier"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+            "line": 269,
+            "kind": "circuit",
+            "name": "ambiguity_stabilizer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md",
+            "line": 130,
+            "kind": "circuit",
+            "name": "three_stage_amplifier"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_12_Filters.md",
+            "line": 48,
+            "kind": "circuit",
+            "name": "emotional_smoother"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_12_Filters.md",
+            "line": 88,
+            "kind": "circuit",
+            "name": "injection_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_13_Oscillators.md",
+            "line": 133,
+            "kind": "circuit",
+            "name": "circadian_pll"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 68,
+            "kind": "circuit",
+            "name": "power_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 113,
+            "kind": "circuit",
+            "name": "brownout_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 319,
+            "kind": "circuit",
+            "name": "startup"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "experience_adc"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 187,
+            "kind": "circuit",
+            "name": "nfb_amplifier_gain3"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 220,
+            "kind": "circuit",
+            "name": "anxiety_oscillator"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 244,
+            "kind": "circuit",
+            "name": "anxiety_damped"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 70,
+            "kind": "circuit",
+            "name": "csb_policy_guard"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 166,
+            "kind": "board",
+            "name": "csb_v0"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 259,
+            "kind": "board",
+            "name": "mini"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+            "line": 72,
+            "kind": "board",
+            "name": "cognitive_safety_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md",
+            "line": 116,
+            "kind": "circuit",
+            "name": "compulsive_checking_loop"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md",
+            "line": 126,
+            "kind": "circuit",
+            "name": "cdab_compare"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md",
+            "line": 146,
+            "kind": "circuit",
+            "name": "cognitive_memory_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "cpmb_regulators"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 120,
+            "kind": "circuit",
+            "name": "cpmb_limiters"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 149,
+            "kind": "circuit",
+            "name": "cpmb_brownout"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 175,
+            "kind": "circuit",
+            "name": "cpmb_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 212,
+            "kind": "circuit",
+            "name": "cpmb_thermal"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 256,
+            "kind": "circuit",
+            "name": "CPMB"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/STYLE_GUIDE.md",
+            "line": 154,
+            "kind": "circuit",
+            "name": "safety_filter"
+          }
+        ]
+      },
+      "canon": {
+        "top_level_markdown_files": 39,
+        "blocks": 58,
+        "distinct_names": 42,
+        "rows": [
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+            "line": 147,
+            "kind": "circuit",
+            "name": "name"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+            "line": 570,
+            "kind": "board",
+            "name": "csb_v0"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+            "line": 988,
+            "kind": "circuit",
+            "name": "safety_filter_v1"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 60,
+            "kind": "board",
+            "name": "cognitive_safety_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 214,
+            "kind": "circuit",
+            "name": "compulsive_checking_loop"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 339,
+            "kind": "circuit",
+            "name": "cdab_compare"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 454,
+            "kind": "circuit",
+            "name": "cognitive_memory_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 585,
+            "kind": "circuit",
+            "name": "CPMB"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 613,
+            "kind": "circuit",
+            "name": "cpmb_regulators"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 629,
+            "kind": "circuit",
+            "name": "cpmb_limiters"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 646,
+            "kind": "circuit",
+            "name": "cpmb_brownout"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 666,
+            "kind": "circuit",
+            "name": "cpmb_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md",
+            "line": 687,
+            "kind": "circuit",
+            "name": "cpmb_thermal"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 134,
+            "kind": "circuit",
+            "name": "agency_limiter"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 179,
+            "kind": "circuit",
+            "name": "memory_cell_praise"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 219,
+            "kind": "circuit",
+            "name": "safe_habit_taper"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 244,
+            "kind": "circuit",
+            "name": "governed_descent"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 323,
+            "kind": "circuit",
+            "name": "decisive_commit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 377,
+            "kind": "circuit",
+            "name": "injection_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 401,
+            "kind": "circuit",
+            "name": "daily_loop_bandpass"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 456,
+            "kind": "circuit",
+            "name": "startup"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 527,
+            "kind": "circuit",
+            "name": "damped_expansion"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 565,
+            "kind": "board",
+            "name": "mini"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+            "line": 655,
+            "kind": "board",
+            "name": "nail_biting_cob"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md",
+            "line": 94,
+            "kind": "circuit",
+            "name": "first_circuit"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_05_Resistors.md",
+            "line": 186,
+            "kind": "circuit",
+            "name": "agency_divider"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_06_Capacitors.md",
+            "line": 149,
+            "kind": "circuit",
+            "name": "memory_cell_criticism"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_07_Inductors.md",
+            "line": 115,
+            "kind": "circuit",
+            "name": "compulsive_checking"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_08_Diodes.md",
+            "line": 162,
+            "kind": "circuit",
+            "name": "domain_descent_stack"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md",
+            "line": 128,
+            "kind": "circuit",
+            "name": "biased_amplifier"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+            "line": 272,
+            "kind": "circuit",
+            "name": "ambiguity_stabilizer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md",
+            "line": 130,
+            "kind": "circuit",
+            "name": "three_stage_amplifier"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_12_Filters.md",
+            "line": 48,
+            "kind": "circuit",
+            "name": "emotional_smoother"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_12_Filters.md",
+            "line": 88,
+            "kind": "circuit",
+            "name": "injection_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_13_Oscillators.md",
+            "line": 133,
+            "kind": "circuit",
+            "name": "circadian_pll"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 68,
+            "kind": "circuit",
+            "name": "power_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 113,
+            "kind": "circuit",
+            "name": "brownout_detector"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+            "line": 319,
+            "kind": "circuit",
+            "name": "startup"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "experience_adc"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 187,
+            "kind": "circuit",
+            "name": "nfb_amplifier_gain3"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 220,
+            "kind": "circuit",
+            "name": "anxiety_oscillator"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+            "line": 244,
+            "kind": "circuit",
+            "name": "anxiety_damped"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 70,
+            "kind": "circuit",
+            "name": "csb_policy_guard"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 166,
+            "kind": "board",
+            "name": "csb_v0"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md",
+            "line": 259,
+            "kind": "board",
+            "name": "mini"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md",
+            "line": 72,
+            "kind": "board",
+            "name": "cognitive_safety_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md",
+            "line": 116,
+            "kind": "circuit",
+            "name": "compulsive_checking_loop"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md",
+            "line": 126,
+            "kind": "circuit",
+            "name": "cdab_compare"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md",
+            "line": 146,
+            "kind": "circuit",
+            "name": "cognitive_memory_board"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 91,
+            "kind": "circuit",
+            "name": "cpmb_regulators"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 120,
+            "kind": "circuit",
+            "name": "cpmb_limiters"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 149,
+            "kind": "circuit",
+            "name": "cpmb_brownout"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 175,
+            "kind": "circuit",
+            "name": "cpmb_sequencer"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 212,
+            "kind": "circuit",
+            "name": "cpmb_thermal"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md",
+            "line": 256,
+            "kind": "circuit",
+            "name": "CPMB"
+          },
+          {
+            "path": "book/CAS_PCBA_Engineer/STYLE_GUIDE.md",
+            "line": 154,
+            "kind": "circuit",
+            "name": "safety_filter"
+          }
+        ]
+      }
+    },
+    "BOOK-8": {
+      "verdict": "REPRODUCES",
+      "note": "Both reported sentences and changed headings survive unchanged through the frozen audit target."
+    },
+    "GOV-3": {
+      "verdict": "UNVERIFIABLE",
+      "artifact_exists": true,
+      "entries": [
+        {
+          "id": "OD-9",
+          "topic": "PCBA stays in CAS; it is partly implemented, not rejected",
+          "owner_words": "PCBA remains included in the project. Describe it as partly implemented, not rejected. Reuse the existing component reader where it matches the book. Build the missing whole-board reading and checking features. Keep reading a component, checking a board, running its behavior, and teaching Helm as separate results. Bottom line: the book describes more than the current software implements. The task is to close that gap, not remove PCBA from CAS.",
+          "what_fable_does": "Records PCBA's status as PARTLY IMPLEMENTED (never 'rejected' or 'not in CAS'). Reuses the cas-forex component reader (pcba_syntax.py, cjt_syntax.py, compiler_bridge.py, crc_linter.py) where it matches the book. Builds the whole-board reader and checker that the book describes and no code implements. Keeps four separate results with four separate claim words: (1) read a component, (2) check a board, (3) run its behaviour, (4) teach Helm. No result inherits another's pass.",
+          "status": "RULED_BY_OWNER_IN_CHAT",
+          "given": "2026-09-21, in the chat message that also said 'I hit my usage limit while you were working, but it has reset now.'",
+          "why_this_record_exists": "The codex continuation (branch codex/helm-cas-data-boundary-20260921, records/continuation_20260921/VERIFICATION.md) read this ruling in the report prose and correctly refused to treat prose as authorization: 'The newer original report attributes a PCBA route ruling to the owner, but the current owner-decision file and this conversation do not corroborate it.' The ruling IS real and was given in the owner's own words above; it was missing from this file. That gap is what this entry closes. The governance rule stands: owner approval must be recorded, not inferred from an agent's prose.",
+          "still_open": "The ROUTE is not ruled: whether the whole-board reader lives beside pcba_syntax.py in cas-forex or becomes a new CCDL module the CAS compiler can call. Owner decisions OD-A..OD-O in COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md section 5 remain open, starting with OD-A: the book's PCBA chapters carry uncommitted edits, so there are two canon texts."
+        },
+        {
+          "id": "OD-10",
+          "topic": "check the other agent's work instead of repeating it",
+          "owner_words": "another agent did this work already check it out",
+          "pointer": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/codex-helm-data/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/continuation_20260921/VERIFICATION.md",
+          "what_fable_does": "Re-ran every test command in that record in that worktree and compared the two compilers side by side. Every count reproduced: 458, 304, 92, 27, 2. Their compiler (LF sha256 61ed5a45970459e4...) is better than mine (f1a44678438a65c3...) on every point where they differ, including one regression I had introduced. Does not duplicate their work; does not push to their branch.",
+          "status": "DONE",
+          "given": "2026-09-21"
+        }
+      ],
+      "owner_artifact_lf_sha256": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+      "quoted_refusal_in_named_verification": false,
+      "quoted_refusal_in_packaged_verification": false,
+      "quoted_refusal_in_actual_continuation": true,
+      "actual_source_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/CODEX_CONTINUATION_20260921.md:53",
+      "boundary": "Artifact contents and prior refusal reproduce. Actual chat was not supplied to this audit; wording, speaker, and authorization authenticity cannot be established by the agent-authored artifact itself."
+    }
+  },
+  "additional_line_evidence": [
+    {
+      "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "lf_sha256": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+      "lines": [
+        {
+          "line": 96,
+          "text": "| **XOR** | true if inputs *differ* | **dissonance detector** — both `^2` and `^3` firing → conflict flag |"
+        },
+        {
+          "line": 98,
+          "text": "The two that earn the most use in safety circuits are **NOT** and **XOR**. NOT is the involution operator made discrete: `NOT< ^2^E >` yields `^3^E`, flipping attraction to aversion — exactly the breakdown-flip a CJT performs under overload, but here deliberate and controlled. XOR is the **dissonance detector**: if a stimulus makes *both* the `^2` Positive (attraction) and the `^3` Negative (aversion) states fire at once, something is genuinely conflicted, and XOR raises a flag. A clean stimulus fires one or the other; a manipulative or ambiguous one fires both."
+        },
+        {
+          "line": 104,
+          "text": "XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                 // both attraction AND aversion firing → dissonance flag"
+        },
+        {
+          "line": 278,
+          "text": "    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md",
+      "lf_sha256": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+      "lines": [
+        {
+          "line": 37,
+          "text": "## Op-Amp — High-Gain Differential Stage with Feedback"
+        },
+        {
+          "line": 39,
+          "text": "An **operational amplifier** (op-amp) has two inputs — a `+` non-inverting input and a `−` inverting input — and one output. It amplifies their arithmetic difference with large open-loop gain. On its own, a tiny difference can drive the output to a rail. Feedback turns that raw gain into a precise closed-loop response, often `1 + Rf/Rg` in the non-inverting configuration."
+        },
+        {
+          "line": 41,
+          "text": "The CAS mapping compares two commensurable cognitive quantities. The non-inverting input contributes positively to the arithmetic difference; the inverting input contributes negatively. This subtraction is not a Noetic involution. The output is the designed landing. Four common configurations are:"
+        },
+        {
+          "line": 96,
+          "text": "| **XOR** | true if inputs *differ* | exclusivity detector — exactly one fires |"
+        },
+        {
+          "line": 99,
+          "text": "The two safety rules to memorize are **AND detects both-active conflict; XOR detects exactly-one exclusivity**. NOT is a Boolean complement. It maps to a Noetic involution only for `^2↔^3`, `^5↔^6`, or `^8↔^9`; the self-duals remain themselves. If attraction and aversion firing flags are both active, an AND gate raises the conflict flag. XOR is false in that case."
+        },
+        {
+          "line": 111,
+          "text": "| `AND< s₁, …, sₙ >` | n states | fires only if all n fire |"
+        },
+        {
+          "line": 112,
+          "text": "| `OR< s₁, …, sₙ >` | n states | fires if any fire |"
+        },
+        {
+          "line": 115,
+          "text": "| `XOR< s₁, s₂ >` | 2 firing flags | fires iff exactly one fires |"
+        },
+        {
+          "line": 116,
+          "text": "| `XNOR< s₁, s₂ >` | 2 firing flags | fires iff the inputs agree, including both-inactive |"
+        },
+        {
+          "line": 278,
+          "text": "    node settled:  ^9^E_{F2}|A;   // a settled, reasoned verdict"
+        },
+        {
+          "line": 322,
+          "text": "- **Transformer** matches domains by trading abstraction for actionability (`ratio`); a step-down is Domain Descent, not a violation. **Op-Amp** is an ultra-high-gain CJT tamed by feedback — set the *closed-loop* gain (`1 + Rf/Rg`), never run reasoning open-loop."
+        }
+      ]
+    },
+    {
+      "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+      "path": "book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md",
+      "lf_sha256": "a148ef9f3af7ead10b07ad2e72bc69db24bba188fcab44a6bc8ba1199fe1112c",
+      "lines": [
+        {
+          "line": 80,
+          "text": "    gate o_enable: o_rail requires (p_rail within 0.10)"
+        },
+        {
+          "line": 326,
+          "text": "    gate o_enable: o_rail requires (e_rail within 0.1);"
+        }
+      ]
+    },
+    {
+      "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "lf_sha256": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+      "lines": [
+        {
+          "line": 327,
+          "text": "    xor dissonance: XOR< attract, averse >;       // fires only when both active (ambiguity)"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md",
+      "lf_sha256": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+      "lines": [
+        {
+          "line": 327,
+          "text": "    gate conflict: AND< attract, averse >;        // fires only when both are active"
+        }
+      ]
+    },
+    {
+      "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "lf_sha256": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+      "lines": [
+        {
+          "line": 137,
+          "text": "| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … >` | Boolean logic on states. |"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md",
+      "lf_sha256": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+      "lines": [
+        {
+          "line": 40,
+          "text": "Under CJT **breakdown**, output flips to its involution pair; self-duals have nowhere to flip (stable anchors)."
+        },
+        {
+          "line": 121,
+          "text": "Regions: **Cutoff** (no effect) · **Active** (Δeffect ≈ β·Δcause) · **Saturation** (maxed) · **Breakdown** (flips to involution pair). Named form: `let cjt_x = CJT< … => … > [β=…];`"
+        },
+        {
+          "line": 137,
+          "text": "| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … > XNOR< … >` | Boolean logic on engineered firing flags, not on states. |"
+        }
+      ]
+    },
+    {
+      "commit": "dbb388ee42d70c993e241dd35b4167413634872a",
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "lf_sha256": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+      "lines": [
+        {
+          "line": 372,
+          "text": "NOT< ^2^E >                                    // = ^3^E  (involution flip)"
+        },
+        {
+          "line": 374,
+          "text": "XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion firing → dissonance flag"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md",
+      "lf_sha256": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+      "lines": [
+        {
+          "line": 59,
+          "text": "| **Breakdown** | overload past safe limits | engineered failure behavior; an involution flip occurs only when that explicit rule is declared |"
+        },
+        {
+          "line": 65,
+          "text": "**Typical use.** Every active stage. Reasoning steps (`expand → evaluate → respond`), amplifier cores, and the cascade chains of the CSB are all CJTs. The op-amp is a CJT with so much raw gain it must be tamed by feedback."
+        },
+        {
+          "line": 281,
+          "text": "## Op-Amp — High-Gain Differential Stage with Feedback"
+        },
+        {
+          "line": 283,
+          "text": "**Symbol / role.** An operational amplifier has two inputs (`+` non-inverting, `−` inverting) and one output. It amplifies their arithmetic difference with large open-loop gain. Feedback can turn that raw gain into a precise closed-loop response. This is a differential construction, not a Noetic involution operator."
+        },
+        {
+          "line": 374,
+          "text": "NOT< enable_flag >                             // Boolean complement of one flag"
+        },
+        {
+          "line": 386,
+          "text": "| `NOT< s >` | 1 | Boolean complement; use a Noetic involution only when `s` has a licensed pair | flag negation; optional licensed `^2`↔`^3`, `^5`↔`^6`, or `^8`↔`^9` mapping |"
+        },
+        {
+          "line": 389,
+          "text": "| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | exclusivity detector — one route, never both |"
+        },
+        {
+          "line": 390,
+          "text": "| `XNOR< s₁, s₂ >` | 2 | fires iff inputs agree | equivalence detector; both-active **and** both-inactive count |"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md",
+      "lf_sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "lines": [
+        {
+          "line": 444,
+          "text": "gate ::= ( \"AND\" | \"OR\" | \"NOT\" | \"NAND\" | \"NOR\" | \"XOR\" | \"XNOR\" ) , \"<\" , arg_list , \">\""
+        },
+        {
+          "line": 447,
+          "text": "Gates act on engineered Boolean firing flags obtained by thresholding continuous CAS activations. `NOT` takes one input; the rest take two or more. AND detects a both-active condition. XOR is true for exactly one active input. XNOR is true when its inputs agree, including the both-inactive case."
+        },
+        {
+          "line": 549,
+          "text": "- **Breakdown** — gross overload; the effect flips to the involution pair (`^2`→`^3`, `^8`→`^9`), a bug unless deliberately designed with protection."
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Appendix_G_Glossary.md",
+      "lf_sha256": "5e4f96a6fb624f8fab87b02ac4eae0d17075e200386f5a095105ad33bc7521d7",
+      "lines": [
+        {
+          "line": 47,
+          "text": "**Breakdown** — The overload region of a transistor or *CJT*. In a CJT, breakdown is"
+        },
+        {
+          "line": 48,
+          "text": "when the output **flips to its involution pair** — a *Positive* (`^2`) state inverts"
+        },
+        {
+          "line": 238,
+          "text": "Under *breakdown*, a CJT's output flips to its involution partner. *Dial* settings of an"
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md",
+      "lf_sha256": "ae49301b10bc34eaa565c0911509da73a71563606c948a931783e6e24799b1d3",
+      "lines": [
+        {
+          "line": 101,
+          "text": "- **Breakdown.** This is the dangerous one, and the cognitive version is the most important idea in the chapter. Electronically: overload forces the junction to conduct destructively. Cognitively: under overload the effect **flips to the involution Noetic pair.** Recall the involution pairs from Chapter 1: `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`. A transition that was producing **`^2` Positive** — attraction, affinity — is driven so hard that it inverts into **`^3` Negative** — visceral aversion, repulsion. The classic human case: pushed past the limit, fascination flips to disgust, enthusiasm flips to revulsion. The circuit did not gracefully max out. It snapped into its opposite. A cognitive circuit in breakdown is not producing too much of the right thing; it is producing the *wrong thing.*"
+        },
+        {
+          "line": 103,
+          "text": "> **Bench Notes:** Cutoff and saturation are *boundaries* of the active region — the effect goes to zero or to its ceiling, but it stays the *right kind* of effect. Breakdown is categorically different: the effect changes *Noetic.* `^2` Positive becomes `^3` Negative. When you debug a misbehaving cognitive circuit, your first question is \"which region?\" — and if the answer is breakdown, you are not looking at a tuning problem, you are looking at an inversion, and the fix is structural, not a nudge to a Dial."
+        },
+        {
+          "line": 181,
+          "text": "The cognitive version is structurally identical. Read \"temperature\" as *activation intensity* or *emotional charge.* A cognitive transition whose gain rises with its own activation is a runaway: a small cause produces a large effect, that effect feeds back as a larger cause, which at higher \"temperature\" gets an even higher β, which produces a still-larger effect. This is the structural signature of a spiraling anxiety loop, a rage escalation, a panic that amplifies itself, a hype cycle that feeds on its own excitement. Left unchecked it drives the CJT straight into **breakdown** — and breakdown, recall, flips the effect to its involution pair. Runaway attraction (`^2` Positive) snaps into aversion (`^3` Negative); confident competence flips into collapse."
+        },
+        {
+          "line": 188,
+          "text": "| **Breakdown** | over-voltage, destructive conduction | effect flips to involution pair under overload | output Noetic ≠ designed Noetic; `^2`→`^3` inversion at the emitter |"
+        },
+        {
+          "line": 199,
+          "text": "- The four cognitive regions: **cutoff** (no engagement), **active** (proportional response), **saturation** (effect plateaued), and **breakdown** — where the effect **flips to its involution pair** (`^2`→`^3`)."
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md",
+      "lf_sha256": "1ed9cc9b51a4e2893cd5f47280ad8e2305b482fd16c1559e996bf133a01cd2c9",
+      "lines": [
+        {
+          "line": 17,
+          "text": "The control-theory skeleton of every closed loop is one equation. Call the forward path's raw gain `A` (the \"open-loop gain\" — how much the amplifier multiplies its input before any feedback). Call `β` the **feedback factor** — the fraction of the output that gets routed back to the input. Then the actual, real-world gain you observe — the **closed-loop gain** — is:"
+        },
+        {
+          "line": 20,
+          "text": "                A"
+        },
+        {
+          "line": 21,
+          "text": "   A_closed = -------"
+        },
+        {
+          "line": 22,
+          "text": "              1 + Aβ"
+        },
+        {
+          "line": 25,
+          "text": "This little fraction is the engine of the entire chapter, so read it slowly. The quantity `Aβ` is the **loop gain**: how much a signal is multiplied as it travels all the way around the loop once. When the feedback opposes the input (negative feedback), `1 + Aβ` is a number bigger than one, so the closed-loop gain is *smaller* than the raw gain. You gave up gain. Here's what you bought: if `A` is enormous — and in a real op-amp it's 100,000 or more — then `Aβ` dominates the denominator, the `1` becomes negligible, and the equation collapses to `A_closed ≈ A/(Aβ) = 1/β`. The forward gain `A` *cancels out entirely*. Your gain is now set by `β` alone — by the feedback network, by a couple of resistors — and is utterly indifferent to whether `A` is 100,000 or 80,000 or drifting with temperature. That is Black's miracle in one line: **make the loop gain large and the system's behavior stops depending on the messy, drifting forward path and starts depending only on the clean, stable feedback path.**"
+        },
+        {
+          "line": 182,
+          "text": "We'll build the cognitive twin of the non-inverting op-amp with gain 3. The forward path is a high-gain expansion CJT (our \"op-amp\"). The feedback path samples an evaluation node and feeds it back to oppose the expansion, set so the closed-loop gain lands at exactly 3."
+        },
+        {
+          "line": 184,
+          "text": "Recall the op-amp formula: `A_closed = 1 + Rf/Rg`. For a gain of 3 we need `Rf/Rg = 2`. In CAS feedback terms, the feedback factor is `β = Rg/(Rf+Rg) = 1/3`, and with large forward gain the closed-loop gain is `1/β = 3`. So we set the forward CJT's open-loop gain high and the feedback path's `β = 0.333`."
+        },
+        {
+          "line": 198,
+          "text": "    cjt c_fwd: CJT< prompt   | bias_principles => expand   > [β=12.0];"
+        },
+        {
+          "line": 199,
+          "text": "    cjt c_eval: CJT< expand  | bias_principles => evaluate > [β=1.5];"
+        },
+        {
+          "line": 204,
+          "text": "    feedback evaluate -> expand [β=0.333];"
+        },
+        {
+          "line": 211,
+          "text": "Walk it line by line. The forward CJT `c_fwd` has `β=12.0` — an aggressive, unstable-on-its-own expansion, our stand-in for the op-amp's runaway open-loop gain. Left alone it would blow every prompt out of proportion. The `feedback evaluate -> expand [β=0.333]` line is Black's inverted wire: it samples the evaluation node and routes one-third of it back to *oppose* the expansion's bias. By the closed-loop formula, the observed gain settles to `1/β = 3`, regardless of whether the forward `β` is 12 or 10 or drifting — the loop divides out the forward path's volatility. The two probes let you see the contrast: `tp_fwd` shows the hot raw expansion, `tp_out` shows the disciplined result after feedback. Gain of exactly 3, set by the feedback factor, immune to the forward path. This is the current-limited, self-stabilizing topology that the CSB's reasoning rail uses in Chapter 18."
+        },
+        {
+          "line": 213,
+          "text": "> **Bench Note — keep the loop gain large.** The gain only locks to `1/β` when the forward `β` is much larger than `1/β`. Here forward `β=12` against a target of 3 — a loop gain of 4×, enough to make the forward path's drift negligible. If you set the forward `β` only slightly above 3, the `1` in `1 + Aβ` stops being negligible and your gain wanders with the forward path. Hot forward path, gentle feedback: that's the recipe for a stable, drift-immune amplifier."
+        }
+      ]
+    },
+    {
+      "commit": "d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454",
+      "path": "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md",
+      "lf_sha256": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+      "lines": [
+        {
+          "line": 49,
+          "text": "The **DAC direction, `|A -> |E`**, is a second directed conversion: *turning a plan into action*. It runs from discrete control toward continuous output, but it is **not the inverse of the ADC's lossy `|f -> |A` translation**. It also lands in a different Register (`|E`, not `|f`). You start with a discrete analytical plan — *\"Step one: send the email. Step two: call the vendor.\"* — and reconstruct it as continuous embodied execution, the smooth sensorimotor act of actually doing the thing. A plan that never gets DAC-converted stays a string of propositions; the DAC is what gives it a body."
+        },
+        {
+          "line": 144,
+          "text": "> **Bench Note — the single-point join is the ADC, full stop.** If a schematic shows the `|f` rail and the `|A` rail touching anywhere *other* than a declared converter — a stray `+` co-presence that lets felt and analytical states share a node, or a feedback path from an `|A` conclusion straight onto an `|f` input — that is a grounding fault. The fix is to route the connection through an ADC (`|f -> |A`) or a DAC (`|A -> |E`) so the boundary is a designed conversion, not an accidental bleed."
+        },
+        {
+          "line": 164,
+          "text": "| **Ground bleed (digital→analog)** | \"felt\" reading echoes a prior conclusion | `\\|A` output feeds back onto the `\\|f` input | trace for an `\\|A -> \\|f` path that doesn't go through a DAC/ADC |"
+        }
+      ]
+    },
+    {
+      "commit": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/CODEX_CONTINUATION_20260921.md",
+      "lf_sha256": "974c6d0cd8e2266e761fe99037a93350b67979bdf2bc15189ca4a728f666aaf2",
+      "lines": [
+        {
+          "line": 51,
+          "text": "the original branch by this continuation."
+        },
+        {
+          "line": 52,
+          "text": ""
+        },
+        {
+          "line": 53,
+          "text": "The newer original report attributes a PCBA route ruling to the owner, but"
+        },
+        {
+          "line": 54,
+          "text": "the current owner-decision file and this conversation do not corroborate it."
+        },
+        {
+          "line": 55,
+          "text": "That statement is retained as unverified document content, not authorization."
+        }
+      ]
+    }
+  ],
+  "finite_feedback_counterexample": {
+    "feedback_factor_exact": "333/1000",
+    "book_forward_gain": 12,
+    "closed_loop_at_A12": 2.401921537229784,
+    "closed_loop_at_A10": 2.3094688221709005,
+    "including_serial_evaluation_gain_A18": 2.5736345438947668,
+    "infinite_A_limit": 3.003003003003003,
+    "A12_exact_feedback_one_third": 2.4,
+    "claim_exactly_three": false,
+    "boundary": "Arithmetic under the book's formula only; no simulation or model measurement."
+  },
+  "readonly_boundary": "Git reads and Python standard-library arithmetic only. All generated artifacts stay beside this script.",
+  "commands": [
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_package_20260922/02_MANIFEST.json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "diff",
+        "--name-only",
+        "dbb388ee",
+        "d50abbbc",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/CHANGELOG.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/CHANGELOG.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "show",
+        "eb3c9b1e:book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "diff",
+        "--numstat",
+        "dbb388ee",
+        "d50abbbc",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "diff",
+        "--name-only",
+        "d50abbbc",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_G_Glossary.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/CODEX_CONTINUATION_20260921.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/continuation_20260921/VERIFICATION.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_package_20260922/files/OTHER_AGENT_VERIFICATION.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "626cc84b574e60217a103b72d2f09388d7aa5e34:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/CODEX_CONTINUATION_20260921.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "--stat",
+        "--oneline",
+        "0fc6bb30",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "ls-files",
+        "--eol",
+        "--",
+        "book/CAS_PCBA_Engineer/*.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "ls-files",
+        "--eol",
+        "--",
+        "book/CAS_PCBA_Engineer/*.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "diff",
+        "--numstat",
+        "dbb388ee",
+        "d50abbbc",
+        "--",
+        "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "ls-tree",
+        "-r",
+        "--name-only",
+        "dbb388ee",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/00_Front_Matter.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/About_the_Author.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_G_Glossary.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_H_Further_Reading.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/CHANGELOG.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_01_Why_Build_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_02_CAS_Notation_in_One_Chapter.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_05_Resistors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_06_Capacitors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_07_Inductors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_08_Diodes.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_12_Filters.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_13_Oscillators.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_23_Testing_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_24_Debugging_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_25_Production_Deployment.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/Chapter_26_Governance.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "dbb388ee:book/CAS_PCBA_Engineer/STYLE_GUIDE.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "ls-tree",
+        "-r",
+        "--name-only",
+        "d50abbbc",
+        "--",
+        "book/CAS_PCBA_Engineer/"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/00_Front_Matter.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/About_the_Author.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_D_CCB_Reference_Designs.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_F_Lab_Setup_Guide.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_G_Glossary.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_H_Further_Reading.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/CHANGELOG.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_01_Why_Build_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_02_CAS_Notation_in_One_Chapter.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_03_The_Transistor_That_Changed_Everything.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_04_Your_First_Cognitive_Circuit.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_05_Resistors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_06_Capacitors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_07_Inductors.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_08_Diodes.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_09_CJT_Deep_Dive.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_11_Amplifiers.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_12_Filters.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_13_Oscillators.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_14_Power_Management.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_16_Feedback_Systems.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_17_CCB_Design_Process.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_19_COB_Cognitive_Oscillator_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_20_CDAB_Differential_Amplifier_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_21_CMB_Cognitive_Memory_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_22_CPMB_Power_Management_Board.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_23_Testing_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_24_Debugging_Cognitive_Circuits.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_25_Production_Deployment.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/Chapter_26_Governance.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "show",
+        "d50abbbc:book/CAS_PCBA_Engineer/STYLE_GUIDE.md"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "d50abbbc"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "dbb388ee"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "rev-parse",
+        "eb3c9b1e"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-peer-audit",
+      "arguments": [
+        "rev-parse",
+        "--git-common-dir"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "arguments": [
+        "rev-parse",
+        "--git-common-dir"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}

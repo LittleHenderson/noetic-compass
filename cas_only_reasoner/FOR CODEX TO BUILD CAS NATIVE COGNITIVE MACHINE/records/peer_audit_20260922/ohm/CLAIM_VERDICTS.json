@@ -1,0 +1,77 @@
+{
+  "schema": "cas.peer-audit.ohm-claims/1.0",
+  "source_snapshot": "626cc84b574e60217a103b72d2f09388d7aa5e34",
+  "command": "C:/Python314/python.exe -B audit_ohm.py",
+  "claims": [
+    {
+      "id": "OHM-1",
+      "original_claim": "Before commit 86ba3d75, i_pred returned nan for i_pred(nan, 4.0) and for i_pred(8.0, nan), 0.0 for i_pred(8.0, inf), and inf for i_pred(inf, 4.0); r_total(1e308, 1e308, 1.0, 1.0) returned inf.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Pre-fix returns nan, nan, 0.0, inf, inf.",
+      "literal_evidence_in_results_json": "historical_cases.pre[0:5]"
+    },
+    {
+      "id": "OHM-2",
+      "original_claim": "After commit 86ba3d75 all five of those calls are refused with a ValueError whose message contains the word 'finite'.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Five ValueError refusals each containing finite at first_fix and frozen.",
+      "literal_evidence_in_results_json": "historical_cases.first_fix[0:5]; historical_cases.frozen[0:5]"
+    },
+    {
+      "id": "OHM-3",
+      "original_claim": "The fix changed nothing else: i_pred(8.0, 4.0) == 2.0, y_hat(8.0, 4.0) == 2.0, r_total(1,2,3,4) == 10.0, r_hidden(v=8.0, i_obs=2.0, r_known=2.0) gives magnitude 2.0 and r_apparent 4.0, and resistance 0.0 or -2.0 is still refused.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Listed good examples and zero/negative refusals reproduce before/after. This is bounded to those examples, not a universal unchanged-behavior proof.",
+      "literal_evidence_in_results_json": "historical_cases.pre[5:11]; historical_cases.first_fix[5:11]"
+    },
+    {
+      "id": "OHM-4",
+      "original_claim": "The module passed 39/39 before my change and passes 48/48 after it. AND, because that commit wrote its own tests, the count alone proves nothing: running HEAD's test file against the PRE-FIX implementation gives PASSED 42/48 with six tests failing by name.",
+      "auditor_verdict": "FALSE",
+      "auditor_observed": "Historical matched39/39 and48/48 reproduce, as does42/48 using exact86ba tests against oldcode. Frozen HEADtests instead give51/51 or44/51 against oldcode: floatingHEAD instruction stale.",
+      "literal_evidence_in_results_json": "suites"
+    },
+    {
+      "id": "OHM-5",
+      "original_claim": "The cause was that the guard read 'if rf <= 0.0', which NaN passes because NaN compares False against every ordering and equality operator (it returns True against !=), and which infinity passes because infinity is legitimately positive; and the module already contained a _is_finite helper that _as_resistance never called.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Pre-change resistance guard only tests rf<=0 and does not call the existing finite helper.",
+      "literal_evidence_in_results_json": "pre_guard_source"
+    },
+    {
+      "id": "OHM-6",
+      "original_claim": "WITHDRAWN BY THE AUTHOR BEFORE HANDOVER. I called i_pred(8.0, inf) -> 0.0 the dangerous one because a zero flow reads downstream as a starved path, and the changelog went further and called it an ASOM classification produced from garbage. BOTH ARE WRONG. There is no code path from a flow number to an ASOM label: asom() takes two enums, asom(0.0, INTENDED) returns None, and Region is always a caller judgement. Measured through delta_current, the module's only numeric consumer of a flow value: 0.0 -> OVERSHOOT (visible), nan -> WITHIN_TOLERANCE (the SAME sign reading as a perfectly correct prediction), inf -> UNDERSHOOT. NaN is the dangerous value, not 0.0. I picked the wrong value and stated the wrong mechanism.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "asom(0.0,INTENDED)->None; delta prediction2,0,nan,inf gives WITHIN_TOLERANCE,OVERSHOOT,WITHIN_TOLERANCE,UNDERSHOOT. Known NaN defect remains live.",
+      "literal_evidence_in_results_json": "historical_cases.frozen[13:18]"
+    },
+    {
+      "id": "OHM-7",
+      "original_claim": "The CAS-Ohm module is NOT connected to the CAS compiler. None of the three operations is reachable from a compiled expression today.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Frozen peer compiler lacks quantifier imports/calls. Scoped only to626cc84b and this cas_ohm package; does not negate separate Codex compiler helper at eb998556.",
+      "literal_evidence_in_results_json": "peer_compiler_ohm_references"
+    },
+    {
+      "id": "OHM-8",
+      "original_claim": "Of the owner's three operations, I = V/R exists as i_pred; R = V/I exists only as a private step inside r_hidden (surfaced as RHidden.r_apparent, tagged APPARENT_SAME_SAMPLE); V = I x R does not exist anywhere in the module.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "No V=IxR function exported; apparent R=V/I is within r_hidden and tagged APPARENT_SAME_SAMPLE.",
+      "literal_evidence_in_results_json": "declarations.exported_symbols; historical_cases.frozen[8]"
+    },
+    {
+      "id": "OHM-9",
+      "original_claim": "A defect of the same class survived my first fix: r_hidden never checked its drive argument. At commit 86ba3d75, r_hidden(v=nan, i_obs=2.0, r_known=2.0) returned RHidden magnitude=nan, and v=inf returned magnitude=inf. It is fixed now and the suite is 51/51.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "NaN/infinite drives return nonfinite RHidden at86ba; ValueError containing finite at a4b2/frozen.48/48 then51/51.",
+      "literal_evidence_in_results_json": "historical_cases.first_fix[11:13]; historical_cases.frozen[11:13]; suites"
+    },
+    {
+      "id": "OHM-10",
+      "original_claim": "My statement 'no test covered a non-finite input' was FALSE. The pre-fix test file already had test_r_hidden_censors_non_finite, passing nan and inf as i_obs at lines 156 and 158. The accurate claim is: no test covered a non-finite input TO i_pred OR r_total.",
+      "auditor_verdict": "REPRODUCES",
+      "auditor_observed": "Original test already covers nan/inf as i_obs; correction accurately limits missing coverage to i_pred/r_total.",
+      "literal_evidence_in_results_json": "pre_nonfinite_test"
+    }
+  ]
+}

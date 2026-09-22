@@ -1,0 +1,106 @@
+test_admissible_trend_preserves_exact_declared_decimal_evidence (__main__.ContractBoundaryAudit.test_admissible_trend_preserves_exact_declared_decimal_evidence) ... FAIL
+test_admissible_trend_rejects_reversed_intervals (__main__.ContractBoundaryAudit.test_admissible_trend_rejects_reversed_intervals) ... FAIL
+test_admissible_trend_rejects_unsupported_uncertainty_rule (__main__.ContractBoundaryAudit.test_admissible_trend_rejects_unsupported_uncertainty_rule) ... FAIL
+test_delta_rejects_nan_tolerance_instead_of_claiming_alignment (__main__.ContractBoundaryAudit.test_delta_rejects_nan_tolerance_instead_of_claiming_alignment) ... FAIL
+test_hidden_refuses_finite_input_overflow (__main__.ContractBoundaryAudit.test_hidden_refuses_finite_input_overflow) ... FAIL
+test_interval_zero_denominator_is_refused_before_arithmetic (__main__.ContractBoundaryAudit.test_interval_zero_denominator_is_refused_before_arithmetic) ... ERROR
+test_maturity_retains_exact_value_that_selected_the_band (__main__.ContractBoundaryAudit.test_maturity_retains_exact_value_that_selected_the_band) ... FAIL
+test_prediction_refuses_finite_input_overflow (__main__.ContractBoundaryAudit.test_prediction_refuses_finite_input_overflow) ... FAIL
+
+======================================================================
+ERROR: test_interval_zero_denominator_is_refused_before_arithmetic (__main__.ContractBoundaryAudit.test_interval_zero_denominator_is_refused_before_arithmetic)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 39, in test_interval_zero_denominator_is_refused_before_arithmetic
+    self.assertRefused(lambda:m.r_hidden(8,0,2,i_obs_interval=(1,2)))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 24, in assertRefused
+    value=fn()
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 39, in <lambda>
+    self.assertRefused(lambda:m.r_hidden(8,0,2,i_obs_interval=(1,2)))
+                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "626cc84b574e60217a103b72d2f09388d7aa5e34:noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py", line 572, in r_hidden
+ZeroDivisionError: division by zero
+
+======================================================================
+FAIL: test_admissible_trend_preserves_exact_declared_decimal_evidence (__main__.ContractBoundaryAudit.test_admissible_trend_preserves_exact_declared_decimal_evidence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 50, in test_admissible_trend_preserves_exact_declared_decimal_evidence
+    self.assertEqual(result.verdict,m.TrendVerdict.RISING)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: <TrendVerdict.NO_TREND: 'NO_TREND'> != <TrendVerdict.RISING: 'RISING'>
+
+======================================================================
+FAIL: test_admissible_trend_rejects_reversed_intervals (__main__.ContractBoundaryAudit.test_admissible_trend_rejects_reversed_intervals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 42, in test_admissible_trend_rejects_reversed_intervals
+    self.assertRefused(lambda:m.admissible_trend(2,8,axis="I_Q/test/profile",earlier_interval=(3,1),later_interval=(9,7),minimum_effect=0.1))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 27, in assertRefused
+    self.assertIsInstance(value,m.CensoredResult,"Invalid quantity must be refused or censored, not emitted as a usable value")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: TrendTag(verdict=<TrendVerdict.RISING: 'RISING'>, axis='I_Q/test/profile', minimum_effect=0.1, uncertainty_rule='interval-non-overlap') is not an instance of <class 'frozen_ohm_contract_probe.CensoredResult'> : Invalid quantity must be refused or censored, not emitted as a usable value
+
+======================================================================
+FAIL: test_admissible_trend_rejects_unsupported_uncertainty_rule (__main__.ContractBoundaryAudit.test_admissible_trend_rejects_unsupported_uncertainty_rule)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 45, in test_admissible_trend_rejects_unsupported_uncertainty_rule
+    self.assertRefused(lambda:m.admissible_trend(1.5,8,axis="I_Q/test/profile",earlier_interval=(1,2),later_interval=(7,9),minimum_effect=0.1,uncertainty_rule="made-up-rule"))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 27, in assertRefused
+    self.assertIsInstance(value,m.CensoredResult,"Invalid quantity must be refused or censored, not emitted as a usable value")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: TrendTag(verdict=<TrendVerdict.RISING: 'RISING'>, axis='I_Q/test/profile', minimum_effect=0.1, uncertainty_rule='made-up-rule') is not an instance of <class 'frozen_ohm_contract_probe.CensoredResult'> : Invalid quantity must be refused or censored, not emitted as a usable value
+
+======================================================================
+FAIL: test_delta_rejects_nan_tolerance_instead_of_claiming_alignment (__main__.ContractBoundaryAudit.test_delta_rejects_nan_tolerance_instead_of_claiming_alignment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 36, in test_delta_rejects_nan_tolerance_instead_of_claiming_alignment
+    self.assertRefused(lambda:m.delta_current(100,0,tolerance=float("nan")))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 27, in assertRefused
+    self.assertIsInstance(value,m.CensoredResult,"Invalid quantity must be refused or censored, not emitted as a usable value")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: DeltaCurrent(value=100.0, sign=<SignReading.WITHIN_TOLERANCE: 'WITHIN_TOLERANCE'>, tolerance=nan, region=<Region.ACTIVE: 'ACTIVE'>, identifies_mechanism=False, method_identity='CAS-OHM-V1-NONIDENTIFYING-RESIDUAL', note='The SIGN of this residual ranks which follow-up PROBE to spend the next measurement budget on.  It NEVER identifies a hidden cause, policy, or bypass: at least seven mechanisms (hidden facilitation, constraint bypass, opposition elsewhere, measurement error, model misspecification, calibration-transfer failure, sampling fluctuation) reproduce any given sign and are observationally equivalent.') is not an instance of <class 'frozen_ohm_contract_probe.CensoredResult'> : Invalid quantity must be refused or censored, not emitted as a usable value
+
+======================================================================
+FAIL: test_hidden_refuses_finite_input_overflow (__main__.ContractBoundaryAudit.test_hidden_refuses_finite_input_overflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 33, in test_hidden_refuses_finite_input_overflow
+    self.assertRefused(lambda:m.r_hidden(1e308,0.1,2.0))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 27, in assertRefused
+    self.assertIsInstance(value,m.CensoredResult,"Invalid quantity must be refused or censored, not emitted as a usable value")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RHidden(magnitude=inf, r_apparent=inf, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>, probe_shortlist=('capability', 'policy', 'context', 'resource', 'miswired-branch'), identifies_mechanism=False, causal_identity_note="The candidate does NOT expose R_hidden as a proof of a hidden constraint. r_apparent = v / i_obs carries role APPARENT_SAME_SAMPLE — the very role the prediction gate REFUSES as input. A positive value is NOT read as a 'bypass' or 'hidden resistance proven'; that reading is on the forbidden-wording list regardless of any future outcome (ch10:rule:nonident, ch10:tab:tensions). The magnitude only ranks which of the shortlisted probes to run next.", name_override_note="NAME OVERRIDE: the symbol 'r_hidden' / 'RHidden' is an owner-chosen headline name that deliberately departs from ch10, which bans hidden-resistance vocabulary in emitted quantities. It is NOT monograph-reconciled wording. The reconciled neutral name for this exact arithmetic is RESISTANCE_DELTA = a/y_obs - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary.") is not an instance of <class 'frozen_ohm_contract_probe.CensoredResult'> : Invalid quantity must be refused or censored, not emitted as a usable value
+
+======================================================================
+FAIL: test_maturity_retains_exact_value_that_selected_the_band (__main__.ContractBoundaryAudit.test_maturity_retains_exact_value_that_selected_the_band)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 56, in test_maturity_retains_exact_value_that_selected_the_band
+    self.assertEqual(decimal.Decimal(result.i_q_exact),exact)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Decimal('2.5') != Decimal('2.49999999999999999999999999999999999999999999999999999')
+
+======================================================================
+FAIL: test_prediction_refuses_finite_input_overflow (__main__.ContractBoundaryAudit.test_prediction_refuses_finite_input_overflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 30, in test_prediction_refuses_finite_input_overflow
+    self.assertRefused(lambda:m.i_pred(1e308,1e-308))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\codex-helm-peer-audit\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\peer_audit_20260922\ohm\test_contract_boundaries.py", line 27, in assertRefused
+    self.assertIsInstance(value,m.CensoredResult,"Invalid quantity must be refused or censored, not emitted as a usable value")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: inf is not an instance of <class 'frozen_ohm_contract_probe.CensoredResult'> : Invalid quantity must be refused or censored, not emitted as a usable value
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.008s
+
+FAILED (failures=7, errors=1)
