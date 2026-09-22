@@ -1,0 +1,219 @@
+{
+  "authority": "INSPECTION_ONLY",
+  "browser_exceptions": 0,
+  "browser_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "checks": [
+    {
+      "exact_saved_records_preserved": true,
+      "example_id": "correct",
+      "ohm_status": "No CAS-Ohm quantities were recorded for this task.",
+      "original_prediction_display": "VIA via Dev1Node2",
+      "original_prediction_id": "typed-prediction-d3f26f9c1bb8a5331eadd5f76299a6d50757b63ae0adf5ae243948fedfbbb855",
+      "panels": [
+        {
+          "kind": "task",
+          "title": "Original development task",
+          "value": "How is Dev1Node1 reached from Dev1Node7?"
+        },
+        {
+          "kind": "input",
+          "title": "Original saved model input",
+          "value": "Complete saved public packet: 64 retained training-bank worlds and one development focus world. The focus graph below contains the original supplied declarations."
+        },
+        {
+          "kind": "input",
+          "title": "Original focus-world graph",
+          "value": "Dev1Node7 contains Dev1Node2; Dev1Node8 contains Dev1Node3; Dev1Node9 contains Dev1Node4; Dev1Node9 contains Dev1Node5; Dev1Node9 contains Dev1Node6; Dev1Node2 contains Dev1Node0; Dev1Node2 contains Dev1Node1"
+        },
+        {
+          "kind": "prediction",
+          "title": "Original Helm prediction",
+          "value": "VIA via Dev1Node2"
+        },
+        {
+          "kind": "checker",
+          "title": "Original saved checker result",
+          "value": "CORRECT"
+        },
+        {
+          "kind": "checker",
+          "title": "Independent replay of saved checker",
+          "value": "Matches original saved check. Declared-source answer: VIA via Dev1Node2"
+        },
+        {
+          "kind": "model",
+          "title": "Original saved model identity",
+          "value": "Helm 2.0-experimental \u00b7 revision 1470 \u00b7 checkpoint c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb"
+        },
+        {
+          "kind": "availability",
+          "title": "Saved evidence limits",
+          "value": "CAS profile: Not assigned\nCAS-Ohm measurement: Not available\nOriginal prediction: Available\nChecker result: Available\nInternal thought trace: Not recorded\nModel weights: Retained Git bytes were hashed at selection; not included, decoded or run in this view."
+        }
+      ],
+      "profile_status": "Profile not assigned to this item.",
+      "replay_display": "Matches original saved check. Declared-source answer: VIA via Dev1Node2",
+      "saved_checker_correct": true,
+      "saved_checker_digest": "19d8f5d9676c8b327a3f74f23f19ffd9fe2d6e0990eab4633e4412591def391f"
+    },
+    {
+      "exact_saved_records_preserved": true,
+      "example_id": "wrong",
+      "ohm_status": "No CAS-Ohm quantities were recorded for this task.",
+      "original_prediction_display": "(no nodes)",
+      "original_prediction_id": "typed-prediction-bcbc0aa4c1a4dc6fc1f5f3490ddb18a0aee6fc24d848b9109496be8e6483ec8f",
+      "panels": [
+        {
+          "kind": "task",
+          "title": "Original development task",
+          "value": "Which nodes does Dev1Node7 directly contain?"
+        },
+        {
+          "kind": "input",
+          "title": "Original saved model input",
+          "value": "Complete saved public packet: 64 retained training-bank worlds and one development focus world. The focus graph below contains the original supplied declarations."
+        },
+        {
+          "kind": "input",
+          "title": "Original focus-world graph",
+          "value": "Dev1Node7 contains Dev1Node2; Dev1Node8 contains Dev1Node3; Dev1Node9 contains Dev1Node4; Dev1Node9 contains Dev1Node5; Dev1Node9 contains Dev1Node6; Dev1Node2 contains Dev1Node0; Dev1Node2 contains Dev1Node1"
+        },
+        {
+          "kind": "prediction",
+          "title": "Original Helm prediction",
+          "value": "(no nodes)"
+        },
+        {
+          "kind": "checker",
+          "title": "Original saved checker result",
+          "value": "INCORRECT"
+        },
+        {
+          "kind": "checker",
+          "title": "Independent replay of saved checker",
+          "value": "Matches original saved check. Declared-source answer: Dev1Node2"
+        },
+        {
+          "kind": "model",
+          "title": "Original saved model identity",
+          "value": "Helm 2.0-experimental \u00b7 revision 1470 \u00b7 checkpoint c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb"
+        },
+        {
+          "kind": "availability",
+          "title": "Saved evidence limits",
+          "value": "CAS profile: Not assigned\nCAS-Ohm measurement: Not available\nOriginal prediction: Available\nChecker result: Available\nInternal thought trace: Not recorded\nModel weights: Retained Git bytes were hashed at selection; not included, decoded or run in this view."
+        }
+      ],
+      "profile_status": "Profile not assigned to this item.",
+      "replay_display": "Matches original saved check. Declared-source answer: Dev1Node2",
+      "saved_checker_correct": false,
+      "saved_checker_digest": "cd01fbc744b210e528b75a718bf38b74e3fd04aa96c05fc725d4aa876477334d"
+    }
+  ],
+  "external_requests": 0,
+  "html_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_recorded_helm_20260922\\workbench\\helm.html",
+  "html_sha256_raw": "34ce37a286b02da2324276e4492d2cf836a999d41e57a51d3d54a6b291298405",
+  "neural_calls": 0,
+  "new_model_predictions": 0,
+  "node_path": "C:\\Program Files\\nodejs\\node.EXE",
+  "original": {
+    "coordinates": null,
+    "current_state_id": "recorded-run",
+    "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+    "focus_node_id": "recorded-run",
+    "layout": "flower",
+    "path": [
+      "recorded-run"
+    ],
+    "reference_node_id": "recorded-run",
+    "source_unchanged": true,
+    "zoom": 1
+  },
+  "schema_version": "cas.rpa.recorded-helm-browser-qa/0.1",
+  "screenshots": [
+    {
+      "file": "desktop_correct.png",
+      "image_dimensions": {
+        "height": 2771,
+        "width": 1440
+      },
+      "sha256_raw": "379552e35ee8275800957c527db2f56bb192887fce7973fa62c32f5b6a5f83d7",
+      "state": {
+        "coordinates": null,
+        "current_state_id": "recorded-run",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "focus_node_id": "task-correct",
+        "layout": "flower",
+        "path": [
+          "recorded-run",
+          "task-correct"
+        ],
+        "reference_node_id": "recorded-run",
+        "source_unchanged": true,
+        "zoom": 1
+      },
+      "viewport": {
+        "deviceScaleFactor": 1,
+        "height": 1100,
+        "mobile": false,
+        "width": 1440
+      }
+    },
+    {
+      "file": "desktop_wrong.png",
+      "image_dimensions": {
+        "height": 2798,
+        "width": 1440
+      },
+      "sha256_raw": "06c437b76d2d6f8fe7a5a8437e3de91461094027a56870cf2be5b6aaa52c12d1",
+      "state": {
+        "coordinates": null,
+        "current_state_id": "recorded-run",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "focus_node_id": "task-wrong",
+        "layout": "flower",
+        "path": [
+          "recorded-run",
+          "task-wrong"
+        ],
+        "reference_node_id": "recorded-run",
+        "source_unchanged": true,
+        "zoom": 1
+      },
+      "viewport": {
+        "deviceScaleFactor": 1,
+        "height": 1100,
+        "mobile": false,
+        "width": 1440
+      }
+    },
+    {
+      "file": "mobile_wrong.png",
+      "image_dimensions": {
+        "height": 4620,
+        "width": 390
+      },
+      "sha256_raw": "8af0de2e6fd7b4d654113a5b91286fd223b112b23236b717a737459facd1cdba",
+      "state": {
+        "coordinates": null,
+        "current_state_id": "recorded-run",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "focus_node_id": "task-wrong",
+        "layout": "flower",
+        "path": [
+          "recorded-run",
+          "task-wrong"
+        ],
+        "reference_node_id": "recorded-run",
+        "source_unchanged": true,
+        "zoom": 1
+      },
+      "viewport": {
+        "deviceScaleFactor": 1,
+        "height": 844,
+        "mobile": true,
+        "width": 390
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "helm-cas-expression-lab.q4-preparation-verification/0.1",
+  "observed_utc": "2026-09-22T15:41:06.163424+00:00",
+  "plan_sha256": "af81383702c9695ae00ba831eac2ae9f28891d40eaa8075b90d3857723d0aa87",
+  "metadata_revalidation": "PASS",
+  "signature_verifier_import": "PASS",
+  "signature_algorithm_known_vector": "RFC8032_TEST_VECTOR_1_VERIFIED_NOT_OWNER_AUTHORIZATION",
+  "cryptography_import_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_runtime\\q4_auth_20260922\\cryptography\\__init__.py",
+  "environment": {
+    "python": "3.14.0",
+    "python_executable": "C:\\Users\\wakil\\venvs\\cas-gpu\\Scripts\\python.exe",
+    "torch_distribution": "2.11.0+cu128",
+    "cryptography_distribution": "49.0.0",
+    "torch_build": {
+      "status": "CUDA_BUILD_RUNTIME_UNPROBED",
+      "version_source": "C:\\Users\\wakil\\venvs\\cas-gpu\\Lib\\site-packages\\torch\\version.py",
+      "version_source_sha256": "533e322ff85c9adf6f17cde43856524d757ffdac13dd06e35628b0d43520a070",
+      "version": "2.11.0+cu128",
+      "cuda": "12.8",
+      "hip": null,
+      "torch_imported": false
+    },
+    "pythonpath": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_runtime\\q4_auth_20260922",
+    "auth_dependencies": {
+      "root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_runtime\\q4_auth_20260922",
+      "manifest_sha256": "1b59d30cabc5635cc5c7344b722b2a4f8de76abfd724d1fc3b72f3837e12fa74",
+      "total_bytes": 11233284,
+      "file_count": 166,
+      "distributions": [
+        {
+          "name": "cryptography",
+          "version": "49.0.0"
+        },
+        {
+          "name": "cffi",
+          "version": "2.0.0"
+        },
+        {
+          "name": "pycparser",
+          "version": "3.0"
+        }
+      ]
+    }
+  },
+  "hardware_metadata": [
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=index,name,uuid,memory.total",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stdout": "0, NVIDIA GeForce RTX 4070 Laptop GPU, GPU-7cfee18b-e83d-b6fb-a946-ae444b329fdd, 8188 MiB\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-compute-apps=pid",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stdout": "2536\n20656\n16028\n2532\n20488\n55048\n",
+      "stderr": ""
+    }
+  ],
+  "torch_imported": false,
+  "model_loaded": false,
+  "neural_execution": "NOT_RUN",
+  "owner_authorization": "NOT_FOUND_IN_REVIEWED_Q4_RECORDS",
+  "cuda_runtime_status": "NOT_PROBED",
+  "gpu_idle_status": "NOT_IDLE_OR_UNKNOWN",
+  "output_directory_exists": false,
+  "dependency_manifest_sha256": "1b59d30cabc5635cc5c7344b722b2a4f8de76abfd724d1fc3b72f3837e12fa74",
+  "dependency_scope": "Project copy only; existing GPU environment untouched"
+}

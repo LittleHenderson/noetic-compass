@@ -1,0 +1,8 @@
+# Retained source bytes and receipts must survive checkout unchanged.
+*.json -text
+*.xml binary
+pinned_checker/*.py -text
+workbench/* -text
+q4_preparation/dependency_install*.txt binary
+q4_preparation/deterministic_tests*.txt binary
+q4_preparation/prepare_before_dependency_setup.json binary

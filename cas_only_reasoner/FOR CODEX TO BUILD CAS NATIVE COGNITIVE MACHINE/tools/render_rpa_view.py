@@ -297,6 +297,11 @@ BODY = """
 
 def render_rpa_view(document) -> str:
     """Return deterministic self-contained HTML without modifying the document."""
+    if type(document) is dict and document.get("schema_version") == "cas.rpa.recorded-helm/0.1":
+        if str(PROJECT_ROOT) not in sys.path:
+            sys.path.insert(0, str(PROJECT_ROOT))
+        from tools.render_recorded_helm_view import render_recorded_helm_view
+        return render_recorded_helm_view(document)
     if type(document) is dict and document.get("schema_version") == "cas.rpa.ohm-atlas/0.1":
         if str(PROJECT_ROOT) not in sys.path:
             sys.path.insert(0, str(PROJECT_ROOT))
@@ -335,7 +340,7 @@ def _unique_object(pairs):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("input", type=Path, help="exported native RPA or checked CAS-Ohm atlas JSON inside the CNCM homebase")
+    parser.add_argument("input", type=Path, help="exported native RPA, checked CAS-Ohm, or saved Helm atlas JSON inside the CNCM homebase")
     parser.add_argument("output", type=Path, help="HTML destination inside the CNCM homebase")
     args = parser.parse_args(argv)
     source, target = _within_home(args.input), _within_home(args.output)

@@ -1,5 +1,28 @@
 # Codex continuation — 2026-09-21
 
+## Follow-up: retained Helm answers — 2026-09-22
+
+Continued from exact atlas checkpoint
+`5b3d713c5e7f2b2fc2959aaf776d0d80ca09d256` in isolated branch
+`codex/helm-rpa-recorded-run-20260922`. The prior atlas checkout and unrelated
+main-checkout changes are preserved. Newer `helm3-lab` work was inspected; its
+`86ba3d75431c56147f229f24794805a3d8504f76` quantifier fix did not supersede
+the atlas or provide Q4 execution evidence.
+
+The existing renderer now accepts a distinct, validated retained-Helm document.
+Two genuine development cases retain their complete saved input, original
+prediction, original checker, separate reference replay and exact model identity.
+The wrong answer remains wrong. Profiles, Ohm measurements and internal thought
+traces remain unassigned or unavailable. The original design atlas is linked
+separately and retains its original artifacts.
+
+Open `records/rpa_recorded_helm_20260922/workbench/index.html`.
+Scope and reproduction: `docs/CAS_RPA_RECORDED_HELM_20260922.md`.
+Verification and failures: `records/rpa_recorded_helm_20260922/VERIFICATION.md`.
+Q4 prepared plan and resource blockers:
+`records/rpa_recorded_helm_20260922/q4_preparation/STATUS.md`.
+No new inference, training, scientific acceptance or Helm release is claimed.
+
 ## Follow-up: connected CAS-RPA atlas — 2026-09-22
 
 The requested offline integration now connects present-centered coordinates,

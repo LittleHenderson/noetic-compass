@@ -161,9 +161,15 @@ await new Promise((resolve,reject)=>{
     try:
         process.wait(timeout=10)
     except subprocess.TimeoutExpired:
+        # Browser.close may finish between wait's deadline and the fallback.
+        # A vanished owned PID is success, not an error that masks the test.
+        if process.poll() is not None:
+            return
         if os.name == "nt":
-            subprocess.run(["taskkill.exe", "/PID", str(process.pid), "/T", "/F"],
-                capture_output=True, timeout=10, check=True)
+            killed = subprocess.run(["taskkill.exe", "/PID", str(process.pid), "/T", "/F"],
+                capture_output=True, timeout=10, check=False)
+            if killed.returncode and process.poll() is None:
+                raise RuntimeError("Could not stop the owned browser PID " + str(process.pid))
         else:
             process.terminate()
         process.wait(timeout=10)

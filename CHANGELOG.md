@@ -1,5 +1,24 @@
 # tksCAS — Changelog
 
+## 2026-09-22 — Inspect genuine retained Helm answers in CAS-RPA
+
+Connected a source-bound correct and wrong Helm 2.0-experimental development
+prediction to the existing offline atlas. The workbench shows the original
+question, full saved input, original answer, original checker and exact model
+identity together, with a separately labeled pure checker replay. Missing
+profiles, Ohm measurements and internal thought records stay missing.
+Exact addresses, saved versions, fixed present and independent navigation and
+reference selection reuse the existing atlas. Declared designs remain separate.
+
+Q4 preparation now distinguishes CPU/CUDA build metadata and binds an explicitly
+selected local authorization dependency copy without loading Torch. No neural
+job, authorization or new learned result is produced. Exact verification,
+negative attempts, source identities and the remaining resource gate are in
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_recorded_helm_20260922/`.
+Validation: 422 distinct RPA/adapter tests and 107 deterministic Q4 preparation
+tests passed. Real Chrome checks and desktop/mobile captures preserve original
+records, missing measurements and offline behavior. Q4 learning remains NOT_RUN.
+
 ## 2026-09-22 — Connected CAS-RPA coordinates, navigation and Ohm view
 
 Added exact saved addresses and versions, a fixed declared present, independent

@@ -1,5 +1,22 @@
 # The learning brain — lineage record
 
+## 2026-09-22 retained Helm answers in CAS-RPA: engineering only
+
+The workbench now inspects one genuine correct and one genuine wrong saved
+development answer from the existing Helm 2.0-experimental job
+`cas-meta2-tpntr-20260920210258-20208c92-m-20260917`, revision 1470.
+Original inputs, predictions, checker results and checkpoint identities remain
+source-bound. The source result remains NOT_CERTIFIED / NO_TRANSFER_TO_NEW_WORLDS.
+No new model execution, weights, evaluation result or release is added.
+Missing profiles and Ohm measurements remain missing. A deterministic replay of
+the retained checker is identified separately from the learned prediction.
+
+Evidence: `records/rpa_recorded_helm_20260922/`; usage:
+`docs/CAS_RPA_RECORDED_HELM_20260922.md`. Q4 preparation is refreshed separately;
+actual learning remains NOT_RUN pending applicable owner resource authorization
+and the execution resource checks. Preparation and adapter tests are not neural
+learning results or scientific acceptance.
+
 ## 2026-09-22 CAS-RPA connected atlas: engineering only
 
 Present-centered coordinates, declared-part navigation, saved-view recovery and

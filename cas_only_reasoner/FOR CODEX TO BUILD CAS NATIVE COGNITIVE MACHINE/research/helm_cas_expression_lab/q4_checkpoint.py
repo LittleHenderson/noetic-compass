@@ -16,7 +16,7 @@ SCHEMA = "helm-cas-expression-lab.q4-inference-checkpoint/0.1"
 HERE = Path(__file__).resolve().parent
 RUNTIME_FILES = ("learner_q4_representation.py", "learner_q4_decoder.py", "learner_q4_neural.py",
                  "learner_q4_memory.py", "q4_checkpoint.py", "q4_smoke_job.py", "q3_load.py",
-                 "q3_behaviour_records.py", "reference_ops.py")
+                 "q3_behaviour_records.py", "reference_ops.py", "q4_runtime_metadata.py")
 
 
 class CheckpointError(ValueError):

@@ -11,10 +11,8 @@ from __future__ import annotations
 import argparse
 import base64
 from datetime import datetime, timezone
-from importlib import metadata
 import json
 import os
-import platform
 from pathlib import Path
 import re
 import secrets
@@ -50,13 +48,8 @@ def _bounded_int(value, name, low, high):
 
 
 def _environment_metadata():
-    def version(package):
-        try:
-            return metadata.version(package)
-        except metadata.PackageNotFoundError:
-            return "UNAVAILABLE"
-    return {"python": platform.python_version(), "python_executable": sys.executable,
-            "torch_distribution": version("torch"), "cryptography_distribution": version("cryptography")}
+    from q4_runtime_metadata import environment_metadata
+    return environment_metadata()
 
 
 def prepare_plan(*, data_dir, data_version, output, seed=20260921, width=64,

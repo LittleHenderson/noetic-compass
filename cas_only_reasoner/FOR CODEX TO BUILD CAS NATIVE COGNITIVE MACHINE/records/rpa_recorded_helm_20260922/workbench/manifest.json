@@ -1,0 +1,26 @@
+{
+  "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+  "files": {
+    "helm.html": {
+      "bytes": 1849451,
+      "sha256": "34ce37a286b02da2324276e4492d2cf836a999d41e57a51d3d54a6b291298405"
+    },
+    "helm.json": {
+      "bytes": 792794,
+      "sha256": "e46df51e825e4e4091223c293ee0706084ff4a7bcff2b9c2d87720693d4b18cb"
+    },
+    "index.html": {
+      "bytes": 2251,
+      "sha256": "fed8f1f7971a197208e4fc77f0c26b18fefd7e089044e3592b4333f8c14b5d18"
+    },
+    "saved_view.json": {
+      "bytes": 577,
+      "sha256": "ad6ecde479d878af310e9cea84e4c36497736654052d09838774b03b9f5581a7"
+    },
+    "verification.json": {
+      "bytes": 16260,
+      "sha256": "cd95fc1c939f5247cac71fa4ffd81583cc6d7643a6589c7e356b58ac01ea131b"
+    }
+  },
+  "schema_version": "cas.rpa.recorded-helm-artifacts/0.1"
+}

@@ -1,0 +1,289 @@
+{
+  "addresses": {
+    "checker-correct": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "check-19d8f5d9676c8b327a3f74f23f19ffd9fe2d6e0990eab4633e4412591def391f",
+        "node_id": "checker-correct",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/checker-correct?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=check-19d8f5d9676c8b327a3f74f23f19ffd9fe2d6e0990eab4633e4412591def391f"
+    },
+    "checker-wrong": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "check-cd01fbc744b210e528b75a718bf38b74e3fd04aa96c05fc725d4aa876477334d",
+        "node_id": "checker-wrong",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/checker-wrong?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=check-cd01fbc744b210e528b75a718bf38b74e3fd04aa96c05fc725d4aa876477334d"
+    },
+    "input-correct": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "input-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8",
+        "node_id": "input-correct",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/input-correct?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=input-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8"
+    },
+    "input-wrong": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864",
+        "node_id": "input-wrong",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/input-wrong?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864"
+    },
+    "model-checkpoint": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "checkpoint-c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+        "node_id": "model-checkpoint",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "revision-1470"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/model-checkpoint?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=revision-1470&item=checkpoint-c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb"
+    },
+    "prediction-correct": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "typed-prediction-d3f26f9c1bb8a5331eadd5f76299a6d50757b63ae0adf5ae243948fedfbbb855",
+        "node_id": "prediction-correct",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "revision-1470"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/prediction-correct?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=revision-1470&item=typed-prediction-d3f26f9c1bb8a5331eadd5f76299a6d50757b63ae0adf5ae243948fedfbbb855"
+    },
+    "prediction-wrong": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "typed-prediction-bcbc0aa4c1a4dc6fc1f5f3490ddb18a0aee6fc24d848b9109496be8e6483ec8f",
+        "node_id": "prediction-wrong",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "revision-1470"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/prediction-wrong?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=revision-1470&item=typed-prediction-bcbc0aa4c1a4dc6fc1f5f3490ddb18a0aee6fc24d848b9109496be8e6483ec8f"
+    },
+    "recorded-run": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "helm-run-dd6d0c12d6c5f947984b263f14012242510bb7aff204a8eaff8c9d684e6359f6",
+        "node_id": "recorded-run",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "revision-1470"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/recorded-run?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=revision-1470&item=helm-run-dd6d0c12d6c5f947984b263f14012242510bb7aff204a8eaff8c9d684e6359f6"
+    },
+    "task-correct": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "task-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8",
+        "node_id": "task-correct",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/task-correct?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=task-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8"
+    },
+    "task-wrong": {
+      "address": {
+        "context_sha256": "1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df",
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "item_id": "task-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864",
+        "node_id": "task-wrong",
+        "schema_version": "cas.rpa.recorded-helm-address/0.1",
+        "version_id": "development-p10"
+      },
+      "uri": "cas-rpa-helm://088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271/task-wrong?context=1760063ce214362e95c9173c08e1809a1d01b7866d6b3496a4f1d2fca45ae3df&version=development-p10&item=task-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864"
+    }
+  },
+  "browser_tests": "SEPARATELY_RECORDED",
+  "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+  "examples": [
+    {
+      "checker_replay": {
+        "admissible_answers": [
+          {
+            "kind": "reach",
+            "query_id": "typed-query-f007ca4fb949f128299efe6bad948593acbf589cc005c183a3d7ee79f934c9ed",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2"
+            }
+          }
+        ],
+        "answer_displays": [
+          "VIA via Dev1Node2"
+        ],
+        "record": {
+          "admissible_answer_count": 1,
+          "answer_digest": "f0881b5a0bd6d24282becfeb7badb6c1d59b63c5da2a543c66522bc67d392a87",
+          "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+          "check_digest": "19d8f5d9676c8b327a3f74f23f19ffd9fe2d6e0990eab4633e4412591def391f",
+          "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+          "correct": true,
+          "kind": "reach",
+          "query_id": "typed-query-f007ca4fb949f128299efe6bad948593acbf589cc005c183a3d7ee79f934c9ed",
+          "rule": "first_direct_constituent_lexical_v1",
+          "schema": "cas.typed-teaching-private-check/0.1",
+          "source_digest": "48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914",
+          "target_digest": "72dbd45e1da5ce20738bd9bb59b2cbfa04cd7c57cbfc0b8bb04189943aacc411",
+          "witnesses": [
+            {
+              "answer_digest": "f0881b5a0bd6d24282becfeb7badb6c1d59b63c5da2a543c66522bc67d392a87",
+              "evidence": {
+                "path": [
+                  "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n7",
+                  "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2",
+                  "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n1"
+                ],
+                "selection": "LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH"
+              }
+            }
+          ]
+        },
+        "scope": "DETERMINISTIC_DEVELOPMENT_CHECK_ONLY_NOT_MODEL_INFERENCE",
+        "status": "MATCHES_ORIGINAL_SAVED_CHECKER"
+      },
+      "example_id": "correct",
+      "prediction_display": "VIA via Dev1Node2",
+      "question_display": "How is Dev1Node1 reached from Dev1Node7?",
+      "saved_check": {
+        "admissible_answer_count": 1,
+        "answer_digest": "f0881b5a0bd6d24282becfeb7badb6c1d59b63c5da2a543c66522bc67d392a87",
+        "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+        "check_digest": "19d8f5d9676c8b327a3f74f23f19ffd9fe2d6e0990eab4633e4412591def391f",
+        "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+        "correct": true,
+        "kind": "reach",
+        "prediction_id": "typed-prediction-d3f26f9c1bb8a5331eadd5f76299a6d50757b63ae0adf5ae243948fedfbbb855",
+        "query_id": "typed-query-f007ca4fb949f128299efe6bad948593acbf589cc005c183a3d7ee79f934c9ed",
+        "record_id": "typed-input-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8",
+        "rule": "first_direct_constituent_lexical_v1",
+        "schema": "cas.typed-teaching-private-check/0.1",
+        "source_digest": "48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914",
+        "target_digest": "72dbd45e1da5ce20738bd9bb59b2cbfa04cd7c57cbfc0b8bb04189943aacc411",
+        "witnesses": [
+          {
+            "answer_digest": "f0881b5a0bd6d24282becfeb7badb6c1d59b63c5da2a543c66522bc67d392a87",
+            "evidence": {
+              "path": [
+                "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n7",
+                "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2",
+                "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n1"
+              ],
+              "selection": "LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "checker_replay": {
+        "admissible_answers": [
+          {
+            "kind": "parts",
+            "query_id": "typed-query-8ba3957637452c9145ed9e3f2bd31b2ff0128e685069b59b447a645d9b96c797",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "nodes": [
+                "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2"
+              ]
+            }
+          }
+        ],
+        "answer_displays": [
+          "Dev1Node2"
+        ],
+        "record": {
+          "admissible_answer_count": 1,
+          "answer_digest": "087b9aa52bd6b10312699ff31b83a37bc0b4dc4d797814134b4741da025ec104",
+          "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+          "check_digest": "cd01fbc744b210e528b75a718bf38b74e3fd04aa96c05fc725d4aa876477334d",
+          "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+          "correct": false,
+          "kind": "parts",
+          "query_id": "typed-query-8ba3957637452c9145ed9e3f2bd31b2ff0128e685069b59b447a645d9b96c797",
+          "rule": "direct_contains_v1",
+          "schema": "cas.typed-teaching-private-check/0.1",
+          "source_digest": "48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914",
+          "target_digest": "437f682230c80527d055148264fd6a01ad29c567b4d60e27618de4d082d000fd",
+          "witnesses": []
+        },
+        "scope": "DETERMINISTIC_DEVELOPMENT_CHECK_ONLY_NOT_MODEL_INFERENCE",
+        "status": "MATCHES_ORIGINAL_SAVED_CHECKER"
+      },
+      "example_id": "wrong",
+      "prediction_display": "(no nodes)",
+      "question_display": "Which nodes does Dev1Node7 directly contain?",
+      "saved_check": {
+        "admissible_answer_count": 1,
+        "answer_digest": "087b9aa52bd6b10312699ff31b83a37bc0b4dc4d797814134b4741da025ec104",
+        "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+        "check_digest": "cd01fbc744b210e528b75a718bf38b74e3fd04aa96c05fc725d4aa876477334d",
+        "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+        "correct": false,
+        "kind": "parts",
+        "prediction_id": "typed-prediction-bcbc0aa4c1a4dc6fc1f5f3490ddb18a0aee6fc24d848b9109496be8e6483ec8f",
+        "query_id": "typed-query-8ba3957637452c9145ed9e3f2bd31b2ff0128e685069b59b447a645d9b96c797",
+        "record_id": "typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864",
+        "rule": "direct_contains_v1",
+        "schema": "cas.typed-teaching-private-check/0.1",
+        "source_digest": "48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914",
+        "target_digest": "437f682230c80527d055148264fd6a01ad29c567b4d60e27618de4d082d000fd",
+        "witnesses": []
+      }
+    }
+  ],
+  "model_execution": "NOT_RUN",
+  "navigation": [
+    {
+      "case": "correct",
+      "cursor": {
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "focus_node_id": "prediction-correct",
+        "path": [
+          "recorded-run",
+          "task-correct"
+        ],
+        "reference_node_id": "model-checkpoint",
+        "schema_version": "cas.rpa.recorded-helm-navigation/0.1"
+      },
+      "source_unchanged": true
+    },
+    {
+      "case": "wrong",
+      "cursor": {
+        "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+        "focus_node_id": "prediction-wrong",
+        "path": [
+          "recorded-run",
+          "task-wrong"
+        ],
+        "reference_node_id": "model-checkpoint",
+        "schema_version": "cas.rpa.recorded-helm-navigation/0.1"
+      },
+      "source_unchanged": true
+    }
+  ],
+  "ohm_measurements": "NOT_AVAILABLE",
+  "profiles": "NOT_ASSIGNED",
+  "schema_version": "cas.rpa.recorded-helm-reproduction/0.1",
+  "source_selection_sha256": "d181782419e3480a7f8b39e2bc3bce7eaa28cde21c44bb9abcd0c021bfcd7daf",
+  "status": "EXECUTED_RECORD_AND_NAVIGATION_CHECKS_PASS"
+}

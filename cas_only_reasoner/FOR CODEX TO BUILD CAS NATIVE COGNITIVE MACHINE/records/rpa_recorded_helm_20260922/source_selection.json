@@ -1,0 +1,145 @@
+{
+  "checker_sources": [
+    {
+      "bytes": 20601,
+      "loaded_module_receipt": {
+        "bytes": 20601,
+        "execution": "COMPILED_FROM_VERIFIED_SOURCE_BYTES",
+        "module": "cas_meta2.typed_teaching.source",
+        "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+        "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+      },
+      "original_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+      "saved_path": "pinned_checker/source.py",
+      "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+    },
+    {
+      "bytes": 13894,
+      "loaded_module_receipt": {
+        "bytes": 13894,
+        "execution": "COMPILED_FROM_VERIFIED_SOURCE_BYTES",
+        "module": "cas_meta2.typed_teaching.answers",
+        "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+        "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+      },
+      "original_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "saved_path": "pinned_checker/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+    },
+    {
+      "bytes": 15105,
+      "loaded_module_receipt": {
+        "bytes": 15105,
+        "execution": "COMPILED_FROM_VERIFIED_SOURCE_BYTES",
+        "module": "cas_meta2.typed_teaching.focal",
+        "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+        "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+      },
+      "original_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+      "saved_path": "pinned_checker/focal.py",
+      "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+    },
+    {
+      "bytes": 13934,
+      "loaded_module_receipt": {
+        "bytes": 13934,
+        "execution": "COMPILED_FROM_VERIFIED_SOURCE_BYTES",
+        "module": "cas_meta2.typed_teaching.checker",
+        "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+        "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+      },
+      "original_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "saved_path": "pinned_checker/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+    }
+  ],
+  "checkpoint_availability": {
+    "bytes": 3670007,
+    "original_path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+    "selected_export_includes_weights": false,
+    "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+    "status": "RETAINED_GIT_BYTES_HASH_VERIFIED_AT_SELECTION_NOT_DECODED"
+  },
+  "exposure": {
+    "benchmark_claim": false,
+    "learner_or_model_executed": false,
+    "main_or_final_target_files_opened": false,
+    "posthoc_example_selection": true,
+    "split": "development"
+  },
+  "extract_locations": {
+    "admission": "protocol_material.json#/development/admission by record_id",
+    "checks": "development_p10_scoring.json#/rows by record_id",
+    "packets": "protocol_material.json#/development/packets by record.record_id",
+    "predictions": "development_p10_predictions.json#/predictions by record_id"
+  },
+  "model_label": "Helm 2.0-experimental",
+  "model_release_status": "NOT_CERTIFIED_NO_UPGRADE_CLAIM",
+  "original_artifact_manifest": {
+    "bytes": 12679,
+    "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/manifest.json",
+    "sha256": "437e57e504f27979acfc85e56b87e8b52d4586c69576ad9a9a1da84618f77e46"
+  },
+  "original_files": {
+    "development_p10_predictions.json": {
+      "bytes": 115188,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/development_p10_predictions.json",
+      "sha256": "9cdf1825f155a12f38cd07828da7a5cc94823a6950313840f0c6796f9e57d638"
+    },
+    "development_p10_scoring.json": {
+      "bytes": 62488,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/development_p10_scoring.json",
+      "sha256": "1594c9f1a42cda34fc4645476e65ca839e1d22f548888347c9ead19ff5b4730d"
+    },
+    "final_checkpoint.json": {
+      "bytes": 30879,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final_checkpoint.json",
+      "sha256": "2f4bfbd1c61f5814fc91a17430ce9d89447c603654c7bc48754f928b82fc1c89"
+    },
+    "loaded_sources.json": {
+      "bytes": 24849,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/loaded_sources.json",
+      "sha256": "9709df9e7e763bd26d24968d7f03866baee9a3e12633752d5f7f82614c71bffa"
+    },
+    "model_identity.json": {
+      "bytes": 4234,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/model_identity.json",
+      "sha256": "7438a2b0110e190f932a182e7820820337fe37fe3588d2e94a4ce2ee752f43d4"
+    },
+    "protocol_material.json": {
+      "bytes": 16182588,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/protocol_material.json",
+      "sha256": "cfa3e9d13cf1a234b1b617f205aa132ad79d9e1816cf23de316f0366c4b8dfed"
+    },
+    "worker_report.json": {
+      "bytes": 89492,
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/worker_report.json",
+      "sha256": "f41544105902ad874a1f71dfd9dae98f93996ffd7755581d3386637a09c70d0a"
+    }
+  },
+  "repository_snapshot": "5b3d713c5e7f2b2fc2959aaf776d0d80ca09d256",
+  "schema_version": "cas.rpa.recorded-helm-source-selection/0.1",
+  "selected_files": {
+    "artifact_manifest.json": {
+      "bytes": 12679,
+      "sha256": "437e57e504f27979acfc85e56b87e8b52d4586c69576ad9a9a1da84618f77e46"
+    },
+    "saved_identity.json": {
+      "bytes": 62990,
+      "sha256": "861a29b056736045f543a57cafca623d27796baa55067fae52ccdd6cd932b57c"
+    },
+    "selected_records.json": {
+      "bytes": 656407,
+      "sha256": "abdcd28d7a07be55ea706079d8792e08c873102bd483fdefd19effdc4f29d52b"
+    }
+  },
+  "selected_record_ids": {
+    "correct": "typed-input-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8",
+    "wrong": "typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864"
+  },
+  "selection_policy": "FIRST_CORRECT_AND_FIRST_WRONG_IN_ORIGINAL_DEVELOPMENT_P10_SCORING_ORDER_FOR_ILLUSTRATION"
+}

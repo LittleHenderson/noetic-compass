@@ -1,0 +1,21 @@
+{
+  "axes": [
+    25,
+    33
+  ],
+  "compare_node_id": "",
+  "current_state_id": "recorded-run",
+  "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+  "layout": "flower",
+  "navigation": {
+    "document_sha256": "088b1d4f83d5533003860d028c6247ed88a03b620021ff64421a61a6fa166271",
+    "focus_node_id": "task-correct",
+    "path": [
+      "recorded-run"
+    ],
+    "reference_node_id": "recorded-run",
+    "schema_version": "cas.rpa.recorded-helm-navigation/0.1"
+  },
+  "schema_version": "cas.rpa.recorded-helm-saved-view/0.1",
+  "zoom": 1
+}

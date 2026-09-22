@@ -1,0 +1,51 @@
+{
+  "plan": {
+    "schema": "helm-cas-expression-lab.q4-smoke-plan/0.1",
+    "status": "PREPARED_NOT_AUTHORIZATION",
+    "task": "T14_R1_G_ENGINEERING_SMOKE",
+    "data_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\data\\q3_v0_7",
+    "data_version": "helm-cas-expression-lab.q3-behaviour-records/0.7",
+    "manifest_sha256": "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9",
+    "export_report_sha256": "cb69d3784b5623f7b4a2afb0913710fa7b9accc0e7665593ed7dbb3e2a4849c0",
+    "contract_digest": "891d9e9dab670a642696190687dc9badcff44669d70aa7f7590076d0ffcfee26",
+    "contracts_file_sha256": "a7d22648c34f0ac2b3f1df40bd619902056ffb38d2c5888621e082a2a19ecee9",
+    "pins_file_sha256": "e67fb880bf3f8b9e4802e5567572ee4970a25bc3209999bc4dda4eea6d3968fc",
+    "source_pins": {
+      "learner_q4_representation.py": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+      "learner_q4_decoder.py": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+      "learner_q4_neural.py": "0824a573ccc56aa8956f2bd63134e1ebb4901747a25c78316b9f55e840d9aa3f",
+      "learner_q4_memory.py": "72910b931ff8d4da853ab4776a7d7b5f1f072b525446f63656581a208651d3d0",
+      "q4_checkpoint.py": "a7a27b2914f7415d5c15587f39f1334bbb9acfc2227828d05cccc005d0d17f1d",
+      "q4_smoke_job.py": "d09c954a3374a62a1304896b6ddf60d55855ca0c85a966e9f1db36b68b5d5760",
+      "q3_load.py": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+      "q3_behaviour_records.py": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+      "reference_ops.py": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12"
+    },
+    "output": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-rpa-recorded-run\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_recorded_helm_20260922\\q4_preparation\\q4_smoke_output",
+    "seed": 20260921,
+    "width": 64,
+    "max_updates": 128,
+    "max_wall_seconds": 1800,
+    "train_examples": 2048,
+    "dev_examples": 16,
+    "device": "cuda:0",
+    "family": "G",
+    "splits": [
+      "train",
+      "dev"
+    ],
+    "learning_rate": 0.001,
+    "clip_norm": 1.0,
+    "max_concurrent_jobs": 1,
+    "numerical_policy": "CUDA_FLOAT32_DETERMINISTIC_OR_FAIL_NO_FALLBACK",
+    "environment": {
+      "python": "3.14.0",
+      "python_executable": "C:\\Users\\wakil\\venvs\\cas-gpu\\Scripts\\python.exe",
+      "torch_distribution": "2.11.0+cu128",
+      "cryptography_distribution": "UNAVAILABLE"
+    },
+    "evaluation_custody": "EVALUATION_NOT_INDEPENDENT",
+    "resume": false
+  },
+  "plan_sha256": "17590a5ccd50f9455275b48b8c11768926cb7cbb39bb4cccfe4c00aafc0394ba"
+}
