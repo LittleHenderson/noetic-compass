@@ -134,7 +134,7 @@ Regions: **Cutoff** (no effect) · **Active** (Δeffect ≈ β·Δcause) · **Sa
 | Transformer | `Transformer< ^P -> ^C, ratio=0.5 >` | Domain impedance match. |
 | OpAmp | `OpAmp< non_inverting=^8^C_{F2}\|A, inverting=^6^E_{F6}\|A, output=^9^C_{F2}\|A, open_loop_gain=10000 >` | Differential amplification. |
 | Oscillator | `Oscillator< Phi< ^8^C\|A, ^3^O\|E, ^9^E\|f, ^0^P\|T >, frequency=0.0000116 >` | Cyclic state traversal. |
-| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … >` | Boolean logic on states. |
+| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … > XNOR< … >` | Boolean logic on engineered firing flags, not on states. |
 | MUX / DEMUX | `MUX< inputs=[…], select=Drive::active >` | Drive-selected routing. |
 | Regulator | `Regulator< target_state=^0^E_{F3}\|f, tolerance=0.1 >` | Holds a target state. |
 | Fuse | `Fuse< ^8^O_{F5}\|E, threshold=0.9, action=permanent_block >` | Trips and blocks on overload. |

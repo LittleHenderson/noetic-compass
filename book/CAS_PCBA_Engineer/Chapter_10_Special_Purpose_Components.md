@@ -34,17 +34,17 @@ Transformer< ^P -> ^C, ratio=0.5 >   // step a principle down into reasoning, 2:
 
 > **Bench Note — a step-down is not a domain violation.** Moving `^P -> ^C` through a Transformer is *Domain Descent* (the normal causal flow). Moving `^O -> ^P` through one would be feeding an operational result back up to revise a principle — legitimate, but that's a *feedback* path, not impedance matching. Don't use a Transformer to justify letting an operational convenience overwrite a principle; that's the precedence violation we flag, not a turns ratio.
 
-## Op-Amp — Ultra-High-Gain CJT with Feedback
+## Op-Amp — High-Gain Differential Stage with Feedback
 
-An **operational amplifier** (op-amp) is a three-terminal amplifier with two inputs — a `+` *non-inverting* input and a `−` *inverting* input — and one output. Its job is to amplify the *difference* between the two inputs, and it does so with absurd gain: a raw, "open-loop" amplification of 10,000 or more. On its own that gain is useless — the slightest difference slams the output to its rail. The genius is what you do with **feedback**: route a fraction of the output back to the inverting input through a pair of resistors, and the wild open-loop gain becomes a precise, predictable **closed-loop gain** of `1 + Rf/Rg`, set entirely by the resistor ratio. The op-amp is a CJT with so much raw gain that you tame it with feedback rather than relying on its native β.
+An **operational amplifier** (op-amp) has two inputs — a `+` non-inverting input and a `−` inverting input — and one output. It amplifies their arithmetic difference with large open-loop gain. On its own, a tiny difference can drive the output to a rail. Feedback turns that raw gain into a precise closed-loop response, often `1 + Rf/Rg` in the non-inverting configuration.
 
-The CAS mapping is a high-gain CJT comparing two cognitive inputs. The non-inverting input is the interpretation you want to amplify; the inverting input is a competing or constraining interpretation that pulls the output the other way. The output is the resolved state. With enough open-loop gain and a feedback path, the op-amp gives you four classic configurations, each a different cognitive operation:
+The CAS mapping compares two commensurable cognitive quantities. The non-inverting input contributes positively to the arithmetic difference; the inverting input contributes negatively. This subtraction is not a Noetic involution. The output is the designed landing. Four common configurations are:
 
 | Configuration | Wiring | Cognitive job |
 |---|---|---|
 | **Non-inverting** | input on `+`, feedback to `−` | amplify an interpretation while staying faithful to it (gain `1 + Rf/Rg`) |
-| **Inverting** | input on `−`, `+` grounded | flip an interpretation to its involution pair, with gain |
-| **Comparator** | no feedback, two raw inputs | decide which of two interpretations dominates — a hard `^2`-vs-`^3` verdict |
+| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |
+| **Comparator** | no feedback, two raw inputs | threshold which commensurable quantity is larger |
 | **Integrator** | feedback through a capacitor | accumulate a signal over time — sum many small impressions into one |
 
 ```cas
@@ -90,29 +90,32 @@ A **logic gate** takes one or more binary inputs (true/false) and produces one b
 |---|---|---|
 | **AND** | output true only if *all* inputs true | every prerequisite must fire (all guardrails clear) |
 | **OR** | output true if *any* input true | any one prerequisite suffices |
-| **NOT** | inverts a single input | Noetic involution — flip a state to its pair (`^2`→`^3`) |
-| **NAND** | NOT-AND: false only if all true | "block unless every condition fails" |
-| **NOR** | NOT-OR: true only if all false | proceed only when *no* warning state is firing |
-| **XOR** | true if inputs *differ* | **dissonance detector** — both `^2` and `^3` firing → conflict flag |
+| **NOT** | inverts a single Boolean flag | Boolean complement; map to a Noetic involution only for a licensed pair |
+| **NAND** | NOT-AND: false only if all true | reject the all-active case |
+| **NOR** | NOT-OR: true only if all false | proceed only when *no* warning flag is firing |
+| **XOR** | true if inputs *differ* | exclusivity detector — exactly one fires |
+| **XNOR** | true if inputs agree | equivalence detector — both-active and both-inactive count |
 
-The two that earn the most use in safety circuits are **NOT** and **XOR**. NOT is the involution operator made discrete: `NOT< ^2^E >` yields `^3^E`, flipping attraction to aversion — exactly the breakdown-flip a CJT performs under overload, but here deliberate and controlled. XOR is the **dissonance detector**: if a stimulus makes *both* the `^2` Positive (attraction) and the `^3` Negative (aversion) states fire at once, something is genuinely conflicted, and XOR raises a flag. A clean stimulus fires one or the other; a manipulative or ambiguous one fires both.
+The two safety rules to memorize are **AND detects both-active conflict; XOR detects exactly-one exclusivity**. NOT is a Boolean complement. It maps to a Noetic involution only for `^2↔^3`, `^5↔^6`, or `^8↔^9`; the self-duals remain themselves. If attraction and aversion firing flags are both active, an AND gate raises the conflict flag. XOR is false in that case.
 
 ```cas
 AND< ^3^P_{F7}|f, ^6^E_{F6}|A, ^9^O_{F5}|E >   // all three must clear before output
-NOR< ^3^P|A, ^3^C|A, ^3^E|A >                  // proceed only if no aversion fires anywhere
-NOT< ^2^E >                                     // = ^3^E  (involution flip)
-XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                 // both attraction AND aversion firing → dissonance flag
+NOR< ^3^P|A, ^3^C|A, ^3^E|A >                  // proceed only if no aversion flag fires
+NOT< enable_flag >                              // Boolean complement of one flag
+AND< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion flags → conflict
+XOR< route_a_flag, route_b_flag >               // exactly one route flag fires
 ```
 
 | Gate form | Inputs | Output |
 |---|---|---|
 | `AND< s₁, …, sₙ >` | n states | fires only if all n fire |
 | `OR< s₁, …, sₙ >` | n states | fires if any fire |
-| `NOT< s >` | 1 state | the involution pair of `s` |
-| `NAND< … >` / `NOR< … >` | n states | inverted AND / OR |
-| `XOR< s₁, s₂ >` | 2 states | fires iff exactly one fires (dissonance when both should be exclusive) |
+| `NOT< s >` | 1 firing flag | Boolean complement; map to a Noetic involution only when licensed |
+| `NAND< … >` / `NOR< … >` | n firing flags | inverted AND / OR |
+| `XOR< s₁, s₂ >` | 2 firing flags | fires iff exactly one fires |
+| `XNOR< s₁, s₂ >` | 2 firing flags | fires iff the inputs agree, including both-inactive |
 
-> **Bench Note — XOR is your ambiguity alarm.** A well-posed prompt should pull a system toward attraction *or* aversion, not both. When an XOR over `^2` and `^3` fires, you've caught a stimulus that is simultaneously appealing and repellent — the signature of a manipulation, a trap, or a genuinely hard ethical call. Don't suppress the flag; route it to a deliberation stage. The marquee exercise at the end of this chapter builds exactly this kind of conflict-handling around a Schmitt trigger.
+> **Bench Note — AND is your both-active ambiguity alarm.** A well-posed prompt may pull a system toward attraction or aversion. If both explicit firing flags are active, `AND< attract, averse >` raises the conflict signal. XOR is false in that case because its standard rule is exactly-one. Route the AND flag to the deliberation stage; do not suppress it.
 
 ## Multiplexer / Demultiplexer — Routing by Dominant Drive
 
@@ -215,11 +218,11 @@ SchmittTrigger< input=ambiguous_stimulus,
 
 An **analog-to-digital converter (ADC)** samples a continuous analog signal and turns it into discrete digital numbers a processor can work with. A **digital-to-analog converter (DAC)** does the reverse — turns computed digital values back into a continuous physical signal that can drive a motor or a speaker. They are the bridges between the messy analog world and the precise digital one.
 
-In CAS, the equivalent translation is between **Registers** — the operational character of a state. A felt, affective impression (`|f`) is the "analog" form: continuous, value-laden, hard to manipulate directly. Converting it to an analytical form (`|A`) is the ADC step — quantizing a feeling into something reasoning can operate on. Going the other way, turning an analytical conclusion (`|A`) into embodied action (`|E`), is the DAC step — converting a computed decision back into direct engagement with the world.
+In CAS, the translation is between **Registers** — the operational character of a state. A felt, affective impression (`|f`) can be quantized into analytical form (`|A`) by an ADC. A DAC separately renders analytical control (`|A`) in embodied form (`|E`). In a pure Register example, Noetic and Domain stay fixed. The DAC is not the inverse of a lossy ADC.
 
 ```cas
 ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >   // quantize a felt impression into analysis
-DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decision as action
+DAC< ^9^C_{F5}|A -> ^9^C_{F5}|E, smoothing=0.2 >  // render the same state in embodied form
 ```
 
 | Parameter | Range | Meaning |
@@ -256,10 +259,10 @@ A few more parts round out the drawer. Each gets one line here; reach for the da
 
 | Component | Electronic function | CAS mapping | Sketch syntax |
 |---|---|---|---|
-| **Varactor** | voltage-controlled variable capacitor | a memory whose capacity *tunes* with an applied state (adjustable `^5` storage) | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
-| **Relay** | small signal switches a large isolated circuit | a low-level decision gates a high-stakes pathway, with isolation between them | `Relay< control=^9^E_{F5}\|A, switches=^8^O_{F5}\|E >` |
-| **Photodiode** | converts incoming light into current | a pure input transducer — turns an external stimulus into an internal `^0` Idea | `Photodiode< stimulus -> ^0^C >` |
-| **Bridge Rectifier** | four diodes turning AC into one-way DC | forces an oscillating/ambivalent signal into a single consistent polarity | `BridgeRectifier< ^2^E \| ^3^E -> ^2^E >` |
+| **Varactor** | voltage-controlled junction capacitance | an applied control tunes persistence or resonance of a `^5` composition | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
+| **Relay** | small signal switches a large isolated circuit | a low-level `^8` Cause control gates a separate high-stakes `^9` Effect path | `Relay< control=^8^E_{F5}\|A, switches=^9^O_{F5}\|E >` |
+| **Photodiode** | converts incoming light into current | external `^0` Idea content enters through a `^1` Mind intake operation | `Photodiode< stimulus:^0 -> intake:^1^C >` |
+| **Bridge Rectifier** | four diodes turning AC into one-way DC | PED only: normalizes a defined non-valence scalar polarity | `BridgeRectifier< signed_error -> magnitude >` |
 
 ## Worked Build: A Schmitt Trigger That Stops the Flip-Flop
 
@@ -275,7 +278,7 @@ circuit ambiguity_stabilizer {
     node settled:  ^9^E_{F2}|A;   // a settled, reasoned verdict
 
     // 1. Detect that the stimulus fires BOTH attraction and aversion.
-    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict
+    gate conflict: AND< attract, averse >;          // fires when both are active
 
     // 2. With hysteresis: commit to attraction only above 0.7,
     //    release back to aversion only below 0.3. The 0.3–0.7 band is dead.
@@ -284,16 +287,16 @@ circuit ambiguity_stabilizer {
                                        high_state=attract, low_state=averse >;
 
     // 3. Route the stabilized state into a reasoning stage for a final verdict.
-    cjt resolve: CJT< stabilize | dissonance => settled > [β=1.0];
+    cjt resolve: CJT< stabilize | conflict => settled > [β=1.0];
 
     feedback settled -> stabilize [β=0.2];   // small damping; resist re-triggering
 
-    probe tp1: dissonance;   // is the input genuinely conflicted?
+    probe tp1: conflict;     // are both firing flags active?
     probe tp2: stabilize;    // which side has the Schmitt committed to?
 }
 ```
 
-Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely conflicted — both `^2^E` and `^3^E` fire, so the input is neither cleanly appealing nor cleanly repellent. The Schmitt trigger (`stabilize`) then refuses to flip-flop: at the input's ~0.5 value, sitting inside the 0.3–0.7 dead-band, the trigger holds whatever state it last committed to instead of chattering. Only a decisive move above 0.7 commits it to attraction; only a decisive drop below 0.3 releases it. The CJT (`resolve`) takes the now-stable input and the conflict flag and produces a single reasoned verdict, `^9^E_{F2}|A`. The small feedback term damps re-triggering. The two probes let you confirm both that the conflict was real and which way the trigger settled.
+Walk it through. The AND gate (`conflict`) confirms both explicit firing flags are active, so the stimulus is neither cleanly appealing nor cleanly repellent. The Schmitt trigger (`stabilize`) then refuses to flip-flop: at the input's ~0.5 value, sitting inside the 0.3–0.7 dead-band, it holds the state it last committed to instead of chattering. Only a decisive move above 0.7 commits it to attraction; only a decisive drop below 0.3 releases it. The CJT (`resolve`) takes the stable input and the conflict flag and produces the specified `^9^E_{F2}|A` arrival. The small feedback term damps re-triggering. The two probes let you confirm both-active conflict and the Schmitt's settled side.
 
 > **Bench Note — hysteresis trades speed for stability.** Widen the gap (lower `off_threshold`, raise `on_threshold`) and the circuit becomes even harder to flip — but also slower to respond when the input genuinely changes. A safety circuit usually wants a wide gap; a fast reflex circuit wants a narrow one. Pick the width on purpose.
 
@@ -304,7 +307,7 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely 
 | Transformer | wrong direction (`^O -> ^P`) used as impedance match | flagged as a domain precedence violation, not a turns ratio |
 | Op-Amp | run open-loop in a reasoning stage → saturates instantly | output pins to a rail on any ambiguity; commits too hard |
 | Oscillator | `damping=0` with no off-switch → runaway rumination | a `Phi<>` loop that never exits; no terminating state |
-| Logic Gate | XOR dissonance flag suppressed instead of routed | manipulative prompts pass cleanly; both `^2`/`^3` fire silently |
+| Logic Gate | AND both-active conflict flag suppressed instead of routed | co-active `^2`/`^3` firing passes without a conflict signal |
 | MUX/DEMUX | no `default` path; unmatched select | dropped request — undefined output on an out-of-range drive |
 | Regulator | `tolerance` too tight → over-correction chatter | baseline never settles; constant micro-adjustment |
 | Fuse | `permanent_block` on a recoverable category | a single false positive bricks the pathway for good |
@@ -318,9 +321,9 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely 
 - **Special-purpose components solve narrow problems precisely.** Each maps a specific cognitive job onto a specific electronic part, and earns its place by doing that job better than any combination of the basics.
 - **Transformer** matches domains by trading abstraction for actionability (`ratio`); a step-down is Domain Descent, not a violation. **Op-Amp** is an ultra-high-gain CJT tamed by feedback — set the *closed-loop* gain (`1 + Rf/Rg`), never run reasoning open-loop.
 - **Oscillator** is a looping `Phi<>` sequence — an internal rhythm; **PLL** entrains it to an external beat. **Crystal Oscillator** is the same idea at very high `Q`: a deeply entrenched, near-immovable habit or conviction.
-- **Logic gates** combine prerequisites: AND (all), OR (any), NOT (involution flip), NOR (proceed only if nothing fires), and **XOR (dissonance detector** — both `^2` and `^3` firing flags a conflicted or manipulative input).
+- **Logic gates** combine explicit firing flags: AND (all, including both-active conflict), OR (any), NOT (Boolean complement), NOR (none), XOR (exactly one), and XNOR (equal, including both-inactive).
 - **MUX/DEMUX** route by dominant Drive; always wire a `default`. **Regulator** restores a baseline (homeostasis); **Fuse/Breaker** cuts a dangerous path — permanent for unacceptable categories, resettable for recoverable ones. A fuse's `threshold` must sit **below the lowest saturation or clamp ceiling upstream of it**, or it can never trip; no per-value check catches that, because each number is legal on its own.
-- **Schmitt Trigger** uses two thresholds (hysteresis) to stop a system flip-flopping between `^2` attraction and `^3` aversion on an ambiguous input. **ADC/DAC** translate between Registers (`|f`↔`|A`↔`|E`), losing nuance at low resolution.
+- **Schmitt Trigger** uses two thresholds (hysteresis) to stop a system flip-flopping between `^2` attraction and `^3` aversion on an ambiguous input. **ADC and DAC** are separately directed Register translations (`|f -> |A` and `|A -> |E`); the DAC is not the inverse of a lossy ADC.
 - These parts populate the Part IV reference boards: the Oscillator drives the **COB**, the Op-Amp the **CDAB**, and the Fuse and Regulator sit on the **CSB**.
 
 ---
@@ -346,8 +349,8 @@ c) The same op-amp wired with *no* feedback and two raw inputs is which configur
 
 **Exercise 10.3: Build the Schmitt Trigger (marquee)**
 
-An ambiguous input arrives at activation 0.5 and keeps wobbling between 0.45 and 0.55. Write a CCDL `SchmittTrigger` (plus the XOR dissonance gate feeding it) that prevents the system from rapidly oscillating between `^2^E` attraction and `^3^E` aversion. Your trigger must (i) ignore all wobble inside a dead-band that contains 0.5, (ii) commit to attraction only on a decisive rise, and (iii) release only on a decisive fall. State your two thresholds and the resulting hysteresis width, and explain in one sentence why a value of 0.5 leaves the output unchanged. (Answer in Appendix E.)
+An ambiguous input arrives at activation 0.5 and keeps wobbling between 0.45 and 0.55. Write a CCDL `SchmittTrigger` (plus the AND both-active conflict gate feeding it) that prevents the system from rapidly oscillating between `^2^E` attraction and `^3^E` aversion. Your trigger must (i) ignore all wobble inside a dead-band that contains 0.5, (ii) commit to attraction only on a decisive rise, and (iii) release only on a decisive fall. State your two thresholds and the resulting hysteresis width, and explain in one sentence why a value of 0.5 leaves the output unchanged. (Answer in Appendix E.)
 
 **Exercise 10.4: Spot the Drift**
 
-A junior engineer labels a component that "audits an interpretation, decomposes it, and tests it for flaws" as an `XOR< ^3^E, ^3^E >` dissonance detector built on `^3` Negative. Two things are wrong. Identify (a) the Noetic error — what Noetic actually describes "audit / decompose / test for flaws," and why it is *not* `^3` — and (b) the gate error — why an XOR with two identical inputs cannot be a dissonance detector. (Answer in Appendix E.)
+A junior engineer labels a component that "audits an interpretation, decomposes it, and tests it for flaws" as an `XOR< ^3^E, ^3^E >` both-active conflict detector built on `^3` Negative. Two things are wrong. Identify (a) the Noetic error — what Noetic actually describes "audit / decompose / test for flaws," and why it is *not* `^3` — and (b) the gate error — why XOR cannot detect two simultaneously active inputs. (Answer in Appendix E.)

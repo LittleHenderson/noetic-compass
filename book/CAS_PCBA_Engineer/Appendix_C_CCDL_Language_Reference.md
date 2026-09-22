@@ -73,7 +73,7 @@ Examples, all legal literals: `^8^C_{F2}|A`, `^5^E_{F4}|f`, `^3^P_{F7}|f`, `^9^O
 
 > **Bench Notes — write the literal the compiler can parse.** The Unicode caret-and-superscript forms in this book (`^8^C_{F2}|A`) are the canonical surface syntax. The compiler tokenizes the literal whole; a malformed literal (a `^` with no Noetic digit, a `_{}` with no drive, an unknown register letter) is a lexical error, caught before any structural rule runs. When in doubt, copy a literal that already validates rather than retyping one by hand — the same advice Chapter 4 gives for nodes.
 >
-> One consequence of whole-literal tokenization is worth naming out loud, because it *looks* like an ambiguity and isn't. The `|` that separates cause from bias in `CJT< cause | bias => effect >` — and the `|` that separates the two inputs of a `BridgeRectifier< ^2^E | ^3^E -> ^2^E >` — is a **structural delimiter**. The `|` in `^3^P|f` is **inside the literal token**. The tokenizer resolves the literal first, so the two never compete for the same character. Write your literals unbroken (`^3^P|f`, no spaces) and your delimiters spaced (` | `), and the distinction stays visible to the reader as well as the parser.
+> One consequence of whole-literal tokenization is worth naming out loud, because it *looks* like an ambiguity and isn't. The `|` that separates cause from bias in `CJT< cause | bias => effect >` is a **structural delimiter**. A two-input component may use the same spaced delimiter between owned scalar references. The `|` in `^3^P|f` is **inside the literal token**. The tokenizer resolves the literal first, so the two never compete for the same character. Write literals unbroken (`^3^P|f`, no spaces) and delimiters spaced (` | `), and the distinction stays visible to the reader as well as the parser.
 
 ### Numbers
 
@@ -136,7 +136,7 @@ The `comp_kind` prefix in a component declaration (§C.5) is also reserved. Thes
 resistor  cap  capacitor  inductor  diode  zener  transformer  opamp  oscillator
 crystal   varactor  relay   schmitt  comparator  integrator  divider  active_load
 mirror    modulator  pll    tank     filter   diff    mux      demux   gate
-xor       fuse       reg    led      adc      dac     rectifier
+xor       xnor       fuse   reg      led      adc     dac       rectifier
 ```
 
 `cap` is an accepted short form of `capacitor`; both are legal and mean the same thing. The prefix is checked against the component type that follows it — `resistor r1: Capacitor< … >` is a kind mismatch and returns `E-DECL-002`.
@@ -176,11 +176,11 @@ CJT   Resistor  Capacitor  Inductor  Diode  Zener  Transformer  OpAmp
 Oscillator  CrystalOscillator  Varactor  Relay  Schmitt  SchmittTrigger
 Comparator  Integrator  LowPass  HighPass  LC  PLL  DutyCycle  Differential
 Photodiode  BridgeRectifier  ADC  DAC  LED
-AND  OR  NOT  NAND  NOR  XOR  MUX  DEMUX  Regulator  Fuse  CircuitBreaker
+AND  OR  NOT  NAND  NOR  XOR  XNOR  MUX  DEMUX  Regulator  Fuse  CircuitBreaker
 Phi
 ```
 
-Nineteen of those names — `CrystalOscillator`, `Varactor`, `Relay`, `Schmitt`, `SchmittTrigger`, `Comparator`, `Integrator`, `LowPass`, `HighPass`, `LC`, `PLL`, `DutyCycle`, `Differential`, `Photodiode`, `BridgeRectifier`, `ADC`, `DAC`, `LED` and `CircuitBreaker` — are instantiated in Chapters 10–22 or Appendix B but were absent from this list in earlier printings. `type_name` is an open nonterminal in the grammar sketch, so those listings always *parsed*; what was missing was the reservation, which is what stops you from naming a node `PLL`.
+Twenty of those names — `CrystalOscillator`, `Varactor`, `Relay`, `Schmitt`, `SchmittTrigger`, `Comparator`, `Integrator`, `LowPass`, `HighPass`, `LC`, `PLL`, `DutyCycle`, `Differential`, `Photodiode`, `BridgeRectifier`, `ADC`, `DAC`, `LED`, `XNOR` and `CircuitBreaker` — are instantiated or specified in Chapters 10–22 and Appendix B, or drawn in the companion volume *The Component Companion*, but were absent from this list in earlier printings. `type_name` is an open nonterminal in the grammar sketch, so those listings always *parsed*; what was missing was the reservation, which is what stops you from naming a node `PLL`.
 
 Parameter keys inside parameter blocks (`β`, `sat`, `cutoff`, `region`, `gm`, `rπ`, `R`, `C`, `L`, `leakage`, `ratio`, `breakdown`, `frequency`, `threshold`, `action`, `target_state`, `tolerance`, `open_loop_gain`, `inputs`, `outputs`, `select`, `non_inverting`, `inverting`, `output`, `v`, `dial`, `dropout`, `enforce`, `beta_scale`, `duration`, `pump`, `gain`, `tau`, `V`, `dt`, `metric`, `top_k`, `capture_range`, `lock_range`) are reserved in parameter position only.
 
@@ -384,14 +384,14 @@ ref_group ::= ref , { "|" , ref }
 phi_expr  ::= "Phi<" , ref , { "," , ref } , ">"
 ```
 
-The `ref_group [ "->" ref_group ]` alternative is what lets a component's argument *be* a directed conversion rather than a list of parts. `Diode< ^P -> ^C >` is the familiar case; `ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >` converts a felt impression into an analytical one; `Photodiode< stimulus -> ^0^C >` turns an external stimulus into an internal Idea. The `|`-joined group covers the one part that takes two sources into one target, `BridgeRectifier< ^2^E | ^3^E -> ^2^E >` — both polarities in, one polarity out.
+The `ref_group [ "->" ref_group ]` alternative is what lets a component's argument *be* a directed conversion rather than a list of parts. `Diode< ^P -> ^C >` is the familiar case; `ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >` converts a felt impression into an analytical one; `Photodiode< stimulus:^0 -> intake:^1^C >` names external Idea content and the Mind intake operation. A bridge rectifier may use two scalar-polarity inputs only when they are explicitly defined as a non-valence control quantity, e.g. `BridgeRectifier< signed_error -> magnitude >`. It must not encode `^3` Negative-to-`^2` Positive conversion.
 
 ### Passive Components
 
 | Form | Meaning | Key args |
 |---|---|---|
 | `Resistor< state, R=… >` | limits activation flow; higher `R` = more constrained | `R` ≥ 0 |
-| `Capacitor< state, C=…, leakage=… >` | stores accumulated experience; `leakage` = forgetting rate | `C` ≥ 0, `leakage` ∈ [0,1] |
+| `Capacitor< state, C=…, leakage=… >` | models persistence of accumulated `^5` composition; `leakage` = decay rate | `C` ≥ 0, `leakage` ∈ [0,1] |
 | `Inductor< state, L=… >` | resists pattern change; habit inertia | `L` ≥ 0 |
 
 ```cas
@@ -441,15 +441,16 @@ Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
 ### Logic Gates
 
 ```
-gate ::= ( "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" ) , "<" , arg_list , ">"
+gate ::= ( "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" | "XNOR" ) , "<" , arg_list , ">"
 ```
 
-Gates take one or more state inputs and produce a logic-combined output. `NOT` takes one input; the rest take two or more.
+Gates act on engineered Boolean firing flags obtained by thresholding continuous CAS activations. `NOT` takes one input; the rest take two or more. AND detects a both-active condition. XOR is true for exactly one active input. XNOR is true when its inputs agree, including the both-inactive case.
 
 ```cas
-AND< ^2^C|A, ^6^E|A >
-NOT< ^3^P|f >
-XOR< ^8^C|A, ^9^C|A >
+AND< attraction_flag, aversion_flag >    // both-active conflict
+NOT< enable_flag >                       // Boolean complement
+XOR< route_a_flag, route_b_flag >        // exactly one route
+XNOR< candidate_flag, baseline_flag >    // equal truth values
 ```
 
 ### Multiplexers

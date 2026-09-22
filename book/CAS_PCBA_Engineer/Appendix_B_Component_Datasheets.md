@@ -17,7 +17,7 @@ Canonical Noetic names are used throughout: `^0` Idea, `^1` Mind, `^2` Positive,
 
 ## CJT — Cognitive Junction Transistor
 
-**Symbol / role.** The book's central component. A transistor is a three-terminal device where a small current at one terminal controls a large current between the other two. The **CJT** models a cognitive state transition the same way: a small change at the **Bias** terminal controls a large change in the **Cause → Effect** transition. It is the active, amplifying element of every cognitive circuit — everything else conditions, stores, routes, or protects the signal the CJT produces.
+**Symbol / role.** The book's central component. A transistor is a three-terminal device where one terminal controls conduction through a separate path. The **CJT** keeps that controlled-transition pattern: a Bias role shapes a Cause-to-Effect transition. These are CAS functional roles, not claims that Cause is literally a collector, Bias a base, or Effect an emitter.
 
 **CCDL syntax.**
 
@@ -30,11 +30,13 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
 
 **Terminals.**
 
-| Terminal | Transistor analog | CAS analog |
+| Functional port | Hardware drawing cue | CAS role |
 |---|---|---|
-| **C — Cause** | Collector (input) | the Idea entering the Mind — typically an `^8` Above/Cause state |
-| **B — Bias** | Base (control) | accumulated substrate: `^5` Female, constitution, Dial settings, Drive config |
-| **E — Effect** | Emitter (output) | the Idea produced — typically a `^9` Below/Effect state |
+| **Cause** | one transition-path port | the triggering Idea — typically `^8` Above/Cause |
+| **Bias** | control-port cue | accumulated `^5` composition plus stated configuration |
+| **Effect** | the other transition-path port | the Idea brought to Mind — typically `^9` Below/Effect |
+
+The plate labels the three cognitive ports explicitly. Their names do not assign fixed BJT terminal identities.
 
 **Parameters.**
 
@@ -54,7 +56,7 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
 | **Cutoff** | bias below `cutoff` threshold | no effect; the transition does not fire |
 | **Active** | bias above cutoff, below saturation | linear amplification: `Δeffect ≈ β·Δcause` |
 | **Saturation** | effect at `sat` plateau | effect maxed; more cause produces no further change |
-| **Breakdown** | overload past safe limits | effect flips to its involution pair (`^2`→`^3`) — the controlled state inverts |
+| **Breakdown** | overload past safe limits | engineered failure behavior; an involution flip occurs only when that explicit rule is declared |
 
 **Gain, formally.** Small-signal `β = ‖∂E/∂C‖_FR` at constant bias; large-signal `β = d_FR(E_after, E_before) / d_FR(C_after, C_before)`, where `d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))` is the Fisher-Rao geodesic distance on the open simplex Δ39°. (Stated in Chapter 3 and restated in Chapter 9; cited, not re-derived, here.) **Before you write a measured β on a test report, read the gain-definition section of Appendix I** — a second, different definition of `β` is in circulation in instrumentation tooling, and the two are not known to be the same quantity.
 
@@ -74,7 +76,7 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
 | Short circuit | cause routed straight to effect, bypassing bias | W-CJT-006 CjtShortCircuit |
 | Cascade too deep | long β-chain compounds gain into instability | W-CJT-007 CjtCascadeDepth |
 | Cross-domain bias | bias and transition in incompatible domains | E-CJT-008 CjtCrossDomainBias |
-| Breakdown flip | overload inverts the state to its involution pair | (design: clamp before breakdown) |
+| Breakdown rule invoked | declared overload rule changes the output, possibly by a licensed involution | (design: clamp before breakdown) |
 
 > **Bench Note — pick the region on purpose.** A safety CJT *should* saturate at its specified threshold — that is the certification claim, an engineering fact about where the effect plateaus, not a claim about values. A reasoning CJT should sit in the active region with modest β. Cutoff is for stages you want silent until bias crosses a deliberate floor.
 
@@ -113,36 +115,36 @@ Resistor< ^8^C_{F2}|A, R=50 >   // limits activation flow; higher R = more const
 
 ---
 
-## Capacitor — Experience Storage
+## Capacitor — Persistence of Accumulated Composition
 
-**Symbol / role.** A capacitor stores electrical charge and releases it later, smoothing out fast changes in voltage. In CAS it stores **accumulated experience** — the `^5` Female substrate — and bleeds it back into the circuit over time.
+**Symbol / role.** A capacitor stores electrical charge and releases it later, smoothing fast voltage changes. In CAS it models the persistence of `^5` Female composition: the Mind **is composed of** accumulated Ideas. The Mind is not a container, and the Ideas are not cargo placed inside it.
 
 **CCDL syntax.**
 
 ```cas
-Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >   // stores experience; leakage = forgetting
+Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >   // preserves accumulated composition; leakage = decay
 ```
 
 **Parameters.**
 
 | Parameter | Range | Meaning |
 |---|---|---|
-| state literal | — | the experiential state being stored |
-| `C` | >0 | capacity; how much experience can be held |
-| `leakage` | 0–1 | rate of decay per unit time — forgetting |
-| `esr` | ≥0 | equivalent series resistance; how slowly stored experience can be drawn out |
+| state literal | — | the `^5` composition whose persistence is modeled |
+| `C` | >0 | persistence capacity for that accumulated composition |
+| `leakage` | 0–1 | decay rate per unit time |
+| `esr` | ≥0 | equivalent series resistance; how slowly the retained effect can bias a path |
 
-**Cognitive function.** Memory with dynamics. A capacitor smooths a noisy input by averaging recent activation, and it holds a baseline that carries forward when the input goes quiet. `leakage` is forgetting: `leakage=0` is permanent memory, higher values fade. This is the building block of the Cognitive Memory Board.
+**Cognitive function.** Persistence with dynamics. A capacitor smooths a noisy input by averaging recent activation and carries an accumulated baseline forward when input goes quiet. `leakage=0` means no designed decay; larger values fade faster. This is an engineered model of lasting composition, not a literal claim about a Mind as a container.
 
-**Typical use.** Smoothing filters, the integrator configuration of an op-amp (feedback through a capacitor), and the CMB's storage cells. A `^5` capacitor is the bias reservoir a CJT draws on.
+**Typical use.** Smoothing filters, an op-amp integrator, and CMB persistence cells. A `^5` capacitor supplies an accumulated-composition bias that a CJT can use.
 
 **Failure modes.**
 
 | Failure | Symptom |
 |---|---|
-| Leakage too high | experience fades before it can be used; no continuity across turns |
-| Capacity too small | memory saturates; new experience overwrites old |
-| ESR too high | stored experience can't be drawn out fast enough to bias a transition |
+| Leakage too high | accumulated influence fades before it can be used; continuity is lost |
+| Capacity too small | the persistence cell saturates and no longer distinguishes added formation |
+| ESR too high | retained influence cannot bias a transition quickly enough |
 
 ---
 
@@ -230,7 +232,7 @@ Zener< ^3^P, breakdown=0.8 >   // reverse-conducts (the aversion fires) only abo
 
 Two relations have to hold or the part does not work at all. First, `breakdown` is a threshold like any other, so the reachability rule under **Fuse** applies unchanged: put it above the lowest saturation or clamp ceiling upstream and the Zener can never conduct. Second, `clamp` must sit at or above `breakdown` — pin the state *below* the level that made it conduct and it drops out, rises, conducts again, and you have built a chattering comparator instead of a clamp.
 
-**Typical use.** Reference voltages (a stable setpoint for a regulator), over-activation clamps, and threshold guards where a state should be silent until a real limit is reached.
+**Typical use.** Threshold-derived setpoints for a regulator (a held cognitive state, not the schematic Reference/rest node), over-activation clamps, and guards where a state stays silent until a real limit is reached.
 
 **Failure modes.**
 
@@ -276,9 +278,9 @@ Transformer< ^P -> ^C, ratio=0.5 >   // step a principle down into reasoning, 2:
 
 ---
 
-## Op-Amp — Ultra-High-Gain CJT with Feedback
+## Op-Amp — High-Gain Differential Stage with Feedback
 
-**Symbol / role.** An operational amplifier has two inputs (`+` non-inverting, `−` inverting) and one output, and amplifies the *difference* between them with enormous open-loop gain (10⁴+). Feedback turns that wild gain into a precise closed-loop gain of `1 + Rf/Rg`. It is a CJT with so much raw gain you tame it with feedback rather than relying on native β.
+**Symbol / role.** An operational amplifier has two inputs (`+` non-inverting, `−` inverting) and one output. It amplifies their arithmetic difference with large open-loop gain. Feedback can turn that raw gain into a precise closed-loop response. This is a differential construction, not a Noetic involution operator.
 
 **CCDL syntax.**
 
@@ -302,11 +304,11 @@ OpAmp< non_inverting=^8^C_{F2}|A, inverting=^6^E_{F6}|A, output=^9^C_{F2}|A, ope
 | Configuration | Wiring | Cognitive job |
 |---|---|---|
 | **Non-inverting** | input on `+`, feedback to `−` | amplify an interpretation while staying faithful to it |
-| **Inverting** | input on `−`, `+` grounded | flip an interpretation to its involution pair, with gain |
-| **Comparator** | no feedback, two raw inputs | decide which of two interpretations dominates — a hard `^2`-vs-`^3` verdict |
+| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |
+| **Comparator** | no feedback, two raw inputs | threshold which of two commensurable quantities is larger |
 | **Integrator** | feedback through a capacitor | accumulate small impressions into one over time |
 
-**Cognitive function.** A high-gain CJT comparing two cognitive inputs and resolving them. The feedback path is what makes it usable: it converts raw, brittle gain into a modest, stable, predictable response.
+**Cognitive function.** A high-gain stage comparing two commensurable cognitive quantities. The feedback path converts raw, brittle gain into a modest and predictable response. If a design wants an involution, it must name and license that rule separately.
 
 **Typical use.** The core of the Cognitive Differential Amplifier Board (CDAB). Comparator stages for `^2`-vs-`^3` verdicts; integrator stages for accumulating evidence.
 
@@ -369,9 +371,10 @@ CrystalOscillator< Phi< ^5^P_{F7}|T, ^3^P_{F7}|f >, frequency=fixed, Q=50000 >
 ```cas
 AND< ^3^P_{F7}|f, ^6^E_{F6}|A, ^9^O_{F5}|E >   // all three must clear before output
 OR<  ^2^C|A, ^2^E|A >                          // any one suffices
-NOT< ^2^E >                                    // = ^3^E  (involution flip)
+NOT< enable_flag >                             // Boolean complement of one flag
 NAND< … >    NOR< ^3^P|A, ^3^C|A, ^3^E|A >     // inverted AND / inverted OR
-XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion firing → dissonance flag
+AND< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion firing → conflict flag
+XOR< route_a_flag, route_b_flag >                // exactly one route flag fires
 ```
 
 **Parameters / truth rules.**
@@ -380,21 +383,22 @@ XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion f
 |---|---|---|---|
 | `AND< s₁,…,sₙ >` | n | fires iff all fire | every prerequisite must clear |
 | `OR< s₁,…,sₙ >` | n | fires iff any fires | any one prerequisite suffices |
-| `NOT< s >` | 1 | the involution pair of `s` | Noetic involution flip (`^2`→`^3`) |
+| `NOT< s >` | 1 | Boolean complement; use a Noetic involution only when `s` has a licensed pair | flag negation; optional licensed `^2`↔`^3`, `^5`↔`^6`, or `^8`↔`^9` mapping |
 | `NAND< … >` | n | inverted AND | "block unless every condition fails" |
 | `NOR< … >` | n | inverted OR | proceed only when *no* warning state fires |
-| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | **dissonance detector** — both `^2` and `^3` firing → conflict |
+| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | exclusivity detector — one route, never both |
+| `XNOR< s₁, s₂ >` | 2 | fires iff inputs agree | equivalence detector; both-active **and** both-inactive count |
 
-**Cognitive function.** Prerequisite combination. **NOT** is the involution operator made discrete — the deliberate, controlled version of a CJT's breakdown-flip. **XOR** is the ambiguity alarm: a clean stimulus fires attraction *or* aversion; a manipulative or genuinely hard one fires both, and XOR raises a flag.
+**Cognitive function.** Prerequisite combination. **NOT** is a Boolean complement; it maps to a Noetic involution only for a licensed involution pair. **AND**, not XOR, is the both-active conflict detector. **XOR** reports exactly one active input. **XNOR** reports equality and therefore needs an activity qualifier when both-inactive must be excluded.
 
-**Typical use.** Guardrail clearance (AND of all checks), warning suppression (NOR of all aversion states), and conflict detection (XOR of `^2`/`^3`) feeding a deliberation stage.
+**Typical use.** Guardrail clearance (AND of all checks), warning suppression (NOR of all warning flags), both-active conflict detection (AND of attraction and aversion firing flags), and exclusive routing (XOR) feeding a deliberation stage.
 
 **Failure modes.**
 
 | Failure | Symptom |
 |---|---|
-| XOR dissonance flag suppressed instead of routed | manipulative prompts pass cleanly; both `^2`/`^3` fire silently |
-| XOR over two *identical* inputs | can never fire — a degenerate "dissonance detector" that detects nothing |
+| AND both-active conflict flag suppressed instead of routed | co-active attraction and aversion pass without a conflict signal |
+| XOR used for both-active detection | both-active produces false because XOR requires exactly one |
 | AND used where OR was meant (or vice versa) | over- or under-blocking of prerequisites |
 
 ---
@@ -449,12 +453,12 @@ Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
 
 | Parameter | Range | Meaning |
 |---|---|---|
-| `target_state` | state literal | the baseline to maintain (the setpoint) |
+| `target_state` | state literal | the held state to maintain; distinct from the schematic Reference/rest node |
 | `tolerance` | 0–1 | dead-band; drift smaller than this is left alone |
 | `response_rate` | 0–1 | how aggressively the regulator corrects toward the setpoint |
 | `dropout` | >0 | minimum input "headroom" below which regulation fails |
 
-**Cognitive function.** Gentle restoration. Under provocation, flattery, or stress a system drifts off its baseline; the Regulator measures the drift, compares to the setpoint, and pulls it back. It restores — it does not block.
+**Cognitive function.** Gentle restoration. Under perturbation a system can drift from its held state; the Regulator compares the drift to that setpoint and pulls it back. `target_state=^0...` names Idea content selected as the held state. It does not make the electrical Reference/rest symbol canonically identical to `^0` Idea. A regulator restores; it does not block.
 
 **Typical use.** Emotional and evaluative steadiness on any board. Holds a calm baseline that downstream stages can rely on.
 
@@ -567,7 +571,7 @@ SchmittTrigger< input=ambiguous_stimulus,
 
 ```cas
 ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >   // quantize a felt impression into analysis
-DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decision as action
+DAC< ^9^C_{F5}|A -> ^9^C_{F5}|E, smoothing=0.2 >  // render the same state in embodied form
 ```
 
 **Parameters.**
@@ -578,7 +582,7 @@ DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decisi
 | `resolution` (ADC) | bits | how finely the analog register is quantized; low res loses nuance |
 | `smoothing` (DAC) | 0–1 | how gradually the action register is rendered; prevents jerky output |
 
-**Cognitive function.** Register conversion. A felt impression (`|f`) is the "analog" form — continuous, value-laden. Converting it to analytical (`|A`) is the ADC step, quantizing a feeling into something reasoning can operate on. Turning an analytical conclusion (`|A`) into embodied action (`|E`) is the DAC step, rendering a decision back into direct engagement.
+**Cognitive function.** Register conversion. A felt impression (`|f`) can be quantized into analytical form (`|A`) by an ADC. A DAC renders analytical control (`|A`) in embodied form (`|E`). In a pure Register example, Noetic and Domain stay fixed. These are two separately directed stages; the DAC is not the inverse of a lossy ADC.
 
 **Typical use.** Front-ends that turn affect into analysis (ADC) and back-ends that turn decisions into action (DAC). Any stage where the register must change for the next stage to operate.
 
@@ -588,9 +592,11 @@ DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decisi
 |---|---|
 | ADC resolution too low | rich `|f` impressions collapse to a coarse `|A` verdict; nuance lost |
 | DAC smoothing too low | jerky, abrupt action output |
-| Treating ADC output as complete | the analytical verdict is mistaken for the full affective input |
+| Treating ADC output as complete | the analytical result is mistaken for the full affective input |
+| Calling DAC the inverse of ADC | irreversible quantization loss and the `|E` landing are hidden |
+| Changing Domain in a pure converter example | a Register conversion is made to perform an undeclared Domain crossing |
 
-> **Bench Note — quantization loses information.** When a circuit converts feeling to analysis, expect some nuance to be lost; don't treat the analytical output as a complete picture of the affective input.
+> **Bench Note — quantization loses information.** When a circuit converts feeling to analysis, expect nuance to be lost. A later DAC cannot recreate that discarded detail, and a pure ADC or DAC does not silently change Domain.
 
 ---
 
@@ -600,7 +606,7 @@ A few more parts round out the drawer. Each gets one line; reach for the full da
 
 | Component | Electronic function | CAS mapping | Sketch syntax |
 |---|---|---|---|
-| **Varactor** | voltage-controlled variable capacitor | a memory whose capacity *tunes* with an applied state (adjustable `^5` storage) | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
-| **Relay** | small signal switches a large isolated circuit | a low-level decision gates a high-stakes pathway, with isolation between them | `Relay< control=^9^E_{F5}\|A, switches=^8^O_{F5}\|E >` |
-| **Photodiode** | converts incoming light into current | a pure input transducer — turns an external stimulus into an internal `^0` Idea | `Photodiode< stimulus -> ^0^C >` |
-| **Bridge Rectifier** | four diodes turning AC into one-way DC | forces an oscillating/ambivalent signal into a single consistent polarity | `BridgeRectifier< ^2^E \| ^3^E -> ^2^E >` |
+| **Varactor** | voltage-controlled junction capacitance | an applied control tunes persistence or resonance of a `^5` composition | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
+| **Relay** | small signal switches a large isolated circuit | a low-level `^8` Cause control gates a separate high-stakes `^9` Effect path | `Relay< control=^8^E_{F5}\|A, switches=^9^O_{F5}\|E >` |
+| **Photodiode** | converts incoming light into current | external `^0` Idea content enters through a `^1` Mind intake operation | `Photodiode< stimulus:^0 -> intake:^1^C >` |
+| **Bridge Rectifier** | four diodes turning AC into one-way DC | PED only: normalizes a defined non-valence scalar polarity | `BridgeRectifier< signed_error -> magnitude >` |

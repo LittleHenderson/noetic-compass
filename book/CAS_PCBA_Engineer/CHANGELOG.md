@@ -1,5 +1,102 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-09-21 — logic gates are separated from Noetic involution (owner decision OD-A)
+
+The book described Boolean logic gates in Noetic vocabulary. Two defects followed from that, and both are
+corrected here. This changes what a board checker must enforce, so it is recorded as its own entry.
+
+- **`XOR` was called a both-active detector.** It is not. `XOR` fires when its inputs *differ*, so it never
+  fires when both are active. **`AND`** is the both-active detector. Corrected in `Chapter_10` (the gate
+  table, the worked examples and the bench note), `Appendix_B` (the truth-rule table and its failure row)
+  and `Appendix_E` exercise 10.4, whose listing now reads `gate conflict: AND< attract, averse >;`.
+- **`NOT` was called the involution operator made discrete**, with `NOT< ^2^E >` yielding `^3^E`. A gate
+  acts on a true/false firing flag; a Noetic involution acts on a cognitive state. `NOT` is now a Boolean
+  complement that maps to a Noetic involution only for a licensed pair. The same correction is applied to
+  the op-amp inverting configuration (an arithmetic inversion around a reference, with no automatic Noetic
+  flip) and to the Breakdown rule (the flip happens only when it is declared).
+
+Also in this entry:
+
+- **`XNOR` added** as an equivalence detector, in the gate production, the reserved type-name list, the
+  component prefix list, the `Chapter_10` and `Appendix_B` tables and the `Appendix_A` quick reference.
+- **The Capacitor state literal** is now described as the `^5` composition whose persistence is modeled,
+  which ties the datasheet to the authoritative `^5` Female definition.
+
+Known and deliberate: `gate` is both a component prefix and a statement leader. That was already true of
+the grammar's two reserved lists (`Appendix_C` §C.2 and §C.12); exercise 10.4 now makes it visible in a
+listing. A reader resolves it with one token of lookahead past the colon — a type name followed by `<` is a
+component declaration, anything else is the `gate` statement, which always carries `requires`.
+
+## 2026-09-09 — v0.9 (print-quality rebuild; the component library moves out to its own book)
+
+The illustrated component library — the symbol plates, the cognitive schematics and
+the printable card deck — is **no longer part of this volume**. It is published as a
+separate short book, *The Component Companion*, under
+`book/CAS_Component_Companion/`. Its changelog is `book/CAS_Component_Companion/CHANGELOG.md`.
+
+It was Appendix J here for one draft, and that was the wrong shape: a reference you keep
+open beside the main volume is a book, not an appendix, and calling it one buried a
+40-page illustrated component library at the back of a design text. The appendix is gone;
+`build_book.py` no longer lists it, and the only trace left in this volume is a
+cross-reference in Appendix C that now names the companion by title.
+
+**One thing is deliberately shared between the two books.**
+`build/figures_preamble.tex` — the TikZ symbol and block library — stays here, because this
+volume's own schematics use it. The companion copies it at build time rather than keeping
+its own version, so `pics/cas*` glyphs have exactly one definition. `build_companion.py`
+runs this volume's `patch_overflows.py` against the companion's `body.tex` for the same
+reason. Fix a glyph or a layout pass once, and both books get it.
+
+### This volume's own fixes
+
+- **The printed index was missing.** `body.tex` contained zero `\index{}` marks because
+  `publishing/build_indexes.py` was not in the build path. The new `build/build_full_book.py`
+  runs the whole pipeline in the one order that works (assemble → pandoc → postprocess →
+  patch → index marks → xelatex → makeindex → xelatex ×2) and fails on any log line
+  beginning with `! `, because `nonstopmode` still writes a PDF after an error. The index is
+  back: 181 lines.
+- **39 wrapped running heads are gone.** A two-line running head overflows memoir's 13.6 pt
+  head slot and raised `Overfull \vbox (13.59999pt too high)` on that recto page. Pass 5 of
+  `patch_overflows.py` now shortens the running-head mark for the 76 over-long section titles
+  using memoir's three-argument `\section[TOC][head]{printed}` form, so the printed heading,
+  TOC entry, PDF bookmark and every page break are untouched. The mark is built from pandoc's
+  plain-text `\texorpdfstring` argument and re-escaped for text mode — without that escape
+  step, titles containing `^` or `_` compile *with* two silent errors. Result:
+  `Overfull \vbox` 39 → **0**, wrapped heads 39 → **0**.
+- **Tables that ran into the gutter now wrap.** pandoc emits `@{}llll@{}` for a pipe table and
+  an `l` column never wraps, so sentence-length cells made the table wider than the measure;
+  separately, pandoc wraps grid-table cells in `\begin{minipage}[b]{\linewidth}`, which inside
+  a longtable means the *table* width. Both are fixed in `patch_overflows.py` (proportional
+  `p{}` columns for all-`l` tables with long cells; redundant minipage wrappers removed).
+- **One cell token was widened into a phrase.** The CSB test-point table carried
+  `safety_decision=PASS` as an unbreakable token in a quarter-width column, which pushed a
+  line 15.6 pt past the fore-edge line. It is now prose.
+- **`build/verify_print_margins.py` is new** — it measures the finished PDF's ink against each
+  trim edge, per page, with the gutter side chosen by page parity. This changelog has claimed
+  "0 margin violations" since v0.8.1, but **no script that measures margins existed**; the claim
+  rested on a KDP previewer run. Measured before the table fixes: gutter **0.513 in** where the
+  layout promises 0.9375 in — sentence-length cells in non-wrapping columns were pushing tables
+  into the spine. After: **0.9001 in on page 356**, and the narrowest outside margin 0.283 in →
+  **0.381 in**. KDP requires 0.875 in inside at this page count. The claim is now measured
+  rather than asserted.
+
+### Interior
+
+**781 pages**, 0 LaTeX errors, 0 overfull vboxes, 0 missing characters, index restored, 41
+overfull hboxes remaining — all pre-existing, all in Chapters 3/9/18/19/21/23 and Appendices
+C/D/E, and none of them crosses a KDP limit. The page count fell from 804 (and 809 with the
+appendix) because the component library is no longer in this volume.
+
+### Covers
+
+`book/covers/build_covers.py` had been hard-coding 743 pages while the published paperback was
+783, so the cover on file was a whole revision narrow. It now reads the page count from the
+built interior (`interior_pdf`), gained a `SPINE_TEXT_MIN_PAGES` rule (KDP prints no spine type
+below 100 pages), and gained a checker, `book/covers/verify_cover.py`, which measures the
+finished wrap for text collisions, barcode-zone intrusion and trim overflow. PCBA wrap
+regenerated at 781 pages: spine **1.7588 in**, wrap 14.0088 × 9.25 in. Confirm the spine in
+KDP's cover calculator against the uploaded interior before publishing.
+
 ## 2026-08-14 — v0.8.1 (KDP print-compliance rebuild; published)
 
 Published on Amazon KDP: Kindle eBook (from the existing v0.8 EPUB, $9.99, DRM on)

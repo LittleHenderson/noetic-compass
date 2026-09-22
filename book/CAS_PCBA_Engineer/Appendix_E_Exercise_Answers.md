@@ -310,9 +310,9 @@ For each curve, the **cutoff boundary** is where it leaves the horizontal axis (
 
 **10.1 — Pick the part.**
 - **(a)** Hold an evaluative baseline calm, correcting only large drifts → **`Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >`**.
-- **(b)** Permanently sever a path if Operational Agency exceeds 0.9 → **`Fuse< ^9^O_{F5}|E, threshold=0.9, action=permanent_block >`**.
+- **(b)** Permanently sever the guarded path if the Operational Agency trigger exceeds 0.9 → **`Fuse< ^8^O_{F5}|E, threshold=0.9, action=permanent_block >`**.
 - **(c)** Step a high-abstraction principle down to drive a concrete operation → **`Transformer< ^P -> ^O, ratio=0.4 >`**.
-- **(d)** Flag a prompt that fires both attraction and aversion at once → **`XOR< ^2^E_{F4}|f, ^3^E_{F4}|f >`** (a dissonance detector on two *opposite* states).
+- **(d)** Flag a prompt that fires both attraction and aversion at once → threshold both states, then use **`AND< ^2^E_{F4}|f, ^3^E_{F4}|f >`** (a both-active conflict detector).
 
 **10.2 — Op-amp gain** (`gain = 1 + Rf/Rg`).
 **(a)** For closed-loop 4: `Rf/Rg = 3`, e.g. **`Rf=30, Rg=10`**. **(b)** You don't use the open-loop 10,000 directly because it is **uncontrolled and unstable** — tiny input changes would slam the output to its rails, and the exact gain drifts with conditions; negative feedback trades raw gain for a **stable, predictable** 4. **(c)** No feedback + two raw inputs = a **comparator** (open-loop differential), whose cognitive job is a sharp **binary decision** — which of two states dominates.
@@ -324,17 +324,17 @@ circuit decisive_commit {
     node attract:  ^2^E_{F4}|f;
     node averse:   ^3^E_{F4}|f;
 
-    xor dissonance: XOR< attract, averse >;       // fires only when both active (ambiguity)
-    schmitt st: SchmittTrigger< in=dissonance, v_high=0.62, v_low=0.38 >;
+    gate conflict: AND< attract, averse >;        // fires only when both are active
+    schmitt st: SchmittTrigger< in=conflict, v_high=0.62, v_low=0.38 >;
 
-    probe tp_in:  dissonance;
+    probe tp_in:  conflict;
     probe tp_out: st;
 }
 ```
 
 It commits to attraction only on a decisive rise above 0.62, releases only on a decisive fall below 0.38, and ignores all wobble inside the 0.38–0.62 dead-band. An input of 0.5 sits inside the dead-band, so the output **stays in whatever state it was already in** — no change.
 
-**10.4 — Spot the drift.** **(a) Noetic error:** "audit / decompose / test for flaws" is **`^6` Male** (compositional decomposition-and-test), not `^3` Negative — `^3` is *visceral aversion*, not analytical critique. The correct literal is `^6^E_{F6}|A`. **(b) Gate error:** an **XOR with two identical inputs** can never be a dissonance detector — XOR fires only when its inputs *differ*, so `XOR< ^3^E, ^3^E >` (two copies of the same state) outputs **0 always**. A real dissonance detector needs the two **opposite** states (`^2` attraction vs `^3` aversion) so the gate fires when both are simultaneously active.
+**10.4 — Spot the drift.** **(a) Noetic error:** "audit / decompose / test for flaws" is **`^6` Male** (compositional decomposition-and-test), not `^3` Negative — `^3` is repulsion, not analytical critique. The correct literal is `^6^E_{F6}|A`. **(b) Gate error:** XOR fires only when its inputs differ, so `XOR< ^3^E, ^3^E >` is always false. More generally, XOR cannot detect two simultaneously active inputs. Threshold attraction and aversion explicitly, then use **AND** for the both-active conflict flag.
 
 ---
 
