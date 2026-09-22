@@ -35,14 +35,39 @@ Both are one-line changes. I found them by reading the edited text against itsel
 
 ## A naming point the reader must handle either way
 
-`gate` is **both** a component prefix and a statement leader — **in the committed text already** (`Appendix_C` lines 136–139 list it as a prefix; line 147 lists it as a statement keyword). This is not created by the edits.
+> **CORRECTED 2026-09-21, after this brief was first committed.** My original wording said the uncommitted edits
+> made the `gate` clash *reachable in a listing*. That was **wrong**. It was already reachable in the committed
+> book. A CCDL designer caught it and I verified the correction myself; the original claim is struck through
+> below so the mistake stays in the record. The conclusion — commit the edits — is unchanged and in fact
+> strengthened, because the edits fix an inconsistency rather than introduce one.
 
-What the edits do is make the clash *reachable in a real listing*:
+`gate` is **both** a component prefix and a statement leader — **in the committed text already** (`Appendix_C` lines 136–139 list it as a prefix; line 147 lists it as a statement keyword). This is not created by the edits. *(This part was right.)*
 
-- committed: `gate` appears in listings only as a statement — `gate o_enable: o_rail requires (p_rail within 0.10);` (`Appendix_D`:676–678, `Appendix_E`:463, 766)
-- edited: also as a component — `gate conflict: AND< attract, averse >;` (`Appendix_E`:327)
+~~What the edits do is make the clash *reachable in a real listing*.~~ **Wrong.** Measured in the committed book
+(`dbb388ee`, the tree before the OD-A commit):
 
-**It is not ambiguous to a parser.** Look at one token past the colon: a type name followed by `<` means a component declaration; anything else is the `gate` statement, which always has `requires`. The reader will do exactly that, whichever text you pick.
+- `Chapter_10_Special_Purpose_Components.md:278` — `gate dissonance: XOR< attract, averse >;` — a **component**
+  declaration using the `gate` prefix.
+- `Chapter_14_Power_Management.md` — two `gate o_enable: … requires …` lines — the **statement**.
+
+So both uses already appear in listings of the committed book. What the edits actually do is **make the book
+agree with itself**:
+
+| | committed | edited |
+|---|---|---|
+| `Chapter_10:278` (the chapter) | `gate dissonance: XOR< … >` | `gate conflict: AND< … >` |
+| `Appendix_E:327` (the answer to that exercise) | `xor dissonance: XOR< … >` | `gate conflict: AND< … >` |
+
+In the committed book **the chapter and its own answer key use different prefixes for the same declaration**.
+After the edits they match. That is one more defect the edits fix, and one more reason to commit them.
+
+**It is not ambiguous to a parser, under either text.** Look at one token past the colon: a type name followed by
+`<` means a component declaration; anything else is the `gate` statement, which always carries `requires`. The
+reader does exactly that, whichever text you pick.
+
+**How I got it wrong:** my search for `gate` declarations ran as a shell loop whose output was truncated by a
+broken pipe (`sed: couldn't flush stdout: Permission denied`). I read the short result as a complete one. The
+lesson is in the method, not the fact: a search that errors is not a search that found nothing.
 
 ## What I recommend
 

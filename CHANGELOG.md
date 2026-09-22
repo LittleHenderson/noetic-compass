@@ -1,5 +1,29 @@
 # tksCAS — Changelog
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - CORRECTION to the OD-A brief: the `gate` clash was already reachable in the COMMITTED book.
+
+**What I got wrong.** The OD-A brief and the commit message for the book canon fix both said the uncommitted edits only made
+the `gate` prefix/leader clash *reachable in a listing*. That is **false**. Measured in the pre-edit tree (`dbb388ee`):
+`Chapter_10_Special_Purpose_Components.md:278` already reads `gate dissonance: XOR< attract, averse >;` (a component using the
+`gate` prefix) and `Chapter_14_Power_Management.md` already carries two `gate o_enable: ... requires ...` statements. Both uses
+were already in listings.
+
+**What the edits actually do** is make the book agree with itself. In the committed book the chapter writes
+`gate dissonance: XOR< ... >` while its own answer key at `Appendix_E:327` writes `xor dissonance: XOR< ... >` - the chapter and
+its answer use different prefixes for the same declaration. After the edits both read `gate conflict: AND< ... >`. So this is one
+more defect the edits fix. **The OD-A decision and the canon pin are unchanged and better supported, not weaker.**
+
+**Who caught it.** The grammar-first CCDL designer, working read-only and independently; I then verified it myself before
+correcting the record. It also corrected a count: the book has **58** `circuit`/`board` listing blocks across 42 distinct names,
+not the 60 an investigator reported - I re-counted and got 58/42. And it established that book and compiler digests must be taken
+over **LF-normalised** bytes, because the main checkout stores some files CRLF: `Appendix_D` is byte-identical in content between
+the two book copies but has two different raw digests, which reads as an edit and is not one.
+
+**How I got it wrong.** My search ran as a shell loop whose output was truncated by a broken pipe
+(`sed: couldn't flush stdout: Permission denied`). I read the short result as a complete one. The lesson is the method: a search
+that errors is not a search that found nothing. The brief now carries the correction inline with the original claim struck
+through, so the mistake stays in the record.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - TWO AGENT LINES RECONCILED INTO ONE, and the PCBA book canon is pinned (owner decisions OD-A, OD-9, OD-10).
 
 **Why.** A second agent (branch `codex/helm-cas-data-boundary-20260921`) recovered this line's then-uncommitted compiler work and
