@@ -1,0 +1,218 @@
+GRADER af0970cfa6d54a85aeb16e5a99a84d791ace59c0 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/evaluate_gates.py SHA256-LF d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d
+112: ALPHA = Fraction(1, 100)
+113: MIN_IMPROVED_KINDS = 2
+114: MIN_IMPROVED_WORLDS = 2
+283: def binomial_upper_tail(b, n):
+284:     """Exact one-sided P(X >= b | n, 1/2)."""
+285:     if n == 0:
+286:         return Fraction(1)
+287:     return Fraction(sum(comb(n, k) for k in range(b, n + 1)), 2 ** n)
+288: 
+289: 
+290: def paired(before, after, keys):
+291:     b = sum(1 for k in keys if not before[k] and after[k])
+292:     c = sum(1 for k in keys if before[k] and not after[k])
+293:     return {'wrong_to_right': b, 'right_to_wrong': c, 'pairs': len(keys)}
+294: 
+295: 
+296: def question_outcomes(record_correct, questions):
+297:     """{query_id: all records correct} for the given {query_id: [record ids]}."""
+298:     return {q: all(record_correct[r] for r in records) for q, records in questions.items()}
+299: 
+300: 
+301: def seed_test(before, after, keys, kind_of, world_of=None):
+302:     """One seed's pre-registered test on questions: b > c, exact p <= ALPHA, improvements in >= 2 kinds
+303:     and, when worlds are given, in >= 2 worlds.
+304: 
+305:     The returned dict CARRIES THE KEY SET THE TEST RAN OVER as `keys`. That is not decoration: it is what makes
+306:     the label's unit of evidence MEASURED rather than intended, so a reader (and the self-test) can see which
+307:     questions the test that set the label actually used, even if a later edit changes the expression at the call
+308:     site (R1, FIX 1).
+309:     """
+310:     test = paired(before, after, keys)
+311:     b, c = test['wrong_to_right'], test['right_to_wrong']
+312:     p = binomial_upper_tail(b, b + c)
+313:     improved = [k for k in keys if not before[k] and after[k]]
+314:     kinds = sorted({kind_of[k] for k in improved})
+315:     worlds = sorted({world_of[k] for k in improved}) if world_of is not None else None
+316:     passed = b > c and p <= ALPHA and len(kinds) >= MIN_IMPROVED_KINDS
+317:     if world_of is not None:
+318:         passed = passed and len(worlds) >= MIN_IMPROVED_WORLDS
+319:     test.update(p_one_sided=str(p), p_float=float(p), improved_kinds=kinds, improved_worlds=worlds, passed=passed,
+320:                 keys=list(keys))
+321:     return test
+322: 
+323: 
+324: def label_decision(complete, primary_passed):
+325:     """The ONLY label decision in this program, in order of precedence, as (label, rule code).
+326: 
+327:     1. anything that breaks the integrity chain, or fewer than the three registered seeds -> VOID
+328:     2. the RELATIONAL population test passes in all three seeds                        -> LEARNS_NEW_WORLDS
+329:     3. otherwise                                                                        -> NO_TRANSFER_TO_NEW_WORLDS
+330: 
+331:     `complete` is `not failures and len(seeds) == len(contract.MODEL_SEEDS)`. `primary_passed` is the primary test
+332:     over the key set `primary_keys` returned - NEVER the all-kinds test (FP1). No other code path sets a label.
+333:     """
+334:     if not complete:
+335:         return 'VOID', 'INTEGRITY_OR_SEED_COUNT_FAILED'
+336:     if primary_passed:
+337:         return 'LEARNS_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_PASSED_ALL_SEEDS'
+338:     return 'NO_TRANSFER_TO_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_FAILED'
+355: def primary_keys(contract, population, eligible, kind_of):
+356:     """THE ONE PLACE the label's key set is chosen: the eligible held RELATIONAL questions of the derived population.
+357: 
+358:     R1's P12 (protocol sections 4.1 and 11.3) is the behavioural test that a flag-copy-only outcome receives no
+359:     label, and it can only mean anything if the SET OF QUESTIONS the label is keyed on is computed once and can be
+360:     asserted on. This function is that single place. Its rules, all of them fail-CLOSED:
+361: 
+362:     * `population` is the contract's own `relational_population(frozen)` - the eligible held RELATIONAL questions
+363:       after the frozen removals (18). With no derived population the key set is EMPTY, so the label cannot pass;
+364:     * every returned id must belong to the tier the CONTRACT registers as its label tier
+365:       (`DESIGN["primary_label_tier"]`), looked up through `contract.TIERS`. A contract that registered another
+366:       tier would produce an empty set here rather than a wider one: DIRECT_READ and TEXT can never be the label's
+367:       unit of evidence (protocol section 3; findings LK1, LK2);
+368:     * `eligible` - every eligible held question of every kind - is the outer boundary, so a key set is never
+369:       returned that the caller could not have derived from the population it was handed.
+370: 
+371:     The caller must run the primary test over exactly the returned list and report it as `label_key_population`.
+372:     """
+373:     if population is None:
+374:         return []
+375:     tier = contract.DESIGN.get('primary_label_tier')
+376:     members = set(contract.TIERS.get(tier, ()))
+377:     keys = sorted(question for question in population['question_ids'] if kind_of.get(question) in members)
+378:     if set(keys) != set(population['question_ids']) or not set(keys) <= set(eligible):
+379:         return []
+380:     return keys
+1142:     complete = not failures and len(seeds) == len(seed_order)
+1143:     primary_passed = complete and all(entry[PRIMARY_TEST]['passed'] for entry in seeds.values())
+1144:     label, rule = label_decision(complete, primary_passed)
+CONTRACT Helm 1.0 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py SHA256 70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d
+518: REMOVALS = {
+519:     "flag_rule": {"parts": [
+520:         "typed-query-4a0342c26f982758689611569bebd798f324a52a3b8ee25cb5f016b394e17509",
+521:         "typed-query-6d9f6280ddb8dc463bfb557617353b7857fba6cfda057403516a79d8a5ec1249",
+522:         "typed-query-a14f184d8f6cc4f3b80a87998515fe3c707c2dfb4f92a2358f1233fc43fba1d9"]},
+523:     "order_rule": {"reach": [
+524:         "typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94",
+525:         "typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7"]},
+526:     "present_rule": {"reach": [
+527:         "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7"]},
+528:     "inexpressible": {"correspondence": [
+529:         "typed-query-06e475e2b15faf1f1171e023219499f3255033f2dd71e05c86388b733c3f6077",
+530:         "typed-query-6122a0c6cf78338961e9fd54efca446b1b31a74eddcc0e9f9480a1acc62b37c4",
+531:         "typed-query-9b29b95ce429d36bf88bd5d301f0e146d178dd21b20bada78641e29dae9793e8",
+532:         "typed-query-a6316d425dd26e46b9898a510e4e90dead89e882c57b444d44014a59c4de29e0",
+533:         "typed-query-b291ebd18e0a4ea355ee1e08b1f82ba6e934c4e68cd4252691acbd86dc437a86"]},
+534: }
+552: VERIFIED_POPULATION_BY_KIND = {"parts": 2, "edge_account": 5, "reach": 6, "correspondence": 0, "analogy": 5}
+553: VERIFIED_POPULATION_DIGEST = "4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d"
+GRADER 20208c923d41c24614504d4ecc2b289ecb66eda8 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/evaluate_gates.py SHA256-LF d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d
+112: ALPHA = Fraction(1, 100)
+113: MIN_IMPROVED_KINDS = 2
+114: MIN_IMPROVED_WORLDS = 2
+283: def binomial_upper_tail(b, n):
+284:     """Exact one-sided P(X >= b | n, 1/2)."""
+285:     if n == 0:
+286:         return Fraction(1)
+287:     return Fraction(sum(comb(n, k) for k in range(b, n + 1)), 2 ** n)
+288: 
+289: 
+290: def paired(before, after, keys):
+291:     b = sum(1 for k in keys if not before[k] and after[k])
+292:     c = sum(1 for k in keys if before[k] and not after[k])
+293:     return {'wrong_to_right': b, 'right_to_wrong': c, 'pairs': len(keys)}
+294: 
+295: 
+296: def question_outcomes(record_correct, questions):
+297:     """{query_id: all records correct} for the given {query_id: [record ids]}."""
+298:     return {q: all(record_correct[r] for r in records) for q, records in questions.items()}
+299: 
+300: 
+301: def seed_test(before, after, keys, kind_of, world_of=None):
+302:     """One seed's pre-registered test on questions: b > c, exact p <= ALPHA, improvements in >= 2 kinds
+303:     and, when worlds are given, in >= 2 worlds.
+304: 
+305:     The returned dict CARRIES THE KEY SET THE TEST RAN OVER as `keys`. That is not decoration: it is what makes
+306:     the label's unit of evidence MEASURED rather than intended, so a reader (and the self-test) can see which
+307:     questions the test that set the label actually used, even if a later edit changes the expression at the call
+308:     site (R1, FIX 1).
+309:     """
+310:     test = paired(before, after, keys)
+311:     b, c = test['wrong_to_right'], test['right_to_wrong']
+312:     p = binomial_upper_tail(b, b + c)
+313:     improved = [k for k in keys if not before[k] and after[k]]
+314:     kinds = sorted({kind_of[k] for k in improved})
+315:     worlds = sorted({world_of[k] for k in improved}) if world_of is not None else None
+316:     passed = b > c and p <= ALPHA and len(kinds) >= MIN_IMPROVED_KINDS
+317:     if world_of is not None:
+318:         passed = passed and len(worlds) >= MIN_IMPROVED_WORLDS
+319:     test.update(p_one_sided=str(p), p_float=float(p), improved_kinds=kinds, improved_worlds=worlds, passed=passed,
+320:                 keys=list(keys))
+321:     return test
+322: 
+323: 
+324: def label_decision(complete, primary_passed):
+325:     """The ONLY label decision in this program, in order of precedence, as (label, rule code).
+326: 
+327:     1. anything that breaks the integrity chain, or fewer than the three registered seeds -> VOID
+328:     2. the RELATIONAL population test passes in all three seeds                        -> LEARNS_NEW_WORLDS
+329:     3. otherwise                                                                        -> NO_TRANSFER_TO_NEW_WORLDS
+330: 
+331:     `complete` is `not failures and len(seeds) == len(contract.MODEL_SEEDS)`. `primary_passed` is the primary test
+332:     over the key set `primary_keys` returned - NEVER the all-kinds test (FP1). No other code path sets a label.
+333:     """
+334:     if not complete:
+335:         return 'VOID', 'INTEGRITY_OR_SEED_COUNT_FAILED'
+336:     if primary_passed:
+337:         return 'LEARNS_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_PASSED_ALL_SEEDS'
+338:     return 'NO_TRANSFER_TO_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_FAILED'
+355: def primary_keys(contract, population, eligible, kind_of):
+356:     """THE ONE PLACE the label's key set is chosen: the eligible held RELATIONAL questions of the derived population.
+357: 
+358:     R1's P12 (protocol sections 4.1 and 11.3) is the behavioural test that a flag-copy-only outcome receives no
+359:     label, and it can only mean anything if the SET OF QUESTIONS the label is keyed on is computed once and can be
+360:     asserted on. This function is that single place. Its rules, all of them fail-CLOSED:
+361: 
+362:     * `population` is the contract's own `relational_population(frozen)` - the eligible held RELATIONAL questions
+363:       after the frozen removals (18). With no derived population the key set is EMPTY, so the label cannot pass;
+364:     * every returned id must belong to the tier the CONTRACT registers as its label tier
+365:       (`DESIGN["primary_label_tier"]`), looked up through `contract.TIERS`. A contract that registered another
+366:       tier would produce an empty set here rather than a wider one: DIRECT_READ and TEXT can never be the label's
+367:       unit of evidence (protocol section 3; findings LK1, LK2);
+368:     * `eligible` - every eligible held question of every kind - is the outer boundary, so a key set is never
+369:       returned that the caller could not have derived from the population it was handed.
+370: 
+371:     The caller must run the primary test over exactly the returned list and report it as `label_key_population`.
+372:     """
+373:     if population is None:
+374:         return []
+375:     tier = contract.DESIGN.get('primary_label_tier')
+376:     members = set(contract.TIERS.get(tier, ()))
+377:     keys = sorted(question for question in population['question_ids'] if kind_of.get(question) in members)
+378:     if set(keys) != set(population['question_ids']) or not set(keys) <= set(eligible):
+379:         return []
+380:     return keys
+1142:     complete = not failures and len(seeds) == len(seed_order)
+1143:     primary_passed = complete and all(entry[PRIMARY_TEST]['passed'] for entry in seeds.values())
+1144:     label, rule = label_decision(complete, primary_passed)
+CONTRACT Helm 2.0-experimental research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py SHA256 70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d
+518: REMOVALS = {
+519:     "flag_rule": {"parts": [
+520:         "typed-query-4a0342c26f982758689611569bebd798f324a52a3b8ee25cb5f016b394e17509",
+521:         "typed-query-6d9f6280ddb8dc463bfb557617353b7857fba6cfda057403516a79d8a5ec1249",
+522:         "typed-query-a14f184d8f6cc4f3b80a87998515fe3c707c2dfb4f92a2358f1233fc43fba1d9"]},
+523:     "order_rule": {"reach": [
+524:         "typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94",
+525:         "typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7"]},
+526:     "present_rule": {"reach": [
+527:         "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7"]},
+528:     "inexpressible": {"correspondence": [
+529:         "typed-query-06e475e2b15faf1f1171e023219499f3255033f2dd71e05c86388b733c3f6077",
+530:         "typed-query-6122a0c6cf78338961e9fd54efca446b1b31a74eddcc0e9f9480a1acc62b37c4",
+531:         "typed-query-9b29b95ce429d36bf88bd5d301f0e146d178dd21b20bada78641e29dae9793e8",
+532:         "typed-query-a6316d425dd26e46b9898a510e4e90dead89e882c57b444d44014a59c4de29e0",
+533:         "typed-query-b291ebd18e0a4ea355ee1e08b1f82ba6e934c4e68cd4252691acbd86dc437a86"]},
+534: }
+552: VERIFIED_POPULATION_BY_KIND = {"parts": 2, "edge_account": 5, "reach": 6, "correspondence": 0, "analogy": 5}
+553: VERIFIED_POPULATION_DIGEST = "4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d"
