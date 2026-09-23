@@ -10,8 +10,8 @@ No full historical integrity certification was rerun and no neural checkpoint wa
 | A2 | 5 | 2 source ZIPs, 18 member copies, 6 unchanged-function comparisons; 1 symbolic 4-node path observed across 8 steps/version; 64 worlds, 70 analogy inputs, 2 selected witness inputs; 12 saved files/6,768 stored predictions, of which 840 analogy and 1,056 correspondence instances selected; 3 algebra sizes/32 permutations | Decisive suite 1 time, 0.647s; 0 repeat suites | Inspection failures and CRLF/source-byte formatting warnings logged. No neural execution. Saved endpoint instances overlap A1's population; they are not additional independent trials. |
 | A3 | 0 formal test functions; 1 diagnostic program | Per execution: 64 bank graphs, 5 overlap witnesses, 564 records /244 distinct queries, 59 development packets, 6 ZIP/config pairs, 6 first-pass logs ×147 rows | 2 successful executions, each under 2s; same cases repeated | Second execution corrected hardcoded descriptive count 60 to actual 59; initial computed result already 59, preserved. Truncated reads narrowed. Independent graph/label code. |
 | A4 | 3 | 6 subjects = 18 subject/function cases per execution; 300 manifest artifacts; 8,820 main rows plus 96 interference rows; 42 held snapshots and 12 retention snapshots; 6 ZIPs/24 members | 2 successful executions, 19.572s and 21.336s; 36 subject/function executions total | Second run added all-kind batch and score-total checks. Inspection failures/truncations logged; saved score rows reused, no new semantic grader or historical replay. |
-| A5 | Not launched | Pending | Pending | Pending |
-| A6 | Not launched | Pending | Pending | Pending |
+| A5 | 0 formal test functions; 1 inline algebra property | 158 unique family records (70 analogy, 88 correspondence), including 37 held presentations; 2,118 repeated saved occurrences; 12 matrix cases /128 assignments per condition; 6 registered comparison methods | 1 substantive execution, 0.749s, no repeats; 1 provenance-helper execution | Two manifest-key discovery errors and encoding-name typo recovered; default CRLF whitespace check failed, CRLF-aware check passed. No reach/VIA replay. |
+| A6 | 0 formal test functions; 2 diagnostic scripts | 6 version/seed cases; 108 question pairs /330 record pairs; 5 lost-record checks represent 2 lost questions; 20 original-file fingerprints in reconstruction | Each script once, 0.280s and 0.100s; no repeats | Early truncated reads narrowed; subsequent whitespace-check failure separately preserved without altering first report. Independent coin enumeration and unique-path semantics; most original scores and frozen population reused. |
 | A7 | Not launched | Pending | Pending | Pending |
 
 Root custody checks are file identity checks, not model/test behavior: 630 unique paths from 642 rows,
@@ -19,4 +19,5 @@ Root custody checks are file identity checks, not model/test behavior: 630 uniqu
 coordinator/CUSTODY_LOG.md. Original worktree status-list equality does not hash unrelated dirty files.
 
 Follow-up accounting will be appended after registered checks; first-report counts remain original.
+
 
