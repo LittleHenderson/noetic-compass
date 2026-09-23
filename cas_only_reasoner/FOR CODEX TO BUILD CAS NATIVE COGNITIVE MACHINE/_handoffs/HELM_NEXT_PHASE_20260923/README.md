@@ -60,3 +60,17 @@ files untouched. Claude's acceptance tools are in `records/helm_eval_design_2026
 - The T4 preservation reference is complete.
 - The switch-OFF check must run on a T4 with a same-job control (prereg amendment A3). The reusable launcher is
   `records/helm_eval_design_20260923/aws_probe_job/`.
+
+**Update 2026-09-23: checker v2 ACCEPTED; Stage 1 cells built (AWS).**
+- **D-1 acceptance of Codex's checker v2 (`7f85af1e`): ACCEPTED.** All of A1 to A6 pass, plus the extra check X.
+  See `records/helm_eval_design_20260923/d1_acceptance/D1_ACCEPTANCE_RESULT.md`. Checker v2 may now score
+  Stage 2 cells.
+- **The Stage 1 cells are built.** See `records/helm_eval_design_20260923/hset1a/HSET1A_BUILD_RESULT.md`.
+  - **No Stage 1 cell can carry a claim.** On TEST, the no-learning two-hop rule is wrong on only 2 reach clusters.
+    A pass needs at least 7.
+  - This is a limit of 5-node worlds, not a result about Helm. The owner decides the next cut (the options are
+    listed in that file).
+- **What Codex may use.** The public cells in `records/helm_eval_design_20260923/hset1a_aws_job/results/`
+  (`HSET1A_CELLS_PUBLIC.json`: FAMILIAR_RELABELLED, NEW_SHAPE_4, DEV_NEW_5), for development only.
+- **The rule for the builder, unchanged from design section 1.4.** No update and no development evaluation may use
+  a 5-node shape outside DEV_NEW_5. TEST_NEW_5 stays sealed with Claude.

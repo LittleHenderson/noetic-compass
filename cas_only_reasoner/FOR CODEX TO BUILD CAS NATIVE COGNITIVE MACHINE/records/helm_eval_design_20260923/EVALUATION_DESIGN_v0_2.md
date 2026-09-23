@@ -182,3 +182,19 @@ transfer. Stage 1 at 4 nodes can only show "matches the degree rule".
 
 Stage 2 cells may be built only after checker v2 passes A1-A6. They may be read only after section 1.3 is
 signed. The row "D-1" in section 4 now reads **APPROVED**; the table itself is left as written.
+
+## Update 2026-09-23: Stage 1 built; its reach cells cannot carry a claim at 5 nodes
+
+- **Built on AWS.** See `hset1a/HSET1A_BUILD_RESULT.md` and `hset1a/BUILD_SPEC_v0_1.md`.
+- **The result.** On `TEST_NEW_5` the no-learning rule `TWO_HOP_FIRST_CHILD` is wrong on only **2** primary reach
+  clusters in each reach cell. A pass needs at least 7 wins with no loss. So
+  `REACH_TRANSFERS_TO_NEW_STRUCTURE_5` **cannot be tested** with these cells, whatever model is run.
+- **The cause.** Across all 267 five-node shapes, only 27 (first-child rule) or 28 (BFS rule) non-tie reach
+  questions need 3 or more steps.
+- **What is unchanged.** This section is additive. Section 1.3 is still unsigned, and no option is chosen here.
+- **The options for the owner are in `hset1a/HSET1A_BUILD_RESULT.md`:**
+  - 6- and 7-node reach cells (Claude's recommendation);
+  - pooling every non-DEV 5-node shape;
+  - declaring Stage 1 reach diagnostic only.
+- **D-1.** Checker v2 is ACCEPTED (`d1_acceptance/D1_ACCEPTANCE_RESULT.md`). Stage 2 cells may be built. They may be
+  read only after section 1.3 is signed.

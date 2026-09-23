@@ -1,0 +1,81 @@
+JOB START 2026-09-23T15:50:13Z
+bundle.tar.gz: OK
+downloading uv 0.12.18 x86_64-unknown-linux-gnu
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.14.7-linux-x86_64-gnu (download) (34.3MiB)
+ Downloaded cpython-3.14.7-linux-x86_64-gnu (download)
+Installed Python 3.14.7 in 776ms
+ + cpython-3.14.7-linux-x86_64-gnu (python3.14)
+Using CPython 3.14.7
+Creating virtual environment at: venv
+Activate with: source venv/bin/activate
+Python 3.14.7
+Linux ip-172-31-40-156 7.0.0-1013-aws #13~24.04.1-Ubuntu SMP PREEMPT Sat Sep  5 01:10:01 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+8
+               total        used        free      shared  buff/cache   available
+Mem:           15700         834       14578           2         578       14865
+Swap:              0           0           0
+model name	: Intel(R) Xeon(R) Platinum 8488C
+bundle_sha256=8863766959be3289d7c6fc656d458ddc3a88b1ecdcaabd4be1652846abbd66e6
+claude_commit=6dcf035cfeb9e63017808aa99fc5cf5ebff4d62a
+uv 0.12.18 (x86_64-unknown-linux-gnu)
+Using Python 3.14.7 environment at: venv
+{"root": "/root/hset_job/pkg/frozen", "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81", "checker_profile_schema": "cas.typed-teaching-semantic-profile/0.1", "slot_profile_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98", "slot_profile_schema": "cas.typed-teaching-slot-profile/0.1"}
+smoke tests with errors or missing: []
+SMOKE PASSED 2026-09-23T15:52:32Z
+upload hset_job.log -> http 200
+upload hset_job.log -> http 200
+upload hset_job.log -> http 200
+build exit=0 wall=678s
+    alt ALL_NON_TIE                            64    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_ONLY_NON_TIE                        9    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/REACH_BFS                      30    0 TWO_HOP_FIRST_CHILD      1.0000       0.0       0.0  NO: the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown
+    alt ALL_NON_TIE                            65    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_ONLY_NON_TIE                       10    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/PARTS                          25    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+NEW_SHAPE_4/EDGE_ACCOUNT                   22    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+DEV_NEW_5/REACH_FIRST_DIRECT              126    6 TWO_HOP_FIRST_CHILD      0.9524       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           257    6 TWO_HOP_FIRST_CHILD      0.9767
+    alt VIA_ONLY_NON_TIE                       42    2 DEGREE_RULE              0.9524
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             6    0 DEGREE_RULE              1.0000
+DEV_NEW_5/REACH_BFS                       153    6 TWO_HOP_FIRST_CHILD      0.9608       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           266    6 TWO_HOP_FIRST_CHILD      0.9774
+    alt VIA_ONLY_NON_TIE                       51    6 TWO_HOP_FIRST_CHILD      0.8824
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             6    5 PARTICIPANT_2            0.1667
+DEV_NEW_5/PARTS                            76    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+DEV_NEW_5/EDGE_ACCOUNT                     60    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+TEST_NEW_5/REACH_FIRST_DIRECT             123    2 TWO_HOP_FIRST_CHILD      0.9837       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           284    2 TWO_HOP_FIRST_CHILD      0.9930
+    alt VIA_ONLY_NON_TIE                       41    1 DEGREE_RULE              0.9756
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             2    0 RANK_LAST_CHILD          1.0000
+TEST_NEW_5/REACH_BFS                      156    2 TWO_HOP_FIRST_CHILD      0.9872       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           295    2 TWO_HOP_FIRST_CHILD      0.9932
+    alt VIA_ONLY_NON_TIE                       52    2 TWO_HOP_FIRST_CHILD      0.9615
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             2    1 PARTICIPANT_2            0.5000
+TEST_NEW_5/PARTS                           83    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+TEST_NEW_5/EDGE_ACCOUNT                    60    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+{"build_ok": true, "problems": {"errors": [], "error_count": 0, "not_exactly_one_admissible_answer": 0, "independent_gold_disagrees": 0, "comparator_scoring_inconsistent": 0, "reader_check_failed": 0, "duplicate_record_ids": 0}, "seconds": 677.6}
+upload hset_job.log -> http 200
+upload hset_job.log -> http 200
+upload hset_job.log -> http 200
+upload hset_job.log -> http 200
+acceptance exit=0 wall=957s
+A1 True (0 s)
+A4 True (0 s)
+A2 True (704 s)
+A3 True (17 s)
+A5 True (0 s)
+A6 True (139 s)
+X_hset1a_crosscheck True (93 s)
+{"acceptance": "ACCEPTED", "verdict": {"A1": true, "A4": true, "A2": true, "A3": true, "A5": true, "A6": true, "X_hset1a_crosscheck": true}, "seconds": 956.1}
+JOB FINISH 2026-09-23T16:19:47Z status=done

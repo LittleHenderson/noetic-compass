@@ -1,0 +1,8 @@
+A1 True (0 s)
+A4 True (0 s)
+A2 True (704 s)
+A3 True (17 s)
+A5 True (0 s)
+A6 True (139 s)
+X_hset1a_crosscheck True (93 s)
+{"acceptance": "ACCEPTED", "verdict": {"A1": true, "A4": true, "A2": true, "A3": true, "A5": true, "A6": true, "X_hset1a_crosscheck": true}, "seconds": 956.1}

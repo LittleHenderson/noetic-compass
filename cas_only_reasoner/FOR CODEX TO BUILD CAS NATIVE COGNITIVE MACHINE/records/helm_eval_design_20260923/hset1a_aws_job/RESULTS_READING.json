@@ -1,0 +1,615 @@
+{
+ "build_ok": true,
+ "cells": {
+  "DEV_NEW_5/EDGE_ACCOUNT": {
+   "all_comparators": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.016667
+   },
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 60,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "DEV_NEW_5/PARTS": {
+   "all_comparators": {
+    "ALL_OTHERS": 0.105263,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.328947,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.052632
+   },
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 76,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "DEV_NEW_5/REACH_BFS": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.823529,
+    "LOWEST_RANK_CHILD": 0.48366,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.431373,
+    "RANK_LAST_CHILD": 0.464052,
+    "TWO_HOP_FIRST_CHILD": 0.960784
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.960784,
+   "can_carry_a_claim": false,
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters_by_role": {
+    "PRIMARY": 153,
+    "SURPLUS_NON_TIE": 113,
+    "TIE_STRATUM": 14
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 51,
+    "DIRECT": 51,
+    "VIA": 51
+   },
+   "primary_clusters": 153,
+   "primary_via_by_distance": {
+    "2": 45,
+    "3": 5,
+    "4": 1
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "DEV_NEW_5/REACH_FIRST_DIRECT": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.904762,
+    "LOWEST_RANK_CHILD": 0.531746,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.436508,
+    "RANK_LAST_CHILD": 0.5,
+    "TWO_HOP_FIRST_CHILD": 0.952381
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.952381,
+   "can_carry_a_claim": false,
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters_by_role": {
+    "PRIMARY": 126,
+    "SURPLUS_NON_TIE": 131,
+    "TIE_STRATUM": 23
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 42,
+    "DIRECT": 42,
+    "VIA": 42
+   },
+   "primary_clusters": 126,
+   "primary_via_by_distance": {
+    "2": 36,
+    "3": 5,
+    "4": 1
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "FAMILIAR_RELABELLED/EDGE_ACCOUNT": {
+   "all_comparators": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.166667,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.166667
+   },
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 6,
+   "primary_via_by_distance": null,
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/PARTS": {
+   "all_comparators": {
+    "ALL_OTHERS": 0.142857,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.428571,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.0
+   },
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 7,
+   "primary_via_by_distance": null,
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/REACH_BFS": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.777778,
+    "LOWEST_RANK_CHILD": 0.444444,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.444444,
+    "RANK_LAST_CHILD": 0.444444,
+    "TWO_HOP_FIRST_CHILD": 0.888889
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.888889,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": {
+    "PRIMARY": 9,
+    "SURPLUS_NON_TIE": 7,
+    "TIE_STRATUM": 1
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 3,
+    "DIRECT": 3,
+    "VIA": 3
+   },
+   "primary_clusters": 9,
+   "primary_via_by_distance": {
+    "2": 2,
+    "3": 1
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/REACH_FIRST_DIRECT": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.888889,
+    "LOWEST_RANK_CHILD": 0.666667,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.444444,
+    "RANK_LAST_CHILD": 0.666667,
+    "TWO_HOP_FIRST_CHILD": 0.888889
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.888889,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": {
+    "PRIMARY": 9,
+    "SURPLUS_NON_TIE": 7,
+    "TIE_STRATUM": 1
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 3,
+    "DIRECT": 3,
+    "VIA": 3
+   },
+   "primary_clusters": 9,
+   "primary_via_by_distance": {
+    "2": 2,
+    "3": 1
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "NEW_SHAPE_4/EDGE_ACCOUNT": {
+   "all_comparators": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.045455
+   },
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 22,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/PARTS": {
+   "all_comparators": {
+    "ALL_OTHERS": 0.28,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.6,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.24
+   },
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 25,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/REACH_BFS": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.9,
+    "LOWEST_RANK_CHILD": 0.6,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.4,
+    "RANK_LAST_CHILD": 0.533333,
+    "TWO_HOP_FIRST_CHILD": 1.0
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": {
+    "PRIMARY": 30,
+    "SURPLUS_NON_TIE": 35,
+    "TIE_STRATUM": 1
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 10,
+    "DIRECT": 10,
+    "VIA": 10
+   },
+   "primary_clusters": 30,
+   "primary_via_by_distance": {
+    "2": 10
+   },
+   "why_not": "the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/REACH_FIRST_DIRECT": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.962963,
+    "LOWEST_RANK_CHILD": 0.62963,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.407407,
+    "RANK_LAST_CHILD": 0.555556,
+    "TWO_HOP_FIRST_CHILD": 1.0
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": {
+    "PRIMARY": 27,
+    "SURPLUS_NON_TIE": 37,
+    "TIE_STRATUM": 2
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 9,
+    "DIRECT": 9,
+    "VIA": 9
+   },
+   "primary_clusters": 27,
+   "primary_via_by_distance": {
+    "2": 9
+   },
+   "why_not": "the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/EDGE_ACCOUNT": {
+   "all_comparators": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.0
+   },
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 60,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/PARTS": {
+   "all_comparators": {
+    "ALL_OTHERS": 0.060241,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.385542,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.060241
+   },
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "can_carry_a_claim": false,
+   "claim_role": "DIAGNOSTIC",
+   "clusters_by_role": null,
+   "power": null,
+   "primary_by_state": null,
+   "primary_clusters": 83,
+   "primary_via_by_distance": null,
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/REACH_BFS": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.858974,
+    "LOWEST_RANK_CHILD": 0.487179,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.455128,
+    "RANK_LAST_CHILD": 0.487179,
+    "TWO_HOP_FIRST_CHILD": 0.987179
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.987179,
+   "can_carry_a_claim": false,
+   "claim_role": "PRIMARY_CLAIM_CANDIDATE",
+   "clusters_by_role": {
+    "PRIMARY": 156,
+    "SURPLUS_NON_TIE": 139,
+    "TIE_STRATUM": 15
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 52,
+    "DIRECT": 52,
+    "VIA": 52
+   },
+   "primary_clusters": 156,
+   "primary_via_by_distance": {
+    "2": 50,
+    "3": 2
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "TEST_NEW_5/REACH_FIRST_DIRECT": {
+   "all_comparators": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.869919,
+    "LOWEST_RANK_CHILD": 0.512195,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.463415,
+    "RANK_LAST_CHILD": 0.504065,
+    "TWO_HOP_FIRST_CHILD": 0.98374
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.98374,
+   "can_carry_a_claim": false,
+   "claim_role": "PRIMARY_CLAIM_CANDIDATE",
+   "clusters_by_role": {
+    "PRIMARY": 123,
+    "SURPLUS_NON_TIE": 161,
+    "TIE_STRATUM": 26
+   },
+   "power": null,
+   "primary_by_state": {
+    "ABSENT": 41,
+    "DIRECT": 41,
+    "VIA": 41
+   },
+   "primary_clusters": 123,
+   "primary_via_by_distance": {
+    "2": 39,
+    "3": 2
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  }
+ },
+ "counts": {
+  "clusters": 1685,
+  "items": 3370,
+  "items_by_split": {
+   "DEV_NEW_5": 1392,
+   "FAMILIAR_RELABELLED": 94,
+   "NEW_SHAPE_4": 358,
+   "TEST_NEW_5": 1526
+  }
+ },
+ "d1_acceptance": "ACCEPTED",
+ "d1_key_values": {
+  "A1_files_equal_anchor": {
+   "answers.py": true,
+   "checker.py": true,
+   "pointer_inputs.py": true,
+   "slots.py": true,
+   "source.py": true
+  },
+  "A1_profile_equals_historical_anchor": true,
+  "A2": {
+   "answer_set_mismatches": [],
+   "coverage_differences": 0,
+   "error_count": 0,
+   "plan_byte_mismatches": [],
+   "prediction_mismatches": [],
+   "predictions_compared": 6768,
+   "records": 564,
+   "seconds": null,
+   "witness_differences": 0
+  },
+  "A3": {
+   "analogy_questions": 210,
+   "cap_cases": [
+    {
+     "bank_worlds": 64,
+     "case": "analogy_exactly_64_cross_domain_isomorphs",
+     "equal_oracle": true,
+     "pass": true,
+     "v2_answers": 64
+    },
+    {
+     "case": "star5_24",
+     "oracle_mappings": 24,
+     "pass": true,
+     "v2_answers": 24,
+     "v2_refused": null
+    },
+    {
+     "case": "sink5_24",
+     "oracle_mappings": 24,
+     "pass": true,
+     "v2_answers": 24,
+     "v2_refused": null
+    },
+    {
+     "case": "k24_6_48",
+     "oracle_mappings": 48,
+     "pass": true,
+     "v2_answers": 48,
+     "v2_refused": null
+    },
+    {
+     "case": "k33_6_36",
+     "oracle_mappings": 36,
+     "pass": true,
+     "v2_answers": 36,
+     "v2_refused": null
+    },
+    {
+     "case": "star6_120",
+     "oracle_mappings": 120,
+     "pass": true,
+     "v2_answers": null,
+     "v2_refused": "TYPED_CHECKER_TARGET_SET_BOUND"
+    },
+    {
+     "case": "sink6_120",
+     "oracle_mappings": 120,
+     "pass": true,
+     "v2_answers": null,
+     "v2_refused": "TYPED_CHECKER_TARGET_SET_BOUND"
+    }
+   ],
+   "colliding_classes_tested": 105,
+   "correspondence_questions": 442,
+   "seconds": null,
+   "six_node_correspondence_questions": 233
+  },
+  "A3_mismatch_count": 0,
+  "A4": {
+   "frozen_checker_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+   "frozen_checker_schema": "cas.typed-teaching-semantic-profile/0.1",
+   "frozen_slot_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98",
+   "frozen_slot_schema": "cas.typed-teaching-slot-profile/0.1",
+   "names_checked": [
+    "checker_v2",
+    "answers_v2",
+    "slots_v2",
+    "cas.typed-teaching-semantic-profile/0.2",
+    "cas.typed-teaching-slot-profile/0.2",
+    "cas.typed-teaching-slot-plan/0.2",
+    "cas.typed-teaching-semantic-profile/0.2",
+    "cas.typed-teaching-slot-profile/0.2"
+   ],
+   "no_name_contains_frozen": true,
+   "s3_rule_strings_equal_frozen": {
+    "analogy_domain_rule": true,
+    "declaration_references": true,
+    "graph_matching": true,
+    "graph_order": true,
+    "max_admissible_answers": true,
+    "process_order": true,
+    "role_semantics": true,
+    "rules": true,
+    "tie_rule": true
+   },
+   "shared_with_frozen_by_design": {
+    "CHECK_SCHEMA": true,
+    "DECISION_SCHEMA": true,
+    "TARGET_SCHEMA": true,
+    "note": "the spec (S1) requires a distinct PROFILE; a v2 target or check is told apart by the profile digest it carries"
+   },
+   "v2_checker_digest": "b0e565314a91083f8c5559ce1be16fd667e82a52d7dd224de88440bdb0709075",
+   "v2_checker_schema": "cas.typed-teaching-semantic-profile/0.2",
+   "v2_max_admissible_answers": 64,
+   "v2_max_isomorphism_nodes": 6,
+   "v2_profile_declares": {
+    "max_admissible_answers": 64,
+    "max_isomorphism_nodes": 6
+   },
+   "v2_slot_digest": "3f384e6053036c5eecd0464d32101fe773edf64ecb9e0481af92e80494aeb453",
+   "v2_slot_schema": "cas.typed-teaching-slot-profile/0.2"
+  },
+  "A5": {
+   "frozen_on_bank_with_5_node_world": "TYPED_CHECKER_ISOMORPHISM_BOUND",
+   "frozen_on_training_bank_with_5_node_focus": "TYPED_CHECKER_ISOMORPHISM_BOUND",
+   "v2_on_64_bank_worlds_plus_focus": null,
+   "v2_on_65_bank_worlds": "TYPED_SOURCE_PUBLIC_BANK_REFS",
+   "v2_on_bank_with_5_node_world_equals_oracle": true,
+   "v2_on_training_bank_equals_oracle": true,
+   "v2_on_training_bank_with_5_node_focus": [
+    "None"
+   ]
+  },
+  "A6": {
+   "answers_equal_oracle": 1000,
+   "bank_worlds_per_question": 64,
+   "budget_seconds": 600.0,
+   "max_permutations_per_question": 3240,
+   "questions": 1000,
+   "single_process_seconds": 92.21,
+   "six_node_seconds": 10.534
+  },
+  "X": {
+   "equal": 3370,
+   "packets": 3370,
+   "public_errors": [],
+   "sealed_equal": 1526,
+   "sealed_error_count": 0,
+   "sealed_error_types": [],
+   "sealed_packets": 1526
+  }
+ },
+ "d1_verdict": {
+  "A1": true,
+  "A2": true,
+  "A3": true,
+  "A4": true,
+  "A5": true,
+  "A6": true,
+  "X_hset1a_crosscheck": true
+ },
+ "exit_codes": "build=0 acceptance=0",
+ "problems": {
+  "comparator_scoring_inconsistent": 0,
+  "duplicate_record_ids": 0,
+  "error_count": 0,
+  "errors": [],
+  "independent_gold_disagrees": 0,
+  "not_exactly_one_admissible_answer": 0,
+  "reader_check_failed": 0
+ },
+ "salt_sha256": "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754",
+ "schema": "claude.hset1a-results-reading/0.1",
+ "sealed_sha256_by_build": "ae0c28a494f861ff92740a8314112c1d0e97ca41b2c006eba030365ffaa20d25",
+ "sealed_sha256_by_watcher": "ae0c28a494f861ff92740a8314112c1d0e97ca41b2c006eba030365ffaa20d25",
+ "seconds_build": 677.6,
+ "status": "done",
+ "test_shapes_digest": "1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9",
+ "watch": {
+  "cost_upper_bound_usd": 0.1827,
+  "dollar_ceiling": 1.5,
+  "final_state": "shutting-down",
+  "job_status": "done",
+  "minutes_from_launch_to_watch_end": 30.1,
+  "outcome": "RESULTS_RECEIVED"
+ }
+}

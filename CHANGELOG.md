@@ -1,5 +1,54 @@
 # tksCAS — Changelog
 
+## 2026-09-23 — Checker v2 ACCEPTED; Stage 1 test cells built on AWS; Stage 1 reach cannot carry a claim at 5 nodes
+
+**Owner order.** "build the Stage 1 cells on aws". Claude is the evaluation designer, the sealed-test custodian and
+the independent checker. Codex is the builder.
+
+**Before any run.**
+- Two independent reviewers read the code. Their 1 blocker, 8 major and 14 minor findings were fixed or recorded
+  (`hset1a/BUILD_SPEC_v0_1.md` section 6a; `d1_acceptance/README.md`).
+- The salt's sha256 was committed first: `33f9d350...0909754`.
+
+**The AWS runs** (`records/helm_eval_design_20260923/hset1a_aws_job/RUN_LOG.md`):
+- **Attempt 1** (`i-0c8907f61b2d5fbc4`). It crashed on Claude's own bug: on Python 3.14, `Pool.imap_unordered`
+  returns a generator with no `.next(timeout)`. It cost at most $0.0223.
+- **Attempt 2** (`i-0681fa3905a7bb0eb`). It first ran both programs end to end at tiny size, with a throwaway salt.
+  It then took 30.1 minutes, cost at most **$0.1827**, and finished with status `done`.
+
+**The results:**
+- **Checker v2 (Codex `7f85af1e`): ACCEPTED.** The program emitted the verdict
+  (`d1_acceptance/D1_ACCEPTANCE_RESULT.md`).
+  - A1: frozen files and profile equal the anchors.
+  - A2: 564 answer sets, 564 slot plans and 6,768 historical decisions, all identical.
+  - A3: 105 degree-colliding classes, 652 five-node questions and 233 six-node questions, with 0 oracle
+    mismatches. Exactly 64 answers accepted, 120 refused. 7-node refused.
+  - A4, A5: pass.
+  - A6: 1,000 questions on 64-world banks in 92.21 s, against a 600 s budget.
+  - X: v2 equals the frozen gold on all 3,370 Stage 1 packets.
+- **The Stage 1 cells were built** (`hset1a/HSET1A_BUILD_RESULT.md`).
+  - 3,370 packets in 1,685 clusters, with 0 errors.
+  - Every packet is readable by Helm's frozen reader.
+  - The sealed TEST file (sha256 `ae0c28a4...a20d25`) is only in `D:/tksCAS-archive/hset1a_sealed_20260923/`.
+  - None of the 1,526 TEST record ids or 60 TEST shapes appears in any public file.
+- **No Stage 1 cell can carry a claim.**
+  - On TEST, the no-learning two-hop rule is wrong on only 2 reach clusters. A pass needs 7.
+  - Across all 267 five-node shapes, only 27 or 28 reach questions need 3 or more steps.
+  - Parts and edge account have exact bars.
+  - **This is a limit of the 5-node test, not a result about Helm. No model was run.**
+
+**Corrections.** `records/helm_eval_design_20260923/CORRECTIONS_20260923.md` records K1 to K5, as raised by Codex:
+- K1: amendment A3 came after Codex's repair commit.
+- K2: the probe job's disk was 100 GB, not 20.
+- K3: four laptop fingerprints are printed values, not a kept receipt.
+- K4: the cause of the GPU difference is not isolated.
+- K5: Codex's speed test used 3-world banks.
+
+**Open, the owner's call.** How to cut the reach cells (design section 1.3):
+- 6- and 7-node worlds (recommended);
+- pooling every non-DEV 5-node shape;
+- declaring Stage 1 reach diagnostic only.
+
 ## 2026-09-23 — Analogy wiring probe: reference DONE on AWS; probe self-test PASS; D-1 approved
 
 **Owner orders.** "use aws" and "use aws as there is only 354 mb of 16 gbs locally". This is now recorded for

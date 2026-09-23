@@ -1,0 +1,2494 @@
+{
+ "build_ok": true,
+ "cells": {
+  "DEV_NEW_5/EDGE_ACCOUNT": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 60,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "EDGE_ACCOUNT",
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters": 60,
+   "comparator_cluster_accuracy": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.016667
+   },
+   "kind": "edge_account",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 60,
+   "primary_domains": {
+    "container": 19,
+    "grammatical": 13,
+    "mechanical": 15,
+    "procedural": 13
+   },
+   "primary_node_counts": {
+    "5": 60
+   },
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "DEV_NEW_5/PARTS": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 76,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "PARTS",
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters": 76,
+   "comparator_cluster_accuracy": {
+    "ALL_OTHERS": 0.105263,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.328947,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.052632
+   },
+   "kind": "parts",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 76,
+   "primary_domains": {
+    "container": 15,
+    "grammatical": 25,
+    "mechanical": 13,
+    "procedural": 23
+   },
+   "primary_node_counts": {
+    "5": 76
+   },
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "DEV_NEW_5/REACH_BFS": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 56,
+     "DIRECT": 159,
+     "VIA": 51
+    },
+    "clusters": 266,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.210526,
+     "CONSTANT_DIRECT": 0.597744,
+     "DEGREE_RULE": 0.887218,
+     "LOWEST_RANK_CHILD": 0.684211,
+     "ONE_HOP": 0.808271,
+     "PARTICIPANT_2": 0.654135,
+     "RANK_LAST_CHILD": 0.672932,
+     "TWO_HOP_FIRST_CHILD": 0.977444
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 45,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.822222,
+       "LOWEST_RANK_CHILD": 0.511111,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.311111,
+       "RANK_LAST_CHILD": 0.444444,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 5,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.0,
+       "LOWEST_RANK_CHILD": 0.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.2,
+       "RANK_LAST_CHILD": 0.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     },
+     "4": {
+      "clusters": 1,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.0,
+       "LOWEST_RANK_CHILD": 0.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.0,
+       "RANK_LAST_CHILD": 0.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.977444,
+     "bar_right_clusters": 260,
+     "bar_wrong_clusters_W": 6,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 266,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.210526,
+      "CONSTANT_DIRECT": 0.597744,
+      "DEGREE_RULE": 0.887218,
+      "LOWEST_RANK_CHILD": 0.684211,
+      "ONE_HOP": 0.808271,
+      "PARTICIPANT_2": 0.654135,
+      "RANK_LAST_CHILD": 0.672932,
+      "TWO_HOP_FIRST_CHILD": 0.977444
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "PARTICIPANT_2",
+     "bar_cluster_accuracy": 0.166667,
+     "bar_right_clusters": 1,
+     "bar_wrong_clusters_W": 5,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 6,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.0,
+      "LOWEST_RANK_CHILD": 0.0,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.166667,
+      "RANK_LAST_CHILD": 0.0,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "0.2667": 0.0,
+       "0.3667": 0.0,
+       "0.4667": 0.0,
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.882353,
+     "bar_right_clusters": 45,
+     "bar_wrong_clusters_W": 6,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 51,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.72549,
+      "LOWEST_RANK_CHILD": 0.45098,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.294118,
+      "RANK_LAST_CHILD": 0.392157,
+      "TWO_HOP_FIRST_CHILD": 0.882353
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "0.9824": 0.0,
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.960784,
+   "bar_right_clusters": 147,
+   "bar_wrong_clusters_W": 6,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_BFS",
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters": 153,
+   "clusters_by_role": {
+    "PRIMARY": 153,
+    "SURPLUS_NON_TIE": 113,
+    "TIE_STRATUM": 14
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.823529,
+    "LOWEST_RANK_CHILD": 0.48366,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.431373,
+    "RANK_LAST_CHILD": 0.464052,
+    "TWO_HOP_FIRST_CHILD": 0.960784
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.615385,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.3,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.407692,
+    "presentations": 130
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.568627,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.294118,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.519608,
+    "presentations": 102
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.882353
+   },
+   "primary_by_state": {
+    "ABSENT": 51,
+    "DIRECT": 51,
+    "VIA": 51
+   },
+   "primary_clusters": 153,
+   "primary_domains": {
+    "container": 32,
+    "grammatical": 38,
+    "mechanical": 34,
+    "procedural": 49
+   },
+   "primary_node_counts": {
+    "5": 153
+   },
+   "primary_via_by_distance": {
+    "2": 45,
+    "3": 5,
+    "4": 1
+   },
+   "tie_stratum": {
+    "clusters": 14,
+    "clusters_whose_gold_differs_between_presentations": 14,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.357143,
+     "LOWEST_RANK_CHILD": 0.571429,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.142857,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "VIA": 59
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "DEV_NEW_5/REACH_FIRST_DIRECT": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 56,
+     "DIRECT": 159,
+     "VIA": 42
+    },
+    "clusters": 257,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.217899,
+     "CONSTANT_DIRECT": 0.618677,
+     "DEGREE_RULE": 0.929961,
+     "LOWEST_RANK_CHILD": 0.715953,
+     "ONE_HOP": 0.836576,
+     "PARTICIPANT_2": 0.669261,
+     "RANK_LAST_CHILD": 0.700389,
+     "TWO_HOP_FIRST_CHILD": 0.976654
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 36,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.944444,
+       "LOWEST_RANK_CHILD": 0.583333,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.333333,
+       "RANK_LAST_CHILD": 0.472222,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 5,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 0.6,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.2,
+       "RANK_LAST_CHILD": 0.6,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     },
+     "4": {
+      "clusters": 1,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 1.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.0,
+       "RANK_LAST_CHILD": 1.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.976654,
+     "bar_right_clusters": 251,
+     "bar_wrong_clusters_W": 6,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 257,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.217899,
+      "CONSTANT_DIRECT": 0.618677,
+      "DEGREE_RULE": 0.929961,
+      "LOWEST_RANK_CHILD": 0.715953,
+      "ONE_HOP": 0.836576,
+      "PARTICIPANT_2": 0.669261,
+      "RANK_LAST_CHILD": 0.700389,
+      "TWO_HOP_FIRST_CHILD": 0.976654
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "DEGREE_RULE",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 6,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 6,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 1.0,
+      "LOWEST_RANK_CHILD": 0.666667,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.166667,
+      "RANK_LAST_CHILD": 0.666667,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "DEGREE_RULE",
+     "bar_cluster_accuracy": 0.952381,
+     "bar_right_clusters": 40,
+     "bar_wrong_clusters_W": 2,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 42,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.952381,
+      "LOWEST_RANK_CHILD": 0.595238,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.309524,
+      "RANK_LAST_CHILD": 0.5,
+      "TWO_HOP_FIRST_CHILD": 0.857143
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.952381,
+   "bar_right_clusters": 120,
+   "bar_wrong_clusters_W": 6,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_FIRST_DIRECT",
+   "claim_role": "DEVELOPMENT_FEEDBACK",
+   "clusters": 126,
+   "clusters_by_role": {
+    "PRIMARY": 126,
+    "SURPLUS_NON_TIE": 131,
+    "TIE_STRATUM": 23
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.904762,
+    "LOWEST_RANK_CHILD": 0.531746,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.436508,
+    "RANK_LAST_CHILD": 0.5,
+    "TWO_HOP_FIRST_CHILD": 0.952381
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.784615,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.284615,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.415385,
+    "presentations": 130
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.72619,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.309524,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.642857,
+    "presentations": 84
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.857143
+   },
+   "primary_by_state": {
+    "ABSENT": 42,
+    "DIRECT": 42,
+    "VIA": 42
+   },
+   "primary_clusters": 126,
+   "primary_domains": {
+    "container": 30,
+    "grammatical": 29,
+    "mechanical": 21,
+    "procedural": 46
+   },
+   "primary_node_counts": {
+    "5": 126
+   },
+   "primary_via_by_distance": {
+    "2": 36,
+    "3": 5,
+    "4": 1
+   },
+   "tie_stratum": {
+    "clusters": 23,
+    "clusters_whose_gold_differs_between_presentations": 23,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.565217,
+     "LOWEST_RANK_CHILD": 0.782609,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.130435,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 0.608696
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "ABSENT": 2,
+    "DIRECT": 30,
+    "VIA": 16
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "FAMILIAR_RELABELLED/EDGE_ACCOUNT": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 6,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "EDGE_ACCOUNT",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 6,
+   "comparator_cluster_accuracy": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.166667,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.166667
+   },
+   "kind": "edge_account",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 6,
+   "primary_domains": {
+    "container": 1,
+    "grammatical": 1,
+    "mechanical": 1,
+    "procedural": 3
+   },
+   "primary_node_counts": {
+    "3": 1,
+    "4": 5
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/PARTS": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 7,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "PARTS",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 7,
+   "comparator_cluster_accuracy": {
+    "ALL_OTHERS": 0.142857,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.428571,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.0
+   },
+   "kind": "parts",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 7,
+   "primary_domains": {
+    "container": 2,
+    "grammatical": 3,
+    "mechanical": 1,
+    "procedural": 1
+   },
+   "primary_node_counts": {
+    "3": 1,
+    "4": 6
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/REACH_BFS": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 3,
+     "DIRECT": 9,
+     "VIA": 4
+    },
+    "clusters": 16,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.1875,
+     "CONSTANT_DIRECT": 0.5625,
+     "DEGREE_RULE": 0.875,
+     "LOWEST_RANK_CHILD": 0.6875,
+     "ONE_HOP": 0.75,
+     "PARTICIPANT_2": 0.6875,
+     "RANK_LAST_CHILD": 0.6875,
+     "TWO_HOP_FIRST_CHILD": 0.9375
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 3,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 0.666667,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.666667,
+       "RANK_LAST_CHILD": 0.666667,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 1,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.0,
+       "LOWEST_RANK_CHILD": 0.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.0,
+       "RANK_LAST_CHILD": 0.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.9375,
+     "bar_right_clusters": 15,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 16,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.1875,
+      "CONSTANT_DIRECT": 0.5625,
+      "DEGREE_RULE": 0.875,
+      "LOWEST_RANK_CHILD": 0.6875,
+      "ONE_HOP": 0.75,
+      "PARTICIPANT_2": 0.6875,
+      "RANK_LAST_CHILD": 0.6875,
+      "TWO_HOP_FIRST_CHILD": 0.9375
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "CONSTANT_ABSENT",
+     "bar_cluster_accuracy": 0.0,
+     "bar_right_clusters": 0,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 1,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.0,
+      "LOWEST_RANK_CHILD": 0.0,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.0,
+      "RANK_LAST_CHILD": 0.0,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "0.1000": 0.0,
+       "0.2000": 0.0,
+       "0.3000": 0.0,
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.75,
+     "bar_right_clusters": 3,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 4,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.75,
+      "LOWEST_RANK_CHILD": 0.5,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.5,
+      "RANK_LAST_CHILD": 0.5,
+      "TWO_HOP_FIRST_CHILD": 0.75
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "0.8500": 0.0,
+       "0.9500": 0.0,
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.888889,
+   "bar_right_clusters": 8,
+   "bar_wrong_clusters_W": 1,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_BFS",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 9,
+   "clusters_by_role": {
+    "PRIMARY": 9,
+    "SURPLUS_NON_TIE": 7,
+    "TIE_STRATUM": 1
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.777778,
+    "LOWEST_RANK_CHILD": 0.444444,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.444444,
+    "RANK_LAST_CHILD": 0.444444,
+    "TWO_HOP_FIRST_CHILD": 0.888889
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.7,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.5,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.5,
+    "presentations": 10
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.5,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.333333,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.5,
+    "presentations": 6
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "0.9889": 0.0,
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.666667
+   },
+   "primary_by_state": {
+    "ABSENT": 3,
+    "DIRECT": 3,
+    "VIA": 3
+   },
+   "primary_clusters": 9,
+   "primary_domains": {
+    "container": 2,
+    "grammatical": 3,
+    "mechanical": 1,
+    "procedural": 3
+   },
+   "primary_node_counts": {
+    "3": 1,
+    "4": 8
+   },
+   "primary_via_by_distance": {
+    "2": 2,
+    "3": 1
+   },
+   "tie_stratum": {
+    "clusters": 1,
+    "clusters_whose_gold_differs_between_presentations": 1,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 1.0,
+     "LOWEST_RANK_CHILD": 1.0,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.0,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "VIA": 59
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "FAMILIAR_RELABELLED/REACH_FIRST_DIRECT": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 3,
+     "DIRECT": 9,
+     "VIA": 4
+    },
+    "clusters": 16,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.1875,
+     "CONSTANT_DIRECT": 0.5625,
+     "DEGREE_RULE": 0.9375,
+     "LOWEST_RANK_CHILD": 0.75,
+     "ONE_HOP": 0.75,
+     "PARTICIPANT_2": 0.6875,
+     "RANK_LAST_CHILD": 0.75,
+     "TWO_HOP_FIRST_CHILD": 0.9375
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 3,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 0.666667,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.666667,
+       "RANK_LAST_CHILD": 0.666667,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 1,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 1.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.0,
+       "RANK_LAST_CHILD": 1.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.9375,
+     "bar_right_clusters": 15,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 16,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.1875,
+      "CONSTANT_DIRECT": 0.5625,
+      "DEGREE_RULE": 0.9375,
+      "LOWEST_RANK_CHILD": 0.75,
+      "ONE_HOP": 0.75,
+      "PARTICIPANT_2": 0.6875,
+      "RANK_LAST_CHILD": 0.75,
+      "TWO_HOP_FIRST_CHILD": 0.9375
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "LOWEST_RANK_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 1,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 1,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 1.0,
+      "LOWEST_RANK_CHILD": 1.0,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.0,
+      "RANK_LAST_CHILD": 1.0,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "DEGREE_RULE",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 4,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 4,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 1.0,
+      "LOWEST_RANK_CHILD": 0.75,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.5,
+      "RANK_LAST_CHILD": 0.75,
+      "TWO_HOP_FIRST_CHILD": 0.75
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.888889,
+   "bar_right_clusters": 8,
+   "bar_wrong_clusters_W": 1,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_FIRST_DIRECT",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 9,
+   "clusters_by_role": {
+    "PRIMARY": 9,
+    "SURPLUS_NON_TIE": 7,
+    "TIE_STRATUM": 1
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.888889,
+    "LOWEST_RANK_CHILD": 0.666667,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.444444,
+    "RANK_LAST_CHILD": 0.666667,
+    "TWO_HOP_FIRST_CHILD": 0.888889
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.9,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.5,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.7,
+    "presentations": 10
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 1.0,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.333333,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 1.0,
+    "presentations": 6
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "0.9889": 0.0,
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.666667
+   },
+   "primary_by_state": {
+    "ABSENT": 3,
+    "DIRECT": 3,
+    "VIA": 3
+   },
+   "primary_clusters": 9,
+   "primary_domains": {
+    "container": 2,
+    "grammatical": 2,
+    "mechanical": 1,
+    "procedural": 4
+   },
+   "primary_node_counts": {
+    "3": 1,
+    "4": 8
+   },
+   "primary_via_by_distance": {
+    "2": 2,
+    "3": 1
+   },
+   "tie_stratum": {
+    "clusters": 1,
+    "clusters_whose_gold_differs_between_presentations": 1,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 1.0,
+     "LOWEST_RANK_CHILD": 1.0,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.0,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "ABSENT": 2,
+    "DIRECT": 30,
+    "VIA": 16
+   },
+   "why_not": "fewer than 10 clusters"
+  },
+  "NEW_SHAPE_4/EDGE_ACCOUNT": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 22,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "EDGE_ACCOUNT",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 22,
+   "comparator_cluster_accuracy": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.045455
+   },
+   "kind": "edge_account",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 22,
+   "primary_domains": {
+    "container": 4,
+    "grammatical": 10,
+    "mechanical": 6,
+    "procedural": 2
+   },
+   "primary_node_counts": {
+    "3": 3,
+    "4": 19
+   },
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/PARTS": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 25,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "PARTS",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 25,
+   "comparator_cluster_accuracy": {
+    "ALL_OTHERS": 0.28,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.6,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.24
+   },
+   "kind": "parts",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 25,
+   "primary_domains": {
+    "container": 9,
+    "grammatical": 5,
+    "mechanical": 7,
+    "procedural": 4
+   },
+   "primary_node_counts": {
+    "3": 3,
+    "4": 22
+   },
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/REACH_BFS": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 13,
+     "DIRECT": 42,
+     "VIA": 10
+    },
+    "clusters": 65,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.2,
+     "CONSTANT_DIRECT": 0.646154,
+     "DEGREE_RULE": 0.953846,
+     "LOWEST_RANK_CHILD": 0.769231,
+     "ONE_HOP": 0.846154,
+     "PARTICIPANT_2": 0.676923,
+     "RANK_LAST_CHILD": 0.738462,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 10,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.9,
+       "LOWEST_RANK_CHILD": 0.8,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.2,
+       "RANK_LAST_CHILD": 0.6,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 65,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 65,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.2,
+      "CONSTANT_DIRECT": 0.646154,
+      "DEGREE_RULE": 0.953846,
+      "LOWEST_RANK_CHILD": 0.769231,
+      "ONE_HOP": 0.846154,
+      "PARTICIPANT_2": 0.676923,
+      "RANK_LAST_CHILD": 0.738462,
+      "TWO_HOP_FIRST_CHILD": 1.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "CONSTANT_ABSENT",
+     "bar_cluster_accuracy": null,
+     "bar_right_clusters": 0,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 0,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": null,
+      "CONSTANT_DIRECT": null,
+      "DEGREE_RULE": null,
+      "LOWEST_RANK_CHILD": null,
+      "ONE_HOP": null,
+      "PARTICIPANT_2": null,
+      "RANK_LAST_CHILD": null,
+      "TWO_HOP_FIRST_CHILD": null
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 10,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 10,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.9,
+      "LOWEST_RANK_CHILD": 0.8,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.2,
+      "RANK_LAST_CHILD": 0.6,
+      "TWO_HOP_FIRST_CHILD": 1.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 30,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_BFS",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 30,
+   "clusters_by_role": {
+    "PRIMARY": 30,
+    "SURPLUS_NON_TIE": 35,
+    "TIE_STRATUM": 1
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.9,
+    "LOWEST_RANK_CHILD": 0.6,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.4,
+    "RANK_LAST_CHILD": 0.533333,
+    "TWO_HOP_FIRST_CHILD": 1.0
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.909091,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.181818,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.636364,
+    "presentations": 22
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.9,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.2,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.7,
+    "presentations": 20
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 1.0
+   },
+   "primary_by_state": {
+    "ABSENT": 10,
+    "DIRECT": 10,
+    "VIA": 10
+   },
+   "primary_clusters": 30,
+   "primary_domains": {
+    "container": 5,
+    "grammatical": 6,
+    "mechanical": 11,
+    "procedural": 8
+   },
+   "primary_node_counts": {
+    "3": 1,
+    "4": 29
+   },
+   "primary_via_by_distance": {
+    "2": 10
+   },
+   "tie_stratum": {
+    "clusters": 1,
+    "clusters_whose_gold_differs_between_presentations": 1,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.0,
+     "LOWEST_RANK_CHILD": 1.0,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.0,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "VIA": 59
+   },
+   "why_not": "the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown"
+  },
+  "NEW_SHAPE_4/REACH_FIRST_DIRECT": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 13,
+     "DIRECT": 42,
+     "VIA": 9
+    },
+    "clusters": 64,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.203125,
+     "CONSTANT_DIRECT": 0.65625,
+     "DEGREE_RULE": 0.96875,
+     "LOWEST_RANK_CHILD": 0.78125,
+     "ONE_HOP": 0.859375,
+     "PARTICIPANT_2": 0.6875,
+     "RANK_LAST_CHILD": 0.75,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 9,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 0.888889,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.222222,
+       "RANK_LAST_CHILD": 0.666667,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 64,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 64,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.203125,
+      "CONSTANT_DIRECT": 0.65625,
+      "DEGREE_RULE": 0.96875,
+      "LOWEST_RANK_CHILD": 0.78125,
+      "ONE_HOP": 0.859375,
+      "PARTICIPANT_2": 0.6875,
+      "RANK_LAST_CHILD": 0.75,
+      "TWO_HOP_FIRST_CHILD": 1.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "CONSTANT_ABSENT",
+     "bar_cluster_accuracy": null,
+     "bar_right_clusters": 0,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 0,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": null,
+      "CONSTANT_DIRECT": null,
+      "DEGREE_RULE": null,
+      "LOWEST_RANK_CHILD": null,
+      "ONE_HOP": null,
+      "PARTICIPANT_2": null,
+      "RANK_LAST_CHILD": null,
+      "TWO_HOP_FIRST_CHILD": null
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 9,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 9,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 1.0,
+      "LOWEST_RANK_CHILD": 0.888889,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.222222,
+      "RANK_LAST_CHILD": 0.666667,
+      "TWO_HOP_FIRST_CHILD": 1.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 27,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_FIRST_DIRECT",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 27,
+   "clusters_by_role": {
+    "PRIMARY": 27,
+    "SURPLUS_NON_TIE": 37,
+    "TIE_STRATUM": 2
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.962963,
+    "LOWEST_RANK_CHILD": 0.62963,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.407407,
+    "RANK_LAST_CHILD": 0.555556,
+    "TWO_HOP_FIRST_CHILD": 1.0
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.954545,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.181818,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.590909,
+    "presentations": 22
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.944444,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.222222,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.722222,
+    "presentations": 18
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 1.0
+   },
+   "primary_by_state": {
+    "ABSENT": 9,
+    "DIRECT": 9,
+    "VIA": 9
+   },
+   "primary_clusters": 27,
+   "primary_domains": {
+    "container": 6,
+    "grammatical": 5,
+    "mechanical": 7,
+    "procedural": 9
+   },
+   "primary_node_counts": {
+    "3": 2,
+    "4": 25
+   },
+   "primary_via_by_distance": {
+    "2": 9
+   },
+   "tie_stratum": {
+    "clusters": 2,
+    "clusters_whose_gold_differs_between_presentations": 2,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.5,
+     "LOWEST_RANK_CHILD": 1.0,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.0,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 0.5
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "ABSENT": 2,
+    "DIRECT": 30,
+    "VIA": 16
+   },
+   "why_not": "the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/EDGE_ACCOUNT": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP_ALL_EDGES",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 60,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "EDGE_ACCOUNT",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 60,
+   "comparator_cluster_accuracy": {
+    "ONE_HOP_ALL_EDGES": 1.0,
+    "PARTICIPANT_CHAIN": 0.0,
+    "RANK_CHAIN": 0.0,
+    "STAR_FROM_DECLARED_WHOLE": 0.0
+   },
+   "kind": "edge_account",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 60,
+   "primary_domains": {
+    "container": 10,
+    "grammatical": 22,
+    "mechanical": 14,
+    "procedural": 14
+   },
+   "primary_node_counts": {
+    "5": 60
+   },
+   "why_not": "the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/PARTS": {
+   "W_meets_10_cluster_floor": false,
+   "bar": "ONE_HOP",
+   "bar_cluster_accuracy": 1.0,
+   "bar_right_clusters": 83,
+   "bar_wrong_clusters_W": 0,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "PARTS",
+   "claim_role": "DIAGNOSTIC",
+   "clusters": 83,
+   "comparator_cluster_accuracy": {
+    "ALL_OTHERS": 0.060241,
+    "CONSTANT_EMPTY": 0.0,
+    "DESCENDANTS": 0.385542,
+    "ONE_HOP": 1.0,
+    "PARTICIPANTS_2_3": 0.060241
+   },
+   "kind": "parts",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_clusters": 83,
+   "primary_domains": {
+    "container": 22,
+    "grammatical": 22,
+    "mechanical": 20,
+    "procedural": 19
+   },
+   "primary_node_counts": {
+    "5": 83
+   },
+   "why_not": "the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown"
+  },
+  "TEST_NEW_5/REACH_BFS": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 75,
+     "DIRECT": 168,
+     "VIA": 52
+    },
+    "clusters": 295,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.254237,
+     "CONSTANT_DIRECT": 0.569492,
+     "DEGREE_RULE": 0.884746,
+     "LOWEST_RANK_CHILD": 0.650847,
+     "ONE_HOP": 0.823729,
+     "PARTICIPANT_2": 0.633898,
+     "RANK_LAST_CHILD": 0.650847,
+     "TWO_HOP_FIRST_CHILD": 0.99322
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 50,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.84,
+       "LOWEST_RANK_CHILD": 0.48,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.36,
+       "RANK_LAST_CHILD": 0.48,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 2,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.0,
+       "LOWEST_RANK_CHILD": 0.0,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.5,
+       "RANK_LAST_CHILD": 0.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.99322,
+     "bar_right_clusters": 293,
+     "bar_wrong_clusters_W": 2,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 295,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.254237,
+      "CONSTANT_DIRECT": 0.569492,
+      "DEGREE_RULE": 0.884746,
+      "LOWEST_RANK_CHILD": 0.650847,
+      "ONE_HOP": 0.823729,
+      "PARTICIPANT_2": 0.633898,
+      "RANK_LAST_CHILD": 0.650847,
+      "TWO_HOP_FIRST_CHILD": 0.99322
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "PARTICIPANT_2",
+     "bar_cluster_accuracy": 0.5,
+     "bar_right_clusters": 1,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 2,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.0,
+      "LOWEST_RANK_CHILD": 0.0,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.5,
+      "RANK_LAST_CHILD": 0.0,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "0.6000": 0.0,
+       "0.7000": 0.0,
+       "0.8000": 0.0,
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.961538,
+     "bar_right_clusters": 50,
+     "bar_wrong_clusters_W": 2,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 52,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.807692,
+      "LOWEST_RANK_CHILD": 0.461538,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.365385,
+      "RANK_LAST_CHILD": 0.461538,
+      "TWO_HOP_FIRST_CHILD": 0.961538
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.987179,
+   "bar_right_clusters": 154,
+   "bar_wrong_clusters_W": 2,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_BFS",
+   "claim_role": "PRIMARY_CLAIM_CANDIDATE",
+   "clusters": 156,
+   "clusters_by_role": {
+    "PRIMARY": 156,
+    "SURPLUS_NON_TIE": 139,
+    "TIE_STRATUM": 15
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.858974,
+    "LOWEST_RANK_CHILD": 0.487179,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.455128,
+    "RANK_LAST_CHILD": 0.487179,
+    "TWO_HOP_FIRST_CHILD": 0.987179
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.634328,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.313433,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.447761,
+    "presentations": 134
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.586538,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.365385,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.576923,
+    "presentations": 104
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.961538
+   },
+   "primary_by_state": {
+    "ABSENT": 52,
+    "DIRECT": 52,
+    "VIA": 52
+   },
+   "primary_clusters": 156,
+   "primary_domains": {
+    "container": 31,
+    "grammatical": 47,
+    "mechanical": 29,
+    "procedural": 49
+   },
+   "primary_node_counts": {
+    "5": 156
+   },
+   "primary_via_by_distance": {
+    "2": 50,
+    "3": 2
+   },
+   "tie_stratum": {
+    "clusters": 15,
+    "clusters_whose_gold_differs_between_presentations": 15,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.466667,
+     "LOWEST_RANK_CHILD": 0.733333,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.0,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 1.0
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "VIA": 59
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  },
+  "TEST_NEW_5/REACH_FIRST_DIRECT": {
+   "W_meets_10_cluster_floor": false,
+   "all_non_tie_clusters": {
+    "by_state": {
+     "ABSENT": 75,
+     "DIRECT": 168,
+     "VIA": 41
+    },
+    "clusters": 284,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.264085,
+     "CONSTANT_DIRECT": 0.591549,
+     "DEGREE_RULE": 0.911972,
+     "LOWEST_RANK_CHILD": 0.669014,
+     "ONE_HOP": 0.855634,
+     "PARTICIPANT_2": 0.647887,
+     "RANK_LAST_CHILD": 0.665493,
+     "TWO_HOP_FIRST_CHILD": 0.992958
+    },
+    "via_by_distance": {
+     "2": {
+      "clusters": 39,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 0.974359,
+       "LOWEST_RANK_CHILD": 0.538462,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.410256,
+       "RANK_LAST_CHILD": 0.487179,
+       "TWO_HOP_FIRST_CHILD": 1.0
+      }
+     },
+     "3": {
+      "clusters": 2,
+      "comparator_cluster_accuracy": {
+       "CONSTANT_ABSENT": 0.0,
+       "CONSTANT_DIRECT": 0.0,
+       "DEGREE_RULE": 1.0,
+       "LOWEST_RANK_CHILD": 0.5,
+       "ONE_HOP": 0.0,
+       "PARTICIPANT_2": 0.0,
+       "RANK_LAST_CHILD": 1.0,
+       "TWO_HOP_FIRST_CHILD": 0.0
+      }
+     }
+    }
+   },
+   "alternative_cuts_not_chosen": {
+    "ALL_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "TWO_HOP_FIRST_CHILD",
+     "bar_cluster_accuracy": 0.992958,
+     "bar_right_clusters": 282,
+     "bar_wrong_clusters_W": 2,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 284,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.264085,
+      "CONSTANT_DIRECT": 0.591549,
+      "DEGREE_RULE": 0.911972,
+      "LOWEST_RANK_CHILD": 0.669014,
+      "ONE_HOP": 0.855634,
+      "PARTICIPANT_2": 0.647887,
+      "RANK_LAST_CHILD": 0.665493,
+      "TWO_HOP_FIRST_CHILD": 0.992958
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_DISTANCE_3_PLUS_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "RANK_LAST_CHILD",
+     "bar_cluster_accuracy": 1.0,
+     "bar_right_clusters": 2,
+     "bar_wrong_clusters_W": 0,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 2,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 1.0,
+      "LOWEST_RANK_CHILD": 0.5,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.0,
+      "RANK_LAST_CHILD": 1.0,
+      "TWO_HOP_FIRST_CHILD": 0.0
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    },
+    "VIA_ONLY_NON_TIE": {
+     "W_meets_10_cluster_floor": false,
+     "bar": "DEGREE_RULE",
+     "bar_cluster_accuracy": 0.97561,
+     "bar_right_clusters": 40,
+     "bar_wrong_clusters_W": 1,
+     "can_possibly_pass_W_at_least_7": false,
+     "clusters": 41,
+     "comparator_cluster_accuracy": {
+      "CONSTANT_ABSENT": 0.0,
+      "CONSTANT_DIRECT": 0.0,
+      "DEGREE_RULE": 0.97561,
+      "LOWEST_RANK_CHILD": 0.536585,
+      "ONE_HOP": 0.0,
+      "PARTICIPANT_2": 0.390244,
+      "RANK_LAST_CHILD": 0.512195,
+      "TWO_HOP_FIRST_CHILD": 0.95122
+     },
+     "power_conditional_on_measured_bar": {
+      "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+      "never_loses_where_bar_is_right_wins_fraction": {
+       "0.50": 0.0,
+       "0.75": 0.0,
+       "1.00": 0.0
+      },
+      "uniform_model_accuracy": {
+       "1.0000": 0.0
+      }
+     }
+    }
+   },
+   "bar": "TWO_HOP_FIRST_CHILD",
+   "bar_cluster_accuracy": 0.98374,
+   "bar_right_clusters": 121,
+   "bar_wrong_clusters_W": 2,
+   "can_carry_a_claim": false,
+   "can_possibly_pass_W_at_least_7": false,
+   "cell": "REACH_FIRST_DIRECT",
+   "claim_role": "PRIMARY_CLAIM_CANDIDATE",
+   "clusters": 123,
+   "clusters_by_role": {
+    "PRIMARY": 123,
+    "SURPLUS_NON_TIE": 161,
+    "TIE_STRATUM": 26
+   },
+   "comparator_cluster_accuracy": {
+    "CONSTANT_ABSENT": 0.333333,
+    "CONSTANT_DIRECT": 0.333333,
+    "DEGREE_RULE": 0.869919,
+    "LOWEST_RANK_CHILD": 0.512195,
+    "ONE_HOP": 0.666667,
+    "PARTICIPANT_2": 0.463415,
+    "RANK_LAST_CHILD": 0.504065,
+    "TWO_HOP_FIRST_CHILD": 0.98374
+   },
+   "flag_hit_rate_all_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.746269,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.313433,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.395522,
+    "presentations": 134
+   },
+   "flag_hit_rate_primary_via": {
+    "GOLD_VIA_IS_LOWEST_RANK_CHILD": 0.658537,
+    "GOLD_VIA_IS_PARTICIPANT_2": 0.390244,
+    "GOLD_VIA_IS_RANK_LAST_CHILD": 0.646341,
+    "presentations": 82
+   },
+   "kind": "reach",
+   "power_conditional_on_measured_bar": {
+    "assumption": "clusters independent; the bar's per-cluster results are the measured ones; alpha 0.01 one-sided; no zero-loss veto; one run (three runs must each pass)",
+    "never_loses_where_bar_is_right_wins_fraction": {
+     "0.50": 0.0,
+     "0.75": 0.0,
+     "1.00": 0.0
+    },
+    "uniform_model_accuracy": {
+     "1.0000": 0.0
+    }
+   },
+   "presentations_per_cluster": 2,
+   "primary_bar_accuracy_by_state": {
+    "ABSENT": 1.0,
+    "DIRECT": 1.0,
+    "VIA": 0.95122
+   },
+   "primary_by_state": {
+    "ABSENT": 41,
+    "DIRECT": 41,
+    "VIA": 41
+   },
+   "primary_clusters": 123,
+   "primary_domains": {
+    "container": 31,
+    "grammatical": 32,
+    "mechanical": 24,
+    "procedural": 36
+   },
+   "primary_node_counts": {
+    "5": 123
+   },
+   "primary_via_by_distance": {
+    "2": 39,
+    "3": 2
+   },
+   "tie_stratum": {
+    "clusters": 26,
+    "clusters_whose_gold_differs_between_presentations": 26,
+    "comparator_cluster_accuracy": {
+     "CONSTANT_ABSENT": 0.0,
+     "CONSTANT_DIRECT": 0.0,
+     "DEGREE_RULE": 0.615385,
+     "LOWEST_RANK_CHILD": 0.846154,
+     "ONE_HOP": 0.0,
+     "PARTICIPANT_2": 0.115385,
+     "RANK_LAST_CHILD": 0.0,
+     "TWO_HOP_FIRST_CHILD": 0.653846
+    }
+   },
+   "trained_course_answer_states_for_this_rule": {
+    "ABSENT": 2,
+    "DIRECT": 30,
+    "VIA": 16
+   },
+   "why_not": "the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W"
+  }
+ },
+ "counts": {
+  "clusters": 1685,
+  "items": 3370,
+  "items_by_split": {
+   "DEV_NEW_5": 1392,
+   "FAMILIAR_RELABELLED": 94,
+   "NEW_SHAPE_4": 358,
+   "TEST_NEW_5": 1526
+  }
+ },
+ "dev_shapes": [
+  "[5,[[0,1],[0,2],[0,3],[0,4]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,2],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[4,3]]]",
+  "[5,[[0,1],[0,2],[3,1],[3,2],[4,1],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,1],[3,2],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,2],[3,4],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,1],[3,2],[4,1],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,3],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,3],[4,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[2,3],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,3],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,3],[2,4]]]",
+  "[5,[[0,1],[1,2],[2,3],[3,4]]]",
+  "[5,[[0,1],[1,2],[3,1],[4,1]]]",
+  "[5,[[0,1],[0,2],[1,3],[4,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[4,0]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,4],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,3],[2,4],[3,2]]]",
+  "[5,[[0,1],[0,2],[3,0],[4,1],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,4],[2,4]]]",
+  "[5,[[0,1],[0,2],[1,3],[1,4],[3,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[2,3],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[2,4]]]",
+  "[5,[[0,1],[0,2],[1,2],[2,3],[4,1]]]",
+  "[5,[[0,1],[0,2],[1,3],[3,2],[4,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,4],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[2,4],[3,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,0],[4,2],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,1],[4,2],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[2,3],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[3,1],[3,2],[4,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,4],[4,2],[4,3]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[3,2],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[3,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[3,2],[4,0]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[2,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[3,4],[4,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[3,1]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[3,2],[4,1]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[3,2],[4,1]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[3,2],[3,4],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[2,4],[3,1]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[2,3],[4,0],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[2,3],[2,4],[3,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[2,4],[3,4]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[3,2],[4,1],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[1,4],[4,2]]]",
+  "[5,[[0,1],[0,2],[1,2],[1,3],[2,3],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[4,1],[4,2]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[3,2],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[1,4],[2,4],[3,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[2,3],[2,4],[3,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[1,4],[2,3],[3,4]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,4],[2,3],[2,4],[4,3]]]",
+  "[5,[[0,1],[0,2],[0,3],[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]]"
+ ],
+ "files": {
+  "HSET1A_CELLS_PUBLIC.json": "3edae4fa9f9ca0206e98ca02f74f72b3058a688ae854b6891c281b62df251b34",
+  "HSET1A_SEALED_TEST_NEW_5.json": "ae0c28a494f861ff92740a8314112c1d0e97ca41b2c006eba030365ffaa20d25"
+ },
+ "five_node_strata": [
+  {
+   "classes": 1,
+   "dev": 0,
+   "edge_count": 10,
+   "test": 0,
+   "via_capable": false
+  },
+  {
+   "classes": 6,
+   "dev": 1,
+   "edge_count": 4,
+   "test": 1,
+   "via_capable": false
+  },
+  {
+   "classes": 7,
+   "dev": 2,
+   "edge_count": 5,
+   "test": 2,
+   "via_capable": false
+  },
+  {
+   "classes": 13,
+   "dev": 3,
+   "edge_count": 6,
+   "test": 3,
+   "via_capable": false
+  },
+  {
+   "classes": 15,
+   "dev": 3,
+   "edge_count": 7,
+   "test": 3,
+   "via_capable": false
+  },
+  {
+   "classes": 13,
+   "dev": 3,
+   "edge_count": 8,
+   "test": 3,
+   "via_capable": false
+  },
+  {
+   "classes": 7,
+   "dev": 2,
+   "edge_count": 9,
+   "test": 2,
+   "via_capable": false
+  },
+  {
+   "classes": 21,
+   "dev": 5,
+   "edge_count": 4,
+   "test": 5,
+   "via_capable": true
+  },
+  {
+   "classes": 47,
+   "dev": 10,
+   "edge_count": 5,
+   "test": 10,
+   "via_capable": true
+  },
+  {
+   "classes": 66,
+   "dev": 15,
+   "edge_count": 6,
+   "test": 15,
+   "via_capable": true
+  },
+  {
+   "classes": 48,
+   "dev": 11,
+   "edge_count": 7,
+   "test": 11,
+   "via_capable": true
+  },
+  {
+   "classes": 20,
+   "dev": 4,
+   "edge_count": 8,
+   "test": 4,
+   "via_capable": true
+  },
+  {
+   "classes": 3,
+   "dev": 1,
+   "edge_count": 9,
+   "test": 1,
+   "via_capable": true
+  }
+ ],
+ "five_node_structural_reach_cluster_counts": {
+  "ALL_267_FIVE_NODE_CLASSES": {
+   "REACH_BFS": {
+    "ABSENT/non_tie/dNone": 277,
+    "DIRECT/non_tie/d1": 714,
+    "VIA/non_tie/d2": 217,
+    "VIA/non_tie/d3": 27,
+    "VIA/non_tie/d4": 1,
+    "VIA/tie/d2": 60,
+    "VIA/tie/d3": 2
+   },
+   "REACH_FIRST_DIRECT": {
+    "ABSENT/non_tie/dNone": 277,
+    "DIRECT/non_tie/d1": 714,
+    "VIA/non_tie/d2": 181,
+    "VIA/non_tie/d3": 26,
+    "VIA/non_tie/d4": 1,
+    "VIA/tie/d2": 96,
+    "VIA/tie/d3": 3
+   }
+  },
+  "DEV_NEW_5": {
+   "REACH_BFS": {
+    "ABSENT/non_tie/dNone": 56,
+    "DIRECT/non_tie/d1": 159,
+    "VIA/non_tie/d2": 45,
+    "VIA/non_tie/d3": 5,
+    "VIA/non_tie/d4": 1,
+    "VIA/tie/d2": 14
+   },
+   "REACH_FIRST_DIRECT": {
+    "ABSENT/non_tie/dNone": 56,
+    "DIRECT/non_tie/d1": 159,
+    "VIA/non_tie/d2": 36,
+    "VIA/non_tie/d3": 5,
+    "VIA/non_tie/d4": 1,
+    "VIA/tie/d2": 23
+   }
+  },
+  "TEST_NEW_5": {
+   "REACH_BFS": {
+    "ABSENT/non_tie/dNone": 75,
+    "DIRECT/non_tie/d1": 168,
+    "VIA/non_tie/d2": 50,
+    "VIA/non_tie/d3": 2,
+    "VIA/tie/d2": 15
+   },
+   "REACH_FIRST_DIRECT": {
+    "ABSENT/non_tie/dNone": 75,
+    "DIRECT/non_tie/d1": 168,
+    "VIA/non_tie/d2": 39,
+    "VIA/non_tie/d3": 2,
+    "VIA/tie/d2": 26
+   }
+  }
+ },
+ "identity": {
+  "bank_digest": "0f563762a70e67513ca3e6996d988afd4421dd90fe63e1a04942a31a79e9c388",
+  "builder_sha256_lf": "1e3d04fed3c27f8cd843087fb7c61a2c403e030cdba14c51aed95147803a5a9e",
+  "face_corpus_sha256_lf": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507",
+  "frozen_checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+  "frozen_files_sha256_lf": {
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "course.py": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+   "course_plan.py": "bd73cb444dc2a5becb6322b4fa50de9c9f0bde288bd54a3c6ce2003bbb8aed88",
+   "focal.py": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+   "input_frames.py": "0077ab78c35124249ca324db52eeba03d4f992c69d5bac8695bd88e177a17326",
+   "matched_contract.py": "9418270aa8751799ce01bca632ce6606bbd05ab3e95dc44c1e3bdc6228c46804",
+   "pointer_contract.py": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+   "practice_contract.py": "2c52286a0f046c071a5c62cf5c7eba3bd1fb61c883c3fe73d8c5fddd63828b6c",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+   "tokenization.py": "be84607539d5375346d4bc0bc1321c7a59668e3edb2189bebf090a74ecbb7c1b",
+   "worker_contract.py": "c24e93b0ab0f46007732cc908b322ce77b8925fb18641deca5899017841c9919"
+  },
+  "hset_worlds_sha256_lf": "b962318e1b0685e17797aa3f77345aaedeb1b4fca1f4f7c64db67818d23fb7fd",
+  "oracle_sha256_lf": "72187339f746ac25405a477b1ac79be0ccc6368690c1e981bad30a591e789437",
+  "platform": "Linux-7.0.0-1013-aws-x86_64-with-glibc2.39",
+  "processes": 8,
+  "python": "3.14.7",
+  "salt_sha256": "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754",
+  "vocabulary_digest": "bf157a9192ec7938e31e5c3901f74554de020b52c71d93a90f541987a00147dd",
+  "vocabulary_sizes": {
+   "container": {
+    "kinds": 16,
+    "labels": 60
+   },
+   "grammatical": {
+    "kinds": 16,
+    "labels": 60
+   },
+   "mechanical": {
+    "kinds": 16,
+    "labels": 56
+   },
+   "procedural": {
+    "kinds": 16,
+    "labels": 60
+   }
+  }
+ },
+ "limit_shapes": 0,
+ "problems": {
+  "comparator_scoring_inconsistent": 0,
+  "duplicate_record_ids": 0,
+  "error_count": 0,
+  "errors": [],
+  "independent_gold_disagrees": 0,
+  "not_exactly_one_admissible_answer": 0,
+  "reader_check_failed": 0
+ },
+ "schema": "claude.hset1a-build-summary/0.1",
+ "seconds": 677.6,
+ "test_shapes_digest": "1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9"
+}

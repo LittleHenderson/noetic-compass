@@ -1,0 +1,44 @@
+items 62, clusters 31, built in 11.4 s
+
+cell                                        n    W bar                     bar_acc   pw+0.20  pw_all_W  claim?
+FAMILIAR_RELABELLED/REACH_FIRST_DIRECT      0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             2    0 LOWEST_RANK_CHILD        1.0000
+    alt VIA_ONLY_NON_TIE                        1    0 LOWEST_RANK_CHILD        1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+FAMILIAR_RELABELLED/REACH_BFS               0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             2    0 LOWEST_RANK_CHILD        1.0000
+    alt VIA_ONLY_NON_TIE                        1    0 LOWEST_RANK_CHILD        1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+FAMILIAR_RELABELLED/PARTS                   1    0 ONE_HOP                  1.0000       0.0       0.0  NO: fewer than 10 clusters
+FAMILIAR_RELABELLED/EDGE_ACCOUNT            1    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: fewer than 10 clusters
+NEW_SHAPE_4/REACH_FIRST_DIRECT              0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             2    0 CONSTANT_DIRECT          1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/REACH_BFS                       0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             2    0 CONSTANT_DIRECT          1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/PARTS                           1    0 ONE_HOP                  1.0000       0.0       0.0  NO: fewer than 10 clusters
+NEW_SHAPE_4/EDGE_ACCOUNT                    1    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: fewer than 10 clusters
+DEV_NEW_5/REACH_FIRST_DIRECT                0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             6    0 ONE_HOP                  1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+DEV_NEW_5/REACH_BFS                         0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             6    0 ONE_HOP                  1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+DEV_NEW_5/PARTS                             2    0 ONE_HOP                  1.0000       0.0       0.0  NO: fewer than 10 clusters
+DEV_NEW_5/EDGE_ACCOUNT                      1    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: fewer than 10 clusters
+TEST_NEW_5/REACH_FIRST_DIRECT               0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             1    0 CONSTANT_DIRECT          1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+TEST_NEW_5/REACH_BFS                        0    0 CONSTANT_ABSENT          0.0000      None      None  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                             1    0 CONSTANT_DIRECT          1.0000
+    alt VIA_ONLY_NON_TIE                        0    0 CONSTANT_ABSENT          0.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+TEST_NEW_5/PARTS                            1    0 ONE_HOP                  1.0000       0.0       0.0  NO: fewer than 10 clusters
+TEST_NEW_5/EDGE_ACCOUNT                     1    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: fewer than 10 clusters
+{"build_ok": true, "problems": {"errors": [], "error_count": 0, "not_exactly_one_admissible_answer": 0, "independent_gold_disagrees": 0, "comparator_scoring_inconsistent": 0, "reader_check_failed": 0, "duplicate_record_ids": 0}, "seconds": 45.7}

@@ -1,0 +1,50 @@
+items 3370, clusters 1685, built in 11.0 s
+  evaluated 500 / 3370 (110 s)
+  evaluated 1000 / 3370 (203 s)
+  evaluated 1500 / 3370 (302 s)
+  evaluated 2000 / 3370 (403 s)
+  evaluated 2500 / 3370 (497 s)
+  evaluated 3000 / 3370 (594 s)
+
+cell                                        n    W bar                     bar_acc   pw+0.20  pw_all_W  claim?
+FAMILIAR_RELABELLED/REACH_FIRST_DIRECT      9    1 TWO_HOP_FIRST_CHILD      0.8889       0.0       0.0  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                            16    1 TWO_HOP_FIRST_CHILD      0.9375
+    alt VIA_ONLY_NON_TIE                        4    0 DEGREE_RULE              1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             1    0 LOWEST_RANK_CHILD        1.0000
+FAMILIAR_RELABELLED/REACH_BFS               9    1 TWO_HOP_FIRST_CHILD      0.8889       0.0       0.0  NO: fewer than 10 clusters
+    alt ALL_NON_TIE                            16    1 TWO_HOP_FIRST_CHILD      0.9375
+    alt VIA_ONLY_NON_TIE                        4    1 TWO_HOP_FIRST_CHILD      0.7500
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             1    1 CONSTANT_ABSENT          0.0000
+FAMILIAR_RELABELLED/PARTS                   7    0 ONE_HOP                  1.0000       0.0       0.0  NO: fewer than 10 clusters
+FAMILIAR_RELABELLED/EDGE_ACCOUNT            6    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: fewer than 10 clusters
+NEW_SHAPE_4/REACH_FIRST_DIRECT             27    0 TWO_HOP_FIRST_CHILD      1.0000       0.0       0.0  NO: the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown
+    alt ALL_NON_TIE                            64    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_ONLY_NON_TIE                        9    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/REACH_BFS                      30    0 TWO_HOP_FIRST_CHILD      1.0000       0.0       0.0  NO: the bar is exact (TWO_HOP_FIRST_CHILD answers every cluster): only input-reading fidelity can be shown
+    alt ALL_NON_TIE                            65    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_ONLY_NON_TIE                       10    0 TWO_HOP_FIRST_CHILD      1.0000
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             0    0 CONSTANT_ABSENT          0.0000
+NEW_SHAPE_4/PARTS                          25    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+NEW_SHAPE_4/EDGE_ACCOUNT                   22    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+DEV_NEW_5/REACH_FIRST_DIRECT              126    6 TWO_HOP_FIRST_CHILD      0.9524       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           257    6 TWO_HOP_FIRST_CHILD      0.9767
+    alt VIA_ONLY_NON_TIE                       42    2 DEGREE_RULE              0.9524
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             6    0 DEGREE_RULE              1.0000
+DEV_NEW_5/REACH_BFS                       153    6 TWO_HOP_FIRST_CHILD      0.9608       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=6 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           266    6 TWO_HOP_FIRST_CHILD      0.9774
+    alt VIA_ONLY_NON_TIE                       51    6 TWO_HOP_FIRST_CHILD      0.8824
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             6    5 PARTICIPANT_2            0.1667
+DEV_NEW_5/PARTS                            76    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+DEV_NEW_5/EDGE_ACCOUNT                     60    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+TEST_NEW_5/REACH_FIRST_DIRECT             123    2 TWO_HOP_FIRST_CHILD      0.9837       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           284    2 TWO_HOP_FIRST_CHILD      0.9930
+    alt VIA_ONLY_NON_TIE                       41    1 DEGREE_RULE              0.9756
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             2    0 RANK_LAST_CHILD          1.0000
+TEST_NEW_5/REACH_BFS                      156    2 TWO_HOP_FIRST_CHILD      0.9872       0.0       0.0  NO: the bar (TWO_HOP_FIRST_CHILD) is wrong on only W=2 clusters; a pass needs at least 7 wins with no loss, and the 10-cluster floor applies to W
+    alt ALL_NON_TIE                           295    2 TWO_HOP_FIRST_CHILD      0.9932
+    alt VIA_ONLY_NON_TIE                       52    2 TWO_HOP_FIRST_CHILD      0.9615
+    alt VIA_DISTANCE_3_PLUS_NON_TIE             2    1 PARTICIPANT_2            0.5000
+TEST_NEW_5/PARTS                           83    0 ONE_HOP                  1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP answers every cluster): only input-reading fidelity can be shown
+TEST_NEW_5/EDGE_ACCOUNT                    60    0 ONE_HOP_ALL_EDGES        1.0000       0.0       0.0  NO: the bar is exact (ONE_HOP_ALL_EDGES answers every cluster): only input-reading fidelity can be shown
+{"build_ok": true, "problems": {"errors": [], "error_count": 0, "not_exactly_one_admissible_answer": 0, "independent_gold_disagrees": 0, "comparator_scoring_inconsistent": 0, "reader_check_failed": 0, "duplicate_record_ids": 0}, "seconds": 677.6}
