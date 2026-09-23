@@ -77,3 +77,25 @@ Codex reviews it on return.
 4. the rescorer reading.
 
 The two CPU jobs may run while no GPU job is running.
+
+## Addendum: the spending limit for switch-ON training (2026-09-23)
+
+**The question put to the owner in chat, exactly:**
+
+> "Switch-ON training must run on the same AWS g7.2xlarge Helm 2.0 used (the training code refuses any other GPU).
+> Expected real cost is about $24 total: a ~$1.50 short test run, then 3 seeds of about 3 hours each (~$7.50 each),
+> one at a time. The code books a fixed $15 per job, so up to $60 is reserved. What spending limit do you approve?"
+
+**The owner's answer: "Up to $60 (Recommended)".** The option's text read: "Short test run + 3 seeds, one at a time.
+Expected ~$24. Stops if the test run or any seed fails, and I stop and report if spend passes $30 before the third
+seed."
+
+**Applied as:**
+- **Ceiling:** $60.00, for one reduced-schedule test run plus 3 seed jobs on g7.2xlarge, us-west-2. Each job books
+  the code's fixed $15.00 reservation.
+- **One machine at a time.** No automatic retries.
+- **Stops:**
+  - if the test run fails, no seed is launched;
+  - if any seed ends other than delivered, the next seed is not launched;
+  - if actual spend passes $30 before the third seed, stop and report.
+- **Still first:** acceptance item 1 must pass on the T4, and the preparation must be reviewed.
