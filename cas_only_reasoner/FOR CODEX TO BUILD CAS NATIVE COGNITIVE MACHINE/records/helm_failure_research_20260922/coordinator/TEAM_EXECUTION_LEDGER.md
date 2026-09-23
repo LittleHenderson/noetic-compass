@@ -13,10 +13,10 @@ Only A0 integrates explicit report commits.
 | A0 | /root/helm_research_a0 | n/a | n/a | Coordinator, not final judge |
 | A1 | /root/helm_research_a0/a1_pass_rule | 87266d875207cc1df6df6de1dc89845fae60109f | b5a8aa8223c66344bc7da8dfc8169160b6d8a8ece49f6b7a21e31a14ca274e7c | Saved and integrated; waiting behind barrier |
 | A2 | /root/helm_research_a0/a2_information_flow | bed714813750a53f38b7908f0ffdcdfd42d56f3d | 91de7dc113f564374df6dd287be06760d87c2f75c20e7823e96b86cc106a012f | Saved and integrated; waiting behind barrier |
-| A3 | /root/helm_research_a0/a3_teaching_transfer | Pending | Pending | Independent report in progress |
-| A4 | /root/helm_research_a0/a4_training_retention | Pending | Pending | Independent report in progress |
-| A5 | Not launched | Pending | Pending | Role worktree prepared |
-| A6 | Not launched | Pending | Pending | Role worktree prepared |
+| A3 | /root/helm_research_a0/a3_teaching_transfer | 89ef569d0b8119906b9e640bba552eb5e76d6ea6 | 1457f898fc98e47f7ca34975202adc2a36235b959b53c5ac2449ea926f339a52 | Saved and integrated; waiting behind barrier |
+| A4 | /root/helm_research_a0/a4_training_retention | 78023b5f8e368a431a6303706c7e373ec6c7d8b3 | 7a96838b04441697c3d7edee9d437498af66e0c241c5d992ceaefc2edca015c3 | Saved and integrated; waiting behind barrier |
+| A5 | /root/helm_research_a0/a5_answer_comparison | Pending | Pending | Independent report in progress |
+| A6 | /root/helm_research_a0/a6_independent_reproducer | Pending | Pending | Independent report in progress |
 | A7 | Not launched | n/a | n/a | Fresh judgment session reserved |
 
 A1 initial spawn returned an identifier during user steering, but the live inventory briefly
@@ -33,4 +33,5 @@ Follow-up reports are new files; first reports will never be rewritten.
 
 Resource observations: root last read ordinaryUsageAllowed=true, weekly 71% consumed / 29%
 remaining, no paid-credit balance. This is existing account allowance, not a dollar-cost estimate.
+
 

@@ -78,3 +78,14 @@ Latest usage is unavailable, not zero and not evidence of exhaustion. No reset o
 An A0 attempt to write this accounting document failed in functions JavaScript parsing before any
 shell call ran because a PowerShell newline escape ended the JavaScript template. It was corrected
 by using a PowerShell here-string. The failed call made no filesystem mutation.
+
+## Second batch integration
+
+A3 commit 89ef569d0b8119906b9e640bba552eb5e76d6ea6 integrated as 1bbbbb72.
+A4 commit 78023b5f8e368a431a6303706c7e373ec6c7d8b3 integrated as 36dd45a5.
+The same changed-path assertions preceded each sequential cherry-pick; both exited 0.
+A5/A6 were launched fresh with fork_turns=none and their prepared original-base worktrees,
+without A1-A4 findings. Native session identifiers are in the ledger.
+Root's latest successful allowance read: ordinaryUsageAllowed=true, weekly77% used/23% remaining,
+spendControlReached=false, no paid-credit balance. No reset or purchase. This supersedes the
+earlier failed refresh as the latest known reading; actual dollar cost remains unavailable.
