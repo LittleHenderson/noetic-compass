@@ -48,5 +48,22 @@ Independent-review handoff details:
    that separate conversation. Current user continuation/AWS instructions are
    directly present in this task.
 
-Builder test receipts and completion status will be recorded in the D-1 README.
+Builder checks are complete on AWS: 110 test cases (40 functions), all 564
+registry targets and plans, and all 6,768 saved prediction decisions passed.
+No answer, witness, coverage, plan or correctness differences were found.
+The 1,000-question five-node benchmark took 23.554114344 seconds. It used three
+worlds per bank; do not describe that timing as a 64-world benchmark.
+Complete receipts, resource amendment, cleanup, custody and fingerprints are in
+records/helm_stage2_checker_20260923/README.md and OUTPUT_MANIFEST.json.
+The instance, disk and temporary bucket are confirmed deleted. No models ran.
 Independent acceptance stays open until Claude runs and records its own checks.
+
+Next command, on Claude's reviewed AWS integration checkout containing both
+the new modules and its independent harness (not on the laptop):
+
+```text
+python -B records/helm_eval_design_20260923/d1_acceptance/a2_compare_harness.py --v2-module cas_meta2.typed_teaching.checker_v2 --out a2_result.json
+```
+
+This next command has not been run by Codex. Apply the package-path and missing
+slot-plan coverage notes above, and run Claude's separate A3 oracle before use.

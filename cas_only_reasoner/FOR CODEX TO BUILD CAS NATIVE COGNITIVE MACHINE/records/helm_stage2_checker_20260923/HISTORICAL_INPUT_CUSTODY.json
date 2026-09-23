@@ -1,0 +1,78 @@
+{
+  "scope": "Lightweight inspection of retained anchor metadata against transferred byte manifest; no checker execution",
+  "anchors": [
+    {
+      "path": "records\\typed_pointer_001\\trust_anchor_helm1_certified.json",
+      "sha256_raw": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef",
+      "original_checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81"
+    },
+    {
+      "path": "records\\typed_pointer_001\\trust_anchor_helm2_experimental_20208c92.json",
+      "sha256_raw": "f71fa001209eb0bb8a7ab980cae24c1dab394ca3f12ce333a84e985a76a1f834",
+      "original_checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81"
+    }
+  ],
+  "predictions": [
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p00_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca"
+    },
+    {
+      "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p10_predictions.json",
+      "matches_original_anchor_raw": true,
+      "sha256_raw": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd"
+    }
+  ],
+  "all_12_match": true
+}

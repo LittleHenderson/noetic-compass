@@ -1,0 +1,94 @@
+{
+  "requested_utc": "2026-09-23T13:46:43.612675+00:00",
+  "instance_id": "i-00787ea718c2631ea",
+  "bucket": "cas-helm-checker-20260923-807562639912-9eeab1e7",
+  "archive_sha256": "078fdb3612248d45786f5f3e64da4c0c4a73ecb1db27fe2b9f2a38c2e149d965",
+  "archive_matches_s3_etag": true,
+  "deleted_keys": [
+    "job/input_bundle.tar.gz",
+    "job/run001-progress.json",
+    "job/run001-results.tar.gz"
+  ],
+  "volume_ids": [
+    "vol-0d3077a69b01406c3"
+  ],
+  "launch_time": "2026-09-23 12:55:22+00:00",
+  "termination": {
+    "TerminatingInstances": [
+      {
+        "InstanceId": "i-00787ea718c2631ea",
+        "CurrentState": {
+          "Code": 32,
+          "Name": "shutting-down"
+        },
+        "PreviousState": {
+          "Code": 16,
+          "Name": "running"
+        }
+      }
+    ],
+    "ResponseMetadata": {
+      "RequestId": "4511966a-3101-4a8b-8db5-714140551a69",
+      "HTTPStatusCode": 200,
+      "HTTPHeaders": {
+        "x-amzn-requestid": "4511966a-3101-4a8b-8db5-714140551a69",
+        "cache-control": "no-cache, no-store",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "content-type": "text/xml;charset=UTF-8",
+        "content-length": "426",
+        "date": "Wed, 23 Sep 2026 13:46:43 GMT",
+        "server": "AmazonEC2"
+      },
+      "RetryAttempts": 0
+    }
+  },
+  "objects_deleted": {
+    "ResponseMetadata": {
+      "RequestId": "N1HFDP29WS59DF0Z",
+      "HostId": "mDIy4772wFEogW1Lwla+BJvxvpenPO3e8nTVSgaZepeDhYDYxnn1Ni6jddLratKEnUjrOEvtRs8=",
+      "HTTPStatusCode": 200,
+      "HTTPHeaders": {
+        "x-amz-id-2": "mDIy4772wFEogW1Lwla+BJvxvpenPO3e8nTVSgaZepeDhYDYxnn1Ni6jddLratKEnUjrOEvtRs8=",
+        "x-amz-request-id": "N1HFDP29WS59DF0Z",
+        "date": "Wed, 23 Sep 2026 13:46:44 GMT",
+        "connection": "close",
+        "content-type": "application/xml",
+        "transfer-encoding": "chunked",
+        "server": "AmazonS3"
+      },
+      "RetryAttempts": 0
+    },
+    "Deleted": [
+      {
+        "Key": "job/input_bundle.tar.gz"
+      },
+      {
+        "Key": "job/run001-progress.json"
+      },
+      {
+        "Key": "job/run001-results.tar.gz"
+      }
+    ]
+  },
+  "bucket_deleted": {
+    "ResponseMetadata": {
+      "RequestId": "N1H63RZ1RCYJ26M4",
+      "HostId": "2rShtTqMRMSPskJRWoifZcrDH/ukHekK2d5kG4mAJlk+4b0pQboWvUzTz+m+LiF3FqYrlv8BrAc=",
+      "HTTPStatusCode": 204,
+      "HTTPHeaders": {
+        "x-amz-id-2": "2rShtTqMRMSPskJRWoifZcrDH/ukHekK2d5kG4mAJlk+4b0pQboWvUzTz+m+LiF3FqYrlv8BrAc=",
+        "x-amz-request-id": "N1H63RZ1RCYJ26M4",
+        "date": "Wed, 23 Sep 2026 13:46:44 GMT",
+        "server": "AmazonS3"
+      },
+      "RetryAttempts": 0
+    }
+  },
+  "verified_utc": "2026-09-23T13:47:15.179768+00:00",
+  "instance_state": "terminated",
+  "volumes": {
+    "vol-0d3077a69b01406c3": "InvalidVolume.NotFound"
+  },
+  "bucket_state": "404",
+  "cleanup_complete": true
+}

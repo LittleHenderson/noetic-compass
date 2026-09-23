@@ -1,0 +1,115 @@
+{
+  "observed_utc": "2026-09-23T13:26:42.286332+00:00",
+  "credit_balance": [
+    {
+      "Timestamp": "2026-09-23 06:16:00-07:00",
+      "Average": 0.0050355,
+      "Minimum": 0.0050355,
+      "Unit": "Count"
+    },
+    {
+      "Timestamp": "2026-09-23 06:11:00-07:00",
+      "Average": 0.0048609,
+      "Minimum": 0.0048609,
+      "Unit": "Count"
+    },
+    {
+      "Timestamp": "2026-09-23 06:21:00-07:00",
+      "Average": 0.006332683333333334,
+      "Minimum": 0.006332683333333334,
+      "Unit": "Count"
+    }
+  ],
+  "credit_price_products": [
+    {
+      "product": {
+        "productFamily": "CPU Credits",
+        "attributes": {
+          "instanceFamilyCategory": "General Purpose",
+          "regionCode": "us-west-2",
+          "instance": "T3",
+          "servicecode": "AmazonEC2",
+          "usagetype": "USW2-CPUCredits:t3",
+          "locationType": "AWS Region",
+          "location": "US West (Oregon)",
+          "servicename": "Amazon Elastic Compute Cloud",
+          "marketoption": "OnDemand",
+          "operatingSystem": "Windows",
+          "operation": "WindowsT3CPUCredits"
+        },
+        "sku": "9PY4SSZSUFFX5WZH"
+      },
+      "serviceCode": "AmazonEC2",
+      "terms": {
+        "OnDemand": {
+          "9PY4SSZSUFFX5WZH.JRTCKXETXF": {
+            "priceDimensions": {
+              "9PY4SSZSUFFX5WZH.JRTCKXETXF.6YS6EN2CT7": {
+                "unit": "vCPU-Hours",
+                "endRange": "Inf",
+                "description": "$0.096 per vCPU-Hour of T3 CPU Credits",
+                "appliesTo": [],
+                "rateCode": "9PY4SSZSUFFX5WZH.JRTCKXETXF.6YS6EN2CT7",
+                "beginRange": "0",
+                "pricePerUnit": {
+                  "USD": "0.0960000000"
+                }
+              }
+            },
+            "sku": "9PY4SSZSUFFX5WZH",
+            "effectiveDate": "2026-09-01T00:00:00Z",
+            "offerTermCode": "JRTCKXETXF",
+            "termAttributes": {}
+          }
+        }
+      },
+      "version": "20260921194712",
+      "publicationDate": "2026-09-21T19:47:12Z"
+    },
+    {
+      "product": {
+        "productFamily": "CPU Credits",
+        "attributes": {
+          "instanceFamilyCategory": "General Purpose",
+          "regionCode": "us-west-2",
+          "instance": "T3",
+          "servicecode": "AmazonEC2",
+          "usagetype": "USW2-CPUCredits:t3",
+          "locationType": "AWS Region",
+          "location": "US West (Oregon)",
+          "servicename": "Amazon Elastic Compute Cloud",
+          "marketoption": "OnDemand",
+          "operatingSystem": "Linux",
+          "operation": "T3CPUCredits"
+        },
+        "sku": "PRN6A2Z3QVS9CA8N"
+      },
+      "serviceCode": "AmazonEC2",
+      "terms": {
+        "OnDemand": {
+          "PRN6A2Z3QVS9CA8N.JRTCKXETXF": {
+            "priceDimensions": {
+              "PRN6A2Z3QVS9CA8N.JRTCKXETXF.6YS6EN2CT7": {
+                "unit": "vCPU-Hours",
+                "endRange": "Inf",
+                "description": "$0.05 per vCPU-Hour of T3 CPU Credits",
+                "appliesTo": [],
+                "rateCode": "PRN6A2Z3QVS9CA8N.JRTCKXETXF.6YS6EN2CT7",
+                "beginRange": "0",
+                "pricePerUnit": {
+                  "USD": "0.0500000000"
+                }
+              }
+            },
+            "sku": "PRN6A2Z3QVS9CA8N",
+            "effectiveDate": "2026-09-01T00:00:00Z",
+            "offerTermCode": "JRTCKXETXF",
+            "termAttributes": {}
+          }
+        }
+      },
+      "version": "20260921194712",
+      "publicationDate": "2026-09-21T19:47:12Z"
+    }
+  ]
+}

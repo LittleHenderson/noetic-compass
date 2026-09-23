@@ -1,0 +1,445 @@
+{
+  "schema": "helm.stage2-builder-compatibility/1",
+  "status": "PASS",
+  "input_manifest_sha256": "f1d28a48b9c72099a5caf0e62c2e116871bacd51f62d2e427c3e9ee6a6c2d943",
+  "frozen_profile": {
+    "schema": "cas.typed-teaching-semantic-profile/0.1",
+    "rules": {
+      "role_set": [
+        "focal_excerpt_roles_v1"
+      ],
+      "definition": [
+        "declared_kind_and_function_v1"
+      ],
+      "context": [
+        "declared_setting_and_participants_v1"
+      ],
+      "analogy": [
+        "cross_domain_full_graph_isomorphism_v1"
+      ],
+      "correspondence": [
+        "full_directed_graph_bijection_v1"
+      ],
+      "parts": [
+        "direct_contains_v1"
+      ],
+      "edge_account": [
+        "complete_edge_set_lexical_serialization_v1"
+      ],
+      "reach": [
+        "first_direct_constituent_lexical_v1",
+        "bfs_immediate_predecessor_lexical_v1"
+      ]
+    },
+    "role_semantics": "EXACT_CONTROLLED_FOCAL_CLAUSES_NOT_FREE_LANGUAGE",
+    "focal_grammar": {
+      "schema": "cas.typed-teaching-focal-grammar/0.1",
+      "rule": "focal_excerpt_roles_v1",
+      "syntax": "READABLE_PREFIX_PLUS_CANONICAL_JSON_ONE_CLAUSE_PER_LF_LINE",
+      "clauses": [
+        {
+          "name": "definition",
+          "prefix": "Declared whole: ",
+          "fields": [
+            "function_ref",
+            "kind_ref",
+            "whole"
+          ],
+          "roles": [
+            1
+          ]
+        },
+        {
+          "name": "context",
+          "prefix": "Declared surroundings: ",
+          "fields": [
+            "participants",
+            "setting_ref",
+            "world_id"
+          ],
+          "roles": [
+            2
+          ]
+        },
+        {
+          "name": "analogy",
+          "prefix": "Different domains, same containment pattern: ",
+          "fields": [
+            "source_world_id",
+            "target_world_id"
+          ],
+          "roles": [
+            3
+          ]
+        },
+        {
+          "name": "correspondence",
+          "prefix": "Exact node correspondence: ",
+          "fields": [
+            "pairs",
+            "source_world_id",
+            "target_world_id"
+          ],
+          "roles": [
+            4
+          ]
+        },
+        {
+          "name": "parts",
+          "prefix": "Direct constituent inventory: ",
+          "fields": [
+            "nodes",
+            "whole",
+            "world_id"
+          ],
+          "roles": [
+            5
+          ]
+        },
+        {
+          "name": "account",
+          "prefix": "Complete static containment account: ",
+          "fields": [
+            "edges",
+            "world_id"
+          ],
+          "roles": [
+            5,
+            6
+          ]
+        },
+        {
+          "name": "reference",
+          "prefix": "Source reference: ",
+          "fields": [
+            "world_id"
+          ],
+          "roles": []
+        }
+      ],
+      "max_excerpt_bytes": 16384,
+      "max_clauses": 16,
+      "max_isomorphism_search_states": 100000,
+      "scope": "EXPLICIT_FOCAL_CLAUSES_ONLY_NOT_BACKGROUND_OR_WORKED_SUPPORTS",
+      "claim_authority": "EXACT_CALLER_SUPPLIED_SOURCE_NOT_WORLD_TRUTH",
+      "recognition_scope": "CONTROLLED_GRAMMAR_NOT_UNRESTRICTED_NATURAL_LANGUAGE",
+      "static_account_roles": [
+        5,
+        6
+      ],
+      "process_order_inferred": false,
+      "interaction_facts_inferred": false,
+      "candidate_menu": "ALL_SIX_ROLES_INDEPENDENT_OF_TARGET"
+    },
+    "declaration_references": "FOCUS_WORLD_DECLARATION_IDENTITY",
+    "graph_matching": "UNROOTED_EXACT_DIRECTED_GRAPH_BIJECTION",
+    "analogy_domain_rule": "DISTINCT_DECLARED_DOMAIN_STRINGS",
+    "tie_rule": "ALL_VALID_ANSWERS_RETAINED_CANONICAL_BYTE_ORDER",
+    "graph_order": "SORTED_SCOPED_NODE_REFERENCES",
+    "process_order": "NOT_INFERRED_FROM_CONTAINS_OR_SERIALIZATION",
+    "max_isomorphism_nodes": 4,
+    "max_bank_worlds": 64,
+    "max_admissible_answers": 64,
+    "max_target_bytes": 524288,
+    "identity_evidence": "VERSIONED_RULE_PROFILE_NOT_CODE_AUTHENTICATION",
+    "profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81"
+  },
+  "new_profile": {
+    "schema": "cas.typed-teaching-semantic-profile/0.2",
+    "rules": {
+      "role_set": [
+        "focal_excerpt_roles_v1"
+      ],
+      "definition": [
+        "declared_kind_and_function_v1"
+      ],
+      "context": [
+        "declared_setting_and_participants_v1"
+      ],
+      "analogy": [
+        "cross_domain_full_graph_isomorphism_v1"
+      ],
+      "correspondence": [
+        "full_directed_graph_bijection_v1"
+      ],
+      "parts": [
+        "direct_contains_v1"
+      ],
+      "edge_account": [
+        "complete_edge_set_lexical_serialization_v1"
+      ],
+      "reach": [
+        "first_direct_constituent_lexical_v1",
+        "bfs_immediate_predecessor_lexical_v1"
+      ]
+    },
+    "role_semantics": "EXACT_CONTROLLED_FOCAL_CLAUSES_NOT_FREE_LANGUAGE",
+    "focal_grammar": {
+      "schema": "cas.typed-teaching-focal-grammar/0.1",
+      "rule": "focal_excerpt_roles_v1",
+      "syntax": "READABLE_PREFIX_PLUS_CANONICAL_JSON_ONE_CLAUSE_PER_LF_LINE",
+      "clauses": [
+        {
+          "name": "definition",
+          "prefix": "Declared whole: ",
+          "fields": [
+            "function_ref",
+            "kind_ref",
+            "whole"
+          ],
+          "roles": [
+            1
+          ]
+        },
+        {
+          "name": "context",
+          "prefix": "Declared surroundings: ",
+          "fields": [
+            "participants",
+            "setting_ref",
+            "world_id"
+          ],
+          "roles": [
+            2
+          ]
+        },
+        {
+          "name": "analogy",
+          "prefix": "Different domains, same containment pattern: ",
+          "fields": [
+            "source_world_id",
+            "target_world_id"
+          ],
+          "roles": [
+            3
+          ]
+        },
+        {
+          "name": "correspondence",
+          "prefix": "Exact node correspondence: ",
+          "fields": [
+            "pairs",
+            "source_world_id",
+            "target_world_id"
+          ],
+          "roles": [
+            4
+          ]
+        },
+        {
+          "name": "parts",
+          "prefix": "Direct constituent inventory: ",
+          "fields": [
+            "nodes",
+            "whole",
+            "world_id"
+          ],
+          "roles": [
+            5
+          ]
+        },
+        {
+          "name": "account",
+          "prefix": "Complete static containment account: ",
+          "fields": [
+            "edges",
+            "world_id"
+          ],
+          "roles": [
+            5,
+            6
+          ]
+        },
+        {
+          "name": "reference",
+          "prefix": "Source reference: ",
+          "fields": [
+            "world_id"
+          ],
+          "roles": []
+        }
+      ],
+      "max_excerpt_bytes": 16384,
+      "max_clauses": 16,
+      "max_isomorphism_search_states": 100000,
+      "scope": "EXPLICIT_FOCAL_CLAUSES_ONLY_NOT_BACKGROUND_OR_WORKED_SUPPORTS",
+      "claim_authority": "EXACT_CALLER_SUPPLIED_SOURCE_NOT_WORLD_TRUTH",
+      "recognition_scope": "CONTROLLED_GRAMMAR_NOT_UNRESTRICTED_NATURAL_LANGUAGE",
+      "static_account_roles": [
+        5,
+        6
+      ],
+      "process_order_inferred": false,
+      "interaction_facts_inferred": false,
+      "candidate_menu": "ALL_SIX_ROLES_INDEPENDENT_OF_TARGET"
+    },
+    "declaration_references": "FOCUS_WORLD_DECLARATION_IDENTITY",
+    "graph_matching": "UNROOTED_EXACT_DIRECTED_GRAPH_BIJECTION",
+    "analogy_domain_rule": "DISTINCT_DECLARED_DOMAIN_STRINGS",
+    "tie_rule": "ALL_VALID_ANSWERS_RETAINED_CANONICAL_BYTE_ORDER",
+    "graph_order": "SORTED_SCOPED_NODE_REFERENCES",
+    "process_order": "NOT_INFERRED_FROM_CONTAINS_OR_SERIALIZATION",
+    "max_isomorphism_nodes": 6,
+    "max_bank_worlds": 64,
+    "max_admissible_answers": 64,
+    "max_target_bytes": 524288,
+    "identity_evidence": "VERSIONED_RULE_PROFILE_NOT_CODE_AUTHENTICATION",
+    "profile_digest": "b0e565314a91083f8c5559ce1be16fd667e82a52d7dd224de88440bdb0709075"
+  },
+  "target_records": 564,
+  "unique_targets": 244,
+  "slot_plans": 564,
+  "predictions": 6768,
+  "target_mismatches": [],
+  "witness_mismatches": [],
+  "slot_mismatches": [],
+  "check_mismatches": [],
+  "unique_check_inputs": 1290,
+  "reused_identical_check_inputs": 5478,
+  "prediction_files": [
+    {
+      "study": "helm1",
+      "seed": 20260917,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+      "counts": {
+        "incorrect": 534,
+        "correct": 30
+      }
+    },
+    {
+      "study": "helm1",
+      "seed": 20260917,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+      "counts": {
+        "correct": 392,
+        "incorrect": 172
+      }
+    },
+    {
+      "study": "helm1",
+      "seed": 20260918,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+      "counts": {
+        "correct": 17,
+        "incorrect": 547
+      }
+    },
+    {
+      "study": "helm1",
+      "seed": 20260918,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+      "counts": {
+        "correct": 422,
+        "incorrect": 142
+      }
+    },
+    {
+      "study": "helm1",
+      "seed": 20260919,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+      "counts": {
+        "incorrect": 544,
+        "correct": 20
+      }
+    },
+    {
+      "study": "helm1",
+      "seed": 20260919,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
+      "counts": {
+        "correct": 407,
+        "incorrect": 157
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260917,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+      "counts": {
+        "incorrect": 542,
+        "correct": 22
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260917,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+      "counts": {
+        "correct": 495,
+        "incorrect": 69
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260918,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
+      "counts": {
+        "incorrect": 560,
+        "correct": 4
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260918,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
+      "counts": {
+        "correct": 495,
+        "incorrect": 69
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260919,
+      "phase": "course_p00",
+      "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p00_predictions.json",
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "counts": {
+        "correct": 73,
+        "incorrect": 491
+      }
+    },
+    {
+      "study": "helm2",
+      "seed": 20260919,
+      "phase": "course_p10",
+      "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p10_predictions.json",
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "counts": {
+        "correct": 490,
+        "incorrect": 74
+      }
+    }
+  ],
+  "device": {
+    "platform": "Linux-6.18.48-109.150.amzn2023.x86_64-x86_64-with-glibc2.34",
+    "cpu": "x86_64",
+    "logical_cpus": 2
+  },
+  "source_commit": "b87fcc150e5818a7b1a4efd11f56b764fa15c219",
+  "historical_model_sources": {
+    "helm1": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+    "helm2": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+  },
+  "elapsed_seconds": 2727.837589011,
+  "max_rss_kib": 51196
+}

@@ -5865,7 +5865,7 @@
   "stage2_addition_20260923": {
   "branch": "codex/helm-stage2-checker-20260923",
   "independent_checker": "Claude",
-  "status": "IMPLEMENTED_BUILDER_AWS_CHECKS_RUNNING_INDEPENDENT_ACCEPTANCE_OPEN",
+  "status": "BUILDER_AWS_CHECKS_PASS_INDEPENDENT_ACCEPTANCE_OPEN",
   "modules": [
     {
       "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker_v2.py",

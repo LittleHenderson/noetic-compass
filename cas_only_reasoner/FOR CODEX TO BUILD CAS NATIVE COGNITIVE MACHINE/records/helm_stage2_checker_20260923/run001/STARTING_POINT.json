@@ -1,0 +1,30 @@
+{
+  "source_commit": "d206b42aa1b68d24f65ab01ec58cc82aad432859",
+  "branch": "codex/helm-stage2-checker-20260923",
+  "frozen_files": {
+    "checker.py": {
+      "sha256_raw": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "sha256_lf": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+    },
+    "answers.py": {
+      "sha256_raw": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "sha256_lf": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+    },
+    "slots.py": {
+      "sha256_raw": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "sha256_lf": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+    },
+    "source.py": {
+      "sha256_raw": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+      "sha256_lf": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+    },
+    "pointer_inputs.py": {
+      "sha256_raw": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "sha256_lf": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd"
+    }
+  },
+  "prior_evidence_manifest_sha256": "274e78efd63c38307de2f77692171cd83fe96a473cc42b9aae0e3cd78cc8cd30",
+  "prior_files_verified": 81,
+  "prior_mismatches": [],
+  "observed_utc": "2026-09-23T12:53:52.600451+00:00"
+}

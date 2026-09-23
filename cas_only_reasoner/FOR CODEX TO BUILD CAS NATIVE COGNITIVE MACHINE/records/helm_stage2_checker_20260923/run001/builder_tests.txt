@@ -1,0 +1,4 @@
+........................................................................ [ 65%]
+......................................                                   [100%]
+- generated xml file: /opt/helm-stage2/run001/records/helm_stage2_checker_20260923/builder_tests.xml -
+110 passed in 17.01s

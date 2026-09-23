@@ -1,0 +1,14 @@
+{
+  "schema": "helm.stage2-aws-benchmark/1",
+  "questions": 1000,
+  "nodes_per_world": 5,
+  "worlds_in_each_bank": 3,
+  "generated_unique_source_questions": true,
+  "maximum_actual_permutations_per_question": 240,
+  "total_permutations_checked": 240000,
+  "theoretical_six_node_64_world_maximum": 46080,
+  "elapsed_seconds": 23.554114344,
+  "device": "AWS t3.large CPU; one process; CPUQuota=100%",
+  "local_cpu_measurement": "NOT_RUN_OWNER_SELECTED_AWS",
+  "max_rss_kib": 21984
+}

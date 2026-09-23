@@ -1,0 +1,36 @@
+{
+  "CommandId": "cfbb0c8e-83eb-41f0-973e-1e7eeb6d30a2",
+  "InstanceId": "i-00787ea718c2631ea",
+  "Comment": "",
+  "DocumentName": "AWS-RunShellScript",
+  "DocumentVersion": "$DEFAULT",
+  "PluginName": "aws:runShellScript",
+  "ResponseCode": 0,
+  "ExecutionStartDateTime": "2026-09-23T13:25:58.697Z",
+  "ExecutionElapsedTime": "PT0.089S",
+  "ExecutionEndDateTime": "2026-09-23T13:25:58.697Z",
+  "Status": "Success",
+  "StatusDetails": "Success",
+  "StandardOutputContent": "               total        used        free      shared  buff/cache   available\nMem:            7819         259        7058           0         501        7331\nSwap:              0           0           0\n   2381       26:26  0.0  1904 timeout 3600 /opt/helm-stage2/venv/bin/python -B records/helm_stage2_checker_20260923/verify_stage2.py compatibility\n   2382       26:26 63.9 42932 /opt/helm-stage2/venv/bin/python -B records/helm_stage2_checker_20260923/verify_stage2.py compatibility\n\nrun001/records/helm_stage2_checker_20260923/run_status.json\n{\"unit_exit\":0,\"benchmark_exit\":0}\n\nrun001/records/helm_stage2_checker_20260923/builder_tests.txt\n......................................                                   [100%]\n- generated xml file: /opt/helm-stage2/run001/records/helm_stage2_checker_20260923/builder_tests.xml -\n110 passed in 17.01s\n\nrun001/records/helm_stage2_checker_20260923/performance.log\nbenchmark 800\nbenchmark 900\n{\"schema\": \"helm.stage2-aws-benchmark/1\", \"questions\": 1000, \"nodes_per_world\": 5, \"worlds_in_each_bank\": 3, \"generated_unique_source_questions\": true, \"maximum_actual_permutations_per_question\": 240, \"total_permutations_checked\": 240000, \"theoretical_six_node_64_world_maximum\": 46080, \"elapsed_seconds\": 23.554114344, \"device\": \"AWS t3.large CPU; one process; CPUQuota=100%\", \"local_cpu_measurement\": \"NOT_RUN_OWNER_SELECTED_AWS\", \"max_rss_kib\": 21984}\n\nrun001/records/helm_stage2_checker_20260923/compatibility.log\nrecords 501\nrecords 526\nrecords 551\n",
+  "StandardOutputUrl": "",
+  "StandardErrorContent": "",
+  "StandardErrorUrl": "",
+  "CloudWatchOutputConfig": {
+    "CloudWatchLogGroupName": "",
+    "CloudWatchOutputEnabled": false
+  },
+  "ResponseMetadata": {
+    "RequestId": "852512f1-1290-48ef-9aec-272fa2411be1",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "server": "Server",
+      "date": "Wed, 23 Sep 2026 13:25:59 GMT",
+      "content-type": "application/x-amz-json-1.1",
+      "content-length": "2135",
+      "connection": "keep-alive",
+      "x-amzn-requestid": "852512f1-1290-48ef-9aec-272fa2411be1",
+      "cache-control": "no-store"
+    },
+    "RetryAttempts": 0
+  }
+}

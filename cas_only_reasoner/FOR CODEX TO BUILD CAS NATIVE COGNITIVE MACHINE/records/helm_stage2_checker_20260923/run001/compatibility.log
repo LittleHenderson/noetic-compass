@@ -1,0 +1,36 @@
+records 1
+records 26
+records 51
+records 76
+records 101
+records 126
+records 151
+records 176
+records 201
+records 226
+records 251
+records 276
+records 301
+records 326
+records 351
+records 376
+records 401
+records 426
+records 451
+records 476
+records 501
+records 526
+records 551
+helm1 20260917 course_p00 {'incorrect': 534, 'correct': 30}
+helm1 20260917 course_p10 {'correct': 392, 'incorrect': 172}
+helm1 20260918 course_p00 {'correct': 17, 'incorrect': 547}
+helm1 20260918 course_p10 {'correct': 422, 'incorrect': 142}
+helm1 20260919 course_p00 {'incorrect': 544, 'correct': 20}
+helm1 20260919 course_p10 {'correct': 407, 'incorrect': 157}
+helm2 20260917 course_p00 {'incorrect': 542, 'correct': 22}
+helm2 20260917 course_p10 {'correct': 495, 'incorrect': 69}
+helm2 20260918 course_p00 {'incorrect': 560, 'correct': 4}
+helm2 20260918 course_p10 {'correct': 495, 'incorrect': 69}
+helm2 20260919 course_p00 {'correct': 73, 'incorrect': 491}
+helm2 20260919 course_p10 {'correct': 490, 'incorrect': 74}
+{"status": "PASS", "target_records": 564, "slot_plans": 564, "predictions": 6768, "elapsed_seconds": 2727.837589011}

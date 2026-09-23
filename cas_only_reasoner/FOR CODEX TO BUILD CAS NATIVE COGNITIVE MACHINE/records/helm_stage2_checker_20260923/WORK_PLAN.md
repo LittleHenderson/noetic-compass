@@ -30,3 +30,17 @@ No full course reconstruction or retained all-packets cache: stream existing rec
 
 D-1 does not change the public learner's frozen slot import. Larger learned
 inference remains a separately selected integration, not proved by checker tests.
+
+## Recorded resource amendment during run001
+
+CPUCreditBalance fell to approximately 0.005 credits. The builder selected
+paid CPU credits (unlimited mode) under the existing AWS instruction and $1
+budget, without restarting the worker or changing source, CPUQuota=100%,
+MemoryMax=4G, the 3,600-second comparison cap or the two-hour instance limit.
+AWS_JOB.json records the actual time and provider response. A conservative
+additional credit ceiling is $0.384 (two vCPUs for the entire two hours at
+$0.096/vCPU-hour; actual Linux rate is lower). Combined with $0.1664
+maximum instance time and small disk/IP/storage charges, this remains under
+$1. The completed benchmark used standard credits; do not relabel its timing.
+This is an operator resource selection under standing authorization, not a new
+owner message, signature, model run, or retry.

@@ -1,0 +1,496 @@
+{
+  "schema": "helm.stage2-completed-evidence/1",
+  "sealed_utc": "2026-09-23T13:49:09.972113+00:00",
+  "implementation_commit": "45828c45",
+  "tested_source_commit": "b87fcc150e5818a7b1a4efd11f56b764fa15c219",
+  "prior_checkpoint": "d206b42aa1b68d24f65ab01ec58cc82aad432859",
+  "branch": "codex/helm-stage2-checker-20260923",
+  "source_files": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\checker_v2.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker_v2.py",
+      "bytes": 14078,
+      "sha256_raw": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\answers_v2.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers_v2.py",
+      "bytes": 1492,
+      "sha256_raw": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots_v2.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots_v2.py",
+      "bytes": 20350,
+      "sha256_raw": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\checker.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "bytes": 13934,
+      "sha256_raw": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\answers.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "bytes": 13894,
+      "sha256_raw": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "bytes": 19341,
+      "sha256_raw": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\source.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+      "bytes": 20601,
+      "sha256_raw": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\pointer_inputs.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "bytes": 26040,
+      "sha256_raw": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_stage2_checker.py",
+      "relative_path": "research/CAS_META_2_COMPOSITION/tests/test_stage2_checker.py",
+      "bytes": 17727,
+      "sha256_raw": "455aea355f3fd8473b8ab51afe71336cc8f9d73f3afb0d8649b6cb295af9c660"
+    }
+  ],
+  "records": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\.gitattributes",
+      "relative_path": "records/helm_stage2_checker_20260923/.gitattributes",
+      "bytes": 9,
+      "sha256_raw": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\.gitignore",
+      "relative_path": "records/helm_stage2_checker_20260923/.gitignore",
+      "bytes": 10,
+      "sha256_raw": "971f60bfad85992f1d12c4ad612c64a899ced916250000418df0e6948c3fdfa6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\AWS_CLEANUP.json",
+      "relative_path": "records/helm_stage2_checker_20260923/AWS_CLEANUP.json",
+      "bytes": 2973,
+      "sha256_raw": "6d0d187371a57e2bda409c72c9bc9cb8c18f2308bc72a64b8ea998557188c7ea"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\AWS_CREDIT_INSPECTION.json",
+      "relative_path": "records/helm_stage2_checker_20260923/AWS_CREDIT_INSPECTION.json",
+      "bytes": 3682,
+      "sha256_raw": "66bae034496d67faa901755703fea136dfea8d607dda7e8e16f790cfd3d9d4aa"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\AWS_JOB.json",
+      "relative_path": "records/helm_stage2_checker_20260923/AWS_JOB.json",
+      "bytes": 4110,
+      "sha256_raw": "d8c669dd8f0cece9dd4d4834e67479b70053b7db16cf30158f37bbbfa0c00ba8"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_preflight.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_preflight.json",
+      "bytes": 2576,
+      "sha256_raw": "504d1ff89c9b42f2d93224bfefdf8b4d7437cc4dcb23ea765c126d0024bdc4ab"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_preflight.sh",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_preflight.sh",
+      "bytes": 134,
+      "sha256_raw": "3b2057685977e87ce8190c7112c9002463297f121fe79d2606c8294d44d3ac90"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress.sh",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress.sh",
+      "bytes": 458,
+      "sha256_raw": "b853da5f682e4b84b1689089d7f481607ced5fff7b2616ca9b4ccb260321e912"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_001.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_001.json",
+      "bytes": 2683,
+      "sha256_raw": "0197e69c089accc8bd0bfdd625bf441f4170100521e2e63d64b8448f1a457b3e"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_002.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_002.json",
+      "bytes": 2708,
+      "sha256_raw": "260178bf10c43ffcd1529288a4d7b5ea7bcc8e09625cce817150d528f89ec63f"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_003.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_003.json",
+      "bytes": 2711,
+      "sha256_raw": "4ea2485a1588c481b38eaa8f00f350b96150a53571496b70d3eea8e1419ef5a4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_004.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_004.json",
+      "bytes": 1462,
+      "sha256_raw": "8ef30f0ff1a1e08ae00ab6134354d7a48895706284c18cc97e5a49b938fc98ef"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_005.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_005.json",
+      "bytes": 1458,
+      "sha256_raw": "a0dfd17c2717fbc80f39c9b82ed15cd57ba0fa348656a4b0bebbe22b2652cf8a"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_006.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_006.json",
+      "bytes": 1458,
+      "sha256_raw": "68a281a292aae5e9e99becaf4fcfb0b0f6da7d235dade688531b28ce8f00a059"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_007.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_007.json",
+      "bytes": 1458,
+      "sha256_raw": "3f7affe954780987c936becbd7e552c578263223551c87b385e290f1a68ba797"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_008.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_008.json",
+      "bytes": 1457,
+      "sha256_raw": "c1723aeec8354b881f09da5379afeb6402a4a88ed67cda1a27df781145bfa8e2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_009.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_009.json",
+      "bytes": 1457,
+      "sha256_raw": "4b0804bfc49e13867cdd3fcda687c0ad4dc688a157a04ebdea37375d28aca89c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_010.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_010.json",
+      "bytes": 1458,
+      "sha256_raw": "62f61ebd79134aa158f5d66ebc8e5f15494f3cff3f0e687dc1527304871a447b"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_011.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_011.json",
+      "bytes": 1458,
+      "sha256_raw": "a51d86ef20a03d0a50cf268e04d80b0e9ed189bea2272796e80f37e6819b37bc"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_012.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_012.json",
+      "bytes": 1459,
+      "sha256_raw": "3dfeefdde88a910f846cdfcd99cae8fffe37873fa20a851d77c7fa6ae23bbbe4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_013.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_013.json",
+      "bytes": 1459,
+      "sha256_raw": "b98632cecb801511e76a824c1714acefaa3f39f0588568e38804661ea24a01fb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_014.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_014.json",
+      "bytes": 1458,
+      "sha256_raw": "8575859501aa1e5c0fa4fa5e6bf179fb3092d7ad16300a72317ae29724dc08bb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_015.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_015.json",
+      "bytes": 1459,
+      "sha256_raw": "09f5786e09fce30dd113ed084c004d72a4251b61fca344a19ac9e4a55d65cda0"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_016.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_016.json",
+      "bytes": 1459,
+      "sha256_raw": "750a5cc897116593975805515148131e9d94ce36ce57e7ab38f3ef017827dd64"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_017.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_017.json",
+      "bytes": 1459,
+      "sha256_raw": "3f0e358b8dece7afc4b23b12eb6507915ca812278df3c12424e5ca2158af4230"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_018.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_018.json",
+      "bytes": 2711,
+      "sha256_raw": "e1c53a52766e5e12e1b147842102251764db0e016b56383539c9411d16374ad9"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_019.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_019.json",
+      "bytes": 1465,
+      "sha256_raw": "b9f87db5842743e7115854feac1e75b622e52a753a6f0ab00fb78a030a33cab4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_020.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_020.json",
+      "bytes": 1465,
+      "sha256_raw": "db3be21005d386f6a09bbd93fcc62701666747f70016c3de69bb75ab98f8f65c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_021.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_021.json",
+      "bytes": 1470,
+      "sha256_raw": "b67a551e0b42449afd411bb06d265d365c8dc58350d324a81809eaae3ee2c205"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_022.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_022.json",
+      "bytes": 1470,
+      "sha256_raw": "f99eced89e15346bbc2a51cb647370d3c53cb827d5ddbac9685c937f31d1ab85"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_023.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_023.json",
+      "bytes": 1467,
+      "sha256_raw": "c5d8e201ec6a40cecde9641714b64dddee25eaa2b9c2f5a9f7e4fcada2a2ec14"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_024.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_024.json",
+      "bytes": 1467,
+      "sha256_raw": "c7810da0d282d0733092c54cb2b85cc58f7193227e53bea8f3396dc2bbfe5695"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_025.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_025.json",
+      "bytes": 1471,
+      "sha256_raw": "95fcf1a2c710f54fac0ee66e4db9fd7432563da0634d5f5b1926c55a12b3f04f"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_026.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_026.json",
+      "bytes": 1471,
+      "sha256_raw": "43d8daa21fc0876fc189e81969bbc911971b61ff70014aed450bcb10a9be0d85"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_027.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_027.json",
+      "bytes": 1472,
+      "sha256_raw": "afe28198fa2f7f86fd05fd004f0d19cf044030d63b729d6a397696520ccf4860"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_028.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_028.json",
+      "bytes": 1472,
+      "sha256_raw": "d84970e2fd2e2446cde5c3793bd1abca91eab312bae8b7e4fffb807d304226c9"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_029.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_029.json",
+      "bytes": 1472,
+      "sha256_raw": "218cc6a6a6e49ccc9cf5a5d6ece7ee92eedde38228b6b8e22c44440d107b6d26"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_030.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_030.json",
+      "bytes": 1465,
+      "sha256_raw": "78a43339026d02aa16a001bee484088cab32c48245208b11bb9e90f268c86614"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_progress_compact.sh",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_progress_compact.sh",
+      "bytes": 441,
+      "sha256_raw": "892182771fe098b36da2b7e59273500b2aa77f6f6e0baa2fa19a9b35e88e0749"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\AWS_RESOURCE_VERIFICATION.json",
+      "relative_path": "records/helm_stage2_checker_20260923/AWS_RESOURCE_VERIFICATION.json",
+      "bytes": 207,
+      "sha256_raw": "92d8539cb3c7b92b191669b5b94e08492a8c5db6ba875ef19eccf5ac1e167e1e"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_run_001.sh",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_run_001.sh",
+      "bytes": 2433,
+      "sha256_raw": "39de6d4dadeed960d49dd990dccbdd05b126bd325a4b7b977e24ca49ce7cd479"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\aws_run_001_invocation.json",
+      "relative_path": "records/helm_stage2_checker_20260923/aws_run_001_invocation.json",
+      "bytes": 1462,
+      "sha256_raw": "350b61e2b69f6be46e9058159b8819e0e61f316a9449f9b0e72b56a63f0dd2c9"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\cleanup_aws.py",
+      "relative_path": "records/helm_stage2_checker_20260923/cleanup_aws.py",
+      "bytes": 2653,
+      "sha256_raw": "5ad54d6b328ed10418b785f4fee46a8b69fa53b9e18fbf44ffdddf665a74cd1c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\cloud_control.py",
+      "relative_path": "records/helm_stage2_checker_20260923/cloud_control.py",
+      "bytes": 6459,
+      "sha256_raw": "e5e498d6ea25944ede3305ed6f9f6daa450abee26611e1e56a249017f588c7d3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\collect_results.py",
+      "relative_path": "records/helm_stage2_checker_20260923/collect_results.py",
+      "bytes": 3305,
+      "sha256_raw": "70dbd6537e3d585ce07f17e0cde0348188cd1a8fca41d2e9a6774ad1ef7ac811"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\D1_CHECKER_V2_SPEC_AND_ACCEPTANCE.md",
+      "relative_path": "records/helm_stage2_checker_20260923/D1_CHECKER_V2_SPEC_AND_ACCEPTANCE.md",
+      "bytes": 5480,
+      "sha256_raw": "59d2f2b80032e20265b9df01066a3c56a6455746038f041f521c75a4c341c964"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\HISTORICAL_INPUT_CUSTODY.json",
+      "relative_path": "records/helm_stage2_checker_20260923/HISTORICAL_INPUT_CUSTODY.json",
+      "bytes": 4060,
+      "sha256_raw": "f2d9c85863f3d382e09b05dc7904b525c34e8eb12cb814965b7fc74248a2dc0b"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\INPUT_MANIFEST.json",
+      "relative_path": "records/helm_stage2_checker_20260923/INPUT_MANIFEST.json",
+      "bytes": 95888,
+      "sha256_raw": "f1d28a48b9c72099a5caf0e62c2e116871bacd51f62d2e427c3e9ee6a6c2d943"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\OWNER_DECISION_D1_20260923.md",
+      "relative_path": "records/helm_stage2_checker_20260923/OWNER_DECISION_D1_20260923.md",
+      "bytes": 1283,
+      "sha256_raw": "a19728fbfb7d853c7530948bce722ddcd73bcb979a357a47f06c0332ca21ceac"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\PERSISTENT_AWS_NOTES.json",
+      "relative_path": "records/helm_stage2_checker_20260923/PERSISTENT_AWS_NOTES.json",
+      "bytes": 1866,
+      "sha256_raw": "05a1921f9c63ba429c8ced8e40ae12ce70605007e1854cb00e5a27215617b218"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\PROTECTED_FILE_VERIFICATION.json",
+      "relative_path": "records/helm_stage2_checker_20260923/PROTECTED_FILE_VERIFICATION.json",
+      "bytes": 1125,
+      "sha256_raw": "1ef6fe724c5bbe7a2247fe23089d3f3286dffed44971bcea5af248e199364434"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\README.md",
+      "relative_path": "records/helm_stage2_checker_20260923/README.md",
+      "bytes": 6698,
+      "sha256_raw": "84a4b755289b47d9f493ca90755a91d8f144838d36060766c0c8bcfd41715120"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\builder_tests.txt",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/builder_tests.txt",
+      "bytes": 284,
+      "sha256_raw": "4a89a1a4a75fef6afd6c6124783c4e1129d11c486b5f5ee586c1fd168bcd2e1d"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\builder_tests.xml",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/builder_tests.xml",
+      "bytes": 19824,
+      "sha256_raw": "762a2934179d30a4aa82c0921972c38fd4c338c62585769be20f23bebb3290c1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\compatibility.json",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/compatibility.json",
+      "bytes": 13277,
+      "sha256_raw": "b4d697c7d32bc8c768543354eda8ede7215159a2799115eac5de695192c128e4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\compatibility.log",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/compatibility.log",
+      "bytes": 1110,
+      "sha256_raw": "6821e0e1f7e57582261436c20afdc81c361c6b619c0f2939f432e539346a5b99"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\INPUT_MANIFEST.json",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/INPUT_MANIFEST.json",
+      "bytes": 95888,
+      "sha256_raw": "f1d28a48b9c72099a5caf0e62c2e116871bacd51f62d2e427c3e9ee6a6c2d943"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\input_verification.log",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/input_verification.log",
+      "bytes": 20,
+      "sha256_raw": "42c4c19c6bb35bdd6891491bb14f380f781d9e22d8816cf67ec0c1d2c0601409"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\performance.json",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/performance.json",
+      "bytes": 481,
+      "sha256_raw": "66d83e3145da12d16a2c0e103b6f87dc227206d3d596d9c63a26b1a8acfc16eb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\performance.log",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/performance.log",
+      "bytes": 593,
+      "sha256_raw": "dd1ca5ea1b860c62a496233e1120394c3f0e0272d18a1ab551a5ad8356e110dc"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\pip-install.log",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/pip-install.log",
+      "bytes": 933,
+      "sha256_raw": "981fac31fce3e3673a8e328c0836265784a320f81086487f53f113345b1b6c5c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\run_status.json",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/run_status.json",
+      "bytes": 58,
+      "sha256_raw": "a2e6b45886ea27c356b4ece644ff5d3faf112d7417b402117e28e1344c6522c9"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\STARTING_POINT.json",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/STARTING_POINT.json",
+      "bytes": 1393,
+      "sha256_raw": "9720d2dd1fc0f46e2cc790df3d10793bb5373ed1bcad4982b6746db6e65c28d0"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001\\verify_stage2.py",
+      "relative_path": "records/helm_stage2_checker_20260923/run001/verify_stage2.py",
+      "bytes": 8756,
+      "sha256_raw": "d124953f3562aad8355a647b6072cc5ca330c34d5de634b1b2ffbaf290144811"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\seal_evidence.py",
+      "relative_path": "records/helm_stage2_checker_20260923/seal_evidence.py",
+      "bytes": 1954,
+      "sha256_raw": "a28e88eb4383a4d19923df23884b5329fc019bf3112ade59d36485aaad15c1c2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\STARTING_POINT.json",
+      "relative_path": "records/helm_stage2_checker_20260923/STARTING_POINT.json",
+      "bytes": 1393,
+      "sha256_raw": "9720d2dd1fc0f46e2cc790df3d10793bb5373ed1bcad4982b6746db6e65c28d0"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\TEST_ACCOUNTING.json",
+      "relative_path": "records/helm_stage2_checker_20260923/TEST_ACCOUNTING.json",
+      "bytes": 751,
+      "sha256_raw": "0c70f0f66191d08bd15278db0f0746b417603c8eb1efad62e114610ecf7bdaec"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\verify_stage2.py",
+      "relative_path": "records/helm_stage2_checker_20260923/verify_stage2.py",
+      "bytes": 8756,
+      "sha256_raw": "d124953f3562aad8355a647b6072cc5ca330c34d5de634b1b2ffbaf290144811"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\WORK_PLAN.md",
+      "relative_path": "records/helm_stage2_checker_20260923/WORK_PLAN.md",
+      "bytes": 3048,
+      "sha256_raw": "453dd25691cd5ced4197ea2f051c1093594056c87f11d7760839d479ccd42b26"
+    }
+  ],
+  "transport_archives_local_only": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\input_bundle.tar.gz",
+      "relative_path": "records/helm_stage2_checker_20260923/input_bundle.tar.gz",
+      "bytes": 9483443,
+      "sha256_raw": "a9ef9062801fd6657f6c39be2a9dac3ac7f464e14c17a96d1265fff67d1d8d05"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_stage2_checker_20260923\\run001-results.tar.gz",
+      "relative_path": "records/helm_stage2_checker_20260923/run001-results.tar.gz",
+      "bytes": 20801,
+      "sha256_raw": "078fdb3612248d45786f5f3e64da4c0c4a73ecb1db27fe2b9f2a38c2e149d965"
+    }
+  ],
+  "independent_acceptance": "OPEN_CLAUDE_OWNED",
+  "scope": "Builder CPU checks and AWS cleanup only. No neural model execution or new learning result."
+}

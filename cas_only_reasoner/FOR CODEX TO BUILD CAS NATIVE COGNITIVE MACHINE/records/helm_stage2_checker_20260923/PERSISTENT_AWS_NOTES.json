@@ -1,0 +1,36 @@
+{
+  "owner_quote": "use aws as there is only 354 mb of 16 gbs locally",
+  "scope": "standing future execution preference; reported memory snapshot, not current telemetry",
+  "locations": [
+    {
+      "path": "C:/Users/wakil/.codex/AGENTS.md",
+      "sha256_raw": "ff2d22cf73b1c4910be87143d7622eca86ab28f98afedb173bdbe1aa5f49ad33",
+      "contains_owner_quote": true
+    },
+    {
+      "path": "C:/Users/wakil/.claude/CLAUDE.md",
+      "sha256_raw": "ab1f71826923c63d869ed23fcb6eb8c3dc527e7c914acc151fd59368b1b6be66",
+      "contains_owner_quote": true
+    },
+    {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/AGENTS.md",
+      "sha256_raw": "9e6baca3f4cb564f41f1d7f88752cc166a1e71fab6a0b5c3a204c60c0854f8e7",
+      "contains_owner_quote": true
+    },
+    {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/AGENTS.md",
+      "sha256_raw": "82e501bbab06a4c5f6949f9772cceb2eaf8eb0335a30fc7cbd3c27f829f2f986",
+      "contains_owner_quote": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\AGENTS.md",
+      "sha256_raw": "4b36cbc853749915c8c29c7ca30fdee8e692e1420d50da5bf465b6255212c8a2",
+      "contains_owner_quote": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-integrated-repairs\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\AWS_EXECUTION_PREFERENCE_20260923.md",
+      "sha256_raw": "b7ef4b5a1f1ba8f951a8a9ad91bd566eb996e27df7f487ef522579e5f1578268",
+      "contains_owner_quote": true
+    }
+  ]
+}

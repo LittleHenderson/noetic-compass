@@ -1,0 +1,24 @@
+{
+  "scope": "two selected files; filename census is not repository-wide pytest collection",
+  "test_functions": 40,
+  "test_cases": 110,
+  "passed": 110,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "new_functions": 18,
+  "new_cases": 68,
+  "existing_functions": 22,
+  "existing_cases": 42,
+  "loaded_test_files": [
+    "research.CAS_META_2_COMPOSITION.tests.test_stage2_checker",
+    "research.CAS_META_2_COMPOSITION.tests.test_typed_teaching_checker"
+  ],
+  "tracked_test_filename_count": 1076,
+  "unloaded_test_filename_count": 1074,
+  "frozen_profile_matches_both_original_anchors": true,
+  "accepted_answer_records": 564,
+  "slot_plans": 564,
+  "historical_prediction_checks": 6768,
+  "compatibility_status": "PASS"
+}

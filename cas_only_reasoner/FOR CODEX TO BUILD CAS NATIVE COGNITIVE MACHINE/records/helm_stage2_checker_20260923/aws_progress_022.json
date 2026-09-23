@@ -1,0 +1,36 @@
+{
+  "CommandId": "7576ce98-c88c-47bb-9efc-906eb789f9d9",
+  "InstanceId": "i-00787ea718c2631ea",
+  "Comment": "",
+  "DocumentName": "AWS-RunShellScript",
+  "DocumentVersion": "$DEFAULT",
+  "PluginName": "aws:runShellScript",
+  "ResponseCode": 0,
+  "ExecutionStartDateTime": "2026-09-23T13:32:38.337Z",
+  "ExecutionElapsedTime": "PT0.059S",
+  "ExecutionEndDateTime": "2026-09-23T13:32:38.337Z",
+  "Status": "Success",
+  "StatusDetails": "Success",
+  "StandardOutputContent": "{\"status\": \"RUNNING\", \"target_records\": 564, \"slot_plans\": 564, \"predictions\": 1128, \"unique_check_inputs\": 475, \"reused_identical_check_inputs\": 653, \"elapsed_seconds\": 1878.1547270859999, \"target_mismatches\": [], \"witness_mismatches\": [], \"slot_mismatches\": [], \"check_mismatches\": []}\n",
+  "StandardOutputUrl": "",
+  "StandardErrorContent": "",
+  "StandardErrorUrl": "",
+  "CloudWatchOutputConfig": {
+    "CloudWatchLogGroupName": "",
+    "CloudWatchOutputEnabled": false
+  },
+  "ResponseMetadata": {
+    "RequestId": "09719697-7adc-45d0-9cc1-32dfcfd0e9fb",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "server": "Server",
+      "date": "Wed, 23 Sep 2026 13:32:39 GMT",
+      "content-type": "application/x-amz-json-1.1",
+      "content-length": "895",
+      "connection": "keep-alive",
+      "x-amzn-requestid": "09719697-7adc-45d0-9cc1-32dfcfd0e9fb",
+      "cache-control": "no-store"
+    },
+    "RetryAttempts": 0
+  }
+}

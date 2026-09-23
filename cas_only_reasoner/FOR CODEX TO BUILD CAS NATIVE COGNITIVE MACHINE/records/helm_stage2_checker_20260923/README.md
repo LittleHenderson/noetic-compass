@@ -17,8 +17,18 @@ codex/helm-stage2-checker-20260923. Prior checkpoint d206b42a is preserved.
   bank, 23.554114344 seconds. Maximum 240 actual permutations per question;
   240,000 in total. This is AWS timing, not laptop timing. The theoretical
   six-node/64-world ceiling is 46,080 permutations per question.
-- Complete historical comparison: RUNNING. The final receipt is authoritative;
-  no complete compatibility claim is made by this interim document.
+- Complete historical comparison: PASS. All 564 records have identical accepted
+  answers, witnesses and coverage; all 564 slot plans have identical canonical
+  bytes. All 6,768 historical prediction decisions agree. There are zero
+  mismatches. This took 2,727.837589011 seconds on AWS.
+- The prediction comparison made 1,290 fresh exact-input checks with each checker
+  and reused 5,478 identical inputs. Target derivation covered 244 unique inputs
+  across the 564 records. These counts are not additional pytest test cases.
+- The frozen profile digest matches both original historical anchors. All 12
+  transferred prediction files match those anchors' original raw hashes.
+- No selected test failed, errored or skipped. Two files were loaded; 1,074 other
+  tracked test filenames were not loaded. This filename census is not a whole
+  repository test collection or claim of full-suite acceptance.
 - Claude's independent A1–A6 acceptance: OPEN. Builder checks do not replace it.
 
 ## Meaning and limits
@@ -50,9 +60,17 @@ Lightweight editing, inspection, transport and receipt download stayed local.
 
 AWS: i-00787ea718c2631ea, us-west-2, t3.large, two vCPUs, 8 GiB RAM;
 one test process, CPU quota one core, worker memory ceiling 4 GiB. Automatic
-shutdown after 120 minutes terminates the instance. CPU credits are standard.
+shutdown after 120 minutes terminates the instance. Unit tests and the benchmark
+used standard CPU credits. At 13:27:03 UTC, after CloudWatch showed a nearly zero
+credit balance, the operator enabled paid credits for the continuing comparison.
+The one-core worker quota, memory/time limits, source and $1 budget stayed fixed.
+AWS_CREDIT_INSPECTION.json and AWS_JOB.json preserve that amendment and its rates.
 See AWS_JOB.json, AWS_RESOURCE_VERIFICATION.json and WORK_PLAN.md for limits,
 actual provider responses, pricing estimate and explicit cleanup status.
+Cleanup is verified complete: instance terminated, disposable volume absent,
+and temporary S3 bucket absent. Downloaded archive SHA256:
+078fdb3612248d45786f5f3e64da4c0c4a73ecb1db27fe2b9f2a38c2e149d965.
+AWS_CLEANUP.json includes the provider responses and archive/S3 integrity check.
 
 INPUT_MANIFEST.json binds transferred source and each historical prediction
 file to exact bytes. Historical predictions come from the retained q4-live
@@ -64,6 +82,15 @@ The compatibility runner streams the 564 original registry records, retaining
 only bounded semantic results and exact-input check reuse. It calls both actual
 checker implementations; it does not replace correctness with a new scoring rule.
 This is a new compatibility run, not a regenerated historical receipt or grader run.
+
+Exact receipts are in run001/builder_tests.xml, run001/builder_tests.txt,
+run001/compatibility.json, run001/compatibility.log, run001/performance.json,
+run001/performance.log, and run001/run_status.json. TEST_ACCOUNTING.json separates
+functions, cases, new/existing coverage and unloaded filenames. OUTPUT_MANIFEST.json
+gives paths and raw SHA256 fingerprints for the acceptance records and source.
+
+Frozen semantic profile: 2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81.
+New semantic profile: b0e565314a91083f8c5559ce1be16fd667e82a52d7dd224de88440bdb0709075.
 
 ## Commands run on AWS
 

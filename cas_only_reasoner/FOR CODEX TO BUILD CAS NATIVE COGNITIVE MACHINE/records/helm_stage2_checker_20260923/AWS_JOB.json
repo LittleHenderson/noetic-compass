@@ -62,5 +62,42 @@
       "script": "records/helm_stage2_checker_20260923/aws_progress_compact.sh",
       "sha256": "892182771fe098b36da2b7e59273500b2aa77f6f6e0baa2fa19a9b35e88e0749"
     }
-  ]
+  ],
+  "credit_mode_amendment": {
+    "selected_utc": "2026-09-23T13:27:03.319465+00:00",
+    "previous": "standard",
+    "selected": "unlimited",
+    "reason": "Measured credit balance near zero; retain existing one-core worker quota and remaining time/resource limits",
+    "conservative_extra_credit_cost_ceiling_usd": "0.384 (2 vCPUs * 2 hours * 0.096, including Windows rate as upper bound; actual Linux rate lower)",
+    "budget_usd_unchanged": 1,
+    "response": {
+      "SuccessfulInstanceCreditSpecifications": [
+        {
+          "InstanceId": "i-00787ea718c2631ea"
+        }
+      ],
+      "UnsuccessfulInstanceCreditSpecifications": [],
+      "ResponseMetadata": {
+        "RequestId": "a555350e-90cb-445b-9c10-5dcc30e96b95",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+          "x-amzn-requestid": "a555350e-90cb-445b-9c10-5dcc30e96b95",
+          "cache-control": "no-cache, no-store",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "vary": "accept-encoding",
+          "content-type": "text/xml;charset=UTF-8",
+          "transfer-encoding": "chunked",
+          "date": "Wed, 23 Sep 2026 13:27:02 GMT",
+          "server": "AmazonEC2"
+        },
+        "RetryAttempts": 0
+      }
+    },
+    "verification": [
+      {
+        "InstanceId": "i-00787ea718c2631ea",
+        "CpuCredits": "unlimited"
+      }
+    ]
+  }
 }
