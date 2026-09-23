@@ -1,0 +1,15 @@
+.......F........................                                         [100%]
+================================== FAILURES ===================================
+___________ test_exposure_is_ordered_seeded_single_example_schedule ___________
+
+    def test_exposure_is_ordered_seeded_single_example_schedule():
+>       assert panel.consumed_indices(10, 20260921, 4) == [4, 3, 7, 5]
+E       assert [2, 5, 4, 7] == [4, 3, 7, 5]
+E         
+E         At index 0 diff: 2 != 4
+E         Use -v to get more diff
+
+research\helm_cas_expression_lab\test_q4_panel_evaluation.py:54: AssertionError
+=========================== short test summary info ===========================
+FAILED research\helm_cas_expression_lab\test_q4_panel_evaluation.py::test_exposure_is_ordered_seeded_single_example_schedule
+1 failed, 31 passed in 1.32s
