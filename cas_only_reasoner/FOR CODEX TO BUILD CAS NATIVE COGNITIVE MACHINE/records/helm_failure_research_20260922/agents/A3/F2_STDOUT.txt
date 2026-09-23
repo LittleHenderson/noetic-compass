@@ -1,0 +1,26 @@
+version,seed,ABSENT/42,DIRECT/8,VIA/3,PARTS/6,ALL/59
+Helm 1.0,20260917,0->0,0->3,0->3,0->1,0->7
+Helm 1.0,20260918,0->1,0->5,0->2,0->1,0->9
+Helm 1.0,20260919,0->0,0->2,0->3,0->1,0->6
+Helm 2.0-experimental,20260917,0->0,0->0,3->2,0->0,3->2
+Helm 2.0-experimental,20260918,10->2,0->7,0->3,0->0,10->12
+Helm 2.0-experimental,20260919,0->2,0->0,0->3,0->1,0->6
+{
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "elapsed_seconds": 0.3133488000021316,
+  "formal_test_functions": 0,
+  "substantive_executions": 1,
+  "repeat_executions": 0,
+  "subjects": 6,
+  "unique_data_packets": 59,
+  "unique_queries": 59,
+  "focus_worlds": 6,
+  "prediction_files": 12,
+  "saved_scoring_crosscheck_files": 12,
+  "prediction_instances": 708,
+  "reach_prediction_instances": 636,
+  "parts_prediction_instances": 72,
+  "model_operations": 0,
+  "exit_status": "completed_no_assertion_failure"
+}
+scoring_disagreements 0

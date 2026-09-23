@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "script_sha256": "D59431BBD137D77C5469DF033B081B8F4E2235F8C3BA54930A8D93F0564721E5",
+  "output_sha256": "2DB1E7257605732BCE7BBD1887ECE77F7C2DF20C05624DD7EF230C1A0CE6FF5D",
+  "command": "C:/Python314/python.exe -B cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/f2_development_classes.py",
+  "workdir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-failure-a3",
+  "python_env": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONIOENCODING": "utf-8"
+  }
+}
