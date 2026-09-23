@@ -1,0 +1,13 @@
+{
+  "peer_research_tree_sha": "d0edf36bf66a4e0eba1fe0bf8acc8557bef7f91e",
+  "imported_tree_sha": "d0edf36bf66a4e0eba1fe0bf8acc8557bef7f91e",
+  "byte_exact_git_tree": true,
+  "source_diff_whitespace_exit": 0,
+  "artifact_diff_whitespace_exit": 2,
+  "artifact_whitespace_explanation": "Preserved pytest failure output contains trailing whitespace; the archived peer evidence has original CRLF bytes. Neither was rewritten to silence formatting checks.",
+  "q4_cli_import_failure": "ModuleNotFoundError: q3_load; fixed by explicit adjacent module path; new prepared manifest003 verified",
+  "q4_test_runtime_failure": "cas-gpu runtime does not contain pytest; final pure tests used C:/Python314/python.exe",
+  "final_q4_cases": 38,
+  "final_total_passed": 842,
+  "final_skipped": 9
+}
