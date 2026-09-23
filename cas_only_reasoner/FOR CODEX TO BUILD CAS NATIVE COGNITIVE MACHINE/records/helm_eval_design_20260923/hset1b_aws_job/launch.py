@@ -6,7 +6,8 @@ Owner decision, in chat, 2026-09-23: "GO WITH YOUR RECOMMENDATION 6 AND 7 NODE" 
 kill switches plus the client watcher, refusal to launch twice.
 
 What differs: a CPU machine (no model, no GPU work); the bundle is built from GIT OBJECTS, not the working tree, so the
-machine gets exactly the committed bytes of three sources:
+machine gets exactly the committed bytes of three sources. HSET-1B reads only frozen/ and claude/; the v2 tree and
+the 12 prediction files are carried over unchanged from the HSET-1A launcher and are never read by this job:
   frozen/  the CNCM tree at Helm 2.0's source 20208c92 (the frozen checker, course and reader)
   v2/      the CNCM tree at Codex's checker-v2 commit 7f85af1e, plus the 12 historical prediction files (from this
            branch's HEAD) that test A2 needs
@@ -39,6 +40,7 @@ ORIGINAL = "20208c923d41c24614504d4ecc2b289ecb66eda8"
 V2_COMMIT = "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d"
 ARCHIVE = pathlib.Path("D:/tksCAS-archive/hset1b_sealed_20260923")
 SALT = ARCHIVE / "salt.hex"
+EXPECTED_SALT_SHA256 = "b3cf84e2828e84a4a2d7a3215830ecd35f9f267d66ba2e560f8b6cc7c70d7f1e"   # committed in BUILD_SPEC_HSET1B_v0_1.md before any build
 CODE_TOPS = ("cncm/", "research/")
 DATA_DIRS = ("records/typed_course_001/", "records/typed_matched_001/development_001/", "schemas/", "spec/")
 DATA_FILES = ("records/typed_interface_001/checks_002/training_tokenizer.json", "records/typed_practice_001/evaluate_gates.py",
@@ -127,6 +129,8 @@ def assemble():
     salt = SALT.read_bytes().strip()
     if len(salt) != 64:
         raise SystemExit("BUNDLE_REFUSED: salt file is not 64 hex characters")
+    if hashlib.sha256(salt).hexdigest() != EXPECTED_SALT_SHA256:
+        raise SystemExit("BUNDLE_REFUSED: the salt is not the one whose sha256 was committed (review finding 1)")
     files = {}
     files.update({"frozen/" + p: b for p, b in frozen.items()})
     files.update({"v2/" + p: b for p, b in v2.items()})
@@ -248,7 +252,7 @@ def main():
               "machine_script_rendered_sha256": hashlib.sha256(script.encode("utf-8")).hexdigest(),
               "custody_note": ("the bundle (with the salt) and the sealed results stay in the private bucket under keys; "
                                "anyone who can read that bucket, or this machine's startup script while its links are "
-                               "valid (4 hours), could rebuild TEST_NEW_5. Claude does not delete them (no permanent "
+                               "valid (4 hours), could rebuild TEST_NEW_6 and TEST_NEW_7. Claude does not delete them (no permanent "
                                "deletion); removing them is an owner decision"),
               "links_stored": "no -- time-limited links are never written to disk"}
     (HERE / "launch_record.json").write_text(json.dumps(record, indent=1), encoding="utf-8", newline="\n")

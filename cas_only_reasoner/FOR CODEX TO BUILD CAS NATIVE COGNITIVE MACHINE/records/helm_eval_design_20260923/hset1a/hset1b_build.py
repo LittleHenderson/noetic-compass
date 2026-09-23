@@ -53,7 +53,8 @@ def _density_edges(rng, n):
 def _tree_edges(rng, n):
     """Generator T: deeper, tree-like shapes. Nodes are placed in a random order; each new node either hangs under an
     earlier node, preferring recent ones (long paths), or, with probability 0.2, becomes a new ROOT pointing at an
-    earlier node (so ABSENT questions exist). Then 0 to 2 random extra forward edges are added. Acyclic by construction."""
+    earlier node (so ABSENT questions exist). Then 0 to 2 random extra forward edges are added. NOT acyclic by construction: a new-root edge plus an extra edge
+    can close a cycle, so sample_class rejects cyclic draws."""
     order = list(range(n))
     rng.shuffle(order)
     edges = set()
@@ -121,9 +122,17 @@ def main():
 
     salt = pathlib.Path(args.salt_file).read_text(encoding="ascii").strip()
     assert len(salt) == 64 and all(ch in "0123456789abcdef" for ch in salt)
+    if args.limit_shapes and salt != "0" * 64:
+        raise SystemExit("REFUSED: --limit-shapes is a smoke option and needs the all-zero throwaway salt (review finding 6)")
     identity = {"builder_sha256_lf": A.lf_sha(__file__), "hset1a_build_sha256_lf": A.lf_sha(HERE / "hset1a_build.py"),
                 "hset_worlds_sha256_lf": A.lf_sha(HERE / "hset_worlds.py"), "oracle_sha256_lf": A.lf_sha(A.ORACLE_DIR / "oracle_isomorphism.py"),
                 "salt_sha256": hashlib.sha256(salt.encode("ascii")).hexdigest(),
+                "frozen_files_sha256_lf": {name: A.lf_sha(root / "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching" / name)
+                                           for name in ("checker.py", "answers.py", "slots.py", "source.py", "pointer_inputs.py",
+                                                        "course.py", "pointer_contract.py", "tokenization.py", "focal.py",
+                                                        "course_plan.py", "practice_contract.py", "matched_contract.py",
+                                                        "worker_contract.py", "input_frames.py")},
+                "face_corpus_sha256_lf": A.lf_sha(root / "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py"),
                 "frozen_checker_profile_digest": checker.checker_profile()["profile_digest"],
                 "python": platform.python_version(), "platform": platform.platform(), "processes": args.processes}
     assert identity["frozen_checker_profile_digest"] == A.FROZEN_CHECKER_PROFILE_ANCHOR
@@ -131,6 +140,9 @@ def main():
     bank = source.freeze_bank(families)
     assert hw.canon(pointer_contract.load_material(root)[0]["bank"]["bank"]) == hw.canon(bank["bank"])
     identity["bank_digest"] = bank["bank"]["bank_digest"]
+    identity["vocabulary_digest"] = hw.sha(vocab)
+    identity["vocabulary_sizes"] = {d: {"kinds": len(v["kinds"]), "labels": len(v["labels"]),
+                                        "declaration_labels": len(v["declaration_labels"])} for d, v in vocab.items()}
 
     # ---- shapes: DEV from a public seed, TEST from the salt, never isomorphic to DEV
     key = lambda s: hw.canon([s[0], [list(e) for e in s[1]]])              # noqa: E731
