@@ -13,4 +13,3 @@ Claude owns the independent acceptance harness, new evaluation cells and final
 test custody. No duplicate experiment, new training run or success-rule decision
 is selected by this handoff. See the full note for A3's same-job T4 control,
 corrected amendment chronology, and the precise acceptance coverage gaps.
-

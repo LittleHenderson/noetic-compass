@@ -123,6 +123,5 @@ out["limits"]=[
     "No peer S3 objects were deleted. No peer worktree edits made.",
     "Empty current EC2 attachments alone do not establish deletion of an unidentified historical peer volume."
 ]
-pathlib.Path(a.out).write_text(json.dumps(out,indent=2)+"\n",encoding="utf-8")
+pathlib.Path(a.out).write_text(json.dumps(out,indent=2)+"\n",encoding="utf-8", newline="\n")
 print(json.dumps({"accounting":out["accounting"],"cloud":out["cloud"],"out":a.out},indent=2))
-

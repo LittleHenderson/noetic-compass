@@ -1,6 +1,6 @@
 {
   "schema": "codex.peer-handoff-files/1",
-  "sealed_utc": "2026-09-23T14:35:42.724774+00:00",
+  "sealed_utc": "2026-09-23T14:36:06.274651+00:00",
   "files": [
     {
       "relative_path": "records/helm_peer_handoff_20260923/.gitattributes",
@@ -9,28 +9,28 @@
     },
     {
       "relative_path": "records/helm_peer_handoff_20260923/inspect_saved_evidence.py",
-      "bytes": 7976,
-      "sha256_raw": "ee6ca957d2b4df0e097046e1c9a9e112ef4af6402436d4dc235eb91ea8762958"
+      "bytes": 7989,
+      "sha256_raw": "1c6c2c06b443b2faa8747df3dc245cf9333acc020be4b4721c15b764262cc10a"
     },
     {
       "relative_path": "records/helm_peer_handoff_20260923/PRESERVED_BUILDER_EVIDENCE.json",
-      "bytes": 24008,
-      "sha256_raw": "255f8d930ac8abcfc03f52295253eaf94c033cca49386005b567f405b2f4aef9"
+      "bytes": 23520,
+      "sha256_raw": "cab65e0eddf0c455b95cd96bb3a025a9a63b73d6f4f2868445320293d363f5f5"
     },
     {
       "relative_path": "records/helm_peer_handoff_20260923/README.md",
-      "bytes": 7889,
-      "sha256_raw": "9bfabcb96529e941231aa3bc88431df77bc411a2793780e30a94640a9cbbf945"
+      "bytes": 7888,
+      "sha256_raw": "f0ba6868cc447ae948e17dca72a892b0bc620a82bc8a31ace72fa8374d729043"
     },
     {
       "relative_path": "records/helm_peer_handoff_20260923/VERIFICATION.json",
-      "bytes": 48821,
-      "sha256_raw": "667bdc97108e809d38cf774b6d4ff3718806eb4e6bae1822b86b05e27c9810ae"
+      "bytes": 47721,
+      "sha256_raw": "8e884effe62e4888e513873fecc7403d0c4187299cf0dc6eb1b5e691421410ce"
     },
     {
       "relative_path": "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_PEER_EVIDENCE_STATUS.md",
-      "bytes": 849,
-      "sha256_raw": "82e56e5e389733ecd8b7600c5660dbfd479aa76d61ad22331d1c22cc3ca8b2f8"
+      "bytes": 848,
+      "sha256_raw": "757a72369d1413a300b05d8388bb1fbe631f116455a05698087269745a37562d"
     },
     {
       "relative_path": "BRAIN_LINEAGE.md",
