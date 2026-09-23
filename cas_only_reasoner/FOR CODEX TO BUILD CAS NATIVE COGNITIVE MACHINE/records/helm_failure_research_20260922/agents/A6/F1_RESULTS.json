@@ -1,0 +1,2986 @@
+{
+  "summary": {
+    "status": "COMPLETE",
+    "preregistration_commit_prefix": "259ed0be",
+    "dispatch_integration_commit_prefix": "5c128a33",
+    "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+    "python": "3.14.0",
+    "probe_executions": 1,
+    "repeat_executions": 0,
+    "test_functions": 0,
+    "seed_cases": 2,
+    "unique_query_cases": 2,
+    "input_record_cases": 5,
+    "saved_prediction_instances": 10,
+    "all_finite": true,
+    "all_candidates_available": true,
+    "decoder_discrepancies": 0,
+    "classifications": {
+      "CORRECT_SELECTION": 5,
+      "WRONG_LEARNED_RANKING": 5
+    },
+    "elapsed_seconds": 0.13131100000464357,
+    "neural_execution": false,
+    "implementation": "Independent stdlib translation; no project-module imports, historical decoder execution, or reconstruction of model-generated logits.",
+    "scope_limit": "Full model-packet and slot-plan digest reconstruction not repeated; original candidate inventory, score coverage, chosen symbol, answer assembly, and exact tie rule checked for these ten instances only."
+  },
+  "input_fingerprints": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_course_001\\checks_002\\public_course.json": {
+      "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+      "bytes": 4165195
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip": {
+      "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "bytes": 5977155
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip": {
+      "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "bytes": 5977155
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_predictions.json": {
+      "sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+      "bytes": 1776785
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_predictions.json": {
+      "sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+      "bytes": 1823627
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json": {
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "bytes": 1815272
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json": {
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "bytes": 1819016
+    }
+  },
+  "manifest_sha256": "1ddf793e5cd6a77cdcc843b089c26b9a880f268ac556d22d40cdbb45e9874101",
+  "source_receipts": [
+    {
+      "seed": 20260917,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "lines": [
+        {
+          "number": 135,
+          "text": "def answer_space(public, query):"
+        },
+        {
+          "number": 136,
+          "text": "    \"\"\"All syntactic choices; excludes no answer because of graph correctness."
+        },
+        {
+          "number": 137,
+          "text": ""
+        },
+        {
+          "number": 138,
+          "text": "    Edges are all node pairs, including self-pairs, not the declared contains"
+        },
+        {
+          "number": 139,
+          "text": "    subset. Analogy includes the entire frozen bank, not matching graphs only."
+        },
+        {
+          "number": 140,
+          "text": "    \"\"\""
+        },
+        {
+          "number": 141,
+          "text": "    validate_query(public, query)"
+        },
+        {
+          "number": 142,
+          "text": "    worlds = _worlds(public)"
+        },
+        {
+          "number": 143,
+          "text": "    nodes = _nodes(worlds[query[\"focus_world_id\"]])"
+        },
+        {
+          "number": 144,
+          "text": "    kind = query[\"kind\"]"
+        },
+        {
+          "number": 145,
+          "text": "    inventory = {}"
+        },
+        {
+          "number": 146,
+          "text": "    if kind == \"role_set\":"
+        },
+        {
+          "number": 147,
+          "text": "        inventory = {\"role_ids\": list(ROLE_IDS),"
+        },
+        {
+          "number": 148,
+          "text": "                     \"statuses\": [\"INSUFFICIENT\", \"UNIQUE\", \"AMBIGUOUS\"]}"
+        },
+        {
+          "number": 149,
+          "text": "    elif kind == \"definition\":"
+        },
+        {
+          "number": 150,
+          "text": "        inventory = {\"whole_refs\": nodes,"
+        },
+        {
+          "number": 151,
+          "text": "                     \"kind_refs\": [declaration_ref(w, \"kind\") for w in sorted(worlds)],"
+        },
+        {
+          "number": 152,
+          "text": "                     \"function_refs\": [declaration_ref(w, \"function\") for w in sorted(worlds)]}"
+        },
+        {
+          "number": 153,
+          "text": "    elif kind == \"context\":"
+        },
+        {
+          "number": 154,
+          "text": "        inventory = {\"setting_refs\": [declaration_ref(w, \"setting\") for w in sorted(worlds)],"
+        },
+        {
+          "number": 155,
+          "text": "                     \"participant_refs\": nodes}"
+        },
+        {
+          "number": 156,
+          "text": "    elif kind == \"analogy\":"
+        },
+        {
+          "number": 157,
+          "text": "        inventory = {\"world_ids\": list(public[\"bank\"][\"world_ids\"]), \"no_match_allowed\": True}"
+        },
+        {
+          "number": 158,
+          "text": "    elif kind == \"correspondence\":"
+        },
+        {
+          "number": 159,
+          "text": "        inventory = {\"source_nodes\": nodes,"
+        },
+        {
+          "number": 160,
+          "text": "                     \"target_nodes\": _nodes(worlds[query[\"arguments\"][\"target_world_id\"]]),"
+        },
+        {
+          "number": 161,
+          "text": "                     \"no_match_allowed\": True}"
+        },
+        {
+          "number": 162,
+          "text": "    elif kind == \"parts\":"
+        },
+        {
+          "number": 163,
+          "text": "        inventory = {\"node_refs\": nodes}"
+        },
+        {
+          "number": 164,
+          "text": "    elif kind == \"edge_account\":"
+        },
+        {
+          "number": 165,
+          "text": "        inventory = {\"edge_pairs\": [[a, b] for a in nodes for b in nodes],"
+        },
+        {
+          "number": 166,
+          "text": "                     \"order\": \"LEXICAL_REFERENCE_PAIR_SERIALIZATION_NOT_PROCESS\"}"
+        },
+        {
+          "number": 167,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 168,
+          "text": "        inventory = {\"states\": [\"ABSENT\", \"DIRECT\", \"VIA\"], \"via_refs\": nodes}"
+        },
+        {
+          "number": 169,
+          "text": "    return {\"schema\": SPACE_SCHEMA, \"query_id\": query[\"query_id\"],"
+        },
+        {
+          "number": 236,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 237,
+          "text": "        _closed(value, {\"state\", \"via\"}, \"TYPED_REACH_FIELDS\")"
+        },
+        {
+          "number": 238,
+          "text": "        _require(type(value[\"state\"]) is str and value[\"state\"] in inv[\"states\"], \"TYPED_REACH_STATE\")"
+        },
+        {
+          "number": 239,
+          "text": "        if value[\"state\"] == \"VIA\":"
+        },
+        {
+          "number": 240,
+          "text": "            _member(value[\"via\"], inv[\"via_refs\"], \"TYPED_REACH_VIA\")"
+        },
+        {
+          "number": 241,
+          "text": "        else:"
+        },
+        {
+          "number": 242,
+          "text": "            _require(value[\"via\"] is None, \"TYPED_REACH_NON_VIA\")"
+        },
+        {
+          "number": 243,
+          "text": ""
+        },
+        {
+          "number": 244,
+          "text": ""
+        },
+        {
+          "number": 245,
+          "text": "def make_answer(public, query, payload):"
+        },
+        {
+          "number": 246,
+          "text": "    \"\"\"Wrap caller prediction; syntactic admission only.\"\"\""
+        },
+        {
+          "number": 247,
+          "text": "    space = answer_space(public, query)"
+        }
+      ]
+    },
+    {
+      "seed": 20260917,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "lines": [
+        {
+          "number": 28,
+          "text": "DECISION_CONTRACT = {"
+        },
+        {
+          "number": 29,
+          "text": "    \"independent\": \"argmax over each slot's declared symbol order; first wins exact ties\","
+        },
+        {
+          "number": 30,
+          "text": "    \"correspondence\": \"NO_MATCH log probability = logsoftmax(mode)[NO_MATCH]; mapping log probability = logsoftmax(mode)[MAPPING] + sum(assigned node logits) - logsumexp(sum(assigned node logits) over ALL syntactic bijections)\","
+        },
+        {
+          "number": 31,
+          "text": "    \"correspondence_forced\": \"No syntactic bijections: NO_MATCH log probability 0; report forced decision\","
+        },
+        {
+          "number": 32,
+          "text": "    \"candidate_order\": \"NO_MATCH first; then all target-ref permutations in lexical order against lexical source refs\","
+        },
+        {
+          "number": 33,
+          "text": "    \"candidate_ties\": \"first candidate wins exact scalar ties\","
+        },
+        {
+          "number": 34,
+          "text": "    \"score_scalar\": \"finite exact Python int or float, excluding bool; absolute value <= 1000000\","
+        },
+        {
+          "number": 35,
+          "text": "    \"loss_contract\": \"field mean, then task mean, then batch mean; correspondence is ONE whole-candidate valid-set field, not node marginals; membership binary loss and private valid-set loss are worker work, not implemented here\","
+        },
+        {
+          "number": 36,
+          "text": "    \"semantic_repair\": False,"
+        },
+        {
+          "number": 54,
+          "text": ""
+        },
+        {
+          "number": 55,
+          "text": "def alias_table(public):"
+        },
+        {
+          "number": 56,
+          "text": "    source.validate_public(public)"
+        },
+        {
+          "number": 57,
+          "text": "    return {\"worlds\": [{\"alias\": \"W%d\" % i, \"world_id\": world[\"world_id\"],"
+        },
+        {
+          "number": 58,
+          "text": "        \"nodes\": [{\"alias\": \"N%d\" % j, \"ref\": ref}"
+        },
+        {
+          "number": 59,
+          "text": "                  for j, ref in enumerate(sorted(node[\"ref\"] for node in world[\"nodes\"]))]}"
+        },
+        {
+          "number": 60,
+          "text": "        for i, world in enumerate(sorted(public[\"worlds\"], key=lambda row: row[\"world_id\"]))]}"
+        },
+        {
+          "number": 63,
+          "text": "def _compile_slots_uncached(packet):"
+        },
+        {
+          "number": 64,
+          "text": "    \"\"\"Compile all syntactic slots from the closed learner-visible packet.\"\"\""
+        },
+        {
+          "number": 65,
+          "text": "    checked = course.validate_model_packet(packet)"
+        },
+        {
+          "number": 66,
+          "text": "    public, record = checked[\"source\"], checked[\"record\"]"
+        },
+        {
+          "number": 67,
+          "text": "    query = record[\"query\"]"
+        },
+        {
+          "number": 68,
+          "text": "    inv = answers.answer_space(public, query)[\"inventory\"]"
+        },
+        {
+          "number": 69,
+          "text": "    aliases = alias_table(public)"
+        },
+        {
+          "number": 70,
+          "text": "    world_by_id = {row[\"world_id\"]: row for row in aliases[\"worlds\"]}"
+        },
+        {
+          "number": 71,
+          "text": "    world_alias = {key: row[\"alias\"] for key, row in world_by_id.items()}"
+        },
+        {
+          "number": 72,
+          "text": "    node_alias = {node[\"ref\"]: node[\"alias\"] for row in aliases[\"worlds\"] for node in row[\"nodes\"]}"
+        },
+        {
+          "number": 73,
+          "text": "    focus, kind = query[\"focus_world_id\"], query[\"kind\"]"
+        },
+        {
+          "number": 74,
+          "text": "    target = query[\"arguments\"].get(\"target_world_id\") if kind == \"correspondence\" else None"
+        },
+        {
+          "number": 75,
+          "text": "    packet_digest = digest(checked)"
+        },
+        {
+          "number": 76,
+          "text": "    slots = []"
+        },
+        {
+          "number": 77,
+          "text": "    def add(field, group, coordinates, symbols, *, scope_world=None):"
+        },
+        {
+          "number": 78,
+          "text": "        scope = focus if scope_world is None else scope_world"
+        },
+        {
+          "number": 79,
+          "text": "        body = {\"field\": field, \"group\": group, \"coordinates\": coordinates,"
+        },
+        {
+          "number": 80,
+          "text": "                \"scope_world_id\": scope, \"scope_alias\": world_alias[scope],"
+        },
+        {
+          "number": 81,
+          "text": "                \"symbols\": list(symbols)}"
+        },
+        {
+          "number": 82,
+          "text": "        require(body[\"symbols\"] and len(set(body[\"symbols\"])) == len(body[\"symbols\"])"
+        },
+        {
+          "number": 83,
+          "text": "                and set(body[\"symbols\"]) <= set(SYMBOLS), \"TYPED_SLOT_SYMBOLS\")"
+        },
+        {
+          "number": 84,
+          "text": "        slots.append({\"slot_id\": \"typed-slot-\" + digest({\"packet_digest\": packet_digest, **body}), **body})"
+        },
+        {
+          "number": 106,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 107,
+          "text": "        add(\"reach\", \"reach\", [], [\"ABSENT\", \"DIRECT\", *(\"VIA_\" + node_alias[ref] for ref in inv[\"via_refs\"])])"
+        },
+        {
+          "number": 108,
+          "text": "    require(0 < len(slots) <= 100 and len({row[\"slot_id\"] for row in slots}) == len(slots), \"TYPED_SLOT_BOUND\")"
+        },
+        {
+          "number": 243,
+          "text": "def _check_scores(plan, scores):"
+        },
+        {
+          "number": 244,
+          "text": "    require(type(scores) is dict and set(scores) == {slot[\"slot_id\"] for slot in plan[\"slots\"]}, \"TYPED_SLOT_SCORE_FIELDS\")"
+        },
+        {
+          "number": 245,
+          "text": "    for slot in plan[\"slots\"]:"
+        },
+        {
+          "number": 246,
+          "text": "        row = scores[slot[\"slot_id\"]]"
+        },
+        {
+          "number": 247,
+          "text": "        require(type(row) is dict and set(row) == set(slot[\"symbols\"]), \"TYPED_SLOT_SCORE_SYMBOLS\")"
+        },
+        {
+          "number": 248,
+          "text": "        require(all(type(value) in (int, float) and abs(value) <= MAX_ABS_SCORE and math.isfinite(value)"
+        },
+        {
+          "number": 249,
+          "text": "                    for value in row.values()), \"TYPED_SLOT_SCORE_SCALAR\")"
+        },
+        {
+          "number": 283,
+          "text": "def score_decisions(packet, scores):"
+        },
+        {
+          "number": 284,
+          "text": "    \"\"\"Deterministic scalar reference decoder, with no numeric package or teacher."
+        },
+        {
+          "number": 285,
+          "text": ""
+        },
+        {
+          "number": 286,
+          "text": "    Scores cover every slot/symbol exactly. Hierarchical correspondence scoring"
+        },
+        {
+          "number": 287,
+          "text": "    normalizes over ALL syntactic bijections. Joint MAP includes the declared"
+        },
+        {
+          "number": 288,
+          "text": "    mapping-cardinality prior; it is not a mode-first decoder or a truth check."
+        },
+        {
+          "number": 289,
+          "text": "    \"\"\""
+        },
+        {
+          "number": 290,
+          "text": "    plan = compile_slots(packet)"
+        },
+        {
+          "number": 291,
+          "text": "    _check_scores(plan, scores)"
+        },
+        {
+          "number": 292,
+          "text": "    if plan[\"kind\"] != \"correspondence\":"
+        },
+        {
+          "number": 293,
+          "text": "        return _decision(plan, {slot[\"slot_id\"]: max(slot[\"symbols\"], key=lambda symbol: scores[slot[\"slot_id\"]][symbol])"
+        },
+        {
+          "number": 294,
+          "text": "                                for slot in plan[\"slots\"]})"
+        },
+        {
+          "number": 295,
+          "text": "    winner = max(_candidate_scores(plan, scores), key=lambda row: row[\"log_probability\"])"
+        },
+        {
+          "number": 296,
+          "text": "    return _decision(plan, {}, winner[\"candidate_id\"])"
+        },
+        {
+          "number": 344,
+          "text": "        elif kind == \"reach\":"
+        },
+        {
+          "number": 345,
+          "text": "            symbol = fields[\"reach\"]"
+        },
+        {
+          "number": 346,
+          "text": "            value = {\"state\": \"VIA\" if symbol.startswith(\"VIA_\") else symbol,"
+        },
+        {
+          "number": 347,
+          "text": "                     \"via\": nodes[symbol[4:]] if symbol.startswith(\"VIA_\") else None}"
+        },
+        {
+          "number": 348,
+          "text": "    return answers.make_answer(packet[\"source\"], packet[\"record\"][\"query\"], value)"
+        }
+      ]
+    },
+    {
+      "seed": 20260917,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+      "lines": [
+        {
+          "number": 1446,
+          "text": "    def _reach_options(self, position):"
+        },
+        {
+          "number": 1447,
+          "text": "        \"\"\"The always-available `reach` options: `ABSENT`, `DIRECT`, then one pointer per candidate node.\"\"\""
+        },
+        {
+          "number": 1448,
+          "text": "        torch, model = self.torch, self.model"
+        },
+        {
+          "number": 1449,
+          "text": "        features = self.blocks[position][2]"
+        },
+        {
+          "number": 1450,
+          "text": "        count = self.blocks[position][1]"
+        },
+        {
+          "number": 1451,
+          "text": "        degrees = torch.stack([features[:, IN_DEGREE_SUM_COLUMN].sum(),"
+        },
+        {
+          "number": 1452,
+          "text": "                               features[:, OUT_DEGREE_SUM_COLUMN].sum(),"
+        },
+        {
+          "number": 1453,
+          "text": "                               features[:, IN_DEGREE_SUM_COLUMN].sum() / count,"
+        },
+        {
+          "number": 1454,
+          "text": "                               features[:, OUT_DEGREE_SUM_COLUMN].sum() / count])"
+        },
+        {
+          "number": 1455,
+          "text": "        # HELM 2.0 (F2a): the PAIR the question is about, read from the same `hidden` the pointer options use."
+        },
+        {
+          "number": 1456,
+          "text": "        # A question with no named node contributes a zero vector in that slot, so the width is fixed and the"
+        },
+        {
+          "number": 1457,
+          "text": "        # \"not named\" case is representable rather than absent."
+        },
+        {
+          "number": 1458,
+          "text": "        value = torch.cat((self.query_value, self.worlds[position],"
+        },
+        {
+          "number": 1459,
+          "text": "                           self._pair_states(position), degrees)).reshape(1, -1)"
+        },
+        {
+          "number": 1460,
+          "text": "        # DERIVED, NEVER RESTATED. This reshape used to say `2 * WIDTH + 4`, i.e. the same number the head was"
+        },
+        {
+          "number": 1461,
+          "text": "        # built from -- a check that cannot detect that number being wrong, which is the whole lesson of the"
+        },
+        {
+          "number": 1462,
+          "text": "        # width defects in this module. `-1` plus the head's own `in_features` has no second number to drift."
+        },
+        {
+          "number": 1463,
+          "text": "        require(int(model.reach_option_head[0].in_features) == int(value.shape[1]),"
+        },
+        {
+          "number": 1464,
+          "text": "                \"POINTER_REACH_OPTION_HEAD_WIDTH:%d!=%d\""
+        },
+        {
+          "number": 1465,
+          "text": "                % (int(model.reach_option_head[0].in_features), int(value.shape[1])))"
+        },
+        {
+          "number": 1466,
+          "text": "        return model.reach_option_head(value).reshape(-1)"
+        },
+        {
+          "number": 1558,
+          "text": "            elif field == \"reach\":"
+        },
+        {
+          "number": 1559,
+          "text": "                nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith(\"VIA_N\")]"
+        },
+        {
+          "number": 1560,
+          "text": "                require(symbols[:REACH_OPTION_COUNT] == [\"ABSENT\", \"DIRECT\"]"
+        },
+        {
+          "number": 1561,
+          "text": "                        and symbols[REACH_OPTION_COUNT:] == [\"VIA_N%d\" % rank for rank in nodes],"
+        },
+        {
+          "number": 1562,
+          "text": "                        \"POINTER_REACH_SYMBOLS\")"
+        },
+        {
+          "number": 1563,
+          "text": "                logits = torch.cat((self._reach_options(self.focus_position),"
+        },
+        {
+          "number": 1564,
+          "text": "                                    self._node_options(self.focus_position, nodes)))"
+        }
+      ]
+    },
+    {
+      "seed": 20260919,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "lines": [
+        {
+          "number": 135,
+          "text": "def answer_space(public, query):"
+        },
+        {
+          "number": 136,
+          "text": "    \"\"\"All syntactic choices; excludes no answer because of graph correctness."
+        },
+        {
+          "number": 137,
+          "text": ""
+        },
+        {
+          "number": 138,
+          "text": "    Edges are all node pairs, including self-pairs, not the declared contains"
+        },
+        {
+          "number": 139,
+          "text": "    subset. Analogy includes the entire frozen bank, not matching graphs only."
+        },
+        {
+          "number": 140,
+          "text": "    \"\"\""
+        },
+        {
+          "number": 141,
+          "text": "    validate_query(public, query)"
+        },
+        {
+          "number": 142,
+          "text": "    worlds = _worlds(public)"
+        },
+        {
+          "number": 143,
+          "text": "    nodes = _nodes(worlds[query[\"focus_world_id\"]])"
+        },
+        {
+          "number": 144,
+          "text": "    kind = query[\"kind\"]"
+        },
+        {
+          "number": 145,
+          "text": "    inventory = {}"
+        },
+        {
+          "number": 146,
+          "text": "    if kind == \"role_set\":"
+        },
+        {
+          "number": 147,
+          "text": "        inventory = {\"role_ids\": list(ROLE_IDS),"
+        },
+        {
+          "number": 148,
+          "text": "                     \"statuses\": [\"INSUFFICIENT\", \"UNIQUE\", \"AMBIGUOUS\"]}"
+        },
+        {
+          "number": 149,
+          "text": "    elif kind == \"definition\":"
+        },
+        {
+          "number": 150,
+          "text": "        inventory = {\"whole_refs\": nodes,"
+        },
+        {
+          "number": 151,
+          "text": "                     \"kind_refs\": [declaration_ref(w, \"kind\") for w in sorted(worlds)],"
+        },
+        {
+          "number": 152,
+          "text": "                     \"function_refs\": [declaration_ref(w, \"function\") for w in sorted(worlds)]}"
+        },
+        {
+          "number": 153,
+          "text": "    elif kind == \"context\":"
+        },
+        {
+          "number": 154,
+          "text": "        inventory = {\"setting_refs\": [declaration_ref(w, \"setting\") for w in sorted(worlds)],"
+        },
+        {
+          "number": 155,
+          "text": "                     \"participant_refs\": nodes}"
+        },
+        {
+          "number": 156,
+          "text": "    elif kind == \"analogy\":"
+        },
+        {
+          "number": 157,
+          "text": "        inventory = {\"world_ids\": list(public[\"bank\"][\"world_ids\"]), \"no_match_allowed\": True}"
+        },
+        {
+          "number": 158,
+          "text": "    elif kind == \"correspondence\":"
+        },
+        {
+          "number": 159,
+          "text": "        inventory = {\"source_nodes\": nodes,"
+        },
+        {
+          "number": 160,
+          "text": "                     \"target_nodes\": _nodes(worlds[query[\"arguments\"][\"target_world_id\"]]),"
+        },
+        {
+          "number": 161,
+          "text": "                     \"no_match_allowed\": True}"
+        },
+        {
+          "number": 162,
+          "text": "    elif kind == \"parts\":"
+        },
+        {
+          "number": 163,
+          "text": "        inventory = {\"node_refs\": nodes}"
+        },
+        {
+          "number": 164,
+          "text": "    elif kind == \"edge_account\":"
+        },
+        {
+          "number": 165,
+          "text": "        inventory = {\"edge_pairs\": [[a, b] for a in nodes for b in nodes],"
+        },
+        {
+          "number": 166,
+          "text": "                     \"order\": \"LEXICAL_REFERENCE_PAIR_SERIALIZATION_NOT_PROCESS\"}"
+        },
+        {
+          "number": 167,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 168,
+          "text": "        inventory = {\"states\": [\"ABSENT\", \"DIRECT\", \"VIA\"], \"via_refs\": nodes}"
+        },
+        {
+          "number": 169,
+          "text": "    return {\"schema\": SPACE_SCHEMA, \"query_id\": query[\"query_id\"],"
+        },
+        {
+          "number": 236,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 237,
+          "text": "        _closed(value, {\"state\", \"via\"}, \"TYPED_REACH_FIELDS\")"
+        },
+        {
+          "number": 238,
+          "text": "        _require(type(value[\"state\"]) is str and value[\"state\"] in inv[\"states\"], \"TYPED_REACH_STATE\")"
+        },
+        {
+          "number": 239,
+          "text": "        if value[\"state\"] == \"VIA\":"
+        },
+        {
+          "number": 240,
+          "text": "            _member(value[\"via\"], inv[\"via_refs\"], \"TYPED_REACH_VIA\")"
+        },
+        {
+          "number": 241,
+          "text": "        else:"
+        },
+        {
+          "number": 242,
+          "text": "            _require(value[\"via\"] is None, \"TYPED_REACH_NON_VIA\")"
+        },
+        {
+          "number": 243,
+          "text": ""
+        },
+        {
+          "number": 244,
+          "text": ""
+        },
+        {
+          "number": 245,
+          "text": "def make_answer(public, query, payload):"
+        },
+        {
+          "number": 246,
+          "text": "    \"\"\"Wrap caller prediction; syntactic admission only.\"\"\""
+        },
+        {
+          "number": 247,
+          "text": "    space = answer_space(public, query)"
+        }
+      ]
+    },
+    {
+      "seed": 20260919,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "lines": [
+        {
+          "number": 28,
+          "text": "DECISION_CONTRACT = {"
+        },
+        {
+          "number": 29,
+          "text": "    \"independent\": \"argmax over each slot's declared symbol order; first wins exact ties\","
+        },
+        {
+          "number": 30,
+          "text": "    \"correspondence\": \"NO_MATCH log probability = logsoftmax(mode)[NO_MATCH]; mapping log probability = logsoftmax(mode)[MAPPING] + sum(assigned node logits) - logsumexp(sum(assigned node logits) over ALL syntactic bijections)\","
+        },
+        {
+          "number": 31,
+          "text": "    \"correspondence_forced\": \"No syntactic bijections: NO_MATCH log probability 0; report forced decision\","
+        },
+        {
+          "number": 32,
+          "text": "    \"candidate_order\": \"NO_MATCH first; then all target-ref permutations in lexical order against lexical source refs\","
+        },
+        {
+          "number": 33,
+          "text": "    \"candidate_ties\": \"first candidate wins exact scalar ties\","
+        },
+        {
+          "number": 34,
+          "text": "    \"score_scalar\": \"finite exact Python int or float, excluding bool; absolute value <= 1000000\","
+        },
+        {
+          "number": 35,
+          "text": "    \"loss_contract\": \"field mean, then task mean, then batch mean; correspondence is ONE whole-candidate valid-set field, not node marginals; membership binary loss and private valid-set loss are worker work, not implemented here\","
+        },
+        {
+          "number": 36,
+          "text": "    \"semantic_repair\": False,"
+        },
+        {
+          "number": 54,
+          "text": ""
+        },
+        {
+          "number": 55,
+          "text": "def alias_table(public):"
+        },
+        {
+          "number": 56,
+          "text": "    source.validate_public(public)"
+        },
+        {
+          "number": 57,
+          "text": "    return {\"worlds\": [{\"alias\": \"W%d\" % i, \"world_id\": world[\"world_id\"],"
+        },
+        {
+          "number": 58,
+          "text": "        \"nodes\": [{\"alias\": \"N%d\" % j, \"ref\": ref}"
+        },
+        {
+          "number": 59,
+          "text": "                  for j, ref in enumerate(sorted(node[\"ref\"] for node in world[\"nodes\"]))]}"
+        },
+        {
+          "number": 60,
+          "text": "        for i, world in enumerate(sorted(public[\"worlds\"], key=lambda row: row[\"world_id\"]))]}"
+        },
+        {
+          "number": 63,
+          "text": "def _compile_slots_uncached(packet):"
+        },
+        {
+          "number": 64,
+          "text": "    \"\"\"Compile all syntactic slots from the closed learner-visible packet.\"\"\""
+        },
+        {
+          "number": 65,
+          "text": "    checked = course.validate_model_packet(packet)"
+        },
+        {
+          "number": 66,
+          "text": "    public, record = checked[\"source\"], checked[\"record\"]"
+        },
+        {
+          "number": 67,
+          "text": "    query = record[\"query\"]"
+        },
+        {
+          "number": 68,
+          "text": "    inv = answers.answer_space(public, query)[\"inventory\"]"
+        },
+        {
+          "number": 69,
+          "text": "    aliases = alias_table(public)"
+        },
+        {
+          "number": 70,
+          "text": "    world_by_id = {row[\"world_id\"]: row for row in aliases[\"worlds\"]}"
+        },
+        {
+          "number": 71,
+          "text": "    world_alias = {key: row[\"alias\"] for key, row in world_by_id.items()}"
+        },
+        {
+          "number": 72,
+          "text": "    node_alias = {node[\"ref\"]: node[\"alias\"] for row in aliases[\"worlds\"] for node in row[\"nodes\"]}"
+        },
+        {
+          "number": 73,
+          "text": "    focus, kind = query[\"focus_world_id\"], query[\"kind\"]"
+        },
+        {
+          "number": 74,
+          "text": "    target = query[\"arguments\"].get(\"target_world_id\") if kind == \"correspondence\" else None"
+        },
+        {
+          "number": 75,
+          "text": "    packet_digest = digest(checked)"
+        },
+        {
+          "number": 76,
+          "text": "    slots = []"
+        },
+        {
+          "number": 77,
+          "text": "    def add(field, group, coordinates, symbols, *, scope_world=None):"
+        },
+        {
+          "number": 78,
+          "text": "        scope = focus if scope_world is None else scope_world"
+        },
+        {
+          "number": 79,
+          "text": "        body = {\"field\": field, \"group\": group, \"coordinates\": coordinates,"
+        },
+        {
+          "number": 80,
+          "text": "                \"scope_world_id\": scope, \"scope_alias\": world_alias[scope],"
+        },
+        {
+          "number": 81,
+          "text": "                \"symbols\": list(symbols)}"
+        },
+        {
+          "number": 82,
+          "text": "        require(body[\"symbols\"] and len(set(body[\"symbols\"])) == len(body[\"symbols\"])"
+        },
+        {
+          "number": 83,
+          "text": "                and set(body[\"symbols\"]) <= set(SYMBOLS), \"TYPED_SLOT_SYMBOLS\")"
+        },
+        {
+          "number": 84,
+          "text": "        slots.append({\"slot_id\": \"typed-slot-\" + digest({\"packet_digest\": packet_digest, **body}), **body})"
+        },
+        {
+          "number": 106,
+          "text": "    elif kind == \"reach\":"
+        },
+        {
+          "number": 107,
+          "text": "        add(\"reach\", \"reach\", [], [\"ABSENT\", \"DIRECT\", *(\"VIA_\" + node_alias[ref] for ref in inv[\"via_refs\"])])"
+        },
+        {
+          "number": 108,
+          "text": "    require(0 < len(slots) <= 100 and len({row[\"slot_id\"] for row in slots}) == len(slots), \"TYPED_SLOT_BOUND\")"
+        },
+        {
+          "number": 243,
+          "text": "def _check_scores(plan, scores):"
+        },
+        {
+          "number": 244,
+          "text": "    require(type(scores) is dict and set(scores) == {slot[\"slot_id\"] for slot in plan[\"slots\"]}, \"TYPED_SLOT_SCORE_FIELDS\")"
+        },
+        {
+          "number": 245,
+          "text": "    for slot in plan[\"slots\"]:"
+        },
+        {
+          "number": 246,
+          "text": "        row = scores[slot[\"slot_id\"]]"
+        },
+        {
+          "number": 247,
+          "text": "        require(type(row) is dict and set(row) == set(slot[\"symbols\"]), \"TYPED_SLOT_SCORE_SYMBOLS\")"
+        },
+        {
+          "number": 248,
+          "text": "        require(all(type(value) in (int, float) and abs(value) <= MAX_ABS_SCORE and math.isfinite(value)"
+        },
+        {
+          "number": 249,
+          "text": "                    for value in row.values()), \"TYPED_SLOT_SCORE_SCALAR\")"
+        },
+        {
+          "number": 283,
+          "text": "def score_decisions(packet, scores):"
+        },
+        {
+          "number": 284,
+          "text": "    \"\"\"Deterministic scalar reference decoder, with no numeric package or teacher."
+        },
+        {
+          "number": 285,
+          "text": ""
+        },
+        {
+          "number": 286,
+          "text": "    Scores cover every slot/symbol exactly. Hierarchical correspondence scoring"
+        },
+        {
+          "number": 287,
+          "text": "    normalizes over ALL syntactic bijections. Joint MAP includes the declared"
+        },
+        {
+          "number": 288,
+          "text": "    mapping-cardinality prior; it is not a mode-first decoder or a truth check."
+        },
+        {
+          "number": 289,
+          "text": "    \"\"\""
+        },
+        {
+          "number": 290,
+          "text": "    plan = compile_slots(packet)"
+        },
+        {
+          "number": 291,
+          "text": "    _check_scores(plan, scores)"
+        },
+        {
+          "number": 292,
+          "text": "    if plan[\"kind\"] != \"correspondence\":"
+        },
+        {
+          "number": 293,
+          "text": "        return _decision(plan, {slot[\"slot_id\"]: max(slot[\"symbols\"], key=lambda symbol: scores[slot[\"slot_id\"]][symbol])"
+        },
+        {
+          "number": 294,
+          "text": "                                for slot in plan[\"slots\"]})"
+        },
+        {
+          "number": 295,
+          "text": "    winner = max(_candidate_scores(plan, scores), key=lambda row: row[\"log_probability\"])"
+        },
+        {
+          "number": 296,
+          "text": "    return _decision(plan, {}, winner[\"candidate_id\"])"
+        },
+        {
+          "number": 344,
+          "text": "        elif kind == \"reach\":"
+        },
+        {
+          "number": 345,
+          "text": "            symbol = fields[\"reach\"]"
+        },
+        {
+          "number": 346,
+          "text": "            value = {\"state\": \"VIA\" if symbol.startswith(\"VIA_\") else symbol,"
+        },
+        {
+          "number": 347,
+          "text": "                     \"via\": nodes[symbol[4:]] if symbol.startswith(\"VIA_\") else None}"
+        },
+        {
+          "number": 348,
+          "text": "    return answers.make_answer(packet[\"source\"], packet[\"record\"][\"query\"], value)"
+        }
+      ]
+    },
+    {
+      "seed": 20260919,
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+      "lines": [
+        {
+          "number": 1446,
+          "text": "    def _reach_options(self, position):"
+        },
+        {
+          "number": 1447,
+          "text": "        \"\"\"The always-available `reach` options: `ABSENT`, `DIRECT`, then one pointer per candidate node.\"\"\""
+        },
+        {
+          "number": 1448,
+          "text": "        torch, model = self.torch, self.model"
+        },
+        {
+          "number": 1449,
+          "text": "        features = self.blocks[position][2]"
+        },
+        {
+          "number": 1450,
+          "text": "        count = self.blocks[position][1]"
+        },
+        {
+          "number": 1451,
+          "text": "        degrees = torch.stack([features[:, IN_DEGREE_SUM_COLUMN].sum(),"
+        },
+        {
+          "number": 1452,
+          "text": "                               features[:, OUT_DEGREE_SUM_COLUMN].sum(),"
+        },
+        {
+          "number": 1453,
+          "text": "                               features[:, IN_DEGREE_SUM_COLUMN].sum() / count,"
+        },
+        {
+          "number": 1454,
+          "text": "                               features[:, OUT_DEGREE_SUM_COLUMN].sum() / count])"
+        },
+        {
+          "number": 1455,
+          "text": "        # HELM 2.0 (F2a): the PAIR the question is about, read from the same `hidden` the pointer options use."
+        },
+        {
+          "number": 1456,
+          "text": "        # A question with no named node contributes a zero vector in that slot, so the width is fixed and the"
+        },
+        {
+          "number": 1457,
+          "text": "        # \"not named\" case is representable rather than absent."
+        },
+        {
+          "number": 1458,
+          "text": "        value = torch.cat((self.query_value, self.worlds[position],"
+        },
+        {
+          "number": 1459,
+          "text": "                           self._pair_states(position), degrees)).reshape(1, -1)"
+        },
+        {
+          "number": 1460,
+          "text": "        # DERIVED, NEVER RESTATED. This reshape used to say `2 * WIDTH + 4`, i.e. the same number the head was"
+        },
+        {
+          "number": 1461,
+          "text": "        # built from -- a check that cannot detect that number being wrong, which is the whole lesson of the"
+        },
+        {
+          "number": 1462,
+          "text": "        # width defects in this module. `-1` plus the head's own `in_features` has no second number to drift."
+        },
+        {
+          "number": 1463,
+          "text": "        require(int(model.reach_option_head[0].in_features) == int(value.shape[1]),"
+        },
+        {
+          "number": 1464,
+          "text": "                \"POINTER_REACH_OPTION_HEAD_WIDTH:%d!=%d\""
+        },
+        {
+          "number": 1465,
+          "text": "                % (int(model.reach_option_head[0].in_features), int(value.shape[1])))"
+        },
+        {
+          "number": 1466,
+          "text": "        return model.reach_option_head(value).reshape(-1)"
+        },
+        {
+          "number": 1558,
+          "text": "            elif field == \"reach\":"
+        },
+        {
+          "number": 1559,
+          "text": "                nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith(\"VIA_N\")]"
+        },
+        {
+          "number": 1560,
+          "text": "                require(symbols[:REACH_OPTION_COUNT] == [\"ABSENT\", \"DIRECT\"]"
+        },
+        {
+          "number": 1561,
+          "text": "                        and symbols[REACH_OPTION_COUNT:] == [\"VIA_N%d\" % rank for rank in nodes],"
+        },
+        {
+          "number": 1562,
+          "text": "                        \"POINTER_REACH_SYMBOLS\")"
+        },
+        {
+          "number": 1563,
+          "text": "                logits = torch.cat((self._reach_options(self.focus_position),"
+        },
+        {
+          "number": 1564,
+          "text": "                                    self._node_options(self.focus_position, nodes)))"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "seed": 20260917,
+      "phase": 0,
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+      "slot_id": "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5",
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": "VIA_N3"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 0,
+        "packet_digest": "2c5953ca2a6ab3b7d0b68ead36c50ebe1cb095ab3b1ad4e88fb8371af29ba948",
+        "prediction_id": "typed-prediction-30be79aed2fa64e68d4b3ff6e7af601fc65a81a00ff8ed58d38dbff5140f9b50",
+        "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+        "run_context_digest": "bfee0e7c0a36ed6b7e46b6b32f7d4bd0637fef07464737f403659e601dcb881d",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": {
+            "ABSENT": -0.176187664270401,
+            "DIRECT": -1.070238709449768,
+            "VIA_N0": 3.13063907623291,
+            "VIA_N1": 6.575292587280273,
+            "VIA_N2": 4.761305332183838,
+            "VIA_N3": 6.773494243621826
+          }
+        },
+        "slot_plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N3",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N3"
+      ],
+      "candidate_rank_order": [
+        "VIA_N3",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N0",
+        "ABSENT",
+        "DIRECT"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -0.176187664270401,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": -1.070238709449768,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": 3.13063907623291,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 6.575292587280273,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 4.761305332183838,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 6.773494243621826,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        }
+      ],
+      "selected_raw_score": 6.773494243621826,
+      "correct_raw_score": 6.773494243621826,
+      "correct_strict_rank": 1,
+      "correct_tie_order_rank": 1,
+      "winner_minus_correct": 0.0,
+      "winner_margin_to_runnerup": 0.19820165634155273,
+      "classification": "CORRECT_SELECTION"
+    },
+    {
+      "seed": 20260917,
+      "phase": 10,
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+      "slot_id": "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5",
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": "DIRECT"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 1470,
+        "packet_digest": "2c5953ca2a6ab3b7d0b68ead36c50ebe1cb095ab3b1ad4e88fb8371af29ba948",
+        "prediction_id": "typed-prediction-24a6bfda6de2b9742ec9c647fc23a22f853db7ee22c1bec915dbe861022ef794",
+        "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+        "run_context_digest": "bfee0e7c0a36ed6b7e46b6b32f7d4bd0637fef07464737f403659e601dcb881d",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": {
+            "ABSENT": -6.0152130126953125,
+            "DIRECT": 2.56620717048645,
+            "VIA_N0": -51.93198013305664,
+            "VIA_N1": -47.228187561035156,
+            "VIA_N2": -43.74720001220703,
+            "VIA_N3": -25.31268310546875
+          }
+        },
+        "slot_plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "DIRECT",
+      "translated_answer": {
+        "state": "DIRECT",
+        "via": null
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "DIRECT"
+      ],
+      "candidate_rank_order": [
+        "DIRECT",
+        "ABSENT",
+        "VIA_N3",
+        "VIA_N2",
+        "VIA_N1",
+        "VIA_N0"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -6.0152130126953125,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 2.56620717048645,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": -51.93198013305664,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": -47.228187561035156,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": -43.74720001220703,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": -25.31268310546875,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        }
+      ],
+      "selected_raw_score": 2.56620717048645,
+      "correct_raw_score": -25.31268310546875,
+      "correct_strict_rank": 3,
+      "correct_tie_order_rank": 3,
+      "winner_minus_correct": 27.8788902759552,
+      "winner_margin_to_runnerup": 8.581420183181763,
+      "classification": "WRONG_LEARNED_RANKING"
+    },
+    {
+      "seed": 20260919,
+      "phase": 0,
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": "VIA_N3"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 0,
+        "packet_digest": "077dfaf7bfd3ff32cd08085ae6d4674d9b3dfefdaed519796e95f809ba234546",
+        "prediction_id": "typed-prediction-0fe95368ee3876698ff11a55c470a5f6db9aae3c0dbc0c19d972fbaba69647a3",
+        "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": {
+            "ABSENT": -0.2523500919342041,
+            "DIRECT": 1.2058537006378174,
+            "VIA_N0": -2.2020397186279297,
+            "VIA_N1": 16.086816787719727,
+            "VIA_N2": 5.516077041625977,
+            "VIA_N3": 17.396583557128906
+          }
+        },
+        "slot_plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N3",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N3"
+      ],
+      "candidate_rank_order": [
+        "VIA_N3",
+        "VIA_N1",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT",
+        "VIA_N0"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -0.2523500919342041,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 1.2058537006378174,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": -2.2020397186279297,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 16.086816787719727,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 5.516077041625977,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 17.396583557128906,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        }
+      ],
+      "selected_raw_score": 17.396583557128906,
+      "correct_raw_score": 17.396583557128906,
+      "correct_strict_rank": 1,
+      "correct_tie_order_rank": 1,
+      "winner_minus_correct": 0.0,
+      "winner_margin_to_runnerup": 1.3097667694091797,
+      "classification": "CORRECT_SELECTION"
+    },
+    {
+      "seed": 20260919,
+      "phase": 10,
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": "VIA_N1"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 1470,
+        "packet_digest": "077dfaf7bfd3ff32cd08085ae6d4674d9b3dfefdaed519796e95f809ba234546",
+        "prediction_id": "typed-prediction-7bb4c8df5e79ddd59446df3254d5bb0b2b268ba27a3ed267e67096a8f2bbae1f",
+        "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": {
+            "ABSENT": -4.343050003051758,
+            "DIRECT": 2.3660178184509277,
+            "VIA_N0": 17.353687286376953,
+            "VIA_N1": 26.474693298339844,
+            "VIA_N2": 6.176858425140381,
+            "VIA_N3": 22.808488845825195
+          }
+        },
+        "slot_plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N1",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N1"
+      ],
+      "candidate_rank_order": [
+        "VIA_N1",
+        "VIA_N3",
+        "VIA_N0",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -4.343050003051758,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 2.3660178184509277,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": 17.353687286376953,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 26.474693298339844,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 6.176858425140381,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 22.808488845825195,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        }
+      ],
+      "selected_raw_score": 26.474693298339844,
+      "correct_raw_score": 22.808488845825195,
+      "correct_strict_rank": 2,
+      "correct_tie_order_rank": 2,
+      "winner_minus_correct": 3.6662044525146484,
+      "winner_margin_to_runnerup": 3.6662044525146484,
+      "classification": "WRONG_LEARNED_RANKING"
+    },
+    {
+      "seed": 20260919,
+      "phase": 0,
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": "VIA_N3"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 0,
+        "packet_digest": "bef302831b479a92d9edb2c17d786cd0b1a10df2d65c7f8a96470d0387b1d295",
+        "prediction_id": "typed-prediction-e2a3114e4fbabd106d5ddac13b1b8d625d120ad0f6a7963e2c5ce05ca1d63c38",
+        "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": {
+            "ABSENT": -0.2523500919342041,
+            "DIRECT": 1.2058537006378174,
+            "VIA_N0": -2.2020397186279297,
+            "VIA_N1": 16.086816787719727,
+            "VIA_N2": 5.516077041625977,
+            "VIA_N3": 17.396583557128906
+          }
+        },
+        "slot_plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N3",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N3"
+      ],
+      "candidate_rank_order": [
+        "VIA_N3",
+        "VIA_N1",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT",
+        "VIA_N0"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -0.2523500919342041,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 1.2058537006378174,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": -2.2020397186279297,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 16.086816787719727,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 5.516077041625977,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 17.396583557128906,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        }
+      ],
+      "selected_raw_score": 17.396583557128906,
+      "correct_raw_score": 17.396583557128906,
+      "correct_strict_rank": 1,
+      "correct_tie_order_rank": 1,
+      "winner_minus_correct": 0.0,
+      "winner_margin_to_runnerup": 1.3097667694091797,
+      "classification": "CORRECT_SELECTION"
+    },
+    {
+      "seed": 20260919,
+      "phase": 10,
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": "VIA_N1"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 1470,
+        "packet_digest": "bef302831b479a92d9edb2c17d786cd0b1a10df2d65c7f8a96470d0387b1d295",
+        "prediction_id": "typed-prediction-43fe2b6bcfeac892a10e0e3ed9d7a48105519649f91330ee40a8956d3cf3ceb9",
+        "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": {
+            "ABSENT": -4.343050003051758,
+            "DIRECT": 2.3660178184509277,
+            "VIA_N0": 17.353687286376953,
+            "VIA_N1": 26.474693298339844,
+            "VIA_N2": 6.176858425140381,
+            "VIA_N3": 22.808488845825195
+          }
+        },
+        "slot_plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N1",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N1"
+      ],
+      "candidate_rank_order": [
+        "VIA_N1",
+        "VIA_N3",
+        "VIA_N0",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -4.343050003051758,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 2.3660178184509277,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": 17.353687286376953,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 26.474693298339844,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 6.176858425140381,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 22.808488845825195,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        }
+      ],
+      "selected_raw_score": 26.474693298339844,
+      "correct_raw_score": 22.808488845825195,
+      "correct_strict_rank": 2,
+      "correct_tie_order_rank": 2,
+      "winner_minus_correct": 3.6662044525146484,
+      "winner_margin_to_runnerup": 3.6662044525146484,
+      "classification": "WRONG_LEARNED_RANKING"
+    },
+    {
+      "seed": 20260919,
+      "phase": 0,
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": "VIA_N3"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 0,
+        "packet_digest": "9a7cdd0e62e1ad84e7c4773c3ccf965efae1b7f97e8c3f273e6beab5b09b46f1",
+        "prediction_id": "typed-prediction-c76c0c960eccfcc2a3ccda4ad4d47c5767798367390c2aa37d6e4cb513ef44c9",
+        "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": {
+            "ABSENT": -0.2523500919342041,
+            "DIRECT": 1.2058537006378174,
+            "VIA_N0": -2.2020397186279297,
+            "VIA_N1": 16.086816787719727,
+            "VIA_N2": 5.516077041625977,
+            "VIA_N3": 17.396583557128906
+          }
+        },
+        "slot_plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N3",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N3"
+      ],
+      "candidate_rank_order": [
+        "VIA_N3",
+        "VIA_N1",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT",
+        "VIA_N0"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -0.2523500919342041,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 1.2058537006378174,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": -2.2020397186279297,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 16.086816787719727,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 5.516077041625977,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 17.396583557128906,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        }
+      ],
+      "selected_raw_score": 17.396583557128906,
+      "correct_raw_score": 17.396583557128906,
+      "correct_strict_rank": 1,
+      "correct_tie_order_rank": 1,
+      "winner_minus_correct": 0.0,
+      "winner_margin_to_runnerup": 1.3097667694091797,
+      "classification": "CORRECT_SELECTION"
+    },
+    {
+      "seed": 20260919,
+      "phase": 10,
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": "VIA_N1"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 1470,
+        "packet_digest": "9a7cdd0e62e1ad84e7c4773c3ccf965efae1b7f97e8c3f273e6beab5b09b46f1",
+        "prediction_id": "typed-prediction-51e0de32e8afbd575c3528c31f869c616338bb02b7183c484366d5633d0b5147",
+        "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": {
+            "ABSENT": -4.343050003051758,
+            "DIRECT": 2.3660178184509277,
+            "VIA_N0": 17.353687286376953,
+            "VIA_N1": 26.474693298339844,
+            "VIA_N2": 6.176858425140381,
+            "VIA_N3": 22.808488845825195
+          }
+        },
+        "slot_plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N1",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N1"
+      ],
+      "candidate_rank_order": [
+        "VIA_N1",
+        "VIA_N3",
+        "VIA_N0",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -4.343050003051758,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 2.3660178184509277,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": 17.353687286376953,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 26.474693298339844,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 6.176858425140381,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 22.808488845825195,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        }
+      ],
+      "selected_raw_score": 26.474693298339844,
+      "correct_raw_score": 22.808488845825195,
+      "correct_strict_rank": 2,
+      "correct_tie_order_rank": 2,
+      "winner_minus_correct": 3.6662044525146484,
+      "winner_margin_to_runnerup": 3.6662044525146484,
+      "classification": "WRONG_LEARNED_RANKING"
+    },
+    {
+      "seed": 20260919,
+      "phase": 0,
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": "VIA_N3"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 0,
+        "packet_digest": "2658384708b5366082ad9e310e2a9131bd838df4b7460d0a97d4eb81f0c327d0",
+        "prediction_id": "typed-prediction-80d041cdb14308811c47e5af56596a93f97e1cf0e19ee3dec6dd10be10b2a601",
+        "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": {
+            "ABSENT": -0.2523500919342041,
+            "DIRECT": 1.2058537006378174,
+            "VIA_N0": -2.2020397186279297,
+            "VIA_N1": 16.086816787719727,
+            "VIA_N2": 5.516077041625977,
+            "VIA_N3": 17.396583557128906
+          }
+        },
+        "slot_plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N3",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N3"
+      ],
+      "candidate_rank_order": [
+        "VIA_N3",
+        "VIA_N1",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT",
+        "VIA_N0"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -0.2523500919342041,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 1.2058537006378174,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": -2.2020397186279297,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 16.086816787719727,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 5.516077041625977,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 17.396583557128906,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        }
+      ],
+      "selected_raw_score": 17.396583557128906,
+      "correct_raw_score": 17.396583557128906,
+      "correct_strict_rank": 1,
+      "correct_tie_order_rank": 1,
+      "winner_minus_correct": 0.0,
+      "winner_margin_to_runnerup": 1.3097667694091797,
+      "classification": "CORRECT_SELECTION"
+    },
+    {
+      "seed": 20260919,
+      "phase": 10,
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "slot_id": "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4",
+      "raw_prediction": {
+        "answer": {
+          "kind": "reach",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "schema": "cas.typed-teaching-answer/0.1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        "decisions": {
+          "correspondence_candidate_id": null,
+          "plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+          "schema": "cas.typed-teaching-slot-decisions/0.1",
+          "selected": {
+            "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": "VIA_N1"
+          }
+        },
+        "depth": 8,
+        "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+        "model_revision": 1470,
+        "packet_digest": "2658384708b5366082ad9e310e2a9131bd838df4b7460d0a97d4eb81f0c327d0",
+        "prediction_id": "typed-prediction-d30d0a557cbc1440a932517b668392dccf2e39a41bfae96bff5e6eb08b86fa09",
+        "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+        "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+        "schema": "cas.typed-teaching-prediction/0.1",
+        "scores": {
+          "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": {
+            "ABSENT": -4.343050003051758,
+            "DIRECT": 2.3660178184509277,
+            "VIA_N0": 17.353687286376953,
+            "VIA_N1": 26.474693298339844,
+            "VIA_N2": 6.176858425140381,
+            "VIA_N3": 22.808488845825195
+          }
+        },
+        "slot_plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc"
+      },
+      "candidate_order": [
+        "ABSENT",
+        "DIRECT",
+        "VIA_N0",
+        "VIA_N1",
+        "VIA_N2",
+        "VIA_N3"
+      ],
+      "constructed_candidates": [
+        {
+          "symbol": "ABSENT",
+          "answer": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "DIRECT",
+          "answer": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "symbol": "VIA_N0",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+          }
+        },
+        {
+          "symbol": "VIA_N1",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+          }
+        },
+        {
+          "symbol": "VIA_N2",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+          }
+        },
+        {
+          "symbol": "VIA_N3",
+          "answer": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        }
+      ],
+      "all_candidate_scores_present": true,
+      "finite_and_within_frozen_bound": true,
+      "semantic_target": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "correct_symbol": "VIA_N3",
+      "unique_graph_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "normalization": "NONE in the actual reach selector; each symbol already denotes one complete answer.",
+      "translated_selected_symbol": "VIA_N1",
+      "translated_answer": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "saved_selection_matches": true,
+      "maximum_tie_symbols_in_declared_order": [
+        "VIA_N1"
+      ],
+      "candidate_rank_order": [
+        "VIA_N1",
+        "VIA_N3",
+        "VIA_N0",
+        "VIA_N2",
+        "DIRECT",
+        "ABSENT"
+      ],
+      "candidate_scores_and_ranks": [
+        {
+          "symbol": "ABSENT",
+          "raw_score": -4.343050003051758,
+          "strict_score_rank": 6,
+          "tie_order_rank": 6
+        },
+        {
+          "symbol": "DIRECT",
+          "raw_score": 2.3660178184509277,
+          "strict_score_rank": 5,
+          "tie_order_rank": 5
+        },
+        {
+          "symbol": "VIA_N0",
+          "raw_score": 17.353687286376953,
+          "strict_score_rank": 3,
+          "tie_order_rank": 3
+        },
+        {
+          "symbol": "VIA_N1",
+          "raw_score": 26.474693298339844,
+          "strict_score_rank": 1,
+          "tie_order_rank": 1
+        },
+        {
+          "symbol": "VIA_N2",
+          "raw_score": 6.176858425140381,
+          "strict_score_rank": 4,
+          "tie_order_rank": 4
+        },
+        {
+          "symbol": "VIA_N3",
+          "raw_score": 22.808488845825195,
+          "strict_score_rank": 2,
+          "tie_order_rank": 2
+        }
+      ],
+      "selected_raw_score": 26.474693298339844,
+      "correct_raw_score": 22.808488845825195,
+      "correct_strict_rank": 2,
+      "correct_tie_order_rank": 2,
+      "winner_minus_correct": 3.6662044525146484,
+      "winner_margin_to_runnerup": 3.6662044525146484,
+      "classification": "WRONG_LEARNED_RANKING"
+    }
+  ]
+}
