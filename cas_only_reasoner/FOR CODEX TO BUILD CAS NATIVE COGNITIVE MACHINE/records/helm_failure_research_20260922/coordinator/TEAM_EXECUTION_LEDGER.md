@@ -17,7 +17,7 @@ Only A0 integrates explicit report commits.
 | A4 | /root/helm_research_a0/a4_training_retention | 78023b5f8e368a431a6303706c7e373ec6c7d8b3 | 7a96838b04441697c3d7edee9d437498af66e0c241c5d992ceaefc2edca015c3 | First report saved; conference allowed |
 | A5 | /root/helm_research_a0/a5_answer_comparison | f253754c21ccc5b2ae8a2c0f381fc4882540b7cc | 6991dca9b2c34ada684822c04c1ea0ef6a04e910ae2ebece8039aa5523e35a84 | First report saved; conference allowed |
 | A6 | /root/helm_research_a0/a6_independent_reproducer | 5dcf4db819795aba9039c96a824a127276375caf | d9aa2716de1a1db581d68e5173b7f2fd40dd87531fa7a5894927a2bd0576b45c | First report saved; conference allowed |
-| A7 | Not launched | n/a | n/a | Fresh judgment session reserved |
+| A7 | /root/helm_research_a0/a7_final_judge | Pending final judgment | Pending | Fresh session launched after conference and one follow-up round |
 
 A1 initial spawn returned an identifier during user steering, but the live inventory briefly
 omitted it. A0 resumed the same session. A1 confirmed it was active and asked for the original
@@ -32,6 +32,7 @@ Follow-up reports are new files; first reports will never be rewritten.
 
 Resource observations: root last read ordinaryUsageAllowed=true, weekly 71% consumed / 29%
 remaining, no paid-credit balance. This is existing account allowance, not a dollar-cost estimate.
+
 
 
 

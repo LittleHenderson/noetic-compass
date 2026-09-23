@@ -121,3 +121,14 @@ F2(A3), unchanged predicted alternatives from259ed0be, confirmed by5c128a33. No 
 Root additionally verified git merge-base --is-ancestor 5f7111d5204e872c18df717badc2e2021f31ad70
 4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d returned0, with no stderr. The chosen evidence base descends
 from the preserved reconciliation checkpoint. This is ancestry evidence, not behavior or readiness.
+
+F1(A6) and F2(A3) were integrated with the same allowed-prefix check used for every role commit.
+Both passed once within one second. No second follow-up round is justified by their outcomes.
+Integration3f7ac296 contains the full package handed to A7.
+
+A7 launched using fork_turns=none as /root/helm_research_a0/a7_final_judge in prepared
+helm-failure-a7 / codex/helm-failure-a7-20260922 from59b1dd57. It was not a first-round investigator,
+coordinator, hypothesis author or fixer. It must inspect decisive original raw records, classify
+evidence and rank no more than three next actions. Its output remains separate until A0 integrates
+the exact role commit; A0 will copy judgment/next-action files verbatim, not issue its own judgment.
+Root is using the second CPU slot for final preservation checks; A0 starts no concurrent probe.
