@@ -132,3 +132,13 @@ coordinator, hypothesis author or fixer. It must inspect decisive original raw r
 evidence and rank no more than three next actions. Its output remains separate until A0 integrates
 the exact role commit; A0 will copy judgment/next-action files verbatim, not issue its own judgment.
 Root is using the second CPU slot for final preservation checks; A0 starts no concurrent probe.
+
+## Root final preservation result
+
+Root completed its single bounded read-only process at2026-09-23T06:19:42.008835+00:00,
+exit0 in8.097s. All630 unique original paths/642 rows/724,161,768 bytes,540 members of2 ZIPs,
+and3 frozen-grader Git versions matched. Source failures0. Original project and three original
+worktrees retained their HEAD/branch/status lists. Outer138 status entries and7 existing warnings
+are unchanged; the three original worktrees are clean. Exact paths/IDs and attribution are in
+ROOT_FINAL_PRESERVATION_RECEIPT.json. Dirty original-file bytes were not independently compared.
+The second CPU slot is released. A0 will verify final research outputs separately.
