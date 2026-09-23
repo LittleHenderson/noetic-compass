@@ -15,6 +15,7 @@ from pathlib import Path
 import random
 import re
 import secrets
+import shutil
 import subprocess
 import sys
 import time
@@ -284,7 +285,10 @@ def validate_manifest(manifest, expected_sha):
 
 def active_learning_jobs():
     """Local Windows process check; provider telemetry remains a separate guard."""
-    command = ["C:/Program Files/PowerShell/7/pwsh.exe", "-NoProfile", "-NonInteractive", "-Command",
+    executable = shutil.which("pwsh") or shutil.which("powershell")
+    if executable is None:
+        raise PanelError("LOCAL_JOB_INVENTORY_SHELL_UNAVAILABLE")
+    command = [executable, "-NoProfile", "-NonInteractive", "-Command",
                "@(Get-CimInstance Win32_Process -ErrorAction Stop -Filter \"Name like '%python%'\" | Select-Object ProcessId,CommandLine) | ConvertTo-Json -Compress"]
     completed = subprocess.run(command, capture_output=True, text=True, timeout=10,
                                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
@@ -301,7 +305,7 @@ def active_learning_jobs():
         match = re.search(r"(?:preflight|execute_study|q4_smoke_job|typed_pointer_worker|rt[127]_(?:run|diag)|train_[a-z0-9_]+)\.py", command_line, re.I)
         if match:
             matches.append({"pid": row["ProcessId"], "entry_point": match.group()})
-    return {"python_processes_checked": len(rows), "matching_learning_jobs": matches,
+    return {"inventory_executable": executable, "python_processes_checked": len(rows), "matching_learning_jobs": matches,
             "limits": "Known learning entry points; GPU admission checks capacity independently"}
 
 

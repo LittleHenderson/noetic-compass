@@ -187,3 +187,26 @@ def test_supervisor_records_conflict_without_launch_or_unrelated_process_kill(tm
     assert receipt["status"] == "FAILED"
     assert receipt["automatic_retries"] == 0
     assert receipt["failure"]["message"] == "OTHER_LEARNING_JOB_ACTIVE"
+
+
+@pytest.mark.parametrize("pwsh_present", [True, False])
+def test_process_inventory_resolves_installed_shell_instead_of_assumed_path(monkeypatch, pwsh_present):
+    from types import SimpleNamespace
+    monkeypatch.setattr(panel.shutil, "which", lambda name: "D:/runtime/" + name + ".exe"
+                        if name == "powershell" or pwsh_present else None)
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        return SimpleNamespace(returncode=0, stdout=json.dumps([
+            {"ProcessId": 7, "CommandLine": "python q4_smoke_job.py execute"},
+            {"ProcessId": 8, "CommandLine": "python server.py"}]))
+    monkeypatch.setattr(panel.subprocess, "run", run)
+    result = panel.active_learning_jobs()
+    assert calls[0][0] == "D:/runtime/" + ("pwsh" if pwsh_present else "powershell") + ".exe"
+    assert result["matching_learning_jobs"] == [{"pid": 7, "entry_point": "q4_smoke_job.py"}]
+
+
+def test_process_inventory_missing_shell_fails_closed(monkeypatch):
+    monkeypatch.setattr(panel.shutil, "which", lambda _: None)
+    with pytest.raises(panel.PanelError, match="LOCAL_JOB_INVENTORY_SHELL_UNAVAILABLE"):
+        panel.active_learning_jobs()
