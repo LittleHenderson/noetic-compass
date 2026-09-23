@@ -726,10 +726,38 @@ def _build_container(torch, framework, device, *, analogy_focus_comparison=True,
 
         initial_block_layout = layout
 
+        # READ-ONLY SWITCH. The preregistered interface: "a read-only boolean attribute, written `model.<switch>`".
+        # Both values are this function's own arguments, validated at the top of `_build_container`, and served by
+        # getter-only class properties. No instance attribute, tensor, buffer, `_extra_state` or state-dict key
+        # holds them and no random draw reads them, so the OFF layout, RNG use and scoring path are unchanged.
+        # `__init__` below still branches on the enclosing argument (methods skip class scope), not on these.
+        # A property is a data descriptor, so a value written into `__dict__` is never returned. The two guards
+        # refuse assignment and deletion for EVERY value: without them torch's `Module.__setattr__` would register
+        # a Module value as a new child (new state-dict keys) and answer a Parameter or Buffer with KeyError.
+        _READ_ONLY_SWITCH = ("analogy_focus_comparison", "analogy_seed")
+
+        @property
+        def analogy_focus_comparison(self):
+            """The analogy switch this container was built with: a real `bool`, fixed at construction."""
+            return analogy_focus_comparison
+
+        @property
+        def analogy_seed(self):
+            """The analogy head's initialisation seed when the switch is ON; `None` when it is OFF."""
+            return analogy_seed if analogy_focus_comparison else None
+
+        def __setattr__(self, name, value):
+            if name in self._READ_ONLY_SWITCH:
+                raise AttributeError("POINTER_ANALOGY_SWITCH_READ_ONLY:" + name)
+            super().__setattr__(name, value)
+
+        def __delattr__(self, name):
+            if name in self._READ_ONLY_SWITCH:
+                raise AttributeError("POINTER_ANALOGY_SWITCH_READ_ONLY:" + name)
+            super().__delattr__(name)
+
         def __init__(self):
             super().__init__()
-            self.analogy_focus_comparison = analogy_focus_comparison
-            self.analogy_seed = analogy_seed if analogy_focus_comparison else None
             # ---- the registered ^6 block, under its exact registered NAMES, installed FIRST ----
             # `nn.Module.register_parameter` refuses a name containing a dot, so each `^6` tensor is held
             # under an underscore name and the dot-free names are restored in `state_dict` / `load_state_dict`
