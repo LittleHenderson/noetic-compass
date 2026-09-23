@@ -1,8 +1,9 @@
 """One bounded, explicitly authorized CUDA R1 engineering job. Default: prepare.
 
 Preparation reads only source/pin/contract/manifest metadata, never data rows.
-Execution requires an Ed25519 signature from a separately owner-pinned key;
-neither a status string nor this program supplies human authorization. No cloud,
+Execution accepts either the existing externally pinned Ed25519 signature or
+an explicitly selected record of actual user authorization in the live chat.
+The latter is agent-recorded provenance, not cryptographic owner identity. No cloud,
 API, automatic retry, resume, eval-split access, or CPU neural fallback exists.
 The actual neural worker has NOT been run during code-only implementation.
 """
@@ -54,7 +55,7 @@ def _environment_metadata():
 
 def prepare_plan(*, data_dir, data_version, output, seed=20260921, width=64,
                  max_updates=128, max_wall_seconds=1800, train_examples=2048, dev_examples=16,
-                 device="cuda:0") -> dict:
+                 device="cuda:0", device_policy=None) -> dict:
     """Metadata-only preparation; this function does NOT authorize execution."""
     _bounded_int(seed, "seed", 0, 2**32 - 1)
     _bounded_int(max_updates, "max_updates", 1, 128)
@@ -78,7 +79,7 @@ def prepare_plan(*, data_dir, data_version, output, seed=20260921, width=64,
     if (type(counts.get("G_train")) is not int or counts["G_train"] < train_examples
             or type(counts.get("G_dev")) is not int or counts["G_dev"] < dev_examples):
         raise JobError("INVALID_PLAN: requested rows exceed the pinned G train/dev counts")
-    return {"schema": PLAN_SCHEMA, "status": "PREPARED_NOT_AUTHORIZATION", "task": "T14_R1_G_ENGINEERING_SMOKE",
+    plan = {"schema": PLAN_SCHEMA, "status": "PREPARED_NOT_AUTHORIZATION", "task": "T14_R1_G_ENGINEERING_SMOKE",
             "data_dir": str(data), "data_version": data_version, "manifest_sha256": manifest_sha(data),
             "export_report_sha256": pin["export_report_sha256"], "contract_digest": contract,
             "contracts_file_sha256": digest((HERE / "OPERATION_CONTRACTS.json").read_bytes().replace(b"\r\n", b"\n")),
@@ -90,13 +91,17 @@ def prepare_plan(*, data_dir, data_version, output, seed=20260921, width=64,
             "numerical_policy": "CUDA_FLOAT32_DETERMINISTIC_OR_FAIL_NO_FALLBACK",
             "environment": _environment_metadata(),
             "evaluation_custody": "EVALUATION_NOT_INDEPENDENT", "resume": False}
+    if device_policy is not None:
+        from q4_device_capacity import validate_policy
+        plan["device_policy"] = validate_policy(device_policy)
+    return plan
 
 
 def validate_plan(plan: dict) -> dict:
     if type(plan) is not dict:
         raise JobError("INVALID_PLAN: object required")
     try:
-        fresh = prepare_plan(**{key: plan[key] for key in
+        fresh = prepare_plan(device_policy=plan.get("device_policy"), **{key: plan[key] for key in
                                 ("data_dir", "data_version", "output", "seed", "width", "max_updates",
                                  "max_wall_seconds", "train_examples", "dev_examples", "device")})
     except KeyError as error:
@@ -146,6 +151,52 @@ def _write_json(path: Path, value):
         stream.write(canonical(value) + b"\n")
 
 
+def _authorization_receipt(plan, authorization=None, trusted_public_key=None,
+                           trusted_key_sha256=None, *, conversation_authorization=None,
+                           conversation_sha256=None):
+    signed = (authorization, trusted_public_key, trusted_key_sha256)
+    conversation = (conversation_authorization, conversation_sha256)
+    if any(value is not None for value in signed) and any(value is not None for value in conversation):
+        raise JobError("AUTHORIZATION_MODE_CONFLICT")
+    if any(value is not None for value in conversation):
+        if not all(value is not None for value in conversation):
+            raise JobError("CONVERSATION_AUTHORIZATION_INCOMPLETE")
+        from q4_conversation_authorization import verify_conversation_authorization
+        return verify_conversation_authorization(plan, *conversation)
+    if not all(value is not None for value in signed):
+        raise JobError("SIGNED_AUTHORIZATION_INCOMPLETE")
+    verify_authorization(plan, *signed)
+    return {"mode": "EXTERNALLY_PINNED_ED25519", "plan_sha256": digest(canonical(plan)),
+            "record_sha256": digest(Path(authorization).read_bytes()),
+            "trusted_key_sha256": trusted_key_sha256}
+
+
+def _wait_for_worker(process, plan, started, out):
+    """Shared-display jobs retain thermal telemetry and the same wall limit."""
+    remaining = lambda: max(0, plan["max_wall_seconds"] - (time.monotonic() - started))
+    policy = plan.get("device_policy")
+    if policy is None:
+        return process.wait(timeout=remaining())
+    from q4_device_capacity import check_running
+    with (out / "device_monitor.jsonl").open("xb") as stream:
+        while True:
+            # Reserve the bounded telemetry call's full allowance. Stop slightly
+            # early rather than let a slow provider query extend the job limit.
+            if remaining() <= policy.get("query_timeout_seconds", 10):
+                raise subprocess.TimeoutExpired("Q4_WORKER", plan["max_wall_seconds"])
+            sample = check_running(policy, plan["device"])
+            stream.write(canonical({"elapsed_seconds": time.monotonic() - started,
+                                    "sample": sample}) + b"\n")
+            stream.flush()
+            if remaining() <= 0:
+                raise subprocess.TimeoutExpired("Q4_WORKER", plan["max_wall_seconds"])
+            try:
+                return process.wait(timeout=min(2.0, remaining()))
+            except subprocess.TimeoutExpired:
+                if remaining() <= 0:
+                    raise
+
+
 def _device_lock_path(device: str) -> Path:
     # Conservative local-smoke scope: one Q4 neural job across this user's GPUs.
     # Do not key by CUDA ordinal, which need not be a physical nvidia-smi index.
@@ -167,22 +218,32 @@ def _check_device_idle(device: str):
         raise JobError("GPU_BUSY_OR_UNKNOWN: selected device reports compute users")
 
 
-def execute_plan(plan_path, authorization, trusted_public_key, trusted_key_sha256):
+def execute_plan(plan_path, authorization=None, trusted_public_key=None, trusted_key_sha256=None,
+                 *, conversation_authorization=None, conversation_sha256=None):
     """Reserve one output, supervise one worker, kill on timeout; never retry."""
     plan = validate_plan(_read_json(plan_path))
-    verify_authorization(plan, authorization, trusted_public_key, trusted_key_sha256)
+    receipt = _authorization_receipt(plan, authorization, trusted_public_key, trusted_key_sha256,
+                                     conversation_authorization=conversation_authorization,
+                                     conversation_sha256=conversation_sha256)
     out = Path(plan["output"])
     out.mkdir(parents=False, exist_ok=False)  # existing output means already used; never overwrite/resume
     nonce = secrets.token_hex(32)
     _write_json(out / "claim.json", {"plan_sha256": digest(canonical(plan)), "worker_nonce_sha256": digest(nonce.encode()),
-                                     "supervisor_pid": os.getpid()})
+                                     "supervisor_pid": os.getpid(),
+                                     "authorization_receipt_sha256": digest(canonical(receipt))})
     _write_json(out / "plan.json", plan)
+    _write_json(out / "authorization_receipt.json", receipt)
     environment = dict(os.environ, HELM_Q4_WORKER_NONCE=nonce, CUBLAS_WORKSPACE_CONFIG=":4096:8")
-    command = [sys.executable, str(Path(__file__).resolve()), "_worker", "--plan", str(Path(plan_path).resolve()),
-               "--authorization", str(Path(authorization).resolve()), "--trusted-public-key", str(Path(trusted_public_key).resolve()),
-               "--trusted-key-sha256", trusted_key_sha256]
+    command = [sys.executable, str(Path(__file__).resolve()), "_worker", "--plan", str(Path(plan_path).resolve())]
+    if conversation_authorization is not None:
+        command += ["--conversation-authorization", str(Path(conversation_authorization).resolve()),
+                    "--conversation-sha256", conversation_sha256]
+    else:
+        command += ["--authorization", str(Path(authorization).resolve()),
+                    "--trusted-public-key", str(Path(trusted_public_key).resolve()),
+                    "--trusted-key-sha256", trusted_key_sha256]
     started = time.monotonic()
-    status, returncode = "FAILED", None
+    status, returncode, failure = "FAILED", None, None
     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
     device_lock = _device_lock_path(plan["device"])
     owns_lock = False
@@ -190,13 +251,16 @@ def execute_plan(plan_path, authorization, trusted_public_key, trusted_key_sha25
         with device_lock.open("xb") as lock:
             owns_lock = True
             lock.write(canonical({"pid": os.getpid(), "plan_sha256": digest(canonical(plan))}))
-        _check_device_idle(plan["device"])
+        if "device_policy" in plan:
+            from q4_device_capacity import check_prelaunch
+            _write_json(out / "device_prelaunch.json", check_prelaunch(plan["device_policy"], plan["device"]))
+        else:
+            _check_device_idle(plan["device"])
         with (out / "worker.log").open("xb") as log:
             with subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, env=environment,
                                   creationflags=flags) as process:
                 try:
-                    remaining = max(0, plan["max_wall_seconds"] - (time.monotonic() - started))
-                    returncode = process.wait(timeout=remaining)
+                    returncode = _wait_for_worker(process, plan, started, out)
                     if returncode == 0:
                         result = _read_json(out / "result.json")
                         if (result.get("plan_sha256") != digest(canonical(plan))
@@ -211,25 +275,33 @@ def execute_plan(plan_path, authorization, trusted_public_key, trusted_key_sha25
                     process.kill()
                     returncode = process.wait(timeout=10)
                     raise
+    except BaseException as error:
+        failure = {"type": type(error).__name__, "message": str(error)}
+        raise
     finally:
         if owns_lock:
             device_lock.unlink()
         _write_json(out / "supervisor.json", {"status": status, "returncode": returncode,
                                                "elapsed_seconds": time.monotonic() - started,
-                                               "plan_sha256": digest(canonical(plan)), "automatic_retries": 0})
+                                               "plan_sha256": digest(canonical(plan)), "automatic_retries": 0,
+                                               "failure": failure, "authorization": receipt})
     if status != "COMPLETE":
         raise JobError(status + ": preserved output; no retry or resume")
     return out
 
 
-def _worker(plan_path, authorization, trusted_public_key, trusted_key_sha256):
+def _worker(plan_path, authorization=None, trusted_public_key=None, trusted_key_sha256=None,
+            *, conversation_authorization=None, conversation_sha256=None):
     plan = validate_plan(_read_json(plan_path))
-    verify_authorization(plan, authorization, trusted_public_key, trusted_key_sha256)
+    receipt = _authorization_receipt(plan, authorization, trusted_public_key, trusted_key_sha256,
+                                     conversation_authorization=conversation_authorization,
+                                     conversation_sha256=conversation_sha256)
     out = Path(plan["output"])
     nonce = os.environ.pop("HELM_Q4_WORKER_NONCE", "")
     claim = _read_json(out / "claim.json")
     if (not nonce or claim.get("plan_sha256") != digest(canonical(plan))
-            or claim.get("worker_nonce_sha256") != digest(nonce.encode())):
+            or claim.get("worker_nonce_sha256") != digest(nonce.encode())
+            or claim.get("authorization_receipt_sha256") != digest(canonical(receipt))):
         raise JobError("WORKER_NOT_OWNED: use the supervised execute command")
     # Exclusive worker lock is retained after success or failure: one launch only.
     _write_json(out / "worker_started.json", {"pid": os.getpid(), "plan_sha256": digest(canonical(plan))})
@@ -284,7 +356,7 @@ def _worker(plan_path, authorization, trusted_public_key, trusted_key_sha256):
     identity = {"source_pins": plan["source_pins"], "data_version": plan["data_version"],
                 "manifest_sha256": plan["manifest_sha256"], "contract_digest": plan["contract_digest"],
                 "environment": plan["environment"],
-                "plan_sha256": digest(canonical(plan))}
+                "plan_sha256": digest(canonical(plan)), "authorization": receipt}
     check_deadline()
     checkpoint_manifest = save_checkpoint(model, out / "checkpoint", identity=identity)
     predictions = []
@@ -321,6 +393,9 @@ def _worker(plan_path, authorization, trusted_public_key, trusted_key_sha256):
                                       "evaluation_custody": "EVALUATION_NOT_INDEPENDENT",
                                       "actual_updates": plan["max_updates"], "dev_by_depth": by_depth,
                                       "checkpoint_weights_sha256": checkpoint_manifest["weights_sha256"],
+                                      "learned_parameter_count": sum(parameter.numel() for parameter in model.parameters()),
+                                      "cuda_peak_allocated_bytes": torch.cuda.max_memory_allocated(model._device()),
+                                      "authorization": receipt,
                                       "runtime": {"environment": plan["environment"], "torch": torch.__version__,
                                                    "cuda": torch.version.cuda,
                                                    "device_name": torch.cuda.get_device_name(model._device())},
@@ -340,14 +415,23 @@ def main(argv=None):
                           ("max-wall-seconds", 1800), ("train-examples", 2048), ("dev-examples", 16)):
         prepare.add_argument("--" + name, type=int, default=default)
     prepare.add_argument("--device", default="cuda:0")
+    prepare.add_argument("--shared-display-gpu-uuid", help="explicit bounded Windows shared-display policy")
     for mode in ("execute", "_worker"):
         command = modes.add_parser(mode, help="signed authorized job" if mode == "execute" else argparse.SUPPRESS)
-        for option in ("plan", "authorization", "trusted-public-key", "trusted-key-sha256"):
-            command.add_argument("--" + option, required=True)
+        command.add_argument("--plan", required=True)
+        choice = command.add_mutually_exclusive_group(required=True)
+        choice.add_argument("--authorization")
+        choice.add_argument("--conversation-authorization")
+        for option in ("trusted-public-key", "trusted-key-sha256", "conversation-sha256"):
+            command.add_argument("--" + option)
     args = vars(parser.parse_args(argv))
     mode = args.pop("mode")
     if mode == "prepare":
         plan_out = args.pop("plan_out")
+        shared_uuid = args.pop("shared_display_gpu_uuid")
+        if shared_uuid is not None:
+            from q4_device_capacity import shared_display_policy
+            args["device_policy"] = shared_display_policy(shared_uuid)
         plan = prepare_plan(**args)
         if plan_out:
             _write_json(Path(plan_out), plan)

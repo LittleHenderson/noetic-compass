@@ -1,5 +1,13 @@
 # CNCM Codex Homebase
 
+## Current run authorization — user instruction 2026-09-22
+
+Read `docs/OWNER_RUN_AUTHORIZATION_20260922.md`. The user explicitly authorized
+this project and future AI/LLM research runs in the live conversation. Do not
+repeat the superseded per-run approval/signature request for ordinary in-scope
+work. Preserve each job's source identity, explicit resource limits, actual
+results and failures. An agent transcription is not an owner signature.
+
 ## Write boundary
 
 All CNCM implementation work, tests, generated artifacts, documentation, and

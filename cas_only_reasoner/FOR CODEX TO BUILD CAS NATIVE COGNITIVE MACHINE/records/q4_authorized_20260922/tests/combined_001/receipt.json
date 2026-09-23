@@ -1,0 +1,1286 @@
+{
+  "started_utc": "2026-09-23T00:36:20.095229+00:00",
+  "ended_utc": "2026-09-23T00:36:30.681914+00:00",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "test_learner_q4.py",
+    "test_q4_followup.py",
+    "test_q4_preparation.py",
+    "test_q4_conversation_authorization.py",
+    "test_q4_device_capacity.py",
+    "test_q4_authorized_supervisor.py",
+    "-q",
+    "--noconftest",
+    "-o",
+    "addopts=",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\cas-q4-combined_001",
+    "--junitxml",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\q4_authorized_20260922\\tests\\combined_001\\cases.xml"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab",
+  "exit_code": 0,
+  "case_count": 249,
+  "function_count": 85,
+  "cases": [
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_same_bag_control_collides_but_sequence_preserves_roles",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unicode_input_is_lossless_and_not_reinterpreted",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_or_oversized_observation_rejected[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_or_oversized_observation_rejected[value1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_or_oversized_observation_rejected[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_or_oversized_observation_rejected[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_or_oversized_observation_rejected[\\ud800]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_metadata_and_targets_never_reach_sequence",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_bad_bottleneck_rejected[value5]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_codec_preserves_exact_supported_ast[tree0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_codec_preserves_exact_supported_ast[tree1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_codec_preserves_exact_supported_ast[tree2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_codec_preserves_exact_supported_ast[tree3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_grouping_order_and_optional_register_survive",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree5]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_unsupported_or_invalid_ast_never_simplified[tree6]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_free_decode_receives_only_vector_and_own_history",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_mask_uses_syntax_not_gold_or_input",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[nan]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[inf]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[-inf]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_nonfinite_or_invalid_model_logits_fail_closed[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_budget_exhaustion_is_not_corrected_to_an_answer",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_depth_and_node_caps_control_generated_history",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_malformed_output_cannot_be_called_an_ast[tokens0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_malformed_output_cannot_be_called_an_ast[tokens1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_malformed_output_cannot_be_called_an_ast[tokens2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_malformed_output_cannot_be_called_an_ast[tokens3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_malformed_output_cannot_be_called_an_ast[tokens4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_eos_and_extra_tokens_are_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_prediction_modules_have_no_oracle_imports_or_calls",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_neural_factory_rejects_cpu_before_import_or_initialization",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_neural_prediction_path_never_calls_teacher_forcing",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_deterministic_demo_reports_its_limits",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_q3_g_training_codec_compatibility",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_learner_q4",
+      "name": "test_runtime_core_works_when_oracle_and_neural_imports_are_denied",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_r2_explicit_roles_order_vectors_and_isolated_intervention",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_r2_bad_binding_shapes_refused[change0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_r2_bad_binding_shapes_refused[change1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_r2_bad_binding_shapes_refused[change2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_r2_bad_binding_shapes_refused[change3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_verification_is_not_a_neural_load",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_restore_consumes_verified_bytes_even_if_disk_file_changes",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_read_stays_bounded_if_file_grows_after_stat",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights_and_manifest]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[source]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[width]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[unsafe_path]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_checkpoint_tamper_refused_even_if_local_manifest_resealed[extra_key]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_reads_metadata_only_and_any_explicit_pinned_version",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[seed-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[max_updates-129]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[max_wall_seconds-1801]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[width-16]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[device-cpu]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[train_examples-2049]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[dev_examples-257]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_dry_run_limits_and_exact_version_fail_closed[data_version-latest]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[status-APPROVED]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[source_pins-value1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[splits-value2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[learning_rate-0.9]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[resume-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_modified_plan_refused[answer-3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_signed_scope_cryptographic_check_only",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_forged_or_expired_signature_refused[scope]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_forged_or_expired_signature_refused[expiry]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_forged_or_expired_signature_refused[signature]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_forged_or_expired_signature_refused[fingerprint]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_forged_or_expired_signature_refused[approval_word]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_external_anchor_location_required",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_no_launch_on_bad_authorization",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_supervisor_kills_timed_out_mock_worker_once",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_busy_device_lock_blocks_a_different_output",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_unavailable_or_busy_gpu_metadata_refused[1-]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_unavailable_or_busy_gpu_metadata_refused[0-12345]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_unavailable_or_busy_gpu_metadata_refused[0-N/A]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_remapped_cuda_environment_refused_before_any_gpu_query",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_followup",
+      "name": "test_global_local_lock_and_all_gpu_query",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_identity_binds_path_bytes_and_extra_files",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_directory_without_explicit_binding_is_unassigned",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_search_path_must_match_bound_directory[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_search_path_must_match_bound_directory[other]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_search_path_must_match_bound_directory[two;paths]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_external_dependency_directory_is_refused",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_short_dependency_path_inside_homebase_need_not_be_in_nested_checkout",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_homebase_is_outer_cncm_boundary_used_by_renderer",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_byte_and_entry_bounds_precede_reading",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_dependency_distribution_must_resolve_from_bound_directory",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_mutated_auth_dependency_invalidates_prepared_plan",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_torch_build_type_comes_from_bounded_literal_metadata_only[None-NO_CUDA_BUILD]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_torch_build_type_comes_from_bounded_literal_metadata_only[12.8-CUDA_BUILD_RUNTIME_UNPROBED]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_unreadable_or_executable_version_metadata_is_not_readiness",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_preparation",
+      "name": "test_new_identity_helper_is_itself_a_runtime_pin",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_valid_record_returns_integrity_receipt_without_identity_claim",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_hash_is_raw_and_detects_changed_bytes",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[000000000000000000000000000000000000000000000000000000000000000]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[00000000000000000000000000000000000000000000000000000000000000000]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_malformed_or_wrong_external_record_digest_is_refused[0000000000000000000000000000000000000000000000000000000000000000]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_record_is_refused",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_any_bound_plan_change_is_refused[device-cuda:1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_any_bound_plan_change_is_refused[max_updates-3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_any_bound_plan_change_is_refused[max_wall_seconds-31]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_any_bound_plan_change_is_refused[source_pins-value3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[source_role-assistant]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[source-LOCAL_FILE]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[recorded_by-OWNER_SIGNED]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[source_reference- ]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[source_reference-9]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[user_quote-APPROVED]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_with_false_provenance_is_refused[user_quote_sha256-0000000000000000000000000000000000000000000000000000000000000000]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_quote_and_its_digest_cannot_both_be_replaced",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_timezone_malformed_and_future_capture_times_are_refused[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_timezone_malformed_and_future_capture_times_are_refused[20260922]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_timezone_malformed_and_future_capture_times_are_refused[invalid]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_timezone_malformed_and_future_capture_times_are_refused[2026-01-01T00:00:00]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_missing_timezone_malformed_and_future_capture_times_are_refused[9999-01-01T00:00:00+00:00]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[extra-None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[extra-provenance]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[extra-execution_scope]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[missing-None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[missing-provenance]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[missing-execution_scope]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[not_object-None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[not_object-provenance]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_exact_record_schema_required[not_object-execution_scope]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[task-ANOTHER_JOB]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[device-cpu]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[max_updates-3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[max_updates-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[max_updates-2.0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[max_wall_seconds-31]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[no_retries-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_resealed_record_cannot_change_execution_scope[no_retries-1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_cannot_expand_hard_work_limits_even_with_new_plan_digest[max_updates-129]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_cannot_expand_hard_work_limits_even_with_new_plan_digest[max_wall_seconds-1801]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_cannot_expand_hard_work_limits_even_with_new_plan_digest[max_updates-0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_cannot_expand_hard_work_limits_even_with_new_plan_digest[device-cpu]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_cannot_expand_hard_work_limits_even_with_new_plan_digest[resume-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_strict_json_rejects_ambiguous_or_unsupported_bytes[{\"schema\":1,\"schema\":2}]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_strict_json_rejects_ambiguous_or_unsupported_bytes[{\"schema\":NaN}]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_strict_json_rejects_ambiguous_or_unsupported_bytes[{\"schema\":1e999}]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_strict_json_rejects_ambiguous_or_unsupported_bytes[\\xff]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_strict_json_rejects_ambiguous_or_unsupported_bytes[{\"schema\":\"\\ud800\"}]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_conversation_authorization",
+      "name": "test_record_read_is_bounded",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_shared_contexts_and_raw_metadata_are_retained",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[max_start_utilization_percent-11]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[min_start_free_mib-4095]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[max_start_temperature_c-76]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[stop_temperature_c-81]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[prelaunch_samples-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[sample_interval_seconds-0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[running_check_interval_seconds-3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[query_timeout_seconds-11]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[allowed_prelaunch_context_types-value8]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[mode-IDLE]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_policy_fails_closed[physical_gpu_count-2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_incomplete_policy_is_refused[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_incomplete_policy_is_refused[policy_value1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_incomplete_policy_is_refused[policy_value2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_incomplete_policy_is_refused[policy_value3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_exact_uuid_required[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_exact_uuid_required[GPU-unknown]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_exact_uuid_required[GPU-7CFEE18B-E83D-B6FB-A946-AE444B329FDD]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_exact_uuid_required[123]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_exact_uuid_required[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_unsupported_host_device_or_remap[other_host]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_unsupported_host_device_or_remap[other_device]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_unsupported_host_device_or_remap[mapping]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes5]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes6]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes7]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes8]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes9]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes10]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes11]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_invalid_or_changed_metadata_is_refused[changes12]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_or_multiple_gpu_csv_is_refused[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_or_multiple_gpu_csv_is_refused[0, GPU-7cfee18b-e83d-b6fb-a946-ae444b329fdd, WDDM, Enabled, 8188, 7333, 616, 0, 63\\n0, GPU-7cfee18b-e83d-b6fb-a946-ae444b329fdd, WDDM, Enabled, 8188, 7333, 616, 0, 63\\n]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_or_multiple_gpu_csv_is_refused[0,one,two\\n]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_or_multiple_gpu_csv_is_refused[\"bad]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[C]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[M]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[M+C]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[O]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_compute_only_and_unknown_contexts_refused[N/A]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_explicitly_shared_or_empty_inventory_is_readable[G]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_explicitly_shared_or_empty_inventory_is_readable[C+G]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_explicitly_shared_or_empty_inventory_is_readable[None]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes5]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_changed_inventory_identity_or_missing_pid_refused[changes6]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_inventory_fails_closed[missing]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_inventory_fails_closed[blank]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_inventory_fails_closed[duplicate]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_inventory_fails_closed[entity]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_malformed_inventory_fails_closed[broken]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_prelaunch_threshold_boundaries[changes0-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_prelaunch_threshold_boundaries[changes1-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_prelaunch_threshold_boundaries[changes2-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_prelaunch_threshold_boundaries[changes3-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_later_prelaunch_sample_failure_refuses_admission",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_thermal_stop_boundary[79-True]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_thermal_stop_boundary[80-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_thermal_stop_boundary[81-False]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_identity_or_telemetry_loss_refused[changes0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_identity_or_telemetry_loss_refused[changes1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_identity_or_telemetry_loss_refused[changes2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_running_identity_or_telemetry_loss_refused[changes3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_query_failures_and_bounded_timeout[exit]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_query_failures_and_bounded_timeout[empty]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_query_failures_and_bounded_timeout[oversized]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_query_failures_and_bounded_timeout[timeout]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_device_capacity",
+      "name": "test_query_failures_and_bounded_timeout[missing]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_conversation_mode_propagates_to_owned_worker_and_receipts",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_incomplete_or_mixed_modes_cannot_create_output[arguments0]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_incomplete_or_mixed_modes_cannot_create_output[arguments1]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_incomplete_or_mixed_modes_cannot_create_output[arguments2]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_incomplete_or_mixed_modes_cannot_create_output[arguments3]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_incomplete_or_mixed_modes_cannot_create_output[arguments4]",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_worker_rejects_changed_authorization_before_loading_model",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_shared_gpu_thermal_failure_stops_only_owned_worker",
+      "outcome": "PASS"
+    },
+    {
+      "file": "research.helm_cas_expression_lab.test_q4_authorized_supervisor",
+      "name": "test_shared_gpu_wait_keeps_samples_until_owned_worker_finishes",
+      "outcome": "PASS"
+    }
+  ],
+  "source_hashes": {
+    "test_learner_q4.py": "dd45b9e8e7fdb5cd24357a8c815ad183449087425caec62a66a44f9e6f8ae74b",
+    "test_q4_followup.py": "f0ca858e015dfd336ecfca81ad0aaf2183b8210588ba4ae38a7ff6a20865d8c4",
+    "test_q4_preparation.py": "cb827c10237a27c6f71af58f490713d36add5db1d24d66e834ba228f223daa42",
+    "test_q4_conversation_authorization.py": "722f1ef345bb0c0a8907d605f9e7fb49c847d1415748a941a35bdcb1fc8b5bb3",
+    "test_q4_device_capacity.py": "b02beede0a9fb71a2df950a0902fcd6e6a9265aaea0c33fd5efe7689c6c44f5e",
+    "test_q4_authorized_supervisor.py": "cdb24f28b0bd5664c51cb6913fdc8dd3fa21875ae740d602382166096f831ba3"
+  },
+  "neural_execution": "NOT_PERFORMED_BY_TESTS"
+}

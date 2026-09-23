@@ -1,5 +1,17 @@
 # The learning brain — lineage record
 
+## 2026-09-22 current user approval: bounded Q4 execution prepared
+
+The user explicitly authorized this and future AI/LLM research runs in the live
+conversation; the exact instruction is in docs/OWNER_RUN_AUTHORIZATION_20260922.md.
+The reconciliation checkpoint 5f7111d5204e872c18df717badc2e2021f31ad70 is preserved
+in its original worktree. A separate q4-live worktree adds conversation approval
+and an explicit shared-display capacity policy. No owner signature was invented.
+The R1 model, learning loop, Q3 v0.7 data and 128-update/1,800-second caps remain.
+251 deterministic cases / 87 functions pass before launch. This preparation is
+not a learned result; the actual execution receipts will be recorded separately
+under records/q4_authorized_20260922. No Helm release or certification is added.
+
 ## 2026-09-22 audit reconciliation and numeric repair: no new learned result
 
 The working recorded-Helm atlas and compiler are preserved. The older diagnostic
