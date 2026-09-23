@@ -40,6 +40,8 @@ from __future__ import annotations
 
 import argparse
 import collections
+import concurrent.futures
+import concurrent.futures.process
 import contextlib
 import hashlib
 import io
@@ -66,7 +68,7 @@ STUDIES = {"helm1_certified": ["receipt_helm1_certified_%s" % s for s in ("20260
            "helm2_experimental": ["receipt_%s" % s for s in ("20260917", "20260918", "20260919")]}
 PHASES = ("course_p00", "course_p10")
 A6_QUESTIONS, A6_BANK, A6_BUDGET_SECONDS = 1000, 64, 600.0
-POOL_WAIT_SECONDS = 900
+POOL_TOTAL_SECONDS = 2400
 
 
 def lf_sha(path):
@@ -80,15 +82,21 @@ def _paths(v2_root):
             sys.path.insert(0, p)
 
 
-def _pool_results(iterator, total):
+def run_pool(fn, tasks, *, processes, init_args, chunksize):
+    """Map fn over tasks in spawned worker processes. A dead worker or a failed start-up raises BrokenProcessPool
+    (never an endless restart), and the whole map is bounded by POOL_TOTAL_SECONDS. Attempt 1 on AWS failed here:
+    on Python 3.14 `multiprocessing.Pool.imap_unordered` returns a plain generator with no `.next(timeout)`."""
+    executor = concurrent.futures.ProcessPoolExecutor(max_workers=processes, mp_context=multiprocessing.get_context("spawn"),
+                                                      initializer=_init, initargs=init_args)
     rows = []
-    while True:
-        try:
-            rows.append(iterator.next(timeout=POOL_WAIT_SECONDS))
-        except StopIteration:
-            return rows
-        except multiprocessing.TimeoutError:
-            raise RuntimeError("POOL_STALLED after %d of %d" % (len(rows), total))
+    try:
+        for row in executor.map(fn, tasks, chunksize=chunksize, timeout=POOL_TOTAL_SECONDS):
+            rows.append(row)
+    except (concurrent.futures.process.BrokenProcessPool, TimeoutError) as error:
+        executor.shutdown(wait=False, cancel_futures=True)
+        raise RuntimeError("POOL_FAILED: %s after %d of %d" % (type(error).__name__, len(rows), len(tasks)))
+    executor.shutdown(wait=True)
+    return rows
 
 
 # ============================================================================ workers
@@ -293,7 +301,7 @@ def test_a4(ctx):
 
 
 def test_a2(ctx):
-    args, root, pool_ctx = ctx["args"], ctx["v2_root"], ctx["pool_ctx"]
+    args, root = ctx["args"], ctx["v2_root"]
     by_record, files = collections.defaultdict(list), {}
     for study, receipts in STUDIES.items():
         for receipt in receipts:
@@ -307,8 +315,7 @@ def test_a2(ctx):
     tasks = [(rid, by_record.get(rid, [])) for rid in registry]
     if args.quick:
         tasks = tasks[:24]
-    with pool_ctx.Pool(args.processes, initializer=_init, initargs=(str(root), True)) as pool:
-        rows = _pool_results(pool.imap_unordered(_a2_task, tasks, chunksize=4), len(tasks))
+    rows = run_pool(_a2_task, tasks, processes=args.processes, init_args=(str(root), True), chunksize=4)
     errors = [r for r in rows if "error" in r]
     ok_rows = [r for r in rows if "error" not in r]
     expected = sum(len(v) for v in by_record.values())
@@ -570,8 +577,7 @@ def test_x(ctx):
         items = items[:40]
     if not items:
         return None, {"skipped": "no HSET-1A files"}
-    with ctx["pool_ctx"].Pool(args.processes, initializer=_init, initargs=(str(ctx["v2_root"]), False)) as pool:
-        xs = _pool_results(pool.imap_unordered(_x_task, items, chunksize=16), len(items))
+    xs = run_pool(_x_task, items, processes=args.processes, init_args=(str(ctx["v2_root"]), False), chunksize=16)
     # Custody: a sealed item id carries a fingerprint of a secret shape, so sealed rows are reported as counts only.
     d = {"packets": len(xs), "equal": sum(1 for r in xs if r.get("equal")),
          "sealed_packets": sum(1 for r in xs if r["item_id"] in sealed_ids),
@@ -607,7 +613,7 @@ def main():
     ctx = {"args": args, "v2_root": v2_root, "hw": hw, "oracle": oracle, "answers": answers, "checker": checker, "v2": v2,
            "course": course, "slots": slots, "slots_v2": slots_v2, "source": source, "families": families, "machine": machine,
            "anchors": json.loads(pathlib.Path(args.anchors).read_text(encoding="utf-8")), "rng": random.Random(20260923),
-           "pool_ctx": multiprocessing.get_context("spawn"), "classes5": oracle.dag_classes(5)}
+           "classes5": oracle.dag_classes(5)}
     ctx["W"] = Worlds(hw, source, vocab, ctx["rng"])
     result = {"schema": "claude.d1-acceptance/0.2", "v2_root": str(v2_root), "anchors": ctx["anchors"], "machine": machine,
               "quick": args.quick, "v2_files_sha256_lf": {n: lf_sha(v2_root / TT / n) for n in ("checker_v2.py", "answers_v2.py", "slots_v2.py")},

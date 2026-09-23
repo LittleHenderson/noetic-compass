@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import argparse
 import collections
+import concurrent.futures
+import concurrent.futures.process
 import functools
 import hashlib
 import json
@@ -45,6 +47,7 @@ SECRET_SPLITS = ("TEST_NEW_5",)
 CELLS = ("REACH_FIRST_DIRECT", "REACH_BFS", "PARTS", "EDGE_ACCOUNT")
 DEV_TEST_EACH = 60
 MIN_CLUSTERS = 10
+POOL_TOTAL_SECONDS = 4500
 ALPHA = 0.01
 COMPARATORS = {
     "reach": ("CONSTANT_ABSENT", "CONSTANT_DIRECT", "ONE_HOP", "LOWEST_RANK_CHILD", "RANK_LAST_CHILD",
@@ -528,20 +531,21 @@ def main():
     if "error" in first:
         raise SystemExit("PREFLIGHT_ITEM_FAILED: %s" % (first["error"] if items[0]["split"] not in SECRET_SPLITS
                                                          else first["error"].split(":")[0]))
-    ctx = multiprocessing.get_context("spawn")
+    # ProcessPoolExecutor, not multiprocessing.Pool: a worker that dies or fails at start-up raises BrokenProcessPool
+    # instead of being restarted forever, and `timeout` bounds the whole map. (Attempt 1 on AWS crashed here: on
+    # Python 3.14 `Pool.imap_unordered` returns a plain generator with no `.next(timeout)`.)
     rows, t1 = [], time.monotonic()
-    with ctx.Pool(args.processes, initializer=_init, initargs=(str(root),)) as pool:
-        results = pool.imap_unordered(_evaluate, items, chunksize=8)
-        while True:
-            try:
-                row = results.next(timeout=900)          # no result for 15 minutes = a dead or stuck worker
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                raise SystemExit("POOL_STALLED: no result for 900 s after %d of %d items" % (len(rows), len(items)))
+    executor = concurrent.futures.ProcessPoolExecutor(max_workers=args.processes, mp_context=multiprocessing.get_context("spawn"),
+                                                      initializer=_init, initargs=(str(root),))
+    try:
+        for row in executor.map(_evaluate, items, chunksize=8, timeout=POOL_TOTAL_SECONDS):
             rows.append(row)
             if len(rows) % 500 == 0:
                 print("  evaluated %d / %d (%.0f s)" % (len(rows), len(items), time.monotonic() - t1), flush=True)
+    except (concurrent.futures.process.BrokenProcessPool, TimeoutError) as error:
+        executor.shutdown(wait=False, cancel_futures=True)
+        raise SystemExit("POOL_FAILED: %s after %d of %d items" % (type(error).__name__, len(rows), len(items)))
+    executor.shutdown(wait=True)
     rows_by_item = {r["item_id"]: r for r in rows}
     errors = [r for r in rows if "error" in r]
     problems = {

@@ -1,0 +1,9 @@
+items 3370, clusters 1685, built in 11.6 s
+Traceback (most recent call last):
+  File "/root/hset_job/pkg/claude/records/helm_eval_design_20260923/hset1a/hset1a_build.py", line 625, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/root/hset_job/pkg/claude/records/helm_eval_design_20260923/hset1a/hset1a_build.py", line 537, in main
+    row = results.next(timeout=900)          # no result for 15 minutes = a dead or stuck worker
+          ^^^^^^^^^^^^
+AttributeError: 'generator' object has no attribute 'next'

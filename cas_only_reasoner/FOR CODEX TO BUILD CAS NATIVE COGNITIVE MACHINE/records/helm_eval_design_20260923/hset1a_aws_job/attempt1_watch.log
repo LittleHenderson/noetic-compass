@@ -1,0 +1,9 @@
+permission to terminate i-0c8907f61b2d5fbc4: yes
+15:43:20  machine i-0c8907f61b2d5fbc4: running
+15:43:20  still running, 0 min since launch
+15:46:53  machine i-0c8907f61b2d5fbc4: shutting-down
+  skipped archive member 'out'
+results downloaded: 8 files; the job's own status: finished_with_failures build=1 acceptance=3
+sealed files written OUTSIDE the repository to D:\tksCAS-archive\hset1a_sealed_20260923\run_20260923T154310Z: []
+{"schema": "claude.hset1a-watch/0.1", "instance_id": "i-0c8907f61b2d5fbc4", "outcome": "RESULTS_RECEIVED", "job_status": "finished_with_failures build=1 acceptance=3", "final_state": "shutting-down", "files_downloaded": 8, "launched_utc": "2026-09-23T15:43:14Z", "watch_ended_utc": "2026-09-23T15:46:53Z", "minutes_from_launch_to_watch_end": 3.7, "cost_upper_bound_usd": 0.0223, "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 20 GB of gp3 disk at 0.08 per GB-month", "sealed_files_sha256": {}, "dollar_ceiling": 1.5}
+WATCH EXIT 5

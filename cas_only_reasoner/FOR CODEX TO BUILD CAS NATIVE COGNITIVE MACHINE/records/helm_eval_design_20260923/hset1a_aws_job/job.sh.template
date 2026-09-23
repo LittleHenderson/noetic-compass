@@ -50,6 +50,24 @@ STATUS=frozen_profiles
 "$PY" -B $C/d1_acceptance/frozen_profiles.py --root frozen --out "$WORK/out/frozen_profiles.json" \
   || { STATUS=frozen_profiles_failed; exit 1; }
 
+# SMOKE: both programs end to end at tiny size, with a throwaway all-zero salt (so no real TEST data is made), before the
+# full run. Its outputs are never uploaded; only its logs are. Attempt 1 crashed after setup on a bug a run of main()
+# would have caught; the laptop has too little memory to run main() locally.
+STATUS=smoke
+mkdir -p "$WORK/smoke/out" "$WORK/smoke/sealed"
+printf '%064d\n' 0 > "$WORK/smoke/dummy_salt.hex"
+"$PY" -B $C/hset1a/hset1a_build.py --package-root frozen --salt-file "$WORK/smoke/dummy_salt.hex" \
+  --out-public "$WORK/smoke/out" --out-sealed "$WORK/smoke/sealed" --processes 2 --limit-shapes 1 > "$WORK/out/smoke_build.log" 2>&1 \
+  || { STATUS=smoke_build_failed; tail -n 15 "$WORK/out/smoke_build.log"; exit 1; }
+"$PY" -B $C/d1_acceptance/d1_acceptance_run.py --v2-root v2 --anchors anchors.json --frozen-profile-json "$WORK/out/frozen_profiles.json" \
+  --hset-public "$WORK/smoke/out/HSET1A_CELLS_PUBLIC.json" --hset-sealed "$WORK/smoke/sealed/HSET1A_SEALED_TEST_NEW_5.json" \
+  --out "$WORK/smoke/acceptance.json" --processes 2 --quick > "$WORK/out/smoke_acceptance.log" 2>&1
+SA=$?
+{ [ "$SA" -eq 0 ] || [ "$SA" -eq 3 ]; } || { STATUS=smoke_acceptance_crashed; tail -n 15 "$WORK/out/smoke_acceptance.log"; exit 1; }
+"$PY" -c "import json,sys; r=json.load(open(sys.argv[1])); bad=[k for k in ('A1','A2','A3','A4','A5','A6','X_hset1a_crosscheck') if not isinstance(r.get(k), dict) or 'error' in r[k] or 'skipped' in r[k]]; print('smoke tests with errors or missing:', bad); sys.exit(1 if bad else 0)" \
+  "$WORK/smoke/acceptance.json" || { STATUS=smoke_acceptance_errors; exit 1; }
+echo "SMOKE PASSED $(date -u +%FT%TZ)"
+
 STATUS=build
 START=$(date +%s)
 "$PY" -B $C/hset1a/hset1a_build.py --package-root frozen --salt-file sealed/salt.hex \

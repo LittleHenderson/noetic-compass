@@ -1,0 +1,7 @@
+{
+ "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+ "checker_profile_schema": "cas.typed-teaching-semantic-profile/0.1",
+ "root": "/root/hset_job/pkg/frozen",
+ "slot_profile_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98",
+ "slot_profile_schema": "cas.typed-teaching-slot-profile/0.1"
+}

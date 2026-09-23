@@ -1,0 +1,316 @@
+{
+ "A1": {
+  "all_modules_from_v2_root": true,
+  "checker_profile_equals_original_tree": true,
+  "files_equal_anchor": {
+   "answers.py": true,
+   "checker.py": true,
+   "pointer_inputs.py": true,
+   "slots.py": true,
+   "source.py": true
+  },
+  "files_sha256_lf": {
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  },
+  "frozen_checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+  "imported_module_files": {
+   "cas_meta2.typed_teaching.answers": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+   "cas_meta2.typed_teaching.checker": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+   "cas_meta2.typed_teaching.checker_v2": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker_v2.py",
+   "cas_meta2.typed_teaching.slots": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+   "cas_meta2.typed_teaching.slots_v2": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots_v2.py",
+   "cas_meta2.typed_teaching.source": "/root/hset_job/pkg/v2/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py"
+  },
+  "original_tree_profiles": {
+   "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+   "checker_profile_schema": "cas.typed-teaching-semantic-profile/0.1",
+   "root": "/root/hset_job/pkg/frozen",
+   "slot_profile_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98",
+   "slot_profile_schema": "cas.typed-teaching-slot-profile/0.1"
+  },
+  "profile_equals_historical_anchor": true,
+  "slot_profile_equals_original_tree": true
+ },
+ "A2": {
+  "error": "AttributeError: 'generator' object has no attribute 'next'",
+  "traceback_tail": [
+   "  File \"/root/hset_job/pkg/claude/records/helm_eval_design_20260923/d1_acceptance/d1_acceptance_run.py\", line 311, in test_a2",
+   "    rows = _pool_results(pool.imap_unordered(_a2_task, tasks, chunksize=4), len(tasks))",
+   "  File \"/root/hset_job/pkg/claude/records/helm_eval_design_20260923/d1_acceptance/d1_acceptance_run.py\", line 87, in _pool_results",
+   "    rows.append(iterator.next(timeout=POOL_WAIT_SECONDS))",
+   "                ^^^^^^^^^^^^^",
+   "AttributeError: 'generator' object has no attribute 'next'"
+  ]
+ },
+ "A3": {
+  "analogy_questions": 210,
+  "bound_cases": [
+   {
+    "case": "seven_node_world_same_domain_in_bank",
+    "pass": true,
+    "v2_refused": "TYPED_CHECKER_ISOMORPHISM_BOUND"
+   },
+   {
+    "case": "seven_node_world_cross_domain_in_bank",
+    "pass": true,
+    "v2_refused": "TYPED_CHECKER_ISOMORPHISM_BOUND"
+   },
+   {
+    "case": "seven_node_focus",
+    "pass": true,
+    "v2_refused": "TYPED_CHECKER_ISOMORPHISM_BOUND"
+   },
+   {
+    "case": "seven_node_correspondence",
+    "pass": true,
+    "v2_refused": "TYPED_CHECKER_ISOMORPHISM_BOUND"
+   }
+  ],
+  "cap_cases": [
+   {
+    "bank_worlds": 64,
+    "case": "analogy_exactly_64_cross_domain_isomorphs",
+    "equal_oracle": true,
+    "pass": true,
+    "v2_answers": 64
+   },
+   {
+    "case": "star5_24",
+    "oracle_mappings": 24,
+    "pass": true,
+    "v2_answers": 24,
+    "v2_refused": null
+   },
+   {
+    "case": "sink5_24",
+    "oracle_mappings": 24,
+    "pass": true,
+    "v2_answers": 24,
+    "v2_refused": null
+   },
+   {
+    "case": "k24_6_48",
+    "oracle_mappings": 48,
+    "pass": true,
+    "v2_answers": 48,
+    "v2_refused": null
+   },
+   {
+    "case": "k33_6_36",
+    "oracle_mappings": 36,
+    "pass": true,
+    "v2_answers": 36,
+    "v2_refused": null
+   },
+   {
+    "case": "star6_120",
+    "oracle_mappings": 120,
+    "pass": true,
+    "v2_answers": null,
+    "v2_refused": "TYPED_CHECKER_TARGET_SET_BOUND"
+   },
+   {
+    "case": "sink6_120",
+    "oracle_mappings": 120,
+    "pass": true,
+    "v2_answers": null,
+    "v2_refused": "TYPED_CHECKER_TARGET_SET_BOUND"
+   }
+  ],
+  "colliding_classes_tested": 105,
+  "colliding_groups_tested": 38,
+  "correspondence_questions": 442,
+  "mismatches": [],
+  "six_node_correspondence_questions": 233,
+  "six_node_refusals": [],
+  "slot_path_cases": [
+   {
+    "candidates": 121,
+    "case": "slot_path_5_nodes",
+    "every_accepted_answer_offered": true,
+    "expected_candidates": 121,
+    "frozen_compiler_refused": "TYPED_PERMUTATION_BOUND",
+    "pass": true,
+    "plan_schema": "cas.typed-teaching-slot-plan/0.2"
+   },
+   {
+    "candidates": 121,
+    "case": "slot_path_5_nodes",
+    "every_accepted_answer_offered": true,
+    "expected_candidates": 121,
+    "frozen_compiler_refused": "TYPED_PERMUTATION_BOUND",
+    "pass": true,
+    "plan_schema": "cas.typed-teaching-slot-plan/0.2"
+   },
+   {
+    "candidates": 721,
+    "case": "slot_path_6_nodes",
+    "every_accepted_answer_offered": true,
+    "expected_candidates": 721,
+    "frozen_compiler_refused": "TYPED_PERMUTATION_BOUND",
+    "pass": true,
+    "plan_schema": "cas.typed-teaching-slot-plan/0.2"
+   },
+   {
+    "candidates": 721,
+    "case": "slot_path_6_nodes",
+    "every_accepted_answer_offered": true,
+    "expected_candidates": 721,
+    "frozen_compiler_refused": "TYPED_PERMUTATION_BOUND",
+    "pass": true,
+    "plan_schema": "cas.typed-teaching-slot-plan/0.2"
+   }
+  ]
+ },
+ "A4": {
+  "frozen_checker_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+  "frozen_checker_schema": "cas.typed-teaching-semantic-profile/0.1",
+  "frozen_slot_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98",
+  "frozen_slot_schema": "cas.typed-teaching-slot-profile/0.1",
+  "names_checked": [
+   "checker_v2",
+   "answers_v2",
+   "slots_v2",
+   "cas.typed-teaching-semantic-profile/0.2",
+   "cas.typed-teaching-slot-profile/0.2",
+   "cas.typed-teaching-slot-plan/0.2",
+   "cas.typed-teaching-semantic-profile/0.2",
+   "cas.typed-teaching-slot-profile/0.2"
+  ],
+  "no_name_contains_frozen": true,
+  "s3_rule_strings_equal_frozen": {
+   "analogy_domain_rule": true,
+   "declaration_references": true,
+   "graph_matching": true,
+   "graph_order": true,
+   "max_admissible_answers": true,
+   "process_order": true,
+   "role_semantics": true,
+   "rules": true,
+   "tie_rule": true
+  },
+  "shared_with_frozen_by_design": {
+   "CHECK_SCHEMA": true,
+   "DECISION_SCHEMA": true,
+   "TARGET_SCHEMA": true,
+   "note": "the spec (S1) requires a distinct PROFILE; a v2 target or check is told apart by the profile digest it carries"
+  },
+  "v2_checker_digest": "b0e565314a91083f8c5559ce1be16fd667e82a52d7dd224de88440bdb0709075",
+  "v2_checker_schema": "cas.typed-teaching-semantic-profile/0.2",
+  "v2_max_admissible_answers": 64,
+  "v2_max_isomorphism_nodes": 6,
+  "v2_profile_declares": {
+   "max_admissible_answers": 64,
+   "max_isomorphism_nodes": 6
+  },
+  "v2_slot_digest": "3f384e6053036c5eecd0464d32101fe773edf64ecb9e0481af92e80494aeb453",
+  "v2_slot_schema": "cas.typed-teaching-slot-profile/0.2"
+ },
+ "A5": {
+  "frozen_on_bank_with_5_node_world": "TYPED_CHECKER_ISOMORPHISM_BOUND",
+  "frozen_on_training_bank_with_5_node_focus": "TYPED_CHECKER_ISOMORPHISM_BOUND",
+  "v2_on_64_bank_worlds_plus_focus": null,
+  "v2_on_65_bank_worlds": "TYPED_SOURCE_PUBLIC_BANK_REFS",
+  "v2_on_bank_with_5_node_world_equals_oracle": true,
+  "v2_on_training_bank_equals_oracle": true,
+  "v2_on_training_bank_with_5_node_focus": [
+   "None"
+  ]
+ },
+ "A6": {
+  "answers_equal_oracle": 1000,
+  "bank_worlds_per_question": 64,
+  "budget_seconds": 600.0,
+  "budget_source": "Codex records/helm_stage2_checker_20260923/WORK_PLAN.md",
+  "builder_benchmark_for_comparison": "Codex: 1,000 questions, 3 worlds per bank, 23.554114344 s on t3.large (README)",
+  "device": {
+   "cpu_model": "Intel(R) Xeon(R) Platinum 8488C",
+   "cpus": 8,
+   "platform": "Linux-7.0.0-1013-aws-x86_64-with-glibc2.39",
+   "python": "3.14.7"
+  },
+  "max_permutations_per_question": 3240,
+  "nodes": 5,
+  "questions": 1000,
+  "single_process_seconds": 88.655,
+  "six_node_max_permutations_per_question": 17280,
+  "six_node_questions": 100,
+  "six_node_seconds": 10.067,
+  "total_permutations": 1187640
+ },
+ "X_hset1a_crosscheck": {
+  "skipped": "no HSET-1A files"
+ },
+ "acceptance": "NOT_ACCEPTED",
+ "anchors": {
+  "claude_commit": "1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b",
+  "frozen_files_sha256_lf": {
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  },
+  "original_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "prediction_files_sha256": {
+   "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p00_predictions.json": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+   "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p10_predictions.json": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+   "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p00_predictions.json": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
+   "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p10_predictions.json": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
+   "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p00_predictions.json": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+   "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p10_predictions.json": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+   "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p00_predictions.json": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+   "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p10_predictions.json": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+   "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p00_predictions.json": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+   "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p10_predictions.json": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+   "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p00_predictions.json": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+   "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p10_predictions.json": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513"
+  },
+  "prediction_source_commit": "1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b",
+  "schema": "claude.d1-anchors/0.1",
+  "v2_commit": "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d",
+  "v2_tree_frozen_files_sha256_lf_at_launch": {
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  }
+ },
+ "machine": {
+  "cpu_model": "Intel(R) Xeon(R) Platinum 8488C",
+  "cpus": 8,
+  "platform": "Linux-7.0.0-1013-aws-x86_64-with-glibc2.39",
+  "python": "3.14.7"
+ },
+ "quick": false,
+ "schema": "claude.d1-acceptance/0.2",
+ "seconds": 159.8,
+ "seconds_per_test": {
+  "A1": 0.0,
+  "A2": 6.6,
+  "A3": 16.2,
+  "A4": 0.0,
+  "A5": 0.3,
+  "A6": 133.3,
+  "X_hset1a_crosscheck": 0.0
+ },
+ "v2_files_sha256_lf": {
+  "answers_v2.py": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
+  "checker_v2.py": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
+  "slots_v2.py": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb"
+ },
+ "v2_root": "/root/hset_job/pkg/v2",
+ "verdict": {
+  "A1": true,
+  "A2": false,
+  "A3": true,
+  "A4": true,
+  "A5": true,
+  "A6": true
+ }
+}

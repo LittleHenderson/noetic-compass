@@ -1,0 +1,51 @@
+JOB START 2026-09-23T15:43:31Z
+bundle.tar.gz: OK
+downloading uv 0.12.18 x86_64-unknown-linux-gnu
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.14.7-linux-x86_64-gnu (download) (34.3MiB)
+ Downloaded cpython-3.14.7-linux-x86_64-gnu (download)
+Installed Python 3.14.7 in 1.32s
+ + cpython-3.14.7-linux-x86_64-gnu (python3.14)
+Using CPython 3.14.7
+Creating virtual environment at: venv
+Activate with: source venv/bin/activate
+Python 3.14.7
+Linux ip-172-31-40-170 7.0.0-1013-aws #13~24.04.1-Ubuntu SMP PREEMPT Sat Sep  5 01:10:01 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+8
+               total        used        free      shared  buff/cache   available
+Mem:           15700         822       14591           2         577       14878
+Swap:              0           0           0
+model name	: Intel(R) Xeon(R) Platinum 8488C
+bundle_sha256=d0dfb09ede6a93ea67a9ad740e3853c50e755f945cf81d1b4f0bc2733fe1eac6
+claude_commit=1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b
+uv 0.12.18 (x86_64-unknown-linux-gnu)
+Using Python 3.14.7 environment at: venv
+{"root": "/root/hset_job/pkg/frozen", "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81", "checker_profile_schema": "cas.typed-teaching-semantic-profile/0.1", "slot_profile_digest": "6cc7b2a630d9c841d43f38d806d777501f6f4095185856f2688fef83150f0a98", "slot_profile_schema": "cas.typed-teaching-slot-profile/0.1"}
+build exit=1 wall=15s
+items 3370, clusters 1685, built in 11.6 s
+Traceback (most recent call last):
+  File "/root/hset_job/pkg/claude/records/helm_eval_design_20260923/hset1a/hset1a_build.py", line 625, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/root/hset_job/pkg/claude/records/helm_eval_design_20260923/hset1a/hset1a_build.py", line 537, in main
+    row = results.next(timeout=900)          # no result for 15 minutes = a dead or stuck worker
+          ^^^^^^^^^^^^
+AttributeError: 'generator' object has no attribute 'next'
+acceptance exit=3 wall=160s
+A1 True (0 s)
+A4 True (0 s)
+A2 False (7 s)
+A3 True (16 s)
+A5 True (0 s)
+A6 True (133 s)
+X_hset1a_crosscheck None (0 s)
+{"acceptance": "NOT_ACCEPTED", "verdict": {"A1": true, "A4": true, "A2": false, "A3": true, "A5": true, "A6": true}, "seconds": 159.8}
+JOB FINISH 2026-09-23T15:46:29Z status=finished_with_failures build=1 acceptance=3
