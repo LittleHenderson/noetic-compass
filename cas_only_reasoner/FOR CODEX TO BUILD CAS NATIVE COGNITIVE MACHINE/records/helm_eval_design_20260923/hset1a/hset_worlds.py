@@ -72,8 +72,13 @@ def vocabulary(source):
         assert len(settings) == 1, domain
         for f in rows:
             assert templates[domain] % {"whole": f["labels"][0], "child": f["labels"][1]} == f["function"], f["family_id"]
+        # `declaration_labels`: the labels that occur inside a TRAINED declaration (each training family's function
+        # text names its labels[0] and labels[1]). Node labels are dropped by Helm's reader, so the only label words
+        # Helm ever reads are the two inside the focus world's function text; drawing every node label from this set
+        # keeps those words trained (review 2026-09-23, finding 3) and keeps rank order uniformly random.
         result[domain] = {"setting": settings[0], "kinds": sorted({f["kind"] for f in rows}),
                           "labels": sorted({label for f in rows for label in f["labels"]}),
+                          "declaration_labels": sorted({f["labels"][i] for f in rows for i in (0, 1)}),
                           "function_template": templates[domain]}
     return result, families
 

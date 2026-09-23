@@ -22,8 +22,8 @@ finish() {                                                                   # k
   cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
   tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
   tar -czf "$WORK/sealed.tar.gz" -C "$WORK" sealed_out || true
+  upload "$WORK/sealed.tar.gz" "__SEALED_URL__"                            # sealed FIRST: the watcher stops at results
   upload "$WORK/results.tar.gz" "__RESULTS_URL__"
-  upload "$WORK/sealed.tar.gz" "__SEALED_URL__"
   shutdown -h now
 }
 trap finish EXIT
@@ -31,7 +31,7 @@ trap finish EXIT
 
 curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
 echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
-mkdir pkg && tar -xzf bundle.tar.gz -C pkg
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
 
 export HOME=/root
 curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }

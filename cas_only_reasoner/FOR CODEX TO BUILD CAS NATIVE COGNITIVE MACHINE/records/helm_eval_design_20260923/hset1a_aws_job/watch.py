@@ -22,7 +22,7 @@ import time
 
 HERE = pathlib.Path(__file__).resolve().parent
 GONE = ("terminated", "shutting-down", "gone")
-SAFE_MEMBER = re.compile(r"^out/[A-Za-z0-9._-]+$")
+SAFE_MEMBER = re.compile(r"^out/[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 
 def utc():
@@ -88,11 +88,18 @@ def main():
         if exists(keys["results"]):
             outcome = "RESULTS_RECEIVED"
         elif st in GONE or st == "stopped":
-            time.sleep(20)                                   # the upload is the machine's last act; give the object a moment
+            for _ in range(12):                              # the uploads are the machine's last act: wait up to 2 minutes
+                if exists(keys["results"]):
+                    break
+                time.sleep(10)
             outcome = "RESULTS_RECEIVED" if exists(keys["results"]) else "MACHINE_ENDED_WITHOUT_RESULTS"
         elif now >= deadline:
             terminate("client deadline of %d minutes reached" % record["client_deadline_minutes"])
-            outcome = "CLIENT_DEADLINE_TERMINATED"
+            for _ in range(18):                              # its exit handler still uploads on SIGTERM: look for 3 minutes
+                if exists(keys["results"]):
+                    break
+                time.sleep(10)
+            outcome = "CLIENT_DEADLINE_TERMINATED_RESULTS_RECEIVED" if exists(keys["results"]) else "CLIENT_DEADLINE_TERMINATED"
         else:
             if time.time() - last_beat > 300:
                 print("%s  still running, %d min since launch%s" % (now.strftime("%H:%M:%S"), (now - launched).total_seconds() // 60,
@@ -112,7 +119,7 @@ def main():
     watch_sealed = {}
     out.mkdir(exist_ok=True)
     try:
-        if outcome == "RESULTS_RECEIVED":
+        if outcome in ("RESULTS_RECEIVED", "CLIENT_DEADLINE_TERMINATED_RESULTS_RECEIVED"):
             body = s3.get_object(Bucket=bucket, Key=keys["results"])["Body"].read()
             (out / "results.tar.gz").write_bytes(body)
             with tarfile.open(fileobj=io.BytesIO(body), mode="r:gz") as tar:
@@ -128,12 +135,16 @@ def main():
             sealed_dir = pathlib.Path(record["sealed_destination"])
             if exists(keys["sealed"]):
                 sealed_body = s3.get_object(Bucket=bucket, Key=keys["sealed"])["Body"].read()
-                sealed_dir.mkdir(parents=True, exist_ok=True)
+                if sealed_dir.exists():
+                    raise RuntimeError("SEALED_DESTINATION_EXISTS %s: refusing to overwrite" % sealed_dir)
+                sealed_dir.mkdir(parents=True)
                 (sealed_dir / "sealed.tar.gz").write_bytes(sealed_body)
                 sealed_files = {}
                 with tarfile.open(fileobj=io.BytesIO(sealed_body), mode="r:gz") as tar:
                     for member in tar.getmembers():
-                        if member.isfile() and re.match(r"^sealed_out/[A-Za-z0-9._-]+$", member.name):
+                        name = member.name.split("/", 1)[-1]
+                        if (member.isfile() and re.match(r"^sealed_out/[A-Za-z0-9][A-Za-z0-9._-]*$", member.name)
+                                and name != "salt.hex"):
                             data = tar.extractfile(member).read()
                             (sealed_dir / member.name.split("/", 1)[1]).write_bytes(data)
                             sealed_files[member.name.split("/", 1)[1]] = hashlib.sha256(data).hexdigest()
@@ -159,8 +170,11 @@ def main():
     if end_state not in GONE:
         print("MACHINE NOT CONFIRMED GONE: %s is %s" % (iid, end_state), flush=True)
         return 6
-    if outcome == "RESULTS_RECEIVED":
-        return 0 if job_status == "done" else 5
+    if outcome in ("RESULTS_RECEIVED", "CLIENT_DEADLINE_TERMINATED_RESULTS_RECEIVED"):
+        if "HSET1A_SEALED_TEST_NEW_5.json" not in watch_sealed and job_status == "done":
+            print("SEALED FILE MISSING although the job says done", flush=True)
+            return 7
+        return 0 if job_status == "done" and outcome == "RESULTS_RECEIVED" else 5
     return {"MACHINE_ENDED_WITHOUT_RESULTS": 3, "CLIENT_DEADLINE_TERMINATED": 4}[outcome]
 
 

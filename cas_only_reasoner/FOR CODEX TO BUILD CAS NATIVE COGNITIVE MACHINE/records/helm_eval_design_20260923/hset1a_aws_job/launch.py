@@ -54,6 +54,7 @@ PREDICTIONS = ["records/typed_pointer_001/%s/collected/results/artifacts/%s_pred
 D = "records/helm_eval_design_20260923/"
 CLAUDE_FILES = [D + "hset1a/hset_worlds.py", D + "hset1a/hset1a_build.py", D + "d1_acceptance/oracle_isomorphism.py",
                 D + "d1_acceptance/d1_acceptance_run.py", D + "d1_acceptance/frozen_profiles.py"]
+JOB_FILES = [D + "hset1a_aws_job/launch.py", D + "hset1a_aws_job/job.sh.template", D + "hset1a_aws_job/watch.py"]
 
 
 def git(*args, data=None):
@@ -97,11 +98,15 @@ def lf(data):
 def assemble():
     head = git("rev-parse", "HEAD").decode().strip()
     for c in (ORIGINAL, V2_COMMIT):
-        if git("rev-parse", c).decode().strip() != c:
-            raise SystemExit("BUNDLE_REFUSED: commit %s not found" % c)
-    dirty = git("status", "--porcelain", "--", *CLAUDE_FILES).decode().strip()     # pathspecs relative to PACKAGE (git -C)
+        try:
+            found = git("rev-parse", "--verify", "--quiet", c + "^{commit}").decode().strip()
+        except subprocess.CalledProcessError:
+            found = None
+        if found != c:
+            raise SystemExit("BUNDLE_REFUSED: commit %s not found in this repository" % c)
+    dirty = git("status", "--porcelain", "--", *(CLAUDE_FILES + JOB_FILES)).decode().strip()   # pathspecs relative to PACKAGE
     if dirty:
-        # any line means a Claude file is modified or untracked relative to HEAD
+        # any line means a script, the machine template or this launcher differs from HEAD
         raise SystemExit("BUNDLE_REFUSED: commit the scripts first:\n" + dirty)
     frozen_paths, v2_paths = tree_paths(ORIGINAL), tree_paths(V2_COMMIT)
     frozen, v2 = read_blobs(ORIGINAL, frozen_paths), read_blobs(V2_COMMIT, v2_paths)
@@ -178,7 +183,7 @@ def main():
               .replace("__BUNDLE_SHA256__", bundle_sha).replace("__SOURCE_COMMIT__", head).replace("__PYTHON_VERSION__", PYTHON_VERSION))
     assert "__" not in script.replace("__pycache__", ""), "an unfilled placeholder remains"
     assert len(script.encode("utf-8")) < 16000, "user-data limit"
-    worst_case = PRICE_PER_HOUR * CLIENT_DEADLINE_MINUTES / 60.0 + ROOT_GB * 0.08 / 730 * CLIENT_DEADLINE_MINUTES / 60.0
+    worst_case = (PRICE_PER_HOUR + 0.005 + ROOT_GB * 0.08 / 730) * CLIENT_DEADLINE_MINUTES / 60.0   # machine + public address + disk
     assert worst_case < DOLLAR_CEILING, "the time limit does not keep the job under the ceiling"
     if args.dry_run:
         (HERE / "dry_run_machine_script.sh").write_text(script, encoding="utf-8", newline="\n")
@@ -205,6 +210,13 @@ def main():
             {"Key": "SelfTerminates", "Value": "yes-%d-seconds" % MAX_SECONDS}]
     launched, last_error = None, None
     for subnet in sorted(subnets, key=lambda s: s["AvailabilityZone"]):
+        # A launch that timed out on our side may still have started a machine: never start a second one.
+        existing = ec2.describe_instances(Filters=[{"Name": "tag:Name", "Values": ["hset1a-build-%s" % stamp]},
+                                                  {"Name": "instance-state-name", "Values": ["pending", "running"]}])["Reservations"]
+        if existing:
+            launched = {"Instances": existing[0]["Instances"]}
+            print("a machine from an earlier zone attempt is running: using it, not launching another", flush=True)
+            break
         try:
             launched = ec2.run_instances(
                 ImageId=ami, InstanceType=INSTANCE_TYPE, MinCount=1, MaxCount=1, SubnetId=subnet["SubnetId"], SecurityGroupIds=[group["GroupId"]],
@@ -231,7 +243,14 @@ def main():
               "bucket": BUCKET, "keys": keys, "python": PYTHON_VERSION, "anchors": anchors,
               "bundle": {"files": len(files), "bytes": len(body), "sha256": bundle_sha, "claude_commit": head,
                          "original_commit": ORIGINAL, "v2_commit": V2_COMMIT},
-              "sealed_destination": str(ARCHIVE), "links_stored": "no -- time-limited links are never written to disk"}
+              "sealed_destination": str(ARCHIVE / ("run_" + stamp)),
+              "machine_script_template_sha256_lf": hashlib.sha256(template.encode("utf-8")).hexdigest(),
+              "machine_script_rendered_sha256": hashlib.sha256(script.encode("utf-8")).hexdigest(),
+              "custody_note": ("the bundle (with the salt) and the sealed results stay in the private bucket under keys; "
+                               "anyone who can read that bucket, or this machine's startup script while its links are "
+                               "valid (4 hours), could rebuild TEST_NEW_5. Claude does not delete them (no permanent "
+                               "deletion); removing them is an owner decision"),
+              "links_stored": "no -- time-limited links are never written to disk"}
     (HERE / "launch_record.json").write_text(json.dumps(record, indent=1), encoding="utf-8", newline="\n")
     print("LAUNCHED %s (%s, %s). It destroys itself within %d minutes." % (instance["InstanceId"], INSTANCE_TYPE,
                                                                         instance["Placement"]["AvailabilityZone"], MAX_SECONDS // 60 + 3))

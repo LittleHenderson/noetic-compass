@@ -52,6 +52,9 @@ COMPARATORS = {
     "parts": ("CONSTANT_EMPTY", "ONE_HOP", "PARTICIPANTS_2_3", "ALL_OTHERS", "DESCENDANTS"),
     "edge_account": ("ONE_HOP_ALL_EDGES", "STAR_FROM_DECLARED_WHOLE", "RANK_CHAIN", "PARTICIPANT_CHAIN"),
 }
+# Measured on the trained course (records/typed_course_001/checks_002/public_course.json, 107 reach records), 2026-09-23:
+# the BFS rule was only ever asked with gold VIA; the first-child rule had all three states.
+TRAINED_REACH_STATES = {"REACH_BFS": {"VIA": 59}, "REACH_FIRST_DIRECT": {"ABSENT": 2, "DIRECT": 30, "VIA": 16}}
 FLAGS = ("GOLD_VIA_IS_PARTICIPANT_2", "GOLD_VIA_IS_LOWEST_RANK_CHILD", "GOLD_VIA_IS_RANK_LAST_CHILD")
 
 
@@ -198,23 +201,51 @@ def sign_pass(b, c):
     return b > c and sign_p(b, c) <= ALPHA
 
 
-def power(n, q_model, q_bar):
-    """P(the exact cluster sign test passes) when the model is right on a cluster with probability q_model and the
-    bar with q_bar, independently per cluster (a stated assumption, printed with every number)."""
-    pb, pc = q_model * (1 - q_bar), (1 - q_model) * q_bar
-    pt = max(0.0, 1.0 - pb - pc)
+def _binom_pmf(n, k, p):
+    if p <= 0.0:
+        return 1.0 if k == 0 else 0.0
+    if p >= 1.0:
+        return 1.0 if k == n else 0.0
+    return math.exp(math.lgamma(n + 1) - math.lgamma(k + 1) - math.lgamma(n - k + 1) + k * math.log(p) + (n - k) * math.log(1 - p))
+
+
+def power_given_bar(wrong, right, q_win, q_keep):
+    """P(the exact cluster sign test passes), CONDITIONAL on the bar's measured per-cluster results.
+
+    `wrong` = primary clusters the bar gets wrong (the only places the model can win, b), `right` = clusters the bar
+    gets right (the only places the model can lose, c). The model wins each bar-wrong cluster with probability q_win
+    and keeps each bar-right cluster with probability q_keep, independently (a stated assumption). With q_win = 1 and
+    q_keep = 1 this is exactly 1 if wrong >= 7 and 0 otherwise: 2**-7 is the first p at or below 0.01 with no loss.
+    """
     total = 0.0
-    for b in range(n + 1):
-        for c in range(0, min(b, n - b + 1)):
-            if not sign_pass(b, c):
-                continue
-            t = n - b - c
-            log_term = math.lgamma(n + 1) - math.lgamma(b + 1) - math.lgamma(c + 1) - math.lgamma(t + 1)
-            if (pb == 0 and b) or (pc == 0 and c) or (pt == 0 and t):
-                continue
-            log_term += (b * math.log(pb) if b else 0) + (c * math.log(pc) if c else 0) + (t * math.log(pt) if t else 0)
-            total += math.exp(log_term)
+    for b in range(wrong + 1):
+        pb = _binom_pmf(wrong, b, q_win)
+        if pb == 0.0:
+            continue
+        for c in range(0, min(b, right + 1)):
+            if sign_pass(b, c):
+                total += pb * _binom_pmf(right, c, 1 - q_keep)
     return round(min(1.0, total), 6)
+
+
+def cut_stats(members, names):
+    """Bar, bar-wrong count W and conditional power for one set of clusters (a cell or an alternative cut)."""
+    n = len(members)
+    acc = {name: (round(sum(c["comparators"][name] for c in members) / n, 6) if n else None) for name in names}
+    bar = max(names, key=lambda name: (acc[name] if acc[name] is not None else -1, -names.index(name)))
+    wrong = sum(1 for c in members if not c["comparators"][bar])
+    out = {"clusters": n, "comparator_cluster_accuracy": acc, "bar": bar, "bar_cluster_accuracy": acc[bar],
+           "bar_wrong_clusters_W": wrong, "bar_right_clusters": n - wrong,
+           "can_possibly_pass_W_at_least_7": wrong >= 7, "W_meets_10_cluster_floor": wrong >= MIN_CLUSTERS}
+    if n:
+        uniform = sorted({round(min(1.0, (acc[bar] or 0) + d), 4) for d in (0.10, 0.20, 0.30)} | {1.0})
+        out["power_conditional_on_measured_bar"] = {
+            "assumption": ("clusters independent; the bar's per-cluster results are the measured ones; alpha %s one-sided; "
+                           "no zero-loss veto; one run (three runs must each pass)" % ALPHA),
+            "uniform_model_accuracy": {("%.4f" % q): power_given_bar(wrong, n - wrong, q, q) for q in uniform},
+            "never_loses_where_bar_is_right_wins_fraction": {("%.2f" % f): power_given_bar(wrong, n - wrong, f, 1.0)
+                                                             for f in (0.5, 0.75, 1.0)}}
+    return out
 
 
 # ============================================================================ building
@@ -266,7 +297,7 @@ def instance_specs(hw, vocab, rng, shape, whole, part):
     n, edges = shape
     domain = rng.choice(hw.TRAINING_DOMAINS)
     v = vocab[domain]
-    kind, label_set = rng.choice(v["kinds"]), rng.sample(v["labels"], n)
+    kind, label_set = rng.choice(v["kinds"]), rng.sample(v["declaration_labels"], n)
     p2, p3 = rng.sample([x for x in range(n) if x != whole], 2)
     primary = [whole, p2, p3]
 
@@ -351,22 +382,18 @@ def summarise_cell(hw, cell, clusters, rows_by_item, items_by_cluster, seed_mate
         for c in clusters:
             c["role"] = "PRIMARY"
     primary = [c for c in clusters if c["role"] == "PRIMARY"]
-    n = len(primary)
-    acc = {name: (sum(c["comparators"][name] for c in primary) / n if n else None) for name in names}
-    bar = max(names, key=lambda name: (acc[name] if acc[name] is not None else -1, -names.index(name)))
-    q_bar = acc[bar]
-    summary = {"cell": cell, "kind": kind, "primary_clusters": n, "presentations_per_cluster": 2,
-               "comparator_cluster_accuracy": acc, "bar": bar, "bar_cluster_accuracy": q_bar,
-               "bar_right_clusters": sum(c["comparators"][bar] for c in primary)}
-    if n and q_bar is not None:
-        effects = sorted({round(min(1.0, q_bar + d), 6) for d in (0.10, 0.20, 0.30)} | {1.0})
-        summary["power_exact_sign_test"] = {
-            "assumption": "model and bar right on each cluster independently; alpha %s one-sided; no zero-loss veto" % ALPHA,
-            "by_model_cluster_accuracy": {("%.4f" % q): power(n, q, q_bar) for q in effects}}
-    summary["can_carry_a_claim"] = bool(n >= MIN_CLUSTERS and q_bar is not None and q_bar < 1.0)
+    stats = cut_stats(primary, names)
+    n, bar, q_bar, wrong = stats["clusters"], stats["bar"], stats["bar_cluster_accuracy"], stats["bar_wrong_clusters_W"]
+    summary = {"cell": cell, "kind": kind, "primary_clusters": n, "presentations_per_cluster": 2, **stats}
+    # A model can only WIN where the bar is wrong. The design's floor of 10 clusters is applied to W, the clusters that
+    # can tell model from bar (review 2026-09-23, finding 1); W >= 7 is the arithmetic minimum for any pass.
+    summary["can_carry_a_claim"] = bool(n >= MIN_CLUSTERS and wrong >= MIN_CLUSTERS and q_bar is not None and q_bar < 1.0)
     summary["why_not"] = (None if summary["can_carry_a_claim"] else
                           "fewer than %d clusters" % MIN_CLUSTERS if n < MIN_CLUSTERS else
-                          "the bar is exact (%s answers every cluster): only input-reading fidelity can be shown" % bar)
+                          "the bar is exact (%s answers every cluster): only input-reading fidelity can be shown" % bar
+                          if wrong == 0 else
+                          "the bar (%s) is wrong on only W=%d clusters; a pass needs at least 7 wins with no loss, and the "
+                          "10-cluster floor applies to W" % (bar, wrong))
     if kind == "reach":
         roles = collections.Counter(c["role"] for c in clusters)
         summary["clusters_by_role"] = dict(sorted(roles.items()))
@@ -387,8 +414,19 @@ def summarise_cell(hw, cell, clusters, rows_by_item, items_by_cluster, seed_mate
                                              / max(1, sum(1 for c in nontie if c["state"] == "VIA" and c["distance"] == d)), 6)
                                              for name in names}}
                                 for d in sorted({c["distance"] for c in nontie if c["state"] == "VIA"})}}
+        # Alternative cuts, printed for the owner's decision on section 1.3. NOT chosen here; nothing is re-cut.
+        summary["alternative_cuts_not_chosen"] = {
+            "ALL_NON_TIE": cut_stats(nontie, names),
+            "VIA_ONLY_NON_TIE": cut_stats([c for c in nontie if c["state"] == "VIA"], names),
+            "VIA_DISTANCE_3_PLUS_NON_TIE": cut_stats([c for c in nontie if c["state"] == "VIA" and (c["distance"] or 0) >= 3], names)}
+        summary["trained_course_answer_states_for_this_rule"] = TRAINED_REACH_STATES[cell]
         ties = [c for c in clusters if c["role"] == "TIE_STRATUM"]
-        summary["tie_stratum"] = {"clusters": len(ties), "comparator_cluster_accuracy":
+        tie_gold_differs = 0
+        for c in ties:
+            golds = {hw.canon(rows_by_item[i["item_id"]]["gold"]) for i in items_by_cluster[c["cluster_id"]]}
+            tie_gold_differs += len(golds) > 1
+        summary["tie_stratum"] = {"clusters": len(ties), "clusters_whose_gold_differs_between_presentations": tie_gold_differs,
+                                  "comparator_cluster_accuracy":
                                   {name: (round(sum(c["comparators"][name] for c in ties) / len(ties), 6) if ties else None)
                                    for name in names}}
         for scope, members in (("primary_via", [c for c in primary if c["state"] == "VIA"]),
@@ -424,7 +462,11 @@ def main():
                 "oracle_sha256_lf": lf_sha(ORACLE_DIR / "oracle_isomorphism.py"),
                 "salt_sha256": hashlib.sha256(salt.encode("ascii")).hexdigest(),
                 "frozen_files_sha256_lf": {name: lf_sha(root / "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching" / name)
-                                           for name in ("checker.py", "answers.py", "slots.py", "source.py", "pointer_inputs.py", "course.py")},
+                                           for name in ("checker.py", "answers.py", "slots.py", "source.py", "pointer_inputs.py",
+                                                        "course.py", "pointer_contract.py", "tokenization.py", "focal.py",
+                                                        "course_plan.py", "practice_contract.py", "matched_contract.py",
+                                                        "worker_contract.py", "input_frames.py")},
+                "face_corpus_sha256_lf": lf_sha(root / "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py"),
                 "frozen_checker_profile_digest": checker.checker_profile()["profile_digest"],
                 "python": platform.python_version(), "platform": platform.platform(), "processes": args.processes}
     assert identity["frozen_checker_profile_digest"] == FROZEN_CHECKER_PROFILE_ANCHOR, "not the frozen checker"
@@ -452,6 +494,20 @@ def main():
     dev5, test5, strata_table = split_five(hw, salt, {key(s): facts[key(s)] for s in classes[5]})
     assert len(dev5) == len(test5) == DEV_TEST_EACH and not set(dev5) & set(test5)
     split_shapes = {"FAMILIAR_RELABELLED": familiar, "NEW_SHAPE_4": new4, "DEV_NEW_5": dev5, "TEST_NEW_5": test5}
+
+    def structural_counts(keys):
+        """Reach clusters by (state, tie or not, distance), per rule: rank-free, so the same for every instance."""
+        out = {}
+        for rule, cell in ((hw.REACH_FIRST, "REACH_FIRST_DIRECT"), (hw.REACH_BFS, "REACH_BFS")):
+            counts = collections.Counter()
+            for k in keys:
+                for c in facts[k]["reach_clusters"]:
+                    counts["%s/%s/d%s" % (c["state"], "tie" if len(c["answers"][rule]) > 1 else "non_tie", c["distance"])] += 1
+            out[cell] = dict(sorted(counts.items()))
+        return out
+
+    structural = {"ALL_267_FIVE_NODE_CLASSES": structural_counts([key(s) for s in classes[5]]),
+                  "DEV_NEW_5": structural_counts(dev5), "TEST_NEW_5": structural_counts(test5)}
     if args.limit_shapes:
         split_shapes = {k: v[:args.limit_shapes] for k, v in split_shapes.items()}
 
@@ -465,13 +521,27 @@ def main():
     print("items %d, clusters %d, built in %.1f s" % (len(items), len(clusters), time.monotonic() - t0), flush=True)
 
     # ---- evaluate every packet (frozen validator, slot compiler, Helm's reader, frozen checker)
+    # Fail fast in THIS process first: a worker whose start-up fails would make the pool restart it forever
+    # (review 2026-09-23, finding 5). The first item runs here, which also loads Helm's reader cache once.
+    _init(str(root))
+    first = _evaluate(items[0])
+    if "error" in first:
+        raise SystemExit("PREFLIGHT_ITEM_FAILED: %s" % (first["error"] if items[0]["split"] not in SECRET_SPLITS
+                                                         else first["error"].split(":")[0]))
     ctx = multiprocessing.get_context("spawn")
     rows, t1 = [], time.monotonic()
     with ctx.Pool(args.processes, initializer=_init, initargs=(str(root),)) as pool:
-        for k, row in enumerate(pool.imap_unordered(_evaluate, items, chunksize=8), 1):
+        results = pool.imap_unordered(_evaluate, items, chunksize=8)
+        while True:
+            try:
+                row = results.next(timeout=900)          # no result for 15 minutes = a dead or stuck worker
+            except StopIteration:
+                break
+            except multiprocessing.TimeoutError:
+                raise SystemExit("POOL_STALLED: no result for 900 s after %d of %d items" % (len(rows), len(items)))
             rows.append(row)
-            if k % 500 == 0:
-                print("  evaluated %d / %d (%.0f s)" % (k, len(items), time.monotonic() - t1), flush=True)
+            if len(rows) % 500 == 0:
+                print("  evaluated %d / %d (%.0f s)" % (len(rows), len(items), time.monotonic() - t1), flush=True)
     rows_by_item = {r["item_id"]: r for r in rows}
     errors = [r for r in rows if "error" in r]
     problems = {
@@ -530,17 +600,23 @@ def main():
                "counts": {"items": len(items), "clusters": len(clusters),
                           "items_by_split": dict(collections.Counter(i["split"] for i in items))},
                "five_node_strata": strata_table, "limit_shapes": args.limit_shapes,
+               "five_node_structural_reach_cluster_counts": structural,
                "test_shapes_digest": hw.sha(sorted(split_shapes["TEST_NEW_5"])),
                "dev_shapes": split_shapes["DEV_NEW_5"],
                "files": {"HSET1A_CELLS_PUBLIC.json": public_sha, "HSET1A_SEALED_TEST_NEW_5.json": sealed_sha},
                "cells": summaries, "seconds": round(time.monotonic() - t0, 1)}
     dump(pub / "HSET1A_BUILD_SUMMARY.json", summary)
-    print("\n%-38s %6s %-22s %8s %9s %9s  %s" % ("cell", "n", "bar", "bar_acc", "pow+0.20", "pow@1.0", "claim?"))
+    print("\n%-38s %6s %4s %-22s %8s %9s %9s  %s" % ("cell", "n", "W", "bar", "bar_acc", "pw+0.20", "pw_all_W", "claim?"))
     for name, s in summaries.items():
-        p = s.get("power_exact_sign_test", {}).get("by_model_cluster_accuracy", {})
-        plus20 = p.get("%.4f" % round(min(1.0, (s["bar_cluster_accuracy"] or 0) + 0.20), 6))
-        print("%-38s %6d %-22s %8.4f %9s %9s  %s" % (name, s["primary_clusters"], s["bar"], s["bar_cluster_accuracy"] or 0,
-                                                     plus20, p.get("1.0000"), "yes" if s["can_carry_a_claim"] else "NO: " + s["why_not"]))
+        pw = s.get("power_conditional_on_measured_bar", {})
+        plus20 = pw.get("uniform_model_accuracy", {}).get("%.4f" % round(min(1.0, (s["bar_cluster_accuracy"] or 0) + 0.20), 4))
+        print("%-38s %6d %4d %-22s %8.4f %9s %9s  %s" % (
+            name, s["primary_clusters"], s["bar_wrong_clusters_W"], s["bar"], s["bar_cluster_accuracy"] or 0, plus20,
+            pw.get("never_loses_where_bar_is_right_wins_fraction", {}).get("1.00"),
+            "yes" if s["can_carry_a_claim"] else "NO: " + s["why_not"]))
+        for alt, a in s.get("alternative_cuts_not_chosen", {}).items():
+            print("    alt %-34s %6d %4d %-22s %8.4f" % (alt, a["clusters"], a["bar_wrong_clusters_W"], a["bar"],
+                                                       a["bar_cluster_accuracy"] or 0))
     print(json.dumps({"build_ok": build_ok, "problems": problems, "seconds": summary["seconds"]}), flush=True)
     return 0 if build_ok else 2
 

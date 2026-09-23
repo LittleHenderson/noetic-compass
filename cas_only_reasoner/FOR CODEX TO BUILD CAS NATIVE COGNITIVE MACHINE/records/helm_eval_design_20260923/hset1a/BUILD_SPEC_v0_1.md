@@ -137,7 +137,40 @@ A single failure in any of these fails the build:
 - the frozen checker's profile digest differs from the historical anchor
   `2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81`.
 
-## 7. Power (printed per cell)
+## 6a. Changes after the pre-launch review (2026-09-23), made before any run
+
+An independent reviewer read the builder and found 1 blocker, 3 major and 4 minor findings. Each is fixed or
+recorded below. Nothing had been built or run.
+
+| # | Finding | Disposition |
+|---|---|---|
+| 1 BLOCKER | The bar (`TWO_HOP_FIRST_CHILD`) is right on every non-tie ABSENT, DIRECT and 2-step VIA cluster. It is wrong only on VIA 3 or more steps away. So the number of clusters where a model can win, **W**, was 3 to 9 in 12 trial salts. A pass needs at least 7 wins with no loss. The build said "can carry a claim" anyway | **Fixed in the printout.** Every cell now prints W. `can_carry_a_claim` now needs W of at least 10 (the design's floor, applied to the clusters that can tell the model from the bar) and n of at least 10. The build also prints alternative cuts (all non-tie clusters; VIA only; VIA at 3 or more steps) and structural counts over all 267 five-node classes. **No cut is chosen here.** Choosing one is the owner's decision under design section 1.3. The real salt is fixed and committed; it will never be re-drawn to get a better W |
+| 2 MAJOR | The old power treated the bar's results as random, but they are measured | **Fixed.** Power is now conditional on the measured bar: wins can only come from the W bar-wrong clusters, and losses only from the bar-right ones (`power_given_bar`). With no loss and every W won, power is exactly 1 if W >= 7 and 0 otherwise |
+| 3 MAJOR | The function text names two node labels. About 7 in 10 draws used a label word that appears in no trained declaration, so it has an untrained embedding row | **Fixed.** Every node label is now drawn from `declaration_labels`: the labels that appear inside a trained function text. Rank order stays uniformly random |
+| 4 MAJOR | In training, the BFS rule was only ever asked when the answer was VIA. Measured on the trained course: BFS 59 records, all VIA; first-child rule 48 records, 30 DIRECT, 16 VIA, 2 ABSENT | **Recorded, not re-cut.** Section 1's "how the trained course asked them" is true for cue and rule, not for which answers occurred. BFS questions whose answer is ABSENT or DIRECT are a new kind of question for Helm. The build prints the trained answer states beside each reach cell (`trained_course_answer_states_for_this_rule`) and a VIA-only alternative cut. The owner decides |
+| 5 MINOR | A worker that fails at start-up would hang the job until the 2-hour timer | **Fixed.** The first item now runs in the main process before the pool starts. Waiting for any result is limited to 900 s |
+| 6 MINOR | Section 2.1 claimed a rank-blind model cannot get a tie right in both presentations. In 35 of 80 trial tie clusters, both presentations had the same gold | **Wording corrected here.** A tie's gold depends on rank order. The two presentations are required to differ in some rank, not in the order of the tied candidates, so a tie is sometimes answerable without rank. The build prints how many tie clusters have a different gold in the two presentations. Ties stay outside the primary cell |
+| 7 MINOR | Public TEST totals go beyond the section 5 list | **Listed here.** The public summary also gives TEST totals by state, by VIA distance and by domain; comparator accuracies per distance; tie counts; W and the alternative cuts. All are totals over clusters. No TEST world, record id, answer or shape identity is published |
+| 8 MINOR | The identity record did not hash every file the checks depend on | **Fixed.** It now hashes 14 typed-teaching files and `face_corpus.py`. The bundle's sha256 also covers all of them |
+
+**What the reviewer checked and found correct:**
+- `reach_gold` equals the frozen `checker._reach` on 16,572 checks.
+- Node rank equals the `/n<i>` index.
+- Automorphism groups agree with an independent count for all 295 shapes.
+- Packets pass the frozen validator and slot compiler, with exactly one admissible answer.
+- The checker's comparator scoring agrees with direct comparison.
+- The bar choice follows this spec.
+- Cells with 0 clusters, and reach cells with k = 0, do not crash.
+- JSON output works.
+- Spawn pickling works.
+- No custody path leaks TEST data into public outputs or `build.log`.
+- The runtime is 15 to 35 minutes on 8 vCPU.
+
+**Section 3 note.** `TWO_HOP_FIRST_CHILD` is "the lowest-rank child that has an arrow to the part". That is stronger
+than the design's wording, "two-hop via the first child". A bar should be the strongest cheap competitor, so the
+stronger reading is kept.
+
+## 7. Power (printed per cell; replaced by section 6a, finding 2)
 
 - **The test.** The exact one-sided sign test over clusters at alpha 0.01, with no zero-loss veto.
 - **Model accuracies used.** The bar plus 0.10, plus 0.20 and plus 0.30, and 1.0.

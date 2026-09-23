@@ -12,3 +12,24 @@ from Codex's code. Specification: `_handoffs/HELM_NEXT_PHASE_20260923/D1_CHECKER
 CPU to themselves. The A2 harness runs once Codex delivers v2.
 
 **Pass conditions:** section 3 of the specification. A failure blocks the use of v2.
+
+## Update 2026-09-23: `d1_acceptance_run.py` (runner v0.2) and a pre-launch review
+
+`d1_acceptance_run.py` runs tests A1 to A6 end to end. An independent reviewer read version 0.1 before any run and
+found 5 major and 10 minor defects, with no blocker. Three majors were tests that could pass even if v2 were wrong.
+Version 0.2 fixes them:
+
+- **The 65-bank-world refusal.** It is now asked of v2 itself, with the exact reason
+  `TYPED_SOURCE_PUBLIC_BANK_REFS`.
+- **The node bound, pinned from above.** A 7-node world in scope must be refused with
+  `TYPED_CHECKER_ISOMORPHISM_BOUND`, whether it is the focus, a same-domain bank world or a cross-domain one.
+- **The answer cap, pinned at exactly 64.** An analogy question with exactly 64 cross-domain isomorphs must be
+  accepted, and a 120-map correspondence must be refused.
+- **The new slot-compiler path** is now tested on 5- and 6-node correspondence packets.
+- **Every test is wrapped,** and the result file is rewritten after each test.
+- **A1 fails closed** without the original tree's profiles, and it checks that every imported module comes from
+  the v2 tree.
+- **v2's output** is captured and discarded while it runs on sealed packets.
+
+`a2_compare_harness.py` is superseded by `d1_acceptance_run.py` test A2. It is kept unchanged as the reviewed
+version.
