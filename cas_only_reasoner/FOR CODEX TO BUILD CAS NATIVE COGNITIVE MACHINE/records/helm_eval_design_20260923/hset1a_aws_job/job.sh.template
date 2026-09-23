@@ -1,0 +1,76 @@
+#!/bin/bash
+# HSET-1A Stage 1 cell build + D-1 acceptance tests A1-A6. Claude (evaluation designer, independent checker).
+# Runs as root through cloud-init user-data on a throwaway c7i.2xlarge. NO credentials on this machine: it can fetch
+# ONE object and write THREE through time-limited links. It always ends by shutting down and is destroyed on shutdown.
+# Non-neural: no model, no GPU, no training. Nothing is written back to any repository.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "hset1a job hard limit" || true                 # kill switch 0: the OS's own power-off
+LOG=/var/log/hset_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/hset_job
+mkdir -p "$WORK/out" "$WORK/sealed_out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                   # kill switch 2: ANY exit uploads and shuts down
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  tar -czf "$WORK/sealed.tar.gz" -C "$WORK" sealed_out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  upload "$WORK/sealed.tar.gz" "__SEALED_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+{ "$PY" --version; uname -a; nproc; free -m; grep -m1 "model name" /proc/cpuinfo; echo "bundle_sha256=__BUNDLE_SHA256__";
+  echo "claude_commit=__SOURCE_COMMIT__"; uv --version; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+
+export PYTHONDONTWRITEBYTECODE=1
+C=claude/records/helm_eval_design_20260923
+cd "$WORK/pkg"
+STATUS=frozen_profiles
+"$PY" -B $C/d1_acceptance/frozen_profiles.py --root frozen --out "$WORK/out/frozen_profiles.json" \
+  || { STATUS=frozen_profiles_failed; exit 1; }
+
+STATUS=build
+START=$(date +%s)
+"$PY" -B $C/hset1a/hset1a_build.py --package-root frozen --salt-file sealed/salt.hex \
+  --out-public "$WORK/out" --out-sealed "$WORK/sealed_out" --processes "$(nproc)" > "$WORK/out/build.log" 2>&1
+BUILD=$?
+echo "build exit=$BUILD wall=$(( $(date +%s) - START ))s"
+tail -n 30 "$WORK/out/build.log"
+
+STATUS=acceptance
+START=$(date +%s)
+HSET_ARGS=""
+[ -f "$WORK/out/HSET1A_CELLS_PUBLIC.json" ] && HSET_ARGS="$HSET_ARGS --hset-public $WORK/out/HSET1A_CELLS_PUBLIC.json"
+[ -f "$WORK/sealed_out/HSET1A_SEALED_TEST_NEW_5.json" ] && HSET_ARGS="$HSET_ARGS --hset-sealed $WORK/sealed_out/HSET1A_SEALED_TEST_NEW_5.json"
+"$PY" -B $C/d1_acceptance/d1_acceptance_run.py --v2-root v2 --anchors anchors.json \
+  --frozen-profile-json "$WORK/out/frozen_profiles.json" $HSET_ARGS --out "$WORK/out/D1_ACCEPTANCE_RESULT.json" \
+  --processes "$(nproc)" > "$WORK/out/acceptance.log" 2>&1
+ACC=$?
+echo "acceptance exit=$ACC wall=$(( $(date +%s) - START ))s"
+tail -n 20 "$WORK/out/acceptance.log"
+
+echo "build=$BUILD acceptance=$ACC" > "$WORK/out/EXIT_CODES"
+# acceptance exit 3 = the tests ran and the verdict is NOT_ACCEPTED: a result, not a job failure
+if [ "$BUILD" -eq 0 ] && { [ "$ACC" -eq 0 ] || [ "$ACC" -eq 3 ]; }; then STATUS=done; else STATUS="finished_with_failures build=$BUILD acceptance=$ACC"; fi
+exit 0
