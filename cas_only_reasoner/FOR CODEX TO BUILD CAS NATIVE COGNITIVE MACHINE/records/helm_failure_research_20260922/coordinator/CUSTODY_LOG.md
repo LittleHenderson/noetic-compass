@@ -71,3 +71,10 @@ not a semantic check failure or reason to rewrite immutable report/source bytes.
 The integration worktree remained clean before/after cherry-picks.
 A3 and A4 were then launched with fork_turns=none from their original clean base. They were
 given only the shared factual records and their role, not A1/A2 findings.
+
+Root's later usage refresh failed with 'Could not read current usage limits. Try again later.'
+Last successful observation remains 71% used / 29% remaining, ordinaryUsageAllowed=true.
+Latest usage is unavailable, not zero and not evidence of exhaustion. No reset or paid expansion.
+An A0 attempt to write this accounting document failed in functions JavaScript parsing before any
+shell call ran because a PowerShell newline escape ended the JavaScript template. It was corrected
+by using a PowerShell here-string. The failed call made no filesystem mutation.
