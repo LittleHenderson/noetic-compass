@@ -1,0 +1,24 @@
+Wed Sep 23 05:48:38 PDT 2026
+{
+ "schema": "claude.d1-oracle-selftest/0.1",
+ "class_counts": {
+  "3": 4,
+  "4": 24,
+  "5": 267
+ },
+ "collisions_3_4": 2,
+ "classes_5_in_a_collision": 105,
+ "collision_groups_5": 38,
+ "pairs_checked": 929,
+ "method_disagreements": 0,
+ "relabelled_self_isomorphic": 295,
+ "relabelled_total": 295,
+ "frozen_crosscheck": {
+  "pairs": 4096,
+  "disagreements": 0
+ },
+ "seconds": 4.425338600000032,
+ "verdict": "ORACLE_SELFTEST_PASS"
+}
+EXIT oracle 0
+Wed Sep 23 05:48:43 PDT 2026

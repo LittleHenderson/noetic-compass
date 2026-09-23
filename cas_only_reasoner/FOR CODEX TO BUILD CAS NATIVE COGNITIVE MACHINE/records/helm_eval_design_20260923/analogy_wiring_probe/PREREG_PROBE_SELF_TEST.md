@@ -25,3 +25,6 @@ fixed. The failure is reported, not re-read.
 - forward passes only;
 - at most 3,600 s;
 - no other CPU-heavy job running at the same time.
+
+**Amendment A2 (2026-09-23).** By owner order ("use aws"), the self-test runs on the AWS `g4dn.2xlarge` (T4)
+described in amendment A2 of `PREREG_ANALOGY_WIRING_PROBE_v0_2.md`. The expected outcomes are unchanged.

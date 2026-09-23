@@ -1,0 +1,79 @@
+#!/bin/bash
+# Helm analogy-wiring before-readings + preservation reference + probe self-test. Claude (independent checker).
+# Runs as root through cloud-init user-data on a throwaway g4dn.2xlarge (T4). NO credentials on this machine: it can
+# fetch ONE object and write TWO through time-limited links. It always ends by shutting down, and it is set to be
+# destroyed on shutdown. Forward passes only: nothing is trained, nothing is written back to any repository.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "helm probe job hard limit" || true          # kill switch 0: the OS's own power-off
+LOG=/var/log/helm_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/helm_job
+mkdir -p "$WORK/out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                   # kill switch 2: ANY exit uploads and shuts down
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+uv pip install --python "$PY" "torch==__TORCH_VERSION__" --index-url https://download.pytorch.org/whl/cu128 || { STATUS=torch_install_failed; exit 1; }
+uv pip install --python "$PY" "numpy==__NUMPY_VERSION__" || { STATUS=numpy_install_failed; exit 1; }
+uv pip install --python "$PY" --no-deps pkg/_wheels/casformer_reference-0.1.0-py3-none-any.whl pkg/_wheels/cas_neural_cjt-0.2.0-py3-none-any.whl || { STATUS=wheel_install_failed; exit 1; }
+{ "$PY" --version; uname -a; nproc; free -m; nvidia-smi; echo "bundle_sha256=__BUNDLE_SHA256__"; echo "source_commit=__SOURCE_COMMIT__";
+  sha256sum pkg/_wheels/*.whl; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+
+export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 CUBLAS_WORKSPACE_CONFIG=:4096:8
+P=records/helm_eval_design_20260923/analogy_wiring_probe
+T=records/typed_pointer_001
+cd "$WORK/pkg"
+STATUS=preflight
+"$PY" -B records/helm_eval_design_20260923/aws_probe_job/preflight.py --out "$WORK/out/preflight.json" > "$WORK/out/preflight.log" 2>&1 \
+  || { STATUS=preflight_failed; cat "$WORK/out/preflight.log"; exit 1; }
+cat "$WORK/out/preflight.log"
+STATUS=running
+
+run() {   # $1 = name, rest = command; keeps each job's own exit code and wall time
+  local name=$1; shift
+  ( START=$(date +%s); "$@"; CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) > "$WORK/out/$name.log" 2>&1
+}
+models() { echo "--model h2_fresh_$1:$1 --model h2_initial_$1:$1:$T/receipt_$1/checkpoints/initial.pt --model h2_final_$1:$1:$T/receipt_$1/checkpoints/final.pt"; }
+
+# GROUP A: the three probe before-readings and the probe self-test, side by side on the one T4
+for s in 20260917 20260918 20260919; do
+  run probe_$s "$PY" -B $P/analogy_wiring_probe_v0_2.py $(models $s) --out "$WORK/out/before_reading_v0_2_T4_seed$s.json" & eval "PA_$s=\$!"
+done
+run selftest "$PY" -B $P/probe_self_test.py --seed 20260917 --out "$WORK/out/probe_self_test_result_T4.json" & PS=$!
+wait "$PA_20260917"; A1=$?; wait "$PA_20260918"; A2=$?; wait "$PA_20260919"; A3=$?; wait "$PS"; AS=$?
+
+# GROUP B: the preservation reference on this GPU type, all 9 models
+for s in 20260917 20260918 20260919; do
+  run preserve_$s "$PY" -B $P/preservation_digest.py $(models $s) --out "$WORK/out/preservation_reference_20208c92_T4_seed$s.json" & eval "PB_$s=\$!"
+done
+wait "$PB_20260917"; B1=$?; wait "$PB_20260918"; B2=$?; wait "$PB_20260919"; B3=$?
+
+for f in "$WORK"/out/probe_*.log "$WORK"/out/selftest.log "$WORK"/out/preserve_*.log; do tail -n 6 "$f"; done
+echo "exit codes: probe=$A1,$A2,$A3 selftest=$AS preserve=$B1,$B2,$B3"
+if [ $((A1+A2+A3+AS+B1+B2+B3)) -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures probe=$A1,$A2,$A3 selftest=$AS preserve=$B1,$B2,$B3"; fi
+exit 0

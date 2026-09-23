@@ -1,0 +1,21 @@
+{
+ "class_counts": {
+  "3": 4,
+  "4": 24,
+  "5": 267
+ },
+ "classes_5_in_a_collision": 105,
+ "collision_groups_5": 38,
+ "collisions_3_4": 2,
+ "frozen_crosscheck": {
+  "disagreements": 0,
+  "pairs": 4096
+ },
+ "method_disagreements": 0,
+ "pairs_checked": 929,
+ "relabelled_self_isomorphic": 295,
+ "relabelled_total": 295,
+ "schema": "claude.d1-oracle-selftest/0.1",
+ "seconds": 4.425338600000032,
+ "verdict": "ORACLE_SELFTEST_PASS"
+}

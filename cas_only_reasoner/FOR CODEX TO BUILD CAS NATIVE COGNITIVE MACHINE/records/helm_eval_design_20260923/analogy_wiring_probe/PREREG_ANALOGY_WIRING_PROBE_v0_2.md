@@ -144,3 +144,25 @@ its first counterfactual score was stored.
    completed models.
 
 The metrics, thresholds, verdict rules and the alternative list are **unchanged**.
+
+## Amendment A2 (2026-09-23): device moves to AWS by owner order. Made before any further run.
+
+**The order.** On 2026-09-23 the owner said "use aws", and then: "use aws as there is only 354 mb of 16 gbs
+locally". The laptop ran out of memory during attempt 4 (`RUN_LOG.md`).
+
+**The new device.** The remaining before-readings, the preservation reference and the self-test run on **one
+AWS `g4dn.2xlarge`**: an NVIDIA T4 GPU, 8 vCPU, 32 GiB, us-west-2, on-demand at $0.752/hour (AWS pricing API,
+2026-09-23). It is launched by `../aws_probe_job/launch.py`, with the limits written in that folder's
+`JOB_LIMITS.md`.
+
+**What changes.** Only the device, and running up to 4 invocations at the same time on that one machine. Every
+metric, threshold, verdict rule, alternative list and per-invocation limit is **unchanged**: at most 3 models,
+3,600 s, GPU admission at or below 75 C, a stop at 80 C, no CPU fallback, forward passes only.
+
+**Preservation digests depend on the hardware.** Float32 kernels can differ in the last bits between GPU
+models. So:
+- all 9 reference models are fingerprinted on the T4;
+- seed 20260919 was already fingerprinted on the RTX 4070 (`preservation_reference_20208c92_seed20260919.json`),
+  so comparing the two measures bit-equality across GPUs;
+- the switch-OFF acceptance check for Codex's repair must run on the **same GPU type** as the reference it is
+  compared with.
