@@ -1,0 +1,81 @@
+S: 256 rows, 14 bare shapes (train pool has 16) | set(ii): 128 rows, first/last position in order[256:]: 0/127
+depth counts S: {1: 105, 2: 88, 3: 63} | set(ii): {1: 43, 2: 47, 3: 38} | dev256: {3: 256}
+dev256 bare shapes: 9, shared with train pool: 0 | parser(dev obs) == checker_reference_ast rows 1-16: 16/16
+model params: 70818 | torch 2.11.0+cu128 | cuda 12.8 | NVIDIA GeForce RTX 4070 Laptop GPU
+FIDELITY @128: {"all_tensors_equal_checkpoint": true, "tensors_equal": 12, "tensors": 12, "max_abs_diff": 0.0, "losses_equal_smoke_log": 128, "grad_norms_equal_smoke_log": 128, "seconds_since_train_start": 1.3223387000034563}
+
+== EVAL 500 (after 500 updates, 7.142 s, complete=True)
+ S      exact 0/256 by depth {"1": [0, 105], "2": [0, 88], "3": [0, 63]} | distinct outputs 1 | shape== 105 leaf-seq== 0 pred-shape-in-train 256 | pred depth {"1": 256}
+        CE GRU 1.234663 | IB1 bigram 1.262304 | IB2 lw-slot 1.159119 | EXTRA one-pass IB1 1.270650 IB2 1.159165 | GRU rows below IB1 168, below IB2 25 | spread 0.190613
+ set2   exact 0/128 by depth {"1": [0, 43], "2": [0, 47], "3": [0, 38]} | distinct outputs 1 | shape== 43 leaf-seq== 0 pred-shape-in-train 128 | pred depth {"1": 128}
+        CE GRU 1.250215 | IB1 bigram 1.287984 | IB2 lw-slot 1.170125 | EXTRA one-pass IB1 1.296582 IB2 1.170238 | GRU rows below IB1 90, below IB2 7 | spread 0.188509
+ dev16  exact 0/16 by depth {"3": [0, 16]} | distinct outputs 1 | shape== 0 leaf-seq== 0 pred-shape-in-train 16 | pred depth {"1": 16}
+        CE GRU 1.338353 | IB1 bigram 1.328743 | IB2 lw-slot 1.201415
+ dev256 exact 0/256 by depth {"3": [0, 256]} | distinct outputs 1 | shape== 0 leaf-seq== 0 pred-shape-in-train 256 | pred depth {"1": 256}
+        CE GRU 1.357313 | IB1 bigram 1.333240 | IB2 lw-slot 1.212908 | EXTRA one-pass IB1 1.341907 IB2 1.213231 | GRU rows below IB1 75, below IB2 0 | spread 0.156565
+
+== EVAL 1000 (after 1000 updates, 10.391 s, complete=True)
+ S      exact 0/256 by depth {"1": [0, 105], "2": [0, 88], "3": [0, 63]} | distinct outputs 5 | shape== 123 leaf-seq== 0 pred-shape-in-train 256 | pred depth {"1": 171, "2": 85}
+        CE GRU 1.153622 | IB1 bigram 1.257580 | IB2 lw-slot 1.159070 | EXTRA one-pass IB1 1.270650 IB2 1.159165 | GRU rows below IB1 244, below IB2 133 | spread 0.452747
+ set2   exact 0/128 by depth {"1": [0, 43], "2": [0, 47], "3": [0, 38]} | distinct outputs 5 | shape== 51 leaf-seq== 0 pred-shape-in-train 128 | pred depth {"1": 77, "2": 51}
+        CE GRU 1.191765 | IB1 bigram 1.283678 | IB2 lw-slot 1.170422 | EXTRA one-pass IB1 1.296582 IB2 1.170238 | GRU rows below IB1 116, below IB2 49 | spread 0.433278
+ dev16  exact 0/16 by depth {"3": [0, 16]} | distinct outputs 3 | shape== 0 leaf-seq== 0 pred-shape-in-train 16 | pred depth {"1": 1, "2": 15}
+        CE GRU 1.299008 | IB1 bigram 1.324673 | IB2 lw-slot 1.201369
+ dev256 exact 0/256 by depth {"3": [0, 256]} | distinct outputs 4 | shape== 0 leaf-seq== 0 pred-shape-in-train 256 | pred depth {"1": 31, "2": 225}
+        CE GRU 1.323827 | IB1 bigram 1.328943 | IB2 lw-slot 1.213097 | EXTRA one-pass IB1 1.341907 IB2 1.213231 | GRU rows below IB1 140, below IB2 23 | spread 0.212519
+
+TRAINING STOPPED: updates 2000, reason MAX_UPDATES, budget_limited False, wall since update 1 28.855 s (includes in-run evals)
+
+== EVAL end (after 2000 updates, 12.247 s, complete=True)
+ S      exact 0/256 by depth {"1": [0, 105], "2": [0, 88], "3": [0, 63]} | distinct outputs 14 | shape== 138 leaf-seq== 0 pred-shape-in-train 233 | pred depth {"1": 105, "2": 97, "3": 31, "4": 23}
+        CE GRU 1.043102 | IB1 bigram 1.255115 | IB2 lw-slot 1.159039 | EXTRA one-pass IB1 1.270650 IB2 1.159165 | GRU rows below IB1 256, below IB2 244 | spread 0.567322
+ set2   exact 0/128 by depth {"1": [0, 43], "2": [0, 47], "3": [0, 38]} | distinct outputs 12 | shape== 59 leaf-seq== 0 pred-shape-in-train 108 | pred depth {"1": 43, "2": 47, "3": 18, "4": 20}
+        CE GRU 1.115134 | IB1 bigram 1.281192 | IB2 lw-slot 1.170357 | EXTRA one-pass IB1 1.296582 IB2 1.170238 | GRU rows below IB1 128, below IB2 105 | spread 0.552368
+ dev16  exact 0/16 by depth {"3": [0, 16]} | distinct outputs 4 | shape== 0 leaf-seq== 0 pred-shape-in-train 16 | pred depth {"2": 14, "3": 2}
+        CE GRU 1.262183 | IB1 bigram 1.322514 | IB2 lw-slot 1.201332
+ dev256 exact 0/256 by depth {"3": [0, 256]} | distinct outputs 9 | shape== 0 leaf-seq== 0 pred-shape-in-train 238 | pred depth {"2": 217, "3": 21, "4": 18}
+        CE GRU 1.277560 | IB1 bigram 1.326907 | IB2 lw-slot 1.213150 | EXTRA one-pass IB1 1.341907 IB2 1.213231 | GRU rows below IB1 194, below IB2 58 | spread 0.280600
+mean training loss by update window: {"1-128": 2.405563570559025, "129-256": 1.4777387231588364, "257-512": 1.293989033671096, "513-1024": 1.1974220462143421, "1025-1536": 1.1181226720800623, "1537-2000": 1.0709255154019799}
+
+== RULE READING (per PREREG_RT2.txt item 8, END reading)
+{
+ "fired": [],
+ "inputs": {
+  "updates_done": 2000,
+  "S_depth1_exact_rate": 0.0,
+  "S_depth1": {
+   "n": 105,
+   "generated": 105,
+   "canonical_exact": 0
+  },
+  "S_distinct": 14,
+  "CE_S": {
+   "GRU": 1.043101801071316,
+   "IB1_online_bigram_same_stream": 1.255115041819246,
+   "IB2_lossweighted_slot_same_stream": 1.159038574401365,
+   "EXTRA_IB1_one_pass_S": 1.2706500729778492,
+   "EXTRA_IB2_one_pass_S": 1.1591654998343708,
+   "GRU_rows_below_IB1": 256,
+   "GRU_rows_below_IB2": 244
+  },
+  "bug_ce_primary": false,
+  "bug_ce_strict": false,
+  "bug_strict": false,
+  "S_exact_depth12": 0,
+  "set2_exact_depth12": 0,
+  "set2_distinct": 12,
+  "tlt_perdepth_variant": false,
+  "tlt_distinct_gt1_variant": false,
+  "set2_depth3": {
+   "n": 38,
+   "generated": 38,
+   "canonical_exact": 0
+  },
+  "set2_depth3_rate": 0.0,
+  "dev256_exact": 0,
+  "dev16_exact": 0
+ },
+ "design_axis_fits_none": true
+}
+cuda peak allocated bytes: 137355776 | process seconds 43.124
+wrote C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\5e8709f4-3151-444f-939b-317c01bc3568\scratchpad\helm_review\RT2\rt2_results.json and C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\5e8709f4-3151-444f-939b-317c01bc3568\scratchpad\helm_review\RT2\rt2_updates.jsonl

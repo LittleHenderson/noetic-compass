@@ -1,0 +1,41 @@
+RT8 PRE-REGISTRATION -- written BEFORE any replay was run.
+
+QUESTION
+Does the Q4 grammar-masked decoder (learner_q4_decoder.allowed_next / free_decode) and token codec
+(ast_to_tokens / tokens_to_ast) allow the correct token sequence for EVERY visible train and dev row
+of Q3 v0.7 family G (2048 train + 256 dev = 2304 rows)?
+
+METHOD (fixed now)
+- Pure Python. A sys.meta_path blocker refuses any import of 'torch' (or 'torch.*').
+  A static scan lists every import statement in every lab module that will be imported.
+  If torch would load at import time -> NOT_RUN_TORCH_DEPENDENCY and stop.
+  At the end, assert 'torch' not in sys.modules.
+- Rows read ONLY via q3_load.load_visible(data_dir, 'G', 'train'|'dev') (visible files + manifest.json).
+  No sealed_* file, no eval file is opened.
+- Target AST per row = R5 parser (SCRATCH/R5/common.py parse) applied to the visible observation.
+- gold = ast_to_tokens(ast). Scripted logits: +100.0 on gold[len(prefix)], 0.0 elsewhere (34 floats).
+- free_decode(Bottleneck((0.0,)*64), scripted) with default DecodeLimits().
+- Per row record: outcome == 'GENERATED'; tokens == gold; decoded ast == parsed ast (exact dict
+  equality AND sorted-key JSON equality); steps == len(gold).
+- Independent per-step mask check: gold[i] in allowed_next(gold[:i]) for every i, and
+  allowed_next(gold) == () after EOS. For any failure: slot class, node depth, row depth, refused token.
+- TOKENS check: len(TOKENS), order, BOS_ID, uniqueness; read learner_q4_neural.py / q4_smoke_job.py as
+  TEXT (not imported) for the head size and the index space; compare LF-normalised sha256 of the
+  runtime files with run_001/plan.json source_pins.
+- Parser fidelity side checks (do not change the outcome rule): re-render(parse(obs)) == obs for every
+  row; parse == checker_reference_ast on the 16 saved cases in inspected_predictions.json.
+- Planted-bug control (in memory only, never on disk): a copy of allowed_next that drops REG_T must make
+  the replay FAIL on exactly the rows that contain a '|T' literal. If the control does not fail, the
+  replay is declared VACUOUS and no outcome below is claimed.
+
+OUTCOME RULES (copied from the chair's task text, fixed before running)
+- If all 2304 rows replay exactly -> the mask and codec are cleared for every visible row; any Q4 defect
+  must be in the neural learning path (supports reading RT7 without a mask confound).
+- If any row fails -> MASK_OR_CODEC_BUG on those rows; report counts by slot class and depth; RT7 and RT2
+  leaf results must then be re-read with that defect in mind.
+- If a module would import torch -> NOT_RUN_TORCH_DEPENDENCY; report and defer.
+
+Scope limit stated in advance: 'replay exactly' is judged against the R5-parsed AST. Whether that AST
+equals the sealed target_ast on rows other than the 16 saved cases is not checked here (sealed files are
+not opened); a parser failure (row that R5's parser cannot parse) is reported separately as PARSER_FAIL,
+not as a mask/codec failure, and would make the outcome fit none of the rules for that row.

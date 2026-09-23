@@ -1,0 +1,30 @@
+1. hand parser vs frozen dev reference ASTs: 16 / 16 exact
+   distinct learned predictions among the 16: 1
+2. visible rows: train 2048, dev 256
+   train: depth counts {1: 747, 2: 756, 3: 545}
+   train: input UTF-8 bytes min 13 mean 35.348 max 84
+   train: target AST tokens (incl EOS) min 13 mean 21.114 max 41; rows with <=64 tokens: 2048 of 2048
+   dev: depth counts {3: 256}
+   dev: input UTF-8 bytes min 35 mean 54.078 max 100
+   dev: target AST tokens (incl EOS) min 27 mean 31.430 max 55; rows with <=64 tokens: 256 of 256
+   dev depth-3 rows 256: bytes mean 54.078; tokens mean 31.430
+3. smoke saw 128 updates over 128 distinct rows (0.0625 of the pool)
+   depth counts of seen rows: {1: 58, 2: 37, 3: 33}
+   first seen row: (^5^O_{F7} + (^7^O_{F5}|f + (^6^P|E × ^2^E|T))) tokens 27
+4. the smoke's learned prediction (all 16): (^7^E + ^7^C)
+   input-free greedy [slot kind only, fitted on the 128 seen rows]: ^4^E  | equals learned prediction: False
+   input-free greedy [slot kind only, fitted on all 2048 train rows]: ^4^O  | equals learned prediction: False
+   input-free greedy [slot kind + depth, fitted on the 128 seen rows]: (^3^E + ^3^E)  | equals learned prediction: False
+      counts at ('noetic', 1) {'N5': 14, 'N0': 16, 'N6': 17, 'N8': 15, 'N2': 20, 'N4': 16, 'N3': 22, 'N9': 14, 'N1': 17, 'N7': 16}
+      counts at ('domain', 1) {'D_O': 40, 'D_E': 45, 'D_P': 42, 'D_C': 40}
+      counts at ('drive', 1) {'F7': 15, 'F3': 13, 'F_NONE': 72, 'F6': 12, 'F5': 14, 'F2': 13, 'F4': 19, 'F1': 9}
+      counts at ('register', 1) {'REG_ABSENT': 93, 'REG_T': 16, 'REG_f': 12, 'REG_E': 26, 'REG_A': 20}
+      counts at ('op', 0) {'PLUS': 99, 'TIMES': 29}
+      counts at ('expr', 1) {'STATE': 167, 'BINARY': 89}
+   input-free greedy [slot kind + depth, fitted on all 2048 train rows]: (^8^C + ^8^C)  | equals learned prediction: False
+5. logged losses: n 128, first 3.5241360664367676, last 1.600077748298645, mean of first 16 3.347147, mean of last 16 1.668515, min 1.362770
+   uniform over 34 output tokens: ln = 3.526361
+   input-free CE on the same 128 updates [slot kind only, prior fitted on all 2048 train]: mean 1.235626, last-16 mean 1.215614
+      logged minus input-free, last 16 updates: mean 0.452900
+   input-free CE on the same 128 updates [slot kind + depth, prior fitted on all 2048 train]: mean 1.164755, last-16 mean 1.141938
+      logged minus input-free, last 16 updates: mean 0.526576

@@ -1,0 +1,22 @@
+reach records in course: 107 groups: {'VIA_via_is_child_of_whole_and_parent_of_part': 64, 'DIRECT': 30, 'VIA_needs_longer_chain': 11, 'ABSENT': 2}
+rules: {'bfs_immediate_predecessor_lexical_v1': 59, 'first_direct_constituent_lexical_v1': 48}
+question 7a391350 answer ('VIA', 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1') group VIA_via_is_child_of_whole_and_parent_of_part
+question a3e70de9 answer ('VIA', 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1') group VIA_via_is_child_of_whole_and_parent_of_part
+receipt_helm1_certified_20260917
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 8/9; held/ABSENT 1/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 18/19; trained/ABSENT 1/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 9/9; trained/VIA_via_is_child_of_wh 32/36
+    ablation_round_mix: held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 0/1; held/VIA_via_is_child_of_wh 16/19
+receipt_helm1_certified_20260918
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 8/9; held/ABSENT 1/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 18/19; trained/ABSENT 1/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 9/9; trained/VIA_via_is_child_of_wh 32/36
+    ablation_round_mix: held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 18/19
+receipt_helm1_certified_20260919
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 9/9; held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19; trained/ABSENT 1/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 9/9; trained/VIA_via_is_child_of_wh 31/36
+    ablation_round_mix: held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19
+receipt_20260917
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 9/9; held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19; trained/ABSENT 0/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 8/9; trained/VIA_via_is_child_of_wh 31/36
+    ablation_round_mix: held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19
+receipt_20260918
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 8/9; held/ABSENT 1/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 18/19; trained/ABSENT 1/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 9/9; trained/VIA_via_is_child_of_wh 32/36
+    ablation_round_mix: held/ABSENT 0/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19
+receipt_20260919
+    course_p10: excluded/VIA_needs_longer_chain 1/1; excluded/VIA_via_is_child_of_wh 8/9; held/ABSENT 1/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 13/19; trained/ABSENT 1/1; trained/DIRECT 25/25; trained/VIA_needs_longer_chain 9/9; trained/VIA_via_is_child_of_wh 32/36
+    ablation_round_mix: held/ABSENT 1/1; held/DIRECT 5/5; held/VIA_needs_longer_chain 1/1; held/VIA_via_is_child_of_wh 17/19

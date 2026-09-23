@@ -1,0 +1,37 @@
+RT1 pre-run record. Written BEFORE any GPU script was run. Scratch only. DIAGNOSTIC_NOT_CLAIM_BEARING.
+
+OUTCOME RULES (copied verbatim from the chair's task text):
+(a) If step 0 does not reproduce all 16 saved predictions exactly -> BUG in checkpoint save/load or decoding; stop and report.
+(b) If relative spread < 0.05 on dev and seen rows -> ENCODER COLLAPSE: the vector carries almost no input information.
+(c) If spread >= 0.05 but swap/zero changes the greedy decode on 0 of 16 inputs and every |logit gap change| < 0.1 -> DECODER IGNORES THE BOTTLENECK.
+(d) If swap/zero changes decodes on >= 2 of 16 or logit gaps shift by >= 0.5 -> input is used but too weakly to leave the prior.
+(e) If seen-row exact >= 1 at any depth -> the pipeline can map input to output; no gross BUG.
+(f) If seen and unseen train rows are 0 exact with 1-2 distinct outputs and teacher-forced CE on them is >= the input-blind CE on the same rows -> consistent with TOO LITTLE TRAINING; bug not excluded, go to RT2.
+Neither (b) nor (c) alone is a code defect. None of these outcomes changes any claim status.
+
+OPERATIONAL CHOICES FIXED BEFORE RUNNING (my reading where the task text leaves a choice):
+1. Checkpoint: q4_checkpoint.load_checkpoint(dir, expected_identity=<manifest identity>, expected_weights_sha256=d54f5715...7477, width=64, device="cuda:0").
+   Determinism settings copied from q4_smoke_job.py:327-333 plus CUBLAS_WORKSPACE_CONFIG=":4096:8" (q4_smoke_job.py:236).
+2. Step 0 compares outcome, ast (dict equality) and steps with run_001/dev_predictions.jsonl for all 16 rows. "Exactly" = all three equal on 16/16.
+3. Seen rows: order = list(range(2048)); random.Random(20260921).shuffle(order); seen = order[:128] (checked equal to SCRATCH/R5/used_rows.json).
+   Unseen rows: order[128:256] (the next 128 in the same shuffle; the training loop only used order[0:128], q4_smoke_job.py:336-341).
+4. Relative spread of a set = (mean L2 distance over all unordered pairs) / (mean L2 norm of the vectors). Rule (b) fires only if BOTH dev16 and seen128 are < 0.05.
+5. Gap G1 = logit[TIMES] - logit[PLUS] after prefix (BINARY,). Gap G2 = logit[BINARY] - logit[STATE] after prefix (BINARY, PLUS).
+   (Both gaps are also reported at both prefixes, as asked.) Variants: TRUE (own bottleneck), ZERO (64 zeros), SWAP (dev input (i+1) mod 16's bottleneck).
+   Change = gap(variant) - gap(TRUE). "every |change| < 0.1" for rule (c) is over 16 inputs x {ZERO, SWAP} x {G1, G2}.
+   "logit gaps shift by >= 0.5" for rule (d) = max |change| over the same 64 values >= 0.5.
+   Decode change = full greedy token sequence under variant != under TRUE. Counted per variant; rule (c)/(d) use the count of inputs changed under EITHER variant.
+6. Targets: train rows by the R5 parser (SCRATCH/R5/common.py parse) on the VISIBLE observation, because rule 7 forbids opening sealed_* files.
+   Dev targets: checker_reference_ast from records/q4_authorized_20260922/inspected_predictions.json (a record file). Parser is re-checked against it.
+   Exact = dict equality prediction_ast == target_ast (same test as q4_smoke_job.py:388). Depth = binary nesting depth (R5 common.depth).
+7. Teacher-forced CE: per row, torch.nn.functional.cross_entropy(model.teacher_forced_logits(input, target[:-1]), target) under torch.no_grad()
+   (same formula as q4_smoke_job.py:344-346). Set value = mean of per-row values. Token-weighted mean also reported.
+8. Input-blind learners (R5 definitions):
+   IB1 online bigram: R5 s5_meeting.py preq(k=1, alpha=0.1); vocabulary 34, BOS context, NOT given the grammar.
+       Evaluated on seen/unseen/dev with its state AFTER all 128 seen rows (in update order). Its prequential (before-each-row) values on seen rows also reported.
+   IB2 loss-weighted slot prior: R5 s7_greedy_lw.py fit(None): weighted counts per (slot, expr-depth), weight 1/len(target); EOS prob 1.
+       Fitted on the 128 seen rows. Add 0.01 weight to every legal token of the slot so no probability is zero (unsmoothed zero count reported).
+   Rule (f) CE condition, PRIMARY reading: on seen AND on unseen rows, GRU CE >= min(IB1 CE, IB2 CE) (the GRU does not beat the best input-blind learner).
+   STRICT reading also reported: GRU CE >= both.
+9. Rule (f) "1-2 distinct outputs" = number of distinct predicted ASTs over the 256 train rows (seen + unseen together), also reported per set.
+10. Anything else computed is labelled EXTRA and is not used to apply any rule.

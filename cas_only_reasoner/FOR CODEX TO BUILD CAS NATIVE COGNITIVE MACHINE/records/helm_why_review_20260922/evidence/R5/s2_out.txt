@@ -1,0 +1,68 @@
+keys in update rows: ['class', 'clip_norm', 'learning_rate', 'loss', 'pre_clip_gradient_norm', 'update']
+any example id field logged: False
+pool 2048 updates 128 distinct rows used 128 first 8 indices [1091, 1497, 1444, 696, 526, 174, 63, 128]
+
+loss first/last: 3.5241360664367676 1.600077748298645  min 1.3627700805664062 at update 122  max 3.5299148559570312 at 3
+ updates   1- 16 loss mean 3.347147 sd 0.122375 min 3.051501 max 3.529915
+ updates  17- 32 loss mean 2.985477 sd 0.167524 min 2.662971 max 3.218020
+ updates  33- 48 loss mean 2.650812 sd 0.142930 min 2.355007 max 2.975297
+ updates  49- 64 loss mean 2.449213 sd 0.202761 min 2.056941 max 2.774488
+ updates  65- 80 loss mean 2.252139 sd 0.258065 min 1.850391 max 2.727236
+ updates  81- 96 loss mean 2.031099 sd 0.189179 min 1.731799 max 2.403616
+ updates  97-112 loss mean 1.860109 sd 0.221034 min 1.458956 max 2.244567
+ updates 113-128 loss mean 1.668515 sd 0.167909 min 1.362770 max 1.942765
+ OLS slope all 128: -0.014440614647578023
+ OLS slope updates 65-128: -0.011545610957311624
+ OLS slope updates 97-128: -0.010337350436669291
+ updates with loss below 2.0: [66, 73, 77, 82, 83] ... count 39
+ first update with loss < 2.5: 43
+
+grad norm pre-clip: min 0.725079 max 1.530571 mean 1.051021; count > clip 1.0: 73; argmax update 106
+ updates   1- 32 gradnorm mean 0.918372 min 0.725079 max 1.108778  >1.0: 6
+ updates  33- 64 gradnorm mean 1.050813 min 0.829040 max 1.301621  >1.0: 22
+ updates  65- 96 gradnorm mean 1.071534 min 0.843952 max 1.424013  >1.0: 22
+ updates  97-128 gradnorm mean 1.163366 min 0.863725 max 1.530571  >1.0: 23
+
+vocabulary size 34  ln(V) = 3.5263605246161616
+ slot expr     n=10892 entropy(nats)=0.675364  top: [('STATE', 6470), ('BINARY', 4422)]
+ slot op       n= 4422 entropy(nats)=0.649426  top: [('PLUS', 2860), ('TIMES', 1562)]
+ slot noetic   n= 6470 entropy(nats)=2.301985  top: [('N4', 677), ('N2', 670), ('N9', 667)]
+ slot domain   n= 6470 entropy(nats)=1.386110  top: [('D_O', 1655), ('D_C', 1631), ('D_E', 1614)]
+ slot drive    n= 6470 entropy(nats)=1.680464  top: [('F_NONE', 3185), ('F5', 492), ('F6', 492)]
+ slot register n= 6470 entropy(nats)=1.380353  top: [('REG_ABSENT', 3262), ('REG_T', 830), ('REG_A', 804)]
+ slot eos      n= 2048 entropy(nats)=-0.000000  top: [('EOS', 2048)]
+ expr slot at node-depth 0: [('BINARY', 2048, 1.0)]
+ expr slot at node-depth 1: [('STATE', 2427, 0.592529), ('BINARY', 1669, 0.407471)]
+ expr slot at node-depth 2: [('STATE', 2633, 0.788796), ('BINARY', 705, 0.211204)]
+ expr slot at node-depth 3: [('STATE', 1410, 1.0)]
+
+per-example mean-token cross-entropy on the SAME 128 examples, in update order:
+ B0_uniform34               all128 mean 3.526361 | upd 1-16 3.526361 | upd 97-128 3.526361 | upd 113-128 3.526361
+ B1_unigram_no_grammar      all128 mean 3.109132 | upd 1-16 3.128250 | upd 97-128 3.112003 | upd 113-128 3.087940
+ B2_grammar_slot_marginal   all128 mean 1.235626 | upd 1-16 1.253610 | upd 97-128 1.236023 | upd 113-128 1.215614
+ B3_slot_plus_expr_depth    all128 mean 1.167904 | upd 1-16 1.185595 | upd 97-128 1.167937 | upd 113-128 1.147841
+ MODEL_logged_loss          all128 mean 2.405564 | upd 1-16 3.347147 | upd 97-128 1.764312 | upd 113-128 1.668515
+ model minus B1_unigram_no_grammar: upd 97-128 mean -1.347691, #updates(97-128) where model < baseline: 32/32; all128 model<baseline: 107/128
+ model minus B2_grammar_slot_marginal: upd 97-128 mean 0.528289, #updates(97-128) where model < baseline: 0/32; all128 model<baseline: 0/128
+ model minus B3_slot_plus_expr_depth: upd 97-128 mean 0.596374, #updates(97-128) where model < baseline: 0/32; all128 model<baseline: 0/128
+
+Pearson(model loss, B3 CE) upd 65-128: 0.733087 ; upd 97-128: 0.877254
+Pearson(model loss, B1 CE) upd 65-128: 0.683995
+Pearson(model loss, target length) upd 65-128: 0.143727
+B3 CE range on used examples: min 0.892066 max 1.464021
+
+128 used examples: depth {1: 58, 2: 37, 3: 33}  token lengths {13: 58, 20: 28, 27: 30, 34: 9, 41: 3}
+ supervised target tokens total: 2553  mean per example: 19.9453125
+ leaves seen: 383  distinct noetic^domain states seen: 40 of 40
+ min/max count per state: 4 16  ^7^E: 13  ^7^C: 16
+ distinct full leaf literals seen: 270  of 1600 possible (10x4x8x5)
+ noetic counts in used leaves: [('^0', 37), ('^1', 31), ('^2', 44), ('^3', 43), ('^4', 49), ('^5', 30), ('^6', 34), ('^7', 48), ('^8', 33), ('^9', 34)]
+ depth-3 examples among used: 33
+ last 8 updates: leaves 28, noetic top3 [('^3', 6), ('^2', 4), ('^7', 3)], domain [('C', 13), ('E', 7), ('O', 5), ('P', 3)], ^7^E 0, ^7^C 2, root ops [('PLUS', 6), ('TIMES', 2)], depth {1: 2, 2: 3, 3: 3}
+ last 16 updates: leaves 49, noetic top3 [('^3', 10), ('^0', 9), ('^7', 6)], domain [('C', 21), ('E', 12), ('O', 9), ('P', 7)], ^7^E 2, ^7^C 2, root ops [('PLUS', 13), ('TIMES', 3)], depth {1: 7, 2: 5, 3: 4}
+ last 32 updates: leaves 92, noetic top3 [('^7', 14), ('^3', 14), ('^0', 11)], domain [('C', 28), ('E', 27), ('O', 19), ('P', 18)], ^7^E 5, ^7^C 3, root ops [('PLUS', 27), ('TIMES', 5)], depth {1: 16, 2: 9, 3: 7}
+ last 4 updates' observations:
+  update 125 row 1455 ba61bbdd3f74d3d547671d06 (^4^C|E + (^9^P + (^8^E + ^1^C))) loss 1.3822451829910278
+  update 126 row 1830 24814b2454852aeef3a3edf5 ((^2^C|E × ^1^C) × ((^7^C × ^6^C) × (^9^C|f × ^3^E))) loss 1.6548188924789429
+  update 127 row 744 49fb4cf6190dc2386d8f6580 (^8^E_{F1} + ^2^C_{F2}|E) loss 1.790990948677063
+  update 128 row 166 143232e1fc8f4643ce980675 ((^7^O_{F1}|f + ^3^C) + (^3^O + ^0^C_{F3})) loss 1.600077748298645

@@ -1,0 +1,86 @@
+WIDE ref: {'in': [0, 1, 2], 'out': [0, 1, 2, 3], 'participant': [0, 1, 2, 3]}
+NARROW ref: {'in': [0, 1, 2], 'out': [0, 1, 2, 3], 'participant': [0, 1, 2, 3]}
+query whole-rank ref: [0, 1, 2, 3]  query part-rank ref: [0, 1, 2, 3]
+
+DIRECT/parts records and their flags:
+  typed-input-026214b2 DIRECT n=10 whole=6 part=1 kids=[0, 1] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(1, 1, 0, 3), (6, 0, 2, 1)]
+  typed-input-41427a0d DIRECT n=10 whole=7 part=1 kids=[1] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(1, 1, 0, 3), (7, 0, 1, 1)]
+  typed-input-83a16d91 DIRECT n=10 whole=6 part=0 kids=[0, 1] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(0, 2, 0, 2), (6, 0, 2, 1)]
+  typed-input-8f5cefca DIRECT n=10 whole=7 part=2 kids=[0, 2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(2, 1, 0, 0), (7, 0, 2, 1)]
+  typed-input-996fe0b4 DIRECT n=10 whole=7 part=0 kids=[0, 2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(0, 2, 0, 2), (7, 0, 2, 1)]
+  typed-input-a8237a8d DIRECT n=9 whole=6 part=2 kids=[2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(2, 1, 1, 0), (6, 0, 1, 1)]
+  typed-input-c1eb54aa DIRECT n=10 whole=7 part=2 kids=[2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=True keyrows(n,in,out,prank)=[(2, 1, 2, 0), (7, 0, 1, 1)]
+  typed-input-e15e2851 DIRECT n=10 whole=7 part=3 kids=[3] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(3, 1, 0, 0), (7, 0, 1, 1)]
+  typed-input-066b0398 PARTS  n=10 whole=7 part=None kids=[0, 2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(0, 2, 0, 2), (2, 1, 0, 0), (7, 0, 2, 1)]
+  typed-input-0a32c573 PARTS  n=10 whole=7 part=None kids=[3] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(3, 1, 0, 0), (7, 0, 1, 1)]
+  typed-input-0cd5786c PARTS  n=10 whole=7 part=None kids=[2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=True keyrows(n,in,out,prank)=[(2, 1, 2, 0), (7, 0, 1, 1)]
+  typed-input-58efa293 PARTS  n=9 whole=6 part=None kids=[2] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(2, 1, 1, 0), (6, 0, 1, 1)]
+  typed-input-7ed5bb74 PARTS  n=10 whole=6 part=None kids=[0, 1] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(0, 2, 0, 2), (1, 1, 0, 3), (6, 0, 2, 1)]
+  typed-input-cdcf19ce PARTS  n=10 whole=7 part=None kids=[1] PRIMARY=True nodeKeyWIDE=False nodeKeyNARROW=False anyNodeWIDE=False qOOR=True pairUnseen=False keyrows(n,in,out,prank)=[(1, 1, 0, 3), (7, 0, 1, 1)]
+
+(receipt, record) pairs: 84
+== ALL 6 receipts, DIRECT+parts: pairs 84, misses 63, hits 21
+   PRIMARY                        misses OOR 63/63 (100.0%)   hits OOR 21/21 (100.0%)   diff 0.0 pp
+   node_only_key_WIDE             misses OOR 0/63 (0.0%)   hits OOR 0/21 (0.0%)   diff 0.0 pp
+   node_only_key_NARROW           misses OOR 0/63 (0.0%)   hits OOR 0/21 (0.0%)   diff 0.0 pp
+   any_focus_node_WIDE            misses OOR 0/63 (0.0%)   hits OOR 0/21 (0.0%)   diff 0.0 pp
+   query_rank_OOR                 misses OOR 63/63 (100.0%)   hits OOR 21/21 (100.0%)   diff 0.0 pp
+   whole_rank_OOR                 misses OOR 63/63 (100.0%)   hits OOR 21/21 (100.0%)   diff 0.0 pp
+   part_rank_OOR                  misses OOR 0/63 (0.0%)   hits OOR 0/21 (0.0%)   diff 0.0 pp
+   key_pair_unseen_DESCRIPTIVE    misses OOR 4/63 (6.349206349206349%)   hits OOR 8/21 (38.095238095238095%)   diff -31.746031746031747 pp
+== ALL 6 receipts, DIRECT: pairs 48, misses 31, hits 17
+   PRIMARY                        misses OOR 31/31 (100.0%)   hits OOR 17/17 (100.0%)   diff 0.0 pp
+   node_only_key_WIDE             misses OOR 0/31 (0.0%)   hits OOR 0/17 (0.0%)   diff 0.0 pp
+   node_only_key_NARROW           misses OOR 0/31 (0.0%)   hits OOR 0/17 (0.0%)   diff 0.0 pp
+   any_focus_node_WIDE            misses OOR 0/31 (0.0%)   hits OOR 0/17 (0.0%)   diff 0.0 pp
+   query_rank_OOR                 misses OOR 31/31 (100.0%)   hits OOR 17/17 (100.0%)   diff 0.0 pp
+   whole_rank_OOR                 misses OOR 31/31 (100.0%)   hits OOR 17/17 (100.0%)   diff 0.0 pp
+   part_rank_OOR                  misses OOR 0/31 (0.0%)   hits OOR 0/17 (0.0%)   diff 0.0 pp
+   key_pair_unseen_DESCRIPTIVE    misses OOR 2/31 (6.451612903225806%)   hits OOR 4/17 (23.529411764705884%)   diff -17.077798861480076 pp
+== ALL 6 receipts, parts: pairs 36, misses 32, hits 4
+   PRIMARY                        misses OOR 32/32 (100.0%)   hits OOR 4/4 (100.0%)   diff 0.0 pp
+   node_only_key_WIDE             misses OOR 0/32 (0.0%)   hits OOR 0/4 (0.0%)   diff 0.0 pp
+   node_only_key_NARROW           misses OOR 0/32 (0.0%)   hits OOR 0/4 (0.0%)   diff 0.0 pp
+   any_focus_node_WIDE            misses OOR 0/32 (0.0%)   hits OOR 0/4 (0.0%)   diff 0.0 pp
+   query_rank_OOR                 misses OOR 32/32 (100.0%)   hits OOR 4/4 (100.0%)   diff 0.0 pp
+   whole_rank_OOR                 misses OOR 32/32 (100.0%)   hits OOR 4/4 (100.0%)   diff 0.0 pp
+   part_rank_OOR                  misses OOR 0/32 (0.0%)   hits OOR 0/4 (0.0%)   diff 0.0 pp
+   key_pair_unseen_DESCRIPTIVE    misses OOR 2/32 (6.25%)   hits OOR 4/4 (100.0%)   diff -93.75 pp
+== Helm 1.0, DIRECT+parts: pairs 42, misses 29, hits 13
+   PRIMARY                        misses OOR 29/29 (100.0%)   hits OOR 13/13 (100.0%)   diff 0.0 pp
+   node_only_key_WIDE             misses OOR 0/29 (0.0%)   hits OOR 0/13 (0.0%)   diff 0.0 pp
+   node_only_key_NARROW           misses OOR 0/29 (0.0%)   hits OOR 0/13 (0.0%)   diff 0.0 pp
+   any_focus_node_WIDE            misses OOR 0/29 (0.0%)   hits OOR 0/13 (0.0%)   diff 0.0 pp
+   query_rank_OOR                 misses OOR 29/29 (100.0%)   hits OOR 13/13 (100.0%)   diff 0.0 pp
+   whole_rank_OOR                 misses OOR 29/29 (100.0%)   hits OOR 13/13 (100.0%)   diff 0.0 pp
+   part_rank_OOR                  misses OOR 0/29 (0.0%)   hits OOR 0/13 (0.0%)   diff 0.0 pp
+   key_pair_unseen_DESCRIPTIVE    misses OOR 0/29 (0.0%)   hits OOR 6/13 (46.15384615384615%)   diff -46.15384615384615 pp
+== Helm 2.0, DIRECT+parts: pairs 42, misses 34, hits 8
+   PRIMARY                        misses OOR 34/34 (100.0%)   hits OOR 8/8 (100.0%)   diff 0.0 pp
+   node_only_key_WIDE             misses OOR 0/34 (0.0%)   hits OOR 0/8 (0.0%)   diff 0.0 pp
+   node_only_key_NARROW           misses OOR 0/34 (0.0%)   hits OOR 0/8 (0.0%)   diff 0.0 pp
+   any_focus_node_WIDE            misses OOR 0/34 (0.0%)   hits OOR 0/8 (0.0%)   diff 0.0 pp
+   query_rank_OOR                 misses OOR 34/34 (100.0%)   hits OOR 8/8 (100.0%)   diff 0.0 pp
+   whole_rank_OOR                 misses OOR 34/34 (100.0%)   hits OOR 8/8 (100.0%)   diff 0.0 pp
+   part_rank_OOR                  misses OOR 0/34 (0.0%)   hits OOR 0/8 (0.0%)   diff 0.0 pp
+   key_pair_unseen_DESCRIPTIVE    misses OOR 4/34 (11.764705882352942%)   hits OOR 2/8 (25.0%)   diff -13.235294117647058 pp
+
+Per record: hits over 6 receipts, and per receipt correct bits (1.0 x3 then 2.0 x3):
+  typed-input-026214b2 DIRECT whole=6 part=1  hits 4/6  bits [1, 1, 1, 0, 1, 0]
+  typed-input-41427a0d DIRECT whole=7 part=1  hits 1/6  bits [0, 0, 0, 0, 1, 0]
+  typed-input-83a16d91 DIRECT whole=6 part=0  hits 3/6  bits [1, 1, 0, 0, 1, 0]
+  typed-input-8f5cefca DIRECT whole=7 part=2  hits 2/6  bits [0, 1, 0, 0, 1, 0]
+  typed-input-996fe0b4 DIRECT whole=7 part=0  hits 2/6  bits [0, 1, 0, 0, 1, 0]
+  typed-input-a8237a8d DIRECT whole=6 part=2  hits 1/6  bits [0, 0, 0, 0, 1, 0]
+  typed-input-c1eb54aa DIRECT whole=7 part=2  hits 4/6  bits [1, 1, 1, 0, 1, 0]
+  typed-input-e15e2851 DIRECT whole=7 part=3  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+  typed-input-066b0398 PARTS  whole=7 part=None  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+  typed-input-0a32c573 PARTS  whole=7 part=None  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+  typed-input-0cd5786c PARTS  whole=7 part=None  hits 4/6  bits [1, 1, 1, 0, 0, 1]
+  typed-input-58efa293 PARTS  whole=6 part=None  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+  typed-input-7ed5bb74 PARTS  whole=6 part=None  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+  typed-input-cdcf19ce PARTS  whole=7 part=None  hits 0/6  bits [0, 0, 0, 0, 0, 0]
+
+What Helm answered on the misses (state / via / nodes), counted:
+   DIRECT {('VIA', True): 31}
+   PARTS {('returned 6 nodes vs 2 true; 2 of true included; extra ranks [2, 3, 4, 5]',): 6, ('returned 1 nodes vs 1 true; 0 of true included; extra ranks [2]',): 4, ('returned 2 nodes vs 1 true; 1 of true included; extra ranks [4]',): 5, ('returned 2 nodes vs 1 true; 0 of true included; extra ranks [4, 6]',): 3, ('returned 7 nodes vs 2 true; 2 of true included; extra ranks [1, 3, 4, 5, 6]',): 5, ('returned 2 nodes vs 1 true; 1 of true included; extra ranks [2]',): 1, ('returned 3 nodes vs 1 true; 1 of true included; extra ranks [4, 5]',): 2, ('returned 0 nodes vs 1 true; 0 of true included; extra ranks []',): 1, ('returned 1 nodes vs 1 true; 0 of true included; extra ranks [4]',): 2, ('returned 4 nodes vs 1 true; 1 of true included; extra ranks [4, 5, 6]',): 1, ('returned 4 nodes vs 1 true; 0 of true included; extra ranks [2, 4, 5, 6]',): 1, ('returned 6 nodes vs 2 true; 2 of true included; extra ranks [3, 4, 5, 6]',): 1}

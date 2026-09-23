@@ -1,0 +1,6 @@
+held reach worlds 5 | worlds focused by any trained record 19 | overlap 0
+22704554 nodes/edges 4 [(1, 0), (1, 3), (2, 3)] | trained worlds with IDENTICAL rank-labelled edges: 0 | isomorphic trained worlds: 2
+28f61f2d nodes/edges 4 [(2, 1), (2, 3), (3, 0)] | trained worlds with IDENTICAL rank-labelled edges: 0 | isomorphic trained worlds: 1
+4090ec49 nodes/edges 4 [(0, 2), (1, 3), (3, 0)] | trained worlds with IDENTICAL rank-labelled edges: 0 | isomorphic trained worlds: 3
+6e1fcbda nodes/edges 4 [(0, 1), (0, 2), (1, 3)] | trained worlds with IDENTICAL rank-labelled edges: 0 | isomorphic trained worlds: 1
+98c6352d nodes/edges 4 [(1, 0), (2, 1), (2, 3), (3, 0)] | trained worlds with IDENTICAL rank-labelled edges: 0 | isomorphic trained worlds: 3

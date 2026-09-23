@@ -1,0 +1,118 @@
+prereg sha256 a46ac731dbaaf7abe6639cb42c41c6779311ef14fcc6deaae3cd413b583b819b
+S8 train-pool indices: [1091, 1497, 1444, 696, 526, 174, 63, 128]
+  row 0 idx 1091 record 2176ac0ec938176aeb8741cf depth 3 target-len 27 | (^5^O_{F7} + (^7^O_{F5}|f + (^6^P|E × ^2^E|T)))
+  row 1 idx 1497 record 1905b528613eca835d82497d depth 2 target-len 20 | (^0^O_{F3} + (^1^C_{F3} + ^7^P))
+  row 2 idx 1444 record d8b2b189a689b13f59046ebe depth 1 target-len 13 | (^6^E + ^8^P_{F6})
+  row 3 idx  696 record 6d7433ace8e8984dba47d0c4 depth 3 target-len 27 | ((^8^C_{F1} + (^2^P_{F5}|T × ^8^P|A)) + ^6^C)
+  row 4 idx  526 record 8b0a4f48ed87375563d5e5d2 depth 3 target-len 27 | (^2^E_{F5}|T × (^3^P × (^9^O|E × ^7^O|E)))
+  row 5 idx  174 record a8eca108332526907c518fb1 depth 1 target-len 13 | (^4^P_{F2}|T + ^0^E_{F5}|f)
+  row 6 idx   63 record e11229e1d323791d181deb57 depth 1 target-len 13 | (^5^O_{F4}|E + ^2^O)
+  row 7 idx  128 record 0b35cdb229e24ecbd05a037d depth 3 target-len 34 | ((^9^C × ^5^E_{F1}) + (^7^C × (^4^E_{F7} × ^9^E|A)))
+token round-trip on S8: 8/8 | dev16 parser == checker_reference_ast: 16/16
+S8 gold positions by slot class: {'domain': 26, 'drive': 26, 'eos': 8, 'expr': 44, 'noetic': 26, 'op': 18, 'register': 26}
+model params: 70818 | torch 2.11.0+cu128 | cuda 12.8 | NVIDIA GeForce RTX 4070 Laptop GPU
+FIDELITY PRE-CHECK (first 8 losses vs run_001/updates.jsonl updates 1-8): {"losses_equal": 8, "grad_norms_equal_EXTRA": 8, "n": 8, "ours": [3.5241360664367676, 3.488719940185547, 3.5299148559570312, 3.455052137374878, 3.371485710144043, 3.3732457160949707, 3.315307140350342, 3.3798635005950928], "smoke": [3.5241360664367676, 3.488719940185547, 3.5299148559570312, 3.455052137374878, 3.371485710144043, 3.3732457160949707, 3.315307140350342, 3.3798635005950928], "smoke_update_ids": [1, 2, 3, 4, 5, 6, 7, 8]}
+
+== EVAL after 250 updates (0.484 s)
+ S8 exact 1/8 | distinct outputs 1 | TF(true) logits == teacher_forced_logits on 8/8 rows
+   row 0 depth 3 exact False shape== False leaf== False | row CE true 0.740152 swap 0.738379 | pred (^5^O_{F4}|E + ^2^O)
+   row 1 depth 2 exact False shape== False leaf== False | row CE true 0.646698 swap 0.651498 | pred (^5^O_{F4}|E + ^2^O)
+   row 2 depth 1 exact False shape== True  leaf== False | row CE true 0.565158 swap 0.569343 | pred (^5^O_{F4}|E + ^2^O)
+   row 3 depth 3 exact False shape== False leaf== False | row CE true 0.876563 swap 0.971882 | pred (^5^O_{F4}|E + ^2^O)
+   row 4 depth 3 exact False shape== False leaf== False | row CE true 0.827418 swap 0.893218 | pred (^5^O_{F4}|E + ^2^O)
+   row 5 depth 1 exact False shape== True  leaf== False | row CE true 0.465878 swap 0.474217 | pred (^5^O_{F4}|E + ^2^O)
+   row 6 depth 1 exact True  shape== True  leaf== True  | row CE true 0.438546 swap 0.458512 | pred (^5^O_{F4}|E + ^2^O)
+   row 7 depth 3 exact False shape== False leaf== False | row CE true 0.966363 swap 0.965547 | pred (^5^O_{F4}|E + ^2^O)
+ TF argmax acc by class: expr 0.8636363636363636 op 0.9444444444444444 noetic 0.46153846153846156 domain 0.7692307692307693 drive 0.8076923076923077 register 0.8076923076923077 eos 0.875
+ TF CE TRUE by class:    expr 0.3762713999656791 op 0.3266854054398007 noetic 1.868637862113806 domain 0.8288679254742769 drive 0.7841590224550321 register 0.5234394755501014 eos 0.5396879427134991
+ TF CE SWAP by class:    expr 0.4038684986193072 op 0.5119397313230567 noetic 1.8705310959082384 domain 0.8348890222035922 drive 0.7864760630405866 register 0.5226200159925681 eos 0.5396106876432896
+ pooled leaf acc 0.7115384615384616 | structure acc 0.8857142857142857 | leaf CE TRUE 1.001276071398304 SWAP 1.0036290492862463 SWAP-TRUE 0.002352977887942309 | EXTRA SWAP-ALL 1.0040605826569455
+ EXTRA masked-argmax: leaf 0.7115384615384616 structure 0.9142857142857143 | structure CE TRUE 0.3821968919730612 SWAP 0.4471716372030122
+ bottleneck spread S8: {"relative_spread": 0.334204105675742, "mean_pairwise_L2": 2.5122917462757868, "mean_norm": 7.517237830445181, "min_pairwise_cosine": 0.8182977483279367, "mean_pairwise_cosine": 0.9367414138676675}
+
+== EVAL after 500 updates (0.241 s)
+ S8 exact 3/8 | distinct outputs 5 | TF(true) logits == teacher_forced_logits on 8/8 rows
+   row 0 depth 3 exact False shape== False leaf== False | row CE true 0.348396 swap 0.367062 | pred (^5^O_{F4}|E + ^2^O)
+   row 1 depth 2 exact False shape== False leaf== False | row CE true 0.248816 swap 0.267021 | pred (^5^O_{F4}|E + ^2^O)
+   row 2 depth 1 exact False shape== True  leaf== False | row CE true 0.211783 swap 0.472017 | pred (^5^O_{F4}|E + ^2^O)
+   row 3 depth 3 exact False shape== False leaf== False | row CE true 0.351472 swap 0.817182 | pred ((^5^O_{F4}|E + ^2^O) + (^9^C × ^8^P_{F6}))
+   row 4 depth 3 exact True  shape== True  leaf== True  | row CE true 0.314785 swap 0.450677 | pred (^2^E_{F5}|T × (^3^P × (^9^O|E × ^7^O|E)))
+   row 5 depth 1 exact True  shape== True  leaf== True  | row CE true 0.176450 swap 0.250524 | pred (^4^P_{F2}|T + ^0^E_{F5}|f)
+   row 6 depth 1 exact True  shape== True  leaf== True  | row CE true 0.179704 swap 0.277660 | pred (^5^O_{F4}|E + ^2^O)
+   row 7 depth 3 exact False shape== False leaf== False | row CE true 0.477274 swap 0.518710 | pred ((^9^O|E × ^7^O|E) + ^7^O|E)
+ TF argmax acc by class: expr 1.0 op 1.0 noetic 0.6153846153846154 domain 0.9230769230769231 drive 0.9615384615384616 register 1.0 eos 1.0
+ TF CE TRUE by class:    expr 0.072969934691421 op 0.09355356606344382 noetic 1.2166505513282924 domain 0.33165753819048405 drive 0.25438028072508484 register 0.13065565814479038 eos 0.10260799014940858
+ TF CE SWAP by class:    expr 0.3339981493137946 op 0.6153033608570695 noetic 1.3214898682557619 domain 0.34149780668891394 drive 0.26500103508050626 register 0.13073285504315907 eos 0.10298954555764794
+ pooled leaf acc 0.875 | structure acc 1.0 | leaf CE TRUE 0.4833360070971629 SWAP 0.5146803912670853 SWAP-TRUE 0.03134438416992241 | EXTRA SWAP-ALL 0.5191566618338513
+ EXTRA masked-argmax: leaf 0.875 structure 1.0 | structure CE TRUE 0.08165007481085403 SWAP 0.3799327918527914
+ bottleneck spread S8: {"relative_spread": 0.5522953620387092, "mean_pairwise_L2": 4.199563919800567, "mean_norm": 7.603837019920925, "min_pairwise_cosine": 0.6472625424000915, "mean_pairwise_cosine": 0.838052565381462}
+
+== EVAL after 1000 updates (0.237 s)
+ S8 exact 8/8 | distinct outputs 8 | TF(true) logits == teacher_forced_logits on 8/8 rows
+   row 0 depth 3 exact True  shape== True  leaf== True  | row CE true 0.072472 swap 0.191196 | pred (^5^O_{F7} + (^7^O_{F5}|f + (^6^P|E × ^2^E|T)))
+   row 1 depth 2 exact True  shape== True  leaf== True  | row CE true 0.046617 swap 0.189857 | pred (^0^O_{F3} + (^1^C_{F3} + ^7^P))
+   row 2 depth 1 exact True  shape== True  leaf== True  | row CE true 0.035054 swap 0.751281 | pred (^6^E + ^8^P_{F6})
+   row 3 depth 3 exact True  shape== True  leaf== True  | row CE true 0.061061 swap 0.887541 | pred ((^8^C_{F1} + (^2^P_{F5}|T × ^8^P|A)) + ^6^C)
+   row 4 depth 3 exact True  shape== True  leaf== True  | row CE true 0.058167 swap 0.329333 | pred (^2^E_{F5}|T × (^3^P × (^9^O|E × ^7^O|E)))
+   row 5 depth 1 exact True  shape== True  leaf== True  | row CE true 0.032712 swap 0.281534 | pred (^4^P_{F2}|T + ^0^E_{F5}|f)
+   row 6 depth 1 exact True  shape== True  leaf== True  | row CE true 0.035322 swap 0.477180 | pred (^5^O_{F4}|E + ^2^O)
+   row 7 depth 3 exact True  shape== True  leaf== True  | row CE true 0.083086 swap 0.235790 | pred ((^9^C × ^5^E_{F1}) + (^7^C × (^4^E_{F7} × ^9^E|A)))
+ TF argmax acc by class: expr 1.0 op 1.0 noetic 1.0 domain 1.0 drive 1.0 register 1.0 eos 1.0
+ TF CE TRUE by class:    expr 0.015721139787108932 op 0.02446107166664054 noetic 0.18344538171704 domain 0.06965681745742376 drive 0.06432831599018894 register 0.028306174324825406 eos 0.019015392288565636
+ TF CE SWAP by class:    expr 0.5101235388084949 op 0.8619749079742987 noetic 0.8125383287954789 domain 0.2110817708218327 drive 0.14787166325662 register 0.03427941461380284 eos 0.018848919891752303
+ pooled leaf acc 1.0 | structure acc 1.0 | leaf CE TRUE 0.08643417237236953 SWAP 0.3014427943719336 SWAP-TRUE 0.21500862199956408 | EXTRA SWAP-ALL 0.3005260406599308
+ EXTRA masked-argmax: leaf 1.0 structure 1.0 | structure CE TRUE 0.01834503684201211 SWAP 0.5444539344320739
+ bottleneck spread S8: {"relative_spread": 0.7302341786323813, "mean_pairwise_L2": 5.60728087334432, "mean_norm": 7.678743391395228, "min_pairwise_cosine": 0.4770196450966636, "mean_pairwise_cosine": 0.7239419265432283}
+
+== EVAL after 2000 updates (0.207 s)
+ S8 exact 8/8 | distinct outputs 8 | TF(true) logits == teacher_forced_logits on 8/8 rows
+   row 0 depth 3 exact True  shape== True  leaf== True  | row CE true 0.012279 swap 0.199624 | pred (^5^O_{F7} + (^7^O_{F5}|f + (^6^P|E × ^2^E|T)))
+   row 1 depth 2 exact True  shape== True  leaf== True  | row CE true 0.007671 swap 0.296506 | pred (^0^O_{F3} + (^1^C_{F3} + ^7^P))
+   row 2 depth 1 exact True  shape== True  leaf== True  | row CE true 0.005541 swap 0.957894 | pred (^6^E + ^8^P_{F6})
+   row 3 depth 3 exact True  shape== True  leaf== True  | row CE true 0.010494 swap 1.057094 | pred ((^8^C_{F1} + (^2^P_{F5}|T × ^8^P|A)) + ^6^C)
+   row 4 depth 3 exact True  shape== True  leaf== True  | row CE true 0.009125 swap 0.396916 | pred (^2^E_{F5}|T × (^3^P × (^9^O|E × ^7^O|E)))
+   row 5 depth 1 exact True  shape== True  leaf== True  | row CE true 0.006028 swap 0.397719 | pred (^4^P_{F2}|T + ^0^E_{F5}|f)
+   row 6 depth 1 exact True  shape== True  leaf== True  | row CE true 0.005653 swap 0.798395 | pred (^5^O_{F4}|E + ^2^O)
+   row 7 depth 3 exact True  shape== True  leaf== True  | row CE true 0.012981 swap 0.329158 | pred ((^9^C × ^5^E_{F1}) + (^7^C × (^4^E_{F7} × ^9^E|A)))
+ TF argmax acc by class: expr 1.0 op 1.0 noetic 1.0 domain 1.0 drive 1.0 register 1.0 eos 1.0
+ TF CE TRUE by class:    expr 0.0031464687682190825 op 0.005139232199225161 noetic 0.024989812419964716 domain 0.012159486820634741 drive 0.010973359001442216 register 0.006292338438260441 eos 0.004267716751201078
+ TF CE SWAP by class:    expr 0.7043816302874885 op 1.135554542971982 noetic 0.9496387866898798 domain 0.31088137339191657 drive 0.19650436991986892 register 0.01625056850249306 eos 0.004225092692649923
+ pooled leaf acc 1.0 | structure acc 1.0 | leaf CE TRUE 0.013603749170075528 SWAP 0.36831877462603957 SWAP-TRUE 0.35471502545596406 | EXTRA SWAP-ALL 0.3492476833521473
+ EXTRA masked-argmax: leaf 1.0 structure 1.0 | structure CE TRUE 0.0037870362771043023 SWAP 0.7352367749669481
+ bottleneck spread S8: {"relative_spread": 0.7996384405703121, "mean_pairwise_L2": 6.152563213081081, "mean_norm": 7.694181396148235, "min_pairwise_cosine": 0.38290217659414494, "mean_pairwise_cosine": 0.6719885250765216}
+
+TRAINING STOPPED: updates 2000, reason MAX_UPDATES, budget_limited False, wall since update 1 14.425 s (includes in-run evals)
+
+mean training loss per pass: pass1 3.429715633392334 pass2 3.1941277980804443 pass31 0.7131003439426422 pass32 0.6918081417679787 pass62 0.29923657327890396 pass63 0.29140633158385754 pass125 0.05411960510537028 pass250 0.008781951561104506 (passes complete: 250)
+  passes   1- 25: 3.429716 3.194128 2.978765 2.769416 2.569062 2.378421 2.198268 2.031783 1.881637 1.748526 1.631577 1.529286 1.439805 1.361128 1.291418 1.229220 1.173342 1.122738 1.076554 1.034155 0.995009 0.958712 0.924890 0.893215 0.863409
+  passes  26- 50: 0.835226 0.808449 0.782944 0.758598 0.735337 0.713100 0.691808 0.671384 0.651759 0.632872 0.614661 0.597072 0.580059 0.563586 0.547632 0.532168 0.517155 0.502583 0.488496 0.474882 0.461655 0.448745 0.436251 0.424270 0.412676
+  passes  51- 75: 0.401436 0.390491 0.379936 0.369716 0.360016 0.350467 0.342044 0.332781 0.324410 0.315370 0.307087 0.299237 0.291406 0.284111 0.276581 0.269488 0.262257 0.255518 0.248706 0.242262 0.235802 0.229629 0.223463 0.217556 0.211735
+  passes  76-100: 0.206100 0.200560 0.195173 0.189894 0.184751 0.179713 0.174799 0.169994 0.165353 0.160871 0.156457 0.152136 0.147579 0.143375 0.139272 0.135328 0.131526 0.127819 0.124232 0.120755 0.117380 0.114105 0.110923 0.107832 0.104830
+  passes 101-125: 0.101913 0.099082 0.096338 0.093682 0.091111 0.088620 0.086206 0.083869 0.081607 0.079419 0.077301 0.075251 0.073270 0.071354 0.069502 0.067713 0.065985 0.064316 0.062703 0.061146 0.059642 0.058190 0.056786 0.055430 0.054120
+  passes 126-150: 0.052853 0.051627 0.050442 0.049296 0.048186 0.047111 0.046071 0.045062 0.044085 0.043138 0.042219 0.041328 0.040464 0.039624 0.038809 0.038018 0.037251 0.036506 0.035783 0.035081 0.034400 0.033739 0.033097 0.032473 0.031867
+  passes 151-175: 0.031279 0.030707 0.030151 0.029610 0.029084 0.028573 0.028075 0.027591 0.027119 0.026661 0.026214 0.025779 0.025355 0.024942 0.024539 0.024147 0.023764 0.023391 0.023027 0.022672 0.022326 0.021988 0.021658 0.021335 0.021021
+  passes 176-200: 0.020713 0.020413 0.020119 0.019832 0.019552 0.019277 0.019009 0.018747 0.018490 0.018238 0.017992 0.017751 0.017515 0.017284 0.017057 0.016835 0.016617 0.016404 0.016195 0.015990 0.015788 0.015591 0.015397 0.015206 0.015019
+  passes 201-225: 0.014836 0.014655 0.014478 0.014304 0.014133 0.013964 0.013799 0.013636 0.013476 0.013319 0.013164 0.013012 0.012863 0.012716 0.012571 0.012429 0.012290 0.012153 0.012018 0.011886 0.011756 0.011628 0.011503 0.011379 0.011258
+  passes 226-250: 0.011139 0.011022 0.010906 0.010793 0.010681 0.010572 0.010464 0.010358 0.010253 0.010151 0.010049 0.009950 0.009852 0.009755 0.009660 0.009566 0.009474 0.009383 0.009293 0.009205 0.009118 0.009032 0.008948 0.008864 0.008782
+per-row loss at the last pass (updates 1993-2000): [0.012390679679811, 0.007744407746940851, 0.005590812303125858, 0.010581005364656448, 0.00919435452669859, 0.006059450097382069, 0.0056813983246684074, 0.013013504445552826]
+
+CONTEXT ONLY (not a rule input): dev rows 1-16 exact 0/16 | distinct outputs 4 | outputs: [["(^5^O_{F7} + (^7^O_{F5}|f + (^6^P|E \u00d7 ^2^E|T)))", 6], ["(^2^E_{F5}|T \u00d7 (^3^P \u00d7 (^9^O|E \u00d7 ^7^O|E)))", 4], ["(^0^O_{F3} + (^1^C_{F3} + ^7^P))", 3], ["((^9^C \u00d7 ^5^E_{F1}) + (^7^C \u00d7 (^4^E_{F7} \u00d7 ^9^E|A)))", 3]]
+
+== RULE READING (PREREG_RT7.txt item 7, FINAL evaluation)
+{
+ "fired": [
+  "FITS"
+ ],
+ "inputs": {
+  "updates_done": 2000,
+  "exact_S8": 8,
+  "leaf_acc_pooled": 1.0,
+  "struct_acc_pooled": 1.0,
+  "last_pass_mean_loss": 0.008781951561104506,
+  "leaf_ce_true_pooled": 0.013603749170075528,
+  "leaf_ce_swap_pooled": 0.36831877462603957,
+  "leaf_ce_swap_minus_true": 0.35471502545596406
+ }
+}
+cuda peak allocated bytes: 78279680 | process seconds 16.723
+wrote C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\5e8709f4-3151-444f-939b-317c01bc3568\scratchpad\helm_review\RT7\rt7_results.json and C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\5e8709f4-3151-444f-939b-317c01bc3568\scratchpad\helm_review\RT7\rt7_updates.jsonl

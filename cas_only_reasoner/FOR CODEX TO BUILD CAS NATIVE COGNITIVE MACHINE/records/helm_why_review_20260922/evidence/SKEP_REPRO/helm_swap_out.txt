@@ -1,0 +1,17 @@
+pop 18
+2.0/20260919 final vs each start:
+  start ('2.0', '20260917') 36988555 right at start True -> (10, 2, Fraction(79, 4096), False)
+  start ('2.0', '20260918') 36988555 right at start False -> (10, 0, Fraction(1, 1024), True)
+  start ('2.0', '20260919') 36988555 right at start True -> (7, 1, Fraction(9, 256), False)
+  start ('1.0', '20260917') 36988555 right at start True -> (9, 1, Fraction(11, 1024), False)
+  start ('1.0', '20260918') 36988555 right at start False -> (10, 0, Fraction(1, 1024), True)
+  start ('1.0', '20260919') 36988555 right at start False -> (10, 0, Fraction(1, 1024), True)
+2.0/20260919 checkpoints vs own start:
+   heldback_p02 (9, 0, Fraction(1, 512), True)
+   heldback_p04 (7, 0, Fraction(1, 128), True)
+   heldback_p06 (7, 0, Fraction(1, 128), True)
+   heldback_p08 (8, 0, Fraction(1, 256), True)
+   course_p10 (7, 1, Fraction(9, 256), False)
+course_p10 {"state": "VIA", "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"} {"correspondence_candidate_id": null, "plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4", "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f", "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f", "schema": "cas.typed-teaching-slot-decisions/0.1", "selected": {"typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": "VIA_N1"}}
+course_p10 {"state": "VIA", "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"} {"correspondence_candidate_id": null, "plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353", "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f", "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034", "schema": "cas.typed-teaching-slot-decisions/0.1", "selected": {"typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": "VIA_N1"}}
+course_p10 {"state": "VIA", "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"} {"correspondence_candidate_id": null, "plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc", "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f", "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360", "schema": "cas.typed-teaching-slot-decisions/0.1", "selected": {"typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": "VIA_N1"}}

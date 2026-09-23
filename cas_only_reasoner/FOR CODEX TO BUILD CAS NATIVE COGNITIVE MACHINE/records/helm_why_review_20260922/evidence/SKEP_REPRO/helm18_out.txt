@@ -1,0 +1,15 @@
+population_questions type list 18
+floor size 11 floor subset pop True
+same population in 1.0 reading True pop==question_ids True
+2.0 20260917 start 2 final 12 b 11 c 1 final-minus-11 1 right outside floor ['7a391350', 'a3e70de9'] floor missed ['404166e8'] net vs floor 1
+2.0 20260918 start 0 final 12 b 12 c 0 final-minus-11 1 right outside floor ['7a391350', 'a3e70de9'] floor missed ['404166e8'] net vs floor 1
+2.0 20260919 start 4 final 10 b 7 c 1 final-minus-11 -1 right outside floor ['7a391350', 'a3e70de9'] floor missed ['36988555', '404166e8', '786bbcba'] net vs floor -1
+1.0 20260917 start 2 final 12 b 10 c 0 final-minus-11 1 right outside floor ['7a391350', 'a3e70de9'] floor missed ['404166e8'] net vs floor 1
+1.0 20260918 start 0 final 12 b 12 c 0 final-minus-11 1 right outside floor ['7a391350', 'a3e70de9'] floor missed ['404166e8'] net vs floor 1
+1.0 20260919 start 0 final 11 b 11 c 0 final-minus-11 0 right outside floor ['7a391350', 'a3e70de9'] floor missed ['404166e8', '786bbcba'] net vs floor 0
+kinds of pop [('0dcbaf89', 'edge_account'), ('29e8f3c3', 'edge_account'), ('35a52288', 'edge_account'), ('36988555', 'reach'), ('404166e8', 'reach'), ('497decac', 'analogy'), ('4e9e162a', 'analogy'), ('6caa13d8', 'edge_account'), ('786bbcba', 'parts'), ('7a391350', 'reach'), ('a3e70de9', 'reach'), ('aa62bbee', 'reach'), ('aba576d9', 'analogy'), ('ace89d2f', 'analogy'), ('c7ee82d2', 'parts'), ('d51fda7f', 'edge_account'), ('de2ee2c5', 'analogy'), ('f341afc7', 'reach')]
+2.0 36988555 [('course_p00', True), ('heldback_p02', True), ('heldback_p04', True), ('heldback_p06', True), ('heldback_p08', True), ('course_p10', False)]
+1.0 36988555 [('course_p00', False), ('heldback_p02', True), ('heldback_p04', True), ('heldback_p06', True), ('heldback_p08', True), ('course_p10', True)]
+frozen 2.0 20260917 11 1 13/4096 True | 1.0 1/1024 True
+frozen 2.0 20260918 12 0 1/4096 True | 1.0 1/4096 True
+frozen 2.0 20260919 7 1 9/256 False | 1.0 1/2048 True

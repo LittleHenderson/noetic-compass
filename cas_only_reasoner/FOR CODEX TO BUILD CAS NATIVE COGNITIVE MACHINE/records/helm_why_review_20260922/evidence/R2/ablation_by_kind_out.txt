@@ -1,0 +1,54 @@
+Helm 2.0-exp receipt_20260917: total baseline 103/127 | core_block reset 103 | round_mix reset (no message passing) 100 | heads reset 48 | query_and_readout reset 77
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base  20  core_reset  20  no_msg_passing  20
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   7  core_reset   7  no_msg_passing   6
+   reach           n= 26  base  23  core_reset  23  no_msg_passing  23
+   role_set        n=  6  base   4  core_reset   4  no_msg_passing   2
+Helm 2.0-exp receipt_20260918: total baseline 105/127 | core_block reset 102 | round_mix reset (no message passing) 99 | heads reset 36 | query_and_readout reset 74
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base  20  core_reset  20  no_msg_passing  20
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   9  core_reset   6  no_msg_passing   6
+   reach           n= 26  base  25  core_reset  24  no_msg_passing  23
+   role_set        n=  6  base   2  core_reset   3  no_msg_passing   1
+Helm 2.0-exp receipt_20260919: total baseline 99/127 | core_block reset 99 | round_mix reset (no message passing) 103 | heads reset 26 | query_and_readout reset 80
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base  20  core_reset  20  no_msg_passing  20
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   6  core_reset   6  no_msg_passing   6
+   reach           n= 26  base  20  core_reset  20  no_msg_passing  24
+   role_set        n=  6  base   4  core_reset   4  no_msg_passing   4
+Helm 1.0 receipt_helm1_certified_20260917: total baseline 84/127 | core_block reset 80 | round_mix reset (no message passing) 77 | heads reset 32 | query_and_readout reset 50
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base   0  core_reset   0  no_msg_passing   0
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   9  core_reset   6  no_msg_passing   6
+   reach           n= 26  base  25  core_reset  24  no_msg_passing  21
+   role_set        n=  6  base   1  core_reset   1  no_msg_passing   1
+Helm 1.0 receipt_helm1_certified_20260918: total baseline 88/127 | core_block reset 86 | round_mix reset (no message passing) 86 | heads reset 32 | query_and_readout reset 54
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base   0  core_reset   0  no_msg_passing   0
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   9  core_reset   7  no_msg_passing   8
+   reach           n= 26  base  25  core_reset  25  no_msg_passing  24
+   role_set        n=  6  base   5  core_reset   5  no_msg_passing   5
+Helm 1.0 receipt_helm1_certified_20260919: total baseline 81/127 | core_block reset 81 | round_mix reset (no message passing) 79 | heads reset 40 | query_and_readout reset 48
+   analogy         n= 17  base   0  core_reset   0  no_msg_passing   0
+   context         n= 17  base  17  core_reset  17  no_msg_passing  17
+   correspondence  n= 20  base   0  core_reset   0  no_msg_passing   0
+   definition      n= 15  base  15  core_reset  15  no_msg_passing  15
+   edge_account    n= 17  base  17  core_reset  17  no_msg_passing  17
+   parts           n=  9  base   6  core_reset   6  no_msg_passing   5
+   reach           n= 26  base  23  core_reset  23  no_msg_passing  23
+   role_set        n=  6  base   3  core_reset   3  no_msg_passing   2

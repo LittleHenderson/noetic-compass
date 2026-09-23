@@ -1,0 +1,25 @@
+== reproduce frozen per-seed readings
+helm1 20260917 start 2 final 12 b 10 c 0 p 1/1024 pass True | frozen b 10 c 0 pass True | agree True
+helm1 20260918 start 0 final 12 b 12 c 0 p 1/4096 pass True | frozen b 12 c 0 pass True | agree True
+helm1 20260919 start 0 final 11 b 11 c 0 p 1/2048 pass True | frozen b 11 c 0 pass True | agree True
+helm2 20260917 start 2 final 12 b 11 c 1 p 13/4096 pass True | frozen b 11 c 1 pass True | agree True
+helm2 20260918 start 0 final 12 b 12 c 0 p 1/4096 pass True | frozen b 12 c 0 pass True | agree True
+helm2 20260919 start 4 final 10 b 7 c 1 p 9/256 pass False | frozen b 7 c 1 pass False | agree True
+== identical final answer sets?
+20260917 helm1 final == helm2 final: True | differ on []
+20260918 helm1 final == helm2 final: True | differ on []
+20260919 helm1 final == helm2 final: False | differ on [('36988555', 'reach')]
+== each final answer set tested against each of the six untrained starts
+final helm1/20260917 (12 right): passes against 6 of 6 starts | 1/17:10/0/P 1/18:12/0/P 1/19:12/0/P 2/17:11/1/P 2/18:12/0/P 2/19:8/0/P
+final helm1/20260918 (12 right): passes against 6 of 6 starts | 1/17:10/0/P 1/18:12/0/P 1/19:12/0/P 2/17:11/1/P 2/18:12/0/P 2/19:8/0/P
+final helm1/20260919 (11 right): passes against 6 of 6 starts | 1/17:9/0/P 1/18:11/0/P 1/19:11/0/P 2/17:10/1/P 2/18:11/0/P 2/19:7/0/P
+final helm2/20260917 (12 right): passes against 6 of 6 starts | 1/17:10/0/P 1/18:12/0/P 1/19:12/0/P 2/17:11/1/P 2/18:12/0/P 2/19:8/0/P
+final helm2/20260918 (12 right): passes against 6 of 6 starts | 1/17:10/0/P 1/18:12/0/P 1/19:12/0/P 2/17:11/1/P 2/18:12/0/P 2/19:8/0/P
+final helm2/20260919 (10 right): passes against 3 of 6 starts | 1/17:9/1/F 1/18:10/0/P 1/19:10/0/P 2/17:10/2/F 2/18:10/0/P 2/19:7/1/F
+== untrained start sizes and which questions
+helm1 20260917 start right 2 [('36988555', 'reach'), ('7a391350', 'reach')]
+helm1 20260918 start right 0 []
+helm1 20260919 start right 0 []
+helm2 20260917 start right 2 [('36988555', 'reach'), ('404166e8', 'reach')]
+helm2 20260918 start right 0 []
+helm2 20260919 start right 4 [('36988555', 'reach'), ('7a391350', 'reach'), ('a3e70de9', 'reach'), ('aa62bbee', 'reach')]

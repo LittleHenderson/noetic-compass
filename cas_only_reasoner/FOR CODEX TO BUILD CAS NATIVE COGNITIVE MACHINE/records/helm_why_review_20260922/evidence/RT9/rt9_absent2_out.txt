@@ -1,0 +1,7 @@
+dev ABSENT records needing reachability: 29 questions: 29
+  2.0/17 {'VIA': 28, 'DIRECT': 1}
+  2.0/18 {'VIA': 18, 'DIRECT': 11}
+  2.0/19 {'VIA': 28, 'DIRECT': 1}
+  1.0/17 {'VIA': 26, 'DIRECT': 3}
+  1.0/18 {'VIA': 25, 'DIRECT': 4}
+  1.0/19 {'VIA': 26, 'DIRECT': 3}

@@ -1,0 +1,2 @@
+seen tokens total 2553 ; depth-1 examples 58 x 13 tokens = 754 ; token share 0.29534 ; example (loss-weight) share 0.45312
+depth-1 expr slot: token-count P(BINARY) = 89/256 = 0.34766 ; loss-weighted P(BINARY) = 0.23674

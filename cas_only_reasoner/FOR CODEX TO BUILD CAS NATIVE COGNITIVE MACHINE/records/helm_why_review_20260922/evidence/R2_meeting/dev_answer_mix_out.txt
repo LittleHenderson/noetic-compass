@@ -1,0 +1,7 @@
+course reach answer mix, trained records: {'VIA': 45, 'DIRECT': 25, 'ABSENT': 1} | all course reach: {'VIA': 75, 'DIRECT': 30, 'ABSENT': 2}
+  receipt_helm1_certified_20260917 dev reach predicted states: {'VIA': 46, 'DIRECT': 7}
+  receipt_helm1_certified_20260918 dev reach predicted states: {'VIA': 43, 'DIRECT': 9, 'ABSENT': 1}
+  receipt_helm1_certified_20260919 dev reach predicted states: {'VIA': 47, 'DIRECT': 6}
+  receipt_20260917 dev reach predicted states: {'VIA': 52, 'DIRECT': 1}
+  receipt_20260918 dev reach predicted states: {'VIA': 33, 'DIRECT': 18, 'ABSENT': 2}
+  receipt_20260919 dev reach predicted states: {'VIA': 50, 'DIRECT': 1, 'ABSENT': 2}

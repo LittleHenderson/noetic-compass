@@ -1,0 +1,1996 @@
+{
+ "schema": "helm_why_review_evidence_manifest/1",
+ "workflow_run": "wf_b5716bf0-378",
+ "scratch_root": "Findings cite files as SCRATCH/<AGENT>/<file>. In this record that is evidence/<AGENT>/<file>.",
+ "archive": "D:/tksCAS-archive/helm_why_review_20260922",
+ "files": [
+  {
+   "scratch_path": "JUDGE/j1_analogy_split.py",
+   "bytes": 1639,
+   "sha256": "83da5c37b0f5f558206a3d7538dbc1e7900dc0163f52f56339d4c3bf019f9f76",
+   "committed_as": "evidence/JUDGE/j1_analogy_split.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j1_analogy_split_out.txt",
+   "bytes": 792,
+   "sha256": "eefa604b907f13b5297ecd9f94236ee20f98ef15fd3052ca2a0bd0393fc8be0e",
+   "committed_as": "evidence/JUDGE/j1_analogy_split_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j2_rule_cells.py",
+   "bytes": 852,
+   "sha256": "5f9b0ed7b83f49f3b53ca8728451c453db46ec52494eb6790bd2e94b36934ca9",
+   "committed_as": "evidence/JUDGE/j2_rule_cells.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j2_rule_cells_out.txt",
+   "bytes": 376,
+   "sha256": "716ea443ca7cb500a1387a323488e6512519e06ac61b79d8f48364da7ef0e8a9",
+   "committed_as": "evidence/JUDGE/j2_rule_cells_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j3_broken_rank_last.py",
+   "bytes": 2505,
+   "sha256": "9cd1d7824e5981e615f5a66c56d8864f69bd8cfc34ccf8a945313391aa883e00",
+   "committed_as": "evidence/JUDGE/j3_broken_rank_last.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j3_broken_rank_last_out.txt",
+   "bytes": 848,
+   "sha256": "6fc1cc1a143c1c4612642b9879cf87d6f19bcb5dde98a06952a903a6baf1edf4",
+   "committed_as": "evidence/JUDGE/j3_broken_rank_last_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j4_floor_misses.py",
+   "bytes": 2159,
+   "sha256": "4445bcea4443a2d752ca6af42a2d80b1cae100be661c2446dac171c977a92b1e",
+   "committed_as": "evidence/JUDGE/j4_floor_misses.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j4_floor_misses_out.txt",
+   "bytes": 1392,
+   "sha256": "71ec11774532c7cec66c0e5c8274b43b0af6be7c53a724b8ad1e3e0f23d7b900",
+   "committed_as": "evidence/JUDGE/j4_floor_misses_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j5_g_leaf_counts.py",
+   "bytes": 1912,
+   "sha256": "feaced4380a7f9477f3c612062cded8989fa668810e779710abe9a65c8b33e9f",
+   "committed_as": "evidence/JUDGE/j5_g_leaf_counts.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j5_g_leaf_counts_out.txt",
+   "bytes": 591,
+   "sha256": "eb0343f7a6710bb74e09e17e9f8a4042ea27da8a963c00decb23efba76a44bc9",
+   "committed_as": "evidence/JUDGE/j5_g_leaf_counts_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j6_curve.py",
+   "bytes": 1462,
+   "sha256": "a253da8c6d4c982f5c3453a37b0695cea19404493102ac6f1792da3c60088729",
+   "committed_as": "evidence/JUDGE/j6_curve.py",
+   "note": null
+  },
+  {
+   "scratch_path": "JUDGE/j6_curve_out.txt",
+   "bytes": 1660,
+   "sha256": "777484074460522a25d7934fceb0a4c458c430abe729a1b7586656d72eacb458",
+   "committed_as": "evidence/JUDGE/j6_curve_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/codex_ctx.py",
+   "bytes": 1185,
+   "sha256": "8822cdc93fe1a17cd1e5cea7ce62fade5bc5cd6c03e4db685893a7b7b04c6a4f",
+   "committed_as": "evidence/R1/codex_ctx.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/find_naming.py",
+   "bytes": 1099,
+   "sha256": "4f42ccc7f5026cf66444c4c4953dfacfa2b9ac09001747769c692aee804ac9c3",
+   "committed_as": "evidence/R1/find_naming.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/gate_reading.py",
+   "bytes": 671,
+   "sha256": "5131a8a1d86dbf7fd99244fa5df84c62e1907c7526240431b02960a1c8cd935d",
+   "committed_as": "evidence/R1/gate_reading.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/meeting/a.txt",
+   "bytes": 39,
+   "sha256": "ba9d975431d62a0e4c5b42b316e385d5e8bbadd1cb168b03889754bf0c2daaf4",
+   "committed_as": "evidence/R1/meeting/a.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/meeting/analogy_floor.py",
+   "bytes": 2544,
+   "sha256": "0cd90c6d09b1d878aaaf1e54fa2e08e1c8f457f11c4d1a1059e928ed191dba07",
+   "committed_as": "evidence/R1/meeting/analogy_floor.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/meeting/b.txt",
+   "bytes": 221,
+   "sha256": "76309e8b8606be4fcc1601f27821b2e3ad6797ce034f84166115d55170c42852",
+   "committed_as": "evidence/R1/meeting/b.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/meeting/lb18_q4live.py",
+   "bytes": 2891,
+   "sha256": "5339e26bb92cc2fb5c2b4cfd36287d6212f330addd1e383329d56698325038ea",
+   "committed_as": "evidence/R1/meeting/lb18_q4live.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/meeting/lb18_rerun_out.txt",
+   "bytes": 1102,
+   "sha256": "14358d864425d2d682251238d01cab03024a405f863636205ff1c5ef4da9da4c",
+   "committed_as": "evidence/R1/meeting/lb18_rerun_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R1/user_msgs.py",
+   "bytes": 1014,
+   "sha256": "4fc5ea130848fddc38cf5531a8657cb5f891c7531861e84fe135fa3a6f719c3a",
+   "committed_as": "evidence/R1/user_msgs.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/ablation_by_kind.py",
+   "bytes": 1562,
+   "sha256": "d6d8200bd74edf553d7fff75d06d35862532fc7f9fc39b4509307a8001d8d111",
+   "committed_as": "evidence/R2/ablation_by_kind.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/ablation_by_kind_out.txt",
+   "bytes": 4482,
+   "sha256": "dae311238f235d6b7ed8d2ca9ae66758e573ef25d6519e9029993938f54c2cfa",
+   "committed_as": "evidence/R2/ablation_by_kind_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/correspondence_baseline.py",
+   "bytes": 4426,
+   "sha256": "082557e6e2f5db4b8ae4f25b030ef16210e146ae7cc4246725db75501aa8b37c",
+   "committed_as": "evidence/R2/correspondence_baseline.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/correspondence_baseline_out.txt",
+   "bytes": 656,
+   "sha256": "f84993b0cba7cd6df5aa4c8d18d570be925630588a8bf3e6bbac6613192cf540",
+   "committed_as": "evidence/R2/correspondence_baseline_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/correspondence_per_record.py",
+   "bytes": 1823,
+   "sha256": "639dc42a01d13fa539270c99da1899d2e106bf5ef7fb8c2f0419b72b7820dc4a",
+   "committed_as": "evidence/R2/correspondence_per_record.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/correspondence_per_record_out.txt",
+   "bytes": 946,
+   "sha256": "196a4e0a13b5c1100385dd43dae8114721453c3b817e352303cbebccc24617dc",
+   "committed_as": "evidence/R2/correspondence_per_record_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/g_family_analysis.py",
+   "bytes": 9925,
+   "sha256": "a0841497c9728020131baf2205007dce213003a8426438b56bc9e9df51df26ec",
+   "committed_as": "evidence/R2/g_family_analysis.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/g_family_analysis_out.txt",
+   "bytes": 2446,
+   "sha256": "01875ca81a81729b047d106289707a2804b14d4b6224cbcd1512d6f7ee776d0f",
+   "committed_as": "evidence/R2/g_family_analysis_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/g_shape_overlap.py",
+   "bytes": 1373,
+   "sha256": "9ed3e649414b9aa201fec9d73d1b8bc4dba156c77babaa80f342753bb1b0991a",
+   "committed_as": "evidence/R2/g_shape_overlap.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/g_shape_overlap_out.txt",
+   "bytes": 218,
+   "sha256": "d27914d4a4a8459db60dca8c0c95c71f8083e9d4e1bbe3d38547d28f608099b6",
+   "committed_as": "evidence/R2/g_shape_overlap_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/online_prior.py",
+   "bytes": 1909,
+   "sha256": "3b5ca97de5edb7fe83571ede5e40146e75b50efe47a87806f670bf12e04ebf6b",
+   "committed_as": "evidence/R2/online_prior.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/online_prior_out.txt",
+   "bytes": 443,
+   "sha256": "2d0e2fdfc0fee6169c33b252fa7b60d0c66890befacd05d94771f92a5064b6ac",
+   "committed_as": "evidence/R2/online_prior_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/param_arith.py",
+   "bytes": 1557,
+   "sha256": "8c0ac83fffcab88b567b10a116e730896d4ec3746840db40945e883b4176763d",
+   "committed_as": "evidence/R2/param_arith.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/param_arith_out.txt",
+   "bytes": 1433,
+   "sha256": "7eae929c53c456a5e4accbdd6eeea4816580c78296368fb6b93ecf626f52be72",
+   "committed_as": "evidence/R2/param_arith_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/participant_confound.py",
+   "bytes": 1981,
+   "sha256": "80901111491c818d207033fce2cdd79e4d25a2bf2371bdedd0fc85e6d6711f4c",
+   "committed_as": "evidence/R2/participant_confound.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2/participant_confound_out.txt",
+   "bytes": 183,
+   "sha256": "65baceb005f5442c6ce14f025c71c17db19251e7e9085569e63b9f7f64f04aa6",
+   "committed_as": "evidence/R2/participant_confound_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_focus_check.py",
+   "bytes": 1871,
+   "sha256": "81d78b9fc1afcf8b708a80da1467f7053f0b0c0852231122d7f646771110d4a9",
+   "committed_as": "evidence/R2_meeting/analogy_focus_check.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_focus_check_out.txt",
+   "bytes": 1224,
+   "sha256": "1a778875eae3031bee0780f45349ed4d62df21f4b55539d45324e326a5d573b1",
+   "committed_as": "evidence/R2_meeting/analogy_focus_check_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_invariance.py",
+   "bytes": 2283,
+   "sha256": "2b6e2aae8279de9548fb888dc1e970416e2f165507d79b5557dc3e76ebdb0884",
+   "committed_as": "evidence/R2_meeting/analogy_invariance.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_invariance_out.txt",
+   "bytes": 3253,
+   "sha256": "21ab538ee518f34cbf6f68ff849d542a67ccb3006fb5d97311dcf99a9a282513",
+   "committed_as": "evidence/R2_meeting/analogy_invariance_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_split.py",
+   "bytes": 2114,
+   "sha256": "cbbeba2ef6fdd0cbaae71731e090062849df0bf10c5aff24806c9a4d7e9b721d",
+   "committed_as": "evidence/R2_meeting/analogy_split.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/analogy_split_out.txt",
+   "bytes": 1650,
+   "sha256": "432e94367b4d91cf1a0859ba0358535908a4e63ad113000494337df131ae0908",
+   "committed_as": "evidence/R2_meeting/analogy_split_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/corr_local_features.py",
+   "bytes": 3089,
+   "sha256": "bfaa7fd9df0311f4178620cc9973f5475bcc41ebf544f9bd4ef76e950ee6e030",
+   "committed_as": "evidence/R2_meeting/corr_local_features.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/corr_local_features_out.txt",
+   "bytes": 1699,
+   "sha256": "5a7de10d204a620aa6650dce5e673876d457a04c13974da8e18e606219e71966",
+   "committed_as": "evidence/R2_meeting/corr_local_features_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_absent_rank.py",
+   "bytes": 1512,
+   "sha256": "f720851b2c0b85d16f46d83ec4f2fe7ae821f0d31ae039eac2e452a87af4ae61",
+   "committed_as": "evidence/R2_meeting/dev_absent_rank.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_absent_rank_out.txt",
+   "bytes": 1282,
+   "sha256": "66e79e9c2221d90011ac27f464dd05bfc229abc580fd9509b22cfc22b85bef65",
+   "committed_as": "evidence/R2_meeting/dev_absent_rank_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_answer_mix.py",
+   "bytes": 1588,
+   "sha256": "a74d69fba397bc28f6ff6f3a7cc261e7461abcf988932a8a5b99df57b57f7a3c",
+   "committed_as": "evidence/R2_meeting/dev_answer_mix.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_answer_mix_out.txt",
+   "bytes": 660,
+   "sha256": "7bf76a7f1715a34729916e7cd21514eb9aa96551dbac3739c1d8ded5f39ff966",
+   "committed_as": "evidence/R2_meeting/dev_answer_mix_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_panel_rules.py",
+   "bytes": 4994,
+   "sha256": "86436a5e0cd713c51217a2cf0a6877b281b4218a3dc642affd23b399d960ba95",
+   "committed_as": "evidence/R2_meeting/dev_panel_rules.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/dev_panel_rules_out.txt",
+   "bytes": 1357,
+   "sha256": "9aec8ad34f222430f6e7d38f85b360f63dd2ad1494e208dff4410d98ee106256",
+   "committed_as": "evidence/R2_meeting/dev_panel_rules_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/reach_floor13.py",
+   "bytes": 3239,
+   "sha256": "278c7b7415d8268f865a4ee154fd52aeaeac6a17309094a1d8439c36b974f267",
+   "committed_as": "evidence/R2_meeting/reach_floor13.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/reach_floor13_out.txt",
+   "bytes": 1000,
+   "sha256": "90b96305ad3349b43ac10ccf3d6b8640c3ebebd7d798fbe8f5230e921d5c22c4",
+   "committed_as": "evidence/R2_meeting/reach_floor13_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/reach_hops.py",
+   "bytes": 3851,
+   "sha256": "a06f08e820952a7dd144af15bb7c62f8c981c84a5e2940d39baffc9bf2aae976",
+   "committed_as": "evidence/R2_meeting/reach_hops.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/reach_hops_out.txt",
+   "bytes": 3328,
+   "sha256": "12117de70a3b9680dc1b617e6395d01f05599f9493176840b417770337cbb0fc",
+   "committed_as": "evidence/R2_meeting/reach_hops_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/shape_count_reconcile.py",
+   "bytes": 1322,
+   "sha256": "ef778116fb29a582faa0b9b56acb19434d593d1c2fec03193e4f50386530d315",
+   "committed_as": "evidence/R2_meeting/shape_count_reconcile.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R2_meeting/shape_count_reconcile_out.txt",
+   "bytes": 283,
+   "sha256": "e4989b02ddf48146ab96da65c082684a67f527ebade6eb5444ea7bedbbf4b18f",
+   "committed_as": "evidence/R2_meeting/shape_count_reconcile_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse.py",
+   "bytes": 5793,
+   "sha256": "ca02a9641e854276fb21d986dc82dc7c8ccf2e50d5e17d74cb72e1fa1078e3c8",
+   "committed_as": "evidence/R3/analyse.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse2.py",
+   "bytes": 1988,
+   "sha256": "6417585e5bd50e7c4ecd3e782de0159ec9609028e53148402c9aaaab0eeeba83",
+   "committed_as": "evidence/R3/analyse2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse3.py",
+   "bytes": 1996,
+   "sha256": "014520c3d071b5c11b9028fa1d12e33e3959a0ad26103d5d756a21fa4776ccad",
+   "committed_as": "evidence/R3/analyse3.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse4.py",
+   "bytes": 3468,
+   "sha256": "f6c5830f1c0b97b282f030510649ee47c757bd82ff13a6d74d06a466dd0aa6b7",
+   "committed_as": "evidence/R3/analyse4.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse5.py",
+   "bytes": 1668,
+   "sha256": "5c3c0034baaae6aff18b411211a94d9ca3edea69c2656f32bedcfab7755d9a4f",
+   "committed_as": "evidence/R3/analyse5.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse6.py",
+   "bytes": 1460,
+   "sha256": "184bf2a6f49c6c7cbca9d4e944b0cb6cc74e0f2c6739f16f0982520b48e89753",
+   "committed_as": "evidence/R3/analyse6.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse7.py",
+   "bytes": 613,
+   "sha256": "cb675e02d53bb07f8452e61c07697600f14a816a8f0329f68d75ae083233b4a9",
+   "committed_as": "evidence/R3/analyse7.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse8.py",
+   "bytes": 1301,
+   "sha256": "23c27d42935d9a42a503fb08ad31782acb2cdf96c95cc1502fbff8b1a74081ae",
+   "committed_as": "evidence/R3/analyse8.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/analyse9.py",
+   "bytes": 1663,
+   "sha256": "b4588e9cd25204f70f027e532a1bccfac9e9262547551f493b5592ab520c7cbf",
+   "committed_as": "evidence/R3/analyse9.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/ids.json",
+   "bytes": 3472,
+   "sha256": "ac61cf057b7432b8347c8fc2d195a0cb5e8ab82460ede577bd056b7e158c2e89",
+   "committed_as": "evidence/R3/ids.json",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m1_out.txt",
+   "bytes": 2790,
+   "sha256": "ad8c9d54f35c6510a4ca3592ce312622020d0d2b9f6476b90f316e6e31ecce85",
+   "committed_as": "evidence/R3/meeting/m1_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m1_via.py",
+   "bytes": 2251,
+   "sha256": "2eb22739bcbed0a3596b96020726c89083144ee6268b1760b99498a1d201f05c",
+   "committed_as": "evidence/R3/meeting/m1_via.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m2_dev_hops.py",
+   "bytes": 1384,
+   "sha256": "0698145aa8a6a062fafd8b0da519328f4952fb8f3af6a01eb8df2d1b6dcbbf29",
+   "committed_as": "evidence/R3/meeting/m2_dev_hops.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m2_out.txt",
+   "bytes": 998,
+   "sha256": "aa513454f39c7978fed02268fd81a473362040d30bcd32c90fa6c73c93070f19",
+   "committed_as": "evidence/R3/meeting/m2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m3_out.txt",
+   "bytes": 1729,
+   "sha256": "bdc193c0a5cc51b699d847f01ad8b785d25dd1fed984d0406e3a896b8fad69fb",
+   "committed_as": "evidence/R3/meeting/m3_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m3_via_union.py",
+   "bytes": 2961,
+   "sha256": "089c0ed4eafa319cda88c8a82bc1c8fdcf85d13bbfb3447ab2bc7df9514c3fa8",
+   "committed_as": "evidence/R3/meeting/m3_via_union.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m4_const_reach.py",
+   "bytes": 2773,
+   "sha256": "e6adec9f0c7d59db1266d3c69ad549f38e60e47fb8126625498347dc07de63e7",
+   "committed_as": "evidence/R3/meeting/m4_const_reach.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m4_out.txt",
+   "bytes": 2113,
+   "sha256": "b2e6b88dde249b54cd75e37f48d6cb70286bcd4813f9211f0ff5a6a8606c54b3",
+   "committed_as": "evidence/R3/meeting/m4_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m5_out.txt",
+   "bytes": 2968,
+   "sha256": "ca13e6037bd68776f0f9a80a1c4fe318468eabb2fd5c2decb047a11d56825c41",
+   "committed_as": "evidence/R3/meeting/m5_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m5_reach_rules.py",
+   "bytes": 4062,
+   "sha256": "71e3f4709c2a25b6fdc307d80e6b078c107e016e0928e1f9af105953915abec0",
+   "committed_as": "evidence/R3/meeting/m5_reach_rules.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m6_lookup.py",
+   "bytes": 1993,
+   "sha256": "94471a80cb8653b065f61d228f96596256c06c195645ad4e71e580a5cbc85d09",
+   "committed_as": "evidence/R3/meeting/m6_lookup.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m6_out.txt",
+   "bytes": 423,
+   "sha256": "b2ced73f7ec549ee56c968c8be69bdc9653e706bbd1ef7a84220c9b9581c95c6",
+   "committed_as": "evidence/R3/meeting/m6_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m7_out.txt",
+   "bytes": 752,
+   "sha256": "1eeb2b571514dfc577199b3b01023b8c3c55a83079ffa5476c05e20f7ef7c890",
+   "committed_as": "evidence/R3/meeting/m7_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/meeting/m7_wiring.py",
+   "bytes": 1347,
+   "sha256": "e1c4ca72d77a055707e94a3aa298cb2c6c07b392605dda906cf0b407ca985f62",
+   "committed_as": "evidence/R3/meeting/m7_wiring.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse.txt",
+   "bytes": 3536,
+   "sha256": "e4cfb29e85d9040d58500696fdcfdf9cfd975bbf73c15a7438470effaefdc7d7",
+   "committed_as": "evidence/R3/out_analyse.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse3.txt",
+   "bytes": 13133,
+   "sha256": "c98f4180b5b5d67de2884485e815716cf93b5615afce795de63fdfe6c9a61b9e",
+   "committed_as": "evidence/R3/out_analyse3.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse4.txt",
+   "bytes": 15974,
+   "sha256": "01183d0a47b0b56b6f4aa50180ba20df286e50ee186e2762c0df8a1bce3c69b1",
+   "committed_as": "evidence/R3/out_analyse4.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse5.txt",
+   "bytes": 10376,
+   "sha256": "5939a06c1726b66e455db90694343da0cafc040a0af2bcaa82232b727a1bf8de",
+   "committed_as": "evidence/R3/out_analyse5.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse8.txt",
+   "bytes": 919,
+   "sha256": "14e19cd1bf439b5642a1d3739f85be906e81029c01bebdf31170dd8540eabbf7",
+   "committed_as": "evidence/R3/out_analyse8.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_analyse9.txt",
+   "bytes": 2443,
+   "sha256": "afdf91ba35de260f8b8b972062045c9bde2d207a45413502b4f8701c1a303a0c",
+   "committed_as": "evidence/R3/out_analyse9.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_peek1.txt",
+   "bytes": 7099,
+   "sha256": "ddc7f259569d20d474f3a4c64cd2b0d65aaedccfa4c426b9520dd49f4a2a0d72",
+   "committed_as": "evidence/R3/out_peek1.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/out_peek9.txt",
+   "bytes": 4048,
+   "sha256": "89e5814f563838a9cc08a11868420603d7b7c651a51faafac72b4b9bff290675",
+   "committed_as": "evidence/R3/out_peek9.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek1.py",
+   "bytes": 887,
+   "sha256": "dacc1c4c9415845ae45c37050a89f3e227b53a980e6adb2af169076385fb5edf",
+   "committed_as": "evidence/R3/peek1.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek2.py",
+   "bytes": 1474,
+   "sha256": "5f59907e5122638db3a60443c5234218ad183a71690bc4e1531be69c8006655e",
+   "committed_as": "evidence/R3/peek2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek3.py",
+   "bytes": 1178,
+   "sha256": "9bcc705af32b3bc35a1cd70102608f7474c53ff9a1b88c97d0ca642e564148a3",
+   "committed_as": "evidence/R3/peek3.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek4.py",
+   "bytes": 1283,
+   "sha256": "f7f732c3d366bdf3eadbde25d58eb93e4a9a3e245c2a7d4a6fafba9f826a2d33",
+   "committed_as": "evidence/R3/peek4.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek5.py",
+   "bytes": 655,
+   "sha256": "50427841265d4f173db338493867e3ad777060c6e1ff6e84a5fc824acada3206",
+   "committed_as": "evidence/R3/peek5.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R3/peek9.py",
+   "bytes": 1315,
+   "sha256": "788fe4bc21b616a9dcca63bddd78d03b8c9fb681a30e0887c615f3acf487f10b",
+   "committed_as": "evidence/R3/peek9.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/ast_unread.py",
+   "bytes": 3493,
+   "sha256": "e7e064ed84d65bdcca76bd0402a967e103965e291e27a6dfdeab8b0b4b3b065e",
+   "committed_as": "evidence/R4/ast_unread.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/ast_unread2.py",
+   "bytes": 3933,
+   "sha256": "352a98999de1682ea7b1f970a5e0449af6043223cc9395d67715bf6545b643d3",
+   "committed_as": "evidence/R4/ast_unread2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/ast_unread2_output.txt",
+   "bytes": 2347,
+   "sha256": "f68d351a2e7de6e0b477f61a01cc748859943f267d34e4fb7633e7b4cc368b5b",
+   "committed_as": "evidence/R4/ast_unread2_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/ast_unread_output.txt",
+   "bytes": 13149,
+   "sha256": "fbb08b8f00de740785ad8933921313148597a681193dc12888181a77f32cb9ab",
+   "committed_as": "evidence/R4/ast_unread_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_checker_path.py",
+   "bytes": 1266,
+   "sha256": "c6f1b63fb68e0a31c38937fa72cc8319012781a39c0fc6e27f13dd2a256ad0b4",
+   "committed_as": "evidence/R4/q4_checker_path.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_checker_path_output.txt",
+   "bytes": 297,
+   "sha256": "d1589bed3e8a1842c97e8c65d72f08c1d23edcc6b4da19bf8f4ed96b0017be5d",
+   "committed_as": "evidence/R4/q4_checker_path_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_extra.py",
+   "bytes": 3488,
+   "sha256": "288dbf7107954100b43c995fd3b01ef8f6331e7ee3f903ec9a20447164fd5d9e",
+   "committed_as": "evidence/R4/q4_extra.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_extra_output.txt",
+   "bytes": 1623,
+   "sha256": "3a71857ced16d01d448e69047a63db8b40e11b69a3fe63dde29cb4bf7f36929c",
+   "committed_as": "evidence/R4/q4_extra_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_lossweight.py",
+   "bytes": 1048,
+   "sha256": "79f0c38c3ccd66218aa1a77709ac25406dee28d19ce2ae5baeac11a997989cfe",
+   "committed_as": "evidence/R4/q4_lossweight.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_lossweight_output.txt",
+   "bytes": 221,
+   "sha256": "6a30584aa7a323d745860417fdd13a2d98e9abfe90aeac92b3c45bf76bc6167b",
+   "committed_as": "evidence/R4/q4_lossweight_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_prior_analysis.py",
+   "bytes": 10618,
+   "sha256": "730fcab14df5dd12219735ababd22a5e7d892ff253f8518c01ad47436a63a957",
+   "committed_as": "evidence/R4/q4_prior_analysis.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_prior_analysis_output.txt",
+   "bytes": 4980,
+   "sha256": "709efeb00857297445dfa5e984b82d54817d304c5669c6bf7abb481305e52342",
+   "committed_as": "evidence/R4/q4_prior_analysis_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_r0_control.py",
+   "bytes": 974,
+   "sha256": "a88e1166ddadfa4554f1c2afb3ab0fcf7e0389474a082d7a87b63ca6d3dba6ba",
+   "committed_as": "evidence/R4/q4_r0_control.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4/q4_r0_control_output.txt",
+   "bytes": 219,
+   "sha256": "d416e07fda81532e98d5b8a5722e8d86dc96f975e61c009316f4197cd98fc683",
+   "committed_as": "evidence/R4/q4_r0_control_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/analogy_answers.py",
+   "bytes": 1397,
+   "sha256": "3b8d23e4f3c5e7938909080e4e83d8ebe0fd160a76ef4718fa2683c8bee3981d",
+   "committed_as": "evidence/R4_meeting/analogy_answers.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/analogy_answers_out.txt",
+   "bytes": 2041,
+   "sha256": "eb9b68b70b3a29d3e677f864291f93b643825459e442664514037e8d6375e174",
+   "committed_as": "evidence/R4_meeting/analogy_answers_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/analogy_focus.py",
+   "bytes": 1706,
+   "sha256": "62f67cafc7da9115ff2af1e22b268616684ddd32fba76d5860fa8d534cdb8de7",
+   "committed_as": "evidence/R4_meeting/analogy_focus.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/analogy_focus_out.txt",
+   "bytes": 1667,
+   "sha256": "f00ab3d73ab10b1379879763a31b7952fcc9fe2eb86a93c6c39c492a93110021",
+   "committed_as": "evidence/R4_meeting/analogy_focus_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/q4_lengths.py",
+   "bytes": 1767,
+   "sha256": "30099e71c22b3c2d165a282e55d7670c0baf6d196a942ad7e72f5ec2322ddf52",
+   "committed_as": "evidence/R4_meeting/q4_lengths.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/q4_lengths_out.txt",
+   "bytes": 537,
+   "sha256": "ebeace70165a1daad787b88e798513718a67cf2d752b425597482cf601d9d549",
+   "committed_as": "evidence/R4_meeting/q4_lengths_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/rule_compare.py",
+   "bytes": 1191,
+   "sha256": "c4ce2292aaff8509cf60bb16772c72d8007e12a480483cb7ba2990a930171995",
+   "committed_as": "evidence/R4_meeting/rule_compare.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R4_meeting/rule_compare_out.txt",
+   "bytes": 206,
+   "sha256": "791f4bef71d99efb7ef93abeac70137933ca840dfa5599de0903b8e94a83060a",
+   "committed_as": "evidence/R4_meeting/rule_compare_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/common.py",
+   "bytes": 3871,
+   "sha256": "a17bb39882feabd7dd50aec76fc38e37174e45442c7033004cebfe84838deab9",
+   "committed_as": "evidence/R5/common.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s1_data.py",
+   "bytes": 6000,
+   "sha256": "e1cd1e221f87250b692c930d83e21078a040887484371de158b47bd2fd94910e",
+   "committed_as": "evidence/R5/s1_data.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s1_out.txt",
+   "bytes": 3190,
+   "sha256": "bd05337229b8ae6954063c72e3d91caa2e45f9cebae7809070485c5bbcc0fe42",
+   "committed_as": "evidence/R5/s1_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s2_out.txt",
+   "bytes": 5567,
+   "sha256": "20ec98d13c80abee2e015b587a94bff9f0eb6981a2fdedeb6cbb631cddd5506c",
+   "committed_as": "evidence/R5/s2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s2_updates.py",
+   "bytes": 7890,
+   "sha256": "6db5b66cf8c0343b003c30819d4f03e6828968a3032ddef0059eae31db6a695b",
+   "committed_as": "evidence/R5/s2_updates.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s3_dev.py",
+   "bytes": 12236,
+   "sha256": "f147792d1a3c7b1a85b0ba63f1fda26545179621b33e606ccea4cb6fb1ad7757",
+   "committed_as": "evidence/R5/s3_dev.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s3_out.txt",
+   "bytes": 7731,
+   "sha256": "62a66fe97e30685bd643bef4a49fd0f2b15f3843e560827421bc045a6fa9e9f7",
+   "committed_as": "evidence/R5/s3_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s4_depth.py",
+   "bytes": 1632,
+   "sha256": "8d2bd6bc5d58497df0b40fc4ad4d57205259c2e8586ceb7121d1a578115d5f64",
+   "committed_as": "evidence/R5/s4_depth.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s4_out.txt",
+   "bytes": 687,
+   "sha256": "416a74a4d017379d6c052d6c1bc80baa680ec3d5fb3701b12a5ff0435b8425db",
+   "committed_as": "evidence/R5/s4_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s5_meeting.py",
+   "bytes": 7685,
+   "sha256": "43fd6b1854bbab439e4168e70e20613bf2829829b8258ea67f963ea32d903b36",
+   "committed_as": "evidence/R5/s5_meeting.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s5_out.txt",
+   "bytes": 5317,
+   "sha256": "63838157c39a937a88e2105313cace18028192b303cc29cb3d4111f9614fe56d",
+   "committed_as": "evidence/R5/s5_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s6_lossweight.py",
+   "bytes": 2042,
+   "sha256": "24edaf4be0fae68bf8fe910df09beaa9f3d8452a7a9fd381bfee0e46a089f8ce",
+   "committed_as": "evidence/R5/s6_lossweight.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s6_out.txt",
+   "bytes": 885,
+   "sha256": "37f906dbc4e81bccbf3e50f278a3057b122a875e73c3effe0c8ff70b46b98495",
+   "committed_as": "evidence/R5/s6_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s7_greedy_lw.py",
+   "bytes": 1670,
+   "sha256": "4167f05972c57ff469bb10c25d7efb47d079c2ad76a477907287b94e3cc144d8",
+   "committed_as": "evidence/R5/s7_greedy_lw.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/s7_out.txt",
+   "bytes": 674,
+   "sha256": "9d0d2f3b795af4fb99e94aaf7bc5a2cf140dcfb1cc1656a5192ded92dee98839",
+   "committed_as": "evidence/R5/s7_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R5/used_rows.json",
+   "bytes": 4311,
+   "sha256": "6da722ac77e3f2df8999d1707164af0944cc661463c3751cbed512203fd36405",
+   "committed_as": "evidence/R5/used_rows.json",
+   "note": null
+  },
+  {
+   "scratch_path": "R6/meet_above_floor_ablation.py",
+   "bytes": 1586,
+   "sha256": "af14d42ba7cf259b017e717a09f408024f3d48165cb9929600edbcc6a41e02de",
+   "committed_as": "evidence/R6/meet_above_floor_ablation.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R6/meet_reach_defaults.py",
+   "bytes": 1417,
+   "sha256": "f65625e7210eb4295a1c1e0bfb41a03053e952925450a02399cebd3e250b65d9",
+   "committed_as": "evidence/R6/meet_reach_defaults.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R6/meet_via_rule.py",
+   "bytes": 2467,
+   "sha256": "e29bbb381a3da282ae81f7818de0b81990c4753a4f189a48fd4afa200e0fd17a",
+   "committed_as": "evidence/R6/meet_via_rule.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R6/q4_shape_prior.py",
+   "bytes": 1175,
+   "sha256": "13077dbde664421b33c1f9ad7913a29f8470e61b4db0b760d511b6b37ccf8227",
+   "committed_as": "evidence/R6/q4_shape_prior.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R6/q4_visible_stats.py",
+   "bytes": 2432,
+   "sha256": "c8651b19e7f326ceb57a4b067f9c8b52c083b911a0a402822c3499b0d4e91ccf",
+   "committed_as": "evidence/R6/q4_visible_stats.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/binomial_output.txt",
+   "bytes": 347,
+   "sha256": "aa86c5ba5d9cf022d301c5c97e751c0dd6383b5efe2b1cc02d1e128be46a5838",
+   "committed_as": "evidence/R7/binomial_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/floor_structure_output.txt",
+   "bytes": 235,
+   "sha256": "8cd668b60ea1e29fd47c514b37b7281d3fade8cef8956de0c655acfcbf9f9fb5",
+   "committed_as": "evidence/R7/floor_structure_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/helm_kinds.py",
+   "bytes": 3393,
+   "sha256": "01ce16f1fbcaa1ccfc4911b08ce7c7308b6d595b417f4639cb074ca74eab7d2e",
+   "committed_as": "evidence/R7/helm_kinds.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/helm_kinds_output.txt",
+   "bytes": 2243,
+   "sha256": "0acf3268e963a110e09ed03633c8eb6b51d9ac063cfef4fe40e31707f9bafc16",
+   "committed_as": "evidence/R7/helm_kinds_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/analogy_constant.py",
+   "bytes": 1783,
+   "sha256": "109ab780b00747d1671522db4e30d4259f7dc2c16d3da20844bb64b5398060f3",
+   "committed_as": "evidence/R7/meeting/analogy_constant.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/analogy_constant_out.txt",
+   "bytes": 409,
+   "sha256": "ee79fd05cf24e0a55f2aff0aad374963ed26a2e1f327f58cb820ce8f95319759",
+   "committed_as": "evidence/R7/meeting/analogy_constant_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/analogy_predictions.py",
+   "bytes": 2358,
+   "sha256": "f5a25d264edf7f28618c1804ac11d97cc6f8255507992156b82550f0515d03c2",
+   "committed_as": "evidence/R7/meeting/analogy_predictions.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/analogy_predictions_out.txt",
+   "bytes": 1592,
+   "sha256": "05a97f3fdb1f11716cf5492725c8ef34919efc31ed47983b97bb929abd7f0ac2",
+   "committed_as": "evidence/R7/meeting/analogy_predictions_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/analogy_split_out.txt",
+   "bytes": 397,
+   "sha256": "d97709932887942c0cba4f566eea848653fb3e77e68b2ff69e75c24b5550e16e",
+   "committed_as": "evidence/R7/meeting/analogy_split_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/floor_net.py",
+   "bytes": 1029,
+   "sha256": "ae3a46d623e4b23bf53e73b4c9de670482871c794880f5f137151e2ec906668b",
+   "committed_as": "evidence/R7/meeting/floor_net.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/floor_net_out.txt",
+   "bytes": 1007,
+   "sha256": "6226ab842676db5b14dfeefd9eeb5992f94462d1b1a0f8640d0d04410de1d50e",
+   "committed_as": "evidence/R7/meeting/floor_net_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/start_swap.py",
+   "bytes": 3622,
+   "sha256": "624f7c7b86a4ac57151c392ccc4075540a589d2acc409cb585ff662b984403e0",
+   "committed_as": "evidence/R7/meeting/start_swap.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/meeting/start_swap_out.txt",
+   "bytes": 2190,
+   "sha256": "8e162d477ff22424a16c0d9f59947aa56398fe5a8c44783b4d12ae9cdd819891",
+   "committed_as": "evidence/R7/meeting/start_swap_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/q4_contrarian.py",
+   "bytes": 8081,
+   "sha256": "efdf068d1c7d58cbe9ecec040fcb5d80fc9e74e7cd036cd53e590b6e7f9fbdba",
+   "committed_as": "evidence/R7/q4_contrarian.py",
+   "note": null
+  },
+  {
+   "scratch_path": "R7/q4_contrarian_output.txt",
+   "bytes": 3046,
+   "sha256": "6f325457227680409ac9c1db364cdf675ec397170abb2153133f58b785fee2e5",
+   "committed_as": "evidence/R7/q4_contrarian_output.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "result.json",
+   "bytes": 905902,
+   "sha256": "4acf3978baad2e18732b4107ddf516df5e651abcc693af84ffe36b481948eac5",
+   "committed_as": "team_output.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/pincheck.py",
+   "bytes": 694,
+   "sha256": "9ed8a33b4e5e99d3e13aa81f95cada43ddff4ccea6f94454bda2db39e7cb669a",
+   "committed_as": "evidence/RT1/pincheck.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/PREREG_RT1.txt",
+   "bytes": 4436,
+   "sha256": "856013c2392a033184577f1393835326c92c0ef6eb80e70797e70991af26787a",
+   "committed_as": "evidence/RT1/PREREG_RT1.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_diag.py",
+   "bytes": 21076,
+   "sha256": "689427b01fbe1a3761642cad9896ea09a3c7bd14888cd3b5481ee5d829cc99aa",
+   "committed_as": "evidence/RT1/rt1_diag.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_extra.py",
+   "bytes": 6954,
+   "sha256": "c7bbde0120e603587dbde78a0e280ca0843dccbb1b69029d0a87a2447d0889a9",
+   "committed_as": "evidence/RT1/rt1_extra.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_extra2.py",
+   "bytes": 3654,
+   "sha256": "7dae3078b6ab0defa6926bc5f006538e9cea5d1ae7fa5b646a30abf9e450bd70",
+   "committed_as": "evidence/RT1/rt1_extra2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_extra2_out.txt",
+   "bytes": 689,
+   "sha256": "4b32b6d637accc001e2ebd4ad05ed9f0836f4997c9763c6ee4eb7f007a3c7620",
+   "committed_as": "evidence/RT1/rt1_extra2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_extra_out.txt",
+   "bytes": 2246,
+   "sha256": "540541ffdb75ad59721dd6348287bc13efc2be645867319b652c3f2247142e5b",
+   "committed_as": "evidence/RT1/rt1_extra_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_extra_results.json",
+   "bytes": 1610,
+   "sha256": "8e08360375b8760d41a2eb3704e5b3f1efdff6f2925296b320e363977fd78ea0",
+   "committed_as": "evidence/RT1/rt1_extra_results.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_out.txt",
+   "bytes": 11247,
+   "sha256": "ef7a63ea51d0993cd583ebaa71fdbf758f212758788f4e4dfbe38697ed489382",
+   "committed_as": "evidence/RT1/rt1_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT1/rt1_results.json",
+   "bytes": 62279,
+   "sha256": "b270ae794695aefc200e6d4ece7fb245760c05d36300ffdc9d5e2ec0dbfb917a",
+   "committed_as": "evidence/RT1/rt1_results.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/PREREG_RT2.txt",
+   "bytes": 6529,
+   "sha256": "a1f457d6e2925f04aed8cf9f5dcc71453c582252f8594d7def3e4a1cc026a430",
+   "committed_as": "evidence/RT2/PREREG_RT2.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_out.txt",
+   "bytes": 6297,
+   "sha256": "2f9f0ede62dcce7571087bbc1dbc39e82d5537c6365ee0c0b715498046e5da30",
+   "committed_as": "evidence/RT2/rt2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_posthoc.py",
+   "bytes": 3345,
+   "sha256": "6ba9c3431c5b3535cb6b252ca2cf26778ef48c3487c12f4d454407ad4b99fa59",
+   "committed_as": "evidence/RT2/rt2_posthoc.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_posthoc_out.txt",
+   "bytes": 1552,
+   "sha256": "2339ee5909e865aa3efb7fa9da34e970112d9a83863d8bce21e7ced5c741b92d",
+   "committed_as": "evidence/RT2/rt2_posthoc_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_results.json",
+   "bytes": 378718,
+   "sha256": "ce2abe782d5a7695cf407eecb3a0fe8b14f270b84f186dcd9ad8a62b73d279f2",
+   "committed_as": "evidence/RT2/rt2_results.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_run.py",
+   "bytes": 17771,
+   "sha256": "87a4842ba9e2aa5efff50f52ba4ea60d237ee06ea7d44872c08e877fa85d8443",
+   "committed_as": "evidence/RT2/rt2_run.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_timing.py",
+   "bytes": 2638,
+   "sha256": "d77ba6f8f488d9b0573bf2f47fde5b0c3794f31b328ecb14da9fd2bf54639ced",
+   "committed_as": "evidence/RT2/rt2_timing.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT2/rt2_updates.jsonl",
+   "bytes": 206997,
+   "sha256": "6206509fc0c480755d95867db08e838d3cfca86e74cc8a180399b8dc77bf14c3",
+   "committed_as": "evidence/RT2/rt2_updates.jsonl",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/err_main.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_as": "evidence/RT3/err_main.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_main.json",
+   "bytes": 16525,
+   "sha256": "d4625fd909e0916130e2f666775a690fb233ceecf3b6bdd70c54b9a5a699b4b4",
+   "committed_as": "evidence/RT3/out_main.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_manifest_check.txt",
+   "bytes": 3756,
+   "sha256": "c030e7dfb6a0713c88ae383b1ea27f195edf3d95f21e26362b821d54eb3df0fa",
+   "committed_as": "evidence/RT3/out_manifest_check.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_merge_bound.txt",
+   "bytes": 2580,
+   "sha256": "d315073bd8063eff3d4d4813d07925938e31bf710ee81a709d19d7db384c2440",
+   "committed_as": "evidence/RT3/out_merge_bound.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_optim.txt",
+   "bytes": 3516,
+   "sha256": "03ed4da7739ea2c4c7f232776603de56074a35ed33e834994ccbd096168042a3",
+   "committed_as": "evidence/RT3/out_optim.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_source_check.txt",
+   "bytes": 6231,
+   "sha256": "2e026a3d3f615645fcfbfdf6dfac5823843896d1831f765fb084d34155686056",
+   "committed_as": "evidence/RT3/out_source_check.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/out_structure.txt",
+   "bytes": 3783222,
+   "sha256": "a07026297834ae23eab52d3b70f2384e4f495a7b180f0e64ec1b7d566363e12c",
+   "committed_as": null,
+   "note": "over 2 MiB derived output; kept in the D: archive only"
+  },
+  {
+   "scratch_path": "RT3/out_trajectory.txt",
+   "bytes": 15760,
+   "sha256": "66e6c1e30e8fcd1b2f047918c06fdd9ad7a38dd964a235f5006411668ee0e5d3",
+   "committed_as": "evidence/RT3/out_trajectory.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_merge_bound.py",
+   "bytes": 1870,
+   "sha256": "77ecce8f1122d5c14a5e4b5a3d66f3c6fa3e9a0c2125283fcddb5688d1bf51e4",
+   "committed_as": "evidence/RT3/rt3_merge_bound.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_optim.py",
+   "bytes": 2668,
+   "sha256": "a2b3df3bf1e266daf279290a6473e28c0a5467d121faf817eba00fb7c64840d7",
+   "committed_as": "evidence/RT3/rt3_optim.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_read_round_rate.py",
+   "bytes": 6341,
+   "sha256": "c182fe9d30e24160af0bfb7ab02256e869fee1358c14a8610fdb26927c5eeee5",
+   "committed_as": "evidence/RT3/rt3_read_round_rate.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_source_check.py",
+   "bytes": 958,
+   "sha256": "26a70d1dcecb469b722ac1edd2c386b3b1d207a7058cb9785eaa88854ed6a523",
+   "committed_as": "evidence/RT3/rt3_source_check.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_structure.py",
+   "bytes": 1799,
+   "sha256": "e29a391938a73c615e0ededd296b26a9824e01014f5b2add20dbd5096dfb8dd8",
+   "committed_as": "evidence/RT3/rt3_structure.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/rt3_trajectory.py",
+   "bytes": 2327,
+   "sha256": "c1ca425fc3dc2c0721dfc0355fe9c7c052880442bc51cf466c07c75cd3fca28a",
+   "committed_as": "evidence/RT3/rt3_trajectory.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT3/summary_main.txt",
+   "bytes": 4237,
+   "sha256": "e99306bdc0bf60465660fd41b555ef85e5bb424ac0039f0584e946ca352583a6",
+   "committed_as": "evidence/RT3/summary_main.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/bank_shape.py",
+   "bytes": 1252,
+   "sha256": "6b056c789946862bfe6460d2b7741522caccdbe551bda51e686de6ddc1ecc148",
+   "committed_as": "evidence/RT4/bank_shape.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek1.py",
+   "bytes": 728,
+   "sha256": "44c48bf3db82c22027fe34e5d0b2b3a13911dc838846e953c0236e53095b9317",
+   "committed_as": "evidence/RT4/peek1.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek2.py",
+   "bytes": 720,
+   "sha256": "38d60f286dddb564c7f6b8de7c3bc6f13efed8de734d979ffc35e09d4efcbd9e",
+   "committed_as": "evidence/RT4/peek2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek3.py",
+   "bytes": 409,
+   "sha256": "378d6fdfcc0b51618f9d79d2c30f02f9f59e38aed42330b0b8fe24c9016113e2",
+   "committed_as": "evidence/RT4/peek3.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek4.py",
+   "bytes": 433,
+   "sha256": "8256b625afb0b737e8ab4dbe1ada6e0e21db95ef3b85874ebd2369726530a044",
+   "committed_as": "evidence/RT4/peek4.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek5.py",
+   "bytes": 1583,
+   "sha256": "70c2a301edfc97556cee4ddc389678537c81a0bff38bca79621318c6cddc1d24",
+   "committed_as": "evidence/RT4/peek5.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek6.py",
+   "bytes": 708,
+   "sha256": "5f23b49f827c282595e75a5cdae6a9d23fac964f1163aa5f13214f94d9edc85b",
+   "committed_as": "evidence/RT4/peek6.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek7.py",
+   "bytes": 1049,
+   "sha256": "9adb4027d171fa092806ab31f6a5e5a7f4c18c43d0e25df989a776152c6404a0",
+   "committed_as": "evidence/RT4/peek7.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek8.py",
+   "bytes": 435,
+   "sha256": "05b32dbab6d68b375daec2b781c74fd16a7d47871b5804f948eca6eebc0c4645",
+   "committed_as": "evidence/RT4/peek8.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/peek9.py",
+   "bytes": 674,
+   "sha256": "0735fb12a18c743a0ff949f07960b11b2b6df49a5e85652c1deeb343e214fbd4",
+   "committed_as": "evidence/RT4/peek9.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/PRE_RUN_DEFINITIONS.txt",
+   "bytes": 2644,
+   "sha256": "12dbe48159b66a2a4f5b4c57d62a282910a912593249a7d02e2bd01eb74140ff",
+   "committed_as": "evidence/RT4/PRE_RUN_DEFINITIONS.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_common.py",
+   "bytes": 3248,
+   "sha256": "edd1d69dec2d95ff8f0eb737430aa15f136877e94a3b6870a888a15b249d4ff0",
+   "committed_as": "evidence/RT4/rt4_common.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_cues.py",
+   "bytes": 3478,
+   "sha256": "6c4ec0a1aebcce0121fbfd4779790729551b48656c8fc6fc01fdfad86643c1db",
+   "committed_as": "evidence/RT4/rt4_cues.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_cues_p10_out.txt",
+   "bytes": 11475,
+   "sha256": "4387eff438ad9b878e5aef340db631960b68b44157ebbb42ef208fa13aa96c19",
+   "committed_as": "evidence/RT4/rt4_cues_p10_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_detail.py",
+   "bytes": 4034,
+   "sha256": "09a9ed597fd51e33825d80c26a57c3c86466a82735bc1439c82f973d08889d44",
+   "committed_as": "evidence/RT4/rt4_detail.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_detail_out.txt",
+   "bytes": 12319,
+   "sha256": "4f83e7f1493f34cd381e1f5dfd102a0c7a05b5c3ef85e5ec4e028a359da83fb6",
+   "committed_as": "evidence/RT4/rt4_detail_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_floor_table.py",
+   "bytes": 1177,
+   "sha256": "daf4f1d2f16374b37e2dadc1f77996f0cd0ab8c274d3cea682d01e7511853955",
+   "committed_as": "evidence/RT4/rt4_floor_table.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_floor_table_out.txt",
+   "bytes": 2283,
+   "sha256": "a8cd7b611257ead422b9fbfc78d767f4ade684f362f846498e06a1dc2d71d6ba",
+   "committed_as": "evidence/RT4/rt4_floor_table_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_more.py",
+   "bytes": 3000,
+   "sha256": "28a6785dd6e0ee3e1e2ce2746f305acb13de85fb57deb6ebf4303bfda7d8030e",
+   "committed_as": "evidence/RT4/rt4_more.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_more_out.txt",
+   "bytes": 9532,
+   "sha256": "a938981966e4185e975be99599cb8d59302f6e7eba4dc4336f7866689fa4fcc3",
+   "committed_as": "evidence/RT4/rt4_more_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_secondary.py",
+   "bytes": 4078,
+   "sha256": "499e26eed4d5a14f03ebdef03489b6e51212cf53e9349135e9eb826a0b3a30b4",
+   "committed_as": "evidence/RT4/rt4_secondary.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_secondary_out.txt",
+   "bytes": 5970,
+   "sha256": "6efcbe6b22f7a0d86cd993d73b27815a55465719bfb4899511fca41611edf81a",
+   "committed_as": "evidence/RT4/rt4_secondary_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_start.py",
+   "bytes": 7508,
+   "sha256": "9859685d7de2613036ae7498e3806678d14c7930123a184efc25edd717247ab1",
+   "committed_as": "evidence/RT4/rt4_start.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT4/rt4_start_out.txt",
+   "bytes": 11412,
+   "sha256": "c51fd1c1cc211851a42011ca3a10718d727af0ef3cde3dee9d0d07928203d4e1",
+   "committed_as": "evidence/RT4/rt4_start_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/00_DEFINITIONS_WRITTEN_BEFORE_SCORING.txt",
+   "bytes": 2450,
+   "sha256": "088fbf9de2669a52da48d8a40526493bcef9dd6faabb363e926afd2df1499f79",
+   "committed_as": "evidence/RT5/00_DEFINITIONS_WRITTEN_BEFORE_SCORING.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_argprofile.py",
+   "bytes": 2024,
+   "sha256": "210fd40d9d1b71f4cd543c5001562278fe883574cbb350a7bd55e4b69a1a599a",
+   "committed_as": "evidence/RT5/rt5_argprofile.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_argprofile_out.txt",
+   "bytes": 1063,
+   "sha256": "29babc0301ca5c5ee280bc6271718d3ff65b9ef03e0be9c5e1cb12f284997e68",
+   "committed_as": "evidence/RT5/rt5_argprofile_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_context.py",
+   "bytes": 8590,
+   "sha256": "4711a26ee27b6a6334db58161e247c7dea2d51cf36d7175a842b032d7cbd7734",
+   "committed_as": "evidence/RT5/rt5_context.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_context_out.txt",
+   "bytes": 6671,
+   "sha256": "cbdbcb0ed757745d16102beee9322666767fd0d708e14be1c9d9508cef649a46",
+   "committed_as": "evidence/RT5/rt5_context_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_fed_values.py",
+   "bytes": 5867,
+   "sha256": "79442f0ebc5843085e121a8bdb72533e8fc97ccff18080aa2f7b3980b0aa30a1",
+   "committed_as": "evidence/RT5/rt5_fed_values.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_fed_values_out.txt",
+   "bytes": 2006,
+   "sha256": "c5be072cfbb17aaea6405827e14b4ba94406e323b17deade31623a67fe0c7572",
+   "committed_as": "evidence/RT5/rt5_fed_values_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_inputs.json",
+   "bytes": 6954701,
+   "sha256": "6299d41068b7cf3ec4ec51b7018835d2572b44efb9ab7afa0030b199c3670899",
+   "committed_as": null,
+   "note": "over 2 MiB derived output; kept in the D: archive only"
+  },
+  {
+   "scratch_path": "RT5/rt5_inputs.py",
+   "bytes": 7446,
+   "sha256": "5d1161fcdc918eef5f6c1a075b03699751673c6ac1864730b5a3fb0a6c7e1e1a",
+   "committed_as": "evidence/RT5/rt5_inputs.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_inputs_out.txt",
+   "bytes": 4232,
+   "sha256": "ec3e04b82f4ddef8263e08005b2f870bdef835bb7ae3f17a842b70cb0a246055",
+   "committed_as": "evidence/RT5/rt5_inputs_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_score.py",
+   "bytes": 7201,
+   "sha256": "b7314ce2b5bb72dd907ffa2f3efb0ea03f5082d27cd913652069ec75d7e8c181",
+   "committed_as": "evidence/RT5/rt5_score.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT5/rt5_score_out.txt",
+   "bytes": 9878,
+   "sha256": "56b8cf0d01bf6ca67c0d9b86d8ef7ccdd3445a1bf1183f8f3050f0de290136a1",
+   "committed_as": "evidence/RT5/rt5_score_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/b1_baselines_summary.py",
+   "bytes": 853,
+   "sha256": "063155d16c50acba382ab9631bfb1a410cf1e639a6832bb52f3cb1382099f70d",
+   "committed_as": "evidence/RT6/b1_baselines_summary.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/files_helm3-lab.txt",
+   "bytes": 4346,
+   "sha256": "eb0aab3f096fee0939fc75327fd25f984963e1bb598e89a48a550caec1c967a8",
+   "committed_as": "evidence/RT6/files_helm3-lab.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/files_q4-live.txt",
+   "bytes": 5440,
+   "sha256": "e05182acb349236ac5b381d131f0cdac4323e5d2afb65bfd45cb865a7ae45d01",
+   "committed_as": "evidence/RT6/files_q4-live.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m1_out.txt",
+   "bytes": 1644,
+   "sha256": "601ffe1db325baf7f91792275876f99e50b7660bb9e728d7cc20037031c3c80a",
+   "committed_as": "evidence/RT6/m1_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m1_reference_computable.py",
+   "bytes": 4908,
+   "sha256": "bfaff26643df50aafacbddbee8194bab6a5338443184c4ecb23e0772788563b1",
+   "committed_as": "evidence/RT6/m1_reference_computable.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m2_ladder_program.py",
+   "bytes": 2048,
+   "sha256": "0200ea7109d933bfb2ffb4df73c77ba3c98aac65a03bcee395d8e23327e17bf9",
+   "committed_as": "evidence/RT6/m2_ladder_program.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m2_out.txt",
+   "bytes": 271,
+   "sha256": "0ec02e3ff262da73e17675f8226a487288c2ea77294f4edaf4ebdfc419077e97",
+   "committed_as": "evidence/RT6/m2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m3_ladder_ties.py",
+   "bytes": 1921,
+   "sha256": "157c24d7f4170e15d80397eb13346a2e0a4215a03ace50c553cec3199a114958",
+   "committed_as": "evidence/RT6/m3_ladder_ties.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m3_out.txt",
+   "bytes": 185,
+   "sha256": "ede5acd2a9a0c5ade64cfe5f5639498ef117f5336e9c6a488119c97d5e8423b5",
+   "committed_as": "evidence/RT6/m3_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m4_contract_cases.py",
+   "bytes": 1781,
+   "sha256": "1abf3054a13b58703d3be4823f8381bea793bb8fcabf9c3d265d90e1ea67f602",
+   "committed_as": "evidence/RT6/m4_contract_cases.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT6/m4_out.txt",
+   "bytes": 389,
+   "sha256": "93e57e4ec47379d22bdbe5905489370ad488e42c9feb5be1c0fa547d44a5494f",
+   "committed_as": "evidence/RT6/m4_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT7/PREREG_RT7.txt",
+   "bytes": 7113,
+   "sha256": "a46ac731dbaaf7abe6639cb42c41c6779311ef14fcc6deaae3cd413b583b819b",
+   "committed_as": "evidence/RT7/PREREG_RT7.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT7/rt7_out.txt",
+   "bytes": 15014,
+   "sha256": "5a26298c894b72feedc564b60e4a333168e9ac0652111be9c9ead16d20f1c9d5",
+   "committed_as": "evidence/RT7/rt7_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT7/rt7_results.json",
+   "bytes": 114415,
+   "sha256": "0a64111149210391bb84dcfb15cdc819571ae7b15ac9eb87c66b57db56418a68",
+   "committed_as": "evidence/RT7/rt7_results.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT7/rt7_run.py",
+   "bytes": 17101,
+   "sha256": "27116b1d26a11fc28e51770b6eb5d5d51685bd9780bccefe2d206e1cde18b540",
+   "committed_as": "evidence/RT7/rt7_run.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT7/rt7_updates.jsonl",
+   "bytes": 246710,
+   "sha256": "3ce395e83080793673638b70edf693ee8fec7f488060c0059cbfa08bcdcf383f",
+   "committed_as": "evidence/RT7/rt7_updates.jsonl",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/PREREG_RT8.sha256.txt",
+   "bytes": 243,
+   "sha256": "195446f27c7dc27ad9bca4a7ac8dd7d62069460c9a4fa92e112d5ebb70e400e3",
+   "committed_as": "evidence/RT8/PREREG_RT8.sha256.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/PREREG_RT8.time.txt",
+   "bytes": 21,
+   "sha256": "ebac21bebab4c7ae8de11ac1d039d4502dd2705d6174564f027b8179bdc4f1b5",
+   "committed_as": "evidence/RT8/PREREG_RT8.time.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/PREREG_RT8.txt",
+   "bytes": 3047,
+   "sha256": "ef3581155e3c7389e4f8af9753003077f7395e5ce28321a6ec600644147f935c",
+   "committed_as": "evidence/RT8/PREREG_RT8.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/rt8_out.txt",
+   "bytes": 5274,
+   "sha256": "7c11c30b805fb15768c68e055acdafe70d1c078c2872921419bee51076e0cd03",
+   "committed_as": "evidence/RT8/rt8_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/rt8_replay.py",
+   "bytes": 18566,
+   "sha256": "3367fba2f57c5c7bc2360960d2ced148fb38d32a05f69d6bf3712213ad27c7a5",
+   "committed_as": "evidence/RT8/rt8_replay.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/rt8_results.json",
+   "bytes": 496152,
+   "sha256": "f4813dacf4d72f67ce0664ce0e3ddbec2c7d391bbeb94910f23ff66c394efc2e",
+   "committed_as": "evidence/RT8/rt8_results.json",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/rt8_supp.py",
+   "bytes": 2138,
+   "sha256": "ee3095aaef16c53dab1cd78c0c724566fac29fd0591f01dd1c24fb6befabc3d0",
+   "committed_as": "evidence/RT8/rt8_supp.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT8/rt8_supp_out.txt",
+   "bytes": 480,
+   "sha256": "28ac699810d87b279f20aa9fae9d0ef7c9d6dd774086bc7d7892ec86f5b2a678",
+   "committed_as": "evidence/RT8/rt8_supp_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/00_PRE_RUN_DEFINITIONS.txt",
+   "bytes": 4368,
+   "sha256": "995e6b6a4b3a96f6d76447e452a7917f1420fc61a7dfd5ad1b335dd4907e3547",
+   "committed_as": "evidence/RT9/00_PRE_RUN_DEFINITIONS.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/peek1.py",
+   "bytes": 1013,
+   "sha256": "41917f61c98c1fe9588ac8596585ea6fc6d7b9fd8832b423846ce132639b57ea",
+   "committed_as": "evidence/RT9/peek1.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/peek2.py",
+   "bytes": 1086,
+   "sha256": "a0f07b3a5156e9aa8ef94c9562fa66bc5ac9e0a6bca148cf7b56b7da24c49317",
+   "committed_as": "evidence/RT9/peek2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_absent.py",
+   "bytes": 1126,
+   "sha256": "bb08adf2145bd00825d00de5694b1546f10679b5bd2b56cbc1250164e270722c",
+   "committed_as": "evidence/RT9/rt9_absent.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_absent2.py",
+   "bytes": 755,
+   "sha256": "eafb930134d3411a96abe0c1edcafd429cb89eb501c84637a263dfe7958830a9",
+   "committed_as": "evidence/RT9/rt9_absent2.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_absent2_out.txt",
+   "bytes": 270,
+   "sha256": "5276f79505cfea0986caa708664a208d7a961f67303f7db8ae75ffa798526fb6",
+   "committed_as": "evidence/RT9/rt9_absent2_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_absent_out.txt",
+   "bytes": 727,
+   "sha256": "a6beef54d113f8f79be4eb207ddea5712a2e3a32d1190a5e371bd19426a832c8",
+   "committed_as": "evidence/RT9/rt9_absent_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_candidates.py",
+   "bytes": 3290,
+   "sha256": "9166243632d9edcecbebc8ec70a416367409d46aaad4735f8fd870d60bcbc8ce",
+   "committed_as": "evidence/RT9/rt9_candidates.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_candidates_out.txt",
+   "bytes": 1404,
+   "sha256": "f60c43dbd7ce0dfe9031aa32c4a6258ff509b3592fce34b6d223b180b70afc30",
+   "committed_as": "evidence/RT9/rt9_candidates_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_count.py",
+   "bytes": 13252,
+   "sha256": "ac64c4bc6b295e10f180f901863394d748506baf4e52dae59aa88c9484aaaac2",
+   "committed_as": "evidence/RT9/rt9_count.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_count_out.txt",
+   "bytes": 10858,
+   "sha256": "43e0e86065267a3c143a09a0680c0d2b726398d2ccf4e52cbb1e9748697d0154",
+   "committed_as": "evidence/RT9/rt9_count_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_detail.py",
+   "bytes": 3766,
+   "sha256": "37e8d0a4f450a5da359e5997e07447987bb5d5a5410d279e260a7e8714bcb9db",
+   "committed_as": "evidence/RT9/rt9_detail.py",
+   "note": null
+  },
+  {
+   "scratch_path": "RT9/rt9_detail_out.txt",
+   "bytes": 4397,
+   "sha256": "062df73e054f7edf50a83d058f72e49d9ed20ca415edd2f36e0c0ddb0d820f00",
+   "committed_as": "evidence/RT9/rt9_detail_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/analogy.py",
+   "bytes": 843,
+   "sha256": "cba66e41052f996db1bfc53636c530f92ed49b985692b97a241fd36246f15c3e",
+   "committed_as": "evidence/SKEP_REPRO/analogy.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/analogy_out.txt",
+   "bytes": 924,
+   "sha256": "470eb6eee83b80eced54d21da33560660eecfe7db6b88587616da0d125ced4d8",
+   "committed_as": "evidence/SKEP_REPRO/analogy_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/g_major.py",
+   "bytes": 2413,
+   "sha256": "f95aff6ec7eebf28aaca824349b9f619a97bf9fbb00d929989940e6f87f40e1f",
+   "committed_as": "evidence/SKEP_REPRO/g_major.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/g_major_out.txt",
+   "bytes": 1256,
+   "sha256": "7614585684181870c0c5aac44c477b5f6ecc8a3850367c9948d5caa6eccee701",
+   "committed_as": "evidence/SKEP_REPRO/g_major_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/g_parse.py",
+   "bytes": 3824,
+   "sha256": "1fe35e7bc46c637a318a822db814e9d122bd7a78dd81a8afb30408fb1d2b165d",
+   "committed_as": "evidence/SKEP_REPRO/g_parse.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/g_parse_out.txt",
+   "bytes": 517,
+   "sha256": "e324e4518f235cbe0c27cb48b21aae213f2c8831389378e780b855cf7565f37f",
+   "committed_as": "evidence/SKEP_REPRO/g_parse_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/gap369.py",
+   "bytes": 581,
+   "sha256": "7f2e2fb2ea8b7897c5b4d17081d4e8dde3a9892d6dbdd41614dc6a69400115a6",
+   "committed_as": "evidence/SKEP_REPRO/gap369.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/gap369_out.txt",
+   "bytes": 1704,
+   "sha256": "637401e210da97adf838627bb0cd8e6ae87492093c2e257ea9da452f5948e09b",
+   "committed_as": "evidence/SKEP_REPRO/gap369_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/helm18.py",
+   "bytes": 2565,
+   "sha256": "4196f03cc6573aa475bef3b50f4818ce377b9bb9ff3bdc0f5b82c9b6503ab75f",
+   "committed_as": "evidence/SKEP_REPRO/helm18.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/helm18_out.txt",
+   "bytes": 1981,
+   "sha256": "d6922c104eafebf9f38def50c67245f80a93801e441e004112256a47a63f14f2",
+   "committed_as": "evidence/SKEP_REPRO/helm18_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/helm_swap.py",
+   "bytes": 1950,
+   "sha256": "1233ce36b2fb0f16c2e89a747ce1ea6200c37fd22f20e7a24c2e04be13aa9aa1",
+   "committed_as": "evidence/SKEP_REPRO/helm_swap.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/helm_swap_out.txt",
+   "bytes": 2610,
+   "sha256": "0c9acf7db38a569ca7e068bdf4646e1c4bfb6262ee07545c573a17b65328fe51",
+   "committed_as": "evidence/SKEP_REPRO/helm_swap_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/parser_vs_ref.py",
+   "bytes": 703,
+   "sha256": "28a52b8de3dc62d6e318e611d1720785d64755c918bdb658d61c7a03a5a0cdcf",
+   "committed_as": "evidence/SKEP_REPRO/parser_vs_ref.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/parser_vs_ref_out.txt",
+   "bytes": 62,
+   "sha256": "407df4c26317592f3a0d2b3fdf641a60c745aae0b5296c58a74a79d00af16897",
+   "committed_as": "evidence/SKEP_REPRO/parser_vs_ref_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/pred.json",
+   "bytes": 211,
+   "sha256": "efabdcbee0fa880856c0fc1b3cd521cc199fe945fa4defa13b0f9c004ceebfaf",
+   "committed_as": "evidence/SKEP_REPRO/pred.json",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/q4_basic.py",
+   "bytes": 1057,
+   "sha256": "466d1b8cd7d2019ac9770572f34fd53d655b17b32afcb9f8cc8cd54e2af80880",
+   "committed_as": "evidence/SKEP_REPRO/q4_basic.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/q4_basic_out.txt",
+   "bytes": 665,
+   "sha256": "ee1b2dad78f932dc76523001f1988d641795cd0a3f89915b113fd0625e2def03",
+   "committed_as": "evidence/SKEP_REPRO/q4_basic_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/reach_same.py",
+   "bytes": 691,
+   "sha256": "dcc529fd6bc1a7b2c99f920768912f2fe2641d826f5ea30699857e2ec5a529bc",
+   "committed_as": "evidence/SKEP_REPRO/reach_same.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/reach_same_out.txt",
+   "bytes": 990,
+   "sha256": "4105de98ddea549c01f499bc1af62a085a241685f8ccd9a9396c592a5b8ed7f7",
+   "committed_as": "evidence/SKEP_REPRO/reach_same_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/rerun_R1_analogy_floor_out.txt",
+   "bytes": 2287,
+   "sha256": "e066b6de2692497c5a570219a33991aff267934a87ab21c9bc1e292055489efd",
+   "committed_as": "evidence/SKEP_REPRO/rerun_R1_analogy_floor_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/round_rate.py",
+   "bytes": 1967,
+   "sha256": "e6970a6d3b38d5f853cc8bceaaab67593e0bf867955f6a96f0cd09b29259cc2b",
+   "committed_as": "evidence/SKEP_REPRO/round_rate.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/round_rate_out.txt",
+   "bytes": 1378,
+   "sha256": "200f3df05b2c5bc0bcab9d7e375e4c711e67141c54e2c08366a8aff0b7f57cf6",
+   "committed_as": "evidence/SKEP_REPRO/round_rate_out.txt",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/rule_cells.py",
+   "bytes": 585,
+   "sha256": "06f5ebeee46290a5b739cbd07d56704050373ad0399c20d1c9fb6d6d2cf494ae",
+   "committed_as": "evidence/SKEP_REPRO/rule_cells.py",
+   "note": null
+  },
+  {
+   "scratch_path": "SKEP_REPRO/rule_cells_out.txt",
+   "bytes": 385,
+   "sha256": "e32ad5317b6982f5593af4f2d30a804d08edeac8d203ab89146babb024f44187",
+   "committed_as": "evidence/SKEP_REPRO/rule_cells_out.txt",
+   "note": null
+  }
+ ]
+}

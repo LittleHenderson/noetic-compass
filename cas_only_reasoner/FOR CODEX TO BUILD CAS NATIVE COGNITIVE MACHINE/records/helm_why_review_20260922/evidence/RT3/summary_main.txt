@@ -1,0 +1,37 @@
+helm1.0 20260917 initial.pt 4ac651c39e4192c3 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm1.0 20260917 final.pt 66745c1b5902054d paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate -0.16512343287467957 hex 1e1629be tanh -0.16363888373763216 g -0.0016363888373763216
+   round_mix ['0.03900207206606865', '0.654703676700592', '0.17327722907066345'] hex a3c01f3da99a273f966f313e softmax ['0.2503340546475612', '0.46335701568583854', '0.2863089296666002']
+helm1.0 20260918 initial.pt a7d1c3fa8ea873c4 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm1.0 20260918 final.pt a63b2428f77b0151 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate -0.23411144316196442 hex e9ba6fbe tanh -0.22992610252492837 g -0.002299261025249284
+   round_mix ['0.03779413923621178', '0.3054451048374176', '0.5366852879524231'] hex 07ce1a3d4d639c3e3564093f softmax ['0.25292219937171423', '0.33054172342671806', '0.4165360772015677']
+helm1.0 20260919 initial.pt aa396cc1d29cadb2 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm1.0 20260919 final.pt d693f448d68e5eb5 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate -0.17966674268245697 hex 8ffa37be tanh -0.17775816018125581 g -0.0017775816018125582
+   round_mix ['0.22292360663414001', '0.33889275789260864', '0.30758264660835266'] hex 1646643e5a83ad3e797b9d3e softmax ['0.31139967405565006', '0.3496897608926941', '0.33891056505165584']
+helm2.0 20260917 initial.pt 59dd46877bd7bf97 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm2.0 20260917 final.pt c6c49e982c408ced paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.00778836477547884 hex 8a35ff3b tanh 0.007788207302131318 g 7.788207302131318e-05
+   round_mix ['0.3593052923679352', '0.27649468183517456', '0.32542526721954346'] hex ddf6b73eb6908d3e249ea63e softmax ['0.34635477855453317', '0.3188283948101042', '0.3348168266353626']
+helm2.0 20260918 initial.pt d3c6292f2c0d09e2 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm2.0 20260918 final.pt a6e72caac1fccbd9 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.25864478945732117 hex 176d843e tanh 0.2530275222134544 g 0.0025302752221345445
+   round_mix ['0.1818346530199051', '0.21936947107315063', '0.41711729764938354'] hex dd323a3e64a2603e6690d53e softmax ['0.30270792045581263', '0.31428593726291165', '0.3830061422812756']
+helm2.0 20260919 initial.pt 93b84558c0123673 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate 0.0 hex 00000000 tanh 0.0 g 0.0
+   round_mix ['0.5', '0.25', '0.25'] hex 0000003f0000803e0000803e softmax ['0.39099131515943186', '0.304504342420284', '0.304504342420284']
+helm2.0 20260919 final.pt c83e0123643a2433 paths ['model_state/round_mix', 'model_state/round_rate']
+   round_rate -0.0002534387167543173 hex f8df84b9 tanh -0.00025343871132809455 g -2.5343871132809456e-06
+   round_mix ['0.43890994787216187', '0.3529801070690155', '0.30564939975738525'] hex ceb8e03ecfb9b43e147e9c3e softmax ['0.35805133155439545', '0.32856888763563397', '0.3133797808099706']
+ALL find_class: [('collections', 'OrderedDict'), ('torch', 'ByteStorage'), ('torch', 'FloatStorage'), ('torch._utils', '_rebuild_tensor_v2')]

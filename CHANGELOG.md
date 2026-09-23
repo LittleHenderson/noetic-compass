@@ -1,5 +1,37 @@
 # tksCAS — Changelog
 
+## 2026-09-22 — Team review: why Helm, and why Helm did not pass (advice only)
+
+The owner asked for a team of agents to research two questions. The review ran as workflow
+`wf_b5716bf0-378`: 31 agents, 0 errors. In order:
+
+- seven solo researchers, blind to each other;
+- a meeting where each read every report;
+- two rounds of further research, with outcome rules written before each task;
+- 32 committed findings;
+- three skeptics;
+- a final judge, who ruled 15 UPHELD, 17 UPHELD_IN_PART, 0 NOT_UPHELD.
+
+**Why Helm.** Helm is the learning part of the CNCM pointer machine. It was built because the
+earlier machine could not read never-practised worlds: held-back scores went 2/3/3 -> 5/3/2 of 45.
+Its purpose is learning inside the trained weights. No reason for the name is recorded.
+
+**Why it did not pass.**
+- Helm 1.0 passed its grader. The grader compares each run with its own random start, and 1.0 ended
+  only +1, +1, 0 above an 11-of-18 no-learning floor.
+- Helm 2.0 failed on one run, 20260919 (7 gained, 1 lost, p 9/256), not two as the lineage file
+  says.
+- Today's Q4 smoke had no pass mark. It rebuilt 0/16. No code defect was found at the level tested,
+  and the remaining cause is OPEN.
+
+Three local-GPU diagnostics ran (RT1 forward-only; RT2 and RT7 in-memory re-runs of 2,000 updates).
+They are labelled `DIAGNOSTIC_NOT_CLAIM_BEARING`. Record mismatches in `BRAIN_LINEAGE.md`,
+`AUDIT_PACK.md` and this file are flagged, not corrected; correction is the owner's decision. No
+status changed.
+
+Report: `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_why_review_20260922/README.md`.
+Full evidence archive: `D:/tksCAS-archive/helm_why_review_20260922`.
+
 ## 2026-09-22 — Reconcile parallel audits and repair diagnostic invalid numbers
 
 Preserved the completed compiler/atlas branch while carrying the peer's older

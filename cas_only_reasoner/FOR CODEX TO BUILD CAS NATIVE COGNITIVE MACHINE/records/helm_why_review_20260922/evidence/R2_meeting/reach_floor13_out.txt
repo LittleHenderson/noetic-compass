@@ -1,0 +1,10 @@
+validation over 6 runs x 107 reach records, (checker correct, equals my reconstruction): {(True, True): 595, (False, False): 47}
+frozen population found: True 18
+  reach 36988555 records 4 group VIA_via_is_child_of_whole_and_parent_of_part | one-step rule exact on all records: True
+  reach 404166e8 records 1 group VIA_via_is_child_of_whole_and_parent_of_part | one-step rule exact on all records: True
+  reach 7a391350 records 4 group VIA_via_is_child_of_whole_and_parent_of_part | one-step rule exact on all records: True
+  reach a3e70de9 records 1 group VIA_via_is_child_of_whole_and_parent_of_part | one-step rule exact on all records: True
+  reach aa62bbee records 4 group VIA_via_is_child_of_whole_and_parent_of_part | one-step rule exact on all records: True
+  reach f341afc7 records 1 group VIA_needs_longer_chain | one-step rule exact on all records: False
+population kinds: {'edge_account': 5, 'reach': 6, 'analogy': 5, 'parts': 2}
+reach questions in the 18 solved by the one-step rule: 5

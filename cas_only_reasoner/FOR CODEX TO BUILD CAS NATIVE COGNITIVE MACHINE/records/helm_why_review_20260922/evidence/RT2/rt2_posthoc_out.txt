@@ -1,0 +1,15 @@
+round-trip exact-if-correct S: 256/256
+round-trip exact-if-correct set2: 128/128
+round-trip exact-if-correct dev256: 256/256
+updates logged: 2000 | rows follow S cycle: True
+ pass 1 (updates 1-256): mean loss 1.941651  min 1.091065  max 3.529915
+ pass 2 (updates 257-512): mean loss 1.293989  min 0.931573  max 1.716870
+ pass 3 (updates 513-768): mean loss 1.217502  min 0.874903  max 1.584689
+ pass 4 (updates 769-1024): mean loss 1.177342  min 0.837602  max 1.566761
+ pass 5 (updates 1025-1280): mean loss 1.137451  min 0.812614  max 1.506217
+ pass 6 (updates 1281-1536): mean loss 1.098794  min 0.787805  max 1.467236
+ pass 7 (updates 1537-1792): mean loss 1.074978  min 0.761452  max 1.470021
+ pass 8 (updates 1793-2000): mean loss 1.065938  min 0.744631  max 1.467212
+S: GRU(end) 1.043102 | IB2 prior 1.159165 | shape-oracle+prior 1.068549 | shape+op-oracle+prior 1.006491 | token share {"domain": 0.149875, "drive": 0.149875, "eos": 0.049127, "expr": 0.250624, "noetic": 0.149875, "op": 0.100748, "register": 0.149875}
+set2: GRU(end) 1.115134 | IB2 prior 1.170238 | shape-oracle+prior 1.073913 | shape+op-oracle+prior 1.010505 | token share {"domain": 0.149577, "drive": 0.149577, "eos": 0.047042, "expr": 0.252113, "noetic": 0.149577, "op": 0.102536, "register": 0.149577}
+dev256: GRU(end) 1.277560 | IB2 prior 1.213231 | shape-oracle+prior 1.070283 | shape+op-oracle+prior 1.000041 | token share {"domain": 0.147402, "drive": 0.147402, "eos": 0.031817, "expr": 0.262988, "noetic": 0.147402, "op": 0.115585, "register": 0.147402}

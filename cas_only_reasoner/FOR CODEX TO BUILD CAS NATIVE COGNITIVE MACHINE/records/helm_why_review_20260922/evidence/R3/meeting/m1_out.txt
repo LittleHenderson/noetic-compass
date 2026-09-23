@@ -1,0 +1,16 @@
+reach records 107
+by (rule, hops): [(('bfs_immediate_predecessor_lexical_v1', 2), 48), (('bfs_immediate_predecessor_lexical_v1', 3), 7), (('bfs_immediate_predecessor_lexical_v1', None), 4), (('first_direct_constituent_lexical_v1', 1), 30), (('first_direct_constituent_lexical_v1', 2), 9), (('first_direct_constituent_lexical_v1', 3), 3), (('first_direct_constituent_lexical_v1', None), 6)]
+by (split, hops): [(('excluded', 2), 9), (('excluded', 3), 1), (('held', 1), 5), (('held', 2), 17), (('held', 3), 1), (('held', None), 3), (('trained', 1), 25), (('trained', 2), 31), (('trained', 3), 8), (('trained', None), 7)]
+admissible answer counts: Counter({1: 107}) witness counts Counter({1: 97, 0: 10})
+Helm 1.0 20260917 p00 excluded/h2 5/9 excluded/h3 0/1 held/h1 0/5 held/h2 8/17 held/h3 0/1 held/hNone 1/3 trained/h1 0/25 trained/h2 15/31 trained/h3 0/8 trained/hNone 1/7
+Helm 1.0 20260917 p10 excluded/h2 8/9 excluded/h3 1/1 held/h1 5/5 held/h2 17/17 held/h3 1/1 held/hNone 2/3 trained/h1 25/25 trained/h2 28/31 trained/h3 8/8 trained/hNone 6/7
+Helm 1.0 20260918 p00 excluded/h2 0/9 excluded/h3 0/1 held/h1 1/5 held/h2 0/17 held/h3 0/1 held/hNone 0/3 trained/h1 0/25 trained/h2 0/31 trained/h3 0/8 trained/hNone 0/7
+Helm 1.0 20260918 p10 excluded/h2 8/9 excluded/h3 1/1 held/h1 5/5 held/h2 17/17 held/h3 1/1 held/hNone 2/3 trained/h1 25/25 trained/h2 28/31 trained/h3 8/8 trained/hNone 6/7
+Helm 1.0 20260919 p00 excluded/h2 1/9 excluded/h3 1/1 held/h1 0/5 held/h2 4/17 held/h3 0/1 held/hNone 1/3 trained/h1 0/25 trained/h2 2/31 trained/h3 6/8 trained/hNone 5/7
+Helm 1.0 20260919 p10 excluded/h2 9/9 excluded/h3 1/1 held/h1 5/5 held/h2 17/17 held/h3 1/1 held/hNone 0/3 trained/h1 25/25 trained/h2 31/31 trained/h3 8/8 trained/hNone 2/7
+Helm 2.0 20260917 p00 excluded/h2 2/9 excluded/h3 0/1 held/h1 0/5 held/h2 4/17 held/h3 0/1 held/hNone 1/3 trained/h1 0/25 trained/h2 8/31 trained/h3 0/8 trained/hNone 1/7
+Helm 2.0 20260917 p10 excluded/h2 9/9 excluded/h3 1/1 held/h1 5/5 held/h2 17/17 held/h3 1/1 held/hNone 0/3 trained/h1 25/25 trained/h2 31/31 trained/h3 8/8 trained/hNone 0/7
+Helm 2.0 20260918 p00 excluded/h2 0/9 excluded/h3 0/1 held/h1 0/5 held/h2 0/17 held/h3 0/1 held/hNone 0/3 trained/h1 0/25 trained/h2 0/31 trained/h3 0/8 trained/hNone 0/7
+Helm 2.0 20260918 p10 excluded/h2 8/9 excluded/h3 1/1 held/h1 5/5 held/h2 17/17 held/h3 1/1 held/hNone 2/3 trained/h1 25/25 trained/h2 28/31 trained/h3 8/8 trained/hNone 6/7
+Helm 2.0 20260919 p00 excluded/h2 8/9 excluded/h3 1/1 held/h1 0/5 held/h2 17/17 held/h3 0/1 held/hNone 1/3 trained/h1 0/25 trained/h2 26/31 trained/h3 6/8 trained/hNone 5/7
+Helm 2.0 20260919 p10 excluded/h2 8/9 excluded/h3 1/1 held/h1 5/5 held/h2 13/17 held/h3 1/1 held/hNone 1/3 trained/h1 25/25 trained/h2 28/31 trained/h3 8/8 trained/hNone 6/7

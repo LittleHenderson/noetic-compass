@@ -1,0 +1,73 @@
+reach records in registry: 107 | distinct questions: 64
+   ('CN defined', False, 'direct edge', False) 13
+   ('CN defined', False, 'direct edge', True) 30
+   ('CN defined', True, 'direct edge', False) 64
+   ('cue', 'HPR', 'defined', True, 'differs from CN', False) 59
+   ('cue', 'HPR', 'defined', True, 'differs from CN', True) 5
+   ('cue', 'PC', 'defined', True, 'differs from CN', False) 64
+   ('cue', 'PP', 'defined', True, 'differs from CN', False) 64
+   ('cue', 'RF', 'defined', True, 'differs from CN', False) 51
+   ('cue', 'RF', 'defined', True, 'differs from CN', True) 13
+   ('cue', 'RL', 'defined', True, 'differs from CN', False) 36
+   ('cue', 'RL', 'defined', True, 'differs from CN', True) 28
+   ('n nodes', 3, 'n_cn', 1, 'n_part_parents_in_C', 1, 'n_parent&child_in_C', 1) 23
+   ('n nodes', 4, 'n_cn', 1, 'n_part_parents_in_C', 1, 'n_parent&child_in_C', 1) 23
+   ('n nodes', 4, 'n_cn', 2, 'n_part_parents_in_C', 2, 'n_parent&child_in_C', 2) 18
+reach records with a known correct answer (from any correct prediction in 18 course files): 107 of 107 | any record with 2 different correct answers: 0
+
+--- D_HPR records (CN defined, HPR defined, differ) ---
+ q b7d9f0a1 rec df38a540 trained  first_dir n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 HPR=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q fd15c493 rec 73985581 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 HPR=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec 80561f0a trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 HPR=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec 9b673225 excluded bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 HPR=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec cd99c437 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 HPR=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+
+--- D_RF records (CN defined, RF defined, differ) ---
+ q 36988555 rec 0f35bba4 held     bfs_immed n=4 whole=2 part=0 edges=[(2, 1), (2, 3), (3, 0)] prank={1: 2, 2: 1, 3: 3} | CN=3 RF=1 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V1 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q 36988555 rec 210805b4 held     bfs_immed n=4 whole=2 part=0 edges=[(2, 1), (2, 3), (3, 0)] prank={1: 2, 2: 1, 3: 3} | CN=3 RF=1 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V1 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q 36988555 rec 9e02e451 held     bfs_immed n=4 whole=2 part=0 edges=[(2, 1), (2, 3), (3, 0)] prank={1: 2, 2: 1, 3: 3} | CN=3 RF=1 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V1 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q 36988555 rec fe5b0a6e held     bfs_immed n=4 whole=2 part=0 edges=[(2, 1), (2, 3), (3, 0)] prank={1: 2, 2: 1, 3: 3} | CN=3 RF=1 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V1 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q 3ee0108e rec 1aa474c6 excluded bfs_immed n=4 whole=1 part=3 edges=[(1, 0), (1, 2), (2, 3)] prank={0: 2, 1: 1, 2: 3} | CN=2 RF=0 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q 3ee0108e rec 8f13772b trained  bfs_immed n=4 whole=1 part=3 edges=[(1, 0), (1, 2), (2, 3)] prank={0: 2, 1: 1, 2: 3} | CN=2 RF=0 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q 3ee0108e rec e4782946 trained  bfs_immed n=4 whole=1 part=3 edges=[(1, 0), (1, 2), (2, 3)] prank={0: 2, 1: 1, 2: 3} | CN=2 RF=0 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q 404166e8 rec 9373a9e1 held     first_dir n=4 whole=1 part=0 edges=[(0, 2), (1, 3), (3, 0)] prank={0: 3, 1: 1, 3: 2} | CN=3 RF=2 direct=False | gold=[('VIA', 3)] | p10 2.0/17:D 2.0/18:D 2.0/19:D 1.0/17:D 1.0/18:D 1.0/19:D
+ q 64e0cfa0 rec f863833c trained  first_dir n=4 whole=1 part=3 edges=[(1, 0), (1, 2), (2, 3)] prank={0: 2, 1: 1, 2: 3} | CN=2 RF=0 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q aa62bbee rec 0b1d59e0 held     bfs_immed n=4 whole=1 part=0 edges=[(0, 2), (1, 3), (3, 0)] prank={0: 3, 1: 1, 3: 2} | CN=3 RF=2 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q aa62bbee rec 57b6db56 held     bfs_immed n=4 whole=1 part=0 edges=[(0, 2), (1, 3), (3, 0)] prank={0: 3, 1: 1, 3: 2} | CN=3 RF=2 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q aa62bbee rec a5b28593 held     bfs_immed n=4 whole=1 part=0 edges=[(0, 2), (1, 3), (3, 0)] prank={0: 3, 1: 1, 3: 2} | CN=3 RF=2 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q aa62bbee rec f6406785 held     bfs_immed n=4 whole=1 part=0 edges=[(0, 2), (1, 3), (3, 0)] prank={0: 3, 1: 1, 3: 2} | CN=3 RF=2 direct=False | gold=[('VIA', 3)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V3
+
+--- D_RL records (CN defined, RL defined, differ) ---
+ q 40df917c rec 49b33715 trained  bfs_immed n=4 whole=2 part=1 edges=[(0, 1), (1, 3), (2, 0)] prank={0: 2, 1: 3, 2: 1} | CN=0 RL=3 direct=False | gold=[('VIA', 0)] | p10 2.0/17:V0 2.0/18:V0 2.0/19:V0 1.0/17:V0 1.0/18:V0 1.0/19:V0
+ q 40df917c rec 7678fd74 trained  bfs_immed n=4 whole=2 part=1 edges=[(0, 1), (1, 3), (2, 0)] prank={0: 2, 1: 3, 2: 1} | CN=0 RL=3 direct=False | gold=[('VIA', 0)] | p10 2.0/17:V0 2.0/18:V0 2.0/19:V0 1.0/17:V0 1.0/18:V0 1.0/19:V0
+ q 40df917c rec 9e3ae2cf excluded bfs_immed n=4 whole=2 part=1 edges=[(0, 1), (1, 3), (2, 0)] prank={0: 2, 1: 3, 2: 1} | CN=0 RL=3 direct=False | gold=[('VIA', 0)] | p10 2.0/17:V0 2.0/18:V0 2.0/19:V0 1.0/17:V0 1.0/18:V0 1.0/19:V0
+ q 40df917c rec c1f3add9 excluded bfs_immed n=4 whole=2 part=1 edges=[(0, 1), (1, 3), (2, 0)] prank={0: 2, 1: 3, 2: 1} | CN=0 RL=3 direct=False | gold=[('VIA', 0)] | p10 2.0/17:V0 2.0/18:V0 2.0/19:V0 1.0/17:V0 1.0/18:V0 1.0/19:V0
+ q 5850f911 rec 6f4577d1 held     first_dir n=4 whole=2 part=0 edges=[(1, 0), (2, 1), (2, 3), (3, 0)] prank={1: 3, 2: 1, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:D 2.0/18:V1 2.0/19:D 1.0/17:V1 1.0/18:V1 1.0/19:D
+ q 6864c271 rec 065b48ea trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 3, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V3 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V3
+ q 6864c271 rec 66bcf638 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 3, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V3 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V3
+ q 6864c271 rec 907b71d5 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 3, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V3 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V3
+ q 6864c271 rec bfd7c476 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 3, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V3 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V3
+ q 7a391350 rec 016e3aad held     bfs_immed n=4 whole=0 part=3 edges=[(0, 1), (0, 2), (1, 3)] prank={0: 1, 1: 3, 2: 2} | CN=1 RL=2 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 7a391350 rec 835ef1cc held     bfs_immed n=4 whole=0 part=3 edges=[(0, 1), (0, 2), (1, 3)] prank={0: 1, 1: 3, 2: 2} | CN=1 RL=2 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 7a391350 rec 8e9dd62f held     bfs_immed n=4 whole=0 part=3 edges=[(0, 1), (0, 2), (1, 3)] prank={0: 1, 1: 3, 2: 2} | CN=1 RL=2 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 7a391350 rec bea7e140 held     bfs_immed n=4 whole=0 part=3 edges=[(0, 1), (0, 2), (1, 3)] prank={0: 1, 1: 3, 2: 2} | CN=1 RL=2 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 85a38565 rec 03e4c1ed held     bfs_immed n=4 whole=2 part=0 edges=[(1, 0), (2, 1), (2, 3), (3, 0)] prank={1: 3, 2: 1, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 85a38565 rec e465bdb8 held     bfs_immed n=4 whole=2 part=0 edges=[(1, 0), (2, 1), (2, 3), (3, 0)] prank={1: 3, 2: 1, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 85a38565 rec f35ef736 held     bfs_immed n=4 whole=2 part=0 edges=[(1, 0), (2, 1), (2, 3), (3, 0)] prank={1: 3, 2: 1, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q 85a38565 rec f6489d5b held     bfs_immed n=4 whole=2 part=0 edges=[(1, 0), (2, 1), (2, 3), (3, 0)] prank={1: 3, 2: 1, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q a3e70de9 rec 78d57e38 held     first_dir n=4 whole=0 part=3 edges=[(0, 1), (0, 2), (1, 3)] prank={0: 1, 1: 3, 2: 2} | CN=1 RL=2 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q ad82c0a0 rec 2c693624 excluded bfs_immed n=4 whole=1 part=0 edges=[(1, 2), (1, 3), (2, 0), (3, 0)] prank={1: 1, 2: 3, 3: 2} | CN=2 RL=3 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q ad82c0a0 rec 49684b83 trained  bfs_immed n=4 whole=1 part=0 edges=[(1, 2), (1, 3), (2, 0), (3, 0)] prank={1: 1, 2: 3, 3: 2} | CN=2 RL=3 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q ad82c0a0 rec cade0b37 trained  bfs_immed n=4 whole=1 part=0 edges=[(1, 2), (1, 3), (2, 0), (3, 0)] prank={1: 1, 2: 3, 3: 2} | CN=2 RL=3 direct=False | gold=[('VIA', 2)] | p10 2.0/17:V2 2.0/18:V2 2.0/19:V2 1.0/17:V2 1.0/18:V2 1.0/19:V2
+ q b7d9f0a1 rec df38a540 trained  first_dir n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V1 2.0/19:V1 1.0/17:V1 1.0/18:V1 1.0/19:V1
+ q cbed744a rec 53e5d56f trained  first_dir n=4 whole=2 part=3 edges=[(0, 3), (2, 0), (3, 1)] prank={0: 2, 2: 1, 3: 3} | CN=0 RL=1 direct=False | gold=[('VIA', 0)] | p10 2.0/17:V0 2.0/18:V0 2.0/19:V0 1.0/17:V0 1.0/18:V0 1.0/19:V0
+ q e69768e0 rec 7438b450 trained  first_dir n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 3, 3: 2} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V3 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V3
+ q fd15c493 rec 73985581 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec 80561f0a trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec 9b673225 excluded bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+ q fd15c493 rec cd99c437 trained  bfs_immed n=4 whole=0 part=2 edges=[(0, 1), (0, 3), (1, 2), (3, 2)] prank={0: 1, 1: 2, 3: 3} | CN=1 RL=3 direct=False | gold=[('VIA', 1)] | p10 2.0/17:V1 2.0/18:V3 2.0/19:V3 1.0/17:V3 1.0/18:V3 1.0/19:V1
+
+--- p10 VIA answers where CN is undefined ---
+   ('correct', 'gold', 'VIA', '', '', 'VIA==PC') 17
+   ('correct', 'gold', 'VIA', 'VIA==RL', '', '') 6
+   ('correct', 'gold', 'VIA', 'VIA==RL', 'VIA==PP', '') 42

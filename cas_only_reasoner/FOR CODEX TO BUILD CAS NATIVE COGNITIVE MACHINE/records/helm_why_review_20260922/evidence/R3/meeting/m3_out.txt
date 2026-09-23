@@ -1,0 +1,16 @@
+(correct, has_witness) counts over all course/heldback scoring files: {(False, False): 5779, (True, True): 7421}
+records with >1 distinct witness path: 0
+reach records 107 hop counts: [(1, 30), (2, 64), (3, 11), (None, 2)]
+by split/hops: [(('excluded', 2), 9), (('excluded', 3), 1), (('held', 1), 5), (('held', 2), 19), (('held', 3), 1), (('held', None), 1), (('trained', 1), 25), (('trained', 2), 36), (('trained', 3), 9), (('trained', None), 1)]
+Helm 1.0 20260917 p00 | all: h1 0/30 h2 30/64 h3 0/11 hNone 0/2 | held: h1 0/5 h2 9/19 h3 0/1 hNone 0/1
+Helm 1.0 20260917 p10 | all: h1 30/30 h2 58/64 h3 11/11 hNone 2/2 | held: h1 5/5 h2 18/19 h3 1/1 hNone 1/1
+Helm 1.0 20260918 p00 | all: h1 1/30 h2 0/64 h3 0/11 hNone 0/2 | held: h1 1/5 h2 0/19 h3 0/1 hNone 0/1
+Helm 1.0 20260918 p10 | all: h1 30/30 h2 58/64 h3 11/11 hNone 2/2 | held: h1 5/5 h2 18/19 h3 1/1 hNone 1/1
+Helm 1.0 20260919 p00 | all: h1 0/30 h2 13/64 h3 7/11 hNone 0/2 | held: h1 0/5 h2 5/19 h3 0/1 hNone 0/1
+Helm 1.0 20260919 p10 | all: h1 30/30 h2 57/64 h3 11/11 hNone 1/2 | held: h1 5/5 h2 17/19 h3 1/1 hNone 0/1
+Helm 2.0 20260917 p00 | all: h1 0/30 h2 15/64 h3 1/11 hNone 0/2 | held: h1 0/5 h2 5/19 h3 0/1 hNone 0/1
+Helm 2.0 20260917 p10 | all: h1 30/30 h2 57/64 h3 10/11 hNone 0/2 | held: h1 5/5 h2 17/19 h3 1/1 hNone 0/1
+Helm 2.0 20260918 p00 | all: h1 0/30 h2 0/64 h3 0/11 hNone 0/2 | held: h1 0/5 h2 0/19 h3 0/1 hNone 0/1
+Helm 2.0 20260918 p10 | all: h1 30/30 h2 58/64 h3 11/11 hNone 2/2 | held: h1 5/5 h2 18/19 h3 1/1 hNone 1/1
+Helm 2.0 20260919 p00 | all: h1 0/30 h2 57/64 h3 7/11 hNone 0/2 | held: h1 0/5 h2 18/19 h3 0/1 hNone 0/1
+Helm 2.0 20260919 p10 | all: h1 30/30 h2 53/64 h3 11/11 hNone 2/2 | held: h1 5/5 h2 13/19 h3 1/1 hNone 1/1
