@@ -63,3 +63,10 @@ saved evidence. A7 must inspect decisive raw artifacts directly.
 All future training/forward proposals remain NOT RUN. They need an exact matched design, fresh
 prospective evaluation and resource decision; none follows automatically from this record study.
 
+
+## Selection confirmed after all six conference responses
+
+F1 and F2 are selected unchanged from the predicted outcomes committed at259ed0be.
+This confirmation occurs after all six real responses are committed and before either probe runs.
+F1 targets the untested reach decoder; F2 targets development class balance. There is no selected
+second round. No neural or training proposal becomes authorized by this selection.
