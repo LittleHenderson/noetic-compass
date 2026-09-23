@@ -1,5 +1,18 @@
 # The learning brain — lineage record
 
+## 2026-09-23 peer T4 reference: measured mechanism, acceptance still open
+
+Peer evidence dfe15fa6462866a449ddff4d6b04006ae6f3c665 records the absent
+focus-to-candidate dependency in all nine unchanged Helm 2.0 models. Codex
+checked 22 committed evidence files and 30 historical source fingerprint
+comparisons without re-running a model. See records/helm_peer_handoff_20260923/
+README.md and VERIFICATION.json for paths, hashes and limits.
+
+The repaired model still needs independent T4 acceptance with unchanged Helm
+re-run in the same job. The comparison switch also needs a read-only interface
+correction. Claude's 4,096-pair oracle self-test is not checker-v2 acceptance.
+No new learned result, certification, training or Q4 experiment is added here.
+
 ## 2026-09-23 correction: original Helm rule and integrated evidence
 
 This dated correction takes precedence over earlier prose that calls Helm 2.0

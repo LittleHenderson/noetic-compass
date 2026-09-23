@@ -1,0 +1,1100 @@
+{
+  "schema": "codex.peer-handoff-verification/1",
+  "verified_utc": "2026-09-23T14:33:42.820050+00:00",
+  "scope": "Saved-record and source-byte inspection plus read-only AWS state. No tests, neural execution or training.",
+  "peer_commit": "dfe15fa6462866a449ddff4d6b04006ae6f3c665",
+  "builder_start": "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d",
+  "remote_heads": [
+    "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d\trefs/heads/codex/helm-stage2-checker-20260923",
+    "dfe15fa6462866a449ddff4d6b04006ae6f3c665\trefs/heads/research/helm-integration-20260923"
+  ],
+  "commit_times": {
+    "dfe15fa6462866a449ddff4d6b04006ae6f3c665": "dfe15fa6462866a449ddff4d6b04006ae6f3c665 2026-09-23T06:39:37-07:00",
+    "60e382b0": "60e382b042d54eab68394393b1d8fe4540a1ac06 2026-09-23T01:50:27-07:00",
+    "7f85af1e": "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d 2026-09-23T06:49:10-07:00"
+  },
+  "preflight": {
+    "schema": "claude.aws-probe-preflight/0.1",
+    "seconds": 208.569,
+    "steps": {
+      "checkpoints": {
+        "ok": true,
+        "value": {
+          "receipt_20260917/final.pt": true,
+          "receipt_20260917/initial.pt": true,
+          "receipt_20260918/final.pt": true,
+          "receipt_20260918/initial.pt": true,
+          "receipt_20260919/final.pt": true,
+          "receipt_20260919/initial.pt": true
+        }
+      },
+      "container": {
+        "ok": true,
+        "seconds": 0.0,
+        "value": 174303
+      },
+      "course_load": {
+        "ok": true,
+        "seconds": 5.828,
+        "value": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb"
+      },
+      "cuda": {
+        "ok": true,
+        "seconds": 0.508,
+        "value": {
+          "available": true,
+          "cuda": "12.8",
+          "device": "Tesla T4",
+          "torch": "2.11.0+cu128"
+        }
+      },
+      "forward_every_kind": {
+        "ok": true,
+        "seconds": 5.123,
+        "value": {
+          "analogy": 1,
+          "context": 4,
+          "correspondence": 4,
+          "definition": 3,
+          "edge_account": 16,
+          "parts": 4,
+          "reach": 1,
+          "role_set": 6
+        }
+      },
+      "wheels": {
+        "ok": true,
+        "seconds": 0.0,
+        "value": {
+          "cas_cjt": "/root/helm_job/venv/lib/python3.14/site-packages/cas_cjt/__init__.py",
+          "casformer": "/root/helm_job/venv/lib/python3.14/site-packages/casformer/__init__.py"
+        }
+      }
+    },
+    "verdict": "PREFLIGHT_PASS"
+  },
+  "launch": {
+    "schema": "claude.aws-probe-launch/0.1",
+    "owner_approval_words": [
+      "use aws",
+      "use aws as there is only 354 mb of 16 gbs locally"
+    ],
+    "approved": {
+      "machine": "g4dn.2xlarge",
+      "region": "us-west-2",
+      "price_per_hour_usd": 0.752,
+      "time_limit_minutes": 160,
+      "dollar_ceiling": 3.0
+    },
+    "instance_id": "i-07e0016d92bd6197b",
+    "launched_utc": "2026-09-23T12:58:00Z",
+    "availability_zone": "us-west-2a",
+    "ami": "ami-07d69ce07bfe5628f",
+    "ami_name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260922",
+    "root_volume_gb": 100,
+    "security_group": "sg-07ba7fdad5a6b47ab",
+    "in_instance_timer_seconds": 9000,
+    "client_deadline_minutes": 160,
+    "worst_case_usd_at_client_deadline": 2.0053,
+    "bucket": "cas-harness-runpod-92754088",
+    "keys": {
+      "bundle": "helm-integration/wiring-probe-20260923T125757Z/bundle.tar.gz",
+      "results": "helm-integration/wiring-probe-20260923T125757Z/results.tar.gz",
+      "progress": "helm-integration/wiring-probe-20260923T125757Z/progress.log"
+    },
+    "python": "3.14",
+    "torch": "2.11.0",
+    "numpy": "2.5.2",
+    "bundle": {
+      "files": 1183,
+      "bytes": 15058380,
+      "sha256": "ef35c2d9738482bf61db6ec3d57047c6d84dc8c1e0dac85038d6e0eb3c093dc9",
+      "source_commit": "eccbd8f375b20c174c1fbb3fb87bfeb184c9eb1f"
+    }
+  },
+  "watch_record": {
+    "schema": "claude.aws-probe-watch/0.1",
+    "instance_id": "i-07e0016d92bd6197b",
+    "outcome": "RESULTS_RECEIVED",
+    "job_status": "done",
+    "final_state": "shutting-down",
+    "files_downloaded": 19,
+    "launched_utc": "2026-09-23T12:58:00Z",
+    "watch_ended_utc": "2026-09-23T13:35:31Z",
+    "minutes_from_launch_to_watch_end": 37.5,
+    "cost_upper_bound_usd": 0.4834,
+    "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 0.01 for 20 GB of disk",
+    "dollar_ceiling": 3.0
+  },
+  "probe_models": [
+    {
+      "label": "h2_fresh_20260917",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": null,
+        "checkpoint_sha256": null,
+        "container_kwargs": {},
+        "init_seed": 20260917,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true
+    },
+    {
+      "label": "h2_initial_20260917",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+        "checkpoint_sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+        "container_kwargs": {},
+        "init_seed": 20260917,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    },
+    {
+      "label": "h2_final_20260917",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+        "checkpoint_sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+        "container_kwargs": {},
+        "init_seed": 20260917,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    },
+    {
+      "label": "h2_fresh_20260918",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": null,
+        "checkpoint_sha256": null,
+        "container_kwargs": {},
+        "init_seed": 20260918,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true
+    },
+    {
+      "label": "h2_initial_20260918",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+        "checkpoint_sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+        "container_kwargs": {},
+        "init_seed": 20260918,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    },
+    {
+      "label": "h2_final_20260918",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+        "checkpoint_sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+        "container_kwargs": {},
+        "init_seed": 20260918,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    },
+    {
+      "label": "h2_fresh_20260919",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": null,
+        "checkpoint_sha256": null,
+        "container_kwargs": {},
+        "init_seed": 20260919,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true
+    },
+    {
+      "label": "h2_initial_20260919",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+        "checkpoint_sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+        "container_kwargs": {},
+        "init_seed": 20260919,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    },
+    {
+      "label": "h2_final_20260919",
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "M0_delta0": 0.0,
+      "M1z": 0.0,
+      "M2z": 0.0,
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 0.0,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "model": {
+        "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+        "checkpoint_sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+        "container_kwargs": {},
+        "init_seed": 20260919,
+        "parameter_count": 174303
+      },
+      "complete": true,
+      "per_focus_count": 24,
+      "summary_matches_saved_reading": true,
+      "checkpoint_hash_matches_launch": true
+    }
+  ],
+  "preservation_models": [
+    {
+      "checkpoint": null,
+      "checkpoint_sha256": null,
+      "init_seed": 20260917,
+      "label": "h2_fresh_20260917",
+      "overall_digest": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+      "checkpoint_sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+      "init_seed": 20260917,
+      "label": "h2_initial_20260917",
+      "overall_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+      "checkpoint_sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+      "init_seed": 20260917,
+      "label": "h2_final_20260917",
+      "overall_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": null,
+      "checkpoint_sha256": null,
+      "init_seed": 20260918,
+      "label": "h2_fresh_20260918",
+      "overall_digest": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+      "checkpoint_sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+      "init_seed": 20260918,
+      "label": "h2_initial_20260918",
+      "overall_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+      "checkpoint_sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+      "init_seed": 20260918,
+      "label": "h2_final_20260918",
+      "overall_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": null,
+      "checkpoint_sha256": null,
+      "init_seed": 20260919,
+      "label": "h2_fresh_20260919",
+      "overall_digest": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+      "checkpoint_sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+      "init_seed": 20260919,
+      "label": "h2_initial_20260919",
+      "overall_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    },
+    {
+      "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+      "checkpoint_sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+      "init_seed": 20260919,
+      "label": "h2_final_20260919",
+      "overall_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a",
+      "parameter_count": 174303,
+      "records": 564,
+      "state_keys_shapes_digest": "5793a474297c36cfaa95dec30ca145634ef0b499390fc14de7e507152956540d",
+      "complete": true,
+      "per_record_count": 564,
+      "digest_matches_saved_reading": true
+    }
+  ],
+  "historical_source_hash_checks": [
+    {
+      "record": "before_reading_v0_2_T4_seed20260917.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260917.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260917.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260918.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260918.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260918.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260919.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "before_reading_v0_2_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260919.json",
+      "source": "cncm/typed_matched_worker.py",
+      "expected": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "actual": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+      "expected": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "actual": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "expected": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "actual": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "expected": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "actual": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+      "matches": true
+    },
+    {
+      "record": "preservation_reference_20208c92_T4_seed20260919.json",
+      "source": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "expected": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "actual": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches": true
+    }
+  ],
+  "probe_self_test": {
+    "NEGATIVE_COUPLED": {
+      "verdict": "COUPLED_NOT_COMPARISON",
+      "summary": {
+        "K_positive": 24,
+        "M3z_above_floor": 24,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0797872340425532,
+        "max_M3z": 0.15245955134309952,
+        "median_RC": 0.12107252537474557,
+        "top1_changes_reported_not_scored": 39
+      },
+      "matches_saved_reading": true
+    },
+    "NEGATIVE_UNIFORM": {
+      "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+      "summary": {
+        "K_positive": 0,
+        "M3z_above_floor": 0,
+        "RC_dom_ok": 0,
+        "bystander_ok": 0,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.0,
+        "max_M3z": 8.593126210598712e-13,
+        "median_RC": 0.0,
+        "top1_changes_reported_not_scored": 0
+      },
+      "matches_saved_reading": true
+    },
+    "POSITIVE_COMPARISON": {
+      "verdict": "PRESENT_GRAPH_AND_DOMAIN",
+      "summary": {
+        "K_positive": 24,
+        "M3z_above_floor": 24,
+        "RC_dom_ok": 24,
+        "bystander_ok": 24,
+        "effect_floor": 0.001,
+        "foci": 24,
+        "max_K": 0.723404255319149,
+        "max_M3z": 3.3857726532103523,
+        "median_RC": 4.881481316230698,
+        "top1_changes_reported_not_scored": 0
+      },
+      "matches_saved_reading": true
+    }
+  },
+  "source_unchanged_during_probe_selftest": true,
+  "cross_device": {
+    "cross_gpu_printed_rtx4070": {
+      "h2_fresh_20260917": {
+        "bit_identical": false,
+        "rtx4070": "8bce418f5ea641f0241f9cbfebdca30f1e3393b3beda8c98bb364454802b3749",
+        "t4": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b"
+      },
+      "h2_fresh_20260918": {
+        "bit_identical": false,
+        "rtx4070": "2e8dbaead32b6eb565fc80b24ee75c009122228ee8127c5f504ecc88f749fbd5",
+        "t4": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6"
+      },
+      "h2_initial_20260917": {
+        "bit_identical": false,
+        "rtx4070": "0138af72c05a4e05ddbe6b03c049dad5afae7e47ec0fa69ead191b0e2103d975",
+        "t4": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a"
+      },
+      "h2_initial_20260918": {
+        "bit_identical": false,
+        "rtx4070": "b5aae9c55f3d8a5798d0442199109ba4ce35414a0f2c496744999d85dbe6d84d",
+        "t4": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365"
+      }
+    },
+    "cross_gpu_seed20260919": {
+      "h2_final_20260919": {
+        "bit_identical": false,
+        "rtx4070": "3a5957ee8e9951657c1d0667f60d81172601c253c0531f3c406dfdcb7a2bbeea",
+        "t4": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a"
+      },
+      "h2_fresh_20260919": {
+        "bit_identical": false,
+        "rtx4070": "06b77b70dc1f3709edd527ded29e933c1fd1c3e2ed1b7c46160f37d930c2bacf",
+        "t4": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412"
+      },
+      "h2_initial_20260919": {
+        "bit_identical": false,
+        "rtx4070": "ee551016c03e4f41d3c666d105637f7e9892be5c98775ec19f2c03cd1390eb68",
+        "t4": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858"
+      }
+    }
+  },
+  "cross_device_custody": "3 comparisons refer to retained laptop seed-20260919 JSON; 4 laptop digests are literal printed values in peer read_results.py, not a complete retained reference receipt.",
+  "oracle_selftest": {
+    "class_counts": {
+      "3": 4,
+      "4": 24,
+      "5": 267
+    },
+    "classes_5_in_a_collision": 105,
+    "collision_groups_5": 38,
+    "collisions_3_4": 2,
+    "frozen_crosscheck": {
+      "disagreements": 0,
+      "pairs": 4096
+    },
+    "method_disagreements": 0,
+    "pairs_checked": 929,
+    "relabelled_self_isomorphic": 295,
+    "relabelled_total": 295,
+    "schema": "claude.d1-oracle-selftest/0.1",
+    "seconds": 4.425338600000032,
+    "verdict": "ORACLE_SELFTEST_PASS"
+  },
+  "cloud": {
+    "i-00787ea718c2631ea": {
+      "state": "terminated",
+      "instance_type": "t3.large",
+      "block_devices": [],
+      "currently_attached_volume_ids": []
+    },
+    "i-07e0016d92bd6197b": {
+      "state": "terminated",
+      "instance_type": "g4dn.2xlarge",
+      "block_devices": [],
+      "currently_attached_volume_ids": []
+    },
+    "builder_volume": "InvalidVolume.NotFound",
+    "verified_utc": "2026-09-23T14:33:50.992836+00:00"
+  },
+  "record_fingerprints": [
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\RESULTS_READING.json",
+      "bytes": 6355,
+      "sha256_raw": "0c91f26ce9222e0b072d57a3864d0d6924d830545e129ce9dcbe9cdb89413dc7",
+      "sha256_lf": "0c91f26ce9222e0b072d57a3864d0d6924d830545e129ce9dcbe9cdb89413dc7",
+      "git_blob": "22271c83cb5d88edd35c732b9d5967c6472eaebe",
+      "committed_sha256_raw": "0c91f26ce9222e0b072d57a3864d0d6924d830545e129ce9dcbe9cdb89413dc7",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\launch_record.json",
+      "bytes": 2426,
+      "sha256_raw": "f55b728871f633e9a0601c43c28777a25b89c43d8938978e4af712df8da8ce26",
+      "sha256_lf": "f55b728871f633e9a0601c43c28777a25b89c43d8938978e4af712df8da8ce26",
+      "git_blob": "4817893502f86fc3672de6923f385e1fb8be9f2f",
+      "committed_sha256_raw": "f55b728871f633e9a0601c43c28777a25b89c43d8938978e4af712df8da8ce26",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\watch_record.json",
+      "bytes": 546,
+      "sha256_raw": "7b03f7eeac4a5041c674be0ca4af8e4ea27a8b1bf8c91551aafcb638f30ecb04",
+      "sha256_lf": "7b03f7eeac4a5041c674be0ca4af8e4ea27a8b1bf8c91551aafcb638f30ecb04",
+      "git_blob": "17182006b5b98587d46e2be54c77fd89edc8634e",
+      "committed_sha256_raw": "7b03f7eeac4a5041c674be0ca4af8e4ea27a8b1bf8c91551aafcb638f30ecb04",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\JOB_LIMITS.md",
+      "bytes": 2244,
+      "sha256_raw": "182dd2973bc997fffdb9e40e5cd7b03040c7303a8236351cef1d699023cac839",
+      "sha256_lf": "182dd2973bc997fffdb9e40e5cd7b03040c7303a8236351cef1d699023cac839",
+      "git_blob": "8f2ee827657903e5cf2cd0981b4047ae86310adf",
+      "committed_sha256_raw": "182dd2973bc997fffdb9e40e5cd7b03040c7303a8236351cef1d699023cac839",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\STATUS",
+      "bytes": 5,
+      "sha256_raw": "d117fa006ba9208500b2930ce69cbde436c647afa917cb7396a9bc9111a46dd2",
+      "sha256_lf": "d117fa006ba9208500b2930ce69cbde436c647afa917cb7396a9bc9111a46dd2",
+      "git_blob": "19f86f493ab110b8dc8279a024880e44203968d8",
+      "committed_sha256_raw": "d117fa006ba9208500b2930ce69cbde436c647afa917cb7396a9bc9111a46dd2",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\preflight.json",
+      "bytes": 8066,
+      "sha256_raw": "8cd3e7a2e0ce66d2580b8a74c9f285ca0fa1ae858174717ab868e5e1ddf41008",
+      "sha256_lf": "8cd3e7a2e0ce66d2580b8a74c9f285ca0fa1ae858174717ab868e5e1ddf41008",
+      "git_blob": "f5ef466ec0435986bddaab30843af7a7865d63bf",
+      "committed_sha256_raw": "8cd3e7a2e0ce66d2580b8a74c9f285ca0fa1ae858174717ab868e5e1ddf41008",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\before_reading_v0_2_T4_seed20260917.json",
+      "bytes": 52179,
+      "sha256_raw": "a5ec082a115963c18105042707e2771b3c042bc28056dc626387281a3ebca1aa",
+      "sha256_lf": "a5ec082a115963c18105042707e2771b3c042bc28056dc626387281a3ebca1aa",
+      "git_blob": "a26aea3fcbb5a532875ed7decad0e31d4350cd71",
+      "committed_sha256_raw": "a5ec082a115963c18105042707e2771b3c042bc28056dc626387281a3ebca1aa",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\preservation_reference_20208c92_T4_seed20260917.json",
+      "bytes": 260126,
+      "sha256_raw": "c4336647fcfc53d9e621450e0cc4a9198f6ee473724848500231e6399c2e0875",
+      "sha256_lf": "c4336647fcfc53d9e621450e0cc4a9198f6ee473724848500231e6399c2e0875",
+      "git_blob": "3b7cc1dbfd70cceabeaee685da7df5b2a269f7b3",
+      "committed_sha256_raw": "c4336647fcfc53d9e621450e0cc4a9198f6ee473724848500231e6399c2e0875",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\before_reading_v0_2_T4_seed20260918.json",
+      "bytes": 52131,
+      "sha256_raw": "418f70b3b892732a312160eaec33fb5a9eb6aa5ef3c7b4b20d6b74e78bc1ba74",
+      "sha256_lf": "418f70b3b892732a312160eaec33fb5a9eb6aa5ef3c7b4b20d6b74e78bc1ba74",
+      "git_blob": "9a34b1be5b9558618e2f082be7b439fe031e95e5",
+      "committed_sha256_raw": "418f70b3b892732a312160eaec33fb5a9eb6aa5ef3c7b4b20d6b74e78bc1ba74",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\preservation_reference_20208c92_T4_seed20260918.json",
+      "bytes": 260125,
+      "sha256_raw": "8af80fbbfe2c43adc95a7e5ccf61f7a6d4d876e04f7b6b51d316823b4492815f",
+      "sha256_lf": "8af80fbbfe2c43adc95a7e5ccf61f7a6d4d876e04f7b6b51d316823b4492815f",
+      "git_blob": "3b863b26fedfd78ddf35ea653ee510985e78f8df",
+      "committed_sha256_raw": "8af80fbbfe2c43adc95a7e5ccf61f7a6d4d876e04f7b6b51d316823b4492815f",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\before_reading_v0_2_T4_seed20260919.json",
+      "bytes": 52172,
+      "sha256_raw": "67035b6304045db788392b4937bf7a04c7f10687c09c95de1182305d3b585a1b",
+      "sha256_lf": "67035b6304045db788392b4937bf7a04c7f10687c09c95de1182305d3b585a1b",
+      "git_blob": "2bdb98c33c3c06d90c283046f7b437500b97393c",
+      "committed_sha256_raw": "67035b6304045db788392b4937bf7a04c7f10687c09c95de1182305d3b585a1b",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\preservation_reference_20208c92_T4_seed20260919.json",
+      "bytes": 260125,
+      "sha256_raw": "826bb08113ff5182e8622f1dcb04a7dc1e3d098348f642b379ede8aac770dce1",
+      "sha256_lf": "826bb08113ff5182e8622f1dcb04a7dc1e3d098348f642b379ede8aac770dce1",
+      "git_blob": "2bbffaf793e133af92112e794fd6b97a80f35764",
+      "committed_sha256_raw": "826bb08113ff5182e8622f1dcb04a7dc1e3d098348f642b379ede8aac770dce1",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\probe_self_test_result_T4.json",
+      "bytes": 55215,
+      "sha256_raw": "4e85feb8cda7024b399be0de4c059491633386caaef2479a575626a61146f088",
+      "sha256_lf": "4e85feb8cda7024b399be0de4c059491633386caaef2479a575626a61146f088",
+      "git_blob": "79f7a93c51966b1a4c9f30b1d47ce14ec2db4718",
+      "committed_sha256_raw": "4e85feb8cda7024b399be0de4c059491633386caaef2479a575626a61146f088",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\analogy_wiring_probe\\preservation_reference_20208c92_seed20260919.json",
+      "bytes": 260191,
+      "sha256_raw": "5cee33921d1e8e5b28f21396b17113b7c71d36bbd47d763637c180fe9391fa16",
+      "sha256_lf": "5cee33921d1e8e5b28f21396b17113b7c71d36bbd47d763637c180fe9391fa16",
+      "git_blob": "3b7692a87e0cdc533384e26fd50294b504c0ab1e",
+      "committed_sha256_raw": "5cee33921d1e8e5b28f21396b17113b7c71d36bbd47d763637c180fe9391fa16",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\analogy_wiring_probe\\PREREG_ANALOGY_WIRING_PROBE_v0_2.md",
+      "bytes": 12033,
+      "sha256_raw": "8cebfaba0e2dad2f9d35d2fdf68e2ef965e8121fc48eecef7df618fd0e053946",
+      "sha256_lf": "8cebfaba0e2dad2f9d35d2fdf68e2ef965e8121fc48eecef7df618fd0e053946",
+      "git_blob": "c33a86ca2afe549f0f31b6794d500b2d21f54e4d",
+      "committed_sha256_raw": "8cebfaba0e2dad2f9d35d2fdf68e2ef965e8121fc48eecef7df618fd0e053946",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\analogy_wiring_probe\\BEFORE_READING_RESULT.md",
+      "bytes": 3792,
+      "sha256_raw": "fd688b1da4bd1877ff2c7e17873478490e22fb47ed0adb135990a9be95aba366",
+      "sha256_lf": "fd688b1da4bd1877ff2c7e17873478490e22fb47ed0adb135990a9be95aba366",
+      "git_blob": "95ce9b8cd8b83f259b1b3bab9506496edbddc8c0",
+      "committed_sha256_raw": "fd688b1da4bd1877ff2c7e17873478490e22fb47ed0adb135990a9be95aba366",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\analogy_wiring_probe\\RUN_LOG.md",
+      "bytes": 5338,
+      "sha256_raw": "2eae589b8b9ed95d4ce7cc652bc77e34f32270a013786bb7edce76d08c40beaf",
+      "sha256_lf": "2eae589b8b9ed95d4ce7cc652bc77e34f32270a013786bb7edce76d08c40beaf",
+      "git_blob": "31e7b1c6afb1e7cb0368bf16bea021dbaa638888",
+      "committed_sha256_raw": "2eae589b8b9ed95d4ce7cc652bc77e34f32270a013786bb7edce76d08c40beaf",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\read_results.py",
+      "bytes": 4667,
+      "sha256_raw": "48e6b1c4fc80a001090087355af7b3636548a2451a668522eb08e13526fb9077",
+      "sha256_lf": "48e6b1c4fc80a001090087355af7b3636548a2451a668522eb08e13526fb9077",
+      "git_blob": "833e10624ec9da9f9610d54d3a4f1a50c5db68ac",
+      "committed_sha256_raw": "48e6b1c4fc80a001090087355af7b3636548a2451a668522eb08e13526fb9077",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\aws_probe_job\\results\\results.tar.gz",
+      "bytes": 424252,
+      "sha256_raw": "793058afd36eb103252396e82b79b56f4256db0d5b6198c97cbe754697ed1fd7",
+      "sha256_lf": "64f67bc5ee5a1f0520e8febce06c815cad8ffadbb26769ad9c5c091db8205f8a",
+      "git_blob": "35eb9cd6359dc005d26ccf975028a9d27f2c3769",
+      "committed_sha256_raw": "793058afd36eb103252396e82b79b56f4256db0d5b6198c97cbe754697ed1fd7",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\d1_acceptance\\oracle_selftest_result.json",
+      "bytes": 430,
+      "sha256_raw": "a7d354698d1669ff79b50af8e9690cb0648ff8a86865a73537d3340af16bdd48",
+      "sha256_lf": "a7d354698d1669ff79b50af8e9690cb0648ff8a86865a73537d3340af16bdd48",
+      "git_blob": "efb1844454a815c713e94d5c50782a7fc280c63b",
+      "committed_sha256_raw": "a7d354698d1669ff79b50af8e9690cb0648ff8a86865a73537d3340af16bdd48",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\d1_acceptance\\README.md",
+      "bytes": 1383,
+      "sha256_raw": "60f7b06c8c1b8d54deb4aac28247ec0a9dec3d50d34358ad88e8064e7d43ddbb",
+      "sha256_lf": "60f7b06c8c1b8d54deb4aac28247ec0a9dec3d50d34358ad88e8064e7d43ddbb",
+      "git_blob": "2056fc3679eb6b1e2ba233875f54ac9a705d0161",
+      "committed_sha256_raw": "60f7b06c8c1b8d54deb4aac28247ec0a9dec3d50d34358ad88e8064e7d43ddbb",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    },
+    {
+      "path": "D:\\tksCAS-worktrees\\helm-integration\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_eval_design_20260923\\d1_acceptance\\a2_compare_harness.py",
+      "bytes": 5052,
+      "sha256_raw": "966743eeccc4a0ea49dde9e86b4e49d8c62b67591c9293ca24d3b4a472cc3e5f",
+      "sha256_lf": "966743eeccc4a0ea49dde9e86b4e49d8c62b67591c9293ca24d3b4a472cc3e5f",
+      "git_blob": "3bccad34b5d25643fbf3c44177873ea0c4bb8533",
+      "committed_sha256_raw": "966743eeccc4a0ea49dde9e86b4e49d8c62b67591c9293ca24d3b4a472cc3e5f",
+      "raw_equals_commit": true,
+      "lf_equals_commit": true
+    }
+  ],
+  "accounting": {
+    "files_fingerprinted": 22,
+    "git_lf_mismatches": 0,
+    "git_raw_differences": 0,
+    "historical_source_checks": 30,
+    "historical_source_mismatches": 0,
+    "probe_models": 9,
+    "preservation_models": 9
+  },
+  "limits": [
+    "Saved metrics are inspected, not recomputed by neural inference.",
+    "A3 same-job T4 switch-off acceptance remains unrun by Codex.",
+    "Oracle self-test is not checker_v2 acceptance.",
+    "Probe source receipt hashes cover five listed historical source files, not the whole runtime dependency graph.",
+    "Four cross-device reference values have printed-value custody in read_results.py.",
+    "watch_record cost_upper_bound_usd is an estimate, not a provider bill. Its disk note says 20 GB while launch_record says 100 GB; total-cost upper-bound wording needs reconciliation.",
+    "No peer S3 objects were deleted. No peer worktree edits made.",
+    "Empty current EC2 attachments alone do not establish deletion of an unidentified historical peer volume."
+  ]
+}

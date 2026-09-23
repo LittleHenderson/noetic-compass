@@ -1,0 +1,41 @@
+{
+  "schema": "codex.peer-handoff-files/1",
+  "sealed_utc": "2026-09-23T14:35:42.724774+00:00",
+  "files": [
+    {
+      "relative_path": "records/helm_peer_handoff_20260923/.gitattributes",
+      "bytes": 8,
+      "sha256_raw": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "relative_path": "records/helm_peer_handoff_20260923/inspect_saved_evidence.py",
+      "bytes": 7976,
+      "sha256_raw": "ee6ca957d2b4df0e097046e1c9a9e112ef4af6402436d4dc235eb91ea8762958"
+    },
+    {
+      "relative_path": "records/helm_peer_handoff_20260923/PRESERVED_BUILDER_EVIDENCE.json",
+      "bytes": 24008,
+      "sha256_raw": "255f8d930ac8abcfc03f52295253eaf94c033cca49386005b567f405b2f4aef9"
+    },
+    {
+      "relative_path": "records/helm_peer_handoff_20260923/README.md",
+      "bytes": 7889,
+      "sha256_raw": "9bfabcb96529e941231aa3bc88431df77bc411a2793780e30a94640a9cbbf945"
+    },
+    {
+      "relative_path": "records/helm_peer_handoff_20260923/VERIFICATION.json",
+      "bytes": 48821,
+      "sha256_raw": "667bdc97108e809d38cf774b6d4ff3718806eb4e6bae1822b86b05e27c9810ae"
+    },
+    {
+      "relative_path": "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_PEER_EVIDENCE_STATUS.md",
+      "bytes": 849,
+      "sha256_raw": "82e56e5e389733ecd8b7600c5660dbfd479aa76d61ad22331d1c22cc3ca8b2f8"
+    },
+    {
+      "relative_path": "BRAIN_LINEAGE.md",
+      "bytes": 48913,
+      "sha256_raw": "96d2e8f0ba5f2cae1e5002cf1585e876a25dc2ab487607dc1ca6136e7dbb6288"
+    }
+  ]
+}
