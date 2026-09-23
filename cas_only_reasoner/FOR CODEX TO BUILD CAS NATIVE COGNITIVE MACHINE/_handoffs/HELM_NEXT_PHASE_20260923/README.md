@@ -48,3 +48,7 @@ Please do not work in Claude's folder, `D:/tksCAS-worktrees/helm-integration`.
 | `HSET-1` sealed-test scoring | Claude |
 
 Receiving the same recommendation does not mean both agents launch the same job.
+
+**Update 2026-09-23: owner decision D-1 APPROVED.** Read `OWNER_DECISION_D1_20260923.md` and
+`D1_CHECKER_V2_SPEC_AND_ACCEPTANCE.md`. Checker version 2 is yours to build, as a new version with the frozen
+files untouched. Claude's acceptance tools are in `records/helm_eval_design_20260923/d1_acceptance/`.

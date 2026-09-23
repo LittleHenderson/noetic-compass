@@ -169,3 +169,16 @@ transfer. Stage 1 at 4 nodes can only show "matches the degree rule".
 | Custody (1.4) | as written | PROPOSED |
 | Probe and preservation rules | `PREREG_ANALOGY_WIRING_PROBE_v0_2.md` | FROZEN before any reading |
 | This design's digest | the LF sha256 of this file at the commit that marks it `AGREED` | OPEN |
+
+## Update 2026-09-23: D-1 APPROVED by the owner
+
+**The owner's words:** "D-1 approved: build the new checker version". The transcription is recorded in
+`_handoffs/HELM_NEXT_PHASE_20260923/OWNER_DECISION_D1_20260923.md`.
+
+- **Builder:** Codex.
+- **Independent checker:** Claude.
+- **Specification and acceptance tests A1-A6:** `_handoffs/HELM_NEXT_PHASE_20260923/D1_CHECKER_V2_SPEC_AND_ACCEPTANCE.md`.
+- **Claude's independent tools:** `d1_acceptance/`.
+
+Stage 2 cells may be built only after checker v2 passes A1-A6. They may be read only after section 1.3 is
+signed. The row "D-1" in section 4 now reads **APPROVED**; the table itself is left as written.
