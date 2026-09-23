@@ -1,0 +1,35 @@
+{
+  "teaching_fit": {
+    "n": 128,
+    "canonical_exact": 0,
+    "parse_valid": 128,
+    "operator_structure_exact": 44,
+    "source": "RT1 full consumed128 saved histogram"
+  },
+  "new_content_familiar_structure_within_unconsumed_pool": {
+    "n": 113,
+    "canonical_exact": 0,
+    "parse_valid": 113,
+    "operator_structure_exact": 28,
+    "source": "Derived113-of128 subset of RT1 next unconsumed128; familiar to actual consumed operator shapes"
+  },
+  "genuinely_new_structures": {
+    "n": 16,
+    "canonical_exact": 0,
+    "parse_valid": 16,
+    "operator_structure_exact": 0,
+    "source": "Original saved development predictions"
+  },
+  "new_structure_matched_size_depth": {
+    "n": 15,
+    "canonical_exact": 0,
+    "parse_valid": 15,
+    "operator_structure_exact": 0
+  },
+  "new_structure_unmatched_size_depth": {
+    "n": 1,
+    "canonical_exact": 0,
+    "parse_valid": 1,
+    "operator_structure_exact": 0
+  }
+}

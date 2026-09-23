@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-q4-panels\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\helm_cas_expression_lab\q4_panel_evaluation.py", line 462, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-q4-panels\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\helm_cas_expression_lab\q4_panel_evaluation.py", line 458, in main
+    (execute if mode == "execute" else _worker)(args["manifest"], args["sha256"], args["output"])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-q4-panels\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\helm_cas_expression_lab\q4_panel_evaluation.py", line 404, in execute
+    write_once(out / "device_prelaunch.json", check_prelaunch(resource["device_policy"], "cuda:0"))
+                                              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\q4-live\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\helm_cas_expression_lab\q4_device_capacity.py", line 178, in check_prelaunch
+    raise CapacityError("GPU_BUSY: prelaunch utilization exceeds policy")
+q4_device_capacity.CapacityError: GPU_BUSY: prelaunch utilization exceeds policy
