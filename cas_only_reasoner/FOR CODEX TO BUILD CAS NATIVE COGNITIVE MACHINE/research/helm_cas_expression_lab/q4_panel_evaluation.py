@@ -26,6 +26,9 @@ PLAN_SHA = "9dacc83627422d704c9db58f5ddbac82936e7d52211ec061247419fbad78095c"
 WEIGHTS_SHA = "d54f57155a54cbd28621d92af9cb5f45e425c015a559cf80103966ccbf275477"
 PANELS = ("teaching_fit", "new_content_familiar_structure", "new_structure")
 HERE = Path(__file__).resolve().parent
+# Keep adjacent imports explicit for long Windows script paths and embedded runtimes.
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
 
 
 class PanelError(ValueError):
@@ -257,6 +260,7 @@ def validate_manifest(manifest, expected_sha):
     for pin in manifest["files"]:
         if file_pin(pin["path"]) != pin:
             raise PanelError("FROZEN_FILE_MISMATCH: " + pin["path"])
+    validate_runner_binding(manifest)
     checkpoint = _source_modules(manifest["source_lab"], manifest["source_pins"])
     checkpoint.verify_checkpoint(Path(manifest["historical_run"]) / "checkpoint",
                                  expected_identity=manifest["checkpoint_identity"], expected_width=64,
@@ -281,6 +285,13 @@ def validate_manifest(manifest, expected_sha):
     if canonical(resources) != canonical(expected):
         raise PanelError("RESOURCE_LIMIT_DRIFT")
     return checkpoint
+
+
+def validate_runner_binding(manifest):
+    """A pinned file elsewhere does not prove which evaluator is executing."""
+    own = file_pin(__file__)
+    if own not in manifest.get("files", []):
+        raise PanelError("EXECUTING_RUNNER_NOT_PINNED")
 
 
 def active_learning_jobs():

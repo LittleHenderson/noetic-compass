@@ -160,6 +160,22 @@ def test_missing_panels_have_zero_denominator_not_invented_scores():
     assert summary["new_structure"] == {"n": 1, "canonical_exact": 0, "parse_valid": 1, "operator_structure_exact": 1}
 
 
+def test_executing_runner_requires_its_own_pin():
+    with pytest.raises(panel.PanelError, match="EXECUTING_RUNNER_NOT_PINNED"):
+        panel.validate_runner_binding({"files": []})
+
+
+def test_pin_for_identical_file_elsewhere_is_not_current_runner(tmp_path):
+    copy = tmp_path / "q4_panel_evaluation.py"
+    copy.write_bytes(Path(panel.__file__).read_bytes())
+    with pytest.raises(panel.PanelError, match="EXECUTING_RUNNER_NOT_PINNED"):
+        panel.validate_runner_binding({"files": [panel.file_pin(copy)]})
+
+
+def test_exact_executing_runner_pin_is_accepted():
+    panel.validate_runner_binding({"files": [panel.file_pin(panel.__file__)]})
+
+
 def test_existing_outputs_never_overwritten(tmp_path):
     path = tmp_path / "old.json"
     panel.write_once(path, {"original": True})

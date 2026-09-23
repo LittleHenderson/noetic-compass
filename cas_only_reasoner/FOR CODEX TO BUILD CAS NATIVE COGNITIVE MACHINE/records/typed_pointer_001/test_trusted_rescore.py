@@ -276,11 +276,13 @@ def test_the_committed_anchors_are_the_pinned_ones_and_every_file_they_pin_is_th
         assert reading["reject_reasons"] == [] and all(reading["checks"][c]["status"] == "PASS" for c in T.SAFE_CHECKS)
 
 
-def test_the_committed_readings_were_made_by_this_tool_against_these_anchors():
+def test_the_committed_readings_retain_their_historical_tool_identity():
+    # Immutable 0.2 readings are historical evidence, not receipts for today's
+    # repaired 0.3 tool. New acceptance records live in helm_integrated_repairs.
     for name, anchor in (("helm1_certified", "trust_anchor_helm1_certified.json"), ("helm2_experimental", "trust_anchor_helm2_experimental_20208c92.json")):
         r = json.loads((HERE / ("trusted_rescore_reading_%s.json" % name)).read_text(encoding="utf-8"))
-        assert r["schema"] == T.SCHEMA and r["anchor"]["pin"]["sha256_lf"] == ANCHOR_SHA256_LF[anchor]
-        assert r["tool"]["pin"]["sha256_lf"] == T.file_pin(RESCORE)["sha256_lf"], "the tool changed after the readings were made: re-run the job"
+        assert r["schema"] == "cncm.trusted-rescore-reading/0.2" and r["anchor"]["pin"]["sha256_lf"] == ANCHOR_SHA256_LF[anchor]
+        assert r["tool"]["pin"]["sha256_lf"] == "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a"
         assert all(c["status"] == "PASS" for c in r["checks"].values()) and r["imported_checker_code"] is True
         assert r["bytecode_policy"] == "FRESH_EMPTY_PYCACHE_PREFIX_AND_NO_BYTECODE_WRITTEN" and r["material_supplied_by_caller"] is False
         assert all(s["receipt_resolved_from"] == "package-relative" for s in r["per_seed"].values())
@@ -364,7 +366,9 @@ def test_profile_course_and_population_identity(real, material, change, code_):
 @slow
 def test_agreement_and_disagreement_with_a_frozen_grader_reading(real, material):
     def reading(gained):
-        return {"label": "LEARNS_NEW_WORLDS", "seeds": {CERTIFIED_SEED: {"G_LEARN_population": {"wrong_to_right": gained, "right_to_wrong": 0}}}}
+        g = json.loads((HERE / "admission_helm1_certified/gate_reading.json").read_text(encoding="utf-8"))
+        row = dict(g["seeds"][CERTIFIED_SEED]["G_LEARN_population"], wrong_to_right=gained)
+        return {"label": "LEARNS_NEW_WORLDS", "seeds": {CERTIFIED_SEED: {"G_LEARN_population": row}}}
     (real / "gate_reading.json").write_text(json.dumps(reading(12)), encoding="utf-8")
     code, r = run(real, material=material)
     assert code == 0 and r["checks"]["FROZEN_GRADER_AGREEMENT"]["status"] == "PASS"

@@ -1,5 +1,61 @@
 # The learning brain — lineage record
 
+## 2026-09-23 correction: original Helm rule and integrated evidence
+
+This dated correction takes precedence over earlier prose that calls Helm 2.0
+two failed runs or imposes a zero-loss rule. Original rows and receipts below
+remain historical records.
+
+Helm 1.0 PASSED all three historical runs (seeds 20260917, 20260918, 20260919).
+Helm 2.0 had losses in two runs, but its results were PASS, PASS, FAIL:
+11 gains/1 loss (p=13/4096), 12/0 (p=1/4096), 7/1 (p=9/256).
+Only seed 20260919 failed. The original rule requires b>c, exact one-sided
+paired binomial p<=1/100, improvements across at least two kinds and two worlds,
+and all three seeds passing. There is no automatic zero-loss veto.
+
+The two investigations are complementary: the Codex investigation at
+a6e6f95bcae348775b910438109c9ed3842a5c19 supplies original source/receipt custody
+and question-level reconciliation; the Claude review at
+26f1b46515c960a7aed6023f370df95d591ca36a adds structural, baseline and Q4 diagnostics.
+Their 429 manifested outputs (including two archive-only files) were checked
+against existing recorded hashes in records/helm_integrated_repairs_20260923/
+INVESTIGATION_EVIDENCE_VERIFICATION.json. This is byte verification, not
+independent rerunning of all experiments.
+
+An experimental descendant repairs analogy's missing focus-to-candidate
+comparison. This does not establish accuracy on new examples. Its new checkpoint
+schema/profile refuses historical checkpoints; replay old weights with their
+original source. The complete-assignment correspondence decoder is unchanged.
+Earlier descriptions that the decoder emits independently repeated target nodes
+are incorrect: it already scores complete assignments.
+
+The late Helm2 reach loss and Q4 reconstruction are different experiments.
+Q4's completed 128-update smoke measured 0/16, without a predefined accuracy gate.
+The eight-row memorization diagnostic and 256-row negative diagnostic do not
+prove that longer training or a larger representation is the solution. Report
+teaching fit, new content/familiar structures and new structures separately.
+
+The integrated Q4 evidence now reports 0/128 exact on consumed teaching rows,
+0/113 on the stricter familiar-operator-shape subset of unused teaching-pool
+rows, and 0/16 on original development rows with new bare structures. The
+113-row result is derived from RT1's uniform output histogram, not newly
+recovered per-row predictions. Actual exposure was reconstructed from the
+pinned shuffle and completed update count; training did not log per-row IDs.
+The new outside-pool panel has not run: a shell discovery failure was fixed,
+then the GPU busy guard refused the selected replacement. Neither attempt
+loaded a model. See the integrated q4/README.md and its source manifest.
+
+Additional account corrections: a one-hop ceiling for the whole architecture
+is not demonstrated; global pools and other answer paths existed. Analogy
+does have registered no-learning comparators. The certified Helm1 receipts
+are receipt_helm1_certified_2026091{7,8,9} and admission_helm1_certified;
+unprefixed receipt_2026091{7,8,9} and admission_001 now identify Helm2.
+
+Working compiler, PCBA, CAS-Ohm and atlas remain preserved. Current ownership,
+evaluation draft, repairs, failures and acceptance records are under
+records/helm_integrated_repairs_20260923/. Claude's independent evaluation review
+and hidden final questions are separate from builder development checks.
+
 ## 2026-09-22 authorized Q4 R1 smoke: completed, 0/16 exact
 
 Actual local CUDA run T14_R1_G_ENGINEERING_SMOKE completed 128 updates in

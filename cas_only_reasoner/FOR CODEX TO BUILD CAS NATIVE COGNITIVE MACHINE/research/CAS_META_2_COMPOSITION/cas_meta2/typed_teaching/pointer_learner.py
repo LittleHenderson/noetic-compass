@@ -123,19 +123,14 @@ ablation over K = 1, 2, 4, 8 compares FUNCTIONS, not compute budgets. Recorded a
 treated here as a knob.
 
 =========================================================================================================
-KNOWN, REPORTED, NOT HIDDEN: `correspondence` CANNOT EXPRESS A BIJECTION
+CORRECTION 2026-09-23: CORRESPONDENCE SCORES AND COMPLETE-ASSIGNMENT DECODING
 =========================================================================================================
 
-The `correspondence` `mapping_target` head here reads node states and never a pooled vector, as the review
-requires -- but the learnability lens measured that A PER-NODE ADDITIVE HEAD CANNOT EXPRESS A BIJECTION AT ALL:
-every permutation in the source world's automorphism group receives an identical total score, the declared tie
-rule picks the first syntactic bijection, and that is correct in **0 of 20** held records; in **81 of 88**
-records no admissible mapping lies in the source world's automorphism group, so no additive per-node score over
-these inputs can be made to prefer a correct answer (LB12, LB13, LB15). The contract has already removed all
-five `correspondence` questions from the gate population under the ARCHITECTURAL class `inexpressible` -- not as
-a shortcut (`pointer_contract.py:478-503`). `correspondence` is still run, scored and sealed here; this note is
-the disclosure that its failure is a known head limit, so the study does not read it as evidence about the
-machine.
+The preserved decoder already enumerates complete bijections. Helm 1.0 supplied the same target-score row
+for every source, so all complete assignments had the same additive total. That restricts discrimination,
+not the decoder's ability to emit a bijection. Helm 2.0 uses source-target pair scores; row/column
+normalisation is not what enforces completeness. The historical removal of five correspondence questions
+from the gate remains unchanged. Neither that removal nor the older description is a new decoder design.
 
 ONE RECORDED RELAXATION. `edge_account`'s head receives the single raw `(a -> b)` adjacency bit as one extra
 input dimension, which is exactly the relaxation the learnability lens asked for in its own `edge_account`
@@ -166,7 +161,9 @@ from .learner import BATCH_SCHEMA, PARAMETER_SHAPES, PARAMETERS, TypedCourseLear
 # `require` is the shared pair, so every failure raises `ValueError("TYPED_MATCHED:" + code)`.
 require, digest, canonical = source.require, source.digest, source.canonical
 
-CHECKPOINT_SCHEMA = "cncm.typed-pointer-checkpoint/0.1"
+CHECKPOINT_SCHEMA = "cncm.typed-pointer-checkpoint/0.2"
+MODEL_VARIANT = "HELM_2_ANALOGY_FOCUS_COMPARISON_EXPERIMENTAL"
+ANALOGY_INIT_SEED = 20260923
 UPDATE_SCHEMA = "cncm.typed-pointer-update/0.1"
 PREDICTION_SCHEMA = "cas.typed-teaching-prediction/0.1"
 
@@ -247,6 +244,9 @@ WORLD_VECTOR_WIDTH = 3 * WIDTH + 4
 # and it cost a third AWS run to find. This is the same class as the node-head width: a declared width drifting
 # from the thing it describes.
 WORLD_CANDIDATE_WIDTH = 2 + 4 + DECL_VECTOR_WIDTH
+# Separate analogy scorer: query, focus, candidate, product, absolute difference;
+# the same four focus/candidate comparison terms for domain embeddings; four flags.
+ANALOGY_CANDIDATE_WIDTH = 5 * WIDTH + 4 * DECL_VECTOR_WIDTH + 4
 SLOT_DECLARATION_FIELD = {"kind_ref": "kind", "function_ref": "function", "setting_ref": "setting",
                           "world_id": "domain"}
 REACH_OPTION_COUNT = 2                                      # ABSENT, DIRECT
@@ -478,7 +478,11 @@ def profile():
              meta / "teaching_cycle" / "gpu_adapter.py"]
     require(all(path.is_file() for path in paths), "POINTER_PROFILE_FILES")
     body = {
-        "schema": "cncm.typed-pointer-learner-profile/0.1",
+        "schema": "cncm.typed-pointer-learner-profile/0.2",
+        "model_variant": MODEL_VARIANT,
+        "checkpoint_schema": CHECKPOINT_SCHEMA,
+        "analogy_initialization": {"seed": ANALOGY_INIT_SEED, "rng": "separate CPU generator state; shared initialization unchanged"},
+        "historical_checkpoint_policy": "REFUSE_OLD_SCHEMA_OR_PROFILE; USE_ORIGINAL_SOURCE_FOR_HISTORICAL_REPLAY",
         "files": [{"path": path.relative_to(research).as_posix(),
                    "sha256": sha256(path.read_bytes()).hexdigest(), "bytes": path.stat().st_size}
                   for path in paths],
@@ -490,12 +494,13 @@ def profile():
         "expected_main_counters": list(EXPECTED_MAIN_COUNTERS),
         "readout": ("NODE_LEVEL_FOR_STRUCTURAL_HEADS; WORLD_VECTOR_IS_MEAN_AND_MAX_AND_EXACT_DEGREE_SUMS_AND_"
                     "FOCUS_TARGET_FLAGS_AND_A_LEARNED_ATTENTION_POOL; WORLD_CHOICE_HEADS_ALSO_SEE_EACH_"
-                    "CANDIDATE_WORLD_DECLARATION_TEXT"),
+                    "CANDIDATE_WORLD_DECLARATION_TEXT; ANALOGY_EXPLICITLY_COMPARES_FOCUS_AND_CANDIDATE_"
+                    "WORLD_AND_DOMAIN_VECTORS"),
         "normalisation_placement": "INPUTS_OF_EACH_ROUND_BEFORE_THE_REGISTERED_CORE",
         "initialization": "BUILT_BY_cncm.typed_matched_worker._framework_TORCH_DEFAULT_SCHEME",
         "head_set": sorted(SCORED_FIELDS),
         "edge_head_relaxation": "THE_RAW_A_TO_B_ADJACENCY_BIT_AS_ONE_INPUT_DIMENSION_OF_THE_EDGE_MLP",
-        "correspondence_disclosure": "KNOWN_INEXPRESSIBLE_PER_NODE_HEAD_LB12_LB13_LB15_REPORTED_NOT_HIDDEN",
+        "correspondence_disclosure": "HELM2_PAIR_SCORES_WITH_EXISTING_COMPLETE_ASSIGNMENT_DECODER_UNCHANGED",
         "measured_pooling": deepcopy(MEASURED_POOLING),
         "measured_stability": deepcopy(MEASURED_STABILITY),
         "gradient_gate": "FINITENESS_ONLY_WHERE_GRAD_IS_NOT_NONE_AT_LEAST_ONE_REQUIRED",
@@ -695,7 +700,7 @@ def root_record(root):
 # `real_framework.resolve_plasticity_groups` returns every parameter name of a real framework's module, so
 # calling it would set `requires_grad_(False)` on every head (`trainer.py:86-87`, review RK2).
 # -------------------------------------------------------------------------------------------------------
-def _build_container(torch, framework, device):
+def _build_container(torch, framework, device, *, analogy_focus_comparison=True, analogy_seed=ANALOGY_INIT_SEED):
     """Build the pointer container, installing the registered `^6` tensors under their exact names.
 
     The `^6` block comes from the framework built FIRST by `cncm.typed_matched_worker._framework` (`:43-48`), and
@@ -706,6 +711,8 @@ def _build_container(torch, framework, device):
     `cas_cjt/neural.py:124-126`), and the block weights are installed as leaf parameters with no further
     initialisation, which is the initialisation pin.
     """
+    require(type(analogy_focus_comparison) is bool, "POINTER_ANALOGY_SWITCH")
+    require(type(analogy_seed) is int and 0 <= analogy_seed < 2 ** 63, "POINTER_ANALOGY_SEED")
     registered = dict(framework.module.state_dict())
     require(set(registered) == set(PARAMETERS), "POINTER_FRAMEWORK_STATE_KEYS")
     require(all(tuple(registered[name].shape) == PARAMETER_SHAPES[name] for name in PARAMETERS),
@@ -721,6 +728,8 @@ def _build_container(torch, framework, device):
 
         def __init__(self):
             super().__init__()
+            self.analogy_focus_comparison = analogy_focus_comparison
+            self.analogy_seed = analogy_seed if analogy_focus_comparison else None
             # ---- the registered ^6 block, under its exact registered NAMES, installed FIRST ----
             # `nn.Module.register_parameter` refuses a name containing a dot, so each `^6` tensor is held
             # under an underscore name and the dot-free names are restored in `state_dict` / `load_state_dict`
@@ -745,12 +754,10 @@ def _build_container(torch, framework, device):
             self.state_encode = torch.nn.Linear(WIDTH, WIDTH, bias=False).to(device)
             # HELM 2.0 (F2b). THE CORRESPONDENCE BILINEAR. In Helm 1.0 every `mapping_target` slot was scored
             # by `_node_options`, i.e. `target_state . pointer_query` -- a vector that depends on the QUERY and
-            # not on the SOURCE node. So every source node received the IDENTICAL ranking over targets, and the
-            # only mapping the model could express was "every source points at the same target", which is never
-            # a bijection. That is why `correspondence` sat at 0.09 on its OWN TRAINING DATA, and why the five
-            # correspondence questions left the gate population under the class `inexpressible`. This matrix
-            # makes the score a function of the PAIR, and `_mapping_logits` then normalises rows and columns
-            # together so that one-to-one is a property of the output rather than a hope.
+            # not on the SOURCE node. Identical rows give equal totals to complete bijections. The existing
+            # slots decoder already enumerates complete assignments; it never emits repeated targets in a
+            # mapping. This matrix makes PAIR scores informative. Sinkhorn normalization does not itself
+            # create that complete-assignment constraint; the unchanged decoder enforces it.
             self.match_key = torch.nn.Linear(WIDTH, WIDTH, bias=False).to(device)
             # A softmax over three logits: how much of the node's OWN signal, of its parents' aggregate and of
             # its children's aggregate enters the registered `^6` block this round. Shared by all K rounds.
@@ -820,6 +827,16 @@ def _build_container(torch, framework, device):
             self.world_head = torch.nn.Sequential(
                 torch.nn.Linear(WORLD_CANDIDATE_WIDTH, WIDTH, bias=False), torch.nn.GELU(),
                 torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, 1, bias=True)).to(device)
+            # Added last so identical initialization seeds preserve every older head's initial tensors.
+            # New schema/profile intentionally prevents silently loading historical weights as this model.
+            if analogy_focus_comparison:
+                # Linear constructors initialize on CPU before .to(device). Save only
+                # that generator and avoid reseeding CUDA or consuming shared RNG state.
+                with torch.random.fork_rng(devices=[]):
+                    torch.random.default_generator.manual_seed(analogy_seed)
+                    self.analogy_head = torch.nn.Sequential(
+                        torch.nn.Linear(ANALOGY_CANDIDATE_WIDTH, WIDTH, bias=False), torch.nn.GELU(),
+                        torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, 1, bias=True)).to(device)
             require(len(list(self.named_parameters())) > len(PARAMETERS), "POINTER_CONTAINER_EMPTY")
 
         def core_block(self, value):
@@ -1482,11 +1499,11 @@ class GraphForward:
         return model.mode_option_head(value).reshape(-1)
 
     def _world_scores(self, field, symbols):
-        """Every symbol that names a whole world, scored on `(query, source, candidate, declaration)`.
+        """World-choice scores. Analogy additionally compares the focus with each candidate.
 
-        The candidate term is `[query key @ candidate, query value @ candidate, four flags, declaration]`, so the
-        scorer sees the candidate's degree-conditioned world vector AND the declaration text of the field the
-        slot asks about -- the shape and the domain together, which is what `analogy` needs (17 of 17 held).
+        Historical world_head inputs contain no focus vector/domain comparison.
+        Keep that path for other kinds; the experimental analogy path uses its own head.
+        Neither path calls the checker or inserts an exact graph answer.
         """
         torch = self.torch
         column = self.declaration_names.index(SLOT_DECLARATION_FIELD.get(field, "domain"))
@@ -1504,7 +1521,20 @@ class GraphForward:
         require(int(self.model.world_head[0].in_features) == int(candidate.shape[1]),
                 "POINTER_WORLD_HEAD_WIDTH:%d!=%d" % (int(self.model.world_head[0].in_features),
                                                      int(candidate.shape[1])))
-        flat = self.model.world_head(candidate).reshape(-1)
+        if self.reading["query"]["kind_name"] == "analogy" and self.model.analogy_focus_comparison:
+            require(field == "world_id", "POINTER_ANALOGY_FIELD")
+            focus = self.worlds[self.focus_position].expand_as(self.worlds)
+            domains = self.declaration_embed[:, column, :]
+            focus_domain = domains[self.focus_position].expand_as(domains)
+            comparison = torch.cat((self.query_value.expand_as(self.worlds), focus, self.worlds,
+                                    focus * self.worlds, torch.abs(focus - self.worlds),
+                                    focus_domain, domains, focus_domain * domains,
+                                    torch.abs(focus_domain - domains), flags), dim=1)
+            require(int(self.model.analogy_head[0].in_features) == int(comparison.shape[1]),
+                    "POINTER_ANALOGY_HEAD_WIDTH")
+            flat = self.model.analogy_head(comparison).reshape(-1)
+        else:
+            flat = self.model.world_head(candidate).reshape(-1)
         rows = []
         for symbol in symbols:
             if symbol == "NO_MATCH":

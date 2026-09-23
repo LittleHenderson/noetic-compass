@@ -1,4 +1,4 @@
-"""T01 -- the evaluator boundary, tool version 0.2. Rescore RAW PREDICTIONS with the run's own private checker,
+"""T01 -- the evaluator boundary, tool version 0.3. Rescore RAW PREDICTIONS with the run's own private checker,
 against an anchor that lives OUTSIDE any receipt directory, and compare with what the frozen grader printed.
 
 WHY. `evaluate_gates.py` (frozen, sha256 d3e0ea97...) reads the `correct` flags out of `course_p00_scoring.json`
@@ -51,15 +51,23 @@ import math
 import pathlib
 import sys
 import tempfile
+from fractions import Fraction
 
 HERE = pathlib.Path(__file__).resolve().parent
 PACKAGE = HERE.parents[1]
 CODE_ROOT = PACKAGE / "research" / "CAS_META_2_COMPOSITION"
 
-SCHEMA = "cncm.trusted-rescore-reading/0.2"
+SCHEMA = "cncm.trusted-rescore-reading/0.3"
 ANCHOR_SCHEMA = "cncm.trusted-rescore-anchor/0.2"
 PHASES = ("course_p00", "course_p10")
-MIN_PASSING_B, MIN_IMPROVED_KINDS, MIN_IMPROVED_WORLDS = 7, 2, 2
+MIN_IMPROVED_KINDS, MIN_IMPROVED_WORLDS = 2, 2
+HISTORICAL_RULE = {
+    "id": "HELM_HISTORICAL_PAIRED_RULE_20260919",
+    "test": "exact one-sided Binomial(b+c, 1/2) upper tail at b",
+    "alpha": "1/100", "require_b_greater_than_c": True,
+    "min_improved_kinds": 2, "min_improved_worlds": 2,
+    "all_seeds_must_pass": True, "zero_loss_veto": False,
+}
 GRADER = HERE / "evaluate_gates.py"
 CUSTODY = "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab"
 HASH_POLICY = {
@@ -169,6 +177,39 @@ def _count(value):
     return len(value) if isinstance(value, (list, dict)) else int(value)
 
 
+def historical_seed_result(b, c, kinds, worlds):
+    """The preserved grader's rule, not a future release criterion.
+
+    Seven gains is sufficient only when there are no losses. Losses contribute
+    to the exact probability; they do not automatically veto a pass.
+    """
+    if type(b) is not int or type(c) is not int or min(b, c) < 0:
+        raise ValueError("nonnegative integer transition counts required")
+    p = Fraction(sum(math.comb(b + c, k) for k in range(b, b + c + 1)), 2 ** (b + c))
+    kinds, worlds = sorted(set(kinds)), sorted(set(worlds))
+    return {"p_one_sided": str(p), "p_float": float(p),
+            "kinds_improved": kinds, "world_ids_improved": worlds,
+            "worlds_improved": len(worlds),
+            "passed": b > c and p <= Fraction(HISTORICAL_RULE["alpha"])
+                      and len(kinds) >= MIN_IMPROVED_KINDS and len(worlds) >= MIN_IMPROVED_WORLDS}
+
+
+def compare_seed_result(frozen, rescored):
+    """Compare each decision and its inputs, including breadth and exact p."""
+    fb, fc = _count(frozen.get("wrong_to_right")), _count(frozen.get("right_to_wrong"))
+    fields = {
+        "counts": [fb, fc] == [rescored["gained"], rescored["broken"]],
+        "passed": type(frozen.get("passed")) is bool and frozen["passed"] == rescored["passed"],
+        "p_one_sided": frozen.get("p_one_sided") == rescored["p_one_sided"],
+        "improved_kinds": frozen.get("improved_kinds") == rescored["kinds_improved"],
+        "improved_worlds": frozen.get("improved_worlds") == rescored["world_ids_improved"],
+    }
+    return {"rescored_gained_broken": [rescored["gained"], rescored["broken"]],
+            "frozen_gained_broken": [fb, fc], "rescored_passed": rescored["passed"],
+            "frozen_passed": frozen.get("passed"), "field_agreement": fields,
+            "agree": all(fields.values())}
+
+
 def _load_frozen_and_checker():
     """Import and run the private checker code. Call ONLY after the code-identity gate has passed.
     Cached bytecode is ignored and none is written, so what runs is compiled from the hashed sources."""
@@ -221,8 +262,7 @@ def safe_anchor_part(study_path, receipt_override):
             "grader": {"path": _rel(GRADER), "pin": file_pin(GRADER)},
             "checker": {"code_closure": code_closure_pins()},
             "tool": {"path": _rel(__file__), "pin": file_pin(__file__)},
-            "pass_rule": {"min_passing_b": MIN_PASSING_B, "min_improved_kinds": MIN_IMPROVED_KINDS, "min_improved_worlds": MIN_IMPROVED_WORLDS,
-                          "broken_must_be": 0, "all_seeds_must_pass": True},
+            "pass_rule": dict(HISTORICAL_RULE),
             "seeds": seeds, "custody": CUSTODY}
 
 
@@ -433,8 +473,8 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
             kinds = sorted({anchor["population"]["kind_of"][q] for q in gained})
             worlds = sorted({anchor["population"]["world_of"][q] for q in gained})
             seed_report.update({"frozen_18_before": sum(1 for q in pop if before.get(q, False)), "frozen_18_after": sum(1 for q in pop if after.get(q, False)),
-                                "gained": len(gained), "broken": len(lost), "kinds_improved": kinds, "worlds_improved": len(worlds),
-                                "passed": len(gained) >= MIN_PASSING_B and len(lost) == 0 and len(kinds) >= MIN_IMPROVED_KINDS and len(worlds) >= MIN_IMPROVED_WORLDS})
+                                "gained": len(gained), "broken": len(lost),
+                                **historical_seed_result(len(gained), len(lost), kinds, worlds)})
             per_seed[seed] = seed_report
         run.passed("RESCORE", "%d predictions re-checked" % sum(s["phases"][ph]["rescored"] for s in per_seed.values() for ph in PHASES))
         if compared_all:
@@ -461,12 +501,11 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
                     per = {}
                     for seed, s in per_seed.items():
                         gs = (g.get("seeds") or {}).get(seed, {}).get("G_LEARN_population", {})
-                        fb, fc = _count(gs.get("wrong_to_right")), _count(gs.get("right_to_wrong"))
-                        per[seed] = {"rescored_gained_broken": [s["gained"], s["broken"]], "frozen_gained_broken": [fb, fc],
-                                     "agree": fb == s["gained"] and fc == s["broken"]}
+                        per[seed] = compare_seed_result(gs, s)
                     comparison.update({"frozen_label": g.get("label"), "labels_agree": g.get("label") == label, "per_seed": per})
-                    if not comparison["labels_agree"] or not all(v["agree"] for v in per.values()):
-                        run.fail("FROZEN_GRADER_AGREEMENT", "FROZEN_GRADER_DISAGREES", "label or per-seed counts differ between the fresh rescore and %s" % _rel(fpath))
+                    comparison["seed_sets_agree"] = set(g.get("seeds") or {}) == set(per_seed)
+                    if not comparison["labels_agree"] or not comparison["seed_sets_agree"] or not all(v["agree"] for v in per.values()):
+                        run.fail("FROZEN_GRADER_AGREEMENT", "FROZEN_GRADER_DISAGREES", "label, seed set or per-seed counts/decision/probability/breadth differ between the fresh rescore and %s" % _rel(fpath))
                     run.passed("FROZEN_GRADER_AGREEMENT")
                 except Exception as error:
                     run.fail("FROZEN_GRADER_AGREEMENT", "FROZEN_READING_UNREADABLE", "%s: %s" % (type(error).__name__, str(error)[:120]))
@@ -481,6 +520,9 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
                "imported_checker_code": imported, "bytecode_policy": bytecode_policy, "material_supplied_by_caller": material is not None,
                "anchor": {"path": _rel(anchor_path), "pin": file_pin(anchor_path) if pathlib.Path(anchor_path).is_file() else None},
                "tool": {"path": _rel(__file__), "pin": file_pin(__file__)}, "hash_policy": HASH_POLICY["policy_id"],
+               "historical_rule_applied": dict(HISTORICAL_RULE),
+               "anchor_rule_metadata": anchor.get("pass_rule") if anchor else None,
+               "anchor_rule_note": "Historical 0.2 anchors retain their original erroneous zero-loss metadata. Identity pins remain enforced; the applied rule is the preserved frozen grader's rule, explicitly reported above.",
                "per_seed": per_seed, "comparison_with_frozen_grader": comparison, "custody": CUSTODY,
                "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was re-checked with the private checker"}
     if out_path:

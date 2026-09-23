@@ -1,5 +1,16 @@
 # Independent audit pack — Helm and the pointer study
 
+## Dated correction — 2026-09-23
+
+The historical rule has no zero-loss veto. Helm 1.0 remains PASS/PASS/PASS;
+Helm 2.0 is PASS/PASS/FAIL, with only seed 20260919 failing (7 gains, 1 loss,
+p=9/256). Seed 20260917 passes with 11 gains, 1 loss, p=13/4096.
+The rule also requires improvements across two kinds and two worlds and all
+three seeds passing. Earlier zero-broken shorthand below is superseded by this
+note, not evidence of a different historical rule. Original rows remain intact.
+See records/helm_integrated_repairs_20260923/ for the corrected active rescorer,
+new acceptance records, complementary investigations and separate future design.
+
 **Written for an agent who did not build this and has no stake in the answer.**
 Everything here is command-ready. Run it, break it, and report what you actually got.
 
