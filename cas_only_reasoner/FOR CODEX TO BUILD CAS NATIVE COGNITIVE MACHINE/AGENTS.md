@@ -1,12 +1,14 @@
 # CNCM Codex Homebase
 
-## This research branch: narrower current user scope
+## This implementation branch: current user scope, 2026-09-23
 
-Read records/helm_failure_research_20260922/RESOURCE_AND_WRITE_BOUNDARIES.md.
-This investigation forbids new model execution, training, GPU jobs, cloud spend,
-paid APIs and expanded agent allowance. This explicit current request takes priority
-over the broader run authorization retained below. Only research reports, non-invasive
-pure diagnostic probes and their receipts may be edited in assigned research worktrees.
+The completed research checkpoint remains preserved. The current user requests
+historical rescorer repair, an evaluation design before tuning, and the missing
+focus-to-candidate analogy comparison. Read
+records/helm_integrated_repairs_20260923/EVALUATION_DESIGN.md for selected checks
+and limits. No new broad team, cloud spending or expanded agent allowance is selected.
+The earlier report-only scope remains part of the historical investigation; it
+does not prohibit these newly requested repairs in this separate worktree.
 
 ## Current run authorization — user instruction 2026-09-22
 
