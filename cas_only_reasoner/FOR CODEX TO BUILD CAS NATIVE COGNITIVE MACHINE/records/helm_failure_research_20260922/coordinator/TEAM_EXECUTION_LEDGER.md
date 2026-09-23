@@ -27,12 +27,12 @@ uses another Git object store, so its worktree inventory does not establish role
 Root subsequently confirmed A0, A1 and A2 live concurrently.
 
 First-report barrier: SATISFIED at 2026-09-23T06:05:50.5591506Z. A0 verified all six committed FIRST_REPORT.md byte hashes in the integration worktree. A1-A6 may now read peer first reports only for the real conference.
-After all six role commits and first-report digests are recorded, A0 will explicitly open the
-barrier and give investigators the immutable peer reports for a real evidence conference.
+All six role commits and first-report digests were recorded before A0 distributed immutable peer reports for the real evidence conference.
 Follow-up reports are new files; first reports will never be rewritten.
 
 Resource observations: root last read ordinaryUsageAllowed=true, weekly 71% consumed / 29%
 remaining, no paid-credit balance. This is existing account allowance, not a dollar-cost estimate.
+
 
 
 
