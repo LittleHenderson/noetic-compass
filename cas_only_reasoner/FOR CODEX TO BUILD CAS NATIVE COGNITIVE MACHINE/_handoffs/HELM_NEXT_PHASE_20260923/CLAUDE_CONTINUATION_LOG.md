@@ -44,6 +44,10 @@ The current record is `research/helm-integration-20260923` at
 | `0d8e8316` | `research/helm-integration-20260923` | coordinator | review of Codex's rescorer: program-emitted `RULE_REPAIR_REPRODUCES_HISTORY` |
 | `098a3bdcc81ef3d31cb02f01299506d342cb2b6e` | builder branch | builder | read-only switch: `pointer_learner.py` (+30/-2, LF-only inserted lines; raw `a94084f7...`) and new `tests/test_helm_analogy_switch_read_only.py` (10 functions, 25 cases) |
 | `08b305ec` | builder branch | builder | `BUILDER_REPORT_READ_ONLY_SWITCH.md` |
+| `ceab6c49f611303f39addfaa3553d81d6f902811` | builder branch | builder | Revision 1: guards read a closure tuple, not `self._READ_ONLY_SWITCH`. `pointer_learner.py` raw `0f424d86...`, LF `2ebb1b08...`. New test `test_planted_attributes_cannot_disable_the_guards` (11 functions, 27 cases) |
+| `8a150198` | `research/helm-integration-20260923` | coordinator | the owner's decisions, verbatim (keep the g6e; train switch ON; 6- and 7-node reach; fail-closed rescorer anchors) |
+| `b5a4d525` | `research/helm-integration-20260923` | coordinator | the HSET-1B builder, spec (salt sha `b3cf84e2...` committed before the build) and AWS job. Not launched |
+| `8aba0c62` | `research/helm-integration-20260923` | coordinator | launch record of the T4 item-1 job, R = `ceab6c49` |
 
 ## Checks run, and results
 
@@ -55,6 +59,13 @@ Written test functions, input-specific cases and repeated runs are counted separ
   - a bytecode check that `__init__` still branches on the function argument.
   - **No test has run yet.** 10 new test functions (25 cases, 1 of them CUDA-only) and the existing 11 cases wait
     for the T4 job.
+- **Fresh reviewer (a separate Claude sub-agent), static only.**
+  - First review of `098a3bdc`: no blocker and no major; one MINOR (the guard could be disabled through an instance
+    attribute); `APPROVE_FOR_T4_RUN`.
+  - Delta review of `ceab6c49`: MINOR closed, nothing new, `APPROVE_FOR_T4_RUN`.
+  - It reproduced the byte and sha256 figures independently.
+  - It recorded one pre-existing defect, not fixed because fixing it would break the match with `20208c92`: at
+    `pointer_learner.py:811`, `torch.nn.init.zeros_(self.declaration_table[padding, :])` zeroes a copy.
 - **Rescorer review (coordinator, read-only, $0).** `RULE_REPAIR_REPRODUCES_HISTORY`: 6 of 6 decisions agree, and
   the rule is declared with no zero-loss veto. The full 564-record reading and the slow tests are NOT_RUN.
 - **T4 launcher dry run against `098a3bdc`.**
@@ -65,6 +76,9 @@ Written test functions, input-specific cases and repeated runs are counted separ
   - Nothing was uploaded or launched.
 
 ## Resource use
+
+- 2026-09-23, T4 item-1 job: `i-0b2a1761317398ba4`, g4dn.2xlarge, pinned image `ami-07d69ce07bfe5628f`, ceiling $3.00.
+  Running (see its watch record).
 
 - 2026-09-23: read-only AWS inventory; $0.
   - No Helm instance, volume or SageMaker job is live.
