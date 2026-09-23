@@ -1,0 +1,237 @@
+{
+ "cross_gpu_printed_rtx4070": {
+  "h2_fresh_20260917": {
+   "bit_identical": false,
+   "rtx4070": "8bce418f5ea641f0241f9cbfebdca30f1e3393b3beda8c98bb364454802b3749",
+   "t4": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b"
+  },
+  "h2_fresh_20260918": {
+   "bit_identical": false,
+   "rtx4070": "2e8dbaead32b6eb565fc80b24ee75c009122228ee8127c5f504ecc88f749fbd5",
+   "t4": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6"
+  },
+  "h2_initial_20260917": {
+   "bit_identical": false,
+   "rtx4070": "0138af72c05a4e05ddbe6b03c049dad5afae7e47ec0fa69ead191b0e2103d975",
+   "t4": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a"
+  },
+  "h2_initial_20260918": {
+   "bit_identical": false,
+   "rtx4070": "b5aae9c55f3d8a5798d0442199109ba4ce35414a0f2c496744999d85dbe6d84d",
+   "t4": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365"
+  }
+ },
+ "cross_gpu_seed20260919": {
+  "h2_final_20260919": {
+   "bit_identical": false,
+   "rtx4070": "3a5957ee8e9951657c1d0667f60d81172601c253c0531f3c406dfdcb7a2bbeea",
+   "t4": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a"
+  },
+  "h2_fresh_20260919": {
+   "bit_identical": false,
+   "rtx4070": "06b77b70dc1f3709edd527ded29e933c1fd1c3e2ed1b7c46160f37d930c2bacf",
+   "t4": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412"
+  },
+  "h2_initial_20260919": {
+   "bit_identical": false,
+   "rtx4070": "ee551016c03e4f41d3c666d105637f7e9892be5c98775ec19f2c03cd1390eb68",
+   "t4": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858"
+  }
+ },
+ "laptop_models_compared": [
+  "h2_final_20260917",
+  "h2_fresh_20260917",
+  "h2_fresh_20260918",
+  "h2_initial_20260917",
+  "h2_initial_20260918"
+ ],
+ "laptop_vs_T4_verdicts_agree": true,
+ "preservation_T4": {
+  "20260917": {
+   "complete": true,
+   "digests": {
+    "h2_final_20260917": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806",
+    "h2_fresh_20260917": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b",
+    "h2_initial_20260917": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a"
+   },
+   "parameter_counts": [
+    174303
+   ]
+  },
+  "20260918": {
+   "complete": true,
+   "digests": {
+    "h2_final_20260918": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7",
+    "h2_fresh_20260918": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6",
+    "h2_initial_20260918": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365"
+   },
+   "parameter_counts": [
+    174303
+   ]
+  },
+  "20260919": {
+   "complete": true,
+   "digests": {
+    "h2_final_20260919": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a",
+    "h2_fresh_20260919": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412",
+    "h2_initial_20260919": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858"
+   },
+   "parameter_counts": [
+    174303
+   ]
+  }
+ },
+ "probe_T4": {
+  "20260917": {
+   "complete": true,
+   "results": [
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_fresh_20260917",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_initial_20260917",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_final_20260917",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    }
+   ]
+  },
+  "20260918": {
+   "complete": true,
+   "results": [
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_fresh_20260918",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_initial_20260918",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_final_20260918",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    }
+   ]
+  },
+  "20260919": {
+   "complete": true,
+   "results": [
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_fresh_20260919",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_initial_20260919",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    },
+    {
+     "M1z": 0.0,
+     "M2z": 0.0,
+     "delta0": 0.0,
+     "label": "h2_final_20260919",
+     "max_K": 0.0,
+     "max_M3z": 0.0,
+     "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+    }
+   ]
+  }
+ },
+ "probe_prediction_holds": true,
+ "schema": "claude.aws-probe-results-reading/0.1",
+ "self_test": {
+  "all_met": true,
+  "expectation_met": {
+   "NEGATIVE_COUPLED": true,
+   "NEGATIVE_UNIFORM": true,
+   "POSITIVE_COMPARISON": true
+  },
+  "pointer_learner_unchanged": true,
+  "summaries": {
+   "NEGATIVE_COUPLED": {
+    "K_positive": 24,
+    "M3z_above_floor": 24,
+    "RC_dom_ok": 0,
+    "bystander_ok": 0,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.0797872340425532,
+    "max_M3z": 0.15245955134309952,
+    "median_RC": 0.12107252537474557,
+    "top1_changes_reported_not_scored": 39
+   },
+   "NEGATIVE_UNIFORM": {
+    "K_positive": 0,
+    "M3z_above_floor": 0,
+    "RC_dom_ok": 0,
+    "bystander_ok": 0,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.0,
+    "max_M3z": 8.593126210598712e-13,
+    "median_RC": 0.0,
+    "top1_changes_reported_not_scored": 0
+   },
+   "POSITIVE_COMPARISON": {
+    "K_positive": 24,
+    "M3z_above_floor": 24,
+    "RC_dom_ok": 24,
+    "bystander_ok": 24,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.723404255319149,
+    "max_M3z": 3.3857726532103523,
+    "median_RC": 4.881481316230698,
+    "top1_changes_reported_not_scored": 0
+   }
+  },
+  "verdicts": {
+   "NEGATIVE_COUPLED": "COUPLED_NOT_COMPARISON",
+   "NEGATIVE_UNIFORM": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "POSITIVE_COMPARISON": "PRESENT_GRAPH_AND_DOMAIN"
+  }
+ },
+ "status_file": "done"
+}

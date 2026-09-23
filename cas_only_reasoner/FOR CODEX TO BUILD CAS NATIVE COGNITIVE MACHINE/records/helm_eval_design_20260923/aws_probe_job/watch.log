@@ -1,0 +1,14 @@
+permission to terminate i-07e0016d92bd6197b: yes
+12:58:09  machine i-07e0016d92bd6197b: running
+12:58:09  still running, 0 min since launch
+13:03:14  still running, 5 min since launch
+13:08:20  still running, 10 min since launch; progress log available
+13:13:26  still running, 15 min since launch; progress log available
+13:18:31  still running, 20 min since launch; progress log available
+13:23:37  still running, 25 min since launch; progress log available
+13:28:42  still running, 30 min since launch; progress log available
+13:33:48  still running, 35 min since launch; progress log available
+  skipped archive member 'out'
+results downloaded: 19 files; the job's own status: done
+{"schema": "claude.aws-probe-watch/0.1", "instance_id": "i-07e0016d92bd6197b", "outcome": "RESULTS_RECEIVED", "job_status": "done", "final_state": "shutting-down", "files_downloaded": 19, "launched_utc": "2026-09-23T12:58:00Z", "watch_ended_utc": "2026-09-23T13:35:31Z", "minutes_from_launch_to_watch_end": 37.5, "cost_upper_bound_usd": 0.4834, "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 0.01 for 20 GB of disk", "dollar_ceiling": 3.0}
+WATCH EXIT 0

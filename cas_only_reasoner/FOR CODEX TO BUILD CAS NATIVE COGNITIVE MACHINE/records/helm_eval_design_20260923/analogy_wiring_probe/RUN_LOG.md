@@ -56,3 +56,14 @@
 - Other desktop applications held most of the memory. The largest were the ChatGPT desktop app (13 processes, about 2.3 GB) and Chrome (23 processes, about 2.2 GB).
 - The probe process exited with code 4. Its own `WALL_LIMIT_REACHED` could not have fired after 731 s of a 3,600 s budget, so the exit is recorded as **caused by memory exhaustion, reason not printed**.
 - No file was left half-written: each JSON is rewritten whole after each model.
+
+## Attempt 5: AWS, by owner order ("use aws"). COMPLETE: status `done`, every job exit 0.
+
+- **Machine:** `i-07e0016d92bd6197b`, `g4dn.2xlarge` (Tesla T4), us-west-2a, launched 2026-09-23T12:58:00Z.
+- **Bundle:** `ef35c2d9738482bf...` from commit `eccbd8f3`.
+- **Run time:** watch ended after 37.5 minutes. Cost upper bound **$0.4834** (ceiling $3.00).
+- **Preflight:** `PREFLIGHT_PASS`. torch `2.11.0+cu128`, CUDA 12.8, course digest `272c26e1...`, container 174,303, one
+  forward per question kind. The course load took 5.8 s here, against 176-249 s on the laptop.
+- **Job walls:** probes 1,041, 1,043 and 1,043 s; self-test 1,072 s; preservation 810, 810 and 811 s.
+- **Outputs:** `../aws_probe_job/results/`, read by `../aws_probe_job/read_results.py` into `RESULTS_READING.json`.
+  Archived at `D:/tksCAS-archive/helm_wiring_probe_aws_20260923` (32 files, 3 of 3 sha256 confirmations).

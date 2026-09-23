@@ -166,3 +166,19 @@ models. So:
   so comparing the two measures bit-equality across GPUs;
 - the switch-OFF acceptance check for Codex's repair must run on the **same GPU type** as the reference it is
   compared with.
+
+## Amendment A3 (2026-09-23): acceptance item 1 is tightened. Made after the reference existed and BEFORE any repair existed.
+
+**The measured fact.** Preservation digests differ between an RTX 4070 and a T4 for the same model: 0 of 7
+compared are bit-identical (`BEFORE_READING_RESULT.md`, section 3).
+
+**Item 1 (switch OFF) now requires, on a T4, in one job:**
+- (a) the repaired container with its switch OFF;
+- (b) unchanged `20208c92`, re-fingerprinted in the same job as a same-machine control.
+
+**Pass:** (a) equals (b) bit for bit on all 9 models, AND (b) equals the T4 reference in `../aws_probe_job/results/`.
+
+**If (b) differs from the reference:** the reading is `REFERENCE_NOT_REPRODUCIBLE_ON_T4`, never a pass. That settles
+the reference question first.
+
+Nothing else changes.

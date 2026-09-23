@@ -52,3 +52,11 @@ Receiving the same recommendation does not mean both agents launch the same job.
 **Update 2026-09-23: owner decision D-1 APPROVED.** Read `OWNER_DECISION_D1_20260923.md` and
 `D1_CHECKER_V2_SPEC_AND_ACCEPTANCE.md`. Checker version 2 is yours to build, as a new version with the frozen
 files untouched. Claude's acceptance tools are in `records/helm_eval_design_20260923/d1_acceptance/`.
+
+**Update 2026-09-23: probe reference and self-test DONE, on AWS (T4).** See
+`records/helm_eval_design_20260923/analogy_wiring_probe/BEFORE_READING_RESULT.md`.
+- Unchanged Helm 2.0 reads `FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT` on all 9 models, all zeros.
+- The probe self-test met all 3 expectations.
+- The T4 preservation reference is complete.
+- The switch-OFF check must run on a T4 with a same-job control (prereg amendment A3). The reusable launcher is
+  `records/helm_eval_design_20260923/aws_probe_job/`.

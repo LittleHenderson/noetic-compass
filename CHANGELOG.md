@@ -1,5 +1,32 @@
 # tksCAS — Changelog
 
+## 2026-09-23 — Analogy wiring probe: reference DONE on AWS; probe self-test PASS; D-1 approved
+
+**Owner orders.** "use aws" and "use aws as there is only 354 mb of 16 gbs locally". This is now recorded for
+every future agent: in the global `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` (added by Codex), in the CNCM
+`AGENTS.md`, in the main checkout's `CLAUDE.md` compute section, and in Claude's memory. "D-1 approved: build the new
+checker version": Codex builds it, Claude checks it. Its spec and acceptance tests A1-A6 are in
+`_handoffs/HELM_NEXT_PHASE_20260923/`.
+
+**Why AWS.** The laptop ran out of memory: 345 MB free of 16 GB, and bash died with "fork: Resource temporarily
+unavailable". Before that, 5 of 9 models were read locally; the rest never started.
+
+**The AWS job.** `g4dn.2xlarge` (T4) `i-07e0016d92bd6197b`: 37.5 minutes, at most **$0.4834**, status `done`, every job
+exit 0.
+
+**What it measured** (`records/helm_eval_design_20260923/analogy_wiring_probe/BEFORE_READING_RESULT.md`):
+- **Unchanged Helm 2.0.** `FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT` on all 9 models (fresh, initial and final x 3
+  seeds), with every metric exactly 0.0.
+- **Probe self-test.** All 3 expectations were met:
+  - a real comparison read PRESENT_GRAPH_AND_DOMAIN, 24/24 on every criterion;
+  - a uniform shift read ABSENT;
+  - a global coupling read COUPLED_NOT_COMPARISON.
+- **T4 preservation reference.** Complete for 9 models. It is **not** bit-identical to the RTX 4070 (0 of 7), so the
+  switch-OFF acceptance runs on a T4 with a same-job control (prereg amendment A3).
+- **D-1 oracle self-test.** PASS: 0 disagreements with the frozen checker on 4,096 bank pairs.
+
+**Archive:** `D:/tksCAS-archive/helm_wiring_probe_aws_20260923` (3 of 3 sha256 confirmations).
+
 ## 2026-09-23 — Helm next phase: integration, corrections, evaluation design, wiring probe (Claude = checker)
 
 Branch `research/helm-integration-20260923`. It holds both investigations, each merged unchanged:

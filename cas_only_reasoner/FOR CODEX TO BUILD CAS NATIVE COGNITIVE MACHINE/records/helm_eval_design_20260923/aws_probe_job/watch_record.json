@@ -1,0 +1,14 @@
+{
+ "schema": "claude.aws-probe-watch/0.1",
+ "instance_id": "i-07e0016d92bd6197b",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "shutting-down",
+ "files_downloaded": 19,
+ "launched_utc": "2026-09-23T12:58:00Z",
+ "watch_ended_utc": "2026-09-23T13:35:31Z",
+ "minutes_from_launch_to_watch_end": 37.5,
+ "cost_upper_bound_usd": 0.4834,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 0.01 for 20 GB of disk",
+ "dollar_ceiling": 3.0
+}

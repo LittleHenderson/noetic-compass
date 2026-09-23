@@ -1,0 +1,52 @@
+{
+ "schema": "claude.aws-probe-launch/0.1",
+ "owner_approval_words": [
+  "use aws",
+  "use aws as there is only 354 mb of 16 gbs locally"
+ ],
+ "approved": {
+  "machine": "g4dn.2xlarge",
+  "region": "us-west-2",
+  "price_per_hour_usd": 0.752,
+  "time_limit_minutes": 160,
+  "dollar_ceiling": 3.0
+ },
+ "instance_id": "i-07e0016d92bd6197b",
+ "launched_utc": "2026-09-23T12:58:00Z",
+ "availability_zone": "us-west-2a",
+ "ami": "ami-07d69ce07bfe5628f",
+ "ami_name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260922",
+ "root_volume_gb": 100,
+ "security_group": "sg-07ba7fdad5a6b47ab",
+ "in_instance_timer_seconds": 9000,
+ "client_deadline_minutes": 160,
+ "worst_case_usd_at_client_deadline": 2.0053,
+ "bucket": "cas-harness-runpod-92754088",
+ "keys": {
+  "bundle": "helm-integration/wiring-probe-20260923T125757Z/bundle.tar.gz",
+  "results": "helm-integration/wiring-probe-20260923T125757Z/results.tar.gz",
+  "progress": "helm-integration/wiring-probe-20260923T125757Z/progress.log"
+ },
+ "python": "3.14",
+ "torch": "2.11.0",
+ "numpy": "2.5.2",
+ "wheels": {
+  "casformer_reference-0.1.0-py3-none-any.whl": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+  "cas_neural_cjt-0.2.0-py3-none-any.whl": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+ },
+ "checkpoint_sha256": {
+  "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+  "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+  "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+  "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+  "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+  "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8"
+ },
+ "bundle": {
+  "files": 1183,
+  "bytes": 15058380,
+  "sha256": "ef35c2d9738482bf61db6ec3d57047c6d84dc8c1e0dac85038d6e0eb3c093dc9",
+  "source_commit": "eccbd8f375b20c174c1fbb3fb87bfeb184c9eb1f"
+ },
+ "links_stored": "no -- time-limited links are never written to disk"
+}

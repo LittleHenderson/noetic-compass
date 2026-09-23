@@ -1,0 +1,6 @@
+PREFLIGHT cuda ok (0.5 s): {'available': True, 'device': 'Tesla T4', 'torch': '2.11.0+cu128', 'cuda': '12.8'}
+PREFLIGHT wheels ok (0.0 s): {'casformer': '/root/helm_job/venv/lib/python3.14/site-packages/casformer/__init__.py', 'cas_cjt': '/root/helm_job/venv/lib/python3.14/site-packages/cas_cjt/__init__.py'}
+PREFLIGHT course_load ok (5.8 s): 272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb
+PREFLIGHT container ok (0.0 s): 174303
+PREFLIGHT forward_every_kind ok (5.1 s): {'analogy': 1, 'context': 4, 'correspondence': 4, 'definition': 3, 'edge_account': 16, 'parts': 4, 'reach': 1, 'role_set': 6}
+PREFLIGHT_PASS 
