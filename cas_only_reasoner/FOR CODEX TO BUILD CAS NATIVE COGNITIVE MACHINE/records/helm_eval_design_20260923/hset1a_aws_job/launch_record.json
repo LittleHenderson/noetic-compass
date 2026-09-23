@@ -1,0 +1,81 @@
+{
+ "schema": "claude.hset1a-launch/0.1",
+ "owner_approval_words": [
+  "build the Stage 1 cells on aws",
+  "use aws",
+  "use aws as there is only 354 mb of 16 gbs locally"
+ ],
+ "approved": {
+  "machine": "c7i.2xlarge",
+  "region": "us-west-2",
+  "price_per_hour_usd": 0.357,
+  "time_limit_minutes": 130,
+  "dollar_ceiling": 1.5
+ },
+ "instance_id": "i-0c8907f61b2d5fbc4",
+ "launched_utc": "2026-09-23T15:43:14Z",
+ "availability_zone": "us-west-2a",
+ "ami": "ami-07a134137a631b892",
+ "ami_name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260923",
+ "root_volume_gb": 20,
+ "security_group": "sg-07ba7fdad5a6b47ab",
+ "in_instance_timer_seconds": 7200,
+ "client_deadline_minutes": 130,
+ "worst_case_usd_at_client_deadline": 0.7891,
+ "bucket": "cas-harness-runpod-92754088",
+ "keys": {
+  "bundle": "helm-integration/hset1a-build-20260923T154310Z/bundle.tar.gz",
+  "results": "helm-integration/hset1a-build-20260923T154310Z/results.tar.gz",
+  "sealed": "helm-integration/hset1a-build-20260923T154310Z/sealed.tar.gz",
+  "progress": "helm-integration/hset1a-build-20260923T154310Z/progress.log"
+ },
+ "python": "3.14",
+ "anchors": {
+  "schema": "claude.d1-anchors/0.1",
+  "original_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "v2_commit": "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d",
+  "claude_commit": "1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b",
+  "frozen_files_sha256_lf": {
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd"
+  },
+  "v2_tree_frozen_files_sha256_lf_at_launch": {
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+   "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd"
+  },
+  "prediction_files_sha256": {
+   "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p00_predictions.json": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+   "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/course_p10_predictions.json": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+   "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p00_predictions.json": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+   "records/typed_pointer_001/receipt_helm1_certified_20260918/collected/results/artifacts/course_p10_predictions.json": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+   "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p00_predictions.json": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+   "records/typed_pointer_001/receipt_helm1_certified_20260919/collected/results/artifacts/course_p10_predictions.json": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
+   "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p00_predictions.json": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+   "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/course_p10_predictions.json": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+   "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p00_predictions.json": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
+   "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/course_p10_predictions.json": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
+   "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p00_predictions.json": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+   "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/course_p10_predictions.json": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd"
+  },
+  "prediction_source_commit": "1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b"
+ },
+ "bundle": {
+  "files": 2315,
+  "bytes": 17719894,
+  "sha256": "d0dfb09ede6a93ea67a9ad740e3853c50e755f945cf81d1b4f0bc2733fe1eac6",
+  "claude_commit": "1f3ed3ae109d1ff29f7285d45d059c22a3b3a86b",
+  "original_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "v2_commit": "7f85af1eb9eb0ed991d5a8c82fa7ec4db43e539d"
+ },
+ "sealed_destination": "D:\\tksCAS-archive\\hset1a_sealed_20260923\\run_20260923T154310Z",
+ "machine_script_template_sha256_lf": "58fce5feedc3ee10fc9ad8b5f6fff83dcdda1b0105aaf02fa41d0dedb0dacdda",
+ "machine_script_rendered_sha256": "d98ae357e42869bfca694ae053918cfd306526bade6bb74ae82485a19d391545",
+ "custody_note": "the bundle (with the salt) and the sealed results stay in the private bucket under keys; anyone who can read that bucket, or this machine's startup script while its links are valid (4 hours), could rebuild TEST_NEW_5. Claude does not delete them (no permanent deletion); removing them is an owner decision",
+ "links_stored": "no -- time-limited links are never written to disk"
+}
