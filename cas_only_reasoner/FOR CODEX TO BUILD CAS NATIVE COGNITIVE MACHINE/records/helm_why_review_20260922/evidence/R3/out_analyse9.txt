@@ -1,0 +1,25 @@
+records total 564 held 127 trained 358 excluded 79 held questions 50
+=== (10) PAIRED Helm 1.0 final vs Helm 2.0 final, same seed (b = 1.0 wrong & 2.0 right; c = 1.0 right & 2.0 wrong) ===
+FROZEN 18 20260917 b=0 c=0 p(2.0 better)=1 b kinds [] c kinds []
+FROZEN 18 20260918 b=0 c=0 p(2.0 better)=1 b kinds [] c kinds []
+FROZEN 18 20260919 b=0 c=1 p(2.0 better)=1 b kinds [] c kinds ['reach']
+ELIGIBLE 45 20260917 b=8 c=4 p(2.0 better)=397/2048 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence', 'role_set', 'role_set', 'role_set'] c kinds ['parts', 'parts', 'reach', 'reach']
+ELIGIBLE 45 20260918 b=5 c=3 p(2.0 better)=93/256 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence'] c kinds ['role_set', 'role_set', 'role_set']
+ELIGIBLE 45 20260919 b=7 c=1 p(2.0 better)=9/256 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence', 'reach', 'role_set'] c kinds ['reach']
+HELD 50 20260917 b=8 c=4 p(2.0 better)=397/2048 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence', 'role_set', 'role_set', 'role_set'] c kinds ['parts', 'parts', 'reach', 'reach']
+HELD 50 20260918 b=5 c=3 p(2.0 better)=93/256 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence'] c kinds ['role_set', 'role_set', 'role_set']
+HELD 50 20260919 b=7 c=1 p(2.0 better)=9/256 b kinds ['correspondence', 'correspondence', 'correspondence', 'correspondence', 'correspondence', 'reach', 'role_set'] c kinds ['reach']
+HELD 127 recs 20260917 b=23 c=4 | excluding correspondence b=3 c=4
+ALL 564 recs 20260917 b=114 c=11 | excluding correspondence b=33 c=11
+HELD 127 recs 20260918 b=20 c=3 | excluding correspondence b=0 c=3
+ALL 564 recs 20260918 b=81 c=8 | excluding correspondence b=0 c=8
+HELD 127 recs 20260919 b=22 c=4 | excluding correspondence b=2 c=4
+ALL 564 recs 20260919 b=94 c=11 | excluding correspondence b=13 c=11
+
+=== (11) untrained start by version (records correct at p00) ===
+Helm 1.0 20260917 p00 all 30 held 9 frozen18 questions 2
+Helm 2.0 20260917 p00 all 22 held 8 frozen18 questions 2
+Helm 1.0 20260918 p00 all 17 held 2 frozen18 questions 0
+Helm 2.0 20260918 p00 all 4 held 0 frozen18 questions 0
+Helm 1.0 20260919 p00 all 20 held 5 frozen18 questions 0
+Helm 2.0 20260919 p00 all 73 held 18 frozen18 questions 4

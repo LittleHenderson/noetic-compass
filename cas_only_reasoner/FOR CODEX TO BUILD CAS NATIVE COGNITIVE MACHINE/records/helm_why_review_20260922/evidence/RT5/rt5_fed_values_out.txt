@@ -1,0 +1,15 @@
+(a) the four reach-head degree terms (focus world), trained reach+parts vs dev (all 59):
+   sum in-deg-0 col     trained min 1.6035674514745464 max 3.1035674514745466 | dev min 5.6222543911352165 max 7.967528482153473 | dev questions outside trained [min,max]: 59 / 59
+   sum out-deg-0 col    trained min 1.1338934190276817 max 4.798017154388747 | dev min 6.695383750489774 max 11.161978185067674 | dev questions outside trained [min,max]: 59 / 59
+   sum in-deg-0 / n     trained min 0.4008918628686366 max 0.7758918628686367 | dev min 0.5622254391135216 max 0.7967528482153473 | dev questions outside trained [min,max]: 7 / 59
+   sum out-deg-0 / n    trained min 0.37796447300922725 max 1.1995042885971867 | dev min 0.7439315278321971 max 1.1161978185067674 | dev questions outside trained [min,max]: 0 / 59
+   query whole-rank scalar: trained reach+parts min 0 max 3 | dev min 6 max 7
+
+(b) exact 18-wide raw node rows (before RMS): dev focus rows vs trained FOCUS rows (any kind)
+   trained distinct focus rows 22; dev focus rows 581; dev rows never seen as a trained focus row 236
+   unseen dev rows by (in,out,participant,whole_arg,part_arg,declared_whole): {(2, 0, 2, 0, 0, 0): 27, (1, 1, 0, 0, 0, 0): 43, (0, 1, 0, 0, 0, 0): 53, (0, 2, 0, 0, 0, 0): 35, (1, 2, 0, 0, 0, 0): 18, (0, 3, 0, 0, 0, 0): 27, (1, 3, 0, 0, 0, 0): 9, (0, 1, 0, 0, 1, 0): 6, (0, 3, 0, 0, 1, 0): 3, (1, 1, 0, 0, 1, 0): 5, (2, 0, 2, 0, 1, 0): 3, (0, 2, 0, 0, 1, 0): 4, (1, 3, 0, 0, 1, 0): 1, (1, 2, 0, 0, 1, 0): 2}
+
+(c) post-hoc parts shortcut 'every node with in-degree >= 1' vs true children
+   four-node course parts: shortcut == truth  trained {True: 32, False: 12}  held-back {True: 5, False: 4}
+   ten-node dev parts: shortcut == truth {False: 6}
+   Helm's 36 dev parts answers (6 receipts x 6): {('equals every in>=1 node', False): 25, ('equals every in>=1 node', True): 11, ('equals truth', False): 32, ('equals truth', True): 4, ('is a superset of truth', False): 11, ('is a superset of truth', True): 25}

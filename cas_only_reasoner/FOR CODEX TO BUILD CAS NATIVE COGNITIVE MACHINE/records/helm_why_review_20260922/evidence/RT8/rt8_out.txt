@@ -1,0 +1,72 @@
+=== 1. STATIC IMPORT SCAN (closure over lab-local modules executed at import time) ===
+  learner_q4_decoder.py
+     import-time: ['__future__', 'dataclasses', 'learner_q4_representation', 'math', 'typing']
+     inside functions: []
+  learner_q4_representation.py
+     import-time: ['__future__', 'dataclasses', 'math', 'typing']
+     inside functions: []
+  q3_load.py
+     import-time: ['hashlib', 'json', 'math', 'pathlib', 're', 'reference_ops', 'sys']
+     inside functions: ['q3_behaviour_records@347']
+  R5/common.py
+     import-time: ['json', 'learner_q4_decoder', 'pathlib', 're', 'sys']
+     inside functions: []
+  reference_ops.py
+     import-time: ['math']
+     inside functions: []
+  torch imported at import time anywhere in closure: NONE
+  torch imported inside a function anywhere in closure: NONE
+
+=== 3. TOKEN TABLE ===
+  len(TOKENS) = 34 ; distinct = 34 ; BOS_ID = 34
+  TOKENS order: [(0, 'EOS'), (1, 'STATE'), (2, 'BINARY'), (3, 'PLUS'), (4, 'TIMES'), (5, 'N0'), (6, 'N1'), (7, 'N2'), (8, 'N3'), (9, 'N4'), (10, 'N5'), (11, 'N6'), (12, 'N7'), (13, 'N8'), (14, 'N9'), (15, 'D_NONE'), (16, 'D_P'), (17, 'D_C'), (18, 'D_E'), (19, 'D_O'), (20, 'F_NONE'), (21, 'F1'), (22, 'F2'), (23, 'F3'), (24, 'F4'), (25, 'F5'), (26, 'F6'), (27, 'F7'), (28, 'REG_ABSENT'), (29, 'REG_NULL'), (30, 'REG_A'), (31, 'REG_f'), (32, 'REG_E'), (33, 'REG_T')]
+  TOKEN_IDS is inverse of TOKENS: True
+  _FIELDS union + {EOS,STATE,BINARY} == set(TOKENS): True ; fields pairwise disjoint: True
+  runtime source pins (run_001/plan.json) vs current LF-normalised sha256:
+    learner_q4_decoder.py            pinned 1f8b1cef11fbf996 current 1f8b1cef11fbf996 match=True
+    learner_q4_representation.py     pinned 9b27815f74264435 current 9b27815f74264435 match=True
+    q3_load.py                       pinned 534f486a4cea6ef7 current 534f486a4cea6ef7 match=True
+    reference_ops.py                 pinned 00a1e3f05273b4ba current 00a1e3f05273b4ba match=True
+    learner_q4_neural.py             pinned 0824a573ccc56aa8 current 0824a573ccc56aa8 match=True
+    q4_smoke_job.py                  pinned 2ded1746403a2d44 current 2ded1746403a2d44 match=True
+    q3_behaviour_records.py          pinned 5b3e03cd3b8bc1ea current 5b3e03cd3b8bc1ea match=True
+  result.json learned_parameter_count = 70818 ; solving 257*64 + 2*GRU + (V+1)*64 + 64*V + V = 70818 gives V = 34.0
+
+=== 4. VISIBLE ROWS (q3_load.load_visible) === train 2048 dev 256
+
+=== 5. PARSER SIDE CHECKS ===
+  R5 parse == checker_reference_ast on saved cases: 16/16
+  saved reference literals: register key absent 36, present 40; drive null 42
+  train: parsed 2048/2048 ; render(parse(obs)) == obs on 2048/2048
+  dev: parsed 256/256 ; render(parse(obs)) == obs on 256/256
+
+=== 6. SCRIPTED-GOLD REPLAY (real mask, real codec) ===
+  train: rows 2048 | OK 2048 FAIL 0 PARSER_FAIL 0 | GENERATED 2048 | tokens==gold 2048 | ast==parsed 2048 | steps==len(gold) 2048
+     by (row depth, status): [((1, 'OK'), 747), ((2, 'OK'), 756), ((3, 'OK'), 545)]
+  dev: rows 256 | OK 256 FAIL 0 PARSER_FAIL 0 | GENERATED 256 | tokens==gold 256 | ast==parsed 256 | steps==len(gold) 256
+     by (row depth, status): [((3, 'OK'), 256)]
+
+=== 7. PER-STEP MASK CHECK (gold[i] in allowed_next(gold[:i]); allowed_next(gold) == ()) ===
+  total gold steps checked 51288 ; refused 0 ; complete-after-EOS 2304/2304
+  steps by slot: {'domain': 7656, 'drive': 7656, 'eos': 2304, 'expr': 13008, 'noetic': 7656, 'op': 5352, 'register': 7656}
+  refused by slot: NONE
+  distinct allowed sets at slot domain  : 1 -> [('D_NONE', 'D_P', 'D_C', 'D_E', 'D_O')]
+  distinct allowed sets at slot drive   : 1 -> [('F_NONE', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7')]
+  distinct allowed sets at slot eos     : 1 -> [('EOS',)]
+  distinct allowed sets at slot expr    : 1 -> [('STATE', 'BINARY')]
+  distinct allowed sets at slot noetic  : 1 -> [('N0', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9')]
+  distinct allowed sets at slot op      : 1 -> [('PLUS', 'TIMES')]
+  distinct allowed sets at slot register: 1 -> [('REG_ABSENT', 'REG_NULL', 'REG_A', 'REG_f', 'REG_E', 'REG_T')]
+  max gold length seen 55 (limit 1024)
+  tokens never used by any visible gold sequence: ['D_NONE', 'REG_NULL']
+  token use counts: {'BINARY': 5352, 'PLUS': 3524, 'STATE': 7656, 'N5': 756, 'D_O': 1903, 'F_NONE': 3787, 'REG_ABSENT': 3816, 'TIMES': 1828, 'N7': 760, 'D_P': 1913, 'F7': 555, 'REG_A': 960, 'N9': 779, 'F5': 563, 'REG_f': 945, 'EOS': 2304, 'D_C': 1929, 'F3': 568, 'REG_E': 947, 'N0': 781, 'F4': 518, 'N1': 761, 'N8': 748, 'F6': 566, 'N4': 812, 'REG_T': 988, 'D_E': 1911, 'N3': 735, 'F1': 575, 'N6': 729, 'F2': 524, 'N2': 795}
+
+=== 8. PLANTED-BUG CONTROL (in-memory mask without REG_T) ===
+  train: rows with a |T literal 709 ; replay FAILs 709 ; sets identical True ; fail (slot, token): {('register', 'REG_T'): 709}
+  dev: rows with a |T literal 126 ; replay FAILs 126 ; sets identical True ; fail (slot, token): {('register', 'REG_T'): 126}
+  control detects the planted bug: True
+
+=== 9. FINAL ===
+  torch/numpy in sys.modules: NONE ; blocked import attempts: NONE
+  rows 2304 OK 2304 FAIL 0 PARSER_FAIL 0
+  VERDICT (pre-registered rule): ALL_2304_REPLAY_EXACTLY -> mask and codec cleared for every visible row

@@ -1,0 +1,8 @@
+== 2.0 admission_001 sha256 52877c1670132c70dfd82e5e133e4e6ef90d8595a4b49387a6b0bace9f9d10d6 label NO_TRANSFER_TO_NEW_WORLDS main_updates 1470 updates_per_pass 147 passes 10
+   20260917 frozen-18 by pass [('0', 2), ('1', 12), ('2', 12), ('4', 11), ('6', 11), ('8', 11), ('10', 12)] | primary b/c 11 1 p 13/4096 passed True | more-practice b/c 0 0 p 1 passed False | retention 86 -> 78 of 96
+   20260918 frozen-18 by pass [('0', 0), ('1', 11), ('2', 11), ('4', 11), ('6', 11), ('8', 13), ('10', 12)] | primary b/c 12 0 p 1/4096 passed True | more-practice b/c 1 0 p 1/2 passed False | retention 93 -> 93 of 96
+   20260919 frozen-18 by pass [('0', 4), ('1', 11), ('2', 13), ('4', 11), ('6', 11), ('8', 12), ('10', 10)] | primary b/c 7 1 p 9/256 passed False | more-practice b/c 0 1 p 1 passed False | retention 84 -> 82 of 96
+== 1.0 admission_helm1_certified sha256 475379d2f9d47387a821c79e03a239f9a1f1277a0bbb25b298417557f9b058a9 label LEARNS_NEW_WORLDS main_updates 1470 updates_per_pass 147 passes 10
+   20260917 frozen-18 by pass [('0', 2), ('1', 11), ('2', 11), ('4', 12), ('6', 12), ('8', 12), ('10', 12)] | primary b/c 10 0 p 1/1024 passed True | more-practice b/c 1 0 p 1/2 passed False | retention 93 -> 93 of 96
+   20260918 frozen-18 by pass [('0', 0), ('1', 12), ('2', 12), ('4', 12), ('6', 12), ('8', 12), ('10', 12)] | primary b/c 12 0 p 1/4096 passed True | more-practice b/c 0 0 p 1 passed False | retention 93 -> 93 of 96
+   20260919 frozen-18 by pass [('0', 0), ('1', 11), ('2', 12), ('4', 11), ('6', 11), ('8', 11), ('10', 11)] | primary b/c 11 0 p 1/2048 passed True | more-practice b/c 0 0 p 1 passed False | retention 87 -> 87 of 96

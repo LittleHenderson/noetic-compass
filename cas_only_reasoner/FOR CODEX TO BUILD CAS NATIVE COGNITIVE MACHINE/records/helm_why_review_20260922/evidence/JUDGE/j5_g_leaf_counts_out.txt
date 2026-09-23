@@ -1,0 +1,4 @@
+train all rows 2048 leaves 6470 | F_NONE 3185 (0.4923) | REG_ABSENT 3262 (0.5042) | top noetic [('4', 677), ('2', 670), ('9', 667)] | domains [('O', 1655), ('C', 1631), ('E', 1614), ('P', 1570)]
+train seen128 rows 128 leaves 383 | F_NONE 185 (0.4830) | REG_ABSENT 221 (0.5770) | top noetic [('4', 49), ('7', 48), ('2', 44)] | domains [('E', 105), ('C', 103), ('P', 92), ('O', 83)]
+dev all rows 256 leaves 1186 | F_NONE 602 (0.5076) | REG_ABSENT 554 (0.4671) | top noetic [('4', 135), ('6', 127), ('2', 125)] | domains [('P', 343), ('C', 298), ('E', 297), ('O', 248)]
+used_ids loaded 128

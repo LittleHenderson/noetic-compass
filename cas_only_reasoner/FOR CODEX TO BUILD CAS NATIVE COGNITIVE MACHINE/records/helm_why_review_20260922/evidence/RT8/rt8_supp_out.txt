@@ -1,0 +1,5 @@
+check_pins OK; pinned manifest 1cf98a2b48ade4ac | q3_load.manifest_sha 1cf98a2b48ade4ac | run plan manifest_sha256 1cf98a2b48ade4ac | equal True
+result.json engineering_status ENGINEERING_RUN_COMPLETED actual_updates 128 dev_by_depth {'3': {'canonical_exact': 0, 'generated': 16, 'n': 16}}
+updates.jsonl rows 128 last update 128
+smoke dev_predictions: rows 16 | GENERATED + re-encode length == steps + round-trip: 16 | steps values Counter({13: 16})
+torch/numpy loaded: NONE

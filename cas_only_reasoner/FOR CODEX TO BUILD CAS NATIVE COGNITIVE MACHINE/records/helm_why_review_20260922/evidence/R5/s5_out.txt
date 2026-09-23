@@ -1,0 +1,57 @@
+== 1. field counts over the 128 SEEN rows
+ noetic any depth [('^4', 49), ('^7', 48), ('^2', 44), ('^3', 43), ('^0', 37), ('^6', 34), ('^9', 34), ('^8', 33), ('^1', 31), ('^5', 30)] total 383
+ domain any depth [('E', 105), ('C', 103), ('P', 92), ('O', 83)]
+ noetic depth-1 leaves [('^3', 22), ('^2', 20), ('^6', 17), ('^1', 17), ('^0', 16), ('^4', 16), ('^7', 16), ('^8', 15), ('^5', 14), ('^9', 14)] total 167
+ domain depth-1 leaves [('E', 45), ('P', 42), ('O', 40), ('C', 40)]
+ pos3 noetic after prefix BINARY PLUS STATE: [('N3', 12), ('N1', 9), ('N2', 8), ('N5', 7)] n 73
+ pos4 domain after that prefix: [('D_E', 22), ('D_O', 21), ('D_P', 19), ('D_C', 11)]
+ 2-leaf PLUS trees: pos8 noetic [('N2', 6), ('N3', 6), ('N8', 5), ('N0', 5)] | pos9 domain [('D_P', 13), ('D_O', 11), ('D_C', 11), ('D_E', 9)]
+
+== 2. input-blind models fitted on the 128 SEEN rows only, greedy through allowed_next
+ context  1 tokens (backoff): BINARY PLUS STATE N4 D_E F_NONE REG_ABSENT STATE N4 D_E F_NONE REG_ABSENT EOS
+ context  2 tokens (backoff): BINARY PLUS STATE N3 D_C F_NONE REG_ABSENT STATE N6 D_E F_NONE REG_ABSENT EOS
+ context  3 tokens (backoff): BINARY PLUS STATE N3 D_P F_NONE REG_ABSENT STATE N5 D_E F_NONE REG_ABSENT EOS
+ context  4 tokens (backoff): BINARY PLUS STATE N3 D_P F_NONE REG_ABSENT STATE N2 D_C F2 REG_E EOS
+ context  6 tokens (backoff): BINARY PLUS STATE N3 D_P F_NONE REG_ABSENT STATE N0 D_E F6 REG_ABSENT EOS
+ context  8 tokens (backoff): BINARY PLUS STATE N3 D_P F_NONE REG_ABSENT STATE N0 D_E F6 REG_ABSENT EOS
+ context 13 tokens (backoff): BINARY PLUS STATE N3 D_P F_NONE REG_ABSENT STATE N5 D_C F_NONE REG_E EOS
+ slot+depth marginal: BINARY PLUS STATE N4 D_E F_NONE REG_ABSENT STATE N4 D_E F_NONE REG_ABSENT EOS
+
+== 3. recency-weighted (weight = 0.5**((127-r)/h), r = update index 0..127)
+ h=4      slot+depth: BINARY PLUS STATE N3 D_C F_NONE REG_ABSENT STATE N3 D_C F_NONE REG_ABSENT EOS
+ h=8      slot+depth: BINARY PLUS STATE N3 D_C F_NONE REG_ABSENT STATE N3 D_C F_NONE REG_ABSENT EOS
+ h=16     slot+depth: BINARY PLUS STATE N3 D_C F_NONE REG_ABSENT STATE N3 D_C F_NONE REG_ABSENT EOS
+ h=32     slot+depth: BINARY PLUS STATE N7 D_C F_NONE REG_ABSENT STATE N7 D_C F_NONE REG_ABSENT EOS
+ h=64     slot+depth: BINARY PLUS STATE N7 D_C F_NONE REG_ABSENT STATE N7 D_C F_NONE REG_ABSENT EOS
+ h=inf    slot+depth: BINARY PLUS STATE N4 D_E F_NONE REG_ABSENT STATE N4 D_E F_NONE REG_ABSENT EOS
+ h=4      context-4 backoff: BINARY PLUS STATE N8 D_E F1 REG_ABSENT STATE N2 D_C F2 REG_E EOS
+ h=8      context-4 backoff: BINARY PLUS STATE N3 D_O F_NONE REG_ABSENT STATE N0 D_C F3 REG_ABSENT EOS
+ h=16     context-4 backoff: BINARY PLUS STATE N1 D_E F1 REG_ABSENT STATE N2 D_C F2 REG_E EOS
+ h=32     context-4 backoff: BINARY PLUS STATE N1 D_E F_NONE REG_ABSENT BINARY TIMES STATE N0 D_P F_NONE REG_ABSENT BINARY PLUS STATE N2 D_P F2 REG_ABSENT STATE N0 D_C F3 REG_ABSENT EOS
+ h=8 noetic top3 [('^3', 7.017), ('^7', 5.145), ('^0', 5.013)] | domain [('C', 15.276), ('E', 10.106), ('O', 7.351), ('P', 5.739)]
+ h=16 noetic top3 [('^3', 10.702), ('^7', 9.884), ('^0', 8.739)] | domain [('C', 24.697), ('E', 19.784), ('O', 14.157), ('P', 13.523)]
+ h=32 noetic top3 [('^7', 17.78), ('^3', 16.751), ('^2', 15.684)] | domain [('C', 40.592), ('E', 36.386), ('P', 28.22), ('O', 27.266)]
+
+== 4. prequential n-gram learners NOT handed the grammar (they learn it only from past rows)
+ k=1 alpha=0.1: upd 1-16 2.229073 | 97-128 1.325041 | 113-128 1.283430 || GRU below it 1/128, last32 0/32
+ k=1 alpha=0.5: upd 1-16 2.549654 | 97-128 1.457169 | 113-128 1.407790 || GRU below it 1/128, last32 0/32
+ k=1 alpha=1.0: upd 1-16 2.756742 | 97-128 1.584004 | 113-128 1.528490 || GRU below it 2/128, last32 1/32
+ k=2 alpha=0.1: upd 1-16 2.727385 | 97-128 1.569285 | 113-128 1.478861 || GRU below it 5/128, last32 3/32
+ k=2 alpha=0.5: upd 1-16 2.929637 | 97-128 1.784499 | 113-128 1.700602 || GRU below it 23/128, last32 20/32
+ k=2 alpha=1.0: upd 1-16 3.064061 | 97-128 1.969250 | 113-128 1.888359 || GRU below it 50/128, last32 31/32
+ k=3 alpha=0.1: upd 1-16 2.976973 | 97-128 1.953234 | 113-128 1.830677 || GRU below it 49/128, last32 26/32
+ k=3 alpha=0.5: upd 1-16 3.127275 | 97-128 2.219917 | 113-128 2.136821 || GRU below it 77/128, last32 31/32
+ k=3 alpha=1.0: upd 1-16 3.218383 | 97-128 2.403751 | 113-128 2.339685 || GRU below it 101/128, last32 32/32
+ k=4 alpha=0.1: upd 1-16 3.069177 | 97-128 2.375735 | 113-128 2.289678 || GRU below it 84/128, last32 32/32
+ k=4 alpha=0.5: upd 1-16 3.186029 | 97-128 2.557208 | 113-128 2.511805 || GRU below it 100/128, last32 32/32
+ k=4 alpha=1.0: upd 1-16 3.258907 | 97-128 2.683505 | 113-128 2.655717 || GRU below it 107/128, last32 32/32
+ GRU logged: 1-16 3.347147 | 97-128 1.764312 | 113-128 1.668515
+
+== 5. operator-bearing bare shapes
+ seen-128 top 5: [('(x + x)', 44), ('(x * x)', 14), ('(x + (x + x))', 8), ('(x + (x * x))', 6), ('(x + (x + (x + x)))', 6)]
+ pool-2048 top 5: [('(x + x)', 476), ('(x * x)', 271), ('(x + (x + x))', 197), ('(x + (x * x))', 124), ('(x * (x * x))', 96)]
+ operator-free (B,L,L): seen 58 pool 747
+
+== 6. byte-cue check (R4-F7)
+ train: char[1]=='(' iff left child binary 2048/2048; char[-2]==')' iff right child binary 2048/2048
+ dev16 left child binary 11/16, right child binary 14/16, root PLUS 15/16

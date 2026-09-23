@@ -1,0 +1,18 @@
+dev questions: 59 answer states: {'PARTS': 6, 'VIA': 3, 'DIRECT': 8, 'ABSENT': 42}
+  one-step rule (DIRECT / VIA through a marked neighbour / ABSENT; parts = children)    59 / 59  {'parts': 6, 'reach': 53}
+  first-child rule (DIRECT / lexical-first child of whole / ABSENT; parts = children)   17 / 59  {'parts': 6, 'reach': 11}
+  always ABSENT-or-DIRECT-if-edge, parts = children                                     56 / 59  {'parts': 6, 'reach': 50}
+  receipt_helm1_certified_20260917 dev p10 correct 7 / 59
+  receipt_helm1_certified_20260918 dev p10 correct 9 / 59
+  receipt_helm1_certified_20260919 dev p10 correct 6 / 59
+  receipt_20260917 dev p10 correct 2 / 59
+  receipt_20260918 dev p10 correct 12 / 59
+  receipt_20260919 dev p10 correct 6 / 59
+validation (checker correct, equals my reconstruction): {(True, True): 42, (False, False): 312}
+per-state accuracy on the dev panel (truth state: correct / n):
+  receipt_helm1_certified_20260917 ABSENT 0/42; DIRECT 3/8; PARTS 1/6; VIA 3/3
+  receipt_helm1_certified_20260918 ABSENT 1/42; DIRECT 5/8; PARTS 1/6; VIA 2/3
+  receipt_helm1_certified_20260919 ABSENT 0/42; DIRECT 2/8; PARTS 1/6; VIA 3/3
+  receipt_20260917 ABSENT 0/42; DIRECT 0/8; PARTS 0/6; VIA 2/3
+  receipt_20260918 ABSENT 2/42; DIRECT 7/8; PARTS 0/6; VIA 3/3
+  receipt_20260919 ABSENT 2/42; DIRECT 0/8; PARTS 1/6; VIA 3/3

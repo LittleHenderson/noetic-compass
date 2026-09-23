@@ -1,0 +1,2567 @@
+{
+ "label": "DIAGNOSTIC_NOT_CLAIM_BEARING",
+ "step0": {
+  "reproduced": 16,
+  "of": 16,
+  "rows": [
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "outcome_eq": true,
+    "ast_eq": true,
+    "steps_eq": true,
+    "outcome": "GENERATED",
+    "steps": 13
+   }
+  ]
+ },
+ "step1": {
+  "dev16": {
+   "n": 16,
+   "mean_pairwise_L2": 0.28577952380666505,
+   "mean_norm": 7.576071681231438,
+   "relative_spread": 0.03772133314348652,
+   "min_pairwise_L2": 0.016811018741923794,
+   "max_pairwise_L2": 0.7820934771977505,
+   "mean_pairwise_cosine": 0.9990261279537869,
+   "min_pairwise_cosine": 0.9948728725452913,
+   "mean_per_dim_std": 0.014457656323117234,
+   "mean_abs_value": 0.9342661926968105,
+   "max_abs_value": 0.9991986155509949
+  },
+  "seen128": {
+   "n": 128,
+   "mean_pairwise_L2": 0.5027857313073518,
+   "mean_norm": 7.520934535016729,
+   "relative_spread": 0.06685149684077571,
+   "min_pairwise_L2": 0.0015869436610993874,
+   "max_pairwise_L2": 1.0159185724467041,
+   "mean_pairwise_cosine": 0.9973788060430756,
+   "min_pairwise_cosine": 0.9912219675537849,
+   "mean_per_dim_std": 0.025140074460689832,
+   "mean_abs_value": 0.926081461797196,
+   "max_abs_value": 0.999212920665741
+  },
+  "unseen128": {
+   "n": 128,
+   "mean_pairwise_L2": 0.49907008839525513,
+   "mean_norm": 7.52414219448881,
+   "relative_spread": 0.06632916756421851,
+   "min_pairwise_L2": 0.0016121016543897374,
+   "max_pairwise_L2": 1.0204896666466026,
+   "mean_pairwise_cosine": 0.9974201839992212,
+   "min_pairwise_cosine": 0.9912106399354237,
+   "mean_per_dim_std": 0.02501117160892438,
+   "mean_abs_value": 0.9270636051061949,
+   "max_abs_value": 0.9992173910140991
+  },
+  "all272": {
+   "n": 272,
+   "mean_pairwise_L2": 0.4941898004873608,
+   "mean_norm": 7.525687383369163,
+   "relative_spread": 0.0656670647228131,
+   "min_pairwise_L2": 0.0015869436610993874,
+   "max_pairwise_L2": 1.0204896666466026,
+   "mean_pairwise_cosine": 0.9974633960508209,
+   "min_pairwise_cosine": 0.9911303112245342,
+   "mean_per_dim_std": 0.024819438273338226,
+   "mean_abs_value": 0.9270251016425846,
+   "max_abs_value": 0.9992173910140991
+  }
+ },
+ "step2": {
+  "rows": [
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8565335273742676,
+       "BINARY_minus_STATE": 4.221537828445435
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6186308860778809,
+       "BINARY_minus_STATE": 0.18569397926330566
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7839598655700684,
+       "BINARY_minus_STATE": -1.9977855682373047
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8404006958007812,
+       "BINARY_minus_STATE": 4.230044603347778
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6048164367675781,
+       "BINARY_minus_STATE": 0.1812114715576172
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7728351354598999,
+       "BINARY_minus_STATE": -2.002251386642456
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8404006958007812,
+       "BINARY_minus_STATE": 4.230044603347778
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6048164367675781,
+       "BINARY_minus_STATE": 0.1812114715576172
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7728351354598999,
+       "BINARY_minus_STATE": -2.002251386642456
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8534960746765137,
+       "BINARY_minus_STATE": 4.213248014450073
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6137120723724365,
+       "BINARY_minus_STATE": 0.17502117156982422
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7792278528213501,
+       "BINARY_minus_STATE": -2.0059592723846436
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8534960746765137,
+       "BINARY_minus_STATE": 4.213248014450073
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6137120723724365,
+       "BINARY_minus_STATE": 0.17502117156982422
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7792278528213501,
+       "BINARY_minus_STATE": -2.0059592723846436
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8532290458679199,
+       "BINARY_minus_STATE": 4.2141417264938354
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6179630756378174,
+       "BINARY_minus_STATE": 0.18203520774841309
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7837420701980591,
+       "BINARY_minus_STATE": -1.9975874423980713
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8532290458679199,
+       "BINARY_minus_STATE": 4.2141417264938354
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6179630756378174,
+       "BINARY_minus_STATE": 0.18203520774841309
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7837420701980591,
+       "BINARY_minus_STATE": -1.9975874423980713
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8513681888580322,
+       "BINARY_minus_STATE": 4.217647552490234
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6149015426635742,
+       "BINARY_minus_STATE": 0.18215584754943848
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7809257507324219,
+       "BINARY_minus_STATE": -2.000333070755005
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8513681888580322,
+       "BINARY_minus_STATE": 4.217647552490234
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6149015426635742,
+       "BINARY_minus_STATE": 0.18215584754943848
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7809257507324219,
+       "BINARY_minus_STATE": -2.000333070755005
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8467063903808594,
+       "BINARY_minus_STATE": 4.211248397827148
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6123714447021484,
+       "BINARY_minus_STATE": 0.17766976356506348
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7793824672698975,
+       "BINARY_minus_STATE": -2.003448963165283
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8467063903808594,
+       "BINARY_minus_STATE": 4.211248397827148
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6123714447021484,
+       "BINARY_minus_STATE": 0.17766976356506348
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7793824672698975,
+       "BINARY_minus_STATE": -2.003448963165283
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8541648387908936,
+       "BINARY_minus_STATE": 4.233182668685913
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.618964672088623,
+       "BINARY_minus_STATE": 0.19007396697998047
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7849018573760986,
+       "BINARY_minus_STATE": -1.995574712753296
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8541648387908936,
+       "BINARY_minus_STATE": 4.233182668685913
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.618964672088623,
+       "BINARY_minus_STATE": 0.19007396697998047
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7849018573760986,
+       "BINARY_minus_STATE": -1.995574712753296
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8611352443695068,
+       "BINARY_minus_STATE": 4.225679993629456
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6223454475402832,
+       "BINARY_minus_STATE": 0.18881916999816895
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7869036197662354,
+       "BINARY_minus_STATE": -1.9965462684631348
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8611352443695068,
+       "BINARY_minus_STATE": 4.225679993629456
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6223454475402832,
+       "BINARY_minus_STATE": 0.18881916999816895
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7869036197662354,
+       "BINARY_minus_STATE": -1.9965462684631348
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8537523746490479,
+       "BINARY_minus_STATE": 4.214195728302002
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6138434410095215,
+       "BINARY_minus_STATE": 0.17544960975646973
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7792840003967285,
+       "BINARY_minus_STATE": -2.0057499408721924
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8537523746490479,
+       "BINARY_minus_STATE": 4.214195728302002
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6138434410095215,
+       "BINARY_minus_STATE": 0.17544960975646973
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7792840003967285,
+       "BINARY_minus_STATE": -2.0057499408721924
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8398723602294922,
+       "BINARY_minus_STATE": 4.239677429199219
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6063003540039062,
+       "BINARY_minus_STATE": 0.1858813762664795
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7745966911315918,
+       "BINARY_minus_STATE": -2.0003318786621094
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8398723602294922,
+       "BINARY_minus_STATE": 4.239677429199219
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6063003540039062,
+       "BINARY_minus_STATE": 0.1858813762664795
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7745966911315918,
+       "BINARY_minus_STATE": -2.0003318786621094
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.857872486114502,
+       "BINARY_minus_STATE": 4.225011825561523
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.618574619293213,
+       "BINARY_minus_STATE": 0.185105562210083
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7836484909057617,
+       "BINARY_minus_STATE": -1.9977655410766602
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.857872486114502,
+       "BINARY_minus_STATE": 4.225011825561523
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.618574619293213,
+       "BINARY_minus_STATE": 0.185105562210083
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7836484909057617,
+       "BINARY_minus_STATE": -1.9977655410766602
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8408119678497314,
+       "BINARY_minus_STATE": 4.2222113609313965
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6096887588500977,
+       "BINARY_minus_STATE": 0.17934513092041016
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7764832973480225,
+       "BINARY_minus_STATE": -2.0039560794830322
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8408119678497314,
+       "BINARY_minus_STATE": 4.2222113609313965
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6096887588500977,
+       "BINARY_minus_STATE": 0.17934513092041016
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7764832973480225,
+       "BINARY_minus_STATE": -2.0039560794830322
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8436582088470459,
+       "BINARY_minus_STATE": 4.234806776046753
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.613088607788086,
+       "BINARY_minus_STATE": 0.18784499168395996
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7801986932754517,
+       "BINARY_minus_STATE": -1.9991867542266846
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8436582088470459,
+       "BINARY_minus_STATE": 4.234806776046753
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.613088607788086,
+       "BINARY_minus_STATE": 0.18784499168395996
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7801986932754517,
+       "BINARY_minus_STATE": -1.9991867542266846
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8578178882598877,
+       "BINARY_minus_STATE": 4.2147767543792725
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.619093418121338,
+       "BINARY_minus_STATE": 0.18329501152038574
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7844240665435791,
+       "BINARY_minus_STATE": -1.9983417987823486
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8578178882598877,
+       "BINARY_minus_STATE": 4.2147767543792725
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.619093418121338,
+       "BINARY_minus_STATE": 0.18329501152038574
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7844240665435791,
+       "BINARY_minus_STATE": -1.9983417987823486
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8354454040527344,
+       "BINARY_minus_STATE": 4.220387101173401
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6074557304382324,
+       "BINARY_minus_STATE": 0.17704534530639648
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7751259803771973,
+       "BINARY_minus_STATE": -2.0058159828186035
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8354454040527344,
+       "BINARY_minus_STATE": 4.220387101173401
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6074557304382324,
+       "BINARY_minus_STATE": 0.17704534530639648
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7751259803771973,
+       "BINARY_minus_STATE": -2.0058159828186035
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.855684757232666,
+       "BINARY_minus_STATE": 4.222085118293762
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6183958053588867,
+       "BINARY_minus_STATE": 0.1857128143310547
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7838336229324341,
+       "BINARY_minus_STATE": -1.997856855392456
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "gaps": {
+     "TRUE": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.855684757232666,
+       "BINARY_minus_STATE": 4.222085118293762
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6183958053588867,
+       "BINARY_minus_STATE": 0.1857128143310547
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7838336229324341,
+       "BINARY_minus_STATE": -1.997856855392456
+      }
+     },
+     "ZERO": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.024554967880249023,
+       "BINARY_minus_STATE": 1.6046181917190552
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -0.9722838401794434,
+       "BINARY_minus_STATE": -0.8669383525848389
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.5055253505706787,
+       "BINARY_minus_STATE": -2.702631950378418
+      }
+     },
+     "SWAP": {
+      "P0_empty": {
+       "TIMES_minus_PLUS": -0.8565335273742676,
+       "BINARY_minus_STATE": 4.221537828445435
+      },
+      "P1_BINARY": {
+       "TIMES_minus_PLUS": -1.6186308860778809,
+       "BINARY_minus_STATE": 0.18569397926330566
+      },
+      "P2_BINARY_PLUS": {
+       "TIMES_minus_PLUS": -0.7839598655700684,
+       "BINARY_minus_STATE": -1.9977855682373047
+      }
+     }
+    },
+    "decode_tokens": {
+     "TRUE": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "ZERO": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ],
+     "SWAP": [
+      "BINARY",
+      "PLUS",
+      "STATE",
+      "N7",
+      "D_E",
+      "F_NONE",
+      "REG_ABSENT",
+      "STATE",
+      "N7",
+      "D_C",
+      "F_NONE",
+      "REG_ABSENT",
+      "EOS"
+     ]
+    },
+    "decode_changed": {
+     "ZERO": false,
+     "SWAP": false
+    }
+   }
+  ],
+  "rule_changes": [
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6186308860778809,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6463470458984375
+   },
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9977855682373047,
+    "variant_value": -2.702631950378418,
+    "change": -0.7048463821411133
+   },
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6186308860778809,
+    "variant_value": -1.6048164367675781,
+    "change": 0.013814449310302734
+   },
+   {
+    "record_id": "c12aa3c699ee2af86b148e5e",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9977855682373047,
+    "variant_value": -2.002251386642456,
+    "change": -0.004465818405151367
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6048164367675781,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6325325965881348
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.002251386642456,
+    "variant_value": -2.702631950378418,
+    "change": -0.7003805637359619
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6048164367675781,
+    "variant_value": -1.6137120723724365,
+    "change": -0.008895635604858398
+   },
+   {
+    "record_id": "45963e68fc68b4a8010bec0f",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.002251386642456,
+    "variant_value": -2.0059592723846436,
+    "change": -0.0037078857421875
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6137120723724365,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6414282321929932
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0059592723846436,
+    "variant_value": -2.702631950378418,
+    "change": -0.6966726779937744
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6137120723724365,
+    "variant_value": -1.6179630756378174,
+    "change": -0.004251003265380859
+   },
+   {
+    "record_id": "9299295fe7ced2045a7d5dfd",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0059592723846436,
+    "variant_value": -1.9975874423980713,
+    "change": 0.008371829986572266
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6179630756378174,
+    "variant_value": -0.9722838401794434,
+    "change": 0.645679235458374
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9975874423980713,
+    "variant_value": -2.702631950378418,
+    "change": -0.7050445079803467
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6179630756378174,
+    "variant_value": -1.6149015426635742,
+    "change": 0.003061532974243164
+   },
+   {
+    "record_id": "74ba152a17e463836d08ce17",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9975874423980713,
+    "variant_value": -2.000333070755005,
+    "change": -0.0027456283569335938
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6149015426635742,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6426177024841309
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.000333070755005,
+    "variant_value": -2.702631950378418,
+    "change": -0.7022988796234131
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6149015426635742,
+    "variant_value": -1.6123714447021484,
+    "change": 0.0025300979614257812
+   },
+   {
+    "record_id": "06e1e0be1aea2be218fa06a5",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.000333070755005,
+    "variant_value": -2.003448963165283,
+    "change": -0.0031158924102783203
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6123714447021484,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6400876045227051
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.003448963165283,
+    "variant_value": -2.702631950378418,
+    "change": -0.6991829872131348
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6123714447021484,
+    "variant_value": -1.618964672088623,
+    "change": -0.006593227386474609
+   },
+   {
+    "record_id": "a3213fd8a9fa3aca90da8cb2",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.003448963165283,
+    "variant_value": -1.995574712753296,
+    "change": 0.007874250411987305
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.618964672088623,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6466808319091797
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.995574712753296,
+    "variant_value": -2.702631950378418,
+    "change": -0.7070572376251221
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.618964672088623,
+    "variant_value": -1.6223454475402832,
+    "change": -0.0033807754516601562
+   },
+   {
+    "record_id": "6d018571a7fe4785cc1d48c6",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.995574712753296,
+    "variant_value": -1.9965462684631348,
+    "change": -0.0009715557098388672
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6223454475402832,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6500616073608398
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9965462684631348,
+    "variant_value": -2.702631950378418,
+    "change": -0.7060856819152832
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6223454475402832,
+    "variant_value": -1.6138434410095215,
+    "change": 0.008502006530761719
+   },
+   {
+    "record_id": "833a111b31d5f095f42a4b27",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9965462684631348,
+    "variant_value": -2.0057499408721924,
+    "change": -0.009203672409057617
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6138434410095215,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6415596008300781
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0057499408721924,
+    "variant_value": -2.702631950378418,
+    "change": -0.6968820095062256
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6138434410095215,
+    "variant_value": -1.6063003540039062,
+    "change": 0.007543087005615234
+   },
+   {
+    "record_id": "dd710c42273c18180e7391c8",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0057499408721924,
+    "variant_value": -2.0003318786621094,
+    "change": 0.005418062210083008
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6063003540039062,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6340165138244629
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0003318786621094,
+    "variant_value": -2.702631950378418,
+    "change": -0.7023000717163086
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6063003540039062,
+    "variant_value": -1.618574619293213,
+    "change": -0.01227426528930664
+   },
+   {
+    "record_id": "57bf1205085e4653d0a15060",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0003318786621094,
+    "variant_value": -1.9977655410766602,
+    "change": 0.0025663375854492188
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.618574619293213,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6462907791137695
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9977655410766602,
+    "variant_value": -2.702631950378418,
+    "change": -0.7048664093017578
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.618574619293213,
+    "variant_value": -1.6096887588500977,
+    "change": 0.008885860443115234
+   },
+   {
+    "record_id": "f827325400d4999efb2194e9",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9977655410766602,
+    "variant_value": -2.0039560794830322,
+    "change": -0.00619053840637207
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6096887588500977,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6374049186706543
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0039560794830322,
+    "variant_value": -2.702631950378418,
+    "change": -0.6986758708953857
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6096887588500977,
+    "variant_value": -1.613088607788086,
+    "change": -0.0033998489379882812
+   },
+   {
+    "record_id": "81d6fabc986ce0041442e4ea",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0039560794830322,
+    "variant_value": -1.9991867542266846,
+    "change": 0.004769325256347656
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.613088607788086,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6408047676086426
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9991867542266846,
+    "variant_value": -2.702631950378418,
+    "change": -0.7034451961517334
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.613088607788086,
+    "variant_value": -1.619093418121338,
+    "change": -0.006004810333251953
+   },
+   {
+    "record_id": "8366dc7f5771cad393906306",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9991867542266846,
+    "variant_value": -1.9983417987823486,
+    "change": 0.0008449554443359375
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.619093418121338,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6468095779418945
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9983417987823486,
+    "variant_value": -2.702631950378418,
+    "change": -0.7042901515960693
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.619093418121338,
+    "variant_value": -1.6074557304382324,
+    "change": 0.011637687683105469
+   },
+   {
+    "record_id": "e4f7ee21f944d8bd4f7888ff",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.9983417987823486,
+    "variant_value": -2.0058159828186035,
+    "change": -0.007474184036254883
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6074557304382324,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6351718902587891
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0058159828186035,
+    "variant_value": -2.702631950378418,
+    "change": -0.6968159675598145
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6074557304382324,
+    "variant_value": -1.6183958053588867,
+    "change": -0.010940074920654297
+   },
+   {
+    "record_id": "1bdf64cd54b5af68f80c17ed",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -2.0058159828186035,
+    "variant_value": -1.997856855392456,
+    "change": 0.007959127426147461
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "variant": "ZERO",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6183958053588867,
+    "variant_value": -0.9722838401794434,
+    "change": 0.6461119651794434
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "variant": "ZERO",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.997856855392456,
+    "variant_value": -2.702631950378418,
+    "change": -0.7047750949859619
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "variant": "SWAP",
+    "gap": "P1_BINARY:TIMES_minus_PLUS",
+    "true": -1.6183958053588867,
+    "variant_value": -1.6186308860778809,
+    "change": -0.00023508071899414062
+   },
+   {
+    "record_id": "c1821ebabd72e99c40dc56c2",
+    "variant": "SWAP",
+    "gap": "P2_BINARY_PLUS:BINARY_minus_STATE",
+    "true": -1.997856855392456,
+    "variant_value": -1.9977855682373047,
+    "change": 7.128715515136719e-05
+   }
+  ],
+  "max_abs_change": 0.7070572376251221,
+  "count_abs_change_ge_0_1": 32,
+  "count_abs_change_ge_0_5": 32,
+  "decode_changed_zero": 0,
+  "decode_changed_swap": 0,
+  "decode_changed_either": 0
+ },
+ "step3": {
+  "seen128": {
+   "by_depth": {
+    "1": {
+     "n": 58,
+     "generated": 58,
+     "canonical_exact": 0
+    },
+    "2": {
+     "n": 37,
+     "generated": 37,
+     "canonical_exact": 0
+    },
+    "3": {
+     "n": 33,
+     "generated": 33,
+     "canonical_exact": 0
+    }
+   },
+   "distinct_outputs": 1,
+   "outputs": [
+    [
+     "{\"left\":{\"domain\":\"E\",\"drive\":null,\"node\":\"StateLiteral\",\"operator\":\"^7\"},\"node\":\"BinaryExpr\",\"op\":\"PLUS\",\"right\":{\"domain\":\"C\",\"drive\":null,\"node\":\"StateLiteral\",\"operator\":\"^7\"}}",
+     128
+    ]
+   ]
+  },
+  "unseen128": {
+   "by_depth": {
+    "1": {
+     "n": 47,
+     "generated": 47,
+     "canonical_exact": 0
+    },
+    "2": {
+     "n": 51,
+     "generated": 51,
+     "canonical_exact": 0
+    },
+    "3": {
+     "n": 30,
+     "generated": 30,
+     "canonical_exact": 0
+    }
+   },
+   "distinct_outputs": 1,
+   "outputs": [
+    [
+     "{\"left\":{\"domain\":\"E\",\"drive\":null,\"node\":\"StateLiteral\",\"operator\":\"^7\"},\"node\":\"BinaryExpr\",\"op\":\"PLUS\",\"right\":{\"domain\":\"C\",\"drive\":null,\"node\":\"StateLiteral\",\"operator\":\"^7\"}}",
+     128
+    ]
+   ]
+  },
+  "distinct_outputs_seen_plus_unseen": 1
+ },
+ "step4": {
+  "seen128": {
+   "GRU": {
+    "row_mean": 1.6216725129634142,
+    "token_mean": 1.6367220910352862,
+    "per_slot": {
+     "expr": 0.8044629149886321,
+     "op": 1.0127356166933097,
+     "noetic": 2.6855188508569103,
+     "domain": 1.818444820047981,
+     "drive": 2.2025003372533516,
+     "register": 1.8049537410312781,
+     "eos": 1.14987168693915
+    }
+   },
+   "IB1_bigram_final": {
+    "row_mean": 1.2762925587957838,
+    "token_mean": 1.2789056110741714,
+    "per_slot": {
+     "expr": 0.607380727351436,
+     "op": 0.6685390676164267,
+     "noetic": 2.29362975407823,
+     "domain": 1.4246575722030625,
+     "drive": 1.6875421624749307,
+     "register": 1.2878460505032148,
+     "eos": 1.1201713065905445
+    }
+   },
+   "IB2_lossweighted_slot": {
+    "row_mean": 1.1548906455751726,
+    "token_mean": 1.165774878915732,
+    "per_slot": {
+     "expr": 0.4179750120540787,
+     "op": 0.6567658787315197,
+     "noetic": 2.288727582857888,
+     "domain": 1.3828660633573822,
+     "drive": 1.6993747791301812,
+     "register": 1.266315932630592,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "IB3_EXTRA_unweighted_slot": {
+    "row_mean": 1.1588111900077116,
+    "token_mean": 1.1613700020783722,
+    "per_slot": {
+     "expr": 0.403904511611585,
+     "op": 0.6560778231625571,
+     "noetic": 2.287399103113235,
+     "domain": 1.3819743018545898,
+     "drive": 1.6969163136067305,
+     "register": 1.2655293205675868,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "GRU_rows_below_IB1": 0,
+   "GRU_rows_below_IB2": 0,
+   "n": 128,
+   "GRU_logged_online_loss_row_mean": 2.405563570559025,
+   "IB1_prequential_row_mean": 1.5125447804784904,
+   "GRU_final_minus_logged_per_row_mean": -0.7838910575956106
+  },
+  "unseen128": {
+   "GRU": {
+    "row_mean": 1.672509804368019,
+    "token_mean": 1.6871023658884479,
+    "per_slot": {
+     "expr": 0.873565317003313,
+     "op": 1.0267513791720073,
+     "noetic": 2.767370511838539,
+     "domain": 1.8705759833206483,
+     "drive": 2.070329694891695,
+     "register": 2.005261803841471,
+     "eos": 1.2153550535440445
+    }
+   },
+   "IB1_bigram_final": {
+    "row_mean": 1.3232101542751773,
+    "token_mean": 1.3341979506666997,
+    "per_slot": {
+     "expr": 0.6516536601895488,
+     "op": 0.6655187013612055,
+     "noetic": 2.329718815494664,
+     "domain": 1.495419112599333,
+     "drive": 1.6489601724316032,
+     "register": 1.5170680330163067,
+     "eos": 1.1626510730333173
+    }
+   },
+   "IB2_lossweighted_slot": {
+    "row_mean": 1.170327760346399,
+    "token_mean": 1.1826787781765709,
+    "per_slot": {
+     "expr": 0.4343436153962472,
+     "op": 0.6533217533133198,
+     "noetic": 2.3176171087997703,
+     "domain": 1.3926221166998043,
+     "drive": 1.5998973337674127,
+     "register": 1.416048827451696,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "IB3_EXTRA_unweighted_slot": {
+    "row_mean": 1.1701778938839025,
+    "token_mean": 1.1762175759188014,
+    "per_slot": {
+     "expr": 0.41097391192741084,
+     "op": 0.6530552139715552,
+     "noetic": 2.3235739097580588,
+     "domain": 1.3931719275097973,
+     "drive": 1.5925203966464148,
+     "register": 1.413173052146894,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "GRU_rows_below_IB1": 0,
+   "GRU_rows_below_IB2": 0,
+   "n": 128
+  },
+  "dev16": {
+   "GRU": {
+    "row_mean": 1.7564257681369781,
+    "token_mean": 1.7578607603561047,
+    "per_slot": {
+     "expr": 1.2122914743445374,
+     "op": 1.0577214991052946,
+     "noetic": 2.6710431591460577,
+     "domain": 1.9003109257472188,
+     "drive": 2.0723467924092946,
+     "register": 2.0423610586869088,
+     "eos": 1.1612824201583862
+    }
+   },
+   "IB1_bigram_final": {
+    "row_mean": 1.3790962733933596,
+    "token_mean": 1.3780864150889913,
+    "per_slot": {
+     "expr": 0.8619911816628524,
+     "op": 0.6603840787273295,
+     "noetic": 2.2984059850000507,
+     "domain": 1.4914602793848852,
+     "drive": 1.7012157027352146,
+     "register": 1.5685477142678008,
+     "eos": 1.1066805606654717
+    }
+   },
+   "IB2_lossweighted_slot": {
+    "row_mean": 1.2083216089363356,
+    "token_mean": 1.2115894135512353,
+    "per_slot": {
+     "expr": 0.5640111768026168,
+     "op": 0.64746674010238,
+     "noetic": 2.2909559024409045,
+     "domain": 1.4036751435346653,
+     "drive": 1.5719167970867944,
+     "register": 1.439065485110513,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "IB3_EXTRA_unweighted_slot": {
+    "row_mean": 1.187786277428834,
+    "token_mean": 1.1897536514328984,
+    "per_slot": {
+     "expr": 0.48670487186959444,
+     "op": 0.647916778346852,
+     "noetic": 2.2921910555618488,
+     "domain": 1.4007696338128315,
+     "drive": 1.5613656968403535,
+     "register": 1.441015914631014,
+     "eos": 0.0
+    },
+    "unsmoothed_zero_count_tokens": 0
+   },
+   "GRU_rows_below_IB1": 0,
+   "GRU_rows_below_IB2": 0,
+   "n": 16
+  }
+ },
+ "extra_tf_bottleneck_swap": {
+  "seen128": {
+   "TRUE": 1.6216725129634142,
+   "ZERO": 1.7232608580961823,
+   "SWAP": 1.6217923676595092,
+   "rows_true_below_swap": 76,
+   "rows_true_below_zero": 128,
+   "n": 128
+  },
+  "unseen128": {
+   "TRUE": 1.672509804368019,
+   "ZERO": 1.7716558342799544,
+   "SWAP": 1.6725518042221665,
+   "rows_true_below_swap": 66,
+   "rows_true_below_zero": 128,
+   "n": 128
+  },
+  "dev16": {
+   "TRUE": 1.7564257681369781,
+   "ZERO": 1.829864427447319,
+   "SWAP": 1.7564713954925537,
+   "rows_true_below_swap": 11,
+   "rows_true_below_zero": 16,
+   "n": 16
+  }
+ },
+ "rules": {
+  "a_bug": false,
+  "b_encoder_collapse": false,
+  "c_decoder_ignores": false,
+  "d_input_used_weakly": true,
+  "e_pipeline_maps": false,
+  "f_too_little_training_primary": true,
+  "f_too_little_training_strict": true,
+  "inputs": {
+   "step0_reproduced": 16,
+   "spread_dev16": 0.03772133314348652,
+   "spread_seen128": 0.06685149684077571,
+   "decode_changed_either": 0,
+   "max_abs_gap_change": 0.7070572376251221,
+   "seen_exact": 0,
+   "unseen_exact": 0,
+   "distinct_outputs_256": 1,
+   "ce_condition_primary": true,
+   "ce_condition_strict": true
+  }
+ }
+}

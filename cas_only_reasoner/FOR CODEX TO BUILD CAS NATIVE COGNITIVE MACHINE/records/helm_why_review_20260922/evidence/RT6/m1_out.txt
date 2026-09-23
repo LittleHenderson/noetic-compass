@@ -1,0 +1,11 @@
+compiler receipt: 61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527
+A train n=2173  visible keysets=1  non-visible keys=[]  answer defined=2173/2173  deterministic(2 runs)=True  digest=c9b5030f9408fa15  answers {'False': 1406, 'INVALID_INPUT': 125, 'True': 642}
+A dev   n=296  visible keysets=1  non-visible keys=[]  answer defined=296/296  deterministic(2 runs)=True  digest=dea11e6caebd43f4  answers {'False': 156, 'INVALID_INPUT': 40, 'True': 100}
+C train n=2048  visible keysets=1  non-visible keys=[]  answer defined=2048/2048  deterministic(2 runs)=True  digest=4eccb740c8a3cc4d  grouped-compose == modular-sum on 2048/2048
+C dev   n=256  visible keysets=1  non-visible keys=[]  answer defined=256/256  deterministic(2 runs)=True  digest=ee1a04534272b190  grouped-compose == modular-sum on 256/256
+G train n=2048  visible keysets=1  non-visible keys=[]  answer defined=2048/2048  deterministic(2 runs)=True  digest=2c85e70f62bdc353  compiler returned a valid AST
+G dev   n=256  visible keysets=1  non-visible keys=[]  answer defined=256/256  deterministic(2 runs)=True  digest=bc7bc2c33d27b710  compiler returned a valid AST
+R train n=2048  visible keysets=1  non-visible keys=[]  answer defined=2048/2048  deterministic(2 runs)=True  digest=c5d64b2b4e6a5d31  compiler returned a valid AST
+R dev   n=237  visible keysets=1  non-visible keys=[]  answer defined=237/237  deterministic(2 runs)=True  digest=12c3fb9bab8c7cb2  compiler returned a valid AST
+G dev, first 16 (records/q4_authorized_20260922/inspected_predictions.json): compiler(visible input) == frozen dev reference AST on 16/16
+torch imported: False

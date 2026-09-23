@@ -1,0 +1,15 @@
+reach records with a known gold signature 107 ; with >1 signature 0
+gold signature distribution (all 107 reach records that were ever answered right): [('VIA/n1', 30), ('DIRECT/-', 30), ('VIA/n3', 17), ('VIA/n0', 16), ('VIA/n2', 12), ('ABSENT/-', 2)]
+gold signature distribution, held-back reach records: [('VIA/n1', 10), ('VIA/n3', 10), ('DIRECT/-', 5), ('ABSENT/-', 1)]
+Helm 1.0 20260917 p00 reach answer signatures: [('VIA/n0', 34), ('VIA/n1', 27), ('VIA/n2', 27), ('VIA/n3', 19)] | correct 30 of 107
+Helm 1.0 20260917 p10 reach answer signatures: [('DIRECT/-', 31), ('VIA/n1', 25), ('VIA/n3', 21), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 101 of 107
+Helm 1.0 20260918 p00 reach answer signatures: [('VIA/n0', 44), ('VIA/n2', 30), ('VIA/n1', 20), ('VIA/n3', 7), ('ABSENT/-', 5)] | correct 1 of 107
+Helm 1.0 20260918 p10 reach answer signatures: [('DIRECT/-', 31), ('VIA/n1', 25), ('VIA/n3', 21), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 101 of 107
+Helm 1.0 20260919 p00 reach answer signatures: [('VIA/n1', 36), ('VIA/n2', 33), ('VIA/n3', 24), ('VIA/n0', 14)] | correct 20 of 107
+Helm 1.0 20260919 p10 reach answer signatures: [('DIRECT/-', 33), ('VIA/n1', 24), ('VIA/n3', 21), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 99 of 107
+Helm 2.0 20260917 p00 reach answer signatures: [('VIA/n0', 35), ('VIA/n3', 31), ('VIA/n1', 23), ('VIA/n2', 18)] | correct 16 of 107
+Helm 2.0 20260917 p10 reach answer signatures: [('DIRECT/-', 35), ('VIA/n1', 23), ('VIA/n3', 21), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 97 of 107
+Helm 2.0 20260918 p00 reach answer signatures: [('ABSENT/-', 59), ('VIA/n3', 19), ('VIA/n2', 12), ('VIA/n0', 10), ('VIA/n1', 7)] | correct 0 of 107
+Helm 2.0 20260918 p10 reach answer signatures: [('DIRECT/-', 31), ('VIA/n1', 25), ('VIA/n3', 21), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 101 of 107
+Helm 2.0 20260919 p00 reach answer signatures: [('VIA/n1', 33), ('VIA/n3', 33), ('VIA/n2', 25), ('VIA/n0', 16)] | correct 64 of 107
+Helm 2.0 20260919 p10 reach answer signatures: [('DIRECT/-', 32), ('VIA/n1', 28), ('VIA/n3', 17), ('VIA/n0', 16), ('VIA/n2', 12)] | correct 96 of 107

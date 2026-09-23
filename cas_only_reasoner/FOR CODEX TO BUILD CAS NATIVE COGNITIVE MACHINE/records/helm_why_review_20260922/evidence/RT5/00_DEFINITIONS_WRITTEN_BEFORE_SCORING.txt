@@ -1,0 +1,35 @@
+RT5 operational definitions -- written BEFORE any per-record hit/miss tabulation.
+(Known beforehand from R2's dev_panel_rules_out.txt: only per-state totals, e.g. DIRECT 3/5/2/0/7/0 of 8.)
+
+Input facts (from code, rank feature OFF in both runs: pointer_contract.py:896):
+  Node row (8 raw cols + 10 degree cols, then RMS per row):
+    is_declared_whole, is_participant (1-based participant rank or 0), is_primary_label (never emitted -> 0),
+    is_whole_argument, is_part_argument, is_focus, is_target, bias 1.0,
+    in-degree one-hot (clamped at DEGREE_STEPS-1 = 4), out-degree one-hot (clamped at 4).
+  Query vector: kind one-hot, rule one-hot, float(whole rank) or -1, float(part rank) or -1, is_target,
+    min(world_count,64)/64.
+
+"Trained packets" = the records in protocol_material['trained_record_ids'] (358), read from
+  records/typed_course_001/checks_002/public_course.json; interference-batch records reported separately.
+Reference value sets are built from trained packets. Two references:
+  WIDE   = every node row of every world carried by any trained packet (world-choice kinds carry all 64 worlds).
+  NARROW = focus-world node rows of trained reach + parts packets only.
+  Query-rank reference = whole-rank values over trained reach+parts queries; part-rank values over trained reach.
+
+A NODE is out of range (OOR) if its clamped in-degree, clamped out-degree, or participant-rank value never
+  occurs in the reference node rows.
+A QUERY argument is OOR if its whole rank (or part rank) value never occurs in the query-rank reference.
+
+PRIMARY record flag ("the question involves out-of-range nodes"):
+  OOR if any KEY node is OOR (WIDE reference) OR a query argument rank is OOR.
+  KEY nodes: the whole-argument node; the part-argument node (reach); the answer nodes
+  (parts: the children of the whole).
+SECONDARY flags reported alongside: node-only (no query ranks), NARROW reference, any-focus-node.
+
+Unit of counting: (receipt, record) pairs over the 6 receipts x (8 DIRECT + 6 parts) = 84 pairs, using
+  development_p10_scoring.json 'correct'. Also reported per version and per state.
+
+Rule application (task text, fixed): miss share = OOR misses / misses; hit share = OOR hits / hits.
+  A: miss share >= 50% AND hit share < 50% ("hits mostly do not")  -> SIZE/INPUT-RANGE SHIFT explains them.
+  B: |miss share - hit share| <= 15 percentage points -> not explained by input range; OPEN.
+  Otherwise: fits neither rule; say so.

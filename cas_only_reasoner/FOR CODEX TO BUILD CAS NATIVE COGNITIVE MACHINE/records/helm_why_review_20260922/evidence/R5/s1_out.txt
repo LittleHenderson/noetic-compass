@@ -1,0 +1,55 @@
+PARSER_VS_SAVED_REFERENCE_AST exact: 16 / 16
+PARSER_TOKENS_VS_REFERENCE_TOKENS exact: 16 / 16
+rows train/dev: 2048 256
+first16 dev ids == inspected ids: True
+
+== train n = 2048
+ depth: {1: 747, 2: 756, 3: 545}
+ target token length: {13: 747, 20: 621, 27: 377, 34: 213, 41: 90}
+ token length mean: 21.1142578125 min 13 max 41
+ leaves per tree: {2: 747, 3: 621, 4: 377, 5: 213, 6: 90}
+ distinct bare shapes: 16
+ input bytes mean/min/max: 35.34814453125 13 84
+
+== dev n = 256
+ depth: {3: 256}
+ target token length: {27: 127, 34: 114, 48: 12, 55: 3}
+ token length mean: 31.4296875 min 27 max 55
+ leaves per tree: {4: 127, 5: 114, 7: 12, 8: 3}
+ distinct bare shapes: 9
+ input bytes mean/min/max: 54.078125 35 100
+
+== dev_first16 n = 16
+ depth: {3: 16}
+ target token length: {27: 7, 34: 8, 55: 1}
+ token length mean: 32.25 min 27 max 55
+ leaves per tree: {4: 7, 5: 8, 8: 1}
+ distinct bare shapes: 5
+ input bytes mean/min/max: 54.6875 40 100
+
+bare shapes train 16 dev 9 shared 0
+dev first16 bare shapes: [('["B", ["B", "L", ["B", "L", "L"]], ["B", "L", "L"]]', 6), ('["B", "L", ["B", ["B", "L", "L"], "L"]]', 5), ('["B", ["B", ["B", "L", "L"], "L"], "L"]', 2), ('["B", ["B", "L", "L"], ["B", ["B", "L", "L"], "L"]]', 2), ('["B", ["B", ["B", "L", "L"], ["B", "L", "L"]], ["B", ["B", "L", "L"], ["B", "L", "L"]]]', 1)]
+
+train leaves: 6470
+  operator [('^4', 677), ('^2', 670), ('^9', 667), ('^0', 660), ('^1', 655), ('^5', 641), ('^8', 641), ('^7', 637), ('^3', 620), ('^6', 602)]
+  domain [('O', 1655), ('C', 1631), ('E', 1614), ('P', 1570)]
+  drive [(None, 3185), ('F5', 492), ('F6', 492), ('F1', 485), ('F3', 480), ('F7', 457), ('F2', 444), ('F4', 435)]
+  register [('ABSENT', 3262), ('T', 830), ('A', 804), ('E', 791), ('f', 783)]
+  top 12 leaf states (noetic^domain): [('^4^O', 186), ('^9^O', 182), ('^5^O', 180), ('^4^C', 178), ('^8^P', 176), ('^0^E', 176), ('^1^C', 175), ('^2^O', 175), ('^2^C', 171), ('^1^E', 171), ('^9^P', 170), ('^0^C', 170)]
+  bottom 5 leaf states: [('^3^E', 144), ('^4^P', 143), ('^8^O', 141), ('^7^C', 141), ('^5^P', 137)]
+  count ^7^E 167 rank 14 ; ^7^C 141 rank 39 of 40
+  exact bare leaf ^7^E (no drive, no register): 46  ^7^C: 41
+  distinct full leaf literals: 1335  top 8: [('^3^P', 51), ('^9^O', 48), ('^1^C', 47), ('^0^E', 47), ('^8^E', 46), ('^7^E', 46), ('^3^C', 46), ('^7^P', 43)]
+  binary ops: [('PLUS', 2860), ('TIMES', 1562)]
+  root op: [('PLUS', 1579), ('TIMES', 469)]
+
+distinct whole train trees: 2048  max multiplicity: 1
+distinct binary sub-trees: 4412  top 5: [('(^7^E + ^2^O)', 3), ('(^9^O × ^6^O_{F3})', 2), ('(^3^C + ^8^C)', 2), ('(^2^P × ^2^C|E)', 2), ('(^0^O + ^6^O)', 2)]
+pred tree as whole train tree: 0  as sub-tree: 0
+loose sub-tree (^7^E op ^7^C), any drive/register/op: 1
+loose sub-tree (^7^C op ^7^E): 0
+string '^7^E + ^7^C' in train observations: 0
+train whole trees = (bareleaf + bareleaf): 31
+train whole trees of depth 1: 747
+depth-1 root-left leaf domain: [('P', 213), ('C', 203), ('O', 173), ('E', 158)]  noetic: [('^1', 87), ('^5', 86), ('^4', 79)]
+depth-1 root-right leaf domain: [('O', 221), ('E', 209), ('C', 187), ('P', 130)]  noetic: [('^8', 92), ('^3', 88), ('^9', 79)]

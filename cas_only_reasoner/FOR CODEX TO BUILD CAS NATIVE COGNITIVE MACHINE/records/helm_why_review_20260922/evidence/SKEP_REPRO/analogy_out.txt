@@ -1,0 +1,6 @@
+1.0 20260917 analogy records 70 distinct answers 1 ['{"world_id": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c"}'] correct 16
+1.0 20260918 analogy records 70 distinct answers 1 ['{"world_id": "world-056bbffdcc0ff270a1c8e19b9a70e8e890cb4329c1eb64761d4222255e114d7f"}'] correct 16
+1.0 20260919 analogy records 70 distinct answers 1 ['{"world_id": "world-056bbffdcc0ff270a1c8e19b9a70e8e890cb4329c1eb64761d4222255e114d7f"}'] correct 16
+2.0 20260917 analogy records 70 distinct answers 1 ['{"world_id": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c"}'] correct 16
+2.0 20260918 analogy records 70 distinct answers 1 ['{"world_id": "world-056bbffdcc0ff270a1c8e19b9a70e8e890cb4329c1eb64761d4222255e114d7f"}'] correct 16
+2.0 20260919 analogy records 70 distinct answers 1 ['{"world_id": "world-056bbffdcc0ff270a1c8e19b9a70e8e890cb4329c1eb64761d4222255e114d7f"}'] correct 16

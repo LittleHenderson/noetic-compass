@@ -1,0 +1,57 @@
+RT9 operational definitions. Written BEFORE running any per-hop count script in this folder (rt9_count.py).
+
+WHAT I HAD ALREADY SEEN BEFORE WRITING THIS (disclosed, so the reader can judge):
+ - the chair's task text and the consensus C1-C29 (C9 quotes Helm 1.0 2-hop 58/58/57 of 64 and 3-hop 11/11/11);
+ - R3's earlier outputs SCRATCH/R3/meeting/m1_out.txt, m2_out.txt, m3_out.txt (per-run and union-witness hop tables,
+   pooled over ALL splits incl. excluded; dev panel grouped by each run's OWN witness, which is circular);
+ - RT4's rt4_common.py / rt4_more.py / rt4_more_out.txt and PRE_RUN_DEFINITIONS.txt;
+ - the file structure only (peek1.py, peek2.py): no per-record counts computed by me yet.
+ From R3 m3_out.txt I already know (all splits pooled, incl. excluded) the course p10 3-hop totals are near ceiling
+ (2.0: 10/11, 11/11, 11/11). The outcome rules below are the chair's, copied unchanged; only the operational
+ reading is mine, and it is fixed here before my own counts.
+
+RUNS (six): Helm 2.0 = records/typed_pointer_001/receipt_2026091{7,8,9}; Helm 1.0 = receipt_helm1_certified_2026091{7,8,9}.
+ Files read: checkpoints/course_p10_predictions.json, checkpoints/course_p10_scoring.json,
+ checkpoints/development_p10_predictions.json, checkpoints/development_p10_scoring.json
+ (sha256-identical to the collected/results/artifacts copies; measured before writing this).
+ Public inputs: records/typed_course_001/checks_002/public_course.json (bank + registry) and
+ receipt_20260917/collected/results/artifacts/protocol_material.json (split ids; development.packets).
+ NEVER opened: any sealed_* or private_targets* file.
+
+RECORDS
+ course reach = course_p10_scoring rows with kind == 'reach'. Split from protocol_material.json:
+   trained_record_ids / held_back_record_ids / excluded_record_ids.
+ PRIMARY POPULATION for both outcome rules = trained + held-back combined (the chair wrote this for rule 1;
+   I apply the same population to rule 2). Excluded records and the dev panel are reported, not used in the verdict.
+ dev panel reach = development_p10_scoring rows with kind == 'reach'.
+
+HOP COUNT (run-independent)
+ A scoring row carries a witness ONLY when the prediction is correct (R3 m3_out.txt: (False,False) 5779, (True,True) 7421),
+ so grouping each run by its own witness is circular. I therefore compute the checker's GOLD witness path myself by
+ re-implementing checker.py _bfs/_reach (research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py:115-153)
+ in pure Python on the public focus world:
+   DIRECT  -> path [whole, part]          -> hop 1
+   VIA     -> path from the rule          -> hop = len(path) - 1
+   ABSENT  -> no path                     -> group 'none'
+ VALIDATION (must pass, else I fall back to the union of written witnesses as R3 did and say so):
+   (v1) every witness path written in any p10 course/dev scoring row of the six runs equals my recomputed gold path;
+   (v2) my recomputed gold answer (state, via) reproduces the scoring 'correct' bit for every reach row of every run
+        (prediction answer.value state/via compared to my gold).
+
+COUNTS
+ Hk(run) = number of records with hop k in the PRIMARY POPULATION whose scoring row has correct == true.
+ Also reported: per split, excluded, dev panel, and paired record-level differences (records where 2.0/20260918
+ is right and the other run wrong, and the reverse).
+
+OUTCOME RULES (chair's, verbatim meaning; my arithmetic reading)
+ LOOP_SIGNAL_POSSIBLY_USED  iff  H3(2.0/18) - H3(2.0/17) >= 2  AND  H3(2.0/18) - H3(2.0/19) >= 2
+                                 AND  H3(2.0/18) - H3(1.0/18) >= 2          (one seed only, confounded with seed; not proof)
+ NO_EVIDENCE_THAT_THE_OPEN_LOOP_IS_USED_FOR_MULTI_HOP  iff
+        |H2(2.0/18) - H2(2.0/17)| <= 1 AND |H2(2.0/18) - H2(2.0/19)| <= 1
+    AND |H3(2.0/18) - H3(2.0/17)| <= 1 AND |H3(2.0/18) - H3(2.0/19)| <= 1
+ MIXED otherwise (report numbers).
+ The two firing conditions are mutually exclusive (3-hop gap >= 2 vs <= 1), so order does not matter.
+ Secondary readings (reported, NOT the verdict): the same arithmetic with the dev panel added; with excluded added;
+ held-back only.
+ Caveat fixed by the chair: 3-hop VIA answers are one-hop relations to one marked node (RT4-F4), so even a positive
+ result does not show multi-step propagation. I will re-check that caveat on the recomputed gold paths.

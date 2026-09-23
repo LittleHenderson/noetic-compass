@@ -1,0 +1,4 @@
+online input-blind count learner [slot kind only]: first-16 mean 1.338042, last-16 mean 1.210880 | smoke GRU first-16 3.347147, last-16 1.668515
+   updates where the GRU loss is below the input-blind learner: 0 of 128
+online input-blind count learner [slot kind + depth]: first-16 mean 1.309386, last-16 mean 1.163654 | smoke GRU first-16 3.347147, last-16 1.668515
+   updates where the GRU loss is below the input-blind learner: 0 of 128

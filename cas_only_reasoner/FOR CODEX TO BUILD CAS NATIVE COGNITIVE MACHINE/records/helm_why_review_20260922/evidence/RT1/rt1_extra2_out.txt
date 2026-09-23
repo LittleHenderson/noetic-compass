@@ -1,0 +1,8 @@
+right child binary=True: gap BINARY-STATE at the right-child slot mean -1.106680 min -1.106781 max -1.106579 n 1027
+right child binary=False: gap BINARY-STATE at the right-child slot mean -1.107140 min -1.107462 max -1.106883 n 1021
+difference of group means (binary minus leaf): +0.000460
+root op=PLUS: gap TIMES-PLUS at the root-op slot mean -1.613558 min -1.624439 max -1.586275 n 1579
+root op=TIMES: gap TIMES-PLUS at the root-op slot mean -1.608961 min -1.623741 max -1.585987 n 469
+difference of group means (TIMES minus PLUS): +0.004597
+rows whose greedy right-child choice would be BINARY (gap > 0): 0/2048
+rows whose greedy root-op choice would be TIMES (gap > 0): 0/2048

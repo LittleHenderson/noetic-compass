@@ -1,0 +1,12 @@
+Helm 1.0 20260917 dev p00 total 0/59 parts/hNone 0/6 reach/hNone 0/53
+Helm 1.0 20260917 dev p10 total 7/59 parts/hNone 1/6 reach/h1 3/3 reach/h2 3/3 reach/hNone 0/47
+Helm 1.0 20260918 dev p00 total 0/59 parts/hNone 0/6 reach/hNone 0/53
+Helm 1.0 20260918 dev p10 total 9/59 parts/hNone 1/6 reach/h1 5/5 reach/h2 2/2 reach/hNone 1/46
+Helm 1.0 20260919 dev p00 total 0/59 parts/hNone 0/6 reach/hNone 0/53
+Helm 1.0 20260919 dev p10 total 6/59 parts/hNone 1/6 reach/h1 2/2 reach/h2 3/3 reach/hNone 0/48
+Helm 2.0 20260917 dev p00 total 3/59 parts/hNone 0/6 reach/h2 3/3 reach/hNone 0/50
+Helm 2.0 20260917 dev p10 total 2/59 parts/hNone 0/6 reach/h2 2/2 reach/hNone 0/51
+Helm 2.0 20260918 dev p00 total 10/59 parts/hNone 0/6 reach/hNone 10/53
+Helm 2.0 20260918 dev p10 total 12/59 parts/hNone 0/6 reach/h1 7/7 reach/h2 3/3 reach/hNone 2/43
+Helm 2.0 20260919 dev p00 total 0/59 parts/hNone 0/6 reach/hNone 0/53
+Helm 2.0 20260919 dev p10 total 6/59 parts/hNone 1/6 reach/h2 3/3 reach/hNone 2/50

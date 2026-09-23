@@ -1,0 +1,3 @@
+bare tree shapes: train 16, dev 9, dev rows whose bare shape occurs in train: 0 of 256
+dev rows whose exact AST occurs in train: 0 of 256
+distinct UTF-8 byte values in G train observations: 29 of 256 embedding rows

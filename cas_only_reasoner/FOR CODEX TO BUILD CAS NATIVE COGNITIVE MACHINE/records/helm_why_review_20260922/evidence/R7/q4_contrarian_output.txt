@@ -1,0 +1,49 @@
+train rows 2048 dev rows 256 inspected cases 16
+MY_PARSER_EXACT_VS_REFERENCE 16 / 16
+inspected cases are the first 16 dev rows in file order: True
+train depth counts {1: 747, 2: 756, 3: 545}
+dev depth counts {3: 256}
+train bare shapes 16 dev bare shapes 9 shared 0
+most common train shapes [("('B', 'L', 'L')", 747), ("('B', 'L', ('B', 'L', 'L'))", 417), ("('B', ('B', 'L', 'L'), 'L')", 204)]
+distinct predicted ASTs 1 pred shape ('B', 'L', 'L') depth 1 pred shape in train shapes: True count 747
+predicted tree appears verbatim in train: 0 times
+distinct seen indices 128 first five [1091, 1497, 1444, 696, 526]
+seen depth counts {1: 58, 2: 37, 3: 33}
+== seen128
+   ('expr', 0) [('BINARY', 128)]
+   ('expr', 1) [('STATE', 167), ('BINARY', 89)]
+   ('expr', 2) [('STATE', 140), ('BINARY', 38)]
+   ('op', 0) [('PLUS', 99), ('TIMES', 29)]
+   ('op', 'any') [('PLUS', 162), ('TIMES', 93)]
+   ('noetic', 1) [('N3', 22), ('N2', 20), ('N6', 17), ('N1', 17), ('N0', 16)]
+   ('noetic', 'any') [('N4', 49), ('N7', 48), ('N2', 44), ('N3', 43), ('N0', 37)]
+   ('domain', 1) [('D_E', 45), ('D_P', 42), ('D_O', 40), ('D_C', 40)]
+   ('domain', 'any') [('D_E', 105), ('D_C', 103), ('D_P', 92), ('D_O', 83)]
+   ('drive', 'any') [('F_NONE', 185), ('F4', 32), ('F6', 30), ('F7', 29), ('F2', 29)]
+   ('register', 'any') [('REG_ABSENT', 221), ('REG_A', 46), ('REG_E', 42), ('REG_T', 39), ('REG_f', 35)]
+== all2048
+   ('expr', 0) [('BINARY', 2048)]
+   ('expr', 1) [('STATE', 2427), ('BINARY', 1669)]
+   ('expr', 2) [('STATE', 2633), ('BINARY', 705)]
+   ('op', 0) [('PLUS', 1579), ('TIMES', 469)]
+   ('op', 'any') [('PLUS', 2860), ('TIMES', 1562)]
+   ('noetic', 1) [('N8', 260), ('N0', 257), ('N9', 254), ('N5', 250), ('N4', 243)]
+   ('noetic', 'any') [('N4', 677), ('N2', 670), ('N9', 667), ('N0', 660), ('N1', 655)]
+   ('domain', 1) [('D_C', 636), ('D_O', 623), ('D_E', 605), ('D_P', 563)]
+   ('domain', 'any') [('D_O', 1655), ('D_C', 1631), ('D_E', 1614), ('D_P', 1570)]
+   ('drive', 'any') [('F_NONE', 3185), ('F5', 492), ('F6', 492), ('F1', 485), ('F3', 480)]
+   ('register', 'any') [('REG_ABSENT', 3262), ('REG_T', 830), ('REG_A', 804), ('REG_E', 791), ('REG_f', 783)]
+updates 128 first 3.5241360664367676 last 1.600077748298645 ln(34) 3.5263605246161616
+updates 1-16 mean logged loss 3.347147 ; input-blind prior loss on the SAME examples 1.176179
+updates 97-128 mean logged loss 1.764312 ; input-blind prior loss on the SAME examples 1.163416
+updates 113-128 mean logged loss 1.668515 ; input-blind prior loss on the SAME examples 1.142351
+  update 121 logged 1.483639 blind 1.081336
+  update 122 logged 1.362770 blind 0.980901
+  update 123 logged 1.679550 blind 1.197396
+  update 124 logged 1.867689 blind 1.230143
+  update 125 logged 1.382245 blind 0.981184
+  update 126 logged 1.654819 blind 1.049137
+  update 127 logged 1.790991 blind 1.287326
+  update 128 logged 1.600078 blind 1.099922
+of updates 97-128, logged loss below the input-blind prior loss: 0 / 32
+16 inputs distinct: 16 ; predictions distinct: 1

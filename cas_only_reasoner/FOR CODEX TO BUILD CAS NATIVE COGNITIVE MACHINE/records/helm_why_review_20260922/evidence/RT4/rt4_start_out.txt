@@ -1,0 +1,83 @@
+(A) p00 rank-last pointing, all 564 course records
+== Helm 2.0 seed 20260917
+   reach+parts  pointers  314 | rank-last non-arg   82 vs expected 139 (=139.0) -> ratio 82/139 (=0.5899280575539568) | chair-literal 1/(n-2): ratio 164/357 (=0.45938375350140054)
+                  non-argument pointers only  206: rank-last   82 vs expected 163/2 (=81.5) -> ratio 164/163 (=1.0061349693251533) | rank-last OVERALL   85 vs 1/n expected 985/12 (=82.08333333333333) -> ratio 204/197 (=1.0355329949238579)
+   reach        pointers  107 | rank-last non-arg   29 vs expected 135/2 (=67.5) -> ratio 58/135 (=0.42962962962962964) | chair-literal 1/(n-2): ratio 58/135 (=0.42962962962962964)
+                  non-argument pointers only   52: rank-last   29 vs expected 57/2 (=28.5) -> ratio 58/57 (=1.0175438596491229) | rank-last OVERALL   32 vs 1/n expected 349/12 (=29.083333333333332) -> ratio 384/349 (=1.1002865329512894)
+   parts        pointers  207 | rank-last non-arg   53 vs expected 143/2 (=71.5) -> ratio 106/143 (=0.7412587412587412) | chair-literal 1/(n-2): ratio 53/111 (=0.4774774774774775)
+                  non-argument pointers only  154: rank-last   53 vs expected 53 (=53.0) -> ratio 1 (=1.0) | rank-last OVERALL   53 vs 1/n expected 53 (=53.0) -> ratio 1 (=1.0)
+== Helm 2.0 seed 20260918
+   reach+parts  pointers  156 | rank-last non-arg   25 vs expected 127/2 (=63.5) -> ratio 50/127 (=0.3937007874015748) | chair-literal 1/(n-2): ratio 50/169 (=0.2958579881656805)
+                  non-argument pointers only   94: rank-last   25 vs expected 37 (=37.0) -> ratio 25/37 (=0.6756756756756757) | rank-last OVERALL   34 vs 1/n expected 481/12 (=40.083333333333336) -> ratio 408/481 (=0.8482328482328483)
+   reach        pointers   48 | rank-last non-arg   10 vs expected 26 (=26.0) -> ratio 5/13 (=0.38461538461538464) | chair-literal 1/(n-2): ratio 5/13 (=0.38461538461538464)
+                  non-argument pointers only   30: rank-last   10 vs expected 15 (=15.0) -> ratio 2/3 (=0.6666666666666666) | rank-last OVERALL   19 vs 1/n expected 37/3 (=12.333333333333334) -> ratio 57/37 (=1.5405405405405406)
+   parts        pointers  108 | rank-last non-arg   15 vs expected 75/2 (=37.5) -> ratio 2/5 (=0.4) | chair-literal 1/(n-2): ratio 10/39 (=0.2564102564102564)
+                  non-argument pointers only   64: rank-last   15 vs expected 22 (=22.0) -> ratio 15/22 (=0.6818181818181818) | rank-last OVERALL   15 vs 1/n expected 111/4 (=27.75) -> ratio 20/37 (=0.5405405405405406)
+== Helm 2.0 seed 20260919
+   reach+parts  pointers  314 | rank-last non-arg  126 vs expected 139 (=139.0) -> ratio 126/139 (=0.9064748201438849) | chair-literal 1/(n-2): ratio 12/17 (=0.7058823529411765)
+                  non-argument pointers only  257: rank-last  126 vs expected 118 (=118.0) -> ratio 63/59 (=1.0677966101694916) | rank-last OVERALL   94 vs 1/n expected 985/12 (=82.08333333333333) -> ratio 1128/985 (=1.1451776649746193)
+   reach        pointers  107 | rank-last non-arg   73 vs expected 135/2 (=67.5) -> ratio 146/135 (=1.0814814814814815) | chair-literal 1/(n-2): ratio 146/135 (=1.0814814814814815)
+                  non-argument pointers only  103: rank-last   73 vs expected 65 (=65.0) -> ratio 73/65 (=1.123076923076923) | rank-last OVERALL   41 vs 1/n expected 349/12 (=29.083333333333332) -> ratio 492/349 (=1.4097421203438396)
+   parts        pointers  207 | rank-last non-arg   53 vs expected 143/2 (=71.5) -> ratio 106/143 (=0.7412587412587412) | chair-literal 1/(n-2): ratio 53/111 (=0.4774774774774775)
+                  non-argument pointers only  154: rank-last   53 vs expected 53 (=53.0) -> ratio 1 (=1.0) | rank-last OVERALL   53 vs 1/n expected 53 (=53.0) -> ratio 1 (=1.0)
+== Helm 1.0 seed 20260917
+   reach+parts  pointers  111 | rank-last non-arg   51 vs expected 208/3 (=69.33333333333333) -> ratio 153/208 (=0.7355769230769231) | chair-literal 1/(n-2): ratio 51/71 (=0.7183098591549296)
+                  non-argument pointers only   84: rank-last   51 vs expected 151/3 (=50.333333333333336) -> ratio 153/151 (=1.0132450331125828) | rank-last OVERALL   25 vs 1/n expected 91/3 (=30.333333333333332) -> ratio 75/91 (=0.8241758241758241)
+   reach        pointers  107 | rank-last non-arg   49 vs expected 135/2 (=67.5) -> ratio 98/135 (=0.725925925925926) | chair-literal 1/(n-2): ratio 98/135 (=0.725925925925926)
+                  non-argument pointers only   80: rank-last   49 vs expected 97/2 (=48.5) -> ratio 98/97 (=1.0103092783505154) | rank-last OVERALL   23 vs 1/n expected 349/12 (=29.083333333333332) -> ratio 276/349 (=0.7908309455587392)
+   parts        pointers    4 | rank-last non-arg    2 vs expected 11/6 (=1.8333333333333333) -> ratio 12/11 (=1.0909090909090908) | chair-literal 1/(n-2): ratio 4/7 (=0.5714285714285714)
+                  non-argument pointers only    4: rank-last    2 vs expected 11/6 (=1.8333333333333333) -> ratio 12/11 (=1.0909090909090908) | rank-last OVERALL    2 vs 1/n expected 5/4 (=1.25) -> ratio 8/5 (=1.6)
+== Helm 1.0 seed 20260918
+   reach+parts  pointers  248 | rank-last non-arg   35 vs expected 229/2 (=114.5) -> ratio 70/229 (=0.3056768558951965) | chair-literal 1/(n-2): ratio 35/141 (=0.24822695035460993)
+                  non-argument pointers only  107: rank-last   35 vs expected 77/2 (=38.5) -> ratio 10/11 (=0.9090909090909091) | rank-last OVERALL   47 vs 1/n expected 389/6 (=64.83333333333333) -> ratio 282/389 (=0.7249357326478149)
+   reach        pointers  101 | rank-last non-arg    4 vs expected 129/2 (=64.5) -> ratio 8/129 (=0.06201550387596899) | chair-literal 1/(n-2): ratio 8/129 (=0.06201550387596899)
+                  non-argument pointers only   10: rank-last    4 vs expected 6 (=6.0) -> ratio 2/3 (=0.6666666666666666) | rank-last OVERALL   15 vs 1/n expected 331/12 (=27.583333333333332) -> ratio 180/331 (=0.5438066465256798)
+   parts        pointers  147 | rank-last non-arg   31 vs expected 50 (=50.0) -> ratio 31/50 (=0.62) | chair-literal 1/(n-2): ratio 62/153 (=0.40522875816993464)
+                  non-argument pointers only   97: rank-last   31 vs expected 65/2 (=32.5) -> ratio 62/65 (=0.9538461538461539) | rank-last OVERALL   32 vs 1/n expected 149/4 (=37.25) -> ratio 128/149 (=0.8590604026845637)
+== Helm 1.0 seed 20260919
+   reach+parts  pointers  265 | rank-last non-arg   70 vs expected 733/6 (=122.16666666666667) -> ratio 420/733 (=0.572987721691678) | chair-literal 1/(n-2): ratio 28/61 (=0.45901639344262296)
+                  non-argument pointers only  167: rank-last   70 vs expected 209/3 (=69.66666666666667) -> ratio 210/209 (=1.0047846889952152) | rank-last OVERALL   73 vs 1/n expected 835/12 (=69.58333333333333) -> ratio 876/835 (=1.0491017964071856)
+   reach        pointers  107 | rank-last non-arg   37 vs expected 135/2 (=67.5) -> ratio 74/135 (=0.5481481481481482) | chair-literal 1/(n-2): ratio 74/135 (=0.5481481481481482)
+                  non-argument pointers only   62: rank-last   37 vs expected 67/2 (=33.5) -> ratio 74/67 (=1.1044776119402986) | rank-last OVERALL   40 vs 1/n expected 349/12 (=29.083333333333332) -> ratio 480/349 (=1.3753581661891117)
+   parts        pointers  158 | rank-last non-arg   33 vs expected 164/3 (=54.666666666666664) -> ratio 99/164 (=0.6036585365853658) | chair-literal 1/(n-2): ratio 33/85 (=0.38823529411764707)
+                  non-argument pointers only  105: rank-last   33 vs expected 217/6 (=36.166666666666664) -> ratio 198/217 (=0.9124423963133641) | rank-last OVERALL   33 vs 1/n expected 81/2 (=40.5) -> ratio 22/27 (=0.8148148148148148)
+
+Pre-registered verdict (primary = reach+parts, per-pointer chance, argument pointers not rank-last):
+   primary                      ratios [0.589928, 0.393701, 0.906475, 0.735577, 0.305677, 0.572988] | runs >= 2x: 0 | all within [2/3, 3/2]: False -> NEITHER_RULE
+   chair-literal 1/(n-2)        ratios [0.459384, 0.295858, 0.705882, 0.71831, 0.248227, 0.459016] | runs >= 2x: 0 | all within [2/3, 3/2]: False -> NEITHER_RULE
+   non-argument pointers only   ratios [1.006135, 0.675676, 1.067797, 1.013245, 0.909091, 1.004785] | runs >= 2x: 0 | all within [2/3, 3/2]: True -> NO_SYSTEMATIC_BIAS
+   rank-last overall vs 1/n     ratios [1.035533, 0.848233, 1.145178, 0.824176, 0.724936, 1.049102] | runs >= 2x: 0 | all within [2/3, 3/2]: True -> NO_SYSTEMATIC_BIAS
+
+(A2) secondary, parts only: P(node included | rank-last non-arg) vs P(included | other non-arg), p00
+   Helm 2.0 20260917: rank-last included 1 (=1.0) | other non-arg included 1 (=1.0) | whole arg included 1 (=1.0)
+   Helm 2.0 20260918: rank-last included 15/53 (=0.2830188679245283) | other non-arg included 49/101 (=0.48514851485148514) | whole arg included 44/53 (=0.8301886792452831)
+   Helm 2.0 20260919: rank-last included 1 (=1.0) | other non-arg included 1 (=1.0) | whole arg included 1 (=1.0)
+   Helm 1.0 20260917: rank-last included 2/53 (=0.03773584905660377) | other non-arg included 2/101 (=0.019801980198019802) | whole arg included 0 (=0.0)
+   Helm 1.0 20260918: rank-last included 31/53 (=0.5849056603773585) | other non-arg included 66/101 (=0.6534653465346535) | whole arg included 50/53 (=0.9433962264150944)
+   Helm 1.0 20260919: rank-last included 33/53 (=0.6226415094339622) | other non-arg included 72/101 (=0.7128712871287128) | whole arg included 1 (=1.0)
+
+(B) frozen floor questions answered by each untrained start (p00); question right = all its held records right
+== Helm 2.0 seed 20260917: questions mapped 18 (records 55) | rebuilt b=11 c=1, recorded b=11 c=1, match=True
+   p00 right on floor (11): 2 -> ['36988555(R)', '404166e8(R)']
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 2 -> ['36988555', '404166e8']
+   p00 right on all 18: 2 | non-floor right at p00: []
+== Helm 2.0 seed 20260918: questions mapped 18 (records 55) | rebuilt b=12 c=0, recorded b=12 c=0, match=True
+   p00 right on floor (11): 0 -> []
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 0 -> []
+   p00 right on all 18: 0 | non-floor right at p00: []
+== Helm 2.0 seed 20260919: questions mapped 18 (records 55) | rebuilt b=7 c=1, recorded b=7 c=1, match=True
+   p00 right on floor (11): 2 -> ['36988555(R)', 'aa62bbee(R)']
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 2 -> ['36988555', 'aa62bbee']
+   p00 right on all 18: 4 | non-floor right at p00: ['7a391350', 'a3e70de9']
+== Helm 1.0 seed 20260917: questions mapped 18 (records 55) | rebuilt b=10 c=0, recorded b=10 c=0, match=True
+   p00 right on floor (11): 1 -> ['36988555(R)']
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 1 -> ['36988555']
+   p00 right on all 18: 2 | non-floor right at p00: ['7a391350']
+== Helm 1.0 seed 20260918: questions mapped 18 (records 55) | rebuilt b=12 c=0, recorded b=12 c=0, match=True
+   p00 right on floor (11): 0 -> []
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 0 -> []
+   p00 right on all 18: 0 | non-floor right at p00: []
+== Helm 1.0 seed 20260919: questions mapped 18 (records 55) | rebuilt b=11 c=0, recorded b=11 c=0, match=True
+   p00 right on floor (11): 0 -> []
+   p00 right on rank-last-only floor (4, excl. 786bbcba which the oracle also solves): 0 -> []
+   p00 right on all 18: 0 | non-floor right at p00: []

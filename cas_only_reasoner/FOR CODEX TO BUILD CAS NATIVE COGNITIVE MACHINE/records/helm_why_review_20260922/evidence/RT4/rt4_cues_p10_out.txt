@@ -1,0 +1,126 @@
+== POOLED six runs, course_p10, all splits | VIA-answered reach record x run pairs: 440 | distinct records: 74
+   overall agreement VIA==CN   341/375 = 0.9093333333333333
+   overall agreement VIA==RL   284/440 = 0.6454545454545455
+   overall agreement VIA==RF   294/440 = 0.6681818181818182
+   overall agreement VIA==PP   383/440 = 0.8704545454545455
+   overall agreement VIA==PC   358/440 = 0.8136363636363636
+   overall agreement VIA==HPR  385/440 = 0.875
+   VIA pointing at an argument node: 0
+   D_RL        pairs 165 | distinct records  28 | distinct questions  11 | VIA==CN 135/165 = 0.8181818181818182 | VIA==RL 30/165 = 0.18181818181818182
+   D_RF        pairs  72 | distinct records  12 | distinct questions   4 | VIA==CN 68/72 = 0.9444444444444444 | VIA==RF 4/72 = 0.05555555555555555
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs  30 | distinct records   5 | distinct questions   2 | VIA==CN 14/30 = 0.4666666666666667 | VIA==HPR 16/30 = 0.5333333333333333
+   D_PP_unique pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP_unique 0/0 = undefined
+   D_PC_unique pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC_unique 0/0 = undefined
+   D_LPR       pairs 153 | distinct records  26 | distinct questions  10 | VIA==CN 135/153 = 0.8823529411764706 | VIA==LPR 18/153 = 0.11764705882352941
+   distinct records in union of D_k over the five node-local cues: 40
+   VERDICT (pooled, pre-registered rule): MIXED (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 2.0 seed 20260917, course_p10 | VIA-answered reach record x run pairs: 72 | distinct records: 72
+   overall agreement VIA==CN   57/62 = 0.9193548387096774
+   overall agreement VIA==RL   48/72 = 0.6666666666666666
+   overall agreement VIA==RF   47/72 = 0.6527777777777778
+   overall agreement VIA==PP   64/72 = 0.8888888888888888
+   overall agreement VIA==PC   59/72 = 0.8194444444444444
+   overall agreement VIA==HPR  59/72 = 0.8194444444444444
+   VIA pointing at an argument node: 0
+   D_RL        pairs  27 | distinct records  27 | distinct questions  10 | VIA==CN 22/27 = 0.8148148148148148 | VIA==RL 5/27 = 0.18518518518518517
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 12/12 = 1.0 | VIA==RF 0/12 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 5/5 = 1.0 | VIA==HPR 0/5 = 0.0
+   distinct records in union of D_k over the five node-local cues: 39
+   verdict (this run only): STRUCTURAL (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 2.0 seed 20260918, course_p10 | VIA-answered reach record x run pairs: 74 | distinct records: 74
+   overall agreement VIA==CN   58/63 = 0.9206349206349206
+   overall agreement VIA==RL   48/74 = 0.6486486486486487
+   overall agreement VIA==RF   49/74 = 0.6621621621621622
+   overall agreement VIA==PP   65/74 = 0.8783783783783784
+   overall agreement VIA==PC   61/74 = 0.8243243243243243
+   overall agreement VIA==HPR  68/74 = 0.918918918918919
+   VIA pointing at an argument node: 0
+   D_RL        pairs  28 | distinct records  28 | distinct questions  11 | VIA==CN 23/28 = 0.8214285714285714 | VIA==RL 5/28 = 0.17857142857142858
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 12/12 = 1.0 | VIA==RF 0/12 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 1/5 = 0.2 | VIA==HPR 4/5 = 0.8
+   distinct records in union of D_k over the five node-local cues: 40
+   verdict (this run only): SHORTCUT via HPR (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 2.0 seed 20260919, course_p10 | VIA-answered reach record x run pairs: 73 | distinct records: 73
+   overall agreement VIA==CN   53/62 = 0.8548387096774194
+   overall agreement VIA==RL   44/73 = 0.6027397260273972
+   overall agreement VIA==RF   52/73 = 0.7123287671232876
+   overall agreement VIA==PP   60/73 = 0.821917808219178
+   overall agreement VIA==PC   56/73 = 0.7671232876712328
+   overall agreement VIA==HPR  63/73 = 0.863013698630137
+   VIA pointing at an argument node: 0
+   D_RL        pairs  27 | distinct records  27 | distinct questions  10 | VIA==CN 22/27 = 0.8148148148148148 | VIA==RL 5/27 = 0.18518518518518517
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 8/12 = 0.6666666666666666 | VIA==RF 4/12 = 0.3333333333333333
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 1/5 = 0.2 | VIA==HPR 4/5 = 0.8
+   distinct records in union of D_k over the five node-local cues: 39
+   verdict (this run only): SHORTCUT via HPR (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 1.0 seed 20260917, course_p10 | VIA-answered reach record x run pairs: 74 | distinct records: 74
+   overall agreement VIA==CN   58/63 = 0.9206349206349206
+   overall agreement VIA==RL   48/74 = 0.6486486486486487
+   overall agreement VIA==RF   49/74 = 0.6621621621621622
+   overall agreement VIA==PP   65/74 = 0.8783783783783784
+   overall agreement VIA==PC   61/74 = 0.8243243243243243
+   overall agreement VIA==HPR  68/74 = 0.918918918918919
+   VIA pointing at an argument node: 0
+   D_RL        pairs  28 | distinct records  28 | distinct questions  11 | VIA==CN 23/28 = 0.8214285714285714 | VIA==RL 5/28 = 0.17857142857142858
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 12/12 = 1.0 | VIA==RF 0/12 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 1/5 = 0.2 | VIA==HPR 4/5 = 0.8
+   distinct records in union of D_k over the five node-local cues: 40
+   verdict (this run only): SHORTCUT via HPR (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 1.0 seed 20260918, course_p10 | VIA-answered reach record x run pairs: 74 | distinct records: 74
+   overall agreement VIA==CN   58/63 = 0.9206349206349206
+   overall agreement VIA==RL   48/74 = 0.6486486486486487
+   overall agreement VIA==RF   49/74 = 0.6621621621621622
+   overall agreement VIA==PP   65/74 = 0.8783783783783784
+   overall agreement VIA==PC   61/74 = 0.8243243243243243
+   overall agreement VIA==HPR  68/74 = 0.918918918918919
+   VIA pointing at an argument node: 0
+   D_RL        pairs  28 | distinct records  28 | distinct questions  11 | VIA==CN 23/28 = 0.8214285714285714 | VIA==RL 5/28 = 0.17857142857142858
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 12/12 = 1.0 | VIA==RF 0/12 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 1/5 = 0.2 | VIA==HPR 4/5 = 0.8
+   distinct records in union of D_k over the five node-local cues: 40
+   verdict (this run only): SHORTCUT via HPR (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== run Helm 1.0 seed 20260919, course_p10 | VIA-answered reach record x run pairs: 73 | distinct records: 73
+   overall agreement VIA==CN   57/62 = 0.9193548387096774
+   overall agreement VIA==RL   48/73 = 0.6575342465753424
+   overall agreement VIA==RF   48/73 = 0.6575342465753424
+   overall agreement VIA==PP   64/73 = 0.8767123287671232
+   overall agreement VIA==PC   60/73 = 0.821917808219178
+   overall agreement VIA==HPR  59/73 = 0.8082191780821918
+   VIA pointing at an argument node: 0
+   D_RL        pairs  27 | distinct records  27 | distinct questions  10 | VIA==CN 22/27 = 0.8148148148148148 | VIA==RL 5/27 = 0.18518518518518517
+   D_RF        pairs  12 | distinct records  12 | distinct questions   4 | VIA==CN 12/12 = 1.0 | VIA==RF 0/12 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   5 | distinct records   5 | distinct questions   2 | VIA==CN 5/5 = 1.0 | VIA==HPR 0/5 = 0.0
+   distinct records in union of D_k over the five node-local cues: 39
+   verdict (this run only): STRUCTURAL (testable cues ['HPR', 'RF', 'RL']; untestable ['PP', 'PC'])
+== POOLED six runs, course_p10, HELD records only (secondary) | VIA-answered reach record x run pairs: 111 | distinct records: 19
+   overall agreement VIA==CN   101/105 = 0.9619047619047619
+   overall agreement VIA==RL   50/111 = 0.45045045045045046
+   overall agreement VIA==RF   61/111 = 0.5495495495495496
+   overall agreement VIA==PP   101/111 = 0.9099099099099099
+   overall agreement VIA==PC   101/111 = 0.9099099099099099
+   overall agreement VIA==HPR  101/111 = 0.9099099099099099
+   VIA pointing at an argument node: 0
+   D_RL        pairs  57 | distinct records  10 | distinct questions   4 | VIA==CN 57/57 = 1.0 | VIA==RL 0/57 = 0.0
+   D_RF        pairs  48 | distinct records   8 | distinct questions   2 | VIA==CN 44/48 = 0.9166666666666666 | VIA==RF 4/48 = 0.08333333333333333
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   D_PP_unique pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP_unique 0/0 = undefined
+   D_PC_unique pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC_unique 0/0 = undefined
+   D_LPR       pairs  81 | distinct records  14 | distinct questions   5 | VIA==CN 77/81 = 0.9506172839506173 | VIA==LPR 4/81 = 0.04938271604938271
+   distinct records in union of D_k over the five node-local cues: 18
+   verdict (held only, secondary): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])

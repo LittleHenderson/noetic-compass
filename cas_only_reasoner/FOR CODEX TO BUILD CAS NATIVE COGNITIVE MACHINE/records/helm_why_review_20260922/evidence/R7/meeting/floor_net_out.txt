@@ -1,0 +1,7 @@
+floor size 11
+helm1 20260917 final 12 | floor questions right 10 of 11 | non-floor right 2 | net vs floor total 11: 1 | floor questions missed [('404166e8', 'reach')]
+helm1 20260918 final 12 | floor questions right 10 of 11 | non-floor right 2 | net vs floor total 11: 1 | floor questions missed [('404166e8', 'reach')]
+helm1 20260919 final 11 | floor questions right 9 of 11 | non-floor right 2 | net vs floor total 11: 0 | floor questions missed [('404166e8', 'reach'), ('786bbcba', 'parts')]
+helm2 20260917 final 12 | floor questions right 10 of 11 | non-floor right 2 | net vs floor total 11: 1 | floor questions missed [('404166e8', 'reach')]
+helm2 20260918 final 12 | floor questions right 10 of 11 | non-floor right 2 | net vs floor total 11: 1 | floor questions missed [('404166e8', 'reach')]
+helm2 20260919 final 10 | floor questions right 8 of 11 | non-floor right 2 | net vs floor total 11: -1 | floor questions missed [('36988555', 'reach'), ('404166e8', 'reach'), ('786bbcba', 'parts')]

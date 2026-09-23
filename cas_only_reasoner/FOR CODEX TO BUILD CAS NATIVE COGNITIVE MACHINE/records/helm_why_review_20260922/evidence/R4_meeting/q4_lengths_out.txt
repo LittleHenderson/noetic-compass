@@ -1,0 +1,7 @@
+train input bytes min 13 max 84 ; seen128 max 81
+dev input bytes min 35 max 100
+dev inputs longer than longest TRAIN input (84): 9 of 256 ; in first16: 1
+dev inputs longer than longest SEEN input (81): 11 of 256 ; in first16: 1
+shape incl operator seen128 top: [('(x + x)', 44), ('(x × x)', 14)] | pool top: [('(x + x)', 476), ('(x × x)', 271)]
+shape excl operator seen128 top: [('(x o x)', 58), ('(x o (x o x))', 19)] | pool top: [('(x o x)', 747), ('(x o (x o x))', 417)]
+operator characters seen in observations: ['+', '×']

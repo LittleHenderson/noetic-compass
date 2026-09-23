@@ -1,0 +1,19 @@
+== course trained+held: multi-hop VIA records by (hop, class, n_candidates, n_on_path)
+  hop2 ONE_CANDIDATE n=37 questions=17 | 2.0/17 36  2.0/18 36  2.0/19 32  1.0/17 36  1.0/18 36  1.0/19 36
+  hop2 PATH_DECIDES  n= 2 questions=2 | 2.0/17 2  2.0/18 2  2.0/19 2  1.0/17 2  1.0/18 2  1.0/19 2
+  hop2 TIE_BY_LABEL  n=16 questions=7 | 2.0/17 10  2.0/18 12  2.0/19 11  1.0/17 12  1.0/18 12  1.0/19 10
+  hop3 ONE_CANDIDATE n=10 questions=6 | 2.0/17 9  2.0/18 10  2.0/19 10  1.0/17 10  1.0/18 10  1.0/19 10
+     detail (2, 'ONE_CANDIDATE', 1, 1) 37
+     detail (2, 'PATH_DECIDES', 2, 1) 2
+     detail (2, 'TIE_BY_LABEL', 2, 2) 16
+     detail (3, 'ONE_CANDIDATE', 1, 1) 10
+== course excluded: multi-hop VIA records by (hop, class, n_candidates, n_on_path)
+  hop2 ONE_CANDIDATE n= 7 questions=5 | 2.0/17 7  2.0/18 7  2.0/19 7  1.0/17 7  1.0/18 7  1.0/19 7
+  hop2 TIE_BY_LABEL  n= 2 questions=2 | 2.0/17 2  2.0/18 1  2.0/19 1  1.0/17 1  1.0/18 1  1.0/19 2
+  hop3 ONE_CANDIDATE n= 1 questions=1 | 2.0/17 1  2.0/18 1  2.0/19 1  1.0/17 1  1.0/18 1  1.0/19 1
+     detail (2, 'ONE_CANDIDATE', 1, 1) 7
+     detail (2, 'TIE_BY_LABEL', 2, 2) 2
+     detail (3, 'ONE_CANDIDATE', 1, 1) 1
+== dev panel: multi-hop VIA records by (hop, class, n_candidates, n_on_path)
+  hop2 ONE_CANDIDATE n= 3 questions=3 | 2.0/17 2  2.0/18 3  2.0/19 3  1.0/17 3  1.0/18 2  1.0/19 3
+     detail (2, 'ONE_CANDIDATE', 1, 1) 3

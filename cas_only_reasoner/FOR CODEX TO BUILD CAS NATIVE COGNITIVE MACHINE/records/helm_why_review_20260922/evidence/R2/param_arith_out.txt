@@ -1,0 +1,22 @@
+Helm 2.0 total 174303 Helm 1.0 total 157919
+  core ^6 (left,right,merge)          16384  0.0940 of 2.0
+  node_encode 18->64                   1152  0.0066 of 2.0
+  state_encode (F1)                    4096  0.0235 of 2.0
+  match_key (F2b)                      4096  0.0235 of 2.0
+  round_mix+round_rate                    4  0.0000 of 2.0
+  query_projection+query_norm          1472  0.0084 of 2.0
+  attention_key                          64  0.0004 of 2.0
+  world_projection 196->64            12544  0.0720 of 2.0
+  declaration_table 1024x64           65536  0.3760 of 2.0
+  declaration_projection               2048  0.0117 of 2.0
+  directed_pair_embedding                16  0.0001 of 2.0
+  node_head                            8450  0.0485 of 2.0
+  edge_head                            8962  0.0514 of 2.0
+  role_head+role_embedding            13314  0.0764 of 2.0
+  pointer_key                          4096  0.0235 of 2.0
+  reach_option_head (F2a, 260 in)     16898  0.0969 of 2.0
+  mode_option_head                    12546  0.0720 of 2.0
+  world_head                           2625  0.0151 of 2.0
+message-passing path (core+node_encode+state_encode+mix/rate): 2.0 21636 = 0.1241 ; 1.0 17540 = 0.1111
+declaration_table share: 2.0 0.3760 ; 1.0 0.4150
+R1 total 70818 {'input_embedding 257x64': 16448, 'encoder GRU': 24960, 'output_embedding 35x64': 2240, 'decoder GRU': 24960, 'output_head 64->34': 2210}

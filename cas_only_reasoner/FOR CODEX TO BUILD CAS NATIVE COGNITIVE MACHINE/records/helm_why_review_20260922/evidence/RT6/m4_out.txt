@@ -1,0 +1,6 @@
+compose              expected 8/8  invalid->INVALID_INPUT 4/4
+domain_descent_mask  expected 6/6  invalid->INVALID_INPUT 0/0
+involute             expected 10/10  invalid->INVALID_INPUT 4/4
+is_admissible        expected 16/16  invalid->INVALID_INPUT 4/4
+rpm_embed_realize    expected 4/4  invalid->INVALID_INPUT 5/5
+all cases reproduced by reference_ops from the operands alone: 61/61

@@ -1,0 +1,9 @@
+RANK_LAST ids 5 ONE_HOP ids 11 union 15
+2.0 population 18 in rank_last 5 in one_hop 7 in union 11
+   2.0 20260917 start 2 final 12 gained 11 broken [('404166e8', 'rank_last', '-')] final-right outside union ['7a391350', 'a3e70de9']
+   2.0 20260918 start 0 final 12 gained 12 broken [] final-right outside union ['7a391350', 'a3e70de9']
+   2.0 20260919 start 4 final 10 gained 7 broken [('36988555', 'rank_last', '-')] final-right outside union ['7a391350', 'a3e70de9']
+1.0 population 18 in rank_last 5 in one_hop 7 in union 11
+   1.0 20260917 start 2 final 12 gained 10 broken [] final-right outside union ['7a391350', 'a3e70de9']
+   1.0 20260918 start 0 final 12 gained 12 broken [] final-right outside union ['7a391350', 'a3e70de9']
+   1.0 20260919 start 0 final 11 gained 11 broken [] final-right outside union ['7a391350', 'a3e70de9']

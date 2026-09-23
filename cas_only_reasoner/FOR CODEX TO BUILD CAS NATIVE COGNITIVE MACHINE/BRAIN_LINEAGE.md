@@ -1,5 +1,39 @@
 # The learning brain — lineage record
 
+## 2026-09-22 team review: why Helm, and why it did not pass (advice only)
+
+A 31-agent review answered two owner questions: why Helm exists, and why it did not pass. It changes
+no status, certificate, grader or old row in this file. The judge upheld 15 of its 32 committed
+findings in full and 17 in part. Report, rulings and every script and output:
+`records/helm_why_review_20260922/README.md`.
+
+**Flagged here, NOT corrected.** Correcting these is the owner's decision. Line numbers refer to
+this file at commit `4eb98682`, before this section was added.
+
+- `:231` prints Helm 2.0 seed 20260917 as `False`. The frozen `admission_001/gate_reading.json` says
+  that seed **passed** (11 gained, 1 lost, p 13/4096). Only seed 20260919 failed (7 gained, 1 lost,
+  p 9/256 = 0.03515625).
+- `:234-235` says the gate "requires zero broken on every seed". The frozen grader passes a seed
+  when b > c and exact p <= 1/100, with gains in at least 2 kinds and 2 worlds.
+- `:195`, `:198` and `:200` state the one-hop ceiling, "VIA needs two" and the ten-node chains as
+  causes. They are inferences, not measurements.
+- `:392` repeats the "zero broken" rule. `:395` says no zero-learning rule touches analogy; the
+  pre-run LB18 rule does.
+- `:669`: the Helm 1.0 evidence pointer names Helm 2.0 folders.
+
+The report lists the matching lines in other files.
+
+**Three diagnostic GPU runs on the local RTX 4070, `DIAGNOSTIC_NOT_CLAIM_BEARING`.** No checkpoint
+was saved. No sealed or eval file was opened.
+
+- RT1 read the saved Q4 checkpoint forward only. Its 64-number hand-off is nearly the same for every
+  input.
+- RT2 re-ran 2,000 updates on 256 rows: 0 exact.
+- RT7 re-ran 2,000 updates on 8 rows. It memorised all 8 exactly and still got 0/16 on dev.
+
+The Q4 status stays `MEASURED_ON_DEV_ONLY_NOT_CERTIFIED`. The cause of Q4's 0/16 stays OPEN. No
+code defect was found at the level tested.
+
 ## 2026-09-22 authorized Q4 R1 smoke: completed, 0/16 exact
 
 Actual local CUDA run T14_R1_G_ENGINEERING_SMOKE completed 128 updates in

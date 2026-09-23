@@ -1,0 +1,13 @@
+analogy queries in registry: 24 distinct focus worlds: 24
+helm2.0 20260917 course_p00: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm2.0 20260917 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm2.0 20260918 course_p00: distinct answers 2; records whose focus IS the modal answer 3; minority 3, of which answer==own focus 0
+helm2.0 20260918 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm2.0 20260919 course_p00: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm2.0 20260919 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260917 course_p00: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260917 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260918 course_p00: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260918 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260919 course_p00: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0
+helm1.0 20260919 course_p10: distinct answers 1; records whose focus IS the modal answer 0; minority 0, of which answer==own focus 0

@@ -1,0 +1,25 @@
+== saturation of the 64 encoder units (GRU hidden values lie in (-1, 1))
+ train2048: fraction |h|>0.9 0.845207, |h|>0.99 0.444801, |h|>0.999 0.020393; units whose |mean|>0.9: 55/64; mean per-unit std 0.025187
+ dev16: fraction |h|>0.9 0.854492, |h|>0.99 0.488281, |h|>0.999 0.026367; units whose |mean|>0.9: 55/64; mean per-unit std 0.014458
+ distance between dev16 mean vector and train2048 mean vector: 0.177522 ; train2048 mean pairwise-to-mean distance 0.381782
+
+== nearest-centroid read-out (z-scored by the 1920 fit rows); test = unseen128 and dev16; majority = most common class in fit rows
+ root_op             classes  2 | unseen128 centroid  72/128 vs majority  94/128 | dev16 centroid 13/16 vs majority 15/16
+ depth               classes  3 | unseen128 centroid  78/128 vs majority  51/128 | dev16 centroid 12/16 vs majority  0/16
+ left_child_binary   classes  2 | unseen128 centroid  69/128 vs majority  85/128 | dev16 centroid  9/16 vs majority  5/16
+ right_child_binary  classes  2 | unseen128 centroid 128/128 vs majority  60/128 | dev16 centroid 16/16 vs majority 14/16
+ first_leaf_noetic   classes 10 | unseen128 centroid   9/128 vs majority   8/128 | dev16 centroid  2/16 vs majority  1/16
+ last_leaf_noetic    classes 10 | unseen128 centroid  20/128 vs majority  14/128 | dev16 centroid  4/16 vs majority  2/16
+ last_leaf_domain    classes  4 | unseen128 centroid  63/128 vs majority  36/128 | dev16 centroid 10/16 vs majority  6/16
+ last_leaf_register  classes  5 | unseen128 centroid 105/128 vs majority  61/128 | dev16 centroid 11/16 vs majority  8/16
+ n_leaves            classes  5 | unseen128 centroid  58/128 vs majority  47/128 | dev16 centroid  3/15 vs majority  0/15
+
+== which input features move the vector? Pearson(pairwise L2, feature difference) over unseen128 pairs
+ abs_input_byte_length_diff   Pearson 0.439018
+ last_leaf_differs            Pearson 0.024524
+ last_8_chars_differ          Pearson 0.092270
+
+== exact one-sided sign-test p for 'TRUE bottleneck gives lower teacher-forced CE than SWAP' counts from rt1_out.txt
+ seen128: 76/128  P(X>=76 | n=128, 0.5) = 0.0208191419
+ unseen128: 66/128  P(X>=66 | n=128, 0.5) = 0.3955037247
+ dev16: 11/16  P(X>=11 | n=16, 0.5) = 0.1050567627

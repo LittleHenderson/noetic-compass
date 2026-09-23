@@ -1,0 +1,31 @@
+held_questions value 50 held_records 127
+held sets identical across versions: True
+label populations identical: True 18
+floor ids (adjacency or rank-last) in label population: 11
+=== seed 20260917
+  helm1 course p00 30 p10 392 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 7, 'definition': 70, 'edge_account': 70, 'parts': 53, 'reach': 101, 'role_set': 5}
+     course p10 minus correspondence 385
+     frozen18 before 2 after 12 gained 10 lost 0 []
+     after-correct NOT in floor set 2
+  helm2 course p00 22 p10 495 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 88, 'definition': 70, 'edge_account': 70, 'parts': 50, 'reach': 97, 'role_set': 34}
+     course p10 minus correspondence 407
+     frozen18 before 2 after 12 gained 11 lost 1 [('typed-query-404166e8b818', 'reach', True, True)]
+     after-correct NOT in floor set 2
+=== seed 20260918
+  helm1 course p00 17 p10 422 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 7, 'definition': 70, 'edge_account': 70, 'parts': 53, 'reach': 101, 'role_set': 35}
+     course p10 minus correspondence 415
+     frozen18 before 0 after 12 gained 12 lost 0 []
+     after-correct NOT in floor set 2
+  helm2 course p00 4 p10 495 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 88, 'definition': 70, 'edge_account': 70, 'parts': 53, 'reach': 101, 'role_set': 27}
+     course p10 minus correspondence 407
+     frozen18 before 0 after 12 gained 12 lost 0 []
+     after-correct NOT in floor set 2
+=== seed 20260919
+  helm1 course p00 20 p10 407 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 7, 'definition': 70, 'edge_account': 70, 'parts': 49, 'reach': 99, 'role_set': 26}
+     course p10 minus correspondence 400
+     frozen18 before 0 after 11 gained 11 lost 0 []
+     after-correct NOT in floor set 2
+  helm2 course p00 73 p10 490 / 564 | p10 by kind {'analogy': 16, 'context': 70, 'correspondence': 88, 'definition': 70, 'edge_account': 70, 'parts': 46, 'reach': 96, 'role_set': 34}
+     course p10 minus correspondence 402
+     frozen18 before 4 after 10 gained 7 lost 1 [('typed-query-369885551a55', 'reach', True, True)]
+     after-correct NOT in floor set 2

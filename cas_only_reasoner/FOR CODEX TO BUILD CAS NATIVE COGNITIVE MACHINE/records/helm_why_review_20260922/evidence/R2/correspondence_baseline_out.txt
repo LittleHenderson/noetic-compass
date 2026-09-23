@@ -1,0 +1,10 @@
+public bank worlds: 64
+declaration keys: ['domain', 'function', 'kind', 'participants', 'participants_basis', 'primary_labels', 'setting']
+held correspondence questions: 5 answer statuses over 3 seeds: {'MAPPING': 60}
+questions where the 3 seeds gave >1 distinct correct mapping: 0
+  participant_order (no edges read)             5 / 5
+  positional n_i->n_i                           0 / 5
+  brute_force_isomorphism_lexical_first         5 / 5
+  observed answer is a contains-isomorphism     5 / 5
+  participant_order mapping is itself a contains-isomorphism: 5 / 5
+  number of contains-isomorphisms per question (count: questions): {1: 4, 2: 1}

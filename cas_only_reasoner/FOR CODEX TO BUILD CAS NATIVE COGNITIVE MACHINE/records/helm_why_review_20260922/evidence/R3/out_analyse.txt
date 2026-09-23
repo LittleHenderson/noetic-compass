@@ -1,0 +1,30 @@
+records total 564 held 127 trained 358 excluded 79 held questions 50
+
+=== (1) PRIMARY TEST ON THE FROZEN 18, recomputed from raw correct flags, both rules ===
+Helm 1.0 seed 20260917: ck 0->10 before 2 after 12 b=10 c=0 p=1/1024 (0.0009765625) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=True (frozen reading says True, b/c 10/0, p 1/1024) | broken==0 rule pass=True
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 1 [('404166e8', 'reach', 'RANK')]; machine-vs-floor p=1/2 (0.5)
+     right at START: [('36988555', 'reach', 'RANK'), ('7a391350', 'reach', 'NONFLOOR')]
+     BROKEN: []
+Helm 1.0 seed 20260918: ck 0->10 before 0 after 12 b=12 c=0 p=1/4096 (0.000244140625) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=True (frozen reading says True, b/c 12/0, p 1/4096) | broken==0 rule pass=True
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 1 [('404166e8', 'reach', 'RANK')]; machine-vs-floor p=1/2 (0.5)
+     right at START: []
+     BROKEN: []
+Helm 1.0 seed 20260919: ck 0->10 before 0 after 11 b=11 c=0 p=1/2048 (0.00048828125) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=True (frozen reading says True, b/c 11/0, p 1/2048) | broken==0 rule pass=True
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 2 [('404166e8', 'reach', 'RANK'), ('786bbcba', 'parts', 'RANK')]; machine-vs-floor p=11/16 (0.6875)
+     right at START: []
+     BROKEN: []
+Helm 2.0 seed 20260917: ck 0->10 before 2 after 12 b=11 c=1 p=13/4096 (0.003173828125) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=True (frozen reading says True, b/c 11/1, p 13/4096) | broken==0 rule pass=False
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 1 [('404166e8', 'reach', 'RANK')]; machine-vs-floor p=1/2 (0.5)
+     right at START: [('36988555', 'reach', 'RANK'), ('404166e8', 'reach', 'RANK')]
+     BROKEN: [('404166e8', 'reach', '4090ec49', 'RANK', 1)]
+Helm 2.0 seed 20260918: ck 0->10 before 0 after 12 b=12 c=0 p=1/4096 (0.000244140625) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=True (frozen reading says True, b/c 12/0, p 1/4096) | broken==0 rule pass=True
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 1 [('404166e8', 'reach', 'RANK')]; machine-vs-floor p=1/2 (0.5)
+     right at START: []
+     BROKEN: []
+Helm 2.0 seed 20260919: ck 0->10 before 4 after 10 b=7 c=1 p=9/256 (0.03515625) kinds=['edge_account', 'parts', 'reach'] worlds=5 | evaluate_gates rule pass=False (frozen reading says False, b/c 7/1, p 9/256) | broken==0 rule pass=False
+     above floor at final: 2 [('7a391350', 'reach'), ('a3e70de9', 'reach')]; floor questions wrong at final: 3 [('36988555', 'reach', 'RANK'), ('404166e8', 'reach', 'RANK'), ('786bbcba', 'parts', 'RANK')]; machine-vs-floor p=13/16 (0.8125)
+     right at START: [('36988555', 'reach', 'RANK'), ('7a391350', 'reach', 'NONFLOOR'), ('a3e70de9', 'reach', 'NONFLOOR'), ('aa62bbee', 'reach', 'RANK')]
+     BROKEN: [('36988555', 'reach', '28f61f2d', 'RANK', 4)]
+
+min b passing with c=0: 7  with c=1: 10  with c=2: 12
+tail(7,8)= 9/256 0.03515625  tail(7,7)= 1/128 0.0078125  tail(11,12)= 13/4096 0.003173828125  tail(8,9)= 5/256 0.01953125

@@ -1,0 +1,12 @@
+1.0 20260917 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+1.0 20260917 final.pt /model_state/round_rate round_rate -0.16512343287467957 g=0.01*tanh -0.0016363888373763216 sha256(final.pt) 66745c1b5902054d
+1.0 20260918 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+1.0 20260918 final.pt /model_state/round_rate round_rate -0.23411144316196442 g=0.01*tanh -0.002299261025249284 sha256(final.pt) a63b2428f77b0151
+1.0 20260919 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+1.0 20260919 final.pt /model_state/round_rate round_rate -0.17966674268245697 g=0.01*tanh -0.0017775816018125582 sha256(final.pt) d693f448d68e5eb5
+2.0 20260917 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+2.0 20260917 final.pt /model_state/round_rate round_rate 0.00778836477547884 g=0.01*tanh 7.788207302131318e-05 sha256(final.pt) c6c49e982c408ced
+2.0 20260918 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+2.0 20260918 final.pt /model_state/round_rate round_rate 0.25864478945732117 g=0.01*tanh 0.0025302752221345445 sha256(final.pt) a6e72caac1fccbd9
+2.0 20260919 initial.pt /model_state/round_rate round_rate 0.0 g=0.01*tanh 0.0  
+2.0 20260919 final.pt /model_state/round_rate round_rate -0.0002534387167543173 g=0.01*tanh -2.5343871132809456e-06 sha256(final.pt) c83e0123643a2433

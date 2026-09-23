@@ -1,0 +1,13 @@
+analogy records in registry 70 distinct focus worlds 24
+helm1 20260917 p00: n 70 correct 0 | distinct predicted worlds 1 | top [('', 70)] | pred == a support's worked answer 0
+helm1 20260917 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('41ef0201', 70)] | pred == a support's worked answer 0
+helm1 20260918 p00: n 70 correct 0 | distinct predicted worlds 1 | top [('', 70)] | pred == a support's worked answer 0
+helm1 20260918 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('056bbffd', 70)] | pred == a support's worked answer 62
+helm1 20260919 p00: n 70 correct 0 | distinct predicted worlds 1 | top [('', 70)] | pred == a support's worked answer 0
+helm1 20260919 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('056bbffd', 70)] | pred == a support's worked answer 62
+helm2 20260917 p00: n 70 correct 0 | distinct predicted worlds 1 | top [('', 70)] | pred == a support's worked answer 0
+helm2 20260917 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('41ef0201', 70)] | pred == a support's worked answer 0
+helm2 20260918 p00: n 70 correct 4 | distinct predicted worlds 2 | top [('5ba8e866', 67), ('d5f47cea', 3)] | pred == a support's worked answer 0
+helm2 20260918 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('056bbffd', 70)] | pred == a support's worked answer 62
+helm2 20260919 p00: n 70 correct 0 | distinct predicted worlds 1 | top [('', 70)] | pred == a support's worked answer 0
+helm2 20260919 p10: n 70 correct 16 | distinct predicted worlds 1 | top [('056bbffd', 70)] | pred == a support's worked answer 62
