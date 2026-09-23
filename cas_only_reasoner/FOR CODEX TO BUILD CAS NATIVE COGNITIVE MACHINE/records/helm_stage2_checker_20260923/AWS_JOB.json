@@ -1,0 +1,31 @@
+{
+  "schema": "helm.stage2-aws-job/1",
+  "created_utc": "2026-09-23T12:55:20.030062+00:00",
+  "region": "us-west-2",
+  "bucket": "cas-helm-checker-20260923-807562639912-9eeab1e7",
+  "prefix": "job/",
+  "client_token": "9eeab1e7289243a6898d623c3b02c866",
+  "owner_instruction": "use aws as there is only 354 mb of 16 gbs locally",
+  "instance_type": "t3.large",
+  "vcpu": 2,
+  "memory_gib": 8,
+  "disk_gib": 12,
+  "instance_lifetime_seconds": 7200,
+  "cpu_credits": "standard",
+  "worker_memory_gib": 4,
+  "budget_usd": 1,
+  "budget_enforcement": "resource/time caps; not a billing-enforced dollar cap",
+  "rate_usd_hour": "0.0832",
+  "training_updates": 0,
+  "gpu": false,
+  "instance_id": "i-00787ea718c2631ea",
+  "ami": "ami-075d448db8fb256af",
+  "launch_response_request_id": "2656140a-fe19-446d-8a62-33924685454b",
+  "commands": [
+    {
+      "id": "323dc665-4875-4266-8979-8cc57fc00056",
+      "script": "records/helm_stage2_checker_20260923/aws_preflight.sh",
+      "sha256": "3b2057685977e87ce8190c7112c9002463297f121fe79d2606c8294d44d3ac90"
+    }
+  ]
+}

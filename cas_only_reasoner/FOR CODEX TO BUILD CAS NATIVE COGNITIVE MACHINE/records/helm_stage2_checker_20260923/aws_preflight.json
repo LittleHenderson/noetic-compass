@@ -1,0 +1,36 @@
+{
+  "CommandId": "323dc665-4875-4266-8979-8cc57fc00056",
+  "InstanceId": "i-00787ea718c2631ea",
+  "Comment": "",
+  "DocumentName": "AWS-RunShellScript",
+  "DocumentVersion": "$DEFAULT",
+  "PluginName": "aws:runShellScript",
+  "ResponseCode": 0,
+  "ExecutionStartDateTime": "2026-09-23T12:57:01.224Z",
+  "ExecutionElapsedTime": "PT1.292S",
+  "ExecutionEndDateTime": "2026-09-23T12:57:02.224Z",
+  "Status": "Success",
+  "StatusDetails": "Success",
+  "StandardOutputContent": "READY\nPython 3.9.25\naws-cli/2.33.15 Python/3.9.25 Linux/6.18.48-109.150.amzn2023.x86_64 source/x86_64.amzn.2023\n               total        used        free      shared  buff/cache   available\nMem:            7819         218        7178           0         422        7374\nSwap:              0           0           0\nNEXT                        LEFT          LAST                        PASSED  UNIT                             ACTIVATES\nWed 2026-09-23 12:57:06 UTC 4s left       Wed 2026-09-23 12:56:05 UTC 57s ago refresh-policy-routes@ens5.timer refresh-policy-routes@ens5.service\nWed 2026-09-23 13:00:00 UTC 2min 57s left -                           -       sysstat-collect.timer            sysstat-collect.service\nWed 2026-09-23 13:10:28 UTC 13min left    -                           -       systemd-tmpfiles-clean.timer     systemd-tmpfiles-clean.service\nThu 2026-09-24 00:00:00 UTC 11h left      -                           -       logrotate.timer                  logrotate.service\nThu 2026-09-24 00:07:00 UTC 11h left      -                           -       sysstat-summary.timer            sysstat-summary.service\nThu 2026-09-24 01:53:42 UTC 12h left      -                           -       update-motd.timer                update-motd.service\nMon 2026-09-28 00:24:18 UTC 4 days left   -                           -       fstrim.timer                     fstrim.service\n\n7 timers listed.\n",
+  "StandardOutputUrl": "",
+  "StandardErrorContent": "",
+  "StandardErrorUrl": "",
+  "CloudWatchOutputConfig": {
+    "CloudWatchLogGroupName": "",
+    "CloudWatchOutputEnabled": false
+  },
+  "ResponseMetadata": {
+    "RequestId": "8493b915-9198-49a0-a4e2-72295a7bb792",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "server": "Server",
+      "date": "Wed, 23 Sep 2026 12:57:18 GMT",
+      "content-type": "application/x-amz-json-1.1",
+      "content-length": "2000",
+      "connection": "keep-alive",
+      "x-amzn-requestid": "8493b915-9198-49a0-a4e2-72295a7bb792",
+      "cache-control": "no-store"
+    },
+    "RetryAttempts": 0
+  }
+}
