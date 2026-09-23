@@ -187,3 +187,88 @@ uses exists at module level in `pointer_learner.py` (checked with `ast`, not by 
 - **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` file, any `hset1a` path, `D:/tksCAS-worktrees/helm-integration/`,
   other worktrees, AWS or S3, and any session log or transcript.
 - **Other actions:** one read-only local process listing (checking no study run was in flight). No AWS call.
+
+## Revision 1 (2026-09-23): the guards no longer read a class attribute
+
+Everything above describes `098a3bdc` and stays as that record. This section describes the revision in the
+commit after this report's first version.
+
+### The finding (fresh reviewer, MINOR)
+
+- In `098a3bdc`, the `__setattr__` and `__delattr__` guards read `self._READ_ONLY_SWITCH`, a plain class attribute.
+- An instance attribute of the same name hides it. `model._READ_ONLY_SWITCH = ()` was allowed.
+- After that, assigning a `Module` to the switch name registered a new child and added state-dict keys. A
+  `Parameter` value raised `KeyError`, not `AttributeError`.
+- The reviewer was right. I had missed that the guard's own list could be replaced through the same object it protects.
+
+### What changed
+
+- `_build_container` gets one new local variable, right after the two argument checks:
+  `read_only_names = ("analogy_focus_comparison", "analogy_seed")` (new line 716).
+- Both guards now test `if name in read_only_names:` (new lines 751 and 756).
+  - That name is a closure variable of `_build_container`: a value held by the function, not by the model.
+  - Nothing is looked up through `self` or through the class.
+- The class attribute `_READ_ONLY_SWITCH` is gone. Its line became one comment line (new line 738). Nothing new is
+  stored on the instance or the class.
+- Bytecode (compiled only, never run): `_build_container.co_cellvars` now also holds `read_only_names`. Both guards
+  load it with `LOAD_DEREF`. The class body stores only the two properties and the methods.
+- **Line endings:** all four new or changed lines are **LF**.
+  - The new local sits between old lines 715 and 716, which are both LF (added by `60e382b0`).
+  - The three replaced lines were LF.
+  - The CRLF count is still 2,241.
+
+### New hashes of `pointer_learner.py`
+
+| | `098a3bdc` | Revision 1 |
+|---|---|---|
+| raw sha256 | `a94084f76553f6ee88989c34d6ea65af3fb7758e73625bbdbf680a867a7c56ea` | `0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8` |
+| LF sha256 | `08198047a91b2ae32d04d87ac94ce1d4577557983c5303b620247de54ad90768` | `2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781` |
+| bytes / lines | 159,216 / 2,336 | 159,350 / 2,337 |
+| CRLF / LF lines | 2,241 / 95 | 2,241 / 96 |
+
+### Byte comparisons (line by line, endings included)
+
+- **vs `098a3bdc`:** four changes only.
+  - Insert: new line 716.
+  - Replace: old 737 with new 738.
+  - Replace: old 750 with new 751.
+  - Replace: old 755 with new 756.
+  - 2,333 lines are equal.
+- **vs `96644503`:** three changes only.
+  - Insert: new line 716.
+  - Insert: the 30-line LF block (new 730-759).
+  - Delete: old 731-732.
+  - 2,306 lines are equal, which is every other line of the original.
+
+### Line numbers after Revision 1
+
+Everything after old line 715 moves down one more line:
+- the block is at 730-759 and `__init__` at 760;
+- the build-time branch is at 861 and 865;
+- `state_dict` / `load_state_dict` are at 880-896;
+- `_world_scores` is at 1553;
+- the learner builds are at 1777 and 2189;
+- the checkpoint fingerprint is at 2195.
+
+### New test case
+
+- `test_planted_attributes_cannot_disable_the_guards`, 2 cases (ON and OFF), in section (2) of the test file.
+- It plants `_READ_ONLY_SWITCH = ()` and `read_only_names = ()` on the instance **and** on that model's own class.
+- Then, for both names, it assigns a `Module`, a `Parameter`, a `Buffer` and the opposite bool. It also tries `del`.
+- Every attempt must raise `AttributeError`. The state-dict keys and shapes must be unchanged, with no stray child,
+  parameter or buffer. The switch and seed must read back unchanged.
+- The test file change is a pure insertion of 22 lines (new lines 204-225). No existing test changed.
+- Test file: 362 lines, LF only, sha256 `16444079d08827283af3feb07448c6d6d45923ffdfba2ca385596c798d2695ba`.
+- Totals: 11 test functions, 27 cases (26 CPU, 1 CUDA skipped when CUDA is absent). **All NOT_RUN.**
+- Static checks: `py_compile` and `ast` pass for both files.
+
+### Limit still standing (class-level tampering, out of scope)
+
+- Someone with access to the class object itself can still change behaviour. Examples: replace a property on
+  `type(model)`, or overwrite the closure cell through `type(model).__setattr__.__closure__`.
+- Each `_build_container` call makes its own class, so either change affects only that one model.
+- Instance-level writes (attribute assignment, `del`, `object.__setattr__`, `__dict__`, planted names) are all covered.
+
+### Exposure in this revision
+
+None new. I opened only my working copy, `git show` of `098a3bdc` and `96644503`, and my own scratch copies.

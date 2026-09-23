@@ -713,6 +713,7 @@ def _build_container(torch, framework, device, *, analogy_focus_comparison=True,
     """
     require(type(analogy_focus_comparison) is bool, "POINTER_ANALOGY_SWITCH")
     require(type(analogy_seed) is int and 0 <= analogy_seed < 2 ** 63, "POINTER_ANALOGY_SEED")
+    read_only_names = ("analogy_focus_comparison", "analogy_seed")  # checked by the container's two guards
     registered = dict(framework.module.state_dict())
     require(set(registered) == set(PARAMETERS), "POINTER_FRAMEWORK_STATE_KEYS")
     require(all(tuple(registered[name].shape) == PARAMETER_SHAPES[name] for name in PARAMETERS),
@@ -734,7 +735,7 @@ def _build_container(torch, framework, device, *, analogy_focus_comparison=True,
         # A property is a data descriptor, so a value written into `__dict__` is never returned. The two guards
         # refuse assignment and deletion for EVERY value: without them torch's `Module.__setattr__` would register
         # a Module value as a new child (new state-dict keys) and answer a Parameter or Buffer with KeyError.
-        _READ_ONLY_SWITCH = ("analogy_focus_comparison", "analogy_seed")
+        # The guards test names against `read_only_names`, a closure local, so no attribute can shadow the list.
 
         @property
         def analogy_focus_comparison(self):
@@ -747,12 +748,12 @@ def _build_container(torch, framework, device, *, analogy_focus_comparison=True,
             return analogy_seed if analogy_focus_comparison else None
 
         def __setattr__(self, name, value):
-            if name in self._READ_ONLY_SWITCH:
+            if name in read_only_names:
                 raise AttributeError("POINTER_ANALOGY_SWITCH_READ_ONLY:" + name)
             super().__setattr__(name, value)
 
         def __delattr__(self, name):
-            if name in self._READ_ONLY_SWITCH:
+            if name in read_only_names:
                 raise AttributeError("POINTER_ANALOGY_SWITCH_READ_ONLY:" + name)
             super().__delattr__(name)
 

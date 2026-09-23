@@ -201,6 +201,28 @@ def test_assignment_and_deletion_raise_and_leave_the_value_unchanged(name, enabl
     assert name not in model._parameters and name not in model._buffers and name not in model._modules
 
 
+@pytest.mark.parametrize("enabled", [True, False], ids=["on", "off"])
+def test_planted_attributes_cannot_disable_the_guards(enabled):
+    model = container(**{SWITCH: enabled})
+    keys = layout(model)
+    # Names an attacker might plant to empty the guards' list: the old class-attribute name and the closure's
+    # name, on the instance and on this container's own class. The guards read neither.
+    for planted in ("_READ_ONLY_SWITCH", "read_only_names"):
+        setattr(model, planted, ())
+        setattr(type(model), planted, ())
+    for name in NAMES:
+        for value in (torch.nn.Linear(1, 1), torch.nn.Parameter(torch.zeros(1)), torch.nn.Buffer(torch.zeros(1)),
+                      not enabled):
+            with pytest.raises(AttributeError):
+                setattr(model, name, value)
+        with pytest.raises(AttributeError):
+            delattr(model, name)
+        assert name not in model._parameters and name not in model._buffers and name not in model._modules
+    assert layout(model) == keys
+    assert getattr(model, SWITCH) is enabled
+    assert getattr(model, SEED) == (P.ANALOGY_INIT_SEED if enabled else None)
+
+
 # ---- (3) an instance-dict write changes neither the value nor the scoring branch ----
 
 @pytest.mark.parametrize("enabled", [True, False], ids=["on", "off"])
