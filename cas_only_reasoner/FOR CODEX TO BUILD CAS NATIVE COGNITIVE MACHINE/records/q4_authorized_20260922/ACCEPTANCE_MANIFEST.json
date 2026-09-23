@@ -1,0 +1,389 @@
+{
+  "schema": "helm-cas-expression-lab.q4-run-evidence/0.1",
+  "sealed_utc": "2026-09-23T00:44:52.489354+00:00",
+  "runtime_source_commit": "d4c3fc7643201a83693ea9073c14ab42ecc5a570",
+  "plan_canonical_sha256": "9dacc83627422d704c9db58f5ddbac82936e7d52211ec061247419fbad78095c",
+  "scope": "Actual bounded development smoke; measured, not certified; not complete Helm 3.0",
+  "artifacts": [
+    {
+      "path": "docs/CAS_SHARED_MODULE_INVENTORY_Q4_20260922.json",
+      "bytes": 8463,
+      "sha256_raw": "987a5256d9df9288ef4e06ce724bcedab361eb6f2548d2f8033fb94b6c11e95b",
+      "sha256_lf": "987a5256d9df9288ef4e06ce724bcedab361eb6f2548d2f8033fb94b6c11e95b",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "docs/OWNER_RUN_AUTHORIZATION_20260922.md",
+      "bytes": 2163,
+      "sha256_raw": "12f2bd430188c1b9ba0cf5222e6bbb74ee8c6942c644eaf0628743be0515a4ce",
+      "sha256_lf": "12f2bd430188c1b9ba0cf5222e6bbb74ee8c6942c644eaf0628743be0515a4ce",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "records/q4_authorized_20260922/.gitattributes",
+      "bytes": 8,
+      "sha256_raw": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/conversation_authorization.json",
+      "bytes": 871,
+      "sha256_raw": "b0570c68e092e3b94e4075660cb84bb35bfd9bc1a8d294970a0075cd3baaa029",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/execute.log",
+      "bytes": 230,
+      "sha256_raw": "15385965fe23106c0fa6e7c8ad04460794461d4e7ae07cf5b944b1da3eb863af",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/execute_once.ps1",
+      "bytes": 953,
+      "sha256_raw": "efe524ee7ce6f08a9a7280581175adf0b7c8b0d4f085558b75b9698ebbf225e8",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/inspect_saved_run.py",
+      "bytes": 5537,
+      "sha256_raw": "edc8641c71dcecc228ad7051c64c1cec9f20785be24b45a575f8772f808aef51",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/inspected_predictions.json",
+      "bytes": 20168,
+      "sha256_raw": "8cbbcb6ba3a689ae8beae0fedf98b2fcd3304fa26d21418227a49e786bc76f9a",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/plan.json",
+      "bytes": 4271,
+      "sha256_raw": "9ceccf3dd036b7cfad4337ef8001279dbf41a4f7617b40ad98fedffdfcb2f8f1",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/prelaunch_readonly.json",
+      "bytes": 220115,
+      "sha256_raw": "ee3c43db8e5762948484d6755e30756090a4348c100224d56f956e57a7e69425",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/preparation.json",
+      "bytes": 1968,
+      "sha256_raw": "9a4064aae10096dfa6177e0552f8167b37513faf4b2fa4c91236f56704827cda",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/prepare_authorized_job.py",
+      "bytes": 3666,
+      "sha256_raw": "24e6b6ac29e5fdd0488607dfe9dc6740a258206dcb3e90630ab623177e32fea2",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/README.md",
+      "bytes": 6520,
+      "sha256_raw": "2201822e76f524d28713242e48cfb2bfcbfb33b3678defee9813feed2ac3e81f",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/RECEIPT_REVIEW.md",
+      "bytes": 6327,
+      "sha256_raw": "5084bd99fd586abde32e8d887d90871a92177b98cc5c7fbe2cd22d0577f98995",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/authorization_receipt.json",
+      "bytes": 351,
+      "sha256_raw": "3ae07c9da823a0b3b06963b3f86e0731911e974e8ac725d6f84a3814dc1df438",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/checkpoint/manifest.json",
+      "bytes": 3134,
+      "sha256_raw": "616d67f431495fb662d16fc474e386efa8b6f117c303d31bc9d29beedfadeb7d",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/checkpoint/model_state.pt",
+      "bytes": 287045,
+      "sha256_raw": "d54f57155a54cbd28621d92af9cb5f45e425c015a559cf80103966ccbf275477",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/claim.json",
+      "bytes": 293,
+      "sha256_raw": "cd63a994c073ee968ef32be73f2d506e4f25b5fce4927d42f5089893829c34f2",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/dev_predictions.jsonl",
+      "bytes": 4176,
+      "sha256_raw": "0be01e6162abbb57a4632ec9df841b82933963ad89c7d04c2c156c8c36c0e9cb",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/device_monitor.jsonl",
+      "bytes": 12875,
+      "sha256_raw": "5ce607dd2fb1f57709f8b8508cb73b4ab35bc336adfcdf1f7c054659ccb6b04d",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/device_prelaunch.json",
+      "bytes": 220110,
+      "sha256_raw": "43e0e391291b277d9c63400f728cd5d4d7b3bbf11cb6c3969adcf3d1ddd826d3",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/plan.json",
+      "bytes": 4271,
+      "sha256_raw": "9ceccf3dd036b7cfad4337ef8001279dbf41a4f7617b40ad98fedffdfcb2f8f1",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/result.json",
+      "bytes": 2168,
+      "sha256_raw": "d333d9ee25b7566f37e5be323c446ab8f09b75f6d64cbf4dec55aff4c6b3c57e",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/supervisor.json",
+      "bytes": 558,
+      "sha256_raw": "bd6a7e7bf7bd87b6aef1716935b5184a5ba45506a634f8622df0fcc03fa6db43",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/updates.jsonl",
+      "bytes": 17476,
+      "sha256_raw": "6faac5e782610134140dd66b011e5ea1a8cc4f0a3685583f98627dcbbd6dbad9",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/worker.log",
+      "bytes": 0,
+      "sha256_raw": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_001/worker_started.json",
+      "bytes": 95,
+      "sha256_raw": "d4fc7decaddc6e2fe0b63c1f215e2d9516c3a86f401b2259146460a1741a5e82",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/run_checks.py",
+      "bytes": 2801,
+      "sha256_raw": "e08efcb56c382b5336bc15a0f4d269a486a4fb6c4e69cfea10fb5dfefce07b90",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/saved_run_verification.json",
+      "bytes": 1044,
+      "sha256_raw": "093c6f900b51f85a733b1b4ba49893516de4ee5d70d723e42d84a4a82bde1357",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/seal_bundle.py",
+      "bytes": 3487,
+      "sha256_raw": "ffe3f37eea371fc6976337af28a51adfdf7601199d9f0304e515fee761a90b5b",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/TEST_SCOPE.json",
+      "bytes": 101498,
+      "sha256_raw": "ce0de3f472e767cb4eef3eac82f8a268161a5131c931de84a03019e0631d7044",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/auth_initial.log",
+      "bytes": 101,
+      "sha256_raw": "fe2be75726b9b7d6be47a0f8e7e2ba36dd6c8ae3faf4991a7d92c3fc92d1b847",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/auth_initial.xml",
+      "bytes": 10292,
+      "sha256_raw": "7aa473eb1083e9bd9d68cb7dd217937c331eed2fa67f8dd5b0308a60350c7452",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/capacity_initial.log",
+      "bytes": 182,
+      "sha256_raw": "637b66f598ef95e44b01588f72069197158a553cb0881f82a5c09d208ef58fe1",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/capacity_initial.xml",
+      "bytes": 12577,
+      "sha256_raw": "f9486f77bca6602146061188313dc87cc3edb8d55a33afc74ade5cdb016997e8",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_001/cases.xml",
+      "bytes": 43083,
+      "sha256_raw": "3caaa10b39aab8fd6addfe9a8cfb7360570f300b60f4c0bbe67fdddc504091a5",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_001/pytest.log",
+      "bytes": 345,
+      "sha256_raw": "c09c374d46acb65d16bca602b040fcb1ade1568effe9e4a90f1ddcad6f4bdd3b",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_001/receipt.json",
+      "bytes": 52677,
+      "sha256_raw": "2f36b3fff1f8395e6746c8ee9ba547283b6cf8d3e6b24a78c292ce395ea7f53e",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_002/cases.xml",
+      "bytes": 43405,
+      "sha256_raw": "e4eae9492f3ed4dc496756c198c7f827e23e0212aae6ecb3e19b5ebdb0ee2b3d",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_002/pytest.log",
+      "bytes": 345,
+      "sha256_raw": "8439cce3ffe09a74e723d0a11688b21056c19f2d3400a0a21a4b8e30abb314a3",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/tests/combined_002/receipt.json",
+      "bytes": 53063,
+      "sha256_raw": "15c2d965d2bf2f0de47b4dbf9434a652f273823324d40a1d3fc9a9a149c9d240",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "records/q4_authorized_20260922/verify_bundle.py",
+      "bytes": 2116,
+      "sha256_raw": "97d321a4980c115c36af3d38b44c0844821be9736e339445046ad16adb453445",
+      "verification": "EXACT_RAW_RECEIPT"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_decoder.py",
+      "bytes": 9161,
+      "sha256_raw": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+      "sha256_lf": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_memory.py",
+      "bytes": 4398,
+      "sha256_raw": "72910b931ff8d4da853ab4776a7d7b5f1f072b525446f63656581a208651d3d0",
+      "sha256_lf": "72910b931ff8d4da853ab4776a7d7b5f1f072b525446f63656581a208651d3d0",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_neural.py",
+      "bytes": 5610,
+      "sha256_raw": "0824a573ccc56aa8956f2bd63134e1ebb4901747a25c78316b9f55e840d9aa3f",
+      "sha256_lf": "0824a573ccc56aa8956f2bd63134e1ebb4901747a25c78316b9f55e840d9aa3f",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_representation.py",
+      "bytes": 5293,
+      "sha256_raw": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+      "sha256_lf": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q3_behaviour_records.py",
+      "bytes": 54564,
+      "sha256_raw": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+      "sha256_lf": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q3_load.py",
+      "bytes": 24361,
+      "sha256_raw": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+      "sha256_lf": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_checkpoint.py",
+      "bytes": 5705,
+      "sha256_raw": "25d33bf9ba6497c6cbaf9e87ad081567f8804d755a302b1fdecd52b170a141d5",
+      "sha256_lf": "25d33bf9ba6497c6cbaf9e87ad081567f8804d755a302b1fdecd52b170a141d5",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_conversation_authorization.py",
+      "bytes": 5356,
+      "sha256_raw": "79a189bc36616c7c77963616dbca15d017d9c702975fd80d7a052af104829b18",
+      "sha256_lf": "79a189bc36616c7c77963616dbca15d017d9c702975fd80d7a052af104829b18",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_device_capacity.py",
+      "bytes": 9483,
+      "sha256_raw": "1ad526bc6fba9eb6320bec44315333277709f8762ea5319636e1226a1fc407bd",
+      "sha256_lf": "1ad526bc6fba9eb6320bec44315333277709f8762ea5319636e1226a1fc407bd",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_runtime_metadata.py",
+      "bytes": 6743,
+      "sha256_raw": "12be9d29453d69fd3cf0dc621132ff57332225580a390d5d347116a43228a1cf",
+      "sha256_lf": "12be9d29453d69fd3cf0dc621132ff57332225580a390d5d347116a43228a1cf",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_smoke_job.py",
+      "bytes": 24969,
+      "sha256_raw": "2ded1746403a2d44a6d393ceadaaae97c183ee92ab2c12f7283f48fefd658259",
+      "sha256_lf": "2ded1746403a2d44a6d393ceadaaae97c183ee92ab2c12f7283f48fefd658259",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/reference_ops.py",
+      "bytes": 9999,
+      "sha256_raw": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12",
+      "sha256_lf": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_learner_q4.py",
+      "bytes": 11302,
+      "sha256_raw": "dd45b9e8e7fdb5cd24357a8c815ad183449087425caec62a66a44f9e6f8ae74b",
+      "sha256_lf": "dd45b9e8e7fdb5cd24357a8c815ad183449087425caec62a66a44f9e6f8ae74b",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_q4_authorized_supervisor.py",
+      "bytes": 7128,
+      "sha256_raw": "75f14801cf72601135360a329007e6498f470032e33225203ff5ccb822982db7",
+      "sha256_lf": "75f14801cf72601135360a329007e6498f470032e33225203ff5ccb822982db7",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_q4_conversation_authorization.py",
+      "bytes": 7333,
+      "sha256_raw": "722f1ef345bb0c0a8907d605f9e7fb49c847d1415748a941a35bdcb1fc8b5bb3",
+      "sha256_lf": "722f1ef345bb0c0a8907d605f9e7fb49c847d1415748a941a35bdcb1fc8b5bb3",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_q4_device_capacity.py",
+      "bytes": 9678,
+      "sha256_raw": "b02beede0a9fb71a2df950a0902fcd6e6a9265aaea0c33fd5efe7689c6c44f5e",
+      "sha256_lf": "b02beede0a9fb71a2df950a0902fcd6e6a9265aaea0c33fd5efe7689c6c44f5e",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_q4_followup.py",
+      "bytes": 14242,
+      "sha256_raw": "f0ca858e015dfd336ecfca81ad0aaf2183b8210588ba4ae38a7ff6a20865d8c4",
+      "sha256_lf": "f0ca858e015dfd336ecfca81ad0aaf2183b8210588ba4ae38a7ff6a20865d8c4",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    },
+    {
+      "path": "research/helm_cas_expression_lab/test_q4_preparation.py",
+      "bytes": 6045,
+      "sha256_raw": "cb827c10237a27c6f71af58f490713d36add5db1d24d66e834ba228f223daa42",
+      "sha256_lf": "cb827c10237a27c6f71af58f490713d36add5db1d24d66e834ba228f223daa42",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED"
+    }
+  ]
+}

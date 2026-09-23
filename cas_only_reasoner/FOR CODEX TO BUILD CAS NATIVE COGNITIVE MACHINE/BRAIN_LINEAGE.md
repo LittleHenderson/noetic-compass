@@ -1,5 +1,26 @@
 # The learning brain — lineage record
 
+## 2026-09-22 authorized Q4 R1 smoke: completed, 0/16 exact
+
+Actual local CUDA run T14_R1_G_ENGINEERING_SMOKE completed 128 updates in
+75.91282699999283 seconds. The width-64 GRU has 70,818 learned parameters.
+The unchanged frozen G development checker reports 16 valid generated trees
+and 0/16 canonical exact reconstructions, all at depth 3. All sixteen saved
+predictions are the same two-leaf PLUS tree. This is a negative accuracy result.
+
+Runtime source: d4c3fc7643201a83693ea9073c14ab42ecc5a570. Plan SHA-256:
+9dacc83627422d704c9db58f5ddbac82936e7d52211ec061247419fbad78095c.
+Checkpoint SHA-256: d54f57155a54cbd28621d92af9cb5f45e425c015a559cf80103966ccbf275477.
+Receipts, original predictions, checkpoint, exact commands and post-run checker
+replay: records/q4_authorized_20260922/README.md. The replay did not load a model.
+Maximum sampled GPU temperature was 64 C; automatic retries 0; runtime failures 0.
+
+Status: MEASURED_ON_DEV_ONLY_NOT_CERTIFIED / EVALUATION_NOT_INDEPENDENT.
+No operation-learning result, trained R2 result, fresh-process neural reload,
+held-out certification or complete Helm 3.0 result is claimed. The first short
+smoke establishes real execution and saved outputs, not successful reconstruction
+or generalization. Compiler references are never relabelled learned answers.
+
 ## 2026-09-22 current user approval: bounded Q4 execution prepared
 
 The user explicitly authorized this and future AI/LLM research runs in the live

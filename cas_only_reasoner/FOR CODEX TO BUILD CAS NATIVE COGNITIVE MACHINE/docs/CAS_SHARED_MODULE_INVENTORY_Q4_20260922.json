@@ -1,0 +1,250 @@
+{
+  "schema": "cas.shared-module-inventory-addendum/0.1",
+  "base_inventory": "docs/CAS_SHARED_MODULE_INVENTORY_20260922.json",
+  "source_commit": "d4c3fc7643201a83693ea9073c14ab42ecc5a570",
+  "editing_worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live",
+  "scope": "Q4 runtime closure only; previous repository-wide inventory remains preserved",
+  "shared_core_implementation": "NOT_SELECTED",
+  "components": [
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_decoder.py",
+      "bytes": 9161,
+      "sha256_raw": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+      "sha256_lf": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "CodecError",
+        "DecodeLimits",
+        "allowed_next",
+        "ast_to_tokens",
+        "tokens_to_ast",
+        "DecodeResult",
+        "free_decode"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_memory.py",
+      "bytes": 4398,
+      "sha256_raw": "72910b931ff8d4da853ab4776a7d7b5f1f072b525446f63656581a208651d3d0",
+      "sha256_lf": "72910b931ff8d4da853ab4776a7d7b5f1f072b525446f63656581a208651d3d0",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "MemoryNode",
+        "StructuredMemory",
+        "from_structure",
+        "replace_vector"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_neural.py",
+      "bytes": 5610,
+      "sha256_raw": "0824a573ccc56aa8956f2bd63134e1ebb4901747a25c78316b9f55e840d9aa3f",
+      "sha256_lf": "0824a573ccc56aa8956f2bd63134e1ebb4901747a25c78316b9f55e840d9aa3f",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "NeuralConfig",
+        "build_model"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/learner_q4_representation.py",
+      "bytes": 5293,
+      "sha256_raw": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+      "sha256_lf": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "Q4InputError",
+        "SequenceInput",
+        "encode_observation",
+        "from_visible_record",
+        "token_row_sum",
+        "Retrieval",
+        "R0NearestNeighbor",
+        "Bottleneck"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q3_behaviour_records.py",
+      "bytes": 54564,
+      "sha256_raw": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+      "sha256_lf": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "_main_checkout",
+        "_sha_bytes",
+        "_sha_json",
+        "_record_id",
+        "_find_scaffold",
+        "_load_compiler",
+        "_find_pool",
+        "canonical",
+        "strict_shape",
+        "tree_shape",
+        "tree_depth",
+        "to_lab_spelling",
+        "to_compiler_spelling",
+        "_ast_size",
+        "_assign_groups_rarest_first",
+        "build_family_R",
+        "emit_R",
+        "_random_literal",
+        "_random_tree",
+        "build_family_G",
+        "_refusal_case",
+        "_refuses",
+        "case_family",
+        "build_family_A",
+        "emit_A",
+        "_chain",
+        "build_family_C",
+        "emit_C",
+        "_valid_fields",
+        "baselines_A",
+        "baselines_C",
+        "baselines_reconstruction",
+        "main"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q3_load.py",
+      "bytes": 24361,
+      "sha256_raw": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+      "sha256_lf": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "Q3LoadError",
+        "verification_level",
+        "_lf",
+        "strict_loads",
+        "manifest_of",
+        "manifest_sha",
+        "check_pins",
+        "check_contract_binding",
+        "_record_id",
+        "_rows",
+        "load_visible",
+        "refuses",
+        "case_family",
+        "_check_A",
+        "evaluate_chain",
+        "_check_C",
+        "_check_reconstruction",
+        "load_split",
+        "load_dataset"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_checkpoint.py",
+      "bytes": 5705,
+      "sha256_raw": "25d33bf9ba6497c6cbaf9e87ad081567f8804d755a302b1fdecd52b170a141d5",
+      "sha256_lf": "25d33bf9ba6497c6cbaf9e87ad081567f8804d755a302b1fdecd52b170a141d5",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "CheckpointError",
+        "canonical",
+        "digest",
+        "runtime_source_pins",
+        "_strict_manifest",
+        "_verified_checkpoint_bytes",
+        "verify_checkpoint",
+        "save_checkpoint",
+        "load_checkpoint"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_conversation_authorization.py",
+      "bytes": 5356,
+      "sha256_raw": "79a189bc36616c7c77963616dbca15d017d9c702975fd80d7a052af104829b18",
+      "sha256_lf": "79a189bc36616c7c77963616dbca15d017d9c702975fd80d7a052af104829b18",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "ConversationAuthorizationError",
+        "_require",
+        "verify_conversation_authorization"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_device_capacity.py",
+      "bytes": 9483,
+      "sha256_raw": "1ad526bc6fba9eb6320bec44315333277709f8762ea5319636e1226a1fc407bd",
+      "sha256_lf": "1ad526bc6fba9eb6320bec44315333277709f8762ea5319636e1226a1fc407bd",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "CapacityError",
+        "shared_display_policy",
+        "validate_policy",
+        "_check_host",
+        "_query",
+        "_integer",
+        "_parse_telemetry",
+        "_parse_inventory",
+        "_telemetry",
+        "check_prelaunch",
+        "check_running"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_runtime_metadata.py",
+      "bytes": 6743,
+      "sha256_raw": "12be9d29453d69fd3cf0dc621132ff57332225580a390d5d347116a43228a1cf",
+      "sha256_lf": "12be9d29453d69fd3cf0dc621132ff57332225580a390d5d347116a43228a1cf",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "_sha",
+        "_canonical",
+        "dependency_manifest",
+        "_torch_build",
+        "environment_metadata"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/q4_smoke_job.py",
+      "bytes": 24969,
+      "sha256_raw": "2ded1746403a2d44a6d393ceadaaae97c183ee92ab2c12f7283f48fefd658259",
+      "sha256_lf": "2ded1746403a2d44a6d393ceadaaae97c183ee92ab2c12f7283f48fefd658259",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "JobError",
+        "_read_json",
+        "_bounded_int",
+        "_environment_metadata",
+        "prepare_plan",
+        "validate_plan",
+        "verify_authorization",
+        "_write_json",
+        "_authorization_receipt",
+        "_wait_for_worker",
+        "_device_lock_path",
+        "_check_device_idle",
+        "execute_plan",
+        "_worker",
+        "main"
+      ]
+    },
+    {
+      "path": "research/helm_cas_expression_lab/reference_ops.py",
+      "bytes": 9999,
+      "sha256_raw": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12",
+      "sha256_lf": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12",
+      "verification": "LF_NORMALIZED_SOURCE_WITH_RAW_FINGERPRINT_RETAINED",
+      "entry_points": [
+        "InvalidInput",
+        "_is_noetic",
+        "state_index",
+        "state_from_index",
+        "tokenizer_id",
+        "_domain_index",
+        "involute",
+        "compose",
+        "is_admissible",
+        "_check_state",
+        "domain_descent_mask",
+        "may_attend",
+        "rpm_embed",
+        "rpm_realize",
+        "rpm_section_law_holds",
+        "rpm_retraction_law_fails_for"
+      ]
+    }
+  ]
+}
