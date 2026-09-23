@@ -114,3 +114,10 @@ Conference A1 commit59a9d1e9e86cc92fb4f0757bcdce6380b44837bc and A2
 5226a93b5120fccd1a2dc15cfa2fb8e0f904ae07 were path-checked and integrated.
 A1 caught an overstatement in A0's matrix: verified digest/subtraction does not mean independently
 regenerated population exclusions. A0 corrected the matrix, leaving A1's first report untouched.
+
+All six real conference responses were integrated before follow-up dispatch. Their commits and actual
+challenge responses are recorded in CONFERENCE_RECORD.md. A0 selected one round with F1(A6) and
+F2(A3), unchanged predicted alternatives from259ed0be, confirmed by5c128a33. No second round selected.
+Root additionally verified git merge-base --is-ancestor 5f7111d5204e872c18df717badc2e2021f31ad70
+4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d returned0, with no stderr. The chosen evidence base descends
+from the preserved reconciliation checkpoint. This is ancestry evidence, not behavior or readiness.
