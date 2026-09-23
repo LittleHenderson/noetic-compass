@@ -274,3 +274,6 @@ It is labelled **`FRESH_ON_REPORT_ONLY`**, with its probe verdict and summary re
   - `GPU_REQUIRED` with no CPU fallback;
   - forward passes only;
   - no optimizer, no checkpoint written, no retries.
+- **Clarification, before any run.** When stage 0 stops the job (A4.1), the later invocations do not exist by
+  design. The verdict is then the stage-0 verdict (`SWITCH_TESTS_FAILED` or `SWITCH_NOT_READ_ONLY`), not
+  `INCOMPLETE`. `INCOMPLETE` applies when stage 0 passed and a later invocation is missing or failed.

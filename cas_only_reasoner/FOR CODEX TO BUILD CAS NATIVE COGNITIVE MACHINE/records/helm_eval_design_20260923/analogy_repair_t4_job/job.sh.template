@@ -1,0 +1,106 @@
+#!/bin/bash
+# HELM-ANALOGY-REPAIR-1 item 1 (prereg A3 + A4) on ONE throwaway g4dn.2xlarge (T4). Claude coordinator, temporary takeover.
+# NO credentials on this machine: ONE download and TWO uploads through time-limited links. Forward passes only, no
+# optimizer, no checkpoint written. It always ends by shutting down, and it is destroyed on shutdown.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "helm analogy repair t4 hard limit" || true                 # kill switch 0
+LOG=/var/log/helm_t4_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/helm_t4
+mkdir -p "$WORK/out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                                # kill switch 2
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
+cp pkg/identity.json "$WORK/out/identity.json"
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+uv pip install --python "$PY" "torch==__TORCH_VERSION__" --index-url https://download.pytorch.org/whl/cu128 || { STATUS=torch_install_failed; exit 1; }
+uv pip install --python "$PY" "numpy==__NUMPY_VERSION__" pytest || { STATUS=numpy_pytest_install_failed; exit 1; }
+uv pip install --python "$PY" --no-deps pkg/_wheels/casformer_reference-0.1.0-py3-none-any.whl pkg/_wheels/cas_neural_cjt-0.2.0-py3-none-any.whl || { STATUS=wheel_install_failed; exit 1; }
+{ "$PY" --version; uname -a; nproc; free -m; nvidia-smi; echo "bundle_sha256=__BUNDLE_SHA256__";
+  sha256sum pkg/_wheels/*.whl; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+"$PY" -c "import torch,sys; ok=torch.cuda.is_available(); print('cuda', ok, torch.cuda.get_device_name(0) if ok else None); sys.exit(0 if ok and 'T4' in torch.cuda.get_device_name(0) else 1)" \
+  || { STATUS=GPU_REQUIRED_T4_NOT_FOUND; exit 1; }
+
+export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 CUBLAS_WORKSPACE_CONFIG=:4096:8
+T=records/typed_pointer_001
+ck() { echo "--model h2_fresh_$1:$1 --model h2_initial_$1:$1:$T/receipt_$1/checkpoints/initial.pt --model h2_final_$1:$1:$T/receipt_$1/checkpoints/final.pt"; }
+run() {   # $1 = name, rest = command; keeps each invocation's own exit code and wall time
+  local name=$1; shift
+  ( START=$(date +%s); "$@"; CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) > "$WORK/out/$name.log" 2>&1
+}
+
+# STAGE 0 (A4.1/A4.2): the switch test suite at R, then the frozen read-only check. Stop on any failure.
+STATUS=stage0
+cd "$WORK/pkg/repaired"
+"$PY" -B -m pytest -q -p no:cacheprovider tests/test_helm_analogy_focus_comparison.py tests/test_helm_analogy_switch_read_only.py \
+  --junitxml "$WORK/out/stage0_junit.xml" > "$WORK/out/stage0_pytest.log" 2>&1
+P0=$?
+tail -n 15 "$WORK/out/stage0_pytest.log"
+"$PY" -B "$WORK/pkg/claude/switch_read_only_check.py" --package-root "$WORK/pkg/repaired" --out "$WORK/out/stage0_read_only_check.json" \
+  > "$WORK/out/stage0_read_only_check.log" 2>&1
+R0=$?
+cat "$WORK/out/stage0_read_only_check.log"
+echo "stage0 pytest=$P0 read_only_check=$R0" > "$WORK/out/STAGE0_CODES"
+[ "$P0" -eq 0 ] || { STATUS=SWITCH_TESTS_FAILED; exit 0; }
+[ "$R0" -eq 0 ] || { STATUS=SWITCH_NOT_READ_ONLY; exit 0; }
+
+PD="$WORK/pkg/claude/preservation_digest.py"
+PR="$WORK/pkg/claude/analogy_wiring_probe_v0_2.py"
+# STAGE 1: the CONTROL -- unchanged 20208c92, 3 invocations side by side (the reference's group-B arrangement)
+STATUS=stage1_control
+cd "$WORK/pkg/frozen"
+for s in 20260917 20260918 20260919; do
+  run control_$s "$PY" -B "$PD" --package-root "$WORK/pkg/frozen" $(ck $s) --out "$WORK/out/preservation_control_20208c92_T4_seed$s.json" & eval "C_$s=\$!"
+done
+wait "$C_20260917"; C1=$?; wait "$C_20260918"; C2=$?; wait "$C_20260919"; C3=$?
+
+# STAGE 2: repaired R, switch OFF, same arrangement
+STATUS=stage2_off
+cd "$WORK/pkg/repaired"
+OFF='{"analogy_focus_comparison": false}'
+for s in 20260917 20260918 20260919; do
+  run off_$s "$PY" -B "$PD" --package-root "$WORK/pkg/repaired" --container-kwargs "$OFF" $(ck $s) --out "$WORK/out/preservation_OFF_T4_seed$s.json" & eval "O_$s=\$!"
+done
+wait "$O_20260917"; O1=$?; wait "$O_20260918"; O2=$?; wait "$O_20260919"; O3=$?
+
+# STAGE 3: three OFF probes and one fresh-ON probe side by side (the reference's group-A arrangement)
+STATUS=stage3_probes
+for s in 20260917 20260918 20260919; do
+  run probe_off_$s "$PY" -B "$PR" --package-root "$WORK/pkg/repaired" --container-kwargs "$OFF" --switch-attr analogy_focus_comparison \
+    --switch-expect false $(ck $s) --out "$WORK/out/probe_OFF_T4_seed$s.json" & eval "Q_$s=\$!"
+done
+run probe_on_fresh "$PY" -B "$PR" --package-root "$WORK/pkg/repaired" --container-kwargs '{"analogy_focus_comparison": true}' \
+  --switch-attr analogy_focus_comparison --switch-expect true --model h2on_fresh_20260917:20260917 --model h2on_fresh_20260918:20260918 \
+  --model h2on_fresh_20260919:20260919 --out "$WORK/out/probe_ON_fresh_T4.json" & QN=$!
+wait "$Q_20260917"; Q1=$?; wait "$Q_20260918"; Q2=$?; wait "$Q_20260919"; Q3=$?; wait "$QN"; QO=$?
+
+for f in "$WORK"/out/control_*.log "$WORK"/out/off_*.log "$WORK"/out/probe_*.log; do tail -n 4 "$f"; done
+echo "control=$C1,$C2,$C3 off=$O1,$O2,$O3 probe_off=$Q1,$Q2,$Q3 probe_on_fresh=$QO" > "$WORK/out/EXIT_CODES"
+cat "$WORK/out/EXIT_CODES"
+if [ $((C1+C2+C3+O1+O2+O3+Q1+Q2+Q3+QO)) -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures $(cat "$WORK/out/EXIT_CODES")"; fi
+exit 0
