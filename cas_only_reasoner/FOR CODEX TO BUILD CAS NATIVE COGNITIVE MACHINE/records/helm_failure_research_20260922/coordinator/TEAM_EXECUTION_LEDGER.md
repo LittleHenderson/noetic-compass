@@ -11,10 +11,10 @@ Only A0 integrates explicit report commits.
 | Role | Session identifier | First-report commit | First-report SHA256 | Status |
 |---|---|---|---|---|
 | A0 | /root/helm_research_a0 | n/a | n/a | Coordinator, not final judge |
-| A1 | /root/helm_research_a0/a1_pass_rule | Pending | Pending | Independent report in progress |
-| A2 | /root/helm_research_a0/a2_information_flow | Pending | Pending | Independent report in progress |
-| A3 | Not launched | Pending | Pending | Role worktree prepared |
-| A4 | Not launched | Pending | Pending | Role worktree prepared |
+| A1 | /root/helm_research_a0/a1_pass_rule | 87266d875207cc1df6df6de1dc89845fae60109f | b5a8aa8223c66344bc7da8dfc8169160b6d8a8ece49f6b7a21e31a14ca274e7c | Saved and integrated; waiting behind barrier |
+| A2 | /root/helm_research_a0/a2_information_flow | bed714813750a53f38b7908f0ffdcdfd42d56f3d | 91de7dc113f564374df6dd287be06760d87c2f75c20e7823e96b86cc106a012f | Saved and integrated; waiting behind barrier |
+| A3 | /root/helm_research_a0/a3_teaching_transfer | Pending | Pending | Independent report in progress |
+| A4 | /root/helm_research_a0/a4_training_retention | Pending | Pending | Independent report in progress |
 | A5 | Not launched | Pending | Pending | Role worktree prepared |
 | A6 | Not launched | Pending | Pending | Role worktree prepared |
 | A7 | Not launched | n/a | n/a | Fresh judgment session reserved |
@@ -33,3 +33,4 @@ Follow-up reports are new files; first reports will never be rewritten.
 
 Resource observations: root last read ordinaryUsageAllowed=true, weekly 71% consumed / 29%
 remaining, no paid-credit balance. This is existing account allowance, not a dollar-cost estimate.
+

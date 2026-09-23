@@ -57,3 +57,17 @@ Pure CPU probes: at most two concurrent; 120 seconds per probe. Root/A0 avoid th
 probes while two investigators work. New neural causal tests remain proposals marked NOT RUN.
 
 Root later completed original mutable-workspace status comparison: git status --porcelain --untracked-files=normal matched WORKSPACE_SNAPSHOT exactly, 138 entries (29 tracked and 109 untracked), same seven warnings, exit 0, 0.153s. This is status-list preservation only, not byte hashing of unrelated dirty files.
+
+## First batch integration
+
+A1 first report commit 87266d875207cc1df6df6de1dc89845fae60109f integrated as 0c533c70.
+A1 separate formatting/custody note 51e35a8e7729c25c9ac3bd580c757d3e2b11c4de integrated as b8599b5d.
+A2 first report commit bed714813750a53f38b7908f0ffdcdfd42d56f3d integrated as 9af6161b.
+Before each cherry-pick A0 used git diff-tree --no-commit-id --name-only -r <commit>
+and asserted that every changed path began with that role's allowed agents/A<n>/ prefix.
+Every integration exited 0. First-report SHA256 values are in TEAM_EXECUTION_LEDGER.md.
+The CRLF/source-copy whitespace warnings in these role commits are documented limitations,
+not a semantic check failure or reason to rewrite immutable report/source bytes.
+The integration worktree remained clean before/after cherry-picks.
+A3 and A4 were then launched with fork_turns=none from their original clean base. They were
+given only the shared factual records and their role, not A1/A2 findings.
