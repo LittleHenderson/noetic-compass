@@ -68,7 +68,3 @@ The current record is `research/helm-integration-20260923` at
     and is the owner's decision.
 - `preflight_dry_run.py` lists 48 container names, but the default container has 53 since `60e382b0`. This drift
   is recorded, not fixed.
-EOF
-cd "D:/tksCAS-worktrees/helm-builder" && H="cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_handoffs/HELM_NEXT_PHASE_20260923" && git add -- "$H/CLAUDE_HELM_TEMPORARY_TAKEOVER_20260923.md" "$H/COORDINATION_AMENDMENT_TEMPORARY_TAKEOVER_20260923.md" "$H/CLAUDE_CONTINUATION_LOG.md" && git diff --cached --stat && git commit -q -m "Temporary takeover: owner's instruction (byte copy), coordination amendment (roles, separation limits, independence loss, verification order) and continuation log. Coordinator commit; no source change.
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q -u origin claude/helm-builder-continuation-20260923 2>&1 | tail -1; git log --oneline -1; git ls-remote origin refs/heads/claude/helm-builder-continuation-20260923 | cut -c1-12
