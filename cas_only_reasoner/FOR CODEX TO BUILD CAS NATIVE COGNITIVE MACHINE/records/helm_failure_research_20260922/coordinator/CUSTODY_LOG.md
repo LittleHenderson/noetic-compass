@@ -55,3 +55,5 @@ Native inherited sessions use existing allowance; no dollar-cost claim. No paid 
 model override, credit reset, dependency install, GPU/cloud/model run or training is allowed.
 Pure CPU probes: at most two concurrent; 120 seconds per probe. Root/A0 avoid third concurrent
 probes while two investigators work. New neural causal tests remain proposals marked NOT RUN.
+
+Root later completed original mutable-workspace status comparison: git status --porcelain --untracked-files=normal matched WORKSPACE_SNAPSHOT exactly, 138 entries (29 tracked and 109 untracked), same seven warnings, exit 0, 0.153s. This is status-list preservation only, not byte hashing of unrelated dirty files.
