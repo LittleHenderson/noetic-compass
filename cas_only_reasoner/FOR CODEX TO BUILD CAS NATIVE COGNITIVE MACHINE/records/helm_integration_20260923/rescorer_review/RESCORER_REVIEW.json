@@ -1,0 +1,238 @@
+{
+ "claude_commit": "c995e09d",
+ "codex_commit": "96644503",
+ "labels": {
+  "helm1": {
+   "codex": "LEARNS_NEW_WORLDS",
+   "expected": "LEARNS_NEW_WORLDS"
+  },
+  "helm2": {
+   "codex": "NO_TRANSFER_TO_NEW_WORLDS",
+   "expected": "NO_TRANSFER_TO_NEW_WORLDS"
+  }
+ },
+ "mismatches": [],
+ "not_covered": [
+  "the full 564-record CLI reading of tool 0.3 (NOT_RUN: laptop timeout)",
+  "the 9 slow rescorer tests (HELM_RUN_SLOW_TESTS=1; NOT_RUN)",
+  "the anchor policy (keep 0.2 anchors and report their zero-loss metadata vs refuse them): OWNER DECISION, unresolved",
+  "independence: Claude reviews Codex's tool, but the six decisions were also replayed by Claude; custody is not outside"
+ ],
+ "recheck_scope": "all presentations of original 18 gate questions, every seed/phase; not the 564-record full registry",
+ "recheck_status": "HISTORICAL_POPULATION_REPRODUCED",
+ "rows": [
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    10,
+    0,
+    "1/1024",
+    true
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    10,
+    0,
+    "1/1024",
+    true
+   ],
+   "seed": "20260917",
+   "study": "helm1",
+   "table": [
+    10,
+    0,
+    "1/1024",
+    true
+   ]
+  },
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    12,
+    0,
+    "1/4096",
+    true
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    12,
+    0,
+    "1/4096",
+    true
+   ],
+   "seed": "20260918",
+   "study": "helm1",
+   "table": [
+    12,
+    0,
+    "1/4096",
+    true
+   ]
+  },
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    11,
+    0,
+    "1/2048",
+    true
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    11,
+    0,
+    "1/2048",
+    true
+   ],
+   "seed": "20260919",
+   "study": "helm1",
+   "table": [
+    11,
+    0,
+    "1/2048",
+    true
+   ]
+  },
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    11,
+    1,
+    "13/4096",
+    true
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    11,
+    1,
+    "13/4096",
+    true
+   ],
+   "seed": "20260917",
+   "study": "helm2",
+   "table": [
+    11,
+    1,
+    "13/4096",
+    true
+   ]
+  },
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    12,
+    0,
+    "1/4096",
+    true
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    12,
+    0,
+    "1/4096",
+    true
+   ],
+   "seed": "20260918",
+   "study": "helm2",
+   "table": [
+    12,
+    0,
+    "1/4096",
+    true
+   ]
+  },
+  {
+   "all_three_agree": true,
+   "claude_breadth": [
+    3,
+    5
+   ],
+   "claude_replay": [
+    7,
+    1,
+    "9/256",
+    false
+   ],
+   "codex_agrees_with_frozen_grader": true,
+   "codex_breadth": [
+    3,
+    5
+   ],
+   "codex_recheck": [
+    7,
+    1,
+    "9/256",
+    false
+   ],
+   "seed": "20260919",
+   "study": "helm2",
+   "table": [
+    7,
+    1,
+    "9/256",
+    false
+   ]
+  }
+ ],
+ "rule_checks": {
+  "all_seeds_must_pass": true,
+  "alpha_1_100": true,
+  "b_greater_than_c": true,
+  "min_kinds_2": true,
+  "min_worlds_2": true,
+  "no_zero_loss_veto": true
+ },
+ "rule_declared": {
+  "all_seeds_must_pass": true,
+  "alpha": "1/100",
+  "id": "HELM_HISTORICAL_PAIRED_RULE_20260919",
+  "min_improved_kinds": 2,
+  "min_improved_worlds": 2,
+  "require_b_greater_than_c": true,
+  "test": "exact one-sided Binomial(b+c, 1/2) upper tail at b",
+  "zero_loss_veto": false
+ },
+ "schema": "claude.rescorer-review/0.1",
+ "tool_sha256_lf": "50295072dd662fac1bf51021e8abd8395621ebafc8d35e8f8e4949120e35f8cc",
+ "verdict": "RULE_REPAIR_REPRODUCES_HISTORY"
+}
