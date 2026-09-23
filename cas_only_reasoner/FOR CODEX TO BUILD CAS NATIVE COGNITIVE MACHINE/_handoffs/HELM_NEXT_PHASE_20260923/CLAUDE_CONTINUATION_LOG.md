@@ -37,11 +37,32 @@ The current record is `research/helm-integration-20260923` at
 
 ## Commits made during the takeover
 
-(Appended as they happen.)
+| Commit | Branch | Who | What |
+|---|---|---|---|
+| `d27e2ec2`, `a19eb735` | builder branch | coordinator | takeover instruction copy, coordination amendment, this log (and removal of stray text) |
+| `37af9b8f`, `6a607f06` | `research/helm-integration-20260923` | coordinator | prereg amendment A4 (verdict names, read-only check, fresh-ON label), frozen before any repaired-source result; the T4 job files (not launched) |
+| `0d8e8316` | `research/helm-integration-20260923` | coordinator | review of Codex's rescorer: program-emitted `RULE_REPAIR_REPRODUCES_HISTORY` |
+| `098a3bdcc81ef3d31cb02f01299506d342cb2b6e` | builder branch | builder | read-only switch: `pointer_learner.py` (+30/-2, LF-only inserted lines; raw `a94084f7...`) and new `tests/test_helm_analogy_switch_read_only.py` (10 functions, 25 cases) |
+| `08b305ec` | builder branch | builder | `BUILDER_REPORT_READ_ONLY_SWITCH.md` |
 
 ## Checks run, and results
 
-(Appended as they happen. Written test functions, input-specific cases and repeated runs are counted separately.)
+Written test functions, input-specific cases and repeated runs are counted separately.
+
+- **Builder, static only** (no torch on the laptop):
+  - byte comparison: only the intended region changed, and the CRLF count is unchanged at 2,241;
+  - `py_compile`;
+  - a bytecode check that `__init__` still branches on the function argument.
+  - **No test has run yet.** 10 new test functions (25 cases, 1 of them CUDA-only) and the existing 11 cases wait
+    for the T4 job.
+- **Rescorer review (coordinator, read-only, $0).** `RULE_REPAIR_REPRODUCES_HISTORY`: 6 of 6 decisions agree, and
+  the rule is declared with no zero-loss veto. The full 564-record reading and the slow tests are NOT_RUN.
+- **T4 launcher dry run against `098a3bdc`.**
+  - The bundle is 2,326 files and 29.77 MB.
+  - The only existing file that differs from `20208c92` is `pointer_learner.py`.
+  - The pinned reference image is still offered.
+  - The worst case is $2.05.
+  - Nothing was uploaded or launched.
 
 ## Resource use
 
@@ -56,6 +77,11 @@ The current record is `research/helm-integration-20260923` at
   `D:/tksCAS-archive/`, any `*SEALED*` file, the S3 `helm-integration/hset1a-build-*` objects, or the coordinator's
   session logs. That is by instruction, not by permission. Their reports must list every file outside their
   working copy that they opened.
+- **Exposure the builder disclosed** (not in its brief): the tool that runs sub-agents pre-loads the owner's global
+  `CLAUDE.md`, the project `CLAUDE.md` and **the auto-memory index**. That index names the sealed-test archive folder
+  and states sealed-build totals, such as "W=2 on TEST". It holds no TEST world, record id or answer.
+- **Other files the builder opened.** torch's installed source, read and never imported, and a `git grep` of
+  committed files. Nothing sealed.
 
 ## Open review items for Codex
 
