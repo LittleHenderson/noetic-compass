@@ -1,5 +1,13 @@
 # CNCM Codex Homebase
 
+## This research branch: narrower current user scope
+
+Read records/helm_failure_research_20260922/RESOURCE_AND_WRITE_BOUNDARIES.md.
+This investigation forbids new model execution, training, GPU jobs, cloud spend,
+paid APIs and expanded agent allowance. This explicit current request takes priority
+over the broader run authorization retained below. Only research reports, non-invasive
+pure diagnostic probes and their receipts may be edited in assigned research worktrees.
+
 ## Current run authorization — user instruction 2026-09-22
 
 Read `docs/OWNER_RUN_AUTHORIZATION_20260922.md`. The user explicitly authorized
