@@ -1,5 +1,44 @@
 # tksCAS — Changelog
 
+## 2026-09-23 — Helm next phase: integration, corrections, evaluation design, wiring probe (Claude = checker)
+
+Branch `research/helm-integration-20260923`. It holds both investigations, each merged unchanged:
+`f1156d03` (Claude review) and `604c1f08` (Codex A1-A7).
+
+**Roles (owner, 2026-09-23).** Codex builds. Claude checks and leads the evaluation design. The coordination
+record, including the conflict report, is `_handoffs/HELM_NEXT_PHASE_20260923/`.
+
+**What was done:**
+- **Integration.** `records/helm_integration_20260923/INTEGRATION.md` reads the two investigations as
+  complementary evidence.
+- **Corrections.** `HISTORICAL_CORRECTIONS.md` lists C1-C10 (additive; for Codex to note in
+  `BRAIN_LINEAGE.md` and `AUDIT_PACK.md`). Helm 2.0 had two runs with a loss but only ONE failed run
+  (20260919, 7/1, p 9/256). The grader has no zero-loss veto.
+- **Reference rescorer.** Claude changed the rescorer before the role split. It is kept as
+  `trusted_rescore_reference_claude_v0_3.py`, with 0.3 anchors. The active `trusted_rescore.py` is restored to
+  its 0.2 bytes; its tests give 19 passed, 9 skipped.
+- **The rule, verified.** `RESCORE_RULE_REPLAY.json`: the historical rule reproduces all six runs.
+  - Helm 1.0: pass, pass, pass.
+  - Helm 2.0-exp: pass, pass, fail.
+  - Breadth: 3 kinds and 5 worlds in every run.
+- **Rescores stopped.** Two full reference rescores stopped at their 30-minute limit, with no readings written
+  (`REFERENCE_RESCORE_RUN_LOG.md`).
+- **Evaluation design.** `records/helm_eval_design_20260923/`:
+  - v0.1 was broken by a 3-reviewer read-only review (`REVIEW_20260923.md`): at 3-4 nodes an arrow-counting
+    rule solves analogy and correspondence; a "first child" rule passes VIA-only reach; small test shapes
+    cannot be secret; "80 items" were about 7 clusters.
+  - v0.2 separates Stage 1 (reach, parts and edge_account, including 5-node new shapes; buildable now) from
+    Stage 2 (analogy and correspondence at 5 or more nodes, which needs a new checker version: **owner
+    decision D-1**).
+- **Wiring probe.**
+  - v0.1 stopped at its wall limit with no reading.
+  - v0.2 (rules frozen before any reading) standardises scores and requires a ranking change. It adds a noise
+    gate, a bystander control, the NO_MATCH margin and a domain counterfactual.
+  - `preservation_digest.py` fingerprints every logit's bits over all 564 records, for checking the repair
+    with its switch off.
+
+No certificate, grader, receipt, label or old row was changed.
+
 ## 2026-09-22 — Team review: why Helm, and why Helm did not pass (advice only)
 
 The owner asked for a team of agents to research two questions. The review ran as workflow

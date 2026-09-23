@@ -1,0 +1,453 @@
+[
+ {
+  "lens": "shortcut",
+  "summary_plain": "I checked the design for shortcuts and leaks. Shortcut here means a simple rule that learns nothing yet still scores well. Leak here means test answers reaching the builder. I recomputed every fact myself with plain Python. I ran no model.\n\nWhat holds up: the bank facts in A1 are correct. The frozen bank has 64 worlds and 6 shapes, with 12/12/12/12/8/8 worlds per shape, and each shape appears in all 4 domains. A shape is a pattern of \"contains\" arrows, ignoring names. Counting every connected shape with no loops gives 4, 24 and 267 at 3, 4 and 5 nodes. So the design's new-shape counts of 3, 19 and 267 are right. All of that is MEASURED.\n\nWhat breaks, in plain words:\n\n(1) At 3 and 4 nodes, a no-learning rule that just counts arrows in and out of each node already solves analogy and correspondence. Analogy asks which other-domain world has the same shape. Correspondence asks which node matches which. Among all 28 shapes, only one pair shares the same counts. So the bar is about 1.0. Even a perfect model cannot beat it, and a win would not show it read structure. The power sums assume a bar of 0.25. The bar for correspondence is at least 0.50, because half its items have \"no match\" as the answer.\n\n(2) The reach-VIA test counts only questions whose true answer is VIA. VIA means the part is reached through an in-between node. The design's bar rules score 0 to 0.22 there. A rule that always says \"VIA through the whole's alphabetically first child\" gets 348/384 = 0.906 on the new 4-node shapes. So a label-order shortcut would pass.\n\n(3) The \"sealed\" test shapes are not sealed. There are only 22 new shapes at 3 and 4 nodes, and anyone can list them. The builder gets the 11 development shapes, so the other 11 are the test shapes. Helm never reads node names, so hiding the names protects almost nothing.\n\n(4) Only 14 structurally different VIA questions exist across all 22 new shapes. So \"80 test questions\" are really about 7 questions, each renamed many times. The p-values overstate the evidence.\n\n(5) The wiring probe passes a repair that adds the same number to every candidate's score. That repair can never change which world is picked. I confirmed this by replaying the probe's verdict arithmetic on a made-up scorer. It read PRESENT with 0 top-choice changes out of 140 rewirings.\n\n(6) The frozen checker refuses graphs above 4 nodes. So the 5-node analogy and correspondence cells cannot be scored as written. Also, one 5-node world in the 64-world bank would break every analogy question that uses that bank.\n\n(7) In the bank, the \"participant\" marks already give a correct node matching in 640 of 640 same-shape pairs. Helm reads these marks. The design does not say how new worlds will set them.\n\nSmaller issues: there is no comparator that ignores the focus world, and Helm 2.0 is exactly that kind of model. The fresh-word rule and the domain words conflict. The Q4 \"new structure\" readout uses a split the builder can already see.\n\nScratch scripts are in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad/hset_review/shortcuts/ (a1.py, dagenum.py, extra2.py, orbits.py, rankcheck.py, uniform_shift.py). No file under D:/tksCAS-worktrees or OneDrive was changed. No sealed or eval-split file was opened.",
+  "findings": [
+   {
+    "id": "S1",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "At 3-4 nodes (NEW_SHAPE_SAME_SIZE, the primary transfer cell), the registered degree-multiset comparator is effectively exact for analogy and for correspondence match/no-match, and simple degree-signature matching nearly always gives a valid bijection. So the bar for analogy and correspondence is about 1.0. Under A7 (b > c with p <= 0.01), even a perfect model ties at b = 0 and can never read BEATS_NO_LEARNING_BAR. And because Helm gets in/out degree as direct node inputs, a 'win' could not tell structure-reading from degree-counting anyway. A5's power figures assume a 0.25 comparator. That is wrong for these families: the constant NO_MATCH comparator alone scores 0.50 on correspondence, because A4 makes half its items NO_MATCH.",
+    "evidence": [
+     "MEASURED (scratch dagenum.py, extra2.py): among all 4+24 = 28 weakly connected DAG classes at 3-4 nodes, exactly ONE degree-multiset collision exists: bank diamond ((0,1),(0,2),(1,3),(2,3)) vs new ((0,1),(0,2),(1,3),(3,2)). Of the 22 new same-size shapes, 21 have a unique (in,out)-degree multiset.",
+     "MEASURED: for 20/22 new same-size shapes, EVERY degree-signature-preserving bijection is a valid isomorphism (3/3 at 3 nodes, 17/19 at 4 nodes). Four-round colour refinement (WL) gives 22/22.",
+     "READ pointer_learner.py:970-971 (in_degree/out_degree are computed as node input features)",
+     "READ EVALUATION_DESIGN_v0_1.md:111 (correspondence half NO_MATCH), :120-122 (power vs comparator 0.25), :132 and :136 (degree comparator is part of the bar), :141-145 (b > c rule)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Compute each primary cell's bar on the actual built items BEFORE fixing n, and redo A5 per cell against that measured bar. Either drop the claim that analogy/correspondence at <=4 nodes can show structure transfer (report them as 'matches degree comparator', diagnostic only), or move structural analogy/correspondence to >=5 nodes. There 105/267 classes collide in degree multiset, so decoys can be drawn from colliding classes. This needs S6 fixed first."
+   },
+   {
+    "id": "S2",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "The reach primary cell is scored on VIA-gold questions only, and none of the registered comparators is a VIA-biased label-order rule. On a VIA-only cell: constant ABSENT scores 0; the one-hop rule (DIRECT iff child, else not VIA) scores 0; rank-last scores about 0.22. But 'if no direct edge, answer VIA through the lowest-rank (alphabetically first) child of the whole' needs no path search and scores about 0.91. The lexical tie-break in first_direct_constituent_lexical_v1 is what makes this rule match the gold so often. A model that learned 'never ABSENT, take the first child' would be certified BEATS_NO_LEARNING_BAR on reach-VIA.",
+    "evidence": [
+     "MEASURED (extra2.py / dagenum.py, over all rank labellings of the 19 new 4-node shapes): VIA questions = 384. Lowest-rank-child rule 348/384 = 0.906. Two-hop rule (first child with a direct edge to the part) 372/384 = 0.969. Rank-last 84/384 = 0.219. Ties 48/384.",
+     "MEASURED at 5 nodes: lowest-rank-child 51280/61800 = 0.830; two-hop 53900/61800 = 0.872; ties 15240/61800",
+     "READ checker.py:135-141 (VIA = first child in sorted-ref order that has a path; DIRECT takes precedence at :132-134)",
+     "READ pointer_contract.py:567-578 (rank-last = VIA via the last ref; one-hop reach = DIRECT iff the part is a child)",
+     "READ EVALUATION_DESIGN_v0_1.md:110, :118 (primary cell is 'reach-VIA'), :129-136 (comparator list)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Register the 'VIA via lowest-rank child' rule and a two-hop rule as bar comparators. Score reach as the full balanced ABSENT/DIRECT/VIA cell, with VIA as a reported stratum and never the cell on its own. Include ABSENT items where the whole has children, so a never-ABSENT policy is penalised."
+   },
+   {
+    "id": "S3",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "TEST_NEW at 3-4 nodes is not sealed. The 22 new same-size shapes can be listed in seconds, and DEV_NEW (11 of them) is handed to the builder. So TEST_NEW is exactly the other 11, and the salted hash hides nothing. Helm never reads node label text, only rank order and declaration token ids. So sealing the labels and salt protects essentially none of the model's test inputs. The builder can use the public generator plus the frozen checker to make inputs and answers for the exact TEST_NEW shapes and use them for development feedback or checkpoint selection. The A2 non-isomorphism check covers only 'training records' and would not see selection on such generated items. A8's statement 'the builder can reproduce everything except which shapes are TEST_NEW' is false at the primary size.",
+    "evidence": [
+     "MEASURED (dagenum.py): weakly connected DAGs up to isomorphism = 4 at 3 nodes and 24 at 4 nodes; new = 3 + 19 = 22, matching A1",
+     "READ EVALUATION_DESIGN_v0_1.md:70-74 (11/11 split; DEV_NEW visible to the builder), :77-78 (check covers training records only), :160-161 (claim that only TEST_NEW membership is hidden)",
+     "READ pointer_inputs.py:30-38 (node label words dropped; nodes identified only by rank), :186-193 (rank = sorted ref index)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "State plainly that same-size test shapes cannot be secret. Replace secrecy with commitment: the builder commits a checkpoint digest and the full list of training AND development-evaluation records (digested) before the shape draw. Claude then checks every one of those records for non-isomorphism to TEST_NEW, not only training records. Alternatively, do not publish DEV_NEW at 3-4 nodes (give the builder only 5-node development shapes). Put real secrecy on the 5-node pool, where 187 shapes are left undrawn."
+   },
+   {
+    "id": "S4",
+    "severity": "BLOCKER",
+    "target": "PROBE_CODE",
+    "problem": "The wiring probe's PRESENT verdict is met by a repair that adds the same focus-dependent constant to every candidate world's score. Such a shift cannot change which world is chosen, so it cannot fix the A7 witness failure (a fixed candidate ranking). Yet it satisfies M1 > 1e-4 and 90% of M3 > 1e-4, because the probe measures absolute score change per candidate, not change relative to the other candidates. Top-1 change is reported but excluded from the verdict. B1 is the stated prerequisite for reading any analogy cell, so the gate can certify the wrong thing.",
+    "evidence": [
+     "READ analogy_wiring_probe.py:198 (diffs = abs(changed[c] - scores[c])), :208 (M1 = abs(sa[c] - sb[c])), :218 (PRESENT rule), :201-202 (top-1 change only reported)",
+     "READ PREREG_ANALOGY_WIRING_PROBE.md:30-33, :43 (verdict excludes top-1)",
+     "MEASURED (scratch uniform_shift.py, which replays the verdict arithmetic of probe lines 198-221 on a synthetic scorer = fixed ranking + one focus-dependent constant): M1 = 0.004, M3 share = 1.0, verdict PRESENT, non-focus top-1 changes 0 of 140 rewirings"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Before either the before-reading or the after-reading, amend the prereg and code to compute M1/M2/M3 on centred scores. For example, subtract the mean over the shared non-focus candidates, or use pairwise candidate differences. Also require a rank or ordering change: for example, at least one non-focus top-1 or pairwise-order flip in a stated share of records. Separately report the NO_MATCH-vs-world margin."
+   },
+   {
+    "id": "S5",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "The effective sample size is far below the claimed 80 per cell, and the split is not stratified. VIA questions exist in only 11 of the 22 new same-size shapes. All 3 new 3-node shapes and 8 of 19 new 4-node shapes have zero VIA questions. Across all 22 there are only 14 structurally distinct VIA (whole, part) questions. TEST_NEW gets about half, so 80 reach-VIA items are about 7 structural questions, each relabelled about 11 times. Analogy rests on at most 11 shapes. A5's binomial power and A7's exact McNemar p treat these as 80 independent items, which overstates the evidence. The unstratified hash split can also leave TEST_NEW with very few VIA-capable shapes.",
+    "evidence": [
+     "MEASURED (orbits.py): 14 distinct VIA orbits (up to automorphism) in 11 of 22 new same-size shapes",
+     "MEASURED (extra2.py): per-shape VIA counts; the 3 new 3-node shapes and 8 of 19 new 4-node shapes have 0 VIA",
+     "MEASURED (orbits.py, hypergeometric draw of 11 from 22 shapes, 11 VIA-capable): P(TEST_NEW has <=3 VIA-capable shapes) = 0.0431, P(<=4) = 0.1974",
+     "READ EVALUATION_DESIGN_v0_1.md:73-74 (unstratified 11/11 hash split), :118-125 (n = 80, power computed as if independent)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Count sample size in distinct structural questions (shape x whole/part orbit, or shape x domain pairing), not relabelled copies. Use shape-clustered inference, for example a permutation or bootstrap over shapes, or require a per-shape majority. Stratify the DEV/TEST split by size and by VIA capability. Report per-shape results. If the same-size pool cannot supply enough distinct questions, say so and move the primary claim to 5 nodes."
+   },
+   {
+    "id": "S6",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "The frozen checker cannot score the 5-node analogy or correspondence items, and one 64-world evaluation bank cannot hold the required worlds. MAX_ISOMORPHISM_NODES = 4, and analogy checks the WHOLE bank before any candidate. So a single 5-node world in the evaluation bank makes every analogy query on that bank fail TYPED_CHECKER_ISOMORPHISM_BOUND, the same-size ones included. The slot contract also caps correspondence at 4 nodes. Capacity: 40 TEST 5-node shapes x at least 2 domains = at least 80 worlds, more than the 64-world maximum. A2 also says TEST_NEW worlds must be non-isomorphic to 'all 64 bank worlds', while A3 needs each one's analogy partner inside 'the evaluation bank'. The design uses one word, 'bank', for both.",
+    "evidence": [
+     "READ checker.py:20 (MAX_ISOMORPHISM_NODES = 4), :91-93, :98, :217 (_bounded_graphs([focus] + bank))",
+     "READ slots.py:47 (correspondence_max_nodes 4)",
+     "READ source.py:20 (MAX_BANK_WORLDS 64, MAX_WORLD_UNION 65)",
+     "READ EVALUATION_DESIGN_v0_1.md:67, :74, :77, :85-86, :97, :164 ('scores them with the frozen checker')"
+    ],
+    "claim_state": "READ",
+    "fix": "Either limit NEW_SHAPE_LARGER to reach/parts/edge_account, or declare a new checker version with a raised bound. That new version needs its own agreement and must not be called 'frozen'. Say whether the bank is per-question or shared, and give an item-to-bank capacity table. Rename the frozen training bank and the evaluation bank so A2's check is unambiguous."
+   },
+   {
+    "id": "S7",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "Participant and declared-whole marks can give the correspondence answer without reading any edge. In the frozen bank, mapping node to node by is_participant rank (1..3), plus the leftover node to the leftover node, is a valid isomorphism for every same-shape pair. The declared whole is always a root. Helm reads both marks for every node. A3 makes labels and declaration words fresh but does not say how new worlds choose primary labels or participants, or in what order. If the generator follows the bank's authoring convention, FAMILIAR_RENAMED and NEW_SHAPE correspondence are solved by a flag-matching rule that is not in A6.",
+    "evidence": [
+     "MEASURED (a1.py): participant-rank mapping is a valid isomorphism on 640/640 ordered same-shape bank pairs; declared whole has in-degree 0 in 64/64 worlds",
+     "READ pointer_inputs.py:219-221, :235-236 (is_declared_whole and is_participant rank are node inputs)",
+     "READ source.py:244 (declared_whole must equal primary[0]), :220-224 (participants = primary labels)",
+     "READ A7 FINAL_JUDGMENT.md:88 (held and trained worlds matched including 'the declared whole and ordered participants')",
+     "READ EVALUATION_DESIGN_v0_1.md:90-94 (only labels, declarations and node order are fresh)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Require the generator to draw participant membership and order at random, independent of structure (the whole-first constraint is the only fixed part). Prove the flag-matching success rate at build time. Register 'participant-rank flag matching' plus the degree rule as correspondence comparators."
+   },
+   {
+    "id": "S8",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "No comparator ignores the focus world. Helm 2.0's analogy path is exactly focus-blind: A7 found identical candidate scores across focus worlds. B4 reads HSET-1 analogy to compare repair against no-repair. The design does not fix the bank's composition per NEW_SHAPE item, beyond one same-domain decoy plus 'different-shape, different-domain decoys'. A candidate-only rule could then solve items: 'the other-domain world of the focus's size whose shape is not one of the 6 trained shapes', or a fixed candidate ranking. This is most likely if the per-item bank holds only one unfamiliar-shape world of that size. The unrepaired arm could then score on analogy without comparing anything.",
+    "evidence": [
+     "READ helm_failure_research_20260922/agents/A7/FINAL_JUDGMENT.md:78-80 (fixed relative ranking; identical scores for all 62 shared non-focus candidates)",
+     "READ EVALUATION_DESIGN_v0_1.md:85-89 (decoy spec), :95-99 (bank composition only 'recorded'), :213-216 (B4 reads HSET-1)",
+     "INFERRED: that the novelty rule would succeed depends on a bank composition the design leaves open"
+    ],
+    "claim_state": "INFERRED",
+    "fix": "Register two comparators. (a) A focus-blind oracle: the best single fixed candidate ranking plus NO_MATCH on the cell. (b) A candidate-only novelty rule. Require every NEW_SHAPE focus's bank to hold at least k other-domain worlds of the same node count, the same edge count and a non-training shape that are NOT partners. Prove all of this by program at build time."
+   },
+   {
+    "id": "S9",
+    "severity": "MINOR",
+    "target": "DESIGN",
+    "problem": "Several A3 surface controls are vacuous or self-contradictory for Helm. (a) Helm never reads node label words, so the zero-label-overlap proof protects nothing. Only the rank order that labels induce matters. (b) Permuting the serialized node order is invisible, because the reader re-sorts refs. Only relabelling changes ranks. (c) 'Zero overlap with every word the course ever showed' would ban the four domain strings. Yet the analogy rule is string-distinct domains. Fresh domain words fall back to byte tokens outside the 136-string cache, so a same-domain-decoy error could come from unreadable domain text rather than structure. (d) The design never requires rank order to be drawn independently of structure. In the bank, rank order is a topological order in 12/64 worlds.",
+    "evidence": [
+     "READ pointer_inputs.py:30-38, :186-193",
+     "READ pointer_inputs.py:40-45, :106-108, :128-150 (label cache pinned to 136 strings; misses use byte fallback)",
+     "READ checker.py:221 (SAME_DECLARED_DOMAIN by string equality)",
+     "MEASURED (rankcheck.py): rank order is topological in 12/64 bank worlds",
+     "READ EVALUATION_DESIGN_v0_1.md:90-94"
+    ],
+    "claim_state": "READ",
+    "fix": "State which declaration fields are fresh and whether domain strings stay the four trained ones. Replace 'permuted node order' with 'rank permutation via relabelling'. Require label order (and so rank) to be uniform random with respect to structure, and report the lowest-rank-child and rank-last rule scores per built cell."
+   },
+   {
+    "id": "S10",
+    "severity": "MINOR",
+    "target": "DESIGN",
+    "problem": "Part D's NEW_STRUCTURE readout is the builder-visible dev split. It therefore works as development feedback, not a sealed transfer test, especially if D3's arms are chosen by looking at it. The design does not forbid picking an arm on NEW_STRUCTURE and then quoting NEW_STRUCTURE as that arm's result.",
+    "evidence": [
+     "READ EVALUATION_DESIGN_v0_1.md:244-246 (NEW_STRUCTURE = visible dev split; sealed eval kept for later), :262-266",
+     "READ research/helm_cas_expression_lab/data/q3_v0_7/ listing: visible_G_dev.jsonl has 256 rows (the eval and sealed files were not opened)"
+    ],
+    "claim_state": "READ",
+    "fix": "Label Q4 NEW_STRUCTURE on the visible dev split as DEVELOPMENT_FEEDBACK_NOT_CLAIM_BEARING. Any arm selected with it must be confirmed on the sealed eval split before a transfer statement is made."
+   }
+  ]
+ },
+ {
+  "lens": "probe",
+  "summary_plain": "Short version: the probe can tell \"no wire at all\" apart from \"some wire\". It cannot yet tell a real comparison apart from a fake one.\n\nWhat is right. On the unchanged Helm 2.0, the probe's prediction of ABSENT follows from the code. Every one of the 70 analogy records carries all 64 worlds and has an empty argument list. Each world is encoded on its own, and the focus world only sets its own flag. The exact-zero threshold (1e-6) suits that case. The worry that a repair could pass through the focus candidate itself, or through the world count, does not hold: the probe leaves the focus candidate out, and the world count is the same in every record.\n\nWhat is wrong, most serious first.\n\n1. The known issue is confirmed by measurement. I fed the probe's own verdict code synthetic scores of the form \"focus-dependent shift + focus-dependent scale × a fixed candidate score\". That is a repair with no comparison at all. The probe returned PRESENT (M1 = 0.4901 or 2.5115; 100% of records above the threshold). Yet 0 of 248 rewirings changed the order of the other candidates, and 0 changed the top pick. The judge A7's finding is about ORDER: a fixed ranking cannot pick from two separate answer sets. The probe measures raw score change, not order, so it can certify the very thing A7 ruled out.\n\n2. The \"switch OFF must reproduce the before-reading exactly\" check does not test preservation. For a model with no focus dependency, M1, M2 and M3 are 0 whatever the scores are, and the probe never saves the scores themselves. A switch-OFF model whose scores all changed would still pass.\n\n3. Two other non-comparison routes also pass:\n   - A shared coupling across all worlds, such as normalising across candidates. There is no control that rewires a non-focus world.\n   - Random noise or non-repeatable GPU operations. There is no repeat run to measure the noise floor.\n\n4. The rewiring does not reach every copy of the focus graph. The reading keeps a second copy in `reading[\"focus_world\"]`, and the probe edits only `reading[\"worlds\"][focus]`.\n\n5. The probe runs only on freshly built models. A new part that starts at zero, as Helm's own `round_rate` does, would read ABSENT even when the repair is correct. And a trained model that learned to switch the path off would never be checked.\n\n6. NO_MATCH is left out, but it is a real answer option with a fixed score of 0. In 32 of the 248 rewirings the correct answer becomes NO_MATCH. About 25% of HSET-1 analogy items are NO_MATCH.\n\n7. The focus world's domain is never changed, although A7's repair order names both graph and domain. Both witness records are in the grammatical domain.\n\n8. Smaller points:\n   - The prereg says the other arrangements come from the bank. The code adds 2 made-up 3-node shapes, which may fall in the sealed test pool.\n   - The 90% rule counts records (70), not distinct focus worlds (24).\n   - The reported top-pick diagnostic does not follow the model's real decision rule.\n\nProposed fix, in outline:\n- Standardise each record's candidate scores (subtract the mean, divide by the spread).\n- Add a rank-change measure and an answer-set contrast.\n- Add a rewire of a non-focus world as a control, a repeat-run noise gate, a NO_MATCH margin, and a domain swap.\n- Add a byte-level digest of all scores for the switch-OFF preservation check.\n- Run the probe on trained repaired checkpoints too, not only fresh models.\nExact thresholds are in the findings below.\n\nClaim states:\n- Measured: F1's synthetic replay, and the counts 70 / 24 / 248 / 32.\n- Read from the code: F2, F4 and the rewiring mechanics.\n- Inferred: that global-coupling and noise paths would pass (F3).\n- Nothing was run on a GPU. Torch was not imported.",
+  "findings": [
+   {
+    "id": "F1",
+    "severity": "BLOCKER",
+    "target": "PREREG",
+    "problem": "PRESENT is triggered by ANY absolute change in a non-focus score, so a repair that adds a focus-dependent offset (or offset + scale) to every candidate passes, although it never changes the relative ranking of candidates. A7's demonstrated restriction is a ranking restriction ('A fixed relative ranking with a fixed tie order cannot select from both disjoint accepted sets', FINAL_JUDGMENT.md:80), so the probe can certify a repair that leaves the A7 defect fully intact.",
+    "evidence": [
+     "PREREG_ANALOGY_WIRING_PROBE.md:20 (M1 = max abs diff), :24-29 (M3 = max abs non-focus change), :43 (PRESENT = M1 > 1e-4 AND >=90% of M3 > 1e-4)",
+     "analogy_wiring_probe.py:198-199 (raw abs diffs), :207-208, :215-219",
+     "MEASURED: scratchpad/hset_review/probe/a3.py imports the probe's own canon_shape/alternative_shapes/WITNESSES/TAU_PRESENT (no torch) and replays lines 182-221 on synthetic scores s(c)=a(focus_shape)+b(focus_shape)*h(c) over the real 70 analogy records and 248 rewirings: offset-only -> M1=0.4901, M3 share=1.000, verdict PRESENT, non-focus ranking changed in 0/248 rewirings, top-1 changed 0; affine -> M1=2.5115, share 1.000, PRESENT, 0 ranking changes, 0 top-1 changes",
+     "records/helm_failure_research_20260922/agents/A7/FINAL_JUDGMENT.md:78-80"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Replace raw M1/M3 by per-record standardised scores over the cross-domain non-focus candidates X (only they can be answers): z_c=(s_c-mean_X s)/sd_X s. M3z(r)=max over rewires of max_{c in X}|Δz_c|; K(r)=max over rewires of Kendall discordant-pair fraction on X; RC(r)=mean over rewires S->S' of |mean_{A'}Δz - mean_{A}Δz| where A/A' are the cross-domain isomorphs of the old/new focus shape (the old and new accepted sets). M1z = max_{c shared}|z_c(a)-z_c(b)|. PRESENT requires, on >=22 of the 24 distinct focus worlds: M3z >= 1e-2, K > 0 on at least one rewire, and median RC >= 1e-2; plus M1z >= 1e-2. Affine-in-focus transforms give M3z=K=RC=0 exactly and therefore cannot pass."
+   },
+   {
+    "id": "F2",
+    "severity": "BLOCKER",
+    "target": "PREREG",
+    "problem": "'Switch OFF must reproduce the before-reading exactly' does not test preservation. The before-reading is ABSENT with M1=M2=M3=0; for any model without focus dependency those numbers are 0 whatever its scores are, and the probe never writes the scores. A switch-OFF build that changed every logit (a changed init RNG stream, a changed LayerNorm, an extra term) still reproduces the verdict and the zero M-values. Also 'identical' is undefined: the output JSON necessarily differs in source_sha256_lf (the repair edits pointer_learner.py), timings and GPU telemetry. The design relies on this check (EVALUATION_DESIGN_v0_1.md:191).",
+    "evidence": [
+     "PREREG_ANALOGY_WIRING_PROBE.md:59-63",
+     "EVALUATION_DESIGN_v0_1.md:190-192",
+     "analogy_wiring_probe.py:223-237 (result has only aggregates: M1, M2, M3 stats, 2 top-1 ids, one focus self-change float, parameter_count; no per-record scores or score digest)",
+     "analogy_wiring_probe.py:118-126 (JSON carries source hashes, wall_seconds, gpu, which must differ between builds)"
+    ],
+    "claim_state": "READ",
+    "fix": "Add a preservation mode. For all 564 registry records and every slot (all families, not only analogy), write the SHA-256 of canonical JSON of each slot's float32 logits as IEEE-754 bit patterns (hex), and one digest over all of them. Do this for the 3 fresh seeds and the 6 historical checkpoints. Switch-OFF must equal the unchanged source 20208c92 bit for bit. In addition: parameter_count == 174,303; the state_dict key set and shapes are identical; the fresh-container state_dict digest is identical (this proves the new code does not consume the framework RNG when OFF). Name the exact JSON fields compared and run both builds under the same torch flags."
+   },
+   {
+    "id": "F3",
+    "severity": "MAJOR",
+    "target": "PREREG",
+    "problem": "Two further non-comparison routes pass PRESENT. (a) A global coupling across worlds, such as normalising or softmax-pooling world vectors across all 64 candidates, or any batched op whose statistics include the focus world. Rewiring the focus then moves every candidate's score, including their order, with no pairwise focus-to-candidate comparison. The probe has no control that separates this from a comparison. (b) A noise path: non-repeatable CUDA ops (atomic scatter/index_add message passing) or stray stochastic ops. With tau_present=1e-4 in absolute logits, reduction-order noise alone can exceed the bar. The probe never repeats a forward pass, and it does not set the deterministic/TF32 flags the training worker sets.",
+    "evidence": [
+     "analogy_wiring_probe.py:148-164 (one forward per condition, no repeat)",
+     "analogy_wiring_probe.py:28 TAU_PRESENT=1e-4 absolute, not scale-relative",
+     "cncm/typed_matched_worker.py:161-163 (worker sets use_deterministic_algorithms(True), matmul/cudnn allow_tf32=False; the probe does not)",
+     "pointer_learner.py:820 world_head = Linear-GELU-LayerNorm-Linear (a shared nonlinear head: any focus-dependent shared input produces non-uniform, order-changing effects)"
+    ],
+    "claim_state": "INFERRED",
+    "fix": "(i) M0 noise gate: set the worker's flags plus CUBLAS_WORKSPACE_CONFIG, run every base forward twice, and require δ0 = max|s-s'| <= 1e-6, else the verdict is INVALID_NONDETERMINISTIC. Every PRESENT effect must also be >= 100×δ0. (ii) M4 third-party leakage control: apply the same rewirings to one non-focus world c' (for example the lexically first cross-domain world of the focus's size), and measure L(r)=max_{c in X\\{c'}}|Δz_c|. A pairwise comparison predicts L≈0. Require median over foci of M3z/L >= 10, and report L raw. (iii) Add a same-shape control: permute the focus world's node order and carry its node fields along. This must give M3z <= 1e-6, since the encoder has no rank feature (pointer_contract.py:896), which shows the effect comes from structure and not from node order."
+   },
+   {
+    "id": "F4",
+    "severity": "MAJOR",
+    "target": "PROBE_CODE",
+    "problem": "The rewiring does not reach every copy of the focus graph in the reading. read_packet stores a second deep copy of the focus world in reading['focus_world'], including its 'contains'. The probe edits only reading['worlds'][focus]['contains'], so the counterfactual reading is internally inconsistent. The current learner never reads reading['focus_world'] (grep found no use), so the before-reading is unaffected. But a repair that takes 'the arrangement Helm is asked to compare' from the natural field reading['focus_world'] would see the stale graph: M3 would read 0 and a correct repair would be scored MIXED or ABSENT. The cached plan (slots.compile_slots) and input digest are also not rebuilt.",
+    "evidence": [
+     "pointer_inputs.py:417 \"focus_world\": deepcopy(graphs[focus_world_id]) and :419 node_flags copy",
+     "analogy_wiring_probe.py:149-152 (deepcopy then edit reading[\"worlds\"][focus][\"contains\"] only), :109 (plan cached from the unrewired packet)",
+     "PREREG_ANALOGY_WIRING_PROBE.md:24-26 claims the rewiring changes 'ONLY the focus world's contains list, inside the model's reading'"
+    ],
+    "claim_state": "READ",
+    "fix": "Build the counterfactual at the packet level. Rewrite packet['source']['worlds'][focus]['contains'] as ref pairs, recompute the probe-only source_digest binding, then re-run pointer_inputs.read_packet and slots.compile_slots. At minimum, edit both reading['worlds'][focus]['contains'] and reading['focus_world']['contains']. Then assert that the edited reading equals read_packet(rewired packet) on every key except record/query ids, and record pointer_inputs.input_digest before and after each rewiring. Fail closed if a repaired GraphForward reads any reading key that the probe did not rebuild."
+   },
+   {
+    "id": "F5",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "The PRESENT requirement is only on FRESH containers. That gives a false FAIL for a correct zero-initialised repair, and no check at all on the trained models whose analogy cells are interpreted. Helm's own house style zero-initialises a gate (round_rate = 0, so tanh(0) = 0 and message passing contributes nothing at init). A repair gated the same way reads exactly ABSENT on fresh containers. Conversely, a repair that is PRESENT at init can be trained to shut the path, and A7 (design line 152-153) would still allow its analogy cells to be read.",
+    "evidence": [
+     "PREREG_ANALOGY_WIRING_PROBE.md:61-62 (switch-ON must be PRESENT on fresh containers; no trained-checkpoint requirement)",
+     "EVALUATION_DESIGN_v0_1.md:152-153 (wiring PRESENT before any analogy cell is interpreted), :190",
+     "pointer_learner.py:761 round_rate zeros; :1154 update scaled by tanh(round_rate)"
+    ],
+    "claim_state": "READ",
+    "fix": "Require the amended PRESENT verdict (F1+F3) on every switch-ON TRAINED checkpoint whose HSET-1 or historical analogy numbers are read, per seed. For fresh containers, B2 must declare the new tensors' init. If any new gate is zero-initialised, the fresh-container probe runs with those tensors set to a recorded, seeded probe draw (not the training init), and it is labelled 'reachability', not 'wiring at init'."
+   },
+   {
+    "id": "F6",
+    "severity": "MAJOR",
+    "target": "PROBE_CODE",
+    "problem": "NO_MATCH is thrown away, although it is a real answer option. The model's decision is an argmax over [NO_MATCH, W0..W63] with NO_MATCH pinned at 0, so a focus-dependent uniform offset is NOT answer-irrelevant: it decides NO_MATCH against any world. This refines the known issue: an offset cannot choose between worlds, but it can decide whether there is a match. The probe cannot see either effect. MEASURED: in the frozen course 0 of 70 analogy records have NO_MATCH gold (acceptance sets are size 9 in 52 records and size 6 in 18). But 32 of the probe's 248 rewirings (every 3-node focus rewired to a non-bank shape) make NO_MATCH the correct answer, and HSET-1 plans about 25% NO_MATCH items. The reported top-1 diagnostic also ignores NO_MATCH and includes the focus world, so it is not the model's answer.",
+    "evidence": [
+     "analogy_wiring_probe.py:162-163 (NO_MATCH dropped), :201 (top-1 over worlds only, focus included)",
+     "pointer_learner.py:1510-1511 (NO_MATCH logit = 0)",
+     "slots.py:293 and :29 (argmax over the declared symbol order, NO_MATCH first)",
+     "MEASURED scratchpad/hset_review/probe/a2.py: 248 rewires, 32 with an empty new accepted set; 16 of 70 records have 3-node foci",
+     "EVALUATION_DESIGN_v0_1.md:89, :112"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Add M5 = the change in the NO_MATCH margin, Δ(max_{c in X} s_c - 0), per rewire. Report it separately for rewires whose new accepted set is empty (32) and non-empty (216). Recompute the top-1 diagnostic with the model's exact decision rule (slots.score_decisions over all symbols). For HSET-1, a separate wiring line should require |M5| > 100×δ0 on >= 90% of the empty-set rewires before any NO_MATCH item is interpreted."
+   },
+   {
+    "id": "F7",
+    "severity": "MAJOR",
+    "target": "PREREG",
+    "problem": "The focus-DOMAIN path is never probed. The analogy rule needs both an isomorphic graph and a DIFFERENT declared domain, and A7's repair action says 'focus-world graph and domain information'. M3 changes only the graph. Both M1 witnesses are in the same domain (grammatical). So a repair that supplies only the focus graph is certified, even though it cannot learn to exclude same-domain isomorphs; the HSET-1 same-domain decoys would then be read against a wiring the probe never established.",
+    "evidence": [
+     "records/helm_failure_research_20260922/agents/A7/NEXT_ACTIONS.md:19",
+     "MEASURED a1.py/a2.py: both witness foci are domain 'grammatical', shapes 4-chain and 3-star; their accepted sets are 9 and 9 with 0 overlap",
+     "EVALUATION_DESIGN_v0_1.md:57-58 (rule), :87 (same-domain decoys)",
+     "checker.py analogy branch: same-domain worlds rejected before the isomorphism check"
+    ],
+    "claim_state": "READ",
+    "fix": "Add M6, a domain counterfactual. Replace the focus world's 'domain' declaration_ids with those of each other domain, leaving the graph unchanged and rebuilding as in F4. Measure RC_dom = |mean_{A'}Δz - mean_{A}Δz|, where A and A' are the accepted sets under the old and new focus domain. Also run the third-party control of F3 for it. Require median RC_dom >= 1e-2 on >= 22 of 24 foci for a verdict of PRESENT_GRAPH_AND_DOMAIN; otherwise report PRESENT_GRAPH_ONLY."
+   },
+   {
+    "id": "F8",
+    "severity": "MINOR",
+    "target": "PREREG",
+    "problem": "The prereg and the code disagree about which arrangements are used, and the extra ones touch HSET-1's new-shape pool. The prereg says the new arrangements are 'every other contains-shape that has the same node count in the bank'. The code adds two non-bank 3-node shapes (fork 0->{1,2} and collider {0,1}->2) and omits the third non-bank 3-node DAG (the transitive triangle). These are 2 of the 3 genuinely new 3-node shapes that design A2 splits between DEV_NEW and sealed TEST_NEW. A builder who iterates the repair against the probe gets development feedback on shapes that may be sealed test shapes.",
+    "evidence": [
+     "PREREG_ANALOGY_WIRING_PROBE.md:26-27",
+     "analogy_wiring_probe.py:54-65 (extras [(0,1),(0,2)] and [(0,2),(1,2)])",
+     "MEASURED a2.py: alternatives per size {4: 5, 3: 3} (bank 3-chain + 2 synthetic)",
+     "EVALUATION_DESIGN_v0_1.md:54, :69-74"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Make the prereg state the exact alternative list (canonical edge tuples), and freeze it. Either take the 3-node rewires only from DEV_NEW after the sealed split is drawn, or exclude all non-bank shapes from any probe run the builder can see, and let Claude run the full probe."
+   },
+   {
+    "id": "F9",
+    "severity": "MINOR",
+    "target": "PREREG",
+    "problem": "The 90% share is counted over the 70 records, not the 24 distinct focus worlds. Records that share a focus have identical model inputs apart from their ids (2 to 4 records per focus), so one focus counts up to 4 times. Also, M3 takes the max over all 62 non-focus candidates, so movement of a single never-answer candidate (for example a same-domain world) is enough for a record to count.",
+    "evidence": [
+     "analogy_wiring_probe.py:215 (share over m3 records)",
+     "MEASURED a2.py: records per distinct focus = [2x6, 3x14, 4x4] over 24 foci",
+     "analogy_wiring_probe.py:198-199 (max over all non-focus candidates)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Compute every share over the 24 distinct foci (require >= 22/24). Restrict M3z/K/RC to the cross-domain candidate set X, and report the per-shape breakdown (6 bank shapes) so a pass carried by one shape family is visible."
+   },
+   {
+    "id": "F10",
+    "severity": "MINOR",
+    "target": "PROBE_CODE",
+    "problem": "The switch interface is unspecified and not verified. The current _build_container(torch, framework, device) takes no switch argument. The probe forwards --container-kwargs but records no evidence that the switch actually took effect. If the repair puts its switch in a contract constant (as node_rank_feature is, in pointer_contract.DESIGN) or at forward time, the ON and OFF runs could silently be the same model.",
+    "evidence": [
+     "pointer_learner.py:698 def _build_container(torch, framework, device)",
+     "analogy_wiring_probe.py:76, :107, :137",
+     "pointer_contract.py:896 (precedent: a switch held in DESIGN)"
+    ],
+    "claim_state": "READ",
+    "fix": "Require the repaired container to expose a read-only attribute (for example model.analogy_focus_repair: bool). The probe asserts it equals the requested state and writes it to the result. With the switch OFF, the probe also asserts that the new tensors are absent from state_dict."
+   }
+  ]
+ },
+ {
+  "lens": "stats",
+  "summary_plain": "I reviewed the design, the probe rules and the probe code. I read the Helm source files: source.py, answers.py, slots.py, checker.py, pointer_inputs.py, pointer_learner.py and course.py. I checked the numbers with pure-Python scripts only: no torch, no model, no sealed or eval file. Scratch files are in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad/hset_review/stats/.\n\nThese numbers check out:\n- The bank has 64 worlds in 6 shapes (12/12/12/12/8/8), and each shape appears in all 4 domains.\n- There are 3, 19 and 267 new shapes at 3, 4 and 5 nodes.\n- The power figures are right: 30/80 gives power 0.9908, or 0.9728 over three runs. 24/60 gives 0.9538, or 0.8676. 40 questions gives 0.4841 over three runs.\n- Part D's shape counts are right: 16 training shapes, 9 dev shapes, 0 shared, and 256 dev rows at depth 3.\n\nThe design still has serious problems:\n1. The 5-node split cannot be scored for analogy or correspondence. The frozen checker stops at 4 nodes. If any 5-node world is in the bank, every analogy question fails to score. Fixing this means editing the checker, which is the answer path.\n2. At 3 and 4 nodes, a no-learning rule that only counts arrows in and out of each node is almost perfect on analogy and correspondence. A perfect model can never beat it, so those two families can never pass.\n3. The 11 sealed same-size shapes hold only about 7 distinct reach-VIA questions. So 80 items are mostly the same few questions repeated. The simple comparators never answer VIA, so a model that is right on 7 copies of one pattern passes the cell.\n4. The sample-size calculation is for a different test from the success rule.\n5. The sealed shapes are simply the 11 new shapes that are not in the development set, so the builder can work them out.\n6. Helm reads two hints the design does not control: the participant rank and the declared whole. In the bank, the \"participant 2\" node is the VIA answer in 41 of 56 cases.\n7. Using fresh declaration words sends the domain signal to rows of Helm's declaration table that were never trained.\n8. The wiring probe can read PRESENT from a change that cannot reorder the candidates.\n9. The wiring rule for a fresh model conflicts with starting both arms from the same weights.\n10. Part D's \"familiar\" readout changes size from arm to arm. It is empty (0 rows) if an arm trains on all 2,048 rows.\n11. Part C gives a shortened query id and no allowed tolerance, so it cannot be checked as written.\n\nOn Codex's questions: the reader and slot code accept a new bank of up to 64 worlds without edits, but correspondence stops at 4 nodes. The course generator does need a new external builder. That builder would not touch the answer path, but it must label test worlds with split \"training\".",
+  "findings": [
+   {
+    "id": "F1",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "NEW_SHAPE_LARGER (5-node) analogy and correspondence cells cannot be produced or scored with the frozen code. The frozen checker refuses any graph over 4 nodes. For analogy, it checks the whole bank first, so one 5-node world in the eval bank makes EVERY analogy question in that bank unscorable (TYPED_CHECKER_ISOMORPHISM_BOUND). The slot compiler also refuses correspondence over 4 nodes. There is a capacity problem too: 40 sealed 5-node shapes x at least 2 domains = 80 partner worlds, but the bank maximum is 64. Only reach, parts and edge_account work at 5 nodes. The fix would need edits to checker.py and answers.py, which are the answer path the design says stays frozen.",
+    "evidence": [
+     "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py:20 MAX_ISOMORPHISM_NODES = 4; :91-93 _bounded_graphs; :98 called for correspondence; :217 _bounded_graphs([focus] + bank) for analogy",
+     "answers.py:22 MAX_PERMUTATION_NODES = 4; :292-298 correspondence_candidates requires max nodes <= 4; slots.py:95 calls it for every correspondence packet; slots.py:47 profile says correspondence_max_nodes 4",
+     "source.py:20 MAX_BANK_WORLDS = 64, MAX_WORLD_UNION = 65; EVALUATION_DESIGN_v0_1.md:67, :74, :85-99, :118"
+    ],
+    "claim_state": "READ",
+    "fix": "Drop analogy and correspondence from NEW_SHAPE_LARGER, or register a new checker version with its own name and profile digest. Either way, say plainly that A5's 'three splits' for these families is not buildable on the frozen checker. Keep 5-node questions for reach, parts and edge_account only. Never put a 5-node world into a bank that analogy is scored against."
+   },
+   {
+    "id": "F2",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "The bar comparator, degree-multiset (a count of arrows in and out of each node), almost fully solves analogy and correspondence at 3-4 nodes. So a perfect learner cannot pass the A7 rule on NEW_SHAPE_SAME_SIZE for those two families: b stays near 0, and b >= 7 is needed when c = 0. At 3 nodes, the degree signature separates all 4 shapes. At 4 nodes it gives 23 classes for 24 shapes. The only collision is the new shape ((0,1),(0,2),(1,3),(3,2)) against the bank diamond. The correspondence degree rule, which picks the first degree-preserving map, scores 1.0 on all 3-node shapes and on 17 of 19 new 4-node shapes. It scores 0.5 on the other 2, for a mean of 0.9474. The degree rule does fail often at 5 nodes (105 of 267 shapes share a signature), but that is exactly where the checker cannot score (F1). As written, TRANSFERS_TO_NEW_STRUCTURE can only ever be earned by reach. It would print 'no transfer' for analogy and correspondence whatever the model does.",
+    "evidence": [
+     "MEASURED shapes.py / cdeg.py: 3 nodes 4 shapes 4 degree classes; 4 nodes 24 shapes 23 classes (1 colliding pair, one of which is the bank diamond); 5 nodes 267 shapes 200 classes, 105 shapes in 38 colliding classes",
+     "cdeg.py: degree-first correspondence accuracy on new 4-node shapes = [1.0 x17, 0.5 x2], mean 0.9474; 3-node 1.0",
+     "EVALUATION_DESIGN_v0_1.md:132 comparator 4 (degree multiset) is in the bar; :136 bar = best of items 1-4; :141-149 success rule",
+     "records/helm_failure_research_20260922/agents/A5/PREREGISTRATION.md:10-11 define A-degree and C-degree"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Decide in the prereg whether degree-multiset is a no-learning bar or a ceiling. If it stays a bar, the analogy and correspondence items must be built where it fails: same node count, same edge count and same degree multiset, but not isomorphic. That needs 5+ nodes, which needs a new checker version (F1). Otherwise, state before any run that these two families can only earn 'matches the degree rule', never 'beats no-learning'."
+   },
+   {
+    "id": "F3",
+    "severity": "BLOCKER",
+    "target": "DESIGN",
+    "problem": "There are too few distinct reach-VIA questions to fill 80 independent items, and the test treats repeats as independent. All 22 new 3-4-node shapes together carry only 14 non-tie VIA (whole, part) questions, plus 2 tie cases. 11 of the 22 shapes have none, and all three new 3-node shapes have none. Over all 705,432 possible 11/11 splits, the sealed half gets a median of 7 non-tie VIA questions from a median of 5 shapes. Its range is 1 to 13, and P(<=4) = 0.0885. FAMILIAR_RENAMED has only 6 labelled VIA questions in the 6 bank shapes (5 non-tie plus the diamond tie). So 80 VIA items means each structural question repeated about 11 times. The exact sign test treats every repeat as an independent coin. Constant ABSENT and the one-hop rule never output VIA, so the bar on a VIA cell is about 0. b = 7 with c = 0 gives p = 0.0078. So one learned structural pattern copied 7 or more times certifies BEATS_NO_LEARNING_BAR.",
+    "evidence": [
+     "MEASURED via.py: new shapes total non-tie VIA labelled = 14, tie = 2, shapes with any non-tie VIA = 10 of 22; bank shapes VIA labelled = 6 (tie 1)",
+     "MEASURED split.py: sealed-half non-tie VIA question count distribution {4:0.0608, 5:0.1229, 6:0.1836, 7:0.2111, 8:0.1836, ...}",
+     "power.py: sign test c=0 needs b>=7 (p=0.0078125); c=1 needs b>=10",
+     "EVALUATION_DESIGN_v0_1.md:73-74 (11/11 split), :110, :118-121, :141-145"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Make the structural question (shape x whole x part, up to automorphism) the unit of analysis. Score a cluster as correct only if all its instances and presentations are correct, then run the sign test over clusters. Alternatively use a cluster-level permutation test. Print the effective n for each cell. If there are fewer than about 10 clusters, say before any run that the cell cannot support a claim, or add VIA supply from 5-node shapes, where the checker's reach rule works."
+   },
+   {
+    "id": "F4",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "Section A5 sizes the sample for one test, and A7 decides success with another. A5 uses a one-sample exact binomial against a fixed 0.25 chance level. A7 uses a paired sign test against the best comparator. In a sign test only the disagreeing pairs count, and 0.25 is the bar of no actual cell. On a VIA-only reach cell the bar is about 0, so 7/80 correct passes, not 30/80. On analogy and correspondence the bar is about 1.0, so nothing passes (F2). The composition is also unclear. A4 line 110 says reach is 'ABSENT / DIRECT / VIA in equal thirds', while A5 line 118 speaks of an 80-question 'reach-VIA' cell. If the cell is the thirds mix, the one-hop rule scores 2/3 and becomes the bar. The power figures themselves are arithmetically correct (reproduced exactly).",
+    "evidence": [
+     "power.py: n=80 crit 30 power 0.9908, 3-run 0.9728; n=60 crit 24 power 0.9538, 3-run 0.8676; n=40 3-run 0.4841 (all match the design)",
+     "EVALUATION_DESIGN_v0_1.md:118-125 (binomial vs 0.25) vs :141-146 (paired sign test vs bar)",
+     "EVALUATION_DESIGN_v0_1.md:110 vs :118"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Redo the power analysis for the A7 sign test itself. Assume the discordant-pair rate from each cell's actual bar composition and from the clustering (F3). State whether the reach cell is VIA-only or the thirds mix, and name the bar for each cell before any output."
+   },
+   {
+    "id": "F5",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "The sealed TEST_NEW set is not actually secret at 3-4 nodes. There are only 22 new shapes, and the design's own enumeration makes them public. The builder receives DEV_NEW (11), so TEST_NEW is exactly the other 11, whatever salt is used. At 5 nodes, the builder can equally train on all 227 non-DEV shapes. The only real protection is the non-isomorphism check against 'every world any training record carries'. But A2 runs that check 'before any use', when the split is built, and not on the submitted checkpoint's actual training inputs at evaluation.",
+    "evidence": [
+     "EVALUATION_DESIGN_v0_1.md:54-56 (3/19/267 enumerated), :73-74 (11/11 split by salted hash), :76-78 ('run before any use'), :160-161 (builder gets DEV_NEW and can reproduce everything except which shapes are TEST_NEW)",
+     "MEASURED shapes.py: 3-node new = 3, 4-node new = 19, so the complement of DEV_NEW is fully determined"
+    ],
+    "claim_state": "INFERRED",
+    "fix": "Say plainly that the seal at 3-4 nodes protects nothing. Require the builder to submit a manifest of every world any update or development run touched. At evaluation, run the two-method isomorphism check against TEST_NEW and fail closed on any match. Ban any training use of new shapes outside DEV_NEW as an explicit rule, not as a secret."
+   },
+   {
+    "id": "F6",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "Helm reads node flags that leak the answer, and the design neither controls them nor registers a comparator for them. Helm reads is_declared_whole and the participant rank for every node. In the frozen bank, the VIA answer from the declared whole is the 'participant 2' node in 41 of 56 VIA questions, because every bank shape has the edge from labels[0] to labels[1]. The design does not say how declared_whole and the three primary labels are assigned in new-shape worlds. The source contract requires exactly 3 primary labels with whole = primary[0], so they must be assigned somehow. Assigned the training way, a flag rule ('answer VIA participant 2') could pass the reach cell without any structure. Assigned differently, the flags shift for new shapes only, which is a confound. A6 lists no flag-based comparator.",
+    "evidence": [
+     "MEASURED part.py over records/typed_course_001/checks_002/public_course.json: VIA questions from declared whole = 56, gold == participants[1] in 41, ties 12; declared whole is the unique root in 56 of 64 worlds",
+     "pointer_inputs.py:212-243 (is_declared_whole, is_participant rank emitted per node); pointer_learner.py:1000-1010 (both are node features)",
+     "source.py:242-244 (3 primary labels, declared_whole == primary[0]); course.py:139-141 (course reach always uses the declared whole)",
+     "EVALUATION_DESIGN_v0_1.md:127-136 (no flag comparator)"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Register 'VIA = participant rank 2' and 'VIA = lowest-rank child of the declared whole' as no-learning comparators. Fix a rule for assigning declared_whole and participants in generated worlds, drawn independently of the reach answer. Report how often the flag rule is right in each split."
+   },
+   {
+    "id": "F7",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "Using fresh declaration words would feed the domain, kind, function and setting signals through parts of Helm that were never trained. Helm maps each declaration token to a table row by its sorted position among the tokens present in that reading, not by a fixed vocabulary id. In the frozen bank, the domain field only ever had 4 distinct tokens, and setting only 12. Words outside the vocabulary are split into bytes: 'zorvic' becomes 6 byte ids, 101-124. Those byte ids sort below the word ids, so they take the low rows and push any familiar tokens to rows that were never used. The analogy family (the domain test and the same-domain decoy) and the definition/context controls would then mix structure with a broken input encoding. The node labels meanwhile are never read by Helm at all, only their sorted order. So 'overlap 0 for labels' tests nothing.",
+    "evidence": [
+     "pointer_learner.py:1195-1235 (per-field sorted-position table, DECL_MAX_TOKENS rows per field)",
+     "MEASURED decl.py via pointer_inputs._build_cache: frozen bank distinct tokens per field domain 4, setting 12, kind 93, function 140; 'zorvic' -> [124,113,116,120,107,101]",
+     "pointer_inputs.py:203-250 (_world_reading emits no label text)",
+     "EVALUATION_DESIGN_v0_1.md:90-91"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Keep the four training domain strings (and settings), and vary structure and node order only. Or add a declaration-encoding control arm, where familiar shapes use fresh words, and report its effect separately. State that label freshness only changes node order."
+   },
+   {
+    "id": "F8",
+    "severity": "MAJOR",
+    "target": "PROBE_CODE",
+    "problem": "The probe can say PRESENT for a change that cannot matter. It measures raw absolute score changes (M1 and M3). So a repair that adds the same focus-dependent shift to every candidate world reads FOCUS_TO_CANDIDATE_DEPENDENCY_PRESENT. But a uniform shift can never reorder the worlds, so it can never separate the A7 witness pair, which needs different rankings. It only moves the candidates against NO_MATCH, which is fixed at logit 0. The probe records top-1 changes but does not use them in the verdict.",
+    "evidence": [
+     "analogy_wiring_probe.py:198-199 (M3 = max abs raw diff), :207-208 (M1 raw diff), :200-202 and :231-232 (top-1 changes 'reported_not_scored')",
+     "pointer_learner.py:1520-1523 (NO_MATCH row = zeros)",
+     "PREREG_ANALOGY_WIRING_PROBE.md:20, :27-33, :42-44"
+    ],
+    "claim_state": "READ",
+    "fix": "Before the first after-reading, compute M1 and M3 on centred scores: subtract each record's mean over non-focus candidates, or use pairwise candidate differences. Put 'some rewiring changes the ranking among worlds' into the PRESENT condition. Keep the raw-score numbers as reported extras."
+   },
+   {
+    "id": "F9",
+    "severity": "MAJOR",
+    "target": "PREREG",
+    "problem": "Part B's wiring and matched-start rules conflict, and 'identical' is undefined.\n(a) B1 requires PRESENT on FRESH containers. A new path whose output weights start at zero does not change any score at update 0, even though training can still flow through it. So it reads ABSENT or MIXED. The rule therefore forces random initialisation of the new path, which means the two arms already differ at update 0.\n(b) Scoring the focus needs a wider world head, because the candidate input width is fixed. A widened (reshaped) tensor is not 'shared', so B3's bitwise rule does not cover it. The 'one change' then silently includes re-initialising the world head.\n(c) 'Switch-OFF identical to the before-reading' is not checkable. The probe output contains source-file hashes (which must differ), container_kwargs, wall time and GPU telemetry.",
+    "evidence": [
+     "PREREG_ANALOGY_WIRING_PROBE.md:59-64; EVALUATION_DESIGN_v0_1.md:188-199, :206-212",
+     "pointer_learner.py:1502-1507 (candidate width checked against world_head[0].in_features)",
+     "analogy_wiring_probe.py:118-126, :223-237 (output fields include source_sha256_lf, container_kwargs, wall_seconds, gpu)"
+    ],
+    "claim_state": "INFERRED",
+    "fix": "Define wiring as a gradient or Jacobian dependency, not a score change at update 0. Or allow a probe run with the new tensors set to a fixed nonzero test value. Require reshaped tensors to hold the old weights bitwise in their old part, with the new part zero or separately seeded. List exactly which fields must match for 'identical' (M1, M2, every M3 value, top-1, parameter count), and at what tolerance."
+   },
+   {
+    "id": "F10",
+    "severity": "MAJOR",
+    "target": "DESIGN",
+    "problem": "Part D's FAMILIAR_STRUCTURE_NEW_CONTENT readout is well defined within one arm, but not comparable across arms. It can also be empty. The rows depend on which training rows an arm teaches from, and q4_smoke_job teaches from the first N rows. With N=8: 4 teaching shapes and 938 familiar rows. With N=256: 15 shapes and 1,790 rows. With N=2048, the job's default: 0 rows, so the readout disappears. The shape mix changes with N, so budget and representation arms (D3) read different sets. The exclusion 'None may repeat a teaching row's expression string' does nothing: all 2,048 train strings are unique, and 0 familiar rows repeat a teaching leaf sequence. The design also does not say how RT2's '128' familiar rows were chosen. The 16/9/0 shape counts and the 256 depth-3 dev rows are verified. The dev rows also contain 73 leaf occurrences never seen in train, so NEW_STRUCTURE also mixes in new content.",
+    "evidence": [
+     "MEASURED g.py on data/q3_v0_7/visible_G_train.jsonl and visible_G_dev.jsonl: train 2048 rows, 2048 unique strings, 16 bare shapes; dev 256 rows all depth 3, 9 shapes, 0 shared; N=8 -> 938, N=256 -> 1790, N=2048 -> 0 familiar rows; dev leaf atoms unseen in train = 73",
+     "research/helm_cas_expression_lab/q4_smoke_job.py:57 (train_examples=2048 default), :320 (first N rows)",
+     "EVALUATION_DESIGN_v0_1.md:243-244, :262-270"
+    ],
+    "claim_state": "MEASURED",
+    "fix": "Before any arm runs, reserve a fixed familiar pool: a digest-listed set of train-pool rows stratified by bare shape. Exclude it from every arm's teaching rows, and report every arm on that same pool. Drop the vacuous string rule, or replace it with a leaf-sequence or operator-shape rule. Report the dev rows that contain unseen atoms separately."
+   },
+   {
+    "id": "F11",
+    "severity": "MINOR",
+    "target": "DESIGN",
+    "problem": "Part C cannot be checked as written. The query id is shortened ('typed-query-369885551a55...'). 'p10' is not defined. Exact float equality (VIA_N1 = 26.474693298339844) is demanded after 1,323 GPU updates with no determinism settings, hardware match or tolerance. So a GPU-noise mismatch would stop the experiment.",
+    "evidence": [
+     "EVALUATION_DESIGN_v0_1.md:223-232"
+    ],
+    "claim_state": "READ",
+    "fix": "Give the full query id and name the checkpoint pass. Pin the GPU type and deterministic settings (torch.use_deterministic_algorithms, CUBLAS_WORKSPACE_CONFIG). Give an explicit tolerance and require the same top answer in all 4 presentations."
+   },
+   {
+    "id": "F12",
+    "severity": "MINOR",
+    "target": "DESIGN",
+    "problem": "Smaller clarity gaps, plus answers to Q-A1/Q-A2:\n- A6 item 4 calls the degree rule 'A5's registered rule'. Here A5 means agent A5, which is easily confused with this design's section A5.\n- The design does not say whether comparators, like the model, must be right in every presentation.\n- Correspondence NO_MATCH items with different node or edge counts are forced or trivial (one candidate). The design should require same node and edge count.\n- Q-A1: the reader and slot compiler accept a non-frozen bank of up to 64 worlds (up to 65 counting the focus) without edits. Declaration strings not in the cache are encoded on the fly.\n- Q-A2: the course generator is hard-wired to the 64 frozen families from face_corpus literals. New packets need a new external builder using compile_source, compile_query and packet assembly; supports=[] is allowed. That builder does not touch the answer path, but provenance must still say input_split='training' for test worlds.",
+    "evidence": [
+     "EVALUATION_DESIGN_v0_1.md:132, :92-94",
+     "slots.py:117 forced_candidate_count; answers.py:300 (bijections only when counts equal); checker.py:101-104",
+     "pointer_inputs.py:153-166 (cache miss encoded); source.py:20, :313-324",
+     "course.py:157-164 (source.training_families), :320 supports length 0 or 3; source.py:130, :168, :345-346 (split must be 'training')"
+    ],
+    "claim_state": "READ",
+    "fix": "Refer to agent A5 by its file path. Apply the all-presentations rule to comparators too. Require NO_MATCH negatives to have equal node and edge counts. Record in Part E that Q-A1 is 'yes, for up to 4 nodes', and that Q-A2 needs a new builder outside course.py whose provenance mislabel is written down."
+   }
+  ]
+ }
+]

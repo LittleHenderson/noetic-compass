@@ -1,0 +1,141 @@
+{
+ "all_agree": true,
+ "schema": "claude.rescore-rule-replay/0.1",
+ "studies": {
+  "helm1_certified": {
+   "frozen_label": "LEARNS_NEW_WORLDS",
+   "label_agrees": true,
+   "label_by_0_3_rule": "LEARNS_NEW_WORLDS",
+   "per_seed": {
+    "20260917": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 10,
+      "lost": 0,
+      "p": "1/1024",
+      "passed": true
+     },
+     "gained": 10,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 0,
+     "p_one_sided": "1/1024",
+     "passed_by_0_2_rule": true,
+     "passed_by_0_3_rule": true,
+     "worlds": 5
+    },
+    "20260918": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 12,
+      "lost": 0,
+      "p": "1/4096",
+      "passed": true
+     },
+     "gained": 12,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 0,
+     "p_one_sided": "1/4096",
+     "passed_by_0_2_rule": true,
+     "passed_by_0_3_rule": true,
+     "worlds": 5
+    },
+    "20260919": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 11,
+      "lost": 0,
+      "p": "1/2048",
+      "passed": true
+     },
+     "gained": 11,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 0,
+     "p_one_sided": "1/2048",
+     "passed_by_0_2_rule": true,
+     "passed_by_0_3_rule": true,
+     "worlds": 5
+    }
+   }
+  },
+  "helm2_experimental": {
+   "frozen_label": "NO_TRANSFER_TO_NEW_WORLDS",
+   "label_agrees": true,
+   "label_by_0_3_rule": "NO_TRANSFER_TO_NEW_WORLDS",
+   "per_seed": {
+    "20260917": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 11,
+      "lost": 1,
+      "p": "13/4096",
+      "passed": true
+     },
+     "gained": 11,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 1,
+     "p_one_sided": "13/4096",
+     "passed_by_0_2_rule": false,
+     "passed_by_0_3_rule": true,
+     "worlds": 5
+    },
+    "20260918": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 12,
+      "lost": 0,
+      "p": "1/4096",
+      "passed": true
+     },
+     "gained": 12,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 0,
+     "p_one_sided": "1/4096",
+     "passed_by_0_2_rule": true,
+     "passed_by_0_3_rule": true,
+     "worlds": 5
+    },
+    "20260919": {
+     "agrees_with_frozen_grader": true,
+     "frozen_grader": {
+      "gained": 7,
+      "lost": 1,
+      "p": "9/256",
+      "passed": false
+     },
+     "gained": 7,
+     "kinds": [
+      "edge_account",
+      "parts",
+      "reach"
+     ],
+     "lost": 1,
+     "p_one_sided": "9/256",
+     "passed_by_0_2_rule": false,
+     "passed_by_0_3_rule": false,
+     "worlds": 5
+    }
+   }
+  }
+ },
+ "what": "tool-0.3 historical rule applied to the checker-derived per-seed counts, kinds and worlds recorded in the committed tool-0.2 readings (3,384 predictions re-checked per study, 0 disagreements); compared seed by seed with the frozen grader's gate_reading.json"
+}

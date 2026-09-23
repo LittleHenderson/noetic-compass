@@ -1,0 +1,724 @@
+{
+ "3": {
+  "shapes": 4,
+  "degree_sig_classes": 4,
+  "shapes_in_colliding_classes": 0,
+  "colliding_classes": 0,
+  "rows": [
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   }
+  ]
+ },
+ "4": {
+  "shapes": 24,
+  "degree_sig_classes": 23,
+  "shapes_in_colliding_classes": 2,
+  "colliding_classes": 1,
+  "rows": [
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ]
+    ],
+    "autos": 6,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      0
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 2,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 2,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 4,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 3,
+    "via_orbits": 3,
+    "via_tie": 0,
+    "via_from_roots": 2,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 2,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 2,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 2,
+    "via_orbits": 2,
+    "via_tie": 1,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 2,
+    "via_orbits": 2,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 1,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "autos": 6,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 3
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      0
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 2,
+    "via_orbits": 2,
+    "via_tie": 0,
+    "via_from_roots": 2,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 1,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 1,
+    "via_orbits": 1,
+    "via_tie": 0,
+    "via_from_roots": 1,
+    "roots": 1
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      3,
+      2
+     ]
+    ],
+    "autos": 2,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 2
+   },
+   {
+    "edges": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "autos": 1,
+    "via_labelled": 0,
+    "via_orbits": 0,
+    "via_tie": 0,
+    "via_from_roots": 0,
+    "roots": 1
+   }
+  ]
+ },
+ "5": {
+  "shapes": 267,
+  "degree_sig_classes": 200,
+  "shapes_in_colliding_classes": 105,
+  "colliding_classes": 38
+ }
+}
