@@ -1,0 +1,52 @@
+[
+  {
+    "version": "Helm 1.0",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+    "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+  },
+  {
+    "version": "Helm 1.0",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+    "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+  },
+  {
+    "version": "Helm 1.0",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+    "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+  },
+  {
+    "version": "Helm 1.0",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+    "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+  },
+  {
+    "version": "Helm 1.0",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+    "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+    "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+    "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+    "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+    "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+    "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  }
+]
