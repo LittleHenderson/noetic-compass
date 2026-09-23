@@ -1,0 +1,59 @@
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:10: trailing whitespace.
++288: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:11: trailing whitespace.
++289: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:16: trailing whitespace.
++294: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:17: trailing whitespace.
++295: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:21: trailing whitespace.
++299: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:22: trailing whitespace.
++300: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:26: trailing whitespace.
++304: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:44: trailing whitespace.
++322: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:45: trailing whitespace.
++323: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:48: trailing whitespace.
++326: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:52: trailing whitespace.
++330: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:63: trailing whitespace.
++357: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:67: trailing whitespace.
++361: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:76: trailing whitespace.
++370: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:119: trailing whitespace.
++288: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:120: trailing whitespace.
++289: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:125: trailing whitespace.
++294: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:126: trailing whitespace.
++295: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:130: trailing whitespace.
++299: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:131: trailing whitespace.
++300: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:135: trailing whitespace.
++304: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:153: trailing whitespace.
++322: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:154: trailing whitespace.
++323: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:157: trailing whitespace.
++326: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:161: trailing whitespace.
++330: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:172: trailing whitespace.
++357: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:176: trailing whitespace.
++361: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt:185: trailing whitespace.
++370: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/recheck_answers.py:106: new blank line at EOF.
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/source_lines.py:22: new blank line at EOF.
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/write_report.py:57: new blank line at EOF.

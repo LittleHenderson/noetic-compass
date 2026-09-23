@@ -1,0 +1,27 @@
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/FIRST_REPORT.md:48: new blank line at EOF.
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:4: trailing whitespace.
++111: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:14: trailing whitespace.
++288: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:15: trailing whitespace.
++289: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:20: trailing whitespace.
++294: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:21: trailing whitespace.
++295: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:25: trailing whitespace.
++299: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:26: trailing whitespace.
++300: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:30: trailing whitespace.
++304: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:48: trailing whitespace.
++322: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:49: trailing whitespace.
++323: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:52: trailing whitespace.
++326: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:56: trailing whitespace.
++330: 
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt:67: trailing whitespace.
++742: 

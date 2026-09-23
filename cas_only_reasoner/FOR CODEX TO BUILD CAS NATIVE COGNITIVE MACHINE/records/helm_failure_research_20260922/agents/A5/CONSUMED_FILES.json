@@ -1,0 +1,187 @@
+[
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_course_001\\checks_002\\public_course.json",
+    "bytes": 4165195,
+    "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1839418,
+    "sha256": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p00_scoring.json",
+    "bytes": 597030,
+    "sha256": "0d6a5de5b3640a8c86bd2431760213d9729cf69689d9ad253ab0aee956c7bc48"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1823956,
+    "sha256": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p10_scoring.json",
+    "bytes": 735535,
+    "sha256": "4e342489eaad5ba2e6ecd941ffdfe29ef560ecbb8e02fd4e65e2ccca8544a5d8"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 421693,
+    "sha256": "8438998c933da3ec692e2cc4c11abbd243ab32f20c78061f85c6de719799296f"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 160922,
+    "sha256": "395d380b7a6b34e21d7577fc1d0991c66b78c006073d9c5bf09b945067b1a43f"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1763749,
+    "sha256": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p00_scoring.json",
+    "bytes": 590554,
+    "sha256": "527f24259b495f6a91d8ae88e57a5fcbe0820c7063fe3decd38ad22907c8d89e"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1827396,
+    "sha256": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p10_scoring.json",
+    "bytes": 761004,
+    "sha256": "5d347365ffe8b54726f00ba8f841c07e19780584e518fe4d01410a9348a616fb"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 422390,
+    "sha256": "dcd92a8e2b622e8324cbad9852e9b96cc905ba1c22bdde964742fc60eb1611e0"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 164796,
+    "sha256": "ddd34abe93a9ab1e40aa5a241f7663d24b5c6ea77e16277fcc45b320786ad601"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1785160,
+    "sha256": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p00_scoring.json",
+    "bytes": 593642,
+    "sha256": "51df0a740903ec60a9de3eab787b76ee5fd519eee6179c148613f6142f051813"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1822615,
+    "sha256": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p10_scoring.json",
+    "bytes": 748356,
+    "sha256": "20172f226555bad23fa313a3eaba93d705ff1fe616c83aee1d6c8d4a537da13c"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 421463,
+    "sha256": "f865416bbd3b0d4a95a475cabfdc5c0d0ba4e47c5340fd69ed79914d2b30423e"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 159753,
+    "sha256": "60abe68835c6cf89040bc4cfb023ad31167526e4a954098a0506e4ea00a862d1"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1776785,
+    "sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_scoring.json",
+    "bytes": 593016,
+    "sha256": "d56aaaf674a4a6a7f5177d4ddc617aa0fc600f0a42e7f34dabc94ae3d2a31f90"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1823627,
+    "sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_scoring.json",
+    "bytes": 821510,
+    "sha256": "45a80ddff8dedf18f31c00acd75c7b0bb1b5e5b4a1bdee6fd2809a915bf99830"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 421592,
+    "sha256": "43d3b8f57434a881021bd9d945fd214dbaf8f654600315eeb9155ca3beb5944c"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 178368,
+    "sha256": "5d1960b523c6639131bb799fc61bf4e9f6db24a65e4ffabf292ccfa20d543a81"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1828929,
+    "sha256": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p00_scoring.json",
+    "bytes": 588985,
+    "sha256": "85f7c4c3d59fb3589796083435706d9810d15a1070f10b9f1660311a13e508d2"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1826757,
+    "sha256": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p10_scoring.json",
+    "bytes": 818787,
+    "sha256": "2c398f50b14352a25a9fe6a1a584b29b62eb14b8fd95856d143c485a273e5a38"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 422342,
+    "sha256": "5b4b01ca142a791636ee9d3dbbfc350409b6a0cc5ce223f27a32da2a207f27ad"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 178461,
+    "sha256": "f3c960ab4f77d457d33123b09fb3dec42341c590b5fecf8435daf08c74db6326"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json",
+    "bytes": 1815272,
+    "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json",
+    "bytes": 612987,
+    "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json",
+    "bytes": 1819016,
+    "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json",
+    "bytes": 819636,
+    "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\ablation_baseline_predictions.json",
+    "bytes": 420621,
+    "sha256": "6f108e4bc54736eda836faa9b7758571b9049e9cfef3ff569c0e95127187b9dd"
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\ablation_baseline_scoring.json",
+    "bytes": 176842,
+    "sha256": "784c4906841985bbcd7ad1dbd9006026b0b50cb6d87e592d1eb9d4703e7ec102"
+  }
+]

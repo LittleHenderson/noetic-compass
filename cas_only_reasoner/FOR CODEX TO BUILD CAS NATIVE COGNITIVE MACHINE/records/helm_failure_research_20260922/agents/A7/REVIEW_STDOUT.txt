@@ -1,0 +1,7 @@
+{
+  "report_table_rows_checked": 12,
+  "research_package_files_bound_to_commit": 26,
+  "formal_test_functions": 0,
+  "executions": 1,
+  "scope": "Document numeric transcription and reviewed-package custody only; no original-record calculations repeated."
+}

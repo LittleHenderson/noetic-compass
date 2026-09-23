@@ -1,0 +1,154 @@
+{
+  "observed_utc": "2026-09-23T04:50:13.929722+00:00",
+  "app_cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner",
+  "research_root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-failure-research",
+  "research_branch": "codex/helm-failure-research-20260922",
+  "starting_commit": "4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d",
+  "workspaces": [
+    {
+      "label": "outer_app_project",
+      "requested_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "root": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS\n",
+        "stderr": ""
+      },
+      "branch": {
+        "exit_code": 0,
+        "stdout": "codex/casformer-v0.2-release\n",
+        "stderr": ""
+      },
+      "head": {
+        "exit_code": 0,
+        "stdout": "eb3c9b1eac98853b2065c98b08987918e8e7d936\n",
+        "stderr": ""
+      },
+      "common_git_dir": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/.git\n",
+        "stderr": ""
+      },
+      "status": {
+        "exit_code": 0,
+        "stdout": " M CHANGELOG.md\n M book/CAS_PCBA_Engineer/CAS_PCBA_Engineer.pdf\n M book/CAS_PCBA_Engineer/CAS_PCBA_Engineer_print.pdf\n M book/CAS_PCBA_Engineer/build/.gitignore\n M book/CAS_PCBA_Engineer/build/BUILD_README.md\n M book/CAS_PCBA_Engineer/build/build_book.py\n M book/CAS_PCBA_Engineer/build/figures_preamble.tex\n M book/CAS_PCBA_Engineer/build/manuscript_pcba.idx\n M book/CAS_PCBA_Engineer/build/manuscript_pcba.ilg\n M book/CAS_PCBA_Engineer/build/manuscript_pcba.ind\n M book/CAS_PCBA_Engineer/build/manuscript_pcba.lof\n M book/CAS_PCBA_Engineer/build/patch_overflows.py\n M book/CAS_PCBA_Engineer/figures/fig-cpmb-topology.png\n M book/covers/build_covers.py\n M book/covers/cas_pcba_engineer_kindle.png\n M book/covers/cas_pcba_engineer_wrap.pdf\n M book/covers/cognitive_circuit_grimoire_wrap.pdf\n M book/covers/cover_template.tex\n M book/covers/reality_engineering_wrap.pdf\n M book/covers/thinking_in_cognitive_architecture_wrap.pdf\n M book/publishing/latex/body.tex\n M book/publishing/latex/preamble.tex\n M book/superiority_of_tks/build/manuscript_tks.idx\n M book/superiority_of_tks/build/manuscript_tks.ilg\n M book/superiority_of_tks/build/manuscript_tks.ind\n M book/superiority_of_tks/build/manuscript_tks.lof\n M \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/CNCM_COMPLETE_REQUIREMENT_LEDGER.md\"\n M docs/CAS_HARNESS_SPEC_SHEET.md\n M docs/working/cas_harness_production_todo.md\n?? .tmp_grounding/\n?? CJT_OHM_0R_RESULT.json\n?? book/CAS_Component_Companion/\n?? book/CAS_PCBA_Engineer/build/build_full_book.py\n?? book/CAS_PCBA_Engineer/build/verify_print_margins.py\n?? book/covers/cas_component_companion_kindle.png\n?? book/covers/cas_component_companion_wrap.pdf\n?? book/covers/verify_cover.py\n?? book/publishing/latex/manuscript.aux\n?? book/publishing/latex/manuscript.idx\n?? book/publishing/latex/manuscript.ilg\n?? book/publishing/latex/manuscript.ind\n?? book/publishing/latex/manuscript.lof\n?? book/publishing/latex/manuscript.log\n?? book/publishing/latex/manuscript.out\n?? book/publishing/latex/manuscript.pdf\n?? book/publishing/latex/manuscript.toc\n?? book/publishing/latex/t1.log\n?? book/publishing/latex/t10.log\n?? book/publishing/latex/t11.log\n?? book/publishing/latex/t12.log\n?? book/publishing/latex/t13.log\n?? book/publishing/latex/t14.log\n?? book/publishing/latex/t15.log\n?? book/publishing/latex/t16.log\n?? book/publishing/latex/t17.log\n?? book/publishing/latex/t18.log\n?? book/publishing/latex/t19.log\n?? book/publishing/latex/t2.log\n?? book/publishing/latex/t3.log\n?? book/publishing/latex/t4.log\n?? book/publishing/latex/t5.log\n?? book/publishing/latex/t6.log\n?? book/publishing/latex/t7.log\n?? book/publishing/latex/t8.log\n?? book/publishing/latex/t9.log\n?? \"cas_only_reasoner/28 fOUNDATIONS 1.0.pdf\"\n?? cas_only_reasoner/CAS_Ohm_Quantification_Guide-1.pdf\n?? cas_only_reasoner/CAS_PCBA_Engineer.docx\n?? \"cas_only_reasoner/CMB_P0_v0_1/cjt_neurons research and development.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/.rgignore\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/.tmp_profile_tests/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_publication/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_runtime/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_scratch/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs_fable_check/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs_merge/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/audit_exports/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/archive/cas_reasoner_pre_append_11834_lines.snapshot\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/output/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.gitignore\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.openai/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.oxfmtrc.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.oxlintrc.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/README.md\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/globals.css\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/hooks/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/next.config.ts\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/package-lock.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/package.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/favicon.svg\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/branch_rollback.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/contradiction.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/deduction.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/memory_recall.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/missing_information.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/rpm_failure.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/rpm_recursion.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/transitive_reasoning.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/og.png\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/cncm-runtime.zip\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/cncm-worker.mjs\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/runtime-meta.mjs\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/tests/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/tsconfig.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/vite.config.ts\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/artifacts/CASFORMER_V0_1_COMPLETION_RECEIPT.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/\"\n?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/\n?? \"cas_only_reasoner/MAJIK AND THE TRUE KABBALAH.pdf\"\n?? \"cas_only_reasoner/MATH LESSONS.txt\"\n?? \"cas_only_reasoner/PROGRAMMING LESSON.txt\"\n?? cas_only_reasoner/RESEARCH_PAPER_CAS_CORE_8_v0.2.pdf\n?? cas_only_reasoner/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf\n?? cas_only_reasoner/TKS_V74_COMPILER_IMPL_MAP.md\n?? cas_only_reasoner/TKS_V74_COMPILER_PIPELINE.md\n?? \"cas_only_reasoner/The 28 Foundations (1).pdf\"\n?? cas_only_reasoner/cas_reasoner.txt\n?? cas_only_reasoner/tmp/\n?? cas_only_reasoner/undefined/\n?? compliance_check.py\n?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEFS_ALL_20260822.pdf\n?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_20260822.md\n?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_PART2_20260822.md\n?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_PART3_20260822.md\n?? docs/working/AUDIT_TARGET_INVENTORY_20260822.md\n?? docs/working/EVIDENCE_FIRST_AI_MODEL_AUDITING_PLATFORM_MASTER_PLAN_v0.1.md\n?? docs/working/gate2_closure/independent_bank/bp_gpt4o.json\n?? docs/working/gate2_closure/independent_bank/elicit_prompt_v2.txt\n?? docs/working/gate2_closure/independent_bank/gen_val.jsonl\n?? docs/working/gate2_closure/independent_bank/gen_val_raw.json\n",
+        "stderr": "warning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/compiler_final/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/compiler_regression/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/compiler_regression_correct_cwd/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/lab312/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/lab314/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/lab_final/': Permission denied\nwarning: could not open directory 'cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_ohm_20260921/numeric_compiler1/': Permission denied\n"
+      }
+    },
+    {
+      "label": "helm_source",
+      "requested_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live",
+      "root": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/q4-live\n",
+        "stderr": ""
+      },
+      "branch": {
+        "exit_code": 0,
+        "stdout": "codex/q4-authorized-20260922\n",
+        "stderr": ""
+      },
+      "head": {
+        "exit_code": 0,
+        "stdout": "4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d\n",
+        "stderr": ""
+      },
+      "common_git_dir": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git\n",
+        "stderr": ""
+      },
+      "status": {
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "preserved_reconciliation",
+      "requested_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-cas-reconcile",
+      "root": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/codex-cas-reconcile\n",
+        "stderr": ""
+      },
+      "branch": {
+        "exit_code": 0,
+        "stdout": "codex/cas-reconcile-20260922\n",
+        "stderr": ""
+      },
+      "head": {
+        "exit_code": 0,
+        "stdout": "5f7111d5204e872c18df717badc2e2021f31ad70\n",
+        "stderr": ""
+      },
+      "common_git_dir": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git\n",
+        "stderr": ""
+      },
+      "status": {
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "peer_helm_lab",
+      "requested_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm3-lab",
+      "root": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm3-lab\n",
+        "stderr": ""
+      },
+      "branch": {
+        "exit_code": 0,
+        "stdout": "research/helm-3.0-cas-lab\n",
+        "stderr": ""
+      },
+      "head": {
+        "exit_code": 0,
+        "stdout": "1eab89f1438dfd03acca4835b6dc9aedf3a7d95d\n",
+        "stderr": ""
+      },
+      "common_git_dir": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git\n",
+        "stderr": ""
+      },
+      "status": {
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "research",
+      "requested_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-failure-research",
+      "root": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm-failure-research\n",
+        "stderr": ""
+      },
+      "branch": {
+        "exit_code": 0,
+        "stdout": "codex/helm-failure-research-20260922\n",
+        "stderr": ""
+      },
+      "head": {
+        "exit_code": 0,
+        "stdout": "4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d\n",
+        "stderr": ""
+      },
+      "common_git_dir": {
+        "exit_code": 0,
+        "stdout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git\n",
+        "stderr": ""
+      },
+      "status": {
+        "exit_code": 0,
+        "stdout": " M \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/AGENTS.md\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/\"\n",
+        "stderr": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,1570 @@
+{
+  "rows": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 10,
+      "losses": 0,
+      "p": "1/1024",
+      "p_decimal": 0.0009765625,
+      "passed": true,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "LEARNS_NEW_WORLDS",
+      "p_if_lost_question_were_retained": null
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 12,
+      "losses": 0,
+      "p": "1/4096",
+      "p_decimal": 0.000244140625,
+      "passed": true,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "LEARNS_NEW_WORLDS",
+      "p_if_lost_question_were_retained": null
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 11,
+      "losses": 0,
+      "p": "1/2048",
+      "p_decimal": 0.00048828125,
+      "passed": true,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "LEARNS_NEW_WORLDS",
+      "p_if_lost_question_were_retained": null
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 11,
+      "losses": 1,
+      "p": "13/4096",
+      "p_decimal": 0.003173828125,
+      "passed": true,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": true,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "NO_TRANSFER_TO_NEW_WORLDS",
+      "p_if_lost_question_were_retained": "1/2048"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 12,
+      "losses": 0,
+      "p": "1/4096",
+      "p_decimal": 0.000244140625,
+      "passed": true,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "NO_TRANSFER_TO_NEW_WORLDS",
+      "p_if_lost_question_were_retained": null
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "n_questions": 18,
+      "record_cases": 55,
+      "gains": 7,
+      "losses": 1,
+      "p": "9/256",
+      "p_decimal": 0.03515625,
+      "passed": false,
+      "matches_saved_gate": true,
+      "improved_kinds": [
+        "edge_account",
+        "parts",
+        "reach"
+      ],
+      "improved_worlds": [
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+      ],
+      "transitions": [
+        {
+          "query_id": "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+          "kind": "edge_account",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-5c9b4742a8c4afc2beb904ce42983db5751d943e735f2c20f6528b2086940301",
+            "typed-input-6b6b9a8b66ebf83e9823c22f61b9f39d51b3837efbf433fc9e767ff506ef7466",
+            "typed-input-eacfccb20928ac4433e6f9c213e5206384bb45f493978cce345bd34ba04bee59"
+          ]
+        },
+        {
+          "query_id": "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+          "kind": "edge_account",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0efdf3b59f0f01ac0c9a749914c4087d0045b1e5a463a7a9541842b59fc7c4ad",
+            "typed-input-104cfc0c1771f54cf5d3db839b1e71eae827eb1cd4dc5df0f4efa7e4b44a61a8",
+            "typed-input-2036d5c9bddf1c6112a97bd2191ca5f93ca9b06fe225c69101e982b3f8ddbb09",
+            "typed-input-a4055b3128b0712393f239d4e734bc1ae092d057ae32a84f143fa4439a3ee21e"
+          ]
+        },
+        {
+          "query_id": "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+          "kind": "edge_account",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-1c9504614be87b5b6521bebbe0d7db8d4f703a394799ac3fa888219cd7f058f3",
+            "typed-input-7a65b9a1a387a180a8f4e7fa6722b098cf541ef7d793c2977af0ffcd4b55334b",
+            "typed-input-c19ff067c88b85c0c5637eea7303b17b58d36ea9441ddaf4bdf0c22adcd65abb"
+          ]
+        },
+        {
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "kind": "reach",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": true,
+          "after": false,
+          "record_ids": [
+            "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+            "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+            "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+            "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360"
+          ]
+        },
+        {
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d"
+          ]
+        },
+        {
+          "query_id": "typed-query-497decac719120a735b4f29822f771f641bfd8e20fc263917ee43f6f1435697d",
+          "kind": "analogy",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25",
+            "typed-input-b907e1300e8364863f6b384662ba9107d2bbdbd79128978e8bf8af56d18c5704",
+            "typed-input-d1385bf515e0711715e5b118d1e2d8cc4394335c4320ae0f2acf9a30ca37b668"
+          ]
+        },
+        {
+          "query_id": "typed-query-4e9e162aac5cdfb33f4d7f8f6a32b1ada91d8d9b23d3a470fa9eb5a7e7159783",
+          "kind": "analogy",
+          "world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+            "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+            "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364"
+          ]
+        },
+        {
+          "query_id": "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+          "kind": "edge_account",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-4bb4c94322337ba8400b2130c176bbaed82c848d9cfd277245fb16a35d122d1c",
+            "typed-input-59e2391829b93bb939dfe022aa9349f563a29de3439e4d247075ae5801f08a06",
+            "typed-input-bec1130ea3c5c1fed51ac726c72c9560c32512e5bb85ccfa0cce3b2511976667"
+          ]
+        },
+        {
+          "query_id": "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+          "kind": "parts",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-9de93da6ce865ba5fda55ad8e57f42dc6ba1f3c47f6d130c52eb7248532b970b"
+          ]
+        },
+        {
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-016e3aad3ec0c3d846b8a5a51f34218e65ac6adae385b1aef6a67855a7364fdc",
+            "typed-input-835ef1cc492cf837e8a51529386c773529b610fe925739b2318827c11846f7e4",
+            "typed-input-8e9dd62fd508413596be59b5dd23b0b7403c47582cbdaf80a570db1267f7b73d",
+            "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479"
+          ]
+        },
+        {
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "kind": "reach",
+          "world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d"
+          ]
+        },
+        {
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": true,
+          "after": true,
+          "record_ids": [
+            "typed-input-0b1d59e0f5c25b4f644caf1c39596e166abf53f28db745b9d41e119523014799",
+            "typed-input-57b6db56211d427c4804ee62ba22977031123edf3802da960d9d6e19b70cd9e1",
+            "typed-input-a5b28593228e9701fa99c41a49f8a05b32f593fc37861c09e0acdfeab72d7f72",
+            "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717"
+          ]
+        },
+        {
+          "query_id": "typed-query-aba576d9ff47d64c49b451b7b963e6de3928e0307d867614b3037ed0dee3202c",
+          "kind": "analogy",
+          "world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+            "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+            "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+            "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+          ]
+        },
+        {
+          "query_id": "typed-query-ace89d2fdeb47b522974cc6e3b1b314ddb61b0bd033843cda265a7be247a6f8e",
+          "kind": "analogy",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366",
+            "typed-input-9f9b46ff04458f3f9ad1b7c84b2e9da7da73898b6660245a65662e09ef23d9a7",
+            "typed-input-d1e2dc67feaca98b59da83932bd437a7dd2060ed33cedf0a2773117dbea75693"
+          ]
+        },
+        {
+          "query_id": "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+          "kind": "parts",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-0c8cfdab6adf41aa196c8ec204c9eba78ce0fb5f78c28a758274478e884d8856",
+            "typed-input-13df2c93a401c07588cb773cd6672e1f4bbef7b7842c62f08ea3a590ea752b00",
+            "typed-input-607d93674075b776ae6a1e4d1432ceed01c201cb1c6abd42ebe8d0fba83dee9e",
+            "typed-input-6f8ad5c09a9e2b270e382bb10ea216913384831b03e94eaa52e592fa0480be83",
+            "typed-input-b90141c2bef9ac0b23d6b4b40369b25920ff7069bd48e5899eed837615cc2c55"
+          ]
+        },
+        {
+          "query_id": "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+          "kind": "edge_account",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-859256822260d91c28fcb4126d91b51f018af75c12ed9fa44912173560b3c406",
+            "typed-input-965fc2faa9b256178eacaa8c0c1e84f781ae8f27cfee1da2a15c4b5ed9bc789b",
+            "typed-input-b8113f40f1f6d3fbf986d6d900fbd783532fa460af9bac025c510bc74bf6aa48",
+            "typed-input-e4077ea6ab339c679742cae7276030a8f08379e3f0a687c8b854c1a4a8f59edc"
+          ]
+        },
+        {
+          "query_id": "typed-query-de2ee2c546d67d98c96214aba3e9cd4b034150d7f9270b81b04c0f9b4e785b98",
+          "kind": "analogy",
+          "world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "before": false,
+          "after": false,
+          "record_ids": [
+            "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c",
+            "typed-input-2cce779525dfd91bbc660f80f5a10d479bb586ba011ce231dee4adf5318ae5db",
+            "typed-input-d7e314fc4c53d259aa5631e9d41d4e0ed6e6dd081a4103fa2c50c3d238a923dc",
+            "typed-input-dbef44e1115122e832ff116400642335f860a01b3743a7b6853e33510a144755"
+          ]
+        },
+        {
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "kind": "reach",
+          "world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "before": false,
+          "after": true,
+          "record_ids": [
+            "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286"
+          ]
+        }
+      ],
+      "saved_label": "NO_TRANSFER_TO_NEW_WORLDS",
+      "p_if_lost_question_were_retained": "1/128"
+    }
+  ],
+  "reading_fingerprints": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_course_001\\checks_002\\public_course.json": {
+      "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+      "bytes": 4165195
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_helm1_certified\\gate_reading.json": {
+      "sha256": "475379d2f9d47387a821c79e03a239f9a1f1277a0bbb25b298417557f9b058a9",
+      "bytes": 202862
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "0d6a5de5b3640a8c86bd2431760213d9729cf69689d9ad253ab0aee956c7bc48",
+      "bytes": 597030
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "4e342489eaad5ba2e6ecd941ffdfe29ef560ecbb8e02fd4e65e2ccca8544a5d8",
+      "bytes": 735535
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "527f24259b495f6a91d8ae88e57a5fcbe0820c7063fe3decd38ad22907c8d89e",
+      "bytes": 590554
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "5d347365ffe8b54726f00ba8f841c07e19780584e518fe4d01410a9348a616fb",
+      "bytes": 761004
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "51df0a740903ec60a9de3eab787b76ee5fd519eee6179c148613f6142f051813",
+      "bytes": 593642
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "20172f226555bad23fa313a3eaba93d705ff1fe616c83aee1d6c8d4a537da13c",
+      "bytes": 748356
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\gate_reading.json": {
+      "sha256": "52877c1670132c70dfd82e5e133e4e6ef90d8595a4b49387a6b0bace9f9d10d6",
+      "bytes": 203392
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "d56aaaf674a4a6a7f5177d4ddc617aa0fc600f0a42e7f34dabc94ae3d2a31f90",
+      "bytes": 593016
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "45a80ddff8dedf18f31c00acd75c7b0bb1b5e5b4a1bdee6fd2809a915bf99830",
+      "bytes": 821510
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_predictions.json": {
+      "sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+      "bytes": 1776785
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_predictions.json": {
+      "sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+      "bytes": 1823627
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "85f7c4c3d59fb3589796083435706d9810d15a1070f10b9f1660311a13e508d2",
+      "bytes": 588985
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "2c398f50b14352a25a9fe6a1a584b29b62eb14b8fd95856d143c485a273e5a38",
+      "bytes": 818787
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json": {
+      "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159",
+      "bytes": 612987
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json": {
+      "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db",
+      "bytes": 819636
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json": {
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "bytes": 1815272
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json": {
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "bytes": 1819016
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\evaluate_gates.py": {
+      "sha256": "d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d",
+      "bytes": 133618
+    }
+  },
+  "manifest_sha256": "1ddf793e5cd6a77cdcc843b089c26b9a880f268ac556d22d40cdbb45e9874101",
+  "elapsed_seconds": 0.27963970000564586,
+  "test_functions": 0,
+  "diagnostic_functions": 2,
+  "diagnostic_executions": 1,
+  "seed_cases": 6,
+  "question_transition_cases": 108,
+  "execution_scope": "Saved correctness aggregation and independent exact coin enumeration; not checker rerun or new model run."
+}

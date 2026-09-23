@@ -1,0 +1,611 @@
+{
+  "created_utc": "2026-09-23T06:03:19.470678+00:00",
+  "runs": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+          "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+          "bytes": 5970519
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\collected\\input\\config.json",
+          "sha256": "ef4d1e6c66972ffc8496ac1409d816d3abc91c56ee2d42c75e327920a18a8f31",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\loaded_sources.json",
+          "sha256": "54720494ef0325ae684294a1ffa67547e7b4cfe0aed57f785e075cfeb78cc93c",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+          "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+          "bytes": 5970519
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\collected\\input\\config.json",
+          "sha256": "89a3b6596ed7aa40b5a10ac5214c604f7f51b996ab41d21ebc62cbecb3182e0b",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\loaded_sources.json",
+          "sha256": "54720494ef0325ae684294a1ffa67547e7b4cfe0aed57f785e075cfeb78cc93c",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+          "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+          "bytes": 5970519
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\collected\\input\\config.json",
+          "sha256": "20f12e1136676a1436bfc8bdcf505a197d853ea9ddae3d43179b4d21370d98ad",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\loaded_sources.json",
+          "sha256": "54720494ef0325ae684294a1ffa67547e7b4cfe0aed57f785e075cfeb78cc93c",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+          "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+          "bytes": 5977155
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\collected\\input\\config.json",
+          "sha256": "cb88290b36426b35d325492af0eb440e5b8725bc468a5bd8d8a144e35c006d83",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\loaded_sources.json",
+          "sha256": "9709df9e7e763bd26d24968d7f03866baee9a3e12633752d5f7f82614c71bffa",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+          "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+          "bytes": 5977155
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\collected\\input\\config.json",
+          "sha256": "83874f1f1cee3c076b3e2d4b3dd42d90b5677dc4a3fcad71a9a4359022ebc1fc",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\loaded_sources.json",
+          "sha256": "9709df9e7e763bd26d24968d7f03866baee9a3e12633752d5f7f82614c71bffa",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "artifacts": [
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+          "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+          "bytes": 5977155
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\collected\\input\\config.json",
+          "sha256": "71335296842a50ebcadac3bb4cd149f1a91a933d0f468ce37745d2edcc7623a7",
+          "bytes": 64927
+        },
+        {
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\loaded_sources.json",
+          "sha256": "9709df9e7e763bd26d24968d7f03866baee9a3e12633752d5f7f82614c71bffa",
+          "bytes": 24849
+        }
+      ],
+      "module_proof": [
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "loaded_records_matching": 1
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+          "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+          "loaded_records_matching": 2
+        },
+        {
+          "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "loaded_records_matching": 2
+        }
+      ]
+    }
+  ],
+  "source_excerpts": [
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "lines": [
+        {
+          "start": 201,
+          "end": 221,
+          "text": "201:     elif kind == \"analogy\":\n202:         _closed(value, {\"world_id\"}, \"TYPED_ANALOGY_FIELDS\")\n203:         if value[\"world_id\"] is not None:\n204:             _member(value[\"world_id\"], inv[\"world_ids\"], \"TYPED_ANALOGY_WORLD\")\n205:     elif kind == \"correspondence\":\n206:         _closed(value, {\"status\", \"pairs\"}, \"TYPED_CORRESPONDENCE_FIELDS\")\n207:         _require(type(value[\"status\"]) is str and value[\"status\"] in (\"MAPPING\", \"NO_MATCH\"),\n208:                  \"TYPED_CORRESPONDENCE_STATUS\")\n209:         pairs = value[\"pairs\"]\n210:         _require(type(pairs) is list, \"TYPED_CORRESPONDENCE_PAIRS\")\n211:         if value[\"status\"] == \"NO_MATCH\":\n212:             _require(pairs == [], \"TYPED_NO_MATCH_PAIRS\")\n213:         else:\n214:             for pair in pairs:\n215:                 _closed(pair, {\"source\", \"target\"}, \"TYPED_MAPPING_PAIR_FIELDS\")\n216:                 _member(pair[\"source\"], inv[\"source_nodes\"], \"TYPED_MAPPING_SOURCE\")\n217:                 _member(pair[\"target\"], inv[\"target_nodes\"], \"TYPED_MAPPING_TARGET\")\n218:             _require([p[\"source\"] for p in pairs] == sorted(inv[\"source_nodes\"]),\n219:                      \"TYPED_MAPPING_SOURCE_COVERAGE\")\n220:             _require(sorted(p[\"target\"] for p in pairs) == sorted(inv[\"target_nodes\"]),\n221:                      \"TYPED_MAPPING_BIJECTION\")"
+        },
+        {
+          "start": 285,
+          "end": 304,
+          "text": "285: def correspondence_candidates(public, query, *, max_nodes=MAX_PERMUTATION_NODES):\n286:     \"\"\"Bounded grammar-only candidates; includes wrong mappings and NO_MATCH.\n287: \n288:     The only selection inputs are public scoped node inventories and a ceiling\n289:     no larger than four. No graph edges or teacher labels enter permutation\n290:     generation. Ten-node syntax admission does not admit 10! numerical work.\n291:     \"\"\"\n292:     _require(type(max_nodes) is int and 1 <= max_nodes <= MAX_PERMUTATION_NODES,\n293:              \"TYPED_PERMUTATION_LIMIT\")\n294:     space = answer_space(public, query)\n295:     _require(query[\"kind\"] == \"correspondence\", \"TYPED_CANDIDATES_KIND\")\n296:     inv = space[\"inventory\"]\n297:     left, right = sorted(inv[\"source_nodes\"]), sorted(inv[\"target_nodes\"])\n298:     _require(max(len(left), len(right)) <= max_nodes, \"TYPED_PERMUTATION_BOUND\")\n299:     candidates = [{\"status\": \"NO_MATCH\", \"pairs\": []}]\n300:     if len(left) == len(right):\n301:         candidates += [{\"status\": \"MAPPING\",\n302:                         \"pairs\": [{\"source\": a, \"target\": b} for a, b in zip(left, row)]}\n303:                        for row in permutations(right)]\n304:     return candidates"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "lines": [
+        {
+          "start": 96,
+          "end": 112,
+          "text": "96: def _isomorphisms(left, right):\n97:     \"\"\"Enumerate every mapping; node labels, root choice and archetypes do not vote.\"\"\"\n98:     _bounded_graphs((left, right))\n99:     lhs, rhs = _nodes(left), _nodes(right)\n100:     ledges, redges = _edges(left), _edges(right)\n101:     if len(lhs) != len(rhs):\n102:         return [], {\"reason\": \"NODE_COUNT_MISMATCH\", \"permutations_checked\": 0}\n103:     if len(ledges) != len(redges):\n104:         return [], {\"reason\": \"EDGE_COUNT_MISMATCH\", \"permutations_checked\": 0}\n105:     matches, checked = [], 0\n106:     for order in permutations(rhs):\n107:         checked += 1\n108:         mapping = dict(zip(lhs, order))\n109:         if frozenset((mapping[a], mapping[b]) for a, b in ledges) == redges:\n110:             matches.append([{\"source\": a, \"target\": mapping[a]} for a in lhs])\n111:     return matches, {\"reason\": \"MATCHES\" if matches else \"NO_EDGE_PRESERVING_BIJECTION\",\n112:                      \"permutations_checked\": checked}"
+        },
+        {
+          "start": 200,
+          "end": 237,
+          "text": "200:     elif kind == \"correspondence\":\n201:         other = worlds[query[\"arguments\"][\"target_world_id\"]]\n202:         matches, audit = _isomorphisms(focus, other)\n203:         coverage = {\"source_world_id\": focus[\"world_id\"], \"target_world_id\": other[\"world_id\"],\n204:                     \"matching_bijections\": len(matches), **audit}\n205:         if matches:\n206:             for pairs in matches:\n207:                 values.append({\"status\": \"MAPPING\", \"pairs\": pairs})\n208:                 witnesses.append({\"mapping\": pairs,\n209:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n210:         else:\n211:             values.append({\"status\": \"NO_MATCH\", \"pairs\": []})\n212:             witnesses.append({\"exhaustive_bounded_comparison\": deepcopy(coverage)})\n213:     elif kind == \"analogy\":\n214:         bank = [worlds[key] for key in public[\"bank\"][\"world_ids\"]]\n215:         # Check the entire requested oracle scope before rejecting any candidate.\n216:         # Unsupported graphs cannot quietly become NO_MATCH, even in one domain.\n217:         _bounded_graphs([focus] + bank)\n218:         decisions = []\n219:         for other in bank:\n220:             row = {\"world_id\": other[\"world_id\"]}\n221:             if other[\"declarations\"][\"domain\"] == focus[\"declarations\"][\"domain\"]:\n222:                 decisions.append({**row, \"reason\": \"SAME_DECLARED_DOMAIN\",\n223:                                   \"permutations_checked\": 0, \"matching_bijections\": 0})\n224:                 continue\n225:             matches, audit = _isomorphisms(focus, other)\n226:             decisions.append({**row, **audit, \"matching_bijections\": len(matches)})\n227:             if matches:\n228:                 values.append({\"world_id\": other[\"world_id\"]})\n229:                 witnesses.append({\"source_domain\": focus[\"declarations\"][\"domain\"],\n230:                                   \"target_domain\": other[\"declarations\"][\"domain\"],\n231:                                   \"mapping\": matches[0], \"matching_bijections\": len(matches),\n232:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n233:         coverage = {\"bank_digest\": public[\"bank\"][\"bank_digest\"],\n234:                     \"worlds_checked\": len(bank), \"decisions\": decisions}\n235:         if not values:\n236:             values.append({\"world_id\": None})\n237:             witnesses.append({\"exhaustive_bounded_bank_comparison\": True})"
+        },
+        {
+          "start": 243,
+          "end": 268,
+          "text": "243: def derive_target(public, query):\n244:     \"\"\"Derive a private complete admissible set from a copied public snapshot.\"\"\"\n245:     snapshot = source.validate_public(public)\n246:     request = answers.validate_query(snapshot, query)\n247:     values, witnesses, coverage = _derive_values(snapshot, request)\n248:     _require(0 < len(values) <= MAX_ADMISSIBLE_ANSWERS and len(values) == len(witnesses),\n249:              \"TYPED_CHECKER_TARGET_SET_BOUND\")\n250:     rows = []\n251:     for value, witness in zip(values, witnesses):\n252:         answer = answers.make_answer(snapshot, request, value)\n253:         rows.append((answer, {\"answer_digest\": _digest(answer), \"evidence\": witness}))\n254:     rows.sort(key=lambda row: _canonical(row[0]))\n255:     _require(len({_canonical(row[0]) for row in rows}) == len(rows),\n256:              \"TYPED_CHECKER_DUPLICATE_TARGET\")\n257:     profile = checker_profile()\n258:     body = {\"schema\": TARGET_SCHEMA, \"query_id\": request[\"query_id\"],\n259:             \"source_digest\": request[\"source_digest\"], \"kind\": request[\"kind\"],\n260:             \"rule\": request[\"rule\"], \"checker_profile\": profile,\n261:             \"checker_profile_digest\": profile[\"profile_digest\"],\n262:             \"admissible_answers\": [row[0] for row in rows],\n263:             \"witnesses\": [row[1] for row in rows], \"coverage\": coverage,\n264:             \"boundary\": BOUNDARY}\n265:     _require(len(_canonical(body)) <= MAX_TARGET_BYTES, \"TYPED_CHECKER_TARGET_BYTES\")\n266:     result = {**body, \"target_digest\": _digest(body)}\n267:     _require(len(_canonical(result)) <= MAX_TARGET_BYTES, \"TYPED_CHECKER_TARGET_BYTES\")\n268:     return deepcopy(result)"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "lines": [
+        {
+          "start": 74,
+          "end": 118,
+          "text": "74:     target = query[\"arguments\"].get(\"target_world_id\") if kind == \"correspondence\" else None\n75:     packet_digest = digest(checked)\n76:     slots = []\n77:     def add(field, group, coordinates, symbols, *, scope_world=None):\n78:         scope = focus if scope_world is None else scope_world\n79:         body = {\"field\": field, \"group\": group, \"coordinates\": coordinates,\n80:                 \"scope_world_id\": scope, \"scope_alias\": world_alias[scope],\n81:                 \"symbols\": list(symbols)}\n82:         require(body[\"symbols\"] and len(set(body[\"symbols\"])) == len(body[\"symbols\"])\n83:                 and set(body[\"symbols\"]) <= set(SYMBOLS), \"TYPED_SLOT_SYMBOLS\")\n84:         slots.append({\"slot_id\": \"typed-slot-\" + digest({\"packet_digest\": packet_digest, **body}), **body})\n85:     if kind == \"role_set\":\n86:         for role in inv[\"role_ids\"]: add(\"role\", \"roles\", [role], (\"ABSENT\", \"PRESENT\"))\n87:     elif kind == \"definition\":\n88:         add(\"whole\", \"whole\", [], [node_alias[ref] for ref in inv[\"whole_refs\"]])\n89:         for field in (\"kind_ref\", \"function_ref\"):\n90:             add(field, field, [], [row[\"alias\"] for row in aliases[\"worlds\"]])\n91:     elif kind == \"context\":\n92:         add(\"setting_ref\", \"setting_ref\", [], [row[\"alias\"] for row in aliases[\"worlds\"]])\n93:         for ref in inv[\"participant_refs\"]: add(\"participant\", \"participants\", [ref], (\"ABSENT\", \"PRESENT\"))\n94:     elif kind == \"analogy\":\n95:         add(\"world_id\", \"world_id\", [], [\"NO_MATCH\", *(world_alias[ref] for ref in inv[\"world_ids\"])])\n96:     elif kind == \"correspondence\":\n97:         # Public grammar alone bounds enumeration; no graph edge is examined.\n98:         candidates = answers.correspondence_candidates(public, query)\n99:         add(\"mode\", \"correspondence\", [], (\"NO_MATCH\", \"MAPPING\"))\n100:         for ref in sorted(inv[\"source_nodes\"]):\n101:             add(\"mapping_target\", \"correspondence\", [ref], [node_alias[v] for v in sorted(inv[\"target_nodes\"])], scope_world=target)\n102:     elif kind == \"parts\":\n103:         for ref in inv[\"node_refs\"]: add(\"node\", \"nodes\", [ref], (\"ABSENT\", \"PRESENT\"))\n104:     elif kind == \"edge_account\":\n105:         for pair in inv[\"edge_pairs\"]: add(\"edge\", \"edges\", list(pair), (\"ABSENT\", \"PRESENT\"))\n106:     elif kind == \"reach\":\n107:         add(\"reach\", \"reach\", [], [\"ABSENT\", \"DIRECT\", *(\"VIA_\" + node_alias[ref] for ref in inv[\"via_refs\"])])\n108:     require(0 < len(slots) <= 100 and len({row[\"slot_id\"] for row in slots}) == len(slots), \"TYPED_SLOT_BOUND\")\n109:     candidate_rows = []\n110:     if kind == \"correspondence\":\n111:         for value in candidates:\n112:             candidate_rows.append({\"candidate_id\": \"typed-candidate-\" + digest({\"query_id\": query[\"query_id\"], \"value\": value}),\n113:                                    \"value\": value})\n114:     body = {\"schema\": PLAN_SCHEMA, \"record_id\": record[\"record_id\"], \"query_id\": query[\"query_id\"],\n115:         \"source_digest\": record[\"source_digest\"], \"packet_digest\": packet_digest, \"kind\": kind,\n116:         \"profile\": profile(), \"aliases\": aliases, \"slots\": slots, \"correspondence_candidates\": candidate_rows,\n117:         \"decision_contract\": deepcopy(DECISION_CONTRACT),\n118:         \"forced_candidate_count\": 1 if kind == \"correspondence\" and len(candidate_rows) == 1 else 0}"
+        },
+        {
+          "start": 259,
+          "end": 296,
+          "text": "259: def _candidate_scores(plan, scores):\n260:     require(plan[\"kind\"] == \"correspondence\", \"TYPED_SLOT_CANDIDATE_SCORE_KIND\")\n261:     mode = scores[plan[\"slots\"][0][\"slot_id\"]]\n262:     by_ref = {slot[\"coordinates\"][0]: slot for slot in plan[\"slots\"][1:]}\n263:     alias = {node[\"ref\"]: node[\"alias\"] for world in plan[\"aliases\"][\"worlds\"] for node in world[\"nodes\"]}\n264:     candidates = plan[\"correspondence_candidates\"]\n265:     if len(candidates) == 1:\n266:         return [{\"candidate_id\": candidates[0][\"candidate_id\"], \"log_probability\": 0.0}]\n267:     raw = [sum(scores[by_ref[pair[\"source\"]][\"slot_id\"]][alias[pair[\"target\"]]] for pair in row[\"value\"][\"pairs\"])\n268:            for row in candidates[1:]]\n269:     require(all(math.isfinite(value) for value in raw), \"TYPED_SLOT_NONFINITE_SCORE_RESULT\")\n270:     mode_normalizer, mapping_normalizer = _logsumexp(list(mode.values())), _logsumexp(raw)\n271:     values = [mode[\"NO_MATCH\"] - mode_normalizer] + [mode[\"MAPPING\"] - mode_normalizer + value - mapping_normalizer for value in raw]\n272:     require(all(math.isfinite(value) for value in values), \"TYPED_SLOT_NONFINITE_SCORE_RESULT\")\n273:     return [{\"candidate_id\": row[\"candidate_id\"], \"log_probability\": value} for row, value in zip(candidates, values)]\n274: \n275: \n276: def candidate_scores(packet, scores):\n277:     \"\"\"Normalized public correspondence distribution; never a correct-set mask.\"\"\"\n278:     plan = compile_slots(packet)\n279:     _check_scores(plan, scores)\n280:     return _candidate_scores(plan, scores)\n281: \n282: \n283: def score_decisions(packet, scores):\n284:     \"\"\"Deterministic scalar reference decoder, with no numeric package or teacher.\n285: \n286:     Scores cover every slot/symbol exactly. Hierarchical correspondence scoring\n287:     normalizes over ALL syntactic bijections. Joint MAP includes the declared\n288:     mapping-cardinality prior; it is not a mode-first decoder or a truth check.\n289:     \"\"\"\n290:     plan = compile_slots(packet)\n291:     _check_scores(plan, scores)\n292:     if plan[\"kind\"] != \"correspondence\":\n293:         return _decision(plan, {slot[\"slot_id\"]: max(slot[\"symbols\"], key=lambda symbol: scores[slot[\"slot_id\"]][symbol])\n294:                                 for slot in plan[\"slots\"]})\n295:     winner = max(_candidate_scores(plan, scores), key=lambda row: row[\"log_probability\"])\n296:     return _decision(plan, {}, winner[\"candidate_id\"])"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "lines": [
+        {
+          "start": 169,
+          "end": 195,
+          "text": "169:     \"\"\"The rank a node ref carries: its own `/n<i>` index, which IS its sorted position (source.py:214).\"\"\"\n170:     require(type(ref) is str, \"POINTER_INPUTS_NODE_REF\")\n171:     head, separator, tail = ref.rpartition(\"/n\")\n172:     require(bool(head) and separator == \"/n\" and tail.isdigit() and str(int(tail)) == tail,\n173:             \"POINTER_INPUTS_NODE_REF\")\n174:     return int(tail)\n175: \n176: \n177: def _node_index(world):\n178:     \"\"\"`{ref: rank}` for one world, REQUIRING that every stored index equals the sorted position.\n179: \n180:     The rank is the node's position among the world's sorted refs - the same list `checker._nodes` and\n181:     `slots.alias_table` sort by (slots.py:55-60). This function proves that invariant for every node it\n182:     returns instead of assuming it, so a bank where the two disagreed would fail closed rather than quietly\n183:     reading a node's ref as its identity.\n184:     \"\"\"\n185:     require(type(world) is dict and type(world.get(\"nodes\")) is list and world[\"nodes\"],\n186:             \"POINTER_INPUTS_WORLD\")\n187:     refs = [node[\"ref\"] for node in world[\"nodes\"]]\n188:     require(len(set(refs)) == len(refs), \"POINTER_INPUTS_NODE_REF\")\n189:     index = {}\n190:     for rank, ref in enumerate(sorted(refs)):\n191:         require(_ref_rank(ref) == rank, \"POINTER_INPUTS_NODE_RANK\")\n192:         index[ref] = rank\n193:     return index\n194: \n195: "
+        },
+        {
+          "start": 212,
+          "end": 244,
+          "text": "212:     # is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).\n213:     #\n214:     # `is_primary_label` and its rank are NOT emitted. LK5 measured that `primary_labels == participants` in\n215:     # **64 of 64** worlds, which was re-verified here against the frozen course, so the second flag is provably\n216:     # the same fact and both design v0.2 \u00a75.1 and the protocol \u00a75.3 require it to be dropped. `is_participant`\n217:     # is the one kept, because it is the flag `checker.py:178-183` derives `context` from.\n218:     participant_rank = {}\n219:     for position, ref in enumerate(declarations[\"participants\"]):\n220:         require(ref in index, \"POINTER_INPUTS_PARTICIPANT\")\n221:         participant_rank[index[ref]] = position + 1\n222:     declaration_ids = {}\n223:     for field in DECLARATION_FIELDS:\n224:         text = declarations[field]\n225:         require(type(text) is str and bool(text), \"POINTER_INPUTS_DECLARATION\")\n226:         declaration_ids[field] = _cached_ids(text, cache=cache, table=\"declaration_ids\")\n227:     contains = []\n228:     for edge in world[\"contains\"]:\n229:         require(edge[\"source\"] in index and edge[\"target\"] in index, \"POINTER_INPUTS_CONTAINS\")\n230:         contains.append([index[edge[\"source\"]], index[edge[\"target\"]]])\n231:     contains.sort()\n232:     nodes = []\n233:     for rank in range(node_count):\n234:         body = {\n235:             \"is_declared_whole\": 1 if rank == index[whole] else 0,\n236:             \"is_participant\": participant_rank.get(rank, 0),\n237:             \"is_whole_argument\": 1 if arguments.get(\"whole\") == rank else 0,\n238:             \"is_part_argument\": 1 if arguments.get(\"part\") == rank else 0,\n239:         }\n240:         nodes.append({**({\"rank\": rank} if use_rank else {}), **body})\n241:     return {\n242:         \"world_id\": world[\"world_id\"],\n243:         \"is_focus\": 1 if world[\"world_id\"] == focus_world_id else 0,\n244:         \"is_target\": 1 if target_world_id is not None and world[\"world_id\"] == target_world_id else 0,"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+      "lines": [
+        {
+          "start": 1252,
+          "end": 1265,
+          "text": "1252:     def _node_options(self, position, ranks):\n1253:         \"\"\"`logit = <pointer key, h_v>` for the named node ranks of ONE world, in the given order.\"\"\"\n1254:         torch = self.torch\n1255:         require(type(ranks) is list and len(set(ranks)) == len(ranks), \"POINTER_NODE_RANKS\")\n1256:         start = sum(row[1] for row in self.blocks[:position])\n1257:         count = self.blocks[position][1]\n1258:         require(all(0 <= rank < count for rank in ranks), \"POINTER_NODE_RANKS\")\n1259:         if not ranks:\n1260:             return self.hidden.new_zeros(0)\n1261:         states = self.hidden.index_select(\n1262:             0, torch.tensor([start + rank for rank in ranks], dtype=torch.int64, device=self.device))\n1263:         return states.matmul(self.pointer_query)\n1264: \n1265:     def _reach_options(self, position):"
+        },
+        {
+          "start": 1300,
+          "end": 1331,
+          "text": "1300:         \"\"\"Every symbol that names a whole world, scored on `(query, source, candidate, declaration)`.\n1301: \n1302:         The candidate term is `[query key @ candidate, query value @ candidate, four flags, declaration]`, so the\n1303:         scorer sees the candidate's degree-conditioned world vector AND the declaration text of the field the\n1304:         slot asks about -- the shape and the domain together, which is what `analogy` needs (17 of 17 held).\n1305:         \"\"\"\n1306:         torch = self.torch\n1307:         column = self.declaration_names.index(SLOT_DECLARATION_FIELD.get(field, \"domain\"))\n1308:         key = self.worlds.matmul(self.pointer_query)\n1309:         value = self.worlds.matmul(self.query_value)\n1310:         flags = torch.zeros(self.worlds.shape[0], 4, dtype=torch.float32, device=self.device)\n1311:         for position, world_id in enumerate(self.world_ids):\n1312:             flags[position, 0] = 1.0 if world_id == self.focus_world_id else 0.0\n1313:             flags[position, 1] = float(self.reading[\"worlds\"][world_id][\"is_target\"])\n1314:         candidate = torch.cat((key.reshape(-1, 1), value.reshape(-1, 1), flags,\n1315:                                self.declaration_embed[:, column, :]), dim=1)\n1316:         require(candidate.shape[1] == WORLD_CANDIDATE_WIDTH, \"POINTER_WORLD_CANDIDATE_WIDTH\")\n1317:         # And the head's own input width, which is the check that can fail: `WORLD_CANDIDATE_WIDTH` is the same\n1318:         # number the head was built from, so agreeing with it is not evidence. This was defect 2 of the six.\n1319:         require(int(self.model.world_head[0].in_features) == int(candidate.shape[1]),\n1320:                 \"POINTER_WORLD_HEAD_WIDTH:%d!=%d\" % (int(self.model.world_head[0].in_features),\n1321:                                                      int(candidate.shape[1])))\n1322:         flat = self.model.world_head(candidate).reshape(-1)\n1323:         rows = []\n1324:         for symbol in symbols:\n1325:             if symbol == \"NO_MATCH\":\n1326:                 rows.append(flat.new_zeros(()))\n1327:             else:\n1328:                 world_id = _world_alias_table_for(self.reading, symbol)\n1329:                 require(world_id in self.world_position, \"POINTER_WORLD_NOT_IN_READING\")\n1330:                 rows.append(flat[self.world_position[world_id]])\n1331:         return torch.stack(rows)"
+        },
+        {
+          "start": 1361,
+          "end": 1369,
+          "text": "1361:             elif field == \"whole\":\n1362:                 logits = self._node_options(self.focus_position,\n1363:                                             [_node_rank_of_alias(symbol) for symbol in symbols])\n1364:             elif field == \"mapping_target\":\n1365:                 logits = self._node_options(self._target_position(),\n1366:                                             [_node_rank_of_alias(symbol) for symbol in symbols])\n1367:             elif field == \"reach\":\n1368:                 nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith(\"VIA_N\")]\n1369:                 require(symbols[:REACH_OPTION_COUNT] == [\"ABSENT\", \"DIRECT\"]"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "package_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+      "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+      "lines": [
+        {
+          "start": 196,
+          "end": 227,
+          "text": "196: \n197:     def _tensor_loss(self, plan, loss, tensors):\n198:         torch = self.torch\n199:         by_id = {s[\"slot_id\"]: s for s in plan[\"slots\"]}\n200:         fields, reports = [], []\n201:         for field in loss[\"fields\"]:\n202:             if field[\"kind\"] == \"joint_correspondence\":\n203:                 mode = torch.log_softmax(tensors[plan[\"slots\"][0][\"slot_id\"]], dim=0)\n204:                 candidates = plan[\"correspondence_candidates\"]\n205:                 if len(candidates) == 1:\n206:                     term = mode.sum() * 0\n207:                 else:\n208:                     node_alias = {n[\"ref\"]: n[\"alias\"] for w in plan[\"aliases\"][\"worlds\"] for n in w[\"nodes\"]}\n209:                     row_by_source = {s[\"coordinates\"][0]: s for s in plan[\"slots\"][1:]}\n210:                     sums = []\n211:                     for candidate in candidates[1:]:\n212:                         selected = []\n213:                         for pair in candidate[\"value\"][\"pairs\"]:\n214:                             row = row_by_source[pair[\"source\"]]\n215:                             selected.append(tensors[row[\"slot_id\"]][row[\"symbols\"].index(node_alias[pair[\"target\"]])])\n216:                         sums.append(torch.stack(selected).sum())\n217:                     mapping = torch.stack(sums)\n218:                     joint = torch.cat((mode[0].reshape(1), mode[1] + mapping - torch.logsumexp(mapping, dim=0)))\n219:                     indices = [i for i, c in enumerate(candidates) if c[\"candidate_id\"] in field[\"valid_candidate_ids\"]]\n220:                     term = -torch.logsumexp(joint[indices], dim=0)\n221:             else:\n222:                 terms = []\n223:                 for key in field[\"slot_ids\"]:\n224:                     logits, row = tensors[key], by_id[key]\n225:                     indices = [row[\"symbols\"].index(symbol) for symbol in field[\"targets\"][key]]\n226:                     terms.append(torch.logsumexp(logits, dim=0) - torch.logsumexp(logits[indices], dim=0))\n227:                 term = torch.stack(terms).mean()"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "member": "cncm/typed_pointer_worker.py",
+      "sha256": "0d801b675d837ebda8b4a64914a8de6494caceb446b2a7e62c1844ae17e24bd1",
+      "lines": [
+        {
+          "start": 1479,
+          "end": 1483,
+          "text": "1479:         restore_pin = ctx[\"checkpoint_pins\"][\"final\"]\n1480:         restored = _restore_pointer(ctx, path=artifacts / \"final.pt\", pin=restore_pin, encoder=ctx[\"encoder\"])\n1481:         _, baseline = _evaluate(restored, ctx[\"held_packets\"], \"ablation_baseline\", artifacts,\n1482:                                 started=ctx[\"started\"], progress=ctx[\"phase\"], work=ctx[\"work\"])\n1483:         baseline_accuracy = baseline[\"correct\"] / baseline[\"total\"]"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "lines": [
+        {
+          "start": 201,
+          "end": 221,
+          "text": "201:     elif kind == \"analogy\":\n202:         _closed(value, {\"world_id\"}, \"TYPED_ANALOGY_FIELDS\")\n203:         if value[\"world_id\"] is not None:\n204:             _member(value[\"world_id\"], inv[\"world_ids\"], \"TYPED_ANALOGY_WORLD\")\n205:     elif kind == \"correspondence\":\n206:         _closed(value, {\"status\", \"pairs\"}, \"TYPED_CORRESPONDENCE_FIELDS\")\n207:         _require(type(value[\"status\"]) is str and value[\"status\"] in (\"MAPPING\", \"NO_MATCH\"),\n208:                  \"TYPED_CORRESPONDENCE_STATUS\")\n209:         pairs = value[\"pairs\"]\n210:         _require(type(pairs) is list, \"TYPED_CORRESPONDENCE_PAIRS\")\n211:         if value[\"status\"] == \"NO_MATCH\":\n212:             _require(pairs == [], \"TYPED_NO_MATCH_PAIRS\")\n213:         else:\n214:             for pair in pairs:\n215:                 _closed(pair, {\"source\", \"target\"}, \"TYPED_MAPPING_PAIR_FIELDS\")\n216:                 _member(pair[\"source\"], inv[\"source_nodes\"], \"TYPED_MAPPING_SOURCE\")\n217:                 _member(pair[\"target\"], inv[\"target_nodes\"], \"TYPED_MAPPING_TARGET\")\n218:             _require([p[\"source\"] for p in pairs] == sorted(inv[\"source_nodes\"]),\n219:                      \"TYPED_MAPPING_SOURCE_COVERAGE\")\n220:             _require(sorted(p[\"target\"] for p in pairs) == sorted(inv[\"target_nodes\"]),\n221:                      \"TYPED_MAPPING_BIJECTION\")"
+        },
+        {
+          "start": 285,
+          "end": 304,
+          "text": "285: def correspondence_candidates(public, query, *, max_nodes=MAX_PERMUTATION_NODES):\n286:     \"\"\"Bounded grammar-only candidates; includes wrong mappings and NO_MATCH.\n287: \n288:     The only selection inputs are public scoped node inventories and a ceiling\n289:     no larger than four. No graph edges or teacher labels enter permutation\n290:     generation. Ten-node syntax admission does not admit 10! numerical work.\n291:     \"\"\"\n292:     _require(type(max_nodes) is int and 1 <= max_nodes <= MAX_PERMUTATION_NODES,\n293:              \"TYPED_PERMUTATION_LIMIT\")\n294:     space = answer_space(public, query)\n295:     _require(query[\"kind\"] == \"correspondence\", \"TYPED_CANDIDATES_KIND\")\n296:     inv = space[\"inventory\"]\n297:     left, right = sorted(inv[\"source_nodes\"]), sorted(inv[\"target_nodes\"])\n298:     _require(max(len(left), len(right)) <= max_nodes, \"TYPED_PERMUTATION_BOUND\")\n299:     candidates = [{\"status\": \"NO_MATCH\", \"pairs\": []}]\n300:     if len(left) == len(right):\n301:         candidates += [{\"status\": \"MAPPING\",\n302:                         \"pairs\": [{\"source\": a, \"target\": b} for a, b in zip(left, row)]}\n303:                        for row in permutations(right)]\n304:     return candidates"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "lines": [
+        {
+          "start": 96,
+          "end": 112,
+          "text": "96: def _isomorphisms(left, right):\n97:     \"\"\"Enumerate every mapping; node labels, root choice and archetypes do not vote.\"\"\"\n98:     _bounded_graphs((left, right))\n99:     lhs, rhs = _nodes(left), _nodes(right)\n100:     ledges, redges = _edges(left), _edges(right)\n101:     if len(lhs) != len(rhs):\n102:         return [], {\"reason\": \"NODE_COUNT_MISMATCH\", \"permutations_checked\": 0}\n103:     if len(ledges) != len(redges):\n104:         return [], {\"reason\": \"EDGE_COUNT_MISMATCH\", \"permutations_checked\": 0}\n105:     matches, checked = [], 0\n106:     for order in permutations(rhs):\n107:         checked += 1\n108:         mapping = dict(zip(lhs, order))\n109:         if frozenset((mapping[a], mapping[b]) for a, b in ledges) == redges:\n110:             matches.append([{\"source\": a, \"target\": mapping[a]} for a in lhs])\n111:     return matches, {\"reason\": \"MATCHES\" if matches else \"NO_EDGE_PRESERVING_BIJECTION\",\n112:                      \"permutations_checked\": checked}"
+        },
+        {
+          "start": 200,
+          "end": 237,
+          "text": "200:     elif kind == \"correspondence\":\n201:         other = worlds[query[\"arguments\"][\"target_world_id\"]]\n202:         matches, audit = _isomorphisms(focus, other)\n203:         coverage = {\"source_world_id\": focus[\"world_id\"], \"target_world_id\": other[\"world_id\"],\n204:                     \"matching_bijections\": len(matches), **audit}\n205:         if matches:\n206:             for pairs in matches:\n207:                 values.append({\"status\": \"MAPPING\", \"pairs\": pairs})\n208:                 witnesses.append({\"mapping\": pairs,\n209:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n210:         else:\n211:             values.append({\"status\": \"NO_MATCH\", \"pairs\": []})\n212:             witnesses.append({\"exhaustive_bounded_comparison\": deepcopy(coverage)})\n213:     elif kind == \"analogy\":\n214:         bank = [worlds[key] for key in public[\"bank\"][\"world_ids\"]]\n215:         # Check the entire requested oracle scope before rejecting any candidate.\n216:         # Unsupported graphs cannot quietly become NO_MATCH, even in one domain.\n217:         _bounded_graphs([focus] + bank)\n218:         decisions = []\n219:         for other in bank:\n220:             row = {\"world_id\": other[\"world_id\"]}\n221:             if other[\"declarations\"][\"domain\"] == focus[\"declarations\"][\"domain\"]:\n222:                 decisions.append({**row, \"reason\": \"SAME_DECLARED_DOMAIN\",\n223:                                   \"permutations_checked\": 0, \"matching_bijections\": 0})\n224:                 continue\n225:             matches, audit = _isomorphisms(focus, other)\n226:             decisions.append({**row, **audit, \"matching_bijections\": len(matches)})\n227:             if matches:\n228:                 values.append({\"world_id\": other[\"world_id\"]})\n229:                 witnesses.append({\"source_domain\": focus[\"declarations\"][\"domain\"],\n230:                                   \"target_domain\": other[\"declarations\"][\"domain\"],\n231:                                   \"mapping\": matches[0], \"matching_bijections\": len(matches),\n232:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n233:         coverage = {\"bank_digest\": public[\"bank\"][\"bank_digest\"],\n234:                     \"worlds_checked\": len(bank), \"decisions\": decisions}\n235:         if not values:\n236:             values.append({\"world_id\": None})\n237:             witnesses.append({\"exhaustive_bounded_bank_comparison\": True})"
+        },
+        {
+          "start": 243,
+          "end": 268,
+          "text": "243: def derive_target(public, query):\n244:     \"\"\"Derive a private complete admissible set from a copied public snapshot.\"\"\"\n245:     snapshot = source.validate_public(public)\n246:     request = answers.validate_query(snapshot, query)\n247:     values, witnesses, coverage = _derive_values(snapshot, request)\n248:     _require(0 < len(values) <= MAX_ADMISSIBLE_ANSWERS and len(values) == len(witnesses),\n249:              \"TYPED_CHECKER_TARGET_SET_BOUND\")\n250:     rows = []\n251:     for value, witness in zip(values, witnesses):\n252:         answer = answers.make_answer(snapshot, request, value)\n253:         rows.append((answer, {\"answer_digest\": _digest(answer), \"evidence\": witness}))\n254:     rows.sort(key=lambda row: _canonical(row[0]))\n255:     _require(len({_canonical(row[0]) for row in rows}) == len(rows),\n256:              \"TYPED_CHECKER_DUPLICATE_TARGET\")\n257:     profile = checker_profile()\n258:     body = {\"schema\": TARGET_SCHEMA, \"query_id\": request[\"query_id\"],\n259:             \"source_digest\": request[\"source_digest\"], \"kind\": request[\"kind\"],\n260:             \"rule\": request[\"rule\"], \"checker_profile\": profile,\n261:             \"checker_profile_digest\": profile[\"profile_digest\"],\n262:             \"admissible_answers\": [row[0] for row in rows],\n263:             \"witnesses\": [row[1] for row in rows], \"coverage\": coverage,\n264:             \"boundary\": BOUNDARY}\n265:     _require(len(_canonical(body)) <= MAX_TARGET_BYTES, \"TYPED_CHECKER_TARGET_BYTES\")\n266:     result = {**body, \"target_digest\": _digest(body)}\n267:     _require(len(_canonical(result)) <= MAX_TARGET_BYTES, \"TYPED_CHECKER_TARGET_BYTES\")\n268:     return deepcopy(result)"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "lines": [
+        {
+          "start": 74,
+          "end": 118,
+          "text": "74:     target = query[\"arguments\"].get(\"target_world_id\") if kind == \"correspondence\" else None\n75:     packet_digest = digest(checked)\n76:     slots = []\n77:     def add(field, group, coordinates, symbols, *, scope_world=None):\n78:         scope = focus if scope_world is None else scope_world\n79:         body = {\"field\": field, \"group\": group, \"coordinates\": coordinates,\n80:                 \"scope_world_id\": scope, \"scope_alias\": world_alias[scope],\n81:                 \"symbols\": list(symbols)}\n82:         require(body[\"symbols\"] and len(set(body[\"symbols\"])) == len(body[\"symbols\"])\n83:                 and set(body[\"symbols\"]) <= set(SYMBOLS), \"TYPED_SLOT_SYMBOLS\")\n84:         slots.append({\"slot_id\": \"typed-slot-\" + digest({\"packet_digest\": packet_digest, **body}), **body})\n85:     if kind == \"role_set\":\n86:         for role in inv[\"role_ids\"]: add(\"role\", \"roles\", [role], (\"ABSENT\", \"PRESENT\"))\n87:     elif kind == \"definition\":\n88:         add(\"whole\", \"whole\", [], [node_alias[ref] for ref in inv[\"whole_refs\"]])\n89:         for field in (\"kind_ref\", \"function_ref\"):\n90:             add(field, field, [], [row[\"alias\"] for row in aliases[\"worlds\"]])\n91:     elif kind == \"context\":\n92:         add(\"setting_ref\", \"setting_ref\", [], [row[\"alias\"] for row in aliases[\"worlds\"]])\n93:         for ref in inv[\"participant_refs\"]: add(\"participant\", \"participants\", [ref], (\"ABSENT\", \"PRESENT\"))\n94:     elif kind == \"analogy\":\n95:         add(\"world_id\", \"world_id\", [], [\"NO_MATCH\", *(world_alias[ref] for ref in inv[\"world_ids\"])])\n96:     elif kind == \"correspondence\":\n97:         # Public grammar alone bounds enumeration; no graph edge is examined.\n98:         candidates = answers.correspondence_candidates(public, query)\n99:         add(\"mode\", \"correspondence\", [], (\"NO_MATCH\", \"MAPPING\"))\n100:         for ref in sorted(inv[\"source_nodes\"]):\n101:             add(\"mapping_target\", \"correspondence\", [ref], [node_alias[v] for v in sorted(inv[\"target_nodes\"])], scope_world=target)\n102:     elif kind == \"parts\":\n103:         for ref in inv[\"node_refs\"]: add(\"node\", \"nodes\", [ref], (\"ABSENT\", \"PRESENT\"))\n104:     elif kind == \"edge_account\":\n105:         for pair in inv[\"edge_pairs\"]: add(\"edge\", \"edges\", list(pair), (\"ABSENT\", \"PRESENT\"))\n106:     elif kind == \"reach\":\n107:         add(\"reach\", \"reach\", [], [\"ABSENT\", \"DIRECT\", *(\"VIA_\" + node_alias[ref] for ref in inv[\"via_refs\"])])\n108:     require(0 < len(slots) <= 100 and len({row[\"slot_id\"] for row in slots}) == len(slots), \"TYPED_SLOT_BOUND\")\n109:     candidate_rows = []\n110:     if kind == \"correspondence\":\n111:         for value in candidates:\n112:             candidate_rows.append({\"candidate_id\": \"typed-candidate-\" + digest({\"query_id\": query[\"query_id\"], \"value\": value}),\n113:                                    \"value\": value})\n114:     body = {\"schema\": PLAN_SCHEMA, \"record_id\": record[\"record_id\"], \"query_id\": query[\"query_id\"],\n115:         \"source_digest\": record[\"source_digest\"], \"packet_digest\": packet_digest, \"kind\": kind,\n116:         \"profile\": profile(), \"aliases\": aliases, \"slots\": slots, \"correspondence_candidates\": candidate_rows,\n117:         \"decision_contract\": deepcopy(DECISION_CONTRACT),\n118:         \"forced_candidate_count\": 1 if kind == \"correspondence\" and len(candidate_rows) == 1 else 0}"
+        },
+        {
+          "start": 259,
+          "end": 296,
+          "text": "259: def _candidate_scores(plan, scores):\n260:     require(plan[\"kind\"] == \"correspondence\", \"TYPED_SLOT_CANDIDATE_SCORE_KIND\")\n261:     mode = scores[plan[\"slots\"][0][\"slot_id\"]]\n262:     by_ref = {slot[\"coordinates\"][0]: slot for slot in plan[\"slots\"][1:]}\n263:     alias = {node[\"ref\"]: node[\"alias\"] for world in plan[\"aliases\"][\"worlds\"] for node in world[\"nodes\"]}\n264:     candidates = plan[\"correspondence_candidates\"]\n265:     if len(candidates) == 1:\n266:         return [{\"candidate_id\": candidates[0][\"candidate_id\"], \"log_probability\": 0.0}]\n267:     raw = [sum(scores[by_ref[pair[\"source\"]][\"slot_id\"]][alias[pair[\"target\"]]] for pair in row[\"value\"][\"pairs\"])\n268:            for row in candidates[1:]]\n269:     require(all(math.isfinite(value) for value in raw), \"TYPED_SLOT_NONFINITE_SCORE_RESULT\")\n270:     mode_normalizer, mapping_normalizer = _logsumexp(list(mode.values())), _logsumexp(raw)\n271:     values = [mode[\"NO_MATCH\"] - mode_normalizer] + [mode[\"MAPPING\"] - mode_normalizer + value - mapping_normalizer for value in raw]\n272:     require(all(math.isfinite(value) for value in values), \"TYPED_SLOT_NONFINITE_SCORE_RESULT\")\n273:     return [{\"candidate_id\": row[\"candidate_id\"], \"log_probability\": value} for row, value in zip(candidates, values)]\n274: \n275: \n276: def candidate_scores(packet, scores):\n277:     \"\"\"Normalized public correspondence distribution; never a correct-set mask.\"\"\"\n278:     plan = compile_slots(packet)\n279:     _check_scores(plan, scores)\n280:     return _candidate_scores(plan, scores)\n281: \n282: \n283: def score_decisions(packet, scores):\n284:     \"\"\"Deterministic scalar reference decoder, with no numeric package or teacher.\n285: \n286:     Scores cover every slot/symbol exactly. Hierarchical correspondence scoring\n287:     normalizes over ALL syntactic bijections. Joint MAP includes the declared\n288:     mapping-cardinality prior; it is not a mode-first decoder or a truth check.\n289:     \"\"\"\n290:     plan = compile_slots(packet)\n291:     _check_scores(plan, scores)\n292:     if plan[\"kind\"] != \"correspondence\":\n293:         return _decision(plan, {slot[\"slot_id\"]: max(slot[\"symbols\"], key=lambda symbol: scores[slot[\"slot_id\"]][symbol])\n294:                                 for slot in plan[\"slots\"]})\n295:     winner = max(_candidate_scores(plan, scores), key=lambda row: row[\"log_probability\"])\n296:     return _decision(plan, {}, winner[\"candidate_id\"])"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "lines": [
+        {
+          "start": 169,
+          "end": 195,
+          "text": "169:     \"\"\"The rank a node ref carries: its own `/n<i>` index, which IS its sorted position (source.py:214).\"\"\"\n170:     require(type(ref) is str, \"POINTER_INPUTS_NODE_REF\")\n171:     head, separator, tail = ref.rpartition(\"/n\")\n172:     require(bool(head) and separator == \"/n\" and tail.isdigit() and str(int(tail)) == tail,\n173:             \"POINTER_INPUTS_NODE_REF\")\n174:     return int(tail)\n175: \n176: \n177: def _node_index(world):\n178:     \"\"\"`{ref: rank}` for one world, REQUIRING that every stored index equals the sorted position.\n179: \n180:     The rank is the node's position among the world's sorted refs - the same list `checker._nodes` and\n181:     `slots.alias_table` sort by (slots.py:55-60). This function proves that invariant for every node it\n182:     returns instead of assuming it, so a bank where the two disagreed would fail closed rather than quietly\n183:     reading a node's ref as its identity.\n184:     \"\"\"\n185:     require(type(world) is dict and type(world.get(\"nodes\")) is list and world[\"nodes\"],\n186:             \"POINTER_INPUTS_WORLD\")\n187:     refs = [node[\"ref\"] for node in world[\"nodes\"]]\n188:     require(len(set(refs)) == len(refs), \"POINTER_INPUTS_NODE_REF\")\n189:     index = {}\n190:     for rank, ref in enumerate(sorted(refs)):\n191:         require(_ref_rank(ref) == rank, \"POINTER_INPUTS_NODE_RANK\")\n192:         index[ref] = rank\n193:     return index\n194: \n195: "
+        },
+        {
+          "start": 212,
+          "end": 244,
+          "text": "212:     # is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).\n213:     #\n214:     # `is_primary_label` and its rank are NOT emitted. LK5 measured that `primary_labels == participants` in\n215:     # **64 of 64** worlds, which was re-verified here against the frozen course, so the second flag is provably\n216:     # the same fact and both design v0.2 \u00a75.1 and the protocol \u00a75.3 require it to be dropped. `is_participant`\n217:     # is the one kept, because it is the flag `checker.py:178-183` derives `context` from.\n218:     participant_rank = {}\n219:     for position, ref in enumerate(declarations[\"participants\"]):\n220:         require(ref in index, \"POINTER_INPUTS_PARTICIPANT\")\n221:         participant_rank[index[ref]] = position + 1\n222:     declaration_ids = {}\n223:     for field in DECLARATION_FIELDS:\n224:         text = declarations[field]\n225:         require(type(text) is str and bool(text), \"POINTER_INPUTS_DECLARATION\")\n226:         declaration_ids[field] = _cached_ids(text, cache=cache, table=\"declaration_ids\")\n227:     contains = []\n228:     for edge in world[\"contains\"]:\n229:         require(edge[\"source\"] in index and edge[\"target\"] in index, \"POINTER_INPUTS_CONTAINS\")\n230:         contains.append([index[edge[\"source\"]], index[edge[\"target\"]]])\n231:     contains.sort()\n232:     nodes = []\n233:     for rank in range(node_count):\n234:         body = {\n235:             \"is_declared_whole\": 1 if rank == index[whole] else 0,\n236:             \"is_participant\": participant_rank.get(rank, 0),\n237:             \"is_whole_argument\": 1 if arguments.get(\"whole\") == rank else 0,\n238:             \"is_part_argument\": 1 if arguments.get(\"part\") == rank else 0,\n239:         }\n240:         nodes.append({**({\"rank\": rank} if use_rank else {}), **body})\n241:     return {\n242:         \"world_id\": world[\"world_id\"],\n243:         \"is_focus\": 1 if world[\"world_id\"] == focus_world_id else 0,\n244:         \"is_target\": 1 if target_world_id is not None and world[\"world_id\"] == target_world_id else 0,"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+      "lines": [
+        {
+          "start": 1373,
+          "end": 1422,
+          "text": "1373:     def _mapping_logits(self, plan):\n1374:         \"\"\"HELM 2.0 (F2b): the whole source x target score matrix for `correspondence`, Sinkhorn-normalised.\n1375: \n1376:         Built ONCE per plan and cached, because Sinkhorn is a property of the MATRIX: normalising a single\n1377:         row in isolation would reintroduce exactly the independence this replaces. Rows are the plan's\n1378:         `mapping_target` source nodes in plan order, columns are every target node those slots name.\n1379: \n1380:         `S[i][j] = <W h_source_i, h_target_j>` is the pair score. The loop then alternately subtracts the\n1381:         row log-sum-exp and the column log-sum-exp, which is Sinkhorn in the log domain: it drives the\n1382:         matrix toward one that is near-doubly-stochastic, so a source that is confidently taken by one\n1383:         target stops being available to the others. The result is still LOGITS, one row per source, which\n1384:         is what the loss and `slots._check_scores` already consume -- nothing downstream changes shape.\n1385: \n1386:         This makes a bijection REPRESENTABLE. It does not make it correct: that is a question for a run.\n1387:         \"\"\"\n1388:         if self._mapping_cache is not None:\n1389:             return self._mapping_cache\n1390:         torch = self.torch\n1391:         sources, targets = [], []\n1392:         for slot in plan[\"slots\"]:\n1393:             if slot[\"field\"] != \"mapping_target\":\n1394:                 continue\n1395:             require(len(slot[\"coordinates\"]) == 1, \"POINTER_SLOT_COORDINATES\")\n1396:             sources.append(_node_rank_of_ref(slot[\"coordinates\"][0]))\n1397:             for symbol in slot[\"symbols\"]:\n1398:                 rank = _node_rank_of_alias(symbol)\n1399:                 if rank not in targets:\n1400:                     targets.append(rank)\n1401:         if not sources:\n1402:             self._mapping_cache = {}\n1403:             return self._mapping_cache\n1404:         require(len(set(sources)) == len(sources), \"POINTER_MAPPING_SOURCE_REPEAT\")\n1405:         targets = sorted(targets)\n1406:         target_offset = sum(row[1] for row in self.blocks[:self._target_position()])\n1407:         source_states = self.hidden.index_select(\n1408:             0, torch.tensor([self.focus_offset + rank for rank in sources],\n1409:                             dtype=torch.int64, device=self.device))\n1410:         target_states = self.hidden.index_select(\n1411:             0, torch.tensor([target_offset + rank for rank in targets],\n1412:                             dtype=torch.int64, device=self.device))\n1413:         scores = self.model.match_key(source_states).matmul(target_states.transpose(0, 1))\n1414:         require(scores.shape == (len(sources), len(targets)), \"POINTER_MAPPING_SCORE_SHAPE\")\n1415:         for _ in range(SINKHORN_STEPS):\n1416:             scores = scores - torch.logsumexp(scores, dim=1, keepdim=True)\n1417:             scores = scores - torch.logsumexp(scores, dim=0, keepdim=True)\n1418:         require(bool(torch.isfinite(scores).all().item()), \"POINTER_MAPPING_NONFINITE\")\n1419:         column = {rank: index for index, rank in enumerate(targets)}\n1420:         self._mapping_cache = {\"rows\": {rank: scores[index] for index, rank in enumerate(sources)},\n1421:                                \"column\": column}\n1422:         return self._mapping_cache"
+        },
+        {
+          "start": 1484,
+          "end": 1516,
+          "text": "1484:     def _world_scores(self, field, symbols):\n1485:         \"\"\"Every symbol that names a whole world, scored on `(query, source, candidate, declaration)`.\n1486: \n1487:         The candidate term is `[query key @ candidate, query value @ candidate, four flags, declaration]`, so the\n1488:         scorer sees the candidate's degree-conditioned world vector AND the declaration text of the field the\n1489:         slot asks about -- the shape and the domain together, which is what `analogy` needs (17 of 17 held).\n1490:         \"\"\"\n1491:         torch = self.torch\n1492:         column = self.declaration_names.index(SLOT_DECLARATION_FIELD.get(field, \"domain\"))\n1493:         key = self.worlds.matmul(self.pointer_query)\n1494:         value = self.worlds.matmul(self.query_value)\n1495:         flags = torch.zeros(self.worlds.shape[0], 4, dtype=torch.float32, device=self.device)\n1496:         for position, world_id in enumerate(self.world_ids):\n1497:             flags[position, 0] = 1.0 if world_id == self.focus_world_id else 0.0\n1498:             flags[position, 1] = float(self.reading[\"worlds\"][world_id][\"is_target\"])\n1499:         candidate = torch.cat((key.reshape(-1, 1), value.reshape(-1, 1), flags,\n1500:                                self.declaration_embed[:, column, :]), dim=1)\n1501:         require(candidate.shape[1] == WORLD_CANDIDATE_WIDTH, \"POINTER_WORLD_CANDIDATE_WIDTH\")\n1502:         # And the head's own input width, which is the check that can fail: `WORLD_CANDIDATE_WIDTH` is the same\n1503:         # number the head was built from, so agreeing with it is not evidence. This was defect 2 of the six.\n1504:         require(int(self.model.world_head[0].in_features) == int(candidate.shape[1]),\n1505:                 \"POINTER_WORLD_HEAD_WIDTH:%d!=%d\" % (int(self.model.world_head[0].in_features),\n1506:                                                      int(candidate.shape[1])))\n1507:         flat = self.model.world_head(candidate).reshape(-1)\n1508:         rows = []\n1509:         for symbol in symbols:\n1510:             if symbol == \"NO_MATCH\":\n1511:                 rows.append(flat.new_zeros(()))\n1512:             else:\n1513:                 world_id = _world_alias_table_for(self.reading, symbol)\n1514:                 require(world_id in self.world_position, \"POINTER_WORLD_NOT_IN_READING\")\n1515:                 rows.append(flat[self.world_position[world_id]])\n1516:         return torch.stack(rows)"
+        },
+        {
+          "start": 1547,
+          "end": 1561,
+          "text": "1547:                 logits = self._node_options(self.focus_position,\n1548:                                             [_node_rank_of_alias(symbol) for symbol in symbols])\n1549:             elif field == \"mapping_target\":\n1550:                 # HELM 2.0 (F2b): this slot's ROW of the Sinkhorn-normalised pair matrix, indexed in the\n1551:                 # slot's own symbol order. Helm 1.0 called `_node_options` here, which scored every\n1552:                 # target against `pointer_query` and therefore gave EVERY source the same ranking.\n1553:                 require(len(coordinates) == 1, \"POINTER_SLOT_COORDINATES\")\n1554:                 mapping = self._mapping_logits(plan)\n1555:                 row = mapping[\"rows\"][_node_rank_of_ref(coordinates[0])]\n1556:                 logits = torch.stack([row[mapping[\"column\"][_node_rank_of_alias(symbol)]]\n1557:                                       for symbol in symbols])\n1558:             elif field == \"reach\":\n1559:                 nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith(\"VIA_N\")]\n1560:                 require(symbols[:REACH_OPTION_COUNT] == [\"ABSENT\", \"DIRECT\"]\n1561:                         and symbols[REACH_OPTION_COUNT:] == [\"VIA_N%d\" % rank for rank in nodes],"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "package_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+      "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+      "lines": [
+        {
+          "start": 196,
+          "end": 227,
+          "text": "196: \n197:     def _tensor_loss(self, plan, loss, tensors):\n198:         torch = self.torch\n199:         by_id = {s[\"slot_id\"]: s for s in plan[\"slots\"]}\n200:         fields, reports = [], []\n201:         for field in loss[\"fields\"]:\n202:             if field[\"kind\"] == \"joint_correspondence\":\n203:                 mode = torch.log_softmax(tensors[plan[\"slots\"][0][\"slot_id\"]], dim=0)\n204:                 candidates = plan[\"correspondence_candidates\"]\n205:                 if len(candidates) == 1:\n206:                     term = mode.sum() * 0\n207:                 else:\n208:                     node_alias = {n[\"ref\"]: n[\"alias\"] for w in plan[\"aliases\"][\"worlds\"] for n in w[\"nodes\"]}\n209:                     row_by_source = {s[\"coordinates\"][0]: s for s in plan[\"slots\"][1:]}\n210:                     sums = []\n211:                     for candidate in candidates[1:]:\n212:                         selected = []\n213:                         for pair in candidate[\"value\"][\"pairs\"]:\n214:                             row = row_by_source[pair[\"source\"]]\n215:                             selected.append(tensors[row[\"slot_id\"]][row[\"symbols\"].index(node_alias[pair[\"target\"]])])\n216:                         sums.append(torch.stack(selected).sum())\n217:                     mapping = torch.stack(sums)\n218:                     joint = torch.cat((mode[0].reshape(1), mode[1] + mapping - torch.logsumexp(mapping, dim=0)))\n219:                     indices = [i for i, c in enumerate(candidates) if c[\"candidate_id\"] in field[\"valid_candidate_ids\"]]\n220:                     term = -torch.logsumexp(joint[indices], dim=0)\n221:             else:\n222:                 terms = []\n223:                 for key in field[\"slot_ids\"]:\n224:                     logits, row = tensors[key], by_id[key]\n225:                     indices = [row[\"symbols\"].index(symbol) for symbol in field[\"targets\"][key]]\n226:                     terms.append(torch.logsumexp(logits, dim=0) - torch.logsumexp(logits[indices], dim=0))\n227:                 term = torch.stack(terms).mean()"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "member": "cncm/typed_pointer_worker.py",
+      "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+      "lines": [
+        {
+          "start": 1487,
+          "end": 1491,
+          "text": "1487:         restore_pin = ctx[\"checkpoint_pins\"][\"final\"]\n1488:         restored = _restore_pointer(ctx, path=artifacts / \"final.pt\", pin=restore_pin, encoder=ctx[\"encoder\"])\n1489:         _, baseline = _evaluate(restored, ctx[\"held_packets\"], \"ablation_baseline\", artifacts,\n1490:                                 started=ctx[\"started\"], progress=ctx[\"phase\"], work=ctx[\"work\"])\n1491:         baseline_accuracy = baseline[\"correct\"] / baseline[\"total\"]"
+        }
+      ]
+    }
+  ]
+}

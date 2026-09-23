@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-failure-a7\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_failure_research_20260922\agents\A7\verify_report_tables.py", line 38, in <module>
+    assert raw==proc.stdout, relative
+           ^^^^^^^^^^^^^^^^
+AssertionError: FOLLOWUP_PLAN.md

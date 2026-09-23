@@ -1,0 +1,78 @@
+{
+  "schema": "helm.research-root-preservation-receipt/0.1",
+  "observed_utc": "2026-09-23T06:19:42.008835+00:00",
+  "observation_provider": "Actual parent native session /root; exact outcome delivered by collaboration message. This file is A0 transcription, not an additional A0 execution.",
+  "exit_code": 0,
+  "elapsed_seconds": 8.097,
+  "source_manifest_sha256": "1ddf793e5cd6a77cdcc843b089c26b9a880f268ac556d22d40cdbb45e9874101",
+  "raw_fingerprint_rows": 642,
+  "unique_paths": 630,
+  "bytes_rehashed": 724161768,
+  "source_zip_members_checked": 540,
+  "source_zip_count": 2,
+  "frozen_grader_git_versions": 3,
+  "source_failures": 0,
+  "original_workspaces": [
+    {
+      "label": "outer_app_project",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "head": "eb3c9b1eac98853b2065c98b08987918e8e7d936",
+      "branch": "codex/casformer-v0.2-release",
+      "head_equal": true,
+      "branch_equal": true,
+      "status_list_equal": true,
+      "status_entries": 138,
+      "warning_lines": 7,
+      "added_status_entries": 0,
+      "removed_status_entries": 0
+    },
+    {
+      "label": "helm_source",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live",
+      "head": "4eb98682b983f9ceb22c9e0b5fa127e9d21cda0d",
+      "branch": "codex/q4-authorized-20260922",
+      "head_equal": true,
+      "branch_equal": true,
+      "status_list_equal": true,
+      "status_entries": 0,
+      "warning_lines": 0,
+      "added_status_entries": 0,
+      "removed_status_entries": 0
+    },
+    {
+      "label": "preserved_reconciliation",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-cas-reconcile",
+      "head": "5f7111d5204e872c18df717badc2e2021f31ad70",
+      "branch": "codex/cas-reconcile-20260922",
+      "head_equal": true,
+      "branch_equal": true,
+      "status_list_equal": true,
+      "status_entries": 0,
+      "warning_lines": 0,
+      "added_status_entries": 0,
+      "removed_status_entries": 0
+    },
+    {
+      "label": "peer_helm_lab",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm3-lab",
+      "head": "1eab89f1438dfd03acca4835b6dc9aedf3a7d95d",
+      "branch": "research/helm-3.0-cas-lab",
+      "head_equal": true,
+      "branch_equal": true,
+      "status_list_equal": true,
+      "status_entries": 0,
+      "warning_lines": 0,
+      "added_status_entries": 0,
+      "removed_status_entries": 0
+    }
+  ],
+  "test_functions": 0,
+  "new_input_cases": 0,
+  "repeat_identity_checks": true,
+  "model_execution": false,
+  "limitations": [
+    "Outer dirty files were compared by status list, not before/after byte hashes.",
+    "Seven existing untracked-access warning lines remain.",
+    "This proves scoped identity/preservation facts, not model behavior or production readiness."
+  ]
+}

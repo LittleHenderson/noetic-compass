@@ -1,0 +1,2492 @@
+{
+  "scope": "Pinned course, development, six configs/source ZIPs and first-pass saved batches; no neural execution",
+  "identities": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "ef4d1e6c66972ffc8496ac1409d816d3abc91c56ee2d42c75e327920a18a8f31",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+      "bytes": 5970519,
+      "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "89a3b6596ed7aa40b5a10ac5214c604f7f51b996ab41d21ebc62cbecb3182e0b",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+      "bytes": 5970519,
+      "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "20f12e1136676a1436bfc8bdcf505a197d853ea9ddae3d43179b4d21370d98ad",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+      "bytes": 5970519,
+      "sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "cb88290b36426b35d325492af0eb440e5b8725bc468a5bd8d8a144e35c006d83",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "bytes": 5977155,
+      "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "83874f1f1cee3c076b3e2d4b3dd42d90b5677dc4a3fcad71a9a4359022ebc1fc",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+      "bytes": 5977155,
+      "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\collected\\input\\config.json",
+      "bytes": 64927,
+      "sha256": "71335296842a50ebcadac3bb4cd149f1a91a933d0f468ce37745d2edcc7623a7",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+      "bytes": 5977155,
+      "sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 3998284,
+      "sha256": "3bb0290cc441d247458f5ab988067f9562ce4a74bbc23a46256396b0b6550807",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 3995900,
+      "sha256": "a292d82d0f3a647add1c39300c1b8bc33c1579f21d04d27df333b4c777bc9b11",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 3998809,
+      "sha256": "5cf16143a8d2aa71e30bc0d95451f35f0eb2d216160acae61d431c44fabca8f8",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 4009360,
+      "sha256": "d30f1a5dfe8116d13e358c5413f440421a3c1b8f42cce9f9c0a1e5f70882cbcb",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 4007585,
+      "sha256": "d2780adc374bd16d3a6cb77ed986f35281b7566b86e727b2131dd1666b02fa69",
+      "manifest_match": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\pass_01_batches.jsonl",
+      "bytes": 4003147,
+      "sha256": "17e4d0f9669535360c8f5d9eb3f192cef5a448ecdfde9359e55855f19561156b",
+      "manifest_match": true
+    }
+  ],
+  "source_excerpts": [
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/practice_contract.py",
+      "sha256": "2c52286a0f046c071a5c62cf5c7eba3bd1fb61c883c3fe73d8c5fddd63828b6c",
+      "functions": [
+        {
+          "name": "split",
+          "start": 96,
+          "end": 117,
+          "lines": "96: def split(frozen):\n97:     \"\"\"(held_back, trained, excluded) record ids, each sorted, disjoint, covering the 564-record registry.\"\"\"\n98:     worlds = set(held_worlds(frozen))\n99:     registry = frozen[\"registry\"]\n100:     held = sorted(row[\"record_id\"] for row in registry if row[\"source_world_id\"] in worlds)\n101:     held_ids = set(held)\n102:     mentioning = {row[\"record_id\"] for row in registry if row[\"record_id\"] not in held_ids\n103:                   and any(world in _record_text(row) for world in worlds)}\n104:     answer_exposed = set(ANSWER_EXPOSED_RECORD_IDS)\n105:     require(answer_exposed <= {row[\"record_id\"] for row in registry} and not answer_exposed & held_ids\n106:             and not answer_exposed & mentioning, \"HOLDOUT_ANSWER_EXPOSED\")\n107:     excluded_ids = mentioning | answer_exposed\n108:     excluded = sorted(excluded_ids)\n109:     trained = sorted(row[\"record_id\"] for row in registry\n110:                      if row[\"record_id\"] not in held_ids and row[\"record_id\"] not in excluded_ids)\n111:     require(held and trained and len(held) + len(trained) + len(excluded) == len(registry) == 564, \"HOLDOUT_SPLIT\")\n112:     by_id = {row[\"record_id\"]: row for row in registry}\n113:     for key in trained:\n114:         # No trained record mentions a held world anywhere in its text (answers: ANSWER_EXPOSED_RECORD_IDS).\n115:         require(not any(world in _record_text(by_id[key]) for world in worlds), \"HOLDOUT_LEAK\")\n116:     require({by_id[k][\"query\"][\"kind\"] for k in held} == set(KINDS), \"HOLDOUT_KIND_COVERAGE\")\n117:     return held, trained, excluded"
+        },
+        {
+          "name": "held_back_questions",
+          "start": 120,
+          "end": 127,
+          "lines": "120: def held_back_questions(frozen):\n121:     \"\"\"Held query ids -> their record ids. A question is the unit of the gate, not a record.\"\"\"\n122:     held = set(split(frozen)[0])\n123:     questions = {}\n124:     for row in frozen[\"registry\"]:\n125:         if row[\"record_id\"] in held:\n126:             questions.setdefault(row[\"query\"][\"query_id\"], []).append(row[\"record_id\"])\n127:     return {key: sorted(value) for key, value in sorted(questions.items())}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+      "functions": [
+        {
+          "name": "_public",
+          "start": 86,
+          "end": 87,
+          "lines": "86: def _public(bank, focus):\n87:     return {\"focus_world_id\": focus, \"worlds\": bank[\"worlds\"], \"bank\": bank[\"bank\"]}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "functions": [
+        {
+          "name": "_world_reading",
+          "start": 203,
+          "end": 249,
+          "lines": "203: def _world_reading(world, *, focus_world_id, target_world_id, arguments, use_rank, cache):\n204:     \"\"\"One world as a graph: nodes with their own raw flags, directed `contains`, declaration token ids.\"\"\"\n205:     index = _node_index(world)\n206:     node_count = len(world[\"nodes\"])\n207:     declarations = world[\"declarations\"]\n208:     require(type(declarations) is dict, \"POINTER_INPUTS_DECLARATIONS\")\n209:     whole = world[\"declared_whole\"]\n210:     require(whole in index, \"POINTER_INPUTS_DECLARED_WHOLE\")\n211:     # `is_participant` carries the 1-based rank inside the world's declared participant list, 0 when the node\n212:     # is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).\n213:     #\n214:     # `is_primary_label` and its rank are NOT emitted. LK5 measured that `primary_labels == participants` in\n215:     # **64 of 64** worlds, which was re-verified here against the frozen course, so the second flag is provably\n216:     # the same fact and both design v0.2 §5.1 and the protocol §5.3 require it to be dropped. `is_participant`\n217:     # is the one kept, because it is the flag `checker.py:178-183` derives `context` from.\n218:     participant_rank = {}\n219:     for position, ref in enumerate(declarations[\"participants\"]):\n220:         require(ref in index, \"POINTER_INPUTS_PARTICIPANT\")\n221:         participant_rank[index[ref]] = position + 1\n222:     declaration_ids = {}\n223:     for field in DECLARATION_FIELDS:\n224:         text = declarations[field]\n225:         require(type(text) is str and bool(text), \"POINTER_INPUTS_DECLARATION\")\n226:         declaration_ids[field] = _cached_ids(text, cache=cache, table=\"declaration_ids\")\n227:     contains = []\n228:     for edge in world[\"contains\"]:\n229:         require(edge[\"source\"] in index and edge[\"target\"] in index, \"POINTER_INPUTS_CONTAINS\")\n230:         contains.append([index[edge[\"source\"]], index[edge[\"target\"]]])\n231:     contains.sort()\n232:     nodes = []\n233:     for rank in range(node_count):\n234:         body = {\n235:             \"is_declared_whole\": 1 if rank == index[whole] else 0,\n236:             \"is_participant\": participant_rank.get(rank, 0),\n237:             \"is_whole_argument\": 1 if arguments.get(\"whole\") == rank else 0,\n238:             \"is_part_argument\": 1 if arguments.get(\"part\") == rank else 0,\n239:         }\n240:         nodes.append({**({\"rank\": rank} if use_rank else {}), **body})\n241:     return {\n242:         \"world_id\": world[\"world_id\"],\n243:         \"is_focus\": 1 if world[\"world_id\"] == focus_world_id else 0,\n244:         \"is_target\": 1 if target_world_id is not None and world[\"world_id\"] == target_world_id else 0,\n245:         \"node_count\": node_count,\n246:         \"contains\": contains,\n247:         \"declaration_ids\": declaration_ids,\n248:         \"nodes\": nodes,\n249:     }"
+        },
+        {
+          "name": "read_packet",
+          "start": 339,
+          "end": 421,
+          "lines": "339: def read_packet(packet):\n340:     \"\"\"The whole per-record input, read from the public packet ONLY. No answers, ever.\n341: \n342:     The packet must carry `source[\"focus_world_id\"]` and `source[\"worlds\"]` (the frozen bank, as\n343:     `course._public` builds it, course.py:86-87) and `record[\"query\"]`. It is NOT required to carry\n344:     `supports`, `cue`, `instruction`, `role_catalog` or any answer: this reader reads only the keys it\n345:     needs, so a caller can prove the exclusion by handing it a packet that does not have them at all.\n346:     \"\"\"\n347:     cache = _installed()\n348:     use_rank = _rank_feature()\n349:     require(type(packet) is dict, \"POINTER_INPUTS_PACKET\")\n350:     public, record = packet.get(\"source\"), packet.get(\"record\")\n351:     require(type(public) is dict and type(record) is dict, \"POINTER_INPUTS_PACKET\")\n352:     require(\"focus_world_id\" in public and type(public[\"focus_world_id\"]) is str, \"POINTER_INPUTS_FOCUS\")\n353:     require(type(public.get(\"worlds\")) is list and public[\"worlds\"], \"POINTER_INPUTS_WORLDS\")\n354:     query = record.get(\"query\")\n355:     require(type(query) is dict, \"POINTER_INPUTS_QUERY\")\n356:     require(type(record.get(\"record_id\")) is str and type(query.get(\"query_id\")) is str,\n357:             \"POINTER_INPUTS_IDENTITY\")\n358:     focus_world_id = public[\"focus_world_id\"]\n359:     require(query.get(\"focus_world_id\") == focus_world_id, \"POINTER_INPUTS_FOCUS\")\n360:     kind, rule = query.get(\"kind\"), query.get(\"rule\")\n361:     require(kind in KIND_IDS, \"POINTER_INPUTS_KIND\")\n362:     require(rule in answers.RULES[kind], \"POINTER_INPUTS_RULE\")\n363:     arguments = query.get(\"arguments\")\n364:     require(type(arguments) is dict, \"POINTER_INPUTS_ARGUMENTS\")\n365: \n366:     by_id = {}\n367:     for world in public[\"worlds\"]:\n368:         require(type(world) is dict and type(world.get(\"world_id\")) is str, \"POINTER_INPUTS_WORLDS\")\n369:         require(world[\"world_id\"] not in by_id, \"POINTER_INPUTS_WORLDS\")\n370:         by_id[world[\"world_id\"]] = world\n371:     require(focus_world_id in by_id, \"POINTER_INPUTS_FOCUS\")\n372:     target_world_id = arguments.get(\"target_world_id\") if kind == CORRESPONDENCE else None\n373:     if target_world_id is not None:\n374:         require(type(target_world_id) is str and target_world_id in by_id, \"POINTER_INPUTS_TARGET_WORLD\")\n375: \n376:     focus_index = _node_index(by_id[focus_world_id])\n377:     marks = {}\n378:     for field in NODE_ARGUMENT_FIELDS:\n379:         value = arguments.get(field)\n380:         require(value is None or (type(value) is str and value in focus_index),\n381:                 \"POINTER_INPUTS_ARGUMENT_NODE\")\n382:         marks[field] = None if value is None else focus_index[value]\n383: \n384:     if kind in WORLD_CHOICE_KINDS:\n385:         keep = sorted(by_id)\n386:     else:\n387:         keep = sorted({focus_world_id} | ({target_world_id} if target_world_id is not None else set()))\n388:     graphs = {}\n389:     for world_id in keep:\n390:         graphs[world_id] = _world_reading(by_id[world_id], focus_world_id=focus_world_id,\n391:                                           target_world_id=target_world_id, arguments=marks,\n392:                                           use_rank=use_rank, cache=cache)\n393: \n394:     excerpt = []\n395:     if kind == ROLE_SET:\n396:         text = arguments.get(\"focal_excerpt\")\n397:         require(type(text) is str and bool(text), \"POINTER_INPUTS_EXCERPT\")\n398:         # The bag is position-free: sorted, so the same excerpt always gives the same bytes.\n399:         excerpt = sorted(_cached_ids(text, cache=cache, table=\"excerpt_ids\"))\n400: \n401:     return {\n402:         \"schema\": READING_SCHEMA,\n403:         \"record_id\": record[\"record_id\"],\n404:         \"query_id\": query[\"query_id\"],\n405:         \"focus_world_id\": focus_world_id,\n406:         \"node_rank_feature\": 1 if use_rank else 0,\n407:         \"query\": {\n408:             \"kind\": KIND_IDS.index(kind),\n409:             \"kind_name\": kind,\n410:             \"rule\": RULE_IDS.index(rule),\n411:             \"rule_name\": rule,\n412:             \"whole\": marks[\"whole\"],\n413:             \"part\": marks[\"part\"],\n414:             \"target_world_id\": target_world_id,\n415:             \"world_count\": len(keep),\n416:         },\n417:         \"focus_world\": deepcopy(graphs[focus_world_id]),\n418:         \"worlds\": graphs,\n419:         \"node_flags\": deepcopy(graphs[focus_world_id][\"nodes\"]),\n420:         \"excerpt\": excerpt,\n421:     }"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "functions": [
+        {
+          "name": "_reach",
+          "start": 129,
+          "end": 153,
+          "lines": "129: def _reach(world, query):\n130:     whole, part = query[\"arguments\"][\"whole\"], query[\"arguments\"][\"part\"]\n131:     adjacency = _adjacency(world)\n132:     if part in adjacency[whole]:\n133:         return {\"state\": \"DIRECT\", \"via\": None}, {\n134:             \"path\": [whole, part], \"selection\": \"DIRECT_EDGE_TAKES_PRECEDENCE\"}\n135:     if query[\"rule\"] == \"first_direct_constituent_lexical_v1\":\n136:         for first in adjacency[whole]:\n137:             suffix, _ = _bfs(adjacency, first, part)\n138:             if suffix is not None:\n139:                 return {\"state\": \"VIA\", \"via\": first}, {\n140:                     \"path\": [whole] + suffix,\n141:                     \"selection\": \"LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH\"}\n142:         _, visited = _bfs(adjacency, whole, part)\n143:     else:\n144:         _require(query[\"rule\"] == \"bfs_immediate_predecessor_lexical_v1\",\n145:                  \"TYPED_CHECKER_REACH_RULE\")\n146:         path, visited = _bfs(adjacency, whole, part)\n147:         if path is not None:\n148:             return {\"state\": \"VIA\", \"via\": path[-2]}, {\n149:                 \"path\": path, \"selection\": \"LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR\"}\n150:     return {\"state\": \"ABSENT\", \"via\": None}, {\n151:         \"reachable_nodes_including_start\": visited,\n152:         \"inventory_scope\": world[\"inventory_scope\"],\n153:         \"selection\": \"NO_PATH_IN_COMPLETE_SUPPLIED_SNAPSHOT\"}"
+        },
+        {
+          "name": "_derive_values",
+          "start": 156,
+          "end": 240,
+          "lines": "156: def _derive_values(public, query):\n157:     worlds = {world[\"world_id\"]: world for world in public[\"worlds\"]}\n158:     focus = worlds[query[\"focus_world_id\"]]\n159:     kind = query[\"kind\"]\n160:     values, witnesses, coverage = [], [], {}\n161:     if kind == \"role_set\":\n162:         derived = focal.derive_roles(public, query)\n163:         values.append({\"roles\": derived[\"roles\"], \"status\": derived[\"status\"]})\n164:         witnesses.append({\"focal_clauses\": derived[\"witnesses\"],\n165:                           \"role_rule\": \"ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES\"})\n166:         coverage = {\"clauses_checked\": len(derived[\"witnesses\"]),\n167:                     \"focal_grammar_schema\": focal.GRAMMAR_SCHEMA,\n168:                     \"background_and_worked_supports_are_focal\": False}\n169:     elif kind == \"definition\":\n170:         value = {\"whole\": focus[\"declared_whole\"],\n171:                  \"kind_ref\": answers.declaration_ref(focus[\"world_id\"], \"kind\"),\n172:                  \"function_ref\": answers.declaration_ref(focus[\"world_id\"], \"function\")}\n173:         values.append(value)\n174:         witnesses.append({\"whole\": value[\"whole\"],\n175:                           \"kind\": focus[\"declarations\"][\"kind\"],\n176:                           \"function\": focus[\"declarations\"][\"function\"],\n177:                           \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})\n178:     elif kind == \"context\":\n179:         values.append({\"setting_ref\": answers.declaration_ref(focus[\"world_id\"], \"setting\"),\n180:                        \"participants\": sorted(focus[\"declarations\"][\"participants\"])})\n181:         witnesses.append({\"setting\": focus[\"declarations\"][\"setting\"],\n182:                           \"participants_basis\": focus[\"declarations\"][\"participants_basis\"],\n183:                           \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})\n184:     elif kind == \"parts\":\n185:         whole = query[\"arguments\"][\"whole\"]\n186:         edges = [(a, b) for a, b in _edges(focus) if a == whole]\n187:         values.append({\"nodes\": sorted(b for _, b in edges)})\n188:         witnesses.append({\"whole\": whole, \"direct_edges\": _edge_rows(edges),\n189:                           \"inventory_scope\": focus[\"inventory_scope\"]})\n190:     elif kind == \"edge_account\":\n191:         value = {\"edges\": _edge_rows(_edges(focus))}\n192:         values.append(value)\n193:         witnesses.append({\"declared_edge_count\": len(value[\"edges\"]),\n194:                           \"order\": \"LEXICAL_REFERENCE_PAIR_SERIALIZATION_NOT_PROCESS\",\n195:                           \"inventory_scope\": focus[\"inventory_scope\"]})\n196:     elif kind == \"reach\":\n197:         value, witness = _reach(focus, query)\n198:         values.append(value)\n199:         witnesses.append(witness)\n200:     elif kind == \"correspondence\":\n201:         other = worlds[query[\"arguments\"][\"target_world_id\"]]\n202:         matches, audit = _isomorphisms(focus, other)\n203:         coverage = {\"source_world_id\": focus[\"world_id\"], \"target_world_id\": other[\"world_id\"],\n204:                     \"matching_bijections\": len(matches), **audit}\n205:         if matches:\n206:             for pairs in matches:\n207:                 values.append({\"status\": \"MAPPING\", \"pairs\": pairs})\n208:                 witnesses.append({\"mapping\": pairs,\n209:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n210:         else:\n211:             values.append({\"status\": \"NO_MATCH\", \"pairs\": []})\n212:             witnesses.append({\"exhaustive_bounded_comparison\": deepcopy(coverage)})\n213:     elif kind == \"analogy\":\n214:         bank = [worlds[key] for key in public[\"bank\"][\"world_ids\"]]\n215:         # Check the entire requested oracle scope before rejecting any candidate.\n216:         # Unsupported graphs cannot quietly become NO_MATCH, even in one domain.\n217:         _bounded_graphs([focus] + bank)\n218:         decisions = []\n219:         for other in bank:\n220:             row = {\"world_id\": other[\"world_id\"]}\n221:             if other[\"declarations\"][\"domain\"] == focus[\"declarations\"][\"domain\"]:\n222:                 decisions.append({**row, \"reason\": \"SAME_DECLARED_DOMAIN\",\n223:                                   \"permutations_checked\": 0, \"matching_bijections\": 0})\n224:                 continue\n225:             matches, audit = _isomorphisms(focus, other)\n226:             decisions.append({**row, **audit, \"matching_bijections\": len(matches)})\n227:             if matches:\n228:                 values.append({\"world_id\": other[\"world_id\"]})\n229:                 witnesses.append({\"source_domain\": focus[\"declarations\"][\"domain\"],\n230:                                   \"target_domain\": other[\"declarations\"][\"domain\"],\n231:                                   \"mapping\": matches[0], \"matching_bijections\": len(matches),\n232:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n233:         coverage = {\"bank_digest\": public[\"bank\"][\"bank_digest\"],\n234:                     \"worlds_checked\": len(bank), \"decisions\": decisions}\n235:         if not values:\n236:             values.append({\"world_id\": None})\n237:             witnesses.append({\"exhaustive_bounded_bank_comparison\": True})\n238:     else:\n239:         raise SemanticCheckError(\"TYPED_CHECKER_KIND_UNSUPPORTED\")\n240:     return values, witnesses, coverage"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+      "functions": [
+        {
+          "name": "_graph_blocks",
+          "start": 883,
+          "end": 946,
+          "lines": "883: def _graph_blocks(torch, reading, device):\n884:     \"\"\"`[[world_id, node_count, features, adjacency]]` for every world the reading carries, in sorted order.\n885: \n886:     The feature row is, in this order and this width (`NODE_FEATURE_COUNT`): `is_declared_whole`,\n887:     `is_participant` (its raw rank 1..3), `is_primary_label` (1..3; omitted when the rank branch is on),\n888:     `is_whole_argument`, `is_part_argument` (query marks, which exist in the FOCUS world only), `is_focus`,\n889:     `is_target`, then the two degree features. The row is RMS-normalised ONCE PER ROW. Nothing is derived from a\n890:     node's ref beyond its list position, and the query marks are applied by LIST POSITION, which is the\n891:     reading's own node order.\n892:     \"\"\"\n893:     focus_world_id = reading[\"focus_world_id\"]\n894:     require(type(focus_world_id) is str, \"POINTER_FOCUS_WORLD\")\n895:     whole_argument, part_argument = reading[\"query\"][\"whole\"], reading[\"query\"][\"part\"]\n896:     blocks = []\n897:     for world_id in _sorted_world_ids(reading):\n898:         graph = reading[\"worlds\"][world_id]\n899:         node_count = graph[\"node_count\"]\n900:         require(node_count == len(graph[\"nodes\"]) and node_count >= 1, \"POINTER_NODE_COUNT\")\n901:         adjacency = torch.zeros(node_count, node_count, dtype=torch.float32, device=device)\n902:         for source, target in graph[\"contains\"]:\n903:             require(0 <= source < node_count and 0 <= target < node_count, \"POINTER_ADJACENCY_INDEX\")\n904:             adjacency[source, target] = 1.0\n905:         rows = []\n906:         for rank, node in enumerate(graph[\"nodes\"]):\n907:             is_focus = world_id == focus_world_id\n908:             # EIGHT columns, written as ONE literal so the width is countable at the point of construction and\n909:             # cannot drift by an appended element. The two query marks exist in the FOCUS world only, and are\n910:             # applied by LIST POSITION, which is the reading's own node order and this block's row order.\n911:             values = [\n912:                 float(node.get(\"is_declared_whole\", 0)),\n913:                 float(node.get(\"is_participant\", 0)),\n914:                 float(node[\"rank\"]) if contract.DESIGN[\"node_rank_feature\"]\n915:                 else float(node.get(\"is_primary_label\", 0)),\n916:                 1.0 if (is_focus and whole_argument == rank) else 0.0,\n917:                 1.0 if (is_focus and part_argument == rank) else 0.0,\n918:                 float(graph[\"is_focus\"]),\n919:                 float(graph[\"is_target\"]),\n920:                 1.0,                                   # a constant bias column, never a reading fact\n921:             ][:NODE_FEATURE_COUNT]\n922:             if len(values) != NODE_FEATURE_COUNT:\n923:                 raise ValueError(\"TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:%d\" % len(values))\n924:             rows.append(values)\n925:         features = torch.tensor(rows, dtype=torch.float32, device=device).reshape(node_count,\n926:                                                                                  NODE_FEATURE_COUNT)\n927:         degree_one_hot, in_degree, out_degree = _degree_features(torch, adjacency)\n928:         features = torch.cat((features, degree_one_hot), dim=1)\n929:         require(features.shape[1] == NODE_ROW_WIDTH, \"POINTER_NODE_FEATURE_WIDTH\")\n930:         # THE GUARD THAT ENDS THIS FAMILY FOR THE TWO DEGREE COLUMNS. Both constants are INDEXES into this row,\n931:         # and a wrong index is SILENT: it addresses a column that exists and belongs to the other degree block,\n932:         # so no width check can see it and the world head simply never receives an out-degree reading. So the\n933:         # check is against the GRAPH and not against a restatement of the constants: each named block must be\n934:         # the one-hot of the degree it is named for, computed one line above from this same `adjacency`.\n935:         in_block = features[:, IN_DEGREE_SUM_COLUMN:IN_DEGREE_SUM_COLUMN + DEGREE_STEPS]\n936:         out_block = features[:, OUT_DEGREE_SUM_COLUMN:OUT_DEGREE_SUM_COLUMN + DEGREE_STEPS]\n937:         require(tuple(in_block.shape) == (node_count, DEGREE_STEPS)\n938:                 and tuple(out_block.shape) == (node_count, DEGREE_STEPS)\n939:                 and bool((in_block.sum(dim=1) == 1).all().item())\n940:                 and bool((out_block.sum(dim=1) == 1).all().item())\n941:                 and bool((in_block.argmax(dim=1) == in_degree).all().item())\n942:                 and bool((out_block.argmax(dim=1) == out_degree).all().item()),\n943:                 \"POINTER_DEGREE_COLUMNS:\" + world_id)\n944:         blocks.append([world_id, node_count, _rms_unit(torch, features), adjacency])\n945:     require(focus_world_id in [row[0] for row in blocks], \"POINTER_FOCUS_WORLD\")\n946:     return blocks"
+        },
+        {
+          "name": "_graph",
+          "start": 1630,
+          "end": 1663,
+          "lines": "1630:     def _graph(self, packet):\n1631:         \"\"\"One packet's forward. `torch` is imported HERE, so importing this module does no numeric work.\"\"\"\n1632:         import torch\n1633:         self._budget()\n1634:         self.encoder.verify_frozen()\n1635:         require(type(packet) is dict and type(packet.get(\"source\")) is dict\n1636:                 and type(packet.get(\"record\")) is dict, \"POINTER_PACKET\")\n1637:         from . import slots\n1638:         plan = slots.compile_slots(packet)\n1639:         reading = pointer_inputs.read_packet(packet)\n1640:         reading[\"_device\"] = self.device\n1641:         require(reading[\"record_id\"] == plan[\"record_id\"], \"POINTER_READING_RECORD\")\n1642:         self._check_core_budget(CORE_ROUNDS)\n1643:         self.counters[\"packet_forward_calls\"] += 1\n1644:         forward = GraphForward(torch, self.module, reading, self.device, charge=self._charge_round)\n1645:         indicators = (self._tag(packet) if reading[\"query\"][\"kind_name\"] == \"role_set\"\n1646:                       else [0] * CLAUSE_COUNT)\n1647:         rows = forward.head_logits(plan, indicators)\n1648:         values = _scalar_scores(torch, rows)\n1649:         scores = _logit_rows(torch, plan, values)\n1650:         require(set(scores) == {slot[\"slot_id\"] for slot in plan[\"slots\"]}, \"POINTER_SLOT_COVERAGE\")\n1651:         decisions = slots.score_decisions(packet, scores)\n1652:         answer = slots.assemble_answer(packet, decisions)\n1653:         body = {\"schema\": PREDICTION_SCHEMA, \"record_id\": plan[\"record_id\"],\n1654:                 \"packet_digest\": plan[\"packet_digest\"], \"slot_plan_digest\": plan[\"plan_digest\"],\n1655:                 \"depth\": PREDICTION_DEPTH, \"model_revision\": self.model_revision,\n1656:                 \"run_context_digest\": self.run_identity_digest,\n1657:                 \"encoder_identity_digest\": digest(self.encoder.identity), \"scores\": scores,\n1658:                 \"decisions\": decisions, \"answer\": answer}\n1659:         prediction = {**body, \"prediction_id\": \"typed-prediction-\" + digest(body)}\n1660:         require(set(prediction) == PREDICTION_FIELD_SET, \"POINTER_PREDICTION_FIELDS\")\n1661:         self.counters[\"prediction_calls\"] += 1\n1662:         return {\"packet\": packet, \"prediction\": prediction, \"plan\": plan, \"rows\": rows,\n1663:                 \"forward\": forward}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 1.0",
+      "source_commit": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/development.py",
+      "sha256": "c46d9db5ba5f829e41cb806b0245fe09de8fa1391e82ed893a8b1161693dd021",
+      "functions": [
+        {
+          "name": "build_development",
+          "start": 191,
+          "end": 243,
+          "lines": "191: def build_development(*, root, expected_supply_sha256=SUPPLY_SHA, expected_exclusions_sha256=EXCLUSIONS_SHA, tokenizer=None):\n192:     before = profile()\n193:     selected, pins = _selected(root, expected_supply_sha256, expected_exclusions_sha256)\n194:     raw, pin = _read(root, COURSE_PATH, COURSE_SHA)\n195:     pins.append(pin)\n196:     retained = json.loads(raw)\n197:     bank = source.validate_bank(retained[\"bank\"])\n198:     require(len(bank[\"worlds\"]) == 64, \"TYPED_DEV_FULL_TRAINING_BANK\")\n199:     if tokenizer is None:\n200:         raw, pin = _read(root, TOKENIZER_PATH, TOKENIZER_SHA)\n201:         pins.append(pin)\n202:         tokenizer = tokenization.FrameTokenizer.from_dict(json.loads(raw))\n203:     require(type(tokenizer) is tokenization.FrameTokenizer and tokenizer.digest == TOKENIZER_DIGEST\n204:             and tokenizer.max_tokens == 32768, \"TYPED_DEV_FROZEN_TOKENIZER\")\n205:     packets, families, admission = [], [], []\n206:     for index, (key, shape) in enumerate(selected):\n207:         world, root_label = _development_world(shape, index)\n208:         require(world[\"world_id\"] not in bank[\"bank\"][\"world_ids\"], \"TYPED_DEV_FOCUS_ALREADY_IN_BANK\")\n209:         public = {\"focus_world_id\": world[\"world_id\"], \"worlds\": sorted([*deepcopy(bank[\"worlds\"]), world], key=lambda w: w[\"world_id\"]),\n210:                   \"bank\": deepcopy(bank[\"bank\"])}\n211:         source.validate_public(public)\n212:         root_ref = next(n[\"ref\"] for n in world[\"nodes\"] if n[\"label\"] == root_label)\n213:         requests = [(\"parts\", {\"whole\": root_ref})] + [(\"reach\", {\"whole\": root_ref, \"part\": n[\"ref\"]})\n214:             for n in world[\"nodes\"] if n[\"ref\"] != root_ref]\n215:         ids = []\n216:         for kind, arguments in requests:\n217:             packet = _packet(public, kind=kind, arguments=arguments)\n218:             frame = input_frames.compile_packet(packet)\n219:             sequence = tokenizer.encode_frame(frame)  # exact32768 bound; overflow is an error, never truncation\n220:             require(tokenizer.decode_text(sequence[\"ids\"][1:-1]) == frame[\"text\"], \"TYPED_DEV_TEXT_ROUNDTRIP\")\n221:             plan = slots.compile_slots(packet)\n222:             require(slots.compile_slots(packet) == plan, \"TYPED_DEV_CACHE_PARITY\")\n223:             record_id = packet[\"record\"][\"record_id\"]\n224:             ids.append(record_id)\n225:             packets.append(packet)\n226:             admission.append({\"record_id\": record_id, \"kind\": kind, \"family_index\": index,\n227:                 \"topology\": key, \"packet_sha256\": digest(packet), \"source_digest\": source.public_digest(public),\n228:                 \"frame_digest\": frame[\"frame_digest\"], \"sequence_digest\": sequence[\"sequence_digest\"],\n229:                 \"token_count\": len(sequence[\"ids\"]), \"slot_plan_digest\": plan[\"plan_digest\"], \"slots\": len(plan[\"slots\"])})\n230:         families.append({\"index\": index, \"split\": \"development\", \"topology\": key, \"shape\": {a: list(b) for a, b in shape.items()},\n231:             \"stats\": _stats(shape), \"world_id\": world[\"world_id\"], \"root_ref\": root_ref,\n232:             \"declared_root_label\": root_label, \"record_ids\": ids, \"declarations_authority\": \"NEW_CALLER_AUTHORED_DEVELOPMENT_FACTS_NOT_WORLD_TRUTH\"})\n233:     require(len(packets) == sum(row[\"stats\"][\"nodes\"] for row in families)\n234:             and len({p[\"record\"][\"record_id\"] for p in packets}) == len(packets), \"TYPED_DEV_PACKET_COUNTS\")\n235:     require(profile() == before, \"TYPED_DEV_SOURCE_CHANGED\")\n236:     body = {\"schema\": SCHEMA, \"status\": \"PUBLIC_DEVELOPMENT_PREPARED_NOT_MODEL_EVALUATED\", \"policy\": deepcopy(POLICY),\n237:         \"profile\": before, \"inputs\": pins, \"tokenizer_digest\": tokenizer.digest,\n238:         \"training_bank_digest\": bank[\"bank\"][\"bank_digest\"], \"families\": families,\n239:         \"packets\": packets, \"admission\": admission, \"counts\": {\"families\": 6, \"parts\": 6,\n240:             \"reach\": len(packets) - 6, \"packets\": len(packets), \"bank_worlds\": 64, \"worlds_per_packet\": 65},\n241:         \"max_token_count\": max(r[\"token_count\"] for r in admission), \"main_targets_constructed\": 0,\n242:         \"final_questions_constructed\": 0, \"neural_calls\": 0, \"provider_calls\": 0}\n243:     return {**body, \"development_digest\": digest(body)}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/practice_contract.py",
+      "sha256": "2c52286a0f046c071a5c62cf5c7eba3bd1fb61c883c3fe73d8c5fddd63828b6c",
+      "functions": [
+        {
+          "name": "split",
+          "start": 96,
+          "end": 117,
+          "lines": "96: def split(frozen):\n97:     \"\"\"(held_back, trained, excluded) record ids, each sorted, disjoint, covering the 564-record registry.\"\"\"\n98:     worlds = set(held_worlds(frozen))\n99:     registry = frozen[\"registry\"]\n100:     held = sorted(row[\"record_id\"] for row in registry if row[\"source_world_id\"] in worlds)\n101:     held_ids = set(held)\n102:     mentioning = {row[\"record_id\"] for row in registry if row[\"record_id\"] not in held_ids\n103:                   and any(world in _record_text(row) for world in worlds)}\n104:     answer_exposed = set(ANSWER_EXPOSED_RECORD_IDS)\n105:     require(answer_exposed <= {row[\"record_id\"] for row in registry} and not answer_exposed & held_ids\n106:             and not answer_exposed & mentioning, \"HOLDOUT_ANSWER_EXPOSED\")\n107:     excluded_ids = mentioning | answer_exposed\n108:     excluded = sorted(excluded_ids)\n109:     trained = sorted(row[\"record_id\"] for row in registry\n110:                      if row[\"record_id\"] not in held_ids and row[\"record_id\"] not in excluded_ids)\n111:     require(held and trained and len(held) + len(trained) + len(excluded) == len(registry) == 564, \"HOLDOUT_SPLIT\")\n112:     by_id = {row[\"record_id\"]: row for row in registry}\n113:     for key in trained:\n114:         # No trained record mentions a held world anywhere in its text (answers: ANSWER_EXPOSED_RECORD_IDS).\n115:         require(not any(world in _record_text(by_id[key]) for world in worlds), \"HOLDOUT_LEAK\")\n116:     require({by_id[k][\"query\"][\"kind\"] for k in held} == set(KINDS), \"HOLDOUT_KIND_COVERAGE\")\n117:     return held, trained, excluded"
+        },
+        {
+          "name": "held_back_questions",
+          "start": 120,
+          "end": 127,
+          "lines": "120: def held_back_questions(frozen):\n121:     \"\"\"Held query ids -> their record ids. A question is the unit of the gate, not a record.\"\"\"\n122:     held = set(split(frozen)[0])\n123:     questions = {}\n124:     for row in frozen[\"registry\"]:\n125:         if row[\"record_id\"] in held:\n126:             questions.setdefault(row[\"query\"][\"query_id\"], []).append(row[\"record_id\"])\n127:     return {key: sorted(value) for key, value in sorted(questions.items())}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+      "functions": [
+        {
+          "name": "_public",
+          "start": 86,
+          "end": 87,
+          "lines": "86: def _public(bank, focus):\n87:     return {\"focus_world_id\": focus, \"worlds\": bank[\"worlds\"], \"bank\": bank[\"bank\"]}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "functions": [
+        {
+          "name": "_world_reading",
+          "start": 203,
+          "end": 249,
+          "lines": "203: def _world_reading(world, *, focus_world_id, target_world_id, arguments, use_rank, cache):\n204:     \"\"\"One world as a graph: nodes with their own raw flags, directed `contains`, declaration token ids.\"\"\"\n205:     index = _node_index(world)\n206:     node_count = len(world[\"nodes\"])\n207:     declarations = world[\"declarations\"]\n208:     require(type(declarations) is dict, \"POINTER_INPUTS_DECLARATIONS\")\n209:     whole = world[\"declared_whole\"]\n210:     require(whole in index, \"POINTER_INPUTS_DECLARED_WHOLE\")\n211:     # `is_participant` carries the 1-based rank inside the world's declared participant list, 0 when the node\n212:     # is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).\n213:     #\n214:     # `is_primary_label` and its rank are NOT emitted. LK5 measured that `primary_labels == participants` in\n215:     # **64 of 64** worlds, which was re-verified here against the frozen course, so the second flag is provably\n216:     # the same fact and both design v0.2 §5.1 and the protocol §5.3 require it to be dropped. `is_participant`\n217:     # is the one kept, because it is the flag `checker.py:178-183` derives `context` from.\n218:     participant_rank = {}\n219:     for position, ref in enumerate(declarations[\"participants\"]):\n220:         require(ref in index, \"POINTER_INPUTS_PARTICIPANT\")\n221:         participant_rank[index[ref]] = position + 1\n222:     declaration_ids = {}\n223:     for field in DECLARATION_FIELDS:\n224:         text = declarations[field]\n225:         require(type(text) is str and bool(text), \"POINTER_INPUTS_DECLARATION\")\n226:         declaration_ids[field] = _cached_ids(text, cache=cache, table=\"declaration_ids\")\n227:     contains = []\n228:     for edge in world[\"contains\"]:\n229:         require(edge[\"source\"] in index and edge[\"target\"] in index, \"POINTER_INPUTS_CONTAINS\")\n230:         contains.append([index[edge[\"source\"]], index[edge[\"target\"]]])\n231:     contains.sort()\n232:     nodes = []\n233:     for rank in range(node_count):\n234:         body = {\n235:             \"is_declared_whole\": 1 if rank == index[whole] else 0,\n236:             \"is_participant\": participant_rank.get(rank, 0),\n237:             \"is_whole_argument\": 1 if arguments.get(\"whole\") == rank else 0,\n238:             \"is_part_argument\": 1 if arguments.get(\"part\") == rank else 0,\n239:         }\n240:         nodes.append({**({\"rank\": rank} if use_rank else {}), **body})\n241:     return {\n242:         \"world_id\": world[\"world_id\"],\n243:         \"is_focus\": 1 if world[\"world_id\"] == focus_world_id else 0,\n244:         \"is_target\": 1 if target_world_id is not None and world[\"world_id\"] == target_world_id else 0,\n245:         \"node_count\": node_count,\n246:         \"contains\": contains,\n247:         \"declaration_ids\": declaration_ids,\n248:         \"nodes\": nodes,\n249:     }"
+        },
+        {
+          "name": "read_packet",
+          "start": 339,
+          "end": 421,
+          "lines": "339: def read_packet(packet):\n340:     \"\"\"The whole per-record input, read from the public packet ONLY. No answers, ever.\n341: \n342:     The packet must carry `source[\"focus_world_id\"]` and `source[\"worlds\"]` (the frozen bank, as\n343:     `course._public` builds it, course.py:86-87) and `record[\"query\"]`. It is NOT required to carry\n344:     `supports`, `cue`, `instruction`, `role_catalog` or any answer: this reader reads only the keys it\n345:     needs, so a caller can prove the exclusion by handing it a packet that does not have them at all.\n346:     \"\"\"\n347:     cache = _installed()\n348:     use_rank = _rank_feature()\n349:     require(type(packet) is dict, \"POINTER_INPUTS_PACKET\")\n350:     public, record = packet.get(\"source\"), packet.get(\"record\")\n351:     require(type(public) is dict and type(record) is dict, \"POINTER_INPUTS_PACKET\")\n352:     require(\"focus_world_id\" in public and type(public[\"focus_world_id\"]) is str, \"POINTER_INPUTS_FOCUS\")\n353:     require(type(public.get(\"worlds\")) is list and public[\"worlds\"], \"POINTER_INPUTS_WORLDS\")\n354:     query = record.get(\"query\")\n355:     require(type(query) is dict, \"POINTER_INPUTS_QUERY\")\n356:     require(type(record.get(\"record_id\")) is str and type(query.get(\"query_id\")) is str,\n357:             \"POINTER_INPUTS_IDENTITY\")\n358:     focus_world_id = public[\"focus_world_id\"]\n359:     require(query.get(\"focus_world_id\") == focus_world_id, \"POINTER_INPUTS_FOCUS\")\n360:     kind, rule = query.get(\"kind\"), query.get(\"rule\")\n361:     require(kind in KIND_IDS, \"POINTER_INPUTS_KIND\")\n362:     require(rule in answers.RULES[kind], \"POINTER_INPUTS_RULE\")\n363:     arguments = query.get(\"arguments\")\n364:     require(type(arguments) is dict, \"POINTER_INPUTS_ARGUMENTS\")\n365: \n366:     by_id = {}\n367:     for world in public[\"worlds\"]:\n368:         require(type(world) is dict and type(world.get(\"world_id\")) is str, \"POINTER_INPUTS_WORLDS\")\n369:         require(world[\"world_id\"] not in by_id, \"POINTER_INPUTS_WORLDS\")\n370:         by_id[world[\"world_id\"]] = world\n371:     require(focus_world_id in by_id, \"POINTER_INPUTS_FOCUS\")\n372:     target_world_id = arguments.get(\"target_world_id\") if kind == CORRESPONDENCE else None\n373:     if target_world_id is not None:\n374:         require(type(target_world_id) is str and target_world_id in by_id, \"POINTER_INPUTS_TARGET_WORLD\")\n375: \n376:     focus_index = _node_index(by_id[focus_world_id])\n377:     marks = {}\n378:     for field in NODE_ARGUMENT_FIELDS:\n379:         value = arguments.get(field)\n380:         require(value is None or (type(value) is str and value in focus_index),\n381:                 \"POINTER_INPUTS_ARGUMENT_NODE\")\n382:         marks[field] = None if value is None else focus_index[value]\n383: \n384:     if kind in WORLD_CHOICE_KINDS:\n385:         keep = sorted(by_id)\n386:     else:\n387:         keep = sorted({focus_world_id} | ({target_world_id} if target_world_id is not None else set()))\n388:     graphs = {}\n389:     for world_id in keep:\n390:         graphs[world_id] = _world_reading(by_id[world_id], focus_world_id=focus_world_id,\n391:                                           target_world_id=target_world_id, arguments=marks,\n392:                                           use_rank=use_rank, cache=cache)\n393: \n394:     excerpt = []\n395:     if kind == ROLE_SET:\n396:         text = arguments.get(\"focal_excerpt\")\n397:         require(type(text) is str and bool(text), \"POINTER_INPUTS_EXCERPT\")\n398:         # The bag is position-free: sorted, so the same excerpt always gives the same bytes.\n399:         excerpt = sorted(_cached_ids(text, cache=cache, table=\"excerpt_ids\"))\n400: \n401:     return {\n402:         \"schema\": READING_SCHEMA,\n403:         \"record_id\": record[\"record_id\"],\n404:         \"query_id\": query[\"query_id\"],\n405:         \"focus_world_id\": focus_world_id,\n406:         \"node_rank_feature\": 1 if use_rank else 0,\n407:         \"query\": {\n408:             \"kind\": KIND_IDS.index(kind),\n409:             \"kind_name\": kind,\n410:             \"rule\": RULE_IDS.index(rule),\n411:             \"rule_name\": rule,\n412:             \"whole\": marks[\"whole\"],\n413:             \"part\": marks[\"part\"],\n414:             \"target_world_id\": target_world_id,\n415:             \"world_count\": len(keep),\n416:         },\n417:         \"focus_world\": deepcopy(graphs[focus_world_id]),\n418:         \"worlds\": graphs,\n419:         \"node_flags\": deepcopy(graphs[focus_world_id][\"nodes\"]),\n420:         \"excerpt\": excerpt,\n421:     }"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "functions": [
+        {
+          "name": "_reach",
+          "start": 129,
+          "end": 153,
+          "lines": "129: def _reach(world, query):\n130:     whole, part = query[\"arguments\"][\"whole\"], query[\"arguments\"][\"part\"]\n131:     adjacency = _adjacency(world)\n132:     if part in adjacency[whole]:\n133:         return {\"state\": \"DIRECT\", \"via\": None}, {\n134:             \"path\": [whole, part], \"selection\": \"DIRECT_EDGE_TAKES_PRECEDENCE\"}\n135:     if query[\"rule\"] == \"first_direct_constituent_lexical_v1\":\n136:         for first in adjacency[whole]:\n137:             suffix, _ = _bfs(adjacency, first, part)\n138:             if suffix is not None:\n139:                 return {\"state\": \"VIA\", \"via\": first}, {\n140:                     \"path\": [whole] + suffix,\n141:                     \"selection\": \"LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH\"}\n142:         _, visited = _bfs(adjacency, whole, part)\n143:     else:\n144:         _require(query[\"rule\"] == \"bfs_immediate_predecessor_lexical_v1\",\n145:                  \"TYPED_CHECKER_REACH_RULE\")\n146:         path, visited = _bfs(adjacency, whole, part)\n147:         if path is not None:\n148:             return {\"state\": \"VIA\", \"via\": path[-2]}, {\n149:                 \"path\": path, \"selection\": \"LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR\"}\n150:     return {\"state\": \"ABSENT\", \"via\": None}, {\n151:         \"reachable_nodes_including_start\": visited,\n152:         \"inventory_scope\": world[\"inventory_scope\"],\n153:         \"selection\": \"NO_PATH_IN_COMPLETE_SUPPLIED_SNAPSHOT\"}"
+        },
+        {
+          "name": "_derive_values",
+          "start": 156,
+          "end": 240,
+          "lines": "156: def _derive_values(public, query):\n157:     worlds = {world[\"world_id\"]: world for world in public[\"worlds\"]}\n158:     focus = worlds[query[\"focus_world_id\"]]\n159:     kind = query[\"kind\"]\n160:     values, witnesses, coverage = [], [], {}\n161:     if kind == \"role_set\":\n162:         derived = focal.derive_roles(public, query)\n163:         values.append({\"roles\": derived[\"roles\"], \"status\": derived[\"status\"]})\n164:         witnesses.append({\"focal_clauses\": derived[\"witnesses\"],\n165:                           \"role_rule\": \"ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES\"})\n166:         coverage = {\"clauses_checked\": len(derived[\"witnesses\"]),\n167:                     \"focal_grammar_schema\": focal.GRAMMAR_SCHEMA,\n168:                     \"background_and_worked_supports_are_focal\": False}\n169:     elif kind == \"definition\":\n170:         value = {\"whole\": focus[\"declared_whole\"],\n171:                  \"kind_ref\": answers.declaration_ref(focus[\"world_id\"], \"kind\"),\n172:                  \"function_ref\": answers.declaration_ref(focus[\"world_id\"], \"function\")}\n173:         values.append(value)\n174:         witnesses.append({\"whole\": value[\"whole\"],\n175:                           \"kind\": focus[\"declarations\"][\"kind\"],\n176:                           \"function\": focus[\"declarations\"][\"function\"],\n177:                           \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})\n178:     elif kind == \"context\":\n179:         values.append({\"setting_ref\": answers.declaration_ref(focus[\"world_id\"], \"setting\"),\n180:                        \"participants\": sorted(focus[\"declarations\"][\"participants\"])})\n181:         witnesses.append({\"setting\": focus[\"declarations\"][\"setting\"],\n182:                           \"participants_basis\": focus[\"declarations\"][\"participants_basis\"],\n183:                           \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})\n184:     elif kind == \"parts\":\n185:         whole = query[\"arguments\"][\"whole\"]\n186:         edges = [(a, b) for a, b in _edges(focus) if a == whole]\n187:         values.append({\"nodes\": sorted(b for _, b in edges)})\n188:         witnesses.append({\"whole\": whole, \"direct_edges\": _edge_rows(edges),\n189:                           \"inventory_scope\": focus[\"inventory_scope\"]})\n190:     elif kind == \"edge_account\":\n191:         value = {\"edges\": _edge_rows(_edges(focus))}\n192:         values.append(value)\n193:         witnesses.append({\"declared_edge_count\": len(value[\"edges\"]),\n194:                           \"order\": \"LEXICAL_REFERENCE_PAIR_SERIALIZATION_NOT_PROCESS\",\n195:                           \"inventory_scope\": focus[\"inventory_scope\"]})\n196:     elif kind == \"reach\":\n197:         value, witness = _reach(focus, query)\n198:         values.append(value)\n199:         witnesses.append(witness)\n200:     elif kind == \"correspondence\":\n201:         other = worlds[query[\"arguments\"][\"target_world_id\"]]\n202:         matches, audit = _isomorphisms(focus, other)\n203:         coverage = {\"source_world_id\": focus[\"world_id\"], \"target_world_id\": other[\"world_id\"],\n204:                     \"matching_bijections\": len(matches), **audit}\n205:         if matches:\n206:             for pairs in matches:\n207:                 values.append({\"status\": \"MAPPING\", \"pairs\": pairs})\n208:                 witnesses.append({\"mapping\": pairs,\n209:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n210:         else:\n211:             values.append({\"status\": \"NO_MATCH\", \"pairs\": []})\n212:             witnesses.append({\"exhaustive_bounded_comparison\": deepcopy(coverage)})\n213:     elif kind == \"analogy\":\n214:         bank = [worlds[key] for key in public[\"bank\"][\"world_ids\"]]\n215:         # Check the entire requested oracle scope before rejecting any candidate.\n216:         # Unsupported graphs cannot quietly become NO_MATCH, even in one domain.\n217:         _bounded_graphs([focus] + bank)\n218:         decisions = []\n219:         for other in bank:\n220:             row = {\"world_id\": other[\"world_id\"]}\n221:             if other[\"declarations\"][\"domain\"] == focus[\"declarations\"][\"domain\"]:\n222:                 decisions.append({**row, \"reason\": \"SAME_DECLARED_DOMAIN\",\n223:                                   \"permutations_checked\": 0, \"matching_bijections\": 0})\n224:                 continue\n225:             matches, audit = _isomorphisms(focus, other)\n226:             decisions.append({**row, **audit, \"matching_bijections\": len(matches)})\n227:             if matches:\n228:                 values.append({\"world_id\": other[\"world_id\"]})\n229:                 witnesses.append({\"source_domain\": focus[\"declarations\"][\"domain\"],\n230:                                   \"target_domain\": other[\"declarations\"][\"domain\"],\n231:                                   \"mapping\": matches[0], \"matching_bijections\": len(matches),\n232:                                   \"mapped_source_edges_equal_all_target_edges\": True})\n233:         coverage = {\"bank_digest\": public[\"bank\"][\"bank_digest\"],\n234:                     \"worlds_checked\": len(bank), \"decisions\": decisions}\n235:         if not values:\n236:             values.append({\"world_id\": None})\n237:             witnesses.append({\"exhaustive_bounded_bank_comparison\": True})\n238:     else:\n239:         raise SemanticCheckError(\"TYPED_CHECKER_KIND_UNSUPPORTED\")\n240:     return values, witnesses, coverage"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+      "functions": [
+        {
+          "name": "_graph_blocks",
+          "start": 979,
+          "end": 1042,
+          "lines": "979: def _graph_blocks(torch, reading, device):\n980:     \"\"\"`[[world_id, node_count, features, adjacency]]` for every world the reading carries, in sorted order.\n981: \n982:     The feature row is, in this order and this width (`NODE_FEATURE_COUNT`): `is_declared_whole`,\n983:     `is_participant` (its raw rank 1..3), `is_primary_label` (1..3; omitted when the rank branch is on),\n984:     `is_whole_argument`, `is_part_argument` (query marks, which exist in the FOCUS world only), `is_focus`,\n985:     `is_target`, then the two degree features. The row is RMS-normalised ONCE PER ROW. Nothing is derived from a\n986:     node's ref beyond its list position, and the query marks are applied by LIST POSITION, which is the\n987:     reading's own node order.\n988:     \"\"\"\n989:     focus_world_id = reading[\"focus_world_id\"]\n990:     require(type(focus_world_id) is str, \"POINTER_FOCUS_WORLD\")\n991:     whole_argument, part_argument = reading[\"query\"][\"whole\"], reading[\"query\"][\"part\"]\n992:     blocks = []\n993:     for world_id in _sorted_world_ids(reading):\n994:         graph = reading[\"worlds\"][world_id]\n995:         node_count = graph[\"node_count\"]\n996:         require(node_count == len(graph[\"nodes\"]) and node_count >= 1, \"POINTER_NODE_COUNT\")\n997:         adjacency = torch.zeros(node_count, node_count, dtype=torch.float32, device=device)\n998:         for source, target in graph[\"contains\"]:\n999:             require(0 <= source < node_count and 0 <= target < node_count, \"POINTER_ADJACENCY_INDEX\")\n1000:             adjacency[source, target] = 1.0\n1001:         rows = []\n1002:         for rank, node in enumerate(graph[\"nodes\"]):\n1003:             is_focus = world_id == focus_world_id\n1004:             # EIGHT columns, written as ONE literal so the width is countable at the point of construction and\n1005:             # cannot drift by an appended element. The two query marks exist in the FOCUS world only, and are\n1006:             # applied by LIST POSITION, which is the reading's own node order and this block's row order.\n1007:             values = [\n1008:                 float(node.get(\"is_declared_whole\", 0)),\n1009:                 float(node.get(\"is_participant\", 0)),\n1010:                 float(node[\"rank\"]) if contract.DESIGN[\"node_rank_feature\"]\n1011:                 else float(node.get(\"is_primary_label\", 0)),\n1012:                 1.0 if (is_focus and whole_argument == rank) else 0.0,\n1013:                 1.0 if (is_focus and part_argument == rank) else 0.0,\n1014:                 float(graph[\"is_focus\"]),\n1015:                 float(graph[\"is_target\"]),\n1016:                 1.0,                                   # a constant bias column, never a reading fact\n1017:             ][:NODE_FEATURE_COUNT]\n1018:             if len(values) != NODE_FEATURE_COUNT:\n1019:                 raise ValueError(\"TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:%d\" % len(values))\n1020:             rows.append(values)\n1021:         features = torch.tensor(rows, dtype=torch.float32, device=device).reshape(node_count,\n1022:                                                                                  NODE_FEATURE_COUNT)\n1023:         degree_one_hot, in_degree, out_degree = _degree_features(torch, adjacency)\n1024:         features = torch.cat((features, degree_one_hot), dim=1)\n1025:         require(features.shape[1] == NODE_ROW_WIDTH, \"POINTER_NODE_FEATURE_WIDTH\")\n1026:         # THE GUARD THAT ENDS THIS FAMILY FOR THE TWO DEGREE COLUMNS. Both constants are INDEXES into this row,\n1027:         # and a wrong index is SILENT: it addresses a column that exists and belongs to the other degree block,\n1028:         # so no width check can see it and the world head simply never receives an out-degree reading. So the\n1029:         # check is against the GRAPH and not against a restatement of the constants: each named block must be\n1030:         # the one-hot of the degree it is named for, computed one line above from this same `adjacency`.\n1031:         in_block = features[:, IN_DEGREE_SUM_COLUMN:IN_DEGREE_SUM_COLUMN + DEGREE_STEPS]\n1032:         out_block = features[:, OUT_DEGREE_SUM_COLUMN:OUT_DEGREE_SUM_COLUMN + DEGREE_STEPS]\n1033:         require(tuple(in_block.shape) == (node_count, DEGREE_STEPS)\n1034:                 and tuple(out_block.shape) == (node_count, DEGREE_STEPS)\n1035:                 and bool((in_block.sum(dim=1) == 1).all().item())\n1036:                 and bool((out_block.sum(dim=1) == 1).all().item())\n1037:                 and bool((in_block.argmax(dim=1) == in_degree).all().item())\n1038:                 and bool((out_block.argmax(dim=1) == out_degree).all().item()),\n1039:                 \"POINTER_DEGREE_COLUMNS:\" + world_id)\n1040:         blocks.append([world_id, node_count, _rms_unit(torch, features), adjacency])\n1041:     require(focus_world_id in [row[0] for row in blocks], \"POINTER_FOCUS_WORLD\")\n1042:     return blocks"
+        },
+        {
+          "name": "_graph",
+          "start": 1859,
+          "end": 1892,
+          "lines": "1859:     def _graph(self, packet):\n1860:         \"\"\"One packet's forward. `torch` is imported HERE, so importing this module does no numeric work.\"\"\"\n1861:         import torch\n1862:         self._budget()\n1863:         self.encoder.verify_frozen()\n1864:         require(type(packet) is dict and type(packet.get(\"source\")) is dict\n1865:                 and type(packet.get(\"record\")) is dict, \"POINTER_PACKET\")\n1866:         from . import slots\n1867:         plan = slots.compile_slots(packet)\n1868:         reading = pointer_inputs.read_packet(packet)\n1869:         reading[\"_device\"] = self.device\n1870:         require(reading[\"record_id\"] == plan[\"record_id\"], \"POINTER_READING_RECORD\")\n1871:         self._check_core_budget(CORE_ROUNDS)\n1872:         self.counters[\"packet_forward_calls\"] += 1\n1873:         forward = GraphForward(torch, self.module, reading, self.device, charge=self._charge_round)\n1874:         indicators = (self._tag(packet) if reading[\"query\"][\"kind_name\"] == \"role_set\"\n1875:                       else [0] * CLAUSE_COUNT)\n1876:         rows = forward.head_logits(plan, indicators)\n1877:         values = _scalar_scores(torch, rows)\n1878:         scores = _logit_rows(torch, plan, values)\n1879:         require(set(scores) == {slot[\"slot_id\"] for slot in plan[\"slots\"]}, \"POINTER_SLOT_COVERAGE\")\n1880:         decisions = slots.score_decisions(packet, scores)\n1881:         answer = slots.assemble_answer(packet, decisions)\n1882:         body = {\"schema\": PREDICTION_SCHEMA, \"record_id\": plan[\"record_id\"],\n1883:                 \"packet_digest\": plan[\"packet_digest\"], \"slot_plan_digest\": plan[\"plan_digest\"],\n1884:                 \"depth\": PREDICTION_DEPTH, \"model_revision\": self.model_revision,\n1885:                 \"run_context_digest\": self.run_identity_digest,\n1886:                 \"encoder_identity_digest\": digest(self.encoder.identity), \"scores\": scores,\n1887:                 \"decisions\": decisions, \"answer\": answer}\n1888:         prediction = {**body, \"prediction_id\": \"typed-prediction-\" + digest(body)}\n1889:         require(set(prediction) == PREDICTION_FIELD_SET, \"POINTER_PREDICTION_FIELDS\")\n1890:         self.counters[\"prediction_calls\"] += 1\n1891:         return {\"packet\": packet, \"prediction\": prediction, \"plan\": plan, \"rows\": rows,\n1892:                 \"forward\": forward}"
+        }
+      ]
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/development.py",
+      "sha256": "c46d9db5ba5f829e41cb806b0245fe09de8fa1391e82ed893a8b1161693dd021",
+      "functions": [
+        {
+          "name": "build_development",
+          "start": 191,
+          "end": 243,
+          "lines": "191: def build_development(*, root, expected_supply_sha256=SUPPLY_SHA, expected_exclusions_sha256=EXCLUSIONS_SHA, tokenizer=None):\n192:     before = profile()\n193:     selected, pins = _selected(root, expected_supply_sha256, expected_exclusions_sha256)\n194:     raw, pin = _read(root, COURSE_PATH, COURSE_SHA)\n195:     pins.append(pin)\n196:     retained = json.loads(raw)\n197:     bank = source.validate_bank(retained[\"bank\"])\n198:     require(len(bank[\"worlds\"]) == 64, \"TYPED_DEV_FULL_TRAINING_BANK\")\n199:     if tokenizer is None:\n200:         raw, pin = _read(root, TOKENIZER_PATH, TOKENIZER_SHA)\n201:         pins.append(pin)\n202:         tokenizer = tokenization.FrameTokenizer.from_dict(json.loads(raw))\n203:     require(type(tokenizer) is tokenization.FrameTokenizer and tokenizer.digest == TOKENIZER_DIGEST\n204:             and tokenizer.max_tokens == 32768, \"TYPED_DEV_FROZEN_TOKENIZER\")\n205:     packets, families, admission = [], [], []\n206:     for index, (key, shape) in enumerate(selected):\n207:         world, root_label = _development_world(shape, index)\n208:         require(world[\"world_id\"] not in bank[\"bank\"][\"world_ids\"], \"TYPED_DEV_FOCUS_ALREADY_IN_BANK\")\n209:         public = {\"focus_world_id\": world[\"world_id\"], \"worlds\": sorted([*deepcopy(bank[\"worlds\"]), world], key=lambda w: w[\"world_id\"]),\n210:                   \"bank\": deepcopy(bank[\"bank\"])}\n211:         source.validate_public(public)\n212:         root_ref = next(n[\"ref\"] for n in world[\"nodes\"] if n[\"label\"] == root_label)\n213:         requests = [(\"parts\", {\"whole\": root_ref})] + [(\"reach\", {\"whole\": root_ref, \"part\": n[\"ref\"]})\n214:             for n in world[\"nodes\"] if n[\"ref\"] != root_ref]\n215:         ids = []\n216:         for kind, arguments in requests:\n217:             packet = _packet(public, kind=kind, arguments=arguments)\n218:             frame = input_frames.compile_packet(packet)\n219:             sequence = tokenizer.encode_frame(frame)  # exact32768 bound; overflow is an error, never truncation\n220:             require(tokenizer.decode_text(sequence[\"ids\"][1:-1]) == frame[\"text\"], \"TYPED_DEV_TEXT_ROUNDTRIP\")\n221:             plan = slots.compile_slots(packet)\n222:             require(slots.compile_slots(packet) == plan, \"TYPED_DEV_CACHE_PARITY\")\n223:             record_id = packet[\"record\"][\"record_id\"]\n224:             ids.append(record_id)\n225:             packets.append(packet)\n226:             admission.append({\"record_id\": record_id, \"kind\": kind, \"family_index\": index,\n227:                 \"topology\": key, \"packet_sha256\": digest(packet), \"source_digest\": source.public_digest(public),\n228:                 \"frame_digest\": frame[\"frame_digest\"], \"sequence_digest\": sequence[\"sequence_digest\"],\n229:                 \"token_count\": len(sequence[\"ids\"]), \"slot_plan_digest\": plan[\"plan_digest\"], \"slots\": len(plan[\"slots\"])})\n230:         families.append({\"index\": index, \"split\": \"development\", \"topology\": key, \"shape\": {a: list(b) for a, b in shape.items()},\n231:             \"stats\": _stats(shape), \"world_id\": world[\"world_id\"], \"root_ref\": root_ref,\n232:             \"declared_root_label\": root_label, \"record_ids\": ids, \"declarations_authority\": \"NEW_CALLER_AUTHORED_DEVELOPMENT_FACTS_NOT_WORLD_TRUTH\"})\n233:     require(len(packets) == sum(row[\"stats\"][\"nodes\"] for row in families)\n234:             and len({p[\"record\"][\"record_id\"] for p in packets}) == len(packets), \"TYPED_DEV_PACKET_COUNTS\")\n235:     require(profile() == before, \"TYPED_DEV_SOURCE_CHANGED\")\n236:     body = {\"schema\": SCHEMA, \"status\": \"PUBLIC_DEVELOPMENT_PREPARED_NOT_MODEL_EVALUATED\", \"policy\": deepcopy(POLICY),\n237:         \"profile\": before, \"inputs\": pins, \"tokenizer_digest\": tokenizer.digest,\n238:         \"training_bank_digest\": bank[\"bank\"][\"bank_digest\"], \"families\": families,\n239:         \"packets\": packets, \"admission\": admission, \"counts\": {\"families\": 6, \"parts\": 6,\n240:             \"reach\": len(packets) - 6, \"packets\": len(packets), \"bank_worlds\": 64, \"worlds_per_packet\": 65},\n241:         \"max_token_count\": max(r[\"token_count\"] for r in admission), \"main_targets_constructed\": 0,\n242:         \"final_questions_constructed\": 0, \"neural_calls\": 0, \"provider_calls\": 0}\n243:     return {**body, \"development_digest\": digest(body)}"
+        }
+      ]
+    }
+  ],
+  "configs": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "source_sha": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "source_sha": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "source_sha": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "node_rank_feature": false,
+      "schedule": {
+        "actual_compute_measured": false,
+        "batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+        "condition": "MIXED_SAME_ITEMS",
+        "excluded_record_ids_digest": "b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621",
+        "excluded_records": 79,
+        "held_back_kinds": {
+          "analogy": 17,
+          "context": 17,
+          "correspondence": 20,
+          "definition": 15,
+          "edge_account": 17,
+          "parts": 9,
+          "reach": 26,
+          "role_set": 6
+        },
+        "held_back_questions": 50,
+        "held_back_record_ids_digest": "668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d",
+        "held_back_records": 127,
+        "held_worlds": [
+          "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+          "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+          "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+        ],
+        "holdout_unit": "FOCUS_WORLD",
+        "main_updates": 1470,
+        "passes": 10,
+        "planned_slot_core_passes": 212080,
+        "presentation_slots": 56510,
+        "presentations": 11760,
+        "presentations_per_pass": 1176,
+        "source_schedule_digest": "1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275",
+        "source_seed": 101,
+        "trained_records": 358,
+        "updates_per_pass": 147
+      }
+    }
+  ],
+  "zip_data_identities": {
+    "Helm 1.0/20260917": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    },
+    "Helm 1.0/20260918": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    },
+    "Helm 1.0/20260919": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    },
+    "Helm 2.0-experimental/20260917": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    },
+    "Helm 2.0-experimental/20260918": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    },
+    "Helm 2.0-experimental/20260919": {
+      "records/typed_course_001/checks_002/public_course.json": {
+        "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+        "bytes": 4165195
+      },
+      "records/typed_matched_001/development_001/compact_development.json": {
+        "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+        "bytes": 685549
+      },
+      "records/typed_interface_001/checks_002/training_tokenizer.json": {
+        "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+        "bytes": 447140
+      }
+    }
+  },
+  "graph_counts": {
+    "worlds": 64,
+    "node_counts": {
+      "4": 52,
+      "3": 12
+    },
+    "unrooted_directed_shapes": 6,
+    "colored_shapes_declared_whole_participant_rank": 6,
+    "trained_focus_worlds": 19,
+    "held_focus_worlds": 5
+  },
+  "held_structure_overlap": [
+    {
+      "held_world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+      "directed_shape": "[4,[[0,1],[0,2],[3,1]],[]]",
+      "trained_isomorphic_world_count": 2,
+      "trained_colored_isomorphic_world_count": 2,
+      "example_trained_world": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2",
+      "bijection": {
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n0": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n0",
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n1": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2",
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n2": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n1",
+        "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n3": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3"
+      },
+      "held_edges": [
+        {
+          "ref": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/e1",
+          "source": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n1",
+          "target": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n3"
+        },
+        {
+          "ref": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/e2",
+          "source": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n2",
+          "target": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n3"
+        },
+        {
+          "ref": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/e0",
+          "source": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n1",
+          "target": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952/n0"
+        }
+      ],
+      "example_edges": [
+        {
+          "ref": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e2",
+          "source": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2",
+          "target": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3"
+        },
+        {
+          "ref": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e0",
+          "source": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n1",
+          "target": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3"
+        },
+        {
+          "ref": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e1",
+          "source": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2",
+          "target": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n0"
+        }
+      ]
+    },
+    {
+      "held_world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "directed_shape": "[4,[[0,1],[0,2],[1,3]],[]]",
+      "trained_isomorphic_world_count": 1,
+      "trained_colored_isomorphic_world_count": 1,
+      "example_trained_world": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118",
+      "bijection": {
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n0",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2"
+      },
+      "held_edges": [
+        {
+          "ref": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/e0",
+          "source": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "target": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        },
+        {
+          "ref": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/e1",
+          "source": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "target": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        },
+        {
+          "ref": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/e2",
+          "source": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+          "target": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+        }
+      ],
+      "example_edges": [
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e0",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n0"
+        },
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e1",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2"
+        },
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e2",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n3"
+        }
+      ]
+    },
+    {
+      "held_world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+      "directed_shape": "[4,[[0,1],[1,2],[2,3]],[]]",
+      "trained_isomorphic_world_count": 3,
+      "trained_colored_isomorphic_world_count": 3,
+      "example_trained_world": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f",
+      "bijection": {
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n3",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n2",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n2": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n0",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n1"
+      },
+      "held_edges": [
+        {
+          "ref": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/e1",
+          "source": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+          "target": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+        },
+        {
+          "ref": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/e2",
+          "source": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+          "target": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+        },
+        {
+          "ref": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/e0",
+          "source": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0",
+          "target": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n2"
+        }
+      ],
+      "example_edges": [
+        {
+          "ref": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/e1",
+          "source": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n2",
+          "target": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n1"
+        },
+        {
+          "ref": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/e0",
+          "source": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n1",
+          "target": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n3"
+        },
+        {
+          "ref": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/e2",
+          "source": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n3",
+          "target": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n0"
+        }
+      ]
+    },
+    {
+      "held_world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+      "directed_shape": "[4,[[0,1],[0,2],[1,3]],[]]",
+      "trained_isomorphic_world_count": 1,
+      "trained_colored_isomorphic_world_count": 1,
+      "example_trained_world": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118",
+      "bijection": {
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n0": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n2": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n0",
+        "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n3": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n3"
+      },
+      "held_edges": [
+        {
+          "ref": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/e1",
+          "source": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n0",
+          "target": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n2"
+        },
+        {
+          "ref": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/e0",
+          "source": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n0",
+          "target": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1"
+        },
+        {
+          "ref": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/e2",
+          "source": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1",
+          "target": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n3"
+        }
+      ],
+      "example_edges": [
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e0",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n0"
+        },
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e1",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n1",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2"
+        },
+        {
+          "ref": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/e2",
+          "source": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2",
+          "target": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n3"
+        }
+      ]
+    },
+    {
+      "held_world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+      "directed_shape": "[4,[[0,1],[0,2],[1,3],[2,3]],[]]",
+      "trained_isomorphic_world_count": 3,
+      "trained_colored_isomorphic_world_count": 3,
+      "example_trained_world": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66",
+      "bijection": {
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n0": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n0",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n2",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n2": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n1",
+        "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n3": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n3"
+      },
+      "held_edges": [
+        {
+          "ref": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/e2",
+          "source": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n2",
+          "target": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n3"
+        },
+        {
+          "ref": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/e1",
+          "source": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n2",
+          "target": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1"
+        },
+        {
+          "ref": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/e0",
+          "source": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1",
+          "target": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n0"
+        },
+        {
+          "ref": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/e3",
+          "source": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n3",
+          "target": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n0"
+        }
+      ],
+      "example_edges": [
+        {
+          "ref": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/e1",
+          "source": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n1",
+          "target": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n3"
+        },
+        {
+          "ref": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/e0",
+          "source": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n1",
+          "target": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n2"
+        },
+        {
+          "ref": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/e2",
+          "source": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n2",
+          "target": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n0"
+        },
+        {
+          "ref": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/e3",
+          "source": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n3",
+          "target": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n0"
+        }
+      ]
+    }
+  ],
+  "split_counts": {
+    "all": {
+      "records": 564,
+      "questions": 244,
+      "kind_records": {
+        "context": 70,
+        "correspondence": 88,
+        "reach": 107,
+        "definition": 70,
+        "role_set": 36,
+        "parts": 53,
+        "analogy": 70,
+        "edge_account": 70
+      },
+      "kind_questions": {
+        "context": 24,
+        "correspondence": 24,
+        "reach": 64,
+        "definition": 24,
+        "role_set": 36,
+        "parts": 24,
+        "analogy": 24,
+        "edge_account": 24
+      },
+      "query_multiplicity": {
+        "3": 69,
+        "4": 46,
+        "1": 100,
+        "5": 5,
+        "2": 24
+      }
+    },
+    "trained": {
+      "records": 358,
+      "questions": 189,
+      "kind_records": {
+        "definition": 36,
+        "role_set": 30,
+        "correspondence": 54,
+        "parts": 44,
+        "reach": 71,
+        "edge_account": 46,
+        "analogy": 36,
+        "context": 41
+      },
+      "kind_questions": {
+        "definition": 18,
+        "role_set": 30,
+        "correspondence": 19,
+        "parts": 19,
+        "reach": 50,
+        "edge_account": 19,
+        "analogy": 15,
+        "context": 19
+      },
+      "query_multiplicity": {
+        "1": 96,
+        "2": 40,
+        "5": 4,
+        "4": 15,
+        "3": 34
+      }
+    },
+    "held": {
+      "records": 127,
+      "questions": 50,
+      "kind_records": {
+        "reach": 26,
+        "correspondence": 20,
+        "context": 17,
+        "parts": 9,
+        "analogy": 17,
+        "edge_account": 17,
+        "role_set": 6,
+        "definition": 15
+      },
+      "kind_questions": {
+        "reach": 14,
+        "correspondence": 5,
+        "context": 5,
+        "parts": 5,
+        "analogy": 5,
+        "edge_account": 5,
+        "role_set": 6,
+        "definition": 5
+      },
+      "query_multiplicity": {
+        "4": 15,
+        "5": 1,
+        "1": 20,
+        "3": 14
+      }
+    },
+    "excluded": {
+      "records": 79,
+      "questions": 60,
+      "kind_records": {
+        "context": 12,
+        "correspondence": 14,
+        "definition": 19,
+        "analogy": 17,
+        "reach": 10,
+        "edge_account": 7
+      },
+      "kind_questions": {
+        "context": 10,
+        "correspondence": 11,
+        "definition": 14,
+        "analogy": 10,
+        "reach": 8,
+        "edge_account": 7
+      },
+      "query_multiplicity": {
+        "1": 42,
+        "2": 17,
+        "3": 1
+      }
+    }
+  },
+  "exposure": {
+    "trained_record_text_held_references": 0,
+    "trained_world_choice_records": {
+      "definition": 36,
+      "analogy": 36,
+      "context": 41
+    },
+    "full_bank_worlds_in_world_choice_reading": 64,
+    "held_worlds_in_world_choice_reading": [
+      "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+      "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+      "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+      "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+    ],
+    "supports_per_record": {
+      "3": 384,
+      "0": 180
+    },
+    "main_record_answer_keys": []
+  },
+  "labels": {
+    "trained": {
+      "unique_question_class_counts": {
+        "analogy:matching_world_count:6": 1,
+        "analogy:matching_world_count:9": 14,
+        "correspondence:MAPPING": 19,
+        "reach:ABSENT": 1,
+        "reach:DIRECT": 25,
+        "reach:VIA": 24
+      },
+      "reach_labels": [
+        {
+          "record_id": "typed-input-bfd7c476117fc128e0ac8974e0802174179eacda9dd50cf92066f8de26a6ee2f",
+          "query_id": "typed-query-6864c271072731d9e11eba80244c700dc4318e53a40c4464436a88d64590c44f",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-0963375edc85f657102a6021593c9459ba406daac3a2a5ced6e0c8c8c7d4e296",
+          "query_id": "typed-query-e0f098b8a4c0261701bf1e7823184885225227af27c057803f1e39cbda3935ee",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-3fa5e3f00824eda0ed7ee81264289bb12f8bd919cae4597553847b2aaa15fa83/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-e799442b99407055134066a4ce33d746f673ccae380f8256b95dd0ec4ae20d9f",
+          "query_id": "typed-query-0ba3d11af330bf3e450dc2b7a6e101f53a1c862227d18c99f1fb6d3da5f17c80",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-e194d990f71fd7a2947a6d4213d204036eb009fe5e7e6c9d0482b6b4f53b2c06",
+          "query_id": "typed-query-79159997174f870807d9ae24a0ec664b2f84151bf8af614cc9a3071eae16b952",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-3fa5e3f00824eda0ed7ee81264289bb12f8bd919cae4597553847b2aaa15fa83/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-876ac8243915fce3ee1d96931e773ab9a693c628f9ac939feac1224ce042b1bf",
+          "query_id": "typed-query-9fa158301cef44e6ad4cc3a81a4889f933804e101c5039d0e009a9a7d537776b",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-1605e625f32dd396a9d564094499664b7f680a15eb13de4d0f4f3f9a47c98c20",
+          "query_id": "typed-query-5180f730f94a391386db6849ada757fb5be0f8ffdb9bcb9efad5e0531c0d318e",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-1a1e940f61219347c6deccd64c7cff0a4af778362e0ed755bd86e24a3bf45a14",
+          "query_id": "typed-query-868682388153270f6f39fa81a0130fcb6f49f3cf48fe356b3d406a5305470bdf",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-1fe9eaf36d47f4af69883eaf4ab6d493364dd0738be573843838c359580ab89d",
+          "query_id": "typed-query-8f2e393c52d82bc8cdd566a40d66e117d3f6203d5ebad8642fdb69d980b5a41f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-1ff663a8c0618b0432eb9d73ba58acf9bafef094c24870b8610e2c367cef1423",
+          "query_id": "typed-query-7b1fe933ca5109fca97d078d49481fb2c4d38538620ed1765f5b5a88129d2f5d",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-3201997844d6947397dea4d12827c47400447dc90d9f597fa669a29cf62d7a03",
+          "query_id": "typed-query-932731ad767c29c6046d3e3d2ad6c47d4142c65ec54adf631329d5ea25464846",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-b1bcc0975d820eb3cbcf49c643f7206b7fccb262db80419602825ca1ae932a76",
+          "query_id": "typed-query-671487b701843d88d1a1785fc639465d14cbe33041772fbc3c7bb14636f070ba",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-e8131acb5a123d0ca2617fd3db3e015453e84201cfe7a32faec2a3a025b2f114",
+          "query_id": "typed-query-ec7e1190f590f59874cd545b7a8fc96007fdb1b4e3dde6d1d091b3581c0e3729",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-cade0b37f04d44c77bd8fc41569e2ce33c6d863023f77933c1c13da6c5efba98",
+          "query_id": "typed-query-ad82c0a00b9d94a8dc13e85583b6c21b283ade053e555cc3e2da1ea09f63cf8c",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-7678fd74c45c06de5fc3a4f6909685ee6dff6d416114a36addd594e62ff93e37",
+          "query_id": "typed-query-40df917c1bedc88635906ac1e9e0a7ac3e006c861bea24fc1df9900b89a8271b",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-f85f70a34330ba24c64adb950a57a974b0850bb80f935009c643ee6febfd3798",
+          "query_id": "typed-query-616526c12a645c3536f559ec2c74d2f086dde61dcce2e65b9d84f34bd45ef3ac",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-52a7644ec0016ba9d871fab1b3964d193be8a797551b6b4da4cf255f16f5c22d",
+          "query_id": "typed-query-6db82d5ca89b4eddd65162287f85ca2634f01ddaf705c64df75f670564a3607f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-53e5d56fa5d5d7a32865b566ad8bcb5b379de5e75972b2e10a852811c2986a5a",
+          "query_id": "typed-query-cbed744a873662a2e15f961d1303ab7a765074a84372ef532a3ea9e9b46b2307",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-548e509567f670f3575554d092d2de714e0893b086ed73a82853e52bab928e0e",
+          "query_id": "typed-query-89815dd69f2d9cd3a6b62d4f0c389089fa9cd3c674955ba6dc3c6f5e025c9da6",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-5c5c4205aa9f513bc8ccaaa9ba9ca78592f2df7cdab7524e6105945dd1bc0523",
+          "query_id": "typed-query-ee23b43af2a53176709aa00b6a40173e03ccb58857ac7fe42ba31a6582824404",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-7027a4cfc9f2dcf6b4a1e870b981222640852dc2e318cbe7f069acbbe80d2c36",
+          "query_id": "typed-query-16db9ba1f7493273ee782db49c5fb48a3a8750db5ea8ef96b1993edfed08dd3a",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-710c40864f1fcf96485532c25feeef886fa72c3dc55410368969ca820ea4e08a",
+          "query_id": "typed-query-f0f548e205bb07acb427006bc10fbcb6853dbe6a017cff7878f01ce74009c62f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-71ee869fd455eb8ee32dae933b52c04c57f2535405752b688dcf3ea29e3b12d6",
+          "query_id": "typed-query-67aaf5d274c8acf7fa91ed546bbea4d8908901fa10a22cde9a8f8071735d7767",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-cd99c437aca0586be9dd1468cbc15b406dec39424320cd5f8dadea2b1bdf4d46",
+          "query_id": "typed-query-fd15c493df17a4b242ae912db71e5f3ac4d9e3a5ad10871242ca8d6e85c41beb",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-3b0abc92cf4ab9d63e120dcca1c1a6b9a8473593693a22cce2e49cc6721bbec7/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-7438b4501dbd3d67b3ca49c280edcf11f5fb4de820742e55f035b0df1dfa7bb8",
+          "query_id": "typed-query-e69768e00fbe374bcb36037c5ab196c0036bb5b44e835ddaafd17d153b060d17",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-7710a9cfa0f53adb91015c525cae1edef43b29ecdfac61111ed77d1e884a93e9",
+          "query_id": "typed-query-48c19ad14d7f4ef2328f9e3f28cc1e6e724afd595e4a5018bc731a3fad0ecf75",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-e478294669e7fb4d01a27c35f553951e4bc60ae851a4d8b850364fcb55148456",
+          "query_id": "typed-query-3ee0108e38de2023347873ac590446607621270929a173efeec97e22299591d1",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-95d444f4d5c4e7c65309b608e9e3c167718ab4a25ec56fde488366e6249801e9",
+          "query_id": "typed-query-2aa5f0b2341afbea34356f6d7484a64e2499a66f3d89fd9111cbbaeb21705630",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-fd2dcd74b697ea187a426af2e67e5bdc5d8231a003b76ceff6f116287fdda64f",
+          "query_id": "typed-query-6567b412be13b0f05db8882d9c72b2732e218ce967aade34b0d57feeab49879f",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-a33db92cd75f73ff4b5ac1ef624ede9697db17359f693c191309a6f3bfbfadfb",
+          "query_id": "typed-query-b3bad43d16de2083bd303a2858ed0656ac2b02cbc95392692787e17cde2feec4",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-a4dd72012656c18c74a23256f2d2b23b7f744643717fa913671f741e768fa67c",
+          "query_id": "typed-query-30934be0fe53688d955836f1df0f42b8ebf32d53148c36a899dccb9c35f8ca2a",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-a9d86dc51ee635352bc19628d4b6a2ac7b59e0b8b1b37540aef1e001c7a45ed8",
+          "query_id": "typed-query-6888839319da69da8ceb8268207f410c32e0390ae0f12fbc7e13420abc21c4d7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-acb1c39004313d6983630f69136966853fe956a4fdc60fb9fbabd4e4d1b7a40e",
+          "query_id": "typed-query-6d5a10763bdcee9ad1675f9d06dadce62b46a9c7bd686adf7744b18c142c3861",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-aee9a472aeba0112dfc3944e66e76142928ff7ebcbe1350b1c334d01df6fe1ed",
+          "query_id": "typed-query-fe55e747691d165dcdd90d8f5b1c8a8b97552612bf88e6979c1dcaa379273d40",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-b48fe61eb6ed84ba3ed1fd703e424e7403fedcd8c95d24055ea0a6f6202800d7",
+          "query_id": "typed-query-dfcdd1d191ad49e85ac5e72b512aec9ba4fbadbc67b9de90eb4c2095e5c19ef5",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-b629c20c6583e214119fd827f093e4dd4e7dea58b37dc4f31bb612f7f3609b76",
+          "query_id": "typed-query-bd2df44feed8af65b267ffd04c20d62b79c7f3eb96ad2a4ab725bb5a0b1e7f37",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-c5ca6fe7a062fdfe298948d8f031f983fea64146b492923630b0a84da938b878",
+          "query_id": "typed-query-1400a1cd6cce3866842638b2bf9cd2e5a32e4809f2f0f97c018c013aec72498f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-ccbf3998c5a8da63cf005f68b0aa93c3d304006977e183d92c727656fd3e0659",
+          "query_id": "typed-query-ab7ce0cea6aa187b582f3ac165d1171516e5aa43eac2c2a26f1f7cf0833ac271",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-d804a3c92dc4bd482188d561f8285a52117c4e1566ecdd8b047f6fe297d7be5b",
+          "query_id": "typed-query-4e85713899cb566837b1563abbde599ae7120e81ca81be873f79f95fc563cbde",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-db70433f55f7537b7f6ed9d6afab1e7c13a4594c88c2aa01d31d812ebc5f4414",
+          "query_id": "typed-query-375d4fd4e60b44cfe59bd02ba0ffea2269d667f927eeb572725ce6dfd13e36b1",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-df38a5406e9bd278c85a6b38d36a9bd4eefe47bd15c6caf5ce18ea09cd42a6ff",
+          "query_id": "typed-query-b7d9f0a1b879a91ab7e429fbd6d50359115f85671f02ade054e0db3bfbc30629",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-3b0abc92cf4ab9d63e120dcca1c1a6b9a8473593693a22cce2e49cc6721bbec7/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-e188488c965953bb1884bc8a47b1274da9b2c68054ee6048ec183403d1c194c1",
+          "query_id": "typed-query-3827fdeab8cc7bd60d2545a569cc83b331e51a776518b5cc13d02e1c7d152331",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-e4cb220265b0c1f20c4b47901f623d659fb9500976b3ef9075dea991ff295438",
+          "query_id": "typed-query-8cb52a9f1e7e3a8700d80938205ac68d911f12fe542e7f93f6a098c89c65a061",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-ef5eb4e33ed40cc484b9c2ef74cdb498b1d8ac9a1c25b91b7a97548ac9a597e4",
+          "query_id": "typed-query-8791e7529b68ed8cef0209b1cbb1808d5278eeb3d128ef4b284e0be6d8710db4",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f05b3350ad0b03b21fedb9b8c1b4a5d2bdc2b497a444cd510b1f954b68dc3d5e",
+          "query_id": "typed-query-4a764832efe1adf8e715483e4395314e8b37166da1b79aaffc2bd36cb003b415",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f06042210ecaf13ad4cc21a6053e355fe9c784c2b9b6c99991c0b7ef6c4a82bc",
+          "query_id": "typed-query-a67fe21ece58bfb2f3f1e3073c8886a11df4530c232004bd34e03d0fa032e8db",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f263baa95eb06ecf98d7cd1a23fd9f99d9cae3bb60df9d81bd03b3492115f2f0",
+          "query_id": "typed-query-4ecad6e27b09f490c4f4c8019256fc5212302f7f6c0e64a14af2bff823300b7f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f389571b0f1920d41655ac3dae89f5ce6d0249f1ccd88254c81d99f8a46a4012",
+          "query_id": "typed-query-2baabc95656975ac7e045138db0f0ca1de749b566f79fb26a40451513bba4bf2",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f863833c0261a6993b8733dc3daa76a34840c148f38d3de139db5480296c754e",
+          "query_id": "typed-query-64e0cfa06e281aa577dcc33e780542403c374fe5c291615d019a9e7db4aa793e",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-f87a93d58d2b3d4b5760523988a3553211ce98423f9ce796cd3826ec889e9803",
+          "query_id": "typed-query-3a0612fe0138420d792f4d4fa60092b4b7e745885048268a722f51dbc1918c17",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n0"
+          }
+        },
+        {
+          "record_id": "typed-input-fca8f6035ce3ed4d8eb4260708efb9aa43047c7460002d5a685421ebeb20201c",
+          "query_id": "typed-query-4ae748b049d1eee3f98bfcffac348d2ca64e8c86494abeb6a915888411e1a4a6",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"
+          }
+        }
+      ]
+    },
+    "held": {
+      "unique_question_class_counts": {
+        "analogy:matching_world_count:6": 3,
+        "analogy:matching_world_count:9": 2,
+        "correspondence:MAPPING": 5,
+        "reach:ABSENT": 1,
+        "reach:DIRECT": 5,
+        "reach:VIA": 8
+      },
+      "reach_labels": [
+        {
+          "record_id": "typed-input-bea7e140fe87eaec9f00f54f8a6edb6873784cc0c15a015fda920695b84d2479",
+          "query_id": "typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-f6489d5bbbfbf05355f48aa88dd1dc63d5482a4bc5f15e54d7bd379327b0a7fd",
+          "query_id": "typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-f6406785b2c5bb06bef0ea228b0e035c55ca2b2662b763245b9424fd0899e717",
+          "query_id": "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+          "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+          "rule": "bfs_immediate_predecessor_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-1fcc96d7021900fd49dcb7c609f170abc2cd0b3b4795201f11655143967e2ea4",
+          "query_id": "typed-query-3b1f8e8fd57c958547b376cf4fde3b47a116144c2614e5420748463d5a9a3a9c",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-6b1db4d5e43d63f1118603b23da6e7e4950c3f9ccbc604d33d1e03605811bfb8",
+          "query_id": "typed-query-d1a3fa13d5c9fa33b9f227fde82fce236671082e3cfd41e649a39b7ed2e1ca42",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-6f4577d1c12e9b4fcbc8c014d30e605fa114e74dbc6ada090441c82f9a335cc1",
+          "query_id": "typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-78d57e38272c7d227a6adf9425737d6a443141e3af617fdf98f44f78ccea978d",
+          "query_id": "typed-query-a3e70de96532ddaea96fe49555eaed5a13212df4fbaa3711912cfbe227bd014c",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n1"
+          }
+        },
+        {
+          "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+          "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-a1a64469ff4b6c03476b80a23d7dde6bdc67abc684e2680502ca62e18c5cc200",
+          "query_id": "typed-query-2c0c39b88314b4d8263b4c78c5a4ee04622bb66e1ae9b5b1d3e217a8a8e0f909",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-d7d5ca0468a6eed3b0618a4a3071b46406000403ba1c95c1e82d542ca63d2d38",
+          "query_id": "typed-query-d653be653ecbb6224e4e266947b3c27fd3aa55bcb7e5ac4460cbcbac3da1c1a7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-e21da9613bdc3f2a3bd74d3e72fd955702ff8833ddba1824177db0c42143822c",
+          "query_id": "typed-query-396eee750c41344e7157855afb8431f37a8823eee5e20a8b5a8ca7e9f968c92f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f6567a827a505df29b7e4b70d85943899fe6553a0156307c08ce40dd94ef1286",
+          "query_id": "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+          }
+        },
+        {
+          "record_id": "typed-input-f834c268a3d4f6515ed8e6c643d34ec84778e3a3799c4edd80fed0edd8a15a9a",
+          "query_id": "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        }
+      ]
+    },
+    "development": {
+      "unique_question_class_counts": {
+        "reach:ABSENT": 42,
+        "reach:DIRECT": 8,
+        "reach:VIA": 3
+      },
+      "reach_labels": [
+        {
+          "record_id": "typed-input-4c964e2d7f89b3d89b82f36e75d1dd8dd3d6fd6e85a099a70e2ece1cf6e89fcb",
+          "query_id": "typed-query-1c4b352603ec5fef5546475b77ae2637348a330d84b502e589792f78c0ee4227",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-4da592b0a8f7e97ed48493432a4735913acf77e1cd99d1116db4882b287499b8",
+          "query_id": "typed-query-f007ca4fb949f128299efe6bad948593acbf589cc005c183a3d7ee79f934c9ed",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-c1eb54aa56eee7d31eb72f2ece43c154bbf70d83a0c510bbace6cfea2b526512",
+          "query_id": "typed-query-4d4e0ca67a31f5d69b01bdbd68d914f913210077e8b101b07569ec8cd2f5156a",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-34567aef18dd99e65e5f4d8f0a763a60b9c6bf97f528fcf5d8c93286c7cdb4fb",
+          "query_id": "typed-query-a828dd7c9e0eac8f318fe8e098f4d47b78a46cbfe095c494a9e4f44654a67043",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-bbde85d1c0e4ab6d781ae6f60f0b170ce784117ec34eaed4f8383d829d3a19f9",
+          "query_id": "typed-query-b534bcfff87b65a2b0d9385859fec1ccdf5a8cfaadb86fff5e53dc74a852c24c",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-879938c56bf44d1b664f4179edba9c5060d207bcf7ce65a05e846144feac2892",
+          "query_id": "typed-query-8e91d6054d112836189af94b92f509b41a8900ffd36bd2564fea2ac4981eec21",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-8f7fdd1a619be2fd0c78435f5a4f0a67f13e71c9efb5f069820ab7552b9cdf8a",
+          "query_id": "typed-query-be6b1c7aeadcbfdc23fd34ab1a589c9a756427d57b79feed2f33eb65fec67e3b",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-7bc28ecd0f673ca734a1c69dc2f2baea1e232002f02867d94d654e1b239bf4df",
+          "query_id": "typed-query-76dec940220d17c3404235352aee71865971e3fcb14ac7a7cdf218e4005b8792",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-4af91e7b59df6da45dd9619cb4e1674355e2a071a3c6f83c64ff58a22e5e8eee",
+          "query_id": "typed-query-91db33244374aacbc157299300f19361289ce9e24694f9c756ecf176b5e6bfaf",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-83a16d916bb13afccc7592ed90e6af4423b3e4acb0d1661c2a1259bf57d2b2a7",
+          "query_id": "typed-query-b0094eacb6ca4b7404877ddb16b116330dc652e1e521ae8ef324fecbab5d35c3",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-026214b2431167db133e6f1ecc66b029211794154a3d0e4d1697c418d9d86343",
+          "query_id": "typed-query-b254f20bb21e251ed2d9b527cba57d801a319352d875ec67d4f949cc5b75b6ac",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f97584bde612d3aaeeeb3958644f0339f239513d43b057e5c08bd245b48ced0a",
+          "query_id": "typed-query-bcf0939ef7896a02b12c7c0625b708bf8cb66f92cea5150c2dfbd8d04d3f37e2",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-2d2c68eca46ef8d3b0d76368bd6410e0d6d8605e5405f91f2ee5c7976ee28f36",
+          "query_id": "typed-query-0c0ff6e20587b8b1b9a82bb9b7dd1815a0d042ec76af41b914c85557dc8419ce",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-688e5e72238c76d2adc7773b29113fcd745d46c6a99a27305f520f73a4ce52f7",
+          "query_id": "typed-query-498b35f5570ecbd820b7f8b42d38ad4194f523c828f91216eb79439f27da6c9c",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-cb1cf41c513d383949e402a3094f3e7102358871a22cadf804909aff6a7c37d7",
+          "query_id": "typed-query-42ab515b5db4a0f3ad601e94b5e8f9fb5027ad40095bbf0aa4b7377e3333367f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-cbab6471f34544eab1db6ab5cf20ca6d0a7a49a65ca85d74004d6a62c0f20f6e",
+          "query_id": "typed-query-12e5367ed77e379a8632c5367d12c1ac99172af3bebf0b6a9e19cd6ef5c6d70a",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-e10af6d348e523f112ba71b8a7fbcba393d5ff4fe77944182e10c915c35c0931",
+          "query_id": "typed-query-22f4a46bc9bff5a3cbdd39d960bba5c9bae8a6944d01dea1fe5f95b1586ffa29",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-fea38d389a6912db6f9bcd357b809e7b2594f42a56b772fbcf28f934ed6de474",
+          "query_id": "typed-query-e2611ed5763ace0832f195f28db5846243a54e2f3abf990542f04d4b48071b3b",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-2c5d2e87005ff3a6c864ab08fbecf6bfa9f0a3775d09607b0eab07615b39c6c5",
+          "query_id": "typed-query-7858556cff81555f0a949c31023eb9e060ef7687d20a721e027a4240618a7191",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-41427a0df8d480b80c1097bd8878e5fb0f88a2c0fd108ad773343847c3284646",
+          "query_id": "typed-query-312e3802308ca92fb0f61cfcf02b76bef20f90cfa72ef2dbb45401e72a749e17",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-111e8e769ff190878a3523cd123284433313805072a1e49acfe1eba66e103772",
+          "query_id": "typed-query-939a3ee2c2b429467a2a7432d33b9576be5227b0d590bb63f3046dba1b99939b",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-112a1e88d2687d97799cb372af5d4684ab409759295ba8760477b368f7d2a88e",
+          "query_id": "typed-query-0f651c1da9d6154308f7b21aca894468e33be038f8a8740b229322d605e9ce8c",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-77b4ea48f033d9e4299b6f56678c42b2187362a65296980b40e9feec30d4952d",
+          "query_id": "typed-query-9ebcce70fbcfa19644a9e33f80e4ce9eb663bf180180bb20ed0fdd05add8f8e2",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-9811a5166b8a0d87458f26de76edbd3c27a6b41beab14da44e7bc8c409a639ab",
+          "query_id": "typed-query-b8d7680a3167c5b931353747a296a3054a440ed9f90c83803e87a3ab56540c94",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-30ac564375806de267bc0785cb0a1a5935e2e7529ec9bcd78861e19a79d3a9e9",
+          "query_id": "typed-query-6f5712acde09fe91b9c9f1678d2975baab3b75d585ecea565f0ee96085fc4cdd",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-413e25edbb95c6f121cd0998165c7ce2593a52006a68b905b422ecaa9e4a15c6",
+          "query_id": "typed-query-df9ce5ac0669133170115135bf5dced060441be691ffa4f29ddbce03095bc8b9",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-0cb5e8b4556161721b058d80ce8eaa154ba0d202a8142fdb39b4d7b1b6305aea",
+          "query_id": "typed-query-0d83ee01f599a0adc3c8c735d3a3ac97eff78f56818500a4fe2336e339836d73",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-8c91bae84566e935b7c5b425367dc26bb42099ca441f08e09f5892147d99df12",
+          "query_id": "typed-query-efe8e6898b74b5d059029a89219cfe31e8f92517ba6137adbf1538221303d5c2",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "VIA",
+            "via": "world-82ccb700f1af18aafc4a333ba47ddf7c488e1057f19acdb48e33701dfe128871/n2"
+          }
+        },
+        {
+          "record_id": "typed-input-0899d6a3a9330026f77ac2f29660d2e49e3b04fce8f5a091831534e3d5f64512",
+          "query_id": "typed-query-b14861d0418b49736a0dfda28045beaf801b5f02731fa8f4fa35dfdffd2787e6",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-a8237a8dc1dd141a62e0ee37b7a38455dd62e876a63b06916f4cceee26bc2bb7",
+          "query_id": "typed-query-044eddef0698c95d262b36ece5836024d42a0886c3c55718833173e94aa6773a",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-78d32c7da47368d5dbb469dc89335e5e0ca0dc9ddfa877152574903d53279f7d",
+          "query_id": "typed-query-394a56c4ef096bddad515123df32f52520d6a4c2403fc00725aff0aa5383dac6",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-3a9ad799fd4519d6e75b579e48aff4b7ba9ae6695f9e8efc9dc7f51313055e65",
+          "query_id": "typed-query-8fb17371b2f7ee3c9828f58c6d1dc4669cf60bbd1765b67e705c75cabc78ecb7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-b6b3c1c52e9a90f9ec3cdc5386073be14b55c72fb1b41b82807d38f5ef4c1ece",
+          "query_id": "typed-query-c9b4c3db41050a9cc65ebcb3b44ad4175efcab5964b033a16295e9823a7fa19f",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-0a906c04c9c7eb77731483401b3fa184db4515c288e9152d0db398e6402e4358",
+          "query_id": "typed-query-9c0f129f1a68461811cf6459da0076d3e8b61802171c6abd6842e5cfce5165f2",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-7753f60e14241a06a03b4bf1ef06972b6c53dc4dd91924523c58da9ac8a96b58",
+          "query_id": "typed-query-b93f2da7e33b67d4bdbc92ca57b5e15cc17f5101a85c5c62aa5f412f8bba66f7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-27d5e005af285ce276d47f4e26448b59da11fe2c2c7f1df14abbb0e43616a0d5",
+          "query_id": "typed-query-03c873c83b91b3a5836702c72ad2fa7fe6465234c14f9948fdb5dfde6882e19b",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-243c41040f8c58d263747df1b4d521c90dde59257f06df9276ea55d1ddba589c",
+          "query_id": "typed-query-6f01329d465848816a159fe6b71f7da51fa69c06bbf57d7bc42937076e4e43d7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-7e3889e6d679cbcfb516cdeb0da65cf309db447d4be1575f0ac31eb58b918adf",
+          "query_id": "typed-query-14de16ae89e589815f3008eb64211127237f38634744d0c67c5647bad89b6b0b",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-e15e2851559e08272cd35cd7089dca0f1a7377355c2480f0281eac19af9c2173",
+          "query_id": "typed-query-ecbb9e391b6cbd8575e56a08139416a870524f11d6549c0644bbbc3d962550de",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-bcf99ce364b3c2c8bd6977c468e1dcef27fcaab1e6bd0ac4df8c99c63bf31827",
+          "query_id": "typed-query-aeeb017431d3858eef1c1c991feb70c14461394ca901d4990f3b9ed8386b89c9",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-3b974c42383aefd4949fa7c83140e7403d01f23adeff665c7d2a2af2f9b310a2",
+          "query_id": "typed-query-51fba3620bf66cc2c978150a8d6a00fd7d18efbd33feae650dfcd16f01700580",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-4ad68cb33114682286e8003078bc7f1e34f0e2570b6b7b9b11daed7e70d40db7",
+          "query_id": "typed-query-21ae732de18e222b928fc91a02d8ac69c904a30abfe47945795e9968d53c13fb",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-a396e5d36c9d352546aa034b0bc9e44dace9c6bdaceb3ebc49b9bf4c572a7214",
+          "query_id": "typed-query-8234b32666b0b972e0806e0e2872909d96c0e114cf84766e629ce33d1f5795ab",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-fe80e8d38487a3afb6e635d0726f46297289320d397b43faca3ea1710e4fe90d",
+          "query_id": "typed-query-2eecd86c41e39f4b615dd7065746c1ddfcfae161000a65e2cd81a98dd759e1a0",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-996fe0b40a003e66068dfa73445bad1ff3d0bd0fc9c6d33d88e1fc8e560c9c6e",
+          "query_id": "typed-query-e28aff5eaeca4d50ef486aead2ad067167db52752f4ac29428378ba8e9ef4f60",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-be27e48941e93c63eb00f9bb5623610b8117e713aa389bbbd8ff620aba0f623e",
+          "query_id": "typed-query-7d61e8af09a08594ae1da598ad6796a502dfb726e6703372891d8af587052570",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-8f5cefca2d851c50d7c99111fef53e3c0b9d219d31b2b9f90f529f57fee0c77c",
+          "query_id": "typed-query-ed3cea22c1351bfb68b83c4bbb283082203780f3036a9c7e6987e092c762fbaa",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "DIRECT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-1508ba5b478e7273c5cfa77b33c00426396772331ff04ae6f7fbf46dfee61c84",
+          "query_id": "typed-query-54599f50d0b6735eb7131d92e57ec23ac1ebae327248174155aad135f0ce4cbd",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-95c9e6e20e08d6fd94325111d3b1b18abf5738776f2ec1ace4c36677b068235c",
+          "query_id": "typed-query-257c6b32c87c614208f6795503fa4e35dc9d705430d5a224d64aba01fd443d0d",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-f8ea34fcf273476ce8b2720676f4cfb143dd6b9703041e2247a7401e3be53186",
+          "query_id": "typed-query-aa08f6a67e63b2187a8f620d4c93cfaff0203a9fb6f28661e3e132ad75c75add",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-4ac23c13e25bca8ba9110e7903e2039bc1b7e8fe5f15242a6cd75b51573eb78f",
+          "query_id": "typed-query-93b5a7660d317bfaef283fcd997075c34167e270c3fe2bd7f8277a716bcd3ef7",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-1fd6341e7441c977ea8cf2608b13cc8a94068f6b1d32d9e07f8cb5cd5bf944e5",
+          "query_id": "typed-query-935d8fda31bde09bcf6f4f26b1e4cd9b9adacf775abae972a8ddca3ad307fbd9",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        },
+        {
+          "record_id": "typed-input-0b964edb519aa27f2c38e14ea06dd1c1827371b5a2cc351aa5c2872566bda040",
+          "query_id": "typed-query-4c007ad9cef207f182f516888411dab54bfe42311bcabaf80d6a2053c4d6e7a4",
+          "rule": "first_direct_constituent_lexical_v1",
+          "value": {
+            "state": "ABSENT",
+            "via": null
+          }
+        }
+      ]
+    }
+  },
+  "development": {
+    "packets": 59,
+    "focus_worlds": 6,
+    "focus_node_counts": {
+      "10": 50,
+      "9": 9
+    },
+    "kind_packets": {
+      "parts": 6,
+      "reach": 53
+    },
+    "training_focus_overlap": 0,
+    "metadata_policy": {
+      "bank": "ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS",
+      "comparison": "Parts/reach development structure-and-size transfer only; not all-eight-kind transfer",
+      "labels": "Dev<family-index>Node<sorted-structural-node-index>; no legacy labels or target menus",
+      "legacy_parity": "Topology identities only; not legacy18-question/text/difficulty/answer parity",
+      "novelty": "Excluded under pinned historical inventory; not authenticated absolute historical nonexposure",
+      "questions": "PARTS_ROOT_AND_REACH_FROM_ROOT_TO_EVERY_OTHER_PUBLIC_NODE",
+      "reach_rule": "first_direct_constituent_lexical_v1",
+      "root": "LEXICAL_FIRST_AUTHORED_NODE_WITH_ZERO_INDEGREE",
+      "selection": "EXACT_SIX_RETAINED_PUBLIC_DEVELOPMENT_TOPOLOGY_IDS; NO_ANSWER_CLASS_QUERY_SELECTION",
+      "semantics": "Complete supplied DAG snapshot; authored declarations; no world truth or temporal-process claim",
+      "split": "development",
+      "supports": "NONE_EQUAL_FOR_BOTH_STUDY_ARMS",
+      "target_boundary": "NO_MAIN_TARGETS_IN_FACTORY; SCORE_ONLY_AFTER_DURABLE_PUBLIC_PREDICTION_SEALS",
+      "tokenizer": "UNCHANGED_RETAINED_TRAINING_FIT_UTF8_BYTE_FALLBACK_32768_NO_TRUNCATION"
+    }
+  },
+  "actual_first_pass": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    }
+  ],
+  "all_first_pass_record_orders_equal": true,
+  "elapsed_seconds": 1.305959,
+  "counting_boundary": {
+    "formal_test_functions": 0,
+    "diagnostic_program_runs": 1,
+    "repeat_runs": 0,
+    "data_variants": 1,
+    "study_configs": 6,
+    "source_packages": 6,
+    "first_pass_record_logs": 6,
+    "first_pass_rows_per_log": 147,
+    "all_bank_graph_cases": 64,
+    "held_overlap_cases": 5,
+    "development_packet_cases": 59,
+    "models_loaded_or_run": 0
+  }
+}

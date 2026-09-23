@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "initial_count_correction": "Only metadata development_packet_cases:60 corrected to len(DEV records)=59; initial result preserved",
+  "source_sha256": "3F39C49AE99C75B9E28874307E496A7B2A892FCA6AD142AE83AA985AD8C13679",
+  "output_sha256": "2A68F0A9D602BD3EE943BA2D00F7C233BDFD39ECC4E8B292892A9DCC8A9165F8"
+}

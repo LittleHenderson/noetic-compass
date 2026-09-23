@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-failure-a7\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_failure_research_20260922\agents\A7\verify_original_records.py", line 128, in <module>
+    c = member(subject, archive, archive_row, 'checks_002/public_course.json')
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-failure-a7\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_failure_research_20260922\agents\A7\verify_original_records.py", line 65, in member
+    package = next(p for p in MANIFEST['source_packages'] if Path(p['package']['path']) == Path(archive_row['path']))
+StopIteration

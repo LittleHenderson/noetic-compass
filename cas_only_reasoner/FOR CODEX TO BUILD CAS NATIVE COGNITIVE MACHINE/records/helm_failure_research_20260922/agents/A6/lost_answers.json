@@ -1,0 +1,1040 @@
+[
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260917,
+    "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+    "packet": {
+      "cue": null,
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "query": {
+        "arguments": {
+          "part": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0",
+          "whole": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1"
+        },
+        "focus_world_id": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+        "kind": "reach",
+        "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+        "rule": "first_direct_constituent_lexical_v1",
+        "schema": "cas.typed-teaching-query/0.1",
+        "source_digest": "8df4f96882a7185a3b11e68a00bbc0ca33d0b59a2bca5ba0b86f6d1de476482a"
+      },
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "role_catalog": {
+        "1": "declared whole kind and function",
+        "2": "declared setting and participants",
+        "3": "cross-domain containment-pattern comparison",
+        "4": "explicit node correspondence",
+        "5": "constituents and structural relations",
+        "6": "complete static structural account; temporal process requires additional evidence"
+      },
+      "schema": "cas.typed-teaching-model-packet/0.1",
+      "source_digest": "8df4f96882a7185a3b11e68a00bbc0ca33d0b59a2bca5ba0b86f6d1de476482a",
+      "source_world_id": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+      "supports": []
+    },
+    "before_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5",
+        "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+        "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": "VIA_N3"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 0,
+      "packet_digest": "2c5953ca2a6ab3b7d0b68ead36c50ebe1cb095ab3b1ad4e88fb8371af29ba948",
+      "prediction_id": "typed-prediction-30be79aed2fa64e68d4b3ff6e7af601fc65a81a00ff8ed58d38dbff5140f9b50",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "run_context_digest": "bfee0e7c0a36ed6b7e46b6b32f7d4bd0637fef07464737f403659e601dcb881d",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": {
+          "ABSENT": -0.176187664270401,
+          "DIRECT": -1.070238709449768,
+          "VIA_N0": 3.13063907623291,
+          "VIA_N1": 6.575292587280273,
+          "VIA_N2": 4.761305332183838,
+          "VIA_N3": 6.773494243621826
+        }
+      },
+      "slot_plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5"
+    },
+    "after_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "DIRECT",
+          "via": null
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5",
+        "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+        "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": "DIRECT"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 1470,
+      "packet_digest": "2c5953ca2a6ab3b7d0b68ead36c50ebe1cb095ab3b1ad4e88fb8371af29ba948",
+      "prediction_id": "typed-prediction-24a6bfda6de2b9742ec9c647fc23a22f853db7ee22c1bec915dbe861022ef794",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "run_context_digest": "bfee0e7c0a36ed6b7e46b6b32f7d4bd0637fef07464737f403659e601dcb881d",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-b8dba2a7c65b4766e04608dd0fafca3c22c6d8faaba1de775eab5374a16442c8": {
+          "ABSENT": -6.0152130126953125,
+          "DIRECT": 2.56620717048645,
+          "VIA_N0": -51.93198013305664,
+          "VIA_N1": -47.228187561035156,
+          "VIA_N2": -43.74720001220703,
+          "VIA_N3": -25.31268310546875
+        }
+      },
+      "slot_plan_digest": "8af2fa3095c2c1403d91fd5d9dd465f25c2d4989e37ccd296699a9fcf502ccd5"
+    },
+    "before_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "9e1522ce8f333d9b1435c42a1b26234d037f98ab566914cec8cf67a418337a77",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "ef4804d461b3924af02698f7902c97771589f7483498b444e7b33dd7ebf879cf",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": true,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-30be79aed2fa64e68d4b3ff6e7af601fc65a81a00ff8ed58d38dbff5140f9b50",
+      "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "rule": "first_direct_constituent_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "8df4f96882a7185a3b11e68a00bbc0ca33d0b59a2bca5ba0b86f6d1de476482a",
+      "target_digest": "2f306fe878e24b0a85bd0e9dabf9c2d392f438b4b03c0609020e172f65712c14",
+      "witnesses": [
+        {
+          "answer_digest": "9e1522ce8f333d9b1435c42a1b26234d037f98ab566914cec8cf67a418337a77",
+          "evidence": {
+            "path": [
+              "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+              "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+              "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+            ],
+            "selection": "LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH"
+          }
+        }
+      ]
+    },
+    "after_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "33ff5f37ff40d53f1918b00b679ad959b1739331f1e75b827285c2f3e6b0886f",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "38e7f1e8acf4d6e6f933b9a7928efa585f51f2cfb881b474c729d92b2f1f3359",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": false,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-24a6bfda6de2b9742ec9c647fc23a22f853db7ee22c1bec915dbe861022ef794",
+      "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "rule": "first_direct_constituent_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "8df4f96882a7185a3b11e68a00bbc0ca33d0b59a2bca5ba0b86f6d1de476482a",
+      "target_digest": "2f306fe878e24b0a85bd0e9dabf9c2d392f438b4b03c0609020e172f65712c14",
+      "witnesses": []
+    }
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+    "packet": {
+      "cue": "CUBE_FACE_5",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "query": {
+        "arguments": {
+          "part": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0",
+          "whole": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+        },
+        "focus_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "rule": "bfs_immediate_predecessor_lexical_v1",
+        "schema": "cas.typed-teaching-query/0.1",
+        "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+      },
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "role_catalog": {
+        "1": "declared whole kind and function",
+        "2": "declared setting and participants",
+        "3": "cross-domain containment-pattern comparison",
+        "4": "explicit node correspondence",
+        "5": "constituents and structural relations",
+        "6": "complete static structural account; temporal process requires additional evidence"
+      },
+      "schema": "cas.typed-teaching-model-packet/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "source_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "supports": [
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n0",
+              "whole": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n2"
+            },
+            "focus_world_id": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+            "kind": "reach",
+            "query_id": "typed-query-fb0fe2a0c2bb4225eadfd3e8a53a8d0b74d8e9e5a67774e4fae2cd5a46bc35c2",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-fb0fe2a0c2bb4225eadfd3e8a53a8d0b74d8e9e5a67774e4fae2cd5a46bc35c2",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9/n1"
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n2",
+              "whole": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n1"
+            },
+            "focus_world_id": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237",
+            "kind": "reach",
+            "query_id": "typed-query-ef346dfb31efa689d66ad5d5abc9ac9bd450237aa09c6c5a146a7b3e4dd0c68b",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-ef346dfb31efa689d66ad5d5abc9ac9bd450237aa09c6c5a146a7b3e4dd0c68b",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n0"
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n0",
+              "whole": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n1"
+            },
+            "focus_world_id": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128",
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n2"
+            }
+          }
+        }
+      ]
+    },
+    "before_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": "VIA_N3"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 0,
+      "packet_digest": "077dfaf7bfd3ff32cd08085ae6d4674d9b3dfefdaed519796e95f809ba234546",
+      "prediction_id": "typed-prediction-0fe95368ee3876698ff11a55c470a5f6db9aae3c0dbc0c19d972fbaba69647a3",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": {
+          "ABSENT": -0.2523500919342041,
+          "DIRECT": 1.2058537006378174,
+          "VIA_N0": -2.2020397186279297,
+          "VIA_N1": 16.086816787719727,
+          "VIA_N2": 5.516077041625977,
+          "VIA_N3": 17.396583557128906
+        }
+      },
+      "slot_plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce"
+    },
+    "after_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": "VIA_N1"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 1470,
+      "packet_digest": "077dfaf7bfd3ff32cd08085ae6d4674d9b3dfefdaed519796e95f809ba234546",
+      "prediction_id": "typed-prediction-7bb4c8df5e79ddd59446df3254d5bb0b2b268ba27a3ed267e67096a8f2bbae1f",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-17e3f7cb37231dc1301a1bdc6e7acd5b9620607f6f941454d6d3096c9e430619": {
+          "ABSENT": -4.343050003051758,
+          "DIRECT": 2.3660178184509277,
+          "VIA_N0": 17.353687286376953,
+          "VIA_N1": 26.474693298339844,
+          "VIA_N2": 6.176858425140381,
+          "VIA_N3": 22.808488845825195
+        }
+      },
+      "slot_plan_digest": "b82732de6130d94ef2dc991d5367d84eaa7ad99c21a904e869b0cfa567fa44ce"
+    },
+    "before_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "3c31e9a6544103096c50b64aa982d985e3ab17537c3d59b869f08abd0cb74558",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": true,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-0fe95368ee3876698ff11a55c470a5f6db9aae3c0dbc0c19d972fbaba69647a3",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": [
+        {
+          "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+          "evidence": {
+            "path": [
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+            ],
+            "selection": "LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR"
+          }
+        }
+      ]
+    },
+    "after_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "0c708d67b2445fbf1b7c4daa8dfeaa615a9ab0763c6baf9a524863704daaee48",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "61c5f93dbfccf98b39e55d371d12dca12984e1af12906ed11c16237a337500ba",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": false,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-7bb4c8df5e79ddd59446df3254d5bb0b2b268ba27a3ed267e67096a8f2bbae1f",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": []
+    }
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+    "packet": {
+      "cue": "CUBE_FACE_5",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "query": {
+        "arguments": {
+          "part": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0",
+          "whole": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+        },
+        "focus_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "rule": "bfs_immediate_predecessor_lexical_v1",
+        "schema": "cas.typed-teaching-query/0.1",
+        "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+      },
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "role_catalog": {
+        "1": "declared whole kind and function",
+        "2": "declared setting and participants",
+        "3": "cross-domain containment-pattern comparison",
+        "4": "explicit node correspondence",
+        "5": "constituents and structural relations",
+        "6": "complete static structural account; temporal process requires additional evidence"
+      },
+      "schema": "cas.typed-teaching-model-packet/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "source_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "supports": []
+    },
+    "before_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": "VIA_N3"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 0,
+      "packet_digest": "bef302831b479a92d9edb2c17d786cd0b1a10df2d65c7f8a96470d0387b1d295",
+      "prediction_id": "typed-prediction-e2a3114e4fbabd106d5ddac13b1b8d625d120ad0f6a7963e2c5ce05ca1d63c38",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": {
+          "ABSENT": -0.2523500919342041,
+          "DIRECT": 1.2058537006378174,
+          "VIA_N0": -2.2020397186279297,
+          "VIA_N1": 16.086816787719727,
+          "VIA_N2": 5.516077041625977,
+          "VIA_N3": 17.396583557128906
+        }
+      },
+      "slot_plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4"
+    },
+    "after_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": "VIA_N1"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 1470,
+      "packet_digest": "bef302831b479a92d9edb2c17d786cd0b1a10df2d65c7f8a96470d0387b1d295",
+      "prediction_id": "typed-prediction-43fe2b6bcfeac892a10e0e3ed9d7a48105519649f91330ee40a8956d3cf3ceb9",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-22bbe3c08348c708ca47c3a1791fd9f43ebf34f8004e034e9678f12d54a0096f": {
+          "ABSENT": -4.343050003051758,
+          "DIRECT": 2.3660178184509277,
+          "VIA_N0": 17.353687286376953,
+          "VIA_N1": 26.474693298339844,
+          "VIA_N2": 6.176858425140381,
+          "VIA_N3": 22.808488845825195
+        }
+      },
+      "slot_plan_digest": "e6cb3fab9350ceca3e75d3f9f1465e40c165159d803060b2e56aebe2fe2c9bb4"
+    },
+    "before_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "3c31e9a6544103096c50b64aa982d985e3ab17537c3d59b869f08abd0cb74558",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": true,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-e2a3114e4fbabd106d5ddac13b1b8d625d120ad0f6a7963e2c5ce05ca1d63c38",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": [
+        {
+          "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+          "evidence": {
+            "path": [
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+            ],
+            "selection": "LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR"
+          }
+        }
+      ]
+    },
+    "after_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "0c708d67b2445fbf1b7c4daa8dfeaa615a9ab0763c6baf9a524863704daaee48",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "61c5f93dbfccf98b39e55d371d12dca12984e1af12906ed11c16237a337500ba",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": false,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-43fe2b6bcfeac892a10e0e3ed9d7a48105519649f91330ee40a8956d3cf3ceb9",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": []
+    }
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+    "packet": {
+      "cue": "CUBE_FACE_5",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "query": {
+        "arguments": {
+          "part": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0",
+          "whole": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+        },
+        "focus_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "rule": "bfs_immediate_predecessor_lexical_v1",
+        "schema": "cas.typed-teaching-query/0.1",
+        "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+      },
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "role_catalog": {
+        "1": "declared whole kind and function",
+        "2": "declared setting and participants",
+        "3": "cross-domain containment-pattern comparison",
+        "4": "explicit node correspondence",
+        "5": "constituents and structural relations",
+        "6": "complete static structural account; temporal process requires additional evidence"
+      },
+      "schema": "cas.typed-teaching-model-packet/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "source_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "supports": [
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2",
+              "whole": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0"
+            },
+            "focus_world_id": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f",
+            "kind": "reach",
+            "query_id": "typed-query-1e07362b700fe5108de25fd33ad171afc7a4dda2f57530d154103d39efab4f3c",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-1e07362b700fe5108de25fd33ad171afc7a4dda2f57530d154103d39efab4f3c",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n2",
+              "whole": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n1"
+            },
+            "focus_world_id": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237",
+            "kind": "reach",
+            "query_id": "typed-query-ef346dfb31efa689d66ad5d5abc9ac9bd450237aa09c6c5a146a7b3e4dd0c68b",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-ef346dfb31efa689d66ad5d5abc9ac9bd450237aa09c6c5a146a7b3e4dd0c68b",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237/n0"
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n0",
+              "whole": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n1"
+            },
+            "focus_world_id": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128",
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n2"
+            }
+          }
+        }
+      ]
+    },
+    "before_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": "VIA_N3"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 0,
+      "packet_digest": "9a7cdd0e62e1ad84e7c4773c3ccf965efae1b7f97e8c3f273e6beab5b09b46f1",
+      "prediction_id": "typed-prediction-c76c0c960eccfcc2a3ccda4ad4d47c5767798367390c2aa37d6e4cb513ef44c9",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": {
+          "ABSENT": -0.2523500919342041,
+          "DIRECT": 1.2058537006378174,
+          "VIA_N0": -2.2020397186279297,
+          "VIA_N1": 16.086816787719727,
+          "VIA_N2": 5.516077041625977,
+          "VIA_N3": 17.396583557128906
+        }
+      },
+      "slot_plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353"
+    },
+    "after_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": "VIA_N1"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 1470,
+      "packet_digest": "9a7cdd0e62e1ad84e7c4773c3ccf965efae1b7f97e8c3f273e6beab5b09b46f1",
+      "prediction_id": "typed-prediction-51e0de32e8afbd575c3528c31f869c616338bb02b7183c484366d5633d0b5147",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-2b4e9b6a5140e8ef15bf5ac060ef06d388f5748320ef4ebf9f7f620dc28758ae": {
+          "ABSENT": -4.343050003051758,
+          "DIRECT": 2.3660178184509277,
+          "VIA_N0": 17.353687286376953,
+          "VIA_N1": 26.474693298339844,
+          "VIA_N2": 6.176858425140381,
+          "VIA_N3": 22.808488845825195
+        }
+      },
+      "slot_plan_digest": "a77c87f2acc3bd7b234d46778e9e1da9af42d3e912cbe081a10e58585aea7353"
+    },
+    "before_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "3c31e9a6544103096c50b64aa982d985e3ab17537c3d59b869f08abd0cb74558",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": true,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-c76c0c960eccfcc2a3ccda4ad4d47c5767798367390c2aa37d6e4cb513ef44c9",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": [
+        {
+          "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+          "evidence": {
+            "path": [
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+            ],
+            "selection": "LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR"
+          }
+        }
+      ]
+    },
+    "after_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "0c708d67b2445fbf1b7c4daa8dfeaa615a9ab0763c6baf9a524863704daaee48",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "61c5f93dbfccf98b39e55d371d12dca12984e1af12906ed11c16237a337500ba",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": false,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-51e0de32e8afbd575c3528c31f869c616338bb02b7183c484366d5633d0b5147",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": []
+    }
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+    "packet": {
+      "cue": "CUBE_FACE_5",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "query": {
+        "arguments": {
+          "part": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0",
+          "whole": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2"
+        },
+        "focus_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "rule": "bfs_immediate_predecessor_lexical_v1",
+        "schema": "cas.typed-teaching-query/0.1",
+        "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+      },
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "role_catalog": {
+        "1": "declared whole kind and function",
+        "2": "declared setting and participants",
+        "3": "cross-domain containment-pattern comparison",
+        "4": "explicit node correspondence",
+        "5": "constituents and structural relations",
+        "6": "complete static structural account; temporal process requires additional evidence"
+      },
+      "schema": "cas.typed-teaching-model-packet/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "source_world_id": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "supports": [
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+          "query": {
+            "arguments": {
+              "whole": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2"
+            },
+            "focus_world_id": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2",
+            "kind": "parts",
+            "query_id": "typed-query-bbf2418e96546b933387a40935dc79abd4119d41daef49eb7bfa3e801f11411f",
+            "rule": "direct_contains_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "parts",
+            "query_id": "typed-query-bbf2418e96546b933387a40935dc79abd4119d41daef49eb7bfa3e801f11411f",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "nodes": [
+                "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n0",
+                "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3"
+              ]
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n0",
+              "whole": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n1"
+            },
+            "focus_world_id": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128",
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-8dd8bfd40b1283d1c3d4aed7fefea7a90617206ec77b7b2304382f86cc5fffb8",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/n2"
+            }
+          }
+        },
+        {
+          "cue": "CUBE_FACE_5",
+          "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+          "query": {
+            "arguments": {
+              "part": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c/n2",
+              "whole": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c/n0"
+            },
+            "focus_world_id": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c",
+            "kind": "reach",
+            "query_id": "typed-query-a8b39e3419cd898b3426cccd002e511a95459787b1078ffa6e815fd98df56ba5",
+            "rule": "bfs_immediate_predecessor_lexical_v1",
+            "schema": "cas.typed-teaching-query/0.1",
+            "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0"
+          },
+          "selection_rule": "LEXICAL_FIRST_VALID_WORKED_EXAMPLE_NOT_UNIQUENESS_CLAIM",
+          "worked_answer": {
+            "kind": "reach",
+            "query_id": "typed-query-a8b39e3419cd898b3426cccd002e511a95459787b1078ffa6e815fd98df56ba5",
+            "schema": "cas.typed-teaching-answer/0.1",
+            "value": {
+              "state": "VIA",
+              "via": "world-41ef020196c25f201484aa45e89f8cc7b95c15a8f1c2e4e38aa3d194af4c2b1c/n1"
+            }
+          }
+        }
+      ]
+    },
+    "before_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": "VIA_N3"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 0,
+      "packet_digest": "2658384708b5366082ad9e310e2a9131bd838df4b7460d0a97d4eb81f0c327d0",
+      "prediction_id": "typed-prediction-80d041cdb14308811c47e5af56596a93f97e1cf0e19ee3dec6dd10be10b2a601",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": {
+          "ABSENT": -0.2523500919342041,
+          "DIRECT": 1.2058537006378174,
+          "VIA_N0": -2.2020397186279297,
+          "VIA_N1": 16.086816787719727,
+          "VIA_N2": 5.516077041625977,
+          "VIA_N3": 17.396583557128906
+        }
+      },
+      "slot_plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc"
+    },
+    "after_prediction": {
+      "answer": {
+        "kind": "reach",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "schema": "cas.typed-teaching-answer/0.1",
+        "value": {
+          "state": "VIA",
+          "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        }
+      },
+      "decisions": {
+        "correspondence_candidate_id": null,
+        "plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc",
+        "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+        "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+        "schema": "cas.typed-teaching-slot-decisions/0.1",
+        "selected": {
+          "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": "VIA_N1"
+        }
+      },
+      "depth": 8,
+      "encoder_identity_digest": "15d67197fda16cb438c6b6400e78d57ea6963a5909580e1339febeddfcb49fad",
+      "model_revision": 1470,
+      "packet_digest": "2658384708b5366082ad9e310e2a9131bd838df4b7460d0a97d4eb81f0c327d0",
+      "prediction_id": "typed-prediction-d30d0a557cbc1440a932517b668392dccf2e39a41bfae96bff5e6eb08b86fa09",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "run_context_digest": "c6edde38b174ceb73cf58f5b475ad54038e4b7dd21b87864a0d630d7804cc9c9",
+      "schema": "cas.typed-teaching-prediction/0.1",
+      "scores": {
+        "typed-slot-f0d8658baf41d972d1814ab8f5edced656d0cf5ba6dc77bb3a6b0f0a995e95f4": {
+          "ABSENT": -4.343050003051758,
+          "DIRECT": 2.3660178184509277,
+          "VIA_N0": 17.353687286376953,
+          "VIA_N1": 26.474693298339844,
+          "VIA_N2": 6.176858425140381,
+          "VIA_N3": 22.808488845825195
+        }
+      },
+      "slot_plan_digest": "51721750dd198d7b166561d1734cf83e2aef08548ebcf30d3a864054e0c7d5bc"
+    },
+    "before_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "3c31e9a6544103096c50b64aa982d985e3ab17537c3d59b869f08abd0cb74558",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": true,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-80d041cdb14308811c47e5af56596a93f97e1cf0e19ee3dec6dd10be10b2a601",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": [
+        {
+          "answer_digest": "eb9dd41acce6c3709847f62baf00ef7418979f67663cd9848072fee0df61747a",
+          "evidence": {
+            "path": [
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+              "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+            ],
+            "selection": "LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR"
+          }
+        }
+      ]
+    },
+    "after_score": {
+      "admissible_answer_count": 1,
+      "answer_digest": "0c708d67b2445fbf1b7c4daa8dfeaa615a9ab0763c6baf9a524863704daaee48",
+      "boundary": "Private deterministic semantics of supplied public declarations; no source authentication, outside-world truth, learner inference or learning claim.",
+      "check_digest": "61c5f93dbfccf98b39e55d371d12dca12984e1af12906ed11c16237a337500ba",
+      "checker_profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+      "correct": false,
+      "kind": "reach",
+      "prediction_id": "typed-prediction-d30d0a557cbc1440a932517b668392dccf2e39a41bfae96bff5e6eb08b86fa09",
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "schema": "cas.typed-teaching-private-check/0.1",
+      "source_digest": "0228be45f1225f6b90427d1567bfaf00e83e1980bd5cbcfd7c8f8ddf4e4edaf0",
+      "target_digest": "03abf63f6d9bc50c08d478f6fb1c33eb53e47095ee117d714ba67921025ea555",
+      "witnesses": []
+    }
+  }
+]

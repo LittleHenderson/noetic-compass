@@ -1,0 +1,527 @@
+{
+  "scope": "Pinned course, development, six configs/source ZIPs and first-pass saved batches; no neural execution",
+  "graph_counts": {
+    "worlds": 64,
+    "node_counts": {
+      "4": 52,
+      "3": 12
+    },
+    "unrooted_directed_shapes": 6,
+    "colored_shapes_declared_whole_participant_rank": 6,
+    "trained_focus_worlds": 19,
+    "held_focus_worlds": 5
+  },
+  "split_counts": {
+    "all": {
+      "records": 564,
+      "questions": 244,
+      "kind_records": {
+        "context": 70,
+        "correspondence": 88,
+        "reach": 107,
+        "definition": 70,
+        "role_set": 36,
+        "parts": 53,
+        "analogy": 70,
+        "edge_account": 70
+      },
+      "kind_questions": {
+        "context": 24,
+        "correspondence": 24,
+        "reach": 64,
+        "definition": 24,
+        "role_set": 36,
+        "parts": 24,
+        "analogy": 24,
+        "edge_account": 24
+      },
+      "query_multiplicity": {
+        "3": 69,
+        "4": 46,
+        "1": 100,
+        "5": 5,
+        "2": 24
+      }
+    },
+    "trained": {
+      "records": 358,
+      "questions": 189,
+      "kind_records": {
+        "definition": 36,
+        "role_set": 30,
+        "correspondence": 54,
+        "parts": 44,
+        "reach": 71,
+        "edge_account": 46,
+        "analogy": 36,
+        "context": 41
+      },
+      "kind_questions": {
+        "definition": 18,
+        "role_set": 30,
+        "correspondence": 19,
+        "parts": 19,
+        "reach": 50,
+        "edge_account": 19,
+        "analogy": 15,
+        "context": 19
+      },
+      "query_multiplicity": {
+        "1": 96,
+        "2": 40,
+        "5": 4,
+        "4": 15,
+        "3": 34
+      }
+    },
+    "held": {
+      "records": 127,
+      "questions": 50,
+      "kind_records": {
+        "reach": 26,
+        "correspondence": 20,
+        "context": 17,
+        "parts": 9,
+        "analogy": 17,
+        "edge_account": 17,
+        "role_set": 6,
+        "definition": 15
+      },
+      "kind_questions": {
+        "reach": 14,
+        "correspondence": 5,
+        "context": 5,
+        "parts": 5,
+        "analogy": 5,
+        "edge_account": 5,
+        "role_set": 6,
+        "definition": 5
+      },
+      "query_multiplicity": {
+        "4": 15,
+        "5": 1,
+        "1": 20,
+        "3": 14
+      }
+    },
+    "excluded": {
+      "records": 79,
+      "questions": 60,
+      "kind_records": {
+        "context": 12,
+        "correspondence": 14,
+        "definition": 19,
+        "analogy": 17,
+        "reach": 10,
+        "edge_account": 7
+      },
+      "kind_questions": {
+        "context": 10,
+        "correspondence": 11,
+        "definition": 14,
+        "analogy": 10,
+        "reach": 8,
+        "edge_account": 7
+      },
+      "query_multiplicity": {
+        "1": 42,
+        "2": 17,
+        "3": 1
+      }
+    }
+  },
+  "exposure": {
+    "trained_record_text_held_references": 0,
+    "trained_world_choice_records": {
+      "definition": 36,
+      "analogy": 36,
+      "context": 41
+    },
+    "full_bank_worlds_in_world_choice_reading": 64,
+    "held_worlds_in_world_choice_reading": [
+      "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+      "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+      "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+      "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9"
+    ],
+    "supports_per_record": {
+      "3": 384,
+      "0": 180
+    },
+    "main_record_answer_keys": []
+  },
+  "development": {
+    "packets": 59,
+    "focus_worlds": 6,
+    "focus_node_counts": {
+      "10": 50,
+      "9": 9
+    },
+    "kind_packets": {
+      "parts": 6,
+      "reach": 53
+    },
+    "training_focus_overlap": 0,
+    "metadata_policy": {
+      "bank": "ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS",
+      "comparison": "Parts/reach development structure-and-size transfer only; not all-eight-kind transfer",
+      "labels": "Dev<family-index>Node<sorted-structural-node-index>; no legacy labels or target menus",
+      "legacy_parity": "Topology identities only; not legacy18-question/text/difficulty/answer parity",
+      "novelty": "Excluded under pinned historical inventory; not authenticated absolute historical nonexposure",
+      "questions": "PARTS_ROOT_AND_REACH_FROM_ROOT_TO_EVERY_OTHER_PUBLIC_NODE",
+      "reach_rule": "first_direct_constituent_lexical_v1",
+      "root": "LEXICAL_FIRST_AUTHORED_NODE_WITH_ZERO_INDEGREE",
+      "selection": "EXACT_SIX_RETAINED_PUBLIC_DEVELOPMENT_TOPOLOGY_IDS; NO_ANSWER_CLASS_QUERY_SELECTION",
+      "semantics": "Complete supplied DAG snapshot; authored declarations; no world truth or temporal-process claim",
+      "split": "development",
+      "supports": "NONE_EQUAL_FOR_BOTH_STUDY_ARMS",
+      "target_boundary": "NO_MAIN_TARGETS_IN_FACTORY; SCORE_ONLY_AFTER_DURABLE_PUBLIC_PREDICTION_SEALS",
+      "tokenizer": "UNCHANGED_RETAINED_TRAINING_FIT_UTF8_BYTE_FALLBACK_32768_NO_TRUNCATION"
+    }
+  },
+  "actual_first_pass": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "batches": 147,
+      "presentations": 1176,
+      "distinct_records": 358,
+      "distinct_questions": 189,
+      "kind_presentations": {
+        "role_set": 147,
+        "definition": 147,
+        "context": 147,
+        "analogy": 147,
+        "correspondence": 147,
+        "parts": 147,
+        "edge_account": 147,
+        "reach": 147
+      },
+      "record_repetition_histogram": {
+        "5": 33,
+        "4": 117,
+        "3": 127,
+        "2": 81
+      },
+      "question_repetition_histogram": {
+        "5": 31,
+        "16": 6,
+        "13": 2,
+        "6": 18,
+        "18": 1,
+        "7": 7,
+        "9": 9,
+        "4": 21,
+        "3": 14,
+        "11": 6,
+        "14": 3,
+        "12": 11,
+        "15": 1,
+        "10": 6,
+        "8": 16,
+        "2": 37
+      },
+      "every_batch_one_each_kind": true,
+      "held_or_excluded_training_presentations": 0,
+      "world_choice_presentations": 441,
+      "order_digest": "037a5d63b59807db0ee95f9c10c2f795aa6681cf42d7e96157654bc8e51896ef"
+    }
+  ],
+  "all_first_pass_record_orders_equal": true,
+  "elapsed_seconds": 1.305959,
+  "counting_boundary": {
+    "formal_test_functions": 0,
+    "diagnostic_program_runs": 1,
+    "repeat_runs": 0,
+    "data_variants": 1,
+    "study_configs": 6,
+    "source_packages": 6,
+    "first_pass_record_logs": 6,
+    "first_pass_rows_per_log": 147,
+    "all_bank_graph_cases": 64,
+    "held_overlap_cases": 5,
+    "development_packet_cases": 59,
+    "models_loaded_or_run": 0
+  },
+  "held_overlap_counts": [
+    {
+      "held_world": "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952",
+      "trained_isomorphic_world_count": 2,
+      "trained_colored_isomorphic_world_count": 2
+    },
+    {
+      "held_world": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547",
+      "trained_isomorphic_world_count": 1,
+      "trained_colored_isomorphic_world_count": 1
+    },
+    {
+      "held_world": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc",
+      "trained_isomorphic_world_count": 3,
+      "trained_colored_isomorphic_world_count": 3
+    },
+    {
+      "held_world": "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be",
+      "trained_isomorphic_world_count": 1,
+      "trained_colored_isomorphic_world_count": 1
+    },
+    {
+      "held_world": "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9",
+      "trained_isomorphic_world_count": 3,
+      "trained_colored_isomorphic_world_count": 3
+    }
+  ],
+  "label_counts": {
+    "trained": {
+      "analogy:matching_world_count:6": 1,
+      "analogy:matching_world_count:9": 14,
+      "correspondence:MAPPING": 19,
+      "reach:ABSENT": 1,
+      "reach:DIRECT": 25,
+      "reach:VIA": 24
+    },
+    "held": {
+      "analogy:matching_world_count:6": 3,
+      "analogy:matching_world_count:9": 2,
+      "correspondence:MAPPING": 5,
+      "reach:ABSENT": 1,
+      "reach:DIRECT": 5,
+      "reach:VIA": 8
+    },
+    "development": {
+      "reach:ABSENT": 42,
+      "reach:DIRECT": 8,
+      "reach:VIA": 3
+    }
+  }
+}

@@ -1,0 +1,844 @@
+{
+  "input_course_sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+  "results": [
+    {
+      "seed": 20260917,
+      "query_id": "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "rule": "first_direct_constituent_lexical_v1",
+      "edges": [
+        [
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+        ],
+        [
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+        ],
+        [
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0",
+          "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n2"
+        ]
+      ],
+      "unique_directed_path": [
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3",
+        "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0"
+      ],
+      "expected": {
+        "state": "VIA",
+        "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+      },
+      "before": {
+        "state": "VIA",
+        "via": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n3"
+      },
+      "after": {
+        "state": "DIRECT",
+        "via": null
+      },
+      "before_correct": true,
+      "after_correct": false
+    },
+    {
+      "seed": 20260919,
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "edges": [
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+        ]
+      ],
+      "unique_directed_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "expected": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "before": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "after": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "before_correct": true,
+      "after_correct": false
+    },
+    {
+      "seed": 20260919,
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "edges": [
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+        ]
+      ],
+      "unique_directed_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "expected": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "before": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "after": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "before_correct": true,
+      "after_correct": false
+    },
+    {
+      "seed": 20260919,
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "edges": [
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+        ]
+      ],
+      "unique_directed_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "expected": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "before": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "after": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "before_correct": true,
+      "after_correct": false
+    },
+    {
+      "seed": 20260919,
+      "query_id": "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+      "rule": "bfs_immediate_predecessor_lexical_v1",
+      "edges": [
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+        ],
+        [
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+          "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+        ]
+      ],
+      "unique_directed_path": [
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n2",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3",
+        "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n0"
+      ],
+      "expected": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "before": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n3"
+      },
+      "after": {
+        "state": "VIA",
+        "via": "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547/n1"
+      },
+      "before_correct": true,
+      "after_correct": false
+    }
+  ],
+  "source_excerpts": [
+    {
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "archive_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "member_sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+      "lines": [
+        {
+          "number": 28,
+          "text": "    \"analogy\": (\"cross_domain_full_graph_isomorphism_v1\",),"
+        },
+        {
+          "number": 29,
+          "text": "    \"correspondence\": (\"full_directed_graph_bijection_v1\",),"
+        },
+        {
+          "number": 30,
+          "text": "    \"parts\": (\"direct_contains_v1\",),"
+        },
+        {
+          "number": 31,
+          "text": "    \"edge_account\": (\"complete_edge_set_lexical_serialization_v1\",),"
+        },
+        {
+          "number": 32,
+          "text": "    \"reach\": (\"first_direct_constituent_lexical_v1\","
+        },
+        {
+          "number": 33,
+          "text": "              \"bfs_immediate_predecessor_lexical_v1\"),"
+        },
+        {
+          "number": 34,
+          "text": "}"
+        },
+        {
+          "number": 35,
+          "text": "_ARGUMENTS = {"
+        },
+        {
+          "number": 36,
+          "text": "    \"role_set\": {\"focal_excerpt\"}, \"definition\": set(), \"context\": set(),"
+        },
+        {
+          "number": 37,
+          "text": "    \"analogy\": set(), \"correspondence\": {\"target_world_id\"},"
+        },
+        {
+          "number": 38,
+          "text": "    \"parts\": {\"whole\"}, \"edge_account\": set(), \"reach\": {\"whole\", \"part\"},"
+        },
+        {
+          "number": 39,
+          "text": "}"
+        },
+        {
+          "number": 40,
+          "text": "_QUERY_FIELDS = {\"schema\", \"source_digest\", \"focus_world_id\", \"kind\", \"rule\","
+        },
+        {
+          "number": 41,
+          "text": "                 \"arguments\", \"query_id\"}"
+        },
+        {
+          "number": 42,
+          "text": ""
+        },
+        {
+          "number": 43,
+          "text": ""
+        },
+        {
+          "number": 44,
+          "text": "class AnswerContractError(ValueError):"
+        },
+        {
+          "number": 45,
+          "text": "    \"\"\"A public query or answer is malformed, not necessarily false.\"\"\""
+        },
+        {
+          "number": 46,
+          "text": ""
+        },
+        {
+          "number": 47,
+          "text": ""
+        },
+        {
+          "number": 48,
+          "text": "def _require(condition, reason):"
+        },
+        {
+          "number": 49,
+          "text": "    if not condition:"
+        },
+        {
+          "number": 50,
+          "text": "        raise AnswerContractError(reason)"
+        },
+        {
+          "number": 51,
+          "text": ""
+        },
+        {
+          "number": 52,
+          "text": ""
+        },
+        {
+          "number": 53,
+          "text": "def _closed(value, fields, reason):"
+        },
+        {
+          "number": 54,
+          "text": "    _require(type(value) is dict and set(value) == set(fields), reason)"
+        },
+        {
+          "number": 55,
+          "text": ""
+        },
+        {
+          "number": 56,
+          "text": ""
+        },
+        {
+          "number": 57,
+          "text": "def _json(value):"
+        },
+        {
+          "number": 58,
+          "text": "    try:"
+        },
+        {
+          "number": 59,
+          "text": "        return json.dumps(value, sort_keys=True, separators=(\",\", \":\"),"
+        },
+        {
+          "number": 60,
+          "text": "                          ensure_ascii=False, allow_nan=False).encode(\"utf-8\")"
+        },
+        {
+          "number": 61,
+          "text": "    except (TypeError, ValueError, UnicodeError, RecursionError) as exc:"
+        },
+        {
+          "number": 62,
+          "text": "        raise AnswerContractError(\"TYPED_NOT_CANONICAL_JSON\") from exc"
+        },
+        {
+          "number": 63,
+          "text": ""
+        },
+        {
+          "number": 64,
+          "text": ""
+        },
+        {
+          "number": 65,
+          "text": "def _digest(value):"
+        },
+        {
+          "number": 66,
+          "text": "    return sha256(_json(value)).hexdigest()"
+        },
+        {
+          "number": 67,
+          "text": ""
+        },
+        {
+          "number": 68,
+          "text": ""
+        },
+        {
+          "number": 69,
+          "text": "def _worlds(public):"
+        },
+        {
+          "number": 70,
+          "text": "    source.validate_public(public)"
+        },
+        {
+          "number": 71,
+          "text": "    return {world[\"world_id\"]: world for world in public[\"worlds\"]}"
+        },
+        {
+          "number": 72,
+          "text": ""
+        },
+        {
+          "number": 73,
+          "text": ""
+        },
+        {
+          "number": 74,
+          "text": "def _nodes(world):"
+        },
+        {
+          "number": 75,
+          "text": "    return [node[\"ref\"] for node in world[\"nodes\"]]"
+        },
+        {
+          "number": 76,
+          "text": ""
+        },
+        {
+          "number": 77,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+      "archive_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+      "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+      "member_sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "lines": [
+        {
+          "number": 125,
+          "text": "                queue.append(path + [child])"
+        },
+        {
+          "number": 126,
+          "text": "    return None, sorted(seen)"
+        },
+        {
+          "number": 127,
+          "text": ""
+        },
+        {
+          "number": 128,
+          "text": ""
+        },
+        {
+          "number": 129,
+          "text": "def _reach(world, query):"
+        },
+        {
+          "number": 130,
+          "text": "    whole, part = query[\"arguments\"][\"whole\"], query[\"arguments\"][\"part\"]"
+        },
+        {
+          "number": 131,
+          "text": "    adjacency = _adjacency(world)"
+        },
+        {
+          "number": 132,
+          "text": "    if part in adjacency[whole]:"
+        },
+        {
+          "number": 133,
+          "text": "        return {\"state\": \"DIRECT\", \"via\": None}, {"
+        },
+        {
+          "number": 134,
+          "text": "            \"path\": [whole, part], \"selection\": \"DIRECT_EDGE_TAKES_PRECEDENCE\"}"
+        },
+        {
+          "number": 135,
+          "text": "    if query[\"rule\"] == \"first_direct_constituent_lexical_v1\":"
+        },
+        {
+          "number": 136,
+          "text": "        for first in adjacency[whole]:"
+        },
+        {
+          "number": 137,
+          "text": "            suffix, _ = _bfs(adjacency, first, part)"
+        },
+        {
+          "number": 138,
+          "text": "            if suffix is not None:"
+        },
+        {
+          "number": 139,
+          "text": "                return {\"state\": \"VIA\", \"via\": first}, {"
+        },
+        {
+          "number": 140,
+          "text": "                    \"path\": [whole] + suffix,"
+        },
+        {
+          "number": 141,
+          "text": "                    \"selection\": \"LEXICAL_FIRST_DIRECT_CONSTITUENT_WITH_A_PATH\"}"
+        },
+        {
+          "number": 142,
+          "text": "        _, visited = _bfs(adjacency, whole, part)"
+        },
+        {
+          "number": 143,
+          "text": "    else:"
+        },
+        {
+          "number": 144,
+          "text": "        _require(query[\"rule\"] == \"bfs_immediate_predecessor_lexical_v1\","
+        },
+        {
+          "number": 145,
+          "text": "                 \"TYPED_CHECKER_REACH_RULE\")"
+        },
+        {
+          "number": 146,
+          "text": "        path, visited = _bfs(adjacency, whole, part)"
+        },
+        {
+          "number": 147,
+          "text": "        if path is not None:"
+        },
+        {
+          "number": 148,
+          "text": "            return {\"state\": \"VIA\", \"via\": path[-2]}, {"
+        },
+        {
+          "number": 149,
+          "text": "                \"path\": path, \"selection\": \"LEXICAL_BFS_FIRST_PATH_IMMEDIATE_PREDECESSOR\"}"
+        },
+        {
+          "number": 150,
+          "text": "    return {\"state\": \"ABSENT\", \"via\": None}, {"
+        },
+        {
+          "number": 151,
+          "text": "        \"reachable_nodes_including_start\": visited,"
+        },
+        {
+          "number": 152,
+          "text": "        \"inventory_scope\": world[\"inventory_scope\"],"
+        },
+        {
+          "number": 153,
+          "text": "        \"selection\": \"NO_PATH_IN_COMPLETE_SUPPLIED_SNAPSHOT\"}"
+        },
+        {
+          "number": 154,
+          "text": ""
+        },
+        {
+          "number": 155,
+          "text": ""
+        },
+        {
+          "number": 156,
+          "text": "def _derive_values(public, query):"
+        },
+        {
+          "number": 157,
+          "text": "    worlds = {world[\"world_id\"]: world for world in public[\"worlds\"]}"
+        },
+        {
+          "number": 158,
+          "text": "    focus = worlds[query[\"focus_world_id\"]]"
+        },
+        {
+          "number": 159,
+          "text": "    kind = query[\"kind\"]"
+        },
+        {
+          "number": 160,
+          "text": "    values, witnesses, coverage = [], [], {}"
+        },
+        {
+          "number": 161,
+          "text": "    if kind == \"role_set\":"
+        },
+        {
+          "number": 162,
+          "text": "        derived = focal.derive_roles(public, query)"
+        },
+        {
+          "number": 163,
+          "text": "        values.append({\"roles\": derived[\"roles\"], \"status\": derived[\"status\"]})"
+        },
+        {
+          "number": 164,
+          "text": "        witnesses.append({\"focal_clauses\": derived[\"witnesses\"],"
+        },
+        {
+          "number": 165,
+          "text": "                          \"role_rule\": \"ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES\"})"
+        },
+        {
+          "number": 166,
+          "text": "        coverage = {\"clauses_checked\": len(derived[\"witnesses\"]),"
+        },
+        {
+          "number": 167,
+          "text": "                    \"focal_grammar_schema\": focal.GRAMMAR_SCHEMA,"
+        },
+        {
+          "number": 168,
+          "text": "                    \"background_and_worked_supports_are_focal\": False}"
+        },
+        {
+          "number": 169,
+          "text": "    elif kind == \"definition\":"
+        },
+        {
+          "number": 170,
+          "text": "        value = {\"whole\": focus[\"declared_whole\"],"
+        },
+        {
+          "number": 171,
+          "text": "                 \"kind_ref\": answers.declaration_ref(focus[\"world_id\"], \"kind\"),"
+        },
+        {
+          "number": 172,
+          "text": "                 \"function_ref\": answers.declaration_ref(focus[\"world_id\"], \"function\")}"
+        },
+        {
+          "number": 173,
+          "text": "        values.append(value)"
+        },
+        {
+          "number": 174,
+          "text": "        witnesses.append({\"whole\": value[\"whole\"],"
+        },
+        {
+          "number": 175,
+          "text": "                          \"kind\": focus[\"declarations\"][\"kind\"],"
+        },
+        {
+          "number": 176,
+          "text": "                          \"function\": focus[\"declarations\"][\"function\"],"
+        },
+        {
+          "number": 177,
+          "text": "                          \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})"
+        },
+        {
+          "number": 178,
+          "text": "    elif kind == \"context\":"
+        },
+        {
+          "number": 179,
+          "text": "        values.append({\"setting_ref\": answers.declaration_ref(focus[\"world_id\"], \"setting\"),"
+        },
+        {
+          "number": 180,
+          "text": "                       \"participants\": sorted(focus[\"declarations\"][\"participants\"])})"
+        },
+        {
+          "number": 181,
+          "text": "        witnesses.append({\"setting\": focus[\"declarations\"][\"setting\"],"
+        },
+        {
+          "number": 182,
+          "text": "                          \"participants_basis\": focus[\"declarations\"][\"participants_basis\"],"
+        },
+        {
+          "number": 183,
+          "text": "                          \"reference_rule\": \"FOCUS_WORLD_DECLARATION_IDENTITY\"})"
+        },
+        {
+          "number": 184,
+          "text": "    elif kind == \"parts\":"
+        },
+        {
+          "number": 185,
+          "text": "        whole = query[\"arguments\"][\"whole\"]"
+        },
+        {
+          "number": 186,
+          "text": "        edges = [(a, b) for a, b in _edges(focus) if a == whole]"
+        },
+        {
+          "number": 187,
+          "text": "        values.append({\"nodes\": sorted(b for _, b in edges)})"
+        },
+        {
+          "number": 188,
+          "text": "        witnesses.append({\"whole\": whole, \"direct_edges\": _edge_rows(edges),"
+        }
+      ]
+    }
+  ],
+  "raw_locations": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_predictions.json",
+      "sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_predictions.json",
+      "sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p00_scoring.json",
+      "sha256": "d56aaaf674a4a6a7f5177d4ddc617aa0fc600f0a42e7f34dabc94ae3d2a31f90",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\checkpoints\\course_p10_scoring.json",
+      "sha256": "45a80ddff8dedf18f31c00acd75c7b0bb1b5e5b4a1bdee6fd2809a915bf99830",
+      "record_id": "typed-input-9373a9e1fb69dda6ed107b85aa1a6b6cce6e286881a9390ad31ba80d27508c0d",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json",
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json",
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json",
+      "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json",
+      "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db",
+      "record_id": "typed-input-0f35bba4ad80a5e38a5ceb44393ab1a1a5c05f37c7af83ee2924f421471c70fa",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json",
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json",
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json",
+      "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json",
+      "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db",
+      "record_id": "typed-input-210805b41f9cb08ab2307b676f2e820bbbf81e2b64fcbf7050a1d7fd5790f64f",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json",
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json",
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json",
+      "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json",
+      "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db",
+      "record_id": "typed-input-9e02e4518153e42f85facf43bbb0cda2e954df273ba0be9d679f37bf369c4034",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_predictions.json",
+      "sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_predictions.json",
+      "sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p00_scoring.json",
+      "sha256": "25ac098c1679a970a77dda42186ecf506aae28ed1d4f5c56c6b1b2e3a16b8159",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "matching_record_id_lines": [
+        1
+      ]
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\checkpoints\\course_p10_scoring.json",
+      "sha256": "13f4d6bdbded01dfb8b2ebb2a64f0ee5c86a629618a37ab23c7962a50f4fb8db",
+      "record_id": "typed-input-fe5b0a6e3d4a8140ca72bc96f0425df13ef8148caca0b97995db9f68a83ac360",
+      "matching_record_id_lines": [
+        1
+      ]
+    }
+  ],
+  "elapsed_seconds": 0.09988480000174604,
+  "test_functions": 0,
+  "diagnostic_executions": 1
+}

@@ -1,0 +1,123 @@
+Source: C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\q4-live\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\evaluate_gates.py
+SHA256: d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d
+110:         sys.path.insert(0, str(extra))
+111: 
+112: ALPHA = Fraction(1, 100)
+113: MIN_IMPROVED_KINDS = 2
+114: MIN_IMPROVED_WORLDS = 2
+115: SCHEMA = 'cncm.typed-pointer-gate-reading/0.1'
+283: def binomial_upper_tail(b, n):
+284:     """Exact one-sided P(X >= b | n, 1/2)."""
+285:     if n == 0:
+286:         return Fraction(1)
+287:     return Fraction(sum(comb(n, k) for k in range(b, n + 1)), 2 ** n)
+288: 
+289: 
+290: def paired(before, after, keys):
+291:     b = sum(1 for k in keys if not before[k] and after[k])
+292:     c = sum(1 for k in keys if before[k] and not after[k])
+293:     return {'wrong_to_right': b, 'right_to_wrong': c, 'pairs': len(keys)}
+294: 
+295: 
+296: def question_outcomes(record_correct, questions):
+297:     """{query_id: all records correct} for the given {query_id: [record ids]}."""
+298:     return {q: all(record_correct[r] for r in records) for q, records in questions.items()}
+299: 
+300: 
+301: def seed_test(before, after, keys, kind_of, world_of=None):
+302:     """One seed's pre-registered test on questions: b > c, exact p <= ALPHA, improvements in >= 2 kinds
+303:     and, when worlds are given, in >= 2 worlds.
+304: 
+305:     The returned dict CARRIES THE KEY SET THE TEST RAN OVER as `keys`. That is not decoration: it is what makes
+306:     the label's unit of evidence MEASURED rather than intended, so a reader (and the self-test) can see which
+307:     questions the test that set the label actually used, even if a later edit changes the expression at the call
+308:     site (R1, FIX 1).
+309:     """
+310:     test = paired(before, after, keys)
+311:     b, c = test['wrong_to_right'], test['right_to_wrong']
+312:     p = binomial_upper_tail(b, b + c)
+313:     improved = [k for k in keys if not before[k] and after[k]]
+314:     kinds = sorted({kind_of[k] for k in improved})
+315:     worlds = sorted({world_of[k] for k in improved}) if world_of is not None else None
+316:     passed = b > c and p <= ALPHA and len(kinds) >= MIN_IMPROVED_KINDS
+317:     if world_of is not None:
+318:         passed = passed and len(worlds) >= MIN_IMPROVED_WORLDS
+319:     test.update(p_one_sided=str(p), p_float=float(p), improved_kinds=kinds, improved_worlds=worlds, passed=passed,
+320:                 keys=list(keys))
+321:     return test
+322: 
+323: 
+324: def label_decision(complete, primary_passed):
+325:     """The ONLY label decision in this program, in order of precedence, as (label, rule code).
+326: 
+327:     1. anything that breaks the integrity chain, or fewer than the three registered seeds -> VOID
+328:     2. the RELATIONAL population test passes in all three seeds                        -> LEARNS_NEW_WORLDS
+329:     3. otherwise                                                                        -> NO_TRANSFER_TO_NEW_WORLDS
+330: 
+331:     `complete` is `not failures and len(seeds) == len(contract.MODEL_SEEDS)`. `primary_passed` is the primary test
+332:     over the key set `primary_keys` returned - NEVER the all-kinds test (FP1). No other code path sets a label.
+333:     """
+334:     if not complete:
+335:         return 'VOID', 'INTEGRITY_OR_SEED_COUNT_FAILED'
+336:     if primary_passed:
+337:         return 'LEARNS_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_PASSED_ALL_SEEDS'
+338:     return 'NO_TRANSFER_TO_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_FAILED'
+740: def scoring_rows(artifacts, names):
+741:     """(checkpoint -> {record_id: correct}, failures) merged over every `<prefix>_pNN_scoring.json` in `names`.
+742: 
+743:     The phase names are DISCOVERED from the job's own manifest, not hardcoded: a pointer job's evaluation points
+744:     are the practice study's, reused by import, but the reader assumes no more than the registered
+745:     `<prefix>_pNN_scoring.json` convention. A record scored twice at one checkpoint must have agreed.
+746:     """
+747:     rows, failures = {}, []
+748:     for name in sorted(names):
+749:         match = SCORING_NAME.match(name)
+750:         if match is None:
+751:             continue
+752:         number = int(match.group('number'))
+753:         try:
+754:             scored = _read_json(artifacts / name)
+755:             table = {row['record_id']: bool(row['correct']) for row in scored['rows']}
+756:         except (OSError, ValueError, KeyError, TypeError) as error:
+757:             failures.append('SCORING:%s:%s' % (type(error).__name__, name))
+758:             continue
+759:         bucket = rows.setdefault(number, {})
+760:         for key, value in table.items():
+761:             if key in bucket and bucket[key] != value:
+762:                 failures.append('SCORING_CONFLICT:%d' % number)
+763:             bucket[key] = value
+764:     return rows, failures
+1045:         try:  # the scoring files: the unit of evidence behind every test below
+1046:             at, scoring_problems = scoring_rows(art, manifest_names)
+1047:             failures.extend('I1:%d:%s' % (seed, code) for code in scoring_problems)
+1048:             if not at:
+1049:                 failures.append('I1:%d:SCORING_PHASES_MISSING' % seed)
+1050:                 continue
+1051:             checkpoints = sorted(at)
+1052:             start, final = checkpoints[0], checkpoints[-1]
+1053:             full = [n for n in checkpoints if set(at[n]) >= set(trained)]
+1054:             first = min([n for n in full if n > start], default=None)
+1055:             needed = sorted({record_id for records in held_questions.values() for record_id in records})
+1056:             incomplete = [n for n in (start, final) if not set(at[n]) >= set(needed)]
+1057:             for n in incomplete:
+1058:                 failures.append('I1:%d:SCORING_INCOMPLETE:%d' % (seed, n))
+1059:             if incomplete:
+1060:                 continue
+1061:         except (OSError, ValueError, KeyError, TypeError) as error:
+1062:             failures.append('I1:%d:SCORING:%s' % (seed, type(error).__name__))
+1063:             continue
+1064:         # Every question-set expression below reads `population_ids` for the label's own unit of evidence: there is no
+1065:         # second copy of the key choice to drift from it. The all-kinds set and the per-tier sets are REPORTED.
+1066:         tier_ids = {tier: sorted(q for q in eligible_all if tier_of[kind_of[q]] == tier) for tier in contract.TIERS}
+1067:         heldq = {n: question_outcomes(at[n], held_questions) for n in checkpoints}
+1068:         trainq = {n: question_outcomes(at[n], trained_questions) for n in full}
+1069:         correspondence_ids = sorted(q for q in eligible_all if kind_of[q] == CORRESPONDENCE_KIND)
+1070:         correspondence_scored = sorted(q for q in correspondence_ids if q in heldq[start] and q in heldq[final])
+1071:         gained = []
+1072:         for key in population_ids:
+1073:             if not heldq[start][key] and heldq[final][key]:
+1074:                 gained.append({'query_id': key, 'kind': kind_of[key], 'world': world_of[key],
+1075:                                'records': len(held_questions[key]),
+1076:                                'admissible_answers': len(admissible_answers(frozen, by_id[held_questions[key][0]]))})
+1077:         primary = seed_test(heldq[start], heldq[final], population_ids, kind_of, world_of)
+1078:         failures.extend(label_key_divergence_failures(seed, primary['keys'], population_ids))

@@ -1,0 +1,786 @@
+{
+  "counts": {
+    "comparison_methods": 6,
+    "saved_decoder_reconstruction_function": 1,
+    "algebra_property_function": 1,
+    "algebra_input_cases": 12,
+    "complete_probe_executions": 1,
+    "unique_selected_records": 158,
+    "saved_selected_occurrences": 2118,
+    "source_packages": 2,
+    "runs": 6,
+    "phases_per_run": 3,
+    "elapsed_seconds": 0.7492723000032129
+  },
+  "comparisons": {
+    "all": {
+      "analogy": {
+        "records": 70,
+        "methods": {
+          "name": 12,
+          "degree": 70,
+          "exact": 70
+        },
+        "valid_counts": {
+          "9": 52,
+          "6": 18
+        }
+      },
+      "correspondence": {
+        "records": 88,
+        "methods": {
+          "name": 7,
+          "degree": 80,
+          "exact": 88
+        },
+        "valid_counts": {
+          "1": 55,
+          "6": 18,
+          "2": 15
+        }
+      }
+    },
+    "held": {
+      "analogy": {
+        "records": 17,
+        "methods": {
+          "name": 4,
+          "degree": 17,
+          "exact": 17
+        },
+        "valid_counts": {
+          "6": 10,
+          "9": 7
+        }
+      },
+      "correspondence": {
+        "records": 20,
+        "methods": {
+          "name": 0,
+          "degree": 12,
+          "exact": 20
+        },
+        "valid_counts": {
+          "1": 16,
+          "2": 4
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 70,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "12": 11,
+            "5": 13,
+            "10": 10,
+            "2": 12,
+            "8": 8,
+            "18": 16
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "2": 88
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "13": 11,
+            "7": 13,
+            "16": 10,
+            "21": 12,
+            "29": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 7,
+          "total": 88,
+          "top_tie_cases": 88,
+          "wrong_tie_with_valid": 81,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 7,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "16": 4,
+            "29": 6,
+            "13": 3,
+            "21": 4
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 20,
+          "top_tie_cases": 20,
+          "wrong_tie_with_valid": 20,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 20,
+          "independent_row_argmax_duplicates": 20,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 70,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "8": 11,
+            "15": 13,
+            "11": 10,
+            "5": 12,
+            "13": 8,
+            "2": 16
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "2": 88
+          },
+          "mode_first_correct": 7,
+          "mode_first_changes": 88,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "10": 11,
+            "7": 13,
+            "16": 10,
+            "21": 12,
+            "29": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 7,
+          "total": 88,
+          "top_tie_cases": 88,
+          "wrong_tie_with_valid": 81,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 7,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "16": 4,
+            "29": 6,
+            "10": 3,
+            "21": 4
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 20,
+          "top_tie_cases": 20,
+          "wrong_tie_with_valid": 20,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 20,
+          "independent_row_argmax_duplicates": 20,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 70,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "44": 11,
+            "2": 13,
+            "11": 10,
+            "35": 12,
+            "26": 8,
+            "17": 16
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "2": 88
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "13": 11,
+            "7": 13,
+            "16": 10,
+            "21": 12,
+            "29": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 7,
+          "total": 88,
+          "top_tie_cases": 88,
+          "wrong_tie_with_valid": 81,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 7,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 88,
+          "independent_row_argmax_duplicates": 88,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "16": 4,
+            "29": 6,
+            "13": 3,
+            "21": 4
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 20,
+          "top_tie_cases": 20,
+          "wrong_tie_with_valid": 20,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 20,
+          "independent_row_argmax_duplicates": 20,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 70,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "2": 11,
+            "15": 13,
+            "8": 10,
+            "12": 12,
+            "10": 8,
+            "5": 16
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "3": 18,
+            "8": 18,
+            "11": 11,
+            "15": 26,
+            "12": 15
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 18,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 70,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "17": 11,
+            "7": 13,
+            "13": 10,
+            "23": 12,
+            "32": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 88,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 88,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "13": 4,
+            "32": 6,
+            "17": 3,
+            "23": 4
+          }
+        },
+        "correspondence": {
+          "correct": 20,
+          "total": 20,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 20,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 4,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "21": 2,
+            "1": 4,
+            "43": 7,
+            "27": 3,
+            "55": 10,
+            "37": 9,
+            "3": 9,
+            "31": 6,
+            "17": 11,
+            "16": 2,
+            "7": 5,
+            "46": 2
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "4": 18,
+            "16": 40,
+            "18": 15,
+            "5": 15
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 73,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "13": 11,
+            "7": 13,
+            "16": 10,
+            "23": 12,
+            "29": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 88,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 88,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "16": 4,
+            "29": 6,
+            "13": 3,
+            "23": 4
+          }
+        },
+        "correspondence": {
+          "correct": 20,
+          "total": 20,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 20,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "phase": "course_p00",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 70,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "26": 2,
+            "16": 4,
+            "5": 7,
+            "2": 3,
+            "22": 10,
+            "56": 9,
+            "35": 9,
+            "20": 6,
+            "30": 11,
+            "4": 2,
+            "11": 5,
+            "8": 2
+          }
+        },
+        "correspondence": {
+          "correct": 0,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "3": 18,
+            "11": 18,
+            "19": 26,
+            "17": 11,
+            "20": 15
+          },
+          "mode_first_correct": 0,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 70,
+          "statuses": {
+            "NO_MATCH": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "phase": "course_p10",
+      "all_kind_records": 564,
+      "kinds": {
+        "analogy": {
+          "correct": 16,
+          "total": 70,
+          "top_tie_cases": 70,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "13": 11,
+            "7": 13,
+            "16": 10,
+            "23": 12,
+            "29": 8,
+            "1": 16
+          }
+        },
+        "correspondence": {
+          "correct": 88,
+          "total": 88,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 88
+          },
+          "mode_first_correct": 88,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 88,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 88
+          }
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "phase": "ablation_baseline",
+      "all_kind_records": 127,
+      "kinds": {
+        "analogy": {
+          "correct": 0,
+          "total": 17,
+          "top_tie_cases": 17,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "16": 4,
+            "29": 6,
+            "13": 3,
+            "23": 4
+          }
+        },
+        "correspondence": {
+          "correct": 20,
+          "total": 20,
+          "top_tie_cases": 0,
+          "wrong_tie_with_valid": 0,
+          "best_valid_ranks": {
+            "1": 20
+          },
+          "mode_first_correct": 20,
+          "mode_first_changes": 0,
+          "mapping_is_bijective": 20,
+          "matrix_identical_rows": 0,
+          "independent_row_argmax_duplicates": 0,
+          "statuses": {
+            "MAPPING": 20
+          }
+        }
+      }
+    }
+  ],
+  "algebra_max_error": 5.551115123125783e-16
+}

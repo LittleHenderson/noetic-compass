@@ -1,0 +1,50 @@
+{
+  "scope": "A7 authored artifacts; original baseline copies intentionally preserve their bytes",
+  "selected_whitespace_check": {
+    "command": "git -c core.whitespace=cr-at-eol diff --cached --check -- <A7> :(exclude)<A7>/tmp/at_review_pin/**",
+    "tool_chunk": "9db82a",
+    "exit_code": 0
+  },
+  "full_staged_whitespace_check": {
+    "tool_chunk": "33fdb2",
+    "exit_code": 2,
+    "finding": "Blank lines at EOF in exact historical TEAM_EXECUTION_LEDGER copy; retained unchanged"
+  },
+  "files": [
+    {
+      "name": "FINAL_JUDGMENT.md",
+      "bytes": 21199,
+      "sha256": "87f09df063224f687c79ec98347390214c99e0abfcb782722a88cf5c827dbbd1"
+    },
+    {
+      "name": "NEXT_ACTIONS.md",
+      "bytes": 6509,
+      "sha256": "7e29fbed0707474b1e7c07cc881dfcaec479b0a18009e24d5b68fa3b394490c9"
+    },
+    {
+      "name": "ORIGINAL_RECORD_CHECKS.json",
+      "bytes": 976726,
+      "sha256": "277d34f31c586dea42cc4346b818596346bc5fb16581c8b33b88015659d2f8e6"
+    },
+    {
+      "name": "verify_original_records.py",
+      "bytes": 18658,
+      "sha256": "a84df4e8b125e9cef69815c3a13975dbee76f2a1f07110dfb182a6056cb828f3"
+    },
+    {
+      "name": "COMMANDS_AND_LIMITS.md",
+      "bytes": 12235,
+      "sha256": "72e55497808cdb38b807db3081f80efc9b7bc504fdbc4665b56f9a98cf49cfc5"
+    },
+    {
+      "name": "REVIEW_RECEIPT.json",
+      "bytes": 18329,
+      "sha256": "2a1665a7e538d40926989e5de58a18bcf1eecde2df470c8de548e8d3c8af9a23"
+    },
+    {
+      "name": "verify_report_tables.py",
+      "bytes": 3685,
+      "sha256": "19d8097679c5455c470c3183bee656135b0b6a06d73731d4ee714f9b931805f8"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+c2478f6f253fe8b3aa060b9a1a11b4b4e68257b6 research: record independent Helm information-flow findings
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/pointer_learner.py:2033: new blank line at EOF.
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/pointer_learner.py:2278: new blank line at EOF.
