@@ -5,7 +5,7 @@ All six first reports were committed and SHA256-checked before any peer report w
 
 | Issue | Evidence and agreement | Competing account / boundary | Conference disposition |
 |---|---|---|---|
-| Historical label | A1 reuses frozen checker/math; A6 independently groups saved scores and enumerates coin outcomes. Both reconstruct Helm1 3/3 passing and Helm2 2/3 passing, failed seed20260919 at7 gains/1 loss,p=9/256. | A6 reuses saved18-ID population and most score rows; A1 independently rederives population exclusions but reuses checker. No full integrity recertification. | Pending actual responses |
+| Historical label | A1 reuses frozen checker/math; A6 independently groups saved scores and enumerates coin outcomes. Both reconstruct Helm1 3/3 passing and Helm2 2/3 passing, failed seed20260919 at7 gains/1 loss,p=9/256. | A6 reuses saved18-ID population and most score rows; A1 verifies saved population digest and source-bound subtraction but does not regenerate all exclusions or shortcut discovery; it reuses checker. No full integrity recertification. | Pending actual responses |
 | Any loss automatically fails | Both reproduce seed20260917 passing with11 gains/1 loss,p=13/4096. | Directive summary says two runs failed; contradicted. A3/A5 loose phrase retention gate must be corrected without altering first reports. | Pending |
 | Exact loss semantics | A1 checker and A6 independent unique directed-path enumeration agree on both lost reach questions. | One question has4 presentations, not4 independent question losses. | Pending |
 | Timing of losses | A4 records seed17 wrong from pass1; seed19 correct through pass8, wrong at pass10. | Separate final→retained interference happens later and cannot cause initial→final gate answers. A1 proposed chronology already answered, no redundant follow-up. | Pending |
@@ -22,3 +22,4 @@ All six first reports were committed and SHA256-checked before any peer report w
 
 All interpretations use the exact pinned historical sources. Excluded answers remain excluded
 from the historical rule. Original labels, graders, model code, atlas, books and receipts stay intact.
+

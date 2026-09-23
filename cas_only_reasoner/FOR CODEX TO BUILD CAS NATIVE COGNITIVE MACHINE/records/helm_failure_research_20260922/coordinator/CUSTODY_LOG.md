@@ -103,3 +103,14 @@ A5 final addendum e9d4c008757a8691add71845498a8f467a664a07 also integrated with 
 A5 documented local untracked tmp source copies; these were not integrated or removed.
 A5 explicitly did not reconstruct reach decoding. F1 therefore fills a real gap rather than
 repeating its analogy/correspondence work. F1/F2 predicted outcomes were committed at259ed0be.
+
+Root interim Git scope check: A1-A7 branches changed20/29/8/9/11/10/0 paths respectively from
+59b1dd57, all under their own agents/A<n> prefix. Integration changed103 paths from4eb98682,
+all research records except the deliberate scope header in research AGENTS.md. No out-of-scope
+changed path was found. Root's first stdin script had an IndentationError before Git commands;
+corrected execution exited0. These are attributed root messages, not new A0 commands.
+
+Conference A1 commit59a9d1e9e86cc92fb4f0757bcdce6380b44837bc and A2
+5226a93b5120fccd1a2dc15cfa2fb8e0f904ae07 were path-checked and integrated.
+A1 caught an overstatement in A0's matrix: verified digest/subtraction does not mean independently
+regenerated population exclusions. A0 corrected the matrix, leaving A1's first report untouched.
