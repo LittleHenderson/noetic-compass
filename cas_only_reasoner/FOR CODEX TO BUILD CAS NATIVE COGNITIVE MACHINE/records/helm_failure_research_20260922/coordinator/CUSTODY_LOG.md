@@ -93,3 +93,13 @@ earlier failed refresh as the latest known reading; actual dollar cost remains u
 A0's manifest discovery command initially failed at PowerShell parsing because a foreach statement
 was piped directly. No discovery loop executed. The corrected assignment-then-pipe command exited0
 and confirmed development_p00/p10 predictions/scorings exist for all six original subjects.
+
+## First-round barrier opened
+
+All A1-A6 first reports were committed and A0 checked their working-byte SHA256 values at
+2026-09-23T06:05:50.5591506Z before sending conference tasks. All matched reported identities.
+A5 prerequisites/report integrated as75a920d8/f0ce0972; A6 report and notes asbef4a797/4fca94eb/0d27868c.
+A5 final addendum e9d4c008757a8691add71845498a8f467a664a07 also integrated with path-scope check.
+A5 documented local untracked tmp source copies; these were not integrated or removed.
+A5 explicitly did not reconstruct reach decoding. F1 therefore fills a real gap rather than
+repeating its analogy/correspondence work. F1/F2 predicted outcomes were committed at259ed0be.
