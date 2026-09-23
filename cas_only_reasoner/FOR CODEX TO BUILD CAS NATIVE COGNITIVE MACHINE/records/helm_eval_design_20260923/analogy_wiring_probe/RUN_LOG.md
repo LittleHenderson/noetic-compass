@@ -39,3 +39,20 @@
   | h2_final_20260919 | `3a5957ee8e9951657c1d0667f60d81172601c253c0531f3c406dfdcb7a2bbeea` |
 
 - **Log:** `before_reading_v0_2.log`. No automatic retries: each re-run is a separately started job.
+
+## Attempt 4 (after amendment A1): 04:48:31 PDT -> about 05:27. PARTIAL: the laptop ran out of memory.
+
+| Invocation | Result |
+|---|---|
+| Probe, seed 20260917 | **complete**: `before_reading_v0_2_seed20260917.json`, wall 1455.3 s, course load 249.1 s |
+| Probe, seed 20260918 | **partial**: 2 of 3 models saved (`h2_fresh_20260918`, `h2_initial_20260918`) in `before_reading_v0_2_seed20260918.json` (`"complete": false`, wall 731.2 s). The third model, `h2_final_20260918`, did not run |
+| Everything queued after it | **did not start**: probe seed 20260919, preservation seeds 20260917 and 20260918, the probe self-test, the D-1 oracle self-test |
+
+**Every completed model reads `FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT`**, with `delta0 = M1z = M2z = max M3z = max K = 0.0`, as predicted. That is 5 models so far: fresh, initial and final for 20260917; fresh and initial for 20260918.
+
+**The cause** (measured after the stop):
+- The shell logged `fork: retry: Resource temporarily unavailable` (errno 11).
+- Afterwards the machine had **345 MB of 16,085 MB** RAM free, with none of these jobs running.
+- Other desktop applications held most of the memory. The largest were the ChatGPT desktop app (13 processes, about 2.3 GB) and Chrome (23 processes, about 2.2 GB).
+- The probe process exited with code 4. Its own `WALL_LIMIT_REACHED` could not have fired after 731 s of a 3,600 s budget, so the exit is recorded as **caused by memory exhaustion, reason not printed**.
+- No file was left half-written: each JSON is rewritten whole after each model.

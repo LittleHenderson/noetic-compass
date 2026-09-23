@@ -1,0 +1,13 @@
+Wed Sep 23 04:48:31 PDT 2026
+PROBE seed 20260917
+{"label": "h2_fresh_20260917", "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT", "switch": "NOT_A_REPAIRED_CONTAINER", "M0_delta0": 0.0, "M1z": 0.0, "M2z": 0.0, "summary": {"foci": 24, "K_positive": 0, "M3z_above_floor": 0, "median_RC": 0.0, "bystander_ok": 0, "RC_dom_ok": 0, "max_M3z": 0.0, "max_K": 0.0, "top1_changes_reported_not_scored": 0, "effect_floor": 0.001}}
+{"label": "h2_initial_20260917", "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT", "switch": "NOT_A_REPAIRED_CONTAINER", "M0_delta0": 0.0, "M1z": 0.0, "M2z": 0.0, "summary": {"foci": 24, "K_positive": 0, "M3z_above_floor": 0, "median_RC": 0.0, "bystander_ok": 0, "RC_dom_ok": 0, "max_M3z": 0.0, "max_K": 0.0, "top1_changes_reported_not_scored": 0, "effect_floor": 0.001}}
+{"label": "h2_final_20260917", "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT", "switch": "NOT_A_REPAIRED_CONTAINER", "M0_delta0": 0.0, "M1z": 0.0, "M2z": 0.0, "summary": {"foci": 24, "K_positive": 0, "M3z_above_floor": 0, "median_RC": 0.0, "bystander_ok": 0, "RC_dom_ok": 0, "max_M3z": 0.0, "max_K": 0.0, "top1_changes_reported_not_scored": 0, "effect_floor": 0.001}}
+EXIT probe 20260917 0
+Wed Sep 23 05:12:49 PDT 2026
+PROBE seed 20260918
+EXIT probe 20260918 4
+      0 [main] bash 464 dofork: child -1 - forked process 47172 died unexpectedly, retry 0, exit code 0xC000026B, errno 11
+/usr/bin/bash: fork: retry: Resource temporarily unavailable
+1096493 [main] bash 464 dofork: child -1 - forked process 24016 died unexpectedly, retry 0, exit code 0xC000026B, errno 11
+/usr/bin/bash: fork: retry: Resource temporarily unavailable
