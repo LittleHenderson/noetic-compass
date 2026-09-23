@@ -1,0 +1,39 @@
+{
+  "protected_files": [
+    {
+      "path": "research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\checker.py",
+      "raw_unchanged": true,
+      "lf_unchanged": true
+    },
+    {
+      "path": "research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\answers.py",
+      "raw_unchanged": true,
+      "lf_unchanged": true
+    },
+    {
+      "path": "research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots.py",
+      "raw_unchanged": true,
+      "lf_unchanged": true
+    },
+    {
+      "path": "research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\source.py",
+      "raw_unchanged": true,
+      "lf_unchanged": true
+    },
+    {
+      "path": "research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\pointer_inputs.py",
+      "raw_unchanged": true,
+      "lf_unchanged": true
+    }
+  ],
+  "decoder_function_ast_identical": {
+    "_decision": true,
+    "_check_scores": true,
+    "_logsumexp": true,
+    "_candidate_scores": true,
+    "candidate_scores": true,
+    "score_decisions": true,
+    "assemble_answer": true
+  },
+  "inspection_only": true
+}

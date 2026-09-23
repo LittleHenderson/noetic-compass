@@ -26,6 +26,41 @@
       "id": "323dc665-4875-4266-8979-8cc57fc00056",
       "script": "records/helm_stage2_checker_20260923/aws_preflight.sh",
       "sha256": "3b2057685977e87ce8190c7112c9002463297f121fe79d2606c8294d44d3ac90"
+    },
+    {
+      "id": "f7a6329d-141c-4cf7-889d-8107b5e4247e",
+      "script": "records/helm_stage2_checker_20260923/aws_run_001.sh",
+      "sha256": "39de6d4dadeed960d49dd990dccbdd05b126bd325a4b7b977e24ca49ce7cd479"
+    },
+    {
+      "id": "8cd99e77-40d7-489a-8458-463f8f816dd0",
+      "script": "records/helm_stage2_checker_20260923/aws_progress.sh",
+      "sha256": "b853da5f682e4b84b1689089d7f481607ced5fff7b2616ca9b4ccb260321e912"
+    },
+    {
+      "id": "76ededa0-33b4-4ce7-a092-ea7bdc92c42a",
+      "script": "records/helm_stage2_checker_20260923/aws_progress.sh",
+      "sha256": "b853da5f682e4b84b1689089d7f481607ced5fff7b2616ca9b4ccb260321e912"
+    },
+    {
+      "id": "224718c4-dbf3-4256-936b-43487640e44c",
+      "script": "records/helm_stage2_checker_20260923/aws_progress.sh",
+      "sha256": "b853da5f682e4b84b1689089d7f481607ced5fff7b2616ca9b4ccb260321e912"
+    },
+    {
+      "id": "57c79ecb-9e57-4f51-a46b-8ce23aabbdf8",
+      "script": "records/helm_stage2_checker_20260923/aws_progress_compact.sh",
+      "sha256": "892182771fe098b36da2b7e59273500b2aa77f6f6e0baa2fa19a9b35e88e0749"
+    },
+    {
+      "id": "d08814bc-bcee-4112-b8c3-a8058c745232",
+      "script": "records/helm_stage2_checker_20260923/aws_progress_compact.sh",
+      "sha256": "892182771fe098b36da2b7e59273500b2aa77f6f6e0baa2fa19a9b35e88e0749"
+    },
+    {
+      "id": "71597a16-0c35-4908-a5e4-b2ab389feb61",
+      "script": "records/helm_stage2_checker_20260923/aws_progress_compact.sh",
+      "sha256": "892182771fe098b36da2b7e59273500b2aa77f6f6e0baa2fa19a9b35e88e0749"
     }
   ]
 }

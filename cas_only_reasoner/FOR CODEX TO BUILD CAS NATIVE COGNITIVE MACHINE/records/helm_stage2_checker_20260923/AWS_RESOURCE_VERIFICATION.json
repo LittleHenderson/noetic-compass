@@ -1,0 +1,12 @@
+{
+  "instance_id": "i-00787ea718c2631ea",
+  "shutdown": {
+    "Value": "terminate"
+  },
+  "credits": [
+    {
+      "InstanceId": "i-00787ea718c2631ea",
+      "CpuCredits": "standard"
+    }
+  ]
+}

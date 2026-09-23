@@ -5861,5 +5861,55 @@
         }
       ]
     }
-  }
+  },
+  "stage2_addition_20260923": {
+  "branch": "codex/helm-stage2-checker-20260923",
+  "independent_checker": "Claude",
+  "status": "IMPLEMENTED_BUILDER_AWS_CHECKS_RUNNING_INDEPENDENT_ACCEPTANCE_OPEN",
+  "modules": [
+    {
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker_v2.py",
+      "source_revision": "45828c45",
+      "sha256_raw": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
+      "editing_owner": "Codex D-1 builder",
+      "public_entry_points": [
+        "checker_profile",
+        "derive_target",
+        "validate_target",
+        "check_answer"
+      ]
+    },
+    {
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers_v2.py",
+      "source_revision": "45828c45",
+      "sha256_raw": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
+      "editing_owner": "Codex D-1 builder",
+      "public_entry_points": [
+        "correspondence_candidates"
+      ]
+    },
+    {
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots_v2.py",
+      "source_revision": "45828c45",
+      "sha256_raw": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb",
+      "editing_owner": "Codex D-1 builder",
+      "public_entry_points": [
+        "profile",
+        "compile_slots",
+        "validate_plan",
+        "candidate_scores",
+        "score_decisions",
+        "assemble_answer"
+      ]
+    }
+  ],
+  "protected_originals": [
+    "checker.py",
+    "answers.py",
+    "slots.py",
+    "source.py",
+    "pointer_inputs.py"
+  ],
+  "execution_note": "docs/AWS_EXECUTION_PREFERENCE_20260923.md"
+}
 }
