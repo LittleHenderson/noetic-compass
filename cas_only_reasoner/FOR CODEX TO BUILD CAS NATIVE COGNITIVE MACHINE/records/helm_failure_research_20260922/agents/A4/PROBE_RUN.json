@@ -1,0 +1,32 @@
+{
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Python314\\python.exe",
+  "elapsed_seconds": 21.335677700000815,
+  "test_functions": 3,
+  "subject_cases_per_function": 6,
+  "subject_function_cases": 18,
+  "probe_executions": 2,
+  "main_update_rows": 8820,
+  "interference_update_rows": 96,
+  "new_model_executions": 0,
+  "status": "PASS",
+  "files_read": 300,
+  "unbound_reads": [],
+  "previous_executions": [
+    {
+      "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+      "executable": "C:\\Python314\\python.exe",
+      "elapsed_seconds": 19.572126699989894,
+      "test_functions": 3,
+      "subject_cases_per_function": 6,
+      "subject_function_cases": 18,
+      "probe_executions": 1,
+      "main_update_rows": 8820,
+      "interference_update_rows": 96,
+      "new_model_executions": 0,
+      "status": "PASS",
+      "files_read": 300,
+      "unbound_reads": []
+    }
+  ]
+}

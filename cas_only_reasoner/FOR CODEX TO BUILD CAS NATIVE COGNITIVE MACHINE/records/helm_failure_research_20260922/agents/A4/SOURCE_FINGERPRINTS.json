@@ -1,0 +1,242 @@
+[
+  {
+    "version": "Helm 1.0",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "0d801b675d837ebda8b4a64914a8de6494caceb446b2a7e62c1844ae17e24bd1",
+    "bytes": 123625,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+    "bytes": 134832,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "0d801b675d837ebda8b4a64914a8de6494caceb446b2a7e62c1844ae17e24bd1",
+    "bytes": 123625,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+    "bytes": 134832,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "0d801b675d837ebda8b4a64914a8de6494caceb446b2a7e62c1844ae17e24bd1",
+    "bytes": 123625,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+    "bytes": 134832,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 1.0",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919\\source.zip",
+    "source_zip_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+    "bytes": 124382,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+    "bytes": 155445,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260917,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+    "bytes": 124382,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+    "bytes": 155445,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260918,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "cncm/typed_pointer_worker.py",
+    "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+    "bytes": 124382,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+    "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+    "bytes": 155445,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+    "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+    "bytes": 70733,
+    "equals_loaded_after": true
+  },
+  {
+    "version": "Helm 2.0-experimental",
+    "seed": 20260919,
+    "source_zip": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\q4-live\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919\\source.zip",
+    "source_zip_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "member": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+    "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+    "bytes": 26674,
+    "equals_loaded_after": true
+  }
+]
