@@ -89,3 +89,7 @@ without A1-A4 findings. Native session identifiers are in the ledger.
 Root's latest successful allowance read: ordinaryUsageAllowed=true, weekly77% used/23% remaining,
 spendControlReached=false, no paid-credit balance. No reset or purchase. This supersedes the
 earlier failed refresh as the latest known reading; actual dollar cost remains unavailable.
+
+A0's manifest discovery command initially failed at PowerShell parsing because a foreach statement
+was piped directly. No discovery loop executed. The corrected assignment-then-pipe command exited0
+and confirmed development_p00/p10 predictions/scorings exist for all six original subjects.
