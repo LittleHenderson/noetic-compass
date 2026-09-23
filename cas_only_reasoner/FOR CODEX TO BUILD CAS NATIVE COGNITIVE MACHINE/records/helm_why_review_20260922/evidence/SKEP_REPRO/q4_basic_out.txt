@@ -1,0 +1,19 @@
+n preds 16 distinct ast 1 steps {13} outcomes {'GENERATED'}
+updates 128 classes {'main'} lr {0.001}
+first 3.5241360664367676 last 1.600077748298645 min 1.3627700805664062 argmin 122
+ln34 3.5263605246161616
+last16 mean 1.6685146763920784 last32 1.7643116191029549
+1 - 16 3.347146525979042
+17 - 32 2.9854765087366104
+33 - 48 2.650811791419983
+49 - 64 2.449213281273842
+65 - 80 2.252138637006283
+81 - 96 2.0310985818505287
+97 - 112 1.8601085618138313
+113 - 128 1.6685146763920784
+actual_updates 128
+learned_parameter_count 70818
+dev_by_depth {'3': {'canonical_exact': 0, 'generated': 16, 'n': 16}}
+wall_seconds None
+elapsed_seconds None
+['runtime']

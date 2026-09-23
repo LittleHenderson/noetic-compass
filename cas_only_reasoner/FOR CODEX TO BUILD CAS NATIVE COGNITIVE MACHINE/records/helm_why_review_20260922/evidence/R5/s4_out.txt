@@ -1,0 +1,9 @@
+updates 1-64 depth 1: n=32 model mean 2.786831  B3 mean 1.154930  gap 1.631901
+updates 1-64 depth 2: n=17 model mean 2.890339  B3 mean 1.155814  gap 1.734525
+updates 1-64 depth 3: n=15 model mean 2.973868  B3 mean 1.160809  gap 1.813058
+updates 65-128 depth 1: n=26 model mean 1.919998  B3 mean 1.182366  gap 0.737633
+updates 65-128 depth 2: n=20 model mean 1.941785  B3 mean 1.169189  gap 0.772596
+updates 65-128 depth 3: n=18 model mean 2.013006  B3 mean 1.185979  gap 0.827027
+dev targets longer than every train target (max train tokens 41): 15 of 256 ; in first 16: 1
+train depth-3 leaves per tree: {4: 242, 5: 213, 6: 90}
+bits per leaf log2(10*4*8*5) = 10.643856189774725

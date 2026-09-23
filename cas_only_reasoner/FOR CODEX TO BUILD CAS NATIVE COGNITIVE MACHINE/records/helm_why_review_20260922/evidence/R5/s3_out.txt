@@ -1,0 +1,51 @@
+distinct predicted ASTs: 1  outcomes: Counter({'GENERATED': 16})  steps: Counter({13: 16})
+prediction: (^7^E + ^7^C)  tokens: ['BINARY', 'PLUS', 'STATE', 'N7', 'D_E', 'F_NONE', 'REG_ABSENT', 'STATE', 'N7', 'D_C', 'F_NONE', 'REG_ABSENT', 'EOS']  len 13
+
+PER-RECORD: constant prediction vs each of the 16 references
+ c12aa3c699ee2af86b148e5e tlen=27 lcp= 3 pos= 3 lcs= 9 bag=10 rootop=True leaves 2/4 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 1, 0, 0, 0) | (^6^O_{F2}|E + ((^5^C_{F6}|E + ^1^C) + ^7^O|E))
+ 45963e68fc68b4a8010bec0f tlen=27 lcp= 2 pos= 2 lcs= 9 bag=11 rootop=True leaves 2/4 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 2, 0) | (((^2^P × ^2^E_{F2}) + ^0^P_{F1}|T) + ^5^C|T)
+ 9299295fe7ced2045a7d5dfd tlen=27 lcp= 3 pos= 4 lcs= 8 bag= 9 rootop=True leaves 2/4 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 1, 0) | (^4^C|T + ((^2^O_{F6} + ^3^P_{F7}|A) + ^1^P_{F5}))
+ 74ba152a17e463836d08ce17 tlen=34 lcp= 2 pos= 2 lcs= 9 bag=10 rootop=True leaves 2/5 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 0, 0) | ((^4^O|E + ^4^E_{F2}|A) + ((^0^P_{F4}|E + ^5^C) + ^3^P|A))
+ 06e1e0be1aea2be218fa06a5 tlen=34 lcp= 2 pos= 2 lcs=10 bag=10 rootop=True leaves 2/5 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 1, 1, 1, 0) | ((^5^E × (^4^E_{F5}|f × ^0^O|E)) + (^2^E + ^0^E))
+ a3213fd8a9fa3aca90da8cb2 tlen=34 lcp= 2 pos= 2 lcs=10 bag=12 rootop=True leaves 2/5 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(0, 1, 0, 1, 0) | ((^1^C_{F3} + (^8^C_{F4}|f + ^7^C|A)) + (^0^C_{F6}|f × ^2^E))
+ 6d018571a7fe4785cc1d48c6 tlen=34 lcp= 2 pos= 2 lcs= 9 bag=11 rootop=True leaves 2/5 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 0, 0) | ((^2^C_{F3}|f × (^4^P|T × ^0^O)) + (^6^P × ^7^P_{F1}|T))
+ 833a111b31d5f095f42a4b27 tlen=55 lcp= 2 pos= 2 lcs=11 bag=11 rootop=True leaves 2/8 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(0, 0, 0, 1, 0) | (((^1^O_{F6}|f + ^4^O_{F6}) + (^5^O|T + ^6^O_{F6}|f)) + ((^1^P|A × ^6^O_{F4}) × (^7^C × ^3^O|E)))
+ dd710c42273c18180e7391c8 tlen=27 lcp= 3 pos= 4 lcs= 9 bag= 9 rootop=True leaves 2/4 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 0, 1, 0) | (^8^P_{F6} + ((^3^P_{F7}|f × ^0^C) + ^4^O_{F5}))
+ 57bf1205085e4653d0a15060 tlen=27 lcp= 2 pos= 2 lcs=10 bag=11 rootop=True leaves 2/4 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(1, 0, 0, 0, 0) | (((^7^C_{F4}|E × ^9^E_{F6}|A) × ^8^O) + ^1^O|T)
+ f827325400d4999efb2194e9 tlen=27 lcp= 3 pos= 4 lcs=10 bag=12 rootop=True leaves 2/4 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(0, 1, 2, 0, 0) | (^3^O|f + ((^4^C|E + ^7^E) + ^8^E_{F4}))
+ 81d6fabc986ce0041442e4ea tlen=34 lcp= 2 pos= 2 lcs=12 bag=12 rootop=True leaves 2/5 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 2, 0) | ((^9^O_{F3} + (^4^O + ^4^P|A)) + (^7^C × ^7^C))
+ 8366dc7f5771cad393906306 tlen=34 lcp= 1 pos= 1 lcs= 8 bag= 8 rootop=False leaves 2/5 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 0, 0) | ((^5^P_{F1}|E × (^4^P|A × ^9^O_{F7}|T)) × (^1^O × ^1^O))
+ e4f7ee21f944d8bd4f7888ff tlen=34 lcp= 2 pos= 2 lcs=10 bag=11 rootop=True leaves 2/5 states_in_target=1 inorder(op,dom,drv,reg,leaf)=(0, 0, 1, 0, 0) | ((^8^P_{F6}|T + (^8^P|E × ^7^C_{F6})) + (^2^C + ^5^P|E))
+ 1bdf64cd54b5af68f80c17ed tlen=34 lcp= 2 pos= 2 lcs=11 bag=11 rootop=True leaves 2/5 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 2, 1, 2, 0) | ((^0^E_{F5} + ^4^C) + ((^1^C_{F4} × ^9^C|A) × ^2^C))
+ c1821ebabd72e99c40dc56c2 tlen=27 lcp= 3 pos= 5 lcs= 9 bag=10 rootop=True leaves 2/4 states_in_target=0 inorder(op,dom,drv,reg,leaf)=(0, 1, 1, 2, 0) | (^5^E_{F7} + ((^4^P + ^6^E_{F5}|E) + ^0^O|E))
+
+SUMMARY on the 16 dev records
+ MODEL constant (^7^E + ^7^C)                 exact 0/16 | lcp mean 2.2500 | pos-match tokens 41/516 = 0.079457 | LCS 154/516 = 0.298450 | bag 168/516 = 0.325581 | root-op 15/16 | shape 0/16 | inorder leaf fields op 1 dom 7 drv 12 reg 13 whole 0 (of 32 compared leaves)
+ target root ops (16): Counter({'PLUS': 15, 'TIMES': 1})  all-256 dev root ops: Counter({'PLUS': 243, 'TIMES': 13})
+ target leaves that are ^7^E / ^7^C (by noetic^domain): 1 / 6  of 76 leaves
+
+CHANCE: each of the 747 train depth-1 trees used as a constant prediction on the same 16 targets
+ lcp  model 2.250000 | constants: min 1.062500 median 2.250000 max 2.500000 | constants strictly better than model: 218/747
+ pos  model 0.079457 | constants: min 0.044574 median 0.075581 max 0.083333 | constants strictly better than model: 97/747
+ lcs  model 0.298450 | constants: min 0.201550 median 0.259690 max 0.315891 | constants strictly better than model: 25/747
+ bag  model 0.325581 | constants: min 0.220930 median 0.298450 max 0.344961 | constants strictly better than model: 59/747
+
+MECHANISM-FREE BASELINES on the same 16 dev records
+ whole train trees distinct: 2048  max multiplicity: 1 -> 'most common train tree' is a 2048-way tie; tie-break = first row in file
+ MOST-COMMON-TRAIN-TREE (tie->row0)           exact 0/16 | lcp mean 2.3125 | pos-match tokens 51/516 = 0.098837 | LCS 177/516 = 0.343023 | bag 226/516 = 0.437984 | root-op 15/16 | shape 0/16 | inorder leaf fields op 4 dom 14 drv 7 reg 10 whole 0 (of 48 compared leaves)
+ most common train bare shape: ('["B", "L", "L"]', 747)
+ MODAL-FIELDS depth-1 tree (^4^O + ^4^O)      exact 0/16 | lcp mean 2.3125 | pos-match tokens 43/516 = 0.083333 | LCS 161/516 = 0.312016 | bag 168/516 = 0.325581 | root-op 15/16 | shape 0/16 | inorder leaf fields op 11 dom 8 drv 12 reg 13 whole 1 (of 32 compared leaves)
+ most common depth-3 train bare shape: ('["B", "L", ["B", "L", ["B", "L", "L"]]]', 190)
+ MODAL depth-3 train skeleton, modal leaves   exact 0/16 | lcp mean 2.3125 | pos-match tokens 120/516 = 0.232558 | LCS 251/516 = 0.486434 | bag 276/516 = 0.534884 | root-op 15/16 | shape 0/16 | inorder leaf fields op 13 dom 19 drv 32 reg 29 whole 1 (of 64 compared leaves)
+ R0 byte-bag nearest train neighbour          exact 0/16 | lcp mean 3.0625 | pos-match tokens 206/516 = 0.399225 | LCS 287/516 = 0.556202 | bag 413/516 = 0.800388 | root-op 16/16 | shape 0/16 | inorder leaf fields op 12 dom 24 drv 34 reg 31 whole 0 (of 74 compared leaves)
+ LEAF-COPY regex + modal train shape by leaf count exact 0/16 | lcp mean 6.8750 | pos-match tokens 338/516 = 0.655039 | LCS 437/516 = 0.846899 | bag 474/516 = 0.918605 | root-op 11/16 | shape 0/16 | inorder leaf fields op 70 dom 70 drv 70 reg 70 whole 70 (of 70 compared leaves)
+ R5 PARSER (brackets + literal regex)         exact 16/16 | lcp mean 32.2500 | pos-match tokens 516/516 = 1.000000 | LCS 516/516 = 1.000000 | bag 516/516 = 1.000000 | root-op 16/16 | shape 16/16 | inorder leaf fields op 76 dom 76 drv 76 reg 76 whole 76 (of 76 compared leaves)
+ parser on all 256 dev: see s1 (16/16 checked against saved references only; the other 240 references are sealed and NOT opened)
+
+GREEDY decode of the input-blind prior B3 (slot + node depth), same grammar mask, lowest-id ties:
+ tokens: ['BINARY', 'PLUS', 'STATE', 'N4', 'D_O', 'F_NONE', 'REG_ABSENT', 'STATE', 'N4', 'D_O', 'F_NONE', 'REG_ABSENT', 'EOS']  len 13
+ tree: (^4^O + ^4^O)  same skeleton as model (shape, root op, drive, register): True
+ token positions where model output differs from B3-greedy: [(3, 'N7', 'N4'), (4, 'D_E', 'D_O'), (8, 'N7', 'N4'), (9, 'D_C', 'D_O')]
+ B3-GREEDY input-blind prior tree (^4^O + ^4^O) exact 0/16 | lcp mean 2.3125 | pos-match tokens 43/516 = 0.083333 | LCS 161/516 = 0.312016 | bag 168/516 = 0.325581 | root-op 15/16 | shape 0/16 | inorder leaf fields op 11 dom 8 drv 12 reg 13 whole 1 (of 32 compared leaves)
+
+ORDER CONTROL: Pearson(loss upd 97-128, B3 CE) with reconstructed order = 0.877254; 2000 random orders: max 0.556666, 99th pct 0.408063, #>=real 0

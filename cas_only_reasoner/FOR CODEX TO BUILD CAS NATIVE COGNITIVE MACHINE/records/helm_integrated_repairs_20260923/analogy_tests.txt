@@ -1,0 +1,28 @@
+{'seed': 730, 'legacy_max_difference': 0.0, 'repaired_margin_before': 0.0009918212890625, 'repaired_margin_after': 0.0010030865669250488}
+.F{'seed': 732, 'legacy_max_difference': 0.0, 'repaired_margin_before': -0.00286787748336792, 'repaired_margin_after': -0.002855554223060608}
+........
+================================== FAILURES ===================================
+___ test_changing_only_focus_structure_changes_relative_analogy_scores[731] ___
+
+seed = 731, legacy_scores = <function _world_scores at 0x0000027B6648A160>
+
+    @pytest.mark.parametrize("seed",[730,731,732])
+    def test_changing_only_focus_structure_changes_relative_analogy_scores(seed, legacy_scores):
+        model=container(seed)
+        before,after=forward(model),forward(model,shape="star")
+        assert torch.equal(before.worlds[1:],after.worlds[1:])  # alternatives are held fixed
+        assert torch.equal(before.declaration_embed,after.declaration_embed)
+        old_before=legacy_scores(before,"world_id",["W1","W2"])
+        old_after=legacy_scores(after,"world_id",["W1","W2"])
+        assert torch.equal(old_before,old_after)  # reproduces missing path using original source method
+        scores1=before._world_scores("world_id",["W1","W2"])
+        scores2=after._world_scores("world_id",["W1","W2"])
+>       assert not torch.isclose(scores1[0]-scores1[1],scores2[0]-scores2[1],atol=1e-6,rtol=0)
+E       assert not tensor(True)
+E        +  where tensor(True) = <built-in method isclose of type object at 0x00007FF8478CC250>((tensor(0.3682, grad_fn=<SelectBackward0>) - tensor(0.3706, grad_fn=<SelectBackward0>)), (tensor(0.3682, grad_fn=<SelectBackward0>) - tensor(0.3707, grad_fn=<SelectBackward0>)), atol=1e-06, rtol=0)
+E        +    where <built-in method isclose of type object at 0x00007FF8478CC250> = torch.isclose
+
+tests\test_helm_analogy_focus_comparison.py:59: AssertionError
+=========================== short test summary info ===========================
+FAILED tests\test_helm_analogy_focus_comparison.py::test_changing_only_focus_structure_changes_relative_analogy_scores[731]
+1 failed, 9 passed in 21.64s

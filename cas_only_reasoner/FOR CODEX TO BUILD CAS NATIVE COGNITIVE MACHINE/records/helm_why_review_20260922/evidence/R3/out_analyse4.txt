@@ -1,0 +1,181 @@
+records total 564 held 127 trained 358 excluded 79 held questions 50
+
+=== (2) TIMELINE of question correctness on the frozen 18 across checkpoints (1=all records right) ===
+0dcbaf89 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+29e8f3c3 edge_account ORACLE   recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+35a52288 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+36988555 reach        RANK     recs 4 1.0/17:1111111 1.0/18:0111111 1.0/19:0111111 2.0/17:1111111 2.0/18:0110111 2.0/19:1111110
+404166e8 reach        RANK     recs 1 1.0/17:0000000 1.0/18:0000000 1.0/19:0010000 2.0/17:1000000 2.0/18:0000010 2.0/19:0010010
+497decac analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+4e9e162a analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+6caa13d8 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+786bbcba parts        RANK     recs 1 1.0/17:0001111 1.0/18:0111111 1.0/19:0000000 2.0/17:0110001 2.0/18:0001111 2.0/19:0010000
+7a391350 reach        NONFLOOR recs 4 1.0/17:1111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:1111111
+a3e70de9 reach        NONFLOOR recs 1 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111011 2.0/19:1111111
+aa62bbee reach        RANK     recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:1111111
+aba576d9 analogy      NONFLOOR recs 4 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+ace89d2f analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+c7ee82d2 parts        ORACLE   recs 5 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+d51fda7f edge_account ORACLE   recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+de2ee2c5 analogy      NONFLOOR recs 4 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+f341afc7 reach        RANK     recs 1 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+checkpoints [0, 1, 2, 4, 6, 8, 10]
+
+=== (3) RECORD-LEVEL answers for the two broken questions and the two above-floor questions ===
+--- question 404166e8 reach world 4090ec49 records 1
+    9373a9e1 Helm 1.0 17 VIA/n0- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 1.0 18 VIA/n1- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 1.0 19 VIA/n0- DIRECT- VIA/n3+ DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 2.0 17 VIA/n3+ DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 2.0 18 VIA/n2- DIRECT- DIRECT- DIRECT- DIRECT- VIA/n3+ DIRECT-
+    9373a9e1 Helm 2.0 19 VIA/n0- DIRECT- VIA/n3+ DIRECT- DIRECT- VIA/n3+ DIRECT-
+--- question 36988555 reach world 28f61f2d records 4
+    0f35bba4 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    210805b4 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    9e02e451 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    fe5b0a6e Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+--- question 7a391350 reach world 6e1fcbda records 4
+    016e3aad Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+--- question a3e70de9 reach world 6e1fcbda records 1
+    78d57e38 Helm 1.0 17 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ DIRECT- VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+eligible held questions 45
+
+=== (6) RECORD level by kind, final checkpoint p10 (and p00), Helm 1.0 -> 2.0 ===
+-- ALL 564
+   reach          17: 1.0 30->101 | 2.0 16->97 of 107 (d=-4) ; 18: 1.0 1->101 | 2.0 0->101 of 107 (d=+0) ; 19: 1.0 20->99 | 2.0 64->96 of 107 (d=-3)
+   analogy        17: 1.0 0->16 | 2.0 0->16 of 70 (d=+0) ; 18: 1.0 0->16 | 2.0 4->16 of 70 (d=+0) ; 19: 1.0 0->16 | 2.0 0->16 of 70 (d=+0)
+   correspondence 17: 1.0 0->7 | 2.0 0->88 of 88 (d=+81) ; 18: 1.0 0->7 | 2.0 0->88 of 88 (d=+81) ; 19: 1.0 0->7 | 2.0 0->88 of 88 (d=+81)
+   parts          17: 1.0 0->53 | 2.0 0->50 of 53 (d=-3) ; 18: 1.0 0->53 | 2.0 0->53 of 53 (d=+0) ; 19: 1.0 0->49 | 2.0 0->46 of 53 (d=-3)
+   context        17: 1.0 0->70 | 2.0 6->70 of 70 (d=+0) ; 18: 1.0 13->70 | 2.0 0->70 of 70 (d=+0) ; 19: 1.0 0->70 | 2.0 9->70 of 70 (d=+0)
+   definition     17: 1.0 0->70 | 2.0 0->70 of 70 (d=+0) ; 18: 1.0 0->70 | 2.0 0->70 of 70 (d=+0) ; 19: 1.0 0->70 | 2.0 0->70 of 70 (d=+0)
+   edge_account   17: 1.0 0->70 | 2.0 0->70 of 70 (d=+0) ; 18: 1.0 0->70 | 2.0 0->70 of 70 (d=+0) ; 19: 1.0 0->70 | 2.0 0->70 of 70 (d=+0)
+   role_set       17: 1.0 0->5 | 2.0 0->34 of 36 (d=+29) ; 18: 1.0 3->35 | 2.0 0->27 of 36 (d=-8) ; 19: 1.0 0->26 | 2.0 0->34 of 36 (d=+8)
+   TOTAL seed 20260917 1.0 30->392  2.0 22->495  of 564  final diff +103
+   TOTAL seed 20260918 1.0 17->422  2.0 4->495  of 564  final diff +73
+   TOTAL seed 20260919 1.0 20->407  2.0 73->490  of 564  final diff +83
+-- HELD 127
+   reach          17: 1.0 9->25 | 2.0 5->23 of 26 (d=-2) ; 18: 1.0 1->25 | 2.0 0->25 of 26 (d=+0) ; 19: 1.0 5->23 | 2.0 18->20 of 26 (d=-3)
+   analogy        17: 1.0 0->0 | 2.0 0->0 of 17 (d=+0) ; 18: 1.0 0->0 | 2.0 0->0 of 17 (d=+0) ; 19: 1.0 0->0 | 2.0 0->0 of 17 (d=+0)
+   correspondence 17: 1.0 0->0 | 2.0 0->20 of 20 (d=+20) ; 18: 1.0 0->0 | 2.0 0->20 of 20 (d=+20) ; 19: 1.0 0->0 | 2.0 0->20 of 20 (d=+20)
+   parts          17: 1.0 0->9 | 2.0 0->7 of 9 (d=-2) ; 18: 1.0 0->9 | 2.0 0->9 of 9 (d=+0) ; 19: 1.0 0->6 | 2.0 0->6 of 9 (d=+0)
+   context        17: 1.0 0->17 | 2.0 3->17 of 17 (d=+0) ; 18: 1.0 0->17 | 2.0 0->17 of 17 (d=+0) ; 19: 1.0 0->17 | 2.0 0->17 of 17 (d=+0)
+   definition     17: 1.0 0->15 | 2.0 0->15 of 15 (d=+0) ; 18: 1.0 0->15 | 2.0 0->15 of 15 (d=+0) ; 19: 1.0 0->15 | 2.0 0->15 of 15 (d=+0)
+   edge_account   17: 1.0 0->17 | 2.0 0->17 of 17 (d=+0) ; 18: 1.0 0->17 | 2.0 0->17 of 17 (d=+0) ; 19: 1.0 0->17 | 2.0 0->17 of 17 (d=+0)
+   role_set       17: 1.0 0->1 | 2.0 0->4 of 6 (d=+3) ; 18: 1.0 1->5 | 2.0 0->2 of 6 (d=-3) ; 19: 1.0 0->3 | 2.0 0->4 of 6 (d=+1)
+   TOTAL seed 20260917 1.0 9->84  2.0 8->103  of 127  final diff +19
+   TOTAL seed 20260918 1.0 2->88  2.0 0->105  of 127  final diff +17
+   TOTAL seed 20260919 1.0 5->81  2.0 18->99  of 127  final diff +18
+-- TRAINED 358
+   reach          17: 1.0 16->67 | 2.0 9->64 of 71 (d=-3) ; 18: 1.0 0->67 | 2.0 0->67 of 71 (d=+0) ; 19: 1.0 13->66 | 2.0 37->67 of 71 (d=+1)
+   analogy        17: 1.0 0->15 | 2.0 0->15 of 36 (d=+0) ; 18: 1.0 0->15 | 2.0 2->15 of 36 (d=+0) ; 19: 1.0 0->15 | 2.0 0->15 of 36 (d=+0)
+   correspondence 17: 1.0 0->5 | 2.0 0->54 of 54 (d=+49) ; 18: 1.0 0->5 | 2.0 0->54 of 54 (d=+49) ; 19: 1.0 0->5 | 2.0 0->54 of 54 (d=+49)
+   parts          17: 1.0 0->44 | 2.0 0->43 of 44 (d=-1) ; 18: 1.0 0->44 | 2.0 0->44 of 44 (d=+0) ; 19: 1.0 0->43 | 2.0 0->40 of 44 (d=-3)
+   context        17: 1.0 0->41 | 2.0 3->41 of 41 (d=+0) ; 18: 1.0 8->41 | 2.0 0->41 of 41 (d=+0) ; 19: 1.0 0->41 | 2.0 5->41 of 41 (d=+0)
+   definition     17: 1.0 0->36 | 2.0 0->36 of 36 (d=+0) ; 18: 1.0 0->36 | 2.0 0->36 of 36 (d=+0) ; 19: 1.0 0->36 | 2.0 0->36 of 36 (d=+0)
+   edge_account   17: 1.0 0->46 | 2.0 0->46 of 46 (d=+0) ; 18: 1.0 0->46 | 2.0 0->46 of 46 (d=+0) ; 19: 1.0 0->46 | 2.0 0->46 of 46 (d=+0)
+   role_set       17: 1.0 0->4 | 2.0 0->30 of 30 (d=+26) ; 18: 1.0 2->30 | 2.0 0->25 of 30 (d=-5) ; 19: 1.0 0->23 | 2.0 0->30 of 30 (d=+7)
+   TOTAL seed 20260917 1.0 16->258  2.0 12->329  of 358  final diff +71
+   TOTAL seed 20260918 1.0 10->284  2.0 2->328  of 358  final diff +44
+   TOTAL seed 20260919 1.0 13->275  2.0 42->329  of 358  final diff +54
+-- EXCLUDED 79
+   reach          17: 1.0 5->9 | 2.0 2->10 of 10 (d=+1) ; 18: 1.0 0->9 | 2.0 0->9 of 10 (d=+0) ; 19: 1.0 2->10 | 2.0 9->9 of 10 (d=-1)
+   analogy        17: 1.0 0->1 | 2.0 0->1 of 17 (d=+0) ; 18: 1.0 0->1 | 2.0 2->1 of 17 (d=+0) ; 19: 1.0 0->1 | 2.0 0->1 of 17 (d=+0)
+   correspondence 17: 1.0 0->2 | 2.0 0->14 of 14 (d=+12) ; 18: 1.0 0->2 | 2.0 0->14 of 14 (d=+12) ; 19: 1.0 0->2 | 2.0 0->14 of 14 (d=+12)
+   parts          17: 1.0 0->0 | 2.0 0->0 of 0 (d=+0) ; 18: 1.0 0->0 | 2.0 0->0 of 0 (d=+0) ; 19: 1.0 0->0 | 2.0 0->0 of 0 (d=+0)
+   context        17: 1.0 0->12 | 2.0 0->12 of 12 (d=+0) ; 18: 1.0 5->12 | 2.0 0->12 of 12 (d=+0) ; 19: 1.0 0->12 | 2.0 4->12 of 12 (d=+0)
+   definition     17: 1.0 0->19 | 2.0 0->19 of 19 (d=+0) ; 18: 1.0 0->19 | 2.0 0->19 of 19 (d=+0) ; 19: 1.0 0->19 | 2.0 0->19 of 19 (d=+0)
+   edge_account   17: 1.0 0->7 | 2.0 0->7 of 7 (d=+0) ; 18: 1.0 0->7 | 2.0 0->7 of 7 (d=+0) ; 19: 1.0 0->7 | 2.0 0->7 of 7 (d=+0)
+   role_set       17: 1.0 0->0 | 2.0 0->0 of 0 (d=+0) ; 18: 1.0 0->0 | 2.0 0->0 of 0 (d=+0) ; 19: 1.0 0->0 | 2.0 0->0 of 0 (d=+0)
+   TOTAL seed 20260917 1.0 5->50  2.0 2->63  of 79  final diff +13
+   TOTAL seed 20260918 1.0 5->50  2.0 2->62  of 79  final diff +12
+   TOTAL seed 20260919 1.0 2->51  2.0 13->62  of 79  final diff +11
+
+=== (7) QUESTION level by kind at p10 (all records right), frozen 18 / eligible 45 / held 50 ===
+-- FROZEN 18
+   reach          of  6 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 4
+   analogy        of  5 17: 0 -> 0 ; 18: 0 -> 0 ; 19: 0 -> 0
+   parts          of  2 17: 2 -> 2 ; 18: 2 -> 2 ; 19: 1 -> 1
+   edge_account   of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   TOTAL 20260917 1.0 12  2.0 12 of 18
+   TOTAL 20260918 1.0 12  2.0 12 of 18
+   TOTAL 20260919 1.0 11  2.0 10 of 18
+-- ELIGIBLE 45
+   reach          of  9 17: 8 -> 6 ; 18: 8 -> 8 ; 19: 6 -> 6
+   analogy        of  5 17: 0 -> 0 ; 18: 0 -> 0 ; 19: 0 -> 0
+   correspondence of  5 17: 0 -> 5 ; 18: 0 -> 5 ; 19: 0 -> 5
+   parts          of  5 17: 5 -> 3 ; 18: 5 -> 5 ; 19: 2 -> 2
+   context        of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   definition     of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   edge_account   of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   role_set       of  6 17: 1 -> 4 ; 18: 5 -> 2 ; 19: 3 -> 4
+   TOTAL 20260917 1.0 29  2.0 33 of 45
+   TOTAL 20260918 1.0 33  2.0 35 of 45
+   TOTAL 20260919 1.0 26  2.0 32 of 45
+-- HELD 50
+   reach          of 14 17: 13 -> 11 ; 18: 13 -> 13 ; 19: 11 -> 11
+   analogy        of  5 17: 0 -> 0 ; 18: 0 -> 0 ; 19: 0 -> 0
+   correspondence of  5 17: 0 -> 5 ; 18: 0 -> 5 ; 19: 0 -> 5
+   parts          of  5 17: 5 -> 3 ; 18: 5 -> 5 ; 19: 2 -> 2
+   context        of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   definition     of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   edge_account   of  5 17: 5 -> 5 ; 18: 5 -> 5 ; 19: 5 -> 5
+   role_set       of  6 17: 1 -> 4 ; 18: 5 -> 2 ; 19: 3 -> 4
+   TOTAL 20260917 1.0 34  2.0 38 of 50
+   TOTAL 20260918 1.0 38  2.0 40 of 50
+   TOTAL 20260919 1.0 31  2.0 37 of 50
+
+=== (8) RETENTION and DEVELOPMENT (worker_report) ===
+Helm 1.0 20260917 retention before 93/96 after 93/96 held_world 19->19/20 trained_world 74->74/76 interference_updates 16 | dev [0, 4, 4, 4, 3, 4, 7] of 59
+Helm 2.0 20260917 retention before 86/96 after 78/96 held_world 15->13/20 trained_world 71->65/76 interference_updates 16 | dev [3, 2, 2, 2, 2, 2, 2] of 59
+Helm 1.0 20260918 retention before 93/96 after 93/96 held_world 19->19/20 trained_world 74->74/76 interference_updates 16 | dev [0, 6, 5, 4, 5, 7, 9] of 59
+Helm 2.0 20260918 retention before 93/96 after 93/96 held_world 19->19/20 trained_world 74->74/76 interference_updates 16 | dev [10, 6, 4, 9, 9, 6, 12] of 59
+Helm 1.0 20260919 retention before 87/96 after 87/96 held_world 14->14/20 trained_world 73->73/76 interference_updates 16 | dev [0, 4, 5, 5, 6, 5, 6] of 59
+Helm 2.0 20260919 retention before 84/96 after 82/96 held_world 14->12/20 trained_world 70->70/76 interference_updates 16 | dev [0, 5, 5, 4, 5, 3, 6] of 59

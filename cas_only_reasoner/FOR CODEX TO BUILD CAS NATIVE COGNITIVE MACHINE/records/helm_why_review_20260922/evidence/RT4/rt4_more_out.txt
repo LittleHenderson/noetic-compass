@@ -1,0 +1,113 @@
+(1) p10 VIA answers on records with NO common neighbour, by rule and whether VIA = whole's child (WC) / part's parent (PP)
+   ('bfs_immed', 'hops', 3, '-', 'VIA==PP', 'correct') 42
+   ('first_dir', 'hops', 3, 'VIA==WC', '-', 'correct') 23
+
+(2) ablation files: 26 held reach records per run; pooled over six runs
+  ablation_baseline reach answer states pooled: {'VIA': 111, 'DIRECT': 41, 'ABSENT': 4}
+== ablation_baseline pooled six runs (held reach only) | VIA-answered reach record x run pairs: 111 | distinct records: 19
+   overall agreement VIA==CN   101/105 = 0.9619047619047619
+   overall agreement VIA==RL   50/111 = 0.45045045045045046
+   overall agreement VIA==RF   61/111 = 0.5495495495495496
+   overall agreement VIA==PP   101/111 = 0.9099099099099099
+   overall agreement VIA==PC   101/111 = 0.9099099099099099
+   overall agreement VIA==HPR  101/111 = 0.9099099099099099
+   VIA pointing at an argument node: 0
+   D_RL        pairs  57 | distinct records  10 | distinct questions   4 | VIA==CN 57/57 = 1.0 | VIA==RL 0/57 = 0.0
+   D_RF        pairs  48 | distinct records   8 | distinct questions   2 | VIA==CN 44/48 = 0.9166666666666666 | VIA==RF 4/48 = 0.08333333333333333
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 18
+   rule applied (secondary, ablated model): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   unique-CN records: VIA==CN 74/78
+  ablation_round_mix reach answer states pooled: {'VIA': 108, 'DIRECT': 47, 'ABSENT': 1}
+== ablation_round_mix pooled six runs (held reach only) | VIA-answered reach record x run pairs: 108 | distinct records: 19
+   overall agreement VIA==CN   102/103 = 0.9902912621359223
+   overall agreement VIA==RL   54/108 = 0.5
+   overall agreement VIA==RF   54/108 = 0.5
+   overall agreement VIA==PP   102/108 = 0.9444444444444444
+   overall agreement VIA==PC   102/108 = 0.9444444444444444
+   overall agreement VIA==HPR  102/108 = 0.9444444444444444
+   VIA pointing at an argument node: 0
+   D_RL        pairs  55 | distinct records  10 | distinct questions   4 | VIA==CN 54/55 = 0.9818181818181818 | VIA==RL 1/55 = 0.01818181818181818
+   D_RF        pairs  48 | distinct records   8 | distinct questions   2 | VIA==CN 48/48 = 1.0 | VIA==RF 0/48 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 18
+   rule applied (secondary, ablated model): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   unique-CN records: VIA==CN 77/77
+  ablation_core_block reach answer states pooled: {'VIA': 110, 'DIRECT': 42, 'ABSENT': 4}
+== ablation_core_block pooled six runs (held reach only) | VIA-answered reach record x run pairs: 110 | distinct records: 19
+   overall agreement VIA==CN   99/104 = 0.9519230769230769
+   overall agreement VIA==RL   51/110 = 0.4636363636363636
+   overall agreement VIA==RF   59/110 = 0.5363636363636364
+   overall agreement VIA==PP   99/110 = 0.9
+   overall agreement VIA==PC   99/110 = 0.9
+   overall agreement VIA==HPR  99/110 = 0.9
+   VIA pointing at an argument node: 0
+   D_RL        pairs  56 | distinct records  10 | distinct questions   4 | VIA==CN 55/56 = 0.9821428571428571 | VIA==RL 1/56 = 0.017857142857142856
+   D_RF        pairs  48 | distinct records   8 | distinct questions   2 | VIA==CN 44/48 = 0.9166666666666666 | VIA==RF 4/48 = 0.08333333333333333
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 18
+   rule applied (secondary, ablated model): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   unique-CN records: VIA==CN 74/78
+  ablation_query_and_readout reach answer states pooled: {'VIA': 127, 'DIRECT': 27, 'ABSENT': 2}
+== ablation_query_and_readout pooled six runs (held reach only) | VIA-answered reach record x run pairs: 127 | distinct records: 23
+   overall agreement VIA==CN   113/114 = 0.9912280701754386
+   overall agreement VIA==RL   67/127 = 0.5275590551181102
+   overall agreement VIA==RF   60/127 = 0.47244094488188976
+   overall agreement VIA==PP   113/121 = 0.9338842975206612
+   overall agreement VIA==PC   119/126 = 0.9444444444444444
+   overall agreement VIA==HPR  119/127 = 0.937007874015748
+   VIA pointing at an argument node: 0
+   D_RL        pairs  60 | distinct records  10 | distinct questions   4 | VIA==CN 59/60 = 0.9833333333333333 | VIA==RL 1/60 = 0.016666666666666666
+   D_RF        pairs  54 | distinct records   9 | distinct questions   3 | VIA==CN 54/54 = 1.0 | VIA==RF 0/54 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 19
+   rule applied (secondary, ablated model): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   unique-CN records: VIA==CN 84/84
+  ablation_heads reach answer states pooled: {'VIA': 121, 'ABSENT': 10, 'DIRECT': 25}
+== ablation_heads pooled six runs (held reach only) | VIA-answered reach record x run pairs: 121 | distinct records: 26
+   overall agreement VIA==CN   83/104 = 0.7980769230769231
+   overall agreement VIA==RL   48/121 = 0.39669421487603307
+   overall agreement VIA==RF   52/121 = 0.4297520661157025
+   overall agreement VIA==PP   83/112 = 0.7410714285714286
+   overall agreement VIA==PC   85/113 = 0.7522123893805309
+   overall agreement VIA==HPR  85/121 = 0.7024793388429752
+   VIA pointing at an argument node: 21
+   D_RL        pairs  57 | distinct records  10 | distinct questions   4 | VIA==CN 48/57 = 0.8421052631578947 | VIA==RL 5/57 = 0.08771929824561403
+   D_RF        pairs  47 | distinct records   9 | distinct questions   3 | VIA==CN 35/47 = 0.7446808510638298 | VIA==RF 0/47 = 0.0
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 19
+   rule applied (secondary, ablated model): MIXED (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   unique-CN records: VIA==CN 64/76
+  ablation_baseline answer == course_p10 answer on the same record (all kinds, 6 runs): {True: 762}
+
+(3) p00 (untrained start) cue agreement, pooled and per run
+== course_p00 pooled six runs | VIA-answered reach record x run pairs: 577 | distinct records: 107
+   overall agreement VIA==CN   115/339 = 0.3392330383480826
+   overall agreement VIA==RL   202/577 = 0.35008665511265163
+   overall agreement VIA==RF   191/577 = 0.3310225303292894
+   overall agreement VIA==PP   143/408 = 0.35049019607843135
+   overall agreement VIA==PC   152/448 = 0.3392857142857143
+   overall agreement VIA==HPR  231/577 = 0.4003466204506066
+   VIA pointing at an argument node: 240
+   D_RL        pairs 150 | distinct records  28 | distinct questions  11 | VIA==CN 52/150 = 0.3466666666666667 | VIA==RL 39/150 = 0.26
+   D_RF        pairs  70 | distinct records  13 | distinct questions   5 | VIA==CN 24/70 = 0.34285714285714286 | VIA==RF 17/70 = 0.24285714285714285
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs  25 | distinct records   5 | distinct questions   2 | VIA==CN 5/25 = 0.2 | VIA==HPR 11/25 = 0.44
+   distinct records in union of D_k over the five node-local cues: 41
+   run 2.0/20260917 VIA-answered reach records at p00: 107 of 107
+   run 2.0/20260918 VIA-answered reach records at p00: 48 of 107
+   run 2.0/20260919 VIA-answered reach records at p00: 107 of 107
+   run 1.0/20260917 VIA-answered reach records at p00: 107 of 107
+   run 1.0/20260918 VIA-answered reach records at p00: 101 of 107
+   run 1.0/20260919 VIA-answered reach records at p00: 107 of 107

@@ -1,0 +1,55 @@
+RT2 pre-run record. Written BEFORE the bounded re-training was run. Scratch only. DIAGNOSTIC_NOT_CLAIM_BEARING.
+Only GPU work before this file: SCRATCH/RT2/rt2_timing.py (forward passes on the saved checkpoint; no backward, no optimizer).
+RT1 gate: RT1 rule (a) did NOT fire (SCRATCH/RT1/rt1_out.txt: "step0 exact reproductions ... 16/16", "a_bug: False"), so RT2 runs.
+
+OUTCOME RULES (copied verbatim from the chair's task text):
+BUG (or broken optimisation): at the end, S exact at depth 1 < 10% AND distinct outputs on S <= 2 AND CE on S not below the input-blind prior on S -> the pipeline cannot fit 256 rows in about 8 passes; report as BUG_OR_OPTIMISATION_FAILURE and propose an 8-row overfit test next round.
+TOO LITTLE TRAINING (for the smoke): S exact > 0 and set (ii) exact > 0 at depths 1-2, with outputs varying by input -> the 128-update constant output is explained by budget.
+TASK/DESIGN LIMIT at this budget: set (ii) depth-3 exact >= 25% while dev exact = 0 of 256 -> the model reconstructs seen shapes but not held-out shapes; the 0/16 reflects shape/length extrapolation under the strict bottleneck, not only budget (not proof of impossibility at larger budgets).
+SHAPE TRANSFER POSSIBLE: dev exact >= 1 of 256 -> held-out shapes are reachable and the smoke's 0/16 was budget.
+Mixed results (e.g. set (ii) depth-3 between 0 and 25%, dev 0) -> INCONCLUSIVE; report numbers only.
+If the 5-minute cap stops the run before 2,000 updates, apply the rules to the updates reached and mark BUDGET_LIMITED.
+
+OPERATIONAL CHOICES FIXED BEFORE RUNNING (my reading where the task text leaves a choice):
+1. Training: same as q4_smoke_job.py:320-355 except the row schedule. torch.manual_seed(20260921); torch.cuda.manual_seed_all(20260921);
+   deterministic flags of q4_smoke_job.py:329-333; CUBLAS_WORKSPACE_CONFIG=":4096:8" (q4_smoke_job.py:236);
+   build_model(NeuralConfig(64), device="cuda:0"); AdamW(lr=0.001) defaults otherwise; per update: zero_grad(set_to_none=True),
+   teacher_forced_logits(input, target[:-1]), cross_entropy(logits, gold), backward, clip_grad_norm_(1.0, error_if_nonfinite=True), step.
+   order = list(range(2048)); random.Random(20260921).shuffle(order); S = order[:256]; update u (1-based) trains row S[(u-1) % 256].
+   Consequence: updates 1-128 are the smoke's updates 1-128 (q4_smoke_job.py:341 uses order[u % 2048]).
+2. Targets: R5 parser on the VISIBLE observation (SCRATCH/R5/common.py parse) -> learner_q4_decoder.ast_to_tokens. Sealed files are never opened.
+   Fidelity check (EXTRA, not a rule input): after update 128, every parameter tensor must be torch.equal to the saved checkpoint
+   (loaded read-only with q4_checkpoint.load_checkpoint and sha256 d54f5715...5477), and the 128 losses must equal run_001/updates.jsonl.
+   If they differ, I report it and still apply the rules; I do not re-run.
+3. Caps: stop at 2,000 updates or when wall time since just before update 1 (INCLUDING the in-run evaluations at 500 and 1000) reaches 300 s,
+   whichever first; the check runs before each update. BUDGET_LIMITED = fewer than 2,000 updates done.
+   A separate process guard: if total process time passes 285 s during an evaluation, that evaluation stops and is marked INCOMPLETE.
+4. Evaluation points: after update 500, after update 1000, and at the end (update 2000 or the last update reached). Rules use the END reading only.
+   Evaluation = encode + learner_q4_decoder.free_decode(vec, model.next_logits) with default DecodeLimits (same path as q4_smoke_job.py:366-372).
+   Exact = prediction AST dict == target AST dict (q4_smoke_job.py:388). Depth = binary nesting depth (R5 common.depth).
+5. Sets:
+   S      = the 256 training rows order[:256].
+   set(ii) = scan order[256:2048] in order; keep the first 128 rows whose bare tree shape (R5 common.shape == q3 tree_shape) is one of the shapes present in S.
+   dev16  = visible_G_dev rows 1-16 (file order; the smoke's readout rows).  dev256 = all 256 visible_G_dev rows.
+   Dev targets: parser on the visible observation; checked against records/q4_authorized_20260922/inspected_predictions.json checker_reference_ast for rows 1-16.
+6. Distinct outputs per set = number of distinct canonical predicted ASTs (plus one entry per non-GENERATED outcome kind).
+7. Teacher-forced CE (row mean of per-row mean token CE, same formula as q4_smoke_job.py:344-346, under torch.no_grad) on S, set(ii), dev16, dev256.
+   Input-blind references, each fed EXACTLY the same stream of training rows as the GRU up to the evaluation point:
+   IB1 online bigram: k=1, alpha=0.1, vocabulary 34 + BOS context, NOT given the grammar (R5 s5_meeting.py preq; RT1 IB1).
+   IB2 loss-weighted slot prior: counts per (slot, expr-depth), weight 1/len(target) per occurrence; +0.01 on every legal token of the slot;
+       EOS contributes 0 (R5 s7_greedy_lw.py fit(None); RT1 IB2).
+   EXTRA: the same two learners fitted on one pass over S (not rule inputs).
+8. Rule reading at the END:
+   BUG fires iff  S depth-1 exact/n < 0.10  AND  distinct outputs on S <= 2  AND  GRU CE(S) >= min(IB1 CE(S), IB2 CE(S))   [primary].
+       Strict variant reported: GRU CE(S) >= max(IB1, IB2).
+   TOO_LITTLE_TRAINING fires iff  S exact over depths 1-2 combined > 0  AND  set(ii) exact over depths 1-2 combined > 0
+       AND distinct outputs on S > 2 AND distinct outputs on set(ii) > 2   [primary; "varying by input" = more than the <= 2 of the BUG rule].
+       Variants reported: per-depth (depth 1 > 0 and depth 2 > 0 in both sets); distinct > 1.
+   TASK_DESIGN_LIMIT fires iff  set(ii) depth-3 exact/n >= 0.25  AND  dev256 exact == 0.
+   SHAPE_TRANSFER_POSSIBLE fires iff  dev256 exact >= 1.
+   INCONCLUSIVE (design axis) iff  dev256 exact == 0 AND 0 < set(ii) depth-3 exact/n < 0.25   (the chair's stated example).
+   If set(ii) depth-3 exact == 0 and dev256 exact == 0 and BUG does not fire: none of the named outcomes on the design axis fits; I say so plainly.
+   More than one rule can fire (the budget axis and the design axis are separate questions); every fired rule is reported. BUDGET_LIMITED is appended if it applies.
+9. EXTRA (not rule inputs): per-set predicted-shape == target-shape count; leaf-sequence == target-leaf-sequence count; fraction of dev predictions whose
+   bare shape is a training shape; predicted depth histogram; bottleneck relative spread (RT1 definition); per-update loss and grad norm log.
+10. Nothing is saved into any repository. The trained model is held in memory only; nothing but text/JSON is written, and only to SCRATCH/RT2.

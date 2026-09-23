@@ -1,0 +1,83 @@
+{
+ "root_op": {
+  "unseen128_correct": 72,
+  "unseen128_majority": 94,
+  "n": 128,
+  "dev16_correct": 13,
+  "dev16_majority": 15,
+  "dev16_n": 16,
+  "classes": 2
+ },
+ "depth": {
+  "unseen128_correct": 78,
+  "unseen128_majority": 51,
+  "n": 128,
+  "dev16_correct": 12,
+  "dev16_majority": 0,
+  "dev16_n": 16,
+  "classes": 3
+ },
+ "left_child_binary": {
+  "unseen128_correct": 69,
+  "unseen128_majority": 85,
+  "n": 128,
+  "dev16_correct": 9,
+  "dev16_majority": 5,
+  "dev16_n": 16,
+  "classes": 2
+ },
+ "right_child_binary": {
+  "unseen128_correct": 128,
+  "unseen128_majority": 60,
+  "n": 128,
+  "dev16_correct": 16,
+  "dev16_majority": 14,
+  "dev16_n": 16,
+  "classes": 2
+ },
+ "first_leaf_noetic": {
+  "unseen128_correct": 9,
+  "unseen128_majority": 8,
+  "n": 128,
+  "dev16_correct": 2,
+  "dev16_majority": 1,
+  "dev16_n": 16,
+  "classes": 10
+ },
+ "last_leaf_noetic": {
+  "unseen128_correct": 20,
+  "unseen128_majority": 14,
+  "n": 128,
+  "dev16_correct": 4,
+  "dev16_majority": 2,
+  "dev16_n": 16,
+  "classes": 10
+ },
+ "last_leaf_domain": {
+  "unseen128_correct": 63,
+  "unseen128_majority": 36,
+  "n": 128,
+  "dev16_correct": 10,
+  "dev16_majority": 6,
+  "dev16_n": 16,
+  "classes": 4
+ },
+ "last_leaf_register": {
+  "unseen128_correct": 105,
+  "unseen128_majority": 61,
+  "n": 128,
+  "dev16_correct": 11,
+  "dev16_majority": 8,
+  "dev16_n": 16,
+  "classes": 5
+ },
+ "n_leaves": {
+  "unseen128_correct": 58,
+  "unseen128_majority": 47,
+  "n": 128,
+  "dev16_correct": 3,
+  "dev16_majority": 0,
+  "dev16_n": 15,
+  "classes": 5
+ }
+}

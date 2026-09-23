@@ -1,0 +1,6 @@
+2.0 20260917 analogy 70 answers {'41ef0201': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16
+2.0 20260918 analogy 70 answers {'056bbffd': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16
+2.0 20260919 analogy 70 answers {'056bbffd': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16
+1.0 20260917 analogy 70 answers {'41ef0201': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16
+1.0 20260918 analogy 70 answers {'056bbffd': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16
+1.0 20260919 analogy 70 answers {'056bbffd': 70} correct {'excluded': '1/17', 'held': '0/17', 'trained': '15/36'} total correct 16

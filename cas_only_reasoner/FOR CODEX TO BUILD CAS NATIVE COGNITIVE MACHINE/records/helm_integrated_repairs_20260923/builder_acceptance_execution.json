@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/test_helm_analogy_focus_comparison.py",
+    "records/typed_pointer_001/test_historical_rescore_rule.py",
+    "records/typed_pointer_001/test_trusted_rescore.py",
+    "-q",
+    "-s",
+    "--disable-warnings",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=records\\helm_integrated_repairs_20260923\\builder_acceptance.xml"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 111.23399999999674,
+  "timeout_seconds": 120,
+  "cpu_threads": 2,
+  "optimizer_steps": 0
+}

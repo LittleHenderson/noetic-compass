@@ -1,0 +1,10 @@
+questions 1072 worlds 18
+('edge_account', 1, True) 18
+('parts', 1, True) 303
+('reach', 0, True) 198
+('reach', 1, True) 180
+('reach', 2, True) 146
+('reach', 3, True) 112
+('reach', 4, True) 75
+('reach', 5, True) 40
+exact from visible world + arguments: 1072/1072

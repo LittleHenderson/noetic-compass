@@ -1,0 +1,1 @@
+{"pred": {"left": {"domain": "E", "drive": null, "node": "StateLiteral", "operator": "^7"}, "node": "BinaryExpr", "op": "PLUS", "right": {"domain": "C", "drive": null, "node": "StateLiteral", "operator": "^7"}}}

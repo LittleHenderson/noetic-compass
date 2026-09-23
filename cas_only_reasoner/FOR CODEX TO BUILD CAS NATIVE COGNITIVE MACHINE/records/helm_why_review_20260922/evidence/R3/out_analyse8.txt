@@ -1,0 +1,6 @@
+Helm 1.0 20260917 updates 1470 clipped 0 clipped_in_pass10 0 max_pre_clip 0.0 pass10 pre-clip mean None lr {None} sched {None}
+Helm 1.0 20260918 updates 1470 clipped 0 clipped_in_pass10 0 max_pre_clip 0.0 pass10 pre-clip mean None lr {None} sched {None}
+Helm 1.0 20260919 updates 1470 clipped 0 clipped_in_pass10 0 max_pre_clip 0.0 pass10 pre-clip mean None lr {None} sched {None}
+Helm 2.0 20260917 updates 1470 clipped 264 clipped_in_pass10 26 max_pre_clip 25.376535415649414 pass10 pre-clip mean 1.3573575030986955 lr {0.003} sched {'CONSTANT_AS_HELM_1_0'}
+Helm 2.0 20260918 updates 1470 clipped 187 clipped_in_pass10 5 max_pre_clip 24.56574058532715 pass10 pre-clip mean 0.5204800695789104 lr {0.003} sched {'CONSTANT_AS_HELM_1_0'}
+Helm 2.0 20260919 updates 1470 clipped 230 clipped_in_pass10 6 max_pre_clip 27.676780700683594 pass10 pre-clip mean 0.42473415219459404 lr {0.003} sched {'CONSTANT_AS_HELM_1_0'}

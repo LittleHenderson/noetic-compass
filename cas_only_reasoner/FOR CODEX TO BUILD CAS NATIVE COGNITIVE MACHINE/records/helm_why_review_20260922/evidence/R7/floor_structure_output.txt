@@ -1,0 +1,4 @@
+label 18 by kind {'edge_account': 5, 'reach': 6, 'analogy': 5, 'parts': 2}
+adjacency-solvable 7 rank-last-solvable 5 union 11
+non-floor questions 7 by kind {'analogy': 5, 'reach': 2}
+max possible above-floor without any analogy: 2

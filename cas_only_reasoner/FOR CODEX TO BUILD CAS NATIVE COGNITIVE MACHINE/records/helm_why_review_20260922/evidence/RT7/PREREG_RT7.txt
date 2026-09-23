@@ -1,0 +1,60 @@
+RT7 pre-run record. Written BEFORE the bounded 8-row re-training was run (2026-09-22, before any RT7 GPU work). Scratch only.
+Every number RT7 produces is DIAGNOSTIC_NOT_CLAIM_BEARING. No GPU work was done for RT7 before this file.
+Repo state at writing: q4-live worktree HEAD 4eb98682, `git status --short` empty.
+
+OUTCOME RULES (copied verbatim from the chair's task text; not re-read after the run):
+(0) If the fidelity pre-check fails -> SCRIPT_DEFECT; stop and report; no reading. If the 5-minute cap stops the run early -> BUDGET_LIMITED;
+    apply the rules to the updates reached. Rules are read at the final evaluation.
+(A) FITS: S8 exact >= 7 of 8 -> no gross defect in the learning path; the pipeline can carry leaf content through the 64-number state for 8 rows;
+    RT2's 0/256 is then a rate or capacity issue at 256 rows (TOO LITTLE TRAINING or capacity DESIGN LIMIT), not a BUG.
+(B) BUG_OR_OPTIMISATION_FAILURE: S8 exact <= 1 of 8 AND pooled leaf-slot (noetic+domain+drive+register) teacher-forced accuracy on S8 < 50%
+    AND last-pass mean training loss > 0.5 -> a 70,818-parameter model cannot memorise 8 rows in 250 passes; recommend a code audit of the leaf path.
+(C) BOTTLENECK_NOT_USED: S8 exact <= 1 of 8 AND structure-slot (expr+op+eos) teacher-forced accuracy >= 95% AND pooled leaf-slot CE with SWAP
+    minus CE with TRUE < 0.05 nats -> the decoder learns shared structure but does not read row-specific content from the bottleneck.
+    If (B) and (C) both fire, report both; (C) is the more specific reading.
+(D) Otherwise (for example 2-6 of 8 exact) -> INCONCLUSIVE; report numbers only; D1 stays open.
+
+OPERATIONAL CHOICES FIXED BEFORE RUNNING (my reading where the task text leaves a choice):
+1. Driver: SCRATCH/RT7/rt7_run.py, built from SCRATCH/RT2/rt2_run.py (bit-faithful per RT2-F1). Same training step as q4_smoke_job.py:327-355:
+   torch.manual_seed(20260921); torch.cuda.manual_seed_all(20260921); deterministic flags; CUBLAS_WORKSPACE_CONFIG=":4096:8";
+   build_model(NeuralConfig(64), device="cuda:0"); AdamW(lr=0.001), other AdamW settings default; per update: zero_grad(set_to_none=True),
+   teacher_forced_logits(input, target[:-1]), F.cross_entropy(logits, gold) (mean over tokens), backward, clip_grad_norm_(1.0, error_if_nonfinite=True), step.
+   ONE change: order = list(range(2048)); random.Random(20260921).shuffle(order); S8 = order[:8]; update u (1-based) trains row S8[(u-1) % 8].
+   2,000 updates = 250 passes over S8. The saved checkpoint is NOT loaded (not needed for this pre-check), so model init is the same RNG path as the smoke.
+2. Targets: R5 parser (SCRATCH/R5/common.py parse) on the VISIBLE observation -> learner_q4_decoder.ast_to_tokens. Sealed and eval files are never opened.
+   Sanity (reported, not a rule input): tokens_to_ast(ast_to_tokens(parse(obs))) == parse(obs) for the 8 rows; dev rows 1-16 parse == inspected_predictions.json checker_reference_ast.
+3. Fidelity pre-check (rule 0): after update 8, the 8 logged losses must be float-equal (==) to "loss" of updates 1-8 in records/q4_authorized_20260922/run_001/updates.jsonl.
+   EXTRA: the 8 pre-clip gradient norms compared the same way (reported; the rule uses losses only, as the task states).
+   If any of the 8 losses differs: write SCRIPT_DEFECT to the output, do no evaluation, exit.
+4. Cap: the check runs before each update: stop if time since process start >= 270 s (leaves room for the final evaluation inside 5 minutes of process time).
+   Stopping before update 2000 = BUDGET_LIMITED; the final evaluation is then taken at the last update reached.
+5. Evaluation points: after updates 250, 500, 1000, 2000 (or final reached). Rules use the FINAL evaluation only. Evaluation never calls backward or optimizer.
+6. Measures on S8 (row order = S8 order):
+   (i)  exact: pred = learner_q4_decoder.free_decode(model.encode(x), model.next_logits) with default DecodeLimits; exact iff pred.ast == target AST (dict ==,
+        as q4_smoke_job.py:388). Report record_id, depth (R5 common.depth), predicted expression and exact per row.
+   (ii) teacher-forced argmax token accuracy: logits = model.teacher_forced_logits(x_i, tgt_i[:-1]) under torch.no_grad; prediction = torch.argmax over ALL 34
+        output tokens (no grammar mask; first index on ties); correct iff == gold token. Slot class of each gold position from R5 common.slot_sequence
+        (expr, op, noetic, domain, drive, register, eos). Per-class accuracy = correct / positions, pooled over the 8 rows.
+        pooled leaf-slot accuracy = correct / positions over noetic+domain+drive+register positions pooled (token-weighted, not a mean of class means).
+        structure-slot accuracy = correct / positions over expr+op+eos positions pooled (token-weighted).
+        EXTRA (not a rule input): the same with the grammar mask allowed_next(gold prefix) applied before argmax.
+   (iii) teacher-forced CE per gold position = F.cross_entropy(logits, gold, reduction="none") over all 34 tokens (no mask), natural log (nats).
+        TRUE: decoder starting state = encoder final state of row i (exactly model.teacher_forced_logits).
+        SWAP: decoder starting state = encoder final state of row S8[(i+1) mod 8]; decoder input BOS + tgt_i[:-1] and gold tgt_i are row i's.
+        SWAP is computed with the model's own parts in the order of learner_q4_neural.py:103-105:
+        output_head(decoder(output_embedding(_prefix_tensor(tgt_i[:-1])), h_j)[0][0]); check: with h_i it must equal teacher_forced_logits bit for bit (reported).
+        Per-class CE = mean over positions pooled over the 8 rows. pooled leaf-slot CE = mean over all noetic+domain+drive+register positions pooled.
+        Rule (C) input: pooled leaf CE(SWAP) - pooled leaf CE(TRUE).
+        EXTRA (not a rule input): SWAP-ALL = mean over the 7 other rows' vectors; per-row CE TRUE/SWAP.
+   (iv) bottleneck relative spread on S8: RT1 definition (SCRATCH/RT1/rt1_diag.py:95-107): float64, mean L2 distance over the 28 unordered pairs of the
+        8 model.encode vectors / mean L2 norm. Also min pairwise cosine.
+   (v)  mean training loss per 8-update pass: pass k = updates 8k-7..8k (k = 1..250). "last-pass mean training loss" = pass 250 (updates 1993-2000),
+        or the last complete pass reached if BUDGET_LIMITED.
+   Context only (not a rule input): free-decode visible_G_dev rows 1-16 (file order) at the final evaluation; exact vs parsed dev observation.
+7. Rule reading at the FINAL evaluation (all comparisons exactly as written, no rounding):
+   FITS            iff exact_S8 >= 7
+   BUG             iff exact_S8 <= 1 AND leaf_acc_pooled < 0.50 AND last_pass_loss > 0.5
+   BOTTLENECK_NOT_USED iff exact_S8 <= 1 AND structure_acc_pooled >= 0.95 AND (leafCE_SWAP - leafCE_TRUE) < 0.05
+   INCONCLUSIVE    iff none of FITS, BUG, BOTTLENECK_NOT_USED fired.
+   BUDGET_LIMITED is appended if fewer than 2,000 updates were done. SCRIPT_DEFECT replaces everything if the pre-check fails.
+8. Nothing is saved into any repository. The model is held in memory only. Only text/JSON is written, only to SCRATCH/RT7. PYTHONDONTWRITEBYTECODE=1 and -B.

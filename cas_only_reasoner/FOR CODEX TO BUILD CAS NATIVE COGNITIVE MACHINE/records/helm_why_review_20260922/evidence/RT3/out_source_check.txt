@@ -1,0 +1,63 @@
+== receipt_helm1_certified_20260917 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  722: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  724: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  1027: block = hidden[start:stop, :]
+  1047: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1554: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1558: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1578: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1580: weight_decay=optimizer_config["weight_decay"],
+== receipt_helm1_certified_20260918 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  722: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  724: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  1027: block = hidden[start:stop, :]
+  1047: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1554: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1558: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1578: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1580: weight_decay=optimizer_config["weight_decay"],
+== receipt_helm1_certified_20260919 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  722: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  724: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  1027: block = hidden[start:stop, :]
+  1047: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1554: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1558: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1578: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1580: weight_decay=optimizer_config["weight_decay"],
+== receipt_20260917 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  759: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  761: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  902: # three registered `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight`,
+  933: `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight` -- every one of
+  1154: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1745: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1749: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1781: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1783: weight_decay=optimizer_config["weight_decay"],
+== receipt_20260918 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  759: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  761: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  902: # three registered `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight`,
+  933: `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight` -- every one of
+  1154: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1745: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1749: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1781: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1783: weight_decay=optimizer_config["weight_decay"],
+== receipt_20260919 research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py sha256 21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084
+  254: PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+  759: # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+  761: self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
+  902: # three registered `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight`,
+  933: `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight` -- every one of
+  1154: hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
+  1745: and set(optimizer_config) == {"learning_rate", "weight_decay", "betas", "eps"},
+  1749: values = [optimizer_config["learning_rate"], optimizer_config["weight_decay"],
+  1781: self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
+  1783: weight_decay=optimizer_config["weight_decay"],

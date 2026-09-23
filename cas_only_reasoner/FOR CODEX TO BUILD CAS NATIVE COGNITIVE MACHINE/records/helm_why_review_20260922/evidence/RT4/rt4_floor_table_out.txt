@@ -1,0 +1,35 @@
+q 36988555 kind=reach rule=bfs_immediat n=4 args={'part': 0, 'whole': 2} held records=4
+   p00 Helm 2.0 20260917: {'VIA/n3': 4} | all right: True
+   p00 Helm 2.0 20260918: {'ABSENT': 4} | all right: False
+   p00 Helm 2.0 20260919: {'VIA/n3': 4} | all right: True
+   p00 Helm 1.0 20260917: {'VIA/n3': 4} | all right: True
+   p00 Helm 1.0 20260918: {'ABSENT': 4} | all right: False
+   p00 Helm 1.0 20260919: {'VIA/n1': 4} | all right: False
+q 404166e8 kind=reach rule=first_direct n=4 args={'part': 0, 'whole': 1} held records=1
+   p00 Helm 2.0 20260917: {'VIA/n3': 1} | all right: True
+   p00 Helm 2.0 20260918: {'VIA/n2': 1} | all right: False
+   p00 Helm 2.0 20260919: {'VIA/n0': 1} | all right: False
+   p00 Helm 1.0 20260917: {'VIA/n0': 1} | all right: False
+   p00 Helm 1.0 20260918: {'VIA/n1': 1} | all right: False
+   p00 Helm 1.0 20260919: {'VIA/n0': 1} | all right: False
+q 786bbcba kind=parts rule=direct_conta n=4 args={'whole': 1} held records=1
+   p00 Helm 2.0 20260917: {'nodes=[0, 1, 2, 3]': 1} | all right: False
+   p00 Helm 2.0 20260918: {'nodes=[0, 1, 2, 3]': 1} | all right: False
+   p00 Helm 2.0 20260919: {'nodes=[0, 1, 2, 3]': 1} | all right: False
+   p00 Helm 1.0 20260917: {'nodes=[2]': 1} | all right: False
+   p00 Helm 1.0 20260918: {'nodes=[1]': 1} | all right: False
+   p00 Helm 1.0 20260919: {'nodes=[0, 1, 2, 3]': 1} | all right: False
+q aa62bbee kind=reach rule=bfs_immediat n=4 args={'part': 0, 'whole': 1} held records=4
+   p00 Helm 2.0 20260917: {'VIA/n1': 4} | all right: False
+   p00 Helm 2.0 20260918: {'VIA/n2': 4} | all right: False
+   p00 Helm 2.0 20260919: {'VIA/n3': 4} | all right: True
+   p00 Helm 1.0 20260917: {'VIA/n1': 4} | all right: False
+   p00 Helm 1.0 20260918: {'VIA/n1': 4} | all right: False
+   p00 Helm 1.0 20260919: {'VIA/n0': 4} | all right: False
+q f341afc7 kind=reach rule=first_direct n=4 args={'part': 2, 'whole': 1} held records=1
+   p00 Helm 2.0 20260917: {'VIA/n1': 1} | all right: False
+   p00 Helm 2.0 20260918: {'VIA/n2': 1} | all right: False
+   p00 Helm 2.0 20260919: {'VIA/n0': 1} | all right: False
+   p00 Helm 1.0 20260917: {'VIA/n0': 1} | all right: False
+   p00 Helm 1.0 20260918: {'VIA/n2': 1} | all right: False
+   p00 Helm 1.0 20260919: {'VIA/n0': 1} | all right: False

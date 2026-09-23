@@ -1,0 +1,82 @@
+model device: cuda:0 | params: 70818 | torch 2.11.0+cu128 | cuda 12.8 | NVIDIA GeForce RTX 4070 Laptop GPU
+
+== STEP 0: re-decode the 16 dev inputs and compare with run_001/dev_predictions.jsonl
+step0 exact reproductions (outcome, ast, steps all equal): 16/16
+
+seen idx == SCRATCH/R5/used_rows.json idx: True | overlap seen/unseen: 0
+parser round-trip tokens_to_ast(ast_to_tokens(parse(obs))) == parse(obs) on 2048 train rows: 2048/2048
+train depth counts (parser): {1: 747, 2: 756, 3: 545}
+parser(dev observation) == checker_reference_ast: 16/16
+
+== STEP 1: bottleneck spread
+ dev16     {"n": 16, "mean_pairwise_L2": 0.28577952380666505, "mean_norm": 7.576071681231438, "relative_spread": 0.03772133314348652, "min_pairwise_L2": 0.016811018741923794, "max_pairwise_L2": 0.7820934771977505, "mean_pairwise_cosine": 0.9990261279537869, "min_pairwise_cosine": 0.9948728725452913, "mean_per_dim_std": 0.014457656323117234, "mean_abs_value": 0.9342661926968105, "max_abs_value": 0.9991986155509949}
+ seen128   {"n": 128, "mean_pairwise_L2": 0.5027857313073518, "mean_norm": 7.520934535016729, "relative_spread": 0.06685149684077571, "min_pairwise_L2": 0.0015869436610993874, "max_pairwise_L2": 1.0159185724467041, "mean_pairwise_cosine": 0.9973788060430756, "min_pairwise_cosine": 0.9912219675537849, "mean_per_dim_std": 0.025140074460689832, "mean_abs_value": 0.926081461797196, "max_abs_value": 0.999212920665741}
+ unseen128 {"n": 128, "mean_pairwise_L2": 0.49907008839525513, "mean_norm": 7.52414219448881, "relative_spread": 0.06632916756421851, "min_pairwise_L2": 0.0016121016543897374, "max_pairwise_L2": 1.0204896666466026, "mean_pairwise_cosine": 0.9974201839992212, "min_pairwise_cosine": 0.9912106399354237, "mean_per_dim_std": 0.02501117160892438, "mean_abs_value": 0.9270636051061949, "max_abs_value": 0.9992173910140991}
+ all272    {"n": 272, "mean_pairwise_L2": 0.4941898004873608, "mean_norm": 7.525687383369163, "relative_spread": 0.0656670647228131, "min_pairwise_L2": 0.0015869436610993874, "max_pairwise_L2": 1.0204896666466026, "mean_pairwise_cosine": 0.9974633960508209, "min_pairwise_cosine": 0.9911303112245342, "mean_per_dim_std": 0.024819438273338226, "mean_abs_value": 0.9270251016425846, "max_abs_value": 0.9992173910140991}
+
+== STEP 2: next_logits with TRUE / ZERO / SWAP bottleneck (swap partner = dev (i+1) mod 16)
+ per input: G1 = logit[TIMES]-logit[PLUS] after (BINARY,) ; G2 = logit[BINARY]-logit[STATE] after (BINARY,PLUS)
+  c12aa3c699ee2af86b148e5e G1 true -1.618631 zero -0.972284 swap -1.604816 | G2 true -1.997786 zero -2.702632 swap -2.002251 | root(B-S) true +4.221538 zero +1.604618 swap +4.230045 | changed zero=False swap=False
+  45963e68fc68b4a8010bec0f G1 true -1.604816 zero -0.972284 swap -1.613712 | G2 true -2.002251 zero -2.702632 swap -2.005959 | root(B-S) true +4.230045 zero +1.604618 swap +4.213248 | changed zero=False swap=False
+  9299295fe7ced2045a7d5dfd G1 true -1.613712 zero -0.972284 swap -1.617963 | G2 true -2.005959 zero -2.702632 swap -1.997587 | root(B-S) true +4.213248 zero +1.604618 swap +4.214142 | changed zero=False swap=False
+  74ba152a17e463836d08ce17 G1 true -1.617963 zero -0.972284 swap -1.614902 | G2 true -1.997587 zero -2.702632 swap -2.000333 | root(B-S) true +4.214142 zero +1.604618 swap +4.217648 | changed zero=False swap=False
+  06e1e0be1aea2be218fa06a5 G1 true -1.614902 zero -0.972284 swap -1.612371 | G2 true -2.000333 zero -2.702632 swap -2.003449 | root(B-S) true +4.217648 zero +1.604618 swap +4.211248 | changed zero=False swap=False
+  a3213fd8a9fa3aca90da8cb2 G1 true -1.612371 zero -0.972284 swap -1.618965 | G2 true -2.003449 zero -2.702632 swap -1.995575 | root(B-S) true +4.211248 zero +1.604618 swap +4.233183 | changed zero=False swap=False
+  6d018571a7fe4785cc1d48c6 G1 true -1.618965 zero -0.972284 swap -1.622345 | G2 true -1.995575 zero -2.702632 swap -1.996546 | root(B-S) true +4.233183 zero +1.604618 swap +4.225680 | changed zero=False swap=False
+  833a111b31d5f095f42a4b27 G1 true -1.622345 zero -0.972284 swap -1.613843 | G2 true -1.996546 zero -2.702632 swap -2.005750 | root(B-S) true +4.225680 zero +1.604618 swap +4.214196 | changed zero=False swap=False
+  dd710c42273c18180e7391c8 G1 true -1.613843 zero -0.972284 swap -1.606300 | G2 true -2.005750 zero -2.702632 swap -2.000332 | root(B-S) true +4.214196 zero +1.604618 swap +4.239677 | changed zero=False swap=False
+  57bf1205085e4653d0a15060 G1 true -1.606300 zero -0.972284 swap -1.618575 | G2 true -2.000332 zero -2.702632 swap -1.997766 | root(B-S) true +4.239677 zero +1.604618 swap +4.225012 | changed zero=False swap=False
+  f827325400d4999efb2194e9 G1 true -1.618575 zero -0.972284 swap -1.609689 | G2 true -1.997766 zero -2.702632 swap -2.003956 | root(B-S) true +4.225012 zero +1.604618 swap +4.222211 | changed zero=False swap=False
+  81d6fabc986ce0041442e4ea G1 true -1.609689 zero -0.972284 swap -1.613089 | G2 true -2.003956 zero -2.702632 swap -1.999187 | root(B-S) true +4.222211 zero +1.604618 swap +4.234807 | changed zero=False swap=False
+  8366dc7f5771cad393906306 G1 true -1.613089 zero -0.972284 swap -1.619093 | G2 true -1.999187 zero -2.702632 swap -1.998342 | root(B-S) true +4.234807 zero +1.604618 swap +4.214777 | changed zero=False swap=False
+  e4f7ee21f944d8bd4f7888ff G1 true -1.619093 zero -0.972284 swap -1.607456 | G2 true -1.998342 zero -2.702632 swap -2.005816 | root(B-S) true +4.214777 zero +1.604618 swap +4.220387 | changed zero=False swap=False
+  1bdf64cd54b5af68f80c17ed G1 true -1.607456 zero -0.972284 swap -1.618396 | G2 true -2.005816 zero -2.702632 swap -1.997857 | root(B-S) true +4.220387 zero +1.604618 swap +4.222085 | changed zero=False swap=False
+  c1821ebabd72e99c40dc56c2 G1 true -1.618396 zero -0.972284 swap -1.618631 | G2 true -1.997857 zero -2.702632 swap -1.997786 | root(B-S) true +4.222085 zero +1.604618 swap +4.221538 | changed zero=False swap=False
+  ZERO P1_BINARY:TIMES_minus_PLUS: mean change +0.642100, mean |change| 0.642100, max |change| 0.650062
+  ZERO P2_BINARY_PLUS:BINARY_minus_STATE: mean change -0.702101, mean |change| 0.702101, max |change| 0.707057
+  SWAP P1_BINARY:TIMES_minus_PLUS: mean change +0.000000, mean |change| 0.006997, max |change| 0.013814
+  SWAP P2_BINARY_PLUS:BINARY_minus_STATE: mean change +0.000000, mean |change| 0.004734, max |change| 0.009204
+ max |gap change| over 64 rule values: 0.707057 ; count |change| >= 0.1: 32 ; >= 0.5: 32
+ greedy decode changed: ZERO 0/16, SWAP 0/16, EITHER 0/16
+ EXTRA: TRUE G1 across 16 inputs min -1.622345 max -1.604816 range 0.017529 ; TRUE G2 min -2.005959 max -1.995575 range 0.010385
+ distinct TRUE decodes over 16: 1 | ZERO decode: BINARY PLUS STATE N7 D_E F_NONE REG_ABSENT STATE N7 D_C F_NONE REG_ABSENT EOS
+
+== STEP 3: free decode on 128 seen and 128 unseen train rows
+ seen128 by depth {"1": {"n": 58, "generated": 58, "canonical_exact": 0}, "2": {"n": 37, "generated": 37, "canonical_exact": 0}, "3": {"n": 33, "generated": 33, "canonical_exact": 0}} | distinct outputs 1
+    128 x {"left":{"domain":"E","drive":null,"node":"StateLiteral","operator":"^7"},"node":"BinaryExpr","op":"PLUS","right":{"domain":"C","drive":null,"node":"StateLiteral","operator":"^7"}}
+ unseen128 by depth {"1": {"n": 47, "generated": 47, "canonical_exact": 0}, "2": {"n": 51, "generated": 51, "canonical_exact": 0}, "3": {"n": 30, "generated": 30, "canonical_exact": 0}} | distinct outputs 1
+    128 x {"left":{"domain":"E","drive":null,"node":"StateLiteral","operator":"^7"},"node":"BinaryExpr","op":"PLUS","right":{"domain":"C","drive":null,"node":"StateLiteral","operator":"^7"}}
+ distinct outputs over all 256 train rows: 1
+
+== STEP 4: teacher-forced cross-entropy
+ seen128: GRU row-mean 1.621673 token-mean 1.636722 | IB1 bigram 1.276293 / 1.278906 | IB2 lw-slot 1.154891 / 1.165775 (zero-count tokens 0) | IB3 slot 1.158811 / 1.161370 | GRU rows below IB1 0/128, below IB2 0/128
+    per-slot token CE GRU                    {"domain": 1.818445, "drive": 2.2025, "eos": 1.149872, "expr": 0.804463, "noetic": 2.685519, "op": 1.012736, "register": 1.804954}
+    per-slot token CE IB1_bigram_final       {"domain": 1.424658, "drive": 1.687542, "eos": 1.120171, "expr": 0.607381, "noetic": 2.29363, "op": 0.668539, "register": 1.287846}
+    per-slot token CE IB2_lossweighted_slot  {"domain": 1.382866, "drive": 1.699375, "eos": 0.0, "expr": 0.417975, "noetic": 2.288728, "op": 0.656766, "register": 1.266316}
+ unseen128: GRU row-mean 1.672510 token-mean 1.687102 | IB1 bigram 1.323210 / 1.334198 | IB2 lw-slot 1.170328 / 1.182679 (zero-count tokens 0) | IB3 slot 1.170178 / 1.176218 | GRU rows below IB1 0/128, below IB2 0/128
+    per-slot token CE GRU                    {"domain": 1.870576, "drive": 2.07033, "eos": 1.215355, "expr": 0.873565, "noetic": 2.767371, "op": 1.026751, "register": 2.005262}
+    per-slot token CE IB1_bigram_final       {"domain": 1.495419, "drive": 1.64896, "eos": 1.162651, "expr": 0.651654, "noetic": 2.329719, "op": 0.665519, "register": 1.517068}
+    per-slot token CE IB2_lossweighted_slot  {"domain": 1.392622, "drive": 1.599897, "eos": 0.0, "expr": 0.434344, "noetic": 2.317617, "op": 0.653322, "register": 1.416049}
+ dev16: GRU row-mean 1.756426 token-mean 1.757861 | IB1 bigram 1.379096 / 1.378086 | IB2 lw-slot 1.208322 / 1.211589 (zero-count tokens 0) | IB3 slot 1.187786 / 1.189754 | GRU rows below IB1 0/16, below IB2 0/16
+    per-slot token CE GRU                    {"domain": 1.900311, "drive": 2.072347, "eos": 1.161282, "expr": 1.212291, "noetic": 2.671043, "op": 1.057721, "register": 2.042361}
+    per-slot token CE IB1_bigram_final       {"domain": 1.49146, "drive": 1.701216, "eos": 1.106681, "expr": 0.861991, "noetic": 2.298406, "op": 0.660384, "register": 1.568548}
+    per-slot token CE IB2_lossweighted_slot  {"domain": 1.403675, "drive": 1.571917, "eos": 0.0, "expr": 0.564011, "noetic": 2.290956, "op": 0.647467, "register": 1.439065}
+ seen128 extra: GRU logged online loss mean 2.405564 | IB1 prequential mean 1.512545 | GRU final-minus-logged per-row mean -0.783891
+
+== EXTRA: teacher-forced CE with TRUE / ZERO / SWAP bottleneck (swap partner (i+1) mod n within the set)
+ seen128: TRUE 1.621673 | ZERO 1.723261 | SWAP 1.621792 | rows TRUE<SWAP 76/128, TRUE<ZERO 128/128
+ unseen128: TRUE 1.672510 | ZERO 1.771656 | SWAP 1.672552 | rows TRUE<SWAP 66/128, TRUE<ZERO 128/128
+ dev16: TRUE 1.756426 | ZERO 1.829864 | SWAP 1.756471 | rows TRUE<SWAP 11/16, TRUE<ZERO 16/16
+
+== RULE READING (per PREREG_RT1.txt)
+ a_bug: False
+ b_encoder_collapse: False
+ c_decoder_ignores: False
+ d_input_used_weakly: True
+ e_pipeline_maps: False
+ f_too_little_training_primary: True
+ f_too_little_training_strict: True
+ inputs: {'step0_reproduced': 16, 'spread_dev16': 0.03772133314348652, 'spread_seen128': 0.06685149684077571, 'decode_changed_either': 0, 'max_abs_gap_change': 0.7070572376251221, 'seen_exact': 0, 'unseen_exact': 0, 'distinct_outputs_256': 1, 'ce_condition_primary': True, 'ce_condition_strict': True}
+
+cuda peak allocated bytes: 110786048
+wrote C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\5e8709f4-3151-444f-939b-317c01bc3568\scratchpad\helm_review\RT1\rt1_results.json

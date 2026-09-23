@@ -1,0 +1,4 @@
+loss-weighted: BINARY PLUS STATE N7 D_E F_NONE REG_ABSENT STATE N7 D_E F_NONE REG_ABSENT EOS | len 13 | positions differing from model: [(9, 'D_C', 'D_E')]
+loss-weighted x recency h=128: BINARY PLUS STATE N7 D_E F_NONE REG_ABSENT STATE N7 D_E F_NONE REG_ABSENT EOS | len 13 | positions differing from model: [(9, 'D_C', 'D_E')]
+loss-weighted x recency h=64: BINARY PLUS STATE N7 D_C F_NONE REG_ABSENT STATE N7 D_C F_NONE REG_ABSENT EOS | len 13 | positions differing from model: [(4, 'D_E', 'D_C')]
+loss-weighted x recency h=32: BINARY PLUS STATE N7 D_C F_NONE REG_ABSENT STATE N7 D_C F_NONE REG_ABSENT EOS | len 13 | positions differing from model: [(4, 'D_E', 'D_C')]

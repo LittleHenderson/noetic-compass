@@ -1,0 +1,33 @@
+== learner_q4_decoder.py
+  MODULE-LEVEL name never read in this file: SCHEMA                 line 16 (may be exported API)
+  MODULE-LEVEL name never read in this file: BOS_ID                 line 22 (may be exported API)
+  MODULE-LEVEL name never read in this file: ast_to_tokens          line 91 (may be exported API)
+  MODULE-LEVEL name never read in this file: free_decode            line 173 (may be exported API)
+== learner_q4_demo.py
+  UNREAD PARAMETER _vector              line 15   in scripted_fixture_only()
+== learner_q4_memory.py
+  MODULE-LEVEL name never read in this file: from_structure         line 36 (may be exported API)
+  MODULE-LEVEL name never read in this file: replace_vector         line 80 (may be exported API)
+== learner_q4_neural.py
+  UNREAD LOCAL     __init__             line 44   in build_model()
+  UNREAD LOCAL     _device              line 53   in build_model()
+  UNREAD LOCAL     _encode_tensor       line 61   in build_model()
+  UNREAD LOCAL     _prefix_tensor       line 68   in build_model()
+  UNREAD LOCAL     encode               line 74   in build_model()
+  UNREAD LOCAL     next_logits          line 81   in build_model()
+  UNREAD LOCAL     generate             line 93   in build_model()
+  UNREAD LOCAL     teacher_forced_logits line 96   in build_model()
+  MODULE-LEVEL name never read in this file: build_model            line 26 (may be exported API)
+  ATTR self.config stored line 46 never read as .config in this file
+== learner_q4_representation.py
+  MODULE-LEVEL name never read in this file: SCHEMA                 line 13 (may be exported API)
+  MODULE-LEVEL name never read in this file: from_visible_record    line 43 (may be exported API)
+  MODULE-LEVEL name never read in this file: R0NearestNeighbor      line 77 (may be exported API)
+  MODULE-LEVEL name never read in this file: Bottleneck             line 112 (may be exported API)
+== q4_smoke_job.py
+  UNREAD PARAMETER device               line 200  in _device_lock_path()
+  UNREAD PARAMETER device               line 206  in _check_device_idle()
+== q4_checkpoint.py
+  MODULE-LEVEL name never read in this file: save_checkpoint        line 84 (may be exported API)
+  MODULE-LEVEL name never read in this file: load_checkpoint        line 101 (may be exported API)
+TOTAL function-level unread bindings: 11

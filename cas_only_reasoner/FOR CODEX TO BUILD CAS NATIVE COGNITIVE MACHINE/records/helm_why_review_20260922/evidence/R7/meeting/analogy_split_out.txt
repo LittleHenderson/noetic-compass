@@ -1,0 +1,5 @@
+receipt_helm1_certified_20260917 analogy correct: trained 15/36 held 0/17 excluded 1/17
+receipt_helm1_certified_20260918 analogy correct: trained 15/36 held 0/17 excluded 1/17
+receipt_20260917 analogy correct: trained 15/36 held 0/17 excluded 1/17
+receipt_20260918 analogy correct: trained 15/36 held 0/17 excluded 1/17
+receipt_20260919 analogy correct: trained 15/36 held 0/17 excluded 1/17

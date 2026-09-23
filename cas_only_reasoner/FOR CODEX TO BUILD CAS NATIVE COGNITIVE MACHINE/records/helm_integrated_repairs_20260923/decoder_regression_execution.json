@@ -1,0 +1,8 @@
+{
+  "timeout_seconds": 900,
+  "reason": "Full prepared fixture exceeded selected CPU wall limit; no completed case result claimed",
+  "pid": 15736,
+  "observed_elapsed_seconds": 938.3594108,
+  "status": "TIMEOUT",
+  "command": "\"C:\\Python314\\python.exe\" -B -m pytest research/CAS_META_2_COMPOSITION/tests/test_typed_teaching_slots.py -k \"bijections or joint_mapping or row_constant_shift or unknown_mapping\" -q --disable-warnings -p no:cacheprovider --junitxml=records/helm_integrated_repairs_20260923/decoder_regression.xml"
+}

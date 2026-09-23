@@ -1,0 +1,8 @@
+public bank worlds: 64
+declaration keys: ['domain', 'function', 'kind', 'participants', 'participants_basis', 'primary_labels', 'setting']
+held correspondence questions: 5 answer statuses over 3 seeds: {'MAPPING': 60}
+questions where the 3 seeds gave >1 distinct correct mapping: 0
+seed 20260917: correspondence rows 20, distinct query_ids 5, distinct (source,target) world pairs 5; participant_order matches Helm's correct answer on 20/20; brute-force isomorphism on 20/20
+seed 20260918: correspondence rows 20, distinct query_ids 5, distinct (source,target) world pairs 5; participant_order matches Helm's correct answer on 20/20; brute-force isomorphism on 20/20
+seed 20260919: correspondence rows 20, distinct query_ids 5, distinct (source,target) world pairs 5; participant_order matches Helm's correct answer on 20/20; brute-force isomorphism on 20/20
+bank worlds: 64 example participants_basis: PRIMARY_AUTHORED_LABELS_FIRST_THREE

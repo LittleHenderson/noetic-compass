@@ -1,0 +1,570 @@
+{
+  "schema": "helm.analogy-tensor-inventory/1",
+  "legacy_parameters": 174303,
+  "experimental_parameters": 203424,
+  "new_tensors": [
+    {
+      "name": "analogy_head.0.weight",
+      "shape": [
+        64,
+        452
+      ],
+      "elements": 28928,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.3.weight",
+      "shape": [
+        1,
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.3.bias",
+      "shape": [
+        1
+      ],
+      "elements": 1,
+      "status": "FRESH",
+      "initial_values_equal": null
+    }
+  ],
+  "all_shared_tensors_identical": true,
+  "rows": [
+    {
+      "name": "round_mix",
+      "shape": [
+        3
+      ],
+      "elements": 3,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "round_rate",
+      "shape": [
+        1
+      ],
+      "elements": 1,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "declaration_table",
+      "shape": [
+        1024,
+        64
+      ],
+      "elements": 65536,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "directed_pair_embedding",
+      "shape": [
+        2,
+        8
+      ],
+      "elements": 16,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_embedding",
+      "shape": [
+        6,
+        64
+      ],
+      "elements": 384,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_encode.weight",
+      "shape": [
+        64,
+        18
+      ],
+      "elements": 1152,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "state_encode.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "elements": 4096,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "match_key.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "elements": 4096,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "query_projection.weight",
+      "shape": [
+        64,
+        21
+      ],
+      "elements": 1344,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "query_norm.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "query_norm.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "attention_key.weight",
+      "shape": [
+        1,
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_projection.weight",
+      "shape": [
+        64,
+        196
+      ],
+      "elements": 12544,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "declaration_projection.weight",
+      "shape": [
+        32,
+        64
+      ],
+      "elements": 2048,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_head.0.weight",
+      "shape": [
+        64,
+        128
+      ],
+      "elements": 8192,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_head.3.weight",
+      "shape": [
+        2,
+        64
+      ],
+      "elements": 128,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "node_head.3.bias",
+      "shape": [
+        2
+      ],
+      "elements": 2,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "edge_head.0.weight",
+      "shape": [
+        64,
+        136
+      ],
+      "elements": 8704,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "edge_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "edge_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "edge_head.3.weight",
+      "shape": [
+        2,
+        64
+      ],
+      "elements": 128,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "edge_head.3.bias",
+      "shape": [
+        2
+      ],
+      "elements": 2,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_head.0.weight",
+      "shape": [
+        64,
+        198
+      ],
+      "elements": 12672,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_head.3.weight",
+      "shape": [
+        2,
+        64
+      ],
+      "elements": 128,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "role_head.3.bias",
+      "shape": [
+        2
+      ],
+      "elements": 2,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "pointer_key.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "elements": 4096,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "reach_option_head.0.weight",
+      "shape": [
+        64,
+        260
+      ],
+      "elements": 16640,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "reach_option_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "reach_option_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "reach_option_head.3.weight",
+      "shape": [
+        2,
+        64
+      ],
+      "elements": 128,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "reach_option_head.3.bias",
+      "shape": [
+        2
+      ],
+      "elements": 2,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "mode_option_head.0.weight",
+      "shape": [
+        64,
+        192
+      ],
+      "elements": 12288,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "mode_option_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "mode_option_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "mode_option_head.3.weight",
+      "shape": [
+        2,
+        64
+      ],
+      "elements": 128,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "mode_option_head.3.bias",
+      "shape": [
+        2
+      ],
+      "elements": 2,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_head.0.weight",
+      "shape": [
+        64,
+        38
+      ],
+      "elements": 2432,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_head.3.weight",
+      "shape": [
+        1,
+        64
+      ],
+      "elements": 64,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "world_head.3.bias",
+      "shape": [
+        1
+      ],
+      "elements": 1,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "analogy_head.0.weight",
+      "shape": [
+        64,
+        452
+      ],
+      "elements": 28928,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.2.weight",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.2.bias",
+      "shape": [
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.3.weight",
+      "shape": [
+        1,
+        64
+      ],
+      "elements": 64,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "analogy_head.3.bias",
+      "shape": [
+        1
+      ],
+      "elements": 1,
+      "status": "FRESH",
+      "initial_values_equal": null
+    },
+    {
+      "name": "left.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "elements": 4096,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "merge.weight",
+      "shape": [
+        64,
+        128
+      ],
+      "elements": 8192,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    },
+    {
+      "name": "right.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "elements": 4096,
+      "status": "CARRIED_UNCHANGED_LAYOUT",
+      "initial_values_equal": true
+    }
+  ],
+  "analogy_seed": 20260923,
+  "torch": "2.5.1+cu121",
+  "device": "cpu",
+  "threads": 2,
+  "optimizer_steps": 0,
+  "historical_checkpoint_loaded": false,
+  "source_sha256": "320024b4bc0c5930369934eabf06e6b9bd48163a819f81eda2063f040310c5bf",
+  "migration": "No historical checkpoint migrated. Off switch accepts legacy tensor layout strictly; on switch requires explicit fresh head, new profile/schema and a separately registered training job."
+}

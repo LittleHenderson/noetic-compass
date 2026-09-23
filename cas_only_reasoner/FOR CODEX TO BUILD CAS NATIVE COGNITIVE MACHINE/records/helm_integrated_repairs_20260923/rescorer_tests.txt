@@ -1,0 +1,45 @@
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 44%]
+........................................................................ [ 53%]
+........................................................................ [ 62%]
+........................................................................ [ 71%]
+........................................................................ [ 80%]
+........................................................................ [ 89%]
+...................................................................F.... [ 98%]
+Fsssssssss                                                               [100%]
+================================== FAILURES ===================================
+______ test_receipts_resolve_inside_this_package_and_paths_are_portable _______
+
+    def test_receipts_resolve_inside_this_package_and_paths_are_portable():
+        part = T.safe_anchor_part(HERE / "study_helm1_certified.json", {})
+        assert part["seed_set"] == ["20260917", "20260918", "20260919"] and part["study"]["path"] == "records/typed_pointer_001/study_helm1_certified.json"
+        for seed, info in part["seeds"].items():
+>           assert info["receipt_resolved_from"] == "package-relative"          # not the absolute path into another worktree
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: assert 'absolute-path-in-study' == 'package-relative'
+E             
+E             - package-relative
+E             + absolute-path-in-study
+
+records\typed_pointer_001\test_trusted_rescore.py:236: AssertionError
+__ test_the_committed_readings_were_made_by_this_tool_against_these_anchors ___
+
+    def test_the_committed_readings_were_made_by_this_tool_against_these_anchors():
+        for name, anchor in (("helm1_certified", "trust_anchor_helm1_certified.json"), ("helm2_experimental", "trust_anchor_helm2_experimental_20208c92.json")):
+            r = json.loads((HERE / ("trusted_rescore_reading_%s.json" % name)).read_text(encoding="utf-8"))
+>           assert r["schema"] == T.SCHEMA and r["anchor"]["pin"]["sha256_lf"] == ANCHOR_SHA256_LF[anchor]
+E           AssertionError: assert ('cncm.trusted...e-reading/0.2' == 'cncm.trusted...e-reading/0.3'
+E             
+E             - cncm.trusted-rescore-reading/0.3
+E             ?                                ^
+E             + cncm.trusted-rescore-reading/0.2
+E             ?                                ^)
+
+records\typed_pointer_001\test_trusted_rescore.py:282: AssertionError
+=========================== short test summary info ===========================
+FAILED records\typed_pointer_001\test_trusted_rescore.py::test_receipts_resolve_inside_this_package_and_paths_are_portable
+FAILED records\typed_pointer_001\test_trusted_rescore.py::test_the_committed_readings_were_made_by_this_tool_against_these_anchors
+2 failed, 791 passed, 9 skipped in 6.88s

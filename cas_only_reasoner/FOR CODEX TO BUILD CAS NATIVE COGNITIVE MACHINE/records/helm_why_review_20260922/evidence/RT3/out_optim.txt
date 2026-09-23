@@ -1,0 +1,24 @@
+== helm1.0 20260917 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['0.00347826792858541', '0.0009911321103572845', '-0.004469400271773338'] exp_avg_sq ['0.002670002868399024', '0.002297886647284031', '0.00480627128854394']
+   round_rate idx 4 step 1470.0 exp_avg ['0.013996640220284462'] exp_avg_sq ['0.7012247443199158']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = 4.400788238202012e-05 ; decoupled decay lr*wd*rate = -4.953702986240387e-06 ; sqrt(vhat) = 0.9541454382256298
+== helm1.0 20260918 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['0.002566672395914793', '0.00048768770648166537', '-0.003054356900975108'] exp_avg_sq ['8.312906720675528e-05', '6.713713810313493e-05', '0.0001604373101145029']
+   round_rate idx 4 step 1470.0 exp_avg ['-0.005111057311296463'] exp_avg_sq ['0.00459517864510417']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = -0.00019851566706802483 ; decoupled decay lr*wd*rate = -7.023343294858933e-06 ; sqrt(vhat) = 0.07723909238598554
+== helm1.0 20260919 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['0.0006545312935486436', '-0.0002583320892881602', '-0.0003961985930800438'] exp_avg_sq ['1.0940827451122459e-05', '2.0304070858401246e-05', '6.519066573673626e-06']
+   round_rate idx 4 step 1470.0 exp_avg ['-0.003506638575345278'] exp_avg_sq ['0.0018352029146626592']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = -0.00021551830597252517 ; decoupled decay lr*wd*rate = -5.390002280473709e-06 ; sqrt(vhat) = 0.048812157850729766
+== helm2.0 20260917 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['-9.422885796084302e-07', '1.1387975291654584e-06', '-1.965087221833528e-07'] exp_avg_sq ['1.9877814949609274e-08', '7.072876950786622e-09', '2.3270420257404112e-08']
+   round_rate idx 4 step 1470.0 exp_avg ['0.004566386342048645'] exp_avg_sq ['0.0009696930064819753']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = 0.0003860919006425259 ; decoupled decay lr*wd*rate = 2.3365094326436521e-07 ; sqrt(vhat) = 0.035481591668794624
+== helm2.0 20260918 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['0.00019403244368731976', '0.0004668292822316289', '-0.0006608617259189487'] exp_avg_sq ['4.19231437263079e-05', '1.741116284392774e-05', '7.000403275014833e-05']
+   round_rate idx 4 step 1470.0 exp_avg ['-0.0077027673833072186'] exp_avg_sq ['0.0023604759480804205']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = -0.00041742860580184805 ; decoupled decay lr*wd*rate = 7.759343683719635e-06 ; sqrt(vhat) = 0.055358683268115626
+== helm2.0 20260919 cursor 1470 shape-match: {'state_dict': False, 'learnable_names': False, 'core_first': True}
+   round_mix idx 3 step 1470.0 exp_avg ['8.226536785116423e-09', '-3.946793469822296e-08', '3.124142722299439e-08'] exp_avg_sq ['9.371248665956955e-09', '3.325736575021665e-09', '2.79177769790806e-09']
+   round_rate idx 4 step 1470.0 exp_avg ['0.0011243144981563091'] exp_avg_sq ['0.000288932875264436']
+      adam step estimate lr*mhat/(sqrt(vhat)+eps) = 0.00017415036934657934 ; decoupled decay lr*wd*rate = -7.603161502629518e-09 ; sqrt(vhat) = 0.019367985067276487

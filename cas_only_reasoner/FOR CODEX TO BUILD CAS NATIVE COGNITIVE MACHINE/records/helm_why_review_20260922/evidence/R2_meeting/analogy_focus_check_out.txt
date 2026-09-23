@@ -1,0 +1,6 @@
+receipt_20260917: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24
+receipt_20260918: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24
+receipt_20260919: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24
+receipt_helm1_certified_20260917: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24
+receipt_helm1_certified_20260918: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24
+receipt_helm1_certified_20260919: rows 70 | the only differing alias IS the focus world: {True: 70} | focus score lower than its non-focus score: {True: 70} | answer == focus world: 0 | distinct focus worlds 24

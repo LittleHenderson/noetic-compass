@@ -1,0 +1,10 @@
+== trained reach+parts 115
+   whole arg (participant, declared_whole, in, out): {(1, 1, 0, 3): 33, (1, 1, 0, 2): 36, (1, 1, 0, 1): 46}
+   part  arg (participant, declared_whole, in, out): {(0, 0, 2, 0): 11, (3, 0, 1, 0): 23, (3, 0, 1, 1): 5, (2, 0, 1, 1): 9, (0, 0, 1, 0): 18, (3, 0, 2, 0): 1, (2, 0, 0, 1): 1, (2, 0, 1, 0): 3}
+== trained DIRECT+parts 69
+   whole arg (participant, declared_whole, in, out): {(1, 1, 0, 3): 33, (1, 1, 0, 1): 15, (1, 1, 0, 2): 21}
+   part  arg (participant, declared_whole, in, out): {(3, 0, 1, 1): 2, (2, 0, 1, 1): 9, (0, 0, 1, 0): 6, (3, 0, 2, 0): 1, (2, 0, 1, 0): 3, (3, 0, 1, 0): 4}
+== dev DIRECT+parts 14
+   whole arg (participant, declared_whole, in, out): {(1, 1, 0, 2): 6, (1, 1, 0, 1): 8}
+   part  arg (participant, declared_whole, in, out): {(3, 0, 1, 0): 2, (2, 0, 2, 0): 2, (0, 0, 1, 0): 2, (0, 0, 1, 1): 1, (0, 0, 1, 2): 1}
+participant-rank 0 rows: trained reach+parts focus (86, 431, 0.19953596287703015); trained all rows (WIDE) (6100, 28693, 0.21259540654515038); dev focus (404, 581, 0.6953528399311532)

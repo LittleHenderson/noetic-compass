@@ -1,0 +1,5 @@
+{'seed': 730, 'legacy_max_difference': 0.0, 'repaired_margin_before': 0.0009918212890625, 'repaired_margin_after': 0.0010030865669250488}
+.{'seed': 731, 'legacy_max_difference': 0.0, 'repaired_margin_before': -0.002454310655593872, 'repaired_margin_after': -0.0024547576904296875}
+.{'seed': 732, 'legacy_max_difference': 0.0, 'repaired_margin_before': -0.00286787748336792, 'repaired_margin_after': -0.002855554223060608}
+........
+10 passed in 22.49s

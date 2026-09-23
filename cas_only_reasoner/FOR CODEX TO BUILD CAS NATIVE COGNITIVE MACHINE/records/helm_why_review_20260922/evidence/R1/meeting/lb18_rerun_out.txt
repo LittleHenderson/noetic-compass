@@ -1,0 +1,11 @@
+6:CNCM = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE")
+held      records 17 answers 123 | correct set == (isomorphic AND different domain) in 17 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 24
+trained   records 36 answers 315 | correct set == (isomorphic AND different domain) in 36 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 69
+excluded  records 17 answers 138 | correct set == (isomorphic AND different domain) in 17 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 29
+
+held detail (side, rid, correct answers, isomorphic others, isomorphic-but-rejected, non-domain candidates):
+    ('held', '1374d8b8432c', 6, 7, 1, 48)
+    ('held', '69d6b554ce25', 6, 7, 1, 48)
+    ('held', 'adf5318ae5db', 6, 7, 1, 48)
+
+[exited with code 0]

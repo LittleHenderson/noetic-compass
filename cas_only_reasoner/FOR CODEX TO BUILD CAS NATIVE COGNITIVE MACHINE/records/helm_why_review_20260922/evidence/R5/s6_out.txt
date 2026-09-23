@@ -1,0 +1,7 @@
+depth-1 expr slot token-count: {'STATE': 167, 'BINARY': 89}  P(BINARY) = 0.34766
+depth-1 expr slot loss-weighted P(BINARY) = 0.23674
+token share of depth-1 examples: 754/2553 = 0.29534
+loss-weighted: noetic top4 [('^7', 2.3127), ('^4', 2.3073), ('^3', 2.2826), ('^2', 2.1762)] | domain [('E', 5.4064), ('C', 4.9596), ('P', 4.7291), ('O', 4.2349)]
+loss-weighted x recency h=64: noetic top4 [('^7', 1.3056), ('^3', 1.2599), ('^4', 1.2425), ('^2', 1.2118)] | domain [('C', 2.9254), ('E', 2.9097), ('P', 2.4385), ('O', 2.2374)]
+loss-weighted x recency h=32: noetic top4 [('^7', 0.8427), ('^3', 0.8306), ('^2', 0.7748), ('^4', 0.7605)] | domain [('C', 1.9747), ('E', 1.8201), ('P', 1.4444), ('O', 1.3635)]
+loss-weighted x recency h=16: noetic top4 [('^3', 0.5107), ('^7', 0.4606), ('^2', 0.4259), ('^0', 0.4099)] | domain [('C', 1.1822), ('E', 0.9758), ('O', 0.7008), ('P', 0.6845)]

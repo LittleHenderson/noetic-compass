@@ -1,0 +1,962 @@
+[
+ {
+  "version": "helm1.0",
+  "seed": "20260917",
+  "file": "initial.pt",
+  "sha256": "4ac651c39e4192c3ddf9eb6c196c6065cdfc233cc39563e2b3755b08c9566077",
+  "bytes": 2168845,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 50,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm1.0",
+  "seed": "20260917",
+  "file": "final.pt",
+  "sha256": "66745c1b5902054df0fc2734d607b0da37878c46be2f4b0fe7b2d5c24088b499",
+  "bytes": 3470983,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 188,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.03900207206606865",
+     "0.654703676700592",
+     "0.17327722907066345"
+    ],
+    "raw_hex": "a3c01f3da99a273f966f313e",
+    "softmax": [
+     "0.2503340546475612",
+     "0.46335701568583854",
+     "0.2863089296666002"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "-0.16512343287467957"
+    ],
+    "raw_hex": "1e1629be",
+    "tanh": "-0.16363888373763216",
+    "g": "-0.0016363888373763216"
+   }
+  ]
+ },
+ {
+  "version": "helm1.0",
+  "seed": "20260918",
+  "file": "initial.pt",
+  "sha256": "a7d1c3fa8ea873c4b92cf7eeb92d0a53dd8c4db8e38bb791a219dbe2e75f8ce9",
+  "bytes": 2168845,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 50,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm1.0",
+  "seed": "20260918",
+  "file": "final.pt",
+  "sha256": "a63b2428f77b0151a0481898abf16e9d67ca5381c623bb47986e1987fc8ab404",
+  "bytes": 3470983,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 188,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.03779413923621178",
+     "0.3054451048374176",
+     "0.5366852879524231"
+    ],
+    "raw_hex": "07ce1a3d4d639c3e3564093f",
+    "softmax": [
+     "0.25292219937171423",
+     "0.33054172342671806",
+     "0.4165360772015677"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "-0.23411144316196442"
+    ],
+    "raw_hex": "e9ba6fbe",
+    "tanh": "-0.22992610252492837",
+    "g": "-0.002299261025249284"
+   }
+  ]
+ },
+ {
+  "version": "helm1.0",
+  "seed": "20260919",
+  "file": "initial.pt",
+  "sha256": "aa396cc1d29cadb209c498f6f75fa0d6c178f2bcf8a88333dd4f7b78986a1d94",
+  "bytes": 2168845,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 50,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm1.0",
+  "seed": "20260919",
+  "file": "final.pt",
+  "sha256": "d693f448d68e5eb5ea909548e06b9baa5d5ec49c220805da34cd4505a74b3137",
+  "bytes": 3470983,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 188,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.22292360663414001",
+     "0.33889275789260864",
+     "0.30758264660835266"
+    ],
+    "raw_hex": "1646643e5a83ad3e797b9d3e",
+    "softmax": [
+     "0.31139967405565006",
+     "0.3496897608926941",
+     "0.33891056505165584"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "-0.17966674268245697"
+    ],
+    "raw_hex": "8ffa37be",
+    "tanh": "-0.17775816018125581",
+    "g": "-0.0017775816018125582"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260917",
+  "file": "initial.pt",
+  "sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+  "bytes": 2235079,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 52,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260917",
+  "file": "final.pt",
+  "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+  "bytes": 3670007,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 196,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.3593052923679352",
+     "0.27649468183517456",
+     "0.32542526721954346"
+    ],
+    "raw_hex": "ddf6b73eb6908d3e249ea63e",
+    "softmax": [
+     "0.34635477855453317",
+     "0.3188283948101042",
+     "0.3348168266353626"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.00778836477547884"
+    ],
+    "raw_hex": "8a35ff3b",
+    "tanh": "0.007788207302131318",
+    "g": "7.788207302131318e-05"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260918",
+  "file": "initial.pt",
+  "sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+  "bytes": 2235079,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 52,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260918",
+  "file": "final.pt",
+  "sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+  "bytes": 3670007,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 196,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.1818346530199051",
+     "0.21936947107315063",
+     "0.41711729764938354"
+    ],
+    "raw_hex": "dd323a3e64a2603e6690d53e",
+    "softmax": [
+     "0.30270792045581263",
+     "0.31428593726291165",
+     "0.3830061422812756"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.25864478945732117"
+    ],
+    "raw_hex": "176d843e",
+    "tanh": "0.2530275222134544",
+    "g": "0.0025302752221345445"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260919",
+  "file": "initial.pt",
+  "sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+  "bytes": 2235079,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 52,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.5",
+     "0.25",
+     "0.25"
+    ],
+    "raw_hex": "0000003f0000803e0000803e",
+    "softmax": [
+     "0.39099131515943186",
+     "0.304504342420284",
+     "0.304504342420284"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "0.0"
+    ],
+    "raw_hex": "00000000",
+    "tanh": "0.0",
+    "g": "0.0"
+   }
+  ]
+ },
+ {
+  "version": "helm2.0",
+  "seed": "20260919",
+  "file": "final.pt",
+  "sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+  "bytes": 3670007,
+  "zip_prefix": "archive/",
+  "top_keys": [
+   "schema",
+   "metadata",
+   "model_state",
+   "optimizer_state",
+   "encoder_state",
+   "rng_state"
+  ],
+  "find_class": [
+   [
+    "collections",
+    "OrderedDict"
+   ],
+   [
+    "torch",
+    "ByteStorage"
+   ],
+   [
+    "torch",
+    "FloatStorage"
+   ],
+   [
+    "torch._utils",
+    "_rebuild_tensor_v2"
+   ]
+  ],
+  "n_tensors": 196,
+  "entries": [
+   {
+    "path": "model_state/round_mix",
+    "key": "0",
+    "numel": 3,
+    "size": [
+     3
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 12,
+    "values_repr": [
+     "0.43890994787216187",
+     "0.3529801070690155",
+     "0.30564939975738525"
+    ],
+    "raw_hex": "ceb8e03ecfb9b43e147e9c3e",
+    "softmax": [
+     "0.35805133155439545",
+     "0.32856888763563397",
+     "0.3133797808099706"
+    ]
+   },
+   {
+    "path": "model_state/round_rate",
+    "key": "1",
+    "numel": 1,
+    "size": [
+     1
+    ],
+    "offset": 0,
+    "stride": [
+     1
+    ],
+    "storage_bytes": 4,
+    "values_repr": [
+     "-0.0002534387167543173"
+    ],
+    "raw_hex": "f8df84b9",
+    "tanh": "-0.00025343871132809455",
+    "g": "-2.5343871132809456e-06"
+   }
+  ]
+ }
+]

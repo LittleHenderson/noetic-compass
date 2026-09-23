@@ -1,0 +1,21 @@
+PARSER_CHECK: my parse == frozen reference AST for 16/16 inspected dev cases
+inspected ids == first 16 dev ids: True
+saved predictions: n=16 unique=1 shown=(^7^E + ^7^C) steps=[13]
+distinct examples used in 128 updates: 128 of pool 2048
+depth pool: [(1, 747), (2, 756), (3, 545)]
+depth 128 seen: [(1, 58), (2, 37), (3, 33)]
+depth dev all 256: [(3, 256)]  first16: [(3, 16)]
+target token length: pool mean 21.1143; seen mean 19.9453; dev16 mean 32.2500; predicted 13
+input bytes: seen mean 32.9219; dev16 mean 54.6875
+dev16 bare shapes present in train pool: 0 /16
+predicted tree appears verbatim in train pool: 0 ; its shape (ss) count in pool: 747 ; in 128 seen: 58
+
+PARAMS: input_emb 16448 + encoder GRU 24960 + output_emb 2240 + decoder GRU 24960 + head 2210 = 70818
+CLIP: updates with pre-clip norm > 1.0: 73/128 ; min 0.725079 max 1.530571 ; lr values [0.001] ; clip values [1.0]
+RULE: root-left-child is BINARY iff observation char[1]=='(' : 2048/2048 ; root-right-child BINARY iff char[-2]==')': 2048/2048
+DEV16: root-left-child BINARY in 11/16 ; root-right-child BINARY in 14/16 ; input bytes min 40 max 100 mean 54.6875
+DEV16 root op: Counter({'PLUS': 15, 'TIMES': 1})
+CORR updates 65-128: pearson(model loss, input-blind prequential slot-count loss a=0.1) = 0.7674 ; model - blind mean = 0.6898
+CORR updates 97-128: pearson(model loss, input-blind prequential slot-count loss a=0.1) = 0.9237 ; model - blind mean = 0.5179
+MODEL LOSS by example depth, updates 65-128: {1: (26, 1.92), 2: (20, 1.9418), 3: (18, 2.013)}
+updates 97-128 where model loss < input-blind slot-count loss (a=0.1): 0/32

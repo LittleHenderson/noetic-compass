@@ -1,0 +1,99 @@
+records total 564 held 127 trained 358 excluded 79 held questions 50
+
+=== (2) TIMELINE of question correctness on the frozen 18 across checkpoints (1=all records right) ===
+0dcbaf89 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+29e8f3c3 edge_account ORACLE   recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+35a52288 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+36988555 reach        RANK     recs 4 1.0/17:1111111 1.0/18:0111111 1.0/19:0111111 2.0/17:1111111 2.0/18:0110111 2.0/19:1111110
+404166e8 reach        RANK     recs 1 1.0/17:0000000 1.0/18:0000000 1.0/19:0010000 2.0/17:1000000 2.0/18:0000010 2.0/19:0010010
+497decac analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+4e9e162a analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+6caa13d8 edge_account ORACLE   recs 3 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+786bbcba parts        RANK     recs 1 1.0/17:0001111 1.0/18:0111111 1.0/19:0000000 2.0/17:0110001 2.0/18:0001111 2.0/19:0010000
+7a391350 reach        NONFLOOR recs 4 1.0/17:1111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:1111111
+a3e70de9 reach        NONFLOOR recs 1 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111011 2.0/19:1111111
+aa62bbee reach        RANK     recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:1111111
+aba576d9 analogy      NONFLOOR recs 4 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+ace89d2f analogy      NONFLOOR recs 3 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+c7ee82d2 parts        ORACLE   recs 5 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+d51fda7f edge_account ORACLE   recs 4 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+de2ee2c5 analogy      NONFLOOR recs 4 1.0/17:0000000 1.0/18:0000000 1.0/19:0000000 2.0/17:0000000 2.0/18:0000000 2.0/19:0000000
+f341afc7 reach        RANK     recs 1 1.0/17:0111111 1.0/18:0111111 1.0/19:0111111 2.0/17:0111111 2.0/18:0111111 2.0/19:0111111
+checkpoints [0, 1, 2, 4, 6, 8, 10]
+
+=== (3) RECORD-LEVEL answers for the two broken questions and the two above-floor questions ===
+--- question 404166e8 reach world 4090ec49 records 1
+    9373a9e1 Helm 1.0 17 VIA/n0- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 1.0 18 VIA/n1- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 1.0 19 VIA/n0- DIRECT- VIA/n3+ DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 2.0 17 VIA/n3+ DIRECT- DIRECT- DIRECT- DIRECT- DIRECT- DIRECT-
+    9373a9e1 Helm 2.0 18 VIA/n2- DIRECT- DIRECT- DIRECT- DIRECT- VIA/n3+ DIRECT-
+    9373a9e1 Helm 2.0 19 VIA/n0- DIRECT- VIA/n3+ DIRECT- DIRECT- VIA/n3+ DIRECT-
+--- question 36988555 reach world 28f61f2d records 4
+    0f35bba4 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    0f35bba4 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    210805b4 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    210805b4 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    9e02e451 Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    9e02e451 Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+    fe5b0a6e Helm 1.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 1.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 1.0 19 VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 17 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 18 ABSENT- VIA/n3+ VIA/n3+ VIA/n1- VIA/n3+ VIA/n3+ VIA/n3+
+    fe5b0a6e Helm 2.0 19 VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n3+ VIA/n1-
+--- question 7a391350 reach world 6e1fcbda records 4
+    016e3aad Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    016e3aad Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    835ef1cc Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    8e9dd62f Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 17 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    bea7e140 Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+--- question a3e70de9 reach world 6e1fcbda records 1
+    78d57e38 Helm 1.0 17 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 1.0 18 VIA/n0- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 1.0 19 VIA/n2- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 17 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 18 VIA/n3- VIA/n1+ VIA/n1+ VIA/n1+ DIRECT- VIA/n1+ VIA/n1+
+    78d57e38 Helm 2.0 19 VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+ VIA/n1+
+=== (9) retention records vs course_p10 correctness, and interference damage by kind ===
+Helm 1.0 20260917 ret n 96 before==course_p10 on 96 | before 93 after 93 | lost 0 won 0 | by kind n/before/after {'reach': [64, 61, 61], 'parts': [32, 32, 32]}
+Helm 1.0 20260918 ret n 96 before==course_p10 on 96 | before 93 after 93 | lost 0 won 0 | by kind n/before/after {'reach': [64, 61, 61], 'parts': [32, 32, 32]}
+Helm 1.0 20260919 ret n 96 before==course_p10 on 96 | before 87 after 87 | lost 1 won 1 | by kind n/before/after {'reach': [64, 59, 59], 'parts': [32, 28, 28]}
+Helm 2.0 20260917 ret n 96 before==course_p10 on 96 | before 86 after 78 | lost 10 won 2 | by kind n/before/after {'reach': [64, 57, 55], 'parts': [32, 29, 23]}
+Helm 2.0 20260918 ret n 96 before==course_p10 on 96 | before 93 after 93 | lost 0 won 0 | by kind n/before/after {'reach': [64, 61, 61], 'parts': [32, 32, 32]}
+Helm 2.0 20260919 ret n 96 before==course_p10 on 96 | before 84 after 82 | lost 2 won 0 | by kind n/before/after {'reach': [64, 59, 57], 'parts': [32, 25, 25]}
+
+2.0 worker_report keys of interest: {'learning_on_held_back_established': False, 'report_only_status': {'ablations': 'COMPLETE', 'checkpoint_check_phase_a': 'COMPLETE', 'checkpoint_check_phase_b': 'COMPLETE'}, 'degraded_checks': [], 'ablation_status': 'COMPLETE', 'checkpoint_check_phase_a_status': 'COMPLETE', 'checkpoint_check_phase_b_status': 'COMPLETE', 'completed_main_updates': 1470, 'schedule_plan_mode': 'REGISTERED', 'claim_bearing': True}
+pass_summaries 2.0/18 first/last {"cursor_end": 147, "first_raw_batch_loss": 3.0748021751642227, "last_raw_batch_loss": 0.30129693262279034, "mean_gradient_squared_norm": 55.75590853623758, "mean_raw_batch_loss": 0.8676923648507024, "pass": 1, "seconds": 722.328998576, "updates": 147} ... {"cursor_end": 1470, "first_raw_batch_loss": 0.3655551169067621, "last_raw_batch_loss": 0.1987004621575276, "mean_gradient_squared_norm": 4.28223156994284, "mean_raw_batch_loss": 0.21974338093901233, "pass": 10, "seconds": 722.4157132250002, "updates": 147}
+pass_summaries 1.0/18 first/last {"cursor_end": 147, "first_raw_batch_loss": 2.5933081209659576, "last_raw_batch_loss": 0.7171513736248016, "mean_gradient_squared_norm": 46.4444732396395, "mean_raw_batch_loss": 0.9522530092298008, "pass": 1, "seconds": 530.197656387, "updates": 147} ... {"cursor_end": 1470, "first_raw_batch_loss": 0.522107849518458, "last_raw_batch_loss": 0.5925736067195734, "mean_gradient_squared_norm": 0.26132497820206674, "mean_raw_batch_loss": 0.48907629777083644, "pass": 10, "seconds": 530.3619768190001, "updates": 147}

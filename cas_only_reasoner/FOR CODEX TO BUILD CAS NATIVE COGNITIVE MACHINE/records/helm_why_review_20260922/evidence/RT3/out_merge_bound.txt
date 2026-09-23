@@ -1,0 +1,12 @@
+helm1.0 20260917 initial.pt merge shape 64x128  ||merge||_F=4.622432080197718  bound RMS(u)<=5.6777604541603335  typical RMS(u)~0.5778040100247147  g=0.0  step bound=0.0  step typical~0.0
+helm1.0 20260917 final.pt   merge shape 64x128  ||merge||_F=17.579357427893193  bound RMS(u)<=21.776819701726872  typical RMS(u)~2.197419678486649  g=-0.0016363888373763216  step bound=0.03563534467346261  step typical~0.003595833032906618
+helm1.0 20260918 initial.pt merge shape 64x128  ||merge||_F=4.64177772211351  bound RMS(u)<=5.713572461424728  typical RMS(u)~0.5802222152641887  g=0.0  step bound=0.0  step typical~0.0
+helm1.0 20260918 final.pt   merge shape 64x128  ||merge||_F=17.49552952386477  bound RMS(u)<=21.500296915756373  typical RMS(u)~2.1869411904830964  g=-0.002299261025249284  step bound=0.04943479472968602  step typical~0.005028348643790054
+helm1.0 20260919 initial.pt merge shape 64x128  ||merge||_F=4.5839284355821865  bound RMS(u)<=5.6109594683466435  typical RMS(u)~0.5729910544477733  g=0.0  step bound=0.0  step typical~0.0
+helm1.0 20260919 final.pt   merge shape 64x128  ||merge||_F=15.836339990739694  bound RMS(u)<=18.891420037914845  typical RMS(u)~1.9795424988424617  g=-0.0017775816018125582  step bound=0.03358104069151053  step typical~0.003518798325948417
+helm2.0 20260917 initial.pt merge shape 64x128  ||merge||_F=4.622432080197718  bound RMS(u)<=5.6777604541603335  typical RMS(u)~0.5778040100247147  g=0.0  step bound=0.0  step typical~0.0
+helm2.0 20260917 final.pt   merge shape 64x128  ||merge||_F=8.446552902213345  bound RMS(u)<=9.995269810142405  typical RMS(u)~1.055819112776668  g=7.788207302131318e-05  step bound=0.0007784523332212379  step typical~8.222938123857055e-05
+helm2.0 20260918 initial.pt merge shape 64x128  ||merge||_F=4.64177772211351  bound RMS(u)<=5.713572461424728  typical RMS(u)~0.5802222152641887  g=0.0  step bound=0.0  step typical~0.0
+helm2.0 20260918 final.pt   merge shape 64x128  ||merge||_F=16.828943177656857  bound RMS(u)<=21.826969624869708  typical RMS(u)~2.103617897207107  g=0.0025302752221345445  step bound=0.05522824041609115  step typical~0.005322732242141916
+helm2.0 20260919 initial.pt merge shape 64x128  ||merge||_F=4.5839284355821865  bound RMS(u)<=5.6109594683466435  typical RMS(u)~0.5729910544477733  g=0.0  step bound=0.0  step typical~0.0
+helm2.0 20260919 final.pt   merge shape 64x128  ||merge||_F=6.564389822069956  bound RMS(u)<=7.578393192562606  typical RMS(u)~0.8205487277587445  g=-2.5343871132809456e-06  step bound=1.920658204660671e-05  step typical~2.079588121450837e-06

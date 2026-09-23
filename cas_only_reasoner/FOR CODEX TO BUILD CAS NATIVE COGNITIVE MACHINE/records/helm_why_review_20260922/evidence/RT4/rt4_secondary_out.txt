@@ -1,0 +1,49 @@
+(a) CN-defined records: (number of common neighbours, gold == VIA/lexfirst-CN) -> {(1, True): 46, (2, True): 18}
+== (b1) POOLED p10, records with ONE common neighbour only | VIA-answered reach record x run pairs: 270 | distinct records: 45
+   overall agreement VIA==CN   266/270 = 0.9851851851851852
+   overall agreement VIA==RL   206/270 = 0.762962962962963
+   overall agreement VIA==RF   202/270 = 0.7481481481481481
+   overall agreement VIA==PP   266/270 = 0.9851851851851852
+   overall agreement VIA==PC   266/270 = 0.9851851851851852
+   overall agreement VIA==HPR  266/270 = 0.9851851851851852
+   VIA pointing at an argument node: 0
+   D_RL        pairs  60 | distinct records  10 | distinct questions   4 | VIA==CN 60/60 = 1.0 | VIA==RL 0/60 = 0.0
+   D_RF        pairs  72 | distinct records  12 | distinct questions   4 | VIA==CN 68/72 = 0.9444444444444444 | VIA==RF 4/72 = 0.05555555555555555
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==HPR 0/0 = undefined
+   distinct records in union of D_k over the five node-local cues: 22
+   rule applied to this subset (secondary): STRUCTURAL (testable cues ['RF', 'RL']; untestable ['PP', 'PC', 'HPR'])
+   run 2.0/20260917 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 22/22
+   run 2.0/20260918 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 22/22
+   run 2.0/20260919 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 18/22
+   run 1.0/20260917 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 22/22
+   run 1.0/20260918 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 22/22
+   run 1.0/20260919 unique-CN records disagreeing with >=1 node-local cue: VIA==CN 22/22
+== (b2) POOLED p10, records with TWO common neighbours (diamond ties) only | VIA-answered reach record x run pairs: 105 | distinct records: 18
+   overall agreement VIA==CN   75/105 = 0.7142857142857143
+   overall agreement VIA==RL   30/105 = 0.2857142857142857
+   overall agreement VIA==RF   75/105 = 0.7142857142857143
+   overall agreement VIA==PP   75/105 = 0.7142857142857143
+   overall agreement VIA==PC   75/105 = 0.7142857142857143
+   overall agreement VIA==HPR  77/105 = 0.7333333333333333
+   VIA pointing at an argument node: 0
+   D_RL        pairs 105 | distinct records  18 | distinct questions   7 | VIA==CN 75/105 = 0.7142857142857143 | VIA==RL 30/105 = 0.2857142857142857
+   D_RF        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==RF 0/0 = undefined
+   D_PP        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PP 0/0 = undefined
+   D_PC        pairs   0 | distinct records   0 | distinct questions   0 | VIA==CN 0/0 = undefined | VIA==PC 0/0 = undefined
+   D_HPR       pairs  30 | distinct records   5 | distinct questions   2 | VIA==CN 14/30 = 0.4666666666666667 | VIA==HPR 16/30 = 0.5333333333333333
+   distinct records in union of D_k over the five node-local cues: 18
+   rule applied to this subset (secondary): MIXED (testable cues ['HPR', 'RL']; untestable ['RF', 'PP', 'PC'])
+
+(c) diamond records: the two common neighbours, their input flags, and each run's pick at p10
+ q 5850f911 first_dir records=1 split=held whole=n2 part=n0 CNs=[1, 3] feats={1: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:nNone(other) 2.0/18:n1(hiPR) 2.0/19:nNone(other) 1.0/17:n1(hiPR) 1.0/18:n1(hiPR) 1.0/19:nNone(other)
+ q 6864c271 bfs_immed records=4 split=trained whole=n0 part=n2 CNs=[1, 3] feats={1: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:n3(loPR) 2.0/18:n1(hiPR) 2.0/19:n1(hiPR) 1.0/17:n1(hiPR) 1.0/18:n1(hiPR) 1.0/19:n3(loPR)
+ q 85a38565 bfs_immed records=4 split=held whole=n2 part=n0 CNs=[1, 3] feats={1: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:n1(hiPR) 2.0/18:n1(hiPR) 2.0/19:n1(hiPR) 1.0/17:n1(hiPR) 1.0/18:n1(hiPR) 1.0/19:n1(hiPR)
+ q ad82c0a0 bfs_immed records=3 split=excluded whole=n1 part=n0 CNs=[2, 3] feats={2: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 2)] | 2.0/17:n2(hiPR) 2.0/18:n2(hiPR) 2.0/19:n2(hiPR) 1.0/17:n2(hiPR) 1.0/18:n2(hiPR) 1.0/19:n2(hiPR)
+ q b7d9f0a1 first_dir records=1 split=trained whole=n0 part=n2 CNs=[1, 3] feats={1: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:n1(loPR) 2.0/18:n1(loPR) 2.0/19:n1(loPR) 1.0/17:n1(loPR) 1.0/18:n1(loPR) 1.0/19:n1(loPR)
+ q e69768e0 first_dir records=1 split=trained whole=n0 part=n2 CNs=[1, 3] feats={1: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:n3(loPR) 2.0/18:n3(loPR) 2.0/19:n3(loPR) 1.0/17:n3(loPR) 1.0/18:n3(loPR) 1.0/19:n3(loPR)
+ q fd15c493 bfs_immed records=4 split=trained whole=n0 part=n2 CNs=[1, 3] feats={1: {'prank': 2, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}, 3: {'prank': 3, 'declared_whole': 0, 'indeg': 1, 'outdeg': 1}} gold=[('VIA', 1)] | 2.0/17:n1(loPR) 2.0/18:n3(hiPR) 2.0/19:n3(hiPR) 1.0/17:n3(hiPR) 1.0/18:n3(hiPR) 1.0/19:n1(loPR)
+
+(d) diamond records whose two common neighbours carry the SAME participant rank: 0 of 18
+    VIA==CN misses at p10 (all runs) split by tie status: unique-CN 4, diamond 30

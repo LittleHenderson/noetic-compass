@@ -1,0 +1,8 @@
+held reach records 26 -> {'not_covered': 26, 'wiring_unseen': 26}
+frozen reach 36988555 FLOOR [None, None, None, None]
+frozen reach 404166e8 FLOOR [None]
+frozen reach 7a391350 NONFLOOR [None, None, None, None]
+frozen reach a3e70de9 NONFLOOR [None]
+frozen reach aa62bbee FLOOR [None, None, None, None]
+frozen reach f341afc7 FLOOR [None]
+held reach focus worlds 5 ; rank-labelled wiring identical to a trained reach world: 0

@@ -1,0 +1,10 @@
+train n 2048 renderback 2048 depths Counter({2: 756, 1: 747, 3: 545}) bare shapes 16
+  max bytes 84 max toks(+EOS) 41
+dev n 256 renderback 256 depths Counter({3: 256}) bare shapes 9
+  max bytes 100 max toks(+EOS) 55
+shared shapes 0
+dev longer bytes than train max 9 dev longer tokens 15
+D_NONE count 0 REG_NULL count 0 REG_T count train 709 rows with |T train/dev 709 126
+first16 depth Counter({3: 16}) pred equals parse 0
+pred ids == first16 dev ids True
+total gold steps (tokens incl EOS) train+dev 51288

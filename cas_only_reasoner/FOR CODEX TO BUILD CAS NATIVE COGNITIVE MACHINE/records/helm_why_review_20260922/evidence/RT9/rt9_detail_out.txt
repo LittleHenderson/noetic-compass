@@ -1,0 +1,55 @@
+(a) course multi-hop reach records where the six runs disagree on correctness
+    cols: qid[12:20] split hop rule CN-set gold | 2.0/17 2.0/18 2.0/19 1.0/17 1.0/18 1.0/19
+   36988555 held     hop2 bfs_immed CN=['n3'] gold=Vn3 | ok Vn3  ok Vn3  XX Vn1  ok Vn3  ok Vn3  ok Vn3
+   36988555 held     hop2 bfs_immed CN=['n3'] gold=Vn3 | ok Vn3  ok Vn3  XX Vn1  ok Vn3  ok Vn3  ok Vn3
+   36988555 held     hop2 bfs_immed CN=['n3'] gold=Vn3 | ok Vn3  ok Vn3  XX Vn1  ok Vn3  ok Vn3  ok Vn3
+   36988555 held     hop2 bfs_immed CN=['n3'] gold=Vn3 | ok Vn3  ok Vn3  XX Vn1  ok Vn3  ok Vn3  ok Vn3
+   404166e8 held     hop2 first_dir CN=['n3'] gold=Vn3 | XX D  XX D  XX D  XX D  XX D  XX D
+   5850f911 held     hop2 first_dir CN=['n1', 'n3'] gold=Vn1 | XX D  ok Vn1  XX D  ok Vn1  ok Vn1  XX D
+   6864c271 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | XX Vn3  ok Vn1  ok Vn1  ok Vn1  ok Vn1  XX Vn3
+   6864c271 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | XX Vn3  ok Vn1  ok Vn1  ok Vn1  ok Vn1  XX Vn3
+   6864c271 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | XX Vn3  ok Vn1  ok Vn1  ok Vn1  ok Vn1  XX Vn3
+   6864c271 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | XX Vn3  ok Vn1  ok Vn1  ok Vn1  ok Vn1  XX Vn3
+   8cb52a9f trained  hop3 first_dir CN=[] gold=Vn1 | XX D  ok Vn1  ok Vn1  ok Vn1  ok Vn1  ok Vn1
+   e69768e0 trained  hop2 first_dir CN=['n1', 'n3'] gold=Vn1 | XX Vn3  XX Vn3  XX Vn3  XX Vn3  XX Vn3  XX Vn3
+   fd15c493 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | ok Vn1  XX Vn3  XX Vn3  XX Vn3  XX Vn3  ok Vn1
+   fd15c493 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | ok Vn1  XX Vn3  XX Vn3  XX Vn3  XX Vn3  ok Vn1
+   fd15c493 excluded hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | ok Vn1  XX Vn3  XX Vn3  XX Vn3  XX Vn3  ok Vn1
+   fd15c493 trained  hop2 bfs_immed CN=['n1', 'n3'] gold=Vn1 | ok Vn1  XX Vn3  XX Vn3  XX Vn3  XX Vn3  ok Vn1
+
+    summary: by question, the number of records and CN-set size
+      36988555 records 4 splits {'held': 4} CN-set sizes {1: 4}
+      404166e8 records 1 splits {'held': 1} CN-set sizes {1: 1}
+      5850f911 records 1 splits {'held': 1} CN-set sizes {2: 1}
+      6864c271 records 4 splits {'trained': 4} CN-set sizes {2: 4}
+      8cb52a9f records 1 splits {'trained': 1} CN-set sizes {0: 1}
+      e69768e0 records 1 splits {'trained': 1} CN-set sizes {2: 1}
+      fd15c493 records 4 splits {'trained': 3, 'excluded': 1} CN-set sizes {2: 4}
+
+(b) whole-answer identity (state+via) on reach records between run pairs, by hop (course all 107; dev 53)
+   course 2.0/18 vs 1.0/18: hop1 same 30/30  hop2 same 64/64  hop3 same 11/11  hopnone same 2/2
+   course 2.0/18 vs 1.0/17: hop1 same 30/30  hop2 same 64/64  hop3 same 11/11  hopnone same 2/2
+   course 2.0/18 vs 1.0/19: hop1 same 30/30  hop2 same 55/64  hop3 same 11/11  hopnone same 1/2
+   course 2.0/18 vs 2.0/17: hop1 same 30/30  hop2 same 55/64  hop3 same 10/11  hopnone same 0/2
+   course 2.0/18 vs 2.0/19: hop1 same 30/30  hop2 same 59/64  hop3 same 11/11  hopnone same 2/2
+   course 1.0/17 vs 1.0/18: hop1 same 30/30  hop2 same 64/64  hop3 same 11/11  hopnone same 2/2
+   course 2.0/17 vs 1.0/19: hop1 same 30/30  hop2 same 64/64  hop3 same 10/11  hopnone same 1/2
+   dev 2.0/18 vs 1.0/18: hop1 same 6/8  hop2 same 2/3  hopnone same 23/42
+   dev 2.0/18 vs 1.0/17: hop1 same 3/8  hop2 same 3/3  hopnone same 21/42
+   dev 2.0/18 vs 1.0/19: hop1 same 2/8  hop2 same 3/3  hopnone same 25/42
+   dev 2.0/18 vs 2.0/17: hop1 same 1/8  hop2 same 2/3  hopnone same 25/42
+   dev 2.0/18 vs 2.0/19: hop1 same 1/8  hop2 same 3/3  hopnone same 27/42
+   dev 1.0/17 vs 1.0/18: hop1 same 5/8  hop2 same 2/3  hopnone same 34/42
+   dev 2.0/17 vs 1.0/19: hop1 same 3/8  hop2 same 2/3  hopnone same 30/42
+
+(c) diamond reach records (CN-set size 2) among all 107 course reach: by question and split
+    [(('5850f911', 'held'), 1), (('6864c271', 'trained'), 4), (('85a38565', 'held'), 4), (('ad82c0a0', 'excluded'), 1), (('ad82c0a0', 'trained'), 2), (('b7d9f0a1', 'trained'), 1), (('e69768e0', 'trained'), 1), (('fd15c493', 'excluded'), 1), (('fd15c493', 'trained'), 3)] total records 18 questions 7
+   primary-population diamond records (trained+held): 16
+
+(d) primary 2-hop counts with diamond records removed (descriptive, post-verdict)
+   2.0/17: 38/39
+   2.0/18: 38/39
+   2.0/19: 34/39
+   1.0/17: 38/39
+   1.0/18: 38/39
+   1.0/19: 38/39

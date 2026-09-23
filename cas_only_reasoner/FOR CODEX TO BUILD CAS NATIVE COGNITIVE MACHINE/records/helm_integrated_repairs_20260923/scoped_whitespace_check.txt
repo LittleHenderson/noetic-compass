@@ -1,0 +1,8 @@
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_integrated_repairs_20260923/rescorer_tests.txt:23: trailing whitespace.
++E             
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_integrated_repairs_20260923/rescorer_tests.txt:35: trailing whitespace.
++E             
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_integrated_repairs_20260923/rescorer_tests.xml:8: trailing whitespace.
++E             
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_integrated_repairs_20260923/rescorer_tests.xml:17: trailing whitespace.
++E             

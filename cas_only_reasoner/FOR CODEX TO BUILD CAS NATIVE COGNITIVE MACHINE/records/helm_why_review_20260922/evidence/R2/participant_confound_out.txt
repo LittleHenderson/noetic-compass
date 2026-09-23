@@ -1,0 +1,2 @@
+bank worlds by node count: {4: 52, 3: 12}
+ordered pairs 4032; contains-isomorphic pairs 640; participant-order map is an isomorphism in 640; equals lexical-first isomorphism in 454
