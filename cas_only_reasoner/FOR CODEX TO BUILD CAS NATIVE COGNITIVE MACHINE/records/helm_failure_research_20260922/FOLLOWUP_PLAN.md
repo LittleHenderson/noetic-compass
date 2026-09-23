@@ -70,3 +70,20 @@ F1 and F2 are selected unchanged from the predicted outcomes committed at259ed0b
 This confirmation occurs after all six real responses are committed and before either probe runs.
 F1 targets the untested reach decoder; F2 targets development class balance. There is no selected
 second round. No neural or training proposal becomes authorized by this selection.
+
+## Round 1 result and stopping decision
+
+F1 executed once by A6, original commit505c2bd1557e10b5a0c865dc1eaed3f47cd3d827.
+All10 saved choices follow the frozen decoder, all60 values finite, correct candidates present,
+no winning ties. Source uses a single flattened complete-answer reach slot, so separate mode/via
+normalization would be the wrong reconstruction. Final wrong winners reflect score ranking.
+This rejects candidate omission/tie/decoder-order discrepancy for these two losses, not a training cause.
+
+F2 executed once by A3, original commit5901aca68c298a8d16a1c0c3d2d0cf403093c8f6.
+All708 independent exact-answer checks match saved scores. Positive-path gains occur in five runs,
+while Helm2 seed20260917 loses one. ABSENT success is poor in every final run, so a blanket
+majority-ABSENT-success account is contradicted. Class/size shift remains a confound.
+
+No outcome-changing discrepancy or missing artifact appeared. Stop after this one selected round.
+No second round, neural forwards, training, fixes, grader edits or historical label changes.
+Pass complete records and actual challenge responses to fresh A7 for independent final judgment.

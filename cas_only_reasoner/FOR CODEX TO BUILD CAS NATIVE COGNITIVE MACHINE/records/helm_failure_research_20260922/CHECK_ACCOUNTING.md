@@ -21,3 +21,14 @@ coordinator/CUSTODY_LOG.md. Original worktree status-list equality does not hash
 Follow-up accounting will be appended after registered checks; first-report counts remain original.
 
 
+
+## Executed follow-up round
+
+| Check | Functions | Inputs / saved observations | Execution | Failures / boundary |
+|---|---:|---|---|---|
+| F1, A6 | 0 formal test functions; 1 diagnostic script | 2 unique questions, 5 records ×2 endpoints =10 saved selections;60 scores | Once,0.131s, exit0; no repeats | No failed check. Correct candidates available, finite values, no winning ties, exact decoder agreement. Not causal training evidence. |
+| F2, A3 | 0 formal test functions; 1 diagnostic script | 59 shared unique queries ×6 run subjects ×2 endpoints =708 instances (636 reach,72 parts) | Once,0.313s, exit0; no repeats | Zero disagreement with saved scoring; independently derived exact targets. Historical development data, not fresh evaluation. |
+
+One targeted follow-up round completed. No second round selected. All conference responses used
+reads only and contribute zero additional diagnostic case executions. Counts above must not be
+added to first-round counts as independent experiments.
