@@ -31,7 +31,7 @@ ALTERNATIVES = {  # frozen in the prereg, canonical edge form
         ((0, 1), (0, 2), (3, 1)), ((0, 1), (0, 2), (1, 3))],
     3: [((0, 1), (1, 2)), ((0, 1), (0, 2)), ((0, 2), (1, 2)), ((0, 1), (0, 2), (1, 2))],
 }
-MAX_START_C, STOP_C, MIN_FREE_MIB, WALL_SECONDS = 75, 80, 2048, 1800
+MAX_START_C, STOP_C, MIN_FREE_MIB, WALL_SECONDS = 75, 80, 2048, 3600  # amendment A1: 3600
 
 
 def gpu_telemetry():
@@ -151,7 +151,14 @@ def main():
         results.append(probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, packets, analogy_ids,
                                  focus_of, rep, kwargs, args, label=label, init_seed=int(seed),
                                  checkpoint=ck[0] if ck else None, started=started))
-    out = {"schema": "claude.analogy-wiring-probe/0.2", "results": results,
+        write_out(args, results, frozen, package, source_files, load_seconds, admission, torch, started)
+    write_out(args, results, frozen, package, source_files, load_seconds, admission, torch, started, final=True)
+    for r in results:
+        print(json.dumps({k: r[k] for k in ("label", "verdict", "switch", "M0_delta0", "M1z", "M2z", "summary")}))
+
+
+def write_out(args, results, frozen, package, source_files, load_seconds, admission, torch, started, final=False):
+    out = {"complete": final, "schema": "claude.analogy-wiring-probe/0.2", "results": results,
            "rules": {"tau": TAU, "noise_max": NOISE_MAX, "rc_min": RC_MIN, "share_foci_required": SHARE_FOCI,
                      "leak_ratio": LEAK_RATIO, "alternatives": {str(k): v for k, v in ALTERNATIVES.items()},
                      "prereg_sha256_lf": lf_sha(HERE / "PREREG_ANALOGY_WIRING_PROBE_v0_2.md"),
@@ -165,8 +172,6 @@ def main():
            "work": "forward passes only under torch.no_grad(); no optimizer, no update, no checkpoint written"}
     with open(args.out, "w", encoding="utf-8", newline="") as handle:
         handle.write(json.dumps(out, indent=1, sort_keys=True))
-    for r in results:
-        print(json.dumps({k: r[k] for k in ("label", "verdict", "switch", "M0_delta0", "M1z", "M2z", "summary")}))
 
 
 def probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, packets, analogy_ids, focus_of, rep,
@@ -188,15 +193,24 @@ def probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, 
         assert args.switch_expect is None or value == (args.switch_expect == "true"), "SWITCH_STATE_MISMATCH"
         switch = value
     parameter_count = sum(int(p.numel()) for p in model.parameters())
+    # Amendment A1: `slots.compile_slots` validates the whole source bank and rejects any world whose contains-list
+    # was altered (TYPED_SOURCE_WORLD_RECONSTRUCTION), so the slot PLAN is always taken from the unmodified packet.
+    # The analogy slot's symbols are the bank's world aliases, which no counterfactual touches. The READING of a
+    # counterfactual packet comes from `pointer_inputs.read_packet` -- the learner's own reader -- and every copy of
+    # the changed world inside it is asserted consistent.
     base_plan = {rid: slots.compile_slots(packets[rid]) for rid in analogy_ids}
+    base_read = {rid: pointer_inputs.read_packet(packets[rid]) for rid in analogy_ids}
 
-    def scores_for(rid, packet):
-        plan = slots.compile_slots(packet)
+    def scores_for(rid, packet, changed_world=None):
+        plan = base_plan[rid]
         slot = [s for s in plan["slots"] if s["field"] == "world_id"]
         assert len(slot) == 1, "ANALOGY_SLOT_COUNT"
-        base_slot = [s for s in base_plan[rid]["slots"] if s["field"] == "world_id"][0]
-        assert slot[0]["symbols"] == base_slot["symbols"], "ANALOGY_SYMBOLS_CHANGED"
-        reading = pointer_inputs.read_packet(packet)
+        if changed_world is None:
+            reading = copy.deepcopy(base_read[rid])
+        else:
+            reading = pointer_inputs.read_packet(packet)
+            if changed_world == reading["focus_world_id"]:
+                assert reading["focus_world"]["contains"] == reading["worlds"][changed_world]["contains"], "FOCUS_COPIES_DISAGREE"
         reading["_device"] = device
         forward = PL.GraphForward(torch, model, reading, device)
         rows = forward.head_logits(plan, [0] * PL.CLAUSE_COUNT)
@@ -240,7 +254,7 @@ def probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, 
                 new_shape = canon(n, list(edges))
                 if new_shape == shape[f]:
                     continue
-                s = scores_for(rid, with_world(packet, f, rewire(worlds[f], edges, node_index)))
+                s = scores_for(rid, with_world(packet, f, rewire(worlds[f], edges, node_index)), changed_world=f)
                 z = zscores(s, X)
                 dz = {c: z[c] - z0[c] for c in X}
                 m3 = max(m3, max(abs(v) for v in dz.values()))
@@ -260,7 +274,7 @@ def probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, 
                 for edges in ALTERNATIVES.get(n, []):
                     if canon(n, list(edges)) == shape[b]:
                         continue
-                    s = scores_for(rid, with_world(packet, b, rewire(worlds[b], edges, node_index)))
+                    s = scores_for(rid, with_world(packet, b, rewire(worlds[b], edges, node_index)), changed_world=b)
                     z = zscores(s, X)
                     leaks.append(max(abs(z[c] - z0[c]) for c in X if c != b))
             # domain counterfactual
@@ -269,7 +283,7 @@ def probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, 
             zb_all = zscores(base_s[rid], X_all)
             for other in sorted(set(domain.values()) - {domain[f]}):
                 nw = copy.deepcopy(worlds[f]); nw["declarations"]["domain"] = other
-                s = scores_for(rid, with_world(packet, f, nw))
+                s = scores_for(rid, with_world(packet, f, nw), changed_world=f)
                 z = zscores(s, X_all)
                 dz = {c: z[c] - zb_all[c] for c in X_all}
                 # isomorphs that STOP being answers (they sit in the new focus domain) versus isomorphs that

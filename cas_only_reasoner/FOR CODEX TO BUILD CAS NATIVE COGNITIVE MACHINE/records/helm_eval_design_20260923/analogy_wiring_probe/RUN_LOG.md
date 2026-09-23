@@ -17,3 +17,25 @@
 - run after the rescore job ends;
 - probe at most 3 models per invocation;
 - record the load time.
+
+## Attempts 2 and 3: probe v0.2 and preservation, 02:29:58 -> 04:46:44 PDT. Probe CRASHED; preservation PARTIAL.
+
+- **Probe v0.2, seeds 20260917, 20260918 and 20260919** (3 invocations). Every invocation stopped with
+  `ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION` at the first counterfactual. The cause: `slots.compile_slots`
+  validates the source bank and refuses an altered world. **No metric was written.** Fixed by Amendment A1.
+- **Preservation.** The run for seed 20260919 completed all 3 models: `preservation_reference_20208c92_seed20260919.json`
+  (tool before A1; the digest code is identical after A1). The runs for seeds 20260917 and 20260918 stopped at
+  `WALL_LIMIT_REACHED` (1,800 s) after 2 models, with no JSON written. The digests they printed are kept here
+  as a reproducibility check for the re-run:
+
+  | Model | Overall digest |
+  |---|---|
+  | h2_fresh_20260917 | `8bce418f5ea641f0241f9cbfebdca30f1e3393b3beda8c98bb364454802b3749` |
+  | h2_initial_20260917 | `0138af72c05a4e05ddbe6b03c049dad5afae7e47ec0fa69ead191b0e2103d975` |
+  | h2_fresh_20260918 | `2e8dbaead32b6eb565fc80b24ee75c009122228ee8127c5f504ecc88f749fbd5` |
+  | h2_initial_20260918 | `b5aae9c55f3d8a5798d0442199109ba4ce35414a0f2c496744999d85dbe6d84d` |
+  | h2_fresh_20260919 | `06b77b70dc1f3709edd527ded29e933c1fd1c3e2ed1b7c46160f37d930c2bacf` |
+  | h2_initial_20260919 | `ee551016c03e4f41d3c666d105637f7e9892be5c98775ec19f2c03cd1390eb68` |
+  | h2_final_20260919 | `3a5957ee8e9951657c1d0667f60d81172601c253c0531f3c406dfdcb7a2bbeea` |
+
+- **Log:** `before_reading_v0_2.log`. No automatic retries: each re-run is a separately started job.

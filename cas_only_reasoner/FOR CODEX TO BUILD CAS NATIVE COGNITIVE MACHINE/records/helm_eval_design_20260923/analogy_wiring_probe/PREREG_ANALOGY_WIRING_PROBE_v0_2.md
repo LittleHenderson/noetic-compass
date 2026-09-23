@@ -123,3 +123,24 @@ one overall digest.
 - **Scope:** no other CPU-heavy job runs at the same time. Only public packets are read: no sealed file, no
   eval split, no gold answer.
 - **Cost:** no cloud and no spending.
+
+## Amendment A1 (2026-09-23 04:50 PDT), made after two failed attempts and BEFORE any probe metric existed
+
+Attempt log: `RUN_LOG.md`, attempts 2 and 3. No metric was written in either attempt; the probe crashed before
+its first counterfactual score was stored.
+
+1. **Where the slot plan comes from.** `slots.compile_slots` validates the whole source bank, and it rejects any
+   world whose contains-list was altered (`TYPED_SOURCE_WORLD_RECONSTRUCTION`). So the slot plan is always
+   taken from the **unmodified** packet.
+   - Why this is safe: the analogy slot's symbols are the bank's world aliases, and no counterfactual changes
+     them.
+   - Where the counterfactual input comes from: its **reading** is built by `pointer_inputs.read_packet` (the
+     learner's own reader). For focus changes, the probe asserts that `reading["focus_world"]["contains"]`
+     equals `reading["worlds"][focus]["contains"]`.
+   - This replaces "fed through `read_packet` and `slots.compile_slots` again" in the Definitions.
+2. **Wall limit.** Raised to 3,600 s per invocation for both programs. Loading the course plus 564 forwards for
+   each of 3 models exceeded 1,800 s.
+3. **Partial results.** Both programs now write their output after each model, so a limit stop keeps the
+   completed models.
+
+The metrics, thresholds, verdict rules and the alternative list are **unchanged**.

@@ -1,0 +1,134 @@
+Wed Sep 23 02:29:58 PDT 2026
+PROBE seed 20260917
+Traceback (most recent call last):
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 339, in <module>
+    main()
+    ~~~~^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 151, in main
+    results.append(probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, packets, analogy_ids,
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             focus_of, rep, kwargs, args, label=label, init_seed=int(seed),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             checkpoint=ck[0] if ck else None, started=started))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 243, in probe_one
+    s = scores_for(rid, with_world(packet, f, rewire(worlds[f], edges, node_index)))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 194, in scores_for
+    plan = slots.compile_slots(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 220, in compile_slots
+    return _SLOT_CACHE.compile(packet)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 183, in compile
+    plan = _compile_slots_uncached(json.loads(raw))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 65, in _compile_slots_uncached
+    checked = course.validate_model_packet(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\course.py", line 298, in validate_model_packet
+    public = source.validate_public(packet["source"])
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 370, in validate_public
+    return validate_public_source(public)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 314, in validate_public_source
+    worlds = [_validate_world(world) for world in public["worlds"]]
+              ~~~~~~~~~~~~~~~^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 254, in _validate_world
+    require(canonical(world) == canonical(expected), "TYPED_SOURCE_WORLD_RECONSTRUCTION")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 48, in require
+    raise ValueError(reason)
+ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
+EXIT probe 20260917 1
+Wed Sep 23 02:59:19 PDT 2026
+PROBE seed 20260918
+Traceback (most recent call last):
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 339, in <module>
+    main()
+    ~~~~^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 151, in main
+    results.append(probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, packets, analogy_ids,
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             focus_of, rep, kwargs, args, label=label, init_seed=int(seed),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             checkpoint=ck[0] if ck else None, started=started))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 243, in probe_one
+    s = scores_for(rid, with_world(packet, f, rewire(worlds[f], edges, node_index)))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 194, in scores_for
+    plan = slots.compile_slots(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 220, in compile_slots
+    return _SLOT_CACHE.compile(packet)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 183, in compile
+    plan = _compile_slots_uncached(json.loads(raw))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 65, in _compile_slots_uncached
+    checked = course.validate_model_packet(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\course.py", line 298, in validate_model_packet
+    public = source.validate_public(packet["source"])
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 370, in validate_public
+    return validate_public_source(public)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 314, in validate_public_source
+    worlds = [_validate_world(world) for world in public["worlds"]]
+              ~~~~~~~~~~~~~~~^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 254, in _validate_world
+    require(canonical(world) == canonical(expected), "TYPED_SOURCE_WORLD_RECONSTRUCTION")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 48, in require
+    raise ValueError(reason)
+ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
+EXIT probe 20260918 1
+Wed Sep 23 03:10:55 PDT 2026
+PROBE seed 20260919
+Traceback (most recent call last):
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 339, in <module>
+    main()
+    ~~~~^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 151, in main
+    results.append(probe_one(torch, device, PL, slots, pointer_inputs, _framework, node_index, packets, analogy_ids,
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             focus_of, rep, kwargs, args, label=label, init_seed=int(seed),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             checkpoint=ck[0] if ck else None, started=started))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 243, in probe_one
+    s = scores_for(rid, with_world(packet, f, rewire(worlds[f], edges, node_index)))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_eval_design_20260923\analogy_wiring_probe\analogy_wiring_probe_v0_2.py", line 194, in scores_for
+    plan = slots.compile_slots(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 220, in compile_slots
+    return _SLOT_CACHE.compile(packet)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 183, in compile
+    plan = _compile_slots_uncached(json.loads(raw))
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\slots.py", line 65, in _compile_slots_uncached
+    checked = course.validate_model_packet(packet)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\course.py", line 298, in validate_model_packet
+    public = source.validate_public(packet["source"])
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 370, in validate_public
+    return validate_public_source(public)
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 314, in validate_public_source
+    worlds = [_validate_world(world) for world in public["worlds"]]
+              ~~~~~~~~~~~~~~~^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 254, in _validate_world
+    require(canonical(world) == canonical(expected), "TYPED_SOURCE_WORLD_RECONSTRUCTION")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 48, in require
+    raise ValueError(reason)
+ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
+EXIT probe 20260919 1
+Wed Sep 23 03:22:10 PDT 2026
+PRESERVE seed 20260917
+{"label": "h2_fresh_20260917", "overall_digest": "8bce418f5ea641f0241f9cbfebdca30f1e3393b3beda8c98bb364454802b3749", "records": 564}
+{"label": "h2_initial_20260917", "overall_digest": "0138af72c05a4e05ddbe6b03c049dad5afae7e47ec0fa69ead191b0e2103d975", "records": 564}
+WALL_LIMIT_REACHED
+EXIT preserve 20260917 4
+Wed Sep 23 03:52:18 PDT 2026
+PRESERVE seed 20260918
+{"label": "h2_fresh_20260918", "overall_digest": "2e8dbaead32b6eb565fc80b24ee75c009122228ee8127c5f504ecc88f749fbd5", "records": 564}
+{"label": "h2_initial_20260918", "overall_digest": "b5aae9c55f3d8a5798d0442199109ba4ce35414a0f2c496744999d85dbe6d84d", "records": 564}
+WALL_LIMIT_REACHED
+EXIT preserve 20260918 4
+Wed Sep 23 04:22:26 PDT 2026
+PRESERVE seed 20260919
+{"label": "h2_fresh_20260919", "overall_digest": "06b77b70dc1f3709edd527ded29e933c1fd1c3e2ed1b7c46160f37d930c2bacf", "records": 564}
+{"label": "h2_initial_20260919", "overall_digest": "ee551016c03e4f41d3c666d105637f7e9892be5c98775ec19f2c03cd1390eb68", "records": 564}
+{"label": "h2_final_20260919", "overall_digest": "3a5957ee8e9951657c1d0667f60d81172601c253c0531f3c406dfdcb7a2bbeea", "records": 564}
+EXIT preserve 20260919 0
+Wed Sep 23 04:46:44 PDT 2026
+ALL_DONE

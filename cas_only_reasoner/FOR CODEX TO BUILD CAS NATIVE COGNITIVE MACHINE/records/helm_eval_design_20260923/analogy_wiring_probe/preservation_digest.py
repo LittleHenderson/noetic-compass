@@ -19,7 +19,7 @@ import time
 os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 HERE = pathlib.Path(__file__).resolve().parent
 DEFAULT_PACKAGE = HERE.parents[2]
-MAX_START_C, STOP_C, MIN_FREE_MIB, WALL_SECONDS = 75, 80, 2048, 1800
+MAX_START_C, STOP_C, MIN_FREE_MIB, WALL_SECONDS = 75, 80, 2048, 3600  # amendment A1: 3600
 
 
 def gpu_telemetry():
@@ -106,9 +106,14 @@ def main():
                             sorted((k, list(v.shape)) for k, v in state.items())).encode()).hexdigest(),
                         "per_record": per_record})
         print(json.dumps({"label": label, "overall_digest": overall, "records": len(ids)}))
+        write_out(args, results, package, frozen, load_seconds, admission, torch, started, final=False)
+    write_out(args, results, package, frozen, load_seconds, admission, torch, started, final=True)
+
+
+def write_out(args, results, package, frozen, load_seconds, admission, torch, started, final):
     src = ["research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/" + f for f in
            ("pointer_learner.py", "pointer_inputs.py", "slots.py", "pointer_contract.py")] + ["cncm/typed_matched_worker.py"]
-    out = {"schema": "claude.helm-preservation-digest/0.1", "results": results, "package_root": str(package),
+    out = {"schema": "claude.helm-preservation-digest/0.1", "complete": final, "results": results, "package_root": str(package),
            "source_sha256_lf": {f: lf_sha(package / f) for f in src}, "course_digest": frozen["course_digest"],
            "tool_sha256_lf": lf_sha(__file__), "material_load_seconds": load_seconds,
            "gpu": {"admission": admission, "end": gpu_telemetry()}, "torch": torch.__version__,
