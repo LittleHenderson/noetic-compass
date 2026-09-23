@@ -182,3 +182,95 @@ compared are bit-identical (`BEFORE_READING_RESULT.md`, section 3).
 the reference question first.
 
 Nothing else changes.
+
+## Amendment A4 (2026-09-23): names and checks for the T4 acceptance job. Frozen before any repaired-source result exists.
+
+**Why.** A3 names only the pass and `REFERENCE_NOT_REPRODUCIBLE_ON_T4`. It leaves some outcomes unnamed, the
+read-only requirement unchecked, and the fresh-ON reading without a label. This amendment fixes all three
+**before** the job runs. It changes no threshold, no model list and no digest rule.
+
+**Correction to A3's heading (see `../CORRECTIONS_20260923.md`, K1).** Codex's repair commit `60e382b0` (01:50 PDT)
+existed before A3 was written (`dfe15fa6`, 06:39 PDT). A3 was made after the reference existed and before any
+switch-OFF check of the repair was run or read.
+
+**Roles during the temporary takeover.** The read-only fix is built by a Claude builder, and this job is run and
+read by the Claude coordinator. Every outcome below is therefore labelled `CLAUDE_BUILT_CLAUDE_CHECKED`. It becomes
+independently checked only when Codex, or an outside reviewer, repeats the review.
+
+### A4.1 The repaired source R and the job's stages
+
+- **R** is the reviewed commit of `claude/helm-builder-continuation-20260923` that makes the switch read-only. The
+  launch record names it. Inside the bundle, R must differ from `20208c92` in existing code only in
+  `pointer_learner.py`; added files are allowed. The launcher checks this.
+- **Stage 0, precondition.** The complete switch test suite at R is `tests/test_helm_analogy_focus_comparison.py`
+  (unchanged) plus the builder's new read-only test file. It runs under pytest on the T4. The frozen read-only check
+  (A4.2) also runs. If any test fails or errors, or the check fails, the job stops. The verdict is then
+  `SWITCH_TESTS_FAILED` or `SWITCH_NOT_READ_ONLY`, and no digest is read.
+- **Stage 1, the control.** Unchanged `20208c92`, preservation digests for the 9 models. It runs as 3 invocations
+  side by side, one per seed, the same arrangement as the reference's group B. It uses no container arguments,
+  because `20208c92`'s `_build_container` takes none.
+- **Stage 2, OFF.** R with `--container-kwargs '{"analogy_focus_comparison": false}'`, in the same arrangement.
+- **Stage 3, probes.** Four invocations side by side:
+  - three OFF probes (R, switch OFF, `--switch-attr analogy_focus_comparison --switch-expect false`, the 3 models
+    of each seed);
+  - one fresh-ON probe (R, `{"analogy_focus_comparison": true}`, `--switch-expect true`, three fresh seeds). No
+    historical checkpoint is ever loaded into ON.
+
+### A4.2 The frozen read-only check
+
+The check runs on the T4, on R, for the switch OFF and the switch ON. It passes only if all four hold:
+- `getattr(model, "analogy_focus_comparison")` is a `bool` equal to the construction argument;
+- `setattr(model, "analogy_focus_comparison", not value)` raises `AttributeError`, and so does the same on
+  `analogy_seed`;
+- `delattr` of either raises `AttributeError`;
+- after `model.__dict__["analogy_focus_comparison"] = not value`, `getattr` still returns the construction value.
+
+### A4.3 Verdicts for item 1, emitted by `read_results.py`, checked in this order (the first that applies wins)
+
+1. **`INCOMPLETE`.** Any required invocation is missing, crashed, or hit its wall or thermal limit. This is not a
+   pass, and not a verdict on the repair.
+2. **`SWITCH_TESTS_FAILED` / `SWITCH_NOT_READ_ONLY`.** Stage 0 failed.
+3. **`REFERENCE_NOT_REPRODUCIBLE_ON_T4`.** The control's overall digest differs from the retained T4 reference
+   (`../aws_probe_job/results/preservation_reference_20208c92_T4_seed*.json`) for any of the 9 models. Every model
+   is listed.
+4. **`OFF_NOT_PRESERVED`.** The control equals the reference on all 9, but the OFF overall digest differs from the
+   control's for any model. Every model is listed.
+5. **`OFF_STRUCTURE_CHANGED`.** The digests are equal, but for OFF on any model one of these fails:
+   - the parameter count is 174,303;
+   - `state_keys_shapes_digest` equals the control's;
+   - a historical checkpoint load did not complete with `strict=True`;
+   - the checkpoint sha256 equals the launch record's.
+6. **`OFF_PROBE_NOT_ABSENT`.** Any OFF probe verdict is not `FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT`.
+7. **`OFF_PRESERVED_ON_T4`, the pass.** None of the above applies.
+
+**Scope of the pass.** It is item 1 only, labelled `CLAUDE_BUILT_CLAUDE_CHECKED`. Item 2 (trained ON) stays OPEN
+until a separate, owner-approved training job produces a trained ON checkpoint.
+
+### A4.4 The fresh-ON reading
+
+It is labelled **`FRESH_ON_REPORT_ONLY`**, with its probe verdict and summary recorded.
+- **It has no pass rule.** It never satisfies item 2.
+- **Item 3's `REACHABILITY` label does not apply.** That label is for zero-initialised paths, and `analogy_head`
+  uses its default seeded initialisation.
+- **What the three readings share.** All three use byte-identical `analogy_head` weights (fixed seed 20260923).
+  Their base weights differ by seed.
+
+### A4.5 Environment and known details
+
+- **The environment the reference used, reproduced where possible:**
+  - AMI `ami-07d69ce07bfe5628f`, if still offered; otherwise the substitute is recorded;
+  - Python 3.14.7, torch 2.11.0 (cu128 index), numpy 2.5.2;
+  - the two wheels by sha256;
+  - `CUBLAS_WORKSPACE_CONFIG=:4096:8`, `OMP_NUM_THREADS=2`, `MKL_NUM_THREADS=2`.
+
+  If the control still differs from the reference, the verdict is `REFERENCE_NOT_REPRODUCIBLE_ON_T4`. A different
+  environment is never counted as a pass.
+- **A known deviation.** `preservation_digest.py` checks the 80 C stop every 50 records, not every 10 as the Limits
+  section says. The T4 reference used the same tool, so the control and OFF runs keep it unchanged.
+- **Limits.** Per invocation:
+  - at most 3 models;
+  - a 3,600 s wall;
+  - admission at or below 75 C with at least 2,048 MiB free;
+  - `GPU_REQUIRED` with no CPU fallback;
+  - forward passes only;
+  - no optimizer, no checkpoint written, no retries.
