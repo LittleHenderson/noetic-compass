@@ -1,13 +1,13 @@
 # Targeted follow-up plan
 
-Status: preregistered proposals before execution. Do not run before A 1-A 6 submission barrier.
-A 0 will confirm selected gaps against A 5's first report and the actual conference responses.
+Status: preregistered proposals before execution. Do not run before A1-A6 submission barrier.
+A0 will confirm selected gaps against A5's first report and the actual conference responses.
 At most two follow-up rounds are allowed. Intended scope is one round of two record-only checks;
 a second round is reserved only for an outcome-changing discrepancy. No model execution is allowed.
 
-## F1 — exact lost-answer decoding, only if A 5 has not already covered it
+## F1 — exact lost-answer decoding, only if A5 has not already covered it
 
-Proposed executor: A 6, using its independently identified two lost reach questions/five input
+Proposed executor: A6, using its independently identified two lost reach questions/five input
 records and their original course_p00/course_p10 saved prediction/slot-score records.
 Subject source is Helm2 20208c923d41c24614504d4ecc2b289ecb66eda8, seeds 20260917/20260919;
 the original artifact paths/hashes must come from SOURCE_AND_EVIDENCE_MANIFEST.json.
@@ -27,15 +27,15 @@ Predictions fixed before execution:
 
 Stop after the five original records' two endpoints have been checked once. This is at most ten
 saved prediction instances for two unique questions, not fresh evaluation. One stdlib script,
-hard 120-second bound, one CPU slot, role-local output. If A 5 already did the exact check, use that
+hard 120-second bound, one CPU slot, role-local output. If A5 already did the exact check, use that
 existing result and cancel redundant execution.
 
 ## F2 — development label classes
 
-Proposed executor: A 3. Use each of six receipt subjects' manifest-bound
+Proposed executor: A3. Use each of six receipt subjects' manifest-bound
 development_p00_predictions.json and development_p10_predictions.json (and saved scoring only
 as a cross-check), joined to the shared compact development artifact from the historical source ZIP.
-The artifact has 59 packets: 6 parts and 53 reach. Derive exact reach answers using A 3's source-bound
+The artifact has 59 packets: 6 parts and 53 reach. Derive exact reach answers using A3's source-bound
 independent graph routine, including the via node; group by 42 ABSENT, 8 DIRECT and 3 VIA labels.
 
 Predictions fixed before execution:
@@ -51,14 +51,14 @@ No new model prediction or fresh hidden evaluation is performed.
 
 ## Already answered; do not duplicate
 
-A 1's first report proposed intermediate endpoint chronology. A 4's immutable first report already
+A1's first report proposed intermediate endpoint chronology. A4's immutable first report already
 checks it: the seed 17 lost query is wrong by pass 1; seed 19's lost query is correct through pass 8
 and wrong at pass 10. Both precede the separate interference interval. Repeating that chronology
 does not change the current conclusion unless a specific disagreement appears.
 
-A 2's source-insensitive analogy witness remains open to conference/final-judge challenge through
+A2's source-insensitive analogy witness remains open to conference/final-judge challenge through
 the original source/accepted sets and saved scores. Do not run neural forwards simply to repeat
-saved evidence. A 7 must inspect decisive raw artifacts directly.
+saved evidence. A7 must inspect decisive raw artifacts directly.
 
 All future training/forward proposals remain NOT RUN. They need an exact matched design, fresh
 prospective evaluation and resource decision; none follows automatically from this record study.
@@ -66,25 +66,24 @@ prospective evaluation and resource decision; none follows automatically from th
 
 ## Selection confirmed after all six conference responses
 
-F1 and F2 are selected unchanged from the predicted outcomes committed at 259ed0be.
+F1 and F2 are selected unchanged from the predicted outcomes committed at259ed0be.
 This confirmation occurs after all six real responses are committed and before either probe runs.
 F1 targets the untested reach decoder; F2 targets development class balance. There is no selected
 second round. No neural or training proposal becomes authorized by this selection.
 
 ## Round 1 result and stopping decision
 
-F1 executed once by A 6, original commit 505c2bd1557e10b5a0c865dc1eaed3f47cd3d827.
-All 10 saved choices follow the frozen decoder, all 60 values finite, correct candidates present,
+F1 executed once by A6, original commit505c2bd1557e10b5a0c865dc1eaed3f47cd3d827.
+All10 saved choices follow the frozen decoder, all60 values finite, correct candidates present,
 no winning ties. Source uses a single flattened complete-answer reach slot, so separate mode/via
 normalization would be the wrong reconstruction. Final wrong winners reflect score ranking.
 This rejects candidate omission/tie/decoder-order discrepancy for these two losses, not a training cause.
 
-F2 executed once by A 3, original commit 5901aca68c298a8d16a1c0c3d2d0cf403093c8f6.
-All 708 independent exact-answer checks match saved scores. Positive-path gains occur in five runs,
-while Helm2 seed 20260917 loses one. ABSENT success is poor in every final run, so a blanket
+F2 executed once by A3, original commit5901aca68c298a8d16a1c0c3d2d0cf403093c8f6.
+All708 independent exact-answer checks match saved scores. Positive-path gains occur in five runs,
+while Helm2 seed20260917 loses one. ABSENT success is poor in every final run, so a blanket
 majority-ABSENT-success account is contradicted. Class/size shift remains a confound.
 
 No outcome-changing discrepancy or missing artifact appeared. Stop after this one selected round.
 No second round, neural forwards, training, fixes, grader edits or historical label changes.
-Pass complete records and actual challenge responses to fresh A 7 for independent final judgment.
-
+Pass complete records and actual challenge responses to fresh A7 for independent final judgment.
