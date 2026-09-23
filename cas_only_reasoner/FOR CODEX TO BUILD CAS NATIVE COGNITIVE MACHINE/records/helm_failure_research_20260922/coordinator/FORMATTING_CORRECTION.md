@@ -22,3 +22,11 @@ preservation evidence. The final output manifest fingerprints the corrected fina
 
 A0 will not perform further blanket text substitutions. A7 judgment and next actions will be copied
 byte-for-byte. This note records the error and recovery without rewriting an investigator report.
+
+The separate FORMATTING_CORRECTION_RECEIPT.json records the full pre-format, malformed and
+restored SHA256 for each file, plus comparison with A7's reviewed baseline. All four restored
+files equal their immediate pre-format bytes. The custody log legitimately contains later
+supplemental ledger/root-preservation entries; the other three files also equal the reviewed
+3f7ac296 bytes. Every A1-A6 investigator file at that reviewed commit was compared byte-for-byte
+against the current integration file via git cat-file --batch. All were unchanged, including
+all six first reports and every committed raw result. This is a custody check, not new research.

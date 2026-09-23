@@ -1,0 +1,712 @@
+{
+  "schema": "helm.coordinator-formatting-correction/0.1",
+  "pre_format_commit": "2820cc53446319c2ae680a00044b7f0573389742",
+  "bad_format_commit": "dec36a3ab5a6f65634fc1ed58cd3d68b5c347b19",
+  "restoration_commit": "af8655aaea080346d4ccd07d9c28313147ca1b32",
+  "reviewed_baseline_commit": "3f7ac2967c4bc38313a003e2817a3dcab58451d1",
+  "corrected_files": [
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CUSTODY_LOG.md",
+      "pre_format_sha256": "fe02017cd6e30de713c60b837f7d44eeded2b7d8b4f8d6b703955ebc22d4dcd0",
+      "bad_format_sha256": "4f1e3237028b4c68296efd66567e1453286d1cf8a69b3986d52f4b0ed12ae458",
+      "restored_sha256": "fe02017cd6e30de713c60b837f7d44eeded2b7d8b4f8d6b703955ebc22d4dcd0",
+      "reviewed_baseline_sha256": "34ef7af593974269b385ec3ca8623ccab666f677e5f7feb05a138408ecd49efc",
+      "restored_equals_pre_format": true,
+      "restored_equals_reviewed_baseline": false
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CONFERENCE_RECORD.md",
+      "pre_format_sha256": "e87afcb46d70e71c74e3b9a24a906b2c9207bd9326a5c9ab055d8d39ad80e8fe",
+      "bad_format_sha256": "00100452e52406df1d999f31c261f7bf79ff32c758ea470e7791456dab6ac4cd",
+      "restored_sha256": "e87afcb46d70e71c74e3b9a24a906b2c9207bd9326a5c9ab055d8d39ad80e8fe",
+      "reviewed_baseline_sha256": "e87afcb46d70e71c74e3b9a24a906b2c9207bd9326a5c9ab055d8d39ad80e8fe",
+      "restored_equals_pre_format": true,
+      "restored_equals_reviewed_baseline": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/CHECK_ACCOUNTING.md",
+      "pre_format_sha256": "09879499cd6ebde3fcd56e3e9efb523bb500aa9d69e63c85558b4350becb363f",
+      "bad_format_sha256": "adcdf239aa7d8007a08411d1f88030b54a006967a9b14a2a22adb2d0cb3f11f7",
+      "restored_sha256": "09879499cd6ebde3fcd56e3e9efb523bb500aa9d69e63c85558b4350becb363f",
+      "reviewed_baseline_sha256": "09879499cd6ebde3fcd56e3e9efb523bb500aa9d69e63c85558b4350becb363f",
+      "restored_equals_pre_format": true,
+      "restored_equals_reviewed_baseline": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/FOLLOWUP_PLAN.md",
+      "pre_format_sha256": "4d288224537c53486f246a6b23e6716ac3d8b9b191e717ff475efbb8e296d7c0",
+      "bad_format_sha256": "3ae2faece6d4b4d46cde62019b6ea975abd4df53a4d7449813d6d58b849ae93d",
+      "restored_sha256": "4d288224537c53486f246a6b23e6716ac3d8b9b191e717ff475efbb8e296d7c0",
+      "reviewed_baseline_sha256": "4d288224537c53486f246a6b23e6716ac3d8b9b191e717ff475efbb8e296d7c0",
+      "restored_equals_pre_format": true,
+      "restored_equals_reviewed_baseline": true
+    }
+  ],
+  "investigator_files_checked": 103,
+  "investigator_files": [
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/COMMANDS_AND_FAILURES.md",
+      "sha256": "79bc2ef768ccd3273a817503e2fe8bc62473f1beba6e9b7cadbe988ec65db289",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/CONFERENCE_RESPONSE.md",
+      "sha256": "d2b43c9d119de8ffca94c2b5bd597c5ca15cdd30531823f64cfa7d61c9679313",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/FIRST_REPORT.md",
+      "sha256": "b5a8aa8223c66344bc7da8dfc8169160b6d8a8ece49f6b7a21e31a14ca274e7c",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/PINNED_SOURCE_LINES.txt",
+      "sha256": "9aeeaee596e0552785c07bd5172a206e2c2f0e478a9633ccfcb6c9e17262f215",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/POST_SUBMISSION_CUSTODY_NOTE.md",
+      "sha256": "e5e4e5ffe601e5c92b28b19336711eae657cb3c2cae90fa12bf73b962889381b",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/QUESTION_TRANSITIONS.md",
+      "sha256": "bd9d7fc2c15a6a94bf7967a3efda7681de93e76e6e3be1a0ea5c8742ea0da9cd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/format_check.txt",
+      "sha256": "de4ea6d4b4a88e26f43a2da8720012dea5974392271b79e46138ee12b041d27a",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/recheck_answers.py",
+      "sha256": "c2a7029b54ddd9c3ae1522f49faeb97f2c0780db93a10e7db15f3e011e9fedad",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/run_1.stdout.txt",
+      "sha256": "02ef4e43c6d9749469b9b900857fc8f4e72cee3f082822f7f730e4cf0521d437",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/run_2.stdout.txt",
+      "sha256": "0b8a5484a7bd4acc2f877aad8aa294bdc9a8b6c13d9dac4c0821d5695af44f86",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/run_3.stdout.txt",
+      "sha256": "e58593392f8772d114a504c46ee22c94bed0376144967094aa563fca84c4c0f1",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/run_4.stdout.txt",
+      "sha256": "357b7b2b20519801f29afba2fcfa5e0b8cf879971d9e9923e6bcf0f466c2a4f0",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/run_5.stdout.txt",
+      "sha256": "45d85874267ff4ec21273d57fde0a77b28692837195f628ddb15f3d82f5c9e8c",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_0.json",
+      "sha256": "fadbf4a536a076e7319e708b66f8202a742150b83d414ac31757b6913a01a174",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_1.json",
+      "sha256": "286b4f310814203eaf62b8b4eb4bf4f90ce71fc4a74e40d80af3d5722e642eb7",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_2.json",
+      "sha256": "8efb3a071af731d2dc7bb01ed7bf73a5704cb760a86024f995624dfbe50521e2",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_3.json",
+      "sha256": "ee520b6b60904e43291d0e2c4e305085454a62ced5b50ff80ae2438a098b5831",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_4.json",
+      "sha256": "ff0d0d93e2a023d5881fa93892d906d7df6175338659bd66468a8a911283c915",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/seed_5.json",
+      "sha256": "e7bd7506fc4c0775d22eda96e8b54f22ca2ac91fced83a3edb654ecc3725dd52",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/source_lines.py",
+      "sha256": "813b40bd65419a8ce537ad10324dadcf8acd7483decc95b5e79ca385519f3338",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A1/write_report.py",
+      "sha256": "1ab614234b6f1985d6def9a2a48d31a90b98bca1cc200ade2c0938d4fbc442a1",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/COMMAND_LOG.md",
+      "sha256": "6ce213673024c15c6ab197e27c0c3248f23f8378d988cd45ed1f25b546233619",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/CONFERENCE_RESPONSE.md",
+      "sha256": "39de59db97cace0ac0b5adfe0f564d0deb336208bb377229e63d2aabb9fec29f",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/FIRST_REPORT.md",
+      "sha256": "91de7dc113f564374df6dd287be06760d87c2f75c20e7823e96b86cc106a012f",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/POST_WRITE_VERIFICATION.md",
+      "sha256": "6538292c6e3fd3a7cd8aa5162bae551ce50b2f00f5073231a8b7416df6900e5c",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/commit_whitespace_check.txt",
+      "sha256": "be99940f534e65bfaab7219f96f552baf7fd812bf20a4daa10e23e97027795e9",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/inspect_data.py",
+      "sha256": "b15c0b5d70596868cf56d6ae867e527d79becd0b7f783ea4c5e32cfe2c50f42a",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/inspect_sources.py",
+      "sha256": "9b831eb5b314ceab905d27633f746188dcf09cc7bd819b80696b5e1f0b4e9d34",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/inspect_supplement.py",
+      "sha256": "484cf3d29b63d70efc97ab90034802627ba133a877f7de34708d1da7b5e54ffe",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/probe_information_flow.py",
+      "sha256": "158f8c93c767526071dda79f2f1c4c98ddcd6eb5f737d547c43ec315ffcb1baa",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/probe_results.json",
+      "sha256": "24368d85b58e0af2970e753cf0e89d6a4ac7ff7beef6bfe424aa22ab1955b7cf",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/focal.py",
+      "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/pointer_contract.py",
+      "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/pointer_learner.py",
+      "sha256": "e0fe6dc8b523bc65eaaf0c7b287ee1d931db591180e2c19eaa3f8fdce687c6c2",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/source.py",
+      "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm1/typed_pointer_worker.py",
+      "sha256": "0d801b675d837ebda8b4a64914a8de6494caceb446b2a7e62c1844ae17e24bd1",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/checker.py",
+      "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/focal.py",
+      "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/pointer_contract.py",
+      "sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/pointer_inputs.py",
+      "sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/pointer_learner.py",
+      "sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/source.py",
+      "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copies/helm2/typed_pointer_worker.py",
+      "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/source_copy_manifest.json",
+      "sha256": "26ed34cd104bc150fa765ac97c53d92bb89b08a160f9cc19ab9a82603947fc1a",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A2/supplemental_source_manifest.json",
+      "sha256": "3985ad56ed3c75dc984b37cd129403e72bb851df7c6c889b08049181daab0938",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/COMMANDS.md",
+      "sha256": "b7139a021eb1f141dfcc18485321a5efccfc3863207a1f2c368c97f9ccc0afa8",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/CONFERENCE_RESPONSE.md",
+      "sha256": "097152ab93884a0c6c9086d073ada0e000bdae166cd8da4593bd61771f99a33f",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/EXECUTION_RECEIPT.json",
+      "sha256": "d1eb03520253978c0714c9ef1b745b353c6edc784612cf03d62168f356a84193",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/F2_EXECUTION_RECEIPT.json",
+      "sha256": "807fff24853a911b3d21859337029fcd74646d1f042e8dcad396dba79bbe2a01",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/F2_REPORT.md",
+      "sha256": "4dd08e28049962c607b2e778e2267707e21bd0fd8826a4c0e2d7dbc733d5a813",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/F2_RESULTS.json",
+      "sha256": "2db1e7257605732bce7bbd1887ece77f7c2df20c05624dd7ef230c1a0ce6ff5d",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/F2_STDOUT.txt",
+      "sha256": "221815cf09bcfef281d15d552ca87cbd12f11f6e2d7cc0d0e88925d6a3084d9c",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/FIRST_REPORT.md",
+      "sha256": "1457f898fc98e47f7ca34975202adc2a36235b959b53c5ac2449ea926f339a52",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/GIT_VERIFICATION.json",
+      "sha256": "73141db197e9803fed4dc9d48842a3a7e296de8994c0515bfbc54e6e7429ebe4",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/PROBE_RESULTS.initial.json",
+      "sha256": "f50245b57742ef3385b94ade2e803c89d48abb05d44c0f90d09b1ee4af6a873d",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/PROBE_RESULTS.json",
+      "sha256": "2a68f0a9d602bd3ee943ba2d00f7c233bdfd39ecc4e8b292892a9dcc8a9165f8",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/PROBE_STDOUT.json",
+      "sha256": "f2559dedb157d6c7f9d2c75dedf0cdba128fe6f7125152a4dcafafae8fae836b",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/audit_teaching_transfer.py",
+      "sha256": "3f39c49ae99c75b9e28874307e496a7b2a892fca6ad142ae83aa985ad8c13679",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A3/f2_development_classes.py",
+      "sha256": "d59431bbd137d77c5469df033b081b8f4e2235f8c3ba54930a8d93f0564721e5",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/.gitignore",
+      "sha256": "1a9ba1479331c1ee35add00917198fb47e2c75de2e39eae2c6ed9963f4eca2cd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/COMMAND_LOG.md",
+      "sha256": "376582c2777239f66bc2201bc9cd5518c5283842de7741749746903d93f9c344",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/CONFERENCE_RESPONSE.md",
+      "sha256": "5126ba68eb90f6229b6015507e5a5038ae2710661c0a5afcc50f5c4db7dd9c80",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/FIRST_REPORT.md",
+      "sha256": "7a96838b04441697c3d7edee9d437498af66e0c241c5d992ceaefc2edca015c3",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/PROBE_RUN.json",
+      "sha256": "e244352d16bc89bab398bfeb608135a1b8d3ec13d9805ffb2a3b31de627a056b",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/READ_FINGERPRINTS.json",
+      "sha256": "5b32d774aa4a95cc85ff91d964803dac97956e3a92889009dcd1290bb0abf218",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/SAVED_RECORD_ANALYSIS.json",
+      "sha256": "3e953d2825bc080c28ab41cfa6256db15f46734cb33716be8fa6993750af5213",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/SOURCE_EXCERPTS.md",
+      "sha256": "453ed887fa47dbaee0821cbc45a35547de598d3649395ce219ff05d4609c3ecd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/SOURCE_FINGERPRINTS.json",
+      "sha256": "d721f89d455c42d001f08596c21a72938693e0a80917b07c1871be0279657e54",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A4/probe_saved_training.py",
+      "sha256": "fe2f60f64aef4b7aafe4a2d13347a8cfcf6b3b9407e717c52b525a0ea79aeb05",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/COMMANDS.md",
+      "sha256": "f5f0e3e4f2ad88ae4fbe575d84793522a2d612216d7022a308814798c76abf6e",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/CONFERENCE_RESPONSE.md",
+      "sha256": "cad389bf9bd3259fb7a9ae0e13a89838319660fff6386a4ed855a40e93a8ea76",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/CONSUMED_FILES.json",
+      "sha256": "47534e2b12afe1ff884185acdeaaf51c602b786aa267eda063aff8760539cd66",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/FIRST_REPORT.md",
+      "sha256": "6991dca9b2c34ada684822c04c1ea0ef6a04e910ae2ebece8039aa5523e35a84",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/FIRST_REPORT_ADDENDUM.md",
+      "sha256": "6d69670f350d046a79aabe493ada342f25e8dd7716f6a65a62b6dc9b14a8c17d",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/PREREGISTRATION.md",
+      "sha256": "36c2562dcd6102740a457d1e86d29debc2f91ab9c2108553ae644ef716a61de3",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/PREREGISTRATION_TIMESTAMP.txt",
+      "sha256": "9b277fe7a633f63fbf1c69a8219e25c06a4e2c9577f81e0e316d1e17748d0883",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/RESULTS.json",
+      "sha256": "1b0ab4c1f87afc54159693720c80a6f0bd254ee067d6cc29487e3a31b645d5cb",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/SOURCE_PROVENANCE.json",
+      "sha256": "f82d2f1390ef274026e09fd0561ddb20aea09fce80aed862e1f746ea36c954eb",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/SUMMARY.json",
+      "sha256": "03427bb22d790a5f94c8732f59d8c36aae7992d10901b437059bbf216d8f9ba1",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/probe.py",
+      "sha256": "6334f978e2782329216b6fff43f58a49c7dfba13e82a8a73a4049d0cea1b02b9",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A5/provenance.py",
+      "sha256": "c12ca09a93682187bc22f31d8ca2e7fc9a553251b6d4b434fbe4a16273d9f6f8",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/COMMANDS.md",
+      "sha256": "63e1a341f9d836cd104e8594439f7175a31b0e0f24ab8f648481b057d379c5fd",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/CONFERENCE_RESPONSE.md",
+      "sha256": "47a9b4f95c60f930a7a30213d8b9064d442e4926ec38909236919f66e908e277",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/EXECUTION_NOTE.md",
+      "sha256": "4a7e2bd73dd418caf040e1fbcc18fcae79f6640f7b952e0b8b03dc58f8160ea6",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/F1_COMMANDS.md",
+      "sha256": "2beb0270c154a0d7eb28367302988fb7bbd6ef440ebb9d60fb79d5dc25c261c9",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/F1_REPORT.md",
+      "sha256": "453c291cc5572ea318aeb32afcc10f210b1eab83f3e75563f32ab05b224e02c5",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/F1_RESULTS.json",
+      "sha256": "8b7dc6da0d72a6a8051b894cd18becfa40fe7bfedc39548aa0106c9e234f68b5",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/F1_STDOUT.txt",
+      "sha256": "a270a7aba74b7cf5992731adbce56c61266dfcd37831d214153177508a76a210",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/FIRST_REPORT.md",
+      "sha256": "d9aa2716de1a1db581d68e5173b7f2fd40dd87531fa7a5894927a2bd0576b45c",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/f1_saved_reach_decoder.py",
+      "sha256": "f74474cd66e496e90d19e17b008fab73ad0f8d5ccd51ee2b25fb823494df1235",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/lost_answers.json",
+      "sha256": "656a42b7801733b2e8752545b6340dd92c7f1dc787c8bd40b9e4d9f49e7eb4a4",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/reach_verification.json",
+      "sha256": "577a39cab99626090996272418c1ec81fc1b705667fd5e4c3d4ed86bc828c2ee",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/reconstruct.py",
+      "sha256": "f51830290ab610d9aa2cf4348c9f9920d2bdb244ef24c2a89013de7790b5a852",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/reconstruction.json",
+      "sha256": "cc6665f741141085b2bc589697a69e1dd74e2e63b2a709820e65dc7862a131db",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/source_lines.txt",
+      "sha256": "7735c14b8757a3545f7981378eda107b8e196a3a21dc39fb59bf0f0abc844b7e",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/tmp/whitespace_check.txt",
+      "sha256": "68077fe76ee036a605dbb056636329bbb8d8fe0410351b313c26a8205570ff2f",
+      "matches_reviewed_bytes": true
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents/A6/verify_lost_reach.py",
+      "sha256": "c9ab2df6a2fc78b5b11db5e7b995634f0c819d4f71187a0e9b0ed70fda4b0f52",
+      "matches_reviewed_bytes": true
+    }
+  ],
+  "all_investigator_bytes_unchanged": true,
+  "first_reports_unchanged": 6,
+  "commands_and_exits": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "dec36a3a"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "dec36a3a^"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "2820cc53446319c2ae680a00044b7f0573389742:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CUSTODY_LOG.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "dec36a3ab5a6f65634fc1ed58cd3d68b5c347b19:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CUSTODY_LOG.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "3f7ac2967c4bc38313a003e2817a3dcab58451d1:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CUSTODY_LOG.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "2820cc53446319c2ae680a00044b7f0573389742:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CONFERENCE_RECORD.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "dec36a3ab5a6f65634fc1ed58cd3d68b5c347b19:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CONFERENCE_RECORD.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "3f7ac2967c4bc38313a003e2817a3dcab58451d1:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/coordinator/CONFERENCE_RECORD.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "2820cc53446319c2ae680a00044b7f0573389742:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/CHECK_ACCOUNTING.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "dec36a3ab5a6f65634fc1ed58cd3d68b5c347b19:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/CHECK_ACCOUNTING.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "3f7ac2967c4bc38313a003e2817a3dcab58451d1:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/CHECK_ACCOUNTING.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "2820cc53446319c2ae680a00044b7f0573389742:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/FOLLOWUP_PLAN.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "dec36a3ab5a6f65634fc1ed58cd3d68b5c347b19:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/FOLLOWUP_PLAN.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "3f7ac2967c4bc38313a003e2817a3dcab58451d1:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/FOLLOWUP_PLAN.md"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "ls-tree",
+        "-r",
+        "--name-only",
+        "3f7ac2967c4bc38313a003e2817a3dcab58451d1",
+        "--",
+        "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_failure_research_20260922/agents"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "cat-file",
+        "--batch"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "elapsed_seconds": 2.4660593000007793,
+  "test_functions": 0,
+  "new_behavioral_cases": 0,
+  "model_execution": false,
+  "note": "CUSTODY_LOG contains intended post-review supplemental ledger/root-preservation entries; its pre-format bytes therefore differ from the reviewed baseline. Other restored documents match the reviewed baseline exactly."
+}
