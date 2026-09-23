@@ -1,0 +1,5 @@
+{
+  "ordinary_diff_check_exit": 2,
+  "cr_at_eol_diff_check_exit": 0,
+  "reason": "Windows CRLF output retained byte-exactly for source/output hash receipts; ordinary check treats CR as trailing whitespace."
+}
