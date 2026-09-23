@@ -1,0 +1,200 @@
+{
+  "status": "PASS",
+  "execution": {
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+    "elapsed_seconds": 0.6102173999970546,
+    "functions": 5,
+    "executions": 1,
+    "repeat_executions": 0,
+    "neural_execution": false,
+    "manifest_sha256": "1ddf793e5cd6a77cdcc843b089c26b9a880f268ac556d22d40cdbb45e9874101",
+    "probe_sha256": "a84df4e8b125e9cef69815c3a13975dbee76f2a1f07110dfb182a6056cb828f3",
+    "working_directory": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-failure-a7",
+    "original_file_count": 56,
+    "source_member_observations": 22
+  },
+  "output_sha256": "277d34f31c586dea42cc4346b818596346bc5fb16581c8b33b88015659d2f8e6",
+  "gates": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "initial": 2,
+      "final": 12,
+      "gains": 10,
+      "losses": 0,
+      "p": "1/1024",
+      "passed": true
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "initial": 0,
+      "final": 12,
+      "gains": 12,
+      "losses": 0,
+      "p": "1/4096",
+      "passed": true
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "initial": 0,
+      "final": 11,
+      "gains": 11,
+      "losses": 0,
+      "p": "1/2048",
+      "passed": true
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "initial": 2,
+      "final": 12,
+      "gains": 11,
+      "losses": 1,
+      "p": "13/4096",
+      "passed": true
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "initial": 0,
+      "final": 12,
+      "gains": 12,
+      "losses": 0,
+      "p": "1/4096",
+      "passed": true
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "initial": 4,
+      "final": 10,
+      "gains": 7,
+      "losses": 1,
+      "p": "9/256",
+      "passed": false
+    }
+  ],
+  "analogy_sets": [
+    9,
+    9
+  ],
+  "overlap_counts": [
+    2,
+    1,
+    3,
+    1,
+    3
+  ],
+  "development": [
+    {
+      "version": "Helm 1.0",
+      "seed": 20260917,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 0,
+          "DIRECT": 0,
+          "ABSENT": 0
+        },
+        "p10": {
+          "PARTS": 1,
+          "VIA": 3,
+          "DIRECT": 3,
+          "ABSENT": 0
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260918,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 0,
+          "DIRECT": 0,
+          "ABSENT": 0
+        },
+        "p10": {
+          "PARTS": 1,
+          "VIA": 2,
+          "DIRECT": 5,
+          "ABSENT": 1
+        }
+      }
+    },
+    {
+      "version": "Helm 1.0",
+      "seed": 20260919,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 0,
+          "DIRECT": 0,
+          "ABSENT": 0
+        },
+        "p10": {
+          "PARTS": 1,
+          "VIA": 3,
+          "DIRECT": 2,
+          "ABSENT": 0
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260917,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 3,
+          "DIRECT": 0,
+          "ABSENT": 0
+        },
+        "p10": {
+          "PARTS": 0,
+          "VIA": 2,
+          "DIRECT": 0,
+          "ABSENT": 0
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260918,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 0,
+          "DIRECT": 0,
+          "ABSENT": 10
+        },
+        "p10": {
+          "PARTS": 0,
+          "VIA": 3,
+          "DIRECT": 7,
+          "ABSENT": 2
+        }
+      }
+    },
+    {
+      "version": "Helm 2.0-experimental",
+      "seed": 20260919,
+      "endpoints": {
+        "p00": {
+          "PARTS": 0,
+          "VIA": 0,
+          "DIRECT": 0,
+          "ABSENT": 0
+        },
+        "p10": {
+          "PARTS": 1,
+          "VIA": 3,
+          "DIRECT": 0,
+          "ABSENT": 2
+        }
+      }
+    }
+  ]
+}

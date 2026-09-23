@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-failure-a7\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_failure_research_20260922\agents\A7\verify_original_records.py", line 298, in <module>
+    RESULT[function.__name__]=function()
+                              ~~~~~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-failure-a7\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\helm_failure_research_20260922\agents\A7\verify_original_records.py", line 149, in check_gate
+    assert gate['label'] == subject['recorded_label'] and gate['void_paths_taken'] == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
