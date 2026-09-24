@@ -1,0 +1,81 @@
+{
+ "schema": "claude.analogy-repair-t4-launch/0.1",
+ "owner_authority": [
+  "takeover instruction in chat 2026-09-23: 'Complete the required historical OFF-control and ON-effect checks'",
+  "AWS order 2026-09-23: 'use aws as there is only 354 mb of 16 gbs locally'"
+ ],
+ "approved": {
+  "machine": "g4dn.2xlarge",
+  "region": "us-west-2",
+  "price_per_hour_usd": 0.752,
+  "time_limit_minutes": 160,
+  "dollar_ceiling": 3.0
+ },
+ "instance_id": "i-030e5665bcad36f69",
+ "instance_name": "helm-analogy-repair-t4-20260924T002206Z",
+ "launched_utc": "2026-09-24T00:22:13Z",
+ "availability_zone": "us-west-2a",
+ "ami": "ami-07d69ce07bfe5628f",
+ "ami_name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260922",
+ "ami_note": "pinned reference image",
+ "root_volume_gb": 100,
+ "in_instance_timer_seconds": 9000,
+ "client_deadline_minutes": 160,
+ "worst_case_usd_at_client_deadline": 2.0479,
+ "bucket": "cas-harness-runpod-92754088",
+ "keys": {
+  "bundle": "helm-integration/analogy-repair-t4-20260924T002206Z/bundle.tar.gz",
+  "results": "helm-integration/analogy-repair-t4-20260924T002206Z/results.tar.gz",
+  "progress": "helm-integration/analogy-repair-t4-20260924T002206Z/progress.log"
+ },
+ "python": "3.14.7",
+ "torch": "2.11.0",
+ "numpy": "2.5.2",
+ "wheels": {
+  "casformer_reference-0.1.0-py3-none-any.whl": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+  "cas_neural_cjt-0.2.0-py3-none-any.whl": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+ },
+ "identity": {
+  "original_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "repaired_commit": "ceab6c49f611303f39addfaa3553d81d6f902811",
+  "claude_commit": "5e1d137366199841cbaeca455c65df271b29d6a5",
+  "learner_sha256_raw": {
+   "frozen": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+   "repaired": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8"
+  },
+  "learner_sha256_lf": {
+   "frozen": "a2b592b56113b8e0dd5486a21599ab9cc98f8835438706bd8bc088ced01f7bae",
+   "repaired": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781"
+  },
+  "test_files_sha256": {
+   "tests/test_helm_analogy_focus_comparison.py": "4cbb8c593f2590b054ceda87f8883cf734acaaff828d773405d07833719592ab",
+   "tests/test_helm_analogy_switch_read_only.py": "16444079d08827283af3feb07448c6d6d45923ffdfba2ca385596c798d2695ba",
+   "records/helm_integrated_repairs_20260923/analogy_tensor_inventory.json": "21ae887a6c783bc6f20e17d672d33431f36b5e5032af45d15fafe3f1955c95e3"
+  },
+  "claude_files_sha256_lf": {
+   "records/helm_eval_design_20260923/analogy_wiring_probe/analogy_wiring_probe_v0_2.py": "89c1e40293ca87c9ef8296bcbe9e672d77be264f89fe22908a62a41050f2ea82",
+   "records/helm_eval_design_20260923/analogy_wiring_probe/preservation_digest.py": "21bf01e5411d3d959bd8106f8f6a7ca6ca158d97f4000c0b060d57e99176292e",
+   "records/helm_eval_design_20260923/analogy_repair_t4_job/switch_read_only_check.py": "da9c1868705d99af4d6095a384d93aa1c0b9f4fb6864282c82037962b06e4408",
+   "records/helm_eval_design_20260923/analogy_wiring_probe/PREREG_ANALOGY_WIRING_PROBE_v0_2.md": "4c8c7c331d02a65c9b4b6290efae8f84669ff632e074015f91a8c4afeae79000"
+  },
+  "checkpoint_sha256": {
+   "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+   "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+   "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+   "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+   "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+   "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8"
+  },
+  "changed_existing_files_vs_original": [
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py"
+  ]
+ },
+ "bundle": {
+  "files": 2327,
+  "bytes": 29785216,
+  "sha256": "70360bc7e3f7ab0a639e543ef84be15e0b318ea59eed91c0adba7641600b91af"
+ },
+ "machine_script_template_sha256": "c998a634b56999c1e4bfc02307cd743acbb5a591a01a76e4e0699fe664e3a906",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "links_stored": "no -- time-limited links are never written to disk"
+}

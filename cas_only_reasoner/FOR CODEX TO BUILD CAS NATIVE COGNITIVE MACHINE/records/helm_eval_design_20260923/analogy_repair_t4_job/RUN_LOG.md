@@ -43,3 +43,7 @@ reading. A byte copy is at `D:/tksCAS-archive/analogy_repair_t4_attempt1_2026092
 ## Attempt 2
 
 Same R, same models, same limits ($3.00 ceiling). The only change is the bundle fix above.
+- **Launched.** `i-030e5665bcad36f69`, g4dn.2xlarge, us-west-2a, bundle 2327 files, sha256 prefix `70360bc7e3f7ab0a`.
+  It destroys itself within 153 minutes.
+- **Money.** Attempt 1's upper bound ($0.5596) plus attempt 2's worst case ($2.05) is $2.61, inside the one $3.00
+  ceiling for this job.
