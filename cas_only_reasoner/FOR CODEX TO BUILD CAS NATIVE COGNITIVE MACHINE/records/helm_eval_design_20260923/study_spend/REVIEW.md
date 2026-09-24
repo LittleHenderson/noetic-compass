@@ -1267,3 +1267,164 @@ regenerated state, and a small git repository used to check upstream and fetch b
 batches it). The untracked `aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS
 call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1
 ledger, no transcript.
+
+## Verification of 4e292912a1efe0a85312574a69291a1af5af5427
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Verifier: a fresh Claude verifier sub-agent. It did not build the round-4 fixes.
+This is **not** Codex's review and **not** owner acceptance.
+
+**Verdict: APPROVE_ADMISSION_GATE** (with two MINOR findings and two NOTEs, below).
+
+In short: round 4 does what was ordered. N6a-N6d now refuse. The two-attempt positive case is admitted, with both
+attempts counted. N8 is closed. The real figures did not change. I found three more ways to hide a launch attempt
+from the new search (MINOR L). Each one needs the runner to leave an attempt out of the row, and
+`PREREQUISITE_SLOTS.md` forbids that. When the same attempts are listed, as the document says, the gate refuses in
+every case. I also found that a retry prepared the way the real S1 -> S2 retry was prepared stops the study for good
+(MINOR M). That fails closed: no money is at risk. But the documented retry path does not work as written.
+
+### What was run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `4e292912` |
+| `python -B test_study_spend.py` (run once) | 69 passed, 0 failed (about 7 s) |
+| `python -B test_read_results.py` (run once) | 31 passed, 0 failed |
+| Real report (`main([])`, state written to a scratch file) | exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92; remaining mandatory caps $51.64; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed; no training job started; 1.0 s |
+| State regenerated | byte-identical to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| Real reader on `i-09e14d4afd0e0ebfa` (in memory, and `main(["--no-write"])`) | exit 0; ROUTE_ACCEPTED; script verdict and job verdict INTEGRATION_CHECKS_PASS |
+| Reading regenerated | byte-identical to the committed `RESULTS_READING.json` |
+| Finished job's files | `results/`, `launch_record.json`, `watch_record.json`, `dry_run_record.json`, `job.sh.template`, `watch.py`, `launch.py`: no difference from `b0fd06ff`. Round 4 does not touch the job folder, `STUDY_SLOTS.json` or `STUDY_SPEND_STATE.json` |
+| Remote-tip check on this real checkout (`GitReader().at_remote_tip()` only; no `--admit`) | True: HEAD `4e292912` equals the fetched tip. This checkout's own `origin/research/helm-integration-20260923` ref is stale (`b0fd06ff`): the configured fetch refspec lists only three other branches. The gate reads `FETCH_HEAD`, so the stale ref does not fool it |
+| Probes | a scratch script built from the World's primitives (`pointer`, `refusal`, `provider`, `LAUNCH`, `WATCH`, the spec builders, `admission`, `invalid`, `build`), not from the round-4 helpers or tests; temporary folders, deleted afterwards; N8 in tiny real git repositories |
+| Real `--admit` | **not run** |
+
+### S1, S2, P1a: the complete set of attempts of their jobs
+
+The search was re-run on the real data, read-only. From each file it keeps only the job id, or the instance id and
+the launch time. It found **nothing unlisted** for S1, S2 or P1a, and no scan failure.
+- `typed_pointer_001/` at HEAD and at `1ddf6a1e`: 19 job ids. The only ones prepared on or after 2026-09-23 are S1's
+  `cas-meta2-tpntr-20260924021244-70490111-m-20260917` and S2's `cas-meta2-tpntr-20260924033550-3df31d96-m-20260917`.
+- The design folder: 12 launch and watch records, each seen on disk and at HEAD. `larger_question_t4_job/` holds
+  only P1a's two records (`i-09e14d4afd0e0ebfa`, launched 2026-09-24T05:53:38Z).
+- Git history (file names only) since 2026-09-23, on all 18 remote branches whose name contains `helm` (this one
+  included; tips read with `git ls-remote`; tips missing locally were fetched) and on `master`: the only typed-pointer
+  `result.json` files added are S1's (`5715fda0`, moved unchanged to `..._attempt1/` in `3df31d96`) and S2's
+  (`1ddf6a1e`). P1a's two records were each added once (`fae817fe`, `b0fd06ff`). No other branch added a launch
+  record in the design folder outside the three older job folders.
+
+So **S1, S2 and P1a are the complete set of attempts of their jobs**. They are scanned, not exempt.
+
+### Probes rebuilt
+
+| Probe | Result now | Verdict |
+|---|---|---|
+| N6a | refusal 09:05 unlisted, clean run 09:15 named: M1 ACCEPTED $8.94 but UNCONFIRMED (`UNLISTED_TRAINING_ATTEMPT`); `--admit M2` exit 1 | FIXED |
+| Two attempts listed (the ordered positive test) | refusal then clean run: ACCEPTED **$10.54** ($1.60 + $8.94); spent $15.98; no cleanup flag; `--admit M2` exit 0 ADMIT, total **$55.96** | as ordered |
+| N6b | a 600-s attempt with its identity lost, unlisted: UNCONFIRMED; exit 1. Listed: REJECTED and UNCONFIRMED; exit 1 | FIXED |
+| N6c | watched attempt still running, records in `p1b/attempt1/`, or in a new folder `p1b_try1/`: UNCONFIRMED (`UNLISTED_WATCHED_LAUNCH`); `--admit P2` exit 1 | FIXED |
+| N6d | named refusal, unlisted 20,000-s attempt: ACCEPTED $1.60 but UNCONFIRMED; exit 1 | FIXED |
+| N8 | after `merge -s ours`: plain `git log` sees 1 version, the gate's history 4; `check_history` raises `HISTORY_VIOLATION: M1 was DONE`. Remote tip: at the tip, True; after another clone pushes, `HEAD_IS_NOT_THE_REMOTE_TIP`; after `pull --ff-only`, True; remote gone, `FETCH_FAILED` | FIXED |
+| N1a | INVALID naming another job's clean receipt: $11.66; UNCONFIRMED (`LAUNCHED_BEFORE_ADMISSION`); exit 1 | holds |
+| N3 | INVALID naming an older capacity refusal: UNCONFIRMED; exit 1 | holds |
+| N4 | bare record committed RUNNING: REJECTED (the window and the NOTE-F reasons); not started; exit 1 | holds |
+| P4 | 20,000 s, identity lost, instance id empty, INVALID: $15.58; spent $21.02; `--admit P1b` exit 1 with `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` and `OVER_CEILING:$61.00 > $60.00` | holds |
+| P6 | hand-written admission, never committed RUNNING: REJECTED (`ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW`); exit 1 (`DONE_RECEIPT_REJECTED:M1`) | holds |
+
+### New findings
+
+**L. MINOR: the search for unlisted attempts misses three shapes of retry** (`unlisted_attempts`, lines 1258-1310).
+The search is the safety net for an attempt the row leaves out. Each probe below leaves one out.
+
+- **X2. A training retry prepared from a new source commit.** M1 is admitted at 09:00 with source `4444...`.
+  Attempt 1 (09:05) is a capacity refusal, and the row names it. Attempt 2 (09:15) was prepared from `5555...`. It
+  ran 20,000 s, and its machine's identity is lost. The row does not list it. The search looks only for the admitted
+  source's first 8 characters, so it misses attempt 2. M1 is ACCEPTED at $1.60, with no cleanup flag. `--admit M2`
+  gives **exit 0 ADMIT**, total $47.02. This is N6d with a new source.
+  - Why this shape matters: the real retry had it. S2's source `3df31d96` is the commit that moved S1's receipt
+    aside. The prepare scripts take the source from `git rev-parse HEAD`. So committing attempt 1's receipt in the
+    preparing checkout changes the next attempt's source.
+- **X3. The same prepared job launched twice.** Attempt 1 (job J) ran and lost its identity. Attempt 2 (the same
+  job J) finished clean, and the row names it. The search skips every job id the row lists, so it skips J
+  everywhere. `--admit M2` gives **exit 0**, total $54.36.
+- **X1. A watched attempt committed at HEAD, then its folder reused.** P1b attempt 1 (09:05, still running) was
+  committed in `p1b/`, then deleted from disk. Attempt 2 (09:45, clean) was launched into the same `p1b/`. The search
+  skips any record whose path the row lists, so it skips attempt 1's copy at HEAD. `--admit P2` gives **exit 0**,
+  total $55.63. Control: the same attempt 1 at HEAD under another path is found (exit 1).
+
+Why MINOR, not MAJOR: each probe needs the runner to leave an attempt out of `attempts`. `PREREQUISITE_SLOTS.md`
+says "Every attempt is listed in the row". Listed honestly, all three refuse (probes X2h, X3h, X1h):
+- X2: `SOURCE_NOT_THE_ADMITTED_SOURCE`, UNCONFIRMED;
+- X3: `RECEIPT_SHARED` on the job id (the "one receipt, one attempt" rule);
+- X1: a pin mismatch, plus `RECEIPT_SHARED` on the instance id.
+So a careful runner who follows the document cannot reach a wrongful ADMIT this way.
+
+Fix (a suggestion; Codex decides):
+- Training: match the seed and the window with **any** source prefix. A job another slot claims stays that slot's.
+  (A job of the next slot inside this window is then flagged only until that slot's row names it.)
+- Training: count a job id as listed only together with the listed receipt's own identity (its path or sha256),
+  not the id alone.
+- Watched: skip a scanned record only when its sha256 equals a listed pin, or its instance id is listed. Never skip
+  it by path alone.
+- Add X1-X3 as negative tests.
+
+**M. MINOR: the documented retry stops the study for good when it is prepared the way the real retry was**
+(`PREREQUISITE_SLOTS.md`, "Launch attempts and retries"; it fails closed).
+- The runner action: commit attempt 1's receipt, as the document requires, in the checkout that prepares jobs. Then
+  prepare the retry in that checkout. (`prepare_study.py` refuses a dirty tree, so the receipt must be committed or
+  moved first.) The commit moves HEAD, and today's prepare scripts take the source from HEAD.
+- Probe X2h: a refusal (admitted source) and a clean run (new source), both listed. M1 is REJECTED (`attempt 2:
+  SOURCE_NOT_THE_ADMITTED_SOURCE`), counted $23.32, UNCONFIRMED. `--admit M2` gives exit 1. Both attempts are clean,
+  yet the study stops, and nothing clears it.
+- The round-4 positive test uses one source for both attempts. The real S1 -> S2 retry did not.
+- No money is at risk: the gate refuses. But "a retry inside a live admission is allowed" holds only when the retry
+  is prepared from a checkout that still sits at the admitted source commit. The document does not say so.
+- Fix: say it in the document (prepare every attempt from the admitted source commit; commit receipts where they do
+  not move that checkout's HEAD). Or decide it together with open question 8.
+
+**N. NOTE: an attempt that made no machine, and is not an AWS capacity refusal, stops the study for good.** Probe
+X5: a launcher preflight refusal (status `PREFLIGHT_REFUSED`, no launch) listed as attempt 1, then a clean run:
+REJECTED, UNCONFIRMED, exit 1. Such receipts exist in the training receipt home
+(`typed_pointer_001/receipt_20260917_preflight_refused_af0970cf/`; folder name only). Only a proven capacity refusal (the S1 rule) or a
+confirmed termination can clear an attempt. This fails closed. Whether a proof that no AWS call was made should also
+clear an attempt is for Codex or the owner.
+
+**O. NOTE: `--admit` checks the current branch's upstream, not a named study branch.** The document says to run it on
+the study's branch. Today only `research/helm-integration-20260923` carries `study_spend/` (checked on the local refs
+`origin/claude/helm-on-launch-20260924` and `origin/master`). A copy of the slots file on another branch would have
+its own tip. No change asked.
+
+**Unchanged, as ordered.** NOTE J (a careful hand-written admission record passes) and NOTE K (watched slots bind by
+launch time only; `validate_watched` passes no source or bundle to `not_this_launch`) stand as the builder states.
+Open questions 6-9 stay open.
+
+### Claim states
+
+- **Real (measured here):** both test runs; the real report and its byte-identical state; the real reading and its
+  byte-identical regeneration; the real attempt search for S1, S2, P1a; the file-name history on the branches named
+  above; the file diffs; the remote-tip check on this checkout; probes N1a, N3, N4, N6a-N6d, the two-attempt positive
+  case, N8, P4, P6, X1, X1h, X2, X2h, X3, X3h, X5.
+- **Open:** Codex's review of rounds 1-4; open questions 1-9; findings L and M; notes N and O (FLAG_FOR_HUMAN_REVIEW
+  for the design choices).
+- **Verdict scope:** APPROVE_ADMISSION_GATE is this verifier's reading only. It is not Codex's review and not owner
+  acceptance. It says nothing about the technical readiness of any slot; the gate does not check that.
+
+### Exposure
+
+Read: this file; `study_spend.py` (all of it); `test_study_spend.py` (helpers, the round-4 tests, the test list);
+`PREREQUISITE_SLOTS.md` (the round-4 diff); `STUDY_SLOTS.json` (slot ids, statuses, caps, kinds, training seeds and
+arms, receipt specs); `read_results.py` lines 283-300; `typed_pointer_001/prepare_smoke.py` lines 395-420 and
+495-560, and a grep of it for `receipt`, `source_sha` and `rev-parse`; `typed_pointer_001/prepare_study.py` lines
+80-130; the folder names of `typed_pointer_001/` and its `.gitignore`; a grep for `tpntr` in `.py` files; file-name
+history for `typed_pointer_001/*result.json` and the design folder's launch records on the branches named above; the
+fetch refspec, the upstream setting and `git ls-remote` branch names. The real report, the real reader and the real
+attempt search read receipts and `results/` only through the programs. Printed were only summary lines, the route
+and job verdicts, job ids with their file places, and each watched record's path, instance id and launch time. **No
+receipt file was opened directly**, and no `ledger_before` / `ledger_after` field was read or printed. Network (git
+only, read-only): `git pull --ff-only`; `git fetch origin` (it refreshed the three remote-tracking refs its refspec
+lists); fetches of remote branch tips missing locally (`codex/helm-controlled-prelaunch-20260924`, `master`) into
+`FETCH_HEAD`; `git ls-remote`; the
+gate's own fetch inside `at_remote_tip()`. Wrote: this section only. Scratch (the session scratch folder): the probe
+script and a regenerated state copy. The probes' temporary folders and the N8 repositories were deleted. The
+untracked `aws_probe_job/dry_run_machine_script.sh` is not the verifier's and was left alone. No AWS call, no torch,
+no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript,
+no real `--admit`.
