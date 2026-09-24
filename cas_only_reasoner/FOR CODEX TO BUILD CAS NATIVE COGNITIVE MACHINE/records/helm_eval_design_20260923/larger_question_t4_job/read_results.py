@@ -1,0 +1,85 @@
+"""Read the downloaded HELM-LARGER-QUESTION-PATH-1 T4 results and emit the job reading. Label CLAUDE_BUILT_CLAUDE_CHECKED.
+
+Reads files only: `results/`, `launch_record.json` and `watch_record.json`. It does not re-decide any check. The check
+verdicts and the overall verdict are the ones `t4_larger_question_checks.py` wrote; this program only checks that the
+files are whole and belong to the launched bundle, then restates them. The first rule that applies wins:
+  1 SMOKE_FAILED                the job stopped at stage 0 (its own STATUS says which part failed)
+  2 INCOMPLETE                  no summary file, or the summary says it is not complete and names no refusal
+  3 RESULT_INTEGRITY_FAILED     the rows file's sha256 differs from the summary's, or the code under test, the
+                                torch build or the GPU differ from the launched bundle and the T4 reference
+  4 the script's own verdict    INTEGRATION_CHECKS_PASS / _FAIL / _INCOMPLETE, or its refusal (SETUP_REFUSED,
+                                GPU_REQUIRED, WALL_LIMIT_REACHED, PREFLIGHT_OVER_WALL_LIMIT)
+Nothing here measures Helm's accuracy; any accuracy statement is NOT LICENSED by this job. Writes RESULTS_READING.json.
+"""
+import hashlib
+import json
+import pathlib
+
+HERE = pathlib.Path(__file__).resolve().parent
+RES = HERE / "results"
+SUMMARY = RES / "larger_path_result.json"
+ROWS = RES / "larger_path_result.json.rows.jsonl"
+TORCH, GPU = "2.11.0+cu128", "T4"
+
+
+def load(path):
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
+def main():
+    record = load(HERE / "launch_record.json") or {}
+    identity = record.get("identity", {})
+    status = (RES / "STATUS").read_text(encoding="utf-8").strip() if (RES / "STATUS").is_file() else None
+    smoke = load(RES / "stage0_smoke.json")
+    summary = load(SUMMARY)
+    out = {"schema": "claude.larger-question-t4-reading/0.1", "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+           "job_status": status, "source_commit": identity.get("source_commit"),
+           "bundle_sha256": record.get("bundle", {}).get("sha256"), "stage0_smoke": smoke, "problems": {},
+           "accuracy": "NOT LICENSED: plumbing checks on public fixtures; nothing here measures Helm's accuracy"}
+    if summary is not None:
+        out["script"] = {key: summary.get(key) for key in ("verdict", "reason", "complete", "requested", "torch",
+                                                           "device_name", "wall_seconds", "rows_by_check",
+                                                           "course_digest", "fixture_set_digest")}
+        out["checks"] = {name: {k: v for k, v in (row or {}).items() if k in ("name", "verdict", "reason", "crash")}
+                         for name, row in (summary.get("checks") or {}).items()}
+        out["preflight"] = summary.get("preflight")
+    # integrity
+    if summary is not None:
+        if ROWS.is_file():
+            observed = hashlib.sha256(ROWS.read_bytes()).hexdigest()
+            if observed != summary.get("rows_file_sha256"):
+                out["problems"]["rows_file_sha256"] = {"observed": observed, "summary": summary.get("rows_file_sha256")}
+        else:
+            out["problems"]["rows_file"] = "missing"
+        launched = identity.get("eval_paths_lf_sha256", {})
+        ran = (summary.get("inputs") or {}).get("eval_paths_lf_sha256", {})
+        prefix = "research/CAS_META_2_COMPOSITION/eval_paths/"
+        if ran and {prefix + name: digest for name, digest in ran.items()} != launched:
+            out["problems"]["code_under_test"] = {"ran": ran, "launched": launched}
+        if summary.get("torch") is not None and summary.get("torch") != TORCH:
+            out["problems"]["torch"] = summary.get("torch")
+        if summary.get("device_name") is not None and GPU not in summary.get("device_name"):
+            out["problems"]["device_name"] = summary.get("device_name")
+    script_verdict = (summary or {}).get("verdict")
+    if status in ("SMOKE_FAILED", "SMOKE_LIST_INPUTS_FAILED") or (smoke is not None and not smoke.get("pass")):
+        verdict = "SMOKE_FAILED"
+    elif summary is None or script_verdict is None:
+        verdict = "INCOMPLETE"
+    elif out["problems"]:
+        verdict = "RESULT_INTEGRITY_FAILED"
+    else:
+        verdict = script_verdict
+    out["job_verdict"] = verdict
+    w = load(HERE / "watch_record.json")
+    if w:
+        out["watch"] = {k: w.get(k) for k in ("outcome", "job_status", "final_state", "terminated_confirmed",
+                                               "volumes_of_this_job_remaining", "minutes_from_launch_to_watch_end",
+                                               "cost_upper_bound_usd", "dollar_ceiling")}
+    (HERE / "RESULTS_READING.json").write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8",
+                                                newline="\n")
+    print(json.dumps(out, indent=1, sort_keys=True)[:8000])
+    return 0 if verdict == "INTEGRATION_CHECKS_PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
