@@ -13,16 +13,18 @@
     20260919
   ],
   "count_C": {
-    "existing_attempts": 2,
-    "future_jobs": 7,
+    "existing_attempts": 3,
+    "future_jobs": null,
     "main_training_jobs": 4,
-    "all_attempted_or_proposed_slots": 9
+    "all_attempted_or_proposed_slots": null,
+    "status": "NOT_RECONCILED_AFTER_ROUTE_ONLY_P1_LAUNCH"
   },
   "count_full_B_fallback": {
-    "existing_attempts": 2,
-    "future_jobs": 9,
+    "existing_attempts": 3,
+    "future_jobs": null,
     "main_training_jobs": 6,
-    "all_attempted_or_proposed_slots": 11
+    "all_attempted_or_proposed_slots": null,
+    "status": "NOT_RECONCILED_AFTER_ROUTE_ONLY_P1_LAUNCH"
   },
   "actual_spend_ceiling_usd": 60,
   "actual_spend_horizon": "execution plus 30 days after E1; subsequent retained storage separately reported",
@@ -47,17 +49,19 @@
     "REPRODUCTION_POLICY.md": "92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e",
     "REPRODUCTION_POLICY.json": "13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259",
     "STATISTICAL_POLICY.json": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055",
-    "EXECUTION_MANIFEST.json": "a321e3221335db55a359962f3f800f6bfd1b0e8d46876cc7fec8350cfd366628",
+    "EXECUTION_MANIFEST.json": "f0b328d24c5fd007a4d12f4bbd912d498d342e1a96bf52a4540894a5d0292c0d",
     "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
-    "COST_AND_JOB_ENVELOPE.md": "789641f43a3effa5ae0b8e119e9a13b9f5ee937894ec6f01ccc0298b992b460f",
-    "COST_STATE.json": "7e7956b0ce4f1551f936c87fd70f60710e1979e8a8ec4bc95eba0e4fe0d5cc59",
+    "COST_AND_JOB_ENVELOPE.md": "4341ad956fda87c53134ca777b308966825d80995113c29f8e126f7385f2382f",
+    "COST_STATE.json": "382b0a758d510075627bfe0549627afb24589408277283fa16a3c4523088e928",
     "CURRENT_COORDINATION_STATE.json": "5a2646fc17d230cf7bfd1c2dc5f0a43203e4757bf199df96620ff33a1a786cd2",
     "LEDGER_RECONCILIATION.json": "28f8e0964eb061be170e9c1bdb9faaab57fc912954ce18f706a49cd59a4dc59e",
     "SMOKE_COMPLETION_RECONCILIATION.json": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
     "SMOKE_PROVIDER_OBSERVATION.json": "d5225ee20a0fa26201673dc8049ba6a1f5e3f69e1edf6ddd9beec47ce7f45509",
     "OWNER_STANDING_AUTHORIZATION_20260924.md": "86d7f14b9a191bb90733d011c8c5d1344a29739498be9c2e48c4e3084fd10687",
     "OWNER_STANDING_AUTHORIZATION_20260924.json": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
-    "AGENT_BUS_COORDINATION_20260924.md": "d9e5b73b711ca96926b1264585e72ec1691311bf336314312e6405520678a429"
+    "AGENT_BUS_COORDINATION_20260924.md": "d9e5b73b711ca96926b1264585e72ec1691311bf336314312e6405520678a429",
+    "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md": "4cc13c829eddf980c641944a7a0de4b76553f56420687f1207a3f661b18c0500",
+    "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json": "410ac2af4d80460726c42eeae9715b137fbc98ccd3ecda18c494323a7eff602e"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -68,13 +72,14 @@
     "bounded retention/collection implementation",
     "existing reader and approval-state parser conform to prospective policy",
     "HSET-2 A2 conformance and public exposure attestation",
-    "actual combined prerequisite timing within named slots"
+    "actual combined prerequisite timing within named slots",
+    "route-only P1 split: remaining paid job count, caps, timing and programmatic ledger reservations reconciled"
   ],
   "approval_requested_now": false,
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
-    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "2b840818952cb7ed44b1efbf7b2f4518d596340b975eb75f5d4ea4fbc97d4753",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "6dc8df4b1552ecf79625f1fafbe47555fffcc00f51344053e2c418230e4e1b96",
+    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "d24d58859520d2beeba063e319549be70479785f111832db19543838b4317b94",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "f40ab256fa6d59afcda31232c9fbeb52e759b42d0672ff42a7a32394175ffc19",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
@@ -82,9 +87,10 @@
   "prerequisite_results": {
     "S0": "CAPACITY_REFUSED_NO_INSTANCE_NO_COMPUTE; reservation retained",
     "S1": "PASS_FOUR_FROZEN_REDUCED_SMOKE_CONDITIONS_AND_VERIFIED_TEMPORARY_RESOURCE_CLEANUP",
-    "P1": "NOT_RUN_FOR_FINAL_COMBINED_SCOPE",
+    "P1": "PARTIAL_ROUTE_ONLY_LAUNCH_RESULTS_PENDING_READER_PROBE_ADMISSION_OPEN",
     "P2": "ACTUAL_CUSTODIAN_COUNTS_NOT_AVAILABLE",
-    "main_package_freeze": "NOT_READY"
+    "main_package_freeze": "NOT_READY",
+    "route_launch_public_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json"
   },
   "estimated_charges": {
     "C_main_training_historical_usd": "29.39",
@@ -95,7 +101,10 @@
     "B_hybrid_planning_total_usd": "66.27",
     "final_expected_total_status": "PENDING_ACTUAL_PREREQUISITE_TIMING_AND_RECONCILED_RETAINED_CHARGES",
     "final_provider_invoice_obtained": false,
-    "B_completion_funded_under_60_on_this_basis": false
+    "B_completion_funded_under_60_on_this_basis": false,
+    "prior_hybrid_figures_status": "HISTORICAL_COMBINED_P1_PROPOSAL_REQUIRES_RECONCILIATION",
+    "current_expected_total_usd": null,
+    "route_only_inclusive_cap_inside_60_usd": "3.00"
   },
   "execution_owner": "Claude",
   "preparation_owner": "Codex amendments; Claude existing implementations and custody",
@@ -116,5 +125,20 @@
   },
   "launch_enabled": false,
   "hold_reason": "TECHNICAL_PREREQUISITES_AND_FIXED_BINDINGS_INCOMPLETE_NOT_OWNER_PERMISSION",
-  "further_owner_launch_approval_required": false
+  "further_owner_launch_approval_required": false,
+  "previous_combined_P1_count_proposal": {
+    "count_C": {
+      "existing_attempts": 2,
+      "future_jobs": 7,
+      "main_training_jobs": 4,
+      "all_attempted_or_proposed_slots": 9
+    },
+    "count_full_B_fallback": {
+      "existing_attempts": 2,
+      "future_jobs": 9,
+      "main_training_jobs": 6,
+      "all_attempted_or_proposed_slots": 11
+    }
+  },
+  "current_job_envelope_status": "NOT_RECONCILED"
 }

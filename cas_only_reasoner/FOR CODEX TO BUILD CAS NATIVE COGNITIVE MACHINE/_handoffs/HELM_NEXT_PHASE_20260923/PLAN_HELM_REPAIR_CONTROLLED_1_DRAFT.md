@@ -56,7 +56,7 @@ Use the common reviewed `predict_packet` bare-container adapter for historical O
 | Historical grader | Unchanged; earlier statistical rederivation preserved | Existing frozen hash and historical receipts in final manifest |
 | OFF preservation | Recorded OFF_PRESERVED_ON_T4 at research 41071a3f; earlier audit rederived receipt decision | Preserve evidence; rerun only if relevant source/contract changes |
 | ON reduced smoke | PASS of four frozen conditions at `1ddf6a1e`; 53/53 ablation keys, 8 main + 2 replay updates; provider cleanup verified 04:26–04:27 UTC | Closed for reduced-smoke scope; no full-runtime or larger-route claim |
-| Larger-question route | Shared OFF/ON adapter exists; source review CHANGES_REQUIRED; four T4 checks NOT_RUN in inspected source | Reviewed bounded script and all four AWS result receipts |
+| Larger-question route | Revised source approved by `fb6bc4dd`; route-only launch recorded at `fae817fe`, results pending | All four complete AWS check receipts, provenance and separate cleanup; see public route-launch review |
 | C admission reader | Proposed state-and-output policy supplied; `cb2df78a` has hold/receipt gates but still file-only logic; review `0391a307` finds approval-parser V1 | Claude conforms reader and status parser; pin full public panel and AWS positive/negative acceptance |
 | Corrected mechanism probe | v0.2 flaw confirmed; corrected validation OPEN | Reviewed revision, fixed thresholds/direction and public controls |
 | HSET-2 | A1 preserved, proposed A2 specified; Claude builder still requires conformance and actual counts | Reviewed builder/scorer, authorized custodian build, actual feasibility table and split checks |
@@ -65,7 +65,9 @@ Use the common reviewed `predict_packet` bare-container adapter for historical O
 
 The latest HSET-2 public builder report also identifies 24/40 old public DEV classes on the proposed TEST-side class pool. That is not evidence that selected protected questions were read. Claude must document whether those public classes entered training or a candidate bank and resolve any exposure prospectively, before the sealed build; do not silently redraw protected splits. No missing result is replaced with a throwaway-salt estimate. The actual pretraining table must print each cell/bar's informative errors, groups/components, effective floors and conditional power, along with every NOT_TESTABLE reason. Repaired-versus-unchanged realized discordant counts are only observable after model predictions; before training, label their conditional scenarios as such. The custodian keeps the protected inputs and publishes only permitted aggregates. This preparation does not appoint an outside custodian or open protected data.
 
-## 5. Complete proposed job and attempt list
+## 5. Proposed job list — current split requires reconciliation
+
+**Current reconciliation update:** Claude launched the route-only portion of P1 at 05:53:38 UTC. There are now three observed study attempts (two delivered instances). Reader/probe/admission checks remain open; current future/total counts and expected charges are unknown until their grouping is fixed. The tables and total9/11 arithmetic below preserve the earlier combined-P1 proposal only. They are not a current complete execution envelope. [Public launch review](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md) records the route's 130-minute outer deadline, $3 cap inside $60, pending results and missing ledger reconciliation. Main execution stays held.
 
 Every listed slot is one bounded attempt, no automatic retry. The existing smoke is distinguished from future work. Bundling several checks into a slot does not make unrun checks PASS.
 

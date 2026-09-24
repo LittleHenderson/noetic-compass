@@ -4,6 +4,8 @@ Status: **STANDING OWNER AUTHORITY; MAIN EXECUTION NOT_READY.** [Authority recor
 
 ## Current evidence
 
+**Current reconciliation update:** Claude launched the route-only portion of P1 at 05:53:38 UTC. There are now three observed study attempts (two delivered instances). Reader/probe/admission checks remain open; current future/total counts and expected charges are unknown until their grouping is fixed. The tables and total9/11 arithmetic below preserve the earlier combined-P1 proposal only. They are not a current complete execution envelope. [Public launch review](ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md) records the route's 130-minute outer deadline, $3 cap inside $60, pending results and missing ledger reconciliation. Main execution stays held.
+
 The completed smoke is now a **passed reduced-schedule prerequisite**. Public receipts at launch commit `1ddf6a1e4cdefee8aed30760904c7ec4cf49333e` support all four frozen conditions: launcher exit 0, completed delivery/cleanup, the exact reduced schedule, and completed worker ablation/phase-A checks with `claim_bearing=false`. All 53 ablation keys are present, including the five analogy-head keys. This was 8 main updates plus 2 replay steps; phase B was skipped as registered. It does not prove the full-training runtime or the larger-question route.
 
 [SMOKE_COMPLETION_RECONCILIATION.json](SMOKE_COMPLETION_RECONCILIATION.json) records the checks and their limits. The launcher's exit is supported by its public run log and return rule; this review did not re-run it or independently load the binary checkpoints. The producer reports collection of all 54 required objects. Protected archives were not opened.

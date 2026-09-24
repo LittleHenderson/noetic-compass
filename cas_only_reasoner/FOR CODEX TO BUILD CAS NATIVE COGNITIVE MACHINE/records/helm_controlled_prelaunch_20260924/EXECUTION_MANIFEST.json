@@ -881,14 +881,17 @@
     },
     {
       "id": "larger_question_gpu_route_both_arms",
-      "status": "NOT_READY_DEVICE_CHECKS_NOT_RUN_IN_REVIEWED_SNAPSHOTS",
+      "status": "LAUNCH_RECORDED_RESULT_PENDING",
       "receipt_sha256": null,
-      "before_new_main_training": true
+      "before_new_main_training": true,
+      "public_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json"
     },
     {
       "id": "route_acceptance_script_delta_review",
-      "status": "NOT_READY_CHANGES_REQUIRED",
-      "receipt_sha256": null
+      "status": "SOURCE_REVIEW_APPROVED_FOR_ROUTE_PREREQUISITE_WITH_RECORDED_LIMITATIONS",
+      "receipt_sha256": null,
+      "review_commit": "fb6bc4dddf07ed506bd11c254b5572e058a948b1",
+      "reader_hardening_static_review": "35cf5957b9104c4dc43d316774cd5806417df8a6"
     },
     {
       "id": "corrected_probe_admission",
@@ -1041,14 +1044,18 @@
     "fallback_maximum_total_attempts": 11,
     "base_future_jobs": 7,
     "fallback_maximum_future_jobs": 9,
-    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling."
+    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling.",
+    "status": "HISTORICAL_COMBINED_P1_PROPOSAL_NOT_CURRENT_RECONCILED_COUNTS",
+    "observed_study_attempts_now": 3,
+    "current_remaining_jobs": null
   },
   "subsequent_reviewed_snapshots": {
     "integration": "59d86443edc35bcf57368a99f602cd36530ca11d",
     "smoke_receipts": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
     "unchanged_reader_review": "0391a3073f02fb00819b0125a467aefad53ccf2e",
     "unchanged_reader_implementation": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
-    "hset2_builder": "853e645d7b5da5551257c4271e10c90b5fdb254e"
+    "hset2_builder": "853e645d7b5da5551257c4271e10c90b5fdb254e",
+    "route_launch_record": "fae817fe44501b1f8615653e69bc88053df6fbe8"
   },
   "owner_authorization": {
     "status": "STANDING_PROJECT_AUTHORIZATION",
@@ -1056,5 +1063,6 @@
     "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
     "further_owner_approval_required": false
   },
-  "new_launch_authorized_scope": "Standing owner authority; execution separately requires launch_enabled and all technical checks."
+  "new_launch_authorized_scope": "Standing owner authority; execution separately requires launch_enabled and all technical checks.",
+  "route_prerequisite_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json"
 }

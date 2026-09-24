@@ -1,6 +1,6 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T05:29:49.959321+00:00",
+  "validated_utc": "2026-09-24T06:12:18.408264+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
@@ -13,6 +13,7 @@
     "OWNER_STANDING_AUTHORIZATION_20260924.json",
     "PREPARATION_VALIDATION.json",
     "REPRODUCTION_POLICY.json",
+    "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
     "SMOKE_COMPLETION_RECONCILIATION.json",
     "SMOKE_PROVIDER_OBSERVATION.json",
     "STATISTICAL_POLICY.json"
@@ -20,7 +21,7 @@
   "launch_request_referenced_hashes_match": true,
   "main_plan_and_handoff_relative_links_exist": true,
   "git_diff_check": "PASS",
-  "slot_and_reservation_arithmetic": "PASS",
+  "slot_and_reservation_arithmetic": "PRIOR_COMBINED_P1_ARITHMETIC_PRESERVED_CURRENT_SCOPE_RECONCILIATION_OPEN",
   "1470_plus_16_plus_2_equals_1488": true,
   "eighteen_unique_checkpoint_reads": true,
   "ledger_before_and_after_sha256": "42eb28a1186deb026e0bd09a195f0787e5203428b10a989aa6adb3a3ef424e9f",
@@ -48,11 +49,32 @@
     "heartbeat_id": "helm-claude-codex-bus-check",
     "status": "ACTIVE",
     "interval_minutes": 10,
-    "scheduled_turn_completion_verified": false,
+    "scheduled_turn_completion_verified": true,
     "claude_watcher_interval_change": "CONFIRMED_BY_CLAUDE_IN_CLAUDE_0002",
     "no_duplicate_agent_started": true,
     "no_missing_tracked_files": true,
     "ledger_unchanged": true,
-    "round_trip": "claude-0001 -> codex-0001 -> claude-0002"
+    "round_trip": "claude-0001 -> codex-0001 -> claude-0002",
+    "observed_heartbeat_utc": [
+      "2026-09-24T05:37:27.390Z",
+      "2026-09-24T05:47:27.572Z",
+      "2026-09-24T05:57:28.724Z"
+    ]
+  },
+  "route_launch_review_update": {
+    "scope": "Static public source/document and metadata checks only",
+    "source_record_commit": "fae817fe44501b1f8615653e69bc88053df6fbe8",
+    "launcher_template_watcher_match_reviewed_blobs": true,
+    "reader_M1_fix_static_review": "CLOSED_IN_INSPECTED_SOURCE_NOT_EXECUTED",
+    "result_acceptance": "PENDING",
+    "cleanup_acceptance": "PENDING",
+    "job_counts": "CURRENT_COUNTS_NULL_EXCEPT_THREE_OBSERVED_ATTEMPTS_AND_REGISTERED_MAIN_COUNTS",
+    "prior_arithmetic_preserved_as_historical": true,
+    "policies_A1_and_18_checkpoint_protocol_unchanged": true,
+    "links_resolve": true,
+    "ledger_hash_unchanged": true,
+    "launch_disabled": true,
+    "new_cloud_jobs_by_codex": 0,
+    "checks_executed_by_codex": "JSON parse, SHA256, exact Git blobs, diff whitespace, relative links and assertions on public documents; no project test/model execution"
   }
 }
