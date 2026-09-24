@@ -80,3 +80,32 @@ protected name. 1,899 match nothing protected (generated test data and older pro
 7. **Future rule.** New protected sets (HSET-2 TEST, any new Q4 examination) are never committed to git. Only
    their digests are committed; the files live in the archive. The Q3 sets already in git stay there: removing
    them would mean rewriting published history, which is not proposed.
+
+## 5. Actions taken, 2026-09-24, under the owner's grant (`OWNER_AUTHORITY_AND_DECISIONS_20260924.md`)
+
+Every action here is reversible. Nothing was permanently deleted.
+
+- **Item 1 (done): the test-run leftovers were moved, not deleted.**
+  - 1,460 files, 675,442,860 bytes, 0 problems. They left the 5 test-run folders for
+    `D:/tksCAS-archive/quarantine_protected_duplicates_20260924/`, keeping their paths.
+  - Each copy's sha256 was checked three times, and each original was checked unchanged since the inventory, before
+    it was removed.
+  - Manifest: `MOVE_MANIFEST.json`, sha256 `27c8a0c4ac6b55b7276efa6f0fc8d59e9f7e2342ff6fcc1848a31176944b070e`. It
+    lists every "from" and "to", so each file can be put back.
+- **Item 2 (done): sealed and eval files removed from the builders' working copy.**
+  - `D:/tksCAS-worktrees/helm-builder` now excludes `*sealed*`, `*SEALED*` and `*_eval.jsonl`.
+  - Files on disk: 108 before, 0 after. Git still tracks all 125.
+- **Item 3 (deferred).** Codex's working copies wait for Codex (2026-09-28).
+- **Item 4.** No action.
+- **Item 5 (done): the second copy.**
+  - `hset1a_sealed_20260923/` and `hset1b_sealed_20260923/`, 5 files, went to
+    `s3://cas-harness-runpod-92754088/sealed-archive-backup/20260924/`.
+  - S3 verified the SHA-256 checksum of all 5 files, 5 of 5.
+  - Record: `D:/tksCAS-archive/protected_copy_inventory_20260924/s3_second_copy_20260924.json`.
+  - The HSET-1B salt now has a second copy.
+- **Item 6 (handed to the owner).** The commands to restrict the 4 sealed archive folders to `msi\wakil` and SYSTEM
+  were given to the owner in chat. Claude does not change security settings.
+- **Custody check of the new public fixtures** (HELM-LARGER-QUESTION-PATH-1, `785c9bd1`).
+  - 7 fixture shape classes (3 at 5 nodes, 4 at 6 nodes) were compared by canonical form against all 60 sealed
+    `TEST_NEW_5` classes. **0 match.**
+  - The 7 classes are also excluded from every HSET-2 TEST and WITHHELD draw.
