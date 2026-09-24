@@ -54,3 +54,42 @@ is not edited.
 
 **Attempt 2 is a new, recorded job.** It has a new stamp, a new admission and a new $15.00 ledger booking. It is not
 an automatic retry. It uses the same reviewed code, and the zone preference is unchanged (us-west-2a first).
+
+## Attempt 2 (2026-09-24, job `cas-meta2-tpntr-20260924033550-3df31d96-m-20260917`): PASSED
+
+**Run:**
+- Source `3df31d96`; admission `1fcc15e5`, whose inputs sha256 `57ac0be5...` equals attempt 1's.
+- Instance `i-039b7ae505c4c6245`, g7.2xlarge, us-west-2a.
+- CloudTrail: RunInstances 03:38:48Z, TerminateInstances 04:13:24Z, about 34.6 minutes.
+
+**Launcher:** exit 0; `result.json` status `AWS_CANDIDATE_FINISHED`; `completed_deliverable: true`.
+- Execution `FINISHED`.
+- Checkpoint and measurement collection `COMPLETE_VERIFIED`.
+- Compute cleanup `COMPLETE`, with no failures.
+- The evidence bucket is retained, as designed.
+- Launcher elapsed 2,431.2951856 s.
+
+**The four pass conditions frozen in `smoke/smoke.json`:**
+
+| Condition | Result |
+|---|---|
+| launcher exit code 0 | yes |
+| `completed_deliverable` true, cleanup complete, status `AWS_CANDIDATE_FINISHED` | yes |
+| `reduced_schedule.json` carries the frozen literal | yes: `reduced_schedule_literal` is byte-identical |
+| `worker_report.json`: `ablation_status` COMPLETE; `report_only_status` ablations and `checkpoint_check_phase_a` COMPLETE; `claim_bearing` false | yes |
+
+**What it exercised:**
+- `ablations.json` covers **53 of 53** state keys, each by exactly one component. `heads` owns 38, including the 5
+  `analogy_head.*` keys.
+- So the switch-ON container trained, saved, reloaded and ablated end to end on the real machine.
+- `degraded_checks: ["checkpoint_check_phase_b"]` is expected. Phase B is off in this reduced schedule, so it was
+  `SKIPPED`.
+
+**Money:**
+- The recorded on-demand rate ceiling is $2.52/h. Instance compute is about $1.45.
+- The runner's conservative bound (launcher elapsed x rate + $1.48 ancillary) is **$3.18**.
+- The ledger booking is $15.00, bookkeeping only.
+- Measured spend on the comparison so far: attempt 1 $0 compute; attempt 2 at most $3.18.
+
+**Status of the plan.** This is the enabled-path prerequisite result for HELM-REPAIR-CONTROLLED-1. **The main
+comparison stays HELD** until the amended launch request is approved (`OWNER_HEADSUP_PLAN_REVIEW_20260924.md`).
