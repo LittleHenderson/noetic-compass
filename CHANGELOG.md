@@ -1,5 +1,33 @@
 # tksCAS — Changelog
 
+## 2026-09-23/24 — Temporary takeover (Codex away until 2026-09-28): read-only switch, T4 check, owner decisions, Q4 line
+
+**Who does what.** The owner's takeover order: this Claude session coordinates and keeps the tests. Separate Claude
+sub-agents build and review. Every result is labelled `CLAUDE_BUILT_CLAUDE_CHECKED`. The running log is
+`_handoffs/HELM_NEXT_PHASE_20260923/CLAUDE_CONTINUATION_LOG.md` on `claude/helm-builder-continuation-20260923`.
+
+**Done:**
+- **The analogy switch is now read-only** (`ceab6c49`, builder). Two fresh reviews approved it. Its tests passed on
+  the AWS T4 (38 passed).
+- **Owner decisions recorded verbatim** (`8a150198`, `d6c9faa9`):
+  - keep the stopped g6e.xlarge;
+  - train the switch-ON model, up to $60;
+  - Stage 1 reach cells at 6 and 7 nodes;
+  - the rescorer refuses wrong-rule anchors.
+- **Prereg amendment A5** (`d7023288`): how trained switch-ON checkpoints will be read, frozen before any training.
+- **HSET-1B** (6- and 7-node reach cells): builder, spec and AWS job ready (`b5a4d525`, `5773b7ad`). Not launched.
+- **ON-training prep** (`2cd6aed9`, builder): the ablation table now covers the analogy head. Review pending.
+- **Q4-SDG-1 opened** as its own line (`0687e20a`, branch `claude/q4-sdg-feedback-20260923`), from the owner's
+  directive (`8eb798a5`). Three of its six first questions were answered from saved files at $0.
+
+**T4 check of the switch (acceptance item 1):**
+- **Attempt 1: INCOMPLETE.** Upper bound $0.5596; machine gone, no disk left.
+  - Measured: the old code matches the saved reference on 9 of 9 models. The new code with the switch OFF matches
+    the old code on 9 of 9. Parameter count 174303.
+  - The 4 probes crashed: their preregistration file was not packed beside them. That was Claude's bundling bug.
+  - Fixed in `5e1d1373`: the file is packed, and the launcher now refuses any missing side file.
+- **Attempt 2:** launched (`e5106ad8`). Both attempts together stay inside the $3.00 ceiling.
+
 ## 2026-09-23 — Checker v2 ACCEPTED; Stage 1 test cells built on AWS; Stage 1 reach cannot carry a claim at 5 nodes
 
 **Owner order.** "build the Stage 1 cells on aws". Claude is the evaluation designer, the sealed-test custodian and
