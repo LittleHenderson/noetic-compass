@@ -1679,3 +1679,96 @@ the revision script, the edit scripts, the mutation scripts and their temporary 
 `aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS call, no torch, no model, no
 `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript, no real
 `--admit`.
+
+## Conformance check of d5c8184a5e293316e12eb1506520a8f8649af362
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Checker: Claude, a fresh checker (not the builder), 2026-09-24. Scope: conformance
+of `d5c8184a` to rules R1-R9 and the Q5 list only, as decided by Codex at `c3a128ee` (`POLICY_DECISIONS_20260924.md`
+"Spending decisions: Q1-Q9", R3-F, "Envelope consequences"; `SPEND_STATIC_REVIEW_20260924.md` findings 1 and 2, both
+read in full). For each rule I built my own synthetic cases: at least one the rule must refuse and one it must allow.
+No search for new attack classes beyond the rules.
+
+**Verdict: CHANGES_REQUIRED, rule R3.** Every other rule and the Q5 list conform.
+
+In plain words: the gate does what the decided rules say, with one exception. The search for hidden launch attempts
+still skips a hidden attempt when its receipt is stored inside the folder of the receipt the row does list. R3 says a
+file counts as listed only by the listed receipt's own path AND sha256 (its fingerprint). This file has neither, and it
+carries a different job id. The gate then admits the next job. It must refuse.
+
+### What was run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; HEAD `d5c8184a` = fetched remote tip |
+| `python -B test_study_spend.py` (once) | **80 passed, 0 failed** |
+| Real read-only report (`python -B study_spend.py --no-write`) | **exit 0**; spent upper bound **$7.36** (S1 $1.60, S2 $3.29, P1a $0.55, PRIOR $1.92); remaining mandatory caps **$51.64**; plan C **$59.00**, headroom **$1.00**, `plan_C_is_final: false`; fallback B +$23.32 does not fit; nothing rejected, shared, unconfirmed, latched, wrong-identity or uncertain; no main start; money-gate previews ADMIT for P1b, P2, M1-M4, E1 and REFUSE `OVER_CEILING:$70.66` for M5, M6 |
+| Schema revision byte check (old `a98221dd` against new `d5c8184a` `STUDY_SLOTS.json`) | schema `0.3` to `0.4`; the S1-S2-P1a text span is byte-identical (4,126 bytes, same sha256 in both); P1b, P2, E1 identical; M1-M6 differ only in `preconditions_outside_money_gate` and `preconditions_note`; PRIOR added; `attempt_rows: []`; no status changed |
+| My synthetic cases (scratch script, temporary folders, the test file's fake git; not committed) | **32 cases: 30 right decisions, 2 wrong (both R3)** |
+
+### Rule by rule
+
+| Rule | Must refuse (my case, decision) | Must allow (my case, decision) | Conforms |
+|---|---|---|---|
+| R1 | M1 lists two finished attempts under one admission; `--admit P1b`: exit 1 `LIMIT_BREACH_LATCHED:M1`. Retry row M4.2 while the closed M4 admission has a launch in its window: exit 1 `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M4`. A `CLOSED_NO_LAUNCH` row edited back to PLANNED: exit 2 `HISTORY_VIOLATION` | M3 attempt 1 a proven capacity refusal; retry row M3.2 `--admit`: exit 0, $7.04 + $11.66 "replacement cap of attempt 2 of M3" + $39.98 = $58.68 | yes |
+| R2 | After P1b's admission: a new launch record appears on disk, then `--launch-check`: exit 1 `INPUT_CHANGED`. The program file changed: `PROGRAM_CHANGED`. A second launch check 10 s after the first: `ADMISSION_ALREADY_USED`. `--admit` while another process holds the lock in state DECIDING: `LOCK_HELD`, lock left in place | `--launch-check` 30 s after the admission: exit 0 `LAUNCH_ONCE`; the record carries `inventory_sha256`, `gate_version`, `cap_usd` 2.00, `remaining_mandatory_reserve_usd` 49.64, `cumulative_upper_bound_usd` 5.44, `main_starts` 0, source/bundle/worker/checker, `valid_until_utc` = admission + 300 s, `lock_nonce` | yes |
+| R3 | **See the finding below: two cases give exit 0 where the rule must refuse.** These refuse correctly: an unlisted attempt with another source prefix at HEAD only under the receipt home (exit 1); a watched record at the listed path at HEAD with another sha256 and instance id (exit 1). The builder's X1, X2, X3 tests pass | M1's listed receipt with three of its own provider records (same job id) in its folder: `--admit M2` exit 0 | **no** |
+| R4 | M1 training receipt with another bundle (`archive_sha256`), INVALID: exit 1 `WRONG_IDENTITY_BLOCKS_THE_STUDY:M1`, and its cleanup is still confirmed, it is counted $11.66 and counted as a main start. P1b watched receipt with another checker: exit 1, rejected and blocking | P1b with all four admitted hashes: `--admit P2` exit 0; `--admit P2` without `--checker`: exit 2 | yes |
+| R5 | P2 ran on a 200 GB disk (basis 100 GB), terminated, INVALID: `--admit M1` exit 1 `LIMIT_BREACH_LATCHED:P2` (`DISK_OVER_BASIS`) with cleanup confirmed. P1b's watcher recorded $2.50 on a $2.00 cap: `LIMIT_BREACH_LATCHED:P1b` (`MONEY_OVER_CAP:$2.60`) | M3 `CLOSED_NO_LAUNCH` with a pinned prelaunch-failure receipt and no RunInstances call: $0.00, no latch, `--admit P1b` exit 0 | yes (update limit: NOTE 1) |
+| R6 | M1 launched then failed (INVALID) and its repeat M1.2 finished; with a $5.00 prior row the spend is $31.04; starts = `M1, M1.2`; `--admit M2`: exit 1 `OWNER_STOP_TRIGGERED` | M1, M2, M3 all started, spend $40.42: `--admit M4` exit 0, total $57.08, owner stop "not triggered" (3 of 3 started; the $60 ceiling still applies) | yes |
+| R7 | Mandatory M2 cancelled: `--admit M3` exit 1 `COMPARISON_INCOMPLETE:M2`, reserve still $51.64. A cancelled mandatory retry row M1.2: `--admit M2` exit 1 `COMPARISON_INCOMPLETE:M1.2` | Optional M5 cancelled: it leaves fallback B, reserve unchanged $51.64, `--admit M2` exit 0 | yes |
+| R8 | S1's folder shows a later provider call (`provider_0026.json`): the rule fails, S1 `UNCONFIRMED`, `--admit P1b` exit 1 | S1 counted $1.60; the override reads ACCEPTED (Codex Q1) and `override_resolved_by` names `provider_0025.json` and its pin; the real report shows S1 $1.60 | yes |
+| R9 | A temporary copy of the real slots file with PRIOR removed, or with a PRIOR item set to $0.00: `SLOT_DEFINITIONS_CHANGED` (exit 2 path) | The real file: PRIOR $1.92 (items sum $1.9180), the frozen digest holds; the real report prints plan C $59.00 and headroom $1.00, not final | yes |
+| Q5 | Not a money-gate refusal by design: the list is declared and belongs to the separate technical admission (not built) | The real M1-M6 lists hold every Codex Q5 item; M2-M4 need M1's completed VALID reproduction verdict (the bare "M1 was admitted first" item is gone); M5/M6 need the valid-mismatch predicate, reviewed B admissions and funding within $60, "not a new owner approval token"; the note says both gates run and a status label proves nothing without its receipts. `--admit M1` on money alone prints the list | yes |
+
+### Finding (CHANGES_REQUIRED): R3, a hidden attempt inside the listed receipt's folder counts as listed
+
+- **Case 1.** M1 admitted 09:00. Attempt 1 (job `...-20260924090100-44444444-m-20260917`) ran 600 s and lost its
+  instance identity; its receipt is at `r/m1/attempt1/result.json`. Attempt 2 (job `...-20260924090300-...`) finished
+  clean at `r/m1/result.json`, and the row lists only attempt 2. `--admit M2`: **exit 0** (no cleanup flag on M1). The
+  rule requires a refusal: this file is not the listed receipt's path, not its sha256, and not even its job id.
+- **Case 2.** The same, with attempt 1's receipt renamed `r/m1/attempt1_result.json` beside the listed receipt:
+  **exit 0**. Must refuse.
+- **Control.** The same attempt one folder over (`r/m1_attempt1/result.json`) is found: M1 `UNCONFIRMED`, exit 1.
+- **Why.** The search does find the hidden job id. But `listed_files` (`study_spend.py:1500-1517`) counts as listed
+  EVERY training-named file under the listed receipt's folder at the listed commit, by its own path and sha256. The
+  folder listing is recursive (`tree_files` uses `git ls-tree -r`, line 628), and no check compares the file's job id
+  with the listed receipt's job id. `unlisted_attempts` then drops the hit (`(path, digest) in own`, lines 1575-1576).
+  My probe printed `counted as listed: ['r/m1/attempt1/result.json', 'r/m1/result.json']`.
+- **Smallest fix that meets the rule.** Count a sibling as listed only when (a) it is a `provider_NNNN.json` directly in
+  the listed receipt's folder (not in a subfolder), and (b) every job id it carries equals the job id of the listed
+  receipt as read from its pinned, hash-verified copy. Never count any other `result.json` or `*_result.json` as
+  listed unless it is the listed receipt itself (path AND sha256). S2's 26 provider records still pass (they carry S2's
+  own job id). Add cases 1 and 2 as negative tests.
+
+### Notes (not the reason for the verdict)
+
+1. **R5 "update" limit.** The latch fires for every limit this gate admits (money cap, instance seconds, deadline,
+   disk, machine) and for a second attempt under one admission. No update (optimizer-step) limit is admitted or read,
+   as the builder's own record says. It is empty in this gate, not wrong; Codex to say whether the technical
+   admission owns it.
+2. **A closed mandatory admission with no retry row frees its reserve.** Outside the literal rule text; recorded for
+   Codex, not required. With a $4.00 prior row, `--admit P1b` is refused at $61.08. After M1's unused admission is
+   closed `CLOSED_NO_LAUNCH` (no M1.2 appended yet), `--admit P1b` is admitted at $49.42: M1's $11.66 is no longer
+   reserved, and the comparison is not marked incomplete. The $60 ceiling itself still holds on every admission.
+
+### Claim states
+
+- **Real (measured here):** the 80/0 test run; the real report's numbers; the byte check of the schema revision; the
+  32 synthetic decisions (30 right, 2 wrong, both R3).
+- **Open:** the R3 fix and its two negative tests; Codex's review of v2; NOTES 1-2.
+- **Not licensed:** any real `--admit`; any claim that the unlisted-attempt search is fail-closed before the R3 fix.
+
+### Exposure
+
+Read: `POLICY_DECISIONS_20260924.md` and `SPEND_STATIC_REVIEW_20260924.md` at `c3a128ee` (`git show`, read-only);
+`study_spend.py`, `test_study_spend.py`, this file's v2 section, `STUDY_SLOTS.json` at `a98221dd` and `d5c8184a`
+(through a script that printed row ids, statuses, changed key names, the PRIOR row, `owner_stop`, and the M1/M2/M5
+precondition lists). The real report read receipts only through the program and printed its summary lines only; no
+receipt was opened directly, and no `ledger_before` / `ledger_after` field was printed or inspected. Ran: the test file
+once; the real report once with `--no-write` (no state file written, no lock taken, no fetch); a scratch script of
+synthetic cases (temporary folders, fake git; it read the real `STUDY_SLOTS.json` only to check Q5 and R9, never wrote
+it). Wrote: this section only. Scratch only (session scratch folder, not committed): the case script and this
+section's draft; two temporary copies of the slots file, deleted. The untracked
+`aws_probe_job/dry_run_machine_script.sh` is not mine and was left alone. No AWS call, no torch, no model, no
+`*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript, no real
+`--admit`, no `--launch-check` on the real slots file.
