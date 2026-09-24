@@ -1,9 +1,38 @@
 # HELM-REPAIR-CONTROLLED-1: named AWS job plan (DRAFT; for the owner's launch approval)
 
-**Status.** `DRAFT`. It is not approved and nothing in it is launched. It is completed and brought to the owner once
+**Status.** Was `DRAFT`; now `APPROVED_FOR_LAUNCH` (section 0). It is completed and brought to the owner once
 the preconditions below have passed. The owner's words (`OWNER_DIRECTION_20260924.md`, item 4): "Prepare the exact
 AWS job plan with source, data, starting weights, runs, update/time/dollar limits, stopping conditions, and cleanup.
 Bring that named plan to me for launch approval."
+
+## 0. LAUNCH APPROVAL (2026-09-24), verbatim, and how it is applied
+
+**The owner's words:** "YES to launching the side-by-side training of the repaired Helm. You approved up to $60. AND
+Run the access-restriction commands Claude handed to lock down the secret test files."
+
+**Applied as follows:**
+- **Status: `APPROVED_FOR_LAUNCH`, option C with the fallback to B (section 4a).**
+- **Ceiling: $60.00 of actual AWS spend** for the whole comparison: every smoke attempt and every training job. This
+  is the spending limit the owner set on 2026-09-23 ("Up to $60"), whose question stated that the launcher books a
+  fixed $15 per job.
+- **Ledger bookings are bookkeeping, not spend.** They can exceed $60 (attempt 1's $15 booking stands with $0
+  spent). The ceiling is enforced on measured spend.
+- **Before each job:** measured spend so far + $15.00 (the per-job bound) must be at most $60.00, or the run stops
+  and is reported.
+- **The owner's earlier stop stays:** if spend passes $30 before the third training job, stop and report.
+- **Job order,** one machine at a time, no automatic retries:
+  1. the switch-ON smoke (attempt 2);
+  2. repaired seeds 20260917, 20260918, 20260919;
+  3. the unchanged reproduction seed 20260917 of `20208c92`, once its admission writer is built and reviewed;
+  4. if it reads `DOES_NOT_REPRODUCE`, unchanged seeds 20260918 and 20260919.
+- **The smoke gates the repaired seeds.** If the smoke fails for any reason other than AWS capacity before launch,
+  no repaired seed runs.
+- **The two unmet preconditions gate the READING, not the compute.** Larger-question integration and evaluation
+  preparation must pass before any HSET-2 TEST number is read. Training runs first on the owner's approval.
+- **Zone.** The launcher's zone preference is unchanged, and attempt 2 retries in us-west-2a. If AWS refuses for
+  capacity again, the owner is asked once about the zone.
+- **Access commands.** Not run by Claude: changing folder permissions is a security setting, which Claude's rules
+  forbid even at the owner's request. The owner has the exact commands.
 
 ## 1. The question
 
