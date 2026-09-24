@@ -122,7 +122,7 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 
 **Resolution:** candidate count reconciled to C10 total/7 future, fallback12/9; reported canonical booking route gives $90/$120 rather than the former nontraining-booking proposal. The proposed $57.59 worst-case figure is not accepted: cost/input and executable admission gaps remain. Route completeness improves, but source and cleanup identity binding still fail the public review.
 
-**Changed files:** `R/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md/json`, linked plan, cost/manifest/launch records and this handoff. **Commit:** the follow-up content commit containing this section; exact delivery SHA goes in the bus DONE.
+**Changed files:** `R/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md/json`, linked plan, cost/manifest/launch records and this handoff. **Commit:** follow-up public review `cbafaab5f4115a0191e908b1bbfa1576509e09fd`; the next record-only commit pins this content and the schedule verification.
 
 **Checks actually performed:** four allowlisted public files at3083ea0d, source hashes, targeted reader delta, scalar counts and arithmetic. No project execution; Claude's six reported synthetic cases not independently verified. [Findings](../../records/helm_controlled_prelaunch_20260924/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md).
 

@@ -1,0 +1,120 @@
+{
+  "schema": "helm.existing-agent-bus-schedule-verification/1",
+  "observed_utc": "2026-09-24T06:26:03.102374+00:00",
+  "codex": {
+    "existing_identifier": "helm-claude-codex-bus-check",
+    "configured_status": "ACTIVE",
+    "before_minutes": 10,
+    "after_minutes": 10,
+    "settings_changed": false,
+    "config_sha256": "b56596e36038303c4025289f2c754b9bbf7b63e6726da3f6d744b29ba6a83df7",
+    "scheduler_record": {
+      "id": "helm-claude-codex-bus-check",
+      "status": "ACTIVE",
+      "kind": "heartbeat",
+      "rrule": "FREQ=MINUTELY;INTERVAL=10",
+      "target_thread_id": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+      "last_run_at": 1790229448110,
+      "next_run_at": 1790231219057,
+      "updated_at": 1790227652080,
+      "last_run_at_utc": "2026-09-24T05:57:28.110000+00:00",
+      "next_run_at_utc": "2026-09-24T06:26:59.057000+00:00",
+      "updated_at_utc": "2026-09-24T05:27:32.080000+00:00"
+    },
+    "actual_firings_seen_utc": [
+      "2026-09-24T05:37:27.390Z",
+      "2026-09-24T05:47:27.572Z",
+      "2026-09-24T05:57:28.724Z"
+    ],
+    "running_status": "This same handler is executing; subsequent stored due times advance while it is busy; no new handler started by this review",
+    "next_time_is_scheduler_snapshot_not_guaranteed_execution": true,
+    "matching_automation_count": 1
+  },
+  "claude": {
+    "public_settings_path": "D:\\tksCAS-agent-bus\\claude_watcher_settings.json",
+    "public_settings_sha256": "69e6630d0fe7a925d5a8ad306143b6901679278ada17b7d748ff6ed97da4634c",
+    "settings": {
+      "schema": "claude.bus-watcher-settings/0.1",
+      "observed_utc": "2026-09-24T06:21:28Z",
+      "current_watcher": {
+        "tool_task_id": "bnxn4cit2",
+        "os_processes": [
+          {
+            "pid": 26268,
+            "parent": 27856,
+            "started_utc": "2026-09-24T06:17:33Z"
+          },
+          {
+            "pid": 35828,
+            "parent": 26268,
+            "started_utc": "2026-09-24T06:17:34Z"
+          }
+        ],
+        "timeout_ms": 600000,
+        "fast_poll_seconds": 5,
+        "watches": [
+          "D:/tksCAS-agent-bus/codex_to_claude.jsonl (new lines)",
+          "D:/tksCAS-agent-bus/ESCALATIONS_FOR_OWNER.md (growth)"
+        ],
+        "cursor_file": "D:/tksCAS-agent-bus/.claude_seen_lines",
+        "cursor_value": 8,
+        "expected_expiry_utc": "2026-09-24T06:27:34Z",
+        "re_arm_rule": "re-armed only on this task's expiry notice, with the identical command; never a second copy"
+      },
+      "history": [
+        {
+          "tool_task_id": "b5932jcmz",
+          "timeout_ms": 1800000,
+          "end": "stopped explicitly (owner asked for 10 minutes)"
+        },
+        {
+          "tool_task_id": "boyf43m77",
+          "timeout_ms": 600000,
+          "end": "expired"
+        },
+        {
+          "tool_task_id": "bja5v37jf",
+          "timeout_ms": 600000,
+          "end": "expired"
+        },
+        {
+          "tool_task_id": "b8qrwuzai",
+          "timeout_ms": 600000,
+          "end": "expired"
+        },
+        {
+          "tool_task_id": "bofnx5zhc",
+          "timeout_ms": 600000,
+          "end": "expired"
+        },
+        {
+          "tool_task_id": "bh626b4qd",
+          "timeout_ms": 600000,
+          "end": "expired"
+        }
+      ],
+      "duplicates_or_overlap": "none: exactly one bash process pair whose command line names codex_to_claude.jsonl (checked with Win32_Process); no watcher that starts Codex",
+      "status": "VERIFIED RUNNING (process observed; events delivered)",
+      "limits": "runs only while this Claude desktop session is open and the laptop is awake; re-arming needs this session active to receive the expiry notice"
+    },
+    "before_minutes": 10,
+    "after_minutes": 10,
+    "original_superseded_minutes": 30,
+    "settings_changed": false,
+    "independent_process_observation": "One matching process tree26268->35828 at06:23UTC; command lines contain5-second poll and persistent cursor",
+    "received_message_delivery": "codex-0008 consumed at line8; settings reply claude-0007 at06:21:28UTC",
+    "next_rearm": "Expected06:27:34UTC, requires existing Claude session to process expiry; not yet observed"
+  },
+  "duplicates_or_overlapping_handlers_found": false,
+  "duplicate_detection_scope": "One matching Codex automation in stored files/database; one matching Claude process tree. No duplicate handlers created. Not a guarantee about future process behavior.",
+  "preserved": [
+    "Existing prompts/role/custody/AWS/$60/Q4 restrictions",
+    "Bus history, IDs and acknowledgments",
+    "Claude persisted line cursor",
+    "Codex current thread history and pending request state"
+  ],
+  "unfinished_request": "codex-0007 received; fixes queued until an existing Claude workflow frees memory per claude-0008; not completed or reissued",
+  "owner_escalations_required": false,
+  "settings_or_app_database_written": false,
+  "limits": "Local files require powered-on awake computer and running Codex app; Claude watcher/rearm also requires its existing desktop session active."
+}

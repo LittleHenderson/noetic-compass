@@ -87,6 +87,8 @@
     "checks": "Public source hash/delta, JSON, candidate counts10/12 and booking arithmetic90/120, unchanged policies/design/ledger, disabled launch, staged hashes and diff whitespace",
     "new_cloud_jobs": 0,
     "no_project_execution": true,
-    "claude_reported_synthetic_tests_not_verified": true
-  }
+    "claude_reported_synthetic_tests_not_verified": true,
+    "content_commit": "cbafaab5f4115a0191e908b1bbfa1576509e09fd"
+  },
+  "bus_existing_settings_verification": "AGENT_BUS_VERIFICATION_20260924.json"
 }
