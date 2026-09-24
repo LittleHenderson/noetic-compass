@@ -214,3 +214,110 @@ check them. Test: `test_missing_preconditions_print_not_assessed`.
 
 The finished job's `results/`, `launch_record.json`, `watch_record.json` and `dry_run_record.json` are unchanged.
 Only its reading, `RESULTS_READING.json`, was rewritten by the new reader. The meta1 ledger was not read or written.
+
+## Verification of d89721b4ddef5a3e8da1641b6e6f133c155aef6a
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Verifier: a fresh Claude verifier sub-agent. It did not build the fixes. This is
+**not** Codex's review and **not** owner acceptance.
+
+**Verdict: CHANGES_REQUIRED.**
+
+In short: four of the five MAJOR findings are fixed. MAJOR 4 is fixed only for the reviewer's exact case. Leave one
+field of a receipt spec empty, or pin a receipt with a stale hash, and the gate stops reading that receipt. It then
+counts only the cap and skips the cleanup check. Mark the slot INVALID and the gate admits the next machine. In one
+probe it admits at $57.08. Its own correct figure for the same state is $61.00, over the $60.00 ceiling, and a machine
+may still be running.
+
+### What was run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `python -B test_study_spend.py` | 40 passed, 0 failed |
+| `python -B test_read_results.py` | 29 passed, 0 failed |
+| `python -B study_spend.py --no-write` (real slots) | exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed |
+| State regenerated into a scratch file | byte-identical to the committed `STUDY_SPEND_STATE.json` |
+| `python -B read_results.py --no-write` (finished job `i-09e14d4afd0e0ebfa`) | exit 0; script verdict and job verdict INTEGRATION_CHECKS_PASS; ROUTE_ACCEPTED; JOB START 2026-09-24T05:55:04Z inside [05:53:38Z, 06:28:42Z] |
+| Reading regenerated into a scratch file | byte-identical to the committed `RESULTS_READING.json` |
+| Finished job's records | `results/`, `launch_record.json`, `watch_record.json` (17 tracked files): git diff since `b0fd06ff` is empty |
+| Probes P1-P7 | a scratch script built on the builder's own test helpers (`World`, `FakeGit`); results below; not committed |
+| Real `--admit` | **not run** (it writes the slot RUNNING) |
+
+### The five MAJOR findings
+
+| # | Finding | Verdict | Evidence |
+|---|---|---|---|
+| 1 | One receipt claimed by two slots | **FIXED** (residual MINOR A) | The reviewer's exact copy case: M1 and S2 both REJECTED, `--admit M2` exit 1 (test). Sharing is checked on receipt sha256 and path, job id, instance id, provider / launch / watch record sha256 and path, and the ids read from the files. At DONE the seed, the admitted source (and bundle) and "launch after admission" are checked. |
+| 2 | A capacity refusal counts as a started training job | **FIXED** (NOTE C) | Started = RUNNING, or DONE with an ACCEPTED `pointer_finished` receipt (lines 849-851). The reviewer's case: started R1, R2 only; `--admit R3` exit 1, OWNER_STOP_TRIGGERED "2 of 3". |
+| 3 | The owner's numbers and the slot list come from an editable file | **FIXED** | $60.00, $30.00, 3 and $0.10 are in the code. The definitions digest `82e80950...` matches the real file. Ceiling 90.00, S1 deleted, M4 flags, E1 cap, a seed change: each exit 2 (test). Forward-only moves are checked against every committed version. `--admit` is refused while the slots file or the program differs from HEAD. |
+| 4 | A breached receipt is undercounted after INVALID | **NOT FULLY FIXED**: new MAJOR B | The reviewer's case now counts $3.18 (test). Neighbouring paths still fail open (probes P1-P4). |
+| 5 | The reader never binds results to the launched machine | **FIXED** (residual MINOR D) | Watch outcome RESULTS_RECEIVED, files_downloaded > 0, watch job_status equal to `results/STATUS`, exactly one JOB START inside the launch window, and the `instance_id=` line when written. Each has a failing test that ends in exit 3. |
+
+### Remaining findings
+
+**B. MAJOR: the MAJOR 4 fix stops at an incomplete spec or a stale pin** (`study_spend.py` lines 568-582, 598-607,
+689-706).
+
+What happens:
+- `validate_pointer` and `validate_watched` return at `RECEIPT_SPEC_INCOMPLETE` before they read the receipt. So
+  there are no cost figures and no cleanup check.
+- `cleanup_unconfirmed` is computed only from a receipt that passed its hash check. The lenient read of a stale receipt
+  feeds the cost figures only.
+- The default is "cleanup confirmed". An INVALID slot does not block. So the gate reopens.
+
+Probes (each on the builder's own synthetic `World`):
+- **P1.** P1b ran 240 min with a watcher cost of $3.0719. `expected.bundle_sha256` left empty. Marked INVALID. Counted
+  $2.00, not $3.18. `--admit P2` exit 0, ADMIT.
+- **P2.** P1b's watch record says `terminated_confirmed: false`, `final_state: running`. Same empty field. INVALID. No
+  cleanup flag. `--admit P2` exit 0, ADMIT.
+- **P3.** The same unconfirmed cleanup with a complete spec, but a stale watch-record pin. INVALID. No cleanup flag.
+  `--admit P2` exit 0, ADMIT.
+- **P4.** M1 ran 20,000 s. Its cleanup says `complete: false`, `compute_identity_uncertain: true`, instance
+  `UNKNOWN`. `expected.instance_id` left empty, which is the natural entry when the identity is uncertain. INVALID.
+  Counted $11.66. No cleanup flag. `--admit P1b` exit 0, ADMIT, total $57.08.
+- **P5 (control).** P4 with a complete spec: counted $15.58; `--admit P1b` exit 1 with
+  `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` and `OVER_CEILING:$61.00 > $60.00`.
+
+Why it matters: P4 is the very case the fix exists for. The identity is uncertain, a machine may still exist, and the
+money is over the ceiling. One empty field turns the refusal into ADMIT. A committed DONE receipt is frozen by the
+history rule, so a spec committed incomplete can never be corrected. INVALID is then the only way on, and INVALID
+reopens admission.
+
+Fix: do the lenient read (cost figures, ids, cleanup) before any spec-completeness return, from whatever commit and
+path the spec gives. Compute cleanup from the lenient document too. Fail closed: when a REJECTED or INVALID slot names
+a receipt that cannot be read, or that does not positively show confirmed termination (and is not a proven capacity
+refusal), mark its cleanup UNCONFIRMED. Add P1-P4 as negative tests.
+
+**A. MINOR: a hand-written admission record is accepted** (`study_spend.py` lines 474-498). `bind_admission` checks
+only the slot name, the time, the source, the bundle, the seed and the arm. It does not check that `--admit` wrote the
+record, or that the RUNNING row was ever committed. Probe **P6**: M1 DONE with a hand-written admission dated
+2000-01-01 and no `--admit` run: ACCEPTED, counted $8.94. So "launch after admission" is only as strong as the runner's
+care. Fix: at DONE, require that a committed version of `STUDY_SLOTS.json` shows the slot RUNNING with the identical
+admission record.
+
+**C. NOTE: a training job that launched and then failed counts as started.** Probe **P7**: M1-M3 each launched and
+failed after 60 s (status `AWS_CANDIDATE_FAILED`, cleanup confirmed). All three count as started; spent $10.33; the
+$30.00 stop is then off for the rest of the study. This follows the stated rule. "Which job is the third seed" is
+already open question 3. Codex or the owner should rule on whether a failed seed counts.
+
+**D. MINOR: the reader's template exemption covers every future launch** (`read_results.py` lines 54 and 137-139). The
+exemption is keyed on template sha256 `dc05f4af...`. That is also the CURRENT `job.sh.template` (sha256 checked; it
+writes no `instance_id=` line). So any later launch from this folder is exempt, not only `i-09e14d4afd0e0ebfa`. The
+dispositions above say "any later template must write `instance_id=`", but no later template exists. The time window
+and the watch record still catch stale results, so this is not a wrongful accept today. Fix: key the exemption to the
+instance id `i-09e14d4afd0e0ebfa` as well as the template, or change the template (a job-code change that needs its
+own review) before the next launch.
+
+### Claim states
+
+- **Real (measured here):** the two test runs, the real report, the real reading, both byte-identical regenerations,
+  probes P1-P7.
+- **Open:** Codex's review of these fixes; open questions 1-5 in `STUDY_SLOTS.json` (FLAG_FOR_HUMAN_REVIEW).
+- **Not licensed:** any statement that the gate is ready to admit the next machine. It should not be used for a real
+  `--admit` until finding B is fixed and re-verified.
+
+### Exposure
+
+Read: the two programs, their tests, `STUDY_SLOTS.json`, this file, the T4 job's `watch.py`, `launch_record.json`,
+`watch_record.json`, the summary's key names, and the S2 receipt at `1ddf6a1e` (field names only). Wrote: this section
+only (the probe script and regenerated copies live in the verifier's scratch folder). No AWS call, no torch, no model,
+no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no S3, no meta1 ledger, no transcript.
