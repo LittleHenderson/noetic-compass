@@ -1,0 +1,26 @@
+E1b test run, 2026-09-24T15:15:44Z, laptop (no torch), python 3.14.0, job folder at integration HEAD f7a7280d plus the uncommitted e1b_job files
+command: python -B -m pytest test_e1b.py -v -p no:cacheprovider
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+rootdir: D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE
+configfile: pyproject.toml
+plugins: anyio-4.12.0, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 14 items
+
+test_e1b.py::test_acceptance_every_label_no_answer_digest_across_scenarios PASSED
+test_e1b.py::test_gate_open_scenario_masks_the_repaired_analogy_cell PASSED
+test_e1b.py::test_matched_start_failure_withholds_every_side_by_side_number PASSED
+test_e1b.py::test_item_fault_makes_the_run_invalid_and_its_message_stays_sealed PASSED
+test_e1b.py::test_two_worker_pool_gives_the_same_labels PASSED
+test_e1b.py::test_custody_collision_stops_before_any_prediction PASSED
+test_e1b.py::test_refusals PASSED
+test_e1b.py::test_custody_manifest_unit PASSED
+test_e1b.py::test_regression_rule_seven_losses_flagged_six_not PASSED
+test_e1b.py::test_prerequisite_readers_fail_closed PASSED
+test_e1b.py::test_stage_script_passes_bash_n PASSED
+test_e1b.py::test_launcher_limits_custody_and_gates PASSED
+test_e1b.py::test_args_file_expands_in_place PASSED
+test_e1b.py::test_no_torch_was_imported PASSED
+
+============================= 14 passed in 14.73s =============================

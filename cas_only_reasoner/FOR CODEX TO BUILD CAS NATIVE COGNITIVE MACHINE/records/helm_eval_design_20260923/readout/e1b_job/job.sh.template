@@ -1,0 +1,75 @@
+#!/bin/bash
+# E1b sealed HSET-2 TEST readout, one __INSTANCE_TYPE__ (T4). CLAUDE_BUILT_CLAUDE_CHECKED. See JOB_LIMITS.md.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "e1b hard limit" || true
+LOG=/var/log/e1b_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now ) &
+W=/root/e1b; OUT=$W/out; SO=$W/sealed_out; SI=$W/sealed_in
+mkdir -p $OUT $SO $SI; cd $W
+STATUS=setup; CHILD=
+up() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") %{http_code}\n" || true; }
+finish() {
+  if [ -n "$CHILD" ]; then kill -TERM "$CHILD" 2>/dev/null; sleep 5; fi
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"; echo "$STATUS" > $OUT/STATUS
+  rm -rf $SI || true
+  tar -czf $W/sealed_results.tar.gz -C $W sealed_out || true
+  up $W/sealed_results.tar.gz "__SEALED_RESULTS_URL__"
+  cp "$LOG" $OUT/job.log 2>/dev/null || true
+  tar -czf $W/results.tar.gz -C $W out || true
+  up $W/results.tar.gz "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+trap 'STATUS="TIMER_TERM during $STATUS"; exit 143' TERM
+( while true; do sleep 240; up "$LOG" "__PROGRESS_URL__"; done ) &
+STATUS=instance_id
+T=$(curl -sS --max-time 10 -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 300" http://169.254.169.254/latest/api/token)
+IID=$(curl -sS --max-time 10 -H "X-aws-ec2-metadata-token: $T" http://169.254.169.254/latest/meta-data/instance-id)
+[[ "$IID" =~ ^i-[0-9a-f]{8,17}$ ]] || { STATUS=instance_id_unreadable; exit 1; }
+echo "instance_id=$IID" > $OUT/env.txt
+export HOME=/root
+STATUS=tools
+curl -LsSf --max-time 300 "https://astral.sh/uv/__UV_VERSION__/install.sh" | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+[ "$(uv --version | cut -d' ' -f2)" = "__UV_VERSION__" ] || { STATUS=uv_version_mismatch; exit 1; }
+uv python install __PYTHON_VERSION__ && uv venv --python __PYTHON_VERSION__ $W/venv || { STATUS=python_failed; exit 1; }
+PY=$W/venv/bin/python
+[ "$($PY -c 'import platform; print(platform.python_version())')" = "__PYTHON_VERSION__" ] || { STATUS=python_version_mismatch; exit 1; }
+uv pip install --python $PY "torch==__TORCH_VERSION__" --index-url https://download.pytorch.org/whl/cu128 || { STATUS=torch_install_failed; exit 1; }
+uv pip install --python $PY "numpy==__NUMPY_VERSION__" || { STATUS=numpy_install_failed; exit 1; }
+STATUS=bundle
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg && rm -f bundle.tar.gz || { STATUS=bundle_extract_failed; exit 1; }
+$PY -B pkg/e1b/machine_checks.py anchors pkg > $OUT/anchors.log 2>&1 || { STATUS=anchor_mismatch; cat $OUT/anchors.log; exit 1; }
+WH=pkg/tree/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist
+uv pip install --python $PY --no-deps $WH/casformer_reference-0.1.0-py3-none-any.whl $WH/cas_neural_cjt-0.2.0-py3-none-any.whl || { STATUS=wheel_install_failed; exit 1; }
+{ $PY --version; uname -a; echo "nproc=$(nproc)"; free -m; nvidia-smi; echo "bundle_sha256=__BUNDLE_SHA256__"; uv pip freeze --python $PY; } >> $OUT/env.txt 2>&1
+STATUS=sealed_input
+curl -fsS --retry 3 --max-time 900 -o $SI/p2.tar.gz "__SEALED_INPUT_URL__" || { STATUS=sealed_download_failed; exit 1; }
+echo "__SEALED_SHA256__  $SI/p2.tar.gz" | sha256sum -c - > /dev/null 2>&1 || { STATUS=sealed_hash_mismatch; exit 1; }
+tar -xzf $SI/p2.tar.gz -C $SI sealed_out/HSET2_SEALED_TEST.json && rm -f $SI/p2.tar.gz || { STATUS=sealed_extract_failed; exit 1; }
+STATUS=smoke
+$PY -B pkg/e1b/machine_checks.py smoke "__TORCH_LOCAL__" | tee $OUT/smoke.log || { STATUS=SMOKE_FAILED; exit 0; }
+export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 CUBLAS_WORKSPACE_CONFIG=:4096:8 CAS_META2_RUN_TEACHING_CYCLE=1
+STATUS=readout
+S=$(date +%s)
+cd $W/pkg
+$PY -B e1b/e1b_machine.py --hset2-dir hset2code --package-root tree --sealed-file $SI/sealed_out/HSET2_SEALED_TEST.json \
+  --build-summary inputs/build_summary.json --public-cells inputs/public_cells.json --runs runs/runs.json \
+  --item2-reading inputs/item2_reading.json --matched-start inputs/matched_start.json \
+  --reproduction-reading inputs/reproduction_reading.json --args-file e1b/readout_args.json --out-public $OUT --out-sealed $SO \
+  --processes __PROCESSES__ --wall-seconds __WALL_SECONDS__ > $OUT/readout.log 2> $SO/readout_stderr.log &
+CHILD=$!
+wait $CHILD; CODE=$?
+CHILD=
+echo "readout exit=$CODE wall=$(( $(date +%s) - S ))s" | tee -a $OUT/readout.log
+grep -E "^(STAGE|REPAIR_IMPROVES_ANALOGY_6|READOUT_WRITTEN|E1B_)" $OUT/readout.log || true
+case "$CODE" in
+  0) STATUS=done ;; 2) STATUS=GPU_REQUIRED ;; 3) STATUS=CUSTODY_STOP ;; 4) STATUS=SETUP_REFUSED ;;
+  5) STATUS=PREFLIGHT_OVER_WALL_LIMIT ;; 6) STATUS=PACKET_REBUILD_MISMATCH ;; *) STATUS="READOUT_EXIT_$CODE" ;;
+esac
+exit 0
