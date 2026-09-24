@@ -1,0 +1,74 @@
+#!/bin/bash
+# HSET-2 sealed build. Claude (temporary builder; CLAUDE_BUILT_CLAUDE_CHECKED). Adapted from ../hset1b_aws_job.
+# Runs as root through cloud-init user-data on a throwaway CPU machine. NO credentials on this machine: it can fetch
+# ONE object and write THREE through time-limited links. It always ends by shutting down and is destroyed on shutdown.
+# Non-neural: no model, no GPU, no training. Nothing is written back to any repository.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "hset2 job hard limit" || true                 # kill switch 0: the OS's own power-off
+LOG=/var/log/hset_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/hset_job
+mkdir -p "$WORK/out" "$WORK/sealed_out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                   # kill switch 2: ANY exit uploads and shuts down
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  tar -czf "$WORK/sealed.tar.gz" -C "$WORK" sealed_out || true
+  upload "$WORK/sealed.tar.gz" "__SEALED_URL__"                            # sealed FIRST: the watcher stops at results
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+{ "$PY" --version; uname -a; nproc; free -m; grep -m1 "model name" /proc/cpuinfo; echo "bundle_sha256=__BUNDLE_SHA256__";
+  echo "claude_commit=__SOURCE_COMMIT__"; uv --version; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+
+export PYTHONDONTWRITEBYTECODE=1
+cd "$WORK/pkg"
+# every bundled file against anchors.json (raw sha256), before anything runs
+"$PY" -c "import hashlib,json,pathlib,sys; a=json.load(open('anchors.json')); bad=[n for n,r in a['files'].items() if hashlib.sha256(pathlib.Path(n).read_bytes()).hexdigest()!=r['sha256']]; print('bundled files checked:', len(a['files']), 'bad:', len(bad)); sys.exit(1 if bad else 0)" \
+  || { STATUS=anchor_mismatch; exit 1; }
+C=claude/records/helm_eval_design_20260923/hset2
+# STAGE 0 CHECK: the committed public stage-0 files are recomputed from the pinned fixture and must be identical
+STATUS=stage0_check
+"$PY" -B $C/hset2_stage0_public.py --check --fixture-file tree/research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json \
+  > "$WORK/out/stage0_check.log" 2>&1 || { STATUS=stage0_check_failed; tail -n 5 "$WORK/out/stage0_check.log"; exit 1; }
+# SMOKE: the builder end to end at tiny size with THROWAWAY salts (no salt file is read; no real TEST data); outputs never uploaded
+STATUS=smoke
+mkdir -p "$WORK/smoke/out" "$WORK/smoke/sealed_throwaway"
+"$PY" -B $C/hset2_build.py --package-root tree --throwaway-seed tiny-9 --limit-foci 2 --processes 2 \
+  --out-public "$WORK/smoke/out" --out-sealed "$WORK/smoke/sealed_throwaway" > "$WORK/out/smoke_build.log" 2>&1 \
+  || { STATUS=smoke_build_failed; tail -n 15 "$WORK/out/smoke_build.log"; exit 1; }
+echo "SMOKE PASSED $(date -u +%FT%TZ)"
+
+STATUS=build
+START=$(date +%s)
+"$PY" -B $C/hset2_build.py --package-root tree --salt-file-hset1a sealed/salt_hset1a.hex --salt-file-hset2 sealed/salt_hset2.hex \
+  --expect-test5-shapes-digest __EXPECT_TEST5__ --out-public "$WORK/out" --out-sealed "$WORK/sealed_out" --processes "$(nproc)" \
+  > "$WORK/out/build.log" 2>&1
+BUILD=$?
+echo "build exit=$BUILD wall=$(( $(date +%s) - START ))s"
+tail -n 40 "$WORK/out/build.log"
+echo "build=$BUILD" > "$WORK/out/EXIT_CODES"
+if [ "$BUILD" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures build=$BUILD"; fi
+exit 0
