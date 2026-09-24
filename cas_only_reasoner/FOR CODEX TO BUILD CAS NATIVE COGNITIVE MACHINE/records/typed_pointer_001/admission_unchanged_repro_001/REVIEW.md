@@ -284,3 +284,149 @@ Files and objects outside this working copy that I opened or touched in this rev
 
 Not opened: any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, S3 or AWS, the budget ledger,
 Claude transcripts.
+
+## Verification of cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. A fresh Claude verifier. Not an owner signature.
+
+**Checked:** the diff from `2c464d2fad88922b4f44c3677265bde303258e4b` to
+`cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82`, against the two blockers and two majors of the first review.
+
+**Verdict: `CHANGES_REQUIRED`.**
+
+In plain words: the code changes are correct. The two majors are fixed. The two blockers are now gated correctly,
+but they are not closed. The plan is still on hold, and the reproduction rule is still not fixed. So the writer must
+not run `--write`, and nothing may launch. That is the builder's own position too.
+
+### V.1 Each finding
+
+| # | Finding | Result of this check |
+|---|---|---|
+| 1 | BLOCKER: pinned to a plan that is now held | **Gate FIXED and correct. Blocker still OPEN.** |
+| 2 | BLOCKER: the file-hash test cannot pass | **Gate correct. Rule not chosen by the builder (right). Blocker still OPEN.** |
+| 3 | MAJOR: copied records read `REPRODUCES` | **FIXED, complete.** |
+| 4 | MAJOR: partial record sets give a verdict | **FIXED, complete.** |
+
+**Finding 1.** The gate fetches the plan branch with an explicit refspec. It reads the fetched tip and the local
+tip. Each must carry blob `67163714`, and the pinned commit must be in the branch. It runs before the launcher is
+imported, in every mode, and again (without a fetch) just before the rename in `--write`. Real result today: both tips
+are `6816b52e`, blob `3172a221`, status `LAUNCH_HELD_PENDING_AMENDMENTS`. The gate stops with `PLAN_MOVED_OR_HELD`.
+That is correct. The finding stays open until the amended plan is approved and re-pinned. `BUILDER_REPORT.md`
+section 5 is updated; its times match git (`2c464d2f` at 21:00:14, `7b6e25f8` at 21:04:56, both -0700).
+
+**Finding 2.** `REPRODUCTION_POLICY` ships as `NOT_FIXED_PENDING_CODEX_AMENDMENT_ITEM_2`. The writer and the reader
+both stop on it first. The builder did not pick a new rule. That is right: the rule is the owner's, via Codex. Under
+the rule as written, `REPRODUCES` is now unreachable (an equal hash under the new run id is a stop). The underlying
+fact holds: `pointer_learner.py` at `20208c92` lists `run_identity` and `elapsed_seconds` in `METADATA_FIELDS`
+(lines 186-187) and puts them in the saved `metadata` (line 2056).
+
+**Finding 3.** Every part of the reviewer's fix is in `read_reproduction.bound_records` and `new_reading`:
+- the inventory `job` must be the frozen job;
+- both checkpoint run ids must be the frozen job (a missing one also stops);
+- the manifest and checkpoint-pin bytes must be the ones the job's own inventory collected (beyond the fix asked);
+- Helm 2.0's file hash under the new run id is a stop, not `REPRODUCES`.
+
+The reviewer's exact probe now stops. The real Helm 2.0 records, read as if they were a new run, stop. The old
+impossible positive test is gone. The same binding runs on the reference side and passes on the real records at
+`c8d5c430`.
+
+**Finding 4.** All three records are required. Each needs exactly one well-formed `final.pt` row (64-hex sha256,
+positive whole-number bytes). All three must agree on sha256 and bytes. Otherwise `INCOMPLETE`. The weights file is a
+cross-check only. The four reviewer probes each read `INCOMPLETE`. My own extra probes (synthetic, pure Python):
+
+| Probe | Result |
+|---|---|
+| inventory has two `final.pt` rows | `INCOMPLETE` |
+| inventory `files` is not a list | `INCOMPLETE` |
+| all three records absent | `INCOMPLETE` |
+| bytes as a float, or as `true` | `INCOMPLETE` |
+| only the inventory states Helm 2.0's hash | `INCOMPLETE` (records disagree) |
+| checkpoint pin without `metadata` | stop (`CHECKPOINT_IS_FOR_ANOTHER_JOB:(None, None)`) |
+| not delivered, Helm 2.0 inventory copied in | `INCOMPLETE` |
+
+None reads `REPRODUCES` or `DOES_NOT_REPRODUCE`.
+
+### V.2 New findings from this verification
+
+**V1 - MINOR - the status-line check is a deny-list and ignores order** (`repro_common.py`, lines 119-122 and
+342-345). `plan_status_approved` accepts any status line that has `APPROVED_FOR_LAUNCH` somewhere and no backticked
+word containing HELD, HOLD, PENDING, WITHDRAWN, REVOKED, SUSPENDED or SUPERSEDED. Real probes of the function:
+
+- "Was `APPROVED_FOR_LAUNCH`; now `DRAFT` again." -> accepted.
+- "Was `APPROVED_FOR_LAUNCH`; now `PAUSED`." -> accepted.
+- "`APPROVED_FOR_LAUNCH` is cancelled; see `CANCELLED`." -> accepted.
+- "`APPROVED_FOR_LAUNCH` (launch held by the owner, see the note)." -> accepted (the word "held" is not backticked).
+
+Today this does no harm: the blob pin stops any edit to the plan. It matters at the re-pin, which is the very next
+step. Then the status check is the only program check that the new blob is approved.
+**Fix:** use an allow-list. For example: the last backticked word on the status line must be `APPROVED_FOR_LAUNCH`;
+any other backticked word must be in a short known list (today only `DRAFT`, in the "Was ... now" form); any prose
+word such as held, hold, paused, cancel, withdraw, revoke, suspend or supersede, in any case, is a refusal. Better,
+following the owner's rule that approval be executable: gate on an owner-signed phase-approval record, not on plan
+prose.
+
+**V2 - NOTE - a misleading stop name.** A checkpoint pin with no `metadata` stops as
+`CHECKPOINT_IS_FOR_ANOTHER_JOB:(None, None)`. It fails closed, and section 3 says a missing run id stops. A name such
+as `CHECKPOINT_RUN_ID_MISSING` would be clearer.
+
+**V3 - NOTE - any later edit to the plan file stops `--check`.** The gate compares the whole plan blob. If the
+amended plan is later edited for any reason (for example a results note), `--check` stops until a reviewed re-pin.
+That fails closed and is intended. The amendment should keep later notes out of the plan file.
+
+**V4 - NOTE - conforming the reader means more than `READER_RULE`.** The contradiction stop (`new_reading`, line 256)
+and `decide()` both assume file identity. When the policy is fixed, the builder must revisit both, not only the
+constant.
+
+**V5 - NOTE - where the first `--dry-run` runs.** `--dry-run` and `--write` import the launcher, read about 290 git
+blobs and hash 18 checkpoints. The owner's rules forbid launcher execution on this laptop. Where that first real run
+happens should be settled before the re-pinned revision is reviewed.
+
+### V.3 Checks run (real)
+
+- Tests, once: `python -B test_unchanged_repro.py -v` from the worktree root. **48 of 48 pass**, none skipped,
+  5.383 s.
+- A live probe from a scratch script, with `load_launcher` replaced by a stub that stops:
+  - `--dry-run` stopped with `PLAN_MOVED_OR_HELD` (both tips `6816b52e`, blob `3172a221`,
+    `LAUNCH_HELD_PENDING_AMENDMENTS`);
+  - `--check` stopped with `NOTHING_FROZEN_RUN_WRITE_FIRST`;
+  - `read_reproduction.py --receipt-commit 000...0` stopped with
+    `REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN`;
+  - neither the launcher nor torch was imported.
+- `git ls-remote origin`: the plan branch is at `6816b52e`; this branch was at `cb2df78a` before this commit.
+- `git diff --name-status 20208c92 cb2df78a`: 8 files, all added. No file that exists at `20208c92` was edited.
+- Reference hash: commit `c8d5c430` added the three records (status `A`) under
+  `records/typed_pointer_001/receipt_20260917/`. It is an ancestor of `claude/helm-builder-continuation-20260923`
+  (`cc68d8b3`). The real-record test reads `c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb`,
+  3,670,007 bytes, from all 3 records, bound to Helm 2.0's job.
+- Launcher `validate_owner` (lines 481-492) reads only schema, candidate, quote, job and bounds. The new owner-record
+  keys (`reproduction_policy`, `sixty_dollar_readings`) do not break it. Read statically; not run.
+
+**Not run:** `--write`, the launcher, any package build, any AWS call. Nothing launched. No money spent.
+
+**The owner's second instruction** ("Run the access-restriction commands..."): not run. It is not in this task.
+Changing folder permissions is a security setting that Claude does not change. The owner holds the commands.
+
+### V.4 What must happen before `APPROVE_FOR_WRITE_AND_LAUNCH`
+
+1. Codex's amended plan, approved by the owner in an executable form.
+2. Re-pin `PLAN_COMMIT`, `PLAN_BLOB` and `PLAN_SHA256`; re-check every quote.
+3. The reproduction rule fixed by that plan. The reader conformed (`READER_RULE`, `decide()`, the contradiction stop),
+   and `REPRODUCTION_POLICY` recorded.
+4. V1 fixed, or explicitly accepted by the owner.
+5. Fallback B admissions, if B is kept (finding 6).
+6. A fresh review of that revision. Then `--dry-run` where the owner's compute rules allow.
+
+### V.5 EXPOSURE (this verification)
+
+- Two scratch scripts I wrote in the session scratchpad (`verify_probe.py`, `verify_reader_probe.py`), and this
+  section's draft there (`verification_section.md`).
+- Git objects read from the shared repository: the plan file at `197caa32` and `6816b52e` (blob ids and status
+  lines); the log `197caa32..6816b52e`; the names added by `c8d5c430`; through the tests, the three Helm 2.0
+  `final.pt` JSON records at `c8d5c430` and the package and admission blobs at `3da10d84`.
+- Network: `git ls-remote origin` for two branch names; one `git fetch` of the plan branch with the explicit refspec,
+  made by the gate during the probe (the tracking ref stayed at `6816b52e`); the `git push` of this commit.
+- The tool harness may save long outputs under `C:/Users/wakil/.claude/projects/.../tool-results/`. I did not open
+  them.
+
+Not opened: any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, S3 or AWS, the meta1 ledger
+(not even checked for existence: both probes stopped before that step), the `vision-next` worktree, Claude transcripts.
