@@ -277,3 +277,79 @@ It is labelled **`FRESH_ON_REPORT_ONLY`**, with its probe verdict and summary re
 - **Clarification, before any run.** When stage 0 stops the job (A4.1), the later invocations do not exist by
   design. The verdict is then the stage-0 verdict (`SWITCH_TESTS_FAILED` or `SWITCH_NOT_READ_ONLY`), not
   `INCOMPLETE`. `INCOMPLETE` applies when stage 0 passed and a later invocation is missing or failed.
+
+## Amendment A5 (2026-09-23): reading rules for trained switch-ON checkpoints (item 2). Frozen before any ON training exists.
+
+**Authority.**
+- The owner approved training the switch-ON model, with a ceiling of up to $60. See
+  `_handoffs/HELM_NEXT_PHASE_20260923/OWNER_DECISIONS_TAKEOVER_20260923.md` and its addendum.
+- The training runs on the Helm 2.0 path: `typed_pointer_launch.py` into `cncm.typed_pointer_worker`, on
+  g7.2xlarge (NVIDIA RTX PRO 4500, torch 2.11.0+cu128).
+- Seeds 20260917, 20260918 and 20260919, one job at a time.
+- Every outcome is labelled `CLAUDE_BUILT_CLAUDE_CHECKED`.
+
+### A5.1 Which checkpoints are read
+
+For each seed, the trained ON checkpoints whose analogy numbers may be read are exactly the ones the frozen gate
+reading prints counts for:
+- `pass_01.pt`;
+- `evidence/main_checkpoint_0294.pt`, `_0588`, `_0882`, `_1176`;
+- `final.pt`.
+
+That is 6 per seed and 18 in total. **Probe v0.2 runs on each before any analogy number from it is opened.** The ON
+`initial.pt` gets `FRESH_ON_REPORT_ONLY`, as in A4.4.
+
+### A5.2 The item-2 outcome, emitted by a program
+
+- **`ITEM2_PASS`** iff every listed checkpoint reads `PRESENT_GRAPH_AND_DOMAIN`.
+- **`ITEM2_FAIL:<list>`** otherwise.
+- **`ITEM2_INVALID`** if any reading is `INVALID_NONDETERMINISTIC`.
+- **A checkpoint that does not read `PRESENT_GRAPH_AND_DOMAIN`:** its analogy numbers are withheld as
+  `ANALOGY_NOT_READ_WIRING_ABSENT`. Its non-analogy numbers are still read, as regressions.
+
+### A5.3 The historical gate on the ON arm
+
+- **Precondition.** The frozen `evaluate_gates.py` is run unchanged on the ON receipts only under `ITEM2_PASS`.
+  Otherwise the reading is `G_LEARN_ON_NOT_READ`.
+- **Status.** When computed, the frozen label is recorded exactly as a historical-rule reading of the ON arm. It is
+  diagnostic. It licenses no structural-analogy transfer and no version promotion.
+- **Printed beside it, report only:**
+  - per seed: b, c, exact p, improved kinds and improved worlds;
+  - before and after on the 5 analogy questions, next to the answers of the zero-learning rule LB18;
+  - the 11/18, 16/18 and 18/18 zero-learning floors.
+
+  None of these is a veto, and none is authoritative.
+- **The `claim_bearing=true` flag.** The worker writes it on every full 10-pass run. It is a flag of the historical
+  protocol, not a claim under design v0.2.
+
+### A5.4 No analogy-benefit claim from this job
+
+**No claim is made from this job that the repair improves analogy.** The 18 frozen questions cannot carry one: at
+most 5 analogy questions can be gained, so the smallest possible p is 1/32 = 0.03125, which is above 1/100.
+
+Any benefit claim needs a Stage 2 analogy cell, scored by checker v2, with section 1.3 signed and at least 10
+clusters. Its rule and power must be frozen first.
+
+### A5.5 A matched start is required before any comparison with Helm 2.0
+
+**The check, on AWS.** It uses `torch.equal` on the saved tensors. For each seed:
+- the 48 tensors the ON `initial.pt` shares with Helm 2.0 must equal Helm 2.0's committed
+  `receipt_<seed>/checkpoints/initial.pt` bit for bit;
+- the 5 `analogy_head` tensors must be identical across the three seeds, and equal to a fresh build with head seed
+  20260923;
+- the parameter count must be 203,424;
+- every one of the 1,470 main update rows must report 53 gradient parameters.
+
+**If it fails,** the reading is `MATCHED_START_NOT_REPRODUCED`, and no ON number is compared with Helm 2.0's.
+
+**Disclosed.** All three seeds share one head start (seed 20260923), so the head's starting-weight variation is
+never sampled. The machine type is fixed by the code; no substitute is allowed.
+
+### A5.6 Known differences from Helm 2.0, recorded before the run
+
+1. The worker's ablation row "heads" now also covers `analogy_head.*`, so the heads-ablation number is not like for
+   like with Helm 2.0's.
+2. Gradient clipping uses one global norm across all parameters, so the new head's gradients change the clipping
+   scale for the shared tensors too. Differences on non-analogy kinds are not caused by routing alone.
+3. `pointer_learner.py:811` zeroes a copy (`zeros_(declaration_table[padding, :])`). It is kept as it is, so the
+   start stays matched.
