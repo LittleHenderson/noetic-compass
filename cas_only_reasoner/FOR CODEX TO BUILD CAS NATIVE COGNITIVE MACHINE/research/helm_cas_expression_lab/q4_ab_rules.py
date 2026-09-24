@@ -16,8 +16,8 @@ import json
 from math import comb
 
 SCHEMA = "helm-cas-expression-lab.q4-sdg-ab/0.2"
-SPEC_REVISION = ("v0.2 revision 3 (coordinator decisions of 2026-09-24 after the verification of 294471a5; "
-                 "PROPOSED_FOR_REVIEW)")
+SPEC_REVISION = ("v0.2 revision 3a (coordinator decisions of 2026-09-24 after the verification of 294471a5; W1 of "
+                 "the verification of 793a4f68; coordinator confirmations of 2026-09-24; PROPOSED_FOR_REVIEW)")
 EXPERIMENT = "Q4-SDG-1"
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
 
@@ -114,7 +114,10 @@ LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_
 FIELD_LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS")     # exactly the levels where T1 or T2V passes
 ARCHITECTURE_REASONS = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS",
                         "STRUCTURE_OR_OUTPUT_VARIATION", "SEED_DEPENDENT", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID",
-                        "TOO_FEW_VALID_RUNS")
+                        "TOO_FEW_VALID_RUNS", "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING")
+# A run whose FINAL checkpoint file exists but gives no FINAL reading (a missing run manifest, a wrong identity, or any
+# recomputation failure in that file) cannot be counted as NONE, so it withholds JUSTIFIED (verification of 793a4f68,
+# W1). It only makes JUSTIFIED rarer: NOT_JUSTIFIED and the calibration guard are unchanged.
 INFORMATION_LABELS = ("FIELDS_NOT_READ_IN_ANY_RUN",)               # decision 4: information only, justifies nothing
 LESSON_OUTCOMES = ("HELP", "HURT", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
 OVERALL_LESSON_OUTCOMES = ("HELP", "HURT", "MIXED", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
@@ -210,11 +213,19 @@ def frozen_record() -> dict:
                                        "may vary. The checkpoint-0 distinct-output count of every run is reported",
                   "ARM": "SHOWS_INPUT_USE iff FULL in at least %d valid runs; SHOWS_NO_INPUT_USE iff NONE in at "
                          "least %d valid runs and every run of the arm that has a FINAL reading (valid or not) is "
-                         "NONE; INPUT_USE_UNDETERMINED otherwise" % (ARM_MIN_SEEDS, ARM_MIN_VALID_NONE_RUNS),
+                         "NONE; INPUT_USE_UNDETERMINED otherwise. A run with no FINAL reading is left out of the arm "
+                         "label; if its FINAL checkpoint file exists, the architecture rule withholds JUSTIFIED "
+                         "(FINAL_CHECKPOINT_PRESENT_WITHOUT_READING)" % (ARM_MIN_SEEDS, ARM_MIN_VALID_NONE_RUNS),
                   "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration guard silent, every run that has a FINAL reading "
-                                                   "(valid or not) is NONE, and each arm has at least %d valid NONE "
-                                                   "runs (coordinator decision 3 of 2026-09-24)"
-                                                   % ARM_MIN_VALID_NONE_RUNS,
+                                                   "(valid or not) is NONE, each arm has at least %d valid NONE "
+                                                   "runs (coordinator decision 3 of 2026-09-24), and no run has a "
+                                                   "FINAL checkpoint file without a FINAL reading (verification of "
+                                                   "793a4f68, W1)" % ARM_MIN_VALID_NONE_RUNS,
+                  "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING": "a run's FINAL checkpoint file exists but gives no FINAL "
+                                                              "reading (missing run manifest, wrong identity, or any "
+                                                              "recomputation failure in that file, including an "
+                                                              "exact-flag check on any panel). Withholds JUSTIFIED "
+                                                              "only; never changes NOT_JUSTIFIED or the guard",
                   "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE": "calibration guard silent and some arm "
                                                                          "SHOWS_INPUT_USE; teaching fit is not tested",
                   "ARCHITECTURE_DECISION_INCOMPLETE": "otherwise, with every reason that applies from %s"
@@ -222,7 +233,9 @@ def frozen_record() -> dict:
                   "FIELDS_NOT_READ_IN_ANY_RUN": "information only; justifies nothing by itself: emitted iff at least "
                                                 "one run has a FINAL reading and no run passes T1 or T2V at the FINAL "
                                                 "checkpoint (valid or not); names the target for a later, separately "
-                                                "approved design discussion (coordinator decision 4 of 2026-09-24)",
+                                                "approved design discussion (coordinator decision 4 of 2026-09-24). "
+                                                "Scope: runs with a FINAL reading only; a run whose FINAL checkpoint "
+                                                "file gives no reading is listed beside it, not covered by it",
                   "B_BEATS_A": "per seed pair, exact canonical tree, paired rows: b = B exact and A not, c = A exact "
                                "and B not; b > c and P(X >= b | b+c, 1/2) <= %s" % PAIR_ALPHA,
                   "LESSONS_HELP": "B_BEATS_A in all 3 seed pairs, per panel",
@@ -320,7 +333,8 @@ def calibration_guard_fires(checkpoint_0_tests) -> bool:
 
 def arm_label(arm: str, finals) -> str:
     """finals: (FINAL level, run is valid) of every run of this arm that HAS a FINAL reading, valid or not.
-    Runs with no FINAL reading (missing, or an unreadable final checkpoint) are left out."""
+    Runs with no FINAL reading (missing, or an unreadable final checkpoint) are left out here; an unreadable final
+    checkpoint FILE withholds JUSTIFIED in architecture_decision instead (verification of 793a4f68, W1)."""
     finals = [(level, bool(valid)) for level, valid in finals]
     valid_levels = [level for level, valid in finals if valid]
     if valid_levels.count("FULL") >= ARM_MIN_SEEDS:
@@ -331,15 +345,21 @@ def arm_label(arm: str, finals) -> str:
     return "ARM_%s_INPUT_USE_UNDETERMINED" % arm
 
 
-def architecture_decision(finals_by_arm: dict, guard_fires: bool):
-    """(label, reasons). finals_by_arm: arm -> (FINAL level, valid) of every run of that arm with a FINAL reading."""
-    if guard_fires:
+def architecture_decision(finals_by_arm: dict, guard_fires: bool, final_checkpoints_without_reading: int):
+    """(label, reasons). finals_by_arm: arm -> (FINAL level, valid) of every run of that arm with a FINAL reading.
+    final_checkpoints_without_reading: the number of runs whose FINAL checkpoint file exists but gave no FINAL reading
+    (verification of 793a4f68, W1). Any such run withholds JUSTIFIED with the reason
+    FINAL_CHECKPOINT_PRESENT_WITHOUT_READING; it changes nothing else (only JUSTIFIED becomes rarer)."""
+    unread = final_checkpoints_without_reading
+    if type(unread) is not int or unread < 0:
+        raise ValueError("INVALID_FINAL_CHECKPOINTS_WITHOUT_READING")
+    if guard_fires:                                   # coordinator confirmation (d): the guard's reason stays alone
         return "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
     finals = {arm: [(level, bool(valid)) for level, valid in finals_by_arm.get(arm, ())] for arm in ARMS}
     labels = {arm: arm_label(arm, finals[arm]) for arm in ARMS}
     if any(label.endswith("_SHOWS_INPUT_USE") for label in labels.values()):
         return "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE", []
-    if all(label.endswith("_SHOWS_NO_INPUT_USE") for label in labels.values()):
+    if all(label.endswith("_SHOWS_NO_INPUT_USE") for label in labels.values()) and not unread:
         return "ARCHITECTURE_CHANGE_JUSTIFIED", []
     present = [level for arm in ARMS for level, _ in finals[arm]]
     reasons = [level for level in ("TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_VARIATION")
@@ -350,6 +370,8 @@ def architecture_decision(finals_by_arm: dict, guard_fires: bool):
         reasons.append("NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID")
     if any(sum(1 for _, valid in finals[arm] if valid) < ARM_MIN_VALID_RUNS for arm in ARMS):
         reasons.append("TOO_FEW_VALID_RUNS")
+    if unread:
+        reasons.append("FINAL_CHECKPOINT_PRESENT_WITHOUT_READING")
     if not reasons:                                   # cannot happen (a test enumerates the cases); fail loudly
         raise ValueError("ARCHITECTURE_INCOMPLETE_WITHOUT_A_REASON")
     return "ARCHITECTURE_DECISION_INCOMPLETE", reasons

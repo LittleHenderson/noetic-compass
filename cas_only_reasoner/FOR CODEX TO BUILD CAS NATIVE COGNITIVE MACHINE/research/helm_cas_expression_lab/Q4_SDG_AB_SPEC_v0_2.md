@@ -1,6 +1,6 @@
-# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3)
+# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3a)
 
-**Status: PROPOSED_FOR_REVIEW** (revision 3; not frozen; the launcher refuses it)
+**Status: PROPOSED_FOR_REVIEW** (revision 3a; not frozen; the launcher refuses it)
 
 How this status was set, and what it binds:
 - Revision 1 (commit `3771f989`) went to two independent reviews. They found one MAJOR defect and eight MINOR ones
@@ -11,11 +11,15 @@ How this status was set, and what it binds:
   **not** the approved revision any more.
 - Revision 3 applies the coordinator's five decisions of 2026-09-24, quoted word for word in section 15. It goes back
   to `PROPOSED_FOR_REVIEW`. It needs a new review.
+- A fresh verification of revision 3 (commit `502a5704`, same review file) returned **CHANGES_REQUIRED** with one
+  MINOR point, W1: a run whose FINAL checkpoint file exists but gives no reading was left out, so JUSTIFIED could still
+  fire. **Revision 3a** fixes W1 and records the coordinator's confirmations of 2026-09-24 (section 16). It stays
+  `PROPOSED_FOR_REVIEW`.
 - The training launcher (`records/q4_sdg_1_20260923/ab_job/launch.py`) still holds revision 2's approved values
-  (`APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256`). Revision 3's rules hash differs, and this status line is not the
-  frozen one. So the launcher refuses revision 3 (`FROZEN_RULES_NOT_THE_APPROVED_ONES`). A test checks this.
-- After a review approves revision 3: set this line to the frozen form (`**Status: FROZEN_BEFORE_LAUNCH**` followed by
-  the rules hash), then write the new approved values into `launch.py` in a commit of their own.
+  (`APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256`). Revision 3a's rules hash differs, and this status line is not
+  the frozen one. So the launcher refuses revision 3a (`FROZEN_RULES_NOT_THE_APPROVED_ONES`). A test checks this.
+- After a review approves revision 3a: set this line to the frozen form (`**Status: FROZEN_BEFORE_LAUNCH**` followed
+  by the rules hash), then write the new approved values into `launch.py` in a commit of their own.
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover while Codex is away). Experiment id **Q4-SDG-1**. Builder: a
 Claude sub-agent. Nothing here has run on AWS. No model has been trained under this spec.
@@ -32,6 +36,7 @@ Claude sub-agent. Nothing here has run on AWS. No model has been trained under t
   families A-C (section 10).
 - The two reviews of revision 1 (`Q4_AB_REVIEW_20260924.md`): section 14 lists what changed because of them.
 - The verification of revision 2 and the coordinator's decisions of 2026-09-24: section 15.
+- The verification of revision 3 and the coordinator's confirmations of 2026-09-24: section 16.
 
 **Where every frozen value lives.** `q4_ab_rules.py` (standard library only). This document explains those values. If
 the two ever disagree, the program wins, and the disagreement is a defect to report.
@@ -281,12 +286,19 @@ Labels: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FI
 
 ### 7.3 Arms
 
-For each arm, over its 3 seeds, at the FINAL checkpoint. A run "has a FINAL reading" when its final checkpoint file
-exists and agrees with the reader's recomputation, whether or not the run is valid (section 7.7).
+For each arm, over its 3 seeds, at the FINAL checkpoint. A run "has a FINAL reading" when its run manifest and its
+final checkpoint file exist and the file agrees with the reader's recomputation, whether or not the run is valid
+(section 7.7).
 - **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** VALID runs are FULL (unchanged).
 - **ARM_<arm>_SHOWS_NO_INPUT_USE** iff at least **2** VALID runs are NONE, AND every run of the arm that has a FINAL
   reading, valid or not, is NONE.
 - **ARM_<arm>_INPUT_USE_UNDETERMINED** otherwise.
+
+A run with no FINAL reading is left out of the arm label. If that run's FINAL checkpoint file EXISTS (it was written,
+but the reader could not take a reading from it), the architecture rule withholds JUSTIFIED instead (section 7.5,
+reason `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`). The verdict lists such runs per arm
+(`final_checkpoints_present_without_reading`). So an arm label can say SHOWS_NO_INPUT_USE while the architecture label
+is INCOMPLETE; the architecture label is the decision.
 
 ### 7.4 Calibration guard
 
@@ -307,17 +319,40 @@ can then be compared with the same run's untrained D.
 In this order:
 1. The calibration guard fires: **ARCHITECTURE_DECISION_INCOMPLETE**, reason INPUT_USE_RULE_FIRES_AT_INITIALISATION.
 2. Some arm SHOWS_INPUT_USE: **ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE**.
-3. Both arms SHOW_NO_INPUT_USE: **ARCHITECTURE_CHANGE_JUSTIFIED**. That is: the guard is clean; every run that has a
-   FINAL reading (valid or not) is NONE; and each arm has at least 2 VALID NONE runs (coordinator decision 3).
+3. Both arms SHOW_NO_INPUT_USE, and no run has a FINAL checkpoint file without a FINAL reading:
+   **ARCHITECTURE_CHANGE_JUSTIFIED**. That is: the guard is clean; every run that has a FINAL reading (valid or not)
+   is NONE; each arm has at least 2 VALID NONE runs (coordinator decision 3); and every FINAL checkpoint file that
+   exists gave a reading (verification of revision 3, W1).
 4. Otherwise **ARCHITECTURE_DECISION_INCOMPLETE** (the verdict is withheld), with every reason that applies, each also
    emitted as `ARCHITECTURE_INCOMPLETE_BECAUSE_<REASON>`:
    - `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`: a run with a FINAL reading (valid or
      not) has that level;
    - `SEED_DEPENDENT`: a run with a FINAL reading (valid or not) is FULL, but no arm has 2 valid FULL runs;
    - `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`: a run that is not valid has a FINAL reading other than NONE;
-   - `TOO_FEW_VALID_RUNS`: an arm has fewer than 2 valid runs.
+   - `TOO_FEW_VALID_RUNS`: an arm has fewer than 2 valid runs;
+   - `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`: a run's FINAL checkpoint file exists, but the reader took no FINAL
+     reading from it. Causes: the run manifest is missing; the file names another rules hash or another checkpoint;
+     the file holds no record (for example JSON `null`); or any recomputation in it fails, including an exact-flag
+     check on SP1, SP2, B_DEV or TEACH_FIT. Listed last.
 
    Every INCOMPLETE carries at least one reason (a test enumerates every arm of 0 to 3 readings).
+
+**Why an unread FINAL checkpoint withholds JUSTIFIED** (verification of revision 3, W1). The run trained to the end
+and wrote its final file, but the reader could not take a reading from it. Nothing then shows that the run is NONE.
+It may have read its input fully (the verifier measured three such cases, each giving JUSTIFIED under revision 3). A
+failed check does not undo what the run read; a wrong exact flag on a teaching row does not either. So such a run
+cannot count toward "neither arm shows input use". It changes nothing else:
+- ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE is unchanged. Two valid FULL runs in one arm are not undone by
+  another run's unreadable file.
+- The calibration guard is unchanged. When it fires, it stays the only reason (coordinator confirmation (d),
+  section 16).
+- A run whose FINAL checkpoint file does NOT exist is left out, as before (it cannot have been read by anyone).
+- A FINAL file that holds neither a JSON object nor JSON `null` (invalid JSON, duplicate keys, a non-finite number, a
+  list) still stops the whole reader with an error, as before: no verdict and no label at all. A test checks this.
+
+So the rule can only make JUSTIFIED rarer. A test checks every pair of the 286 distinct arms with 0, 1, 2 and 6 such
+runs: the 9 JUSTIFIED pairs become INCOMPLETE [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING]; every other INCOMPLETE gains
+that reason last; NOT_JUSTIFIED is unchanged.
 
 **ARCHITECTURE_NOT_EVALUATED** when there is no verdict at all (section 8).
 
@@ -383,6 +418,9 @@ else gives **RUN_INVALID_<reason>**.
 
 A run that is not valid still counts in the architecture rule when it has a FINAL reading (section 7.3, 7.5). It
 never counts in a pair comparison (section 7.6), and never toward the 2 valid FULL or the 2 valid NONE runs of an arm.
+A run whose FINAL checkpoint file exists but gave no FINAL reading (it is then RUN_INCOMPLETE or RUN_INVALID_<reason>)
+withholds JUSTIFIED (section 7.5, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`). Each run in the verdict carries
+`final_checkpoint_file_present` and `final_checkpoint_present_without_reading`.
 
 ### 7.8 Information-only label (coordinator decision 4 of 2026-09-24)
 
@@ -393,6 +431,10 @@ label is not emitted.)
 - It names the target for a later, separately approved design discussion: getting field values into the output.
 - It can appear next to any architecture label. Examples: six input-blind runs give ARCHITECTURE_CHANGE_JUSTIFIED and
   this label; six shape-only runs give ARCHITECTURE_DECISION_INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] and this label.
+- **Scope** (revision 3a): it speaks only about runs with a FINAL reading. A run whose FINAL checkpoint file exists but
+  gave no reading is NOT covered by it. Such runs are listed beside it, in the verdict's `information` block
+  (`final_checkpoints_present_without_reading`). The rule itself is unchanged, as the coordinator confirmed
+  (confirmation (c), section 16).
 
 ## 8. Stops
 
@@ -461,7 +503,7 @@ The verdict records the LF sha256 of the reader and of the rules module it ran w
 - calibration: `INPUT_USE_RULE_SILENT_AT_INITIALISATION`, `INPUT_USE_RULE_FIRES_AT_INITIALISATION`
 - arm: `ARM_A_…` / `ARM_B_…`: `SHOWS_INPUT_USE`, `SHOWS_NO_INPUT_USE`, `INPUT_USE_UNDETERMINED`
 - architecture: `ARCHITECTURE_CHANGE_JUSTIFIED`, `ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE`, `ARCHITECTURE_DECISION_INCOMPLETE`, `ARCHITECTURE_NOT_EVALUATED`
-- architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`, `SEED_DEPENDENT`, `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`, `TOO_FEW_VALID_RUNS`
+- architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`, `SEED_DEPENDENT`, `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`, `TOO_FEW_VALID_RUNS`, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`
 - information only (section 7.8): `FIELDS_NOT_READ_IN_ANY_RUN`
 - pair: `B_BEATS_A_<P>_PAIR<i>`, `A_BEATS_B_<P>_PAIR<i>`, `NO_PAIRED_DIFFERENCE_<P>_PAIR<i>`, `PAIR_INCOMPLETE_<P>_PAIR<i>`
 - lessons: `LESSONS_HELP_<P>`, `LESSONS_HURT_<P>`, `LESSONS_EFFECT_NOT_SHOWN_<P>`, `LESSONS_COMPARISON_INCOMPLETE_<P>`, `LESSONS_NOT_EVALUATED_<P>`
@@ -582,18 +624,20 @@ Its verdict: CHANGES_REQUIRED. Its points, in short:
 | 5 | The guard is `calibration_guard_fires` on T1, T2V, T2P at checkpoint 0 (the same test as revision 2). The verdict reports `checkpoint_0_distinct_free_outputs` and `calibration_checkpoint_0` for every run | 7.4 |
 | V4 | Status back to PROPOSED_FOR_REVIEW. The approved values in `launch.py` are NOT changed; the launcher therefore refuses revision 3 | status block |
 
-**Choices the builder made in applying the decisions (disclosed; the reviewer should check them):**
+**Choices the builder made in applying the decisions (disclosed; the reviewer should check them).** Choices 1, 2, 4
+and 5 were confirmed by the coordinator on 2026-09-24 (confirmations (a), (b), (c), (d); section 16).
 1. *One new level, replacing STRUCTURE_ONLY.* Decision 2 says "levels" but names one. Its definition contains every
    revision-2 STRUCTURE_ONLY case (T2P passes, T1 and T2V fail). Keeping STRUCTURE_ONLY as well would have split the
-   named level, so it was folded in. The reading still shows which part fired (T2P, and D).
+   named level, so it was folded in. The reading still shows which part fired (T2P, and D). **Confirmed (a).**
 2. *Decision 3's "2 of 3 seeds" counts VALID runs.* See 7.5. Counting invalid NONE runs would make JUSTIFIED more
-   common than in revision 2, which the decision rules out ("it can only become rarer").
+   common than in revision 2, which the decision rules out ("it can only become rarer"). **Confirmed (b).**
 3. *Reasons count invalid runs' readings.* When an invalid run blocks JUSTIFIED, the reasons name its level (for
    example SEED_DEPENDENT for an invalid FULL run) and add `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`.
 4. *FIELDS_NOT_READ_IN_ANY_RUN needs at least one FINAL reading,* and it counts invalid runs' readings too (a field
    reading in any run, valid or not, suppresses it). With no reading at all the label would be vacuous.
+   **Confirmed (c).**
 5. *The guard still returns only its own reason.* When it fires, no other architecture reason is listed (as in
-   revision 2).
+   revision 2). **Confirmed (d).**
 
 **New or changed tests (torch-free):**
 - The verifier's scratch fakes are now lab fakes: `shape_operators_only` (D = 44) and `shape_only` (D = 14). Both are
@@ -608,3 +652,60 @@ Its verdict: CHANGES_REQUIRED. Its points, in short:
   counts are reported for all 6 runs.
 - The launcher test now has two states: under review (this revision), the launcher must refuse the working copy;
   approved, its values must equal the working copy.
+
+## 16. Changes in revision 3a (the verification of revision 3, and the coordinator's confirmations of 2026-09-24)
+
+**The verification** of revision 3 (commit `793a4f68`) is recorded in `Q4_AB_REVIEW_20260924.md` (commit
+`502a5704`). Its verdict: CHANGES_REQUIRED, one MINOR point, no BLOCKER, no MAJOR.
+- W1 (MINOR): decision 3 did not reach a run whose FINAL checkpoint file exists but gives no reading. The reader
+  dropped the whole reading when the run manifest was missing, when the file's identity was wrong, or when any
+  recomputation in the file failed (even an exact flag on a teaching row). A fully reading run could then be left out,
+  and ARCHITECTURE_CHANGE_JUSTIFIED could still fire. The verifier measured three such cases.
+
+**What revision 3a changed** (code: `q4_ab_rules.py`, `read_q4_ab_results.py`; tests: `test_q4_ab.py`):
+
+| Point | Change | Where |
+|---|---|---|
+| W1 | `read_q4_ab_results.read_run` records, for every run, whether its FINAL checkpoint file exists (`final_checkpoint_file_present`, checked on the path, so a file holding JSON `null` counts) and whether that file gave no FINAL reading (`final_checkpoint_present_without_reading`). `final_checkpoints_without_reading` lists those runs; the verdict reports them overall, per arm and in the `information` block | 7.3, 7.7, 7.8 |
+| W1 | `q4_ab_rules.architecture_decision(finals_by_arm, guard_fires, final_checkpoints_without_reading)` takes the number of such runs (a required argument; not a non-negative int is refused). Any such run withholds JUSTIFIED with the new reason `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`, added last to every other INCOMPLETE. NOT_JUSTIFIED and the guard are unchanged | 7.5, 9 |
+| W1 | The frozen record states the new condition and the new reason, and the scope of FIELDS_NOT_READ_IN_ANY_RUN. So `frozen_sha256` changes | `q4_ab_rules.frozen_record` |
+
+**Coordinator confirmations of 2026-09-24**, recorded word for word as the builder received them:
+
+> (a) folding STRUCTURE_ONLY into STRUCTURE_OR_OUTPUT_VARIATION is confirmed;
+> (b) decision 3 means at least 2 VALID NONE runs per arm AND every FINAL reading (valid or not) NONE, confirmed;
+> (c) FIELDS_NOT_READ_IN_ANY_RUN is emitted only when at least one run has a FINAL reading, and a field reading in an
+>     invalid run suppresses it, confirmed;
+> (d) when the calibration guard fires it stays the only architecture reason, confirmed.
+
+They confirm the builder's choices 1, 2, 4 and 5 of revision 3 (section 15). Revision 3a does not change any of them.
+
+**Choices the builder made in revision 3a (disclosed; the reviewer should check them):**
+1. *The arm labels are unchanged.* The coordinator asked for the architecture rule to withhold JUSTIFIED. An arm label
+   still speaks only about runs with a FINAL reading (7.3), so an arm can say SHOWS_NO_INPUT_USE while the
+   architecture label is INCOMPLETE. The unread runs are listed per arm. If the arm label should also be withheld,
+   that is a small change; it is not made here.
+2. *FIELDS_NOT_READ_IN_ANY_RUN is unchanged; its scope is stated (7.8).* Confirmation (c) fixes when it is emitted.
+   The verifier offered two fixes: suppress it, or state its scope. Suppressing would add a condition that (c) does
+   not name, so the scope is stated and the unread runs are listed beside it.
+3. *No partial reading is kept.* The verifier's optional idea (keep the input-use reading when only an exact-flag
+   check failed) is not done. A file that fails any check gives no reading, and it withholds JUSTIFIED instead.
+4. *Only the FINAL checkpoint is covered.* A checkpoint-0 file that exists but gives no reading still leaves that
+   run out of the calibration guard, as in revision 3. This is outside W1; it is an open question for the coordinator.
+
+**New or changed tests (torch-free):**
+- New `test_reader_final_checkpoint_present_without_reading_withholds_justified`. Run B 20260933's FINAL file exists
+  but gives no reading, and the other five runs are input-blind: a flipped SP1 exact flag, a flipped TEACH_FIT exact
+  flag, a missing run manifest (the verifier's three measured cases, all JUSTIFIED under revision 3), a wrong rules
+  hash, a file holding JSON `null`, and an input-blind run with a flipped flag. Each gives INCOMPLETE
+  [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING]. Controls: a FINAL file that does not exist is not flagged (JUSTIFIED, as
+  before); two valid FULL runs still give NOT_JUSTIFIED with no reason; a firing guard stays the only reason; two
+  flagged runs are listed in run order and the reason is added after STRUCTURE_OR_OUTPUT_VARIATION; unparsable FINAL
+  files still stop the reader.
+- `test_architecture_rule_can_only_become_rarer_and_always_names_a_reason` now also runs every pair of the 286
+  distinct arms with 1, 2 and 6 unread FINAL files (27 JUSTIFIED cases become INCOMPLETE; nothing becomes JUSTIFIED),
+  and refuses a count that is not a non-negative int.
+- `test_reader_recomputes_what_prep_claims`: its two cases with a dropped or swapped edit value in B 20260931's FINAL
+  file said JUSTIFIED under revision 3. They now give INCOMPLETE [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING]. This is
+  W1 itself, so the assertion changed.
+- `test_reader_labels_are_the_declared_ones` now also sees `ARCHITECTURE_INCOMPLETE_BECAUSE_FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`.

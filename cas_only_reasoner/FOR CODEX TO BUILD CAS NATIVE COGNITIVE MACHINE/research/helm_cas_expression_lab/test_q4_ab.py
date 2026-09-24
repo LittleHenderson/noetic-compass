@@ -657,7 +657,10 @@ def test_architecture_rule_can_only_become_rarer_and_always_names_a_reason():
       - JUSTIFIED needs every FINAL reading NONE (valid or not) and >= 2 valid NONE runs per arm;
       - an arm that shows no input use under revision 3 also did under revision 2 (so JUSTIFIED only becomes rarer;
         the calibration guard is the same T1/T2V/T2P test in both revisions);
-      - every ARCHITECTURE_DECISION_INCOMPLETE carries at least one declared reason."""
+      - every ARCHITECTURE_DECISION_INCOMPLETE carries at least one declared reason;
+      - W1 of the verification of 793a4f68: with 1, 2 or 6 FINAL checkpoint files present without a reading, every
+        JUSTIFIED pair becomes INCOMPLETE [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING], every other INCOMPLETE gains that
+        reason last, NOT_JUSTIFIED and the guard are unchanged."""
     import itertools
     outcomes = ((False, False, False, 1), (False, False, False, 2), (False, False, False, 44), (False, False, True, 1),
                 (True, False, False, 1), (False, True, False, 256), (True, True, False, 256))
@@ -683,17 +686,36 @@ def test_architecture_rule_can_only_become_rarer_and_always_names_a_reason():
         assert rules.arm_label("A", [(rules.input_use_level(*r[:4]), r[4]) for r in runs]) != "ARM_A_SHOWS_NO_INPUT_USE"
     distinct_arms = sorted({tuple(sorted(finals)) for finals in arm_cases})   # the rules ignore seed order
     assert len(distinct_arms) == 286                                          # multisets of size <= 3 over 10 states
+    unread_reason = "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING"
+    moved = collections.Counter()
     for arm_a in distinct_arms:
         for arm_b in distinct_arms:
             finals_a, finals_b = list(arm_a), list(arm_b)
-            label, reasons = rules.architecture_decision({"A": finals_a, "B": finals_b}, False)
-            assert set(reasons) <= set(rules.ARCHITECTURE_REASONS)
+            label, reasons = rules.architecture_decision({"A": finals_a, "B": finals_b}, False, 0)
+            assert set(reasons) <= set(rules.ARCHITECTURE_REASONS) and unread_reason not in reasons
             if label == "ARCHITECTURE_DECISION_INCOMPLETE":
                 assert reasons
             elif label == "ARCHITECTURE_CHANGE_JUSTIFIED":
                 assert all(level == "NONE" for level, _ in finals_a + finals_b)
-    assert rules.architecture_decision({"A": [], "B": []}, True) == (
-        "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"])
+            # verification of 793a4f68, W1: a FINAL checkpoint file without a reading withholds JUSTIFIED, adds its
+            # own reason to every other INCOMPLETE, and changes nothing else (only JUSTIFIED becomes rarer)
+            for unread in (1, 2, 6):
+                label_u, reasons_u = rules.architecture_decision({"A": finals_a, "B": finals_b}, False, unread)
+                if label == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE":
+                    assert (label_u, reasons_u) == (label, reasons)
+                elif label == "ARCHITECTURE_CHANGE_JUSTIFIED":
+                    assert (label_u, reasons_u) == ("ARCHITECTURE_DECISION_INCOMPLETE", [unread_reason])
+                else:
+                    assert (label_u, reasons_u) == (label, reasons + [unread_reason])
+                moved[(label, label_u)] += 1
+    assert moved[("ARCHITECTURE_CHANGE_JUSTIFIED", "ARCHITECTURE_DECISION_INCOMPLETE")] == 3 * 9    # 9 JUSTIFIED pairs
+    assert not any(after == "ARCHITECTURE_CHANGE_JUSTIFIED" for _, after in moved)
+    for unread in (0, 1):                             # coordinator confirmation (d): the guard's reason stays alone
+        assert rules.architecture_decision({"A": [], "B": []}, True, unread) == (
+            "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"])
+    for bad in (-1, 1.0, True, None, "1"):
+        with pytest.raises(ValueError, match="INVALID_FINAL_CHECKPOINTS_WITHOUT_READING"):
+            rules.architecture_decision({"A": [], "B": []}, False, bad)
 
 
 def test_calibration_guard_uses_t1_t2v_t2p_only():
@@ -727,6 +749,7 @@ def test_reader_no_arm_reads_input_justifies_the_architecture_change(tmp_path, f
     assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED" and v["architecture_reasons"] == []
     assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE" and v["arms"]["B"]["label"] == "ARM_B_SHOWS_NO_INPUT_USE"
     assert "FIELDS_NOT_READ_IN_ANY_RUN" in v["labels"] and v["information"]["final_readings_counted"] == 6
+    assert v["final_checkpoints_present_without_reading"] == [] and v["information"]["final_checkpoints_present_without_reading"] == []
     assert v["checkpoint_0_distinct_free_outputs"] == {"%s_%d" % k: 1 for k in rules.RUN_ORDER}
     assert set(v["lessons"].values()) == {"LESSONS_EFFECT_NOT_SHOWN_SP1", "LESSONS_EFFECT_NOT_SHOWN_SP2U",
                                           "LESSONS_EFFECT_NOT_SHOWN_SP2ALL"}
@@ -760,6 +783,7 @@ def test_reader_architecture_needs_every_valid_run_to_show_no_input_use(tmp_path
     assert v["arms"]["B"]["final_levels_of_runs_not_valid"] == ["FULL"] and v["arms"]["B"]["valid_none_runs"] == 2
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE"
     assert v["architecture_reasons"] == ["SEED_DEPENDENT", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID"]
+    assert v["final_checkpoints_present_without_reading"] == []           # its FINAL file was read (W1 is not this)
     assert "FIELDS_NOT_READ_IN_ANY_RUN" not in v["labels"]                 # the invalid run passes T1 and T2V
     # the same with output variation only, in an invalid run
     v = reader.verdict(write_results(tmp_path / "v3s", fake_records, modes={("A", S1): "shape_only"},
@@ -773,6 +797,87 @@ def test_reader_architecture_needs_every_valid_run_to_show_no_input_use(tmp_path
     v = reader.verdict(write_results(tmp_path / "one", fake_records, modes={("B", S3): "no_noetic"}))
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["PARTIAL_FIELDS"]
     assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE"
+    assert v["final_checkpoints_present_without_reading"] == []
+
+
+def _rewrite(path, change):
+    body = json.loads(path.read_bytes().decode("utf-8"))
+    change(body)
+    _write(path, body)
+
+
+def test_reader_final_checkpoint_present_without_reading_withholds_justified(tmp_path, fake_records):
+    """Verification of 793a4f68, W1. A run whose FINAL checkpoint FILE exists but gives no FINAL reading cannot be
+    counted as NONE: a wrong exact flag on any panel (TEACH_FIT included), a missing run manifest, a wrong identity, or a
+    file that holds JSON null. The reader lists it, and the rule withholds ARCHITECTURE_CHANGE_JUSTIFIED with the reason
+    FINAL_CHECKPOINT_PRESENT_WITHOUT_READING. The other five runs are input-blind in every case; revision 3 said
+    JUSTIFIED for the verifier's three measured cases (sp1_flag, teach_fit_flag, no_manifest)."""
+    key, name = ("B", S3), "B_%d" % S3
+    final = "checkpoint_%05d.json" % rules.FINAL
+    inconsistent_final = "RUN_INVALID_RESULT_INCONSISTENT_AT_%d" % rules.FINAL
+    reason = "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING"
+
+    def flip_teach_fit(k, body):
+        if k == key:
+            row = body["panels"]["TEACH_FIT"]["rows"][0]
+            row["exact"] = 1 - row["exact"]
+
+    cases = (   # name, write_results arguments, a change to B_S3's folder after writing, B_S3's validity
+        ("sp1_flag", {"modes": {key: "reader"}, "inconsistent": {key}}, None, inconsistent_final),
+        ("teach_fit_flag", {"modes": {key: "reader"}, "mutate_final": flip_teach_fit}, None, inconsistent_final),
+        ("no_manifest", {"modes": {key: "reader"}}, lambda f: (f / "run_manifest.json").unlink(), "RUN_INCOMPLETE"),
+        ("wrong_identity", {"modes": {key: "reader"}},
+         lambda f: _rewrite(f / final, lambda b: b.update(frozen_sha256="0" * 64)), inconsistent_final),
+        ("json_null", {"modes": {key: "reader"}}, lambda f: (f / final).write_bytes(b"null\n"), "RUN_INCOMPLETE"),
+        ("blind_run_flag", {"inconsistent": {key}}, None, inconsistent_final),       # what the file held is unknown
+    )
+    for case, kwargs, change, validity in cases:
+        root = write_results(tmp_path / case, fake_records, **kwargs)
+        if change:
+            change(root / "runs" / name)
+        v = reader.verdict(root)
+        run = v["runs"][name]
+        assert run["validity"] == validity and str(rules.FINAL) not in run["readings"], case
+        assert run["final_checkpoint_file_present"] and run["final_checkpoint_present_without_reading"], case
+        assert v["final_checkpoints_present_without_reading"] == [name], case
+        assert (v["arms"]["A"]["final_checkpoints_present_without_reading"],
+                v["arms"]["B"]["final_checkpoints_present_without_reading"]) == ([], [name]), case
+        assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == [reason], case
+        assert "ARCHITECTURE_INCOMPLETE_BECAUSE_" + reason in v["labels"], case
+        # the arm labels keep their scope (runs with a FINAL reading); only the architecture label is withheld
+        assert (v["arms"]["A"]["label"], v["arms"]["B"]["label"]) == ("ARM_A_SHOWS_NO_INPUT_USE",
+                                                                      "ARM_B_SHOWS_NO_INPUT_USE"), case
+        # coordinator confirmation (c): the information label speaks about the 5 runs with a reading; scope stated
+        assert "FIELDS_NOT_READ_IN_ANY_RUN" in v["labels"] and v["information"]["final_readings_counted"] == 5, case
+        assert v["information"]["final_checkpoints_present_without_reading"] == [name], case
+    # the flag is about the FILE: with B_S3's final checkpoint file absent, nothing is flagged (the run is left out,
+    # as before) and 2 valid NONE runs per arm still give JUSTIFIED
+    root = write_results(tmp_path / "final_absent", fake_records, modes={key: "reader"})
+    (root / "runs" / name / final).unlink()
+    v = reader.verdict(root)
+    assert v["runs"][name]["validity"] == "RUN_INCOMPLETE" and not v["runs"][name]["final_checkpoint_file_present"]
+    assert v["final_checkpoints_present_without_reading"] == [] and v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"
+    # only JUSTIFIED becomes rarer: two valid FULL runs in arm A still give NOT_JUSTIFIED, with no reason
+    v = reader.verdict(write_results(tmp_path / "not_justified", fake_records,
+                                     reads={("A", S1): True, ("A", S2): True}, inconsistent={key}))
+    assert v["final_checkpoints_present_without_reading"] == [name]
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE" and v["architecture_reasons"] == []
+    # coordinator confirmation (d): when the guard fires, it stays the only reason
+    v = reader.verdict(write_results(tmp_path / "guard", fake_records, fires_at_zero=True, inconsistent={key}))
+    assert v["final_checkpoints_present_without_reading"] == [name]
+    assert v["architecture_reasons"] == ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
+    # two flagged runs (run order), next to another reason: the new reason is added last
+    v = reader.verdict(write_results(tmp_path / "two", fake_records, modes={("A", S1): "shape_only"},
+                                     inconsistent={("A", S2), key}))
+    assert v["final_checkpoints_present_without_reading"] == ["A_%d" % S2, name]
+    assert v["architecture_reasons"] == ["STRUCTURE_OR_OUTPUT_VARIATION", reason]
+    # unchanged: a FINAL file that holds neither a JSON object nor null stops the whole reader (no verdict, no label)
+    root = write_results(tmp_path / "unparsable", fake_records)
+    first = root / "runs" / ("A_%d" % S1) / final
+    for body in (b"{\n", b'{"a": 1, "a": 2}\n', b'{"a": NaN}\n', b"[]\n"):
+        first.write_bytes(body)
+        with pytest.raises((ValueError, AttributeError)):                # ReadError is a ValueError
+            reader.verdict(root)
 
 
 def test_reader_calibration_guard_and_checkpoint_0_counts(tmp_path, fake_records):
@@ -922,7 +1027,11 @@ def test_reader_recomputes_what_prep_claims(tmp_path, fake_records):
         v = reader.verdict(write_results(tmp_path / name, fake_records, mutate_final=mutate))
         run = v["runs"]["B_%d" % S1]
         assert run["validity"] == "RUN_INVALID_RESULT_INCONSISTENT_AT_%d" % rules.FINAL and reason in run["problems"][0], name
-        assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"              # 2 valid NONE runs per arm remain
+        # 2 valid NONE runs per arm remain, but B_S1's FINAL file exists without a reading: JUSTIFIED is withheld
+        # (verification of 793a4f68, W1; revision 3 said JUSTIFIED here)
+        assert v["final_checkpoints_present_without_reading"] == ["B_%d" % S1], name
+        assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE", name
+        assert v["architecture_reasons"] == ["FINAL_CHECKPOINT_PRESENT_WITHOUT_READING"], name
         assert v["lessons_overall"] == "LESSONS_OVERALL_COMPARISON_INCOMPLETE"
 
 
@@ -934,6 +1043,7 @@ def test_reader_labels_are_the_declared_ones(tmp_path, fake_records):
                          ("tf", {"modes": {k: "tf_reader_freegen_collapse" for k in rules.RUN_ORDER}}),
                          ("shape", {"modes": {k: "shape_only" for k in rules.RUN_ORDER}}),
                          ("v3", {"modes": {("B", S3): "reader"}, "reload_bad": {("B", S3)}}),
+                         ("w1", {"modes": {("B", S3): "reader"}, "inconsistent": {("B", S3)}}),
                          ("blind", {})):
         v = reader.verdict(write_results(tmp_path / name, fake_records, **kwargs))
         for label in v["labels"]:
@@ -941,7 +1051,8 @@ def test_reader_labels_are_the_declared_ones(tmp_path, fake_records):
             assert any(re.fullmatch(p, core) for p in patterns), label
         seen.update(label.split(":")[-1] for label in v["labels"])
     assert {"FIELDS_NOT_READ_IN_ANY_RUN", "INPUT_USE_STRUCTURE_OR_OUTPUT_VARIATION",
-            "ARCHITECTURE_INCOMPLETE_BECAUSE_NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID"} <= seen
+            "ARCHITECTURE_INCOMPLETE_BECAUSE_NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID",
+            "ARCHITECTURE_INCOMPLETE_BECAUSE_FINAL_CHECKPOINT_PRESENT_WITHOUT_READING"} <= seen
 
 
 # ------------------------------------------------------------------------------------------------------------

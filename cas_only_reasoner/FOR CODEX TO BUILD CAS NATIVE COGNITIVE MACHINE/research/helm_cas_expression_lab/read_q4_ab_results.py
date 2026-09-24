@@ -219,10 +219,14 @@ def read_run(root, arm, seed, prep, frozen_sha):
     manifest, result = load(folder / "run_manifest.json"), load(folder / "run_result.json")
     reload_record = load(folder / "reload_check.json")
     checkpoints = {k: load(folder / ("checkpoint_%05d.json" % k)) for k in rules.CHECKPOINTS}
-    info = {"arm": arm, "seed": seed, "readings": {}, "exact": {}, "validity": None}
+    # Verification of 793a4f68, W1: the path is checked, not load()'s value (a file holding JSON null loads as None).
+    final_present = (folder / ("checkpoint_%05d.json" % rules.FINAL)).exists()
+    info = {"arm": arm, "seed": seed, "readings": {}, "exact": {}, "validity": None,
+            "final_checkpoint_file_present": final_present}
     problems = []
     if manifest is None:
         info["validity"] = "RUN_INCOMPLETE"
+        info["final_checkpoint_present_without_reading"] = final_present
         return info, {}
     if manifest.get("frozen_sha256") != frozen_sha:
         problems.append("FROZEN_SHA_DIFFERS")
@@ -280,6 +284,7 @@ def read_run(root, arm, seed, prep, frozen_sha):
         info["practice"] = {k: result.get(k) for k in ("updates", "presentations", "distinct_rows_seen", "pool_rows",
                                                        "target_tokens", "source_bytes", "train_seconds",
                                                        "eval_seconds", "wall_seconds", "final_weights_sha256")}
+    info["final_checkpoint_present_without_reading"] = final_present and str(rules.FINAL) not in info["readings"]
     return info, per_checkpoint
 
 
@@ -297,6 +302,20 @@ def final_readings(runs):
                     raise ReadError("VALID_RUN_WITHOUT_A_FINAL_READING: %s_%d" % (arm, seed))
                 continue
             out[arm].append((reading["level"], info["validity"] == "RUN_VALID"))
+    return out
+
+
+def final_checkpoints_without_reading(runs):
+    """Run names (run order) whose FINAL checkpoint file exists but gave no FINAL reading: a missing run manifest, a
+    wrong identity, or any recomputation failure in that file (verification of 793a4f68, W1). Each one withholds
+    ARCHITECTURE_CHANGE_JUSTIFIED (reason FINAL_CHECKPOINT_PRESENT_WITHOUT_READING)."""
+    out = []
+    for key, info in runs.items():
+        flagged = info["final_checkpoint_present_without_reading"]
+        if flagged and str(rules.FINAL) in info["readings"]:   # read_run never sets both; fail loudly if it did
+            raise ReadError("FLAGGED_RUN_HAS_A_FINAL_READING: %s_%d" % key)
+        if flagged:
+            out.append("%s_%d" % key)
     return out
 
 
@@ -405,20 +424,26 @@ def verdict(root):
     out["checkpoint_0_distinct_free_outputs"] = {run: (None if r is None else r["distinct_free_outputs"])
                                                  for run, r in zero.items()}
     finals = final_readings(runs)
+    unread = final_checkpoints_without_reading(runs)
+    out["final_checkpoints_present_without_reading"] = unread
     out["arms"] = {}
     for arm in rules.ARMS:
         valid = [level for level, ok in finals[arm] if ok]
         out["arms"][arm] = {"label": rules.arm_label(arm, finals[arm]), "final_levels_of_valid_runs": valid,
                             "final_levels_of_runs_not_valid": [level for level, ok in finals[arm] if not ok],
                             "valid_runs": len(valid), "valid_none_runs": valid.count("NONE"),
-                            "full_runs": valid.count("FULL"), "runs_not_valid": len(rules.SEEDS) - len(valid)}
+                            "full_runs": valid.count("FULL"), "runs_not_valid": len(rules.SEEDS) - len(valid),
+                            "final_checkpoints_present_without_reading": [
+                                run for run in unread if run.startswith(arm + "_")]}
     arm_labels = [out["arms"][arm]["label"] for arm in rules.ARMS]
-    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(finals, fires_at_zero)
+    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(finals, fires_at_zero, len(unread))
     final_levels = [level for arm in rules.ARMS for level, _ in finals[arm]]
     out["information"] = {"labels": (["FIELDS_NOT_READ_IN_ANY_RUN"] if rules.fields_not_read_in_any_run(final_levels)
                                      else []),
                           "final_readings_counted": len(final_levels),
-                          "note": "information only; justifies nothing by itself"}
+                          "final_checkpoints_present_without_reading": unread,
+                          "note": "information only; justifies nothing by itself. Scope: runs with a FINAL reading "
+                                  "only; the runs listed in final_checkpoints_present_without_reading are not covered"}
     inspected = {r["id"] for r in prep["panels"]["SP2"] if r.get("inspected")}
     panel_ids = {"SP1": [r["id"] for r in prep["panels"]["SP1"]],
                  "SP2U": [r["id"] for r in prep["panels"]["SP2"] if r["id"] not in inspected],
