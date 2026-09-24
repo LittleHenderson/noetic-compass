@@ -31,9 +31,10 @@ The current record is `research/helm-integration-20260923` at
 | # | Task | Status |
 |---|---|---|
 | A | Preserve accepted D-1; reconcile outstanding items | D-1 is preserved, and the pointer is above. Claude's review of Codex's rescorer is not yet recorded (see Open review items) |
-| B | Read-only comparison setting | **OPEN at `96644503`.** `pointer_learner.py:731-732` are plain changeable attributes (blob `caaff9dc`, unchanged since `60e382b0`). Assigned to the temporary builder |
-| C | Historical OFF control and ON-effect checks on a T4 | Not run. The specification is recovered (A3 rule, 9 models). It waits on B and on prereg amendment A4 |
-| D | Public evaluation design; larger-question path through the actual learner | Not started. The learner imports only the original `slots`, so 5- and 6-node correspondence is refused at the slot compiler. The proposal is a separate opt-in, inference-only subclass. The Stage 1 cut awaits the owner |
+| B | Read-only comparison setting | **Built** at `ceab6c49` (builder), two fresh reviews `APPROVE_FOR_T4_RUN`. Its tests passed on the T4 (38 passed, attempt 1 stage 0) |
+| C | Historical OFF control and ON-effect checks on a T4 | Attempt 1 **INCOMPLETE** (the probes lacked their preregistration file). Preservation measured: control==reference 9/9, OFF==control 9/9. Attempt 2 running (`i-030e5665bcad36f69`). ON training (owner-approved, $60) waits on attempt 2's program verdict and on a fresh review of the ON prep `2cd6aed9` |
+| D | Public evaluation design; larger-question path through the actual learner | HSET-1A built: no 5-node reach cell can carry a claim. The owner chose 6- and 7-node cells (HSET-1B): builder, spec and AWS job committed (`b5a4d525`, `5773b7ad`), not launched; it runs after the T4 job. The learner-path subclass is not started |
+| E | Q4-SDG-1 (owner directive `8eb798a5`) | Separate line, own working copy `D:/tksCAS-worktrees/q4-sdg`, branch `claude/q4-sdg-feedback-20260923`, ownership record `0687e20a`. Builder sub-agent working (lesson adapter, error-panel module). Diagnostic job ($1.00 ceiling) after review. A-versus-B training needs an owner dollar ceiling |
 
 ## Commits made during the takeover
 
@@ -48,6 +49,13 @@ The current record is `research/helm-integration-20260923` at
 | `8a150198` | `research/helm-integration-20260923` | coordinator | the owner's decisions, verbatim (keep the g6e; train switch ON; 6- and 7-node reach; fail-closed rescorer anchors) |
 | `b5a4d525` | `research/helm-integration-20260923` | coordinator | the HSET-1B builder, spec (salt sha `b3cf84e2...` committed before the build) and AWS job. Not launched |
 | `8aba0c62` | `research/helm-integration-20260923` | coordinator | launch record of the T4 item-1 job, R = `ceab6c49` |
+| `5773b7ad` | `research/helm-integration-20260923` | coordinator | HSET-1B pre-launch review fixes: the launcher refuses a salt whose sha256 differs from the committed one (MAJOR); success rule pinned |
+| `8eb798a5`, `e1728a59` | `research/helm-integration-20260923` | coordinator | the owner's Q4 directive (byte copy) and pasted rationale |
+| `d6c9faa9` | `research/helm-integration-20260923` | coordinator | owner approves up to $60 for switch-ON training (verbatim question and answer) |
+| `d7023288` | `research/helm-integration-20260923` | coordinator | prereg amendment A5 (reading rules for trained ON checkpoints), frozen before any ON training |
+| `2cd6aed9` | builder branch | builder | ON-training prep: the ablation "heads" row owns `analogy_head`; ON admission writer. Fresh review pending |
+| `0687e20a` | `claude/q4-sdg-feedback-20260923` | coordinator | Q4-SDG-1 temporary ownership record, before any Q4 code |
+| `5e1d1373`, `e5106ad8` | `research/helm-integration-20260923` | coordinator | T4 attempt 1 filed (INCOMPLETE) + launcher fix; attempt 2 launched |
 
 ## Checks run, and results
 
@@ -77,8 +85,11 @@ Written test functions, input-specific cases and repeated runs are counted separ
 
 ## Resource use
 
-- 2026-09-23, T4 item-1 job: `i-0b2a1761317398ba4`, g4dn.2xlarge, pinned image `ami-07d69ce07bfe5628f`, ceiling $3.00.
-  Running (see its watch record).
+- 2026-09-23, T4 item-1 job, ceiling $3.00 for both attempts together:
+  - attempt 1: `i-0b2a1761317398ba4`, g4dn.2xlarge, pinned image `ami-07d69ce07bfe5628f`; 43.7 minutes; upper bound
+    $0.5596; terminated, no volume left. Outcome INCOMPLETE (the 4 probes crashed on a missing file; see
+    `analogy_repair_t4_job/RUN_LOG.md`);
+  - attempt 2: `i-030e5665bcad36f69`, same machine type and image; worst case $2.05. Running.
 
 - 2026-09-23: read-only AWS inventory; $0.
   - No Helm instance, volume or SageMaker job is live.
@@ -104,7 +115,8 @@ Written test functions, input-specific cases and repeated runs are counted separ
   - Codex's `trusted_rescore.py` 0.3 (LF `50295072...`) reproduces the six historical decisions in its targeted
     recheck.
   - Its full 564-record reading and its 9 slow tests are **NOT_RUN** (the laptop timed out).
-  - The anchor policy (keep the 0.2 anchors and report their zero-loss metadata, or refuse them) is **unresolved**,
-    and is the owner's decision.
+  - The anchor policy: the owner chose "whichever makes for a better model"; applied as **fail-closed** (refuse any
+    anchor whose recorded rule is wrong; write new 0.3 anchors; keep the 0.2 ones as history). Builder task, not
+    started.
 - `preflight_dry_run.py` lists 48 container names, but the default container has 53 since `60e382b0`. This drift
   is recorded, not fixed.
