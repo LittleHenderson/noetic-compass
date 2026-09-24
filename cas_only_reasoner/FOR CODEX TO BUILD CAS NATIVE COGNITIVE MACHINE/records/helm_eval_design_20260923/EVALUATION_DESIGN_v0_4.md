@@ -282,3 +282,36 @@ as "focus-aware, but only by degree" (review N4).
    rates.
 5. **To the owner.** The printed table goes with the named training plan. Any cell that cannot carry a claim is
    reported before training.
+
+## Amendment A1 (2026-09-24): the delta review's six changes (`REVIEW_v0_3_20260924.md`, delta section, `6b70f01c`)
+
+The delta review's verdict was `APPROVE_WITH_CHANGES`. No build has run, and no model has been read.
+
+- **D1: the group key is pinned byte for byte.**
+  - The key is `hset_worlds.canon([6, [[i, o], ...]])`: canonical JSON (sorted keys, separators `,` and `:`,
+    UTF-8), where the list is `hset_worlds.degree_multiset(n, edges)`, the sorted (in-degree, out-degree) pairs.
+  - A group is on the DEV side iff `sha256(b"HSET-2-group-side-v0.1:" + key.encode("utf-8")).digest()[0] < 64`.
+  - Stage 0 of the build is **public and runs first**. It enumerates the 6-node classes, removes `PUBLIC_EXCLUDED`,
+    groups them, and writes the DEV-side group list and the TEST-side group list with their digests. Those are
+    committed **before** the sealed stage runs.
+  - No other spelling may be tried.
+- **D2: 5-node correspondence foci are widened (a design choice made before any build; the owner signs it with the
+  plan).**
+  - As v0.4 was first written, `CORRESPONDENCE_BEYOND_DEGREE_5` would almost surely read `NOT_TESTABLE`: expected
+    binding W 5.89, and W >= 10 in only 14 of 300 throwaway salts.
+  - The foci are now **every class in `TEST_NEW_5` ∪ `WITHHELD_5` with at least one same-degree, non-isomorphic
+    partner in that union**. The reviewer measured W 12 to 33, and >= 10 in 300 of 300 throwaway salts.
+  - Custody is unchanged: all of these classes are already sealed and forbidden to training.
+  - **The owner is told now that `REACH_4_STEP_TRANSFER_6` will almost surely read `NOT_TESTABLE`** (binding W 2 to 9
+    in 10 of 10 salts). It stays registered and reported, and is never dropped.
+- **D3: filler pools.** TEST items take fillers from the TEST side (TEST ∪ WITHHELD) of the same level; DEV items take
+  them from `DEV_DECOYS_6`.
+- **D4: gate pins and sensitivity.**
+  - `records/typed_pointer_001/evaluate_gates.py` is pinned at LF sha256
+    `d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d`.
+  - Each gate's smallest detectable regression (the smallest c′ with b′ = 0 that gives p <= 1/100; that is 7) is
+    printed beside it.
+- **D5: the distractor split.** The analogy cell is also reported separately for the half of foci with the
+  same-domain distractor and for the half without. This is diagnostic; the pass rule is unchanged.
+- **D6: future public shapes.** After the build, any new public 6-node shape must be a DEV-side class, and any new
+  public 5-node shape must be a `DEV_NEW_5` class. Anything else is refused before use.
