@@ -232,8 +232,12 @@ All in `records/typed_pointer_001/admission_unchanged_repro_001/`. No file that 
   blob `3172a221`, `LAUNCH_HELD_PENDING_AMENDMENTS`). This is the intended result.
 - The policy gate: **stopped** with `REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN`. Intended.
 - `read_reproduction.py --receipt-commit 000...0`: **stopped** on the policy gate first, exit 1. Intended.
-- After the commit, the writer's `--dry-run` and `--check` on this checkout (results in the commit report). Both are
-  expected to stop before any launcher import.
+- After commit `ccf1d86a`, on this clean checkout:
+  - `prepare_unchanged_repro.py --dry-run` **stopped** with `PLAN_MOVED_OR_HELD` (same tips as above), exit 1. It ran
+    under `python -X importtime`; the import log names neither `typed_pointer_launch` nor `torch`. So the gate
+    stopped it before the launcher was imported. Intended.
+  - `prepare_unchanged_repro.py --check` **stopped** with `NOTHING_FROZEN_RUN_WRITE_FIRST`, exit 1. Intended: no
+    `frozen/` exists.
 
 **Not run (open):**
 - The launcher-side steps (`verify_package`, the three validators, the Helm 2.0 comparison). The laptop rule forbids
@@ -272,6 +276,9 @@ Files and objects outside this working copy that I opened or touched in this rev
 - `git fetch` from `origin` (GitHub) of `research/helm-integration-20260923`, with an explicit refspec, twice (once by
   hand, once by the gate). It moved `refs/remotes/origin/research/helm-integration-20260923` to `6816b52e`.
 - My scratch copy of `run_on_study.py` (from `git show`) in the session scratchpad folder.
+- Two temporary files I wrote by mistake under the shell's `/tmp`: a `git show` copy of Helm 2.0's
+  `collected_inventory.json` (from `c8d5c430`) and the import-time log of the dry run. Both deleted.
+- The `__pycache__/` folder my compile check created in this folder (git-ignored). Deleted before the commit.
 - The tool harness saved one long command output under `C:/Users/wakil/.claude/projects/.../tool-results/`. I did not
   open it.
 
