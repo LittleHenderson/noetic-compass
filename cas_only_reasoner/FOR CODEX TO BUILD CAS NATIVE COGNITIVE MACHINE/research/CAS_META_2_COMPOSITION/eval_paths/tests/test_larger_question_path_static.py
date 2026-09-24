@@ -33,6 +33,9 @@ FIXTURE_FILE_SHA256 = "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4
 D1_ANCHORS = {"checker_v2.py": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
               "answers_v2.py": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
               "slots_v2.py": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb"}
+# Revision 2 (verification V1): both checkers also run code from these four files while grading. Written here
+# independently of the module's own `SHARED_GRADER_FILES`.
+SHARED_GRADER_FILES = ("answers.py", "focal.py", "source.py", "course.py")
 
 DOCUMENT, PACKETS = fixtures.load()
 ROWS = {row["fixture_id"]: row for row in DOCUMENT["fixtures"]}
@@ -701,7 +704,7 @@ def test_t4_reference_digests_equal_the_committed_t4_item1_job():
 def test_grade_and_target_check_the_grader_pins_on_every_call():
     packet = PACKETS["F06"]
     good = scope.target(packet)["admissible_answers"][0]
-    assert scope.grade(packet, good)["grader_pins_checked"] == sorted(scope.D1_ACCEPTED_LF_SHA256)
+    assert scope.grade(packet, good)["grader_pins_checked"] == sorted([*D1_ANCHORS, *SHARED_GRADER_FILES])
     saved = scope.D1_ACCEPTED_LF_SHA256
     try:
         scope.D1_ACCEPTED_LF_SHA256 = {**saved, "checker_v2.py": "0" * 64}
@@ -722,20 +725,74 @@ def test_grade_and_target_check_the_grader_pins_on_every_call():
         assert error.detail == "checker.py"
     finally:
         scope.PROTECTED_SOURCE_LF_SHA256 = saved
+    assert scope.verify_grader_pins(scope.ORIGINAL) == {name: scope.PROTECTED_SOURCE_LF_SHA256[name]
+                                                        for name in ("checker.py", *SHARED_GRADER_FILES)}
+
+
+def test_grader_pins_also_cover_the_files_both_checkers_run():
+    """V1: a drifted `answers.py`, `focal.py`, `source.py` or `course.py` refuses grading on both routes."""
+    assert tuple(scope.SHARED_GRADER_FILES) == SHARED_GRADER_FILES
+    # Every typed_teaching module either checker imports is pinned inside `grade` for its route.
+    for name, route in (("checker.py", scope.ORIGINAL), ("checker_v2.py", scope.LARGER)):
+        imported = set()
+        for node in ast.parse((TYPED / name).read_bytes()).body:
+            if isinstance(node, ast.ImportFrom) and node.level == 1:
+                imported |= ({alias.name + ".py" for alias in node.names} if node.module is None
+                             else {node.module + ".py"})
+        assert imported == {"answers.py", "focal.py", "source.py"}, name
+        assert imported | {"course.py", name} <= set(scope.verify_grader_pins(route)), name
+    larger = PACKETS["F06"]
+    good = scope.target(larger)["admissible_answers"][0]
+    bank = fixtures.frozen_training_bank()
+    public = {"focus_world_id": bank["worlds"][0]["world_id"], "worlds": bank["worlds"], "bank": bank["bank"]}
+    original = fixtures._packet(public, "definition", None, {}, "CUBE_FACE_1")
+    assert scope.route(larger) == scope.LARGER and scope.route(original) == scope.ORIGINAL
+    saved = scope.PROTECTED_SOURCE_LF_SHA256
+    for drifted in SHARED_GRADER_FILES:
+        try:
+            scope.PROTECTED_SOURCE_LF_SHA256 = {**saved, drifted: "0" * 64}
+            calls = (lambda: scope.grade(larger, good), lambda: scope.target(larger),
+                     lambda: scope.grade(original, {}), lambda: scope.target(original))
+            for call in calls:
+                error = _raises(call)
+                assert isinstance(error, scope.LargerPathRefusal) and error.code == "SOURCE_DRIFT", drifted
+                assert error.detail == drifted, (drifted, error.detail)
+        finally:
+            scope.PROTECTED_SOURCE_LF_SHA256 = saved
+    assert scope.grade(larger, good)["correct"] is True
+
+
+# The claim-status legend of `docs/CAS_HARNESS_SPEC_SHEET.md`, as the project CLAUDE.md lists it.
+SPEC_SHEET_LEGEND = ("REAL", "VALIDATED", "LICENSED", "NOT LICENSED", "NOT_LICENSED", "GREY", "VACUOUS", "WITHDRAWN",
+                     "ENGINEERED-NOT-VALIDATED", "ENGINEERED_NOT_VALIDATED", "FLAG_FOR_HUMAN_REVIEW")
 
 
 def test_kind_scope_records_the_coordinator_claim_ruling():
-    """Ruling 2026-09-23 on review F6. The builder records it; the builder does not decide it."""
+    """Rulings 2026-09-23 on review F6 and on verification V4. The builder records them; it does not decide them."""
     expected = {"role_set": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"), "definition": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"),
                 "context": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"),
                 "analogy": ("CHECKER_V2_D1_ACCEPTED", "CHECKER_V2_D1_ACCEPTED"),
                 "correspondence": ("CHECKER_V2_D1_ACCEPTED", "CHECKER_V2_D1_ACCEPTED"),
-                "parts": ("NOT_RULED_D1_X_COVERED_3_TO_5", "DIAGNOSTIC_ONLY"),
-                "edge_account": ("NOT_RULED_D1_X_COVERED_3_TO_5", "DIAGNOSTIC_ONLY"),
-                "reach": ("NOT_RULED_D1_X_COVERED_3_TO_5",
-                          "CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES")}
+                "parts": ("DIAGNOSTIC_ONLY", "DIAGNOSTIC_ONLY"),
+                "edge_account": ("DIAGNOSTIC_ONLY", "DIAGNOSTIC_ONLY"),
+                "reach": ("DIAGNOSTIC_ONLY", "CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES")}
     assert {kind: (row["claim_status_at_5_nodes"], row["claim_status_at_6_nodes"])
             for kind, row in scope.KIND_SCOPE.items()} == expected
+    # V4: nothing is left NOT_RULED, and the 5-node reason is written into the rows it applies to.
+    for kind, row in scope.KIND_SCOPE.items():
+        assert "NOT_RULED" not in row["claim_status_at_5_nodes"] + row["claim_status_at_6_nodes"], kind
+        basis = row["claim_status_basis"]
+        assert type(basis) is str and basis, kind
+        if kind in ("parts", "edge_account", "reach"):
+            assert "V4" in basis and "DIAGNOSTIC ONLY at 5 nodes" in basis and "reach W = 2 on TEST_NEW_5" in basis
+            assert "read the answer off the input" in basis
+        # The claim words are local labels, and say so; none of them is a spec-sheet legend word.
+        assert row["claim_status_vocabulary"] == scope.CLAIM_STATUS_VOCABULARY == \
+            "LOCAL_LABELS_NOT_THE_SPEC_SHEET_LEGEND", kind
+        for word in (row["claim_status_at_5_nodes"], row["claim_status_at_6_nodes"]):
+            assert word not in SPEC_SHEET_LEGEND, (kind, word)
+    text = (EVAL / "larger_question_scope.py").read_text(encoding="utf-8")
+    assert "THE CLAIM-STATUS WORDS ARE LOCAL LABELS." in text and "docs/CAS_HARNESS_SPEC_SHEET.md" in text
 
 
 if __name__ == "__main__":

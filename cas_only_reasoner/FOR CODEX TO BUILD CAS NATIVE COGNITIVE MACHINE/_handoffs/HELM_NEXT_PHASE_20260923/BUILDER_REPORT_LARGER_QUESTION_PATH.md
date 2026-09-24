@@ -786,3 +786,143 @@ confirm. I did not repeat any of it.
 **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any path containing
 `hset1a` or `hset1b`, any salt, S3 or AWS, the meta1 ledger, other worktrees' files, and Claude transcripts. No torch
 import, no GPU, no training.
+
+---
+
+# Revision 2 (2026-09-23): two notes from the verification of e21472a8
+
+- **Label: CLAUDE_BUILT_CLAUDE_CHECKED.** Written by the temporary Claude builder. Custody is not independent:
+  Claude built, reviewed, verified and revised this path.
+- Parent commit: `0cdd1a7b` (the verification, verdict APPROVE_FOR_T4_CHECKS, notes V1-V5).
+- Asked for: V1 (a code fix) and V4 (the coordinator's ruling, written into the table). V2 needs no change (the
+  preflight measures the real speed). V3 (thread settings) and V5 (the launcher) belong to the AWS job folder
+  `larger_question_t4_job/` on `research/helm-integration-20260923`, not to this branch.
+- Only `larger_question_scope.py`, the torch-free test file and this report changed. `t4_larger_question_checks.py`
+  did not change. No protected file changed. The 12 source pins still hold.
+- **Status: BUILT, checked statically on the laptop. The AWS T4 checks are still NOT_RUN.** Nothing ran with
+  torch. No AWS call was made from this branch.
+
+## R2-1. V1: the grader now pins the four helper files too
+
+In plain words: both checkers run code from four more files while grading. Before, `grade()` checked only the
+checker's own files. Now it checks all of them, on every call.
+
+- New `SHARED_GRADER_FILES = ("answers.py", "focal.py", "source.py", "course.py")` in `larger_question_scope.py`.
+  Their pins are read from `PROTECTED_SOURCE_LF_SHA256` at call time. An import-time guard refuses the module if a
+  name is missing from that table or overlaps the D-1 anchors (`LARGER_PATH_GRADER_PIN_TABLE`).
+- `verify_grader_pins(route)` checks, in this order: the route's checker files (the three D-1 anchors on LARGER;
+  the frozen `checker.py` on ORIGINAL), then the four shared files, **on both routes**. Why both: `checker.py` and
+  `checker_v2.py` both import `answers`, `focal` and `source`, and `grade()` calls `course.validate_model_packet`
+  on both routes.
+- Refusal names: a drifted D-1 anchor is `SOURCE_DRIFT:D1_ANCHOR:<file>` (unchanged). A drifted shared file is
+  `SOURCE_DRIFT:<file>`, for example `LARGER_PATH_REFUSED:SOURCE_DRIFT:focal.py`.
+- `grade()` now returns 7 names in `grader_pins_checked` on LARGER and 5 on ORIGINAL.
+- Cost: four more small file hashes per `grade()` or `target()` call. Not measured on its own.
+- **Not covered, recorded as a note:** `course.py` imports `course_plan.py` at module load. `course_plan.py` is not
+  in `PROTECTED_SOURCE_LF_SHA256`, so it is not pinned here. `validate_model_packet` does not call it (I read lines
+  295-330 of `course.py`). The T4 run still ships and records the whole source tree's digest. See open question R2-A.
+
+## R2-2. V4: the 5-node ruling, and the claim words are local labels
+
+In plain words: the coordinator ruled that at 5 nodes, parts, edge account and reach are diagnostic only. I wrote
+that into the table, with the reason. I also wrote into the table that its claim words are its own labels, not the
+spec sheet's.
+
+| Kind | Claim status at 5 nodes | Claim status at 6 nodes | Changed? |
+|---|---|---|---|
+| `role_set`, `definition`, `context` | `OUT_OF_SCOPE` | `OUT_OF_SCOPE` | no |
+| `analogy`, `correspondence` | `CHECKER_V2_D1_ACCEPTED` | `CHECKER_V2_D1_ACCEPTED` | no |
+| `parts` | `DIAGNOSTIC_ONLY` (was `NOT_RULED_D1_X_COVERED_3_TO_5`) | `DIAGNOSTIC_ONLY` | 5 nodes |
+| `edge_account` | `DIAGNOSTIC_ONLY` (was `NOT_RULED_D1_X_COVERED_3_TO_5`) | `DIAGNOSTIC_ONLY` | 5 nodes |
+| `reach` | `DIAGNOSTIC_ONLY` (was `NOT_RULED_D1_X_COVERED_3_TO_5`) | `CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES` | 5 nodes |
+
+- **The reason, as the coordinator gave it** (recorded, not re-derived by me): HSET-1A measured reach W = 2 on
+  TEST_NEW_5, and the parts and edge-account bars read the answer off the input. I did not open any HSET-1A file to
+  check this.
+- The `d1_acceptance_coverage` column still says `X_HSET1A_AT_3_TO_5_NODES_ONLY` for these three kinds. That column
+  is about the CHECKER. The claim-status columns are about what a Helm score may claim. The comment above the table
+  now says this.
+- Every row has two new keys:
+  - `claim_status_basis`: which ruling set the row, in words (F6, V4, or the D-1 scope for analogy and
+    correspondence);
+  - `claim_status_vocabulary`: `LOCAL_LABELS_NOT_THE_SPEC_SHEET_LEGEND`.
+- The comment above the table says the words `OUT_OF_SCOPE`, `DIAGNOSTIC_ONLY`, `CHECKER_V2_D1_ACCEPTED` and
+  `CLAIM_BEARING_IN_HSET2_...` are local labels. They are **not** the claim-status legend of
+  `docs/CAS_HARNESS_SPEC_SHEET.md` (REAL / VALIDATED / LICENSED / NOT LICENSED / GREY / VACUOUS / WITHDRAWN /
+  ENGINEERED-NOT-VALIDATED / FLAG_FOR_HUMAN_REVIEW). A person must map them to that legend before any of them
+  enters the spec sheet.
+- This answers open question 1 of Revision 1.
+
+## R2-3. What I checked on the laptop (static only; no torch)
+
+| Check | Result |
+|---|---|
+| `python -B -m pytest -q -p no:cacheprovider eval_paths/tests/test_larger_question_path_static.py` (from `research/CAS_META_2_COMPOSITION`) | **37 passed in 50.82 s** on the final files (an earlier run, before one docstring edit: 37 passed in 49.32 s) |
+| `python -B t4_larger_question_checks.py --list-inputs` | exit 0 (file unchanged) |
+| Syntax of the changed files; line endings | both parse; both LF only; no new line over 120 characters |
+| In-memory mutation check (scratchpad script `mutate_r2.py`; nothing on disk changed) | **7 of 7 caught**: shared files not checked; shared files checked on LARGER only; 5-node reach left `NOT_RULED`; 5-node parts made claim-bearing; a spec-sheet legend word (`LICENSED`) used; the vocabulary note dropped; a basis without the V4 reason |
+
+Tests changed or added (36 -> 37):
+
+- `test_grade_and_target_check_the_grader_pins_on_every_call` (updated): LARGER returns the 3 anchors plus the 4
+  shared files; ORIGINAL returns `checker.py` plus the 4 shared files.
+- `test_grader_pins_also_cover_the_files_both_checkers_run` (new): reads each checker's relative imports with
+  `ast` and requires every imported project file (and `course.py`, and the checker itself) to be pinned for its
+  route; then makes each shared pin wrong in turn and requires `SOURCE_DRIFT:<file>` from `grade` and `target` on
+  both routes; then grades once with the true pins. The four names are written in the test independently of the
+  module.
+- `test_kind_scope_records_the_coordinator_claim_ruling` (updated): the new 5-node words; no `NOT_RULED` left; the
+  V4 reason in the three rows; `claim_status_vocabulary` on every row; no claim word equal to a spec-sheet legend
+  word; the "local labels" comment present.
+
+## R2-4. Files after Revision 2 (all LF)
+
+Under `research/CAS_META_2_COMPOSITION/eval_paths/`:
+
+| File | Bytes | sha256 | Changed? |
+|---|---|---|---|
+| `__init__.py` | 393 | `38a1d4f57995cd43b5a0ed1616b2e941726327abed0919f3d8ce7a793f1e0ae4` | no |
+| `larger_question_scope.py` | 22,424 | `a09a172510b2f5ad1dd2ba2bc56d6cd46f354b619264bac90d18aa06748f9f32` | yes |
+| `larger_question_learner.py` | 7,852 | `82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d` | no |
+| `larger_question_fixtures.py` | 32,130 | `567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d` | no |
+| `fixtures/larger_question_fixtures_v0_1.json` | 190,466 | `7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3` | no |
+| `colour_refinement_census.py` | 5,295 | `dbf9d01f41946349bf853ec51b9d3a279b8194a0914758075212337ffe4cbb5f` | no |
+| `t4_larger_question_checks.py` | 54,273 | `4d2bdbbf5907860e65696853513430bf0a4516dc46250533e94f2a28e77d72f7` | no |
+| `tests/test_larger_question_path_static.py` | 45,405 | `9f0be6d35e11a65623ef12ae035e73ce2630903a0a93421018cd43668f449c97` | yes |
+
+## R2-5. Claim status of this revision
+
+- **REAL (measured on the laptop, torch-free):** 37 of 37 tests pass; 7 of 7 mutations caught; `--list-inputs`
+  exit 0.
+- **NOT_RUN:** all four T4 checks and the preflight.
+- **NOT LICENSED:** any statement about Helm's accuracy on larger questions.
+
+## R2-6. Open questions for the coordinator (not decided by the builder)
+
+- **R2-A. `course_plan.py`.** Imported by `course.py`, not pinned by this path, not called by grading. Pin it too
+  (it would need adding to `PROTECTED_SOURCE_LF_SHA256`, which widens `verify_source_pins`), or leave it?
+- Revision 1 questions 2 to 6 stay open as written. Question 2 (the launcher) is being answered by the job folder
+  `larger_question_t4_job/` on `research/helm-integration-20260923`, which is written but not reviewed or run.
+
+## EXPOSURE (Revision 2): every file outside my working copy that I opened, and what else I saw
+
+My working copy is `D:/tksCAS-worktrees/helm-builder`.
+
+**Loaded by the tool before I started (not opened by me).** The owner's global `CLAUDE.md`, the project `CLAUDE.md`
+at `C:/Users/wakil/OneDrive/Desktop/tksCAS/CLAUDE.md`, and the auto-memory index `MEMORY.md`. The index names the
+sealed-test archive folder and states sealed-build totals (for example "HSET-1A reach W=2"). It holds no TEST world,
+record id, shape or answer.
+
+**Read in the working copy:** the verification section of the review (through `git show 0cdd1a7b`), this report's
+Revision 1 section, `larger_question_scope.py` (whole), the test file (parts), `grep`s of
+`t4_larger_question_checks.py`. Protected source, unedited: the import lines of `checker.py`, `checker_v2.py`,
+`answers_v2.py`, `slots_v2.py`, `course.py`, `answers.py`, `focal.py`, `source.py`; `course.py` lines 295-330 and a
+`grep` for `course_plan.`.
+
+**Written outside the working copy:** the session scratchpad only: `patch_scope.py` (a text patch of the table),
+`mutate_r2.py` (the in-memory mutation check) and this section's draft.
+
+**Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any path containing
+`hset1a` or `hset1b`, any `results/` folder by me (the existing test re-reads six committed T4 preservation files
+from git objects of `41071a3f`, as in Revision 1; nothing from them was printed), any salt, S3 or AWS, the meta1
+ledger, and Claude transcripts. No torch import, no GPU, no training.

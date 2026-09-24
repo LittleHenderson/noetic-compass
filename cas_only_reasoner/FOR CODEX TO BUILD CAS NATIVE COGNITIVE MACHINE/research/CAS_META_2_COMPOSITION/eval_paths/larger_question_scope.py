@@ -18,10 +18,13 @@ not import `pointer_contract`, `pointer_inputs` or `pointer_learner`: importing 
 `decode` turns caller-supplied scores into an answer; `grade` runs the checker. Grading is separate from
 decoding, so no checker call can reach an inference step.
 
-PINS INSIDE THE GRADER (revision 1, review F5). `grade` and `target` check, on every call, that the checker files
-their route uses still equal their pins: the three D-1 ACCEPTED anchors (`checker_v2.py`, `answers_v2.py`,
-`slots_v2.py`) on the LARGER route, the frozen `checker.py` pin on the ORIGINAL route. So a torch-free scorer that
-imports only this module cannot grade with a drifted checker; it gets `LARGER_PATH_REFUSED:SOURCE_DRIFT`.
+PINS INSIDE THE GRADER (revision 1, review F5; widened in revision 2, verification V1). `grade` and `target`
+check, on every call, that the files their route grades with still equal their pins: the three D-1 ACCEPTED
+anchors (`checker_v2.py`, `answers_v2.py`, `slots_v2.py`) on the LARGER route, the frozen `checker.py` pin on the
+ORIGINAL route, and on BOTH routes the four files both checkers run code from (`answers.py`, `focal.py`,
+`source.py`, and `course.py`, whose `validate_model_packet` `grade` calls). So a torch-free scorer that imports
+only this module cannot grade with a drifted checker or a drifted helper file; it gets
+`LARGER_PATH_REFUSED:SOURCE_DRIFT`.
 
 WHY MALFORMED PACKETS GO TO THE ORIGINAL PATH. `route` reads the packet before any validator does. If it cannot
 count the worlds' nodes and edges, it returns ORIGINAL, and the original validators refuse the packet with their
@@ -89,6 +92,14 @@ D1_ACCEPTED_LF_SHA256 = {
     "answers_v2.py": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
     "slots_v2.py": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb",
 }
+# Files BOTH checkers run code from while grading (revision 2, verification V1). `checker.py` and `checker_v2.py`
+# import `answers`, `focal` and `source` and call `answers.validate_answer`, `answers.make_answer`,
+# `answers.validate_query`, `focal.derive_roles` and `source.validate_public`; `grade` itself calls
+# `course.validate_model_packet`. Their pins are the ones in `PROTECTED_SOURCE_LF_SHA256`, read at call time.
+SHARED_GRADER_FILES = ("answers.py", "focal.py", "source.py", "course.py")
+if not set(SHARED_GRADER_FILES) <= set(PROTECTED_SOURCE_LF_SHA256) or set(SHARED_GRADER_FILES) & set(
+        D1_ACCEPTED_LF_SHA256):
+    raise ValueError("LARGER_PATH_GRADER_PIN_TABLE")
 # Checker errors that mean "outside the checker's bounded scope", not "malformed question".
 GRADER_SCOPE_CODES = ("TYPED_CHECKER_ISOMORPHISM_BOUND", "TYPED_CHECKER_TARGET_SET_BOUND",
                       "TYPED_CHECKER_TARGET_BYTES")
@@ -98,31 +109,47 @@ REFUSAL_CODES = ("WORLD_ABOVE_SIX_NODES", "DEGREE_ABOVE_READER_EXACT_RANGE", "GR
 # What each question kind does at 5 and 6 nodes. `tests/test_larger_question_path_static.py` checks every
 # COMPILES / REFUSES / GRADES word here against the committed fixtures, so this table cannot drift silently.
 #
-# CLAIM STATUS (coordinator ruling, 2026-09-23, on review F6; recorded here, not decided by the builder):
-# * reach at 6 nodes is CLAIM-BEARING in HSET-2, because the HSET-2 build cross-checks every reach gold with
-#   independent rules;
-# * parts and edge_account at 6 nodes stay DIAGNOSTIC ONLY;
-# * role_set, definition and context are OUT OF SCOPE (not claim-bearing at 5 or 6 nodes);
+# CLAIM STATUS (coordinator rulings, 2026-09-23; recorded here, not decided by the builder):
+# * on review F6: reach at 6 nodes is CLAIM-BEARING in HSET-2, because the HSET-2 build cross-checks every reach
+#   gold with independent rules;
+# * on review F6: parts and edge_account at 6 nodes stay DIAGNOSTIC ONLY;
+# * on review F6: role_set, definition and context are OUT OF SCOPE (not claim-bearing at 5 or 6 nodes);
 # * analogy and correspondence at 5 and 6 nodes are inside checker v2's D-1 ACCEPTED scope (A3, A5, A6);
-# * parts, edge_account and reach at 5 nodes: no ruling was given; D-1 extra check X covered them at 3-5 nodes.
+# * on verification V4 (revision 2): parts, edge_account and reach at 5 nodes are DIAGNOSTIC ONLY for claims.
+#   Reason given by the coordinator: HSET-1A measured reach W = 2 on TEST_NEW_5, and the parts and edge_account
+#   bars read the answer off the input. D-1 extra check X still covered these kinds at 3-5 nodes; that coverage
+#   is about the CHECKER, not about what a Helm score at 5 nodes may claim.
+#
+# THE CLAIM-STATUS WORDS ARE LOCAL LABELS. `OUT_OF_SCOPE`, `DIAGNOSTIC_ONLY`, `CHECKER_V2_D1_ACCEPTED` and
+# `CLAIM_BEARING_IN_HSET2_...` are this table's own words. They are NOT the claim-status legend of
+# `docs/CAS_HARNESS_SPEC_SHEET.md` (REAL / VALIDATED / LICENSED / NOT LICENSED / GREY / VACUOUS / WITHDRAWN /
+# ENGINEERED-NOT-VALIDATED / FLAG_FOR_HUMAN_REVIEW). Before any of them enters the spec sheet, a person must map it
+# to that legend. Every row carries `claim_status_vocabulary` to say so.
+CLAIM_STATUS_VOCABULARY = "LOCAL_LABELS_NOT_THE_SPEC_SHEET_LEGEND"
+_DIAGNOSTIC_AT_5_BASIS = ("coordinator ruling on V4 (2026-09-23): DIAGNOSTIC ONLY at 5 nodes; HSET-1A measured "
+                          "reach W = 2 on TEST_NEW_5, and the parts and edge_account bars read the answer off the "
+                          "input")
 KIND_SCOPE = {
     "role_set": {"rules": list(answers.RULES["role_set"]),
                  "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
                  "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
                  "d1_acceptance_coverage": "NOT_EXERCISED_BY_D1",
                  "claim_status_at_5_nodes": "OUT_OF_SCOPE", "claim_status_at_6_nodes": "OUT_OF_SCOPE",
+                 "claim_status_basis": "coordinator ruling on review F6 (2026-09-23): OUT OF SCOPE at 5 and 6 nodes",
                  "answer_slots": "6 role slots, ABSENT/PRESENT; independent of node count"},
     "definition": {"rules": list(answers.RULES["definition"]),
                    "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
                    "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
                    "d1_acceptance_coverage": "NOT_EXERCISED_BY_D1",
                    "claim_status_at_5_nodes": "OUT_OF_SCOPE", "claim_status_at_6_nodes": "OUT_OF_SCOPE",
+                   "claim_status_basis": "coordinator ruling on review F6 (2026-09-23): OUT OF SCOPE at 5 and 6 nodes",
                    "answer_slots": "whole: one of N0..N(n-1); kind_ref and function_ref: one of W0..W64"},
     "context": {"rules": list(answers.RULES["context"]),
                 "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
                 "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
                 "d1_acceptance_coverage": "NOT_EXERCISED_BY_D1",
                 "claim_status_at_5_nodes": "OUT_OF_SCOPE", "claim_status_at_6_nodes": "OUT_OF_SCOPE",
+                "claim_status_basis": "coordinator ruling on review F6 (2026-09-23): OUT OF SCOPE at 5 and 6 nodes",
                 "answer_slots": "setting_ref: one of W0..W64; one ABSENT/PRESENT slot per focus node (3 are primary)"},
     "analogy": {"rules": list(answers.RULES["analogy"]),
                 "old_slot_compiler_at_5_6": "COMPILES",
@@ -132,6 +159,8 @@ KIND_SCOPE = {
                 "d1_acceptance_coverage": "A3_A5_A6_AT_5_AND_6_NODES",
                 "claim_status_at_5_nodes": "CHECKER_V2_D1_ACCEPTED", "claim_status_at_6_nodes":
                     "CHECKER_V2_D1_ACCEPTED",
+                "claim_status_basis": ("D-1 ACCEPTED scope of checker v2 (A3, A5, A6) at 5 and 6 nodes; "
+                                       "not restated by the F6 ruling"),
                 "answer_slots": "world_id: NO_MATCH or one of the bank's W aliases (at most 64 bank worlds)"},
     "correspondence": {"rules": list(answers.RULES["correspondence"]),
                        "old_slot_compiler_at_5_6": "REFUSES_TYPED_PERMUTATION_BOUND",
@@ -141,6 +170,8 @@ KIND_SCOPE = {
                        "d1_acceptance_coverage": "A3_AT_5_AND_6_NODES",
                        "claim_status_at_5_nodes": "CHECKER_V2_D1_ACCEPTED", "claim_status_at_6_nodes":
                            "CHECKER_V2_D1_ACCEPTED",
+                       "claim_status_basis": ("D-1 ACCEPTED scope of checker v2 (A3) at 5 and 6 nodes; "
+                                              "not restated by the F6 ruling"),
                        "answer_slots": ("mode NO_MATCH/MAPPING plus one mapping_target slot per focus node over the "
                                         "target's N aliases; decoded over all 1 + n! complete assignments "
                                         "(121 at 5 nodes, 721 at 6)")},
@@ -148,24 +179,29 @@ KIND_SCOPE = {
               "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
               "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
               "d1_acceptance_coverage": "X_HSET1A_AT_3_TO_5_NODES_ONLY",
-              "claim_status_at_5_nodes": "NOT_RULED_D1_X_COVERED_3_TO_5", "claim_status_at_6_nodes":
-                  "DIAGNOSTIC_ONLY",
+              "claim_status_at_5_nodes": "DIAGNOSTIC_ONLY", "claim_status_at_6_nodes": "DIAGNOSTIC_ONLY",
+              "claim_status_basis": _DIAGNOSTIC_AT_5_BASIS + "; F6 ruling: DIAGNOSTIC ONLY at 6 nodes",
               "answer_slots": "one ABSENT/PRESENT slot per focus node"},
     "edge_account": {"rules": list(answers.RULES["edge_account"]),
                      "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
                      "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
                      "d1_acceptance_coverage": "X_HSET1A_AT_3_TO_5_NODES_ONLY",
-                     "claim_status_at_5_nodes": "NOT_RULED_D1_X_COVERED_3_TO_5", "claim_status_at_6_nodes":
-                         "DIAGNOSTIC_ONLY",
+                     "claim_status_at_5_nodes": "DIAGNOSTIC_ONLY", "claim_status_at_6_nodes": "DIAGNOSTIC_ONLY",
+                     "claim_status_basis": _DIAGNOSTIC_AT_5_BASIS + "; F6 ruling: DIAGNOSTIC ONLY at 6 nodes",
                      "answer_slots": "one ABSENT/PRESENT slot per ordered node pair: 25 at 5 nodes, 36 at 6 (cap 100)"},
     "reach": {"rules": list(answers.RULES["reach"]),
               "old_slot_compiler_at_5_6": "COMPILES", "old_checker_at_5_6": "GRADES",
               "checker_v2_at_5_6": "GRADES", "checker_v2_versus_frozen": "IDENTICAL_CODE_PATH",
               "d1_acceptance_coverage": "X_HSET1A_AT_3_TO_5_NODES_ONLY",
-              "claim_status_at_5_nodes": "NOT_RULED_D1_X_COVERED_3_TO_5", "claim_status_at_6_nodes":
+              "claim_status_at_5_nodes": "DIAGNOSTIC_ONLY", "claim_status_at_6_nodes":
                   "CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES",
+              "claim_status_basis": (_DIAGNOSTIC_AT_5_BASIS + "; F6 ruling: CLAIM-BEARING at 6 nodes in HSET-2, "
+                                     "because the HSET-2 build cross-checks every reach gold with independent "
+                                     "rules"),
               "answer_slots": "one slot: ABSENT, DIRECT, or VIA_N0..VIA_N(n-1)"},
 }
+for _row in KIND_SCOPE.values():
+    _row["claim_status_vocabulary"] = CLAIM_STATUS_VOCABULARY
 if set(KIND_SCOPE) != set(answers.RULES):
     raise ValueError("LARGER_PATH_KIND_TABLE")
 
@@ -198,21 +234,26 @@ def verify_source_pins():
 
 
 def verify_grader_pins(path):
-    """Fail closed unless the checker files `path` grades with equal their pins. Called inside `grade`/`target`.
+    """Fail closed unless the files `path` grades with equal their pins. Called inside `grade`/`target`.
 
     LARGER: the three D-1 ACCEPTED anchors (`checker_v2.py`, `answers_v2.py`, `slots_v2.py`). ORIGINAL: the frozen
-    `checker.py` pin (the scorer of record for history). Returns `{file: expected LF sha256}` for the record.
+    `checker.py` pin (the scorer of record for history). BOTH routes: `SHARED_GRADER_FILES` (`answers.py`,
+    `focal.py`, `source.py`, `course.py`) against `PROTECTED_SOURCE_LF_SHA256`. The route's checker files are
+    checked first. A drifted D-1 anchor is named `D1_ANCHOR:<file>`; any other drifted file is named `<file>`.
+    Returns `{file: expected LF sha256}` for the record.
     """
     if path == LARGER:
-        expected, prefix = dict(D1_ACCEPTED_LF_SHA256), "D1_ANCHOR:"
+        anchors = dict(D1_ACCEPTED_LF_SHA256)
     elif path == ORIGINAL:
-        expected, prefix = {"checker.py": PROTECTED_SOURCE_LF_SHA256["checker.py"]}, ""
+        anchors = {"checker.py": PROTECTED_SOURCE_LF_SHA256["checker.py"]}
     else:
         raise ValueError("LARGER_PATH_ROUTE:" + str(path))
-    for name, pin in expected.items():
+    checks = [(name, pin, "D1_ANCHOR:" if path == LARGER else "") for name, pin in anchors.items()]
+    checks += [(name, PROTECTED_SOURCE_LF_SHA256[name], "") for name in SHARED_GRADER_FILES]
+    for name, pin, prefix in checks:
         if lf_sha256(TYPED_TEACHING / name) != pin:
             raise LargerPathRefusal("SOURCE_DRIFT", prefix + name)
-    return expected
+    return {name: pin for name, pin, _ in checks}
 
 
 def packet_shape(packet):
@@ -291,7 +332,8 @@ def grade(packet, answer):
     ORIGINAL questions are graded by the frozen checker, which stays the scorer of record for every historical
     result. LARGER questions are graded by checker v2. A checker bound (more than 6 nodes, more than 64 valid
     answers, an oversized target) becomes `LargerPathRefusal("GRADER_OUT_OF_SCOPE", <checker code>)`.
-    The route's checker pins are checked first, on every call (`verify_grader_pins`).
+    The route's grader pins (its checker files and the four shared helper files) are checked first, on every
+    call (`verify_grader_pins`).
     """
     path = route(packet)
     pins = verify_grader_pins(path)
