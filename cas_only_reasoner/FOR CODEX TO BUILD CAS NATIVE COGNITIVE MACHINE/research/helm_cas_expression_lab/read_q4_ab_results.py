@@ -46,6 +46,7 @@ LABELS = {
     "architecture": ("ARCHITECTURE_CHANGE_JUSTIFIED", "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE",
                      "ARCHITECTURE_DECISION_INCOMPLETE", "ARCHITECTURE_NOT_EVALUATED"),
     "architecture_reason": tuple("ARCHITECTURE_INCOMPLETE_BECAUSE_" + r for r in rules.ARCHITECTURE_REASONS),
+    "information_only": rules.INFORMATION_LABELS,
     "pair": ("B_BEATS_A_<PANEL>_PAIR<i>", "A_BEATS_B_<PANEL>_PAIR<i>", "NO_PAIRED_DIFFERENCE_<PANEL>_PAIR<i>",
              "PAIR_INCOMPLETE_<PANEL>_PAIR<i>"),
     "lessons": tuple("LESSONS_%s_<PANEL>" % outcome for outcome in rules.LESSON_OUTCOMES),
@@ -197,8 +198,10 @@ def input_use(checkpoint, arm, prep):
     if distinct != checkpoint["panels"]["SP1"]["distinct_free_outputs"]:
         raise ReadError("DISTINCT_TOTAL_DISAGREES")
     t3 = {"distinct_free_outputs": distinct, "rows": len(rows), "passes": distinct >= rules.T3_MIN_DISTINCT,
-          "meaning": "free generation has not collapsed; not evidence of field-value reading by itself"}
-    level = rules.input_use_level(t1["passes_alpha"], t2v["passes"], t2p["passes"], t3["passes"])
+          "output_varies": distinct > rules.NONE_DISTINCT_FREE_OUTPUTS,
+          "meaning": "free generation has not collapsed; not evidence of field-value reading by itself. 2 or more "
+                     "distinct free outputs is never NONE"}
+    level = rules.input_use_level(t1["passes_alpha"], t2v["passes"], t2p["passes"], distinct)
     return {"level": level, "label": "INPUT_USE_" + level,
             "T1": dict(t1, field=rules.T1_FIELD, passes=t1["passes_alpha"]), "T2V": t2v, "T2P": t2p, "T3": t3,
             "T2_ALL_EDITS_REPORTED_NOT_DECISIVE": edit_move_test(moves["value"] + moves["presence"]),
@@ -280,10 +283,32 @@ def read_run(root, arm, seed, prep, frozen_sha):
     return info, per_checkpoint
 
 
-def valid_final_levels(runs):
-    """arm -> the FINAL input-use level of every VALID run of that arm, in seed order."""
-    return {arm: [runs[(arm, seed)]["readings"][str(rules.FINAL)]["level"] for seed in rules.SEEDS
-                  if runs[(arm, seed)]["validity"] == "RUN_VALID"] for arm in rules.ARMS}
+def final_readings(runs):
+    """arm -> (FINAL level, run is valid) of every run of that arm that HAS a FINAL reading, valid or not, in seed
+    order (coordinator decision 3 of 2026-09-24: an invalid run's reading counts against JUSTIFIED)."""
+    out = {}
+    for arm in rules.ARMS:
+        out[arm] = []
+        for seed in rules.SEEDS:
+            info = runs[(arm, seed)]
+            reading = info["readings"].get(str(rules.FINAL))
+            if reading is None:
+                if info["validity"] == "RUN_VALID":          # read_run never makes a run valid without it
+                    raise ReadError("VALID_RUN_WITHOUT_A_FINAL_READING: %s_%d" % (arm, seed))
+                continue
+            out[arm].append((reading["level"], info["validity"] == "RUN_VALID"))
+    return out
+
+
+def checkpoint_0_report(runs):
+    """Every run (in run order): its checkpoint-0 T1, T2V, T2P, distinct free outputs and level; None if unread."""
+    report = {}
+    for key, info in runs.items():
+        reading = info["readings"].get("0")
+        report["%s_%d" % key] = None if reading is None else {
+            "T1": reading["T1"]["passes"], "T2V": reading["T2V"]["passes"], "T2P": reading["T2P"]["passes"],
+            "distinct_free_outputs": reading["T3"]["distinct_free_outputs"], "level": reading["level"]}
+    return report
 
 
 def pair_start_equal(a, b):
@@ -320,6 +345,7 @@ def verdict(root):
     frozen_sha = rules.frozen_sha256()
     out = {"schema": VERDICT_SCHEMA, "label": rules.LABEL, "experiment": rules.EXPERIMENT,
            "status": "PROGRAM_READING_NOT_CERTIFIED", "frozen_sha256": frozen_sha, "labels": [],
+           "spec_revision": rules.SPEC_REVISION,
            "reader": "read_q4_ab_results.py", "labels_possible": LABELS,
            "reader_lf_sha256": {"read_q4_ab_results.py": _lf_sha256(__file__),
                                 "q4_ab_rules.py": _lf_sha256(rules.__file__)}}
@@ -369,18 +395,30 @@ def verdict(root):
         runs[(arm, seed)] = info
         detail[(arm, seed)] = {"info": info, "checkpoints": checkpoints}
     out["runs"] = {"%s_%d" % key: info for key, info in runs.items()}
-    levels_at_zero = {"%s_%d" % key: info["readings"]["0"]["level"] for key, info in runs.items()
-                      if "0" in info["readings"]}
-    fires_at_zero = any(level != "NONE" for level in levels_at_zero.values())
+    zero = checkpoint_0_report(runs)
+    fires_at_zero = rules.calibration_guard_fires(
+        (r["T1"], r["T2V"], r["T2P"]) for r in zero.values() if r is not None)
     out["calibration"] = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION" if fires_at_zero
                           else "INPUT_USE_RULE_SILENT_AT_INITIALISATION")
-    out["calibration_levels_at_checkpoint_0"] = levels_at_zero
-    levels = valid_final_levels(runs)
-    out["arms"] = {arm: {"label": rules.arm_label(arm, levels[arm]), "final_levels_of_valid_runs": levels[arm],
-                         "valid_runs": len(levels[arm]), "full_runs": levels[arm].count("FULL"),
-                         "runs_not_valid": len(rules.SEEDS) - len(levels[arm])} for arm in rules.ARMS}
+    out["calibration_guard_tests"] = "T1, T2V, T2P at checkpoint 0 (distinct free outputs and T3 are not in the guard)"
+    out["calibration_checkpoint_0"] = zero
+    out["checkpoint_0_distinct_free_outputs"] = {run: (None if r is None else r["distinct_free_outputs"])
+                                                 for run, r in zero.items()}
+    finals = final_readings(runs)
+    out["arms"] = {}
+    for arm in rules.ARMS:
+        valid = [level for level, ok in finals[arm] if ok]
+        out["arms"][arm] = {"label": rules.arm_label(arm, finals[arm]), "final_levels_of_valid_runs": valid,
+                            "final_levels_of_runs_not_valid": [level for level, ok in finals[arm] if not ok],
+                            "valid_runs": len(valid), "valid_none_runs": valid.count("NONE"),
+                            "full_runs": valid.count("FULL"), "runs_not_valid": len(rules.SEEDS) - len(valid)}
     arm_labels = [out["arms"][arm]["label"] for arm in rules.ARMS]
-    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(levels, fires_at_zero)
+    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(finals, fires_at_zero)
+    final_levels = [level for arm in rules.ARMS for level, _ in finals[arm]]
+    out["information"] = {"labels": (["FIELDS_NOT_READ_IN_ANY_RUN"] if rules.fields_not_read_in_any_run(final_levels)
+                                     else []),
+                          "final_readings_counted": len(final_levels),
+                          "note": "information only; justifies nothing by itself"}
     inspected = {r["id"] for r in prep["panels"]["SP2"] if r.get("inspected")}
     panel_ids = {"SP1": [r["id"] for r in prep["panels"]["SP1"]],
                  "SP2U": [r["id"] for r in prep["panels"]["SP2"] if r["id"] not in inspected],
@@ -429,6 +467,7 @@ def verdict(root):
                       for k, v in runs.items() if str(rules.FINAL) in v["readings"]]
     out["labels"] += ([out["calibration"]] + arm_labels + [out["architecture"]]
                       + ["ARCHITECTURE_INCOMPLETE_BECAUSE_" + r for r in out["architecture_reasons"]]
+                      + out["information"]["labels"]
                       + list(out["lessons"].values()) + [out["lessons_overall"]])
     return out
 

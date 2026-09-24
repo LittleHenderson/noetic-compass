@@ -1,17 +1,21 @@
-# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 2)
+# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3)
 
-**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `3100f37603cbc0e351cfbad2e2832bd769819d906338f7cf08966b916ee42f11`
+**Status: PROPOSED_FOR_REVIEW** (revision 3; not frozen; the launcher refuses it)
 
 How this status was set, and what it binds:
 - Revision 1 (commit `3771f989`) went to two independent reviews. They found one MAJOR defect and eight MINOR ones
-  (`_handoffs/HELM_NEXT_PHASE_20260923/Q4_AB_REVIEW_20260924.md`). Revision 2 fixes the MAJOR one and every MINOR one
-  that was cheap and safe. The builder set this status only after the MAJOR fix and its tests, as the coordinator's
-  task allowed.
-- The hash above is `q4_ab_rules.frozen_sha256()` of revision 2. The training launcher
-  (`records/q4_sdg_1_20260923/ab_job/launch.py`) refuses to launch unless, at the source commit: this exact status
-  line is present; the rules hash to the same value (`APPROVED_FROZEN_SHA256`); and the four decision programs and
-  this spec have exactly the bytes listed in `APPROVED_LF_SHA256`.
-- Any change after this needs a new version number, a new review, and new approved values in the launcher.
+  (`_handoffs/HELM_NEXT_PHASE_20260923/Q4_AB_REVIEW_20260924.md`). Revision 2 (commit `294471a5`) fixed them and was
+  set to frozen, with rules hash `3100f376...`.
+- A fresh verification of revision 2 (commit `fbcc279b`, same review file) returned **CHANGES_REQUIRED**: one MAJOR
+  point (a shape-and-operator reader was still graded NONE), two MINOR points and one process note. So revision 2 is
+  **not** the approved revision any more.
+- Revision 3 applies the coordinator's five decisions of 2026-09-24, quoted word for word in section 15. It goes back
+  to `PROPOSED_FOR_REVIEW`. It needs a new review.
+- The training launcher (`records/q4_sdg_1_20260923/ab_job/launch.py`) still holds revision 2's approved values
+  (`APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256`). Revision 3's rules hash differs, and this status line is not the
+  frozen one. So the launcher refuses revision 3 (`FROZEN_RULES_NOT_THE_APPROVED_ONES`). A test checks this.
+- After a review approves revision 3: set this line to the frozen form (`**Status: FROZEN_BEFORE_LAUNCH**` followed by
+  the rules hash), then write the new approved values into `launch.py` in a commit of their own.
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover while Codex is away). Experiment id **Q4-SDG-1**. Builder: a
 Claude sub-agent. Nothing here has run on AWS. No model has been trained under this spec.
@@ -27,6 +31,7 @@ Claude sub-agent. Nothing here has run on AWS. No model has been trained under t
   that favour neither arm) and A1 (the compiler engine pinned for the build). A3 is addressed only where it touches
   families A-C (section 10).
 - The two reviews of revision 1 (`Q4_AB_REVIEW_20260924.md`): section 14 lists what changed because of them.
+- The verification of revision 2 and the coordinator's decisions of 2026-09-24: section 15.
 
 **Where every frozen value lives.** `q4_ab_rules.py` (standard library only). This document explains those values. If
 the two ever disagree, the program wins, and the disagreement is a defect to report.
@@ -173,7 +178,8 @@ So this comparison says nothing about longer or deeper expressions.
 ## 7. Decision rules (review M1)
 
 A program, `read_q4_ab_results.py`, emits every label below from the result files. It calls the decision functions in
-`q4_ab_rules.py` (`input_use_level`, `arm_label`, `architecture_decision`, `overall_lessons`). No person chooses a label.
+`q4_ab_rules.py` (`input_use_level`, `calibration_guard_fires`, `arm_label`, `architecture_decision`,
+`fields_not_read_in_any_run`, `overall_lessons`). No person chooses a label.
 
 ### 7.1 The four input-use tests (one run, one checkpoint)
 
@@ -225,61 +231,113 @@ T2 over all 773 edits (revision 1's T2) is reported and never decisive. Measured
 - What it shows: only that free generation depends on the input and is not one fixed output. The saved model produced
   1 distinct output for 96 inputs.
 - What it does NOT show: field-value reading. A model that reads only shape, operators and field presence can reach
-  **180** distinct outputs on SP1 (measured). T3 therefore never counts as input use on its own. It separates FULL
-  from TEACHER_FORCED_ONLY.
+  **180** distinct outputs on SP1 (measured). So T3 never counts as field-value reading. It separates FULL from
+  TEACHER_FORCED_ONLY.
+
+**The distinct-output count D also decides NONE** (coordinator decision 1 of 2026-09-24, section 15). D = the number of
+distinct free-decoded token sequences over the 256 SP1 rows (the same count T3 uses). Free decoding is greedy, so it is
+deterministic: D >= 2 means the output depends on the input. **NONE needs D = 1 exactly** (total collapse). Any run
+with D >= 2 is not NONE, whatever T3 says. Measured on fakes (section 7.2): a shape-and-operator reader gives D = 44
+(T3 passes), a shape-only reader gives D = 14 (T3 fails); neither is NONE.
 
 Reported with every reading, never decisive: the summary cosine between SP1 partners of the same shape (the saved
 model: minimum 0.9966), the masked choice changes under edits, first-wrong-decision kinds, outcomes and mean lengths.
 
 ### 7.2 The input-use level (one run, one checkpoint)
 
-Checked in this order. Every combination of the four tests has exactly one level (a test checks all 16).
+Checked in this order. D = distinct free outputs over the 256 SP1 rows. Every combination of T1, T2V, T2P and D has
+exactly one level. A test checks all 40 combinations (2 x 2 x 2 x 5 values of D: 1, 2, 31, 32, 256).
 
 | Level | Condition | In plain words |
 |---|---|---|
 | **FULL** | T1 and T2V and T3 | reads field values, and free generation uses them |
 | **TEACHER_FORCED_ONLY** | (T1 or T2V) and not T3 | reads field values with the correct previous tokens, but free generation collapses |
 | **PARTIAL_FIELDS** | T3 and exactly one of T1, T2V | reads some field values (for example domain, drive and register, not the Noetic) |
-| **STRUCTURE_ONLY** | not T1, not T2V, and T2P | reads drive/register presence, no field value |
-| **NONE** | not T1, not T2V, not T2P | no input reading detected |
+| **STRUCTURE_OR_OUTPUT_VARIATION** | not T1, not T2V, and (T2P or D >= 2) | reads no field value, but reads drive/register presence, or its free output changes with the input (for example with the tree's shape or operators) |
+| **NONE** | not T1, not T2V, not T2P, and D = 1 | total collapse: no input reading detected, and one fixed free output for all 256 rows |
 
-Labels: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_ONLY`,
-`INPUT_USE_NONE`.
+T1 or T2V passes exactly in the first three levels (the "field levels").
+
+`STRUCTURE_OR_OUTPUT_VARIATION` replaces revision 2's `STRUCTURE_ONLY`. The coordinator's definition ("2 or more
+distinct free outputs, or T2P passes, while T1 and T2V fail") contains every STRUCTURE_ONLY case. Which of the two
+parts fired is in the reading (T2P, and D with `output_varies`).
+
+Measured on the runner's own `evaluate()` with pure-Python fakes (NOT Q4; each value is asserted by a test):
+
+| Fake model | T1 (of 799) | T2V (538 value edits) | T2P (235 presence edits) | D (of 256) | Level |
+|---|---:|---|---|---:|---|
+| blind | 88 (fails) | fails | fails | 1 | NONE |
+| reader | 799 | 538 up, 0 down | 235 up | 256 | FULL |
+| tf_reader_freegen_collapse | 799 | passes | - | 1 | TEACHER_FORCED_ONLY |
+| no_noetic | 88 (fails) | 342 up (passes) | - | passes T3 | PARTIAL_FIELDS |
+| structure_only | 88 (fails) | 0 up (fails) | 235 up, 0 down | 180 | STRUCTURE_OR_OUTPUT_VARIATION |
+| shape_operators_only (verification V1) | 88 (fails) | 0 up, 0 down | 0 up, 0 down | 44 (T3 passes) | STRUCTURE_OR_OUTPUT_VARIATION |
+| shape_only (verification V2) | 88 (fails) | 0 up, 0 down | 0 up, 0 down | 14 (T3 fails) | STRUCTURE_OR_OUTPUT_VARIATION |
+
+Revision 2 graded the last two NONE.
+
+Labels: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`,
+`INPUT_USE_STRUCTURE_OR_OUTPUT_VARIATION`, `INPUT_USE_NONE`.
 
 ### 7.3 Arms
 
-For each arm, over its 3 seeds, at the FINAL checkpoint, counting only VALID runs (section 7.7):
-- **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** valid runs are FULL.
-- **ARM_<arm>_SHOWS_NO_INPUT_USE** iff the arm has at least **2** valid runs and every valid run is NONE.
+For each arm, over its 3 seeds, at the FINAL checkpoint. A run "has a FINAL reading" when its final checkpoint file
+exists and agrees with the reader's recomputation, whether or not the run is valid (section 7.7).
+- **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** VALID runs are FULL (unchanged).
+- **ARM_<arm>_SHOWS_NO_INPUT_USE** iff at least **2** VALID runs are NONE, AND every run of the arm that has a FINAL
+  reading, valid or not, is NONE.
 - **ARM_<arm>_INPUT_USE_UNDETERMINED** otherwise.
 
 ### 7.4 Calibration guard
 
-If any run's level at checkpoint 0 (untrained) is not NONE, the tests are not trustworthy on this machine:
-**INPUT_USE_RULE_FIRES_AT_INITIALISATION**, and the architecture label is ARCHITECTURE_DECISION_INCOMPLETE. Otherwise
-**INPUT_USE_RULE_SILENT_AT_INITIALISATION**. (T3 alone may pass at initialisation; it does not change the level.)
+The guard uses **T1, T2V and T2P only** (coordinator decision 5 of 2026-09-24). If any run passes T1, T2V or T2P at
+checkpoint 0 (untrained), the tests are not trustworthy on this machine: **INPUT_USE_RULE_FIRES_AT_INITIALISATION**,
+and the architecture label is ARCHITECTURE_DECISION_INCOMPLETE. Otherwise **INPUT_USE_RULE_SILENT_AT_INITIALISATION**.
+
+D and T3 are not in the guard. An untrained model's free outputs may vary with the input, so its level at checkpoint 0
+may be STRUCTURE_OR_OUTPUT_VARIATION; that does not fire the guard. (In revision 2 the guard was "the level at
+checkpoint 0 is not NONE", which then meant exactly "T1, T2V or T2P passes"; the test is the same.)
+
+**Reported for every run:** its checkpoint-0 distinct-output count D (`checkpoint_0_distinct_free_outputs`; null for a
+run with no checkpoint-0 reading), and its checkpoint-0 T1, T2V, T2P and level (`calibration_checkpoint_0`). A FINAL D
+can then be compared with the same run's untrained D.
 
 ### 7.5 The architecture label
 
 In this order:
 1. The calibration guard fires: **ARCHITECTURE_DECISION_INCOMPLETE**, reason INPUT_USE_RULE_FIRES_AT_INITIALISATION.
 2. Some arm SHOWS_INPUT_USE: **ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE**.
-3. Both arms SHOW_NO_INPUT_USE, that is, every valid FINAL run of both arms is NONE, with at least 2 valid runs per
-   arm: **ARCHITECTURE_CHANGE_JUSTIFIED**.
-4. Otherwise **ARCHITECTURE_DECISION_INCOMPLETE**, with every reason that applies, each also emitted as
-   `ARCHITECTURE_INCOMPLETE_BECAUSE_<REASON>`:
-   - `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_ONLY`: a valid run has that level;
-   - `SEED_DEPENDENT`: a valid run is FULL, but no arm has 2 FULL runs;
+3. Both arms SHOW_NO_INPUT_USE: **ARCHITECTURE_CHANGE_JUSTIFIED**. That is: the guard is clean; every run that has a
+   FINAL reading (valid or not) is NONE; and each arm has at least 2 VALID NONE runs (coordinator decision 3).
+4. Otherwise **ARCHITECTURE_DECISION_INCOMPLETE** (the verdict is withheld), with every reason that applies, each also
+   emitted as `ARCHITECTURE_INCOMPLETE_BECAUSE_<REASON>`:
+   - `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`: a run with a FINAL reading (valid or
+     not) has that level;
+   - `SEED_DEPENDENT`: a run with a FINAL reading (valid or not) is FULL, but no arm has 2 valid FULL runs;
+   - `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`: a run that is not valid has a FINAL reading other than NONE;
    - `TOO_FEW_VALID_RUNS`: an arm has fewer than 2 valid runs.
+
+   Every INCOMPLETE carries at least one reason (a test enumerates every arm of 0 to 3 readings).
 
 **ARCHITECTURE_NOT_EVALUATED** when there is no verdict at all (section 8).
 
-Why this shape (review of revision 1, MAJOR). The owner's decision says: "If neither arm shows input use at the final
-checkpoint, an architecture change is justified." A run that reads its input only partly, or only with the correct
-previous tokens, or only its structure, does show input use. Directive section 3 also says that when behaviour
-differs with correct previous tokens, one should "investigate that training/generation difference rather than blaming
-capacity alone". So JUSTIFIED now needs every valid run of both arms to show no input use at all. A single fully
-reading run already shows the architecture can carry the input, so it blocks JUSTIFIED too (SEED_DEPENDENT).
+**How decision 3 is read, and why.** "Every run that has a FINAL reading (valid or invalid) is NONE in at least 2 of its
+arm's 3 seeds" is read as two conditions: (a) every FINAL reading, valid or not, is NONE; and (b) each arm has at least
+2 VALID NONE runs. Condition (b) counts valid runs only, because the decision says JUSTIFIED "can only become rarer".
+Revision 2 required at least 2 valid runs per arm. Counting an invalid NONE run toward the 2 would let JUSTIFIED fire
+where revision 2 gave TOO_FEW_VALID_RUNS. A test enumerates 3,375 arms and checks that every arm that shows no input
+use under revision 3 also did under revision 2. It also checks three revision-2 JUSTIFIED arms that revision 3
+withholds: D = 44, D = 14, and an invalid FULL run (the verification's V1, V2 and V3).
+
+Why this shape (review of revision 1, MAJOR, and the verification of revision 2). The owner's decision says: "If
+neither arm shows input use at the final checkpoint, an architecture change is justified." A run that reads its input
+only partly, or only with the correct previous tokens, or only its structure, does show input use. So does a run whose
+free output changes with its input (the verification of revision 2 reports that the owner's decision names distinct
+outputs as an input-use measure; the builder did not re-read that document for revision 3). Directive
+section 3 also says that when behaviour differs with correct previous tokens, one should "investigate that
+training/generation difference rather than blaming capacity alone". So JUSTIFIED needs total collapse in every run
+that has a FINAL reading. A single fully reading run, valid or not, already shows the architecture can carry the input,
+so it blocks JUSTIFIED too (SEED_DEPENDENT; for an invalid run also NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID).
 
 What the labels mean, and do not mean:
 - "Justified" means only what the owner's decision says: an architecture change may then be designed as a separately
@@ -322,6 +380,19 @@ reload check with status RELOAD_REPRODUCED are present; every file carries the f
 totals agree with the reader's recomputation (exact flags, teacher-forced counts, distinct outputs, exactly 773 edit
 values in the frozen edit order, 538 value and 235 presence edits). A missing file gives **RUN_INCOMPLETE**. Anything
 else gives **RUN_INVALID_<reason>**.
+
+A run that is not valid still counts in the architecture rule when it has a FINAL reading (section 7.3, 7.5). It
+never counts in a pair comparison (section 7.6), and never toward the 2 valid FULL or the 2 valid NONE runs of an arm.
+
+### 7.8 Information-only label (coordinator decision 4 of 2026-09-24)
+
+**FIELDS_NOT_READ_IN_ANY_RUN** is emitted iff at least one run has a FINAL reading, and no run with a FINAL reading
+(valid or not) passes T1 or T2V at the FINAL checkpoint. (With no FINAL reading at all there is nothing to say, so the
+label is not emitted.)
+- It is **information only**. It justifies nothing by itself. It changes no other label.
+- It names the target for a later, separately approved design discussion: getting field values into the output.
+- It can appear next to any architecture label. Examples: six input-blind runs give ARCHITECTURE_CHANGE_JUSTIFIED and
+  this label; six shape-only runs give ARCHITECTURE_DECISION_INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] and this label.
 
 ## 8. Stops
 
@@ -386,11 +457,12 @@ The verdict records the LF sha256 of the reader and of the rules module it ran w
 - Stage 0: `STAGE0_REPRODUCED`, `STAGE0_NOT_REPRODUCED`, `STAGE0_MISSING`
 - no verdict: `NO_VERDICT_STAGE0`, `NO_VERDICT_PREP_MISSING`, `NO_VERDICT_FROZEN_RULES_DIFFER`, `NO_VERDICT_PREP_NOT_FROZEN`
 - run: `RUN_VALID`, `RUN_INCOMPLETE`, `RUN_INVALID_<REASON>`
-- checkpoint: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_ONLY`, `INPUT_USE_NONE`
+- checkpoint: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_OR_OUTPUT_VARIATION`, `INPUT_USE_NONE`
 - calibration: `INPUT_USE_RULE_SILENT_AT_INITIALISATION`, `INPUT_USE_RULE_FIRES_AT_INITIALISATION`
 - arm: `ARM_A_…` / `ARM_B_…`: `SHOWS_INPUT_USE`, `SHOWS_NO_INPUT_USE`, `INPUT_USE_UNDETERMINED`
 - architecture: `ARCHITECTURE_CHANGE_JUSTIFIED`, `ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE`, `ARCHITECTURE_DECISION_INCOMPLETE`, `ARCHITECTURE_NOT_EVALUATED`
-- architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_ONLY`, `SEED_DEPENDENT`, `TOO_FEW_VALID_RUNS`
+- architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`, `SEED_DEPENDENT`, `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`, `TOO_FEW_VALID_RUNS`
+- information only (section 7.8): `FIELDS_NOT_READ_IN_ANY_RUN`
 - pair: `B_BEATS_A_<P>_PAIR<i>`, `A_BEATS_B_<P>_PAIR<i>`, `NO_PAIRED_DIFFERENCE_<P>_PAIR<i>`, `PAIR_INCOMPLETE_<P>_PAIR<i>`
 - lessons: `LESSONS_HELP_<P>`, `LESSONS_HURT_<P>`, `LESSONS_EFFECT_NOT_SHOWN_<P>`, `LESSONS_COMPARISON_INCOMPLETE_<P>`, `LESSONS_NOT_EVALUATED_<P>`
 - overall: `LESSONS_OVERALL_HELP`, `LESSONS_OVERALL_HURT`, `LESSONS_OVERALL_MIXED`, `LESSONS_OVERALL_EFFECT_NOT_SHOWN`, `LESSONS_OVERALL_COMPARISON_INCOMPLETE`, `LESSONS_OVERALL_NOT_EVALUATED`
@@ -437,6 +509,8 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
 - LESSONS_HELP is about these panels, this model and this budget. It is not "CAS SDG lessons help" in general, not
   a Helm result, and not general CAS reasoning.
 - ARCHITECTURE_CHANGE_JUSTIFIED does not choose or start a change. The owner's go-ahead and a separate spec do.
+- FIELDS_NOT_READ_IN_ANY_RUN justifies nothing (section 7.8). It only names a target for a later, separately
+  approved design discussion.
 - **Teaching fit is not tested** (review of revision 1, MINOR 5). Directive section 9 names two triggers for an
   architecture change: failing "to fit small teaching sets" or to "use input distinctions". The owner's decision
   names only input use, so the rule tests only that. TEACH_FIT is reported per run and never compared. A run that
@@ -457,6 +531,9 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
 
 ## 14. Changes in revision 2 (after the two reviews of `3771f989`)
 
+History. This table describes revision 2. Revision 3 changes the levels, the arm rule and the architecture rule again
+(section 15); where the two differ, section 7 and section 15 are current.
+
 | Review finding | Change |
 |---|---|
 | MAJOR: JUSTIFIED could fire for a model that reads its input | Five input-use levels (7.2); JUSTIFIED only when every valid run of both arms is NONE with 2 or more valid runs per arm; otherwise INCOMPLETE with named reasons (7.5); tests with the reviewers' two fakes and a structure-only fake |
@@ -468,3 +545,66 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
 | MINOR 6: the B rebuild could fail after setup | The launcher compares the data build's source hashes with the source commit at $0 (10) |
 | MINOR 7: the reload path had never run | The smoke stage runs the fresh-process reload before any main run; new stop `SMOKE_RELOAD_FAILED`; the reload now takes its rows from the saved checkpoint |
 | MINOR 8: the pin commit would break an existing test | `test_q4_sdg_curriculum.py` now uses an empty temporary pin file; `q4_sdg_curriculum.py` unchanged |
+
+## 15. Changes in revision 3 (the verification of revision 2, and the coordinator's decisions of 2026-09-24)
+
+**The verification** of revision 2 (commit `294471a5`) is recorded in `Q4_AB_REVIEW_20260924.md` (commit `fbcc279b`).
+Its verdict: CHANGES_REQUIRED. Its points, in short:
+- V1 (MAJOR): a model that reads the trees' shape and operators, but no field value, passes T3 (44 distinct of 256)
+  yet was graded NONE, so six such runs gave ARCHITECTURE_CHANGE_JUSTIFIED.
+- V2 (MINOR): a shape-only reader (14 distinct, below the T3 threshold 32) was also graded NONE.
+- V3 (MINOR): an invalid run whose final reading is FULL was ignored, so JUSTIFIED could fire while one run showed full
+  input use.
+- V4 (NOTE): the fix needs a new revision, a new review, and new approved hashes in the job's `launch.py`.
+
+**Coordinator decisions of 2026-09-24**, quoted word for word as the builder received them:
+
+> 1. NONE means TOTAL collapse only: T1, T2V and T2P all fail AND the run gives exactly 1 distinct free output over the
+>    256 SP1 rows. Any run with 2 or more distinct free outputs is NOT NONE.
+> 2. Add levels between NONE and the field levels: STRUCTURE_OR_OUTPUT_VARIATION (2 or more distinct free outputs, or
+>    T2P passes, while T1 and T2V fail). It blocks ARCHITECTURE_CHANGE_JUSTIFIED. Keep FULL as it is.
+> 3. ARCHITECTURE_CHANGE_JUSTIFIED fires only if every run that has a FINAL reading (valid or invalid) is NONE in at
+>    least 2 of its arm's 3 seeds, for both arms, and the calibration guard is clean. Otherwise the architecture verdict
+>    is withheld with named reasons (it can only become rarer).
+> 4. Add an information-only label FIELDS_NOT_READ_IN_ANY_RUN when no run at the final checkpoint passes T1 or T2V. It
+>    justifies nothing by itself; it names the target for a later, separately approved design discussion.
+> 5. Keep the calibration guard on T1, T2V and T2P, say so, and report the checkpoint-0 distinct-output counts for
+>    every run.
+
+**What revision 3 changed** (code: `q4_ab_rules.py`, `read_q4_ab_results.py`; tests: `test_q4_ab.py`):
+
+| Decision / point | Change | Where |
+|---|---|---|
+| 1 (V1, V2) | NONE = not T1, not T2V, not T2P, and D = 1 (`NONE_DISTINCT_FREE_OUTPUTS = 1`). `input_use_level` now takes the distinct count D, not a T3 flag, so T3 and D cannot disagree | 7.1, 7.2 |
+| 2 | New level `STRUCTURE_OR_OUTPUT_VARIATION` = not T1, not T2V, and (T2P or D >= 2). It replaces `STRUCTURE_ONLY` (disclosed below). FULL is unchanged | 7.2 |
+| 3 (V3) | Arm and architecture rules read every run with a FINAL reading, valid or not. JUSTIFIED needs all of them NONE and at least 2 VALID NONE runs per arm. New reason `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`; the level reasons and SEED_DEPENDENT now also count invalid runs' readings | 7.3, 7.5, 7.7 |
+| 4 | New information-only label `FIELDS_NOT_READ_IN_ANY_RUN` (`fields_not_read_in_any_run`) | 7.8, 9, 12 |
+| 5 | The guard is `calibration_guard_fires` on T1, T2V, T2P at checkpoint 0 (the same test as revision 2). The verdict reports `checkpoint_0_distinct_free_outputs` and `calibration_checkpoint_0` for every run | 7.4 |
+| V4 | Status back to PROPOSED_FOR_REVIEW. The approved values in `launch.py` are NOT changed; the launcher therefore refuses revision 3 | status block |
+
+**Choices the builder made in applying the decisions (disclosed; the reviewer should check them):**
+1. *One new level, replacing STRUCTURE_ONLY.* Decision 2 says "levels" but names one. Its definition contains every
+   revision-2 STRUCTURE_ONLY case (T2P passes, T1 and T2V fail). Keeping STRUCTURE_ONLY as well would have split the
+   named level, so it was folded in. The reading still shows which part fired (T2P, and D).
+2. *Decision 3's "2 of 3 seeds" counts VALID runs.* See 7.5. Counting invalid NONE runs would make JUSTIFIED more
+   common than in revision 2, which the decision rules out ("it can only become rarer").
+3. *Reasons count invalid runs' readings.* When an invalid run blocks JUSTIFIED, the reasons name its level (for
+   example SEED_DEPENDENT for an invalid FULL run) and add `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`.
+4. *FIELDS_NOT_READ_IN_ANY_RUN needs at least one FINAL reading,* and it counts invalid runs' readings too (a field
+   reading in any run, valid or not, suppresses it). With no reading at all the label would be vacuous.
+5. *The guard still returns only its own reason.* When it fires, no other architecture reason is listed (as in
+   revision 2).
+
+**New or changed tests (torch-free):**
+- The verifier's scratch fakes are now lab fakes: `shape_operators_only` (D = 44) and `shape_only` (D = 14). Both are
+  graded STRUCTURE_OR_OUTPUT_VARIATION; six such runs give INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] and
+  FIELDS_NOT_READ_IN_ANY_RUN.
+- The partition test covers all 40 combinations of T1, T2V, T2P and D in (1, 2, 31, 32, 256); NONE is exactly one of
+  them.
+- An enumeration of 3,375 arms (and all pairs of the 286 distinct ones) checks decision 3, "only rarer than revision
+  2", and that every INCOMPLETE names a reason.
+- V3 as a test: an invalid FULL run gives INCOMPLETE [SEED_DEPENDENT, NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID].
+- The guard ignores D at checkpoint 0 (D = 44 everywhere: silent) and fires on T2P at checkpoint 0; the checkpoint-0
+  counts are reported for all 6 runs.
+- The launcher test now has two states: under review (this revision), the launcher must refuse the working copy;
+  approved, its values must equal the working copy.

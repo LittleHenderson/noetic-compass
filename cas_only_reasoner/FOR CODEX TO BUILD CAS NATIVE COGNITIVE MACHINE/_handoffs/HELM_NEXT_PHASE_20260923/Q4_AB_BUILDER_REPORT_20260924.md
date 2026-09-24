@@ -9,6 +9,8 @@ spent. No model was built or trained.** The spec is `PROPOSED_FOR_REVIEW`, not f
 **Superseded in part (2026-09-24):** this report describes revision 1 (commit `3771f989`). Two reviews found one MAJOR
 and eight MINOR defects; revision 2 fixes them and freezes the spec. See `Q4_AB_REVIEW_20260924.md`. The file hashes,
 the rules hash and decision 4 below are those of revision 1.
+**Superseded again (2026-09-24):** a verification of revision 2 returned CHANGES_REQUIRED. The spec's revision 3 applies
+the coordinator's decisions and is `PROPOSED_FOR_REVIEW`. See the section "Revision 2 of this report" at the end.
 
 Paths are relative to `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/`. `LAB` =
 `research/helm_cas_expression_lab/`.
@@ -185,3 +187,170 @@ Paths are relative to `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE
   hashed, not loaded); visible Q3 v0.7 files only through `q3_load.load_visible`.
 - **Not touched:** any `*_eval.jsonl`, any Q3 `sealed*` file, `D:/tksCAS-archive/`, any hset1a/hset1b path, S3 or any
   AWS service, the meta1 budget ledger, other worktrees, Claude transcripts.
+
+## Revision 2 of this report (2026-09-24): spec v0.2 revision 3, the coordinator's decisions
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. The builder is a Claude sub-agent (temporary builder). A Claude check of
+Claude work is not an independent review.
+**Status:** built and tested on the laptop in pure Python. **Nothing was launched. No AWS call. No money spent. No
+model built or trained. No torch import.** The spec is back to **`PROPOSED_FOR_REVIEW`** (revision 3).
+
+A note on numbers. This is the second revision of THIS REPORT. It describes the SPEC's revision 3. (The spec's
+revision 2 is described in `Q4_AB_REVIEW_20260924.md`.)
+
+### In plain words
+
+- The verifier of revision 2 (commit `fbcc279b`) found that a model which reads only the SHAPE of the tree (and maybe
+  its operators) was still called "no input use". Six such runs would have said "an architecture change is justified".
+  That was wrong: such a model's answers change with its input.
+- The coordinator decided five rules on 2026-09-24. I applied them exactly. The spec quotes them word for word
+  (section 15).
+- Now "no input use" (NONE) means total collapse only: every test fails AND the model gives the same one answer for
+  all 256 test rows.
+- A new level, STRUCTURE_OR_OUTPUT_VARIATION, catches a model that reads no field value but whose answers still vary,
+  or that reads drive/register presence. It blocks "justified".
+- A run that is not valid (for example, its reload check failed) now also counts against "justified", if its final
+  reading is anything other than NONE.
+- A new information-only label, FIELDS_NOT_READ_IN_ANY_RUN, says when no run read any field value. It decides nothing.
+- The safety check on the untrained model (the calibration guard) is unchanged: it uses T1, T2V and T2P only. The
+  number of different answers each untrained run gives is now reported for every run.
+- I did NOT change the approved hashes in the launcher, as instructed. So the launcher refuses this revision until a
+  review approves it. I checked that it does.
+
+### The coordinator's decisions and where each landed
+
+| Decision (2026-09-24) | Code | Spec |
+|---|---|---|
+| 1. NONE = T1, T2V, T2P all fail AND exactly 1 distinct free output over the 256 SP1 rows | `q4_ab_rules.NONE_DISTINCT_FREE_OUTPUTS = 1`; `input_use_level(t1, t2v, t2p, distinct)` now takes the count D itself, so T3 and D cannot disagree | 7.1, 7.2 |
+| 2. STRUCTURE_OR_OUTPUT_VARIATION (D >= 2, or T2P, while T1 and T2V fail); blocks JUSTIFIED; FULL unchanged | `LEVELS`, `FIELD_LEVELS`, `ARCHITECTURE_REASONS` | 7.2 |
+| 3. JUSTIFIED only if every run with a FINAL reading (valid or invalid) is NONE, in at least 2 of 3 seeds per arm, and the guard is clean | `arm_label` and `architecture_decision` take (level, valid) of every run with a FINAL reading; new reason `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`; `read_q4_ab_results.final_readings` | 7.3, 7.5, 7.7 |
+| 4. Information-only FIELDS_NOT_READ_IN_ANY_RUN | `fields_not_read_in_any_run`; `INFORMATION_LABELS`; the reader's `information` block and label list | 7.8, 9, 12 |
+| 5. Guard stays on T1, T2V, T2P; report checkpoint-0 distinct counts for every run | `calibration_guard_fires`; the verdict's `calibration_guard_tests`, `calibration_checkpoint_0`, `checkpoint_0_distinct_free_outputs` | 7.4 |
+
+### Choices I made in applying them (disclosed; please review)
+
+1. **One new level, which replaces STRUCTURE_ONLY.** Decision 2 says "levels" but names one. Its definition contains
+   every revision-2 STRUCTURE_ONLY case (T2P passes, T1 and T2V fail). Keeping both would split the named level. The
+   reading still shows which part fired (T2P, and D with `output_varies`).
+2. **"At least 2 of its arm's 3 seeds" counts VALID NONE runs.** Decision 3 says JUSTIFIED "can only become rarer".
+   Counting an invalid NONE run toward the 2 would let JUSTIFIED fire where revision 2 said TOO_FEW_VALID_RUNS. A test
+   enumerates 3,375 arms. It checks that every arm that "shows no input use" under revision 3 also did under
+   revision 2.
+3. **The reasons also read invalid runs.** An invalid FULL run gives `SEED_DEPENDENT` and
+   `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`.
+4. **FIELDS_NOT_READ_IN_ANY_RUN needs at least one FINAL reading.** With none, the label would mean nothing. A field
+   reading in ANY run with a FINAL reading, valid or not, suppresses it.
+5. **When the guard fires, it is still the only reason given** (as in revision 2).
+6. **The launcher test now has two states** (`test_launcher_approves_exactly_the_committed_rules_programs_and_spec`).
+   Under review (the spec says PROPOSED_FOR_REVIEW): the launcher must refuse this working copy before the pin check.
+   Approved (the spec has the frozen status line): the launcher's values must equal the working copy, as before. The
+   old test would now fail by design, because the approved hashes are revision 2's and must not change yet.
+
+### Measured on fakes (pure Python, the runner's own `evaluate()`; each value is asserted by a passing test)
+
+| Fake model (NOT Q4) | T1 (of 799) | T2V (538) | T2P (235) | D (of 256) | Level, revision 2 | Level, revision 3 |
+|---|---:|---|---|---:|---|---|
+| blind | 88 | fails | fails | 1 | NONE | NONE |
+| reader | 799 | 538 up, 0 down | 235 up | 256 | FULL | FULL |
+| tf_reader_freegen_collapse | 799 | passes | - | 1 | TEACHER_FORCED_ONLY | TEACHER_FORCED_ONLY |
+| no_noetic | 88 | 342 up | - | passes T3 | PARTIAL_FIELDS | PARTIAL_FIELDS |
+| structure_only | 88 | 0 up | 235 up, 0 down | 180 | STRUCTURE_ONLY | STRUCTURE_OR_OUTPUT_VARIATION |
+| shape_operators_only (the verifier's V1 fake, now a lab test) | 88 | 0 up, 0 down | 0 up, 0 down | 44 | NONE | STRUCTURE_OR_OUTPUT_VARIATION |
+| shape_only (the verifier's V2 fake, now a lab test) | 88 | 0 up, 0 down | 0 up, 0 down | 14 | NONE | STRUCTURE_OR_OUTPUT_VARIATION |
+
+The V1 and V2 numbers (88; 0 and 0; 0 and 0; 44 and 14) equal the verifier's own scratch measurements.
+
+| Results folder (all through the reader) | Architecture label [reasons] | FIELDS_NOT_READ_IN_ANY_RUN |
+|---|---|---|
+| 6 blind runs | JUSTIFIED | yes |
+| 6 blind runs, one invalid (reload) | JUSTIFIED (2 valid NONE runs per arm; the invalid run's reading is NONE) | (not asserted) |
+| 6 blind runs, arm A: one invalid, one missing | INCOMPLETE [TOO_FEW_VALID_RUNS] | (not asserted) |
+| 6 shape_operators_only runs (V1) | INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] | yes |
+| 6 shape_only runs (V2) | INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] | yes |
+| 6 structure_only runs | INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION] | yes |
+| 6 tf_reader_freegen_collapse runs | INCOMPLETE [TEACHER_FORCED_ONLY] | no |
+| 6 no_noetic runs | INCOMPLETE [PARTIAL_FIELDS] | no |
+| B seed 20260933 reads fully, but its reload fails; 5 blind runs (V3) | INCOMPLETE [SEED_DEPENDENT, NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID] | no |
+| A seed 20260931 is shape_only and invalid; 5 blind runs | INCOMPLETE [STRUCTURE_OR_OUTPUT_VARIATION, NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID] | yes |
+| checkpoint 0 = shape_operators_only in all runs (D = 44 each); FINAL blind | guard SILENT; JUSTIFIED; every run's checkpoint-0 D reported as 44 | (not asserted) |
+| checkpoint 0 = structure_only in all runs (T2P passes) | guard FIRES; INCOMPLETE [INPUT_USE_RULE_FIRES_AT_INITIALISATION] | (not asserted) |
+
+### Checks run (pure Python on the laptop; one at a time; no torch, no GPU, no AWS)
+
+| Check | Result (measured) |
+|---|---|
+| `py_compile` of the three changed Python files | OK |
+| Fast rule tests only (partition, enumeration, guard, statistics) | **4 passed** in 1.07 s |
+| `pytest test_q4_ab.py` (whole file, once) | **41 passed** in 172.36 s (38 before; 3 new tests) |
+| `pytest test_q4_sdg_curriculum.py test_q4_error_panel.py` (unchanged files, once) | **38 passed** in 30.97 s |
+| The two launcher tests again, after the last spec text edit | **2 passed** in 0.86 s |
+| The launcher's own `check_frozen` on this working copy | refuses: `LAUNCH_REFUSED: FROZEN_RULES_NOT_THE_APPROVED_ONES (dc7d014c7889 at this commit, approved 3100f37603cb)` |
+| Changed files | LF only, no control characters |
+
+Free memory before the long test run: 640 MB (measured; the laptop has about 16 GB). The run took longer than earlier
+runs (172 s, against about 65 s). It finished.
+
+### Identity of revision 3 (NOT approved; the launcher still approves revision 2)
+
+- `q4_ab_rules.frozen_sha256()`: `dc7d014c788980ef851faf2d245bd1006916eccbc380b9d2e0c31e78f0d65eac`
+  (revision 2 was `3100f376...`).
+- LF sha256 of the five files the launcher pins, as committed here:
+  - `LAB/q4_ab_rules.py` `c106d899cdbd8ff5fd88f9a1af29748a66120bb45699f5588efecbde93e10dea` (changed)
+  - `LAB/q4_ab_prep.py` `b0601e5382df15441526bf334fb8c548ee6a379d4b633a81adb60e40fca8fd23` (unchanged)
+  - `LAB/q4_ab_train.py` `4d793a6afed5ddf6e399fcbcfff2bb1799a28ee725ab98cf4d59578e1bce8cd4` (unchanged)
+  - `LAB/read_q4_ab_results.py` `d4e0f1ee3648a3e33bb5d95e26bc84a3396aeee33b275e9ff8b2831107491a50` (changed)
+  - `LAB/Q4_SDG_AB_SPEC_v0_2.md` `f5385327bf87f134c2ecd4b7a934267a659100a7708c7c2c7151120fdd73f739` (changed; this
+    hash changes again when the status line is set to frozen after review)
+- `LAB/test_q4_ab.py` `7cbbcf834cef8e796522b334ba2fafbf336a80b44de72ccbf6cf99a3bb7d4a89`.
+
+### Files changed in this revision
+
+- `LAB/q4_ab_rules.py`, `LAB/read_q4_ab_results.py`, `LAB/test_q4_ab.py`, `LAB/Q4_SDG_AB_SPEC_v0_2.md`, and this report.
+- NOT changed: `records/q4_sdg_1_20260923/ab_job/launch.py` (its approved hashes stay revision 2's, as instructed),
+  `q4_ab_prep.py`, `q4_ab_train.py`, the job scripts and job limits, `q4_sdg_curriculum.py`, `Q4_SDG_DATA_PINS.json`,
+  every Q3 file and pin, `records/q4_authorized_20260922/`.
+
+### Next steps (in order; none is done)
+
+1. A fresh review of revision 3 (this commit). It should check the six disclosed choices above.
+2. After approval: set the spec's status line to the frozen form with the rules hash. Then write the new
+   `APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256` into `ab_job/launch.py`, in a commit of their own.
+3. The data build, the pin and the training launch, as before.
+
+### Open questions (for the coordinator and the owner)
+
+1. Folding STRUCTURE_ONLY into STRUCTURE_OR_OUTPUT_VARIATION (choice 1): confirm, or name the second level that
+   decision 2 meant.
+2. Counting only VALID NONE runs toward "2 of 3 seeds" (choice 2): confirm.
+3. Output variation may often be present. An untrained or lightly trained GRU may already give D >= 2. Under decision
+   1 such a run blocks JUSTIFIED. The verdict now reports each run's checkpoint-0 D, so it can be set next to its
+   FINAL D. The rule itself does not compare them. This follows the decisions, and it makes JUSTIFIED rare.
+4. Still open from earlier: a teaching-fit floor (the owner's choice); MIXED as the overall lessons answer; the
+   c7i.large price not re-read from AWS; B's exact pool size known only after the data build.
+
+### EXPOSURE (everything outside my working copy that I opened or used)
+
+- **Git:** `git fetch origin claude/q4-sdg-feedback-20260923` and `git pull --ff-only` (already up to date at
+  `fbcc279b`); `git show --stat` of the last three commits; `git diff` of my own changes; `git status`.
+- **The verifier's scratch file** in this session's scratchpad:
+  `C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad/verify_294471a5/test_verify_shape_readers.py`
+  (read once, to copy its two fakes exactly). One `ls` of that folder showed the names of its pytest folders
+  (`pt_ab`, `pt_cur`, `pt_shape`, `pt_shape2`). I opened none of them.
+- **My own scratch folder** `.../scratchpad/rev3/`: pytest temporary folders `pt_fast`, `pt_ab`, `pt_cur`,
+  `pt_launch`. In them the tests built tiny B packages, and the package code wrote and may have read its own generated
+  `sealed_*` sidecars there. I opened none of them myself. I deleted the pytest folders before committing.
+- **Launcher module:** loaded once in a Python process to print its `check_frozen` refusal on this working copy. No
+  AWS client was created; `launch.py` imports nothing from AWS at load time.
+- **Memory queries:** three PowerShell reads of free physical memory (a number only).
+- **Python and tools:** `C:/Python314/python.exe` (3.14.0) and its standard library; pytest 9.0.2 from
+  `C:/Users/wakil/AppData/Roaming/Python/Python314/site-packages/`. The pinned compiler's optional Rust `cas_engine`
+  may load with the compiler; the lab fixture switches it off for every measurement. Git Bash (`timeout`, `grep`,
+  `tail`, `od`, `file`, `wc`).
+- **Context the harness gave me, not opened by me:** the user's `CLAUDE.md` files and memory index.
+- **Inside the working copy, read:** `Q4_AB_REVIEW_20260924.md`, this report, `q4_ab_rules.py`,
+  `read_q4_ab_results.py`, `test_q4_ab.py`, `Q4_SDG_AB_SPEC_v0_2.md`, parts of `ab_job/launch.py`, and the decoder's
+  token list (`learner_q4_decoder.TOKENS`). The tests read visible Q3 v0.7 files and run_001's records through the
+  lab's own fixtures.
+- **Not touched:** any `*_eval.jsonl`, any Q3 `sealed*` file, `D:/tksCAS-archive/`, any hset1a/hset1b path, S3 or any
+  AWS service, the meta1 budget ledger, other worktrees, Claude transcripts, and the owner's documents on the research
+  branch (not re-read for this revision).

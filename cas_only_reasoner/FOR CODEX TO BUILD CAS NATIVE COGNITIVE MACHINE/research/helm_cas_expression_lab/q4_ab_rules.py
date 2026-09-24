@@ -16,7 +16,8 @@ import json
 from math import comb
 
 SCHEMA = "helm-cas-expression-lab.q4-sdg-ab/0.2"
-SPEC_REVISION = "v0.2 revision 2 (fixes of the two reviews of 3771f989, 2026-09-24)"
+SPEC_REVISION = ("v0.2 revision 3 (coordinator decisions of 2026-09-24 after the verification of 294471a5; "
+                 "PROPOSED_FOR_REVIEW)")
 EXPERIMENT = "Q4-SDG-1"
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
 
@@ -89,9 +90,13 @@ T2_DELTA = 0.01                             # 2,700 x the largest move the saved
 T2_MIN_SHARE = Fraction(1, 10)
 T2_ALPHA = Fraction(1, 100)
 T3_MIN_DISTINCT = 32                        # of the 256 SP1 rows; the saved model gave 1 distinct output of 96
+# NONE means TOTAL collapse only (coordinator decision 1 of 2026-09-24): T1, T2V and T2P all fail AND the run gives
+# exactly this many distinct free outputs over the 256 SP1 rows. Two or more distinct free outputs is never NONE.
+NONE_DISTINCT_FREE_OUTPUTS = 1
 PAIR_ALPHA = Fraction(1, 100)
-ARM_MIN_SEEDS = 2                           # "at least 2 of its 3 seeds"
-ARM_MIN_VALID_RUNS = 2                      # an arm "shows no input use" only with at least 2 valid runs
+ARM_MIN_SEEDS = 2                           # "at least 2 of its 3 seeds" are FULL (valid runs)
+ARM_MIN_VALID_RUNS = 2                      # an arm has too few valid runs below this
+ARM_MIN_VALID_NONE_RUNS = 2                 # "NONE in at least 2 of its arm's 3 seeds" (valid runs; decision 3)
 # One-field edits come in two kinds. A PRESENCE edit adds or removes an optional drive or register, so the input
 # text gets longer or shorter; reading it needs only the input's length or layout. A VALUE edit changes a value in
 # place (same input length). Only value edits test field-value reading (review of 3771f989, MINOR 1).
@@ -102,10 +107,15 @@ VALUE_EDIT_COUNT = sum(VALUE_EDIT_COUNTS.values())
 PRESENCE_EDIT_COUNT = sum(PRESENCE_EDIT_COUNTS.values())
 EDIT_VALUE_COLUMNS = ("p_new_original", "p_new_edited", "p_old_original", "p_old_edited", "masked_choice_original",
                       "masked_choice_edited", "summary_cosine", "row", "position")
-# Input-use levels of one run at one checkpoint (review of 3771f989, MAJOR). Checked in this order.
-LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_ONLY", "NONE")
+# Input-use levels of one run at one checkpoint (review of 3771f989, MAJOR; coordinator decisions 1 and 2 of
+# 2026-09-24). Checked in this order. STRUCTURE_OR_OUTPUT_VARIATION replaces revision 2's STRUCTURE_ONLY: its
+# definition ("2 or more distinct free outputs, or T2P passes, while T1 and T2V fail") contains STRUCTURE_ONLY.
+LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_VARIATION", "NONE")
+FIELD_LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS")     # exactly the levels where T1 or T2V passes
 ARCHITECTURE_REASONS = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS",
-                        "STRUCTURE_ONLY", "SEED_DEPENDENT", "TOO_FEW_VALID_RUNS")
+                        "STRUCTURE_OR_OUTPUT_VARIATION", "SEED_DEPENDENT", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID",
+                        "TOO_FEW_VALID_RUNS")
+INFORMATION_LABELS = ("FIELDS_NOT_READ_IN_ANY_RUN",)               # decision 4: information only, justifies nothing
 LESSON_OUTCOMES = ("HELP", "HURT", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
 OVERALL_LESSON_OUTCOMES = ("HELP", "HURT", "MIXED", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
 
@@ -185,20 +195,34 @@ def frozen_record() -> dict:
                   "T3": {"min_distinct": T3_MIN_DISTINCT, "panel": "SP1",
                          "test": "distinct free-decoded token sequences on SP1 >= min_distinct",
                          "meaning": "free generation has not collapsed. NOT evidence of field-value reading: a "
-                                    "structure-only reader reaches 180 distinct outputs on SP1"},
-                  "LEVELS": "checked in order: FULL = T1 and T2V and T3; TEACHER_FORCED_ONLY = (T1 or T2V) and not "
-                            "T3; PARTIAL_FIELDS = T3 and exactly one of T1, T2V; STRUCTURE_ONLY = not T1 and not "
-                            "T2V and T2P; NONE = not T1 and not T2V and not T2P",
-                  "CALIBRATION_GUARD": "fires iff some run's checkpoint-0 level is not NONE",
-                  "ARM": "SHOWS_INPUT_USE iff FULL in at least %d valid runs; SHOWS_NO_INPUT_USE iff at least %d "
-                         "valid runs and every valid run NONE; INPUT_USE_UNDETERMINED otherwise"
-                         % (ARM_MIN_SEEDS, ARM_MIN_VALID_RUNS),
-                  "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration guard silent, and every valid FINAL run of both arms "
-                                                   "is NONE, with at least %d valid runs per arm" % ARM_MIN_VALID_RUNS,
+                                    "structure-only reader reaches 180 distinct outputs on SP1. Separates FULL from "
+                                    "TEACHER_FORCED_ONLY"},
+                  "NONE": {"distinct_free_outputs": NONE_DISTINCT_FREE_OUTPUTS, "panel": "SP1",
+                           "meaning": "TOTAL collapse only: T1, T2V and T2P all fail and the run gives exactly %d "
+                                      "distinct free output over the 256 SP1 rows; 2 or more is never NONE "
+                                      "(coordinator decision 1 of 2026-09-24)" % NONE_DISTINCT_FREE_OUTPUTS},
+                  "LEVELS": "checked in order, with D = distinct free outputs on SP1: FULL = T1 and T2V and T3; "
+                            "TEACHER_FORCED_ONLY = (T1 or T2V) and not T3; PARTIAL_FIELDS = T3 and exactly one of "
+                            "T1, T2V; STRUCTURE_OR_OUTPUT_VARIATION = not T1 and not T2V and (T2P or D >= 2); "
+                            "NONE = not T1 and not T2V and not T2P and D = 1",
+                  "CALIBRATION_GUARD": "fires iff some run passes T1, T2V or T2P at checkpoint 0. Distinct free "
+                                       "outputs (and so T3) are NOT in the guard: an untrained model's free outputs "
+                                       "may vary. The checkpoint-0 distinct-output count of every run is reported",
+                  "ARM": "SHOWS_INPUT_USE iff FULL in at least %d valid runs; SHOWS_NO_INPUT_USE iff NONE in at "
+                         "least %d valid runs and every run of the arm that has a FINAL reading (valid or not) is "
+                         "NONE; INPUT_USE_UNDETERMINED otherwise" % (ARM_MIN_SEEDS, ARM_MIN_VALID_NONE_RUNS),
+                  "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration guard silent, every run that has a FINAL reading "
+                                                   "(valid or not) is NONE, and each arm has at least %d valid NONE "
+                                                   "runs (coordinator decision 3 of 2026-09-24)"
+                                                   % ARM_MIN_VALID_NONE_RUNS,
                   "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE": "calibration guard silent and some arm "
                                                                          "SHOWS_INPUT_USE; teaching fit is not tested",
                   "ARCHITECTURE_DECISION_INCOMPLETE": "otherwise, with every reason that applies from %s"
                                                       % ", ".join(ARCHITECTURE_REASONS),
+                  "FIELDS_NOT_READ_IN_ANY_RUN": "information only; justifies nothing by itself: emitted iff at least "
+                                                "one run has a FINAL reading and no run passes T1 or T2V at the FINAL "
+                                                "checkpoint (valid or not); names the target for a later, separately "
+                                                "approved design discussion (coordinator decision 4 of 2026-09-24)",
                   "B_BEATS_A": "per seed pair, exact canonical tree, paired rows: b = B exact and A not, c = A exact "
                                "and B not; b > c and P(X >= b | b+c, 1/2) <= %s" % PAIR_ALPHA,
                   "LESSONS_HELP": "B_BEATS_A in all 3 seed pairs, per panel",
@@ -274,41 +298,68 @@ def edit_kinds_digest(items) -> str:
 
 
 # ---- the decision functions (the reader calls these; the spec and the record above say the same in words) -------
-def input_use_level(t1: bool, t2v: bool, t2p: bool, t3: bool) -> str:
-    """One run at one checkpoint. See LEVELS; every combination of the four tests has exactly one level."""
+def input_use_level(t1: bool, t2v: bool, t2p: bool, distinct: int) -> str:
+    """One run at one checkpoint. distinct = distinct free outputs over the SP1 rows; T3 = distinct >= T3_MIN_DISTINCT.
+    See LEVELS; every combination of T1, T2V, T2P and the distinct count has exactly one level."""
+    if type(distinct) is not int or distinct < NONE_DISTINCT_FREE_OUTPUTS:
+        raise ValueError("INVALID_DISTINCT_FREE_OUTPUTS")
+    t3 = distinct >= T3_MIN_DISTINCT
     if t1 and t2v and t3:
         return "FULL"
     if t1 or t2v:
         return "PARTIAL_FIELDS" if t3 else "TEACHER_FORCED_ONLY"
-    return "STRUCTURE_ONLY" if t2p else "NONE"
+    if t2p or distinct > NONE_DISTINCT_FREE_OUTPUTS:
+        return "STRUCTURE_OR_OUTPUT_VARIATION"
+    return "NONE"
 
 
-def arm_label(arm: str, valid_levels) -> str:
-    """valid_levels: the FINAL level of every VALID run of this arm (missing or invalid runs are left out)."""
-    valid_levels = list(valid_levels)
+def calibration_guard_fires(checkpoint_0_tests) -> bool:
+    """checkpoint_0_tests: (T1, T2V, T2P) of every run that has a checkpoint-0 reading. Distinct outputs are not used."""
+    return any(t1 or t2v or t2p for t1, t2v, t2p in checkpoint_0_tests)
+
+
+def arm_label(arm: str, finals) -> str:
+    """finals: (FINAL level, run is valid) of every run of this arm that HAS a FINAL reading, valid or not.
+    Runs with no FINAL reading (missing, or an unreadable final checkpoint) are left out."""
+    finals = [(level, bool(valid)) for level, valid in finals]
+    valid_levels = [level for level, valid in finals if valid]
     if valid_levels.count("FULL") >= ARM_MIN_SEEDS:
         return "ARM_%s_SHOWS_INPUT_USE" % arm
-    if len(valid_levels) >= ARM_MIN_VALID_RUNS and all(level == "NONE" for level in valid_levels):
+    if (valid_levels.count("NONE") >= ARM_MIN_VALID_NONE_RUNS
+            and all(level == "NONE" for level, _ in finals)):
         return "ARM_%s_SHOWS_NO_INPUT_USE" % arm
     return "ARM_%s_INPUT_USE_UNDETERMINED" % arm
 
 
-def architecture_decision(valid_levels_by_arm: dict, guard_fires: bool):
-    """(label, reasons). valid_levels_by_arm: arm -> FINAL levels of that arm's VALID runs."""
+def architecture_decision(finals_by_arm: dict, guard_fires: bool):
+    """(label, reasons). finals_by_arm: arm -> (FINAL level, valid) of every run of that arm with a FINAL reading."""
     if guard_fires:
         return "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
-    labels = {arm: arm_label(arm, valid_levels_by_arm.get(arm, ())) for arm in ARMS}
+    finals = {arm: [(level, bool(valid)) for level, valid in finals_by_arm.get(arm, ())] for arm in ARMS}
+    labels = {arm: arm_label(arm, finals[arm]) for arm in ARMS}
     if any(label.endswith("_SHOWS_INPUT_USE") for label in labels.values()):
         return "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE", []
     if all(label.endswith("_SHOWS_NO_INPUT_USE") for label in labels.values()):
         return "ARCHITECTURE_CHANGE_JUSTIFIED", []
-    present = [level for arm in ARMS for level in valid_levels_by_arm.get(arm, ())]
-    reasons = [level for level in ("TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_ONLY") if level in present]
+    present = [level for arm in ARMS for level, _ in finals[arm]]
+    reasons = [level for level in ("TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_VARIATION")
+               if level in present]
     if "FULL" in present:
         reasons.append("SEED_DEPENDENT")
-    if any(len(valid_levels_by_arm.get(arm, ())) < ARM_MIN_VALID_RUNS for arm in ARMS):
+    if any(level != "NONE" and not valid for arm in ARMS for level, valid in finals[arm]):
+        reasons.append("NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID")
+    if any(sum(1 for _, valid in finals[arm] if valid) < ARM_MIN_VALID_RUNS for arm in ARMS):
         reasons.append("TOO_FEW_VALID_RUNS")
+    if not reasons:                                   # cannot happen (a test enumerates the cases); fail loudly
+        raise ValueError("ARCHITECTURE_INCOMPLETE_WITHOUT_A_REASON")
     return "ARCHITECTURE_DECISION_INCOMPLETE", reasons
+
+
+def fields_not_read_in_any_run(final_levels) -> bool:
+    """Information only (decision 4). final_levels: the FINAL level of every run that has a FINAL reading, valid or
+    not. True iff there is at least one such run and none passes T1 or T2V (none is in FIELD_LEVELS)."""
+    final_levels = list(final_levels)
+    return bool(final_levels) and not any(level in FIELD_LEVELS for level in final_levels)
 
 
 def overall_lessons(per_panel: dict) -> str:

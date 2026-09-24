@@ -360,7 +360,33 @@ def test_pin_package_tool_refuses_and_never_overwrites(tiny, tmp_path, monkeypat
 # ------------------------------------------------------------------------------------------------------------
 # 5. the reader, on records made by the runner's own evaluate() with pure-Python fake models
 # ------------------------------------------------------------------------------------------------------------
-FAKE_MODES = ("blind", "reader", "tf_reader_freegen_collapse", "no_noetic", "structure_only")
+FAKE_MODES = ("blind", "reader", "tf_reader_freegen_collapse", "no_noetic", "structure_only", "shape_operators_only",
+              "shape_only")
+
+
+def _shape_reader(keep_operators):
+    """The verifier's scratch fakes of 294471a5 (V1, V2), made tests: keep the tree shape (and the PLUS/TIMES operators
+    when keep_operators); write N0, D_P, F_NONE and REG_ABSENT at every leaf. No field value, no field presence."""
+    def mapped(tokens):
+        out = []
+        for token in tokens:
+            name = TOKENS[token]
+            if re.fullmatch(r"N[0-9]", name):
+                name = "N0"
+            elif name.startswith("D_"):
+                name = "D_P"
+            elif name == "F_NONE" or re.fullmatch(r"F[1-7]", name):
+                name = "F_NONE"
+            elif name.startswith("REG_"):
+                name = "REG_ABSENT"
+            elif name in ("PLUS", "TIMES") and not keep_operators:
+                name = "PLUS"
+            out.append(TOKENS.index(name))
+        return out
+    return mapped
+
+
+SHAPE_READERS = {"shape_operators_only": _shape_reader(True), "shape_only": _shape_reader(False)}
 
 
 def _structure_only(tokens):
@@ -388,6 +414,8 @@ class FakeModel:
                                   decision is always STATE (review of 3771f989, MAJOR: T1 799/799, 1 distinct output)
       no_noetic                   reads domain, drive and register values, never the Noetic (always N0)
       structure_only              reads shape, operators and field presence only (review MINOR 1: 180 distinct)
+      shape_operators_only        reads shape and PLUS/TIMES only (verification of 294471a5, V1: 44 distinct)
+      shape_only                  reads shape only; always PLUS (verification of 294471a5, V2: 14 distinct)
     """
 
     def __init__(self, mode):
@@ -411,6 +439,8 @@ class FakeModel:
             return true, [TOKENS.index("N0") if re.fullmatch(r"N[0-9]", TOKENS[t]) else t for t in true]
         if self.mode == "structure_only":
             return true, _structure_only(true)
+        if self.mode in SHAPE_READERS:
+            return true, SHAPE_READERS[self.mode](true)
         return true, true
 
     def next_logits(self, bottleneck, prefix):
@@ -486,9 +516,10 @@ def _make_exact(record, panel, ids, prep_rows):
 
 def write_results(root, fake, *, reads=None, modes=None, exact=None, stage0="REPRODUCED_16_OF_16", missing=(),
                   reload_bad=(), init_bad=(), inconsistent=(), job_status="COMPLETE", fires_at_zero=False,
-                  frozen_override=None, mutate_prep=None, mutate_final=None):
+                  zero_modes=None, frozen_override=None, mutate_prep=None, mutate_final=None):
     """A complete synthetic results folder. `modes[(arm, seed)]` = the fake mode of the final-checkpoint model
-    (default blind); `reads[(arm, seed)] = True` is short for mode "reader"; `exact[(arm, seed)]` = {panel: ids} made
+    (default blind); `reads[(arm, seed)] = True` is short for mode "reader"; `zero_modes[(arm, seed)]` = the mode at
+    checkpoint 0 (default blind; `fires_at_zero` = "reader" for every run); `exact[(arm, seed)]` = {panel: ids} made
     exact at the final checkpoint; `mutate_prep(record)` and `mutate_final(key, body)` alter the written files."""
     root = Path(root)
     modes = dict(modes or {})
@@ -515,8 +546,10 @@ def write_results(root, fake, *, reads=None, modes=None, exact=None, stage0="REP
         for point in rules.CHECKPOINTS:
             if point == rules.FINAL:
                 mode = modes.get((arm, seed), "blind")
+            elif point == 0:
+                mode = "reader" if fires_at_zero else (zero_modes or {}).get((arm, seed), "blind")
             else:
-                mode = "reader" if fires_at_zero and point == 0 else "blind"
+                mode = "blind"
             body = json.loads(fake["bytes"][(arm, mode)])
             if point == rules.FINAL:
                 for panel, ids in ((exact or {}).get((arm, seed)) or {}).items():
@@ -544,7 +577,9 @@ def test_runner_records_satisfy_the_reader_and_the_levels_separate_the_fakes(fak
     assert reading["panels"]["SP1"]["exact"] == 256 and reading["panels"]["SP2"]["exact"] == 256
     assert len(reading["edits"]["values"]) == rules.EDIT_COUNT and reading["edits"]["columns"] == list(rules.EDIT_VALUE_COLUMNS)
     expected = {"blind": "NONE", "reader": "FULL", "tf_reader_freegen_collapse": "TEACHER_FORCED_ONLY",
-                "no_noetic": "PARTIAL_FIELDS", "structure_only": "STRUCTURE_ONLY"}
+                "no_noetic": "PARTIAL_FIELDS", "structure_only": "STRUCTURE_OR_OUTPUT_VARIATION",
+                "shape_operators_only": "STRUCTURE_OR_OUTPUT_VARIATION", "shape_only": "STRUCTURE_OR_OUTPUT_VARIATION"}
+    assert set(expected) == set(FAKE_MODES)
     for arm in rules.ARMS:
         for mode, level in expected.items():
             reading_ = reader.input_use(records[(arm, mode)], arm, prep_record)
@@ -569,21 +604,108 @@ def test_runner_records_satisfy_the_reader_and_the_levels_separate_the_fakes(fak
     assert structure["T2P"]["up"] == rules.PRESENCE_EDIT_COUNT == 235 and structure["T2P"]["down"] == 0
     assert structure["T3"]["distinct_free_outputs"] == 180 and structure["T3"]["passes"]
     assert structure["T2_ALL_EDITS_REPORTED_NOT_DECISIVE"]["passes"]          # the old T2 would have passed
+    # the verifier's V1 and V2 fakes (verification of 294471a5): no field value, no field presence, but the free
+    # outputs depend on the input. Revision 2 graded both NONE; revision 3 (coordinator decision 1) does not.
+    for mode, distinct in (("shape_operators_only", 44), ("shape_only", 14)):
+        shape = reader.input_use(records[("A", mode)], "A", prep_record)
+        assert shape["T1"]["correct"] == 88 and shape["T1"]["n"] == 799 and not shape["T1"]["passes"], mode
+        assert (shape["T2V"]["up"], shape["T2V"]["down"], shape["T2P"]["up"], shape["T2P"]["down"]) == (0, 0, 0, 0), mode
+        assert shape["T3"]["distinct_free_outputs"] == distinct and shape["T3"]["output_varies"], mode
+        assert shape["T3"]["passes"] == (distinct >= rules.T3_MIN_DISTINCT), mode
+    assert not reader.input_use(blind, "A", prep_record)["T3"]["output_varies"]
+
+
+# The four distinct-output classes that matter: exactly 1 (NONE possible), 2..31 (varies, T3 fails), >= 32 (T3).
+DISTINCT_CASES = (1, 2, rules.T3_MIN_DISTINCT - 1, rules.T3_MIN_DISTINCT, 256)
+
+
+def _level_table():
+    return {(t1, t2v, t2p, d): rules.input_use_level(t1, t2v, t2p, d)
+            for t1 in (False, True) for t2v in (False, True) for t2p in (False, True) for d in DISTINCT_CASES}
 
 
 def test_level_function_is_a_complete_partition():
-    seen = {}
-    for t1 in (False, True):
-        for t2v in (False, True):
-            for t2p in (False, True):
-                for t3 in (False, True):
-                    seen[(t1, t2v, t2p, t3)] = rules.input_use_level(t1, t2v, t2p, t3)
-    assert set(seen.values()) == set(rules.LEVELS)
-    assert [k for k, v in seen.items() if v == "FULL"] == [(True, True, False, True), (True, True, True, True)]
-    assert all(v == "NONE" for k, v in seen.items() if not (k[0] or k[1] or k[2]))
-    assert all(v == "TEACHER_FORCED_ONLY" for k, v in seen.items() if (k[0] or k[1]) and not k[3])
-    assert all(v == "PARTIAL_FIELDS" for k, v in seen.items() if k[3] and k[0] != k[1])
-    assert all(v == "STRUCTURE_ONLY" for k, v in seen.items() if not k[0] and not k[1] and k[2])
+    """Every combination of T1, T2V, T2P and the distinct-output count has exactly one level (2 x 2 x 2 x 5 = 40
+    cases). Coordinator decisions 1 and 2 of 2026-09-24: NONE is total collapse only."""
+    seen = _level_table()
+    assert len(seen) == 40 and set(seen.values()) == set(rules.LEVELS)
+    t3 = lambda d: d >= rules.T3_MIN_DISTINCT                                                  # noqa: E731
+    assert {k for k, v in seen.items() if v == "FULL"} == {k for k in seen if k[0] and k[1] and t3(k[3])}
+    assert {k for k, v in seen.items() if v == "NONE"} == {(False, False, False, 1)}          # exactly one case
+    assert all(v == "TEACHER_FORCED_ONLY" for k, v in seen.items() if (k[0] or k[1]) and not t3(k[3]))
+    assert all(v == "PARTIAL_FIELDS" for k, v in seen.items() if t3(k[3]) and k[0] != k[1])
+    assert {k for k, v in seen.items() if v == "STRUCTURE_OR_OUTPUT_VARIATION"} == {
+        k for k in seen if not k[0] and not k[1] and (k[2] or k[3] >= 2)}
+    assert all((v in rules.FIELD_LEVELS) == (k[0] or k[1]) for k, v in seen.items())         # field levels = T1 or T2V
+    assert rules.input_use_level(False, False, False, 2) != "NONE"                            # 2 distinct is never NONE
+    for bad in (0, -1, 1.0, True, None):
+        with pytest.raises(ValueError, match="INVALID_DISTINCT_FREE_OUTPUTS"):
+            rules.input_use_level(False, False, False, bad)
+
+
+def _revision_2_shows_no_input_use(runs):
+    """Revision 2's arm rule, for the monotonicity check: runs = [(t1, t2v, t2p, distinct, valid)] with a FINAL
+    reading. Revision 2: NONE = not T1, not T2V, not T2P (distinct ignored); >= 2 valid runs, every VALID run NONE."""
+    valid = [not (t1 or t2v or t2p) for t1, t2v, t2p, _, ok in runs if ok]
+    return len(valid) >= 2 and all(valid)
+
+
+def test_architecture_rule_can_only_become_rarer_and_always_names_a_reason():
+    """Coordinator decision 3 of 2026-09-24, enumerated per arm (3 seeds; each seed: no FINAL reading, or one of 7
+    test outcomes, valid or not = 15 states; 15^3 = 3,375 arms) and over all pairs of distinct arms (286 distinct
+    multisets of (level, valid)) for the reasons:
+      - JUSTIFIED needs every FINAL reading NONE (valid or not) and >= 2 valid NONE runs per arm;
+      - an arm that shows no input use under revision 3 also did under revision 2 (so JUSTIFIED only becomes rarer;
+        the calibration guard is the same T1/T2V/T2P test in both revisions);
+      - every ARCHITECTURE_DECISION_INCOMPLETE carries at least one declared reason."""
+    import itertools
+    outcomes = ((False, False, False, 1), (False, False, False, 2), (False, False, False, 44), (False, False, True, 1),
+                (True, False, False, 1), (False, True, False, 256), (True, True, False, 256))
+    states = [None] + [o + (ok,) for o in outcomes for ok in (True, False)]
+    arm_cases, new_no = [], 0
+    for seeds in itertools.product(states, repeat=3):
+        runs = [s for s in seeds if s is not None]
+        finals = [(rules.input_use_level(*s[:4]), s[4]) for s in runs]
+        label = rules.arm_label("A", finals)
+        shows_no = label == "ARM_A_SHOWS_NO_INPUT_USE"
+        want = (all(level == "NONE" for level, _ in finals)
+                and sum(1 for level, ok in finals if ok and level == "NONE") >= rules.ARM_MIN_VALID_NONE_RUNS)
+        assert shows_no == want, seeds
+        if shows_no:
+            new_no += 1
+            assert _revision_2_shows_no_input_use(runs), seeds             # never JUSTIFIED where revision 2 was not
+        arm_cases.append(finals)
+    assert len(arm_cases) == 3375 and new_no > 0
+    # a revision-2 JUSTIFIED that revision 3 withholds (the verifier's V1, V2 and V3 paths)
+    for runs in ([(False, False, False, 44, True)] * 3, [(False, False, False, 14, True)] * 3,
+                 [(False, False, False, 1, True)] * 2 + [(True, True, False, 256, False)]):
+        assert _revision_2_shows_no_input_use(runs)
+        assert rules.arm_label("A", [(rules.input_use_level(*r[:4]), r[4]) for r in runs]) != "ARM_A_SHOWS_NO_INPUT_USE"
+    distinct_arms = sorted({tuple(sorted(finals)) for finals in arm_cases})   # the rules ignore seed order
+    assert len(distinct_arms) == 286                                          # multisets of size <= 3 over 10 states
+    for arm_a in distinct_arms:
+        for arm_b in distinct_arms:
+            finals_a, finals_b = list(arm_a), list(arm_b)
+            label, reasons = rules.architecture_decision({"A": finals_a, "B": finals_b}, False)
+            assert set(reasons) <= set(rules.ARCHITECTURE_REASONS)
+            if label == "ARCHITECTURE_DECISION_INCOMPLETE":
+                assert reasons
+            elif label == "ARCHITECTURE_CHANGE_JUSTIFIED":
+                assert all(level == "NONE" for level, _ in finals_a + finals_b)
+    assert rules.architecture_decision({"A": [], "B": []}, True) == (
+        "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"])
+
+
+def test_calibration_guard_uses_t1_t2v_t2p_only():
+    """Coordinator decision 5: the guard stays on T1, T2V and T2P; distinct outputs never fire it."""
+    assert not rules.calibration_guard_fires([])
+    assert not rules.calibration_guard_fires([(False, False, False)] * 6)
+    for tests in ((True, False, False), (False, True, False), (False, False, True)):
+        assert rules.calibration_guard_fires([(False, False, False)] * 5 + [tests])
+    assert rules.fields_not_read_in_any_run([]) is False                   # no FINAL reading: nothing to say
+    assert rules.fields_not_read_in_any_run(["NONE", "STRUCTURE_OR_OUTPUT_VARIATION"]) is True
+    for level in rules.FIELD_LEVELS:
+        assert rules.fields_not_read_in_any_run(["NONE"] * 5 + [level]) is False
 
 
 def test_reader_b_reads_a_does_not(tmp_path, fake_records):
@@ -604,6 +726,8 @@ def test_reader_no_arm_reads_input_justifies_the_architecture_change(tmp_path, f
     v = reader.verdict(write_results(tmp_path / "all", fake_records))
     assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED" and v["architecture_reasons"] == []
     assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE" and v["arms"]["B"]["label"] == "ARM_B_SHOWS_NO_INPUT_USE"
+    assert "FIELDS_NOT_READ_IN_ANY_RUN" in v["labels"] and v["information"]["final_readings_counted"] == 6
+    assert v["checkpoint_0_distinct_free_outputs"] == {"%s_%d" % k: 1 for k in rules.RUN_ORDER}
     assert set(v["lessons"].values()) == {"LESSONS_EFFECT_NOT_SHOWN_SP1", "LESSONS_EFFECT_NOT_SHOWN_SP2U",
                                           "LESSONS_EFFECT_NOT_SHOWN_SP2ALL"}
     assert v["lessons_overall"] == "LESSONS_OVERALL_EFFECT_NOT_SHOWN"
@@ -618,11 +742,30 @@ def test_reader_architecture_needs_every_valid_run_to_show_no_input_use(tmp_path
     """Review of 3771f989, MAJOR: a model that reads its input only partly, or only with the correct previous
     tokens, must never give ARCHITECTURE_CHANGE_JUSTIFIED."""
     for mode, reason in (("tf_reader_freegen_collapse", "TEACHER_FORCED_ONLY"), ("no_noetic", "PARTIAL_FIELDS"),
-                         ("structure_only", "STRUCTURE_ONLY")):
+                         ("structure_only", "STRUCTURE_OR_OUTPUT_VARIATION"),
+                         ("shape_operators_only", "STRUCTURE_OR_OUTPUT_VARIATION"),     # verification V1 (MAJOR)
+                         ("shape_only", "STRUCTURE_OR_OUTPUT_VARIATION")):              # verification V2
         v = reader.verdict(write_results(tmp_path / mode, fake_records, modes={k: mode for k in rules.RUN_ORDER}))
         assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == [reason], mode
         assert "ARCHITECTURE_INCOMPLETE_BECAUSE_" + reason in v["labels"]
         assert v["arms"]["A"]["label"] == "ARM_A_INPUT_USE_UNDETERMINED"
+        assert v["calibration"] == "INPUT_USE_RULE_SILENT_AT_INITIALISATION"
+        fields_read = mode in ("tf_reader_freegen_collapse", "no_noetic")
+        assert ("FIELDS_NOT_READ_IN_ANY_RUN" in v["labels"]) == (not fields_read), mode
+    # verification V3: a fully reading run that is NOT valid (its reload failed) still withholds JUSTIFIED
+    v = reader.verdict(write_results(tmp_path / "v3", fake_records, modes={("B", S3): "reader"}, reload_bad={("B", S3)}))
+    assert v["runs"]["B_%d" % S3]["validity"] == "RUN_INVALID_RELOAD_MISMATCH"
+    assert v["runs"]["B_%d" % S3]["readings"][str(rules.FINAL)]["level"] == "FULL"
+    assert v["arms"]["B"]["label"] == "ARM_B_INPUT_USE_UNDETERMINED"
+    assert v["arms"]["B"]["final_levels_of_runs_not_valid"] == ["FULL"] and v["arms"]["B"]["valid_none_runs"] == 2
+    assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE"
+    assert v["architecture_reasons"] == ["SEED_DEPENDENT", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID"]
+    assert "FIELDS_NOT_READ_IN_ANY_RUN" not in v["labels"]                 # the invalid run passes T1 and T2V
+    # the same with output variation only, in an invalid run
+    v = reader.verdict(write_results(tmp_path / "v3s", fake_records, modes={("A", S1): "shape_only"},
+                                     reload_bad={("A", S1)}))
+    assert v["architecture_reasons"] == ["STRUCTURE_OR_OUTPUT_VARIATION", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID"]
+    assert "FIELDS_NOT_READ_IN_ANY_RUN" in v["labels"]
     # one fully reading seed per arm (2 of 6 runs): the architecture can carry the input -> never JUSTIFIED
     v = reader.verdict(write_results(tmp_path / "seed", fake_records, reads={("A", S1): True, ("B", S2): True}))
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["SEED_DEPENDENT"]
@@ -630,6 +773,25 @@ def test_reader_architecture_needs_every_valid_run_to_show_no_input_use(tmp_path
     v = reader.verdict(write_results(tmp_path / "one", fake_records, modes={("B", S3): "no_noetic"}))
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["PARTIAL_FIELDS"]
     assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE"
+
+
+def test_reader_calibration_guard_and_checkpoint_0_counts(tmp_path, fake_records):
+    """Coordinator decision 5 of 2026-09-24: the guard stays on T1, T2V and T2P; every run's checkpoint-0 distinct
+    free-output count is reported. An untrained model whose outputs vary does not fire the guard."""
+    everyone = {k: "shape_operators_only" for k in rules.RUN_ORDER}
+    v = reader.verdict(write_results(tmp_path / "vary", fake_records, zero_modes=everyone))
+    assert v["calibration"] == "INPUT_USE_RULE_SILENT_AT_INITIALISATION"
+    assert v["checkpoint_0_distinct_free_outputs"] == {"%s_%d" % k: 44 for k in rules.RUN_ORDER}
+    first = v["calibration_checkpoint_0"]["A_%d" % S1]
+    assert first == {"T1": False, "T2V": False, "T2P": False, "distinct_free_outputs": 44,
+                     "level": "STRUCTURE_OR_OUTPUT_VARIATION"}
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"             # FINAL readings are all NONE here
+    v = reader.verdict(write_results(tmp_path / "t2p", fake_records, zero_modes={k: "structure_only" for k in rules.RUN_ORDER}))
+    assert v["calibration"] == "INPUT_USE_RULE_FIRES_AT_INITIALISATION"      # T2P passes at checkpoint 0
+    assert v["architecture_reasons"] == ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
+    assert v["checkpoint_0_distinct_free_outputs"]["B_%d" % S3] == 180
+    v = reader.verdict(write_results(tmp_path / "gap", fake_records, missing={("A", S2)}))
+    assert v["checkpoint_0_distinct_free_outputs"]["A_%d" % S2] is None and len(v["checkpoint_0_distinct_free_outputs"]) == 6
 
 
 def test_reader_two_of_three_seeds_are_enough_and_one_is_not(tmp_path, fake_records):
@@ -767,12 +929,19 @@ def test_reader_recomputes_what_prep_claims(tmp_path, fake_records):
 def test_reader_labels_are_the_declared_ones(tmp_path, fake_records):
     patterns = [p.replace("<A|B>", "(A|B)").replace("<STOP_CODE>", "[A-Z0-9_]+").replace("<REASON>", "[A-Z0-9_]+")
                 .replace("<PANEL>", "(SP1|SP2U|SP2ALL)").replace("<i>", "[123]") for group in reader.LABELS.values() for p in group]
+    seen = set()
     for name, kwargs in (("mix", {"reads": {("B", S1): True}, "missing": {("A", S2)}}),
-                         ("tf", {"modes": {k: "tf_reader_freegen_collapse" for k in rules.RUN_ORDER}})):
+                         ("tf", {"modes": {k: "tf_reader_freegen_collapse" for k in rules.RUN_ORDER}}),
+                         ("shape", {"modes": {k: "shape_only" for k in rules.RUN_ORDER}}),
+                         ("v3", {"modes": {("B", S3): "reader"}, "reload_bad": {("B", S3)}}),
+                         ("blind", {})):
         v = reader.verdict(write_results(tmp_path / name, fake_records, **kwargs))
         for label in v["labels"]:
             core = label.split(":")[-1]
             assert any(re.fullmatch(p, core) for p in patterns), label
+        seen.update(label.split(":")[-1] for label in v["labels"])
+    assert {"FIELDS_NOT_READ_IN_ANY_RUN", "INPUT_USE_STRUCTURE_OR_OUTPUT_VARIATION",
+            "ARCHITECTURE_INCOMPLETE_BECAUSE_NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID"} <= seen
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -891,12 +1060,21 @@ def test_launch_custody_filters_and_prelaunch_refusals():
 
 @NEEDS_JOBS
 def test_launcher_approves_exactly_the_committed_rules_programs_and_spec():
-    """launch.py's APPROVED_* values equal this working copy: the rules hash, the spec's frozen status line, and the
-    LF bytes of the four decision programs and the spec. Every check before the pin passes on the real files."""
+    """Two states, both fail-closed.
+    UNDER REVIEW (the spec's status is PROPOSED_FOR_REVIEW, as for revision 3): launch.py still holds the approved
+    values of an earlier revision, so it must REFUSE this working copy before the pin check.
+    APPROVED (the spec carries the frozen status line): launch.py's APPROVED_* values equal this working copy: the
+    rules hash, the spec's frozen status line, and the LF bytes of the four decision programs and the spec. Every
+    check before the pin passes on the real files."""
     ab = _load(JOBS / "ab_job" / "launch.py", "q4ab_ab_launch3")
-    assert ab.APPROVED_FROZEN_SHA256 == rules.frozen_sha256()
     blobs = {rel: (ab.PACKAGE / rel).read_bytes() for rel in ab.APPROVED_LF_SHA256}
     blobs[ab.LAB + "Q4_SDG_DATA_PINS.json"] = (HERE / "Q4_SDG_DATA_PINS.json").read_bytes()
+    if ab.FROZEN_STATUS_LINE.search(blobs[ab.SPEC]) is None:
+        assert re.search(rb"^[*][*]Status: PROPOSED_FOR_REVIEW[*][*]", blobs[ab.SPEC], re.MULTILINE)
+        with pytest.raises(SystemExit, match="FROZEN_RULES_NOT_THE_APPROVED_ONES|FROZEN_BEFORE_LAUNCH"):
+            ab.check_frozen(blobs)                                          # refused before the pin is even read
+        return
+    assert ab.APPROVED_FROZEN_SHA256 == rules.frozen_sha256()
     for rel, want in ab.APPROVED_LF_SHA256.items():
         assert ab.lf_sha256(blobs[rel]) == want, rel
     status = ab.FROZEN_STATUS_LINE.search(blobs[ab.SPEC])
