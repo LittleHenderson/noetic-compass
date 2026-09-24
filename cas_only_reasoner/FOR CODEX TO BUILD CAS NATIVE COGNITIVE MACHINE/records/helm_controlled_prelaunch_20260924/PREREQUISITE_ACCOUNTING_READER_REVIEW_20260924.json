@@ -1,0 +1,94 @@
+{
+  "schema": "helm.prerequisite-slot-and-reader-review/1",
+  "observed_utc": "2026-09-24T06:19:05.355068+00:00",
+  "verdict": "CHANGES_REQUIRED_BEFORE_NEW_TECHNICAL_ADMISSION",
+  "reviewed_commit": "3083ea0d013929df76d5fe4852a0769d4c5010b6",
+  "source_sha256": {
+    "records/helm_eval_design_20260923/study_spend/PREREQUISITE_SLOTS.md": "076446cb08e9861b4cd9daedcb6c6efd2bc3f7eb4e3c7d6943663f46a417889b",
+    "records/helm_eval_design_20260923/study_spend/study_spend.py": "5dce1a73e1f4139eb6f945c0368af92562641d98e6283170e09d24f8edfee934",
+    "records/helm_eval_design_20260923/study_spend/STUDY_SPEND_STATE.json": "06eb2b9391d467ade806864ed30c5081d1ca96aa89860d83d48321d68e181471",
+    "records/helm_eval_design_20260923/larger_question_t4_job/read_results.py": "0d5d7aee4680e904a0ec016b2ca3070bec06880451d56b715b60d612200a87d3"
+  },
+  "no_project_code_executed": true,
+  "owner_action_required": false,
+  "proposed_counts": {
+    "C_total_attempts": 10,
+    "C_future_jobs": 7,
+    "fallback_total_attempts": 12,
+    "fallback_future_jobs": 9,
+    "observed_attempts": 3,
+    "C_main_training_jobs": 4,
+    "fallback_main_training_jobs": 6,
+    "automatic_retries": 0
+  },
+  "canonical_booking_policy_reported_by_claude": {
+    "existing_smokes_usd": 30,
+    "future_C_training_bookings_usd": 60,
+    "C_total_bookings_usd": 90,
+    "fallback_total_bookings_usd": 120,
+    "nontraining_prerequisites_use_own_receipts_not_meta1_ledger": true,
+    "launcher_policy_implementation_audit_still_required": true
+  },
+  "spend_claim": {
+    "claude_reported_C_worst_total_usd": "57.59",
+    "accepted_as_conservative_upper_bound": false,
+    "claude_reported_future_mandatory_usd": "51.24",
+    "inclusive_route_cap_instead_of_1_66_arithmetic_total_usd": "58.93",
+    "58_93_is_not_verified_complete_cost_bound": true,
+    "actual_study_ceiling_usd": 60,
+    "expected_bill_available": false
+  },
+  "findings": [
+    {
+      "id": "B1",
+      "severity": "BLOCKING",
+      "file": "study_spend.py",
+      "finding": "P1a hardcodes1.66 below recorded1.6639 and treats infrastructure-only bound as study spend; reserve inclusive3 until complete validated bound exists."
+    },
+    {
+      "id": "B2",
+      "severity": "BLOCKING",
+      "file": "study_spend.py",
+      "finding": "Static JOBS/FUTURE never accounts for completed future jobs; no next-slot gate, third-training stop or refusal exit. Always returns0. Prose admission rule is not executable enforcement."
+    },
+    {
+      "id": "B3",
+      "severity": "BLOCKING",
+      "file": "study_spend.py",
+      "finding": "Missing elapsed defaults0; watcher cost lacks finite/nonnegative validation, matching job/instance/source identity, pinned receipt hashes and full ancillary/retention scope. Moving Git refs are not frozen inputs."
+    },
+    {
+      "id": "B4",
+      "severity": "OPEN_PREREQUISITE",
+      "file": "PREREQUISITE_SLOTS.md",
+      "finding": "P1b/E1 runtime/resource/cleanup limits and timing acceptance are not supplied; training11.56 bound must cover full billed interval; E1 retention/collection/partial-study allowance unspecified."
+    },
+    {
+      "id": "R1",
+      "severity": "BLOCKING",
+      "file": "read_results.py:112-113",
+      "finding": "Launch source/bundle fields are presence-only. Returned identity.json not read or compared to launch/frozen pins."
+    },
+    {
+      "id": "R2",
+      "severity": "BLOCKING",
+      "file": "read_results.py:116",
+      "finding": "Cleanup watcher record not bound to launch job/instance; an unrelated terminated record with empty volumes could satisfy it."
+    },
+    {
+      "id": "R3",
+      "severity": "OPEN_CONSUMER_CONTRACT",
+      "file": "read_results.py:125",
+      "finding": "Exit0 means job PASS even when route_acceptance is ROUTE_NOT_ACCEPTED. Consumer must enforce explicit route verdict or separate strict exit."
+    }
+  ],
+  "positive_reader_changes": [
+    "Complete flag and exact ordered d,c,b,a request required",
+    "All four check verdicts PASS and stage0 success required",
+    "Existing integrity problems and missing cleanup prevent ROUTE_ACCEPTED"
+  ],
+  "aggregation_timing": "Post-launch evidence aggregation; keep frozen per-check source/scoring and original job verdict unchanged, bind aggregator revision separately",
+  "handoff": "codex-0007 to claude-0006",
+  "main_launch_enabled": false,
+  "protected_data_accessed": false
+}

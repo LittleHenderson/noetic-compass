@@ -1,0 +1,57 @@
+{
+  "schema": "helm.controlled.reproduction-policy/2",
+  "status": "PROSPECTIVE_REVISION_2_IMPLEMENTATION_AND_AWS_ACCEPTANCE_PENDING",
+  "frozen_before_reproduction_result_required": true,
+  "historical_source": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "reproduction_seed": 20260917,
+  "file_hash_preserved": true,
+  "learned_state_tolerance": 0,
+  "required_for_C": [
+    "artifact_and_environment_admission_valid",
+    "complete_learned_state_identical",
+    "complete_registered_output_panel_identical"
+  ],
+  "continuation_identity_reported_separately": true,
+  "file_mismatch_alone_triggers_fallback": false,
+  "missing_or_invalid_evidence": "ADMISSION_INVALID_STOP",
+  "valid_state_or_output_mismatch": "DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY",
+  "output_panel_manifest_sha256": null,
+  "reader_source_sha256": null,
+  "reader_acceptance_receipt_sha256": null,
+  "main_launch_ready": false,
+  "implementation_review": {
+    "reader_branch": "claude/helm-unchanged-repro-20260924",
+    "implementation_commit": "d5414964314475e2b13a49595fd54a3d7fee017c",
+    "latest_review_commit": "d5414964314475e2b13a49595fd54a3d7fee017c",
+    "decision_currently_implemented": "VALID_EVIDENCE_AND_EXACT_LEARNED_STATE_AND_COMPLETE_OUTPUT_PANEL",
+    "proposed_decision_implemented": true,
+    "plan_and_policy_gates_present": true,
+    "approval_status_parser_review": "CORE_SOURCE_CONFORMANT_EXECUTION_ADMISSION_CHANGES_REQUIRED",
+    "acceptance_execution_slot": "P1b_G7_PACKAGE_AND_REVISED_BUDGET_PENDING",
+    "competing_reader_created": false,
+    "codex_review": "READER_STATIC_REVIEW_20260924.md"
+  },
+  "owner_authorization": {
+    "status": "STANDING_PROJECT_AUTHORIZATION",
+    "record": "OWNER_STANDING_AUTHORIZATION_20260924.json",
+    "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "further_owner_approval_required": false
+  },
+  "fallback_requires_frozen_plan_valid_mismatch_and_headroom": true,
+  "prospective_decisions": {
+    "record": "POLICY_DECISIONS_20260924.md",
+    "panel_records": 564,
+    "panel_includes_held_back_public_course_records": 127,
+    "extra_dev_panel_records": 0,
+    "decoded_slot_decisions_required": true,
+    "starting_state_mismatch": "ADMISSION_INVALID_STOP",
+    "missing_key_or_dtype_loader_refusal": "ADMISSION_INVALID_STOP_IF_FULL_VALID_PANEL_UNAVAILABLE",
+    "model_refusal": "EXACT_PLAIN_VALUEERROR_FULL_MESSAGE_IN_PINNED_HISTORICAL_CODE_ALLOWLIST",
+    "other_fault": "ADMISSION_INVALID_STOP",
+    "missing_git_object": "TOOL_STOP",
+    "changed_buffer": "VACUOUS_ONLY_IF_ACTUAL_PERSISTENT_BUFFER_COUNT_ZERO",
+    "acceptance_gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+    "environment_lock_schema": "helm.reproduction-environment/1",
+    "source_review_not_runtime_acceptance": true
+  }
+}

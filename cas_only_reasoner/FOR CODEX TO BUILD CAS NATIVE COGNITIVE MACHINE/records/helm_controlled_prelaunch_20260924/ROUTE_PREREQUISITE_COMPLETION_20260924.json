@@ -1,0 +1,157 @@
+{
+  "schema": "helm.route-prerequisite-public-completion-review/1",
+  "observed_utc": "2026-09-24T07:16:16.596450+00:00",
+  "status": "PUBLIC_SCRIPT_PASS_RECEIPTS_CONSISTENT_FINAL_AUTOMATED_ADMISSION_OPEN",
+  "source_receipt_commit": "b0fd06ff522e61b0efd125f9f568acfa9e532a2e",
+  "source_paths_sha256": {
+    "records/helm_eval_design_20260923/larger_question_t4_job/RESULTS_READING.json": "af2b1c2600a34b983bf4055a29fbf5e486564c57096f27b004a924d40ea45417",
+    "records/helm_eval_design_20260923/larger_question_t4_job/launch_record.json": "82b91aebe2f5989321ced0a5ad7847591c84a8e6eb9413550da52c869fede1a6",
+    "records/helm_eval_design_20260923/larger_question_t4_job/watch_record.json": "6c2447e1ececb71adac6113a25560ef4fee65fd5fe816b72d1cab2787d071d65",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/STATUS": "d117fa006ba9208500b2930ce69cbde436c647afa917cb7396a9bc9111a46dd2",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/CHECKS_EXIT_CODE": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/identity.json": "5163356a02dc3dd7457b6e2c6f222998cc07f7cad9beb0c49370ee74229ee104",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/stage0_smoke.json": "fb92b7b404af03e1b37ac3e08b5dafe11fab930a36ebce7175c6237d38869c4f",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/larger_path_result.json": "e97f0f0ef9fcb1109c6d819c387de3cba32bb285b16d4b892d4d186a6ef2ac2a",
+    "records/helm_eval_design_20260923/larger_question_t4_job/results/larger_path_result.json.rows.jsonl": "a1f990652e473208d4e89e872af1ea7b344c647d9671118d2eb1a83a68272b5e"
+  },
+  "execution_source": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
+  "instance_id": "i-09e14d4afd0e0ebfa",
+  "original_verdict": "INTEGRATION_CHECKS_PASS",
+  "complete": true,
+  "requested": [
+    "d",
+    "c",
+    "b",
+    "a"
+  ],
+  "check_verdicts": {
+    "d": {
+      "name": "FULL_LEARNER_SUBCLASS",
+      "verdict": "PASS"
+    },
+    "c": {
+      "name": "SEVEN_NODE_REFUSAL",
+      "verdict": "PASS"
+    },
+    "b": {
+      "name": "FIXTURES_THROUGH_LEARNER",
+      "verdict": "PASS"
+    },
+    "a": {
+      "name": "OLD_PACKET_PRESERVATION_AGAINST_T4_HISTORY",
+      "verdict": "PASS"
+    }
+  },
+  "runtime": {
+    "torch": "2.11.0+cu128",
+    "device_name": "Tesla T4",
+    "wall_seconds": 1690.097118063,
+    "preflight_projected_seconds": 3231.001671499493
+  },
+  "scope": {
+    "fixtures": 37,
+    "refusal_fixtures": 4,
+    "b_containers": [
+      {
+        "label": "OFF_HELM20_FINAL_20260917",
+        "switch": false,
+        "fixtures": 37,
+        "errors": 0
+      },
+      {
+        "label": "OFF_HELM20_FINAL_20260918",
+        "switch": false,
+        "fixtures": 37,
+        "errors": 0
+      },
+      {
+        "label": "OFF_HELM20_FINAL_20260919",
+        "switch": false,
+        "fixtures": 37,
+        "errors": 0
+      },
+      {
+        "label": "OFF_FRESH_20260917",
+        "switch": false,
+        "fixtures": 37,
+        "errors": 0
+      },
+      {
+        "label": "ON_FRESH_20260917",
+        "switch": true,
+        "fixtures": 37,
+        "errors": 0
+      }
+    ],
+    "d_pairs": [
+      {
+        "label": "ON_FRESH_20260917",
+        "switch": true,
+        "course_packets": 564,
+        "fixtures": 37,
+        "prediction_mismatches": 0,
+        "same_start": true,
+        "counters_equal_after_course": true,
+        "verdict": "PASS"
+      },
+      {
+        "label": "OFF_FRESH_20260917_EVERY_8TH_COURSE_PACKET",
+        "switch": false,
+        "course_packets": 71,
+        "fixtures": 37,
+        "prediction_mismatches": 0,
+        "same_start": true,
+        "counters_equal_after_course": true,
+        "verdict": "PASS"
+      }
+    ],
+    "a_historical_checkpoints": 6,
+    "a_records_per_checkpoint": 564,
+    "accuracy_claim": false,
+    "training_or_reproduction_run": false
+  },
+  "manual_public_consistency_checks": {
+    "output_identity_equals_launch_identity": true,
+    "twelve_input_hashes_match_launch": true,
+    "source_tree_and_eval_module_hashes_match_launch": true,
+    "reported_protected_and_t4_reference_source_names_match_launch": true,
+    "individual_protected_and_reference_source_bytes_rehashed_this_update": false,
+    "watch_instance_and_launch_time_match": true,
+    "stage0_runtime_and_inputs_consistent": true,
+    "status_done_and_exit_zero": true,
+    "rows_file_hash_match": true,
+    "rows_count": 298,
+    "rows_by_check_actual": {
+      "run": 3,
+      "d": 89,
+      "c": 13,
+      "b": 186,
+      "a": 7
+    },
+    "run_count_note": "Summary counts precede terminal verdict write; pinned script lines831-834 explain one extra run row"
+  },
+  "cleanup": {
+    "basis": "Claude public watcher receipt, manually matched to launch; no fresh Codex provider query",
+    "terminated_confirmed": true,
+    "volumes_remaining": [],
+    "watch_ended_utc": "2026-09-24T06:28:42Z"
+  },
+  "cost": {
+    "watcher_compute_address_disk_bound_usd": 0.4489,
+    "not_all_services_or_invoice": true,
+    "inclusive_route_allowance_retained_usd": 3,
+    "inside_study_ceiling_usd": 60
+  },
+  "still_open": [
+    "Generic reader identity/cleanup binding and strict admission exit",
+    "Spending admission and full ancillary/retention accounting",
+    "P1b reader/probe/admission validation",
+    "Actual HSET-2 counts and scorer conformance",
+    "Final main source/package/starting-state/runtime/checker freeze"
+  ],
+  "main_launch_enabled": false,
+  "Q4_in_scope": false,
+  "protected_output_or_archive_accessed": false,
+  "project_code_executed_by_codex": false,
+  "new_cloud_jobs_by_codex": 0
+}

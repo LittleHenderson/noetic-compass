@@ -1,0 +1,38 @@
+{
+  "schema": "helm.preparation-recovery/1",
+  "observed_utc": "2026-09-24T04:44:00.307204+00:00",
+  "active_environment_cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner",
+  "original_repository": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+  "original_branch": "codex/casformer-v0.2-release",
+  "original_commit": "eb3c9b1eac98853b2065c98b08987918e8e7d936",
+  "original_tracked_change_count": 31,
+  "original_changes_untouched": true,
+  "amendment_worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-controlled-prelaunch-20260924",
+  "amendment_branch": "codex/helm-controlled-prelaunch-20260924",
+  "amendment_start_commit": "b2a370bd2d06a902a37686ad92e7221be2e0ea71",
+  "amendment_start_tracked_status": "CLEAN",
+  "amendment_start_untracked": "Only assigned _scratch/ review artifacts",
+  "coordination_commit": "59d86443edc35bcf57368a99f602cd36530ca11d",
+  "source_reader_commit": "0391a3073f02fb00819b0125a467aefad53ccf2e",
+  "reader_implementation_commit": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
+  "source_smoke_receipts_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+  "source_hset2_commit": "853e645d7b5da5551257c4271e10c90b5fdb254e",
+  "source_route_review_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+  "main_hold": true,
+  "Claude_roles": [
+    "continue existing preparation",
+    "incorporate agreed amendments into owned files",
+    "protected-test custody",
+    "run approved AWS jobs"
+  ],
+  "Codex_roles": [
+    "six amendments",
+    "public evidence review",
+    "consolidated launch draft",
+    "this handoff record"
+  ],
+  "protected_content_read": false,
+  "new_cloud_jobs": 0,
+  "smoke_stopped_or_repeated": false,
+  "Q4_taken_over": false
+}

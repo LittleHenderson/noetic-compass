@@ -1,0 +1,75 @@
+{
+  "observed_utc": "2026-09-24T04:26:16.895898+00:00",
+  "mode": "READ_ONLY",
+  "region": "us-west-2",
+  "provider_invoice_obtained": false,
+  "smoke_instance": [
+    {
+      "id": "i-039b7ae505c4c6245",
+      "state": "terminated",
+      "type": "g7.2xlarge",
+      "launch_time": "2026-09-24T03:38:48+00:00",
+      "reason": "User initiated (2026-09-24 04:13:24 GMT)",
+      "volume_ids": []
+    }
+  ],
+  "smoke_volume_error": "InvalidVolume.NotFound",
+  "nonterminated_instances_us_west_2": [
+    {
+      "id": "i-0c3028734c8885542",
+      "state": "stopped",
+      "type": "g6e.xlarge",
+      "name": "cas-bridge-control-20260822",
+      "job": null,
+      "launch_time": "2026-08-24T18:35:33+00:00"
+    }
+  ],
+  "smoke_and_typed_pointer_events": [
+    {
+      "event": "RunInstances",
+      "time_utc": "2026-09-24T03:38:48+00:00",
+      "instance_ids": [
+        "i-039b7ae505c4c6245"
+      ],
+      "client_token": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "instance_type": "g7.2xlarge",
+      "error_code": null
+    },
+    {
+      "event": "RunInstances",
+      "time_utc": "2026-09-24T02:15:27+00:00",
+      "instance_ids": [
+        null
+      ],
+      "client_token": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+      "instance_type": "g7.2xlarge",
+      "error_code": "Server.InsufficientInstanceCapacity"
+    },
+    {
+      "event": "TerminateInstances",
+      "time_utc": "2026-09-24T04:13:24+00:00",
+      "instance_ids": [
+        "i-039b7ae505c4c6245"
+      ],
+      "client_token": "",
+      "instance_type": null,
+      "error_code": null
+    }
+  ],
+  "smoke_remaining_roles": [],
+  "smoke_remaining_profiles": [],
+  "smoke_remaining_security_groups": [],
+  "smoke_archive_metadata": [
+    {
+      "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+      "retained_object_count": 4,
+      "retained_bytes": 6754096
+    },
+    {
+      "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "retained_object_count": 247,
+      "retained_bytes": 55932238
+    }
+  ],
+  "cleanup_metadata_observed_utc": "2026-09-24T04:27:41.704047+00:00"
+}

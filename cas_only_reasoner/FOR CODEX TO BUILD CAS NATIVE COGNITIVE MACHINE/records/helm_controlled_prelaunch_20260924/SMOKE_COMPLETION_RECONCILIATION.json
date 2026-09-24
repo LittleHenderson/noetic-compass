@@ -1,0 +1,119 @@
+{
+  "reviewed_utc": "2026-09-24T04:28:37.154768+00:00",
+  "launch_receipt_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+  "integration_commit": "6816b52ef2c740e1f6d424e026bdbb95ecd87b55",
+  "scope": "READ_ONLY_PUBLIC_RECEIPTS_AND_PROVIDER_METADATA",
+  "no_model_or_project_code_executed": true,
+  "no_protected_material_read": true,
+  "smoke": {
+    "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+    "frozen_pass_conditions": {
+      "launcher_exit_0": "SUPPORTED_BY_LOG_AND_SOURCE_RETURN_RULE_FOR_COMPLETED_DELIVERABLE",
+      "delivered_cleanup_status": true,
+      "reduced_literal_matches": true,
+      "worker_ablations_phase_a_complete_and_not_claim_bearing": true
+    },
+    "ablation_keys_reported": 53,
+    "component_key_counts": {
+      "core_block": 3,
+      "heads": 38,
+      "query_and_readout": 8,
+      "round_mix": 4
+    },
+    "analogy_head_keys": 5,
+    "completed_main_updates": 8,
+    "replay_updates": 2,
+    "phase_b": "SKIPPED_AS_FROZEN",
+    "full_run_projection_complete": false,
+    "projection_unmeasured_terms": [
+      "checkpoint_check_phase_b"
+    ],
+    "source_sha": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+    "runtime_receipt": {
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition"
+    },
+    "collection_receipt_required_objects": 54,
+    "collection_receipt_verified_objects": 54,
+    "independent_binary_hash_reread_performed": false
+  },
+  "cost": {
+    "provider_invoice_obtained": false,
+    "rate_usd_per_hour": "2.52",
+    "provider_instance_interval_seconds": 2076,
+    "modeled_compute_usd": "1.4532",
+    "launcher_elapsed_seconds": "2431.2951856",
+    "ancillary_allowance_usd": "1.48",
+    "formula_unrounded_usd": "3.181906629920000000000000000",
+    "round_up_to_cent_usd": "3.19",
+    "run_log_stated_upper_usd": "3.18",
+    "run_log_rounding_needs_correction": true,
+    "attempt_1_compute_usd": "0.00",
+    "retained_storage_not_deleted_and_not_final_invoiced": true
+  },
+  "ledger": {
+    "observed_revision": 106,
+    "updated_utc": "2026-09-24T03:38:27.360908+00:00",
+    "account_wide_total_reserved_usd": "831.00",
+    "account_wide_remaining_unreserved_usd": "4169.00",
+    "study_smoke_reservations": [
+      {
+        "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+        "reserved_usd": "15.00"
+      },
+      {
+        "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+        "reserved_usd": "15.00"
+      }
+    ],
+    "study_smoke_reserved_total_usd": "30.00",
+    "provider_charges_equal_reservations": false
+  },
+  "main_comparison": "HELD; NO_ACTIVE_MAIN_JOB_OBSERVED_IN_US_WEST_2_AT_PROVIDER_CHECK",
+  "public_source_artifacts": [
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/admission_analogy_on_001/SMOKE_RUN_LOG.md",
+      "bytes": 5652,
+      "sha256": "6ad6c0faee75ff9ac6dffbf534154004faf6026250d47c5e751672eabe517ecb"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/admission_analogy_on_001/smoke/smoke.json",
+      "bytes": 14624,
+      "sha256": "523dd6e8c58eb11be90e5b20efdb58b1a8af9eb05721e0c7be7e0c51a1562b19"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/receipt_analogy_on_smoke_20260917/result.json",
+      "bytes": 1477270,
+      "sha256": "0e0914a8780d5d9e20f840c41662d6368a3d32c4b638217ed4960aab64b45642"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/receipt_analogy_on_smoke_20260917/reduced_schedule.json",
+      "bytes": 1085,
+      "sha256": "97ccc14b501d65425f129e8c5ff72cb39ad84444718740ae071fba69ee67b496"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/receipt_analogy_on_smoke_20260917/receiver_receipt.json",
+      "bytes": 1225,
+      "sha256": "9d2559b14b298b2b524ca5e821486ded0d305e5aa433a21aa788de8d17304dfa"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/receipt_analogy_on_smoke_20260917/checkpoints/worker_report.json",
+      "bytes": 80843,
+      "sha256": "6320e629fa8dfc24c926f384059cde09429556e570b1ff9d09d5809faad69370"
+    },
+    {
+      "commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+      "path": "records/typed_pointer_001/receipt_analogy_on_smoke_20260917/checkpoints/ablations.json",
+      "bytes": 5010,
+      "sha256": "6eec38bf42278c1161323d811f1abf91477c13bdfa32ad11aec565c218b1d299"
+    }
+  ],
+  "billing_correction": "Use 3.19 as the rounded-up conservative formula value; do not rewrite the historical run log or call this a final invoice."
+}

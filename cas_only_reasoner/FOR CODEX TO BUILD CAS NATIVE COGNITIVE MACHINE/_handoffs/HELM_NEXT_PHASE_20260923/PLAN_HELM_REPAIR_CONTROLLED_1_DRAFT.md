@@ -1,154 +1,132 @@
-# HELM-REPAIR-CONTROLLED-1: named AWS job plan (DRAFT; for the owner's launch approval)
+# HELM-REPAIR-CONTROLLED-1 — revised preparation draft
 
-**Status.** `LAUNCH_HELD_PENDING_AMENDMENTS` (2026-09-24). The owner's launch yes (section 0) is held, not used, until one complete amended launch request is approved; see `OWNER_HEADSUP_PLAN_REVIEW_20260924.md`. Codex works the amendments. Only the switch-ON smoke (preparation) runs. It is completed and brought to the owner once
-the preconditions below have passed. The owner's words (`OWNER_DIRECTION_20260924.md`, item 4): "Prepare the exact
-AWS job plan with source, data, starting weights, runs, update/time/dollar limits, stopping conditions, and cleanup.
-Bring that named plan to me for launch approval."
+**Status: OWNER_AUTHORIZED_NOT_READY_TO_EXECUTE. Standing project approval granted; technical prerequisites remain open.**
 
-## 0. LAUNCH APPROVAL (2026-09-24), verbatim, and how it is applied
+The owner's latest direct message grants all current and future approvals for this project in advance. [Verbatim standing authority](../../records/helm_controlled_prelaunch_20260924/OWNER_STANDING_AUTHORIZATION_20260924.md). It supersedes the former requirement to return for another owner launch approval. C, the $60 ceiling and all six substantive amendments remain in force. Claude retains preparation, custody and AWS execution; Codex maintains these amendments.
 
-**The owner's words:** "YES to launching the side-by-side training of the repaired Helm. You approved up to $60. AND
-Run the access-restriction commands Claude handed to lock down the secret test files."
+This remains the single consolidated execution packet to complete before main training. Actual informative-case counts, reviewed reader/probe/route results and immutable final inputs are still missing. Once those technical gates and budget checks pass, Claude can execute under standing authority without asking the owner again. Q4 remains separate. The custody label remains `EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT`.
 
-**Applied as follows:**
-- **Status: `APPROVED_FOR_LAUNCH`, option C with the fallback to B (section 4a).**
-- **Ceiling: $60.00 of actual AWS spend** for the whole comparison: every smoke attempt and every training job. This
-  is the spending limit the owner set on 2026-09-23 ("Up to $60"), whose question stated that the launcher books a
-  fixed $15 per job.
-- **Ledger bookings are bookkeeping, not spend.** They can exceed $60 (attempt 1's $15 booking stands with $0
-  spent). The ceiling is enforced on measured spend.
-- **Before each job:** measured spend so far + $15.00 (the per-job bound) must be at most $60.00, or the run stops
-  and is reported.
-- **The owner's earlier stop stays:** if spend passes $30 before the third training job, stop and report.
-- **Job order,** one machine at a time, no automatic retries:
-  1. the switch-ON smoke (attempt 2);
-  2. repaired seeds 20260917, 20260918, 20260919;
-  3. the unchanged reproduction seed 20260917 of `20208c92`, once its admission writer is built and reviewed;
-  4. if it reads `DOES_NOT_REPRODUCE`, unchanged seeds 20260918 and 20260919.
-- **The smoke gates the repaired seeds.** If the smoke fails for any reason other than AWS capacity before launch,
-  no repaired seed runs.
-- **The two unmet preconditions gate the READING, not the compute.** Larger-question integration and evaluation
-  preparation must pass before any HSET-2 TEST number is read. Training runs first on the owner's approval.
-- **Zone.** The launcher's zone preference is unchanged, and attempt 2 retries in us-west-2a. If AWS refuses for
-  capacity again, the owner is asked once about the zone.
-- **Access commands.** Not run by Claude: changing folder permissions is a security setting, which Claude's rules
-  forbid even at the owner's request. The owner has the exact commands.
+## 1. Question, control choice and supported claim
 
-## 1. The question
+Does the analogy repair improve answers on the registered unseen six-node analogy questions, compared with unchanged Helm trained on the same historical course and every registered simple comparison rule, under the declared regression tests?
 
-Does the analogy repair (switch ON) make Helm answer analogy questions on unseen 6-node shapes better than the
-unchanged Helm, trained the same way, beyond every no-learning rule, without regressions?
+**Retain the owner-selected C and the $60 limit.** This incorporates Claude's marked option-C correction at `7b6e25f8`, rather than introducing a competing choice. The amended acceptance rule and detailed execution envelope remain specified amendments pending implementation review and freeze. Train repaired seeds 20260917, 20260918 and 20260919, and freshly reproduce unchanged seed 20260917 from historical source `20208c923d41c24614504d4ecc2b289ecb66eda8`. If the fixed state-and-output admission succeeds, the other two unchanged controls are their historical final checkpoints. Report the comparison as **one fresh reproduced control plus two reused historical controls**. Reproducing one seed supplies evidence for that seed and environment; it does not prove the other seeds would reproduce.
 
-## 2. Preconditions (owner direction item 4), with status
+**B is the stronger fresh-control comparison:** three fresh unchanged runs and three fresh repaired runs under pinned conditions. Its additional runs provide direct evidence about the other seeds. C is not equivalent to B. If C's valid reproduction evidence differs under the prospective policy, the proposed fallback adds unchanged seeds 20260918 and 20260919, provided the standing authorization, technical admission, headroom and stop rules allow them. A missing/invalid reference stops the study; it does not automatically spend on fallback. No result is labelled a complete controlled comparison if required controls remain missing.
 
-| Precondition | Status | Evidence |
+The sole confirmatory endpoint is `REPAIR_IMPROVES_ANALOGY_6`. Any successful caption must say **no regression detected by the listed paired tests**, attach C's control provenance if applicable, and restrict its scope to the registered generator and these three seed pairs. Beating listed simple rules does not prove superiority to all non-learning algorithms, arbitrary graph sizes, or a particular internal reasoning algorithm. Keep stronger diagnostic solvers visible.
+
+## 2. Rules fixed before execution
+
+[Reproduction policy revision 1](../../records/helm_controlled_prelaunch_20260924/REPRODUCTION_POLICY.md) distinguishes:
+
+- exact original checkpoint-file bytes and SHA-256;
+- independently checked complete learned state and prediction-affecting configuration;
+- exact answers/refusals on the complete pre-pinned public reproduction panel;
+- separately reported optimizer/RNG/cursor continuity, required for a continuation claim.
+
+For C, valid artifact/environment admission plus exact learned-state and panel agreement is the proposed acceptance predicate. Raw-file differences remain visible. Elapsed time and run metadata in `final.pt` cannot alone establish different learned weights. Equal answers do not override different weights. No tolerance or reference change may be introduced after a mismatch. Freeze the reader, panel, environment and policy before relevant results; preserve all older byte-comparison outcomes under their original rules. Historical OFF-preservation requirements are unchanged.
+
+[Evaluation design v0.4 + A1 + A2](../../records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md) and [machine-readable policy](../../records/helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json) fix:
+
+- every `STATUS_BY_COUNT` threshold m=0..8, including its candidate choice, and every fixed non-focus position 1..7; no TEST-selected best rule;
+- original cluster calculations plus declared degree-group and shared-shape sensitivity views, explicit assumptions, and effective-unit counts/power;
+- one confirmatory claim; every other registered cell/arm result remains mandatory and exploratory, with no unsupported study-wide 1% assertion or `0.01^3` claim;
+- all gains, losses, ties, accuracies and old-gate crossings, whether or not the registered regression test flags them;
+- `final.pt` after 1,470 main updates as the single primary endpoint, fixed for all arms and seeds.
+
+A1 and protected splits remain unchanged. All NOT_TESTABLE results remain listed; none is dropped, promoted or redrawn to rescue the study. A primary NOT_TESTABLE cell means the proposed main study cannot answer its primary question. Report it before training; do not spend on the current confirmatory plan without a separately documented prospective study decision under standing authority. Keep the historical grader unchanged.
+
+Probe v0.2's normalization confound must be corrected and publicly validated before a new mechanism gate can pass. Preserve its old results as historical diagnostics. This is a targeted measurement correction, not a restart of the model repair, compiler or OFF preservation work.
+
+## 3. Exact source, data, starting-state and route binding
+
+[Execution manifest](../../records/helm_controlled_prelaunch_20260924/EXECUTION_MANIFEST.json) and [route/checkpoint protocol](../../records/helm_controlled_prelaunch_20260924/ROUTE_AND_CHECKPOINT_PROTOCOL.md) identify the inspected sources and public reference artifacts. They explicitly distinguish the historical OFF package, the existing reduced smoke package, and the still-unbuilt main packages. A smoke package must not be relabelled as a main package.
+
+The final launch manifest must bind full commit IDs and package/manifest digests for both arms; the worker and launcher; course/tokenizer/practice data and schedule; all checker/slot/adapter/reader source hashes; resolved numerical software and driver/container identities; the fixed initialization recipe and expected state identities; the reproduction panel; and every prerequisite receipt. Null required prelaunch fields mean NOT_READY. Runtime artifact hashes, such as the actual new `initial.pt` container, are recorded when created, before the first optimizer update; no one predicts elapsed-time-containing file hashes.
+
+Both arms train on public course SHA-256 `cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987`: ten passes of 147 updates. Six-node questions are a transfer examination, not added teaching. Match all 48 shared learned tensors against the seed's historical initial state and the corresponding fresh control when run. The five ON-only analogy-head tensors use seed 20260923 and are checked separately across repaired starts. Same seed alone does not prove a matched start.
+
+Use the common reviewed `predict_packet` bare-container adapter for historical OFF and repaired ON. Both receive the same packet, candidate bank, slot plan and grading definition. Expected scope refusals are labelled; unexpected route errors invalidate the reading rather than becoming learned wrong answers. The public fixture checks and frozen source-pin enforcement must pass on AWS before main training. Public fixture accuracy carries no held-out learning claim.
+
+## 4. Prerequisite results and readiness
+
+| Gate | Verified preparation state | Evidence needed before main execution |
 |---|---|---|
-| OFF preservation | **PASSED** | `OFF_PRESERVED_ON_T4`, research `41071a3f` |
-| Enabled-path checks | **OPEN** | The switch-ON smoke: attempt 1 was refused by AWS capacity before launch, $0 compute (`claude/helm-on-launch-20260924` `5715fda0`); the zone decision is with the owner. Also the larger-question T4 checks (below) |
-| Larger-question integration | **BUILT, REVIEW RUNNING** | `785c9bd1`; its AWS T4 checks run after the review |
-| Evaluation preparation | **DESIGN v0.4 IN REVIEW** | `EVALUATION_DESIGN_v0_4.md` (`7df1923f`); then `hset2_build.py`, its review, and the AWS build printing every cell's W before any model |
+| Historical grader | Unchanged; earlier statistical rederivation preserved | Existing frozen hash and historical receipts in final manifest |
+| OFF preservation | Recorded OFF_PRESERVED_ON_T4 at research 41071a3f; earlier audit rederived receipt decision | Preserve evidence; rerun only if relevant source/contract changes |
+| ON reduced smoke | PASS of four frozen conditions at `1ddf6a1e`; 53/53 ablation keys, 8 main + 2 replay updates; provider cleanup verified 04:26–04:27 UTC | Closed for reduced-smoke scope; no full-runtime or larger-route claim |
+| Larger-question route | Public d/c/b/a PASS at `b0fd06ff`; returned input/source identity and same-instance cleanup receipts consistent | Generic automated admission still open; no held-out accuracy or final-main-package claim |
+| C admission reader | Proposed state-and-output policy supplied; `cb2df78a` has hold/receipt gates but still file-only logic; review `0391a307` finds approval-parser V1 | Claude conforms reader and status parser; pin full public panel and AWS positive/negative acceptance |
+| Corrected mechanism probe | v0.2 flaw confirmed; corrected validation OPEN | Reviewed revision, fixed thresholds/direction and public controls |
+| HSET-2 | A1 preserved, proposed A2 specified; Claude builder still requires conformance and actual counts | Reviewed builder/scorer, authorized custodian build, actual feasibility table and split checks |
+| Immutable final packages/environment | Historical and smoke reference pins collected; main packages/reader/environment incomplete | Complete manifest and reviewed source/package acceptance |
+| Cost and job envelope | Concrete slots below; read-only provider/ledger snapshot attached | Current incurred-exposure bound, remaining headroom, complete cleanup allowance |
 
-## 3. Arms, source and starting weights
+The latest HSET-2 public builder report also identifies 24/40 old public DEV classes on the proposed TEST-side class pool. That is not evidence that selected protected questions were read. Claude must document whether those public classes entered training or a candidate bank and resolve any exposure prospectively, before the sealed build; do not silently redraw protected splits. No missing result is replaced with a throwaway-salt estimate. The actual pretraining table must print each cell/bar's informative errors, groups/components, effective floors and conditional power, along with every NOT_TESTABLE reason. Repaired-versus-unchanged realized discordant counts are only observable after model predictions; before training, label their conditional scenarios as such. The custodian keeps the protected inputs and publishes only permitted aggregates. This preparation does not appoint an outside custodian or open protected data.
 
-| Arm | Code | Starting weights |
-|---|---|---|
-| **repaired** | the reviewed launch source (currently `70490111`). The worker always builds the switch-ON container (`analogy_focus_comparison=True`, analogy head seeded 20260923) | matched starts: the same seeds as Helm 2.0 (20260917, 20260918, 20260919), whose `initial.pt` sha256 are recorded in `MIGRATION_ON_SHAPES.json`; the 5 analogy-head tensors seeded separately. The A5.5 check confirms this on AWS |
-| **unchanged** | the historical Helm 2.0 source `20208c923d41c24614504d4ecc2b289ecb66eda8`, package `package_20208c92` (committed). **No code change is needed** | Helm 2.0's own starts, the same seeds |
+## 5. Proposed job list — current split requires reconciliation
 
-**Data and schedule (both arms, identical):**
-- the typed course `records/typed_course_001/checks_002/public_course.json` (sha256 `cf7a7181...`);
-- the stratified schedule: 10 passes, 147 updates per pass, 1,470 main updates;
-- the same held-back panel.
+**Current candidate envelope:** Claude's `3083ea0d` now names C as 10 total attempts / 7 future jobs and fallback as 12 / 9. Three attempts have occurred. The split adds P1a route-only and P1b reader/probe/admission validation; E1 is proposed on a T4 for $2. These bounds and the spending gate are CHANGES_REQUIRED, so the tables below retain only the earlier combined-P1 proposal. [Current accounting/reader review](../../records/helm_controlled_prelaunch_20260924/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md) gives the named revision, $90/$120 proposed canonical bookings, missing evidence and exact fixes. No current expected bill or worst-case completion guarantee is accepted. Main execution remains held.
 
-## 4. The owner's choice: how the unchanged arm is obtained
+Every listed slot is one bounded attempt, no automatic retry. The existing smoke is distinguished from future work. Bundling several checks into a slot does not make unrun checks PASS.
 
-| Option | What runs | Jobs | Expected cost | Ledger reservations | Strength |
-|---|---|---|---|---|---|
-| **A** | Reuse the 3 Helm 2.0 receipts (trained 2026-09-20/21 on g7.2xlarge) as the unchanged arm | 3 (repaired only) | about $22.50 | 3 x $15 | weakest: the arms ran on different days |
-| **C (recommended)** | Re-run `20208c92` for **one** seed (20260917) first, and require its final checkpoint to equal the Helm 2.0 receipt's bit for bit. If it does, reuse the other two receipts; if not, fall back to B | 4 | about $30 | 4 x $15 | proves the old runs are a fair control, at one extra job |
-| **B** | Re-run `20208c92` for all 3 seeds, alongside the repaired runs | 6 | about $45 | 6 x $15 | fully controlled |
+| Slot | Count | Purpose and source | Instance, lifetime and inclusive dollar cap |
+|---|---:|---|---|
+| S0 | 1, already attempted | Initial ON smoke; capacity refused before compute | Recorded g7 request; $0 compute; $15 ledger reservation retained |
+| S1 | 1, completed | Replacement reduced smoke, observed source 3df31d965bb2eabb168ae7efbf03300a1a1144d7 | g7.2xlarge, 75 GiB gp3, at most 14,400s; $15 |
+| P1 | 1 future | Public prerequisite acceptance: route, actual state/output-reader checks, corrected-probe controls, nonlaunch admission/package preparation; timing preflight and pins required | g4dn.2xlarge, 100 GiB gp3, at most 7,200s; $3 |
+| P2 | 1 future | Reviewed HSET-2 build, actual counts, power and split checks; authorized custodian only | c7i.2xlarge, 20 GiB gp3, at most 7,200s; $1 |
+| M1–M4 | 4 future | Three repaired seeds plus unchanged 20260917, including its exact state/panel comparison; final packages pinned | g7.2xlarge, 75 GiB gp3, at most 14,400s each; $15 each |
+| M5–M6 | 0 or 2 future | Only registered C-to-B fallback: unchanged 20260918/20260919 | Same g7 bounds; $15 each |
+| E1 | 1 future | Eighteen repaired mechanism readings, public route admission on all final checkpoints, H1/H2/V losses/crossings, fixed final TEST reads and comparison; authorized protected-data reader | g7.2xlarge, 75 GiB gp3, at most 14,400s; $15 |
 
-**Cost basis:**
-- Helm 2.0 runs took about 2.9 h each on g7.2xlarge, about $7.50 each.
-- The launcher books a fixed $15 per job, and the ledger never refunds.
-- The smoke adds one more $15 booking per attempt; attempt 1's booking already stands. The current $60 approval
-  covers the smoke plus 3 jobs. Options C and B need more.
+**C totals:** 9 attempted/planned slots including both smoke attempts, 7 future jobs, 4 full training jobs. **B/fallback totals:** 11 attempted/planned slots, 9 future jobs, 6 full training jobs. A refusal or failed slot still counts as an attempt. The 18 mechanism checks are checkpoint readings inside E1, not 18 cloud jobs. No extra correction, retry, preflight, packaging or readout job is silently outside the list; any additional paid slot requires a revised named envelope within standing authority and the unchanged budget before execution. Package preparation that needs paid compute must be included within an authorized prerequisite slot or explicitly added before technical admission.
 
-### 4a. The owner's choice (2026-09-24), verbatim, and how it is applied
+Sequence under standing authority and each job's technical admission: retain the completed S1 receipt; complete P1 and P2; attach actual counts and all remaining acceptance receipts; freeze and technically admit the named immutable main packet under standing authority. Then run M1=unchanged 20260917 first, M2–M4=repaired 20260917/18/19, M5–M6 only if valid C admission requires fallback. For a complete comparison, E1 follows once the selected control set exists. If a stop leaves missing controls, the same reserved E1 slot may collect available public diagnostics and historical-gate loss records, list every missing result, and return COMPARISON_INCOMPLETE; it does not run a partial confirmatory TEST comparison or claim the repair helped. This revised order requires runner conformance and technical admission; smoke completion alone does not satisfy it.
 
-The owner's words: "WHICH EVER IS BEST FOR THE OVER ALL MODEL/PROJECT:   A: reuse the old runs, about $22.50;
-C, recommended: re-run one seed to prove the old runs reproduce exactly, then reuse them, about $30;
-B: re-run all three, about $45."
+## 6. Expected spending, reservations and maximum charges
 
-**Applied as option C, with a pre-set fallback to B.** The Claude coordinator chose it under this delegation;
-this is not an owner signature.
+See [cost and job envelope](../../records/helm_controlled_prelaunch_20260924/COST_AND_JOB_ENVELOPE.md) and timestamped [provider/ledger state](../../records/helm_controlled_prelaunch_20260924/COST_STATE.json). They separate actual billed amounts, incurred exposure bounds, historical runtime estimates and proposed allowances. Missing or delayed billing is not $0 spending. The training-only historical estimate is $29.39 for C / $44.08 for B. Adding the $19 prerequisite/readout caps and the $3.19 completed-smoke bound gives **$51.58 / $66.27** before any unreconciled S0/delay-related retained costs. These are hybrid planning totals, not measured expected charges. Actual expected charges remain pending final prerequisite timing; B cannot be promised within $60 on this basis.
 
-**CORRECTION (2026-09-24, per the owner-shared review): the rationale below overstates.** Reproducing one seed does not prove the other two seeds would reproduce; the second bullet is an inference, not a proof. So B is the stronger fresh-control comparison, and C keeps a real limitation: for seeds 20260918 and 20260919 the control is historical, not re-run. The choice between B and C, and the reproduction policy (checkpoint-file identity versus learned-state identity versus output reproduction, fixed before running), are part of the amendments Codex is working. The original text is kept below as written.
+The unchanged **overall stop ceiling is $60 actual study charges** over execution and the proposed 30-day evidence accounting window after E1, including S1, P1, P2, M jobs, E1 and their incremental disks/network/retained evidence. Continuing retention after that window remains separately reported under the existing keep policy; no permanent $60 storage guarantee or automatic deletion is implied. Standing authority permits admitted work within that ceiling and does not increase it. The sum of individual caps is **$94 for C** or **$124 with fallback B**, after the zero-compute S0 refusal. These sums describe the exposure if every bounded slot used its cap; they are not approved spending and show why $60 cannot guarantee completion at all allowed runtimes.
 
-**Why C is best for the project:**
-- If one re-run of `20208c92` reproduces Helm 2.0's final checkpoint bit for bit, re-running the other two seeds
-  would only reproduce the same bytes. B would add cost and no evidence.
-- If it does not reproduce, the old runs are not a fair control, and C becomes B **automatically, before any
-  result is read**.
-- A alone rests on an unproven assumption, so it is not chosen.
+Using the inherited fixed $15 ledger booking per attempted slot, two smoke bookings already equal $30. The full proposed reservation totals are **$135 for C** or **$165 for B**; P1/P2 still have actual caps $3/$1. Reservations never become invoice claims or authority to exceed $60. If the prerequisite launcher uses a different ledger policy, reconcile the named ledger before technical admission and print the difference; never count a booking twice or erase a capacity-refused attempt.
 
-**The reproduction test, fixed now:**
-- Seed 20260917 of `20208c92`, trained by the same launcher on g7.2xlarge.
-- **`REPRODUCES`** iff the sha256 of its `final.pt` equals the Helm 2.0 receipt's `final.pt` sha256.
-- Anything else reads **`DOES_NOT_REPRODUCE`** and triggers B: seeds 20260918 and 20260919 of `20208c92` are
-  re-run too.
-- The reading is made by a program, before any TEST cell of HSET-2 is read.
+Before each new job, use a conservative upper bound on incurred charges including unbilled runtime; add that job's cap, remaining prerequisite caps and readout allowance, including its retained-evidence allowance once. If the total exceeds $60, do not admit the job. This reserves the next training job, not every unstarted training job at its maximum; it permits a later budget stop and never guarantees completion. Reserve E1 and cleanup before spending on training; do not finish training with no allowance to read the result. The remaining additional exposure is at most $60 minus the current conservative incurred bound. The earlier stop also remains: if study spending passes $30 before the third full training job, stop and report. One machine at a time; no automatic retries, instance substitutions or unrecorded zone/cost changes.
 
-**Money.**
-- Expected about $30 for C: 3 repaired jobs + 1 unchanged job.
-- If the fallback runs, about $45 for B.
-- Ledger reservations: 4 x $15, or 6 x $15 with the fallback, plus the smoke bookings.
-- **The final plan still comes to the owner for launch approval with its dollar ceiling.** This choice does not
-  launch anything.
+A stopped, partial study is labelled COMPARISON_INCOMPLETE and cannot claim that the repair helped. Guaranteed completion at every slot cap does not fit the existing $60 ceiling. Standing authority does not supply a higher numeric limit; neither selecting C nor fallback B increases it.
 
-## 5. Limits (per job, from the launcher's frozen bounds)
+## 7. Updates, checkpoint readings and result interpretation
 
-| Item | Value |
-|---|---|
-| Machine | `g7.2xlarge`, us-west-2; zone placement per the owner's decision |
-| Instance lifetime | at most 14,400 s; the guest watchdog powers off at 14,100 s |
-| Worker wall time | at most 12,600 s |
-| Optimizer updates | at most 1,488 |
-| Reservation | $15.00 per job |
-| Concurrency | one machine at a time |
-| Retries | none automatic |
+Each job allows **1,470 main + 16 interference + 2 independent replay updates = 1,488**. `final.pt` is saved after the 1,470 main updates. Interference changes `retained.pt`; each replay restores `prelast.pt` separately. These phases do not add 18 updates to the primary final model.
 
-## 6. Stopping conditions (enforced by `run_on_study.py` or the same rules by hand)
+For each repaired seed, read the corrected mechanism probe on exactly: `pass_01.pt` (147); `evidence/main_checkpoint_0294.pt`, `_0588.pt`, `_0882.pt`, `_1176.pt`; and `final.pt` (1,470). All four intermediate names are under `evidence/`. Six per seed gives 18. Keep every failure/invalid/missing result. Intermediate checkpoints do not receive protected TEST reads or replace the final endpoint.
 
-- The smoke must pass before any seed job.
-- If any job ends other than delivered, the next job is not launched.
-- If spend passes the owner's stated stop before the last job, stop and report.
-- Option C: if the reproduction seed reads `DOES_NOT_REPRODUCE`, the old receipts are not reused, and the two
-  remaining `20208c92` seeds run (option B), inside the dollar ceiling the owner approves with this plan (section 4a).
-- Before any TEST reading, the custody manifest check must pass (design v0.4 section 8).
+Report every registered cell and both arms, every paired gain/loss, absolute accuracy, historical-gate crossing and failure reason. A mechanism failure does not hide non-analogy regression evidence. The conclusion must answer three separate questions: did the registered repair comparison pass; which tasks, mechanisms or scopes remain unproven/failed/NOT_TESTABLE; and what specific separate next experiment the failures suggest. New lessons, learning rates, architecture changes and Q4 feedback remain outside this experiment.
 
-## 7. Reading (fixed before launch)
+## 8. Cleanup and retained evidence
 
-**The rules.** Design v0.4 section 7 fixes the base claims per arm, `REPAIR_BEATS_UNCHANGED_<cell>`,
-`REPAIR_IMPROVES_ANALOGY_6`, and the no-regression gate set (H1, H2, V).
+Each slot must name its immutable source, purpose, instance identity, resource/time/cost limits and cleanup receipt. Bound the worker below the launcher/instance watchdog and publish partial progress before timeout. After success, failure or timeout, terminate the job instance and verify final provider state; verify temporary root EBS deletion and removal of temporary role/profile/security group. A permissions dry-run is not a termination receipt.
 
-**Also required before any analogy number is read:**
-- prereg A5: probe v0.2 on all 18 trained repaired checkpoints;
-- the matched-start check.
+Preserve the existing owner-retained stopped instance and volume. Retain original checkpoints, admissions, failed attempts and full public results under the existing evidence policy; account for incremental S3/storage charges. Do not publicly copy salts, protected questions/answers or reconstructable answer hashes. Protected archiving and scoring belong to the authorized custodian, with private receipts and permitted public aggregates. No deletion of retained evidence or security-setting change is authorized by this preparation.
 
-**Label.** `CLAUDE_BUILT_CLAUDE_CHECKED`, and `EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT`.
+Close the job only after evidence is collected, hashes verified, termination and temporary-resource cleanup checked, and measured duration plus charge evidence recorded. Any cleanup failure remains open and counts against the ceiling. Within E1's $15 cap, reserve $1 for evidence through 30 days after E1: at most 10 GiB S3 Standard, 10,000 Tier-1 requests, 100,000 Tier-2 requests and 2 GiB of charged downloads, using the current rate evidence in the cost note. The collection script must meter these bounds and refuse unbudgeted transfers. At day 30, inventory retained data and report ongoing cost to the owner; do not delete it automatically. Continuing retention is outside this finite execution accounting window and must have an explicit ongoing treatment in the final packet under standing authority. Prior owner-retained infrastructure remains separate.
 
-## 8. Cleanup
+## 9. Final decision packet
 
-- The launcher terminates the instance, and removes its security group, role and instance profile.
-- The job's evidence bucket is kept, as the run-evidence rule requires.
-- Receipts are committed on the launch branch.
-- Checkpoints and results are archived to `D:/tksCAS-archive/`, with three sha256 confirmations, plus a private S3
-  copy.
-- Every job's measured time and cost are recorded.
+Submit this plan with the completed S1 receipt and completed P1/P2 receipts, the actual HSET-2 table, final source/package/environment/panel pins, validated C reader and corrected probe, current spending/ledger reconciliation and cleanup allocation. The final packet must say exactly which C/B job envelope is requested and show every unresolved gate.
 
-## 9. Open before this plan can be approved
+**Current disposition: owner authority granted; execution remains held because empirical prerequisites and immutable main packages are missing.** Do not bypass these checks or edit active-job sources. Historical grading, custody and Q4 separation remain unchanged.
 
-- The four preconditions of section 2.
-- ~~The owner's choice of option A, C or B~~: decided 2026-09-24 as C with a pre-set fallback to B (section 4a). The matching dollar ceiling comes with launch approval.
-- The owner's zone decision for g7.2xlarge capacity.
+## Current prelaunch decisions after reader/gate/HSET review
+
+The controlling clarification is [POLICY_DECISIONS_20260924.md](../../records/helm_controlled_prelaunch_20260924/POLICY_DECISIONS_20260924.md).
+A2.7 resolves the builder's pending choices before protected-key creation. It keeps the frontier shortcut as a bar,
+all NOT_TESTABLE outcomes and the ten-unit floors, and does not claim that beating a finite list proves learned
+three-step path following. Core reader source conforms, but both reader execution admission and spending gate need
+specific fixes. A single admission cannot fund retries. The manifest no longer hashes a downstream admission that
+hashes it back. Main launch stays disabled. P1b needs the pinned RTX PRO 4500/g7 environment and a revised priced
+package; T4 route acceptance does not supply that prerequisite. The $57.08 C figure is unaccepted preliminary
+arithmetic; conservatively adding the flagged $1.918 earlier preparation gives $59.00 before g7/retention corrections.
+Option C, $60 ceiling, $30 stop, eighteen saved-model checks, A1, custody and Q4 separation remain unchanged.

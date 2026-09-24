@@ -1,0 +1,1110 @@
+{
+  "schema": "codex.helm-controlled-prelaunch-execution-manifest/0.1",
+  "status": "OWNER_AUTHORIZED_NOT_READY_TO_EXECUTE",
+  "launch_enabled": false,
+  "new_launch_authorized": true,
+  "scope": "Preparation only. No tests, model runs, builds, checkpoint loads, protected-file access or cloud jobs were executed by this preparation. The proposed C comparison has four new main jobs and two reused historical controls; conditional B adds two fresh unchanged jobs. Q4 is excluded.",
+  "reviewed_snapshots": {
+    "integration": "197caa322d20ae6830928b20c5b16933e93cd00d",
+    "builder": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+    "observed_launch_records": "1fcc15e5fe0183da4572741e4efa675698640ab5",
+    "observed_smoke_source": "3df31d965bb2eabb168ae7efbf03300a1a1144d7"
+  },
+  "chosen_comparison_for_request": "C_ONE_FRESH_REPRODUCTION_CONTROL_THREE_REPAIRED_TWO_REUSED_HISTORICAL_CONTROLS_WITH_CONDITIONAL_B_FALLBACK_PENDING_TECHNICAL_ADMISSION",
+  "final_freeze": {
+    "study_source_commit": null,
+    "control_main_package_sha256": null,
+    "repaired_main_package_sha256": null,
+    "evaluation_package_sha256": null,
+    "dependency_lock_sha256": null,
+    "image_ami_or_container_identity": null,
+    "hset2_public_manifest_sha256": null,
+    "hset2_custodian_split_commitment_sha256": null,
+    "hset2_feasibility_receipt_sha256": null,
+    "larger_route_gpu_acceptance_receipt_sha256": null,
+    "corrected_analogy_probe_source_sha256": null,
+    "status": "NOT_READY_REQUIRED_BINDINGS_MISSING",
+    "expected_initialization_recipe_and_state_receipt_sha256": null,
+    "admission_writer_source_sha256": null,
+    "admission_rules_sha256": null,
+    "spending_gate_source_sha256": null,
+    "control_prelaunch_configuration_sha256": null,
+    "repaired_prelaunch_configuration_sha256": null
+  },
+  "freeze_policy": [
+    "The manifest binds exact immutable source/data/package/configuration/environment leaves and prerequisite receipts. The launch request binds the manifest; a downstream packet index and technical admission bind the launch request. Runtime admissions and the packet containing this manifest are never hashed upstream into this manifest.",
+    "No branch tip, currently-hash label, null required binding, missing prerequisite or changed source may pass final admission.",
+    "Future output hashes cannot exist before training and remain PENDING_RUNTIME. Bind generation recipes, expected learned-state references, initialization prerequisite receipt and validation rules before launch; append each produced initial/checkpoint identity and actual environment to a separately hashed run receipt. Capture and validate initial state before the first optimizer update. Reject mismatches under the predeclared policy before any claim-bearing read.",
+    "Any frozen-input change requires an explicit new version, affected acceptance checks and Claude technical admission under standing owner authority. Never weaken a predicate after observing a mismatch.",
+    "Historical file identity, learned-state identity and output reproduction remain separate; see the accompanying checkpoint identity policy. Historical grader and historical OFF acceptance are unchanged."
+  ],
+  "historical_off_package": {
+    "record": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_20208c92/receipt.json",
+      "bytes": 121181,
+      "raw_sha256": "eeaa71f04b9823ae898e847bab4ec605e30ba8034ff121341c66a5de943788e6",
+      "lf_sha256": "eeaa71f04b9823ae898e847bab4ec605e30ba8034ff121341c66a5de943788e6"
+    },
+    "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+    "archive_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+    "archive_bytes": 5977155,
+    "manifest_sha256": "333381ace5c4e37ff4c7fba7338bced0a4495f0cee7a43432bc3f2cc35923d40",
+    "member_count": 270,
+    "inputs_sha256": "442ae914e563fcf0bbb49d9c6d6746b0bea2b4ef7390542b135a33864a494150"
+  },
+  "observed_smoke_only_package": {
+    "record": {
+      "source_commit": "1fcc15e5fe0183da4572741e4efa675698640ab5",
+      "path": "research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_on_smoke_3df31d96/receipt.json",
+      "bytes": 123410,
+      "raw_sha256": "0ea7d15f1b568faa13fec36255ecf2b52c92dbf173c1eccd3c87351b55588fca",
+      "lf_sha256": "0ea7d15f1b568faa13fec36255ecf2b52c92dbf173c1eccd3c87351b55588fca"
+    },
+    "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+    "archive_sha256": "40a9640314c20fef5da3309847bbeaa5f51ff365165626a66a28ced868a5a8b4",
+    "archive_bytes": 6011481,
+    "manifest_sha256": "480c98b12f3fa2a900b0446770d63e43da4427adbdbd08e6965124b4ffae272d",
+    "member_count": 276,
+    "inputs_sha256": "57ac0be5bcc8fa891050369206c2109755e6338c38e6a7b8b62373c9e842cb73",
+    "claim_bearing": false,
+    "main_package": false,
+    "smoke_status": "REFER_TO_CURRENT_COST_AND_JOB_RECEIPT_NOT_INFERRED_FROM_ADMISSION",
+    "note": "Admission manifest retains full design fields; reduced smoke schedule is separately bound by smoke.json. This package is not a main training package.",
+    "admission_record": {
+      "source_commit": "1fcc15e5fe0183da4572741e4efa675698640ab5",
+      "path": "records/typed_pointer_001/admission_analogy_on_001/smoke/smoke.json",
+      "bytes": 14624,
+      "raw_sha256": "523dd6e8c58eb11be90e5b20efdb58b1a8af9eb05721e0c7be7e0c51a1562b19",
+      "lf_sha256": "523dd6e8c58eb11be90e5b20efdb58b1a8af9eb05721e0c7be7e0c51a1562b19"
+    }
+  },
+  "training_material": {
+    "records/typed_course_001/checks_002/public_course.json": {
+      "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+      "bytes": 4165195,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_interface_001/checks_002/training_tokenizer.json": {
+      "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+      "bytes": 447140,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_matched_001/development_001/compact_development.json": {
+      "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+      "bytes": 685549,
+      "same_in_observed_smoke_package": true
+    }
+  },
+  "included_practice_checkpoint_material": {
+    "records/typed_practice_001/receipt_20260917/checkpoints/final.pt": {
+      "sha256": "24686285c3618b2f352dc3f245bd82de1a2bb07e989c1082c6f57c3d891a333c",
+      "bytes": 1717107,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260917/checkpoints/final_checkpoint.json": {
+      "sha256": "95e86d62a3ac70f21d523c232bb830330ca78992c0546a6c62c7316eaf55ea36",
+      "bytes": 22953,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260917/checkpoints/initial.pt": {
+      "sha256": "0c1af5abb80cec2f67373fbf51c49d6e02f2edb4dc957de7bc8b9b494df98e7f",
+      "bytes": 1583505,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260917/checkpoints/initial_checkpoint.json": {
+      "sha256": "b9d7712a23096baba2e2df9433a3f8d19778c0d0a0b17658ea297e66d08b7a30",
+      "bytes": 22913,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260917/checkpoints/pass_01.pt": {
+      "sha256": "c562469a930818cef8a8d1eea3d9d986bb40c87023640424a45fa7cee19a97d4",
+      "bytes": 1717107,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260917/checkpoints/pass_01_checkpoint.json": {
+      "sha256": "8f201e058c0a86d4b7820d679dc89769ee23f0db3b72e1175cb59249e753bfab",
+      "bytes": 22941,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/final.pt": {
+      "sha256": "01cabdac9f1c01efe445859ae743aa50a7600e884fdc12a11803b49a8e0424e4",
+      "bytes": 1717171,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/final_checkpoint.json": {
+      "sha256": "b4342a8ce3b2775ef617f51ab98fcc4f7f921f922378f1a023edebf13db26067",
+      "bytes": 22953,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/initial.pt": {
+      "sha256": "21e8758c7ec5b37da2bf741b714a2a958303f0ba20962697e410cf800382c6b3",
+      "bytes": 1583569,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/initial_checkpoint.json": {
+      "sha256": "93abe51582d0b93ebe2579546801259f458823c57c7aaf0c8fc6a4e150e77e90",
+      "bytes": 22914,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/pass_01.pt": {
+      "sha256": "460250c30a7e96b8eb0f426a16ffb2b070b493d969e427a3c7feb22e9e82a091",
+      "bytes": 1717107,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260918/checkpoints/pass_01_checkpoint.json": {
+      "sha256": "09e90c83dcfc17335f82868393aedb14eb3df9aa3b5a60fb708c09bfef08ec52",
+      "bytes": 22946,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/final.pt": {
+      "sha256": "9cca11430a0488bb8e211f8adf291999f179ae8d20a95631145d4f40763422b9",
+      "bytes": 1717107,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/final_checkpoint.json": {
+      "sha256": "c1ac9c3b783d2a7c02295270fb51e20177f5b30a2725c8334f1d4e1b94fae17b",
+      "bytes": 22953,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/initial.pt": {
+      "sha256": "90cb22f297f4e8fe9e3585e9fa74ab6565f47fafa81d8941341a2b091d4de656",
+      "bytes": 1583569,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/initial_checkpoint.json": {
+      "sha256": "7e3d9386ee9b36d1b51f9573d3cf56a1eb52b242a2b7f2b012ecfb9e1967d182",
+      "bytes": 22914,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/pass_01.pt": {
+      "sha256": "31334ab72bbaad57d15a8557bb4ca7e36e2ad8181732281f4520f3e412fd2f87",
+      "bytes": 1717107,
+      "same_in_observed_smoke_package": true
+    },
+    "records/typed_practice_001/receipt_20260919/checkpoints/pass_01_checkpoint.json": {
+      "sha256": "b58e8a3feda8957f9b649c7e68d30b36f9e95ac0c055a6beb2aee5dd616e7f30",
+      "bytes": 22941,
+      "same_in_observed_smoke_package": true
+    }
+  },
+  "schedule": {
+    "passes": 10,
+    "main_updates_per_pass": 147,
+    "main_updates": 1470,
+    "main_presentations_per_pass": 1176,
+    "interference_updates": 16,
+    "replay_independent_branch_updates": 2,
+    "total_job_optimizer_updates_max": 1488,
+    "single_main_plus_interference_trajectory_updates": 1486,
+    "primary_endpoint": "final.pt saved after 1,470 main updates, before interference",
+    "retention_endpoint": "retained.pt after 16 interference updates; diagnostic only",
+    "replay": "Two independent restores of prelast.pt repeat final main update; not two accumulated additions to final.pt",
+    "stratified_batches_digest": "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304",
+    "stratified_pass_digest": "80ae7121ff75f687e9c6c88593e2ed7d3f6024173d3577243ed05049c8859056",
+    "optimizer_config": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "learning_rate": 0.003,
+      "weight_decay": 0.01
+    }
+  },
+  "historical_checkpoint_references": [
+    {
+      "model_seed": 20260917,
+      "phase": "initial",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+      "bytes": 2235079,
+      "file_sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+      "state_identities": {
+        "model_state_identity": "7ca2043b152976d53e28cde6053f66bd240edd6761b4be80b7452979e3bf5c61",
+        "optimizer_state_identity": "1b04ac03ef4ee315c8e3349e5ce97da9cc0b86abeb84d5b8c660d791f10fe717",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 0,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260917/checkpoints/initial_checkpoint.json",
+        "bytes": 30838,
+        "raw_sha256": "d5041b69925bfec710cb4e466aed664506978ffb2bc9a86bc6b1b432efe8274f",
+        "lf_sha256": "d5041b69925bfec710cb4e466aed664506978ffb2bc9a86bc6b1b432efe8274f"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    },
+    {
+      "model_seed": 20260917,
+      "phase": "final",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+      "bytes": 3670007,
+      "file_sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+      "state_identities": {
+        "model_state_identity": "c6d0f95d68740834199684cd706ad385ccb040dd91eb13781e60d14ba3cd1ed6",
+        "optimizer_state_identity": "7872d910b6dad89513bc472c8fbc45b354f553740ee57b0278fee27237b45c1b",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 1470,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final_checkpoint.json",
+        "bytes": 30879,
+        "raw_sha256": "2f4bfbd1c61f5814fc91a17430ce9d89447c603654c7bc48754f928b82fc1c89",
+        "lf_sha256": "2f4bfbd1c61f5814fc91a17430ce9d89447c603654c7bc48754f928b82fc1c89"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    },
+    {
+      "model_seed": 20260918,
+      "phase": "initial",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+      "bytes": 2235079,
+      "file_sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+      "state_identities": {
+        "model_state_identity": "dc5bec3d9d73c653567214dad20709280146d1c702f52f7c30775bba25f4d5d7",
+        "optimizer_state_identity": "1b04ac03ef4ee315c8e3349e5ce97da9cc0b86abeb84d5b8c660d791f10fe717",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 0,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260918/checkpoints/initial_checkpoint.json",
+        "bytes": 30837,
+        "raw_sha256": "f7f029aba0059c81707ef5756f1dff5d08be859c87fec5f2867971274c9e9ac4",
+        "lf_sha256": "f7f029aba0059c81707ef5756f1dff5d08be859c87fec5f2867971274c9e9ac4"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    },
+    {
+      "model_seed": 20260918,
+      "phase": "final",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+      "bytes": 3670007,
+      "file_sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+      "state_identities": {
+        "model_state_identity": "c4497444a363fe0fd3b5f5f0174c84bf9c7ffbca1a5492bfcf78489129d55113",
+        "optimizer_state_identity": "5d024f1c4dfda2561aa934e7033b548198c8cc5d8eeaedf794fe501fc1ce3683",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 1470,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260918/checkpoints/final_checkpoint.json",
+        "bytes": 30883,
+        "raw_sha256": "ce735cad7366b35027f01df3c2ef47d63f97ecfaf333af1853c2d54c27304b91",
+        "lf_sha256": "ce735cad7366b35027f01df3c2ef47d63f97ecfaf333af1853c2d54c27304b91"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    },
+    {
+      "model_seed": 20260919,
+      "phase": "initial",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+      "bytes": 2235079,
+      "file_sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+      "state_identities": {
+        "model_state_identity": "e6b59487d96eca823766b5618d04339288ca7b0549d49d012f3ddfd9f235f3e0",
+        "optimizer_state_identity": "1b04ac03ef4ee315c8e3349e5ce97da9cc0b86abeb84d5b8c660d791f10fe717",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 0,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260919/checkpoints/initial_checkpoint.json",
+        "bytes": 30838,
+        "raw_sha256": "f0cbfc4c77317bea08cdce2ec92f80191e8868f96a9ad945c850dfdc4b0c35ae",
+        "lf_sha256": "f0cbfc4c77317bea08cdce2ec92f80191e8868f96a9ad945c850dfdc4b0c35ae"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    },
+    {
+      "model_seed": 20260919,
+      "phase": "final",
+      "checkpoint_path": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+      "bytes": 3670007,
+      "file_sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+      "state_identities": {
+        "model_state_identity": "8e3e997af8fb966b26116b0ae8b614f5dd4cd2b9a499706304e9bb3d54d6f767",
+        "optimizer_state_identity": "63f6a8e3e24dd939d6813a9a860c17dbb9090e58b17c41598b33a52e1476622f",
+        "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+        "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+      },
+      "cursor": 1470,
+      "metadata_record": {
+        "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+        "path": "records/typed_pointer_001/receipt_20260919/checkpoints/final_checkpoint.json",
+        "bytes": 30879,
+        "raw_sha256": "37cea4e455e299b2b06a49fc7bbb671ece1087d4d25787a01312561ed062466e",
+        "lf_sha256": "37cea4e455e299b2b06a49fc7bbb671ece1087d4d25787a01312561ed062466e"
+      },
+      "verification": "PUBLIC_JSON_RECEIPT_READ_ONLY_CHECKPOINT_NOT_LOADED_OR_REHASHED_IN_THIS_PREPARATION"
+    }
+  ],
+  "matched_start_rule": {
+    "seeds": [
+      20260917,
+      20260918,
+      20260919
+    ],
+    "off_state_dict_keys": 48,
+    "on_state_dict_keys": 53,
+    "off_parameters": 174303,
+    "on_parameters": 203424,
+    "analogy_head_seed": 20260923,
+    "shared_tensors": "For each seed, compare all 48 shared tensors of each newly generated initial state exactly with its pinned historical OFF initial reference. Also compare fresh OFF with repaired ON where a fresh control exists: seed 20260917 in C, all three seeds only if B runs. Record every mismatch. Do not infer equality from seeds or the three-core-only identity.",
+    "added_tensors": "Five analogy_head tensors must match exactly across repaired seeds; hash shape, dtype, layout and value bytes separately.",
+    "observed_result": null,
+    "status": "PENDING_RUNTIME_MATCHED_START_CHECKS_UNDER_FROZEN_PRELAUNCH_RECIPE",
+    "migration_record": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "records/typed_pointer_001/admission_analogy_on_001/MIGRATION_ON_SHAPES.json",
+      "bytes": 13362,
+      "raw_sha256": "dbdcda9c7b64a83d9f2bb8ee260bc1450427d8e9b62d52ecb03490330e87c207",
+      "lf_sha256": "dbdcda9c7b64a83d9f2bb8ee260bc1450427d8e9b62d52ecb03490330e87c207"
+    },
+    "runtime_requirement": "Future checkpoint file identities are not launch blockers merely because they do not yet exist. Freeze source, recipe, expected state references and acceptance reader before launch; capture and validate actual initial identities before the first optimizer update.",
+    "expected_added_head_state_identity": null,
+    "expected_added_head_state_identity_status": "NOT_READY_PRELAUNCH_INITIALIZATION_PREREQUISITE_RECEIPT_REQUIRED"
+  },
+  "workers": {
+    "historical": {
+      "cncm/typed_pointer_worker.py": {
+        "sha256": "6d859630ef45bcc4ef969f1d7232e3e68270cc208da431dd25cddfbfadda34e2",
+        "bytes": 124382
+      },
+      "typed_pointer_worker.py": {
+        "sha256": "8d101c5486dbb4d59a1db58cd4540bcd7087bc95bf26788eec761bcc799703a8",
+        "bytes": 14031
+      }
+    },
+    "observed_smoke": {
+      "cncm/typed_pointer_worker.py": {
+        "sha256": "712579b0b5a869e10e95b21644fe8157b9e4007036bbfa28aa62114bc491047c",
+        "bytes": 124957
+      },
+      "typed_pointer_worker.py": {
+        "sha256": "02a1d2ae430ad82c8ed4b46328b8a1eeb9a76208967bbb0d7d64340470aa7956",
+        "bytes": 14387
+      }
+    },
+    "final_main_worker_bindings": null,
+    "status": "NOT_READY_SMOKE_AND_MAIN_ARE_DISTINCT_PACKAGES"
+  },
+  "evaluation_route": {
+    "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+    "adapter": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_learner.py",
+      "bytes": 7852,
+      "raw_sha256": "82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d",
+      "lf_sha256": "82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d"
+    },
+    "scope_and_grader_router": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_scope.py",
+      "bytes": 15446,
+      "raw_sha256": "4da36a48ba0c9938e8df80f9380449186074ea6e5a9e2c57c487277598852b67",
+      "lf_sha256": "4da36a48ba0c9938e8df80f9380449186074ea6e5a9e2c57c487277598852b67"
+    },
+    "fixture_builder": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_fixtures.py",
+      "bytes": 32130,
+      "raw_sha256": "567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d",
+      "lf_sha256": "567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d"
+    },
+    "public_fixture_file": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json",
+      "bytes": 190466,
+      "raw_sha256": "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3",
+      "lf_sha256": "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3"
+    },
+    "acceptance_script": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py",
+      "bytes": 25588,
+      "raw_sha256": "3f02c9e88371386db8e84aff281d089e52652e7429e90ce716751ba454af2884",
+      "lf_sha256": "3f02c9e88371386db8e84aff281d089e52652e7429e90ce716751ba454af2884"
+    },
+    "review": {
+      "source_commit": "cc68d8b326ea772a7d93871e843a9bbacb4cee0e",
+      "path": "_handoffs/HELM_NEXT_PHASE_20260923/REVIEW_LARGER_QUESTION_PATH_785c9bd1.md",
+      "bytes": 25018,
+      "raw_sha256": "533958c66d94f30fde4de85b7a1605590d45190a64a5fa8399e56f85384a9fe7",
+      "lf_sha256": "533958c66d94f30fde4de85b7a1605590d45190a64a5fa8399e56f85384a9fe7"
+    },
+    "source_review_verdict": "CHANGES_REQUIRED",
+    "gpu_result": null,
+    "status": "NOT_READY_DEVICE_ROUTE_NOT_DEMONSTRATED",
+    "public_fixtures": {
+      "answerable": 37,
+      "refusals": 4,
+      "total": 41,
+      "accuracy_claims": false
+    },
+    "twelve_protected_pins": {
+      "pointer_learner.py": {
+        "expected_lf_sha256": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "bytes": 159350,
+          "raw_sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+          "lf_sha256": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781"
+        },
+        "matches": true
+      },
+      "pointer_inputs.py": {
+        "expected_lf_sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+          "bytes": 26040,
+          "raw_sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+          "lf_sha256": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd"
+        },
+        "matches": true
+      },
+      "pointer_contract.py": {
+        "expected_lf_sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+          "bytes": 70733,
+          "raw_sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+          "lf_sha256": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d"
+        },
+        "matches": true
+      },
+      "slots.py": {
+        "expected_lf_sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+          "bytes": 19341,
+          "raw_sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+          "lf_sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+        },
+        "matches": true
+      },
+      "slots_v2.py": {
+        "expected_lf_sha256": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots_v2.py",
+          "bytes": 20350,
+          "raw_sha256": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb",
+          "lf_sha256": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb"
+        },
+        "matches": true
+      },
+      "answers.py": {
+        "expected_lf_sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+          "bytes": 13894,
+          "raw_sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+          "lf_sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+        },
+        "matches": true
+      },
+      "answers_v2.py": {
+        "expected_lf_sha256": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers_v2.py",
+          "bytes": 1492,
+          "raw_sha256": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
+          "lf_sha256": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5"
+        },
+        "matches": true
+      },
+      "checker.py": {
+        "expected_lf_sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker.py",
+          "bytes": 13934,
+          "raw_sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+          "lf_sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+        },
+        "matches": true
+      },
+      "checker_v2.py": {
+        "expected_lf_sha256": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/checker_v2.py",
+          "bytes": 14078,
+          "raw_sha256": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
+          "lf_sha256": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258"
+        },
+        "matches": true
+      },
+      "source.py": {
+        "expected_lf_sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+          "bytes": 20601,
+          "raw_sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+          "lf_sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+        },
+        "matches": true
+      },
+      "course.py": {
+        "expected_lf_sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+          "bytes": 20756,
+          "raw_sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+          "lf_sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+        },
+        "matches": true
+      },
+      "focal.py": {
+        "expected_lf_sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+        "observed_at_launch_source": {
+          "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+          "bytes": 15105,
+          "raw_sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+          "lf_sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+        },
+        "matches": true
+      }
+    },
+    "all_twelve_match_observed_smoke_source": true
+  },
+  "dependencies": {
+    "requirements": {
+      "source_commit": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+      "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+      "bytes": 246,
+      "raw_sha256": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379",
+      "lf_sha256": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379"
+    },
+    "declared_direct_pins": {
+      "numpy": "2.2.6",
+      "jsonschema": "4.26.0",
+      "pytest": "9.0.2",
+      "torch": "2.11.0 from cu128 index, per requirements comment"
+    },
+    "wheels": {
+      "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl": {
+        "bytes": 221994,
+        "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+      },
+      "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl": {
+        "bytes": 36501,
+        "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+      }
+    },
+    "actual_resolved_environment_for_new_main_jobs": null,
+    "cuda_runtime_driver_cudnn_gpu_ami_python_versions": null,
+    "status": "NOT_READY_FULL_ENVIRONMENT_NOT_FROZEN",
+    "policy": "Identical pinned Linux, Python, PyTorch, CUDA, cuDNN, driver, GPU and determinism configuration across both arms; record full resolved environment and nondeterminism warnings per job. Direct requirement pins alone are insufficient."
+  },
+  "mechanism_checkpoint_checks": {
+    "registered_source": {
+      "source_commit": "197caa322d20ae6830928b20c5b16933e93cd00d",
+      "path": "records/helm_eval_design_20260923/analogy_wiring_probe/PREREG_ANALOGY_WIRING_PROBE_v0_2.md",
+      "bytes": 22475,
+      "raw_sha256": "4c8c7c331d02a65c9b4b6290efae8f84669ff632e074015f91a8c4afeae79000",
+      "lf_sha256": "4c8c7c331d02a65c9b4b6290efae8f84669ff632e074015f91a8c4afeae79000"
+    },
+    "count": 18,
+    "seeds": [
+      20260917,
+      20260918,
+      20260919
+    ],
+    "per_seed": [
+      {
+        "checkpoint": "pass_01.pt",
+        "main_updates": 147
+      },
+      {
+        "checkpoint": "evidence/main_checkpoint_0294.pt",
+        "main_updates": 294
+      },
+      {
+        "checkpoint": "evidence/main_checkpoint_0588.pt",
+        "main_updates": 588
+      },
+      {
+        "checkpoint": "evidence/main_checkpoint_0882.pt",
+        "main_updates": 882
+      },
+      {
+        "checkpoint": "evidence/main_checkpoint_1176.pt",
+        "main_updates": 1176
+      },
+      {
+        "checkpoint": "final.pt",
+        "main_updates": 1470
+      }
+    ],
+    "purpose": "Six timepoints for each repaired seed; mechanism eligibility, not choosing the best TEST checkpoint. All 18 results are retained including failures. Only final.pt is the primary HSET-2 endpoint.",
+    "probe_status": "NOT_READY_V0_2_NORMALIZATION_FLAW_REQUIRES_PREDECLARED_CORRECTION",
+    "distinct_from_worker_phase_a": "Worker phase A restores three practice checkpoints per seed and compares three core tensors; this is not the 18 repaired mechanism checks.",
+    "checks": [
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "pass_01.pt",
+        "main_updates": 147,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0294.pt",
+        "main_updates": 294,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0588.pt",
+        "main_updates": 588,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0882.pt",
+        "main_updates": 882,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_1176.pt",
+        "main_updates": 1176,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260917,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "final.pt",
+        "main_updates": 1470,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "pass_01.pt",
+        "main_updates": 147,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0294.pt",
+        "main_updates": 294,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0588.pt",
+        "main_updates": 588,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0882.pt",
+        "main_updates": 882,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_1176.pt",
+        "main_updates": 1176,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260918,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "final.pt",
+        "main_updates": 1470,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "pass_01.pt",
+        "main_updates": 147,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0294.pt",
+        "main_updates": 294,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0588.pt",
+        "main_updates": 588,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_0882.pt",
+        "main_updates": 882,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "evidence/main_checkpoint_1176.pt",
+        "main_updates": 1176,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      },
+      {
+        "model_seed": 20260919,
+        "arm": "REPAIRED",
+        "phase": "MAIN_TRAINING",
+        "checkpoint_relative_path": "final.pt",
+        "main_updates": 1470,
+        "admitted_job_receipt_root": null,
+        "receipt_root_status": "NOT_READY_BIND_FROM_FROZEN_MAIN_ADMISSION_BEFORE_LAUNCH",
+        "actual_checkpoint_sha256": null,
+        "actual_hash_status": "PENDING_RUNTIME"
+      }
+    ]
+  },
+  "prerequisites": [
+    {
+      "id": "historical_off_preservation",
+      "status": "EXISTING_RECORDED_PASS",
+      "receipt_sha256": "43c6cd6583f2618a7f1db5ea577ffba054ea6c55155a6dd573b8a532baf851b1",
+      "verdict": "OFF_PRESERVED_ON_T4",
+      "reuse_limit": "Only for the unchanged source contract; not proof of the new larger-question route."
+    },
+    {
+      "id": "on_reduced_smoke_and_cleanup",
+      "status": "PASS_FOUR_FROZEN_SMOKE_CONDITIONS",
+      "receipt": "SMOKE_COMPLETION_RECONCILIATION.json",
+      "receipt_sha256": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
+      "provider_observation": "SMOKE_PROVIDER_OBSERVATION.json",
+      "provider_observation_sha256": "d5225ee20a0fa26201673dc8049ba6a1f5e3f69e1edf6ddd9beec47ce7f45509",
+      "scope": "8 main plus2 replay updates; phaseB skipped; not larger-route or full-runtime acceptance"
+    },
+    {
+      "id": "hset2_actual_informative_case_counts",
+      "status": "NOT_READY_NOT_FOUND_IN_REVIEWED_SNAPSHOTS",
+      "receipt_sha256": null,
+      "before_new_main_training": true
+    },
+    {
+      "id": "larger_question_gpu_route_both_arms",
+      "status": "PUBLIC_SCRIPT_PASS_RECEIPTS_CONSISTENT_AUTOMATED_ADMISSION_OPEN",
+      "receipt_sha256": "9519434d721819a219f5c4e9d5d085d0d4e6c4c825d38d858551891df0c312b5",
+      "before_new_main_training": true,
+      "public_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
+      "receipt": "ROUTE_PREREQUISITE_COMPLETION_20260924.json"
+    },
+    {
+      "id": "route_acceptance_script_delta_review",
+      "status": "SOURCE_REVIEW_APPROVED_FOR_ROUTE_PREREQUISITE_WITH_RECORDED_LIMITATIONS",
+      "receipt_sha256": null,
+      "review_commit": "fb6bc4dddf07ed506bd11c254b5572e058a948b1",
+      "reader_hardening_static_review": "35cf5957b9104c4dc43d316774cd5806417df8a6"
+    },
+    {
+      "id": "corrected_probe_admission",
+      "status": "NOT_READY",
+      "receipt_sha256": null
+    }
+  ],
+  "comparison_limit": "C freshly reproduces only seed 20260917. Historical controls for seeds 20260918 and 20260919 are reused and are not demonstrated reproducible. B adds fresh unchanged runs for those two seeds and is the stronger fresh-control comparison.",
+  "planned_main_jobs": [
+    {
+      "arm": "UNCHANGED",
+      "model_seed": 20260917,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "source_status": "HISTORICAL_SOURCE_FIXED_NEW_ADMISSION_REQUIRED",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME",
+      "expected_shared_initial_reference_seed": 20260917,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "7ca2043b152976d53e28cde6053f66bd240edd6761b4be80b7452979e3bf5c61",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME"
+    },
+    {
+      "arm": "UNCHANGED",
+      "model_seed": 20260918,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "source_status": "HISTORICAL_SOURCE_FIXED_NEW_ADMISSION_REQUIRED",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME_IF_FALLBACK",
+      "expected_shared_initial_reference_seed": 20260918,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_UNCHANGED_60_USD_CEILING_AND_VERIFIED_HEADROOM",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "dc5bec3d9d73c653567214dad20709280146d1c702f52f7c30775bba25f4d5d7",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME_IF_FALLBACK"
+    },
+    {
+      "arm": "UNCHANGED",
+      "model_seed": 20260919,
+      "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+      "source_status": "HISTORICAL_SOURCE_FIXED_NEW_ADMISSION_REQUIRED",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME_IF_FALLBACK",
+      "expected_shared_initial_reference_seed": 20260919,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_UNCHANGED_60_USD_CEILING_AND_VERIFIED_HEADROOM",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "e6b59487d96eca823766b5618d04339288ca7b0549d49d012f3ddfd9f235f3e0",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME_IF_FALLBACK"
+    },
+    {
+      "arm": "REPAIRED",
+      "model_seed": 20260917,
+      "source_commit": null,
+      "source_status": "NOT_READY_FINAL_SOURCE_AND_MAIN_PACKAGE_NOT_FROZEN",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME",
+      "expected_shared_initial_reference_seed": 20260917,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "7ca2043b152976d53e28cde6053f66bd240edd6761b4be80b7452979e3bf5c61",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME"
+    },
+    {
+      "arm": "REPAIRED",
+      "model_seed": 20260918,
+      "source_commit": null,
+      "source_status": "NOT_READY_FINAL_SOURCE_AND_MAIN_PACKAGE_NOT_FROZEN",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME",
+      "expected_shared_initial_reference_seed": 20260918,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "dc5bec3d9d73c653567214dad20709280146d1c702f52f7c30775bba25f4d5d7",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME"
+    },
+    {
+      "arm": "REPAIRED",
+      "model_seed": 20260919,
+      "source_commit": null,
+      "source_status": "NOT_READY_FINAL_SOURCE_AND_MAIN_PACKAGE_NOT_FROZEN",
+      "initial_file_sha256": null,
+      "initial_model_state_identity": null,
+      "initial_encoder_state_identity": null,
+      "initial_optimizer_state_identity": null,
+      "initial_rng_state_identity": null,
+      "initial_status": "PENDING_RUNTIME",
+      "expected_shared_initial_reference_seed": 20260919,
+      "final_file_sha256": null,
+      "final_model_state_identity": null,
+      "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
+      "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
+      "historical_shared_state_reference": "e6b59487d96eca823766b5618d04339288ca7b0549d49d012f3ddfd9f235f3e0",
+      "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
+      "final_status": "PENDING_RUNTIME"
+    }
+  ],
+  "job_counts": {
+    "base_option_c_main_jobs": 4,
+    "conditional_additional_unchanged_jobs": 2,
+    "maximum_option_b_main_jobs": 6,
+    "observed_study_attempts": 3,
+    "base_total_attempts": 10,
+    "fallback_maximum_total_attempts": 12,
+    "base_future_jobs": 7,
+    "fallback_maximum_future_jobs": 9,
+    "status": "CLAUDE_3083EA0D_CANDIDATE_NAMED_COST_ADMISSION_NOT_READY"
+  },
+  "subsequent_reviewed_snapshots": {
+    "integration": "59d86443edc35bcf57368a99f602cd36530ca11d",
+    "smoke_receipts": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+    "unchanged_reader_review": "0391a3073f02fb00819b0125a467aefad53ccf2e",
+    "unchanged_reader_implementation": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
+    "hset2_builder": "853e645d7b5da5551257c4271e10c90b5fdb254e",
+    "route_launch_record": "fae817fe44501b1f8615653e69bc88053df6fbe8"
+  },
+  "owner_authorization": {
+    "status": "STANDING_PROJECT_AUTHORIZATION",
+    "record": "OWNER_STANDING_AUTHORIZATION_20260924.json",
+    "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "further_owner_approval_required": false
+  },
+  "new_launch_authorized_scope": "Standing owner authority; execution separately requires launch_enabled and all technical checks.",
+  "route_prerequisite_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
+  "previous_combined_P1_job_counts": {
+    "base_option_c_main_jobs": 4,
+    "conditional_additional_unchanged_jobs": 2,
+    "maximum_option_b_main_jobs": 6,
+    "already_booked_smoke_attempts": 2,
+    "proposed_prerequisite_jobs": 2,
+    "proposed_post_training_readout_jobs": 1,
+    "base_total_attempts": 9,
+    "fallback_maximum_total_attempts": 11,
+    "base_future_jobs": 7,
+    "fallback_maximum_future_jobs": 9,
+    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling.",
+    "status": "HISTORICAL_COMBINED_P1_PROPOSAL_NOT_CURRENT_RECONCILED_COUNTS",
+    "observed_study_attempts_now": 3,
+    "current_remaining_jobs": null
+  },
+  "accounting_reader_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json",
+  "route_prerequisite_completion": "ROUTE_PREREQUISITE_COMPLETION_20260924.json",
+  "admission_binding_direction": {
+    "decisions": "POLICY_DECISIONS_20260924.md",
+    "order": [
+      "source_data_environment_rule_leaves",
+      "acceptance_receipts",
+      "execution_manifest",
+      "launch_request",
+      "frozen_packet_index",
+      "policy_pins_and_technical_admission",
+      "runtime_receipts"
+    ],
+    "single_attempt_only": true,
+    "spend_snapshot_max_age_seconds": 300,
+    "launch_enabled_for_preparation": false,
+    "runtime_admission_hashes": "RECORDED_DOWNSTREAM_NOT_REQUIRED_MANIFEST_INPUTS"
+  },
+  "latest_public_review": {
+    "reader": "d5414964314475e2b13a49595fd54a3d7fee017c",
+    "spend_gate": "4e292912a1efe0a85312574a69291a1af5af5427",
+    "hset_builder_review": "bd960bc1ae351f9cf653fd865a9a9996e3c3aa75",
+    "status": "FIXES_AND_RUNTIME_ACCEPTANCE_PENDING"
+  },
+  "downstream_gate_requirements": [
+    {
+      "id": "final_frozen_manifest_and_fresh_admission",
+      "required_before_launch": true,
+      "result_record_location": "DOWNSTREAM_TECHNICAL_ADMISSION_ONLY",
+      "upstream_receipt_hash_permitted": false,
+      "reason": "The admission binds this manifest; its own hash cannot be bound back into the manifest."
+    }
+  ]
+}
