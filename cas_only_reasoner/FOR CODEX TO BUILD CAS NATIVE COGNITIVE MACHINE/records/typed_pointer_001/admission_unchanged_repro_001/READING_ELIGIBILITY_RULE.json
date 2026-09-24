@@ -1,0 +1,210 @@
+{
+  "schema": "cncm.helm-unchanged-reproduction-reading-eligibility-rule/1",
+  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+  "status": "RULE_FROZEN_EVIDENCE_APPENDED_LATER",
+  "study": "HELM-REPAIR-CONTROLLED-1",
+  "decisions": [
+    {
+      "by": "Codex",
+      "branch": "codex/helm-controlled-prelaunch-20260924",
+      "commit": "dc02eb8142e5bced003b9dfa76887bb8a9cd864c",
+      "path": "records/helm_controlled_prelaunch_20260924/READING_STAGE_DECISIONS_20260924.md",
+      "blob": "ad39acc7f06d971652d0fef64357996ecd9f562e",
+      "items": [
+        "Q-F",
+        "Q-G"
+      ]
+    },
+    {
+      "by": "Codex",
+      "branch": "codex/helm-controlled-prelaunch-20260924",
+      "commit": "dc02eb8142e5bced003b9dfa76887bb8a9cd864c",
+      "path": "records/helm_controlled_prelaunch_20260924/POLICY_DECISIONS_20260924.md",
+      "blob": "81ee0951622eb08652a6ff806411ffc9c089958f",
+      "items": [
+        "R3-I"
+      ]
+    }
+  ],
+  "preserved_never_rewritten": {
+    "freeze_commit": "3344ae5d7bcc0d5ff50f1bce220f77a063ece65a",
+    "frozen_files": [
+      "frozen/study.json",
+      "frozen/20260917/request.json",
+      "frozen/20260917/authority.json",
+      "frozen/20260917/owner.json"
+    ],
+    "execution_admission": "records/typed_pointer_001/admission_unchanged_repro_001/EXECUTION_ADMISSION.json",
+    "execution_admission_state": "NOT_READY",
+    "statement": "Nothing frozen at the freeze commit is ever edited. EXECUTION_ADMISSION.json stays NOT_READY and byte-identical (sha256 in fixed_now.execution_admission_as_is) in every later commit, merges included. It is never flipped to ADMITTED and never rewritten, and the eligibility record is never described as a prelaunch admission."
+  },
+  "decide_unchanged": {
+    "file": "read_reproduction.py",
+    "function": "decide",
+    "source_sha256_at_freeze": "637db5ebe7608dae5eec1df3c8c9657f6099308517e8257908b3e92e2742b635",
+    "statement": "decide() in read_reproduction.py is byte-identical to the freeze. The reader checks this by test and at run time, and the eligibility record binds its sha256. Only the admission check gained a second route; the verdict rule did not change."
+  },
+  "record": {
+    "path": "records/typed_pointer_001/admission_unchanged_repro_001/READING_ELIGIBILITY.json",
+    "schema": "cncm.helm-unchanged-reproduction-reading-eligibility/2",
+    "state": "READING_ELIGIBLE",
+    "chronology": "POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON",
+    "committed_versions": 1,
+    "fields": [
+      "chronology",
+      "decide_source_sha256",
+      "eligibility_rule",
+      "environment_lock",
+      "execution_admission_as_is",
+      "frozen_study",
+      "job",
+      "job_kind",
+      "label",
+      "launch_basis",
+      "model_seed",
+      "note",
+      "numerical_environment_sha256",
+      "owner_direction_record",
+      "panel_manifest_sha256",
+      "policy_pins_sha256",
+      "reader",
+      "reader_acceptance",
+      "review",
+      "runner_attestation",
+      "schema",
+      "source_sha",
+      "state",
+      "writer_blobs",
+      "written_by",
+      "written_utc"
+    ]
+  },
+  "fixed_now": {
+    "schema": "cncm.helm-unchanged-reproduction-reading-eligibility/2",
+    "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+    "state": "READING_ELIGIBLE",
+    "chronology": "POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON",
+    "job": "cas-meta2-tpntr-20260924123354-20208c92-m-20260917",
+    "job_kind": "UNCHANGED_ARM_REPRODUCTION",
+    "model_seed": 20260917,
+    "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+    "launch_basis": "OWNER_DIRECTION_20260924",
+    "frozen_study": {
+      "commit": "3344ae5d7bcc0d5ff50f1bce220f77a063ece65a",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_unchanged_repro_001/frozen/study.json",
+      "sha256": "60140ae0587e983120f37cb3499ecdc19e59f23cc0363520b2814e9e413f8a12"
+    },
+    "execution_admission_as_is": {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_unchanged_repro_001/EXECUTION_ADMISSION.json",
+      "sha256": "5042681aa3e6e034a88cf6e516ee8dbf2f9b97b2d09f2f9bf4e234ad552bfb50",
+      "state": "NOT_READY"
+    },
+    "decide_source_sha256": "637db5ebe7608dae5eec1df3c8c9657f6099308517e8257908b3e92e2742b635",
+    "owner_direction_record": {
+      "commit": "33d2e7893948152221501da3902781a3babb9a4d",
+      "path": "_handoffs/HELM_NEXT_PHASE_20260923/OWNER_STOP_POLISHING_20260924.md",
+      "blob": "e76f1005e8fb9d7fad9fa2bd5e8cf377446512c4",
+      "sha256": "626b81fef3d481cdcd264560ca6106ee1e4c3fabde705be4ebdca9146f2729eb"
+    },
+    "panel_manifest_sha256": "a27b3839f6fe5cb07d498c591395a30f06725a1ea0ee5882dcccbb1c2647c3e2",
+    "numerical_environment_sha256": "c04d66208d6bf70f492e2ab9b14d553b240649b4de825bbee72112540493aa05",
+    "writer_blobs": {
+      "prepare_unchanged_repro.py": "ee1ca1e8399d5618ca4b4f33f9d27e3bd4a52bfe",
+      "write_launch_under_owner_direction.py": "aed75bfb72fff5d0eac1d48e03562c4ed6fd9135"
+    }
+  },
+  "appended_later": [
+    {
+      "field": "reader_acceptance",
+      "evidence": "The P1b acceptance receipt: receipt_commit, receipt_path and the EXACT sha256 of the committed receipt bytes. It must read READER_ACCEPTANCE_PASS, list all eleven cases in the registered order, match the frozen per-case table (expected and observed fields), be made by this reader and match the environment lock. It is committed strictly after the lock and before this record."
+    },
+    {
+      "field": "environment_lock",
+      "evidence": "The helm.reproduction-environment/1 lock: receipt_commit, receipt_path, receipt_sha256. Its values are frozen from public historical records. It is committed strictly before the P1b acceptance receipt and before this record."
+    },
+    {
+      "field": "review",
+      "evidence": "The review receipt (schema /2): receipt_commit, receipt_path, receipt_sha256. Verdict SOURCE_CONFORMANCE_PASS with no open BLOCKER or MAJOR finding, on a pushed reviewed commit, binding the whole closure (both writers included) and reviewer provenance. Committed before this record."
+    },
+    {
+      "field": "reader",
+      "evidence": "The reader fingerprint: reader_sources_sha256 (the sha256 of every reader source file, this rule file included) and reader_source_sha256 (one digest over them). It must be the reader that runs the reading."
+    },
+    {
+      "field": "policy_pins_sha256",
+      "evidence": "The sha256 of policy_pins.json. It must equal the value the frozen study binds. It is appended, not fixed here, so this rule holds no policy hash."
+    },
+    {
+      "field": "eligibility_rule",
+      "evidence": "This rule: commit, path (ROOT-relative) and sha256. The sha256 must equal the rule the reader loaded; the commit must come before the U17 training result commit and before this record."
+    },
+    {
+      "field": "runner_attestation",
+      "evidence": "attester, statement, rule_on_launch_checkout_before_u17_launch (must be true) and deciding_outputs_viewed: the exact list of deciding outputs (learned-state or panel comparisons, evidence files, readings) viewed before this record, empty if none. A viewed output is disclosed and its original verdict kept; eligibility is never revised in response to it."
+    },
+    {
+      "field": "written_by",
+      "evidence": "Who wrote the record: the runner or custodian, by name."
+    },
+    {
+      "field": "written_utc",
+      "evidence": "When the record was written, UTC, YYYY-MM-DDTHH:MM:SSZ. An audit field, not proof of time; git order is checked separately."
+    },
+    {
+      "field": "note",
+      "evidence": "Free text. It is never read as a status word or an approval."
+    }
+  ],
+  "environment_rule": {
+    "lock_schema": "helm.reproduction-environment/1",
+    "required_equal": [
+      "image.ami_id",
+      "image.provider",
+      "image.region",
+      "runtime.kernel",
+      "runtime.machine",
+      "runtime.os",
+      "runtime.python_implementation",
+      "runtime.python_version",
+      "accelerator.compute_capability",
+      "accelerator.driver_version",
+      "accelerator.gpu_model",
+      "accelerator.instance_type",
+      "libraries.cuda_runtime",
+      "libraries.cudnn",
+      "libraries.packages",
+      "libraries.torch",
+      "numerics.cudnn_allow_tf32",
+      "numerics.deterministic_algorithms",
+      "numerics.dtype",
+      "numerics.environment_variables",
+      "numerics.float32_matmul_precision",
+      "numerics.matmul_allow_tf32",
+      "numerics.seeds",
+      "numerics.thread_counts"
+    ],
+    "diagnostic_only_pattern": "envelope\\.[a-z][a-z0-9_]{0,63}",
+    "unestablished_value": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "unestablished_reads": "ENVIRONMENT_ADMISSION_UNVERIFIED",
+    "lock_committed_before_p1b_acceptance": true,
+    "statement": "Every lock field is required-equal, driver version and kernel included (Codex R3-I, Q-G). Only declared envelope fields (envelope.<name>: hardware instance IDs, paths, elapsed time, or another declared non-predictive envelope field, each with a reason) may be diagnostic. A historical value that cannot be established is written as the unestablished value and reads ENVIRONMENT_ADMISSION_UNVERIFIED (INVALID) for every source; the current machine value is never accepted in its place. The lock must not contradict a historical value this reader already pins, and it is committed strictly before the P1b acceptance receipt."
+  },
+  "order": [
+    "1. This rule is committed and pushed, and the U17 launch branch is fast-forwarded to include it, BEFORE U17 launches.",
+    "2. U17 trains; its receipt result (records/typed_pointer_001/receipt_unchanged_repro_20260917/result.json) is committed once.",
+    "3. The environment lock is committed, its values frozen from public historical records (it need not wait for step 2).",
+    "4. P1b acceptance runs in the admitted historical g7 environment; its receipt is committed strictly after the lock.",
+    "5. The review receipt for the reader that will run is committed.",
+    "6. READING_ELIGIBILITY.json is committed ONCE: after the freeze, this rule, the U17 training result and every receipt, and before the production evidence. Its chronology label is POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON.",
+    "7. The production reproduction evidence is committed once; then read_reproduction.py runs."
+  ],
+  "never": [
+    "Never edit frozen/ or EXECUTION_ADMISSION.json, and never flip NOT_READY to ADMITTED.",
+    "Never call the eligibility record a prelaunch admission, and never claim it predates the U17 training outputs.",
+    "Never change decide().",
+    "Never accept the current machine value for a historical environment value that cannot be established; it reads ENVIRONMENT_ADMISSION_UNVERIFIED (INVALID).",
+    "Never revise eligibility after a deciding comparison is seen; disclose it in runner_attestation and keep its original verdict.",
+    "Never write a second version of the eligibility record.",
+    "Missing or conflicting identity or evidence reads ADMISSION_INVALID_STOP; it never buys fallback B."
+  ]
+}

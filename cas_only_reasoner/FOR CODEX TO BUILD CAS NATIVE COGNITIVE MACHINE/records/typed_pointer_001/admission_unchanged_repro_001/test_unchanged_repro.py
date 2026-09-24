@@ -1930,11 +1930,10 @@ def lock_document(**changes):
                          'cudnn_allow_tf32': False, 'float32_matmul_precision': 'highest',
                          'seeds': {'model': 20260917}, 'thread_counts': {'torch': 8},
                          'environment_variables': {'CUBLAS_WORKSPACE_CONFIG': ':4096:8'}},
-            'comparison': {'required_equal': [path for path in common.ENVIRONMENT_LOCK_LEAVES
-                                              if path not in ('runtime.kernel', 'accelerator.driver_version')],
-                           'diagnostic_only': [{'path': 'runtime.kernel', 'reason': 'Q-G default: diagnostic'},
-                                               {'path': 'accelerator.driver_version',
-                                                'reason': 'Q-G default: diagnostic'}]}}
+            # revision 5 (Codex R3-I, Q-G): EVERY lock field required-equal; only envelope fields are diagnostic
+            'comparison': {'required_equal': list(common.ENVIRONMENT_LOCK_LEAVES),
+                           'diagnostic_only': [{'path': 'envelope.instance_id',
+                                                'reason': 'hardware instance ID: differs every run, predicts nothing'}]}}
     for path, value in changes.items():
         section, key = path.split('.') if '.' in path else (path, None)
         if key is None:
@@ -2136,7 +2135,9 @@ class RevisionFourFixTests(unittest.TestCase):
         moved = lock_document()
         moved['comparison']['required_equal'].remove('libraries.cudnn')
         moved['comparison']['diagnostic_only'].append({'path': 'libraries.cudnn', 'reason': 'x'})
-        self.assertIn('LOCK_REQUIRED_EQUAL_LACKS:libraries.cudnn', common.environment_lock_violations(enc(moved))[0])
+        found = common.environment_lock_violations(enc(moved))[0]
+        self.assertIn('LOCK_REQUIRED_EQUAL_LACKS:libraries.cudnn', found)
+        self.assertIn('LOCK_DIAGNOSTIC_ONLY_MAY_NAME_ENVELOPE_FIELDS_ONLY:libraries.cudnn', found)
         self.assertEqual(common.parse_cudnn_version(91002), common.parse_version('9.10.2'))
         self.assertEqual(common.parse_version('12.8.0'), common.parse_version('12.8'))
         self.assertNotEqual(common.parse_torch_version('2.11.0+cu128'), common.parse_torch_version('2.11.0+cu126'))
@@ -2147,11 +2148,12 @@ class RevisionFourFixTests(unittest.TestCase):
                                  ('torch_version', '2.11.0+cu126', 'libraries.torch'),
                                  ('cuda_version', '12.6', 'libraries.cuda_runtime'),
                                  ('gpu_name', 'Tesla T4', 'accelerator.gpu_model'),
-                                 ('python_implementation', 'PyPy', 'runtime.python_implementation')):
+                                 ('python_implementation', 'PyPy', 'runtime.python_implementation'),
+                                 # revision 5 (Q-G): driver and kernel are required-equal, no longer diagnostic
+                                 ('driver_version', '590.1', 'accelerator.driver_version'),
+                                 ('platform_release', '6.8.0-1030-aws', 'runtime.kernel')):
             self.assertEqual(compare(LOCK, dict(RECORDED_ENV, **{key: value}), 'E', must_observe=True)[0],
                              ['ENVIRONMENT_DIFFERS_FROM_LOCK:E:' + path], key)
-        invalid, diagnostic, _ = compare(LOCK, dict(RECORDED_ENV, driver_version='590.1'), 'E', must_observe=True)
-        self.assertEqual((invalid, [row['path'] for row in diagnostic]), ([], ['accelerator.driver_version']))
         missing = {key: value for key, value in RECORDED_ENV.items() if key != 'python_version'}
         self.assertEqual(compare(LOCK, missing, 'E', must_observe=True)[0],
                          ['ENVIRONMENT_NOT_OBSERVED:E:runtime.python_version'])
@@ -2208,13 +2210,178 @@ class RevisionFourFixTests(unittest.TestCase):
         self.assertEqual(common.decide_source_sha256(running), common.decide_source_sha256(frozen))
 
 
+# =====================================================================================================================
+# REVISION 5: Codex R3-I / Q-G (every lock field required-equal; UNESTABLISHED reads UNVERIFIED) and Q-F (frozen rule).
+# =====================================================================================================================
+class RevisionFiveEnvironmentTests(unittest.TestCase):
+    def test_rev5_driver_and_kernel_are_required_equal_and_only_envelope_fields_are_diagnostic(self):
+        """The revision-4 lock (driver and kernel diagnostic) is refused; an envelope field is reported, never deciding;
+        an envelope name that reuses a predictive key (driver_version) is refused."""
+        old = lock_document()
+        old['comparison'] = {'required_equal': [path for path in common.ENVIRONMENT_LOCK_LEAVES
+                                                if path not in ('runtime.kernel', 'accelerator.driver_version')],
+                             'diagnostic_only': [{'path': 'runtime.kernel', 'reason': 'Q-G default'},
+                                                 {'path': 'accelerator.driver_version', 'reason': 'Q-G default'}]}
+        found, lock = common.environment_lock_violations(enc(old))
+        self.assertIsNone(lock)
+        self.assertIn('LOCK_REQUIRED_EQUAL_LACKS:runtime.kernel,accelerator.driver_version', found)
+        self.assertIn('LOCK_DIAGNOSTIC_ONLY_MAY_NAME_ENVELOPE_FIELDS_ONLY:runtime.kernel,accelerator.driver_version',
+                      found)
+        for path in ('envelope.driver_version', 'envelope.platform_release', 'envelope.python_version', 'kernel',
+                     'envelope.', 'envelope.Instance'):
+            bad = lock_document(comparison={'required_equal': list(common.ENVIRONMENT_LOCK_LEAVES),
+                                            'diagnostic_only': [{'path': path, 'reason': 'x'}]})
+            self.assertIn('LOCK_DIAGNOSTIC_ONLY_MAY_NAME_ENVELOPE_FIELDS_ONLY:' + path,
+                          common.environment_lock_violations(enc(bad))[0], path)
+        twice = lock_document(comparison={'required_equal': list(common.ENVIRONMENT_LOCK_LEAVES) + ['runtime.kernel'],
+                                          'diagnostic_only': []})
+        self.assertIn('LOCK_REQUIRED_EQUAL_UNKNOWN_OR_DUPLICATE', common.environment_lock_violations(enc(twice))[0])
+        invalid, diagnostic, _ = common.environment_lock_comparison(
+            LOCK, dict(RECORDED_ENV, instance_id='i-0123456789abcdef0'), 'E', must_observe=True)
+        self.assertEqual(invalid, [])
+        self.assertEqual([(row['path'], row['observed']) for row in diagnostic],
+                         [('envelope.instance_id', 'i-0123456789abcdef0')])
+        for key, value, path in (('driver_version', '590.1', 'accelerator.driver_version'),
+                                 ('platform_release', '6.8.0-1030-aws', 'runtime.kernel')):
+            evaluated = reader.evaluate_evidence(
+                evidence(environment=dict(RECORDED_ENV, **{key: value})), MANIFEST, expected_candidate_job=NEW_JOB,
+                expected_candidate_sha256=OTHER, admitted_sources=FAKE_SOURCES, required_mode='READING',
+                environment_lock=LOCK)
+            self.assertIn('ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:' + path, evaluated['invalid_reasons'])
+
+    def test_rev5_an_unestablished_historical_value_reads_unverified_never_the_current_machine(self):
+        lock = lock_document(**{'runtime.python_version': common.ENVIRONMENT_UNESTABLISHED,
+                                'numerics.dtype': common.ENVIRONMENT_UNESTABLISHED})
+        found, parsed = common.environment_lock_violations(enc(lock))
+        self.assertEqual((found, parsed), ([], lock))                       # an explicit blocker is a legal lock
+        self.assertEqual(common.environment_lock_unestablished(lock), ['runtime.python_version', 'numerics.dtype'])
+        for observed, must in ((RECORDED_ENV, True), (RUNTIME, False), ({}, False)):
+            invalid, diagnostic, _ = common.environment_lock_comparison(lock, observed, 'S', must_observe=must)
+            self.assertIn('ENVIRONMENT_ADMISSION_UNVERIFIED:S:runtime.python_version', invalid)
+            self.assertIn('ENVIRONMENT_ADMISSION_UNVERIFIED:S:numerics.dtype', invalid)
+            shown = [row for row in diagnostic if row['path'] == 'runtime.python_version']
+            if 'python_version' in observed:                               # shown for disclosure, never accepted
+                self.assertEqual(shown, [{'source': 'S', 'path': 'runtime.python_version',
+                                          'lock': common.ENVIRONMENT_UNESTABLISHED, 'observed': '3.12.3',
+                                          'accepted': False}])
+        evaluated = reader.evaluate_evidence(
+            evidence(), MANIFEST, expected_candidate_job=NEW_JOB, expected_candidate_sha256=OTHER,
+            admitted_sources=FAKE_SOURCES, required_mode='READING', environment_lock=lock)
+        self.assertIn('ENVIRONMENT_ADMISSION_UNVERIFIED:READING_EVIDENCE:runtime.python_version',
+                      evaluated['invalid_reasons'])
+        found = common.acceptance_receipt_violations(acceptance_receipt(), common.expected_admission_bindings(
+            FAKE_SOURCES), environment_lock=lock)
+        self.assertIn('ENVIRONMENT_LOCK:ENVIRONMENT_ADMISSION_UNVERIFIED:P1B_ACCEPTANCE:runtime.python_version', found)
+
+    def test_rev5_a_lock_may_not_contradict_the_historical_pins(self):
+        for changes, path in (({'image.ami_id': 'ami-0123456789abcdef0'}, 'image.ami_id'),
+                              ({'image.region': 'us-east-1'}, 'image.region'),
+                              ({'accelerator.instance_type': 'g4dn.xlarge'}, 'accelerator.instance_type'),
+                              ({'accelerator.gpu_model': 'Tesla T4'}, 'accelerator.gpu_model'),
+                              ({'libraries.torch': '2.11.0+cu126'}, 'libraries.torch'),
+                              ({'libraries.cuda_runtime': '12.6'}, 'libraries.cuda_runtime'),
+                              ({'numerics.matmul_allow_tf32': True}, 'numerics.matmul_allow_tf32'),
+                              ({'accelerator.gpu_model': common.ENVIRONMENT_UNESTABLISHED}, 'accelerator.gpu_model'),
+                              ({'numerics.environment_variables': {'CUBLAS_WORKSPACE_CONFIG': ':16:8'}},
+                               'numerics.environment_variables.CUBLAS_WORKSPACE_CONFIG')):
+            found, lock = common.environment_lock_violations(enc(lock_document(**changes)))
+            self.assertIsNone(lock, path)
+            self.assertIn('LOCK_CONTRADICTS_THE_HISTORICAL_PIN:' + path, found, path)
+        self.assertEqual(common.environment_lock_historical_contradictions(LOCK), [])
+        self.assertIn('accelerator.driver_version', common.ENVIRONMENT_REQUIRED_EQUAL)
+        self.assertIn('runtime.kernel', common.ENVIRONMENT_REQUIRED_EQUAL)
+        self.assertEqual(set(common.ENVIRONMENT_NOT_OBSERVED_ANYWHERE) | set(common.ENVIRONMENT_OBSERVED),
+                         set(common.ENVIRONMENT_LOCK_LEAVES))
+
+
+OWNER_DIRECTION_PRESENT = git_has(common.OWNER_DIRECTION['commit'], common.OWNER_DIRECTION['path'])
+OWNER_DIRECTION_RAW = (common.show(common.OWNER_DIRECTION['commit'], common.OWNER_DIRECTION['path'])
+                       if OWNER_DIRECTION_PRESENT else None)
+RULE_RAW = (HERE / common.ELIGIBILITY_RULE_NAME).read_bytes()
+
+
+class RevisionFiveRuleTests(unittest.TestCase):
+    def test_rev5_the_frozen_rule_is_committed_here_conforms_and_is_a_reader_source(self):
+        self.assertIsNotNone(common.ELIGIBILITY_RULE)
+        self.assertEqual(common.ELIGIBILITY_RULE_SHA256, digest(RULE_RAW))
+        self.assertEqual(common.eligibility_rule_violations(common.strict_json_object(RULE_RAW)), [])
+        self.assertIn(common.ELIGIBILITY_RULE_NAME, common.READER_SOURCE_FILES)          # the fingerprint covers it
+        rule = json.loads(RULE_RAW)
+        self.assertEqual(rule['fixed_now']['execution_admission_as_is'],
+                         {'path': P + common.ADMISSION_REL, 'sha256': common.FROZEN_ADMISSION_SHA256,
+                          'state': common.NOT_READY})
+        self.assertEqual(rule['preserved_never_rewritten']['execution_admission_state'], common.NOT_READY)
+        self.assertEqual(rule['decide_unchanged']['source_sha256_at_freeze'], common.FROZEN_DECIDE_SHA256)
+        self.assertEqual(rule['record']['chronology'], 'POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON')
+        self.assertEqual([row['field'] for row in rule['appended_later']][:4],
+                         ['reader_acceptance', 'environment_lock', 'review', 'reader'])
+        self.assertEqual(rule['fixed_now']['panel_manifest_sha256'], common.PANEL_MANIFEST_SHA256)
+        self.assertEqual(rule['fixed_now']['owner_direction_record']['commit'],
+                         '33d2e7893948152221501da3902781a3babb9a4d')
+        self.assertEqual(rule['environment_rule']['required_equal'], list(common.ENVIRONMENT_LOCK_LEAVES))
+        self.assertNotIn(b'PRELAUNCH_ADMISSION', RULE_RAW)
+        self.assertNotIn(common.PINS_SHA256.encode('ascii'), RULE_RAW)           # appended later, never fixed here
+        self.assertEqual(json.loads(common.canonical(rule)), rule)              # plain JSON, no NaN
+
+    def test_rev5_a_changed_rule_stops_every_tool(self):
+        rule = json.loads(RULE_RAW)
+        for mutate, reason in (
+                (lambda r: r['fixed_now'].update(chronology='PRELAUNCH_ADMISSION'), 'RULE_SECTION:fixed_now'),
+                (lambda r: r['fixed_now']['execution_admission_as_is'].update(state='ADMITTED'),
+                 'RULE_SECTION:fixed_now'),
+                (lambda r: r['decide_unchanged'].update(source_sha256_at_freeze='0' * 64),
+                 'RULE_SECTION:decide_unchanged'),
+                (lambda r: r['environment_rule']['required_equal'].remove('accelerator.driver_version'),
+                 'RULE_SECTION:environment_rule'),
+                (lambda r: r['appended_later'].pop(0), 'RULE_APPENDED_LATER'),
+                (lambda r: r['record']['fields'].remove('runner_attestation'), 'RULE_SECTION:record'),
+                (lambda r: r['never'].append('two\nlines'), 'RULE_PROSE_LIST:never'),
+                (lambda r: r.update(status='DRAFT'), 'RULE_SCHEMA_LABEL_STATUS_OR_STUDY')):
+            changed = deepcopy(rule)
+            mutate(changed)
+            self.assertIn(reason, common.eligibility_rule_violations(changed), reason)
+            with self.assertRaisesRegex(SystemExit, 'UNCHANGED_REPRO_ELIGIBILITY_RULE_INVALID'):
+                common.load_eligibility_rule(enc(changed))
+        self.assertIsNone(common.load_eligibility_rule(None))                  # absent: every record is refused
+        self.assertEqual(common.eligibility_rule_violations(None), ['RULE_NOT_A_STRICT_JSON_OBJECT'])
+
+    @unittest.skipUnless(git_has(common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py'), 'freeze absent')
+    def test_rev5_the_fixed_values_are_the_committed_facts(self):
+        frozen_reader = common.show(common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py')
+        self.assertEqual(common.decide_source_sha256(frozen_reader), common.FROZEN_DECIDE_SHA256)
+        self.assertEqual(common.decide_source_sha256((HERE / 'read_reproduction.py').read_bytes()),
+                         common.FROZEN_DECIDE_SHA256)
+        for name, blob in common.WRITER_BLOBS_AT_FREEZE.items():
+            self.assertEqual(common.blob_id(common.FREEZE_COMMIT, common.HERE_REL + '/' + name), blob, name)
+            self.assertEqual(common.git_object_id((HERE / name).read_bytes()), blob, name)   # writers unchanged
+        study = json.loads(common.show(common.FREEZE_COMMIT, common.HERE_REL + '/frozen/study.json'))
+        self.assertEqual(study['jobs'][0]['job'], common.FROZEN_JOB)
+        self.assertEqual(study['writer_blob_at_head'], common.WRITER_BLOBS_AT_FREEZE[
+            'write_launch_under_owner_direction.py'])
+        self.assertEqual(reader.owner_direction_path(study), common.OWNER_DIRECTION['path'])
+        self.assertEqual(common.ELIGIBILITY_FIXED['numerical_environment_sha256'], common.environment_digest())
+        self.assertEqual(common.ELIGIBILITY_FIXED['numerical_environment_sha256'],
+                         study['execution_admission']['bindings']['numerical_environment_sha256'])
+
+    @unittest.skipUnless(OWNER_DIRECTION_PRESENT, 'owner-direction commit 33d2e789 absent')
+    def test_rev5_the_owner_direction_pin_is_the_committed_record(self):
+        self.assertEqual(common.git_object_id(OWNER_DIRECTION_RAW), common.OWNER_DIRECTION['blob'])
+        self.assertEqual(digest(OWNER_DIRECTION_RAW), common.OWNER_DIRECTION['sha256'])
+        self.assertEqual(common.blob_id(common.OWNER_DIRECTION['commit'], common.OWNER_DIRECTION['path']),
+                         common.OWNER_DIRECTION['blob'])
+
+
 # ---- the eligibility route (route B), over the REAL frozen study and request of 3344ae5d ----
 FROZEN_DIR = HERE / 'frozen'
 REAL_STUDY_RAW = (FROZEN_DIR / 'study.json').read_bytes() if (FROZEN_DIR / 'study.json').is_file() else None
 REAL_REQUEST_RAW = ((FROZEN_DIR / '20260917' / 'request.json').read_bytes()
                     if (FROZEN_DIR / '20260917' / 'request.json').is_file() else None)
-OWNER_DIRECTION_RAW = b'# Owner direction 2026-09-24 (synthetic stand-in bytes)\n'
 DECIDE_SHA = common.decide_source_sha256((HERE / 'read_reproduction.py').read_bytes())
+
+
+RULE_COMMIT = '8' * 40                        # a synthetic commit that carries the frozen rule
+ATTESTATION = {'attester': 'Claude coordinator (synthetic)', 'rule_on_launch_checkout_before_u17_launch': True,
+               'deciding_outputs_viewed': [], 'statement': 'synthetic attestation for the tests'}
 
 
 def receipt_reference(name, raw):
@@ -2240,16 +2407,22 @@ def eligibility_bundle(record_changes=None, fact_changes=None, raws=None):
                          'reader_source_sha256': common.reader_source_digest(FAKE_SOURCES)},
               'policy_pins_sha256': common.PINS_SHA256, 'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
               'launch_basis': common.LAUNCH_BASIS,
-              'owner_direction_record': {'commit': '3' * 40, 'path': reader.owner_direction_path(study),
-                                         'blob': common.git_object_id(OWNER_DIRECTION_RAW),
-                                         'sha256': digest(OWNER_DIRECTION_RAW)},
+              'owner_direction_record': dict(common.OWNER_DIRECTION),         # the real 33d2e789 record
               'decide_source_sha256': DECIDE_SHA,
+              # revision 5 (Codex Q-F): chronology label, the frozen rule, environment digest, writers, attestation
+              'chronology': common.ELIGIBILITY_CHRONOLOGY,
+              'eligibility_rule': {'commit': RULE_COMMIT, 'path': common.ELIGIBILITY_RULE_REL, 'sha256': digest(RULE_RAW)},
+              'numerical_environment_sha256': common.environment_digest(),
+              'writer_blobs': dict(common.WRITER_BLOBS_AT_FREEZE),
+              'runner_attestation': dict(ATTESTATION),
               **{name: receipt_reference(name, raw) for name, raw in raws.items()},
               'written_by': 'Claude builder (synthetic)', 'written_utc': '2026-09-25T02:00:00Z', 'note': 'synthetic'}
     record.update(record_changes or {})
     facts = {'receipts': {name: {'commit': record[name]['receipt_commit'], 'path': record[name]['receipt_path'],
                                  'raw': raw, 'anchored': True} for name, raw in raws.items()},
-             'owner_direction': {'blob': common.git_object_id(OWNER_DIRECTION_RAW), 'raw': OWNER_DIRECTION_RAW},
+             'owner_direction': {'blob': common.git_object_id(OWNER_DIRECTION_RAW or b''), 'raw': OWNER_DIRECTION_RAW},
+             'rule': {'commit': RULE_COMMIT, 'raw': RULE_RAW, 'anchored': True, 'precedes_training_result': True},
+             'lock_precedes_acceptance': True,
              'review_facts': review_facts(closure_at_reviewed_commit=dict(closure), closure_running=dict(closure),
                                           writer_blobs_at_freeze={name: closure[name] for name in common.WRITER_FILES}),
              'decide_running': DECIDE_SHA, 'decide_at_freeze': DECIDE_SHA}
@@ -2263,11 +2436,12 @@ AS_IS_ADMISSION = {'state': common.NOT_READY, 'recorded_state': common.NOT_READY
                    'job': None, 'spend': None}
 HISTORY_B = dict(HISTORY, freeze_commits=[common.FREEZE_COMMIT], eligibility_commits=['6' * 40],
                  eligibility_follows_freeze=True, eligibility_precedes_evidence=True, eligibility_has_evidence=False,
+                 eligibility_follows_training_result=True,
                  blob_versions=dict(HISTORY['blob_versions'], eligibility=['7' * 40]))
 
 
-@unittest.skipUnless(ARCHIVE_RAW is not None and REAL_STUDY_RAW is not None and REAL_REQUEST_RAW is not None,
-                     'package archive or frozen records not in this checkout')
+@unittest.skipUnless(ARCHIVE_RAW is not None and REAL_STUDY_RAW is not None and REAL_REQUEST_RAW is not None
+                     and OWNER_DIRECTION_PRESENT, 'package archive, frozen records or owner direction not here')
 class EligibilityRouteTests(unittest.TestCase):
     def read_b(self, record_changes=None, fact_changes=None, raws=None, **options):
         study = json.loads(REAL_STUDY_RAW)
@@ -2288,7 +2462,16 @@ class EligibilityRouteTests(unittest.TestCase):
         self.assertEqual(record['route'], common.ROUTE_ELIGIBILITY)
         self.assertEqual(record['refusal_allowlist_sha256'], common.REFUSAL_ALLOWLIST_SHA256)
         self.assertEqual(sorted(record['environment_lock_reported_only']),
-                         ['CANDIDATE_TRAINING', 'READING_EVIDENCE', 'REFERENCE_TRAINING'])
+                         ['CANDIDATE_TRAINING', 'READING_EVIDENCE', 'REFERENCE_TRAINING',
+                          'required_equal_not_observed_by_any_source', 'unestablished_historical_values'])
+        self.assertEqual(record['environment_lock_reported_only']['unestablished_historical_values'], [])
+        self.assertEqual(record['eligibility']['rule_sha256'], digest(RULE_RAW))
+        self.assertEqual(record['eligibility']['chronology'], 'POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON')
+        # Q-F: a viewed deciding output is DISCLOSED (printed), never a reason to revise eligibility or the verdict.
+        viewed = dict(ATTESTATION, deciding_outputs_viewed=['reproduction_reading.json of an earlier reader'])
+        disclosed = self.read_b({'runner_attestation': viewed})
+        self.assertEqual(disclosed['verdict'], REPRODUCED, disclosed['invalid_reasons'])
+        self.assertEqual(disclosed['eligibility']['runner_attestation_disclosed'], viewed)
         mismatch = self.read_b(document=evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER,
                                                                 state=parts(model_state=lambda m: {
                                                                     **m, 'round_rate': T(0.75)}))))
@@ -2320,6 +2503,46 @@ class EligibilityRouteTests(unittest.TestCase):
             ({'document': evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
                                    environment=dict(RECORDED_ENV, python_version='3.12.4'))},
              'ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:runtime.python_version'),
+            # ---- revision 5 (Codex R3-I, Q-G, Q-F) ----
+            ({'document': evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
+                                   environment=dict(RECORDED_ENV, driver_version='590.1'))},
+             'ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:accelerator.driver_version'),
+            ({'document': evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
+                                   environment=dict(RECORDED_ENV, platform_release='6.8.0-1030-aws'))},
+             'ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:runtime.kernel'),
+            ({'raws': {'environment_lock': enc(lock_document(**{
+                'accelerator.driver_version': common.ENVIRONMENT_UNESTABLISHED}))}},
+             'ENVIRONMENT_ADMISSION_UNVERIFIED:READING_EVIDENCE:accelerator.driver_version'),
+            ({'raws': {'environment_lock': enc(lock_document(**{
+                'accelerator.driver_version': common.ENVIRONMENT_UNESTABLISHED}))}},
+             'ENVIRONMENT_ADMISSION_UNVERIFIED:REFERENCE_TRAINING:accelerator.driver_version'),
+            ({'record_changes': {'chronology': 'PRELAUNCH_ADMISSION'}},
+             'ELIGIBILITY:NOT_THE_VALUE_THE_FROZEN_RULE_FIXES:chronology'),
+            ({'record_changes': {'owner_direction_record': dict(common.OWNER_DIRECTION, commit='3' * 40)}},
+             'ELIGIBILITY:NOT_THE_VALUE_THE_FROZEN_RULE_FIXES:owner_direction_record'),
+            ({'record_changes': {'writer_blobs': dict(common.WRITER_BLOBS_AT_FREEZE, **{
+                'prepare_unchanged_repro.py': '9' * 40})}},
+             'ELIGIBILITY:NOT_THE_VALUE_THE_FROZEN_RULE_FIXES:writer_blobs'),
+            ({'record_changes': {'numerical_environment_sha256': '9' * 64}},
+             'ELIGIBILITY:NOT_THE_VALUE_THE_FROZEN_RULE_FIXES:numerical_environment_sha256'),
+            ({'record_changes': {'eligibility_rule': {'commit': RULE_COMMIT, 'path': common.ELIGIBILITY_RULE_REL,
+                                                      'sha256': '9' * 64}}},
+             'ELIGIBILITY:ELIGIBILITY_RULE_IS_NOT_THE_RULE_THIS_READER_LOADED'),
+            ({'fact_changes': {'rule': None}}, 'ELIGIBILITY:ELIGIBILITY_RULE_NOT_A_COMMITTED_BLOB'),
+            ({'fact_changes': {'rule': {'commit': RULE_COMMIT, 'raw': RULE_RAW, 'anchored': True,
+                                        'precedes_training_result': False}}},
+             'ELIGIBILITY:ELIGIBILITY_RULE_NOT_COMMITTED_BEFORE_THE_U17_TRAINING_RESULT'),
+            ({'fact_changes': {'rule': {'commit': RULE_COMMIT, 'raw': RULE_RAW, 'anchored': False,
+                                        'precedes_training_result': True}}},
+             'ELIGIBILITY:ELIGIBILITY_RULE_NOT_COMMITTED_BEFORE_THE_RECORD'),
+            ({'fact_changes': {'lock_precedes_acceptance': False}},
+             'ELIGIBILITY:ENVIRONMENT_LOCK_NOT_COMMITTED_BEFORE_THE_P1B_ACCEPTANCE'),
+            ({'record_changes': {'runner_attestation': dict(ATTESTATION,
+                                                             rule_on_launch_checkout_before_u17_launch=False)}},
+             'ELIGIBILITY:RULE_WAS_NOT_ON_THE_LAUNCH_CHECKOUT_BEFORE_U17_LAUNCH'),
+            ({'record_changes': {'runner_attestation': {'attester': 'x'}}}, 'ELIGIBILITY:RUNNER_ATTESTATION_FORM'),
+            ({'history': dict(HISTORY_B, eligibility_follows_training_result=False)},
+             'ELIGIBILITY_RECORD_IS_NOT_AFTER_THE_TRAINING_RESULT'),
         ]
         for options, reason in cases:
             record = self.read_b(**options)
@@ -2329,9 +2552,16 @@ class EligibilityRouteTests(unittest.TestCase):
         receipts['review']['anchored'] = False
         record = self.read_b(fact_changes={'receipts': receipts})
         self.assertIn('ELIGIBILITY:RECEIPT_NOT_COMMITTED_BEFORE_THE_ELIGIBILITY_RECORD:review', record['invalid_reasons'])
-        driver = self.read_b(document=evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
-                                               environment=dict(RECORDED_ENV, driver_version='590.1')))
-        self.assertEqual(driver['verdict'], REPRODUCED, driver['invalid_reasons'])      # diagnostic only (Q-G)
+        # Revision 5: the revision-4 lock (driver and kernel diagnostic) no longer admits anything.
+        old = lock_document(comparison={
+            'required_equal': [path for path in common.ENVIRONMENT_LOCK_LEAVES
+                               if path not in ('runtime.kernel', 'accelerator.driver_version')],
+            'diagnostic_only': [{'path': 'runtime.kernel', 'reason': 'Q-G default'},
+                                {'path': 'accelerator.driver_version', 'reason': 'Q-G default'}]})
+        record = self.read_b(raws={'environment_lock': enc(old)})
+        self.assertEqual(record['verdict'], INVALID)
+        self.assertIn('ELIGIBILITY:ENVIRONMENT_LOCK:LOCK_REQUIRED_EQUAL_LACKS:runtime.kernel,accelerator.driver_version',
+                      record['invalid_reasons'])
 
     def test_this_reader_cannot_read_the_frozen_study_without_the_record(self):
         """As frozen, the study binds the revision-3 reader, so this revision TOOL-stops (no verdict) until an

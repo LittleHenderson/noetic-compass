@@ -54,9 +54,28 @@ REVISION 4 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED; branch claude/helm-unchange
   * fix 6 / R3-I: the environment lock `helm.reproduction-environment/1` is parsed strictly and compared with the
     observed runtime (versions parsed, not hashed). INVALID-deciding at minimum (Claude default Q-G): Python
     implementation and version, torch build, CUDA runtime, cuDNN, GPU model; other fields are diagnostic unless the
-    lock itself lists them as required-equal;
+    lock itself lists them as required-equal (THIS DEFAULT IS WITHDRAWN in revision 5: every lock field is
+    required-equal, per Codex Q-G);
   * fix 7 / R3-C: a frozen table of the expected verdict and levels of all eleven acceptance cases; each case's observed
     fields are compared with it, and `pass: true` is never trusted. changed-buffer prints its buffer count (0).
+
+REVISION 5 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED; same branch, on top of fee4ebec). Codex's rulings
+READING_STAGE_DECISIONS_20260924 Q-F / Q-G and POLICY_DECISIONS_20260924 R3-I (branch
+codex/helm-controlled-prelaunch-20260924, commit dc02eb81):
+  * Q-G / R3-I: EVERY field of the environment lock is required-equal, driver version and kernel included. The
+    revision-4 default (driver and kernel diagnostic) is withdrawn. Only declared non-predictive ENVELOPE fields
+    (`envelope.<name>`: hardware instance IDs, paths, elapsed time, or another envelope field the lock declares with a
+    reason) may be diagnostic, so no lock field can be downgraded. A historical value that cannot be established is
+    written as UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS and reads ENVIRONMENT_ADMISSION_UNVERIFIED (INVALID); the
+    current machine's value is never compared with it or accepted in its place. A lock that contradicts a value this
+    reader already pins from the historical records is refused;
+  * Q-F: the eligibility RULE is a frozen, committed file (`READING_ELIGIBILITY_RULE.json`, a reader source, so the
+    reader fingerprint covers it). It fixes now every value that is known now, names every piece of evidence that is
+    appended later (the P1b acceptance receipt hash, the environment lock, the review, the reader fingerprint, ...),
+    and states that the NOT_READY admission is preserved and never rewritten and that decide() is unchanged. The
+    record it governs (schema /2) is labelled POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON, carries a runner
+    attestation of which deciding outputs (if any) were viewed, and must follow the training result, the lock (which
+    must precede the P1b acceptance) and every receipt, and precede the production evidence. decide() is unchanged.
 
 THIS MODULE IMPORTS NOTHING FROM THE LAUNCHER, torch or the network. It lives under `records/`, not `cncm/` or
 `cas_meta2/`, on purpose: `pointer_contract.input_inventory` globs `*.py` under those trees.
@@ -377,9 +396,12 @@ EVIDENCE_REL = 'records/typed_pointer_001/evidence_unchanged_repro_20260917/repr
 EVIDENCE_MODES = ('READING', 'ACCEPTANCE')
 # The files the ONE reader digest covers. `policy_pins.json` is deliberately NOT one of them (BLOCKER 1, revision 3).
 # Revision 4 adds the published refusal allowlist: it decides which panel rows are model refusals, so it is covered.
+# Revision 5 adds the frozen eligibility rule (Codex Q-F): it decides which eligibility record is acceptable, so it is
+# covered too. It holds no reader, policy or owner-record hash, so covering it makes no hash cycle.
 REFUSAL_ALLOWLIST_NAME = 'historical_refusal_allowlist.json'
+ELIGIBILITY_RULE_NAME = 'READING_ELIGIBILITY_RULE.json'
 READER_SOURCE_FILES = ('read_reproduction.py', 'repro_common.py', 'recompute_reproduction_evidence.py',
-                       REFUSAL_ALLOWLIST_NAME)
+                       REFUSAL_ALLOWLIST_NAME, ELIGIBILITY_RULE_NAME)
 
 # ---- panel rows: what is model behaviour and what is an infrastructure fault (review MAJOR 3, revision 3).
 # The historical `require` (source.require, matched_contract.require at 20208c92) raises ValueError whose message is a
@@ -567,13 +589,30 @@ FROZEN_FILES = ('frozen/study.json', 'frozen/20260917/request.json', 'frozen/202
                 'frozen/20260917/owner.json')
 ELIGIBILITY_NAME = 'READING_ELIGIBILITY.json'
 ELIGIBILITY_REL = HERE_REL + '/' + ELIGIBILITY_NAME
-ELIGIBILITY_SCHEMA = 'cncm.helm-unchanged-reproduction-reading-eligibility/1'
+# Revision 5 (Codex Q-F): schema /2. No /1 record was ever written; /2 adds the chronology label, the frozen rule it
+# follows, the numerical-environment digest, the writer blobs and the runner attestation.
+ELIGIBILITY_SCHEMA = 'cncm.helm-unchanged-reproduction-reading-eligibility/2'
 ELIGIBLE = 'READING_ELIGIBLE'
+ELIGIBILITY_CHRONOLOGY = 'POST_TRAINING_ELIGIBILITY_BEFORE_COMPARISON'     # Codex Q-F; never a prelaunch admission
 ELIGIBILITY_RECEIPTS = ('reader_acceptance', 'environment_lock', 'review')
-ELIGIBILITY_FIELDS = ('decide_source_sha256', 'environment_lock', 'execution_admission_as_is', 'frozen_study', 'job',
-                      'job_kind', 'label', 'launch_basis', 'model_seed', 'note', 'owner_direction_record',
-                      'panel_manifest_sha256', 'policy_pins_sha256', 'reader', 'reader_acceptance', 'review', 'schema',
-                      'source_sha', 'state', 'written_by', 'written_utc')
+ELIGIBILITY_RULE_REL = HERE_REL + '/' + ELIGIBILITY_RULE_NAME
+ELIGIBILITY_RULE_SCHEMA = 'cncm.helm-unchanged-reproduction-reading-eligibility-rule/1'
+# The status claims only what the file itself shows. "Before U17 launch" is shown by git order (the rule's commit must
+# precede the U17 training result) and by the runner attestation, never by this word.
+ELIGIBILITY_RULE_STATUS = 'RULE_FROZEN_EVIDENCE_APPENDED_LATER'
+FROZEN_JOB = 'cas-meta2-tpntr-20260924123354-20208c92-m-20260917'          # frozen/study.json jobs[0].job
+FROZEN_DECIDE_SHA256 = '637db5ebe7608dae5eec1df3c8c9657f6099308517e8257908b3e92e2742b635'   # decide() at the freeze
+WRITER_BLOBS_AT_FREEZE = {'prepare_unchanged_repro.py': 'ee1ca1e8399d5618ca4b4f33f9d27e3bd4a52bfe',
+                          'write_launch_under_owner_direction.py': 'aed75bfb72fff5d0eac1d48e03562c4ed6fd9135'}
+# The owner-direction record the frozen study names, at the commit that added it (the disclosed 33d2e789 chronology).
+OWNER_DIRECTION = {'commit': '33d2e7893948152221501da3902781a3babb9a4d',
+                   'path': HANDOFF + 'OWNER_STOP_POLISHING_20260924.md',
+                   'blob': 'e76f1005e8fb9d7fad9fa2bd5e8cf377446512c4',
+                   'sha256': '626b81fef3d481cdcd264560ca6106ee1e4c3fabde705be4ebdca9146f2729eb'}
+# The fields whose values arrive later (their order is the order the frozen rule lists them in).
+ELIGIBILITY_APPENDED = ('reader_acceptance', 'environment_lock', 'review', 'reader', 'policy_pins_sha256',
+                        'eligibility_rule', 'runner_attestation', 'written_by', 'written_utc', 'note')
+ATTESTATION_FIELDS = ('attester', 'deciding_outputs_viewed', 'rule_on_launch_checkout_before_u17_launch', 'statement')
 ROUTE_ADMISSION, ROUTE_ELIGIBILITY = 'EXECUTION_ADMISSION_ADMITTED', 'READING_ELIGIBILITY_RECORD'
 
 # ---- the spend gate for --check (plan section 0 as carried by the amended plan): spend so far + per-job <= ceiling.
@@ -754,10 +793,21 @@ ENVIRONMENT_LOCK_SHAPE = {
 ENVIRONMENT_LOCK_LEAVES = tuple(section + '.' + key for section, keys in ENVIRONMENT_LOCK_SHAPE.items() for key in keys)
 ENVIRONMENT_BOOL_LEAVES = ('numerics.cudnn_allow_tf32', 'numerics.deterministic_algorithms', 'numerics.matmul_allow_tf32')
 ENVIRONMENT_MAP_LEAVES = ('numerics.environment_variables', 'numerics.seeds', 'numerics.thread_counts')
-# Claude default Q-G (bus claude-0024; silence keeps it): the lock MUST list these as required-equal, and a difference
-# in any of them makes the evidence INVALID. Driver and kernel are diagnostic unless the lock lists them required-equal.
-ENVIRONMENT_INVALID_DECIDING = ('runtime.python_implementation', 'runtime.python_version', 'libraries.torch',
-                                'libraries.cuda_runtime', 'libraries.cudnn', 'accelerator.gpu_model')
+# Revision 5 (Codex R3-I and Q-G). The revision-4 default (driver and kernel diagnostic) is WITHDRAWN: Codex ruled
+# "the proposed blanket diagnostic-only driver/kernel treatment conflicts with the fixed R3-I policy". So the lock MUST
+# list EVERY lock field as required-equal (numerical, software, library, image, runtime and accelerator fields alike,
+# driver version and kernel included), and a difference in any of them makes the evidence INVALID, never a mismatch.
+ENVIRONMENT_REQUIRED_EQUAL = ENVIRONMENT_LOCK_LEAVES
+# Only declared non-predictive ENVELOPE fields may be diagnostic (R3-I: "only hardware instance IDs, paths, elapsed time
+# and other declared non-predictive envelope fields are diagnostic"). They are named `envelope.<name>`, carry a reason,
+# and are never lock fields, so no lock field can be downgraded by listing it as diagnostic.
+ENVIRONMENT_DIAGNOSTIC_PREFIX = 'envelope.'
+ENVIRONMENT_DIAGNOSTIC_PATTERN = r'envelope\.[a-z][a-z0-9_]{0,63}'
+# A historical value that cannot be established from the public historical records is written as this exact string.
+# It is an explicit blocker: every source reads ENVIRONMENT_ADMISSION_UNVERIFIED (INVALID) for that field, and the
+# current machine's value is never compared with it or accepted in its place (R3-I, Q-G).
+ENVIRONMENT_UNESTABLISHED = 'UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS'
+ENVIRONMENT_UNVERIFIED = 'ENVIRONMENT_ADMISSION_UNVERIFIED'
 # lock leaf -> (key in an observed environment: the evidence / acceptance `environment`, a worker_report `runtime`;
 # how the two values are parsed before they are compared).
 ENVIRONMENT_OBSERVED = {
@@ -776,6 +826,29 @@ ENVIRONMENT_OBSERVED = {
     'numerics.matmul_allow_tf32': ('matmul_allow_tf32', 'bool'),
     'numerics.cudnn_allow_tf32': ('cudnn_allow_tf32', 'bool'),
 }
+# Required-equal lock fields that no observed environment records. They are listed in every reading (never silently
+# passed): the lock's own form, the historical pins below and the reader's separate pinned checks (training-machine
+# preflight, shipped package, numerical environment, training configuration) are what hold them.
+ENVIRONMENT_NOT_OBSERVED_ANYWHERE = tuple(path for path in ENVIRONMENT_LOCK_LEAVES if path not in ENVIRONMENT_OBSERVED)
+# Observed keys that carry a predictive value; an envelope (diagnostic) field may never reuse one of their names.
+ENVIRONMENT_PREDICTIVE_KEYS = frozenset([key for key, _ in ENVIRONMENT_OBSERVED.values()] + list(NUMERICAL_ENVIRONMENT)
+                                        + list(ENVIRONMENT_RECORDED_NOT_PINNED))
+# Revision 5: lock field -> the value this reader ALREADY pins from the public historical records (the Helm 2.0 seed-17
+# receipt at c8d5c430 and its worker/requirements at 20208c92). A lock that contradicts one of them is refused, so the
+# lock cannot replace a known historical value with another machine's value.
+ENVIRONMENT_HISTORICAL_PINS = {
+    'image.ami_id': HISTORICAL_AMI,
+    'image.region': PREFLIGHT_PINS['region'],
+    'accelerator.instance_type': PREFLIGHT_PINS['instance_type'],
+    'runtime.os': NUMERICAL_ENVIRONMENT['platform_system'],
+    'accelerator.gpu_model': NUMERICAL_ENVIRONMENT['gpu_name'],
+    'libraries.torch': NUMERICAL_ENVIRONMENT['torch_version'],
+    'libraries.cuda_runtime': NUMERICAL_ENVIRONMENT['cuda_version'],
+    'numerics.deterministic_algorithms': NUMERICAL_ENVIRONMENT['deterministic_algorithms'],
+    'numerics.matmul_allow_tf32': NUMERICAL_ENVIRONMENT['matmul_allow_tf32'],
+    'numerics.cudnn_allow_tf32': NUMERICAL_ENVIRONMENT['cudnn_allow_tf32'],
+}
+ENVIRONMENT_HISTORICAL_VARIABLES = {'CUBLAS_WORKSPACE_CONFIG': NUMERICAL_ENVIRONMENT['cublas_workspace_config']}
 
 
 class _Refused(ValueError):
@@ -850,7 +923,12 @@ def parse_environment_value(kind, value):
 
 
 def environment_lock_violations(raw):
-    """`(violations, lock)` for the raw lock bytes. Unknown, duplicate, null or missing fields refuse (R3-I). Pure."""
+    """`(violations, lock)` for the raw lock bytes. Unknown, duplicate, null or missing fields refuse (R3-I). Pure.
+
+    Revision 5 (Codex R3-I, Q-G): `required_equal` lists EVERY lock field exactly once; `diagnostic_only` may name only
+    declared envelope fields (`envelope.<name>`, each with a reason). A field whose historical value cannot be
+    established holds ENVIRONMENT_UNESTABLISHED (an explicit blocker, read as ENVIRONMENT_ADMISSION_UNVERIFIED). A lock
+    that contradicts a historical value this reader already pins is refused."""
     lock = strict_json_object(raw)
     if lock is None:
         return ['LOCK_NOT_A_STRICT_JSON_OBJECT'], None
@@ -860,12 +938,16 @@ def environment_lock_violations(raw):
     if lock['schema'] != ENVIRONMENT_LOCK_SCHEMA or lock['status'] != ENVIRONMENT_LOCK_STATUS \
             or not is_hex(lock['source_commit'], 40):
         violations.append('LOCK_SCHEMA_STATUS_OR_SOURCE_COMMIT')
+    shaped = True
     for section, keys in ENVIRONMENT_LOCK_SHAPE.items():
         if type(lock[section]) is not dict or sorted(lock[section]) != sorted(keys):
             violations.append('LOCK_SECTION_FIELDS:' + section)
+            shaped = False
             continue
         for key in keys:
             path, value = section + '.' + key, lock[section][key]
+            if type(value) is str and value == ENVIRONMENT_UNESTABLISHED:
+                continue                                  # an explicit blocker, read as UNVERIFIED by every source
             if path in ENVIRONMENT_BOOL_LEAVES:
                 ok = type(value) is bool
             elif path in ENVIRONMENT_MAP_LEAVES:
@@ -882,6 +964,8 @@ def environment_lock_violations(raw):
                 violations.append('LOCK_VALUE:' + path)
             elif path in ENVIRONMENT_OBSERVED and parse_environment_value(ENVIRONMENT_OBSERVED[path][1], value) is None:
                 violations.append('LOCK_VALUE_UNPARSEABLE:' + path)
+    if shaped:
+        violations.extend(environment_lock_historical_contradictions(lock))
     comparison = lock['comparison'] if type(lock['comparison']) is dict else {}
     required, diagnostic = comparison.get('required_equal'), comparison.get('diagnostic_only')
     if sorted(comparison) != ['diagnostic_only', 'required_equal'] or type(required) is not list \
@@ -891,47 +975,226 @@ def environment_lock_violations(raw):
             type(row) is dict and sorted(row) == ['path', 'reason'] and type(row['path']) is str
             and type(row['reason']) is str and row['reason'].strip() for row in diagnostic):
         return violations + ['LOCK_COMPARISON_ENTRY_FORM'], None
-    listed = list(required) + [row['path'] for row in diagnostic]
-    if sorted(listed) != sorted(ENVIRONMENT_LOCK_LEAVES):
-        violations.append('LOCK_COMPARISON_MUST_LIST_EVERY_FIELD_EXACTLY_ONCE')
-    missing = [path for path in ENVIRONMENT_INVALID_DECIDING if path not in required]
+    missing = [path for path in ENVIRONMENT_REQUIRED_EQUAL if path not in required]
     if missing:
         violations.append('LOCK_REQUIRED_EQUAL_LACKS:' + ','.join(missing))
+    if len(set(required)) != len(required) or any(path not in ENVIRONMENT_LOCK_LEAVES for path in required):
+        violations.append('LOCK_REQUIRED_EQUAL_UNKNOWN_OR_DUPLICATE')
+    paths = [row['path'] for row in diagnostic]
+    not_envelope = [path for path in paths if not environment_envelope_path(path)]
+    if not_envelope:
+        violations.append('LOCK_DIAGNOSTIC_ONLY_MAY_NAME_ENVELOPE_FIELDS_ONLY:' + ','.join(not_envelope)[:300])
+    if len(set(paths)) != len(paths):
+        violations.append('LOCK_DIAGNOSTIC_ONLY_DUPLICATE')
     return violations, (lock if not violations else None)
+
+
+def environment_envelope_path(path):
+    """True for a declared envelope (diagnostic) field: `envelope.<name>`, never a lock field, never a name that an
+    observed environment uses for a predictive value (driver, kernel, Python, cuDNN, ...). Pure."""
+    return (type(path) is str and re.fullmatch(ENVIRONMENT_DIAGNOSTIC_PATTERN, path) is not None
+            and path[len(ENVIRONMENT_DIAGNOSTIC_PREFIX):] not in ENVIRONMENT_PREDICTIVE_KEYS)
+
+
+def environment_lock_historical_contradictions(lock):
+    """Every lock field that contradicts a value this reader already pins from the historical records. Pure.
+    (UNESTABLISHED is a contradiction here too: these values ARE established.)"""
+    found = []
+    for path, pinned in ENVIRONMENT_HISTORICAL_PINS.items():
+        section, name = path.split('.')
+        value = lock[section][name]
+        if path in ENVIRONMENT_OBSERVED:
+            kind = ENVIRONMENT_OBSERVED[path][1]
+            ok = (parse_environment_value(kind, value) is not None
+                  and parse_environment_value(kind, value) == parse_environment_value(kind, pinned))
+        else:
+            ok = same(value, pinned)
+        if not ok:
+            found.append('LOCK_CONTRADICTS_THE_HISTORICAL_PIN:' + path)
+    variables = lock['numerics']['environment_variables']
+    for name, pinned in ENVIRONMENT_HISTORICAL_VARIABLES.items():
+        if not (type(variables) is dict and same(variables.get(name), pinned)):
+            found.append('LOCK_CONTRADICTS_THE_HISTORICAL_PIN:numerics.environment_variables.' + name)
+    return found
+
+
+def environment_lock_unestablished(lock):
+    """The lock fields whose historical value could not be established (each is an explicit blocker). Pure."""
+    lock = lock if type(lock) is dict else {}
+    found = []
+    for path in ENVIRONMENT_LOCK_LEAVES:
+        section, name = path.split('.')
+        if type(lock.get(section)) is dict and lock[section].get(name) == ENVIRONMENT_UNESTABLISHED:
+            found.append(path)
+    return found
+
+
+def _shown(value):
+    return value if type(value) in (str, int, bool) else None
 
 
 def environment_lock_comparison(lock, observed, source, *, must_observe):
     """`(invalid, diagnostic, not_observed)` for ONE observed environment against a valid lock. Pure.
 
-    A required-equal field that differs, or cannot be parsed, is INVALID. A required-equal field the source does not
-    record is INVALID when `must_observe` (the evidence and the P1b acceptance record every field by construction) and
-    only reported otherwise (the historical training receipts never recorded Python or cuDNN). Diagnostic fields are
-    reported, never deciding."""
+    Revision 5: every lock field is required-equal. A field that differs, or cannot be parsed, is INVALID. A field the
+    source does not record is INVALID when `must_observe` (the evidence and the P1b acceptance record every field by
+    construction) and only reported otherwise (the historical training receipts never recorded Python or cuDNN; the
+    lock, frozen from the public historical records, carries those values). A field the lock marks UNESTABLISHED is
+    INVALID for every source (ENVIRONMENT_ADMISSION_UNVERIFIED): the observed value is shown for disclosure but is never
+    compared with anything or accepted in place of the historical value. Declared envelope fields are reported only."""
     observed = observed if type(observed) is dict else {}
-    required = set(lock['comparison']['required_equal'])
     invalid, diagnostic, not_observed = [], [], []
     for path in ENVIRONMENT_LOCK_LEAVES:
-        if path not in ENVIRONMENT_OBSERVED:
-            continue
-        key, kind = ENVIRONMENT_OBSERVED[path]
         section, name = path.split('.')
+        key, kind = ENVIRONMENT_OBSERVED.get(path, (None, None))
+        if lock[section][name] == ENVIRONMENT_UNESTABLISHED:
+            invalid.append(ENVIRONMENT_UNVERIFIED + ':' + source + ':' + path)
+            if key is not None and key in observed:
+                diagnostic.append({'source': source, 'path': path, 'lock': ENVIRONMENT_UNESTABLISHED,
+                                   'observed': _shown(observed[key]), 'accepted': False})
+            continue
+        if key is None:
+            continue                                      # listed once per reading: ENVIRONMENT_NOT_OBSERVED_ANYWHERE
         if key not in observed:
-            if path in required and must_observe:
+            if must_observe:
                 invalid.append('ENVIRONMENT_NOT_OBSERVED:' + source + ':' + path)
             else:
                 not_observed.append(source + ':' + path)
             continue
         expected = parse_environment_value(kind, lock[section][name])
         found = parse_environment_value(kind, observed[key])
-        if found is not None and found == expected:
-            continue
-        if path in required:
+        if found is None or found != expected:
             invalid.append(('ENVIRONMENT_UNPARSEABLE:' if found is None else 'ENVIRONMENT_DIFFERS_FROM_LOCK:')
                            + source + ':' + path)
-        else:
-            diagnostic.append({'source': source, 'path': path, 'lock': lock[section][name],
-                               'observed': observed[key] if type(observed[key]) in (str, int, bool) else None})
+    for row in lock['comparison']['diagnostic_only']:
+        name = row['path'][len(ENVIRONMENT_DIAGNOSTIC_PREFIX):]
+        if name in observed:
+            diagnostic.append({'source': source, 'path': row['path'], 'observed': _shown(observed[name]),
+                               'reason': row['reason']})
     return invalid, diagnostic, not_observed
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Revision 5 (Codex Q-F): the FROZEN eligibility rule. `READING_ELIGIBILITY_RULE.json` is committed before U17 launches
+# and is a reader source, so the reader fingerprint covers it. It fixes every value that is known now, names every
+# piece of evidence that is appended later, and states what is never rewritten. It holds no reader, policy or owner-
+# record hash (no hash cycle). This code and the rule must agree exactly, or nothing runs (checked at import, like the
+# pins and the allowlist). An absent rule refuses every eligibility record (fail closed).
+# ---------------------------------------------------------------------------------------------------------------------
+ELIGIBILITY_FIXED = {
+    'schema': ELIGIBILITY_SCHEMA, 'label': LABEL, 'state': ELIGIBLE, 'chronology': ELIGIBILITY_CHRONOLOGY,
+    'job': FROZEN_JOB, 'job_kind': JOB_KIND, 'model_seed': MODEL_SEED, 'source_sha': SOURCE_SHA,
+    'launch_basis': LAUNCH_BASIS,
+    'frozen_study': {'commit': FREEZE_COMMIT, 'path': GIT_PREFIX + HERE_REL + '/frozen/study.json',
+                     'sha256': FROZEN_STUDY_SHA256},
+    'execution_admission_as_is': {'path': GIT_PREFIX + ADMISSION_REL, 'sha256': FROZEN_ADMISSION_SHA256,
+                                  'state': NOT_READY},
+    'decide_source_sha256': FROZEN_DECIDE_SHA256,
+    'owner_direction_record': dict(OWNER_DIRECTION),
+    'panel_manifest_sha256': PANEL_MANIFEST_SHA256,
+    'numerical_environment_sha256': value_digest(NUMERICAL_ENVIRONMENT),
+    'writer_blobs': dict(WRITER_BLOBS_AT_FREEZE),
+}
+ELIGIBILITY_FIELDS = tuple(sorted(set(ELIGIBILITY_FIXED) | set(ELIGIBILITY_APPENDED)))
+ELIGIBILITY_RULE_TOP = ('appended_later', 'decide_unchanged', 'decisions', 'environment_rule', 'fixed_now', 'label',
+                        'never', 'order', 'preserved_never_rewritten', 'record', 'schema', 'status', 'study')
+ELIGIBILITY_RULE_EXACT = ('fixed_now', 'record')                 # compared exactly; the other sections carry prose
+DECISION_FIELDS = ('blob', 'branch', 'by', 'commit', 'items', 'path')
+
+
+def _prose(value):
+    return type(value) is str and bool(value.strip()) and value.isascii() and '\n' not in value
+
+
+def eligibility_rule_expected():
+    """The machine part of the frozen rule, exactly as this code implements it (prose `statement`s excluded). Pure."""
+    return {
+        'record': {'path': ELIGIBILITY_REL, 'schema': ELIGIBILITY_SCHEMA, 'state': ELIGIBLE,
+                   'chronology': ELIGIBILITY_CHRONOLOGY, 'committed_versions': 1, 'fields': list(ELIGIBILITY_FIELDS)},
+        'fixed_now': ELIGIBILITY_FIXED,
+        'preserved_never_rewritten': {'freeze_commit': FREEZE_COMMIT, 'frozen_files': list(FROZEN_FILES),
+                                      'execution_admission': ADMISSION_REL, 'execution_admission_state': NOT_READY},
+        'decide_unchanged': {'file': 'read_reproduction.py', 'function': 'decide',
+                             'source_sha256_at_freeze': FROZEN_DECIDE_SHA256},
+        'environment_rule': {'lock_schema': ENVIRONMENT_LOCK_SCHEMA,
+                             'required_equal': list(ENVIRONMENT_REQUIRED_EQUAL),
+                             'diagnostic_only_pattern': ENVIRONMENT_DIAGNOSTIC_PATTERN,
+                             'unestablished_value': ENVIRONMENT_UNESTABLISHED,
+                             'unestablished_reads': ENVIRONMENT_UNVERIFIED,
+                             'lock_committed_before_p1b_acceptance': True},
+    }
+
+
+def eligibility_rule_violations(rule):
+    """Every way a parsed rule is not the frozen rule this code implements. Pure."""
+    if type(rule) is not dict:
+        return ['RULE_NOT_A_STRICT_JSON_OBJECT']
+    if sorted(rule) != list(ELIGIBILITY_RULE_TOP):
+        return ['RULE_TOP_FIELDS']
+    violations = []
+    if not (rule['schema'] == ELIGIBILITY_RULE_SCHEMA and rule['label'] == LABEL
+            and rule['status'] == ELIGIBILITY_RULE_STATUS and rule['study'] == STUDY_NAME):
+        violations.append('RULE_SCHEMA_LABEL_STATUS_OR_STUDY')
+    for name, expected in eligibility_rule_expected().items():
+        section = rule[name]
+        if name in ELIGIBILITY_RULE_EXACT:
+            ok = same(section, expected)
+        else:
+            ok = (type(section) is dict and _prose(section.get('statement'))
+                  and same({key: value for key, value in section.items() if key != 'statement'}, expected))
+        if not ok:
+            violations.append('RULE_SECTION:' + name)
+    appended = rule['appended_later']
+    if not (type(appended) is list
+            and [row.get('field') if type(row) is dict else None for row in appended] == list(ELIGIBILITY_APPENDED)
+            and all(sorted(row) == ['evidence', 'field'] and _prose(row['evidence']) for row in appended)):
+        violations.append('RULE_APPENDED_LATER')
+    decisions = rule['decisions']
+    if not (type(decisions) is list and decisions and all(
+            type(row) is dict and sorted(row) == list(DECISION_FIELDS) and _prose(row['by'])
+            and _branch(row['branch']) and _hex(row['commit'], 40) and _hex(row['blob'], 40)
+            and _relative_path(row['path']) and type(row['items']) is list and row['items']
+            and all(_prose(item) for item in row['items']) for row in decisions)):
+        violations.append('RULE_DECISIONS')
+    for name in ('order', 'never'):
+        if not (type(rule[name]) is list and rule[name] and all(_prose(line) for line in rule[name])):
+            violations.append('RULE_PROSE_LIST:' + name)
+    return violations
+
+
+def load_eligibility_rule(raw):
+    """The parsed frozen rule; None when the file is absent (every eligibility record is then refused). A present but
+    non-conforming rule stops at import: this code and the frozen rule must agree exactly."""
+    if raw is None:
+        return None
+    rule = strict_json_object(raw)
+    violations = eligibility_rule_violations(rule)
+    if violations:
+        raise SystemExit('UNCHANGED_REPRO_ELIGIBILITY_RULE_INVALID:' + '|'.join(violations)[:600])
+    return rule
+
+
+ELIGIBILITY_RULE_PATH = HERE / ELIGIBILITY_RULE_NAME
+ELIGIBILITY_RULE_RAW = ELIGIBILITY_RULE_PATH.read_bytes() if ELIGIBILITY_RULE_PATH.is_file() else None
+ELIGIBILITY_RULE_SHA256 = digest(ELIGIBILITY_RULE_RAW) if ELIGIBILITY_RULE_RAW is not None else None
+ELIGIBILITY_RULE = load_eligibility_rule(ELIGIBILITY_RULE_RAW)
+
+
+def attestation_violations(attestation):
+    """The runner's attestation (Codex Q-F): who attests, that this rule was on the U17 launch checkout before U17
+    launched, and WHICH deciding outputs (if any) were viewed before this record. A viewed output is disclosed, never a
+    reason to revise eligibility; it is printed in the reading. Pure."""
+    if not (type(attestation) is dict and sorted(attestation) == list(ATTESTATION_FIELDS)):
+        return ['RUNNER_ATTESTATION_FORM']
+    violations = []
+    if not (_prose(attestation['attester']) and _prose(attestation['statement'])):
+        violations.append('RUNNER_ATTESTATION_ATTESTER_OR_STATEMENT')
+    viewed = attestation['deciding_outputs_viewed']
+    if not (type(viewed) is list and all(_prose(item) for item in viewed) and len(set(viewed)) == len(viewed)):
+        violations.append('RUNNER_ATTESTATION_VIEWED_LIST_FORM')
+    if attestation['rule_on_launch_checkout_before_u17_launch'] is not True:
+        violations.append('RULE_WAS_NOT_ON_THE_LAUNCH_CHECKOUT_BEFORE_U17_LAUNCH')
+    return violations
 
 
 def is_historical_refusal(message):
