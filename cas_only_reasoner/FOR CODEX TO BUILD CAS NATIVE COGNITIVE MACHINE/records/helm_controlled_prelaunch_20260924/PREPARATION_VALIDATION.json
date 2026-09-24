@@ -123,5 +123,11 @@
       "spend": "EXACT_INHERITED_GT30_EARLY_STOP_INCLUDES_ADMISSIONS_BEFORE_FIRST_SECOND_THIRD_START",
       "no_runtime_execution": true
     }
+  },
+  "owner_progress_priority_update": {
+    "utc": "2026-09-24T11:25:02.823954+00:00",
+    "change": "Delivery priority and finite closure path only; scientific policy, budget, custody and launch_enabled unchanged",
+    "checks": "JSON parsing, cross-file Git-index hash verification and diff whitespace",
+    "new_cloud_jobs": 0
   }
 }

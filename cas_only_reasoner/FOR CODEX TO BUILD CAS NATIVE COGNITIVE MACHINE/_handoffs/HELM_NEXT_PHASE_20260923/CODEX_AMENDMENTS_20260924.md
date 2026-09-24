@@ -163,3 +163,19 @@ cost-scope/retention escalations remain; no new owner action is needed for these
 remains disabled. Items 1 and 3 are unchanged; item5's completed P1a evidence remains scoped as previously recorded.
 
 Delivery consistency review: preserved the exact inherited >$30 early-stop rule before any admission while fewer than three main attempts have started, and moved the final-admission requirement wholly downstream so its receipt cannot recreate a manifest hash cycle. These clarifications are included in the delivery successor; no paid job has run under the draft.
+
+## Owner priority: close the remaining blockers and obtain results
+
+Direct owner instruction, 2026-09-24: "LET'S START MAKING SOME REAL PROGRESS SOON" and "LET EVERYONE INVOLVED KNOW WE CAN CHASE OUR TAIL ONLY BUT SO MUCH BEFORE WE SEE WHAT WE HAVE". This changes execution priority, not the chosen C comparison, $60 ceiling, fixed scientific rules or custody. Existing standing authorization already covers in-scope technically admitted jobs; no renewed launch-permission request is needed.
+
+The six-item policy work and the three requested reviews have been delivered at `d1d8376ad4cec5d42f5b2409dad404ab00226845` and `c3a128ee7bde3455f6b479e7972043fccc983162`. Do not restart those decisions. Use the following finite completion path:
+
+1. Claude finishes the named reader, spending-admission and A2.7 builder corrections in its existing workflows. For each outstanding blocker, state the concrete failure prevented, exact fix, owner and one acceptance check. A received message is not a finished fix.
+2. Codex reviews the specific changed code and returned public evidence. Close a finding when its check passes. Re-review only failed checks, changed dependencies or concrete new defects that threaten valid results, custody, spending or cleanup. Park cosmetic changes, optional hardening, extra experiments and stronger future claims outside this launch.
+3. Claude supplies a priced P1b g7 package and revised complete cost envelope, including prior preparation and retained-service allowances. Complete the already required AWS prerequisites under the existing authority and fixed ceilings. Do not pay for a package that cannot support the intended comparison or its readout.
+4. Freeze actual public feasibility counts and the final source/data/initialization/worker/checker/environment pins. With the named technical and money gates passed, Claude proceeds with the approved C sequence. Do not add another general review round or another permission loop.
+5. Report gains, losses, old-gate crossings, NOT_TESTABLE cells and limits honestly. The aim is evidence about whether the repair helped and what to improve next, not a claim that every possible weakness has been removed.
+
+Q4 remains a separate workstream. Relay this priority to its current owner: close its existing concrete blocker and proceed to its next already-authorized step under its own rules. Codex does not take it over, combine its charges with this study or assert that its quoted "one small fix" status has been independently verified here.
+
+Communication: relay this owner priority once through the existing Claude bus, the existing Helm oversight task and the available Codex reviewers. Ask Claude to pass it to its active implementers and the Q4 owner and return the next concrete deliverable and remaining critical path. No new watcher, process, research team or duplicate implementation is requested. Until the next reviewed code/receipt delivery, the technical hold remains; it is not a request for the owner to repeat approval.
