@@ -1772,3 +1772,90 @@ section's draft; two temporary copies of the slots file, deleted. The untracked
 `aws_probe_job/dry_run_machine_script.sh` is not mine and was left alone. No AWS call, no torch, no model, no
 `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript, no real
 `--admit`, no `--launch-check` on the real slots file.
+
+## Builder fix of the R3 finding (conformance check of d5c8184a)
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Builder: Claude, the temporary builder, 2026-09-24. Scope: the one MAJOR finding
+(R3) of the conformance check above. The two NOTES are not rule non-conformances; they go to the after-run backlog
+below. `STUDY_SLOTS.json` is unchanged (no schema change, frozen digest unchanged); `STUDY_SPEND_STATE.json` changes
+only its `gate_version` line.
+
+**What was wrong, in plain words.** The search for hidden launch attempts treated every result-named file anywhere
+inside the listed receipt's folder as "listed" (already accounted for), whatever job it belonged to. So a hidden
+attempt's receipt stored in that folder, or in a subfolder of it, was never found, and the gate admitted the next job.
+
+**What changed (`study_spend.py`, `listed_files`; gate version now `v2.1`).** A file counts as listed only when it is
+the listed receipt itself (its path AND pinned sha256). Beside it, in its folder at the listed commit, and only when
+that commit's copy of the receipt has the pinned sha256 and exactly one job id, two kinds of file also count:
+
+- (a) a `provider_NNNN.json` directly in that folder (not a subfolder) whose job ids are exactly the receipt's job id
+  (the checker's suggested fix);
+- (b) a file whose sha256 equals the worker-result pin the receipt itself carries (`collected.result_sha256`).
+
+Every other `result.json` or `*_result.json` never counts, and a job id alone never makes a file listed.
+
+**Why (b), a deviation from the checker's suggested fix.** I first built the suggested fix exactly (only (a)). The
+tests passed, but the real read-only report then gave **exit 1**: S2 `UNCONFIRMED`, every money-gate preview
+`REFUSE CLEANUP_UNCONFIRMED_STOP_AND_REPORT:S2`. The search found S2's own job id
+(`cas-meta2-tpntr-20260924033550-3df31d96-m-20260917`) in two more files in S2's folder at `1ddf6a1e`:
+`curriculum_result.json` and `collected/results/result.json`. The checker's note "S2's 26 provider records still
+pass" was right about the 26 provider records, but these two files are not provider records. What they are (checked
+by a script that printed booleans only): S2's receipt at `1ddf6a1e` has the pinned sha256, and both files' sha256
+equals the `collected.result_sha256` that receipt pins. They are byte-identical copies of S2's own worker result.
+The launcher writes both into every receipt folder (`graph_training_curriculum_launch.py`, `_collect_declared`:
+`curriculum_result.json`; `collected/` tree). So with (a) alone, every future M1-M4 row would also block the study
+because of its own output. Rule (b) keeps R3's substance: such a file is listed by a sha256 that the pinned receipt
+itself pins, never by its job id. A hidden attempt's launcher receipt has other bytes, so it is still found (tested,
+including one with the SAME job id in a subfolder). **Open for the next checker / Codex:** accept or reject (b).
+
+### Results (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `python -B test_study_spend.py` | **81 passed, 0 failed** (80 before, plus the new test) |
+| New test `test_v2_r3_a_hidden_attempt_inside_the_listed_receipts_folder_is_found` run against the old program `d5c8184a` | **fails**, as it must (the old program counted the hidden attempt as listed) |
+| Checker's case 1: hidden attempt at `r/m1/attempt1/result.json`, `--admit M2` | was exit 0; now **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` |
+| Checker's case 2: hidden attempt at `r/m1/attempt1_result.json`, `--admit M2` | was exit 0; now **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` |
+| Checker's control: `r/m1_attempt1/result.json`, `--admit M2` | **exit 1** (unchanged, correct) |
+| Also in the test: a provider-named file beside the receipt with attempt 1's job id; attempt 1 with the SAME job id as the listed receipt in `r/m1/attempt1/`; a worker-result copy with one byte changed | each **found**, `--admit M2` exit 1 |
+| Controls in the test: 3 provider records with the listed job id beside the receipt, plus the two worker-result copies the receipt pins | not findings; `--admit M2` **exit 0** ADMIT, total $54.36 |
+| Real read-only report (`python -B study_spend.py --no-write`), with (a) only | exit 1, S2 `UNCONFIRMED` (see above; not committed) |
+| Real read-only report, final program | **exit 0**; spent upper bound **$7.36**; plan C **$59.00**; headroom **$1.00**; `plan_C_is_final: false`; nothing rejected, unconfirmed, latched or uncertain; previews ADMIT for P1b, P2, M1-M4, E1; M5, M6 REFUSE `OVER_CEILING:$70.66 > $60.00` (same as the checker's run of `d5c8184a`) |
+
+### After-run backlog (NOTES from the conformance check; not fixed here, not rule non-conformances)
+
+1. **R5 "update" limit (NOTE 1).** No update (optimizer-step) limit is admitted or read by this gate. The latch fires
+   for every limit it does admit (money cap, instance seconds, deadline, disk, machine) and for a second attempt under
+   one admission. Codex to decide: does the technical admission own the update limit, or should this gate bind an
+   admitted update limit and read an observed update count?
+2. **A closed mandatory admission with no retry row frees its reserve (NOTE 2).** Outside the literal rule text. With
+   M1's unused admission closed `CLOSED_NO_LAUNCH` and no M1.2 appended yet, M1's $11.66 is no longer reserved and the
+   comparison is not marked incomplete. The $60 ceiling still holds on every admission. Optional, for Codex: keep a
+   mandatory slot's cap reserved while its latest attempt is `CLOSED_NO_LAUNCH` (or a proven refusal) and no later
+   attempt row exists.
+
+### Claim states
+
+- **Real (measured here):** 81/0 tests; the new test fails on `d5c8184a`; the named case decisions above; the real
+  report's numbers; the four booleans about S2's two worker-result copies.
+- **Open:** a fresh conformance check of this fix; Codex's ruling on rule (b); NOTES 1-2 (backlog).
+- **Not licensed:** any real `--admit`; any claim that the gate is final before that check.
+
+### Exposure
+
+Read: `REVIEW.md` (the conformance check section), `study_spend.py`, `test_study_spend.py`, `PREREQUISITE_SLOTS.md`
+(R3 bullet); the receipt paths, kinds and commits in `STUDY_SLOTS.json` (a script printed those only); the file names
+in S2's receipt folder at `1ddf6a1e` (`git ls-tree`, names only); the launcher's `_collect_declared` code
+(`research/CAS_META_2_COMPOSITION/aws/graph_training_curriculum_launch.py`, lines 1060-1125, code only). One script
+read S2's receipt, `curriculum_result.json` and `collected/results/result.json` at `1ddf6a1e` and printed only
+booleans (pin match, sha256 equality with `collected.result_sha256`) and the file name tail of `collected.result`; no
+`ledger_before` / `ledger_after` field was printed or inspected, and `collected/reservation/ledger_snapshot.json` was
+not opened. One script printed S2's cleanup line from the real account (job id and paths only). Ran: the test file
+three times (after each change) and the new test alone once; the real report three times with `--no-write` (no state file written, no lock, no
+fetch) and once in plain report mode, which rewrote `STUDY_SPEND_STATE.json` (only its `gate_version` line changed; no
+lock, no fetch); the checker's named cases in a scratch script (temporary folders, fake git); the new test once against a
+scratch copy of the `d5c8184a` program. Wrote: `study_spend.py`, `test_study_spend.py`, `PREREQUISITE_SLOTS.md` (R3
+bullet), `STUDY_SPEND_STATE.json` (by the program), this section. Scratch only (session scratch folder, not committed): the case script, the report outputs,
+the old-program copy. The untracked `aws_probe_job/dry_run_machine_script.sh` is not mine and was left alone. No AWS
+call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1
+ledger, no transcript, no real `--admit`, no `--launch-check` on the real slots file.

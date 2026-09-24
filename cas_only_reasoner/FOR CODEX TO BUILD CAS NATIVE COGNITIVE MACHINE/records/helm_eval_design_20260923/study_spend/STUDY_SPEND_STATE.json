@@ -1,7 +1,7 @@
 {
  "schema": "claude.helm-repair-controlled-1.study-spend/0.4",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
- "gate_version": "study_spend.py v2 (Codex Q1-Q9 and R3-F; slots schema 0.4)",
+ "gate_version": "study_spend.py v2.1 (Codex Q1-Q9 and R3-F; slots schema 0.4; R3 listed-file rule narrowed)",
  "inputs": {
   "slots_file": "STUDY_SLOTS.json",
   "slots_file_sha256": "a74033e167eefe41bc2c0299d3896b29d920d625effe35e296822f5ceb3b33a2",

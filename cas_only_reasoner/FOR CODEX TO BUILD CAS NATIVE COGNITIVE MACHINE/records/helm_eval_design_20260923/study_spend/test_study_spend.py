@@ -5,7 +5,8 @@ verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6), the round-3 v
 probes N1a, N1b, N2a, N2b, N3; NOTE-F probe N4) and the round-4 verification of d2098474 (MAJOR-H probes N6a-N6d;
 MINOR probe N8): every wrongful ADMIT a reviewer found has a negative test here. V2 (Codex Q1-Q9, R3-F and the static
 review findings 1-2 at c3a128ee): one named test per rule, test_v2_r1 ... test_v2_r9 and test_v2_q5, plus the
-verifier's X1, X2 and X3 as negative tests. Synthetic receipts only; a fake git reader; temporary folders. The two N8
+verifier's X1, X2 and X3 as negative tests, and the conformance check of d5c8184a (its R3 cases 1 and 2) in
+test_v2_r3_a_hidden_attempt_inside_the_listed_receipts_folder_is_found. Synthetic receipts only; a fake git reader; temporary folders. The two N8
 tests build tiny real git repositories (and a local bare "remote") in a temporary folder; nothing touches the network.
 No AWS, no torch; the real receipts are never read; the real slots file is only read (json and load_slots, no
 admission, no write) by test_v2_q5.
@@ -1823,6 +1824,65 @@ def test_v2_r3_x3_the_same_job_launched_twice_is_found():
     unlisted(w, "M1", "r/m1_attempt1/result.json")
     code, out = w.run(*admit_args("M2"))                                     # the verifier saw exit 0, $54.36
     assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_v2_r3_a_hidden_attempt_inside_the_listed_receipts_folder_is_found():
+    # Conformance check of d5c8184a, cases 1 and 2: M1 admitted 09:00; attempt 1 (09:01) ran 600 s and lost its
+    # identity; its receipt sits INSIDE the listed receipt's folder r/m1/; attempt 2 (09:03) finished clean at
+    # r/m1/result.json and is the only one listed. d5c8184a counted every training-named file under r/m1/ as listed,
+    # whatever its job id, and gave exit 0. Now only the listed receipt itself (path AND sha256) and a provider_NNNN.json
+    # directly beside it that carries exactly its job id count as listed.
+    def fn(where):
+        def inner(w):
+            first = training_attempt(w, "M1", "m1_tmp", "20260924090100", elapsed=600, uncertain=True)
+            w.receipts[where] = w.receipts.pop("r/m1_tmp/result.json")
+            set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090300"))
+            return first["expected"]["job"]
+        return inner
+    hidden = "cas-meta2-tpntr-20260924090100-44444444-m-20260917"
+    for where in ("r/m1/attempt1/result.json",          # case 1: a subfolder of the listed receipt's folder
+                  "r/m1/attempt1_result.json",          # case 2: beside the listed receipt, another name
+                  "r/m1/provider_0004.json",            # beside it, a provider name, but attempt 1's job id
+                  "r/m1_attempt1/result.json"):         # the checker's control, one folder over
+        w = world(fn(where))
+        assert w.row("M1")["receipt"] == "ACCEPTED", (where, w.row("M1"))
+        unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:%s (%s:%s)" % (hidden, C1[:8], where))
+        code, out = w.run(*admit_args("M2"))                                 # the checker saw exit 0 for cases 1, 2
+        assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], (where, out)
+
+    # X3 inside the folder: attempt 1 of the SAME job id as the listed receipt, in a subfolder: found (a job id alone
+    # never makes a file listed).
+    def same_job_in_subfolder(w):
+        spec = training_attempt(w, "M1", "m1", "20260924090300")
+        first = pointer(spec["expected"]["job"], SRC_UNCHANGED, "UNKNOWN", 600)
+        first["cleanup"].update(complete=False, compute_identity_uncertain=True, instance_ids=[], instances={})
+        w.receipts["r/m1/attempt1/result.json"] = first
+        set_row(w, "M1", spec)
+    w = world(same_job_in_subfolder)
+    unlisted(w, "M1", "(%s:r/m1/attempt1/result.json)" % C1[:8])
+    assert w.run(*admit_args("M2"))[0] == 1
+
+    # Controls: what the launcher itself leaves in every receipt folder still counts as listed. Provider records
+    # directly beside the listed receipt that carry ITS job id; and the two byte-identical copies of this attempt's own
+    # worker result (curriculum_result.json, collected/results/result.json) whose sha256 the listed receipt pins as
+    # collected.result_sha256 (the real S2 folder holds exactly these).
+    def launcher_layout(w):
+        spec = training_attempt(w, "M1", "m1", "20260924090300")
+        job = spec["expected"]["job"]
+        for n in (1, 2, 3):
+            w.providers["r/m1/provider_%04d.json" % n] = dict(provider(job), state="OK")
+        worker = {"schema": "test-worker-result", "job": job, "status": "TYPED_COURSE_DELIVERED"}
+        w.receipts["r/m1/result.json"]["collected"] = {"result_sha256": sha(enc(worker))}
+        w.providers["r/m1/curriculum_result.json"] = worker
+        w.providers["r/m1/collected/results/result.json"] = copy.deepcopy(worker)
+        set_row(w, "M1", spec)
+    w = world(launcher_layout)
+    assert w.account()[1]["unconfirmed"] == [] and w.run(*admit_args("M2"))[0] == 0, w.row("M1")
+    # ... but the same worker-result file with one byte changed (not the pinned bytes) is found.
+    w = world(launcher_layout)
+    w.git.blobs[(C1, "r/m1/collected/results/result.json")] += b" "
+    unlisted(w, "M1", "(%s:r/m1/collected/results/result.json)" % C1[:8])
+    assert w.run(*admit_args("M2"))[0] == 1
 
 
 def test_v2_r4_source_bundle_worker_checker_are_bound_and_a_mismatch_blocks_but_cleanup_is_inspected():

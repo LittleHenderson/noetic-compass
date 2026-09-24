@@ -23,9 +23,11 @@ c3a128ee; slots schema 0.4; see REVIEW.md "v2 (Codex Q1-Q9)"). Where the text be
      start count and launch identity. The receipt's launch time must lie inside the 300-s validity (this replaces the
      reusable lifetime window for admission validity; the search for unlisted attempts still uses the lifetime).
   R3 the unlisted-attempt search matches training files by seed + window with ANY source prefix; a file counts as
-     listed only by its own path AND sha256 (the listed receipt, and its sibling files in the listed receipt's folder
-     at the listed commit); a watched record is skipped only when its sha256 is a listed pin or its instance id is
-     listed, never by path alone; HEAD, pinned commits and the working tree are all read.
+     listed only by its own path AND sha256: the listed receipt itself, and (v2.1, see listed_files) in its folder at
+     the listed commit only a provider_NNNN.json directly beside it carrying exactly its job id, or a copy of its
+     own worker result whose sha256 the hash-verified receipt pins; a watched record is skipped only when its sha256 is
+     a listed pin or its instance id is listed, never by path alone; HEAD, pinned commits and the working tree are all
+     read.
   R4 the admission binds source, bundle, worker and checker hashes for watched AND training slots; the receipt must
      show the same values at IDENTITY_FIELDS. A mismatch makes the result INVALID-worthy (rejected at DONE) and
      blocks every new admission, but no longer stops the cleanup check: the actual instance is still inspected and
@@ -180,7 +182,7 @@ PRE_GATE_DONE = ("S1", "S2", "P1a", "PRIOR")
 ATTEMPT_ROW_KEYS = ("id", "slot", "attempt") + MUTABLE                        # V2 R1: an append-only attempt row
 SETTLED = ("DONE", "INVALID", "CLOSED_NO_LAUNCH")
 ADMISSION_VALIDITY_SECONDS = 300        # V2 R2 (Codex R3-F): an ADMIT is valid for at most five minutes, single use
-GATE_VERSION = "study_spend.py v2 (Codex Q1-Q9 and R3-F; slots schema 0.4)"
+GATE_VERSION = "study_spend.py v2.1 (Codex Q1-Q9 and R3-F; slots schema 0.4; R3 listed-file rule narrowed)"
 LOCK_NAME = "ADMISSION.lock"            # V2 R2: the single-writer admission lock, beside the slots file; never committed
 # V2 R4: where each receipt shows the identity the admission binds (dotted paths inside the verified record).
 IDENTITY_FIELDS = {
@@ -1397,9 +1399,10 @@ def job_parts(job):
 
 class AttemptScanner:
     """Round 4 MAJOR-H (b), V2 R3: what the study's receipt folders and the design folder hold, read at most once per
-    run. From a training file only its job ids and its sha256 are taken (`job`, `authority.job`, `request.job`); from a
-    watched record only its instance id, its launch time and its sha256. No other field of a scanned file is used or
-    printed."""
+    run. From a training file only its job ids and its sha256 are taken (`job`, `authority.job`, `request.job`), plus
+    the worker-result pin a launcher receipt carries (`collected.result_sha256`), used only for a listed receipt whose
+    sha256 equals its pin; from a watched record only its instance id, its launch time and its sha256. No other field
+    of a scanned file is used or printed."""
 
     def __init__(self, git, root):
         self.git, self.root = git, pathlib.Path(root)
@@ -1416,9 +1419,19 @@ class AttemptScanner:
         return {j for j in (d.get("job"), obj(d.get("authority")).get("job"), obj(d.get("request")).get("job"))
                 if isinstance(j, str) and j}
 
+    @staticmethod
+    def result_pin(raw):
+        """The sha256 a launcher receipt pins for its own attempt's worker result (`collected.result_sha256`), or None."""
+        try:
+            d = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            return None
+        pin = obj(obj(d).get("collected")).get("result_sha256")
+        return pin if isinstance(pin, str) and SHA.match(pin) else None
+
     def _tree(self, commit, folder):
         """([(path, blob id)] of the training-scan-named files under `folder` at `commit`, failure or None); cached.
-        Each blob's job ids and sha256 are kept in blob_info."""
+        Each blob's job ids, sha256 and worker-result pin are kept in blob_info."""
         key = (commit, folder)
         if key not in self.trees:
             try:
@@ -1426,7 +1439,7 @@ class AttemptScanner:
                          if training_scan_name(p.rsplit("/", 1)[-1])]
                 need = sorted({oid for _p, oid in files if oid not in self.blob_info})
                 for oid, raw in self.git.blob_items(need):
-                    self.blob_info[oid] = (self.job_ids(raw), sha256(raw))
+                    self.blob_info[oid] = (self.job_ids(raw), sha256(raw), self.result_pin(raw))
                 self.trees[key] = (files, None)
             except (OSError, KeyError, ValueError) as error:
                 self.trees[key] = ([], "SCAN_FAILED:%s:%s:%s" % (str(commit)[:8], folder, type(error).__name__))
@@ -1442,7 +1455,7 @@ class AttemptScanner:
                 if failure:
                     failures.append(failure)
                 for p, oid in files:
-                    jobs, digest = self.blob_info[oid]
+                    jobs, digest, _pin = self.blob_info[oid]
                     for job in jobs:
                         found.setdefault(job, []).append(("%s:%s" % (commit[:8], p), p, digest))
             if folder not in self.worktrees:
@@ -1460,10 +1473,11 @@ class AttemptScanner:
         return found, failures
 
     def folder_files(self, commit, folder):
-        """V2 R3: ({(path, sha256)} of the training-scan-named files under a listed receipt's folder at its commit),
-        failure or None)."""
+        """V2 R3: ([(path, sha256, job ids, worker-result pin)] of the training-scan-named files under a listed
+        receipt's folder at its commit, failure or None)."""
         files, failure = self._tree(commit, folder)
-        return {(p, self.blob_info[oid][1]) for p, oid in files}, failure
+        return [(p, self.blob_info[oid][1], frozenset(self.blob_info[oid][0]), self.blob_info[oid][2])
+                for p, oid in files], failure
 
     def watched_records(self):
         """([(design-folder-relative path, instance id, launched_utc, place, sha256)], [scan failures]) of every launch
@@ -1498,22 +1512,33 @@ class AttemptScanner:
 
 
 def listed_files(scanner, specs):
-    """V2 R3 (Codex finding L): the (path, sha256) pairs a row's listed training receipts account for. Each listed
-    receipt counts by its own pinned path AND sha256; its sibling records (provider_NNNN.json, *_result.json) in the
-    listed receipt's folder at the listed commit count by their own path and sha256. A job id alone never makes a file
-    listed. Returns (set, [scan failures])."""
+    """V2 R3 (Codex finding L; conformance check of d5c8184a): the (path, sha256) pairs a row's listed training
+    receipts account for. Each listed receipt counts by its own pinned path AND sha256. Its copy at the listed commit
+    whose sha256 equals the pin is the only source of anything else; beside it, in its folder at that commit, only:
+      (a) a provider_NNNN.json DIRECTLY in the folder (no subfolder) whose job ids are exactly the receipt's one job id;
+      (b) a file whose sha256 equals the worker-result pin the receipt itself carries (`collected.result_sha256`): the
+          byte-identical copies of this attempt's own worker result the launcher collects into every receipt folder
+          (curriculum_result.json, collected/results/result.json).
+    Any other result.json or *_result.json never counts, and a job id alone never makes a file listed. Returns (set,
+    [scan failures])."""
     out, failures = set(), []
     for spec in specs:
         path, pin, commit = spec.get("path"), spec.get("sha256"), spec.get("git_commit")
-        if not (isinstance(path, str) and path):
+        if not (isinstance(path, str) and path and isinstance(pin, str) and SHA.match(pin)):
             continue
-        if isinstance(pin, str) and SHA.match(pin):
-            out.add((path, pin))
+        out.add((path, pin))
         if "/" in path and isinstance(commit, str) and COMMIT.match(commit):
-            files, failure = scanner.folder_files(commit, path.rsplit("/", 1)[0])
+            folder = path.rsplit("/", 1)[0]
+            files, failure = scanner.folder_files(commit, folder)
             if failure:
                 failures.append(failure)
-            out |= {(p, digest) for p, digest in files if p != path}
+            own = [(jobs, result) for p, digest, jobs, result in files if p == path and digest == pin]
+            if len(own) != 1 or len(own[0][0]) != 1:
+                continue                    # no hash-verified receipt with one job id: nothing else counts (fail closed)
+            job, result = own[0]
+            out |= {(p, digest) for p, digest, jobs, _r in files if p != path and (
+                (p.rsplit("/", 1)[0] == folder and PROVIDER_NAME.match(p.rsplit("/", 1)[-1]) and jobs == job)
+                or (result is not None and digest == result))}
     return out, failures
 
 

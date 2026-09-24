@@ -112,9 +112,14 @@ admission.
   window (admission time + the lifetime: 14,400 s), with **any source prefix** (v2; round 4 matched the admitted
   source only, which missed the verifier's X2), in a file that is not **listed**.
 - **Listed means path AND sha256** (v2; round 4 skipped a listed job id everywhere, which missed X3). A file is listed
-  when it is the listed receipt itself (its path and pinned sha256), or a sibling record (`provider_NNNN.json`,
-  `*_result.json`) in the listed receipt's folder at the listed commit, with the same path and sha256. Another row's
-  listed file is that row's.
+  when it is the listed receipt itself (its path and pinned sha256). Beside it, in its folder at the listed commit,
+  and only when that commit's copy of the receipt has the pinned sha256 and one job id (v2.1, after the conformance
+  check of `d5c8184a` found a hidden attempt inside the listed receipt's folder counted as listed): (a) a
+  `provider_NNNN.json` directly in that folder (no subfolder) whose job ids are exactly the receipt's job id; (b) a file
+  whose sha256 equals the worker-result pin the receipt itself carries (`collected.result_sha256`), which is what the
+  launcher's two copies of the attempt's own worker result are (`curriculum_result.json`,
+  `collected/results/result.json`). No other `result.json` or `*_result.json` counts. Another row's listed file is
+  that row's.
 - **Watched rows** (P1b, P2, E1). Every `*launch_record.json` and `*watch_record.json` under the design folder, on disk
   and at HEAD. A record is skipped only when its **sha256 equals a listed pin or its instance id is listed** (v2;
   never by its path alone, which missed X1), or when another row claims it the same way. A finding is one launched
