@@ -15,6 +15,8 @@ import math
 import os
 import pathlib
 import random
+import re
+import subprocess
 import sys
 
 import pytest
@@ -38,6 +40,23 @@ def H():
     if ROOT:
         hset2_build._paths(ROOT)
     return hset2_build
+
+
+def launcher():
+    """The AWS job's launcher module (imported, never run against AWS here)."""
+    job = str(HERE.parent / "hset2_aws_job")
+    if job not in sys.path:
+        sys.path.insert(0, job)
+    import launch
+    return launch
+
+
+def codex_design_text():
+    """EVALUATION_DESIGN_v0_4.md at Codex's c3a128ee (A2.7), from git objects; None if the object is not here."""
+    rel = ("cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_eval_design_20260923/"
+           "EVALUATION_DESIGN_v0_4.md")
+    run = subprocess.run(["git", "-C", str(HERE), "show", "%s:%s" % (H().DESIGN_SOURCE_COMMIT, rel)], capture_output=True)
+    return run.stdout if run.returncode == 0 else None
 
 
 def throwaway_salt(seed, which):
@@ -73,9 +92,19 @@ def test_stage0_committed_outputs_reproduce_and_are_consistent():
     summary = json.loads(files[S0.SUMMARY_FILE])
     sides = {s: json.loads(files[f]) for s, f in (("DEV", S0.DEV_GROUPS_FILE), ("TEST", S0.TEST_GROUPS_FILE))}
     assert summary["six_node_universe"]["classes_enumerated"] == 5074
-    assert summary["six_node_universe"]["classes_after_public_excluded"] == 5071
+    # PUBLIC_EXCLUDED version 2 (T5, default Q-B): 3 + 24 six-node classes in the universe are removed
+    assert summary["six_node_universe"]["classes_after_public_excluded"] == 5047
+    assert summary["public_excluded"]["file"] == "PUBLIC_EXCLUDED_v2.json" == S0.PUBLIC_EXCLUDED_FILE
     assert (sides["DEV"]["group_count"], sides["DEV"]["class_count"]) == (503, 1324)
-    assert (sides["TEST"]["group_count"], sides["TEST"]["class_count"]) == (1434, 3747)
+    assert (sides["TEST"]["group_count"], sides["TEST"]["class_count"]) == (1429, 3723)
+    # the DEV side, DEV_NEW_6 and DEV_DECOYS_6 are exactly those of version 1 (digests of the first commit)
+    assert sides["DEV"]["groups_digest"] == "29349b328b8150719c9f5cc03f65fae43602cc9476e9362c6e388028c84d35de"
+    assert summary["dev_new_6"]["digest"] == "e1c046a464e794873ccfd7d64344cdc418a5bd4121d6deefa49261ed96cdf682"
+    assert summary["dev_decoys_6"]["digest"] == "7d3b68e489b7e97ddd2e109b27a9f4960579356d4a7e5e93a73e3d2c1cb8ce85"
+    # every committed file, the history file PUBLIC_EXCLUDED_v1.json included, is among the recomputed ones
+    assert set(files) == {S0.PUBLIC_EXCLUDED_V1_FILE, S0.PUBLIC_EXCLUDED_FILE, S0.DEV_GROUPS_FILE, S0.TEST_GROUPS_FILE,
+                          S0.SUMMARY_FILE}
+    assert set(summary["files_sha256"]) == set(files) - {S0.SUMMARY_FILE}
     dev_side = set()
     for s, doc in sides.items():
         for row in doc["groups"]:
@@ -142,7 +171,10 @@ def test_test5_digest_is_checked_before_any_item_is_built(monkeypatch):
 
 # ============================================================================ PUBLIC_EXCLUDED (s3, M11)
 def test_public_excluded_version_1():
-    pe = json.loads((HERE / S0.PUBLIC_EXCLUDED_FILE).read_text(encoding="utf-8"))
+    """Version 1 is kept as history, byte for byte (its sha256 is the one of the first commit, 853e645d)."""
+    raw = (HERE / S0.PUBLIC_EXCLUDED_V1_FILE).read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "f101cbdd2984e5bcd21389f8ed76ef4550bc3817735c65f0acb8c8afc6d23b98"
+    pe = json.loads(raw.decode("utf-8"))
     assert pe["counts_by_nodes"] == {"5": 3, "6": 4}
     names = sorted(n for r in pe["classes"] for n in r["fixture_shape_names"])
     assert names == ["S5A", "S5B", "S5C", "S6A", "S6B", "S6D", "S6STAR"]
@@ -152,6 +184,37 @@ def test_public_excluded_version_1():
         assert oracle.canonical_form(n, edges) == (n, edges)
         assert r["inside_degree_4_universe"] == (r["fixture_shape_names"] != ["S6STAR"])
     assert pe["version_1_input"]["sha256"] == S0.FIXTURE_SHA256
+
+
+def test_public_excluded_version_2():
+    """T5 (Claude's default Q-B): version 2 = version 1 + exactly the 24 TEST-side classes of the 40 public HSET-1B
+    DEV_NEW_6 classes, all 6-node; nothing at 5 nodes changes, so TEST_NEW_5 and its pinned public digest cannot."""
+    v1 = json.loads((HERE / S0.PUBLIC_EXCLUDED_V1_FILE).read_text(encoding="utf-8"))
+    v2 = json.loads((HERE / S0.PUBLIC_EXCLUDED_FILE).read_text(encoding="utf-8"))
+    assert S0.PUBLIC_EXCLUDED_FILE == "PUBLIC_EXCLUDED_v2.json" and v2["version"] == 2
+    assert v2["counts_by_nodes"] == {"5": 3, "6": 28}
+    extra = ("added_in_version", "hset1b_dev_new_6_draw_order", "hset2_stage0_side")
+    old = [{k: v for k, v in r.items() if k not in extra} for r in v2["classes"] if r["added_in_version"] == 1]
+    new = [r for r in v2["classes"] if r["added_in_version"] == 2]
+    assert sorted(old, key=lambda r: r["digest"]) == sorted(v1["classes"], key=lambda r: r["digest"])
+    assert len(new) == 24
+    t5 = json.loads((HERE / "PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json").read_text(encoding="utf-8"))
+    assert {r["digest"] for r in new} == {r["class_digest"] for r in t5["rows"] if r["hset2_side"] == "TEST"}
+    drawn = S0.hset1b_dev_new_6_keys()                                     # recomputed from the public seed
+    assert len(drawn) == len(set(drawn)) == 40
+    for r in new:
+        assert drawn[r["hset1b_dev_new_6_draw_order"]] == r["canonical_form"]
+        assert r["nodes"] == 6 and r["inside_degree_4_universe"] and r["hset2_stage0_side"] == "TEST"
+        assert S0.side_of_group(r["degree_multiset_group_key"]) == "TEST"
+        assert r["digest"] == hashlib.sha256(r["canonical_form"].encode("utf-8")).hexdigest()
+        n, edges = S0.key_shape(r["canonical_form"])
+        assert oracle.canonical_form(n, edges) == (n, edges)
+    # the 16 others sit on the DEV side and are not added
+    assert sum(1 for k in drawn if S0.side_of_group(S0.group_key(S0.key_shape(k))) == "DEV") == 16
+    five = lambda doc: {r["canonical_form"] for r in doc["classes"] if r["nodes"] == 5}      # noqa: E731
+    assert five(v2) == five(v1)
+    assert v2["class_digests_digest"] == S0.list_digest(sorted(r["digest"] for r in v2["classes"]))
+    assert v2["version_1_history"]["class_digests_digest"] == v1["class_digests_digest"]
 
 
 # ============================================================================ comparators on hand-made cases (s6)
@@ -442,7 +505,7 @@ def test_analogy_comparators():
     assert out["DEGREE_GUESS_THEN_CHECK"] == out["WHOLE_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": "D4"}
     assert out["FLAG_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": None}
     # N1: the flags tie-break guess (degree, then declared-flag position, then rank) pairs F and D4 node for node
-    assert out["FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "D4"}
+    assert out["DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "D4"}
     assert set(out) == set(Hm.analogy_comparators()) | set(Hm.analogy_computed_not_registered())
     # Codex A2.1: every family member is its own comparator. Aliases in numeric order: A1=W0, B2=W1, C3=W2, D4=W3, F=W4
     assert [out["FIXED_POSITION_%d" % j]["world_id"] for j in range(1, 8)] == ["A1", "B2", "C3", "D4", None, None, None]
@@ -461,7 +524,7 @@ def test_analogy_comparators():
     out = Hm.analogy_payloads(bank_public(bank), "F", set(), key)
     assert out["DEGREE_GUESS_THEN_CHECK"] == out["WHOLE_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": None}
     assert out["FLAG_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": "E5"}      # F's participants 0, 1, 3 land on 0, 3, 1
-    assert out["FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "E5"}   # the flag positions break the (1,1) tie
+    assert out["DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "E5"}   # the flag positions break the (1,1) tie
     assert not Hm.flags_tiebreak_guess(worlds[0], worlds[3])                # C3: same degrees, other wiring
     # a trained shape (4 nodes or fewer) is not novel
     small =[named("F", 4, [(0, 1), (1, 2), (2, 3)], "mechanical"), named("E", 4, [(0, 1), (1, 2), (2, 3)], "container")]
@@ -476,7 +539,7 @@ def test_codex_a2_1_families_and_switches(monkeypatch):
     reg = Hm.registered_comparators()
     bars = reg["analogy"]
     for name in (["FIXED_POSITION_%d" % j for j in range(1, 8)] + ["STATUS_BY_COUNT_%d" % m for m in range(9)]
-                 + ["FIXED_ALIAS_W%d" % k for k in range(8)] + ["FLAGS_TIEBREAK_GUESS_THEN_CHECK"]):
+                 + ["FIXED_ALIAS_W%d" % k for k in range(8)] + ["DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"]):
         assert bars.count(name) == 1, name
     assert "BEST_FIXED_POSITION" not in bars and "STATUS_BY_COUNT" not in bars
     # every bar of the first version (853e645d) is still a bar, or its whole table is (A2 only adds)
@@ -491,9 +554,118 @@ def test_codex_a2_1_families_and_switches(monkeypatch):
     # the N1 switch: off, the rule leaves the bar list, stays computed and printed, and the digest changes
     monkeypatch.setattr(Hm, "REGISTER_FLAGS_TIEBREAK_GUESS", False)
     off = Hm.registered_comparators()
-    assert "FLAGS_TIEBREAK_GUESS_THEN_CHECK" not in off["analogy"]
-    assert off["computed_not_registered_printed_only"]["analogy"] == ["FLAGS_TIEBREAK_GUESS_THEN_CHECK"]
+    assert "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK" not in off["analogy"]
+    assert off["computed_not_registered_printed_only"]["analogy"] == ["DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"]
     assert hw.sha(off) != hw.sha(reg)
+
+
+def test_flag_key_order_and_tie_rule_pinned_by_toys():
+    """Q-C (bus claude-0024) and A2.7 D2: the exact flag-key order and tie convention, pinned by public toy examples
+    before the key is made. Every key ascending: in-degree, then out-degree, [child-of-the-declared-whole,] flag
+    position (whole 0, second participant 1, third 2, any other node 3), then rank."""
+    Hm = H()
+    # 1. a star: the root (in 0, out 4) comes before the leaves (in 1, out 0), so in-degree is the first key; among the
+    # leaves the flags decide (node 3 is participant 2, node 1 is participant 3), then rank (2 before 4)
+    star = named("S", 5, [(0, 1), (0, 2), (0, 3), (0, 4)], "mechanical", participants=[0, 3, 1])
+    assert Hm.tiebreak_order(star) == [0, 3, 1, 2, 4]
+    # 2. a chain 0 -> 1 -> 2 -> 3 whose (1, 1) tie holds a child of the whole (node 1, no flag) and a non-child (node 2,
+    # flag 1): the flags put 2 first; CHILDREN_LAST puts the non-child 2 first; CHILDREN_FIRST puts the child 1 first
+    chain = [(0, 1), (1, 2), (2, 3)]
+    C = named("C", 4, chain, "mechanical", participants=[0, 2, 3])
+    assert Hm.tiebreak_order(C) == [0, 3, 2, 1]
+    assert Hm.tiebreak_order(C, "last") == [0, 3, 2, 1]
+    assert Hm.tiebreak_order(C, "first") == [0, 3, 1, 2]
+    with pytest.raises(ValueError):
+        Hm.tiebreak_order(C, "sideways")
+    # 3. the direction of the whole-child key changes answers (verifier note VN-1), so both directions are bars (Q-A).
+    # F declares a leaf as its whole (so F's (1, 1) tie has no child of the whole and the flags order it); T declares
+    # its root. The chain has one automorphism, so a guess passes only if it maps node i to node i.
+    T = named("T", 4, chain, "container", participants=[0, 3, 1])
+    F_last = named("F", 4, chain, "mechanical", whole=3, participants=[3, 2, 0])      # flags order the tie [2, 1]
+    F_first = named("F", 4, chain, "mechanical", whole=3, participants=[3, 1, 0])     # flags order the tie [1, 2]
+    assert Hm.flags_tiebreak_guess(F_last, T, "last") and not Hm.flags_tiebreak_guess(F_last, T, "first")
+    assert Hm.flags_tiebreak_guess(F_first, T, "first") and not Hm.flags_tiebreak_guess(F_first, T, "last")
+    # the same, through the analogy bank rule (one guess per same-degree, other-domain candidate)
+    key = lambda shape: S0.class_key(oracle.canonical_form(*shape))   # noqa: E731
+    out = Hm.analogy_payloads(bank_public([F_last, T]), "F", set(), key)
+    assert out[Hm.WHOLE_CHILD_LAST] == {"world_id": "T"} and out[Hm.WHOLE_CHILD_FIRST] == {"world_id": None}
+    out = Hm.analogy_payloads(bank_public([F_first, T]), "F", set(), key)
+    assert out[Hm.WHOLE_CHILD_FIRST] == {"world_id": "T"} and out[Hm.WHOLE_CHILD_LAST] == {"world_id": None}
+    # T's own flags order its tie [1, 2] (participant 3 is node 1): the plain flags rule passes the second pair only
+    assert not Hm.flags_tiebreak_guess(F_last, T) and Hm.flags_tiebreak_guess(F_first, T)
+    # the rule text is published with the bar set (and so inside its digest)
+    reg = Hm.registered_comparators()
+    assert reg["tie_rules_pinned"] == Hm.TIE_RULES
+    for name in (Hm.FLAGS_TIEBREAK,) + Hm.WHOLE_CHILD_BARS:
+        assert name in Hm.TIE_RULES
+    assert "ascending (whole first)" in Hm.TIE_RULES["flag_position"]
+
+
+def test_bar_set_conforms_to_a2_7(monkeypatch):
+    """A2.7 (Codex, c3a128ee) word for word: every bar name it gives is registered under that exact name, in the claims
+    it names; plus Claude's default Q-A (R1: both whole-child directions), whose switch is recorded in the digest."""
+    Hm = H()
+    reg = Hm.registered_comparators()
+    three, four = reg["reach"]["REACH_3_STEP_TRANSFER_6"], reg["reach"]["REACH_4_STEP_TRANSFER_6"]
+    assert Hm.D1_FRONTIER_DECISION == "a"                                           # D1: option (a)
+    for bar in ("FRONTIER_FALLBACK", "SINGLE_ROOT_FALLBACK"):
+        assert bar in three and bar in four
+    assert set(four) - set(three) == {"THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"}
+    d2 = ["DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK", "FLAG_ANCHOR_GUESS_THEN_CHECK",
+          "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"]
+    for bar in d2:
+        assert reg["analogy"].count(bar) == 1, bar
+    assert "WHOLE_ANCHOR_GUESS_THEN_CHECK" in reg["correspondence"]
+    assert '"FLAGS_TIEBREAK_GUESS_THEN_CHECK"' not in json.dumps(reg)             # the old name is gone
+    assert reg["a2_7_named_bars_registered_under_the_same_names"]["analogy"] == d2
+    assert "never a bar" in reg["exact_search_ceiling"]
+    # the A2.7 names and sentences appear verbatim in Codex's text (whitespace joined), when the object is here
+    text = codex_design_text()
+    if text is not None:
+        assert hashlib.sha256(text).hexdigest() == Hm.DESIGN_V0_4_SHA256_AT_SOURCE
+        a27 = " ".join(text.decode("utf-8").split("### A2.7")[1].split())
+        for name in d2 + ["FRONTIER_FALLBACK", "SINGLE_ROOT_FALLBACK", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP",
+                          "THREE_HOP_FIRST_CHILD"]:
+            assert "`%s`" % name in a27, name
+        for sentence in Hm.REACH_CLAIM_LIMITS_A2_7:
+            assert sentence in a27, sentence
+        a23 = " ".join(text.decode("utf-8").split("### A2.3")[1].split("### A2.4")[0].split())
+        assert '"%s"' % Hm.CONFIRMATORY_CAPTION_A2_3 in a23.replace("**", "")
+    # R1 (Q-A): both directions registered; option b moves them to printed-only and widens the scope; c is refused
+    assert Hm.R1_ANALOGY_SCOPE_DECISION == "a"
+    for bar in Hm.WHOLE_CHILD_BARS:
+        assert reg["analogy"].count(bar) == 1
+    assert reg["design_owner_switches"]["R1_ANALOGY_SCOPE_DECISION"] == "a"
+    assert Hm.scope_sentence() == Hm.SCOPE_SENTENCE
+    monkeypatch.setattr(Hm, "R1_ANALOGY_SCOPE_DECISION", "b_widen_scope")
+    off = Hm.registered_comparators()
+    assert not set(Hm.WHOLE_CHILD_BARS) & set(off["analogy"])
+    assert off["computed_not_registered_printed_only"]["analogy"] == list(Hm.WHOLE_CHILD_BARS)
+    assert hw.sha(off) != hw.sha(reg) and Hm.scope_sentence().startswith(Hm.SCOPE_SENTENCE + " Under R1 option b")
+    monkeypatch.setattr(Hm, "R1_ANALOGY_SCOPE_DECISION", "c")
+    with pytest.raises(SystemExit, match="R1 option c"):
+        Hm.check_d1()
+    monkeypatch.setattr(Hm, "R1_ANALOGY_SCOPE_DECISION", "zz")
+    with pytest.raises(SystemExit, match="R1_ANALOGY_SCOPE_DECISION must be one of"):
+        Hm.check_d1()
+
+
+def test_presalt_manifest_matches_the_build():
+    """A2.7's pre-key deliverable: the committed PRESALT_MANIFEST_HSET2.json carries the bar set exactly as the build
+    registers it, its digest, the tie rules and the launcher pins (the salt pin still None, for the custodian)."""
+    Hm = H()
+    launch = launcher()
+    m = json.loads((HERE / "PRESALT_MANIFEST_HSET2.json").read_text(encoding="utf-8"))
+    assert m["registered_comparators"] == Hm.registered_comparators()
+    assert m["registered_comparators_digest"] == hw.sha(Hm.registered_comparators())
+    assert m["tie_rules_pinned"] == Hm.TIE_RULES
+    assert m["pins"]["EXPECTED_TEST5_SHAPES_DIGEST"] == launch.EXPECTED_TEST5_SHAPES_DIGEST
+    assert m["pins"]["UV_TARBALL_SHA256"] == launch.UV_TARBALL_SHA256
+    assert m["pins"]["HSET2_SALT_SHA256"] is None and Hm.HSET2_SALT_SHA256 is None
+    assert m["public_excluded"]["class_digests_digest"] == json.loads(
+        (HERE / S0.PUBLIC_EXCLUDED_FILE).read_text(encoding="utf-8"))["class_digests_digest"]
+    summary = json.loads((HERE / S0.SUMMARY_FILE).read_text(encoding="utf-8"))
+    assert m["stage0_files_sha256"] == summary["files_sha256"]
 
 
 # ============================================================================ clusters, floor, statistics (s5, s7)
@@ -847,14 +1019,19 @@ def test_sealed_mode_hides_uncaught_exception_text(tmp_path, monkeypatch):
 
 
 def test_launcher_limits_and_pins():
-    sys.path.insert(0, str(HERE.parent / "hset2_aws_job"))
-    import launch
+    launch = launcher()
+    D2 = launch.D
     assert launch.worst_case_usd() < launch.DOLLAR_CEILING == 1.00
     pins = launch.builder_pins((HERE / "hset2_build.py").read_bytes())
     assert pins == {"HSET1A_SALT_SHA256": H().HSET1A_SALT_SHA256, "HSET2_SALT_SHA256": H().HSET2_SALT_SHA256,
                     "SOURCE_COMMIT": launch.SOURCE_COMMIT}
     for value in (pins["HSET2_SALT_SHA256"], launch.EXPECTED_TEST5_SHAPES_DIGEST, launch.UV_TARBALL_SHA256):
         assert pin_or_none(value)                                  # None until the coordinator commits it (review F7)
+    # set in the pre-salt round: HSET-1A's public test_shapes_digest, and uv 0.12.7's published tarball sha256
+    assert launch.EXPECTED_TEST5_SHAPES_DIGEST == "1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9"
+    assert launch.UV_TARBALL_SHA256 == "788f18abea7c5f55d6216e4f5613fd89d4d59b631efeec117b2b07fe72f1da21"
+    assert launch.UV_VERSION == "0.12.7"
+    assert D2 + "hset2/PUBLIC_EXCLUDED_v2.json" in launch.CLAUDE_FILES and D2 + "hset2/PUBLIC_EXCLUDED_v1.json" in launch.CLAUDE_FILES
     assert launch.PYTHON_VERSION.count(".") == 2 and launch.UV_VERSION.count(".") == 2   # exact versions (review F9)
     for name in launch.CLAUDE_FILES + launch.JOB_FILES:
         assert (HERE.parents[2] / name).is_file(), name
@@ -871,6 +1048,32 @@ def test_launcher_limits_and_pins():
     assert template.index("uv python install") < template.index("bundle.tar.gz")
     assert "sha256sum -c" in template[:template.index("bundle.tar.gz")]
     assert "rm -rf \"$WORK/pkg/sealed\"" in template
+
+
+def test_launcher_dry_run_refuses_only_for_the_salt_pin(tmp_path):
+    """Acceptance: the AWS job's dry run makes no AWS call and refuses ONLY because HSET2_SALT_SHA256 (the custodian's
+    pin) is missing. Run as a child process in which importing boto3 fails loudly; before the round's commit it may
+    also name the uncommitted files, which is reported separately and is not a pin."""
+    launch = launcher()
+    assert launch.pin_refusals((HERE / "hset2_build.py").read_bytes()) == ["HSET2_SALT_SHA256"]
+    pinned = (HERE / "hset2_build.py").read_bytes().replace(b"HSET2_SALT_SHA256 = None",
+                                                           b'HSET2_SALT_SHA256 = "' + b"a" * 64 + b'"', 1)
+    assert launch.pin_refusals(pinned) == []                        # with a (throwaway) pin, nothing else is missing
+    fake = tmp_path / "no_aws"
+    fake.mkdir()
+    (fake / "boto3.py").write_text('raise ImportError("DRY_RUN_IMPORTED_BOTO3")' + chr(10), encoding="utf-8")
+    env = dict(os.environ, PYTHONPATH=str(fake) + os.pathsep + os.environ.get("PYTHONPATH", ""))
+    before = set((HERE.parent / "hset2_aws_job").iterdir())
+    run = subprocess.run([sys.executable, "-B", str(HERE.parent / "hset2_aws_job" / "launch.py"), "--dry-run"],
+                         capture_output=True, text=True, env=env, timeout=240)
+    assert run.returncode == 1, run.stderr[-500:]
+    assert "DRY_RUN_IMPORTED_BOTO3" not in run.stderr + run.stdout and "Traceback" not in run.stderr
+    message = run.stderr.strip()
+    assert re.match(r"^BUNDLE_REFUSED [(][0-9][)]: ", message), message[:200]
+    items = message.split("): ", 1)[1].split(" | ")
+    pins = [i for i in items if not i.startswith("UNCOMMITTED_BUILDER_OR_JOB_FILES")]
+    assert pins == [launch.PIN_REFUSALS["HSET2_SALT_SHA256"]], items
+    assert set((HERE.parent / "hset2_aws_job").iterdir()) == before      # no machine script, no launch record
 
 
 # ============================================================================ tiny end to end, and public-output custody
@@ -944,9 +1147,17 @@ def test_tiny_end_to_end(tiny_build):
     assert rep["mechanism_gate_status"]["state"] == "MECHANISM_GATE_OPEN"
     assert rep["inference_assumptions_status"]["state"] == "OPEN_FOR_THE_BUILDER_SCORER_REVIEW"
     assert {"INFERENCE_ASSUMPTIONS_UNSUPPORTED", "MECHANISM_GATE_OPEN"} <= set(rep["status_words_the_scorer_must_use"])
-    # review of 4c402209, finding 1 (a design choice): recorded as an open question in the output, no bar added
+    # review of 4c402209, finding 1 (R1): Claude's default Q-A registers the whole-child rule in both directions
     for claim in ("ANALOGY_BEYOND_DEGREE_6", "REPAIR_IMPROVES_ANALOGY_6"):
-        assert summary["claims_before_any_model"][claim]["open_design_question_before_the_salt"].startswith("OPEN")
+        r1 = summary["claims_before_any_model"][claim]["r1_analogy_scope_decision"]
+        assert r1["value"] == "a" and r1["state"].startswith("CLAUDE_DEFAULT_Q_A_APPLIED")
+    for bar in H().WHOLE_CHILD_BARS:
+        assert bar in summary["cells"]["TEST_NEW_6/ANALOGY"]["W_by_comparator"]
+    for claim in ("REACH_3_STEP_TRANSFER_6", "REACH_4_STEP_TRANSFER_6"):     # A2.7 D1 wording, word for word
+        assert summary["claims_before_any_model"][claim]["claim_limits_A2_7"] == list(H().REACH_CLAIM_LIMITS_A2_7)
+    assert rep["caption_only_if_every_condition_passes_A2_3"] == H().CONFIRMATORY_CAPTION_A2_3
+    assert summary["splits"]["public_excluded_class_digests_digest"] == json.loads(
+        (HERE / "PUBLIC_EXCLUDED_v2.json").read_text(encoding="utf-8"))["class_digests_digest"]
     assert summary["inference_assumptions"]["state"] == "OPEN_FOR_THE_BUILDER_SCORER_REVIEW"
     assert summary["success_rule"].count("CONDITIONAL_CLUSTER_DIAGNOSTIC") == 1
     # the printed disjointness is counted, and every required count is 0 (review F5)

@@ -1,0 +1,1193 @@
+{
+ "defaults_applied": {
+  "Q-A": "R1: register the whole-child rule as bars in BOTH sort directions (R1_ANALOGY_SCOPE_DECISION = a)",
+  "Q-B": "T5: PUBLIC_EXCLUDED version 2 = version 1 + the 24 TEST-side older HSET-1B DEV classes",
+  "Q-C": "flag-key order and tie rule pinned (tie_rules_pinned) and checked by public toy examples",
+  "source": "bus message claude-0024 (Claude to Codex, 2026-09-24T13:40:35Z); silence keeps them; an objection reverts them before the salt"
+ },
+ "design_source": {
+  "EVALUATION_DESIGN_v0_4_md_sha256": "0dd740584f33b752feb0453214d335520855d6ede77f3a5b490afd6c013a3454",
+  "STATISTICAL_POLICY_json_sha256": "845de197a5214b5fdf18206c4c738c5e1fd3b05b96b6fe086516f2964b7bb619",
+  "branch": "codex/helm-controlled-prelaunch-20260924",
+  "commit": "c3a128ee7bde3455f6b479e7972043fccc983162",
+  "what": "A2.7, the single A2 specification (D1-D4), plus A2.1-A2.6 that it completes"
+ },
+ "differences_from_A2_7": [
+  {
+   "item": "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+   "note": "the build called it FLAGS_TIEBREAK_GUESS_THEN_CHECK until this round; renamed to A2.7 D2's name, word for word",
+   "state": "CONFORMED_IN_THIS_ROUND"
+  },
+  {
+   "item": "R1 whole-child rule, both sort directions (DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST and ..._CHILDREN_FIRST)",
+   "note": "Claude's default Q-A (bus claude-0024), pending Codex or the owner; A2.7 does not name this rule. It only adds bars. Switch R1_ANALOGY_SCOPE_DECISION: a (default), b_widen_scope, c (refused)",
+   "state": "ADDED_BEYOND_A2_7"
+  },
+  {
+   "item": "FIXED_ALIAS_W0..W7",
+   "note": "the pre-A2 BEST_FIXED_POSITION table (focus included), kept as eight untuned bars so no bar of the first version is dropped; A2.1 names only FIXED_POSITION_1..7. They never bind (review R6)",
+   "state": "KEPT_BEYOND_A2_1"
+  },
+  {
+   "item": "'check all required relations and flags' (A2.7 D2)",
+   "note": "the one-guess rules check every edge (and the node count), which is checker v2's own analogy and correspondence condition ('node labels, root choice and archetypes do not vote'); the declared domain is the candidate filter. Declared flags order the guess but are not checked: checker v2 does not require them, and with fresh flags a flag check would reject most true partners. Codex may rule otherwise",
+   "state": "READ_AS_CHECKER_V2"
+  },
+  {
+   "item": "the flag-key direction of DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+   "note": "pinned ascending (whole, second participant, third participant, then every other node), then rank ascending, as N1 defined it and as the other one-guess rules sort; the reverse flag order is not registered. Q-C's 'both directions where the direction changes answers' is applied to the whole-child key (R1), whose direction no text fixes",
+   "state": "PINNED_ONE_DIRECTION"
+  },
+  {
+   "item": "A2.7 D3 'reprint actual DEV counts, labelled'",
+   "note": "STAGE0_SUMMARY.json dev_counts_labelled_A2_7_D3 labels foci, eligible decoys and targets, and fillers",
+   "state": "CONFORMED_IN_THIS_ROUND"
+  },
+  {
+   "item": "A2.7 'exact-search ceiling retained separately'",
+   "note": "never a bar; printed as the full colour-refinement diagnostic (design s6)",
+   "state": "CONFORMED"
+  },
+  {
+   "item": "A2.7 D1 reach claim wording",
+   "note": "both reach claims print A2.7's two limit sentences verbatim (claim_limits_A2_7)",
+   "state": "CONFORMED_IN_THIS_ROUND"
+  },
+  {
+   "item": "the confirmatory caption (A2.3)",
+   "note": "REPAIR_IMPROVES_ANALOGY_6 prints A2.3's caption verbatim, only for use if every condition passes",
+   "state": "CONFORMED_IN_THIS_ROUND"
+  }
+ ],
+ "files_sha256_lf": {
+  "../hset2_aws_job/JOB_LIMITS.md": "7658555b038c8cf54a8366c4497b3a9874d53bf7fd947433c26f511aa6b0ee7b",
+  "../hset2_aws_job/job.sh.template": "9766c45310e7ccba9298cd5212c434b4aff261ef0c31d1da7053029af5055e40",
+  "../hset2_aws_job/launch.py": "d37629a3262fece0417dba66f5344405ff3e61772b47774b5ffea63c39e540fe",
+  "../hset2_aws_job/watch.py": "42571a7eb8d35baff68c168a09b21f981346628418df0ca2acd084ed50a3607c",
+  "hset2_build.py": "e1bed5c6098408af6aa02106a4133fa571d827356ffaca39ecccf42ddf5d39dc",
+  "hset2_presalt_manifest.py": "b3954c2632cc63a2e1e45b6c8ad60aec762f1545d1a8453b5e46944263653545",
+  "hset2_stage0_public.py": "b4df4168f445ce6e9c1830f08ded8a2b868d92da627aacae7ea09124c77d3ed8",
+  "hset2_throwaway_ranges.py": "2678e95b1a8d154172dfbd17e1b2c3ccf127746dd7820d308c91fe60c24cc7d6",
+  "test_hset2.py": "4a29c1146bd2d18e44fc1a8ae4f7c73889fa91af632425824f977625c7dc864b"
+ },
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "pins": {
+  "EXPECTED_TEST5_SHAPES_DIGEST": "1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9",
+  "EXPECTED_TEST5_SHAPES_DIGEST_source": "records/helm_eval_design_20260923/hset1a_aws_job/RESULTS_READING.json test_shapes_digest (salt_sha256 33f9d350...); unchanged by PUBLIC_EXCLUDED v2, which adds no 5-node class",
+  "HSET1A_SALT_SHA256": "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754",
+  "HSET2_SALT_SHA256": null,
+  "HSET2_SALT_SHA256_note": "None on purpose: the custodian alone makes the salt and commits only this",
+  "PYTHON_VERSION": "3.14.0",
+  "SOURCE_COMMIT": "785c9bd10f1416deb95f9c30aacb43124134fe45",
+  "UV_TARBALL_SHA256": "788f18abea7c5f55d6216e4f5613fd89d4d59b631efeec117b2b07fe72f1da21",
+  "UV_TARBALL_SHA256_cross_check": "https://api.github.com/repos/astral-sh/uv/releases/tags/0.12.7",
+  "UV_TARBALL_SHA256_source": "https://github.com/astral-sh/uv/releases/download/0.12.7/uv-x86_64-unknown-linux-gnu.tar.gz.sha256",
+  "UV_VERSION": "0.12.7"
+ },
+ "public_excluded": {
+  "class_digests_digest": "04be98292c0486af0a3821d3d561cfa4ab67a7adddf97de87beb49ffe576169b",
+  "counts_by_nodes": {
+   "5": 3,
+   "6": 28
+  },
+  "file": "PUBLIC_EXCLUDED_v2.json",
+  "rule": "T5, fixed before the HSET-2 salt (Claude's default Q-B, bus message claude-0024; Codex may object before the salt): version 1 plus every class of the 40 public HSET-1B DEV_NEW_6 classes whose degree group falls on the HSET-2 TEST side. General form: any class that a committed public seed or file named for development, training, probing or a candidate bank before the salt, and that falls on the TEST side, joins PUBLIC_EXCLUDED before the salt.",
+  "version": 2,
+  "version_1": {
+   "class_digests_digest": "afa70ca607c3498fdfeff14f850fc15b369f64843b32c47ceac96fdf4beee27f",
+   "counts_by_nodes": {
+    "5": 3,
+    "6": 4
+   },
+   "file": "PUBLIC_EXCLUDED_v1.json"
+  }
+ },
+ "registered_comparators": {
+  "a2_7_named_bars_registered_under_the_same_names": {
+   "analogy": [
+    "DEGREE_GUESS_THEN_CHECK",
+    "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+    "FLAG_ANCHOR_GUESS_THEN_CHECK",
+    "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"
+   ],
+   "correspondence_added": [
+    "WHOLE_ANCHOR_GUESS_THEN_CHECK"
+   ],
+   "reach_4_step_claim_only": [
+    "THREE_HOP_FIRST_CHILD",
+    "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"
+   ],
+   "reach_both_claims": [
+    "FRONTIER_FALLBACK",
+    "SINGLE_ROOT_FALLBACK"
+   ]
+  },
+  "added_by_codex_A2_1_complete_families": {
+   "analogy": [
+    "FIXED_POSITION_1",
+    "FIXED_POSITION_2",
+    "FIXED_POSITION_3",
+    "FIXED_POSITION_4",
+    "FIXED_POSITION_5",
+    "FIXED_POSITION_6",
+    "FIXED_POSITION_7",
+    "STATUS_BY_COUNT_0",
+    "STATUS_BY_COUNT_1",
+    "STATUS_BY_COUNT_2",
+    "STATUS_BY_COUNT_3",
+    "STATUS_BY_COUNT_4",
+    "STATUS_BY_COUNT_5",
+    "STATUS_BY_COUNT_6",
+    "STATUS_BY_COUNT_7",
+    "STATUS_BY_COUNT_8"
+   ]
+  },
+  "added_by_proposed_amendment_A2": {
+   "analogy": [
+    "DEGREE_GUESS_THEN_CHECK",
+    "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+    "FLAG_ANCHOR_GUESS_THEN_CHECK"
+   ],
+   "correspondence": [
+    "WHOLE_ANCHOR_GUESS_THEN_CHECK"
+   ],
+   "reach": [
+    "SINGLE_ROOT_FALLBACK",
+    "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"
+   ]
+  },
+  "added_by_switches": {
+   "analogy": [
+    "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST",
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST"
+   ],
+   "reach": {
+    "REACH_3_STEP_TRANSFER_6": [
+     "FRONTIER_FALLBACK"
+    ],
+    "REACH_4_STEP_TRANSFER_6": [
+     "FRONTIER_FALLBACK"
+    ]
+   }
+  },
+  "analogy": [
+   "ALWAYS_NO_MATCH",
+   "FIRST_CANDIDATE",
+   "NODE_EDGE_COUNT_MATCH",
+   "DEGREE_MULTISET_MATCH",
+   "FLAG_ANCHOR",
+   "FIXED_POSITION_1",
+   "FIXED_POSITION_2",
+   "FIXED_POSITION_3",
+   "FIXED_POSITION_4",
+   "FIXED_POSITION_5",
+   "FIXED_POSITION_6",
+   "FIXED_POSITION_7",
+   "FIXED_ALIAS_W0",
+   "FIXED_ALIAS_W1",
+   "FIXED_ALIAS_W2",
+   "FIXED_ALIAS_W3",
+   "FIXED_ALIAS_W4",
+   "FIXED_ALIAS_W5",
+   "FIXED_ALIAS_W6",
+   "FIXED_ALIAS_W7",
+   "CANDIDATE_ONLY_NOVELTY",
+   "STATUS_BY_COUNT_0",
+   "STATUS_BY_COUNT_1",
+   "STATUS_BY_COUNT_2",
+   "STATUS_BY_COUNT_3",
+   "STATUS_BY_COUNT_4",
+   "STATUS_BY_COUNT_5",
+   "STATUS_BY_COUNT_6",
+   "STATUS_BY_COUNT_7",
+   "STATUS_BY_COUNT_8",
+   "OTHER_DOMAIN_ONLY",
+   "DEGREE_GUESS_THEN_CHECK",
+   "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+   "FLAG_ANCHOR_GUESS_THEN_CHECK",
+   "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+   "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST",
+   "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST"
+  ],
+  "beyond_a2_7_only_adding_bars": {
+   "analogy_FIXED_ALIAS_W0_to_W7": "the pre-A2 BEST_FIXED_POSITION table (focus included), kept untuned so no bar of the first version is dropped; A2.1 names only FIXED_POSITION_1..7",
+   "analogy_R1_whole_child_both_directions": [
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST",
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST"
+   ]
+  },
+  "computed_not_registered_printed_only": {
+   "analogy": [],
+   "reach": {
+    "REACH_3_STEP_TRANSFER_6": [],
+    "REACH_4_STEP_TRANSFER_6": []
+   }
+  },
+  "correspondence": [
+   "ALWAYS_NO_MATCH",
+   "IDENTITY_BY_RANK",
+   "DEGREE_SORTED",
+   "DEGREE_GUESS_THEN_CHECK",
+   "FLAG_ANCHOR_GUESS_THEN_CHECK",
+   "WHOLE_ANCHOR_GUESS_THEN_CHECK"
+  ],
+  "declared_not_testable_by_D1": [],
+  "design_owner_switches": {
+   "D1_FRONTIER_DECISION": "a",
+   "D1_meaning": "keep: FRONTIER_FALLBACK is a bar of REACH_3_STEP_TRANSFER_6 and REACH_4_STEP_TRANSFER_6",
+   "R1_ANALOGY_SCOPE_DECISION": "a",
+   "R1_meaning": "register the whole-child rule in BOTH sort directions (two bars, DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST and DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST): Claude's default Q-A, bus message claude-0024, applied before the salt; Codex or the owner may object before the salt",
+   "REGISTER_FLAGS_TIEBREAK_GUESS": true
+  },
+  "exact_search_ceiling": "retained separately, never a bar (design s6 'Exact search is the ceiling'; A2.7 D2): printed as the full directed colour-refinement diagnostic, which separates every pair on this universe and so equals exact search",
+  "pre_A2_tuned_bars_completed_untuned": {
+   "BEST_FIXED_POSITION": [
+    "FIXED_ALIAS_W0",
+    "FIXED_ALIAS_W1",
+    "FIXED_ALIAS_W2",
+    "FIXED_ALIAS_W3",
+    "FIXED_ALIAS_W4",
+    "FIXED_ALIAS_W5",
+    "FIXED_ALIAS_W6",
+    "FIXED_ALIAS_W7"
+   ],
+   "STATUS_BY_COUNT": [
+    "STATUS_BY_COUNT_0",
+    "STATUS_BY_COUNT_1",
+    "STATUS_BY_COUNT_2",
+    "STATUS_BY_COUNT_3",
+    "STATUS_BY_COUNT_4",
+    "STATUS_BY_COUNT_5",
+    "STATUS_BY_COUNT_6",
+    "STATUS_BY_COUNT_7",
+    "STATUS_BY_COUNT_8"
+   ]
+  },
+  "reach": {
+   "REACH_3_STEP_TRANSFER_6": [
+    "CONSTANT_ABSENT",
+    "CONSTANT_DIRECT",
+    "ONE_HOP",
+    "LOWEST_RANK_CHILD",
+    "RANK_LAST_CHILD",
+    "TWO_HOP_FIRST_CHILD",
+    "PARTICIPANT_2",
+    "DEGREE_RULE",
+    "SINGLE_ROOT_FALLBACK",
+    "FRONTIER_FALLBACK"
+   ],
+   "REACH_4_STEP_TRANSFER_6": [
+    "CONSTANT_ABSENT",
+    "CONSTANT_DIRECT",
+    "ONE_HOP",
+    "LOWEST_RANK_CHILD",
+    "RANK_LAST_CHILD",
+    "TWO_HOP_FIRST_CHILD",
+    "PARTICIPANT_2",
+    "DEGREE_RULE",
+    "THREE_HOP_FIRST_CHILD",
+    "SINGLE_ROOT_FALLBACK",
+    "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP",
+    "FRONTIER_FALLBACK"
+   ]
+  },
+  "tie_rules_pinned": {
+   "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK": "sort every node of each world by (in-degree, out-degree, flag_position, rank), all ascending; pair the two sorted lists; one check of every edge",
+   "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": "sort by (in-degree, out-degree, 1 - child_of_the_declared_whole, flag_position, rank), all ascending (children before non-children); pair; one check of every edge",
+   "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": "sort by (in-degree, out-degree, child_of_the_declared_whole, flag_position, rank), all ascending (non-children before children); pair; one check of every edge",
+   "bank_rule": "analogy: each rule makes that one guess for each same-degree, other-domain candidate in displayed-alias order (sorted world_id) and answers the first candidate whose guess passes, else NO_MATCH; no backtracking, no second guess per candidate",
+   "child_of_the_declared_whole": "1 if an edge runs from the declared whole (declarations.participants[0]) to the node, else 0 (the whole itself is 0)",
+   "flag_position": "the node's index in declarations.participants: 0 = the declared whole, 1 = the second declared participant, 2 = the third; 3 = every node that is not a declared participant; ascending (whole first)",
+   "one_guess_family": "DEGREE_GUESS_THEN_CHECK, WHOLE_ANCHOR_GUESS_THEN_CHECK, FLAG_ANCHOR_GUESS_THEN_CHECK: map the first 0, 1 or 3 declared participants in order, then pair the other nodes sorted by (in-degree, out-degree, rank), all ascending; one check of every edge",
+   "rank": "a node's rank is its position in the world's sorted node references (ascending); lowest rank first",
+   "the_check": "'check all required relations and flags' (A2.7 D2) is read as checker v2's own condition: every edge maps onto an edge and the counts agree (checker_v2._isomorphisms: 'node labels, root choice and archetypes do not vote'); the declared domain is checked by the candidate filter; declared flags are not a required relation of an analogy or correspondence answer, so they order the guess but are not checked"
+  },
+  "tuned_on_the_cell_diagnostic_only_never_a_bar": [
+   "BEST_FIXED_NON_FOCUS_POSITION",
+   "BEST_FIXED_POSITION",
+   "BEST_STATUS_BY_COUNT"
+  ]
+ },
+ "registered_comparators_digest": "a2fd2104cac2b5b45115159e8748d604450d061bc6a93825bdecc7b696291363",
+ "schema": "claude.hset2-presalt-manifest/0.1",
+ "split_and_exposure_attestation": {
+  "exposure_search_scope_from_the_T5_record": {
+   "development_material_at_785c9bd1": "70 distinct worlds of 3, 4, 9 or 10 nodes; 0 of the 40",
+   "frozen_public_course_at_785c9bd1": "64 families and 64 bank worlds, all 3 or 4 nodes; 564 registry records, all sourced from those bank worlds; 0 six-node classes; 0 of the 40",
+   "hset1b_packets": "none: OWNER_DIRECTION_20260924.md (row 1) records the HSET-1B design as never built or launched; its salt was never used",
+   "not_searched": [
+    "other branches and repositories",
+    "AWS, S3 and D:/tksCAS-archive",
+    "any training run outside the frozen course"
+   ],
+   "searched_only": [
+    "the frozen public course, its 64-world bank and its development material at 785c9bd1, through the frozen loaders",
+    "a text search of this working copy (branch claude/hset2-build-20260924) for the HSET-1B DEV seed string",
+    "the committed code of HSET-1A, HSET-1B, HSET-2 stage 0 and the analogy probe and repair jobs in this design folder"
+   ]
+  },
+  "limit": "A2.7: do not assert clean novelty from stage-0 counts alone. This attests only the searched scope above; the not_searched list stays unsearched. Label EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT.",
+  "what_is_attested": [
+   "The DEV/TEST side of every 6-node degree group is fixed by the public rule of A1 D1; the TEST side is the public forbidden set; which TEST-side classes become TEST_NEW_6 foci is decided only by the HSET-2 salt, which does not exist yet.",
+   "PUBLIC_EXCLUDED version 2 removes, before the salt, every 5- or 6-node class of the larger-question fixture file (version 1) and the 24 older public HSET-1B DEV_NEW_6 classes that fall on the TEST side.",
+   "TEST_NEW_5 is HSET-1A's split (salt sha256 33f9d350...), never re-drawn; the build checks its public digest before any item is built.",
+   "The DEV side, DEV_NEW_6 and DEV_DECOYS_6 are unchanged by version 2 (digests in stage0_counts)."
+  ]
+ },
+ "stage0_counts": {
+  "dev_counts_labelled_A2_7_D3": {
+   "analogy_eligible_foci": 27,
+   "analogy_eligible_foci_degree_groups": 18,
+   "correspondence_eligible_foci": 52,
+   "correspondence_eligible_foci_degree_groups": 35,
+   "eligible_decoy_and_no_match_target_pool": {
+    "analogy_eligible_decoys_per_eligible_focus_total": 183,
+    "classes": 1324,
+    "correspondence_targets_per_eligible_focus_total": 227,
+    "degree_groups": 503,
+    "rule": "A2.7 D3: the focus's degree group within DEV_NEW_6 union DEV_DECOYS_6 (the whole DEV side), excluding the focus"
+   },
+   "filler_pool": {
+    "classes": 1264,
+    "rule": "A1 D3: filler worlds come only from DEV_DECOYS_6 (other degree groups than the focus's)"
+   },
+   "foci_DEV_NEW_6": 60,
+   "if_decoys_came_from_DEV_DECOYS_6_only_printed_not_used": {
+    "analogy_eligible_foci": 22,
+    "correspondence_eligible_foci": 43
+   },
+   "note": "public DEV counts; the published 27/52 foci are not a protected result (A2.7 D3)"
+  },
+  "dev_decoys_6_digest": "7d3b68e489b7e97ddd2e109b27a9f4960579356d4a7e5e93a73e3d2c1cb8ce85",
+  "dev_new_6_digest": "e1c046a464e794873ccfd7d64344cdc418a5bd4121d6deefa49261ed96cdf682",
+  "groups_digests": {
+   "DEV": "29349b328b8150719c9f5cc03f65fae43602cc9476e9362c6e388028c84d35de",
+   "TEST": "603e56e24704229fa21b0768b73b9532ff9688dd08c862b26dfc93154b88ba06"
+  },
+  "sides": {
+   "DEV": {
+    "classes": 1324,
+    "groups": 503,
+    "groups_with_2_or_more_classes": 233,
+    "groups_with_5_or_more_classes": 81
+   },
+   "TEST": {
+    "classes": 3723,
+    "groups": 1429,
+    "groups_with_2_or_more_classes": 622,
+    "groups_with_5_or_more_classes": 219
+   }
+  },
+  "six_node_universe": {
+   "all_classes_digest": "5efdb71e8cc7d6d638d6ce57d5c16e02efb8a9b415ac8f9ff7858f680fbd7472",
+   "classes_after_public_excluded": 5047,
+   "classes_enumerated": 5074,
+   "degree_groups": 1932
+  }
+ },
+ "stage0_files_sha256": {
+  "PUBLIC_EXCLUDED_v1.json": "f101cbdd2984e5bcd21389f8ed76ef4550bc3817735c65f0acb8c8afc6d23b98",
+  "PUBLIC_EXCLUDED_v2.json": "3aada28870504fb75cf97cc96fa26097ea3a59ad69eda904766ed84362f2a7b1",
+  "STAGE0_DEV_SIDE_GROUPS.json": "d36ad592335d28306b0fe45cac24a9f9060ed2660b30207f84555cbb15fe4121",
+  "STAGE0_TEST_SIDE_GROUPS.json": "30df4cd35f66e4b11f8155a5114cf64b1c7d0a3195377190d6cbd99394f42a1b"
+ },
+ "state": "PRE_SALT: the bar set, tie rules, pins and exposure attestation fixed before the HSET-2 salt exists. Not reviewed by Codex yet. No salt was made or read; no sealed file was opened; no model was run.",
+ "throwaway_ranges": {
+  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+  "runs": {
+   "ranges_analogy.json": {
+    "only": "analogy",
+    "seeds": [
+     "REVIEWER-a12",
+     "REVIEWER-a16",
+     "REVIEWER-a5",
+     "REVIEWER-a7",
+     "REVIEWER-a8",
+     "REVIEWER-a9",
+     "reach-4",
+     "reach-5",
+     "reach-6",
+     "reach-7",
+     "reach-9",
+     "tiny-10",
+     "tiny-11",
+     "tiny-12",
+     "tiny-14",
+     "tiny-15",
+     "tiny-16",
+     "tiny-17",
+     "tiny-18",
+     "tiny-19",
+     "tiny-9"
+    ]
+   },
+   "ranges_corr_1.json": {
+    "only": "correspondence",
+    "seeds": [
+     "REVIEWER-a12",
+     "REVIEWER-a16",
+     "REVIEWER-a5",
+     "REVIEWER-a7",
+     "REVIEWER-a8",
+     "REVIEWER-a9",
+     "tiny-10",
+     "tiny-11",
+     "tiny-12",
+     "tiny-14",
+     "tiny-9"
+    ]
+   },
+   "ranges_corr_2.json": {
+    "only": "correspondence",
+    "seeds": [
+     "reach-4",
+     "reach-5",
+     "reach-6",
+     "reach-7",
+     "reach-9",
+     "tiny-15",
+     "tiny-16",
+     "tiny-17",
+     "tiny-18",
+     "tiny-19"
+    ]
+   },
+   "ranges_reach_1.json": {
+    "only": "reach",
+    "seeds": [
+     "REVIEWER-a12",
+     "REVIEWER-a16",
+     "REVIEWER-a5",
+     "REVIEWER-a7",
+     "REVIEWER-a8",
+     "REVIEWER-a9",
+     "tiny-10",
+     "tiny-11",
+     "tiny-12",
+     "tiny-14",
+     "tiny-9"
+    ]
+   },
+   "ranges_reach_2.json": {
+    "only": "reach",
+    "seeds": [
+     "reach-4",
+     "reach-5",
+     "reach-6",
+     "reach-7",
+     "reach-9",
+     "tiny-15",
+     "tiny-16",
+     "tiny-17",
+     "tiny-18",
+     "tiny-19"
+    ]
+   }
+  },
+  "schema": "claude.hset2-throwaway-ranges-summary/0.1",
+  "state": "THROWAWAY: throwaway salts; development estimates, not the A2.4 table and never a result",
+  "summary": {
+   "DEV_NEW_6/ANALOGY": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      5,
+      5.0,
+      5
+     ],
+     "original_cluster": [
+      6,
+      6.0,
+      6
+     ],
+     "shared_shape_component": [
+      5,
+      5.0,
+      5
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 21
+     },
+     "original_cluster": {
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 21
+     },
+     "shared_shape_component": {
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 21
+     }
+    },
+    "binding_bar_counts": {
+     "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 21
+    },
+    "clusters": [
+     27,
+     27.0,
+     27
+    ],
+    "degree_groups": [
+     18,
+     18.0,
+     18
+    ],
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     6,
+     6.0,
+     6
+    ],
+    "original_floor_met": 0,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      18,
+      18.0,
+      18
+     ],
+     "original_cluster": [
+      27,
+      27.0,
+      27
+     ],
+     "shared_shape_component": [
+      14,
+      14.0,
+      14
+     ]
+    }
+   },
+   "TEST_NEW_5/CORRESPONDENCE": {
+    "a2_4_floors_met": 21,
+    "binding_W_by_view": {
+     "degree_group": [
+      12,
+      15.6,
+      20
+     ],
+     "original_cluster": [
+      14,
+      20.9,
+      26
+     ],
+     "shared_shape_component": [
+      12,
+      15.6,
+      20
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "DEGREE_GUESS_THEN_CHECK": 21
+     },
+     "original_cluster": {
+      "DEGREE_GUESS_THEN_CHECK": 21
+     },
+     "shared_shape_component": {
+      "DEGREE_GUESS_THEN_CHECK": 21
+     }
+    },
+    "binding_bar_counts": {
+     "DEGREE_GUESS_THEN_CHECK": 21
+    },
+    "clusters": [
+     60,
+     72.6,
+     83
+    ],
+    "degree_groups": [
+     22,
+     28.1,
+     33
+    ],
+    "original_and_a2_4_floors_met": 21,
+    "original_binding_W": [
+     14,
+     20.9,
+     26
+    ],
+    "original_floor_met": 21,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      22,
+      28.1,
+      33
+     ],
+     "original_cluster": [
+      60,
+      72.6,
+      83
+     ],
+     "shared_shape_component": [
+      22,
+      28.1,
+      33
+     ]
+    }
+   },
+   "TEST_NEW_6/ANALOGY": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      2,
+      5.4,
+      9
+     ],
+     "original_cluster": [
+      2,
+      6.1,
+      11
+     ],
+     "shared_shape_component": [
+      2,
+      5.0,
+      7
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK": 1,
+      "DEGREE_GUESS_THEN_CHECK": 1,
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": 6,
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 13
+     },
+     "original_cluster": {
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": 7,
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 14
+     },
+     "shared_shape_component": {
+      "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK": 1,
+      "DEGREE_GUESS_THEN_CHECK": 1,
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": 6,
+      "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 13
+     }
+    },
+    "binding_bar_counts": {
+     "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": 7,
+     "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": 14
+    },
+    "clusters": [
+     13,
+     22.3,
+     26
+    ],
+    "degree_groups": [
+     13,
+     16.4,
+     21
+    ],
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     2,
+     6.1,
+     11
+    ],
+    "original_floor_met": 1,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      13,
+      16.4,
+      21
+     ],
+     "original_cluster": [
+      13,
+      22.3,
+      26
+     ],
+     "shared_shape_component": [
+      10,
+      15.0,
+      21
+     ]
+    }
+   },
+   "TEST_NEW_6/CORRESPONDENCE": {
+    "a2_4_floors_met": 21,
+    "binding_W_by_view": {
+     "degree_group": [
+      12,
+      22.8,
+      30
+     ],
+     "original_cluster": [
+      19,
+      28.2,
+      34
+     ],
+     "shared_shape_component": [
+      12,
+      22.8,
+      30
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "DEGREE_GUESS_THEN_CHECK": 19,
+      "WHOLE_ANCHOR_GUESS_THEN_CHECK": 2
+     },
+     "original_cluster": {
+      "DEGREE_GUESS_THEN_CHECK": 20,
+      "WHOLE_ANCHOR_GUESS_THEN_CHECK": 1
+     },
+     "shared_shape_component": {
+      "DEGREE_GUESS_THEN_CHECK": 19,
+      "WHOLE_ANCHOR_GUESS_THEN_CHECK": 2
+     }
+    },
+    "binding_bar_counts": {
+     "DEGREE_GUESS_THEN_CHECK": 20,
+     "WHOLE_ANCHOR_GUESS_THEN_CHECK": 1
+    },
+    "clusters": [
+     39,
+     46.8,
+     53
+    ],
+    "degree_groups": [
+     29,
+     36.0,
+     43
+    ],
+    "original_and_a2_4_floors_met": 21,
+    "original_binding_W": [
+     19,
+     28.2,
+     34
+    ],
+    "original_floor_met": 21,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      29,
+      36.0,
+      43
+     ],
+     "original_cluster": [
+      39,
+      46.8,
+      53
+     ],
+     "shared_shape_component": [
+      29,
+      36.0,
+      43
+     ]
+    }
+   },
+   "TEST_NEW_6/REACH_BFS [REACH_3_STEP_TRANSFER_6]": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      0,
+      1.1,
+      3
+     ],
+     "original_cluster": [
+      0,
+      1.2,
+      3
+     ],
+     "shared_shape_component": [
+      0,
+      1.1,
+      3
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "FRONTIER_FALLBACK": 21
+     },
+     "original_cluster": {
+      "FRONTIER_FALLBACK": 21
+     },
+     "shared_shape_component": {
+      "FRONTIER_FALLBACK": 21
+     }
+    },
+    "binding_bar_counts": {
+     "FRONTIER_FALLBACK": 21
+    },
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     0,
+     1.2,
+     3
+    ],
+    "original_floor_met": 0,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      45,
+      49.2,
+      54
+     ],
+     "original_cluster": [
+      312,
+      352.7,
+      414
+     ],
+     "shared_shape_component": [
+      45,
+      49.2,
+      54
+     ]
+    }
+   },
+   "TEST_NEW_6/REACH_BFS [REACH_4_STEP_TRANSFER_6]": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      0,
+      0.6,
+      2
+     ],
+     "original_cluster": [
+      0,
+      0.8,
+      2
+     ],
+     "shared_shape_component": [
+      0,
+      0.6,
+      2
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "FRONTIER_FALLBACK": 9,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 12
+     },
+     "original_cluster": {
+      "FRONTIER_FALLBACK": 10,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 11
+     },
+     "shared_shape_component": {
+      "FRONTIER_FALLBACK": 9,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 12
+     }
+    },
+    "binding_bar_counts": {
+     "FRONTIER_FALLBACK": 10,
+     "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 11
+    },
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     0,
+     0.8,
+     2
+    ],
+    "original_floor_met": 0,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      45,
+      49.2,
+      54
+     ],
+     "original_cluster": [
+      312,
+      352.7,
+      414
+     ],
+     "shared_shape_component": [
+      45,
+      49.2,
+      54
+     ]
+    }
+   },
+   "TEST_NEW_6/REACH_FIRST_DIRECT [REACH_3_STEP_TRANSFER_6]": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      1,
+      3.3,
+      7
+     ],
+     "original_cluster": [
+      1,
+      3.5,
+      7
+     ],
+     "shared_shape_component": [
+      1,
+      3.3,
+      7
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "FRONTIER_FALLBACK": 21
+     },
+     "original_cluster": {
+      "FRONTIER_FALLBACK": 21
+     },
+     "shared_shape_component": {
+      "FRONTIER_FALLBACK": 21
+     }
+    },
+    "binding_bar_counts": {
+     "FRONTIER_FALLBACK": 21
+    },
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     1,
+     3.5,
+     7
+    ],
+    "original_floor_met": 0,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      45,
+      48.9,
+      54
+     ],
+     "original_cluster": [
+      261,
+      317.9,
+      366
+     ],
+     "shared_shape_component": [
+      45,
+      48.9,
+      54
+     ]
+    }
+   },
+   "TEST_NEW_6/REACH_FIRST_DIRECT [REACH_4_STEP_TRANSFER_6]": {
+    "a2_4_floors_met": 0,
+    "binding_W_by_view": {
+     "degree_group": [
+      0,
+      1.5,
+      3
+     ],
+     "original_cluster": [
+      0,
+      1.8,
+      4
+     ],
+     "shared_shape_component": [
+      0,
+      1.5,
+      3
+     ]
+    },
+    "binding_bar_by_view_counts": {
+     "degree_group": {
+      "FRONTIER_FALLBACK": 4,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 17
+     },
+     "original_cluster": {
+      "FRONTIER_FALLBACK": 5,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 16
+     },
+     "shared_shape_component": {
+      "FRONTIER_FALLBACK": 4,
+      "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 17
+     }
+    },
+    "binding_bar_counts": {
+     "FRONTIER_FALLBACK": 5,
+     "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP": 16
+    },
+    "original_and_a2_4_floors_met": 0,
+    "original_binding_W": [
+     0,
+     1.8,
+     4
+    ],
+    "original_floor_met": 0,
+    "seeds": 21,
+    "units_by_view": {
+     "degree_group": [
+      45,
+      48.9,
+      54
+     ],
+     "original_cluster": [
+      261,
+      317.9,
+      366
+     ],
+     "shared_shape_component": [
+      45,
+      48.9,
+      54
+     ]
+    }
+   },
+   "claims": {
+    "ANALOGY_BEYOND_DEGREE_6": {
+     "seeds": 21,
+     "testable": 1
+    },
+    "CORRESPONDENCE_BEYOND_DEGREE_5": {
+     "seeds": 21,
+     "testable": 21
+    },
+    "CORRESPONDENCE_BEYOND_DEGREE_6": {
+     "seeds": 21,
+     "testable": 21
+    },
+    "REACH_3_STEP_TRANSFER_6": {
+     "seeds": 21,
+     "testable": 0
+    },
+    "REACH_4_STEP_TRANSFER_6": {
+     "seeds": 21,
+     "testable": 0
+    },
+    "REPAIR_IMPROVES_ANALOGY_6": {
+     "seeds": 21,
+     "testable_original_and_every_A2_4_floor": 0
+    }
+   },
+   "per_seed_TEST_NEW_6_ANALOGY_binding_W_original_group_component": {
+    "REVIEWER-a12": [
+     9,
+     6,
+     5
+    ],
+    "REVIEWER-a16": [
+     3,
+     3,
+     3
+    ],
+    "REVIEWER-a5": [
+     3,
+     3,
+     3
+    ],
+    "REVIEWER-a7": [
+     6,
+     6,
+     6
+    ],
+    "REVIEWER-a8": [
+     4,
+     4,
+     3
+    ],
+    "REVIEWER-a9": [
+     7,
+     7,
+     7
+    ],
+    "reach-4": [
+     7,
+     7,
+     7
+    ],
+    "reach-5": [
+     9,
+     8,
+     7
+    ],
+    "reach-6": [
+     8,
+     6,
+     6
+    ],
+    "reach-7": [
+     4,
+     4,
+     4
+    ],
+    "reach-9": [
+     2,
+     2,
+     2
+    ],
+    "tiny-10": [
+     7,
+     7,
+     6
+    ],
+    "tiny-11": [
+     4,
+     3,
+     3
+    ],
+    "tiny-12": [
+     8,
+     7,
+     7
+    ],
+    "tiny-14": [
+     5,
+     4,
+     4
+    ],
+    "tiny-15": [
+     3,
+     3,
+     3
+    ],
+    "tiny-16": [
+     11,
+     9,
+     7
+    ],
+    "tiny-17": [
+     7,
+     7,
+     7
+    ],
+    "tiny-18": [
+     7,
+     5,
+     5
+    ],
+    "tiny-19": [
+     8,
+     8,
+     6
+    ],
+    "tiny-9": [
+     6,
+     5,
+     5
+    ]
+   },
+   "seeds_measured": [
+    "REVIEWER-a12",
+    "REVIEWER-a16",
+    "REVIEWER-a5",
+    "REVIEWER-a7",
+    "REVIEWER-a8",
+    "REVIEWER-a9",
+    "reach-4",
+    "reach-5",
+    "reach-6",
+    "reach-7",
+    "reach-9",
+    "tiny-10",
+    "tiny-11",
+    "tiny-12",
+    "tiny-14",
+    "tiny-15",
+    "tiny-16",
+    "tiny-17",
+    "tiny-18",
+    "tiny-19",
+    "tiny-9"
+   ],
+   "seeds_refused": {}
+  }
+ },
+ "tie_rules_pinned": {
+  "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK": "sort every node of each world by (in-degree, out-degree, flag_position, rank), all ascending; pair the two sorted lists; one check of every edge",
+  "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": "sort by (in-degree, out-degree, 1 - child_of_the_declared_whole, flag_position, rank), all ascending (children before non-children); pair; one check of every edge",
+  "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": "sort by (in-degree, out-degree, child_of_the_declared_whole, flag_position, rank), all ascending (non-children before children); pair; one check of every edge",
+  "bank_rule": "analogy: each rule makes that one guess for each same-degree, other-domain candidate in displayed-alias order (sorted world_id) and answers the first candidate whose guess passes, else NO_MATCH; no backtracking, no second guess per candidate",
+  "child_of_the_declared_whole": "1 if an edge runs from the declared whole (declarations.participants[0]) to the node, else 0 (the whole itself is 0)",
+  "flag_position": "the node's index in declarations.participants: 0 = the declared whole, 1 = the second declared participant, 2 = the third; 3 = every node that is not a declared participant; ascending (whole first)",
+  "one_guess_family": "DEGREE_GUESS_THEN_CHECK, WHOLE_ANCHOR_GUESS_THEN_CHECK, FLAG_ANCHOR_GUESS_THEN_CHECK: map the first 0, 1 or 3 declared participants in order, then pair the other nodes sorted by (in-degree, out-degree, rank), all ascending; one check of every edge",
+  "rank": "a node's rank is its position in the world's sorted node references (ascending); lowest rank first",
+  "the_check": "'check all required relations and flags' (A2.7 D2) is read as checker v2's own condition: every edge maps onto an edge and the counts agree (checker_v2._isomorphisms: 'node labels, root choice and archetypes do not vote'); the declared domain is checked by the candidate filter; declared flags are not a required relation of an analogy or correspondence answer, so they order the guess but are not checked"
+ }
+}

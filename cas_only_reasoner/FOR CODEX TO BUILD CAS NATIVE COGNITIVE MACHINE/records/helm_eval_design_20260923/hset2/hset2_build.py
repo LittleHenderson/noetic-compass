@@ -12,6 +12,10 @@ grid computed exactly at the group and component levels). And two switches for t
 D1_FRONTIER_DECISION (finding V-1, decision D1: "a", "b_not_testable", "b_rename" or "c"; default "a") and
 REGISTER_FLAGS_TIEBREAK_GUESS (note N1; default on). Two different texts are called "A2": this docstring says
 "Codex A2" for the statistical policy.
+Pre-salt round (2026-09-24): conforms to Codex's A2.7 at c3a128ee (the single A2 specification; D1 = a, D2's bar
+names word for word, including DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK), applies Claude's defaults Q-A (R1: the
+whole-child one-guess rule registered in BOTH sort directions; switch R1_ANALOGY_SCOPE_DECISION), Q-B (PUBLIC_EXCLUDED
+version 2, in stage 0) and Q-C (the sort keys and tie rules pinned in TIE_RULES and by public toy examples in the tests).
 Choices the design leaves open are written in `BUILDER_REPORT_HSET2.md` ("Choices where the design is silent").
 Non-neural: no model is loaded, nothing is trained, no forward pass.
 
@@ -74,13 +78,18 @@ HSET1A_DIR = DESIGN_DIR / "hset1a"
 ORACLE_DIR = DESIGN_DIR / "d1_acceptance"
 
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
-SCHEMA_SUMMARY = "claude.hset2-build-summary/0.3"
-DESIGN_BASIS = ("EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02) + the builder's PROPOSED Amendment A2 "
-                "(hset2/REVIEW_HSET2_BUILD_20260924.md; the designer or owner must accept it before the salt is made) "
-                "+ conformance to Codex's PROPOSED Amendment A2 statistical policy (EVALUATION_DESIGN_v0_4.md and "
-                "STATISTICAL_POLICY.json at f287f965, branch codex/helm-controlled-prelaunch-20260924): A2.1 families, "
-                "A2.2 views, A2.4 feasibility table; switches D1_FRONTIER_DECISION (default a: FRONTIER_FALLBACK "
-                "registered) and REGISTER_FLAGS_TIEBREAK_GUESS (registered)")
+SCHEMA_SUMMARY = "claude.hset2-build-summary/0.4"
+DESIGN_BASIS = ("EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02) + Codex's Amendment A2 as the single A2 "
+                "specification, A2.7 included (EVALUATION_DESIGN_v0_4.md and STATISTICAL_POLICY.json at c3a128ee, "
+                "branch codex/helm-controlled-prelaunch-20260924; it incorporates the builder's proposed bars of "
+                "bd960bc1): A2.1 families, A2.2 views, A2.4 feasibility table, A2.7 D1-D4; switches D1_FRONTIER_DECISION "
+                "(a: FRONTIER_FALLBACK registered, A2.7 D1), REGISTER_FLAGS_TIEBREAK_GUESS (on: "
+                "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK registered, A2.7 D2) and R1_ANALOGY_SCOPE_DECISION (a: the "
+                "whole-child one-guess rule registered in both sort directions, Claude's default Q-A, bus claude-0024, "
+                "pending Codex or owner); PUBLIC_EXCLUDED version 2 (T5, Claude's default Q-B)")
+DESIGN_SOURCE_COMMIT = "c3a128ee7bde3455f6b479e7972043fccc983162"          # Codex's branch; A2.7 read here
+DESIGN_V0_4_SHA256_AT_SOURCE = "0dd740584f33b752feb0453214d335520855d6ede77f3a5b490afd6c013a3454"   # git show bytes
+STATISTICAL_POLICY_SHA256_AT_SOURCE = "845de197a5214b5fdf18206c4c738c5e1fd3b05b96b6fe086516f2964b7bb619"
 # ---- pins, committed before any build
 HSET1A_SALT_SHA256 = "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754"   # BUILD_SPEC_v0_1.md s5
 # The coordinator makes the HSET-2 salt (32 random bytes, 64 hex characters) and commits its sha256 HERE before the
@@ -138,14 +147,59 @@ REACH_3_STEP_RENAMED_SCOPE = ("D1 option b_rename: this claim does NOT show 3-st
                               "the model beats the two-hop and root-count rules. FRONTIER_FALLBACK, a no-learning rule "
                               "that never follows an edge more than 2 steps from the whole, would also pass it (finding "
                               "V-1); its W is printed as computed_not_registered_W.")
-REGISTER_FLAGS_TIEBREAK_GUESS = True    # N1: FLAGS_TIEBREAK_GUESS_THEN_CHECK is an analogy bar
+REGISTER_FLAGS_TIEBREAK_GUESS = True    # N1 / A2.7 D2: DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK is an analogy bar
 THREE_HOP = "THREE_HOP_FIRST_CHILD"
 SINGLE_ROOT = "SINGLE_ROOT_FALLBACK"                                   # A2 (F2): two-hop, then a root-count fallback
 SINGLE_ROOT_THREE_HOP = "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"        # A2 (F2): three-hop, then the same fallback
 FRONTIER = "FRONTIER_FALLBACK"                                        # V-1: two-hop, then a 2-step-frontier fallback
 BUILT_ON_THREE_HOP = (THREE_HOP, SINGLE_ROOT_THREE_HOP)               # not bars of REACH_3_STEP_TRANSFER_6
-FLAGS_TIEBREAK = "FLAGS_TIEBREAK_GUESS_THEN_CHECK"                   # N1: degree sort, ties by declared flags, then rank
-# Codex A2.1 (PROPOSED, f287f965): complete finite families, every member a registered bar, nothing tuned on TEST.
+# A2.7 D2's name, word for word (the build called it FLAGS_TIEBREAK_GUESS_THEN_CHECK before 2026-09-24's pre-salt round)
+FLAGS_TIEBREAK = "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK"            # N1: degree sort, ties by declared flags, then rank
+# R1 (review of 4c402209, finding 1; its "analogy cousin"): the flags tie-break guess with one more sort key, "is this
+# node a child of the declared whole?", placed after the degrees and before the flags. The key's direction is not
+# implied by any text (verifier note VN-1), so Claude's default Q-A (bus claude-0024) registers BOTH directions as bars.
+WHOLE_CHILD_LAST = "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST"     # non-children before children
+WHOLE_CHILD_FIRST = "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST"   # children before non-children
+WHOLE_CHILD_BARS = (WHOLE_CHILD_LAST, WHOLE_CHILD_FIRST)
+R1_OPTIONS = {
+    "a": ("register the whole-child rule in BOTH sort directions (two bars, %s and %s): Claude's default Q-A, bus "
+          "message claude-0024, applied before the salt; Codex or the owner may object before the salt"
+          % WHOLE_CHILD_BARS),
+    "b_widen_scope": ("the two whole-child rules are computed and printed only (computed_not_registered_W); the scope "
+                      "sentence is widened to say a pass may come from such a single guess"),
+    "c": ("define the analogy bar by a declared view (the best one-guess ordering from a named feature set): a design "
+          "change that needs its own amendment and code; the build refuses until then")}
+R1_ANALOGY_SCOPE_DECISION = "a"
+# Q-C (bus claude-0024; A2.7 D2 "publish and pin the exact flag-key order and tie convention"): the pinned sort keys.
+# The tests pin each one with public toy examples (test_hset2.py, test_flag_key_order_and_tie_rule_pinned_by_toys).
+TIE_RULES = {
+    "rank": "a node's rank is its position in the world's sorted node references (ascending); lowest rank first",
+    "flag_position": ("the node's index in declarations.participants: 0 = the declared whole, 1 = the second declared "
+                      "participant, 2 = the third; 3 = every node that is not a declared participant; ascending "
+                      "(whole first)"),
+    "child_of_the_declared_whole": ("1 if an edge runs from the declared whole (declarations.participants[0]) to the "
+                                    "node, else 0 (the whole itself is 0)"),
+    FLAGS_TIEBREAK: "sort every node of each world by (in-degree, out-degree, flag_position, rank), all ascending; pair "
+                    "the two sorted lists; one check of every edge",
+    WHOLE_CHILD_LAST: "sort by (in-degree, out-degree, child_of_the_declared_whole, flag_position, rank), all "
+                      "ascending (non-children before children); pair; one check of every edge",
+    WHOLE_CHILD_FIRST: "sort by (in-degree, out-degree, 1 - child_of_the_declared_whole, flag_position, rank), all "
+                       "ascending (children before non-children); pair; one check of every edge",
+    "one_guess_family": ("DEGREE_GUESS_THEN_CHECK, WHOLE_ANCHOR_GUESS_THEN_CHECK, FLAG_ANCHOR_GUESS_THEN_CHECK: map the "
+                         "first 0, 1 or 3 declared participants in order, then pair the other nodes sorted by "
+                         "(in-degree, out-degree, rank), all ascending; one check of every edge"),
+    "bank_rule": ("analogy: each rule makes that one guess for each same-degree, other-domain candidate in displayed-alias "
+                  "order (sorted world_id) and answers the first candidate whose guess passes, else NO_MATCH; no "
+                  "backtracking, no second guess per candidate"),
+    "the_check": ("'check all required relations and flags' (A2.7 D2) is read as checker v2's own condition: every edge "
+                  "maps onto an edge and the counts agree (checker_v2._isomorphisms: 'node labels, root choice and "
+                  "archetypes do not vote'); the declared domain is checked by the candidate filter; declared flags are "
+                  "not a required relation of an analogy or correspondence answer, so they order the guess but are not "
+                  "checked")}
+EXACT_SEARCH_CEILING = ("retained separately, never a bar (design s6 'Exact search is the ceiling'; A2.7 D2): printed "
+                        "as the full directed colour-refinement diagnostic, which separates every pair on this universe "
+                        "and so equals exact search")
+# Codex A2.1 (f287f965; unchanged at c3a128ee): complete finite families, every member a registered bar, nothing tuned on TEST.
 FIXED_POSITIONS = tuple("FIXED_POSITION_%d" % j for j in range(1, 8))  # the j-th non-focus alias, numeric alias order
 STATUS_BY_COUNT_M = tuple(range(0, 9))
 STATUS_BY_COUNT_FAMILY = tuple("STATUS_BY_COUNT_%d" % m for m in STATUS_BY_COUNT_M)
@@ -162,14 +216,17 @@ ANALOGY_BASE_COMPARATORS = (("ALWAYS_NO_MATCH", "FIRST_CANDIDATE", "NODE_EDGE_CO
 
 
 def analogy_comparators():
-    """The registered analogy bars: design s6, Codex A2.1's families, the builder's proposed A2, and the flags
-    tie-break guess while its switch is on (read at call time, so the switch is one recorded constant)."""
-    return ANALOGY_BASE_COMPARATORS + ((FLAGS_TIEBREAK,) if REGISTER_FLAGS_TIEBREAK_GUESS else ())
+    """The registered analogy bars: design s6, Codex A2.1's families, A2.7 D2's one-guess bars (the flags tie-break
+    guess while its switch is on), and R1's two whole-child bars while R1 is option a (switches read at call time, so
+    each is one recorded constant)."""
+    return (ANALOGY_BASE_COMPARATORS + ((FLAGS_TIEBREAK,) if REGISTER_FLAGS_TIEBREAK_GUESS else ())
+            + (WHOLE_CHILD_BARS if R1_ANALOGY_SCOPE_DECISION == "a" else ()))
 
 
 def analogy_computed_not_registered():
     """Analogy rules computed and printed as diagnostics only (a switched-off bar stays visible)."""
-    return () if REGISTER_FLAGS_TIEBREAK_GUESS else (FLAGS_TIEBREAK,)
+    return ((() if REGISTER_FLAGS_TIEBREAK_GUESS else (FLAGS_TIEBREAK,))
+            + (() if R1_ANALOGY_SCOPE_DECISION == "a" else WHOLE_CHILD_BARS))
 # The three one-guess rules, the same in both bank kinds: how many declared participants are mapped first (0: none;
 # 1: the declared whole; 3: the whole and both participants), then the rest by (in-degree, out-degree, rank).
 GUESS_ANCHORS = {"DEGREE_GUESS_THEN_CHECK": 0, "WHOLE_ANCHOR_GUESS_THEN_CHECK": 1, "FLAG_ANCHOR_GUESS_THEN_CHECK": 3}
@@ -189,7 +246,7 @@ A2_4_MIN_UNITS = 10
 SIGN_POWER_Q = ((3, 5), (7, 10), (4, 5), (1, 1))                      # q = 0.60, 0.70, 0.80, 1.00, exact
 HSET1A_NEVER_LOSES_FRACTIONS = ((1, 2), (3, 4), (1, 1))               # 0.5, 0.75, 1.0 (the HSET-1A grid)
 UNIT_POWER_MAX_STATES = 200000        # a component whose exact enumeration needs more states is reported, not computed
-MECHANISM_GATE_STATE = "MECHANISM_GATE_OPEN"      # STATISTICAL_POLICY.json mechanism.state at f287f965 (Codex A2.6)
+MECHANISM_GATE_STATE = "MECHANISM_GATE_OPEN"      # STATISTICAL_POLICY.json mechanism.state at c3a128ee (Codex A2.6)
 # Measured 2026-09-23 by this builder: the frozen checker over the frozen public course's registry main queries (70
 # analogy and 88 correspondence records). NO_MATCH was never trained for either kind (review m4). Re-measured by the
 # sealed build, which fails closed on any difference.
@@ -197,16 +254,39 @@ TRAINED_BANK_STATES = {"analogy": {"MATCH": 70}, "correspondence": {"MAPPING": 8
 SCOPE_SENTENCE = ("At 6 nodes or fewer this test can show that the model does better than every registered no-learning "
                   "rule, including degree counting. It cannot tell full structural comparison from one hop of "
                   "neighbour-degree matching.")
-# Review of 4c402209, finding 1 (MAJOR, a design choice): recorded, not decided, by this builder. No bar is added for it.
-OPEN_ANALOGY_SCOPE_QUESTION = (
-    "OPEN, for the design owner before the salt (review of 4c402209, finding 1): an unregistered no-learning rule, "
-    "WHOLE_CHILD_FLAG_GUESS (one guess per same-degree other-domain candidate: nodes sorted by in-degree, out-degree, "
-    "child-of-the-declared-whole, flag position, rank; one check; no search), passed ANALOGY_BEYOND_DEGREE_6 with every "
-    "registered bar in place in 2 of 21 throwaway salts; in one of them (tiny-9) every Codex A2.4 floor is met and "
-    "the rule also passes the group and component views. So the scope sentence overstates the least a passing model "
-    "must do. Options: (a) register that rule (then, in the throwaway salts, the original floor holds in 3 of 21 and "
-    "every A2.4 floor in 0 of 21, so the confirmatory claim reads NOT_TESTABLE in every one); (b) widen the scope "
-    "sentence; (c) define the bar by a declared view (the best one-guess ordering from a named feature set)")
+R1_WIDENED_SCOPE_ADDITION = (" Under R1 option b a pass may also come from a single one-guess rule keyed on degree, the "
+                             "declared flags and the declared whole's children, which is computed but not a bar.")
+# A2.7 D1, word for word: the limits every reach claim carries
+REACH_CLAIM_LIMITS_A2_7 = (
+    "Even a nominal pass establishes only performance against the registered finite rules, not proof of learned "
+    "three-step path following or exclusion of every shallow rule.",
+    "Do not label this finite list an exhaustive information-view control.")
+# A2.3, word for word: the only caption the confirmatory claim may use, and only if every condition passes
+CONFIRMATORY_CAPTION_A2_3 = ("The repair improved registered six-node analogy performance in all three seed pairs, "
+                             "cleared the registered bars and mechanism checks, and had no regression detected by the "
+                             "listed tests.")
+
+
+def scope_sentence():
+    return SCOPE_SENTENCE + (R1_WIDENED_SCOPE_ADDITION if R1_ANALOGY_SCOPE_DECISION == "b_widen_scope" else "")
+
+
+# Review of 4c402209, finding 1 (MAJOR, a design choice). Claude's default Q-A is applied (R1 option a); the finding
+# and the options stay printed so a reader can see what was decided and by whom.
+R1_FINDING = (
+    "review of 4c402209, finding 1: an unregistered no-learning rule, WHOLE_CHILD_FLAG_GUESS (one guess per "
+    "same-degree other-domain candidate: nodes sorted by in-degree, out-degree, child-of-the-declared-whole, flag "
+    "position, rank; one check; no search), passed ANALOGY_BEYOND_DEGREE_6 with every then-registered bar in place in 2 "
+    "of 21 throwaway salts; in one of them (tiny-9) every Codex A2.4 floor was met and the rule also passed the group "
+    "and component views. The sort direction of the whole-child key changes which salts it passes (note VN-1).")
+
+
+def r1_record():
+    """The R1 decision as printed on the analogy claims (replaces the earlier open question)."""
+    return {"value": R1_ANALOGY_SCOPE_DECISION, "meaning": R1_OPTIONS.get(R1_ANALOGY_SCOPE_DECISION),
+            "state": ("CLAUDE_DEFAULT_Q_A_APPLIED_BEFORE_THE_SALT_PENDING_CODEX_OR_OWNER_OBJECTION"
+                      if R1_ANALOGY_SCOPE_DECISION == "a" else "SET_BY_THE_DESIGN_OWNER"),
+            "finding": R1_FINDING, "options": dict(R1_OPTIONS)}
 DECLARED_NOT_TESTABLE = {
     "ANALOGY_BEYOND_DEGREE_5": "design s1: the whole 5-node universe has only 6 degree groups with 4 or more members",
     "REACH_3_STEP_TRANSFER_5": "design s1: HSET-1A measured W = 2 on TEST_NEW_5",
@@ -230,6 +310,16 @@ def check_d1():
         raise SystemExit("REFUSED: D1_FRONTIER_DECISION must be one of %s" % ", ".join(sorted(D1_OPTIONS)))
     if D1_FRONTIER_DECISION == "c":
         raise SystemExit("REFUSED: D1 option c (rebalance the reach cell) is a design change; it needs its own "
+                         "amendment and code before any build")
+    check_r1()
+
+
+def check_r1():
+    """Refuse an unknown R1 value, and R1 option c (a declared-view bar needs its own amendment and code)."""
+    if R1_ANALOGY_SCOPE_DECISION not in R1_OPTIONS:
+        raise SystemExit("REFUSED: R1_ANALOGY_SCOPE_DECISION must be one of %s" % ", ".join(sorted(R1_OPTIONS)))
+    if R1_ANALOGY_SCOPE_DECISION == "c":
+        raise SystemExit("REFUSED: R1 option c (a declared-view analogy bar) is a design change; it needs its own "
                          "amendment and code before any build")
 
 
@@ -276,14 +366,33 @@ def registered_comparators():
             "tuned_on_the_cell_diagnostic_only_never_a_bar": sorted(TUNED_DIAGNOSTIC_FAMILIES),
             "design_owner_switches": {"D1_FRONTIER_DECISION": D1_FRONTIER_DECISION,
                                       "D1_meaning": D1_OPTIONS.get(D1_FRONTIER_DECISION),
-                                      "REGISTER_FLAGS_TIEBREAK_GUESS": REGISTER_FLAGS_TIEBREAK_GUESS},
+                                      "REGISTER_FLAGS_TIEBREAK_GUESS": REGISTER_FLAGS_TIEBREAK_GUESS,
+                                      "R1_ANALOGY_SCOPE_DECISION": R1_ANALOGY_SCOPE_DECISION,
+                                      "R1_meaning": R1_OPTIONS.get(R1_ANALOGY_SCOPE_DECISION)},
             "declared_not_testable_by_D1": ([REACH_3_STEP_NAME] if D1_FRONTIER_DECISION == "b_not_testable" else []),
             "added_by_switches": {"reach": {claim: [FRONTIER] if FRONTIER in bars else []
                                             for claim, bars in reach_claim_bars().items()},
-                                  "analogy": [FLAGS_TIEBREAK] if REGISTER_FLAGS_TIEBREAK_GUESS else []},
+                                  "analogy": (([FLAGS_TIEBREAK] if REGISTER_FLAGS_TIEBREAK_GUESS else [])
+                                              + (list(WHOLE_CHILD_BARS) if R1_ANALOGY_SCOPE_DECISION == "a" else []))},
             "computed_not_registered_printed_only": {"reach": {claim: list(x) for claim, x
                                                                in reach_computed_not_registered().items()},
-                                                     "analogy": list(analogy_computed_not_registered())}}
+                                                     "analogy": list(analogy_computed_not_registered())},
+            # A2.7 D2 / Q-C: the exact sort keys and tie conventions, pinned before the key is made
+            "tie_rules_pinned": dict(TIE_RULES),
+            "exact_search_ceiling": EXACT_SEARCH_CEILING,
+            "a2_7_named_bars_registered_under_the_same_names": {
+                "reach_both_claims": [x for x in (FRONTIER, SINGLE_ROOT)
+                                      if all(x in bars for bars in reach_claim_bars().values())],
+                "reach_4_step_claim_only": list(BUILT_ON_THREE_HOP),
+                "analogy": [x for x in ("DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+                                        "FLAG_ANCHOR_GUESS_THEN_CHECK", FLAGS_TIEBREAK) if x in analogy_comparators()],
+                "correspondence_added": ["WHOLE_ANCHOR_GUESS_THEN_CHECK"]},
+            "beyond_a2_7_only_adding_bars": {
+                "analogy_FIXED_ALIAS_W0_to_W7": ("the pre-A2 BEST_FIXED_POSITION table (focus included), kept untuned "
+                                                 "so no bar of the first version is dropped; A2.1 names only "
+                                                 "FIXED_POSITION_1..7"),
+                "analogy_R1_whole_child_both_directions": (list(WHOLE_CHILD_BARS) if R1_ANALOGY_SCOPE_DECISION == "a"
+                                                           else [])}}
 
 
 # ============================================================================ plain graphs (public helpers)
@@ -423,22 +532,39 @@ def one_guess(F, T, anchored):
     return frefs, trefs, m, {(m[a], m[b]) for a, b in fe} == set(te)
 
 
-def flags_tiebreak_guess(F, T):
-    """ONE guess, then ONE check (note N1 of the verification of 1520e17c): every node of each world sorted by
-    (in-degree, out-degree, declared-flag position, rank), where the flag position is 0 for the declared whole, 1 and
-    2 for the other two participants and 3 for any other node; the two sorted lists are paired. No node is anchored.
-    Returns whether the guess passes the edge check (False if the node counts differ)."""
-    fn, fe, frefs = world_graph(F)
-    tn, te, trefs = world_graph(T)
+def tiebreak_order(W, whole_child=None):
+    """The pinned node order of the flags tie-break guesses (TIE_RULES; Q-C), as rank positions.
+
+    whole_child None: (in-degree, out-degree, flag position, rank) -- DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK.
+    whole_child "last": (in-degree, out-degree, child-of-the-declared-whole, flag position, rank) -- non-children first.
+    whole_child "first": (in-degree, out-degree, 1 - child-of-the-declared-whole, flag position, rank) -- children first.
+    All keys ascending. Flag position = index in declarations.participants (0 = the declared whole), 3 for any other
+    node. Rank = position in the sorted node references."""
+    n, edges, refs = world_graph(W)
+    ind, outd = degrees(n, edges)
+    p = W["declarations"]["participants"]
+    flag = {i: (p.index(r) if r in p else 3) for i, r in enumerate(refs)}
+    if whole_child is None:
+        return sorted(range(n), key=lambda a: (ind[a], outd[a], flag[a], a))
+    if whole_child not in ("last", "first"):
+        raise ValueError("whole_child must be None, 'last' or 'first'")
+    whole = refs.index(p[0])
+    child = {a: int((whole, a) in set(edges)) for a in range(n)}
+    if whole_child == "first":
+        child = {a: 1 - c for a, c in child.items()}
+    return sorted(range(n), key=lambda a: (ind[a], outd[a], child[a], flag[a], a))
+
+
+def flags_tiebreak_guess(F, T, whole_child=None):
+    """ONE guess, then ONE check (note N1 of the verification of 1520e17c; A2.7 D2): every node of each world sorted by
+    the pinned order of `tiebreak_order` (the same order on both sides); the two sorted lists are paired. No node is
+    anchored. Returns whether the guess passes the edge check (False if the node counts differ).
+    whole_child None is DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK; "last" and "first" are R1's two whole-child bars."""
+    fn, fe, _ = world_graph(F)
+    tn, te, _ = world_graph(T)
     if fn != tn:
         return False
-
-    def order(W, n, edges, refs):
-        ind, outd = degrees(n, edges)
-        p = W["declarations"]["participants"]
-        flag = {i: (p.index(r) if r in p else 3) for i, r in enumerate(refs)}
-        return sorted(range(n), key=lambda a: (ind[a], outd[a], flag[a], a))
-    m = dict(zip(order(F, fn, fe, frefs), order(T, tn, te, trefs)))
+    m = dict(zip(tiebreak_order(F, whole_child), tiebreak_order(T, whole_child)))
     return {(m[a], m[b]) for a, b in fe} == set(te)
 
 
@@ -481,8 +607,10 @@ def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
     # order; the first candidate whose one guess passes the check, else NO_MATCH
     for name, anchored in GUESS_ANCHORS.items():
         out[name] = pick([w for w in same_deg_other if one_guess(focus, worlds[w], anchored)[3]])
-    # N1: the same, with the flags tie-break guess
+    # N1 / A2.7 D2: the same, with the flags tie-break guess; R1 (Q-A): its whole-child cousin in both directions
     out[FLAGS_TIEBREAK] = pick([w for w in same_deg_other if flags_tiebreak_guess(focus, worlds[w])])
+    out[WHOLE_CHILD_LAST] = pick([w for w in same_deg_other if flags_tiebreak_guess(focus, worlds[w], "last")])
+    out[WHOLE_CHILD_FIRST] = pick([w for w in same_deg_other if flags_tiebreak_guess(focus, worlds[w], "first")])
     # Codex A2.1: FIXED_POSITION_j = the j-th non-focus candidate (NO_MATCH if the bank has fewer than j); the pre-A2
     # table FIXED_ALIAS_Wk = the k-th displayed alias, focus included (NO_MATCH if absent); STATUS_BY_COUNT_m: E = the
     # same-degree other-domain candidates in alias order; NO_MATCH if E is empty or len(E) < m, else E[0]
@@ -1984,7 +2112,7 @@ def _run(args):
                                "a2_views_binding_W_printed_not_binding": {
                                    c: ({v: cell_views(claim, c)["binding_by_view"][v]["W"] for v in VIEWS}
                                        if cell_views(claim, c) else None) for c in cells},
-                               "scope_sentence": SCOPE_SENTENCE}
+                               "scope_sentence": scope_sentence()}
     claims_table[three_step]["d1_frontier_decision"] = {"value": D1_FRONTIER_DECISION,
                                                         "meaning": D1_OPTIONS[D1_FRONTIER_DECISION]}
     if D1_FRONTIER_DECISION == "b_not_testable":
@@ -1994,7 +2122,11 @@ def _run(args):
     if D1_FRONTIER_DECISION == "b_rename":
         claims_table[three_step]["renamed_from"] = REACH_3_STEP_NAME
         claims_table[three_step]["scope_note"] = REACH_3_STEP_RENAMED_SCOPE
-    claims_table["ANALOGY_BEYOND_DEGREE_6"]["open_design_question_before_the_salt"] = OPEN_ANALOGY_SCOPE_QUESTION
+    claims_table["ANALOGY_BEYOND_DEGREE_6"]["r1_analogy_scope_decision"] = r1_record()
+    for claim in (three_step, four_step):                      # A2.7 D1, word for word
+        claims_table[claim]["claim_limits_A2_7"] = list(REACH_CLAIM_LIMITS_A2_7)
+        claims_table[claim]["codex_A2_7_role"] = ("registered and exploratory; actual counts determine its status; "
+                                                  "never rebalanced, renamed into a success or rescued by a redraw")
     for claim, why in DECLARED_NOT_TESTABLE.items():
         claims_table[claim] = {"cells": [], "can_carry_a_claim_before_any_model": False, "status_if_not": "NOT_TESTABLE",
                                "declared_before_any_build": why}
@@ -2024,13 +2156,14 @@ def _run(args):
                                     "reported; no confirmatory claim)"},
             "mechanism_gate_status": {
                 "state": MECHANISM_GATE_STATE,
-                "source": "STATISTICAL_POLICY.json mechanism.state at f287f965 (Codex's PROPOSED A2.6); read, not "
+                "source": "STATISTICAL_POLICY.json mechanism.state at c3a128ee (Codex's A2.6); read, not "
                           "decided, by this builder",
                 "while_open": "MECHANISM_GATE_OPEN: a missing required mechanism validation keeps the claim from "
                               "passing (Codex A2.3); the underlying scores and reasons are kept"},
             "status_words_the_scorer_must_use": ["NOT_TESTABLE", "INFERENCE_ASSUMPTIONS_UNSUPPORTED",
                                                  "MECHANISM_GATE_OPEN"],
-            "open_design_question_before_the_salt": OPEN_ANALOGY_SCOPE_QUESTION}
+            "r1_analogy_scope_decision": r1_record(),
+            "caption_only_if_every_condition_passes_A2_3": CONFIRMATORY_CAPTION_A2_3}
     v_cells = sorted({c for claim, cells in claims.items() for c in cells if cell_floor(claim, c) and cell_floor(claim, c)["can_carry_a_claim"]})
     all_claim_cells = sorted({c for cells in claims.values() for c in cells})
     gates = {"pinned_program": {"path": GATES_PROGRAM, "sha256_lf": GATES_PROGRAM_LF_SHA256,
@@ -2143,7 +2276,7 @@ def _run(args):
                "counts": {"items": len(items), "items_by_split": dict(collections.Counter(i["split"] for i in items)),
                           "items_by_kind": dict(collections.Counter(i["kind"] for i in items))},
                "cells": summaries, "claims_before_any_model": claims_table, "family_wise_risk": family_wise,
-               "no_regression_gates": gates, "scope_sentence": SCOPE_SENTENCE,
+               "no_regression_gates": gates, "scope_sentence": scope_sentence(),
                "success_rule": ("BEATS_ALL_REGISTERED_BARS per cell per run: for every registered comparator X of the "
                                 "cell, b_X > c_X and exact one-sided p(b_X, b_X + c_X) <= 0.01; no zero-loss veto (s7); "
                                 "labelled %s under Codex A2.2 (PROPOSED), which adds the degree-group and "

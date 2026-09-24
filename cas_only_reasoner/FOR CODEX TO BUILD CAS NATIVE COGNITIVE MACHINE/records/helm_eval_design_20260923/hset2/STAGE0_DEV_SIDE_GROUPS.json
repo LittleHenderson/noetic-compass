@@ -3844,7 +3844,7 @@
  ],
  "groups_digest": "29349b328b8150719c9f5cc03f65fae43602cc9476e9362c6e388028c84d35de",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
- "public_excluded_removed_first": "afa70ca607c3498fdfeff14f850fc15b369f64843b32c47ceac96fdf4beee27f",
+ "public_excluded_removed_first": "04be98292c0486af0a3821d3d561cfa4ab67a7adddf97de87beb49ffe576169b",
  "rule": "group key = hset_worlds.canon([6, [[in, out], ...]]) over hset_worlds.degree_multiset; DEV iff sha256(b\"HSET-2-group-side-v0.1:\" + key.encode(\"utf-8\")).digest()[0] < 64",
  "schema": "claude.hset2-stage0-side-groups/0.1",
  "side": "DEV"

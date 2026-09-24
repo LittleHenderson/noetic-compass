@@ -1,8 +1,9 @@
 # AWS job: the HSET-2 sealed build (`CLAUDE_BUILT_CLAUDE_CHECKED`, NOT LAUNCHED)
 
 **What it is.** One CPU machine runs `../hset2/hset2_build.py` with the real salts. It builds the HSET-2 cells of
-`../EVALUATION_DESIGN_v0_4.md` with Amendment A1 and the builder's PROPOSED Amendment A2
-(`../hset2/REVIEW_HSET2_BUILD_20260924.md`), and prints everything section 7 lists before any model is read.
+`../EVALUATION_DESIGN_v0_4.md` with Amendment A1 and Codex's A2 as its single specification, A2.7 included (at
+`c3a128ee` on Codex's branch; `../hset2/PRESALT_MANIFEST_HSET2.json` lists the bar set, its digest, the tie rules, the
+pins and every difference), and prints everything section 7 lists before any model is read.
 No model is loaded, trained or run.
 
 **Who runs it.** The coordinator, only. The builder (Claude, temporary takeover while Codex is away) wrote it and did
@@ -71,27 +72,34 @@ comparators, not packets.
 
 ## Before launch (the coordinator; every step is required)
 
-The launcher refuses without steps 2, 3 and 3a. Steps 1 and 1a are not enforced by code: the coordinator
-records them in commits.
+The launcher refuses without steps 2, 3 and 3a, and names every missing pin at once. Steps 1 and 1a are not
+enforced by code: the coordinator records them in commits. **State after the pre-salt round (2026-09-24):** steps 3
+and 3a are DONE and committed; step 1a is decided by Codex's A2.7 plus Claude's defaults Q-A, Q-B and Q-C (bus
+`claude-0024`; an objection reverts them before the salt); `python launch.py --dry-run` makes no AWS call and refuses
+ONLY for step 2 (`HSET2_SALT_SHA256`), which is the custodian's.
 
 1. **A fresh review** of `hset2_build.py`, including the new packet code and the review fixes (design s9 step 1,
    s5.3; `../hset2/REVIEW_HSET2_BUILD_20260924.md`).
-1a. **The Amendment A2 decision, BEFORE the salt.** The designer or owner accepts the proposed A2 (the added bars), edits
-   it, or chooses option (b) of review F1 and/or F2, and the decision is committed. The owner hears the numbers of that
-   file's section 3 first (the 3-step reach claim could carry in 14 of 21 throwaway salts, the 4-step claim in 0 of 21,
-   the analogy claim in 19 of 21). Changing the bars after the salt exists, or after the build prints W, is a post-hoc
-   change.
+1a. **The bar decision, BEFORE the salt.** Codex fixed it in A2.7 (`c3a128ee`). The build conforms and adds Claude's
+   default Q-A (the whole-child rule in both directions). The owner hears the throwaway numbers first
+   (`../hset2/PRESALT_MANIFEST_HSET2.json`, `throwaway_ranges`; 21 salts): the confirmatory analogy claim meets every
+   A2.4 floor in 0 of 21; the analogy base claim's original floor in 1 of 21; both reach claims in 0 of 21; both
+   correspondence claims in 21 of 21. Changing the bars after the salt exists, or after the build prints W, is a
+   post-hoc change.
 2. **The HSET-2 salt.** Make 32 random bytes, written as 64 lowercase hex characters, in
    `D:/tksCAS-archive/hset2_sealed_20260924/salt.hex` (outside every repository). Commit its sha256 as
    `HSET2_SALT_SHA256` in `../hset2/hset2_build.py` and push, **before** the build (design s3 step 6, s9 step 2).
    If another folder date is used, change `ARCHIVE_HSET2` in `launch.py` in the same commit.
-3. **The TEST_NEW_5 check.** Copy HSET-1A's public `test_shapes_digest` (from its build summary) into
-   `EXPECTED_TEST5_SHAPES_DIGEST` in `launch.py`, and commit.
-3a. **The uv pin (review F9).** Copy the sha256 of `uv-x86_64-unknown-linux-gnu.tar.gz` for uv `0.12.7` from that GitHub
-   release's published `.sha256` file into `UV_TARBALL_SHA256` in `launch.py`, and commit. The launcher refuses while it
-   is None; the machine refuses if the download does not match. The tests pass with these pins set or unset (review
-   F7), so run `pytest` before this commit as usual.
-4. `python launch.py --dry-run` (uploads and launches nothing), then `python launch.py`, then `python watch.py`.
+3. **The TEST_NEW_5 check. DONE (pre-salt round):** `EXPECTED_TEST5_SHAPES_DIGEST` =
+   `1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9`, HSET-1A's public `test_shapes_digest`
+   (`../hset1a_aws_job/RESULTS_READING.json`). PUBLIC_EXCLUDED version 2 adds no 5-node class, so it is unchanged.
+3a. **The uv pin (review F9). DONE (pre-salt round):** `UV_TARBALL_SHA256` =
+   `788f18abea7c5f55d6216e4f5613fd89d4d59b631efeec117b2b07fe72f1da21`, from
+   `https://github.com/astral-sh/uv/releases/download/0.12.7/uv-x86_64-unknown-linux-gnu.tar.gz.sha256`, and equal to
+   the asset digest in `https://api.github.com/repos/astral-sh/uv/releases/tags/0.12.7`. The machine refuses if the
+   download does not match.
+4. `python launch.py --dry-run` (no AWS call: boto3 is imported only for a real launch), then `python launch.py`, then
+   `python watch.py`.
 
 ## Custody
 

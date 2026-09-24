@@ -12,7 +12,7 @@ The bundle is built from GIT OBJECTS only, never from working files:
   sealed/  the two salts, read from the archive, each checked against its committed sha256
 plus anchors.json: the sha256 (raw and LF) of EVERY bundled file.
 
-    python launch.py [--dry-run]                    # --dry-run uploads and launches nothing
+    python launch.py [--dry-run]                    # --dry-run makes no AWS call (boto3 is not imported)
     python launch.py --materialize-tree DIR         # local tests only: write tree/ (no salts) into a new folder
 """
 import argparse
@@ -42,16 +42,23 @@ MAX_SECONDS, CLIENT_DEADLINE_MINUTES, DOLLAR_CEILING = 90 * 60, 100, 1.00
 # None refuses the launch. The machine refuses to run if the downloaded tarball does not match it.
 PYTHON_VERSION = "3.14.0"
 UV_VERSION = "0.12.7"
-UV_TARBALL_SHA256 = None
+# Set 2026-09-24 (pre-salt round) from the official release checksum file
+#   https://github.com/astral-sh/uv/releases/download/0.12.7/uv-x86_64-unknown-linux-gnu.tar.gz.sha256
+# (101 bytes: "<sha256>  uv-x86_64-unknown-linux-gnu.tar.gz"), and cross-checked against the asset "digest" field of
+#   https://api.github.com/repos/astral-sh/uv/releases/tags/0.12.7 (published 2026-08-27T22:14:06Z; not a pre-release).
+UV_TARBALL_SHA256 = "788f18abea7c5f55d6216e4f5613fd89d4d59b631efeec117b2b07fe72f1da21"
 SOURCE_COMMIT = "785c9bd10f1416deb95f9c30aacb43124134fe45"
 SOURCE_BRANCH = "claude/helm-builder-continuation-20260923"
 ARCHIVE_HSET1A = pathlib.Path("D:/tksCAS-archive/hset1a_sealed_20260923")
 # The coordinator creates the HSET-2 salt here (32 random bytes as 64 lowercase hex characters) and commits its sha256
 # as hset2_build.HSET2_SALT_SHA256 BEFORE launch. The sealed results come back to a new run_<stamp> folder here.
 ARCHIVE_HSET2 = pathlib.Path("D:/tksCAS-archive/hset2_sealed_20260924")
-# HSET-1A's PUBLIC `test_shapes_digest` (its HSET1A_BUILD_SUMMARY.json). The coordinator copies it here before launch;
-# the build then proves TEST_NEW_5 is reproduced exactly. None refuses the launch.
-EXPECTED_TEST5_SHAPES_DIGEST = None
+# HSET-1A's PUBLIC `test_shapes_digest`; the build proves TEST_NEW_5 is reproduced exactly. Set 2026-09-24 (pre-salt
+# round) from records/helm_eval_design_20260923/hset1a_aws_job/RESULTS_READING.json ("test_shapes_digest", the build
+# whose "salt_sha256" is 33f9d350..., = HSET1A_SALT_SHA256). PUBLIC_EXCLUDED version 2 does not change it: version 2
+# adds only 6-node classes, and TEST_NEW_5 is hset1a_build.split_five of the HSET-1A salt over the 267 five-node classes
+# (test_hset2.py checks that no 5-node class was added). None would refuse the launch.
+EXPECTED_TEST5_SHAPES_DIGEST = "1b5a1d6872a69c350a73e51888cf7a942e00d5ea5747fa883a85f43444792bf9"
 CODE_TOPS = ("cncm/", "research/")
 DATA_DIRS = ("records/typed_course_001/", "records/typed_matched_001/development_001/", "schemas/", "spec/")
 DATA_FILES = ("records/typed_interface_001/checks_002/training_tokenizer.json", "records/typed_practice_001/evaluate_gates.py",
@@ -68,7 +75,7 @@ LF_PINS = {"records/typed_pointer_001/evaluate_gates.py": "d3e0ea979835fa548ae4f
            "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots_v2.py": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb"}
 D = "records/helm_eval_design_20260923/"
 CLAUDE_FILES = [D + "hset2/hset2_build.py", D + "hset2/hset2_stage0_public.py", D + "hset2/PUBLIC_EXCLUDED_v1.json",
-                D + "hset2/STAGE0_DEV_SIDE_GROUPS.json", D + "hset2/STAGE0_TEST_SIDE_GROUPS.json", D + "hset2/STAGE0_SUMMARY.json",
+                D + "hset2/PUBLIC_EXCLUDED_v2.json", D + "hset2/STAGE0_DEV_SIDE_GROUPS.json", D + "hset2/STAGE0_TEST_SIDE_GROUPS.json", D + "hset2/STAGE0_SUMMARY.json",
                 D + "hset1a/hset_worlds.py", D + "hset1a/hset1a_build.py", D + "hset1a/hset1b_build.py",
                 D + "d1_acceptance/oracle_isomorphism.py"]
 JOB_FILES = [D + "hset2_aws_job/launch.py", D + "hset2_aws_job/job.sh.template", D + "hset2_aws_job/watch.py",
@@ -152,23 +159,52 @@ def read_salt(path, pin, name):
     return salt
 
 
+def is_hex64(value):
+    return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+
+
+PIN_REFUSALS = {
+    "EXPECTED_TEST5_SHAPES_DIGEST": "EXPECTED_TEST5_SHAPES_DIGEST is not set (JOB_LIMITS.md, before launch)",
+    "UV_TARBALL_SHA256": "UV_TARBALL_SHA256 is not set (JOB_LIMITS.md, before launch; review F9)",
+    "SOURCE_COMMIT": "hset2_build.SOURCE_COMMIT differs from this launcher's",
+    "HSET1A_SALT_SHA256": "hset2_build.HSET1A_SALT_SHA256 is not 64 lowercase hex characters",
+    "HSET2_SALT_SHA256": "hset2_build.HSET2_SALT_SHA256 is not committed (design s3 step 6; the custodian's step)"}
+
+
+def pin_refusals(builder_blob):
+    """Every pin the launch needs, checked TOGETHER, so a refusal names all that are missing (no AWS call, no archive
+    read). `builder_blob` is hset2_build.py as committed. Returns the list of PIN_REFUSALS keys that fail."""
+    pins = builder_pins(builder_blob)
+    bad = [name for name, value in (("EXPECTED_TEST5_SHAPES_DIGEST", EXPECTED_TEST5_SHAPES_DIGEST),
+                                    ("UV_TARBALL_SHA256", UV_TARBALL_SHA256)) if not is_hex64(value)]
+    if pins.get("SOURCE_COMMIT") != SOURCE_COMMIT:
+        bad.append("SOURCE_COMMIT")
+    for name in ("HSET1A_SALT_SHA256", "HSET2_SALT_SHA256"):
+        if not is_hex64(pins.get(name)):
+            bad.append(name)
+    return bad
+
+
 def assemble():
+    """Checks everything that needs no salt first (uncommitted files, the pinned source tree, every pin), refusing with
+    the COMPLETE list of what is missing; only then reads the two salts from the archive."""
     head = git("rev-parse", "HEAD").decode().strip()
+    refusals = []
+    pre = prefix()
     dirty = git("status", "--porcelain", "--", *(CLAUDE_FILES + JOB_FILES)).decode().strip()
-    if dirty:
-        raise SystemExit("BUNDLE_REFUSED: commit the builder and job files first:\n" + dirty)
-    if EXPECTED_TEST5_SHAPES_DIGEST is None:
-        raise SystemExit("BUNDLE_REFUSED: EXPECTED_TEST5_SHAPES_DIGEST is not set (JOB_LIMITS.md, before launch)")
-    if not (isinstance(UV_TARBALL_SHA256, str) and len(UV_TARBALL_SHA256) == 64
-            and all(c in "0123456789abcdef" for c in UV_TARBALL_SHA256)):
-        raise SystemExit("BUNDLE_REFUSED: UV_TARBALL_SHA256 is not set (JOB_LIMITS.md, before launch; review F9)")
-    tree = source_tree()
+    at_head = set(git("ls-tree", "-r", "-z", "--name-only", "--full-tree", head, "--",
+                      *(pre + p for p in CLAUDE_FILES + JOB_FILES)).decode("utf-8").split("\0"))
+    absent = [p for p in CLAUDE_FILES + JOB_FILES if pre + p not in at_head]
+    if dirty or absent:
+        refusals.append("UNCOMMITTED_BUILDER_OR_JOB_FILES: commit them first:\n" + "\n".join(
+            [dirty] * bool(dirty) + ["not at HEAD: " + p for p in absent]))
+    tree = source_tree()                                  # refuses by itself if the pinned tree is not reproduced
+    builder = read_blobs(head, [D + "hset2/hset2_build.py"])[D + "hset2/hset2_build.py"]
+    refusals += [PIN_REFUSALS[name] for name in pin_refusals(builder)]
+    if refusals:
+        raise SystemExit("BUNDLE_REFUSED (%d): %s" % (len(refusals), " | ".join(refusals)))
     claude = read_blobs(head, CLAUDE_FILES)
     pins = builder_pins(claude[D + "hset2/hset2_build.py"])
-    if pins.get("SOURCE_COMMIT") != SOURCE_COMMIT:
-        raise SystemExit("BUNDLE_REFUSED: hset2_build.SOURCE_COMMIT differs from this launcher's")
-    if not pins.get("HSET2_SALT_SHA256"):
-        raise SystemExit("BUNDLE_REFUSED: hset2_build.HSET2_SALT_SHA256 is not committed (design s3 step 6)")
     salt1a = read_salt(ARCHIVE_HSET1A / "salt.hex", pins["HSET1A_SALT_SHA256"], "HSET-1A")
     salt2 = read_salt(ARCHIVE_HSET2 / "salt.hex", pins["HSET2_SALT_SHA256"], "HSET-2")
     files = {"tree/" + p: b for p, b in tree.items()}
@@ -231,8 +267,7 @@ def main():
         return materialize_tree(args.materialize_tree)
     worst_case = worst_case_usd()
     assert worst_case < DOLLAR_CEILING, "the time limit does not keep the job under the ceiling"
-    import boto3
-
+    # every refusal comes before boto3 is imported: a dry run makes no AWS call and creates no AWS client
     files, anchors, head = assemble()
     body, bundle_sha = build_bundle(files)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -242,10 +277,11 @@ def main():
     template = (HERE / "job.sh.template").read_text(encoding="utf-8").replace("\r\n", "\n")
     keys = {"bundle": key_prefix + "bundle.tar.gz", "results": key_prefix + "results.tar.gz",
             "sealed": key_prefix + "sealed.tar.gz", "progress": key_prefix + "progress.log"}
-    s3 = boto3.client("s3", region_name=REGION)
     if args.dry_run:
         urls = {k: "https://DRY-RUN/%s" % v for k, v in keys.items()}
     else:
+        import boto3
+        s3 = boto3.client("s3", region_name=REGION)
         if (HERE / "launch_record.json").exists():
             raise SystemExit("LAUNCH_REFUSED: launch_record.json already exists -- one approval, one machine")
         s3.put_object(Bucket=BUCKET, Key=keys["bundle"], Body=body)

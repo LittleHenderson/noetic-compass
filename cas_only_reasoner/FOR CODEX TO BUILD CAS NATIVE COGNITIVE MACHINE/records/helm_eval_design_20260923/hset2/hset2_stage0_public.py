@@ -6,10 +6,14 @@ Label: CLAUDE_BUILT_CLAUDE_CHECKED (temporary takeover while Codex is away). Imp
 What it does, in order (no salt, no sealed material, no model):
   1. PUBLIC_EXCLUDED version 1: every 5- or 6-node class in the larger-question fixture file (commit 785c9bd1,
      sha256 7f0760c7...), listed by canonical-form digest. The canonical form is the D-1 oracle's method M1
-     (`oracle_isomorphism.canonical_form`: the smallest sorted edge list over all n! node orders).
+     (`oracle_isomorphism.canonical_form`: the smallest sorted edge list over all n! node orders). Kept as history:
+     it is recomputed and must stay byte-identical to the committed PUBLIC_EXCLUDED_v1.json.
+  1a. PUBLIC_EXCLUDED version 2 (T5; Claude's default Q-B, bus message claude-0024; the one the build uses):
+     version 1 plus every class of the 40 public HSET-1B DEV_NEW_6 classes (public seed HSET-1B-dev-shapes-v0.1)
+     whose degree group falls on the HSET-2 TEST side (24 classes, all 6-node). The DEV side does not change.
   2. Every 6-node class: acyclic, weakly connected, every in-degree and out-degree at most 4 (expected 5,074).
-  3. Remove PUBLIC_EXCLUDED; group the rest by degree multiset; put each whole group on the DEV or TEST side by the
-     pinned rule of A1 D1.
+  3. Remove PUBLIC_EXCLUDED (version 2); group the rest by degree multiset; put each whole group on the DEV or TEST
+     side by the pinned rule of A1 D1.
   4. DEV_NEW_6: 60 foci from the reviewed MIX sampler (`hset1b_build.sample_class`) with the public seed
      `HSET-2-dev-shapes-v0.1`, keeping only DEV-side classes. DEV_DECOYS_6: every other DEV-side class.
   5. Write the DEV-side and TEST-side group lists with their digests.
@@ -54,9 +58,12 @@ N6 = 6
 MAX_DEGREE = 4
 FOCI_PER_SPLIT = 60
 EXPECTED_CLASSES = {5: 267, 6: 5074}                       # 6: with every degree <= 4 (design s3; review census)
-EXPECTED_PUBLIC_EXCLUDED = {5: 3, 6: 4}                    # the coordinator's count; verified, not assumed
+EXPECTED_PUBLIC_EXCLUDED_V1 = {5: 3, 6: 4}                 # the coordinator's count; verified, not assumed
+EXPECTED_V2_ADDED = {"drawn": 40, "on_test_side_added": 24, "on_dev_side_not_added": 16}   # T5 proposal's counts
+EXPECTED_PUBLIC_EXCLUDED = {5: 3, 6: 28}                   # version 2 = version 1 + the 24 (all 6-node)
 
-PUBLIC_EXCLUDED_FILE = "PUBLIC_EXCLUDED_v1.json"
+PUBLIC_EXCLUDED_V1_FILE = "PUBLIC_EXCLUDED_v1.json"        # history: recomputed, must stay byte-identical
+PUBLIC_EXCLUDED_FILE = "PUBLIC_EXCLUDED_v2.json"           # the version the build removes (T5, default Q-B)
 DEV_GROUPS_FILE = "STAGE0_DEV_SIDE_GROUPS.json"
 TEST_GROUPS_FILE = "STAGE0_TEST_SIDE_GROUPS.json"
 SUMMARY_FILE = "STAGE0_SUMMARY.json"
@@ -259,9 +266,67 @@ def public_excluded_document(raw):
            "digest": "sha256 of the key's UTF-8 bytes",
            "classes": rows, "counts_by_nodes": {str(k): counts[k] for k in sorted(counts)},
            "class_digests_digest": list_digest(sorted(r["digest"] for r in rows))}
-    for n, expected in EXPECTED_PUBLIC_EXCLUDED.items():
+    for n, expected in EXPECTED_PUBLIC_EXCLUDED_V1.items():
         if counts[n] != expected:
             raise AssertionError("PUBLIC_EXCLUDED_COUNT n=%d: %d, expected %d" % (n, counts[n], expected))
+    return doc
+
+
+def hset1b_dev_new_6_keys():
+    """The 40 public HSET-1B DEV_NEW_6 classes, in draw order (public seed; hset1b_build.draw, as HSET-1B drew them)."""
+    hw, B, oracle = modules()
+    shapes, _ = B.draw(random.Random(hw.keyed_int(HSET1B_DEV_SEED, "dev", N6)), N6, 40, oracle, ())
+    return [class_key(s) for s in shapes]
+
+
+def public_excluded_v2_document(pe_v1, classes6):
+    """T5 (Claude's default Q-B, bus message claude-0024), fixed before the HSET-2 salt: version 2 = version 1 plus
+    every class of the 40 public HSET-1B DEV_NEW_6 classes that lies in the 6-node universe and whose degree group falls
+    on the HSET-2 TEST side. The side of a group depends only on its key, so removing TEST-side classes cannot move a
+    group, and the DEV side, DEV_NEW_6 and DEV_DECOYS_6 stay as they were (checked by the tests)."""
+    v1_keys = {r["canonical_form"] for r in pe_v1["classes"]}
+    universe = set(classes6)
+    drawn = hset1b_dev_new_6_keys()
+    added, dev_side_kept = [], []
+    for order, k in enumerate(drawn):
+        if k in v1_keys or k not in universe:
+            continue
+        if side_of_group(group_key(key_shape(k))) == "TEST":
+            added.append((order, k))
+        else:
+            dev_side_kept.append(k)
+    got = {"drawn": len(drawn), "on_test_side_added": len(added), "on_dev_side_not_added": len(dev_side_kept)}
+    if got != EXPECTED_V2_ADDED or len(set(drawn)) != len(drawn):
+        raise AssertionError("PUBLIC_EXCLUDED_V2_ADDITION %s, expected %s" % (got, EXPECTED_V2_ADDED))
+    rows = [dict(r, added_in_version=1, hset1b_dev_new_6_draw_order=None, hset2_stage0_side=None) for r in pe_v1["classes"]]
+    for order, k in added:
+        n, edges = key_shape(k)
+        rows.append({"digest": class_digest(k), "canonical_form": k, "nodes": n, "edges": len(edges),
+                     "max_degree": max_degree(n, edges), "inside_degree_4_universe": max_degree(n, edges) <= MAX_DEGREE,
+                     "fixture_shape_names": [], "fixture_world_names": [], "degree_multiset_group_key": group_key((n, edges)),
+                     "added_in_version": 2, "hset1b_dev_new_6_draw_order": order, "hset2_stage0_side": "TEST"})
+    rows.sort(key=lambda r: r["digest"])
+    counts = collections.Counter(r["nodes"] for r in rows)
+    doc = {"schema": "claude.hset2-public-excluded/2", "label": LABEL, "version": 2,
+           "rule": pe_v1["rule"],
+           "version_2_rule": ("T5, fixed before the HSET-2 salt (Claude's default Q-B, bus message claude-0024; Codex may "
+                              "object before the salt): version 1 plus every class of the 40 public HSET-1B DEV_NEW_6 "
+                              "classes whose degree group falls on the HSET-2 TEST side. General form: any class that a "
+                              "committed public seed or file named for development, training, probing or a candidate bank "
+                              "before the salt, and that falls on the TEST side, joins PUBLIC_EXCLUDED before the salt."),
+           "version_1_history": {"file": PUBLIC_EXCLUDED_V1_FILE, "class_digests_digest": pe_v1["class_digests_digest"],
+                                 "kept": "unchanged; recomputed and required byte-identical by stage 0"},
+           "version_2_added_input": {
+               "seed": HSET1B_DEV_SEED, "draw": 'hset1b_build.draw(random.Random(hset_worlds.keyed_int(seed, "dev", 6)), 6, 40, oracle, ())',
+               "counts": got, "dev_side_classes_not_added_why": ("they sit on the DEV side, which is public by design; "
+                                                                "excluding them would change DEV, not protect TEST"),
+               "proposal_file": "PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json"},
+           "canonical_form": pe_v1["canonical_form"], "digest": pe_v1["digest"],
+           "classes": rows, "counts_by_nodes": {str(k): counts[k] for k in sorted(counts)},
+           "class_digests_digest": list_digest(sorted(r["digest"] for r in rows))}
+    for n, expected in EXPECTED_PUBLIC_EXCLUDED.items():
+        if counts[n] != expected:
+            raise AssertionError("PUBLIC_EXCLUDED_V2_COUNT n=%d: %d, expected %d" % (n, counts[n], expected))
     return doc
 
 
@@ -288,11 +353,12 @@ def compute(raw):
     """Everything stage 0 writes, as plain data. Deterministic; no salt."""
     hw, B, oracle = modules()
     t0 = time.monotonic()
-    pe_doc = public_excluded_document(raw)
-    excluded = {r["canonical_form"] for r in pe_doc["classes"]}
+    pe_v1 = public_excluded_document(raw)
     classes6 = [class_key(s) for s in enumerate_classes(N6)]
     if len(classes6) != EXPECTED_CLASSES[N6]:
         raise AssertionError("SIX_NODE_CLASS_COUNT %d" % len(classes6))
+    pe_doc = public_excluded_v2_document(pe_v1, classes6)
+    excluded = {r["canonical_form"] for r in pe_doc["classes"]}
     universe = [k for k in classes6 if k not in excluded]
     excluded_in_universe = sorted(k for k in classes6 if k in excluded)
     groups = collections.defaultdict(list)
@@ -312,9 +378,28 @@ def compute(raw):
         return [c for c in groups[group_of[k]] if c != k and c in side_set]
     dev_analogy = [k for k in dev_new_6 if len(partners_on_side(k, dev_side)) >= 4]
     dev_corr = [k for k in dev_new_6 if len(partners_on_side(k, dev_side)) >= 1]
-    # Custody diagnostic only (printed, not acted on): where do the 40 public HSET-1B DEV_NEW_6 classes fall?
-    hset1b_dev6, _ = B.draw(random.Random(hw.keyed_int(HSET1B_DEV_SEED, "dev", N6)), N6, 40, oracle, ())
-    hset1b_keys = [class_key(s) for s in hset1b_dev6]
+    # Custody diagnostic: where do the 40 public HSET-1B DEV_NEW_6 classes fall? (Version 2 excludes the TEST-side ones.)
+    hset1b_keys = hset1b_dev_new_6_keys()
+    dev_decoy_set = set(dev_decoys_6)
+    # A2.7 D3: DEV counts, each labelled by what it counts (foci, eligible decoys, NO_MATCH targets or fillers)
+    dev_counts = {
+        "foci_DEV_NEW_6": len(dev_new_6),
+        "analogy_eligible_foci": len(dev_analogy),
+        "analogy_eligible_foci_degree_groups": len({group_of[k] for k in dev_analogy}),
+        "correspondence_eligible_foci": len(dev_corr),
+        "correspondence_eligible_foci_degree_groups": len({group_of[k] for k in dev_corr}),
+        "eligible_decoy_and_no_match_target_pool": {
+            "rule": ("A2.7 D3: the focus's degree group within DEV_NEW_6 union DEV_DECOYS_6 (the whole DEV side), "
+                     "excluding the focus"),
+            "classes": len(dev_side), "degree_groups": len(lists["DEV"]),
+            "analogy_eligible_decoys_per_eligible_focus_total": sum(len(partners_on_side(k, dev_side)) for k in dev_analogy),
+            "correspondence_targets_per_eligible_focus_total": sum(len(partners_on_side(k, dev_side)) for k in dev_corr)},
+        "filler_pool": {"rule": "A1 D3: filler worlds come only from DEV_DECOYS_6 (other degree groups than the focus's)",
+                        "classes": len(dev_decoy_set)},
+        "if_decoys_came_from_DEV_DECOYS_6_only_printed_not_used": {
+            "analogy_eligible_foci": sum(1 for k in dev_new_6 if len(partners_on_side(k, dev_decoy_set)) >= 4),
+            "correspondence_eligible_foci": sum(1 for k in dev_new_6 if len(partners_on_side(k, dev_decoy_set)) >= 1)},
+        "note": "public DEV counts; the published 27/52 foci are not a protected result (A2.7 D3)"}
 
     def side_stats(rows):
         sizes = collections.Counter(len(r["classes"]) for r in rows)
@@ -333,11 +418,16 @@ def compute(raw):
         body["groups_digest"] = list_digest(lists[s])
         group_docs[s] = body
     summary = {
-        "schema": "claude.hset2-stage0-summary/0.1", "label": LABEL,
-        "design": "EVALUATION_DESIGN_v0_4.md s3 + Amendment A1 D1 (d840ea02)",
-        "public_excluded": {"file": PUBLIC_EXCLUDED_FILE, "class_digests_digest": pe_doc["class_digests_digest"],
+        "schema": "claude.hset2-stage0-summary/0.2", "label": LABEL,
+        "design": ("EVALUATION_DESIGN_v0_4.md s3 + Amendment A1 D1 (d840ea02) + A2.7 D3 labelled DEV counts (c3a128ee) "
+                   "+ PUBLIC_EXCLUDED version 2 (T5, Claude's default Q-B)"),
+        "public_excluded": {"file": PUBLIC_EXCLUDED_FILE, "version": 2,
+                            "class_digests_digest": pe_doc["class_digests_digest"],
                             "counts_by_nodes": pe_doc["counts_by_nodes"],
-                            "six_node_classes_inside_the_degree_4_universe": len(excluded_in_universe)},
+                            "six_node_classes_inside_the_degree_4_universe": len(excluded_in_universe),
+                            "version_1_history": {"file": PUBLIC_EXCLUDED_V1_FILE,
+                                                  "class_digests_digest": pe_v1["class_digests_digest"],
+                                                  "counts_by_nodes": pe_v1["counts_by_nodes"]}},
         "six_node_universe": {"classes_enumerated": len(classes6), "classes_after_public_excluded": len(universe),
                               "degree_groups": len(groups), "all_classes_digest": list_digest(classes6)},
         "sides": {s: side_stats(lists[s]) for s in ("DEV", "TEST")},
@@ -351,13 +441,15 @@ def compute(raw):
             "analogy_distinct_degree_groups": len({group_of[k] for k in dev_analogy}),
             "correspondence_at_least_1_same_group_dev_side_partner": len(dev_corr),
             "correspondence_distinct_degree_groups": len({group_of[k] for k in dev_corr})},
+        "dev_counts_labelled_A2_7_D3": dev_counts,
         "custody_diagnostic_hset1b_dev_new_6": {
-            "note": ("the 40 public HSET-1B DEV_NEW_6 classes (public seed HSET-1B-dev-shapes-v0.1). They are not in "
-                     "PUBLIC_EXCLUDED v1 (design s3 names only the fixture file); printed so the owner can decide"),
+            "note": ("the 40 public HSET-1B DEV_NEW_6 classes (public seed HSET-1B-dev-shapes-v0.1). PUBLIC_EXCLUDED "
+                     "version 2 removes the 24 on the TEST side before the salt (T5); the 16 on the DEV side stay DEV"),
             "on_dev_side": sum(k in dev_side for k in hset1b_keys), "on_test_side": sum(k in test_side for k in hset1b_keys),
-            "in_public_excluded": sum(k in excluded for k in hset1b_keys)},
+            "in_public_excluded": sum(k in excluded for k in hset1b_keys),
+            "in_public_excluded_v1": sum(k in {r["canonical_form"] for r in pe_v1["classes"]} for k in hset1b_keys)},
         "seconds": round(time.monotonic() - t0, 1)}
-    return pe_doc, group_docs, summary
+    return pe_v1, pe_doc, group_docs, summary
 
 
 def dump_bytes(value):
@@ -365,10 +457,11 @@ def dump_bytes(value):
 
 
 def outputs(raw):
-    """{file name: exact bytes}. The summary records the sha256 of the three list files."""
-    pe_doc, group_docs, summary = compute(raw)
-    files = {PUBLIC_EXCLUDED_FILE: dump_bytes(pe_doc), DEV_GROUPS_FILE: dump_bytes(group_docs["DEV"]),
-             TEST_GROUPS_FILE: dump_bytes(group_docs["TEST"])}
+    """{file name: exact bytes}. The summary records the sha256 of the four list files (PUBLIC_EXCLUDED version 1 is
+    history: recomputed so that a check proves it unchanged)."""
+    pe_v1, pe_doc, group_docs, summary = compute(raw)
+    files = {PUBLIC_EXCLUDED_V1_FILE: dump_bytes(pe_v1), PUBLIC_EXCLUDED_FILE: dump_bytes(pe_doc),
+             DEV_GROUPS_FILE: dump_bytes(group_docs["DEV"]), TEST_GROUPS_FILE: dump_bytes(group_docs["TEST"])}
     summary = dict(summary, files_sha256={name: hashlib.sha256(b).hexdigest() for name, b in sorted(files.items())})
     seconds = summary.pop("seconds")
     files[SUMMARY_FILE] = dump_bytes(summary)
@@ -403,7 +496,8 @@ def main():
     for name, data in files.items():
         (out / name).write_bytes(data)
     print(json.dumps({k: summary[k] for k in ("public_excluded", "six_node_universe", "sides", "groups_digests",
-                                              "dev_foci_usable", "custody_diagnostic_hset1b_dev_new_6")}, indent=1))
+                                              "dev_foci_usable", "dev_counts_labelled_A2_7_D3",
+                                              "custody_diagnostic_hset1b_dev_new_6")}, indent=1))
     print(json.dumps({"dev_new_6_draws": summary["dev_new_6"]["draws"], "dev_decoys_6": summary["dev_decoys_6"]["count"],
                       "files_sha256": summary["files_sha256"], "seconds": seconds}, indent=1))
     return 0

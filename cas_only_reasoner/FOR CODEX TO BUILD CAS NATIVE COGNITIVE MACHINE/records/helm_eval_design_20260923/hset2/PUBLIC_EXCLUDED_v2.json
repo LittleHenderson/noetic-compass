@@ -1,0 +1,497 @@
+{
+ "canonical_form": "oracle_isomorphism.canonical_form (D-1 oracle method M1): the smallest sorted edge list over all n! node orders; key = hset_worlds.canon([n, [[a, b], ...]])",
+ "class_digests_digest": "04be98292c0486af0a3821d3d561cfa4ab67a7adddf97de87beb49ffe576169b",
+ "classes": [
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,4],[5,0],[5,2]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[1,0],[1,0],[1,1],[1,3],[2,0]]]",
+   "digest": "15d40a55bbfc55a060b5a0ec7bef982d9da4b0e4b4c1a8a4d91cd3cb7a937525",
+   "edges": 6,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 16,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[4,2],[4,5],[5,3]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[0,3],[1,1],[1,1],[2,0],[3,0]]]",
+   "digest": "2e0047ab7c978751595922cd86f134012a85b00474e778f91cf9e464dece6e18",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 26,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,4],[2,5],[4,3],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,3],[1,1],[1,1],[1,2],[2,0],[2,0]]]",
+   "digest": "35eb29bcff0baee052244a3610b7477e6ae7ec876309292d3a9916d6f5844450",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 1,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[3,4],[4,5],[5,1]]]",
+   "degree_multiset_group_key": "[6,[[0,3],[1,1],[1,1],[1,1],[2,0],[2,1]]]",
+   "digest": "3d3b06d5e2a4f5967ac2586fefc8d03a804d0846eb9f7e57e95443c00059c2d5",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 9,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[5,[[0,1],[0,2],[1,3],[2,4]]]",
+   "degree_multiset_group_key": "[5,[[0,2],[1,0],[1,0],[1,1],[1,1]]]",
+   "digest": "4901ef2b95563bbd95244a39f63b5e9f60c0a45618111924432ba30cfc7c646c",
+   "edges": 4,
+   "fixture_shape_names": [
+    "S5B"
+   ],
+   "fixture_world_names": [
+    "W5B_P"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 5
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[1,4],[5,3]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[1,0],[1,0],[1,2],[2,0]]]",
+   "digest": "4bc316a4b6018d6a0ebea450fbfd05b8839347d01e2f5ee634bf535712e0a029",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 35,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[4,2],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[0,2],[1,0],[1,0],[1,1],[2,0]]]",
+   "digest": "4cf2f60000dcae6bc88cda9259d2b704bd348ab7654f2a4b6f8f9739c50acac6",
+   "edges": 5,
+   "fixture_shape_names": [
+    "S6D"
+   ],
+   "fixture_world_names": [
+    "W6D_C"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,2],[3,0],[3,4],[4,2],[5,1]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[1,1],[1,2],[2,1],[3,0]]]",
+   "digest": "4fafd4a36978a440eb3f72150a3808c4c39b3c0b823ff3ff3f14c92d259fe504",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 31,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,2],[1,3],[4,2],[5,3],[5,4]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[0,2],[1,1],[1,2],[2,0],[3,0]]]",
+   "digest": "5307ab545c64518da493f17c0ad7946212b985b095e0cfa70ff50281bb65f5c6",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 14,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[1,2],[2,3],[3,4],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[1,0],[1,1],[1,1],[1,1],[1,1]]]",
+   "digest": "6ad9b056cdb5c0141eaac05eef8be4702b1f20d7c4c874e5c3c74f2f8c2f56d6",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 10,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 1,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[2,3],[3,4],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[1,0],[1,1],[1,1],[1,1],[2,1]]]",
+   "digest": "6b9b6f7e8f253323ebfee667d3c36c6b86ab9c89cbb7dab7c5aa687ff8cb04e9",
+   "edges": 6,
+   "fixture_shape_names": [
+    "S6A"
+   ],
+   "fixture_world_names": [
+    "W6A_G",
+    "W6A_M"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[1,4],[5,0]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[1,0],[1,0],[1,0],[1,2],[1,2]]]",
+   "digest": "7343afa49d4994c3f058f41759c7b8703c20f8ab15ad1fa1439eadc26fe6df2a",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 18,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[2,4],[4,3],[5,2]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,3],[1,1],[1,1],[2,0],[3,1]]]",
+   "digest": "7424941c0c673e7b8ca7c4c7e9d33051ae1484faed503a2707a7289a4e88961d",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 29,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,4],[2,5],[4,2],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,3],[1,0],[1,1],[1,2],[2,0],[2,1]]]",
+   "digest": "76762ab3238484a44996f48f6743e1656eb88a10900b55a2a6fbaa7d33edf54c",
+   "edges": 7,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 38,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[5,[[0,1],[0,2],[1,3],[3,4]]]",
+   "degree_multiset_group_key": "[5,[[0,2],[1,0],[1,0],[1,1],[1,1]]]",
+   "digest": "77f6cb924bdd241f679dfdaf2b90e2a5a563c0ae83b6c2977121acd064945f54",
+   "edges": 4,
+   "fixture_shape_names": [
+    "S5A"
+   ],
+   "fixture_world_names": [
+    "W5A_G",
+    "W5A_M"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 5
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,4],[5,0],[5,1]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[1,0],[1,0],[1,0],[1,3],[2,1]]]",
+   "digest": "941d5b91f2e6331966e54fa320da7502346cc171a35ad54af8358c014402b591",
+   "edges": 6,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 7,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[4,1],[4,2],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,3],[0,3],[1,0],[1,0],[2,0],[2,0]]]",
+   "digest": "95975d033ac56a57a489c0d5e13355d2fcecadc3357421b4de65c607ed139818",
+   "edges": 6,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 33,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[1,4],[3,2],[4,2],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,3],[1,0],[1,1],[1,2],[1,2],[4,0]]]",
+   "digest": "b37d9618cf7ac3373fe85293d6089964f74758d89b722bcb16cf04d5a398342f",
+   "edges": 8,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 20,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 4,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[5,[[0,1],[0,2],[3,1],[3,4]]]",
+   "degree_multiset_group_key": "[5,[[0,2],[0,2],[1,0],[1,0],[2,0]]]",
+   "digest": "d82040c5691534a7397585622db7e682b6a3323cf6cd2f5eeb9367c6eb9cd656",
+   "edges": 4,
+   "fixture_shape_names": [
+    "S5C"
+   ],
+   "fixture_world_names": [
+    "W5C_C"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 5
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[2,3],[4,0],[4,2],[5,1]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[1,3],[2,0],[2,1],[3,1]]]",
+   "digest": "d9f75175cac679aff0ecc7c388fc021d07585a951c76a2921d946c2e8535b147",
+   "edges": 8,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 0,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[2,4],[5,3]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[1,0],[1,1],[1,1],[2,0]]]",
+   "digest": "df1232460fb3ca9c622ce25548fec5a54e8fc6ab394fba4657608e482d90b6b2",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 34,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,4],[5,2],[5,4]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[0,3],[1,0],[1,1],[2,0],[2,0]]]",
+   "digest": "e4d3388ef6f3a07172a0960509ab142589d3962b743e44ec8087f6a5cf3ac3c7",
+   "edges": 6,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 11,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[1,4],[2,5],[3,5]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[1,0],[1,1],[1,1],[1,2],[2,0]]]",
+   "digest": "e5ac5bda5a1790895f858fd9e3f8d31f85e67279b3d4ce1bd2be9dd902c8781d",
+   "edges": 6,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 32,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[1,3],[1,4],[2,3],[2,4],[5,2],[5,4]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[0,3],[1,3],[3,0],[3,0],[3,2]]]",
+   "digest": "ecaa6ffd8eafdb291d181b0904a4ced319702e7fb5b2adb3044e1f2939e3a5e0",
+   "edges": 10,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 30,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[3,4],[5,0]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[1,0],[1,0],[1,1],[1,1],[1,2]]]",
+   "digest": "f03e7d00c7111fa91d18fa5044343969a7f2978507bb5936e1b81a8934a3a4ff",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 19,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[1,2],[1,3],[4,1],[5,2],[5,3]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[0,3],[2,2],[3,0],[3,0]]]",
+   "digest": "f0f4128476c2ed59999c1d332af88363941cf6193a8c1038b9b5a0bafb81d1a2",
+   "edges": 8,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 12,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 3,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[1,5]]]",
+   "degree_multiset_group_key": "[6,[[0,4],[1,0],[1,4],[2,0],[2,0],[2,0]]]",
+   "digest": "f316683670551210eaf5c39abcdc3312cae9188c50bfcdab930442f79efc2ef9",
+   "edges": 8,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 4,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 4,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[3,0],[4,3],[5,3]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,1],[1,0],[1,0],[1,2],[2,1]]]",
+   "digest": "f87aea2fc1a3a261369ce8c1a2d402586f531798e3b1f657d31159a7b9e1e977",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 3,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[2,4],[3,2],[4,5]]]",
+   "degree_multiset_group_key": "[6,[[0,2],[1,0],[1,1],[1,1],[1,1],[2,1]]]",
+   "digest": "f8b504b2970c3e8401e972b81033d2a65795630ade6f513ad17e927ead7247ec",
+   "edges": 6,
+   "fixture_shape_names": [
+    "S6B"
+   ],
+   "fixture_world_names": [
+    "W6B_P",
+    "W6B_P2"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 2,
+   "canonical_form": "[6,[[0,1],[0,2],[1,3],[4,2],[5,4]]]",
+   "degree_multiset_group_key": "[6,[[0,1],[0,2],[1,0],[1,1],[1,1],[2,0]]]",
+   "digest": "fb9a784d6e226ad516d83fc6db82234d672b1b75800048bad85884db3899ed63",
+   "edges": 5,
+   "fixture_shape_names": [],
+   "fixture_world_names": [],
+   "hset1b_dev_new_6_draw_order": 37,
+   "hset2_stage0_side": "TEST",
+   "inside_degree_4_universe": true,
+   "max_degree": 2,
+   "nodes": 6
+  },
+  {
+   "added_in_version": 1,
+   "canonical_form": "[6,[[0,1],[0,2],[0,3],[0,4],[0,5]]]",
+   "degree_multiset_group_key": "[6,[[0,5],[1,0],[1,0],[1,0],[1,0],[1,0]]]",
+   "digest": "fe1c07fd9e086d3fd1a379964d73d0114e0dad79bc72d63de13ef3ede0cfc4dd",
+   "edges": 5,
+   "fixture_shape_names": [
+    "S6STAR"
+   ],
+   "fixture_world_names": [
+    "W6STAR_C"
+   ],
+   "hset1b_dev_new_6_draw_order": null,
+   "hset2_stage0_side": null,
+   "inside_degree_4_universe": false,
+   "max_degree": 5,
+   "nodes": 6
+  }
+ ],
+ "counts_by_nodes": {
+  "5": 3,
+  "6": 28
+ },
+ "digest": "sha256 of the key's UTF-8 bytes",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "rule": "EVALUATION_DESIGN_v0_4 s3: every 5- or 6-node class used publicly with a trained model or in any candidate bank. Open-ended: any later public shape joins before its first use. After the HSET-2 build (A1 D6), a new public 6-node shape must be a DEV-side class and a new public 5-node shape a DEV_NEW_5 class; anything else is refused before use.",
+ "schema": "claude.hset2-public-excluded/2",
+ "version": 2,
+ "version_1_history": {
+  "class_digests_digest": "afa70ca607c3498fdfeff14f850fc15b369f64843b32c47ceac96fdf4beee27f",
+  "file": "PUBLIC_EXCLUDED_v1.json",
+  "kept": "unchanged; recomputed and required byte-identical by stage 0"
+ },
+ "version_2_added_input": {
+  "counts": {
+   "drawn": 40,
+   "on_dev_side_not_added": 16,
+   "on_test_side_added": 24
+  },
+  "dev_side_classes_not_added_why": "they sit on the DEV side, which is public by design; excluding them would change DEV, not protect TEST",
+  "draw": "hset1b_build.draw(random.Random(hset_worlds.keyed_int(seed, \"dev\", 6)), 6, 40, oracle, ())",
+  "proposal_file": "PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json",
+  "seed": "HSET-1B-dev-shapes-v0.1"
+ },
+ "version_2_rule": "T5, fixed before the HSET-2 salt (Claude's default Q-B, bus message claude-0024; Codex may object before the salt): version 1 plus every class of the 40 public HSET-1B DEV_NEW_6 classes whose degree group falls on the HSET-2 TEST side. General form: any class that a committed public seed or file named for development, training, probing or a candidate bank before the salt, and that falls on the TEST side, joins PUBLIC_EXCLUDED before the salt."
+}

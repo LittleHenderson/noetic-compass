@@ -149,19 +149,100 @@ def headline(summaries, D):
     return h
 
 
+VIEWS = ("original_cluster", "degree_group", "shared_shape_component")
+CLAIM_CELLS = {"ANALOGY_BEYOND_DEGREE_6": ("TEST_NEW_6/ANALOGY", None),
+               "CORRESPONDENCE_BEYOND_DEGREE_6": ("TEST_NEW_6/CORRESPONDENCE", None),
+               "CORRESPONDENCE_BEYOND_DEGREE_5": ("TEST_NEW_5/CORRESPONDENCE", None)}
+
+
+def _mmm(values):
+    values = [v for v in values if v is not None]
+    return [min(values), round(sum(values) / len(values), 1), max(values)] if values else None
+
+
+def summarize(results):
+    """Ranges over seeds, counts only (min / mean / max), for the pre-salt manifest (A2.7: "complete throwaway
+    feasibility ranges including groups/components"). A claim is counted testable in a seed when every one of its cells
+    meets the original floor (can_carry); REPAIR_IMPROVES_ANALOGY_6 also needs every A2.4 floor (A2.3, A2.4, A2.7 D4)."""
+    done = {s: r for s, r in results.items() if "refused" not in r}
+    out = {"seeds_measured": sorted(done), "seeds_refused": {s: r["refused"] for s, r in results.items() if "refused" in r},
+           "claims": {}}
+    cells = sorted({c for r in done.values() for c in r if "/" in c})
+    for cell in cells:
+        rows = [r[cell] for r in done.values() if cell in r]
+        blocks = ([(claim, [row[claim] for row in rows]) for claim in rows[0] if claim != "primary_by_state"]
+                  if "primary_by_state" in rows[0] else [(None, rows)])
+        for claim, bs in blocks:
+            key = cell if claim is None else "%s [%s]" % (cell, claim)
+            entry = {"seeds": len(bs),
+                     "original_binding_W": _mmm([b["binding_W"] for b in bs]),
+                     "original_floor_met": sum(1 for b in bs if b["can_carry"]),
+                     "binding_bar_counts": dict(collections.Counter(b["binding"] for b in bs)),
+                     "units_by_view": {v: _mmm([b["views"]["units"][v] for b in bs]) for v in VIEWS},
+                     "binding_W_by_view": {v: _mmm([b["views"]["binding_by_view"][v][1] for b in bs]) for v in VIEWS},
+                     "binding_bar_by_view_counts": {v: dict(collections.Counter(b["views"]["binding_by_view"][v][0]
+                                                                                 for b in bs)) for v in VIEWS},
+                     "a2_4_floors_met": sum(1 for b in bs if b["views"]["a2_4_floors_met"]),
+                     "original_and_a2_4_floors_met": sum(1 for b in bs if b["can_carry"] and b["views"]["a2_4_floors_met"])}
+            if claim is None and "clusters" in bs[0]:
+                entry["clusters"] = _mmm([b["clusters"] for b in bs])
+                entry["degree_groups"] = _mmm([b["distinct_degree_groups"] for b in bs])
+            out[key] = entry
+    # claims (both reach cells must carry for a reach claim)
+    for claim, (cell, _) in CLAIM_CELLS.items():
+        if cell in cells:
+            n = [r[cell] for r in done.values() if cell in r]
+            out["claims"][claim] = {"seeds": len(n), "testable": sum(1 for b in n if b["can_carry"])}
+    if "TEST_NEW_6/ANALOGY" in cells:
+        n = [r["TEST_NEW_6/ANALOGY"] for r in done.values() if "TEST_NEW_6/ANALOGY" in r]
+        out["per_seed_TEST_NEW_6_ANALOGY_binding_W_original_group_component"] = {
+            seed: [r["TEST_NEW_6/ANALOGY"]["views"]["binding_by_view"][v][1] for v in VIEWS]
+            for seed, r in sorted(done.items()) if "TEST_NEW_6/ANALOGY" in r}
+        out["claims"]["REPAIR_IMPROVES_ANALOGY_6"] = {
+            "seeds": len(n), "testable_original_and_every_A2_4_floor": sum(1 for b in n if b["can_carry"] and
+                                                                          b["views"]["a2_4_floors_met"])}
+    reach_cells = ("TEST_NEW_6/REACH_FIRST_DIRECT", "TEST_NEW_6/REACH_BFS")
+    if all(c in cells for c in reach_cells):
+        both = [r for r in done.values() if all(c in r for c in reach_cells)]
+        for claim in [k for k in both[0][reach_cells[0]] if k != "primary_by_state"]:
+            out["claims"][claim] = {"seeds": len(both),
+                                    "testable": sum(1 for r in both if all(r[c][claim]["can_carry"] for c in reach_cells))}
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--package-root", required=True)
-    parser.add_argument("--seeds", required=True, help="comma-separated public strings; each gives two throwaway salts")
+    parser.add_argument("--package-root")
+    parser.add_argument("--seeds", help="comma-separated public strings; each gives two throwaway salts")
     parser.add_argument("--only", choices=("reach", "analogy", "correspondence"), default=None)
     parser.add_argument("--splits", default=None,
                         help="comma-separated splits to evaluate (for example TEST_NEW_6); default every split")
     parser.add_argument("--out", required=True)
+    parser.add_argument("--summarize", nargs="+", default=None,
+                        help="merge earlier --out files (counts only) into one ranges summary written to --out")
     args = parser.parse_args()
+    if args.summarize:
+        merged, sources = {}, {}
+        for f in args.summarize:                           # one file per family or seed batch: merge cells per seed
+            doc = json.loads(pathlib.Path(f).read_text(encoding="utf-8"))
+            sources[pathlib.Path(f).name] = {"only": doc.get("only"), "seeds": sorted(doc["results"])}
+            for seed, r in doc["results"].items():
+                merged.setdefault(seed, {}).update(r)
+        pathlib.Path(args.out).write_text(json.dumps({"schema": "claude.hset2-throwaway-ranges-summary/0.1",
+                                                      "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+                                                      "state": "THROWAWAY: throwaway salts; development estimates, "
+                                                               "not the A2.4 table and never a result",
+                                                      "runs": sources, "summary": summarize(merged)},
+                                                     indent=1, sort_keys=True),
+                                          encoding="utf-8")
+        return 0
+    if not (args.package_root and args.seeds):
+        raise SystemExit("REFUSED: --package-root and --seeds are required unless --summarize is given")
     splits = set(args.splits.split(",")) if args.splits else None
     if any((q / ".git").exists() for q in pathlib.Path(args.out).resolve().parents):
         raise SystemExit("REFUSED: throwaway range outputs may not be written inside a git work tree")
     import hset2_build as H
+    H.check_d1()                                          # verifier note VN-4: refuse D1 or R1 option c or an unknown value
     root = pathlib.Path(args.package_root).resolve()
     H._paths(root)
     H._init(str(root))
