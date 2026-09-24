@@ -13,9 +13,13 @@ REVISION 2 (2026-09-23), after a fresh review of 2cd6aed9 (verdict CHANGES_REQUI
     "Up to $60 (Recommended)" (owner record, commit d6c9faa9, addendum to section 3). The records now quote the
     question, the answer and the chosen option's text verbatim, and state the $60.00 ceiling (smoke $15.00 + 3 x
     $15.00), one machine at a time, no automatic retries, and the three stop rules.
-  * ITEM 1 FIRST. `--item1-reading <path> --item1-reading-sha256 <hex>` are required. The file must hash to the
-    given value and its `item1_verdict` must be `OFF_PRESERVED_ON_T4`; otherwise nothing is written. Its path, sha256
-    and verdict are recorded, and a byte copy is written beside the records.
+  * ITEM 1 FIRST. `--item1-commit <C> --item1-reading-sha256 <hex>` are required. The reading is read with
+    `git show <C>:<fixed RESULTS_READING.json path>` (revision 1, review MINOR 4); <C> must be an ancestor of
+    `origin/research/helm-integration-20260923`; the bytes must hash to the given value; and `item1_verdict` must
+    be `OFF_PRESERVED_ON_T4`. Otherwise nothing is written. The commit, blob id, sha256 and verdict are recorded,
+    and a byte copy is written beside the records.
+  * SEED DELIVERED RULE (revision 1, review MINOR 1). study.json records the coordinator's decision verbatim:
+    "coordinator decision 2026-09-24: owner's delivered test only; degraded checks reported, not a stop".
   * ORDERING (finding 3). HEAD must still be the source commit, but the tree may now carry, untracked, exactly the
     declared outputs of both writers: the two package folders and the smoke writer's `smoke/` folder
     (`on_study_common.tolerated_prefixes`). Nothing else. Both packages must carry the same `inputs_sha256`.
@@ -43,8 +47,8 @@ WHERE IT MUST RUN. From a FULL checkout at the source commit under
 from. No torch, no network, no AWS call.
 
 USAGE (run with `python -B`):
-    python -B prepare_on_study.py --source-sha <S> --item1-reading <path> --item1-reading-sha256 <hex> --dry-run
-    python -B prepare_on_study.py --source-sha <S> --item1-reading <path> --item1-reading-sha256 <hex> --write
+    python -B prepare_on_study.py --source-sha <S> --item1-commit <C> --item1-reading-sha256 <hex> --dry-run
+    python -B prepare_on_study.py --source-sha <S> --item1-commit <C> --item1-reading-sha256 <hex> --write
     optional: --owner-question "<the question behind the item-3 answer, verbatim>"
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED. Runner: the Claude coordinator (temporary takeover). This script transcribes the
@@ -202,7 +206,13 @@ def study_record(source_sha, source_facts, package, jobs, bindings, *, owner_que
                                 'seeded separately (seed 20260923)'),
                        'helm2_initial_pt_sha256': migration['helm2_initial_pt_sha256'],
                        'deciding_check': 'prereg amendment A5.5 (commit d7023288), on AWS, after training'},
-            'limits': launch.BOUNDS, 'claim_bearing_semantics': CLAIM_BEARING_SEMANTICS, 'jobs': jobs,
+            'limits': launch.BOUNDS, 'claim_bearing_semantics': CLAIM_BEARING_SEMANTICS,
+            'seed_delivered_rule': common.SEED_DELIVERED_RULE,
+            'seed_delivered_rule_means': ('a seed counts as delivered when the launcher says so: exit 0, '
+                                          'completed_deliverable true, cleanup complete, status '
+                                          'AWS_CANDIDATE_FINISHED; a non-empty degraded_checks list is logged and '
+                                          'reported by run_on_study.py, not a stop'),
+            'jobs': jobs,
             'launch_order': ['smoke:%d' % common.SMOKE_SEED] + ['seed:%d' % seed for seed in common.SEEDS],
             'launcher': str(common.LAUNCHER), 'canonical_ledger': str(launch.CANONICAL_LEDGER),
             'run_with': 'records/typed_pointer_001/admission_analogy_on_001/run_on_study.py',
@@ -213,9 +223,9 @@ def study_record(source_sha, source_facts, package, jobs, bindings, *, owner_que
             'numeric_runs_completed': 0}
 
 
-def prepare(source_sha, *, write, item1_path, item1_sha256, owner_question=None):
+def prepare(source_sha, *, write, item1_commit, item1_sha256, owner_question=None):
     stop_unless(owner_question is None or (type(owner_question) is str and owner_question.strip()), 'OWNER_QUESTION')
-    item1, item1_raw = common.read_item1(item1_path, item1_sha256, stop_unless)
+    item1, item1_raw = common.read_item1(item1_commit, item1_sha256, stop_unless)
     source_facts, owner_record, migration = check_source(source_sha)
     seeds, paths, receipts = targets()
     existing = [str(path) for path in [common.SEED_OUTPUT, *receipts.values()] if path.exists()]
@@ -271,14 +281,14 @@ def prepare(source_sha, *, write, item1_path, item1_sha256, owner_question=None)
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('--source-sha', required=True)
-    parser.add_argument('--item1-reading', required=True)
+    parser.add_argument('--item1-commit', required=True)
     parser.add_argument('--item1-reading-sha256', required=True)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--dry-run', action='store_true')
     mode.add_argument('--write', action='store_true')
     parser.add_argument('--owner-question')
     args = parser.parse_args(argv)
-    return prepare(args.source_sha, write=args.write, item1_path=args.item1_reading,
+    return prepare(args.source_sha, write=args.write, item1_commit=args.item1_commit,
                    item1_sha256=args.item1_reading_sha256, owner_question=args.owner_question)
 
 

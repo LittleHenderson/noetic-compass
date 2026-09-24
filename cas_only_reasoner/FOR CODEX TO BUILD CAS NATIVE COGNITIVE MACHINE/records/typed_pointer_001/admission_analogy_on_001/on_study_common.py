@@ -48,9 +48,20 @@ SMOKE_ARTIFACT_NAMES = 51
 SMOKE_REQUIRED_COUNT = 54
 
 # ---- item 1 (the order rule): training runs only after acceptance item 1 has passed.
+# Revision 1 (review MINOR 4): the reading is read from GIT, never from a file the operator points at. The commit is
+# given on the command line, must be an ancestor of the research branch's remote-tracking ref, and the path is fixed.
 ITEM1_PASS_VERDICT = 'OFF_PRESERVED_ON_T4'
+ITEM1_REF = 'origin/research/helm-integration-20260923'
+ITEM1_REF_FETCH = ('git fetch origin research/helm-integration-20260923:'
+                   'refs/remotes/origin/research/helm-integration-20260923')
+ITEM1_PATH = (GIT_PREFIX + 'records/helm_eval_design_20260923/analogy_repair_t4_job/RESULTS_READING.json')
 ITEM1_COPY_NAME = 'item1_reading.json'
 ITEM1_MAX_BYTES = 8 * 1024 * 1024
+
+# ---- what counts as a delivered SEED (review MINOR 1). The coordinator's decision, recorded verbatim in study.json
+# and enforced by run_on_study.py: the launcher's own delivered test only; degraded checks are logged, not a stop.
+SEED_DELIVERED_RULE = ("coordinator decision 2026-09-24: owner's delivered test only; degraded checks reported, "
+                       "not a stop")
 
 # ---- money. The owner approved "Up to $60 (Recommended)" for one test run plus 3 seeds.
 RESERVATION_PER_JOB_USD = '15.00'
@@ -132,6 +143,11 @@ def digest(raw):
 def git(*args):
     return subprocess.run(['git', '-c', 'core.autocrlf=false', *args], cwd=ROOT, check=True,
                           capture_output=True).stdout
+
+
+def git_ok(*args):
+    """True when the git command exits 0 (used for yes/no questions such as `merge-base --is-ancestor`)."""
+    return subprocess.run(['git', '-c', 'core.autocrlf=false', *args], cwd=ROOT, capture_output=True).returncode == 0
 
 
 def partial_of(folder):
@@ -271,28 +287,54 @@ def check_switch_on_source(launch, contract, pointer_learner, stop):
                     'checkpoint_schema': pointer_learner.CHECKPOINT_SCHEMA}
 
 
-def read_item1(path, expected_sha256, stop):
+def is_hex(value, length):
+    return type(value) is str and len(value) == length and all(ch in '0123456789abcdef' for ch in value)
+
+
+def read_item1(commit, expected_sha256, stop):
     """Acceptance item 1 must have passed before any training job is admitted (owner record, section 3, 'Order').
 
-    Returns `(record, raw)`. The raw bytes are copied into the admission folder, so the evidence travels with it.
+    REVISION 1 (review MINOR 4). The reading is read from git, like the owner record: `git show <commit>:<path>`.
+      * `commit` is given on the command line as 40 hex characters and must exist here;
+      * it must be an ancestor of `origin/research/helm-integration-20260923` (so it is the research branch's
+        committed reading, not a local edit);
+      * the path is fixed: `ITEM1_PATH`, the file `read_results.py` writes. No path is taken from the operator;
+      * the bytes must hash to `expected_sha256`, contain no CR byte, and carry `item1_verdict: OFF_PRESERVED_ON_T4`.
+    Returns `(record, raw)`. The record names the commit, the blob id and the sha256. The raw bytes are copied into
+    the admission folder, so the evidence travels with the records.
     """
-    stop(type(expected_sha256) is str and len(expected_sha256) == 64
-         and all(ch in '0123456789abcdef' for ch in expected_sha256), 'ITEM1_SHA256_FORM')
-    stop(type(path) is str and Path(path).is_file(), 'ITEM1_READING_FILE_MISSING:' + str(path))
-    source = Path(path).resolve(strict=True)
-    stop(source.stat().st_size <= ITEM1_MAX_BYTES, 'ITEM1_READING_FILE_TOO_LARGE')
-    raw = source.read_bytes()
+    stop(is_hex(commit, 40), 'ITEM1_COMMIT_FORM')
+    stop(is_hex(expected_sha256, 64), 'ITEM1_SHA256_FORM')
+    try:
+        ref_sha = git('rev-parse', '--verify', ITEM1_REF + '^{commit}').decode('ascii').strip()
+    except subprocess.CalledProcessError:
+        stop(False, 'ITEM1_REF_MISSING:' + ITEM1_REF + ':run ' + ITEM1_REF_FETCH)
+    try:
+        resolved = git('rev-parse', '--verify', commit + '^{commit}').decode('ascii').strip()
+    except subprocess.CalledProcessError:
+        stop(False, 'ITEM1_COMMIT_MISSING:' + commit + ':run ' + ITEM1_REF_FETCH)
+    stop(resolved == commit, 'ITEM1_COMMIT_NOT_A_COMMIT:' + commit)
+    stop(git_ok('merge-base', '--is-ancestor', commit, ITEM1_REF), 'ITEM1_COMMIT_NOT_ON_' + ITEM1_REF + ':' + commit)
+    try:
+        blob = git('rev-parse', commit + ':' + ITEM1_PATH).decode('ascii').strip()
+        raw = git('show', commit + ':' + ITEM1_PATH)
+    except subprocess.CalledProcessError:
+        stop(False, 'ITEM1_READING_NOT_IN_COMMIT:' + commit + ':' + ITEM1_PATH)
+    stop(is_hex(blob, 40), 'ITEM1_BLOB_ID')
+    stop(len(raw) <= ITEM1_MAX_BYTES, 'ITEM1_READING_TOO_LARGE')
     stop(digest(raw) == expected_sha256, 'ITEM1_READING_SHA256:' + digest(raw))
     # The copy is committed under `text eol=lf`; a CR byte would be rewritten on commit and break this pin.
     stop(b'\r' not in raw, 'ITEM1_READING_HAS_CR_BYTES')
-    reading = json.loads(raw)
+    try:
+        reading = json.loads(raw)
+    except ValueError:
+        reading = None
     stop(type(reading) is dict, 'ITEM1_READING_NOT_AN_OBJECT')
     verdict = reading.get('item1_verdict')
     stop(verdict == ITEM1_PASS_VERDICT, 'ITEM1_NOT_PASSED:' + repr(verdict))
-    return {'source_path': str(source), 'sha256': expected_sha256, 'bytes': len(raw), 'item1_verdict': verdict,
-            'copied_to': ITEM1_COPY_NAME,
-            'expected_origin': ('records/helm_eval_design_20260923/analogy_repair_t4_job/RESULTS_READING.json on '
-                                'branch research/helm-integration-20260923 (supplied by the coordinator)')}, raw
+    return {'commit': commit, 'path': ITEM1_PATH, 'blob': blob, 'sha256': expected_sha256, 'bytes': len(raw),
+            'item1_verdict': verdict, 'read_with': 'git show <commit>:<path>', 'ancestor_of': ITEM1_REF,
+            'ancestor_ref_sha_when_checked': ref_sha, 'copied_to': ITEM1_COPY_NAME}, raw
 
 
 def verify_migration(stop):

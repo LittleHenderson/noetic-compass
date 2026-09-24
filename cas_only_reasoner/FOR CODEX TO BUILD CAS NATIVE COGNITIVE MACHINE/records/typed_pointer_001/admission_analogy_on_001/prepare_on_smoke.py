@@ -21,8 +21,10 @@ of the BUILT `source.zip` (the only bytes that reach the instance), as Helm 2.0'
 The launch process must be given the same literal with `--reduced-schedule`; the exact argv is recorded.
 
 WHAT IT CHECKS BEFORE WRITING (any failure stops with `ANALOGY_ON_SMOKE_STOPPED:<reason>`):
-  * acceptance item 1 passed: `--item1-reading` hashes to `--item1-reading-sha256` and its `item1_verdict` is
-    `OFF_PRESERVED_ON_T4` (owner order: training only after item 1);
+  * acceptance item 1 passed (owner order: training only after item 1). The reading is read with
+    `git show <--item1-commit>:<fixed RESULTS_READING.json path>`; the commit must be an ancestor of
+    `origin/research/helm-integration-20260923`; the bytes must hash to `--item1-reading-sha256`; and
+    `item1_verdict` must be `OFF_PRESERVED_ON_T4` (`on_study_common.read_item1`, revision 1);
   * HEAD is the source commit; the only untracked paths are the four declared outputs of the two writers
     (`on_study_common.tolerated_prefixes`); no `.partial` folder exists;
   * the switch default is ON and the `heads` ablation row owns `analogy_head.`, both in this process AND in the
@@ -45,8 +47,11 @@ WHERE IT MUST RUN. From a FULL checkout at the source commit under
 from (`BUILDER_REPORT_ON_TRAINING_PREP.md`, answer (a)). No torch, no network, no AWS call.
 
 USAGE (run with `python -B` so no `__pycache__` appears):
-    python -B prepare_on_smoke.py --source-sha <S> --item1-reading <path> --item1-reading-sha256 <hex> --dry-run
-    python -B prepare_on_smoke.py --source-sha <S> --item1-reading <path> --item1-reading-sha256 <hex> --write
+    python -B prepare_on_smoke.py --source-sha <S> --item1-commit <C> --item1-reading-sha256 <hex> --dry-run
+    python -B prepare_on_smoke.py --source-sha <S> --item1-commit <C> --item1-reading-sha256 <hex> --write
+  <C> is the research-branch commit that holds RESULTS_READING.json. If `origin/research/helm-integration-20260923`
+  is missing here, run the fetch command in `on_study_common.ITEM1_REF_FETCH` (it names the ref explicitly, because
+  this repository's fetch refspec does not track that branch).
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED. Runner: the Claude coordinator (temporary takeover). Not an owner signature.
 """
@@ -228,8 +233,8 @@ def validate(request, authority, owner_path, contract_document):
     launch.validate_owner(owner_path, authority)
 
 
-def prepare(source_sha, *, write, item1_path, item1_sha256):
-    item1, item1_raw = common.read_item1(item1_path, item1_sha256, stop_unless)
+def prepare(source_sha, *, write, item1_commit, item1_sha256):
+    item1, item1_raw = common.read_item1(item1_commit, item1_sha256, stop_unless)
     worker, source_facts, owner_record, migration = check_source(source_sha)
     receipt_dir = common.smoke_receipt_dir()
     stop_unless(not common.SMOKE_OUTPUT.exists(), 'TARGET_EXISTS_NO_OVERWRITE:' + str(common.SMOKE_OUTPUT))
@@ -353,13 +358,13 @@ def prepare(source_sha, *, write, item1_path, item1_sha256):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('--source-sha', required=True)
-    parser.add_argument('--item1-reading', required=True)
+    parser.add_argument('--item1-commit', required=True)
     parser.add_argument('--item1-reading-sha256', required=True)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--dry-run', action='store_true')
     mode.add_argument('--write', action='store_true')
     args = parser.parse_args(argv)
-    return prepare(args.source_sha, write=args.write, item1_path=args.item1_reading,
+    return prepare(args.source_sha, write=args.write, item1_commit=args.item1_commit,
                    item1_sha256=args.item1_reading_sha256)
 
 

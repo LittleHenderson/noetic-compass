@@ -59,7 +59,8 @@ source commit. A later commit that adds only records is accepted.
    It must be clean. (That location is needed for the canonical ledger; see the earlier report, answer (a).)
 2. Build the seed package with the launcher, from the CNCM folder:
    `python -B research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py --package "<CNCM>/research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_<S8>" --source-sha <S>`
-3. Smoke writer: `python -B records/typed_pointer_001/admission_analogy_on_001/prepare_on_smoke.py --source-sha <S> --item1-reading <RESULTS_READING.json> --item1-reading-sha256 <hex> --dry-run`, then the same with `--write`.
+3. Smoke writer: `python -B records/typed_pointer_001/admission_analogy_on_001/prepare_on_smoke.py --source-sha <S> --item1-commit <C> --item1-reading-sha256 <hex> --dry-run`, then the same with `--write`.
+   (Revision 1: `<C>` is the research-branch commit holding `RESULTS_READING.json`; see the Revision 1 section.)
    `--write` builds `package_on_smoke_<S8>` and writes `smoke/`.
 4. Seed writer: `python -B records/typed_pointer_001/admission_analogy_on_001/prepare_on_study.py` with the same
    arguments, `--dry-run` then `--write`. It writes `seeds/`.
@@ -77,7 +78,7 @@ source commit. A later commit that adds only records is accepted.
 | 1 BLOCKER: no ON smoke with ablations | New `prepare_on_smoke.py`. Literal exactly as briefed. Own package `package_on_smoke_<sha8>`, built in-process after `configure_reduced_schedule(literal)`. Line read back from the built `source.zip`. Seed 20260917. Receipt `receipt_analogy_on_smoke_20260917`. Authority bound to `smoke_evidence_contract()` |
 | 2 MAJOR: false budget statement | Removed. Both writers quote the question, the answer "Up to $60 (Recommended)" and the option text, verbatim, checked against the committed owner record (`d6c9faa9`). $60.00 ceiling = smoke $15 + 3 × $15. One machine at a time. No automatic retries. The three stop rules, verbatim |
 | 2 (owner record, lines 30-31) | Records carry source, seeds, starts, limits (`launch.BOUNDS`) and the ceiling. Migration record `MIGRATION_ON_SHAPES.json` |
-| Item-1 order rule | `--item1-reading <path> --item1-reading-sha256 <hex>` required by both writers. Refused unless `item1_verdict == "OFF_PRESERVED_ON_T4"`. Path, sha256 and verdict recorded; a byte copy `item1_reading.json` is written beside the records |
+| Item-1 order rule | Required by both writers. Refused unless `item1_verdict == "OFF_PRESERVED_ON_T4"`; a byte copy `item1_reading.json` is written beside the records. (Revision 1 replaced the file path with `--item1-commit <C>` and a `git show` read; see below.) |
 | 3 MINOR: one HEAD for both | Each writer tolerates, untracked, only the two package folders and the two admission folders. Nothing else. Both packages must carry the same `inputs_sha256` |
 | 4 MINOR: stop rules not enforced | New `run_on_study.py` |
 | 5 NOTE: crash leaves partial files | All admission files go into `<folder>.partial/`, are read back and re-validated, then renamed. Any `.partial` folder stops every writer until a person looks at it. A half-built smoke package is refused (`PACKAGE_INCOMPLETE_INSPECT_BY_HAND`); a complete one is verified and reused |
@@ -248,3 +249,111 @@ All are LF only and ASCII. `.gitattributes` gives `.py` and `.json` here `text e
   `helm-integration` and `q4-sdg` working copies, S3/AWS, the meta1 ledger, any `.pt` file or package archive, and
   any Claude transcript.
 - **Not changed:** the sparse-checkout list and all git configuration.
+
+## Revision 1 (2026-09-23): the four MINOR findings of `REVIEW_ON_SMOKE_0a8a81b3.md`
+
+The fresh review of `0a8a81b3` said APPROVE_WITH_MINOR. The coordinator decided all four MINOR findings. This
+section records what changed. Where it differs from the sections above, **this section wins**: section E's
+"delivered" and spend rules and open questions 1 and 3 are replaced as follows.
+
+Static only, as before: no torch, no writer, launcher or runner run, no package built, no AWS call.
+
+### What changed
+
+| Finding | Coordinator decision | What the code now does |
+|---|---|---|
+| MINOR 1 (`run_on_study.py`, seed "delivered") | Follow the owner's words | A seed is delivered when the launcher says so: exit 0, `completed_deliverable: true`, `cleanup.complete: true`, status `AWS_CANDIDATE_FINISHED`, same job. A non-empty `degraded_checks` goes into the `job_finished` line as `degraded_checks_warning`, is printed, and is listed again in `study_complete`. **It is not a stop.** `study.json` records, verbatim: "coordinator decision 2026-09-24: owner's delivered test only; degraded checks reported, not a stop" (`seed_delivered_rule`). The runner refuses a `study.json` without it. |
+| MINOR 2 (spend under-count on laptop sleep) | Use the larger clock | Seconds = max(`result.json` `elapsed_seconds`, the runner's own UTC wall clock from its logged `job_started` to its logged `job_finished`). Every `job_finished`, `spend_check` and `study_complete` line carries `spend_hours_basis` saying so, and each estimate names the clock it used (`seconds_source`). |
+| MINOR 3 (a free refusal blocked the log for good) | Own record kind; dry-run checks | Exit non-zero with **no receipt folder** is logged as `pre_reservation_refusal`, with the last 40 lines of the launcher's error output. It is not a failed job, not a `stopped` event, and it closes its `job_started`, so a later start is allowed. The run pauses with `ANALOGY_ON_RUN_PAUSED:PRE_RESERVATION_REFUSAL:...`. `--dry-run` (and `--execute`, before its first log line) checks that this Python imports `boto3` and `botocore`, and that the canonical ledger path exists (`Path.is_file`, existence only; never opened or parsed). The resume steps are in the runner's docstring: read `stderr_tail`, fix the cause, run `--dry-run` until it passes, then run `--execute` with the same two hashes. |
+| MINOR 4 (item-1 file trusted from a typed hash) | Read it from git | Both writers now take `--item1-commit <C> --item1-reading-sha256 <hex>`. The bytes come from `git show <C>:<path>`. `<C>` must be 40 hex, must exist, and must be an ancestor of `origin/research/helm-integration-20260923`. The path is fixed to `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/helm_eval_design_20260923/analogy_repair_t4_job/RESULTS_READING.json`; no path is taken from the operator. `OFF_PRESERVED_ON_T4` is still required. The records hold the commit, the blob id, the sha256, the path, and the ref's commit at check time. The runner re-reads the reading from git and compares it with both copies. |
+
+**Also fixed: a bug the new tests found.** In `0a8a81b3`, `run_on_study.py` built its "prior failure" message
+before testing for a failure: `json.dumps(state['stopped'][-1])` ran even when the list was empty. So **every**
+`--dry-run` and `--execute` would have crashed with `IndexError` on a clean log, before launching anything. It cost
+nothing, but the runner could not have started. The message is now built only when there is a failure. The first
+round of tests did not reach `plan()`, and the review did not catch it either.
+
+**Kept, and said plainly.**
+- A delivered seed that is not the approved full run (a reduced schedule recorded, or `claim_bearing` false) still
+  stops, as `SEED_NOT_THE_APPROVED_FULL_RUN`. It checks the job's identity, not its quality. Drop it if you
+  disagree.
+- The smoke still has to show its ablations COMPLETE. The coordinator's decision covers seeds only.
+- A failure after the receipt folder exists but with no reservation spends nothing, but it uses up the frozen
+  receipt path. It stops for good as `FAILED_AFTER_RECEIPT_BEFORE_RESERVATION_NEW_ADMISSION_NEEDED`.
+- Any other stop is permanent for that log. The runner has no reset.
+
+**One operator step is new.** This repository's fetch refspec does not track the research branch, so
+`origin/research/helm-integration-20260923` does not exist here yet. Run the fetch in
+`on_study_common.ITEM1_REF_FETCH` first:
+`git fetch origin research/helm-integration-20260923:refs/remotes/origin/research/helm-integration-20260923`.
+Without it, both writers stop with `ITEM1_REF_MISSING` and print that command. I did not create the ref.
+Review note N1 (where to put the item-1 file) no longer applies: the file is read from git.
+
+### Files (revision 1)
+
+| File | sha256 | Bytes / lines |
+|---|---|---|
+| `on_study_common.py` | `7299019d16c9e3f2b3ab364447e11d4143832bc2462aec9ce1d3fecee6843184` | 28,671 / 491 |
+| `prepare_on_smoke.py` | `040d044f48f9a1ea87cb71f3c6ee455b45748c919a54283f3998dc63015df2bf` | 26,456 / 372 |
+| `prepare_on_study.py` | `3398c74133214ebf95ba9eaa498cd0d2ae569a24e9f078dfb438222f9716da68` | 20,673 / 296 |
+| `run_on_study.py` | `5d20da5c8d4fa9232cc2deecb5bc6de7d9649930198cbf69c405044ef182e7ca` | 33,302 / 541 |
+| `MIGRATION_ON_SHAPES.json` | unchanged, `dbdcda9c7b64a83d9f2bb8ee260bc1450427d8e9b62d52ecb03490330e87c207` | 13,362 / 515 |
+
+All are LF only and ASCII. Nothing under `cncm/`, `cas_meta2/` or `aws/` changed.
+
+### Checks (static only)
+
+- All four `.py` files compile with warnings as errors. pyflakes 3.4.0: clean.
+- `ast` name check: every `launch.*`, `launch.shared.*`, `launch.lifecycle.*`, `launch.run_evidence.*`,
+  `contract.*`, `pointer_learner.*`, `common.*` and `runner.*` attribute used is defined (304 uses, 0 missing).
+- **39 pure-Python checks, all passed** (was 27). New or changed:
+  - **MINOR 4, faked git:** a pass records commit, blob, sha256 and the fixed path. Refused: short commit, wrong
+    verdict, wrong sha256, commit not on the research branch, missing ref (the message carries the fetch command),
+    file absent, CR bytes, unknown commit.
+  - **MINOR 4, real git here:** the missing `origin/...` ref is refused. With the ref name pointed at the local
+    research branch, `31f6a037` is refused as not an ancestor, and `d6c9faa9` (an ancestor) is refused because the
+    reading is not in it. `RESULTS_READING.json` does not exist yet at the research branch tip `214687ba`.
+  - **MINOR 1 and 2, on Helm 2.0's committed receipt JSON:**
+    - a seed is DELIVERED ($8.83 by elapsed time);
+    - a longer runner clock wins (20,000 s gives $15.48);
+    - degraded checks give a warning, not a stop;
+    - a seed that is not a full run stops;
+    - non-zero exit, and a result with no reservation, are not delivered;
+    - Helm 2.0's smoke fails the ON smoke checks, and passes once its ablations read COMPLETE.
+  - **MINOR 3:** the preflight passes and never opens the ledger (reads and opens of that path were watched). A
+    missing module, a missing ledger and a mismatched `--ledger-path` are refused.
+  - **The whole execute loop, simulated** with fake launches that copy Helm 2.0's receipt JSON into scratch folders
+    (nothing launched):
+    - A: a boto3 refusal pauses the run with no `stopped` event; the next start completes it (5 launches in all),
+      with a degraded seed logged as a warning. The spend checks before the three seeds read $2.97, $11.80 and
+      $20.66.
+    - B: seeds at 20,000 s trip the $30.00 stop before the third seed; only 3 launches.
+    - C: a runner clock longer than the smoke's elapsed time is used, and the log line says so.
+    - D: an undelivered seed stops the run; the next start refuses.
+  - Log bookkeeping: a refusal closes its job; a delivered job's clock is its logged finish minus its logged start;
+    a tampered earlier line breaks the chain. (A hash chain cannot flag an edit to its own last line; the
+    half-written-line check still applies.)
+  - **Not checked here:** whether the launch checkout's Python has `boto3`. The preflight checks that there.
+
+### Still open (unchanged)
+
+The writers and the runner have not run anywhere. The item-1 reading does not exist yet. These all wait for the
+launch checkout and AWS: the package builds, the launcher's validators on real records, the ledger's presence at
+the `C:` path, and A5.5.
+
+### EXPOSURE for revision 1
+
+- **Opened outside the worktree:** only my scratch folder (`static_checks.py`, rewritten, and a temporary
+  `checks_tmp/`, deleted after the run).
+- **Git objects read:**
+  - the review file (in this worktree);
+  - Helm 2.0 receipt JSON again: `result.json`, `reduced_schedule.json` and `worker_report.json` of
+    `receipt_smoke_20260918` and `receipt_2026091{7,8,9}`;
+  - `git ls-tree` of `records/helm_eval_design_20260923/analogy_repair_t4_job/` at `214687ba` (names only), and
+    `git cat-file -e` for `RESULTS_READING.json` there (absent);
+  - the ancestry of `d6c9faa9` and `31f6a037`;
+  - `git for-each-ref` and the fetch refspec.
+- **Network:** one `git fetch origin research/helm-integration-20260923`. It wrote FETCH_HEAD only and created no
+  ref; the local branch was already at `214687ba`.
+- **Not opened:** the archive, sealed files, `hset1a` paths, other worktrees, the meta1 ledger, S3/AWS, and any
+  transcript. No change to git configuration or the sparse-checkout list.
