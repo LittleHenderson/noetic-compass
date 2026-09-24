@@ -56,7 +56,7 @@ Use the common reviewed `predict_packet` bare-container adapter for historical O
 | Historical grader | Unchanged; earlier statistical rederivation preserved | Existing frozen hash and historical receipts in final manifest |
 | OFF preservation | Recorded OFF_PRESERVED_ON_T4 at research 41071a3f; earlier audit rederived receipt decision | Preserve evidence; rerun only if relevant source/contract changes |
 | ON reduced smoke | PASS of four frozen conditions at `1ddf6a1e`; 53/53 ablation keys, 8 main + 2 replay updates; provider cleanup verified 04:26–04:27 UTC | Closed for reduced-smoke scope; no full-runtime or larger-route claim |
-| Larger-question route | Revised source approved by `fb6bc4dd`; route-only launch recorded at `fae817fe`, results pending | All four complete AWS check receipts, provenance and separate cleanup; see public route-launch review |
+| Larger-question route | Public d/c/b/a PASS at `b0fd06ff`; returned input/source identity and same-instance cleanup receipts consistent | Generic automated admission still open; no held-out accuracy or final-main-package claim |
 | C admission reader | Proposed state-and-output policy supplied; `cb2df78a` has hold/receipt gates but still file-only logic; review `0391a307` finds approval-parser V1 | Claude conforms reader and status parser; pin full public panel and AWS positive/negative acceptance |
 | Corrected mechanism probe | v0.2 flaw confirmed; corrected validation OPEN | Reviewed revision, fixed thresholds/direction and public controls |
 | HSET-2 | A1 preserved, proposed A2 specified; Claude builder still requires conformance and actual counts | Reviewed builder/scorer, authorized custodian build, actual feasibility table and split checks |

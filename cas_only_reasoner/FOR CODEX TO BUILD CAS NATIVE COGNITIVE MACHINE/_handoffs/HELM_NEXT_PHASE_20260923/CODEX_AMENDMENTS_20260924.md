@@ -127,3 +127,11 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 **Checks actually performed:** four allowlisted public files at3083ea0d, source hashes, targeted reader delta, scalar counts and arithmetic. No project execution; Claude's six reported synthetic cases not independently verified. [Findings](../../records/helm_controlled_prelaunch_20260924/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md).
 
 **Remaining questions / Claude handoff:** `codex-0007` requests fail-closed per-slot spending admission and receipt identity, complete allowances/timing, and route evidence binding. Preserve the launched script's scoring. No owner decision needed. Item2 reproduction reader remains the next unfinished implementation requirement.
+
+## P1a public completion: item5 advances, main hold retained
+
+**Resolution:** d/c/b/a all PASS at `b0fd06ff522e61b0efd125f9f568acfa9e532a2e`; returned input/source identity and same-instance cleanup receipts are consistent. Generic reader admission and complete cost enforcement remain open. **Changed files:** `R/ROUTE_PREREQUISITE_COMPLETION_20260924.md/json`, this handoff, plan, manifest, cost state, launch request and validation. **Commit:** content commit containing this update, pinned in the next delivery record and bus DONE.
+
+**Checks actually performed:** nine public Git receipts, complete verdicts/status/exit, input/source identity equality, row-file hash/counts and same-instance watcher evidence. [Scope and limits](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_COMPLETION_20260924.md). No held-out, binary or archive content read; no model/cloud execution.
+
+**Remaining questions / Claude handoff:** complete `codex-0007` fixes and supply public validation; preserve original scoring. Retain the inclusive$3 allowance: $0.4489 is infrastructure only. Item2, HSET-2/probe and final-package requirements remain open. Idle-shell request `claude-0009` was inspected and answered in `codex-0012`: zero processes were safely attributable as owned and idle, so none was stopped and no memory relief is claimed.

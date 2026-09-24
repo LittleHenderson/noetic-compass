@@ -1,10 +1,11 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T06:22:34.611430+00:00",
+  "validated_utc": "2026-09-24T07:29:41.784452+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
   "JSON_parsed": [
+    "AGENT_BUS_VERIFICATION_20260924.json",
     "COST_STATE.json",
     "CURRENT_COORDINATION_STATE.json",
     "EXECUTION_MANIFEST.json",
@@ -14,6 +15,7 @@
     "PREPARATION_VALIDATION.json",
     "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json",
     "REPRODUCTION_POLICY.json",
+    "ROUTE_PREREQUISITE_COMPLETION_20260924.json",
     "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
     "SMOKE_COMPLETION_RECONCILIATION.json",
     "SMOKE_PROVIDER_OBSERVATION.json",
@@ -90,5 +92,13 @@
     "claude_reported_synthetic_tests_not_verified": true,
     "content_commit": "cbafaab5f4115a0191e908b1bbfa1576509e09fd"
   },
-  "bus_existing_settings_verification": "AGENT_BUS_VERIFICATION_20260924.json"
+  "bus_existing_settings_verification": "AGENT_BUS_VERIFICATION_20260924.json",
+  "route_completion_update": {
+    "source_commit": "b0fd06ff522e61b0efd125f9f568acfa9e532a2e",
+    "public_receipt_consistency_checks": "PASS_WITH_RECORDED_SCOPE",
+    "automated_admission": "STILL_OPEN",
+    "links_json_staged_hashes_diff_whitespace": "PASS",
+    "existing_policies_A1_and_ledger_unchanged": true,
+    "model_execution_or_new_cloud_job": false
+  }
 }

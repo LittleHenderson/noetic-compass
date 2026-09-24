@@ -881,10 +881,11 @@
     },
     {
       "id": "larger_question_gpu_route_both_arms",
-      "status": "LAUNCH_RECORDED_RESULT_PENDING",
-      "receipt_sha256": null,
+      "status": "PUBLIC_SCRIPT_PASS_RECEIPTS_CONSISTENT_AUTOMATED_ADMISSION_OPEN",
+      "receipt_sha256": "9519434d721819a219f5c4e9d5d085d0d4e6c4c825d38d858551891df0c312b5",
       "before_new_main_training": true,
-      "public_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json"
+      "public_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
+      "receipt": "ROUTE_PREREQUISITE_COMPLETION_20260924.json"
     },
     {
       "id": "route_acceptance_script_delta_review",
@@ -1076,5 +1077,6 @@
     "observed_study_attempts_now": 3,
     "current_remaining_jobs": null
   },
-  "accounting_reader_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json"
+  "accounting_reader_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json",
+  "route_prerequisite_completion": "ROUTE_PREREQUISITE_COMPLETION_20260924.json"
 }

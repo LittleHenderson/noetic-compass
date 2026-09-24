@@ -1,0 +1,13 @@
+# Larger-question prerequisite completion: public receipt review
+
+**All four registered public route checks report PASS.** The detailed public receipts at `b0fd06ff522e61b0efd125f9f568acfa9e532a2e` are complete for d,c,b,a, status done and exit0. This demonstrates the public route, not held-out accuracy or a completed training comparison.
+
+Source `e05889eec0f800a9a17b0c39a8d8d37f544b43bf` ran on Tesla T4 / torch2.11.0+cu128 for1,690.097 seconds, against a3,231.002-second preflight projection. Check b used37 fixtures with three historical OFF finals and fresh OFF/ON containers, with zero route errors. Check d matched the complete ON learner on564 old course packets and the OFF learner on the declared every-eighth-packet subset of71, plus37 fixtures per arm; no mismatch was recorded. Check c verified expected seven-node refusals. Check a matched six historical initial/final checkpoint digests over564 records each. Do not infer a full-course OFF check-d claim.
+
+Codex independently compared the returned identity with the launch identity; twelve input hashes, source-tree hashes and evaluation-module hashes agree. The public row-file hash matches, with298 rows and matching d/c/b/a counts. The run counter is one higher because the pinned script writes its terminal verdict after capturing counters (lines831-834). Successful stage0 and runtime fields agree. The reported grader/worker and T4-reference source names match the launch lists; their individual source bytes were not rehashed in this update. No binary checkpoint or archive was opened.
+
+The watcher receipt names the same instance `i-09e14d4afd0e0ebfa` and launch time. It reports termination and no remaining job volume at06:28:42UTC. This is Claude's recorded observation, manually reconciled by Codex; no fresh Codex provider query was made. The $0.4489 calculation covers compute, address and disk only. Keep the $3 inclusive route allowance inside the unchanged $60 ceiling until complete accounting is validated.
+
+The reader's ROUTE_ACCEPTED remains provisional as automated admission: identity/cleanup/strict-exit fixes in `codex-0007` are still queued. Manual consistency for this result does not close generic reader defects. P1b, actual HSET-2 counts, corrected-probe validation, budget enforcement and final main packages remain open. Main training stays disabled. The original scoring and earlier review records remain unchanged.
+
+Checks performed: nine exact public Git receipts, identity/hash/status/runtime/row-count comparisons and targeted terminal-row accounting source inspection. No project test/model/cloud execution or protected-output access. Exact hashes and scope summaries are in the JSON companion.
