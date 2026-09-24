@@ -34,7 +34,15 @@ INSTANCE_TYPE, PRICE_PER_HOUR = "c7i.2xlarge", 0.357          # AWS on-demand, u
 AMI_PARAMETER = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"
 ROOT_GB = 20
 MAX_SECONDS, CLIENT_DEADLINE_MINUTES, DOLLAR_CEILING = 90 * 60, 100, 1.00
-PYTHON_VERSION = "3.14"
+# Third-party tools, pinned (review F9). The machine installs them BEFORE the bundle (and its salts) reaches its disk.
+# PYTHON_VERSION is the exact patch version the laptop tests used; the pinned uv checks the Python download against
+# the checksum list built into that uv release. UV_VERSION is the uv the laptop has. UV_TARBALL_SHA256 is the sha256
+# of https://github.com/astral-sh/uv/releases/download/<UV_VERSION>/uv-x86_64-unknown-linux-gnu.tar.gz: the
+# coordinator copies it from that release's published .sha256 file and commits it before launch (JOB_LIMITS.md);
+# None refuses the launch. The machine refuses to run if the downloaded tarball does not match it.
+PYTHON_VERSION = "3.14.0"
+UV_VERSION = "0.12.7"
+UV_TARBALL_SHA256 = None
 SOURCE_COMMIT = "785c9bd10f1416deb95f9c30aacb43124134fe45"
 SOURCE_BRANCH = "claude/helm-builder-continuation-20260923"
 ARCHIVE_HSET1A = pathlib.Path("D:/tksCAS-archive/hset1a_sealed_20260923")
@@ -151,6 +159,9 @@ def assemble():
         raise SystemExit("BUNDLE_REFUSED: commit the builder and job files first:\n" + dirty)
     if EXPECTED_TEST5_SHAPES_DIGEST is None:
         raise SystemExit("BUNDLE_REFUSED: EXPECTED_TEST5_SHAPES_DIGEST is not set (JOB_LIMITS.md, before launch)")
+    if not (isinstance(UV_TARBALL_SHA256, str) and len(UV_TARBALL_SHA256) == 64
+            and all(c in "0123456789abcdef" for c in UV_TARBALL_SHA256)):
+        raise SystemExit("BUNDLE_REFUSED: UV_TARBALL_SHA256 is not set (JOB_LIMITS.md, before launch; review F9)")
     tree = source_tree()
     claude = read_blobs(head, CLAUDE_FILES)
     pins = builder_pins(claude[D + "hset2/hset2_build.py"])
@@ -166,7 +177,9 @@ def assemble():
                "claude_commit": head, "files": {name: {"sha256": hashlib.sha256(b).hexdigest(), "sha256_lf": lf(b), "bytes": len(b)}
                                                 for name, b in sorted(files.items())},
                "salt_sha256": {"hset1a": pins["HSET1A_SALT_SHA256"], "hset2": pins["HSET2_SALT_SHA256"]},
-               "expected_test5_shapes_digest": EXPECTED_TEST5_SHAPES_DIGEST}
+               "expected_test5_shapes_digest": EXPECTED_TEST5_SHAPES_DIGEST,
+               "tools": {"uv_version": UV_VERSION, "uv_tarball_sha256": UV_TARBALL_SHA256, "python_version": PYTHON_VERSION,
+                         "installed_before_the_bundle": True}}
     files["sealed/salt_hset1a.hex"] = salt1a + b"\n"
     files["sealed/salt_hset2.hex"] = salt2 + b"\n"
     files["anchors.json"] = json.dumps(anchors, indent=1, sort_keys=True).encode()
@@ -244,7 +257,8 @@ def main():
               .replace("__BUNDLE_URL__", urls["bundle"]).replace("__RESULTS_URL__", urls["results"])
               .replace("__SEALED_URL__", urls["sealed"]).replace("__PROGRESS_URL__", urls["progress"])
               .replace("__BUNDLE_SHA256__", bundle_sha).replace("__SOURCE_COMMIT__", head)
-              .replace("__EXPECT_TEST5__", EXPECTED_TEST5_SHAPES_DIGEST).replace("__PYTHON_VERSION__", PYTHON_VERSION))
+              .replace("__EXPECT_TEST5__", EXPECTED_TEST5_SHAPES_DIGEST).replace("__PYTHON_VERSION__", PYTHON_VERSION)
+              .replace("__UV_VERSION__", UV_VERSION).replace("__UV_SHA256__", UV_TARBALL_SHA256))
     assert "__" not in script.replace("__pycache__", ""), "an unfilled placeholder remains"
     assert len(script.encode("utf-8")) < 16000, "user-data limit"
     if args.dry_run:

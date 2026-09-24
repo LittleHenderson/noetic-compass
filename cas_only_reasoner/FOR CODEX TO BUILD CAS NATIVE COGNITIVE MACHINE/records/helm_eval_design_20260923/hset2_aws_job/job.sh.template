@@ -3,6 +3,7 @@
 # Runs as root through cloud-init user-data on a throwaway CPU machine. NO credentials on this machine: it can fetch
 # ONE object and write THREE through time-limited links. It always ends by shutting down and is destroyed on shutdown.
 # Non-neural: no model, no GPU, no training. Nothing is written back to any repository.
+# Review F9: pinned tools are installed BEFORE the bundle (with the salts) reaches this disk; salts removed at the end.
 set -uo pipefail
 trap '' PIPE
 shutdown -h +__MAX_MINUTES__ "hset2 job hard limit" || true                 # kill switch 0: the OS's own power-off
@@ -18,6 +19,7 @@ STATUS=setup
 upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
 finish() {                                                                   # kill switch 2: ANY exit uploads and shuts down
   echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  rm -rf "$WORK/pkg/sealed" || true                                          # the two salts leave the disk first
   echo "$STATUS" > "$WORK/out/STATUS"
   cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
   tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
@@ -29,19 +31,32 @@ finish() {                                                                   # k
 trap finish EXIT
 ( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
 
+# ---- TOOLS FIRST (no salt on this disk yet)
+export HOME=/root
+STATUS=tools
+UV_TGZ=uv-x86_64-unknown-linux-gnu.tar.gz
+curl -fsSL --retry 3 --max-time 300 -o "$WORK/$UV_TGZ" "https://github.com/astral-sh/uv/releases/download/__UV_VERSION__/$UV_TGZ" \
+  || { STATUS=uv_download_failed; exit 1; }
+echo "__UV_SHA256__  $WORK/$UV_TGZ" | sha256sum -c - || { STATUS=uv_hash_mismatch; exit 1; }
+mkdir -p /opt/uv && tar -xzf "$WORK/$UV_TGZ" -C /opt/uv --strip-components=1 || { STATUS=uv_extract_failed; exit 1; }
+export PATH="/opt/uv:$PATH"
+[ "$(uv --version | cut -d' ' -f2)" = "__UV_VERSION__" ] || { STATUS=uv_version_mismatch; exit 1; }
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }   # uv checks the download's sha256
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+[ "$("$PY" -c 'import platform; print(platform.python_version())')" = "__PYTHON_VERSION__" ] || { STATUS=python_version_mismatch; exit 1; }
+{ "$PY" --version; uname -a; nproc; free -m; grep -m1 "model name" /proc/cpuinfo;
+  echo "uv_version=$(uv --version)"; echo "uv_tarball_sha256=$(sha256sum "$WORK/$UV_TGZ" | cut -d' ' -f1) (pinned __UV_SHA256__)";
+  echo "uv_binary_sha256=$(sha256sum /opt/uv/uv | cut -d' ' -f1)";
+  echo "python_binary=$(readlink -f "$PY")"; echo "python_binary_sha256=$(sha256sum "$(readlink -f "$PY")" | cut -d' ' -f1)";
+  echo "bundle_sha256=__BUNDLE_SHA256__"; echo "claude_commit=__SOURCE_COMMIT__"; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+
+# ---- THE BUNDLE (it holds the two salts under pkg/sealed/)
+STATUS=bundle
 curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
 echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
 mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
-
-export HOME=/root
-curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
-export PATH="/root/.local/bin:$PATH"
-uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
-uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
-PY="$WORK/venv/bin/python"
-{ "$PY" --version; uname -a; nproc; free -m; grep -m1 "model name" /proc/cpuinfo; echo "bundle_sha256=__BUNDLE_SHA256__";
-  echo "claude_commit=__SOURCE_COMMIT__"; uv --version; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
-cat "$WORK/out/env.txt"
 
 export PYTHONDONTWRITEBYTECODE=1
 cd "$WORK/pkg"
@@ -53,20 +68,22 @@ C=claude/records/helm_eval_design_20260923/hset2
 STATUS=stage0_check
 "$PY" -B $C/hset2_stage0_public.py --check --fixture-file tree/research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json \
   > "$WORK/out/stage0_check.log" 2>&1 || { STATUS=stage0_check_failed; tail -n 5 "$WORK/out/stage0_check.log"; exit 1; }
-# SMOKE: the builder end to end at tiny size with THROWAWAY salts (no salt file is read; no real TEST data); outputs never uploaded
+# SMOKE: tiny build, THROWAWAY salts (no salt file read), plus the trained-state re-measurement (F10); never uploaded
 STATUS=smoke
 mkdir -p "$WORK/smoke/out" "$WORK/smoke/sealed_throwaway"
-"$PY" -B $C/hset2_build.py --package-root tree --throwaway-seed tiny-9 --limit-foci 2 --processes 2 \
+"$PY" -B $C/hset2_build.py --package-root tree --throwaway-seed tiny-9 --limit-foci 2 --processes 2 --remeasure-trained-states \
   --out-public "$WORK/smoke/out" --out-sealed "$WORK/smoke/sealed_throwaway" > "$WORK/out/smoke_build.log" 2>&1 \
   || { STATUS=smoke_build_failed; tail -n 15 "$WORK/out/smoke_build.log"; exit 1; }
 echo "SMOKE PASSED $(date -u +%FT%TZ)"
 
+# THE BUILD. Real mode: an uncaught exception's traceback goes ONLY to sealed_out; build.log gets its type (F6, F8)
 STATUS=build
 START=$(date +%s)
 "$PY" -B $C/hset2_build.py --package-root tree --salt-file-hset1a sealed/salt_hset1a.hex --salt-file-hset2 sealed/salt_hset2.hex \
   --expect-test5-shapes-digest __EXPECT_TEST5__ --out-public "$WORK/out" --out-sealed "$WORK/sealed_out" --processes "$(nproc)" \
   > "$WORK/out/build.log" 2>&1
 BUILD=$?
+rm -rf "$WORK/pkg/sealed"                                                    # the salts are no longer needed on this disk
 echo "build exit=$BUILD wall=$(( $(date +%s) - START ))s"
 tail -n 40 "$WORK/out/build.log"
 echo "build=$BUILD" > "$WORK/out/EXIT_CODES"

@@ -1,6 +1,9 @@
 """HSET-2 sealed stage: the improved Helm test at 5 and 6 nodes (Claude, temporary builder while Codex is away).
 
-Label: CLAUDE_BUILT_CLAUDE_CHECKED. Implements `../EVALUATION_DESIGN_v0_4.md` with its Amendment A1 (d840ea02).
+Label: CLAUDE_BUILT_CLAUDE_CHECKED. Implements `../EVALUATION_DESIGN_v0_4.md` with its Amendment A1 (d840ea02), plus
+the builder's PROPOSED Amendment A2 (`REVIEW_HSET2_BUILD_20260924.md`): five more registered bars, each a no-learning
+rule that two reviewers showed could pass a claim. A2 only adds bars; the designer or owner must accept it (or choose
+the other option each finding names) before the HSET-2 salt is made.
 Choices the design leaves open are written in `BUILDER_REPORT_HSET2.md` ("Choices where the design is silent").
 Non-neural: no model is loaded, nothing is trained, no forward pass.
 
@@ -10,9 +13,12 @@ RUN ONLY ON AWS, by the coordinator, with the real salts:
         --expect-test5-shapes-digest <HSET-1A public test_shapes_digest> \
         --out-public DIR --out-sealed DIR [--processes N]
 Throwaway mode (tests, smoke): no salt file is read; both salts are derived from a public string, so a throwaway
-run can never reproduce the sealed TEST:
+run can never reproduce the sealed TEST. Its files are named THROWAWAY_* and every cell's role is THROWAWAY_NOT_DEV
+(its 5-node 'DEV' split is random, so it holds real TEST_NEW_5 and WITHHELD_5 classes); neither output folder may be
+inside a git work tree:
     python -B hset2_build.py --package-root ... --throwaway-seed STRING --out-public DIR --out-sealed DIR \
-        [--processes N] [--limit-foci K]
+        [--processes N] [--limit-foci K] [--remeasure-trained-states]
+In real mode any uncaught exception's traceback goes ONLY to --out-sealed; the public log gets its type only.
 
 What it builds (design sections in brackets):
   5 nodes  TEST_NEW_5 and DEV_NEW_5 by `hset1a_build.split_five` with the HSET-1A salt (never re-drawn) [s3];
@@ -55,7 +61,9 @@ HSET1A_DIR = DESIGN_DIR / "hset1a"
 ORACLE_DIR = DESIGN_DIR / "d1_acceptance"
 
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
-SCHEMA_SUMMARY = "claude.hset2-build-summary/0.1"
+SCHEMA_SUMMARY = "claude.hset2-build-summary/0.2"
+DESIGN_BASIS = ("EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02) + the builder's PROPOSED Amendment A2 "
+                "(hset2/REVIEW_HSET2_BUILD_20260924.md; the designer or owner must accept it before the salt is made)")
 # ---- pins, committed before any build
 HSET1A_SALT_SHA256 = "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754"   # BUILD_SPEC_v0_1.md s5
 # The coordinator makes the HSET-2 salt (32 random bytes, 64 hex characters) and commits its sha256 HERE before the
@@ -84,13 +92,28 @@ SPLITS_SECRET = ("TEST_NEW_6", "TEST_NEW_5")
 SPLITS_PUBLIC = ("DEV_NEW_6", "DEV_NEW_5")
 
 # ---- comparators (design s6). Every one is a bar of its kind's claims, except as each claim says.
+# The bars marked A2 are the builder's PROPOSED Amendment A2 (REVIEW_HSET2_BUILD_20260924.md, findings F1 and F2):
+# each is a no-learning rule that passed a claim in 6 of 6 throwaway salts while it was not registered. Adding a bar
+# only makes a claim harder to pass. The designer or owner must accept A2 (or choose the other option each finding
+# names) BEFORE the HSET-2 salt is made; adding a bar after the sealed build prints W would be a post-hoc change.
 THREE_HOP = "THREE_HOP_FIRST_CHILD"
+SINGLE_ROOT = "SINGLE_ROOT_FALLBACK"                                   # A2 (F2): two-hop, then a root-count fallback
+SINGLE_ROOT_THREE_HOP = "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"        # A2 (F2): three-hop, then the same fallback
+BUILT_ON_THREE_HOP = (THREE_HOP, SINGLE_ROOT_THREE_HOP)               # not bars of REACH_3_STEP_TRANSFER_6
 ANALOGY_COMPARATORS = ("ALWAYS_NO_MATCH", "FIRST_CANDIDATE", "NODE_EDGE_COUNT_MATCH", "DEGREE_MULTISET_MATCH",
                        "FLAG_ANCHOR", "BEST_FIXED_POSITION", "CANDIDATE_ONLY_NOVELTY", "STATUS_BY_COUNT",
-                       "OTHER_DOMAIN_ONLY")
+                       "OTHER_DOMAIN_ONLY",                                  # A2 (F1): one guess per candidate
+                       "DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK", "FLAG_ANCHOR_GUESS_THEN_CHECK")
+# The three one-guess rules, the same in both bank kinds: how many declared participants are mapped first (0: none;
+# 1: the declared whole; 3: the whole and both participants), then the rest by (in-degree, out-degree, rank).
+GUESS_ANCHORS = {"DEGREE_GUESS_THEN_CHECK": 0, "WHOLE_ANCHOR_GUESS_THEN_CHECK": 1, "FLAG_ANCHOR_GUESS_THEN_CHECK": 3}
 ANALOGY_TUNED = ("BEST_FIXED_POSITION", "STATUS_BY_COUNT")          # a parameter chosen at its best value on the cell
 CORRESPONDENCE_COMPARATORS = ("ALWAYS_NO_MATCH", "IDENTITY_BY_RANK", "DEGREE_SORTED", "DEGREE_GUESS_THEN_CHECK",
-                              "FLAG_ANCHOR_GUESS_THEN_CHECK")
+                              "FLAG_ANCHOR_GUESS_THEN_CHECK",
+                              "WHOLE_ANCHOR_GUESS_THEN_CHECK")      # A2: completes the same one-guess family
+A2_BARS = {"analogy": ("DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK", "FLAG_ANCHOR_GUESS_THEN_CHECK"),
+           "correspondence": ("WHOLE_ANCHOR_GUESS_THEN_CHECK",),
+           "reach": (SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)}
 STATUS_BY_COUNT_M = tuple(range(0, 9))
 # Measured 2026-09-23 by this builder: the frozen checker over the frozen public course's registry main queries (70
 # analogy and 88 correspondence records). NO_MATCH was never trained for either kind (review m4). Re-measured by the
@@ -118,7 +141,18 @@ def _paths(package_root):
 
 def reach_comparators():
     import hset1a_build as A
-    return tuple(A.COMPARATORS["reach"]) + (THREE_HOP,)
+    return tuple(A.COMPARATORS["reach"]) + (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)
+
+
+def registered_comparators():
+    """The whole bar set, printed with its digest in every summary, so anyone can see which bars were fixed before the
+    salt was made (design s6 and s7; the proposed A2 additions are listed separately)."""
+    reach = list(reach_comparators())
+    return {"reach": {"REACH_3_STEP_TRANSFER_6": [x for x in reach if x not in BUILT_ON_THREE_HOP],
+                      "REACH_4_STEP_TRANSFER_6": reach},
+            "analogy": list(ANALOGY_COMPARATORS), "analogy_tuned_on_the_cell": list(ANALOGY_TUNED),
+            "correspondence": list(CORRESPONDENCE_COMPARATORS),
+            "added_by_proposed_amendment_A2": {k: list(v) for k, v in sorted(A2_BARS.items())}}
 
 
 # ============================================================================ plain graphs (public helpers)
@@ -174,6 +208,57 @@ def three_hop_payload(world, query):
     return {"state": "VIA", "via": three[0]} if three else {"state": "ABSENT", "via": None}
 
 
+def single_root_fallback_payload(world, query, base):
+    """SINGLE_ROOT_FALLBACK (A2, review F2), read off the packet's focus world. It follows no path longer than `base`.
+
+    Take the `base` answer (the registered two-hop answer, or the three-hop answer for the ..._AFTER_THREE_HOP form).
+    If it is ABSENT and the world has exactly one root (one node of in-degree 0, read off the joint degree list), a
+    whole there reaches every node, so answer VIA: the lowest-rank child of the whole (first-child rule), or the
+    lowest-rank parent of the part (BFS rule). Otherwise keep ABSENT."""
+    if base["state"] != "ABSENT":
+        return dict(base)
+    nodes = sorted(n["ref"] for n in world["nodes"])
+    rank = {ref: i for i, ref in enumerate(nodes)}
+    targets = {e["target"] for e in world["contains"]}
+    if sum(1 for ref in nodes if ref not in targets) != 1:
+        return {"state": "ABSENT", "via": None}
+    whole, part = query["arguments"]["whole"], query["arguments"]["part"]
+    if query["rule"] == "first_direct_constituent_lexical_v1":
+        near = sorted((e["target"] for e in world["contains"] if e["source"] == whole), key=rank.get)
+    else:
+        near = sorted((e["source"] for e in world["contains"] if e["target"] == part), key=rank.get)
+    return {"state": "VIA", "via": near[0]} if near else {"state": "ABSENT", "via": None}
+
+
+def extra_reach_payloads(world, query, hset1a_payloads):
+    """The reach comparators design s6 and A2 add to HSET-1A's eight, each read off the packet's focus world."""
+    three = three_hop_payload(world, query)
+    return {THREE_HOP: three,
+            SINGLE_ROOT: single_root_fallback_payload(world, query, hset1a_payloads["TWO_HOP_FIRST_CHILD"]),
+            SINGLE_ROOT_THREE_HOP: single_root_fallback_payload(world, query, three)}
+
+
+def one_guess(F, T, anchored):
+    """ONE guess of a node map from world F to world T, then ONE check (design s6: one guess, one check, no search).
+
+    The first `anchored` declared participants (0: none; 1: the declared whole; 3: the whole and both participants)
+    are mapped in order; the other nodes are paired after sorting both sides by (in-degree, out-degree, rank).
+    Returns (frefs, trefs, map over rank positions or None, valid)."""
+    fn, fe, frefs = world_graph(F)
+    tn, te, trefs = world_graph(T)
+    if fn != tn:
+        return frefs, trefs, None, False
+    fin, fout = degrees(fn, fe)
+    tin, tout = degrees(tn, te)
+    fidx, tidx = {r: i for i, r in enumerate(frefs)}, {r: i for i, r in enumerate(trefs)}
+    m = {fidx[a]: tidx[b] for a, b in zip(F["declarations"]["participants"][:anchored],
+                                          T["declarations"]["participants"][:anchored])}
+    left = sorted((a for a in range(fn) if a not in m), key=lambda a: (fin[a], fout[a], a))
+    right = sorted((b for b in range(tn) if b not in m.values()), key=lambda b: (tin[b], tout[b], b))
+    m.update(zip(left, right))
+    return frefs, trefs, m, {(m[a], m[b]) for a, b in fe} == set(te)
+
+
 def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
     """Every registered analogy comparator (design s6), read off the packet: {name: payload}, {tuned: {p: payload}}.
 
@@ -207,6 +292,10 @@ def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
            "CANDIDATE_ONLY_NOVELTY": pick([w for w in other if ci[w]["n"] == fn and (
                ci[w]["n"] > 4 or canonical_key(ci[w]["shape"]) not in trained_shape_keys)]),
            "OTHER_DOMAIN_ONLY": {"world_id": same_deg_other[0] if len(same_deg_other) == 1 else None}}
+    # A2 (review F1): the correspondence guess-then-check made once per same-degree other-domain candidate, in alias
+    # order; the first candidate whose one guess passes the check, else NO_MATCH
+    for name, anchored in GUESS_ANCHORS.items():
+        out[name] = pick([w for w in same_deg_other if one_guess(focus, worlds[w], anchored)[3]])
     tuned = {"BEST_FIXED_POSITION": {str(k): {"world_id": wid} for k, wid in enumerate(bank)},
              "STATUS_BY_COUNT": {str(m): {"world_id": same_deg_other[0] if same_deg_other and len(same_deg_other) >= m else None}
                                  for m in STATUS_BY_COUNT_M}}
@@ -217,37 +306,21 @@ def correspondence_payloads(public, focus_id, target_id):
     """Every registered correspondence comparator (design s6): one guess at most, and one check at most."""
     worlds = {w["world_id"]: w for w in public["worlds"]}
     F, T = worlds[focus_id], worlds[target_id]
-    fn, fe, frefs = world_graph(F)
-    tn, te, trefs = world_graph(T)
-    fin, fout = degrees(fn, fe)
-    tin, tout = degrees(tn, te)
     no = {"status": "NO_MATCH", "pairs": []}
+    frefs, trefs, guess, valid = one_guess(F, T, 0)
+    out = {"ALWAYS_NO_MATCH": no}
+    if guess is None:                                                  # node counts differ
+        out.update({name: no for name in CORRESPONDENCE_COMPARATORS})
+        return out
 
     def mapping(m):
-        return {"status": "MAPPING", "pairs": [{"source": frefs[a], "target": trefs[m[a]]} for a in range(fn)]}
-
-    def valid(m):
-        return {(m[a], m[b]) for a, b in fe} == set(te)
-
-    def degree_guess(anchored):
-        m = dict(anchored)
-        left = sorted((a for a in range(fn) if a not in m), key=lambda a: (fin[a], fout[a], a))
-        right = sorted((b for b in range(tn) if b not in m.values()), key=lambda b: (tin[b], tout[b], b))
-        m.update(zip(left, right))
-        return m
-    out = {"ALWAYS_NO_MATCH": no}
-    if fn != tn:
-        out.update(IDENTITY_BY_RANK=no, DEGREE_SORTED=no, DEGREE_GUESS_THEN_CHECK=no, FLAG_ANCHOR_GUESS_THEN_CHECK=no)
-        return out
-    out["IDENTITY_BY_RANK"] = mapping({a: a for a in range(fn)})
-    guess = degree_guess({})
+        return {"status": "MAPPING", "pairs": [{"source": frefs[a], "target": trefs[m[a]]} for a in range(len(frefs))]}
+    out["IDENTITY_BY_RANK"] = mapping({a: a for a in range(len(frefs))})
     out["DEGREE_SORTED"] = mapping(guess)
-    out["DEGREE_GUESS_THEN_CHECK"] = mapping(guess) if valid(guess) else no
-    fidx, tidx = {r: i for i, r in enumerate(frefs)}, {r: i for i, r in enumerate(trefs)}
-    anchored = {fidx[a]: tidx[b] for a, b in zip(F["declarations"]["participants"], T["declarations"]["participants"])}
-    anchored_guess = degree_guess(anchored)
-    out["FLAG_ANCHOR_GUESS_THEN_CHECK"] = mapping(anchored_guess) if valid(anchored_guess) else no
-    return out
+    for name, anchored in GUESS_ANCHORS.items():                      # the one-guess family (s6, A2)
+        _, _, m, ok = one_guess(F, T, anchored)
+        out[name] = mapping(m) if ok else no
+    return {name: out[name] for name in CORRESPONDENCE_COMPARATORS}
 
 
 # ============================================================================ worker (one per process)
@@ -345,7 +418,7 @@ def _evaluate_single(item):
     independent = A._independent_gold(hw, item, refs)
     payloads, aux = A._comparators(item["kind"], focus, query)
     if item["kind"] == "reach":
-        payloads[THREE_HOP] = three_hop_payload(focus, query)
+        payloads.update(extra_reach_payloads(focus, query, payloads))
     verdicts, consistent, graded = _grade(public, query, payloads, {hw.canon(a) for a in admissible})
     flags = {}
     if item["kind"] == "reach" and gold is not None and gold["state"] == "VIA":
@@ -811,13 +884,15 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
         return s
     for c in clusters:
         rows = [rows_by_item[i["item_id"]] for i in items_by_cluster[c["cluster_id"]]]
-        c["comparators"][THREE_HOP] = all(r["comparators"][THREE_HOP] for r in rows)
+        for x in (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP):
+            c["comparators"][x] = all(r["comparators"][x] for r in rows)
         _, edges = json.loads(c["shape_key"])
         c["whole_has_children"] = any(a == c["whole"] for a, _ in edges)
+        c["single_root_shape"] = len({a for a, _ in edges} | {b for _, b in edges}) - len({b for _, b in edges}) == 1
     primary = [c for c in clusters if c["role"] == "PRIMARY"]
     for c in primary:
         c["group_key"] = None
-    s["claims"] = {"REACH_3_STEP_TRANSFER_6": floor_block(A, primary, tuple(x for x in names if x != THREE_HOP)),
+    s["claims"] = {"REACH_3_STEP_TRANSFER_6": floor_block(A, primary, tuple(x for x in names if x not in BUILT_ON_THREE_HOP)),
                    "REACH_4_STEP_TRANSFER_6": floor_block(A, primary, names)}
     for block in s["claims"].values():
         block.pop("distinct_degree_groups")
@@ -825,6 +900,11 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
     s["genuine_no_path_primary_absent_clusters_whose_whole_has_children"] = sum(
         1 for c in primary if c["state"] == "ABSENT" and c["whole_has_children"])
     s["primary_absent_clusters"] = sum(1 for c in primary if c["state"] == "ABSENT")
+    # A2 (F2), printed: a whole in a one-root shape reaches every node, so ABSENT clusters come only from shapes with
+    # two or more roots. This is what SINGLE_ROOT_FALLBACK exploits without following any path.
+    s["primary_by_state_single_root_shape"] = {st: {"one_root": sum(1 for c in primary if c["state"] == st and c["single_root_shape"]),
+                                                    "two_or_more_roots": sum(1 for c in primary if c["state"] == st and not c["single_root_shape"])}
+                                               for st in ("ABSENT", "DIRECT", "VIA")}
     s["can_carry_a_claim"] = s["claims"]["REACH_3_STEP_TRANSFER_6"]["can_carry_a_claim"]
     s["can_carry_a_claim_note"] = ("cell-level value = the REACH_3_STEP_TRANSFER_6 floor; REACH_4_STEP_TRANSFER_6 has its "
                                    "own floor in claims")
@@ -862,6 +942,10 @@ def trained_answer_states(frozen=None):
 
 
 # ============================================================================ main
+def is_hex64(value):
+    return isinstance(value, str) and len(value) == 64 and all(ch in "0123456789abcdef" for ch in value)
+
+
 def resolve_salts(args):
     if args.throwaway_seed is not None:
         if args.salt_file_hset1a or args.salt_file_hset2:
@@ -878,10 +962,15 @@ def resolve_salts(args):
         raise SystemExit("REFUSED: HSET2_SALT_SHA256 is not committed yet (design s3 step 6, s9 step 2)")
     if not (args.salt_file_hset1a and args.salt_file_hset2 and args.expect_test5_shapes_digest):
         raise SystemExit("REFUSED: real mode needs both salt files and --expect-test5-shapes-digest")
+    if not is_hex64(args.expect_test5_shapes_digest):
+        raise SystemExit("REFUSED: --expect-test5-shapes-digest must be 64 lowercase hex characters")
     salts = []
     for path, pin, name in ((args.salt_file_hset1a, HSET1A_SALT_SHA256, "HSET-1A"), (args.salt_file_hset2, HSET2_SALT_SHA256, "HSET-2")):
-        salt = pathlib.Path(path).read_text(encoding="ascii").strip()
-        if not (len(salt) == 64 and all(ch in "0123456789abcdef" for ch in salt)):
+        try:
+            salt = pathlib.Path(path).read_text(encoding="ascii").strip()
+        except (OSError, UnicodeDecodeError) as error:             # names the error type only, never the content
+            raise SystemExit("REFUSED: the %s salt file cannot be read (%s)" % (name, type(error).__name__)) from None
+        if not is_hex64(salt):
             raise SystemExit("REFUSED: the %s salt must be 64 lowercase hex characters" % name)
         if hashlib.sha256(salt.encode("ascii")).hexdigest() != pin:
             raise SystemExit("REFUSED: the %s salt is not the one whose sha256 was committed" % name)
@@ -890,16 +979,41 @@ def resolve_salts(args):
 
 
 def check_withheld_5(all5, dev5, test5, withheld5, excluded):
-    """Design s3 and review M11: WITHHELD_5 is every 5-node class not in DEV_NEW_5, not in TEST_NEW_5 and not in
-    PUBLIC_EXCLUDED; and no PUBLIC_EXCLUDED class may be in TEST_NEW_5. Fails closed; names no class."""
-    dev5, test5, withheld5 = set(dev5), set(test5), set(withheld5)
+    """Design s3 and review M11: no PUBLIC_EXCLUDED class may be in TEST_NEW_5 (the real guard: CUSTODY_BREACH), and
+    WITHHELD_5 must be every 5-node class not in DEV_NEW_5, not in TEST_NEW_5 and not in PUBLIC_EXCLUDED. The second
+    rule is checked as a partition (WITHHELD_5 meets none of the three; the four together cover all 267 classes), not
+    by recomputing the formula that made WITHHELD_5. In the build it guards against a later edit of that formula; the
+    unit test shows it catches a wrong WITHHELD_5. Fails closed; names no class."""
+    all5, dev5, test5, withheld5 = set(all5), set(dev5), set(test5), set(withheld5)
     if test5 & excluded:
         raise SystemExit("CUSTODY_BREACH: %d PUBLIC_EXCLUDED classes are in TEST_NEW_5" % len(test5 & excluded))
     if dev5 & test5 or len(dev5) != 60 or len(test5) != 60:
         raise SystemExit("REFUSED: DEV_NEW_5 and TEST_NEW_5 are not two disjoint sets of 60")
-    if withheld5 != set(all5) - dev5 - test5 - excluded:
+    if withheld5 & (dev5 | test5 | excluded) or withheld5 | dev5 | test5 | (excluded & all5) != all5:
         raise SystemExit("REFUSED: WITHHELD_5 is not every class outside DEV_NEW_5, TEST_NEW_5 and PUBLIC_EXCLUDED")
     return True
+
+
+def disjointness_measured(all5, dev5, test5, withheld5, excluded, dev_side, test_side, dev6, test6, withheld6):
+    """The printed split-disjointness table (design s9 step 4). Every value is COUNTED from the sets themselves, so it
+    can show a failure; the build has already exited (CUSTODY_BREACH or REFUSED) if a required value is wrong."""
+    all5, dev5, test5, withheld5 = set(all5), set(dev5), set(test5), set(withheld5)
+    dev_side, test_side, dev6, test6, withheld6 = set(dev_side), set(test_side), set(dev6), set(test6), set(withheld6)
+    return {"how": "counted from the sets; the build exits before this print if a required value fails",
+            "five": {"dev_new_5_meets_test_new_5": len(dev5 & test5),
+                     "withheld_5_meets_dev_new_5": len(withheld5 & dev5),
+                     "withheld_5_meets_test_new_5": len(withheld5 & test5),
+                     "withheld_5_meets_public_excluded": len(withheld5 & excluded),
+                     "public_excluded_in_test_new_5": len(test5 & excluded),
+                     "public_excluded_in_dev_new_5_printed_only_dev_is_public": len(dev5 & excluded),
+                     "classes_not_covered_by_the_four_sets": len(all5 - dev5 - test5 - withheld5 - excluded)},
+            "six": {"dev_side_meets_test_side": len(dev_side & test_side),
+                    "public_excluded_on_dev_side": len(dev_side & excluded),
+                    "public_excluded_on_test_side": len(test_side & excluded),
+                    "test_new_6_off_the_test_side": len(test6 - test_side),
+                    "dev_new_6_off_the_dev_side": len(dev6 - dev_side),
+                    "withheld_6_meets_test_new_6": len(withheld6 & test6),
+                    "test_side_not_covered_by_test_new_6_and_withheld_6": len(test_side - test6 - withheld6)}}
 
 
 def inside_git_work_tree(path):
@@ -920,11 +1034,13 @@ def load_stage0(root):
             "excluded": {r["canonical_form"] for r in pe["classes"]}}
 
 
-def derive(stage0, salt1a, salt2, vocab, source, *, limit_foci=0, only=None, facts5=None):
+def derive(stage0, salt1a, salt2, vocab, source, *, limit_foci=0, only=None, facts5=None, expect_test5_digest=None):
     """The splits (s3), the eligible foci on the FULL pools (s5.2, s5.3, A1 D2), and every item and cluster.
 
     Deterministic in the two salts. `limit_foci` and `only` are smoke options (main refuses them with real salts);
-    `facts5` may be passed in to skip recomputing the salt-free 5-node facts. Fails closed on the s3 split rules."""
+    `facts5` may be passed in to skip recomputing the salt-free 5-node facts. Fails closed on the s3 split rules.
+    `expect_test5_digest` (the sealed build passes HSET-1A's public test_shapes_digest) is checked right after
+    `split_five`, before any item is built (review F10)."""
     import hset_worlds as hw
     import hset1a_build as A
     import oracle_isomorphism as oracle
@@ -939,6 +1055,8 @@ def derive(stage0, salt1a, salt2, vocab, source, *, limit_foci=0, only=None, fac
         facts5 = {S0.class_key(s): A.shape_facts(hw, s) for s in classes5}
     dev5, test5, strata5 = A.split_five(hw, salt1a, facts5)
     test5_digest = hw.sha(sorted(test5))
+    if expect_test5_digest is not None and test5_digest != expect_test5_digest:
+        raise SystemExit("REFUSED: TEST_NEW_5 does not reproduce HSET-1A's public test_shapes_digest")
     withheld5 = sorted(set(facts5) - set(dev5) - set(test5) - excluded)
     check_withheld_5(facts5, dev5, test5, withheld5, excluded)
     # ---- 6 nodes (s3): the stage-0 sides; TEST_NEW_6 from the HSET-2 salt
@@ -953,12 +1071,10 @@ def derive(stage0, salt1a, salt2, vocab, source, *, limit_foci=0, only=None, fac
     dev_decoys6 = summary0["dev_decoys_6"]["classes"]
     test6, test_draws = S0.draw_side(salt2, "test", 6, FOCI, set(test_side))
     withheld6 = sorted(set(test_side) - set(test6))
-    if set(test6) & set(dev_side) or (set(test_side) | set(dev_side)) & excluded or not set(test6) <= set(test_side):
+    if (set(test6) & set(dev_side) or set(dev_side) & set(test_side) or (set(test_side) | set(dev_side)) & excluded
+            or not set(test6) <= set(test_side) or not set(dev6) <= set(dev_side)):
         raise SystemExit("REFUSED: the 6-node splits are not disjoint as design s3 requires")
-    disjoint = {"five": {"dev_test": not set(dev5) & set(test5), "withheld_excludes_dev_test_public": True,
-                         "public_excluded_in_test_new_5": 0},
-                "six": {"dev_test_sides": not set(dev_side) & set(test_side), "public_excluded_on_no_side": True,
-                        "test_new_6_on_test_side": set(test6) <= set(test_side), "dev_new_6_on_dev_side": set(dev6) <= set(dev_side)}}
+    disjoint = disjointness_measured(facts5, dev5, test5, withheld5, excluded, dev_side, test_side, dev6, test6, withheld6)
 
     # ---- eligibility (s5.2, s5.3, A1 D2) on the FULL pools; --limit-foci only trims the focus lists afterwards
     group5 = {k: S0.group_key(S0.key_shape(k)) for k in facts5}
@@ -1046,7 +1162,45 @@ def derive(stage0, salt1a, salt2, vocab, source, *, limit_foci=0, only=None, fac
             "partners5": partners5, "t5_pool": t5_pool}
 
 
+def output_names(mode):
+    """File names and cell-role words per mode. Throwaway outputs are named THROWAWAY_* and every cell's role is
+    THROWAWAY_NOT_DEV (review F11): a throwaway 5-node split puts real TEST_NEW_5 and WITHHELD_5 classes into its
+    'DEV_NEW_5', so no throwaway output may ever be read as development feedback."""
+    if mode == "SEALED_BUILD":
+        return {"public": "HSET2_CELLS_PUBLIC.json", "summary": "HSET2_BUILD_SUMMARY.json", "sealed": "HSET2_SEALED_TEST.json",
+                "traceback": "build_traceback.txt", "role_override": None}
+    return {"public": "THROWAWAY_HSET2_CELLS_NOT_DEV.json", "summary": "THROWAWAY_HSET2_BUILD_SUMMARY.json",
+            "sealed": "THROWAWAY_HSET2_SEALED_TEST.json", "traceback": "THROWAWAY_build_traceback.txt",
+            "role_override": "THROWAWAY_NOT_DEV"}
+
+
 def main(argv=None):
+    """Parse, then run. In real (sealed) mode ANY exception that the build does not turn into a fixed refusal code is
+    caught here: its full traceback goes ONLY to --out-sealed, and the public log gets only the exception type
+    (review F6 and F8: an exception message could carry a TEST class key or a world spec)."""
+    args = parse_args(argv)
+    if args.throwaway_seed is not None:
+        return _run(args)
+    try:
+        return _run(args)
+    except SystemExit:
+        raise                                                      # the build's own refusal codes name no TEST item
+    except BaseException as error:  # noqa: BLE001 -- custody: nothing but the type may reach a public log
+        import traceback
+        written = False
+        try:
+            sealed = pathlib.Path(args.out_sealed)
+            if not inside_git_work_tree(sealed):
+                sealed.mkdir(parents=True, exist_ok=True)
+                (sealed / output_names("SEALED_BUILD")["traceback"]).write_text(traceback.format_exc(), encoding="utf-8")
+                written = True
+        except BaseException:  # noqa: BLE001
+            pass
+        raise SystemExit("BUILD_FAILED_UNCAUGHT: %s (full traceback %s)" % (
+            type(error).__name__, "written to the sealed output only" if written else "NOT written")) from None
+
+
+def parse_args(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--package-root", required=True)
     parser.add_argument("--salt-file-hset1a")
@@ -1059,13 +1213,24 @@ def main(argv=None):
     parser.add_argument("--limit-foci", type=int, default=0, help="throwaway smoke only: keep K foci per split")
     parser.add_argument("--only", choices=("reach", "analogy", "correspondence"), default=None,
                         help="throwaway only: build one family of cells (to measure a family at full size in a short run)")
-    args = parser.parse_args(argv)
+    parser.add_argument("--remeasure-trained-states", action="store_true",
+                        help="throwaway mode: also re-measure the trained answer states (the sealed build always does; "
+                             "the AWS smoke passes this so the paid build runs no code path for the first time)")
+    return parser.parse_args(argv)
+
+
+def _run(args):
     t0 = time.monotonic()
     root = pathlib.Path(args.package_root).resolve()
     _paths(root)
     if inside_git_work_tree(args.out_sealed):
         raise SystemExit("REFUSED: --out-sealed is inside a git work tree (design s8: nothing sealed goes into git)")
+    if args.throwaway_seed is not None and inside_git_work_tree(args.out_public):
+        raise SystemExit("REFUSED: throwaway outputs may not be written inside a git work tree (review F11: a throwaway "
+                         "5-node split holds real TEST_NEW_5 and WITHHELD_5 classes)")
     mode, salt1a, salt2 = resolve_salts(args)
+    outn = output_names(mode)
+    remeasure = mode == "SEALED_BUILD" or args.remeasure_trained_states
     import hset_worlds as hw
     import hset1a_build as A
     import hset2_stage0_public as S0
@@ -1105,15 +1270,23 @@ def main(argv=None):
     identity["bank_digest"] = bank["bank"]["bank_digest"]
     identity["vocabulary_digest"] = hw.sha(vocab)
     identity["label_cache_digest"] = pointer_inputs.label_cache(root)["cache_digest"]
+    identity["registered_comparators"] = registered_comparators()
+    identity["registered_comparators_digest"] = hw.sha(identity["registered_comparators"])
+
+    # ---- trained answer states (s7, m4), from the frozen public course; salt-free, so measured FIRST (review F10)
+    trained = trained_answer_states(frozen_course if remeasure else None)
+    del frozen_course
+    print("trained answer states %s in %.1f s" % ("re-measured" if remeasure else "read from the pinned record",
+                                                  time.monotonic() - t0), flush=True)
 
     # ---- stage 0, recomputed and required identical to the committed files (A1 D1)
     stage0 = load_stage0(root)
     identity["stage0_files_sha256"] = stage0["summary0"]["files_sha256"]
     print("identity and stage 0 checked in %.1f s" % (time.monotonic() - t0), flush=True)
-    # ---- splits (s3), eligibility (s5, A1 D2) and every item
-    D = derive(stage0, salt1a, salt2, vocab, source, limit_foci=args.limit_foci, only=args.only)
-    if mode == "SEALED_BUILD" and D["test5_digest"] != args.expect_test5_shapes_digest:
-        raise SystemExit("REFUSED: TEST_NEW_5 does not reproduce HSET-1A's public test_shapes_digest")
+    # ---- splits (s3), eligibility (s5, A1 D2) and every item; the TEST_NEW_5 digest is checked inside derive,
+    # right after split_five and before any item is built (review F10)
+    D = derive(stage0, salt1a, salt2, vocab, source, limit_foci=args.limit_foci, only=args.only,
+               expect_test5_digest=args.expect_test5_shapes_digest)
     pe, summary0 = stage0["pe"], stage0["summary0"]
     (dev5, test5, strata5, test5_digest, withheld5, dev_side, test_side, dev6, dev_decoys6, test6, test_draws, withheld6,
      disjoint, elig, eligible_full_counts, test6_use, items, single_clusters, bank_clusters, members6, group_of,
@@ -1122,11 +1295,6 @@ def main(argv=None):
         "test_draws", "withheld6", "disjoint", "elig", "eligible_full_counts", "test6_use", "items", "single_clusters",
         "bank_clusters", "members6", "group_of", "test_pool6", "partners6", "partners5", "t5_pool"))
     print("items %d, built in %.1f s" % (len(items), time.monotonic() - t0), flush=True)
-
-    # ---- trained answer states (s7, m4), from the frozen public course
-    trained = trained_answer_states(frozen_course if mode == "SEALED_BUILD" else None)
-    del frozen_course
-    print("trained answer states read in %.1f s" % (time.monotonic() - t0), flush=True)
 
     # ---- evaluate every packet: preflight one of each form in THIS process first, then the pool
     _init(str(root))
@@ -1177,9 +1345,10 @@ def main(argv=None):
 
     # ---- cells (s7: printed before any model is read)
     summaries, tables = {}, {}
-    role = lambda split, cell: ("PRIMARY_CLAIM_CANDIDATE" if split in SPLITS_SECRET and cell in ("REACH_FIRST_DIRECT", "REACH_BFS", "ANALOGY", "CORRESPONDENCE")  # noqa: E731
-                                else "DEVELOPMENT_FEEDBACK" if split in SPLITS_PUBLIC and cell != "PARTS" and cell != "EDGE_ACCOUNT"
-                                else "DIAGNOSTIC")
+    role = lambda split, cell: (outn["role_override"] or  # noqa: E731
+                                ("PRIMARY_CLAIM_CANDIDATE" if split in SPLITS_SECRET and cell in ("REACH_FIRST_DIRECT", "REACH_BFS", "ANALOGY", "CORRESPONDENCE")
+                                 else "DEVELOPMENT_FEEDBACK" if split in SPLITS_PUBLIC and cell != "PARTS" and cell != "EDGE_ACCOUNT"
+                                 else "DIAGNOSTIC"))
     if build_ok:
         for split, seed in (("DEV_NEW_6", S0.DEV_SEED), ("TEST_NEW_6", salt2)) if args.only in (None, "reach") else ():
             for cell in ("REACH_FIRST_DIRECT", "REACH_BFS", "PARTS", "EDGE_ACCOUNT"):
@@ -1227,7 +1396,8 @@ def main(argv=None):
         floors = {c: cell_floor(claim, c) for c in cells}
         testable = all(f is not None and f["can_carry_a_claim"] for f in floors.values())
         claims_table[claim] = {"cells": list(cells), "per_arm": "evaluated per arm, both arms always reported (s7.1)",
-                               "bars": ("every registered reach comparator except THREE_HOP_FIRST_CHILD" if claim == "REACH_3_STEP_TRANSFER_6"
+                               "bars": ("every registered reach comparator except the two built on three-hop (%s)"
+                                        % ", ".join(BUILT_ON_THREE_HOP) if claim == "REACH_3_STEP_TRANSFER_6"
                                         else "every registered comparator of the cell's kind"),
                                "can_carry_a_claim_before_any_model": testable,
                                "status_if_not": None if testable else "NOT_TESTABLE",
@@ -1264,18 +1434,21 @@ def main(argv=None):
     def payload(names):
         return {"items": [dict(i, evaluation=rows_by_item.get(i["item_id"])) for i in items if i["split"] in names],
                 "clusters": {k: v for k, v in tables.items() if k.split("/")[0] in names}}
-    sealed_sha = dump(sealed / "HSET2_SEALED_TEST.json", {
+    sealed_sha = dump(sealed / outn["sealed"], {
         "schema": "claude.hset2-sealed/0.1", "custody": "CLAUDE_ONLY_NEVER_COMMIT", "label": LABEL, "identity": identity,
         "splits": {"TEST_NEW_6": test6, "WITHHELD_6": withheld6, "TEST_NEW_5": test5, "WITHHELD_5": withheld5},
         "eligible_foci": {c: v for c, v in elig.items() if c.split("/")[0] in SPLITS_SECRET},
         "test_new_6_draws": test_draws, **payload(SPLITS_SECRET)})
-    public_sha = dump(pub / "HSET2_CELLS_PUBLIC.json", {
+    public_sha = dump(pub / outn["public"], {
         "schema": "claude.hset2-public-cells/0.1", "label": LABEL, "identity": identity,
         "splits": {"DEV_NEW_6": dev6, "DEV_DECOYS_6_digest": summary0["dev_decoys_6"]["digest"], "DEV_NEW_5": dev5},
         "eligible_foci": {c: v for c, v in elig.items() if c.split("/")[0] in SPLITS_PUBLIC}, **payload(SPLITS_PUBLIC)})
     summary = {"schema": SCHEMA_SUMMARY, "label": LABEL, "mode": mode, "build_ok": build_ok, "problems": problems,
-               "identity": identity, "design": "EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02)",
+               "identity": identity, "design": DESIGN_BASIS,
                "status": "BUILD_ONLY: no model was run; nothing here is a result about Helm",
+               "throwaway_warning": (None if mode == "SEALED_BUILD" else
+                                     "THROWAWAY_NOT_DEV: throwaway salts; its 'DEV_NEW_5' holds real TEST_NEW_5 and "
+                                     "WITHHELD_5 classes; never use any of these files as development feedback"),
                "custody_label": "EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT",
                "limit_foci": args.limit_foci,
                "splits": {"five_nodes": {"classes": 267, "DEV_NEW_5": len(dev5), "TEST_NEW_5": len(test5),
@@ -1297,9 +1470,9 @@ def main(argv=None):
                "no_regression_gates": gates, "scope_sentence": SCOPE_SENTENCE,
                "success_rule": ("BEATS_ALL_REGISTERED_BARS per cell per run: for every registered comparator X of the "
                                 "cell, b_X > c_X and exact one-sided p(b_X, b_X + c_X) <= 0.01; no zero-loss veto (s7)"),
-               "files": {"HSET2_CELLS_PUBLIC.json": public_sha, "HSET2_SEALED_TEST.json": sealed_sha},
+               "files": {outn["public"]: public_sha, outn["sealed"]: sealed_sha},
                "evaluation_seconds": evaluation_seconds, "seconds": round(time.monotonic() - t0, 1)}
-    dump(pub / "HSET2_BUILD_SUMMARY.json", summary)
+    dump(pub / outn["summary"], summary)
     print("\n%-34s %5s %6s %-30s %6s  %s" % ("cell", "n", "bindW", "binding comparator", "groups", "can carry a claim"))
     for name, s in sorted(summaries.items()):
         blocks = s["claims"].items() if "claims" in s else [(None, s)]

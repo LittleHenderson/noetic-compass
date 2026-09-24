@@ -46,7 +46,7 @@ def fast_rows(H, items):
             gold = A._independent_gold(hw, item, refs)
             payloads, aux = A._comparators(item["kind"], focus, query)
             if item["kind"] == "reach":
-                payloads[H.THREE_HOP] = H.three_hop_payload(focus, query)
+                payloads.update(H.extra_reach_payloads(focus, query, payloads))
             flags = {}
             if item["kind"] == "reach" and gold["state"] == "VIA":
                 flags = {"GOLD_VIA_IS_PARTICIPANT_2": gold["via"] == aux["p2"],
