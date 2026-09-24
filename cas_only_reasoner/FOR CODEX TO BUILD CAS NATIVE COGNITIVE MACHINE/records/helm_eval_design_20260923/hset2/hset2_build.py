@@ -4,6 +4,12 @@ Label: CLAUDE_BUILT_CLAUDE_CHECKED. Implements `../EVALUATION_DESIGN_v0_4.md` wi
 the builder's PROPOSED Amendment A2 (`REVIEW_HSET2_BUILD_20260924.md`): five more registered bars, each a no-learning
 rule that two reviewers showed could pass a claim. A2 only adds bars; the designer or owner must accept it (or choose
 the other option each finding names) before the HSET-2 salt is made.
+Also conforms to Codex's PROPOSED Amendment A2 (statistical policy; EVALUATION_DESIGN_v0_4.md at f287f965 on Codex's
+branch, and its STATISTICAL_POLICY.json): A2.1 complete finite families (FIXED_POSITION_1..7, STATUS_BY_COUNT_0..8,
+every member a bar; nothing tuned on TEST); A2.2 the degree-group and shared-shape-component views beside the original
+cluster calculation (labelled CONDITIONAL_CLUSTER_DIAGNOSTIC); A2.4 the feasibility table. And two switches for the
+design owner: REGISTER_FRONTIER_FALLBACK (finding V-1, decision D1) and REGISTER_FLAGS_TIEBREAK_GUESS (note N1), both
+registered by default. Two different texts are called "A2": this docstring says "Codex A2" for the statistical policy.
 Choices the design leaves open are written in `BUILDER_REPORT_HSET2.md` ("Choices where the design is silent").
 Non-neural: no model is loaded, nothing is trained, no forward pass.
 
@@ -32,7 +38,10 @@ What it builds (design sections in brackets):
            reader (`pointer_inputs.read_packet`), checker v2's gold, an independent gold (reach rules re-implemented;
            the D-1 oracle's canonical form and its method-M2 isomorphism enumeration), every registered comparator
            graded by checker v2 and cross-checked by direct comparison [s6]
-  printed  everything s7 lists before any model is read, plus can_carry_a_claim per cell from the floor [s7, s9]
+  printed  everything s7 lists before any model is read, plus can_carry_a_claim per cell from the floor [s7, s9];
+           Codex A2.4's feasibility table (clusters, degree groups, shared-shape components, W of every bar in every
+           view, the A2.4 floors, the exact conditional sign-power grid), counts only, labelled THROWAWAY in throwaway
+           mode; the claim REPAIR_IMPROVES_ANALOGY_6 with its floors (Codex A2.3)
 
 Custody [s8]: TEST and WITHHELD items, answers, shapes and per-cluster results go ONLY to --out-sealed, which must not
 be inside a git work tree. Public outputs carry TEST numbers only as totals and list digests. No per-item digest over an
@@ -46,6 +55,7 @@ import concurrent.futures
 import concurrent.futures.process
 import hashlib
 import json
+import math
 import multiprocessing
 import os
 import pathlib
@@ -54,16 +64,21 @@ import random
 import sys
 import time
 from copy import deepcopy
+from fractions import Fraction
 
-HERE = pathlib.Path(__file__).resolve().parent
+HERE =pathlib.Path(__file__).resolve().parent
 DESIGN_DIR = HERE.parent
 HSET1A_DIR = DESIGN_DIR / "hset1a"
 ORACLE_DIR = DESIGN_DIR / "d1_acceptance"
 
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
-SCHEMA_SUMMARY = "claude.hset2-build-summary/0.2"
+SCHEMA_SUMMARY = "claude.hset2-build-summary/0.3"
 DESIGN_BASIS = ("EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02) + the builder's PROPOSED Amendment A2 "
-                "(hset2/REVIEW_HSET2_BUILD_20260924.md; the designer or owner must accept it before the salt is made)")
+                "(hset2/REVIEW_HSET2_BUILD_20260924.md; the designer or owner must accept it before the salt is made) "
+                "+ conformance to Codex's PROPOSED Amendment A2 statistical policy (EVALUATION_DESIGN_v0_4.md and "
+                "STATISTICAL_POLICY.json at f287f965, branch codex/helm-controlled-prelaunch-20260924): A2.1 families, "
+                "A2.2 views, A2.4 feasibility table; switches REGISTER_FRONTIER_FALLBACK and "
+                "REGISTER_FLAGS_TIEBREAK_GUESS (both registered)")
 # ---- pins, committed before any build
 HSET1A_SALT_SHA256 = "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754"   # BUILD_SPEC_v0_1.md s5
 # The coordinator makes the HSET-2 salt (32 random bytes, 64 hex characters) and commits its sha256 HERE before the
@@ -96,25 +111,61 @@ SPLITS_PUBLIC = ("DEV_NEW_6", "DEV_NEW_5")
 # each is a no-learning rule that passed a claim in 6 of 6 throwaway salts while it was not registered. Adding a bar
 # only makes a claim harder to pass. The designer or owner must accept A2 (or choose the other option each finding
 # names) BEFORE the HSET-2 salt is made; adding a bar after the sealed build prints W would be a post-hoc change.
+# ---- the design owner's two switches (the fresh verification of 1520e17c: finding V-1, decision D1; note N1). Each
+# defaults to REGISTERED, so the default only adds bars. D1 (a) keep = True. D1 (b) (declare REACH_3_STEP_TRANSFER_6
+# NOT_TESTABLE or rename it) and D1 (c) (rebalance the reach cell) are design changes that need their own amendment;
+# setting a switch to False is recorded in `registered_comparators()` and its digest, and the rule's W is still printed
+# as a diagnostic, so turning a bar off can never be hidden.
+REGISTER_FRONTIER_FALLBACK = True       # V-1: FRONTIER_FALLBACK is a bar of both reach claims
+REGISTER_FLAGS_TIEBREAK_GUESS = True    # N1: FLAGS_TIEBREAK_GUESS_THEN_CHECK is an analogy bar
 THREE_HOP = "THREE_HOP_FIRST_CHILD"
 SINGLE_ROOT = "SINGLE_ROOT_FALLBACK"                                   # A2 (F2): two-hop, then a root-count fallback
 SINGLE_ROOT_THREE_HOP = "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"        # A2 (F2): three-hop, then the same fallback
+FRONTIER = "FRONTIER_FALLBACK"                                        # V-1: two-hop, then a 2-step-frontier fallback
 BUILT_ON_THREE_HOP = (THREE_HOP, SINGLE_ROOT_THREE_HOP)               # not bars of REACH_3_STEP_TRANSFER_6
-ANALOGY_COMPARATORS = ("ALWAYS_NO_MATCH", "FIRST_CANDIDATE", "NODE_EDGE_COUNT_MATCH", "DEGREE_MULTISET_MATCH",
-                       "FLAG_ANCHOR", "BEST_FIXED_POSITION", "CANDIDATE_ONLY_NOVELTY", "STATUS_BY_COUNT",
-                       "OTHER_DOMAIN_ONLY",                                  # A2 (F1): one guess per candidate
-                       "DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK", "FLAG_ANCHOR_GUESS_THEN_CHECK")
+FLAGS_TIEBREAK = "FLAGS_TIEBREAK_GUESS_THEN_CHECK"                   # N1: degree sort, ties by declared flags, then rank
+# Codex A2.1 (PROPOSED, f287f965): complete finite families, every member a registered bar, nothing tuned on TEST.
+FIXED_POSITIONS = tuple("FIXED_POSITION_%d" % j for j in range(1, 8))  # the j-th non-focus alias, numeric alias order
+STATUS_BY_COUNT_M = tuple(range(0, 9))
+STATUS_BY_COUNT_FAMILY = tuple("STATUS_BY_COUNT_%d" % m for m in STATUS_BY_COUNT_M)
+# The pre-A2 tuned bar BEST_FIXED_POSITION chose one displayed alias W0..W7 (focus included) at its best value on the
+# cell. Its whole table is kept, untuned, as eight registered bars, so no bar is dropped (the tuned choice was always
+# one of them). STATUS_BY_COUNT's old table is exactly STATUS_BY_COUNT_0..8 above.
+FIXED_ALIASES = tuple("FIXED_ALIAS_W%d" % k for k in range(8))
+ANALOGY_BASE_COMPARATORS = (("ALWAYS_NO_MATCH", "FIRST_CANDIDATE", "NODE_EDGE_COUNT_MATCH", "DEGREE_MULTISET_MATCH",
+                             "FLAG_ANCHOR") + FIXED_POSITIONS + FIXED_ALIASES + ("CANDIDATE_ONLY_NOVELTY",)
+                            + STATUS_BY_COUNT_FAMILY + ("OTHER_DOMAIN_ONLY",
+                                                        # A2 (F1): one guess per candidate
+                                                        "DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+                                                        "FLAG_ANCHOR_GUESS_THEN_CHECK"))
+
+
+def analogy_comparators():
+    """The registered analogy bars: design s6, Codex A2.1's families, the builder's proposed A2, and the flags
+    tie-break guess while its switch is on (read at call time, so the switch is one recorded constant)."""
+    return ANALOGY_BASE_COMPARATORS + ((FLAGS_TIEBREAK,) if REGISTER_FLAGS_TIEBREAK_GUESS else ())
+
+
+def analogy_computed_not_registered():
+    """Analogy rules computed and printed as diagnostics only (a switched-off bar stays visible)."""
+    return () if REGISTER_FLAGS_TIEBREAK_GUESS else (FLAGS_TIEBREAK,)
 # The three one-guess rules, the same in both bank kinds: how many declared participants are mapped first (0: none;
 # 1: the declared whole; 3: the whole and both participants), then the rest by (in-degree, out-degree, rank).
 GUESS_ANCHORS = {"DEGREE_GUESS_THEN_CHECK": 0, "WHOLE_ANCHOR_GUESS_THEN_CHECK": 1, "FLAG_ANCHOR_GUESS_THEN_CHECK": 3}
-ANALOGY_TUNED = ("BEST_FIXED_POSITION", "STATUS_BY_COUNT")          # a parameter chosen at its best value on the cell
+# Printed diagnostics only, never bars (Codex A2.1): the old tuned choices, re-derived from the families above.
+TUNED_DIAGNOSTIC_FAMILIES = {"BEST_FIXED_POSITION": FIXED_ALIASES, "BEST_FIXED_NON_FOCUS_POSITION": FIXED_POSITIONS,
+                             "BEST_STATUS_BY_COUNT": STATUS_BY_COUNT_FAMILY}
 CORRESPONDENCE_COMPARATORS = ("ALWAYS_NO_MATCH", "IDENTITY_BY_RANK", "DEGREE_SORTED", "DEGREE_GUESS_THEN_CHECK",
                               "FLAG_ANCHOR_GUESS_THEN_CHECK",
                               "WHOLE_ANCHOR_GUESS_THEN_CHECK")      # A2: completes the same one-guess family
 A2_BARS = {"analogy": ("DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK", "FLAG_ANCHOR_GUESS_THEN_CHECK"),
            "correspondence": ("WHOLE_ANCHOR_GUESS_THEN_CHECK",),
            "reach": (SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)}
-STATUS_BY_COUNT_M = tuple(range(0, 9))
+# Codex A2.2 / A2.4 (PROPOSED): the two added views and the confirmatory analogy floors
+ORIGINAL_VIEW_LABEL = "CONDITIONAL_CLUSTER_DIAGNOSTIC"
+VIEWS = ("original_cluster", "degree_group", "shared_shape_component")
+A2_4_MIN_UNITS = 10
+SIGN_POWER_Q = ((3, 5), (7, 10), (4, 5), (1, 1))                      # q = 0.60, 0.70, 0.80, 1.00, exact
 # Measured 2026-09-23 by this builder: the frozen checker over the frozen public course's registry main queries (70
 # analogy and 88 correspondence records). NO_MATCH was never trained for either kind (review m4). Re-measured by the
 # sealed build, which fails closed on any difference.
@@ -140,19 +191,36 @@ def _paths(package_root):
 
 
 def reach_comparators():
+    """The registered reach bars (design s6, the builder's proposed A2, and FRONTIER_FALLBACK while its switch is on)."""
     import hset1a_build as A
-    return tuple(A.COMPARATORS["reach"]) + (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)
+    return (tuple(A.COMPARATORS["reach"]) + (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)
+            + ((FRONTIER,) if REGISTER_FRONTIER_FALLBACK else ()))
+
+
+def reach_computed_not_registered():
+    """Reach rules computed and printed as diagnostics only (a switched-off bar stays visible)."""
+    return () if REGISTER_FRONTIER_FALLBACK else (FRONTIER,)
 
 
 def registered_comparators():
     """The whole bar set, printed with its digest in every summary, so anyone can see which bars were fixed before the
-    salt was made (design s6 and s7; the proposed A2 additions are listed separately)."""
+    salt was made (design s6 and s7; the proposed additions are listed separately, with where each came from)."""
     reach = list(reach_comparators())
     return {"reach": {"REACH_3_STEP_TRANSFER_6": [x for x in reach if x not in BUILT_ON_THREE_HOP],
                       "REACH_4_STEP_TRANSFER_6": reach},
-            "analogy": list(ANALOGY_COMPARATORS), "analogy_tuned_on_the_cell": list(ANALOGY_TUNED),
+            "analogy": list(analogy_comparators()),
             "correspondence": list(CORRESPONDENCE_COMPARATORS),
-            "added_by_proposed_amendment_A2": {k: list(v) for k, v in sorted(A2_BARS.items())}}
+            "added_by_proposed_amendment_A2": {k: list(v) for k, v in sorted(A2_BARS.items())},
+            "added_by_codex_A2_1_complete_families": {"analogy": list(FIXED_POSITIONS + STATUS_BY_COUNT_FAMILY)},
+            "pre_A2_tuned_bars_completed_untuned": {"BEST_FIXED_POSITION": list(FIXED_ALIASES),
+                                                    "STATUS_BY_COUNT": list(STATUS_BY_COUNT_FAMILY)},
+            "tuned_on_the_cell_diagnostic_only_never_a_bar": sorted(TUNED_DIAGNOSTIC_FAMILIES),
+            "design_owner_switches": {"REGISTER_FRONTIER_FALLBACK": REGISTER_FRONTIER_FALLBACK,
+                                      "REGISTER_FLAGS_TIEBREAK_GUESS": REGISTER_FLAGS_TIEBREAK_GUESS},
+            "added_by_switches": {"reach": [FRONTIER] if REGISTER_FRONTIER_FALLBACK else [],
+                                  "analogy": [FLAGS_TIEBREAK] if REGISTER_FLAGS_TIEBREAK_GUESS else []},
+            "computed_not_registered_printed_only": {"reach": list(reach_computed_not_registered()),
+                                                     "analogy": list(analogy_computed_not_registered())}}
 
 
 # ============================================================================ plain graphs (public helpers)
@@ -230,12 +298,45 @@ def single_root_fallback_payload(world, query, base):
     return {"state": "VIA", "via": near[0]} if near else {"state": "ABSENT", "via": None}
 
 
+def frontier_fallback_payload(world, query, base):
+    """FRONTIER_FALLBACK (the fresh verification of 1520e17c, finding V-1, REVIEW section V.3), read off the packet's
+    focus world. It never follows an edge more than 2 steps from the whole, and never checks where a third step goes.
+
+    Take the registered two-hop answer (`base`). If it is ABSENT: answer VIA when (i) some node exactly two steps from
+    the whole (a child of a child that is not itself a child of the whole) has at least one child, and (ii) the part
+    has at least one parent; otherwise ABSENT. The via: first-child rule, the whole's child with the most children
+    (ties: lowest rank); BFS rule, among the part's parents that have a parent themselves, the one with the most
+    parents (ties: lowest rank). If that via does not exist, ABSENT. (It is the verifier's V4_FRONTIER_MAXOUT.)"""
+    if base["state"] != "ABSENT":
+        return dict(base)
+    nodes = sorted(n["ref"] for n in world["nodes"])
+    rank = {ref: i for i, ref in enumerate(nodes)}
+    out, inn = collections.defaultdict(list), collections.defaultdict(list)
+    for e in world["contains"]:
+        out[e["source"]].append(e["target"])
+        inn[e["target"]].append(e["source"])
+    whole, part = query["arguments"]["whole"], query["arguments"]["part"]
+    kids = out[whole]
+    level2 = [g for c in kids for g in out[c] if g not in kids and g != whole]
+    if not (any(out[g] for g in level2) and inn[part]):
+        return {"state": "ABSENT", "via": None}
+    if query["rule"] == "first_direct_constituent_lexical_v1":
+        pick = max(kids, key=lambda c: (len(out[c]), -rank[c])) if kids else None
+    else:
+        parents = [p for p in inn[part] if inn[p]]
+        pick = max(parents, key=lambda p: (len(inn[p]), -rank[p])) if parents else None
+    return {"state": "VIA", "via": pick} if pick is not None else {"state": "ABSENT", "via": None}
+
+
 def extra_reach_payloads(world, query, hset1a_payloads):
-    """The reach comparators design s6 and A2 add to HSET-1A's eight, each read off the packet's focus world."""
+    """The reach comparators design s6, the builder's proposed A2 and finding V-1 add to HSET-1A's eight, each read off
+    the packet's focus world. FRONTIER_FALLBACK is always computed; it is a bar only while its switch is on."""
     three = three_hop_payload(world, query)
+    two = hset1a_payloads["TWO_HOP_FIRST_CHILD"]
     return {THREE_HOP: three,
-            SINGLE_ROOT: single_root_fallback_payload(world, query, hset1a_payloads["TWO_HOP_FIRST_CHILD"]),
-            SINGLE_ROOT_THREE_HOP: single_root_fallback_payload(world, query, three)}
+            SINGLE_ROOT: single_root_fallback_payload(world, query, two),
+            SINGLE_ROOT_THREE_HOP: single_root_fallback_payload(world, query, three),
+            FRONTIER: frontier_fallback_payload(world, query, two)}
 
 
 def one_guess(F, T, anchored):
@@ -259,10 +360,31 @@ def one_guess(F, T, anchored):
     return frefs, trefs, m, {(m[a], m[b]) for a, b in fe} == set(te)
 
 
-def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
-    """Every registered analogy comparator (design s6), read off the packet: {name: payload}, {tuned: {p: payload}}.
+def flags_tiebreak_guess(F, T):
+    """ONE guess, then ONE check (note N1 of the verification of 1520e17c): every node of each world sorted by
+    (in-degree, out-degree, declared-flag position, rank), where the flag position is 0 for the declared whole, 1 and
+    2 for the other two participants and 3 for any other node; the two sorted lists are paired. No node is anchored.
+    Returns whether the guess passes the edge check (False if the node counts differ)."""
+    fn, fe, frefs = world_graph(F)
+    tn, te, trefs = world_graph(T)
+    if fn != tn:
+        return False
 
-    Candidates are the bank worlds other than the focus, in alias order (sorted world_id, as Helm's W aliases)."""
+    def order(W, n, edges, refs):
+        ind, outd = degrees(n, edges)
+        p = W["declarations"]["participants"]
+        flag = {i: (p.index(r) if r in p else 3) for i, r in enumerate(refs)}
+        return sorted(range(n), key=lambda a: (ind[a], outd[a], flag[a], a))
+    m = dict(zip(order(F, fn, fe, frefs), order(T, tn, te, trefs)))
+    return {(m[a], m[b]) for a, b in fe} == set(te)
+
+
+def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
+    """Every analogy comparator (design s6, Codex A2.1, the switches), read off the packet: {name: payload}.
+
+    Candidates are the bank worlds other than the focus, in alias order (sorted world_id, as Helm's W aliases: the
+    numeric alias index is the position in that sorted list). Every family member is its own entry; nothing is tuned.
+    A computed-but-unregistered rule (a switch set to False) is also returned, so its W can be printed."""
     worlds = {w["world_id"]: w for w in public["worlds"]}
     bank = sorted(public["bank"]["world_ids"])
     focus = worlds[focus_id]
@@ -296,10 +418,18 @@ def analogy_payloads(public, focus_id, trained_shape_keys, canonical_key):
     # order; the first candidate whose one guess passes the check, else NO_MATCH
     for name, anchored in GUESS_ANCHORS.items():
         out[name] = pick([w for w in same_deg_other if one_guess(focus, worlds[w], anchored)[3]])
-    tuned = {"BEST_FIXED_POSITION": {str(k): {"world_id": wid} for k, wid in enumerate(bank)},
-             "STATUS_BY_COUNT": {str(m): {"world_id": same_deg_other[0] if same_deg_other and len(same_deg_other) >= m else None}
-                                 for m in STATUS_BY_COUNT_M}}
-    return out, tuned
+    # N1: the same, with the flags tie-break guess
+    out[FLAGS_TIEBREAK] = pick([w for w in same_deg_other if flags_tiebreak_guess(focus, worlds[w])])
+    # Codex A2.1: FIXED_POSITION_j = the j-th non-focus candidate (NO_MATCH if the bank has fewer than j); the pre-A2
+    # table FIXED_ALIAS_Wk = the k-th displayed alias, focus included (NO_MATCH if absent); STATUS_BY_COUNT_m: E = the
+    # same-degree other-domain candidates in alias order; NO_MATCH if E is empty or len(E) < m, else E[0]
+    for j, name in enumerate(FIXED_POSITIONS, start=1):
+        out[name] = {"world_id": cands[j - 1] if len(cands) >= j else None}
+    for k, name in enumerate(FIXED_ALIASES):
+        out[name] = {"world_id": bank[k] if len(bank) > k else None}
+    for m, name in zip(STATUS_BY_COUNT_M, STATUS_BY_COUNT_FAMILY):
+        out[name] = {"world_id": same_deg_other[0] if same_deg_other and len(same_deg_other) >= m else None}
+    return out
 
 
 def correspondence_payloads(public, focus_id, target_id):
@@ -466,8 +596,8 @@ def _evaluate_multi(item):
         independent = hits or [{"world_id": None}]
         expected = ([{"world_id": worlds[item["roles"].index("PARTNER")]["world_id"]}] if item["status"] == "MATCH"
                     else [{"world_id": None}])
-        payloads, tuned = analogy_payloads(public, focus["world_id"], _W["trained_shapes"],
-                                           lambda shape: S0.class_key(oracle.canonical_form(*shape)))
+        payloads = analogy_payloads(public, focus["world_id"], _W["trained_shapes"],
+                                    lambda shape: S0.class_key(oracle.canonical_form(*shape)))
     else:
         tw = by_id[target_id]
         tn, te, trefs = world_graph(tw)
@@ -475,18 +605,16 @@ def _evaluate_multi(item):
         independent = ([{"status": "MAPPING", "pairs": [{"source": frefs[a], "target": trefs[m[a]]} for a in range(fn)]}
                         for m in maps] or [{"status": "NO_MATCH", "pairs": []}])
         expected = None
-        payloads, tuned = correspondence_payloads(public, focus["world_id"], target_id), {}
+        payloads = correspondence_payloads(public, focus["world_id"], target_id)
     admissible_keys = sorted(hw.canon(a) for a in admissible)
     independent_agrees = admissible_keys == sorted(hw.canon(a) for a in independent) and (
         expected is None or admissible_keys == sorted(hw.canon(a) for a in expected))
     status_agrees = (item["status"] in ("MATCH", "MAPPING")) == (admissible[0].get("world_id") is not None
                                                                    if item["kind"] == "analogy"
                                                                    else admissible[0]["status"] == "MAPPING")
-    flat = dict(payloads)
-    for name, table in tuned.items():
-        for p, payload in table.items():
-            flat["%s@%s" % (name, p)] = payload
-    verdicts, consistent, graded = _grade(public, query, flat, set(admissible_keys))
+    # every comparator, family member and switched-off rule is graded by checker v2 and checked against direct
+    # comparison (Codex A2.1: duplicate predictions share one calculation, every rule ID keeps its own verdict)
+    verdicts, consistent, graded = _grade(public, query, payloads, set(admissible_keys))
     sorted_ids = sorted(w["world_id"] for w in public["worlds"])
     role_alias = {}
     for role in ("PARTNER", "DISTRACTOR"):
@@ -503,7 +631,6 @@ def _evaluate_multi(item):
             "independent_gold_agrees": independent_agrees and status_agrees,
             "comparator_scoring_consistent": consistent, "distinct_payloads_graded": graded,
             "comparators": {name: verdicts[name] for name in payloads},
-            "tuned": {name: {p: verdicts["%s@%s" % (name, p)] for p in table} for name, table in tuned.items()},
             "role_alias": role_alias, "world_ids": sorted_ids}
 
 
@@ -589,7 +716,10 @@ def analogy_items(ctx, split, cell, seed, foci, partners_of, filler_pool_of, wit
         meta = {"cluster_id": cid, "split": split, "cell": cell, "shape_key": focus, "n": n, "edge_count": len(edges),
                 "group_key": S0.group_key((n, edges)), "with_distractor": wd, "decoys": decoys, "fillers": fillers,
                 "focus_domain": f_dom, "relaxed_recipe": relaxed, "profiles": {},
-                "same_degree_other_domain_non_isomorphic_decoys": {}, "flag_image": {}, "items": []}
+                "same_degree_other_domain_non_isomorphic_decoys": {}, "flag_image": {}, "items": [],
+                # Codex A2.2: every canonical class in every packet role (focus, partner, decoy, distractor, filler)
+                # of both twins; both presentations carry the same classes. Custodian-only for TEST (sealed tables)
+                "role_classes": sorted({cls for rows in members.values() for _, cls, _ in rows})}
         for status in ("MATCH", "NO_MATCH"):
             rows = members[status]
             irng = random.Random(hw.keyed_int(seed, "analogy-item", split, focus, status))
@@ -659,7 +789,8 @@ def correspondence_items(ctx, split, cell, seed, foci, partners_of):
         n, edges = S0.key_shape(focus)
         meta = {"cluster_id": cid, "split": split, "cell": cell, "shape_key": focus, "n": n, "edge_count": len(edges),
                 "group_key": S0.group_key((n, edges)), "no_match_class": no_match, "focus_domain": f_dom,
-                "flag_image": {}, "items": []}
+                "flag_image": {}, "items": [],
+                "role_classes": sorted({focus, no_match})}                # Codex A2.2: focus and both targets
         for status, cls in (("MAPPING", focus), ("NO_MATCH", no_match)):
             irng = random.Random(hw.keyed_int(seed, "correspondence-item", split, focus, status))
             t_dom = irng.choice([d for d in domains if d != f_dom])
@@ -798,31 +929,235 @@ def floor_block(A, members, bars, *, need_groups=False):
     return out
 
 
-def cluster_results(clusters, rows_by_item, names, tuned_names=()):
-    """A cluster is right for a comparator only if every item and every presentation is right (design s5)."""
+def cluster_results(clusters, rows_by_item, names):
+    """A cluster is right for a comparator only if every item and every presentation is right (design s5). No
+    parameter is chosen on the cell (Codex A2.1): every family member keeps its own cluster results."""
     for c in clusters:
         rows = [rows_by_item[i] for i in c["items"]]
-        c["comparators"] = {x: all(r["comparators"][x] for r in rows) for x in names if x not in tuned_names}
-        c["tuned"] = {t: {p: all(r["tuned"][t][p] for r in rows) for p in rows[0]["tuned"][t]} for t in tuned_names}
-    chosen = {}
-    for t in tuned_names:
-        params = list(clusters[0]["tuned"][t]) if clusters else []
-        best = max(params, key=lambda p: (sum(c["tuned"][t][p] for c in clusters), -params.index(p))) if params else None
-        chosen[t] = best
-        for c in clusters:
-            c["comparators"][t] = c["tuned"][t][best] if best is not None else False
-    return chosen
+        c["comparators"] = {x: all(r["comparators"][x] for r in rows) for x in names}
+
+
+def tuned_diagnostic(W):
+    """The pre-A2 tuned choices, printed ONLY as a labelled diagnostic (Codex A2.1): for each family, the member with
+    the fewest wrong clusters on this cell (ties: the first). Never used by a floor, a bar or a claim."""
+    out = {"label": ("DIAGNOSTIC_ONLY_NEVER_A_BAR: a parameter chosen at its best value on this cell; every family "
+                     "member is a registered bar with its own W (Codex A2.1)")}
+    for name, family in sorted(TUNED_DIAGNOSTIC_FAMILIES.items()):
+        best = min(family, key=lambda x: (W[x], family.index(x)))
+        out[name] = {"chosen": best, "W": W[best]}
+    return out
+
+
+# ---- Codex A2.2 (PROPOSED): degree-group and shared-shape-component views; exact rational arithmetic
+ALPHA_EXACT = Fraction(1, 100)
+assert Fraction(ALPHA).limit_denominator(1000) == ALPHA_EXACT
+
+
+def sign_tail_exact(B, C):
+    """The exact one-sided sign-test tail sum(comb(B+C, k), k = B..B+C) / 2**(B+C); p = 1 if B + C = 0 (Codex A2.2).
+    Ties never enter the denominator."""
+    n = B + C
+    if n == 0:
+        return Fraction(1)
+    return Fraction(sum(math.comb(n, k) for k in range(B, n + 1)), 2 ** n)
+
+
+def view_units(members):
+    """Codex A2.2: the cell's degree groups and shared-shape components, fixed from the build before any model is read.
+
+    Each cluster carries `view_group` (its focus's degree-group key: node count and joint degree multiset) and
+    `role_classes` (every canonical class in every packet role and presentation). Two degree groups are joined when
+    their class sets intersect; components are the transitive closure. Returns ({group key: [clusters]}, {group key:
+    component index}); component indices follow the sorted order of each component's smallest group key."""
+    groups = collections.defaultdict(list)
+    for c in members:
+        groups[c["view_group"]].append(c)
+    keys = sorted(groups)
+    parent = {g: g for g in keys}
+
+    def find(g):
+        while parent[g] != g:
+            parent[g] = parent[parent[g]]
+            g = parent[g]
+        return g
+    owner = {}
+    for g in keys:
+        for k in sorted({k for c in groups[g] for k in c["role_classes"]}):
+            if k not in owner:
+                owner[k] = g
+                continue
+            a, b = find(g), find(owner[k])
+            if a != b:
+                parent[max(a, b)] = min(a, b)
+    index = {r: i for i, r in enumerate(sorted({find(g) for g in keys}))}
+    return dict(groups), {g: index[find(g)] for g in keys}
+
+
+def _sign_counts(values):
+    return (sum(1 for v in values if v > 0), sum(1 for v in values if v < 0), sum(1 for v in values if v == 0))
+
+
+def paired_views(A, members, groups, component_of, a_right, b_right):
+    """ONE paired comparison in all three views (Codex A2.2): `a` is the model (or the repaired arm), `b` a registered
+    bar (or the unchanged arm). a_right, b_right: {cluster_id: bool}, a cluster being right only if every item and
+    presentation is right (design s5). Differences are a - b per cluster, in {-1, 0, 1}.
+
+    original_cluster: the section 7 calculation, unchanged (b > c and exact one-sided p <= 0.01), labelled
+    CONDITIONAL_CLUSTER_DIAGNOSTIC. degree_group: each group's exact mean difference; its sign is one observation.
+    shared_shape_component: the equally weighted mean of the member groups' means; its sign is one observation. A view
+    passes iff B > C, the overall accuracy difference is positive, and the exact tail is <= 1/100."""
+    d = {c["cluster_id"]: int(bool(a_right[c["cluster_id"]])) - int(bool(b_right[c["cluster_id"]])) for c in members}
+    n = len(members)
+    overall = Fraction(sum(d.values()), n) if n else Fraction(0)
+    gmean = {g: Fraction(sum(d[c["cluster_id"]] for c in cs), len(cs)) for g, cs in groups.items()}
+    by_comp = collections.defaultdict(list)
+    for g, v in gmean.items():
+        by_comp[component_of[g]].append(v)
+    cmean = {k: sum(vs, Fraction(0)) / len(vs) for k, vs in by_comp.items()}
+    out = {"overall_accuracy_difference": str(overall), "overall_accuracy_difference_float": round(float(overall), 6)}
+    b, c, t = _sign_counts(d.values())
+    out["original_cluster"] = {"label": ORIGINAL_VIEW_LABEL, "b": b, "c": c, "ties": t, "p": A.sign_p(b, c),
+                               "p_exact": str(sign_tail_exact(b, c)),
+                               "pass": b > c and A.sign_p(b, c) <= ALPHA}
+    for view, values in (("degree_group", gmean.values()), ("shared_shape_component", cmean.values())):
+        B, C, T = _sign_counts(values)
+        p = sign_tail_exact(B, C)
+        out[view] = {"units": len(values), "B": B, "C": C, "ties": T, "p_exact": str(p), "p": float(p),
+                     "pass": B > C and overall > 0 and p <= ALPHA_EXACT}
+    return out
+
+
+def evaluate_cell_views(A, members, bars, model_right):
+    """What the scorer runs per cell and run (Codex A2.2, A2.3): the model against EVERY registered bar of the claim,
+    in all three views. A view passes iff the model beats every bar in it. `largest_p` is the largest p over the bars
+    (the intersection-union reading); it is valid only if the view's own assumptions hold (A2.2)."""
+    groups, component_of = view_units(members)
+    per_bar = {x: paired_views(A, members, groups, component_of, model_right,
+                               {c["cluster_id"]: c["comparators"][x] for c in members}) for x in bars}
+    return {"per_bar": per_bar,
+            "passes_every_bar": {v: bool(bars) and all(per_bar[x][v]["pass"] for x in bars) for v in VIEWS},
+            "largest_p": {v: max((per_bar[x][v]["p"] for x in bars), default=1.0) for v in VIEWS}}
+
+
+def _histogram(sizes):
+    counts = collections.Counter(sizes)
+    return {str(k): counts[k] for k in sorted(counts)}
+
+
+def views_block(members, bars, *, confirmatory_analogy=False, diagnostics=()):
+    """Codex A2.4, per cell (reach: per claim): the units of every view, their size distributions, W_X of every bar in
+    every view (the units in which a perfect model could improve on X), each view's binding minimum, the A2.4 floors
+    (binding only for the confirmatory analogy claim; printed for every other cell) and the unit counts for the power
+    grid. Counts only: no class, group key or membership (those stay in the cluster tables, custodian-only for TEST)."""
+    groups, component_of = view_units(members)
+    comp_groups = collections.Counter(component_of.values())
+    comp_clusters = collections.Counter()
+    for g, cs in groups.items():
+        comp_clusters[component_of[g]] += len(cs)
+    units = {"original_cluster": len(members), "degree_group": len(groups), "shared_shape_component": len(comp_groups)}
+
+    def w(x):
+        bad = [g for g, cs in groups.items() if any(not c["comparators"][x] for c in cs)]
+        return {"original_cluster": sum(1 for c in members if not c["comparators"][x]), "degree_group": len(bad),
+                "shared_shape_component": len({component_of[g] for g in bad})}
+    W = {x: w(x) for x in bars}
+    binding = {}
+    for v in VIEWS:
+        if bars:
+            x = min(bars, key=lambda y: (W[y][v], bars.index(y)))
+            binding[v] = {"comparator": x, "W": W[x][v], "tied": [y for y in bars if W[y][v] == W[x][v]]}
+        else:
+            binding[v] = {"comparator": None, "W": 0, "tied": []}
+    checks = [("original clusters", units["original_cluster"]), ("degree groups", units["degree_group"]),
+              ("shared-shape components", units["shared_shape_component"])]
+    checks += [("binding W in the %s view (%s)" % (v, binding[v]["comparator"]), binding[v]["W"]) for v in VIEWS]
+    reasons = ["%s %d < %d" % (name, value, A2_4_MIN_UNITS) for name, value in checks if value < A2_4_MIN_UNITS]
+    out = {"units": units,
+           "distinct_focus_shapes": len({c["shape_key"] for c in members}),
+           "size_distributions": {"clusters_per_degree_group": _histogram(len(cs) for cs in groups.values()),
+                                  "degree_groups_per_component": _histogram(comp_groups.values()),
+                                  "clusters_per_component": _histogram(comp_clusters.values())},
+           "W_by_comparator_by_view": W, "binding_by_view": binding,
+           "original_view_label": ORIGINAL_VIEW_LABEL,
+           "floors": {"rule": ("Codex A2.4: at least %d original clusters, degree groups and shared-shape components, "
+                               "and binding W >= %d in every view" % (A2_4_MIN_UNITS, A2_4_MIN_UNITS)),
+                      "applies": ("BINDING: the confirmatory analogy claim (REPAIR_IMPROVES_ANALOGY_6)"
+                                  if confirmatory_analogy else
+                                  "PRINTED_NOT_BINDING: A2.4 names these floors only for the confirmatory analogy "
+                                  "claim; this cell's claims keep their original floor"),
+                      "meets_every_floor": not reasons,
+                      "not_testable_reasons": reasons},
+           "repaired_vs_unchanged_informative_count": {"state": "NOT_YET_OBSERVED",
+                                                       "structural_maximum_units": units},
+           "power": {"original_cluster": "the HSET-1A grid (power_conditional_on_binding_bar) for the binding bar, "
+                                         "labelled CONDITIONAL_CLUSTER_DIAGNOSTIC; and the conditional sign-power "
+                                         "grid for n = the original cluster count",
+                     "degree_group": "NOT_IDENTIFIED_FROM_RAW_ACCURACY; the conditional sign-power grid for n = the "
+                                     "degree-group count",
+                     "shared_shape_component": "NOT_IDENTIFIED_FROM_RAW_ACCURACY; the conditional sign-power grid for "
+                                               "n = the component count",
+                     "grid_table": "conditional_sign_power_by_unit_count (top level), rows n = %s"
+                                   % sorted(set(units.values()))}}
+    if diagnostics:
+        out["computed_not_registered_W_by_view"] = {x: w(x) for x in diagnostics}
+    return out
+
+
+_SIGN_MIN_WINS = {}
+
+
+def sign_min_wins(d):
+    """The smallest B (of d discordant units) with B > d - B and exact tail <= 1/100, or None (exact integers)."""
+    if d not in _SIGN_MIN_WINS:
+        best, tail = None, 0
+        for B in range(d, -1, -1):
+            tail += math.comb(d, B)
+            if B > d - B and 100 * tail <= 2 ** d:
+                best = B
+            else:
+                break
+        _SIGN_MIN_WINS[d] = best
+    return _SIGN_MIN_WINS[d]
+
+
+def conditional_sign_power(d, q):
+    """Codex A2.4: P(the exact sign test passes | d discordant units, each positive with probability q), summed
+    exactly over Binomial(d, q): sum over B >= sign_min_wins(d) of comb(d, B) q**B (1 - q)**(d - B). q = (num, den)."""
+    lo = sign_min_wins(d)
+    if lo is None:
+        return Fraction(0)
+    a, b = q
+    return Fraction(sum(math.comb(d, B) * a ** B * (b - a) ** (d - B) for B in range(lo, d + 1)), b ** d)
+
+
+def sign_power_table(unit_counts):
+    """{n: {q: [power for d = 0..n]}} for every unit count n that occurs, computed exactly, rounded only at print."""
+    top = max(unit_counts, default=0)
+    grid = {"%.2f" % (a / b): [conditional_sign_power(d, (a, b)) for d in range(top + 1)] for a, b in SIGN_POWER_Q}
+    return {"how": ("Codex A2.4: conditional on d discordant units; each discordant unit positive with probability q; "
+                    "power = sum over B of Binomial(d, q) probabilities whose exact null tail at q = 0.5 is <= 0.01 "
+                    "(and B > d - B); exact rational sums, rounded to 6 places only at print. A sensitivity "
+                    "calculation, not a forecast of any model's power"),
+            "all_win_minimum_discordant_units": next(d for d in range(1, 64) if sign_min_wins(d) is not None),
+            "by_unit_count": {str(n): {q: [round(float(v), 6) for v in values[:n + 1]] for q, values in grid.items()}
+                              for n in sorted(set(unit_counts))}}
 
 
 def summarise_bank_cell(A, cell, kind, clusters, rows_by_item, claim_role):
-    names = ANALOGY_COMPARATORS if kind == "analogy" else CORRESPONDENCE_COMPARATORS
-    tuned = ANALOGY_TUNED if kind == "analogy" else ()
-    chosen = cluster_results(clusters, rows_by_item, names, tuned)
+    names = analogy_comparators() if kind == "analogy" else CORRESPONDENCE_COMPARATORS
+    extra = analogy_computed_not_registered() if kind == "analogy" else ()
+    cluster_results(clusters, rows_by_item, names + extra)
     for c in clusters:
-        c["comparators"] = {x: c["comparators"][x] for x in names}
+        c["view_group"] = c["group_key"]
     s = {"cell": cell, "kind": kind, "claim_role": claim_role, "cluster_unit": "FOCUS_CLASS (every item and presentation)",
-         "items_per_focus": 2, "presentations_per_item": 2, "tuned_parameters_chosen_on_this_cell": chosen,
+         "items_per_focus": 2, "presentations_per_item": 2, "original_calculation_label": ORIGINAL_VIEW_LABEL,
          **floor_block(A, clusters, names, need_groups=(kind == "analogy"))}
+    if kind == "analogy":
+        s["tuned_on_this_cell_diagnostic_not_a_bar"] = tuned_diagnostic(s["W_by_comparator"])
+    if extra:
+        s["computed_not_registered_W"] = {x: sum(1 for c in clusters if not c["comparators"][x]) for x in extra}
+    s["a2_views"] = views_block(clusters, names, confirmatory_analogy=(cell == "TEST_NEW_6/ANALOGY"),
+                                diagnostics=extra)
     statuses = ("MATCH", "NO_MATCH") if kind == "analogy" else ("MAPPING", "NO_MATCH")
     rows = [rows_by_item[i] for c in clusters for i in c["items"]]
     s["item_level_accuracy_by_status"] = {}
@@ -834,8 +1169,8 @@ def summarise_bank_cell(A, cell, kind, clusters, rows_by_item, claim_role):
                     pairs[i.rsplit("|", 1)[0]].append(rows_by_item[i])
         s["item_level_accuracy_by_status"][st] = {
             "items": len(pairs),
-            **{x: (round(sum(all((r["comparators"][x] if x not in tuned else r["tuned"][x][chosen[x]]) for r in rs)
-                             for rs in pairs.values()) / len(pairs), 6) if pairs else None) for x in names}}
+            **{x: (round(sum(all(r["comparators"][x] for r in rs) for rs in pairs.values()) / len(pairs), 6)
+                   if pairs else None) for x in names}}
     s["flag_image_rates"] = {}
     for st in statuses:
         roles = collections.defaultdict(list)
@@ -870,8 +1205,11 @@ def summarise_bank_cell(A, cell, kind, clusters, rows_by_item, claim_role):
 
 
 def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, seed, claim_role):
-    """HSET-1A's reviewed summary (balancing, ties, alternative cuts), then design s7's per-bar W and both claims."""
+    """HSET-1A's reviewed summary (balancing, ties, alternative cuts), then design s7's per-bar W and both claims, with
+    Codex A2.2's views per claim (the focus's degree group; reach packets have one listed role, the focus)."""
+    import hset2_stage0_public as S0
     names = reach_comparators()
+    extra = reach_computed_not_registered()
     s = A.summarise_cell(hw, cell, clusters, rows_by_item, items_by_cluster, seed)
     single_bar = {k: s.pop(k) for k in ("bar", "bar_cluster_accuracy", "bar_wrong_clusters_W", "bar_right_clusters",
                                         "can_carry_a_claim", "why_not", "can_possibly_pass_W_at_least_7",
@@ -884,19 +1222,28 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
         return s
     for c in clusters:
         rows = [rows_by_item[i["item_id"]] for i in items_by_cluster[c["cluster_id"]]]
-        for x in (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP):
+        for x in (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP, FRONTIER):
             c["comparators"][x] = all(r["comparators"][x] for r in rows)
         _, edges = json.loads(c["shape_key"])
         c["whole_has_children"] = any(a == c["whole"] for a, _ in edges)
         c["single_root_shape"] = len({a for a, _ in edges} | {b for _, b in edges}) - len({b for _, b in edges}) == 1
+        # Codex A2.2: the unit keys. The frozen 64-world training bank rides unchanged in every reach packet and is
+        # not a listed packet role (F4; Helm's reader reads only the focus for reach), so it joins no two groups.
+        c["view_group"] = S0.group_key(S0.key_shape(c["shape_key"]))
+        c["role_classes"] = [c["shape_key"]]
     primary = [c for c in clusters if c["role"] == "PRIMARY"]
     for c in primary:
         c["group_key"] = None
-    s["claims"] = {"REACH_3_STEP_TRANSFER_6": floor_block(A, primary, tuple(x for x in names if x not in BUILT_ON_THREE_HOP)),
-                   "REACH_4_STEP_TRANSFER_6": floor_block(A, primary, names)}
-    for block in s["claims"].values():
+    claim_bars = {"REACH_3_STEP_TRANSFER_6": tuple(x for x in names if x not in BUILT_ON_THREE_HOP),
+                  "REACH_4_STEP_TRANSFER_6": names}
+    s["claims"] = {claim: floor_block(A, primary, bars) for claim, bars in claim_bars.items()}
+    for claim, block in s["claims"].items():
         block.pop("distinct_degree_groups")
         block.pop("distinct_degree_groups_behind_binding_W")
+        block["original_calculation_label"] = ORIGINAL_VIEW_LABEL
+        block["a2_views"] = views_block(primary, claim_bars[claim], diagnostics=extra)
+    if extra:
+        s["computed_not_registered_W"] = {x: sum(1 for c in primary if not c["comparators"][x]) for x in extra}
     s["genuine_no_path_primary_absent_clusters_whose_whole_has_children"] = sum(
         1 for c in primary if c["state"] == "ABSENT" and c["whole_has_children"])
     s["primary_absent_clusters"] = sum(1 for c in primary if c["state"] == "ABSENT")
@@ -1391,6 +1738,10 @@ def _run(args):
             return None
         return s["claims"][claim] if "claims" in s else s
 
+    def cell_views(claim, cell):
+        f = cell_floor(claim, cell)
+        return f["a2_views"] if f is not None and "a2_views" in f else None
+
     claims_table = {}
     for claim, cells in claims.items():
         floors = {c: cell_floor(claim, c) for c in cells}
@@ -1402,10 +1753,35 @@ def _run(args):
                                "can_carry_a_claim_before_any_model": testable,
                                "status_if_not": None if testable else "NOT_TESTABLE",
                                "binding_W": {c: (f["binding_W"] if f else None) for c, f in floors.items()},
+                               "original_calculation_label": ORIGINAL_VIEW_LABEL,
+                               "codex_A2_3_role": ("MANDATORY_EXPLORATORY: report EXPLORATORY_NOMINAL_PASS, "
+                                                   "EXPLORATORY_NO_NOMINAL_PASS or NOT_TESTABLE; no confirmatory "
+                                                   "allocation"),
+                               "a2_views_binding_W_printed_not_binding": {
+                                   c: ({v: cell_views(claim, c)["binding_by_view"][v]["W"] for v in VIEWS}
+                                       if cell_views(claim, c) else None) for c in cells},
                                "scope_sentence": SCOPE_SENTENCE}
     for claim, why in DECLARED_NOT_TESTABLE.items():
         claims_table[claim] = {"cells": [], "can_carry_a_claim_before_any_model": False, "status_if_not": "NOT_TESTABLE",
                                "declared_before_any_build": why}
+    # Codex A2.3 (PROPOSED): the one confirmatory claim. Before any model it can only be NOT_TESTABLE or open.
+    an = summaries.get("TEST_NEW_6/ANALOGY")
+    if an is not None:
+        reasons = ([] if an["can_carry_a_claim"] else ["original floor: %s" % an["why_not"]])
+        reasons += ["A2.4: %s" % r for r in an["a2_views"]["floors"]["not_testable_reasons"]]
+        claims_table["REPAIR_IMPROVES_ANALOGY_6"] = {
+            "cells": ["TEST_NEW_6/ANALOGY"], "codex_A2_3_role": "THE_ONE_CONFIRMATORY_CLAIM (PROPOSED)",
+            "requires": ["REPAIR_BEATS_UNCHANGED_ANALOGY in all 3 seed pairs, in the degree-group and shared-shape "
+                         "views (and the original cluster calculation as an extra CONDITIONAL_CLUSTER_DIAGNOSTIC "
+                         "condition)", "ANALOGY_BEYOND_DEGREE_6[repaired] against every registered analogy bar, in "
+                         "both added views", "the corrected mechanism gate (A2.6; outside this builder)",
+                         "no regression detected by the listed paired tests (s7.2)"],
+            "inferential_p": "the largest degree-group or shared-shape-component p over every required comparison "
+                             "and all three seed pairs; never 0.01 ** 3; never a product of seed p-values",
+            "can_carry_a_claim_before_any_model": not reasons, "status_if_not": None if not reasons else "NOT_TESTABLE",
+            "not_testable_reasons": reasons,
+            "repaired_vs_unchanged_informative_count": "NOT_YET_OBSERVED",
+            "inference_assumptions": "see inference_assumptions (top level)"}
     v_cells = sorted({c for claim, cells in claims.items() for c in cells if cell_floor(claim, c) and cell_floor(claim, c)["can_carry_a_claim"]})
     all_claim_cells = sorted({c for cells in claims.values() for c in cells})
     gates = {"pinned_program": {"path": GATES_PROGRAM, "sha256_lf": GATES_PROGRAM_LF_SHA256,
@@ -1418,8 +1794,43 @@ def _run(args):
              "V": [{"cell": c, "unit": "the cell's clusters", "clusters": summaries[c]["clusters"] if "clusters" in summaries[c] else summaries[c]["primary_clusters"],
                     "smallest_detectable_regression": sdr} for c in v_cells],
              "left_out_cells_cannot_carry_a_claim": [c for c in all_claim_cells if c not in v_cells]}
-    family_wise = "up to %d testable base claims per arm, each with a false-pass risk of at most about %s per run; none pooled" % (
-        sum(1 for v in claims_table.values() if v["can_carry_a_claim_before_any_model"]), ALPHA)
+    family_wise = ("up to %d testable base claims per arm, each with a nominal false-pass risk of at most about %s per "
+                   "run; none pooled; under Codex A2.3 (PROPOSED) they are mandatory exploratory results with no "
+                   "study-wide guarantee, and only REPAIR_IMPROVES_ANALOGY_6 is confirmatory" % (
+                       sum(1 for k in claims if claims_table[k]["can_carry_a_claim_before_any_model"]), ALPHA))
+    # ---- Codex A2.4 (PROPOSED): the feasibility table, per registered cell and claim (counts only; no membership)
+    feasibility_rows = []
+    for name, s in sorted(summaries.items()):
+        blocks = ([(claim, b) for claim, b in s["claims"].items()] if "claims" in s else [(None, s)])
+        for claim, b in blocks:
+            if "a2_views" in b:
+                feasibility_rows.append({"cell": name, "claim": claim, "claim_role": s.get("claim_role"), **b["a2_views"]})
+    feasibility = {
+        "label": LABEL,
+        "table_state": ("ACTUAL_AGGREGATES_OF_THIS_BUILD: Codex A2.4 accepts them only from the authorized custodian "
+                        "build" if mode == "SEALED_BUILD" else
+                        "THROWAWAY: throwaway salts; an estimate of the table's shape only; NOT the A2.4 table and "
+                        "never a result"),
+        "rows": feasibility_rows,
+        "conditional_sign_power_by_unit_count": sign_power_table(
+            [u for r in feasibility_rows for u in r["units"].values()]),
+        "repaired_vs_unchanged_informative_count": "NOT_YET_OBSERVED (A2.4: unknowable before both arms are scored)"}
+    inference_assumptions = {
+        "state": "OPEN_FOR_THE_BUILDER_SCORER_REVIEW",
+        "rule": ("Codex A2.2: a p-value is conditional on independent units and exchangeable paired signs under the "
+                 "null; the builder/scorer review states whether the sampling construction supports them; if it "
+                 "cannot, the status is INFERENCE_ASSUMPTIONS_UNSUPPORTED (all scores and conditional p-values still "
+                 "reported; no confirmatory claim)"),
+        "known_dependencies_by_construction": [
+            "both presentations and both twins (or MATCH/NO_MATCH, MAPPING/NO_MATCH) of a focus form one cluster",
+            "reach: several rooted questions of one shape are separate clusters; they share a degree group",
+            "analogy decoys and correspondence NO_MATCH targets come from the focus's own degree group, so foci of "
+            "one group can appear in each other's packets (the same degree-group unit)",
+            "analogy fillers come from other degree groups; a shared filler joins two groups into one component",
+            "every TEST_NEW_6 focus comes from one salted MIX-sampler draw without replacement; the units are not "
+            "independent draws from a fixed population",
+            "reach: the ABSENT / DIRECT / VIA balancing chooses primary clusters by a salted order within each state",
+            "reach: the frozen 64-world training bank rides unchanged in every reach packet (not a listed role)"]}
 
     # ---- write
     pub, sealed = pathlib.Path(args.out_public), pathlib.Path(args.out_sealed)
@@ -1469,7 +1880,11 @@ def _run(args):
                "cells": summaries, "claims_before_any_model": claims_table, "family_wise_risk": family_wise,
                "no_regression_gates": gates, "scope_sentence": SCOPE_SENTENCE,
                "success_rule": ("BEATS_ALL_REGISTERED_BARS per cell per run: for every registered comparator X of the "
-                                "cell, b_X > c_X and exact one-sided p(b_X, b_X + c_X) <= 0.01; no zero-loss veto (s7)"),
+                                "cell, b_X > c_X and exact one-sided p(b_X, b_X + c_X) <= 0.01; no zero-loss veto (s7); "
+                                "labelled %s under Codex A2.2 (PROPOSED), which adds the degree-group and "
+                                "shared-shape-component views (B > C, positive overall accuracy difference, exact "
+                                "sign tail <= 0.01)" % ORIGINAL_VIEW_LABEL),
+               "a2_4_feasibility": feasibility, "inference_assumptions": inference_assumptions,
                "files": {outn["public"]: public_sha, outn["sealed"]: sealed_sha},
                "evaluation_seconds": evaluation_seconds, "seconds": round(time.monotonic() - t0, 1)}
     dump(pub / outn["summary"], summary)
@@ -1483,6 +1898,16 @@ def _run(args):
                                                      b.get("distinct_degree_groups") or "-",
                                                      "yes" if b["can_carry_a_claim"] else "NO: %s" % b["why_not"],
                                                      "  [%s]" % claim if claim else ""))
+    print("\nCodex A2.4 feasibility (%s)" % feasibility["table_state"].split(":")[0])
+    print("%-34s %-24s %17s %20s  %s" % ("cell", "claim", "units c/g/k", "binding W c/g/k", "A2.4 floors"))
+    for r in feasibility_rows:
+        u, b = r["units"], r["binding_by_view"]
+        print("%-34s %-24s %17s %20s  %s" % (
+            r["cell"], r["claim"] or "-", "%d/%d/%d" % (u["original_cluster"], u["degree_group"], u["shared_shape_component"]),
+            "%d/%d/%d" % tuple(b[v]["W"] for v in VIEWS),
+            ("met" if r["floors"]["meets_every_floor"] else "NOT_TESTABLE: " + "; ".join(r["floors"]["not_testable_reasons"]))
+            + ("" if r["floors"]["applies"].startswith("BINDING") else " (printed, not binding)")))
+    print("registered_comparators_digest %s" % identity["registered_comparators_digest"])
     print(json.dumps({"build_ok": build_ok, "problems": problems, "evaluation_seconds": evaluation_seconds,
                       "seconds": summary["seconds"]}), flush=True)
     return 0 if build_ok else 2

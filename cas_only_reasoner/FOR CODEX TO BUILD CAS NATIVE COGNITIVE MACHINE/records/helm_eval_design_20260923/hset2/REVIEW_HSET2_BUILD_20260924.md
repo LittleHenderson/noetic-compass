@@ -560,3 +560,129 @@ chosen on the cell as `BEST_FIXED_POSITION` is. That is a design change, and the
   `D:/tksCAS-archive/`; any `salt.hex`; S3 or AWS; the meta1 budget ledger; any `results/` or `results_attempt1/`
   folder; the builder's scratch files and the old throwaway output folders named in F11; Claude transcripts. No real
   salt was used. Nothing was downloaded.
+
+## Conformance to Codex A2 (PROPOSED) (the temporary builder, 2026-09-24; `CLAUDE_BUILT_CLAUDE_CHECKED`)
+
+**What this is.** The builder's throwaway measurements after this round's changes. The changes themselves are in
+`BUILDER_REPORT_HSET2.md`, section "Conformance round, 2026-09-24". In short:
+- Codex's proposed A2.1: the families `FIXED_POSITION_1` to `_7` and `STATUS_BY_COUNT_0` to `_8` are bars, and no bar
+  is tuned on TEST any more.
+- Codex's proposed A2.2 and A2.4: degree-group and shared-shape-component views, and the feasibility table.
+- Finding V-1: `FRONTIER_FALLBACK` is a bar of both reach claims (switch `REGISTER_FRONTIER_FALLBACK`, on).
+- Note N1: `FLAGS_TIEBREAK_GUESS_THEN_CHECK` is an analogy bar (switch `REGISTER_FLAGS_TIEBREAK_GUESS`, on).
+- The bar-set digest is now `cf88cebafa9169964aff041d3c1bcb652b2067b86854befc253dd452291c78af` (it was `1a233f31...`).
+
+**What this is not.** No independent reviewer has read this round. No model was run. Nothing here is a result about
+Helm. Every salt is a THROWAWAY salt made from a public string. Codex's A2 is not agreed; the design owner decides.
+
+**How measured.**
+- `hset2_throwaway_ranges.py`: the builder's own `derive`, comparators and cell summaries, with `--only analogy`, and
+  with `--only reach --splits TEST_NEW_6`. It compares each rule directly with the independent gold. Checker v2
+  agreed with that direct comparison on every verdict checked this round (1,260 analogy and 288 reach verdicts,
+  0 disagreements; builder report C.3).
+- **Seeds: all 21 measured, none left out, none refused:** `REVIEWER-a5`, `-a7`, `-a8`, `-a9`, `-a12`, `-a16`;
+  `tiny-9` to `tiny-19` without `tiny-13`; `reach-4`, `-5`, `-6`, `-7`, `-9`.
+- DEV (public; the same in every seed): analogy in every run; reach once (seed `tiny-9`, `--splits DEV_NEW_6`).
+- **Not measured again this round:** the correspondence cells, and the effect of the proposed T5 rule on these ranges.
+- Run time, one process: analogy 28.8 s for all 21 seeds; reach 76.6 s and 81.5 s (two batches, 11 and 10 seeds).
+- min / mean / max over the 21 seeds. "c / g / k" means clusters / degree groups / shared-shape components.
+- **Cross-checks with earlier, separate scripts.** The new code reproduces, over the same 21 seeds:
+  `DEGREE_GUESS_THEN_CHECK` W 9 / 13.9 / 19 and `SINGLE_ROOT_FALLBACK` W 9 / 16.0 / 22 and 6 / 11.4 / 20 (section 3);
+  the N1 rule's W 7 / 12.5 / 17 (section V.2); `FRONTIER_FALLBACK` W 1 / 3.4 / 6 and 0 / 1.1 / 2 (section V.3).
+
+### A. Analogy, `TEST_NEW_6/ANALOGY` (both switches on)
+
+| Number | min / mean / max | Can carry (W >= 10) |
+|---|---|---|
+| Units c / g / k | 19 / 24.0 / 29; 15 / 17.0 / 20; 9 / 14.9 / 18 | components >= 10 in 20 of 21 (`tiny-18` has 9) |
+| Binding W, original view | **7 / 12.2 / 16** | 17 of 21 |
+| Binding W, degree-group view | **7 / 9.7 / 12** | 13 of 21 |
+| Binding W, component view | **6 / 8.9 / 11** | 9 of 21 |
+| The original floor (clusters, W and groups >= 10) | | **17 of 21** (19 of 21 before N1) |
+| Every A2.4 floor (the confirmatory claim) | | **9 of 21** |
+
+- **Binding bars.** `DEGREE_GUESS_THEN_CHECK` or `FLAGS_TIEBREAK_GUESS_THEN_CHECK` in every view. In the component
+  view `WHOLE_ANCHOR_GUESS_THEN_CHECK` is the named binding bar in some seeds.
+- **Each rule's W, original / group / component view:** N1's `FLAGS_TIEBREAK_GUESS_THEN_CHECK` 7 / 12.5 / 17,
+  7 / 9.9 / 13, 6 / 9.1 / 11. `DEGREE_GUESS_THEN_CHECK` 9 / 13.9 / 19, 7 / 10.6 / 13, 6 / 9.6 / 12. `FLAG_ANCHOR`
+  17 / 23.0 / 27, 14 / 16.4 / 20, 8 / 14.3 / 18.
+- **The A2.1 families never bind.** Every member (`FIXED_POSITION_1` to `_7`, `FIXED_ALIAS_W0` to `W7`,
+  `STATUS_BY_COUNT_0` to `_8`) is wrong on every cluster in every seed, TEST and DEV. The twin design causes this. A
+  fixed position always names a world, so it fails the NO_MATCH twin. The list E has the same length in both twins
+  (the profiles are equal), so a count rule gives the same kind of answer in both twins and fails one of them.
+- **Why the A2.4 floors fail in 12 of 21 seeds** (the build prints each reason): the component view's binding W is
+  below 10 in 12 seeds; the group view's in 8; the original view's in 4; and `tiny-18` has only 9 components.
+- **Per seed, binding W original / group / component:** `REVIEWER-a5` 8/7/7, `-a7` 11/11/10, `-a8` 7/7/6, `-a9` 11/8/8,
+  `-a12` 16/11/11, `-a16` 8/8/8; `tiny-9` 16/11/11, `-10` 13/12/10, `-11` 13/9/9, `-12` 12/11/10, `-14` 10/7/6,
+  `-15` 12/10/9, `-16` 16/12/11, `-17` 13/10/10, `-18` 14/10/7, `-19` 12/10/8; `reach-4` 13/12/11, `-5` 12/9/8,
+  `-6` 16/11/11, `-7` 14/11/8, `-9` 9/7/7.
+- **If N1 were switched off** (the same runs, binding over the other bars): W 9 / 13.9 / 19 original (>= 10 in 19 of
+  21), 7 / 10.6 / 13 group (14 of 21), 6 / 9.4 / 12 component (10 of 21); every A2.4 floor met in 10 of 21.
+- **DEV (public):** 27 / 18 / 14 units; binding W 15 / 10 / 10 (`DEGREE_GUESS_THEN_CHECK`); the N1 rule 15 / 11 / 10.
+  The A2.4 floors are met on DEV (printed only; DEV carries no claim).
+
+### B. Reach, both TEST cells (both switches on)
+
+| Cell and claim | Units c / g / k | Binding W original / group / component | Binding bar | Can carry |
+|---|---|---|---|---|
+| `REACH_FIRST_DIRECT`, 3-step | 285 / 330.1 / 366; 45 / 48.4 / 54; the same as g | **1 / 3.4 / 6; 1 / 3.3 / 6; 1 / 3.3 / 6** | `FRONTIER_FALLBACK` | 0 of 21 |
+| `REACH_BFS`, 3-step | 306 / 364.0 / 414; 45 / 48.6 / 54; the same as g | **0 / 1.1 / 2; 0 / 1.0 / 2; 0 / 1.0 / 2** | `FRONTIER_FALLBACK` | 0 of 21 |
+| `REACH_FIRST_DIRECT`, 4-step | as above | 0 / 1.7 / 3; 0 / 1.4 / 3; 0 / 1.4 / 3 | `FRONTIER_FALLBACK` or `SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP` | 0 of 21 |
+| `REACH_BFS`, 4-step | as above | 0 / 0.8 / 2; 0 / 0.6 / 2; 0 / 0.6 / 2 | the same two | 0 of 21 |
+
+- **`REACH_3_STEP_TRANSFER_6` reads `NOT_TESTABLE` in 21 of 21 throwaway salts, in every view.** So does
+  `REACH_4_STEP_TRANSFER_6`.
+- For reach, components equal degree groups, because the focus is the only listed packet role (builder report,
+  T2).
+- **If FRONTIER were switched off** (the same runs; the binding bar is then `SINGLE_ROOT_FALLBACK` in every view):
+  - 3-step, first-child: W 9 / 16.0 / 22 original (>= 10 in 20 of 21); 7 / 10.2 / 16 group (12 of 21).
+  - 3-step, BFS: W 6 / 11.4 / 20 original (14 of 21); 5 / 7.4 / 10 group (1 of 21).
+  - Both cells at W >= 10: original view **14 of 21** (as section 3); group view **1 of 21**; component view 1 of 21.
+    For reach the group and component floors are printed, not binding (A2.4 binds them only for the confirmatory
+    analogy claim).
+  - 4-step: 0 of 21 in every view.
+- **DEV (public, seed `tiny-9`):** first-child 357 clusters in 43 groups (= components); 3-step binding W 4 / 3 / 3
+  (`FRONTIER_FALLBACK`); 4-step 2 / 2 / 2 (`SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP`). BFS 375 clusters in 43 groups;
+  3-step 3 / 2 / 2; 4-step 1 / 1 / 1.
+
+### C. The exact power grid, an excerpt
+
+The build prints the grid for every unit count that occurs. Power here is the chance that the sign test passes, given
+d units where the model and the bar differ, if the model wins each of them with probability q. The sums are exact;
+they are rounded here to 4 places. This is a sensitivity calculation, not a forecast of any model.
+
+| d | smallest winning B | q = 0.60 | q = 0.70 | q = 0.80 | q = 1.00 |
+|---|---|---|---|---|---|
+| 6 | none | 0 | 0 | 0 | 0 |
+| 7 | 7 | 0.0280 | 0.0824 | 0.2097 | 1 |
+| 10 | 10 | 0.0060 | 0.0282 | 0.1074 | 1 |
+| 12 | 11 | 0.0196 | 0.0850 | 0.2749 | 1 |
+| 17 | 14 | 0.0464 | 0.2019 | 0.5489 | 1 |
+| 20 | 16 | 0.0510 | 0.2375 | 0.6296 | 1 |
+
+### D. What this means, in plain words
+
+- **Analogy.** With every bar and both added views, the confirmatory analogy claim could be tested in about 9 of 21
+  throwaway salts. The limit is the component view: after grouping, there are often fewer than 10 units where the best
+  cheap rule fails.
+- **Even when it can be tested, the margin is thin.** With 10 informative units, a model has to win all 10. A model
+  that wins each such unit with probability 0.8 would pass only about 1 time in 9 (0.1074).
+- **Reach, 3 steps.** With `FRONTIER_FALLBACK` registered, the claim reads `NOT_TESTABLE` in every throwaway salt.
+  Without it, the original view is testable in 14 of 21 salts, but the group view in only 1 of 21.
+- **Reach, 4 steps.** `NOT_TESTABLE` in every salt and every view.
+- None of these numbers is about Helm. They say how much room the test leaves above the cheap rules.
+
+### E. Checks
+
+- Tests: 28 run, 28 passed (fast 26 of 26, 28.06 s; end-to-end 2 of 2, 96.11 s; both on the final files). The slow
+  test was not run; its code path did not change.
+- Checker v2 against direct comparison, every new bar: analogy 36 items, 1,260 verdicts; reach 24 items (12 where
+  `FRONTIER_FALLBACK` answers VIA), 288 verdicts; **0 disagreements**.
+- `pyflakes` clean. The stage-0 files and `PUBLIC_EXCLUDED_v1.json` are unchanged (same LF sha256 as before).
+- **Not done:** no new search for further cheap rules. Each review so far has found one more rule; this round only
+  registered the two already named. A fresh independent review is needed before any paid run.
+
+### EXPOSURE
+
+The same as the builder report's EXPOSURE for this round (`BUILDER_REPORT_HSET2.md`, "Conformance round,
+2026-09-24"). No real salt was used or made. Nothing was downloaded. Nothing ran on AWS.

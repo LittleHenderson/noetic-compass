@@ -8,6 +8,9 @@ before any paid run (design s9 step 1).
 **What this is.** The build code for HSET-2, the improved Helm test, as `../EVALUATION_DESIGN_v0_4.md` with its
 Amendment A1 (`d840ea02`) says, **plus the builder's PROPOSED Amendment A2** (five more registered bars; text in
 `REVIEW_HSET2_BUILD_20260924.md` section 2). It is code plus committed PUBLIC stage-0 files.
+**Later round (2026-09-24):** the section "Conformance round, 2026-09-24" at the end records the changes that follow
+Codex's proposed Amendment A2 (the statistical policy), finding V-1 and note N1. Sections 1 to 8 describe the earlier
+rounds and are kept as written.
 
 **What this is not.**
 - No model was loaded, trained or run. Nothing here is a result about Helm.
@@ -386,3 +389,258 @@ free memory.
 anything under `D:/tksCAS-archive/`; any `salt.hex`; S3 or AWS; the meta1 budget ledger; any `results/` or
 `results_attempt1/` folder; Claude transcripts. Nothing was downloaded. A directory listing of the scratchpad showed
 other files' names; I did not open them.
+
+## Conformance round, 2026-09-24: Codex's proposed A2, finding V-1 and note N1 (`CLAUDE_BUILT_CLAUDE_CHECKED`)
+
+**Who.** Claude, the temporary builder. I wrote these changes and checked them myself. No independent reviewer has
+read them yet.
+
+**What this is.** Code that follows the text of Codex's **proposed** Amendment A2, the statistical policy. The text is
+in `EVALUATION_DESIGN_v0_4.md` (sections A2.1 to A2.6 and the analogy line of the section 6 table) and in
+`../helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json`, both at commit `f287f965` on Codex's branch
+`codex/helm-controlled-prelaunch-20260924`. I read them with `git show`. I did not check out that branch.
+
+**What this is not.**
+- Codex's A2 is not agreed. The design owner decides later. This is conformance to proposed text only.
+- No model was loaded or run. No real salt exists, and none was made. Every number comes from throwaway salts or
+  from public files. Nothing ran on AWS.
+- `STATISTICAL_POLICY.json` says `"launch_authorized": true`. That is Codex's record. It gives this builder no launch
+  authority, and I launched nothing.
+
+**One name, two texts.** Two different proposals are both called "A2".
+- The builder's A2 (`REVIEW_HSET2_BUILD_20260924.md` section 2): five more bars.
+- Codex's A2: the statistical policy.
+
+Below, "Codex A2" always means the statistical policy. The code keeps both.
+
+### C.1 What changed, task by task
+
+**T1. Complete comparator families (Codex A2.1).**
+- New bars `FIXED_POSITION_1` to `FIXED_POSITION_7`. Each always answers the j-th non-focus world, in numeric alias
+  order (W0, W1, ...). If the bank has fewer than j other worlds, it answers NO_MATCH.
+- New bars `STATUS_BY_COUNT_0` to `STATUS_BY_COUNT_8`. E is the list of other worlds with the focus's joint degree
+  list and another domain, in alias order. The rule answers NO_MATCH if E is empty or has fewer than m members.
+  Otherwise it answers E[0].
+- Every member is its own bar, with its own W, gains, losses and p. A cluster counts as right only when both twins
+  and both presentations are right, as for the model. Checker v2 grades every member.
+- **The tuned choice is gone from every claim decision.** Before, `BEST_FIXED_POSITION` and `STATUS_BY_COUNT` took
+  their best setting on the TEST cell (`cluster_results` in the lines Codex cited, `hset2_build.py` 686 to 751 at
+  `853e645d`). That code is removed.
+- **No bar was dropped.** The old `BEST_FIXED_POSITION` always chose one displayed alias, W0 to W7, focus included.
+  All eight are now bars (`FIXED_ALIAS_W0` to `FIXED_ALIAS_W7`), untuned. The old `STATUS_BY_COUNT` table is exactly
+  `STATUS_BY_COUNT_0` to `STATUS_BY_COUNT_8`. The tuned choice was always one of these, so the new set is at least as
+  hard to beat.
+- The old tuned choices are still printed, as `tuned_on_this_cell_diagnostic_not_a_bar`, labelled
+  `DIAGNOSTIC_ONLY_NEVER_A_BAR`. No floor, bar or claim reads them.
+- The analogy cell now has 35 bars. Before this round it had 12.
+
+**T2. Two more views (Codex A2.2).** For every cell with bars, TEST and DEV:
+- The original cluster calculation is unchanged. It is now labelled `CONDITIONAL_CLUSTER_DIAGNOSTIC`.
+- **Degree groups.** Clusters are grouped by the focus's node count and joint degree list (the stage-0 group key).
+  A group's difference is the exact mean of its clusters' score differences (Python `Fraction`). The group is a win
+  if the mean is above 0, a loss if below 0, and a tie if 0. Each group counts once.
+- **Shared-shape components.** For each degree group, the build collects every canonical class used in any packet
+  role and presentation: focus, partner, target, decoy, distractor, filler. Two groups join when these sets share a
+  class. Joining is transitive. A component's difference is the equal-weight mean of its groups' differences.
+- **The test in both views.** B wins and C losses; ties are left out. The exact tail is
+  `sum(comb(B+C,k), k=B..B+C) / 2**(B+C)`, and p = 1 when B + C = 0. A view passes only if B > C, the overall
+  accuracy difference is above 0, and p <= 1/100. The comparison with 1/100 is exact.
+- **New functions.** `view_units` (groups and components), `paired_views` (one comparison in all three views),
+  `evaluate_cell_views` (the model against every bar of a cell; for the future scorer), `views_block` (the counts
+  before any model).
+- **Custody.** Group keys and component membership stay on the cluster tables. For TEST cells those tables go only
+  to the sealed file. The public summary carries counts and size distributions only.
+- **A reading I made (reach).** A reach packet has one listed role, the focus. The frozen 64-world training bank
+  rides unchanged in every reach packet, but it is not a listed role, so it joins no groups. So for reach,
+  components equal groups. If the bank counted, every reach group would join one component, and the reach
+  component view would have 1 unit.
+
+**T3. The feasibility table (Codex A2.4).** The summary has a new block, `a2_4_feasibility`. For every cell with bars
+(and for each reach claim) it gives:
+- the units: clusters, degree groups and components; distinct focus shapes; the size distributions (clusters per
+  group, groups per component, clusters per component);
+- W of every bar in every view (the units where a perfect model could beat that bar), and each view's binding
+  minimum;
+- the A2.4 floors: at least 10 clusters, 10 groups and 10 components, and binding W >= 10 in every view. Each failure
+  is written as a `NOT_TESTABLE` reason. The floors are **binding only for `TEST_NEW_6/ANALOGY`**, the confirmatory
+  claim's cell. For every other cell they are printed and labelled `PRINTED_NOT_BINDING`, because A2.4 names them only
+  for the confirmatory claim. Every original floor is kept.
+- the power: the HSET-1A grid at the cluster level (unchanged; a diagnostic); `NOT_IDENTIFIED_FROM_RAW_ACCURACY` at the
+  group and component levels; and the exact conditional sign-power grid for every unit count n that occurs, for
+  d = 0 to n discordant units and q = 0.60, 0.70, 0.80 and 1.00. The sums are exact fractions, rounded only when
+  printed. The all-win minimum is printed: 7 discordant units.
+- the repaired-versus-unchanged informative count: `NOT_YET_OBSERVED`, with the structural maximum (each view's unit
+  count).
+- In throwaway mode the block's state reads `THROWAWAY: ... NOT the A2.4 table and never a result`. The build also
+  prints the table to its log.
+
+Also in the summary:
+- The claims table has a new row, `REPAIR_IMPROVES_ANALOGY_6`, marked as the one confirmatory claim (PROPOSED). Before
+  any model it can only read `NOT_TESTABLE` (with reasons) or stay open.
+- Each base claim gets the role `MANDATORY_EXPLORATORY` and its binding W per view, printed but not binding.
+- A new block, `inference_assumptions`, has the state `OPEN_FOR_THE_BUILDER_SCORER_REVIEW`. It lists seven
+  dependencies built into the sampling. I did not decide whether the assumptions hold. Under A2.2 that is the
+  review's job; if they are not supported, the status is `INFERENCE_ASSUMPTIONS_UNSUPPORTED`.
+
+**T4. Two switches for the design owner.**
+- `REGISTER_FRONTIER_FALLBACK = True`. `FRONTIER_FALLBACK` is the rule of finding V-1, coded as
+  `REVIEW_HSET2_BUILD_20260924.md` section V.3 writes it (the verifier's `V4_FRONTIER_MAXOUT`). It is a bar of both
+  reach claims. It never follows an edge more than 2 steps from the whole.
+- `REGISTER_FLAGS_TIEBREAK_GUESS = True`. `FLAGS_TIEBREAK_GUESS_THEN_CHECK` is the rule of note N1. For each
+  same-degree other-domain candidate, in alias order, it makes one guess (every node sorted by in-degree, out-degree,
+  declared-flag position, then rank) and one edge check. It answers the first candidate that passes, else NO_MATCH.
+  It is an analogy bar.
+- Setting a switch to False takes the rule off the bar lists. The rule is still computed, and its W is printed as
+  `computed_not_registered_W`. The switch values are part of `registered_comparators`, so the digest records them.
+- **The bar-set digest changed.** `registered_comparators_digest` was
+  `1a233f311ac4585149600a7812748aa33ac27253640db22c8931dcfae0f8de17` at `1520e17c`. It is now
+  `cf88cebafa9169964aff041d3c1bcb652b2067b86854befc253dd452291c78af` (both switches on). With only FRONTIER off it
+  would be `49d9d28959cb4862c34ec9d975247133ccd955d2884c1908f05bc8297b53e32b`; with only FLAGS off,
+  `51c5f1d4bfa49145ec9b684e9e8ff06543047969ea28a6893c4a2ac9e2b6ad31`; with both off,
+  `e408b423cfd1b28350c039cf34ca3d4091a2f8c4a4156f9bd3dedf4ec7077cfb`. The build prints the digest in its log.
+- Decision D1 option (a) is the default. Options (b) (declare `REACH_3_STEP_TRANSFER_6` `NOT_TESTABLE` now, or rename
+  it) and (c) (rebalance the reach cell) are design changes. A switch cannot make them; each needs its own amendment.
+
+**T5. The older public classes on the proposed TEST side** (Codex item 4; section 3 "A custody fact" and open
+question 7 of this report). From public files only. Nothing was applied. Details and the class digests are in the new
+file `PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json`, which no build code reads.
+- **Which classes.** The 40 public HSET-1B `DEV_NEW_6` classes: public seed `HSET-1B-dev-shapes-v0.1`,
+  `hset1b_build.draw`, 47 sampler draws. **24 sit on HSET-2's TEST side and 16 on the DEV side.** 6 of the 16 DEV-side
+  classes are also HSET-2 `DEV_NEW_6` foci. The 24 TEST-side classes have 5 to 10 edges and sit in 23 degree groups.
+- **Did they enter training?** No, as far as I searched. The frozen public course at `785c9bd1` has 64 families and
+  64 bank worlds, all with 3 or 4 nodes (12 and 52). Its 564 registry records all take their source world from those
+  64. So no 6-node class entered that course, and none of the 40.
+- **Did they enter a candidate bank?** No, as far as I searched. The course's candidate bank is the same 64 worlds.
+  The development material at `785c9bd1` holds 70 distinct worlds, of 3, 4, 9 and 10 nodes; none of the 40.
+  `OWNER_DIRECTION_20260924.md` (row 1) records the HSET-1B design as never built or launched, so no HSET-1B packet was
+  ever made.
+- **How far I searched.** The frozen course, its bank and its development material, through the frozen loaders; a
+  text search of this working copy for the HSET-1B DEV seed string; the committed HSET, probe and repair-job code in
+  this design folder. **Not searched:** other branches or repositories, AWS, S3, the archive, and any training run
+  outside the frozen course. So "not found" holds only inside that search.
+- **Why they still matter.** Anyone can rebuild the 40 from the public seed and code. `BUILD_SPEC_HSET1B_v0_1.md`
+  allows development to use `DEV_NEW_6` classes. Any such use, past or future, would touch 24 HSET-2 TEST-side classes.
+- **How PUBLIC_EXCLUDED handles them now.** It does not. `PUBLIC_EXCLUDED_v1.json` lists only the 7 fixture classes.
+  The 24 are ordinary TEST-side classes: they can be drawn as `TEST_NEW_6` foci and used as TEST partners, decoys,
+  distractors and fillers.
+- **Proposed rule (not applied).** Before the HSET-2 salt is made: `PUBLIC_EXCLUDED` v2 = v1 plus the 24 TEST-side
+  classes, then stage 0 is run again and committed again. General form: any class that a committed public seed or
+  file named for development, training, probing or a candidate bank before the salt, and that falls on the TEST side,
+  joins `PUBLIC_EXCLUDED` before the salt. (After the salt, A1 D6 already refuses new public 6-node shapes off the DEV
+  side.)
+- **Its measured effect (public stage-0 lists; not applied).** The DEV side, `DEV_NEW_6` and `DEV_DECOYS_6` stay
+  byte-identical by construction (the DEV sampler keeps only DEV-side classes). The TEST side goes from 3,747 to 3,723
+  classes, and from 1,434 to 1,429 non-empty groups. Groups with 5 or more classes (where an analogy focus can have 4
+  partners) go from 221 to 219. Classes in those groups go from 1,847 to 1,828. The throwaway ranges were not measured
+  again under this rule.
+
+**T6. Throwaway ranges.** All 21 seeds were measured. The numbers are in `REVIEW_HSET2_BUILD_20260924.md`, section
+"Conformance to Codex A2 (PROPOSED)".
+
+### C.2 Files changed in this round
+
+LF sha256 at this commit. The stage-0 files, `PUBLIC_EXCLUDED_v1.json` and `hset2_stage0_public.py` are unchanged.
+
+| File | LF sha256 | Change |
+|---|---|---|
+| `hset2/hset2_build.py` | `97d3e73bc8be19b4e2f0ab770ed1eb182d1890fa7f9ce4d61c76c4e0028895cd` | T1 to T4 |
+| `hset2/hset2_throwaway_ranges.py` | `2849515a0fe4fc8515acec40f65fff7f87c4d978cfc02460da64c32b61aa1497` | no tuned tables; views in the headline; `--splits`; refuses an output inside a git work tree |
+| `hset2/test_hset2.py` | `eed494a31068c0b6e77b1ce31dbff58705d8c6db909f1ce1a997c5493113ce1a` | 5 new tests, 4 changed |
+| `hset2/PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json` | `397ddefb24abc557d95760c09feb3e1176ffa6f0e256961b13ab36c3056d3201` | new; T5; read by no code |
+
+The summary schema is now `claude.hset2-build-summary/0.3`.
+
+### C.3 Tests and checks
+
+**Tests: 28 run, 28 passed.** Fast group 26 of 26 (28.06 s, on the final files). End-to-end group 2 of 2 (96.11 s, on
+the final files). The slow group (1 test, the trained-state re-measurement) was **not run** this round; its code path
+did not change. `pyflakes` is clean on the three changed Python files.
+
+New and changed tests:
+
+| Test | What it proves |
+|---|---|
+| `test_frontier_fallback_rules` (new) | V-1's rule on hand-made worlds: it answers VIA where `SINGLE_ROOT_FALLBACK` says ABSENT and both vias equal the gold; the first-child form answers VIA wrongly on a no-path world, the BFS form keeps ABSENT; the most-children via; two-hop first; the switch (both claims; off leaves both bar lists; the digest changes) |
+| `test_codex_a2_1_families_and_switches` (new) | Every family member is one registered bar; no tuned bar remains; every first-version bar is still a bar; the old tuned tables are kept whole; the digest differs from `1a233f31...`; the N1 switch off leaves the list and changes the digest |
+| `test_view_units_and_feasibility_counts` (new) | Groups; components joined through a shared filler and transitively; W in every view; size distributions; the floor reasons; binding versus printed floors; `NOT_YET_OBSERVED`; no class or group key in the printed block |
+| `test_paired_views_exact` (new) | Exact means (4/7, 1/3); the cluster view passes while the group view cannot (every win in one group: B = 1, p = 1/2); `evaluate_cell_views` against every bar |
+| `test_sign_tail_and_conditional_power_exact` (new) | Exact tails (1/128, 11/1024, p = 1 at B + C = 0); the smallest winning counts (7 of 7, 9 of 9, 10 of 10, 11 of 12); the power equals a brute-force exact sum; the all-win minimum 7 |
+| `test_analogy_comparators` (changed) | Adds every family member on a hand-made bank, and the N1 guess (it finds a partner the degree guess misses) |
+| `test_cluster_counting_and_tuned_diagnostic` (replaces `..._tuned_choice`) | No parameter is chosen for a claim; the diagnostic picks the first family member with the fewest wrong clusters |
+| `test_three_hop_first_child_rules` (changed) | The reach bar list now ends with `FRONTIER_FALLBACK` |
+| `test_tiny_end_to_end` (changed) | Every new bar scored in its cells; no tuned field; the A2.4 block (labelled THROWAWAY, every claim cell, units ordered, W within units, a power row for every unit count); `REPAIR_IMPROVES_ANALOGY_6` reads `NOT_TESTABLE` with reasons at 1 focus per split |
+
+**Checker v2 against direct comparison, every new bar, small throwaway builds** (scratch script
+`checker_vs_direct.py`, not committed):
+- Analogy, seed `tiny-9`, `--limit-foci 3`: 36 items (12 TEST_NEW_6, 12 DEV_NEW_6, 12 DEV_NEW_5), 1,260 verdicts,
+  **0 disagreements**. All 25 new analogy rules were compared (7 + 8 + 9 family members and the N1 guess).
+- Reach, seed `REVIEWER-a5`, full foci: 24 TEST items where two-hop says ABSENT, 12 where `FRONTIER_FALLBACK` answers
+  VIA and 12 where it keeps ABSENT. 288 verdicts, **0 disagreements**. Checker v2 marked FRONTIER right on 10 VIA and 12
+  ABSENT items, and wrong on 2 VIA items.
+- The end-to-end test also requires checker v2 to agree with direct comparison on every item of the tiny build.
+
+### C.4 Choices where the proposed text is silent
+
+1. `FIXED_POSITION_j` for a bank with fewer than j other worlds answers NO_MATCH. (Every real analogy packet has 8
+   worlds, so this happens only in hand-made tests.)
+2. The pre-A2 tuned table is kept as `FIXED_ALIAS_W0` to `W7`, so no bar is dropped. Codex's text names only the
+   non-focus positions.
+3. For reach, the focus is the only listed role, so components equal groups (T2 above).
+4. The A2.4 floors bind only on `TEST_NEW_6/ANALOGY`. They are printed for every other cell.
+5. Reach views use the claim's primary clusters, the same clusters as the original calculation.
+6. When bars tie for the binding W, the first in the bar list is named; all tied bars are listed.
+7. At the group and component levels the power is `NOT_IDENTIFIED_FROM_RAW_ACCURACY` plus the conditional sign grid.
+   I did not build a per-unit model of group signs from cluster accuracies.
+8. The N1 guess is registered for analogy only, as note N1 asks. It is not added to correspondence.
+9. No three-hop form of `FRONTIER_FALLBACK` was added for the 4-step claim. That claim already reads `NOT_TESTABLE` in
+   every throwaway salt.
+
+### C.5 Open questions for the design owner
+
+1. **Codex A2**: accept, edit or reject the conformance above, before the salt is made. The same holds for the
+   builder's A2 (five bars).
+2. **Decision D1** (finding V-1): keep `REGISTER_FRONTIER_FALLBACK = True` (then `REACH_3_STEP_TRANSFER_6` reads
+   `NOT_TESTABLE` in 21 of 21 throwaway salts), or choose (b) or (c) with an amendment.
+3. **Note N1**: keep `REGISTER_FLAGS_TIEBREAK_GUESS = True` (the analogy claim's original floor then holds in 17 of 21
+   throwaway salts instead of 19), or switch it off.
+4. **T5**: accept the proposed `PUBLIC_EXCLUDED` v2 rule (24 classes) or not. It must be decided before the salt,
+   because it changes the committed stage-0 TEST-side files.
+5. **Inference assumptions** (Codex A2.2): the builder/scorer review must state whether they hold. The seven known
+   dependencies are listed in the summary.
+6. **The reach reading of components** (T2): confirm that the frozen training bank is not a packet role.
+7. **A fresh independent review** of this round is needed before any paid run. This round is
+   `CLAUDE_BUILT_CLAUDE_CHECKED`.
+
+### EXPOSURE (this round: files outside my working copy, and the public files inside it that bear on T5)
+
+- **Codex's branch, read-only, by `git show` of commit `f287f965`:** `EVALUATION_DESIGN_v0_4.md` (in full),
+  `records/helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json` (in full), and
+  `_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md` (a search for headings and "HSET-2", then lines 55
+  to 68, its item 4). Copies of these three went to the Git Bash `/tmp` folder (`ed04_codex.md`, `stat_policy.json`,
+  `codex_amend.md`), outside every repository. A `git fetch` of that branch and a `git ls-tree` of the commit (names
+  only). No checkout.
+- **The pinned CNCM tree `785c9bd1`,** written from git objects by `launch.py --materialize-tree` into
+  `a2conf/tree/` of the session scratchpad (1,186 files, tree digest
+  `fe2eaa174b6d7265bcb78de25a13b6898a158ee808bfaf87a419c3ff10190db6`). The tests, the build and my scripts imported
+  code from it and loaded the public course, the tokenizer and the development material through the frozen loaders.
+  By hand I read `typed_teaching/source.py` lines 255 to 290 (`freeze_bank`) and searched the `typed_teaching` folder
+  for `load_material`. Neither I nor my programs opened `records/typed_course_001/checks_002/private_targets.json`.
+- **Public files of this working copy:** the HSET-1B build spec, `hset1b_build.py` (`draw`), the analogy probe
+  (`analogy_wiring_probe_v0_2.py`, a search for world and shape words), the repair job (`RUN_LOG.md` lines 1 to 40, a
+  search of `launch.py` and `job.sh.template`), the handoff files that mention HSET-1B (a search, and row 1 of
+  `OWNER_DIRECTION_20260924.md`). A text search of the working copy for the HSET-1B DEV seed string, with `results/`
+  folders and `*_eval.jsonl` files excluded. A name-only search showed that no sealed, salt, `*_eval.jsonl` or
+  `private_targets.json` file exists in the working copy.
+- **Earlier session scratch files, read:** the verifier's `verify_1520/probe_reach.py`, `probe_analogy.py` and
+  `check_v4_checker.py` (the rules' exact code), its `r_*.json`, `a_*.json` and `r_b1.log` (timings and results), and
+  the builder's `hset2_fix/fastpath_vs_checker.py` and `m_re_1.json`, `m_an_1.json` (timings). A directory listing of
+  the scratchpad (names only).
+- **My scratch files** in `a2conf/` of the session scratchpad: `checker_vs_direct.py`, `summarise_t6.py`,
+  `t5_older_public.py`, `t5.log`, the range outputs `t6_analogy.json`, `t6_reach_1.json`, `t6_reach_2.json`,
+  `t6_reach.json`, `t6_reach_dev.json`, `t5_older_public.json`, `builder_section.md`, `review_section.md`, and the
+  pytest folders `pt_fast1`, `pt_fast2`, `pt_e2e1`, `pt_fast_final`, `pt_e2e_final` (their throwaway builds include
+  `sealed_throwaway/THROWAWAY_HSET2_SEALED_TEST.json`, made with a throwaway salt). Not committed.
+- **Laptop state:** free memory and the Python process list (PowerShell).
+- **Not opened:** any `*_eval.jsonl`; any sealed file or folder except my own throwaway outputs; anything under
+  `D:/tksCAS-archive/`; any real salt; S3 or AWS; the meta1 ledger; any `results/` folder;
+  `private_targets.json`; Claude transcripts. No real salt was used or made. Nothing was downloaded.

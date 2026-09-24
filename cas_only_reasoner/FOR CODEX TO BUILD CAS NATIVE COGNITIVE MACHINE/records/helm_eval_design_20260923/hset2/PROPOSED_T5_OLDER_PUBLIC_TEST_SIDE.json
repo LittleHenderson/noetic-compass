@@ -1,0 +1,545 @@
+{
+ "counts": {
+  "classes": 40,
+  "dev_side_also_in_hset2_dev_new_6": 6,
+  "in_public_excluded_v1": 0,
+  "on_hset2_dev_side": 16,
+  "on_hset2_test_side": 24
+ },
+ "exposure_found_in_public_files": {
+  "development_material_at_785c9bd1": "70 distinct worlds of 3, 4, 9 or 10 nodes; 0 of the 40",
+  "frozen_public_course_at_785c9bd1": "64 families and 64 bank worlds, all 3 or 4 nodes; 564 registry records, all sourced from those bank worlds; 0 six-node classes; 0 of the 40",
+  "hset1b_packets": "none: OWNER_DIRECTION_20260924.md (row 1) records the HSET-1B design as never built or launched; its salt was never used",
+  "not_searched": [
+   "other branches and repositories",
+   "AWS, S3 and D:/tksCAS-archive",
+   "any training run outside the frozen course"
+  ],
+  "searched_only": [
+   "the frozen public course, its 64-world bank and its development material at 785c9bd1, through the frozen loaders",
+   "a text search of this working copy (branch claude/hset2-build-20260924) for the HSET-1B DEV seed string",
+   "the committed code of HSET-1A, HSET-1B, HSET-2 stage 0 and the analogy probe and repair jobs in this design folder"
+  ]
+ },
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "measured_effect_of_the_proposed_rule_not_applied": {
+  "dev_side_changed": false,
+  "test_side_classes": [
+   3747,
+   3723
+  ],
+  "test_side_classes_in_groups_of_5_or_more": [
+   1847,
+   1828
+  ],
+  "test_side_groups_nonempty": [
+   1434,
+   1429
+  ],
+  "test_side_groups_touched": 23,
+  "test_side_groups_with_5_or_more_classes": [
+   221,
+   219
+  ],
+  "touched_group_sizes_before_after": [
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    1,
+    0
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    3,
+    2
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    5,
+    4
+   ],
+   [
+    6,
+    4
+   ],
+   [
+    6,
+    5
+   ],
+   [
+    6,
+    5
+   ],
+   [
+    8,
+    7
+   ],
+   [
+    9,
+    8
+   ],
+   [
+    10,
+    9
+   ],
+   [
+    14,
+    13
+   ],
+   [
+    21,
+    20
+   ],
+   [
+    21,
+    20
+   ]
+  ]
+ },
+ "proposed_rule": "Before the HSET-2 salt is made: PUBLIC_EXCLUDED v2 = v1 + the 24 TEST-side classes below; stage 0 re-run and re-committed; the DEV side, DEV_NEW_6 and DEV_DECOYS_6 stay byte-identical by construction. General form: any class that a committed public seed or file named for development, training, probing or a candidate bank before the salt, and that falls on the TEST side, joins PUBLIC_EXCLUDED before the salt.",
+ "rows": [
+  {
+   "class_digest": "d9f75175cac679aff0ecc7c388fc021d07585a951c76a2921d946c2e8535b147",
+   "degree_group_digest": "b79aae0dc941cbc7083898aac27b3799e0a1be5a94da755a4679c65e0f49b068",
+   "degree_group_size_on_its_side": 4,
+   "edges": 8,
+   "hset1b_draw_order": 0,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "35eb29bcff0baee052244a3610b7477e6ae7ec876309292d3a9916d6f5844450",
+   "degree_group_digest": "30092779ce7b0413c3147d4cef7dad0404e19e7f95553de0f03402b3dd4ee931",
+   "degree_group_size_on_its_side": 10,
+   "edges": 7,
+   "hset1b_draw_order": 1,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "77de69f6e1fbd0491524f495c62f836d90ce695940b5bdeece9e7348a3da126a",
+   "degree_group_digest": "e32a1ac55242a9e7af30b7a029f4be5501817e8fbc4ec2c1ffe3b7929881e697",
+   "degree_group_size_on_its_side": 3,
+   "edges": 5,
+   "hset1b_draw_order": 2,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f87aea2fc1a3a261369ce8c1a2d402586f531798e3b1f657d31159a7b9e1e977",
+   "degree_group_digest": "f022f51d8ccbb3ea3988b8e575a6156e9a01dcbfb8f22b75e30102d50df02c82",
+   "degree_group_size_on_its_side": 2,
+   "edges": 5,
+   "hset1b_draw_order": 3,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f316683670551210eaf5c39abcdc3312cae9188c50bfcdab930442f79efc2ef9",
+   "degree_group_digest": "59d618d60fb472a20cee56b593306a0c132b739ab446cf107f87ddfe3e4f285d",
+   "degree_group_size_on_its_side": 1,
+   "edges": 8,
+   "hset1b_draw_order": 4,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "34b101ea6b7261176cca177a8d0b4edb4c78aae6b163f6240d8e764446be89bc",
+   "degree_group_digest": "9b09ee5c3e763d705133dc6b405e6558a9e0d7e150c86d1952f0a55af00ba3e9",
+   "degree_group_size_on_its_side": 7,
+   "edges": 9,
+   "hset1b_draw_order": 5,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "3ad8861f83bf8f143cc6a15582f82b7907dcdf0711ae157ccd94e1e27450a802",
+   "degree_group_digest": "71cb7e4ec2e6a70cdd02caafbe40e033f188fc7681f801849408ada0130a2cd0",
+   "degree_group_size_on_its_side": 4,
+   "edges": 5,
+   "hset1b_draw_order": 6,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "941d5b91f2e6331966e54fa320da7502346cc171a35ad54af8358c014402b591",
+   "degree_group_digest": "1e5e999f6ac7f52a0b4697fe393951aa07fe156f149625059b3e34a34c0efe19",
+   "degree_group_size_on_its_side": 1,
+   "edges": 6,
+   "hset1b_draw_order": 7,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "fb5edd40a4e0afa349689696883c8e210809bad35074f3b80de704597725c9e6",
+   "degree_group_digest": "52b561ec4bdbdbde8046c6abaa084d255a94a6599550d2ab295c105da964027d",
+   "degree_group_size_on_its_side": 1,
+   "edges": 7,
+   "hset1b_draw_order": 8,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "3d3b06d5e2a4f5967ac2586fefc8d03a804d0846eb9f7e57e95443c00059c2d5",
+   "degree_group_digest": "d3758aa5d297b9ac477a3d866572dae4ebec948d1bde194f9fae79ff284ed329",
+   "degree_group_size_on_its_side": 9,
+   "edges": 7,
+   "hset1b_draw_order": 9,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "6ad9b056cdb5c0141eaac05eef8be4702b1f20d7c4c874e5c3c74f2f8c2f56d6",
+   "degree_group_digest": "e16f27d7743ba44678267ee4466226063e0a4057bfc73bb7637293d11f7279d7",
+   "degree_group_size_on_its_side": 1,
+   "edges": 5,
+   "hset1b_draw_order": 10,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "e4d3388ef6f3a07172a0960509ab142589d3962b743e44ec8087f6a5cf3ac3c7",
+   "degree_group_digest": "8e65e1ae2f73767a5bd7c57d0a6f370425e940a1837b8bba4b797e655700df36",
+   "degree_group_size_on_its_side": 4,
+   "edges": 6,
+   "hset1b_draw_order": 11,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f0f4128476c2ed59999c1d332af88363941cf6193a8c1038b9b5a0bafb81d1a2",
+   "degree_group_digest": "14bb96b8268476a4e51163538d843e9bdb742fdd9772050b16137b2b38364f07",
+   "degree_group_size_on_its_side": 2,
+   "edges": 8,
+   "hset1b_draw_order": 12,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "17b6c6bc061d1fe4195491cf6f7b6cad3940ef3a3d96315cf63da5db800e1a08",
+   "degree_group_digest": "d65b604e13efb1fe6c0d4696e0a9c2daa4d975a52fc0bb1d9b096bfa74ed8821",
+   "degree_group_size_on_its_side": 2,
+   "edges": 5,
+   "hset1b_draw_order": 13,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "5307ab545c64518da493f17c0ad7946212b985b095e0cfa70ff50281bb65f5c6",
+   "degree_group_digest": "408231c321be15743551430f696dc9b24c20691535f675bc64532ff6c530f6b2",
+   "degree_group_size_on_its_side": 8,
+   "edges": 7,
+   "hset1b_draw_order": 14,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "d4fe91612a1056b77cf910f716b34f8b801483d9f276777125b5ff79dd931655",
+   "degree_group_digest": "8525641c1b3ab39802bbed10c1a8f5bbdba8644a9ccab2655142ba36ceeacd0b",
+   "degree_group_size_on_its_side": 6,
+   "edges": 6,
+   "hset1b_draw_order": 15,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "15d40a55bbfc55a060b5a0ec7bef982d9da4b0e4b4c1a8a4d91cd3cb7a937525",
+   "degree_group_digest": "2e44f56695015f8779844301b36f1f2b75a3d0c623a21e88786dc16384660659",
+   "degree_group_size_on_its_side": 5,
+   "edges": 6,
+   "hset1b_draw_order": 16,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "e2c39c9a1d67940d43aec37e1c659b3f1cd6cc22bf4e0869ce409765b5748b40",
+   "degree_group_digest": "70ec1745f689eac1183861398771bb47c7fe3f79bae2b24e1bf8a5eaec81e1f5",
+   "degree_group_size_on_its_side": 5,
+   "edges": 6,
+   "hset1b_draw_order": 17,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "7343afa49d4994c3f058f41759c7b8703c20f8ab15ad1fa1439eadc26fe6df2a",
+   "degree_group_digest": "72932a4582b6ed1b1d093571706527da1a5563ace910ebb25661836cf8048e14",
+   "degree_group_size_on_its_side": 1,
+   "edges": 5,
+   "hset1b_draw_order": 18,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f03e7d00c7111fa91d18fa5044343969a7f2978507bb5936e1b81a8934a3a4ff",
+   "degree_group_digest": "1dd4dac608104e87d5f08d5ee4ec1f0c4fe37203155bdf04e56c65e5e81b9ea7",
+   "degree_group_size_on_its_side": 4,
+   "edges": 5,
+   "hset1b_draw_order": 19,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "b37d9618cf7ac3373fe85293d6089964f74758d89b722bcb16cf04d5a398342f",
+   "degree_group_digest": "7eb269d466ebf23d2675d3978b355abac4985f01452c2f7ce1e4f646c1f227e2",
+   "degree_group_size_on_its_side": 3,
+   "edges": 8,
+   "hset1b_draw_order": 20,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "d2e00ad52b0b03fba07eb7b8880a16e68d2fb77fcdb5e24181ef29a81cd8be06",
+   "degree_group_digest": "b5398a49430826bf406e682c1eb7a91bb6d90f53e4566390713356ecb9573ff8",
+   "degree_group_size_on_its_side": 9,
+   "edges": 6,
+   "hset1b_draw_order": 21,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "c7ed6311681656d80596b1dbd17a5637a58371b7701b3c5820e8d670ccc7f514",
+   "degree_group_digest": "71197e37c6e4f62d4f0ce693ad0c8b67c0fcc77e03b8af42842ef94f6ca822d5",
+   "degree_group_size_on_its_side": 1,
+   "edges": 6,
+   "hset1b_draw_order": 22,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "5c06e86a993d5154e015aa077e6b418aa0ec85532f3f54631e58c7cb3bdf23d7",
+   "degree_group_digest": "e658e3fe07901c7aef03216bc8e689e51890588a892f6a6001b7718772c4ece8",
+   "degree_group_size_on_its_side": 1,
+   "edges": 5,
+   "hset1b_draw_order": 23,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f78bb7cef4b4d004d3162a449f8e65f3db45afa859a122864d9b5d8cd787b4cc",
+   "degree_group_digest": "6197809e9ac025d47b025372e0252c0b3c3f7f2734b77e7090e7fa8defa64d20",
+   "degree_group_size_on_its_side": 2,
+   "edges": 7,
+   "hset1b_draw_order": 24,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "746c819633557f5d45d140be6382bf022dde23da8681827a255c20ee2d23941c",
+   "degree_group_digest": "8525641c1b3ab39802bbed10c1a8f5bbdba8644a9ccab2655142ba36ceeacd0b",
+   "degree_group_size_on_its_side": 6,
+   "edges": 6,
+   "hset1b_draw_order": 25,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "2e0047ab7c978751595922cd86f134012a85b00474e778f91cf9e464dece6e18",
+   "degree_group_digest": "07d8e9afff600e15dcbbccac1e4a68f62e85cdf11e807f758e8397b4c42fe3a1",
+   "degree_group_size_on_its_side": 6,
+   "edges": 7,
+   "hset1b_draw_order": 26,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "f02a51da63a52dab995fcaa3912080846bcdf95712a48d789d2c483540b50313",
+   "degree_group_digest": "71cb7e4ec2e6a70cdd02caafbe40e033f188fc7681f801849408ada0130a2cd0",
+   "degree_group_size_on_its_side": 4,
+   "edges": 5,
+   "hset1b_draw_order": 27,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "aa7225f18648fd5d10374c229f786b92972e9bd4ff168caab27702e0708e1050",
+   "degree_group_digest": "946e79bf1ee50c21966795d4e2dbb6f1e75899f505bee5b60f77f8d81dbb5036",
+   "degree_group_size_on_its_side": 7,
+   "edges": 6,
+   "hset1b_draw_order": 28,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "7424941c0c673e7b8ca7c4c7e9d33051ae1484faed503a2707a7289a4e88961d",
+   "degree_group_digest": "fe59cb96f7e0d5145a0943e62cbc64b654f9ff501a1f31d52ae08bc1a829be99",
+   "degree_group_size_on_its_side": 6,
+   "edges": 7,
+   "hset1b_draw_order": 29,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "ecaa6ffd8eafdb291d181b0904a4ced319702e7fb5b2adb3044e1f2939e3a5e0",
+   "degree_group_digest": "4cba310c012431fbe0fd4fecf2ca27a668c757ecb34d139c299d28054235ff7b",
+   "degree_group_size_on_its_side": 2,
+   "edges": 10,
+   "hset1b_draw_order": 30,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "4fafd4a36978a440eb3f72150a3808c4c39b3c0b823ff3ff3f14c92d259fe504",
+   "degree_group_digest": "d67244c47251ac1060ba4edb3e618126941376facaab96ac3b36f7616ca1a900",
+   "degree_group_size_on_its_side": 21,
+   "edges": 7,
+   "hset1b_draw_order": 31,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "e5ac5bda5a1790895f858fd9e3f8d31f85e67279b3d4ce1bd2be9dd902c8781d",
+   "degree_group_digest": "7a07521751c2bca1d0b1b8a71608a1cc379f94f881a3368a06d4ce398f93b2b2",
+   "degree_group_size_on_its_side": 14,
+   "edges": 6,
+   "hset1b_draw_order": 32,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "95975d033ac56a57a489c0d5e13355d2fcecadc3357421b4de65c607ed139818",
+   "degree_group_digest": "150ff5f2dd41840c64a3378ece32282154f7d69eaeab73049b5d68c36caac01e",
+   "degree_group_size_on_its_side": 1,
+   "edges": 6,
+   "hset1b_draw_order": 33,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "df1232460fb3ca9c622ce25548fec5a54e8fc6ab394fba4657608e482d90b6b2",
+   "degree_group_digest": "fdbdf809914c125bbd2e6f475d22c0986c7cc82266d1c33decbe03d900c67dbc",
+   "degree_group_size_on_its_side": 6,
+   "edges": 5,
+   "hset1b_draw_order": 34,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "4bc316a4b6018d6a0ebea450fbfd05b8839347d01e2f5ee634bf535712e0a029",
+   "degree_group_digest": "fba0f2da6dcc43cd68d5d8059e342598fd44381ecb32dc1a7112f839bdacc0e0",
+   "degree_group_size_on_its_side": 3,
+   "edges": 5,
+   "hset1b_draw_order": 35,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "9be3549fda66042d77ca1e58d7dc7709e0117757a29673489ce97fe85f30dab3",
+   "degree_group_digest": "e4a80606f6a1e23388f27c885e69f26a3b07a1e5a7065e822b585bcde417a918",
+   "degree_group_size_on_its_side": 2,
+   "edges": 5,
+   "hset1b_draw_order": 36,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": true,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "fb9a784d6e226ad516d83fc6db82234d672b1b75800048bad85884db3899ed63",
+   "degree_group_digest": "fdbdf809914c125bbd2e6f475d22c0986c7cc82266d1c33decbe03d900c67dbc",
+   "degree_group_size_on_its_side": 6,
+   "edges": 5,
+   "hset1b_draw_order": 37,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "76762ab3238484a44996f48f6743e1656eb88a10900b55a2a6fbaa7d33edf54c",
+   "degree_group_digest": "5f88f9615ecd1ab429e198714873fb3e4db9a6202dc4997a0542263033807124",
+   "degree_group_size_on_its_side": 21,
+   "edges": 7,
+   "hset1b_draw_order": 38,
+   "hset2_side": "TEST",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  },
+  {
+   "class_digest": "067c8b2afb3eeab0b08c187cb90264dd1f447bc874def71ce50a6d2cd0698267",
+   "degree_group_digest": "b82a866d63c7386a564b1804aa12958a12ea5063b8cf4f370983afd7cfecf39b",
+   "degree_group_size_on_its_side": 16,
+   "edges": 9,
+   "hset1b_draw_order": 39,
+   "hset2_side": "DEV",
+   "in_hset2_dev_new_6": false,
+   "in_public_excluded_v1": false
+  }
+ ],
+ "schema": "claude.hset2-proposed-older-public-test-side/0.1",
+ "status": "PROPOSED_NOT_APPLIED: no build code reads this file; PUBLIC_EXCLUDED_v1.json and the stage-0 files are unchanged",
+ "what": "The 40 public HSET-1B DEV_NEW_6 classes (public seed HSET-1B-dev-shapes-v0.1, hset1b_build.draw, 47 sampler draws), placed on HSET-2 stage-0 sides by the committed group lists. class_digest = sha256 of the canonical-form key, the digest PUBLIC_EXCLUDED uses. Every value is derived from public files; no salt, no sealed file and no selection was read."
+}

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import pathlib
 import random
@@ -186,7 +187,7 @@ def test_three_hop_first_child_rules():
     assert three_hop(fork, q(4, first)) == {"state": "VIA", "via": "w/n1"}
     assert three_hop(fork, q(5, first)) == {"state": "VIA", "via": "w/n2"}    # n1 needs 3 steps; n2 needs 2
     assert H().reach_comparators() == tuple(A.COMPARATORS["reach"]) + (
-        "THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP")
+        "THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP", "FRONTIER_FALLBACK")
 
 
 def test_single_root_fallback_rules():
@@ -220,6 +221,59 @@ def test_single_root_fallback_rules():
     reg = Hm.registered_comparators()["reach"]
     assert set(reg["REACH_4_STEP_TRANSFER_6"]) - set(reg["REACH_3_STEP_TRANSFER_6"]) == {
         "THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"}
+
+
+def test_frontier_fallback_rules(monkeypatch):
+    """Finding V-1: two-hop, then VIA when a node exactly 2 steps out has a child and the part has a parent. It never
+    checks where the third step goes. The switch REGISTER_FRONTIER_FALLBACK (default True) makes it a bar of both
+    reach claims; switched off, it is still computed and printed, and the bar-set digest changes."""
+    Hm = H()
+    first, bfs = "first_direct_constituent_lexical_v1", "bfs_immediate_predecessor_lexical_v1"
+    q = lambda part, rule: {"arguments": {"whole": "w/n0", "part": "w/n%d" % part}, "rule": rule}   # noqa: E731
+
+    def run(world, part, rule):
+        base, _ = A._comparators("reach", world, q(part, rule))
+        return Hm.extra_reach_payloads(world, q(part, rule), base)
+    via = lambda k: {"state": "VIA", "via": "w/n%d" % k}                                          # noqa: E731
+    absent = {"state": "ABSENT", "via": None}
+    # 1. two roots (n0, n4); the part n3 is 3 steps from the whole. SINGLE_ROOT_FALLBACK says ABSENT; the frontier
+    # rule says VIA, and both of its vias equal the gold (first-child: n1; BFS: n2, the part's parent that has a parent)
+    edges = [(0, 1), (1, 2), (2, 3), (4, 3), (4, 5)]
+    world = plain_world(6, edges)
+    rank = {i: i for i in range(6)}
+    assert hw.reach_gold(6, edges, 0, 3, rank, hw.REACH_FIRST) == ("VIA", 1)
+    assert hw.reach_gold(6, edges, 0, 3, rank, hw.REACH_BFS) == ("VIA", 2)
+    assert run(world, 3, first)["SINGLE_ROOT_FALLBACK"] == absent
+    assert run(world, 3, first)["FRONTIER_FALLBACK"] == via(1)
+    assert run(world, 3, bfs)["FRONTIER_FALLBACK"] == via(2)
+    # 2. no path at all (the part's only parent n4 is a root), but the frontier has a child: the first-child form
+    # answers VIA wrongly; the BFS form finds no parent with a parent and keeps ABSENT
+    edges = [(0, 1), (1, 2), (2, 5), (4, 3), (4, 5)]
+    world = plain_world(6, edges)
+    assert hw.reach_gold(6, edges, 0, 3, rank, hw.REACH_FIRST) == ("ABSENT", None)
+    assert run(world, 3, first)["FRONTIER_FALLBACK"] == via(1)
+    assert run(world, 3, bfs)["FRONTIER_FALLBACK"] == absent
+    # 3. the first-child via is the whole's child with the MOST children (ties: lowest rank)
+    edges = [(0, 1), (0, 2), (2, 3), (2, 4), (3, 5), (1, 4)]
+    world = plain_world(6, edges)
+    assert A._comparators("reach", world, q(5, first))[0]["TWO_HOP_FIRST_CHILD"] == absent
+    assert run(world, 5, first)["FRONTIER_FALLBACK"] == via(2)                    # n2 has 2 children, n1 has 1
+    # 4. the two-hop answer comes first; a frontier with no child keeps ABSENT
+    chain = plain_world(6, [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)])
+    assert run(chain, 2, first)["FRONTIER_FALLBACK"] == via(1)
+    assert run(chain, 1, bfs)["FRONTIER_FALLBACK"] == {"state": "DIRECT", "via": None}
+    short = plain_world(6, [(0, 1), (1, 2), (3, 4), (4, 5), (3, 1)])
+    assert run(short, 5, first)["FRONTIER_FALLBACK"] == absent                  # n2, 2 steps out, has no child
+    # 5. the switch: registered by default in both claims; off, it leaves both bar lists and stays printed
+    reg = Hm.registered_comparators()
+    assert Hm.REGISTER_FRONTIER_FALLBACK is True
+    assert all("FRONTIER_FALLBACK" in reg["reach"][c] for c in ("REACH_3_STEP_TRANSFER_6", "REACH_4_STEP_TRANSFER_6"))
+    digest_on = hw.sha(reg)
+    monkeypatch.setattr(Hm, "REGISTER_FRONTIER_FALLBACK", False)
+    off = Hm.registered_comparators()
+    assert not any("FRONTIER_FALLBACK" in off["reach"][c] for c in off["reach"])
+    assert off["computed_not_registered_printed_only"]["reach"] == ["FRONTIER_FALLBACK"]
+    assert off["design_owner_switches"]["REGISTER_FRONTIER_FALLBACK"] is False and hw.sha(off) != digest_on
 
 
 def test_reach_comparators_hand_made():
@@ -291,7 +345,7 @@ def test_analogy_comparators():
               named("B2", 5, CHAIN, "container"),                      # a filler: same counts, other degrees
               named("C3", 5, S5B, "grammatical", participants=[0, 1, 2]),   # same-degree decoy, flags anchored
               named("D4", 5, S5A, "procedural", participants=[0, 2, 4])]    # the partner, flags not anchored
-    out, tuned = Hm.analogy_payloads(bank_public(worlds), "F", set(), key)
+    out = Hm.analogy_payloads(bank_public(worlds), "F", set(), key)
     assert out["ALWAYS_NO_MATCH"] == {"world_id": None}
     assert out["FIRST_CANDIDATE"] == {"world_id": "A1"}
     assert out["NODE_EDGE_COUNT_MATCH"] == {"world_id": "B2"}              # first other-domain with equal counts
@@ -304,46 +358,166 @@ def test_analogy_comparators():
     # participants sit elsewhere, so the flag-anchored guess fails; the same-domain A1 is never a candidate
     assert out["DEGREE_GUESS_THEN_CHECK"] == out["WHOLE_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": "D4"}
     assert out["FLAG_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": None}
-    assert set(out) | set(tuned) == set(Hm.ANALOGY_COMPARATORS)
-    assert tuned["BEST_FIXED_POSITION"] == {str(i): {"world_id": w} for i, w in enumerate(["A1", "B2", "C3", "D4", "F"])}
-    assert [tuned["STATUS_BY_COUNT"][str(m)]["world_id"] for m in range(4)] == ["C3", "C3", "C3", None]
+    # N1: the flags tie-break guess (degree, then declared-flag position, then rank) pairs F and D4 node for node
+    assert out["FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "D4"}
+    assert set(out) == set(Hm.analogy_comparators()) | set(Hm.analogy_computed_not_registered())
+    # Codex A2.1: every family member is its own comparator. Aliases in numeric order: A1=W0, B2=W1, C3=W2, D4=W3, F=W4
+    assert [out["FIXED_POSITION_%d" % j]["world_id"] for j in range(1, 8)] == ["A1", "B2", "C3", "D4", None, None, None]
+    assert [out["FIXED_ALIAS_W%d" % k]["world_id"] for k in range(8)] == ["A1", "B2", "C3", "D4", "F", None, None, None]
+    # E = [C3, D4] (same degree, other domain); NO_MATCH when len(E) < m; else E[0]
+    assert [out["STATUS_BY_COUNT_%d" % m]["world_id"] for m in range(9)] == ["C3", "C3", "C3"] + [None] * 6
     # with the decoy removed, the partner is the only same-degree other-domain candidate
-    out, _ = Hm.analogy_payloads(bank_public([w for w in worlds if w["world_id"] != "C3"]), "F", set(), key)
+    out = Hm.analogy_payloads(bank_public([w for w in worlds if w["world_id"] != "C3"]), "F", set(), key)
     assert out["OTHER_DOMAIN_ONLY"] == {"world_id": "D4"} and out["FLAG_ANCHOR"] == {"world_id": None}
+    assert [out["STATUS_BY_COUNT_%d" % m]["world_id"] for m in range(3)] == ["D4", "D4", None]
     # a partner whose two (1,1) nodes are numbered the other way round: its ONE degree-sorted guess breaks an edge, so
     # the guess rules answer NO_MATCH although an isomorphic partner is there (they may not search)
     swapped = [(0, 3), (0, 2), (3, 1), (1, 4)]                              # S5A with nodes 1 and 3 swapped
     assert oracle.canonical_form(5, swapped) == oracle.canonical_form(5, S5A)
     bank = [worlds[0], worlds[3], named("E5", 5, swapped, "container", participants=[0, 3, 1])]
-    out, _ = Hm.analogy_payloads(bank_public(bank), "F", set(), key)
+    out = Hm.analogy_payloads(bank_public(bank), "F", set(), key)
     assert out["DEGREE_GUESS_THEN_CHECK"] == out["WHOLE_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": None}
     assert out["FLAG_ANCHOR_GUESS_THEN_CHECK"] == {"world_id": "E5"}      # F's participants 0, 1, 3 land on 0, 3, 1
+    assert out["FLAGS_TIEBREAK_GUESS_THEN_CHECK"] == {"world_id": "E5"}   # the flag positions break the (1,1) tie
+    assert not Hm.flags_tiebreak_guess(worlds[0], worlds[3])                # C3: same degrees, other wiring
     # a trained shape (4 nodes or fewer) is not novel
     small =[named("F", 4, [(0, 1), (1, 2), (2, 3)], "mechanical"), named("E", 4, [(0, 1), (1, 2), (2, 3)], "container")]
-    out, _ = Hm.analogy_payloads(bank_public(small), "F", {key((4, [(0, 1), (1, 2), (2, 3)]))}, key)
+    out = Hm.analogy_payloads(bank_public(small), "F", {key((4, [(0, 1), (1, 2), (2, 3)]))}, key)
     assert out["CANDIDATE_ONLY_NOVELTY"] == {"world_id": None}
 
 
-# ============================================================================ clusters, floor, statistics (s5, s7)
-def test_cluster_counting_and_tuned_choice():
+def test_codex_a2_1_families_and_switches(monkeypatch):
+    """Codex A2.1: FIXED_POSITION_1..7 and STATUS_BY_COUNT_0..8 are registered bars; the pre-A2 tuned bars survive only
+    as their complete untuned tables (no bar dropped) and as a labelled diagnostic; the N1 switch is recorded."""
     Hm = H()
+    reg = Hm.registered_comparators()
+    bars = reg["analogy"]
+    for name in (["FIXED_POSITION_%d" % j for j in range(1, 8)] + ["STATUS_BY_COUNT_%d" % m for m in range(9)]
+                 + ["FIXED_ALIAS_W%d" % k for k in range(8)] + ["FLAGS_TIEBREAK_GUESS_THEN_CHECK"]):
+        assert bars.count(name) == 1, name
+    assert "BEST_FIXED_POSITION" not in bars and "STATUS_BY_COUNT" not in bars
+    # every bar of the first version (853e645d) is still a bar, or its whole table is (A2 only adds)
+    old = ["ALWAYS_NO_MATCH", "FIRST_CANDIDATE", "NODE_EDGE_COUNT_MATCH", "DEGREE_MULTISET_MATCH", "FLAG_ANCHOR",
+           "CANDIDATE_ONLY_NOVELTY", "OTHER_DOMAIN_ONLY", "DEGREE_GUESS_THEN_CHECK", "WHOLE_ANCHOR_GUESS_THEN_CHECK",
+           "FLAG_ANCHOR_GUESS_THEN_CHECK"]
+    assert set(old) <= set(bars)
+    assert reg["pre_A2_tuned_bars_completed_untuned"] == {"BEST_FIXED_POSITION": ["FIXED_ALIAS_W%d" % k for k in range(8)],
+                                                          "STATUS_BY_COUNT": ["STATUS_BY_COUNT_%d" % m for m in range(9)]}
+    # the digest of the bar set changed from the verified 1520e17c build's
+    assert hw.sha(reg) != "1a233f311ac4585149600a7812748aa33ac27253640db22c8931dcfae0f8de17"
+    # the N1 switch: off, the rule leaves the bar list, stays computed and printed, and the digest changes
+    monkeypatch.setattr(Hm, "REGISTER_FLAGS_TIEBREAK_GUESS", False)
+    off = Hm.registered_comparators()
+    assert "FLAGS_TIEBREAK_GUESS_THEN_CHECK" not in off["analogy"]
+    assert off["computed_not_registered_printed_only"]["analogy"] == ["FLAGS_TIEBREAK_GUESS_THEN_CHECK"]
+    assert hw.sha(off) != hw.sha(reg)
+
+
+# ============================================================================ clusters, floor, statistics (s5, s7)
+def test_cluster_counting_and_tuned_diagnostic():
+    """A cluster is right only if all 4 rows are right; no parameter is chosen for a claim (Codex A2.1): the old tuned
+    choice is printed only as a labelled diagnostic, and the binding bar is the worst family member."""
+    Hm = H()
+    names = Hm.analogy_comparators()
     rows = {}
     clusters = []
     for f in range(3):
         items = ["c%d|%s|pres%d" % (f, st, k) for st in ("MATCH", "NO_MATCH") for k in (0, 1)]
         for i in items:
-            rows[i] = {"comparators": {x: True for x in Hm.ANALOGY_COMPARATORS if x not in Hm.ANALOGY_TUNED},
-                       "tuned": {"BEST_FIXED_POSITION": {"0": True, "1": f == 0}, "STATUS_BY_COUNT": {"0": False, "1": True}}}
+            rows[i] = {"comparators": {x: True for x in names}}
+            rows[i]["comparators"]["FIXED_ALIAS_W1"] = f == 0
+            rows[i]["comparators"]["STATUS_BY_COUNT_0"] = False
         clusters.append({"items": items, "shape_key": "s%d" % f, "group_key": "g%d" % f})
     rows["c1|NO_MATCH|pres1"]["comparators"]["FLAG_ANCHOR"] = False          # one presentation wrong: cluster wrong
-    rows["c2|NO_MATCH|pres0"]["tuned"]["BEST_FIXED_POSITION"]["0"] = False
-    chosen = Hm.cluster_results(clusters, rows, Hm.ANALOGY_COMPARATORS, Hm.ANALOGY_TUNED)
+    rows["c2|NO_MATCH|pres0"]["comparators"]["FIXED_ALIAS_W0"] = False
+    Hm.cluster_results(clusters, rows, names)
     assert [c["comparators"]["FLAG_ANCHOR"] for c in clusters] == [True, False, True]
-    assert chosen == {"BEST_FIXED_POSITION": "0", "STATUS_BY_COUNT": "1"}   # best on the cell; ties to the first
-    assert [c["comparators"]["BEST_FIXED_POSITION"] for c in clusters] == [True, True, False]
-    block = Hm.floor_block(A, clusters, Hm.ANALOGY_COMPARATORS, need_groups=True)
-    assert block["W_by_comparator"]["FLAG_ANCHOR"] == 1 and block["binding_W"] == 0
-    assert block["distinct_shapes_behind_binding_W"] == 0 and block["distinct_degree_groups"] == 3
+    assert [c["comparators"]["FIXED_ALIAS_W0"] for c in clusters] == [True, True, False]
+    block = Hm.floor_block(A, clusters, names, need_groups=True)
+    W = block["W_by_comparator"]
+    assert W["FLAG_ANCHOR"] == 1 and W["FIXED_ALIAS_W0"] == 1 and W["FIXED_ALIAS_W1"] == 2 and W["STATUS_BY_COUNT_0"] == 3
+    assert block["binding_W"] == 0 and block["distinct_degree_groups"] == 3
+    diag = Hm.tuned_diagnostic(W)
+    assert diag["label"].startswith("DIAGNOSTIC_ONLY_NEVER_A_BAR")
+    assert diag["BEST_FIXED_POSITION"] == {"chosen": "FIXED_ALIAS_W2", "W": 0}   # the first alias with W 0
+    assert diag["BEST_STATUS_BY_COUNT"] == {"chosen": "STATUS_BY_COUNT_1", "W": 0}
+
+
+def view_cluster(cid, group, classes, **right):
+    return {"cluster_id": cid, "view_group": group, "role_classes": classes, "shape_key": classes[0],
+            "comparators": {"X": right.get("X", False), "Y": right.get("Y", True)}}
+
+
+def test_view_units_and_feasibility_counts():
+    """Codex A2.2 / A2.4: degree groups, shared-shape components (transitive), W in every view, the floors."""
+    Hm = H()
+    members = [view_cluster("a1", "gA", ["k1", "f1"]), view_cluster("a2", "gA", ["k2", "f2"], X=True),
+               view_cluster("b1", "gB", ["k3", "f1"], X=True),          # shares f1 with gA
+               view_cluster("c1", "gC", ["k4", "k3"], X=True),          # shares k3 with gB: gA-gB-gC one component
+               view_cluster("d1", "gD", ["k5"]), view_cluster("e1", "gE", ["k6"], X=True)]
+    groups, comp = Hm.view_units(members)
+    assert sorted(groups) == ["gA", "gB", "gC", "gD", "gE"]
+    assert comp["gA"] == comp["gB"] == comp["gC"] and len({comp["gA"], comp["gD"], comp["gE"]}) == 3
+    block = Hm.views_block(members, ("X", "Y"))
+    assert block["units"] == {"original_cluster": 6, "degree_group": 5, "shared_shape_component": 3}
+    # X is wrong on a1 (gA) and d1 (gD): 2 clusters, 2 groups, 2 components; Y is never wrong
+    assert block["W_by_comparator_by_view"]["X"] == {"original_cluster": 2, "degree_group": 2, "shared_shape_component": 2}
+    assert block["binding_by_view"]["degree_group"]["comparator"] == "Y" and block["binding_by_view"]["degree_group"]["W"] == 0
+    assert block["size_distributions"] == {"clusters_per_degree_group": {"1": 4, "2": 1},
+                                           "degree_groups_per_component": {"1": 2, "3": 1},
+                                           "clusters_per_component": {"1": 2, "4": 1}}
+    assert block["floors"]["applies"].startswith("PRINTED_NOT_BINDING") and not block["floors"]["meets_every_floor"]
+    assert "shared-shape components 3 < 10" in block["floors"]["not_testable_reasons"]
+    assert block["repaired_vs_unchanged_informative_count"]["state"] == "NOT_YET_OBSERVED"
+    assert Hm.views_block(members, ("X",), confirmatory_analogy=True)["floors"]["applies"].startswith("BINDING")
+    # counts only: no class or group key reaches the printed block
+    text = json.dumps(block)
+    assert not any(s in text for s in ("gA", "k1", "f1", "a1"))
+
+
+def test_paired_views_exact():
+    """Codex A2.2: exact rational group and component means; the sign tail; B > C, positive overall difference and
+    p <= 0.01. Here the cluster view passes but the group view cannot: every win sits in one degree group."""
+    Hm = H()
+    members = [view_cluster("w%d" % i, "g0", ["s%d" % i], X=False) for i in range(12)]
+    members += [view_cluster("t%d" % i, "g%d" % (i + 1), ["u%d" % i], X=True) for i in range(9)]
+    groups, comp = Hm.view_units(members)
+    model = {c["cluster_id"]: True for c in members}
+    bar = {c["cluster_id"]: c["comparators"]["X"] for c in members}
+    out = Hm.paired_views(A, members, groups, comp, model, bar)
+    assert out["overall_accuracy_difference"] == "4/7"                     # 12 wins of 21 clusters
+    assert out["original_cluster"]["b"] == 12 and out["original_cluster"]["c"] == 0 and out["original_cluster"]["pass"]
+    assert out["original_cluster"]["label"] == "CONDITIONAL_CLUSTER_DIAGNOSTIC"
+    assert out["degree_group"] == {"units": 10, "B": 1, "C": 0, "ties": 9, "p_exact": "1/2", "p": 0.5, "pass": False}
+    assert out["shared_shape_component"]["B"] == 1 and not out["shared_shape_component"]["pass"]
+    # mixed signs inside a group: its mean is exact (1 - 1 + 1) / 3 = 1/3 > 0
+    mixed = [view_cluster("m%d" % i, "gm", ["x%d" % i], X=(i == 1)) for i in range(3)]
+    g2, c2 = Hm.view_units(mixed)
+    res = Hm.paired_views(A, mixed, g2, c2, {"m0": True, "m1": False, "m2": True},
+                          {c["cluster_id"]: c["comparators"]["X"] for c in mixed})
+    assert res["degree_group"]["B"] == 1 and res["overall_accuracy_difference"] == "1/3"
+    # the scorer's per-cell call: the model against every bar in every view
+    ev = Hm.evaluate_cell_views(A, members, ("X", "Y"), model)
+    assert ev["passes_every_bar"] == {"original_cluster": False, "degree_group": False, "shared_shape_component": False}
+    assert ev["per_bar"]["Y"]["original_cluster"]["b"] == 0                # Y is right everywhere: nothing to win
+
+
+def test_sign_tail_and_conditional_power_exact():
+    Hm = H()
+    from fractions import Fraction
+    assert Hm.sign_tail_exact(0, 0) == 1 and Hm.sign_tail_exact(7, 0) == Fraction(1, 128)
+    assert Hm.sign_tail_exact(9, 1) == Fraction(11, 1024)
+    assert [Hm.sign_min_wins(d) for d in (0, 6, 7, 9, 10, 12)] == [None, None, 7, 9, 10, 11]
+    assert Hm.conditional_sign_power(6, (1, 1)) == 0 and Hm.conditional_sign_power(7, (1, 1)) == 1
+    # a brute-force check against the definition, d = 12, q = 0.6
+    brute = sum(Fraction(math.comb(12, B)) * Fraction(3, 5) ** B * Fraction(2, 5) ** (12 - B) for B in range(13)
+                if B > 12 - B and Hm.sign_tail_exact(B, 12 - B) <= Fraction(1, 100))
+    assert Hm.conditional_sign_power(12, (3, 5)) == brute
+    table = Hm.sign_power_table([7, 3])
+    assert table["all_win_minimum_discordant_units"] == 7
+    assert sorted(table["by_unit_count"]) == ["3", "7"]
+    assert table["by_unit_count"]["7"]["1.00"] == [0, 0, 0, 0, 0, 0, 0, 1.0]
+    assert len(table["by_unit_count"]["3"]["0.60"]) == 4
 
 
 def test_floor():
@@ -565,10 +739,34 @@ def test_tiny_end_to_end(tiny_build):
     # every A2 bar is registered, printed and scored in its cells
     reg = summary["identity"]["registered_comparators"]
     assert reg == H().registered_comparators() and summary["identity"]["registered_comparators_digest"] == hw.sha(reg)
-    assert set(summary["cells"]["TEST_NEW_6/ANALOGY"]["W_by_comparator"]) == set(H().ANALOGY_COMPARATORS)
+    assert set(summary["cells"]["TEST_NEW_6/ANALOGY"]["W_by_comparator"]) == set(H().analogy_comparators())
     assert set(summary["cells"]["TEST_NEW_6/CORRESPONDENCE"]["W_by_comparator"]) == set(H().CORRESPONDENCE_COMPARATORS)
     for claim in ("REACH_3_STEP_TRANSFER_6", "REACH_4_STEP_TRANSFER_6"):
         assert set(summary["cells"]["TEST_NEW_6/REACH_BFS"]["claims"][claim]["W_by_comparator"]) == set(reg["reach"][claim])
+        assert "FRONTIER_FALLBACK" in reg["reach"][claim]
+    # Codex A2.1: no tuned choice decides anything; it is printed only as a labelled diagnostic
+    an = summary["cells"]["TEST_NEW_6/ANALOGY"]
+    assert "tuned_parameters_chosen_on_this_cell" not in an
+    assert an["tuned_on_this_cell_diagnostic_not_a_bar"]["label"].startswith("DIAGNOSTIC_ONLY_NEVER_A_BAR")
+    # Codex A2.2 / A2.4: every claim cell has the three views; the table is labelled THROWAWAY; the confirmatory
+    # claim is registered with its floors; repaired-versus-unchanged is not observed yet
+    feas = summary["a2_4_feasibility"]
+    assert feas["table_state"].startswith("THROWAWAY") and feas["rows"]
+    assert {(r["cell"], r["claim"]) for r in feas["rows"]} >= {
+        ("TEST_NEW_6/ANALOGY", None), ("TEST_NEW_6/CORRESPONDENCE", None), ("TEST_NEW_5/CORRESPONDENCE", None),
+        ("TEST_NEW_6/REACH_BFS", "REACH_3_STEP_TRANSFER_6"), ("TEST_NEW_6/REACH_FIRST_DIRECT", "REACH_4_STEP_TRANSFER_6")}
+    for r in feas["rows"]:
+        assert set(r["units"]) == {"original_cluster", "degree_group", "shared_shape_component"}
+        assert r["units"]["shared_shape_component"] <= r["units"]["degree_group"] <= r["units"]["original_cluster"]
+        for view, b in r["binding_by_view"].items():
+            assert b["W"] <= r["units"][view]
+        assert r["repaired_vs_unchanged_informative_count"]["state"] == "NOT_YET_OBSERVED"
+        for n in set(r["units"].values()):
+            assert str(n) in feas["conditional_sign_power_by_unit_count"]["by_unit_count"]
+    rep = summary["claims_before_any_model"]["REPAIR_IMPROVES_ANALOGY_6"]
+    assert rep["status_if_not"] == "NOT_TESTABLE" and rep["not_testable_reasons"]      # 1 focus per split: too few
+    assert summary["inference_assumptions"]["state"] == "OPEN_FOR_THE_BUILDER_SCORER_REVIEW"
+    assert summary["success_rule"].count("CONDITIONAL_CLUSTER_DIAGNOSTIC") == 1
     # the printed disjointness is counted, and every required count is 0 (review F5)
     d = summary["splits"]["disjointness"]
     assert d["how"].startswith("counted") and all(v == 0 for k, v in {**d["five"], **d["six"]}.items()
