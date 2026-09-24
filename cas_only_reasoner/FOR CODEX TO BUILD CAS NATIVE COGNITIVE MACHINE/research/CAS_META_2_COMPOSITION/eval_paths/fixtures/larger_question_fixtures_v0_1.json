@@ -1,0 +1,4913 @@
+{
+ "banks": {
+  "MAIN": {
+   "bank": {
+    "bank_digest": "1a38fc33beceffccb3a230d305827c2df965e959fce8397c2e6a88173d7f9466",
+    "complete_within_supplied_bank": true,
+    "coverage": "ALL_AND_ONLY_CALLER_SUPPLIED_MEMBERS",
+    "selection": "NO_COMPILER_TARGET_FILTERING_OR_FOCUS_DEPENDENCE",
+    "world_ids": [
+     "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37",
+     "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+     "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1",
+     "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+     "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+     "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+     "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827",
+     "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc"
+    ]
+   },
+   "schema": "cas.typed-teaching-public-bank/0.1",
+   "worlds": [
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e0",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e1",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e2",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e3"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e0",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e1",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e2",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e3"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e0",
+       "source": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n2"
+      },
+      {
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e1",
+       "source": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4"
+      },
+      {
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e2",
+       "source": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n1"
+      },
+      {
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/e3",
+       "source": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "grammatical",
+      "function": "carries the relation between Clause and Footnote",
+      "kind": "a compound pattern",
+      "participants": [
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4",
+       "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3"
+      ],
+      "setting": "in an edited sentence"
+     },
+     "declared_whole": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Clause",
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "ClauseA",
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Compound",
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Figure",
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Footnote",
+       "ref": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "mechanical",
+      "function": "transmits force between Core and Drill",
+      "kind": "a fluid-moving device",
+      "participants": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      ],
+      "setting": "in a workshop"
+     },
+     "declared_whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Clock",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Clutch",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Core",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Crane",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Crankshaft",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Drill",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e0",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e1",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e2"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e0",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e1",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e2"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e0",
+       "source": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+       "target": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0"
+      },
+      {
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e1",
+       "source": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+       "target": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n3"
+      },
+      {
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/e2",
+       "source": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n3",
+       "target": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n1"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "container",
+      "function": "holds ArtCase inside Bandage",
+      "kind": "a cable bag",
+      "participants": [
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n1"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0",
+       "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n1"
+      ],
+      "setting": "in a packed store"
+     },
+     "declared_whole": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "ArtCase",
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Backpack",
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Bandage",
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Bottle",
+       "ref": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n3"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e0",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e1",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e2",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e3",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e4",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e0",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e1",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e2",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e3",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e4",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e0",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      },
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e1",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0"
+      },
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e2",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0"
+      },
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e3",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n2"
+      },
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e4",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1"
+      },
+      {
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/e5",
+       "source": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "grammatical",
+      "function": "carries the relation between Noun and List",
+      "kind": "a list pattern",
+      "participants": [
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3",
+       "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      ],
+      "setting": "in an edited sentence"
+     },
+     "declared_whole": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Letters",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "List",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Mark",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Marker",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Morpheme",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Noun",
+       "ref": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e0",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e1",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e2",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e3",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e4"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e0",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e1",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e2",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e3",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e4"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e0",
+       "source": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+       "target": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n1"
+      },
+      {
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e1",
+       "source": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+       "target": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n2"
+      },
+      {
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e2",
+       "source": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n2",
+       "target": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n5"
+      },
+      {
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e3",
+       "source": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3",
+       "target": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n1"
+      },
+      {
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/e4",
+       "source": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3",
+       "target": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "container",
+      "function": "holds Jar inside FirstAidKit",
+      "kind": "a seed packet",
+      "participants": [
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3",
+       "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4"
+      ],
+      "setting": "in a packed store"
+     },
+     "declared_whole": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "FirstAidKit",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Folder",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Jar",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Kit",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Lens",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Pantry",
+       "ref": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "mechanical",
+      "function": "transmits force between Blade and Alternator",
+      "kind": "a charging machine",
+      "participants": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      ],
+      "setting": "in a workshop"
+     },
+     "declared_whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Alternator",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Bicycle",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Bit",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Blade",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Boiler",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e0",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e1",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e2",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e3"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e0",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e1",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e2",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e3"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e0",
+       "source": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+       "target": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n0"
+      },
+      {
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e1",
+       "source": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+       "target": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n3"
+      },
+      {
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e2",
+       "source": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4",
+       "target": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n0"
+      },
+      {
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/e3",
+       "source": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4",
+       "target": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "container",
+      "function": "holds Crate inside CameraBag",
+      "kind": "a first-aid kit",
+      "participants": [
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4",
+       "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+      ],
+      "setting": "in a packed store"
+     },
+     "declared_whole": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "CableBag",
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "CameraBag",
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Coil",
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Crate",
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Eraser",
+       "ref": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e0",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e1",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e2",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e3",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e4",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e0",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e1",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e2",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e3",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e4",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e0",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n0",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3"
+      },
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e1",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n4"
+      },
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e2",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5"
+      },
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e3",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n2",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5"
+      },
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e4",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n4",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n2"
+      },
+      {
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/e5",
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+       "target": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n0"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "procedural",
+      "function": "produces Deploy as part of Checkout",
+      "kind": "a printing procedure",
+      "participants": [
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+       "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3"
+      ],
+      "setting": "during a recorded run"
+     },
+     "declared_whole": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Check",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Checkout",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Cleaning",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Copy",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Deploy",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Diagnosis",
+       "ref": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e0",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e1",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e2",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e3",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e4",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e0",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e1",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e2",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e3",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e4",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e0",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n5"
+      },
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e1",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4"
+      },
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e2",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0"
+      },
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e3",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2"
+      },
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e4",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n1"
+      },
+      {
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/e5",
+       "source": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n5",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "procedural",
+      "function": "produces Measure as part of Payment",
+      "kind": "a refund procedure",
+      "participants": [
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0",
+       "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4"
+      ],
+      "setting": "during a recorded run"
+     },
+     "declared_whole": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Measure",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Migration",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Onboarding",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Payment",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Plan",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Plate",
+       "ref": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e0",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e1",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e2",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e3"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e0",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e1",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e2",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e3"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e0",
+       "source": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0",
+       "target": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n2"
+      },
+      {
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e1",
+       "source": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1",
+       "target": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n3"
+      },
+      {
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e2",
+       "source": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+       "target": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0"
+      },
+      {
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/e3",
+       "source": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+       "target": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "procedural",
+      "function": "produces Audit as part of Build",
+      "kind": "a cleaning procedure",
+      "participants": [
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1",
+       "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0"
+      ],
+      "setting": "during a recorded run"
+     },
+     "declared_whole": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Assembly",
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Audit",
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Backup",
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Briefing",
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Build",
+       "ref": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc"
+    }
+   ]
+  },
+  "REFUSE_DEGREE": {
+   "bank": {
+    "bank_digest": "35d8461367a394604208e173891647cacc754ca530b6bb1604e123b4e1cb2980",
+    "complete_within_supplied_bank": true,
+    "coverage": "ALL_AND_ONLY_CALLER_SUPPLIED_MEMBERS",
+    "selection": "NO_COMPILER_TARGET_FILTERING_OR_FOCUS_DEPENDENCE",
+    "world_ids": [
+     "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613",
+     "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98"
+    ]
+   },
+   "schema": "cas.typed-teaching-public-bank/0.1",
+   "worlds": [
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e0",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e1",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e2",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e3",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e4"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e0",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e1",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e2",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e3",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e4"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e0",
+       "source": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "target": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n1"
+      },
+      {
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e1",
+       "source": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "target": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n2"
+      },
+      {
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e2",
+       "source": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "target": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n3"
+      },
+      {
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e3",
+       "source": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "target": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n4"
+      },
+      {
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/e4",
+       "source": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "target": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n5"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "container",
+      "function": "holds Pouch inside Plate",
+      "kind": "a spice rack",
+      "participants": [
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n1",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n2"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n1",
+       "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n2"
+      ],
+      "setting": "in a packed store"
+     },
+     "declared_whole": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Plate",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Pouch",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Rope",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "SeedPacket",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Seeds",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Shelf",
+       "ref": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e0",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e1",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e2",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e3",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e4",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+      },
+      {
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/e5",
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "mechanical",
+      "function": "transmits force between Core and Drill",
+      "kind": "a fluid-moving device",
+      "participants": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      ],
+      "setting": "in a workshop"
+     },
+     "declared_whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Clock",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Clutch",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Core",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Crane",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Crankshaft",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Drill",
+       "ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98"
+    }
+   ]
+  },
+  "REFUSE_SEVEN": {
+   "bank": {
+    "bank_digest": "81bdd9cbf558b018a4448ce7e4b0986c6aed6ce28be63f91792b5e04790319e2",
+    "complete_within_supplied_bank": true,
+    "coverage": "ALL_AND_ONLY_CALLER_SUPPLIED_MEMBERS",
+    "selection": "NO_COMPILER_TARGET_FILTERING_OR_FOCUS_DEPENDENCE",
+    "world_ids": [
+     "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a"
+    ]
+   },
+   "schema": "cas.typed-teaching-public-bank/0.1",
+   "worlds": [
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e0",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e1",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e2",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+      },
+      {
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/e3",
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "mechanical",
+      "function": "transmits force between Blade and Alternator",
+      "kind": "a charging machine",
+      "participants": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+       "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      ],
+      "setting": "in a workshop"
+     },
+     "declared_whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Alternator",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Bicycle",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Bit",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Blade",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Boiler",
+       "ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382"
+    },
+    {
+     "branch_order": {
+      "canonical_account_order": [
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e0",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e1",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e2",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e3",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e4",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e5"
+      ],
+      "order_basis": "SERIALIZATION_ONLY_NOT_TEMPORAL",
+      "process_order": null,
+      "source_order": [
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e0",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e1",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e2",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e3",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e4",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e5"
+      ]
+     },
+     "contains": [
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e0",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n1"
+      },
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e1",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n1",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n2"
+      },
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e2",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n5"
+      },
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e3",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n5",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n4"
+      },
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e4",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0"
+      },
+      {
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/e5",
+       "source": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+       "target": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3"
+      }
+     ],
+     "contains_inventory_complete": true,
+     "declarations": {
+      "domain": "mechanical",
+      "function": "transmits force between Piston and Gear",
+      "kind": "a stopping assembly",
+      "participants": [
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3"
+      ],
+      "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+      "primary_labels": [
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0",
+       "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3"
+      ],
+      "setting": "in a workshop"
+     },
+     "declared_whole": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+     "inventory_scope": "EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD",
+     "nodes": [
+      {
+       "kind": "idea",
+       "label": "Gear",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0"
+      },
+      {
+       "kind": "idea",
+       "label": "Gearbox",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n1"
+      },
+      {
+       "kind": "idea",
+       "label": "Hook",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n2"
+      },
+      {
+       "kind": "idea",
+       "label": "Lathe",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3"
+      },
+      {
+       "kind": "idea",
+       "label": "Loom",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n4"
+      },
+      {
+       "kind": "idea",
+       "label": "Pad",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n5"
+      },
+      {
+       "kind": "idea",
+       "label": "Piston",
+       "ref": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6"
+      }
+     ],
+     "source_status": {
+      "authorship_authenticated": false,
+      "declaration_basis": "CALLER_SUPPLIED_SOURCE",
+      "field_origins": {
+       "branch_order": "PRESENTATION_CONVENTIONS_ONLY",
+       "contains": "SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED",
+       "domain": "AUTHORED_DOMAIN_DECLARATION",
+       "function": "DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE",
+       "kind": "AUTHORED_KIND_DECLARATION",
+       "participants": "PRESENTATION_DERIVED_PRIMARY_THREE_LABELS",
+       "primary_labels": "FIRST_THREE_CALLER_SUPPLIED_LABELS",
+       "setting": "AUTHORED_DOMAIN_DECLARATION"
+      },
+      "world_truth_established": false
+     },
+     "world_id": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a"
+    }
+   ]
+  }
+ },
+ "construction": "Public HSET construction (hset_worlds.world_from_spec / build_packet), training-domain words only, 0 supports; no salt, no TEST material, no model.",
+ "fixture_set_digest": "049b92bb657831ba4df5a50f2135801510b464fa202384e4ec52ebe814ed75f2",
+ "fixtures": [
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "roles": [
+      3
+     ],
+     "status": "UNIQUE"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F01",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "role_set",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; one analogy clause",
+   "packet_sha256": "09e5404bf74f4d5fe274cac4e20e2329250fe3a8f52257211d93eaa57b4f4ae6",
+   "record": {
+    "cue": null,
+    "instruction": "Classify only the focal controlled-language excerpt. Return every applicable role from the fixed six-role catalog, with its ambiguity status. These forms are explicit instructional cues, not unrestricted natural-language understanding.",
+    "query": {
+     "arguments": {
+      "focal_excerpt": "Different domains, same containment pattern: {\"source_world_id\":\"world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382\",\"target_world_id\":\"world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37\"}"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "role_set",
+     "query_id": "typed-query-d48046fae34aef26899a8d517d280c614902992c4ba4cd0ebf05b860b5fc62ae",
+     "rule": "focal_excerpt_roles_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-712f17e2f9491172937fb528373500a1140368e5f7ba115dc75ae0fe1b81dc4f",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "focal_excerpt_roles_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "function_ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/decl/function",
+     "kind_ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/decl/kind",
+     "whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F02",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "definition",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes",
+   "packet_sha256": "b39e2b61fea84d86009e7b353cb27ad65c738fe1e368cac89914d37deb48acfa",
+   "record": {
+    "cue": "CUBE_FACE_1",
+    "instruction": "Return the declared whole and that focused world's own kind and function declaration references. Equal text declared in another world is a different reference.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "definition",
+     "query_id": "typed-query-72c1af2809f6b5954967e369c7ec3496bc6a54c639d74dd0a0ae612c642a8cd4",
+     "rule": "declared_kind_and_function_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-85062ad0e89bc81eed8650413072ef5141cf100c67a6dd2aa827046f453b2c9d",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "declared_kind_and_function_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "participants": [
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2",
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+     ],
+     "setting_ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/decl/setting"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F03",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "context",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes",
+   "packet_sha256": "2cf3951c40a146b1fed9e4f87e421d1536e65775e857fc53656079a524704957",
+   "record": {
+    "cue": "CUBE_FACE_2",
+    "instruction": "Return that focused world's own setting declaration reference and its declared participant set. Participants use the stated presentation convention. This question does not establish additional interaction facts.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "context",
+     "query_id": "typed-query-e28fbecf8ccfc3ea3d8f236ee4c98df26b87c161df2bb3293a0093a3a309ee55",
+     "rule": "declared_setting_and_participants_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-6bb8ceadfa2de5fa890407d064e4e2f22b69adf4c89c681d79711f9cbdcd9d4f",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "declared_setting_and_participants_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_decoys_in_bank": [
+     "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc"
+    ]
+   },
+   "expected_values": [
+    {
+     "world_id": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F04",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "analogy",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; genuine match W5A_G, same-degree decoy W5B_P in bank",
+   "packet_sha256": "02805d3c239af5040e8951cb9e31a5cbd6c1b74ad05b7d31d67a38b4ba67e280",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "analogy",
+     "query_id": "typed-query-3e121d0475c39867d6c67aa549a9e7757ccd811999ec4f3cab5413b06a59e01b",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-20c715a112ddfc967ba53b0f716eb9af2923cfc256e06f7833d17ddd757f16a2",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_decoys_in_bank": [
+     "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37",
+     "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382"
+    ]
+   },
+   "expected_values": [
+    {
+     "world_id": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F05",
+   "focus": "W5B_P",
+   "focus_world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc",
+   "kind": "analogy",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; GENUINE NO_MATCH: only same-degree decoys exist",
+   "packet_sha256": "27a22cd5f69091c32fd8177b6df43340499bdaee260c7e620a7e539b9b086914",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc",
+     "kind": "analogy",
+     "query_id": "typed-query-542deedfd79362e79aa9701b28d72237f857b192f965e95c162e43f1d8973717",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "cce683e5edac3f7892e4f7c4217973170100975304f9fe86adac09800f48adf4"
+    },
+    "record_id": "typed-input-7154959e7a006c0f33ab0dd5658c3ac17fb77742c5fd4f434ca032832fdc6a1e",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "cce683e5edac3f7892e4f7c4217973170100975304f9fe86adac09800f48adf4",
+    "source_world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": true,
+    "syntactic_candidates": 121
+   },
+   "expected_values": [
+    {
+     "pairs": [
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n1"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+       "target": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n2"
+      }
+     ],
+     "status": "MAPPING"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F06",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; MAPPING",
+   "packet_sha256": "72dafb3f3850db57ae1cad1d2fe8116b9f4c4bf751198c28935175ffaabe8ae9",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "correspondence",
+     "query_id": "typed-query-03fccb12542e3feda4eab96d53cad72715c5d89cfeb85fd1f40cabb3628c5bbd",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-0317e42a77eab9c3990f1569db8b6cff0f9ea24d6f95326ea76450dc0bc1adec",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": true,
+    "syntactic_candidates": 121
+   },
+   "expected_values": [
+    {
+     "pairs": [],
+     "status": "NO_MATCH"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F07",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; GENUINE NO_MATCH against a same-degree different-wiring world; 121 candidates",
+   "packet_sha256": "82be550c5c41c40b5146f7b4f824f6f3bd836ccd50e09fddc220343eab5c1e76",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "correspondence",
+     "query_id": "typed-query-9f31b9ccc4fc8537af124335694922b048d3dcef9b54a9842d2f3bdc9117bc79",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-38aa3f83f38ac580f2afa1fcd0a9979fcd0130e9d56a90a5f752580bdfc1525c",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "nodes": [
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+     ]
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F08",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "parts",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes",
+   "packet_sha256": "9cff201600a4cfb86e6d0a9a1623be131a1d1bd1a0b2adeae53d35ef1e397684",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "parts",
+     "query_id": "typed-query-874caedf6ac136316a38321c51014aa5e3a7542e3ad6cc482366ce70e1d05232",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-ff45ac82ad8c31726eee5a60f75113b6e268625a0cb01589d479fb5ff8a53bc8",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "edges": [
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+      },
+      {
+       "source": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+       "target": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+      }
+     ]
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F09",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "edge_account",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes",
+   "packet_sha256": "657e36b0145fce0f052ae171f2591128e30e74e512eddfe23663b8f1e3a9d98a",
+   "record": {
+    "cue": "CUBE_FACE_6",
+    "instruction": "Return every declared directed contains pair in the focus world, canonically serialized. This is a static structural account; no temporal process order has been supplied.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "edge_account",
+     "query_id": "typed-query-1d162fdd8a416c12f8126c7882390d9dcffbbbbdaa5e8fb62501d424b275b2b5",
+     "rule": "complete_edge_set_lexical_serialization_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-46c57b11facbc898a0d86c5adc22c5bf5cd5181f5c4e05cc41032bf049f2d0ad",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "complete_edge_set_lexical_serialization_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F10",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; VIA, part 3 steps away",
+   "packet_sha256": "2db6c1d75faa4e01aa7232c25a4354eda214ae96afee02ab3c6fbbb64a5ec875",
+   "record": {
+    "cue": null,
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2",
+      "whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "reach",
+     "query_id": "typed-query-59465c6b01323facbcd4bff1009f9a656fa8ac52a884f177fb889e47cac8a49b",
+     "rule": "first_direct_constituent_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-558d46782fc1a7d6faec80d990c8f2d65cf739a1a8e4f0cd726a57b94dfede46",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "first_direct_constituent_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F11",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; VIA, the two rules differ",
+   "packet_sha256": "479ca227f87d728dddfdf2298109caaf10fc47a245138512328e7b1ac2dd92e8",
+   "record": {
+    "cue": "CUBE_FACE_5",
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2",
+      "whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "reach",
+     "query_id": "typed-query-7590c5bfaf16597842632431870375097c6c608c894a842838e658c18f156f96",
+     "rule": "bfs_immediate_predecessor_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-03c4e0ff0450409e26da1c7f75ad9d3364c362d496b1b81bd754395003c08922",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "bfs_immediate_predecessor_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "ABSENT",
+     "via": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F12",
+   "focus": "W5C_C",
+   "focus_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; GENUINE NO-PATH: the part exists under another root",
+   "packet_sha256": "893b1007bebfc7f3fb10d73ad5c005167b6b9a3a4cc07350a999d96199d34320",
+   "record": {
+    "cue": null,
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2",
+      "whole": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1"
+     },
+     "focus_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+     "kind": "reach",
+     "query_id": "typed-query-09748c08863f90f596420cc1618826c24b2d56487875db684a87c32717e9e752",
+     "rule": "first_direct_constituent_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "e8907b1e466d16faf1bc7d2b04efdf410cdd9452c92eef3819455073103f26b9"
+    },
+    "record_id": "typed-input-c544a134b9a5f690bd8ad8df54f4c2be1c71d34ba6472f8377947ecf9223cb8b",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "e8907b1e466d16faf1bc7d2b04efdf410cdd9452c92eef3819455073103f26b9",
+    "source_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+    "supports": []
+   },
+   "rule": "first_direct_constituent_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "DIRECT",
+     "via": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F13",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "5 nodes; DIRECT",
+   "packet_sha256": "a8dc0351877a36884be087c2b3d2be5e21ea8eaa65e1a88a24ea5b8a2b019ebb",
+   "record": {
+    "cue": "CUBE_FACE_5",
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+      "whole": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "reach",
+     "query_id": "typed-query-733e1fbd70ab25e97f7dddd5c72ebbe6fa2008128b034b08d09b0289222a30f5",
+     "rule": "bfs_immediate_predecessor_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-1df28394783d038c8a3d0aafbb3f63b4c91ad4e9ac039e37516daa6498233492",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "bfs_immediate_predecessor_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "roles": [
+      1,
+      5,
+      6
+     ],
+     "status": "AMBIGUOUS"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F14",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "role_set",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; definition and account clauses",
+   "packet_sha256": "1ce4c36cf9dd33d4e49b784a92e2ffdb9ef7e264e6d2dfebfd924eee5177e484",
+   "record": {
+    "cue": null,
+    "instruction": "Classify only the focal controlled-language excerpt. Return every applicable role from the fixed six-role catalog, with its ambiguity status. These forms are explicit instructional cues, not unrestricted natural-language understanding.",
+    "query": {
+     "arguments": {
+      "focal_excerpt": "Declared whole: {\"function_ref\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/function\",\"kind_ref\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/kind\",\"whole\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2\"}\nComplete static containment account: {\"edges\":[{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3\"},{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4\"},{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0\"},{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5\"},{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1\"},{\"source\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5\",\"target\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3\"}],\"world_id\":\"world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98\"}"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "role_set",
+     "query_id": "typed-query-26f18012993105608683e2e34a5fbdec2f154b9eb244e34e4881fb563a2edb3c",
+     "rule": "focal_excerpt_roles_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-48b6ff5c85e6944827a5f71ccd488065bd37854fd690fa349263920aacb1df70",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "focal_excerpt_roles_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "function_ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/function",
+     "kind_ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/kind",
+     "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F15",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "definition",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes",
+   "packet_sha256": "6579573737e619a3678805887cbadc83e2aa195bea5a143082c1f6ced8f4077a",
+   "record": {
+    "cue": "CUBE_FACE_1",
+    "instruction": "Return the declared whole and that focused world's own kind and function declaration references. Equal text declared in another world is a different reference.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "definition",
+     "query_id": "typed-query-31fdf376cfec9b58fbb0bb801499a25295150dcc32563a8942ceb1ee2b8842cc",
+     "rule": "declared_kind_and_function_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-3742422a5f994b59fefcc131102ff7c9b5cd79d7af6b775b5d592c9df19e3ad9",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "declared_kind_and_function_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "participants": [
+      "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+      "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+      "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+     ],
+     "setting_ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/setting"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F16",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "context",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes",
+   "packet_sha256": "9b28c62397551859600da99e46ebf718e9218488099edb56c2fb93f72609df14",
+   "record": {
+    "cue": "CUBE_FACE_2",
+    "instruction": "Return that focused world's own setting declaration reference and its declared participant set. Participants use the stated presentation convention. This question does not establish additional interaction facts.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "context",
+     "query_id": "typed-query-1a104f235bf8da6a6faea3cf769b91fc68d745767dd5355d74658f6ae4929ef9",
+     "rule": "declared_setting_and_participants_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-9287608d64b5e4f82771a87dcc908c4991a48589e7439147ee5babc4edbf39a1",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "declared_setting_and_participants_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_decoys_in_bank": [
+     "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+     "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827"
+    ]
+   },
+   "expected_values": [
+    {
+     "world_id": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F17",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "analogy",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; genuine match W6A_G, same-degree decoys in bank",
+   "packet_sha256": "51c9fb47e73fc7c9cd7f6f537d6b261577c94cadea60f2068952ef77be6e5b8e",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "analogy",
+     "query_id": "typed-query-a5e31a9a01116d40b68d2d971e38951b5bc91ce4d37f44a0e5d452ba883113ca",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-ec6f0b748db3674841f3a9aa1dc5ea50eeb40387c778c7c371d5081896f20c6f",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_decoys_in_bank": [
+     "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1"
+    ]
+   },
+   "expected_values": [
+    {
+     "world_id": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F18",
+   "focus": "W6B_P",
+   "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+   "kind": "analogy",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; GENUINE NO_MATCH: the only isomorphic world W6B_P2 shares the domain; decoys share degrees",
+   "packet_sha256": "3a51542f89086429b3849e66954c4aa6f13aff4437db0f2573ea5a29c886d6c0",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+     "kind": "analogy",
+     "query_id": "typed-query-d8b56258b68616c266982c7878f8ce83247ef82c7e4a19ad0c5988702fb2392d",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a"
+    },
+    "record_id": "typed-input-bae561a6b07c6e162742397f84cf9d13adfa123779c4ac5b351a3283ef44a74f",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a",
+    "source_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": true,
+    "syntactic_candidates": 721
+   },
+   "expected_values": [
+    {
+     "pairs": [
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n2"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3"
+      }
+     ],
+     "status": "MAPPING"
+    },
+    {
+     "pairs": [
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n2"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "target": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1"
+      }
+     ],
+     "status": "MAPPING"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F19",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; MAPPING, 2 valid maps",
+   "packet_sha256": "6faa93539dff3112c0a6c0768f3024e12bb085de9af4bce99850b418c4d7d06c",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "correspondence",
+     "query_id": "typed-query-8498b96cf8fbf00afb470c748e8d4ce8a1260747e4a1a48f5d3b7019a29b6a43",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-10136bfcef27c052cc75f4514cae20b88794ba0ba130932f7ca12779f61fd7b1",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": true,
+    "syntactic_candidates": 721
+   },
+   "expected_values": [
+    {
+     "pairs": [],
+     "status": "NO_MATCH"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F20",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; GENUINE NO_MATCH against a same-degree different-wiring world; 721 candidates",
+   "packet_sha256": "ea1bb23b024127b41b4bf91063fceb11eeb09362195eccfe9e267e7833371419",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "correspondence",
+     "query_id": "typed-query-71bb21abb4c83987a2ecfd2f91b41ac953ece1868c71ebb23ca4aed98ffcdcee",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-c97b868f3736a1c0c278d2d82e36d970842ac3a9cab23fd79f58cba874ba3aa1",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "nodes": [
+      "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+      "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+     ]
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F21",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "parts",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes",
+   "packet_sha256": "e4d37101b6f65679347796ccceeb4bda276e0bd7c7d0a982c82d888636513bb0",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "parts",
+     "query_id": "typed-query-d757f70899d35dae874fc8a40b449b707462c73910e193b775ae32a09ec3edac",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-e049ef43f76e8209ee7a34a2d68d0210e8d55f18096c2651d12aad71937ac8c5",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "edges": [
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+      },
+      {
+       "source": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+       "target": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3"
+      }
+     ]
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F22",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "edge_account",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes",
+   "packet_sha256": "91605d971c9b23caaea84533f482da5a3c3040bb45bdcc4f5a49c6952037688b",
+   "record": {
+    "cue": "CUBE_FACE_6",
+    "instruction": "Return every declared directed contains pair in the focus world, canonically serialized. This is a static structural account; no temporal process order has been supplied.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "edge_account",
+     "query_id": "typed-query-c283a3f9bf6746eaf9dc8069886cb72969cd54e7979e72d4c900d4582dc6cf63",
+     "rule": "complete_edge_set_lexical_serialization_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-d02e3b7530a766dba1398275709045fe9c7b30adb22517ea0f8497a33353162b",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "complete_edge_set_lexical_serialization_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": true
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F23",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; VIA; which child is named depends on node rank (a tie by structure)",
+   "packet_sha256": "5976b4126307d7c8246b763b3ad2dd7b28b7dfcaf0b3c54fdb3e155ad8499855",
+   "record": {
+    "cue": null,
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+      "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "reach",
+     "query_id": "typed-query-5fc647c9f786e1d56a17e2e18a6c99dcae7f0ef4ea3d1d77e62aaa767d37b514",
+     "rule": "first_direct_constituent_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-b212edc157bc60b786828f7343b3a99fd3bfe0bddbc16436589509f1aa4fb77e",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "first_direct_constituent_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F24",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; VIA, 4 steps",
+   "packet_sha256": "15591de80c81244c7e50447bd15ce3356d42a5e0d2f6facc6a4b16d17982dde3",
+   "record": {
+    "cue": "CUBE_FACE_5",
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+      "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "reach",
+     "query_id": "typed-query-823f3aefeed8aab1df36af5b698c434da2cdba41f93fe9644e60fc73d74057b8",
+     "rule": "bfs_immediate_predecessor_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813"
+    },
+    "record_id": "typed-input-a981796d8ba3131c582bab43ee67dd936d80277159e6063a9e5661d0804d9889",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25c0d8e64f6e61242963a4f12bc06e8ac1ed3a6379a46efda96300c23f7bb813",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "bfs_immediate_predecessor_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "ABSENT",
+     "via": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F25",
+   "focus": "W6D_C",
+   "focus_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; GENUINE NO-PATH: the part exists under another root",
+   "packet_sha256": "99027c453ad60a1752601921f04bb259085143bcfd92c84fd9e9dc565afcc550",
+   "record": {
+    "cue": "CUBE_FACE_5",
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4",
+      "whole": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0"
+     },
+     "focus_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+     "kind": "reach",
+     "query_id": "typed-query-1e31eb3fcf20e208280477e8dd60a76fa5718d195eed98727451d969722a2a90",
+     "rule": "bfs_immediate_predecessor_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "993183d62a11f613e0f246faeeb8ad6972c41b5015420c0d74e5a4f12240be00"
+    },
+    "record_id": "typed-input-4ceb961c341297f0acb7a9dadf0ca9d2b0556641040bdd5c940ae1f0e1730300",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "993183d62a11f613e0f246faeeb8ad6972c41b5015420c0d74e5a4f12240be00",
+    "source_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+    "supports": []
+   },
+   "rule": "bfs_immediate_predecessor_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "DIRECT",
+     "via": null
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F26",
+   "focus": "W6B_P",
+   "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; DIRECT",
+   "packet_sha256": "bd659a083086069f59b4a054e91d6b380ab41bca96f5e9502a06c6c99d2432d7",
+   "record": {
+    "cue": null,
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+      "whole": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1"
+     },
+     "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+     "kind": "reach",
+     "query_id": "typed-query-7869dc791d41ccaeaa90225c53a54ba5c1461d2c8070606404e4722ec1c5bfe1",
+     "rule": "first_direct_constituent_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a"
+    },
+    "record_id": "typed-input-e5bddef9baebe3b9bf2d5452d2a9bb2efe12bf6cdf3628b2f6239c3a306f64d2",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a",
+    "source_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+    "supports": []
+   },
+   "rule": "first_direct_constituent_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": true,
+    "syntactic_candidates": 721
+   },
+   "expected_values": [
+    {
+     "pairs": [
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n0",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4"
+      },
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3"
+      },
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n2",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n5"
+      },
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n1"
+      },
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n4",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0"
+      },
+      {
+       "source": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+       "target": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2"
+      }
+     ],
+     "status": "MAPPING"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F27",
+   "focus": "W6B_P",
+   "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; MAPPING within one domain",
+   "packet_sha256": "bac6437ccbd883731d2bbc654b02cd0fe0e6c50465ae0111bb3d8e32733fc680",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827"
+     },
+     "focus_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+     "kind": "correspondence",
+     "query_id": "typed-query-b0662a27f39c87d5ca1b41e922d7162111e27a9efa78daeee521b3d67a20c85a",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a"
+    },
+    "record_id": "typed-input-8ade4fcc7ea8e5d6c99db8b7607cf76563c71ae5941996009219f3f77c65f32e",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "c96a6a6e92042995f0acb4801cc5bfa359ce3aa255866d2676f9741702db325a",
+    "source_world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "nodes": [
+      "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0",
+      "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n3"
+     ]
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F28",
+   "focus": "W4_C",
+   "focus_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+   "kind": "parts",
+   "max_nodes_in_source": 6,
+   "note": "4-node focus in a bank with 5- and 6-node worlds: takes the LARGER route",
+   "packet_sha256": "ed00b26e364d98978ea1a489abcfd112dc559ee4507d7ae9f202a0c518d212a4",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2"
+     },
+     "focus_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+     "kind": "parts",
+     "query_id": "typed-query-5a3690b6782562a580266f981507f45f73bc759aa1c8338a2752dae97ddd9da9",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "27c4a52cd790294bf3e433e72332dfa6b335d9fdba5a4569e869544fcab1cc99"
+    },
+    "record_id": "typed-input-90774138ad4f202723c8750c4a375786deb5a5b1c863d0e898cb514a9d375421",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "27c4a52cd790294bf3e433e72332dfa6b335d9fdba5a4569e869544fcab1cc99",
+    "source_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": false,
+    "syntactic_candidates": 1
+   },
+   "expected_values": [
+    {
+     "pairs": [],
+     "status": "NO_MATCH"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F29",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "5 to 6 nodes: forced NO_MATCH, 1 candidate",
+   "packet_sha256": "f73bd2138bb9e9e5b196acbd0b7435af5170ef34c7539d795cad58060e2e454b",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98"
+     },
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "correspondence",
+     "query_id": "typed-query-d1af01ee944a1edfa14919716c04db63d1a5acc89e960f8e05b648fe5b642dac",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454"
+    },
+    "record_id": "typed-input-4b8deba4c57b04271c484bdd6fdf051fb8295dac58982c21c91ce9a1bac9d83d",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "927377d59563e58a6c3012a07e7637a64310ca33f0e4b913095c6d4c054bd454",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "same_degree_counts": false,
+    "syntactic_candidates": 1
+   },
+   "expected_values": [
+    {
+     "pairs": [],
+     "status": "NO_MATCH"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F30",
+   "focus": "W4_C",
+   "focus_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "4 to 5 nodes: forced NO_MATCH; the frozen compiler refuses it",
+   "packet_sha256": "5478430e8c1b89e2eb812808be1f94b53427d8981fa0707b04a8c1d252583dcf",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382"
+     },
+     "focus_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+     "kind": "correspondence",
+     "query_id": "typed-query-f3e82a6adf6800320011dacb2cc7a6e74b28d1f0d409abdf75181d897a4286be",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "27c4a52cd790294bf3e433e72332dfa6b335d9fdba5a4569e869544fcab1cc99"
+    },
+    "record_id": "typed-input-493314ed00eecc3e1d7bfe9aab31f2b0a8f62af0ee041bd801c4a1c1f618f4b0",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "27c4a52cd790294bf3e433e72332dfa6b335d9fdba5a4569e869544fcab1cc99",
+    "source_world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "MAIN",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n2"
+    }
+   ],
+   "extra_world_keys": [],
+   "fixture_id": "F31",
+   "focus": "W6D_C",
+   "focus_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "6 nodes; VIA, 2 steps, one route",
+   "packet_sha256": "2ebe344dc5cefd047605516636fd0cf4d15575e29cd318a29455fd6e73e1120d",
+   "record": {
+    "cue": null,
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n5",
+      "whole": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0"
+     },
+     "focus_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+     "kind": "reach",
+     "query_id": "typed-query-a818f3884e45297f8bf865403ee6a6f3758ccc5d6ec21e4020835b3d9dd2accd",
+     "rule": "first_direct_constituent_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "993183d62a11f613e0f246faeeb8ad6972c41b5015420c0d74e5a4f12240be00"
+    },
+    "record_id": "typed-input-1be0f49ef93e5c6e55439b9022d444825e9b49aeb69f0a4726ba3db209a337f2",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "993183d62a11f613e0f246faeeb8ad6972c41b5015420c0d74e5a4f12240be00",
+    "source_world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf",
+    "supports": []
+   },
+   "rule": "first_direct_constituent_lexical_v1",
+   "world_count_in_source": 10
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "function_ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/function",
+     "kind_ref": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/decl/kind",
+     "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+    }
+   ],
+   "extra_world_keys": [
+    "W6A_M"
+   ],
+   "fixture_id": "H01",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "definition",
+   "max_nodes_in_source": 6,
+   "note": "65 worlds: aliases W0..W64",
+   "packet_sha256": "efd72c1a10b90dc59c575399d891c3fe15bce509f2a339ac9e4dd51e1728fb85",
+   "record": {
+    "cue": "CUBE_FACE_1",
+    "instruction": "Return the declared whole and that focused world's own kind and function declaration references. Equal text declared in another world is a different reference.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "definition",
+     "query_id": "typed-query-4a797465f57a868abcb8d2e76c836d60c58b9abc35192dfd3aa91136524809ac",
+     "rule": "declared_kind_and_function_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a"
+    },
+    "record_id": "typed-input-25843058db33356283c584f05e638abab8831cfd7a64a48cd24df909da151bb7",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "declared_kind_and_function_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {
+    "same_degree_decoys_in_bank": []
+   },
+   "expected_values": [
+    {
+     "world_id": null
+    }
+   ],
+   "extra_world_keys": [
+    "W6A_M"
+   ],
+   "fixture_id": "H02",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "analogy",
+   "max_nodes_in_source": 6,
+   "note": "65 worlds; NO_MATCH by size only (every bank world has at most 4 nodes)",
+   "packet_sha256": "22a85eb9fb9d17be2c02068ad9c89cf74d8ead691e445d7e7aa91e589636fd1b",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "analogy",
+     "query_id": "typed-query-e3d3eba223e6c2d74ebf3d3ae92e5cca34be90ab71a87bbb022d3412b5d91a1a",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a"
+    },
+    "record_id": "typed-input-e9394893e682b017a2a3057a9c8fb93bab83d0fc57cc3add6abf89c1e26cc97c",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {
+    "rank_dependent": false
+   },
+   "expected_values": [
+    {
+     "state": "VIA",
+     "via": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1"
+    }
+   ],
+   "extra_world_keys": [
+    "W6A_M"
+   ],
+   "fixture_id": "H03",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "reach",
+   "max_nodes_in_source": 6,
+   "note": "65 worlds; VIA",
+   "packet_sha256": "0f848a83ebcbc263485ecff22669d6e55bda8e39813e66b3b848054d7847a510",
+   "record": {
+    "cue": "CUBE_FACE_5",
+    "instruction": "Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to select the intermediate node; the two reach rule IDs have different meanings.",
+    "query": {
+     "arguments": {
+      "part": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4",
+      "whole": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "reach",
+     "query_id": "typed-query-2461614b37cda11b5afe26e0bcced4694d38f602c0c91b5c7c6317ca6f60b6ce",
+     "rule": "bfs_immediate_predecessor_lexical_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a"
+    },
+    "record_id": "typed-input-b5376888f0d85751dda4ce9d83f236018ecc4438f91ad024c2df4a0de6a43285",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "bfs_immediate_predecessor_lexical_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {
+    "same_degree_counts": false,
+    "syntactic_candidates": 1
+   },
+   "expected_values": [
+    {
+     "pairs": [],
+     "status": "NO_MATCH"
+    }
+   ],
+   "extra_world_keys": [
+    "W6A_M"
+   ],
+   "fixture_id": "H04",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "correspondence",
+   "max_nodes_in_source": 6,
+   "note": "65 worlds; forced NO_MATCH to a 4-node training world",
+   "packet_sha256": "1008c2165f7108031e398d6308281e98e8b20220cd79fd71ee02b13f4b7f328e",
+   "record": {
+    "cue": "CUBE_FACE_4",
+    "instruction": "Map every focus node bijectively to the specified target world, preserving exactly all directed contains edges. Every valid map is accepted. Return NO_MATCH only when none exists.",
+    "query": {
+     "arguments": {
+      "target_world_id": "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2"
+     },
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "correspondence",
+     "query_id": "typed-query-f869d983db7de91f2b19c72ee44d13eda91c68be25b970a5d430db628a22db85",
+     "rule": "full_directed_graph_bijection_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a"
+    },
+    "record_id": "typed-input-11c4691e899ca1ef0379993e04d0714748771979fab3f06aeaa6cc59fd9c9696",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "3f6109b87c5307aa08586623e69ff97d24b23d39e20344002127e5b2343aa73a",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "full_directed_graph_bijection_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "participants": [
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2",
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+      "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4"
+     ],
+     "setting_ref": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/decl/setting"
+    }
+   ],
+   "extra_world_keys": [
+    "W5A_M"
+   ],
+   "fixture_id": "H05",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "context",
+   "max_nodes_in_source": 5,
+   "note": "65 worlds; 5 nodes",
+   "packet_sha256": "053d41da9eb3b37f1ed1626dd69dfb6b7a853ce646341f5d5a0b7f4d5d4fb812",
+   "record": {
+    "cue": "CUBE_FACE_2",
+    "instruction": "Return that focused world's own setting declaration reference and its declared participant set. Participants use the stated presentation convention. This question does not establish additional interaction facts.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "context",
+     "query_id": "typed-query-ae966974f71616bcc50eabaadb448880c3b3d909a3346289f6b18d55dd5c5fc3",
+     "rule": "declared_setting_and_participants_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "25e5c46c9054cb25dfc3bcee90814ad58b4b33e85140b508be9ca09d49f942a3"
+    },
+    "record_id": "typed-input-9dbbf349b65b57f9ea3a9ec8bfbbc44b60d74eb0d9e19d029cbace9d5c7095e0",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "25e5c46c9054cb25dfc3bcee90814ad58b4b33e85140b508be9ca09d49f942a3",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "declared_setting_and_participants_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "FROZEN_TRAINING",
+   "design_facts": {},
+   "expected_values": [
+    {
+     "nodes": [
+      "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n0",
+      "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+     ]
+    }
+   ],
+   "extra_world_keys": [
+    "W5C_C"
+   ],
+   "fixture_id": "H06",
+   "focus": "W5C_C",
+   "focus_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+   "kind": "parts",
+   "max_nodes_in_source": 5,
+   "note": "65 worlds; parts of the second root",
+   "packet_sha256": "6b5fc441d767610b6ad4462d9b8c862ef538e742791eb3c7e7679c8eea24aa75",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4"
+     },
+     "focus_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+     "kind": "parts",
+     "query_id": "typed-query-7cb8fa17a128241d19943f9ff5a89d7ad6b14f06d76f70e05be205c0e0560a62",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "d65eb39ba8f1db6b40bbf3e1b658d30a43ebab6a96534ecaa8a0ca55e13871f6"
+    },
+    "record_id": "typed-input-15f9f8121831bd00bc43c76b025aadf9845ff9372d05b424196efff0a8c001aa",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "d65eb39ba8f1db6b40bbf3e1b658d30a43ebab6a96534ecaa8a0ca55e13871f6",
+    "source_world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 65
+  },
+  {
+   "bank": "REFUSE_SEVEN",
+   "expected_refusal": "WORLD_ABOVE_SIX_NODES",
+   "extra_world_keys": [],
+   "fixture_id": "R01",
+   "focus": "W7_M",
+   "focus_world_id": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a",
+   "kind": "parts",
+   "max_nodes_in_source": 7,
+   "note": "REFUSE: 7-node focus",
+   "packet_sha256": "0d6f835f32581e93f17003c31a27009530403ef6333f7ea193af422ce8b88356",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6"
+     },
+     "focus_world_id": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a",
+     "kind": "parts",
+     "query_id": "typed-query-16f1d771eb2aa4ecadb2ff8367b94f851f9e3262d41c865d517c0f50d18d9645",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "8780a160ffffab63bed9bc859e5c721a0ec5f49ada1c43da9343508b68796040"
+    },
+    "record_id": "typed-input-9ab6e63e9a1d7e00f51b715b502786fc857ffb3b75816fcab06825c69789c15a",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "8780a160ffffab63bed9bc859e5c721a0ec5f49ada1c43da9343508b68796040",
+    "source_world_id": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 2
+  },
+  {
+   "bank": "REFUSE_SEVEN",
+   "expected_refusal": "WORLD_ABOVE_SIX_NODES",
+   "extra_world_keys": [],
+   "fixture_id": "R02",
+   "focus": "W5A_M",
+   "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+   "kind": "analogy",
+   "max_nodes_in_source": 7,
+   "note": "REFUSE: 5-node focus, 7-node world in the bank",
+   "packet_sha256": "21811c7d7a81708347118a8b4f3a8b9cb1e6e7bf2b17b2a2df95c1d7e326c3a7",
+   "record": {
+    "cue": "CUBE_FACE_3",
+    "instruction": "Choose any world in the entire supplied bank with a distinct declared domain and an isomorphic complete directed contains graph. Compare all nodes and edges, without a required root match. Return no match only if none qualifies.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+     "kind": "analogy",
+     "query_id": "typed-query-444cc587d3376361b0a68d4a19a8b7aaff6c5012a9b999a938030222d64a5255",
+     "rule": "cross_domain_full_graph_isomorphism_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "a1733f83fb74c4b59ec3a1635ed8491fcd302da60b03123540698861229d5d96"
+    },
+    "record_id": "typed-input-624b1f1e9939a7985148121c3bb6e6bc777150f6333b00eb64e5a63b29da2718",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "a1733f83fb74c4b59ec3a1635ed8491fcd302da60b03123540698861229d5d96",
+    "source_world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382",
+    "supports": []
+   },
+   "rule": "cross_domain_full_graph_isomorphism_v1",
+   "world_count_in_source": 2
+  },
+  {
+   "bank": "REFUSE_DEGREE",
+   "expected_refusal": "DEGREE_ABOVE_READER_EXACT_RANGE",
+   "extra_world_keys": [],
+   "fixture_id": "R03",
+   "focus": "W6STAR_C",
+   "focus_world_id": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613",
+   "kind": "parts",
+   "max_nodes_in_source": 6,
+   "note": "REFUSE: a node with out-degree 5",
+   "packet_sha256": "cfb6f1e06290768907a1e6c58b198a1dcaa9485380c9ea86c15a6befec6b3089",
+   "record": {
+    "cue": null,
+    "instruction": "Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.",
+    "query": {
+     "arguments": {
+      "whole": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0"
+     },
+     "focus_world_id": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613",
+     "kind": "parts",
+     "query_id": "typed-query-d66c8b856386e695c5e8e2198d3e15cedcd54f7c8e8c58e9592d98022e2a0251",
+     "rule": "direct_contains_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "1e777f16244d3f46e7eb3708bc3274d54cf7cef3b44c48ec8749267f1bf93395"
+    },
+    "record_id": "typed-input-930fd8f7cb005924baf38a0bb5e36dbad584248bd3538cc839a9c02369d5ec6e",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "1e777f16244d3f46e7eb3708bc3274d54cf7cef3b44c48ec8749267f1bf93395",
+    "source_world_id": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613",
+    "supports": []
+   },
+   "rule": "direct_contains_v1",
+   "world_count_in_source": 2
+  },
+  {
+   "bank": "REFUSE_DEGREE",
+   "expected_refusal": "DEGREE_ABOVE_READER_EXACT_RANGE",
+   "extra_world_keys": [],
+   "fixture_id": "R04",
+   "focus": "W6A_M",
+   "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+   "kind": "definition",
+   "max_nodes_in_source": 6,
+   "note": "REFUSE: degree-5 world in the bank",
+   "packet_sha256": "481c9ba1a3a5ea353722a11b6fb4fa88851cc2e471fa4cd1e1b21dba603e9856",
+   "record": {
+    "cue": "CUBE_FACE_1",
+    "instruction": "Return the declared whole and that focused world's own kind and function declaration references. Equal text declared in another world is a different reference.",
+    "query": {
+     "arguments": {},
+     "focus_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+     "kind": "definition",
+     "query_id": "typed-query-83f7b0b5f6cdfbeffb288c5f4bace8516bffd730f3f81ad5fcc5d67cf0f3ca33",
+     "rule": "declared_kind_and_function_v1",
+     "schema": "cas.typed-teaching-query/0.1",
+     "source_digest": "17caa2d127a8083e2fe4fd2747966cab7ae238a6ebb97f25806def3486ca6f2d"
+    },
+    "record_id": "typed-input-42051219d3a36d26ffb9bbfa9ce48be89bd3f52567f9333fbde5aa28f46c164d",
+    "role_catalog": {
+     "1": "declared whole kind and function",
+     "2": "declared setting and participants",
+     "3": "cross-domain containment-pattern comparison",
+     "4": "explicit node correspondence",
+     "5": "constituents and structural relations",
+     "6": "complete static structural account; temporal process requires additional evidence"
+    },
+    "schema": "cas.typed-teaching-model-packet/0.1",
+    "source_digest": "17caa2d127a8083e2fe4fd2747966cab7ae238a6ebb97f25806def3486ca6f2d",
+    "source_world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98",
+    "supports": []
+   },
+   "rule": "declared_kind_and_function_v1",
+   "world_count_in_source": 2
+  }
+ ],
+ "frozen_training_bank": {
+  "bank_digest": "0f563762a70e67513ca3e6996d988afd4421dd90fe63e1a04942a31a79e9c388",
+  "rebuilt_on_load_by": "source.freeze_bank(source.training_families())",
+  "world_count": 64
+ },
+ "purpose": "PUBLIC_INTEGRATION_FIXTURES_NOT_AN_EVALUATION_SET: read -> forward -> decode -> grade plumbing for 5- and 6-node questions, plus refusal of 7-node and degree-5 questions. No claim about Helm.",
+ "same_degree_pairs": [
+  {
+   "colour_refinement_distinguishes": true,
+   "degree_multisets_equal": true,
+   "isomorphic": false,
+   "left": "S5A",
+   "right": "S5B"
+  },
+  {
+   "colour_refinement_distinguishes": true,
+   "degree_multisets_equal": true,
+   "isomorphic": false,
+   "left": "S6A",
+   "right": "S6B"
+  }
+ ],
+ "schema": "claude.helm-larger-question-fixtures/0.1",
+ "shapes": {
+  "S4": {
+   "automorphisms": 1,
+   "canonical_form": [
+    4,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 4
+  },
+  "S5A": {
+   "automorphisms": 1,
+   "canonical_form": [
+    5,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      3,
+      4
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 5
+  },
+  "S5B": {
+   "automorphisms": 2,
+   "canonical_form": [
+    5,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 5
+  },
+  "S5C": {
+   "automorphisms": 2,
+   "canonical_form": [
+    5,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      3,
+      4
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     2
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 5
+  },
+  "S6A": {
+   "automorphisms": 2,
+   "canonical_form": [
+    6,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      4,
+      5
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 6
+  },
+  "S6B": {
+   "automorphisms": 1,
+   "canonical_form": [
+    6,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ],
+     [
+      3,
+      2
+     ],
+     [
+      4,
+      5
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 6
+  },
+  "S6D": {
+   "automorphisms": 1,
+   "canonical_form": [
+    6,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      4,
+      5
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 6
+  },
+  "S6STAR": {
+   "automorphisms": 120,
+   "canonical_form": [
+    6,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      4
+     ],
+     [
+      0,
+      5
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     5
+    ]
+   ],
+   "max_degree": 5,
+   "nodes": 6
+  },
+  "S7": {
+   "automorphisms": 2,
+   "canonical_form": [
+    7,
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      4,
+      6
+     ]
+    ]
+   ],
+   "degree_multiset": [
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     4,
+     6
+    ]
+   ],
+   "max_degree": 2,
+   "nodes": 7
+  }
+ },
+ "worlds": {
+  "W4_C": {
+   "domain": "container",
+   "kind_index": 0,
+   "label_offset": 0,
+   "label_order": [
+    2,
+    0,
+    3,
+    1
+   ],
+   "labels_by_node": [
+    "Bandage",
+    "ArtCase",
+    "Bottle",
+    "Backpack"
+   ],
+   "primary": [
+    0,
+    1,
+    3
+   ],
+   "refs_by_node": [
+    "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n2",
+    "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n0",
+    "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n3",
+    "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15/n1"
+   ],
+   "shape": "S4",
+   "world_id": "world-3c895d1aef09305658a076c9ccfdfacb75a878cc110ede1796e5cab3a50cfb15"
+  },
+  "W5A_G": {
+   "domain": "grammatical",
+   "kind_index": 2,
+   "label_offset": 5,
+   "label_order": [
+    0,
+    4,
+    2,
+    3,
+    1
+   ],
+   "labels_by_node": [
+    "Clause",
+    "Footnote",
+    "Compound",
+    "Figure",
+    "ClauseA"
+   ],
+   "primary": [
+    0,
+    1,
+    3
+   ],
+   "refs_by_node": [
+    "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n0",
+    "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n4",
+    "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n2",
+    "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n3",
+    "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37/n1"
+   ],
+   "shape": "S5A",
+   "world_id": "world-081260b11c0616bbeea1913b17e435100be0a5807d46c75486be568e24155b37"
+  },
+  "W5A_M": {
+   "domain": "mechanical",
+   "kind_index": 1,
+   "label_offset": 0,
+   "label_order": [
+    3,
+    0,
+    4,
+    1,
+    2
+   ],
+   "labels_by_node": [
+    "Blade",
+    "Alternator",
+    "Boiler",
+    "Bicycle",
+    "Bit"
+   ],
+   "primary": [
+    0,
+    2,
+    4
+   ],
+   "refs_by_node": [
+    "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n3",
+    "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n0",
+    "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n4",
+    "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n1",
+    "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382/n2"
+   ],
+   "shape": "S5A",
+   "world_id": "world-977049ff523b1a37db66666a064cfab48632a4ba5573ae7edc3371146c4af382"
+  },
+  "W5B_P": {
+   "domain": "procedural",
+   "kind_index": 3,
+   "label_offset": 0,
+   "label_order": [
+    4,
+    1,
+    0,
+    3,
+    2
+   ],
+   "labels_by_node": [
+    "Build",
+    "Audit",
+    "Assembly",
+    "Briefing",
+    "Backup"
+   ],
+   "primary": [
+    0,
+    1,
+    2
+   ],
+   "refs_by_node": [
+    "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n4",
+    "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n1",
+    "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n0",
+    "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n3",
+    "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc/n2"
+   ],
+   "shape": "S5B",
+   "world_id": "world-e672809f274c82624faeae48c8d1143a7e58c738e86f20d5226b01a68e1f42fc"
+  },
+  "W5C_C": {
+   "domain": "container",
+   "kind_index": 4,
+   "label_offset": 6,
+   "label_order": [
+    1,
+    3,
+    0,
+    4,
+    2
+   ],
+   "labels_by_node": [
+    "CameraBag",
+    "Crate",
+    "CableBag",
+    "Eraser",
+    "Coil"
+   ],
+   "primary": [
+    0,
+    3,
+    4
+   ],
+   "refs_by_node": [
+    "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n1",
+    "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n3",
+    "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n0",
+    "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n4",
+    "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f/n2"
+   ],
+   "shape": "S5C",
+   "world_id": "world-ad111325a4117b2d347539cd0f101635b063d3e44e3ba0165ed37dc66a168a4f"
+  },
+  "W6A_G": {
+   "domain": "grammatical",
+   "kind_index": 6,
+   "label_offset": 12,
+   "label_order": [
+    5,
+    1,
+    3,
+    0,
+    4,
+    2
+   ],
+   "labels_by_node": [
+    "Noun",
+    "List",
+    "Marker",
+    "Letters",
+    "Morpheme",
+    "Mark"
+   ],
+   "primary": [
+    0,
+    2,
+    4
+   ],
+   "refs_by_node": [
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n5",
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n1",
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n3",
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n0",
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n4",
+    "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1/n2"
+   ],
+   "shape": "S6A",
+   "world_id": "world-568726fb5ca1e9744e6fc3c8307534d3438d768836b6027e7de556775526a7f1"
+  },
+  "W6A_M": {
+   "domain": "mechanical",
+   "kind_index": 5,
+   "label_offset": 8,
+   "label_order": [
+    2,
+    5,
+    0,
+    3,
+    1,
+    4
+   ],
+   "labels_by_node": [
+    "Core",
+    "Drill",
+    "Clock",
+    "Crane",
+    "Clutch",
+    "Crankshaft"
+   ],
+   "primary": [
+    0,
+    1,
+    5
+   ],
+   "refs_by_node": [
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n2",
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n5",
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n0",
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n3",
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n1",
+    "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98/n4"
+   ],
+   "shape": "S6A",
+   "world_id": "world-3b2257be6fa60f9318a59b91de13777b1321196aa26dbbb54bf89671caa6ca98"
+  },
+  "W6B_P": {
+   "domain": "procedural",
+   "kind_index": 7,
+   "label_offset": 6,
+   "label_order": [
+    1,
+    4,
+    2,
+    5,
+    0,
+    3
+   ],
+   "labels_by_node": [
+    "Checkout",
+    "Deploy",
+    "Cleaning",
+    "Diagnosis",
+    "Check",
+    "Copy"
+   ],
+   "primary": [
+    0,
+    3,
+    5
+   ],
+   "refs_by_node": [
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n1",
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n4",
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n2",
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n5",
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n0",
+    "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97/n3"
+   ],
+   "shape": "S6B",
+   "world_id": "world-b6a97488597dc4d5f7f38989f7051241684ec1697383f34a1505e788531f1d97"
+  },
+  "W6B_P2": {
+   "domain": "procedural",
+   "kind_index": 8,
+   "label_offset": 14,
+   "label_order": [
+    3,
+    0,
+    5,
+    2,
+    4,
+    1
+   ],
+   "labels_by_node": [
+    "Payment",
+    "Measure",
+    "Plate",
+    "Onboarding",
+    "Plan",
+    "Migration"
+   ],
+   "primary": [
+    0,
+    1,
+    4
+   ],
+   "refs_by_node": [
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n3",
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n0",
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n5",
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n2",
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n4",
+    "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827/n1"
+   ],
+   "shape": "S6B",
+   "world_id": "world-e1df10822f32d87f759244d87af41a034350617e13ff1d9077871c7290a17827"
+  },
+  "W6D_C": {
+   "domain": "container",
+   "kind_index": 9,
+   "label_offset": 12,
+   "label_order": [
+    0,
+    2,
+    5,
+    1,
+    3,
+    4
+   ],
+   "labels_by_node": [
+    "FirstAidKit",
+    "Jar",
+    "Pantry",
+    "Folder",
+    "Kit",
+    "Lens"
+   ],
+   "primary": [
+    0,
+    4,
+    5
+   ],
+   "refs_by_node": [
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n0",
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n2",
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n5",
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n1",
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n3",
+    "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf/n4"
+   ],
+   "shape": "S6D",
+   "world_id": "world-5e3d7a4e1508820574c8dc8c26a9e5074969198f3bebe7d1d3c28c7b8c23accf"
+  },
+  "W6STAR_C": {
+   "domain": "container",
+   "kind_index": 11,
+   "label_offset": 20,
+   "label_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "labels_by_node": [
+    "Plate",
+    "Pouch",
+    "Rope",
+    "SeedPacket",
+    "Seeds",
+    "Shelf"
+   ],
+   "primary": [
+    0,
+    1,
+    2
+   ],
+   "refs_by_node": [
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n0",
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n1",
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n2",
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n3",
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n4",
+    "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613/n5"
+   ],
+   "shape": "S6STAR",
+   "world_id": "world-1f383321bd5010b346202c97539cad61a4a7422a2d6ef66423e77095020fe613"
+  },
+  "W7_M": {
+   "domain": "mechanical",
+   "kind_index": 10,
+   "label_offset": 16,
+   "label_order": [
+    6,
+    0,
+    3,
+    1,
+    5,
+    2,
+    4
+   ],
+   "labels_by_node": [
+    "Piston",
+    "Gear",
+    "Lathe",
+    "Gearbox",
+    "Pad",
+    "Hook",
+    "Loom"
+   ],
+   "primary": [
+    0,
+    1,
+    2
+   ],
+   "refs_by_node": [
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n6",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n0",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n3",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n1",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n5",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n2",
+    "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a/n4"
+   ],
+   "shape": "S7",
+   "world_id": "world-a6820cecf286f28552a4828873deaca320e321005b81cb652aa20a7b24bae78a"
+  }
+ }
+}
