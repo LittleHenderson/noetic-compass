@@ -1,0 +1,125 @@
+{
+ "schema": "claude.larger-question-t4-launch/0.1",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "authority": "see JOB_LIMITS.md; the runner records the owner's go here before launching",
+ "approved": {
+  "machine": "g4dn.2xlarge",
+  "region": "us-west-2",
+  "price_per_hour_usd": 0.752,
+  "time_limit_minutes": 130,
+  "dollar_ceiling": 3.0
+ },
+ "instance_id": "i-09e14d4afd0e0ebfa",
+ "instance_name": "helm-larger-question-t4-20260924T055330Z",
+ "launched_utc": "2026-09-24T05:53:38Z",
+ "availability_zone": "us-west-2a",
+ "ami": "ami-07d69ce07bfe5628f",
+ "ami_name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260922",
+ "root_volume_gb": 100,
+ "in_instance_timer_seconds": 7200,
+ "client_deadline_minutes": 130,
+ "worst_case_usd_at_client_deadline": 1.6639,
+ "worst_case_arithmetic": "g4dn.2xlarge: (0.752 machine + 0.005 public address + 100 GB x 0.08 / 730 disk) = 0.767959 USD/hour; x 130/60 hours (client deadline) = 1.6639 USD; ceiling 3.00",
+ "bucket": "cas-harness-runpod-92754088",
+ "keys": {
+  "bundle": "helm-integration/larger-question-t4-20260924T055330Z/bundle.tar.gz",
+  "results": "helm-integration/larger-question-t4-20260924T055330Z/results.tar.gz",
+  "progress": "helm-integration/larger-question-t4-20260924T055330Z/progress.log",
+  "rows": "helm-integration/larger-question-t4-20260924T055330Z/rows_progress.jsonl"
+ },
+ "python": "3.14.7",
+ "torch": "2.11.0+cu128",
+ "numpy": "2.5.2",
+ "identity": {
+  "schema": "claude.larger-question-t4-bundle-identity/0.1",
+  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+  "source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
+  "source_branch": "claude/helm-builder-continuation-20260923",
+  "script": "research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py",
+  "list_inputs_sha256": "2e6ae12be1ce7471946fc98045a5b8d43cc5ad4d86a4c8b972e6148c2e77780c",
+  "required_inputs_sha256": {
+   "records/typed_course_001/checks_002/public_course.json": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+   "records/typed_interface_001/checks_002/training_tokenizer.json": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+   "records/typed_matched_001/development_001/compact_development.json": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+   "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+   "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+   "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+   "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+   "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+   "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+   "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+   "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+   "research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json": "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3"
+  },
+  "eval_paths_lf_sha256": {
+   "research/CAS_META_2_COMPOSITION/eval_paths/__init__.py": "38a1d4f57995cd43b5a0ed1616b2e941726327abed0919f3d8ce7a793f1e0ae4",
+   "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_scope.py": "a09a172510b2f5ad1dd2ba2bc56d6cd46f354b619264bac90d18aa06748f9f32",
+   "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_learner.py": "82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d",
+   "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_fixtures.py": "567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d",
+   "research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py": "4d2bdbbf5907860e65696853513430bf0a4516dc46250533e94f2a28e77d72f7"
+  },
+  "source_trees": {
+   "cncm": {
+    "py_files": 77,
+    "digest": "88742bd715c2c23711dbf846bb699a8182feb8800dae3fa35ec38c3a829fa312"
+   },
+   "research/CAS_META_2_COMPOSITION/cas_meta2": {
+    "py_files": 164,
+    "digest": "c6e6ba37291a7fc4bd515da95333039d0d056e0335599ed01b4fa05def704508"
+   }
+  },
+  "protected_source_lf_sha256_checked": [
+   "answers.py",
+   "answers_v2.py",
+   "checker.py",
+   "checker_v2.py",
+   "course.py",
+   "focal.py",
+   "pointer_contract.py",
+   "pointer_inputs.py",
+   "pointer_learner.py",
+   "slots.py",
+   "slots_v2.py",
+   "source.py"
+  ],
+  "t4_reference_source_checked": [
+   "cncm/typed_matched_worker.py",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py"
+  ],
+  "sibling_reads_checked": [
+   "research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json"
+  ],
+  "imports": {
+   "project_imports_checked": 1518,
+   "modules": 417,
+   "script_import_closure_modules": 96,
+   "script_import_closure_external": [
+    "cas_cjt",
+    "casformer",
+    "torch"
+   ],
+   "other_top_level_imports_not_bundled": {
+    "_pytest": 4,
+    "aws": 8,
+    "cas_meta": 8,
+    "cas_meta1": 10,
+    "pytest": 2,
+    "tools": 13
+   }
+  }
+ },
+ "provenance": {
+  "job_commit": "3f19c914344dcc2740874278aae84f8521b95aa4",
+  "source_branch_remote_tip": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf"
+ },
+ "bundle": {
+  "files": 259,
+  "bytes": 10230760,
+  "sha256": "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36"
+ },
+ "machine_script_template_sha256": "dc05f4afd885d13559e1352e4496cf043e7bd5ed203c62031220c804016fd01e",
+ "links_stored": "no -- time-limited links are never written to disk"
+}
