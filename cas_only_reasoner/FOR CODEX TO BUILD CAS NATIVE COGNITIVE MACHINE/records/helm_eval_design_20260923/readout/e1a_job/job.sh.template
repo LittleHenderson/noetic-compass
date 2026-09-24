@@ -1,0 +1,118 @@
+#!/bin/bash
+# E1a (readout item 9) on ONE throwaway T4. CLAUDE_BUILT_CLAUDE_CHECKED. NO credentials here: one download, two uploads,
+# through time-limited links. Forward passes only: no optimizer step, no checkpoint written, no TEST data, and no
+# analogy number printed. It always ends by shutting down; the machine is destroyed on shutdown.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "e1a hard limit" || true                               # kill switch 0: OS power-off
+LOG=/var/log/e1a_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+T0=$(date +%s)
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now ) &  # kill switch 1
+WORK=/root/e1a
+OUT="$WORK/out"
+mkdir -p "$OUT"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                           # kill switch 2
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$OUT/STATUS"
+  cp "$LOG" "$OUT/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+trap 'STATUS="IN_INSTANCE_TIMER_TERM during $STATUS"; exit 143' TERM
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+( while true; do echo "$(date -u +%T) $(free -m | awk 'NR==2{print "used_mb="$3" available_mb="$7}') $(nvidia-smi --query-gpu=temperature.gpu,memory.used,utilization.gpu --format=csv,noheader 2>/dev/null)" >> "$OUT/machine.log"; sleep 30; done ) &
+
+# ---- THE MACHINE'S OWN ID (IMDSv2); the laptop reader binds the results to the launched instance with it
+STATUS=instance_id
+TOKEN=$(curl -sS --max-time 10 -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 300" http://169.254.169.254/latest/api/token)
+IID=$(curl -sS --max-time 10 -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+[[ "$IID" =~ ^i-[0-9a-f]{8,17}$ ]] || { STATUS=instance_id_unreadable; exit 1; }
+echo "instance_id=$IID" > "$OUT/env.txt"
+
+# ---- THE BUNDLE (built from git objects on the laptop; every file is checked against anchors.json below)
+STATUS=bundle
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
+rm -f bundle.tar.gz
+
+# ---- TOOLS (pinned versions; the machine refuses any other)
+export HOME=/root
+STATUS=tools
+curl -LsSf --max-time 300 "https://astral.sh/uv/__UV_VERSION__/install.sh" | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+[ "$(uv --version | cut -d' ' -f2)" = "__UV_VERSION__" ] || { STATUS=uv_version_mismatch; exit 1; }
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+[ "$("$PY" -c 'import platform; print(platform.python_version())')" = "__PYTHON_VERSION__" ] || { STATUS=python_version_mismatch; exit 1; }
+uv pip install --python "$PY" "torch==__TORCH_VERSION__" --index-url https://download.pytorch.org/whl/cu128 || { STATUS=torch_install_failed; exit 1; }
+uv pip install --python "$PY" "numpy==__NUMPY_VERSION__" || { STATUS=numpy_install_failed; exit 1; }
+W="$WORK/pkg/tree/__WHEELS__"
+uv pip install --python "$PY" --no-deps "$W/casformer_reference-0.1.0-py3-none-any.whl" "$W/cas_neural_cjt-0.2.0-py3-none-any.whl" || { STATUS=wheel_install_failed; exit 1; }
+{ "$PY" --version; uname -a; echo "nproc=$(nproc)"; free -m; nvidia-smi; echo "uv_version=$(uv --version)";
+  echo "bundle_sha256=__BUNDLE_SHA256__"; echo "source_commit=__SOURCE_COMMIT__"; uv pip freeze --python "$PY"; } >> "$OUT/env.txt" 2>&1
+cat "$OUT/env.txt"
+
+export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 CUBLAS_WORKSPACE_CONFIG=:4096:8
+export CAS_META2_RUN_TEACHING_CYCLE=1
+M="$WORK/pkg/claude/e1a_machine.py"
+T="$WORK/pkg/tree"
+SPEC="$WORK/pkg/claude/e1a_spec.json"
+PROBE="$T/__PROBE_DIR__"
+STATUS=anchors
+"$PY" -B "$M" anchors --root "$WORK/pkg" > "$OUT/anchors_check.log" 2>&1 || { STATUS=anchor_mismatch; cat "$OUT/anchors_check.log"; exit 1; }
+cat "$OUT/anchors_check.log"
+STATUS=smoke
+"$PY" -B "$M" smoke --out "$OUT" --expect-torch "__TORCH_LOCAL__" || { STATUS=SMOKE_FAILED; exit 0; }
+
+# ---- STAGE 0b: TIMING PREFLIGHT. Real probe and fixture calls are timed and the whole job is projected; over the
+# budget (or over a harness process's own 3,600 s wall) nothing else runs.
+STATUS=preflight
+"$PY" -B "$M" preflight --tree "$T" --spec "$SPEC" --out "$OUT" --job-start "$T0" --budget-seconds __BUDGET_SECONDS__ > "$OUT/preflight.log" 2>&1
+C=$?
+cat "$OUT/preflight.log"
+[ "$C" -eq 5 ] && { STATUS=PREFLIGHT_OVER_WALL_LIMIT; exit 0; }
+[ "$C" -eq 0 ] || { STATUS="PREFLIGHT_FAILED_$C"; exit 0; }
+
+# ---- STAGES 1, 2 and 4+5 side by side: route receipt; probe v0.3 validation (fresh, switch OFF); matched start, roster
+STATUS=stages_1_2_4_5
+mkdir -p "$OUT/route" "$OUT/probe/validation" "$OUT/matched_start" "$OUT/roster"
+( "$PY" -B "$M" route --tree "$T" --spec "$SPEC" --out "$OUT"; echo "route=$?" > "$OUT/EXIT_route" ) > "$OUT/route/route.log" 2>&1 &
+P1=$!
+( "$PY" -B "$PROBE/probe_v0_3_harness.py" validate --seed __VALIDATION_SEED__ --out-dir "$OUT/probe/validation" \
+    --container-kwargs '{"analogy_focus_comparison": false}' --switch-attr analogy_focus_comparison --switch-expect false \
+    --package-root "$T"; echo "validation=$?" > "$OUT/EXIT_validation" ) > "$OUT/probe/validation.log" 2>&1 &
+P2=$!
+( "$PY" -B "$M" matched --tree "$T" --spec "$SPEC" --out "$OUT" --python "$PY"; echo "matched=$?" > "$OUT/EXIT_matched"
+  "$PY" -B "$M" roster --tree "$T" --spec "$SPEC" --out "$OUT" --python "$PY"; echo "roster=$?" > "$OUT/EXIT_roster" ) > "$OUT/matched_start/stages_4_5.log" 2>&1 &
+P3=$!
+for p in $P1 $P2 $P3; do wait "$p"; done                 # never a bare wait: the timer and log loops never end
+
+# ---- STAGE 3: the 18 probe reads (two waves of three processes); they start only after VALIDATION_PASS, re-derived
+# from the raw validation tables by the frozen metric. Then the ITEM2 inputs and the ITEM2 reader.
+STATUS=stage_3_reads
+"$PY" -B "$M" reads --tree "$T" --spec "$SPEC" --out "$OUT" --job-start "$T0" --budget-seconds __BUDGET_SECONDS__ \
+  --python "$PY" > "$OUT/probe/reads.log" 2>&1
+echo "reads=$?" > "$OUT/EXIT_reads"
+STATUS=item2
+"$PY" -B "$M" inputs --tree "$T" --spec "$SPEC" --out "$OUT" > "$OUT/probe/inputs.log" 2>&1
+echo "inputs=$?" > "$OUT/EXIT_inputs"
+"$PY" -B "$PROBE/item2_reader.py" --inputs "$OUT/probe/ITEM2_INPUTS.json" --out "$OUT/probe/ITEM2_READING.json" > "$OUT/probe/item2.log" 2>&1
+echo "item2=$?" > "$OUT/EXIT_item2"
+
+STATUS=decide
+cat "$OUT"/EXIT_* > "$OUT/EXIT_CODES" 2>/dev/null
+cat "$OUT/EXIT_CODES"
+"$PY" -B "$M" decide --out "$OUT" > "$OUT/decide.log" 2>&1
+D=$?
+cat "$OUT/decide.log"
+if [ "$D" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures decide=$D"; fi
+exit 0

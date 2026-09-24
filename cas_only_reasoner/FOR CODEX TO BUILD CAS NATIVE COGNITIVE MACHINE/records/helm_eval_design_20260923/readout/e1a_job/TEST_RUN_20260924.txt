@@ -1,0 +1,66 @@
+E1a job tests: the single run, 2026-09-24, laptop (Windows, Python 3.14, pytest 9.0.2). CLAUDE_BUILT_CLAUDE_CHECKED.
+Command: PYTHONDONTWRITEBYTECODE=1 python -B -m pytest test_e1a_job.py -v -p no:cacheprovider -rA   (last 60 lines kept)
+No AWS call (boto3/botocore poisoned in every launcher subprocess), no torch, no course load.
+After this run, e1a_machine.py gained one torch-only check in the route stage (STATE_KEY_COUNT: 53 ON / 48 OFF,
+from MIGRATION_ON_SHAPES.json at afccbcb9). No laptop test covers the torch route code; it was syntax-checked only.
+----
+  bundle    266 files, 28.7 MB raw, 10.5 MB compressed, sha256 60b7aee14128adb56da4fc031d5bd521a43d2b3d0d54f1d619edbf6cf18cc1d1
+  sources   route e05889ee; readout programs 994c32eb; smoke 1ddf6a1e; repaired receipts afccbcb9; unchanged receipt 3344ae5d
+  job files WORKING COPY, not committed (dry run only; a real launch refuses)
+  probe v0.3 acceptance record: NOT GIVEN (a real launch refuses: prereg v0.3 s9 binds before any read)
+  stages    0 instance id (IMDSv2), tools, anchors, smoke, TIMING PREFLIGHT (stops if over the budget)
+            1 route: smoke_on_final(ON), repaired_final_20260917(ON), repaired_final_20260918(ON), repaired_final_20260919(ON), unchanged_final_20260917(OFF), unchanged_final_20260918(OFF), unchanged_final_20260919(OFF)
+            2 probe v0.3 validation (fresh, seed 20260917, switch OFF)   [1, 2 and 4+5 side by side]
+            3 18 probe reads in 2 waves of 3 processes, only after VALIDATION_PASS; then ITEM2
+            4 matched start: self-test, then A5.5 reading     5 roster on the three repaired receipts
+  custody   public course, public fixtures, receipts' checkpoints and update files only; no TEST, sealed,
+            salt, HSET, scoring or prediction file; no analogy number is printed
+  labels    CLAUDE_BUILT_CLAUDE_CHECKED; EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT
+DRY RUN: nothing uploaded, nothing launched, no AWS call. Bundle, machine script (7500 bytes) and dry_run_record.json are in C:\Users\wakil\AppData\Local\Temp\pytest-of-wakil\pytest-3029\test_dry_run_builds_the_bundle0\bundle
+LAUNCH_REFUSED: STUDY_RECEIPTS_MISSING: receipt_analogy_on_20260917 at afccbcb9: 25 of 25 files absent, e.g. ['records/typed_pointer_001/receipt_analogy_on_20260917/collected_inventory.json', 'records/typed_pointer_001/receipt_analogy_on_20260917/collected/results/artifacts/initial.pt', 'records/typed_pointer_001/receipt_analogy_on_20260917/collected/results/artifacts/pass_01_checkpoint.json']; receipt_analogy_on_20260918 at afccbcb9: 25 of 25 files absent, e.g. ['records/typed_pointer_001/receipt_analogy_on_20260918/collected_inventory.json', 'records/typed_pointer_001/receipt_analogy_on_20260918/collected/results/artifacts/initial.pt', 'records/typed_pointer_001/receipt_analogy_on_20260918/collected/results/artifacts/pass_01_checkpoint.json']; receipt_analogy_on_20260919 at afccbcb9: 25 of 25 files absent, e.g. ['records/typed_pointer_001/receipt_analogy_on_20260919/collected_inventory.json', 'records/typed_pointer_001/receipt_analogy_on_20260919/collected/results/artifacts/initial.pt', 'records/typed_pointer_001/receipt_analogy_on_20260919/collected/results/artifacts/pass_01_checkpoint.json']; receipt_unchanged_repro_20260917 at 3344ae5d: 3 of 3 files absent, e.g. ['records/typed_pointer_001/receipt_unchanged_repro_20260917/collected_inventory.json', 'records/typed_pointer_001/receipt_unchanged_repro_20260917/collected/results/artifacts/final.pt', 'records/typed_pointer_001/receipt_unchanged_repro_20260917/collected/results/artifacts/final_checkpoint.json']
+
+___ test_a_streamed_file_that_differs_from_its_inventory_or_pin_is_refused ____
+---------------------------- Captured stdout call -----------------------------
+LAUNCH_REFUSED: RECEIPT_FILE_DIFFERS_FROM_INVENTORY: records/helm_eval_design_20260923/readout/roster/check_roster.py (sha256 fc8e128a2cef, inventory 000000000000)
+LAUNCH_REFUSED: PIN_MISMATCH: records/helm_eval_design_20260923/readout/roster/check_roster.py (LF sha256 fc8e128a2cef, pinned 111111111111)
+LAUNCH_REFUSED: PINNED_FILE_NOT_BUNDLED: ['not/bundled.json']
+_____________ test_the_18_reads_start_only_after_validation_pass ______________
+---------------------------- Captured stdout call -----------------------------
+{"reads": "NOT_STARTED", "validation": "VALIDATION_SUMMARY_MISSING_OR_MALFORMED"}
+{"reads": "NOT_STARTED", "validation": "VALIDATION_FAIL:V2_POSITIVE_COMPARISON"}
+{"reads": "READS_COMPLETE", "stopped": null, "exits": [{"20260917": 0, "20260918": 0, "20260919": 0}, {"20260917": 0, "20260918": 0, "20260919": 0}]}
+_________ test_item2_inputs_take_every_hash_and_count_from_the_roster _________
+---------------------------- Captured stdout call -----------------------------
+{"item2_inputs": 18, "acceptance_record": null}
+_______ test_matched_start_reading_runs_only_after_the_self_test_passes _______
+---------------------------- Captured stdout call -----------------------------
+{"matched_start_exits": {"self_test": 4, "reading": "NOT_RUN_SELF_TEST_DID_NOT_PASS"}}
+{"matched_start_exits": {"self_test": 0, "reading": 3}}
+_______________________ test_decide_reports_words_only ________________________
+---------------------------- Captured stdout call -----------------------------
+{"mechanism_gate": "MECHANISM_GATE_OPEN", "missing_stage_readings": [], "overall": "E1A_STAGES_COMPLETE", "stages": {"item2": "ITEM2_PASS", "matched_start": "MATCHED_START_REPRODUCED", "matched_start_self_test": "MATCHED_START_SELF_TEST:PASS", "preflight": "PREFLIGHT_PASS", "reads": "READS_COMPLETE", "roster": "roster_20260917=ROSTER_COMPLETE,roster_20260918=ROSTER_COMPLETE,roster_20260919=ROSTER_PROBLEM", "route": "ROUTE_RECEIPT_PASS", "smoke": "SMOKE_PASS", "validation": "VALIDATION_PASS"}}
+{"mechanism_gate": "MECHANISM_GATE_OPEN", "missing_stage_readings": ["route"], "overall": "E1A_INCOMPLETE", "stages": {"item2": "ITEM2_PASS", "matched_start": "MATCHED_START_REPRODUCED", "matched_start_self_test": "MATCHED_START_SELF_TEST:PASS", "preflight": "PREFLIGHT_PASS", "reads": "READS_COMPLETE", "roster": "roster_20260917=ROSTER_COMPLETE,roster_20260918=ROSTER_COMPLETE,roster_20260919=ROSTER_PROBLEM", "route": null, "smoke": "SMOKE_PASS", "validation": "VALIDATION_PASS"}}
+_________ test_anchor_check_finds_a_changed_missing_or_unlisted_file __________
+---------------------------- Captured stdout call -----------------------------
+bundled files checked: 1; bad or missing: 0; unlisted: 0
+bundled files checked: 1; bad or missing: 0; unlisted: 1
+  tree/b.py
+bundled files checked: 1; bad or missing: 1; unlisted: 0
+  tree/a.py
+=========================== short test summary info ===========================
+PASSED test_e1a_job.py::test_dry_run_builds_the_bundle_passes_custody_and_refuses_without_the_study_receipts
+PASSED test_e1a_job.py::test_a_real_launch_refuses_without_the_study_receipts_before_building_anything
+PASSED test_e1a_job.py::test_custody_filter_names_every_forbidden_name
+PASSED test_e1a_job.py::test_gpu_rule_cost_cap_limits_and_the_machine_script
+PASSED test_e1a_job.py::test_receipt_selection_and_inventory_binding_on_a_real_full_run_receipt
+PASSED test_e1a_job.py::test_a_streamed_file_that_differs_from_its_inventory_or_pin_is_refused
+PASSED test_e1a_job.py::test_preflight_projection
+PASSED test_e1a_job.py::test_route_verdict
+PASSED test_e1a_job.py::test_the_18_reads_start_only_after_validation_pass
+PASSED test_e1a_job.py::test_item2_inputs_take_every_hash_and_count_from_the_roster
+PASSED test_e1a_job.py::test_matched_start_reading_runs_only_after_the_self_test_passes
+PASSED test_e1a_job.py::test_decide_reports_words_only
+PASSED test_e1a_job.py::test_anchor_check_finds_a_changed_missing_or_unlisted_file
+PASSED test_e1a_job.py::test_the_laptop_reader_binds_results_to_the_launched_instance
+PASSED test_e1a_job.py::test_watch_extracts_only_plain_paths_under_out
+============================= 15 passed in 26.13s =============================
