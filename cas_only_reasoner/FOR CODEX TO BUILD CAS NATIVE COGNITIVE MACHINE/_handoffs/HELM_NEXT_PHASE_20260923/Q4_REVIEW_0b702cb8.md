@@ -254,3 +254,54 @@ G-dev rows and flags only the old 16.
   file hashes and G eval depth counts). I read visible Q3 files only through `q3_load.load_visible`. I opened no
   `*_eval.jsonl` and no Q3 `*sealed*` file.
 - **Not touched:** `D:/tksCAS-archive/`, any hset1a path, any other worktree, S3/AWS, and any Claude transcript.
+
+## Delta review of 28acfa06 (2026-09-23)
+
+**Scope:** `git diff 1a746ba0..28acfa06`, limited to `LAB/q4_error_panel.py`, `LAB/test_q4_error_panel.py`, and the
+builder report's "Revision 1". I pulled with `--ff-only` first (already up to date at `28acfa06`).
+
+**Verdict for the diagnostic job: APPROVE_FOR_DIAGNOSTIC_JOB.** P1 to P4 are fixed. Nothing else changed in
+behaviour.
+
+| Item | Finding |
+|---|---|
+| P1, update-1 gradient per group | Fixed. `update_1_check` writes all 5 module groups plus the total, and the equal-weight check. The pass rule (loss and total norm, relative 1e-4) is unchanged |
+| P2, weight change on a failed re-init | Fixed. Under `REINIT_NOT_REPRODUCED_ON_THIS_DEVICE`, `by_module_group` and `by_tensor` are `null`, with a `withheld` reason. Only the final weights' own norms are written, under `final_weight_l2_only`. Full numbers are written only under `REINIT_REPRODUCES_UPDATE_1`. A test checks that no difference or initial-weight number appears in the failed record |
+| P3, Stage-0 trace | Fixed. See below |
+| P4, limits text | Fixed. `result.json` limits now say 48 G-dev rows are inspected and must be flagged later |
+
+**P3, checked line by line.**
+- **Same logits.** `traced_generate` wraps `model.next_logits` in a recorder and passes it to the same `free_decode`
+  call `model.generate` makes (same `encode`, same default limits). The recorder keeps the exact tuple it returns to
+  the decoder. So the margin is computed on the logits the decode used. There is no second forward pass, and no
+  other device or path.
+- **No off-by-one.** Recorded call i has prefix length i, and the decoder's chosen token i follows from it. `zip`
+  pairs them. A last call with no chosen token (a numerical failure) is dropped by the `zip`, not mispaired.
+- **Same mask and tie-break.** `decision_margins` ranks with `allowed_next(prefix)` (default limits) and the key
+  (highest logit, then lowest id), as `free_decode` does. `chosen_is_top_ranked` records that the ranking agrees
+  with the decoder. A test shows a masked-out high logit is never the runner-up, and a tie gives margin 0.0 with the
+  lower id chosen.
+- **Both branches.** The trace goes into `stage0_reproduction.json` on a match, and into
+  `DEVICE_OR_SOURCE_MISMATCH.json` on a mismatch, with `first_difference` (the first differing token index, the
+  saved and replayed tokens, and the replay's margin at that step).
+
+**Unchanged (checked in the diff):**
+- The Stage-0 pass/fail test still compares exactly `record_id`, `outcome`, `ast` and `steps`.
+- There is still no optimizer and no step. The source-hygiene test still passes: 1 `read_bytes(`, 1 `.open(`.
+- Custody is unchanged: `guarded_read`, the data-folder name check, and `load_visible` only.
+- The fail-closed order in `run()` is unchanged. Its only edit is the limits list.
+
+**What I ran (laptop, pure Python, no torch, $0):**
+- `pytest test_q4_sdg_curriculum.py test_q4_error_panel.py`: **38 passed** in 6.47 s (24 + 14).
+- `q4_error_panel.py select --run-dir ../../records/q4_authorized_20260922/run_001 --data-dir data/q3_v0_7`: digest
+  `0b98bfc94a5aed8af2d4fef72378fec7dfa9d46808b09ff30f750972387a3059`, counts 16 / 16 / 64. That is the expected
+  digest.
+
+**One NOTE, no action needed.** `decision_margins` calls `sdg.slot_kind`, which raises on an empty allowed set. A
+recorded step never has an empty allowed set: the decoder stops before choosing in that case, and `zip` drops that
+call. So this cannot stop the job.
+
+**Still open (not in this delta's scope):** M1 and M2 (spec), A1 to A3 (adapter).
+
+**Exposure for this delta:** `git pull --ff-only` of this branch only. The two test runs used pytest's temp folder.
+No scratch files. No eval or sealed Q3 file, archive, hset1a path, other worktree, AWS or transcript.
