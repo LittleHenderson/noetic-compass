@@ -262,7 +262,7 @@ pending. Source names are mapped by explicit aliases; do not restart a naming re
 
 **Changed files:** new HSET2_PRESALT_SOURCE_ACCEPTANCE_20260924.json, PROBE_V03_POLICY_ACCEPTANCE_20260924.json and
 READING_IMPLEMENTATION_REVIEW_20260924.md in R; this handoff, launch request and preparation validation.
-**Commit:** content commit pending its creation; delivery record will pin it.
+**Commit:** `fe677621edd31dcde0ad0f1bac2558c8df3bd320`; following delivery-only commit pins it and refreshes the handoff hash.
 **Checks:** exact public source/leaf hashes, public JSON comparison, fixed predicates, frozen-directory equality,
 conditional decimal arithmetic, JSON, staged cross-file bindings and whitespace. No project execution/protected read.
 **Remaining handoff:** Claude implements the four finite corrections and returns their focused checks; proceeds with
