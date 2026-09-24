@@ -1,0 +1,515 @@
+{
+  "added_by_switch_on": {
+    "parameters": 29121,
+    "state_dict_keys": 5
+  },
+  "analogy_head_initialisation": {
+    "code": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py: ANALOGY_INIT_SEED (line 166); _build_container (line 703); the head block (lines 859-868) at commit ceab6c49",
+    "not_verified_here": [
+      "No model was built for this record. The shared-tensor equality in the source inventory was measured on CPU, torch 2.5.1, at pointer_learner commit 60e382b0, switch OFF versus ON, zero optimizer steps.",
+      "It was NOT measured against Helm 2.0's saved initial.pt, and NOT on the g7.2xlarge GPU path.",
+      "Later edits (098a3bdc, ceab6c49) add read-only properties and guards only; they were read, not run."
+    ],
+    "seed": 20260923,
+    "what_follows_by_reading": [
+      "The 48 shared tensors are drawn before the head, from the same generator states as with the switch OFF.",
+      "After the container is built, the CPU generator is back in the state it had before the head, so later CPU draws are the same as with the switch OFF.",
+      "The head does not touch the CUDA generator, so CUDA draws are not moved either.",
+      "Between Helm 2.0 source 20208c92 and ceab6c49, pointer_learner.py changed the container only by appending the head, two argument checks, read-only switch properties and comments. No shared tensor was reordered or re-initialised (read from git diff 20208c92..ceab6c49)."
+    ],
+    "what_the_code_does": [
+      "The analogy head is built LAST, after every one of the 48 shared tensors.",
+      "It is built inside torch.random.fork_rng(devices=[]), which saves the CPU generator state first and restores it afterwards.",
+      "Inside that block the CPU generator is seeded with analogy_seed (20260923); the head's Linear layers draw their initial values on the CPU, then move to the device. LayerNorm starts at ones and zeros.",
+      "devices=[] means no CUDA generator is saved, reseeded or used by the head."
+    ]
+  },
+  "analogy_head_tensors": [
+    {
+      "elements": 28928,
+      "name": "analogy_head.0.weight",
+      "shape": [
+        64,
+        452
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "analogy_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "analogy_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "analogy_head.3.weight",
+      "shape": [
+        1,
+        64
+      ]
+    },
+    {
+      "elements": 1,
+      "name": "analogy_head.3.bias",
+      "shape": [
+        1
+      ]
+    }
+  ],
+  "checkpoint_schema_on": "cncm.typed-pointer-checkpoint/0.2",
+  "historical_checkpoint_migrated": false,
+  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+  "matched_starts": {
+    "deciding_check": "Prereg amendment A5.5 (commit d7023288, PREREG_ANALOGY_WIRING_PROBE_v0_2.md), run on AWS with torch.equal. If it fails the reading is MATCHED_START_NOT_REPRODUCED and no ON number is compared with Helm 2.0's.",
+    "expected": "For each seed, the 48 shared tensors of the ON initial.pt should equal the same-named tensors of Helm 2.0's initial.pt bit for bit, and the 5 analogy_head tensors should be identical across the three seeds (all from seed 20260923).",
+    "per_seed": [
+      {
+        "helm2_initial_pt": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+        "helm2_initial_pt_bytes": 2235079,
+        "helm2_initial_pt_git_blob": "8b42f3ecddb4d2fc3887b8288116944dd825b58b",
+        "helm2_initial_pt_sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+        "helm2_job": "cas-meta2-tpntr-20260920210258-20208c92-m-20260917",
+        "helm2_source_sha8": "20208c92",
+        "how_read": "git show of the two JSON records and git rev-parse/cat-file -s of the blob; the .pt file itself was not opened",
+        "model_seed": 20260917,
+        "read_at_commit": "31f6a0370d57aa30afee2aeef780a78f60433d32",
+        "where_the_sha256_is_stated": [
+          "records/typed_pointer_001/receipt_20260917/collected_inventory.json (files row results/artifacts/initial.pt)",
+          "records/typed_pointer_001/receipt_20260917/artifact_manifest.json (artifacts row initial.pt)"
+        ]
+      },
+      {
+        "helm2_initial_pt": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+        "helm2_initial_pt_bytes": 2235079,
+        "helm2_initial_pt_git_blob": "423085e91eb6cfe5f4d3d294a6cfc1126bd9b9d6",
+        "helm2_initial_pt_sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+        "helm2_job": "cas-meta2-tpntr-20260920210258-20208c92-m-20260918",
+        "helm2_source_sha8": "20208c92",
+        "how_read": "git show of the two JSON records and git rev-parse/cat-file -s of the blob; the .pt file itself was not opened",
+        "model_seed": 20260918,
+        "read_at_commit": "31f6a0370d57aa30afee2aeef780a78f60433d32",
+        "where_the_sha256_is_stated": [
+          "records/typed_pointer_001/receipt_20260918/collected_inventory.json (files row results/artifacts/initial.pt)",
+          "records/typed_pointer_001/receipt_20260918/artifact_manifest.json (artifacts row initial.pt)"
+        ]
+      },
+      {
+        "helm2_initial_pt": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+        "helm2_initial_pt_bytes": 2235079,
+        "helm2_initial_pt_git_blob": "d90858ffcf08312c2d37b2539236ad03a91577f2",
+        "helm2_initial_pt_sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+        "helm2_job": "cas-meta2-tpntr-20260920210258-20208c92-m-20260919",
+        "helm2_source_sha8": "20208c92",
+        "how_read": "git show of the two JSON records and git rev-parse/cat-file -s of the blob; the .pt file itself was not opened",
+        "model_seed": 20260919,
+        "read_at_commit": "31f6a0370d57aa30afee2aeef780a78f60433d32",
+        "where_the_sha256_is_stated": [
+          "records/typed_pointer_001/receipt_20260919/collected_inventory.json (files row results/artifacts/initial.pt)",
+          "records/typed_pointer_001/receipt_20260919/artifact_manifest.json (artifacts row initial.pt)"
+        ]
+      }
+    ],
+    "rule": "Matched starts come from the same seeds as Helm 2.0, with the five analogy_head tensors seeded separately (owner record section 3).",
+    "this_record_is_an_expectation_not_a_result": true
+  },
+  "migration_rule": "No historical checkpoint migrated. Off switch accepts legacy tensor layout strictly; on switch requires explicit fresh head, new profile/schema and a separately registered training job.",
+  "model_variant_on": "HELM_2_ANALOGY_FOCUS_COMPARISON_EXPERIMENTAL",
+  "purpose": "The migration record the owner requires before switch-ON training (OWNER_DECISIONS_TAKEOVER_20260923.md section 3, commit d6c9faa9): it declares the ON shapes and the matched starts.",
+  "schema": "cncm.typed-pointer-analogy-on-migration/0.1",
+  "shared_tensors": [
+    {
+      "elements": 3,
+      "name": "round_mix",
+      "shape": [
+        3
+      ]
+    },
+    {
+      "elements": 1,
+      "name": "round_rate",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "elements": 65536,
+      "name": "declaration_table",
+      "shape": [
+        1024,
+        64
+      ]
+    },
+    {
+      "elements": 16,
+      "name": "directed_pair_embedding",
+      "shape": [
+        2,
+        8
+      ]
+    },
+    {
+      "elements": 384,
+      "name": "role_embedding",
+      "shape": [
+        6,
+        64
+      ]
+    },
+    {
+      "elements": 1152,
+      "name": "node_encode.weight",
+      "shape": [
+        64,
+        18
+      ]
+    },
+    {
+      "elements": 4096,
+      "name": "state_encode.weight",
+      "shape": [
+        64,
+        64
+      ]
+    },
+    {
+      "elements": 4096,
+      "name": "match_key.weight",
+      "shape": [
+        64,
+        64
+      ]
+    },
+    {
+      "elements": 1344,
+      "name": "query_projection.weight",
+      "shape": [
+        64,
+        21
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "query_norm.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "query_norm.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "attention_key.weight",
+      "shape": [
+        1,
+        64
+      ]
+    },
+    {
+      "elements": 12544,
+      "name": "world_projection.weight",
+      "shape": [
+        64,
+        196
+      ]
+    },
+    {
+      "elements": 2048,
+      "name": "declaration_projection.weight",
+      "shape": [
+        32,
+        64
+      ]
+    },
+    {
+      "elements": 8192,
+      "name": "node_head.0.weight",
+      "shape": [
+        64,
+        128
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "node_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "node_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 128,
+      "name": "node_head.3.weight",
+      "shape": [
+        2,
+        64
+      ]
+    },
+    {
+      "elements": 2,
+      "name": "node_head.3.bias",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "elements": 8704,
+      "name": "edge_head.0.weight",
+      "shape": [
+        64,
+        136
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "edge_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "edge_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 128,
+      "name": "edge_head.3.weight",
+      "shape": [
+        2,
+        64
+      ]
+    },
+    {
+      "elements": 2,
+      "name": "edge_head.3.bias",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "elements": 12672,
+      "name": "role_head.0.weight",
+      "shape": [
+        64,
+        198
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "role_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "role_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 128,
+      "name": "role_head.3.weight",
+      "shape": [
+        2,
+        64
+      ]
+    },
+    {
+      "elements": 2,
+      "name": "role_head.3.bias",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "elements": 4096,
+      "name": "pointer_key.weight",
+      "shape": [
+        64,
+        64
+      ]
+    },
+    {
+      "elements": 16640,
+      "name": "reach_option_head.0.weight",
+      "shape": [
+        64,
+        260
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "reach_option_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "reach_option_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 128,
+      "name": "reach_option_head.3.weight",
+      "shape": [
+        2,
+        64
+      ]
+    },
+    {
+      "elements": 2,
+      "name": "reach_option_head.3.bias",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "elements": 12288,
+      "name": "mode_option_head.0.weight",
+      "shape": [
+        64,
+        192
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "mode_option_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "mode_option_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 128,
+      "name": "mode_option_head.3.weight",
+      "shape": [
+        2,
+        64
+      ]
+    },
+    {
+      "elements": 2,
+      "name": "mode_option_head.3.bias",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "elements": 2432,
+      "name": "world_head.0.weight",
+      "shape": [
+        64,
+        38
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "world_head.2.weight",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "world_head.2.bias",
+      "shape": [
+        64
+      ]
+    },
+    {
+      "elements": 64,
+      "name": "world_head.3.weight",
+      "shape": [
+        1,
+        64
+      ]
+    },
+    {
+      "elements": 1,
+      "name": "world_head.3.bias",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "elements": 4096,
+      "name": "left.weight",
+      "shape": [
+        64,
+        64
+      ]
+    },
+    {
+      "elements": 8192,
+      "name": "merge.weight",
+      "shape": [
+        64,
+        128
+      ]
+    },
+    {
+      "elements": 4096,
+      "name": "right.weight",
+      "shape": [
+        64,
+        64
+      ]
+    }
+  ],
+  "source_inventory": {
+    "all_shared_tensors_identical": true,
+    "bytes": 11748,
+    "measured_with": {
+      "device": "cpu",
+      "optimizer_steps": 0,
+      "pointer_learner_commit": "60e382b0",
+      "pointer_learner_sha256": "320024b4bc0c5930369934eabf06e6b9bd48163a819f81eda2063f040310c5bf",
+      "threads": 2,
+      "torch": "2.5.1+cu121"
+    },
+    "path": "records/helm_integrated_repairs_20260923/analogy_tensor_inventory.json",
+    "schema": "helm.analogy-tensor-inventory/1",
+    "sha256": "21ae887a6c783bc6f20e17d672d33431f36b5e5032af45d15fafe3f1955c95e3"
+  },
+  "status": "DECLARED_BEFORE_LAUNCH",
+  "switch_off": {
+    "parameters": 174303,
+    "state_dict_keys": 48
+  },
+  "switch_on": {
+    "parameters": 203424,
+    "state_dict_keys": 53
+  },
+  "written_by": "temporary Claude builder, 2026-09-23 (static record; no torch, no model built)"
+}
