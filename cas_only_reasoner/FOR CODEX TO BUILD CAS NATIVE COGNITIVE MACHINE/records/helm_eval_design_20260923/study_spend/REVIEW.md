@@ -865,3 +865,173 @@ script and a regenerated state copy). Not written: `STUDY_SLOTS.json`, `STUDY_SP
 `RESULTS_READING.json`, any job code, `CHANGELOG.md` (the coordinator batches it). The untracked
 `aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS call, no torch, no model, no
 `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript.
+
+## Verification of d2098474d2802538c843afe3118bfd33ecf2399f
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Verifier: a fresh Claude verifier sub-agent. It did not build the round-3 fixes.
+This is **not** Codex's review and **not** owner acceptance.
+
+**Verdict: CHANGES_REQUIRED.**
+
+In short: round 3 does what was ordered. N1a, N1b, N2a, N2b, N3 and N4 now refuse. P1-P7 and the positive controls
+behave as recorded. The real figures did not change. But the gate ties a receipt to the slot's admission **window**,
+not to one **launch**. One admission can cover several launch attempts, and the row names only one receipt. The gate
+never reads the others. So after a retry (the pattern this study already used: S1, then S2) the gate drops the first
+attempt's cost, and it admits the next machine while the first attempt's machine may still exist. Probes N6a-N6d
+reproduce this with exit 0 ADMIT.
+
+### What was run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `d2098474` |
+| `python -B test_study_spend.py` | 57 passed, 0 failed |
+| `python -B test_read_results.py` | 31 passed, 0 failed |
+| Real report (`main([])`, state written to a scratch file) | exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92; remaining mandatory caps $51.64; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed; no training job started |
+| State regenerated | byte-identical to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| Real reader on `i-09e14d4afd0e0ebfa` (in memory, no write) | exit 0; ROUTE_ACCEPTED; script and job verdict INTEGRATION_CHECKS_PASS |
+| Reading regenerated | byte-identical to the committed `RESULTS_READING.json` |
+| Finished job's files | working tree vs `b0fd06ff` over `results/`, `launch_record.json`, `watch_record.json`, `dry_run_record.json`, `job.sh.template`, `watch.py`, `launch.py`: no difference. `d2098474` does not touch `STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json` or `RESULTS_READING.json`. `job.sh.template` sha256 is still `dc05f4af...` with no `instance_id` text. P1a's pins `82b91aeb...` and `6c2447e1...` match the files and the README |
+| Line endings (NOTE-F compares committed bytes) | the committed `.gitattributes` of the Codex folder sets `*.json` and `*.py` to `eol=lf`; the working copy of both files equals the HEAD blob. So the NOTE-F hash checks hold on any checkout, including one with `core.autocrlf=true` |
+| Probes | a scratch script on the builder's `World` / `FakeGit`; temporary folders; not committed. Probe N8 used one tiny real git repository in the scratch folder |
+| Real `--admit` | **not run** (it writes the slot RUNNING) |
+
+### Probes rebuilt (the round-3 probes written again from the World's primitives, not by calling the builder's tests)
+
+| Probe | Result now | Verdict |
+|---|---|---|
+| P1 | P1b INVALID, bundle field empty: counted $3.18; cleanup confirmed by its own records (launched 10:00, inside [09:00, 11:10)); spent $8.62; `--admit P2` exit 0 ADMIT, $58.26 | as recorded (positive control) |
+| P2 | $3.18; UNCONFIRMED; exit 1 `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b` | holds |
+| P3 | stale watch pin, rewritten to say "terminated" after pinning: $3.18; UNCONFIRMED; exit 1 | holds |
+| P4 | M1 $15.58; UNCONFIRMED; spent $21.02; `--admit P1b` exit 1 with `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` and `OVER_CEILING:$61.00 > $60.00` | holds |
+| P5 | the same as P4 | holds |
+| P6 | 2000-01-01 record, never committed RUNNING: REJECTED (now also `LAUNCH_AFTER_THE_ADMISSION_LIFETIME` and the three NOTE-F reasons); not started; UNCONFIRMED; `--admit M2` exit 1 | holds |
+| P7 | M1-M3 each launched and failed after 60 s: started M1, M2, M3; spent $10.33 | unchanged (NOTE-D open) |
+| N1a | M1 INVALID names another job's clean receipt (2026-09-17), ids empty: $11.66; UNCONFIRMED `LAUNCHED_BEFORE_ADMISSION`; `--admit M2` exit 1 | FIXED |
+| N1b | the same, that job's ids filled: exit 1. As DONE: REJECTED `LAUNCH_NOT_AFTER_ADMISSION` and UNCONFIRMED | FIXED |
+| N2a / N2b | P1b INVALID names an older job's watched records (2026-09-20): $2.00; UNCONFIRMED; `--admit P2` exit 1 | FIXED |
+| N3 | M1 INVALID names an older capacity refusal: UNCONFIRMED; exit 1. As DONE: REJECTED | FIXED |
+| N4 | bare record (2000-01-01; no gate, program or slots-before) committed RUNNING: REJECTED with `LAUNCH_AFTER_THE_ADMISSION_LIFETIME` and the three NOTE-F reasons; not started; `--admit M2` exit 1 | FIXED |
+| N5 | P1a's pinned files moved to `job/attempt1/`: P1a REJECTED, UNCONFIRMED ("no readable receipt"); `--admit P1b` exit 1; marking P1a INVALID: exit 2 `SLOT_DEFINITIONS_CHANGED` | fails closed, as recorded; NOTE-G's text now forbids the move |
+| Controls | M1's own clean receipt, INVALID: confirmed, `--admit M2` exit 0 ($57.08). M1's own capacity refusal, INVALID: proven, exit 0 ($57.08) | hold |
+| Reuse R1 | M2 (admitted 12:00) INVALID names M1's unnamed attempt-1 refusal: UNCONFIRMED (`LAUNCHED_BEFORE_ADMISSION`, `SOURCE_NOT_THE_ADMITTED_SOURCE`); exit 1 | holds |
+| Reuse R2 | M2 INVALID names M1's accepted receipt: `RECEIPT_SHARED`, both UNCONFIRMED; exit 1 | holds |
+
+### New findings
+
+**H. MAJOR: one admission can cover several launch attempts, but a row names one receipt, and the gate never
+reads the others** (`not_this_launch` lines 614-644, `cleanup_gap` 974-990, `account` 993-1078; the procedure in
+`PREREQUISITE_SLOTS.md` step 2).
+
+What happens:
+- `--admit` opens a window: the admission time up to the admission time plus the slot's lifetime (training 14,400 s;
+  watched 130 min).
+- Round 3 takes a receipt as "this slot's launch" when the launch time it shows lies in that window (and, for a
+  training slot, its seed and source are right). Any number of jobs can pass that test.
+- The row holds one receipt spec. The gate reads only that receipt: for the count, for the cleanup, and for the
+  shared-identity check.
+- The docs say "admit first, then prepare the job, then launch, all inside the slot's lifetime". They do not say
+  "one launch per admission". They do not say a failed attempt must be written down.
+- So after a retry, the gate's answer depends on which attempt the runner writes down.
+
+Probes (synthetic `World`; M1 or P1b admitted at 09:00 and committed RUNNING; every receipt hash-verified):
+- **N6a.** M1 attempt 1 (prepared 09:05) is an AWS capacity refusal. Its receipt is moved aside to
+  `r/m1_attempt1/`, as S1's was to `..._attempt1/`. Attempt 2 (09:15) finishes clean, and the row names it. M1 is
+  ACCEPTED at $8.94; spent $14.38; `--admit M2` **exit 0 ADMIT**, total $54.36. The refusal is not counted. This same
+  gate counts a named refusal at **$1.60**. No mistake by the runner is needed.
+- **N6b.** Attempt 1 launched a machine. It ran 600 s. Its cleanup and the machine's identity are uncertain.
+  Attempt 2 is clean and is named. ACCEPTED $8.94; no cleanup flag; `--admit M2` **exit 0**, $54.36. With attempt 1
+  named alone, the gate says UNCONFIRMED and exit 1.
+- **N6c.** P1b attempt 1 (launched 09:05): the watcher saw it still running. Its records are moved to
+  `p1b/attempt1/` (`launch.py` refuses while `launch_record.json` exists, so a retry in the same folder must move
+  them; `analogy_repair_t4_job/attempt1/` did this). Attempt 2 (09:45) is clean and named. ACCEPTED $0.55;
+  `--admit P2` **exit 0**, $55.63.
+- **N6d.** The row names attempt 1, a proven capacity refusal (09:05). Attempt 2 (09:15) ran 20,000 s with an
+  uncertain identity and is not named. ACCEPTED $1.60; not started; spent $7.04; `--admit M2` **exit 0**, $47.02.
+  Named, attempt 2 is probe P4: $15.58, UNCONFIRMED, `OVER_CEILING:$61.00 > $60.00`.
+
+Why MAJOR and not the stated limit 3:
+- Limit 3 speaks of "a receipt of another job ... launched inside this slot's window". The usual source of such a
+  receipt is not a stranger. It is this slot's own retry.
+- Retries are the norm in this study. S1 (capacity refusal, job time 02:12:44) and S2 (finished, 03:35:50) are
+  1 h 23 min apart, inside one 4-hour window. `analogy_repair_t4_job` and `hset1a_aws_job` each ran an attempt 1
+  and an attempt 2. `typed_pointer_001/` has receipt folders named `..._orphaned_...`, `..._preflight_refused_...`
+  and `..._gradfail_...` (names read only; the folders were not opened).
+- N6a breaks the "spent upper bound" by the gate's own $1.60 per extra attempt, with the runner following the docs.
+  Round 1 rated a $1.07 undercount MAJOR (finding 4). Plan C's headroom is $2.92, so two retries exceed it.
+- N6b-N6d admit the next machine while a machine may still exist. That is the case round 3 was ordered to close.
+
+Fix (a suggestion; Codex or the owner decides the design):
+1. Docs: one admission covers **one** launch attempt. Commit every attempt's receipt, including a capacity refusal
+   and a failed launch. Never prepare or launch a second job under one admission unless the row names every attempt.
+2. Code, one of:
+   - a. let the row list every attempt under its admission. Count each one (a proven refusal at its bound; anything
+     else at the larger of the cap and its figures). Bind each to the window, seed and source. Require a confirmed
+     cleanup or a proven refusal for each.
+   - b. look for attempts the row does not name, and fail closed. Training: any committed receipt whose own job id
+     carries this slot's seed and this admission's source prefix (the job id holds both) and a time in the window.
+     Watched: any `launch_record.json` in the design folder whose `launched_utc` lies in the window. Any unnamed one
+     makes the cleanup UNCONFIRMED ("another launch attempt of this admission is not named").
+   - Detection only sees receipts that exist in git or on disk. Rule 1 covers the rest.
+3. Tests: N6a (attempt 1 is counted, or the row is refused), N6b, N6c and N6d (exit 1) as negative tests. The
+   single-attempt tests stay as positive controls.
+4. Where a retry goes is not decided: no retry slot exists, and the slot definitions are frozen. New open question 9.
+
+**I. MINOR: the history is one branch's default `git log`; a merge can hide a committed RUNNING or DONE row**
+(`GitReader.history`, lines 375-380).
+
+- `git log --format=%H -- STUDY_SLOTS.json` uses git's default history simplification. If a merge keeps one side's
+  slots file exactly, the other side's commits of that file drop out of the list.
+- **Probe N8** (a tiny real repository in the scratch folder). Main has M1 PLANNED. Branch `side` commits M1
+  RUNNING, then M1 DONE. Then `git merge -s ours side` on main. Default log: 1 version (PLANNED). `GitReader.history`
+  returned that 1 version, and `check_history` **passed** with M1 PLANNED again. So `--admit M1` would be judged as if
+  M1 never ran. With `git log --full-history`: 4 versions, and `check_history` exits 2
+  (`HISTORY_VIOLATION: M1 was DONE ... now PLANNED`).
+- The same root: the gate reads only the local checkout. Two checkouts, or one that was not pulled, each see their
+  own file, and each can admit. The second RUNNING row's push then fails or conflicts. A conflict resolved to "ours"
+  is N8.
+- Fix: read history with `--full-history`; make `--admit` refuse unless HEAD equals the fetched remote tip of the
+  study's branch; in the docs, `git pull --ff-only` before `--admit`, and launch only after the RUNNING row's push
+  succeeds.
+- Why MINOR: it needs two runners, or a stale checkout plus a merge that discards one side. A force-push was already
+  stated to be outside the check; this is a second way to the same place.
+
+**J. NOTE: a careful hand-written admission record still passes** (the NOTE-F limit the builder states,
+reconfirmed). Probe N7: the World writes every admission record by hand, with `gate`, `program_sha256` and
+`slots_sha256_before` filled, and commits it RUNNING. ACCEPTED; `--admit M2` exit 0, $54.36. As stated. No change
+asked.
+
+**K. NOTE: watched slots bind time only, so a stray watched launch inside the window confirms** (the builder's
+limit 2, reconfirmed). Probe R3: E1 admitted 10:30 with bundle `d...`; its INVALID row names a watched job launched
+at 10:40 with bundle `c...` (a launch the gate never admitted). Cleanup confirmed; `--admit P2` exit 0, $55.63. The
+bundle and source are known at `--admit` and shown in the launch record. Binding them for watched slots would match
+what round 3 does for training sources. Codex or the owner should decide both together (with open question 8).
+
+### Still open (not decided here)
+
+NOTE-D (open question 6), question 7 and question 8 stay open, as the builder left them. New: **9. Where does a
+retry of a slot go** after a capacity refusal or a failed launch? (No retry slot exists; the definitions are frozen.)
+
+### Claim states
+
+- **Real (measured here):** both test runs; the real report and its byte-identical state; the real reading and its
+  byte-identical regeneration; the file diffs; probes P1-P7, N1a-N5, R1-R3, N6a-N6d, N7, N8.
+- **Open:** Codex's review; open questions 1-9; findings H and I; notes J and K (FLAG_FOR_HUMAN_REVIEW for the
+  design choices).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, until finding H is fixed and
+  re-verified.
+
+### Exposure
+
+Read: this file; `study_spend.py`; `test_study_spend.py`; `STUDY_SLOTS.json` (slot ids, statuses, caps, bases,
+training seeds and arms, receipt specs including S1's and S2's job ids); `PREREQUISITE_SLOTS.md` (lines 20-179 and the
+round-3 diff); the round-3 diff of `larger_question_t4_job/README.md`; `read_results.py` lines 283-300; the Codex
+folder's `.gitattributes` (first 10 lines) and the git config for line endings; the folder listing of
+`typed_pointer_001/` (names only). P1a's `launch_record.json` and `watch_record.json` were read as bytes and hashed
+only; nothing from them was printed. The real report read its receipts through the program, and only summary lines
+were printed. The real reader ran in memory; only its top-level key names, `route_acceptance`, the two verdicts and
+`instance_id` were printed. **No receipt file was opened directly**, so no `ledger_before` / `ledger_after` field was
+read or printed. Wrote: this section only. The probe script, the regenerated state and the N8 repository live in the
+verifier's scratch folder. The untracked `aws_probe_job/dry_run_machine_script.sh` is not the verifier's and was left
+alone. No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3,
+no meta1 ledger, no transcript.
