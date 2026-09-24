@@ -118,3 +118,15 @@ Close the job only after evidence is collected, hashes verified, termination and
 Submit this plan with the completed S1 receipt and completed P1/P2 receipts, the actual HSET-2 table, final source/package/environment/panel pins, validated C reader and corrected probe, current spending/ledger reconciliation and cleanup allocation. The final packet must say exactly which C/B job envelope is requested and show every unresolved gate.
 
 **Current disposition: owner authority granted; execution remains held because empirical prerequisites and immutable main packages are missing.** Do not bypass these checks or edit active-job sources. Historical grading, custody and Q4 separation remain unchanged.
+
+## Current prelaunch decisions after reader/gate/HSET review
+
+The controlling clarification is [POLICY_DECISIONS_20260924.md](../../records/helm_controlled_prelaunch_20260924/POLICY_DECISIONS_20260924.md).
+A2.7 resolves the builder's pending choices before protected-key creation. It keeps the frontier shortcut as a bar,
+all NOT_TESTABLE outcomes and the ten-unit floors, and does not claim that beating a finite list proves learned
+three-step path following. Core reader source conforms, but both reader execution admission and spending gate need
+specific fixes. A single admission cannot fund retries. The manifest no longer hashes a downstream admission that
+hashes it back. Main launch stays disabled. P1b needs the pinned RTX PRO 4500/g7 environment and a revised priced
+package; T4 route acceptance does not supply that prerequisite. The $57.08 C figure is unaccepted preliminary
+arithmetic; conservatively adding the flagged $1.918 earlier preparation gives $59.00 before g7/retention corrections.
+Option C, $60 ceiling, $30 stop, eighteen saved-model checks, A1, custody and Q4 separation remain unchanged.

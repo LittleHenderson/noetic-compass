@@ -74,3 +74,15 @@ After that finite horizon, preserve the evidence under the owner's existing keep
 The reduced smoke result and temporary-resource cleanup are closed. P1/P2/E1 packages, their fixed-reservation bookkeeping, cumulative spending enforcement, measured runtime estimates, implementation of the proposed retention bounds and P1/P2 completion receipts remain prerequisites to a **ready-to-execute** packet. The future job counts above are fixed; unfinished admission details do not permit extra jobs. This cost note does not claim those gates passed.
 
 E1 completion and cleanup receipts are post-execution deliverables, not prelaunch prerequisites. If the funded sequence stops early, the same E1 slot may report available public diagnostics, historical-gate losses and missing results as COMPARISON_INCOMPLETE; no partial confirmatory TEST comparison or repair-success claim is permitted.
+
+## Current gate review and cost correction
+
+[POLICY_DECISIONS_20260924.md](POLICY_DECISIONS_20260924.md) answers Q1-Q9. Gate4e292912 remains CHANGES_REQUIRED:
+one admission cannot cover another RunInstances call; every attempt needs cleanup, a fresh reserve and a single-use
+five-minute launch window. Invalid study evidence or a breached limit stops further study admissions.
+The reported $57.08 C bound is not an accepted maximum. Conservatively include the separately flagged $1.918 earlier
+preparation: $58.998, rounded upward to $59.00, at most $1.00 headroom before other changes. P1b must be re-priced on
+g7 rather than the proposed T4. Reconcile the gate's 12-month $0.10/job retention allowance with the plan's 30-day
+accounting horizon and ongoing retained charges. No deletion or ceiling increase is authorized. Preserve existing
+$15 bookings; neither $90 C bookings nor historical hybrid estimates are invoices. Current candidate job counts
+remain provisional until the required package and cost corrections are complete.

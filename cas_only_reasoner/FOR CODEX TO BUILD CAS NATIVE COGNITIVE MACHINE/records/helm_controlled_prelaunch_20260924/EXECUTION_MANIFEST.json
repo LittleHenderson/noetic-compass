@@ -13,8 +13,6 @@
   "chosen_comparison_for_request": "C_ONE_FRESH_REPRODUCTION_CONTROL_THREE_REPAIRED_TWO_REUSED_HISTORICAL_CONTROLS_WITH_CONDITIONAL_B_FALLBACK_PENDING_TECHNICAL_ADMISSION",
   "final_freeze": {
     "study_source_commit": null,
-    "control_admission_sha256": null,
-    "repaired_admission_sha256": null,
     "control_main_package_sha256": null,
     "repaired_main_package_sha256": null,
     "evaluation_package_sha256": null,
@@ -27,10 +25,14 @@
     "corrected_analogy_probe_source_sha256": null,
     "status": "NOT_READY_REQUIRED_BINDINGS_MISSING",
     "expected_initialization_recipe_and_state_receipt_sha256": null,
-    "frozen_launch_packet_sha256": null
+    "admission_writer_source_sha256": null,
+    "admission_rules_sha256": null,
+    "spending_gate_source_sha256": null,
+    "control_prelaunch_configuration_sha256": null,
+    "repaired_prelaunch_configuration_sha256": null
   },
   "freeze_policy": [
-    "The final launch request must bind exact source commits, package hashes, public data hashes, initialization recipe, worker, checker, decoder, probe, environment, admission records and prerequisite receipts before any new main job.",
+    "The manifest binds exact immutable source/data/package/configuration/environment leaves and prerequisite receipts. The launch request binds the manifest; a downstream packet index and technical admission bind the launch request. Runtime admissions and the packet containing this manifest are never hashed upstream into this manifest.",
     "No branch tip, currently-hash label, null required binding, missing prerequisite or changed source may pass final admission.",
     "Future output hashes cannot exist before training and remain PENDING_RUNTIME. Bind generation recipes, expected learned-state references, initialization prerequisite receipt and validation rules before launch; append each produced initial/checkpoint identity and actual environment to a separately hashed run receipt. Capture and validate initial state before the first optimizer update. Reject mismatches under the predeclared policy before any claim-bearing read.",
     "Any frozen-input change requires an explicit new version, affected acceptance checks and Claude technical admission under standing owner authority. Never weaken a predicate after observing a mismatch.",
@@ -1078,5 +1080,27 @@
     "current_remaining_jobs": null
   },
   "accounting_reader_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json",
-  "route_prerequisite_completion": "ROUTE_PREREQUISITE_COMPLETION_20260924.json"
+  "route_prerequisite_completion": "ROUTE_PREREQUISITE_COMPLETION_20260924.json",
+  "admission_binding_direction": {
+    "decisions": "POLICY_DECISIONS_20260924.md",
+    "order": [
+      "source_data_environment_rule_leaves",
+      "acceptance_receipts",
+      "execution_manifest",
+      "launch_request",
+      "frozen_packet_index",
+      "policy_pins_and_technical_admission",
+      "runtime_receipts"
+    ],
+    "single_attempt_only": true,
+    "spend_snapshot_max_age_seconds": 300,
+    "launch_enabled_for_preparation": false,
+    "runtime_admission_hashes": "RECORDED_DOWNSTREAM_NOT_REQUIRED_MANIFEST_INPUTS"
+  },
+  "latest_public_review": {
+    "reader": "d5414964314475e2b13a49595fd54a3d7fee017c",
+    "spend_gate": "4e292912a1efe0a85312574a69291a1af5af5427",
+    "hset_builder_review": "bd960bc1ae351f9cf653fd865a9a9996e3c3aa75",
+    "status": "FIXES_AND_RUNTIME_ACCEPTANCE_PENDING"
+  }
 }

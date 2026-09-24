@@ -464,3 +464,59 @@ loss, gain, tie, accuracy change, p-value and old-gate crossing; include six-los
 Do not say "no ability lost", "preserved performance" or "noninferior" from failure to reject this test. A stronger
 zero-observed-loss or noninferiority rule would require its own owner-approved predeclared margin and analysis;
 this amendment does not silently add one or alter the historical grader.
+
+### A2.7 Builder comparator decisions, before the protected key
+
+This is the single A2 specification. It incorporates the builder's proposed bars in the public review at
+`bd960bc1ae351f9cf653fd865a9a9996e3c3aa75`; that proposal is not a competing amendment. These decisions resolve
+D1-D4 in `claude-0019`. Claude implements and checks them before creating the protected key or sealed set.
+
+- **D1: choose option (a), register the shortcut.** Add `FRONTIER_FALLBACK` to both reach variants and both
+  registered reach claims. It first uses the registered two-hop answer. If that is ABSENT, it returns VIA only
+  when a node exactly two steps from the whole has a child and the part has a parent. For first-child, choose
+  the whole's child with most children, breaking ties by lowest rank. For BFS, choose among the part's parents
+  that themselves have a parent, maximizing parent count and then minimizing rank. An empty eligible via set
+  returns ABSENT. Freeze these deterministic choices in source; validate the full packet answer with checker v2.
+  Reading a frontier node's degree is not evidence of following a path to the requested part at distance three.
+- Keep `SINGLE_ROOT_FALLBACK` and `SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP` exactly as specified in the public builder
+  review section 2. The three-step claim excludes only the two explicitly three-hop rules
+  `THREE_HOP_FIRST_CHILD` and `SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP`; the four-step claim includes them.
+  `FRONTIER_FALLBACK` is not excluded from the three-step bars. Every new bar is scored in all required views.
+- Do not rebalance cells, rename a failed claim into a success, redraw the key, or remove a bar to restore power.
+  The throwaway finding is 21/21 `NOT_TESTABLE` salts after this bar, with binding W 1/3.4/6 for first-child and
+  0/1.1/2 for BFS. These are development estimates, not actual protected counts. Keep the reach claim registered
+  and exploratory; actual counts determine its status. Even a nominal pass establishes only performance against
+  the registered finite rules, not proof of learned three-step path following or exclusion of every shallow rule.
+  A comparator defined by the best possible answer from an entire two-step information view is deferred to a
+  separately preregistered successor design: neither its equivalence relation nor its allowed fitting procedure
+  is currently specified. Do not label this finite list an exhaustive information-view control.
+- **D2: add the one-guess bars.** For analogy register `DEGREE_GUESS_THEN_CHECK`,
+  `WHOLE_ANCHOR_GUESS_THEN_CHECK`, `FLAG_ANCHOR_GUESS_THEN_CHECK`, and
+  `DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK`. Each may make one deterministic mapping guess for each same-degree,
+  other-domain candidate in displayed-alias order, check all required relations and flags, and return the first
+  accepted candidate or NO_MATCH. No backtracking or second guess per candidate. The first three use the builder
+  section-2 definitions. The fourth is verifier N1's degree sort, ties broken by declared flags and then rank;
+  Claude must publish and pin the exact flag-key order and tie convention with public toy examples before the
+  key is made. This name is distinct from anchoring the whole and participants. Correspondence also registers
+  `WHOLE_ANCHOR_GUESS_THEN_CHECK` alongside its existing bars. Retain the exact-search ceiling separately.
+- **D3: whole DEV side for eligible decoys and NO_MATCH targets.** Use the focus's degree group within
+  `DEV_NEW_6` union `DEV_DECOYS_6`, excluding the focus and respecting the existing recipe's eligibility rules.
+  This resolves section 5.4's ambiguity by matching TEST's same-side recipe. It does not cross the DEV/TEST
+  boundary. A1 D3 is unchanged: filler worlds come only from `DEV_DECOYS_6`. Reprint actual DEV counts and label
+  whether a count concerns foci, eligible decoys, targets or fillers. Published 27/52 foci are not a protected result.
+- Clarify F4: the relabel-every-world requirement applies to analogy/correspondence bank tasks. Reach, parts and
+  edge-account tasks retain their frozen 64-world bank and relabel the focus only. Before accepting this as
+  implementation-conformant, the public review must verify both arms and their comparators consume only that
+  focus for these tasks. This clarification does not permit information from ignored bank worlds to affect answers.
+- **D4: retain every floor in A2.4.** In particular, confirmatory analogy needs ten degree groups, ten shared-shape
+  components, and binding W at least ten in each additional view. The reported analogy W minimum of nine is a
+  reason to report `NOT_TESTABLE`, never to lower a floor. Reach retains its existing floors; the new grouped
+  views are reported as specified in A2.2. No salt is selected for favourable feasibility.
+
+Before protected-key creation, Claude supplies the reviewed comparator manifest, digest, complete throwaway
+feasibility ranges including groups/components, exact tie rules and public split/exposure attestation. After the
+single authorized custodian build, publish only the permitted actual aggregate feasibility table, with every
+`NOT_TESTABLE` row and reason, before main training. A1's protected partitions and grader pin are unchanged.
+The documented overlap of 24/40 older public DEV classes with the TEST-side candidate pool remains an exposure
+question requiring an attestation; do not assert clean novelty from stage-0 counts alone. This decision permits
+continued preparation under existing roles; it does not itself establish a ready sealed build or main launch.

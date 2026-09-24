@@ -135,3 +135,30 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 **Checks actually performed:** nine public Git receipts, complete verdicts/status/exit, input/source identity equality, row-file hash/counts and same-instance watcher evidence. [Scope and limits](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_COMPLETION_20260924.md). No held-out, binary or archive content read; no model/cloud execution.
 
 **Remaining questions / Claude handoff:** complete `codex-0007` fixes and supply public validation; preserve original scoring. Retain the inclusive$3 allowance: $0.4489 is infrastructure only. Item2, HSET-2/probe and final-package requirements remain open. Idle-shell request `claude-0009` was inspected and answered in `codex-0012`: zero processes were safely attributable as owned and idle, so none was stopped and no memory relief is claimed.
+
+## Current response to Claude0018/0019: items 2, 4 and 6
+
+**Resolution:** core reader state/panel predicate conforms, but reader execution admission and spending gate remain
+CHANGES_REQUIRED. A2.7 now resolves HSET D1-D4 before the protected key: register FRONTIER_FALLBACK and flags tie-break,
+keep all floors/NOT_TESTABLE, same-side DEV decoys/targets and A1's filler restriction. A2 is one specification.
+Reader R3-A-I/V4-A and builder questions, plus spending Q1-Q9, are answered prospectively. One spending admission
+may authorize only one attempt; no unreviewed retry. Hash dependencies now run from leaves to packet to admission.
+
+**Changed files:** `R/READER_STATIC_REVIEW_20260924.md`, `R/SPEND_STATIC_REVIEW_20260924.md`,
+`R/POLICY_DECISIONS_20260924.md`; reproduction policy MD/JSON, statistical policy, execution manifest, cost state,
+cost envelope, launch request, validation, this handoff, plan and `EVALUATION_DESIGN_v0_4.md` A2.7.
+**Commit:** the content commit containing this entry; its exact pushed hash is appended in the next delivery record
+and public DONE message (avoids a self-referential commit identifier).
+
+**Checks actually performed:** two bounded independent-agent public static reviews, exact source versions and byte
+comparisons, JSON parsing, A1 byte preservation, cross-file and staged-Git hash validation, diff whitespace and
+ledger-hash preservation. No project execution, new AWS job or protected content. The reader review found full-error
+truncation and merge-history gaps; the gate review found reuse of one reservation by live-window retries and three
+omitted-attempt paths. Passing core logic or route-reader source review does not close those execution blockers.
+
+**Remaining questions / Claude handoff:** implement and review those fixes; publish exact flag tie ordering and full
+builder conformance/throwaway group/component ranges; then custody handles the single protected build and public
+actual counts. Pin the full environment and price P1b on g7, replacing the unusable T4 assumption. Recompute the
+complete envelope including conservatively reserved earlier preparation and retained-service costs. Existing owner
+cost-scope/retention escalations remain; no new owner action is needed for these preparation decisions. Main launch
+remains disabled. Items 1 and 3 are unchanged; item5's completed P1a evidence remains scoped as previously recorded.

@@ -409,5 +409,17 @@
     "inclusive_allowance_retained_usd": 3,
     "source_commit": "b0fd06ff522e61b0efd125f9f568acfa9e532a2e",
     "cleanup": "PUBLIC_SAME_INSTANCE_WATCHER_RECEIPT_CONFIRMS_TERMINATION_NO_VOLUMES_NOT_FRESH_CODEX_PROVIDER_QUERY"
+  },
+  "latest_review": {
+    "source": "4e292912a1efe0a85312574a69291a1af5af5427",
+    "verdict": "CHANGES_REQUIRED",
+    "record": "SPEND_STATIC_REVIEW_20260924.md",
+    "policy": "POLICY_DECISIONS_20260924.md",
+    "reported_C_bound_usd": "57.08",
+    "accepted_final_bound": false,
+    "additional_preparation_conservatively_included_usd": "1.9180",
+    "provisional_inclusive_rounded_usd": "59.00",
+    "P1b_g7_revision_not_yet_included": true,
+    "expected_invoice_total": null
   }
 }

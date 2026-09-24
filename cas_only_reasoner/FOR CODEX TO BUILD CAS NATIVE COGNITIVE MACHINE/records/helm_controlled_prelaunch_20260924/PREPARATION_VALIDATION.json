@@ -101,5 +101,19 @@
     "existing_policies_A1_and_ledger_unchanged": true,
     "model_execution_or_new_cloud_job": false,
     "content_commit": "ad269fe921224f01f6d2ca2bd4d0ee8e63ec6e59"
+  },
+  "three_priority_review_update": {
+    "utc": "2026-09-24T10:36:34.964827+00:00",
+    "reader_review": "d5414964314475e2b13a49595fd54a3d7fee017c",
+    "spend_review": "4e292912a1efe0a85312574a69291a1af5af5427",
+    "hset_review": "bd960bc1ae351f9cf653fd865a9a9996e3c3aa75",
+    "A1_bytes_unchanged": true,
+    "ledger_sha256_unchanged": "42eb28a1186deb026e0bd09a195f0787e5203428b10a989aa6adb3a3ef424e9f",
+    "launch_disabled": true,
+    "checks": "public static source reviews and exact source bytes, JSON parse, A1 comparison, SHA256 and Git diff; staged bindings verified separately before commit",
+    "project_execution": false,
+    "new_aws_jobs": 0,
+    "protected_material_read": false,
+    "content_commit": "PENDING_DELIVERY_RECORD"
   }
 }

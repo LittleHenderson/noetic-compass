@@ -46,13 +46,13 @@
   "protected_splits_changed": false,
   "A1_changed": false,
   "policy_file_sha256": {
-    "REPRODUCTION_POLICY.md": "92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e",
-    "REPRODUCTION_POLICY.json": "13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259",
-    "STATISTICAL_POLICY.json": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055",
-    "EXECUTION_MANIFEST.json": "a0cc864ece13b531a20fb76f3e27ac7ad32b7cd2c7734b393f06ef5f85059470",
+    "REPRODUCTION_POLICY.md": "5d6a0e53e14e1f90e2c021e786a1236a99af646a09747bb1a55d7c933560e383",
+    "REPRODUCTION_POLICY.json": "f4ce13d0ace02e368279d77efb3d86391b2b92f5c8f9c61ad60070f36abd8543",
+    "STATISTICAL_POLICY.json": "845de197a5214b5fdf18206c4c738c5e1fd3b05b96b6fe086516f2964b7bb619",
+    "EXECUTION_MANIFEST.json": "a277642c4aa6b3369f2d6d3cedaf0535a17d25f24ad5ea3bb58e3b5f1d4805ca",
     "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
-    "COST_AND_JOB_ENVELOPE.md": "6de1abc8bf04f06b03ef548a6c612aa80ef5b43b3723790a8a0ec0045c02a873",
-    "COST_STATE.json": "9c90753cc575cfcdab7a8b4a6373e631bf8e358669f20d2738ff374b2a3ca0db",
+    "COST_AND_JOB_ENVELOPE.md": "a2105de6817455f72a23c93f222cd7fb70408e62cda9d686a8cb8cae2d657f88",
+    "COST_STATE.json": "777369d0c87a555f7928b44d5dba896bb77447b6cf89eff384e2f256e43d29d9",
     "CURRENT_COORDINATION_STATE.json": "5a2646fc17d230cf7bfd1c2dc5f0a43203e4757bf199df96620ff33a1a786cd2",
     "LEDGER_RECONCILIATION.json": "28f8e0964eb061be170e9c1bdb9faaab57fc912954ce18f706a49cd59a4dc59e",
     "SMOKE_COMPLETION_RECONCILIATION.json": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
@@ -66,7 +66,10 @@
     "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json": "2f7cb1d1b09a8fc259895fabfa8ff901d2a11705e9f1440c577d571d3fc26351",
     "AGENT_BUS_VERIFICATION_20260924.json": "3e3fc1530546df346dd171f8922121b10e20d2b611bdce56d89e7ee03cc3e949",
     "ROUTE_PREREQUISITE_COMPLETION_20260924.md": "4d418ef60f422d8b2771e8e243fc1a54e2fd4351a2cd9394461ff4c58990fed1",
-    "ROUTE_PREREQUISITE_COMPLETION_20260924.json": "9519434d721819a219f5c4e9d5d085d0d4e6c4c825d38d858551891df0c312b5"
+    "ROUTE_PREREQUISITE_COMPLETION_20260924.json": "9519434d721819a219f5c4e9d5d085d0d4e6c4c825d38d858551891df0c312b5",
+    "READER_STATIC_REVIEW_20260924.md": "4028b48a4effc519e012225f20142559d9192dea08643bfb5129a12ae8b7a08e",
+    "SPEND_STATIC_REVIEW_20260924.md": "d504762b09db114cd9d9d3428e129345b0154f4a3085de2ae955cbbbdf4ed1ea",
+    "POLICY_DECISIONS_20260924.md": "00e148e84133373c4dfde5153123474ab392890feae11a2977d074d380d516f4"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -78,14 +81,18 @@
     "existing reader and approval-state parser conform to prospective policy",
     "HSET-2 A2 conformance and public exposure attestation",
     "actual combined prerequisite timing within named slots",
-    "candidate remaining slots named; complete cost bounds, identity-bound receipts and enforced per-slot/$30 admission still required"
+    "candidate remaining slots named; complete cost bounds, identity-bound receipts and enforced per-slot/$30 admission still required",
+    "reader full-message exception, merge-history, provenance and runtime environment enforcement fixes",
+    "per-attempt single-use spending admission and omitted-attempt fixes",
+    "P1b g7 package and complete budget re-pricing",
+    "A2.7 exact flag tie-order, builder conformance and public feasibility/exposure receipts"
   ],
   "approval_requested_now": false,
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
-    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "5f08212e7abfcfaf24c1bfb438d3c149dc06922265a35688f4fb5a7e585141da",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "c23fcb4660e94102d2bb80e4d5b35e41e3f8ef8cce4efe709d011fc7ed270f64",
-    "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
+    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "da3dc477cd168f48b724ac87d84c354f01013f2bf19350aa185376f0ae1e9805",
+    "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "0dd740584f33b752feb0453214d335520855d6ede77f3a5b490afd6c013a3454",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
   },
@@ -111,7 +118,9 @@
     "prior_hybrid_figures_status": "HISTORICAL_COMBINED_P1_PROPOSAL_REQUIRES_RECONCILIATION",
     "current_expected_total_usd": null,
     "route_only_inclusive_cap_inside_60_usd": "3.00",
-    "claude_candidate_57_59_worst_claim_accepted": false
+    "claude_candidate_57_59_worst_claim_accepted": false,
+    "claude_reported_57_08_bound_accepted": false,
+    "conservative_prior_prep_included_pre_g7_repricing_usd": "59.00"
   },
   "execution_owner": "Claude",
   "preparation_owner": "Codex amendments; Claude existing implementations and custody",
@@ -153,5 +162,11 @@
     "B_usd": 165
   },
   "reservation_scope": "Canonical fixed15 bookings for smoke/training only per Claude3083ea0d; nontraining separate study-spend receipts; not implemented by Codex",
-  "candidate_envelope_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json"
+  "candidate_envelope_review": "SPEND_STATIC_REVIEW_20260924.md",
+  "current_review": {
+    "policy": "POLICY_DECISIONS_20260924.md",
+    "reader": "READER_STATIC_REVIEW_20260924.md",
+    "spend": "SPEND_STATIC_REVIEW_20260924.md",
+    "hset": "A2.7_DESIGN_DECIDED_IMPLEMENTATION_PENDING"
+  }
 }
