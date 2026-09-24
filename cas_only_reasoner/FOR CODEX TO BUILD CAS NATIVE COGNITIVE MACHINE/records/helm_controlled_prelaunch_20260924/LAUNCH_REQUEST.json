@@ -91,7 +91,7 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "5ec269c1cece25065f3dedcead2a5d322c6121d5164c6c1acdbbe8ffd05c5a16",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "08195e82fa39b45dad0c10b8f938ebadd49ecdec3eb477867268b5592a651588",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "0dd740584f33b752feb0453214d335520855d6ede77f3a5b490afd6c013a3454",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
@@ -168,5 +168,14 @@
     "reader": "READER_STATIC_REVIEW_20260924.md",
     "spend": "SPEND_STATIC_REVIEW_20260924.md",
     "hset": "A2.7_DESIGN_DECIDED_IMPLEMENTATION_PENDING"
+  },
+  "observed_separate_training_execution": {
+    "source_record_commit": "33d2e7893948152221501da3902781a3babb9a4d",
+    "R17_instance": "i-06b46a8c257e782a5",
+    "launch_utc": "2026-09-24T13:04:36Z",
+    "state_observed": "RUNNING",
+    "evidence": "read-only AWS DescribeInstances in 13:06 heartbeat turn",
+    "this_draft_retroactively_admitted": false,
+    "controlled_comparison_readiness": "OPEN_READING_STAGE_PREREQUISITES"
   }
 }

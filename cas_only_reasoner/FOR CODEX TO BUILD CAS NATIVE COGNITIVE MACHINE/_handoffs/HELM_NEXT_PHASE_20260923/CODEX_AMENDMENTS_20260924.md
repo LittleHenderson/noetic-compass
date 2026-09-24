@@ -179,3 +179,31 @@ The six-item policy work and the three requested reviews have been delivered at 
 Q4 remains a separate workstream. Relay this priority to its current owner: close its existing concrete blocker and proceed to its next already-authorized step under its own rules. Codex does not take it over, combine its charges with this study or assert that its quoted "one small fix" status has been independently verified here.
 
 Communication: relay this owner priority once through the existing Claude bus, the existing Helm oversight task and the available Codex reviewers. Ask Claude to pass it to its active implementers and the Q4 owner and return the next concrete deliverable and remaining critical path. No new watcher, process, research team or duplicate implementation is requested. Until the next reviewed code/receipt delivery, the technical hold remains; it is not a request for the owner to repeat approval.
+
+## 13:06 UTC heartbeat: actual execution supersedes the earlier waiting status
+
+Claude's training-first disposition is committed at `33d2e7893948152221501da3902781a3babb9a4d` in
+`OWNER_STOP_POLISHING_20260924.md`. It records the relayed owner direction, labels itself a Claude transcription
+rather than an owner signature, and discloses postponing HSET-2 feasibility and reader/probe/evaluation prerequisites
+until reading. All six review items are classified RECORD-AND-CONTINUE for training. This is a separate execution
+route from this branch's earlier evaluation-inclusive launch draft; that draft is not retroactively marked ready.
+
+**Actual observation:** a fresh read-only AWS DescribeInstances query in this turn confirmed the first repaired
+job's instance `i-06b46a8c257e782a5` RUNNING, `g7.2xlarge`, `us-west-2a`, launch `2026-09-24T13:04:36Z`.
+Claude names job `cas-meta2-tpntr-20260924122512-3df31d96-m-20260917`. The repaired freeze is
+`afccbcb98bb36bbea953f6918b3fe0c62429495e`; unchanged freeze `3344ae5d7bcc0d5ff50f1bce220f77a063ece65a`.
+These commits resolved from fetched branches. Instance state does not prove completed training or a valid scientific
+comparison. The unchanged technical admission remains historically NOT_READY. Never rewrite that history; any later
+reading eligibility clarification must be separately disclosed before deciding comparisons are opened, with the
+exact state/output predicate and fixed scientific rules preserved. No active source or job was altered here.
+
+**Separate Q4 observation:** public watcher, STATUS and verdict at `1d65740885b04150d4b1ca3ecf6766a259e4cda3`
+record JOB_COMPLETE, STAGE0_REPRODUCED and LESSONS_OVERALL_EFFECT_NOT_SHOWN, with PROGRAM_READING_NOT_CERTIFIED /
+CLAUDE_BUILT_CLAUDE_CHECKED labels. Its watcher reports a whole-job cost upper bound of $0.3383, not an invoice.
+The same fresh AWS query confirmed Q4 instance `i-0410e43c787fdabdb` TERMINATED. No Q4 implementation or ownership
+was taken over; no protected questions, answers, salt or sealed outputs were opened.
+
+**Checks and next handoff:** exact public commit resolution, named public receipts and a two-instance read-only
+provider query; no project execution. Bus `codex-0021` acknowledges receipt and requests actual completion/checkpoint
+inventory and reading-side deltas. The $60 ceiling still includes the deferred readout; Claude must account for it
+before later jobs. Readiness of the controlled comparison, the reader, HSET-2 and corrected mechanism remains open.
