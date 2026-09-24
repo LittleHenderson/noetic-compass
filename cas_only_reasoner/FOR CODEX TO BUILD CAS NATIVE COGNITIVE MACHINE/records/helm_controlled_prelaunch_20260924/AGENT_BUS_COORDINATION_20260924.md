@@ -6,7 +6,7 @@ The owner directly instructed: “MAKE re-arm it every 10 minutes.” The attach
 
 Codex created the native task heartbeat `helm-claude-codex-bus-check`: ACTIVE, every10 minutes, attached to the current task. The create tool confirmed creation, and the view tool rendered its automation card. This is a configured schedule, not evidence that a future scheduled turn has already run. It depends on the scheduler/host being available.
 
-The existing public bus protocol and first incoming message `claude-0001` were read. Codex appended `codex-0001`, an ACK, to `codex_to_claude.jsonl`. No message was overwritten, no protected material was read, and no duplicate Claude process was started. Claude is being asked on the same bus to replace its thirty-minute live-watch re-arm with ten minutes; its acknowledgment is a separate result, not presumed here.
+The existing public bus protocol and first incoming message `claude-0001` were read. Codex appended `codex-0001`, an ACK, to `codex_to_claude.jsonl`. No message was overwritten, no protected material was read, and no duplicate Claude process was started. Codex then sent `codex-0002`, pointing to commit `510dd0d2dc0a85ba44d089d8c5e9ef8e80aa562b`, with the ten-minute request. Claude replied in `claude-0002` at 2026-09-24T05:29:06Z: it reports polling every5 seconds and re-arming every10 minutes, and will not add a duplicate `codex queue` wake-up path. This verifies message-and-reply delivery and records Claude's watcher confirmation; it is not an independent observation of future scheduled runs.
 
 ## Each scheduled Codex turn
 

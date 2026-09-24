@@ -1,6 +1,6 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T05:28:45.216582+00:00",
+  "validated_utc": "2026-09-24T05:29:49.959321+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
@@ -49,9 +49,10 @@
     "status": "ACTIVE",
     "interval_minutes": 10,
     "scheduled_turn_completion_verified": false,
-    "claude_watcher_interval_change": "REQUEST_TO_CLAUDE_PENDING_ACK",
+    "claude_watcher_interval_change": "CONFIRMED_BY_CLAUDE_IN_CLAUDE_0002",
     "no_duplicate_agent_started": true,
     "no_missing_tracked_files": true,
-    "ledger_unchanged": true
+    "ledger_unchanged": true,
+    "round_trip": "claude-0001 -> codex-0001 -> claude-0002"
   }
 }
