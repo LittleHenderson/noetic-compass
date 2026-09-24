@@ -1024,3 +1024,150 @@ assumptions hold.
   - the meta1 ledger; any `results/` folder; `private_targets.json`;
   - the reviewer's scratch files; Claude transcripts.
 - No real salt was used or made. Nothing was downloaded. Nothing ran on AWS.
+
+## Verification of 1c404269d0afc728c4a2f3f95d1575637efb0cd2 (fresh verifier; `CLAUDE_BUILT_CLAUDE_CHECKED`)
+
+**Who and what.** A fresh verifier: a Claude sub-agent that did not write the build, its fixes or the review of
+`4c402209`. Claude is both the temporary builder and the checker while Codex is away, so this is not an outside
+custodian review. I read the diff from `4c402209` to `1c404269`, ran the tests, and re-measured the numbers the fixes
+print. No model was loaded. No real salt was used or made. Every number below comes from THROWAWAY salts made from
+public strings, or from small hand-made clusters. Nothing ran on AWS.
+
+**Verdict: `APPROVE_CONFORMANCE`.**
+- The three MINOR fixes (R2 the D1 switch, R3 the exact power, R4 the packet-route field) and the NOTE fix (R7 the
+  status words) are correct. I found no new BLOCKER or MAJOR problem.
+- The MAJOR (R1) is a design question. It is recorded, not decided: no bar was added, the scope sentence did not change,
+  and the question is printed in the build output. I reproduced its premise myself (VF.3).
+- Under the default settings every claim has exactly the bars it had at `4c402209`.
+- This approves conformance only. The open questions in R.4 are still open, and each one is for the design owner
+  before the salt is made.
+
+### VF.1 What I ran (one process at a time; each run under 5 minutes)
+
+- **The pinned tree.** Written again by `launch.py --materialize-tree` into my scratchpad: 1,186 files, tree digest
+  `fe2eaa174b6d7265bcb78de25a13b6898a158ee808bfaf87a419c3ff10190db6` (the same as every earlier round).
+- **Fast test group: 29 passed** (43.40 s). **End-to-end group: 2 passed** (85.01 s; it fitted in the limit). The slow
+  group was not run; its code path (the trained-answer-state re-measurement) is not in this diff.
+- **File hashes.** The LF sha256 of `hset2_build.py` (`a21d022b...`), `test_hset2.py` (`997345c9...`) and
+  `hset2_throwaway_ranges.py` (`6d4bf431...`) equal the ones in R.3. `pyflakes` is clean on all three.
+- **The commit** changes only 5 files, all in this folder. The stage-0 files and `PUBLIC_EXCLUDED_v1.json` are not in it.
+
+### VF.2 Each fix, checked
+
+**The bars did not change under the default (R.1 claim).** I loaded `4c402209`'s `hset2_build.py` (from git) beside the
+new one. The reach bars of both claims, the analogy bars, the correspondence bars, `SCOPE_SENTENCE`,
+`GUESS_ANCHORS`, `MIN_CLUSTERS`, `A2_4_MIN_UNITS` and `DECLARED_NOT_TESTABLE` are all identical. The old digest is
+`cf88cebafa9169964aff041d3c1bcb652b2067b86854befc253dd452291c78af`, as the builder said.
+
+**R2, the D1 switch: correct.**
+- Each value gives the bar-set digest the review table prints: `a` `14be05d5a0845e52a194628974fd0bfd6763b0fc0b1e1e96dfe3dd779671edfd`,
+  `b_not_testable` `42928c8681b59064ed5feb200a4072171c580147f7c73927c2e156bb1fd94bb9`, `b_rename`
+  `f24cbbc878a08ef6a5750e3043e7898bbb23623d835926459efc3271e8a45781`; `a` with N1 off
+  `47a7777b481a47a5b28730432744cd405878e8cf736e0ad590f2449bfea9b8e8`. (Not printed by the builder: `b_not_testable` with
+  N1 off `27b3e3c753c5898a3f1bd21dd67a54100fe6bca974435011ecce8ee2c7e6d1c9`, `b_rename` with N1 off
+  `aa60634d2be19304e63c2b11cfbf44c9d64b1712fe52a54a2137752b708c427d`.)
+- `c` and an unknown value are refused by `check_d1`, which `_run` calls before it reads anything.
+- Under `a` and `b_not_testable` both claims keep `FRONTIER_FALLBACK`. Under `b_rename` only the renamed 3-step claim
+  leaves it out, and prints its W instead. Under every value each claim has at least the bars of the old
+  `REGISTER_FRONTIER_FALLBACK = False` (checked by script). So no value drops a bar that the old switch kept.
+- `b_not_testable` forces `NOT_TESTABLE` in the cell block and in the claims table, and keeps the floor result
+  (`floor_result_before_the_D1_declaration`). Nothing is hidden.
+- **One throwaway build under `b_rename`** (seed `tiny-9`, `--only reach --limit-foci 1 --processes 1`): `build_ok`,
+  every problem count 0, 64.6 s, digest `f24cbbc8...`. The claims table has `REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6`
+  with `renamed_from`, the scope note and the D1 record. At 1 focus the reach cells have no primary clusters, so this
+  checks the wiring, not the numbers. My first attempt, with seed `VERIFIER-1c40-a1`, was refused with
+  `CUSTODY_BREACH` (its throwaway TEST_NEW_5 held 2 PUBLIC_EXCLUDED classes), as the build should refuse.
+- **The same option on full-size throwaway cells** (the ranges tool, 2 seeds, `TEST_NEW_6`): the renamed claim's binding
+  bar is `SINGLE_ROOT_FALLBACK`, W 16 and 11 (`REVIEWER-a5`, first-child and BFS) and 18 and 11 (`tiny-9`);
+  `FRONTIER_FALLBACK` is printed in every view (W 3 and 1; 5 and 1). The 4-step claim keeps `FRONTIER_FALLBACK`.
+
+**R3, the exact power: correct.**
+- **Against the scorer's own pass rule.** I made two small hand-made cells: 14 clusters in 10 degree groups and 8
+  components, and 12 clusters in 9 groups and 7 components (mixed group sizes; components of 2 and 3 groups; one group
+  with only bar-right clusters). For every model outcome (2 to the power 14, and 2 to the power 12) I ran the build's
+  own `paired_views`, the function the scorer uses, and summed the exact probabilities.
+  - In all 42 cases (2 cells, 3 views, 7 HSET-1A settings) the printed value equals my exact sum of "B > C and exact
+    tail <= 1/100", to all 12 printed digits.
+  - In every case the true pass chance (which also needs a positive overall difference) is at most the printed value.
+    It is equal wherever the build says the value is exact (q_keep = 1, and the original cluster view).
+  - Limit: in these small cells the bound was never strict, so I did not see a case where it is strictly above.
+- **The R3 table, measured again.** `hset2_throwaway_ranges.py --only analogy` on all 21 seeds (47.9 s). Every entry of
+  the R3 table (6 settings, 3 views, min / mean / max) is the same to the printed digits. Also the same: binding W
+  7 / 12.2 / 16 (original), 7 / 9.7 / 12 (groups), 6 / 8.9 / 11 (components); every A2.4 floor met in 9 of 21; the
+  original floor in 17 of 21.
+- **Run time where the review did not measure it.** Correspondence cells (2 seeds): `COMPUTED_EXACT` in every view;
+  14.8 s for both seeds, set-up included. Reach under `b_rename` (2 seeds): 10.3 s and 6.2 s per seed. Under the
+  default `a`, the builder's 21-seed reach numbers have binding W of at most 6, so every reach view is `EXACT_ZERO`
+  (fewer than 7 winnable units) and needs no enumeration. So the new calculation adds little time to the sealed build.
+
+**R4, both-arm packet-route acceptance: correct.** The feasibility block prints `NOT_YET_CHECKED`, what this build checks
+(the repaired arm only), what is still required (the `20208c92` reader, plan `d015d58e`), and that a missing receipt is
+a pretraining blocker. It is also open question 4.
+
+**R7, the status words: correct.** `STATISTICAL_POLICY.json` at `f287f965` has `mechanism.state = MECHANISM_GATE_OPEN`,
+the value the build prints. `inference_assumptions_status` stays `OPEN_FOR_THE_BUILDER_SCORER_REVIEW`; the builder did
+not rule on it.
+
+**R5, R6.** No code change, as written. R5 stays open question 5.
+
+### VF.3 The MAJOR (R1): recorded, not decided; its premise reproduced
+
+- **Recorded.** `open_design_question_before_the_salt` is on the `ANALOGY_BEYOND_DEGREE_6` row and on the
+  `REPAIR_IMPROVES_ANALOGY_6` row of my end-to-end build's summary. It names the three options. R.4 item 1 lists it.
+- **Not decided.** The analogy bar list and the scope sentence are byte-for-byte those of `4c402209` (VF.2).
+- **Reproduced by me** (the builder did not re-measure it). I added the rule to the payloads of the builder's own
+  `analogy_payloads`, never as a bar, and graded it with the builder's `derive`, `fast_rows`, `summarise_bank_cell` and
+  `evaluate_cell_views` against all 35 registered analogy bars, on the same 21 throwaway seeds (25.8 s).
+  - Sort key (in-degree, out-degree, child of the declared whole, flag position, rank), with non-children before
+    children (the natural False-before-True order): it passes the base claim in **`tiny-9` (smallest b 9, largest c 0)
+    and `tiny-11`**, and in `tiny-9`, which meets every A2.4 floor, it passes all three views. These are the review's
+    numbers.
+  - Its W, if it were a bar, is 10 or more in only 3 of 21 salts (`tiny-16` 11, `tiny-18` 10, `reach-6` 11). So the
+    original floor could hold in at most 3 of 21, as the review said. I did not measure its group and component W.
+- **Note VN-1 (for the design owner).** The printed question says "child-of-the-declared-whole" but not the sort
+  direction. The direction matters. With children first, the rule passes the base claim in `tiny-11` and `tiny-15`
+  instead. If the owner chooses (a), the rule to register should be pinned exactly, or both directions registered.
+
+### VF.4 Notes (none blocks conformance)
+
+- **VN-1.** Above.
+- **VN-2 (wording).** In the group and component views each setting's block says `COMPUTED_EXACT`, but in the uniform rows
+  below 1.0 its value is an upper bound on the pass chance. The row's `power` and `power_assumptions` text says so; the
+  per-setting block does not. The builder report says "an upper bound ... except in the never-loses rows, where it is
+  exact"; the uniform 1.0000 row is exact too (q_keep = 1).
+- **VN-3 (for the owner, under `b_rename` only).** The claims table then has no key named `REACH_3_STEP_TRANSFER_6`;
+  the old name appears only as `renamed_from`. A reader who searches for the 3-step claim finds it only through that
+  field. The owner may want the old name printed with a status too.
+- **VN-4 (throwaway tool only).** `hset2_throwaway_ranges.py` does not call `check_d1`. With D1 set to `c` or to an
+  unknown value it would compute as if `a` were set. The build itself refuses.
+
+### VF.5 Before the salt
+
+1. The design owner decides R1 (a, b or c). If (a), pin the rule's sort direction (VN-1).
+2. The design owner sets D1 (`a`, `b_not_testable`, `b_rename`) and decides the other R.4 items.
+3. After any change to the bars: print the ranges again, and have the change reviewed again.
+
+### EXPOSURE (this verification)
+
+- **The pinned CNCM tree `785c9bd1`.** Written from git objects by `launch.py --materialize-tree` into
+  `verify_1c40/tree/` of the session scratchpad (1,186 files, digest `fe2eaa17...`). The tests, the build and my
+  scripts imported code from it and loaded the public course, the tokenizer and the development material through the
+  frozen loaders. I opened no file of it by hand. Neither I nor my programs opened
+  `records/typed_course_001/checks_002/private_targets.json`.
+- **Codex's branch, read-only.** `git fetch` of `codex/helm-controlled-prelaunch-20260924`, then `git show` of commit
+  `f287f965` for `EVALUATION_DESIGN_v0_4.md` (copied to the Git Bash `/tmp` folder, outside every repository, as
+  `v1c40_ed04.md`; I read Amendment A2) and `records/helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json`
+  (through a pipe: its key list and its `status`, `inference`, `mechanism`, `feasibility` and `primary_claim` fields).
+  No checkout.
+- **This working copy's history.** `git show` of `hset2_build.py` at `4c402209` (read into memory by my script), and the
+  diff `4c402209..1c404269` of `hset2_build.py`, saved as `v1c40_build.diff` in the scratchpad.
+- **My scratch files** in `verify_1c40/` of the session scratchpad, not committed: `check_1c40.py` and its
+  `check_out.json`; `probe_whole_child.py` and `probe_wc.log`; `d1_rename_cli.py`, `cli_b_rename.log` and the throwaway
+  build `cli_b_rename/`; `ranges_d1.py`; the range outputs `r_analogy.json`, `r_corr_2.json`, `r_reach_rename.json`;
+  the pytest folders `pt_fast/` and `pt_e2e/`; this text as `verification_section.md`. Every throwaway build was made
+  with a throwaway salt; they are THROWAWAY outputs, never development feedback. Of their outputs I opened only the public `THROWAWAY_HSET2_BUILD_SUMMARY.json` files, never a
+  sealed file (not even my own).
+- **Laptop state:** free memory and the Python process list (PowerShell).
+- **Not opened:** any `*_eval.jsonl`; any sealed file or folder; anything under `D:/tksCAS-archive/`; any real salt; S3
+  or AWS; the meta1 ledger; any `results/` folder; `private_targets.json`; the builder's and earlier reviewers' scratch
+  files; Claude transcripts. No real salt was used or made. Nothing was downloaded. Nothing ran on AWS.
