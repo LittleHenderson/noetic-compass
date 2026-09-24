@@ -1,6 +1,6 @@
 # HELM-REPAIR-CONTROLLED-1: named AWS job plan (DRAFT; for the owner's launch approval)
 
-**Status.** Was `DRAFT`; now `APPROVED_FOR_LAUNCH` (section 0). It is completed and brought to the owner once
+**Status.** `LAUNCH_HELD_PENDING_AMENDMENTS` (2026-09-24). The owner's launch yes (section 0) is held, not used, until one complete amended launch request is approved; see `OWNER_HEADSUP_PLAN_REVIEW_20260924.md`. Codex works the amendments. Only the switch-ON smoke (preparation) runs. It is completed and brought to the owner once
 the preconditions below have passed. The owner's words (`OWNER_DIRECTION_20260924.md`, item 4): "Prepare the exact
 AWS job plan with source, data, starting weights, runs, update/time/dollar limits, stopping conditions, and cleanup.
 Bring that named plan to me for launch approval."
@@ -82,6 +82,8 @@ B: re-run all three, about $45."
 
 **Applied as option C, with a pre-set fallback to B.** The Claude coordinator chose it under this delegation;
 this is not an owner signature.
+
+**CORRECTION (2026-09-24, per the owner-shared review): the rationale below overstates.** Reproducing one seed does not prove the other two seeds would reproduce; the second bullet is an inference, not a proof. So B is the stronger fresh-control comparison, and C keeps a real limitation: for seeds 20260918 and 20260919 the control is historical, not re-run. The choice between B and C, and the reproduction policy (checkpoint-file identity versus learned-state identity versus output reproduction, fixed before running), are part of the amendments Codex is working. The original text is kept below as written.
 
 **Why C is best for the project:**
 - If one re-run of `20208c92` reproduces Helm 2.0's final checkpoint bit for bit, re-running the other two seeds
