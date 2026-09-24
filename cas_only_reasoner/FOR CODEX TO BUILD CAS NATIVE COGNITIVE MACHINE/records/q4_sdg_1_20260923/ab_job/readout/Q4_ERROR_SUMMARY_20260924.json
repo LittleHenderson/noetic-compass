@@ -1,0 +1,6774 @@
+{
+ "arm_totals_over_three_seeds": {
+  "A": {
+   "SP1": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       663,
+       768
+      ],
+      "leaf2": [
+       444,
+       768
+      ],
+      "leaf3": [
+       311,
+       483
+      ],
+      "leaf4+": [
+       260,
+       378
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       448,
+       768
+      ],
+      "leaf2": [
+       412,
+       768
+      ],
+      "leaf3": [
+       244,
+       483
+      ],
+      "leaf4+": [
+       195,
+       378
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       684,
+       768
+      ],
+      "leaf2": [
+       98,
+       768
+      ],
+      "leaf3": [
+       44,
+       483
+      ],
+      "leaf4+": [
+       45,
+       378
+      ]
+     },
+     "register": {
+      "leaf1": [
+       375,
+       768
+      ],
+      "leaf2": [
+       402,
+       768
+      ],
+      "leaf3": [
+       265,
+       483
+      ],
+      "leaf4+": [
+       174,
+       378
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1678,
+      2397
+     ],
+     "drive": [
+      1299,
+      2397
+     ],
+     "eos": [
+      768,
+      768
+     ],
+     "expr": [
+      3935,
+      4026
+     ],
+     "noetic": [
+      871,
+      2397
+     ],
+     "op": [
+      1560,
+      1629
+     ],
+     "register": [
+      1216,
+      2397
+     ]
+    },
+    "assisted_rows_all_tokens_right": 4,
+    "exact": 4,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 4,
+      "FIELD": 746,
+      "OPERATOR": 10,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 8
+     },
+     "by_kind": {
+      "EXACT": 4,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 1,
+      "LOST_BRANCH": 7,
+      "PLUS_FOR_TIMES": 7,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 3,
+      "WRONG_DOMAIN": 107,
+      "WRONG_DRIVE": 253,
+      "WRONG_NOETIC": 241,
+      "WRONG_REGISTER": 145
+     },
+     "by_slot_kind": {
+      "domain": 107,
+      "drive": 253,
+      "eos": 0,
+      "expr": 8,
+      "noetic": 241,
+      "op": 10,
+      "register": 145
+     },
+     "index_sum": 4875,
+     "rows_with_a_wrong_decision": 764,
+     "whole_leaves_right_before_it": {
+      "0": 577,
+      "1": 187
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       1349,
+       1979
+      ],
+      "drive": [
+       1032,
+       1979
+      ],
+      "noetic": [
+       770,
+       1979
+      ],
+      "register": [
+       1039,
+       1979
+      ]
+     },
+     "op": [
+      1261,
+      1296
+     ]
+    },
+    "length": {
+     "equal": 702,
+     "free_tokens_total": 15689,
+     "longer": 10,
+     "shorter": 56,
+     "target_tokens_total": 16011
+    },
+    "n": 768,
+    "outcomes": {
+     "GENERATED": 768
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 56,
+      "MORE_LEAVES": 10,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 19,
+      "SHAPE_MATCH": 683
+     },
+     "extra_leaves_total": 10,
+     "missing_leaves_total": 56,
+     "target_depth_to_generated_depth": {
+      "1->1": 285,
+      "2->2": 279,
+      "2->3": 9,
+      "3->2": 26,
+      "3->3": 166,
+      "3->4": 3
+     }
+    }
+   },
+   "SP2ALL": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       668,
+       768
+      ],
+      "leaf2": [
+       266,
+       768
+      ],
+      "leaf3": [
+       294,
+       768
+      ],
+      "leaf4+": [
+       608,
+       1254
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       365,
+       768
+      ],
+      "leaf2": [
+       359,
+       768
+      ],
+      "leaf3": [
+       379,
+       768
+      ],
+      "leaf4+": [
+       531,
+       1254
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       603,
+       768
+      ],
+      "leaf2": [
+       81,
+       768
+      ],
+      "leaf3": [
+       79,
+       768
+      ],
+      "leaf4+": [
+       160,
+       1254
+      ]
+     },
+     "register": {
+      "leaf1": [
+       353,
+       768
+      ],
+      "leaf2": [
+       320,
+       768
+      ],
+      "leaf3": [
+       352,
+       768
+      ],
+      "leaf4+": [
+       618,
+       1254
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1836,
+      3558
+     ],
+     "drive": [
+      1634,
+      3558
+     ],
+     "eos": [
+      768,
+      768
+     ],
+     "expr": [
+      5379,
+      6348
+     ],
+     "noetic": [
+      923,
+      3558
+     ],
+     "op": [
+      2494,
+      2790
+     ],
+     "register": [
+      1643,
+      3558
+     ]
+    },
+    "assisted_rows_all_tokens_right": 0,
+    "exact": 0,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 0,
+      "FIELD": 618,
+      "OPERATOR": 28,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 122
+     },
+     "by_kind": {
+      "EXACT": 0,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 25,
+      "LOST_BRANCH": 97,
+      "PLUS_FOR_TIMES": 10,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 18,
+      "WRONG_DOMAIN": 87,
+      "WRONG_DRIVE": 245,
+      "WRONG_NOETIC": 169,
+      "WRONG_REGISTER": 117
+     },
+     "by_slot_kind": {
+      "domain": 87,
+      "drive": 245,
+      "eos": 0,
+      "expr": 122,
+      "noetic": 169,
+      "op": 28,
+      "register": 117
+     },
+     "index_sum": 4715,
+     "rows_with_a_wrong_decision": 768,
+     "whole_leaves_right_before_it": {
+      "0": 661,
+      "1": 107
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       57,
+       117
+      ],
+      "drive": [
+       47,
+       117
+      ],
+      "noetic": [
+       23,
+       117
+      ],
+      "register": [
+       50,
+       117
+      ]
+     },
+     "op": [
+      80,
+      89
+     ]
+    },
+    "length": {
+     "equal": 208,
+     "free_tokens_total": 20533,
+     "longer": 34,
+     "shorter": 526,
+     "target_tokens_total": 24138
+    },
+    "n": 768,
+    "outcomes": {
+     "GENERATED": 768
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 526,
+      "MORE_LEAVES": 34,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 180,
+      "SHAPE_MATCH": 28
+     },
+     "extra_leaves_total": 34,
+     "missing_leaves_total": 549,
+     "target_depth_to_generated_depth": {
+      "3->1": 1,
+      "3->2": 474,
+      "3->3": 277,
+      "3->4": 16
+     }
+    }
+   },
+   "SP2U": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       549,
+       624
+      ],
+      "leaf2": [
+       226,
+       624
+      ],
+      "leaf3": [
+       243,
+       624
+      ],
+      "leaf4+": [
+       459,
+       921
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       314,
+       624
+      ],
+      "leaf2": [
+       300,
+       624
+      ],
+      "leaf3": [
+       319,
+       624
+      ],
+      "leaf4+": [
+       373,
+       921
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       493,
+       624
+      ],
+      "leaf2": [
+       65,
+       624
+      ],
+      "leaf3": [
+       63,
+       624
+      ],
+      "leaf4+": [
+       117,
+       921
+      ]
+     },
+     "register": {
+      "leaf1": [
+       293,
+       624
+      ],
+      "leaf2": [
+       270,
+       624
+      ],
+      "leaf3": [
+       282,
+       624
+      ],
+      "leaf4+": [
+       443,
+       921
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1477,
+      2793
+     ],
+     "drive": [
+      1306,
+      2793
+     ],
+     "eos": [
+      624,
+      624
+     ],
+     "expr": [
+      4196,
+      4962
+     ],
+     "noetic": [
+      738,
+      2793
+     ],
+     "op": [
+      1958,
+      2169
+     ],
+     "register": [
+      1288,
+      2793
+     ]
+    },
+    "assisted_rows_all_tokens_right": 0,
+    "exact": 0,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 0,
+      "FIELD": 509,
+      "OPERATOR": 20,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 95
+     },
+     "by_kind": {
+      "EXACT": 0,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 20,
+      "LOST_BRANCH": 75,
+      "PLUS_FOR_TIMES": 7,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 13,
+      "WRONG_DOMAIN": 68,
+      "WRONG_DRIVE": 200,
+      "WRONG_NOETIC": 139,
+      "WRONG_REGISTER": 102
+     },
+     "by_slot_kind": {
+      "domain": 68,
+      "drive": 200,
+      "eos": 0,
+      "expr": 95,
+      "noetic": 139,
+      "op": 20,
+      "register": 102
+     },
+     "index_sum": 3791,
+     "rows_with_a_wrong_decision": 624,
+     "whole_leaves_right_before_it": {
+      "0": 530,
+      "1": 94
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       39,
+       74
+      ],
+      "drive": [
+       31,
+       74
+      ],
+      "noetic": [
+       14,
+       74
+      ],
+      "register": [
+       27,
+       74
+      ]
+     },
+     "op": [
+      51,
+      56
+     ]
+    },
+    "length": {
+     "equal": 175,
+     "free_tokens_total": 16148,
+     "longer": 28,
+     "shorter": 421,
+     "target_tokens_total": 18927
+    },
+    "n": 624,
+    "outcomes": {
+     "GENERATED": 624
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 421,
+      "MORE_LEAVES": 28,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 157,
+      "SHAPE_MATCH": 18
+     },
+     "extra_leaves_total": 28,
+     "missing_leaves_total": 425,
+     "target_depth_to_generated_depth": {
+      "3->1": 1,
+      "3->2": 408,
+      "3->3": 213,
+      "3->4": 2
+     }
+    }
+   }
+  },
+  "B": {
+   "SP1": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       766,
+       768
+      ],
+      "leaf2": [
+       428,
+       768
+      ],
+      "leaf3": [
+       241,
+       483
+      ],
+      "leaf4+": [
+       155,
+       378
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       630,
+       768
+      ],
+      "leaf2": [
+       536,
+       768
+      ],
+      "leaf3": [
+       316,
+       483
+      ],
+      "leaf4+": [
+       221,
+       378
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       763,
+       768
+      ],
+      "leaf2": [
+       73,
+       768
+      ],
+      "leaf3": [
+       47,
+       483
+      ],
+      "leaf4+": [
+       38,
+       378
+      ]
+     },
+     "register": {
+      "leaf1": [
+       605,
+       768
+      ],
+      "leaf2": [
+       549,
+       768
+      ],
+      "leaf3": [
+       356,
+       483
+      ],
+      "leaf4+": [
+       269,
+       378
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1590,
+      2397
+     ],
+     "drive": [
+      1703,
+      2397
+     ],
+     "eos": [
+      768,
+      768
+     ],
+     "expr": [
+      3941,
+      4026
+     ],
+     "noetic": [
+      921,
+      2397
+     ],
+     "op": [
+      1496,
+      1629
+     ],
+     "register": [
+      1779,
+      2397
+     ]
+    },
+    "assisted_rows_all_tokens_right": 11,
+    "exact": 11,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 11,
+      "FIELD": 709,
+      "OPERATOR": 28,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 20
+     },
+     "by_kind": {
+      "EXACT": 11,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 11,
+      "LOST_BRANCH": 9,
+      "PLUS_FOR_TIMES": 16,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 12,
+      "WRONG_DOMAIN": 19,
+      "WRONG_DRIVE": 144,
+      "WRONG_NOETIC": 435,
+      "WRONG_REGISTER": 111
+     },
+     "by_slot_kind": {
+      "domain": 19,
+      "drive": 144,
+      "eos": 0,
+      "expr": 20,
+      "noetic": 435,
+      "op": 28,
+      "register": 111
+     },
+     "index_sum": 6201,
+     "rows_with_a_wrong_decision": 757,
+     "whole_leaves_right_before_it": {
+      "0": 260,
+      "1": 490,
+      "2": 7
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       1395,
+       2093
+      ],
+      "drive": [
+       1407,
+       2093
+      ],
+      "noetic": [
+       843,
+       2093
+      ],
+      "register": [
+       1590,
+       2093
+      ]
+     },
+     "op": [
+      1290,
+      1382
+     ]
+    },
+    "length": {
+     "equal": 721,
+     "free_tokens_total": 15808,
+     "longer": 9,
+     "shorter": 38,
+     "target_tokens_total": 16011
+    },
+    "n": 768,
+    "outcomes": {
+     "GENERATED": 768
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 38,
+      "MORE_LEAVES": 9,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 10,
+      "SHAPE_MATCH": 711
+     },
+     "extra_leaves_total": 9,
+     "missing_leaves_total": 38,
+     "target_depth_to_generated_depth": {
+      "1->1": 285,
+      "2->2": 288,
+      "3->2": 7,
+      "3->3": 183,
+      "3->4": 5
+     }
+    }
+   },
+   "SP2ALL": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       762,
+       768
+      ],
+      "leaf2": [
+       421,
+       768
+      ],
+      "leaf3": [
+       334,
+       768
+      ],
+      "leaf4+": [
+       408,
+       1254
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       595,
+       768
+      ],
+      "leaf2": [
+       450,
+       768
+      ],
+      "leaf3": [
+       421,
+       768
+      ],
+      "leaf4+": [
+       696,
+       1254
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       742,
+       768
+      ],
+      "leaf2": [
+       86,
+       768
+      ],
+      "leaf3": [
+       85,
+       768
+      ],
+      "leaf4+": [
+       121,
+       1254
+      ]
+     },
+     "register": {
+      "leaf1": [
+       554,
+       768
+      ],
+      "leaf2": [
+       337,
+       768
+      ],
+      "leaf3": [
+       336,
+       768
+      ],
+      "leaf4+": [
+       823,
+       1254
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1925,
+      3558
+     ],
+     "drive": [
+      2162,
+      3558
+     ],
+     "eos": [
+      768,
+      768
+     ],
+     "expr": [
+      5229,
+      6348
+     ],
+     "noetic": [
+      1034,
+      3558
+     ],
+     "op": [
+      2347,
+      2790
+     ],
+     "register": [
+      2050,
+      3558
+     ]
+    },
+    "assisted_rows_all_tokens_right": 0,
+    "exact": 0,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 0,
+      "FIELD": 397,
+      "OPERATOR": 84,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 287
+     },
+     "by_kind": {
+      "EXACT": 0,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 174,
+      "LOST_BRANCH": 113,
+      "PLUS_FOR_TIMES": 45,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 39,
+      "WRONG_DOMAIN": 7,
+      "WRONG_DRIVE": 147,
+      "WRONG_NOETIC": 126,
+      "WRONG_REGISTER": 117
+     },
+     "by_slot_kind": {
+      "domain": 7,
+      "drive": 147,
+      "eos": 0,
+      "expr": 287,
+      "noetic": 126,
+      "op": 84,
+      "register": 117
+     },
+     "index_sum": 5329,
+     "rows_with_a_wrong_decision": 768,
+     "whole_leaves_right_before_it": {
+      "0": 485,
+      "1": 282,
+      "2": 1
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       197,
+       404
+      ],
+      "drive": [
+       222,
+       404
+      ],
+      "noetic": [
+       120,
+       404
+      ],
+      "register": [
+       209,
+       404
+      ]
+     },
+     "op": [
+      280,
+      321
+     ]
+    },
+    "length": {
+     "equal": 317,
+     "free_tokens_total": 22087,
+     "longer": 82,
+     "shorter": 369,
+     "target_tokens_total": 24138
+    },
+    "n": 768,
+    "outcomes": {
+     "GENERATED": 768
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 369,
+      "MORE_LEAVES": 82,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 234,
+      "SHAPE_MATCH": 83
+     },
+     "extra_leaves_total": 88,
+     "missing_leaves_total": 381,
+     "target_depth_to_generated_depth": {
+      "3->2": 444,
+      "3->3": 276,
+      "3->4": 48
+     }
+    }
+   },
+   "SP2U": {
+    "assisted_accuracy_by_field_and_leaf": {
+     "domain": {
+      "leaf1": [
+       621,
+       624
+      ],
+      "leaf2": [
+       346,
+       624
+      ],
+      "leaf3": [
+       267,
+       624
+      ],
+      "leaf4+": [
+       298,
+       921
+      ]
+     },
+     "drive": {
+      "leaf1": [
+       488,
+       624
+      ],
+      "leaf2": [
+       365,
+       624
+      ],
+      "leaf3": [
+       358,
+       624
+      ],
+      "leaf4+": [
+       520,
+       921
+      ]
+     },
+     "noetic": {
+      "leaf1": [
+       604,
+       624
+      ],
+      "leaf2": [
+       67,
+       624
+      ],
+      "leaf3": [
+       75,
+       624
+      ],
+      "leaf4+": [
+       87,
+       921
+      ]
+     },
+     "register": {
+      "leaf1": [
+       458,
+       624
+      ],
+      "leaf2": [
+       282,
+       624
+      ],
+      "leaf3": [
+       267,
+       624
+      ],
+      "leaf4+": [
+       626,
+       921
+      ]
+     }
+    },
+    "assisted_accuracy_by_slot": {
+     "domain": [
+      1532,
+      2793
+     ],
+     "drive": [
+      1731,
+      2793
+     ],
+     "eos": [
+      624,
+      624
+     ],
+     "expr": [
+      4047,
+      4962
+     ],
+     "noetic": [
+      833,
+      2793
+     ],
+     "op": [
+      1830,
+      2169
+     ],
+     "register": [
+      1633,
+      2793
+     ]
+    },
+    "assisted_rows_all_tokens_right": 0,
+    "exact": 0,
+    "first_wrong_decision": {
+     "by_group": {
+      "EXACT": 0,
+      "FIELD": 307,
+      "OPERATOR": 68,
+      "OTHER": 0,
+      "STRUCTURE_BRANCH": 249
+     },
+     "by_kind": {
+      "EXACT": 0,
+      "GRAMMAR_VIOLATION": 0,
+      "INVENTED_BRANCH": 160,
+      "LOST_BRANCH": 89,
+      "PLUS_FOR_TIMES": 38,
+      "PREDICTION_ENDED": 0,
+      "TIMES_FOR_PLUS": 30,
+      "WRONG_DOMAIN": 4,
+      "WRONG_DRIVE": 115,
+      "WRONG_NOETIC": 97,
+      "WRONG_REGISTER": 91
+     },
+     "by_slot_kind": {
+      "domain": 4,
+      "drive": 115,
+      "eos": 0,
+      "expr": 249,
+      "noetic": 97,
+      "op": 68,
+      "register": 91
+     },
+     "index_sum": 4191,
+     "rows_with_a_wrong_decision": 624,
+     "whole_leaves_right_before_it": {
+      "0": 392,
+      "1": 231,
+      "2": 1
+     }
+    },
+    "free_field_accuracy_on_shape_matched_rows": {
+     "fields": {
+      "domain": [
+       140,
+       288
+      ],
+      "drive": [
+       158,
+       288
+      ],
+      "noetic": [
+       86,
+       288
+      ],
+      "register": [
+       148,
+       288
+      ]
+     },
+     "op": [
+      199,
+      229
+     ]
+    },
+    "length": {
+     "equal": 263,
+     "free_tokens_total": 17324,
+     "longer": 64,
+     "shorter": 297,
+     "target_tokens_total": 18927
+    },
+    "n": 624,
+    "outcomes": {
+     "GENERATED": 624
+    },
+    "structure": {
+     "by_class": {
+      "FEWER_LEAVES": 297,
+      "MORE_LEAVES": 64,
+      "NOT_A_COMPLETE_TREE": 0,
+      "SAME_LEAF_COUNT_OTHER_SHAPE": 204,
+      "SHAPE_MATCH": 59
+     },
+     "extra_leaves_total": 68,
+     "missing_leaves_total": 297,
+     "target_depth_to_generated_depth": {
+      "3->2": 399,
+      "3->3": 191,
+      "3->4": 34
+     }
+    }
+   }
+  }
+ },
+ "checkpoint": 32768,
+ "checks": [
+  {
+   "check": "verdict label lessons_overall quoted unchanged",
+   "pass": true,
+   "value": "LESSONS_OVERALL_EFFECT_NOT_SHOWN"
+  },
+  {
+   "check": "verdict label architecture quoted unchanged",
+   "pass": true,
+   "value": "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE"
+  },
+  {
+   "check": "prep panel SP1 size",
+   "pass": true,
+   "value": 256
+  },
+  {
+   "check": "prep panel SP2U size",
+   "pass": true,
+   "value": 208
+  },
+  {
+   "check": "prep panel SP2ALL size",
+   "pass": true,
+   "value": 256
+  },
+  {
+   "check": "A_20260931 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "A_20260931 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260931 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "A_20260931 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "1/256 vs 1/256"
+  },
+  {
+   "check": "A_20260931 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260931 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "A_20260931 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "A_20260931 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260931 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260931 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260931 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260931 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "A_20260931 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260931 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260931 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260931 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "A_20260931 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260931 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260931 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "248+80 vs 328/799"
+  },
+  {
+   "check": "A_20260932 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "A_20260932 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260932 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "2 vs 2"
+  },
+  {
+   "check": "A_20260932 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "2/256 vs 2/256"
+  },
+  {
+   "check": "A_20260932 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260932 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "2 vs 2"
+  },
+  {
+   "check": "A_20260932 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "A_20260932 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260932 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260932 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260932 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260932 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "A_20260932 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260932 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260932 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260932 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "A_20260932 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260932 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260932 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "181+44 vs 225/799"
+  },
+  {
+   "check": "A_20260933 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "A_20260933 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260933 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "A_20260933 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "1/256 vs 1/256"
+  },
+  {
+   "check": "A_20260933 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260933 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "A_20260933 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "A_20260933 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260933 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260933 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "A_20260933 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260933 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "A_20260933 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "A_20260933 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "A_20260933 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260933 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "A_20260933 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "A_20260933 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "A_20260933 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "255+63 vs 318/799"
+  },
+  {
+   "check": "B_20260931 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "B_20260931 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260931 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "4 vs 4"
+  },
+  {
+   "check": "B_20260931 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "4/256 vs 4/256"
+  },
+  {
+   "check": "B_20260931 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260931 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "4 vs 4"
+  },
+  {
+   "check": "B_20260931 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "B_20260931 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260931 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260931 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260931 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260931 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "B_20260931 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260931 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260931 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260931 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "B_20260931 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260931 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260931 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "255+43 vs 298/799"
+  },
+  {
+   "check": "B_20260932 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "B_20260932 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260932 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "B_20260932 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "1/256 vs 1/256"
+  },
+  {
+   "check": "B_20260932 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260932 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "1 vs 1"
+  },
+  {
+   "check": "B_20260932 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "B_20260932 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260932 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260932 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260932 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260932 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "B_20260932 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260932 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260932 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260932 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "B_20260932 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260932 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260932 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "256+57 vs 313/799"
+  },
+  {
+   "check": "B_20260933 identity (COMPLETE, 32768 updates, frozen sha, arm, seed)",
+   "pass": true,
+   "value": "COMPLETE"
+  },
+  {
+   "check": "B_20260933 SP1: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260933 SP1: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP1: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP1: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP1: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "6 vs 6"
+  },
+  {
+   "check": "B_20260933 SP1 exact equals the verdict re-read",
+   "pass": true,
+   "value": "6/256 vs 6/256"
+  },
+  {
+   "check": "B_20260933 SP1 assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260933 SP1 exact equals the saved panel exact",
+   "pass": true,
+   "value": "6 vs 6"
+  },
+  {
+   "check": "B_20260933 SP2U: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "208/208"
+  },
+  {
+   "check": "B_20260933 SP2U: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260933 SP2U: structure classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260933 SP2U: length classes add up to the panel size",
+   "pass": true,
+   "value": "208 of 208"
+  },
+  {
+   "check": "B_20260933 SP2U: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260933 SP2U exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/208 vs 0/208"
+  },
+  {
+   "check": "B_20260933 SP2ALL: first-wrong labels re-derived from generated vs target tokens agree",
+   "pass": true,
+   "value": "256/256"
+  },
+  {
+   "check": "B_20260933 SP2ALL: first-wrong kinds add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP2ALL: structure classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP2ALL: length classes add up to the panel size",
+   "pass": true,
+   "value": "256 of 256"
+  },
+  {
+   "check": "B_20260933 SP2ALL: exact rows == EXACT first-wrong rows",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260933 SP2ALL exact equals the verdict re-read",
+   "pass": true,
+   "value": "0/256 vs 0/256"
+  },
+  {
+   "check": "B_20260933 SP2ALL assisted accuracy re-derived from tf bits equals saved tf_by_slot",
+   "pass": true,
+   "value": "equal"
+  },
+  {
+   "check": "B_20260933 SP2ALL exact equals the saved panel exact",
+   "pass": true,
+   "value": "0 vs 0"
+  },
+  {
+   "check": "B_20260933 assisted noetic (first + later leaves) equals the program's T1 count at 32768",
+   "pass": true,
+   "value": "252+58 vs 310/799"
+  }
+ ],
+ "checks_failed": 0,
+ "experiment": "Q4-SDG-1",
+ "frozen_sha256": "5b03862a653902699921d668f11cb67c98689e6c80a5d89f76f78fbe962901cb",
+ "inputs_sha256_raw_bytes": {
+  "ab_job/VERDICT_LAPTOP_REREAD.json": "d44bc66256e9ef59e139e02142fbef40f1b1f9ea946f228a3f140d3b3e5a174e",
+  "ab_job/results/ab/prep.json": "05e2b016a86ffcd7efb33a4561ef416d6d0c00ffd6eac86ea59fe3deee93595c",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_00000.json": "d168060cf750ae9489128e6f8f58d9e33cb9df4f05438441f64732806edf82e1",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_00128.json": "3679ea72e18837f81078234602a7ccd18203dc9394195a0700923b9556c974ec",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_00512.json": "ef7895549b76e716c992a21f8c2484cac8efbd7af9f0da676432e9ea3f1ade08",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_02048.json": "ea068f86e4b2ef50949c4af334bd717d2ea1ae89dff79035a67db76a0a9f60fd",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_08192.json": "fe76364c62285372df0067075ef5331e8c73bb98a18ce0db8ae349d3b6676bfb",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_16384.json": "d1d3c363e7c3b86289eede0b3ac45824ddf46ed91cf38a2b080152cd2f653ef5",
+  "ab_job/results/ab/runs/A_20260931/checkpoint_32768.json": "390366e87e8e3dbc0fe1a6306fa845da28f3513b2d0f75449820940c6f1d3c89",
+  "ab_job/results/ab/runs/A_20260931/run_manifest.json": "ea1c6299332d88e56bf7bfdb09d41e5fd4e4ca10b9090cfc05e0094d8f8615fb",
+  "ab_job/results/ab/runs/A_20260931/run_result.json": "20643281e62e88946d540727041f85444b68bd2c20100f6f38466c021c88e54b",
+  "ab_job/results/ab/runs/A_20260931/updates.json": "83c040ded88134f1f4979f9e9d0e4407139fa340617d4235621ad5849b128225",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_00000.json": "b3d39f43594a328ad25c385689b682567cf24194948fe01c46540ff0536679ae",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_00128.json": "cd5b21d21c5c39a08a2f461e903b80271dbfdc4e710de43a54a771ff6da2807e",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_00512.json": "897579d6590fad84ca8427a7ed92c4e17ce60b1cf4689bd483e3455ab75e12f2",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_02048.json": "4cdddb8da6e01eecefbe0d32377a84243fee1c8d4d46cd6174b087515e478f2e",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_08192.json": "bbf95a3afe2ebbcf27389c9ab875f59b09192b9276c2146f8c6a11a94f451759",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_16384.json": "d196dfcfc42ca84ca8594d9dffdaf0aa269e245a35e4390a023067fa531a2e86",
+  "ab_job/results/ab/runs/A_20260932/checkpoint_32768.json": "cd1a5a0d54e457f8bfbf9b780e0ef59cfc37b9c3a6db39c29bfb6521da846b2d",
+  "ab_job/results/ab/runs/A_20260932/run_manifest.json": "a8f7d448ac9d34485c67af96ef9ebdeaa94b83d77870158b310b397a2d95e08c",
+  "ab_job/results/ab/runs/A_20260932/run_result.json": "fb658fc153b1db39d849655bd0b1766650c3465b1063544d0d9d3808b6453128",
+  "ab_job/results/ab/runs/A_20260932/updates.json": "3a2289fd7a1f5d0d1c6fcb14eeb95dd26f07929bb240df5d564a7fadbd58fcb0",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_00000.json": "bc4e63ad5a1f70abc3b85303b74b5fdb4b6f0ac7552e498e3a82731e20c54b24",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_00128.json": "04e5ef1843b2d6acdc23fff762041d02291dd4825f633fb59edb758bf38b291e",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_00512.json": "873b7a53f03ec1a01e5bbf6ec4c2b9cb0ef17796af1583c0127d9385111104b9",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_02048.json": "205d26fd9b96e91fa7f72833736edbff3dff42d5f54fc1df2438fd8ba465c167",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_08192.json": "80f229ff9d15cb4a5c964e52dc4c2fd5c1147e59d395a94ad3ab2fb309a060a1",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_16384.json": "68941e2b853baa40d4a6df6d5fe8bcb8f135b413eb3dc1c77fd0c950aa149994",
+  "ab_job/results/ab/runs/A_20260933/checkpoint_32768.json": "c539fe28324325dad8df6ac3fc3cbbbf832d90b301b3fef8705b4e64d4752b5e",
+  "ab_job/results/ab/runs/A_20260933/run_manifest.json": "99633e88a110b6ccf74547b9b27c6732cabdbac04ae758b76889896a1709516e",
+  "ab_job/results/ab/runs/A_20260933/run_result.json": "d14b6927718476fecb113b126b33e8076f548ac1ca1a7a1c40c2d720eee12e4d",
+  "ab_job/results/ab/runs/A_20260933/updates.json": "26352a1cb8ca028be5bb31f2cc9534148a0308aa292ec63cdd82084209712c4b",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_00000.json": "7719cce3f1561c5b6610f63d0ceecf0230624fb6396fb16c02beb2838afe3782",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_00128.json": "eae51c605ba5c46ab3c29558bc533cbd80bbb012207f35ebbf1793cc301eb0b2",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_00512.json": "ab2a818f1a09421fb4849794e68de0eabde0c8ea63333ae3835a2a9350d3950b",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_02048.json": "52bc1896ad6afbd393b9a9b4f2d1fd2ab2c776a476f3e8af46f3cd610749ce68",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_08192.json": "f820dc589ba2b7f805a3aed6ecbacd466639dea68854a2e0f562835c226300bd",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_16384.json": "6a610ec366dd9e8226ed050d71b165233453121f13acf60d06f2017990a0f1e2",
+  "ab_job/results/ab/runs/B_20260931/checkpoint_32768.json": "c5e1769e0c3b9b2290905e62c386005811c644570150d854f399dd8dfc6a2abe",
+  "ab_job/results/ab/runs/B_20260931/run_manifest.json": "144f7c626a33d80de38c568f96a71988e9bbdd0ef33c94ab31c8cf98889f317d",
+  "ab_job/results/ab/runs/B_20260931/run_result.json": "71bd6ba88bf2e8e6851c59bc99e98787a5d01b82594f36cc26e6992237bc80d8",
+  "ab_job/results/ab/runs/B_20260931/updates.json": "7fdf0f68eacd60f21f214a4d3b711e8e2a79297ba42715172ac32976495c48ec",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_00000.json": "a9948bd8d59ebd3d03506c27f15cf48bd1d1125a21ced01038ae727c0191d601",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_00128.json": "6ac243f78a5486ac51b86650a240c24de59ed85a7fe59da1114367f2578286a1",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_00512.json": "0382ce536d8ab64b0665599aec1e8adf0eb97adb238012aa5a17f85113b8e449",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_02048.json": "3e2d4d6db6eaaf54f7a85dc8f7c429f3c03d67ebf64708c5df93b3647946d49e",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_08192.json": "9f5705d2e27de3f3c9eacc798bdfaf0f7ea27575b09dc5dc46d381a38398ce39",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_16384.json": "f230de95e712016cf78bd732e7c9e827cb08ae8b9e388744cd1137d82c8dd279",
+  "ab_job/results/ab/runs/B_20260932/checkpoint_32768.json": "d1ccc6071b7753501db455061ad7abe2aef1fb0644b687bf9caf0154eb42087e",
+  "ab_job/results/ab/runs/B_20260932/run_manifest.json": "05f1d59eabbc404117bb02b47a1d336e4e802729a745ec7aea9d88c9758b0428",
+  "ab_job/results/ab/runs/B_20260932/run_result.json": "8bf0eb65fc0c731535e98abd76d5f2a134ebee645fe0f1c7b3554ee9a5065860",
+  "ab_job/results/ab/runs/B_20260932/updates.json": "68da064301b31f11659583a837f047e048a78f1d6929d56dbaf952945bd88519",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_00000.json": "768fc319196a9049754ba43ffe37a4f48346c4233c6b9bc1bfd1ad4e82bde3a7",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_00128.json": "32ecdd6ad0aa57ccfe8a405a581006c222cd257ca24bff70d6ede9f16818fed0",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_00512.json": "5c6b729ac318c258a33ee972219ba22ebb64e745fdc16d6845fc1e3b0d1b0af3",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_02048.json": "3698c74e6b76ccd82e95faa674a05b8f9b6fca928b72844fa565de8db6bcfc07",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_08192.json": "195fdd650d4cb1603ba8215a6db300da7bbe0b9eeec6bc630144d3d81d916628",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_16384.json": "e5d41346d3131b6208c709eada9dc9fce27d60b6f77ca16afb6dd62950ecb1da",
+  "ab_job/results/ab/runs/B_20260933/checkpoint_32768.json": "4f6a1eddad9c1e25c9811f2215fb5261fda7a268476fbda7fff300250b18461d",
+  "ab_job/results/ab/runs/B_20260933/run_manifest.json": "ff3fa699c9c23039e1f0bdd1dfa182705ee6790ce482c928b5438774eb18200a",
+  "ab_job/results/ab/runs/B_20260933/run_result.json": "4f3eddaaee730e984fb5fab6cf3775d99ab196c42386d8302fe594631ded0bfd",
+  "ab_job/results/ab/runs/B_20260933/updates.json": "fed8f288edbebb6e79c73562bcb1937b3e999787b054f50e9df4d01242dca20d"
+ },
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "mistake_groups": {
+  "EXACT": [
+   "EXACT"
+  ],
+  "FIELD": [
+   "WRONG_NOETIC",
+   "WRONG_DOMAIN",
+   "WRONG_DRIVE",
+   "WRONG_REGISTER"
+  ],
+  "OPERATOR": [
+   "PLUS_FOR_TIMES",
+   "TIMES_FOR_PLUS"
+  ],
+  "OTHER": [
+   "PREDICTION_ENDED",
+   "GRAMMAR_VIOLATION"
+  ],
+  "STRUCTURE_BRANCH": [
+   "LOST_BRANCH",
+   "INVENTED_BRANCH"
+  ]
+ },
+ "panels": {
+  "SP1": "256 familiar-structure rows (shared, decisive)",
+  "SP2ALL": "all 256 new-structure rows (reported)",
+  "SP2U": "208 new-structure rows never inspected (shared, decisive)"
+ },
+ "program": {
+  "file": "summarize_q4_errors.py",
+  "imports_lf_sha256": {
+   "learner_q4_decoder.py": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+   "q4_ab_rules.py": "807ebbef4f6e41f9b53a868a8c319cba657695d3ada65462189dd2f2588e7fa6"
+  },
+  "lf_sha256": "b7b80b685a4fe8983b3141733c7edbc5f4f098dc1e7c8b162351c9da6cca9339"
+ },
+ "runs": {
+  "A_20260931": {
+   "arm": "A",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        96,
+        6
+       ],
+       "leaf1": [
+        63,
+        63,
+        0
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        0,
+        0
+       ],
+       "leaf1": [
+        26,
+        0,
+        0
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        73,
+        1
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        0,
+        0
+       ],
+       "leaf1": [
+        23,
+        0,
+        0
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       52,
+       543
+      ],
+      "leaf1": [
+       32,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       70,
+       543
+      ],
+      "leaf1": [
+       18,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       51,
+       543
+      ],
+      "leaf1": [
+       52,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       42,
+       543
+      ],
+      "leaf1": [
+       19,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       80,
+       543
+      ],
+      "leaf1": [
+       248,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       32,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       43,
+       543
+      ],
+      "leaf1": [
+       31,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       92,
+       139
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       67,
+       139
+      ],
+      "leaf1": [
+       29,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       29,
+       139
+      ],
+      "leaf1": [
+       61,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       70,
+       139
+      ],
+      "leaf1": [
+       31,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     1,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 1.0078704573534196,
+     "16384": 0.9536738255410455,
+     "20480": 0.9016843125864398,
+     "24576": 0.8547645137368818,
+     "28672": 0.8030722440598765,
+     "32768": 0.7668803620617837,
+     "4096": 1.1750880373292603,
+     "8192": 1.0500812125683296
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        256,
+        256
+       ],
+       "leaf2": [
+        153,
+        256
+       ],
+       "leaf3": [
+        108,
+        161
+       ],
+       "leaf4+": [
+        88,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        133,
+        256
+       ],
+       "leaf2": [
+        129,
+        256
+       ],
+       "leaf3": [
+        79,
+        161
+       ],
+       "leaf4+": [
+        65,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        248,
+        256
+       ],
+       "leaf2": [
+        43,
+        256
+       ],
+       "leaf3": [
+        21,
+        161
+       ],
+       "leaf4+": [
+        16,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        125,
+        256
+       ],
+       "leaf2": [
+        133,
+        256
+       ],
+       "leaf3": [
+        87,
+        161
+       ],
+       "leaf4+": [
+        59,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       605,
+       799
+      ],
+      "drive": [
+       406,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1317,
+       1342
+      ],
+      "noetic": [
+       328,
+       799
+      ],
+      "op": [
+       522,
+       543
+      ],
+      "register": [
+       404,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 1,
+     "exact": 1,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 1,
+       "FIELD": 250,
+       "OPERATOR": 3,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 2
+      },
+      "by_kind": {
+       "EXACT": 1,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 2,
+       "PLUS_FOR_TIMES": 1,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 2,
+       "WRONG_DOMAIN": 2,
+       "WRONG_DRIVE": 124,
+       "WRONG_NOETIC": 66,
+       "WRONG_REGISTER": 58
+      },
+      "by_slot_kind": {
+       "domain": 2,
+       "drive": 124,
+       "eos": 0,
+       "expr": 2,
+       "noetic": 66,
+       "op": 3,
+       "register": 58
+      },
+      "index_sum": 1754,
+      "rows_with_a_wrong_decision": 255,
+      "whole_leaves_right_before_it": {
+       "0": 184,
+       "1": 71
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        494,
+        678
+       ],
+       "drive": [
+        334,
+        678
+       ],
+       "noetic": [
+        282,
+        678
+       ],
+       "register": [
+        357,
+        678
+       ]
+      },
+      "op": [
+       435,
+       446
+      ]
+     },
+     "length": {
+      "equal": 233,
+      "free_tokens_total": 5190,
+      "longer": 1,
+      "shorter": 22,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 22,
+       "MORE_LEAVES": 1,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 1,
+       "SHAPE_MATCH": 232
+      },
+      "extra_leaves_total": 1,
+      "missing_leaves_total": 22,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 95,
+       "2->3": 1,
+       "3->2": 6,
+       "3->3": 58,
+       "3->4": 1
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        254,
+        256
+       ],
+       "leaf2": [
+        93,
+        256
+       ],
+       "leaf3": [
+        99,
+        256
+       ],
+       "leaf4+": [
+        199,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        113,
+        256
+       ],
+       "leaf2": [
+        133,
+        256
+       ],
+       "leaf3": [
+        132,
+        256
+       ],
+       "leaf4+": [
+        224,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        239,
+        256
+       ],
+       "leaf2": [
+        31,
+        256
+       ],
+       "leaf3": [
+        27,
+        256
+       ],
+       "leaf4+": [
+        53,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        118,
+        256
+       ],
+       "leaf2": [
+        107,
+        256
+       ],
+       "leaf3": [
+        118,
+        256
+       ],
+       "leaf4+": [
+        209,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       645,
+       1186
+      ],
+      "drive": [
+       602,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1860,
+       2116
+      ],
+      "noetic": [
+       350,
+       1186
+      ],
+      "op": [
+       813,
+       930
+      ],
+      "register": [
+       552,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 208,
+       "OPERATOR": 13,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 35
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 35,
+       "PLUS_FOR_TIMES": 2,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 11,
+       "WRONG_DOMAIN": 4,
+       "WRONG_DRIVE": 126,
+       "WRONG_NOETIC": 29,
+       "WRONG_REGISTER": 49
+      },
+      "by_slot_kind": {
+       "domain": 4,
+       "drive": 126,
+       "eos": 0,
+       "expr": 35,
+       "noetic": 29,
+       "op": 13,
+       "register": 49
+      },
+      "index_sum": 1787,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 203,
+       "1": 53
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        35,
+        56
+       ],
+       "drive": [
+        26,
+        56
+       ],
+       "noetic": [
+        9,
+        56
+       ],
+       "register": [
+        25,
+        56
+       ]
+      },
+      "op": [
+       39,
+       42
+      ]
+     },
+     "length": {
+      "equal": 15,
+      "free_tokens_total": 6359,
+      "longer": 3,
+      "shorter": 238,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 238,
+       "MORE_LEAVES": 3,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 1,
+       "SHAPE_MATCH": 14
+      },
+      "extra_leaves_total": 3,
+      "missing_leaves_total": 244,
+      "target_depth_to_generated_depth": {
+       "3->2": 224,
+       "3->3": 22,
+       "3->4": 10
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        207,
+        208
+       ],
+       "leaf2": [
+        80,
+        208
+       ],
+       "leaf3": [
+        82,
+        208
+       ],
+       "leaf4+": [
+        150,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        97,
+        208
+       ],
+       "leaf2": [
+        109,
+        208
+       ],
+       "leaf3": [
+        112,
+        208
+       ],
+       "leaf4+": [
+        158,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        196,
+        208
+       ],
+       "leaf2": [
+        24,
+        208
+       ],
+       "leaf3": [
+        24,
+        208
+       ],
+       "leaf4+": [
+        40,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        98,
+        208
+       ],
+       "leaf2": [
+        90,
+        208
+       ],
+       "leaf3": [
+        94,
+        208
+       ],
+       "leaf4+": [
+        149,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       519,
+       931
+      ],
+      "drive": [
+       476,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1457,
+       1654
+      ],
+      "noetic": [
+       284,
+       931
+      ],
+      "op": [
+       639,
+       723
+      ],
+      "register": [
+       431,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 169,
+       "OPERATOR": 10,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 29
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 29,
+       "PLUS_FOR_TIMES": 1,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 9,
+       "WRONG_DOMAIN": 3,
+       "WRONG_DRIVE": 102,
+       "WRONG_NOETIC": 22,
+       "WRONG_REGISTER": 42
+      },
+      "by_slot_kind": {
+       "domain": 3,
+       "drive": 102,
+       "eos": 0,
+       "expr": 29,
+       "noetic": 22,
+       "op": 10,
+       "register": 42
+      },
+      "index_sum": 1436,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 162,
+       "1": 46
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        27,
+        40
+       ],
+       "drive": [
+        19,
+        40
+       ],
+       "noetic": [
+        5,
+        40
+       ],
+       "register": [
+        17,
+        40
+       ]
+      },
+      "op": [
+       27,
+       30
+      ]
+     },
+     "length": {
+      "equal": 10,
+      "free_tokens_total": 4965,
+      "longer": 3,
+      "shorter": 195,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 195,
+       "MORE_LEAVES": 3,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 0,
+       "SHAPE_MATCH": 10
+      },
+      "extra_leaves_total": 3,
+      "missing_leaves_total": 195,
+      "target_depth_to_generated_depth": {
+       "3->2": 194,
+       "3->3": 13,
+       "3->4": 1
+      }
+     }
+    }
+   },
+   "seed": 20260931
+  },
+  "A_20260932": {
+   "arm": "A",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        106,
+        8
+       ],
+       "leaf1": [
+        63,
+        63,
+        0
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        26,
+        1
+       ],
+       "leaf1": [
+        26,
+        23,
+        1
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        0,
+        0
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        3,
+        1
+       ],
+       "leaf1": [
+        23,
+        0,
+        1
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       18,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       54,
+       543
+      ],
+      "leaf1": [
+       18,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       52,
+       543
+      ],
+      "leaf1": [
+       27,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       60,
+       543
+      ],
+      "leaf1": [
+       27,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       44,
+       543
+      ],
+      "leaf1": [
+       181,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       50,
+       543
+      ],
+      "leaf1": [
+       21,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       37,
+       543
+      ],
+      "leaf1": [
+       21,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       101,
+       143
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       69,
+       143
+      ],
+      "leaf1": [
+       48,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       23,
+       143
+      ],
+      "leaf1": [
+       50,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       70,
+       143
+      ],
+      "leaf1": [
+       31,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     2,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 0.9958331216621445,
+     "16384": 0.9015983027929906,
+     "20480": 0.8418900182732614,
+     "24576": 0.8222697435267037,
+     "28672": 0.7726884263829561,
+     "32768": 0.7069135126766923,
+     "4096": 1.1847234507004032,
+     "8192": 1.0467453300079796
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        253,
+        256
+       ],
+       "leaf2": [
+        160,
+        256
+       ],
+       "leaf3": [
+        110,
+        161
+       ],
+       "leaf4+": [
+        90,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        161,
+        256
+       ],
+       "leaf2": [
+        139,
+        256
+       ],
+       "leaf3": [
+        83,
+        161
+       ],
+       "leaf4+": [
+        69,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        181,
+        256
+       ],
+       "leaf2": [
+        21,
+        256
+       ],
+       "leaf3": [
+        10,
+        161
+       ],
+       "leaf4+": [
+        13,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        125,
+        256
+       ],
+       "leaf2": [
+        138,
+        256
+       ],
+       "leaf3": [
+        92,
+        161
+       ],
+       "leaf4+": [
+        57,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       613,
+       799
+      ],
+      "drive": [
+       452,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1316,
+       1342
+      ],
+      "noetic": [
+       225,
+       799
+      ],
+      "op": [
+       526,
+       543
+      ],
+      "register": [
+       412,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 2,
+     "exact": 2,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 2,
+       "FIELD": 248,
+       "OPERATOR": 4,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 2
+      },
+      "by_kind": {
+       "EXACT": 2,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 2,
+       "PLUS_FOR_TIMES": 3,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 1,
+       "WRONG_DOMAIN": 1,
+       "WRONG_DRIVE": 67,
+       "WRONG_NOETIC": 130,
+       "WRONG_REGISTER": 50
+      },
+      "by_slot_kind": {
+       "domain": 1,
+       "drive": 67,
+       "eos": 0,
+       "expr": 2,
+       "noetic": 130,
+       "op": 4,
+       "register": 50
+      },
+      "index_sum": 1548,
+      "rows_with_a_wrong_decision": 254,
+      "whole_leaves_right_before_it": {
+       "0": 193,
+       "1": 61
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        492,
+        675
+       ],
+       "drive": [
+        394,
+        675
+       ],
+       "noetic": [
+        208,
+        675
+       ],
+       "register": [
+        363,
+        675
+       ]
+      },
+      "op": [
+       434,
+       444
+      ]
+     },
+     "length": {
+      "equal": 241,
+      "free_tokens_total": 5288,
+      "longer": 4,
+      "shorter": 11,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 11,
+       "MORE_LEAVES": 4,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 10,
+       "SHAPE_MATCH": 231
+      },
+      "extra_leaves_total": 4,
+      "missing_leaves_total": 11,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 93,
+       "2->3": 3,
+       "3->2": 7,
+       "3->3": 57,
+       "3->4": 1
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        247,
+        256
+       ],
+       "leaf2": [
+        99,
+        256
+       ],
+       "leaf3": [
+        111,
+        256
+       ],
+       "leaf4+": [
+        230,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        137,
+        256
+       ],
+       "leaf2": [
+        100,
+        256
+       ],
+       "leaf3": [
+        127,
+        256
+       ],
+       "leaf4+": [
+        112,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        117,
+        256
+       ],
+       "leaf2": [
+        31,
+        256
+       ],
+       "leaf3": [
+        30,
+        256
+       ],
+       "leaf4+": [
+        50,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        118,
+        256
+       ],
+       "leaf2": [
+        106,
+        256
+       ],
+       "leaf3": [
+        116,
+        256
+       ],
+       "leaf4+": [
+        202,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       687,
+       1186
+      ],
+      "drive": [
+       476,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1717,
+       2116
+      ],
+      "noetic": [
+       228,
+       1186
+      ],
+      "op": [
+       860,
+       930
+      ],
+      "register": [
+       542,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 187,
+       "OPERATOR": 9,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 60
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 25,
+       "LOST_BRANCH": 35,
+       "PLUS_FOR_TIMES": 5,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 4,
+       "WRONG_DOMAIN": 2,
+       "WRONG_DRIVE": 39,
+       "WRONG_NOETIC": 122,
+       "WRONG_REGISTER": 24
+      },
+      "by_slot_kind": {
+       "domain": 2,
+       "drive": 39,
+       "eos": 0,
+       "expr": 60,
+       "noetic": 122,
+       "op": 9,
+       "register": 24
+      },
+      "index_sum": 1313,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 231,
+       "1": 25
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        13,
+        31
+       ],
+       "drive": [
+        12,
+        31
+       ],
+       "noetic": [
+        2,
+        31
+       ],
+       "register": [
+        14,
+        31
+       ]
+      },
+      "op": [
+       19,
+       24
+      ]
+     },
+     "length": {
+      "equal": 161,
+      "free_tokens_total": 7710,
+      "longer": 26,
+      "shorter": 69,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 69,
+       "MORE_LEAVES": 26,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 154,
+       "SHAPE_MATCH": 7
+      },
+      "extra_leaves_total": 26,
+      "missing_leaves_total": 74,
+      "target_depth_to_generated_depth": {
+       "3->1": 1,
+       "3->2": 56,
+       "3->3": 193,
+       "3->4": 6
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        202,
+        208
+       ],
+       "leaf2": [
+        84,
+        208
+       ],
+       "leaf3": [
+        93,
+        208
+       ],
+       "leaf4+": [
+        172,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        118,
+        208
+       ],
+       "leaf2": [
+        86,
+        208
+       ],
+       "leaf3": [
+        107,
+        208
+       ],
+       "leaf4+": [
+        70,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        92,
+        208
+       ],
+       "leaf2": [
+        26,
+        208
+       ],
+       "leaf3": [
+        22,
+        208
+       ],
+       "leaf4+": [
+        39,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        98,
+        208
+       ],
+       "leaf2": [
+        90,
+        208
+       ],
+       "leaf3": [
+        94,
+        208
+       ],
+       "leaf4+": [
+        146,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       551,
+       931
+      ],
+      "drive": [
+       381,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1331,
+       1654
+      ],
+      "noetic": [
+       179,
+       931
+      ],
+      "op": [
+       675,
+       723
+      ],
+      "register": [
+       428,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 157,
+       "OPERATOR": 6,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 45
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 20,
+       "LOST_BRANCH": 25,
+       "PLUS_FOR_TIMES": 4,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 2,
+       "WRONG_DOMAIN": 1,
+       "WRONG_DRIVE": 29,
+       "WRONG_NOETIC": 105,
+       "WRONG_REGISTER": 22
+      },
+      "by_slot_kind": {
+       "domain": 1,
+       "drive": 29,
+       "eos": 0,
+       "expr": 45,
+       "noetic": 105,
+       "op": 6,
+       "register": 22
+      },
+      "index_sum": 1061,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 185,
+       "1": 23
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        8,
+        16
+       ],
+       "drive": [
+        6,
+        16
+       ],
+       "noetic": [
+        1,
+        16
+       ],
+       "register": [
+        6,
+        16
+       ]
+      },
+      "op": [
+       11,
+       12
+      ]
+     },
+     "length": {
+      "equal": 140,
+      "free_tokens_total": 6120,
+      "longer": 21,
+      "shorter": 47,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 47,
+       "MORE_LEAVES": 21,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 136,
+       "SHAPE_MATCH": 4
+      },
+      "extra_leaves_total": 21,
+      "missing_leaves_total": 48,
+      "target_depth_to_generated_depth": {
+       "3->1": 1,
+       "3->2": 46,
+       "3->3": 160,
+       "3->4": 1
+      }
+     }
+    }
+   },
+   "seed": 20260932
+  },
+  "A_20260933": {
+   "arm": "A",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        82,
+        5
+       ],
+       "leaf1": [
+        63,
+        54,
+        9
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        42,
+        3
+       ],
+       "leaf1": [
+        26,
+        19,
+        1
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        46,
+        0
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        0,
+        0
+       ],
+       "leaf1": [
+        23,
+        0,
+        0
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       61,
+       543
+      ],
+      "leaf1": [
+       31,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       55,
+       543
+      ],
+      "leaf1": [
+       22,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       42,
+       543
+      ],
+      "leaf1": [
+       165,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       50,
+       543
+      ],
+      "leaf1": [
+       34,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       63,
+       543
+      ],
+      "leaf1": [
+       255,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       58,
+       543
+      ],
+      "leaf1": [
+       21,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       41,
+       543
+      ],
+      "leaf1": [
+       50,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       83,
+       132
+      ],
+      "leaf1": [
+       51,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       70,
+       132
+      ],
+      "leaf1": [
+       31,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       18,
+       132
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       69,
+       132
+      ],
+      "leaf1": [
+       36,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     0,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 0.9317946309602121,
+     "16384": 0.871633769114851,
+     "20480": 0.8216728930856334,
+     "24576": 0.7846979666574043,
+     "28672": 0.7580993956071325,
+     "32768": 0.7274030068838329,
+     "4096": 1.1854369586944813,
+     "8192": 1.0120691387564875
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        154,
+        256
+       ],
+       "leaf2": [
+        131,
+        256
+       ],
+       "leaf3": [
+        93,
+        161
+       ],
+       "leaf4+": [
+        82,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        154,
+        256
+       ],
+       "leaf2": [
+        144,
+        256
+       ],
+       "leaf3": [
+        82,
+        161
+       ],
+       "leaf4+": [
+        61,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        255,
+        256
+       ],
+       "leaf2": [
+        34,
+        256
+       ],
+       "leaf3": [
+        13,
+        161
+       ],
+       "leaf4+": [
+        16,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        125,
+        256
+       ],
+       "leaf2": [
+        131,
+        256
+       ],
+       "leaf3": [
+        86,
+        161
+       ],
+       "leaf4+": [
+        58,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       460,
+       799
+      ],
+      "drive": [
+       441,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1302,
+       1342
+      ],
+      "noetic": [
+       318,
+       799
+      ],
+      "op": [
+       512,
+       543
+      ],
+      "register": [
+       400,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 1,
+     "exact": 1,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 1,
+       "FIELD": 248,
+       "OPERATOR": 3,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 4
+      },
+      "by_kind": {
+       "EXACT": 1,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 1,
+       "LOST_BRANCH": 3,
+       "PLUS_FOR_TIMES": 3,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 0,
+       "WRONG_DOMAIN": 104,
+       "WRONG_DRIVE": 62,
+       "WRONG_NOETIC": 45,
+       "WRONG_REGISTER": 37
+      },
+      "by_slot_kind": {
+       "domain": 104,
+       "drive": 62,
+       "eos": 0,
+       "expr": 4,
+       "noetic": 45,
+       "op": 3,
+       "register": 37
+      },
+      "index_sum": 1573,
+      "rows_with_a_wrong_decision": 255,
+      "whole_leaves_right_before_it": {
+       "0": 200,
+       "1": 55
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        363,
+        626
+       ],
+       "drive": [
+        304,
+        626
+       ],
+       "noetic": [
+        280,
+        626
+       ],
+       "register": [
+        319,
+        626
+       ]
+      },
+      "op": [
+       392,
+       406
+      ]
+     },
+     "length": {
+      "equal": 228,
+      "free_tokens_total": 5211,
+      "longer": 5,
+      "shorter": 23,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 23,
+       "MORE_LEAVES": 5,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 8,
+       "SHAPE_MATCH": 220
+      },
+      "extra_leaves_total": 5,
+      "missing_leaves_total": 23,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 91,
+       "2->3": 5,
+       "3->2": 13,
+       "3->3": 51,
+       "3->4": 1
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        167,
+        256
+       ],
+       "leaf2": [
+        74,
+        256
+       ],
+       "leaf3": [
+        84,
+        256
+       ],
+       "leaf4+": [
+        179,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        115,
+        256
+       ],
+       "leaf2": [
+        126,
+        256
+       ],
+       "leaf3": [
+        120,
+        256
+       ],
+       "leaf4+": [
+        195,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        247,
+        256
+       ],
+       "leaf2": [
+        19,
+        256
+       ],
+       "leaf3": [
+        22,
+        256
+       ],
+       "leaf4+": [
+        57,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        117,
+        256
+       ],
+       "leaf2": [
+        107,
+        256
+       ],
+       "leaf3": [
+        118,
+        256
+       ],
+       "leaf4+": [
+        207,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       504,
+       1186
+      ],
+      "drive": [
+       556,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1802,
+       2116
+      ],
+      "noetic": [
+       345,
+       1186
+      ],
+      "op": [
+       821,
+       930
+      ],
+      "register": [
+       549,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 223,
+       "OPERATOR": 6,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 27
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 27,
+       "PLUS_FOR_TIMES": 3,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 3,
+       "WRONG_DOMAIN": 81,
+       "WRONG_DRIVE": 80,
+       "WRONG_NOETIC": 18,
+       "WRONG_REGISTER": 44
+      },
+      "by_slot_kind": {
+       "domain": 81,
+       "drive": 80,
+       "eos": 0,
+       "expr": 27,
+       "noetic": 18,
+       "op": 6,
+       "register": 44
+      },
+      "index_sum": 1615,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 227,
+       "1": 29
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        9,
+        30
+       ],
+       "drive": [
+        9,
+        30
+       ],
+       "noetic": [
+        12,
+        30
+       ],
+       "register": [
+        11,
+        30
+       ]
+      },
+      "op": [
+       22,
+       23
+      ]
+     },
+     "length": {
+      "equal": 32,
+      "free_tokens_total": 6464,
+      "longer": 5,
+      "shorter": 219,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 219,
+       "MORE_LEAVES": 5,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 25,
+       "SHAPE_MATCH": 7
+      },
+      "extra_leaves_total": 5,
+      "missing_leaves_total": 231,
+      "target_depth_to_generated_depth": {
+       "3->2": 194,
+       "3->3": 62
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        140,
+        208
+       ],
+       "leaf2": [
+        62,
+        208
+       ],
+       "leaf3": [
+        68,
+        208
+       ],
+       "leaf4+": [
+        137,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        99,
+        208
+       ],
+       "leaf2": [
+        105,
+        208
+       ],
+       "leaf3": [
+        100,
+        208
+       ],
+       "leaf4+": [
+        145,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        205,
+        208
+       ],
+       "leaf2": [
+        15,
+        208
+       ],
+       "leaf3": [
+        17,
+        208
+       ],
+       "leaf4+": [
+        38,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        97,
+        208
+       ],
+       "leaf2": [
+        90,
+        208
+       ],
+       "leaf3": [
+        94,
+        208
+       ],
+       "leaf4+": [
+        148,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       407,
+       931
+      ],
+      "drive": [
+       449,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1408,
+       1654
+      ],
+      "noetic": [
+       275,
+       931
+      ],
+      "op": [
+       644,
+       723
+      ],
+      "register": [
+       429,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 183,
+       "OPERATOR": 4,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 21
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 21,
+       "PLUS_FOR_TIMES": 2,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 2,
+       "WRONG_DOMAIN": 64,
+       "WRONG_DRIVE": 69,
+       "WRONG_NOETIC": 12,
+       "WRONG_REGISTER": 38
+      },
+      "by_slot_kind": {
+       "domain": 64,
+       "drive": 69,
+       "eos": 0,
+       "expr": 21,
+       "noetic": 12,
+       "op": 4,
+       "register": 38
+      },
+      "index_sum": 1294,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 183,
+       "1": 25
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        4,
+        18
+       ],
+       "drive": [
+        6,
+        18
+       ],
+       "noetic": [
+        8,
+        18
+       ],
+       "register": [
+        4,
+        18
+       ]
+      },
+      "op": [
+       13,
+       14
+      ]
+     },
+     "length": {
+      "equal": 25,
+      "free_tokens_total": 5063,
+      "longer": 4,
+      "shorter": 179,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 179,
+       "MORE_LEAVES": 4,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 21,
+       "SHAPE_MATCH": 4
+      },
+      "extra_leaves_total": 4,
+      "missing_leaves_total": 182,
+      "target_depth_to_generated_depth": {
+       "3->2": 168,
+       "3->3": 40
+      }
+     }
+    }
+   },
+   "seed": 20260933
+  },
+  "B_20260931": {
+   "arm": "B",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        122,
+        0
+       ],
+       "leaf1": [
+        63,
+        63,
+        0
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        52,
+        4
+       ],
+       "leaf1": [
+        26,
+        26,
+        0
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        0,
+        0
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        25,
+        3
+       ],
+       "leaf1": [
+        23,
+        22,
+        1
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       52,
+       543
+      ],
+      "leaf1": [
+       32,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       41,
+       543
+      ],
+      "leaf1": [
+       35,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       43,
+       543
+      ],
+      "leaf1": [
+       223,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       56,
+       543
+      ],
+      "leaf1": [
+       20,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       43,
+       543
+      ],
+      "leaf1": [
+       255,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       55,
+       543
+      ],
+      "leaf1": [
+       32,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       53,
+       543
+      ],
+      "leaf1": [
+       26,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       85,
+       115
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       75,
+       115
+      ],
+      "leaf1": [
+       61,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       11,
+       115
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       77,
+       115
+      ],
+      "leaf1": [
+       62,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     14,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 0.7741430646783556,
+     "16384": 0.6119568408712439,
+     "20480": 0.50003061973473,
+     "24576": 0.45231722498829185,
+     "28672": 0.4237862981191256,
+     "32768": 0.4033923257391052,
+     "4096": 1.2176813447877066,
+     "8192": 0.9328062805943773
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        255,
+        256
+       ],
+       "leaf2": [
+        200,
+        256
+       ],
+       "leaf3": [
+        107,
+        161
+       ],
+       "leaf4+": [
+        57,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        238,
+        256
+       ],
+       "leaf2": [
+        194,
+        256
+       ],
+       "leaf3": [
+        108,
+        161
+       ],
+       "leaf4+": [
+        71,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        255,
+        256
+       ],
+       "leaf2": [
+        21,
+        256
+       ],
+       "leaf3": [
+        15,
+        161
+       ],
+       "leaf4+": [
+        7,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        239,
+        256
+       ],
+       "leaf2": [
+        179,
+        256
+       ],
+       "leaf3": [
+        122,
+        161
+       ],
+       "leaf4+": [
+        79,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       619,
+       799
+      ],
+      "drive": [
+       611,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1310,
+       1342
+      ],
+      "noetic": [
+       298,
+       799
+      ],
+      "op": [
+       480,
+       543
+      ],
+      "register": [
+       619,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 4,
+     "exact": 4,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 4,
+       "FIELD": 221,
+       "OPERATOR": 21,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 10
+      },
+      "by_kind": {
+       "EXACT": 4,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 6,
+       "LOST_BRANCH": 4,
+       "PLUS_FOR_TIMES": 10,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 11,
+       "WRONG_DOMAIN": 2,
+       "WRONG_DRIVE": 23,
+       "WRONG_NOETIC": 177,
+       "WRONG_REGISTER": 19
+      },
+      "by_slot_kind": {
+       "domain": 2,
+       "drive": 23,
+       "eos": 0,
+       "expr": 10,
+       "noetic": 177,
+       "op": 21,
+       "register": 19
+      },
+      "index_sum": 2218,
+      "rows_with_a_wrong_decision": 252,
+      "whole_leaves_right_before_it": {
+       "0": 37,
+       "1": 211,
+       "2": 4
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        506,
+        677
+       ],
+       "drive": [
+        477,
+        677
+       ],
+       "noetic": [
+        266,
+        677
+       ],
+       "register": [
+        544,
+        677
+       ]
+      },
+      "op": [
+       394,
+       444
+      ]
+     },
+     "length": {
+      "equal": 237,
+      "free_tokens_total": 5302,
+      "longer": 7,
+      "shorter": 12,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 12,
+       "MORE_LEAVES": 7,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 4,
+       "SHAPE_MATCH": 233
+      },
+      "extra_leaves_total": 7,
+      "missing_leaves_total": 12,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 96,
+       "3->2": 1,
+       "3->3": 60,
+       "3->4": 4
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        255,
+        256
+       ],
+       "leaf2": [
+        189,
+        256
+       ],
+       "leaf3": [
+        166,
+        256
+       ],
+       "leaf4+": [
+        150,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        233,
+        256
+       ],
+       "leaf2": [
+        179,
+        256
+       ],
+       "leaf3": [
+        150,
+        256
+       ],
+       "leaf4+": [
+        227,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        252,
+        256
+       ],
+       "leaf2": [
+        28,
+        256
+       ],
+       "leaf3": [
+        26,
+        256
+       ],
+       "leaf4+": [
+        41,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        219,
+        256
+       ],
+       "leaf2": [
+        106,
+        256
+       ],
+       "leaf3": [
+        121,
+        256
+       ],
+       "leaf4+": [
+        206,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       760,
+       1186
+      ],
+      "drive": [
+       789,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1770,
+       2116
+      ],
+      "noetic": [
+       347,
+       1186
+      ],
+      "op": [
+       756,
+       930
+      ],
+      "register": [
+       652,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 111,
+       "OPERATOR": 27,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 118
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 36,
+       "LOST_BRANCH": 82,
+       "PLUS_FOR_TIMES": 12,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 15,
+       "WRONG_DOMAIN": 4,
+       "WRONG_DRIVE": 22,
+       "WRONG_NOETIC": 59,
+       "WRONG_REGISTER": 26
+      },
+      "by_slot_kind": {
+       "domain": 4,
+       "drive": 22,
+       "eos": 0,
+       "expr": 118,
+       "noetic": 59,
+       "op": 27,
+       "register": 26
+      },
+      "index_sum": 1996,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 103,
+       "1": 152,
+       "2": 1
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        41,
+        68
+       ],
+       "drive": [
+        29,
+        68
+       ],
+       "noetic": [
+        24,
+        68
+       ],
+       "register": [
+        31,
+        68
+       ]
+      },
+      "op": [
+       47,
+       54
+      ]
+     },
+     "length": {
+      "equal": 78,
+      "free_tokens_total": 7157,
+      "longer": 25,
+      "shorter": 153,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 153,
+       "MORE_LEAVES": 25,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 64,
+       "SHAPE_MATCH": 14
+      },
+      "extra_leaves_total": 28,
+      "missing_leaves_total": 155,
+      "target_depth_to_generated_depth": {
+       "3->2": 171,
+       "3->3": 79,
+       "3->4": 6
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        208,
+        208
+       ],
+       "leaf2": [
+        158,
+        208
+       ],
+       "leaf3": [
+        135,
+        208
+       ],
+       "leaf4+": [
+        112,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        189,
+        208
+       ],
+       "leaf2": [
+        149,
+        208
+       ],
+       "leaf3": [
+        127,
+        208
+       ],
+       "leaf4+": [
+        167,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        206,
+        208
+       ],
+       "leaf2": [
+        23,
+        208
+       ],
+       "leaf3": [
+        23,
+        208
+       ],
+       "leaf4+": [
+        30,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        183,
+        208
+       ],
+       "leaf2": [
+        89,
+        208
+       ],
+       "leaf3": [
+        97,
+        208
+       ],
+       "leaf4+": [
+        156,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       613,
+       931
+      ],
+      "drive": [
+       632,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1376,
+       1654
+      ],
+      "noetic": [
+       282,
+       931
+      ],
+      "op": [
+       589,
+       723
+      ],
+      "register": [
+       525,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 87,
+       "OPERATOR": 21,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 100
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 34,
+       "LOST_BRANCH": 66,
+       "PLUS_FOR_TIMES": 10,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 11,
+       "WRONG_DOMAIN": 2,
+       "WRONG_DRIVE": 17,
+       "WRONG_NOETIC": 48,
+       "WRONG_REGISTER": 20
+      },
+      "by_slot_kind": {
+       "domain": 2,
+       "drive": 17,
+       "eos": 0,
+       "expr": 100,
+       "noetic": 48,
+       "op": 21,
+       "register": 20
+      },
+      "index_sum": 1606,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 79,
+       "1": 128,
+       "2": 1
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        30,
+        48
+       ],
+       "drive": [
+        18,
+        48
+       ],
+       "noetic": [
+        18,
+        48
+       ],
+       "register": [
+        20,
+        48
+       ]
+      },
+      "op": [
+       33,
+       38
+      ]
+     },
+     "length": {
+      "equal": 63,
+      "free_tokens_total": 5567,
+      "longer": 18,
+      "shorter": 127,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 127,
+       "MORE_LEAVES": 18,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 53,
+       "SHAPE_MATCH": 10
+      },
+      "extra_leaves_total": 21,
+      "missing_leaves_total": 127,
+      "target_depth_to_generated_depth": {
+       "3->2": 153,
+       "3->3": 52,
+       "3->4": 3
+      }
+     }
+    }
+   },
+   "seed": 20260931
+  },
+  "B_20260932": {
+   "arm": "B",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        37,
+        5
+       ],
+       "leaf1": [
+        63,
+        63,
+        0
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        24,
+        2
+       ],
+       "leaf1": [
+        26,
+        17,
+        0
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        0,
+        1
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        24,
+        0
+       ],
+       "leaf1": [
+        23,
+        0,
+        0
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       18,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       32,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       73,
+       543
+      ],
+      "leaf1": [
+       256,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       58,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       256,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       61,
+       543
+      ],
+      "leaf1": [
+       34,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       49,
+       543
+      ],
+      "leaf1": [
+       226,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       37,
+       113
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       63,
+       113
+      ],
+      "leaf1": [
+       49,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       14,
+       113
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       78,
+       113
+      ],
+      "leaf1": [
+       28,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     8,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 0.8227035115487524,
+     "16384": 0.7465869991774525,
+     "20480": 0.6570216683446688,
+     "24576": 0.6016808113245133,
+     "28672": 0.5726740744989911,
+     "32768": 0.5458789798947237,
+     "4096": 1.2197746821912006,
+     "8192": 0.9461127879621927
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        256,
+        256
+       ],
+       "leaf2": [
+        106,
+        256
+       ],
+       "leaf3": [
+        64,
+        161
+       ],
+       "leaf4+": [
+        38,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        166,
+        256
+       ],
+       "leaf2": [
+        163,
+        256
+       ],
+       "leaf3": [
+        99,
+        161
+       ],
+       "leaf4+": [
+        72,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        256,
+        256
+       ],
+       "leaf2": [
+        25,
+        256
+       ],
+       "leaf3": [
+        18,
+        161
+       ],
+       "leaf4+": [
+        14,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        125,
+        256
+       ],
+       "leaf2": [
+        177,
+        256
+       ],
+       "leaf3": [
+        121,
+        161
+       ],
+       "leaf4+": [
+        98,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       464,
+       799
+      ],
+      "drive": [
+       500,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1317,
+       1342
+      ],
+      "noetic": [
+       313,
+       799
+      ],
+      "op": [
+       516,
+       543
+      ],
+      "register": [
+       521,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 1,
+     "exact": 1,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 1,
+       "FIELD": 249,
+       "OPERATOR": 5,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 1
+      },
+      "by_kind": {
+       "EXACT": 1,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 1,
+       "PLUS_FOR_TIMES": 5,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 0,
+       "WRONG_DOMAIN": 7,
+       "WRONG_DRIVE": 89,
+       "WRONG_NOETIC": 74,
+       "WRONG_REGISTER": 79
+      },
+      "by_slot_kind": {
+       "domain": 7,
+       "drive": 89,
+       "eos": 0,
+       "expr": 1,
+       "noetic": 74,
+       "op": 5,
+       "register": 79
+      },
+      "index_sum": 1815,
+      "rows_with_a_wrong_decision": 255,
+      "whole_leaves_right_before_it": {
+       "0": 172,
+       "1": 83
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        439,
+        723
+       ],
+       "drive": [
+        446,
+        723
+       ],
+       "noetic": [
+        287,
+        723
+       ],
+       "register": [
+        479,
+        723
+       ]
+      },
+      "op": [
+       466,
+       481
+      ]
+     },
+     "length": {
+      "equal": 243,
+      "free_tokens_total": 5260,
+      "longer": 1,
+      "shorter": 12,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 12,
+       "MORE_LEAVES": 1,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 1,
+       "SHAPE_MATCH": 242
+      },
+      "extra_leaves_total": 1,
+      "missing_leaves_total": 12,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 96,
+       "3->2": 1,
+       "3->3": 64
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        256,
+        256
+       ],
+       "leaf2": [
+        87,
+        256
+       ],
+       "leaf3": [
+        77,
+        256
+       ],
+       "leaf4+": [
+        110,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        152,
+        256
+       ],
+       "leaf2": [
+        114,
+        256
+       ],
+       "leaf3": [
+        127,
+        256
+       ],
+       "leaf4+": [
+        218,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        256,
+        256
+       ],
+       "leaf2": [
+        30,
+        256
+       ],
+       "leaf3": [
+        29,
+        256
+       ],
+       "leaf4+": [
+        39,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        118,
+        256
+       ],
+       "leaf2": [
+        107,
+        256
+       ],
+       "leaf3": [
+        108,
+        256
+       ],
+       "leaf4+": [
+        313,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       530,
+       1186
+      ],
+      "drive": [
+       611,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1773,
+       2116
+      ],
+      "noetic": [
+       354,
+       1186
+      ],
+      "op": [
+       819,
+       930
+      ],
+      "register": [
+       646,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 212,
+       "OPERATOR": 17,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 27
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 27,
+       "PLUS_FOR_TIMES": 5,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 12,
+       "WRONG_DOMAIN": 2,
+       "WRONG_DRIVE": 102,
+       "WRONG_NOETIC": 33,
+       "WRONG_REGISTER": 75
+      },
+      "by_slot_kind": {
+       "domain": 2,
+       "drive": 102,
+       "eos": 0,
+       "expr": 27,
+       "noetic": 33,
+       "op": 17,
+       "register": 75
+      },
+      "index_sum": 1951,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 185,
+       "1": 71
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        71,
+        180
+       ],
+       "drive": [
+        103,
+        180
+       ],
+       "noetic": [
+        53,
+        180
+       ],
+       "register": [
+        96,
+        180
+       ]
+      },
+      "op": [
+       126,
+       144
+      ]
+     },
+     "length": {
+      "equal": 37,
+      "free_tokens_total": 6947,
+      "longer": 31,
+      "shorter": 188,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 188,
+       "MORE_LEAVES": 31,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 1,
+       "SHAPE_MATCH": 36
+      },
+      "extra_leaves_total": 34,
+      "missing_leaves_total": 191,
+      "target_depth_to_generated_depth": {
+       "3->2": 169,
+       "3->3": 87
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        208,
+        208
+       ],
+       "leaf2": [
+        71,
+        208
+       ],
+       "leaf3": [
+        60,
+        208
+       ],
+       "leaf4+": [
+        77,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        126,
+        208
+       ],
+       "leaf2": [
+        91,
+        208
+       ],
+       "leaf3": [
+        109,
+        208
+       ],
+       "leaf4+": [
+        161,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        208,
+        208
+       ],
+       "leaf2": [
+        22,
+        208
+       ],
+       "leaf3": [
+        25,
+        208
+       ],
+       "leaf4+": [
+        29,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        98,
+        208
+       ],
+       "leaf2": [
+        90,
+        208
+       ],
+       "leaf3": [
+        85,
+        208
+       ],
+       "leaf4+": [
+        237,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       416,
+       931
+      ],
+      "drive": [
+       487,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1373,
+       1654
+      ],
+      "noetic": [
+       284,
+       931
+      ],
+      "op": [
+       641,
+       723
+      ],
+      "register": [
+       510,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 171,
+       "OPERATOR": 14,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 23
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 0,
+       "LOST_BRANCH": 23,
+       "PLUS_FOR_TIMES": 4,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 10,
+       "WRONG_DOMAIN": 1,
+       "WRONG_DRIVE": 81,
+       "WRONG_NOETIC": 29,
+       "WRONG_REGISTER": 60
+      },
+      "by_slot_kind": {
+       "domain": 1,
+       "drive": 81,
+       "eos": 0,
+       "expr": 23,
+       "noetic": 29,
+       "op": 14,
+       "register": 60
+      },
+      "index_sum": 1553,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 147,
+       "1": 61
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        50,
+        130
+       ],
+       "drive": [
+        75,
+        130
+       ],
+       "noetic": [
+        39,
+        130
+       ],
+       "register": [
+        70,
+        130
+       ]
+      },
+      "op": [
+       91,
+       104
+      ]
+     },
+     "length": {
+      "equal": 27,
+      "free_tokens_total": 5385,
+      "longer": 24,
+      "shorter": 157,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 157,
+       "MORE_LEAVES": 24,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 1,
+       "SHAPE_MATCH": 26
+      },
+      "extra_leaves_total": 25,
+      "missing_leaves_total": 157,
+      "target_depth_to_generated_depth": {
+       "3->2": 152,
+       "3->3": 56
+      }
+     }
+    }
+   },
+   "seed": 20260932
+  },
+  "B_20260933": {
+   "arm": "B",
+   "context_reported_not_decisive": {
+    "final_value_edits_first_vs_later_leaf": {
+     "columns": [
+      "edits",
+      "up",
+      "down"
+     ],
+     "fields": {
+      "domain": {
+       "later_leaves": [
+        122,
+        97,
+        0
+       ],
+       "leaf1": [
+        63,
+        63,
+        0
+       ]
+      },
+      "drive": {
+       "later_leaves": [
+        62,
+        60,
+        0
+       ],
+       "leaf1": [
+        26,
+        26,
+        0
+       ]
+      },
+      "noetic": {
+       "later_leaves": [
+        132,
+        0,
+        0
+       ],
+       "leaf1": [
+        64,
+        64,
+        0
+       ]
+      },
+      "register": {
+       "later_leaves": [
+        46,
+        39,
+        1
+       ],
+       "leaf1": [
+        23,
+        23,
+        0
+       ]
+      }
+     },
+     "meaning": "an edit changes one field value in the input; 'up' = the model's probability of the NEW value rose by at least 0.01 at that field's position (the frozen T2 step); 'down' = fell by at least it"
+    },
+    "note": "context for the proposal only; reported, not decisive; TEACH_FIT is per run and never compared",
+    "sp1_assisted_noetic_first_vs_later_leaf_by_checkpoint": {
+     "0": {
+      "later_leaves": [
+       61,
+       543
+      ],
+      "leaf1": [
+       31,
+       256
+      ]
+     },
+     "128": {
+      "later_leaves": [
+       63,
+       543
+      ],
+      "leaf1": [
+       30,
+       256
+      ]
+     },
+     "16384": {
+      "later_leaves": [
+       43,
+       543
+      ],
+      "leaf1": [
+       239,
+       256
+      ]
+     },
+     "2048": {
+      "later_leaves": [
+       57,
+       543
+      ],
+      "leaf1": [
+       15,
+       256
+      ]
+     },
+     "32768": {
+      "later_leaves": [
+       58,
+       543
+      ],
+      "leaf1": [
+       252,
+       256
+      ]
+     },
+     "512": {
+      "later_leaves": [
+       70,
+       543
+      ],
+      "leaf1": [
+       18,
+       256
+      ]
+     },
+     "8192": {
+      "later_leaves": [
+       58,
+       543
+      ],
+      "leaf1": [
+       24,
+       256
+      ]
+     }
+    },
+    "teach_fit_final_assisted_by_field_first_vs_later_leaf": {
+     "domain": {
+      "later_leaves": [
+       72,
+       116
+      ],
+      "leaf1": [
+       64,
+       64
+      ]
+     },
+     "drive": {
+      "later_leaves": [
+       94,
+       116
+      ],
+      "leaf1": [
+       60,
+       64
+      ]
+     },
+     "noetic": {
+      "later_leaves": [
+       17,
+       116
+      ],
+      "leaf1": [
+       63,
+       64
+      ]
+     },
+     "register": {
+      "later_leaves": [
+       88,
+       116
+      ],
+      "leaf1": [
+       63,
+       64
+      ]
+     }
+    },
+    "teach_fit_final_exact": [
+     14,
+     64
+    ],
+    "training_loss_mean_per_4096_updates": {
+     "12288": 0.7938616417659432,
+     "16384": 0.6178268261494395,
+     "20480": 0.5358170028461018,
+     "24576": 0.48288609955983475,
+     "28672": 0.4460317439150572,
+     "32768": 0.41904512351257495,
+     "4096": 1.234023736891686,
+     "8192": 0.9647317025301163
+    }
+   },
+   "panels": {
+    "SP1": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        255,
+        256
+       ],
+       "leaf2": [
+        122,
+        256
+       ],
+       "leaf3": [
+        70,
+        161
+       ],
+       "leaf4+": [
+        60,
+        126
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        226,
+        256
+       ],
+       "leaf2": [
+        179,
+        256
+       ],
+       "leaf3": [
+        109,
+        161
+       ],
+       "leaf4+": [
+        78,
+        126
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        252,
+        256
+       ],
+       "leaf2": [
+        27,
+        256
+       ],
+       "leaf3": [
+        14,
+        161
+       ],
+       "leaf4+": [
+        17,
+        126
+       ]
+      },
+      "register": {
+       "leaf1": [
+        241,
+        256
+       ],
+       "leaf2": [
+        193,
+        256
+       ],
+       "leaf3": [
+        113,
+        161
+       ],
+       "leaf4+": [
+        92,
+        126
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       507,
+       799
+      ],
+      "drive": [
+       592,
+       799
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1314,
+       1342
+      ],
+      "noetic": [
+       310,
+       799
+      ],
+      "op": [
+       500,
+       543
+      ],
+      "register": [
+       639,
+       799
+      ]
+     },
+     "assisted_rows_all_tokens_right": 6,
+     "exact": 6,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 6,
+       "FIELD": 239,
+       "OPERATOR": 2,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 9
+      },
+      "by_kind": {
+       "EXACT": 6,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 5,
+       "LOST_BRANCH": 4,
+       "PLUS_FOR_TIMES": 1,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 1,
+       "WRONG_DOMAIN": 10,
+       "WRONG_DRIVE": 32,
+       "WRONG_NOETIC": 184,
+       "WRONG_REGISTER": 13
+      },
+      "by_slot_kind": {
+       "domain": 10,
+       "drive": 32,
+       "eos": 0,
+       "expr": 9,
+       "noetic": 184,
+       "op": 2,
+       "register": 13
+      },
+      "index_sum": 2168,
+      "rows_with_a_wrong_decision": 250,
+      "whole_leaves_right_before_it": {
+       "0": 51,
+       "1": 196,
+       "2": 3
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        450,
+        693
+       ],
+       "drive": [
+        484,
+        693
+       ],
+       "noetic": [
+        290,
+        693
+       ],
+       "register": [
+        567,
+        693
+       ]
+      },
+      "op": [
+       430,
+       457
+      ]
+     },
+     "length": {
+      "equal": 241,
+      "free_tokens_total": 5246,
+      "longer": 1,
+      "shorter": 14,
+      "target_tokens_total": 5337
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 14,
+       "MORE_LEAVES": 1,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 5,
+       "SHAPE_MATCH": 236
+      },
+      "extra_leaves_total": 1,
+      "missing_leaves_total": 14,
+      "target_depth_to_generated_depth": {
+       "1->1": 95,
+       "2->2": 96,
+       "3->2": 5,
+       "3->3": 59,
+       "3->4": 1
+      }
+     }
+    },
+    "SP2ALL": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        251,
+        256
+       ],
+       "leaf2": [
+        145,
+        256
+       ],
+       "leaf3": [
+        91,
+        256
+       ],
+       "leaf4+": [
+        148,
+        418
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        210,
+        256
+       ],
+       "leaf2": [
+        157,
+        256
+       ],
+       "leaf3": [
+        144,
+        256
+       ],
+       "leaf4+": [
+        251,
+        418
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        234,
+        256
+       ],
+       "leaf2": [
+        28,
+        256
+       ],
+       "leaf3": [
+        30,
+        256
+       ],
+       "leaf4+": [
+        41,
+        418
+       ]
+      },
+      "register": {
+       "leaf1": [
+        217,
+        256
+       ],
+       "leaf2": [
+        124,
+        256
+       ],
+       "leaf3": [
+        107,
+        256
+       ],
+       "leaf4+": [
+        304,
+        418
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       635,
+       1186
+      ],
+      "drive": [
+       762,
+       1186
+      ],
+      "eos": [
+       256,
+       256
+      ],
+      "expr": [
+       1686,
+       2116
+      ],
+      "noetic": [
+       333,
+       1186
+      ],
+      "op": [
+       772,
+       930
+      ],
+      "register": [
+       752,
+       1186
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 74,
+       "OPERATOR": 40,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 142
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 138,
+       "LOST_BRANCH": 4,
+       "PLUS_FOR_TIMES": 28,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 12,
+       "WRONG_DOMAIN": 1,
+       "WRONG_DRIVE": 23,
+       "WRONG_NOETIC": 34,
+       "WRONG_REGISTER": 16
+      },
+      "by_slot_kind": {
+       "domain": 1,
+       "drive": 23,
+       "eos": 0,
+       "expr": 142,
+       "noetic": 34,
+       "op": 40,
+       "register": 16
+      },
+      "index_sum": 1382,
+      "rows_with_a_wrong_decision": 256,
+      "whole_leaves_right_before_it": {
+       "0": 197,
+       "1": 59
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        85,
+        156
+       ],
+       "drive": [
+        90,
+        156
+       ],
+       "noetic": [
+        43,
+        156
+       ],
+       "register": [
+        82,
+        156
+       ]
+      },
+      "op": [
+       107,
+       123
+      ]
+     },
+     "length": {
+      "equal": 202,
+      "free_tokens_total": 7983,
+      "longer": 26,
+      "shorter": 28,
+      "target_tokens_total": 8046
+     },
+     "n": 256,
+     "outcomes": {
+      "GENERATED": 256
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 28,
+       "MORE_LEAVES": 26,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 169,
+       "SHAPE_MATCH": 33
+      },
+      "extra_leaves_total": 26,
+      "missing_leaves_total": 35,
+      "target_depth_to_generated_depth": {
+       "3->2": 104,
+       "3->3": 110,
+       "3->4": 42
+      }
+     }
+    },
+    "SP2U": {
+     "assisted_accuracy_by_field_and_leaf": {
+      "domain": {
+       "leaf1": [
+        205,
+        208
+       ],
+       "leaf2": [
+        117,
+        208
+       ],
+       "leaf3": [
+        72,
+        208
+       ],
+       "leaf4+": [
+        109,
+        307
+       ]
+      },
+      "drive": {
+       "leaf1": [
+        173,
+        208
+       ],
+       "leaf2": [
+        125,
+        208
+       ],
+       "leaf3": [
+        122,
+        208
+       ],
+       "leaf4+": [
+        192,
+        307
+       ]
+      },
+      "noetic": {
+       "leaf1": [
+        190,
+        208
+       ],
+       "leaf2": [
+        22,
+        208
+       ],
+       "leaf3": [
+        27,
+        208
+       ],
+       "leaf4+": [
+        28,
+        307
+       ]
+      },
+      "register": {
+       "leaf1": [
+        177,
+        208
+       ],
+       "leaf2": [
+        103,
+        208
+       ],
+       "leaf3": [
+        85,
+        208
+       ],
+       "leaf4+": [
+        233,
+        307
+       ]
+      }
+     },
+     "assisted_accuracy_by_slot": {
+      "domain": [
+       503,
+       931
+      ],
+      "drive": [
+       612,
+       931
+      ],
+      "eos": [
+       208,
+       208
+      ],
+      "expr": [
+       1298,
+       1654
+      ],
+      "noetic": [
+       267,
+       931
+      ],
+      "op": [
+       600,
+       723
+      ],
+      "register": [
+       598,
+       931
+      ]
+     },
+     "assisted_rows_all_tokens_right": 0,
+     "exact": 0,
+     "first_wrong_decision": {
+      "by_group": {
+       "EXACT": 0,
+       "FIELD": 49,
+       "OPERATOR": 33,
+       "OTHER": 0,
+       "STRUCTURE_BRANCH": 126
+      },
+      "by_kind": {
+       "EXACT": 0,
+       "GRAMMAR_VIOLATION": 0,
+       "INVENTED_BRANCH": 126,
+       "LOST_BRANCH": 0,
+       "PLUS_FOR_TIMES": 24,
+       "PREDICTION_ENDED": 0,
+       "TIMES_FOR_PLUS": 9,
+       "WRONG_DOMAIN": 1,
+       "WRONG_DRIVE": 17,
+       "WRONG_NOETIC": 20,
+       "WRONG_REGISTER": 11
+      },
+      "by_slot_kind": {
+       "domain": 1,
+       "drive": 17,
+       "eos": 0,
+       "expr": 126,
+       "noetic": 20,
+       "op": 33,
+       "register": 11
+      },
+      "index_sum": 1032,
+      "rows_with_a_wrong_decision": 208,
+      "whole_leaves_right_before_it": {
+       "0": 166,
+       "1": 42
+      }
+     },
+     "free_field_accuracy_on_shape_matched_rows": {
+      "fields": {
+       "domain": [
+        60,
+        110
+       ],
+       "drive": [
+        65,
+        110
+       ],
+       "noetic": [
+        29,
+        110
+       ],
+       "register": [
+        58,
+        110
+       ]
+      },
+      "op": [
+       75,
+       87
+      ]
+     },
+     "length": {
+      "equal": 173,
+      "free_tokens_total": 6372,
+      "longer": 22,
+      "shorter": 13,
+      "target_tokens_total": 6309
+     },
+     "n": 208,
+     "outcomes": {
+      "GENERATED": 208
+     },
+     "structure": {
+      "by_class": {
+       "FEWER_LEAVES": 13,
+       "MORE_LEAVES": 22,
+       "NOT_A_COMPLETE_TREE": 0,
+       "SAME_LEAF_COUNT_OTHER_SHAPE": 150,
+       "SHAPE_MATCH": 23
+      },
+      "extra_leaves_total": 22,
+      "missing_leaves_total": 13,
+      "target_depth_to_generated_depth": {
+       "3->2": 94,
+       "3->3": 83,
+       "3->4": 31
+      }
+     }
+    }
+   },
+   "seed": 20260933
+  }
+ },
+ "schema": "helm-cas-expression-lab.q4-sdg-error-summary/0.1",
+ "status": "CHECKS_PASS",
+ "verdict_labels_quoted_unchanged": {
+  "architecture": "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE",
+  "lessons": {
+   "SP1": "LESSONS_EFFECT_NOT_SHOWN_SP1",
+   "SP2ALL": "LESSONS_EFFECT_NOT_SHOWN_SP2ALL",
+   "SP2U": "LESSONS_EFFECT_NOT_SHOWN_SP2U"
+  },
+  "lessons_overall": "LESSONS_OVERALL_EFFECT_NOT_SHOWN"
+ },
+ "what_this_is": "descriptive error summary of the saved public A-versus-B records; decides nothing; changes no label; no model loaded, no rerun, no torch"
+}
