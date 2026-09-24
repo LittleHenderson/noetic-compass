@@ -92,6 +92,33 @@ def main():
         out["watch"] = {k: w.get(k) for k in ("outcome", "job_status", "final_state", "terminated_confirmed",
                                                "volumes_of_this_job_remaining", "minutes_from_launch_to_watch_end",
                                                "cost_upper_bound_usd", "dollar_ceiling")}
+    # Route acceptance (Codex bus request codex-0005): a separate, stricter verdict. PASS from the job alone is not
+    # enough. It needs complete=true; requested exactly d, c, b, a; each of those checks present with verdict PASS;
+    # a passing stage-0 receipt; the launch record's bundle and source pins; the identity checks above clean; and,
+    # SEPARATELY, termination and volume-cleanup evidence from the watcher.
+    reasons = []
+    if verdict != "INTEGRATION_CHECKS_PASS":
+        reasons.append("JOB_VERDICT_NOT_PASS:%s" % verdict)
+    if summary is None or summary.get("complete") is not True:
+        reasons.append("SUMMARY_NOT_COMPLETE")
+    if summary is not None and summary.get("requested") != ["d", "c", "b", "a"]:
+        reasons.append("REQUESTED_NOT_DCBA:%s" % (summary or {}).get("requested"))
+    for name in ("d", "c", "b", "a"):
+        row = ((summary or {}).get("checks") or {}).get(name)
+        if not row or row.get("verdict") != "PASS":
+            reasons.append("CHECK_%s_NOT_PASS:%s" % (name, (row or {}).get("verdict")))
+    if smoke is None or smoke.get("pass") is not True:
+        reasons.append("STAGE0_RECEIPT_MISSING_OR_NOT_PASS")
+    if not record.get("bundle", {}).get("sha256") or not identity.get("source_commit"):
+        reasons.append("LAUNCH_PINS_MISSING")
+    if out["problems"]:
+        reasons.append("IDENTITY_PROBLEMS:%s" % sorted(out["problems"]))
+    cleanup_ok = bool(w) and w.get("terminated_confirmed") is True and w.get("volumes_of_this_job_remaining") == []
+    out["cleanup_evidence"] = {"accepted": cleanup_ok, "terminated_confirmed": (w or {}).get("terminated_confirmed"),
+                               "volumes_of_this_job_remaining": (w or {}).get("volumes_of_this_job_remaining")}
+    if not cleanup_ok:
+        reasons.append("CLEANUP_EVIDENCE_MISSING_OR_INCOMPLETE")
+    out["route_acceptance"] = {"verdict": "ROUTE_ACCEPTED" if not reasons else "ROUTE_NOT_ACCEPTED", "reasons": reasons}
     (HERE / "RESULTS_READING.json").write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8",
                                                 newline="\n")
     print(json.dumps(out, indent=1, sort_keys=True)[:8000])
