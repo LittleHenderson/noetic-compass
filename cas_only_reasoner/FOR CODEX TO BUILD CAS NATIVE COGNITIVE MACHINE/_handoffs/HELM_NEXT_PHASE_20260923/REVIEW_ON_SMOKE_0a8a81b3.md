@@ -284,3 +284,143 @@ No package was built. No AWS call was made.
   - one `git for-each-ref` listing.
 - **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `hset1a` path, the helm-integration
   and q4-sdg working copies, the meta1 ledger, S3 or AWS, torch source, and any transcript.
+
+---
+
+## Delta review of ec80730c (revision 1: the four MINOR findings)
+
+Same reviewer, same rules. Static review, plus the builder's own pure-Python checks, which use fake launches.
+Nothing was run with torch. No writer, launcher or real runner was run. No package was built. No AWS call was made.
+
+### Verdict: APPROVE_FOR_SMOKE
+
+- All four MINOR findings are fixed, as the coordinator decided.
+- The `IndexError` fix is correct.
+- A refusal is classified as "before the reservation" only when that is guaranteed.
+- The two-clock spend estimate no longer under-counts across a laptop suspend.
+- The builder's checks pass: **TOTAL 39, FAILED 0**.
+- **Scope checked.**
+  - `a6b341d5..ec80730c` touches only the four `.py` files in `admission_analogy_on_001/` and the builder report.
+  - Nothing under `cncm/`, `cas_meta2/` or `aws/` changed.
+  - The later commits by the other builder (`785c9bd1`, `a2bab9f2`) do not touch the admission folder:
+    `git diff ec80730c HEAD -- admission_analogy_on_001/` is empty.
+- **File checks.** The file hashes match the builder report (`on_study_common.py` `7299019d...`,
+  `prepare_on_smoke.py` `040d044f...`, `prepare_on_study.py` `3398c741...`, `run_on_study.py` `5d20da5c...`).
+  All four compile. All are LF only and ASCII.
+
+### Each fix
+
+- **MINOR 1 (when a seed counts as delivered): fixed.**
+  - A seed now counts as delivered on the launcher's own test (`run_on_study.py`, `outcome`): exit code 0, the same
+    job name, `AWS_CANDIDATE_FINISHED`, `completed_deliverable: true`, and `cleanup.complete: true`.
+  - A non-empty `degraded_checks` is recorded as `degraded_checks_warning` in `job_finished`, printed, and listed
+    again in `study_complete`. It is not a stop.
+  - The coordinator's decision is recorded verbatim in `study.json` (`seed_delivered_rule`). The runner refuses a
+    `study.json` without it.
+  - One stop was kept: `SEED_NOT_THE_APPROVED_FULL_RUN`, for a reduced schedule or `claim_bearing` false. This tests
+    the job's identity, not its quality. I agree with keeping it.
+  - The smoke's own checks are unchanged (ablations and phase A must be COMPLETE). That is correct, because the
+    decision covers seeds only.
+- **MINOR 2 (spend under-count): fixed.**
+  - The estimate now uses the larger of two clocks: the launcher's `elapsed_seconds`, and the runner's UTC wall
+    clock from its logged `job_started` to its `job_finished`.
+  - The wall-clock window covers everything the job can bill:
+    - `job_started` is written before the launcher process starts;
+    - `finished` is taken after it exits;
+    - inside the process, the reservation, instance launch, wait, collection and cleanup all happen in between
+      (`graph_training_candidate_launch.py:776-812`).
+  - So a laptop suspend no longer shortens the billed time.
+  - A job that was logged as delivered keeps its logged wall seconds when a later start re-verifies it.
+  - The spend of undelivered jobs is not summed. That is harmless, because any undelivered job stops the run before
+    another seed.
+- **MINOR 3 (free refusals): fixed, and detected robustly.**
+  - The rule: exit non-zero and no receipt folder means `pre_reservation_refusal`. It closes the open job, is not a
+    failure, and pauses the run.
+  - **This cannot misclassify a reserved job as free.**
+    - The lifecycle creates the receipt folder at `graph_training_candidate_launch.py:742` (`prepare_evidence`).
+    - It reserves only later, at `:776` (`provider.reserve`), after `preflight` at `:774`.
+    - `TypedPointerProvider.reserve` is reached only from there. Nothing before `:742` can reserve.
+    - Everything before `:742` spends nothing: `typed_pointer_launch.main` validation, `lifecycle._clients` (boto3),
+      `execute`, `bind_authority`, archive hashing, and the ledger read and scope check.
+    - The runner also refuses to launch if the receipt folder already exists. So "folder absent after exit" means
+      this launch never reached `:742`.
+    - As defence in depth, relaunching a job that had been reserved would be refused by the lifecycle's own
+      `JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY` (`:739-741`), which comes before `:742`.
+  - `--dry-run` (and `--execute`, before its first log line) now checks that this Python imports `boto3` and
+    `botocore`, and that the canonical ledger path exists. It only stats the file and never opens it. The resume steps
+    are written in the docstring.
+- **MINOR 4 (item-1 reading): fixed.**
+  - Both writers now take `--item1-commit` and read the reading with `git show <commit>:<fixed path>`.
+  - The commit must be 40 hex characters, must resolve to itself, and must be an ancestor of
+    `origin/research/helm-integration-20260923`.
+  - The commit, blob id, sha256 and ref sha are recorded.
+  - The runner re-reads the reading from git and compares it with both committed copies.
+  - **Checked with real git, in-process.** I pointed the ref name at the local research branch (`8182ad52`), because
+    `origin/research/helm-integration-20260923` does not exist here yet.
+    `read_item1('41071a3f1dd86ffbb00dbf07233c32dcea5e8a1b', '43c6cd6583f2618a7f1db5ea577ffba054ea6c55155a6dd573b8a532baf851b1')`
+    passes:
+    - blob `c8d36f92358fbb757a216bf4e13166de7ce91871`;
+    - 8,605 bytes;
+    - `item1_verdict` `OFF_PRESERVED_ON_T4`.
+- **The `IndexError`: correct fix.**
+  - In `0a8a81b3`, the message `json.dumps(state['stopped'][-1])` was built eagerly. On a clean log that list is
+    empty, so every `--dry-run` and `--execute` would have crashed.
+  - It is now built only inside `if state['stopped']:`.
+  - I missed this in my review of `0a8a81b3`.
+  - I then scanned every `stop` / `stop_unless` message in the four files with `ast` for anything else built eagerly
+    that could raise. The rest are safe: slices, joins, and keys that always exist.
+
+### The builder's checks, run by me
+
+- **What ran.** `static_checks.py` in the session scratchpad, with `C:/Python314/python.exe -B`. It writes only to
+  `scratchpad/checks_tmp/`, which it deletes. It stubs the launch step and the git-state checks. It reads Helm 2.0
+  receipt JSON through `git show`.
+- **Result.** **TOTAL 39, FAILED 0.** The worktree was unchanged afterwards.
+- **The simulated loop showed:**
+  - a boto3 refusal pauses the run, and the next start completes it;
+  - a seed with a degraded check is warned about, and the run continues;
+  - spend checks before the three seeds read $2.97, $11.80 and $20.66;
+  - seeds of 20,000 s trip the $30.00 stop before the third seed;
+  - a longer wall clock is used and named in the log;
+  - an undelivered seed stops the run, and the next start refuses.
+
+### NOTES (none blocks the smoke)
+
+- **D1. One operator step is needed before either writer runs.** Run
+  `git fetch origin research/helm-integration-20260923:refs/remotes/origin/research/helm-integration-20260923` in the
+  launch repository. The ref is shared by all worktrees. Without it, both writers and the runner stop with
+  `ITEM1_REF_MISSING`. That stop is correct.
+- **D2. One narrow case gets the wrong stop label.**
+  - `TypedPointerProvider.reserve` writes the ledger, then calls `_record_aws_side_reservation`. If that call raises,
+    `result.json` records `reservation: null` even though the ledger holds the $15.00 reservation.
+  - The runner would then stop as `FAILED_AFTER_RECEIPT_BEFORE_RESERVATION_NEW_ADMISSION_NEEDED`. The "before
+    reservation" part is wrong in that case.
+  - No instance is launched in that case, and the stop is permanent. So no money is at risk. The ledger is the
+    authority on reservations.
+- **D3. The launcher can die without writing `result.json`.** For example, the laptop runs out of memory after the
+  instance has launched.
+  - The runner then reads "not delivered" and stops. That is correct.
+  - But it cannot tell whether an instance is still running. Until the guest watchdog powers it off (at most
+    14,100 s), a person must check AWS.
+  - Suggestion: add that sentence to the stop message whenever `result.json` is missing.
+- **D4. The error-output reader in `launch_job` has no exception guard.**
+  - If writing a line to the runner's own error output ever raised, the pipe would stop draining. The launcher could
+    then block on a full pipe.
+  - This is very unlikely, because Python's error output uses `backslashreplace`. A `try/except` that keeps draining
+    would close it.
+
+### EXPOSURE for this delta
+
+- **Outside the worktree:**
+  - I read and ran `static_checks.py` in the session scratchpad. Its `checks_tmp/` was created and deleted by the
+    script.
+  - I listed the scratchpad and the names of the `Temp/claude` folders.
+  - No other file outside the worktree was opened.
+- **Git objects:**
+  - the `a6b341d5..ec80730c` diff;
+  - `RESULTS_READING.json` at `41071a3f`, through `read_item1`;
+  - `rev-parse` of `41071a3f` and of the research branch refs;
+  - Helm 2.0 receipt JSON, read by the checks through `git show HEAD:`.
+- **Not opened:** `D:/tksCAS-archive/`, any sealed file, any `hset1a` path, other worktrees, the meta1 ledger, AWS or
+  S3, and any transcript.
+- **Not changed:** git refs and configuration. I did not run the fetch.
