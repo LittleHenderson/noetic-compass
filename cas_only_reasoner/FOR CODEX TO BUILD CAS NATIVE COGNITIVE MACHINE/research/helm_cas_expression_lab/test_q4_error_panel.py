@@ -5,6 +5,8 @@ panel selection and its digest, compiler-derived one-field edits, matched partne
 (eval/sealed names refused), fail-closed GPU_REQUIRED before any torch import, and source hygiene (no optimizer,
 no step, no evaluator door). They also re-derive the known first-error split of the 16 saved dev predictions,
 and run the Stage 0, Q3, Q4 and Q5 code end to end on a pure-Python FAKE model (not Q4; only a wiring check).
+Revision 1 (review P1-P4): Stage 0 decision traces in both branches, update-1 gradient per module group,
+weight change withheld when the re-initialisation fails, the 48-row limit note, and the exact select digest.
 
 Run (small, local):  python -B -m pytest test_q4_error_panel.py -q -p no:cacheprovider
 """
@@ -22,6 +24,7 @@ from learner_q4_decoder import ast_to_tokens  # noqa: E402
 
 RUN = HERE.parents[1] / "records" / "q4_authorized_20260922" / "run_001"
 DATA = HERE / "data" / "q3_v0_7"
+SELECTION_DIGEST = "0b98bfc94a5aed8af2d4fef72378fec7dfa9d46808b09ff30f750972387a3059"
 
 
 @pytest.fixture(scope="module")
@@ -81,6 +84,7 @@ def test_panel_selection_is_declared_and_stable(selected):
     assert set(dev_counts) <= set(sdg.G_DEV_SHAPES) and max(dev_counts.values()) - min(dev_counts.values()) <= 4
     again, selection_again = ep.select_panels(train, dev, compiler)
     assert selection_again["digest"] == selection["digest"] and again == rows
+    assert selection["digest"] == SELECTION_DIGEST              # the digest the AWS job checks in its stage A
     for row in rows:
         assert row["target_source"].startswith("RECOMPILED_FROM_VISIBLE_TEXT")
         assert list(ast_to_tokens(row["target_ast"])) == row["target_tokens"]
@@ -161,6 +165,10 @@ def test_stage_code_runs_end_to_end_on_a_fake_model(selected, monkeypatch):
     model = FakeModel()
     reproduced, mismatches = ep.stage0(model, records, dev)
     assert len(reproduced) == 16 and len(mismatches) == 16          # a fake model must NOT reproduce the saved run
+    for entry in mismatches:                                        # review P3: the trace travels with a mismatch
+        assert entry["decision_trace"] and "first_difference" in entry and "min_margin" in entry
+        assert all(step["chosen_is_top_ranked"] for step in entry["decision_trace"])
+    ep.canonical(mismatches)
 
     def fake_teacher(model, row):
         b = model.encode(encode_observation(row["observation"]))
@@ -178,3 +186,86 @@ def test_stage_code_runs_end_to_end_on_a_fake_model(selected, monkeypatch):
     assert all(r["max_abs_delta_p_gold_control"] == 0.0 for r in q5_result["per_row"] if "partner" in r)
     for value in (q3_result, q4_result, q5_result):
         ep.canonical(value)                                          # finite and JSON-serialisable
+
+
+class ScriptedModel(FakeModel):
+    """Emits one fixed token stream: logit 2.0 on the scripted token, 0.0 elsewhere. Not Q4; a wiring check."""
+
+    def __init__(self, tokens):
+        self.tokens = tuple(tokens)
+
+    def next_logits(self, bottleneck, generated):
+        from learner_q4_decoder import TOKENS
+        return tuple(2.0 if k == self.tokens[len(generated)] else 0.0 for k in range(len(TOKENS)))
+
+
+def test_stage0_trace_when_the_replay_reproduces(selected):
+    """All 16 saved decodes are one tree; a model scripted to emit it reproduces 16 of 16, with a full trace."""
+    records, train, dev, compiler, rows, selection = selected
+    saved_tokens = {tuple(ast_to_tokens(p["ast"])) for p in records["predictions"]}
+    assert len(saved_tokens) == 1
+    tokens = saved_tokens.pop()
+    reproduced, mismatches = ep.stage0(ScriptedModel(tokens), records, dev)
+    assert mismatches == [] and len(reproduced) == 16
+    from learner_q4_decoder import TOKENS
+    for entry in reproduced:
+        trace = entry["decision_trace"]
+        assert [step["chosen"] for step in trace] == [TOKENS[t] for t in tokens] and len(trace) == entry["steps"]
+        for step in trace:
+            if step["allowed_count"] > 1:
+                assert step["margin"] == 2.0 and step["runner_up"] is not None
+            else:
+                assert step["margin"] is None and step["runner_up"] is None
+        assert entry["min_margin"] == 2.0
+    ep.canonical(reproduced)
+
+
+def test_decision_margins_use_the_grammar_mask_and_tie_break():
+    from learner_q4_decoder import TOKEN_IDS, TOKENS
+    logits = [0.0] * len(TOKENS)
+    logits[TOKEN_IDS["EOS"]] = 9.0                  # masked out at the first step; must not become runner-up
+    logits[TOKEN_IDS["STATE"]] = 1.0
+    logits[TOKEN_IDS["BINARY"]] = 1.0               # a tie: the lower id (STATE) wins, margin 0.0
+    trace = ep.decision_margins([((), tuple(logits))], [TOKEN_IDS["STATE"]])
+    assert trace[0]["slot"] == "expr" and trace[0]["chosen"] == "STATE" and trace[0]["runner_up"] == "BINARY"
+    assert trace[0]["margin"] == 0.0 and trace[0]["chosen_is_top_ranked"] and trace[0]["allowed_count"] == 2
+
+
+def _at_init(total=0.7250789403915405):
+    norms = {g: 0.1 * (i + 1) for i, g in enumerate(ep.MODULE_GROUPS)}
+    norms["total"] = total
+    return {"loss": 3.5, "grad_norms": norms, "equal_weight_mean_minus_original": 0.0}
+
+
+def _sums():
+    return {g + ".weight": {"delta": 4.0, "init": 16.0, "final": 25.0, "max_abs_delta": 0.5} for g in ep.MODULE_GROUPS}
+
+
+def test_update_1_check_writes_every_module_group():
+    saved = {"loss": 3.5, "pre_clip_gradient_norm": 0.7250789403915405}
+    check = ep.update_1_check(_at_init(), saved, "rid")
+    assert check["reproduced"] is True
+    assert set(check["reinit_gradient_norms_by_module_group"]) == set(ep.MODULE_GROUPS) | {"total"}
+    assert ep.update_1_check(_at_init(total=0.9), saved, "rid")["reproduced"] is False
+
+
+def test_weight_change_is_withheld_when_the_reinit_fails():
+    saved = {"loss": 3.5, "pre_clip_gradient_norm": 0.7250789403915405}
+    failed = ep.weight_change_record(ep.update_1_check(_at_init(total=0.9), saved, "rid"), _sums())
+    assert failed["status"] == "REINIT_NOT_REPRODUCED_ON_THIS_DEVICE"
+    assert failed["by_module_group"] is None and failed["by_tensor"] is None and failed["withheld"]
+    text = str(failed)
+    assert "l2_delta" not in text and "l2_init" not in text and "relative_change" not in text
+    assert failed["final_weight_l2_only"]["by_module_group"]["encoder"] == 5.0
+    passed = ep.weight_change_record(ep.update_1_check(_at_init(), saved, "rid"), _sums())
+    assert passed["status"] == "REINIT_REPRODUCES_UPDATE_1" and passed["withheld"] is None
+    assert passed["by_module_group"]["encoder"] == {"l2_delta": 2.0, "l2_init": 4.0, "l2_final": 5.0,
+                                                    "relative_change": 0.5, "max_abs_delta": 0.5}
+    ep.canonical(failed)
+    ep.canonical(passed)
+
+
+def test_result_limits_say_48_dev_rows_are_inspected():
+    assert any("48" in line and "G-dev" in line for line in ep.RESULT_LIMITS)
+    source = (HERE / "q4_error_panel.py").read_text(encoding="utf-8")
+    assert '"limits": list(RESULT_LIMITS)' in source

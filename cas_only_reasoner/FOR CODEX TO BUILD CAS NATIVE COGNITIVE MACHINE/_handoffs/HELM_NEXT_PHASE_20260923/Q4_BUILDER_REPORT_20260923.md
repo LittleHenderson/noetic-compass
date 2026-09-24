@@ -201,3 +201,50 @@ All paths are under `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE M
   - I did not open those files myself.
 - **Not touched:** D:/tksCAS-archive/, any hset1a path, any other worktree, S3/AWS, and any Claude session
   transcript.
+
+## Revision 1 (after the review `Q4_REVIEW_0b702cb8.md`, commit `faf3d128`)
+
+Only `q4_error_panel.py` and `test_q4_error_panel.py` changed. The lesson adapter, the spec and the coordinator's job
+files (`records/q4_sdg_1_20260923/error_panel_job/`) were not touched. Nothing neural ran. No AWS. No money.
+
+- **P1: update-1 gradient per module group.** The update-1 check now writes the re-initialised model's gradient norm
+  for each module group (`input_embedding`, `encoder`, `output_embedding`, `decoder`, `output_head`) and the total.
+  Before, it wrote the total only.
+- **P2: weight change when the re-initialisation check fails. I chose to WITHHOLD the numbers.**
+  - If update 1 is not reproduced, the status is `REINIT_NOT_REPRODUCED_ON_THIS_DEVICE`.
+  - Every final-minus-initial number and every initial-weight number is written as `null` (`by_module_group`,
+    `by_tensor`), with a `withheld` reason.
+  - Only the final weights' own norms are written, under the key `final_weight_l2_only`. Those do not depend on the
+    starting point.
+  - If update 1 is reproduced, the status is `REINIT_REPRODUCES_UPDATE_1` and the full numbers are written, as before.
+- **P3: Stage 0 decision trace.** Every step of each of the 16 replayed decodes now records the chosen token, the
+  runner-up, and the logit margin (top minus second).
+  - Both use the same grammar mask and tie-break as free decoding. A step with only one allowed token has no
+    runner-up (margin `null`).
+  - The trace is written in both cases: in `stage0_reproduction.json`, and in `DEVICE_OR_SOURCE_MISMATCH.json`.
+  - A mismatch also records the first step where the saved and replayed tokens differ, and the replay's margin
+    there. So a near-tie flip can be told from a real fault without a second run.
+  - The replay uses the same `free_decode` call as `model.generate`, with the logits recorded on the way. The four
+    compared keys (`record_id`, `outcome`, `ast`, `steps`) are unchanged.
+- **P4: the limits note.** `result.json` limits now say the panel inspects 48 Q3 G-dev rows in total, not 16: dev
+  rows 0-15, plus the 32 G-dev rows in `public64`.
+
+**Checks (local, pure Python, no torch):**
+
+| Check | Result |
+|---|---|
+| `pytest test_q4_error_panel.py test_q4_sdg_curriculum.py` | **38 passed** (24 + 14) |
+| `q4_error_panel.py select` digest | `0b98bfc94a5aed8af2d4fef72378fec7dfa9d46808b09ff30f750972387a3059` (unchanged) |
+
+**New tests (all torch-free):**
+- Stage 0 with a scripted stand-in that emits the saved tree reproduces 16 of 16, and writes a full trace (margin 2.0
+  at every step with a choice).
+- The fake-model mismatch branch carries traces and a first-difference record.
+- The margin ranking ignores a high but grammar-masked token, and breaks a tie by the lower token id (margin 0.0).
+- The update-1 record holds every module group.
+- The failed branch of the weight change holds no difference or initial-weight number. The passing branch holds
+  exact values.
+- The limits say 48.
+- The select digest equals the value the AWS job checks.
+
+**Still open:** the review's M1/M2 (spec) and A1/A3 (adapter) were not in this revision's scope.

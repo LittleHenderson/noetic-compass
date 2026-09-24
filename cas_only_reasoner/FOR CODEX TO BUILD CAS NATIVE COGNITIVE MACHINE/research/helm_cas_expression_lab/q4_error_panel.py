@@ -4,8 +4,10 @@ Answers directive section 3, questions 3, 4, 5 (refined) and 6, on the original 
 records/q4_authorized_20260922/run_001 (weights sha256 d54f5715...). Forward and backward passes only.
 It creates NO optimizer and takes NO step. The weights on disk are never written.
 
-  Stage 0  verify the checkpoint and reproduce the 16 saved dev predictions of run_001. Any difference writes
-           DEVICE_OR_SOURCE_MISMATCH.json with the rows and STOPS.
+  Stage 0  verify the checkpoint and reproduce the 16 saved dev predictions of run_001. Every decoding step keeps
+           its chosen token, runner-up and logit margin (same grammar mask and tie-break as free decoding), so a
+           near-tie flip can be told from a real fault. Any difference writes DEVICE_OR_SOURCE_MISMATCH.json with
+           the rows, their traces and the first differing step, and STOPS.
   Q3       next-token accuracy with the correct previous tokens (gold prefix), per slot kind, plain argmax and
            grammar-masked argmax (lowest token id breaks ties, as in free decoding), next to free generation;
            includes the choice at each row's first wrong decision and after it.
@@ -16,7 +18,9 @@ It creates NO optimizer and takes NO step. The weights on disk are never written
   Q6       gradient norms per module group from one backward pass of the original loss (no step), plus separate
            backward passes of the decision-position and field-position losses; weight change = final checkpoint
            minus a re-initialised model (seed 20260921, the same call order as q4_smoke_job.py), with a check of
-           the re-initialisation against update 1 of updates.jsonl.
+           the re-initialisation against update 1 of updates.jsonl (loss, total and per-group gradient norms).
+           If that check fails, every final-minus-initial number is WITHHELD (null) under status
+           REINIT_NOT_REPRODUCED_ON_THIS_DEVICE; only the final weights' own norms are written.
 
 PANELS. old_dev16: the first 16 visible Q3 G dev rows (the smoke's dev panel; development diagnostic only).
 teaching16: the first 16 training rows the run actually consumed. public64: 2 unconsumed train rows per G-train
@@ -71,6 +75,13 @@ EXPECTED_PYTHON = (3, 14)
 REINIT_RELATIVE_TOLERANCE = 1e-4
 DEFAULT_MAX_WALL_SECONDS = 2400     # 40 minutes; the machine timer is 45 minutes
 _FORBIDDEN_NAME = re.compile(r"(_eval\.jsonl$|sealed)", re.IGNORECASE)
+RESULT_LIMITS = (
+    "Diagnostic of ONE saved checkpoint; not a capability claim",
+    "This panel inspects 48 Q3 G-dev rows in total, not 16: old_dev16 (dev rows 0-15, inspected many times) plus "
+    "the 32 G-dev rows in public64. All 48 are now inspected development rows; any later G-dev panel must flag "
+    "them and report results with and without them",
+    "No row of this panel may be used as a family-D trigger",
+)
 
 
 class PanelError(ValueError):
@@ -323,16 +334,75 @@ def describe_values(values):
 # ------------------------------------------------------------------------------------------------------------
 # Neural stages (called only inside run(), after the CUDA and custody gates)
 # ------------------------------------------------------------------------------------------------------------
+def decision_margins(calls, tokens):
+    """Per free-decoding step: chosen token, runner-up and margin (top minus second logit).
+
+`calls` are the (prefix, logits) pairs free_decode requested, in order; `tokens` are the tokens it chose. The
+ranking uses the same grammar mask (allowed_next) and tie-break (highest logit, then lowest id) as free_decode.
+A step with one allowed token has no runner-up (margin None). A small margin marks a decode that a tiny numeric
+difference between GPUs could flip.
+"""
+    trace = []
+    for i, ((prefix, logits), token) in enumerate(zip(calls, tokens)):
+        allowed = allowed_next(tuple(prefix))
+        finite = all(math.isfinite(x) for x in logits)
+        ranked = sorted(allowed, key=lambda t: (-logits[t], t)) if finite else list(allowed)
+        runner = ranked[1] if finite and len(ranked) > 1 else None
+        trace.append({"i": i, "slot": sdg.slot_kind(tuple(prefix)), "chosen": TOKENS[token],
+                      "chosen_is_top_ranked": finite and ranked[0] == token,
+                      "runner_up": None if runner is None else TOKENS[runner],
+                      "margin": None if runner is None else logits[ranked[0]] - logits[runner],
+                      "allowed_count": len(allowed), "logits_finite": finite})
+    return trace
+
+
+def traced_generate(model, observation):
+    """model.generate's exact path -- free_decode(model.encode(x), model.next_logits) -- with every logit call kept."""
+    calls = []
+
+    def recording(bottleneck, prefix):
+        logits = model.next_logits(bottleneck, prefix)
+        calls.append((tuple(prefix), logits))
+        return logits
+    result = free_decode(model.encode(observation), recording)
+    return result, decision_margins(calls, result.tokens)
+
+
+def _margin_summary(trace):
+    margins = [(step["margin"], step["i"]) for step in trace if step["margin"] is not None]
+    if not margins:
+        return {"min_margin": None, "min_margin_position": None}
+    low = min(margins)
+    return {"min_margin": low[0], "min_margin_position": low[1]}
+
+
+def first_token_difference(saved_ast, now_tokens, trace):
+    """Where a saved decode and a replayed decode first differ, and the replay's margin at that step."""
+    if saved_ast is None:
+        return {"index": None, "note": "the saved decode has no tree"}
+    saved_tokens = ast_to_tokens(saved_ast)
+    for i, (a, b) in enumerate(zip(saved_tokens, now_tokens)):
+        if a != b:
+            step = trace[i] if i < len(trace) else {}
+            return {"index": i, "saved_token": TOKENS[a], "now_token": TOKENS[b], "slot": step.get("slot"),
+                    "now_runner_up": step.get("runner_up"), "now_margin_at_index": step.get("margin")}
+    if len(saved_tokens) != len(now_tokens):
+        return {"index": min(len(saved_tokens), len(now_tokens)), "note": "one decode is a prefix of the other"}
+    return {"index": None, "note": "same tokens; the difference is outside the token stream (outcome or steps)"}
+
+
 def stage0(model, run, dev):
+    """Replay the 16 saved dev decodes. Compare the four saved keys; keep the full decision trace either way."""
     from learner_q4_representation import from_visible_record
     mismatches, reproduced = [], []
     for saved, visible in zip(run["predictions"], dev[:OLD_DEV_ROWS]):
-        generated = model.generate(from_visible_record(visible))
+        generated, trace = traced_generate(model, from_visible_record(visible))
         now = {"record_id": visible["record_id"], "outcome": generated.outcome, "ast": generated.ast,
                "steps": generated.steps}
-        reproduced.append(now)
+        reproduced.append(dict(now, decision_trace=trace, **_margin_summary(trace)))
         if canonical(now) != canonical(saved):
-            mismatches.append({"saved": saved, "now": now})
+            mismatches.append({"saved": saved, "now": now, "decision_trace": trace, **_margin_summary(trace),
+                               "first_difference": first_token_difference(saved.get("ast"), generated.tokens, trace)})
     return reproduced, mismatches
 
 
@@ -591,41 +661,69 @@ def run_q6(model, rows, train, device, run, compiler, check_deadline):
     initial = build_model(NeuralConfig(64), device=device)
     first = train[consumed_positions(len(train))[0]]
     first_row = compiled_row(first, compiler, "update_1", {"split": "train", "update": 1})
-    at_init = backward_norms(initial, first_row, device, None)
-    saved = run["updates"][0]
+    check = update_1_check(backward_norms(initial, first_row, device, None), run["updates"][0], first["record_id"])
+    final_state, init_state = model.state_dict(), initial.state_dict()
+    if set(final_state) != set(init_state):
+        raise PanelError("STATE_KEYS_DIFFER")
+    sums = {}
+    for name in sorted(final_state):
+        final_t, init_t = final_state[name].detach().double(), init_state[name].detach().double()
+        delta = final_t - init_t
+        sums[name] = {"delta": float(delta.pow(2).sum().item()), "init": float(init_t.pow(2).sum().item()),
+                      "final": float(final_t.pow(2).sum().item()), "max_abs_delta": float(delta.abs().max().item())}
+    del initial
+    return {"per_row": per_row, "summary": summary, "weight_change": weight_change_record(check, sums)}
+
+
+def update_1_check(at_init, saved, record_id):
+    """Compare the re-initialised model's update-1 loss and gradient with updates.jsonl line 1.
+
+Update 1 is the one gradient the original run is known to have applied from the initial weights; its norm per
+module group is written as well as the total.
+"""
     loss_gap = abs(at_init["loss"] - saved["loss"])
     norm_gap = abs(at_init["grad_norms"]["total"] - saved["pre_clip_gradient_norm"])
     reproduced = (loss_gap <= REINIT_RELATIVE_TOLERANCE * max(1.0, abs(saved["loss"]))
                   and norm_gap <= REINIT_RELATIVE_TOLERANCE * max(1.0, abs(saved["pre_clip_gradient_norm"])))
-    final_state, init_state = model.state_dict(), initial.state_dict()
-    if set(final_state) != set(init_state):
-        raise PanelError("STATE_KEYS_DIFFER")
-    per_tensor, squares = {}, {g: {"delta": 0.0, "init": 0.0, "final": 0.0, "max_abs_delta": 0.0} for g in MODULE_GROUPS}
-    for name in sorted(final_state):
-        final_t, init_t = final_state[name].detach().double(), init_state[name].detach().double()
-        delta = final_t - init_t
-        values = {"delta": float(delta.pow(2).sum().item()), "init": float(init_t.pow(2).sum().item()),
-                  "final": float(final_t.pow(2).sum().item())}
-        max_abs = float(delta.abs().max().item())
-        per_tensor[name] = {"l2_delta": math.sqrt(values["delta"]), "l2_init": math.sqrt(values["init"]),
-                            "l2_final": math.sqrt(values["final"]), "max_abs_delta": max_abs}
+    return {"reproduced": reproduced, "record_id": record_id, "tolerance_relative": REINIT_RELATIVE_TOLERANCE,
+            "saved_loss": saved["loss"], "reinit_loss": at_init["loss"],
+            "saved_pre_clip_gradient_norm": saved["pre_clip_gradient_norm"],
+            "reinit_gradient_norm": at_init["grad_norms"]["total"],
+            "reinit_gradient_norms_by_module_group": {g: at_init["grad_norms"][g] for g in MODULE_GROUPS + ("total",)},
+            "equal_weight_mean_minus_original": at_init.get("equal_weight_mean_minus_original")}
+
+
+def weight_change_record(check, sums):
+    """Weight change = final minus initial, per tensor and per module group -- ONLY if the re-initialisation passed.
+
+Chosen rule (review P2): when update 1 is NOT reproduced, the rebuilt model is not the run's starting point, so every
+difference and every initial-weight number is WITHHELD (null). Only the final weights' own norms are written, under
+a key that names them as final-only. The status says which case applies.
+"""
+    finals = {name: math.sqrt(v["final"]) for name, v in sums.items()}
+    final_by_group = {g: math.sqrt(sum(v["final"] for n, v in sums.items() if n.split(".")[0] == g)) for g in MODULE_GROUPS}
+    record = {"why_it_can_differ": "CUDA random initialisation can depend on the GPU model's kernel launch layout; "
+                                   "the original ran on an RTX 4070 Laptop GPU",
+              "update_1_check": check,
+              "final_weight_l2_only": {"by_module_group": final_by_group, "by_tensor": finals}}
+    if not check["reproduced"]:
+        record.update(status="REINIT_NOT_REPRODUCED_ON_THIS_DEVICE", by_module_group=None, by_tensor=None,
+                      withheld="final-minus-initial numbers are withheld: the rebuilt start does not match update 1")
+        return record
+    squares = {g: {"delta": 0.0, "init": 0.0, "final": 0.0, "max_abs_delta": 0.0} for g in MODULE_GROUPS}
+    by_tensor = {}
+    for name, v in sums.items():
+        by_tensor[name] = {"l2_delta": math.sqrt(v["delta"]), "l2_init": math.sqrt(v["init"]),
+                           "l2_final": math.sqrt(v["final"]), "max_abs_delta": v["max_abs_delta"]}
         group = squares[name.split(".")[0]]
-        for key, value in values.items():
-            group[key] += value
-        group["max_abs_delta"] = max(group["max_abs_delta"], max_abs)
+        for key in ("delta", "init", "final"):
+            group[key] += v[key]
+        group["max_abs_delta"] = max(group["max_abs_delta"], v["max_abs_delta"])
     by_group = {g: {"l2_delta": math.sqrt(v["delta"]), "l2_init": math.sqrt(v["init"]), "l2_final": math.sqrt(v["final"]),
                     "relative_change": math.sqrt(v["delta"]) / math.sqrt(v["init"]) if v["init"] else None,
                     "max_abs_delta": v["max_abs_delta"]} for g, v in squares.items()}
-    del initial
-    return {"per_row": per_row, "summary": summary,
-            "weight_change": {"status": "REINIT_REPRODUCES_UPDATE_1" if reproduced else "REINIT_NOT_REPRODUCED_ON_THIS_DEVICE",
-                              "why_it_can_differ": "CUDA random initialisation depends on the GPU's kernel launch "
-                                                   "layout; the original ran on an RTX 4070 Laptop GPU",
-                              "update_1_check": {"saved_loss": saved["loss"], "reinit_loss": at_init["loss"],
-                                                 "saved_pre_clip_gradient_norm": saved["pre_clip_gradient_norm"],
-                                                 "reinit_gradient_norm": at_init["grad_norms"]["total"],
-                                                 "record_id": first["record_id"], "tolerance_relative": REINIT_RELATIVE_TOLERANCE},
-                              "by_module_group": by_group, "by_tensor": per_tensor}}
+    record.update(status="REINIT_REPRODUCES_UPDATE_1", by_module_group=by_group, by_tensor=by_tensor, withheld=None)
+    return record
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -702,9 +800,7 @@ def run(run_dir, data_dir, out, *, device="cuda:0", max_wall_seconds=DEFAULT_MAX
                         "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)},
             "compiler": compiler.receipt, "elapsed_seconds": time.monotonic() - started,
             "custody": "targets recompiled from visible text; no sealed or eval file opened; data folder checked",
-            "limits": ["Diagnostic of ONE saved checkpoint; not a capability claim",
-                       "old_dev16 were inspected many times; development diagnostic only",
-                       "No row of this panel may be used as a family-D trigger"]})
+            "limits": list(RESULT_LIMITS)})
     except BaseException as error:
         try:
             write_once(out / "failure.json", {"status": status, "type": type(error).__name__, "message": str(error),
