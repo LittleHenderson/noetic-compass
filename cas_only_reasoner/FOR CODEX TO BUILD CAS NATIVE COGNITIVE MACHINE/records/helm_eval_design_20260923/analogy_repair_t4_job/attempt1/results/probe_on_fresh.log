@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/root/helm_t4/pkg/claude/analogy_wiring_probe_v0_2.py", line 353, in <module>
+    main()
+    ~~~~^^
+  File "/root/helm_t4/pkg/claude/analogy_wiring_probe_v0_2.py", line 154, in main
+    write_out(args, results, frozen, package, source_files, load_seconds, admission, torch, started)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/helm_t4/pkg/claude/analogy_wiring_probe_v0_2.py", line 164, in write_out
+    "prereg_sha256_lf": lf_sha(HERE / "PREREG_ANALOGY_WIRING_PROBE_v0_2.md"),
+                        ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/helm_t4/pkg/claude/analogy_wiring_probe_v0_2.py", line 45, in lf_sha
+    return hashlib.sha256(pathlib.Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/root/.local/share/uv/python/cpython-3.14.7-linux-x86_64-gnu/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.14.7-linux-x86_64-gnu/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/root/helm_t4/pkg/claude/PREREG_ANALOGY_WIRING_PROBE_v0_2.md'
+exit=1 wall=492s

@@ -23,6 +23,7 @@ import hashlib
 import io
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import tarfile
@@ -52,7 +53,8 @@ SEEDS = ("20260917", "20260918", "20260919")
 CHECKPOINTS = ["records/typed_pointer_001/receipt_%s/checkpoints/%s" % (s, n) for s in SEEDS for n in ("initial.pt", "final.pt")]
 D = "records/helm_eval_design_20260923/"
 CLAUDE_FILES = [D + "analogy_wiring_probe/analogy_wiring_probe_v0_2.py", D + "analogy_wiring_probe/preservation_digest.py",
-                D + "analogy_repair_t4_job/switch_read_only_check.py"]
+                D + "analogy_repair_t4_job/switch_read_only_check.py",
+                D + "analogy_wiring_probe/PREREG_ANALOGY_WIRING_PROBE_v0_2.md"]   # the probe hashes it beside itself (attempt 1 crashed without it)
 JOB_FILES = [D + "analogy_repair_t4_job/launch.py", D + "analogy_repair_t4_job/job.sh.template", D + "analogy_repair_t4_job/watch.py",
              D + "analogy_repair_t4_job/read_results.py", D + "analogy_repair_t4_job/JOB_LIMITS.md",
              D + "analogy_wiring_probe/PREREG_ANALOGY_WIRING_PROBE_v0_2.md"]
@@ -132,6 +134,13 @@ def assemble(repaired):
         if hashlib.sha256(b).hexdigest() != reference[p]:
             raise SystemExit("BUNDLE_REFUSED: checkpoint %s differs from the T4 reference job's" % p)
     claude = read_blobs(head, CLAUDE_FILES)
+    # Every file a bundled tool reads beside itself (HERE / "<name>") must be in the bundle: attempt 1 lost its probe
+    # verdicts because PREREG_ANALOGY_WIRING_PROBE_v0_2.md was missing next to the probe.
+    names = {pathlib.PurePosixPath(p).name for p in claude}
+    for p, b in claude.items():
+        for needed in re.findall(rb'HERE / "([^"]+)"', b):
+            if needed.decode() not in names:
+                raise SystemExit("BUNDLE_REFUSED: %s reads %s beside itself, which is not bundled" % (p, needed.decode()))
     for name, digest in WHEELS.items():
         if hashlib.sha256((WHEEL_DIR / name).read_bytes()).hexdigest() != digest:
             raise SystemExit("BUNDLE_REFUSED: wheel %s hash mismatch" % name)
