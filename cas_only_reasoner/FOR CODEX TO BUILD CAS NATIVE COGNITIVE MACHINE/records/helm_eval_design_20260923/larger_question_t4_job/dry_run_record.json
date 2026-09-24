@@ -97,11 +97,11 @@
  "instance_type": "g4dn.2xlarge",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
  "launched": false,
- "machine_script_sha256": "9543f1dc7d1b30ce6faa418f8b58e6c6351a884e0d2791389bebcf56ec907f3e",
+ "machine_script_sha256": "22d8618e84f866ef867938543f92c44c3f3f39eae9c157ed274f4b3bc23e1114",
  "machine_script_template_sha256": "dc05f4afd885d13559e1352e4496cf043e7bd5ed203c62031220c804016fd01e",
  "power_off_minutes": 123,
  "provenance": {
-  "job_commit": "f9ee07aa80f37cb93ef6c120000dc56d59bf43e3",
+  "job_commit": "35cf5957b9104c4dc43d316774cd5806417df8a6",
   "source_branch_remote_tip": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf"
  },
  "schema": "claude.larger-question-t4-dry-run/0.1",

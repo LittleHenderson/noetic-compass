@@ -25,14 +25,14 @@ finish() {                                                                      
   echo "$STATUS" > "$WORK/out/STATUS"
   cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
   tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
-  upload "$WORK/results.tar.gz" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T053056Z/results.tar.gz"
+  upload "$WORK/results.tar.gz" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T055100Z/results.tar.gz"
   shutdown -h now
 }
 trap finish EXIT
 trap 'STATUS="IN_INSTANCE_TIMER_TERM during $STATUS"; exit 143' TERM
-( while true; do sleep 240; upload "$LOG" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T053056Z/progress.log"; [ -f "$ROWS" ] && upload "$ROWS" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T053056Z/rows_progress.jsonl"; done ) &
+( while true; do sleep 240; upload "$LOG" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T055100Z/progress.log"; [ -f "$ROWS" ] && upload "$ROWS" "https://DRY-RUN/helm-integration/larger-question-t4-20260924T055100Z/rows_progress.jsonl"; done ) &
 
-curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "https://DRY-RUN/helm-integration/larger-question-t4-20260924T053056Z/bundle.tar.gz" || { STATUS=bundle_download_failed; exit 1; }
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "https://DRY-RUN/helm-integration/larger-question-t4-20260924T055100Z/bundle.tar.gz" || { STATUS=bundle_download_failed; exit 1; }
 echo "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
 mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
 cp pkg/identity.json "$WORK/out/identity.json"
