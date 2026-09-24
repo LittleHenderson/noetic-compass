@@ -1,5 +1,31 @@
 # tksCAS — Changelog
 
+## 2026-09-24 (later) — spending gate approved by a Claude checker; agent message folder; ChatGPT supervision while the owner sleeps
+
+- **Spending gate for the Helm study** (Codex review `codex-0007`, 5 defects), branch `research/helm-integration-20260923`,
+  folder `records/helm_eval_design_20260923/study_spend/`.
+  - `study_spend.py --admit <slot>` is now a yes/no gate. It refuses unless measured spend plus this job's cap plus
+    every remaining required cap stays at or under $60.00, and the owner's $30 stop is not triggered.
+  - Receipts are checked against their pinned hashes, job, machine, source and launch window. Every launch attempt
+    is counted. A machine not shown shut down refuses every launch.
+  - Four build-review rounds (`bb942461`, `d89721b4`, `269d13c8`, `d2098474`, `4e292912`). Fresh checkers found a new
+    hole in rounds 1-3; round 4 verification `6ba8ec1c` = APPROVE_ADMISSION_GATE (CLAUDE_BUILT_CLAUDE_CHECKED; not
+    Codex's review, not owner acceptance). Tests 69/69 and 31/31.
+  - Open: MINOR L (the unlisted-attempt search misses 3 retry shapes that need an omitted attempt), MINOR M (a retry
+    prepared from a new HEAD stops the study; fails closed), questions 6-9 for Codex or the owner.
+  - Real figures: spent at most $5.44; plan C worst case $57.08 (headroom $2.92); fallback B +$23.32 does not fit.
+- **Route reader** `larger_question_t4_job/read_results.py`: binds the machine's own identity, bundle and wheel hashes,
+  JOB START window and same-instance cleanup; exit 0 only for ROUTE_ACCEPTED. Finished job i-09e14d4afd0e0ebfa:
+  ROUTE_ACCEPTED.
+- **Owner budget questions recorded** in `D:/tksCAS-agent-bus/ESCALATIONS_FOR_OWNER.md`: do the earlier preparation
+  jobs ($1.9180) count inside the $60 (headroom would fall to about $0.50); evidence storage past 12 months.
+- **Agent message folder** `D:/tksCAS-agent-bus/` in use (Claude `claude-0013`..`0017`; Codex `codex-0013`..`0015`).
+  ChatGPT posted three notices (storage cleanup; temporary oversight while the owner sleeps; conditional DeepSeek
+  backup). Claude acknowledged and relayed each once, and treats them as coordination, not owner authority.
+  DeepSeek backup status: FALLBACK_BLOCKED (no reviewed unattended launcher, no DeepSeek allowance, no usage limit hit);
+  Claude's public note `FAILOVER_HANDOFF_CLAUDE_20260924.md`.
+- **Not done:** no cloud job; the main repaired-versus-unchanged comparison stays HELD.
+
 ## 2026-09-24 — T4 check PASSED; Q4 diagnosed on AWS; owner direction; protected-copy inventory; test design v0.3
 
 - **Acceptance item 1 passed.** The program verdict is `OFF_PRESERVED_ON_T4` (`41071a3f`; cost at most $0.67;
