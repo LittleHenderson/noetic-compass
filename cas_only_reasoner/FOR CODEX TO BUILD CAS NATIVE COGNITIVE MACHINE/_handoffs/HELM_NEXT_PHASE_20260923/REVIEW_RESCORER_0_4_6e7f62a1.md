@@ -248,3 +248,180 @@ Targeted tests I ran (fast only, one command at a time, no bytecode written):
   cleanup, so a few small `safe.json` folders remain there.
 - **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*`/`*sealed*` file, any `*_eval.jsonl`, any hset1a/hset1b path,
   S3/AWS, the meta1 ledger, other worktrees' files, and Claude transcripts.
+
+---
+
+## Delta review of 8e260c718da63317a594fd483de784bb35f0b048
+
+- Label: **CLAUDE_BUILT_CLAUDE_CHECKED** (temporary takeover while Codex is away).
+- Reviewer: the same fresh reviewer as above, 2026-09-23. Same model family as the builder, so this is still
+  **not** the independent review that is owed.
+- Scope: `git diff 4c89e737 8e260c71`. Four files changed: `trusted_rescore.py`, `test_historical_compatibility.py`,
+  `test_trusted_rescore.py` and the builder's report. No anchor, reading, receipt, run manifest, frozen grader reading,
+  grader or checker file changed.
+- File hashes match the builder's section R1.3: `trusted_rescore.py` `c3d6bdd0...`, `test_historical_compatibility.py`
+  `d5eb5c22...`, `test_trusted_rescore.py` `edefa58b...`, `test_historical_rescore_rule.py` `58d95cf0...` (unchanged),
+  `history/trusted_rescore_0_3.py` `50295072...` (unchanged).
+- Cost: $0. No AWS. No torch. No checker import. No course load. Small pure-Python runs, one at a time.
+
+### Verdict: APPROVE
+
+- All three findings (BLOCKER 1, MAJOR 2, MAJOR 3) are fixed. Each fix is complete against the fix I asked for.
+- MINOR 4 and MINOR 5 are fixed too.
+- I re-ran my own failure scenarios from the first review, plus new attacks (all in the table below), with my own script. None got
+  through. None gave exit 0. The only exit 5 cases are the honest reading and the limit the builder states openly.
+- What remains is three new NOTEs (10-12) and the open items the builder already lists. None blocks the next step.
+
+### Finding by finding
+
+| Finding | Fixed? | What I checked |
+|---|---|---|
+| **BLOCKER 1** (forged counts gave exit 0) | **Yes, fully** | A trusted `--check-reading` now never gives exit 0. Its best verdict is `READING_CONSISTENT_NOT_RESCORED`, exit **5**, label `NOT_DERIVED`, `trusted_acceptance: false`. Every sanity check I asked for is in `reading_count_problems` and `trusted_reading_clean_problems`. The reading must pin its frozen grader reading, and the counts, p, decision, kinds, worlds and label are compared with it. My original four forgeries are now all refused with exit 2 (table below). |
+| **MAJOR 2** (absent weights passed) | **Yes, fully** | An absent or unverifiable weight file is refused by name in both modes: `HISTORICAL_EVIDENCE_INCOMPLETE` or `RUN_EVIDENCE_INCOMPLETE`. `RECORDED_DIGESTS_ONLY` is gone. A partly present seed is `INCOMPLETE`, never `MATCH`. Anchor schema `0.4` pins the run manifest and every checkpoint digest. Trusted mode checks them at the gate, before any import. `--write-anchor` byte-checks the weights before it loads anything. A `0.3` anchor is `ANCHOR_SCHEMA_OUTDATED`. The tests that assumed the old behaviour were split or moved, as I asked. |
+| **MAJOR 3** (`--out` could overwrite originals) | **Yes, fully** | `output_refusal` runs before any work. An existing path is `OUTPUT_EXISTS`. A listed original, even a deleted one, is `OUTPUT_WOULD_OVERWRITE_ORIGINAL`. The write uses mode `"x"`. Every unlisted original I named in the first review is now refused. The test helpers use a new name each call. The AWS commands in R1.7 use new names. |
+| MINOR 4 (thresholds outside the hash) | Yes | `historical_decision` reads alpha, `b > c`, the veto flag, kinds and worlds from the hashed `HISTORICAL_RULE`. `MIN_IMPROVED_KINDS` / `MIN_IMPROVED_WORLDS` are gone. The whole `RECOGNISED_MISTAKE` is hashed (`fddc692e...`). |
+| MINOR 5 (overloaded exits, crashes) | Yes | Usage errors exit 64. `--receipt nosign` is a usage error, not a crash. Wrong-type reading and anchor fields are refused by name. |
+
+### My own probe runs (script `delta_probe_8e260c71.py`, in a scratch folder, removed afterwards)
+
+The set-up was the same as in the first review. I made a new run from copies of Helm 2.0 seed `20260919`'s four
+label files. The truth for them is 7 gains / 1 loss, p = 9/256, FAIL. This time the run also got its own run manifest
+and three placeholder `.pt` files, and a fresh anchor in schema `0.4`. The honest reading was written by hand, because
+a real rescore needs the course (AWS only).
+
+| Case | Exit | Result |
+|---|---|---|
+| Safe-only trusted rescore of the new run | 3 | `RESCORE_INCOMPLETE`, no reasons, `RUN_EVIDENCE = PASS` |
+| Honest reading (7/1, FAIL) | **5** | `READING_CONSISTENT_NOT_RESCORED`, label `NOT_DERIVED`; replayed label `NO_TRANSFER_TO_NEW_WORLDS` |
+| Honest reading, through the command line | **5** | prints "NOT A RESCORE" |
+| A: forged 12 gains / 0 losses (my first-review case) | 2 | `FROZEN_GRADER_DISAGREES` (was exit 0) |
+| B: 99 gains in an 18-question population | 2 | `READING_INCONSISTENT` (was exit 0) |
+| C: kinds `["reach", "reach"]` | 2 | `READING_INCONSISTENT` (was exit 0) |
+| D: no `p_one_sided` | 2 | `READING_INCOMPLETE` (was exit 0) |
+| The stated limit: forged reading **and** a forged frozen grader reading | **5** | never 0; `trusted_acceptance: false` (see NOTE 11) |
+| An extra seed the anchor does not know | 2 | `READING_INCONSISTENT` |
+| `gained: true` (a boolean) | 2 | `READING_INCONSISTENT` |
+| `rescored: "564"` (a string) | 2 | `READING_INCONSISTENT` |
+| The reading pins the 3-seed historical frozen reading | 2 | `FROZEN_GRADER_DISAGREES` |
+| `HISTORICAL_EVIDENCE = PASS` in a trusted reading | 2 | `READING_NOT_CLEAN` |
+| `material_supplied_by_caller` absent | 2 | `READING_NOT_CLEAN` |
+| `tool_revision: 2` | 2 | `READING_SCHEMA_OUTDATED` |
+| A world id outside the population | 2 | `READING_INCONSISTENT` |
+| A phase that is a list | 2 | `READING_INCOMPLETE` |
+| `checks` is a list | 2 | `READING_MALFORMED` |
+| `passed: "true"` (a string) | 2 | `READING_MALFORMED` |
+| `per_seed` empty | 2 | `READING_INCOMPLETE` |
+| No kinds, counts unchanged | 2 | `FROZEN_GRADER_DISAGREES` |
+| MAJOR 2: `initial.pt` removed; trusted `--check-reading` | 2 | `RUN_EVIDENCE_INCOMPLETE` |
+| MAJOR 2: `initial.pt` removed; trusted safe-only rescore | 2 | `RUN_EVIDENCE_INCOMPLETE`, `RUN_EVIDENCE = FAIL`, checker not imported |
+| MAJOR 2: `initial.pt` removed; `--write-anchor` | 2 | `ANCHOR_REFUSED`, no file written |
+| MAJOR 2: `final.pt` altered | 2 | `RUN_EVIDENCE_ALTERED` |
+| MAJOR 2: manifest rewritten, with a matching new `extra.pt` | 2 | `RUN_EVIDENCE_ALTERED` |
+| MAJOR 2: a `0.3`-schema anchor in trusted mode | 2 | `ANCHOR_SCHEMA_OUTDATED` |
+| MAJOR 2: historical `--check-reading`, Helm 1.0 certified reading | 2 | 15 reasons, all `HISTORICAL_EVIDENCE_INCOMPLETE`; every weight item `INCOMPLETE` (was exit 4, PASS) |
+| MAJOR 2: historical `--check-reading`, Helm 2.0 reading | 2 | the same, 15 reasons (was exit 4, PASS) |
+| MAJOR 2: one weight present, one absent, one named `../c.pt` | - | status `INCOMPLETE` (not `MATCH`); `../c.pt` is unverifiable |
+| MAJOR 3: `output_refusal` for both AWS reading copies, both study files, `evaluate_gates.py`, a checker source, the tool, the 0.3 history copy | - | `OUTPUT_EXISTS` for every one (pure function; nothing written) |
+| MAJOR 3: `output_refusal` for the Helm 1.0 anchor | - | `OUTPUT_WOULD_OVERWRITE_ORIGINAL` |
+| MAJOR 3: `check_reading` and a safe-only `rescore`, each with `--out` an existing scratch file | 2 | refused; the file's bytes unchanged |
+| MAJOR 3: `--out` a hard link to that file | 2 | refused; bytes unchanged |
+| MAJOR 3: `_write_output` on an existing file | - | returns False; bytes unchanged |
+| MAJOR 3: command line, `--out` existing | 2 | refused |
+| MINOR 5: `--check-reading x --study y`; `--receipt nosign` | 64, 64 | `USAGE_ERROR` |
+| MINOR 4: `min_improved_kinds = 1` in memory | - | `constants_problems() == ["HISTORICAL_RULE"]`, and the decision follows the rule |
+| MINOR 4: `RECOGNISED_MISTAKE.anchor_schema` edited in memory | - | `constants_problems() == ["RECOGNISED_MISTAKE"]` |
+
+### Targeted tests I ran (fast only, one command at a time, `PYTHONDONTWRITEBYTECODE=1`, `-p no:cacheprovider`)
+
+| File | Result | Time |
+|---|---|---|
+| `test_historical_compatibility.py` | **60 passed, 6 skipped** (AWS: real weights / full rescore) | 23.82 s |
+| `test_trusted_rescore.py` | **27 passed, 9 skipped** (slow: course load) | 5.41 s |
+| `test_historical_rescore_rule.py` (the decision function changed) | **774 passed** | 0.60 s |
+| **Total** | **861 passed, 15 skipped, 0 failed** | matches the builder's R1.5 |
+
+- `git status` after all runs: clean. No test temp folder was left behind by these runs.
+
+### Did anything else change behaviour?
+
+Yes, in five ways. All are intended, and none breaks an owner rule:
+
+1. **The laptop can no longer get exit 4.** Both historical readings now give exit 2 here, because the 30 weight files
+   are not in this checkout. Exit 4 is now possible only on AWS with the weights bundled. Anyone who quotes the first
+   0.4 report's "exit 4 on the laptop" is out of date.
+2. **`_rel` now records absolute paths** for anything outside the package (it used to keep a bare relative path, which
+   later readers misread as package-relative). The historical records are package-relative, so they are unaffected.
+   New anchors made with a `--receipt` outside the package will carry that machine's absolute path.
+3. **The slow "rewritten manifest" test now stops at the gate** (`RUN_EVIDENCE_ALTERED`), before any import. The
+   scoring-file check after the gate is still covered: the first half of the same test still expects
+   `SCORING_FILE_DISAGREES_WITH_RESCORE`.
+4. **Usage errors exit 64**, not 2. The check record schema is now `.../reading-check/0.2`.
+5. **Trusted `--check-reading` accepts only revision-1 readings**, and needs the weights present. No older 0.4 reading
+   was ever committed, so nothing existing is affected.
+
+### Remaining findings (all NOTE; none blocks)
+
+- **NOTE 10. An `--out` in a folder that does not exist still crashes, after all the work.**
+  - Where: `output_refusal` (`trusted_rescore.py:537-549`) checks only whether the path exists. `_write_output`
+    (`:558-568`) catches only `FileExistsError`.
+  - I ran this: `check_reading(<Helm 2.0 reading>, out=<scratch>/no_such_dir/x.json)` raised `FileNotFoundError`
+    (a traceback, exit 1). Nothing was written.
+  - This is not new: the old `"w"` open failed the same way. It fails closed. But for a full rescore on AWS it would
+    come after about 14 minutes. R1.7's commands all use existing folders.
+  - Suggested fix: refuse a missing parent folder up front, by name, next to `OUTPUT_EXISTS`.
+- **NOTE 11. In a trusted `--check-reading`, the reading chooses its own frozen grader reading.**
+  - Where: `trusted_frozen_grader_problems` (`:1466-1492`). The path and its pin come from the reading itself. Nothing
+    ties them to the study or the anchor.
+  - So the comparison proves only that two files agree with each other. A forger who writes both gets exit 5. The
+    builder says so openly, and exit 5 is never trusted acceptance, so BLOCKER 1 stays closed.
+  - Suggested fix, for a later revision: have `--write-anchor` pin the frozen grader reading, or require the path to be
+    the `gate_reading.json` beside the anchored study.
+- **NOTE 12. One stale docstring.** `write_anchor` (`:835`) still says "schema 0.3". It writes `0.4`. Cosmetic.
+
+### Still open (carried over; the builder lists them in R1.8)
+
+- NOTE 7: a trusted **rescore** with `--no-frozen-reading` can still give `RESCORE_OK`. Coordinator's call.
+- `--write-anchor` still exits 0 when it writes. Coordinator's call.
+- Where the 30 real weight files are kept, and who bundles them for AWS. The old `aws_rescore_job/launch.py` bundle
+  list and `job.sh.template` were not updated. The template would now be refused (its `--out` paths exist), so it
+  must be adapted before use.
+- For Codex: decision (4), the nested study pins; decision (5), `BRAIN_LINEAGE.md` lines 300 and 302-304.
+- The independent (non-Claude) review.
+
+### What this means for the next step
+
+- The AWS steps in the builder's R1.7 may now go ahead, **with the 30 weight files bundled**. That includes decision
+  (3), the fresh trusted anchors: schema `0.4` now pins the weights, so they will not be out of date on arrival.
+- Without the weights, every historical step on AWS will be refused by name. That is the intended behaviour.
+
+### Claim status
+
+- **Ran here:** the 861 fast tests above; my probe script, 51 printed results (it imported the tool only; the checker loader was
+  replaced by one that raises, and it never fired).
+- **Simulated here (by the builder's tests, not by me):** "every weight file present and matching" in the historical
+  acceptance tests. The real weights were not checked by anyone.
+- **Not run:** the 15 slow/AWS tests, the full 564-record rescores, a real `--write-anchor`, and any check of the real
+  weight files. All need AWS with the weights bundled.
+
+### EXPOSURE: every file outside my working copy that I opened or that reached me, for this delta review
+
+- **Pre-loaded into my context by the tool that runs me. I did not open these:**
+  `C:/Users/wakil/.claude/CLAUDE.md`; `C:/Users/wakil/OneDrive/Desktop/tksCAS/CLAUDE.md`; the auto-memory index
+  `C:/Users/wakil/.claude/projects/C--Users-wakil-OneDrive-Desktop-tksCAS/memory/MEMORY.md`. It names the sealed-test
+  archive folder and some sealed-build facts (for example "HSET-1A reach W=2"). It holds no TEST world, record id or answer.
+- **The shared git object store, through git commands only** (`git status`, `git log`, `git show --stat`, `git diff`
+  between `4c89e737` and `8e260c71` of this branch's own files, `git branch -vv`, `git rev-parse`, `git ls-remote`,
+  then `git add`, `git commit` and `git push` for this file):
+  `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git`.
+  `git branch -vv` printed the one-line heads of two other worktrees' branches; I opened none of their files.
+  `git ls-remote` and `git push` talk to GitHub, not AWS.
+- **Not project files:** the Python install and pytest.
+- **My scratchpad** (`C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad`):
+  I wrote `tr_diff.txt` (the tool's diff) and `delta_probe_8e260c71.py`, and read my own earlier `probe_forged_reading.py`.
+  The probe's temp folder held copies of files from this worktree only, and was removed. I listed the scratchpad's file
+  names once; I opened no other file there.
+- **The system temp folder:** I listed folder names only (`helm_compat_sandbox_*`, `trusted_rescore_*`) to check for
+  leftovers. Three old `trusted_rescore_pycache_*` folders from 2026-09-21 and 2026-09-23 01:15 are there; they are
+  not from these runs. I opened none.
+- **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*`/`*sealed*` file, any `*_eval.jsonl`, any hset1a/hset1b path,
+  S3/AWS, the meta1 ledger, other worktrees' files, and Claude transcripts.
