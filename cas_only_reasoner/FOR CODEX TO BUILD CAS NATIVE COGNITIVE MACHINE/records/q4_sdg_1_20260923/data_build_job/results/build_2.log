@@ -1,0 +1,3 @@
+{"compiler_engine": "python", "counts": {"A_dev": 64, "A_feedback": 64, "A_train": 1024, "B_dev": 64, "B_feedback": 64, "B_train": 1024, "C_dev": 128, "C_feedback": 128, "C_train": 2048}}
+Q4_SDG_BUILD_PASS
+exit=0 wall=14s

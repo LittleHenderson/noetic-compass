@@ -1,6 +1,113 @@
 {
- "data_versions": {},
+ "data_versions": {
+  "helm-cas-expression-lab.q4-sdg-lessons/0.1": {
+   "counts": {
+    "A_dev": 64,
+    "A_feedback": 64,
+    "A_train": 1024,
+    "B_dev": 64,
+    "B_feedback": 64,
+    "B_train": 1024,
+    "C_dev": 128,
+    "C_feedback": 128,
+    "C_train": 2048
+   },
+   "data_dir": "data/q4_sdg_v0_1",
+   "engine": "python",
+   "feedback_seed": 20260951,
+   "files": {
+    "sealed_A_dev.jsonl": {
+     "records": 64,
+     "sha256": "c1edb0c13bac3ff07f15ea04e8b797f0be5f24d723432e5c7164421422dc0ee2"
+    },
+    "sealed_A_feedback.jsonl": {
+     "records": 64,
+     "sha256": "f84f37a3722947f2b0d5ff71a1bec65117e9b90aab498b314ad7befa23605c23"
+    },
+    "sealed_A_train.jsonl": {
+     "records": 1024,
+     "sha256": "0f4474119d59c5796f1738b1bc32e586e320288a3a64df7e414427103b24487b"
+    },
+    "sealed_B_dev.jsonl": {
+     "records": 64,
+     "sha256": "81437364b52bbbdc0cd2cf75dbcaa7e2434a9c8cae20a0bba5f5656851b04895"
+    },
+    "sealed_B_feedback.jsonl": {
+     "records": 64,
+     "sha256": "9dcc44b964d76c08081d7469c8ad8b29d64f32d2c34dfecb507455e310d397e6"
+    },
+    "sealed_B_train.jsonl": {
+     "records": 1024,
+     "sha256": "6ded9bf8572193797fc1aea1f697abd06a5bf09d2b4df01c2babe20b23301d38"
+    },
+    "sealed_C_dev.jsonl": {
+     "records": 128,
+     "sha256": "81d72e5fa23c93f5a9b7fd158aea1cab0a568af869fdcdbf7b60c75a001c8a34"
+    },
+    "sealed_C_feedback.jsonl": {
+     "records": 128,
+     "sha256": "1a30977034b8196664a2f9fad0bded2033ddd609a1498f517dedda50c194de13"
+    },
+    "sealed_C_train.jsonl": {
+     "records": 2048,
+     "sha256": "07b7fbaf4b1daf6fcbaf50bc979acaeeec3a8a75d879c9044e46a7ea5a225faa"
+    },
+    "visible_A_dev.jsonl": {
+     "records": 64,
+     "sha256": "5f1fdc58e1e97857d2b651fb1f0eab9d2a0a7674040ffcc715db285ce7c24dd3"
+    },
+    "visible_A_feedback.jsonl": {
+     "records": 64,
+     "sha256": "f850a3add48a6ec1144f63c2f48d21b99507e9262dcba88f08ab03a96803dc41"
+    },
+    "visible_A_train.jsonl": {
+     "records": 1024,
+     "sha256": "f9638725c592ceb9f84c81c0072efbbfc25f3bb73486799d301fc08aec9952c7"
+    },
+    "visible_B_dev.jsonl": {
+     "records": 64,
+     "sha256": "8df760fc4100956f96d51632f5fc308b13d7fe184ac542995e8f4b5c553d390a"
+    },
+    "visible_B_feedback.jsonl": {
+     "records": 64,
+     "sha256": "e03a0a1b8fec16da461efd2949cf2e8bae0cc93e69d3611190c42934f7af3521"
+    },
+    "visible_B_train.jsonl": {
+     "records": 1024,
+     "sha256": "1dce0c4f49c62c3482408e0067778efd1b0cd2e4a67c068a836f606334d9db45"
+    },
+    "visible_C_dev.jsonl": {
+     "records": 128,
+     "sha256": "fa73217515096f547da51871e82462e22619d2a50615af91b4574cbeece8faff"
+    },
+    "visible_C_feedback.jsonl": {
+     "records": 128,
+     "sha256": "0e16d6b5e81350de404c529540d9535c0eaf310a7fe0ee23a97820d636e8927c"
+    },
+    "visible_C_train.jsonl": {
+     "records": 2048,
+     "sha256": "cb7768cdfd2d22246706193a1c73ca678b6ec307c52d3ac772ddf196ea8ac695"
+    }
+   },
+   "manifest_sha256": "7713efea2735534e7abc16d588f28913cf182eb5ae4732ba90c43066242381a2",
+   "provenance": {
+    "ami": "ami-07a134137a631b892",
+    "build_digests_sha256": "f976d07b1c0667b09328228fbb21cfd704fc916fa8eba907da46f4bac4ee444e",
+    "bundle_sha256": "142e07817a059d4ac75dfc8b3350755b8085384a9f25691e4e3bc13a88966b97",
+    "cost_upper_bound_usd": 0.0023,
+    "instance_id": "i-0797041968a7e239e",
+    "job": "records/q4_sdg_1_20260923/data_build_job",
+    "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+    "pinned_by": "Claude coordinator (transcribed_by_agent: true; not an owner signature)",
+    "pinned_utc": "2026-09-24T11:56:45Z",
+    "source_commit": "952da61f98d23688a3cea772a7ea259924e89d49",
+    "watch_outcome": "RESULTS_RECEIVED"
+   },
+   "seed": 20260941,
+   "size": 4096
+  }
+ },
  "schema": "helm-cas-expression-lab.q4-sdg-data-pins/0.1",
- "status": "EMPTY_UNTIL_THE_AWS_BUILD: run q4_sdg_curriculum.py --pin --data data/q4_sdg_v0_1 after --build and --verify --unpinned",
+ "status": "PINNED_FROM_THE_AWS_DATA_BUILD_JOB (data_build_job/pin_package.py)",
  "why": "kept OUTSIDE the data folder and separate from Q3_DATA_PINS.json, which this experiment never edits"
 }

@@ -1,0 +1,17 @@
+{
+ "schema": "claude.q4-sdg-1-data-build-watch/0.2",
+ "instance_id": "i-0797041968a7e239e",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "terminated",
+ "files_downloaded": 12,
+ "launched_utc": "2026-09-24T11:54:32Z",
+ "watch_ended_utc": "2026-09-24T11:55:56Z",
+ "minutes_from_launch_to_watch_end": 1.4,
+ "cost_upper_bound_usd": 0.0023,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the public address and the gp3 disk",
+ "terminated_confirmed": true,
+ "volumes_of_this_job_remaining": [],
+ "package_archive_key_never_downloaded": "q4-sdg-1/data-build-20260924T115426Z/package.tar.gz",
+ "dollar_ceiling_whole_ab_job": 5.0
+}

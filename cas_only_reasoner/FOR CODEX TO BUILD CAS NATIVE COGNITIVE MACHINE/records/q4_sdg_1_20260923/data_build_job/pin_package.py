@@ -22,7 +22,7 @@ import pathlib
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
-LAB = HERE.parents[1] / "research" / "helm_cas_expression_lab"
+LAB = HERE.parents[2] / "research" / "helm_cas_expression_lab"
 PINS = LAB / "Q4_SDG_DATA_PINS.json"
 sys.path.insert(0, str(LAB))
 import q4_ab_rules as rules  # noqa: E402

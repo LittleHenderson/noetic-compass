@@ -1,0 +1,660 @@
+{
+ "a_distinct_cap": 1200,
+ "a_pool_capped": false,
+ "allowed_bare_shapes": {
+  "05fdd4728b8ca588": "(L (L L))",
+  "1e11e6ee0747e36b": "(L ((L L) (L L)))",
+  "31c44c64e094539b": "(L L)",
+  "3baf126600ac57fe": "(((L L) (L L)) (L L))",
+  "5c288aa816d66f85": "((L (L L)) L)",
+  "5c4d93b89d34fd97": "((L L) (L (L L)))",
+  "720ca796c1fa5b66": "((L (L L)) ((L L) L))",
+  "80140e17118d40d9": "(((L L) L) ((L L) L))",
+  "8463f556f97cf8fd": "L",
+  "8d4e8c0eaeb89072": "(((L L) L) (L L))",
+  "b233e9e9a57824c5": "(L (L (L L)))",
+  "b6ac3a0f67c5aafd": "((L L) L)",
+  "b6bd6888c87a4e84": "(((L L) (L L)) L)",
+  "c0c59cb447886151": "((L L) (L L))",
+  "cd624003d788ad55": "((L L) ((L L) (L L)))",
+  "d302f357d770efad": "(((L L) L) (L (L L)))",
+  "d7f357ceacd695a4": "((L (L L)) (L (L L)))"
+ },
+ "compiler": {
+  "engine": "python",
+  "hash_policy": "lf-normalised",
+  "origin_commit": "4345aa36ab056f9539cad3feb9207bba5356bef4",
+  "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+  "resolved_from": "pinned_historical_snapshot",
+  "sha256": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+  "snapshot_path": "pinned_sources/compiler_pre_ohm_61ed5a45.py"
+ },
+ "counts": {
+  "A_dev": 64,
+  "A_feedback": 64,
+  "A_train": 1024,
+  "B_dev": 64,
+  "B_feedback": 64,
+  "B_train": 1024,
+  "C_dev": 128,
+  "C_feedback": 128,
+  "C_train": 2048
+ },
+ "dev_fraction": 0.0625,
+ "experiment": "Q4-SDG-1",
+ "feedback_fraction": 0.0625,
+ "feedback_seed": 20260951,
+ "files": {
+  "sealed_A_dev.jsonl": {
+   "records": 64,
+   "sha256": "c1edb0c13bac3ff07f15ea04e8b797f0be5f24d723432e5c7164421422dc0ee2"
+  },
+  "sealed_A_feedback.jsonl": {
+   "records": 64,
+   "sha256": "f84f37a3722947f2b0d5ff71a1bec65117e9b90aab498b314ad7befa23605c23"
+  },
+  "sealed_A_train.jsonl": {
+   "records": 1024,
+   "sha256": "0f4474119d59c5796f1738b1bc32e586e320288a3a64df7e414427103b24487b"
+  },
+  "sealed_B_dev.jsonl": {
+   "records": 64,
+   "sha256": "81437364b52bbbdc0cd2cf75dbcaa7e2434a9c8cae20a0bba5f5656851b04895"
+  },
+  "sealed_B_feedback.jsonl": {
+   "records": 64,
+   "sha256": "9dcc44b964d76c08081d7469c8ad8b29d64f32d2c34dfecb507455e310d397e6"
+  },
+  "sealed_B_train.jsonl": {
+   "records": 1024,
+   "sha256": "6ded9bf8572193797fc1aea1f697abd06a5bf09d2b4df01c2babe20b23301d38"
+  },
+  "sealed_C_dev.jsonl": {
+   "records": 128,
+   "sha256": "81d72e5fa23c93f5a9b7fd158aea1cab0a568af869fdcdbf7b60c75a001c8a34"
+  },
+  "sealed_C_feedback.jsonl": {
+   "records": 128,
+   "sha256": "1a30977034b8196664a2f9fad0bded2033ddd609a1498f517dedda50c194de13"
+  },
+  "sealed_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "07b7fbaf4b1daf6fcbaf50bc979acaeeec3a8a75d879c9044e46a7ea5a225faa"
+  },
+  "visible_A_dev.jsonl": {
+   "records": 64,
+   "sha256": "5f1fdc58e1e97857d2b651fb1f0eab9d2a0a7674040ffcc715db285ce7c24dd3"
+  },
+  "visible_A_feedback.jsonl": {
+   "records": 64,
+   "sha256": "f850a3add48a6ec1144f63c2f48d21b99507e9262dcba88f08ab03a96803dc41"
+  },
+  "visible_A_train.jsonl": {
+   "records": 1024,
+   "sha256": "f9638725c592ceb9f84c81c0072efbbfc25f3bb73486799d301fc08aec9952c7"
+  },
+  "visible_B_dev.jsonl": {
+   "records": 64,
+   "sha256": "8df760fc4100956f96d51632f5fc308b13d7fe184ac542995e8f4b5c553d390a"
+  },
+  "visible_B_feedback.jsonl": {
+   "records": 64,
+   "sha256": "e03a0a1b8fec16da461efd2949cf2e8bae0cc93e69d3611190c42934f7af3521"
+  },
+  "visible_B_train.jsonl": {
+   "records": 1024,
+   "sha256": "1dce0c4f49c62c3482408e0067778efd1b0cd2e4a67c068a836f606334d9db45"
+  },
+  "visible_C_dev.jsonl": {
+   "records": 128,
+   "sha256": "fa73217515096f547da51871e82462e22619d2a50615af91b4574cbeece8faff"
+  },
+  "visible_C_feedback.jsonl": {
+   "records": 128,
+   "sha256": "0e16d6b5e81350de404c529540d9535c0eaf310a7fe0ee23a97820d636e8927c"
+  },
+  "visible_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "cb7768cdfd2d22246706193a1c73ca678b6ec307c52d3ac772ddf196ea8ac695"
+  }
+ },
+ "forbidden_bare_shapes": {
+  "0752986cdd9d2333": "((L (L L)) ((L L) (L L)))",
+  "12e026df9873e4e4": "((L L) ((L L) L))",
+  "26d2d48fb6249840": "(((L L) (L L)) ((L L) L))",
+  "44bb65bea0e68da4": "(L ((L L) L))",
+  "7e93530d990a7fbc": "(((L L) L) ((L L) (L L)))",
+  "8de25468a32ae305": "((L (L L)) (L L))",
+  "bbbcee41f6d4e232": "(((L L) (L L)) (L (L L)))",
+  "ce4d93b59c124a9f": "(((L L) (L L)) ((L L) (L L)))",
+  "f5844b5735f0fe95": "(((L L) L) L)"
+ },
+ "group_policy": "a group id is assigned when a group is made, before any split; a whole group goes to one split; every content hash occurs at most once in the whole package, so no observation can straddle splits. One-field NEIGHBOURS across groups are not blocked (disclosed).",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "max_depth": 3,
+ "mixture_proposed": {
+  "A/one_field_pair": 0.125,
+  "A/single": 0.125,
+  "B/op_pair": 0.125,
+  "B/swap_pair": 0.125,
+  "C/grouping": 0.15,
+  "C/leaf_only": 0.1,
+  "C/mixed_allowed_shapes": 0.15,
+  "C/operator_only": 0.1
+ },
+ "q3_immutable_lf_sha256": {
+  "Q3_DATA_PINS.json": "e67fb880bf3f8b9e4802e5567572ee4970a25bc3209999bc4dda4eea6d3968fc",
+  "q3_behaviour_records.py": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+  "q3_load.py": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d"
+ },
+ "q3_v0_7_manifest_sha256": "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9",
+ "quotas_rows": {
+  "A/one_field_pair": {
+   "dev": 32,
+   "feedback": 32,
+   "train": 512
+  },
+  "A/single": {
+   "dev": 32,
+   "feedback": 32,
+   "train": 512
+  },
+  "B/op_pair": {
+   "dev": 32,
+   "feedback": 32,
+   "train": 512
+  },
+  "B/swap_pair": {
+   "dev": 32,
+   "feedback": 32,
+   "train": 512
+  },
+  "C/grouping": {
+   "dev": 38,
+   "feedback": 38,
+   "train": 614
+  },
+  "C/leaf_only": {
+   "dev": 26,
+   "feedback": 26,
+   "train": 410
+  },
+  "C/mixed_allowed_shapes": {
+   "dev": 38,
+   "feedback": 38,
+   "train": 614
+  },
+  "C/operator_only": {
+   "dev": 26,
+   "feedback": 26,
+   "train": 410
+  }
+ },
+ "record_id_policy": "sha256 of the raw UTF-8 string '<schema>:<seed>:<lesson>:<split>:<index>', first 24 hex",
+ "record_id_seeds": {
+  "dev": 20260941,
+  "feedback": 20260951,
+  "train": 20260941
+ },
+ "schema": "helm-cas-expression-lab.q4-sdg-lessons/0.1",
+ "seed": 20260941,
+ "size_train_pool_declared": 4096,
+ "sources_lf_sha256": {
+  "historical_compiler.py": "3278924871544780134d28ef70410ea3f833be9683465c1dc1fe605747aec762",
+  "learner_q4_decoder.py": "1f8b1cef11fbf9961bfe98f344115f4ed4a096dbac2772c09aaf3549d16e4451",
+  "learner_q4_representation.py": "9b27815f742644354772e07284b278f4e4d80f90c8fecbc3ffe959e94689cf3e",
+  "pinned_sources/compiler_pre_ohm_61ed5a45.py": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+  "q3_behaviour_records.py": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+  "q3_load.py": "534f486a4cea6ef721f0a62853951d351f79c3a4d7167d554289b6d72a93bb7d",
+  "q4_panel_evaluation.py": "678e50ea16aa4708217787e1b71376cb0346920e95bb6351756961288601876a",
+  "q4_sdg_curriculum.py": "f7490ef2e9fd06864eb9acf7553e16dfc7d6a70732fa1455749b3633e1f007ea",
+  "reference_ops.py": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12"
+ },
+ "stats": {
+  "attempts": {
+   "feedback/A/one_field_pair": {
+    "attempts": 21,
+    "groups_kept": 16,
+    "rows_kept": 32
+   },
+   "feedback/A/single": {
+    "attempts": 32,
+    "groups_kept": 32,
+    "rows_kept": 32
+   },
+   "feedback/B/op_pair": {
+    "attempts": 28,
+    "groups_kept": 16,
+    "rows_kept": 32
+   },
+   "feedback/B/swap_pair": {
+    "attempts": 39,
+    "groups_kept": 16,
+    "rows_kept": 32
+   },
+   "feedback/C/grouping": {
+    "attempts": 82,
+    "groups_kept": 17,
+    "rows_kept": 38
+   },
+   "feedback/C/leaf_only": {
+    "attempts": 36,
+    "groups_kept": 13,
+    "rows_kept": 26
+   },
+   "feedback/C/mixed_allowed_shapes": {
+    "attempts": 226,
+    "groups_kept": 38,
+    "rows_kept": 38
+   },
+   "feedback/C/operator_only": {
+    "attempts": 114,
+    "groups_kept": 13,
+    "rows_kept": 26
+   },
+   "main/A/one_field_pair": {
+    "attempts": 286,
+    "groups_kept": 272,
+    "rows_kept": 544
+   },
+   "main/A/single": {
+    "attempts": 544,
+    "groups_kept": 544,
+    "rows_kept": 544
+   },
+   "main/B/op_pair": {
+    "attempts": 422,
+    "groups_kept": 272,
+    "rows_kept": 544
+   },
+   "main/B/swap_pair": {
+    "attempts": 814,
+    "groups_kept": 272,
+    "rows_kept": 544
+   },
+   "main/C/grouping": {
+    "attempts": 1132,
+    "groups_kept": 286,
+    "rows_kept": 652
+   },
+   "main/C/leaf_only": {
+    "attempts": 666,
+    "groups_kept": 218,
+    "rows_kept": 436
+   },
+   "main/C/mixed_allowed_shapes": {
+    "attempts": 3360,
+    "groups_kept": 652,
+    "rows_kept": 652
+   },
+   "main/C/operator_only": {
+    "attempts": 1246,
+    "groups_kept": 218,
+    "rows_kept": 436
+   }
+  },
+  "coverage": {
+   "dev": {
+    "A_cells_of_1600": 1600,
+    "A_distinct_cells": 64,
+    "A_field_values": {
+     "domain": {
+      "C": 15,
+      "E": 20,
+      "O": 17,
+      "P": 12
+     },
+     "drive": {
+      "1": 6,
+      "2": 14,
+      "3": 9,
+      "4": 10,
+      "5": 8,
+      "6": 9,
+      "7": 5,
+      "None": 3
+     },
+     "noetic": {
+      "0": 9,
+      "1": 10,
+      "2": 3,
+      "3": 8,
+      "4": 4,
+      "5": 4,
+      "6": 11,
+      "7": 8,
+      "8": 4,
+      "9": 3
+     },
+     "register": {
+      "A": 11,
+      "E": 13,
+      "None": 10,
+      "T": 11,
+      "f": 19
+     }
+    },
+    "bare_shapes": {
+     "(((L L) (L L)) (L L))": 1,
+     "(((L L) (L L)) L)": 1,
+     "(((L L) L) ((L L) L))": 3,
+     "(((L L) L) (L (L L)))": 4,
+     "(((L L) L) (L L))": 1,
+     "((L (L L)) ((L L) L))": 5,
+     "((L (L L)) (L (L L)))": 4,
+     "((L (L L)) L)": 18,
+     "((L L) ((L L) (L L)))": 5,
+     "((L L) (L (L L)))": 1,
+     "((L L) (L L))": 23,
+     "((L L) L)": 13,
+     "(L (L (L L)))": 26,
+     "(L (L L))": 20,
+     "(L L)": 67,
+     "L": 64
+    },
+    "changed_field": {
+     "None": 70,
+     "domain": 14,
+     "drive": 4,
+     "grouping": 38,
+     "leaf": 26,
+     "left_right_order": 32,
+     "noetic": 8,
+     "op": 58,
+     "register": 6
+    },
+    "depths": {
+     "0": 64,
+     "1": 67,
+     "2": 56,
+     "3": 69
+    },
+    "operators": {
+     "PLUS": 250,
+     "TIMES": 206
+    },
+    "rows": 256
+   },
+   "feedback": {
+    "A_cells_of_1600": 1600,
+    "A_distinct_cells": 64,
+    "A_field_values": {
+     "domain": {
+      "C": 15,
+      "E": 17,
+      "O": 17,
+      "P": 15
+     },
+     "drive": {
+      "1": 8,
+      "2": 8,
+      "3": 9,
+      "4": 9,
+      "5": 7,
+      "6": 9,
+      "7": 7,
+      "None": 7
+     },
+     "noetic": {
+      "0": 6,
+      "1": 6,
+      "2": 8,
+      "3": 6,
+      "4": 6,
+      "5": 6,
+      "6": 7,
+      "7": 6,
+      "8": 7,
+      "9": 6
+     },
+     "register": {
+      "A": 12,
+      "E": 14,
+      "None": 13,
+      "T": 13,
+      "f": 12
+     }
+    },
+    "bare_shapes": {
+     "(((L L) (L L)) (L L))": 3,
+     "(((L L) (L L)) L)": 2,
+     "(((L L) L) ((L L) L))": 2,
+     "(((L L) L) (L (L L)))": 2,
+     "(((L L) L) (L L))": 2,
+     "((L (L L)) ((L L) L))": 2,
+     "((L (L L)) (L (L L)))": 2,
+     "((L (L L)) L)": 19,
+     "((L L) ((L L) (L L)))": 2,
+     "((L L) (L (L L)))": 3,
+     "((L L) (L L))": 19,
+     "((L L) L)": 22,
+     "(L ((L L) (L L)))": 3,
+     "(L (L (L L)))": 19,
+     "(L (L L))": 23,
+     "(L L)": 67,
+     "L": 64
+    },
+    "changed_field": {
+     "None": 70,
+     "domain": 8,
+     "drive": 8,
+     "grouping": 38,
+     "leaf": 26,
+     "left_right_order": 32,
+     "noetic": 8,
+     "op": 58,
+     "register": 8
+    },
+    "depths": {
+     "0": 64,
+     "1": 67,
+     "2": 64,
+     "3": 61
+    },
+    "operators": {
+     "PLUS": 291,
+     "TIMES": 142
+    },
+    "rows": 256
+   },
+   "train": {
+    "A_cells_of_1600": 1600,
+    "A_distinct_cells": 1024,
+    "A_field_values": {
+     "domain": {
+      "C": 256,
+      "E": 252,
+      "O": 256,
+      "P": 260
+     },
+     "drive": {
+      "1": 130,
+      "2": 122,
+      "3": 127,
+      "4": 126,
+      "5": 127,
+      "6": 127,
+      "7": 132,
+      "None": 133
+     },
+     "noetic": {
+      "0": 100,
+      "1": 99,
+      "2": 105,
+      "3": 101,
+      "4": 105,
+      "5": 104,
+      "6": 97,
+      "7": 101,
+      "8": 106,
+      "9": 106
+     },
+     "register": {
+      "A": 206,
+      "E": 206,
+      "None": 207,
+      "T": 207,
+      "f": 198
+     }
+    },
+    "bare_shapes": {
+     "(((L L) (L L)) (L L))": 40,
+     "(((L L) (L L)) L)": 40,
+     "(((L L) L) ((L L) L))": 38,
+     "(((L L) L) (L (L L)))": 36,
+     "(((L L) L) (L L))": 40,
+     "((L (L L)) ((L L) L))": 36,
+     "((L (L L)) (L (L L)))": 36,
+     "((L (L L)) L)": 292,
+     "((L L) ((L L) (L L)))": 35,
+     "((L L) (L (L L)))": 40,
+     "((L L) (L L))": 347,
+     "((L L) L)": 319,
+     "(L ((L L) (L L)))": 41,
+     "(L (L (L L)))": 358,
+     "(L (L L))": 312,
+     "(L L)": 1062,
+     "L": 1024
+    },
+    "changed_field": {
+     "None": 1126,
+     "domain": 122,
+     "drive": 132,
+     "grouping": 614,
+     "leaf": 410,
+     "left_right_order": 512,
+     "noetic": 128,
+     "op": 922,
+     "register": 130
+    },
+    "depths": {
+     "0": 1024,
+     "1": 1062,
+     "2": 978,
+     "3": 1032
+    },
+    "operators": {
+     "PLUS": 4369,
+     "TIMES": 2695
+    },
+    "rows": 4096
+   }
+  },
+  "observations_equal_to_a_visible_q3_G_train_row": {
+   "dev": 0,
+   "feedback": 0,
+   "train": 1
+  },
+  "refusals": {
+   "feedback/A/one_field_pair": {
+    "A_PAIR_PARTNER_EXHAUSTED": 5
+   },
+   "feedback/A/single": {},
+   "feedback/B/op_pair": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 12
+   },
+   "feedback/B/swap_pair": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 23
+   },
+   "feedback/C/grouping": {
+    "C_GROUPING_FEWER_THAN_TWO_MEMBERS_COMPILE:all_times": 20,
+    "C_GROUPING_FEWER_THAN_TWO_MEMBERS_COMPILE:mixed": 45,
+    "C_grouping member ((L (L L)) L): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 20,
+    "C_grouping member ((L (L L)) L): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 30,
+    "C_grouping member ((L L) (L L)): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 18,
+    "C_grouping member ((L L) (L L)): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 27,
+    "C_grouping member ((L L) L): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 14,
+    "C_grouping member (L (L (L L))): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 13,
+    "C_grouping member (L (L (L L))): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 30,
+    "C_grouping member (L (L L)): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 8
+   },
+   "feedback/C/leaf_only": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 12,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 11
+   },
+   "feedback/C/mixed_allowed_shapes": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 44,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 144
+   },
+   "feedback/C/operator_only": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 39,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 61,
+    "COMPILER_REFUSED:TIMES_SAME_CORE_MULTI_REGISTER": 1
+   },
+   "main/A/one_field_pair": {
+    "A_PAIR_PARTNER_EXHAUSTED": 14
+   },
+   "main/A/single": {},
+   "main/B/op_pair": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 149,
+    "DUPLICATE_CONTENT": 1
+   },
+   "main/B/swap_pair": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 539,
+    "COMPILER_REFUSED:TIMES_SAME_CORE_MULTI_REGISTER": 2,
+    "DUPLICATE_CONTENT": 1
+   },
+   "main/C/grouping": {
+    "C_GROUPING_FEWER_THAN_TWO_MEMBERS_COMPILE:all_times": 265,
+    "C_GROUPING_FEWER_THAN_TWO_MEMBERS_COMPILE:mixed": 581,
+    "C_grouping member ((L (L L)) L): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 246,
+    "C_grouping member ((L (L L)) L): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 416,
+    "C_grouping member ((L L) (L L)): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 279,
+    "C_grouping member ((L L) (L L)): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 334,
+    "C_grouping member ((L L) L): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 143,
+    "C_grouping member (L (L (L L))): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 212,
+    "C_grouping member (L (L (L L))): COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 435,
+    "C_grouping member (L (L L)): COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 111
+   },
+   "main/C/leaf_only": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 166,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 282
+   },
+   "main/C/mixed_allowed_shapes": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 687,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 2015,
+    "COMPILER_REFUSED:TIMES_SAME_CORE_MULTI_REGISTER": 5,
+    "DUPLICATE_CONTENT": 1
+   },
+   "main/C/operator_only": {
+    "COMPILER_REFUSED:TIMES_DOMAIN_ASCENT": 344,
+    "COMPILER_REFUSED:TIMES_OPERAND_NOT_SINGULAR": 682,
+    "COMPILER_REFUSED:TIMES_SAME_CORE_MULTI_REGISTER": 2
+   }
+  }
+ },
+ "status": "BUILT_NOT_PINNED",
+ "trigger_policy": "family D triggers may come only from train or feedback rows of this package",
+ "visibility": {
+  "note": "the learner may open visible_* only; the sealed_* sidecar is for loss and diagnosis",
+  "sealed": [
+   "ast_size",
+   "changed_field",
+   "content_sha256",
+   "depth",
+   "group_id",
+   "group_size",
+   "leaf_count",
+   "lesson_family",
+   "ordered_bare_shape_sha256",
+   "ordered_operator_shape_sha256",
+   "provenance",
+   "q3_tree_shape_key",
+   "record_id",
+   "shape_text",
+   "slot_kinds",
+   "slot_paths",
+   "strict_shape_key",
+   "subfamily",
+   "target_ast",
+   "target_canonical_ast",
+   "target_tokens"
+  ],
+  "visible": [
+   "lesson_family",
+   "mode",
+   "observation",
+   "record_id"
+  ]
+ }
+}

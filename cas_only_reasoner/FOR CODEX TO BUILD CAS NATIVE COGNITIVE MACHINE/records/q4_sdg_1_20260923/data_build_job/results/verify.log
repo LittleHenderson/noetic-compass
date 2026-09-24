@@ -1,0 +1,3 @@
+{"dev": 256, "feedback": 256, "train": 4096}
+Q4_SDG_VERIFY_PASS
+exit=0 wall=4s
