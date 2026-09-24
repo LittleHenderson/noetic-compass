@@ -339,3 +339,191 @@ working copy.
 **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any path containing
 `hset1a` or `hset1b`, any `results/` folder, S3 or AWS, the meta1 ledger, other worktrees' files, and Claude
 transcripts.
+
+---
+
+# Verification of e21472a85acf561daf0703cb0808cb92476db8f3
+
+- **Label: CLAUDE_BUILT_CLAUDE_CHECKED.** Written by a fresh Claude verifier during the temporary takeover. Custody
+  is not independent: Claude also built, reviewed and revised this path.
+- Commit verified: `e21472a8` (Revision 1 of the larger-question path). Parent: `cc68d8b3` (this review).
+- It changes 4 files only: `t4_larger_question_checks.py`, `larger_question_scope.py`, the torch-free test file and
+  `BUILDER_REPORT_LARGER_QUESTION_PATH.md`. No protected file changed. The file sizes and sha256 values on disk equal
+  the report's table (Revision 1, section 11). All four files use LF only.
+- The "Q4" part of the verifier brief (fakes for `ARCHITECTURE_CHANGE_JUSTIFIED`) does not apply here. This path has
+  no such reader.
+
+## Verdict: APPROVE_FOR_T4_CHECKS
+
+In plain words:
+
+- **The MAJOR finding (F1) is fixed.** Check d now runs first. Every finished row is on disk at once. A timing
+  preflight refuses the run by name before the main work if the projected total is over 3,600 s. Check a is half its
+  old size. The planned work fell from 8,122 to 4,917 forward calls.
+- **Every MINOR finding and every coordinator decision is applied**, and applied as worded.
+- **The new check a compares the same quantity as the recorded T4 history.** I re-read the six committed T4 files
+  and the reference tool myself. I then replayed the recorded per-question digests through the real `check_a` code.
+  It passes on the true history and fails on every change I tried.
+- **Nothing else changed behaviour** beyond what the decisions asked for. The changes to checks b, c and d are
+  stricter, not looser.
+- **Five NOTES remain** (V1-V5 below). None blocks the T4 launch. V1 is a one-line hardening the coordinator may
+  want before any torch-free scorer is used on its own.
+
+## Decision by decision
+
+| Item | Result | What I checked |
+|---|---|---|
+| F1 / decision 1: order d, c, b, a | **APPLIED** | `CHECK_ORDER = ("d", "c", "b", "a")`; `requested` is built from `CHECK_ORDER`, so a typed order cannot change it. I ran the real `main()` with a fake torch and fake checks: typed `a,b,c,d` still ran `d, c, b, a` |
+| F1 / decision 1: rows written as each unit completes, create-only, flushed | **APPLIED** | `RowWriter` opens with `"x"`, then write, flush, fsync per row. In my fake run, the rows file already held each row when the check returned. A wall stop in check c kept d's rows and c's first row, marked c `NOT_COMPLETE`, b and a `NOT_RUN`, exit 3. A second run with the same `--out` refused (exit 4). No `.partial` was left behind. The unit is one model (a), one fixture (b, d), one refusal (c, d) or one learner pair's course sweep (d) |
+| F1 / decision 3: preflight of about 20 forward passes, named refusal | **APPLIED** | 2 warm-up calls, then 16 timed course calls and 4 timed fixture calls (20), plus 1 warm-up and 3 timed learner calls. Refusal: `PREFLIGHT_OVER_WALL_LIMIT`, exit 5, summary written. Checked by a fake-clock run of the real `preflight` (below) |
+| F1 / decision 3: expected wall time in the report | **APPLIED** | Report section 3: about 2,300 to 2,800 s, labelled an ESTIMATE. See V2 on how it was derived |
+| F2 / decision 2: compare with the T4 item-1 digests | **APPLIED** | Compared field named: `results[].overall_digest`. Why it is the same quantity: stated point by point in the script and the report. I confirmed each point (below). The paired comparison was dropped, as the decision allows when the quantity is the same |
+| F3 / decision 4: `REQUIRED_INPUTS`, `--list-inputs`, checks before torch | **APPLIED** | 12 files with bytes and sha256: course, tokenizer, development file, both wheels, 6 checkpoints, fixture file. `--list-inputs` printed 12 rows and exit 0 (the test also runs it with torch blocked). `verify_inputs` runs before `import torch`. I traced every data read of the run; the list is complete (below) |
+| F4 / decision 5: digest wording | **APPLIED** | Script docstring, `BOUNDARY`, check b's note and the report now say right/wrong is recomputable from `answer_sha256` and `check_digest`, acceptable for public fixtures, never for sealed items. The old v0.1 sentence is marked wrong in place |
+| F5 / decision 6: D-1 anchors inside `grade()` | **APPLIED** | `verify_grader_pins` checks `checker_v2.py`, `answers_v2.py`, `slots_v2.py` on the new route (and `checker.py` on the old route) on every `grade()` and `target()` call. See V1 for what it does not cover |
+| F6 / decision 7: scope ruling in the table | **APPLIED** | `KIND_SCOPE` rows: reach at 6 nodes `CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES`; parts and edge account at 6 nodes `DIAGNOSTIC_ONLY`; role, definition, context `OUT_OF_SCOPE`. The builder marks 5-node parts, edge and reach `NOT_RULED` and asks the coordinator (open question 1). That is honest, not a builder decision |
+| F7 / decision 8: raw inputs past the trained range | **APPLIED** | Report section 8 discloses it. Check b records `query_whole`, `query_part` and `past_trained_query_range` per fixture. I confirmed the builder's correction to this review: `pointer_contract.DESIGN["node_rank_feature"]` is `False` (`pointer_contract.py:896`), so node rank is not a raw input in these containers |
+| F8 / decision 8: switch-OFF in check d | **APPLIED** | A switch-OFF learner pair on every 8th course packet (71 of 564), all 37 fixtures, the 4 refusals, F20 and both training calls. The substitute of `_build_container` is scoped to the two constructor calls and restored in `finally`. `PointerCourseLearner.__init__` calls `_build_container(torch, framework, self.device)` by module-global name (`pointer_learner.py:1777`), so the substitute takes effect; if it did not, the read-back of `module.analogy_focus_comparison` raises `D_SWITCH_STATE`. Nothing in the learner's constructor requires the analogy head |
+| F9, F10 | **RECORDED** | The builder records the v0.1 exposure items for the coordinator, and answers the wording items |
+| Nothing else changed behaviour | **HOLDS** | Hunk by hunk: the scope module only adds the pin check, one return key and two table columns. Checks b, c and d keep their v0.1 pass rules; c also fails now if a refusal row is missing; d must pass on both pairs. The summary is now written once and create-only, as ordered |
+
+## How I tried to break it
+
+1. **Torch-free tests, run once.** `python -B -m pytest -q -p no:cacheprovider eval_paths/tests/test_larger_question_path_static.py`
+   from `research/CAS_META_2_COMPOSITION`: **36 passed in 45.46 s.** The working tree was clean before and after.
+2. **The T4 reference, re-read by my own script** from git objects of `41071a3f` (I fetched
+   `origin/research/helm-integration-20260923` explicitly; `41071a3f` is an ancestor of its head `59d86443`):
+   - all six file sha256 values equal `T4_REFERENCE["files_sha256"]`; every file is `complete`, torch
+     `2.11.0+cu128`, course digest `272c26e1...6dbb`, tool LF sha256 `21bf01e5...292e`;
+   - in the three OFF files, the five source pins equal `T4_REFERENCE_SOURCE_LF_SHA256`. In the three control files
+     only `pointer_learner.py` differs, as expected for the unchanged `20208c92` source;
+   - every checkpoint row: `init_seed` equals the receipt seed, `checkpoint` equals `_checkpoint_path(seed, phase)`,
+     `checkpoint_sha256` equals the pin, 564 records, and `overall_digest` recomputes from its own `per_record`;
+   - the six overall digests equal `T4_REFERENCE_OVERALL_DIGEST`, and the OFF and control per-question maps are
+     equal on all six checkpoints.
+3. **Same quantity, point by point.** I read the reference tool `preservation_digest.py` at `41071a3f` (whole file)
+   and `job.sh.template` (the preservation lines):
+   - per question: both write `"%08x" % (v & 0xFFFFFFFF)` of the float32 logits viewed as int32, as sorted-key compact
+     JSON, then sha256 (tool lines 98-100; `larger_question_learner.logit_bits_digest`);
+   - overall: both hash the newline-joined `"record_id digest"` lines over the sorted ids (tool line 101;
+     `_overall_digest`);
+   - same logits: `GraphForward(torch, model, reading, device).head_logits(plan, indicators)` with the frozen
+     `slots.compile_slots` plan, `pointer_inputs.read_packet` and the same tagger rule. `predict_packet` then calls
+     `_scalar_scores`, which reads the tensors and does not change them, so the digested `rows` are the head logits;
+   - same container: the job's OFF runs pass `--container-kwargs '{"analogy_focus_comparison": false}'` and
+     `--model h2_<phase>_<seed>:<seed>:records/typed_pointer_001/receipt_<seed>/checkpoints/<phase>.pt`; the
+     framework seed is the checkpoint's own seed in both; strict `load_state_dict`, then eval mode;
+   - same determinism: `CUBLAS_WORKSPACE_CONFIG=:4096:8`, deterministic algorithms (`warn_only=True`), cuDNN
+     deterministic, no benchmark, in both.
+4. **Replay through the real `check_a`.** With fakes that return the recorded per-question digests of the control
+   files, the real `check_a` gives **PASS on all 6 models**, 6 rows, 564 digests each. It gives **FAIL** when
+   initial and final are swapped (6 of 6 unequal), when one question's digest changes (only that model unequal),
+   when one question takes the new route (`non_original_route_count` 1), and when one question is missing.
+5. **The real `main()` with a fake torch and fake checks**, 9 cases: all pass (exit 0); typed order `a,b,c,d` (ran
+   `d,c,b,a`); wall stop in c (exit 3, rows kept); crash in d (d `FAIL`, c, b, a still run, exit 1); preflight over
+   the limit (exit 5, no check run); wrong torch with check a (exit 4, `T4_REFERENCE_ENVIRONMENT_DIFFERS`, before
+   `Context`); wrong torch with `--checks d,c,b` (runs; `INTEGRATION_CHECKS_INCOMPLETE`, exit 1); no CUDA (exit 2);
+   missing input (exit 4, before torch). Every case wrote the summary once; a second run refused.
+6. **Preflight arithmetic.** `planned_work` for the real sizes (564 questions, 37 fixtures, 4 refusals): a 3,384
+   course calls; b 185 and c 4 fixture calls; d 1,270 learner course calls (564 x 2 + 71 x 2) and 74 learner
+   fixture calls; 14 container builds; 4 learner builds. Total 4,917, as the report says. A fake-clock run of the
+   real `preflight` made 22 container calls (2 warm-up, 16 + 4 timed) and 4 learner calls (1 warm-up, 3 timed). With
+   300 s of setup and 0.2 s of grading per fixture:
+
+   | Seconds per course call (learner call) | Projected (with the 1.15 margin) | Fits? | Total at those speeds, no margin |
+   |---|---|---|---|
+   | 0.39 (0.44) | 2,705 s | yes | 2,394 s |
+   | 0.49 (0.54) | 3,273 s | yes | 2,888 s |
+   | 0.56 (0.61) | 3,671 s | **no, refuses** | 3,234 s |
+
+   This matches the report's break-even (about 0.56 s per call, real total about 3,160 s). The margin makes the run
+   refuse early rather than be cut late.
+7. **Input completeness.** Every data file the run reads comes through `pointer_contract.load_material`
+   (= `matched_contract.load_material`: course, tokenizer, development file), the fixture loader, the checkpoint
+   loader and the two wheels (imported by `real_framework`). `load_material` is called three times: at the import of
+   `pointer_contract` (`_import_time_stratified_digests`, line 672), in `Context`, and by the role tagger's cache
+   (`pointer_inputs._build_cache`, line 260). The 18 practice checkpoints in `pointer_contract.MATERIAL` are read
+   only by `input_inventory` (the training launcher), not by this run. The learner's identity files and
+   `face_corpus.py` are `.py` files inside the shipped `cas_meta2` tree. So `REQUIRED_INPUTS` plus the two source
+   trees plus the five `eval_paths` files is complete.
+
+## Remaining findings (all NOTE; none blocks the T4 launch)
+
+| Id | Severity | Finding |
+|---|---|---|
+| V1 | NOTE | `grade()` pins the three D-1 anchors, but checker v2 also runs code from four other files that `grade()` does not pin |
+| V2 | NOTE | The wall-time estimate counts two of the reference tool's three course loads as forward-pass time |
+| V3 | NOTE | The reference job also set `OMP_NUM_THREADS=2` and `MKL_NUM_THREADS=2`; this script does not |
+| V4 | NOTE | Open decisions stay open: 5-node parts, edge and reach; and the new claim words are local labels |
+| V5 | NOTE | Check a needs torch `2.11.0+cu128` on a T4, and no launcher exists yet |
+
+- **V1.** `checker_v2.py` imports `answers`, `focal` and `source` and calls `answers.validate_answer`,
+  `answers.make_answer`, `answers.validate_query`, `focal.derive_roles` and `source.validate_public`; `grade()` also
+  calls `course.validate_model_packet`. These four files are pinned only by `verify_source_pins`, which the pure half
+  never calls. So a torch-free scorer could still grade with a drifted `answers.py`, `focal.py`, `source.py` or
+  `course.py`. Decision 6 ("check the D-1 source anchors inside `grade()`") is met as worded. The scope docstring's
+  "cannot grade with a drifted checker" is true of the checker file only. Cheap hardening: have
+  `verify_grader_pins` also check those four pins (they are already in `PROTECTED_SOURCE_LF_SHA256`). Not needed for
+  the T4 run, which calls `verify_source_pins` in `Context`.
+- **V2.** The report takes the reference job's wall time minus ONE course load and divides by 1,692 calls. But the
+  reference tool loads the course three times (import, explicit load, tagger), and prepares all 564 plans once. So
+  the per-call figure (0.384-0.389 s) is too high, and this script's setup (also three loads, about 230 s assumed) is
+  probably too low. The two errors partly cancel. The preflight measures both for real, so there is no launch risk.
+  Treat the 2,300-2,800 s band as rough.
+- **V3.** Thread settings only matter if CPU arithmetic feeds the logits. I found none on this path (inputs become
+  device tensors; checkpoint copies are exact). If it ever mattered, check a would FAIL, not falsely PASS.
+- **V4.** 5-node parts, edge account and reach are `NOT_RULED` (builder's open question 1). The words in the new
+  `claim_status_*` columns (`OUT_OF_SCOPE`, `DIAGNOSTIC_ONLY`, `CHECKER_V2_D1_ACCEPTED`, ...) are not the spec sheet's
+  status words. Map them to the legend before any of them enters `docs/CAS_HARNESS_SPEC_SHEET.md`.
+- **V5.** If the T4 image is not torch `2.11.0+cu128`, a run that includes check a refuses before any GPU work
+  (by design; builder's open question 2). The launcher must install that torch and both wheels with `--no-deps`, or
+  run `--checks d,c,b`. The launcher is not written or reviewed yet; it needs its own check (bundle side files, the
+  environment variable, Linux).
+
+## Claim status of this verification
+
+- **REAL (measured by me, torch-free):** 36 of 36 tests pass; the six T4 reference files and digests re-read and
+  matched; the real `check_a`, `main()` and `preflight` driven with fakes as described; the input trace.
+- **NOT RUN:** all four T4 checks and the real preflight. Nothing ran with torch or on a GPU. No AWS call was made.
+- **ESTIMATED, not measured:** any T4 wall time.
+- **NOT LICENSED:** any statement about Helm's accuracy on larger questions.
+
+## EXPOSURE (verification): every file outside my working copy that I opened, and what else I saw
+
+My working copy is `D:/tksCAS-worktrees/helm-builder`.
+
+**Loaded by the tool before I started (not opened by me).** The owner's global `CLAUDE.md`, the project `CLAUDE.md`
+at `C:/Users/wakil/OneDrive/Desktop/tksCAS/CLAUDE.md`, and the auto-memory index `MEMORY.md`. The index names the
+sealed-test archive folder and states sealed-build totals. It holds no TEST world, record id, shape or answer.
+
+**Read through git objects of commit `41071a3f`** (after `git fetch origin research/helm-integration-20260923`;
+`FETCH_HEAD` was `59d86443`), not working files:
+- the six files `records/helm_eval_design_20260923/analogy_repair_t4_job/results/preservation_OFF_T4_seed<seed>.json`
+  and `.../preservation_control_20208c92_T4_seed<seed>.json`, as the coordinator's decision 2 names them. Through
+  Python filters I printed their top-level keys, completeness, torch version, pin comparisons (true/false), each
+  result's label, `init_seed`, checkpoint path and record count, and digest comparisons (true/false). The per-question
+  maps were parsed and compared, not printed. I printed 5 record ids (public course ids, `typed-input-<hash>`) and
+  one file's wall and load seconds (820.13 s, 168.90 s);
+- `records/helm_eval_design_20260923/analogy_wiring_probe/preservation_digest.py` (whole file);
+- `records/helm_eval_design_20260923/analogy_repair_t4_job/job.sh.template` (a `grep` for the preservation, model,
+  container-kwargs, pip, wheel and environment lines, then lines 74-90).
+I opened no other file under any `results/` folder.
+
+**Read in the working copy (protected source, unedited):** `pointer_learner.py` (lines 465-480, 676-760, 850-875,
+1092-1108, 1686-1720, 1751-1860, 2180-2195, plus `grep`s); `pointer_contract.py` (`grep`s; lines 655-682);
+`practice_contract.py`, `matched_contract.py`, `worker_contract.py` (`grep`s; matched lines 160-195, worker lines
+20-40 and 116-126); `pointer_inputs.py` (`grep`s; lines 301-325); `encoder.py` (`grep`s; lines 216-228); the import
+lines of `checker.py`, `checker_v2.py`, `answers_v2.py`, `slots_v2.py`, `encoder.py`, `real_framework.py`, and a
+`grep` of the names `checker_v2.py` uses from `answers`, `focal` and `source`; `source.py` (`CORPUS_PATH` line);
+`cncm/typed_matched_worker.py` (lines 30-50 and 105-118). Also the whole review file, the builder report's Revision 1
+section and its diff, all `eval_paths` files, and the v0.1 T4 script (from `git show cc68d8b3`).
+
+**Written outside the working copy:** the session scratchpad only: `t4_old.py` (the v0.1 script from git),
+`verify_t4_ref.py`, `sample_ids.py`, `fake_main_run.py`, `fake_check_a.py`, `fake_preflight.py`, and this section's
+draft. The fake runs and the tests wrote and deleted temporary files in the system temp folder.
+
+**Local machine, not project data:** `python` 3.14.0 and pytest 9.0.2.
+
+**Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any path containing
+`hset1a` or `hset1b`, any salt, S3 or AWS, the meta1 ledger, other worktrees' files, and Claude transcripts. No torch
+import, no GPU, no training.
