@@ -11,7 +11,7 @@ hand; re-run the program.
 | `STUDY_SLOTS.json` | **The ONE list of slots.** Each slot: status, cap, the cap's arithmetic basis, the receipt spec, and (once admitted) its admission record |
 | `study_spend.py` | Reads the list and every receipt **fresh** on every run. Report mode writes `STUDY_SPEND_STATE.json`. `--admit SLOT` is the gate, and on ADMIT it writes the slot as `RUNNING` |
 | `STUDY_SPEND_STATE.json` | Output only: bounds, totals, and a money-gate **preview** for every planned slot (a preview is not an admission) |
-| `test_study_spend.py` | 57 small synthetic tests: `python -B test_study_spend.py` |
+| `test_study_spend.py` | 69 small synthetic tests: `python -B test_study_spend.py` (two of them build tiny real git repositories in a temporary folder; no network) |
 | `REVIEW.md` | The review findings on `bb942461` and what was done about each |
 
 ## What is frozen, and what can change
@@ -25,17 +25,19 @@ hand; re-run the program.
   `FROZEN_DEFINITIONS_SHA256` (`82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764`). Changing any
   of them needs a reviewed code change.
 
-**Can change** (only for slots other than S1, S2, P1a): `status`, `receipt`, `invalid_reason`, `admission`.
-Moves go forward only. The program checks this against **every committed version** of `STUDY_SLOTS.json`; a
-violation is exit 2:
+**Can change** (only for slots other than S1, S2, P1a): `status`, `receipt`, `invalid_reason`, `admission`, `attempts`
+(round 4). Moves go forward only. The program checks this against **every committed version** of `STUDY_SLOTS.json`,
+read with `git log --full-history` (round 4: a merge that keeps one side's file cannot hide the other side's
+commits); a violation is exit 2:
 
 | Once committed as | It may later be |
 |---|---|
-| `RUNNING` | `RUNNING`, `DONE` or `INVALID`, always with the same admission record |
-| `DONE` | `DONE` or `INVALID`, always with the same receipt and admission record |
-| `INVALID` | exactly the same, forever |
+| `RUNNING` | `RUNNING`, `DONE` or `INVALID`, always with the same admission record; `attempts` only grows at its end |
+| `DONE` | `DONE` or `INVALID`, always with the same receipt and admission record; `attempts` only grows at its end |
+| `INVALID` | exactly the same, forever (`attempts` included) |
 
-No committed `RUNNING`, `DONE` or `INVALID` row may disappear.
+No committed `RUNNING`, `DONE` or `INVALID` row may disappear. No committed launch attempt may be removed, changed or
+reordered.
 
 ## How the runner uses it
 
@@ -47,19 +49,72 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
 ```
 
 1. Commit and push `STUDY_SLOTS.json` and `study_spend.py`. The gate refuses while either differs from HEAD.
+   Then `git pull --ff-only` (round 4). `--admit` itself runs `git fetch` for the current branch's upstream and
+   refuses unless HEAD equals the tip it just fetched; if the fetch fails, it refuses. So run it on the study's
+   branch, with that branch tracking its remote branch, and with network access.
 2. `--admit <slot> --source <commit> [--bundle <sha256>]`. Exit 0 means ADMIT, and the program has already written
    the slot as `RUNNING` with an admission record (time, source, bundle or seed and arm, the slots-file sha256 before,
-   the program sha256, the arithmetic). Commit and push that, then launch. **Order matters (round 3):** admit
-   first, then prepare the job, then launch, all inside the slot's lifetime (training 14,400 s; watched: its client
-   deadline, 130 min for P1b and E1). A training job's id carries the UTC time the job was **prepared**
+   the program sha256, the arithmetic). Commit and push that. **Launch only after that push succeeds** (round 4): if
+   the push is refused, another runner got there first; do not launch, pull, and re-check. **Order matters (round
+   3):** admit first, then prepare the job, then launch, all inside the slot's lifetime (training 14,400 s; watched:
+   its client deadline, 130 min for P1b and E1). A training job's id carries the UTC time the job was **prepared**
    (`prepare_study.py` / `prepare_smoke.py` stamp it); a job prepared before its admission, or launched after
    admission time + the lifetime, is not this admission's launch. It is rejected at `DONE`, and after `INVALID` its
    cleanup is `UNCONFIRMED`, which stops the study. Do not edit the admission record by hand.
 3. When the job ends, fill the receipt pins (paths, sha256, job / instance / source identity), set `DONE`, and run
-   the report. **Check the report before committing:** after the commit, the pins of a DONE row are frozen. If the
-   receipt is rejected, fix the pins before committing, or set `INVALID` with a reason. If the report says a slot's
-   cleanup is `UNCONFIRMED`, stop and report to the owner: `INVALID` does **not** clear it (round 2).
+   the report. If the admission had more than one launch attempt, list **every** attempt in `attempts` (see "Launch
+   attempts and retries" below). **Check the report before committing:** after the commit, the pins of a DONE row are
+   frozen. If the receipt is rejected, fix the pins before committing, or set `INVALID` with a reason. If the report
+   says a slot's cleanup is `UNCONFIRMED`, stop and report to the owner: `INVALID` does **not** clear it (round 2).
 4. Commit and push. Only then can the next `--admit` pass.
+
+## Launch attempts and retries (round 4)
+
+One admission can cover more than one launch attempt: for example AWS refuses the machine (like S1), and a second
+launch then runs (like S2). The gate must see every attempt, or it undercounts the money and may admit the next
+machine while an earlier one still exists.
+
+- **Every attempt's receipt is committed**, including a capacity refusal and a launch that failed. Never delete an
+  attempt's receipt, and never move it out of the folders the gate scans (below).
+- **Every attempt is listed in the row**, in launch order, in `attempts`. Each entry is a receipt spec of the same
+  form as `receipt`. At `DONE`, `receipt` is the last listed attempt (the gate rejects the row otherwise). A row with
+  one attempt may leave `attempts` out; then its `receipt` is its one attempt. S1, S2 and P1a are frozen whole and
+  keep this single-receipt form.
+- **Each attempt is judged on its own**: its pins; its own admission binding (launched inside this admission's
+  window; a training attempt's own seed and source); its own cleanup (confirmed, or a proven capacity refusal). One
+  attempt that fails makes the slot's cleanup `UNCONFIRMED`, which refuses every admission.
+- **The slot's count is the sum over its attempts**, each by the status rule in "Counting". An accepted, proven
+  capacity refusal counts at its bound, like S1 ($1.60 in the tests). Example (a test): a refusal at 09:05, then a
+  clean run at 09:15, both listed: $1.60 + $8.94 = $10.54, admitted.
+- **A retry inside a live admission is a manual step only** (the owner's no-automatic-retries rule). The runner
+  decides it, prepares and launches it inside the same admission's window, and lists it.
+- **A retry after the admission window has closed has no slot.** Its launch would lie outside every admission window,
+  so its receipt could never confirm a cleanup. Where such a retry goes is **open question 9** (for Codex or the
+  owner); until it is decided, do not launch one.
+- **Unlisted attempts fail closed.** For every `DONE`, `INVALID` or overdue `RUNNING` slot, the program searches for
+  launch attempts the row does not list. Anything it finds, or a search that cannot run, makes the slot's cleanup
+  `UNCONFIRMED`. What it searches, stated plainly:
+  - **Training slots**: every file named `result.json`, `*_result.json` or `provider_NNNN.json`, at any depth, under
+    `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/` (the training
+    launcher's receipt home) and under the folder that holds each listed attempt's receipt folder. It reads them at
+    HEAD, at every commit a listed attempt is pinned to, and in the working tree (files git reports untracked or
+    modified). From each file it takes only the job id (`job`, `authority.job` or `request.job`). An unlisted attempt
+    is a job id that carries this slot's seed and the admitted source's first 8 characters, prepared inside the
+    admission's window, and that neither this row nor another slot claims.
+  - **Watched slots** (P1b, P2, E1): every file whose name ends in `launch_record.json` or `watch_record.json`,
+    anywhere under the design folder `helm_eval_design_20260923/`, on disk and at HEAD. This is wider than the slot's
+    own job folder on purpose: `launch.py` refuses while a `launch_record.json` exists, so a retry often goes to a new
+    folder. From each record it takes only the instance id and `launched_utc`. An unlisted attempt is a record that
+    neither this row nor another slot claims (by path or instance id) and that was launched inside the window, or
+    that has no readable launch time and sits in the slot's own job folder.
+  - **S1, S2, P1a** (no admission, so no window): S1 and S2 against every job id with their own seed and their own
+    source prefix, at any time; P1a against every watched record under `larger_question_t4_job/`. Today the search
+    finds exactly S1's job, S2's job and P1a's two records, so **S1, S2 and P1a are the complete set of attempts of
+    their jobs** (the switch-ON smoke had two attempts, S1 and S2; the larger-question T4 job had one launch, P1a).
+- **What the search cannot see**: a receipt that exists only on another branch at a commit no listed attempt pins; a
+  receipt that was deleted; a training job prepared before its admission (outside the window; if listed, it fails the
+  binding); a watched record with no readable launch time outside the slot's job folder. The rules above (commit every
+  attempt, never delete or move one, list every one) cover these.
 
 - `--admit` checks money, the owner's stop, one machine at a time, committed state and receipt validity **only**.
   It does **not** check technical readiness (reviews, builds). Each decision prints the slot's preconditions, or
@@ -70,10 +125,10 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
 | Status | How it is counted |
 |---|---|
 | `PLANNED` | Nothing spent. If mandatory, its cap is reserved |
-| `RUNNING` | Its **full cap** (more, if a receipt it already names shows more). While any slot is RUNNING, every admission is refused (one machine at a time) |
-| `DONE`, receipt accepted | The bound computed from its receipt |
-| `DONE`, receipt rejected | **The larger of** the cap and every cost figure the receipt itself shows. Every admission is refused until the slot is marked `INVALID` |
-| `INVALID` | **The larger of** the cap and every cost figure its receipt shows (if it has one), forever. Needs a written `invalid_reason` |
+| `RUNNING` | Its **full cap** (more, if a receipt it already names shows more), for the attempt in progress, **plus** every earlier attempt it lists (each at its bound if accepted, else the larger of the cap and its figures). While any slot is RUNNING, every admission is refused (one machine at a time) |
+| `DONE`, receipt accepted | The bound computed from its receipt; with `attempts`, the **sum** of every attempt's bound |
+| `DONE`, receipt rejected | **The larger of** the cap and every cost figure the receipt itself shows, **for each attempt**, summed. Every admission is refused until the slot is marked `INVALID` |
+| `INVALID` | **The larger of** the cap and every cost figure its receipt shows (if it has one), **for each attempt**, summed, forever (a proven refusal in an `INVALID` row counts at the cap too). Needs a written `invalid_reason` |
 
 "Every cost figure the receipt shows" means: the recorded cost plus the allowances; the cost recomputed from its
 timestamps; and the cost at its own deadline or instance-seconds limit. Each is priced at the highest price the
@@ -91,9 +146,11 @@ A receipt is **rejected** if any of these fail:
   job's paths must stay inside the design folder (no drive letter, backslash, `..` or absolute path).
 - **Identity.** Job id, source commit, instance id (and, for T4/CPU jobs, launch time and bundle sha256) must equal the
   pins. For watched jobs this is checked in **both** the launch record and the watch record.
-- **One receipt, one slot.** No receipt sha256 or path, job id, instance id, launch or watch record sha256 or path,
-  or provider record may be claimed by two `RUNNING`, `DONE` or `INVALID` slots. If one is, **both** receipts are
-  rejected and every admission is refused.
+- **One receipt, one attempt.** No receipt sha256 or path, job id, instance id, launch or watch record sha256 or path,
+  or provider record may be claimed by two `RUNNING`, `DONE` or `INVALID` slots, or by two listed attempts of one
+  slot (round 4). If one is, **both** receipts are rejected and every admission is refused.
+- **Every listed attempt** (round 4) is checked by every rule in this section on its own, and must show a confirmed
+  cleanup or a proven refusal. At `DONE` the row's `receipt` must be its last listed attempt.
 - **Its own admission** (every slot admitted by the gate). The receipt's source commit must equal the admitted
   source; a watched job's bundle must equal the admitted bundle; a training job's model seed
   (`authority.worker_config.design.model_seed`) must equal the slot's seed; the launch time (the time in the job id,
@@ -183,7 +240,8 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
 ## Totals (program output)
 
 - **Spent upper bound: $5.44** (S1 $1.60 + S2 $3.29 + P1a $0.55). No DONE receipt is rejected. No receipt identity is
-  shared. No cleanup is unconfirmed. Training jobs started: none.
+  shared. No cleanup is unconfirmed. Training jobs started: none. The round-4 search finds no unlisted launch attempt:
+  S1, S2 and P1a are the complete set of attempts of their jobs.
 - Remaining mandatory caps: **$51.64** (P1b, P2, M1-M4, E1).
 - **Plan C at worst case: $57.08. It fits $60.00, with $2.92 to spare.**
 - **Fallback B adds $23.32 and does not fit.** Admitting M5 now would total $68.74.
@@ -199,8 +257,10 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
 `--admit <slot> --source <commit> [--bundle <sha256>]` exits 0 only if **all** hold (any input error exits 2):
 
 1. The slot is `PLANNED`. No slot is `RUNNING`. No `DONE` receipt is rejected. No receipt identity is shared. No
-   slot's cleanup is `UNCONFIRMED` (see "Cleanup fails closed").
-2. `STUDY_SLOTS.json` and `study_spend.py` equal HEAD.
+   slot's cleanup is `UNCONFIRMED` (see "Cleanup fails closed" and "Launch attempts and retries").
+2. `STUDY_SLOTS.json` and `study_spend.py` equal HEAD, and HEAD equals the tip of the current branch's upstream,
+   fetched by `--admit` just now (round 4; a fetch that fails refuses). The decision prints this as `remote_tip`.
+   The report's saved `rules.admission` text does not repeat this condition (the state file was kept byte-identical).
 3. **Spent upper bound + the slot's cap + the caps of every other PLANNED mandatory slot (E1 included) <= $60.00.**
 4. **The owner's stop is not triggered.** It triggers when the spent upper bound is **more than** $30.00 while fewer
    than 3 main-comparison training jobs (M1-M6) have **started**. Then every admission is refused and the runner
@@ -280,7 +340,7 @@ These are also in `STUDY_SLOTS.json` and printed with every decision.
    does (a machine ran and its receipt is accepted). The round-2 verification's probe P7: M1-M3 each fail after 60 s,
    all three count as started, spent $10.33, and the stop is then off for the rest of the study. Not decided here.
    (Listed here and in `REVIEW.md`. It is not yet in `STUDY_SLOTS.json`: that file's open-question list is covered by
-   the frozen definitions digest, so adding it needs a re-freeze in a reviewed change. The same holds for 7 and 8.)
+   the frozen definitions digest, so adding it needs a re-freeze in a reviewed change. The same holds for 7, 8 and 9.)
 7. **Cancelling a slot that was never admitted and never launched.** Today, marking it `INVALID` stops the study
    (fail closed: no receipt, no admission, cleanup `UNCONFIRMED`); leaving it `PLANNED` keeps its cap reserved. Not
    decided here.
@@ -288,7 +348,13 @@ These are also in `STUDY_SLOTS.json` and printed with every decision.
    before its cleanup counts (the ordered fix: "arm/source where the receipt shows them"). The round-3 verifier had
    suggested a wrong source stay a rejection reason only, because the machine may still be this slot's. With the
    binding, a slot launched from the wrong commit ends `UNCONFIRMED` for good (stop and report), even when its
-   machine is shown gone. Codex or the owner may keep this or relax it.
+   machine is shown gone. Codex or the owner may keep this or relax it. **To decide with it** (round-3 verification
+   note K, probe R3): watched slots (P1b, P2, E1) bind a receipt to the admission by launch time only, so a stray
+   watched launch inside the window, with another bundle and source, still confirms. The admitted bundle and source
+   are known at `--admit` and shown in the launch record; binding them would match what training slots do.
+9. **Where does a retry go after the admission window has closed?** (Round 4.) A retry inside a live admission is
+   allowed as a manual step and must be listed. After the window closes there is no slot for it: no retry slot
+   exists, and the slot definitions are frozen. Not decided here.
 
 ## Ledgers (unchanged)
 

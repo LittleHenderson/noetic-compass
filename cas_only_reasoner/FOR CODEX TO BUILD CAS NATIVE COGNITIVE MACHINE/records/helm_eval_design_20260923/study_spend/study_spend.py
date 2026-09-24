@@ -1,9 +1,10 @@
 """HELM-REPAIR-CONTROLLED-1 study spend and admission gate. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
 Answers Codex review `codex-0007` (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4), the round-2
-verification of d89721b4 (MAJOR-A, MINOR-B; see REVIEW.md "Round 2") and the round-3 verification of 269d13c8
-(MAJOR-E, NOTE-F; see REVIEW.md "Round 3"). Pure Python; reads files and git objects only; no AWS call; never reads or
-writes the meta1 ledger.
+verification of d89721b4 (MAJOR-A, MINOR-B; see REVIEW.md "Round 2"), the round-3 verification of 269d13c8
+(MAJOR-E, NOTE-F; see REVIEW.md "Round 3") and the round-4 verification of d2098474 (MAJOR-H, MINOR N8; see REVIEW.md
+"Round 4"). Pure Python; reads files and git objects only; no AWS call; never reads or writes the meta1 ledger. The
+only network step is the `git fetch` that `--admit` runs (round 4 N8); report mode never fetches.
 
 FROZEN IN THIS CODE (never taken from the slots file; the file must agree or exit 2):
   * the $60.00 ceiling, the owner's $30.00 stop before the 3rd training job, the $0.10 S3/transfer/retention allowance;
@@ -11,11 +12,36 @@ FROZEN IN THIS CODE (never taken from the slots file; the file must agree or exi
     of the pre-gate DONE slots S1, S2, P1a. Their canonical digest must equal FROZEN_DEFINITIONS_SHA256. Changing any of
     them needs a reviewed code change that re-freezes the digest.
 
-MUTABLE PER SLOT (not pre-gate): status, receipt, invalid_reason, admission. Moves only forward, checked against EVERY
-committed version of STUDY_SLOTS.json (exit 2 on a violation):
+MUTABLE PER SLOT (not pre-gate): status, receipt, invalid_reason, admission, attempts. Moves only forward, checked
+against EVERY committed version of STUDY_SLOTS.json (`git log --full-history`, round 4 N8; exit 2 on a violation):
   PLANNED -> RUNNING (only `--admit` sets it, with an admission record) -> DONE (receipt filled) -> INVALID.
   A committed RUNNING row keeps its admission; a committed DONE row keeps its receipt and admission and may only become
-  INVALID; a committed INVALID row never changes; no committed RUNNING / DONE / INVALID row may disappear.
+  INVALID; a committed INVALID row never changes; no committed RUNNING / DONE / INVALID row may disappear. A committed
+  `attempts` list only grows at its end (no listed attempt is ever removed, changed or reordered); INVALID freezes it.
+
+LAUNCH ATTEMPTS (round 4 MAJOR-H). One admission may cover more than one launch attempt (a manual retry after a
+capacity refusal or a failed launch, inside the admission's window). The row then lists EVERY attempt, in launch order,
+in `attempts` (receipt specs of the same form as `receipt`); at DONE, `receipt` is the last listed attempt. Without
+`attempts` the row has one attempt, its `receipt` (the single-receipt form; the frozen S1, S2, P1a rows always use it).
+  * every attempt is read, counted and checked on its own: its pins, its own admission binding (window, seed, source)
+    and its cleanup (confirmed, or a proven capacity refusal); one attempt that fails makes the slot UNCONFIRMED;
+  * the slot's count is the SUM over its attempts, each by the status rule below (a proven, accepted capacity refusal
+    at its bound, like S1); a RUNNING row adds its full cap for the attempt in progress;
+  * no receipt identity may be claimed by two attempts, of one slot or of two.
+UNLISTED ATTEMPTS FAIL CLOSED (round 4 MAJOR-H b). For every DONE, INVALID or overdue RUNNING slot the program looks
+for launch attempts the row does not list; one found makes the slot UNCONFIRMED:
+  * training: every file named `result.json`, `*_result.json` or `provider_NNNN.json` under the study's receipt home
+    (TRAINING_RECEIPT_HOME, `typed_pointer_001/`) and under the folder that holds each listed attempt's receipt folder,
+    at HEAD, at every commit a listed attempt is pinned to, and in the working tree (untracked or modified files). A
+    job id there (its `job`, `authority.job` or `request.job` field; no other field is used) that carries this slot's
+    seed and admitted source prefix and a time inside the admission's window, and that no listed attempt of this slot
+    and no other slot claims, is an unlisted attempt;
+  * watched: every `*launch_record.json` and `*watch_record.json` anywhere under the design folder, on disk and at HEAD.
+    One that no listed attempt of this slot and no other slot claims (by path or instance id) is an unlisted attempt if
+    its `launched_utc` lies inside the window, or if it has no readable launch time and sits in this slot's job folder
+    (the top folder of a listed record);
+  * the pre-gate rows S1, S2, P1a have no admission window. They are checked without one: S1 and S2 against every job
+    id with their own seed and their own source prefix, P1a against every watched record under its job folder.
 
 ACCOUNTING (exact decimals, every bound rounded UP to the cent):
   * DONE, receipt passes validation      -> the bound computed from that receipt;
@@ -69,6 +95,8 @@ reasons; any input error exit 2. On exit 0 it WRITES the slot as RUNNING with an
   * the slot is PLANNED; no slot is RUNNING (one machine at a time); no DONE receipt is rejected; no identity is shared;
     no slot's cleanup is UNCONFIRMED (see CLEANUP: a machine or disk that may still exist: stop and report to the owner);
   * STUDY_SLOTS.json and study_spend.py equal HEAD (every earlier DONE is committed before the next machine starts);
+  * HEAD equals the tip of the current branch's upstream, fetched just now (`git fetch`); if the fetch fails, refuse
+    (round 4 N8: a stale checkout or a second runner cannot admit from an old copy of the slots file);
   * spent upper bound + the slot's cap + the caps of every OTHER PLANNED mandatory slot (E1 included) <= $60.00;
   * the owner's stop is not triggered: spent upper bound > $30.00 while fewer than 3 training jobs have STARTED stops
     the study. Started = RUNNING, or DONE with an ACCEPTED pointer_finished receipt. An AWS capacity refusal, a rejected
@@ -107,8 +135,13 @@ STATE_FILE = HERE / "STUDY_SPEND_STATE.json"
 PROGRAM_FILE = pathlib.Path(__file__).resolve()
 SCHEMA = "claude.helm-repair-controlled-1.study-slots/0.3"
 STATUSES = ("PLANNED", "RUNNING", "DONE", "INVALID")
-MUTABLE = ("status", "receipt", "invalid_reason", "admission")
+MUTABLE = ("status", "receipt", "invalid_reason", "admission", "attempts")    # "attempts": round 4 MAJOR-H
 PRE_GATE_DONE = ("S1", "S2", "P1a")     # done before this gate existed: their whole rows are frozen
+# Round 4 MAJOR-H (b): the typed-pointer launcher's receipt home. Scanned (with the folder holding each listed receipt
+# folder) for training launch attempts a row does not list. Repository-relative.
+TRAINING_RECEIPT_HOME = "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001"
+TPNTR_JOB = re.compile(r"-(\d{14})-([0-9a-f]{8})-m-(\d+)$")   # ...-<prepared UTC>-<source prefix>-m-<model seed>
+PROVIDER_NAME = re.compile(r"^provider_\d{4}\.json$")
 ARMS = ("UNCHANGED", "REPAIRED")
 POINTER_SCHEMA = "cas-graph-training-candidate-launch/1"
 CENT, SIX = Decimal("0.01"), Decimal("0.000001")
@@ -302,6 +335,16 @@ def load_slots(path, frozen=FROZEN_DEFINITIONS_SHA256):
                    "watched_machine": ("watched_machine",)}[basis["kind"]]
         if receipt.get("kind") not in allowed:
             raise InputError("%s: receipt kind %r does not fit basis %r" % (sid, receipt.get("kind"), basis["kind"]))
+        attempts = slot.get("attempts")             # round 4 MAJOR-H (a): every launch attempt under one admission
+        if attempts is not None:
+            if status == "PLANNED":
+                raise InputError("%s: a PLANNED slot cannot list launch attempts" % sid)
+            if not isinstance(attempts, list) or not attempts or not all(isinstance(a, dict) for a in attempts):
+                raise InputError("%s: attempts must be a non-empty list of receipt specs" % sid)
+            for number, attempt in enumerate(attempts, 1):
+                if attempt.get("kind") not in allowed:
+                    raise InputError("%s: attempt %d kind %r does not fit basis %r" % (
+                        sid, number, attempt.get("kind"), basis["kind"]))
         if basis["kind"] == "training_pointer" and sid not in PRE_GATE_DONE:
             training = obj(slot.get("training"))
             if training.get("arm") not in ARMS or not is_int(training.get("model_seed")):
@@ -322,6 +365,12 @@ def check_history(doc, history):
 
     def same(a, b, keys):
         return all(canonical(a.get(k)) == canonical(b.get(k)) for k in keys)
+
+    def grows(a, b):
+        """Round 4 MAJOR-H: a committed attempts list only grows at its end."""
+        old, new = a.get("attempts") or [], b.get("attempts") or []
+        return (isinstance(old, list) and isinstance(new, list) and len(new) >= len(old)
+                and all(canonical(x) == canonical(y) for x, y in zip(old, new)))
     for commit, raw in history:
         try:
             old = json.loads(raw)
@@ -340,14 +389,15 @@ def check_history(doc, history):
                 raise InputError("HISTORY_VIOLATION: %s was %s at %s and has disappeared" % (sid, was, commit[:8]))
             now = cur.get("status")
             if was == "INVALID":
-                ok = now == "INVALID" and same(o, cur, ("receipt", "invalid_reason", "admission"))
+                ok = now == "INVALID" and same(o, cur, ("receipt", "invalid_reason", "admission", "attempts"))
             elif was == "DONE":
-                ok = now in ("DONE", "INVALID") and same(o, cur, ("receipt", "admission"))
+                ok = now in ("DONE", "INVALID") and same(o, cur, ("receipt", "admission")) and grows(o, cur)
             else:
-                ok = now in ("RUNNING", "DONE", "INVALID") and same(o, cur, ("admission",))
+                ok = now in ("RUNNING", "DONE", "INVALID") and same(o, cur, ("admission",)) and grows(o, cur)
             if not ok:
                 raise InputError("HISTORY_VIOLATION: %s was %s at %s; now %s, or its committed receipt / admission / "
-                                 "reason changed" % (sid, was, commit[:8], now))
+                                 "reason changed, or a committed launch attempt was removed or changed" % (
+                                     sid, was, commit[:8], now))
 
 
 # ---------------------------------------------------------------------------------------------------- receipts
@@ -373,8 +423,9 @@ class GitReader:
         return [line.rsplit("/", 1)[-1] for line in done.stdout.decode("utf-8").splitlines() if line]
 
     def history(self, name):
-        """(commit, bytes) of every committed version of HERE/name."""
-        done = self._run(["log", "--format=%H", "--", name])
+        """(commit, bytes) of every committed version of HERE/name. `--full-history` (round 4 N8): git's default
+        history simplification drops a side branch's commits when a merge keeps the other side's file."""
+        done = self._run(["log", "--full-history", "--format=%H", "--", name])
         if done.returncode != 0:
             raise OSError("git log of %s failed" % name)
         return [(c, self.read(c, "./" + name)) for c in done.stdout.decode("ascii").split()]
@@ -386,6 +437,96 @@ class GitReader:
             raise OSError("git status failed")
         text = done.stdout.decode("utf-8")
         return [n for n in names if n in text]
+
+    def tree_files(self, commit, folder):
+        """(repository-relative path, blob id) of every file under `folder` (repository-relative) at `commit`."""
+        if not (commit == "HEAD" or COMMIT.match(str(commit))):
+            raise FileNotFoundError("not a commit: %r" % commit)
+        where = ["--", folder.rstrip("/") + "/"] if folder.strip("/") else []
+        done = self._run(["ls-tree", "-r", "-z", "--full-tree", commit] + where)
+        if done.returncode != 0:
+            raise FileNotFoundError("git ls-tree %s %s failed" % (commit, folder))
+        out = []
+        for item in done.stdout.split(b"\0"):
+            meta, _, path = item.partition(b"\t")
+            parts = meta.split()
+            if len(parts) == 3 and parts[1] == b"blob":
+                out.append((path.decode("utf-8"), parts[2].decode("ascii")))
+        return out
+
+    def blob_items(self, oids):
+        """(blob id, bytes) of each blob, from one `git cat-file --batch`; a missing object raises."""
+        if not oids:
+            return
+        done = subprocess.run(["git", "-C", self.repo, "cat-file", "--batch"], capture_output=True,
+                              input="".join(o + "\n" for o in oids).encode("ascii"))
+        if done.returncode != 0:
+            raise OSError("git cat-file failed")
+        data, pos = done.stdout, 0
+        while pos < len(data):
+            end = data.index(b"\n", pos)
+            header = data[pos:end].split()
+            if len(header) != 3:
+                raise OSError("git cat-file: object missing: %r" % data[pos:end][:80])
+            start = end + 1
+            size = int(header[2])
+            yield header[0].decode("ascii"), bytes(data[start:start + size])
+            pos = start + size + 1
+
+    def worktree_changes(self, folder, name_ok):
+        """(repository-relative path, bytes) of files under `folder` whose name passes `name_ok` and that git reports
+        untracked or modified in the working tree (their bytes are not in HEAD)."""
+        top = self._run(["rev-parse", "--show-toplevel"])
+        if top.returncode != 0:
+            raise OSError("git rev-parse --show-toplevel failed")
+        top = pathlib.Path(top.stdout.decode("utf-8").strip())
+        done = self._run(["status", "--porcelain", "-z", "--untracked-files=all", "--", ":(top)" + folder.rstrip("/") + "/"])
+        if done.returncode != 0:
+            raise OSError("git status of %s failed" % folder)
+        items, out, i = done.stdout.split(b"\0"), [], 0
+        while i < len(items):
+            item, i = items[i], i + 1
+            if len(item) < 4:
+                continue
+            if item[:1] in (b"R", b"C"):
+                i += 1                      # the next item is the rename's original path
+            path = item[3:].decode("utf-8")
+            if name_ok(path.rsplit("/", 1)[-1]) and (top / path).is_file():
+                out.append((path, (top / path).read_bytes()))
+        return out
+
+    def prefix(self, path):
+        """The repository-relative path of a folder, without a trailing slash."""
+        done = subprocess.run(["git", "-C", str(path), "rev-parse", "--show-prefix"], capture_output=True)
+        if done.returncode != 0:
+            raise OSError("git rev-parse --show-prefix failed")
+        return done.stdout.decode("utf-8").strip().rstrip("/")
+
+    def at_remote_tip(self, timeout=120):
+        """(True, text) when HEAD equals the tip of the current branch's upstream, fetched just now; else (False, why).
+        Round 4 N8: `--admit` refuses unless this holds; a fetch that fails refuses too."""
+        env = dict(os.environ, GIT_TERMINAL_PROMPT="0")
+
+        def run(args):
+            return subprocess.run(["git", "-C", self.repo] + args, capture_output=True, env=env, timeout=timeout)
+        try:
+            branch = run(["symbolic-ref", "--short", "-q", "HEAD"])
+            if branch.returncode != 0:
+                return False, "DETACHED_HEAD: run --admit on the study's branch"
+            name = branch.stdout.decode("utf-8").strip()
+            remote = run(["config", "--get", "branch.%s.remote" % name]).stdout.decode("utf-8").strip()
+            merge = run(["config", "--get", "branch.%s.merge" % name]).stdout.decode("utf-8").strip()
+            if not remote or not merge:
+                return False, "NO_UPSTREAM: branch %s tracks no remote branch" % name
+            if run(["fetch", "--quiet", remote, merge]).returncode != 0:
+                return False, "FETCH_FAILED: git fetch %s %s" % (remote, merge)
+            tip = run(["rev-parse", "--verify", "-q", "FETCH_HEAD"]).stdout.decode("ascii").strip()
+            head = run(["rev-parse", "--verify", "-q", "HEAD"]).stdout.decode("ascii").strip()
+        except (OSError, subprocess.TimeoutExpired) as error:
+            return False, "FETCH_FAILED: %s" % type(error).__name__
+        if not COMMIT.match(tip) or tip != head:
+            return False, "HEAD_IS_NOT_THE_REMOTE_TIP: HEAD %s, fetched %s %s = %s" % (head[:12], remote, merge, tip[:12])
+        return True, "HEAD %s equals the fetched tip of %s %s" % (head[:12], remote, merge)
 
 
 def new_result():
@@ -956,6 +1097,219 @@ def counted_at_least_cap(cap, res):
     return best, text
 
 
+# -------------------------------------------------------------------------------- launch attempts (round 4 MAJOR-H)
+def slot_attempts(slot):
+    """[(label, receipt spec)] of every launch attempt a RUNNING / DONE / INVALID row carries. Without `attempts`: the
+    single-receipt form, labelled with the slot id (a DONE row always; other rows only when the receipt has pins). With
+    `attempts`: each listed spec, labelled "<slot>#<n>", plus the row's receipt ("<slot>#receipt") if it has pins and
+    is not one of the listed specs."""
+    sid, receipt, listed = slot["id"], slot["receipt"], slot.get("attempts")
+    if listed is None:
+        if slot["status"] == "DONE" or (slot["status"] in ("INVALID", "RUNNING") and receipt_has_pins(receipt)):
+            return [(sid, receipt)]
+        return []
+    out = [("%s#%d" % (sid, n), spec) for n, spec in enumerate(listed, 1)]
+    if receipt_has_pins(receipt) and not any(canonical(spec) == canonical(receipt) for spec in listed):
+        out.append(("%s#receipt" % sid, receipt))
+    return out
+
+
+def label_slot(label):
+    return label.split("#", 1)[0]
+
+
+def attempt_name(label):
+    tail = label.split("#", 1)[1] if "#" in label else ""
+    return "attempt %s" % tail if tail.isdigit() else "the row's receipt (not in attempts)"
+
+
+def attempt_where(spec):
+    if spec.get("kind") == "watched_machine":
+        return obj(spec.get("launch_record")).get("path")
+    return spec.get("path")
+
+
+def training_scan_name(name):
+    return name == "result.json" or name.endswith("_result.json") or bool(PROVIDER_NAME.match(name))
+
+
+def watched_scan_name(name):
+    return name.endswith("launch_record.json") or name.endswith("watch_record.json")
+
+
+def job_parts(job):
+    """(prepared UTC, source prefix, model seed) of a typed-pointer job id, or None."""
+    m = TPNTR_JOB.search(job) if isinstance(job, str) else None
+    if not m:
+        return None
+    try:
+        when = datetime.datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=datetime.timezone.utc)
+    except ValueError:
+        return None
+    return when, m.group(2), int(m.group(3))
+
+
+class AttemptScanner:
+    """Round 4 MAJOR-H (b): what the study's receipt folders and the design folder hold, read at most once per run.
+    From a training file only its job ids are taken (`job`, `authority.job`, `request.job`); from a watched record only
+    its instance id and launch time. No other field of a scanned file is used or printed."""
+
+    def __init__(self, git, root):
+        self.git, self.root = git, pathlib.Path(root)
+        self.jobs_of_blob, self.trees, self.worktrees, self.watched = {}, {}, {}, None
+
+    @staticmethod
+    def job_ids(raw):
+        try:
+            d = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            return set()
+        if not isinstance(d, dict):
+            return set()
+        return {j for j in (d.get("job"), obj(d.get("authority")).get("job"), obj(d.get("request")).get("job"))
+                if isinstance(j, str) and j}
+
+    def training_jobs(self, commits, folders):
+        """({job id: places}, [scan failures]) over the folders at each commit and in the working tree."""
+        found, failures = {}, []
+        for folder in folders:
+            for commit in commits:
+                key = (commit, folder)
+                if key not in self.trees:
+                    try:
+                        files = [(p, oid) for p, oid in self.git.tree_files(commit, folder)
+                                 if training_scan_name(p.rsplit("/", 1)[-1])]
+                        need = sorted({oid for _p, oid in files if oid not in self.jobs_of_blob})
+                        for oid, raw in self.git.blob_items(need):
+                            self.jobs_of_blob[oid] = self.job_ids(raw)
+                        self.trees[key] = ([(job, "%s:%s" % (commit[:8], p)) for p, oid in files
+                                            for job in self.jobs_of_blob[oid]], None)
+                    except (OSError, KeyError, ValueError) as error:
+                        self.trees[key] = ([], "SCAN_FAILED:%s:%s:%s" % (commit[:8], folder, type(error).__name__))
+                hits, failure = self.trees[key]
+                for job, place in hits:
+                    found.setdefault(job, set()).add(place)
+                if failure:
+                    failures.append(failure)
+            if folder not in self.worktrees:
+                try:
+                    self.worktrees[folder] = ([(job, "working tree:%s" % p) for p, raw in
+                                               self.git.worktree_changes(folder, training_scan_name)
+                                               for job in self.job_ids(raw)], None)
+                except (OSError, ValueError) as error:
+                    self.worktrees[folder] = ([], "SCAN_FAILED:working tree:%s:%s" % (folder, type(error).__name__))
+            hits, failure = self.worktrees[folder]
+            for job, place in hits:
+                found.setdefault(job, set()).add(place)
+            if failure:
+                failures.append(failure)
+        return found, failures
+
+    def watched_records(self):
+        """([(design-folder-relative path, instance id, launched_utc, place)], [scan failures]) of every launch and watch
+        record under the design folder, on disk and at HEAD."""
+        if self.watched is None:
+            records, failures = [], []
+
+            def add(rel, raw, place):
+                try:
+                    d = json.loads(raw)
+                except (ValueError, UnicodeDecodeError):
+                    d = None
+                d = d if isinstance(d, dict) else {}
+                iid = d.get("instance_id") if isinstance(d.get("instance_id"), str) and d.get("instance_id") else None
+                records.append((rel, iid, d.get("launched_utc"), place))
+            try:
+                for dirpath, _dirs, names in os.walk(self.root):
+                    for name in sorted(names):
+                        if watched_scan_name(name):
+                            path = pathlib.Path(dirpath) / name
+                            add(path.relative_to(self.root).as_posix(), path.read_bytes(), "disk")
+                prefix = self.git.prefix(self.root)
+                files = [(p, oid) for p, oid in self.git.tree_files("HEAD", prefix)
+                         if watched_scan_name(p.rsplit("/", 1)[-1])]
+                blobs = dict(self.git.blob_items(sorted({oid for _p, oid in files})))
+                for p, oid in files:
+                    add(p[len(prefix) + 1:] if prefix else p, blobs[oid], "HEAD")
+            except (OSError, KeyError, ValueError) as error:
+                failures.append("SCAN_FAILED:design folder:%s" % type(error).__name__)
+            self.watched = (records, failures)
+        return self.watched
+
+
+def unlisted_attempts(slot, entries, scanner, owners):
+    """Round 4 MAJOR-H (b): launch attempts that belong to this slot but that its row does not list; [] when none.
+    Fail closed: any finding, including a scan that could not run, makes the slot's cleanup UNCONFIRMED. What is scanned
+    is stated in the module docstring. A job id or record that another slot claims is that slot's (the shared-identity
+    check covers a double claim)."""
+    sid, basis = slot["id"], slot["cap_basis"]
+    specs = [spec for _label, spec, _res in entries]
+
+    def other_claims(key):
+        return any(label_slot(label) != sid for label in owners.get(key, ()))
+    if sid in PRE_GATE_DONE:
+        window = None               # no admission: S1 and S2 by seed and source, P1a by its job folder, at any time
+    else:
+        admitted = utc(obj(slot.get("admission")).get("admitted_utc"))
+        if admitted is None:
+            return []               # nothing to scan against; the missing admission already leaves it UNCONFIRMED
+        window = (admitted, admitted + datetime.timedelta(seconds=lifetime_seconds(basis)))
+    out = []
+    if basis["kind"] == "training_pointer":
+        if window is None:
+            parts = job_parts(obj(slot["receipt"].get("expected")).get("job"))
+            if parts is None:
+                return ["PRE_GATE_JOB_ID_UNREADABLE: its launch attempts cannot be scanned"]
+            _when, prefix, seed = parts
+        else:
+            source, seed = obj(slot.get("admission")).get("source_sha"), obj(slot.get("training")).get("model_seed")
+            if not (isinstance(source, str) and len(source) >= 8 and is_int(seed)):
+                return ["ADMITTED_SOURCE_OR_SLOT_SEED_UNREADABLE: its launch attempts cannot be scanned"]
+            prefix = source[:8]
+        listed = {obj(spec.get("expected")).get("job") for spec in specs}
+        listed |= {value for _label, _spec, res in entries for name, value in res["keys"] if name == "job"}
+        commits = ["HEAD"] + sorted({spec.get("git_commit") for spec in specs if COMMIT.match(str(spec.get("git_commit")))})
+        folders = {TRAINING_RECEIPT_HOME}
+        for spec in specs:
+            path = spec.get("path")
+            if isinstance(path, str) and "/" in path:       # the folder that holds this attempt's receipt folder
+                folders.add(path.rsplit("/", 2)[0] if path.count("/") >= 2 else path.rsplit("/", 1)[0])
+        found, failures = scanner.training_jobs(commits, sorted(folders))
+        out.extend(failures)
+        for job in sorted(found):
+            parts = job_parts(job)
+            if parts is None or job in listed or other_claims(("job", job)):
+                continue
+            when, source_prefix, job_seed = parts
+            if source_prefix != prefix or job_seed != seed or (window and not window[0] <= when < window[1]):
+                continue
+            out.append("UNLISTED_TRAINING_ATTEMPT:%s (%s)" % (job, "; ".join(sorted(found[job])[:3])))
+        return out
+    listed_paths = {obj(spec.get(k)).get("path") for spec in specs for k in ("launch_record", "watch_record")}
+    listed_ids = {obj(spec.get("expected")).get("instance_id") for spec in specs}
+    listed_ids |= {value for _label, _spec, res in entries for name, value in res["keys"] if name == "instance_id"}
+    job_folders = {p.split("/", 1)[0] for p in listed_paths if isinstance(p, str) and "/" in p}
+    records, failures = scanner.watched_records()
+    out.extend(failures)
+    seen = set()
+    for rel, iid, launched, place in records:
+        if rel in listed_paths or (iid and iid in listed_ids):
+            continue
+        if (other_claims(("launch_record_path", rel)) or other_claims(("watch_record_path", rel))
+                or (iid and other_claims(("instance_id", iid)))):
+            continue
+        in_job_folder = "/" in rel and rel.split("/", 1)[0] in job_folders
+        when = utc(launched)
+        if window is None:
+            hit = in_job_folder
+        else:
+            hit = (when is not None and window[0] <= when < window[1]) or (when is None and in_job_folder)
+        if hit and (rel, iid, launched) not in seen:
+            seen.add((rel, iid, launched))
+            out.append("UNLISTED_WATCHED_LAUNCH:%s instance %s launched %s (%s)" % (rel, iid, launched, place))
+    return out
+
+
 # ------------------------------------------------------------------------------------------ accounting + admission
 def lifetime_seconds(basis):
     """The longest a slot's machine may live by its own basis: training instance seconds, or the watched client deadline."""
@@ -990,26 +1344,54 @@ def cleanup_gap(res, shared, provenance=()):
     return None
 
 
+def attempt_count(cap, res, trusted):
+    """One attempt's count: its computed bound when trusted and accepted; else the larger of the cap and every cost
+    figure its receipt shows (review MAJOR 4)."""
+    if trusted and res is not None and not res["problems"] and res["bound"] is not None:
+        return res["bound"], res["text"]
+    return counted_at_least_cap(cap, res)
+
+
+def summed(cap, items, multi, trusted):
+    """(sum, text) over a row's attempts (round 4 MAJOR-H); the single-receipt form keeps its old text exactly."""
+    if not multi:
+        return attempt_count(cap, items[0][2] if items else None, trusted)
+    total, texts = Decimal("0"), []
+    for label, spec, res in items:
+        value, text = attempt_count(cap, res, trusted)
+        total += value
+        texts.append("%s (%s): $%s = %s" % (attempt_name(label), attempt_where(spec), value, text))
+    if not items:
+        total, texts = cap, ["no attempt listed: cap $%s" % cap]
+    return total, "sum over %d launch attempt(s) = $%s: %s" % (len(items), total, "; ".join(texts))
+
+
 def account(loaded, root, git, history=None, now=None, program_name=None):
     slots, info = loaded["slots"], loaded["info"]
     history = git.history(SLOTS_FILE.name) if history is None else history
     now = now or datetime.datetime.now(datetime.timezone.utc)
     overdue = {s["id"] for s in slots if s["status"] == "RUNNING" and past_lifetime(s, now)}
-    results = {}
-    for s in slots:
-        if s["status"] == "DONE" or (s["status"] in ("INVALID", "RUNNING") and receipt_has_pins(s["receipt"])):
-            results[s["id"]] = validate_receipt(s, info[s["id"]], root, git)
-    owners = {}
+    # Round 4 MAJOR-H (a): every launch attempt a row carries is read and judged on its own.
+    entries = {s["id"]: [(label, spec, validate_receipt(dict(s, receipt=spec), info[s["id"]], root, git))
+                         for label, spec in slot_attempts(s)]
+               for s in slots if s["status"] in ("RUNNING", "DONE", "INVALID")}
+    by_label = {label: res for items in entries.values() for label, _spec, res in items}
+    owners = {}             # identity -> the attempts claiming it (a label is the slot id, or "<slot>#<n>")
     for s in slots:
         if s["status"] in ("RUNNING", "DONE", "INVALID"):
-            for key in spec_keys(s["receipt"]) | results.get(s["id"], {}).get("keys", set()):
-                owners.setdefault(key, set()).add(s["id"])
+            receipt_label = next((label for label, spec, _res in entries[s["id"]]
+                                  if canonical(spec) == canonical(s["receipt"])), s["id"])
+            for key in spec_keys(s["receipt"]):
+                owners.setdefault(key, set()).add(receipt_label)
+            for label, spec, res in entries[s["id"]]:
+                for key in spec_keys(spec) | res["keys"]:
+                    owners.setdefault(key, set()).add(label)
     shared = {"%s=%s" % key: sorted(ids) for key, ids in sorted(owners.items()) if len(ids) > 1}
-    shared_slots = {sid for ids in shared.values() for sid in ids}
+    shared_labels = {label for ids in shared.values() for label in ids}
     for label, ids in shared.items():
-        for sid in ids:
-            if sid in results:
-                results[sid]["problems"].append("RECEIPT_SHARED:%s:with=%s" % (label, ",".join(i for i in ids if i != sid)))
+        for owner in ids:
+            if owner in by_label:
+                by_label[owner]["problems"].append("RECEIPT_SHARED:%s:with=%s" % (label, ",".join(i for i in ids if i != owner)))
     # Round 2 MINOR-B, round 3 NOTE-F and MAJOR-E (1): the admission must be one `--admit` wrote and a committed version
     # showed RUNNING. Judged for every non-pre-gate slot whose receipt or cleanup is judged (DONE, INVALID, overdue
     # RUNNING). The committed programs are read only when such a slot carries an admission record.
@@ -1019,35 +1401,52 @@ def account(loaded, root, git, history=None, now=None, program_name=None):
     if any(isinstance(s.get("admission"), dict) for s in judged):
         programs = {sha256(raw) for _commit, raw in git.history(program_name or PROGRAM_FILE.name)}
     provenance = {s["id"]: admission_provenance(s, history, programs) for s in judged}
-    for s in judged:       # at DONE a record that fails is a rejection reason (a missing record: NO_ADMISSION_RECORD)
-        if s["status"] == "DONE" and isinstance(s.get("admission"), dict):
-            results[s["id"]]["problems"].extend(provenance[s["id"]])
+    # Round 4 MAJOR-H (b): look for launch attempts a judged row does not list (pre-gate rows by their own criteria).
+    scanner = AttemptScanner(git, root)
+    unlisted = {s["id"]: unlisted_attempts(s, entries[s["id"]], scanner, owners)
+                for s in slots if s["status"] in ("DONE", "INVALID") or s["id"] in overdue}
     rows, spent, rejected, unconfirmed = [], Decimal("0"), [], []
     for slot in slots:
         sid, status, cap = slot["id"], slot["status"], info[slot["id"]]["cap"]
-        res = results.get(sid)
+        items, multi = entries.get(sid, []), slot.get("attempts") is not None
+        problems = [("%s: %s" % (attempt_name(label), p)) if multi else p
+                    for label, _spec, res in items for p in res["problems"]]
+        if status == "DONE" and multi and canonical(slot["receipt"]) != canonical(slot["attempts"][-1]):
+            problems.append("RECEIPT_NOT_THE_LAST_LISTED_ATTEMPT: at DONE the row's receipt is its last launch attempt")
+        if status == "DONE" and isinstance(slot.get("admission"), dict):
+            problems.extend(provenance.get(sid, ()))    # at DONE a record that fails is a rejection reason
         row = {"slot": sid, "what": slot.get("what"), "status": status, "mandatory": slot["mandatory"],
                "cap_usd": str(cap), "basis_worst_case_usd": str(up(info[sid]["worst"])),
                "basis_arithmetic": info[sid]["text"]}
-        if status == "DONE" and not res["problems"]:
-            row.update(receipt="ACCEPTED", counted_usd=str(res["bound"]), counted_basis=res["text"], receipt_pins=res["pins"])
+        if status == "DONE" and not problems:
+            counted, why = summed(cap, items, multi, trusted=True)
+            pins = ({attempt_name(label): res["pins"] for label, _spec, res in items} if multi else items[0][2]["pins"])
+            row.update(receipt="ACCEPTED", counted_usd=str(counted), counted_basis=why, receipt_pins=pins)
         elif status == "DONE":
             rejected.append(sid)
-            counted, why = counted_at_least_cap(cap, res)
-            row.update(receipt="REJECTED", receipt_problems=res["problems"], counted_usd=str(counted),
+            counted, why = summed(cap, items, multi, trusted=False)
+            row.update(receipt="REJECTED", receipt_problems=problems, counted_usd=str(counted),
                        counted_basis="receipt rejected: the larger of the cap and every cost figure it shows: " + why)
         elif status == "INVALID":
-            counted, why = counted_at_least_cap(cap, res)
+            counted, why = summed(cap, items, multi, trusted=False)
             row.update(receipt="INVALID", counted_usd=str(counted),
                        counted_basis="INVALID (%s): the larger of the cap and every cost figure its receipt shows: %s" % (
                            slot["invalid_reason"], why))
-            if res and res["problems"]:
-                row["receipt_problems"] = res["problems"]
+            if problems:
+                row["receipt_problems"] = problems
         elif status == "RUNNING":
-            counted, why = counted_at_least_cap(cap, res)
-            row.update(receipt="NOT_FINAL", counted_usd=str(counted),
-                       counted_basis="RUNNING: full cap" if res is None else "RUNNING: the larger of the full cap and "
-                                                                             "every cost figure its receipt shows: " + why,
+            pinned = receipt_has_pins(slot["receipt"])
+            current = next((res for _label, spec, res in items if pinned and canonical(spec) == canonical(slot["receipt"])),
+                           None)
+            counted, why = counted_at_least_cap(cap, current)
+            earlier = [item for item in items if item[2] is not current]
+            text = "RUNNING: full cap" if current is None else ("RUNNING: the larger of the full cap and every cost "
+                                                               "figure its receipt shows: " + why)
+            if earlier:     # round 4 MAJOR-H: the attempt in progress at its cap, plus every earlier attempt
+                value, earlier_text = summed(cap, earlier, True, trusted=True)
+                counted += value
+                text = "%s (the attempt in progress); earlier attempts: %s; total $%s" % (text, earlier_text, counted)
+            row.update(receipt="NOT_FINAL", counted_usd=str(counted), counted_basis=text,
                        admission=slot.get("admission") or "MISSING: set RUNNING by hand, not by --admit")
             if sid in overdue:
                 row["lifetime"] = ("PAST: admission time + %d s of its basis has passed (or the admission time is "
@@ -1055,12 +1454,26 @@ def account(loaded, root, git, history=None, now=None, program_name=None):
         else:
             row.update(receipt="NOT_APPLICABLE", counted_usd="0.00",
                        counted_basis="PLANNED: nothing spent; cap %s" % ("reserved" if slot["mandatory"] else "not reserved (optional)"))
-        gap = (cleanup_gap(res, sid in shared_slots, provenance.get(sid, ()))
-               if status in ("DONE", "INVALID") or sid in overdue else None)
-        if gap:             # round 2 MAJOR-A, round 3 MAJOR-E: fail closed
+        if multi:
+            row["attempts"] = [dict({"attempt": attempt_name(label), "receipt": attempt_where(spec)},
+                                    **({"problems": res["problems"]} if res["problems"] else {})) for label, spec, res in items]
+        gaps = []
+        if status in ("DONE", "INVALID") or sid in overdue:     # round 2 MAJOR-A, round 3 MAJOR-E: fail closed
+            if not items:
+                gaps.append("no readable receipt")
+            for label, spec, res in items:      # round 4 MAJOR-H (a): every attempt on its own
+                gap = cleanup_gap(res, label in shared_labels or sid in shared_labels, provenance.get(sid, ()))
+                if gap:
+                    gaps.append("%s (%s): %s" % (attempt_name(label), attempt_where(spec), gap) if multi else gap)
+            if status == "RUNNING" and items and not receipt_has_pins(slot["receipt"]):
+                gaps.append("the attempt in progress names no receipt")
+            if unlisted.get(sid):               # round 4 MAJOR-H (b)
+                gaps.append("the search for launch attempts not listed in its row (every attempt belongs in "
+                            "`attempts`) found: " + "; ".join(unlisted[sid]))
+        if gaps:
             unconfirmed.append(sid)
             row["cleanup"] = ("UNCONFIRMED (%s): a machine or disk of this slot may still exist; stop and report to the "
-                              "owner" % gap)
+                              "owner" % "; ".join(gaps))
         for key in ("scope", "runtime_bound", "cleanup_bound", "timing_feasibility", "training"):
             if key in slot:
                 row[key] = slot[key]
@@ -1083,7 +1496,7 @@ def preconditions(slot):
     return listed if listed else "NOT ASSESSED: no precondition list for this slot; do not read ADMIT as ready"
 
 
-def admit(slot_id, loaded, acct, source=None, bundle=None, preview=False, uncommitted=()):
+def admit(slot_id, loaded, acct, source=None, bundle=None, preview=False, uncommitted=(), remote=None):
     slots, info = {s["id"]: s for s in loaded["slots"]}, loaded["info"]
     if slot_id not in slots:
         raise InputError("no slot named %r" % slot_id)
@@ -1109,6 +1522,8 @@ def admit(slot_id, loaded, acct, source=None, bundle=None, preview=False, uncomm
     if uncommitted:
         reasons.append("UNCOMMITTED_CHANGES:%s: commit them first, so every DONE receipt is in git history before the "
                        "next machine starts" % ",".join(uncommitted))
+    if remote is not None and not remote[0]:        # round 4 N8
+        reasons.append("NOT_AT_THE_FETCHED_REMOTE_TIP:%s: git pull --ff-only (and push), then run --admit again" % remote[1])
     if not preview and kind == "training_pointer" and obj(slot.get("training")).get("arm"):
         arm = slot["training"]["arm"]
         for other in loaded["slots"]:
@@ -1165,7 +1580,8 @@ def state_document(loaded, acct):
     spent, doc = acct["spent"], loaded["doc"]
     plan_total = spent + acct["reserve"]
     fallback = sum((loaded["info"][s["id"]]["cap"] for s in acct["optional"]), Decimal("0"))
-    sensitivity = {r["slot"]: str(plan_total - Decimal(r["counted_usd"]) + max(Decimal(r["cap_usd"]), Decimal(r["counted_usd"])))
+    sensitivity = {r["slot"]: str(plan_total - Decimal(r["counted_usd"]) + max(
+        Decimal(r["cap_usd"]) * len(r.get("attempts") or [None]), Decimal(r["counted_usd"])))     # a full cap per attempt
                    for r in acct["rows"] if r["status"] == "DONE"}
     previews = {s["id"]: admit(s["id"], loaded, acct, preview=True) for s in loaded["slots"] if s["status"] == "PLANNED"}
     return {"schema": "claude.helm-repair-controlled-1.study-spend/0.3", "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
@@ -1217,9 +1633,10 @@ def main(argv=None, git=None, root=ROOT, slots_file=SLOTS_FILE, state_file=STATE
                        program_name=pathlib.Path(program_file).name)
         if args.admit:
             names = [pathlib.Path(slots_file).name, pathlib.Path(program_file).name]
+            remote = git.at_remote_tip()        # round 4 N8: fetch first; HEAD must be the remote tip
             decision = admit(args.admit, loaded, acct, source=args.source, bundle=args.bundle,
-                             uncommitted=git.uncommitted(names))
-            decision.update(spent_upper_bound_usd=str(acct["spent"]), slots_file_sha256=loaded["sha256"],
+                             uncommitted=git.uncommitted(names), remote=remote)
+            decision.update(remote_tip=remote[1], spent_upper_bound_usd=str(acct["spent"]), slots_file_sha256=loaded["sha256"],
                             definitions_sha256=loaded["digest"],
                             receipts={r["slot"]: r.get("receipt_pins") or r.get("receipt_problems")
                                       for r in acct["rows"] if r["status"] == "DONE"},

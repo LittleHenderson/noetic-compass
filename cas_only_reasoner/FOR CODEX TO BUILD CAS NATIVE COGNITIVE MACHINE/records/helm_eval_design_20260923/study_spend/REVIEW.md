@@ -1035,3 +1035,235 @@ read or printed. Wrote: this section only. The probe script, the regenerated sta
 verifier's scratch folder. The untracked `aws_probe_job/dry_run_machine_script.sh` is not the verifier's and was left
 alone. No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3,
 no meta1 ledger, no transcript.
+
+## Round 4
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Builder: Claude (temporary builder). This answers the verification of `d2098474`
+above (verifier commit `3c51785f`). It is the builder's own record. It is **not** an independent acceptance: these
+fixes still need a fresh verifier and Codex's review.
+
+| Name | Finding (short) | Disposition |
+|---|---|---|
+| MAJOR-H (a) | A row names one receipt, but one admission can cover several launch attempts | **FIXED**: a row lists every attempt; each is counted and checked |
+| MAJOR-H (b) | The gate never looks for attempts the row does not name | **FIXED**: unlisted attempts fail closed (limits below) |
+| MINOR N8 (the verification's I) | History read with git's default simplification; `--admit` can run on a stale checkout | **FIXED** |
+| NOTE J (probe N7) | A careful hand-written admission record still passes | **UNCHANGED**, as ordered; the limit stays stated |
+| NOTE K (probe R3) | Watched slots bind by launch time only | **OPEN**, now written into question 8 |
+| Questions 6, 7, 8 | As before | **OPEN**; new question 9 |
+
+### MAJOR-H (a): the row lists every launch attempt (`study_spend.py`)
+
+**The problem, in plain words.** One admission opens a time window. More than one launch can happen inside it: AWS
+refuses a machine, and the runner launches again (S1 then S2 did exactly this). The row named one receipt. The gate
+read only that one. So the first attempt's cost was dropped, and the first attempt's machine was never checked.
+
+**Done.**
+- A row may carry `attempts`: every launch attempt under its admission, in launch order. Each entry is a receipt spec
+  of the same form as `receipt`. It is a mutable field (`MUTABLE` now has `attempts`), so it is **not** in the frozen
+  definitions digest. The digest is unchanged: `82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764`.
+- Without `attempts`, a row has one attempt, its `receipt`. S1, S2 and P1a are frozen whole and keep this form. Their
+  output is unchanged byte for byte.
+- **Each attempt is judged on its own**, by the same code as a single receipt: pins, identity, its own admission
+  binding (launched inside the window; a training attempt's own seed and source), and its cleanup (confirmed, or a
+  proven capacity refusal). One attempt that fails makes the slot `UNCONFIRMED`, which refuses every admission.
+- **The count is the sum over attempts.** `DONE` accepted: the sum of the bounds (a proven refusal at its bound, like
+  S1). `DONE` rejected or `INVALID`: for each attempt, the larger of the cap and every cost figure it shows, summed.
+  `RUNNING`: the full cap for the attempt in progress, plus every earlier listed attempt.
+- **One receipt, one attempt.** An identity claimed by two listed attempts, of one slot or of two, is shared: both are
+  rejected and every admission is refused.
+- **At `DONE`, `receipt` must be the last listed attempt** (`RECEIPT_NOT_THE_LAST_LISTED_ATTEMPT` otherwise).
+- **History.** A committed `attempts` list only grows at its end. No listed attempt may be removed, changed or
+  reordered. An `INVALID` row's list never changes. A `PLANNED` row may not carry one; a malformed list is exit 2.
+
+**The positive test the coordinator asked for.**
+`test_round4_two_attempts_refusal_then_clean_run_are_both_counted_and_admitted`: M1 admitted 09:00; attempt 1 at 09:05
+is an AWS capacity refusal; attempt 2 at 09:15 finishes clean; both listed. M1 is ACCEPTED at **$10.54** ($1.60 +
+$8.94). Spent $15.98. No cleanup flag. M1 counts as a started training job. `--admit M2` **exit 0 ADMIT**, total
+**$55.96** ($15.98 + $11.66 + $28.32 other mandatory caps).
+
+### MAJOR-H (b): look for attempts the row does not list, and fail closed (`study_spend.py`)
+
+**Done.** For every `DONE`, `INVALID` or overdue `RUNNING` slot, the program searches for launch attempts its row
+does not list. A finding, or a search that cannot run (`SCAN_FAILED`), makes the slot's cleanup `UNCONFIRMED`. The
+folders searched, stated plainly:
+
+- **Training slots.** Files named `result.json`, `*_result.json` or `provider_NNNN.json`, at any depth, under
+  `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/` (the constant
+  `TRAINING_RECEIPT_HOME`, the training launcher's receipt home) **and** under the folder that holds each listed
+  attempt's receipt folder. They are read at HEAD, at every commit a listed attempt is pinned to, and in the working
+  tree (files git reports untracked or modified). Only the job id is taken from each file (`job`, `authority.job`,
+  `request.job`). An unlisted attempt: a job id that carries this slot's seed and the admitted source's first
+  8 characters, prepared inside the admission window, that no listed attempt of this slot and no other slot claims.
+- **Watched slots.** Files whose names end in `launch_record.json` or `watch_record.json`, anywhere under the design
+  folder `helm_eval_design_20260923/`, on disk and at HEAD. Only the instance id and `launched_utc` are taken. An
+  unlisted attempt: a record that no listed attempt and no other slot claims (by path or instance id), launched inside
+  the window, or with no readable launch time and inside the slot's own job folder.
+  - This is **wider** than "the slot's job folder" in the order, on purpose. `launch.py` refuses while a
+    `launch_record.json` exists, and NOTE-G sends the next launch to a new folder. So a retry often lands in a
+    different folder. The mutation check below shows the narrower search misses it (probe N6c, second folder).
+  - A record another slot claims is that slot's. This matters in normal use: P2 may be admitted inside P1b's 130-min
+    window, so P2's launch lies in P1b's window (test `test_round4_a_launch_another_slot_claims_is_not_this_slots`).
+
+**S1, S2 and P1a: which it is.** They are **not** exempt. They have no admission window, so the program checks them
+without one, on every run: S1 and S2 against every job id with their own seed and their own source prefix, at any
+time; P1a against every watched record under `larger_question_t4_job/`. On the real data this search finds nothing
+unlisted. **S1, S2 and P1a are the complete set of attempts of their jobs.** The evidence:
+
+- The program's search (real, this round, read-only): in `typed_pointer_001/` at HEAD and at `1ddf6a1e` it saw
+  19 job ids and no scan failure. The only seed-20260917 typed-pointer jobs prepared on 2026-09-24 are S1's
+  `cas-meta2-tpntr-20260924021244-70490111-m-20260917` and S2's `cas-meta2-tpntr-20260924033550-3df31d96-m-20260917`.
+  Each matches only its own slot's criteria. `larger_question_t4_job/` holds only P1a's `launch_record.json` and
+  `watch_record.json` (`i-09e14d4afd0e0ebfa`, launched 2026-09-24T05:53:38Z), on disk and at HEAD.
+- Git history over **all** refs (file names only): the only `result.json` files ever added under `typed_pointer_001/`
+  for this smoke are attempt 1 (added in `5715fda0`, renamed with unchanged bytes to `..._attempt1/` in `3df31d96`)
+  and attempt 2 (added in `1ddf6a1e`). The T4 folder's launch and watch records were each added once (`fae817fe`,
+  `b0fd06ff`) and never replaced. The nearest other watched launch in the design folder is `analogy_repair_t4_job`
+  at 2026-09-24T00:22:13Z, 5 h 31 min before P1a, in another folder.
+
+**The probes, after the fix** (each is now a test on the builder's synthetic `World`; admission 09:00, committed
+`RUNNING`):
+
+| Probe | Before (the verification) | After |
+|---|---|---|
+| N6a: M1 attempt 1 (09:05) a capacity refusal, moved to `r/m1_attempt1/`; attempt 2 (09:15) clean and named alone | ACCEPTED $8.94; spent $14.38; `--admit M2` **exit 0 ADMIT**, $54.36 | still ACCEPTED at $8.94, but **UNCONFIRMED** (`UNLISTED_TRAINING_ATTEMPT:cas-meta2-tpntr-20260924090500-44444444-m-20260917`); `--admit M2` **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` |
+| N6b: attempt 1 ran 600 s, cleanup and identity unconfirmed; attempt 2 clean, named alone | ACCEPTED $8.94; **exit 0**, $54.36 | **UNCONFIRMED** (unlisted attempt 1); **exit 1**. Listed honestly: REJECTED (`attempt 1: CLEANUP_INCOMPLETE_OR_IDENTITY_UNCERTAIN`) and UNCONFIRMED by attempt 1's own cleanup; exit 1 |
+| N6c: P1b attempt 1 (09:05) still running per its watcher; records moved aside; attempt 2 (09:45) clean, named | ACCEPTED $0.55; `--admit P2` **exit 0**, $55.63 | **UNCONFIRMED** (`UNLISTED_WATCHED_LAUNCH`); **exit 1**. The same when attempt 1 sits in `p1b/attempt1/`, in a new folder `p1b_try1/`, or only at HEAD (deleted from disk). Listed honestly: REJECTED and UNCONFIRMED by attempt 1's own record |
+| N6d: the row names attempt 1, a proven refusal (09:05); attempt 2 (09:15) ran 20,000 s, identity lost, unnamed | ACCEPTED $1.60; spent $7.04; **exit 0**, $47.02 | still ACCEPTED at $1.60, but **UNCONFIRMED** (unlisted attempt 2); **exit 1** |
+
+**Other new tests** (`test_study_spend.py`):
+- `test_round4_attempt_rules`: receipt not the last attempt: REJECTED. Another job's older receipt listed as
+  attempt 1: REJECTED `attempt 1: LAUNCH_NOT_AFTER_ADMISSION`, and UNCONFIRMED. One attempt listed twice:
+  `RECEIPT_SHARED` by `M1#1,M1#2`, exit 1. `INVALID` with a refusal and a clean run: $23.32. `RUNNING` with a listed
+  refusal: $13.26 ($11.66 + $1.60). Attempts on a `PLANNED` row, an empty list, a wrong kind: exit 2.
+- `test_round4_committed_attempts_only_grow`: append: allowed. Remove, reorder, change: exit 2 `HISTORY_VIOLATION`.
+- `test_round4_the_scan_reads_head_the_pins_and_the_working_tree`: an attempt only in the working tree; one only at
+  HEAD under the receipt home: both found. Control: M1's seed and source, prepared a week earlier: not a finding. A
+  search that fails: UNCONFIRMED, exit 1.
+- `test_round4_a_launch_another_slot_claims_is_not_this_slots`: P2 launched inside P1b's window, and two test slots
+  with one seed and one source: no finding; `--admit M1` exit 0.
+- `test_round4_pre_gate_rows_are_checked_for_other_attempts`: a third smoke job with S2's seed and source: S2
+  UNCONFIRMED. Another seed: no finding. A foreign launch record in P1a's job folder: P1a UNCONFIRMED. P1a's own copy,
+  and a record in another folder: no finding.
+
+**Test world change.** S1's and S2's job ids in the synthetic world now use the launcher's format
+(`cas-meta2-tpntr-<time>-<source prefix>-m-<seed>`), because the pre-gate search reads seed and source from them. The
+world also pins every listed attempt, whatever the row's status. No assertion about money changed.
+
+### MINOR N8: full history, and `--admit` only at the fetched remote tip (`study_spend.py`)
+
+**Done.**
+- `GitReader.history` now runs `git log --full-history`. The verifier's probe, rebuilt as a test on a tiny real git
+  repository (`test_round4_n8_full_history_sees_a_merged_side_branch`): main has M1 `PLANNED`; branch `side` commits
+  M1 `RUNNING`, then `DONE`; `git merge -s ours side`. Plain `git log`: 1 version. The gate's history includes the
+  `RUNNING` and `DONE` versions, and `check_history` raises `HISTORY_VIOLATION: M1 was ...`.
+- `--admit` now runs `git fetch <remote> <branch>` for the current branch's upstream. It refuses unless HEAD equals
+  the fetched tip (`NOT_AT_THE_FETCHED_REMOTE_TIP`, exit 1). No upstream, a detached HEAD, or a fetch that fails (or
+  takes over 120 s) refuses too. The decision prints the result as `remote_tip`. Report mode never fetches.
+  Test `test_round4_n8_admit_only_at_the_fetched_remote_tip` (a local bare "remote", no network): at the tip: yes. A
+  local commit not pushed: refused. Another clone pushes: refused until `git pull --ff-only`. The remote gone:
+  `FETCH_FAILED`. Detached: refused. Through the gate: exit 1, and the slot stays `PLANNED`.
+- Docs (`PREREQUISITE_SLOTS.md`): `git pull --ff-only` before `--admit`; launch only after the `RUNNING` row's push
+  succeeds.
+
+### NOTES J and K: not changed
+
+- **J (N7).** A careful hand-written admission record, committed as `RUNNING`, still passes. The round-3 limit stays
+  stated as it was.
+- **K (R3).** Watched slots still bind a receipt to the admission by launch time only. It is now written into open
+  question 8, to be decided with it.
+
+### Mutation check (scratch script, not committed)
+
+Each fix was switched off, one at a time, in a temporary copy of `study_spend.py`. The whole test file ran each time.
+
+| Switched off | Tests that fail (of 69) |
+|---|---|
+| nothing (the program as written) | none |
+| (a) the `attempts` list ignored | 4: `attempt_rules`, `n6b`, `n6c`, `two_attempts_...` |
+| (a) the "receipt is the last attempt" rule | `attempt_rules` |
+| (a) `RUNNING` without its earlier attempts | `attempt_rules` |
+| (a) committed attempts may shrink or change | `committed_attempts_only_grow` |
+| (b) the whole search | 6: `n6a`, `n6b`, `n6c`, `n6d`, `pre_gate_rows_...`, `the_scan_reads_...` |
+| (b) the pre-gate rows not searched | `pre_gate_rows_...` |
+| (b) the training window not applied | `the_scan_reads_...` |
+| (b) other slots' claims not excluded | `a_launch_another_slot_claims_...` (this test was added in this round, after the first mutation pass showed that no test caught this switch) |
+| (b) watched: only the slot's job folder | `n6c` |
+| (b) the working tree not searched | `the_scan_reads_...` |
+| (b) HEAD not searched (training) | `the_scan_reads_...` |
+| (b) a failed search passes | `the_scan_reads_...` |
+| N8: no `--full-history` | `n8_full_history_...` |
+| N8: the remote tip ignored | `n8_admit_only_at_...` |
+| BEFORE: the committed `3c51785f` program | 11 (every round-4 test except the claims control) |
+
+### Checks run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `3c51785f` |
+| `python -B test_study_spend.py` | **69 passed, 0 failed** (57 before + 12 new) |
+| `python -B test_read_results.py` | **31 passed, 0 failed** (unchanged) |
+| Mutation check | the table above |
+| Real report (`main([])`, state written to a scratch file) | **exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92**; remaining mandatory caps $51.64; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed; no training job started. 1.2 s, including the new search |
+| Real state regenerated | **byte-identical** to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| Real reader on `i-09e14d4afd0e0ebfa` (in memory, no write) | **exit 0; ROUTE_ACCEPTED**; script and job verdict INTEGRATION_CHECKS_PASS |
+| Real reading regenerated in memory | **byte-identical** to the committed `RESULTS_READING.json` |
+| Real search for S1, S2, P1a (read-only) | the job ids and records listed above; no scan failure |
+| Real `--admit` | **not run** (it writes the slot `RUNNING`, and now also fetches) |
+
+### Limits, stated honestly
+
+1. **The search sees git and the working tree only.** A receipt that exists only on another branch, at a commit no
+   listed attempt pins, is not seen; nor is a deleted one. The docs now require: commit every attempt's receipt;
+   never delete one or move it out of the searched folders; list every attempt. A later attempt's pinned commit
+   normally contains the earlier attempts' receipts, when they are committed in order on one branch.
+2. **Only the launcher's job-id format is matched** (`...-<14-digit time>-<8 hex>-m-<seed>`). A training job
+   prepared before its admission is outside the window, so it is not a finding (if listed, it fails the binding, as
+   in round 3).
+3. **A watched record with no readable launch time** is a finding only inside the slot's own job folder.
+4. **Fail closed can stop the study on a job that is not the slot's.** A watched job outside the study (open
+   question 1) launched anywhere in the design folder inside a slot's window makes that slot `UNCONFIRMED`. That is a
+   stop and report, not a wrongful admit.
+5. **`INVALID` counts every listed attempt at the larger of the cap and its figures**, a proven refusal too. This is
+   the existing `INVALID` rule applied per attempt. It is pessimistic (a refusal plus a clean run, `INVALID`: $23.32).
+6. **Every report now reads the receipt folders.** On the real data: `typed_pointer_001/` at HEAD and at `1ddf6a1e`
+   (at `1ddf6a1e`: 551 matching files, 19,600,495 bytes), plus the design folder's 12 watched records on disk and at
+   HEAD. The receipts are parsed as JSON; only the job id is used. Their embedded `ledger_before` / `ledger_after`
+   fields are never used or printed.
+7. **`--admit` now needs the network**, to fetch the upstream. Offline, it refuses. It checks the current branch's
+   configured upstream, so the runner must run it on the study's branch.
+8. **The saved state's `rules.admission` text** does not name the new remote-tip condition. It was left as it was, so
+   the committed `STUDY_SPEND_STATE.json` stays byte-identical. The `--admit` decision prints the condition.
+
+### Claim states
+
+- **Real (measured here):** both test runs; the mutation check; the real report and its byte-identical state; the
+  real reading and its byte-identical regeneration; the real search for S1, S2, P1a; the git history listings.
+- **Open:** a fresh verifier and Codex's review of round 4; open questions 1-5 in `STUDY_SLOTS.json`; questions 6-9
+  (FLAG_FOR_HUMAN_REVIEW).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, until round 4 is verified.
+
+### Open questions (not decided by the builder)
+
+6. (NOTE-D) Does a training job that launched and then failed count as "started" for the $30.00 stop?
+7. Should a slot that was never admitted and never launched have a way to be cancelled?
+8. Should a wrong source commit on a training receipt stop the study, or stay a rejection reason only? To decide with
+   it: should watched slots bind the admitted bundle and source, not only the launch time (NOTE K, probe R3)?
+9. Where does a retry go after its admission window has closed? No retry slot exists, and the definitions are frozen.
+
+### Exposure
+
+Read: this file; `study_spend.py`; `test_study_spend.py`; `PREREQUISITE_SLOTS.md`; `STUDY_SLOTS.json` (slot ids,
+statuses, receipt specs, row keys); `read_results.py` lines 280-300; git name and size listings of
+`typed_pointer_001/` at HEAD, `1ddf6a1e` and `origin/claude/helm-on-launch-20260924` (fetched, read-only); git history
+of file names over all refs for `typed_pointer_001/` and `larger_question_t4_job/`. A scratch script printed, for each
+`result.json` in `typed_pointer_001/` at `1ddf6a1e`, **only** its job id, the first 8 characters of its source, its
+model seed and its status. The design folder's launch records: only instance id and `launched_utc` were printed. The
+real reader ran in memory; only its top-level key names, `route_acceptance` and the two verdicts were printed. The
+receipts were parsed by programs (the scratch script and the gate); their `ledger_before` / `ledger_after` fields were
+not printed or inspected. Wrote: `study_spend.py`, `test_study_spend.py`, `PREREQUISITE_SLOTS.md`, this section.
+Scratch only (the session scratch folder): the job-id script, the mutation script and its temporary copies, a
+regenerated state, and a small git repository used to check upstream and fetch behaviour. Not written:
+`STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json`, `RESULTS_READING.json`, any job code, `CHANGELOG.md` (the coordinator
+batches it). The untracked `aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS
+call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1
+ledger, no transcript.

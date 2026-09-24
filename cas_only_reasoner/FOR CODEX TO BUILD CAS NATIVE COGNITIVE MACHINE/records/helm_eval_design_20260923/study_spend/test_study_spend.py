@@ -1,9 +1,12 @@
 """Small pure-Python tests for study_spend.py. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
 Covers Codex review codex-0007 (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4), the round-2
-verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6) and the round-3 verification of 269d13c8 (MAJOR-E
-probes N1a, N1b, N2a, N2b, N3; NOTE-F probe N4): every wrongful ADMIT a reviewer found has a negative test here. Synthetic receipts only; a fake git reader; temporary folders. No AWS, no torch; the real slots
-file and receipts are never read or changed.
+verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6), the round-3 verification of 269d13c8 (MAJOR-E
+probes N1a, N1b, N2a, N2b, N3; NOTE-F probe N4) and the round-4 verification of d2098474 (MAJOR-H probes N6a-N6d;
+MINOR probe N8): every wrongful ADMIT a reviewer found has a negative test here. Synthetic receipts only; a fake git
+reader; temporary folders. The two N8 tests build tiny real git repositories (and a local bare "remote") in a
+temporary folder; nothing touches the network. No AWS, no torch; the real slots file and receipts are never read or
+changed.
 Run: python -B test_study_spend.py   (also collectable by pytest)
 """
 import atexit
@@ -13,6 +16,7 @@ import io
 import json
 import pathlib
 import shutil
+import subprocess
 import sys
 import tempfile
 from contextlib import redirect_stdout
@@ -25,6 +29,9 @@ C1 = "a" * 40
 SRC_UNCHANGED, SRC_REPAIRED, SRC_WATCHED = "4" * 40, "3" * 40, "e" * 40
 ADMITTED, NOW = "2026-09-24T09:00:00Z", "2026-09-24T12:00:00Z"
 S1_PATH, S2_PATH, LAST = "r/s1/result.json", "r/s2/result.json", "r/s1/provider_0025.json"
+# The pre-gate smoke's two attempts, in the launcher's job id format (round 4: S1 and S2 are scanned by seed + source)
+S1_JOB = "cas-meta2-tpntr-20260924021244-11111111-m-20260917"
+S2_JOB = "cas-meta2-tpntr-20260924033550-22222222-m-20260917"
 BASIS_T = {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
            "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48"}
 BASIS_W = {"kind": "watched_machine", "machines": {"g4dn.2xlarge": "0.752", "g4dn.xlarge": "0.526"},
@@ -47,6 +54,10 @@ class FakeGit:
     def __init__(self):
         self.blobs, self.trees, self.versions, self.dirty = {}, {}, [], []
         self.program_versions = []                  # committed study_spend.py versions (round 3 NOTE-F)
+        self.worktree = {}                          # repository path -> bytes: untracked or modified files (round 4)
+        self.remote = (True, "test: HEAD is the fetched remote tip")     # round 4 N8
+        self.design = "design"                      # the design folder's repository-relative path (round 4)
+        self.fail_trees = set()                     # commits whose tree listing fails (round 4 scan failure)
 
     def read(self, commit, path):
         if (commit, path) not in self.blobs:
@@ -64,6 +75,30 @@ class FakeGit:
 
     def uncommitted(self, names):
         return [n for n in names if n in self.dirty]
+
+    def tree_files(self, commit, folder):           # round 4 MAJOR-H (b)
+        if commit in self.fail_trees:
+            raise OSError("test: git ls-tree %s failed" % commit)
+        if commit not in ("HEAD",) and not any(c == commit for c, _p in self.blobs):
+            raise FileNotFoundError(commit)
+        start = folder.rstrip("/") + "/" if folder.strip("/") else ""
+        return sorted((p, "%s:%s" % (c, p)) for c, p in self.blobs if c == commit and p.startswith(start))
+
+    def blob_items(self, oids):
+        for oid in oids:
+            commit, path = oid.split(":", 1)
+            yield oid, self.blobs[(commit, path)]
+
+    def worktree_changes(self, folder, name_ok):
+        start = folder.rstrip("/") + "/"
+        return [(p, raw) for p, raw in sorted(self.worktree.items())
+                if p.startswith(start) and name_ok(p.rsplit("/", 1)[-1])]
+
+    def prefix(self, path):
+        return self.design
+
+    def at_remote_tip(self):
+        return self.remote
 
 
 def pointer(job, source, iid, elapsed=2431.2951856, seed=20260917):
@@ -132,8 +167,8 @@ class World:
 
     def __init__(self, tmp):
         self.tmp, self.git = pathlib.Path(tmp), FakeGit()
-        self.receipts = {S1_PATH: refusal("job-s1", "1" * 40), S2_PATH: pointer("job-s2", "2" * 40, "i-s2")}
-        self.providers = {LAST: provider("job-s1")}
+        self.receipts = {S1_PATH: refusal(S1_JOB, "1" * 40), S2_PATH: pointer(S2_JOB, "2" * 40, "i-s2")}
+        self.providers = {LAST: provider(S1_JOB)}
         self.trees = {"r/s1": ["provider_0024.json", "provider_0025.json", "result.json"]}
         self.files = {"job/launch_record.json": copy.deepcopy(LAUNCH), "job/watch_record.json": copy.deepcopy(WATCH)}
         self.launch, self.watch = self.files["job/launch_record.json"], self.files["job/watch_record.json"]
@@ -143,9 +178,9 @@ class World:
         self.slots = [
             slot("S1", "DONE", "11.66", BASIS_T, {"kind": "pointer_capacity_refusal", "git_commit": C1, "path": S1_PATH,
                                                   "sha256": None, "last_provider_record": {"path": LAST, "sha256": None},
-                                                  "expected": {"job": "job-s1", "source_sha": "1" * 40,
+                                                  "expected": {"job": S1_JOB, "source_sha": "1" * 40,
                                                                "instance_type": "g7.2xlarge"}}),
-            slot("S2", "DONE", "11.66", BASIS_T, self.pointer_spec(S2_PATH, "job-s2", "2" * 40, "i-s2")),
+            slot("S2", "DONE", "11.66", BASIS_T, self.pointer_spec(S2_PATH, S2_JOB, "2" * 40, "i-s2")),
             slot("P1a", "DONE", "3.00", p1a, self.watched_spec("job", "i-p1a", "2026-09-24T05:53:38Z", "b" * 64)),
             slot("P1b", "PLANNED", "2.00", BASIS_W, planned_watched()),
             slot("P2", "PLANNED", "1.00", p2, planned_watched()),
@@ -243,18 +278,17 @@ class World:
         for path, doc in self.files.items():
             (self.tmp / path).parent.mkdir(parents=True, exist_ok=True)
             (self.tmp / path).write_bytes(enc(doc))
-        for s in self.slots:
-            r = s["receipt"]
-            if s["status"] not in ("DONE", "INVALID"):
-                continue
-            if r["kind"] in ("pointer_finished", "pointer_capacity_refusal") and r.get("path") and r.get("sha256") is None:
-                r["sha256"] = sha(self.git.blobs[(C1, r["path"])])
-            if r["kind"] == "pointer_capacity_refusal" and r["last_provider_record"]["sha256"] is None:
-                r["last_provider_record"]["sha256"] = sha(self.git.blobs[(C1, r["last_provider_record"]["path"])])
-            if r["kind"] == "watched_machine":
-                for key in ("launch_record", "watch_record"):
-                    if r[key] and r[key]["sha256"] is None:
-                        r[key]["sha256"] = sha((self.tmp / r[key]["path"]).read_bytes())
+        for s in self.slots:        # pin a DONE / INVALID receipt and every listed launch attempt (round 4)
+            specs = list(s.get("attempts") or []) + ([s["receipt"]] if s["status"] in ("DONE", "INVALID") else [])
+            for r in specs:
+                if r["kind"] in ("pointer_finished", "pointer_capacity_refusal") and r.get("path") and r.get("sha256") is None:
+                    r["sha256"] = sha(self.git.blobs[(C1, r["path"])])
+                if r["kind"] == "pointer_capacity_refusal" and r["last_provider_record"]["sha256"] is None:
+                    r["last_provider_record"]["sha256"] = sha(self.git.blobs[(C1, r["last_provider_record"]["path"])])
+                if r["kind"] == "watched_machine":
+                    for key in ("launch_record", "watch_record"):
+                        if r[key] and r[key]["sha256"] is None:
+                            r[key]["sha256"] = sha((self.tmp / r[key]["path"]).read_bytes())
         if after_pin:
             after_pin(self)
         program = self.program.read_bytes()                     # the program under test is a committed version
@@ -266,7 +300,7 @@ class World:
                     and s["id"] not in ss.PRE_GATE_DONE and s["id"] not in self.uncommitted_running):
                 planned = copy.deepcopy(s)
                 planned.update(status="PLANNED", receipt=planned_pointer() if "training" in s else planned_watched())
-                for key in ("admission", "invalid_reason"):
+                for key in ("admission", "invalid_reason", "attempts"):
                     planned.pop(key, None)
                 before = enc({"schema": ss.SCHEMA, "note": "committed before %s was admitted" % s["id"], "slots": [planned]})
                 if s["id"] not in self.bare_admission:          # the fields `--admit` writes (round 3 NOTE-F)
@@ -387,11 +421,11 @@ def test_pointer_cleanup_not_confirmed_rejected():
 
 def test_pointer_stale_or_missing_receipt_rejected():
     def stale(w):   # the file at the pinned place changed after its hash was frozen
-        w.git.blobs[(C1, S2_PATH)] = enc(pointer("job-s2", "2" * 40, "i-s2", elapsed=10.0))
+        w.git.blobs[(C1, S2_PATH)] = enc(pointer(S2_JOB, "2" * 40, "i-s2", elapsed=10.0))
     rejected(world(after_pin=stale), "S2", "RECEIPT_HASH_MISMATCH")
 
     def unrelated(w):   # a real receipt of ANOTHER job, pinned by hash: identity still refuses it
-        w.receipts[S2_PATH] = pointer("job-s1", "1" * 40, "i-s2")
+        w.receipts[S2_PATH] = pointer(S1_JOB, "1" * 40, "i-s2")
     rejected(world(unrelated), "S2", "JOB_MISMATCH")
 
     def missing(w):
@@ -418,7 +452,7 @@ def test_refusal_rule_rejects_anything_but_an_aws_capacity_refusal():
         w.receipts[S1_PATH]["cleanup"]["failures"].append("ROLE_DELETE_FAILED")
 
     def wrong_last(w):
-        w.providers[LAST] = dict(provider("job-s1"), operation="describe_instances")
+        w.providers[LAST] = dict(provider(S1_JOB), operation="describe_instances")
     rejected(world(network), "S1", "NOT_AN_AWS_CAPACITY_REFUSAL")
     rejected(world(launched), "S1", "LAUNCH_RECORD_PRESENT")
     rejected(world(later_call), "S1", "A_PROVIDER_CALL_FOLLOWS")
@@ -427,7 +461,7 @@ def test_refusal_rule_rejects_anything_but_an_aws_capacity_refusal():
     assert world(network).account()[1]["unconfirmed"] == ["S1"]      # the override failed: a machine may exist
 
     def stale_last(w):
-        w.git.blobs[(C1, LAST)] = enc(dict(provider("job-s1"), note="edited"))
+        w.git.blobs[(C1, LAST)] = enc(dict(provider(S1_JOB), note="edited"))
     rejected(world(after_pin=stale_last), "S1", "LAST_PROVIDER_HASH_MISMATCH")
 
 
@@ -659,7 +693,7 @@ def test_a_copied_training_receipt_is_refused_for_both_slots():
     rejected(w, "M1", "RECEIPT_SHARED:")
     rejected(w, "S2", "RECEIPT_SHARED:")
     loaded, acct = w.account()
-    assert "M1" not in acct["training_started"] and "job=job-s2" in acct["shared"], acct["shared"]
+    assert "M1" not in acct["training_started"] and "job=" + S2_JOB in acct["shared"], acct["shared"]
     code, out = w.run(*admit_args("M2"))
     assert code == 1 and any(r.startswith("RECEIPT_SHARED") for r in out["reasons"]), out
 
@@ -1229,6 +1263,331 @@ def test_round3_admission_record_positive_controls():
     w = world(lambda w: w.done_training("M1", 10500))
     w.git.versions.append(("r" * 40, w.git.versions[-1][1]))
     assert w.row("M1")["receipt"] == "ACCEPTED", w.row("M1")
+
+
+# --------------------------------- round 4 MAJOR-H: one admission, several launch attempts (verification probes N6a-N6d)
+def training_attempt(w, sid, folder, job_ts, refused=False, elapsed=10500, uncertain=False):
+    """One launch attempt of a training slot under r/<folder>/, prepared at job_ts (the slot's seed and its arm's
+    source). Returns its receipt spec. uncertain: the machine ran, but its cleanup and identity are unconfirmed."""
+    s, src = w.by_id(sid), w.source_of(sid)
+    seed, job = s["training"]["model_seed"], w.job_id(sid, job_ts=job_ts)
+    if refused:
+        return w.refusal_receipt("r/" + folder, job, src, seed)
+    path, iid = "r/%s/result.json" % folder, "i-%s-%s" % (sid, job_ts)
+    w.receipts[path] = pointer(job, src, iid, elapsed, seed=seed)
+    if uncertain:
+        r = w.receipts[path]
+        r["launch"]["instance_id"] = "UNKNOWN"
+        r["stages"]["compute_cleanup"] = "INCOMPLETE"
+        r["cleanup"].update(complete=False, compute_identity_uncertain=True, instance_ids=[], instances={},
+                            failures=["INSTANCE_IDENTITY_UNKNOWN_AFTER_LAUNCH_ATTEMPT"])
+    return w.pointer_spec(path, job, src, iid)
+
+
+def set_row(w, sid, named, listed=None, status="DONE"):
+    """The row names `named`; `listed` (if given) is its attempts list; admitted 09:00 and committed RUNNING."""
+    s = w.by_id(sid)
+    s["status"], s["receipt"] = status, named
+    if listed is not None:
+        s["attempts"] = listed
+    w.admission(sid, SRC_WATCHED if "training" not in s else w.source_of(sid), bundle="c" * 64)
+
+
+def watched_attempt(w, sid, folder, launched, ended, running=False):
+    """One launch attempt of a watched slot: launch and watch records in <folder>/; returns its receipt spec."""
+    iid = "i-%s-%s" % (sid.lower(), launched[11:16].replace(":", ""))
+    launch, watch = copy.deepcopy(LAUNCH), copy.deepcopy(WATCH)
+    launch.update(instance_id=iid, launched_utc=launched, bundle={"sha256": "c" * 64},
+                  approved={"machine": "g4dn.2xlarge", "price_per_hour_usd": 0.752,
+                            "dollar_ceiling": float(w.by_id(sid)["cap_usd"])})
+    watch.update(instance_id=iid, launched_utc=launched, watch_ended_utc=ended, minutes_from_launch_to_watch_end=35.0)
+    if running:
+        watch.update(terminated_confirmed=False, final_state="running")
+    w.files[folder + "/launch_record.json"], w.files[folder + "/watch_record.json"] = launch, watch
+    return w.watched_spec(folder, iid, launched, "c" * 64)
+
+
+def unlisted(w, sid, needle):
+    row = w.row(sid)
+    assert sid in w.account()[1]["unconfirmed"], row
+    assert "not listed in its row" in row["cleanup"] and needle in row["cleanup"], row["cleanup"]
+
+
+def test_round4_n6a_an_unlisted_capacity_refusal_is_found():
+    def fn(w):          # attempt 1 (09:05) refused by AWS, moved aside; attempt 2 (09:15) finished; the row names only 2
+        training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+    w = world(fn)
+    assert w.row("M1")["receipt"] == "ACCEPTED" and w.row("M1")["counted_usd"] == "8.94", w.row("M1")
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090500"))
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, total $54.36
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_round4_two_attempts_refusal_then_clean_run_are_both_counted_and_admitted():
+    def fn(w):          # the same two attempts, both listed: attempt 1 counted at its bound, like S1
+        first = training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)
+        second = training_attempt(w, "M1", "m1", "20260924091500")
+        set_row(w, "M1", second, listed=[first, second])
+    w = world(fn)
+    row = w.row("M1")
+    assert row["receipt"] == "ACCEPTED" and row["counted_usd"] == "10.54", row          # $1.60 + $8.94
+    assert "sum over 2 launch attempt(s)" in row["counted_basis"] and "cleanup" not in row, row
+    assert set(row["receipt_pins"]) == {"attempt 1", "attempt 2"}, row["receipt_pins"]
+    loaded, acct = w.account()
+    assert acct["spent"] == Decimal("15.98") and acct["unconfirmed"] == [] and acct["training_started"] == ["M1"], acct
+    code, out = w.run(*admit_args("M2"))
+    assert code == 0 and out["decision"] == "ADMIT" and out["total_usd"] == "55.96", out   # 15.98 + 11.66 + 28.32
+
+
+def test_round4_n6b_an_unlisted_machine_that_ran_is_found():
+    def attempt1(w):    # attempt 1 launched a machine; it ran 600 s; its cleanup and identity are unconfirmed
+        return training_attempt(w, "M1", "m1_attempt1", "20260924090500", elapsed=600, uncertain=True)
+
+    def named_alone(w):
+        attempt1(w)
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+    w = world(named_alone)
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090500"))
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, $54.36
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+    def both_listed(w):  # listed honestly: attempt 1 is judged on its own and blocks
+        first, second = attempt1(w), training_attempt(w, "M1", "m1", "20260924091500")
+        set_row(w, "M1", second, listed=[first, second])
+    w = world(both_listed)
+    rejected(w, "M1", "attempt 1: CLEANUP_INCOMPLETE_OR_IDENTITY_UNCERTAIN")
+    assert "attempt 1 (r/m1_attempt1/result.json)" in w.row("M1")["cleanup"], w.row("M1")
+    assert "not listed" not in w.row("M1")["cleanup"], w.row("M1")
+    assert w.run(*admit_args("M2"))[0] == 1
+
+
+def test_round4_n6c_an_unlisted_watched_launch_is_found():
+    def fn(folder):
+        def inner(w):   # attempt 1 (09:05): the watcher saw it still running; its records moved aside
+            watched_attempt(w, "P1b", folder, "2026-09-24T09:05:00Z", "2026-09-24T09:40:00Z", running=True)
+            set_row(w, "P1b", watched_attempt(w, "P1b", "p1b", "2026-09-24T09:45:00Z", "2026-09-24T10:20:00Z"))
+        return inner
+    for folder in ("p1b/attempt1", "p1b_try1"):     # in the job folder, and in a new folder elsewhere
+        w = world(fn(folder))
+        assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")
+        unlisted(w, "P1b", "UNLISTED_WATCHED_LAUNCH:%s/launch_record.json instance i-p1b-0905" % folder)
+        code, out = w.run(*admit_args("P2"))                                 # was exit 0 ADMIT, $55.63
+        assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], (folder, out)
+
+    def at_head_only(w):    # attempt 1's records were committed, then deleted from the disk
+        for path in ("p1b_gone/launch_record.json", "p1b_gone/watch_record.json"):
+            w.git.blobs[("HEAD", "design/" + path)] = enc(w.files.pop(path))
+    w = world(lambda w: (fn("p1b_gone")(w), at_head_only(w)))
+    unlisted(w, "P1b", "p1b_gone/launch_record.json instance i-p1b-0905 launched 2026-09-24T09:05:00Z (HEAD)")
+
+    def listed(w):          # both listed: attempt 1's own record shows the machine still running, so it blocks
+        first = watched_attempt(w, "P1b", "p1b/attempt1", "2026-09-24T09:05:00Z", "2026-09-24T09:40:00Z", running=True)
+        second = watched_attempt(w, "P1b", "p1b", "2026-09-24T09:45:00Z", "2026-09-24T10:20:00Z")
+        set_row(w, "P1b", second, listed=[first, second])
+    w = world(listed)
+    rejected(w, "P1b", "attempt 1: NOT_CONFIRMED_TERMINATED")
+    assert "attempt 1 (p1b/attempt1/launch_record.json)" in w.row("P1b")["cleanup"], w.row("P1b")
+
+
+def test_round4_n6d_an_unlisted_later_attempt_is_found():
+    def fn(w):          # the row names attempt 1, a proven refusal (09:05); attempt 2 (09:15) ran 20,000 s, identity lost
+        training_attempt(w, "M1", "m1_attempt2", "20260924091500", elapsed=20000, uncertain=True)
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090500", refused=True))
+    w = world(fn)
+    assert w.row("M1")["receipt"] == "ACCEPTED" and w.row("M1")["counted_usd"] == "1.60", w.row("M1")
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924091500"))
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, $47.02
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_round4_attempt_rules():
+    clean = lambda w: training_attempt(w, "M1", "m1", "20260924091500")                           # noqa: E731
+    refused = lambda w: training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)  # noqa: E731
+    # At DONE the row's receipt must be its last listed attempt.
+    w = world(lambda w: (lambda a, b: set_row(w, "M1", a, listed=[a, b]))(clean(w), refused(w)))
+    rejected(w, "M1", "RECEIPT_NOT_THE_LAST_LISTED_ATTEMPT")
+    # Every attempt is bound to this admission: another job's older receipt listed as attempt 1 does not confirm.
+    w = world(lambda w: (lambda a, b: set_row(w, "M1", b, listed=[a, b]))(
+        training_attempt(w, "M1", "old", "20260917120000"), clean(w)))
+    rejected(w, "M1", "attempt 1: LAUNCH_NOT_AFTER_ADMISSION")
+    assert "attempt 1 (r/old/result.json)" in w.row("M1")["cleanup"] and "LAUNCHED_BEFORE_ADMISSION" in w.row("M1")["cleanup"]
+    # One receipt, one attempt: the same attempt listed twice is a shared identity.
+    w = world(lambda w: (lambda a, b: set_row(w, "M1", b, listed=[a, copy.deepcopy(a), b]))(refused(w), clean(w)))
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and any(r.startswith("RECEIPT_SHARED") and "M1#1,M1#2" in r for r in out["reasons"]), out
+    # INVALID: every listed attempt counts the larger of the cap and its figures (the refusal too).
+    w = world(lambda w: ((lambda a, b: set_row(w, "M1", b, listed=[a, b]))(refused(w), clean(w)), w.invalid("M1")))
+    assert w.row("M1")["counted_usd"] == "23.32" and w.account()[1]["unconfirmed"] == [], w.row("M1")
+    # RUNNING: the attempt in progress at its full cap, plus every earlier attempt (the proven refusal at its bound).
+    w = world(lambda w: (lambda a: set_row(w, "M1", planned_pointer(), listed=[a], status="RUNNING"))(refused(w)))
+    assert w.row("M1")["counted_usd"] == "13.26", w.row("M1")                # $11.66 + $1.60
+    # Shape: attempts on a PLANNED slot, an empty list or a kind the basis does not allow: exit 2.
+    for bad in ([planned_pointer()], [], [planned_watched()]):
+        w = world(lambda w: w.by_id("M2").update(attempts=bad) if bad and bad[0]["kind"] == "pointer_finished"
+                  else (w.by_id("M1").update(status="RUNNING", attempts=bad), w.admission("M1", SRC_UNCHANGED)))
+        code, out = w.run(*admit_args("P1b"))
+        assert code == 2 and "attempt" in out["error"], (bad, out)
+
+
+def test_round4_committed_attempts_only_grow():
+    def running(w):
+        set_row(w, "M1", planned_pointer(), listed=[training_attempt(w, "M1", "m1_attempt1", "20260924090500",
+                                                                     refused=True)], status="RUNNING")
+    w = world(running)
+    w.commit_snapshot()
+    first = copy.deepcopy(w.by_id("M1")["attempts"][0])
+    second = training_attempt(w, "M1", "m1", "20260924091500")
+    for edit, ok in ((lambda d: d["slots"][5].update(attempts=[first, second]), True),     # appended: allowed
+                     (lambda d: d["slots"][5].pop("attempts"), False),                     # removed
+                     (lambda d: d["slots"][5].update(attempts=[second, first]), False),    # reordered
+                     (lambda d: d["slots"][5]["attempts"][0].update(sha256="0" * 64), False)):   # changed
+        w.edit_slots(lambda d: d["slots"][5].update(attempts=[first]))
+        w.edit_slots(edit)
+        code, out = w.run(*admit_args("P1b"))
+        assert (code != 2) if ok else (code == 2 and "HISTORY_VIOLATION: M1 was RUNNING" in out["error"]), out
+
+
+def test_round4_the_scan_reads_head_the_pins_and_the_working_tree():
+    job = None
+
+    def base(w):
+        nonlocal job
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+        job = w.job_id("M1", "20260924090500")
+    # Working tree only (a refusal receipt written but never committed): found.
+    w = world(base)
+    w.git.worktree["r/m1_attempt1/result.json"] = enc(refusal(job, SRC_UNCHANGED, seed=20260917))
+    unlisted(w, "M1", "working tree:r/m1_attempt1/result.json")
+    # At HEAD only, under the launcher's receipt home (the row's own receipts live elsewhere): found.
+    w = world(base)
+    w.git.blobs[("HEAD", ss.TRAINING_RECEIPT_HOME + "/receipt_x/provider_0001.json")] = enc(provider(job))
+    unlisted(w, "M1", "HEAD:" + ss.TRAINING_RECEIPT_HOME + "/receipt_x/provider_0001.json")
+    # Control: M1's seed and source, but prepared a week before this admission (outside the window): not a finding.
+    # (A job another slot claims is not a finding either: test_capacity_refusals_never_count_as_started has R1 and M2
+    # with one seed and one source inside one window.)
+    w = world(lambda w: (base(w), training_attempt(w, "M1", "old", "20260917120000")))
+    assert w.account()[1]["unconfirmed"] == [] and w.run(*admit_args("M2"))[0] == 0, w.row("M1")
+    # A scan that cannot run fails closed.
+    w = world(base)
+    w.git.fail_trees.add("HEAD")
+    unlisted(w, "M1", "SCAN_FAILED:HEAD")
+    assert w.run(*admit_args("M2"))[0] == 1
+
+
+def test_round4_a_launch_another_slot_claims_is_not_this_slots():
+    def watched(w):     # P1b admitted 09:00 (window to 11:10), DONE; then P2 admitted 10:00 and launched 10:05
+        w.done_watched("P1b", "p1b", launched="2026-09-24T09:10:00Z", ended="2026-09-24T09:45:00Z")
+        w.done_watched("P2", "p2", machine="c7i.2xlarge", price=0.357, launched="2026-09-24T10:05:00Z",
+                       ended="2026-09-24T10:40:00Z", cost=0.22)
+        w.by_id("P2")["admission"]["admitted_utc"] = "2026-09-24T10:00:00Z"
+    w = world(watched)
+    assert [w.row(s)["receipt"] for s in ("P1b", "P2")] == ["ACCEPTED", "ACCEPTED"], (w.row("P1b"), w.row("P2"))
+    assert w.account()[1]["unconfirmed"] == [], w.row("P1b")         # P2's launch lies in P1b's window: P2 claims it
+    assert w.run(*admit_args("M1"))[0] == 0
+
+    def training(w):    # two slots with one seed and one source (test-only R1 twins M2), windows overlapping
+        w.slots.append(training_slot("R1", mandatory=False))
+        w.done_training("M2", 10500)
+        w.done_training("R1", 10500)
+    w = world(training)
+    assert w.account()[1]["unconfirmed"] == [], (w.row("M2"), w.row("R1"))
+
+
+def test_round4_pre_gate_rows_are_checked_for_other_attempts():
+    # S1 and S2: every job with their seed and their own source prefix, at any time, must be theirs.
+    w = world(lambda w: w.receipts.update({"r/s2_retry/result.json": pointer(
+        "cas-meta2-tpntr-20260924040000-22222222-m-20260917", "2" * 40, "i-s2b")}))
+    unlisted(w, "S2", "UNLISTED_TRAINING_ATTEMPT:cas-meta2-tpntr-20260924040000-22222222-m-20260917")
+    assert w.run(*admit_args("P1b"))[0] == 1
+    w = world(lambda w: w.receipts.update({"r/s2_other_seed/result.json": pointer(       # control: another seed
+        "cas-meta2-tpntr-20260924040000-22222222-m-20260918", "2" * 40, "i-s2c", seed=20260918)}))
+    assert w.account()[1]["unconfirmed"] == [], w.account()[1]["unconfirmed"]
+    # P1a: every watched record under its job folder must be P1a's own (by path or instance id).
+    w = world(lambda w: w.files.update({"job/attempt0/launch_record.json": dict(
+        LAUNCH, instance_id="i-p1a-0", launched_utc="2026-09-24T05:00:00Z")}))
+    unlisted(w, "P1a", "UNLISTED_WATCHED_LAUNCH:job/attempt0/launch_record.json instance i-p1a-0")
+    w = world(lambda w: w.files.update({"job/copy/launch_record.json": copy.deepcopy(LAUNCH),        # controls: P1a's
+                                        "elsewhere/launch_record.json": dict(LAUNCH, instance_id="i-x")}))  # own copy;
+    assert w.account()[1]["unconfirmed"] == [], w.account()[1]["unconfirmed"]         # outside its job folder
+
+
+# ---------------------------------------------- round 4 MINOR N8: full history; --admit only at the fetched remote tip
+def git_cmd(cwd, *args):
+    done = subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false",
+                           "-c", "init.defaultBranch=main", "-C", str(cwd)] + list(args), capture_output=True)
+    assert done.returncode == 0, (args, done.stderr)
+    return done.stdout.decode("utf-8").strip()
+
+
+def test_round4_n8_full_history_sees_a_merged_side_branch():
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="ss_git_"))
+    atexit.register(shutil.rmtree, str(tmp), True)
+    repo = tmp / "repo"
+    repo.mkdir()
+    git_cmd(repo, "init", "-q")
+
+    def commit(status, message):
+        (repo / "slots.json").write_text(json.dumps({"slots": [{"id": "M1", "status": status}]}), encoding="utf-8")
+        git_cmd(repo, "add", "slots.json")
+        git_cmd(repo, "commit", "-q", "-m", message)
+    commit("PLANNED", "planned")
+    git_cmd(repo, "checkout", "-q", "-b", "side")
+    commit("RUNNING", "admitted")
+    commit("DONE", "done")
+    git_cmd(repo, "checkout", "-q", "main")
+    git_cmd(repo, "merge", "-q", "-s", "ours", "--no-edit", "side")     # keeps main's file: M1 PLANNED again
+    plain = git_cmd(repo, "log", "--format=%H", "--", "slots.json").split()
+    assert len(plain) == 1, plain                                       # the verifier's probe: the side commits vanish
+    history = ss.GitReader(repo).history("slots.json")
+    statuses = {json.loads(raw)["slots"][0]["status"] for _c, raw in history}
+    assert {"RUNNING", "DONE"} <= statuses, statuses
+    try:
+        ss.check_history({"slots": [{"id": "M1", "status": "PLANNED"}]}, history)
+        raise AssertionError("a merged-away DONE row was not caught")
+    except ss.InputError as error:
+        assert "HISTORY_VIOLATION: M1 was" in str(error), error
+
+
+def test_round4_n8_admit_only_at_the_fetched_remote_tip():
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="ss_git_"))
+    atexit.register(shutil.rmtree, str(tmp), True)
+    remote, a, b = tmp / "remote.git", tmp / "a", tmp / "b"
+    git_cmd(tmp, "init", "-q", "--bare", str(remote))
+    a.mkdir()
+    git_cmd(a, "init", "-q")
+    (a / "f.txt").write_text("1", encoding="utf-8")
+    git_cmd(a, "add", "f.txt")
+    git_cmd(a, "commit", "-q", "-m", "one")
+    git_cmd(a, "remote", "add", "origin", remote.as_posix())
+    git_cmd(a, "push", "-q", "-u", "origin", "main")
+    reader = ss.GitReader(a)
+    ok, why = reader.at_remote_tip()
+    assert ok, why
+    (a / "f.txt").write_text("2", encoding="utf-8")                     # a local commit not pushed yet
+    git_cmd(a, "commit", "-q", "-am", "two")
+    ok, why = reader.at_remote_tip()
+    assert not ok and why.startswith("HEAD_IS_NOT_THE_REMOTE_TIP"), why
+    git_cmd(a, "push", "-q")
+    assert reader.at_remote_tip()[0]
+    git_cmd(tmp, "clone", "-q", remote.as_posix(), str(b))               # a second runner pushes a RUNNING row
+    (b / "f.txt").write_text("3", encoding="utf-8")
+    git_cmd(b, "commit", "-q", "-am", "three")
+    git_cmd(b, "push", "-q")
+    ok, why = reader.at_remote_tip()
+    assert not ok and why.startswith("HEAD_IS_NOT_THE_REMOTE_TIP"), why
+    git_cmd(a, "pull", "-q", "--ff-only")
+    assert reader.at_remote_tip()[0]
+    git_cmd(a, "remote", "set-url", "origin", (tmp / "gone.git").as_posix())   # the fetch fails: refuse
+    ok, why = reader.at_remote_tip()
+    assert not ok and why.startswith("FETCH_FAILED"), why
+    git_cmd(a, "checkout", "-q", "--detach")
+    assert reader.at_remote_tip()[1].startswith("DETACHED_HEAD")
+    w = world()                                                          # the gate turns it into a refusal
+    w.git.remote = (False, "HEAD_IS_NOT_THE_REMOTE_TIP: test")
+    code, out = w.run(*admit_args("P1b"))
+    assert code == 1 and any(r.startswith("NOT_AT_THE_FETCHED_REMOTE_TIP") for r in out["reasons"]), out
+    assert json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))["slots"][3]["status"] == "PLANNED"
 
 
 def run_all():
