@@ -20,9 +20,21 @@ EVERY PIN BELOW WAS READ FROM GIT on 2026-09-23 by the builder, with `git rev-pa
     `claude/helm-builder-continuation-20260923` (cc68d8b3) and `research/helm-integration-20260923` (197caa32);
   * the plan: commit 197caa32, `_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md`.
 
+REVISION 1 (after review, see REVIEW.md). Two gates now stop the writer and the reader before anything else:
+  * THE PLAN MUST STILL BE CURRENT AND APPROVED (`check_plan_is_current`). The plan branch is fetched with an explicit
+    refspec; the plan blob at its tip (and at the local branch, if there is one) must equal PLAN_BLOB, and the status
+    line must read APPROVED_FOR_LAUNCH. On 2026-09-24 commit 7b6e25f8 put the plan on hold
+    (LAUNCH_HELD_PENDING_AMENDMENTS, blob 3172a221), so today this gate stops with PLAN_MOVED_OR_HELD. That is
+    intended. After Codex's amendments are approved, a builder re-pins PLAN_COMMIT, PLAN_BLOB and PLAN_SHA256.
+  * THE REPRODUCTION POLICY MUST BE FIXED BY THAT AMENDED PLAN (`check_policy_fixed`). The owner-shared review
+    (item 2) says: tell checkpoint-file identity, learned-state identity and output reproduction apart, and fix the
+    policy before running. Until REPRODUCTION_POLICY names the amended plan blob AND the rule the reader implements,
+    both tools stop with REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN.
+
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED (temporary Claude builder while Codex is away, 2026-09-23). It transcribes the
 owner's words; it is not an owner signature.
 """
+from decimal import Decimal, InvalidOperation
 from hashlib import sha1, sha256
 import json
 import os
@@ -83,16 +95,58 @@ REFERENCE_BLOBS = {'collected/results/artifacts/manifest.json': 'd98b25aa6b8022d
                    'collected_inventory.json': '25a2277b00c84613b33414de1c70c4cb96ee1ba7',
                    'collected/results/artifacts/final_checkpoint.json': '123f14c8ce64b99268702a64f3d9ef20235fa196',
                    'collected/input/source.zip': PACKAGE_BLOBS['source.zip']}
-FINAL_PT_WEIGHTS = 'collected/results/artifacts/final.pt'   # read ONLY when no record states a sha256
+# The weights file: a CROSS-CHECK only (when the receipt commit carries it), never the only source of the hash.
+FINAL_PT_WEIGHTS = 'collected/results/artifacts/final.pt'
+# How the job's own collected inventory names the two worker records (it states their sha256 and bytes), so each
+# committed record can be tied to the inventory, and the inventory is tied to the job by its `job` field.
+INVENTORY_RECORD = 'collected_inventory.json'
+MANIFEST_RECORD = 'collected/results/artifacts/manifest.json'
+CHECKPOINT_RECORD = 'collected/results/artifacts/final_checkpoint.json'
+INVENTORY_PATHS = {MANIFEST_RECORD: 'results/artifacts/manifest.json',
+                   CHECKPOINT_RECORD: 'results/artifacts/final_checkpoint.json',
+                   FINAL_PT_WEIGHTS: 'results/artifacts/final.pt'}
 
-# ---- the owner-approved plan.
+# ---- the owner-approved plan (pinned at the approval commit; see the currency gate below).
 PLAN_COMMIT = '197caa322d20ae6830928b20c5b16933e93cd00d'
 PLAN_REL = '_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md'
 PLAN_BLOB = '67163714b6f86f5d0e9dd6925a0a7a276c26ff01'
 PLAN_SHA256 = '916cd9e4a8252cdfa44e79596f40d681335331528667ff15e9db3bd4e1046ada'
-PLAN_FETCH = ('git fetch origin research/helm-integration-20260923:'
-              'refs/remotes/origin/research/helm-integration-20260923')
+PLAN_BRANCH = 'research/helm-integration-20260923'
+PLAN_TRACKING_REF = 'refs/remotes/origin/' + PLAN_BRANCH
+PLAN_LOCAL_REF = 'refs/heads/' + PLAN_BRANCH
+PLAN_FETCH_ARGS = ('fetch', 'origin', PLAN_BRANCH + ':' + PLAN_TRACKING_REF)     # an explicit refspec, never a pull
+PLAN_FETCH = 'git ' + ' '.join(PLAN_FETCH_ARGS)
+PLAN_STATUS_APPROVED = 'APPROVED_FOR_LAUNCH'
+# Any backticked status word on the plan's status line that contains one of these is a refusal, even beside
+# APPROVED_FOR_LAUNCH (for example LAUNCH_HELD_PENDING_AMENDMENTS, the status at 7b6e25f8).
+PLAN_STATUS_REFUSING_PARTS = ('HELD', 'HOLD', 'PENDING', 'WITHDRAWN', 'REVOKED', 'SUSPENDED', 'SUPERSEDED')
 OWNER_ANSWERED_DATE = '2026-09-24'     # the plan's own date for both answers (sections 0 and 4a)
+
+# ---- the reproduction policy. NOT FIXED. Review item 2 of the owner-shared review (recorded at 7b6e25f8 in
+# `_handoffs/HELM_NEXT_PHASE_20260923/OWNER_HEADSUP_PLAN_REVIEW_20260924.md`) requires the policy to be fixed before
+# running. Codex works it. A builder who conforms the reader to the amended plan sets `status` to POLICY_FIXED,
+# names the amended plan's commit and blob (equal to the re-pinned PLAN_COMMIT / PLAN_BLOB), and sets `rule` to the
+# rule `read_reproduction.READER_RULE` then implements. Nothing else may flip this gate.
+POLICY_FIXED = 'FIXED_BY_AMENDED_PLAN'
+REPRODUCTION_POLICY = {
+    'status': 'NOT_FIXED_PENDING_CODEX_AMENDMENT_ITEM_2',
+    'fixed_in_plan_commit': None,
+    'fixed_in_plan_blob': None,
+    'rule': None,
+    'rule_as_written_at_197caa32': ('CHECKPOINT_FILE_IDENTITY: REPRODUCES iff the new final.pt sha256 equals the Helm '
+                                    '2.0 receipt final.pt sha256 (plan section 4a)'),
+    'known_consequence_of_the_rule_as_written': (
+        'final.pt embeds the job name (metadata.run_identity.context.run_id) and elapsed_seconds, so a genuine re-run '
+        'cannot give the same file sha256; the reader stops on an equal hash under a new run id (a contradiction), '
+        'so REPRODUCES cannot be read under this rule'),
+    'why_not_fixed': ('owner-shared review item 2: "distinguish checkpoint-file identity, learned-state identity, and '
+                      'output reproduction. Fix the policy before running; do not loosen it after a mismatch." '
+                      'Codex works the amendment; the builder does not choose the policy'),
+}
+
+# ---- the spend gate for --check (plan section 0): measured spend so far + the per-job bound <= the ceiling.
+CEILING_USD = '60.00'
+PER_JOB_USD = '15.00'
 
 # The owner's own words, verbatim (inside the plan's quotation marks), each pinned by sha256.
 OWNER_WORDS = {
@@ -153,7 +207,18 @@ PLAN_WORDS = {
         "**Access commands.** Not run by Claude: changing folder permissions is a security setting, which Claude's "
         "rules forbid even at the owner's request. The owner has the exact commands.",
         '1192676dd3618602ef25e719f0e71c30dea9151afba79571547da46ec434861a'),
+    # Revision 1 (review NOTE): section 4's cost basis reads the $60 differently from section 0. Both are carried,
+    # so the owner record does not hide the disagreement. The amended plan is to reconcile them.
+    'plan_cost_basis_bookings': (
+        "- The smoke adds one more $15 booking per attempt; attempt 1's booking already stands. The current $60 "
+        "approval covers the smoke plus 3 jobs. Options C and B need more.",
+        '0f97696f2bec0214542029283dae253a81b1a084c42a8840176fb9c689ba9270'),
 }
+SIXTY_DOLLAR_READINGS = (
+    'The pinned plan reads the $60 two ways. Section 0 (plan_ceiling, plan_before_each_job): $60.00 of ACTUAL spend, '
+    'with option C and the fallback to B approved inside it. Section 4 (plan_cost_basis_bookings): the $60 approval '
+    'covers the smoke plus 3 jobs, and options C and B need more. Not reconciled by this builder; the amended plan is '
+    'to reconcile them in one sentence before the launch request goes to the owner.')
 
 # ---- outputs. The writer writes ONE folder (`frozen/`, via `frozen.partial/`); the reader may write ONE file.
 OUTPUT = HERE / 'frozen'
@@ -264,6 +329,103 @@ def quotes_record():
 
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Gate 1: the plan must still be current and approved (review BLOCKER 1).
+# ---------------------------------------------------------------------------------------------------------------------
+def plan_status_tokens(raw):
+    """The backticked words on the plan's first `**Status.**` line, or None when there is no such line."""
+    for line in raw.decode('utf-8').splitlines():
+        if line.startswith('**Status.**'):
+            return re.findall(r'`([A-Z][A-Z0-9_]*)`', line)
+    return None
+
+
+def plan_status_approved(tokens):
+    """True only when APPROVED_FOR_LAUNCH is on the status line and no word there holds, withdraws or supersedes it."""
+    return (tokens is not None and PLAN_STATUS_APPROVED in tokens
+            and not any(part in token for token in tokens for part in PLAN_STATUS_REFUSING_PARTS))
+
+
+def plan_tip(ref, commit):
+    """One branch tip, as the gate sees it: the plan blob and bytes there (None when the file is absent)."""
+    present = has_object(commit, PLAN_REL)
+    return {'ref': ref, 'commit': commit, 'blob': blob_id(commit, PLAN_REL) if present else None,
+            'raw': show(commit, PLAN_REL) if present else None,
+            'pinned_commit_is_ancestor': git_ok('merge-base', '--is-ancestor', PLAN_COMMIT, commit)}
+
+
+def plan_tip_violations(tips):
+    """Every reason the tips do not show the pinned, approved plan. Pure: `tips` come from `plan_tip`."""
+    violations = []
+    if not any(tip['ref'] == PLAN_TRACKING_REF for tip in tips):
+        violations.append('PLAN_TRACKING_REF_MISSING:' + PLAN_TRACKING_REF)
+    for tip in tips:
+        where = tip['ref'] + '@' + str(tip['commit'])[:12]
+        if tip['blob'] != PLAN_BLOB:
+            violations.append('BLOB:' + where + ':' + str(tip['blob']))
+        tokens = plan_status_tokens(tip['raw']) if tip['raw'] is not None else None
+        if not plan_status_approved(tokens):
+            violations.append('STATUS:' + where + ':' + ','.join(tokens if tokens else ['ABSENT']))
+        if tip['pinned_commit_is_ancestor'] is not True:
+            violations.append('PINNED_COMMIT_NOT_IN_THIS_BRANCH:' + where)
+    return violations
+
+
+def read_plan_tips(stop, *, fetch):
+    """Fetch the plan branch (explicit refspec), then read its tip and, if it exists, the local branch's tip."""
+    if fetch:
+        try:
+            git(*PLAN_FETCH_ARGS)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+            stop(False, 'PLAN_MOVED_OR_HELD:PLAN_TIP_NOT_FETCHED:run `' + PLAN_FETCH + '` by hand; if it fails, stop')
+    tips = []
+    for ref in (PLAN_TRACKING_REF, PLAN_LOCAL_REF):
+        if git_ok('rev-parse', '--verify', '--quiet', ref + '^{commit}'):
+            tips.append(plan_tip(ref, git('rev-parse', ref + '^{commit}').decode('ascii').strip()))
+    return tips
+
+
+def check_plan_is_current(stop, *, fetch=True):
+    """STOP `PLAN_MOVED_OR_HELD` unless every plan tip still carries PLAN_BLOB with an approved status line."""
+    tips = read_plan_tips(stop, fetch=fetch)
+    violations = plan_tip_violations(tips)
+    stop(not violations, 'PLAN_MOVED_OR_HELD:' + '|'.join(violations)[:1500]
+         + ':do not launch; after the amended plan is approved, re-pin PLAN_COMMIT, PLAN_BLOB and PLAN_SHA256')
+    return [{'ref': tip['ref'], 'commit': tip['commit'], 'blob': tip['blob'],
+             'status': plan_status_tokens(tip['raw'])} for tip in tips]
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Gate 2: the reproduction policy must be fixed by the amended plan, and be the rule the reader implements (BLOCKER 2).
+# ---------------------------------------------------------------------------------------------------------------------
+def check_policy_fixed(stop, reader_rule, policy=None):
+    policy = REPRODUCTION_POLICY if policy is None else policy
+    stop(policy.get('status') == POLICY_FIXED and policy.get('fixed_in_plan_commit') == PLAN_COMMIT
+         and policy.get('fixed_in_plan_blob') == PLAN_BLOB,
+         'REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN:status=' + str(policy.get('status')))
+    stop(policy.get('rule') == reader_rule,
+         'REPRODUCTION_POLICY_IS_NOT_THE_RULE_THE_READER_IMPLEMENTS:' + str(policy.get('rule')) + '!=' + reader_rule)
+    return True
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# The spend gate for --check (review MINOR 1, partly): measured spend so far + $15.00 <= $60.00.
+# ---------------------------------------------------------------------------------------------------------------------
+def spend_gate(text, stop):
+    """The figure is STATED by the operator (dollars, at most two decimals); the arithmetic is enforced here."""
+    form = type(text) is str and re.fullmatch(r'\d{1,4}(\.\d{1,2})?', text) is not None
+    stop(form, 'SPEND_FIGURE_FORM:' + str(text))
+    try:
+        spent = Decimal(text)
+    except InvalidOperation:
+        spent = None
+    stop(spent is not None, 'SPEND_FIGURE_FORM:' + str(text))
+    after = spent + Decimal(PER_JOB_USD)
+    stop(after <= Decimal(CEILING_USD), 'SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:' + str(after) + '>' + CEILING_USD)
+    return {'spend_so_far_usd': str(spent), 'per_job_bound_usd': PER_JOB_USD, 'after_this_job_at_most_usd': str(after),
+            'ceiling_usd': CEILING_USD}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
 # The tree rule and the untracked rule (pure functions over git's -z output, so they can be tested without git).
 # ---------------------------------------------------------------------------------------------------------------------
 def parse_name_status_z(raw):
@@ -325,6 +487,12 @@ def job_name(stamp):
     return 'cas-meta2-tpntr-' + stamp + '-' + SOURCE_SHA[:8] + '-m-' + str(MODEL_SEED)
 
 
+def stamp_of(job):
+    """The 14-digit stamp of a job name of this admission's form, or None."""
+    match = re.fullmatch(r'cas-meta2-tpntr-(\d{14})-' + SOURCE_SHA[:8] + '-m-' + str(MODEL_SEED), str(job))
+    return match.group(1) if match else None
+
+
 def check_stamp(stamp, stop):
     stop(type(stamp) is str and re.fullmatch(r'\d{14}', stamp) is not None, 'STAMP_FORM')
     stop(stamp != HELM2_STAMP and job_name(stamp) != HELM2_JOB, 'STAMP_IS_HELM2_S_OWN_STAMP_A_NEW_JOB_IS_REQUIRED')
@@ -344,9 +512,13 @@ def owner_record(*, schema, candidate, job, condition, bounds, plan):
             'job': job, 'job_kind': JOB_KIND, 'condition': condition, 'model_seed': MODEL_SEED,
             'source_sha': SOURCE_SHA, 'reproduces_job': HELM2_JOB,
             'comparison_target': reference_pointer(),
+            'reproduction_policy': dict(REPRODUCTION_POLICY),
+            'sixty_dollar_readings': SIXTY_DOLLAR_READINGS,
             'scope': ('ONE job: seed 20260917 of source 20208c92, the full registered 10-pass schedule, the committed '
                       'package_20208c92, one machine, no automatic retry. Launched only after the three repaired '
-                      'seeds, after this writer is reviewed, and only if measured spend so far + $15.00 <= $60.00.'),
+                      'seeds, after this writer is reviewed, only while the pinned plan is still the current approved '
+                      'plan, only under a reproduction policy fixed by that plan, and only if measured spend so far '
+                      '+ $15.00 <= $60.00 (checked by `prepare_unchanged_repro.py --check` just before launch).'),
             'bounds': bounds}
 
 
@@ -417,7 +589,11 @@ def write_folder_atomically(final, entries, recheck, stop):
     for item, raw in relative:
         stop((partial / item).read_bytes() == raw, 'WRITTEN_BYTES:' + item.as_posix())
     recheck(lambda path: partial / Path(path).relative_to(final))
-    os.rename(partial, final)
+    try:
+        os.rename(partial, final)
+    except OSError as error:        # e.g. a OneDrive sync lock: fail closed, leave `.partial` for a person
+        stop(False, 'RENAME_FAILED_PARTIAL_LEFT_INSPECT_BY_HAND:pause OneDrive sync during --write:'
+             + type(error).__name__ + ':' + str(error)[:300])
     for item, raw in relative:
         stop((final / item).read_bytes() == raw, 'RENAMED_BYTES:' + item.as_posix())
     return [pin(final / item, raw) for item, raw in relative]

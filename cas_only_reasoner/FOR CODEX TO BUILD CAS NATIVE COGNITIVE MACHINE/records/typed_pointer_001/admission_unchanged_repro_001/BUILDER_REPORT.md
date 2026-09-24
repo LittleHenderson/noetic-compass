@@ -1,9 +1,20 @@
 # Unchanged-arm reproduction admission: builder report
 
 **Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. Built by Claude as the temporary builder while Codex is away.
-It is not an owner signature. It is not reviewed yet.
+It is not an owner signature.
 
-**Status:** built and committed. **Not launched.** No AWS call. No money spent.
+**Status:** built, reviewed once, revised. **Not ready to freeze or launch.** **Not launched.** No AWS call. No money
+spent.
+
+> **Revision 1 (2026-09-23, after the review).** A fresh reviewer said NOT READY TO FREEZE OR LAUNCH.
+> The review and my answer to each finding are in `REVIEW.md`. In short:
+> - The plan was put **on hold** at `7b6e25f8` (`LAUNCH_HELD_PENDING_AMENDMENTS`), 4 minutes after this report was
+>   first written. A new **plan gate** now stops the writer until the pinned plan is again the current, approved plan.
+> - The plan's file-hash test **cannot pass** for a real re-run (section 2 below). A new **policy gate** stops the
+>   writer and the reader until the amended plan fixes the reproduction rule. I did not choose the rule.
+> - The reader now ties every record to the new job, needs all three records, and stops on a contradiction.
+> - A new `--check` mode re-checks everything just before launch, including the $60 spend arithmetic.
+> Today both gates stop. That is intended.
 
 ## 1. What this is
 
@@ -16,8 +27,9 @@ This folder holds the tools for that one job:
 |---|---|
 | `prepare_unchanged_repro.py` | Freezes the one job (owner, request and authority records). Launches nothing. |
 | `read_reproduction.py` | After the run, prints `REPRODUCES`, `DOES_NOT_REPRODUCE` or `INCOMPLETE`. |
-| `repro_common.py` | Shared pins and checks. Imports nothing from the launcher. |
-| `test_unchanged_repro.py` | 30 pure-Python tests. |
+| `repro_common.py` | Shared pins, checks and the two gates. Imports nothing from the launcher. |
+| `test_unchanged_repro.py` | 48 pure-Python tests (30 before revision 1). |
+| `REVIEW.md` | The review, and my disposition of each finding. |
 
 The job: seed 20260917, source `20208c923d41c24614504d4ecc2b289ecb66eda8`, the full 10-pass schedule,
 the committed package `package_20208c92`, the same launcher, g7.2xlarge, $15.00 booking, no automatic retry.
@@ -49,6 +61,12 @@ a fixed torch and GPU check), so equal weights are possible. They are not proven
 - change the rule to "the weight fingerprints are equal": this is a change to the signed plan, so it needs
   the owner's written approval before the job runs.
 
+**Revision 1.** The fresh reviewer confirmed this finding independently. The owner's own review (item 2) now asks
+for the same thing: tell file identity, learned-state identity and output reproduction apart, and fix the rule before
+running. Codex is working that amendment. Until it lands, the writer and the reader stop at the policy gate
+(`REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN`). Under the rule as written, the reader now also stops if a new
+run's records show Helm 2.0's file hash under the new job name. That is a contradiction, not a pass.
+
 ## 3. The exact hash it compares against
 
 | Item | Value |
@@ -59,7 +77,8 @@ a fixed torch and GPU check), so equal weights are possible. They are not proven
 | Commit | `c8d5c430eec23a8fadd98bbcd045fecf03d86239` (the commit that added the Helm 2.0 receipts) |
 | Folder | `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_20260917/` |
 
-Three committed records state that hash, and the reader requires all three to agree:
+Three committed records state that hash, and the reader requires all three to agree (on the new side too, since
+revision 1, and each record must belong to the job it reads):
 
 | Record in that folder | Blob |
 |---|---|
@@ -73,6 +92,9 @@ The Helm 2.0 run shipped the same package: its `collected/input/source.zip` is b
 
 ## 4. How to run it
 
+**Today steps 1 to 4 stop at the plan gate (`PLAN_MOVED_OR_HELD`) and the policy gate. That is intended.** They
+work only after the re-pin described in section 5.
+
 Run every command from the **worktree root**. From a deeper folder, Windows refuses to start Python because
 the folder path is longer than 260 characters.
 
@@ -80,23 +102,27 @@ the folder path is longer than 260 characters.
 cd "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm-unchanged-repro-20260924"
 D="cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_unchanged_repro_001"
 
-# 0. the tests (pure Python, about 3 seconds)
+# 0. the tests (pure Python, about 4 seconds)
 python -B "$D/test_unchanged_repro.py" -v
 
-# 1. dry run: builds and checks everything with the launcher's own functions; writes nothing
+# 1. dry run: the two gates, then every check with the launcher's own functions; writes nothing
 python -B "$D/prepare_unchanged_repro.py" --dry-run
 
-# 2. write: the same checks, then writes frozen/ (via frozen.partial/, then a rename)
+# 2. write: the same checks, then writes frozen/ (via frozen.partial/, then a rename). Pause OneDrive sync first.
 python -B "$D/prepare_unchanged_repro.py" --write
 
 # 3. commit the frozen records by explicit path, then push
 git add --sparse -- "$D/frozen"
 git commit -m "Freeze the unchanged-arm reproduction job (seed 20260917 of 20208c92)" -- "$D/frozen"
 git push origin claude/helm-unchanged-repro-20260924
+
+# 4. immediately before launch: re-check everything (launcher-free); prints the exact launch argv
+python -B "$D/prepare_unchanged_repro.py" --check --study-sha256 <study_json_sha256 printed by step 2> \
+    --spend-so-far-usd <measured spend so far, e.g. 23.18> --spend-source "<where that figure was read>"
 ```
 
-**4. Launch** (only after section 5 is all yes). Run the exact argv that `--write` prints and stores in
-`frozen/study.json` under `jobs[0].launch_argv`. Its shape:
+**5. Launch** (only after section 5 is all yes, and only right after step 4 passes). Run the exact argv that
+`--check` prints (the same argv `--write` stored in `frozen/study.json` under `jobs[0].launch_argv`). Its shape:
 
 ```
 python -B <this checkout>/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py --execute
@@ -109,24 +135,43 @@ python -B <this checkout>/research/CAS_META_2_COMPOSITION/aws/typed_pointer_laun
 
 There is no `--reduced-schedule`, so the launcher runs the full registered schedule.
 
-**5. Read.** Commit the receipt folder, then:
+**6. Read.** Commit the receipt folder, then (the reader also stops at the policy gate until the rule is fixed):
 
 ```bash
 python -B "$D/read_reproduction.py" --receipt-commit <40-hex commit that carries the receipt>
 python -B "$D/read_reproduction.py" --receipt-commit <commit> --write   # also writes reproduction_reading.json
 ```
 
-## 5. Before launch (none of these is checked by the writer)
+## 5. Before launch
 
-- The plan says this writer must be **reviewed** first (job order item 3).
-- The plan's order: the switch-ON smoke, then the three repaired seeds, then this job.
-- Measured spend so far + $15.00 must be at most $60.00.
+**Superseded (revision 1).** The first version of this list was committed at 21:00 (2026-09-23, local time, -0700).
+At 21:04 commit `7b6e25f8` put the plan on hold (the plan dates its status 2026-09-24): the owner's launch yes "is held, not used", and the owner's pasted review says
+"This review does not authorize a launch." So the list is now:
+
+Blocked today (checked by a program: the writer and `--check` stop):
+- **The plan is on hold.** Codex finishes the six amendments. The owner approves one complete, amended launch request.
+- **The re-pin.** A builder re-pins `PLAN_COMMIT`, `PLAN_BLOB` and `PLAN_SHA256` in `repro_common.py` to the amended
+  plan and re-checks every quote. Until then: `PLAN_MOVED_OR_HELD`.
+- **The reproduction rule.** The amended plan fixes it (owner review item 2). A builder conforms
+  `read_reproduction.py`, sets `READER_RULE`, and records the amended plan in `REPRODUCTION_POLICY`. Until then:
+  `REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN`.
+- **Measured spend so far + $15.00 must be at most $60.00.** `--check` enforces the arithmetic on the figure the
+  operator states.
+
+Still checked by the operator, not by a program:
+- A fresh review of the re-pinned, conformed writer and reader.
+- The plan's order: the switch-ON smoke, then the three repaired seeds, then this job. (The smoke, attempt 2,
+  PASSED per the coordinator's state note at `6816b52e`.)
 - If spend passed $30 before the third training job, stop and report.
-- The owner has ruled on section 2.
+- If B is chosen or kept as the fallback, its two admissions exist (review finding 6).
 
 ## 6. Checks
 
-**Run, and passed (real):**
+**Revision 1 (real):** 48 of 48 tests pass, none skipped. On the live repository, the plan gate (with a real fetch)
+stopped with `PLAN_MOVED_OR_HELD` and the policy gate stopped with `REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN`.
+Both are the intended results. Details in `REVIEW.md` section 5.
+
+**First version, run and passed (real):**
 - 30 of 30 tests pass (`python -B test_unchanged_repro.py -v`, 2.7 s). They cover:
   - every quote matches its pin and occurs exactly once in the plan blob `67163714` at `197caa32`;
   - edited plan text is refused;
@@ -149,6 +194,9 @@ python -B "$D/read_reproduction.py" --receipt-commit <commit> --write   # also w
 
 ## 7. Open questions
 
+(Revision 1: questions 1, 4 and 6 are now handled as described in `REVIEW.md`: 1 by the policy gate, 4 partly by
+`--check`, 6 kept and flagged for the policy amendment.)
+
 1. **Section 2.** The owner must choose before this job runs.
 2. **Where the launcher finds the package.** The committed package receipt names the path it was built at, in
    `_worktrees/vision-next/`. The launcher follows that path, and that file exists there today (5,977,155 bytes).
@@ -169,7 +217,9 @@ python -B "$D/read_reproduction.py" --receipt-commit <commit> --write   # also w
 
 ## 8. EXPOSURE
 
-Files outside this working copy that I opened or touched:
+Revision 1's exposure is listed in `REVIEW.md` section 8.
+
+Files outside this working copy that I opened or touched (first version):
 
 - `C:/Users/wakil/AppData/Local/Temp/claude/.../scratchpad/plan.md`, `quotes.py`, `insp.py`: my own scratch
   files (a `git show` copy of the plan, and two small helper scripts).

@@ -2,12 +2,16 @@
 
 What is tested without the package build or the launcher run:
   * the quotes: pins, exactly-once in the real plan blob (commit 197caa32), and refusal of edited plan text;
+  * the plan gate (revision 1, BLOCKER 1): status words, tips, and the REAL held plan at commit 7b6e25f8 refused;
+  * the policy gate (revision 1, BLOCKER 2): it ships NOT fixed, and the reader stops on it before anything else;
   * the tree rule and the untracked rule, on synthetic git `-z` output;
-  * the create-only `.partial` writer;
+  * the create-only `.partial` writer, including a failed rename;
   * the record builders (owner record, job name, launch argv, config comparison);
-  * the verdict reader on synthetic receipts (REPRODUCES / DOES_NOT_REPRODUCE / INCOMPLETE and every stop);
+  * the verdict reader on synthetic receipts: job binding (MAJOR 1), all three records (MAJOR 2), the contradiction
+    stop, the weights cross-check, and every earlier stop;
+  * the --check pieces (MINOR 3): the spend gate and `check_study` on a synthetic frozen folder;
   * the reference hash, read from the real committed Helm 2.0 records at commit c8d5c430 (small JSON blobs only);
-  * statically (AST, no import), that every `launch.<name>` the writer uses exists in the launcher sources.
+  * statically (AST, no import): every `launch.<name>` the writer uses exists, and the gates run before the launcher.
 
 Run:  python -B -m unittest test_unchanged_repro -v     (from this folder)
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED.
@@ -28,6 +32,10 @@ import read_reproduction as reader  # noqa: E402
 import prepare_unchanged_repro as prepare  # noqa: E402  (imports no launcher at module level)
 
 P = common.GIT_PREFIX
+HELD_COMMIT = '7b6e25f89cfece977a5c876537671a6d806ee3ad'       # the commit that put the launch on hold
+HELD_BLOB = '3172a221f3a12448029b995e87009284fcce453c'
+FIXED_POLICY = dict(common.REPRODUCTION_POLICY, status=common.POLICY_FIXED, fixed_in_plan_commit=common.PLAN_COMMIT,
+                    fixed_in_plan_blob=common.PLAN_BLOB, rule=reader.READER_RULE)
 
 
 class Stopped(Exception):
@@ -46,6 +54,10 @@ def git_has(commit, relative):
         return False
 
 
+def digest(raw):
+    return sha256(raw).hexdigest()
+
+
 class QuoteTests(unittest.TestCase):
     def test_pins_match_the_quotes(self):
         for group in (common.OWNER_WORDS, common.PLAN_WORDS):
@@ -62,6 +74,7 @@ class QuoteTests(unittest.TestCase):
         record = common.read_plan(stop)
         self.assertEqual(record['blob'], common.PLAN_BLOB)
         self.assertEqual(record['sha256'], common.PLAN_SHA256)
+        self.assertIn('plan_cost_basis_bookings', common.PLAN_WORDS)       # review NOTE: both $60 readings carried
 
     @unittest.skipUnless(git_has(common.PLAN_COMMIT, common.PLAN_REL), 'plan commit not fetched')
     def test_edited_plan_text_is_refused(self):
@@ -85,6 +98,103 @@ class QuoteTests(unittest.TestCase):
         finally:
             common.OWNER_WORDS.clear()
             common.OWNER_WORDS.update(saved)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Gate 1: the plan must still be current and approved (review BLOCKER 1).
+# ---------------------------------------------------------------------------------------------------------------------
+APPROVED_RAW = b'# t\n\n**Status.** Was `DRAFT`; now `APPROVED_FOR_LAUNCH` (section 0). More\ntext `HELD` here.\n'
+HELD_RAW = b'# t\n\n**Status.** `LAUNCH_HELD_PENDING_AMENDMENTS` (2026-09-24). The yes (section 0) is held.\n'
+
+
+def tip(ref=common.PLAN_TRACKING_REF, *, blob=common.PLAN_BLOB, raw=APPROVED_RAW, ancestor=True, commit='f' * 40):
+    return {'ref': ref, 'commit': commit, 'blob': blob, 'raw': raw, 'pinned_commit_is_ancestor': ancestor}
+
+
+class PlanGateTests(unittest.TestCase):
+    def test_status_words(self):
+        self.assertEqual(common.plan_status_tokens(APPROVED_RAW), ['DRAFT', 'APPROVED_FOR_LAUNCH'])
+        self.assertTrue(common.plan_status_approved(common.plan_status_tokens(APPROVED_RAW)))
+        self.assertEqual(common.plan_status_tokens(HELD_RAW), ['LAUNCH_HELD_PENDING_AMENDMENTS'])
+        self.assertFalse(common.plan_status_approved(common.plan_status_tokens(HELD_RAW)))
+        self.assertFalse(common.plan_status_approved(['APPROVED_FOR_LAUNCH', 'LAUNCH_HELD_PENDING_AMENDMENTS']))
+        self.assertFalse(common.plan_status_approved(['APPROVED_FOR_LAUNCH', 'WITHDRAWN']))
+        self.assertIsNone(common.plan_status_tokens(b'# no status line\n'))
+        self.assertFalse(common.plan_status_approved(None))
+
+    def test_the_pinned_approved_tip_passes(self):
+        self.assertEqual(common.plan_tip_violations([tip()]), [])
+        self.assertEqual(common.plan_tip_violations([tip(), tip(common.PLAN_LOCAL_REF)]), [])
+
+    def test_moved_held_missing_or_unrelated_tips_are_refused(self):
+        cases = {'PLAN_TRACKING_REF_MISSING': [], 'BLOB:': [tip(blob=HELD_BLOB)], 'STATUS:': [tip(raw=HELD_RAW)],
+                 'PINNED_COMMIT_NOT_IN_THIS_BRANCH': [tip(ancestor=False)],
+                 'STATUS:' + common.PLAN_TRACKING_REF: [tip(raw=None, blob=None)]}
+        for expected, tips in cases.items():
+            violations = common.plan_tip_violations(tips)
+            self.assertTrue(any(item.startswith(expected) for item in violations), (expected, violations))
+        # the local branch moved on while the fetched tip did not: still refused
+        violations = common.plan_tip_violations([tip(), tip(common.PLAN_LOCAL_REF, blob=HELD_BLOB, raw=HELD_RAW)])
+        self.assertEqual(len(violations), 2, violations)
+
+    def test_check_plan_is_current_stops_and_fetches(self):
+        saved, seen = common.read_plan_tips, []
+        try:
+            common.read_plan_tips = lambda stop_, *, fetch: seen.append(fetch) or [tip(blob=HELD_BLOB, raw=HELD_RAW)]
+            with self.assertRaisesRegex(Stopped, '^PLAN_MOVED_OR_HELD:BLOB:.*STATUS:.*LAUNCH_HELD_PENDING_AMENDMENTS'):
+                common.check_plan_is_current(stop)
+            common.read_plan_tips = lambda stop_, *, fetch: seen.append(fetch) or [tip()]
+            self.assertEqual(common.check_plan_is_current(stop, fetch=False)[0]['blob'], common.PLAN_BLOB)
+        finally:
+            common.read_plan_tips = saved
+        self.assertEqual(seen, [True, False])        # the default fetches
+
+    @unittest.skipUnless(git_has(common.PLAN_COMMIT, common.PLAN_REL), 'plan commit not fetched')
+    def test_the_real_approval_commit_passes(self):
+        self.assertEqual(common.plan_tip_violations([common.plan_tip(common.PLAN_TRACKING_REF, common.PLAN_COMMIT)]),
+                         [])
+
+    @unittest.skipUnless(git_has(HELD_COMMIT, common.PLAN_REL), 'held commit 7b6e25f8 not fetched')
+    def test_the_real_held_plan_is_refused(self):
+        held = common.plan_tip(common.PLAN_TRACKING_REF, HELD_COMMIT)
+        self.assertEqual(held['blob'], HELD_BLOB)
+        self.assertTrue(held['pinned_commit_is_ancestor'])
+        self.assertEqual(common.plan_status_tokens(held['raw']), ['LAUNCH_HELD_PENDING_AMENDMENTS'])
+        violations = common.plan_tip_violations([held])
+        self.assertEqual([item.split(':')[0] for item in violations], ['BLOB', 'STATUS'])
+        # Every pinned quote still occurs once in the held plan: the quote check alone could not have caught the hold.
+        common.check_quotes(common.normalise(held['raw'].decode('utf-8')), stop)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Gate 2: the reproduction policy (review BLOCKER 2).
+# ---------------------------------------------------------------------------------------------------------------------
+class PolicyGateTests(unittest.TestCase):
+    def test_this_revision_ships_the_policy_unfixed(self):
+        self.assertNotEqual(common.REPRODUCTION_POLICY['status'], common.POLICY_FIXED)
+        with self.assertRaisesRegex(Stopped, 'REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN'):
+            common.check_policy_fixed(stop, reader.READER_RULE)
+
+    def test_only_a_policy_fixed_in_the_pinned_plan_for_the_reader_s_rule_passes(self):
+        self.assertTrue(common.check_policy_fixed(stop, reader.READER_RULE, FIXED_POLICY))
+        for change, reason in (({'fixed_in_plan_blob': HELD_BLOB}, 'NOT_FIXED'),
+                               ({'fixed_in_plan_commit': HELD_COMMIT}, 'NOT_FIXED'),
+                               ({'status': 'FIXED'}, 'NOT_FIXED'),
+                               ({'rule': 'LEARNED_STATE_IDENTITY'}, 'IS_NOT_THE_RULE_THE_READER_IMPLEMENTS')):
+            with self.assertRaisesRegex(Stopped, reason):
+                common.check_policy_fixed(stop, reader.READER_RULE, dict(FIXED_POLICY, **change))
+
+    def test_the_reader_stops_on_the_policy_before_reading_anything(self):
+        saved = reader.stop_unless
+        reader.stop_unless = stop
+
+        def refuse(name):
+            raise AssertionError('read ' + name + ' before the policy gate')
+        try:
+            with self.assertRaisesRegex(Stopped, 'REPRODUCTION_POLICY_NOT_FIXED'):
+                reader.reading(refuse, refuse, refuse)
+        finally:
+            reader.stop_unless = saved
 
 
 class TreeAndUntrackedRuleTests(unittest.TestCase):
@@ -154,6 +264,23 @@ class WriterTests(unittest.TestCase):
             with self.assertRaisesRegex(Stopped, 'PARTIAL_FOLDER_EXISTS_INSPECT_BY_HAND'):
                 common.write_folder_atomically(final, entries, lambda locate: None, stop)
 
+    def test_a_failed_rename_is_a_named_stop_and_leaves_the_partial(self):
+        saved = common.os.rename
+
+        def locked(source, target):
+            raise PermissionError('sync lock')
+        with tempfile.TemporaryDirectory() as scratch:
+            final = Path(scratch) / 'frozen'
+            try:
+                common.os.rename = locked
+                with self.assertRaisesRegex(Stopped, 'RENAME_FAILED_PARTIAL_LEFT_INSPECT_BY_HAND.*PermissionError'):
+                    common.write_folder_atomically(final, [(final / 'study.json', b'{}\n')], lambda locate: None,
+                                                   stop)
+            finally:
+                common.os.rename = saved
+            self.assertTrue(common.partial_of(final).exists())
+            self.assertFalse(final.exists())
+
     def test_cr_bytes_and_outside_entries_are_refused(self):
         with tempfile.TemporaryDirectory() as scratch:
             final = Path(scratch) / 'frozen'
@@ -175,6 +302,8 @@ class BuilderTests(unittest.TestCase):
             common.check_stamp('2026092512000', stop)
         # 63 characters with the account suffix: the bucket-name limit the launcher documents.
         self.assertEqual(len(common.job_name('20260925120000') + '-807562639912'), 63)
+        self.assertEqual(common.stamp_of(common.job_name('20260925120000')), '20260925120000')
+        self.assertIsNone(common.stamp_of('cas-meta2-tpntr-20260925120000-20208c92-m-20260918'))
 
     def test_owner_record_carries_the_owner_words_and_the_bounds(self):
         plan = {'commit': common.PLAN_COMMIT}
@@ -185,6 +314,10 @@ class BuilderTests(unittest.TestCase):
                          common.OWNER_WORDS['owner_option_delegation_raw'][0])
         self.assertEqual(record['plan_text_verbatim']['plan_test_reproduces'],
                          common.PLAN_WORDS['plan_test_reproduces'][0])
+        self.assertEqual(record['plan_text_verbatim']['plan_cost_basis_bookings'],
+                         common.PLAN_WORDS['plan_cost_basis_bookings'][0])
+        self.assertEqual(record['reproduction_policy'], common.REPRODUCTION_POLICY)
+        self.assertIn('Section 4', record['sixty_dollar_readings'])
         self.assertIs(record['is_owner_signature'], False)
         self.assertEqual(record['bounds'], common.EXPECTED_BOUNDS)
         self.assertEqual(record['comparison_target']['final_pt_sha256'], common.REFERENCE_FINAL_PT_SHA256)
@@ -211,52 +344,62 @@ class BuilderTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# The verdict reader, on synthetic receipts.
+# The verdict reader, on synthetic receipts (under a synthetic FIXED policy; the shipped policy is not fixed).
 # ---------------------------------------------------------------------------------------------------------------------
 NEW_JOB = common.job_name('20260925120000')
 REQUEST = {'schema': 'cncm.typed-pointer-request/0.1', 'job': NEW_JOB, 'source_sha': common.SOURCE_SHA,
            'archive_sha256': common.ARCHIVE_SHA256, 'manifest_sha256': common.MANIFEST_SHA256,
            'launch_authorized': False}
 REF = common.REFERENCE_FINAL_PT_SHA256
+REF_BYTES = common.REFERENCE_FINAL_PT_BYTES
 OTHER = 'ab' * 32
+THIRD = 'cd' * 32
+MANIFEST, INVENTORY, CHECKPOINT = common.MANIFEST_RECORD, common.INVENTORY_RECORD, common.CHECKPOINT_RECORD
 
 
 def enc(value):
     return json.dumps(value).encode('utf-8')
 
 
-def reference_files(value=REF, size=common.REFERENCE_FINAL_PT_BYTES):
+def record_set(job, value, size, *, elapsed, run_ids=None, manifest_rows=None, inventory_final=None,
+               inventory_drop=()):
+    """The three final.pt records of one run, bound to each other the way a real receipt binds them."""
+    first, second = run_ids or (job, job)
     meta = {'model_state_identity': 'm1', 'optimizer_state_identity': 'o1', 'encoder_state_identity': 'e1',
-            'rng_state_identity': 'r1', 'elapsed_seconds': 7817.247307497,
-            'run_identity': {'context': {'run_id': common.HELM2_JOB}}}
-    return {'collected/results/artifacts/manifest.json': enc({'artifacts': [{'name': 'final.pt', 'sha256': value,
-                                                                               'bytes': size}]}),
-            'collected_inventory.json': enc({'files': [{'relative_path': 'results/artifacts/final.pt',
-                                                         'sha256': value, 'bytes': size}]}),
-            'collected/results/artifacts/final_checkpoint.json': enc({'sha256': value, 'bytes': size,
-                                                                        'metadata': meta})}
+            'rng_state_identity': 'r1', 'elapsed_seconds': elapsed, 'run_identity': {'context': {'run_id': first}},
+            'init_args': {'run_context': {'run_id': second}}}
+    manifest = enc({'artifacts': manifest_rows if manifest_rows is not None
+                    else [{'name': 'final.pt', 'sha256': value, 'bytes': size}]})
+    checkpoint = enc({'sha256': value, 'bytes': size, 'metadata': meta})
+    final_sha, final_size = inventory_final or (value, size)
+    rows = [{'relative_path': 'results/artifacts/final.pt', 'sha256': final_sha, 'bytes': final_size},
+            {'relative_path': 'results/artifacts/manifest.json', 'sha256': digest(manifest), 'bytes': len(manifest)},
+            {'relative_path': 'results/artifacts/final_checkpoint.json', 'sha256': digest(checkpoint),
+             'bytes': len(checkpoint)}]
+    rows = [row for row in rows if row['relative_path'] not in inventory_drop]
+    return {MANIFEST: manifest, INVENTORY: enc({'job': job, 'files': rows}), CHECKPOINT: checkpoint}
 
 
-def frozen_files(job=NEW_JOB, request=None):
+def reference_files(value=REF, **options):
+    return record_set(common.HELM2_JOB, value, REF_BYTES, elapsed=7817.247307497, **options)
+
+
+def frozen_files(job=NEW_JOB, request=None, plan=None, policy=None):
     study = {'status': 'FROZEN_BEFORE_FIRST_RUN', 'source_sha': common.SOURCE_SHA,
+             'plan_record': plan or {'commit': common.PLAN_COMMIT, 'blob': common.PLAN_BLOB,
+                                     'sha256': common.PLAN_SHA256},
+             'reproduction_policy': policy or common.REPRODUCTION_POLICY,
              'jobs': [{'job': job, 'kind': common.JOB_KIND, 'model_seed': common.MODEL_SEED}]}
     return {'study.json': enc(study), '20260917/request.json': enc(request or dict(REQUEST, job=job))}
 
 
-def receipt_files(value=REF, *, delivered=True, drop=(), overrides=None):
-    meta = {'model_state_identity': 'm1', 'optimizer_state_identity': 'o1', 'encoder_state_identity': 'e1',
-            'rng_state_identity': 'r1', 'elapsed_seconds': 7900.1, 'run_identity': {'context': {'run_id': NEW_JOB}}}
+def receipt_files(value=OTHER, size=REF_BYTES, *, delivered=True, drop=(), overrides=None, **options):
     files = {'result.json': enc({'job': NEW_JOB, 'request': REQUEST, 'completed_deliverable': delivered,
                                  'status': 'AWS_CANDIDATE_FINISHED', 'cleanup': {'complete': True}}),
              'reduced_schedule.json': enc({'job': NEW_JOB, 'reduced_schedule': None}),
              'collected/results/result.json': enc({'job': NEW_JOB, 'status': 'TYPED_POINTER_DELIVERED',
                                                    'summary': {'schedule_plan_mode': 'REGISTERED'}}),
-             'collected/results/artifacts/manifest.json': enc({'artifacts': [{'name': 'final.pt', 'sha256': value,
-                                                                                'bytes': 3670007}]}),
-             'collected_inventory.json': enc({'files': [{'relative_path': 'results/artifacts/final.pt',
-                                                          'sha256': value, 'bytes': 3670007}]}),
-             'collected/results/artifacts/final_checkpoint.json': enc({'sha256': value, 'bytes': 3670007,
-                                                                         'metadata': meta})}
+             **record_set(NEW_JOB, value, size, elapsed=7900.1, **options)}
     files.update(overrides or {})
     for name in drop:
         files.pop(name, None)
@@ -272,26 +415,92 @@ def run(reference=None, frozen=None, receipt=None):
 
 class ReaderTests(unittest.TestCase):
     def setUp(self):
-        self.saved = reader.stop_unless
+        self.saved = reader.stop_unless, common.REPRODUCTION_POLICY
         reader.stop_unless = stop
+        common.REPRODUCTION_POLICY = dict(FIXED_POLICY)
 
     def tearDown(self):
-        reader.stop_unless = self.saved
-
-    def test_equal_hash_reads_reproduces(self):
-        record = run()
-        self.assertEqual(record['verdict'], 'REPRODUCES')
-        self.assertEqual(record['new']['final_pt_sha256'], REF)
-        self.assertEqual(len(record['new']['sources']), 3)
-        self.assertFalse(record['new']['weights_file_read'])
+        reader.stop_unless, common.REPRODUCTION_POLICY = self.saved
 
     def test_different_hash_reads_does_not_reproduce_and_names_option_b(self):
-        record = run(receipt=receipt_files(OTHER))
+        record = run()
         self.assertEqual(record['verdict'], 'DOES_NOT_REPRODUCE')
         self.assertIn('triggers B', record['next_step_per_plan'])
+        self.assertEqual(len(record['new']['sources']), 3)
+        self.assertEqual(record['new']['weights_file_cross_check'], 'WEIGHTS_FILE_NOT_COMMITTED_AT_THE_RECEIPT_COMMIT')
         diag = record['diagnostics_do_not_decide']
         self.assertIs(diag['deciding'], False)
         self.assertTrue(diag['model_state_identity']['equal'])   # equal weights never rescue the verdict
+        self.assertEqual(diag['run_id'], {'reference': common.HELM2_JOB, 'new': NEW_JOB})
+
+    def test_helm2_s_hash_under_the_new_run_id_is_a_contradiction_not_reproduces(self):
+        with self.assertRaisesRegex(Stopped, 'CONTRADICTION_HELM2_FILE_HASH_UNDER_THE_NEW_RUN_ID'):
+            run(receipt=receipt_files(REF))
+
+    def test_decide_is_the_plain_rule(self):
+        reference = {'final_pt_sha256': REF}
+        self.assertEqual(reader.decide(reference, None, {'final_pt_sha256': REF}), 'REPRODUCES')
+        self.assertEqual(reader.decide(reference, None, {'final_pt_sha256': OTHER}), 'DOES_NOT_REPRODUCE')
+        self.assertEqual(reader.decide(reference, 'INCOMPLETE', {}), 'INCOMPLETE')
+
+    def test_records_copied_from_helm2_s_receipt_are_a_stop(self):
+        """The reviewer's probe: the new run's own result files, Helm 2.0's inventory and checkpoint pin."""
+        old = reference_files()
+        with self.assertRaisesRegex(Stopped, 'INVENTORY_IS_FOR_ANOTHER_JOB:' + common.HELM2_JOB):
+            run(receipt=receipt_files(REF, overrides={INVENTORY: old[INVENTORY], CHECKPOINT: old[CHECKPOINT]}))
+        with self.assertRaisesRegex(Stopped, 'CHECKPOINT_IS_FOR_ANOTHER_JOB'):
+            run(receipt=receipt_files(overrides={CHECKPOINT: old[CHECKPOINT]}))
+        with self.assertRaisesRegex(Stopped, 'RECORD_IS_NOT_THE_ONE_THIS_JOB_COLLECTED:worker_artifact_manifest'):
+            run(receipt=receipt_files(overrides={MANIFEST: old[MANIFEST]}))
+        with self.assertRaisesRegex(Stopped, 'CHECKPOINT_IS_FOR_ANOTHER_JOB'):
+            run(receipt=receipt_files(run_ids=(NEW_JOB, common.HELM2_JOB)))
+        with self.assertRaisesRegex(Stopped, 'CHECKPOINT_IS_FOR_ANOTHER_JOB'):
+            run(receipt=receipt_files(run_ids=(None, None)))
+
+    def test_partial_record_sets_read_incomplete(self):
+        """The reviewer's four probes, each of which used to read REPRODUCES."""
+        probes = {
+            'only the inventory states a hash': (
+                receipt_files(drop=(MANIFEST, CHECKPOINT)), 'FINAL_PT_RECORD_ABSENT_OR_UNREADABLE'),
+            'only the checkpoint pin states a hash': (
+                receipt_files(drop=(MANIFEST, INVENTORY)), 'FINAL_PT_RECORD_ABSENT_OR_UNREADABLE'),
+            'equal sha256, different bytes': (
+                receipt_files(inventory_final=(OTHER, REF_BYTES + 1)), 'NEW_RECORDS_DISAGREE_ON_FINAL_PT_SHA256_OR_BYTES'),
+            'two final.pt rows in the manifest': (
+                receipt_files(manifest_rows=[{'name': 'final.pt', 'sha256': OTHER, 'bytes': REF_BYTES}] * 2),
+                'FINAL_PT_ROW_NOT_EXACTLY_ONE_WELL_FORMED:worker_artifact_manifest'),
+            'the inventory does not list the checkpoint pin': (
+                receipt_files(inventory_drop=('results/artifacts/final_checkpoint.json',)),
+                'INVENTORY_HAS_NO_SINGLE_ROW_FOR:worker_final_checkpoint_pin'),
+            'a byte count that is not a positive integer': (
+                receipt_files(manifest_rows=[{'name': 'final.pt', 'sha256': OTHER, 'bytes': '3670007'}]),
+                'FINAL_PT_ROW_NOT_EXACTLY_ONE_WELL_FORMED:worker_artifact_manifest'),
+        }
+        for label, (receipt, reason) in probes.items():
+            record = run(receipt=receipt)
+            self.assertEqual(record['verdict'], 'INCOMPLETE', label)
+            self.assertTrue(any(item.startswith(reason) for item in record['new']['incomplete_reasons']),
+                            (label, record['new']['incomplete_reasons']))
+
+    def test_disagreeing_new_records_read_incomplete(self):
+        record = run(receipt=receipt_files(inventory_final=(THIRD, REF_BYTES)))
+        self.assertEqual(record['verdict'], 'INCOMPLETE')
+        self.assertEqual(record['new']['incomplete_reasons'], ['NEW_RECORDS_DISAGREE_ON_FINAL_PT_SHA256_OR_BYTES'])
+
+    def test_the_weights_file_is_a_cross_check_only(self):
+        weights = b'not really a checkpoint'
+        value, size = digest(weights), len(weights)
+        receipt = receipt_files(value, size)
+        receipt[common.FINAL_PT_WEIGHTS] = weights
+        record = run(receipt=receipt)
+        self.assertEqual(record['verdict'], 'DOES_NOT_REPRODUCE')
+        self.assertEqual(record['new']['weights_file_cross_check'], 'WEIGHTS_FILE_EQUALS_THE_THREE_RECORDS')
+        receipt[common.FINAL_PT_WEIGHTS] = weights + b'x'
+        with self.assertRaisesRegex(Stopped, 'WEIGHTS_FILE_IS_NOT_THE_ONE_THE_RECORDS_STATE'):
+            run(receipt=receipt)
+        alone = receipt_files(drop=common.FINAL_PT_RECORDS)
+        alone[common.FINAL_PT_WEIGHTS] = weights           # never the only source
+        self.assertEqual(run(receipt=alone)['verdict'], 'INCOMPLETE')
 
     def test_not_delivered_reads_incomplete(self):
         for receipt, reason in ((receipt_files(delivered=False), 'COMPLETED_DELIVERABLE_NOT_TRUE'),
@@ -304,32 +513,6 @@ class ReaderTests(unittest.TestCase):
             self.assertEqual(record['verdict'], 'INCOMPLETE')
             self.assertTrue(any(item.startswith(reason) for item in record['new']['incomplete_reasons']), reason)
             self.assertIn('not launched', record['next_step_per_plan'])
-
-    def test_disagreeing_new_records_read_incomplete(self):
-        receipt = receipt_files(overrides={'collected_inventory.json': enc({'files': [{
-            'relative_path': 'results/artifacts/final.pt', 'sha256': OTHER, 'bytes': 3670007}]})})
-        record = run(receipt=receipt)
-        self.assertEqual(record['verdict'], 'INCOMPLETE')
-        self.assertEqual(record['new']['incomplete_reasons'], ['NEW_RECORDS_DISAGREE_ON_FINAL_PT_SHA256'])
-
-    def test_weights_file_is_hashed_only_when_no_record_states_a_hash(self):
-        weights = b'not really a checkpoint'
-        receipt = receipt_files(drop=common.FINAL_PT_RECORDS)
-        receipt[common.FINAL_PT_WEIGHTS] = weights
-        record = run(receipt=receipt)
-        self.assertEqual(record['new']['final_pt_sha256'], sha256(weights).hexdigest())
-        self.assertTrue(record['new']['weights_file_read'])
-        self.assertEqual(record['verdict'], 'DOES_NOT_REPRODUCE')
-        receipt.pop(common.FINAL_PT_WEIGHTS)
-        self.assertEqual(run(receipt=receipt)['verdict'], 'INCOMPLETE')
-
-    def test_weights_file_is_not_read_when_a_record_states_a_hash(self):
-        class Guard(dict):
-            def get(self, name, default=None):
-                if name == common.FINAL_PT_WEIGHTS:
-                    raise AssertionError('weights file read although a record states a sha256')
-                return super().get(name, default)
-        self.assertEqual(run(receipt=Guard(receipt_files()))['verdict'], 'REPRODUCES')
 
     def test_wrong_run_is_a_stop_not_a_verdict(self):
         with self.assertRaisesRegex(Stopped, 'RECEIPT_IS_FOR_ANOTHER_JOB'):
@@ -347,17 +530,26 @@ class ReaderTests(unittest.TestCase):
             run(frozen=frozen_files(request=dict(REQUEST, source_sha='1' * 40)))
         with self.assertRaisesRegex(Stopped, 'NOTHING_FROZEN_AT_THIS_COMMIT'):
             run(frozen={})
+        with self.assertRaisesRegex(Stopped, 'FROZEN_JOB_IS_HELM2_S_OWN_JOB'):
+            run(frozen=frozen_files(job=common.HELM2_JOB))
+        with self.assertRaisesRegex(Stopped, 'FROZEN_UNDER_A_DIFFERENT_PLAN'):
+            run(frozen=frozen_files(plan={'commit': HELD_COMMIT, 'blob': HELD_BLOB, 'sha256': '0' * 64}))
+        with self.assertRaisesRegex(Stopped, 'FROZEN_UNDER_A_DIFFERENT_REPRODUCTION_POLICY'):
+            run(frozen=frozen_files(policy=dict(FIXED_POLICY, rule='OUTPUT_REPRODUCTION')))
 
     def test_a_changed_reference_is_a_stop(self):
         with self.assertRaisesRegex(Stopped, 'REFERENCE_FINAL_PT_NOT_THE_PINNED_VALUE'):
             run(reference=reference_files(OTHER))
         broken = reference_files()
-        broken.pop('collected_inventory.json')
+        broken.pop(INVENTORY)
         with self.assertRaisesRegex(Stopped, 'REFERENCE_RECORD_MISSING'):
             run(reference=broken)
+        with self.assertRaisesRegex(Stopped, 'INVENTORY_IS_FOR_ANOTHER_JOB'):
+            run(reference=record_set(NEW_JOB, REF, REF_BYTES, elapsed=1.0))
 
     def test_the_verdict_is_always_one_of_three_words(self):
-        for receipt in (receipt_files(), receipt_files(OTHER), receipt_files(delivered=False)):
+        for receipt in (receipt_files(), receipt_files(THIRD), receipt_files(delivered=False),
+                        receipt_files(drop=(MANIFEST,))):
             self.assertIn(run(receipt=receipt)['verdict'], ('REPRODUCES', 'DOES_NOT_REPRODUCE', 'INCOMPLETE'))
 
 
@@ -366,18 +558,22 @@ class RealReferenceTests(unittest.TestCase):
 
     @unittest.skipUnless(git_has(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/collected_inventory.json'),
                          'reference commit not fetched')
-    def test_reference_hash_from_git(self):
+    def test_reference_hash_from_git_with_the_job_binding(self):
         saved = reader.stop_unless
         reader.stop_unless = stop
         try:
             read = reader.git_reader(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL)
             reference, checkpoint = reader.reference_reading(read, lambda name: common.blob_id(
                 common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/' + name))
+            # The same real records, read as if they were a NEW run's: they belong to Helm 2.0's job, so a stop.
+            with self.assertRaisesRegex(Stopped, 'INVENTORY_IS_FOR_ANOTHER_JOB'):
+                reader.bound_records(read, NEW_JOB)
         finally:
             reader.stop_unless = saved
         self.assertEqual(reference['final_pt_sha256'],
                          'c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb')
-        self.assertEqual(checkpoint['metadata']['run_identity']['context']['run_id'], common.HELM2_JOB)
+        self.assertEqual(len(reference['sources']), 3)
+        self.assertEqual(reader.checkpoint_run_ids(checkpoint), (common.HELM2_JOB, common.HELM2_JOB))
         self.assertIn('elapsed_seconds', checkpoint['metadata'])      # the fact behind the builder finding
 
     @unittest.skipUnless(git_has(common.PACKAGE_COMMIT, common.HELM2_ADMISSION_REL + '/request.json'),
@@ -395,7 +591,109 @@ class RealReferenceTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Static: every launcher name the writer uses exists in the launcher sources (AST only; nothing is imported).
+# --check: the spend gate and the frozen-study check (review MINOR 1 part, MINOR 3).
+# ---------------------------------------------------------------------------------------------------------------------
+class SpendGateTests(unittest.TestCase):
+    def test_measured_spend_plus_the_per_job_bound_must_fit_the_ceiling(self):
+        self.assertEqual(common.spend_gate('45.00', stop)['after_this_job_at_most_usd'], '60.00')
+        self.assertEqual(common.spend_gate('30', stop)['after_this_job_at_most_usd'], '45.00')
+        self.assertEqual(common.spend_gate('0', stop)['spend_so_far_usd'], '0')
+        with self.assertRaisesRegex(Stopped, 'SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:60.01'):
+            common.spend_gate('45.01', stop)
+        for bad in (None, '', '-1', '1e3', 'NaN', 'inf', '12.345', ' 12', '12,00', '99999'):
+            with self.assertRaisesRegex(Stopped, 'SPEND_FIGURE_FORM'):
+                common.spend_gate(bad, stop)
+
+
+ARCHIVE = common.ROOT / common.PACKAGE_REL / 'source.zip'
+
+
+class CheckStudyTests(unittest.TestCase):
+    """`check_study` on a synthetic frozen folder in a temporary directory. The ledger here is an empty temp file."""
+
+    def setUp(self):
+        self.saved = prepare.stop_unless
+        prepare.stop_unless = stop
+        self.scratch = tempfile.TemporaryDirectory()
+        base = Path(self.scratch.name)
+        self.output, self.ledger = base / 'frozen', base / 'ledger.json'
+        self.ledger.write_bytes(b'')
+        folder = self.output / '20260917'
+        folder.mkdir(parents=True)
+        self.plan = {'commit': common.PLAN_COMMIT, 'blob': common.PLAN_BLOB, 'sha256': common.PLAN_SHA256}
+        job = common.job_name('20260925120000')
+        owner = {'job': job, 'bounds': dict(common.EXPECTED_BOUNDS), 'plan_record': self.plan,
+                 'reproduction_policy': dict(common.REPRODUCTION_POLICY)}
+        request = dict(REQUEST, job=job)
+        pins = {}
+        for name, value in (('owner', owner), ('request', request)):
+            raw = common.canonical(value)
+            (folder / (name + '.json')).write_bytes(raw)
+            pins[name] = common.pin(folder / (name + '.json'), raw)
+        authority = {'job': job, 'owner_authorization_sha256': pins['owner']['sha256'], **common.HELM2_BINDINGS}
+        raw = common.canonical(authority)
+        (folder / 'authority.json').write_bytes(raw)
+        pins['authority'] = common.pin(folder / 'authority.json', raw)
+        argv = common.launch_argv(launcher=common.ROOT / common.LAUNCHER_REL, request=pins['request'],
+                                  authority=pins['authority'], owner=pins['owner'], receipt_dir=common.RECEIPT_DIR,
+                                  ledger=str(self.ledger))
+        self.study = {'schema': prepare.STUDY_SCHEMA, 'status': 'FROZEN_BEFORE_FIRST_RUN',
+                      'source_sha': common.SOURCE_SHA, 'source_checkout': str(common.ROOT), 'plan_record': self.plan,
+                      'reproduction_policy': dict(common.REPRODUCTION_POLICY), 'automatic_retries': 0,
+                      'numeric_runs_completed': 0, 'canonical_ledger': str(self.ledger),
+                      'package': {'archive_the_launcher_locates': str(ARCHIVE)},
+                      'jobs': [{'job': job, 'kind': common.JOB_KIND, 'model_seed': common.MODEL_SEED,
+                                'receipt_dir': str(common.RECEIPT_DIR), 'reduced_schedule': None, **pins,
+                                'launch_argv': argv}]}
+
+    def tearDown(self):
+        prepare.stop_unless = self.saved
+        self.scratch.cleanup()
+
+    def check(self, study=None):
+        return prepare.check_study(json.loads(json.dumps(study or self.study)), self.plan, output=self.output)
+
+    @unittest.skipUnless(ARCHIVE.is_file(), 'package archive not in this checkout')
+    def test_a_consistent_frozen_folder_passes(self):
+        self.assertEqual(self.check()['job'], common.job_name('20260925120000'))
+
+    @unittest.skipUnless(ARCHIVE.is_file(), 'package archive not in this checkout')
+    def test_every_moved_piece_is_refused(self):
+        def changed(path, value):
+            study = json.loads(json.dumps(self.study))
+            target = study
+            for key in path[:-1]:
+                target = target[key]
+            target[path[-1]] = value
+            return study
+        cases = [(changed(('plan_record',), {'commit': HELD_COMMIT}), 'FROZEN_UNDER_A_DIFFERENT_PLAN'),
+                 (changed(('reproduction_policy',), FIXED_POLICY), 'FROZEN_UNDER_A_DIFFERENT_REPRODUCTION_POLICY'),
+                 (changed(('source_checkout',), 'C:/elsewhere'), 'NOT_THE_CHECKOUT_THE_RECORDS_WERE_WRITTEN_IN'),
+                 (changed(('package', 'archive_the_launcher_locates'), str(self.ledger) + '.gone'),
+                  'LOCATED_ARCHIVE_GONE'),
+                 (changed(('package', 'archive_the_launcher_locates'), str(self.ledger)), 'LOCATED_ARCHIVE_CHANGED'),
+                 (changed(('canonical_ledger',), str(self.ledger) + '.gone'), 'LAUNCH_ARGV'),
+                 (changed(('jobs', 0, 'receipt_dir'), 'R'), 'STUDY_JOB'),
+                 (changed(('jobs', 0, 'job'), common.HELM2_JOB), 'STUDY_JOB'),
+                 (changed(('jobs', 0, 'launch_argv'), self.study['jobs'][0]['launch_argv'] + ['--reduced-schedule']),
+                  'LAUNCH_ARGV')]
+        for study, reason in cases:
+            with self.assertRaisesRegex(Stopped, reason):
+                self.check(study)
+        (self.output / '20260917' / 'owner.json').write_bytes(b'{}\n')
+        with self.assertRaisesRegex(Stopped, '^PIN:'):
+            self.check()
+
+    @unittest.skipUnless(ARCHIVE.is_file(), 'package archive not in this checkout')
+    def test_a_missing_ledger_is_refused(self):
+        self.ledger.unlink()
+        with self.assertRaisesRegex(Stopped, 'CANONICAL_LEDGER_NOT_FOUND'):
+            self.check()
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Static: every launcher name the writer uses exists in the launcher sources (AST only; nothing is imported), and the
+# gates run before the launcher is imported.
 # ---------------------------------------------------------------------------------------------------------------------
 PILOT = common.ROOT / 'research/CAS_META_2_COMPOSITION'
 MODULE_FILES = {None: PILOT / 'aws/typed_pointer_launch.py',
@@ -419,6 +717,23 @@ def top_level_names(path):
         elif isinstance(node, (ast.Import, ast.ImportFrom)):
             names.update(alias.asname or alias.name.split('.')[0] for alias in node.names)
     return names
+
+
+def function(path, name):
+    for node in ast.parse(path.read_text(encoding='utf-8')).body:
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return node
+    raise AssertionError(name)
+
+
+def calls(node):
+    """`[(line, name)]` of every call inside `node`, by the called name's last part."""
+    out = []
+    for item in ast.walk(node):
+        if isinstance(item, ast.Call):
+            func = item.func
+            out.append((item.lineno, func.attr if isinstance(func, ast.Attribute) else getattr(func, 'id', None)))
+    return sorted(out)
 
 
 class StaticLauncherNameTests(unittest.TestCase):
@@ -445,8 +760,34 @@ class StaticLauncherNameTests(unittest.TestCase):
                 missing.append('UNMAPPED:' + module + '.' + name)
         self.assertEqual(missing, [])
 
+    def test_the_gates_run_before_the_launcher_is_imported(self):
+        writer = HERE / 'prepare_unchanged_repro.py'
+        order = [name for _, name in calls(function(writer, 'prepare'))]
+        self.assertLess(order.index('gates'), order.index('load_launcher'))
+        self.assertLess(order.index('check_repository'), order.index('gates'))
+        gate = function(writer, 'gates')
+        fetches = [item for item in ast.walk(gate) if isinstance(item, ast.Call)
+                   and getattr(item.func, 'attr', None) == 'check_plan_is_current']
+        self.assertEqual([(kw.arg, kw.value.value) for kw in fetches[0].keywords], [('fetch', True)])
+        self.assertIn('check_policy_fixed', [name for _, name in calls(gate)])
+        for name in ('check_before_launch', 'check_study', 'check_frozen_committed', 'check_pin'):
+            node = function(writer, name)
+            self.assertFalse(any(isinstance(item, ast.Name) and item.id in ('launch', 'load_launcher')
+                                 for item in ast.walk(node)), name)
+        self.assertIn('gates', [name for _, name in calls(function(writer, 'check_before_launch'))])
+
+    def test_the_reader_checks_the_policy_first(self):
+        path = HERE / 'read_reproduction.py'
+        for name in ('reading', 'main'):
+            first = [item for item in function(path, name).body if not isinstance(item, ast.Expr)
+                     or not isinstance(item.value, ast.Constant)]
+            if name == 'main':
+                first = [item for item in first if not (isinstance(item, ast.Assign) or (
+                    isinstance(item, ast.Expr) and getattr(item.value.func, 'attr', None) == 'add_argument'))]
+            self.assertEqual(getattr(first[0].value.func, 'attr', None), 'check_policy_fixed', name)
+
     def test_this_folder_s_files_are_ascii_and_lf(self):
-        for path in HERE.glob('*.py'):
+        for path in list(HERE.glob('*.py')) + list(HERE.glob('*.md')):
             raw = path.read_bytes()
             self.assertNotIn(b'\r', raw, path.name)
             self.assertTrue(raw.isascii(), path.name)
