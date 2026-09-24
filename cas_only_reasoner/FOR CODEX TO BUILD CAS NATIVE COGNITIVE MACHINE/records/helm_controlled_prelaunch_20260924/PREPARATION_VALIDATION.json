@@ -1,18 +1,34 @@
 {
-  "verification": "static document/JSON inspection only; no test suite/build/model/cloud job",
+  "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
+  "validated_utc": "2026-09-24T04:49:05.564949+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
+  "A1_matches_prior_delivery_raw_section": true,
   "JSON_parsed": [
     "COST_STATE.json",
+    "CURRENT_COORDINATION_STATE.json",
     "EXECUTION_MANIFEST.json",
     "LAUNCH_REQUEST.json",
+    "LEDGER_RECONCILIATION.json",
+    "PREPARATION_VALIDATION.json",
     "REPRODUCTION_POLICY.json",
+    "SMOKE_COMPLETION_RECONCILIATION.json",
+    "SMOKE_PROVIDER_OBSERVATION.json",
     "STATISTICAL_POLICY.json"
   ],
   "launch_request_referenced_hashes_match": true,
-  "main_plan_relative_links_exist": true,
+  "main_plan_and_handoff_relative_links_exist": true,
   "git_diff_check": "PASS",
+  "hold_and_no_launch_flags_consistent": true,
+  "slot_and_reservation_arithmetic": "PASS",
+  "1470_plus_16_plus_2_equals_1488": true,
+  "eighteen_unique_checkpoint_reads": true,
+  "ledger_before_and_after_sha256": "42eb28a1186deb026e0bd09a195f0787e5203428b10a989aa6adb3a3ef424e9f",
+  "ledger_untouched": true,
   "historical_grader_edited": false,
   "model_implementation_edited": false,
-  "protected_data_accessed": false
+  "protected_data_accessed": false,
+  "new_cloud_jobs": 0,
+  "Claude_reported_tests_not_rerun": true,
+  "bounded_document_review": "Five wording issues resolved: partial E1, postlaunch E1 receipts, reader nonconformance label, retention counted once, delivery commit linkage pending content commit."
 }

@@ -1,0 +1,40 @@
+{
+  "schema": "helm.ledger-reconciliation/1",
+  "observed_utc": "2026-09-24T04:44:00.307204+00:00",
+  "mode": "READ_ONLY_NO_RESERVATION_WRITES",
+  "canonical_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "worktree_branch": "codex/cas-meta-2-composition",
+  "worktree_commit": "06d95cb017266102001e0298d22d1a78ee93bc9d",
+  "git_status": "M \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/budget/campaign_ledger.json\"",
+  "working_sha256": "42eb28a1186deb026e0bd09a195f0787e5203428b10a989aa6adb3a3ef424e9f",
+  "head_sha256": "3a89d4a89dde9a94e6acab1af1d1d6ab65a57746004652ed86684ac108d48f14",
+  "working_revision": 106,
+  "head_revision": 73,
+  "working_total_reserved_usd": "831.00",
+  "head_total_reserved_usd": "424.00",
+  "working_reservation_count": 108,
+  "head_reservation_count": 75,
+  "study_reservations": [
+    {
+      "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+      "source_sha": "70490111bceb02c63ab4fb9c89c2d0645d92c2a7",
+      "reserved_usd": "15.00",
+      "reserved_utc": "2026-09-24T02:15:06.812076+00:00",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "source_sha": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+      "reserved_usd": "15.00",
+      "reserved_utc": "2026-09-24T03:38:27.359952+00:00",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    }
+  ],
+  "study_reservations_in_HEAD": 0,
+  "study_reserved_usd": "30.00",
+  "bookings_are_invoices": false,
+  "other_ledger_differences_preserved": true,
+  "file_modified_staged_or_committed_by_review": false,
+  "reconciliation": "Both job IDs occur exactly once in the canonical working ledger and are absent from its committed baseline. Preserve the entire dirty ledger; no refund, duplicate booking or blanket commit. Campaign totals are not the controlled-study ceiling. Claude runner must reconcile by job ID under the ledger lock before any future admission.",
+  "study_ceiling_usd": "60.00"
+}

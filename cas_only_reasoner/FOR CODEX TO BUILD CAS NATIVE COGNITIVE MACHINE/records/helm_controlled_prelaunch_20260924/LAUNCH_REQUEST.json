@@ -4,7 +4,7 @@
   "status": "NOT_READY_FOR_FINAL_LAUNCH_APPROVAL",
   "launch_authorized": false,
   "main_launch_hold": true,
-  "source_coordination_commit": "91968e5d17747e7d60b6d4d37b3124657b035a67",
+  "source_coordination_commit": "59d86443edc35bcf57368a99f602cd36530ca11d",
   "selected_proposal": "C_WITH_DISCLOSED_HISTORICAL_CONTROLS_AND_CONDITIONAL_B_FALLBACK",
   "stronger_fresh_control_design": "B",
   "seeds": [
@@ -44,29 +44,64 @@
   "protected_splits_changed": false,
   "A1_changed": false,
   "policy_file_sha256": {
-    "REPRODUCTION_POLICY.md": "7d8bf0db405ae02fbf4dd62eeac51a076b2192822ede6325bed9facc6e7d0f10",
-    "REPRODUCTION_POLICY.json": "1cdef00fd7c2b2794021fc859234799d2dfb50ea7cbf323096956898cad68c2b",
+    "REPRODUCTION_POLICY.md": "a6a7d7159e66c43a3a6ff3111c10101f88eabe17229eeadd4a26c5fd743d9f17",
+    "REPRODUCTION_POLICY.json": "7d5a5eb84705f729cf24f573b872bb4c68461c4c880554a25d5ebf0f6a7007a5",
     "STATISTICAL_POLICY.json": "f8d6e1e594ff0f90e23056a27060830bafba15800dc0db70e9060994b94cac5b",
-    "EXECUTION_MANIFEST.json": "753682d77820544bebff57e35a351759d8426f144163357876f3af5c50585ab6",
+    "EXECUTION_MANIFEST.json": "488b937e736a6b08fe26f7082e1b93c2b4ef7d03cad64c6310351e75de78dac4",
     "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "a98024a71ce793ac87b4e8842437019d189cba39768db09a8eeaebe03d60a14c",
-    "COST_AND_JOB_ENVELOPE.md": "c544f6bb3f401a756c615902940e5156902267aeececb28c4a45d904f4fa7e82",
-    "COST_STATE.json": "8d75ecb0fac7524382266817ac70a5a16a15eae26ab1956c69d54a6324f42367"
+    "COST_AND_JOB_ENVELOPE.md": "fba2bce1c20efc0937d39e45d8eb7a0c8d443026f96e23763e48cb23d36ecc09",
+    "COST_STATE.json": "92964658f2a5a0ff87cf81e59f0492cce42f3db2776b3a86c0e934f504989715",
+    "CURRENT_COORDINATION_STATE.json": "5a2646fc17d230cf7bfd1c2dc5f0a43203e4757bf199df96620ff33a1a786cd2",
+    "LEDGER_RECONCILIATION.json": "28f8e0964eb061be170e9c1bdb9faaab57fc912954ce18f706a49cd59a4dc59e",
+    "SMOKE_COMPLETION_RECONCILIATION.json": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
+    "SMOKE_PROVIDER_OBSERVATION.json": "d5225ee20a0fa26201673dc8049ba6a1f5e3f69e1edf6ddd9beec47ce7f45509"
   },
   "blocking_results": [
-    "S1 final receipt and cleanup",
     "P1 complete route/identity-reader/corrected-probe acceptance",
     "P2 final custodian aggregate feasibility and split receipt with primary testable",
     "main packages and environment frozen",
     "reproduction panel and reader source pins frozen",
     "reviewed admission and cumulative budget enforcement",
-    "bounded retention/collection implementation"
+    "bounded retention/collection implementation",
+    "existing reader and approval-state parser conform to prospective policy",
+    "HSET-2 A2 conformance and public exposure attestation",
+    "actual combined prerequisite timing within named slots"
   ],
   "approval_requested_now": false,
   "reason_approval_not_requested": "Complete empirical prerequisite results and immutable main execution pins are not yet available; no results are invented.",
   "preparation_document_sha256": {
-    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "fd0cabc908c91bf7d800f09d6bcd5918b309ee70781fd24616f1e5496b09dfbd",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "d1760056d9896999fcab3b562e94eb838ccbcbd3623c66aad67bcce065704a4a",
+    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3f8401453c7e36cd8e7f904905959ff593f710adefd26a995f2b35a591116801",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "44c2b2355f7cf7e47b25f9eeb46c7ce7f05d649214128d9789f44dd9ae8b7d14",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
-    "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "52fd4dbe8329e6cbabef2a638e8f15f3aa6ba25101436210828d92d76e96432e"
+    "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "b870d402d200c9749b18aa34d62edbf935491d193f2124403cd5e86ced283b6e"
+  },
+  "prerequisite_results": {
+    "S0": "CAPACITY_REFUSED_NO_INSTANCE_NO_COMPUTE; reservation retained",
+    "S1": "PASS_FOUR_FROZEN_REDUCED_SMOKE_CONDITIONS_AND_VERIFIED_TEMPORARY_RESOURCE_CLEANUP",
+    "P1": "NOT_RUN_FOR_FINAL_COMBINED_SCOPE",
+    "P2": "ACTUAL_CUSTODIAN_COUNTS_NOT_AVAILABLE",
+    "main_package_freeze": "NOT_READY"
+  },
+  "estimated_charges": {
+    "C_main_training_historical_usd": "29.39",
+    "B_main_training_historical_usd": "44.08",
+    "P1_P2_E1_caps_not_expected_runtimes_usd": "19.00",
+    "completed_smoke_conservative_formula_rounded_up_usd": "3.19",
+    "C_hybrid_planning_total_usd": "51.58",
+    "B_hybrid_planning_total_usd": "66.27",
+    "final_expected_total_status": "PENDING_ACTUAL_PREREQUISITE_TIMING_AND_RECONCILED_RETAINED_CHARGES",
+    "final_provider_invoice_obtained": false,
+    "B_completion_funded_under_60_on_this_basis": false
+  },
+  "execution_owner": "Claude",
+  "preparation_owner": "Codex amendments; Claude existing implementations and custody",
+  "proposed_slot_order_and_bookings_are_implemented": false,
+  "approval_binding_requirement": "Exact immutable plan, policy and execution-manifest hashes plus an unambiguous approval state grounded in the owner decision; do not infer approval from a prose token.",
+  "partial_study_readout": {
+    "slot": "E1_SAME_RESERVED_SLOT",
+    "allowed": "available public diagnostics, historical-gate loss records and explicit missing results",
+    "status": "COMPARISON_INCOMPLETE",
+    "partial_confirmatory_TEST_comparison": false,
+    "repair_success_claim": false
   }
 }

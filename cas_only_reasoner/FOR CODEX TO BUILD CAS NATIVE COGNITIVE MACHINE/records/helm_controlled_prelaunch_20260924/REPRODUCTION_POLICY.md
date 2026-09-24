@@ -1,6 +1,6 @@
 # Reproduction policy for option C — revision 1, fixed before running
 
-Status: PROPOSED_FOR_FINAL_PLAN; no reproduction run or new result has been read by this preparation. This policy replaces the proposed raw-file-only admission rule prospectively. It does not relabel any historical file comparison or change OFF-preservation requirements.
+Status: PROPOSED_FOR_FINAL_PLAN; no main reproduction result has been read by this preparation. This policy replaces the proposed raw-file-only admission rule prospectively. It does not relabel any historical file comparison or change OFF-preservation requirements.
 
 The original unchanged model is source 20208c923d41c24614504d4ecc2b289ecb66eda8, seed 20260917. Freeze the policy, reader source, environment, reference artifacts and output-panel manifest in the final launch manifest before any comparison run. If any relevant result has already been inspected before that freeze, disclose it and require a new prospective registration; do not present this revision as a rule fixed before that result.
 
@@ -17,9 +17,9 @@ Current code independently supports these separate identities: the historical ex
 
 Exclude only declared non-predictive envelope fields from learned-state equality: file path, root, elapsed time, storage/container layout, run identifier and administrative limits. Retain and report all their differences. Architecture, switch state, number of rounds, encoder/vocabulary mapping, normalization settings and inference mode are predictive configuration and must match. Training-configuration or software differences are disclosed and fail the environment-admission check unless equivalence was explicitly registered before any reading; this revision grants no such exception.
 
-**Admission decision fixed now:**
+**Prospective decision specified for the amended launch request:**
 
-1. Validate all immutable artifact/input/source pins, checkpoint schema/integrity, full state inventory and numerical environment. Any missing evidence or invalid reference yields ADMISSION_INVALID, stops the study and authorizes no fallback job.
+1. Validate all immutable artifact/input/source pins, checkpoint schema/integrity, full state inventory and numerical environment. Any missing evidence or invalid reference yields ADMISSION_INVALID_STOP, stops the study and authorizes no fallback job.
 2. If learned state and the complete output panel both match, admit C as STATE_AND_PANEL_REPRODUCED_FOR_ONE_SEED. Report FILE_IDENTICAL/FILE_DIFFERENT and continuation status separately. No optimizer/RNG mismatch is hidden; C makes no trajectory-reproduction claim.
 3. If evidence is valid but learned state or any required output differs, label DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY. Preserve exact differences. C's two unreplicated historical controls cannot be admitted under this policy; the proposed fallback is two additional fresh unchanged seeds, only if the final approved job count, pre-job headroom and stop rules allow them. Otherwise stop with COMPARISON_INCOMPLETE.
 4. Output agreement never overrides a learned-state mismatch. A learned-state match never overrides an output mismatch. No tolerance may be introduced after results are read. An investigation may explain a mismatch but does not change the registered outcome.
@@ -27,3 +27,13 @@ Exclude only declared non-predictive envelope fields from learned-state equality
 B is the stronger fresh-control comparison: three fresh unchanged seeds versus three repaired seeds. C contains one fresh/reproduced historical-control seed and two reused historical controls. One successful reproduction supports only that seed and setup. Neither outcome establishes that every earlier receipt is true or false.
 
 The actual reader and its public equal-state/different-envelope, changed-value, changed-buffer, missing-key, dtype-change, altered-output and corrupt-reference checks must be implemented, reviewed and run on AWS before the main comparison. They are NOT_RUN in this preparation; this document supplies the policy, not a fabricated reader acceptance.
+
+## Implementation handoff and current evidence
+
+Claude's handoff at `59d86443edc35bcf57368a99f602cd36530ca11d` confirms why file-only admission cannot pass: the historical export saves the new job's `run_id` and elapsed time alongside weights. The historical reference remains `c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb`, 3,670,007 bytes; no reference is replaced. This is a pre-execution correction of the acceptance meaning, not forgiveness of an observed failed reproduction.
+
+At reader implementation `cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82` (latest review `0391a3073f02fb00819b0125a467aefad53ccf2e`), new plan/policy and receipt-integrity gates are present. The actual decision still compares checkpoint-file SHA-256; stored state fingerprints are diagnostic only. Complete learned-state recomputation and the public output panel remain unimplemented. Claude must conform that existing reader, including its `decide()` logic and verdict tests; changing only a rule-name string is insufficient. Missing/corrupt/misbound evidence maps to `ADMISSION_INVALID_STOP`, never the valid-mismatch fallback. This policy uses that spelling in JSON; Claude must align the existing reader's INCOMPLETE/named-stop vocabulary.
+
+Keep an explicit machine-readable approval state tied to real owner approval and exact plan/policy/manifest hashes. A prose line containing `APPROVED_FOR_LAUNCH` is insufficient: the latest review found the parser can accept a sentence that also says the plan is now a draft. After approval, keep the plan immutable and append results elsewhere. A changed plan invalidates its prior approval binding.
+
+Claude may prepare the proposed implementation now. Public synthetic acceptance and nonlaunch package/admission preparation belong in the named, authorized prerequisite slot, with launch/reservation disabled. Their preparation path must be distinguishable from the production launch path; preparation cannot invent owner approval to get through a gate. The main launch gate stays closed until the complete request is approved. No competing reader is created by Codex.

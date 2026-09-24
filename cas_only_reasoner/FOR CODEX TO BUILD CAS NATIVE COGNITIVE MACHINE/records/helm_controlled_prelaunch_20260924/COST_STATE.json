@@ -204,16 +204,18 @@
     {
       "id": "S1",
       "purpose": "existing replacement smoke",
-      "state": "RUNNING_AT_SNAPSHOT",
+      "state": "COMPLETED_REDUCED_SMOKE_PREREQUISITE",
       "reservation_usd": "15",
       "cap_usd": "15",
       "instance": "g7.2xlarge",
       "hours_max": 4,
-      "disk_gib": 75
+      "disk_gib": 75,
+      "current_charge_bound_usd": "3.19",
+      "provider_invoice_obtained": false
     },
     {
       "id": "P1",
-      "purpose": "public larger-question route, identity reader and revised mechanism calibration",
+      "purpose": "public larger-question route, actual state/output reader acceptance, corrected probe calibration and nonlaunch admission/package preparation; timing preflight required",
       "state": "PROPOSED_NO_LAUNCH",
       "reservation_usd": "15",
       "cap_usd": "3",
@@ -309,7 +311,10 @@
     "C_all_six_g7_jobs_max_compute_only_usd": "60.48",
     "B_all_eight_g7_jobs_max_compute_only_usd": "80.64",
     "infrastructure_formula": "hourly_compute*h + disk_gib*0.08*h/720 + IPv4_count*0.005*h; excludes S3, requests, downloads, tax and continued retention",
-    "qualifier": "Timing estimate is historical, not measured for repair. P1/P2/E1 allowances are bounds, not expected runtime estimates. No worst-case completion guarantee within60."
+    "qualifier": "Timing estimate is historical, not measured for repair. P1/P2/E1 allowances are bounds, not expected runtime estimates. No worst-case completion guarantee within60.",
+    "C_historical_main_plus_prerequisite_readout_caps_plus_smoke_bound_usd": "51.5766666667",
+    "B_historical_main_plus_prerequisite_readout_caps_plus_smoke_bound_usd": "66.27",
+    "hybrid_figure_caveat": "Conservative planning totals, not measured expected charges or invoices. S1 3.19 includes ancillary allowance; study evidence allowance may overlap conservatively. S0 retained charges and any delay-related charges must be reconciled within the study evidence bound before admission. Final expected charges require P1/P2/E1 timing and scoped billing; no B completion promise within60."
   },
   "proposed_retention": {
     "allowance_included_in_E1_usd": "1",
@@ -344,5 +349,18 @@
     "complete_training_not_guaranteed": true,
     "incomplete_status": "COMPARISON_INCOMPLETE",
     "stop_before_third_training_if_spend_exceeds_usd": 30
+  },
+  "snapshot_status": "HISTORICAL_0408_OBSERVATION_SUPERSEDED_FOR_SMOKE_BY_COMPLETION_UPDATE",
+  "completion_update": {
+    "source_coordination_commit": "59d86443edc35bcf57368a99f602cd36530ca11d",
+    "source_receipt_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+    "smoke_result": "PASS_FOUR_FROZEN_REDUCED_SMOKE_CONDITIONS",
+    "cleanup": "VERIFIED_AT_0426_TO_0427_UTC",
+    "receipt_reconciliation": "SMOKE_COMPLETION_RECONCILIATION.json",
+    "provider_observation": "SMOKE_PROVIDER_OBSERVATION.json",
+    "ledger_reconciliation": "LEDGER_RECONCILIATION.json",
+    "no_smoke_restart_or_stop": true,
+    "conservative_smoke_formula_rounded_up_usd": "3.19",
+    "provider_invoice_obtained": false
   }
 }

@@ -865,6 +865,15 @@
       "reuse_limit": "Only for the unchanged source contract; not proof of the new larger-question route."
     },
     {
+      "id": "on_reduced_smoke_and_cleanup",
+      "status": "PASS_FOUR_FROZEN_SMOKE_CONDITIONS",
+      "receipt": "SMOKE_COMPLETION_RECONCILIATION.json",
+      "receipt_sha256": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
+      "provider_observation": "SMOKE_PROVIDER_OBSERVATION.json",
+      "provider_observation_sha256": "d5225ee20a0fa26201673dc8049ba6a1f5e3f69e1edf6ddd9beec47ce7f45509",
+      "scope": "8 main plus2 replay updates; phaseB skipped; not larger-route or full-runtime acceptance"
+    },
+    {
       "id": "hset2_actual_informative_case_counts",
       "status": "NOT_READY_NOT_FOUND_IN_REVIEWED_SNAPSHOTS",
       "receipt_sha256": null,
@@ -1033,5 +1042,12 @@
     "base_future_jobs": 7,
     "fallback_maximum_future_jobs": 9,
     "note": "P1 is one T4 public-route, reader and probe validation job; P2 is one CPU HSET build job; E1 is one G7 readout job for 18 repaired probes, final checkpoints for three controls plus three repaired seeds, and H1/H2. This is a proposed envelope, not authorization or measured feasibility."
+  },
+  "subsequent_reviewed_snapshots": {
+    "integration": "59d86443edc35bcf57368a99f602cd36530ca11d",
+    "smoke_receipts": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+    "unchanged_reader_review": "0391a3073f02fb00819b0125a467aefad53ccf2e",
+    "unchanged_reader_implementation": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
+    "hset2_builder": "853e645d7b5da5551257c4271e10c90b5fdb254e"
   }
 }

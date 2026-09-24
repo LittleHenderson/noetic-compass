@@ -19,5 +19,16 @@
   "output_panel_manifest_sha256": null,
   "reader_source_sha256": null,
   "reader_acceptance_receipt_sha256": null,
-  "main_launch_ready": false
+  "main_launch_ready": false,
+  "implementation_review": {
+    "reader_branch": "claude/helm-unchanged-repro-20260924",
+    "implementation_commit": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
+    "latest_review_commit": "0391a3073f02fb00819b0125a467aefad53ccf2e",
+    "decision_currently_implemented": "CHECKPOINT_FILE_IDENTITY",
+    "proposed_decision_implemented": false,
+    "plan_and_policy_gates_present": true,
+    "approval_status_parser_review": "CHANGES_REQUIRED_V1",
+    "acceptance_execution_slot": "P1_PROPOSED_REQUIRES_AUTHORIZATION",
+    "competing_reader_created": false
+  }
 }
