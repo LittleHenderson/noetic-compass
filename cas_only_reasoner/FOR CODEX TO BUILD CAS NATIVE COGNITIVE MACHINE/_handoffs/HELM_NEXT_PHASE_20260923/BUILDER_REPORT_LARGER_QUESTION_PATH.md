@@ -105,7 +105,7 @@ used, and the static test confirms equal answers and evidence from both checkers
 | `reach` (`first_direct_constituent_lexical_v1`, `bfs_immediate_predecessor_lexical_v1`) | compiles | grades | grades; same code | only at 3-5 nodes (X) | one slot: ABSENT, DIRECT or VIA_N0..VIA_N(n-1) |
 
 The same table is `larger_question_scope.KIND_SCOPE`, and a test checks every "compiles / refuses / grades" word
-against the fixtures.
+against the fixtures. Revision 1 adds the coordinator's claim-status ruling to the table (see "Scope ruling" there).
 
 ### Can Helm's heads hold every correct answer?
 
@@ -236,6 +236,8 @@ Every kind is covered with a 5-node focus and with a 6-node focus. Both reach ru
 
 ## Files (all LF line endings)
 
+These are the v0.1 hashes (commit `785c9bd1`). Revision 1 changed three files; see its file table.
+
 All paths are under `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/eval_paths/`.
 
 | File | Bytes | sha256 | What it is |
@@ -276,6 +278,9 @@ were never imported here: importing them loads the frozen course and torch.
 
 ## What must run on AWS (a T4 is enough)
 
+**Superseded by Revision 1 below.** The check order, check a, the input list, the time limit handling and the
+exit codes all changed. This section is kept as the record of v0.1.
+
 ```text
 CAS_META2_RUN_TEACHING_CYCLE=1 python -B research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py --out larger_path_result.json
 ```
@@ -299,8 +304,12 @@ CAS_META2_RUN_TEACHING_CYCLE=1 python -B research/CAS_META_2_COMPOSITION/eval_pa
 
 The program writes `INTEGRATION_CHECKS_PASS` only when all four checks ran and passed.
 
-**Correct/incorrect flags are not written** in checks b and d. Only "graded, no error" and the checker's receipt
-digest are written. These are plumbing checks, and a public fixture shape might coincide with a sealed TEST shape.
+**Corrected in Revision 1 (review F4).** No correct/incorrect field is written in checks b and d. But the earlier
+sentence here ("only 'graded, no error' and the checker's receipt digest are written") was wrong. Right/wrong CAN be
+recomputed from what is written: `answer_sha256` is the sha256 of the canonical answer, and the public fixture file
+holds every correct value; `check_digest` is a digest over a receipt body that contains `correct`. Check b also
+writes `logit_bits` and `admissible_answer_count`. These are public plumbing fixtures, so this is acceptable. This
+recording scheme must never be used for sealed items.
 
 ## Open questions and flags for the coordinator (not decided by the builder)
 
@@ -356,3 +365,424 @@ I did not open it. Mutation-check scratch copies were written to the session scr
 
 **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any TEST output, any
 `results/` folder, S3 or AWS, the meta1 ledger, other worktrees' files, and Claude transcripts.
+
+---
+
+# Revision 1 (2026-09-23): the changes the review asked for
+
+- **Label: CLAUDE_BUILT_CLAUDE_CHECKED.** Written by the temporary Claude builder. Codex is away until 2026-09-28.
+  Custody is not independent: Claude built the path, reviewed it, and revised it.
+- Review: `REVIEW_LARGER_QUESTION_PATH_785c9bd1.md` (commit `cc68d8b3`). Verdict: CHANGES_REQUIRED.
+- Parent commit: `cc68d8b3`. This revision is the commit that adds this section.
+- **Status: BUILT, and checked statically on the laptop. The AWS T4 checks are still NOT_RUN.** Nothing ran with
+  torch. No AWS call was made.
+- Only `eval_paths/` and this report changed. No protected file was edited. The 12 source pins still hold.
+
+## What changed, finding by finding
+
+| Finding | Coordinator decision | What changed | Where |
+|---|---|---|---|
+| F1 (MAJOR) time limit | 1. order d, c, b, a; write each row as it completes | The checks always run d, c, b, a, whatever order is typed. Every finished row goes to a create-only rows file at once, flushed and fsynced | `t4_larger_question_checks.py`: `CHECK_ORDER` (line 78), `RowWriter` (304), `_publish` (323), `main` (801) |
+| F1 | 3. timing preflight | About 20 timed forward passes project the total; above 3,600 s the run refuses before the main work | `planned_work` (453), `project_total` (472), `preflight` (486) |
+| F2 history | 2. compare with the T4 item-1 digests | Check a now compares each checkpoint's overall digest with the digest the T4 job recorded | `T4_REFERENCE` (161), `T4_REFERENCE_OVERALL_DIGEST` (185), `check_a` (766) |
+| F3 inputs | 4. `REQUIRED_INPUTS` and `--list-inputs` | Every input file is named with bytes and sha256, and checked before torch is imported | `REQUIRED_INPUTS` (112), `list_inputs` (238), `verify_inputs` (258) |
+| F4 wording | 5. fix the wording | The script docstring, `BOUNDARY`, check b's note and this report now say right/wrong is recomputable | docstring; this report, end of "What must run on AWS" |
+| F5 pins | 6. D-1 anchors inside `grade()` | `grade()` and `target()` check the route's checker pins on every call | `larger_question_scope.py`: `verify_grader_pins` (200), `grade` (288), `target` (313) |
+| F6 scope | 7. write the ruling into the table | Two new columns in `KIND_SCOPE` | `larger_question_scope.py` (lines 101-168) |
+| F7 raw inputs | 8. disclose | Disclosed below; check b now records the raw positions per fixture | `check_b` (709) |
+| F8 switch | 8. disclose; add switch OFF to d if cheap | Check d now also runs a switch-OFF learner pair, on a subset | `_build_pair` (547), `_learner_pair` (569), `check_d` (642) |
+| F9 exposure | note | Recorded in the exposure section below | this report |
+| F10 wording | note | Answered below | this report |
+
+Line numbers are those of the revised files in this commit.
+
+## 1. Check order, and rows written as they finish (F1)
+
+- **Order.** `CHECK_ORDER = ("d", "c", "b", "a")`. `--checks` only picks a subset. It cannot change the order.
+  So check d (the subclass against the original learner) runs first and cannot be the check a wall stop cuts.
+- **Rows file.** `<out>.rows.jsonl`, opened with exclusive create (`open(..., "x")`). One JSON line per finished
+  unit: one line per model in check a, one per fixture and container in check b, one per refusal in check c, and in
+  check d one per learner pair, per fixture and per refusal, plus the F20 and training-refusal lines. Each line is
+  flushed and fsynced before the next unit starts.
+- **Summary file.** `<out>`, written once: at the end, or at a stop. It is written to `<out>.partial` with
+  exclusive create, then hard-linked to `<out>` (a hard link refuses to replace an existing file). The summary
+  records the rows file's sha256 and the row count per check.
+- **Create-only.** The run refuses at start (exit 4, `OUTPUT_EXISTS`) if `<out>`, `<out>.partial` or the rows file
+  already exists.
+- **At the wall limit.** The running check is marked `NOT_COMPLETE` with the number of rows it wrote; later checks
+  are `NOT_RUN`; the verdict is `WALL_LIMIT_REACHED` (exit 3). Every finished row is already on disk.
+
+## 2. Check a compares with the recorded T4 history (F2)
+
+**Compared field.** `results[i].overall_digest` in the T4 item-1 job's files, for the row whose `checkpoint` is
+`records/typed_pointer_001/receipt_<seed>/checkpoints/<phase>.pt` and whose `checkpoint_sha256` equals the pin. It
+is compared with the `overall_digest` that check a computes from `predict_packet` on the same checkpoint.
+
+**Source of the reference.** Commit `41071a3f1dd86ffbb00dbf07233c32dcea5e8a1b` on
+`origin/research/helm-integration-20260923` (fetched explicitly; `FETCH_HEAD` was `91968e5d`). Folder
+`records/helm_eval_design_20260923/analogy_repair_t4_job/results/`. Read with `git show` and `git cat-file`.
+
+| File | sha256 |
+|---|---|
+| `preservation_OFF_T4_seed20260917.json` | `27f856d9f7d1d48bf220321d33e589910822850e4efedb6b5f5cb9f159d58890` |
+| `preservation_OFF_T4_seed20260918.json` | `f36e44ead4d6759b11b0766fd3bf04d6ef58d6c75bf72c03d55ef9caa3482efa` |
+| `preservation_OFF_T4_seed20260919.json` | `abc1ece79e195280bbaf4c597a72eb87b97f196974aa250b22153e75f72801cd` |
+| `preservation_control_20208c92_T4_seed20260917.json` | `8ffa0ac95c21a16cdbd1c71ec8f68bb18b82dfbaa8ec340efef578231e841749` |
+| `preservation_control_20208c92_T4_seed20260918.json` | `fff9e352b13c8120a8bf264e06169aab264cc86d175d5d53cd17f04dd96c18c2` |
+| `preservation_control_20208c92_T4_seed20260919.json` | `24b006a5e711878ea5fb036a0a8c820d9e8ac510226840bb076ef5c89884890d` |
+
+| Checkpoint | Recorded `overall_digest` (OFF file = control file) |
+|---|---|
+| seed 20260917, initial | `1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a` |
+| seed 20260917, final | `949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806` |
+| seed 20260918, initial | `47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365` |
+| seed 20260918, final | `5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7` |
+| seed 20260919, initial | `fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858` |
+| seed 20260919, final | `62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a` |
+
+- The OFF files come from the current source with the switch OFF. The control files come from the unchanged Helm
+  2.0 source (`20208c92`). Their digests are equal for all six checkpoints. So the reference is also Helm 2.0's own
+  T4 history.
+
+**Why it is the same quantity.** I read the reference tool, `analogy_wiring_probe/preservation_digest.py` at
+`41071a3f` (LF sha256 `21bf01e5411d3d959bd8106f8f6a7ca6ca158d97f4000c0b060d57e99176292e`, equal to the
+`tool_sha256_lf` in all six files). Point by point:
+
+1. Per question: sha256 of compact, sorted-key JSON `{slot_id: ["%08x" float32 bit patterns]}` of the head logits
+   (tool lines 98-100). `larger_question_learner.logit_bits_digest` writes the same bytes.
+2. Overall: sha256 of the newline-joined `"record_id digest"` lines over the sorted 564 record ids (tool line 101).
+   `_overall_digest` in the script does the same.
+3. Same logits: the tool runs `GraphForward(torch, model, reading, device).head_logits(plan, indicators)` with the
+   plan from the frozen `slots.compile_slots`, the reading from `pointer_inputs.read_packet` and the same role
+   indicators. On the old route, `predict_packet` calls exactly these.
+4. Same container: `_build_container(torch, _framework(torch, device, seed), device,
+   analogy_focus_comparison=False)` (the job's `--container-kwargs` for the OFF files), strict `load_state_dict` of
+   `torch.load(..., weights_only=True)["model_state"]`, eval mode.
+5. Same source: the OFF files record the LF sha256 of five files, and all five equal today's files (tested). They
+   are `pointer_learner.py`, `pointer_inputs.py`, `pointer_contract.py`, `slots.py` (the same values as the scope
+   module's pins) and `cncm/typed_matched_worker.py`
+   (`51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522`). Full values:
+   `T4_REFERENCE_SOURCE_LF_SHA256`.
+6. Same course (course digest `272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb`) and the same
+   determinism settings (`CUBLAS_WORKSPACE_CONFIG=:4096:8`, deterministic algorithms, cuDNN deterministic).
+7. Same torch build and GPU class. The reference ran torch `2.11.0+cu128` on a `g4dn.2xlarge` (Tesla T4). Bits can
+   differ on other hardware or builds. So if check a is requested, the script refuses before any GPU work unless
+   torch is `2.11.0+cu128` and the GPU name contains `T4` (`SETUP_REFUSED:T4_REFERENCE_ENVIRONMENT_DIFFERS`). It also
+   refuses if one of the five source files differs (`T4_REFERENCE_SOURCE_DIFFERS`) or the course digest differs.
+
+So it is the same quantity. The coordinator's fallback (a paired comparison on 2 checkpoints) is not needed, and
+the paired old-versus-new comparison is gone. That halves check a (6,768 to 3,384 forward passes).
+
+**What check a no longer shows, and where that is covered.** It no longer compares scores, decisions and answers of
+two code paths side by side. On the old route those are fixed functions (the frozen `slots.score_decisions` and
+`assemble_answer`) of the logits, which check a now pins to history. And check d compares full predictions (scores,
+decisions, answer, prediction id) of the original learner and the subclass on all 564 questions.
+
+**Locating a mismatch.** Check a writes all 564 per-question digests of each model to the rows file. They can be
+compared line by line with the `per_record` maps in the committed reference files.
+
+## 3. Preflight and expected wall time (F1)
+
+**What the preflight does** (after setup, before any check):
+
+- builds one fresh switch-OFF container, and runs 2 warm-up calls (not timed);
+- times 16 course questions, each doing check a's work (`predict_packet` plus the logit digest);
+- times 4 fixtures (F20, H01, F17, F24), each doing check b's work (`predict_packet`, the scope plan, answer
+  validation, checker v2 grade, logit digest);
+- if check d can run (Linux and the environment guard): builds the frozen encoder (kept for check d), builds one
+  learner, runs 1 warm-up and times 3 learner predictions.
+
+That is 20 timed container calls and 3 timed learner calls.
+
+**The projection:** elapsed seconds so far + 1.15 x (the planned calls of every requested check x their measured
+time per call, plus container and learner builds x their measured build time). Fixture calls by a learner are
+estimated as the fixture time plus the learner's extra time. If the projection is above `WALL_SECONDS = 3600`, the
+run stops with `PREFLIGHT_OVER_WALL_LIMIT` (exit 5). The preflight row, with every timing, is written first.
+
+**Planned forward passes** (down from 8,122):
+
+| Check | Calls |
+|---|---|
+| d | 1,270 learner calls on course questions (564 x 2 with the switch ON, 71 x 2 with it OFF), plus 74 on fixtures (37 x 2) |
+| c | 4 informational old-path calls; the 8 refusals cost 0 |
+| b | 185 (37 fixtures x 5 containers) |
+| a | 3,384 (564 x 6 checkpoints) |
+| total | 4,917, plus 26 in the preflight |
+
+**Expected wall time: about 2,300 to 2,800 s (about 38 to 47 minutes), against a limit of 3,600 s. This is an
+ESTIMATE, not a measurement.** Where the number comes from:
+
+- The T4 item-1 job (the committed files above): each preservation job ran 1,692 forward passes in 820.13 to
+  826.53 s, of which 168.51 to 169.98 s was loading the course. That is 0.384 to 0.389 s per forward pass. It was
+  measured while three such jobs shared one T4 (`job.sh.template` starts them together), so a solo run may be faster.
+- This script also re-reads, re-decodes and re-assembles each question (the reviewer measured about 0.06 s per call
+  of this work on the laptop). So I assumed 0.39 to 0.49 s per course question, 0.05 s more per learner call,
+  0.2 s more per fixture (grading), about 40 s of builds, and about 230 s of setup and preflight.
+- Total: 230 + 4,917 x t + 160 s. That is about 2,307 s at t = 0.39 s and about 2,799 s at t = 0.49 s.
+- **Break-even:** with the same ratios, the preflight refuses when a course question takes more than about 0.56 s.
+  The real total at that speed would be about 3,160 s. So the 1.15 margin errs toward refusing early rather than
+  being cut late.
+
+## 4. The inputs the run needs (F3)
+
+`python -B t4_larger_question_checks.py --list-inputs` prints this list as JSON. It reads no file, and imports no
+torch and no project code (tested in a subprocess with torch blocked). Paths are relative to
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/`. All are committed git blobs; the three JSON
+data files contain no CR byte. The material and wheel rows equal `worker_contract.MATERIAL`,
+`matched_contract.DEVELOPMENT_PIN` and `worker_contract.WHEELS` (tested). Every row equals its git blob (tested by
+streaming the blob through sha256; the checkpoints were hashed, never loaded).
+
+| Path | Bytes | sha256 |
+|---|---|---|
+| `records/typed_course_001/checks_002/public_course.json` | 4,165,195 | `cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987` |
+| `records/typed_interface_001/checks_002/training_tokenizer.json` | 447,140 | `bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c` |
+| `records/typed_matched_001/development_001/compact_development.json` | 685,549 | `5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4` |
+| `research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl` | 36,501 | `0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee` |
+| `research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl` | 221,994 | `6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9` |
+| `records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt` | 2,235,079 | `59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004` |
+| `records/typed_pointer_001/receipt_20260917/checkpoints/final.pt` | 3,670,007 | `c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb` |
+| `records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt` | 2,235,079 | `d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645` |
+| `records/typed_pointer_001/receipt_20260918/checkpoints/final.pt` | 3,670,007 | `a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658` |
+| `records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt` | 2,235,079 | `93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f` |
+| `records/typed_pointer_001/receipt_20260919/checkpoints/final.pt` | 3,670,007 | `c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8` |
+| `research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json` | 190,466 | `7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3` |
+
+Also required, and named in the list:
+
+- **Source trees**, shipped whole (`*.py`), as the training launcher ships them: `cncm` and
+  `research/CAS_META_2_COMPOSITION/cas_meta2`. The protected files inside are pinned by the scope module, and the
+  five reference files above are pinned for check a. The record keeps each tree's file count and digest.
+- **The code under test**: `eval_paths/__init__.py`, `larger_question_scope.py`, `larger_question_learner.py`,
+  `larger_question_fixtures.py`, `t4_larger_question_checks.py`. Not pinned (a file cannot pin itself); their LF
+  sha256 goes into the record. `colour_refinement_census.py` is not needed on the T4.
+- **Installed wheels**: modules `casformer` and `cas_cjt` must be importable, from distributions
+  `casformer_reference 0.1.0` and `cas_neural_cjt 0.2.0` (the T4 item-1 job installed them with `pip --no-deps`).
+- **torch** with CUDA; check a needs `2.11.0+cu128` on a T4. **Environment**: `CAS_META2_RUN_TEACHING_CYCLE=1` and
+  Linux for check d.
+
+**When the check happens.** First thing after the arguments, before `import torch`. A missing file is
+`SETUP_REFUSED:INPUT_MISSING:<path>`; a wrong size or hash is `SETUP_REFUSED:INPUT_MISMATCH:<path>`; a missing tree
+or wheel has its own name. All exit 4, with the summary written.
+
+**New exit code.** 5 = `PREFLIGHT_OVER_WALL_LIMIT`. The others are unchanged: 0 all four PASS; 1 a check failed or
+was not run; 2 `GPU_REQUIRED`; 3 `WALL_LIMIT_REACHED`; 4 `SETUP_REFUSED`.
+
+## 5. What is written (F4)
+
+- No correct/incorrect field is written anywhere.
+- **But right/wrong can be recomputed.** `answer_sha256` is the sha256 of the canonical answer, and the public
+  fixture file holds each question's correct values. `check_digest` is the checker's digest over a receipt body
+  that contains `correct` (`checker_v2.py:292-299`). Check b also writes `logit_bits` and `admissible_answer_count`.
+- These are public plumbing fixtures, so this is acceptable here. **This recording scheme must never be used for
+  sealed items.** The same words are now in the script's docstring, in `BOUNDARY` and in check b's note.
+
+## 6. Pins checked inside the grader (F5)
+
+- New `verify_grader_pins(route)`. On the new route it checks the three D-1 ACCEPTED anchors (`checker_v2.py`,
+  `answers_v2.py`, `slots_v2.py`). On the old route it checks the frozen `checker.py` pin.
+- `grade()` and `target()` call it on every call, after the route and before the checker runs. A drifted file gives
+  `LARGER_PATH_REFUSED:SOURCE_DRIFT:D1_ANCHOR:<file>` (or `LARGER_PATH_REFUSED:SOURCE_DRIFT:checker.py`).
+- `grade()` now also returns `grader_pins_checked`.
+- Cost: three small file hashes per call. Not measured on its own.
+
+## 7. Scope ruling (F6)
+
+The coordinator's ruling of 2026-09-23 is now in `KIND_SCOPE`, as two columns. I recorded it; I did not decide it.
+
+| Kind | Claim status at 5 nodes | Claim status at 6 nodes |
+|---|---|---|
+| `role_set` | `OUT_OF_SCOPE` | `OUT_OF_SCOPE` |
+| `definition` | `OUT_OF_SCOPE` | `OUT_OF_SCOPE` |
+| `context` | `OUT_OF_SCOPE` | `OUT_OF_SCOPE` |
+| `analogy` | `CHECKER_V2_D1_ACCEPTED` | `CHECKER_V2_D1_ACCEPTED` |
+| `correspondence` | `CHECKER_V2_D1_ACCEPTED` | `CHECKER_V2_D1_ACCEPTED` |
+| `parts` | `NOT_RULED_D1_X_COVERED_3_TO_5` | `DIAGNOSTIC_ONLY` |
+| `edge_account` | `NOT_RULED_D1_X_COVERED_3_TO_5` | `DIAGNOSTIC_ONLY` |
+| `reach` | `NOT_RULED_D1_X_COVERED_3_TO_5` | `CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES` |
+
+- 6-node reach is claim-bearing in HSET-2, because the HSET-2 build cross-checks every reach gold with independent
+  rules. 6-node parts and edge account stay diagnostic only. Definition, context and role are out of scope.
+- Analogy and correspondence: the ruling did not restate them. The table says what D-1 licensed: checker v2 for
+  these kinds at 5 and 6 nodes.
+- Parts, edge account and reach at 5 nodes: **no ruling was given.** The table says so, and says that D-1's extra
+  check X covered 3 to 5 nodes. See open question 1.
+
+## 8. Disclosures (F7, F8)
+
+**Raw inputs past the trained range (F7).**
+
+- `_query_vector` feeds the `whole` and `part` node positions to Helm as raw numbers
+  (`pointer_learner.py:1102-1103`). Course focus worlds have at most 4 nodes, so the course only ever shows 0 to 3.
+  A 5-node focus can show 4. A 6-node focus can show 5. Helm has never seen those values.
+- Check b now records, per fixture, `query_whole`, `query_part` and `past_trained_query_range`, and lists the
+  fixtures that pass the range. The count is measured on the T4, not here: the position comes from the reader's own
+  node order, and computing it needs `pointer_inputs`, which loads the course.
+- **One correction to the review.** The review says node rank is also a raw input when `node_rank_feature` is on
+  (`:1056`). In the pinned design it is off: `pointer_contract.DESIGN["node_rank_feature"]` is `False`
+  (`pointer_contract.py:896`). So in these containers only `whole` and `part` are raw positions.
+- Already disclosed in v0.1: the world count is read as `min(count, 64) / 64`, so 64 and 65 worlds look the same.
+- Any later larger-question result is shaped by this. It is not a defect of the path.
+
+**Check d and the switch (F8).**
+
+- v0.1 checked the subclass with the switch ON only. `PointerCourseLearner` always builds its container with the
+  default, which is ON, and takes no argument to change it.
+- Revision 1 adds a switch-OFF learner pair. For the two constructor calls only, the script replaces the module-level
+  `pointer_learner._build_container` with a wrapper that passes `analogy_focus_comparison=False`. It restores the
+  original in a `finally` block. No file is edited. Both learners' `module.analogy_focus_comparison` is read back
+  and must be `False`. A torch-free test with fake learners checks both the switch and the restore.
+- **The OFF pair is a subset:** every 8th sorted course question (71 of 564), all 37 fixtures, the 4 refusals, the
+  F20 refusal and the training refusals. The ON pair still covers all 564. Why a subset: the full OFF pair would add
+  about 1,128 learner calls (about 450 to 600 s) and push the estimate to about 2,900 to 3,400 s. The subset adds
+  about 180 calls (about 80 to 100 s).
+- What the OFF pair adds: the only switch-dependent code is inside `GraphForward` (the analogy step,
+  `pointer_learner.py:1553`). The route and `_graph_larger` do not read the switch.
+
+## 9. Small wording items (F10)
+
+- "The old learner answered 7- to 10-node questions silently" was shown on the laptop only at the slot compiler and
+  checker (fixture R01). Check c's informational rows will show it through the forward pass.
+- The reviewer's hand count closes my caveat about isolated nodes: at most 24 self-maps (for example one edge and 4
+  isolated nodes). I did not re-derive it. Open question 4 names one case the count may not cover.
+- The stale comment at `pointer_learner.py:54-57` and `:207-210` stays unedited (protected file).
+
+## 10. What I checked on the laptop (static only; no torch)
+
+| Check | Result |
+|---|---|
+| `python -B -m pytest -q -p no:cacheprovider eval_paths/tests/test_larger_question_path_static.py` | **36 passed in 76.60 s** (an earlier run, before one last preflight edit: 36 passed in 99.80 s) |
+| Same tests by plain `python -B eval_paths/tests/test_larger_question_path_static.py` | **36 passed, 0 failed** (on the final files) |
+| `python -B t4_larger_question_checks.py --list-inputs` | prints the list; exit 0; no torch and no project module imported |
+| Syntax of the three changed files (`compile`, no bytecode written) | all pass; all LF |
+| In-memory mutation check (scratchpad script; nothing on disk changed) | **8 of 8 caught**: order a,b,c,d; `grade` skipping the anchors; one wrong reference digest; margin 1.0; OFF stride 4; one wrong checkpoint pin in the input list; 6-node parts made claim-bearing; a switch substitute that is not restored |
+
+New tests (10), and one rewritten:
+
+- `test_t4_script_fails_closed_without_cuda_before_any_work` (rewritten): the order in `main` is list-inputs,
+  create-only check, rows file, input check, `import torch`, both `GPU_REQUIRED` exits, the reference environment
+  check, `Context`, preflight, preflight refusal, then the checks.
+- `test_t4_runs_the_checks_in_the_order_d_c_b_a`.
+- `test_t4_outputs_are_create_only_and_flushed_row_by_row` (real files in a temporary folder: rows are readable
+  before close; a second writer and a second publish both refuse).
+- `test_t4_required_inputs_name_every_file_with_its_pin`.
+- `test_t4_list_inputs_needs_no_torch_and_no_project_code`.
+- `test_t4_verify_inputs_refuses_a_missing_or_changed_file_by_name`.
+- `test_t4_preflight_plan_and_projection`.
+- `test_t4_check_d_switch_off_pair_uses_a_scoped_restored_substitute`.
+- `test_t4_reference_digests_equal_the_committed_t4_item1_job` (re-reads the six files and the tool from commit
+  `41071a3f`; checks every sha256, OFF = control, the digest formats, and today's source against the reference).
+- `test_grade_and_target_check_the_grader_pins_on_every_call`.
+- `test_kind_scope_records_the_coordinator_claim_ruling`.
+
+**Not checked locally, by rule:** anything with torch. The T4 script's `main`, `Context`, the preflight and the
+four checks were read and reviewed by eye, never executed.
+
+## 11. Files after Revision 1 (all LF)
+
+Under `research/CAS_META_2_COMPOSITION/eval_paths/`:
+
+| File | Bytes | sha256 | Changed? |
+|---|---|---|---|
+| `__init__.py` | 393 | `38a1d4f57995cd43b5a0ed1616b2e941726327abed0919f3d8ce7a793f1e0ae4` | no |
+| `larger_question_scope.py` | 18,619 | `409095a536c7eaaf31573e5a2ac4354f5e109ac5ac3c8d828ed3532cc73b3ee9` | yes |
+| `larger_question_learner.py` | 7,852 | `82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d` | no |
+| `larger_question_fixtures.py` | 32,130 | `567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d` | no |
+| `fixtures/larger_question_fixtures_v0_1.json` | 190,466 | `7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3` | no |
+| `colour_refinement_census.py` | 5,295 | `dbf9d01f41946349bf853ec51b9d3a279b8194a0914758075212337ffe4cbb5f` | no |
+| `t4_larger_question_checks.py` | 54,273 | `4d2bdbbf5907860e65696853513430bf0a4516dc46250533e94f2a28e77d72f7` | yes |
+| `tests/test_larger_question_path_static.py` | 41,492 | `8da93c3d5de5c820214c28d92164dc64383c6afd8b09ecdd84ea7a6a55027164` | yes |
+
+## 12. Command for the T4 (not run)
+
+```text
+python -B research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py --list-inputs
+CAS_META2_RUN_TEACHING_CYCLE=1 python -B research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py --out larger_path_result.json
+```
+
+Outputs: `larger_path_result.json` (the summary) and `larger_path_result.json.rows.jsonl` (the rows). The program
+writes `INTEGRATION_CHECKS_PASS` only when all four checks ran and passed.
+
+## 13. Claim status of this revision
+
+- **REAL (measured on the laptop, torch-free):** 36 of 36 tests pass; 8 of 8 mutations caught; `--list-inputs` runs
+  without torch; the six T4 reference files re-read from git objects, with OFF = control on all six checkpoints;
+  every required input equals its git blob.
+- **ESTIMATED, not measured:** the T4 wall time (about 2,300 to 2,800 s).
+- **NOT_RUN:** all four T4 checks and the preflight.
+- **NOT LICENSED:** any statement about Helm's accuracy on larger questions.
+
+## 14. Open questions for the coordinator (not decided by the builder)
+
+1. **5-node parts, edge account and reach.** The ruling covered 6 nodes. The table says `NOT_RULED` at 5 nodes.
+   Should they follow D-1's extra check X (claim-bearing), or stay diagnostic?
+2. **The launcher is not written.** The T4 image must have torch `2.11.0+cu128` for check a, and both wheels
+   installed with `--no-deps`. Otherwise check a refuses (by design), and the run must drop it with `--checks d,c,b`.
+3. **Size of the switch-OFF pair in check d.** 71 course questions. If the coordinator wants all 564, set
+   `D_OFF_COURSE_STRIDE` to 1 and expect about 450 to 600 s more; the preflight then decides whether it fits.
+4. **A world with no edges.** The world validator (`source.py:232-255`) does not visibly require an edge. If a 5- or
+   6-node world with no edges is legal, it has 120 or 720 self-maps, above checker v2's 64-answer cap. Grading
+   would then refuse by name (`GRADER_OUT_OF_SCOPE:TYPED_CHECKER_TARGET_SET_BOUND`). Not tested. The HSET-2
+   generator should state whether it can emit such a world.
+5. **Preflight margin.** 1.15. It can refuse a run that would have fitted (see the break-even above). The
+   coordinator may change it.
+6. **F9 exposure items of the v0.1 build** (below) need the coordinator's confirmation against that build's brief.
+
+## EXPOSURE (Revision 1): every file outside my working copy that I opened, and what else I saw
+
+My working copy is `D:/tksCAS-worktrees/helm-builder`.
+
+**Loaded by the tool before I started (not opened by me).** The owner's global `CLAUDE.md`, the project `CLAUDE.md`
+at `C:/Users/wakil/OneDrive/Desktop/tksCAS/CLAUDE.md`, and the auto-memory index `MEMORY.md`. The index names the
+sealed-test archive folder and states sealed-build totals (for example "HSET-1A reach W=2"). It holds no TEST world,
+record id, shape or answer.
+
+**Read through git objects of commit `41071a3f` on `origin/research/helm-integration-20260923`** (fetched explicitly,
+as instructed), not working files:
+
+- the six files `records/helm_eval_design_20260923/analogy_repair_t4_job/results/preservation_OFF_T4_seed<seed>.json`
+  and `.../preservation_control_20208c92_T4_seed<seed>.json` (as instructed). Through a Python filter I printed
+  their top-level fields, GPU admission fields, wall and load seconds, source pins, and each model's label,
+  checkpoint, checkpoint sha256, overall digest and record count. The per-record maps were parsed; I printed only
+  their size and 3 sample record ids (public course ids). The new test re-reads these six files;
+- `records/helm_eval_design_20260923/analogy_wiring_probe/preservation_digest.py` (whole file; the reference tool);
+- `records/helm_eval_design_20260923/analogy_repair_t4_job/job.sh.template` (`grep`s for the preservation,
+  container-kwargs, pip and wheel lines) and `launch.py` (a `grep` for the torch version, the instance type and the
+  package names);
+- file names only: `git show --stat` and `--name-only` of `41071a3f`, and `git ls-tree` of `analogy_repair_t4_job/`
+  and `analogy_wiring_probe/`, with `results/` names filtered out of the second listing. The first listing named
+  every file in `analogy_repair_t4_job/results/` (logs, `STATUS`, probe JSONs, `results.tar.gz`). I opened only the
+  six preservation files.
+
+**Read through git objects of this branch, outside the sparse checkout:** the course, tokenizer and development
+files, the two wheels and the six Helm 2.0 checkpoints, hashed only (`git cat-file -p ... | sha256sum`), plus a CR
+and LF byte count of the three JSON files. Contents were not interpreted. The new tests stream the same blobs
+through sha256.
+
+**Read in the working copy (protected source, unedited):** `pointer_learner.py` (lines 636-660, 700-760, 1040-1060,
+1092-1110, 1751-1990, plus `grep`s), `worker_contract.py` (lines 20-60 and 100-160), `pointer_contract.py`,
+`practice_contract.py` and `matched_contract.py` (`grep`s for material and inventory lines), `pointer_inputs.py`
+(lines 301-321, 339-345, 398-420), `encoder.py` (lines 216-230), `teaching_cycle/gpu_adapter.py` (lines 30-45),
+`graph_teaching/real_framework.py` (lines 40-80), `source.py` (lines 95-125 and 225-262), `course.py` (lines 70-82),
+`cncm/typed_matched_worker.py` (lines 43-49), and the import lines of `course_plan.py`. One `grep -rn` for
+`real_framework` over the `.py` files of `cncm/` and `cas_meta2/`, and a names-only `find` for non-Python files
+there (5 names printed). A names-only `find` showed that no file under those two trees has "sealed" in its name and
+none is an `*_eval.jsonl`.
+
+**Written outside the working copy:** the session scratchpad only: a copy of the reference tool
+(`preservation_digest_41071a3f.py`), the mutation script (`mutation_check_rev1.py`) and this section's draft. The
+tests wrote and deleted temporary files in the system temp folder.
+
+**Local machine, not project data:** `python` 3.14.0 and pytest 9.0.2; `git sparse-checkout list`;
+`git config core.autocrlf` (false).
+
+**F9: exposure items of the v0.1 build, recorded as the review asks.** The v0.1 builder ran a repo-wide
+`git grep -l` for the training bank digest, and a second long `git grep` whose output the tool saved to a file. A
+repo-wide `git grep` reads the contents of every tracked file, including any `*sealed*`, `*_eval.jsonl` or `hset1a`
+path, unless pathspecs exclude them. The v0.1 report does not say they were excluded. Only file names came back.
+The v0.1 builder also read three files under `records/helm_eval_design_20260923/hset1a/`, and saw file names under
+`hset1a_aws_job/results_attempt1/`. I cannot tell whether that build's brief allowed these; the coordinator should
+confirm. I did not repeat any of it.
+
+**Not opened:** `D:/tksCAS-archive/`, any `*SEALED*` or `*sealed*` file, any `*_eval.jsonl`, any path containing
+`hset1a` or `hset1b`, any salt, S3 or AWS, the meta1 ledger, other worktrees' files, and Claude transcripts. No torch
+import, no GPU, no training.

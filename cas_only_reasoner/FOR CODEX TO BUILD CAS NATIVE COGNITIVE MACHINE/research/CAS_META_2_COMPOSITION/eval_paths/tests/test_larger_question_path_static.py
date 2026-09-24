@@ -430,17 +430,312 @@ def test_this_module_imported_no_torch_and_no_learner():
 
 
 def test_t4_script_fails_closed_without_cuda_before_any_work():
-    """Read, never run: running it here would import torch on the laptop."""
+    """Read, never run: `main` would import torch on the laptop. Inputs are checked BEFORE torch is imported."""
     tree = ast.parse((EVAL / "t4_larger_question_checks.py").read_bytes())
     top_imports = {alias.name.split(".")[0] for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom))
                    for alias in (node.names if isinstance(node, ast.Import) else [ast.alias(node.module or "")])}
     assert not top_imports & {"torch", "cas_meta2", "cncm", "eval_paths"}
     main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "main")
     body = ast.unparse(main)
-    assert body.index("import torch") < body.index("GPU_REQUIRED: torch is not importable")
-    assert body.index("if not torch.cuda.is_available():") < body.index("GPU_REQUIRED: CUDA is not available")
-    assert body.index("GPU_REQUIRED: CUDA is not available") < body.index("Context(torch, device, started)")
-    assert body.count("return 2") == 2
+    order = ["if args.list_inputs:", "OUTPUT_EXISTS", "RowWriter(rows_path)", "verify_inputs(requested)",
+             "import torch", "GPU_REQUIRED: torch is not importable", "if not torch.cuda.is_available():",
+             "GPU_REQUIRED: CUDA is not available", "T4_REFERENCE_ENVIRONMENT_DIFFERS",
+             "Context(torch, device, started, rows, requested)", "preflight(ctx, requested)",
+             "PREFLIGHT_OVER_WALL_LIMIT", "for name in requested:"]
+    positions = [body.index(text) for text in order]
+    assert positions == sorted(positions)
+    assert body.count("finish('GPU_REQUIRED', 2") == 2 and "finish('PREFLIGHT_OVER_WALL_LIMIT', 5" in body
+
+
+# ---------------------------------------------------------------------------------------------- T4 script, rev 1
+_T4 = []
+
+
+def _t4():
+    """The T4 script as a module. Its top level imports no torch and no project code (tested above)."""
+    if not _T4:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("t4_larger_question_checks_static",
+                                                      EVAL / "t4_larger_question_checks.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _T4.append(module)
+    return _T4[0]
+
+
+def test_t4_runs_the_checks_in_the_order_d_c_b_a():
+    t4 = _t4()
+    assert t4.CHECK_ORDER == ("d", "c", "b", "a") and set(t4.CHECKS) == set(t4.CHECK_ORDER)
+    main = next(node for node in ast.parse((EVAL / "t4_larger_question_checks.py").read_bytes()).body
+                if isinstance(node, ast.FunctionDef) and node.name == "main")
+    assert "requested = [name for name in CHECK_ORDER if name in chosen]" in ast.unparse(main)
+    tree = ast.parse((EVAL / "t4_larger_question_checks.py").read_bytes())
+    for name in ("check_a", "check_b", "check_c", "_learner_pair"):
+        function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == name)
+        assert "ctx.emit(" in ast.unparse(function), name
+    emit = ast.unparse(_method(EVAL / "t4_larger_question_checks.py", "RowWriter", "emit"))
+    assert emit.index("write(") < emit.index("flush()") < emit.index("os.fsync(")
+
+
+def test_t4_outputs_are_create_only_and_flushed_row_by_row():
+    import json
+    import tempfile
+    t4 = _t4()
+    with tempfile.TemporaryDirectory() as folder:
+        folder = pathlib.Path(folder)
+        rows = folder / "result.json.rows.jsonl"
+        writer = t4.RowWriter(rows)
+        writer.emit("d", {"row": "one"})
+        writer.emit("a", {"row": "two"})
+        lines = rows.read_text(encoding="utf-8").splitlines()  # readable BEFORE close: every row is flushed
+        assert [json.loads(line)["check"] for line in lines] == ["d", "a"] and writer.count == {"d": 1, "a": 1}
+        writer.close()
+        assert isinstance(_raises(t4.RowWriter, rows), FileExistsError)
+        summary = folder / "result.json"
+        t4._publish(summary, {"verdict": "X"})
+        assert json.loads(summary.read_text(encoding="utf-8")) == {"verdict": "X"}
+        assert not (folder / "result.json.partial").exists()
+        assert isinstance(_raises(t4._publish, summary, {"verdict": "Y"}), FileExistsError)
+        assert json.loads(summary.read_text(encoding="utf-8")) == {"verdict": "X"}
+
+
+def test_t4_required_inputs_name_every_file_with_its_pin():
+    from cas_meta2.typed_teaching import matched_contract, worker_contract
+    t4 = _t4()
+    rows = {row["path"]: (row["bytes"], row["sha256"]) for row in t4.REQUIRED_INPUTS}
+    assert len(rows) == len(t4.REQUIRED_INPUTS) == 3 + 2 + 6 + 1
+    for path, pin in worker_contract.MATERIAL.items():
+        assert rows[path] == (pin["bytes"], pin["sha256"]), path
+    assert rows[matched_contract.DEVELOPMENT_PATH] == (matched_contract.DEVELOPMENT_PIN["bytes"],
+                                                       matched_contract.DEVELOPMENT_PIN["sha256"])
+    for name, digest in worker_contract.WHEELS.items():
+        path = worker_contract.WHEEL_PREFIX + name
+        raw = (CNCM / path).read_bytes()
+        assert rows[path] == (len(raw), digest) and hashlib.sha256(raw).hexdigest() == digest, name
+    for (seed, phase), pin in t4.CHECKPOINTS.items():
+        assert rows[t4._checkpoint_path(seed, phase)] == pin
+    fixture = fixtures.FIXTURE_PATH.relative_to(CNCM).as_posix()
+    assert rows[fixture] == (len(fixtures.FIXTURE_PATH.read_bytes()), FIXTURE_FILE_SHA256)
+    assert t4.REQUIRED_SOURCE_TREES == tuple(worker_contract_prefixes())
+    assert set(t4.WHEEL_MODULES) == {"casformer", "cas_cjt"}
+    assert sorted(t4.EVAL_PATHS_FILES) == sorted(path.name for path in EVAL.glob("*.py")
+                                                 if path.name != "colour_refinement_census.py")
+    # The committed git blobs carry exactly these bytes (the records/ files are outside this sparse checkout).
+    top = _git("rev-parse", "--show-toplevel")
+    if top is None:
+        print("NOTE: no git; blob sizes not re-checked")
+        return
+    prefix = CNCM.resolve().relative_to(pathlib.Path(top.decode().strip()).resolve()).as_posix()
+    for path, (size, digest) in rows.items():
+        assert _git_blob_sha256("HEAD:%s/%s" % (prefix, path)) == (size, digest), path
+
+
+def worker_contract_prefixes():
+    tree = ast.parse((TYPED / "worker_contract.py").read_bytes())
+    function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "input_inventory")
+    loop = next(node for node in ast.walk(function) if isinstance(node, ast.For)
+                and isinstance(node.target, ast.Name) and node.target.id == "prefix")
+    return ast.literal_eval(loop.iter)
+
+
+def _git(*args):
+    import subprocess
+    try:
+        done = subprocess.run(["git", "-C", str(CNCM), *args], capture_output=True, timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return done.stdout if done.returncode == 0 else None
+
+
+def _git_blob_sha256(spec):
+    """`(bytes, sha256)` of one git blob, streamed in chunks (checkpoints are hashed, never loaded)."""
+    import subprocess
+    process = subprocess.Popen(["git", "-C", str(CNCM), "cat-file", "blob", spec], stdout=subprocess.PIPE)
+    digest, size = hashlib.sha256(), 0
+    while True:
+        chunk = process.stdout.read(1 << 16)
+        if not chunk:
+            break
+        digest.update(chunk)
+        size += len(chunk)
+    assert process.wait() == 0, spec
+    return size, digest.hexdigest()
+
+
+def test_t4_list_inputs_needs_no_torch_and_no_project_code():
+    import json
+    import subprocess
+    script = EVAL / "t4_larger_question_checks.py"
+    code = ("import json, runpy, sys\n"
+            "sys.modules['torch'] = None\n"
+            "sys.argv = ['t4', '--list-inputs']\n"
+            "try:\n"
+            "    runpy.run_path(%r, run_name='__main__')\n"
+            "except SystemExit as stop:\n"
+            "    status = stop.code\n"
+            "loaded = sorted(n for n in sys.modules if n.split('.')[0] in ('cas_meta2', 'cncm', 'eval_paths'))\n"
+            "print('@@' + json.dumps({'status': status, 'loaded': loaded}))\n" % str(script))
+    done = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True, timeout=120)
+    listing, marker = done.stdout.split("@@")
+    assert json.loads(marker) == {"status": 0, "loaded": []}, done.stderr
+    listed = json.loads(listing)
+    t4 = _t4()
+    assert [row["path"] for row in listed["required_inputs"]] == [row["path"] for row in t4.REQUIRED_INPUTS]
+    assert [row["path"] for row in listed["required_source_trees"]] == list(t4.REQUIRED_SOURCE_TREES)
+
+
+def test_t4_verify_inputs_refuses_a_missing_or_changed_file_by_name():
+    import tempfile
+    t4 = _t4()
+    first = t4.REQUIRED_INPUTS[0]["path"]
+    with tempfile.TemporaryDirectory() as folder:
+        root = pathlib.Path(folder)
+        error = _raises(t4.verify_inputs, ["d"], root)
+        assert isinstance(error, t4.SetupRefused) and str(error) == "INPUT_MISSING:" + first
+        (root / first).parent.mkdir(parents=True)
+        (root / first).write_bytes(b"{}")
+        error = _raises(t4.verify_inputs, ["d"], root)
+        assert isinstance(error, t4.SetupRefused) and str(error) == "INPUT_MISMATCH:" + first
+
+
+def test_t4_preflight_plan_and_projection():
+    t4 = _t4()
+    ids = ["r%03d" % index for index in range(564)]
+    larger, refused = ["f%02d" % index for index in range(37)], ["x%d" % index for index in range(4)]
+    work = t4.planned_work(ids, larger, refused, list(t4.CHECK_ORDER), learner_ok=True)
+    assert work == {"pp_course_calls": 3384, "pp_fixture_calls": 185 + 4, "container_builds": 6 + 5 + 3,
+                    "learner_course_calls": 2 * 564 + 2 * 71, "learner_fixture_calls": 74, "learner_builds": 4}
+    assert "learner_course_calls" not in t4.planned_work(ids, larger, refused, ["d"], learner_ok=False)
+    timings = {"pp_course": 0.45, "pp_fixture": 0.6, "learner_course": 0.5, "container_build": 2.0,
+               "learner_build": 3.0}
+    remaining = 3384 * 0.45 + 189 * 0.6 + 1270 * 0.5 + 74 * 0.65 + 14 * 2.0 + 4 * 3.0
+    projection = t4.project_total(250.0, timings, work)
+    assert abs(projection["projected_total_seconds"] - (250.0 + 1.15 * remaining)) < 1e-9
+    assert projection["projected_total_seconds"] <= t4.WALL_SECONDS
+    assert t4.project_total(250.0, {**timings, "pp_course": 0.8}, work)["projected_total_seconds"] > t4.WALL_SECONDS
+    sample_step = max(1, len(ids) // t4.PREFLIGHT_COURSE_CALLS)
+    assert len(ids[::sample_step][:t4.PREFLIGHT_COURSE_CALLS]) + len(t4.PREFLIGHT_FIXTURE_IDS) == 20
+
+
+def test_t4_check_d_switch_off_pair_uses_a_scoped_restored_substitute():
+    """Fakes only: `_build_pair` must pass the switch OFF to both constructors and restore the builder."""
+    import types
+    t4 = _t4()
+    seen = []
+
+    def build(torch, framework, device, *, analogy_focus_comparison=True):
+        seen.append(analogy_focus_comparison)
+        return types.SimpleNamespace(analogy_focus_comparison=analogy_focus_comparison)
+
+    fake = types.SimpleNamespace(_build_container=build)
+
+    class Learner:
+        def __init__(self, torch, framework, encoder, **kwargs):
+            self.module = fake._build_container(torch, framework, "cuda")  # resolved at call time, as in PL
+
+    fake.PointerCourseLearner = Learner
+    ctx = types.SimpleNamespace(PL=fake, LL=types.SimpleNamespace(LargerQuestionPointerLearner=Learner),
+                                torch=None, device="cuda", learner_kwargs=lambda run_id: {},
+                                encoder=lambda: None, framework=lambda torch, device, seed: None)
+    t4._build_pair(ctx, False)
+    assert seen == [False, False] and fake._build_container is build
+    t4._build_pair(ctx, True)
+    assert seen == [False, False, True, True] and fake._build_container is build
+    check_d = ast.unparse(next(node for node in ast.parse((EVAL / "t4_larger_question_checks.py").read_bytes()).body
+                               if isinstance(node, ast.FunctionDef) and node.name == "check_d"))
+    assert "_learner_pair(ctx, 'ON_FRESH_%d' % FRESH_SEED, True, ctx.ids)" in check_d
+    assert "ctx.ids[::D_OFF_COURSE_STRIDE]" in check_d and t4.D_OFF_COURSE_STRIDE == 8
+
+
+def test_t4_reference_digests_equal_the_committed_t4_item1_job():
+    """Check a's reference, re-read from git objects of commit 41071a3f (origin/research/helm-integration-20260923).
+
+    Needs that commit in the local object store (`git fetch origin research/helm-integration-20260923`).
+    Without git at all (an AWS bundle) the test is a no-op.
+    """
+    import json
+    t4 = _t4()
+    reference = t4.T4_REFERENCE
+    if _git("rev-parse", "--show-toplevel") is None:
+        print("NOTE: no git; T4 reference not re-read")
+        return
+    assert _git("cat-file", "-e", reference["commit"] + "^{commit}") is not None, "fetch the integration branch"
+    top = pathlib.Path(_git("rev-parse", "--show-toplevel").decode().strip()).resolve()
+    prefix = CNCM.resolve().relative_to(top).as_posix()
+    seen = {"OFF": {}, "control": {}}
+    for name, file_sha256 in reference["files_sha256"].items():
+        raw = _git("cat-file", "blob", "%s:%s/%s/%s" % (reference["commit"], prefix, reference["folder"], name))
+        assert raw is not None and hashlib.sha256(raw).hexdigest() == file_sha256, name
+        document = json.loads(raw)
+        assert document["complete"] is True and document["torch"] == reference["torch"]
+        assert document["tool_sha256_lf"] == reference["tool_sha256_lf"]
+        assert document["course_digest"] == reference["course_digest"]
+        arm = "OFF" if "_OFF_" in name else "control"
+        if arm == "OFF":
+            assert document["source_sha256_lf"] == t4.T4_REFERENCE_SOURCE_LF_SHA256
+        for row in document["results"]:
+            assert row["records"] == 564
+            if row["checkpoint"] is None:
+                continue
+            key = next(key for key in t4.CHECKPOINTS if t4._checkpoint_path(*key) == row["checkpoint"])
+            assert row["checkpoint_sha256"] == t4.CHECKPOINTS[key][1]
+            seen[arm][key] = row["overall_digest"]
+    assert seen["OFF"] == seen["control"] == t4.T4_REFERENCE_OVERALL_DIGEST
+    for path, digest in t4.T4_REFERENCE_SOURCE_LF_SHA256.items():
+        assert scope.lf_sha256(CNCM / path) == digest, path
+    tool = _git("cat-file", "blob", "%s:%s/%s" % (reference["commit"], prefix, reference["tool"]))
+    assert hashlib.sha256(tool.replace(b"\r\n", b"\n")).hexdigest() == reference["tool_sha256_lf"]
+    # Same quantity: the reference tool and this path write the per-record and overall digests the same way.
+    tool = tool.decode("utf-8")
+    assert '["%08x" % (v & 0xFFFFFFFF) for v in t.detach().float().contiguous().view(torch.int32).cpu().tolist()]' \
+        in tool
+    assert 'hashlib.sha256(json.dumps(bits, sort_keys=True, separators=(",", ":")).encode()).hexdigest()' in tool
+    assert 'hashlib.sha256("\\n".join("%s %s" % (r, per_record[r]) for r in ids).encode()).hexdigest()' in tool
+    assert "rows = PL.GraphForward(torch, model, reading, device).head_logits(plan, indicators)" in tool
+    ours = (EVAL / "larger_question_learner.py").read_text(encoding="utf-8")
+    assert '"%08x" % (value & 0xFFFFFFFF)' in ours and ".detach().float().contiguous().view(torch.int32)" in ours
+    assert 'json.dumps(bits, sort_keys=True, separators=(",", ":")).encode()).hexdigest()' in ours
+    assert t4._overall_digest(["b", "a"], {"a": "1", "b": "2"}) == hashlib.sha256(b"b 2\na 1").hexdigest()
+
+
+def test_grade_and_target_check_the_grader_pins_on_every_call():
+    packet = PACKETS["F06"]
+    good = scope.target(packet)["admissible_answers"][0]
+    assert scope.grade(packet, good)["grader_pins_checked"] == sorted(scope.D1_ACCEPTED_LF_SHA256)
+    saved = scope.D1_ACCEPTED_LF_SHA256
+    try:
+        scope.D1_ACCEPTED_LF_SHA256 = {**saved, "checker_v2.py": "0" * 64}
+        for call in (lambda: scope.grade(packet, good), lambda: scope.target(packet)):
+            error = _raises(call)
+            assert isinstance(error, scope.LargerPathRefusal) and error.code == "SOURCE_DRIFT"
+            assert error.detail == "D1_ANCHOR:checker_v2.py"
+    finally:
+        scope.D1_ACCEPTED_LF_SHA256 = saved
+    bank = fixtures.frozen_training_bank()
+    public = {"focus_world_id": bank["worlds"][0]["world_id"], "worlds": bank["worlds"], "bank": bank["bank"]}
+    original = fixtures._packet(public, "definition", None, {}, "CUBE_FACE_1")
+    saved = scope.PROTECTED_SOURCE_LF_SHA256
+    try:
+        scope.PROTECTED_SOURCE_LF_SHA256 = {**saved, "checker.py": "0" * 64}
+        error = _raises(scope.grade, original, {})
+        assert isinstance(error, scope.LargerPathRefusal) and error.code == "SOURCE_DRIFT"
+        assert error.detail == "checker.py"
+    finally:
+        scope.PROTECTED_SOURCE_LF_SHA256 = saved
+
+
+def test_kind_scope_records_the_coordinator_claim_ruling():
+    """Ruling 2026-09-23 on review F6. The builder records it; the builder does not decide it."""
+    expected = {"role_set": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"), "definition": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"),
+                "context": ("OUT_OF_SCOPE", "OUT_OF_SCOPE"),
+                "analogy": ("CHECKER_V2_D1_ACCEPTED", "CHECKER_V2_D1_ACCEPTED"),
+                "correspondence": ("CHECKER_V2_D1_ACCEPTED", "CHECKER_V2_D1_ACCEPTED"),
+                "parts": ("NOT_RULED_D1_X_COVERED_3_TO_5", "DIAGNOSTIC_ONLY"),
+                "edge_account": ("NOT_RULED_D1_X_COVERED_3_TO_5", "DIAGNOSTIC_ONLY"),
+                "reach": ("NOT_RULED_D1_X_COVERED_3_TO_5",
+                          "CLAIM_BEARING_IN_HSET2_REACH_GOLD_CROSS_CHECKED_BY_INDEPENDENT_RULES")}
+    assert {kind: (row["claim_status_at_5_nodes"], row["claim_status_at_6_nodes"])
+            for kind, row in scope.KIND_SCOPE.items()} == expected
 
 
 if __name__ == "__main__":
