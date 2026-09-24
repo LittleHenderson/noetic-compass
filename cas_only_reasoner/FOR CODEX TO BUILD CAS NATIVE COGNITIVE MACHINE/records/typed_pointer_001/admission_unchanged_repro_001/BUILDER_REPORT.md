@@ -3,9 +3,17 @@
 **Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. Built by Claude as the temporary builder while Codex is away.
 It is not an owner signature.
 
-**Status:** built, reviewed once, revised. **Not ready to freeze or launch.** **Not launched.** No AWS call. No money
-spent.
+**Status:** revision 2, conformed to Codex's reproduction policy (commit `bc46b36e`). **Not ready to freeze or
+launch.** **Not launched.** No AWS call. No torch run. No money spent. Needs a fresh review.
 
+> **Revision 2 (2026-09-24). Read section 9 first.** It supersedes sections 2, 4, 5 and 7 where they disagree.
+> - The file-hash rule is gone. The reader now follows Codex's policy: valid evidence AND identical learned state AND
+>   an identical 564-record public panel reads `STATE_AND_PANEL_REPRODUCED_FOR_ONE_SEED`. Valid evidence with any
+>   difference reads `DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY`. Any bad evidence reads `ADMISSION_INVALID_STOP`.
+> - A new AWS-only module, `recompute_reproduction_evidence.py`, recomputes the evidence. It is written, not run.
+> - The prose status parser (review finding V1) is gone. Two machine-readable states replace it:
+>   `owner_authorization` and `execution_admission`.
+>
 > **Revision 1 (2026-09-23, after the review).** A fresh reviewer said NOT READY TO FREEZE OR LAUNCH.
 > The review and my answer to each finding are in `REVIEW.md`. In short:
 > - The plan was put **on hold** at `7b6e25f8` (`LAUNCH_HELD_PENDING_AMENDMENTS`), 4 minutes after this report was
@@ -26,10 +34,14 @@ This folder holds the tools for that one job:
 | File | What it does |
 |---|---|
 | `prepare_unchanged_repro.py` | Freezes the one job (owner, request and authority records). Launches nothing. |
-| `read_reproduction.py` | After the run, prints `REPRODUCES`, `DOES_NOT_REPRODUCE` or `INCOMPLETE`. |
-| `repro_common.py` | Shared pins, checks and the two gates. Imports nothing from the launcher. |
-| `test_unchanged_repro.py` | 48 pure-Python tests (30 before revision 1). |
-| `REVIEW.md` | The review, and my disposition of each finding. |
+| `read_reproduction.py` | After the run, prints one of the three policy verdicts (revision 2; section 9). |
+| `recompute_reproduction_evidence.py` | Revision 2. AWS only. Recomputes the evidence the reader reads. Written, not run. |
+| `repro_common.py` | Shared pins, labels, the policy gate and the two states. Imports no launcher and no torch. |
+| `public_panel_manifest.json` | Revision 2. The pinned public panel: 564 course records and the historical answers. |
+| `build_panel_manifest.py` | Revision 2. Rebuilds that manifest from committed JSON (git only). |
+| `EXECUTION_ADMISSION.json` | Revision 2. The technical-readiness record. Today `NOT_READY`. |
+| `test_unchanged_repro.py` | 74 pure-Python tests (48 in revision 1). |
+| `REVIEW.md` | The review, and my disposition of each finding (revisions 0 and 1). |
 
 The job: seed 20260917, source `20208c923d41c24614504d4ecc2b289ecb66eda8`, the full 10-pass schedule,
 the committed package `package_20208c92`, the same launcher, g7.2xlarge, $15.00 booking, no automatic retry.
@@ -235,3 +247,192 @@ Files outside this working copy that I opened or touched (first version):
 
 Not opened: any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, S3 or AWS, Claude transcripts.
 No sealed or `_eval.jsonl` file exists in this checkout (name check over the whole checkout).
+
+## 9. Conformance to policy bc46b36e (revision 2, 2026-09-24)
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. Built by Claude as the temporary builder. Not an owner signature. Not yet
+reviewed.
+
+### 9.1 In plain words
+
+- **The old rule is gone.** It compared the `final.pt` file hash. A real re-run can never match that hash, because
+  the file stores the job name and the elapsed time. So the old rule could never pass.
+- **The new rule is Codex's policy, exactly.** Commit `bc46b36e`, `REPRODUCTION_POLICY.json` and `.md`. There are three
+  answers only:
+  - `STATE_AND_PANEL_REPRODUCED_FOR_ONE_SEED`: the evidence is valid, the learned state is identical, and all 564
+    panel records are identical.
+  - `DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY`: the evidence is valid, but the learned state or any panel
+    record differs. Only this answer may lead to fallback B.
+  - `ADMISSION_INVALID_STOP`: any evidence is missing, broken or tied to the wrong job. The study stops. No fallback.
+- **Four levels, two decide.** The reader works out four things from the evidence: file, learned state, panel output,
+  and continuation (optimizer and random-number state). Only learned state and panel output decide. File and
+  continuation are printed for the record and never change the answer.
+- **Zero tolerance.** Every tensor is compared by the sha256 of its exact bytes. No rounding. No missing key allowed.
+  No dtype conversion.
+- **The evidence is made on AWS only.** `recompute_reproduction_evidence.py` loads both checkpoints on a GPU, hashes
+  every tensor itself, and runs the 564 public records through the historical model. It is written. It has never run.
+- **No prose approval.** The old code searched a plan's status line for approval words (finding V1). That is gone.
+  Two machine-readable states replace it. Owner authorization: granted, read from blob-bound owner records.
+  Execution admission: `NOT_READY` today, in a JSON record bound to exact hashes.
+
+### 9.2 Policy clause to code
+
+Line numbers are in this revision. `rr` = `read_reproduction.py`, `rc` = `repro_common.py`,
+`re` = `recompute_reproduction_evidence.py`, `pu` = `prepare_unchanged_repro.py`.
+
+| Policy clause (where) | What the code does | Code |
+|---|---|---|
+| `required_for_C`: valid admission AND complete learned state identical AND complete panel identical (JSON) | `decide()` returns REPRODUCED only when all three hold | `rr:104` `decide` |
+| `missing_or_invalid_evidence: ADMISSION_INVALID_STOP` (JSON); "authorizes no fallback job" (md step 1) | every evidence problem is a named reason; any reason gives ADMISSION_INVALID_STOP; next step says no fallback | `rr:104`, `rr:529` `reading`, `rr:73` `NEXT_STEP` |
+| `valid_state_or_output_mismatch: DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY` (JSON); fallback only if job count, authority, headroom and stop rules allow, else COMPARISON_INCOMPLETE (md step 3) | the verdict for valid evidence with any difference; the next-step text names the fallback conditions and COMPARISON_INCOMPLETE | `rr:104`, `rr:73`, `rc:143` |
+| `file_hash_preserved: true`, `file_mismatch_alone_triggers_fallback: false` (JSON) | FILE_IDENTICAL / FILE_DIFFERENT is computed and printed; `decide()` takes it and never reads it | `rr:496`, `rr:104` |
+| `continuation_identity_reported_separately: true` (JSON); optimizer, RNG, cursor, revision, counters (md table) | CONTINUATION_IDENTICAL / _DIFFERENT from optimizer and RNG rows plus cursor, revision, counters, training mode, starting state; printed separately; never decides | `rr:507`, `rc:221`, `rc:245` |
+| `learned_state_tolerance: 0`; "no tolerance, rounding, missing-key allowance or dtype conversion" (md table) | per tensor: key path, dtype, shape, layout, sha256 of the logical value bytes; any difference, missing or extra key counts | `rc:255`, `rr:337` `deciding`, `rr:367` `compare_rows`, `rr:503` |
+| "all model state_dict keys ... including persistent buffers, plus encoder/vocabulary state and prediction-affecting configuration" (md table) | learned state = every model_state row + every encoder_state row (incl. the tokenizer/vocabulary) + predictive configuration + inference mode | `rc:220`, `rc:234`, `rc:187`, `re:410` `load_side`, `re:454` buffers |
+| "Architecture, switch state, number of rounds, encoder/vocabulary mapping, normalization settings and inference mode are predictive configuration" (md) | `PREDICTIVE_RUN_IDENTITY`: learner profile (file hashes of the architecture), encoder identity, core rounds, readout, heads, normalisation, prediction depth, learnable names | `rc:234`, `rr:305` `split_metadata` |
+| "Exclude only ... file path, root, elapsed time, storage/container layout, run identifier and administrative limits. Retain and report all their differences." (md) | stride, storage offset, device, run id, root, elapsed seconds, limits and the run-identity digest are envelope: reported under `envelope_differences_reported_only`, never compared | `rc:250`, `rr:305`, `rr:337` |
+| "Training-configuration or software differences ... fail the environment-admission check" (md) | a training-configuration difference between the two checkpoints is INVALID; both training receipts must show the pinned torch, CUDA and GPU | `rr:490`, `rr:224`, `rr:282` |
+| "Validate ... numerical environment" (md step 1); manifest `dependencies` | the evidence environment must equal `NUMERICAL_ENVIRONMENT` exactly, else INVALID | `rc:196`, `rr:426` |
+| "Same pinned public historical course/held-back panel, exact record IDs/order, full decoded answers, explicit refusal/error status and historical grader flags. Compare every record" (md table) | 564 records in the historical order; the reader hashes each full answer and its slot decisions itself; status; grader `correct` and the sha256 of the full grader row | `public_panel_manifest.json`, `rc:175`, `rr:390` `panel_view`, `rr:483`, `rr:517` |
+| "The final manifest must pin the complete output-panel inputs and historical reference answers" (md) | the manifest pins the course file and the Helm 2.0 `course_p10` predictions and scoring by blob and sha256; the recomputed reference panel must equal them, else INVALID | `build_panel_manifest.py`, `rr:486` |
+| "Failed/refused records remain records; only explicitly registered expected refusals compare as equal" (md) | `registered_expected_refusals` is empty; a refusal or error stays a record and compares as different | `build_panel_manifest.py`, `rr:390` |
+| "A panel cannot be reduced after a mismatch"; "No HSET-2 TEST question ... is used" (md) | the panel is pinned by file sha256 and record-id digest; order is checked; `hset2_material_used: false` | `rc:446`, `rr:479` |
+| "Do not trust those fields without recomputing them from the checked checkpoint bytes on AWS" (md) | the AWS module hashes every tensor itself; the four stored identities are only checked for integrity (mismatch = INVALID) | `re:366` `tensor_row`, `re:410`, `rr:456` |
+| "Inspection/loading must use the pinned historical loader ... Never execute an untrusted checkpoint on the laptop" (md) | loads through `PointerCourseLearner.restore_checkpoint` from the byte-verified historical package; stops with GPU_REQUIRED before torch is imported off Linux | `re:443`, `re:321` `verify_package`, `re:282` `require_gpu` |
+| "Output agreement never overrides a learned-state mismatch. A learned-state match never overrides an output mismatch." (md step 4) | `decide()`; tested both ways | `rr:104`, tests |
+| "equal-state/different-envelope, changed-value, changed-buffer, missing-key, dtype-change, altered-output and corrupt-reference checks must be implemented, reviewed and run on AWS" (md) | `--mode acceptance` builds each variant from the public reference checkpoint and checks its registered verdict | `re:522` `acceptance_specs`, `re:585` `acceptance_mode` |
+| "Missing/corrupt/misbound evidence maps to ADMISSION_INVALID_STOP ... align the existing reader's INCOMPLETE/named-stop vocabulary" (md) | `INCOMPLETE` is gone; the old mix-up stops are now named invalid reasons (V2's `CHECKPOINT_RUN_ID_MISSING` included) | `rr:173` `bound_records`, `rr:260` `new_reading` |
+| "Record standing owner authorization separately from a machine-readable technical-admission state bound to exact plan/policy/manifest hashes. A prose line containing `APPROVED_FOR_LAUNCH` is insufficient" (md) | `owner_authorization_state` reads machine fields of blob-bound records; `execution_admission_state` reads `EXECUTION_ADMISSION.json`, bound to every pinned hash; no status line is parsed anywhere | `rc:631`, `rc:694`, `rc:678`, `EXECUTION_ADMISSION.json` |
+| "A preparation-only path must not require inventing launch approval" (amendments item 2) | `--dry-run` and `--print-admission-bindings` need neither state; `--write` and `--check` need both; `--write` takes the job name from the ADMITTED record | `pu:147` `gates`, `pu:358`, `pu:364`, `pu:497` |
+| "pin the complete public panel, numerical environment and independent reader" (amendments item 2) | panel sha256; environment dict and its digest; one reader-source digest over the three reader files | `rc:175`, `rc:196`, `rc:430` |
+| policy JSON `output_panel_manifest_sha256`, `reader_source_sha256`, `reader_acceptance_receipt_sha256` (all null today) | the admission cannot be ADMITTED until they equal this panel, this reader and the P1 receipt; nor until the manifest and launch request say `launch_enabled: true` | `rc:583` `policy_freeze_violations` |
+| "keep the plan immutable ... A changed plan invalidates affected technical admission evidence, not the standing owner authority" (md) | each pinned file must be unchanged at the fetched branch tip: `--write`/`--check` stop, `--dry-run` reports | `rc:560` `check_policy`, `rc:530` |
+
+### 9.3 What runs on AWS in the P1 slot
+
+Nothing here has run. This is the plan the code implements.
+
+- **Machine.** The pinned numerical environment: g7.2xlarge (NVIDIA RTX PRO 4500 Blackwell Server Edition),
+  torch `2.11.0+cu128`, CUDA `12.8`, numpy `2.2.6`, deterministic algorithms on, TF32 off,
+  `CUBLAS_WORKSPACE_CONFIG=:4096:8`. See open question 1 about T4.
+- **Inputs, each named by sha256:**
+  - the historical package `source.zip` (`c42370c4...`, 5,977,155 bytes), unpacked at `/opt/cas-graph6curr/package`
+    (the root both checkpoints record). The module checks all 270 members byte for byte and refuses any extra `.py`;
+  - the reference `final.pt` (`c6c49e98...`, 3,670,007 bytes; committed at `c8d5c430`) and its
+    `final_checkpoint.json` (`2f4bfbd1...`);
+  - `public_panel_manifest.json` (`a27b3839...`, 442,201 bytes);
+  - the three reader sources, in a folder outside the package root.
+- **Command (P1):** `CAS_META2_RUN_TEACHING_CYCLE=1 python -B recompute_reproduction_evidence.py --mode acceptance
+  --package-root /opt/cas-graph6curr/package --package-archive <source.zip> --reference-checkpoint <final.pt>
+  --reference-record <final_checkpoint.json> --panel-manifest <public_panel_manifest.json> --work-dir <new dir>
+  --out <acceptance_receipt.json>`.
+- **What it checks (10 cases).** Self identity (REPRODUCED). Equal state with a new envelope (REPRODUCED,
+  FILE_DIFFERENT). Continuation-only difference (REPRODUCED, CONTINUATION_DIFFERENT). Changed value, changed encoder
+  state, altered output (all DOES_NOT_REPRODUCE). Equal state with one answer tampered (DOES_NOT_REPRODUCE). Missing
+  key, dtype change, corrupt reference (all ADMISSION_INVALID_STOP). The receipt says `READER_ACCEPTANCE_PASS` only if
+  all 10 give their registered answer.
+- **Work estimate, not measured.** Six panel runs of 564 records (3,384 forward passes) plus about ten checkpoint
+  loads. For scale only: the Helm 2.0 worker made 13,750 predictions and 1,470 training updates in 7,817 s.
+- **After P1.** The receipt sha256 goes into `EXECUTION_ADMISSION.json` and, by Codex, into
+  `REPRODUCTION_POLICY.json` `reader_acceptance_receipt_sha256`.
+- **After the main job.** The same module runs `--mode reading` on the same machine type. The evidence file is
+  committed at `records/typed_pointer_001/evidence_unchanged_repro_20260917/reproduction_evidence.json`. Then
+  `read_reproduction.py --receipt-commit <commit>` gives the verdict. It reads JSON only and may run anywhere.
+- **Not built yet.** No launcher ships this module to AWS. The pointer launcher only runs the training worker.
+
+### 9.4 How to run it now (supersedes section 4)
+
+From the worktree root, with the full folder path `D` as in section 4:
+
+```bash
+python -B "$D/test_unchanged_repro.py" -v                              # 74 pure-Python tests
+python -B "$D/prepare_unchanged_repro.py" --print-admission-bindings   # read-only; no approval needed
+python -B "$D/build_panel_manifest.py" --verify                        # rebuilds the panel manifest from git
+# Not on the laptop (imports the launcher): --dry-run (preparation only), --write (needs ADMITTED).
+python -B "$D/prepare_unchanged_repro.py" --check --study-sha256 <hex> --spend-so-far-usd <d.dd> --spend-source "<where>"
+python -B "$D/read_reproduction.py" --receipt-commit <commit>          # exit 0 valid verdict, 2 INVALID_STOP, 1 tool stop
+```
+
+To admit the job later: run P1, collect every prerequisite receipt, then write a new `EXECUTION_ADMISSION.json`
+with `state: ADMITTED`, the job name, every receipt sha256 and the bindings printed by `--print-admission-bindings`.
+Commit it as is. Only then does `--write` proceed.
+
+### 9.5 Checks (real, this revision)
+
+- **Tests.** 74 of 74 pass, none skipped (`python -B test_unchanged_repro.py -v`). They cover all 32 combinations of
+  `decide()`, non-boolean inputs, the label spellings in the real policy files, every policy pin, the panel manifest
+  rebuilt from git byte for byte, both states (including prose-only approval and approval words in a state field),
+  the preparation-only path, and the reader over synthetic evidence.
+- **Mutation check (scratch script).** I broke the rule three ways in memory: output alone decides, file identity
+  decides, invalid evidence reads as a mismatch. The tests caught each one (6, 6 and 7 failures). Ignoring the tensor
+  value bytes was caught too (2 failures). The clean run then had 0 failures.
+- **Live gates, real repository, real fetch.** Owner authorization: `STANDING_PROJECT_AUTHORIZATION`, no reasons (the
+  three recorded owner files at `bc46b36e` and `ca68690b`, blobs `10069e00`, `e6cfe5b9`, `f707ce45`). Execution
+  admission: `NOT_READY`, 16 named reasons: the state itself, no job name, all six prerequisites not passed, seven
+  policy/manifest/launch-request freeze fields not set, and the record not yet committed. The launcher and torch were
+  not imported.
+- **The write path stops today** with `POLICY_OR_PLAN_MOVED`. Codex's branch moved after `bc46b36e` (commits
+  `510dd0d2`, `4489cc62`, agent-bus coordination). `LAUNCH_REQUEST.json` and `CODEX_AMENDMENTS_20260924.md` changed.
+  No deciding file changed. See open question 2.
+- `--check` stops with `NOTHING_FROZEN_RUN_WRITE_FIRST` (exit 1). `read_reproduction.py --receipt-commit 000...0`
+  passes the policy check, then stops on the missing commit (exit 1, no verdict).
+- **Not run:** anything in `recompute_reproduction_evidence.py` that imports torch; `--dry-run` and `--write` (they
+  import the launcher; not on the laptop). No AWS call. No money spent.
+
+### 9.6 Open questions and conflicts (not chosen silently)
+
+1. **P1 machine type.** The cost envelope names a T4 for P1. The historical code refuses a T4 (`gpu_adapter._cuda`,
+   `T4_NOT_ADMITTED`), and the pinned environment is the RTX PRO 4500. The historical answers are only expected to
+   reproduce bit for bit on the pinned GPU. On a T4 the acceptance would read ADMISSION_INVALID_STOP. Which machine?
+2. **Codex's branch moved after `bc46b36e`.** Only coordination notes changed. I kept all eight pinned files under
+   the currency check, so `--write` and `--check` stop until a reviewed re-pin. Should the currency check cover only
+   the deciding files (policy, manifest, plan, protocol, statistical policy)?
+3. **Missing key and dtype change.** The policy table counts them as learned-state differences (a valid mismatch).
+   The pinned historical loader refuses such a checkpoint, so no panel evidence can exist, and the reading is
+   ADMISSION_INVALID_STOP. Policy step 1 ("full state inventory ... any missing evidence") supports the stop. The
+   reader, given complete evidence, would read DOES_NOT_REPRODUCE. Which is intended?
+4. **Unregistered refusals.** The reproduction policy keeps them as differing records (DOES_NOT_REPRODUCE). The plan
+   (section 3) says unexpected route errors invalidate the reading. I followed the reproduction policy. Confirm.
+5. **Route.** The plan names the common `predict_packet` adapter (builder snapshot `cc68d8b3`) for both study arms.
+   For this reproduction panel I used the historical learner route, which produced the pinned historical answers.
+   Route check 1 requires the two to agree on course packets. Confirm this is acceptable.
+6. **Panel scope.** The panel is the 564-record public course, including its 127 held-back records. I did not add the
+   59-record public development panel. Should it be added?
+7. **Slot decisions.** I counted the decoded slot decisions as part of the "full decoded answer" (stricter than the
+   answer alone). Confirm.
+8. **Environment lock.** Driver, cuDNN, Python and AMI are recorded, not pinned. The manifest itself says
+   `NOT_READY_FULL_ENVIRONMENT_NOT_FROZEN`. The Helm 2.0 run recorded AMI `ami-0fbbd0facbc9e3cff`.
+9. **P1 packaging.** No launcher exists for this module yet.
+10. **Which plan file is "the plan".** The amended plan (blob `2462d158`) exists only on Codex's branch. The
+    integration branch still carries the held plan (blob `3172a221`). The pins name Codex's copy.
+11. **Spend.** `--check` still takes an operator-stated figure. The `budget_headroom_verified` prerequisite asks for a
+    figure read from a record, but no runner reads one yet. The $30 stop before the third training job is still not
+    enforced by code (Codex item 6).
+12. **Fallback B admissions** still do not exist (review finding 6).
+
+### 9.7 EXPOSURE (revision 2)
+
+- **Git objects read** with `git show`, `ls-tree`, `diff`, `log`, `rev-parse`:
+  - Codex's branch at `bc46b36e`: `REPRODUCTION_POLICY.json/.md`, `EXECUTION_MANIFEST.json`, `LAUNCH_REQUEST.json`,
+    `STATISTICAL_POLICY.json`, `ROUTE_AND_CHECKPOINT_PROTOCOL.md`, `OWNER_STANDING_AUTHORIZATION_20260924.json/.md`,
+    `PREPARATION_AUTHORITY.md`, the amended plan (head only), `CODEX_AMENDMENTS_20260924.md`, and the sha256 of
+    `COST_*`, `CURRENT_COORDINATION_STATE.json`, `LEDGER_RECONCILIATION.json`, `SMOKE_*`, `EVALUATION_DESIGN_v0_4.md`
+    and `AGENTS.md` (hashes only, to check the launch request's pins). The diff to `4489cc62` for two files.
+  - The integration branch: `ca68690b` (Claude's owner record), and the plan blob ids at `197caa32`, `7b6e25f8`,
+    `ca68690b` and its tip `51917b06`.
+  - The Helm 2.0 receipt at `c8d5c430`: `final_checkpoint.json`, `course_p10_predictions.json`,
+    `course_p10_scoring.json`, `worker_report.json`; the top-level `result.json` (key names and the preflight AMI id
+    only; it embeds ledger snapshots, and I printed none of their content); file listings (names, sizes, blob ids;
+    sealed and `_eval.jsonl` names filtered out).
+- **Files read in this worktree** (source `20208c92`, not edited): `pointer_learner.py`, `learner.py`,
+  `pointer_contract.py`, `encoder.py`, `gpu_adapter.py`, `cncm/typed_pointer_worker.py`, `typed_matched_worker.py`,
+  `typed_course_worker.py`, `typed_practice_worker.py`, `typed_pointer_launch.py` (`validate_owner` only),
+  `requirements-gpu.txt`, `public_course.json`, and the package `source.zip` member names.
+- **Network:** `git fetch origin` with explicit refspecs for `codex/helm-controlled-prelaunch-20260924` (the gate moved
+  its tracking ref to `4489cc62`) and `research/helm-integration-20260923` (to `51917b06`); the `git push` of this
+  commit.
+- **Written outside this worktree:** three scratch scripts in the session scratchpad (`write_admission.py`,
+  `mutants.py`, `live_gates.py`).
+- The tool harness saved one long listing under `C:/Users/wakil/.claude/projects/.../tool-results/`. I did not open it.
+- **Not opened:** any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, the meta1 ledger (not
+  even an existence check), S3 or AWS, Claude transcripts, Codex's working copy.

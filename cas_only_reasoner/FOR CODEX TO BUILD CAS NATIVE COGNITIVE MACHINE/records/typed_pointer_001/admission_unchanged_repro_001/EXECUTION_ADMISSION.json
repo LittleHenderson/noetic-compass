@@ -1,0 +1,90 @@
+{
+ "admitted_by": null,
+ "admitted_utc": null,
+ "bindings": {
+  "job_kind": "UNCHANGED_ARM_REPRODUCTION",
+  "model_seed": 20260917,
+  "numerical_environment_sha256": "c04d66208d6bf70f492e2ab9b14d553b240649b4de825bbee72112540493aa05",
+  "owner_records_blob": {
+   "claude_extension_md": "f707ce455c08e51c5ce18ae5114a7d5b530a9f82",
+   "codex_standing_json": "10069e00869439fdbf58760b5ea712b16c652f18",
+   "codex_standing_md": "e6cfe5b99c039ba21ac6ff68394f3648cfee8e5e"
+  },
+  "package_archive_sha256": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8",
+  "panel_manifest_sha256": "a27b3839f6fe5cb07d498c591395a30f06725a1ea0ee5882dcccbb1c2647c3e2",
+  "policy_commit": "bc46b36e60d904248fee03e5d7212f0eb5886c38",
+  "policy_files_sha256": {
+   "codex_amendments": "4541ddbccff7804e0fce13f76b1d3e61d8e30fdca431b4df106644ce6410f9c9",
+   "execution_manifest": "a321e3221335db55a359962f3f800f6bfd1b0e8d46876cc7fec8350cfd366628",
+   "launch_request": "f2e789bb7798578896f7adb56cc70ff6d95209106861e1bc432504fb02f564d4",
+   "plan": "2b840818952cb7ed44b1efbf7b2f4518d596340b975eb75f5d4ea4fbc97d4753",
+   "reproduction_policy_json": "13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259",
+   "reproduction_policy_md": "92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e",
+   "route_and_checkpoint_protocol": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
+   "statistical_policy": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055"
+  },
+  "reader_rule_sha256": "4f20ad168b571867c03c0a5c482df51a22d6a330ca1609cfa3000d17d2128b38",
+  "reader_source_sha256": "46a595accea1743b5968aadb395e92a9d5d54a9840d69c8dd63362575439a017",
+  "reader_sources_sha256": {
+   "read_reproduction.py": "6b810640d8da2eabcf92fcf7e1063b62abf59e14aa72e968dae5e84d56f08b6b",
+   "recompute_reproduction_evidence.py": "077b6344b2e2268f8356343b92e243d7ef58e26eedd1c8c99cce02beea1f62f7",
+   "repro_common.py": "43793f4d04311881da5b2d55d5dd6f8001e404eaea41bc7a40e3c86f3cd29b61"
+  },
+  "reference_final_pt_sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+  "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+ },
+ "job": null,
+ "job_kind": "UNCHANGED_ARM_REPRODUCTION",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "model_seed": 20260917,
+ "note": "Technical readiness for ONE job (the unchanged reproduction, seed 20260917 of 20208c92). NOT_READY: no prerequisite has a receipt. Owner authorization is a separate state and is granted (STANDING_PROJECT_AUTHORIZATION, owner records bound by blob). Only a technical admission that changes state to ADMITTED, names the job, carries every receipt sha256 and is committed as is lets prepare_unchanged_repro.py --write or --check proceed. No approval word is used anywhere.",
+ "owner_authorization": {
+  "records": {
+   "claude_extension_md": "f707ce455c08e51c5ce18ae5114a7d5b530a9f82",
+   "codex_standing_json": "10069e00869439fdbf58760b5ea712b16c652f18",
+   "codex_standing_md": "e6cfe5b99c039ba21ac6ff68394f3648cfee8e5e"
+  },
+  "state": "STANDING_PROJECT_AUTHORIZATION"
+ },
+ "prerequisites": {
+  "budget_headroom_verified": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "measured spend so far + $15.00 <= $60.00, read from a named spend record (not operator-stated)"
+  },
+  "final_launch_packet_frozen": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "EXECUTION_MANIFEST.json final_freeze.frozen_launch_packet_sha256 set, launch_enabled true, LAUNCH_REQUEST.json launch_enabled true"
+  },
+  "fresh_review_of_this_revision": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "a fresh reviewer verdict on the exact reader sources bound below"
+  },
+  "numerical_environment_frozen": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "the full environment lock (driver, cuDNN, Python, AMI) recorded in the final manifest, and equal to the P1 evidence environment"
+  },
+  "reader_acceptance_on_aws_p1": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "recompute_reproduction_evidence.py --mode acceptance on AWS in the P1 slot, receipt status READER_ACCEPTANCE_PASS; its sha256 also written into REPRODUCTION_POLICY.json reader_acceptance_receipt_sha256"
+  },
+  "reproduction_policy_frozen_with_panel_and_reader": {
+   "receipt_path": null,
+   "receipt_sha256": null,
+   "status": "NOT_RUN",
+   "what_passes_it": "a re-pinned REPRODUCTION_POLICY.json whose output_panel_manifest_sha256 and reader_source_sha256 equal the bindings below"
+  }
+ },
+ "schema": "cncm.helm-unchanged-reproduction-execution-admission/1",
+ "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+ "state": "NOT_READY"
+}

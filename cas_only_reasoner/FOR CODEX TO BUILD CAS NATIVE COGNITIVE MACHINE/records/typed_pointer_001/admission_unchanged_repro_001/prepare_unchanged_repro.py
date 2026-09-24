@@ -1,63 +1,57 @@
 """Freeze ONE job: the unchanged-arm reproduction of Helm 2.0 seed 20260917 at 20208c92. Admission records only.
 
-WHAT THIS IS. HELM-REPAIR-CONTROLLED-1, option C (plan section 4a): re-run seed 20260917 of the historical Helm 2.0
-source `20208c923d41c24614504d4ecc2b289ecb66eda8`, with the full registered 10-pass schedule, from the committed
-package `package_20208c92`, through the same launcher (`aws/typed_pointer_launch.py`). `read_reproduction.py` then
-reads `REPRODUCES` / `DOES_NOT_REPRODUCE` / `INCOMPLETE` against the Helm 2.0 receipt's `final.pt` sha256.
+WHAT THIS IS. HELM-REPAIR-CONTROLLED-1, option C: re-run seed 20260917 of the historical Helm 2.0 source
+`20208c923d41c24614504d4ecc2b289ecb66eda8`, with the full registered 10-pass schedule, from the committed package
+`package_20208c92`, through the same launcher (`aws/typed_pointer_launch.py`). After the run,
+`recompute_reproduction_evidence.py` (AWS only) writes the evidence and `read_reproduction.py` reads it under Codex's
+reproduction policy revision 1 (commit bc46b36e): STATE_AND_PANEL_REPRODUCED_FOR_ONE_SEED,
+DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY, or ADMISSION_INVALID_STOP.
 
-MODELLED ON Helm 2.0's own admission writer at this commit, `records/typed_pointer_001/prepare_study.py`, and on the
-switch-ON writers (`admission_analogy_on_001/`, branch `claude/helm-builder-continuation-20260923`). Differences:
-  * ONE job, not three. Seed 20260917 only.
-  * The package is NOT built here. The committed one (commit 3da10d84, restored blob-identical on this branch) is
-    VERIFIED with the launcher's own functions: its archive and manifest digests, its input rows against
-    `frozen_inputs(20208c92)`, every data member against `git_package_bytes(20208c92)`, its worker member against
-    `render_worker()`, its evidence contract against `evidence_contract()`, and the launcher's own `_locate_archive`.
-  * No rehearsal. The same package bytes were rehearsed at 3da10d84 (`admission_001/rehearsal*`,
-    EXACT_PACKAGE_WINDOWS_REFUSAL_BEFORE_NUMERIC_IMPORT); Helm 2.0's delivered seed-17 run shipped the same bytes
-    (its `collected/input/source.zip` is blob 50201036, the package's blob).
-  * The records are checked against Helm 2.0's own seed-17 request and authority: every field equal except the job
-    name (and the owner-record hash); the worker config equal once the job name is swapped.
-  * The owner record quotes the owner's launch approval and option-C delegation, and the plan's option-C text,
-    verbatim, each checked to occur exactly once in the plan blob at commit 197caa32.
+MODELLED ON Helm 2.0's own admission writer (`records/typed_pointer_001/prepare_study.py`). ONE job, not three. The
+committed package is VERIFIED with the launcher's own functions, not rebuilt. The records are checked against Helm
+2.0's own seed-17 request and authority: every field equal except the job name (and the owner-record hash).
+
+TWO STATES, KEPT APART (revision 2; owner record ca68690b; Codex amendment item 2; review finding V1):
+  * owner_authorization  - STANDING_PROJECT_AUTHORIZATION, read from the three recorded owner files (git blob ids and
+                           sha256 pinned in `repro_common.OWNER_RECORDS`). Nothing reads a status word out of prose.
+  * execution_admission  - `EXECUTION_ADMISSION.json` in this folder: ADMITTED only when it is committed as is, bound
+                           to the exact plan, policy, manifest, panel, environment and reader-source hashes, names this
+                           job, and every prerequisite receipt is present. Today it is NOT_READY.
+`--dry-run` is PREPARATION ONLY: it needs neither state and reports both. `--write` and `--check` refuse unless both
+hold. The job name is taken from the ADMITTED record, so the frozen job is exactly the admitted one. No approval word is
+inserted anywhere to get past a check.
 
 REFUSALS (each an explicit stop, never an `assert`):
-  * THE PLAN GATE (revision 1, review BLOCKER 1). The plan branch is fetched with an explicit refspec. Its tip, and the
-    local branch's tip if there is one, must still carry the pinned plan blob, and the status line must read
-    APPROVED_FOR_LAUNCH. Otherwise PLAN_MOVED_OR_HELD. TODAY THIS STOPS: commit 7b6e25f8 put the launch on hold.
-  * THE POLICY GATE (revision 1, review BLOCKER 2). `repro_common.REPRODUCTION_POLICY` must name the amended plan and
-    the rule `read_reproduction.READER_RULE` implements. Otherwise REPRODUCTION_POLICY_NOT_FIXED_BY_AN_AMENDED_PLAN.
-    Both gates run BEFORE the launcher is imported, in every mode.
+  * THE POLICY GATE. Every pinned policy file (plan, REPRODUCTION_POLICY.json/.md, EXECUTION_MANIFEST.json,
+    LAUNCH_REQUEST.json, STATISTICAL_POLICY.json, ROUTE_AND_CHECKPOINT_PROTOCOL.md, CODEX_AMENDMENTS) must be the
+    pinned blob at bc46b36e; REPRODUCTION_POLICY.json must be exactly the rule the reader implements; LAUNCH_REQUEST.json
+    must pin the same hashes (else POLICY_IS_NOT_THE_RULE_THE_READER_IMPLEMENTS, in every mode). Every pinned file
+    must also be unchanged at the freshly fetched branch tip: `--write` and `--check` stop with POLICY_OR_PLAN_MOVED,
+    `--dry-run` reports the moved files and carries on (a changed plan invalidates the ADMISSION, not preparation).
+    Runs before the launcher is imported.
   * HEAD must descend from 20208c92, and differ from it ONLY by ADDED files in this folder and in `package_20208c92/`.
-    Any difference under `cncm/`, `cas_meta2/`, `aws/` or the other input-inventory trees is refused by name.
   * Nothing may be modified, staged or untracked, except this folder's own outputs (`frozen/`, the reading file).
-  * `frozen/`, `frozen.partial/` or the receipt folder `records/typed_pointer_001/receipt_unchanged_repro_20260917`
-    existing is refused. Nothing is overwritten and nothing is deleted.
+  * `frozen/`, `frozen.partial/` or the receipt folder existing is refused. Nothing is overwritten or deleted.
 
 WHAT IT WRITES (--write only). One folder, `frozen/`: `frozen/20260917/{owner,request,authority}.json` and
 `frozen/study.json`, written into `frozen.partial/`, read back, re-validated with the launcher, then renamed.
 
---check (revision 1, review MINOR 3 and part of MINOR 1). Run IMMEDIATELY before `launch_argv`. Launcher-free. It
-re-runs: the existing-folder refusals (except `frozen/`, which must now exist and be committed as is); the tree rule
-and the untracked rule; the plan gate (with a fresh fetch) and the policy gate; `frozen/study.json` against the sha256
-the --write step printed; every frozen-file pin and the exact launch argv; the archive the launcher located at freeze
-time (still there, same bytes); the canonical ledger path (existence only, never opened); and the spend gate:
-the measured spend so far, STATED by the operator with its source, + $15.00 must be at most $60.00. It does NOT check
-that the switch-ON smoke and the three repaired seeds were delivered, nor the $30 stop before the third training job;
-the runner that would read those is left to the amended launch request (see REVIEW.md, MINOR 1).
+--check. Run IMMEDIATELY before `launch_argv`. Launcher-free. It re-runs the existing-folder refusals, the tree and
+untracked rules, both states (with a fresh fetch), `frozen/study.json` against the sha256 --write printed, every
+frozen-file pin and the exact launch argv, the located archive, the ledger path (existence only) and the spend gate
+(measured spend so far, STATED by the operator with its source, + $15.00 <= $60.00).
 
-WHERE IT MUST RUN. From this checkout (`_worktrees/helm-unchanged-repro-20260924`), the checkout the job will be
-launched from: the launcher derives the canonical meta1 ledger path from its own location. No torch, no AWS call.
-Its only network use is the one `git fetch` of the plan branch. --dry-run and --write read about 290 git blobs and
-hash the 18 practice checkpoints (the launcher's own input check).
+WHERE IT MUST RUN. `--dry-run` and `--write` import the launcher, read about 290 git blobs and hash 18 checkpoints:
+not on the laptop (the owner's compute rule). `--print-admission-bindings` and `--check` are launcher-free.
 
-USAGE (run with `python -B`, from the worktree root: deeper folders exceed the Windows path limit):
-    python -B prepare_unchanged_repro.py --dry-run     # builds and validates everything, writes nothing
-    python -B prepare_unchanged_repro.py --write       # the same, then writes frozen/
+USAGE (python -B, from the worktree root: deeper folders exceed the Windows path limit):
+    python -B prepare_unchanged_repro.py --print-admission-bindings   # read-only: the hashes an admission must carry
+    python -B prepare_unchanged_repro.py --dry-run                    # preparation only; writes nothing
+    python -B prepare_unchanged_repro.py --write                      # needs ADMITTED; writes frozen/
     python -B prepare_unchanged_repro.py --check --study-sha256 <hex> --spend-so-far-usd <d.dd> --spend-source <text>
-Job stamps are taken at run time, so --write produces a different job name from the dry run.
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED. Builder: Claude (temporary takeover while Codex is away). This script transcribes
-the owner's words; it is not an owner signature. The plan requires this writer to be REVIEWED before the job runs.
+the owner's words; it is not an owner signature.
 """
 import argparse
 from datetime import datetime, timezone
@@ -73,22 +67,18 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 import repro_common as common  # noqa: E402
-import read_reproduction as reader  # noqa: E402  (imports only repro_common; used for READER_RULE)
 
 stop_unless = common.make_stop('UNCHANGED_REPRO_ADMISSION_STOPPED:')
-STUDY_SCHEMA = 'cncm.typed-pointer-unchanged-reproduction-admission/0.2'
+STUDY_SCHEMA = 'cncm.typed-pointer-unchanged-reproduction-admission/0.3'
 REDUCED_SCHEDULE_MARK = b'CNCM_POINTER_REDUCED_SCHEDULE'
-# A builder finding, recorded (not acted on) because only the owner may change the plan's test. See BUILDER_REPORT.md.
+PREPARATION_ONLY = 'PREPARATION_ONLY_NO_OWNER_OR_EXECUTION_APPROVAL_NEEDED_OR_USED'
 FINAL_PT_FINDING = (
     'final.pt is torch.save of {schema, metadata, model_state, optimizer_state, encoder_state, rng_state} '
-    '(pointer_learner.py export_checkpoint, lines 2045-2082 at 20208c92). metadata carries run_identity, whose '
-    'context.run_id is the job name (cncm/typed_pointer_worker.py line 872), and elapsed_seconds, a time.monotonic '
-    'wall-clock reading (pointer_learner.py lines 1837-1838). A re-run needs a fresh job name (new bucket) and cannot '
-    'repeat the elapsed time, so its final.pt bytes, and therefore its sha256, cannot equal Helm 2.0\'s even if every '
-    'weight is identical. Under the plan\'s test as written this job is expected to read DOES_NOT_REPRODUCE. The '
-    'reader records the weight-only identities (model_state_identity and three more) as NON-DECIDING diagnostics. '
-    'Confirmed by the fresh review (BLOCKER 2). Revision 1: the writer and the reader now stop until the owner-shared '
-    'review\'s item 2 is settled by an amended plan (repro_common.REPRODUCTION_POLICY).')
+    '(pointer_learner.py export_checkpoint at 20208c92). metadata carries run_identity (whose context.run_id is the job '
+    'name, cncm/typed_pointer_worker.py line 872) and elapsed_seconds, so a genuine re-run cannot give the same FILE '
+    'sha256. Policy bc46b36e therefore decides by recomputed learned-state identity AND the complete public panel; file '
+    'identity is printed separately and never decides (REPRODUCTION_POLICY.json file_mismatch_alone_triggers_fallback '
+    '= false).')
 
 
 def load_launcher():
@@ -146,10 +136,41 @@ def helm2_records():
     stop_unless(all(authority[key] == value for key, value in common.HELM2_BINDINGS.items()), 'HELM2_BINDINGS')
     stop_unless(records['owner.json']['bounds'] == common.EXPECTED_BOUNDS, 'HELM2_OWNER_BOUNDS')
     stop_unless(records['owner.json']['condition'] == common.HELM2_CONDITION, 'HELM2_CONDITION')
-    # The delivered Helm 2.0 run shipped exactly this package: its collected source.zip is the package's blob.
     shipped = common.blob_id(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/collected/input/source.zip')
     stop_unless(shipped == common.PACKAGE_BLOBS['source.zip'], 'HELM2_RUN_SHIPPED_A_DIFFERENT_PACKAGE:' + shipped)
     return records
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# The two states and the policy gate (revision 2). All launcher-free; they run before the launcher is imported.
+# ---------------------------------------------------------------------------------------------------------------------
+def gates(*, fetch=True, require_admitted=False, job=None):
+    """The policy gate always stops on a violation. The two states stop ONLY when `require_admitted` is set.
+
+    `require_admitted=False` is the preparation-only path (`--dry-run`): it needs no owner approval and no execution
+    admission, and it cannot be satisfied or bypassed by inserting any word anywhere.
+    """
+    policy = common.check_policy(stop_unless, fetch=fetch, require_current=require_admitted)
+    owner = common.owner_authorization_state(common.read_owner_records())
+    raw, committed = common.read_execution_admission()
+    admission = common.execution_admission_state(
+        raw, expected_bindings=common.expected_admission_bindings(), owner_state=owner, policy=policy['policy'],
+        manifest=policy['manifest'], launch_request=policy['launch_request'], committed=committed, job=job)
+    if require_admitted:
+        stop_unless(owner['state'] == common.OWNER_AUTHORIZED,
+                    'OWNER_AUTHORIZATION_NOT_ESTABLISHED:' + '|'.join(owner['reasons'])[:1500])
+        stop_unless(admission['state'] == common.ADMITTED,
+                    'EXECUTION_ADMISSION_IS_NOT_ADMITTED:' + '|'.join(admission['reasons'])[:1500])
+    return {'policy': policy, 'owner_authorization': owner, 'execution_admission': admission}
+
+
+def admission_summary(gate):
+    admission = gate['execution_admission']
+    return {'policy_tip_violations': gate['policy']['tip'].get('violations'),
+            'owner_authorization': gate['owner_authorization']['state'],
+            'owner_authorization_reasons': gate['owner_authorization']['reasons'],
+            'execution_admission': admission['state'], 'execution_admission_recorded_state': admission['recorded_state'],
+            'execution_admission_reasons': admission['reasons'], 'execution_admission_job': admission['job']}
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -181,9 +202,6 @@ def verify_package(launch):
     stop_unless(launch.digest(raw) == common.ARCHIVE_SHA256 and len(raw) == common.ARCHIVE_BYTES, 'PACKAGE_ARCHIVE')
     stop_unless(launch._git_object_id(raw) == common.PACKAGE_BLOBS['source.zip'], 'PACKAGE_ARCHIVE_BLOB')
     del raw
-    # The launcher's OWN search, by the hash the request binds. It follows the receipt's recorded `archive` path,
-    # which names the checkout the package was built in (see BUILDER_REPORT.md, open question 2), and it hashes the
-    # file it finds before accepting it, so whichever copy it finds is these exact bytes.
     located = Path(launch.lifecycle._locate_archive(common.ARCHIVE_SHA256))
     stop_unless(launch.digest(located.read_bytes()) == common.ARCHIVE_SHA256, 'LOCATED_ARCHIVE_BYTES')
     rows = launch.frozen_inputs(common.SOURCE_SHA)
@@ -253,13 +271,14 @@ def validate(launch, request, authority, owner_path):
     launch.validate_owner(owner_path, authority)
 
 
-def build(launch, *, stamp, plan, package, helm2):
+def build(launch, *, stamp, gate, package, helm2):
     """Every record, in memory, validated with the launcher before anything is written."""
     job = common.check_stamp(stamp, stop_unless)
     stop_unless(re.fullmatch(launch.JOB_PATTERN, job) is not None, 'JOB_FORM:' + job)
     stop_unless(launch.contract.parse_job(job) == (common.HELM2_CONDITION, common.MODEL_SEED), 'JOB_PARSE')
     owner = common.owner_record(schema=launch.OWNER_SCHEMA, candidate=launch.CANDIDATE, job=job,
-                                condition=launch.contract.CONDITION, bounds=launch.BOUNDS, plan=plan)
+                                condition=launch.contract.CONDITION, bounds=launch.BOUNDS,
+                                owner_state=gate['owner_authorization'], admission=gate['execution_admission'])
     owner_raw = launch.canonical(owner)
     identity = {'source_sha': common.SOURCE_SHA, 'archive_sha256': package['archive_sha256'],
                 'manifest_sha256': package['manifest_sha256']}
@@ -294,8 +313,8 @@ def build(launch, *, stamp, plan, package, helm2):
                                'evidence_contract_sha256': authority['evidence_contract_sha256']}
 
 
-def study_record(launch, *, head, plan, plan_tips, package, job, bindings):
-    owner_words, plan_words = common.quotes_record()
+def study_record(launch, *, head, gate, package, job, bindings):
+    admission = gate['execution_admission']
     return {'schema': STUDY_SCHEMA, 'status': 'FROZEN_BEFORE_FIRST_RUN', 'label': common.LABEL,
             'runner': common.RUNNER, 'source_sha': common.SOURCE_SHA, 'prepared_at_head': head,
             'source_checkout': str(common.ROOT), 'candidate': launch.CANDIDATE, 'config_schema': launch.CONFIG_SCHEMA,
@@ -305,25 +324,25 @@ def study_record(launch, *, head, plan, plan_tips, package, job, bindings):
                                 'folder': common.GIT_PREFIX + common.HELM2_ADMISSION_REL,
                                 'blobs': dict(common.HELM2_ADMISSION_BLOBS), 'job': common.HELM2_JOB},
             'comparison_target': common.reference_pointer(),
-            'owner_words_verbatim': owner_words, 'plan_text_verbatim': plan_words, 'plan_record': plan,
-            'plan_tips_at_freeze': plan_tips, 'reproduction_policy': dict(common.REPRODUCTION_POLICY),
-            'sixty_dollar_readings': common.SIXTY_DOLLAR_READINGS,
-            'owner_answered_date': common.OWNER_ANSWERED_DATE,
-            'verdict_rule': {'reader_rule': reader.READER_RULE,
-                             'reproduces': plan_words['plan_test_reproduces'],
-                             'does_not_reproduce': plan_words['plan_test_does_not_reproduce'],
-                             'incomplete': plan_words['plan_stop_not_delivered'],
-                             'reader': 'records/typed_pointer_001/admission_unchanged_repro_001/read_reproduction.py'},
+            'owner_words_verbatim': {name: words for name, (words, _) in common.OWNER_QUOTES.items()},
+            'owner_authorization': {'state': gate['owner_authorization']['state'],
+                                    'records': gate['owner_authorization']['records']},
+            'execution_admission': {'state': admission['state'], 'record_sha256': admission['record_sha256'],
+                                    'job': admission['job'], 'record': common.GIT_PREFIX + common.ADMISSION_REL,
+                                    'bindings': common.expected_admission_bindings()},
+            'reading_rule': common.reading_rule_record(), 'policy_tip_at_freeze': gate['policy']['tip'],
+            'readers': {'evidence': 'records/typed_pointer_001/admission_unchanged_repro_001/'
+                                    'recompute_reproduction_evidence.py (AWS only)',
+                        'verdict': 'records/typed_pointer_001/admission_unchanged_repro_001/read_reproduction.py'},
             'builder_finding_final_pt_identity': FINAL_PT_FINDING,
-            'before_launch_required': [plan_words['plan_job_order_item_3'], plan_words['plan_before_each_job'],
-                                       plan_words['plan_earlier_stop'], plan_words['plan_ceiling'],
+            'before_launch_required': ['execution_admission ADMITTED for this job (every prerequisite receipt present)',
+                                       'measured spend so far + $15.00 <= $60.00',
                                        'prepare_unchanged_repro.py --check passes, run immediately before launch_argv'],
             'check_before_launch': ('python -B <this file> --check --study-sha256 <study.json sha256> '
                                     '--spend-so-far-usd <measured spend so far> --spend-source <where it was read>'),
-            'not_enforced_by_this_writer': ('that the switch-ON smoke and the three repaired seeds were delivered, and '
-                                            'the $30 stop before the third training job, are checked by the operator; '
-                                            '--check enforces the plan gate, the policy gate, the pins and the '
-                                            '$60.00 spend arithmetic on the stated figure'),
+            'not_enforced_by_this_writer': ('the $30 stop before the third training job and the job order are the '
+                                            'amended envelope\'s; --check enforces the two states, the policy gate, '
+                                            'the pins and the $60.00 arithmetic on the stated figure'),
             'limits': launch.BOUNDS, 'jobs': [job], 'launcher': str(common.ROOT / common.LAUNCHER_REL),
             'canonical_ledger': str(launch.CANONICAL_LEDGER), 'automatic_retries': 0,
             'execute_study_py': ('NOT USED: records/typed_pointer_001/execute_study.py requires three jobs and the '
@@ -333,34 +352,31 @@ def study_record(launch, *, head, plan, plan_tips, package, job, bindings):
             'numeric_runs_completed': 0}
 
 
-def gates():
-    """The plan and the policy gates (revision 1). Run before the launcher is imported, in every mode."""
-    plan = common.read_plan(stop_unless)
-    tips = common.check_plan_is_current(stop_unless, fetch=True)
-    common.check_policy_fixed(stop_unless, reader.READER_RULE)
-    return plan, tips
-
-
 def prepare(*, write):
     refuse_existing()                    # first, so a leftover `.partial` is named as such, not as "untracked"
     head = check_repository()
-    plan, plan_tips = gates()
+    gate = gates(fetch=True, require_admitted=write)
     helm2 = helm2_records()
     launch = load_launcher()
     check_launcher(launch)
     package = verify_package(launch)
-    stamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
-    files, job, bindings = build(launch, stamp=stamp, plan=plan, package=package, helm2=helm2)
+    if write:
+        stamp = common.stamp_of(gate['execution_admission']['job'])     # the ADMITTED job, exactly
+        stop_unless(stamp is not None, 'ADMITTED_JOB_NAME_FORM')
+    else:
+        stamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
+    files, job, bindings = build(launch, stamp=stamp, gate=gate, package=package, helm2=helm2)
     stop_unless(bindings == common.HELM2_BINDINGS, 'BINDINGS_DIFFER_FROM_HELM2')
-    study_raw = launch.canonical(study_record(launch, head=head, plan=plan, plan_tips=plan_tips, package=package,
-                                              job=job, bindings=bindings))
+    study_raw = launch.canonical(study_record(launch, head=head, gate=gate, package=package, job=job,
+                                              bindings=bindings))
     files.append((common.OUTPUT / 'study.json', study_raw))
     if not write:
-        print(json.dumps({'mode': 'DRY_RUN_NOTHING_WRITTEN', 'job': job['job'], 'head': head,
+        print(json.dumps({'mode': 'DRY_RUN_NOTHING_WRITTEN', 'path': PREPARATION_ONLY, 'job': job['job'],
+                          'head': head, **admission_summary(gate),
                           'archive_the_launcher_locates': package['archive_the_launcher_locates'],
                           'canonical_ledger': str(launch.CANONICAL_LEDGER),
                           'canonical_ledger_is_file_here': launch.CANONICAL_LEDGER.is_file(),
-                          'note': 'job stamps are taken at run time, so --write produces a different job name'},
+                          'note': '--write takes the job name from the ADMITTED record, not from this dry run'},
                          sort_keys=True), flush=True)
         for path, raw in files:
             print(json.dumps({'would_write': str(path), 'bytes': len(raw), 'sha256': common.digest(raw)},
@@ -370,14 +386,14 @@ def prepare(*, write):
     launch.validate_ledger_path(launch.CANONICAL_LEDGER)     # a stat only: the admission is tied to this checkout
 
     def recheck(locate):
-        """The launcher's own checks again, on the bytes as they now sit in `frozen.partial/`."""
+        """The launcher's own checks again, on the bytes as they now sit in `frozen.partial/`, and both states."""
         request = json.loads(locate(job['request']['path']).read_bytes())
         authority = json.loads(locate(job['authority']['path']).read_bytes())
         validate(launch, request, authority, locate(job['owner']['path']))
         compare_with_helm2(launch, request, authority, helm2)
         study = json.loads(locate(common.OUTPUT / 'study.json').read_bytes())
         stop_unless(study['jobs'][0]['launch_argv'] == job['launch_argv'], 'STUDY_ARGV')
-        common.check_plan_is_current(stop_unless, fetch=False)      # the refs again, just before the rename
+        gates(fetch=False, require_admitted=True, job=job['job'])      # again, just before the rename
 
     written = common.write_folder_atomically(common.OUTPUT, files, recheck, stop_unless)
     print(json.dumps({'prepared': job['job'], 'receipt_dir': job['receipt_dir'], 'written': written,
@@ -388,7 +404,7 @@ def prepare(*, write):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# --check: immediately before launch (revision 1, review MINOR 3; the spend arithmetic of MINOR 1). Launcher-free.
+# --check: immediately before launch. Launcher-free.
 # ---------------------------------------------------------------------------------------------------------------------
 def check_frozen_committed():
     """`frozen/` has no uncommitted change, and every file in it is committed at HEAD with exactly these bytes."""
@@ -412,23 +428,28 @@ def check_pin(pin, folder):
     return json.loads(raw)
 
 
-def check_study(study, plan, *, output=None):
-    """Everything frozen/study.json says, against the files, this checkout and the current pins. Pure of git."""
+def check_study(study, admission, *, output=None):
+    """Everything frozen/study.json says, against the files, this checkout, the pins and the CURRENT admission."""
     output = common.OUTPUT if output is None else output
     stop_unless(study.get('schema') == STUDY_SCHEMA and study.get('status') == 'FROZEN_BEFORE_FIRST_RUN',
                 'STUDY_SCHEMA_OR_STATUS')
     stop_unless(study.get('source_sha') == common.SOURCE_SHA and study.get('source_checkout') == str(common.ROOT),
                 'NOT_THE_CHECKOUT_THE_RECORDS_WERE_WRITTEN_IN')
-    stop_unless(study.get('plan_record') == plan, 'FROZEN_UNDER_A_DIFFERENT_PLAN')
-    stop_unless(study.get('reproduction_policy') == common.REPRODUCTION_POLICY,
-                'FROZEN_UNDER_A_DIFFERENT_REPRODUCTION_POLICY')
+    stop_unless(common.same(study.get('reading_rule'), common.reading_rule_record()),
+                'FROZEN_UNDER_A_DIFFERENT_READING_RULE')
+    frozen_admission = study.get('execution_admission') if type(study.get('execution_admission')) is dict else {}
+    stop_unless(frozen_admission.get('state') == common.ADMITTED
+                and frozen_admission.get('record_sha256') == admission.get('record_sha256')
+                and frozen_admission.get('job') == admission.get('job')
+                and common.same(frozen_admission.get('bindings'), common.expected_admission_bindings()),
+                'FROZEN_UNDER_A_DIFFERENT_EXECUTION_ADMISSION')
     stop_unless(study.get('automatic_retries') == 0 and study.get('numeric_runs_completed') == 0, 'STUDY_COUNTERS')
     jobs = study.get('jobs')
     stop_unless(type(jobs) is list and len(jobs) == 1 and type(jobs[0]) is dict, 'STUDY_ONE_JOB')
     job = jobs[0]
     stop_unless(job.get('kind') == common.JOB_KIND and job.get('model_seed') == common.MODEL_SEED
                 and job.get('receipt_dir') == str(common.RECEIPT_DIR) and job.get('reduced_schedule') is None
-                and job.get('job') != common.HELM2_JOB, 'STUDY_JOB')
+                and job.get('job') != common.HELM2_JOB and job.get('job') == admission.get('job'), 'STUDY_JOB')
     stamp = common.stamp_of(job['job'])
     stop_unless(stamp is not None, 'STUDY_JOB_NAME_FORM:' + str(job['job']))
     common.check_stamp(stamp, stop_unless)
@@ -446,8 +467,9 @@ def check_study(study, plan, *, output=None):
                 and all(authority.get(key) == value for key, value in common.HELM2_BINDINGS.items()),
                 'AUTHORITY_BINDINGS')
     stop_unless(owner.get('bounds') == common.EXPECTED_BOUNDS
-                and owner.get('reproduction_policy') == common.REPRODUCTION_POLICY
-                and owner.get('plan_record') == plan, 'OWNER_RECORD')
+                and common.same(owner.get('reading_rule'), common.reading_rule_record())
+                and (owner.get('execution_admission') or {}).get('record_sha256') == admission.get('record_sha256')
+                and owner.get('approval_words_inserted_by_builder') is False, 'OWNER_RECORD')
     located = Path(str((study.get('package') or {}).get('archive_the_launcher_locates')))
     stop_unless(located.is_file(), 'LOCATED_ARCHIVE_GONE:' + str(located))
     raw = located.read_bytes()
@@ -467,18 +489,28 @@ def check_before_launch(*, study_sha256, spend_so_far_usd, spend_source):
     spend = common.spend_gate(spend_so_far_usd, stop_unless)
     head = check_repository()
     frozen = check_frozen_committed()
-    plan, plan_tips = gates()
     raw = (common.OUTPUT / 'study.json').read_bytes()
     stop_unless(common.is_hex(study_sha256, 64) and common.digest(raw) == study_sha256,
                 'STUDY_SHA256:' + common.digest(raw))
-    job = check_study(json.loads(raw), plan)
+    study = json.loads(raw)
+    frozen_job = (study.get('jobs') or [{}])[0].get('job') if type(study.get('jobs')) is list else None
+    gate = gates(fetch=True, require_admitted=True, job=frozen_job)
+    job = check_study(study, gate['execution_admission'])
     print(json.dumps({'mode': 'CHECK_PASSED_NOTHING_LAUNCHED', 'head': head, 'frozen_files': frozen,
-                      'plan_tips': plan_tips, 'job': job['job'], 'spend': spend,
-                      'spend_figure_source': spend_source.strip(),
+                      **admission_summary(gate), 'policy_tip': gate['policy']['tip'], 'job': job['job'],
+                      'spend': spend, 'spend_figure_source': spend_source.strip(),
                       'spend_figure_is': 'STATED_BY_THE_OPERATOR_NOT_READ_FROM_A_RECORD',
-                      'not_checked_here': ['the switch-ON smoke and the three repaired seeds were delivered',
-                                           'the $30 stop before the third training job'],
+                      'not_checked_here': ['the $30 stop before the third training job', 'the amended job order'],
                       'launch_cwd': str(common.ROOT), 'launch_argv': job['launch_argv']}, sort_keys=True), flush=True)
+    return 0
+
+
+def print_admission_bindings():
+    """Read-only. The exact bindings an EXECUTION_ADMISSION.json must carry for this revision. No approval involved."""
+    print(json.dumps({'mode': 'ADMISSION_BINDINGS_READ_ONLY', 'path': PREPARATION_ONLY,
+                      'bindings': common.expected_admission_bindings(),
+                      'required_prerequisites': list(common.REQUIRED_PREREQUISITES)}, sort_keys=True, indent=1),
+          flush=True)
     return 0
 
 
@@ -488,11 +520,14 @@ def main(argv=None):
     mode.add_argument('--dry-run', action='store_true')
     mode.add_argument('--write', action='store_true')
     mode.add_argument('--check', action='store_true')
+    mode.add_argument('--print-admission-bindings', action='store_true')
     parser.add_argument('--study-sha256')
     parser.add_argument('--spend-so-far-usd')
     parser.add_argument('--spend-source')
     args = parser.parse_args(argv)
     try:
+        if args.print_admission_bindings:
+            return print_admission_bindings()
         if args.check:
             return check_before_launch(study_sha256=args.study_sha256, spend_so_far_usd=args.spend_so_far_usd,
                                        spend_source=args.spend_source)
