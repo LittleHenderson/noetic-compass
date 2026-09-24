@@ -48,7 +48,7 @@
   "policy_file_sha256": {
     "REPRODUCTION_POLICY.md": "5d6a0e53e14e1f90e2c021e786a1236a99af646a09747bb1a55d7c933560e383",
     "REPRODUCTION_POLICY.json": "f4ce13d0ace02e368279d77efb3d86391b2b92f5c8f9c61ad60070f36abd8543",
-    "STATISTICAL_POLICY.json": "845de197a5214b5fdf18206c4c738c5e1fd3b05b96b6fe086516f2964b7bb619",
+    "STATISTICAL_POLICY.json": "545eb08d869c04de606be8a15e7327a6672f77b5ccb30d392631b3afa24533bf",
     "EXECUTION_MANIFEST.json": "3a5737a4c210afb4e23a4455f15ad5a1e88618c82d06cedfe6190636a074507a",
     "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
     "COST_AND_JOB_ENVELOPE.md": "a2105de6817455f72a23c93f222cd7fb70408e62cda9d686a8cb8cae2d657f88",
@@ -69,7 +69,8 @@
     "ROUTE_PREREQUISITE_COMPLETION_20260924.json": "9519434d721819a219f5c4e9d5d085d0d4e6c4c825d38d858551891df0c312b5",
     "READER_STATIC_REVIEW_20260924.md": "4028b48a4effc519e012225f20142559d9192dea08643bfb5129a12ae8b7a08e",
     "SPEND_STATIC_REVIEW_20260924.md": "d504762b09db114cd9d9d3428e129345b0154f4a3085de2ae955cbbbdf4ed1ea",
-    "POLICY_DECISIONS_20260924.md": "f2fc418307dca04f8af355591bcc5dcf44d0f200876279fd263894e99b3184fd"
+    "POLICY_DECISIONS_20260924.md": "f2fc418307dca04f8af355591bcc5dcf44d0f200876279fd263894e99b3184fd",
+    "READING_STAGE_DECISIONS_20260924.md": "7444718c0bf8f5bb6920e069638963410102bab0085eceecb783eb22c82b0db6"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -91,8 +92,8 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "08195e82fa39b45dad0c10b8f938ebadd49ecdec3eb477867268b5592a651588",
-    "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "0dd740584f33b752feb0453214d335520855d6ede77f3a5b490afd6c013a3454",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "46b8c5521bfd95d71683deeb6bd2f72eb251a30e8f163454cc98581f0a825dee",
+    "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "b473c37cd2e5e5ff3a7b4c26d3c908e984af0dc00e343ed3dfe694ac39f9c188",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
   },
@@ -177,5 +178,38 @@
     "evidence": "read-only AWS DescribeInstances in 13:06 heartbeat turn",
     "this_draft_retroactively_admitted": false,
     "controlled_comparison_readiness": "OPEN_READING_STAGE_PREREQUISITES"
+  },
+  "reading_stage_decisions": {
+    "record": "READING_STAGE_DECISIONS_20260924.md",
+    "request": "claude-0024",
+    "status": "DESIGN_QUESTIONS_ANSWERED_CLAUDE_IMPLEMENTATION_AND_RECEIPTS_PENDING",
+    "timing": "AFTER_R17_START_BEFORE_PROTECTED_KEY_AND_AFFECTED_COMPARISONS",
+    "original_launch_request_retroactively_admitted": false,
+    "existing_top_level_counts_and_costs": "HISTORICAL_CANDIDATE_ENVELOPE_NOT_CURRENT_ALL_IN_EXECUTION_TOTAL",
+    "uncombined_current_core_plan": {
+      "already_recorded_smoke_route_attempts": 3,
+      "main_attempts_including_R17_started": 4,
+      "reading_sessions": 4,
+      "P2_if_needed": 1,
+      "total_with_P2": 12,
+      "total_without_P2": 11,
+      "all_in_historical_job_count_reconciled": false
+    },
+    "proposed_costs_usd": {
+      "reported_expected_after_U17": "43.36",
+      "reading_expected_low": "5.90",
+      "reading_expected_high": "9.40",
+      "combined_expected_low": "49.26",
+      "combined_expected_high": "52.76",
+      "reading_caps": "11.98",
+      "expected_training_plus_reading_caps": "55.34",
+      "all_training_caps_plus_reading_caps_before_omitted_P2": "65.98",
+      "two_g7_session_caps": "5.48",
+      "remaining_reading_cap_needs_named_breakdown": "6.50"
+    },
+    "cost_status": "ARITHMETIC_CHECKED_PROVIDER_CHARGES_AND_NAMED_ENFORCED_CAPS_NOT_VERIFIED",
+    "completion_at_maximum_runtimes_funded": false,
+    "next_reading_handoff": "Exact reader/builder/probe source deltas, public required receipts, U17 rule freeze, actual aggregate counts and named charge bounds; one focused conformance pass",
+    "new_owner_approval_requested": false
   }
 }

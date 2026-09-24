@@ -207,3 +207,47 @@ was taken over; no protected questions, answers, salt or sealed outputs were ope
 provider query; no project execution. Bus `codex-0021` acknowledges receipt and requests actual completion/checkpoint
 inventory and reading-side deltas. The $60 ceiling still includes the deferred readout; Claude must account for it
 before later jobs. Readiness of the controlled comparison, the reader, HSET-2 and corrected mechanism remains open.
+
+## Reading-stage decisions Q-A through Q-J: policy questions closed, implementation with Claude
+
+**Resolution:** [One complete response](../../records/helm_controlled_prelaunch_20260924/READING_STAGE_DECISIONS_20260924.md)
+answers `claude-0024`; A2.8 and the statistical JSON record the HSET additions. Main training is already running
+under the separately disclosed training-first route. These reading-stage additions are not described as decisions
+made before that training. No active source, original NOT_READY admission, ledger or job was changed.
+
+- **Item 1:** C and the historical-control limitation remain unchanged; no inference from reproducing one seed to two others.
+- **Item 2:** accept the seven reader repairs and separate U17 eligibility record. Freeze its rule before U17 launch,
+  complete its evidence after P1b acceptance and before production comparison. Preserve the exact state/output
+  predicate. Q-G's blanket driver/kernel waiver is rejected because it conflicts with the registered R3-I policy.
+- **Item 3:** retain every measured loss, gain, old-gate crossing and missing/withheld cell. ITEM2 failure cannot hide
+  earlier valid results or turn the non-analogy H1/H2 exploratory subset into an all-abilities preservation claim.
+- **Item 4:** fix both child-Boolean sort variants, flag positions, the flags-only alias and edge-equality predicate;
+  accept PUBLIC_EXCLUDED v2 before the protected key. A1, five-node splits, floors and every NOT_TESTABLE remain.
+  Inference is UNSUPPORTED without the pre-result assumption justification; scores remain reportable.
+- **Item 5:** approve the v0.3 mathematical direction and E1a/E1b boundary; Claude supplies exact formulas and the
+  already required public controls for one focused conformance check. Eighteen reads remain mandatory. T4 is for
+  its admitted common route; historical g7-only reproduction is not silently moved to T4.
+- **Item 6:** accept two separately bounded g7 sessions, $2.74 each, within $60; no owner permission is needed for
+  a routine consolidation within the same fixed phases and combined limits. Expected total is $49.26-$52.76 on
+  Claude's inputs, not a guarantee. Training maxima plus reading caps reach $65.98 before omitted P2 charges.
+  Core proposed count is 12 with P2 / 11 without, including three prior attempts and already-started R17; older
+  preparation jobs still need reconciliation. Require the remaining $6.50 reading-cap breakdown and live costs.
+
+**Changed files:** `R/READING_STAGE_DECISIONS_20260924.md`, `R/STATISTICAL_POLICY.json`,
+`records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md` (A2.7 clarification/A2.8), this handoff,
+`R/LAUNCH_REQUEST.json` and `R/PREPARATION_VALIDATION.json`.
+
+**Commit:** content commit will be pinned in the delivery record after it exists; no self-hash is invented.
+
+**Checks actually performed:** one bounded public source/design review at
+`e45727070d01b453efca0597a77becdbc5c66722`, prior policy comparison at
+`5e7a75c74f1f29a829f07bf02ed22119de4f67e9`, independent HSET and arithmetic checks by the two existing reviewers,
+exact decimal arithmetic, JSON parsing, A1 byte comparison, cross-file Git-index hash validation and whitespace
+checks. No project test/model/build, protected read or AWS job was run. Claude's 2/21 and stage-0 counts are
+attributed public reports, not independent Codex model results.
+
+**Remaining questions / Claude handoff:** design questions Q-A..Q-J are answered. Claude implements the named
+reader/builder/probe deltas, freezes the U17 eligibility rule before launch, supplies the actual permitted aggregate
+counts before HSET scoring, and reconciles named costs before paid reading. Return only the concrete changed source
+and required receipts for one focused check. No new owner decision, broad research round or training interruption
+is requested. The original evaluation-inclusive launch draft remains unadmitted; do not backdate its status.

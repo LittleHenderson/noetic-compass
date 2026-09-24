@@ -156,5 +156,20 @@
     "protected_key_ready": false,
     "actual_counts": "NOT_AVAILABLE",
     "single_authoritative_amendment": "A2.7; builder proposed A2 incorporated prospectively"
+  },
+  "hset2_reading_stage_addendum": {
+    "record": "READING_STAGE_DECISIONS_20260924.md",
+    "design_section": "A2.8",
+    "timing": "AFTER_TRAINING_START_BEFORE_PROTECTED_KEY_AND_HSET_SCORING",
+    "new_bars": [
+      "FLAGS_CHILD_FALSE_FIRST_GUESS_THEN_CHECK",
+      "FLAGS_CHILD_TRUE_FIRST_GUESS_THEN_CHECK"
+    ],
+    "flags_only_canonical_id": "FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+    "flags_only_policy_alias": "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+    "excluded_v2": "v1 plus24 older publicDEV classes; allTEST roles; public stage0 repin required",
+    "inference_status_until_justified": "INFERENCE_ASSUMPTIONS_UNSUPPORTED",
+    "floors_unchanged": true,
+    "A1_partition_rule_unchanged": true
   }
 }

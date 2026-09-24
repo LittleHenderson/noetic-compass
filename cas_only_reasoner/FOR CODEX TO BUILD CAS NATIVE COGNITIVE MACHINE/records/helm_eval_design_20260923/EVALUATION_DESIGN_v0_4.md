@@ -493,7 +493,7 @@ D1-D4 in `claude-0019`. Claude implements and checks them before creating the pr
 - **D2: add the one-guess bars.** For analogy register `DEGREE_GUESS_THEN_CHECK`,
   `WHOLE_ANCHOR_GUESS_THEN_CHECK`, `FLAG_ANCHOR_GUESS_THEN_CHECK`, and
   `DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK`. Each may make one deterministic mapping guess for each same-degree,
-  other-domain candidate in displayed-alias order, check all required relations and flags, and return the first
+  other-domain candidate in displayed-alias order, check mapped edge-set equality (flags guide sorting or the explicitly declared anchors), and return the first
   accepted candidate or NO_MATCH. No backtracking or second guess per candidate. The first three use the builder
   section-2 definitions. The fourth is verifier N1's degree sort, ties broken by declared flags and then rank;
   Claude must publish and pin the exact flag-key order and tie convention with public toy examples before the
@@ -520,3 +520,27 @@ single authorized custodian build, publish only the permitted actual aggregate f
 The documented overlap of 24/40 older public DEV classes with the TEST-side candidate pool remains an exposure
 question requiring an attestation; do not assert clean novelty from stage-0 counts alone. This decision permits
 continued preparation under existing roles; it does not itself establish a ready sealed build or main launch.
+
+### A2.8 Reading-stage public exposure and comparator clarification
+
+These additions are fixed before the protected key and before scoring HSET-2, while main training is already
+running. They are not represented as pretraining decisions. See
+`../helm_controlled_prelaunch_20260924/READING_STAGE_DECISIONS_20260924.md`, Q-A through Q-D, for exact definitions.
+
+- Add `FLAGS_CHILD_FALSE_FIRST_GUESS_THEN_CHECK` and `FLAGS_CHILD_TRUE_FIRST_GUESS_THEN_CHECK`: ascending tuple
+  (in-degree, out-degree, child-of-declared-whole Boolean, flag-position, rank); reverse only that Boolean in the
+  second rule, and use no anchors. Whole/second participant/third participant/other have flag positions 0/1/2/3.
+  Each makes one edge-equality mapping check per eligible candidate in displayed-alias order, returns the first
+  accepted candidate or NO_MATCH, and is a separate mandatory bar in all existing views. No winner selection.
+- The existing flags-only rule's canonical ID is `FLAGS_TIEBREAK_GUESS_THEN_CHECK`; the A2.7 spelling
+  `DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK` is an explicit alias, not an extra statistical comparison. Its ascending
+  key omits the child Boolean. Flags are sorting features; do not add flag-preservation constraints to the reviewed
+  unanchored rule. Existing explicitly anchored rules retain their anchors. Grade every complete answer normally.
+- PUBLIC_EXCLUDED v2 adds the 24 older public HSET-1B DEV classes from the TEST-side candidate pool. Remove them
+  from all TEST packet roles; recompute and commit stage 0 before the protected key. Preserve A1's exact group-side
+  hash, existing five-node partitions and filler restrictions. Do not migrate excluded classes into DEV, redraw
+  a salt or delete the v1 exposure record. Actual informative counts remain required before HSET model scoring.
+- Preserve the unit algorithms, all feasibility floors and every NOT_TESTABLE. Until independent-unit and sign
+  exchangeability assumptions have a design-based justification recorded before model results, label inference
+  INFERENCE_ASSUMPTIONS_UNSUPPORTED. Keep scores and conditional calculations, and make no confirmatory claim.
+  Neither a new bar nor this exclusion correction proves that every no-learning strategy is ruled out.

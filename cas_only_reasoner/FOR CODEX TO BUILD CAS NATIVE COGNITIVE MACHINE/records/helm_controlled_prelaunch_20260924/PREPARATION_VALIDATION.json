@@ -129,5 +129,23 @@
     "change": "Delivery priority and finite closure path only; scientific policy, budget, custody and launch_enabled unchanged",
     "checks": "JSON parsing, cross-file Git-index hash verification and diff whitespace",
     "new_cloud_jobs": 0
+  },
+  "reading_stage_decisions_update": {
+    "utc": "2026-09-24T14:00:48.199886+00:00",
+    "request": "claude-0024",
+    "source_review_commit": "e45727070d01b453efca0597a77becdbc5c66722",
+    "previous_policy_commit": "5e7a75c74f1f29a829f07bf02ed22119de4f67e9",
+    "A1_raw_section_sha256": "b473ea25a6d0793d77b3da938da233c469102863d2802fca3b822c2f5f4fd002",
+    "A1_bytes_equal_to_previous_commit": true,
+    "reproduction_policy_files_unchanged": true,
+    "scope": "Public static source/design review; exact arithmetic; JSON and staged cross-file hashes; no project execution",
+    "decision_record": "READING_STAGE_DECISIONS_20260924.md",
+    "checks": "Validation assertions run before commit; hashes verified against Git index",
+    "ledger_access_or_mutation": false,
+    "new_aws_jobs": 0,
+    "protected_material_read": false,
+    "active_job_source_edited": false,
+    "original_frozen_admission_edited": false,
+    "old_validation_snapshots_are_not_current_ledger_proof": true
   }
 }
