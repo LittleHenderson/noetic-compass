@@ -1,0 +1,16 @@
+{
+ "schema": "claude.analogy-repair-t4-watch/0.1",
+ "instance_id": "i-030e5665bcad36f69",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "terminated",
+ "files_downloaded": 30,
+ "launched_utc": "2026-09-24T00:22:13Z",
+ "watch_ended_utc": "2026-09-24T01:14:33Z",
+ "minutes_from_launch_to_watch_end": 52.3,
+ "cost_upper_bound_usd": 0.67,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 100 GB of gp3 disk at 0.08 per GB-month",
+ "terminated_confirmed": true,
+ "volumes_of_this_job_remaining": [],
+ "dollar_ceiling": 3.0
+}

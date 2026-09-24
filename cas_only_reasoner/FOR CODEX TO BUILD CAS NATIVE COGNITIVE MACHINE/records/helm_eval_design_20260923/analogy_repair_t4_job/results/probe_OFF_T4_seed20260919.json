@@ -1,0 +1,2304 @@
+{
+ "complete": true,
+ "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
+ "determinism": {
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+  "deterministic_algorithms": true
+ },
+ "gpu": {
+  "admission": {
+   "memory_free_mib": 14910,
+   "temperature_c": 40,
+   "utilization_percent": 0,
+   "uuid": "GPU-09084ad1-494d-652c-497e-3159111b5cd4"
+  },
+  "end": {
+   "memory_free_mib": 14706,
+   "temperature_c": 41,
+   "utilization_percent": 15,
+   "uuid": "GPU-09084ad1-494d-652c-497e-3159111b5cd4"
+  }
+ },
+ "material_load_seconds": 170.11105678700005,
+ "package_root": "/root/helm_t4/pkg/repaired",
+ "python": "3.14.7",
+ "results": [
+  {
+   "M0_delta0": 0.0,
+   "M1_cross_domain_shared": 48,
+   "M1_kendall_discordant": 0.0,
+   "M1z": 0.0,
+   "M2z": 0.0,
+   "analogy_records": 70,
+   "label": "h2_fresh_20260919",
+   "last_temperature_c": 41,
+   "model": {
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "container_kwargs": {
+     "analogy_focus_comparison": false
+    },
+    "init_seed": 20260919,
+    "parameter_count": 174303
+   },
+   "per_focus": {
+    "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0e7f54633dc16b4de85b9a0881fc99ec94f6a2d18d271fb121c8bf408746dff2"
+    },
+    "world-053ef825e35607d70560a3bfb31678348a7a1bbeb57d5873a8e39488e11d9ca0": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-d9f92747052128a90c221bd9d2c2775ded05116099ce090968c244fc24f57926"
+    },
+    "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c"
+    },
+    "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916"
+    },
+    "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-4ffb71835e32c454abb30ffb9648affc43f32ec27d2e5842ec2339db4dfe86b3"
+    },
+    "world-3828c653000bc7e59b653d131544dfef39fbd7d530ec52593fc4bc9f279c7796": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df25be340de7c545d7cdac679233a291d8d134b872c808ff098130afae7171a"
+    },
+    "world-3b0abc92cf4ab9d63e120dcca1c1a6b9a8473593693a22cce2e49cc6721bbec7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0f4d37c208e8f34b477eef585b2d007b8494841ae4486951d66b6e1f7fe17538"
+    },
+    "world-3fa5e3f00824eda0ed7ee81264289bb12f8bd919cae4597553847b2aaa15fa83": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-30ea585228c713d781f23cf740006ddd473bb257271daaecd72cd2aedcf85ca7"
+    },
+    "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366"
+    },
+    "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-133c7b834f6dfcf4f226a008d86fbd4158e8174e99810b3c87ce0959645dfa40"
+    },
+    "world-5ba8e866f11a0fb55d541ef52418ede7ca82d3a528af351538ed5b1f8530c5fa": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-13e5abc12a8e69ae95a41d1d18e2c87add857f34b0ef9d773856d5d5d9c52d18"
+    },
+    "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-34c0116ee46b803f3213c66251c9822d6de444c3f60f4f80a9f2be4cb9d21e93"
+    },
+    "world-6250db240b49ef0aec98f9e80f63c5c1d91d9d838e1a0f9b67063b2dbc9e825b": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-54b5dfe702fa51ccf0eb498d097ae229215079104bf10ee9f991687a55368f94"
+    },
+    "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-28735732299ff59647028799829d95ae792db54febd681b2d72c61c571e10ee8"
+    },
+    "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.07011398835452454,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-c6be98b7bf361ea1910d28f6bdabd16751433f93ed7ecac672b82ff5e047854c"
+    },
+    "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25"
+    },
+    "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-092dc3b89a0480d462945ca7447bac511c81358714e48059922cd9b469f8a53e"
+    },
+    "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.07011398835452454,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-44406e462716e3a6c1b375527145684fed09ee27422ee52c28009f038d83510c"
+    },
+    "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-49ea7fa7deebe3b60297cd8c7bb0cff742ddd6693568c10760d1d8353e9deff3"
+    },
+    "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-329d4c6eceba26e76e14be3298d1db0ee7bef0323dfef9640385d7fdc7479c63"
+    },
+    "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d"
+    },
+    "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-2d88e21d2c2bf467eadfb98e181430a8f52c131ec362b259415f6ad1bee24777"
+    },
+    "world-d5f47ceac97e3cba99b5e0a53d6ea348e512c5555dd246b27394db07aced5bda": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-83b140d539340f56829dc9aa997bcf259171c8271ebce017f73a066ef673b3ec"
+    },
+    "world-ddd399f3bf592b8ccbf270f007714bf6f86928640d61fb38088f58faffb53e81": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-34d502be906987199c66e931ce7d0b780f410e15e04504e08472e39e1034774b"
+    }
+   },
+   "summary": {
+    "K_positive": 0,
+    "M3z_above_floor": 0,
+    "RC_dom_ok": 0,
+    "bystander_ok": 0,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.0,
+    "max_M3z": 0.0,
+    "median_RC": 0.0,
+    "top1_changes_reported_not_scored": 0
+   },
+   "switch": false,
+   "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+  },
+  {
+   "M0_delta0": 0.0,
+   "M1_cross_domain_shared": 48,
+   "M1_kendall_discordant": 0.0,
+   "M1z": 0.0,
+   "M2z": 0.0,
+   "analogy_records": 70,
+   "label": "h2_initial_20260919",
+   "last_temperature_c": 42,
+   "model": {
+    "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+    "checkpoint_sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+    "container_kwargs": {
+     "analogy_focus_comparison": false
+    },
+    "init_seed": 20260919,
+    "parameter_count": 174303
+   },
+   "per_focus": {
+    "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0e7f54633dc16b4de85b9a0881fc99ec94f6a2d18d271fb121c8bf408746dff2"
+    },
+    "world-053ef825e35607d70560a3bfb31678348a7a1bbeb57d5873a8e39488e11d9ca0": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-d9f92747052128a90c221bd9d2c2775ded05116099ce090968c244fc24f57926"
+    },
+    "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c"
+    },
+    "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916"
+    },
+    "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-4ffb71835e32c454abb30ffb9648affc43f32ec27d2e5842ec2339db4dfe86b3"
+    },
+    "world-3828c653000bc7e59b653d131544dfef39fbd7d530ec52593fc4bc9f279c7796": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df25be340de7c545d7cdac679233a291d8d134b872c808ff098130afae7171a"
+    },
+    "world-3b0abc92cf4ab9d63e120dcca1c1a6b9a8473593693a22cce2e49cc6721bbec7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0f4d37c208e8f34b477eef585b2d007b8494841ae4486951d66b6e1f7fe17538"
+    },
+    "world-3fa5e3f00824eda0ed7ee81264289bb12f8bd919cae4597553847b2aaa15fa83": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-30ea585228c713d781f23cf740006ddd473bb257271daaecd72cd2aedcf85ca7"
+    },
+    "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366"
+    },
+    "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-133c7b834f6dfcf4f226a008d86fbd4158e8174e99810b3c87ce0959645dfa40"
+    },
+    "world-5ba8e866f11a0fb55d541ef52418ede7ca82d3a528af351538ed5b1f8530c5fa": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-13e5abc12a8e69ae95a41d1d18e2c87add857f34b0ef9d773856d5d5d9c52d18"
+    },
+    "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-34c0116ee46b803f3213c66251c9822d6de444c3f60f4f80a9f2be4cb9d21e93"
+    },
+    "world-6250db240b49ef0aec98f9e80f63c5c1d91d9d838e1a0f9b67063b2dbc9e825b": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-54b5dfe702fa51ccf0eb498d097ae229215079104bf10ee9f991687a55368f94"
+    },
+    "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-28735732299ff59647028799829d95ae792db54febd681b2d72c61c571e10ee8"
+    },
+    "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.07011398835452454,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-c6be98b7bf361ea1910d28f6bdabd16751433f93ed7ecac672b82ff5e047854c"
+    },
+    "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25"
+    },
+    "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-092dc3b89a0480d462945ca7447bac511c81358714e48059922cd9b469f8a53e"
+    },
+    "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.07011398835452454,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-44406e462716e3a6c1b375527145684fed09ee27422ee52c28009f038d83510c"
+    },
+    "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-49ea7fa7deebe3b60297cd8c7bb0cff742ddd6693568c10760d1d8353e9deff3"
+    },
+    "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.10405602257989877,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-329d4c6eceba26e76e14be3298d1db0ee7bef0323dfef9640385d7fdc7479c63"
+    },
+    "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d"
+    },
+    "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.16340793985443813,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-2d88e21d2c2bf467eadfb98e181430a8f52c131ec362b259415f6ad1bee24777"
+    },
+    "world-d5f47ceac97e3cba99b5e0a53d6ea348e512c5555dd246b27394db07aced5bda": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-83b140d539340f56829dc9aa997bcf259171c8271ebce017f73a066ef673b3ec"
+    },
+    "world-ddd399f3bf592b8ccbf270f007714bf6f86928640d61fb38088f58faffb53e81": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.10835127154305946,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-34d502be906987199c66e931ce7d0b780f410e15e04504e08472e39e1034774b"
+    }
+   },
+   "summary": {
+    "K_positive": 0,
+    "M3z_above_floor": 0,
+    "RC_dom_ok": 0,
+    "bystander_ok": 0,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.0,
+    "max_M3z": 0.0,
+    "median_RC": 0.0,
+    "top1_changes_reported_not_scored": 0
+   },
+   "switch": false,
+   "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+  },
+  {
+   "M0_delta0": 0.0,
+   "M1_cross_domain_shared": 48,
+   "M1_kendall_discordant": 0.0,
+   "M1z": 0.0,
+   "M2z": 0.0,
+   "analogy_records": 70,
+   "label": "h2_final_20260919",
+   "last_temperature_c": 42,
+   "model": {
+    "checkpoint": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+    "checkpoint_sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+    "container_kwargs": {
+     "analogy_focus_comparison": false
+    },
+    "init_seed": 20260919,
+    "parameter_count": 174303
+   },
+   "per_focus": {
+    "world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0e7f54633dc16b4de85b9a0881fc99ec94f6a2d18d271fb121c8bf408746dff2"
+    },
+    "world-053ef825e35607d70560a3bfb31678348a7a1bbeb57d5873a8e39488e11d9ca0": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-d9f92747052128a90c221bd9d2c2775ded05116099ce090968c244fc24f57926"
+    },
+    "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df45ab078b759c0b3fc16c12c405c954569b614b3e9bda2621b1374d8b8432c"
+    },
+    "world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916"
+    },
+    "world-2e7a50f3600e91e9c199a742e0ee6b90b8ac1e682000ed2449831fe52297cb66": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-4ffb71835e32c454abb30ffb9648affc43f32ec27d2e5842ec2339db4dfe86b3"
+    },
+    "world-3828c653000bc7e59b653d131544dfef39fbd7d530ec52593fc4bc9f279c7796": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0df25be340de7c545d7cdac679233a291d8d134b872c808ff098130afae7171a"
+    },
+    "world-3b0abc92cf4ab9d63e120dcca1c1a6b9a8473593693a22cce2e49cc6721bbec7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-0f4d37c208e8f34b477eef585b2d007b8494841ae4486951d66b6e1f7fe17538"
+    },
+    "world-3fa5e3f00824eda0ed7ee81264289bb12f8bd919cae4597553847b2aaa15fa83": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.0386588801194776,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-30ea585228c713d781f23cf740006ddd473bb257271daaecd72cd2aedcf85ca7"
+    },
+    "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-48906d17f13e95c7e20f3e47cb634ed6299c7f4dbd2b31ee0d1153870b56d366"
+    },
+    "world-54fa2f86f070fe91c19425682f474db3fbc4be98857f88e4c8a6b1efd4da787f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-133c7b834f6dfcf4f226a008d86fbd4158e8174e99810b3c87ce0959645dfa40"
+    },
+    "world-5ba8e866f11a0fb55d541ef52418ede7ca82d3a528af351538ed5b1f8530c5fa": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-13e5abc12a8e69ae95a41d1d18e2c87add857f34b0ef9d773856d5d5d9c52d18"
+    },
+    "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.0386588801194776,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-34c0116ee46b803f3213c66251c9822d6de444c3f60f4f80a9f2be4cb9d21e93"
+    },
+    "world-6250db240b49ef0aec98f9e80f63c5c1d91d9d838e1a0f9b67063b2dbc9e825b": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-54b5dfe702fa51ccf0eb498d097ae229215079104bf10ee9f991687a55368f94"
+    },
+    "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-28735732299ff59647028799829d95ae792db54febd681b2d72c61c571e10ee8"
+    },
+    "world-6b6a64370534eb53cdf15579f89fe6fa7261832c5db215c4bea07d38154ad237": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.02451528737873987,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-c6be98b7bf361ea1910d28f6bdabd16751433f93ed7ecac672b82ff5e047854c"
+    },
+    "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-2bfef91b31f46df575f17c97667472ab579e6a3518e361717de469d6b554ce25"
+    },
+    "world-71465a4148d1fa5896981052d1f7e8f7213a6d49db89a7b098628bf25f97c8b6": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-092dc3b89a0480d462945ca7447bac511c81358714e48059922cd9b469f8a53e"
+    },
+    "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.02451528737873987,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-44406e462716e3a6c1b375527145684fed09ee27422ee52c28009f038d83510c"
+    },
+    "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-49ea7fa7deebe3b60297cd8c7bb0cff742ddd6693568c10760d1d8353e9deff3"
+    },
+    "world-96dc5562fa405194e728933a9242cfaf6a0b80d90e1e51d0bb5cd26e5ee7d118": {
+     "A": 6,
+     "K": 0.0,
+     "L": 0.01696886470706671,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-329d4c6eceba26e76e14be3298d1db0ee7bef0323dfef9640385d7fdc7479c63"
+    },
+    "world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d"
+    },
+    "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.0386588801194776,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": true
+      }
+     ],
+     "RC": null,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 3,
+     "record": "typed-input-2d88e21d2c2bf467eadfb98e181430a8f52c131ec362b259415f6ad1bee24777"
+    },
+    "world-d5f47ceac97e3cba99b5e0a53d6ea348e512c5555dd246b27394db07aced5bda": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-83b140d539340f56829dc9aa997bcf259171c8271ebce017f73a066ef673b3ec"
+    },
+    "world-ddd399f3bf592b8ccbf270f007714bf6f86928640d61fb38088f58faffb53e81": {
+     "A": 9,
+     "K": 0.0,
+     "L": 0.06313840839428408,
+     "M3z": 0.0,
+     "M5": [
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      },
+      {
+       "margin_change": 0.0,
+       "new_accepted_empty": false
+      }
+     ],
+     "RC": 0.0,
+     "RC_dom": 0.0,
+     "X": 48,
+     "nodes": 4,
+     "record": "typed-input-34d502be906987199c66e931ce7d0b780f410e15e04504e08472e39e1034774b"
+    }
+   },
+   "summary": {
+    "K_positive": 0,
+    "M3z_above_floor": 0,
+    "RC_dom_ok": 0,
+    "bystander_ok": 0,
+    "effect_floor": 0.001,
+    "foci": 24,
+    "max_K": 0.0,
+    "max_M3z": 0.0,
+    "median_RC": 0.0,
+    "top1_changes_reported_not_scored": 0
+   },
+   "switch": false,
+   "verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT"
+  }
+ ],
+ "rules": {
+  "alternatives": {
+   "3": [
+    [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ]
+    ],
+    [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   ],
+   "4": [
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   ]
+  },
+  "leak_ratio": 0.1,
+  "noise_max": 1e-06,
+  "prereg_sha256_lf": "4c8c7c331d02a65c9b4b6290efae8f84669ff632e074015f91a8c4afeae79000",
+  "probe_sha256_lf": "89c1e40293ca87c9ef8296bcbe9e672d77be264f89fe22908a62a41050f2ea82",
+  "rc_min": 0.01,
+  "share_foci_required": 22,
+  "tau": 1e-05
+ },
+ "schema": "claude.analogy-wiring-probe/0.2",
+ "source_sha256_lf": {
+  "cncm/typed_matched_worker.py": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+  "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+  "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+  "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781",
+  "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+ },
+ "torch": "2.11.0+cu128",
+ "wall_seconds": 1058.7692687069998,
+ "work": "forward passes only under torch.no_grad(); no optimizer, no update, no checkpoint written"
+}

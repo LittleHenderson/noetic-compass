@@ -1,0 +1,17 @@
+permission to terminate i-030e5665bcad36f69: yes
+00:22:18  machine i-030e5665bcad36f69: pending
+00:22:18  still running, 0 min since launch
+00:22:48  machine i-030e5665bcad36f69: running
+00:27:22  still running, 5 min since launch
+00:32:27  still running, 10 min since launch; progress log available
+00:37:32  still running, 15 min since launch; progress log available
+00:42:37  still running, 20 min since launch; progress log available
+00:47:42  still running, 25 min since launch; progress log available
+00:52:47  still running, 30 min since launch; progress log available
+00:57:52  still running, 35 min since launch; progress log available
+01:02:56  still running, 40 min since launch; progress log available
+01:08:02  still running, 45 min since launch; progress log available
+  skipped archive member 'out'
+results downloaded: 30 files; the job's own status: done
+{"schema": "claude.analogy-repair-t4-watch/0.1", "instance_id": "i-030e5665bcad36f69", "outcome": "RESULTS_RECEIVED", "job_status": "done", "final_state": "terminated", "files_downloaded": 30, "launched_utc": "2026-09-24T00:22:13Z", "watch_ended_utc": "2026-09-24T01:14:33Z", "minutes_from_launch_to_watch_end": 52.3, "cost_upper_bound_usd": 0.67, "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 100 GB of gp3 disk at 0.08 per GB-month", "terminated_confirmed": true, "volumes_of_this_job_remaining": [], "dollar_ceiling": 3.0}
+WATCH EXIT 0

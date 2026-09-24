@@ -47,3 +47,37 @@ Same R, same models, same limits ($3.00 ceiling). The only change is the bundle 
   It destroys itself within 153 minutes.
 - **Money.** Attempt 1's upper bound ($0.5596) plus attempt 2's worst case ($2.05) is $2.61, inside the one $3.00
   ceiling for this job.
+- **Ended.** Watch ended 2026-09-24T01:14:33Z, 52.3 minutes after launch. Termination confirmed. No volume of this
+  job remains. Upper bound $0.67. Both attempts together: at most $1.2296, against the $3.00 ceiling.
+- **The program's verdict** (`read_results.py`, `RESULTS_READING.json` sha256
+  `43c6cd6583f2618a7f1db5ea577ffba054ea6c55155a6dd573b8a532baf851b1`): **`item1_verdict: OFF_PRESERVED_ON_T4`**.
+
+| Check | Result |
+|---|---|
+| stage 0: pytest | 38 tests, 0 failures, 0 errors |
+| stage 0: frozen read-only check (A4.2) | pass, with the switch OFF (174303 parameters) and ON (203424 parameters, analogy seed 20260923) |
+| control (frozen `20208c92`) digest equals the retained T4 reference | 9 of 9 |
+| switch-OFF (R = `ceab6c49`) digest equals control | 9 of 9 |
+| switch-OFF parameter count | 174303 on all 9 |
+| switch-OFF probe v0.2 | switch `False` and `FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT` on all 9 |
+| exit codes | control 0,0,0; OFF 0,0,0; OFF probes 0,0,0; fresh-ON probe 0 |
+
+**Fresh switch-ON probe (`FRESH_ON_REPORT_ONLY`, no pass rule, never counts for item 2).**
+
+| Seed | Verdict | max_K | max_M3z | median_RC |
+|---|---|---|---|---|
+| 20260917 | MIXED | 0.19680851063829788 | 0.03197968538649443 | 0.009539493549375286 |
+| 20260918 | MIXED | 0.1196808510638298 | 0.004556863997850602 | 0.001514925369058025 |
+| 20260919 | MIXED | 0.08244680851063829 | 0.0240242270635877 | 0.011342056474827309 |
+
+For seed 20260919, bystander_ok is 20 of 24.
+
+**Files.** `results/`, `launch_record.json`, `watch_record.json`, `watch.log`, `RESULTS_READING.json`. A byte copy is at
+`D:/tksCAS-archive/analogy_repair_t4_attempt2_20260924/`, with 36 sha256 lines in
+`D:/tksCAS-archive/analogy_repair_t4_attempt2_20260924.sha256`, checked three times after the copy.
+
+**What this does and does not show.**
+- It shows that the repair leaves the switch-OFF model unchanged, bit for bit, on this T4, for all 9 Helm 2.0
+  models.
+- It shows nothing about whether a TRAINED switch-ON model uses the analogy path. That is acceptance item 2, and it
+  needs trained ON checkpoints.

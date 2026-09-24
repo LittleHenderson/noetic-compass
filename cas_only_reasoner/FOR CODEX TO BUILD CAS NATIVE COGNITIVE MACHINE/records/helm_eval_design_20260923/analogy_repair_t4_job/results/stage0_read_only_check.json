@@ -1,0 +1,43 @@
+{
+ "device": "Tesla T4",
+ "package_root": "/root/helm_t4/pkg/repaired",
+ "pass": true,
+ "results": {
+  "OFF": {
+   "analogy_head_present": false,
+   "analogy_seed": null,
+   "construction_value": false,
+   "delattr_raises_analogy_focus_comparison": true,
+   "delattr_raises_analogy_seed": true,
+   "dict_write_does_not_change_getattr": true,
+   "getattr_is_bool_equal": true,
+   "parameter_count": 174303,
+   "pass": true,
+   "present_after_delattr_analogy_focus_comparison": true,
+   "present_after_delattr_analogy_seed": true,
+   "setattr_raises_analogy_focus_comparison": true,
+   "setattr_raises_analogy_seed": true,
+   "unchanged_after_setattr_analogy_focus_comparison": true,
+   "unchanged_after_setattr_analogy_seed": true
+  },
+  "ON": {
+   "analogy_head_present": true,
+   "analogy_seed": 20260923,
+   "construction_value": true,
+   "delattr_raises_analogy_focus_comparison": true,
+   "delattr_raises_analogy_seed": true,
+   "dict_write_does_not_change_getattr": true,
+   "getattr_is_bool_equal": true,
+   "parameter_count": 203424,
+   "pass": true,
+   "present_after_delattr_analogy_focus_comparison": true,
+   "present_after_delattr_analogy_seed": true,
+   "setattr_raises_analogy_focus_comparison": true,
+   "setattr_raises_analogy_seed": true,
+   "unchanged_after_setattr_analogy_focus_comparison": true,
+   "unchanged_after_setattr_analogy_seed": true
+  }
+ },
+ "schema": "claude.a4-read-only-check/0.1",
+ "torch": "2.11.0+cu128"
+}
