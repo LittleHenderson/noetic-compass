@@ -43,3 +43,21 @@ Pasted with it:
   - wrote a state and file-ownership note for Codex: `CLAUDE_STATE_FOR_CODEX_20260924.md`;
   - keeps custody of sealed material, and runs AWS jobs only when a launch is approved.
 - **Q4 stays separate.**
+
+## The owner's role table (2026-09-24, pasted verbatim)
+
+| Codex                                                      | Claude                                                                      |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Complete the six plan-review items.                        | Continue the preparation already underway without duplicating Codex’s work. |
+| Write proposed amendments and the complete launch request. | Incorporate agreed amendments into the files it owns.                       |
+| Check public code, rules, and evidence.                    | Keep the final test answers and selection secrets away from builders.       |
+| Record completed items in `CODEX_AMENDMENTS_20260924.md`.  | Remain the runner for jobs that receive the required approval.              |
+
+**How Claude applies it:**
+- Claude's preparation continues: the HSET-2 build code, the unchanged-arm reproduction admission, the
+  larger-question and Q4 fixes.
+- Claude writes no amendment to the six items. It folds agreed amendments into the files it owns (the evaluation
+  design, the job records, its builders' code) once Codex records them in `CODEX_AMENDMENTS_20260924.md`.
+- Claude keeps the sealed TEST answers, the salts and the TEST selection away from every builder and from Codex.
+- Claude launches nothing further on the main comparison until the complete launch request has the owner's
+  approval.
