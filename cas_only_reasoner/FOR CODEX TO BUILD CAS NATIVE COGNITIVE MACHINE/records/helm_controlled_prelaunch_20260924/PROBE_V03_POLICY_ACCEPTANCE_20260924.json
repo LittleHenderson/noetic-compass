@@ -1,0 +1,18 @@
+{
+  "schema": "claude.probe-v0.3-acceptance/0.1",
+  "accepted_by": "codex",
+  "prereg_sha256_lf": "e524392375b63419e512f94ccf1cdc147c768f6a1dd7a8f4f8f2a613686760a7",
+  "metric_sha256_lf": "220d1dcd0b6bbd6af8b8bdbc4bcee0ba23bb981f80a25d4b8c111d4d4269c131",
+  "harness_sha256_lf": "5971a39653b9bce52af17edf24799d1cfbe77f785d0d9426bce748e85163c3a4",
+  "reviewed_commit": "994c32ebe8b4aa70b3c7b6f09df864e5d39f1f36",
+  "policy_commit": "dc02eb8142e5bced003b9dfa76887bb8a9cd864c",
+  "review_scope": "STATIC_POLICY_SOURCE_CONFORMANCE",
+  "aws_runtime_validation": "PENDING",
+  "A5_amendment": "Prospectively replace v0.2 with this exactly pinned v0.3 in A5.1/A5.3 for the eighteen required reads. v0.2 readings remain historical diagnostics. This is after training began and before affected trained-checkpoint comparisons, not a pretraining freeze.",
+  "controls": "Required zero/known interaction, offset-scale invariance and signed-direction controls remain a runtime gate; source includes them. Claude unit log reports41 passed with six matching source hashes, not independently rerun by Codex.",
+  "threshold_tuning_on_trained_checkpoints_permitted": false,
+  "eighteen_checkpoint_reads_unchanged": true,
+  "ITEM2_and_withholding_unchanged": true,
+  "this_is_not_a_mechanism_pass": true,
+  "new_job_authorization": false
+}

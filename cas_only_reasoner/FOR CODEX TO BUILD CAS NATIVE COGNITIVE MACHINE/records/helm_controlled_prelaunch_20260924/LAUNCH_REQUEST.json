@@ -70,7 +70,10 @@
     "READER_STATIC_REVIEW_20260924.md": "4028b48a4effc519e012225f20142559d9192dea08643bfb5129a12ae8b7a08e",
     "SPEND_STATIC_REVIEW_20260924.md": "d504762b09db114cd9d9d3428e129345b0154f4a3085de2ae955cbbbdf4ed1ea",
     "POLICY_DECISIONS_20260924.md": "f2fc418307dca04f8af355591bcc5dcf44d0f200876279fd263894e99b3184fd",
-    "READING_STAGE_DECISIONS_20260924.md": "7444718c0bf8f5bb6920e069638963410102bab0085eceecb783eb22c82b0db6"
+    "READING_STAGE_DECISIONS_20260924.md": "7444718c0bf8f5bb6920e069638963410102bab0085eceecb783eb22c82b0db6",
+    "READING_IMPLEMENTATION_REVIEW_20260924.md": "6871176812d8875b3f366ce80a07d8c48bfe6d56e7aa41e73d53c1127e9db42c",
+    "HSET2_PRESALT_SOURCE_ACCEPTANCE_20260924.json": "aaaf468925d88c5e9293233ce2c245f310d7a47f5890afd457e7e0ae96265b9e",
+    "PROBE_V03_POLICY_ACCEPTANCE_20260924.json": "23cd93cf6c5c06a51375920dfd8208f19dcc6b0a36270576aac3c1249f617691"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -92,7 +95,7 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "69a1f04d92af1bb0ef90524755d997911d6984873e372425edd5a63f808bbd13",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "581099c012e11add2768bec37b8f6a0dfefe091a78a436da48c8b37a795fc34e",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "b473c37cd2e5e5ff3a7b4c26d3c908e984af0dc00e343ed3dfe694ac39f9c188",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
@@ -211,5 +214,26 @@
     "completion_at_maximum_runtimes_funded": false,
     "next_reading_handoff": "Exact reader/builder/probe source deltas, public required receipts, U17 rule freeze, actual aggregate counts and named charge bounds; one focused conformance pass",
     "new_owner_approval_requested": false
+  },
+  "reading_implementation_review": {
+    "record": "READING_IMPLEMENTATION_REVIEW_20260924.md",
+    "hset_acceptance": "HSET2_PRESALT_SOURCE_ACCEPTANCE_20260924.json",
+    "probe_acceptance": "PROBE_V03_POLICY_ACCEPTANCE_20260924.json",
+    "remaining_major": [
+      "full environment required-field enforcement",
+      "non-claim-bearing H1/H2 cannot satisfy preservation",
+      "fresh cumulative spend and remaining-required-work reserve",
+      "P1b full-lifetime cap/cleanup pricing"
+    ],
+    "reading_physical_sessions": 6,
+    "identified_reading_caps_usd": "11.08",
+    "previous_11_98_unexplained_remainder_usd": "0.90",
+    "separate_P2_proposed_cap_usd": "1.10",
+    "identified_caps_including_P2_usd": "12.18",
+    "core_count_with_P2": 14,
+    "core_count_without_P2": 13,
+    "all_in_historical_count_verified": false,
+    "runtime_acceptance": "PENDING",
+    "retroactive_launch_admission": false
   }
 }

@@ -1,0 +1,66 @@
+{
+  "schema": "codex.hset2-presalt-source-acceptance/1",
+  "status": "SOURCE_CONFORMANCE_PASS",
+  "accepted_by": "codex",
+  "reviewed_commit": "17d6ad655a2e9205bd6253f39ee230299defdbf6",
+  "reviewed_branch": "claude/hset2-build-20260924",
+  "policy_commit": "dc02eb8142e5bced003b9dfa76887bb8a9cd864c",
+  "policy_record": "READING_STAGE_DECISIONS_20260924.md",
+  "policy_sections": [
+    "Q-A",
+    "Q-B",
+    "Q-C",
+    "Q-D",
+    "A2.8"
+  ],
+  "files_base": "records/helm_eval_design_20260923/hset2/",
+  "files_sha256_lf": {
+    "hset2_build.py": "e1bed5c6098408af6aa02106a4133fa571d827356ffaca39ecccf42ddf5d39dc",
+    "hset2_stage0_public.py": "b4df4168f445ce6e9c1830f08ded8a2b868d92da627aacae7ea09124c77d3ed8",
+    "hset2_presalt_manifest.py": "b3954c2632cc63a2e1e45b6c8ad60aec762f1545d1a8453b5e46944263653545",
+    "PRESALT_MANIFEST_HSET2.json": "add829d10e9fabc385624ec43940634f11797fc14f49f7832d5d0234d211ceab",
+    "PUBLIC_EXCLUDED_v2.json": "3aada28870504fb75cf97cc96fa26097ea3a59ad69eda904766ed84362f2a7b1",
+    "STAGE0_DEV_SIDE_GROUPS.json": "d36ad592335d28306b0fe45cac24a9f9060ed2660b30207f84555cbb15fe4121",
+    "STAGE0_TEST_SIDE_GROUPS.json": "30df4cd35f66e4b11f8155a5114cf64b1c7d0a3195377190d6cbd99394f42a1b",
+    "STAGE0_SUMMARY.json": "bd4c4a67a1f4f7a999f401ba26e4430d2c2ed0d15c15bf31a6a38278ae5b9825"
+  },
+  "comparator_aliases": {
+    "DEGREE_FLAGS_TIEBREAK_GUESS_THEN_CHECK": "FLAGS_TIEBREAK_GUESS_THEN_CHECK",
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_LAST": "FLAGS_CHILD_FALSE_FIRST_GUESS_THEN_CHECK",
+    "DEGREE_WHOLE_CHILD_FLAGS_GUESS_THEN_CHECK_CHILDREN_FIRST": "FLAGS_CHILD_TRUE_FIRST_GUESS_THEN_CHECK"
+  },
+  "alias_meaning": "Exactly the same registered predictions; no extra bar or statistical credit; no source rename required.",
+  "inference_default": "INFERENCE_ASSUMPTIONS_UNSUPPORTED",
+  "confirmatory_without_pre_result_justification": false,
+  "A1_partition_and_five_node_split_preserved": true,
+  "floors_unchanged": true,
+  "retain_all_NOT_TESTABLE": true,
+  "public_json_comparison": {
+    "added_six_node_exclusions": 24,
+    "dev_classes": 1324,
+    "dev_groups": 503,
+    "test_classes": 3723,
+    "test_groups": 1429,
+    "excluded_survivors": 0
+  },
+  "reported_throwaway_feasibility": {
+    "source": "Claude committed manifest, not Codex execution or protected/model results",
+    "salts": 21,
+    "confirmatory_analogy_all_floors": 0,
+    "base_analogy_original_floor": 1,
+    "reach_three_step": 0,
+    "reach_four_step": 0,
+    "correspondence_six_nodes": 21,
+    "correspondence_five_nodes": 21
+  },
+  "custodian_next": "One protected key and aggregate feasibility preparation under existing custody. Commit final allowed public manifest with key digest only; retain every actual NOT_TESTABLE and count before HSET scoring. No favourable redraw.",
+  "separate_gates": [
+    "P2 paid-job budget/resource admission and cleanup",
+    "Actual custodian aggregate counts",
+    "Reader/probe/runtime/scorer prerequisites before affected claims"
+  ],
+  "project_execution": false,
+  "protected_content_read": false,
+  "launch_authority_added": false,
+  "review_scope": "Bounded static delta plus public JSON/byte comparisons; source conformance, not execution success."
+}

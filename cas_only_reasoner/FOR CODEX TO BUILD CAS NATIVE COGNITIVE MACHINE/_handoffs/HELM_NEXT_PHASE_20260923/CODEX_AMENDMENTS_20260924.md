@@ -251,3 +251,21 @@ reader/builder/probe deltas, freezes the U17 eligibility rule before launch, sup
 counts before HSET scoring, and reconciles named costs before paid reading. Return only the concrete changed source
 and required receipts for one focused check. No new owner decision, broad research round or training interruption
 is requested. The original evaluation-inclusive launch draft remains unadmitted; do not backdate its status.
+
+## Focused reading implementation review: accepted HSET/probe; four concrete fixes
+
+**Resolution:** item4's presalt source conforms at17d6ad65; item5's v0.3 policy/source conforms at994c32eb.
+[Review and finite corrections](../../records/helm_controlled_prelaunch_20260924/READING_IMPLEMENTATION_REVIEW_20260924.md).
+Item2 reader environment coverage, item3 non-claim-bearing preservation, and item6 cumulative reserves/P1b lifetime
+remain affected-stage MAJOR issues. Other inspected repairs close statically; actual execution acceptance remains
+pending. Source names are mapped by explicit aliases; do not restart a naming review. Item1 C is unchanged.
+
+**Changed files:** new HSET2_PRESALT_SOURCE_ACCEPTANCE_20260924.json, PROBE_V03_POLICY_ACCEPTANCE_20260924.json and
+READING_IMPLEMENTATION_REVIEW_20260924.md in R; this handoff, launch request and preparation validation.
+**Commit:** content commit pending its creation; delivery record will pin it.
+**Checks:** exact public source/leaf hashes, public JSON comparison, fixed predicates, frozen-directory equality,
+conditional decimal arithmetic, JSON, staged cross-file bindings and whitespace. No project execution/protected read.
+**Remaining handoff:** Claude implements the four finite corrections and returns their focused checks; proceeds with
+custodian key preparation under existing roles and cost/resource gates, preserving every NOT_TESTABLE. The key and
+v0.3 policy do not need another broad review. Required runtime acceptance and actual aggregate counts remain open.
+No active training source, original admission, ledger or AWS job was changed; no new owner decision is requested.
