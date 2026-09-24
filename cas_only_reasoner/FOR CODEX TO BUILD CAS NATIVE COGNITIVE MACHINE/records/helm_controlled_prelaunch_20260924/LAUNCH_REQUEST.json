@@ -56,7 +56,8 @@
     "SMOKE_COMPLETION_RECONCILIATION.json": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
     "SMOKE_PROVIDER_OBSERVATION.json": "d5225ee20a0fa26201673dc8049ba6a1f5e3f69e1edf6ddd9beec47ce7f45509",
     "OWNER_STANDING_AUTHORIZATION_20260924.md": "86d7f14b9a191bb90733d011c8c5d1344a29739498be9c2e48c4e3084fd10687",
-    "OWNER_STANDING_AUTHORIZATION_20260924.json": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3"
+    "OWNER_STANDING_AUTHORIZATION_20260924.json": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "AGENT_BUS_COORDINATION_20260924.md": "a1b3df6fabdfda379e32b19bb9cf55d92153b8bc89ca5dfcc6f7987ecbbe4c39"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -73,10 +74,10 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "2b840818952cb7ed44b1efbf7b2f4518d596340b975eb75f5d4ea4fbc97d4753",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "4541ddbccff7804e0fce13f76b1d3e61d8e30fdca431b4df106644ce6410f9c9",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "4150c8727f4853d146db4c76c1bda8d9afa102bbaa9ba62961918642db4542d0",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
-    "AGENTS.md": "d5a5efda3b3456f1444fa480c59afa63c587ce3b326bc90ef9d60263d376423b"
+    "AGENTS.md": "cc46c7fea34e4f9b84583a098cc0bd2ad0a4872ef9f78a1084e6c7a30384cf26"
   },
   "prerequisite_results": {
     "S0": "CAPACITY_REFUSED_NO_INSTANCE_NO_COMPUTE; reservation retained",

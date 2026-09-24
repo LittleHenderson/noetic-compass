@@ -101,3 +101,7 @@ The main launch is held for real missing results, not for another permission que
 - Initial six-item amendment: `b2a370bd2d06a902a37686ad92e7221be2e0ea71`.
 - Current coordination, completed smoke, ledger reconciliation and per-item handoff: `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
 - This final record-only commit pins the preceding content commit and refreshes its document hashes. It changes no execution rule or launch authority.
+
+## Direct bus and ten-minute wake-up
+
+The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`, acknowledged `claude-0001`, and configured ACTIVE task heartbeat `helm-claude-codex-bus-check` every10 minutes. [Coordination record](../../records/helm_controlled_prelaunch_20260924/AGENT_BUS_COORDINATION_20260924.md). Claude retains its existing workflow and live watcher; its change from30 to10 minutes is requested on the bus and is not presumed until acknowledged. No duplicate agent was started.
