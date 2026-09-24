@@ -61,6 +61,23 @@ def main():
         if summary.get("device_name") is not None and GPU not in summary.get("device_name"):
             out["problems"]["device_name"] = summary.get("device_name")
     script_verdict = (summary or {}).get("verdict")
+    # Review fb6bc4dd MINOR (coordinator fix): a PASS must be fail-closed on identity. It needs the code hashes, the
+    # torch build and the GPU to be PRESENT and equal to the launched values, the job's own STATUS "done", and the
+    # check program's own exit code 0. A missing field is a problem, never a silent pass.
+    if summary is not None and script_verdict == "INTEGRATION_CHECKS_PASS":
+        ran_hashes = (summary.get("inputs") or {}).get("eval_paths_lf_sha256")
+        if not ran_hashes or not identity.get("eval_paths_lf_sha256"):
+            out["problems"]["code_under_test_missing"] = {"ran": ran_hashes, "launched": identity.get("eval_paths_lf_sha256")}
+        if summary.get("torch") != TORCH:
+            out["problems"]["torch_missing_or_wrong"] = summary.get("torch")
+        if not summary.get("device_name") or GPU not in summary.get("device_name"):
+            out["problems"]["device_missing_or_wrong"] = summary.get("device_name")
+        if status != "done":
+            out["problems"]["job_status_not_done"] = status
+        exit_file = RES / "CHECKS_EXIT_CODE"
+        exit_code = exit_file.read_text(encoding="utf-8").strip() if exit_file.is_file() else None
+        if exit_code != "0":
+            out["problems"]["checks_exit_code"] = exit_code
     if status in ("SMOKE_FAILED", "SMOKE_LIST_INPUTS_FAILED") or (smoke is not None and not smoke.get("pass")):
         verdict = "SMOKE_FAILED"
     elif summary is None or script_verdict is None:
