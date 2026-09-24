@@ -393,3 +393,170 @@ More detail:
 - **Not opened:** any `*_eval.jsonl`; any sealed file or folder except my own throwaway outputs; anything under
   `D:/tksCAS-archive/`; any `salt.hex`; S3 or AWS; the meta1 budget ledger; any `results/` or `results_attempt1/`
   folder; Claude transcripts. No real salt was used. Nothing was downloaded.
+
+## Verification of 1520e17cf7972f02578ceb3c255de9cae1546d44 (fresh verifier; `CLAUDE_BUILT_CLAUDE_CHECKED`)
+
+**Who and what.** A fresh verifier: a Claude sub-agent that did not write the build or its fixes. Claude is both the
+temporary builder and the checker while Codex is away, so this is not an outside custodian. I read the diff from
+`853e645d` to `1520e17c`, re-ran the tests and one throwaway build, and looked for close cousins of the two BLOCKER
+rules. No model was loaded. No real salt was used. Every number below comes from THROWAWAY salts made from public
+strings. Nothing ran on AWS.
+
+**Verdict: `CHANGES_REQUIRED`.**
+- F1 (analogy) is fixed correctly. As far as my checks reach, it is also complete.
+- F2 (reach) is fixed as the reviewer asked, but it is not complete. A close cousin of the same rule still passes
+  `REACH_3_STEP_TRANSFER_6` (finding V-1 below). It is the same class of problem, so it stays a BLOCKER until the
+  designer or owner decides it, before the salt is made.
+- The nine MINOR fixes hold. I found no new BLOCKER or MAJOR problem in the code changes.
+
+### V.1 What I re-ran
+
+- **The pinned tree.** Written again by `launch.py --materialize-tree` into my scratchpad: 1,186 files, tree digest
+  `fe2eaa174b6d7265bcb78de25a13b6898a158ee808bfaf87a419c3ff10190db6`. This is the same digest the builder got.
+- **Tests, one group at a time: 24 of 24 pass.** Fast group: 21 passed (35.96 s). End-to-end group: 2 passed (147.25 s).
+  Slow group: 1 passed (91.03 s).
+- **One command-line throwaway build.** Seed `VERIFIER-1520-a1`, `--limit-foci 1 --processes 2`.
+  - `build_ok: true`, 72 items, every problem count 0. Evaluation 79.8 s; 124.4 s in all.
+  - The outputs are `THROWAWAY_HSET2_BUILD_SUMMARY.json`, `THROWAWAY_HSET2_CELLS_NOT_DEV.json` and
+    `THROWAWAY_HSET2_SEALED_TEST.json`. All 15 cells have the role `THROWAWAY_NOT_DEV`.
+  - Every printed disjointness count is 0.
+  - `registered_comparators_digest` is `1a233f311ac4585149600a7812748aa33ac27253640db22c8931dcfae0f8de17`. The 3-step
+    reach bars leave out exactly `THREE_HOP_FIRST_CHILD` and `SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP`.
+- **The builder's section 3 numbers, measured again** on the same 21 seeds, with the builder's own `derive`,
+  `fast_rows` and cell summaries (imported, not copied):
+  - Analogy: binding W 9 / 13.9 / 19 (`DEGREE_GUESS_THEN_CHECK`); testable in 19 of 21. The same as the builder's.
+  - Reach 3-step, `SINGLE_ROOT_FALLBACK` W: first-child 9 / 16.0 / 22 (20 of 21), BFS 6 / 11.4 / 20 (14 of 21). The
+    claim is testable in 14 of 21. The same as the builder's.
+  - On the reviewer's six seeds, `SINGLE_ROOT_FALLBACK` W is 16, 20, 14, 13, 19, 19 (first-child) and 11, 16, 9, 8,
+    15, 12 (BFS). These are exactly the reviewer's numbers.
+  - Not measured again by me: the 4-step numbers, correspondence, and DEV.
+
+### V.2 F1 (analogy): fixed
+
+- The reviewer's rule is registered as `DEGREE_GUESS_THEN_CHECK`, with a whole-anchored form and a flag-anchored form.
+- `one_guess` takes `participants[0]` as the declared whole. `source.py` at `785c9bd1` requires exactly that
+  (`TYPED_SOURCE_WHOLE_REF`).
+- **Close cousins**, each treated as a model against every registered analogy bar, over 21 throwaway salts:
+
+| Cousin | Guesses per candidate | Passes the claim | W if it were a bar |
+|---|---|---|---|
+| degree sort, ties broken by reverse rank | 1 (inside the line) | 0 of 21 | 9 / 13.9 / 19 (it makes the same pairs as the registered rule) |
+| degree sort, ties broken by the declared flags, then rank | 1 (inside the line) | 0 of 21 | 7 / 12.5 / 17 |
+| the degree guess OR the whole-anchored guess | 2 (outside the line) | 0 of 21 | 8 / 13.6 / 19 |
+| any of the three registered guesses | 3 (outside the line) | 0 of 21 | 8 / 13.3 / 19 |
+
+- **Note N1 (not a blocker).** The flags tie-break gives the same pairs in both presentations, because the flags do not
+  change between them. So it does not pay the two-presentation penalty. It came closest to passing: b = 9, c = 2
+  (p 0.033) on `REVIEWER-a5`, and b = 5, c = 0 (p 0.031) on `reach-7`, both against `DEGREE_GUESS_THEN_CHECK`. The
+  designer may register it as a bar at no cost. The binding W would then fall a little.
+
+### V.3 F2 (reach): the named rule is closed, but a cousin still passes
+
+**Finding V-1 (BLOCKER).** A rule that learns nothing still passes `REACH_3_STEP_TRANSFER_6` after A2. It never follows
+an edge more than 2 steps from the whole.
+
+**The rule.** I call it `FRONTIER_FALLBACK`.
+- Take the registered two-hop answer: DIRECT if the part is a child of the whole; else VIA a child of the whole with an
+  arrow to the part.
+- If that answer is ABSENT: answer VIA when (i) some node exactly two steps from the whole has at least one child, and
+  (ii) the part has at least one parent. Otherwise answer ABSENT.
+- The via. First-child rule: the whole's child with the most children (ties: lowest rank). BFS rule: among the part's
+  parents that have a parent themselves, the one with the most parents (ties: lowest rank).
+- It reads node degrees (the joint degree list) and the part's parents, as `SINGLE_ROOT_FALLBACK` already does. It
+  never looks at where a third edge goes.
+
+**Measured** (throwaway salts; the builder's own `derive`, `fast_rows` and `summarise_reach_cell`):
+- I fixed the rule after looking at one seed (`REVIEWER-a5`). The other 20 seeds were held out.
+- It passes both TEST reach cells in 6 of the reviewer's 6 seeds. It passes in 16 of the builder's 21 seeds (which
+  include the reviewer's six).
+- In the 14 salts where the 3-step claim is testable at all, it passes in 11. The worst p among its passes is 0.0078.
+- Against `SINGLE_ROOT_FALLBACK`: b = 5 to 22, c = 0 to 6.
+- If it were registered as a bar, its W would be 1 / 3.4 / 6 (first-child) and 0 / 1.1 / 2 (BFS). The 3-step claim
+  would then read `NOT_TESTABLE` in 21 of 21 salts.
+- Checker v2, on the real packets, agreed with the direct comparison on 24 of 24 items, for this rule and for
+  `SINGLE_ROOT_FALLBACK` (seed `REVIEWER-a5`; both presentations of 6 clusters per cell where `SINGLE_ROOT_FALLBACK`
+  is wrong).
+
+**Why it works.**
+- Most clusters that `SINGLE_ROOT_FALLBACK` gets wrong are VIA clusters in shapes with two or more roots. On
+  `REVIEWER-a5` that is 10 of its 16 first-child errors and 10 of its 11 BFS errors (in each cell, 9 at distance 3 and
+  1 at distance 4). There the whole reaches the part in 3 steps, but the root count says nothing.
+- The question "does the whole's 2-step frontier still have outgoing edges?" separates those clusters from the ABSENT
+  ones.
+- Two controls, on 5 of the reviewer's seeds:
+  - The root-count state with this rule's via choice fails in 5 of 5. So the frontier test is what matters.
+  - A strict cousin that never looks at a 2-step node (it asks only whether some child of the whole has a child)
+    passes the BFS cell in 4 of 5 but fails the first-child cell in 5 of 5. So it does not pass the claim.
+
+**What the finding hinges on.** The rule reads whether a node two steps out has any child. So it knows that a third
+step exists somewhere. It does not know where that step goes, and it never checks that it reaches the part. If the
+designer counts this as "following a 3-step path", the finding falls away. The claim text should then say so.
+
+**Fix.** This is a design decision, made before the salt. It is not a code fix alone. Choose one:
+- (a) Register `FRONTIER_FALLBACK` (the text above) as a bar of `REACH_3_STEP_TRANSFER_6`. Tell the owner the claim
+  will then read `NOT_TESTABLE` in about every salt (W 0 to 6).
+- (b) Declare `REACH_3_STEP_TRANSFER_6` `NOT_TESTABLE` now, as the 5-node reach claims are. Or rename it to what it can
+  show (it beats two-hop and root-count rules), and write that a 2-step frontier rule would also pass it.
+- (c) Change the reach cell so that the 2-step view cannot predict the state. For example, balance VIA clusters at
+  distance 3 against ABSENT clusters with the same 2-step frontier. Then measure the ranges again.
+
+**The root cause.** The bar list names single rules. Each review closes one rule, and the next cousin passes. Reach
+has now shown this three times (M4, then F2, now V-1). A bar defined by a declared view would stop it: the best answer
+available from the nodes within 2 steps of the whole, the part's parents, every node's joint degree and the ranks,
+chosen on the cell as `BEST_FIXED_POSITION` is. That is a design change, and the designer decides it.
+
+### V.4 The MINOR fixes hold
+
+- **F5.** The printed disjointness is counted from the sets. In my run every count is 0.
+  - Note N2 (cosmetic). Two counts, `withheld_6_meets_test_new_6` and
+    `test_side_not_covered_by_test_new_6_and_withheld_6`, are 0 by construction, and no exit guards them. The label
+    "the build exits before this print if a required value fails" is true for every other count.
+- **F6 and F8.** Real mode wraps `_run`. Only the exception type reaches the public log (test passes).
+  - The wrapper lets the build's own `SystemExit` messages through. I read every formatted one in `hset2_build.py`,
+    `hset2_stage0_public.py`, `hset1a_build.py`, `hset1b_build.py`, `hset_worlds.py` and `oracle_isomorphism.py`.
+    None names a class, an item or a world.
+  - The imported CNCM modules (`typed_teaching`, `eval_paths`) call `sys.exit` only under `__main__`.
+- **F7.** The refusal test and the launcher test pass with the pins unset. The paths that follow a committed pin run
+  under a throwaway pin.
+- **F9.** The machine fetches the tools, checks their hash and checks their versions before the bundle arrives.
+  `pkg/sealed` is removed after the build and again in the exit handler. `UV_TARBALL_SHA256` is still None, so the
+  launcher refuses; that is a pre-launch step. Not verified by me or by the builder: that uv checks the Python download.
+- **F10.** The smoke passes `--remeasure-trained-states`. The slow test re-measured 70 MATCH and 88 MAPPING. `derive`
+  checks the TEST_NEW_5 digest right after `split_five` (test passes).
+- **F11.** Throwaway names and roles are as described. A throwaway `--out-public` inside a git work tree is refused
+  (test passes).
+- **F3, F4.** Owner decisions. Nothing to verify in code.
+
+### V.5 Before the salt
+
+1. The designer or owner decides V-1 (option a, b or c), together with the A2 decision (JOB_LIMITS step 1a).
+2. Optional: register the flags tie-break as an analogy bar (N1).
+3. After any change to the bars: print the ranges again, and have the change reviewed again.
+
+### EXPOSURE (this verification)
+
+- **The pinned CNCM tree `785c9bd1`.** Written from git objects by `launch.py --materialize-tree` into
+  `verify_1520/tree/` of the session scratchpad (1,186 files, digest `fe2eaa17...`).
+  - The tests, the build and my probes imported code from it. They loaded the public course, the tokenizer and the
+    development material through the frozen loaders.
+  - I opened no file of it by hand. I searched its `cas_meta2/typed_teaching/` and `eval_paths/` folders for
+    `SystemExit`, `sys.exit` and `private_targets` (the last had no match). I searched its whole `research/` folder for
+    `private_targets` (names of matching `.py` files only).
+  - Neither I nor my programs opened `records/typed_course_001/checks_002/private_targets.json`. The imported packages
+    never name it.
+- **Git objects of commit `785c9bd1`** (branch `claude/helm-builder-continuation-20260923`), by `git show`:
+  `typed_teaching/source.py` (a search for "participants" and "declared_whole", and lines 195 to 250) and
+  `typed_teaching/pointer_contract.py` (a search for "private" and "load_material").
+- **My scratch files** in `verify_1520/` of the session scratchpad: `probe_reach.py`, `probe_analogy.py`,
+  `check_v4_checker.py`, `verification_section.md` (this text, before it was appended here), their `r_*.json`,
+  `r2_*.json` and `a_*.json` outputs and logs, the pytest folders `pt_*`, and my throwaway build `cli_a1/` (including
+  `sealed_throwaway/THROWAWAY_HSET2_SEALED_TEST.json`, which I made with a throwaway salt). Not committed.
+- **One file under `C:/Users/wakil/.claude/projects/`.** The tool harness saved the output of my own `git diff` of
+  `hset2_build.py` (`853e645d` to `1520e17c`) as `.../5e8709f4-3151-444f-939b-317c01bc3568/tool-results/b1qn7akvd.txt`,
+  and I read it back. It holds only that diff. It is not a transcript. I list it because its folder is on the
+  forbidden list.
+- **Laptop state:** free memory and the process list (PowerShell), `python --version`, `uv --version`.
+- **Not opened:** any `*_eval.jsonl`; any sealed file or folder except my own throwaway output; anything under
+  `D:/tksCAS-archive/`; any `salt.hex`; S3 or AWS; the meta1 budget ledger; any `results/` or `results_attempt1/`
+  folder; the builder's scratch files and the old throwaway output folders named in F11; Claude transcripts. No real
+  salt was used. Nothing was downloaded.
