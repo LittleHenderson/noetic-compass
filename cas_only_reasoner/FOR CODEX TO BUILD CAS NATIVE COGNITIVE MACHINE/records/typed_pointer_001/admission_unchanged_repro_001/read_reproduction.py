@@ -40,6 +40,24 @@ REVISION 3 (review of 303c281b). The reader now also:
   * checks both training receipts' preflight machine (AMI, instance type, region) and the new receipt's shipped package
     (pinned archive blob, pinned requirements file) (MINOR 7).
 
+REVISION 4 (Codex READER_STATIC_REVIEW_20260924 fixes 1-7, POLICY_DECISIONS_20260924 R3-B/C/G/H/I; the eligibility
+record of bus codex-0021). decide() is byte-identical to the freeze 3344ae5d, and the reader checks that at run time.
+  * TWO ROUTES to a reading. (A) the original one: EXECUTION_ADMISSION.json ADMITTED, unchanged. (B) new: the frozen
+    study froze the admission as it was, NOT_READY, and launched under OWNER_DIRECTION_20260924. A separate record,
+    READING_ELIGIBILITY.json, committed once after the freeze and before the evidence, binds the frozen study
+    (60140ae0...), the as-is NOT_READY admission (5042681a..., which must stay byte-identical), THIS reader, the pins,
+    the panel, the owner-direction record, the P1b acceptance receipt, the environment lock and the review receipt.
+    Every bound receipt is opened and checked. The route is B exactly when the record exists at the receipt commit;
+  * the history rule includes merge commits (`git log -m`): the evidence, the receipt result, the eligibility record
+    and every frozen file each have ONE blob version in the whole history, and the admission record and the frozen
+    files keep their frozen blob in every commit after the freeze, merges included (fix 2);
+  * a missing pinned object, an unfetched receipt or review branch, or a receipt/reviewed commit that the freshly
+    fetched branch does not contain, is a recoverable TOOL_STOP (exit 1) before any evaluation (fix 3, R3-G);
+  * the environment lock is compared with the evidence, the P1b acceptance and both training receipts; a difference
+    in a required-equal field is INVALID, never a mismatch (fix 6, R3-I);
+  * refusals: complete-message allowlist (fix 1); acceptance: frozen per-case table (fix 7); review: resolved pushed
+    commit and bound writers (fix 5); spend: opened sources and freshness (fix 4, admission route only).
+
 WHAT IT READS. Committed JSON only, with `git show <commit>:<path>`, never a weights file:
   * the pinned policy files at the pins' commit (conformance with READER_RULE; no status words are read);
   * `policy_pins.json` at `--receipt-commit` (must equal the pins this reader loaded);
@@ -58,11 +76,13 @@ torch and never loads a checkpoint.
 EXIT CODES. 0: a valid-evidence verdict (REPRODUCED or DOES_NOT_REPRODUCE). 2: ADMISSION_INVALID_STOP (the reading is
 still printed and, with --write, written). 1: the TOOL stopped with no verdict at all (bad arguments, the pinned policy
 is not the rule this reader implements, `policy_pins.json` at the receipt commit is not the one this reader loaded, the
-panel manifest is not the pinned one, or this reader is not the admitted reader).
+panel manifest is not the pinned one, this reader is not the admitted reader, or -- revision 4 -- a pinned object is
+missing locally, a branch could not be fetched, the receipt or reviewed commit is not on its freshly fetched branch, or
+decide() is not the frozen decide()). A tool stop records nothing: fetch or push, then read again.
 
-USAGE (from the worktree root, after the receipt AND the evidence are committed):
-    python -B read_reproduction.py --receipt-commit <40-hex commit>
-    python -B read_reproduction.py --receipt-commit <40-hex commit> --write    # also writes reproduction_reading.json
+USAGE (from the worktree root, after the receipt, the eligibility record AND the evidence are committed and pushed):
+    python -B read_reproduction.py --receipt-commit <40-hex commit> --receipt-branch <branch>
+    python -B read_reproduction.py --receipt-commit <40-hex commit> --receipt-branch <branch> --write
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED (temporary Claude builder while Codex is away).
 """
@@ -78,7 +98,8 @@ if str(HERE) not in sys.path:
 import repro_common as common  # noqa: E402
 
 stop_unless = common.make_stop('UNCHANGED_REPRO_READING_STOPPED:')
-READING_SCHEMA = 'cncm.helm-unchanged-reproduction-reading/0.4'
+READING_SCHEMA = 'cncm.helm-unchanged-reproduction-reading/0.5'
+ZERO_BLOB = '0' * 40
 REPRODUCED, DOES_NOT_REPRODUCE, INVALID_STOP = common.REPRODUCED, common.DOES_NOT_REPRODUCE, common.INVALID_STOP
 EXIT_VALID_VERDICT, EXIT_INVALID_STOP = 0, 2
 DIFFERENCE_LIMIT = 25
@@ -249,14 +270,18 @@ def reference_reading(read, blob_of, ev):
                          + row['path'], 'sha256_stated': row['sha256_stated']} for row in stated]}, checkpoint
 
 
-def frozen_admission(read_frozen, ev, running_sources, admission_state):
+def frozen_admission(read_frozen, ev, running_sources, admission_state, route=common.ROUTE_ADMISSION):
     """The frozen job this reading is bound to, read at the same commit as the receipt. None when nothing is frozen.
 
     Revision 3 (review MINOR 4): the copy of the admission inside study.json is not trusted on its own. `admission_state`
     is EXECUTION_ADMISSION.json evaluated AT THE RECEIPT COMMIT (every prerequisite receipt opened); it must be ADMITTED,
     for this job, with the very record sha256 that study.json names.
+    Revision 4, route B (`ROUTE_ELIGIBILITY`): the frozen study is the frozen bytes, its admission copy is the as-is
+    NOT_READY record, and EXECUTION_ADMISSION.json at the receipt commit is still byte-identical to it. The admitted
+    reader then comes from the eligibility record (`eligibility_violations`), never from a flipped admission.
     """
-    study = load_json(read_frozen('study.json'))
+    raw_study = read_frozen('study.json')
+    study = load_json(raw_study)
     if not ev.check(type(study) is dict and study.get('status') == 'FROZEN_BEFORE_FIRST_RUN'
                     and type(study.get('jobs')) is list and len(study['jobs']) == 1
                     and type(study['jobs'][0]) is dict, 'NOTHING_FROZEN_AT_THIS_COMMIT'):
@@ -269,29 +294,41 @@ def frozen_admission(read_frozen, ev, running_sources, admission_state):
     ev.check(common.same(study.get('reading_rule'), common.reading_rule_record()),
              'FROZEN_UNDER_A_DIFFERENT_READING_RULE')
     admission = study.get('execution_admission') if type(study.get('execution_admission')) is dict else {}
-    ev.check(admission.get('state') == common.ADMITTED and admission.get('job') == job.get('job'),
-             'FROZEN_WITHOUT_AN_ADMITTED_EXECUTION_ADMISSION_FOR_THIS_JOB')
     committed = admission_state if type(admission_state) is dict else {}
-    ev.check(committed.get('state') == common.ADMITTED,
-             'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_ADMITTED:'
-             + '|'.join(map(str, committed.get('reasons') or ['NOT_EVALUATED']))[:600])
-    ev.check(common.is_hex(committed.get('record_sha256'), 64)
-             and committed.get('record_sha256') == admission.get('record_sha256')
-             and committed.get('job') == job.get('job'), 'FROZEN_ADMISSION_IS_NOT_THE_COMMITTED_ADMISSION_RECORD')
     bindings = admission.get('bindings') if type(admission.get('bindings')) is dict else {}
-    ev.check(bindings.get('reader_sources_sha256') == running_sources
-             and bindings.get('reader_source_sha256') == common.reader_source_digest(running_sources),
-             'THIS_READER_IS_NOT_THE_ADMITTED_READER')
+    if route == common.ROUTE_ELIGIBILITY:
+        ev.check(type(raw_study) is bytes and common.digest(raw_study) == common.FROZEN_STUDY_SHA256,
+                 'FROZEN_STUDY_IS_NOT_THE_FROZEN_BYTES')
+        ev.check(admission.get('state') == common.NOT_READY and admission.get('job') is None
+                 and admission.get('record_sha256') == common.FROZEN_ADMISSION_SHA256,
+                 'FROZEN_ADMISSION_IS_NOT_THE_AS_IS_NOT_READY_RECORD')
+        ev.check(committed.get('record_sha256') == common.FROZEN_ADMISSION_SHA256
+                 and committed.get('recorded_state') == common.NOT_READY,
+                 'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_BYTE_IDENTICAL_TO_THE_FROZEN_ONE')
+        admitted_sources = None                         # set only by a valid eligibility record (reading())
+    else:
+        ev.check(admission.get('state') == common.ADMITTED and admission.get('job') == job.get('job'),
+                 'FROZEN_WITHOUT_AN_ADMITTED_EXECUTION_ADMISSION_FOR_THIS_JOB')
+        ev.check(committed.get('state') == common.ADMITTED,
+                 'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_ADMITTED:'
+                 + '|'.join(map(str, committed.get('reasons') or ['NOT_EVALUATED']))[:600])
+        ev.check(common.is_hex(committed.get('record_sha256'), 64)
+                 and committed.get('record_sha256') == admission.get('record_sha256')
+                 and committed.get('job') == job.get('job'), 'FROZEN_ADMISSION_IS_NOT_THE_COMMITTED_ADMISSION_RECORD')
+        ev.check(bindings.get('reader_sources_sha256') == running_sources
+                 and bindings.get('reader_source_sha256') == common.reader_source_digest(running_sources),
+                 'THIS_READER_IS_NOT_THE_ADMITTED_READER')
+        admitted_sources = bindings.get('reader_sources_sha256')
     ev.check(bindings.get('policy_pins_sha256') == common.PINS_SHA256, 'FROZEN_UNDER_OTHER_POLICY_PINS')
     request = load_json(read_frozen(str(common.MODEL_SEED) + '/request.json'))
     ev.check(type(request) is dict and request.get('job') == job.get('job'), 'FROZEN_REQUEST')
     ev.check(type(request) is dict and request.get('source_sha') == common.SOURCE_SHA
              and request.get('archive_sha256') == common.ARCHIVE_SHA256
              and request.get('manifest_sha256') == common.MANIFEST_SHA256, 'FROZEN_REQUEST_IS_NOT_THE_HELM2_PACKAGE')
-    return {'job': job.get('job'), 'request': request, 'admitted_sources': bindings.get('reader_sources_sha256')}
+    return {'job': job.get('job'), 'request': request, 'admitted_sources': admitted_sources, 'study': study}
 
 
-def history_violations(history):
+def history_violations(history, route=common.ROUTE_ADMISSION):
     """The policy's `frozen_before_reproduction_result_required` over git facts (review MINOR 5). Pure.
 
     The frozen records sit in exactly ONE non-merge commit; that commit contains neither the receipt result nor the
@@ -318,6 +355,37 @@ def history_violations(history):
     if history.get('admission_blob_at_freeze') is None or (history.get('admission_blob_at_freeze')
                                                            != history.get('admission_blob_at_receipt')):
         violations.append('ADMISSION_RECORD_CHANGED_AFTER_THE_FREEZE')
+    # Revision 4 (reader review fix 2, Codex R3-G): merge commits count. A merge resolution that edits a pinned file
+    # makes a second blob version (or a changed blob after the freeze), which the --no-merges counts above cannot see.
+    versions = history.get('blob_versions') if type(history.get('blob_versions')) is dict else {}
+    for label in ('evidence', 'receipt_result') + common.FROZEN_FILES:
+        value = versions.get(label)
+        if type(value) is not list or len(value) != 1:
+            violations.append('NOT_ONE_BLOB_VERSION_INCLUDING_MERGES:' + label + ':'
+                              + str(len(value) if type(value) is list else None))
+    changes = history.get('after_freeze_changes') if type(history.get('after_freeze_changes')) is dict else {}
+    pinned = dict(history.get('frozen_blobs_at_freeze') if type(history.get('frozen_blobs_at_freeze')) is dict else {},
+                  admission=history.get('admission_blob_at_freeze'))
+    for label in ('admission',) + common.FROZEN_FILES:
+        value = changes.get(label)
+        if type(value) is not list or not common.is_hex(pinned.get(label), 40) \
+                or any(blob != pinned[label] for blob in value):
+            violations.append('CHANGED_AFTER_THE_FREEZE_INCLUDING_MERGES:' + label)
+    if route == common.ROUTE_ELIGIBILITY:
+        freeze = history.get('freeze_commits')
+        if not (type(freeze) is list and freeze == [common.FREEZE_COMMIT]):
+            violations.append('FREEZE_IS_NOT_THE_REGISTERED_FREEZE_COMMIT')
+        if count('eligibility_commits') != 1:
+            violations.append('ELIGIBILITY_RECORD_NOT_EXACTLY_ONE_COMMITTED_VERSION:' + str(count('eligibility_commits')))
+        value = versions.get('eligibility')
+        if type(value) is not list or len(value) != 1:
+            violations.append('NOT_ONE_BLOB_VERSION_INCLUDING_MERGES:eligibility:'
+                              + str(len(value) if type(value) is list else None))
+        if history.get('eligibility_follows_freeze') is not True:
+            violations.append('ELIGIBILITY_RECORD_IS_NOT_AFTER_THE_FREEZE')
+        if history.get('eligibility_precedes_evidence') is not True or history.get('eligibility_has_evidence') \
+                is not False:
+            violations.append('ELIGIBILITY_RECORD_IS_NOT_BEFORE_THE_EVIDENCE')
     return violations
 
 
@@ -327,26 +395,63 @@ def commits_touching(commit, relative):
     return raw.decode('ascii').split()
 
 
+def blob_changes(revisions, repo_paths, *, ancestry_path=False, cwd=None):
+    """`{repo path: [new blob id of every change]}` over `git log -m --raw`: MERGE COMMITS INCLUDED, each diffed
+    against every parent. A deletion shows as ZERO_BLOB. `repo_paths` are repository-root paths. Impure (git log)."""
+    args = ['log', '--format=C %H', '--full-history', '-m', '--raw', '--no-abbrev', '--no-renames']
+    if ancestry_path:
+        args.append('--ancestry-path')
+    raw = common.git(*args, *revisions, '--', *[':(top)' + path for path in repo_paths], cwd=cwd)
+    out = {path: [] for path in repo_paths}
+    for line in raw.decode('utf-8', 'replace').splitlines():
+        if line.startswith(':') and '\t' in line:
+            meta, path = line.split('\t', 1)
+            fields = meta.split()
+            if path in out and len(fields) >= 4:
+                out[path].append(fields[3])
+    return out
+
+
 def collect_history(receipt_commit):
     """The git facts `history_violations` reads. Impure (git log, cat-file, merge-base)."""
     freeze = commits_touching(receipt_commit, common.HERE_REL + '/frozen')
     evidence = commits_touching(receipt_commit, common.EVIDENCE_REL)
     result = commits_touching(receipt_commit, common.RECEIPT_REL + '/result.json')
+    eligibility = commits_touching(receipt_commit, common.ELIGIBILITY_REL)
     one = freeze[0] if len(freeze) == 1 else None
+    eligible = eligibility[0] if len(eligibility) == 1 else None
 
-    def precedes(later):
-        return (one is not None and len(later) == 1
-                and common.git_ok('merge-base', '--is-ancestor', one, later[0]) and one != later[0])
+    def precedes(earlier, later):
+        return (earlier is not None and len(later) == 1
+                and common.git_ok('merge-base', '--is-ancestor', earlier, later[0]) and earlier != later[0])
 
     def admission_blob(commit):
         if commit is None or not common.has_object(commit, common.ADMISSION_REL):
             return None
         return common.blob_id(commit, common.ADMISSION_REL)
+    labels = {'evidence': common.EVIDENCE_REL, 'receipt_result': common.RECEIPT_REL + '/result.json',
+              'eligibility': common.ELIGIBILITY_REL, 'admission': common.ADMISSION_REL,
+              **{name: common.HERE_REL + '/' + name for name in common.FROZEN_FILES}}
+    repo = {label: common.GIT_PREFIX + relative for label, relative in labels.items()}
+    everything = blob_changes([receipt_commit], sorted(repo.values()))
+    versions = {label: sorted({blob for blob in everything[repo[label]] if blob != ZERO_BLOB})
+                for label in labels if label != 'admission'}
+    after, at_freeze = {}, {}
+    if one is not None:
+        watched = ('admission',) + common.FROZEN_FILES
+        changed = blob_changes([one + '..' + receipt_commit], [repo[label] for label in watched], ancestry_path=True)
+        after = {label: changed[repo[label]] for label in watched}
+        at_freeze = {name: common.blob_id(one, labels[name]) if common.has_object(one, labels[name]) else None
+                     for name in common.FROZEN_FILES}
     return {'freeze_commits': freeze, 'evidence_commits': evidence, 'receipt_result_commits': result,
             'freeze_has_receipt': common.has_object(one, common.RECEIPT_REL + '/result.json') if one else None,
             'freeze_has_evidence': common.has_object(one, common.EVIDENCE_REL) if one else None,
-            'freeze_precedes_receipt': precedes(result), 'freeze_precedes_evidence': precedes(evidence),
-            'admission_blob_at_freeze': admission_blob(one), 'admission_blob_at_receipt': admission_blob(receipt_commit)}
+            'freeze_precedes_receipt': precedes(one, result), 'freeze_precedes_evidence': precedes(one, evidence),
+            'admission_blob_at_freeze': admission_blob(one), 'admission_blob_at_receipt': admission_blob(receipt_commit),
+            'blob_versions': versions, 'after_freeze_changes': after, 'frozen_blobs_at_freeze': at_freeze,
+            'eligibility_commits': eligibility, 'eligibility_follows_freeze': precedes(one, eligibility),
+            'eligibility_precedes_evidence': precedes(eligible, evidence),
+            'eligibility_has_evidence': common.has_object(eligible, common.EVIDENCE_REL) if eligible else None}
 
 
 def committed_admission_state(receipt_commit, policy_files):
@@ -362,6 +467,209 @@ def committed_admission_state(receipt_commit, policy_files):
         policy=loaded['reproduction_policy_json'], manifest=loaded['execution_manifest'],
         launch_request=loaded['launch_request'], committed=raw is not None,
         receipts=common.read_prerequisite_receipts(raw, anchors=(receipt_commit, common.POLICY_COMMIT)))
+
+
+# =====================================================================================================================
+# REVISION 4: the READING ELIGIBILITY record (route B) and the tool stops before evaluation.
+# =====================================================================================================================
+def receipt_reference_ok(entry):
+    return (type(entry) is dict and sorted(entry) == ['receipt_commit', 'receipt_path', 'receipt_sha256']
+            and common.is_hex(entry['receipt_commit'], 40) and common._relative_path(entry['receipt_path'])
+            and common.is_hex(entry['receipt_sha256'], 64))
+
+
+def owner_direction_path(study):
+    """The ROOT-relative path the frozen study names as its owner-direction record ('<path> on <branch>')."""
+    text = study.get('owner_direction_record') if type(study) is dict else None
+    return text.split(' on ', 1)[0] if type(text) is str else None
+
+
+def eligibility_violations(record_raw, *, study_raw, admission_state, running_sources, facts):
+    """`(violations, checked)`: every way the eligibility record does not admit THIS reading. Pure over its arguments.
+
+    `facts` is `eligibility_facts(...)`: the three bound receipts read from git (with whether each commit is an ancestor
+    of the eligibility commit), the review's git facts, the owner-direction record's blob, and the sha256 of decide()
+    at the freeze and as it runs here. `checked` returns the parsed environment lock and acceptance receipt.
+    """
+    checked = {'lock': None, 'acceptance': None}
+    record = common.strict_json_object(record_raw)
+    if record is None:
+        return ['RECORD_IS_NOT_A_STRICT_JSON_OBJECT'], checked
+    facts = facts if type(facts) is dict else {}
+    violations = []
+    if (sorted(record) != sorted(common.ELIGIBILITY_FIELDS) or record.get('schema') != common.ELIGIBILITY_SCHEMA
+            or record.get('label') != common.LABEL or record.get('state') != common.ELIGIBLE):
+        violations.append('FIELDS_SCHEMA_LABEL_OR_STATE')
+    study = load_json(study_raw)
+    study = study if type(study) is dict else {}
+    jobs = study.get('jobs') if type(study.get('jobs')) is list else []
+    frozen_job = jobs[0].get('job') if len(jobs) == 1 and type(jobs[0]) is dict else None
+    if common.stamp_of(record.get('job')) is None or record.get('job') != frozen_job:
+        violations.append('NOT_FOR_THE_FROZEN_JOB:' + str(record.get('job'))[:80])
+    if not (common.same(record.get('job_kind'), common.JOB_KIND) and common.same(record.get('model_seed'),
+                                                                                  common.MODEL_SEED)
+            and common.same(record.get('source_sha'), common.SOURCE_SHA)):
+        violations.append('NOT_THIS_JOB_KIND')
+    if not (common.same(record.get('frozen_study'), {'commit': common.FREEZE_COMMIT,
+                                                     'path': common.GIT_PREFIX + common.HERE_REL + '/frozen/study.json',
+                                                     'sha256': common.FROZEN_STUDY_SHA256})
+            and type(study_raw) is bytes and common.digest(study_raw) == common.FROZEN_STUDY_SHA256):
+        violations.append('FROZEN_STUDY_BINDING')
+    committed = admission_state if type(admission_state) is dict else {}
+    if not (common.same(record.get('execution_admission_as_is'), {
+            'path': common.GIT_PREFIX + common.ADMISSION_REL, 'sha256': common.FROZEN_ADMISSION_SHA256,
+            'state': common.NOT_READY}) and committed.get('record_sha256') == common.FROZEN_ADMISSION_SHA256):
+        violations.append('ADMISSION_IS_NOT_THE_BYTE_IDENTICAL_AS_IS_RECORD')
+    reader = record.get('reader') if type(record.get('reader')) is dict else {}
+    if not (sorted(reader) == ['reader_source_sha256', 'reader_sources_sha256']
+            and common.same(reader.get('reader_sources_sha256'), running_sources)
+            and reader.get('reader_source_sha256') == common.reader_source_digest(running_sources)):
+        violations.append('NOT_THIS_READER')
+    bindings = (study.get('execution_admission') or {}).get('bindings') if type(
+        study.get('execution_admission')) is dict else None
+    if not (record.get('policy_pins_sha256') == common.PINS_SHA256 and type(bindings) is dict
+            and bindings.get('policy_pins_sha256') == common.PINS_SHA256):
+        violations.append('POLICY_PINS')
+    if record.get('panel_manifest_sha256') != common.PANEL_MANIFEST_SHA256:
+        violations.append('PANEL_MANIFEST')
+    if not (record.get('launch_basis') == common.LAUNCH_BASIS == study.get('launch_basis')):
+        violations.append('LAUNCH_BASIS')
+    owner = record.get('owner_direction_record') if type(record.get('owner_direction_record')) is dict else {}
+    found = facts.get('owner_direction') if type(facts.get('owner_direction')) is dict else {}
+    if not (sorted(owner) == ['blob', 'commit', 'path', 'sha256'] and owner.get('path') == owner_direction_path(study)
+            and common.is_hex(owner.get('commit'), 40) and found.get('blob') == owner.get('blob')
+            and type(found.get('raw')) is bytes and common.git_object_id(found['raw']) == owner.get('blob')
+            and common.digest(found['raw']) == owner.get('sha256')):
+        violations.append('OWNER_DIRECTION_RECORD')
+    decide_hash = record.get('decide_source_sha256')
+    if not (common.is_hex(decide_hash, 64) and decide_hash == facts.get('decide_running')
+            == facts.get('decide_at_freeze')):
+        violations.append('DECIDE_IS_NOT_THE_FROZEN_DECIDE')
+    if not (type(record.get('written_by')) is str and record['written_by'].strip()
+            and common.utc_instant(record.get('written_utc')) is not None and type(record.get('note')) is str):
+        violations.append('WRITTEN_BY_UTC_OR_NOTE')
+    receipts = facts.get('receipts') if type(facts.get('receipts')) is dict else {}
+    raws = {}
+    for name in common.ELIGIBILITY_RECEIPTS:
+        entry = record.get(name)
+        if not receipt_reference_ok(entry):
+            violations.append('RECEIPT_REFERENCE_FORM:' + name)
+            continue
+        got = receipts.get(name) if type(receipts.get(name)) is dict else {}
+        if not (got.get('commit') == entry['receipt_commit'] and got.get('path') == entry['receipt_path']
+                and type(got.get('raw')) is bytes):
+            violations.append('RECEIPT_NOT_A_COMMITTED_BLOB:' + name)
+        elif got.get('anchored') is not True:
+            violations.append('RECEIPT_NOT_COMMITTED_BEFORE_THE_ELIGIBILITY_RECORD:' + name)
+        elif common.digest(got['raw']) != entry['receipt_sha256']:
+            violations.append('RECEIPT_SHA256:' + name)
+        else:
+            raws[name] = got['raw']
+    lock = None
+    if 'environment_lock' in raws:
+        found_lock, lock = common.environment_lock_violations(raws['environment_lock'])
+        violations.extend('ENVIRONMENT_LOCK:' + item for item in found_lock)
+    expected_bindings = common.expected_admission_bindings(running_sources)
+    if 'reader_acceptance' in raws:
+        acceptance = common.load_object(raws['reader_acceptance'])
+        violations.extend('READER_ACCEPTANCE:' + item for item in common.acceptance_receipt_violations(
+            acceptance, expected_bindings, environment_lock=lock))
+        if lock is None:
+            violations.append('READER_ACCEPTANCE:NOT_COMPARED_WITH_A_VALID_ENVIRONMENT_LOCK')
+        checked['acceptance'] = acceptance
+    if 'review' in raws:
+        review = common.load_object(raws['review'])
+        violations.extend('REVIEW:' + item for item in common.review_receipt_violations(
+            review, expected_bindings, facts.get('review_facts')))
+        closure = review.get('closure') if type(review) is dict and type(review.get('closure')) is dict else {}
+        if closure.get('write_launch_under_owner_direction.py') != study.get('writer_blob_at_head'):
+            violations.append('REVIEW:WRITER_IS_NOT_THE_WRITER_THE_FROZEN_STUDY_RECORDS')
+    checked['lock'] = lock
+    return violations, checked
+
+
+def eligibility_facts(receipt_commit, raw):
+    """The git facts `eligibility_violations` reads. Impure (git show, cat-file, merge-base; no fetch here)."""
+    record = common.strict_json_object(raw) or {}
+    eligible = commits_touching(receipt_commit, common.ELIGIBILITY_REL)
+    anchor = eligible[0] if len(eligible) == 1 else None
+    receipts = {}
+    for name in common.ELIGIBILITY_RECEIPTS:
+        entry = record.get(name) if type(record.get(name)) is dict else {}
+        commit, path = entry.get('receipt_commit'), entry.get('receipt_path')
+        if not (common.is_hex(commit, 40) and common._relative_path(path)):
+            continue
+        receipts[name] = {'commit': commit, 'path': path,
+                          'raw': common.show(commit, path) if common.has_object(commit, path) else None,
+                          'anchored': anchor is not None and common.git_ok('merge-base', '--is-ancestor', commit,
+                                                                           anchor)}
+    review = common.load_object((receipts.get('review') or {}).get('raw'))
+    owner = record.get('owner_direction_record') if type(record.get('owner_direction_record')) is dict else {}
+    owner_found = None
+    if (common.is_hex(owner.get('commit'), 40) and common._relative_path(owner.get('path'))
+            and common.has_object(owner['commit'], owner['path'])):
+        owner_found = {'blob': common.blob_id(owner['commit'], owner['path']),
+                       'raw': common.show(owner['commit'], owner['path'])}
+    return {'receipts': receipts, 'owner_direction': owner_found,
+            'review_facts': common.review_facts(review, freeze_commit=common.FREEZE_COMMIT) if review else None,
+            'decide_running': common.decide_source_sha256((HERE / 'read_reproduction.py').read_bytes()),
+            'decide_at_freeze': common.decide_source_sha256(
+                common.show(common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py'))}
+
+
+def object_exists(commit, relative):
+    """True when git holds `commit` (a commit object) and, when `relative` is given, `commit:relative`. Impure."""
+    if not common.is_hex(commit, 40):
+        return False
+    if relative is None:
+        return common.git_ok('cat-file', '-e', commit + '^{commit}')
+    return common.has_object(commit, relative)
+
+
+def missing_objects(specs, exists):
+    """`[label:commit[:path]]` for every `(label, commit, relative)` that `exists` does not find. Pure over `exists`."""
+    return [label + ':' + str(commit) + (':' + relative if relative else '') for label, commit, relative in specs
+            if not exists(commit, relative)]
+
+
+def require_objects(specs, exists=None):
+    """Revision 4 (reader review fix 3, Codex R3-G): a missing pinned object is a recoverable TOOL_STOP (exit 1) BEFORE
+    any evaluation, never a recorded ADMISSION_INVALID_STOP. Fetch the named branch and read again."""
+    missing = missing_objects(specs, object_exists if exists is None else exists)
+    stop_unless(not missing, 'PINNED_OBJECT_MISSING:' + '|'.join(missing)[:900]
+                + ':fetch the branch that carries it with an explicit refspec and read again; no verdict was recorded')
+
+
+def fixed_object_specs():
+    """The objects every reading needs: the reference, the freeze, and every pinned owner record (commit AND path)."""
+    return ([('reference', common.REFERENCE_COMMIT, None), ('freeze', common.FREEZE_COMMIT, None),
+             ('freeze_reader', common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py')]
+            + [('owner:' + name, commit, relative) for name, (commit, relative, _, _)
+               in sorted(common.OWNER_RECORDS.items())])
+
+
+def eligibility_object_specs(record):
+    """The commits a well-formed eligibility record names (a malformed entry is left to the pure check)."""
+    record = record if type(record) is dict else {}
+    specs = []
+    for name in common.ELIGIBILITY_RECEIPTS + ('owner_direction_record',):
+        entry = record.get(name) if type(record.get(name)) is dict else {}
+        commit = entry.get('receipt_commit', entry.get('commit'))
+        if common.is_hex(commit, 40):
+            specs.append(('eligibility:' + name, commit, None))
+    return specs
+
+
+def fetch_and_require_on_branch(branch, commit, what):
+    """R3-G: fetch `branch` fresh (explicit refspec into its remote-tracking ref) and require `commit` to be reachable
+    from that tip. Any failure is a TOOL_STOP: an unpushed alternative history is not admissible."""
+    stop_unless(common._branch(branch) and branch[0].isalnum(), what + '_BRANCH_FORM:' + str(branch)[:80])
+    try:
+        common.git(*common.fetch_args(branch))
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        stop_unless(False, what + '_BRANCH_NOT_FETCHED:run `git ' + ' '.join(common.fetch_args(branch)) + '`')
+    stop_unless(common.git_ok('merge-base', '--is-ancestor', commit, common.tracking_ref(branch)),
+                what + '_COMMIT_NOT_ON_THE_FETCHED_BRANCH:' + branch + ':push it first; no verdict was recorded')
 
 
 def new_reading(read, job, request, ev):
@@ -526,17 +834,19 @@ def panel_row_faults(rows):
 
 
 def evaluate_evidence(evidence, manifest, *, expected_candidate_job, expected_candidate_sha256, admitted_sources,
-                      reference_record_metadata=None, candidate_record_metadata=None, required_mode):
+                      reference_record_metadata=None, candidate_record_metadata=None, required_mode,
+                      environment_lock=None):
     """Validity reasons, the four recomputed levels and the bounded differences. Pure over its arguments.
 
     `required_mode` is 'READING' for the production reading and 'ACCEPTANCE' inside the P1 acceptance (review NOTE 11):
-    evidence of the other mode is invalid.
+    evidence of the other mode is invalid. Revision 4: with a valid `environment_lock`, every required-equal field of
+    the evidence's recorded environment is parsed and compared; a difference is INVALID, never a mismatch.
     """
     ev = Evidence()
     levels = {level: None for level in common.LEVEL_LABELS}
     differences, envelope = {}, {}
     result = {'invalid_reasons': ev.reasons, 'levels': levels, 'differences': differences, 'envelope': envelope,
-              'environment_recorded_not_pinned': {}}
+              'environment_recorded_not_pinned': {}, 'environment_lock_comparison': None}
     if not ev.check(type(evidence) is dict, 'EVIDENCE_ABSENT_OR_NOT_AN_OBJECT'):
         return result
     ev.check(evidence.get('schema') == common.EVIDENCE_SCHEMA and evidence.get('label') == common.LABEL,
@@ -556,6 +866,11 @@ def evaluate_evidence(evidence, manifest, *, expected_candidate_job, expected_ca
     recorded = evidence.get('environment') if type(evidence.get('environment')) is dict else {}
     result['environment_recorded_not_pinned'] = {key: recorded.get(key) for key in
                                                  common.ENVIRONMENT_RECORDED_NOT_PINNED}
+    if environment_lock is not None:
+        invalid, diagnostic, not_observed = common.environment_lock_comparison(
+            environment_lock, recorded, 'READING_EVIDENCE', must_observe=True)
+        ev.reasons.extend(invalid)
+        result['environment_lock_comparison'] = {'diagnostic_differences': diagnostic, 'not_observed': not_observed}
     producer_reasons = evidence.get('producer_invalid_reasons')
     ev.check(producer_reasons == [], 'PRODUCER_REPORTED:' + '|'.join(map(str, producer_reasons or ['ABSENT']))[:600])
     inputs = evidence.get('inputs') if type(evidence.get('inputs')) is dict else {}
@@ -662,26 +977,51 @@ def evaluate_evidence(evidence, manifest, *, expected_candidate_job, expected_ca
 # THE READING.
 # =====================================================================================================================
 def reading(read_reference, read_frozen, read_receipt, read_evidence, manifest, *, reference_blob_of=None,
-            receipt_commit=None, running_sources=None, admission_state=None, history=None):
+            receipt_commit=None, running_sources=None, admission_state=None, history=None, eligibility=None):
     """One reading. Every problem with the evidence is a named reason, and any reason reads ADMISSION_INVALID_STOP.
 
     `admission_state` is `committed_admission_state(receipt_commit)`; `history` is `collect_history(receipt_commit)`.
     Either one missing reads ADMISSION_INVALID_STOP (fail closed).
+    Revision 4: `eligibility` is None (route A, the admitted route) or `eligibility_facts(...)` plus `'raw'`, the
+    committed READING_ELIGIBILITY.json bytes (route B). decide() is unchanged; only the admission check differs.
     """
     running_sources = common.source_hashes() if running_sources is None else running_sources
+    route = common.ROUTE_ELIGIBILITY if eligibility is not None else common.ROUTE_ADMISSION
     ev = Evidence()
     reference, reference_checkpoint = reference_reading(read_reference, reference_blob_of, ev)
-    frozen = frozen_admission(read_frozen, ev, running_sources, admission_state)
-    for reason in history_violations(history):
+    frozen = frozen_admission(read_frozen, ev, running_sources, admission_state, route=route)
+    lock, eligibility_raw = None, None
+    if route == common.ROUTE_ELIGIBILITY:
+        eligibility_raw = eligibility.get('raw') if type(eligibility) is dict else None
+        found, checked = eligibility_violations(eligibility_raw, study_raw=read_frozen('study.json'),
+                                                admission_state=admission_state, running_sources=running_sources,
+                                                facts=eligibility)
+        ev.reasons.extend('ELIGIBILITY:' + item for item in found)
+        lock = checked['lock']
+        if frozen is not None and not found:
+            frozen['admitted_sources'] = running_sources          # the reader the valid eligibility record binds
+    for reason in history_violations(history, route):
         ev.reasons.append(reason)
     job = frozen['job'] if frozen else None
     new = new_reading(read_receipt, job, frozen['request'] if frozen else None, ev) if frozen else {}
+    lock_report = {}
+    if lock is not None:                                          # fix 6: both training receipts' recorded runtime
+        for source, read in (('REFERENCE_TRAINING', read_reference), ('CANDIDATE_TRAINING', read_receipt)):
+            report = load_json(read(WORKER_REPORT))
+            runtime = report.get('runtime') if type(report) is dict else None
+            invalid, diagnostic, not_observed = common.environment_lock_comparison(lock, runtime, source,
+                                                                                   must_observe=False)
+            ev.reasons.extend(invalid)
+            lock_report[source] = {'diagnostic_differences': diagnostic, 'not_observed': not_observed}
     raw = read_evidence()
     evaluated = evaluate_evidence(
         load_json(raw), manifest, expected_candidate_job=job, expected_candidate_sha256=new.get('final_pt_sha256'),
         admitted_sources=frozen['admitted_sources'] if frozen else None,
         reference_record_metadata=(reference_checkpoint or {}).get('metadata'),
-        candidate_record_metadata=(new.get('checkpoint') or {}).get('metadata'), required_mode='READING')
+        candidate_record_metadata=(new.get('checkpoint') or {}).get('metadata'), required_mode='READING',
+        environment_lock=lock)
+    if evaluated['environment_lock_comparison'] is not None:
+        lock_report['READING_EVIDENCE'] = evaluated['environment_lock_comparison']
     reasons = ev.reasons + evaluated['invalid_reasons']
     history = history if type(history) is dict else {}
     admission_state = admission_state if type(admission_state) is dict else {}
@@ -699,6 +1039,11 @@ def reading(read_reference, read_frozen, read_receipt, read_evidence, manifest, 
             'levels': labels, 'invalid_reasons': reasons,
             'differences': evaluated['differences'], 'envelope_differences_reported_only': evaluated['envelope'],
             'reading_rule': common.reading_rule_record(),
+            'route': route,
+            'eligibility': {'path': common.GIT_PREFIX + common.ELIGIBILITY_REL,
+                            'sha256': common.digest(eligibility_raw) if type(eligibility_raw) is bytes else None},
+            'refusal_allowlist_sha256': common.REFUSAL_ALLOWLIST_SHA256,
+            'environment_lock_reported_only': lock_report,
             'reader_sources_sha256': running_sources,
             'reader_source_sha256': common.reader_source_digest(running_sources),
             'policy_pins_sha256': common.PINS_SHA256,
@@ -726,19 +1071,33 @@ def git_reader(commit, folder):
     return read
 
 
-def admitted_reader_check(read_frozen, running_sources):
-    """TOOL stop (no verdict): a reader whose own source is not the one the frozen admission names may not read."""
+def admitted_reader_check(read_frozen, running_sources, eligibility_raw=None):
+    """TOOL stop (no verdict): a reader whose own source is not the one the frozen admission names may not read.
+
+    Revision 4: when READING_ELIGIBILITY.json exists at the receipt commit (route B), the reader it binds is the admitted
+    reader. Without it, the frozen study's binding applies, and that names the frozen revision-3 reader, so THIS
+    revision stops here until the eligibility record is committed: a paperwork state never becomes a verdict."""
+    if eligibility_raw is not None:
+        record = common.strict_json_object(eligibility_raw)
+        reader = record.get('reader') if type(record) is dict and type(record.get('reader')) is dict else {}
+        stop_unless(common.same(reader.get('reader_sources_sha256'), running_sources),
+                    'READER_IS_NOT_THE_READER_THE_ELIGIBILITY_RECORD_BINDS:'
+                    + common.reader_source_digest(running_sources))
+        return
     study = load_json(read_frozen('study.json'))
     admission = study.get('execution_admission') if type(study) is dict else None
     bindings = admission.get('bindings') if type(admission) is dict else None
     if type(bindings) is dict:
         stop_unless(bindings.get('reader_sources_sha256') == running_sources,
-                    'READER_IS_NOT_THE_ADMITTED_READER:' + common.reader_source_digest(running_sources))
+                    'READER_IS_NOT_THE_ADMITTED_READER:' + common.reader_source_digest(running_sources)
+                    + ':no READING_ELIGIBILITY.json binds this reader at the receipt commit')
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('--receipt-commit', required=True)
+    parser.add_argument('--receipt-branch', required=True,
+                        help='the pushed branch that carries the receipt commit (fetched fresh; R3-G)')
     parser.add_argument('--write', action='store_true')
     args = parser.parse_args(argv)
     stop_unless(common.is_hex(args.receipt_commit, 40), 'RECEIPT_COMMIT_FORM')
@@ -747,11 +1106,16 @@ def main(argv=None):
         files = common.read_policy_files(stop_unless)
         violations = common.policy_conformance(json.loads(files['reproduction_policy_json']))
         stop_unless(not violations, 'POLICY_IS_NOT_THE_RULE_THIS_READER_IMPLEMENTS:' + '|'.join(violations))
-        stop_unless(common.git('rev-parse', '--verify', args.receipt_commit + '^{commit}').decode('ascii').strip()
-                    == args.receipt_commit, 'RECEIPT_COMMIT_NOT_A_COMMIT')
-        stop_unless(common.git_ok('cat-file', '-e', common.REFERENCE_COMMIT + '^{commit}'),
-                    'REFERENCE_COMMIT_MISSING:fetch claude/helm-builder-continuation-20260923 or '
-                    'research/helm-integration-20260923 with an explicit refspec')
+        stop_unless(common.git_ok('rev-parse', '--verify', '--quiet', args.receipt_commit + '^{commit}')
+                    and common.git('rev-parse', '--verify', args.receipt_commit + '^{commit}').decode('ascii').strip()
+                    == args.receipt_commit, 'RECEIPT_COMMIT_NOT_A_COMMIT:fetch ' + args.receipt_branch)
+        # Revision 4, fix 3: every pinned object is resolved BEFORE evaluation; a gap is a tool stop, never a verdict.
+        require_objects(fixed_object_specs())
+        fetch_and_require_on_branch(args.receipt_branch, args.receipt_commit, 'RECEIPT')     # R3-G
+        stop_unless(common.decide_source_sha256((HERE / 'read_reproduction.py').read_bytes())
+                    == common.decide_source_sha256(common.show(common.FREEZE_COMMIT,
+                                                               common.HERE_REL + '/read_reproduction.py')),
+                    'DECIDE_IS_NOT_THE_FROZEN_DECIDE')
         pins_at_receipt = (common.show(args.receipt_commit, common.PINS_REL)
                            if common.has_object(args.receipt_commit, common.PINS_REL) else None)
         stop_unless(pins_at_receipt == common.PINS_RAW,
@@ -761,7 +1125,23 @@ def main(argv=None):
         manifest = common.load_panel_manifest(stop_unless, manifest_raw)
         running = common.source_hashes()
         read_frozen = git_reader(args.receipt_commit, common.HERE_REL + '/frozen')
-        admitted_reader_check(read_frozen, running)
+        eligibility_raw = (common.show(args.receipt_commit, common.ELIGIBILITY_REL)
+                           if common.has_object(args.receipt_commit, common.ELIGIBILITY_REL) else None)
+        admitted_reader_check(read_frozen, running, eligibility_raw)
+        eligibility = None
+        if eligibility_raw is not None:                                  # route B
+            record_doc = common.strict_json_object(eligibility_raw)
+            require_objects(eligibility_object_specs(record_doc))
+            review_ref = (record_doc or {}).get('review') if type((record_doc or {}).get('review')) is dict else {}
+            review = common.load_object(common.show(review_ref['receipt_commit'], review_ref['receipt_path'])
+                                        if receipt_reference_ok(review_ref) and common.has_object(
+                                            review_ref['receipt_commit'], review_ref['receipt_path']) else None)
+            branch = review.get('reviewed_branch') if review is not None else None
+            if (review is not None and common.is_hex(review.get('reviewed_commit'), 40) and common._branch(branch)
+                    and branch[0].isalnum()):                # a malformed receipt is left to the pure check
+                require_objects([('reviewed_commit', review['reviewed_commit'], None)])
+                fetch_and_require_on_branch(review.get('reviewed_branch'), review['reviewed_commit'], 'REVIEWED')
+            eligibility = dict(eligibility_facts(args.receipt_commit, eligibility_raw), raw=eligibility_raw)
         admission_state = committed_admission_state(args.receipt_commit, files)
         history = collect_history(args.receipt_commit)
         evidence_read = git_reader(args.receipt_commit, str(Path(common.EVIDENCE_REL).parent.as_posix()))
@@ -771,7 +1151,7 @@ def main(argv=None):
                          reference_blob_of=lambda name: common.blob_id(
                              common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/' + name),
                          receipt_commit=args.receipt_commit, running_sources=running,
-                         admission_state=admission_state, history=history)
+                         admission_state=admission_state, history=history, eligibility=eligibility)
     except subprocess.CalledProcessError as error:
         raise SystemExit('UNCHANGED_REPRO_READING_STOPPED:GIT:' + ' '.join(map(str, error.cmd))[:400]) from error
     raw = common.canonical(record)

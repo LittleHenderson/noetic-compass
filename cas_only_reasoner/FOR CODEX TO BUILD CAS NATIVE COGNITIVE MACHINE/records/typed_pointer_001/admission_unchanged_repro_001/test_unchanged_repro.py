@@ -36,6 +36,7 @@ import io
 from itertools import product
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -86,7 +87,8 @@ ARCHIVE_RAW = ARCHIVE.read_bytes() if ARCHIVE.is_file() else None          # the
 PREFLIGHT_OK = {'ami': common.HISTORICAL_AMI, 'instance_type': 'g7.2xlarge', 'region': 'us-west-2',
                 'visible_gpu_count': 1}
 RECORDED_ENV = dict(common.NUMERICAL_ENVIRONMENT, python_version='3.12.3', cudnn_version=91002,
-                    driver_version='580.65.06', platform_release='6.8.0-1024-aws')     # synthetic recorded values
+                    driver_version='580.65.06', platform_release='6.8.0-1024-aws',
+                    python_implementation='CPython', machine='x86_64', compute_capability='12.0')   # synthetic values
 
 
 def policy_json(name):
@@ -388,12 +390,13 @@ class PanelAndEnvironmentPinTests(unittest.TestCase):
             self.assertEqual(common.shipped_package_violations(ARCHIVE_RAW), [])
 
     def test_historical_refusal_codes(self):
-        """Review MAJOR 3: only the historical `require` form is model behaviour."""
-        for message in ('POINTER_SLOT_COVERAGE', 'TYPED_LEARNER_DEPTH', 'TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3',
-                        'TYPED_MATCHED:X'):
+        """Review MAJOR 3: only the historical `require` form is model behaviour. REVISION 4 (Codex R3-B): only a code
+        on the published allowlist; 'TYPED_MATCHED:X' had the shape but is not a historical code, so it moved from
+        the accepted list to the refused list."""
+        for message in ('POINTER_SLOT_COVERAGE', 'TYPED_LEARNER_DEPTH', 'TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3'):
             self.assertTrue(common.is_historical_refusal(message), message)
         for message in ('CUDA error: an illegal memory access was encountered', 'out of memory', 'pointer_slot',
-                        'POINTER_', 'TYPED_X:\nnext line', '', None, 3):
+                        'POINTER_', 'TYPED_X:\nnext line', '', None, 3, 'TYPED_MATCHED:X'):
             self.assertFalse(common.is_historical_refusal(message), message)
 
     def test_reader_source_digest(self):
@@ -504,12 +507,24 @@ RECEIPT_COMMIT = 'e' * 40                     # a synthetic receipt commit; `rea
 LOCK_RAW, PACKET_RAW = b'synthetic dependency lock\n', b'synthetic launch packet\n'
 
 
+def acceptance_case(case):
+    """One case exactly as `recompute_reproduction_evidence.judge` records it when it meets the frozen table (rev. 4)."""
+    expected = common.ACCEPTANCE_EXPECTED[case]
+    if case == 'changed_buffer':
+        return {'case': case, 'status': common.VACUOUS, 'reference_buffers': [], 'reference_buffer_count': 0,
+                'pass': True, 'why': 'zero buffers (synthetic)'}
+    levels = {'file': False, 'learned_state': True, 'output': True, 'continuation': True}
+    levels.update(expected['levels'])
+    reasons = ['CANDIDATE_RESTORE_REFUSED_BY_THE_HISTORICAL_LOADER:x'] if expected['verdict'] == INVALID else []
+    return {'case': case, 'expected_verdict': expected['verdict'], 'expected_levels': dict(expected['levels']),
+            'observed_verdict': expected['verdict'], 'observed_levels': common.level_labels(levels),
+            'invalid_reasons': reasons, 'panel_record_differences': 0, 'evidence_sha256': 'e' * 64, 'pass': True}
+
+
 def acceptance_receipt(sources=FAKE_SOURCES, **changes):
     """A synthetic P1 acceptance receipt, as `recompute_reproduction_evidence.acceptance_mode` writes it."""
     receipt = {'schema': common.ACCEPTANCE_SCHEMA, 'label': common.LABEL, 'status': common.ACCEPTANCE_PASS,
-               'cases': [dict({'case': case, 'pass': True}, **({'status': common.VACUOUS, 'reference_buffers': []}
-                                                               if case == 'changed_buffer' else {}))
-                         for case in common.ACCEPTANCE_CASES],
+               'cases': [acceptance_case(case) for case in common.ACCEPTANCE_CASES],
                'producer': {'sources_sha256': dict(sources), 'reader_source_sha256': common.reader_source_digest(sources)},
                'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
                'numerical_environment_sha256': common.environment_digest(), 'environment': dict(RECORDED_ENV),
@@ -530,13 +545,20 @@ def frozen_policy(acceptance_raw=None):
             {'launch_enabled': True})
 
 
+SPEND_SOURCE_RAW = b'{"synthetic": "cost state"}\n'
+
+
 def spend_record(job=NEW_JOB, **changes):
     record = {'schema': common.SPEND_RECORD_SCHEMA, 'label': common.LABEL, 'study': common.STUDY_NAME, 'job': job,
-              'measured_spend_so_far_usd': '21.40', 'measured_utc': '2026-09-25T09:00:00Z',
+              'measured_spend_so_far_usd': '21.40', 'measured_utc': '2026-09-25T09:58:00Z',   # 120 s before admission
               'basis': 'conservative bound including unbilled runtime (synthetic)',
-              'sources': [{'path': 'records/helm_controlled_prelaunch_20260924/COST_STATE.json', 'sha256': 'f' * 64}]}
+              'sources': [{'commit': RECEIPT_COMMIT, 'path': 'records/helm_controlled_prelaunch_20260924/COST_STATE.json',
+                           'sha256': digest(SPEND_SOURCE_RAW)}]}
     record.update(changes)
     return record
+
+
+REVIEW_CLOSURE = {name: (str(index % 10) * 40) for index, name in enumerate(common.REVIEW_CLOSURE_FILES, start=1)}
 
 
 def review_receipt(**changes):
@@ -545,13 +567,28 @@ def review_receipt(**changes):
                'reviewed_reader_source_sha256': common.reader_source_digest(FAKE_SOURCES),
                'reviewed_policy_pins_sha256': common.PINS_SHA256,
                'reviewed_panel_manifest_sha256': common.PANEL_MANIFEST_SHA256, 'job_kind': common.JOB_KIND,
-               'model_seed': common.MODEL_SEED, 'reviewed_commit': 'd' * 40, 'reviewer': 'fresh Claude reviewer'}
+               'model_seed': common.MODEL_SEED, 'reviewed_commit': 'd' * 40, 'reviewer': 'Codex (synthetic)',
+               'reviewed_branch': 'claude/helm-unchanged-reader-rev-20260924', 'closure': dict(REVIEW_CLOSURE),
+               'unresolved_findings': [{'id': 'N1', 'severity': 'NOTE', 'execution_consequence': 'record only'}],
+               'reviewer_provenance': {'source': 'agent bus (synthetic)', 'reference': 'codex-0000'},
+               'attribution': {'builder': common.LABEL, 'independence': common.INDEPENDENCE_LABEL},
+               'scope': 'reader revision 4 (synthetic)'}
     receipt.update(changes)
     return receipt
 
 
+def review_facts(**changes):
+    """The git facts `common.review_facts` gathers, consistent with `review_receipt()` (synthetic)."""
+    facts = {'reviewed_commit_resolves': True, 'reviewed_commit_pushed': True,
+             'closure_at_reviewed_commit': dict(REVIEW_CLOSURE), 'closure_running': dict(REVIEW_CLOSURE),
+             'writer_blobs_at_freeze': {name: REVIEW_CLOSURE[name] for name in common.WRITER_FILES}}
+    facts.update(changes)
+    return facts
+
+
 def synthetic_receipts(job=NEW_JOB, **raws):
-    """`{name: {'commit', 'path', 'raw'}}` exactly as `read_prerequisite_receipts` returns committed receipts."""
+    """`{name: {'commit', 'path', 'raw'}}` exactly as `read_prerequisite_receipts` returns committed receipts
+    (revision 4: the budget receipt carries its opened `sources`, the review receipt its git `facts`)."""
     policy = frozen_policy()[0]
     default = {'reader_acceptance_on_aws_p1': enc(acceptance_receipt()),
                'reproduction_policy_frozen_with_panel_and_reader': enc(policy),
@@ -565,6 +602,8 @@ def synthetic_receipts(job=NEW_JOB, **raws):
         else:
             commit, path = RECEIPT_COMMIT, common.HERE_REL + '/receipts/' + name + '.json'
         out[name] = {'commit': commit, 'path': path, 'raw': raw}
+    out['budget_headroom_verified']['sources'] = [SPEND_SOURCE_RAW]
+    out['fresh_review_of_this_revision']['facts'] = review_facts()
     return out
 
 
@@ -677,7 +716,9 @@ class ExecutionAdmissionTests(unittest.TestCase):
                             (spend_record(study='HELM-OTHER'), 'SCHEMA_FIELDS_LABEL_OR_STUDY'),
                             (spend_record(measured_utc='yesterday'), 'MEASURED_UTC')):
             self.assertReceiptRefused(name, enc(bad), reason)
-        self.assertEqual(common.spend_record_violations(spend_record(measured_spend_so_far_usd='45.00'), NEW_JOB),
+        self.assertEqual(common.spend_record_violations(spend_record(measured_spend_so_far_usd='45.00'), NEW_JOB,
+                                                        opened_sources=[SPEND_SOURCE_RAW],
+                                                        admitted_utc='2026-09-25T10:00:00Z'),
                          ([], {'spend_so_far_usd': '45.00', 'per_job_bound_usd': '15.00',
                                'after_this_job_at_most_usd': '60.00', 'ceiling_usd': '60.00'}))
 
@@ -747,11 +788,23 @@ class ExecutionAdmissionTests(unittest.TestCase):
 
     @unittest.skipUnless(POLICY_PRESENT, 'policy commit bc46b36e not fetched')
     def test_the_shipped_admission_record_is_not_ready_and_bound_to_this_revision(self):
+        """UPDATED IN REVISION 4. The record is frozen as it was at 3344ae5d (byte-identical, never flipped), so it now
+        binds the FROZEN revision-3 reader, not this revision; everything else it binds is unchanged."""
         raw = common.ADMISSION_PATH.read_bytes()
         record = json.loads(raw)
+        self.assertEqual(digest(raw), common.FROZEN_ADMISSION_SHA256)
         self.assertEqual(record['state'], common.NOT_READY)
         self.assertIsNone(record['job'])
-        self.assertEqual(record['bindings'], common.expected_admission_bindings())
+        frozen_reader = {'read_reproduction.py': '1c8bdfa88f43fd4f63f8b12935499e78abe8974ca9128ca3ad87e5ad5c076f3d',
+                         'recompute_reproduction_evidence.py':
+                             '0bd93daf7a3c3496549eb2da85af28abffc4e0d0d51ae1232483a6763db71383',
+                         'repro_common.py': '4fb2a5e319e2a219bf1f10bd4be60e64ad52af32b6cb9bac14280d3bfd0e683f'}
+        self.assertEqual(record['bindings']['reader_sources_sha256'], frozen_reader)
+        self.assertNotEqual(record['bindings']['reader_sources_sha256'], common.source_hashes())
+        expected = common.expected_admission_bindings()
+        for key in expected:
+            if key not in ('reader_sources_sha256', 'reader_source_sha256'):
+                self.assertEqual(record['bindings'][key], expected[key], key)
         self.assertEqual(record['owner_authorization']['state'], common.OWNER_AUTHORIZED)
         state = common.execution_admission_state(
             raw, expected_bindings=common.expected_admission_bindings(), owner_state={'state': common.OWNER_AUTHORIZED},
@@ -907,8 +960,9 @@ def parts(**changes):
 def panel(answers=ANSWERS, correct=CORRECT, refuse=()):
     rows = []
     for index, record_id in enumerate(IDS):
-        if index in refuse:
-            rows.append(recompute.panel_row(record_id, status='REFUSED', reason='TYPED_MATCHED:X', prediction=None,
+        if index in refuse:                 # revision 4: a code on the published allowlist (was 'TYPED_MATCHED:X')
+            rows.append(recompute.panel_row(record_id, status='REFUSED',
+                                            reason='TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3', prediction=None,
                                             checked=None))
             continue
         prediction = {'record_id': record_id, 'answer': answers[index], 'decisions': DECISIONS[index],
@@ -1288,14 +1342,16 @@ def frozen_files(job=NEW_JOB, state=common.ADMITTED, sources=None, rule=None, pi
     return {'study.json': enc(study), '20260917/request.json': enc(dict(REQUEST, job=job))}
 
 
-def receipt_files(value=OTHER, size=REF_BYTES, *, delivered=True, drop=(), overrides=None, **options):
-    files = {'result.json': enc({'job': NEW_JOB, 'request': REQUEST, 'completed_deliverable': delivered,
+def receipt_files(value=OTHER, size=REF_BYTES, *, delivered=True, drop=(), overrides=None, job=NEW_JOB,
+                  request=None, **options):
+    request = REQUEST if request is None else request
+    files = {'result.json': enc({'job': job, 'request': request, 'completed_deliverable': delivered,
                                  'status': 'AWS_CANDIDATE_FINISHED', 'cleanup': {'complete': True}}),
-             'reduced_schedule.json': enc({'job': NEW_JOB, 'reduced_schedule': None}),
-             'collected/results/result.json': enc({'job': NEW_JOB, 'status': 'TYPED_POINTER_DELIVERED',
+             'reduced_schedule.json': enc({'job': job, 'reduced_schedule': None}),
+             'collected/results/result.json': enc({'job': job, 'status': 'TYPED_POINTER_DELIVERED',
                                                    'summary': {'schedule_plan_mode': 'REGISTERED'}}),
              common.SHIPPED_PACKAGE_RECORD: ARCHIVE_RAW,
-             **record_set(NEW_JOB, value, size, metadata=meta(NEW_JOB), **options)}
+             **record_set(job, value, size, metadata=meta(job), **options)}
     files.update(overrides or {})
     for name in drop:
         files.pop(name, None)
@@ -1308,13 +1364,22 @@ def admitted_state(job=NEW_JOB, **changes):
                  'record_sha256': ADMISSION_SHA, 'job': job, 'spend': None}, **changes)
 
 
+FROZEN_BLOBS = {name: (str(index) * 40) for index, name in enumerate(common.FROZEN_FILES, start=4)}
 HISTORY = {'freeze_commits': ['1' * 40], 'evidence_commits': ['2' * 40], 'receipt_result_commits': ['3' * 40],
            'freeze_has_receipt': False, 'freeze_has_evidence': False, 'freeze_precedes_receipt': True,
            'freeze_precedes_evidence': True, 'admission_blob_at_freeze': 'a' * 40,
-           'admission_blob_at_receipt': 'a' * 40}
+           'admission_blob_at_receipt': 'a' * 40,
+           # revision 4 (fix 2): merge-inclusive facts, clean
+           'blob_versions': {'evidence': ['b' * 40], 'receipt_result': ['c' * 40], 'eligibility': [],
+                             **{name: [blob] for name, blob in FROZEN_BLOBS.items()}},
+           'after_freeze_changes': {'admission': [], **{name: [] for name in common.FROZEN_FILES}},
+           'frozen_blobs_at_freeze': dict(FROZEN_BLOBS), 'eligibility_commits': [],
+           'eligibility_follows_freeze': False, 'eligibility_precedes_evidence': False,
+           'eligibility_has_evidence': None}
 
 
-def run(reference=None, frozen=None, receipt=None, document=None, sources=None, state=None, history=None):
+def run(reference=None, frozen=None, receipt=None, document=None, sources=None, state=None, history=None,
+        eligibility=None):
     reference = reference_files() if reference is None else reference
     frozen = frozen_files() if frozen is None else frozen
     receipt = receipt_files() if receipt is None else receipt
@@ -1322,7 +1387,7 @@ def run(reference=None, frozen=None, receipt=None, document=None, sources=None, 
     return reader.reading(reference.get, frozen.get, receipt.get, lambda: raw, MANIFEST, receipt_commit='c' * 40,
                           running_sources=FAKE_SOURCES if sources is None else sources,
                           admission_state=admitted_state() if state is None else state,
-                          history=dict(HISTORY) if history is None else history)
+                          history=dict(HISTORY) if history is None else history, eligibility=eligibility)
 
 
 @unittest.skipUnless(ARCHIVE_RAW is not None, 'package archive not in this checkout')
@@ -1454,18 +1519,31 @@ class HistoryTests(unittest.TestCase):
     """The frozen-before-result facts (review MINOR 5): pure rule, plus real `git log` on this branch."""
 
     def test_the_pure_rule(self):
+        """UPDATED IN REVISION 4: the six revision-3 reasons, plus the merge-inclusive ones (fix 2), for no facts."""
         self.assertEqual(reader.history_violations(HISTORY), [])
-        self.assertEqual(len(reader.history_violations(None)), 6)
+        found = reader.history_violations(None)
+        self.assertEqual(len([item for item in found if 'INCLUDING_MERGES' not in item]), 6)
+        self.assertEqual(len([item for item in found if 'INCLUDING_MERGES' in item]),
+                         2 * len(common.FROZEN_FILES) + 3)
 
     @unittest.skipUnless(git_has('HEAD', common.HERE_REL + '/repro_common.py'), 'this folder is not committed here')
     def test_git_log_pathspecs_resolve_from_the_cncm_root(self):
+        """UPDATED IN REVISION 4 (this test encoded the PRE-FREEZE state: 'nothing frozen'). This branch starts at the
+        freeze 3344ae5d, so the frozen records sit in exactly that one commit; there is no receipt or evidence yet."""
         touched = reader.commits_touching('HEAD', common.HERE_REL + '/repro_common.py')
         self.assertGreaterEqual(len(touched), 1)
         self.assertTrue(all(common.is_hex(commit, 40) for commit in touched))
-        history = reader.collect_history('HEAD')                  # nothing frozen, no receipt, no evidence yet
+        history = reader.collect_history('HEAD')
         self.assertEqual((history['freeze_commits'], history['evidence_commits'], history['receipt_result_commits']),
-                         ([], [], []))
-        self.assertIn('FROZEN_RECORDS_NOT_IN_EXACTLY_ONE_COMMIT:0', reader.history_violations(history))
+                         ([common.FREEZE_COMMIT], [], []))
+        self.assertEqual(history['blob_versions']['frozen/study.json'],
+                         [common.blob_id(common.FREEZE_COMMIT, common.HERE_REL + '/frozen/study.json')])
+        self.assertIsNotNone(history['admission_blob_at_freeze'])
+        self.assertEqual(history['admission_blob_at_freeze'], history['admission_blob_at_receipt'])
+        found = reader.history_violations(history)
+        self.assertNotIn('FROZEN_RECORDS_NOT_IN_EXACTLY_ONE_COMMIT:1', found)
+        self.assertNotIn('ADMISSION_RECORD_CHANGED_AFTER_THE_FREEZE', found)
+        self.assertIn('EVIDENCE_NOT_EXACTLY_ONE_COMMITTED_VERSION:0', found)
 
 
 class ReceiptReaderTests(unittest.TestCase):
@@ -1832,6 +1910,446 @@ class StaticTests(unittest.TestCase):
             raw = path.read_bytes()
             self.assertNotIn(b'\r', raw, path.name)
             self.assertTrue(raw.isascii(), path.name)
+
+
+# =====================================================================================================================
+# REVISION 4: one test per fix (Codex READER_STATIC_REVIEW_20260924 fixes 1-7), the eligibility route, decide().
+# =====================================================================================================================
+def lock_document(**changes):
+    """A synthetic `helm.reproduction-environment/1` lock that matches RECORDED_ENV and the training RUNTIME."""
+    lock = {'schema': common.ENVIRONMENT_LOCK_SCHEMA, 'status': common.ENVIRONMENT_LOCK_STATUS,
+            'source_commit': '5' * 40,
+            'image': {'provider': 'aws', 'region': 'us-west-2', 'ami_id': common.HISTORICAL_AMI},
+            'runtime': {'python_implementation': 'CPython', 'python_version': '3.12.3', 'os': 'Linux',
+                        'kernel': '6.8.0-1024-aws', 'machine': 'x86_64'},
+            'accelerator': {'instance_type': 'g7.2xlarge', 'gpu_model': common.NUMERICAL_ENVIRONMENT['gpu_name'],
+                            'compute_capability': '12.0', 'driver_version': '580.65.06'},
+            'libraries': {'torch': '2.11.0+cu128', 'cuda_runtime': '12.8', 'cudnn': '9.10.2',
+                          'packages': [{'name': 'torch', 'version': '2.11.0+cu128', 'sha256': 'a' * 64}]},
+            'numerics': {'dtype': 'float32', 'deterministic_algorithms': True, 'matmul_allow_tf32': False,
+                         'cudnn_allow_tf32': False, 'float32_matmul_precision': 'highest',
+                         'seeds': {'model': 20260917}, 'thread_counts': {'torch': 8},
+                         'environment_variables': {'CUBLAS_WORKSPACE_CONFIG': ':4096:8'}},
+            'comparison': {'required_equal': [path for path in common.ENVIRONMENT_LOCK_LEAVES
+                                              if path not in ('runtime.kernel', 'accelerator.driver_version')],
+                           'diagnostic_only': [{'path': 'runtime.kernel', 'reason': 'Q-G default: diagnostic'},
+                                               {'path': 'accelerator.driver_version',
+                                                'reason': 'Q-G default: diagnostic'}]}}
+    for path, value in changes.items():
+        section, key = path.split('.') if '.' in path else (path, None)
+        if key is None:
+            lock[section] = value
+        else:
+            lock[section][key] = value
+    return lock
+
+
+LOCK = lock_document()
+
+
+class RevisionFourFixTests(unittest.TestCase):
+    # ---- fix 1 (Codex R3-B): the COMPLETE message, against the published allowlist, before any truncation ----
+    def test_fix1_the_complete_message_is_validated_before_any_truncation(self):
+        status, reason = recompute.classify_prediction_error(ValueError('POINTER_' + 'A' * 292 + '\nCUDA fault'))
+        self.assertEqual(status, 'ERROR')
+        self.assertEqual(reason, 'ValueError:' + ('POINTER_' + 'A' * 292 + '\nCUDA fault')[:300])  # display only
+        for message in ('POINTER_SLOT_COVERAGE extra prose', 'POINTER_SLOT_COVERAGE\n', 'TYPED_MATCHED:X'):
+            self.assertEqual(recompute.classify_prediction_error(ValueError(message))[0], 'ERROR', message)
+        self.assertEqual(recompute.classify_prediction_error(ValueError('POINTER_SLOT_COVERAGE')),
+                         ('REFUSED', 'POINTER_SLOT_COVERAGE'))
+        # A coded ValueError followed by a CUDA fault reads INVALID, never REFUSED and never DOES_NOT_REPRODUCE.
+        rows = panel()
+        rows[1] = recompute.panel_row(IDS[1], status=status, reason=reason, prediction=None, checked=None)
+        verdict, _, evaluated = verdict_of(evidence(candidate=side(NEW_JOB, OTHER, rows=rows)))
+        self.assertEqual(verdict, INVALID)
+        self.assertIn('CANDIDATE_PANEL_INFRASTRUCTURE_FAULT_ROWS:1', evaluated['invalid_reasons'])
+        rows = panel()                                  # a REFUSED row carrying a truncated coded display
+        rows[1] = recompute.panel_row(IDS[1], status='REFUSED', reason='POINTER_' + 'A' * 292, prediction=None,
+                                      checked=None)
+        verdict, _, evaluated = verdict_of(evidence(candidate=side(NEW_JOB, OTHER, rows=rows)))
+        self.assertEqual(verdict, INVALID)
+        self.assertIn('CANDIDATE_PANEL_REFUSAL_WITHOUT_A_HISTORICAL_CODE:1', evaluated['invalid_reasons'])
+
+    @unittest.skipUnless(git_has(common.PACKAGE_COMMIT, common.PACKAGE_REL + '/source.zip'), 'package commit absent')
+    def test_fix1_the_published_allowlist_rebuilds_from_the_pinned_archive(self):
+        import build_refusal_allowlist
+        self.assertEqual(build_refusal_allowlist.encode(build_refusal_allowlist.build()), common.REFUSAL_ALLOWLIST_RAW)
+        document = json.loads(common.REFUSAL_ALLOWLIST_RAW)
+        self.assertEqual(common.refusal_allowlist_violations(document), [])
+        self.assertEqual((document['source']['archive_sha256'], document['unresolved']), (common.ARCHIVE_SHA256, []))
+        self.assertIn(common.REFUSAL_ALLOWLIST_NAME, common.READER_SOURCE_FILES)          # covered by the digest
+        self.assertEqual(common.source_hashes()[common.REFUSAL_ALLOWLIST_NAME], common.REFUSAL_ALLOWLIST_SHA256)
+
+    # ---- fix 2 (Codex R3-G): merge commits are counted, and an edit inside a merge is caught (real git) ----
+    def test_fix2_an_edit_made_inside_a_merge_is_caught(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            repo = Path(scratch)
+
+            def g(*args):
+                return subprocess.run(['git', '-c', 'user.name=reader-test', '-c', 'user.email=reader-test@invalid',
+                                       '-c', 'core.autocrlf=false', *args], cwd=str(repo), check=True,
+                                      capture_output=True, timeout=60).stdout.decode('utf-8').strip()
+            g('init', '-q')
+            (repo / 'evidence.json').write_bytes(b'{"v": 1}\n')
+            g('add', 'evidence.json')
+            g('commit', '-q', '-m', 'evidence, one version')
+            first = g('rev-parse', 'HEAD')
+            g('checkout', '-q', '-b', 'side')
+            (repo / 'side.txt').write_bytes(b'side\n')
+            g('add', 'side.txt')
+            g('commit', '-q', '-m', 'side')
+            g('checkout', '-q', first)
+            (repo / 'main.txt').write_bytes(b'main\n')
+            g('add', 'main.txt')
+            g('commit', '-q', '-m', 'main')
+            g('merge', '-q', '--no-ff', '--no-commit', 'side')
+            (repo / 'evidence.json').write_bytes(b'{"v": 2}\n')              # the edit inside the merge
+            g('add', 'evidence.json')
+            g('commit', '-q', '-m', 'merge that rewrites the evidence')
+            tip = g('rev-parse', 'HEAD')
+            self.assertEqual(len(g('rev-parse', tip + '^@').split()), 2)
+            counted = g('log', '--format=%H', '--full-history', '--no-merges', tip, '--', 'evidence.json').split()
+            self.assertEqual(counted, [first])                               # revision 3 saw ONE version
+            versions = sorted(set(reader.blob_changes([tip], ['evidence.json'], cwd=repo)['evidence.json'])
+                              - {reader.ZERO_BLOB})
+            self.assertEqual(len(versions), 2)                               # revision 4 sees the merge edit
+            after = reader.blob_changes([first + '..' + tip], ['evidence.json'], ancestry_path=True, cwd=repo)
+            self.assertTrue(after['evidence.json'])
+        history = dict(HISTORY, blob_versions=dict(HISTORY['blob_versions'], evidence=versions))
+        self.assertIn('NOT_ONE_BLOB_VERSION_INCLUDING_MERGES:evidence:2', reader.history_violations(history))
+        history = dict(HISTORY, after_freeze_changes=dict(HISTORY['after_freeze_changes'], admission=['b' * 40]))
+        self.assertIn('CHANGED_AFTER_THE_FREEZE_INCLUDING_MERGES:admission', reader.history_violations(history))
+        self.assertInvalidReading(history, 'NOT_ONE_BLOB_VERSION_INCLUDING_MERGES:frozen/study.json:2',
+                                  blob_versions=dict(HISTORY['blob_versions'],
+                                                     **{'frozen/study.json': ['4' * 40, '9' * 40]}))
+
+    def assertInvalidReading(self, _, reason, **changes):
+        if ARCHIVE_RAW is None:
+            self.skipTest('package archive not in this checkout')
+        record = run(history=dict(HISTORY, **changes))
+        self.assertEqual(record['verdict'], INVALID)
+        self.assertIn(reason, record['invalid_reasons'])
+
+    # ---- fix 3 (Codex R3-G): a missing pinned object is a recoverable TOOL_STOP (exit 1) before evaluation ----
+    def test_fix3_a_missing_owner_object_is_a_tool_stop_with_exit_1(self):
+        specs = reader.fixed_object_specs()
+        self.assertEqual({label for label, _, _ in specs if label.startswith('owner:')},
+                         {'owner:' + name for name in common.OWNER_RECORDS})
+        owner_commit = common.OWNER_RECORDS['claude_extension_md'][0]
+        with self.assertRaises(SystemExit) as caught:
+            reader.require_objects(specs, exists=lambda commit, relative: commit != owner_commit)
+        code = caught.exception.code
+        self.assertIsInstance(code, str)                                    # a string code exits with status 1
+        self.assertTrue(code.startswith('UNCHANGED_REPRO_READING_STOPPED:PINNED_OBJECT_MISSING:owner:'
+                                        'claude_extension_md:' + owner_commit), code)
+        self.assertIn('no verdict was recorded', code)
+        reader.require_objects(specs, exists=lambda commit, relative: True)
+        # A real process: a commit git does not hold stops with exit status 1 and prints the named stop.
+        probe = ('import sys; sys.path.insert(0, %r); import read_reproduction as r; '
+                 "r.require_objects([('owner:probe', '%s', None)])" % (str(HERE), '0' * 40))
+        done = subprocess.run([sys.executable, '-B', '-c', probe], capture_output=True, timeout=120)
+        self.assertEqual(done.returncode, 1)
+        self.assertIn(b'PINNED_OBJECT_MISSING:owner:probe', done.stderr)
+        # The stops run in main() before the admission is evaluated and before any reading.
+        order = [name for _, name in calls(function(HERE / 'read_reproduction.py', 'main'))]
+        for name in ('require_objects', 'fetch_and_require_on_branch'):
+            self.assertLess(order.index(name), order.index('committed_admission_state'), name)
+            self.assertLess(order.index(name), order.index('reading'), name)
+
+    @unittest.skipUnless(OWNER_PRESENT and git_has(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL
+                                                   + '/collected_inventory.json'), 'pinned commits not fetched')
+    def test_fix3_the_real_pinned_objects_are_present_here(self):
+        reader.require_objects(reader.fixed_object_specs())
+
+    # ---- fix 4: the spend sources are opened and the figure is fresh ----
+    def test_fix4_spend_sources_are_opened_and_the_figure_is_fresh(self):
+        admitted = '2026-09-25T10:00:00Z'
+
+        def check(record, sources=(SPEND_SOURCE_RAW,), at=admitted):
+            return common.spend_record_violations(record, NEW_JOB, opened_sources=list(sources), admitted_utc=at)[0]
+        self.assertEqual(check(spend_record()), [])
+        self.assertIn('SOURCE_NOT_OPENED_AS_A_COMMITTED_ANCHORED_BLOB:0', check(spend_record(), sources=(None,)))
+        self.assertIn('SOURCE_SHA256:0', check(spend_record(), sources=(b'other bytes\n',)))
+        self.assertIn('STALE:420_SECONDS', check(spend_record(measured_utc='2026-09-25T09:53:00Z')))
+        self.assertIn('MEASURED_AFTER_THE_ADMISSION', check(spend_record(measured_utc='2026-09-25T10:00:01Z')))
+        self.assertIn('FRESHNESS_NOT_ESTABLISHED:NO_ADMISSION_TIME', check(spend_record(), at=None))
+        self.assertIn('SOURCES', check(spend_record(sources=[{'path': 'records/x.json', 'sha256': 'f' * 64}])))
+        receipts = synthetic_receipts()
+        receipts['budget_headroom_verified']['sources'] = [None]
+        state = admission(admitted_record(NEW_JOB), receipts=receipts)
+        self.assertEqual(state['state'], common.NOT_READY)
+        self.assertIn('PREREQUISITE_RECEIPT:budget_headroom_verified:SOURCE_NOT_OPENED_AS_A_COMMITTED_ANCHORED_BLOB:0',
+                      state['reasons'])
+        if git_has('HEAD', common.HERE_REL + '/repro_common.py'):           # the real opener: anchored blobs only
+            relative = common.HERE_REL + '/repro_common.py'
+            head = common.git('rev-parse', 'HEAD').decode('ascii').strip()
+            self.assertEqual(common.anchored_blob(head, relative, ('HEAD',)), common.show(head, relative))
+            self.assertIsNone(common.anchored_blob('0' * 40, relative, ('HEAD',)))
+
+    # ---- fix 5 (Codex R3-H): the review resolves its PUSHED commit and binds the complete closure and the writers ----
+    def test_fix5_the_review_resolves_a_pushed_commit_and_binds_the_writers(self):
+        bindings = common.expected_admission_bindings(FAKE_SOURCES)
+        self.assertEqual(common.review_receipt_violations(review_receipt(), bindings, review_facts()), [])
+        self.assertTrue(set(common.WRITER_FILES) <= set(common.REVIEW_CLOSURE_FILES))
+        for facts, reason in (
+                (review_facts(reviewed_commit_resolves=False), 'REVIEWED_COMMIT_NOT_RESOLVED'),
+                (review_facts(reviewed_commit_pushed=False), 'REVIEWED_COMMIT_NOT_ON_THE_FETCHED_REVIEWED_BRANCH'),
+                (review_facts(writer_blobs_at_freeze={name: 'f' * 40 for name in common.WRITER_FILES}),
+                 'WRITER_IS_NOT_THE_ONE_THAT_WROTE_THE_FREEZE:prepare_unchanged_repro.py'),
+                (review_facts(closure_running=dict(REVIEW_CLOSURE, **{'read_reproduction.py': 'e' * 40})),
+                 'CLOSURE_IS_NOT_WHAT_RUNS_HERE:read_reproduction.py'),
+                (review_facts(closure_at_reviewed_commit=dict(REVIEW_CLOSURE, **{'prepare_unchanged_repro.py':
+                                                                                 'e' * 40})),
+                 'CLOSURE_IS_NOT_THE_REVIEWED_COMMIT:prepare_unchanged_repro.py'),
+                (None, 'REVIEW_FACTS_NOT_GATHERED')):
+            self.assertIn(reason, common.review_receipt_violations(review_receipt(), bindings, facts), reason)
+        for document, reason in (
+                (review_receipt(unresolved_findings=[{'id': 'M1', 'severity': 'MAJOR', 'execution_consequence': 'x'}]),
+                 'UNRESOLVED_BLOCKING_FINDING:M1'),
+                (review_receipt(verdict='NO_BLOCKER_OR_MAJOR_FINDING_OPEN'), 'VERDICT:NO_BLOCKER_OR_MAJOR_FINDING_OPEN'),
+                (review_receipt(reviewer_provenance={}), 'REVIEWER_PROVENANCE'),
+                (review_receipt(closure={key: value for key, value in REVIEW_CLOSURE.items()
+                                         if key != 'prepare_unchanged_repro.py'}), 'CLOSURE_FORM'),
+                (review_receipt(attribution={'builder': common.LABEL, 'independence': 'INDEPENDENT'}), 'ATTRIBUTION'),
+                (review_receipt(schema='cncm.helm-unchanged-reproduction-review-receipt/1'), 'SCHEMA_FIELDS_OR_LABEL')):
+            self.assertIn(reason, common.review_receipt_violations(document, bindings, review_facts()), reason)
+        if git_has('HEAD', common.HERE_REL + '/repro_common.py') and git_has(common.FREEZE_COMMIT,
+                                                                             common.HERE_REL + '/repro_common.py'):
+            head = common.git('rev-parse', 'HEAD').decode('ascii').strip()
+            facts = common.review_facts({'reviewed_commit': head, 'reviewed_branch': 'no-such/branch-for-this-test'},
+                                        freeze_commit=common.FREEZE_COMMIT)
+            self.assertEqual((facts['reviewed_commit_resolves'], facts['reviewed_commit_pushed']), (True, False))
+            for name in common.WRITER_FILES:        # this revision leaves both writers exactly as they wrote the freeze
+                self.assertEqual(facts['writer_blobs_at_freeze'][name], facts['closure_running'][name], name)
+
+    # ---- fix 6 (Codex R3-I): the environment lock, parsed strictly and compared with the observed runtime ----
+    def test_fix6_the_environment_lock_is_parsed_and_compared(self):
+        raw = enc(LOCK)
+        self.assertEqual(common.environment_lock_violations(raw), ([], LOCK))
+        duplicate = raw.replace(b'"status": ', b'"status": "OTHER", "status": ', 1)
+        self.assertEqual(common.environment_lock_violations(duplicate), (['LOCK_NOT_A_STRICT_JSON_OBJECT'], None))
+        for changes, reason in (({'runtime.python_version': None}, 'LOCK_VALUE:runtime.python_version'),
+                                ({'extra': 1}, 'LOCK_TOP_FIELDS'),
+                                ({'libraries.cudnn': 'nine'}, 'LOCK_VALUE_UNPARSEABLE:libraries.cudnn'),
+                                ({'status': 'DRAFT'}, 'LOCK_SCHEMA_STATUS_OR_SOURCE_COMMIT')):
+            self.assertIn(reason, common.environment_lock_violations(enc(lock_document(**changes)))[0], reason)
+        moved = lock_document()
+        moved['comparison']['required_equal'].remove('libraries.cudnn')
+        moved['comparison']['diagnostic_only'].append({'path': 'libraries.cudnn', 'reason': 'x'})
+        self.assertIn('LOCK_REQUIRED_EQUAL_LACKS:libraries.cudnn', common.environment_lock_violations(enc(moved))[0])
+        self.assertEqual(common.parse_cudnn_version(91002), common.parse_version('9.10.2'))
+        self.assertEqual(common.parse_version('12.8.0'), common.parse_version('12.8'))
+        self.assertNotEqual(common.parse_torch_version('2.11.0+cu128'), common.parse_torch_version('2.11.0+cu126'))
+        compare = common.environment_lock_comparison
+        self.assertEqual(compare(LOCK, RECORDED_ENV, 'E', must_observe=True)[0], [])
+        for key, value, path in (('python_version', '3.12.4', 'runtime.python_version'),
+                                 ('cudnn_version', 91100, 'libraries.cudnn'),
+                                 ('torch_version', '2.11.0+cu126', 'libraries.torch'),
+                                 ('cuda_version', '12.6', 'libraries.cuda_runtime'),
+                                 ('gpu_name', 'Tesla T4', 'accelerator.gpu_model'),
+                                 ('python_implementation', 'PyPy', 'runtime.python_implementation')):
+            self.assertEqual(compare(LOCK, dict(RECORDED_ENV, **{key: value}), 'E', must_observe=True)[0],
+                             ['ENVIRONMENT_DIFFERS_FROM_LOCK:E:' + path], key)
+        invalid, diagnostic, _ = compare(LOCK, dict(RECORDED_ENV, driver_version='590.1'), 'E', must_observe=True)
+        self.assertEqual((invalid, [row['path'] for row in diagnostic]), ([], ['accelerator.driver_version']))
+        missing = {key: value for key, value in RECORDED_ENV.items() if key != 'python_version'}
+        self.assertEqual(compare(LOCK, missing, 'E', must_observe=True)[0],
+                         ['ENVIRONMENT_NOT_OBSERVED:E:runtime.python_version'])
+        invalid, _, not_observed = compare(LOCK, RUNTIME, 'TRAINING', must_observe=False)
+        self.assertEqual(invalid, [])
+        self.assertIn('TRAINING:runtime.python_version', not_observed)
+        # Through the reader: a different Python in the evidence reads INVALID, never DOES_NOT_REPRODUCE.
+        evaluated = reader.evaluate_evidence(
+            evidence(environment=dict(RECORDED_ENV, python_version='3.12.4')), MANIFEST, expected_candidate_job=NEW_JOB,
+            expected_candidate_sha256=OTHER, admitted_sources=FAKE_SOURCES, required_mode='READING',
+            environment_lock=LOCK)
+        self.assertIn('ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:runtime.python_version',
+                      evaluated['invalid_reasons'])
+        self.assertEqual(evaluated['levels']['learned_state'], True)       # the state itself still matched
+
+    # ---- fix 7 (and R3-C): every acceptance case against the frozen table; `pass: true` is never trusted ----
+    def test_fix7_each_acceptance_case_is_compared_with_the_frozen_table(self):
+        bindings = common.expected_admission_bindings(FAKE_SOURCES)
+        self.assertEqual(common.acceptance_receipt_violations(acceptance_receipt(), bindings), [])
+        self.assertEqual(set(common.ACCEPTANCE_EXPECTED), set(common.ACCEPTANCE_CASES))
+        self.assertEqual({case: (verdict, levels) for case, _, verdict, levels in recompute.acceptance_specs(None)},
+                         {case: (row['verdict'], row['levels']) for case, row in common.ACCEPTANCE_EXPECTED.items()
+                          if case in [spec[0] for spec in recompute.acceptance_specs(None)]})
+
+        def replaced(name, **fields):
+            return acceptance_receipt(cases=[dict(case, **fields) if case['case'] == name else case
+                                             for case in acceptance_receipt()['cases']])
+        wrong_levels = common.level_labels({'file': True, 'learned_state': False, 'output': True,
+                                            'continuation': True})
+        found = common.acceptance_receipt_violations(
+            replaced('self_identity', observed_verdict=DOES_NOT_REPRODUCE, observed_levels=wrong_levels), bindings)
+        for reason in ('A_CASE_DID_NOT_PASS', 'CASE:CASE_OBSERVED_IS_NOT_THE_REGISTERED_OUTCOME:self_identity',
+                       'CASE:CASE_PASS_FIELD_CONTRADICTS_THE_OBSERVED_FIELDS:self_identity'):
+            self.assertIn(reason, found)
+        found = common.acceptance_receipt_violations(replaced(
+            'missing_key', expected_verdict=DOES_NOT_REPRODUCE, observed_verdict=DOES_NOT_REPRODUCE,
+            invalid_reasons=[], observed_levels=wrong_levels), bindings)
+        self.assertIn('CASE:CASE_EXPECTATION_IS_NOT_THE_FROZEN_TABLE:missing_key', found)
+        found = common.acceptance_receipt_violations(replaced('changed_value', observed_verdict=INVALID), bindings)
+        self.assertIn('CASE:CASE_VERDICT_IS_NOT_DERIVED_FROM_ITS_OBSERVED_FIELDS:changed_value', found)
+        found = common.acceptance_receipt_violations(replaced('changed_buffer', reference_buffer_count=None), bindings)
+        self.assertIn('CHANGED_BUFFER_NOT_RECORDED_AS_VACUOUS_WITH_NO_BUFFERS', found)
+        found = common.acceptance_receipt_violations(acceptance_receipt(environment=dict(
+            RECORDED_ENV, cudnn_version=91100)), bindings, environment_lock=LOCK)
+        self.assertIn('ENVIRONMENT_LOCK:ENVIRONMENT_DIFFERS_FROM_LOCK:P1B_ACCEPTANCE:libraries.cudnn', found)
+
+    @unittest.skipUnless(git_has(common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py'), 'freeze absent')
+    def test_decide_is_byte_identical_to_the_freeze(self):
+        frozen = common.show(common.FREEZE_COMMIT, common.HERE_REL + '/read_reproduction.py')
+        running = (HERE / 'read_reproduction.py').read_bytes()
+        self.assertIsNotNone(common.function_source(running.decode('utf-8'), 'decide'))
+        self.assertEqual(common.function_source(running.decode('utf-8'), 'decide'),
+                         common.function_source(frozen.decode('utf-8'), 'decide'))
+        self.assertEqual(common.decide_source_sha256(running), common.decide_source_sha256(frozen))
+
+
+# ---- the eligibility route (route B), over the REAL frozen study and request of 3344ae5d ----
+FROZEN_DIR = HERE / 'frozen'
+REAL_STUDY_RAW = (FROZEN_DIR / 'study.json').read_bytes() if (FROZEN_DIR / 'study.json').is_file() else None
+REAL_REQUEST_RAW = ((FROZEN_DIR / '20260917' / 'request.json').read_bytes()
+                    if (FROZEN_DIR / '20260917' / 'request.json').is_file() else None)
+OWNER_DIRECTION_RAW = b'# Owner direction 2026-09-24 (synthetic stand-in bytes)\n'
+DECIDE_SHA = common.decide_source_sha256((HERE / 'read_reproduction.py').read_bytes())
+
+
+def receipt_reference(name, raw):
+    return {'receipt_commit': str(len(name) % 10) * 40, 'receipt_path': common.HERE_REL + '/receipts/' + name + '.json',
+            'receipt_sha256': digest(raw)}
+
+
+def eligibility_bundle(record_changes=None, fact_changes=None, raws=None):
+    """`(record, facts)`: a synthetic eligibility record and the git facts `eligibility_facts` would gather."""
+    study = json.loads(REAL_STUDY_RAW)
+    closure = dict(REVIEW_CLOSURE, **{'write_launch_under_owner_direction.py': study['writer_blob_at_head']})
+    raws = dict({'reader_acceptance': enc(acceptance_receipt()), 'environment_lock': enc(LOCK),
+                 'review': enc(review_receipt(closure=closure))}, **(raws or {}))
+    record = {'schema': common.ELIGIBILITY_SCHEMA, 'label': common.LABEL, 'state': common.ELIGIBLE,
+              'job': study['jobs'][0]['job'], 'job_kind': common.JOB_KIND, 'model_seed': common.MODEL_SEED,
+              'source_sha': common.SOURCE_SHA,
+              'frozen_study': {'commit': common.FREEZE_COMMIT,
+                               'path': common.GIT_PREFIX + common.HERE_REL + '/frozen/study.json',
+                               'sha256': common.FROZEN_STUDY_SHA256},
+              'execution_admission_as_is': {'path': common.GIT_PREFIX + common.ADMISSION_REL,
+                                            'sha256': common.FROZEN_ADMISSION_SHA256, 'state': common.NOT_READY},
+              'reader': {'reader_sources_sha256': dict(FAKE_SOURCES),
+                         'reader_source_sha256': common.reader_source_digest(FAKE_SOURCES)},
+              'policy_pins_sha256': common.PINS_SHA256, 'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
+              'launch_basis': common.LAUNCH_BASIS,
+              'owner_direction_record': {'commit': '3' * 40, 'path': reader.owner_direction_path(study),
+                                         'blob': common.git_object_id(OWNER_DIRECTION_RAW),
+                                         'sha256': digest(OWNER_DIRECTION_RAW)},
+              'decide_source_sha256': DECIDE_SHA,
+              **{name: receipt_reference(name, raw) for name, raw in raws.items()},
+              'written_by': 'Claude builder (synthetic)', 'written_utc': '2026-09-25T02:00:00Z', 'note': 'synthetic'}
+    record.update(record_changes or {})
+    facts = {'receipts': {name: {'commit': record[name]['receipt_commit'], 'path': record[name]['receipt_path'],
+                                 'raw': raw, 'anchored': True} for name, raw in raws.items()},
+             'owner_direction': {'blob': common.git_object_id(OWNER_DIRECTION_RAW), 'raw': OWNER_DIRECTION_RAW},
+             'review_facts': review_facts(closure_at_reviewed_commit=dict(closure), closure_running=dict(closure),
+                                          writer_blobs_at_freeze={name: closure[name] for name in common.WRITER_FILES}),
+             'decide_running': DECIDE_SHA, 'decide_at_freeze': DECIDE_SHA}
+    facts.update(fact_changes or {})
+    facts['raw'] = enc(record)
+    return record, facts
+
+
+AS_IS_ADMISSION = {'state': common.NOT_READY, 'recorded_state': common.NOT_READY,
+                   'reasons': ['ADMISSION_STATE_IS:NOT_READY'], 'record_sha256': common.FROZEN_ADMISSION_SHA256,
+                   'job': None, 'spend': None}
+HISTORY_B = dict(HISTORY, freeze_commits=[common.FREEZE_COMMIT], eligibility_commits=['6' * 40],
+                 eligibility_follows_freeze=True, eligibility_precedes_evidence=True, eligibility_has_evidence=False,
+                 blob_versions=dict(HISTORY['blob_versions'], eligibility=['7' * 40]))
+
+
+@unittest.skipUnless(ARCHIVE_RAW is not None and REAL_STUDY_RAW is not None and REAL_REQUEST_RAW is not None,
+                     'package archive or frozen records not in this checkout')
+class EligibilityRouteTests(unittest.TestCase):
+    def read_b(self, record_changes=None, fact_changes=None, raws=None, **options):
+        study = json.loads(REAL_STUDY_RAW)
+        job = study['jobs'][0]['job']
+        _, facts = eligibility_bundle(record_changes, fact_changes, raws)
+        frozen = {'study.json': REAL_STUDY_RAW, '20260917/request.json': REAL_REQUEST_RAW}
+        receipt = receipt_files(job=job, request=json.loads(REAL_REQUEST_RAW))
+        document = options.pop('document', None) or evidence(candidate=side(job, OTHER))
+        return run(frozen=frozen, receipt=receipt, document=document,
+                   state=options.pop('state', dict(AS_IS_ADMISSION)), history=options.pop('history', dict(HISTORY_B)),
+                   eligibility=facts, **options)
+
+    def test_an_eligibility_record_with_the_admission_byte_identical_is_accepted(self):
+        self.assertEqual(digest(REAL_STUDY_RAW), common.FROZEN_STUDY_SHA256)
+        self.assertEqual(digest(common.ADMISSION_PATH.read_bytes()), common.FROZEN_ADMISSION_SHA256)
+        record = self.read_b()
+        self.assertEqual(record['verdict'], REPRODUCED, record['invalid_reasons'])
+        self.assertEqual(record['route'], common.ROUTE_ELIGIBILITY)
+        self.assertEqual(record['refusal_allowlist_sha256'], common.REFUSAL_ALLOWLIST_SHA256)
+        self.assertEqual(sorted(record['environment_lock_reported_only']),
+                         ['CANDIDATE_TRAINING', 'READING_EVIDENCE', 'REFERENCE_TRAINING'])
+        mismatch = self.read_b(document=evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER,
+                                                                state=parts(model_state=lambda m: {
+                                                                    **m, 'round_rate': T(0.75)}))))
+        self.assertEqual(mismatch['verdict'], DOES_NOT_REPRODUCE, mismatch['invalid_reasons'])
+
+    def test_every_broken_binding_reads_invalid_never_a_mismatch(self):
+        other_job = common.job_name('20260925120001')
+        cases = [
+            ({'state': dict(AS_IS_ADMISSION, record_sha256='8' * 64)},
+             'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_BYTE_IDENTICAL_TO_THE_FROZEN_ONE'),
+            ({'record_changes': {'job': other_job}}, 'ELIGIBILITY:NOT_FOR_THE_FROZEN_JOB:' + other_job),
+            ({'record_changes': {'reader': {'reader_sources_sha256': dict(FAKE_SOURCES, **{
+                'repro_common.py': '7' * 64}), 'reader_source_sha256': '7' * 64}}}, 'ELIGIBILITY:NOT_THIS_READER'),
+            ({'record_changes': {'state': 'ADMITTED'}}, 'ELIGIBILITY:FIELDS_SCHEMA_LABEL_OR_STATE'),
+            ({'fact_changes': {'decide_at_freeze': '0' * 64}}, 'ELIGIBILITY:DECIDE_IS_NOT_THE_FROZEN_DECIDE'),
+            ({'fact_changes': {'owner_direction': None}}, 'ELIGIBILITY:OWNER_DIRECTION_RECORD'),
+            ({'raws': {'reader_acceptance': enc(acceptance_receipt(status=common.ACCEPTANCE_FAIL))}},
+             'ELIGIBILITY:READER_ACCEPTANCE:STATUS:READER_ACCEPTANCE_FAIL'),
+            ({'raws': {'environment_lock': enc(lock_document(**{'runtime.python_version': '3.11.9'}))}},
+             'ELIGIBILITY:READER_ACCEPTANCE:ENVIRONMENT_LOCK:ENVIRONMENT_DIFFERS_FROM_LOCK:P1B_ACCEPTANCE:'
+             'runtime.python_version'),
+            ({'raws': {'review': enc(review_receipt(verdict='CHANGES_REQUIRED'))}},
+             'ELIGIBILITY:REVIEW:VERDICT:CHANGES_REQUIRED'),
+            ({'history': dict(HISTORY_B, eligibility_precedes_evidence=False)},
+             'ELIGIBILITY_RECORD_IS_NOT_BEFORE_THE_EVIDENCE'),
+            ({'history': dict(HISTORY_B, freeze_commits=['1' * 40])}, 'FREEZE_IS_NOT_THE_REGISTERED_FREEZE_COMMIT'),
+            ({'history': dict(HISTORY_B, eligibility_commits=['6' * 40, '6' * 39 + '7'])},
+             'ELIGIBILITY_RECORD_NOT_EXACTLY_ONE_COMMITTED_VERSION:2'),
+            ({'document': evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
+                                   environment=dict(RECORDED_ENV, python_version='3.12.4'))},
+             'ENVIRONMENT_DIFFERS_FROM_LOCK:READING_EVIDENCE:runtime.python_version'),
+        ]
+        for options, reason in cases:
+            record = self.read_b(**options)
+            self.assertEqual(record['verdict'], INVALID, reason)
+            self.assertIn(reason, record['invalid_reasons'], (reason, record['invalid_reasons']))
+        receipts = eligibility_bundle()[1]['receipts']                      # a receipt committed AFTER the record
+        receipts['review']['anchored'] = False
+        record = self.read_b(fact_changes={'receipts': receipts})
+        self.assertIn('ELIGIBILITY:RECEIPT_NOT_COMMITTED_BEFORE_THE_ELIGIBILITY_RECORD:review', record['invalid_reasons'])
+        driver = self.read_b(document=evidence(candidate=side(json.loads(REAL_STUDY_RAW)['jobs'][0]['job'], OTHER),
+                                               environment=dict(RECORDED_ENV, driver_version='590.1')))
+        self.assertEqual(driver['verdict'], REPRODUCED, driver['invalid_reasons'])      # diagnostic only (Q-G)
+
+    def test_this_reader_cannot_read_the_frozen_study_without_the_record(self):
+        """As frozen, the study binds the revision-3 reader, so this revision TOOL-stops (no verdict) until an
+        eligibility record binds it; a record binding another reader also stops."""
+        frozen = {'study.json': REAL_STUDY_RAW}
+        running = common.source_hashes()
+        saved = reader.stop_unless
+        reader.stop_unless = stop
+        try:
+            with self.assertRaisesRegex(Stopped, '^READER_IS_NOT_THE_ADMITTED_READER'):
+                reader.admitted_reader_check(frozen.get, running)
+            record, _ = eligibility_bundle({'reader': {'reader_sources_sha256': running,
+                                                       'reader_source_sha256': common.reader_source_digest(running)}})
+            reader.admitted_reader_check(frozen.get, running, enc(record))
+            with self.assertRaisesRegex(Stopped, '^READER_IS_NOT_THE_READER_THE_ELIGIBILITY_RECORD_BINDS'):
+                reader.admitted_reader_check(frozen.get, running, enc(eligibility_bundle()[0]))
+        finally:
+            reader.stop_unless = saved
 
 
 if __name__ == '__main__':

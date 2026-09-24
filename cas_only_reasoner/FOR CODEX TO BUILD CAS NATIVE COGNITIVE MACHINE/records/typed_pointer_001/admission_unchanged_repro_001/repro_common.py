@@ -30,12 +30,42 @@ REVISION 3 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED). Review of 303c281b (CHANGE
   * minors: the frozen-before-result rule, the admission re-read at the receipt commit, AMI and shipped-package checks,
     the starting-state identity as training configuration, owner records in the tip check.
 
+REVISION 4 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED; branch claude/helm-unchanged-reader-rev-20260924 from the freeze
+3344ae5d). Codex READER_STATIC_REVIEW_20260924 fixes 1-7 and POLICY_DECISIONS_20260924 R3-B/C/G/H/I, in ONE revision
+(each change moves the reader fingerprint):
+  * READING ELIGIBILITY (Codex bus codex-0021; Claude default Q-F). The frozen study (study.json 60140ae0...) froze the
+    execution admission as it was, NOT_READY (5042681a...), and launched under OWNER_DIRECTION_20260924. It asks for "a
+    disclosed amendment to the reader admission check only; decide() unchanged; EXECUTION_ADMISSION.json never flipped
+    afterwards". So a NEW record type, READING_ELIGIBILITY.json, committed once after the freeze and before the
+    evidence, binds the frozen study, the as-is NOT_READY admission (byte-identical), this reader, the pins, the panel,
+    the owner-direction record, the P1b acceptance receipt, the environment lock and the review receipt. The frozen
+    files and EXECUTION_ADMISSION.json are untouched; decide() is byte-identical to the freeze;
+  * fix 1 / R3-B: a refusal is a plain ValueError whose COMPLETE message is on the published allowlist
+    (`historical_refusal_allowlist.json`, extracted from the pinned archive by `build_refusal_allowlist.py`, carrying
+    the archive hash); the display is truncated only after that check;
+  * fix 2 / R3-G: the history rule counts merge commits too (`git log -m`) and compares the pinned blobs across every
+    later commit, merges included;
+  * fix 3 / R3-G: a missing pinned object (owner, policy, reference, freeze or eligibility receipt commit), an
+    unfetched receipt branch or an unpushed receipt commit is a recoverable TOOL_STOP (exit 1) before evaluation;
+  * fix 4: the spend record's sources are opened from committed, anchored blobs and checked; freshness is the R3-F
+    five-minute window before the admission time;
+  * fix 5 / R3-H: a review receipt resolves its pushed reviewed commit and binds the complete closure, the preparation
+    writers included, plus reviewer provenance; verdict SOURCE_CONFORMANCE_PASS with no open BLOCKER/MAJOR finding;
+  * fix 6 / R3-I: the environment lock `helm.reproduction-environment/1` is parsed strictly and compared with the
+    observed runtime (versions parsed, not hashed). INVALID-deciding at minimum (Claude default Q-G): Python
+    implementation and version, torch build, CUDA runtime, cuDNN, GPU model; other fields are diagnostic unless the
+    lock itself lists them as required-equal;
+  * fix 7 / R3-C: a frozen table of the expected verdict and levels of all eleven acceptance cases; each case's observed
+    fields are compared with it, and `pass: true` is never trusted. changed-buffer prints its buffer count (0).
+
 THIS MODULE IMPORTS NOTHING FROM THE LAUNCHER, torch or the network. It lives under `records/`, not `cncm/` or
 `cas_meta2/`, on purpose: `pointer_contract.input_inventory` globs `*.py` under those trees.
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED (temporary Claude builder while Codex is away). It transcribes the owner's words;
 it is not an owner signature.
 """
+import ast
+from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from hashlib import sha1, sha256
 import io
@@ -287,7 +317,8 @@ NUMERICAL_ENVIRONMENT = {
     'cudnn_allow_tf32': False,
     'cublas_workspace_config': ':4096:8',
 }
-ENVIRONMENT_RECORDED_NOT_PINNED = ('python_version', 'cudnn_version', 'driver_version', 'platform_release')
+ENVIRONMENT_RECORDED_NOT_PINNED = ('python_version', 'cudnn_version', 'driver_version', 'platform_release',
+                                   'python_implementation', 'machine', 'compute_capability')     # last 3: revision 4
 HISTORICAL_AMI = 'ami-0fbbd0facbc9e3cff'            # the Helm 2.0 run's preflight AMI (result.json at c8d5c430)
 REQUIREMENTS_GPU_SHA256 = '9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379'
 
@@ -340,12 +371,15 @@ PRODUCER_IDENTITY_FIELDS = ('model_state_identity', 'optimizer_state_identity', 
 TENSOR_DECIDING_KEYS = ('kind', 'dtype', 'shape', 'layout', 'sha256')    # stride / offset / device are envelope
 
 # ---- the evidence the torch-side module writes on AWS, and the reader-acceptance receipt it writes in P1.
-EVIDENCE_SCHEMA = 'cncm.helm-unchanged-reproduction-evidence/1'
-ACCEPTANCE_SCHEMA = 'cncm.helm-unchanged-reproduction-reader-acceptance/1'
+EVIDENCE_SCHEMA = 'cncm.helm-unchanged-reproduction-evidence/2'              # revision 4: full-message refusals
+ACCEPTANCE_SCHEMA = 'cncm.helm-unchanged-reproduction-reader-acceptance/2'   # revision 4: per-case observed fields
 EVIDENCE_REL = 'records/typed_pointer_001/evidence_unchanged_repro_20260917/reproduction_evidence.json'
 EVIDENCE_MODES = ('READING', 'ACCEPTANCE')
 # The files the ONE reader digest covers. `policy_pins.json` is deliberately NOT one of them (BLOCKER 1, revision 3).
-READER_SOURCE_FILES = ('read_reproduction.py', 'repro_common.py', 'recompute_reproduction_evidence.py')
+# Revision 4 adds the published refusal allowlist: it decides which panel rows are model refusals, so it is covered.
+REFUSAL_ALLOWLIST_NAME = 'historical_refusal_allowlist.json'
+READER_SOURCE_FILES = ('read_reproduction.py', 'repro_common.py', 'recompute_reproduction_evidence.py',
+                       REFUSAL_ALLOWLIST_NAME)
 
 # ---- panel rows: what is model behaviour and what is an infrastructure fault (review MAJOR 3, revision 3).
 # The historical `require` (source.require, matched_contract.require at 20208c92) raises ValueError whose message is a
@@ -354,6 +388,66 @@ READER_SOURCE_FILES = ('read_reproduction.py', 'repro_common.py', 'recompute_rep
 # crash, or a prediction for the wrong record is an INFRASTRUCTURE FAULT: the evidence is invalid, never a mismatch.
 HISTORICAL_REFUSAL_PATTERN = r'(POINTER|TYPED)_[A-Z0-9_]+(:[\x20-\x7e]*)?'
 PANEL_INFRASTRUCTURE_FAULT = 'ERROR'
+# ---- revision 4 (Codex R3-B, reader review fix 1): the explicit allowlist. `build_refusal_allowlist.py` extracts it
+# from the pinned archive (c42370c4...) and publishes it next to this module; the reader digest covers it. A message
+# is a refusal only when it satisfies the code shape above AND equals an `exact` entry or fullmatches a `patterns` entry.
+REFUSAL_ALLOWLIST_SCHEMA = 'cncm.helm-historical-refusal-allowlist/1'
+REFUSAL_CODE_HEADS = ('POINTER_', 'TYPED_')
+REFUSAL_DETAIL = '[\\x21-\\x7e]{1,200}'            # a dynamic part: printable ASCII, no space, no newline
+REFUSAL_MESSAGE_MAX = 400
+REFUSAL_ALLOWLIST_FIELDS = ('counts', 'detail_class', 'exact', 'integer_class', 'label', 'patterns', 'rule', 'schema',
+                            'source', 'unresolved')
+
+
+def refusal_allowlist_violations(document):
+    """Every way a parsed allowlist is not the published form bound to the pinned archive. Pure."""
+    if type(document) is not dict:
+        return ['ALLOWLIST_NOT_AN_OBJECT']
+    violations = []
+    if sorted(document) != list(REFUSAL_ALLOWLIST_FIELDS) or document.get('schema') != REFUSAL_ALLOWLIST_SCHEMA \
+            or document.get('label') != LABEL or document.get('detail_class') != REFUSAL_DETAIL:
+        violations.append('ALLOWLIST_FIELDS_SCHEMA_LABEL_OR_DETAIL')
+    source = document.get('source') if type(document.get('source')) is dict else {}
+    if not (source.get('package_commit') == PACKAGE_COMMIT and source.get('archive_sha256') == ARCHIVE_SHA256
+            and source.get('archive_git_blob') == PACKAGE_BLOBS['source.zip']
+            and source.get('archive_bytes') == ARCHIVE_BYTES):
+        violations.append('ALLOWLIST_SOURCE_IS_NOT_THE_PINNED_ARCHIVE')
+    for key in ('exact', 'patterns'):
+        items = document.get(key)
+        if not (type(items) is list and items and all(type(item) is str and item.isascii() and '\n' not in item
+                                                      for item in items) and items == sorted(set(items))):
+            violations.append('ALLOWLIST_' + key.upper() + '_FORM')
+    if not violations:
+        for item in document['exact']:
+            if not item.startswith(REFUSAL_CODE_HEADS):
+                violations.append('ALLOWLIST_EXACT_NOT_A_CODE:' + item[:60])
+        for item in document['patterns']:
+            try:
+                re.compile(item)
+            except re.error:
+                violations.append('ALLOWLIST_PATTERN_DOES_NOT_COMPILE:' + item[:60])
+    return violations
+
+
+def load_refusal_allowlist(raw):
+    """`(exact frozenset, compiled patterns)`. An absent file gives an EMPTY allowlist (every refusal then reads as an
+    infrastructure fault, the fail-closed direction); a present but malformed file stops at import."""
+    if raw is None:
+        return frozenset(), ()
+    try:
+        document = json.loads(raw)
+    except ValueError:
+        document = None
+    violations = refusal_allowlist_violations(document)
+    if violations:
+        raise SystemExit('UNCHANGED_REPRO_REFUSAL_ALLOWLIST_INVALID:' + '|'.join(violations)[:600])
+    return frozenset(document['exact']), tuple(re.compile(item) for item in document['patterns'])
+
+
+REFUSAL_ALLOWLIST_PATH = HERE / REFUSAL_ALLOWLIST_NAME
+REFUSAL_ALLOWLIST_RAW = REFUSAL_ALLOWLIST_PATH.read_bytes() if REFUSAL_ALLOWLIST_PATH.is_file() else None
+REFUSAL_ALLOWLIST_SHA256 = sha256(REFUSAL_ALLOWLIST_RAW).hexdigest() if REFUSAL_ALLOWLIST_RAW is not None else None
+REFUSAL_EXACT, REFUSAL_PATTERNS = load_refusal_allowlist(REFUSAL_ALLOWLIST_RAW)
 
 # ---- the training machine as each receipt's preflight.json records it (review MINOR 7, revision 3).
 PREFLIGHT_RECORD = 'preflight.json'
@@ -416,15 +510,71 @@ VACUOUS = 'VACUOUS'
 ACCEPTANCE_CASES = ('self_identity', 'equal_state_different_envelope', 'continuation_only_different', 'changed_value',
                     'changed_encoder_state', 'missing_key', 'dtype_change', 'altered_output', 'changed_buffer',
                     'state_equal_output_tampered', 'corrupt_reference')
-REVIEW_RECEIPT_SCHEMA = 'cncm.helm-unchanged-reproduction-review-receipt/1'
-REVIEW_RECEIPT_FIELDS = ('job_kind', 'label', 'model_seed', 'reviewed_commit', 'reviewed_panel_manifest_sha256',
-                         'reviewed_policy_pins_sha256', 'reviewed_reader_source_sha256', 'reviewed_reader_sources_sha256',
-                         'reviewer', 'schema', 'verdict')
-REVIEW_PASS = 'NO_BLOCKER_OR_MAJOR_FINDING_OPEN'      # a reviewer's machine field; prose is never read
-SPEND_RECORD_SCHEMA = 'cncm.helm-unchanged-reproduction-spend-record/1'
+# Revision 4, fix 7: the FROZEN expected outcome of every case. `recompute_reproduction_evidence.acceptance_specs` and
+# `acceptance_mode` take their expectations from here, and the reader compares each case's OBSERVED fields with it.
+# `levels` lists only the levels a case registers (other levels are free). missing_key / dtype_change: the pinned
+# historical loader refuses both, so no complete panel exists and the answer is ADMISSION_INVALID_STOP (Codex R3-B:
+# "if the historical loader cannot produce a complete valid panel, the decision is ADMISSION_INVALID_STOP").
+# changed_buffer: VACUOUS only while the restored reference prints exactly zero buffers (Codex R3-C).
+ACCEPTANCE_EXPECTED = {
+    'self_identity': {'verdict': REPRODUCED,
+                      'levels': {'file': True, 'learned_state': True, 'output': True, 'continuation': True}},
+    'equal_state_different_envelope': {'verdict': REPRODUCED, 'levels': {'file': False, 'learned_state': True,
+                                                                         'output': True, 'continuation': True}},
+    'continuation_only_different': {'verdict': REPRODUCED,
+                                    'levels': {'learned_state': True, 'output': True, 'continuation': False}},
+    'changed_value': {'verdict': DOES_NOT_REPRODUCE, 'levels': {'learned_state': False}},
+    'changed_encoder_state': {'verdict': DOES_NOT_REPRODUCE, 'levels': {'learned_state': False}},
+    'missing_key': {'verdict': INVALID_STOP, 'levels': {'learned_state': False}},
+    'dtype_change': {'verdict': INVALID_STOP, 'levels': {'learned_state': False}},
+    'altered_output': {'verdict': DOES_NOT_REPRODUCE, 'levels': {'learned_state': False, 'output': False}},
+    'changed_buffer': {'status': VACUOUS, 'reference_buffer_count': 0},
+    'state_equal_output_tampered': {'verdict': DOES_NOT_REPRODUCE, 'levels': {'learned_state': True, 'output': False}},
+    'corrupt_reference': {'verdict': INVALID_STOP, 'levels': {}},
+}
+# Revision 4, fix 5 (Codex R3-H): scoped verdicts, a RESOLVED and PUSHED reviewed commit, the complete code closure
+# (the preparation writers included) and a reviewer provenance record. The historical NO_BLOCKER_OR_MAJOR_FINDING_OPEN
+# receipt (schema /1) is preserved in history but does not establish readiness, so /1 is refused here.
+REVIEW_RECEIPT_SCHEMA = 'cncm.helm-unchanged-reproduction-review-receipt/2'
+REVIEW_RECEIPT_FIELDS = ('attribution', 'closure', 'job_kind', 'label', 'model_seed', 'reviewed_branch',
+                         'reviewed_commit', 'reviewed_panel_manifest_sha256', 'reviewed_policy_pins_sha256',
+                         'reviewed_reader_source_sha256', 'reviewed_reader_sources_sha256', 'reviewer',
+                         'reviewer_provenance', 'schema', 'scope', 'unresolved_findings', 'verdict')
+REVIEW_PASS = 'SOURCE_CONFORMANCE_PASS'               # a reviewer's machine field; prose is never read
+REVIEW_VERDICTS = ('SOURCE_CONFORMANCE_PASS', 'CHANGES_REQUIRED')
+REVIEW_SEVERITIES = ('BLOCKER', 'MAJOR', 'MINOR', 'NOTE')
+REVIEW_BLOCKING_SEVERITIES = ('BLOCKER', 'MAJOR')     # owner rule 2026-09-24: only these hold a launch or a reading
+INDEPENDENCE_LABEL = 'EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT'
+WRITER_FILES = ('prepare_unchanged_repro.py', 'write_launch_under_owner_direction.py')
+REVIEW_CLOSURE_FILES = READER_SOURCE_FILES + WRITER_FILES + (PANEL_MANIFEST_NAME, PINS_NAME)
+# Revision 4, fix 4: every spend source is a committed blob (commit + path + sha256) that the code OPENS and checks,
+# and the figure is fresh: measured at most five minutes before the admission time (Codex R3-F window).
+SPEND_RECORD_SCHEMA = 'cncm.helm-unchanged-reproduction-spend-record/2'
 SPEND_RECORD_FIELDS = ('basis', 'job', 'label', 'measured_spend_so_far_usd', 'measured_utc', 'schema', 'sources',
                        'study')
+SPEND_SOURCE_FIELDS = ('commit', 'path', 'sha256')
+SPEND_FRESHNESS_SECONDS = 300
 STUDY_NAME = 'HELM-REPAIR-CONTROLLED-1'
+
+# ---- revision 4: the READING ELIGIBILITY record (Codex bus codex-0021; Claude default Q-F). The frozen study and the
+# as-is admission are upstream facts of this reader (no hash cycle: the eligibility record, downstream, binds this
+# reader, never the reverse).
+FREEZE_COMMIT = '3344ae5d7bcc0d5ff50f1bce220f77a063ece65a'
+FROZEN_STUDY_SHA256 = '60140ae0587e983120f37cb3499ecdc19e59f23cc0363520b2814e9e413f8a12'
+FROZEN_ADMISSION_SHA256 = '5042681aa3e6e034a88cf6e516ee8dbf2f9b97b2d09f2f9bf4e234ad552bfb50'
+LAUNCH_BASIS = 'OWNER_DIRECTION_20260924'
+FROZEN_FILES = ('frozen/study.json', 'frozen/20260917/request.json', 'frozen/20260917/authority.json',
+                'frozen/20260917/owner.json')
+ELIGIBILITY_NAME = 'READING_ELIGIBILITY.json'
+ELIGIBILITY_REL = HERE_REL + '/' + ELIGIBILITY_NAME
+ELIGIBILITY_SCHEMA = 'cncm.helm-unchanged-reproduction-reading-eligibility/1'
+ELIGIBLE = 'READING_ELIGIBLE'
+ELIGIBILITY_RECEIPTS = ('reader_acceptance', 'environment_lock', 'review')
+ELIGIBILITY_FIELDS = ('decide_source_sha256', 'environment_lock', 'execution_admission_as_is', 'frozen_study', 'job',
+                      'job_kind', 'label', 'launch_basis', 'model_seed', 'note', 'owner_direction_record',
+                      'panel_manifest_sha256', 'policy_pins_sha256', 'reader', 'reader_acceptance', 'review', 'schema',
+                      'source_sha', 'state', 'written_by', 'written_utc')
+ROUTE_ADMISSION, ROUTE_ELIGIBILITY = 'EXECUTION_ADMISSION_ADMITTED', 'READING_ELIGIBILITY_RECORD'
 
 # ---- the spend gate for --check (plan section 0 as carried by the amended plan): spend so far + per-job <= ceiling.
 CEILING_USD = '60.00'
@@ -539,6 +689,30 @@ def source_hashes(folder=None):
     return {name: digest((folder / name).read_bytes()) for name in READER_SOURCE_FILES}
 
 
+def function_source(text, name):
+    """The exact source text of the top-level function `name` in `text` (decorators excluded), or None. Pure."""
+    try:
+        tree = ast.parse(text)
+    except (SyntaxError, ValueError, TypeError):
+        return None
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return ast.get_source_segment(text, node)
+    return None
+
+
+def decide_source_sha256(raw):
+    """sha256 of the exact `decide()` source text in a read_reproduction.py file's bytes, or None. Pure.
+    Revision 4: `decide()` must stay byte-identical to the freeze; the reader and the eligibility record both check."""
+    if type(raw) is not bytes:
+        return None
+    try:
+        source = function_source(raw.decode('utf-8'), 'decide')
+    except UnicodeDecodeError:
+        return None
+    return None if source is None else digest(source.encode('utf-8'))
+
+
 def reader_source_digest(hashes=None):
     """ONE sha256 for the independent reader: over the canonical {file: sha256} of the three reader sources."""
     return value_digest(source_hashes() if hashes is None else hashes)
@@ -561,9 +735,214 @@ def environment_unrecorded(recorded):
     return [key for key in ENVIRONMENT_RECORDED_NOT_PINNED if key not in recorded]
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Revision 4, fix 6 (Codex R3-I): the environment lock `helm.reproduction-environment/1`, parsed strictly and compared
+# with the OBSERVED runtime (versions parsed, never merely hashed or presence-checked). Pure.
+# ---------------------------------------------------------------------------------------------------------------------
+ENVIRONMENT_LOCK_SCHEMA = 'helm.reproduction-environment/1'
+ENVIRONMENT_LOCK_STATUS = 'FROZEN'
+ENVIRONMENT_LOCK_TOP = ('accelerator', 'comparison', 'image', 'libraries', 'numerics', 'runtime', 'schema',
+                        'source_commit', 'status')
+ENVIRONMENT_LOCK_SHAPE = {
+    'image': ('ami_id', 'provider', 'region'),
+    'runtime': ('kernel', 'machine', 'os', 'python_implementation', 'python_version'),
+    'accelerator': ('compute_capability', 'driver_version', 'gpu_model', 'instance_type'),
+    'libraries': ('cuda_runtime', 'cudnn', 'packages', 'torch'),
+    'numerics': ('cudnn_allow_tf32', 'deterministic_algorithms', 'dtype', 'environment_variables',
+                 'float32_matmul_precision', 'matmul_allow_tf32', 'seeds', 'thread_counts'),
+}
+ENVIRONMENT_LOCK_LEAVES = tuple(section + '.' + key for section, keys in ENVIRONMENT_LOCK_SHAPE.items() for key in keys)
+ENVIRONMENT_BOOL_LEAVES = ('numerics.cudnn_allow_tf32', 'numerics.deterministic_algorithms', 'numerics.matmul_allow_tf32')
+ENVIRONMENT_MAP_LEAVES = ('numerics.environment_variables', 'numerics.seeds', 'numerics.thread_counts')
+# Claude default Q-G (bus claude-0024; silence keeps it): the lock MUST list these as required-equal, and a difference
+# in any of them makes the evidence INVALID. Driver and kernel are diagnostic unless the lock lists them required-equal.
+ENVIRONMENT_INVALID_DECIDING = ('runtime.python_implementation', 'runtime.python_version', 'libraries.torch',
+                                'libraries.cuda_runtime', 'libraries.cudnn', 'accelerator.gpu_model')
+# lock leaf -> (key in an observed environment: the evidence / acceptance `environment`, a worker_report `runtime`;
+# how the two values are parsed before they are compared).
+ENVIRONMENT_OBSERVED = {
+    'runtime.python_implementation': ('python_implementation', 'text'),
+    'runtime.python_version': ('python_version', 'version'),
+    'runtime.os': ('platform_system', 'text'),
+    'runtime.kernel': ('platform_release', 'text'),
+    'runtime.machine': ('machine', 'text'),
+    'accelerator.gpu_model': ('gpu_name', 'text'),
+    'accelerator.compute_capability': ('compute_capability', 'version'),
+    'accelerator.driver_version': ('driver_version', 'version'),
+    'libraries.torch': ('torch_version', 'torch'),
+    'libraries.cuda_runtime': ('cuda_version', 'version'),
+    'libraries.cudnn': ('cudnn_version', 'cudnn'),
+    'numerics.deterministic_algorithms': ('deterministic_algorithms', 'bool'),
+    'numerics.matmul_allow_tf32': ('matmul_allow_tf32', 'bool'),
+    'numerics.cudnn_allow_tf32': ('cudnn_allow_tf32', 'bool'),
+}
+
+
+class _Refused(ValueError):
+    pass
+
+
+def _unique_pairs(pairs):
+    keys = [key for key, _ in pairs]
+    if len(keys) != len(set(keys)):
+        raise _Refused('DUPLICATE_KEY')
+    return dict(pairs)
+
+
+def _no_constant(name):
+    raise _Refused('NON_FINITE:' + name)
+
+
+def strict_json_object(raw):
+    """A JSON object from bytes, refusing duplicate keys and NaN/Infinity; None otherwise. Pure."""
+    if type(raw) is not bytes:
+        return None
+    try:
+        value = json.loads(raw, object_pairs_hook=_unique_pairs, parse_constant=_no_constant)
+    except (ValueError, RecursionError):
+        return None
+    return value if type(value) is dict else None
+
+
+def _normal(parts):
+    parts = tuple(parts)
+    while len(parts) > 1 and parts[-1] == 0:
+        parts = parts[:-1]
+    return parts
+
+
+def parse_version(value):
+    """'3.12.3' -> (3, 12, 3); trailing zero parts dropped ('12.8.0' == '12.8'). None when not a dotted number."""
+    if type(value) is not str or re.fullmatch(r'\d{1,6}(\.\d{1,6}){0,5}', value) is None:
+        return None
+    return _normal(int(part) for part in value.split('.'))
+
+
+def parse_torch_version(value):
+    """'2.11.0+cu128' -> ((2, 11), 'cu128'): the release AND the build tag both count."""
+    match = re.fullmatch(r'(\d{1,6}(?:\.\d{1,6}){0,5})(?:\+([A-Za-z0-9.]{1,32}))?', value) if type(value) is str \
+        else None
+    return None if match is None else (parse_version(match.group(1)), match.group(2) or '')
+
+
+def parse_cudnn_version(value):
+    """torch reports cuDNN as an int (91002 = 9.10.2; 8902 = 8.9.2); a lock writes '9.10.2'. Both parse to a tuple."""
+    if type(value) is int and 0 < value < 10 ** 7:
+        if value >= 90000:
+            return _normal((value // 10000, value // 100 % 100, value % 100))
+        return _normal((value // 1000, value // 100 % 10, value % 100))
+    return parse_version(value)
+
+
+def parse_environment_value(kind, value):
+    """The comparable form of one value, or None when it cannot be parsed (never guessed)."""
+    if kind == 'text':
+        return value if type(value) is str and value else None
+    if kind == 'bool':
+        return value if type(value) is bool else None
+    if kind == 'version':
+        return parse_version(value)
+    if kind == 'torch':
+        return parse_torch_version(value)
+    if kind == 'cudnn':
+        return parse_cudnn_version(value)
+    return None
+
+
+def environment_lock_violations(raw):
+    """`(violations, lock)` for the raw lock bytes. Unknown, duplicate, null or missing fields refuse (R3-I). Pure."""
+    lock = strict_json_object(raw)
+    if lock is None:
+        return ['LOCK_NOT_A_STRICT_JSON_OBJECT'], None
+    violations = []
+    if sorted(lock) != list(ENVIRONMENT_LOCK_TOP):
+        return ['LOCK_TOP_FIELDS'], None
+    if lock['schema'] != ENVIRONMENT_LOCK_SCHEMA or lock['status'] != ENVIRONMENT_LOCK_STATUS \
+            or not is_hex(lock['source_commit'], 40):
+        violations.append('LOCK_SCHEMA_STATUS_OR_SOURCE_COMMIT')
+    for section, keys in ENVIRONMENT_LOCK_SHAPE.items():
+        if type(lock[section]) is not dict or sorted(lock[section]) != sorted(keys):
+            violations.append('LOCK_SECTION_FIELDS:' + section)
+            continue
+        for key in keys:
+            path, value = section + '.' + key, lock[section][key]
+            if path in ENVIRONMENT_BOOL_LEAVES:
+                ok = type(value) is bool
+            elif path in ENVIRONMENT_MAP_LEAVES:
+                ok = type(value) is dict and all(type(name) is str and name and type(item) in (str, int)
+                                                 and type(item) is not bool for name, item in value.items())
+            elif path == 'libraries.packages':
+                ok = (type(value) is list and value and all(
+                    type(row) is dict and sorted(row) == ['name', 'sha256', 'version'] and type(row['name']) is str
+                    and row['name'] and type(row['version']) is str and row['version'] and is_hex(row['sha256'], 64)
+                    for row in value) and len({row['name'] for row in value}) == len(value))
+            else:
+                ok = type(value) is str and bool(value.strip())
+            if not ok:
+                violations.append('LOCK_VALUE:' + path)
+            elif path in ENVIRONMENT_OBSERVED and parse_environment_value(ENVIRONMENT_OBSERVED[path][1], value) is None:
+                violations.append('LOCK_VALUE_UNPARSEABLE:' + path)
+    comparison = lock['comparison'] if type(lock['comparison']) is dict else {}
+    required, diagnostic = comparison.get('required_equal'), comparison.get('diagnostic_only')
+    if sorted(comparison) != ['diagnostic_only', 'required_equal'] or type(required) is not list \
+            or type(diagnostic) is not list:
+        return violations + ['LOCK_COMPARISON_FIELDS'], None
+    if not all(type(path) is str for path in required) or not all(
+            type(row) is dict and sorted(row) == ['path', 'reason'] and type(row['path']) is str
+            and type(row['reason']) is str and row['reason'].strip() for row in diagnostic):
+        return violations + ['LOCK_COMPARISON_ENTRY_FORM'], None
+    listed = list(required) + [row['path'] for row in diagnostic]
+    if sorted(listed) != sorted(ENVIRONMENT_LOCK_LEAVES):
+        violations.append('LOCK_COMPARISON_MUST_LIST_EVERY_FIELD_EXACTLY_ONCE')
+    missing = [path for path in ENVIRONMENT_INVALID_DECIDING if path not in required]
+    if missing:
+        violations.append('LOCK_REQUIRED_EQUAL_LACKS:' + ','.join(missing))
+    return violations, (lock if not violations else None)
+
+
+def environment_lock_comparison(lock, observed, source, *, must_observe):
+    """`(invalid, diagnostic, not_observed)` for ONE observed environment against a valid lock. Pure.
+
+    A required-equal field that differs, or cannot be parsed, is INVALID. A required-equal field the source does not
+    record is INVALID when `must_observe` (the evidence and the P1b acceptance record every field by construction) and
+    only reported otherwise (the historical training receipts never recorded Python or cuDNN). Diagnostic fields are
+    reported, never deciding."""
+    observed = observed if type(observed) is dict else {}
+    required = set(lock['comparison']['required_equal'])
+    invalid, diagnostic, not_observed = [], [], []
+    for path in ENVIRONMENT_LOCK_LEAVES:
+        if path not in ENVIRONMENT_OBSERVED:
+            continue
+        key, kind = ENVIRONMENT_OBSERVED[path]
+        section, name = path.split('.')
+        if key not in observed:
+            if path in required and must_observe:
+                invalid.append('ENVIRONMENT_NOT_OBSERVED:' + source + ':' + path)
+            else:
+                not_observed.append(source + ':' + path)
+            continue
+        expected = parse_environment_value(kind, lock[section][name])
+        found = parse_environment_value(kind, observed[key])
+        if found is not None and found == expected:
+            continue
+        if path in required:
+            invalid.append(('ENVIRONMENT_UNPARSEABLE:' if found is None else 'ENVIRONMENT_DIFFERS_FROM_LOCK:')
+                           + source + ':' + path)
+        else:
+            diagnostic.append({'source': source, 'path': path, 'lock': lock[section][name],
+                               'observed': observed[key] if type(observed[key]) in (str, int, bool) else None})
+    return invalid, diagnostic, not_observed
+
+
 def is_historical_refusal(message):
-    """True only for a message of the historical `require` form (a POINTER_ or TYPED_ code). Pure."""
-    return type(message) is str and re.fullmatch(HISTORICAL_REFUSAL_PATTERN, message) is not None
+    """True only for a COMPLETE message on the published historical allowlist (revision 4, Codex R3-B). Pure.
+
+    The caller passes the whole message, never a truncated display: a coded prefix followed by added prose, a newline
+    or a CUDA fault is not on the allowlist, so it is an infrastructure fault (INVALID), never a model refusal."""
+    if not (type(message) is str and 0 < len(message) <= REFUSAL_MESSAGE_MAX and message.isascii()
+            and re.fullmatch(HISTORICAL_REFUSAL_PATTERN, message) is not None):
+        return False
+    return message in REFUSAL_EXACT or any(pattern.fullmatch(message) for pattern in REFUSAL_PATTERNS)
 
 
 def preflight_violations(preflight):
@@ -890,8 +1269,58 @@ def load_object(raw):
     return value if type(value) is dict else None
 
 
-def acceptance_receipt_violations(document, expected_bindings):
-    """The P1 receipt: READER_ACCEPTANCE_PASS, every registered case in order and passed, made by THIS reader. Pure."""
+def _label_value(level, label):
+    """A level label back to its value: the identical word -> True, the different word -> False, else None."""
+    words = LEVEL_LABELS.get(level)
+    if words is None or label not in words:
+        return None
+    return label == words[0]
+
+
+def acceptance_case_violations(case):
+    """Revision 4, fix 7: ONE acceptance case against the frozen table `ACCEPTANCE_EXPECTED`. Pure.
+
+    The producer's `pass` is never trusted. The reader re-derives the outcome from the case's OBSERVED fields: the
+    observed verdict must be `decide()` of the observed validity and levels (a second, independent derivation), and it
+    must equal the registered verdict, with every registered level. `pass` must then agree with that derivation."""
+    name = case.get('case') if type(case) is dict else None
+    expected = ACCEPTANCE_EXPECTED.get(name)
+    if expected is None:
+        return ['CASE_NOT_REGISTERED:' + str(name)[:40]]
+    if 'status' in expected:                                    # changed_buffer: VACUOUS with a printed zero count
+        ok = (case.get('status') == expected['status'] and case.get('reference_buffers') == []
+              and type(case.get('reference_buffer_count')) is int
+              and case.get('reference_buffer_count') == expected['reference_buffer_count']
+              and type(case.get('why')) is str and bool(case['why'].strip()) and case.get('pass') is True)
+        return [] if ok else ['CHANGED_BUFFER_NOT_RECORDED_AS_VACUOUS_WITH_NO_BUFFERS']
+    violations = []
+    if case.get('expected_verdict') != expected['verdict'] or not same(case.get('expected_levels'),
+                                                                        expected['levels']):
+        violations.append('CASE_EXPECTATION_IS_NOT_THE_FROZEN_TABLE:' + name)
+    labels = case.get('observed_levels') if type(case.get('observed_levels')) is dict else {}
+    reasons = case.get('invalid_reasons')
+    if sorted(labels) != sorted(LEVEL_LABELS) or type(reasons) is not list \
+            or case.get('observed_verdict') not in VERDICTS:
+        return violations + ['CASE_OBSERVED_FIELDS_MALFORMED:' + name]
+    values = {level: _label_value(level, labels[level]) for level in LEVEL_LABELS}
+    valid = not reasons
+    derived = (INVALID_STOP if not valid else
+               INVALID_STOP if any(values[level] is None for level in LEVEL_LABELS) else
+               REPRODUCED if values['learned_state'] and values['output'] else DOES_NOT_REPRODUCE)
+    if derived != case['observed_verdict']:
+        violations.append('CASE_VERDICT_IS_NOT_DERIVED_FROM_ITS_OBSERVED_FIELDS:' + name)
+    outcome = (case['observed_verdict'] == expected['verdict']
+               and all(values[level] is value for level, value in expected['levels'].items()))
+    if not outcome:
+        violations.append('CASE_OBSERVED_IS_NOT_THE_REGISTERED_OUTCOME:' + name)
+    if case.get('pass') is not outcome:
+        violations.append('CASE_PASS_FIELD_CONTRADICTS_THE_OBSERVED_FIELDS:' + name)
+    return violations
+
+
+def acceptance_receipt_violations(document, expected_bindings, environment_lock=None):
+    """The P1 receipt: READER_ACCEPTANCE_PASS, every registered case in order, each case's OBSERVED fields equal to the
+    frozen table (revision 4, fix 7), made by THIS reader, in the pinned (and, when given, the locked) environment."""
     if type(document) is not dict:
         return ['NOT_A_JSON_OBJECT']
     violations = []
@@ -902,12 +1331,15 @@ def acceptance_receipt_violations(document, expected_bindings):
     cases = document.get('cases') if type(document.get('cases')) is list else []
     if [case.get('case') if type(case) is dict else None for case in cases] != list(ACCEPTANCE_CASES):
         violations.append('CASE_SET_OR_ORDER')
-    if not cases or not all(type(case) is dict and case.get('pass') is True for case in cases):
+    found = [item for case in cases for item in acceptance_case_violations(case)]
+    if not cases or found or not all(type(case) is dict and case.get('pass') is True for case in cases):
         violations.append('A_CASE_DID_NOT_PASS')
-    buffer_cases = [case for case in cases if type(case) is dict and case.get('case') == 'changed_buffer']
-    if not (len(buffer_cases) == 1 and buffer_cases[0].get('status') == VACUOUS
-            and buffer_cases[0].get('reference_buffers') == []):
-        violations.append('CHANGED_BUFFER_NOT_RECORDED_AS_VACUOUS_WITH_NO_BUFFERS')
+    violations.extend(item for item in found if item.startswith('CHANGED_BUFFER'))
+    violations.extend('CASE:' + item for item in found if not item.startswith('CHANGED_BUFFER'))
+    if environment_lock is not None:
+        invalid, _, _ = environment_lock_comparison(environment_lock, document.get('environment'), 'P1B_ACCEPTANCE',
+                                                    must_observe=True)
+        violations.extend('ENVIRONMENT_LOCK:' + item for item in invalid)
     producer = document.get('producer') if type(document.get('producer')) is dict else {}
     if not (same(producer.get('sources_sha256'), expected_bindings.get('reader_sources_sha256'))
             and producer.get('reader_source_sha256') == expected_bindings.get('reader_source_sha256')):
@@ -970,8 +1402,22 @@ def spend_violations(text):
     return [], summary
 
 
-def spend_record_violations(document, job):
-    """`(violations, summary)` for the budget receipt: a committed spend record for THIS job, figure read from it."""
+def utc_instant(text):
+    """A UTC timestamp 'YYYY-MM-DDTHH:MM:SS[.ffffff]Z' as an aware datetime, or None. Pure."""
+    if type(text) is not str or re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z', text) is None:
+        return None
+    try:
+        return datetime.strptime(text[:19], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def spend_record_violations(document, job, *, opened_sources=None, admitted_utc=None):
+    """`(violations, summary)` for the budget receipt: a committed spend record for THIS job, figure read from it.
+
+    Revision 4 (reader review fix 4): every source names a commit and the gatherer OPENS its committed blob
+    (`opened_sources`, one raw bytes-or-None per source, in order); each must exist and match its sha256. Freshness:
+    `measured_utc` is at most SPEND_FRESHNESS_SECONDS before, and never after, the admission time `admitted_utc`."""
     if type(document) is not dict:
         return ['NOT_A_JSON_OBJECT'], None
     violations = []
@@ -980,22 +1426,50 @@ def spend_record_violations(document, job):
         violations.append('SCHEMA_FIELDS_LABEL_OR_STUDY')
     if stamp_of(document.get('job')) is None or document.get('job') != job:
         violations.append('FOR_ANOTHER_JOB:' + str(document.get('job'))[:80])
-    if not (type(document.get('measured_utc')) is str
-            and re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z', document['measured_utc'])):
+    measured = utc_instant(document.get('measured_utc'))
+    if measured is None:
         violations.append('MEASURED_UTC')
     if not (type(document.get('basis')) is str and document['basis'].strip()):
         violations.append('BASIS')
     sources = document.get('sources')
     if not (type(sources) is list and sources and all(
-            type(item) is dict and sorted(item) == ['path', 'sha256'] and _relative_path(item['path'])
-            and _hex(item['sha256'], 64) for item in sources)):
+            type(item) is dict and sorted(item) == list(SPEND_SOURCE_FIELDS) and _hex(item['commit'], 40)
+            and _relative_path(item['path']) and _hex(item['sha256'], 64) for item in sources)):
         violations.append('SOURCES')
+    else:
+        opened = opened_sources if type(opened_sources) is list else []
+        for index, item in enumerate(sources):
+            raw = opened[index] if index < len(opened) else None
+            if type(raw) is not bytes:
+                violations.append('SOURCE_NOT_OPENED_AS_A_COMMITTED_ANCHORED_BLOB:%d' % index)
+            elif digest(raw) != item['sha256']:
+                violations.append('SOURCE_SHA256:%d' % index)
+    admitted = utc_instant(admitted_utc)
+    if measured is not None:
+        if admitted is None:
+            violations.append('FRESHNESS_NOT_ESTABLISHED:NO_ADMISSION_TIME')
+        elif measured > admitted:
+            violations.append('MEASURED_AFTER_THE_ADMISSION')
+        elif (admitted - measured).total_seconds() > SPEND_FRESHNESS_SECONDS:
+            violations.append('STALE:%d_SECONDS' % int((admitted - measured).total_seconds()))
     found, summary = spend_violations(document.get('measured_spend_so_far_usd'))
     return violations + found, summary
 
 
-def review_receipt_violations(document, expected_bindings):
-    """A fresh reviewer's machine verdict on THIS reader revision and THESE pins. Prose is never read. Pure."""
+def closure_blobs(folder=None):
+    """`{name: git blob id}` of every REVIEW_CLOSURE_FILES member as it sits on disk here (None when absent)."""
+    folder = HERE if folder is None else Path(folder)
+    return {name: git_object_id((folder / name).read_bytes()) if (folder / name).is_file() else None
+            for name in REVIEW_CLOSURE_FILES}
+
+
+def review_receipt_violations(document, expected_bindings, facts=None):
+    """A fresh reviewer's machine verdict on THIS reader revision and THESE pins. Prose is never read. Pure.
+
+    Revision 4 (reader review fix 5, Codex R3-H). `facts` are git facts gathered by `review_facts`: whether the reviewed
+    commit resolves and is reachable from the freshly fetched tip of `reviewed_branch`, the closure blobs AT the
+    reviewed commit, the closure blobs running here, and (after a freeze) the writer blobs at the freeze commit. The
+    stated closure must equal all of them; no BLOCKER or MAJOR finding may be open."""
     if type(document) is not dict:
         return ['NOT_A_JSON_OBJECT']
     violations = []
@@ -1004,6 +1478,49 @@ def review_receipt_violations(document, expected_bindings):
         violations.append('SCHEMA_FIELDS_OR_LABEL')
     if document.get('verdict') != REVIEW_PASS:
         violations.append('VERDICT:' + str(document.get('verdict'))[:60])
+    findings = document.get('unresolved_findings')
+    if not (type(findings) is list and all(
+            type(item) is dict and sorted(item) == ['execution_consequence', 'id', 'severity']
+            and type(item['id']) is str and item['id'] and item['severity'] in REVIEW_SEVERITIES
+            and type(item['execution_consequence']) is str and item['execution_consequence'].strip()
+            for item in findings)):
+        violations.append('UNRESOLVED_FINDINGS_FORM')
+    else:
+        violations.extend('UNRESOLVED_BLOCKING_FINDING:' + item['id'][:40] for item in findings
+                          if item['severity'] in REVIEW_BLOCKING_SEVERITIES)
+    if not _branch(document.get('reviewed_branch')):
+        violations.append('REVIEWED_BRANCH')
+    provenance = document.get('reviewer_provenance')
+    if not (type(provenance) is dict and sorted(provenance) == ['reference', 'source']
+            and all(type(value) is str and value.strip() for value in provenance.values())):
+        violations.append('REVIEWER_PROVENANCE')
+    if document.get('attribution') != {'builder': LABEL, 'independence': INDEPENDENCE_LABEL}:
+        violations.append('ATTRIBUTION')
+    if not (type(document.get('scope')) is str and document['scope'].strip()):
+        violations.append('SCOPE')
+    closure = document.get('closure')
+    if not (type(closure) is dict and sorted(closure) == sorted(REVIEW_CLOSURE_FILES)
+            and all(_hex(value, 40) for value in closure.values())):
+        violations.append('CLOSURE_FORM')
+        closure = None
+    if type(facts) is not dict:
+        violations.append('REVIEW_FACTS_NOT_GATHERED')
+    else:
+        if facts.get('reviewed_commit_resolves') is not True:
+            violations.append('REVIEWED_COMMIT_NOT_RESOLVED')
+        if facts.get('reviewed_commit_pushed') is not True:
+            violations.append('REVIEWED_COMMIT_NOT_ON_THE_FETCHED_REVIEWED_BRANCH')
+        if closure is not None:
+            at_commit = facts.get('closure_at_reviewed_commit') or {}
+            running = facts.get('closure_running') or {}
+            violations.extend('CLOSURE_IS_NOT_THE_REVIEWED_COMMIT:' + name for name in REVIEW_CLOSURE_FILES
+                              if at_commit.get(name) != closure[name])
+            violations.extend('CLOSURE_IS_NOT_WHAT_RUNS_HERE:' + name for name in REVIEW_CLOSURE_FILES
+                              if running.get(name) != closure[name])
+            at_freeze = facts.get('writer_blobs_at_freeze')
+            if at_freeze is not None:
+                violations.extend('WRITER_IS_NOT_THE_ONE_THAT_WROTE_THE_FREEZE:' + name for name in WRITER_FILES
+                                  if (at_freeze or {}).get(name) != closure[name])
     if not (same(document.get('reviewed_reader_sources_sha256'), expected_bindings.get('reader_sources_sha256'))
             and document.get('reviewed_reader_source_sha256') == expected_bindings.get('reader_source_sha256')):
         violations.append('NOT_THIS_READER_REVISION')
@@ -1021,11 +1538,13 @@ def review_receipt_violations(document, expected_bindings):
     return violations
 
 
-def prerequisite_violations(prerequisites, receipts, *, expected_bindings, policy, manifest, job):
+def prerequisite_violations(prerequisites, receipts, *, expected_bindings, policy, manifest, job, admitted_utc=None):
     """`(reasons, spend)`. Each prerequisite must be PASS AND its committed receipt must check out. Pure.
 
     `receipts` is `read_prerequisite_receipts`' output: `{name: {'commit', 'path', 'raw'}}`, one entry only for a receipt
     that git holds at a commit anchored in HEAD's (or the receipt commit's) history or the pinned policy commit's.
+    Revision 4: the budget entry also carries `'sources'` (each source's opened committed bytes, or None) and the
+    review entry carries `'facts'` (`review_facts`); `admitted_utc` is the admission time the spend must be fresh for.
     """
     reasons, spend = [], None
     prerequisites = prerequisites if type(prerequisites) is dict else {}
@@ -1058,9 +1577,10 @@ def prerequisite_violations(prerequisites, receipts, *, expected_bindings, polic
         elif name == 'final_launch_packet_frozen':
             found = packet_receipt_violations(raw, manifest)
         elif name == 'budget_headroom_verified':
-            found, summary = spend_record_violations(load_object(raw), job)
+            found, summary = spend_record_violations(load_object(raw), job, opened_sources=receipt.get('sources'),
+                                                     admitted_utc=admitted_utc)
         elif name == 'fresh_review_of_this_revision':
-            found = review_receipt_violations(load_object(raw), expected_bindings)
+            found = review_receipt_violations(load_object(raw), expected_bindings, receipt.get('facts'))
         else:                                           # a name added to REQUIRED_PREREQUISITES without a checker
             found = ['NO_CHECKER']
         reasons.extend('PREREQUISITE_RECEIPT:' + name + ':' + item for item in found)
@@ -1069,22 +1589,53 @@ def prerequisite_violations(prerequisites, receipts, *, expected_bindings, polic
     return reasons, spend
 
 
+def anchored_blob(commit, path, anchors):
+    """Impure. The committed bytes at `commit:path` ONLY when `commit` is an ancestor of (or equal to) an anchor."""
+    if not (is_hex(commit, 40) and _relative_path(path)):
+        return None
+    if not any(git_ok('merge-base', '--is-ancestor', commit, anchor) for anchor in anchors):
+        return None
+    return show(commit, path) if has_object(commit, path) else None
+
+
+def review_facts(document, *, freeze_commit=None):
+    """Impure (git only; the caller fetched the reviewed branch first). The facts `review_receipt_violations` checks."""
+    document = document if type(document) is dict else {}
+    commit, branch = document.get('reviewed_commit'), document.get('reviewed_branch')
+    resolves = is_hex(commit, 40) and git_ok('cat-file', '-e', commit + '^{commit}')
+    pushed = bool(resolves and _branch(branch) and git_ok('merge-base', '--is-ancestor', commit, tracking_ref(branch)))
+    return {'reviewed_commit_resolves': resolves, 'reviewed_commit_pushed': pushed,
+            'closure_at_reviewed_commit': {name: blob_id(commit, HERE_REL + '/' + name)
+                                           if resolves and has_object(commit, HERE_REL + '/' + name) else None
+                                           for name in REVIEW_CLOSURE_FILES},
+            'closure_running': closure_blobs(),
+            'writer_blobs_at_freeze': None if freeze_commit is None else {
+                name: blob_id(freeze_commit, HERE_REL + '/' + name)
+                if has_object(freeze_commit, HERE_REL + '/' + name) else None for name in WRITER_FILES}}
+
+
 def read_prerequisite_receipts(raw, *, anchors):
     """Impure. For each prerequisite of the admission record `raw`: the receipt's bytes, read with
     `git show <receipt_commit>:<receipt_path>`, ONLY when that commit is an ancestor of (or equal to) one of `anchors`.
-    A missing, malformed or unanchored receipt is simply absent; the pure check then names it."""
+    A missing, malformed or unanchored receipt is simply absent; the pure check then names it.
+    Revision 4: the budget receipt's sources are opened the same way (fix 4) and the review receipt's git facts are
+    gathered (fix 5)."""
     record = load_object(raw)
     prerequisites = record.get('prerequisites') if record and type(record.get('prerequisites')) is dict else {}
     receipts = {}
     for name in REQUIRED_PREREQUISITES:
         entry = prerequisites.get(name) if type(prerequisites.get(name)) is dict else {}
         commit, path = entry.get('receipt_commit'), entry.get('receipt_path')
-        if not (is_hex(commit, 40) and _relative_path(path)):
+        found = anchored_blob(commit, path, anchors)
+        if found is None:
             continue
-        if not any(git_ok('merge-base', '--is-ancestor', commit, anchor) for anchor in anchors):
-            continue
-        if has_object(commit, path):
-            receipts[name] = {'commit': commit, 'path': path, 'raw': show(commit, path)}
+        receipts[name] = {'commit': commit, 'path': path, 'raw': found}
+        document = load_object(found) or {}
+        if name == 'budget_headroom_verified' and type(document.get('sources')) is list:
+            receipts[name]['sources'] = [anchored_blob(item.get('commit'), item.get('path'), anchors)
+                                         if type(item) is dict else None for item in document['sources']]
+        elif name == 'fresh_review_of_this_revision':
+            receipts[name]['facts'] = review_facts(document)
     return receipts
 
 
@@ -1141,7 +1692,8 @@ def execution_admission_state(raw, *, expected_bindings, owner_state, policy, ma
             reasons.append('ADMISSION_BINDING:' + key)
     prerequisites = record.get('prerequisites') if type(record.get('prerequisites')) is dict else {}
     found, spend = prerequisite_violations(prerequisites, receipts, expected_bindings=expected_bindings, policy=policy,
-                                           manifest=manifest, job=recorded_job)
+                                           manifest=manifest, job=recorded_job,
+                                           admitted_utc=record.get('admitted_utc'))
     reasons.extend(found)
     reasons.extend(policy_freeze_violations(policy, manifest, launch_request, expected_bindings, prerequisites))
     if recorded == ADMITTED and not (type(record.get('admitted_by')) is str and record['admitted_by'].strip()

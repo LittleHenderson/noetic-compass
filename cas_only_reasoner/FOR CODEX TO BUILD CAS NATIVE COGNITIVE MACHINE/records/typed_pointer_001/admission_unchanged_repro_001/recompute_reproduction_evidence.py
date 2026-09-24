@@ -32,6 +32,13 @@ MODES.
                      and a corrupt reference -- `repro_common.ACCEPTANCE_CASES`, in that order. Writes one acceptance
                      receipt (READER_ACCEPTANCE_PASS only when every registered case is present, in order, and passed).
 
+REVISION 4 (reader revision 4; still WRITTEN, NOT RUN). A refusal is validated on the COMPLETE exception message
+against the published allowlist before any display is truncated (fix 1); the environment also records the Python
+implementation, the machine architecture and the GPU compute capability for the environment lock (fix 6); every
+acceptance expectation comes from `common.ACCEPTANCE_EXPECTED`, PASS requires every case's observed fields to match
+it, and changed-buffer prints its buffer count (fix 7, R3-C). The P1b package must ship
+`historical_refusal_allowlist.json` beside the three reader sources (it is read at import and covered by the digest).
+
 FAILS CLOSED. Before torch is imported: `GPU_REQUIRED:LINUX_WORKER_REQUIRED` off Linux (so the laptop can never get as
 far as a torch import) and `GPU_REQUIRED:EXPLICIT_ENABLE_REQUIRED` unless CAS_META2_RUN_TEACHING_CYCLE=1. After:
 `GPU_REQUIRED:CUDA_NOT_AVAILABLE_NO_CPU_FALLBACK` and `GPU_REQUIRED:EXACTLY_ONE_VISIBLE_GPU`. Determinism is set as the
@@ -166,15 +173,18 @@ def walk_rows(value, is_tensor, tensor_row, path=()):
 def classify_prediction_error(error):
     """`(status, reason)` for an exception raised while predicting one panel record (review MAJOR 3). Pure.
 
-    Only a plain ValueError carrying a historical `require` code (POINTER_... or TYPED_...) is model behaviour: status
-    REFUSED, and it stays a panel record. Anything else -- a CUDA fault, out of memory, a TypeError, a ValueError with no
-    historical code -- is an infrastructure fault: status ERROR, and the producer reports it, so the evidence is invalid
-    (ADMISSION_INVALID_STOP), never a valid mismatch and never fallback B.
+    Only a plain ValueError whose COMPLETE message is on the published historical allowlist is model behaviour: status
+    REFUSED, the full message is stored, and it stays a panel record. Anything else -- a CUDA fault, out of memory, a
+    TypeError, a ValueError with no historical code, a coded message followed by added prose or a newline -- is an
+    infrastructure fault: status ERROR, and the producer reports it, so the evidence is invalid (ADMISSION_INVALID_STOP),
+    never a valid mismatch and never fallback B.
+    Revision 4 (reader review fix 1, Codex R3-B): the WHOLE message is validated first; only the display of an ERROR
+    row is truncated, afterwards. Before, the check ran on the first 300 characters.
     """
-    reason = str(error)[:300]
-    if type(error) is ValueError and common.is_historical_refusal(reason):
-        return 'REFUSED', reason
-    return common.PANEL_INFRASTRUCTURE_FAULT, type(error).__name__ + ':' + reason
+    message = str(error)
+    if type(error) is ValueError and common.is_historical_refusal(message):
+        return 'REFUSED', message
+    return common.PANEL_INFRASTRUCTURE_FAULT, type(error).__name__ + ':' + message[:300]
 
 
 def grader_digest(checked):
@@ -325,8 +335,11 @@ def driver_version():
 
 def environment(torch, device):
     import numpy
+    capability = torch.cuda.get_device_capability(device)
     return {'platform_system': platform.system(), 'platform_release': platform.release(),
             'python_version': platform.python_version(), 'device': str(device),
+            'python_implementation': platform.python_implementation(), 'machine': platform.machine(),   # revision 4
+            'compute_capability': '%d.%d' % (int(capability[0]), int(capability[1])),                 # revision 4
             'visible_gpu_count': torch.cuda.device_count(), 'torch_version': str(torch.__version__),
             'cuda_version': torch.version.cuda, 'cudnn_version': torch.backends.cudnn.version(),
             'gpu_name': torch.cuda.get_device_name(device), 'numpy_version': numpy.__version__,
@@ -547,8 +560,15 @@ def reading_mode(args):
 # ---------------------------------------------------------------------------------------------------------------------
 # P1 reader acceptance: synthetic variants of the PUBLIC reference checkpoint, each with its registered verdict.
 # ---------------------------------------------------------------------------------------------------------------------
+def expected(case):
+    """`(verdict, levels)` of one case, from the frozen table `common.ACCEPTANCE_EXPECTED` (revision 4, fix 7)."""
+    row = common.ACCEPTANCE_EXPECTED[case]
+    return row['verdict'], dict(row['levels'])
+
+
 def acceptance_specs(torch):
-    """`[(case, mutate(payload), expected verdict, expected levels)]`. Every variant also gets a new envelope."""
+    """`[(case, mutate(payload), expected verdict, expected levels)]`. Every variant also gets a new envelope.
+    Revision 4: the verdicts and levels are read from the frozen table, never written here."""
     def nudge(tensor):
         flat = tensor.reshape(-1)
         flat[0] = torch.nextafter(flat[0], torch.tensor(float('inf'), dtype=tensor.dtype))
@@ -560,19 +580,14 @@ def acceptance_specs(torch):
     def retype(payload):
         payload['model_state']['round_rate'] = payload['model_state']['round_rate'].to(torch.float64)
 
-    return [
-        ('equal_state_different_envelope', lambda p: None, common.REPRODUCED,
-         {'file': False, 'learned_state': True, 'output': True, 'continuation': True}),
-        ('continuation_only_different', lambda p: nudge(p['optimizer_state']['state'][0]['exp_avg']),
-         common.REPRODUCED, {'learned_state': True, 'output': True, 'continuation': False}),
-        ('changed_value', lambda p: nudge(p['model_state']['round_rate']), common.DOES_NOT_REPRODUCE,
-         {'learned_state': False}),
-        ('changed_encoder_state', lambda p: nudge(p['encoder_state']['readout']), common.DOES_NOT_REPRODUCE,
-         {'learned_state': False}),
-        ('missing_key', lambda p: p['model_state'].pop('round_rate'), common.INVALID_STOP, {'learned_state': False}),
-        ('dtype_change', retype, common.INVALID_STOP, {'learned_state': False}),
-        ('altered_output', flip_heads, common.DOES_NOT_REPRODUCE, {'learned_state': False, 'output': False}),
-    ]
+    mutations = [('equal_state_different_envelope', lambda p: None),
+                 ('continuation_only_different', lambda p: nudge(p['optimizer_state']['state'][0]['exp_avg'])),
+                 ('changed_value', lambda p: nudge(p['model_state']['round_rate'])),
+                 ('changed_encoder_state', lambda p: nudge(p['encoder_state']['readout'])),
+                 ('missing_key', lambda p: p['model_state'].pop('round_rate')),
+                 ('dtype_change', retype),
+                 ('altered_output', flip_heads)]
+    return [(case, mutate, *expected(case)) for case, mutate in mutations]
 
 
 def build_variant(ctx, payload, work, name, mutate):
@@ -643,11 +658,11 @@ def acceptance_mode(args):
             write_new(work / (case + '.evidence.json'), encode(evidence))
             cases.append(judge(case, evidence, ctx, record_metadata=record_metadata, **expected))
 
+        verdict, levels = expected('self_identity')
         record('self_identity', evidence_for(reference, deepcopy(reference), found, common.REFERENCE_FINAL_PT_SHA256,
                                              common.HELM2_JOB),
                job=common.HELM2_JOB, candidate_sha256=common.REFERENCE_FINAL_PT_SHA256,
-               expected_verdict=common.REPRODUCED,
-               expected_levels={'file': True, 'learned_state': True, 'output': True, 'continuation': True})
+               expected_verdict=verdict, expected_levels=levels)
         payload = torch.load(io.BytesIO(reference_raw), map_location='cpu', weights_only=True)
         envelope_evidence = None
         for case, mutate, verdict, levels in acceptance_specs(torch):
@@ -665,18 +680,24 @@ def acceptance_mode(args):
         # a SYNTHETIC buffer case. This case passes ONLY while the restored reference really has no buffers; if one
         # ever appears, the acceptance FAILS until a real changed-buffer variant is built (revision 3, MINOR 6).
         buffers = reference.get('buffers')
+        count = len(buffers) if type(buffers) is list else None
+        print(json.dumps({'changed_buffer': common.VACUOUS, 'reference_buffer_count': count}), flush=True)  # R3-C
         cases.append({'case': 'changed_buffer', 'status': common.VACUOUS, 'reference_buffers': buffers,
-                      'pass': buffers == [],
-                      'why': 'no registered buffers in the historical architecture; nothing to change'})
+                      'reference_buffer_count': count,
+                      'pass': buffers == [] and count == common.ACCEPTANCE_EXPECTED['changed_buffer'][
+                          'reference_buffer_count'],
+                      'why': ('the restored historical reference has exactly zero persistent buffers, so there is '
+                              'nothing to change; VACUOUS is not evidence that altered buffers were tested')})
         if envelope_evidence is not None:           # state equal, one answer tampered: output never overridden
             tampered = json.loads(encode(envelope_evidence))
             row = tampered['sides']['candidate']['panel'][0]
             row['answer'] = {**row['answer'], 'tampered_by_acceptance': True}
             tampered['producer_levels'] = producer_levels(tampered['sides']['reference'],
                                                           tampered['sides']['candidate'], ctx.manifest)
+            verdict, levels = expected('state_equal_output_tampered')
             record('state_equal_output_tampered', tampered, job=ACCEPTANCE_JOB,
                    candidate_sha256=tampered['inputs']['candidate']['sha256'],
-                   expected_verdict=common.DOES_NOT_REPRODUCE, expected_levels={'learned_state': True, 'output': False})
+                   expected_verdict=verdict, expected_levels=levels)
         corrupt = bytearray(reference_raw)
         corrupt[len(corrupt) // 2] ^= 0x01
         corrupt_path = work / 'corrupt_reference.pt'
@@ -685,12 +706,15 @@ def acceptance_mode(args):
         del corrupt, reference_raw
         broken, more = load_side(ctx, path=corrupt_path, expected_sha256=common.REFERENCE_FINAL_PT_SHA256,
                                  label='REFERENCE')
+        verdict, levels = expected('corrupt_reference')
         record('corrupt_reference', evidence_for(broken, deepcopy(reference), more, common.REFERENCE_FINAL_PT_SHA256,
                                                  common.HELM2_JOB),
                job=common.HELM2_JOB, candidate_sha256=common.REFERENCE_FINAL_PT_SHA256,
-               expected_verdict=common.INVALID_STOP, expected_levels={})
+               expected_verdict=verdict, expected_levels=levels)
+    # Revision 4 (fix 7): PASS only when every case's OBSERVED fields match the frozen table (the reader re-checks).
     passed = ([case.get('case') for case in cases] == list(common.ACCEPTANCE_CASES)
-              and all(case['pass'] is True for case in cases))
+              and all(case['pass'] is True for case in cases)
+              and not [item for case in cases for item in common.acceptance_case_violations(case)])
     receipt = {'schema': common.ACCEPTANCE_SCHEMA, 'label': common.LABEL,
                'status': common.ACCEPTANCE_PASS if passed else common.ACCEPTANCE_FAIL, 'cases': cases,
                'registered_cases': list(common.ACCEPTANCE_CASES),
