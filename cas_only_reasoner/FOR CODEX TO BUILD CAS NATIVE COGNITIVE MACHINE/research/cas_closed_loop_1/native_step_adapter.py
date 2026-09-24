@@ -1,0 +1,185 @@
+"""One bounded host actuator; native state and return authority stay upstream.
+
+This trusted-host adapter counts calls it actually invokes and observes the
+resulting native events. Calls, transition events, reserved work and actual
+primitive work are different quantities. No ASOM/calibration claim is made.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timezone
+import re
+import time
+
+from cncm.canonical import digest
+from cncm.compound_engine import CompoundMachine
+from cncm.model import TerminalStatus
+
+
+PROFILE = "cas.closed-loop.native-stage/0.1"
+UNIT = "native_host_step_invocation"
+_SHA = re.compile(r"[0-9a-f]{64}\Z")
+
+
+class GrantRefused(ValueError):
+    """No native call was made for this request."""
+
+
+class NativeStepFailed(RuntimeError):
+    """Native execution failed; the receipt retains observations, not a verdict."""
+
+    def __init__(self, receipt):
+        super().__init__("NATIVE_STEP_FAILED")
+        self.receipt = receipt
+
+
+@dataclass(frozen=True, slots=True)
+class StepGrant:
+    run_id: str
+    state_hash: str
+    logical_tick: int
+    calls: int
+    allow_acquisition: bool
+    actuator_enabled: bool = True
+
+    def __post_init__(self):
+        if type(self.run_id) is not str or not self.run_id or len(self.run_id) > 128:
+            raise GrantRefused("RUN_ID_INVALID")
+        if type(self.state_hash) is not str or _SHA.fullmatch(self.state_hash) is None:
+            raise GrantRefused("STATE_HASH_INVALID")
+        if type(self.logical_tick) is not int or self.logical_tick < 0:
+            raise GrantRefused("TICK_INVALID")
+        if type(self.calls) is not int or self.calls not in (0, 1):
+            raise GrantRefused("ONE_HOST_CALL_MAXIMUM")
+        if type(self.allow_acquisition) is not bool or type(self.actuator_enabled) is not bool:
+            raise GrantRefused("ACTUATOR_FLAGS_INVALID")
+
+
+def _require_machine(machine):
+    if type(machine) is not CompoundMachine:
+        raise GrantRefused("EXACT_COMPOUND_MACHINE_REQUIRED")
+
+
+def grant_for(machine, *, calls, allow_acquisition, actuator_enabled=True):
+    """Bind a proposal to the current snapshot. This does not execute work."""
+    _require_machine(machine)
+    state = machine.state
+    return StepGrant(state.run_id, state.state_hash, state.logical_tick, calls,
+                     allow_acquisition, actuator_enabled)
+
+
+def runtime_location(machine):
+    """Read exact native identities; do not choose or execute a return target.
+
+    This is the runtime half of the later atlas binding. No fabricated atlas
+    node or profile is supplied. The existing native frame owns its return.
+    """
+    _require_machine(machine)
+    state = machine.state
+    root = state.compound_call
+    body = {
+        "schema": "cas.closed-loop.runtime-location/0.1",
+        "run_id": state.run_id,
+        "source_profile": machine.profile.profile_digest,
+        "state_hash": state.state_hash,
+        "logical_tick": state.logical_tick,
+        "problem_hash": machine.problem.input_hash,
+        "root_goal": machine.problem.reasoning.goal_id,
+        "root_call": root.to_dict() if root is not None else None,
+        "frames": [frame.to_dict() for frame in state.rpm_stack],
+        "current_native_budget": state.native_budget.to_dict(),
+        "atlas_binding": None,
+        "profile_coordinates": None,
+        "authority": "READ_ONLY_LOCATION_NOT_A_RESUME_TOKEN",
+    }
+    return {**body, "location_digest": digest(body)}
+
+
+def execute_grant(machine, grant):
+    """Invoke at most one existing host step; never write native state directly.
+
+    A call may produce several native events. That is why the allocation unit
+    is a host invocation, not an instruction or transition event. Upstream
+    coordinator budgets, checks, failure handling and commitment remain active.
+    Returned dictionaries are observations; they cannot authorize replay/resume.
+    """
+    _require_machine(machine)
+    if type(grant) is not StepGrant:
+        raise GrantRefused("TYPED_GRANT_REQUIRED")
+    began = time.monotonic_ns()
+    started_utc = datetime.now(timezone.utc).isoformat()
+    before = machine.state
+    if (grant.run_id, grant.state_hash, grant.logical_tick) != (
+            before.run_id, before.state_hash, before.logical_tick):
+        raise GrantRefused("STALE_OR_FOREIGN_GRANT")
+    if before.halt_status is not TerminalStatus.RUNNING:
+        raise GrantRefused("EPISODE_NOT_RUNNING")
+    location_before = runtime_location(machine)
+    old_events = machine.coordinator.trace.events
+    invoked = 0
+    native_ns = 0
+    fault = None
+    if grant.calls and grant.actuator_enabled:
+        call_started = time.monotonic_ns()
+        invoked += 1
+        try:
+            machine.advance(allow_acquisition=grant.allow_acquisition)
+        except Exception as error:
+            fault = error
+        finally:
+            native_ns = time.monotonic_ns() - call_started
+    after = machine.state
+    all_events = machine.coordinator.trace.events
+    if all_events[:len(old_events)] != old_events:
+        raise RuntimeError("NATIVE_TRACE_PREFIX_CHANGED")
+    events = all_events[len(old_events):]
+    previous_hash = before.state_hash
+    for event in events:
+        if (event.run_id != before.run_id or not event.sealed
+                or event.event_hash != event.computed_hash()
+                or event.pre_state_hash != previous_hash):
+            raise RuntimeError("NATIVE_EVENT_CHAIN_INVALID")
+        previous_hash = event.post_state_hash
+    if previous_hash != after.state_hash:
+        raise RuntimeError("NATIVE_STATE_NOT_BOUND_TO_OBSERVED_EVENTS")
+    instructions = (before.native_budget.instructions_remaining
+                    - after.native_budget.instructions_remaining)
+    checkers = (before.native_budget.checker_calls_remaining
+                - after.native_budget.checker_calls_remaining)
+    if instructions < 0 or checkers < 0:
+        raise RuntimeError("NATIVE_BUDGET_INCREASED_WITHIN_STEP")
+    location_after = runtime_location(machine)
+    elapsed_ns = time.monotonic_ns() - began
+    receipt = {
+        "schema": "cas.closed-loop.native-step-receipt/0.1",
+        "profile": PROFILE,
+        "window": {"started_utc": started_utc, "elapsed_ns": elapsed_ns,
+                   "native_call_ns": native_ns, "wrapper_observation_ns": elapsed_ns - native_ns},
+        "unit": UNIT,
+        "I_predicted": None,
+        "I_allocated": grant.calls,
+        "I_executed": invoked,
+        "actuator_enabled": grant.actuator_enabled,
+        "allow_acquisition": grant.allow_acquisition,
+        "before": location_before,
+        "after": location_after,
+        "native_event_count": len(events),
+        "native_event_refs": [{"event_id": e.event_id, "event_hash": e.event_hash,
+                               "run_id": e.run_id, "logical_tick": e.logical_tick,
+                               "pre_state_hash": e.pre_state_hash,
+                               "post_state_hash": e.post_state_hash} for e in events],
+        "charged_native_policy_units": {"instructions": instructions, "checker_calls": checkers},
+        "actual_primitive_work": None,
+        "actual_primitive_work_status": "NOT_JOINED_USE_EXISTING_EVENT_BOUND_CATALOG",
+        "native_halt_status": after.halt_status.value,
+        "native_commitment_status": after.commitment_state.decision_status,
+        "diagnostic_availability": "UNASSESSED",
+        "asom": None,
+        "semantic_verdict": "NOT_INFERRED_BY_ADAPTER",
+        "execution_status": "INVALID_NATIVE_ERROR" if fault else "OBSERVED",
+        "error_type": type(fault).__name__ if fault else None,
+        "limits": "Host invocation count is not total compute, calibrated attention or proof of task success.",
+    }
+    if fault is not None:
+        raise NativeStepFailed(receipt) from fault
+    return receipt

@@ -2,8 +2,8 @@
   "schema": "cas.closed-loop.status/0.1",
   "utc": "2026-09-24T17:05:27.059320+00:00",
   "T01": "SOURCE_BINDINGS_PREPARED_STATIC_IDENTITY_CHECKED",
-  "T02": "CONTRACT_SELECTED_EXECUTABLE_ACCEPTANCE_PENDING",
-  "T03_T07": "NOT_IMPLEMENTED_IN_THIS_LANE",
+  "T02": "CONTRACT_AND_TYPED_GRANT_IMPLEMENTED_TESTS_NOT_RUN",
+  "T03_T07": "FIRST_HOST_ACTUATOR_AND_OBSERVATION_BOUNDARY_IMPLEMENTED; OHM/PCBA/ACTUAL_WORK_JOIN/ATLAS/DEMO_PENDING",
   "T08": "CLAUDE_Q4_OWNER_PENDING_SAVED_PUBLIC_SUMMARY",
   "T09_T12": "NOT_STARTED",
   "package_sha256": "e6469c4e4d275b79eae387951dd8405e964ed784caf97c6b2c10ad00677fcf0d",
@@ -15,5 +15,11 @@
   "new_paid_jobs": 0,
   "active_study_mutations": 0,
   "protected_material_read": false,
-  "next_missing_link": "Typed grant -> existing native step -> independently observed event -> existing atlas exact-return binding"
+  "next_missing_link": "Ohm prediction to admitted typed grant, event-bound actual-work catalog and atlas return binding",
+  "first_adapter_files": [
+    "native_step_adapter.py",
+    "test_native_step_adapter.py"
+  ],
+  "next_aws_acceptance_command": "python -m pytest research/cas_closed_loop_1/test_native_step_adapter.py",
+  "runtime_validation": "PENDING_CLAUDE_AWS_RUNNER"
 }

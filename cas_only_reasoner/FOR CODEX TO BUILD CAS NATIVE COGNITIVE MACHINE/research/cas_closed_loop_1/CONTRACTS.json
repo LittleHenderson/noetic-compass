@@ -1,6 +1,6 @@
 {
   "schema": "cas.closed-loop.contracts/0.1",
-  "status": "M1_SELECTED_CONTRACT_RUNTIME_ADAPTER_NOT_IMPLEMENTED",
+  "status": "M1_CONTRACT_AND_FIRST_HOST_ADAPTER_IMPLEMENTED_RUNTIME_ACCEPTANCE_PENDING",
   "runtime": "cncm.compound-journal/0.5",
   "profile": "cas.closed-loop.native-stage/0.1",
   "authority": "Only existing CompoundCoordinator commits native state; reference controller can propose allocation, renderer cannot resume callers",
@@ -19,18 +19,18 @@
     ]
   },
   "quantity_contract": {
-    "unit": "native_transition_attempt",
+    "unit": "native_host_step_invocation",
     "window": "one explicitly identified host-step observation window; event interval and monotonic wall interval retained separately",
     "I_predicted": "Declared design prediction via pinned compiler Ohm facade, separately sourced V/R; not derived from I_executed",
     "I_allocated": "Integer grant for at most one permitted next native stage in this first profile; allocation alone creates no event",
-    "I_executed": "Observed coordinator trace event occurrences from the invoked native step, including rejected attempts; zero when actuator disabled",
+    "I_executed": "Calls entered by the host adapter, instrumented at actual invocation. Separately report the resulting native transition events; disabled/zero grants invoke no call.",
     "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
     "independence": "Observe executor trace after invocation, not by copying grant or substituting Ohm output",
     "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met"
   },
   "first_actuator": {
     "operation": "CompoundMachine.advance(allow_acquisition=...) through one typed, budget-masked host-step adapter",
-    "scope": "Positive grant permits one next existing native stage; zero/disabled grant performs no advance; acquisition flag only permits the existing acquisition transition",
+    "scope": "Positive grant permits one invocation of the existing native host; an invocation can produce multiple native transition events. Zero/disabled grant performs no advance. Native instruction/checker budgets remain binding.",
     "native_budget": "Current native budget remains binding; wrapper cannot reset, refund or exceed it; exact deeper work still charged by coordinator",
     "not_supported": [
       "Arbitrary PCBA passive transfer execution",
