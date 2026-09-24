@@ -1,8 +1,8 @@
 {
   "schema": "codex.helm-controlled-prelaunch-execution-manifest/0.1",
-  "status": "NOT_READY",
+  "status": "OWNER_AUTHORIZED_NOT_READY_TO_EXECUTE",
   "launch_enabled": false,
-  "new_launch_authorized": false,
+  "new_launch_authorized": true,
   "scope": "Preparation only. No tests, model runs, builds, checkpoint loads, protected-file access or cloud jobs were executed by this preparation. The proposed C comparison has four new main jobs and two reused historical controls; conditional B adds two fresh unchanged jobs. Q4 is excluded.",
   "reviewed_snapshots": {
     "integration": "197caa322d20ae6830928b20c5b16933e93cd00d",
@@ -10,7 +10,7 @@
     "observed_launch_records": "1fcc15e5fe0183da4572741e4efa675698640ab5",
     "observed_smoke_source": "3df31d965bb2eabb168ae7efbf03300a1a1144d7"
   },
-  "chosen_comparison_for_request": "C_ONE_FRESH_REPRODUCTION_CONTROL_THREE_REPAIRED_TWO_REUSED_HISTORICAL_CONTROLS_WITH_CONDITIONAL_B_FALLBACK_PENDING_OWNER_APPROVAL",
+  "chosen_comparison_for_request": "C_ONE_FRESH_REPRODUCTION_CONTROL_THREE_REPAIRED_TWO_REUSED_HISTORICAL_CONTROLS_WITH_CONDITIONAL_B_FALLBACK_PENDING_TECHNICAL_ADMISSION",
   "final_freeze": {
     "study_source_commit": null,
     "control_admission_sha256": null,
@@ -25,15 +25,15 @@
     "hset2_feasibility_receipt_sha256": null,
     "larger_route_gpu_acceptance_receipt_sha256": null,
     "corrected_analogy_probe_source_sha256": null,
-    "approved_launch_request_sha256": null,
     "status": "NOT_READY_REQUIRED_BINDINGS_MISSING",
-    "expected_initialization_recipe_and_state_receipt_sha256": null
+    "expected_initialization_recipe_and_state_receipt_sha256": null,
+    "frozen_launch_packet_sha256": null
   },
   "freeze_policy": [
     "The final launch request must bind exact source commits, package hashes, public data hashes, initialization recipe, worker, checker, decoder, probe, environment, admission records and prerequisite receipts before any new main job.",
     "No branch tip, currently-hash label, null required binding, missing prerequisite or changed source may pass final admission.",
     "Future output hashes cannot exist before training and remain PENDING_RUNTIME. Bind generation recipes, expected learned-state references, initialization prerequisite receipt and validation rules before launch; append each produced initial/checkpoint identity and actual environment to a separately hashed run receipt. Capture and validate initial state before the first optimizer update. Reject mismatches under the predeclared policy before any claim-bearing read.",
-    "Any change to a frozen input invalidates only the affected acceptance receipts and requires a new explicit version, review and launch decision. Never weaken a predicate after observing a mismatch.",
+    "Any frozen-input change requires an explicit new version, affected acceptance checks and Claude technical admission under standing owner authority. Never weaken a predicate after observing a mismatch.",
     "Historical file identity, learned-state identity and output reproduction remain separate; see the accompanying checkpoint identity policy. Historical grader and historical OFF acceptance are unchanged."
   ],
   "historical_off_package": {
@@ -918,7 +918,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_FINAL_APPROVAL",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "7ca2043b152976d53e28cde6053f66bd240edd6761b4be80b7452979e3bf5c61",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -939,7 +939,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_APPROVED_BUDGET",
+      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_UNCHANGED_60_USD_CEILING_AND_VERIFIED_HEADROOM",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "dc5bec3d9d73c653567214dad20709280146d1c702f52f7c30775bba25f4d5d7",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -960,7 +960,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_APPROVED_BUDGET",
+      "execution_condition": "FALLBACK_B_ONLY_AFTER_VALID_REPRODUCTION_MISMATCH_AND_UNCHANGED_60_USD_CEILING_AND_VERIFIED_HEADROOM",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "e6b59487d96eca823766b5618d04339288ca7b0549d49d012f3ddfd9f235f3e0",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -981,7 +981,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_FINAL_APPROVAL",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "7ca2043b152976d53e28cde6053f66bd240edd6761b4be80b7452979e3bf5c61",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -1002,7 +1002,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_FINAL_APPROVAL",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "dc5bec3d9d73c653567214dad20709280146d1c702f52f7c30775bba25f4d5d7",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -1023,7 +1023,7 @@
       "final_file_sha256": null,
       "final_model_state_identity": null,
       "primary_endpoint": "final.pt_AFTER_1470_MAIN_UPDATES_BEFORE_INTERFERENCE",
-      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_FINAL_APPROVAL",
+      "execution_condition": "OPTION_C_BASELINE_JOB_AFTER_TECHNICAL_ADMISSION_UNDER_STANDING_AUTHORIZATION",
       "initial_capture_deadline": "Capture actual file and independently recomputed learned state before the first optimizer update; enforce frozen expected-state and recipe checks.",
       "historical_shared_state_reference": "e6b59487d96eca823766b5618d04339288ca7b0549d49d012f3ddfd9f235f3e0",
       "historical_reference_interpretation": "All 48 historical OFF state_dict entries; repaired arm compares its same-named shared subset exactly. Historical receipt hash must be independently recomputed from the pinned checkpoint on AWS.",
@@ -1041,7 +1041,7 @@
     "fallback_maximum_total_attempts": 11,
     "base_future_jobs": 7,
     "fallback_maximum_future_jobs": 9,
-    "note": "P1 is one T4 public-route, reader and probe validation job; P2 is one CPU HSET build job; E1 is one G7 readout job for 18 repaired probes, final checkpoints for three controls plus three repaired seeds, and H1/H2. This is a proposed envelope, not authorization or measured feasibility."
+    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling."
   },
   "subsequent_reviewed_snapshots": {
     "integration": "59d86443edc35bcf57368a99f602cd36530ca11d",
@@ -1049,5 +1049,12 @@
     "unchanged_reader_review": "0391a3073f02fb00819b0125a467aefad53ccf2e",
     "unchanged_reader_implementation": "cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82",
     "hset2_builder": "853e645d7b5da5551257c4271e10c90b5fdb254e"
-  }
+  },
+  "owner_authorization": {
+    "status": "STANDING_PROJECT_AUTHORIZATION",
+    "record": "OWNER_STANDING_AUTHORIZATION_20260924.json",
+    "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "further_owner_approval_required": false
+  },
+  "new_launch_authorized_scope": "Standing owner authority; execution separately requires launch_enabled and all technical checks."
 }

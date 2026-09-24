@@ -1,6 +1,6 @@
 # Larger-question route and checkpoint protocol
 
-Status: **NOT_READY — preparation only; no new launch is authorized.** This protocol describes the evidence needed before a new main comparison. It does not turn the existing source review into a device result. Q4 remains separate.
+Status: **OWNER_AUTHORIZED_NOT_READY_TO_EXECUTE — technical route evidence remains missing.** This protocol describes the evidence needed before a new main comparison. It does not turn the existing source review into a device result. Q4 remains separate.
 
 The exact source and public receipt pins are in `EXECUTION_MANIFEST.json`. The source snapshots are integration `197caa322d20ae6830928b20c5b16933e93cd00d`, builder `cc68d8b326ea772a7d93871e843a9bbacb4cee0e`, and observed launch records `1fcc15e5fe0183da4572741e4efa675698640ab5`. The observed smoke uses source `3df31d965bb2eabb168ae7efbf03300a1a1144d7`; its package is **not** the final main-training package. No checkpoint was deserialized, model or test executed, package built, protected file opened, or cloud job launched during this preparation.
 
@@ -36,13 +36,13 @@ The acceptance receipt must report all four checks, with exact source, fixture, 
 3. **Refusal before inference.** For fresh OFF and ON containers, all four refusal fixtures must produce the declared reason with zero calls to `GraphForward`.
 4. **Full learner route.** The original learner and inference subclass, constructed from the same seed, must have equal starting state and predictions on all 564 course questions. The subclass must process all 37 gradable fixtures, refuse all four out-of-scope fixtures without changing counters, and refuse both training entry points. The original learner's six-node correspondence refusal is expected. The existing check uses ON; it must not be presented as a full-learner OFF check.
 
-The study evaluation uses the common **bare-container** entry point from check 2. If the final study reader instead selects the subclass, extend its acceptance to both arms before approval. Every final trained checkpoint must additionally pass the same public route/schema checks before its HSET-2 predictions are accepted. This later check is an evaluation admission check, not permission to tune the model after TEST.
+The study evaluation uses the common **bare-container** entry point from check 2. If the final study reader instead selects the subclass, extend its acceptance to both arms before technical admission. Every final trained checkpoint must additionally pass the same public route/schema checks before its HSET-2 predictions are accepted. This later check is an evaluation admission check, not permission to tune the model after TEST.
 
 The final evaluation package must enforce source pins at its own entry point, including grading-only invocations. Import-time verification in the learner alone is insufficient when a caller can bypass that import.
 
 ## Training and starting-state contract
 
-The retained option C has **four new main jobs**: three repaired runs plus one fresh unchanged reproduction run at seed `20260917`. It reuses the historical unchanged controls at seeds `20260918` and `20260919`. A successful reproduction supports only seed `20260917` and that setup; it does not prove either reused control would reproduce. Option B is the stronger fresh-control comparison. Its conditional fallback adds fresh unchanged runs at seeds `20260918` and `20260919`, for six main jobs maximum, under the valid-mismatch rule in `REPRODUCTION_POLICY.md` and only within a later approved job and spending envelope. Invalid evidence stops admission; it does not authorize fallback.
+The retained option C has **four new main jobs**: three repaired runs plus one fresh unchanged reproduction run at seed `20260917`. It reuses the historical unchanged controls at seeds `20260918` and `20260919`. A successful reproduction supports only seed `20260917` and that setup; it does not prove either reused control would reproduce. Option B is the stronger fresh-control comparison. Its conditional fallback adds fresh unchanged runs at seeds `20260918` and `20260919`, for six main jobs maximum, under the valid-mismatch rule in `REPRODUCTION_POLICY.md` and only within the frozen job envelope, unchanged $60 ceiling and standing owner authority. Invalid evidence stops admission; it does not authorize fallback.
 
 Use the same course, tokenizer, schedule, optimizer settings and environment for every fresh run. The historical package and receipt pins remain references. A fresh OFF admission and repaired main package still need to be built and frozen. Preserve the historical-control limitation even if every C admission requirement passes.
 
@@ -81,7 +81,7 @@ The v0.2 probe has an unresolved normalization flaw: changing one candidate chan
 
 These 18 mechanism checks are also distinct from the worker's earlier practice-checkpoint restoration checks, which compare the registered core sub-block before the pointer learner is seeded.
 
-## Remaining evidence before final launch approval
+## Remaining evidence before technical launch admission
 
 - Actual HSET-2 informative-case counts and feasibility receipt, under the final threshold, grouping and multiple-claim rules. No actual HSET-2 build/count receipt was found in the bounded reviewed trees; the design's throwaway-salt numbers are not substitutes. Preserve A1, protected splits and all NOT_TESTABLE cells.
 - Reviewed and passing AWS route checks above, including a complete receipt rather than selected successful stages.
@@ -89,4 +89,4 @@ These 18 mechanism checks are also distinct from the worker's earlier practice-c
 - Main OFF and ON package identities, admission records, final evaluation reader and package, full resolved dependency/environment lock and bounded job request.
 - A complete spending and cleanup request, including four main C jobs, two conditional fresh-control fallback jobs, prerequisites, post-training evaluation, retained storage and explicit maximum charges. The proposed total envelope has two already-booked smoke attempts, one T4 public route/reader/probe prerequisite, one CPU HSET build, four C main jobs and one G7 readout job: **nine attempts in total, seven future jobs**. B fallback adds two jobs: **eleven attempts maximum, nine future jobs**. This count is a proposed envelope; runtime and cost feasibility still need proof. The readout covers eighteen repaired mechanism probes, three control finals plus three repaired finals, and H1/H2. The observed smoke's result is not inferred from its admission record.
 
-Until these exist, the JSON remains **NOT_READY**, `launch_enabled` remains false, and no main comparison should be presented as ready for final approval.
+Until these exist, the JSON remains **NOT_READY**, `launch_enabled` remains false, and no main comparison should be presented as ready to execute.

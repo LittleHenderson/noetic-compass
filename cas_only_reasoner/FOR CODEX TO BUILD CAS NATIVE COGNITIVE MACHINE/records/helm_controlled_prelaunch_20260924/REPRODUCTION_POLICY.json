@@ -15,7 +15,6 @@
   "file_mismatch_alone_triggers_fallback": false,
   "missing_or_invalid_evidence": "ADMISSION_INVALID_STOP",
   "valid_state_or_output_mismatch": "DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY",
-  "fallback_requires_named_plan_approval_and_headroom": true,
   "output_panel_manifest_sha256": null,
   "reader_source_sha256": null,
   "reader_acceptance_receipt_sha256": null,
@@ -28,7 +27,14 @@
     "proposed_decision_implemented": false,
     "plan_and_policy_gates_present": true,
     "approval_status_parser_review": "CHANGES_REQUIRED_V1",
-    "acceptance_execution_slot": "P1_PROPOSED_REQUIRES_AUTHORIZATION",
+    "acceptance_execution_slot": "P1_AUTHORIZED_PENDING_BOUNDED_TECHNICAL_ADMISSION",
     "competing_reader_created": false
-  }
+  },
+  "owner_authorization": {
+    "status": "STANDING_PROJECT_AUTHORIZATION",
+    "record": "OWNER_STANDING_AUTHORIZATION_20260924.json",
+    "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "further_owner_approval_required": false
+  },
+  "fallback_requires_frozen_plan_valid_mismatch_and_headroom": true
 }

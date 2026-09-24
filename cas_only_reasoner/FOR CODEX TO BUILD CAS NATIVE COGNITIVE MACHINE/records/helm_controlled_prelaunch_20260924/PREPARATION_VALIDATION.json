@@ -1,6 +1,6 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T04:49:57.997278+00:00",
+  "validated_utc": "2026-09-24T05:08:04.369104+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
@@ -10,6 +10,7 @@
     "EXECUTION_MANIFEST.json",
     "LAUNCH_REQUEST.json",
     "LEDGER_RECONCILIATION.json",
+    "OWNER_STANDING_AUTHORIZATION_20260924.json",
     "PREPARATION_VALIDATION.json",
     "REPRODUCTION_POLICY.json",
     "SMOKE_COMPLETION_RECONCILIATION.json",
@@ -19,7 +20,6 @@
   "launch_request_referenced_hashes_match": true,
   "main_plan_and_handoff_relative_links_exist": true,
   "git_diff_check": "PASS",
-  "hold_and_no_launch_flags_consistent": true,
   "slot_and_reservation_arithmetic": "PASS",
   "1470_plus_16_plus_2_equals_1488": true,
   "eighteen_unique_checkpoint_reads": true,
@@ -32,5 +32,16 @@
   "Claude_reported_tests_not_rerun": true,
   "bounded_document_review": "Five wording issues resolved: partial E1, postlaunch E1 receipts, reader nonconformance label, retention counted once, exact delivery commit linkage.",
   "content_commit": "7cd5ff9da02c7f6ae504b172c0321df80748d12f",
-  "committed_git_bytes_match_launch_hashes": true
+  "committed_git_bytes_match_launch_hashes": true,
+  "owner_authorization_granted_execution_disabled": true,
+  "standing_authority_update_checks": [
+    "statistical decision fields unchanged",
+    "same actual prerequisite blockers",
+    "same source/data/state/route/checkpoint pins",
+    "same reproduction tolerances and pending acceptance",
+    "A1/design untouched",
+    "C and $60 unchanged",
+    "shared ledger hash unchanged",
+    "authority and technical admission separate"
+  ]
 }

@@ -1,8 +1,8 @@
 {
   "schema": "helm-controlled-statistical-policy/v1",
-  "status": "PROPOSED_REQUIRES_FINAL_LAUNCH_REVIEW",
-  "launch_authorized": false,
-  "authority": "Owner's 2026-09-24 instruction to amend the draft; this review does not authorize a launch.",
+  "status": "POLICY_SPECIFIED_IMPLEMENTATION_AND_VALIDATION_PENDING",
+  "launch_authorized": true,
+  "authority": "Standing project authorization from the latest direct owner message; substantive statistical rules and missing results are unchanged.",
   "design": "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md#amendment-a2",
   "preserve_amendment_a1": true,
   "preserve_protected_splits": true,
@@ -82,5 +82,12 @@
     "six_losses_zero_gains_p": "1/64",
     "smallest_all_loss_detectable_count": 7,
     "preservation_or_noninferiority_claim": false
-  }
+  },
+  "owner_authorization": {
+    "status": "STANDING_PROJECT_AUTHORIZATION",
+    "record": "OWNER_STANDING_AUTHORIZATION_20260924.json",
+    "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
+    "further_owner_approval_required": false
+  },
+  "execution_ready": false
 }

@@ -1,6 +1,10 @@
 # Codex amendments to HELM-REPAIR-CONTROLLED-1 — 2026-09-24
 
-**Six proposed amendments are documented. Main comparison HELD; empirical readiness is incomplete.** No main training or unchanged reproduction is authorized by this delivery. [One consolidated launch draft](PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md) remains NOT_READY_FOR_FINAL_LAUNCH_APPROVAL. C and the $60 ceiling are retained. Q4 stays separate.
+**Six amendments are documented. Owner authorization is now STANDING; empirical readiness is incomplete.** Main training and unchanged reproduction remain held on technical prerequisites. [One consolidated launch draft](PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md) remains NOT_READY_TO_EXECUTE. C and the $60 ceiling are retained. Q4 stays separate.
+
+## Later owner instruction: standing approval
+
+The owner has now granted all current and future project approvals in advance. [Exact record](../../records/helm_controlled_prelaunch_20260924/OWNER_STANDING_AUTHORIZATION_20260924.md). This supersedes every earlier future-owner-approval requirement in this handoff and the prior coordination note. No repeated owner launch decision is needed. The remaining hold is technical: Claude must implement the policies, produce actual prerequisite results, freeze the final packet and verify the unchanged $60 limit. Claude retains custody and AWS execution; Q4 remains separate. The reader must distinguish standing authority from technical admission instead of treating a prose approval token as readiness.
 
 ## Current state and ownership
 
@@ -24,7 +28,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Checks actually performed:** read Claude's correction and current handoff; compared C/B seed and job counts; checked the plan retains $60 and does not infer seed-18/19 reproduction.
 
-**Remaining questions / Claude handoff:** acknowledge the revised C wording in the owned plan; do not switch to B or run fallback on missing evidence. The final owner decision must identify the exact amended envelope. No new design-choice question is being imposed before preparation finishes.
+**Remaining questions / Claude handoff:** acknowledge the revised C wording in the owned plan; do not switch to B or run fallback on missing evidence. The final technical admission must identify the exact amended envelope and standing authority. No new design-choice question is being imposed before preparation finishes.
 
 ## 2. Meaning of reproduced
 
@@ -84,7 +88,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Checks actually performed:** read both current bookings in the canonical dirty ledger and compared its committed baseline; rederived slot counts and cost arithmetic; verified public terminal smoke records and provider cleanup metadata. Corrected rounding of the smoke's conservative formula from $3.18 to **$3.19**, not an invoice. Training-only historical estimates are $29.39 C / $44.08 B. Add $19 prerequisite/readout maximum allocations and the $3.19 smoke bound: hybrid planning figures **$51.58 C / $66.27 B**, not measured expected totals. S0 retained and delay-related charges still require attribution within the evidence budget. B is not automatically funded within $60. Historical per-slot caps total $94/$124, but never override the aggregate $60 ceiling. Proposed ledger totals are $135/$165, including the existing $30; bookings are not spending.
 
-**Remaining questions / Claude handoff:** return actual prerequisite timings/results, packages and admissions, record-derived conservative incurred spending, reviewed $60 admission enforcement and $30-before-third-training stop, retention bounds and cleanup receipts. Current reader `--check` accepts operator-stated spend only and retains the old reproduction-after-three-ON order; those do not implement this proposed envelope. Reserve the next slot, unspent prerequisites and E1/cleanup before starting; retain honest COMPARISON_INCOMPLETE if further work does not fit. Keep evidence after the proposed30-day accounting window and explicitly state ongoing retention treatment in final approval; no automatic deletion. Preserve the two existing bookings without duplicating or blanket-committing the dirty ledger. Present the complete named request only after actual prerequisites and immutable prelaunch pins exist.
+**Remaining questions / Claude handoff:** return actual prerequisite timings/results, packages and admissions, record-derived conservative incurred spending, reviewed $60 admission enforcement and $30-before-third-training stop, retention bounds and cleanup receipts. Current reader `--check` accepts operator-stated spend only and retains the old reproduction-after-three-ON order; those do not implement this proposed envelope. Reserve the next slot, unspent prerequisites and E1/cleanup before starting; retain honest COMPARISON_INCOMPLETE if further work does not fit. Keep evidence after the proposed30-day accounting window and explicitly state ongoing retention treatment in final approval; no automatic deletion. Preserve the two existing bookings without duplicating or blanket-committing the dirty ledger. Freeze the complete named execution packet after actual prerequisites and immutable prelaunch pins exist; the owner has already authorized its in-scope execution.
 
 ## Delivery checks and limits
 

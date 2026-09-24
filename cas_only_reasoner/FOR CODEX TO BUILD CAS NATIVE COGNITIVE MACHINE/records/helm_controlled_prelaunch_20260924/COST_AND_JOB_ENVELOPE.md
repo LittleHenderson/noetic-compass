@@ -1,6 +1,6 @@
 # Helm controlled comparison: current cost evidence and proposed job envelope
 
-Status: **PREPARATION ONLY — NOT LAUNCH AUTHORITY.** This record accompanies the amended launch request. It does not start, retry, stop, delete or modify any cloud resource. The latest user instruction requires a corrected request before launch; an older approval quoted in source is not new authority for this review to execute it. Q4 is separate.
+Status: **STANDING OWNER AUTHORITY; MAIN EXECUTION NOT_READY.** [Authority record](OWNER_STANDING_AUTHORIZATION_20260924.md). No further owner consent is required for in-scope work; each job still needs its fixed package, technical admission and verified spending headroom. C and the $60 ceiling are unchanged. Q4 remains separate. This document starts or changes no resource.
 
 ## Current evidence
 
@@ -21,7 +21,7 @@ S1 retains 247 evidence objects, 55,932,238 bytes. Cleanup does not mean those r
 
 Cost Explorer's delayed account-wide figures do not establish this job's final bill. Admission must account for unpublished charges and retained storage. The owner-retained stopped instance `i-0c3028734c8885542` and its older 300 GiB volume remain outside this study's cleanup.
 
-The current coordination handoff at integration `59d86443edc35bcf57368a99f602cd36530ca11d` assigns Codex the six amendments and keeps preparation, custody and approved AWS execution with Claude. The main comparison remains **HELD**. The smoke was neither stopped nor repeated by this review.
+The current coordination handoff at integration `59d86443edc35bcf57368a99f602cd36530ca11d` assigns Codex the six amendments and keeps preparation, custody and approved AWS execution with Claude. The main comparison remains **HELD FOR TECHNICAL PREREQUISITES**, with standing owner authority now recorded. The smoke was neither stopped nor repeated by this review.
 
 ## Complete proposed slot count
 
@@ -38,7 +38,7 @@ The following slots are a proposed accounting envelope. P1, P2, M1–M6 and E1 h
 | M5–M6 | Two additional fresh unchanged controls if the predeclared C fallback is required, or B is chosen upfront | Each g7.2xlarge / 4 h / 75 GiB gp3 | $15 each | $15 each |
 | E1 | Eighteen repaired mechanism checkpoint reads, six final endpoints, historical gates, reader and custody checks | g7.2xlarge / 4 h / 75 GiB gp3 | $15 | $15 proposed |
 
-P2's protected-split operations stay with the existing Claude custodian, as the subsequent coordinator state records; builders and Codex receive public material only. This does not establish outside independence. P1 is a public-fixture job and cannot prove custody or publish protected cases. Its timing preflight must include admission preparation (roughly 290 source blobs and 18 starting checkpoints), which belongs on AWS. If the combined work cannot fit its two-hour/$3 limit, leave the prerequisite open and revise the named envelope before approval; do not invent an extra job. E1 bundles inference and checking; eighteen checkpoint checks do **not** mean eighteen training jobs. There are zero added training updates in E1. Resource bounds specify an attempt limit, not a promise that the task will finish within it.
+P2's protected-split operations stay with the existing Claude custodian, as the subsequent coordinator state records; builders and Codex receive public material only. This does not establish outside independence. P1 is a public-fixture job and cannot prove custody or publish protected cases. Its timing preflight must include admission preparation (roughly 290 source blobs and 18 starting checkpoints), which belongs on AWS. If the combined work cannot fit its two-hour/$3 limit, leave the prerequisite open and revise and technically review the named envelope within the unchanged budget before execution; do not invent an extra job. E1 bundles inference and checking; eighteen checkpoint checks do **not** mean eighteen training jobs. There are zero added training updates in E1. Resource bounds specify an attempt limit, not a promise that the task will finish within it.
 
 - **C:** 9 total attempted/proposed slots, including the two existing smoke attempts; **7 future jobs**, of which 4 train. Total proposed reservations **$135**, including $30 already booked and $105 future.
 - **B or full C fallback:** 11 total attempted/proposed slots; **9 future jobs**, of which 6 train. Total proposed reservations **$165**, including $30 already booked and $135 future.
@@ -69,6 +69,6 @@ Retain the evidence objects, checkpoint hashes and failure records under the exi
 
 After that finite horizon, preserve the evidence under the owner's existing keep policy and separately report ongoing retention charges and the responsible owner. There is **no automatic deletion** at day 30. Continued storage after the horizon is outside this finite execution envelope; the $60 figure is not a permanent lifetime-cost guarantee. A final report must state those continuing charges instead of calling retention free or describing all cloud costs as ended. Owner-retained resources that predate this comparison remain excluded.
 
-The reduced smoke result and temporary-resource cleanup are closed. P1/P2/E1 packages, their fixed-reservation bookkeeping, cumulative spending enforcement, measured runtime estimates, implementation of the proposed retention bounds and P1/P2 completion receipts remain prerequisites to a **ready-for-final-approval** request. The future job counts above are fixed; unfinished admission details do not permit extra jobs. This cost note does not claim those gates passed.
+The reduced smoke result and temporary-resource cleanup are closed. P1/P2/E1 packages, their fixed-reservation bookkeeping, cumulative spending enforcement, measured runtime estimates, implementation of the proposed retention bounds and P1/P2 completion receipts remain prerequisites to a **ready-to-execute** packet. The future job counts above are fixed; unfinished admission details do not permit extra jobs. This cost note does not claim those gates passed.
 
 E1 completion and cleanup receipts are post-execution deliverables, not prelaunch prerequisites. If the funded sequence stops early, the same E1 slot may report available public diagnostics, historical-gate losses and missing results as COMPARISON_INCOMPLETE; no partial confirmatory TEST comparison or repair-success claim is permitted.
