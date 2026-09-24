@@ -1,0 +1,139 @@
+#!/bin/bash
+# P1b reproduction-reader job, mode __MODE__, on ONE throwaway __INSTANCE_TYPE__ (RTX PRO 4500). CLAUDE_BUILT_CLAUDE_CHECKED.
+# No credentials here: one download, two uploads, through time-limited links. Forward passes only: no training.
+# POSIX-safe on purpose (the historical launcher for this AMI refuses bash-only syntax). It always ends by shutting
+# down; the launcher sets shutdown behaviour = terminate.
+set -u
+trap '' PIPE
+umask 077
+export HOME=/root PYTHONDONTWRITEBYTECODE=1
+shutdown -h +__POWER_OFF_MINUTES__ "p1b hard limit" || true                     # kill switch 0: OS power-off
+LOG=/var/log/p1b_job.log
+exec >>"$LOG" 2>&1
+JOB_START=$(date +%s)
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now ) &   # kill switch 1: in-machine timer
+WORK=/root/p1b
+OUT=$WORK/out
+mkdir -p "$OUT"
+cd "$WORK" || exit 1
+STATUS=setup
+CHILD=
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") http %{http_code}\n" || true; }
+finish() {                                                                        # kill switch 2: ANY exit uploads, then powers off
+  [ -n "$CHILD" ] && kill -TERM "$CHILD" 2>/dev/null && sleep 5
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$OUT/STATUS"
+  cp "$LOG" "$OUT/job.log" 2>/dev/null
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+trap 'STATUS="IN_INSTANCE_TIMER_TERM during $STATUS"; exit 143' TERM
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+( while true; do echo "$(date -u +%T) $(free -m | awk 'NR==2{print "used_mb="$3" available_mb="$7}')" >> "$OUT/memory.log"; sleep 60; done ) &
+
+# ---- the machine's own identity (IMDSv2): the laptop reader binds the results to the launched instance with it
+STATUS=instance_id
+TOKEN=$(curl -sS --max-time 10 -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 300" http://169.254.169.254/latest/api/token)
+md() { curl -sS --max-time 10 -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/$1"; }
+IID=$(md instance-id)
+printf '%s' "$IID" | grep -Eq '^i-[0-9a-f]{8,17}$' || { STATUS=instance_id_unreadable; exit 1; }
+AMI=$(md ami-id)
+ITYPE=$(md instance-type)
+printf 'instance_id=%s\nami_id=%s\ninstance_type=%s\nzone=%s\n' "$IID" "$AMI" "$ITYPE" "$(md placement/availability-zone)" > "$OUT/env.txt"
+[ "$AMI" = "__AMI__" ] || { STATUS=AMI_NOT_THE_HISTORICAL_AMI; exit 1; }
+[ "$ITYPE" = "__INSTANCE_TYPE__" ] || { STATUS=INSTANCE_TYPE_NOT_PINNED; exit 1; }
+
+# ---- the bundle (built from git objects; every file checked against anchors.json)
+STATUS=bundle
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg && tar -xzf bundle.tar.gz -C pkg || { STATUS=bundle_extract_failed; exit 1; }
+rm -f bundle.tar.gz
+PYB=''
+for p in python3.12 python3.11 python3; do                                          # the historical worker's search order
+  if command -v "$p" >/dev/null 2>&1; then PYB="$p"; break; fi
+done
+[ -n "$PYB" ] || { STATUS=SUPPORTED_PYTHON_REQUIRED; exit 1; }
+"$PYB" -B pkg/claude/p1b_machine.py anchors --root pkg > "$OUT/anchors_check.log" 2>&1 || { STATUS=anchor_mismatch; exit 1; }
+RDREL=records/typed_pointer_001/admission_unchanged_repro_001
+RD=$WORK/pkg/tree/$RDREL
+ARCH=$WORK/pkg/tree/research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_20208c92/source.zip
+echo "__ARCHIVE_SHA256__  $ARCH" | sha256sum -c - || { STATUS=archive_hash_mismatch; exit 1; }
+
+# ---- STAGE 0 (acceptance only): the reader's own tests, pure Python, with the GPU switch UNSET (one test expects
+# the fail-closed stop). Run on a separate copy of the tree. Any failure stops the job before the paid GPU work.
+if [ "__MODE__" = "acceptance" ]; then
+  STATUS=stage0_tests
+  command -v git >/dev/null 2>&1 || { STATUS=STAGE0_GIT_MISSING; exit 1; }
+  cp -a pkg/tree "$WORK/s0" || { STATUS=stage0_copy_failed; exit 1; }
+  ( cd "$WORK/s0/$RDREL" && env -u CAS_META2_RUN_TEACHING_CYCLE "$PYB" -B test_unchanged_repro.py -v ) > "$OUT/stage0_tests.log" 2>&1
+  S0=$?
+  echo "stage0=$S0" > "$OUT/EXIT_stage0"
+  tail -n 4 "$OUT/stage0_tests.log"
+  [ "$S0" -eq 0 ] || { STATUS=STAGE0_TESTS_FAILED; exit 0; }
+fi
+
+# ---- the historical environment: the pinned package at its recorded root, then the historical worker's three pip
+# steps in its order (torch from the cu128 index; the two wheels, no deps; requirements-gpu.txt). --report only adds a
+# name/version/sha256 record of what pip installed.
+STATUS=environment
+mkdir -p /opt/cas-graph6curr/package
+( cd /opt/cas-graph6curr/package && unzip -q "$ARCH" ) || { STATUS=package_unzip_failed; exit 1; }
+PKGROOT=/opt/cas-graph6curr/package
+"$PYB" -m venv /opt/cas-p1b/venv || { STATUS=venv_failed; exit 1; }
+PY=/opt/cas-p1b/venv/bin/python
+PIP="$PY -m pip install --disable-pip-version-check"
+$PIP "torch==__TORCH_VERSION__" --index-url __TORCH_INDEX__ --report "$OUT/pip_report_1_torch.json" || { STATUS=torch_install_failed; exit 1; }
+DIST=$PKGROOT/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist
+$PIP --no-deps "$DIST/casformer_reference-0.1.0-py3-none-any.whl" "$DIST/cas_neural_cjt-0.2.0-py3-none-any.whl" --report "$OUT/pip_report_2_wheels.json" || { STATUS=wheel_install_failed; exit 1; }
+$PIP -r "$PKGROOT/research/CAS_META_2_COMPOSITION/requirements-gpu.txt" --report "$OUT/pip_report_3_requirements.json" || { STATUS=requirements_install_failed; exit 1; }
+{ echo "python_base=$PYB"; "$PY" -c 'import platform; print("python="+platform.python_implementation()+" "+platform.python_version())'
+  uname -a; echo "nproc=$(nproc)"; free -m; nvidia-smi; git --version; echo "bundle_sha256=__BUNDLE_SHA256__"
+  echo "source_commit=__SOURCE_COMMIT__"; echo "reader_digest=__READER_DIGEST__"; echo "mode=__MODE__"; "$PY" -m pip freeze; } >> "$OUT/env.txt" 2>&1
+"$PY" -m pip inspect > "$OUT/pip_inspect.json" 2>/dev/null
+env | grep -E '^(CUBLAS|CUDA|CUDNN|OMP|MKL|NVIDIA|PYTHON|TORCH|CAS_)' | sort > "$OUT/env_vars.txt"
+cat "$OUT/env.txt"
+
+# ---- STAGE 1: the timing preflight (GPU). It refuses a projected end past 55 minutes of job time, and any machine
+# that is not the pinned numerical environment, BEFORE the long run.
+COMMON="--package-root $PKGROOT --package-archive $ARCH --reference-checkpoint $WORK/pkg/ref/final.pt --reference-record $WORK/pkg/ref/final_checkpoint.json --panel-manifest $RD/public_panel_manifest.json"
+STATUS=preflight
+CAS_META2_RUN_TEACHING_CYCLE=1 "$PY" -B pkg/claude/p1b_machine.py preflight --mode __MODE__ --reader-dir "$RD" $COMMON \
+  --job-start "$JOB_START" --out "$OUT/preflight.json" > "$OUT/preflight.log" 2>&1
+PF=$?
+echo "preflight=$PF" > "$OUT/EXIT_preflight"
+tail -n 3 "$OUT/preflight.log"
+case "$PF" in
+  0) ;;
+  5) STATUS=PREFLIGHT_OVER_WALL_LIMIT; exit 0 ;;
+  6) STATUS=PREFLIGHT_ENVIRONMENT_NOT_PINNED; exit 0 ;;
+  *) STATUS="PREFLIGHT_FAULT_$PF"; exit 0 ;;
+esac
+
+# ---- STAGE 2: the reader's own evidence module, once. No retry.
+STATUS=stage2___MODE__
+if [ "__MODE__" = "acceptance" ]; then
+  CAS_META2_RUN_TEACHING_CYCLE=1 "$PY" -B "$RD/recompute_reproduction_evidence.py" --mode acceptance $COMMON \
+    --work-dir "$WORK/acceptance_work" --out "$OUT/reader_acceptance_receipt.json" > "$OUT/recompute.log" 2>&1 &
+else
+  CAS_META2_RUN_TEACHING_CYCLE=1 "$PY" -B "$RD/recompute_reproduction_evidence.py" --mode reading $COMMON \
+    --candidate-checkpoint "$WORK/pkg/cand/final.pt" --candidate-sha256 __CANDIDATE_SHA256__ \
+    --candidate-job __CANDIDATE_JOB__ --out "$OUT/reproduction_evidence.json" > "$OUT/recompute.log" 2>&1 &
+fi
+CHILD=$!
+wait "$CHILD"
+RC=$?
+CHILD=
+echo "recompute=$RC" > "$OUT/EXIT_recompute"
+echo "recompute exit=$RC wall_from_start=$(expr "$(date +%s)" - "$JOB_START")s"
+tail -n 5 "$OUT/recompute.log"
+for f in "$WORK"/acceptance_work/*.evidence.json; do [ -f "$f" ] && cp "$f" "$OUT/case_$(basename "$f")"; done
+"$PY" -B pkg/claude/p1b_machine.py decide --mode __MODE__ --reader-dir "$RD" --out "$OUT" \
+  --expected-tests __EXPECTED_TESTS__ --reader-digest __READER_DIGEST__ --candidate-sha256 __CANDIDATE_SHA256__ > "$OUT/decide.log" 2>&1
+D=$?
+cat "$OUT/decide.log"
+if [ "$D" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures decide=$D"; fi
+exit 0
