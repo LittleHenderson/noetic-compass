@@ -1,8 +1,9 @@
 """HELM-REPAIR-CONTROLLED-1 study spend and admission gate. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
-Answers Codex review `codex-0007` (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4) and the round-2
-verification of d89721b4 (MAJOR-A, MINOR-B; see REVIEW.md "Round 2"). Pure Python; reads files and git objects only;
-no AWS call; never reads or writes the meta1 ledger.
+Answers Codex review `codex-0007` (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4), the round-2
+verification of d89721b4 (MAJOR-A, MINOR-B; see REVIEW.md "Round 2") and the round-3 verification of 269d13c8
+(MAJOR-E, NOTE-F; see REVIEW.md "Round 3"). Pure Python; reads files and git objects only; no AWS call; never reads or
+writes the meta1 ledger.
 
 FROZEN IN THIS CODE (never taken from the slots file; the file must agree or exit 2):
   * the $60.00 ceiling, the owner's $30.00 stop before the 3rd training job, the $0.10 S3/transfer/retention allowance;
@@ -40,12 +41,28 @@ lifetime (admission time + its basis's instance seconds or client deadline), wit
 UNCONFIRMED: a receipt that is missing, unreadable, stale, incomplete or silent is never a confirmation. Every admission
 is then refused: a machine or disk may still exist, so the runner stops and reports to the owner. Nothing clears it.
 
+THIS SLOT'S LAUNCH (round 3 MAJOR-E). For every slot except the pre-gate S1, S2 and P1a, a confirmed cleanup or a
+proven refusal counts only when the verified receipt is THIS slot's admitted launch, whatever the slot's status
+(DONE, INVALID, or RUNNING past its lifetime):
+  (1) the admission record is one `--admit` wrote (gate, program_sha256, slots_sha256_before present; the program
+      sha256 is a committed study_spend.py; slots_sha256_before is the committed STUDY_SLOTS.json version just before
+      the first committed version showing the slot RUNNING with this identical record) -- NOTE-F -- and a committed
+      version shows the slot RUNNING with it (the round-2 MINOR-B check, now also for INVALID rows);
+  (2) the launch time the verified receipt ITSELF shows (the time in its own job id; launched_utc in both watched
+      records) is at or after admitted_utc and before admitted_utc + the slot's lifetime;
+  (3) training: the receipt's own model seed is the slot's seed, and its own source is the admitted source (the arm
+      is bound through the source: one source per arm, never shared across arms).
+Otherwise the cleanup is UNCONFIRMED ("the verified receipt is not this slot's admitted launch"). At DONE, (1) and
+the window of (2) are also rejection reasons. The job id's time is set when the job is PREPARED: admit first, then
+prepare and launch, all inside the slot's lifetime.
+
 A receipt is also rejected when any identity it claims (receipt sha256 or path, job id, instance id, launch or watch
 record sha256 or path, provider record) is claimed by another RUNNING / DONE / INVALID slot; every admission is then
 refused (review MAJOR 1). A slot admitted by this gate must, at DONE, show the admitted source commit (and bundle for
-watched jobs), the slot's own model seed (training), and a launch time AFTER its admission time; and a committed
-version of STUDY_SLOTS.json must show the slot RUNNING with the IDENTICAL admission record (round 2 MINOR-B: a
-hand-written record that was never committed as RUNNING is refused).
+watched jobs), the slot's own model seed (training), and a launch time AFTER its admission time and before admission
+time + the slot's lifetime (round 3); and a committed version of STUDY_SLOTS.json must show the slot RUNNING with the
+IDENTICAL admission record (round 2 MINOR-B: a hand-written record that was never committed as RUNNING is refused),
+a record that carries the fields `--admit` writes and agrees with the committed history (round 3 NOTE-F).
 
 ADMISSION (`--admit SLOT --source <commit> [--bundle <sha256>]`): exit 0 only if ALL of these hold, else exit 1 with the
 reasons; any input error exit 2. On exit 0 it WRITES the slot as RUNNING with an admission record, in the same step.
@@ -109,6 +126,7 @@ STOP_BEFORE_TRAINING_JOB = 3
 ALLOWANCE_USD = Decimal("0.10")
 # Canonical digest of STUDY_SLOTS.json without the mutable fields of non-pre-gate slots (definitions_digest()).
 FROZEN_DEFINITIONS_SHA256 = "82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764"
+ADMIT_GATE = "study_spend.py --admit"      # the `gate` field `--admit` writes into every admission record (NOTE-F)
 MONEY_BASIS = ("worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the "
                "training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN "
                "question (FLAG_FOR_HUMAN_REVIEW, see open_questions)")
@@ -372,9 +390,10 @@ class GitReader:
 
 def new_result():
     """read: some copy of the receipt was read (leniently or verified). cleanup_confirmed: HASH-VERIFIED records
-    positively show this slot's own machine gone. proven_refusal: a verified capacity refusal passing the S1 rule."""
+    positively show a machine gone. proven_refusal: a verified capacity refusal passing the S1 rule. not_this_launch:
+    why the verified receipt is not this slot's admitted launch ([] when it is; None when nothing was verified)."""
     return {"bound": None, "text": "", "problems": [], "pins": {}, "keys": set(), "figures": [],
-            "read": False, "cleanup_confirmed": False, "proven_refusal": False}
+            "read": False, "cleanup_confirmed": False, "proven_refusal": False, "not_this_launch": None}
 
 
 def spec_complete(receipt, keys):
@@ -508,6 +527,9 @@ def bind_admission(slot, res, source, launched_at, seed=None, bundle=None, bundl
         res["problems"].append("BUNDLE_NOT_THE_ADMITTED_BUNDLE:%r vs admitted %r" % (bundle, a.get("bundle_sha256")))
     if launched_at is None or launched_at < admitted:
         res["problems"].append("LAUNCH_NOT_AFTER_ADMISSION:%s vs admitted %s" % (launched_at, a.get("admitted_utc")))
+    elif launched_at >= admitted + datetime.timedelta(seconds=lifetime_seconds(slot["cap_basis"])):    # round 3
+        res["problems"].append("LAUNCH_AFTER_THE_ADMISSION_LIFETIME:%s vs admitted %s + %d s" % (
+            launched_at, a.get("admitted_utc"), lifetime_seconds(slot["cap_basis"])))
     training = obj(slot.get("training"))
     if training:
         if seed != training.get("model_seed") or a.get("model_seed") != training.get("model_seed"):
@@ -569,17 +591,98 @@ def pointer_common(d, expected, basis, problems):
     return elapsed, Decimal(rate)
 
 
+def job_time(job):
+    """The UTC time inside a typed-pointer job id (`cas-meta2-tpntr-<YYYYmmddHHMMSS>-...`), or None. The launcher's
+    prepare scripts stamp it with datetime.now(timezone.utc) when the job is PREPARED."""
+    m = JOB_TIME.search(job) if isinstance(job, str) else None
+    if not m:
+        return None
+    try:
+        return datetime.datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=datetime.timezone.utc)
+    except ValueError:
+        return None
+
+
+def receipt_seed(d):
+    return obj(obj(obj(d.get("authority")).get("worker_config")).get("design")).get("model_seed")
+
+
 def pointer_admission(slot, d, expected, res):
-    job = expected.get("job") if isinstance(expected.get("job"), str) else ""
-    m = JOB_TIME.search(job)
-    launched = None
-    if m:
+    bind_admission(slot, res, expected.get("source_sha"), job_time(expected.get("job")), seed=receipt_seed(d))
+
+
+def not_this_launch(slot, launched_at, seed=None, source=None):
+    """Why a HASH-VERIFIED receipt is NOT this slot's admitted launch; [] when it is (round 3 MAJOR-E). Only facts the
+    receipt itself shows are used (never the spec's expected ids): its launch time must lie in [admitted_utc,
+    admitted_utc + the slot's lifetime); for a training slot its own model seed must be the slot's seed and its own
+    source the admitted source (the arm is bound through the source). The pre-gate rows S1, S2, P1a are exempt."""
+    if slot["id"] in PRE_GATE_DONE:
+        return []
+    a = slot.get("admission")
+    if not isinstance(a, dict):
+        return ["NO_ADMISSION_RECORD"]
+    admitted = utc(a.get("admitted_utc"))
+    if admitted is None or a.get("slot") != slot["id"]:
+        return ["ADMISSION_RECORD_MALFORMED_OR_OF_ANOTHER_SLOT"]
+    out = []
+    end = admitted + datetime.timedelta(seconds=lifetime_seconds(slot["cap_basis"]))
+    shown = launched_at.strftime("%Y-%m-%dT%H:%M:%SZ") if launched_at is not None else None
+    if launched_at is None:
+        out.append("RECEIPT_SHOWS_NO_LAUNCH_TIME")
+    elif launched_at < admitted:
+        out.append("LAUNCHED_BEFORE_ADMISSION:%s < admitted %s" % (shown, a["admitted_utc"]))
+    elif launched_at >= end:
+        out.append("LAUNCHED_AFTER_THE_ADMISSION_LIFETIME:%s >= %s" % (shown, end.strftime("%Y-%m-%dT%H:%M:%SZ")))
+    training = obj(slot.get("training"))
+    if training:
+        if not is_int(seed) or seed != training.get("model_seed"):
+            out.append("SEED_NOT_THE_SLOT_SEED:receipt %r, slot %r" % (seed, training.get("model_seed")))
+        if a.get("model_seed") != training.get("model_seed") or a.get("arm") != training.get("arm"):
+            out.append("ADMISSION_SEED_OR_ARM_NOT_THE_SLOTS:%r %r" % (a.get("model_seed"), a.get("arm")))
+        if not isinstance(source, str) or source != a.get("source_sha"):
+            out.append("SOURCE_NOT_THE_ADMITTED_SOURCE:receipt %r, admitted %r" % (source, a.get("source_sha")))
+    return out
+
+
+def admission_provenance(slot, history, program_hashes):
+    """Why a slot's admission record is not one `--admit` wrote and a committed version showed RUNNING; [] when it is
+    (round 2 MINOR-B; round 3 NOTE-F; MAJOR-E condition 1 applies it to INVALID rows too). history: (commit, bytes) of
+    every committed STUDY_SLOTS.json, newest first like `git log`. A careful hand edit that is committed can still pass;
+    a careless one fails."""
+    if slot["id"] in PRE_GATE_DONE:
+        return []
+    a = slot.get("admission")
+    if not isinstance(a, dict):
+        return ["NO_ADMISSION_RECORD"]
+    want, first = canonical(a), None
+    for index, (_commit, raw) in enumerate(history):
         try:
-            launched = datetime.datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=datetime.timezone.utc)
+            rows = obj(json.loads(raw)).get("slots")
         except ValueError:
-            launched = None
-    seed = obj(obj(obj(d.get("authority")).get("worker_config")).get("design")).get("model_seed")
-    bind_admission(slot, res, expected.get("source_sha"), launched, seed=seed)
+            continue
+        for row in rows if isinstance(rows, list) else []:
+            if (isinstance(row, dict) and row.get("id") == slot["id"] and row.get("status") == "RUNNING"
+                    and isinstance(row.get("admission"), dict) and canonical(row["admission"]) == want):
+                first = index           # newest first: the last match is the OLDEST version showing it RUNNING
+    problems = []
+    if first is None:
+        problems.append("ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW: no committed version of STUDY_SLOTS.json shows %s "
+                        "RUNNING with this identical admission record (was --admit run and its RUNNING row committed?)"
+                        % slot["id"])
+    if a.get("gate") != ADMIT_GATE:
+        problems.append("ADMISSION_NOT_WRITTEN_BY_THE_GATE:gate=%r" % a.get("gate"))
+    program = a.get("program_sha256")
+    if not (isinstance(program, str) and SHA.match(program) and program in program_hashes):
+        problems.append("ADMISSION_PROGRAM_NOT_A_COMMITTED_STUDY_SPEND:%r" % program)
+    before = a.get("slots_sha256_before")
+    if not (isinstance(before, str) and SHA.match(before)):
+        problems.append("ADMISSION_SLOTS_SHA256_BEFORE_MISSING:%r" % before)
+    elif first is not None:
+        older = history[first + 1][1] if first + 1 < len(history) else None
+        if older is None or sha256(older) != before:
+            problems.append("ADMISSION_SLOTS_BEFORE_NOT_THE_COMMITTED_VERSION_BEFORE_RUNNING:%s vs %s" % (
+                before, sha256(older) if older is not None else "no earlier committed version"))
+    return problems
 
 
 def pointer_cleanup_confirmed(d, expected):
@@ -619,6 +722,9 @@ def validate_pointer(slot, git, allowance, refusal):
     if d is None:
         return res
     res["cleanup_confirmed"] = pointer_cleanup_confirmed(d, expected)
+    # Round 3 MAJOR-E: from the verified receipt's OWN job id, seed and source, before any completeness return.
+    res["not_this_launch"] = not_this_launch(slot, job_time(d.get("job")), seed=receipt_seed(d),
+                                             source=obj(d.get("authority")).get("source_sha"))
     if not complete:
         return res
     elapsed, rate = pointer_common(d, expected, basis, problems)
@@ -759,6 +865,9 @@ def validate_watched(slot, info, root, allowance):
     if launch is None or watch is None:
         return res
     res["cleanup_confirmed"] = watched_cleanup_confirmed(launch, watch, expected)
+    # Round 3 MAJOR-E: the launch time BOTH verified records show, before any completeness return.
+    same = isinstance(launch.get("launched_utc"), str) and watch.get("launched_utc") == launch.get("launched_utc")
+    res["not_this_launch"] = not_this_launch(slot, utc(launch["launched_utc"]) if same else None)
     if not complete:
         return res
     approved, machines = obj(launch.get("approved")), watched_machines(basis)
@@ -862,33 +971,26 @@ def past_lifetime(slot, now):
     return admitted is None or now > admitted + datetime.timedelta(seconds=lifetime_seconds(slot["cap_basis"]))
 
 
-def committed_running_admissions(history):
-    """{slot id: canonical admission records} of every committed version that shows the slot RUNNING (round 2 MINOR-B)."""
-    seen = {}
-    for _commit, raw in history:
-        try:
-            old = json.loads(raw)
-        except ValueError:
-            continue
-        for row in obj(old).get("slots") if isinstance(obj(old).get("slots"), list) else []:
-            if isinstance(row, dict) and row.get("status") == "RUNNING" and isinstance(row.get("admission"), dict):
-                seen.setdefault(row.get("id"), set()).add(canonical(row["admission"]))
-    return seen
-
-
-def cleanup_gap(res, shared):
-    """None when the cleanup is confirmed (or the slot is a proven capacity refusal); else why not (round 2 MAJOR-A)."""
+def cleanup_gap(res, shared, provenance=()):
+    """None when the cleanup is confirmed (or the slot is a proven capacity refusal) AND the verified receipt is this
+    slot's admitted launch; else why not (round 2 MAJOR-A; round 3 MAJOR-E)."""
     if res is None or not res["read"]:
         return "no readable receipt"
     if shared:
         return "its receipt identity is also claimed by another slot"
-    if res["cleanup_confirmed"] or res["proven_refusal"]:
-        return None
-    return ("the receipt does not positively show this slot's own machine terminated with no volume left, from "
-            "hash-verified records (a stale, incomplete or silent record never confirms)")
+    if not (res["cleanup_confirmed"] or res["proven_refusal"]):
+        return ("the receipt does not positively show this slot's own machine terminated with no volume left, from "
+                "hash-verified records (a stale, incomplete or silent record never confirms)")
+    if provenance:
+        return ("the admission record is not one `--admit` wrote and a committed version showed RUNNING, so nothing "
+                "ties the receipt to this slot's launch: %s" % "; ".join(provenance))
+    binding = res.get("not_this_launch")
+    if binding is None or binding:
+        return "the verified receipt is not this slot's admitted launch: %s" % "; ".join(binding or ["NOT_EVALUATED"])
+    return None
 
 
-def account(loaded, root, git, history=None, now=None):
+def account(loaded, root, git, history=None, now=None, program_name=None):
     slots, info = loaded["slots"], loaded["info"]
     history = git.history(SLOTS_FILE.name) if history is None else history
     now = now or datetime.datetime.now(datetime.timezone.utc)
@@ -908,13 +1010,18 @@ def account(loaded, root, git, history=None, now=None):
         for sid in ids:
             if sid in results:
                 results[sid]["problems"].append("RECEIPT_SHARED:%s:with=%s" % (label, ",".join(i for i in ids if i != sid)))
-    committed = committed_running_admissions(history)
-    for s in slots:        # round 2 MINOR-B: the admission must be one a committed version showed RUNNING
-        if (s["status"] == "DONE" and s["id"] not in PRE_GATE_DONE and isinstance(s.get("admission"), dict)
-                and canonical(s["admission"]) not in committed.get(s["id"], set())):
-            results[s["id"]]["problems"].append(
-                "ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW: no committed version of STUDY_SLOTS.json shows %s RUNNING "
-                "with this identical admission record (was --admit run and its RUNNING row committed?)" % s["id"])
+    # Round 2 MINOR-B, round 3 NOTE-F and MAJOR-E (1): the admission must be one `--admit` wrote and a committed version
+    # showed RUNNING. Judged for every non-pre-gate slot whose receipt or cleanup is judged (DONE, INVALID, overdue
+    # RUNNING). The committed programs are read only when such a slot carries an admission record.
+    judged = [s for s in slots if s["id"] not in PRE_GATE_DONE
+              and (s["status"] in ("DONE", "INVALID") or s["id"] in overdue)]
+    programs = set()
+    if any(isinstance(s.get("admission"), dict) for s in judged):
+        programs = {sha256(raw) for _commit, raw in git.history(program_name or PROGRAM_FILE.name)}
+    provenance = {s["id"]: admission_provenance(s, history, programs) for s in judged}
+    for s in judged:       # at DONE a record that fails is a rejection reason (a missing record: NO_ADMISSION_RECORD)
+        if s["status"] == "DONE" and isinstance(s.get("admission"), dict):
+            results[s["id"]]["problems"].extend(provenance[s["id"]])
     rows, spent, rejected, unconfirmed = [], Decimal("0"), [], []
     for slot in slots:
         sid, status, cap = slot["id"], slot["status"], info[slot["id"]]["cap"]
@@ -948,8 +1055,9 @@ def account(loaded, root, git, history=None, now=None):
         else:
             row.update(receipt="NOT_APPLICABLE", counted_usd="0.00",
                        counted_basis="PLANNED: nothing spent; cap %s" % ("reserved" if slot["mandatory"] else "not reserved (optional)"))
-        gap = cleanup_gap(res, sid in shared_slots) if status in ("DONE", "INVALID") or sid in overdue else None
-        if gap:             # round 2 MAJOR-A: fail closed
+        gap = (cleanup_gap(res, sid in shared_slots, provenance.get(sid, ()))
+               if status in ("DONE", "INVALID") or sid in overdue else None)
+        if gap:             # round 2 MAJOR-A, round 3 MAJOR-E: fail closed
             unconfirmed.append(sid)
             row["cleanup"] = ("UNCONFIRMED (%s): a machine or disk of this slot may still exist; stop and report to the "
                               "owner" % gap)
@@ -1105,7 +1213,8 @@ def main(argv=None, git=None, root=ROOT, slots_file=SLOTS_FILE, state_file=STATE
         loaded = load_slots(slots_file, frozen)
         history = git.history(pathlib.Path(slots_file).name)
         check_history(loaded["doc"], history)
-        acct = account(loaded, root, git, history=history, now=utc(now) if now else None)
+        acct = account(loaded, root, git, history=history, now=utc(now) if now else None,
+                       program_name=pathlib.Path(program_file).name)
         if args.admit:
             names = [pathlib.Path(slots_file).name, pathlib.Path(program_file).name]
             decision = admit(args.admit, loaded, acct, source=args.source, bundle=args.bundle,
@@ -1117,7 +1226,7 @@ def main(argv=None, git=None, root=ROOT, slots_file=SLOTS_FILE, state_file=STATE
                             open_questions=loaded["doc"].get("open_questions_for_owner_or_codex"))
             if decision["decision"] == "ADMIT":
                 slot = next(s for s in loaded["slots"] if s["id"] == args.admit)
-                record = {"slot": args.admit, "gate": "study_spend.py --admit",
+                record = {"slot": args.admit, "gate": ADMIT_GATE,
                           "admitted_utc": now or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                           "slots_sha256_before": loaded["sha256"], "definitions_sha256": loaded["digest"],
                           "program_sha256": sha256(pathlib.Path(program_file).read_bytes()),

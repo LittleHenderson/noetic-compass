@@ -11,7 +11,7 @@ hand; re-run the program.
 | `STUDY_SLOTS.json` | **The ONE list of slots.** Each slot: status, cap, the cap's arithmetic basis, the receipt spec, and (once admitted) its admission record |
 | `study_spend.py` | Reads the list and every receipt **fresh** on every run. Report mode writes `STUDY_SPEND_STATE.json`. `--admit SLOT` is the gate, and on ADMIT it writes the slot as `RUNNING` |
 | `STUDY_SPEND_STATE.json` | Output only: bounds, totals, and a money-gate **preview** for every planned slot (a preview is not an admission) |
-| `test_study_spend.py` | 40 small synthetic tests: `python -B test_study_spend.py` |
+| `test_study_spend.py` | 57 small synthetic tests: `python -B test_study_spend.py` |
 | `REVIEW.md` | The review findings on `bb942461` and what was done about each |
 
 ## What is frozen, and what can change
@@ -49,7 +49,12 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
 1. Commit and push `STUDY_SLOTS.json` and `study_spend.py`. The gate refuses while either differs from HEAD.
 2. `--admit <slot> --source <commit> [--bundle <sha256>]`. Exit 0 means ADMIT, and the program has already written
    the slot as `RUNNING` with an admission record (time, source, bundle or seed and arm, the slots-file sha256 before,
-   the program sha256, the arithmetic). Commit and push that, then launch.
+   the program sha256, the arithmetic). Commit and push that, then launch. **Order matters (round 3):** admit
+   first, then prepare the job, then launch, all inside the slot's lifetime (training 14,400 s; watched: its client
+   deadline, 130 min for P1b and E1). A training job's id carries the UTC time the job was **prepared**
+   (`prepare_study.py` / `prepare_smoke.py` stamp it); a job prepared before its admission, or launched after
+   admission time + the lifetime, is not this admission's launch. It is rejected at `DONE`, and after `INVALID` its
+   cleanup is `UNCONFIRMED`, which stops the study. Do not edit the admission record by hand.
 3. When the job ends, fill the receipt pins (paths, sha256, job / instance / source identity), set `DONE`, and run
    the report. **Check the report before committing:** after the commit, the pins of a DONE row are frozen. If the
    receipt is rejected, fix the pins before committing, or set `INVALID` with a reason. If the report says a slot's
@@ -92,9 +97,14 @@ A receipt is **rejected** if any of these fail:
 - **Its own admission** (every slot admitted by the gate). The receipt's source commit must equal the admitted
   source; a watched job's bundle must equal the admitted bundle; a training job's model seed
   (`authority.worker_config.design.model_seed`) must equal the slot's seed; the launch time (the time in the job id,
-  or the launch record's `launched_utc`) must be **after** the admission time. A committed version of
-  `STUDY_SLOTS.json` must show the slot `RUNNING` with the **identical** admission record (round 2). So a record
-  typed by hand, never committed as RUNNING, is refused.
+  or the launch record's `launched_utc`) must be **at or after** the admission time and **before** admission time +
+  the slot's lifetime (round 3). A committed version of `STUDY_SLOTS.json` must show the slot `RUNNING` with the
+  **identical** admission record (round 2). So a record typed by hand, never committed as RUNNING, is refused.
+- **An admission record `--admit` wrote** (round 3, NOTE-F). The record must carry `gate` (`study_spend.py --admit`),
+  `program_sha256` and `slots_sha256_before`. `program_sha256` must be the sha256 of some committed `study_spend.py`.
+  `slots_sha256_before` must be the sha256 of the committed `STUDY_SLOTS.json` version just before the first
+  committed version that shows the slot `RUNNING` with this record. A careless hand edit fails; a careful one that
+  copies these values and is committed can still pass (the gate cannot tell who wrote a committed line).
 - **Numbers.** Every number must be a real finite number. Elapsed seconds must be above 0 and within the basis. A
   watcher cost must be at least 0 and at most the cap.
 - **Cleanup.** Training: cleanup complete and that one instance `CONFIRMED_TERMINATED`. Watched: terminated confirmed
@@ -112,6 +122,19 @@ A receipt is **rejected** if any of these fail:
   seconds or client deadline), that has neither is **cleanup UNCONFIRMED**. A missing, unreadable, stale, incomplete or
   silent receipt is never a confirmation. Every admission is then refused, even after `INVALID`: stop and report to
   the owner. Nothing in the program clears it.
+- **The receipt must be this slot's own launch** (round 3, MAJOR-E). For every slot except S1, S2 and P1a, a
+  confirmed cleanup or a proven refusal counts only when the verified receipt is **this slot's admitted launch**,
+  whatever the slot's status (`DONE`, `INVALID`, or `RUNNING` past its lifetime):
+  1. the admission record is one `--admit` wrote and a committed version showed the slot `RUNNING` with it (the
+     two bullets above, now applied to `INVALID` rows too);
+  2. the launch time the verified receipt **itself** shows (the time in its own job id; `launched_utc` in both
+     watched records) is at or after the admission time and before admission time + the slot's lifetime;
+  3. training slots: the receipt's own model seed is the slot's seed, and its own source is the admitted source
+     (the arm is bound through the source).
+
+  Otherwise the cleanup is `UNCONFIRMED` ("the verified receipt is not this slot's admitted launch"). So naming
+  another job's clean receipt on an `INVALID` row no longer reopens the gate. A wrong source is now a stop, not only a
+  rejection (open question 8).
 - **Cost scope.** The machine must be one the basis lists, **at that machine's own listed price**. Disk and client
   deadline must fit the basis. The job's own ceiling must equal the slot's cap. The watcher's cost must not be below
   the cost recomputed from its two timestamps; the bound uses the larger of the two.
@@ -218,8 +241,12 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
 - A later job's machine script must write its own instance id (`instance_id=` from IMDSv2) into `env.txt`. The T4
   reader requires it for every launch except the finished P1a job: its template `dc05f4af` **and** its instance
   `i-09e14d4afd0e0ebfa`, both together (round 2). The current `larger_question_t4_job/job.sh.template` still has
-  sha256 `dc05f4af` and does **not** write the line. So the next launch from that folder needs a template change,
-  with its own review, or the reader refuses its route.
+  sha256 `dc05f4af` and does **not** write the line. So the next T4 job needs a template change, with its own review,
+  or the reader refuses its route.
+- **The next T4 launch goes to a NEW folder** (round 3, NOTE-G). `larger_question_t4_job/launch_record.json` and
+  `watch_record.json` are P1a's pinned receipt: they are never moved, renamed, edited or overwritten. Moving them
+  aside to relaunch there would reject P1a, mark its cleanup `UNCONFIRMED` and stop every admission; P1a's row is
+  frozen whole, so it cannot be marked `INVALID`. Copy the job code into a new folder for P1b or E1.
 
 **E1 scope, stated plainly.** E1 runs in every branch of the plan, so its cap is always reserved. It **includes**:
 
@@ -253,7 +280,15 @@ These are also in `STUDY_SLOTS.json` and printed with every decision.
    does (a machine ran and its receipt is accepted). The round-2 verification's probe P7: M1-M3 each fail after 60 s,
    all three count as started, spent $10.33, and the stop is then off for the rest of the study. Not decided here.
    (Listed here and in `REVIEW.md`. It is not yet in `STUDY_SLOTS.json`: that file's open-question list is covered by
-   the frozen definitions digest, so adding it needs a re-freeze in a reviewed change.)
+   the frozen definitions digest, so adding it needs a re-freeze in a reviewed change. The same holds for 7 and 8.)
+7. **Cancelling a slot that was never admitted and never launched.** Today, marking it `INVALID` stops the study
+   (fail closed: no receipt, no admission, cleanup `UNCONFIRMED`); leaving it `PLANNED` keeps its cap reserved. Not
+   decided here.
+8. **Should a wrong source stop the study?** Round 3 binds a training receipt's own source to the admitted source
+   before its cleanup counts (the ordered fix: "arm/source where the receipt shows them"). The round-3 verifier had
+   suggested a wrong source stay a rejection reason only, because the machine may still be this slot's. With the
+   binding, a slot launched from the wrong commit ends `UNCONFIRMED` for good (stop and report), even when its
+   machine is shown gone. Codex or the owner may keep this or relax it.
 
 ## Ledgers (unchanged)
 

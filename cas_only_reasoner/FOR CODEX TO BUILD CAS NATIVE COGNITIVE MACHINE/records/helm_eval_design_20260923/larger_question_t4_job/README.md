@@ -60,14 +60,26 @@ python -B launch.py --dry-run          # check again; the bundle sha256 should b
 python -B launch.py                    # upload and start ONE machine; writes launch_record.json
 python -B watch.py                     # until the machine is gone; writes watch_record.json and results/
 python -B read_results.py              # writes RESULTS_READING.json; exit 0 only for ROUTE_ACCEPTED
-# A later job's template must write the machine's own id: instance_id=$(IMDSv2 instance-id) into env.txt
+# Done once, for P1a (i-09e14d4afd0e0ebfa). A LATER T4 job runs from a NEW folder (see below), and its template
+# must write the machine's own id: instance_id=$(IMDSv2 instance-id) into env.txt
 ```
 
-**Before the next launch from this folder (round 2 of the study-spend review, MINOR-C).** `job.sh.template` today
-still has sha256 `dc05f4af...` and writes **no** `instance_id=` line. The reader's exemption covers only the one
-finished job (`i-09e14d4afd0e0ebfa`). So any new launch with this template would end `ROUTE_NOT_ACCEPTED` (exit 3,
-`MACHINE_INSTANCE_ID_MISSING`). The next launch needs a template that writes `instance_id=`. That is a job-code change
-and needs its own review; it was **not** made in round 2. `watch.py` is also unchanged.
+**The next T4 launch goes to a NEW folder, never this one (round 3 of the study-spend review, NOTE-G).** This
+folder holds the finished P1a job. Its `launch_record.json` and `watch_record.json` are the pinned receipt of study
+slot P1a (`study_spend/STUDY_SLOTS.json`, sha256 `82b91aeb...` and `6c2447e1...`). **They are never moved, renamed,
+edited or overwritten**, and neither is anything under `results/`.
+
+- Why: `launch.py` refuses to start while `launch_record.json` exists. Moving it aside to relaunch here (as
+  `analogy_repair_t4_job/attempt1/` did) would change P1a's pinned files. The gate then rejects P1a and marks its
+  cleanup `UNCONFIRMED`, and **every** admission is refused. P1a's row is frozen whole, so it cannot be marked
+  `INVALID` either (exit 2 `SLOT_DEFINITIONS_CHANGED`). The study would stop until a reviewed code change.
+- How: copy the job code into a new folder (for example `<next job>_t4_job/`), give that job its own slot, and launch
+  from there.
+- The new folder's template must write the machine's own id (`instance_id=` from IMDSv2) into `env.txt`. Today's
+  `job.sh.template` here still has sha256 `dc05f4af...` and writes **no** such line. The reader's exemption covers
+  only the one finished job (`i-09e14d4afd0e0ebfa`, round 2 MINOR-C), so a new launch with this template would end
+  `ROUTE_NOT_ACCEPTED` (exit 3, `MACHINE_INSTANCE_ID_MISSING`). That template change is job code and needs its own
+  review; it was **not** made here. `watch.py` is also unchanged.
 
 The runner writes a `RUN_LOG.md` after the run, as the analogy job did.
 

@@ -639,3 +639,229 @@ copy of ledger data. Wrote: this section only. The probe script and the regenera
 scratch folder. The untracked `aws_probe_job/dry_run_machine_script.sh` in this working copy is not the verifier's
 and was left alone. No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no
 salt, no S3, no transcript.
+
+## Round 3
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Builder: Claude (temporary builder). This answers the verification of `269d13c8`
+above (verifier commit `2b8a086f`). It is the builder's own record. It is **not** an independent acceptance: these
+fixes still need a fresh verifier and Codex's review.
+
+| Name | Finding (short) | Disposition |
+|---|---|---|
+| MAJOR-E | After `INVALID`, another job's clean receipt "confirms" this slot's cleanup or passes as a proven refusal | **FIXED** (limits below) |
+| NOTE-F | The admission record need not be one `--admit` wrote | **FIXED** (the cheap tightening; limit below) |
+| NOTE-G | The next T4 launch must not reuse `larger_question_t4_job/` | **FIXED** (documents only; no job code changed) |
+| NOTE-D | Does a training job that launched and then failed count as "started"? | **OPEN** (not decided; behaviour unchanged) |
+| Question 7 | Cancelling a slot that was never admitted or launched | **OPEN** (not decided; behaviour unchanged) |
+
+### MAJOR-E: the verified receipt must be this slot's own launch (`study_spend.py`)
+
+**The problem, in plain words.** Round 2 asked one question before it trusted a cleanup: "do hash-verified records
+show *a* machine gone?" It never asked "is that machine *this slot's*?" So a row marked `INVALID` could name another
+job's clean receipt, and the gate would admit the next machine while this slot's own machine might still be running.
+
+**Done.** For every slot except S1, S2 and P1a (done before the gate existed), a cleanup now counts as confirmed, and
+a capacity refusal as proven, only when the verified receipt is **this slot's admitted launch**. This holds whatever
+the slot's status: `DONE`, `INVALID`, or `RUNNING` past its lifetime. Three conditions, all required:
+
+1. **A real admission.** The slot's admission record appears, identical, in a committed version of
+   `STUDY_SLOTS.json` that shows the slot `RUNNING`. Round 2 checked this only for `DONE` rows; it now applies to
+   `INVALID` rows too. The record must also pass NOTE-F (below).
+2. **Launched inside this admission's window.** The launch time the verified receipt **itself** shows is at or after
+   `admitted_utc` and before `admitted_utc` + the slot's lifetime. For training receipts this is the time in the
+   receipt's own `job` id (not the spec's `expected.job`, which N1a left empty). For watched jobs it is `launched_utc`,
+   which must be the same in both records. Lifetime: 14,400 s for training slots; the client deadline (130 min) for
+   P1b and E1.
+3. **Training slots: the right seed and source.** The receipt's own model seed
+   (`authority.worker_config.design.model_seed`) equals the slot's seed. The receipt's own source
+   (`authority.source_sha`) equals the admitted source. The receipt has no arm field; the arm is bound through the
+   source, as before (one source per arm, never shared across arms).
+
+If any condition fails, the cleanup is `UNCONFIRMED` with the reason "the verified receipt is not this slot's admitted
+launch: ...", and every admission is refused (stop and report to the owner).
+
+At `DONE`, the window's upper end is now also a rejection reason (`LAUNCH_AFTER_THE_ADMISSION_LIFETIME`), next to the
+existing `LAUNCH_NOT_AFTER_ADMISSION`. So a receipt is never ACCEPTED as this slot's launch while the cleanup check
+says it is not.
+
+**The probes, after the fix** (each is now a test on the builder's synthetic `World`; admission 2026-09-24T09:00:00Z,
+committed `RUNNING`; this slot's own machine is never shown gone):
+
+| Probe | Before (the verification) | After |
+|---|---|---|
+| N1a: M1 `INVALID` names a clean training receipt of another job (launched 2026-09-17), ids empty | counted $11.66; cleanup "confirmed"; `--admit M2` **exit 0 ADMIT**, total $57.08 | counted $11.66; **UNCONFIRMED** (`LAUNCHED_BEFORE_ADMISSION:2026-09-17T12:00:00Z < admitted 2026-09-24T09:00:00Z`); `--admit M2` **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` |
+| N1b: as N1a, with that job's own ids filled in | exit 0 ADMIT, $57.08 | the same: **UNCONFIRMED**; **exit 1**. As `DONE`: REJECTED `LAUNCH_NOT_AFTER_ADMISSION` (as before) and now also UNCONFIRMED |
+| N2a: P1b `INVALID` names an older job's launch and watch records (launched 2026-09-20), ids empty | counted $2.00; `--admit P2` **exit 0 ADMIT**, $57.08 | counted $2.00; **UNCONFIRMED** (`LAUNCHED_BEFORE_ADMISSION:2026-09-20T10:00:00Z ...`); `--admit P2` **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b` |
+| N2b: as N2a, with that job's own ids | exit 0 ADMIT, $57.08 | **UNCONFIRMED**; **exit 1**. As `DONE`: REJECTED `BUNDLE_NOT_THE_ADMITTED_BUNDLE` and `LAUNCH_NOT_AFTER_ADMISSION` |
+| N3: M1 `INVALID` names an older job's capacity refusal (not S1's) | passed as a proven refusal; exit 0 ADMIT, $57.08 | counted $11.66; **UNCONFIRMED** (`LAUNCHED_BEFORE_ADMISSION`); **exit 1**. As `DONE`: REJECTED `LAUNCH_NOT_AFTER_ADMISSION` |
+
+**Positive controls kept.** P1 (`test_round2_p1_...`): P1b's own breached receipt, `INVALID`, still confirmed; `--admit
+P2` still ADMIT at $58.26. The proven refusal (`test_round2_a_proven_capacity_refusal_is_not_unconfirmed`): M1's own
+refusal, `INVALID`, is still proven. A new "rejected but proven" control replaces the old one (a refusal rejected for
+`INSTANCE_TYPE_MISMATCH` is still proven). `test_admitted_job_end_to_end`: a record written by the real `--admit`,
+committed, then the slot's own receipt: ACCEPTED and confirmed.
+
+**New tests** (`test_study_spend.py`, 8): `test_round3_n1a_...`, `test_round3_n1b_...`, `test_round3_n2a_n2b_...`,
+`test_round3_n3_...`; `test_round3_launch_window_seed_and_source_bind_the_cleanup` (launch at 09:00:00 and 12:59:59:
+confirmed and `--admit M2` exit 0; at 13:00:00: UNCONFIRMED `LAUNCHED_AFTER_THE_ADMISSION_LIFETIME`, and as `DONE`
+REJECTED `LAUNCH_AFTER_THE_ADMISSION_LIFETIME`; at 08:59:59: UNCONFIRMED; seed 20260918 inside the window:
+UNCONFIRMED `SEED_NOT_THE_SLOT_SEED`; the other arm's source with M1's seed, inside the window: UNCONFIRMED
+`SOURCE_NOT_THE_ADMITTED_SOURCE`; a job id with no time: UNCONFIRMED `RECEIPT_SHOWS_NO_LAUNCH_TIME`; P1b launched
+11:09:59: confirmed; 11:10:00: UNCONFIRMED); `test_round3_an_invalid_rows_admission_must_be_committed_running` (the
+slot's own clean receipt, `INVALID`: committed `RUNNING` gives confirmed and `--admit M2` exit 0; never committed gives
+UNCONFIRMED and exit 1, where round 2 gave exit 0; no record at all gives UNCONFIRMED); `test_round3_n4_...` and
+`test_round3_admission_record_positive_controls` (NOTE-F, below).
+
+**Existing tests changed, and why.**
+- The test world's default training job time moved from "10 + slot position" o'clock (M1 at 15:00) to 09:10 + slot
+  position minutes (M1 at 09:15). The old default put every synthetic launch after its 4-hour window, which round 3
+  correctly refuses. No assertion about money changed.
+- `test_round2_a_proven_capacity_refusal_is_not_unconfirmed`: its sub-case "admitted source `999...`, receipt source
+  the slot's real one" was a positive control ("rejected, but the refusal is proven"). Under condition 3 the receipt
+  shows a source other than the admitted one, so it is now **UNCONFIRMED**. The test now asserts that. A new
+  sub-case (rejected for `INSTANCE_TYPE_MISMATCH`, refusal proven) keeps the "rejected but proven" positive control.
+  This is the one place where the ordered fix ("arm/source where the receipt shows them") and the verifier's note ("a
+  wrong source or bundle can stay a rejection reason only") disagree. The builder followed the ordered fix. It is
+  open question 8.
+- `test_round2_p6_a_hand_written_admission_is_refused`: its control ("the same 2000-01-01 record, committed:
+  ACCEPTED") is now REJECTED `LAUNCH_AFTER_THE_ADMISSION_LIFETIME`: a launch in 2026 is not inside a 4-hour window
+  that opened in 2000. The control now uses a record the gate would write (09:00, committed): ACCEPTED. The committed
+  2000-01-01 record is kept as a negative case.
+- `test_admitted_job_end_to_end`: the world now commits the slots file **before** `--admit`, as the real gate
+  requires, so the record's `slots_sha256_before` has a committed version to match.
+
+**Limits, stated honestly.**
+1. **The job id's time is the time the job was prepared**, not the time the machine started. `prepare_study.py` and
+   `prepare_smoke.py` stamp it with `datetime.now(timezone.utc)`. So the runner must admit first, then prepare the
+   job, then launch, all inside the slot's lifetime. A job prepared before its admission (for example, all seeds
+   prepared at once, as `prepare_study.py` did for its study) is rejected at `DONE` (true since round 1) and, from
+   round 3, its cleanup is `UNCONFIRMED` after `INVALID`: the study stops. This is written in
+   `PREREQUISITE_SLOTS.md`, step 2.
+2. **Watched slots bind time only.** For P1b, P2 and E1 the cleanup binding is conditions 1 and 2. A wrong source or
+   bundle on a watched receipt stays a rejection reason only (as the verifier suggested). The ordered condition 3
+   names training slots only.
+3. **A receipt of another job that was launched inside this slot's window, with this slot's seed and source, still
+   confirms.** The gate cannot tell it from this slot's own launch. The shared-identity check still refuses it if
+   any other slot claims it.
+4. **A slot launched from the wrong source commit now stops the study for good** (stop and report), even when its
+   machine is shown gone. See open question 8.
+
+### NOTE-F: the admission record must be one `--admit` wrote (`study_spend.py`)
+
+**Done.** The same check is used at `DONE` (a failure is a rejection reason) and for the cleanup (a failure makes the
+cleanup `UNCONFIRMED`, condition 1 above). The record must:
+- carry `gate` equal to `study_spend.py --admit` (`ADMISSION_NOT_WRITTEN_BY_THE_GATE` otherwise);
+- carry `program_sha256`, and it must be the sha256 of some committed `study_spend.py`
+  (`ADMISSION_PROGRAM_NOT_A_COMMITTED_STUDY_SPEND` otherwise). Any committed version counts, not only the newest;
+- carry `slots_sha256_before`, and it must be the sha256 of the committed `STUDY_SLOTS.json` version just before
+  the **first** committed version that shows the slot `RUNNING` with this record
+  (`ADMISSION_SLOTS_SHA256_BEFORE_MISSING` or `ADMISSION_SLOTS_BEFORE_NOT_THE_COMMITTED_VERSION_BEFORE_RUNNING`).
+
+The committed programs are read only when a judged slot carries an admission record. Today none does, so the real
+report reads no extra git objects.
+
+**N4, after the fix.** The verifier's bare record (slot, time 2000-01-01, source, seed, arm; no `gate`,
+`program_sha256` or `slots_sha256_before`), committed as `RUNNING`: was ACCEPTED and counted as started. Now
+**REJECTED** (`LAUNCH_AFTER_THE_ADMISSION_LIFETIME`, `ADMISSION_NOT_WRITTEN_BY_THE_GATE`,
+`ADMISSION_PROGRAM_NOT_A_COMMITTED_STUDY_SPEND`, `ADMISSION_SLOTS_SHA256_BEFORE_MISSING`), counted $11.66, **not
+started**, cleanup UNCONFIRMED; `--admit M2` **exit 1** (`DONE_RECEIPT_REJECTED:M1`,
+`CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1`).
+
+**Tests.** `test_round3_n4_a_bare_admission_record_is_refused`: the verifier's exact N4; the same bare record dated
+09:00 (inside the window), refused by NOTE-F alone with all three reasons; each field wrong on its own (gate "typed
+by hand", program `000...`, slots-before `000...`), as `DONE` (REJECTED) and as `INVALID` (UNCONFIRMED).
+`test_round3_admission_record_positive_controls`: a record naming an **older** committed program is ACCEPTED; a
+`RUNNING` row committed twice is ACCEPTED (the comparison uses the version before the **first** one).
+
+**Limit.** This is still forgeable: a careful hand edit that copies these three values and is committed passes. A
+careless one fails. It is compared with committed bytes: on this checkout `STUDY_SLOTS.json` and `study_spend.py` are
+`eol=lf`, and their working-copy sha256 equals the committed blob today (checked). A merge that interleaves commits
+of the slots file could make "the version just before" differ from the one `--admit` started from; that fails
+closed (a false refusal), never open.
+
+### NOTE-G: the next T4 launch goes to a new folder (documents)
+
+**Done.** `larger_question_t4_job/README.md` now says: the next T4 launch goes to a **new** folder, never this one.
+P1a's pinned `launch_record.json` and `watch_record.json` (and `results/`) are never moved, renamed, edited or
+overwritten. It gives the reason (`launch.py` refuses while `launch_record.json` exists, line 441; moving it aside
+rejects P1a, makes its cleanup `UNCONFIRMED` and stops every admission; P1a's row is frozen whole, so it cannot be
+marked `INVALID`) and repeats that the new folder's template must write `instance_id=`. `PREREQUISITE_SLOTS.md` says
+the same. No job code (`launch.py`, `job.sh.template`, `watch.py`) was changed.
+
+### NOTE-D and question 7: still open
+
+Not decided. Behaviour unchanged. Both are listed in `PREREQUISITE_SLOTS.md` (questions 6 and 7), with the new
+question 8.
+
+### Mutation check (scratch script, not committed)
+
+Each new binding was switched off, one at a time, in a temporary copy of `study_spend.py`. The 8 round-3 tests and
+four existing tests this round changed or keeps as controls (`test_round2_a_proven_capacity_refusal_...`,
+`test_round2_p6_...`, `test_round2_p1_...`, `test_admitted_job_end_to_end`) were run against each copy.
+
+| Switched off | New tests that fail |
+|---|---|
+| nothing (the program as written) | none |
+| condition 1 in the cleanup (committed RUNNING + NOTE-F record not required) | `..._an_invalid_rows_admission_must_be_committed_running`, `..._n4_...` |
+| condition 2, lower end of the window | `..._n1a_...`, `..._n1b_...`, `..._n2a_n2b_...`, `..._n3_...`, `..._launch_window_...` |
+| condition 2, upper end (cleanup) | `..._launch_window_...` |
+| window upper end at `DONE` (rejection) | `..._launch_window_...`, `test_round2_p6_...` |
+| condition 3, seed | `..._launch_window_...` |
+| condition 3, source | `..._launch_window_...`, `test_round2_a_proven_capacity_refusal_...` |
+| the whole binding (`not_this_launch` always empty) | 6 tests (N1a, N1b, N2a/N2b, N3, window, proven refusal) |
+| NOTE-F `gate` | `..._n4_...` |
+| NOTE-F `program_sha256` | `..._n4_...` |
+| NOTE-F `slots_sha256_before` not compared | `..._n4_...` |
+| `slots_sha256_before` compared with the NEWEST `RUNNING` version | `..._admission_record_positive_controls` |
+| BEFORE: the committed `2b8a086f` program (plus the constant's name only) | 9 tests, including every N probe |
+
+### Checks run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `2b8a086f` |
+| `python -B test_study_spend.py` | **57 passed, 0 failed** (49 before + 8 new) |
+| `python -B test_read_results.py` | **31 passed, 0 failed** (unchanged) |
+| Mutation check | the table above |
+| Real report (`main([])`, state written to a scratch file) | **exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92**; remaining mandatory caps $51.64; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed; no training job started |
+| Real state regenerated | **byte-identical** to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| Real reader on `i-09e14d4afd0e0ebfa` (`--no-write`, and in memory) | **exit 0; ROUTE_ACCEPTED**; script and job verdict INTEGRATION_CHECKS_PASS |
+| Real reading regenerated in memory | **byte-identical** to the committed `RESULTS_READING.json` |
+| Finished job's files (`results/`, `launch_record.json`, `watch_record.json`, `dry_run_record.json`, `job.sh.template`, `watch.py`, `launch.py`, `RESULTS_READING.json`); `STUDY_SLOTS.json`; `STUDY_SPEND_STATE.json` | `git diff` empty |
+| Real `--admit` | **not run** (it writes the slot RUNNING) |
+
+**No real figure changed.** The real slots file has only S1, S2 and P1a as `DONE` (all three exempt, as pre-gate
+rows) and nothing `RUNNING` or `INVALID`. So no real row meets the new checks.
+
+### Claim states
+
+- **Real (measured here):** both test runs; the mutation check; the real report and its byte-identical state; the
+  real reading and its byte-identical regeneration; the file diffs; the probe outputs above.
+- **Open:** a fresh verifier and Codex's review of round 3; open questions 1-5 in `STUDY_SLOTS.json`; questions 6, 7
+  and 8 (FLAG_FOR_HUMAN_REVIEW).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, until round 3 is verified.
+
+### Open questions (not decided by the builder)
+
+6. (NOTE-D) Does a training job that launched and then failed count as "started" for the $30.00 stop?
+7. Should a slot that was never admitted and never launched have a way to be cancelled?
+8. Should a wrong source commit on a training receipt stop the study (round 3, as ordered), or stay a rejection
+   reason only (the verifier's suggestion)? With the binding, a slot launched from the wrong commit ends
+   `UNCONFIRMED` for good, even when its machine is shown gone.
+
+### Exposure
+
+Read: this file; `study_spend.py`; `test_study_spend.py`; `STUDY_SLOTS.json` (slot ids, statuses, caps, kinds,
+training seeds and arms, receipt specs with their paths, pins and expected ids, open questions); `PREREQUISITE_SLOTS.md`;
+`larger_question_t4_job/README.md`; `read_results.py` lines 283-298; grep hits for `launch_record` / `watch_record` in
+`launch.py` and `watch.py`; grep hits for `tpntr` in `.py` files under `cas_only_reasoner/` (job-id formats and
+comments); `typed_pointer_001/prepare_study.py` lines 95-115 and the `stamp =` lines of `prepare_smoke.py`; the
+`route_acceptance` field and top-level key names of `RESULTS_READING.json`; `git config` and `git check-attr` for line
+endings. The real report and the real reader read their receipts and `results/` through the programs; only summary
+lines and verdict fields were printed. **No receipt file was opened directly**, so no `ledger_before` /
+`ledger_after` field was read or printed. Wrote: `study_spend.py`, `test_study_spend.py`, `PREREQUISITE_SLOTS.md`,
+this section, `larger_question_t4_job/README.md`; scratch files only in the session scratch folder (the mutation
+script and a regenerated state copy). Not written: `STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json`,
+`RESULTS_READING.json`, any job code, `CHANGELOG.md` (the coordinator batches it). The untracked
+`aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS call, no torch, no model, no
+`*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript.

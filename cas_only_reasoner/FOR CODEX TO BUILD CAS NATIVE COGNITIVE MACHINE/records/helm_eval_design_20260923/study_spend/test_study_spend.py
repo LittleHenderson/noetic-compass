@@ -1,8 +1,8 @@
 """Small pure-Python tests for study_spend.py. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
-Covers Codex review codex-0007 (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4) and the round-2
-verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6): every wrongful ADMIT a reviewer found has a
-negative test here. Synthetic receipts only; a fake git reader; temporary folders. No AWS, no torch; the real slots
+Covers Codex review codex-0007 (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4), the round-2
+verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6) and the round-3 verification of 269d13c8 (MAJOR-E
+probes N1a, N1b, N2a, N2b, N3; NOTE-F probe N4): every wrongful ADMIT a reviewer found has a negative test here. Synthetic receipts only; a fake git reader; temporary folders. No AWS, no torch; the real slots
 file and receipts are never read or changed.
 Run: python -B test_study_spend.py   (also collectable by pytest)
 """
@@ -46,6 +46,7 @@ def enc(doc):
 class FakeGit:
     def __init__(self):
         self.blobs, self.trees, self.versions, self.dirty = {}, {}, [], []
+        self.program_versions = []                  # committed study_spend.py versions (round 3 NOTE-F)
 
     def read(self, commit, path):
         if (commit, path) not in self.blobs:
@@ -58,7 +59,8 @@ class FakeGit:
         return list(self.trees[(commit, directory)])
 
     def history(self, name):
-        return list(reversed(self.versions))        # newest first, like `git log`
+        versions = self.program_versions if name == "study_spend.py" else self.versions
+        return list(reversed(versions))             # newest first, like `git log`
 
     def uncommitted(self, names):
         return [n for n in names if n in self.dirty]
@@ -154,6 +156,8 @@ class World:
         self.program.write_bytes(b"# program under test\n")
         # Slots whose DONE / INVALID row gets NO synthetic committed RUNNING version in build() (round 2 MINOR-B).
         self.uncommitted_running = set()
+        # Slots whose admission record stays as typed: build() adds no gate / program / slots-before (round 3 NOTE-F).
+        self.bare_admission = set()
 
     @staticmethod
     def pointer_spec(path, job, source, iid):
@@ -184,10 +188,12 @@ class World:
     def source_of(self, sid):
         return SRC_REPAIRED if self.by_id(sid)["training"]["arm"] == "REPAIRED" else SRC_UNCHANGED
 
-    def job_id(self, sid, job_ts=None, seed=None):
-        """The launcher's job id format; each slot launches at its own hour after ADMITTED unless job_ts is given."""
-        job_ts = job_ts or "20260924%02d0000" % (10 + [s["id"] for s in self.slots].index(sid))
-        return "cas-meta2-tpntr-%s-%s-m-%d" % (job_ts, self.source_of(sid)[:8], seed or self.by_id(sid)["training"]["model_seed"])
+    def job_id(self, sid, job_ts=None, seed=None, source=None):
+        """The launcher's job id format. Unless job_ts is given, each slot launches at its own minute (09:15 for M1)
+        inside its lifetime after ADMITTED 09:00 (round 3: before 13:00 for a training slot)."""
+        job_ts = job_ts or "2026092409%02d00" % (10 + [s["id"] for s in self.slots].index(sid))
+        return "cas-meta2-tpntr-%s-%s-m-%d" % (job_ts, (source or self.source_of(sid))[:8],
+                                               seed or self.by_id(sid)["training"]["model_seed"])
 
     def done_training(self, sid, elapsed, job_ts=None, seed=None):
         s, src = self.by_id(sid), self.source_of(sid)
@@ -196,16 +202,19 @@ class World:
         s["status"], s["receipt"] = "DONE", self.pointer_spec(path, job, src, "i-" + sid)
         self.admission(sid, src)
 
-    def refused_training(self, sid):
-        s, src, job = self.by_id(sid), self.source_of(sid), self.job_id(sid)
-        folder = "r/%s" % sid.lower()
-        self.receipts[folder + "/result.json"] = refusal(job, src, seed=s["training"]["model_seed"])
+    def refusal_receipt(self, folder, job, src, seed):
+        """A capacity-refusal receipt, its last provider record and its folder listing; returns its receipt spec."""
+        self.receipts[folder + "/result.json"] = refusal(job, src, seed=seed)
         self.providers[folder + "/provider_0003.json"] = provider(job)
         self.trees[folder] = ["provider_0003.json", "result.json"]
+        return {"kind": "pointer_capacity_refusal", "git_commit": C1, "path": folder + "/result.json",
+                "sha256": None, "last_provider_record": {"path": folder + "/provider_0003.json", "sha256": None},
+                "expected": {"job": job, "source_sha": src, "instance_type": "g7.2xlarge"}}
+
+    def refused_training(self, sid):
+        s, src, job = self.by_id(sid), self.source_of(sid), self.job_id(sid)
         s["status"] = "DONE"
-        s["receipt"] = {"kind": "pointer_capacity_refusal", "git_commit": C1, "path": folder + "/result.json",
-                        "sha256": None, "last_provider_record": {"path": folder + "/provider_0003.json", "sha256": None},
-                        "expected": {"job": job, "source_sha": src, "instance_type": "g7.2xlarge"}}
+        s["receipt"] = self.refusal_receipt("r/%s" % sid.lower(), job, src, s["training"]["model_seed"])
         self.admission(sid, src)
 
     def done_watched(self, sid, folder, machine="g4dn.2xlarge", price=0.752, launched="2026-09-24T10:00:00Z",
@@ -248,19 +257,35 @@ class World:
                         r[key]["sha256"] = sha((self.tmp / r[key]["path"]).read_bytes())
         if after_pin:
             after_pin(self)
+        program = self.program.read_bytes()                     # the program under test is a committed version
+        if not any(raw == program for _commit, raw in self.git.program_versions):
+            self.git.program_versions.append(("p%039d" % len(self.git.program_versions), program))
+        synthetic = []
+        for s in self.slots:    # what `--admit` + "commit and push" would have left in git history (round 2 MINOR-B)
+            if (s["status"] in ("DONE", "INVALID") and isinstance(s.get("admission"), dict)
+                    and s["id"] not in ss.PRE_GATE_DONE and s["id"] not in self.uncommitted_running):
+                planned = copy.deepcopy(s)
+                planned.update(status="PLANNED", receipt=planned_pointer() if "training" in s else planned_watched())
+                for key in ("admission", "invalid_reason"):
+                    planned.pop(key, None)
+                before = enc({"schema": ss.SCHEMA, "note": "committed before %s was admitted" % s["id"], "slots": [planned]})
+                if s["id"] not in self.bare_admission:          # the fields `--admit` writes (round 3 NOTE-F)
+                    s["admission"].setdefault("gate", ss.ADMIT_GATE)
+                    s["admission"].setdefault("program_sha256", sha(program))
+                    s["admission"].setdefault("slots_sha256_before", sha(before))
+                synthetic.append((s, before))
         doc = {"schema": ss.SCHEMA, "ceiling_usd": "60.00",
                "owner_stop": {"usd": "30.00", "before_training_job_number": 3, "rule": "stop"},
                "allowances": {"s3_transfer_per_job_usd": "0.10"}, "open_questions_for_owner_or_codex": ["q"],
                "slots": self.slots}
         (self.tmp / "slots.json").write_text(json.dumps(doc), encoding="utf-8")
         self.frozen = ss.definitions_digest(doc)
-        for s in self.slots:    # what `--admit` + "commit and push" would have left in git history (round 2 MINOR-B)
-            if (s["status"] in ("DONE", "INVALID") and isinstance(s.get("admission"), dict)
-                    and s["id"] not in ss.PRE_GATE_DONE and s["id"] not in self.uncommitted_running):
-                row = copy.deepcopy(s)
-                row.update(status="RUNNING", receipt=planned_pointer() if "training" in s else planned_watched())
-                row.pop("invalid_reason", None)
-                self.git.versions.append(("%040d" % len(self.git.versions), enc(dict(doc, slots=[row]))))
+        for s, before in synthetic:     # the version --admit started from, then the committed RUNNING row
+            row = copy.deepcopy(s)
+            row.update(status="RUNNING", receipt=planned_pointer() if "training" in s else planned_watched())
+            row.pop("invalid_reason", None)
+            self.git.versions.append(("%040d" % len(self.git.versions), before))
+            self.git.versions.append(("%040d" % len(self.git.versions), enc(dict(doc, slots=[row]))))
         return self
 
     def edit_slots(self, fn):
@@ -684,6 +709,7 @@ def test_one_source_per_training_arm():
 
 def test_admitted_job_end_to_end():
     w = world()
+    w.commit_snapshot()                                            # --admit starts from a committed slots file
     assert w.run(*admit_args("P1b"))[0] == 0
     w.commit_snapshot()                                            # the runner commits the RUNNING row, then launches
     launched, ended = "2026-09-24T12:05:00Z", "2026-09-24T12:40:00Z"
@@ -694,7 +720,8 @@ def test_admitted_job_end_to_end():
     w.by_id("P1b")["admission"] = admission                        # keep the gate's own record
     w.uncommitted_running.add("P1b")                               # no synthetic version: only the real committed one
     w.build()
-    assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")
+    assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")     # the real --admit record passes NOTE-F
+    assert w.account()[1]["unconfirmed"] == [], w.row("P1b")       # ... and binds its own launch (round 3)
 
 
 # ------------------------------------------------------------ review MAJOR 3: frozen numbers, definitions, history
@@ -932,12 +959,21 @@ def test_round2_a_proven_capacity_refusal_is_not_unconfirmed():
         w.invalid("M1", "capacity refusal")
     assert world(refused_invalid).account()[1]["unconfirmed"] == []
 
-    def refused_wrong_source(w):                                             # rejected, but the refusal is proven
+    def refused_wrong_type(w):                                               # rejected, but the refusal is proven
+        w.refused_training("M1")
+        w.receipts["r/m1/result.json"]["authority"]["instance_type"] = "g6.xlarge"
+    w = world(refused_wrong_type)
+    rejected(w, "M1", "INSTANCE_TYPE_MISMATCH")
+    assert w.account()[1]["unconfirmed"] == []
+
+    def refused_wrong_source(w):
         w.refused_training("M1")
         w.by_id("M1")["admission"]["source_sha"] = "9" * 40
     w = world(refused_wrong_source)
     rejected(w, "M1", "SOURCE_NOT_THE_ADMITTED_SOURCE")
-    assert w.account()[1]["unconfirmed"] == []
+    # Round 3 (3): the receipt shows a source other than the admitted one, so it is not proven to be THIS slot's
+    # launch. Round 2 left this proven; the ordered round-3 fix binds the source where the receipt shows it.
+    assert w.account()[1]["unconfirmed"] == ["M1"] and "SOURCE_NOT_THE_ADMITTED_SOURCE" in w.row("M1")["cleanup"]
 
     def refused_unproven(w):                                                 # a later provider call breaks the proof
         refused_invalid(w)
@@ -977,14 +1013,222 @@ def test_round2_p6_a_hand_written_admission_is_refused():
     code, out = w.run(*admit_args("M2"))
     assert code == 1 and "DONE_RECEIPT_REJECTED:M1" in out["reasons"], out
 
-    def committed(w):                                                        # control: the same record, committed
+    def committed(w):                                                        # control: a gate record, committed RUNNING
         w.done_training("M1", 10500)
-        w.by_id("M1")["admission"]["admitted_utc"] = "2000-01-01T00:00:00Z"
     assert world(committed).row("M1")["receipt"] == "ACCEPTED"
+
+    def committed_2000(w):          # the hand-written date, committed RUNNING: round 3 refuses a launch that far after
+        committed(w)                # its admission (outside admission time + the slot's 14,400 s lifetime)
+        w.by_id("M1")["admission"]["admitted_utc"] = "2000-01-01T00:00:00Z"
+    rejected(world(committed_2000), "M1", "LAUNCH_AFTER_THE_ADMISSION_LIFETIME")
     w = world(committed)                                                     # the DONE row's record differs from the
     w.edit_slots(lambda d: d["slots"][5]["admission"].update(admitted_utc="2026-09-24T09:30:00Z"))   # committed one
     code, out = w.run(*admit_args("M2"))
     assert code == 2 and "HISTORY_VIOLATION: M1 was RUNNING" in out["error"], out
+
+
+# ------------------------------------ round 3 MAJOR-E: the verified receipt must be THIS slot's admitted launch
+OLDER_TS = "20260917120000"         # another job, launched 2026-09-17, a week before ADMITTED (2026-09-24T09:00:00Z)
+
+
+def other_training_receipt(w, sid, job_ts=OLDER_TS, seed=None, source=None):
+    """A clean training receipt of ANOTHER job, claimed by no slot. Returns (path, job, instance id)."""
+    seed, source = seed or w.by_id(sid)["training"]["model_seed"], source or w.source_of(sid)
+    job = w.job_id(sid, job_ts=job_ts, seed=seed, source=source)
+    tag = "%s-%d-%s" % (job_ts, seed, source[:4])
+    path, iid = "r/other/%s/result.json" % tag, "i-other-" + tag
+    w.receipts[path] = pointer(job, source, iid, seed=seed)
+    return path, job, iid
+
+
+def m1_names(ids=True, invalid=True, **other):
+    """M1 admitted 09:00 and committed RUNNING; its own machine is never shown gone; its row names another job's clean
+    receipt (ids empty: the verifier's N1a; that job's own ids: N1b); then INVALID, or left DONE."""
+    def fn(w):
+        path, job, iid = other_training_receipt(w, "M1", **other)
+        m1 = w.by_id("M1")
+        m1["status"] = "DONE"
+        m1["receipt"] = w.pointer_spec(path, job if ids else "", other.get("source") or w.source_of("M1"),
+                                       iid if ids else "")
+        w.admission("M1", w.source_of("M1"))
+        if invalid:
+            w.invalid("M1", "launch trouble")
+    return fn
+
+
+def p1b_names_older_watched_records(ids, invalid=True):
+    """P1b admitted 09:00 (bundle c...) and committed RUNNING; its row names an older job's launch and watch records
+    (launched 2026-09-20, bundle b..., terminated, claimed by no slot); ids empty (N2a) or that job's own (N2b)."""
+    def fn(w):
+        launched = "2026-09-20T10:00:00Z"
+        launch, watch = copy.deepcopy(LAUNCH), copy.deepcopy(WATCH)
+        launch.update(instance_id="i-older", launched_utc=launched, bundle={"sha256": "b" * 64},
+                      approved={"machine": "g4dn.2xlarge", "price_per_hour_usd": 0.752, "dollar_ceiling": 2.0})
+        watch.update(instance_id="i-older", launched_utc=launched, watch_ended_utc="2026-09-20T10:35:00Z",
+                     minutes_from_launch_to_watch_end=35.0)
+        w.files["older/launch_record.json"], w.files["older/watch_record.json"] = launch, watch
+        p1b = w.by_id("P1b")
+        p1b["status"] = "DONE"
+        p1b["receipt"] = w.watched_spec("older", "i-older" if ids else "", launched if ids else "",
+                                        "b" * 64 if ids else "")
+        w.admission("P1b", SRC_WATCHED, bundle="c" * 64)
+        if invalid:
+            w.invalid("P1b", "launch trouble")
+    return fn
+
+
+def unconfirmed_not_this_launch(w, sid, needle):
+    row = w.row(sid)
+    assert w.account()[1]["unconfirmed"] == [sid], row
+    assert "not this slot's admitted launch" in row["cleanup"] and needle in row["cleanup"], row["cleanup"]
+
+
+def test_round3_n1a_another_jobs_receipt_with_empty_ids_no_longer_confirms():
+    w = world(m1_names(ids=False))
+    assert w.row("M1")["counted_usd"] == "11.66", w.row("M1")
+    unconfirmed_not_this_launch(w, "M1", "LAUNCHED_BEFORE_ADMISSION")
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, total $57.08
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_round3_n1b_another_jobs_receipt_with_its_own_ids_no_longer_confirms():
+    w = world(m1_names(ids=True))
+    unconfirmed_not_this_launch(w, "M1", "LAUNCHED_BEFORE_ADMISSION")
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, total $57.08
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+    w = world(m1_names(ids=True, invalid=False))                             # as DONE: rejected (as before) and now
+    rejected(w, "M1", "LAUNCH_NOT_AFTER_ADMISSION")                          # also unconfirmed
+    assert w.account()[1]["unconfirmed"] == ["M1"]
+
+
+def test_round3_n2a_n2b_another_jobs_watched_records_no_longer_confirm():
+    for ids in (False, True):
+        w = world(p1b_names_older_watched_records(ids))
+        assert w.row("P1b")["counted_usd"] == "2.00", w.row("P1b")
+        unconfirmed_not_this_launch(w, "P1b", "LAUNCHED_BEFORE_ADMISSION")
+        code, out = w.run(*admit_args("P2"))                                 # was exit 0 ADMIT, total $57.08
+        assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], (ids, out)
+    w = world(p1b_names_older_watched_records(True, invalid=False))
+    rejected(w, "P1b", "BUNDLE_NOT_THE_ADMITTED_BUNDLE")
+    rejected(w, "P1b", "LAUNCH_NOT_AFTER_ADMISSION")
+
+
+def test_round3_n3_another_jobs_capacity_refusal_is_no_longer_proven():
+    def names_older_refusal(invalid):
+        def fn(w):
+            m1, src = w.by_id("M1"), w.source_of("M1")
+            m1["status"] = "DONE"
+            m1["receipt"] = w.refusal_receipt("r/older_refusal", w.job_id("M1", job_ts=OLDER_TS), src, 20260917)
+            w.admission("M1", src)
+            if invalid:
+                w.invalid("M1", "capacity refusal")
+        return fn
+    w = world(names_older_refusal(True))
+    unconfirmed_not_this_launch(w, "M1", "LAUNCHED_BEFORE_ADMISSION")
+    code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, total $57.08
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+    rejected(world(names_older_refusal(False)), "M1", "LAUNCH_NOT_AFTER_ADMISSION")
+
+
+def test_round3_launch_window_seed_and_source_bind_the_cleanup():
+    # M1 admitted 09:00; lifetime 14,400 s, so its launch must lie in [09:00:00, 13:00:00).
+    for ts in ("20260924090000", "20260924125959"):                          # positive: inside the window
+        w = world(m1_names(job_ts=ts))
+        assert w.account()[1]["unconfirmed"] == [] and "cleanup" not in w.row("M1"), (ts, w.row("M1"))
+        code, out = w.run(*admit_args("M2"))
+        assert code == 0, (ts, out)
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924130000")), "M1", "LAUNCHED_AFTER_THE_ADMISSION_LIFETIME")
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924085959")), "M1", "LAUNCHED_BEFORE_ADMISSION")
+    rejected(world(m1_names(job_ts="20260924130000", invalid=False)), "M1", "LAUNCH_AFTER_THE_ADMISSION_LIFETIME")
+    # Inside the window, but another seed, or the other arm's source with M1's seed (M2 shares seed 20260917).
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924093000", seed=20260918)), "M1", "SEED_NOT_THE_SLOT_SEED")
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924093000", source=SRC_REPAIRED)), "M1",
+                                "SOURCE_NOT_THE_ADMITTED_SOURCE")
+
+    def no_time(w):                                                          # a job id that carries no time
+        m1_names(job_ts="20260924093000")(w)
+        w.receipts[w.by_id("M1")["receipt"]["path"]]["job"] = "job-without-a-time"
+        w.by_id("M1")["receipt"]["expected"]["job"] = "job-without-a-time"
+    unconfirmed_not_this_launch(world(no_time), "M1", "RECEIPT_SHOWS_NO_LAUNCH_TIME")
+    # P1b: 130-min client deadline, so its launch must lie in [09:00:00, 11:10:00).
+    for launched, ended, ok in (("2026-09-24T11:09:59Z", "2026-09-24T11:44:59Z", True),
+                                ("2026-09-24T11:10:00Z", "2026-09-24T11:45:00Z", False)):
+        def fn(w, launched=launched, ended=ended):
+            w.done_watched("P1b", "p1b", launched=launched, ended=ended)
+            w.invalid("P1b", "operator error")
+        w = world(fn)
+        if ok:
+            assert w.account()[1]["unconfirmed"] == [], w.row("P1b")
+        else:
+            unconfirmed_not_this_launch(w, "P1b", "LAUNCHED_AFTER_THE_ADMISSION_LIFETIME")
+
+
+def test_round3_an_invalid_rows_admission_must_be_committed_running():
+    def own_receipt_invalid(w):
+        w.done_training("M1", 10500)                                         # M1's own clean receipt, launched 09:15
+        w.invalid("M1", "operator error")
+    w = world(own_receipt_invalid)                                           # control: committed RUNNING -> confirmed
+    assert w.account()[1]["unconfirmed"] == [] and "cleanup" not in w.row("M1"), w.row("M1")
+    assert w.run(*admit_args("M2"))[0] == 0
+
+    def never_committed(w):
+        own_receipt_invalid(w)
+        w.uncommitted_running.add("M1")
+    w = world(never_committed)
+    assert w.account()[1]["unconfirmed"] == ["M1"], w.row("M1")
+    assert "ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW" in w.row("M1")["cleanup"], w.row("M1")
+    code, out = w.run(*admit_args("M2"))                                     # round 2: exit 0 ADMIT
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+    def no_record(w):
+        own_receipt_invalid(w)
+        del w.by_id("M1")["admission"]
+    w = world(no_record)
+    assert w.account()[1]["unconfirmed"] == ["M1"] and "NO_ADMISSION_RECORD" in w.row("M1")["cleanup"], w.row("M1")
+
+
+# ------------------------------------------------ round 3 NOTE-F: the admission record must be one `--admit` wrote
+def test_round3_n4_a_bare_admission_record_is_refused():
+    def bare(when):
+        def fn(w):
+            w.done_training("M1", 10500)
+            w.by_id("M1")["admission"]["admitted_utc"] = when
+            w.bare_admission.add("M1")          # slot, time, source, seed, arm only; committed RUNNING as typed
+        return fn
+    w = world(bare("2000-01-01T00:00:00Z"))                                  # the verifier's N4: was ACCEPTED, started
+    rejected(w, "M1", "ADMISSION_NOT_WRITTEN_BY_THE_GATE")
+    assert "M1" not in w.account()[1]["training_started"]
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and "DONE_RECEIPT_REJECTED:M1" in out["reasons"], out
+    problems = world(bare(ADMITTED)).row("M1")["receipt_problems"]          # inside the window: NOTE-F alone refuses
+    for needle in ("ADMISSION_NOT_WRITTEN_BY_THE_GATE", "ADMISSION_PROGRAM_NOT_A_COMMITTED_STUDY_SPEND",
+                   "ADMISSION_SLOTS_SHA256_BEFORE_MISSING"):
+        assert any(needle in p for p in problems), (needle, problems)
+    assert not any("LAUNCH" in p for p in problems), problems
+    for field, value, needle in (("gate", "typed by hand", "ADMISSION_NOT_WRITTEN_BY_THE_GATE"),
+                                 ("program_sha256", "0" * 64, "ADMISSION_PROGRAM_NOT_A_COMMITTED_STUDY_SPEND"),
+                                 ("slots_sha256_before", "0" * 64,
+                                  "ADMISSION_SLOTS_BEFORE_NOT_THE_COMMITTED_VERSION_BEFORE_RUNNING")):
+        def one(w, field=field, value=value, invalid=False):
+            w.done_training("M1", 10500)
+            w.by_id("M1")["admission"][field] = value
+            if invalid:
+                w.invalid("M1", "operator error")
+        rejected(world(one), "M1", needle)
+        w = world(lambda w, one=one: one(w, invalid=True))                   # INVALID: the cleanup is not tied to it
+        assert w.account()[1]["unconfirmed"] == ["M1"] and needle in w.row("M1")["cleanup"], (needle, w.row("M1"))
+
+
+def test_round3_admission_record_positive_controls():
+    def older_program(w):                   # any committed study_spend.py counts, not only the newest
+        w.done_training("M1", 10500)
+        w.git.program_versions.append(("o" * 40, b"# an older committed program\n"))
+        w.by_id("M1")["admission"]["program_sha256"] = sha(b"# an older committed program\n")
+    assert world(older_program).row("M1")["receipt"] == "ACCEPTED"
+    # The RUNNING row committed twice: slots_sha256_before is the version before the FIRST one.
+    w = world(lambda w: w.done_training("M1", 10500))
+    w.git.versions.append(("r" * 40, w.git.versions[-1][1]))
+    assert w.row("M1")["receipt"] == "ACCEPTED", w.row("M1")
 
 
 def run_all():
