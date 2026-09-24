@@ -1,5 +1,7 @@
 # HELM-REPAIR-CONTROLLED-1: named AWS job plan (DRAFT; for the owner's launch approval)
 
+**[STATUS UPDATE 2026-09-24, supersedes the status paragraph below]** `LAUNCH_APPROVED_RUNNING_TODAY`. Owner direction 2026-09-24 ("launch today ... 3 repaired runs plus the old-Helm re-run, inside my $60 limit, with the existing stop rules"), verbatim with the six one-line decisions in `OWNER_STOP_POLISHING_20260924.md`. Section 0's money and stop rules apply unchanged.
+
 **Status.** `LAUNCH_HELD_PENDING_AMENDMENTS` (2026-09-24). The owner's launch yes (section 0) is held, not used, until one complete amended launch request is approved; see `OWNER_HEADSUP_PLAN_REVIEW_20260924.md`. Codex works the amendments. Only the switch-ON smoke (preparation) runs. It is completed and brought to the owner once
 the preconditions below have passed. The owner's words (`OWNER_DIRECTION_20260924.md`, item 4): "Prepare the exact
 AWS job plan with source, data, starting weights, runs, update/time/dollar limits, stopping conditions, and cleanup.
