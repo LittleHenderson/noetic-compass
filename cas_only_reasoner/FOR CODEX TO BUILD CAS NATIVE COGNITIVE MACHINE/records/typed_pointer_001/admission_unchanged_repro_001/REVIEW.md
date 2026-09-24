@@ -676,3 +676,222 @@ from `init_args.root`, so the root must be the recorded one.
 - **Not opened:** any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, the meta1 ledger (not
   even an existence check), S3 or AWS, Claude transcripts, Codex's working copy. Nothing that exists at `20208c92` was
   edited. `CHANGELOG.md` and the harness spec sheet exist at `20208c92`, so they were not edited (standing rule).
+
+## Verification of 61123b5ff0eec98e50a8f5f0f60af761b2b38308
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. A fresh Claude verifier checked this revision. It did not build it. This is
+not an owner signature and not a review by a different model family.
+
+**Verified:** the diff `303c281b84bdecb0613f9a7f412b4fc7916ca23d..61123b5ff0eec98e50a8f5f0f60af761b2b38308`
+(revision 3), against Codex's policy at `bc46b36e` (pinned in `policy_pins.json`).
+
+**Verdict:** `APPROVE_READER_CONFORMANCE`. The 1 BLOCKER and 2 MAJOR findings are fixed. No BLOCKER or MAJOR is open.
+This verification adds 4 MINOR findings and 3 NOTES (V4.2).
+
+**What the verdict does NOT mean.** It is not approval to run P1, to `--write`, or to launch. The execution admission is
+still `NOT_READY` (checked: the shipped record says `NOT_READY` and its bindings equal this revision). Nothing was
+launched. No AWS call was made. No money was spent. MINORs 1-3 change a reader source, so they change the reader digest.
+Fix them, and settle open question V4-A, BEFORE P1b. Otherwise P1 has to be paid for twice.
+
+### V4.1 The three findings
+
+| # | Finding | Result of this check |
+|---|---|---|
+| 1 | BLOCKER: hash cycle between the policy file and the reader digest | **FIXED, complete.** |
+| 2 | MAJOR: prerequisites are self-asserted | **FIXED as the reviewer asked.** Two smaller gaps remain (new MINORs 2, 3) |
+| 3 | MAJOR: infrastructure faults read as a valid mismatch | **FIXED, complete, on both sides.** Codex must still rule on the split (R3-B) |
+
+**Finding 1 (BLOCKER) - fixed.**
+- The reader digest covers exactly `read_reproduction.py`, `repro_common.py` and `recompute_reproduction_evidence.py`
+  (`repro_common.py:348`). `policy_pins.json` is not one of them.
+- I scanned the three sources for every pinned value in `policy_pins.json` (25 hashes, in full and as 7, 8 and 12
+  characters), for the pins file's own sha256 `d57d32dd...`, and for five commit words (`bc46b36e`, `42ad8367`,
+  `ca68690b`, `b0fd06ff`, `13eee049`). None is there.
+- A re-pin now edits only `policy_pins.json`. The digest stays
+  `f35cd2ae967e950fc65debabd0146adc1ad67445cc74ca56cdc5bf9d98b6b849`. The test `test_a_policy_freeze_and_re_pin_leave_the_reader_digest_unchanged` simulates the freeze and the re-pin, and
+  it passes.
+- The chain now has no loop: P1 receipt -> Codex's policy freeze (reader digest, panel, P1 receipt sha256) -> re-pin of
+  `policy_pins.json` -> `EXECUTION_ADMISSION.json`.
+- The P1 receipt is now opened (`acceptance_receipt_violations`, `repro_common.py:893-920`). It must say
+  `READER_ACCEPTANCE_PASS`, list all 11 registered cases in order and passed, record `changed_buffer` as `VACUOUS` with
+  no buffers, name the admitted reader sources and digest, and name the pinned panel and environment. It does not check
+  the receipt's own pins, on purpose: P1 runs before the freeze. My probe: a receipt with pre-freeze pins passes.
+- Residual risk outside the reader digest: see MINOR 4 and open question V4-A.
+
+**Finding 2 (MAJOR) - fixed as asked.**
+- Each prerequisite must name `receipt_commit`, `receipt_path` and `receipt_sha256`. `read_prerequisite_receipts`
+  (`repro_common.py:1072-1088`) opens the blob with `git show`. It does so only when the commit is an ancestor of the
+  anchors: `HEAD` or the pinned policy commit (writer); the receipt commit or the pinned policy commit (reader). A path
+  with `..`, a leading slash or a backslash is refused. A missing blob is refused.
+- The content is checked per receipt kind (`prerequisite_violations`, `repro_common.py:1024-1069`): the P1 receipt
+  (above); the frozen policy (it must BE the pinned `REPRODUCTION_POLICY.json` at the pinned commit); the environment
+  lock and the launch packet (the sha256 values the manifest's `final_freeze` names, and `dependencies.status` no longer
+  `NOT_READY...`); the spend record (this job, schema, figure read from it, `+ $15.00 <= $60.00`); the review receipt (a
+  machine verdict on this reader digest and these pins, by someone other than the builder's runner string).
+- `--check` no longer takes a typed spend figure. `--spend-so-far-usd` and `--spend-source` are gone. The figure is
+  read from the spend record that the ADMITTED admission names. `spend` is returned only when the state is ADMITTED.
+- The reviewer's exact scenario (`PASS` plus `'c3' * 32`, nothing behind it) is refused. A `READER_ACCEPTANCE_FAIL`
+  receipt whose hash was written into the policy is refused. Both are tested.
+- I confirmed the manifest field names the code reads exist in Codex's `EXECUTION_MANIFEST.json` at `bc46b36e`:
+  `final_freeze.dependency_lock_sha256`, `final_freeze.frozen_launch_packet_sha256`, `dependencies.status`
+  (`NOT_READY_FULL_ENVIRONMENT_NOT_FROZEN` today) and `launch_enabled` (`false` today).
+- Gaps that remain: the spend record's own sources are never opened (MINOR 2). The review receipt's commit is never
+  resolved (MINOR 3).
+
+**Finding 3 (MAJOR) - fixed.**
+- Producer (`classify_prediction_error`, `recompute_reproduction_evidence.py:166-177`). My probe with 11 exception
+  forms: only a plain `ValueError` whose whole message is a `POINTER_`/`TYPED_` code reads `REFUSED` (3 cases,
+  including a 400-character code). These read `ERROR`: a CUDA `RuntimeError`, an out-of-memory `RuntimeError`
+  subclass, an uncoded `ValueError`, a coded message with a newline, a coded `ValueError` subclass, a lower-case code,
+  a coded `KeyError`, and a bare `TYPED_`.
+- A grader crash and a prediction for the wrong record are `ERROR` rows. `load_side` turns any fault into a producer
+  invalid reason.
+- Reader (`panel_row_faults`, `read_reproduction.py:519-525`, used at 612-614): any `ERROR` row, or any `REFUSED` row
+  without a historical code, on either side, reads `ADMISSION_INVALID_STOP`. This holds even when the producer does
+  not report it. The reviewer's scenario (reference fine, device fault partway through the candidate) is tested.
+- A fault while restoring a checkpoint was already invalid (`_RESTORE_REFUSED_BY_THE_HISTORICAL_LOADER`).
+- I checked the historical predict path at `20208c92`. `source.require` raises `ValueError(reason)`.
+  `matched_contract.require` raises `ValueError("TYPED_MATCHED:" + reason)`. The two direct raises in
+  `pointer_learner.py` (lines 1019, 1573) are `TYPED_MATCHED:...` codes. No handler on that path turns another exception
+  into a coded `ValueError`. The only `except Exception` blocks are an import fallback (line 607) and the training
+  update, which re-raises (line 2039).
+- **Policy wording tension (not new; R3-B).** `REPRODUCTION_POLICY.md` asks the output panel to carry "explicit
+  refusal/error status" and says "Failed/refused records remain records". The new split makes an uncoded error invalid
+  evidence, not a record. The split is fail-closed: it stops the study and never pays for fallback B. But it is Codex's
+  call. R3-B should quote both phrases to Codex.
+
+### V4.2 New findings from this verification
+
+**MINOR 1 - a missing local git object reads as a study stop, not a tool stop.**
+`read_reproduction.py:352-364` and `739-774`; `repro_common.py:807-815`.
+- The reader now evaluates `EXECUTION_ADMISSION.json` at the receipt commit (the fix for review finding 4). That
+  re-reads the three owner records at their pinned commits.
+- Claude's owner record is at `ca68690b` on `research/helm-integration-20260923`. That commit is NOT in this branch's
+  history (checked with `merge-base --is-ancestor`).
+- `main()` makes a tool stop (exit 1) when the policy commit or the reference commit is missing. It does not check
+  `ca68690b`.
+- Scenario: the reader runs in a checkout that never fetched that branch. `read_owner_records` returns `None`. The
+  owner state is `OWNER_AUTHORIZATION_NOT_ESTABLISHED` (probe: `OWNER_RECORD_MISSING` for each record). The admission
+  reads `NOT_READY`. The verdict is `ADMISSION_INVALID_STOP` (exit 2). With `--write`, the create-only reading file
+  records it. A local fetch gap becomes a registered "stop the study" verdict.
+- Fix: in `main()`, before any reading, make a tool stop (exit 1) when any pinned owner-record commit is absent, and
+  name the explicit-refspec fetch. Same pattern as `REFERENCE_COMMIT_MISSING`.
+
+**MINOR 2 - the spend record's sources are never opened, and it has no freshness rule.**
+`repro_common.py:973-994`.
+- Probe: a spend record for this job, dated `2020-01-01T00:00:00Z`, spend `"0.00"`, with one source
+  `no/such/file.json` and sha256 `000...0`, reads no violations.
+- So the money figure is still self-asserted. It now sits in a committed file, which is better than typed text, but
+  nothing checks where the figure came from. Codex amendment item 6 asks for "record-derived conservative incurred
+  spending".
+- Fix: open each named source as a committed, anchored blob and check its sha256. Better: cross-check the figure
+  against Codex's cost record. Set a freshness rule (open question R3-F).
+
+**MINOR 3 - the review receipt's commit is never resolved, and the writer is not covered.**
+`repro_common.py:997-1021`.
+- Probe: `reviewed_commit` = `000...0` reads no violations.
+- The receipt binds the three reader sources and the pins. It does not bind `prepare_unchanged_repro.py`, which runs
+  the `--write` and `--check` gates. A later edit to the writer does not invalidate the review.
+- Fix: require `reviewed_commit` to be an anchored commit whose blobs for the three reader sources, the pins and
+  `prepare_unchanged_repro.py` equal the ones in use. Or add the writer's sha256 to the review receipt and the
+  admission bindings (it is outside the reader digest, so no cycle).
+
+**MINOR 4 - sequencing: the admission-gate code is inside the reader digest, and a new cycle is possible through
+Codex's final freeze.**
+- The admission checks (`execution_admission_state`, the receipt checkers, the spend and review checks,
+  `policy_freeze_violations`) live in `repro_common.py`, a reader source. Any code change that answers R3-A, R3-F,
+  R3-G, R3-H, R3-I or MINORs 1-3 changes the reader digest. A P1 acceptance run before those changes must then be paid
+  for again.
+- Codex's `EXECUTION_MANIFEST.json` at `bc46b36e` says, in `freeze_policy`: "The final launch request must bind exact
+  source commits, package hashes, public data hashes, initialization recipe, worker, checker, decoder, probe,
+  environment, admission records and prerequisite receipts before any new main job". Its `final_freeze` has a
+  `control_admission_sha256` field (null today).
+- This code binds `LAUNCH_REQUEST.json` and `EXECUTION_MANIFEST.json` (through `policy_pins.json` and the admission
+  bindings) into `EXECUTION_ADMISSION.json`. It also binds them into `frozen/study.json` and
+  `frozen/20260917/owner.json` (through `reading_rule`).
+- So if Codex binds the hash of any of those files into its launch request or manifest, a new cycle appears, and
+  ADMITTED is unreachable again.
+- There is also an order problem. `--write` needs `launch_enabled: true` before it can create the frozen admission
+  records. So those records cannot exist before Codex's final freeze.
+- R3-A covers only the launch packet. It does not cover this.
+- Fix: settle the binding direction with Codex (open question V4-A). Do that, and fix MINORs 1-3, BEFORE P1b. Or move
+  the admission-gate code into a separately hashed module outside the reader digest.
+
+**NOTE 5 - the P1 receipt's per-case expectations are trusted.** Probe: a receipt whose `missing_key` case says
+expected and observed `DOES_NOT_REPRODUCE...`, with `pass: true`, reads no violations. The receipt is bound to the
+admitted reader digest, so the honest producer cannot write that. A cheap extra check would compare each case's
+`expected_verdict` with the registered table.
+
+**NOTE 6 - the pinned tips have not moved since the builder's check.** `git ls-remote`: Codex's branch
+`42ad8367099efcb07da613fd5e19759927b41f21`, `research/helm-integration-20260923` at
+`b0fd06ff522e61b0efd125f9f568acfa9e532a2e`. The re-pin question (R3-E) is still open. `--write` and `--check` still stop
+with `POLICY_OR_PLAN_MOVED`. That is correct fail-closed behaviour.
+
+**NOTE 7 - the two open-choice rules both lean to "stop".** R3-B (an uncoded error is invalid) and R3-D (a different
+starting state is training configuration, so invalid) both give `ADMISSION_INVALID_STOP`, never a fallback-eligible
+mismatch. Both were made in the open. Both still need Codex's ruling.
+
+### V4.3 Policy conformance (still exact)
+
+- `decide()` is unchanged in this diff (no removed lines touch it). Three verdict words, spelled as in the policy.
+- `READER_RULE` equals the pinned policy's deciding fields, including the new
+  `frozen_before_reproduction_result_required: true`. Tested against the real `REPRODUCTION_POLICY.json` at `bc46b36e`.
+- Invalid evidence never becomes `DOES_NOT_REPRODUCE...`. File identity and continuation identity never decide. Zero
+  tolerance. Output never overrides state, and state never overrides output.
+- The pinned panel is 564 records, all `ANSWERED`, with no registered expected refusals. So any candidate refusal
+  compares as different, as the policy says.
+
+### V4.4 Checks run (real)
+
+- **Tests, once:** `python -B test_unchanged_repro.py -v` from the worktree root. **99 of 99 pass, none skipped**,
+  14.242 s.
+- `git diff --name-status 20208c92 61123b5f`: 13 files, all added (`A`). Nothing that exists at `20208c92` was edited.
+  `303c281b..61123b5f`: 8 modified, 1 added (`policy_pins.json`), all in this folder.
+- Pin scan of the three reader sources (V4.1, finding 1).
+- One probe script, pure Python; torch was not imported. Results as quoted above: the exception split; the P1 receipt
+  with pre-freeze pins; the weakened P1 case; the spend record; the review receipt; the owner records absent. Also: the
+  shipped `EXECUTION_ADMISSION.json` bindings equal this revision's expected bindings, state `NOT_READY`; reader digest
+  `f35cd2ae...`; pins sha256 `d57d32ddef3f060bb2c87c7cfdf0b22f6f55dc6fca69fa54bcd0583eb700d3a0`.
+- `git merge-base --is-ancestor` for `ca68690b`, `bc46b36e`, `c8d5c430` against HEAD: none is an ancestor.
+- **Not run:** `--dry-run`, `--write` (they import the launcher); `--check`; anything that imports torch; any AWS call.
+  No money spent.
+
+### V4.5 What must happen next
+
+1. Fix MINORs 1-3. Settle MINOR 4 / V4-A with Codex. Do both before P1b, so P1 is paid for once.
+2. A fresh review of that revision.
+3. Codex answers R3-A to R3-I, V4-A, and the builder questions still open in `BUILDER_REPORT.md` 9.6 and 10.6.
+4. Then the steps in R3.6: P1b on AWS, Codex's freeze, the re-pin, the receipts, an ADMITTED record, `--write`,
+   `--check`, launch.
+
+### V4.6 Open question (new)
+
+- **V4-A.** Codex's `freeze_policy` says the final launch request binds "admission records", and `final_freeze` has
+  `control_admission_sha256`. This code binds the launch request and the manifest into `EXECUTION_ADMISSION.json` and
+  into `frozen/`. Which way should the binding go? If Codex binds any file that already holds the launch-request or
+  manifest hash, there is a cycle. Also, `--write` cannot create frozen records before `launch_enabled` is true.
+
+### V4.7 EXPOSURE (this verification)
+
+- **Git objects read** (`git show`, `diff`, `log`, `ls-files`, `rev-parse`, `merge-base`, `cat-file`):
+  - this branch: the diff `303c281b..61123b5f`; the name-status diff from `20208c92`; this folder's files at
+    `61123b5f` (the working copy equals the commit);
+  - Codex's records at the pinned commit `bc46b36e` (present locally; not fetched): `REPRODUCTION_POLICY.json` and
+    `.md`; from `EXECUTION_MANIFEST.json` its top-level keys, `final_freeze`, `freeze_policy`, `prerequisites`,
+    `dependencies` keys and status, and `launch_enabled`; from `LAUNCH_REQUEST.json` its key names and
+    `launch_enabled`; the lines of `CODEX_AMENDMENTS_20260924.md` that mention admission, packet, freeze or bind;
+  - source `20208c92` (not edited): `pointer_learner.py` (predict, `require` lines, `except` blocks), the `require`
+    definitions in `source.py` and `matched_contract.py`, and the `require` code prefixes in `source.py`,
+    `encoder.py`, `checker.py` and `pointer_contract.py`;
+  - through the tests: the pinned policy and owner files, the Helm 2.0 JSON records at `c8d5c430`, and the package and
+    admission blobs at `3da10d84`, as before.
+- **Network:** `git pull --ff-only` of this branch (already up to date); `git ls-remote origin` for three branch names;
+  the `git push` of this commit. No fetch of any other branch.
+- **Written outside this worktree:** the session scratchpad only (`diff_common.txt`, `test_run.txt`,
+  `v4_pins_scan.py`, `v4_manifest_scan.py`, `v4_manifest_fields.py`, `manifest_bc46.json`, `launch_request_bc46.json`,
+  `pointer_learner_20208c92.py`, `v4_probe.py`).
+- **Written in this worktree:** this section of `REVIEW.md` only.
+- The tool harness may save long outputs under `C:/Users/wakil/.claude/projects/.../tool-results/`. I did not open
+  them.
+- **Not opened:** any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, the meta1 ledger (not
+  even an existence check), S3 or AWS, Claude transcripts, Codex's working copy. Nothing launched. No torch run.
