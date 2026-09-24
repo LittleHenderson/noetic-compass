@@ -7,9 +7,11 @@ the other option each finding names) before the HSET-2 salt is made.
 Also conforms to Codex's PROPOSED Amendment A2 (statistical policy; EVALUATION_DESIGN_v0_4.md at f287f965 on Codex's
 branch, and its STATISTICAL_POLICY.json): A2.1 complete finite families (FIXED_POSITION_1..7, STATUS_BY_COUNT_0..8,
 every member a bar; nothing tuned on TEST); A2.2 the degree-group and shared-shape-component views beside the original
-cluster calculation (labelled CONDITIONAL_CLUSTER_DIAGNOSTIC); A2.4 the feasibility table. And two switches for the
-design owner: REGISTER_FRONTIER_FALLBACK (finding V-1, decision D1) and REGISTER_FLAGS_TIEBREAK_GUESS (note N1), both
-registered by default. Two different texts are called "A2": this docstring says "Codex A2" for the statistical policy.
+cluster calculation (labelled CONDITIONAL_CLUSTER_DIAGNOSTIC); A2.4 the feasibility table (with the HSET-1A power
+grid computed exactly at the group and component levels). And two switches for the design owner:
+D1_FRONTIER_DECISION (finding V-1, decision D1: "a", "b_not_testable", "b_rename" or "c"; default "a") and
+REGISTER_FLAGS_TIEBREAK_GUESS (note N1; default on). Two different texts are called "A2": this docstring says
+"Codex A2" for the statistical policy.
 Choices the design leaves open are written in `BUILDER_REPORT_HSET2.md` ("Choices where the design is silent").
 Non-neural: no model is loaded, nothing is trained, no forward pass.
 
@@ -77,8 +79,8 @@ DESIGN_BASIS = ("EVALUATION_DESIGN_v0_4.md + Amendment A1 (d840ea02) + the build
                 "(hset2/REVIEW_HSET2_BUILD_20260924.md; the designer or owner must accept it before the salt is made) "
                 "+ conformance to Codex's PROPOSED Amendment A2 statistical policy (EVALUATION_DESIGN_v0_4.md and "
                 "STATISTICAL_POLICY.json at f287f965, branch codex/helm-controlled-prelaunch-20260924): A2.1 families, "
-                "A2.2 views, A2.4 feasibility table; switches REGISTER_FRONTIER_FALLBACK and "
-                "REGISTER_FLAGS_TIEBREAK_GUESS (both registered)")
+                "A2.2 views, A2.4 feasibility table; switches D1_FRONTIER_DECISION (default a: FRONTIER_FALLBACK "
+                "registered) and REGISTER_FLAGS_TIEBREAK_GUESS (registered)")
 # ---- pins, committed before any build
 HSET1A_SALT_SHA256 = "33f9d350700470cc968597a525f1c50ae0598d11e99f8604463a730fe0909754"   # BUILD_SPEC_v0_1.md s5
 # The coordinator makes the HSET-2 salt (32 random bytes, 64 hex characters) and commits its sha256 HERE before the
@@ -112,11 +114,30 @@ SPLITS_PUBLIC = ("DEV_NEW_6", "DEV_NEW_5")
 # only makes a claim harder to pass. The designer or owner must accept A2 (or choose the other option each finding
 # names) BEFORE the HSET-2 salt is made; adding a bar after the sealed build prints W would be a post-hoc change.
 # ---- the design owner's two switches (the fresh verification of 1520e17c: finding V-1, decision D1; note N1). Each
-# defaults to REGISTERED, so the default only adds bars. D1 (a) keep = True. D1 (b) (declare REACH_3_STEP_TRANSFER_6
-# NOT_TESTABLE or rename it) and D1 (c) (rebalance the reach cell) are design changes that need their own amendment;
-# setting a switch to False is recorded in `registered_comparators()` and its digest, and the rule's W is still printed
-# as a diagnostic, so turning a bar off can never be hidden.
-REGISTER_FRONTIER_FALLBACK = True       # V-1: FRONTIER_FALLBACK is a bar of both reach claims
+# defaults to the option that only adds bars. Every value is recorded in `registered_comparators()` and its digest, and
+# a rule taken off a bar list is still computed and its W printed as a diagnostic, so no choice can be hidden.
+# D1 is one constant with one value per option of decision D1 (review of 4c402209, finding 2: the earlier boolean
+# REGISTER_FRONTIER_FALLBACK could record only "keep" or "drop the bar", never option (b); this constant replaces it).
+# Every value except "a" changes the 3-step claim's status or name; FRONTIER_FALLBACK stays a bar of
+# REACH_4_STEP_TRANSFER_6 under every value.
+D1_OPTIONS = {
+    "a": "keep: FRONTIER_FALLBACK is a bar of REACH_3_STEP_TRANSFER_6 and REACH_4_STEP_TRANSFER_6",
+    "b_not_testable": ("REACH_3_STEP_TRANSFER_6 is declared NOT_TESTABLE before any build (finding V-1: a no-learning "
+                       "rule that never follows an edge more than 2 steps from the whole passes it); FRONTIER_FALLBACK "
+                       "stays a bar of both reach claims and every floor is still printed"),
+    "b_rename": ("the 3-step claim is renamed REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6 (PROPOSED name; the design owner "
+                 "may change it) and carries the scope note that FRONTIER_FALLBACK, a 2-step frontier rule, would pass "
+                 "it; FRONTIER_FALLBACK is printed for it as a diagnostic and stays a bar of REACH_4_STEP_TRANSFER_6"),
+    "c": ("rebalance the reach cell so the 2-step view cannot predict the state: a design change that needs its own "
+          "amendment and code; the build refuses until then")}
+D1_FRONTIER_DECISION = "a"              # V-1 / D1; "a" = FRONTIER_FALLBACK is a bar of both reach claims
+REACH_3_STEP_NAME = "REACH_3_STEP_TRANSFER_6"
+REACH_3_STEP_RENAMED = "REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6"      # D1 (b_rename) only; PROPOSED name
+REACH_4_STEP_NAME = "REACH_4_STEP_TRANSFER_6"
+REACH_3_STEP_RENAMED_SCOPE = ("D1 option b_rename: this claim does NOT show 3-step path following. It shows only that "
+                              "the model beats the two-hop and root-count rules. FRONTIER_FALLBACK, a no-learning rule "
+                              "that never follows an edge more than 2 steps from the whole, would also pass it (finding "
+                              "V-1); its W is printed as computed_not_registered_W.")
 REGISTER_FLAGS_TIEBREAK_GUESS = True    # N1: FLAGS_TIEBREAK_GUESS_THEN_CHECK is an analogy bar
 THREE_HOP = "THREE_HOP_FIRST_CHILD"
 SINGLE_ROOT = "SINGLE_ROOT_FALLBACK"                                   # A2 (F2): two-hop, then a root-count fallback
@@ -166,6 +187,9 @@ ORIGINAL_VIEW_LABEL = "CONDITIONAL_CLUSTER_DIAGNOSTIC"
 VIEWS = ("original_cluster", "degree_group", "shared_shape_component")
 A2_4_MIN_UNITS = 10
 SIGN_POWER_Q = ((3, 5), (7, 10), (4, 5), (1, 1))                      # q = 0.60, 0.70, 0.80, 1.00, exact
+HSET1A_NEVER_LOSES_FRACTIONS = ((1, 2), (3, 4), (1, 1))               # 0.5, 0.75, 1.0 (the HSET-1A grid)
+UNIT_POWER_MAX_STATES = 200000        # a component whose exact enumeration needs more states is reported, not computed
+MECHANISM_GATE_STATE = "MECHANISM_GATE_OPEN"      # STATISTICAL_POLICY.json mechanism.state at f287f965 (Codex A2.6)
 # Measured 2026-09-23 by this builder: the frozen checker over the frozen public course's registry main queries (70
 # analogy and 88 correspondence records). NO_MATCH was never trained for either kind (review m4). Re-measured by the
 # sealed build, which fails closed on any difference.
@@ -173,6 +197,16 @@ TRAINED_BANK_STATES = {"analogy": {"MATCH": 70}, "correspondence": {"MAPPING": 8
 SCOPE_SENTENCE = ("At 6 nodes or fewer this test can show that the model does better than every registered no-learning "
                   "rule, including degree counting. It cannot tell full structural comparison from one hop of "
                   "neighbour-degree matching.")
+# Review of 4c402209, finding 1 (MAJOR, a design choice): recorded, not decided, by this builder. No bar is added for it.
+OPEN_ANALOGY_SCOPE_QUESTION = (
+    "OPEN, for the design owner before the salt (review of 4c402209, finding 1): an unregistered no-learning rule, "
+    "WHOLE_CHILD_FLAG_GUESS (one guess per same-degree other-domain candidate: nodes sorted by in-degree, out-degree, "
+    "child-of-the-declared-whole, flag position, rank; one check; no search), passed ANALOGY_BEYOND_DEGREE_6 with every "
+    "registered bar in place in 2 of 21 throwaway salts; in one of them (tiny-9) every Codex A2.4 floor is met and "
+    "the rule also passes the group and component views. So the scope sentence overstates the least a passing model "
+    "must do. Options: (a) register that rule (then, in the throwaway salts, the original floor holds in 3 of 21 and "
+    "every A2.4 floor in 0 of 21, so the confirmatory claim reads NOT_TESTABLE in every one); (b) widen the scope "
+    "sentence; (c) define the bar by a declared view (the best one-guess ordering from a named feature set)")
 DECLARED_NOT_TESTABLE = {
     "ANALOGY_BEYOND_DEGREE_5": "design s1: the whole 5-node universe has only 6 degree groups with 4 or more members",
     "REACH_3_STEP_TRANSFER_5": "design s1: HSET-1A measured W = 2 on TEST_NEW_5",
@@ -190,24 +224,49 @@ def _paths(package_root):
             sys.path.insert(0, p)
 
 
+def check_d1():
+    """Refuse an unknown D1 value, and D1 option c (it needs its own amendment and code). Called before any salt."""
+    if D1_FRONTIER_DECISION not in D1_OPTIONS:
+        raise SystemExit("REFUSED: D1_FRONTIER_DECISION must be one of %s" % ", ".join(sorted(D1_OPTIONS)))
+    if D1_FRONTIER_DECISION == "c":
+        raise SystemExit("REFUSED: D1 option c (rebalance the reach cell) is a design change; it needs its own "
+                         "amendment and code before any build")
+
+
+def reach_claim_names():
+    """(the 3-step claim's name, the 4-step claim's name). The 3-step name changes only under D1 option b_rename."""
+    return (REACH_3_STEP_RENAMED if D1_FRONTIER_DECISION == "b_rename" else REACH_3_STEP_NAME), REACH_4_STEP_NAME
+
+
 def reach_comparators():
-    """The registered reach bars (design s6, the builder's proposed A2, and FRONTIER_FALLBACK while its switch is on)."""
+    """Every reach rule that is a bar of at least one reach claim (design s6, the builder's proposed A2 and
+    FRONTIER_FALLBACK, which is a bar of the 4-step claim under every D1 value)."""
     import hset1a_build as A
-    return (tuple(A.COMPARATORS["reach"]) + (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP)
-            + ((FRONTIER,) if REGISTER_FRONTIER_FALLBACK else ()))
+    return tuple(A.COMPARATORS["reach"]) + (THREE_HOP, SINGLE_ROOT, SINGLE_ROOT_THREE_HOP, FRONTIER)
+
+
+def reach_claim_bars():
+    """{claim name: its bars}. The 3-step claim never has the two rules built on three-hop; under D1 option b_rename it
+    also leaves out FRONTIER_FALLBACK (the renamed claim's scope note says that rule would pass it)."""
+    three, four = reach_claim_names()
+    names = reach_comparators()
+    return {three: tuple(x for x in names if x not in BUILT_ON_THREE_HOP
+                         and not (x == FRONTIER and D1_FRONTIER_DECISION == "b_rename")),
+            four: names}
 
 
 def reach_computed_not_registered():
-    """Reach rules computed and printed as diagnostics only (a switched-off bar stays visible)."""
-    return () if REGISTER_FRONTIER_FALLBACK else (FRONTIER,)
+    """{claim name: reach rules computed and printed for that claim as diagnostics only} (a rule D1 took off a claim's
+    bar list stays visible). The rules built on three-hop are left out of the 3-step claim by design s7.1, not by a
+    switch, so they are not listed here."""
+    return {claim: tuple(x for x in reach_comparators() if x not in bars and x not in BUILT_ON_THREE_HOP)
+            for claim, bars in reach_claim_bars().items()}
 
 
 def registered_comparators():
     """The whole bar set, printed with its digest in every summary, so anyone can see which bars were fixed before the
     salt was made (design s6 and s7; the proposed additions are listed separately, with where each came from)."""
-    reach = list(reach_comparators())
-    return {"reach": {"REACH_3_STEP_TRANSFER_6": [x for x in reach if x not in BUILT_ON_THREE_HOP],
-                      "REACH_4_STEP_TRANSFER_6": reach},
+    return {"reach": {claim: list(bars) for claim, bars in reach_claim_bars().items()},
             "analogy": list(analogy_comparators()),
             "correspondence": list(CORRESPONDENCE_COMPARATORS),
             "added_by_proposed_amendment_A2": {k: list(v) for k, v in sorted(A2_BARS.items())},
@@ -215,11 +274,15 @@ def registered_comparators():
             "pre_A2_tuned_bars_completed_untuned": {"BEST_FIXED_POSITION": list(FIXED_ALIASES),
                                                     "STATUS_BY_COUNT": list(STATUS_BY_COUNT_FAMILY)},
             "tuned_on_the_cell_diagnostic_only_never_a_bar": sorted(TUNED_DIAGNOSTIC_FAMILIES),
-            "design_owner_switches": {"REGISTER_FRONTIER_FALLBACK": REGISTER_FRONTIER_FALLBACK,
+            "design_owner_switches": {"D1_FRONTIER_DECISION": D1_FRONTIER_DECISION,
+                                      "D1_meaning": D1_OPTIONS.get(D1_FRONTIER_DECISION),
                                       "REGISTER_FLAGS_TIEBREAK_GUESS": REGISTER_FLAGS_TIEBREAK_GUESS},
-            "added_by_switches": {"reach": [FRONTIER] if REGISTER_FRONTIER_FALLBACK else [],
+            "declared_not_testable_by_D1": ([REACH_3_STEP_NAME] if D1_FRONTIER_DECISION == "b_not_testable" else []),
+            "added_by_switches": {"reach": {claim: [FRONTIER] if FRONTIER in bars else []
+                                            for claim, bars in reach_claim_bars().items()},
                                   "analogy": [FLAGS_TIEBREAK] if REGISTER_FLAGS_TIEBREAK_GUESS else []},
-            "computed_not_registered_printed_only": {"reach": list(reach_computed_not_registered()),
+            "computed_not_registered_printed_only": {"reach": {claim: list(x) for claim, x
+                                                               in reach_computed_not_registered().items()},
                                                      "analogy": list(analogy_computed_not_registered())}}
 
 
@@ -1090,14 +1153,24 @@ def views_block(members, bars, *, confirmatory_analogy=False, diagnostics=()):
            "repaired_vs_unchanged_informative_count": {"state": "NOT_YET_OBSERVED",
                                                        "structural_maximum_units": units},
            "power": {"original_cluster": "the HSET-1A grid (power_conditional_on_binding_bar) for the binding bar, "
-                                         "labelled CONDITIONAL_CLUSTER_DIAGNOSTIC; and the conditional sign-power "
-                                         "grid for n = the original cluster count",
-                     "degree_group": "NOT_IDENTIFIED_FROM_RAW_ACCURACY; the conditional sign-power grid for n = the "
-                                     "degree-group count",
-                     "shared_shape_component": "NOT_IDENTIFIED_FROM_RAW_ACCURACY; the conditional sign-power grid for "
-                                               "n = the component count",
+                                         "labelled CONDITIONAL_CLUSTER_DIAGNOSTIC; the same grid computed exactly "
+                                         "in exact_power_under_hset1a_model; and the conditional sign-power grid "
+                                         "for n = the original cluster count",
+                     "degree_group": "NOT_IDENTIFIED_FROM_RAW_ACCURACY (raw accuracy alone does not fix group "
+                                     "signs); under the HSET-1A per-cluster model, conditional on the view's binding "
+                                     "bar's per-cluster results, it is identified: exact_power_under_hset1a_model "
+                                     "(an upper bound on the pass probability, see power_assumptions); and the "
+                                     "conditional sign-power grid for n = the degree-group count",
+                     "shared_shape_component": "NOT_IDENTIFIED_FROM_RAW_ACCURACY (as for degree groups); under the "
+                                               "HSET-1A per-cluster model: exact_power_under_hset1a_model (an upper "
+                                               "bound on the pass probability); and the conditional sign-power grid "
+                                               "for n = the component count",
                      "grid_table": "conditional_sign_power_by_unit_count (top level), rows n = %s"
-                                   % sorted(set(units.values()))}}
+                                   % sorted(set(units.values()))},
+           "power_assumptions": POWER_ASSUMPTIONS,
+           "exact_power_under_hset1a_model": {v: (exact_view_power(members, groups, component_of,
+                                                                   binding[v]["comparator"], v)
+                                                  if bars else None) for v in VIEWS}}
     if diagnostics:
         out["computed_not_registered_W_by_view"] = {x: w(x) for x in diagnostics}
     return out
@@ -1130,17 +1203,152 @@ def conditional_sign_power(d, q):
     return Fraction(sum(math.comb(d, B) * a ** B * (b - a) ** (d - B) for B in range(lo, d + 1)), b ** d)
 
 
+def sig12(value):
+    """A Fraction printed to 12 significant digits (so a small power never prints as 0; review of 4c402209)."""
+    return "%.12g" % float(value)
+
+
 def sign_power_table(unit_counts):
     """{n: {q: [power for d = 0..n]}} for every unit count n that occurs, computed exactly, rounded only at print."""
     top = max(unit_counts, default=0)
     grid = {"%.2f" % (a / b): [conditional_sign_power(d, (a, b)) for d in range(top + 1)] for a, b in SIGN_POWER_Q}
     return {"how": ("Codex A2.4: conditional on d discordant units; each discordant unit positive with probability q; "
                     "power = sum over B of Binomial(d, q) probabilities whose exact null tail at q = 0.5 is <= 0.01 "
-                    "(and B > d - B); exact rational sums, rounded to 6 places only at print. A sensitivity "
-                    "calculation, not a forecast of any model's power"),
+                    "(and B > d - B); exact rational sums, rounded only at print: to 6 places in by_unit_count, and "
+                    "to 12 significant digits in by_discordant_count_12_significant_digits (the value depends on d "
+                    "and q only, so one list per q covers every n). A sensitivity calculation, not a forecast of any "
+                    "model's power"),
             "all_win_minimum_discordant_units": next(d for d in range(1, 64) if sign_min_wins(d) is not None),
             "by_unit_count": {str(n): {q: [round(float(v), 6) for v in values[:n + 1]] for q, values in grid.items()}
-                              for n in sorted(set(unit_counts))}}
+                              for n in sorted(set(unit_counts))},
+            "by_discordant_count_12_significant_digits": {q: [sig12(v) for v in values] for q, values in grid.items()}}
+
+
+# ---- Codex A2.4 (PROPOSED): the HSET-1A power grid recomputed at the group and component levels (review of 4c402209,
+# finding 3). HSET-1A's model, conditional on the bar's per-cluster results (known before any model is read): the model
+# is right on each cluster the bar gets wrong with probability q_win, and keeps each cluster the bar gets right with
+# probability q_keep, independently. A unit's sign then has an exact distribution, and so does the sign test.
+POWER_ASSUMPTIONS = (
+    "HSET-1A's gain/loss model (hset1a_build.power_given_bar), conditional on the view's binding bar's per-cluster "
+    "results, which are fixed before any model is read: the model is right on each cluster the bar gets wrong with "
+    "probability q_win and wrong on each cluster the bar gets right with probability 1 - q_keep, independently across "
+    "clusters. A cluster's difference is +1, 0 or -1; a degree group's is the exact mean of its clusters' differences; a "
+    "component's is the equal-weight mean of its groups' means. The printed value is the exact probability that B > C "
+    "and the exact one-sided sign tail is <= 1/100. In the degree-group and component views a pass also needs a "
+    "positive overall accuracy difference, which this sum does not condition on, so there it is an UPPER BOUND on the "
+    "pass probability; it is exact when q_keep = 1 (no cluster can lose, so B >= 7 gives a positive overall "
+    "difference) and in the original cluster view (B > C is the overall condition there). Settings as the HSET-1A grid: "
+    "uniform model accuracy q = bar accuracy + 0.10, + 0.20, + 0.30 (capped at 1, 4 places) and 1.0 with "
+    "q_win = q_keep = q; never-loses fractions q_win = 0.5, 0.75, 1.0 with q_keep = 1. A sensitivity calculation, not a "
+    "forecast of any model's power.")
+
+
+def hset1a_power_settings(accuracy):
+    """{(grid name, key): ((q_win num, den), (q_keep num, den))}, exactly the HSET-1A grid's settings (power_grid)."""
+    out = {}
+    for q in sorted({round(min(1.0, accuracy + d), 4) for d in (0.10, 0.20, 0.30)} | {1.0}):
+        f = Fraction("%.4f" % q)
+        out[("uniform_model_accuracy", "%.4f" % q)] = ((f.numerator, f.denominator), (f.numerator, f.denominator))
+    for a, b in HSET1A_NEVER_LOSES_FRACTIONS:
+        out[("never_loses_where_bar_is_right_wins_fraction", "%.2f" % (a / b))] = ((a, b), (1, 1))
+    return out
+
+
+def _binomial_weights(n, a, b):
+    """Integer weights of Binomial(n, a/b): comb(n, k) a**k (b - a)**(n - k), k = 0..n, all over b**n."""
+    return [math.comb(n, k) * a ** k * (b - a) ** (n - k) for k in range(n + 1)]
+
+
+def _cluster_diff_weights(wrong, right, win, keep):
+    """({X - Y: integer weight}, denominator) for `wrong` bar-wrong and `right` bar-right clusters: X ~ Binomial(wrong,
+    q_win) clusters the model gains, Y ~ Binomial(right, 1 - q_keep) clusters it loses."""
+    (wa, wb), (ka, kb) = win, keep
+    gains, losses = _binomial_weights(wrong, wa, wb), _binomial_weights(right, kb - ka, kb)
+    out = collections.defaultdict(int)
+    for x, u in enumerate(gains):
+        if u:
+            for y, v in enumerate(losses):
+                if v:
+                    out[x - y] += u * v
+    return dict(out), wb ** wrong * kb ** right
+
+
+def _unit_signs(parts, win, keep):
+    """(plus, minus, zero, denominator) integers for one unit whose value is the equal-weight mean of its parts' exact
+    mean differences; parts = [(bar-wrong clusters, bar-right clusters)], one per group (one part for a group or a
+    cluster). Returns None if the exact enumeration would need more than UNIT_POWER_MAX_STATES states."""
+    scale = math.lcm(*[w + r for w, r in parts])
+    dist, den = {0: 1}, 1
+    for w, r in parts:
+        diffs, d = _cluster_diff_weights(w, r, win, keep)
+        step = scale // (w + r)
+        new = collections.defaultdict(int)
+        for v, u in dist.items():
+            for x, y in diffs.items():
+                new[v + x * step] += u * y
+        if len(new) > UNIT_POWER_MAX_STATES:
+            return None
+        dist, den = dict(new), den * d
+    return (sum(u for v, u in dist.items() if v > 0), sum(u for v, u in dist.items() if v < 0), dist.get(0, 0), den)
+
+
+def unit_sign_power(units):
+    """Exact P(B > C and the exact one-sided tail <= 1/100) over independent units, each (plus, minus, zero, den).
+    States with more losses than any passing count allows are dropped (C only grows); the denominator stays whole."""
+    top = sum(1 for plus, _, _, _ in units if plus)
+    cap = max((C for B in range(top + 1) for C in range(B) if sign_tail_exact(B, C) <= ALPHA_EXACT), default=None)
+    if cap is None:
+        return Fraction(0)
+    states, den = {(0, 0): 1}, 1
+    for plus, minus, zero, d in units:
+        new = collections.defaultdict(int)
+        for (B, C), u in states.items():
+            if zero:
+                new[(B, C)] += u * zero
+            if plus:
+                new[(B + 1, C)] += u * plus
+            if minus and C < cap:
+                new[(B, C + 1)] += u * minus
+        states, den = new, den * d
+    return Fraction(sum(u for (B, C), u in states.items() if B > C and sign_tail_exact(B, C) <= ALPHA_EXACT), den)
+
+
+def exact_view_power(members, groups, component_of, bar, view):
+    """Codex A2.4: the HSET-1A grid for one bar in one view, exact (POWER_ASSUMPTIONS). Counts only are returned."""
+    n = len(members)
+    wrong = sum(1 for c in members if not c["comparators"][bar])
+    if view == "original_cluster":
+        unit_parts = [[(0, 1) if c["comparators"][bar] else (1, 0)] for c in members]
+    else:
+        split = {g: (sum(1 for c in cs if not c["comparators"][bar]), sum(1 for c in cs if c["comparators"][bar]))
+                 for g, cs in groups.items()}
+        if view == "degree_group":
+            unit_parts = [[split[g]] for g in sorted(groups)]
+        else:
+            by_comp = collections.defaultdict(list)
+            for g in sorted(groups):
+                by_comp[component_of[g]].append(split[g])
+            unit_parts = [by_comp[k] for k in sorted(by_comp)]
+    winnable = sum(1 for parts in unit_parts if any(w for w, _ in parts))
+    out = {"bar": bar, "bar_cluster_accuracy": round((n - wrong) / n, 6) if n else None, "units": len(unit_parts),
+           "units_where_the_bar_is_wrong_somewhere": winnable}
+    if not n:
+        return dict(out, state="NO_UNITS")
+    grids = collections.defaultdict(dict)
+    for (grid, key), (win, keep) in hset1a_power_settings((n - wrong) / n).items():
+        if winnable < 7:                                   # B <= winnable < 7: no sign-test pass is possible
+            value = Fraction(0)
+        else:
+            units = [_unit_signs(parts, win, keep) for parts in unit_parts]
+            if any(u is None for u in units):
+                return dict(out, state="NOT_COMPUTED_TOO_LARGE: a component needs more than %d states"
+                            % UNIT_POWER_MAX_STATES)
+            value = unit_sign_power(units)
+        grids[grid][key] = {"value": round(float(value), 6), "value_12_significant_digits": sig12(value)}
+    out["state"] = ("EXACT_ZERO: fewer than 7 units where the bar is wrong, and the sign test needs at least 7 wins"
+                    if winnable < 7 else "COMPUTED_EXACT")
+    out.update(grids)
+    return out
 
 
 def summarise_bank_cell(A, cell, kind, clusters, rows_by_item, claim_role):
@@ -1208,7 +1416,6 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
     """HSET-1A's reviewed summary (balancing, ties, alternative cuts), then design s7's per-bar W and both claims, with
     Codex A2.2's views per claim (the focus's degree group; reach packets have one listed role, the focus)."""
     import hset2_stage0_public as S0
-    names = reach_comparators()
     extra = reach_computed_not_registered()
     s = A.summarise_cell(hw, cell, clusters, rows_by_item, items_by_cluster, seed)
     single_bar = {k: s.pop(k) for k in ("bar", "bar_cluster_accuracy", "bar_wrong_clusters_W", "bar_right_clusters",
@@ -1234,16 +1441,28 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
     primary = [c for c in clusters if c["role"] == "PRIMARY"]
     for c in primary:
         c["group_key"] = None
-    claim_bars = {"REACH_3_STEP_TRANSFER_6": tuple(x for x in names if x not in BUILT_ON_THREE_HOP),
-                  "REACH_4_STEP_TRANSFER_6": names}
+    claim_bars = reach_claim_bars()
+    three, _ = reach_claim_names()
     s["claims"] = {claim: floor_block(A, primary, bars) for claim, bars in claim_bars.items()}
     for claim, block in s["claims"].items():
         block.pop("distinct_degree_groups")
         block.pop("distinct_degree_groups_behind_binding_W")
         block["original_calculation_label"] = ORIGINAL_VIEW_LABEL
-        block["a2_views"] = views_block(primary, claim_bars[claim], diagnostics=extra)
-    if extra:
-        s["computed_not_registered_W"] = {x: sum(1 for c in primary if not c["comparators"][x]) for x in extra}
+        block["a2_views"] = views_block(primary, claim_bars[claim], diagnostics=extra[claim])
+        if extra[claim]:
+            block["computed_not_registered_W"] = {x: sum(1 for c in primary if not c["comparators"][x])
+                                                  for x in extra[claim]}
+    if D1_FRONTIER_DECISION == "b_not_testable":
+        # D1 (b): the claim is NOT_TESTABLE whatever its floor says; the floor is still printed, never hidden
+        block = s["claims"][REACH_3_STEP_NAME]
+        block["floor_result_before_the_D1_declaration"] = {"can_carry_a_claim": block["can_carry_a_claim"],
+                                                           "why_not": block["why_not"]}
+        block["can_carry_a_claim"] = False
+        block["why_not"] = ("declared NOT_TESTABLE before any build (D1 option b_not_testable, finding V-1)"
+                            + ("; %s" % block["why_not"] if block["why_not"] else ""))
+        block["declared_not_testable_by_D1"] = D1_OPTIONS["b_not_testable"]
+    if D1_FRONTIER_DECISION == "b_rename":
+        s["claims"][three]["scope_note"] = REACH_3_STEP_RENAMED_SCOPE
     s["genuine_no_path_primary_absent_clusters_whose_whole_has_children"] = sum(
         1 for c in primary if c["state"] == "ABSENT" and c["whole_has_children"])
     s["primary_absent_clusters"] = sum(1 for c in primary if c["state"] == "ABSENT")
@@ -1252,9 +1471,9 @@ def summarise_reach_cell(hw, A, cell, clusters, rows_by_item, items_by_cluster, 
     s["primary_by_state_single_root_shape"] = {st: {"one_root": sum(1 for c in primary if c["state"] == st and c["single_root_shape"]),
                                                     "two_or_more_roots": sum(1 for c in primary if c["state"] == st and not c["single_root_shape"])}
                                                for st in ("ABSENT", "DIRECT", "VIA")}
-    s["can_carry_a_claim"] = s["claims"]["REACH_3_STEP_TRANSFER_6"]["can_carry_a_claim"]
-    s["can_carry_a_claim_note"] = ("cell-level value = the REACH_3_STEP_TRANSFER_6 floor; REACH_4_STEP_TRANSFER_6 has its "
-                                   "own floor in claims")
+    s["can_carry_a_claim"] = s["claims"][three]["can_carry_a_claim"]
+    s["can_carry_a_claim_note"] = ("cell-level value = the %s floor; %s has its own floor in claims"
+                                   % (three, REACH_4_STEP_NAME))
     return s
 
 
@@ -1568,6 +1787,7 @@ def parse_args(argv=None):
 
 def _run(args):
     t0 = time.monotonic()
+    check_d1()
     root = pathlib.Path(args.package_root).resolve()
     _paths(root)
     if inside_git_work_tree(args.out_sealed):
@@ -1725,9 +1945,10 @@ def _run(args):
                     "roots_histogram": dict(sorted(collections.Counter(str(len(hw.roots(*S0.key_shape(k)))) for k in keys).items()))}
         s["eligible_foci_versus_rest_of_test"] = {"eligible": profile(sorted(eligible)), "rest": profile(rest)}
     sdr = smallest_detectable_regression(A)
+    three_step, four_step = reach_claim_names()
     claims = {
-        "REACH_3_STEP_TRANSFER_6": ("TEST_NEW_6/REACH_FIRST_DIRECT", "TEST_NEW_6/REACH_BFS"),
-        "REACH_4_STEP_TRANSFER_6": ("TEST_NEW_6/REACH_FIRST_DIRECT", "TEST_NEW_6/REACH_BFS"),
+        three_step: ("TEST_NEW_6/REACH_FIRST_DIRECT", "TEST_NEW_6/REACH_BFS"),
+        four_step: ("TEST_NEW_6/REACH_FIRST_DIRECT", "TEST_NEW_6/REACH_BFS"),
         "ANALOGY_BEYOND_DEGREE_6": ("TEST_NEW_6/ANALOGY",),
         "CORRESPONDENCE_BEYOND_DEGREE_6": ("TEST_NEW_6/CORRESPONDENCE",),
         "CORRESPONDENCE_BEYOND_DEGREE_5": ("TEST_NEW_5/CORRESPONDENCE",)}
@@ -1747,8 +1968,11 @@ def _run(args):
         floors = {c: cell_floor(claim, c) for c in cells}
         testable = all(f is not None and f["can_carry_a_claim"] for f in floors.values())
         claims_table[claim] = {"cells": list(cells), "per_arm": "evaluated per arm, both arms always reported (s7.1)",
-                               "bars": ("every registered reach comparator except the two built on three-hop (%s)"
-                                        % ", ".join(BUILT_ON_THREE_HOP) if claim == "REACH_3_STEP_TRANSFER_6"
+                               "bars": ("every registered reach comparator except the two built on three-hop (%s)%s"
+                                        % (", ".join(BUILT_ON_THREE_HOP),
+                                           " and FRONTIER_FALLBACK (D1 option b_rename)"
+                                           if D1_FRONTIER_DECISION == "b_rename" else "")
+                                        if claim == three_step
                                         else "every registered comparator of the cell's kind"),
                                "can_carry_a_claim_before_any_model": testable,
                                "status_if_not": None if testable else "NOT_TESTABLE",
@@ -1761,6 +1985,16 @@ def _run(args):
                                    c: ({v: cell_views(claim, c)["binding_by_view"][v]["W"] for v in VIEWS}
                                        if cell_views(claim, c) else None) for c in cells},
                                "scope_sentence": SCOPE_SENTENCE}
+    claims_table[three_step]["d1_frontier_decision"] = {"value": D1_FRONTIER_DECISION,
+                                                        "meaning": D1_OPTIONS[D1_FRONTIER_DECISION]}
+    if D1_FRONTIER_DECISION == "b_not_testable":
+        claims_table[three_step]["declared_before_any_build"] = D1_OPTIONS["b_not_testable"]
+        claims_table[three_step]["can_carry_a_claim_before_any_model"] = False
+        claims_table[three_step]["status_if_not"] = "NOT_TESTABLE"
+    if D1_FRONTIER_DECISION == "b_rename":
+        claims_table[three_step]["renamed_from"] = REACH_3_STEP_NAME
+        claims_table[three_step]["scope_note"] = REACH_3_STEP_RENAMED_SCOPE
+    claims_table["ANALOGY_BEYOND_DEGREE_6"]["open_design_question_before_the_salt"] = OPEN_ANALOGY_SCOPE_QUESTION
     for claim, why in DECLARED_NOT_TESTABLE.items():
         claims_table[claim] = {"cells": [], "can_carry_a_claim_before_any_model": False, "status_if_not": "NOT_TESTABLE",
                                "declared_before_any_build": why}
@@ -1781,7 +2015,22 @@ def _run(args):
             "can_carry_a_claim_before_any_model": not reasons, "status_if_not": None if not reasons else "NOT_TESTABLE",
             "not_testable_reasons": reasons,
             "repaired_vs_unchanged_informative_count": "NOT_YET_OBSERVED",
-            "inference_assumptions": "see inference_assumptions (top level)"}
+            "inference_assumptions": "see inference_assumptions (top level)",
+            # Codex A2.3: the two further status words the future scorer must carry (review of 4c402209, note 7).
+            # This builder decides neither; it records where each comes from.
+            "inference_assumptions_status": {
+                "state": "OPEN_FOR_THE_BUILDER_SCORER_REVIEW",
+                "if_not_supported": "INFERENCE_ASSUMPTIONS_UNSUPPORTED (all scores and conditional p-values still "
+                                    "reported; no confirmatory claim)"},
+            "mechanism_gate_status": {
+                "state": MECHANISM_GATE_STATE,
+                "source": "STATISTICAL_POLICY.json mechanism.state at f287f965 (Codex's PROPOSED A2.6); read, not "
+                          "decided, by this builder",
+                "while_open": "MECHANISM_GATE_OPEN: a missing required mechanism validation keeps the claim from "
+                              "passing (Codex A2.3); the underlying scores and reasons are kept"},
+            "status_words_the_scorer_must_use": ["NOT_TESTABLE", "INFERENCE_ASSUMPTIONS_UNSUPPORTED",
+                                                 "MECHANISM_GATE_OPEN"],
+            "open_design_question_before_the_salt": OPEN_ANALOGY_SCOPE_QUESTION}
     v_cells = sorted({c for claim, cells in claims.items() for c in cells if cell_floor(claim, c) and cell_floor(claim, c)["can_carry_a_claim"]})
     all_claim_cells = sorted({c for cells in claims.values() for c in cells})
     gates = {"pinned_program": {"path": GATES_PROGRAM, "sha256_lf": GATES_PROGRAM_LF_SHA256,
@@ -1814,7 +2063,18 @@ def _run(args):
         "rows": feasibility_rows,
         "conditional_sign_power_by_unit_count": sign_power_table(
             [u for r in feasibility_rows for u in r["units"].values()]),
-        "repaired_vs_unchanged_informative_count": "NOT_YET_OBSERVED (A2.4: unknowable before both arms are scored)"}
+        "repaired_vs_unchanged_informative_count": "NOT_YET_OBSERVED (A2.4: unknowable before both arms are scored)",
+        # Codex A2.4 lists "both-arm packet-route acceptance" among the required prints (review of 4c402209, finding
+        # 4). This build checks every packet only against the pinned tree's reader and route (reader_ok, LARGER_PATH).
+        "both_arm_packet_route_acceptance": {
+            "state": "NOT_YET_CHECKED",
+            "checked_by_this_build": ("the repaired arm only: every packet passes the frozen validator, the LARGER "
+                                      "route and Helm's input reader of the pinned tree %s" % SOURCE_COMMIT),
+            "still_required": ("the unchanged arm: the historical 20208c92 source (named plan d015d58e) must accept "
+                               "and route every HSET-2 packet, 6-node packets included, the same way; the custodian "
+                               "build (or its scorer) must run that reader over the same packets before the "
+                               "feasibility table is attached to the launch request"),
+            "blocks": "A2.4: a missing receipt is a pretraining blocker"}}
     inference_assumptions = {
         "state": "OPEN_FOR_THE_BUILDER_SCORER_REVIEW",
         "rule": ("Codex A2.2: a p-value is conditional on independent units and exchangeable paired signs under the "
@@ -1830,7 +2090,12 @@ def _run(args):
             "every TEST_NEW_6 focus comes from one salted MIX-sampler draw without replacement; the units are not "
             "independent draws from a fixed population",
             "reach: the ABSENT / DIRECT / VIA balancing chooses primary clusters by a salted order within each state",
-            "reach: the frozen 64-world training bank rides unchanged in every reach packet (not a listed role)"]}
+            "reach: the frozen 64-world training bank rides unchanged in every reach packet (not a listed role)"],
+        "review_observation_not_a_ruling": (
+            "review of 4c402209, note 7: the sampling does not by itself make the groups independent (shared fillers "
+            "join groups; every TEST focus comes from one salted draw without replacement), and it does not make the "
+            "paired signs exchangeable; unless the design owner accepts the components as the unit of independence, "
+            "the A2.2 default would be INFERENCE_ASSUMPTIONS_UNSUPPORTED")}
 
     # ---- write
     pub, sealed = pathlib.Path(args.out_public), pathlib.Path(args.out_sealed)

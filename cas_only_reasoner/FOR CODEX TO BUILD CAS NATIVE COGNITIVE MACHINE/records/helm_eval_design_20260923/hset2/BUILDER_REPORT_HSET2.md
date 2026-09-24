@@ -644,3 +644,41 @@ New and changed tests:
 - **Not opened:** any `*_eval.jsonl`; any sealed file or folder except my own throwaway outputs; anything under
   `D:/tksCAS-archive/`; any real salt; S3 or AWS; the meta1 ledger; any `results/` folder;
   `private_targets.json`; Claude transcripts. No real salt was used or made. Nothing was downloaded.
+
+## Fix round after the review of 4c402209, 2026-09-24 (`CLAUDE_BUILT_CLAUDE_CHECKED`)
+
+The review, its seven findings and the builder's disposition of each are in `REVIEW_HSET2_BUILD_20260924.md`, section
+"Review of 4c402209...". No independent reviewer has read this round. No model was run, no real salt was used or made,
+and nothing ran on AWS.
+
+**What this round supersedes in the section above** (the text above is kept as it was written):
+- **T4, first switch.** `REGISTER_FRONTIER_FALLBACK` no longer exists. It is replaced by `D1_FRONTIER_DECISION`, one
+  constant with one value per option of decision D1: `a` (default; the same bars as before), `b_not_testable`,
+  `b_rename` or `c` (refused until its own amendment exists). `FRONTIER_FALLBACK` stays a bar of
+  `REACH_4_STEP_TRANSFER_6` under every value.
+- **T4, the digests.** Under the default settings every claim has the same bars as at `4c402209`. The digest changed only
+  because the record's shape changed: it is now `14be05d5a0845e52a194628974fd0bfd6763b0fc0b1e1e96dfe3dd779671edfd`.
+  - With `b_not_testable`: `42928c8681b59064ed5feb200a4072171c580147f7c73927c2e156bb1fd94bb9`.
+  - With `b_rename`: `f24cbbc878a08ef6a5750e3043e7898bbb23623d835926459efc3271e8a45781`.
+  - With D1 `a` and N1 off: `47a7777b481a47a5b28730432744cd405878e8cf736e0ad590f2449bfea9b8e8`.
+  - The four digests printed in T4 above belong to `4c402209`.
+- **C.4 item 7.** The HSET-1A power grid is now computed exactly at the group and component levels, for each view's
+  binding bar (`exact_power_under_hset1a_model`, assumptions in `power_assumptions`). In those two views it is an upper
+  bound on the pass chance, except in the never-loses rows, where it is exact. Every exact power is also printed to 12
+  significant digits.
+- **C.5.** The open questions for the design owner are now the list in the review file, section R.4.
+
+**Added to the output, no bar or floor changed:**
+- `both_arm_packet_route_acceptance: NOT_YET_CHECKED`, naming the unchanged arm's reader check that is still required;
+- on `REPAIR_IMPROVES_ANALOGY_6`: `inference_assumptions_status`, `mechanism_gate_status` (`MECHANISM_GATE_OPEN`, read
+  from `STATISTICAL_POLICY.json` at `f287f965`) and `status_words_the_scorer_must_use`;
+- on `ANALOGY_BEYOND_DEGREE_6` and `REPAIR_IMPROVES_ANALOGY_6`: `open_design_question_before_the_salt`. This is the
+  review's MAJOR finding, a design choice, recorded and not decided.
+
+**Tests:** fast group 29 of 29 passed, end-to-end group 2 of 2 passed, both on the final files. The slow group was not
+run; its code path did not change.
+
+**Files** (LF sha256):
+- `hset2_build.py` `a21d022bfc9a8b851dbea23b3f96c79d4cd1ff3c8b5f5cb2e70a9448d7c037ba`
+- `test_hset2.py` `997345c922e5184db55b99b08eba60592e0081ea83cf61bf9bdaade2242ad4af`
+- `hset2_throwaway_ranges.py` `6d4bf43158642bcee275d1e49e4746a05eb5af05e3c4b32b99ecec7b01a7f917`

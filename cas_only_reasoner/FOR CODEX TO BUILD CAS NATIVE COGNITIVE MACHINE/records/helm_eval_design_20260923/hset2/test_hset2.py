@@ -223,10 +223,10 @@ def test_single_root_fallback_rules():
         "THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"}
 
 
-def test_frontier_fallback_rules(monkeypatch):
+def test_frontier_fallback_rules():
     """Finding V-1: two-hop, then VIA when a node exactly 2 steps out has a child and the part has a parent. It never
-    checks where the third step goes. The switch REGISTER_FRONTIER_FALLBACK (default True) makes it a bar of both
-    reach claims; switched off, it is still computed and printed, and the bar-set digest changes."""
+    checks where the third step goes. Under the default D1 value "a" it is a bar of both reach claims (the other D1
+    values: test_d1_switch_records_every_option)."""
     Hm = H()
     first, bfs = "first_direct_constituent_lexical_v1", "bfs_immediate_predecessor_lexical_v1"
     q = lambda part, rule: {"arguments": {"whole": "w/n0", "part": "w/n%d" % part}, "rule": rule}   # noqa: E731
@@ -264,16 +264,99 @@ def test_frontier_fallback_rules(monkeypatch):
     assert run(chain, 1, bfs)["FRONTIER_FALLBACK"] == {"state": "DIRECT", "via": None}
     short = plain_world(6, [(0, 1), (1, 2), (3, 4), (4, 5), (3, 1)])
     assert run(short, 5, first)["FRONTIER_FALLBACK"] == absent                  # n2, 2 steps out, has no child
-    # 5. the switch: registered by default in both claims; off, it leaves both bar lists and stays printed
+    # 5. the default D1 value "a": registered in both claims
     reg = Hm.registered_comparators()
-    assert Hm.REGISTER_FRONTIER_FALLBACK is True
+    assert Hm.D1_FRONTIER_DECISION == "a" and reg["design_owner_switches"]["D1_FRONTIER_DECISION"] == "a"
     assert all("FRONTIER_FALLBACK" in reg["reach"][c] for c in ("REACH_3_STEP_TRANSFER_6", "REACH_4_STEP_TRANSFER_6"))
-    digest_on = hw.sha(reg)
-    monkeypatch.setattr(Hm, "REGISTER_FRONTIER_FALLBACK", False)
-    off = Hm.registered_comparators()
-    assert not any("FRONTIER_FALLBACK" in off["reach"][c] for c in off["reach"])
-    assert off["computed_not_registered_printed_only"]["reach"] == ["FRONTIER_FALLBACK"]
-    assert off["design_owner_switches"]["REGISTER_FRONTIER_FALLBACK"] is False and hw.sha(off) != digest_on
+
+
+def test_d1_switch_records_every_option(tmp_path, monkeypatch):
+    """Review of 4c402209, finding 2: D1 is one recorded constant with one value per option. Every value except "a"
+    changes the 3-step claim's status or name; FRONTIER_FALLBACK stays a bar of the 4-step claim under every value;
+    option c and unknown values are refused before any salt is read; each value has its own bar-set digest."""
+    Hm = H()
+    three_hop = {"THREE_HOP_FIRST_CHILD", "SINGLE_ROOT_FALLBACK_AFTER_THREE_HOP"}
+    digests = {}
+    for value in ("a", "b_not_testable", "b_rename"):
+        monkeypatch.setattr(Hm, "D1_FRONTIER_DECISION", value)
+        Hm.check_d1()
+        reg = Hm.registered_comparators()
+        digests[value] = hw.sha(reg)
+        three, four = Hm.reach_claim_names()
+        assert set(reg["reach"]) == {three, four} and four == "REACH_4_STEP_TRANSFER_6"
+        assert "FRONTIER_FALLBACK" in reg["reach"][four]
+        assert set(reg["reach"][four]) - set(reg["reach"][three]) >= three_hop
+        assert set(reg["reach"][three]) <= set(reg["reach"][four])
+        assert reg["design_owner_switches"]["D1_FRONTIER_DECISION"] == value
+        assert reg["design_owner_switches"]["D1_meaning"] == Hm.D1_OPTIONS[value]
+        if value == "a":
+            assert three == "REACH_3_STEP_TRANSFER_6" and "FRONTIER_FALLBACK" in reg["reach"][three]
+            assert reg["declared_not_testable_by_D1"] == []
+            assert reg["computed_not_registered_printed_only"]["reach"] == {three: [], four: []}
+        if value == "b_not_testable":                       # the name stays; the claim is declared NOT_TESTABLE
+            assert three == "REACH_3_STEP_TRANSFER_6" and "FRONTIER_FALLBACK" in reg["reach"][three]
+            assert reg["declared_not_testable_by_D1"] == ["REACH_3_STEP_TRANSFER_6"]
+        if value == "b_rename":                             # a new name; FRONTIER printed for it, not a bar of it
+            assert three == "REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6" and "REACH_3_STEP_TRANSFER_6" not in reg["reach"]
+            assert "FRONTIER_FALLBACK" not in reg["reach"][three]
+            assert reg["computed_not_registered_printed_only"]["reach"] == {three: ["FRONTIER_FALLBACK"], four: []}
+            assert "does NOT show 3-step path following" in Hm.REACH_3_STEP_RENAMED_SCOPE
+    assert len(set(digests.values())) == 3
+    for value, pattern in (("c", "^REFUSED: D1 option c"), ("b", "^REFUSED: D1_FRONTIER_DECISION must be one of")):
+        monkeypatch.setattr(Hm, "D1_FRONTIER_DECISION", value)
+        with pytest.raises(SystemExit, match=pattern):
+            Hm.check_d1()
+        with pytest.raises(SystemExit, match=pattern):         # the build refuses before it reads anything
+            Hm.main(["--package-root", ".", "--out-public", str(tmp_path / "p"), "--out-sealed", str(tmp_path / "s"),
+                     "--throwaway-seed", "t"])
+    assert not (tmp_path / "p").exists()
+
+
+@needs_root
+def test_d1_options_in_the_reach_cell_summary(monkeypatch):
+    """The D1 values as the reach cell summary prints them, on a tiny throwaway build (public strings only)."""
+    Hm = H()
+    import copy
+    import hset2_throwaway_ranges as R
+    from cas_meta2.typed_teaching import source
+    Hm._init(ROOT)
+    vocab, _ = hw.vocabulary(source)
+    stage0 = Hm.load_stage0(pathlib.Path(ROOT))
+    salt1a, salt2 = throwaway_salt(NON_BREACHING_SEED, "hset1a"), throwaway_salt(NON_BREACHING_SEED, "hset2")
+    D = Hm.derive(stage0, salt1a, salt2, vocab, source, limit_foci=2, only="reach")
+    items = [i for i in D["items"] if i["split"] == "TEST_NEW_6"]
+    rows = R.fast_rows(Hm, items)
+    by_cluster = {}
+    for item in items:
+        by_cluster.setdefault(item["cluster_id"], []).append(item)
+    members = [c for c in D["single_clusters"] if c["split"] == "TEST_NEW_6" and c["cell"] == "REACH_BFS"]
+    assert members
+    out = {}
+    for value in ("a", "b_not_testable", "b_rename"):
+        monkeypatch.setattr(Hm, "D1_FRONTIER_DECISION", value)
+        out[value] = Hm.summarise_reach_cell(hw, A, "REACH_BFS", copy.deepcopy(members), rows, by_cluster, salt2, "-")
+    a, bnt, bre = out["a"]["claims"], out["b_not_testable"]["claims"], out["b_rename"]["claims"]
+    assert set(a) == set(bnt) == {"REACH_3_STEP_TRANSFER_6", "REACH_4_STEP_TRANSFER_6"}
+    assert "FRONTIER_FALLBACK" in a["REACH_3_STEP_TRANSFER_6"]["W_by_comparator"]
+    assert "computed_not_registered_W" not in a["REACH_3_STEP_TRANSFER_6"]
+    # b_not_testable: NOT_TESTABLE whatever the floor says; the floor is still printed
+    block = bnt["REACH_3_STEP_TRANSFER_6"]
+    assert block["can_carry_a_claim"] is False and out["b_not_testable"]["can_carry_a_claim"] is False
+    assert block["why_not"].startswith("declared NOT_TESTABLE before any build (D1 option b_not_testable")
+    assert block["floor_result_before_the_D1_declaration"]["can_carry_a_claim"] == a["REACH_3_STEP_TRANSFER_6"]["can_carry_a_claim"]
+    assert block["W_by_comparator"] == a["REACH_3_STEP_TRANSFER_6"]["W_by_comparator"]
+    # b_rename: the new name, FRONTIER printed as a diagnostic in every view, the scope note attached
+    assert set(bre) == {"REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6", "REACH_4_STEP_TRANSFER_6"}
+    renamed = bre["REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6"]
+    assert "FRONTIER_FALLBACK" not in renamed["W_by_comparator"]
+    assert renamed["computed_not_registered_W"] == {
+        "FRONTIER_FALLBACK": a["REACH_3_STEP_TRANSFER_6"]["W_by_comparator"]["FRONTIER_FALLBACK"]}
+    assert set(renamed["a2_views"]["computed_not_registered_W_by_view"]) == {"FRONTIER_FALLBACK"}
+    assert renamed["scope_note"] == Hm.REACH_3_STEP_RENAMED_SCOPE
+    # the 4-step claim is the same under every value, FRONTIER included
+    assert (a["REACH_4_STEP_TRANSFER_6"]["W_by_comparator"] == bnt["REACH_4_STEP_TRANSFER_6"]["W_by_comparator"]
+            == bre["REACH_4_STEP_TRANSFER_6"]["W_by_comparator"])
+    assert "FRONTIER_FALLBACK" in a["REACH_4_STEP_TRANSFER_6"]["W_by_comparator"]
 
 
 def test_reach_comparators_hand_made():
@@ -518,6 +601,87 @@ def test_sign_tail_and_conditional_power_exact():
     assert sorted(table["by_unit_count"]) == ["3", "7"]
     assert table["by_unit_count"]["7"]["1.00"] == [0, 0, 0, 0, 0, 0, 0, 1.0]
     assert len(table["by_unit_count"]["3"]["0.60"]) == 4
+    # review of 4c402209, finding 3: 12 significant digits beside the 6-place values (one list per q, d = 0..top)
+    digits = table["by_discordant_count_12_significant_digits"]
+    assert digits["0.60"][7] == Hm.sig12(Fraction(3, 5) ** 7) == "0.0279936" and len(digits["0.60"]) == 8
+    assert Hm.sig12(Fraction(1, 10 ** 9)) == "1e-09"                       # a small power does not print as 0
+
+
+def test_exact_view_power_under_the_hset1a_model():
+    """Review of 4c402209, finding 3: the HSET-1A power grid recomputed exactly at the group and component levels.
+    Checked against HSET-1A's own float grid (cluster level), a hand count (never-loses, groups) and a brute-force sum
+    over every cluster outcome (groups and components, one uniform and one never-loses setting)."""
+    Hm = H()
+    import itertools
+    from fractions import Fraction
+    # 1. the original cluster view equals HSET-1A's power_given_bar (12 of 30 clusters wrong for the bar)
+    members = [view_cluster("c%d" % i, "g%d" % i, ["s%d" % i], X=(i >= 12)) for i in range(30)]
+    groups, comp = Hm.view_units(members)
+    ex = Hm.exact_view_power(members, groups, comp, "X", "original_cluster")
+    grid = Hm.power_grid(A, 12, 30)
+    for name in ("uniform_model_accuracy", "never_loses_where_bar_is_right_wins_fraction"):
+        assert set(ex[name]) == set(grid[name])
+        for key, value in grid[name].items():
+            assert abs(ex[name][key]["value"] - value) <= 2e-6, (name, key)
+    # 2. never-loses 0.5, 10 groups each with one bar-wrong and one bar-right cluster: a group wins with
+    # probability 1/2 and never loses, so the pass needs 7 or more wins: (120 + 45 + 10 + 1) / 1024
+    members = []
+    for g in range(10):
+        members += [view_cluster("w%d" % g, "g%d" % g, ["a%d" % g]), view_cluster("r%d" % g, "g%d" % g, ["b%d" % g], X=True)]
+    groups, comp = Hm.view_units(members)
+    ex = Hm.exact_view_power(members, groups, comp, "X", "degree_group")
+    assert ex["state"] == "COMPUTED_EXACT" and ex["units"] == 10 and ex["units_where_the_bar_is_wrong_somewhere"] == 10
+    assert ex["never_loses_where_bar_is_right_wins_fraction"]["0.50"]["value_12_significant_digits"] == Hm.sig12(Fraction(176, 1024))
+    # 3. brute force: 8 groups (one with 2 wrong and 1 right, one with 1 and 1, six with 1 wrong); g0 and g1 share a
+    # class, so there are 7 components
+    spec = [("g0", 2, 1), ("g1", 1, 1)] + [("g%d" % k, 1, 0) for k in range(2, 8)]
+    members = []
+    for g, wrong, right in spec:
+        shared = ["shared"] if g in ("g0", "g1") else []
+        members += [view_cluster("%sw%d" % (g, i), g, ["%s-w%d" % (g, i)] + shared) for i in range(wrong)]
+        members += [view_cluster("%sr%d" % (g, i), g, ["%s-r%d" % (g, i)], X=True) for i in range(right)]
+    groups, comp = Hm.view_units(members)
+    assert len(groups) == 8 and len(set(comp.values())) == 7
+
+    def brute(view, win, keep):
+        total = Fraction(0)
+        for outcome in itertools.product((0, 1), repeat=len(members)):
+            weight, d = Fraction(1), {}
+            for c, right in zip(members, outcome):
+                p = keep if c["comparators"]["X"] else win
+                weight *= p if right else 1 - p
+                d[c["cluster_id"]] = right - int(c["comparators"]["X"])
+            gmean = {g: Fraction(sum(d[c["cluster_id"]] for c in cs), len(cs)) for g, cs in groups.items()}
+            if view == "degree_group":
+                values = list(gmean.values())
+            else:
+                by = {}
+                for g, v in gmean.items():
+                    by.setdefault(comp[g], []).append(v)
+                values = [sum(vs, Fraction(0)) / len(vs) for vs in by.values()]
+            B, C = sum(v > 0 for v in values), sum(v < 0 for v in values)
+            if B > C and Hm.sign_tail_exact(B, C) <= Fraction(1, 100):
+                total += weight
+        return total
+    for view in ("degree_group", "shared_shape_component"):
+        ex = Hm.exact_view_power(members, groups, comp, "X", view)
+        assert ex["state"] == "COMPUTED_EXACT" and ex["bar_cluster_accuracy"] == round(2 / 11, 6)
+        assert sorted(ex["uniform_model_accuracy"]) == ["0.2818", "0.3818", "0.4818", "1.0000"]
+        q = Fraction("0.3818")
+        value = brute(view, q, q)
+        assert 0 < value < Fraction(1, 10 ** 2)                  # small, and still printed with its digits
+        assert ex["uniform_model_accuracy"]["0.3818"]["value_12_significant_digits"] == Hm.sig12(value)
+        assert (ex["never_loses_where_bar_is_right_wins_fraction"]["0.75"]["value_12_significant_digits"]
+                == Hm.sig12(brute(view, Fraction(3, 4), Fraction(1))))
+        assert ex["uniform_model_accuracy"]["1.0000"]["value"] == 1.0
+    # 4. fewer than 7 units where the bar is wrong: exactly 0 in every setting
+    few = [view_cluster("f%d" % i, "g%d" % i, ["t%d" % i], X=(i >= 6)) for i in range(20)]
+    g4, c4 = Hm.view_units(few)
+    ex = Hm.exact_view_power(few, g4, c4, "X", "degree_group")
+    assert ex["state"].startswith("EXACT_ZERO")
+    assert all(v["value"] == 0 for name in ("uniform_model_accuracy", "never_loses_where_bar_is_right_wins_fraction")
+               for v in ex[name].values())
+    assert "UPPER BOUND" in Hm.POWER_ASSUMPTIONS
 
 
 def test_floor():
@@ -763,8 +927,26 @@ def test_tiny_end_to_end(tiny_build):
         assert r["repaired_vs_unchanged_informative_count"]["state"] == "NOT_YET_OBSERVED"
         for n in set(r["units"].values()):
             assert str(n) in feas["conditional_sign_power_by_unit_count"]["by_unit_count"]
+        # review of 4c402209, finding 3: the HSET-1A grid, exact, in every view, for that view's binding bar
+        assert set(r["exact_power_under_hset1a_model"]) == set(r["units"]) and "UPPER BOUND" in r["power_assumptions"]
+        for view, ex in r["exact_power_under_hset1a_model"].items():
+            assert ex["bar"] == r["binding_by_view"][view]["comparator"] and ex["units"] == r["units"][view]
+            assert ex["state"] in ("COMPUTED_EXACT", "NO_UNITS") or ex["state"].startswith("EXACT_ZERO")
+    assert feas["conditional_sign_power_by_unit_count"]["by_discordant_count_12_significant_digits"]
+    # review of 4c402209, finding 4: both-arm packet-route acceptance is named as still required
+    assert feas["both_arm_packet_route_acceptance"]["state"] == "NOT_YET_CHECKED"
+    assert "20208c92" in feas["both_arm_packet_route_acceptance"]["still_required"]
+    assert reg["design_owner_switches"]["D1_FRONTIER_DECISION"] == "a"
+    assert summary["claims_before_any_model"]["REACH_3_STEP_TRANSFER_6"]["d1_frontier_decision"]["value"] == "a"
     rep = summary["claims_before_any_model"]["REPAIR_IMPROVES_ANALOGY_6"]
     assert rep["status_if_not"] == "NOT_TESTABLE" and rep["not_testable_reasons"]      # 1 focus per split: too few
+    # review of 4c402209, note 7: the status words the future scorer must carry
+    assert rep["mechanism_gate_status"]["state"] == "MECHANISM_GATE_OPEN"
+    assert rep["inference_assumptions_status"]["state"] == "OPEN_FOR_THE_BUILDER_SCORER_REVIEW"
+    assert {"INFERENCE_ASSUMPTIONS_UNSUPPORTED", "MECHANISM_GATE_OPEN"} <= set(rep["status_words_the_scorer_must_use"])
+    # review of 4c402209, finding 1 (a design choice): recorded as an open question in the output, no bar added
+    for claim in ("ANALOGY_BEYOND_DEGREE_6", "REPAIR_IMPROVES_ANALOGY_6"):
+        assert summary["claims_before_any_model"][claim]["open_design_question_before_the_salt"].startswith("OPEN")
     assert summary["inference_assumptions"]["state"] == "OPEN_FOR_THE_BUILDER_SCORER_REVIEW"
     assert summary["success_rule"].count("CONDITIONAL_CLUSTER_DIAGNOSTIC") == 1
     # the printed disjointness is counted, and every required count is 0 (review F5)

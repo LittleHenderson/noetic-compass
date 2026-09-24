@@ -686,3 +686,341 @@ they are rounded here to 4 places. This is a sensitivity calculation, not a fore
 
 The same as the builder report's EXPOSURE for this round (`BUILDER_REPORT_HSET2.md`, "Conformance round,
 2026-09-24"). No real salt was used or made. Nothing was downloaded. Nothing ran on AWS.
+
+## Review of 4c402209ef06c2a78ebabdcc801ea212c81fa1c0 (`CLAUDE_BUILT_CLAUDE_CHECKED`): `CHANGES_REQUIRED`, and the builder's dispositions
+
+**Who.** The reviewer is a Claude sub-agent. The coordinator's workflow passed its verdict and findings to the builder.
+Claude is both the temporary builder and the checker while Codex is away, so this is not an outside custodian review.
+The review text was not in this file before; it is recorded below as it reached the builder. The builder (Claude, the
+temporary builder) wrote every disposition and checked its own fixes. No independent reviewer has read the fixes yet.
+
+**What this is not.** No model was loaded or run. No real salt exists, and none was made. Every number comes from
+THROWAWAY salts (made from public strings) or from public files. Nothing ran on AWS. Nothing here is a result about Helm.
+
+### R.0 The reviewer's verdict, as delivered
+
+"The code follows Codex's proposed A2.1, A2.2 and A2.4 text and tasks T1 to T6 in almost every point I checked. No bar
+was dropped, A1 is intact, and no protected detail reaches the public output. Four things still need the design
+owner's decision, or a small code fix, before the HSET-2 salt is made. The most important: an unregistered no-learning
+one-guess rule, cheaper than the 'one hop' the scope sentence admits, passes ANALOGY_BEYOND_DEGREE_6 in 2 of 21
+throwaway salts. REACH_3_STEP_TRANSFER_6 cannot be passed by any rule: it reads NOT_TESTABLE in 21 of 21 salts."
+
+### R.1 Short version
+
+- **One MAJOR.** It is a design choice (a new bar, or a new claim wording). The builder does not make it. It is recorded
+  as an open question, here and in the build's own output. No bar was added.
+- **Three MINORs.** All three are fixed in code:
+  - D1 is now one constant with one value per option.
+  - The HSET-1A power grid is now computed exactly at the group and component levels.
+  - Both-arm packet-route acceptance is now printed as a named check that is still required.
+- **Three NOTEs.** One is fixed in code: the confirmatory claim now carries its two status words. One stays an open
+  question (the reach components). One needs no change (the A2.1 families never bind).
+- **Under the default settings no bar changed.** Every claim has exactly the same bars as at `4c402209`. I checked this
+  by loading that commit's module beside the new one. The bar-set digest still changed, because the record now
+  stores D1 as one value per option.
+- **Tests:** fast group 29 of 29 passed; end-to-end group 2 of 2 passed.
+
+| # | Severity | Finding in one line | Disposition |
+|---|---|---|---|
+| R1 | MAJOR | An unregistered one-guess rule (degree, whole-child, flags) passes `ANALOGY_BEYOND_DEGREE_6` in 2 of 21 throwaway salts | Design choice: open question for the design owner; recorded in the build output; no bar added |
+| R2 | MINOR | `REGISTER_FRONTIER_FALLBACK = False` records "drop the bar", not D1 option (b) | Fixed: `D1_FRONTIER_DECISION` = `a` / `b_not_testable` / `b_rename` / `c` |
+| R3 | MINOR | The power grid is computed only at the cluster level; tiny powers print as 0 | Fixed: exact group and component power under the HSET-1A model; 12 significant digits printed |
+| R4 | MINOR | "Both-arm packet-route acceptance" is not printed and not listed as open | Fixed: `both_arm_packet_route_acceptance: NOT_YET_CHECKED`, with the check still required; open question |
+| R5 | NOTE | For reach, components equal degree groups (the training bank is not a packet role) | Kept; open question for the design owner (unchanged) |
+| R6 | NOTE | The A2.1 families never bind under the twin design | No change; the owner is told (below) |
+| R7 | NOTE | The confirmatory claim's row has no field for `MECHANISM_GATE_OPEN` or `INFERENCE_ASSUMPTIONS_UNSUPPORTED` | Fixed: both status fields added; whether the assumptions hold stays open |
+
+### R.2 The findings as the reviewer wrote them, with my disposition
+
+#### R1. MAJOR: an unregistered one-guess rule passes `ANALOGY_BEYOND_DEGREE_6`
+
+**Reviewer's summary.** "A no-learning rule that is not registered still passes ANALOGY_BEYOND_DEGREE_6 with every new
+bar in place. It is the registered N1 flags tie-break guess plus one extra sort key per node: is this node a child of
+the declared whole? It makes one guess per same-degree, other-domain candidate, checks it once, and never searches, so
+it sits inside the design's own line. Stronger rules of the same kind pass far more often."
+
+**Reviewer's scenario.** Throwaway salts only, with the builder's own `derive`, `fast_rows` and `summarise_bank_cell`,
+each rule treated as a model against all 35 registered analogy bars.
+- The rule `WHOLE_CHILD_FLAG_GUESS` sorts nodes by (in-degree, out-degree, child-of-the-declared-whole, flag position,
+  rank). It passes the base claim in 2 of 21 salts: `tiny-9` (b = 9, c = 0, worst p 0.001953) and `tiny-11` (b = 9,
+  c = 0, worst p 0.001953).
+- In `tiny-9` it also passes the group view (B = 7, C = 0, p = 1/128) and the component view (B = 7, C = 0). `tiny-9`
+  meets every A2.4 floor, so the rule would clear the bar part of `REPAIR_IMPROVES_ANALOGY_6` there.
+- Sorting by distance from the declared whole passes the base claim in 7 of 21 salts.
+- Sorting by the design's printed diagnostic signature (in, out, descendants, ancestors) passes in 16 of 21.
+- A one-hop colour guess passes in every testable salt (17 of 17), and gets every cluster right in 19 of 21.
+- Checker v2 agreed with the reviewer's direct comparison on all 36 verdicts graded on real `tiny-9` packets.
+- Cost of simply registering the whole-child rule: the original floor would hold in 3 of 21 salts, and every A2.4 floor
+  in 0 of 21.
+- So the scope sentence ("cannot tell full structural comparison from one hop of neighbour-degree matching")
+  overstates the least a passing model must do.
+
+**Reviewer's fix.** The design owner decides, before the salt: (a) register the whole-child rule, and tell the owner the
+confirmatory claim then reads NOT_TESTABLE in every throwaway salt; or (b) widen the scope sentence to say a pass may
+come from a single guess keyed on degree, the declared flags and the declared whole's children or distances; or (c)
+define the analogy bar by a declared view (the best one-guess ordering from a named feature set). "Nothing in the code
+needs changing until that choice is made."
+
+**Disposition: a design choice. Recorded as an open question. No bar added.**
+- Adding a bar and changing the scope sentence are both design decisions. The coordinator's instruction for this round
+  gives them to the design owner. The builder did not choose among (a), (b) and (c).
+- **Recorded in the build's own output**, so no reader of a summary can miss it: a new field
+  `open_design_question_before_the_salt` on the `ANALOGY_BEYOND_DEGREE_6` row and on the `REPAIR_IMPROVES_ANALOGY_6`
+  row (constant `OPEN_ANALOGY_SCOPE_QUESTION` in `hset2_build.py`). It states the rule, the reviewer's numbers and the
+  three options. It changes no bar, floor or status.
+- **Not re-measured by the builder.** The reviewer's numbers above are the reviewer's. I did not write or run the
+  whole-child rule.
+- If the owner chooses (a), the rule can be added behind a switch, as N1's rule was, with its W printed while it is off.
+
+#### R2. MINOR: the D1 switch could not record option (b)
+
+**Reviewer's summary.** "Setting REGISTER_FRONTIER_FALLBACK to False records none of D1's three options. It removes
+FRONTIER_FALLBACK from both reach claims' bars, but leaves REACH_3_STEP_TRANSFER_6 under its old name and able to read
+testable. So the switch records only '(a) keep' or 'drop the bar'. It does not record (b) NOT_TESTABLE/renamed, as T4
+asked."
+
+**Reviewer's scenario.** Someone chooses D1 (b) and flips the constant to False. The 3-step claim then carries a claim
+again in 14 of 21 throwaway salts (without FRONTIER the binding W is 9 / 16.0 / 22 for first-child and 6 / 11.4 / 20
+for BFS), while a known no-learning rule that passes it (V-1) is only a printed diagnostic. That is the state V-1 calls
+a BLOCKER, under the original claim name.
+
+**Reviewer's fix.** Make False mean D1 (b), or replace the boolean with one D1 constant taking 'a' / 'b_not_testable' /
+'b_rename' / 'c', where every value except 'a' changes the claim's status or name, and put it in the digest.
+
+**Disposition: fixed, with the reviewer's second form.** `REGISTER_FRONTIER_FALLBACK` is replaced by one constant,
+`D1_FRONTIER_DECISION` (default `"a"`). Each value is written in `D1_OPTIONS`, recorded in `registered_comparators()`
+(with its meaning) and so in the digest.
+
+| Value | 3-step claim | `FRONTIER_FALLBACK` | Bar-set digest (N1 on) |
+|---|---|---|---|
+| `a` (default) | `REACH_3_STEP_TRANSFER_6`, floor as measured | bar of both reach claims | `14be05d5a0845e52a194628974fd0bfd6763b0fc0b1e1e96dfe3dd779671edfd` |
+| `b_not_testable` | `REACH_3_STEP_TRANSFER_6`, `NOT_TESTABLE` before any build, whatever its floor says; the floor is still printed (`floor_result_before_the_D1_declaration`) | bar of both reach claims | `42928c8681b59064ed5feb200a4072171c580147f7c73927c2e156bb1fd94bb9` |
+| `b_rename` | renamed `REACH_BEYOND_TWO_HOP_AND_ROOT_COUNT_6` (a PROPOSED name), with a scope note that it does NOT show 3-step path following and that `FRONTIER_FALLBACK` would pass it | printed for the renamed claim as `computed_not_registered_W` (every view); bar of the 4-step claim | `f24cbbc878a08ef6a5750e3043e7898bbb23623d835926459efc3271e8a45781` |
+| `c` | the build refuses before it reads anything: rebalancing needs its own amendment and code | - | - |
+
+- An unknown value is refused too.
+- **`FRONTIER_FALLBACK` stays a bar of `REACH_4_STEP_TRANSFER_6` under every value.** The old `False` took it off both
+  claims. So every new value has at least the bars of the old `False`, claim by claim (checked by script).
+- **Under the default, the bars did not change.** I loaded the `4c402209` module beside the new one: the analogy,
+  correspondence, 3-step and 4-step bar lists are identical. The digest changed from
+  `cf88cebafa9169964aff041d3c1bcb652b2067b86854befc253dd452291c78af` to
+  `14be05d5a0845e52a194628974fd0bfd6763b0fc0b1e1e96dfe3dd779671edfd` because the record's shape changed (the D1 value
+  and its meaning, and per-claim lists). With N1 switched off (and D1 `a`) the digest would be
+  `47a7777b481a47a5b28730432744cd405878e8cf736e0ad590f2449bfea9b8e8`.
+- **Checked.** `test_d1_switch_records_every_option` (every value: names, bars, digests all different, the refusals of
+  `c` and of an unknown value, also through `main`). `test_d1_options_in_the_reach_cell_summary` (the reach cell
+  summary under `a`, `b_not_testable` and `b_rename`, on a tiny throwaway build). Two command-line throwaway builds,
+  `--only reach --limit-foci 2`, seed `tiny-9`, one with `b_not_testable` and one with `b_rename`: both `build_ok`, the
+  claims table as in the table above. (At 2 foci the reach cells have no primary clusters, so every reach floor fails
+  anyway; the runs check the wiring, not the numbers.)
+
+#### R3. MINOR: the power grid at the group and component levels
+
+**Reviewer's summary.** "A2.4 asks for the HSET-1A power grid to be recomputed separately at the cluster, group and
+component levels. The build recomputes it only at the cluster level. Both other levels are labelled
+NOT_IDENTIFIED_FROM_RAW_ACCURACY with no reason given."
+
+**Reviewer's scenario.** Under HSET-1A's model (the model wins each bar-wrong cluster with probability q_win and keeps
+each bar-right cluster with probability q_keep, independently), and given the bar's per-cluster results in each group
+(known before any model is read), each group's and component's sign probability can be computed exactly. So the power
+is identified, and A2.4's escape clause does not apply as written. Also, the exact power sums were printed only as
+6-place floats, so very small powers print as 0.
+
+**Reviewer's fix.** Add an exact calculation over units under the HSET-1A settings and print its assumptions, or write
+down why that model does not identify group-sign power. Print the exact fractions, or more digits.
+
+**Disposition: fixed.**
+- **New block per view, `exact_power_under_hset1a_model`,** in every feasibility row (every cell, and each reach claim).
+  For each view it uses that view's binding bar. It gives the HSET-1A settings: uniform model accuracy (bar accuracy
+  +0.10, +0.20, +0.30, capped at 1, and 1.0) and never-loses fractions 0.5, 0.75, 1.0.
+- **How it is computed.** Each unit's chance of a win, a loss and a tie is summed exactly over its clusters' outcomes.
+  Integer arithmetic is used, with one common denominator. Then the chance of "B > C and exact tail <= 1/100" is summed
+  exactly over units. The printed assumptions are in `power_assumptions` (constant `POWER_ASSUMPTIONS`).
+- **One honest limit, printed.** In the group and component views a pass also needs a positive overall accuracy
+  difference. This sum does not condition on it. So there the value is an **upper bound** on the pass chance. It is
+  exact when q_keep = 1 (the never-loses rows: no cluster can lose, so 7 or more wins mean a positive overall
+  difference). It is also exact in the original cluster view.
+- **Shortcut.** If fewer than 7 units have a bar-wrong cluster, no sign test can pass (it needs at least 7 wins), and
+  every value is exactly 0 (`EXACT_ZERO`).
+- **Guard.** A component that would need more than 200,000 enumeration states is reported as `NOT_COMPUTED_TOO_LARGE`,
+  not computed. It did not happen in any throwaway run.
+- **The words `NOT_IDENTIFIED_FROM_RAW_ACCURACY` stay, with the reason.** Raw accuracy alone does not fix group signs.
+  Under the HSET-1A per-cluster model it is identified, and the exact block gives it.
+- **More digits.** Every exact power now also prints to 12 significant digits (`value_12_significant_digits`). The
+  conditional sign-power grid gets one extra list per q, `by_discordant_count_12_significant_digits` (its value depends
+  only on d and q).
+- **Checked** (`test_exact_view_power_under_the_hset1a_model`):
+  - the original cluster view equals HSET-1A's `power_given_bar` for every setting (to 6 places);
+  - a hand count, 176/1024, for 10 never-losing groups;
+  - a brute-force sum over every one of 2,048 cluster outcomes, for groups and for components, at one uniform and one
+    never-loses setting. That case includes a two-group component, mixed group sizes and a power below 0.01;
+  - the exact zero when fewer than 7 units can be won.
+
+**Measured on throwaway salts** (`TEST_NEW_6/ANALOGY`, all 21 seeds of the last round, none refused; one process,
+48.3 s; min / mean / max over seeds). Each view uses its own binding bar, so "bar accuracy + 0.20" means a slightly
+different q in each view. Group and component values under uniform accuracy are upper bounds.
+
+| Setting | Original clusters | Degree groups | Shared-shape components |
+|---|---|---|---|
+| uniform, bar accuracy + 0.10 | 0.002337 / 0.003369 / 0.005846 | 0.0006934 / 0.002263 / 0.005215 | 0 / 0.002359 / 0.006329 |
+| uniform, bar accuracy + 0.20 | 0.02169 / 0.03862 / 0.07939 | 0.008036 / 0.0235 / 0.07939 | 0 / 0.02064 / 0.04755 |
+| uniform, bar accuracy + 0.30 | 0.1194 / 0.2611 / 0.9056 | 0.04795 / 0.169 / 0.9056 | 0 / 0.1203 / 0.4895 |
+| never loses, wins 0.50 (exact) | 0.007812 / 0.4161 / 0.7728 | 0.007812 / 0.2734 / 0.5929 | 0 / 0.2083 / 0.5382 |
+| never loses, wins 0.75 (exact) | 0.1335 / 0.8416 / 0.9984 | 0.1335 / 0.7162 / 0.9841 | 0 / 0.6087 / 0.9737 |
+| never loses, wins 1.00 (exact) | 1 / 1 / 1 | 1 / 1 / 1 | 0 / 0.9048 / 1 |
+
+- The component view is exactly 0 in 2 of 21 salts (component W 6, fewer than 7).
+- **In plain words.** Suppose a model is right on every cluster the bar gets right, and wins 3 of every 4 clusters the
+  bar gets wrong. Then it passes the component view with a chance of about 0.61 on average over these salts, and never
+  more than 0.97. A model that is only 0.20 more accurate than the bar everywhere passes it with a chance of at most
+  about 0.05.
+- These are sensitivity numbers under an assumed model, not a forecast about Helm.
+
+#### R4. MINOR: both-arm packet-route acceptance
+
+**Reviewer's summary.** "A2.4's list of required prints includes 'both-arm packet-route acceptance'. The build does not
+print it and does not list it as open. It checks the packet route only against the pinned 785c9bd1 tree."
+
+**Reviewer's scenario.** The unchanged arm is the historical 20208c92 source (named plan d015d58e). If that reader
+rejects, or reroutes, a 6-node HSET-2 packet, the repaired-versus-unchanged comparison would fail at scoring time, after
+the paid build.
+
+**Reviewer's fix.** Add a field to the feasibility block (for example `both_arm_packet_route_acceptance:
+NOT_YET_CHECKED`) that names the check still required, and add it to the open questions for the custodian build.
+
+**Disposition: fixed.** The feasibility block now has `both_arm_packet_route_acceptance`:
+- state `NOT_YET_CHECKED`;
+- what this build checks: the repaired arm only (every packet passes the frozen validator, the LARGER route and Helm's
+  input reader of the pinned tree);
+- what is still required: the unchanged arm's reader, from the historical `20208c92` source (named plan `d015d58e`, as
+  the reviewer wrote), must accept and route every HSET-2 packet the same way, run by the custodian build or its scorer
+  on the same packets;
+- `A2.4: a missing receipt is a pretraining blocker`.
+
+The builder did not run the unchanged arm's reader. That source is not in the pinned tree. Open question 4 below.
+
+#### R5. NOTE: reach components equal degree groups
+
+**Reviewer.** "For reach, the build treats the frozen 64-world training bank as outside 'every packet role', so for
+reach the components equal the degree groups. Read literally, A2.2 would join every reach group into 1 component. This
+only affects reach component floors, which are printed but do not bind, and the reach claims already read NOT_TESTABLE.
+The builder lists it as open question 6." Fix: the design owner confirms this reading in the A2 text, or accepts 1
+reach component.
+
+**Disposition: kept; open question 5 below.** No code change.
+
+#### R6. NOTE: the A2.1 families never bind
+
+**Reviewer.** "The A2.1 families are implemented correctly but add no protection. Under the twin design, every
+FIXED_POSITION_j, FIXED_ALIAS_Wk and STATUS_BY_COUNT_m is wrong on every cluster, so its W equals the cluster count and
+it can never be the binding bar. A fixed position always names a world, so it fails the NO_MATCH twin. The list E has
+the same length in both twins, so a count rule gives the same kind of answer in both and fails one of them." Fix: none
+needed; the owner should know these bars never bind.
+
+**Disposition: no change.** For the owner: all 24 family bars (`FIXED_POSITION_1` to `_7`, `FIXED_ALIAS_W0` to `W7`,
+`STATUS_BY_COUNT_0` to `_8`) are registered, and they cost nothing. But with the MATCH / NO_MATCH twins they can never
+be the bar that decides a claim.
+
+#### R7. NOTE: the confirmatory claim's status words
+
+**Reviewer.** "inference_assumptions stays OPEN_FOR_THE_BUILDER_SCORER_REVIEW. The REPAIR_IMPROVES_ANALOGY_6 row has no
+field for MECHANISM_GATE_OPEN or INFERENCE_ASSUMPTIONS_UNSUPPORTED, although STATISTICAL_POLICY.json records the
+mechanism state as MECHANISM_GATE_OPEN." Harmless now, because no model has been read. The reviewer's observation, not
+a ruling: the way items are sampled does not by itself make the groups independent (shared fillers join groups; all
+TEST foci come from one salted draw without replacement), and it does not make the paired signs exchangeable. So unless
+the owner accepts the components as the unit of independence, A2.2's default would be INFERENCE_ASSUMPTIONS_UNSUPPORTED.
+Fix: the future scorer must carry these two status words; the design owner or the scorer review states whether the
+assumptions hold.
+
+**Disposition: fixed in the record; the ruling stays open.**
+- The `REPAIR_IMPROVES_ANALOGY_6` row now has two new fields:
+  - `inference_assumptions_status`: state `OPEN_FOR_THE_BUILDER_SCORER_REVIEW`; if not supported,
+    `INFERENCE_ASSUMPTIONS_UNSUPPORTED`.
+  - `mechanism_gate_status`: state `MECHANISM_GATE_OPEN`, read from `STATISTICAL_POLICY.json` at `f287f965`. The
+    builder read this state; it did not decide it.
+- It also has a new list, `status_words_the_scorer_must_use`: `NOT_TESTABLE`, `INFERENCE_ASSUMPTIONS_UNSUPPORTED`,
+  `MECHANISM_GATE_OPEN`.
+- The reviewer's observation is printed in the top-level `inference_assumptions` block as
+  `review_observation_not_a_ruling`.
+- The builder does not rule on whether the assumptions hold (open question 3).
+
+### R.3 Checks run by the builder
+
+- **Tests: 31 of 31 run, 31 passed.**
+  - Fast group: 29 of 29 (68.77 s on the final files; an earlier run, 36.47 s).
+  - End-to-end group: 2 of 2 (122.05 s on the final files; an earlier run, 60.54 s).
+  - Both with one process.
+- **Not run: the slow group** (1 test, the trained-state re-measurement). Its code path did not change.
+- New tests: `test_d1_switch_records_every_option`, `test_d1_options_in_the_reach_cell_summary`,
+  `test_exact_view_power_under_the_hset1a_model`.
+- Changed tests: `test_frontier_fallback_rules` (its switch part moved to the D1 test),
+  `test_sign_tail_and_conditional_power_exact` (12 significant digits), `test_tiny_end_to_end` (the exact power block
+  in every row and view, the packet-route field, the D1 record, the status words, the open analogy question).
+- **Bars unchanged under the default.** Checked by loading `4c402209`'s module beside the new one (above).
+- **Checker v2.** This round adds no bar, so there is no new bar to grade. The end-to-end test still requires checker
+  v2 to equal the direct comparison on every item of the tiny build, every registered bar included. It passed.
+- **Two command-line throwaway builds** under `b_not_testable` and `b_rename` (R2): both `build_ok`, every problem count
+  0. They took 231.4 s and 228.5 s, of which evaluation was 197.3 s and 166.7 s.
+- `pyflakes` is clean on the three changed Python files. The stage-0 files, `PUBLIC_EXCLUDED_v1.json`,
+  `hset2_stage0_public.py` and `PROPOSED_T5_OLDER_PUBLIC_TEST_SIDE.json` are unchanged.
+- **Files changed** (LF sha256):
+  - `hset2_build.py` `a21d022bfc9a8b851dbea23b3f96c79d4cd1ff3c8b5f5cb2e70a9448d7c037ba`
+  - `test_hset2.py` `997345c922e5184db55b99b08eba60592e0081ea83cf61bf9bdaade2242ad4af`
+  - `hset2_throwaway_ranges.py` `6d4bf43158642bcee275d1e49e4746a05eb5af05e3c4b32b99ecec7b01a7f917` (it also prints
+    the exact power per view)
+  - this file, and `BUILDER_REPORT_HSET2.md` (a short fix-round note)
+- **Not done.** No new search for further cheap rules. This round did not re-measure the reach ranges or correspondence.
+  A fresh independent review is still needed before any paid run.
+
+### R.4 Open for the design owner (decisions the builder does not make), before the salt
+
+1. **R1, the analogy scope.** Choose (a) register `WHOLE_CHILD_FLAG_GUESS` (the confirmatory claim then reads
+   `NOT_TESTABLE` in every throwaway salt), (b) widen the scope sentence, or (c) define the analogy bar by a declared
+   view.
+2. **D1.** Choose `D1_FRONTIER_DECISION`: `a` (the default; the 3-step claim reads `NOT_TESTABLE` in 21 of 21 throwaway
+   salts), `b_not_testable`, `b_rename` (and approve or change the proposed name), or `c` (needs its own amendment).
+3. **Inference assumptions** (Codex A2.2, R7): state whether the components are accepted as the unit of independence.
+   If not, the confirmatory claim's status would be `INFERENCE_ASSUMPTIONS_UNSUPPORTED`.
+4. **Both-arm packet-route acceptance** (R4): the custodian build or its scorer must run the unchanged arm's reader
+   (`20208c92`, plan `d015d58e`) over the same HSET-2 packets and attach the receipt.
+5. **The reach reading of components** (R5): confirm that the frozen training bank is not a packet role, or accept 1
+   reach component.
+6. **The earlier open questions still stand**: Codex A2 and the builder's A2 (accept, edit or reject); note N1's
+   switch; the T5 `PUBLIC_EXCLUDED` v2 rule; the DEV decoy pool reading; `UV_TARBALL_SHA256` (the coordinator, before
+   launch).
+7. **A fresh independent review** of this round before any paid run. This round is `CLAUDE_BUILT_CLAUDE_CHECKED`.
+
+### EXPOSURE (this fix round: every file outside my working copy that I opened)
+
+- **The pinned CNCM tree `785c9bd1`.** Written from git objects by `launch.py --materialize-tree` into `a2fix/tree/` of
+  the session scratchpad (1,186 files, tree digest
+  `fe2eaa174b6d7265bcb78de25a13b6898a158ee808bfaf87a419c3ff10190db6`, the same as before).
+  - The tests, the build and my scripts imported code from it. They loaded the public course, the tokenizer and the
+    development material through the frozen loaders.
+  - I opened no file of it by hand.
+  - Neither I nor my programs opened `records/typed_course_001/checks_002/private_targets.json`.
+- **Codex's branch, read-only.** A `git fetch` of `codex/helm-controlled-prelaunch-20260924`. Then `git show` of
+  commit `f287f965` for `EVALUATION_DESIGN_v0_4.md` (a search, then lines 195 to 210 and 354 to 460) and
+  `records/helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json` (its inference and mechanism fields, through a
+  pipe).
+  - Copies went to the Git Bash `/tmp` folder, outside every repository: `ed04_codex_r2.md` (the design text) and
+    `stat_policy_r2.json` (the policy file).
+  - No checkout.
+- **This working copy's own history.** `git show` of `hset2_build.py` at `4c402209`, written to `a2fix/old4c40/` of
+  the scratchpad, to compare the bar sets.
+- **My scratch files** in `a2fix/` of the session scratchpad. Not committed:
+  - scripts: `compare_bars.py`, `d1_cli.py`, `review_section.md` (this text, before it was appended here);
+  - the range output `r_analogy_power.json`;
+  - the two throwaway builds `d1_cli_b_not_testable/` and `d1_cli_b_rename/`;
+  - the pytest folders `pt_new1`, `pt_fast1`, `pt_e2e1`, `pt_fast_final`, `pt_e2e_final`.
+  - Every throwaway build here, including its `sealed_throwaway/THROWAWAY_HSET2_SEALED_TEST.json`, was made with a
+    throwaway salt.
+- **Laptop state:** free memory and the Python process list (PowerShell).
+- **Not opened:**
+  - any `*_eval.jsonl`;
+  - any sealed file or folder, except my own throwaway outputs;
+  - anything under `D:/tksCAS-archive/`;
+  - any real salt, S3 or AWS;
+  - the meta1 ledger; any `results/` folder; `private_targets.json`;
+  - the reviewer's scratch files; Claude transcripts.
+- No real salt was used or made. Nothing was downloaded. Nothing ran on AWS.

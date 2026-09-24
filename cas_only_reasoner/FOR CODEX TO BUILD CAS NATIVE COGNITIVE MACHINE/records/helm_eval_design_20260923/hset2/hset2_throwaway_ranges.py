@@ -119,6 +119,9 @@ def views(block):
             "binding_by_view": {k: [b["comparator"], b["W"]] for k, b in v["binding_by_view"].items()},
             "W_by_comparator_by_view": v["W_by_comparator_by_view"],
             "a2_4_floors_met": v["floors"]["meets_every_floor"], "a2_4_reasons": v["floors"]["not_testable_reasons"],
+            "exact_power": {view: {k: ex[k] for k in ("state", "bar", "uniform_model_accuracy",
+                                                      "never_loses_where_bar_is_right_wins_fraction") if k in ex}
+                            for view, ex in v["exact_power_under_hset1a_model"].items() if ex},
             **({"computed_not_registered_W_by_view": v["computed_not_registered_W_by_view"]}
                if "computed_not_registered_W_by_view" in v else {})}
 
