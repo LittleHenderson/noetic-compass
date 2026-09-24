@@ -92,8 +92,8 @@ this is not an owner signature.
 - The smoke must pass before any seed job.
 - If any job ends other than delivered, the next job is not launched.
 - If spend passes the owner's stated stop before the last job, stop and report.
-- Option C: if the reproduction seed does not match bit for bit, do not reuse the old receipts; bring the B decision
-  back to the owner.
+- Option C: if the reproduction seed reads `DOES_NOT_REPRODUCE`, the old receipts are not reused, and the two
+  remaining `20208c92` seeds run (option B), inside the dollar ceiling the owner approves with this plan (section 4a).
 - Before any TEST reading, the custody manifest check must pass (design v0.4 section 8).
 
 ## 7. Reading (fixed before launch)
