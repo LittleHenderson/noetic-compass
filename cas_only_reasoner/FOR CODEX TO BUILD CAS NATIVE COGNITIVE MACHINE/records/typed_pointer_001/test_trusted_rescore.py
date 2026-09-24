@@ -1,4 +1,5 @@
-"""T01 tamper suite for trusted_rescore.py 0.2 -- every rejection must FIRE, on a real receipt, with a real edit.
+"""T01 tamper suite for trusted_rescore.py (written for 0.2, kept current for 0.4) -- every rejection must FIRE, on a
+real receipt, with a real edit. The 0.4 historical-compatibility mode has its own suite: test_historical_compatibility.py.
 
 Two groups.
 
@@ -112,7 +113,8 @@ def assert_checker_never_ran(reading):
 # =================================== FAST ===================================
 def test_clean_files_pass_every_file_check_and_safe_only_is_never_ok(fast):
     code, r = run(fast, safe_only=True)
-    assert r["reject_reasons"] == [] and all(r["checks"][n]["status"] == "PASS" for n in T.SAFE_CHECKS)
+    assert r["reject_reasons"] == [] and all(r["checks"][n]["status"] == "PASS" for n in T.SAFE_CHECKS if n != "HISTORICAL_EVIDENCE")
+    assert r["checks"]["HISTORICAL_EVIDENCE"]["status"] == "NOT_REQUESTED" and r["mode"]["name"] == "TRUSTED"   # 0.4: default mode
     assert r["verdict"] == "RESCORE_INCOMPLETE" and code == 3           # NOT_RUN is not PASS
     assert_checker_never_ran(r)
     assert r["custody"].startswith("EVALUATION_NOT_INDEPENDENT")
@@ -162,9 +164,9 @@ def test_study_identity_and_seed_set(fast):
 
 def test_an_outdated_or_unreadable_anchor_is_a_typed_rejection_with_a_written_reading(fast):
     if json.loads(HISTORICAL_ANCHOR.read_text(encoding="utf-8")).get("schema") != T.ANCHOR_SCHEMA:
-        shutil.copy(HISTORICAL_ANCHOR, fast / "anchor.json")              # the committed 0.1 anchor
+        shutil.copy(HISTORICAL_ANCHOR, fast / "anchor.json")              # the committed 0.2 anchor (wrong rule description)
         code, r = run(fast)
-        assert code == 2 and codes(r) == ["ANCHOR_SCHEMA_OUTDATED"]
+        assert code == 2 and codes(r) == ["RULE_DESCRIPTION_MISMATCH", "ANCHOR_SCHEMA_OUTDATED"]   # 0.4: the rule is named first
         assert_checker_never_ran(r)
     (fast / "anchor.json").write_text("{ this is not json", encoding="utf-8")
     code, r = run(fast)
@@ -265,13 +267,15 @@ ANCHOR_SHA256_LF = {
 
 
 def test_the_committed_anchors_are_the_pinned_ones_and_every_file_they_pin_is_the_file_on_disk():
+    # 0.4: the committed anchors are the 0.2 HISTORICAL anchors. Trusted mode refuses them (wrong rule description);
+    # their evidence is checked file by file in the explicit historical-compatibility mode.
     studies = {"trust_anchor_helm1_certified.json": "study_helm1_certified.json", "trust_anchor_helm2_experimental_20208c92.json": "admission_001/study.json"}
     for name, digest in ANCHOR_SHA256_LF.items():
         assert T.file_pin(HERE / name)["sha256_lf"] == digest, "ANCHOR_CHANGED:%s" % name
         anchor = json.loads((HERE / name).read_text(encoding="utf-8"))
-        assert anchor["schema"] == T.ANCHOR_SCHEMA and anchor["custody"].startswith("EVALUATION_NOT_INDEPENDENT") and len(anchor["checker"]["code_closure"]) == 18
+        assert anchor["schema"] == T.HISTORICAL_ANCHOR_SCHEMA and anchor["custody"].startswith("EVALUATION_NOT_INDEPENDENT") and len(anchor["checker"]["code_closure"]) == 18
         out = pathlib.Path(tempfile.mkdtemp()) / "safe.json"
-        T.rescore(HERE / studies[name], HERE / name, {}, out, safe_only=True)        # file checks only: seconds, no checker import
+        T.rescore(HERE / studies[name], HERE / name, {}, out, safe_only=True, historical_compatibility=True)   # file checks only: seconds
         reading = json.loads(out.read_text(encoding="utf-8"))
         assert reading["reject_reasons"] == [] and all(reading["checks"][c]["status"] == "PASS" for c in T.SAFE_CHECKS)
 
@@ -313,7 +317,8 @@ def test_clean_copy_through_the_command_line_reproduces_the_certified_numbers(re
     assert (s["gained"], s["broken"]) == (12, 0) and s["frozen_18_after"] == s["frozen_18_before"] + 12
     assert r["imported_checker_code"] is True and r["bytecode_policy"] == "FRESH_EMPTY_PYCACHE_PREFIX_AND_NO_BYTECODE_WRITTEN"
     assert r["checks"]["FROZEN_GRADER_AGREEMENT"]["status"] == "NOT_REQUESTED"
-    assert all(v["status"] == "PASS" for k, v in r["checks"].items() if k != "FROZEN_GRADER_AGREEMENT")
+    assert all(r["checks"][k]["status"] == "NOT_REQUESTED" for k in ("HISTORICAL_EVIDENCE", "HISTORICAL_DECISIONS"))   # 0.4 trusted mode
+    assert all(v["status"] == "PASS" for k, v in r["checks"].items() if k not in ("FROZEN_GRADER_AGREEMENT", "HISTORICAL_EVIDENCE", "HISTORICAL_DECISIONS"))
 
 
 def _flip_scores(tmp):
