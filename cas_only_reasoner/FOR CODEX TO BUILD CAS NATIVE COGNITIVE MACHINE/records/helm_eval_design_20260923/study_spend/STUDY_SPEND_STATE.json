@@ -1,14 +1,29 @@
 {
- "schema": "claude.helm-repair-controlled-1.study-spend/0.2",
+ "schema": "claude.helm-repair-controlled-1.study-spend/0.3",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
  "inputs": {
   "slots_file": "STUDY_SLOTS.json",
-  "slots_file_sha256": "5cfa03155f5fdfda2e934a35eb3cffd59f9c017dc1aa651a6b9b44a6bdee0d82"
+  "slots_file_sha256": "ad6ef1a0e241e9a65430c6b8c22f3ed64eb40e51f12be5127e4a28c0417d17ad",
+  "definitions_sha256": "82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764"
  },
- "ceiling_usd": "60.00",
- "s3_transfer_allowance_per_job_usd": "0.10",
+ "frozen_in_code": {
+  "ceiling_usd": "60.00",
+  "owner_stop_usd": "30.00",
+  "owner_stop_before_training_job": 3,
+  "s3_transfer_allowance_per_job_usd": "0.10",
+  "definitions_sha256": "82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764",
+  "pre_gate_done_rows": [
+   "S1",
+   "S2",
+   "P1a"
+  ]
+ },
+ "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
  "spent_upper_bound_usd": "5.44",
  "rejected_done_receipts": [],
+ "shared_receipt_identities": {},
+ "cleanup_unconfirmed": [],
+ "training_jobs_started": [],
  "slots": [
   {
    "slot": "S1",
@@ -23,8 +38,9 @@
    "counted_basis": "elapsed 25.66626610000094 s x $2.52/h + $1.48 launcher ancillary + $0.10 S3/transfer = $1.597966 (no machine ran)",
    "receipt_pins": {
     "receipt_sha256": "4d9f008e1b6111fcb1b495da5b3f944dba27a7765d6dbe6a48b783453a9f309e",
-    "override": "launcher flag compute_identity_uncertain=True overridden by the capacity-refusal rule: the last provider call is RunInstances refused by AWS (InsufficientInstanceCapacity, zero client retries); no machine was created"
-   }
+    "override": "launcher flag compute_identity_uncertain=True overridden by the capacity-refusal rule: the last provider call is RunInstances refused by AWS (InsufficientInstanceCapacity, zero client retries); no machine was created. Rule status: CLAUDE_PROPOSED, awaiting Codex or owner acceptance"
+   },
+   "preconditions_outside_money_gate": "NOT ASSESSED: no precondition list for this slot; do not read ADMIT as ready"
   },
   {
    "slot": "S2",
@@ -39,7 +55,8 @@
    "counted_basis": "elapsed 2431.2951856 s x $2.52/h + $1.48 launcher ancillary + $0.10 S3/transfer = $3.281907",
    "receipt_pins": {
     "receipt_sha256": "0e0914a8780d5d9e20f840c41662d6368a3d32c4b638217ed4960aab64b45642"
-   }
+   },
+   "preconditions_outside_money_gate": "NOT ASSESSED: no precondition list for this slot; do not read ADMIT as ready"
   },
   {
    "slot": "P1a",
@@ -48,16 +65,17 @@
    "mandatory": true,
    "cap_usd": "3.00",
    "basis_worst_case_usd": "1.77",
-   "basis_arithmetic": "(0.752 + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $1.763911",
+   "basis_arithmetic": "(g4dn.2xlarge 0.752, the dearest listed + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $1.763911",
    "receipt": "ACCEPTED",
    "counted_usd": "0.55",
-   "counted_basis": "max(watcher $0.4489, recomputed 2104 s x $0.767959/h = $0.448829) + $0.00 collection + $0.10 S3/transfer = $0.5489",
+   "counted_basis": "max(watcher $0.4489, recomputed 2104 s x $0.767959/h on g4dn.2xlarge = $0.448829) + $0.00 collection + $0.10 S3/transfer = $0.5489",
    "receipt_pins": {
     "launch_record_sha256": "82b91aebe2f5989321ced0a5ad7847591c84a8e6eb9413550da52c869fede1a6",
     "watch_record_sha256": "6c2447e1ececb71adac6113a25560ef4fee65fd5fe816b72d1cab2787d071d65"
    },
    "runtime_bound": "in-machine timer 120 min; operating-system power-off at 123 min; destroyed on shutdown; client deadline 130 min (watch.py terminates and waits for 'terminated')",
-   "timing_feasibility": "MEASURED: 35.1 min from launch to watch end; the check script 1,690.1 s of its 3,600 s limit"
+   "timing_feasibility": "MEASURED: 35.1 min from launch to watch end; the check script 1,690.1 s of its 3,600 s limit",
+   "preconditions_outside_money_gate": "NOT ASSESSED: no precondition list for this slot; do not read ADMIT as ready"
   },
   {
    "slot": "P1b",
@@ -66,11 +84,11 @@
    "mandatory": true,
    "cap_usd": "2.00",
    "basis_worst_case_usd": "1.77",
-   "basis_arithmetic": "(0.752 + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $1.763911",
+   "basis_arithmetic": "(g4dn.2xlarge 0.752, the dearest listed + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $1.763911",
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "runtime_bound": "must copy P1a's limits: ONE machine at most g4dn.2xlarge (g4dn.xlarge allowed, cheaper), at most 100 GB disk deleted with the machine, in-machine timer 120 min, power-off 123 min, destroyed on shutdown, client deadline at most 130 min; the dollar bound holds whatever the work does, because the deadline ends the machine",
+   "runtime_bound": "must copy P1a's limits: ONE machine at most g4dn.2xlarge (or g4dn.xlarge; each machine is checked at its own listed price), at most 100 GB disk deleted with the machine, in-machine timer 120 min, power-off 123 min, destroyed on shutdown, client deadline at most 130 min; the dollar bound holds whatever the work does, because the deadline ends the machine",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "NOT ESTABLISHED: P1b is not built. Basis available: P1a on the same T4 class ran setup + finish in about 7 min and its forward-pass checks in 1,690.1 s. P1b's work must carry its own wall limit of at most 3,600 s and a timing preflight that refuses before any work if its projection is over",
    "preconditions_outside_money_gate": [
@@ -86,11 +104,11 @@
    "mandatory": true,
    "cap_usd": "1.00",
    "basis_worst_case_usd": "0.91",
-   "basis_arithmetic": "(0.357 + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.372959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $0.908078",
+   "basis_arithmetic": "(c7i.2xlarge 0.357, the dearest listed + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.372959/h x 130/60 h + $0.00 collection + $0.10 S3/transfer = $0.908078",
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "runtime_bound": "ONE c7i.2xlarge (or cheaper), at most 100 GB disk, client deadline at most 130 min, destroyed on shutdown",
+   "runtime_bound": "ONE c7i.2xlarge (the only machine listed), at most 100 GB disk, client deadline at most 130 min, destroyed on shutdown",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "MEASURED for the sister job: HSET-1A ran 30.1 min, at most $0.1827",
    "preconditions_outside_money_gate": [
@@ -108,7 +126,18 @@
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "timing_feasibility": "MEASURED: Helm 2.0 ran 10,471.8 to 10,529.1 s per job, under the 12,600 s wall and the 14,400 s instance cap"
+   "timing_feasibility": "MEASURED: Helm 2.0 ran 10,471.8 to 10,529.1 s per job, under the 12,600 s wall and the 14,400 s instance cap",
+   "training": {
+    "model_seed": 20260917,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "the unchanged source (Helm 2.0, 20208c92) and M1's launch folder are reviewed",
+    "M1 is the first training slot admitted (plan order)",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   {
    "slot": "M2",
@@ -121,7 +150,18 @@
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "timing_feasibility": "MEASURED for Helm 2.0 (10,471.8 to 10,529.1 s); the repaired code adds the analogy head"
+   "timing_feasibility": "MEASURED for Helm 2.0 (10,471.8 to 10,529.1 s); the repaired code adds the analogy head",
+   "training": {
+    "model_seed": 20260917,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   {
    "slot": "M3",
@@ -134,7 +174,18 @@
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "timing_feasibility": "as M2"
+   "timing_feasibility": "as M2",
+   "training": {
+    "model_seed": 20260918,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   {
    "slot": "M4",
@@ -147,7 +198,18 @@
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
-   "timing_feasibility": "as M2"
+   "timing_feasibility": "as M2",
+   "training": {
+    "model_seed": 20260919,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   {
    "slot": "E1",
@@ -156,12 +218,12 @@
    "mandatory": true,
    "cap_usd": "2.00",
    "basis_worst_case_usd": "1.87",
-   "basis_arithmetic": "(0.752 + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.10 collection + $0.10 S3/transfer = $1.863911",
+   "basis_arithmetic": "(g4dn.2xlarge 0.752, the dearest listed + 0.005 address + 100 GB x 0.08 / 730 disk) = 0.767959/h x 130/60 h + $0.10 collection + $0.10 S3/transfer = $1.863911",
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
    "counted_basis": "PLANNED: nothing spent; cap reserved",
    "scope": "E1 runs in every branch of the plan, so it is always reserved. It INCLUDES: (1) collecting the retained evidence of every training slot that ran (the checkpoint and measurement objects each training receipt lists, from the retained buckets or the local receipts, into E1's bundle); (2) the TEST readout, the 18 checkpoint probe reads and the gates; (3) a partial-study readout path: if the study stops early (the $30 stop, a failed seed, or fallback B unfundable) E1 reads whatever checkpoints exist and reports COMPARISON_INCOMPLETE, on the same machine and deadline, so under the same cap",
-   "runtime_bound": "same limits as P1a: ONE machine at most g4dn.2xlarge, at most 100 GB disk, in-machine timer 120 min, power-off 123 min, client deadline at most 130 min, destroyed on shutdown",
+   "runtime_bound": "same limits as P1a: ONE g4dn.2xlarge or g4dn.xlarge, each at its own listed price, at most 100 GB disk, in-machine timer 120 min, power-off 123 min, client deadline at most 130 min, destroyed on shutdown",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "NOT ESTABLISHED: E1 is not built. The per-checkpoint probe-read time on T4 is to be measured by P1b's corrected-probe validation; E1's admission needs 18 x that time + readout + gates within its own wall limit of at most 3,600 s, projected by its own timing preflight before any read",
    "preconditions_outside_money_gate": [
@@ -179,7 +241,18 @@
    "basis_arithmetic": "14400 s x $2.52/h + $1.48 launcher ancillary + $0.10 S3/transfer = $11.660000",
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
-   "counted_basis": "PLANNED: nothing spent; cap not reserved (optional)"
+   "counted_basis": "PLANNED: nothing spent; cap not reserved (optional)",
+   "training": {
+    "model_seed": 20260918,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   {
    "slot": "M6",
@@ -191,7 +264,18 @@
    "basis_arithmetic": "14400 s x $2.52/h + $1.48 launcher ancillary + $0.10 S3/transfer = $11.660000",
    "receipt": "NOT_APPLICABLE",
    "counted_usd": "0.00",
-   "counted_basis": "PLANNED: nothing spent; cap not reserved (optional)"
+   "counted_basis": "PLANNED: nothing spent; cap not reserved (optional)",
+   "training": {
+    "model_seed": 20260919,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   }
  ],
  "remaining_mandatory_slots": [
@@ -218,14 +302,17 @@
   "S2": "65.45",
   "P1a": "59.53"
  },
- "admission_preview": {
+ "money_gate_preview_not_an_admission": {
   "P1b": {
    "slot": "P1b",
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + P1b cap $2.00 + other mandatory caps $49.64 (P2,M1,M2,M3,M4,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
    "preconditions_outside_money_gate": [
     "the reader conformance review passes",
     "the corrected probe is built and reviewed",
@@ -237,8 +324,11 @@
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + P2 cap $1.00 + other mandatory caps $50.64 (P1b,M1,M2,M3,M4,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
    "preconditions_outside_money_gate": [
     "the HSET-2 build code review passes"
    ]
@@ -248,44 +338,79 @@
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + M1 cap $11.66 + other mandatory caps $39.98 (P1b,P2,M2,M3,M4,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "the unchanged source (Helm 2.0, 20208c92) and M1's launch folder are reviewed",
+    "M1 is the first training slot admitted (plan order)",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   "M2": {
    "slot": "M2",
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + M2 cap $11.66 + other mandatory caps $39.98 (P1b,P2,M1,M3,M4,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   "M3": {
    "slot": "M3",
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + M3 cap $11.66 + other mandatory caps $39.98 (P1b,P2,M1,M2,M4,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   "M4": {
    "slot": "M4",
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + M4 cap $11.66 + other mandatory caps $39.98 (P1b,P2,M1,M2,M3,E1) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   "E1": {
    "slot": "E1",
    "decision": "ADMIT",
    "reasons": [],
    "admission_arithmetic": "spent upper bound $5.44 + E1 cap $2.00 + other mandatory caps $49.64 (P1b,P2,M1,M2,M3,M4) = $57.08 vs ceiling $60.00",
+   "total_usd": "57.08",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
    "preconditions_outside_money_gate": [
     "E1 is built and reviewed",
     "P1b measured the per-checkpoint probe-read time on T4"
@@ -298,9 +423,17 @@
     "OVER_CEILING:$68.74 > $60.00"
    ],
    "admission_arithmetic": "spent upper bound $5.44 + M5 cap $11.66 + other mandatory caps $51.64 (P1b,P2,M1,M2,M3,M4,E1) = $68.74 vs ceiling $60.00",
+   "total_usd": "68.74",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   },
   "M6": {
    "slot": "M6",
@@ -309,15 +442,30 @@
     "OVER_CEILING:$68.74 > $60.00"
    ],
    "admission_arithmetic": "spent upper bound $5.44 + M6 cap $11.66 + other mandatory caps $51.64 (P1b,P2,M1,M2,M3,M4,E1) = $68.74 vs ceiling $60.00",
+   "total_usd": "68.74",
    "owner_stop": "not triggered: spent upper bound $5.44 <= $30.00 with 0 of 3 training jobs started (none)",
-   "gate_scope": "money ceiling, owner stop, one machine at a time and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
-   "preconditions_outside_money_gate": []
+   "started_counts": "RUNNING, or DONE with an ACCEPTED pointer_finished receipt; never a capacity refusal, a rejected receipt or an INVALID slot",
+   "money_basis": "worst-case SPEND upper bound (machine + address + disk + launcher ancillary + allowances), NOT the training launcher's fixed $15.00 bookings; which count the owner's $60.00 applies to is an OPEN question (FLAG_FOR_HUMAN_REVIEW, see open_questions)",
+   "gate_scope": "money ceiling, owner stop, one machine at a time, committed state and receipt validity ONLY; technical readiness (reviews, builds) is a separate admission and is NOT checked here",
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ]
   }
  },
+ "open_questions": [
+  "1 FLAG_FOR_HUMAN_REVIEW: other AWS jobs in this design folder are NOT slots: analogy_repair_t4_job attempt 1 $0.5596 and attempt 2 $0.67, aws_probe_job $0.4834, hset1a_aws_job attempt 1 $0.0223 and attempt 2 $0.1827 (total $1.9180, +$0.50 if each got the $0.10 allowance; watcher figures, not program-validated). Are they inside the $60.00? If yes, plan C's $2.92 headroom falls to about $0.50. The gate cannot see a job that is not listed.",
+  "2 FLAG_FOR_HUMAN_REVIEW: does the owner's $60.00 cap SPEND (this program: worst-case upper bounds) or the training launcher's fixed $15.00 BOOKINGS per job (Codex codex-0007: $90 for plan C, $120 for plan B, including the existing $30)? Under bookings, plan C is over the ceiling.",
+  "3 FLAG_FOR_HUMAN_REVIEW: which job is 'the third seed' for the $30.00 stop? Counted as training jobs M1-M6 with M1 included (M1 and M2 share seed 20260917), the stop is checked last at M3's admission; the owner may have meant M4.",
+  "4 FLAG_FOR_HUMAN_REVIEW: the S1 capacity-refusal rule is CLAUDE_PROPOSED; it overrides the launcher's own compute_identity_uncertain=True, and S1's provider log shows no cleanup calls after provider_0025. Plan C fits only with it ($67.14 without). Codex or the owner must accept or reject it.",
+  "5 FLAG_FOR_HUMAN_REVIEW: the $0.10 retention allowance covers 12 months; the evidence buckets have no end date."
+ ],
  "rules": {
-  "admission": "spent upper bound + next cap + every other PLANNED mandatory cap (E1 included) <= ceiling; slot PLANNED; nothing RUNNING; no DONE receipt rejected; owner stop not triggered",
+  "admission": "slot PLANNED; nothing RUNNING; no DONE receipt rejected; no receipt identity shared; no unconfirmed cleanup; slots file and program committed; spent upper bound + next cap + every other PLANNED mandatory cap (E1 included) <= ceiling; owner stop not triggered; one source per training arm. ADMIT writes the slot RUNNING with its admission record",
   "owner_stop": "if the spend upper bound passes (is strictly greater than) $30.00 while fewer than 3 slots marked counts_toward_training_stop are RUNNING or DONE, stop: every admission is refused and the runner reports to the owner",
   "rounding": "every bound rounded UP to the cent; exact decimals, no floats"
  },
- "meta1_ledger": "not read or written by this program; training bookings are the launcher's own bookkeeping"
+ "meta1_ledger": "not read or written by this program"
 }

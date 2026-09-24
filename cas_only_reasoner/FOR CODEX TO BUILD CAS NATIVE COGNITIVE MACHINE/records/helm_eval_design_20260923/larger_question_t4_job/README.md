@@ -19,8 +19,8 @@ so they run on one AWS T4 machine. This folder is the job that would run them.
 | `launch.py` | Builds the bundle from git objects at the pinned commit, checks it, and (for the runner only) uploads it and starts ONE machine. `--dry-run` does everything except upload and launch |
 | `job.sh.template` | The machine's script: three kill switches, stage 0 smoke, then the script (stage 1 preflight, stage 2 checks d, c, b, a), then upload and shut down |
 | `watch.py` | Watches the machine, terminates it at the client deadline, downloads results, confirms "terminated" and no leftover volume |
-| `read_results.py` | Restates the script's own verdict after checking the files are whole and belong to the launched bundle: the machine's own `identity.json`, bundle sha256 and wheel hashes must equal the launch record, and the cleanup record must name the same instance and launch time (codex-0007). Strict exit: 0 only for `ROUTE_ACCEPTED`; 3 when the job passed but the route is not accepted; 1 otherwise |
-| `test_read_results.py` | 20 small synthetic tests, with a mismatch-negative case for every binding: `python -B test_read_results.py` |
+| `read_results.py` | Restates the script's own verdict after checking the files are whole and belong to the launched bundle: the machine's own `identity.json`, bundle sha256 and wheel hashes must equal the launch record (codex-0007). Route acceptance also needs (builder review of bb942461): the launch record's bundle and source equal the REVIEWED pair (`2410f269...` / `e05889ee...`, and `dry_run_record.json` agrees); the watch record says `RESULTS_RECEIVED`, downloaded more than 0 files, and its job status equals `results/STATUS`; the machine's one `JOB START <utc>` line lies inside this launch's window; the machine's `instance_id=` line in `env.txt`, when its template writes one, equals the launched instance (this job's template `dc05f4af` predates that line, and the reading says so); the cleanup record names the same instance and launch time. Strict exit: 0 only for `ROUTE_ACCEPTED`; 3 when the job passed but the route is not accepted; 1 otherwise |
+| `test_read_results.py` | 29 small synthetic tests, with a mismatch-negative case for every binding: `python -B test_read_results.py` |
 | `JOB_LIMITS.md` | Authority, machine, time and money limits, with the arithmetic |
 | `dry_run_machine_script.sh`, `dry_run_record.json` | The output of the dry run below (links are `https://DRY-RUN/...` placeholders) |
 
@@ -60,6 +60,7 @@ python -B launch.py --dry-run          # check again; the bundle sha256 should b
 python -B launch.py                    # upload and start ONE machine; writes launch_record.json
 python -B watch.py                     # until the machine is gone; writes watch_record.json and results/
 python -B read_results.py              # writes RESULTS_READING.json; exit 0 only for ROUTE_ACCEPTED
+# A later job's template must write the machine's own id: instance_id=$(IMDSv2 instance-id) into env.txt
 ```
 
 The runner writes a `RUN_LOG.md` after the run, as the analogy job did.

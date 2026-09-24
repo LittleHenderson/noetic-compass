@@ -1,18 +1,25 @@
 {
- "schema": "claude.helm-repair-controlled-1.study-slots/0.2",
+ "schema": "claude.helm-repair-controlled-1.study-slots/0.3",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
- "about": "The ONE list of study slots. The runner edits only a slot's status and, when a job ends, its receipt pins (paths, sha256, identity). study_spend.py reads this file fresh on every run and never writes it. Money strings are exact US dollars.",
+ "about": "The ONE list of study slots. FROZEN (study_spend.py FROZEN_DEFINITIONS_SHA256): everything except, for slots other than the pre-gate S1/S2/P1a, the four mutable fields status, receipt, invalid_reason and admission. Only `study_spend.py --admit` sets a slot RUNNING (with its admission record); the runner then fills the receipt and sets DONE (or INVALID with a reason) and commits. Moves are forward-only against every committed version. Money strings are exact US dollars.",
  "ceiling_usd": "60.00",
  "owner_stop": {
   "usd": "30.00",
   "before_training_job_number": 3,
   "rule": "if the spend upper bound passes (is strictly greater than) $30.00 while fewer than 3 slots marked counts_toward_training_stop are RUNNING or DONE, stop: every admission is refused and the runner reports to the owner",
-  "counting": "only the main-comparison training jobs M1-M6 count (the owner's words were 'before the third seed'); the smoke runs S1 and S2 do not, and an INVALID slot does not, so the stop stays active as long as possible"
+  "counting": "only the main-comparison training jobs M1-M6 count (the owner's words were 'before the third seed'); a job counts as started when RUNNING, or DONE with an ACCEPTED pointer_finished receipt. An AWS capacity refusal, a rejected receipt and an INVALID slot never count, and the smoke runs S1 and S2 do not, so the stop stays active as long as possible"
  },
  "allowances": {
   "s3_transfer_per_job_usd": "0.10",
-  "basis": "coordinator decision: a stated S3/transfer/retention allowance of $0.10 per job, added on top of the machine+address+disk bound (watched jobs) or on top of the training launcher's own $1.48 ancillary allowance (training jobs). It covers S3 requests, transfer out of AWS and 12 months of storage of up to about 0.36 GB of retained objects at $0.023 per GB-month. Measured sizes today: S2 retains 49,097,828 bytes of artifacts; P1a stored a 10,230,760-byte bundle plus about 1 MB of uploads. No better measured figure exists; no provider invoice is read."
+  "basis": "coordinator decision: a stated S3/transfer/retention allowance of $0.10 per job, added on top of the machine+address+disk bound (watched jobs) or on top of the training launcher's own $1.48 ancillary allowance (training jobs). It covers S3 requests, transfer out of AWS and 12 months of storage of up to about 0.36 GB of retained objects at $0.023 per GB-month. Measured sizes today: S2 retains 49,097,828 bytes of artifacts; P1a stored a 10,230,760-byte bundle plus about 1 MB of uploads. No better measured figure exists; no provider invoice is read. LIMIT: storage is covered for 12 months only; the evidence buckets are kept with no end date (DELETION_DENIED), so storage after 12 months is OUTSIDE this bound (open question 5)."
  },
+ "open_questions_for_owner_or_codex": [
+  "1 FLAG_FOR_HUMAN_REVIEW: other AWS jobs in this design folder are NOT slots: analogy_repair_t4_job attempt 1 $0.5596 and attempt 2 $0.67, aws_probe_job $0.4834, hset1a_aws_job attempt 1 $0.0223 and attempt 2 $0.1827 (total $1.9180, +$0.50 if each got the $0.10 allowance; watcher figures, not program-validated). Are they inside the $60.00? If yes, plan C's $2.92 headroom falls to about $0.50. The gate cannot see a job that is not listed.",
+  "2 FLAG_FOR_HUMAN_REVIEW: does the owner's $60.00 cap SPEND (this program: worst-case upper bounds) or the training launcher's fixed $15.00 BOOKINGS per job (Codex codex-0007: $90 for plan C, $120 for plan B, including the existing $30)? Under bookings, plan C is over the ceiling.",
+  "3 FLAG_FOR_HUMAN_REVIEW: which job is 'the third seed' for the $30.00 stop? Counted as training jobs M1-M6 with M1 included (M1 and M2 share seed 20260917), the stop is checked last at M3's admission; the owner may have meant M4.",
+  "4 FLAG_FOR_HUMAN_REVIEW: the S1 capacity-refusal rule is CLAUDE_PROPOSED; it overrides the launcher's own compute_identity_uncertain=True, and S1's provider log shows no cleanup calls after provider_0025. Plan C fits only with it ($67.14 without). Codex or the owner must accept or reject it.",
+  "5 FLAG_FOR_HUMAN_REVIEW: the $0.10 retention allowance covers 12 months; the evidence buckets have no end date."
+ ],
  "slots": [
   {
    "id": "S1",
@@ -21,17 +28,29 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance (typed_pointer_launch.py: 4 h x $2.52 + $1.48 = $11.56); declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_capacity_refusal",
-               "git_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
-               "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917_attempt1/result.json",
-               "sha256": "4d9f008e1b6111fcb1b495da5b3f944dba27a7765d6dbe6a48b783453a9f309e",
-               "last_provider_record": {"path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917_attempt1/provider_0025.json",
-                                        "sha256": "d866fbf594c76b09e591dbd96c6df0ecc712386d54d37e34ef21ca4be2da2b33"},
-               "expected": {"job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
-                            "source_sha": "70490111bceb02c63ab4fb9c89c2d0645d92c2a7", "instance_type": "g7.2xlarge"}}
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance (typed_pointer_launch.py: 4 h x $2.52 + $1.48 = $11.56); declared, not a provider invoice"
+   },
+   "receipt": {
+    "kind": "pointer_capacity_refusal",
+    "git_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917_attempt1/result.json",
+    "sha256": "4d9f008e1b6111fcb1b495da5b3f944dba27a7765d6dbe6a48b783453a9f309e",
+    "last_provider_record": {
+     "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917_attempt1/provider_0025.json",
+     "sha256": "d866fbf594c76b09e591dbd96c6df0ecc712386d54d37e34ef21ca4be2da2b33"
+    },
+    "expected": {
+     "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+     "source_sha": "70490111bceb02c63ab4fb9c89c2d0645d92c2a7",
+     "instance_type": "g7.2xlarge"
+    }
+   }
   },
   {
    "id": "S2",
@@ -40,16 +59,26 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished",
-               "git_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
-               "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917/result.json",
-               "sha256": "0e0914a8780d5d9e20f840c41662d6368a3d32c4b638217ed4960aab64b45642",
-               "expected": {"job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
-                            "source_sha": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
-                            "instance_id": "i-039b7ae505c4c6245", "instance_type": "g7.2xlarge"}}
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": "1ddf6a1e4cdefee8aed30760904c7ec4cf49333e",
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_smoke_20260917/result.json",
+    "sha256": "0e0914a8780d5d9e20f840c41662d6368a3d32c4b638217ed4960aab64b45642",
+    "expected": {
+     "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+     "source_sha": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+     "instance_id": "i-039b7ae505c4c6245",
+     "instance_type": "g7.2xlarge"
+    }
+   }
   },
   {
    "id": "P1a",
@@ -58,19 +87,37 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "3.00",
-   "cap_basis": {"kind": "watched_machine", "machine": "g4dn.2xlarge", "price_per_hour_usd": "0.752",
-                 "public_address_per_hour_usd": "0.005", "disk_gb_max": 100, "disk_usd_per_gb_month": "0.08",
-                 "hours_per_month": 730, "client_deadline_minutes_max": 130, "evidence_collection_allowance_usd": "0.00"},
-   "receipt": {"kind": "watched_machine",
-               "launch_record": {"path": "larger_question_t4_job/launch_record.json",
-                                 "sha256": "82b91aebe2f5989321ced0a5ad7847591c84a8e6eb9413550da52c869fede1a6"},
-               "watch_record": {"path": "larger_question_t4_job/watch_record.json",
-                                "sha256": "6c2447e1ececb71adac6113a25560ef4fee65fd5fe816b72d1cab2787d071d65"},
-               "launch_schema": "claude.larger-question-t4-launch/0.1",
-               "watch_schema": "claude.larger-question-t4-watch/0.1",
-               "expected": {"instance_id": "i-09e14d4afd0e0ebfa", "launched_utc": "2026-09-24T05:53:38Z",
-                            "source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
-                            "bundle_sha256": "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36"}},
+   "cap_basis": {
+    "kind": "watched_machine",
+    "machines": {
+     "g4dn.2xlarge": "0.752"
+    },
+    "public_address_per_hour_usd": "0.005",
+    "disk_gb_max": 100,
+    "disk_usd_per_gb_month": "0.08",
+    "hours_per_month": 730,
+    "client_deadline_minutes_max": 130,
+    "evidence_collection_allowance_usd": "0.00"
+   },
+   "receipt": {
+    "kind": "watched_machine",
+    "launch_record": {
+     "path": "larger_question_t4_job/launch_record.json",
+     "sha256": "82b91aebe2f5989321ced0a5ad7847591c84a8e6eb9413550da52c869fede1a6"
+    },
+    "watch_record": {
+     "path": "larger_question_t4_job/watch_record.json",
+     "sha256": "6c2447e1ececb71adac6113a25560ef4fee65fd5fe816b72d1cab2787d071d65"
+    },
+    "launch_schema": "claude.larger-question-t4-launch/0.1",
+    "watch_schema": "claude.larger-question-t4-watch/0.1",
+    "expected": {
+     "instance_id": "i-09e14d4afd0e0ebfa",
+     "launched_utc": "2026-09-24T05:53:38Z",
+     "source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
+     "bundle_sha256": "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36"
+    }
+   },
    "runtime_bound": "in-machine timer 120 min; operating-system power-off at 123 min; destroyed on shutdown; client deadline 130 min (watch.py terminates and waits for 'terminated')",
    "timing_feasibility": "MEASURED: 35.1 min from launch to watch end; the check script 1,690.1 s of its 3,600 s limit"
   },
@@ -81,15 +128,36 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "2.00",
-   "cap_basis": {"kind": "watched_machine", "machine": "g4dn.2xlarge", "price_per_hour_usd": "0.752",
-                 "public_address_per_hour_usd": "0.005", "disk_gb_max": 100, "disk_usd_per_gb_month": "0.08",
-                 "hours_per_month": 730, "client_deadline_minutes_max": 130, "evidence_collection_allowance_usd": "0.00"},
-   "receipt": {"kind": "watched_machine", "launch_record": null, "watch_record": null,
-               "launch_schema": null, "watch_schema": null, "expected": null},
-   "runtime_bound": "must copy P1a's limits: ONE machine at most g4dn.2xlarge (g4dn.xlarge allowed, cheaper), at most 100 GB disk deleted with the machine, in-machine timer 120 min, power-off 123 min, destroyed on shutdown, client deadline at most 130 min; the dollar bound holds whatever the work does, because the deadline ends the machine",
+   "cap_basis": {
+    "kind": "watched_machine",
+    "machines": {
+     "g4dn.2xlarge": "0.752",
+     "g4dn.xlarge": "0.526"
+    },
+    "public_address_per_hour_usd": "0.005",
+    "disk_gb_max": 100,
+    "disk_usd_per_gb_month": "0.08",
+    "hours_per_month": 730,
+    "client_deadline_minutes_max": 130,
+    "evidence_collection_allowance_usd": "0.00",
+    "machines_source": "prices: larger_question_t4_job/launch.py PRICES (g4dn.2xlarge 0.752, g4dn.xlarge 0.526), us-west-2 on-demand"
+   },
+   "receipt": {
+    "kind": "watched_machine",
+    "launch_record": null,
+    "watch_record": null,
+    "launch_schema": null,
+    "watch_schema": null,
+    "expected": null
+   },
+   "runtime_bound": "must copy P1a's limits: ONE machine at most g4dn.2xlarge (or g4dn.xlarge; each machine is checked at its own listed price), at most 100 GB disk deleted with the machine, in-machine timer 120 min, power-off 123 min, destroyed on shutdown, client deadline at most 130 min; the dollar bound holds whatever the work does, because the deadline ends the machine",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "NOT ESTABLISHED: P1b is not built. Basis available: P1a on the same T4 class ran setup + finish in about 7 min and its forward-pass checks in 1,690.1 s. P1b's work must carry its own wall limit of at most 3,600 s and a timing preflight that refuses before any work if its projection is over",
-   "preconditions_outside_money_gate": ["the reader conformance review passes", "the corrected probe is built and reviewed", "its launch folder is reviewed"]
+   "preconditions_outside_money_gate": [
+    "the reader conformance review passes",
+    "the corrected probe is built and reviewed",
+    "its launch folder is reviewed"
+   ]
   },
   {
    "id": "P2",
@@ -98,15 +166,33 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "1.00",
-   "cap_basis": {"kind": "watched_machine", "machine": "c7i.2xlarge", "price_per_hour_usd": "0.357",
-                 "public_address_per_hour_usd": "0.005", "disk_gb_max": 100, "disk_usd_per_gb_month": "0.08",
-                 "hours_per_month": 730, "client_deadline_minutes_max": 130, "evidence_collection_allowance_usd": "0.00"},
-   "receipt": {"kind": "watched_machine", "launch_record": null, "watch_record": null,
-               "launch_schema": null, "watch_schema": null, "expected": null},
-   "runtime_bound": "ONE c7i.2xlarge (or cheaper), at most 100 GB disk, client deadline at most 130 min, destroyed on shutdown",
+   "cap_basis": {
+    "kind": "watched_machine",
+    "machines": {
+     "c7i.2xlarge": "0.357"
+    },
+    "public_address_per_hour_usd": "0.005",
+    "disk_gb_max": 100,
+    "disk_usd_per_gb_month": "0.08",
+    "hours_per_month": 730,
+    "client_deadline_minutes_max": 130,
+    "evidence_collection_allowance_usd": "0.00",
+    "machines_source": "c7i.2xlarge 0.357 us-west-2 on-demand (HSET-1A sister job); no cheaper machine is listed, so none is allowed"
+   },
+   "receipt": {
+    "kind": "watched_machine",
+    "launch_record": null,
+    "watch_record": null,
+    "launch_schema": null,
+    "watch_schema": null,
+    "expected": null
+   },
+   "runtime_bound": "ONE c7i.2xlarge (the only machine listed), at most 100 GB disk, client deadline at most 130 min, destroyed on shutdown",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "MEASURED for the sister job: HSET-1A ran 30.1 min, at most $0.1827",
-   "preconditions_outside_money_gate": ["the HSET-2 build code review passes"]
+   "preconditions_outside_money_gate": [
+    "the HSET-2 build code review passes"
+   ]
   },
   {
    "id": "M1",
@@ -115,38 +201,142 @@
    "mandatory": true,
    "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null},
-   "timing_feasibility": "MEASURED: Helm 2.0 ran 10,471.8 to 10,529.1 s per job, under the 12,600 s wall and the 14,400 s instance cap"
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260917,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "timing_feasibility": "MEASURED: Helm 2.0 ran 10,471.8 to 10,529.1 s per job, under the 12,600 s wall and the 14,400 s instance cap",
+   "preconditions_outside_money_gate": [
+    "the unchanged source (Helm 2.0, 20208c92) and M1's launch folder are reviewed",
+    "M1 is the first training slot admitted (plan order)",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   },
   {
-   "id": "M2", "what": "repaired seed 20260917", "status": "PLANNED", "mandatory": true, "counts_toward_training_stop": true,
+   "id": "M2",
+   "what": "repaired seed 20260917",
+   "status": "PLANNED",
+   "mandatory": true,
+   "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null},
-   "timing_feasibility": "MEASURED for Helm 2.0 (10,471.8 to 10,529.1 s); the repaired code adds the analogy head"
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260917,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "timing_feasibility": "MEASURED for Helm 2.0 (10,471.8 to 10,529.1 s); the repaired code adds the analogy head",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   },
   {
-   "id": "M3", "what": "repaired seed 20260918", "status": "PLANNED", "mandatory": true, "counts_toward_training_stop": true,
+   "id": "M3",
+   "what": "repaired seed 20260918",
+   "status": "PLANNED",
+   "mandatory": true,
+   "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null},
-   "timing_feasibility": "as M2"
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260918,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "timing_feasibility": "as M2",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   },
   {
-   "id": "M4", "what": "repaired seed 20260919", "status": "PLANNED", "mandatory": true, "counts_toward_training_stop": true,
+   "id": "M4",
+   "what": "repaired seed 20260919",
+   "status": "PLANNED",
+   "mandatory": true,
+   "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null},
-   "timing_feasibility": "as M2"
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260919,
+    "arm": "REPAIRED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "timing_feasibility": "as M2",
+   "preconditions_outside_money_gate": [
+    "the repaired source is built and reviewed",
+    "M1 was admitted first",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   },
   {
    "id": "E1",
@@ -155,32 +345,106 @@
    "mandatory": true,
    "counts_toward_training_stop": false,
    "cap_usd": "2.00",
-   "cap_basis": {"kind": "watched_machine", "machine": "g4dn.2xlarge", "price_per_hour_usd": "0.752",
-                 "public_address_per_hour_usd": "0.005", "disk_gb_max": 100, "disk_usd_per_gb_month": "0.08",
-                 "hours_per_month": 730, "client_deadline_minutes_max": 130, "evidence_collection_allowance_usd": "0.10"},
-   "receipt": {"kind": "watched_machine", "launch_record": null, "watch_record": null,
-               "launch_schema": null, "watch_schema": null, "expected": null},
+   "cap_basis": {
+    "kind": "watched_machine",
+    "machines": {
+     "g4dn.2xlarge": "0.752",
+     "g4dn.xlarge": "0.526"
+    },
+    "public_address_per_hour_usd": "0.005",
+    "disk_gb_max": 100,
+    "disk_usd_per_gb_month": "0.08",
+    "hours_per_month": 730,
+    "client_deadline_minutes_max": 130,
+    "evidence_collection_allowance_usd": "0.10",
+    "machines_source": "prices: larger_question_t4_job/launch.py PRICES (g4dn.2xlarge 0.752, g4dn.xlarge 0.526), us-west-2 on-demand"
+   },
+   "receipt": {
+    "kind": "watched_machine",
+    "launch_record": null,
+    "watch_record": null,
+    "launch_schema": null,
+    "watch_schema": null,
+    "expected": null
+   },
    "scope": "E1 runs in every branch of the plan, so it is always reserved. It INCLUDES: (1) collecting the retained evidence of every training slot that ran (the checkpoint and measurement objects each training receipt lists, from the retained buckets or the local receipts, into E1's bundle); (2) the TEST readout, the 18 checkpoint probe reads and the gates; (3) a partial-study readout path: if the study stops early (the $30 stop, a failed seed, or fallback B unfundable) E1 reads whatever checkpoints exist and reports COMPARISON_INCOMPLETE, on the same machine and deadline, so under the same cap",
-   "runtime_bound": "same limits as P1a: ONE machine at most g4dn.2xlarge, at most 100 GB disk, in-machine timer 120 min, power-off 123 min, client deadline at most 130 min, destroyed on shutdown",
+   "runtime_bound": "same limits as P1a: ONE g4dn.2xlarge or g4dn.xlarge, each at its own listed price, at most 100 GB disk, in-machine timer 120 min, power-off 123 min, client deadline at most 130 min, destroyed on shutdown",
    "cleanup_bound": "the watcher confirms 'terminated' and lists no volume left, bound to the same instance id as the launch record",
    "timing_feasibility": "NOT ESTABLISHED: E1 is not built. The per-checkpoint probe-read time on T4 is to be measured by P1b's corrected-probe validation; E1's admission needs 18 x that time + readout + gates within its own wall limit of at most 3,600 s, projected by its own timing preflight before any read",
-   "preconditions_outside_money_gate": ["E1 is built and reviewed", "P1b measured the per-checkpoint probe-read time on T4"]
+   "preconditions_outside_money_gate": [
+    "E1 is built and reviewed",
+    "P1b measured the per-checkpoint probe-read time on T4"
+   ]
   },
   {
-   "id": "M5", "what": "fallback B: unchanged seed 20260918", "status": "PLANNED", "mandatory": false, "counts_toward_training_stop": true,
+   "id": "M5",
+   "what": "fallback B: unchanged seed 20260918",
+   "status": "PLANNED",
+   "mandatory": false,
+   "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null}
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260918,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   },
   {
-   "id": "M6", "what": "fallback B: unchanged seed 20260919", "status": "PLANNED", "mandatory": false, "counts_toward_training_stop": true,
+   "id": "M6",
+   "what": "fallback B: unchanged seed 20260919",
+   "status": "PLANNED",
+   "mandatory": false,
+   "counts_toward_training_stop": true,
    "cap_usd": "11.66",
-   "cap_basis": {"kind": "training_pointer", "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                 "rate_ceiling_usd_per_hour": "2.52", "launcher_ancillary_usd": "1.48",
-                 "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"},
-   "receipt": {"kind": "pointer_finished", "git_commit": null, "path": null, "sha256": null, "expected": null}
+   "cap_basis": {
+    "kind": "training_pointer",
+    "instance_type": "g7.2xlarge",
+    "instance_seconds_max": 14400,
+    "rate_ceiling_usd_per_hour": "2.52",
+    "launcher_ancillary_usd": "1.48",
+    "launcher_ancillary_source": "typed-pointer launcher's declared ancillary allowance; declared, not a provider invoice"
+   },
+   "training": {
+    "model_seed": 20260919,
+    "arm": "UNCHANGED",
+    "binding": "at DONE the receipt's authority.worker_config.design.model_seed must equal model_seed; the arm is bound through the source commit given at --admit (one source per arm, never shared across arms)"
+   },
+   "receipt": {
+    "kind": "pointer_finished",
+    "git_commit": null,
+    "path": null,
+    "sha256": null,
+    "expected": null
+   },
+   "preconditions_outside_money_gate": [
+    "fallback B was chosen by the owner",
+    "the unchanged source (Helm 2.0, 20208c92) is reviewed",
+    "P1b passed",
+    "E1 is built and reviewed"
+   ],
+   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
   }
  ]
 }

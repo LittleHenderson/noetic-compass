@@ -64,11 +64,29 @@
   "wall_seconds": 3600
  },
  "problems": {},
+ "provenance": {
+  "accepted": true,
+  "job_start_utc": [
+   "2026-09-24T05:55:04Z"
+  ],
+  "machine_instance_id": "NOT_WRITTEN: template dc05f4af predates the IMDSv2 line; this binding rests on the time window and the watch record",
+  "problems": [],
+  "window": [
+   "2026-09-24T05:53:38Z",
+   "2026-09-24T06:28:42Z"
+  ]
+ },
+ "reviewed_pins": {
+  "dry_run_record": "present",
+  "expected_bundle_sha256": "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36",
+  "expected_source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
+  "problems": []
+ },
  "route_acceptance": {
   "reasons": [],
   "verdict": "ROUTE_ACCEPTED"
  },
- "schema": "claude.larger-question-t4-reading/0.2",
+ "schema": "claude.larger-question-t4-reading/0.3",
  "script": {
   "complete": true,
   "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
@@ -111,6 +129,7 @@
  "watch": {
   "cost_upper_bound_usd": 0.4489,
   "dollar_ceiling": 3.0,
+  "files_downloaded": 12,
   "final_state": "terminated",
   "instance_id": "i-09e14d4afd0e0ebfa",
   "job_status": "done",
@@ -118,6 +137,7 @@
   "minutes_from_launch_to_watch_end": 35.1,
   "outcome": "RESULTS_RECEIVED",
   "terminated_confirmed": true,
-  "volumes_of_this_job_remaining": []
+  "volumes_of_this_job_remaining": [],
+  "watch_ended_utc": "2026-09-24T06:28:42Z"
  }
 }
