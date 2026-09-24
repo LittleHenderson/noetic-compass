@@ -1,8 +1,9 @@
 """Small pure-Python tests for study_spend.py. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
-Covers Codex review codex-0007 (defects 1-4) and the builder review of bb942461 (MAJOR 1-4, MINOR 1-4): every
-wrongful ADMIT the reviewer found has a negative test here. Synthetic receipts only; a fake git reader; temporary
-folders. No AWS, no torch; the real slots file and receipts are never read or changed.
+Covers Codex review codex-0007 (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4) and the round-2
+verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6): every wrongful ADMIT a reviewer found has a
+negative test here. Synthetic receipts only; a fake git reader; temporary folders. No AWS, no torch; the real slots
+file and receipts are never read or changed.
 Run: python -B test_study_spend.py   (also collectable by pytest)
 """
 import atexit
@@ -57,7 +58,7 @@ class FakeGit:
         return list(self.trees[(commit, directory)])
 
     def history(self, name):
-        return list(self.versions)
+        return list(reversed(self.versions))        # newest first, like `git log`
 
     def uncommitted(self, names):
         return [n for n in names if n in self.dirty]
@@ -151,6 +152,8 @@ class World:
             training_slot("M5", mandatory=False)]
         self.program = self.tmp / "study_spend.py"
         self.program.write_bytes(b"# program under test\n")
+        # Slots whose DONE / INVALID row gets NO synthetic committed RUNNING version in build() (round 2 MINOR-B).
+        self.uncommitted_running = set()
 
     @staticmethod
     def pointer_spec(path, job, source, iid):
@@ -251,6 +254,13 @@ class World:
                "slots": self.slots}
         (self.tmp / "slots.json").write_text(json.dumps(doc), encoding="utf-8")
         self.frozen = ss.definitions_digest(doc)
+        for s in self.slots:    # what `--admit` + "commit and push" would have left in git history (round 2 MINOR-B)
+            if (s["status"] in ("DONE", "INVALID") and isinstance(s.get("admission"), dict)
+                    and s["id"] not in ss.PRE_GATE_DONE and s["id"] not in self.uncommitted_running):
+                row = copy.deepcopy(s)
+                row.update(status="RUNNING", receipt=planned_pointer() if "training" in s else planned_watched())
+                row.pop("invalid_reason", None)
+                self.git.versions.append(("%040d" % len(self.git.versions), enc(dict(doc, slots=[row]))))
         return self
 
     def edit_slots(self, fn):
@@ -270,9 +280,9 @@ class World:
         text = out.getvalue()
         return code, (json.loads(text) if argv and argv[0] == "--admit" else text)
 
-    def account(self):
+    def account(self, now=NOW):
         loaded = ss.load_slots(self.tmp / "slots.json", self.frozen)
-        return loaded, ss.account(loaded, self.tmp, self.git)
+        return loaded, ss.account(loaded, self.tmp, self.git, history=self.git.history("slots.json"), now=ss.utc(now))
 
     def row(self, sid):
         return next(r for r in self.account()[1]["rows"] if r["slot"] == sid)
@@ -675,12 +685,14 @@ def test_one_source_per_training_arm():
 def test_admitted_job_end_to_end():
     w = world()
     assert w.run(*admit_args("P1b"))[0] == 0
+    w.commit_snapshot()                                            # the runner commits the RUNNING row, then launches
     launched, ended = "2026-09-24T12:05:00Z", "2026-09-24T12:40:00Z"
     doc = json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))
     w.slots = doc["slots"]
     admission = w.by_id("P1b")["admission"]
     w.done_watched("P1b", "p1b", launched=launched, ended=ended)
     w.by_id("P1b")["admission"] = admission                        # keep the gate's own record
+    w.uncommitted_running.add("P1b")                               # no synthetic version: only the real committed one
     w.build()
     assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")
 
@@ -809,6 +821,170 @@ def test_missing_preconditions_print_not_assessed():
 def test_report_mode_exit_1_when_a_done_receipt_is_rejected():
     code, text = world(lambda w: w.watch.update(terminated_confirmed=False)).run()
     assert code == 1 and "NOT_CONFIRMED_TERMINATED" in text, text
+
+
+# ------------------------------------ round 2 MAJOR-A: read the receipt first; fail closed on an unconfirmed cleanup
+def p1b_breach(w, bundle_field="c" * 64, **watch_extra):
+    """P1b ran 240 min with a watcher cost of $3.0719 (over its 130-min basis), then was marked INVALID."""
+    w.done_watched("P1b", "p1b", launched="2026-09-24T10:00:00Z", ended="2026-09-24T14:00:00Z", minutes=240.0,
+                   cost=3.0719, deadline=240, **watch_extra)
+    w.by_id("P1b")["receipt"]["expected"]["bundle_sha256"] = bundle_field
+    w.invalid("P1b", "ran past its deadline basis")
+
+
+def m1_uncertain(w, expected_instance):
+    """M1 ran 20,000 s; the launcher could not confirm its cleanup or the machine's identity; then INVALID."""
+    w.done_training("M1", 20000)
+    r = w.receipts["r/m1/result.json"]
+    r["launch"]["instance_id"] = "UNKNOWN"
+    r["stages"]["compute_cleanup"] = "INCOMPLETE"
+    r["cleanup"].update(complete=False, compute_identity_uncertain=True, instance_ids=[], instances={},
+                        failures=["INSTANCE_IDENTITY_UNKNOWN_AFTER_LAUNCH_ATTEMPT"])
+    w.by_id("M1")["receipt"]["expected"]["instance_id"] = expected_instance
+    w.invalid("M1", "cleanup and identity unconfirmed")
+
+
+def test_round2_p1_an_empty_spec_field_no_longer_undercounts():
+    probe, twin = world(lambda w: p1b_breach(w, bundle_field="")), world(p1b_breach)
+    for w in (probe, twin):
+        row = w.row("P1b")
+        assert row["counted_usd"] == "3.18" and "cleanup" not in row, row      # was $2.00 for the probe
+        assert w.account()[1]["spent"] == Decimal("8.62")
+    (pc, po), (tc, to) = probe.run(*admit_args("P2")), twin.run(*admit_args("P2"))
+    # The probe now decides exactly as its complete-spec twin. A basis breach whose cleanup is confirmed is counted at
+    # what it recorded and does not by itself stop the study (round-1 disposition; still open for Codex / the owner).
+    assert (pc, po["decision"], po["total_usd"], po["reasons"]) == (tc, to["decision"], to["total_usd"], to["reasons"])
+    assert po["total_usd"] == "58.26", po
+
+
+def test_round2_p2_unconfirmed_cleanup_with_an_empty_spec_field_blocks():
+    w = world(lambda w: p1b_breach(w, bundle_field="", terminated_confirmed=False, final_state="running"))
+    assert w.row("P1b")["counted_usd"] == "3.18" and w.row("P1b")["cleanup"].startswith("UNCONFIRMED"), w.row("P1b")
+    code, out = w.run(*admit_args("P2"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], out
+
+
+def test_round2_p3_unconfirmed_cleanup_with_a_stale_pin_blocks():
+    def stale(note_state):
+        def after_pin(w):   # the watch record on disk changed after its hash was pinned
+            path = w.tmp / "p1b" / "watch_record.json"
+            doc = json.loads(path.read_bytes())
+            doc.update(note="rewritten after pinning", **note_state)
+            path.write_bytes(enc(doc))
+        return after_pin
+    unconfirmed = {"terminated_confirmed": False, "final_state": "running"}
+    w = world(lambda w: p1b_breach(w, **unconfirmed), after_pin=stale(unconfirmed))
+    assert w.row("P1b")["counted_usd"] == "3.18", w.row("P1b")
+    code, out = w.run(*admit_args("P2"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], out
+    # A stale record never confirms, even one rewritten to say "terminated" after its pin was taken.
+    w = world(lambda w: p1b_breach(w, **unconfirmed),
+              after_pin=stale({"terminated_confirmed": True, "final_state": "terminated"}))
+    code, out = w.run(*admit_args("P2"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], out
+
+
+def test_round2_p4_empty_instance_id_is_counted_and_blocks():
+    w = world(lambda w: m1_uncertain(w, ""))
+    assert w.row("M1")["counted_usd"] == "15.58", w.row("M1")                # was $11.66
+    assert w.account()[1]["unconfirmed"] == ["M1"]
+    code, out = w.run(*admit_args("P1b"))                                     # was exit 0 at $57.08
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+    assert "OVER_CEILING:$61.00 > $60.00" in out["reasons"], out
+
+
+def test_round2_p5_positive_control_complete_spec():
+    w = world(lambda w: m1_uncertain(w, "i-M1"))
+    assert w.row("M1")["counted_usd"] == "15.58", w.row("M1")
+    code, out = w.run(*admit_args("P1b"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+    assert "OVER_CEILING:$61.00 > $60.00" in out["reasons"], out
+
+
+def test_round2_no_readable_receipt_is_unconfirmed():
+    w = world(lambda w: w.invalid("P1b", "never ran?"))                     # INVALID naming no receipt at all
+    assert w.account()[1]["unconfirmed"] == ["P1b"] and "no readable receipt" in w.row("P1b")["cleanup"]
+    code, out = w.run(*admit_args("P2"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], out
+
+    def gone(w):                                                             # the pinned receipt is not in git
+        del w.git.blobs[(C1, "r/m1/result.json")]
+    w = world(lambda w: w.done_training("M1", 10500), after_pin=gone)
+    rejected(w, "M1", "RECEIPT_MISSING")
+    assert w.account()[1]["unconfirmed"] == ["M1"]
+
+    def bad_commit(w):                                                       # an option-like commit is never read
+        w.by_id("M1")["receipt"]["git_commit"] = "--output=x"
+    w = world(lambda w: w.done_training("M1", 10500), after_pin=bad_commit)
+    assert w.account()[1]["unconfirmed"] == ["M1"]
+    calls = []
+
+    class Spy:
+        def read(self, commit, path):
+            calls.append(commit)
+            return b"{}"
+    assert ss.read_git_lenient(Spy(), "--output=x", "r/m1/result.json") is None and calls == []
+
+
+def test_round2_a_proven_capacity_refusal_is_not_unconfirmed():
+    def refused_invalid(w):
+        w.refused_training("M1")
+        w.invalid("M1", "capacity refusal")
+    assert world(refused_invalid).account()[1]["unconfirmed"] == []
+
+    def refused_wrong_source(w):                                             # rejected, but the refusal is proven
+        w.refused_training("M1")
+        w.by_id("M1")["admission"]["source_sha"] = "9" * 40
+    w = world(refused_wrong_source)
+    rejected(w, "M1", "SOURCE_NOT_THE_ADMITTED_SOURCE")
+    assert w.account()[1]["unconfirmed"] == []
+
+    def refused_unproven(w):                                                 # a later provider call breaks the proof
+        refused_invalid(w)
+        w.trees["r/m1"] = w.trees["r/m1"] + ["provider_0004.json"]
+    assert world(refused_unproven).account()[1]["unconfirmed"] == ["M1"]
+
+    def refused_stale(w):                                                    # a stale pin is never a proof
+        w.by_id("M1")["receipt"]["sha256"] = "0" * 64
+    assert world(refused_invalid, after_pin=refused_stale).account()[1]["unconfirmed"] == ["M1"]
+
+
+def test_round2_running_past_its_lifetime_is_unconfirmed():
+    def running(sid, when):
+        def fn(w):
+            w.by_id(sid)["status"] = "RUNNING"
+            w.admission(sid, SRC_UNCHANGED if sid == "M1" else SRC_WATCHED, bundle="c" * 64, when=when)
+        return fn
+    # M1: 14,400 s lifetime. Admitted 09:00, now 12:00: still inside it. Admitted 07:59:59: past it.
+    assert world(running("M1", "2026-09-24T09:00:00Z")).account()[1]["unconfirmed"] == []
+    w = world(running("M1", "2026-09-24T07:59:59Z"))
+    assert w.account()[1]["unconfirmed"] == ["M1"] and w.row("M1")["lifetime"].startswith("PAST"), w.row("M1")
+    code, text = w.run()
+    assert code == 1, text
+    # P1b: 130-min client deadline. Admitted 09:00, now 12:00: past it.
+    assert world(running("P1b", "2026-09-24T09:00:00Z")).account()[1]["unconfirmed"] == ["P1b"]
+
+
+# ------------------------------------------ round 2 MINOR-B: a DONE admission must have been committed as RUNNING
+def test_round2_p6_a_hand_written_admission_is_refused():
+    def hand_written(w):
+        w.done_training("M1", 10500)
+        w.by_id("M1")["admission"]["admitted_utc"] = "2000-01-01T00:00:00Z"
+        w.uncommitted_running.add("M1")                                      # --admit never ran; no RUNNING commit
+    w = world(hand_written)
+    rejected(w, "M1", "ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW")
+    assert "M1" not in w.account()[1]["training_started"]
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and "DONE_RECEIPT_REJECTED:M1" in out["reasons"], out
+
+    def committed(w):                                                        # control: the same record, committed
+        w.done_training("M1", 10500)
+        w.by_id("M1")["admission"]["admitted_utc"] = "2000-01-01T00:00:00Z"
+    assert world(committed).row("M1")["receipt"] == "ACCEPTED"
+    w = world(committed)                                                     # the DONE row's record differs from the
+    w.edit_slots(lambda d: d["slots"][5]["admission"].update(admitted_utc="2026-09-24T09:30:00Z"))   # committed one
+    code, out = w.run(*admit_args("M2"))
+    assert code == 2 and "HISTORY_VIOLATION: M1 was RUNNING" in out["error"], out
 
 
 def run_all():

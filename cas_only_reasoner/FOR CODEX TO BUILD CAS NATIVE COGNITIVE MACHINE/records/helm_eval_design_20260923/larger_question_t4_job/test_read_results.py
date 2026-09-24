@@ -1,8 +1,10 @@
 """Small pure-Python tests for read_results.py. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
-Covers Codex review codex-0007 (defect 5) and the builder review of bb942461 (MAJOR 5: results not bound to the
-launched machine; MINOR: reviewed pins; NOTE c: JSON that is not an object). Synthetic job folders in a temporary
-directory; the real results/ folder is never touched. Every binding has a mismatch-negative case.
+Covers Codex review codex-0007 (defect 5), the builder review of bb942461 (MAJOR 5: results not bound to the
+launched machine; MINOR: reviewed pins; NOTE c: JSON that is not an object) and the round-2 verification of d89721b4
+(MINOR-C: the no-instance-line exemption is the one finished job only). Synthetic job folders in a temporary
+directory; the real results/ folder is never touched (job.sh.template is hashed, not run). Every binding has a
+mismatch-negative case.
 Run: python -B test_read_results.py (also collectable by pytest)
 """
 import atexit
@@ -201,11 +203,29 @@ def test_machine_instance_id_line_binds_to_the_launched_instance():
     route_refused(lambda f: f.update({"results/env.txt": ENV.replace("instance_id=i-job\n", "")}),
                   "MACHINE_INSTANCE_ID_MISSING")
 
-    def legacy(f):      # the finished job's template predates the line: accepted, and the reading says so
+
+def legacy(template, instance):
+    """No instance_id= line; the launch record names this template and this instance (watch record kept in step)."""
+    def edit(f):
         f["results/env.txt"] = ENV.replace("instance_id=i-job\n", "")
-        f["launch_record.json"]["machine_script_template_sha256"] = rr.TEMPLATES_WITHOUT_INSTANCE_LINE[0]
-    out, code = reading(legacy)
+        f["launch_record.json"].update(machine_script_template_sha256=template, instance_id=instance)
+        f["watch_record.json"]["instance_id"] = instance
+    return edit
+
+
+def test_instance_line_exemption_is_only_the_finished_job():       # round 2 MINOR-C
+    (template, instance), = rr.EXEMPT_WITHOUT_INSTANCE_LINE
+    assert instance == "i-09e14d4afd0e0ebfa"
+    out, code = reading(legacy(template, instance))              # the finished job itself: accepted, and said so
     assert code == 0 and out["provenance"]["machine_instance_id"].startswith("NOT_WRITTEN"), out["provenance"]
+    route_refused(legacy(template, "i-0a1b2c3d4e5f60718"), "MACHINE_INSTANCE_ID_MISSING")   # same template, new machine
+    route_refused(legacy("a" * 64, instance), "MACHINE_INSTANCE_ID_MISSING")               # same machine, other template
+
+
+def test_the_current_template_is_not_exempt_on_a_new_launch():   # round 2 MINOR-C: why the instance id is in the key
+    current = hashlib.sha256((rr.HERE / "job.sh.template").read_bytes()).hexdigest()
+    assert current == rr.EXEMPT_WITHOUT_INSTANCE_LINE[0][0], current   # job.sh.template still writes no instance_id=
+    route_refused(legacy(current, "i-0a1b2c3d4e5f60718"), "MACHINE_INSTANCE_ID_MISSING")
 
 
 # ---------------------------------------------------------------------- review MINOR: the reviewed pins

@@ -1,7 +1,8 @@
 """HELM-REPAIR-CONTROLLED-1 study spend and admission gate. Label CLAUDE_BUILT_CLAUDE_CHECKED.
 
-Answers Codex review `codex-0007` (defects 1-4) and the builder review of bb942461 (MAJOR 1-4, MINOR 1-4; see
-REVIEW.md). Pure Python; reads files and git objects only; no AWS call; never reads or writes the meta1 ledger.
+Answers Codex review `codex-0007` (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4) and the round-2
+verification of d89721b4 (MAJOR-A, MINOR-B; see REVIEW.md "Round 2"). Pure Python; reads files and git objects only;
+no AWS call; never reads or writes the meta1 ledger.
 
 FROZEN IN THIS CODE (never taken from the slots file; the file must agree or exit 2):
   * the $60.00 ceiling, the owner's $30.00 stop before the 3rd training job, the $0.10 S3/transfer/retention allowance;
@@ -20,22 +21,36 @@ ACCOUNTING (exact decimals, every bound rounded UP to the cent):
   * DONE, receipt fails validation       -> max(cap, every cost figure the receipt itself shows); admissions refused
                                             until the slot is marked INVALID (the pins of a committed DONE row are frozen);
   * INVALID                              -> max(cap, every cost figure its receipt shows, if it has one), forever;
-  * RUNNING                              -> its full cap;
+  * RUNNING                              -> its full cap (or more, if a receipt it already names shows more);
   * PLANNED                              -> nothing spent; if mandatory, its cap is reserved.
   "Every cost figure": recorded cost + allowances, cost recomputed from the timestamps, the receipt's own deadline or
   instance-seconds limit, each at the highest price the receipt or the basis shows. So a job that broke its own cost
-  basis is never counted below what it recorded (review MAJOR 4).
+  basis is never counted below what it recorded (review MAJOR 4). The receipt is read for these figures FIRST, from
+  whatever commit and path its spec gives, before any spec-completeness or pin check (round 2 MAJOR-A): an empty
+  spec field or a stale pin can reject a receipt, never shrink its count.
   Every cap must be at least the worst case its own basis computes (else exit 2; the old P1a $1.66 < $1.6639 guard).
+
+CLEANUP, FAIL CLOSED (round 2 MAJOR-A). A cleanup is CONFIRMED only when HASH-VERIFIED records positively show this
+slot's own machine gone: training -- cleanup complete, identity certain, the one launched instance CONFIRMED_TERMINATED,
+nothing pending, no failure, compute cleanup COMPLETE; watched -- terminated confirmed, final state terminated or gone,
+no volume left, the same instance and launch time in both records. Ids the spec does give must agree. A slot whose
+receipt identity another slot also claims never confirms. The only other way out is a PROVEN capacity refusal under
+the S1 rule (the receipt verified and every refusal check passed). A DONE or INVALID slot, or a RUNNING slot past its
+lifetime (admission time + its basis's instance seconds or client deadline), without one of those is CLEANUP
+UNCONFIRMED: a receipt that is missing, unreadable, stale, incomplete or silent is never a confirmation. Every admission
+is then refused: a machine or disk may still exist, so the runner stops and reports to the owner. Nothing clears it.
 
 A receipt is also rejected when any identity it claims (receipt sha256 or path, job id, instance id, launch or watch
 record sha256 or path, provider record) is claimed by another RUNNING / DONE / INVALID slot; every admission is then
 refused (review MAJOR 1). A slot admitted by this gate must, at DONE, show the admitted source commit (and bundle for
-watched jobs), the slot's own model seed (training), and a launch time AFTER its admission time.
+watched jobs), the slot's own model seed (training), and a launch time AFTER its admission time; and a committed
+version of STUDY_SLOTS.json must show the slot RUNNING with the IDENTICAL admission record (round 2 MINOR-B: a
+hand-written record that was never committed as RUNNING is refused).
 
 ADMISSION (`--admit SLOT --source <commit> [--bundle <sha256>]`): exit 0 only if ALL of these hold, else exit 1 with the
 reasons; any input error exit 2. On exit 0 it WRITES the slot as RUNNING with an admission record, in the same step.
   * the slot is PLANNED; no slot is RUNNING (one machine at a time); no DONE receipt is rejected; no identity is shared;
-    no receipt shows an unconfirmed cleanup (a machine or disk that may still exist: stop and report to the owner);
+    no slot's cleanup is UNCONFIRMED (see CLEANUP: a machine or disk that may still exist: stop and report to the owner);
   * STUDY_SLOTS.json and study_spend.py equal HEAD (every earlier DONE is committed before the next machine starts);
   * spent upper bound + the slot's cap + the caps of every OTHER PLANNED mandatory slot (E1 included) <= $60.00;
   * the owner's stop is not triggered: spent upper bound > $30.00 while fewer than 3 training jobs have STARTED stops
@@ -82,6 +97,7 @@ POINTER_SCHEMA = "cas-graph-training-candidate-launch/1"
 CENT, SIX = Decimal("0.01"), Decimal("0.000001")
 SHA = re.compile(r"^[0-9a-f]{64}$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
+SAFE_REF = re.compile(r"^[0-9A-Za-z][0-9A-Za-z._/-]*$")     # a lenient read's commit: never an option-like string
 MONEY = re.compile(r"^\d+\.\d{2}$")
 DECIMAL = re.compile(r"^\d+(\.\d+)?$")
 JOB_TIME = re.compile(r"-(\d{14})-")
@@ -355,8 +371,10 @@ class GitReader:
 
 
 def new_result():
+    """read: some copy of the receipt was read (leniently or verified). cleanup_confirmed: HASH-VERIFIED records
+    positively show this slot's own machine gone. proven_refusal: a verified capacity refusal passing the S1 rule."""
     return {"bound": None, "text": "", "problems": [], "pins": {}, "keys": set(), "figures": [],
-            "cleanup_unconfirmed": False}
+            "read": False, "cleanup_confirmed": False, "proven_refusal": False}
 
 
 def spec_complete(receipt, keys):
@@ -412,8 +430,9 @@ def read_pinned_git(git, commit, path, pinned, problems, label):
 
 
 def read_git_lenient(git, commit, path):
-    """The receipt at its place WITHOUT the hash check: used only to count MORE, never less."""
-    if not (isinstance(commit, str) and isinstance(path, str)):
+    """The receipt at its place WITHOUT the hash check: used only to count MORE, never less, and never to confirm a
+    cleanup. Whatever commit the spec gives is tried, except an option-like string (it would reach `git show`)."""
+    if not (isinstance(commit, str) and SAFE_REF.match(commit) and isinstance(path, str) and path):
         return None
     try:
         doc = json.loads(git.read(commit, path))
@@ -563,22 +582,44 @@ def pointer_admission(slot, d, expected, res):
     bind_admission(slot, res, expected.get("source_sha"), launched, seed=seed)
 
 
+def pointer_cleanup_confirmed(d, expected):
+    """True only when a HASH-VERIFIED training receipt positively shows its own launched machine gone (round 2 MAJOR-A).
+    Ids the spec does give must agree; an id the spec leaves empty is not guessed. The launcher's receipt has no volume
+    list: its "complete" cleanup and the terminated instance are the only evidence it carries."""
+    cleanup, iid = obj(d.get("cleanup")), obj(d.get("launch")).get("instance_id")
+    if not (isinstance(iid, str) and iid):
+        return False
+    for want, got in ((expected.get("instance_id"), iid), (expected.get("job"), d.get("job"))):
+        if isinstance(want, str) and want and want != got:
+            return False
+    return (cleanup.get("complete") is True and cleanup.get("compute_identity_uncertain") is False
+            and cleanup.get("instance_ids") == [iid] and cleanup.get("instances") == {iid: "CONFIRMED_TERMINATED"}
+            and cleanup.get("instances_termination_pending") == [] and cleanup.get("failures") == []
+            and obj(d.get("stages")).get("compute_cleanup") == "COMPLETE")
+
+
 def validate_pointer(slot, git, allowance, refusal):
     receipt, basis, res = slot["receipt"], slot["cap_basis"], new_result()
+    problems, expected = res["problems"], obj(receipt.get("expected"))
     need = ("git_commit", "path", "sha256", "expected") + (("last_provider_record",) if refusal else ())
     need_expected = ("job", "source_sha", "instance_type") + (() if refusal else ("instance_id",))
-    if not spec_complete(receipt, need) or not spec_complete(obj(receipt["expected"]), need_expected):
-        res["problems"].append("RECEIPT_SPEC_INCOMPLETE")
-        return res
-    expected, problems = receipt["expected"], res["problems"]
-    d = read_pinned_git(git, receipt["git_commit"], receipt["path"], receipt["sha256"], problems, "RECEIPT")
-    lenient = d if d is not None else read_git_lenient(git, receipt["git_commit"], receipt["path"])
+    complete = spec_complete(receipt, need) and spec_complete(expected, need_expected)
+    if not complete:
+        problems.append("RECEIPT_SPEC_INCOMPLETE")
+    # Round 2 MAJOR-A: read FIRST, from whatever commit and path the spec gives, before any completeness or pin return.
+    # The lenient copy only ever ADDS cost figures and ids; only the hash-verified copy can confirm a cleanup.
+    d = read_pinned_git(git, receipt.get("git_commit"), receipt.get("path"), receipt.get("sha256"), problems, "RECEIPT")
+    lenient = d if d is not None else read_git_lenient(git, receipt.get("git_commit"), receipt.get("path"))
     if lenient is not None:
+        res["read"] = True
         res["figures"] = pointer_figures(lenient, basis, allowance)
         for name, value in (("job", lenient.get("job")), ("instance_id", obj(lenient.get("launch")).get("instance_id"))):
             if isinstance(value, str) and value:
                 res["keys"].add((name, value))
     if d is None:
+        return res
+    res["cleanup_confirmed"] = pointer_cleanup_confirmed(d, expected)
+    if not complete:
         return res
     elapsed, rate = pointer_common(d, expected, basis, problems)
     cleanup = obj(d.get("cleanup"))
@@ -594,17 +635,12 @@ def validate_pointer(slot, git, allowance, refusal):
             problems.append("CLEANUP_FAILURES_OR_PENDING:%r" % cleanup.get("failures"))
         if obj(d.get("stages")).get("compute_cleanup") != "COMPLETE":
             problems.append("STAGE_COMPUTE_CLEANUP:%r" % obj(d.get("stages")).get("compute_cleanup"))
-        instances = cleanup.get("instances") if isinstance(cleanup.get("instances"), dict) else {}
-        res["cleanup_unconfirmed"] = (cleanup.get("complete") is not True or not instances
-                                      or any(v != "CONFIRMED_TERMINATED" for v in instances.values())
-                                      or cleanup.get("instances_termination_pending") != [])
     else:
-        validate_refusal_specifics(d, receipt, expected, git, problems)
-        named = (d.get("launch") is not None or cleanup.get("instance_ids") not in ([],)
-                 or cleanup.get("instances") not in ({},) or cleanup.get("instances_termination_pending") not in ([],))
-        proof_failed = any(p.startswith(x) for p in problems for x in (
-            "NOT_A_FAILED_LAUNCH", "NOT_AN_AWS_CAPACITY_REFUSAL", "A_PROVIDER_CALL_FOLLOWS", "LAST_PROVIDER"))
-        res["cleanup_unconfirmed"] = named or (cleanup.get("compute_identity_uncertain") is not False and proof_failed)
+        proof = []
+        validate_refusal_specifics(d, receipt, expected, git, proof)
+        problems.extend(proof)
+        # Proven only for THIS job: every S1-rule check passed and the verified receipt is the job the spec names.
+        res["proven_refusal"] = not proof and not any(p.startswith("JOB_MISMATCH") for p in problems)
     pointer_admission(slot, d, expected, res)
     if problems:
         return res
@@ -684,26 +720,46 @@ def watched_figures(launch, watch, basis, allowance):
     return out
 
 
+def watch_shows_terminated(watch):
+    return (watch.get("terminated_confirmed") is True and watch.get("final_state") in ("terminated", "gone")
+            and watch.get("volumes_of_this_job_remaining") == [])
+
+
+def watched_cleanup_confirmed(launch, watch, expected):
+    """True only when BOTH hash-verified records name the same machine and launch, and the watcher saw it gone with no
+    volume left (round 2 MAJOR-A). Ids the spec does give must agree."""
+    iid = launch.get("instance_id")
+    if not (isinstance(iid, str) and iid) or watch.get("instance_id") != iid:
+        return False
+    if not isinstance(launch.get("launched_utc"), str) or watch.get("launched_utc") != launch.get("launched_utc"):
+        return False
+    for want, got in ((expected.get("instance_id"), iid), (expected.get("launched_utc"), launch.get("launched_utc"))):
+        if isinstance(want, str) and want and want != got:
+            return False
+    return watch_shows_terminated(watch)
+
+
 def validate_watched(slot, info, root, allowance):
     receipt, basis, res = slot["receipt"], slot["cap_basis"], new_result()
-    if not spec_complete(receipt, ("launch_record", "watch_record", "launch_schema", "watch_schema", "expected")) or \
-            not spec_complete(obj(receipt["expected"]), ("instance_id", "launched_utc", "source_commit", "bundle_sha256")):
-        res["problems"].append("RECEIPT_SPEC_INCOMPLETE")
-        return res
-    expected, problems = receipt["expected"], res["problems"]
-    launch = read_pinned_file(root, receipt["launch_record"], problems, "LAUNCH_RECORD")
-    watch = read_pinned_file(root, receipt["watch_record"], problems, "WATCH_RECORD")
-    lenient_launch = launch if launch is not None else read_file_lenient(root, receipt["launch_record"])
-    lenient_watch = watch if watch is not None else read_file_lenient(root, receipt["watch_record"])
+    problems, expected = res["problems"], obj(receipt.get("expected"))
+    complete = (spec_complete(receipt, ("launch_record", "watch_record", "launch_schema", "watch_schema", "expected"))
+                and spec_complete(expected, ("instance_id", "launched_utc", "source_commit", "bundle_sha256")))
+    if not complete:
+        problems.append("RECEIPT_SPEC_INCOMPLETE")
+    # Round 2 MAJOR-A: read FIRST, from whatever paths the spec gives, before any completeness or pin return.
+    launch = read_pinned_file(root, receipt.get("launch_record"), problems, "LAUNCH_RECORD")
+    watch = read_pinned_file(root, receipt.get("watch_record"), problems, "WATCH_RECORD")
+    lenient_launch = launch if launch is not None else read_file_lenient(root, receipt.get("launch_record"))
+    lenient_watch = watch if watch is not None else read_file_lenient(root, receipt.get("watch_record"))
+    res["read"] = lenient_launch is not None or lenient_watch is not None
     res["figures"] = watched_figures(lenient_launch or {}, lenient_watch or {}, basis, allowance)
     for doc in (lenient_launch or {}, lenient_watch or {}):
         if isinstance(doc.get("instance_id"), str) and doc["instance_id"]:
             res["keys"].add(("instance_id", doc["instance_id"]))
-    if watch is not None:
-        res["cleanup_unconfirmed"] = (watch.get("terminated_confirmed") is not True
-                                      or watch.get("final_state") not in ("terminated", "gone")
-                                      or watch.get("volumes_of_this_job_remaining") != [])
     if launch is None or watch is None:
+        return res
+    res["cleanup_confirmed"] = watched_cleanup_confirmed(launch, watch, expected)
+    if not complete:
         return res
     approved, machines = obj(launch.get("approved")), watched_machines(basis)
     if launch.get("schema") != receipt["launch_schema"]:
@@ -734,7 +790,7 @@ def validate_watched(slot, info, root, allowance):
     ceiling = number(approved.get("dollar_ceiling"))
     if ceiling is None or ceiling != info["cap"]:
         problems.append("LAUNCH_CEILING_NOT_SLOT_CAP:%r" % approved.get("dollar_ceiling"))
-    if res["cleanup_unconfirmed"]:
+    if not watch_shows_terminated(watch):
         problems.append("NOT_CONFIRMED_TERMINATED_OR_VOLUMES_LEFT_OR_UNKNOWN:%r %r" % (
             watch.get("final_state"), watch.get("volumes_of_this_job_remaining")))
     cost = number(watch.get("cost_upper_bound_usd"))
@@ -792,11 +848,54 @@ def counted_at_least_cap(cap, res):
 
 
 # ------------------------------------------------------------------------------------------ accounting + admission
-def account(loaded, root, git):
+def lifetime_seconds(basis):
+    """The longest a slot's machine may live by its own basis: training instance seconds, or the watched client deadline."""
+    if basis["kind"] == "training_pointer":
+        return basis["instance_seconds_max"]
+    return basis["client_deadline_minutes_max"] * 60
+
+
+def past_lifetime(slot, now):
+    """A RUNNING slot whose admission time + its basis lifetime has passed, or whose admission time is unreadable. A
+    launch made later than the admission makes this flag early, never late (fail closed)."""
+    admitted = utc(obj(slot.get("admission")).get("admitted_utc"))
+    return admitted is None or now > admitted + datetime.timedelta(seconds=lifetime_seconds(slot["cap_basis"]))
+
+
+def committed_running_admissions(history):
+    """{slot id: canonical admission records} of every committed version that shows the slot RUNNING (round 2 MINOR-B)."""
+    seen = {}
+    for _commit, raw in history:
+        try:
+            old = json.loads(raw)
+        except ValueError:
+            continue
+        for row in obj(old).get("slots") if isinstance(obj(old).get("slots"), list) else []:
+            if isinstance(row, dict) and row.get("status") == "RUNNING" and isinstance(row.get("admission"), dict):
+                seen.setdefault(row.get("id"), set()).add(canonical(row["admission"]))
+    return seen
+
+
+def cleanup_gap(res, shared):
+    """None when the cleanup is confirmed (or the slot is a proven capacity refusal); else why not (round 2 MAJOR-A)."""
+    if res is None or not res["read"]:
+        return "no readable receipt"
+    if shared:
+        return "its receipt identity is also claimed by another slot"
+    if res["cleanup_confirmed"] or res["proven_refusal"]:
+        return None
+    return ("the receipt does not positively show this slot's own machine terminated with no volume left, from "
+            "hash-verified records (a stale, incomplete or silent record never confirms)")
+
+
+def account(loaded, root, git, history=None, now=None):
     slots, info = loaded["slots"], loaded["info"]
+    history = git.history(SLOTS_FILE.name) if history is None else history
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    overdue = {s["id"] for s in slots if s["status"] == "RUNNING" and past_lifetime(s, now)}
     results = {}
     for s in slots:
-        if s["status"] == "DONE" or (s["status"] == "INVALID" and receipt_has_pins(s["receipt"])):
+        if s["status"] == "DONE" or (s["status"] in ("INVALID", "RUNNING") and receipt_has_pins(s["receipt"])):
             results[s["id"]] = validate_receipt(s, info[s["id"]], root, git)
     owners = {}
     for s in slots:
@@ -804,10 +903,18 @@ def account(loaded, root, git):
             for key in spec_keys(s["receipt"]) | results.get(s["id"], {}).get("keys", set()):
                 owners.setdefault(key, set()).add(s["id"])
     shared = {"%s=%s" % key: sorted(ids) for key, ids in sorted(owners.items()) if len(ids) > 1}
+    shared_slots = {sid for ids in shared.values() for sid in ids}
     for label, ids in shared.items():
         for sid in ids:
             if sid in results:
                 results[sid]["problems"].append("RECEIPT_SHARED:%s:with=%s" % (label, ",".join(i for i in ids if i != sid)))
+    committed = committed_running_admissions(history)
+    for s in slots:        # round 2 MINOR-B: the admission must be one a committed version showed RUNNING
+        if (s["status"] == "DONE" and s["id"] not in PRE_GATE_DONE and isinstance(s.get("admission"), dict)
+                and canonical(s["admission"]) not in committed.get(s["id"], set())):
+            results[s["id"]]["problems"].append(
+                "ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW: no committed version of STUDY_SLOTS.json shows %s RUNNING "
+                "with this identical admission record (was --admit run and its RUNNING row committed?)" % s["id"])
     rows, spent, rejected, unconfirmed = [], Decimal("0"), [], []
     for slot in slots:
         sid, status, cap = slot["id"], slot["status"], info[slot["id"]]["cap"]
@@ -830,14 +937,22 @@ def account(loaded, root, git):
             if res and res["problems"]:
                 row["receipt_problems"] = res["problems"]
         elif status == "RUNNING":
-            row.update(receipt="NOT_FINAL", counted_usd=str(cap), counted_basis="RUNNING: full cap",
+            counted, why = counted_at_least_cap(cap, res)
+            row.update(receipt="NOT_FINAL", counted_usd=str(counted),
+                       counted_basis="RUNNING: full cap" if res is None else "RUNNING: the larger of the full cap and "
+                                                                             "every cost figure its receipt shows: " + why,
                        admission=slot.get("admission") or "MISSING: set RUNNING by hand, not by --admit")
+            if sid in overdue:
+                row["lifetime"] = ("PAST: admission time + %d s of its basis has passed (or the admission time is "
+                                   "unreadable)" % lifetime_seconds(slot["cap_basis"]))
         else:
             row.update(receipt="NOT_APPLICABLE", counted_usd="0.00",
                        counted_basis="PLANNED: nothing spent; cap %s" % ("reserved" if slot["mandatory"] else "not reserved (optional)"))
-        if res and res["cleanup_unconfirmed"]:
+        gap = cleanup_gap(res, sid in shared_slots) if status in ("DONE", "INVALID") or sid in overdue else None
+        if gap:             # round 2 MAJOR-A: fail closed
             unconfirmed.append(sid)
-            row["cleanup"] = "UNCONFIRMED: a machine or disk of this slot may still exist; stop and report to the owner"
+            row["cleanup"] = ("UNCONFIRMED (%s): a machine or disk of this slot may still exist; stop and report to the "
+                              "owner" % gap)
         for key in ("scope", "runtime_bound", "cleanup_bound", "timing_feasibility", "training"):
             if key in slot:
                 row[key] = slot[key]
@@ -988,8 +1103,9 @@ def main(argv=None, git=None, root=ROOT, slots_file=SLOTS_FILE, state_file=STATE
     git = git or GitReader()
     try:
         loaded = load_slots(slots_file, frozen)
-        check_history(loaded["doc"], git.history(pathlib.Path(slots_file).name))
-        acct = account(loaded, root, git)
+        history = git.history(pathlib.Path(slots_file).name)
+        check_history(loaded["doc"], history)
+        acct = account(loaded, root, git, history=history, now=utc(now) if now else None)
         if args.admit:
             names = [pathlib.Path(slots_file).name, pathlib.Path(program_file).name]
             decision = admit(args.admit, loaded, acct, source=args.source, bundle=args.bundle,

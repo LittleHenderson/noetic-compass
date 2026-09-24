@@ -23,8 +23,9 @@ requires, besides the job verdict INTEGRATION_CHECKS_PASS and the four checks d/
   * THIS LAUNCH PRODUCED THESE FILES: the watch record's outcome is RESULTS_RECEIVED, it downloaded > 0 files, its
     job_status equals results/STATUS, and the machine's one "JOB START <utc>" line in job.log lies between the launch
     record's launched_utc and the watch record's watch_ended_utc. If env.txt carries "instance_id=<id>" (IMDSv2) it
-    must equal the launched instance; a template that does not write that line is accepted only if it is the one
-    finished job's template (dc05f4af..., which predates the line);
+    must equal the launched instance. With no such line the route is refused, except for the ONE finished job: its
+    template (dc05f4af..., which predates the line) AND its instance i-09e14d4afd0e0ebfa, both together (round 2
+    MINOR-C: the current job.sh.template still has that sha256, so the template alone would exempt every later launch);
   * CLEANUP of this launch: the watch record's instance id and launch time equal the launch record's; terminated
     confirmed; no volume left.
 
@@ -49,9 +50,12 @@ JOB_START = re.compile(r"^JOB START (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)$")
 # The reviewed pair: dry_run_record.json at job commit 3f19c914, admitted by review fb6bc4dd.
 REVIEWED_BUNDLE_SHA256 = "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36"
 REVIEWED_SOURCE_COMMIT = "e05889eec0f800a9a17b0c39a8d8d37f544b43bf"
-# The finished job's machine-script template (launch_record.json machine_script_template_sha256). It does not write
-# the machine's own instance id; every later template must (job.sh line: instance_id=<IMDSv2 instance-id>).
-TEMPLATES_WITHOUT_INSTANCE_LINE = ("dc05f4afd885d13559e1352e4496cf043e7bd5ed203c62031220c804016fd01e",)
+# The ONE finished job whose machine script wrote no instance id (round 2 MINOR-C): the exemption is keyed to BOTH its
+# template sha256 (launch_record.json machine_script_template_sha256) AND its instance id. The template alone is not
+# enough: this folder's CURRENT job.sh.template still has that sha256, so a template-only key would exempt every later
+# launch. Any other instance whose env.txt has no instance_id= line is refused. The next launch from this folder needs
+# a template that writes instance_id=<IMDSv2 instance-id> (a job-code change with its own review; not made here).
+EXEMPT_WITHOUT_INSTANCE_LINE = (("dc05f4afd885d13559e1352e4496cf043e7bd5ed203c62031220c804016fd01e", "i-09e14d4afd0e0ebfa"),)
 
 
 def load(path, errors):
@@ -134,7 +138,7 @@ def provenance(res, record, w, status):
         out["machine_instance_id"] = ids
         if ids != [record.get("instance_id")] or not record.get("instance_id"):
             problems.append("MACHINE_INSTANCE_ID_NOT_LAUNCHED_INSTANCE:%s" % ids)
-    elif record.get("machine_script_template_sha256") in TEMPLATES_WITHOUT_INSTANCE_LINE:
+    elif (record.get("machine_script_template_sha256"), record.get("instance_id")) in EXEMPT_WITHOUT_INSTANCE_LINE:
         out["machine_instance_id"] = ("NOT_WRITTEN: template %s predates the IMDSv2 line; this binding rests on the "
                                       "time window and the watch record" % record["machine_script_template_sha256"][:8])
     else:

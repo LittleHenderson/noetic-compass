@@ -52,7 +52,8 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
    the program sha256, the arithmetic). Commit and push that, then launch.
 3. When the job ends, fill the receipt pins (paths, sha256, job / instance / source identity), set `DONE`, and run
    the report. **Check the report before committing:** after the commit, the pins of a DONE row are frozen. If the
-   receipt is rejected, fix the pins before committing, or set `INVALID` with a reason.
+   receipt is rejected, fix the pins before committing, or set `INVALID` with a reason. If the report says a slot's
+   cleanup is `UNCONFIRMED`, stop and report to the owner: `INVALID` does **not** clear it (round 2).
 4. Commit and push. Only then can the next `--admit` pass.
 
 - `--admit` checks money, the owner's stop, one machine at a time, committed state and receipt validity **only**.
@@ -64,7 +65,7 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
 | Status | How it is counted |
 |---|---|
 | `PLANNED` | Nothing spent. If mandatory, its cap is reserved |
-| `RUNNING` | Its **full cap**. While any slot is RUNNING, every admission is refused (one machine at a time) |
+| `RUNNING` | Its **full cap** (more, if a receipt it already names shows more). While any slot is RUNNING, every admission is refused (one machine at a time) |
 | `DONE`, receipt accepted | The bound computed from its receipt |
 | `DONE`, receipt rejected | **The larger of** the cap and every cost figure the receipt itself shows. Every admission is refused until the slot is marked `INVALID` |
 | `INVALID` | **The larger of** the cap and every cost figure its receipt shows (if it has one), forever. Needs a written `invalid_reason` |
@@ -72,6 +73,10 @@ python -B study_spend.py --admit M1  --source <40-hex>                     # tra
 "Every cost figure the receipt shows" means: the recorded cost plus the allowances; the cost recomputed from its
 timestamps; and the cost at its own deadline or instance-seconds limit. Each is priced at the highest price the
 receipt or the basis shows. So a job that broke its own cost basis is **never counted below what it recorded**.
+
+The receipt is read for these figures **first**, from whatever commit and path its spec gives, before any check of
+the spec or the pins (round 2). An empty spec field or a stale pin can get a receipt rejected. It can never shrink
+the count.
 
 ## Receipt validation
 
@@ -87,12 +92,26 @@ A receipt is **rejected** if any of these fail:
 - **Its own admission** (every slot admitted by the gate). The receipt's source commit must equal the admitted
   source; a watched job's bundle must equal the admitted bundle; a training job's model seed
   (`authority.worker_config.design.model_seed`) must equal the slot's seed; the launch time (the time in the job id,
-  or the launch record's `launched_utc`) must be **after** the admission time.
+  or the launch record's `launched_utc`) must be **after** the admission time. A committed version of
+  `STUDY_SLOTS.json` must show the slot `RUNNING` with the **identical** admission record (round 2). So a record
+  typed by hand, never committed as RUNNING, is refused.
 - **Numbers.** Every number must be a real finite number. Elapsed seconds must be above 0 and within the basis. A
   watcher cost must be at least 0 and at most the cap.
 - **Cleanup.** Training: cleanup complete and that one instance `CONFIRMED_TERMINATED`. Watched: terminated confirmed
-  and an empty list of leftover volumes. **If a readable receipt shows an unconfirmed cleanup** (a machine or disk may
-  still exist), every admission is refused, even after `INVALID`: stop and report to the owner.
+  and an empty list of leftover volumes.
+- **Cleanup fails closed** (round 2). A cleanup counts as **confirmed** only when records whose sha256 matches the
+  pin show **this slot's own machine** gone:
+  - training: cleanup complete, identity certain, the one launched instance `CONFIRMED_TERMINATED`, nothing pending,
+    no failure, compute cleanup `COMPLETE`;
+  - watched: terminated confirmed, final state terminated or gone, no volume left, and the same instance and launch
+    time in both records;
+  - any id the spec does give must agree; a receipt identity that another slot also claims never confirms.
+
+  The one other way out is a **proven** capacity refusal under the S1 rule (receipt hash matches, every refusal check
+  passes). A `DONE` or `INVALID` slot, or a `RUNNING` slot past its lifetime (admission time + its basis's instance
+  seconds or client deadline), that has neither is **cleanup UNCONFIRMED**. A missing, unreadable, stale, incomplete or
+  silent receipt is never a confirmation. Every admission is then refused, even after `INVALID`: stop and report to
+  the owner. Nothing in the program clears it.
 - **Cost scope.** The machine must be one the basis lists, **at that machine's own listed price**. Disk and client
   deadline must fit the basis. The job's own ceiling must equal the slot's cap. The watcher's cost must not be below
   the cost recomputed from its two timestamps; the bound uses the larger of the two.
@@ -157,7 +176,7 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
 `--admit <slot> --source <commit> [--bundle <sha256>]` exits 0 only if **all** hold (any input error exits 2):
 
 1. The slot is `PLANNED`. No slot is `RUNNING`. No `DONE` receipt is rejected. No receipt identity is shared. No
-   readable receipt shows an unconfirmed cleanup.
+   slot's cleanup is `UNCONFIRMED` (see "Cleanup fails closed").
 2. `STUDY_SLOTS.json` and `study_spend.py` equal HEAD.
 3. **Spent upper bound + the slot's cap + the caps of every other PLANNED mandatory slot (E1 included) <= $60.00.**
 4. **The owner's stop is not triggered.** It triggers when the spent upper bound is **more than** $30.00 while fewer
@@ -165,6 +184,8 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
    reports to the owner.
    - **Started** means `RUNNING`, or `DONE` with an **accepted** `pointer_finished` receipt. An AWS capacity refusal,
      a rejected receipt and an `INVALID` slot never count: a machine that never ran cannot switch the stop off.
+   - A training job that **launched and then failed** (a machine ran, the receipt is accepted) counts as started under
+     this rule. Whether it should is **open** (question 6); the behaviour is unchanged.
    - The smoke runs S1 and S2 do not count toward the 3.
    - The stop uses the upper bound, not a provider invoice. It can trigger while real spend is lower. That is the
      safe side.
@@ -194,8 +215,11 @@ owner to confirm): the reviewed source for its arm, M1 admitted first (M2-M4), P
 - E1 needs the per-checkpoint probe-read time on T4. P1b's corrected-probe validation is to measure it. E1's
   admission then needs 18 x that time + readout + gates within 3,600 s.
 - If a preflight refuses, the money is still spent and bounded. A re-run needs its own slot (a reviewed code change).
-- A later job's machine script must write its own instance id (`instance_id=` from IMDSv2) into `env.txt`; the T4
-  reader requires it for every template except the finished P1a job's.
+- A later job's machine script must write its own instance id (`instance_id=` from IMDSv2) into `env.txt`. The T4
+  reader requires it for every launch except the finished P1a job: its template `dc05f4af` **and** its instance
+  `i-09e14d4afd0e0ebfa`, both together (round 2). The current `larger_question_t4_job/job.sh.template` still has
+  sha256 `dc05f4af` and does **not** write the line. So the next launch from that folder needs a template change,
+  with its own review, or the reader refuses its route.
 
 **E1 scope, stated plainly.** E1 runs in every branch of the plan, so its cap is always reserved. It **includes**:
 
@@ -225,6 +249,11 @@ These are also in `STUDY_SLOTS.json` and printed with every decision.
 4. **The S1 capacity-refusal rule** (above) needs acceptance. S1's provider log shows no cleanup calls after
    `provider_0025`, so "last provider call" means last **logged** call.
 5. **Retention after 12 months** is outside the $0.10 allowance.
+6. **Does a training job that launched and then failed count as "started"** for the owner's $30.00 stop? Today it
+   does (a machine ran and its receipt is accepted). The round-2 verification's probe P7: M1-M3 each fail after 60 s,
+   all three count as started, spent $10.33, and the stop is then off for the rest of the study. Not decided here.
+   (Listed here and in `REVIEW.md`. It is not yet in `STUDY_SLOTS.json`: that file's open-question list is covered by
+   the frozen definitions digest, so adding it needs a re-freeze in a reviewed change.)
 
 ## Ledgers (unchanged)
 

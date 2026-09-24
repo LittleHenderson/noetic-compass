@@ -321,3 +321,175 @@ Read: the two programs, their tests, `STUDY_SLOTS.json`, this file, the T4 job's
 `watch_record.json`, the summary's key names, and the S2 receipt at `1ddf6a1e` (field names only). Wrote: this section
 only (the probe script and regenerated copies live in the verifier's scratch folder). No AWS call, no torch, no model,
 no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no S3, no meta1 ledger, no transcript.
+
+## Round 2
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Builder: Claude (temporary builder). This answers the verification of `d89721b4`
+above (verifier commit `e4fbff40`). It is the builder's own record. It is **not** an independent acceptance: these
+fixes still need a fresh verifier and Codex's review.
+
+Names: the task that ordered this round calls the findings MAJOR-A, MINOR-B, MINOR-C and NOTE-D. The verification
+above calls the same findings B, A, D and C.
+
+| Round-2 name | Verification's name | Finding (short) | Disposition |
+|---|---|---|---|
+| MAJOR-A | B | An empty spec field or a stale pin stops the receipt read; INVALID then reopens admission | **FIXED** (limits below) |
+| MINOR-B | A | A hand-written admission record is accepted | **FIXED** (limit below) |
+| MINOR-C | D | The reader's template exemption covers every future launch | **FIXED** (job code not changed; see below) |
+| NOTE-D | C | Does a training job that launched and then failed count as "started"? | **OPEN** (not decided; behaviour unchanged) |
+
+### MAJOR-A: read the receipt first; fail closed on cleanup (`study_spend.py`)
+
+**The problem, in plain words.** Leave one field of a receipt spec empty, or pin a stale hash, and the gate stopped
+reading the receipt. It then counted only the cap and never looked at the cleanup. Mark the slot INVALID and the gate
+admitted the next machine, even when a machine might still be running.
+
+**Done.**
+- **Read first.** `validate_pointer` and `validate_watched` now read the receipt **before** any spec-completeness or
+  pin check. They read from whatever commit and path the spec gives. The lenient copy (hash not checked) supplies the
+  cost figures and the ids. It can only raise the count, never lower it. The count is the larger of the cap and every
+  cost figure found.
+- **Confirmed means verified.** A cleanup counts as confirmed only when records whose sha256 matches the pin show
+  **this slot's own machine** gone:
+  - training: cleanup complete; identity certain; the one launched instance `CONFIRMED_TERMINATED`; nothing pending;
+    no failure; compute cleanup `COMPLETE`;
+  - watched: terminated confirmed; final state terminated or gone; no volume left; the same instance and launch time
+    in the launch record and the watch record;
+  - any id the spec does give must agree; a receipt identity that another slot also claims never confirms.
+- **The one exception** is a proven capacity refusal under the existing S1 rule: the receipt and its last provider
+  record match their pins, every S1-rule check passes, and the receipt is the job the spec names.
+- **Fail closed.** A `DONE` or `INVALID` slot, or a `RUNNING` slot past its lifetime, without a confirmed cleanup or
+  a proven refusal is `CLEANUP UNCONFIRMED`. That refuses every admission (`CLEANUP_UNCONFIRMED_STOP_AND_REPORT`). The
+  row says why: "no readable receipt", "also claimed by another slot", or "does not positively show ...".
+  - "Past its lifetime" means: admission time + the basis's instance seconds (training, 14,400 s) or client deadline
+    (watched, 130 min for P1b and E1) has passed, or the admission time cannot be read.
+  - A `RUNNING` slot whose receipt spec is already filled is now read too, for its figures, ids and cleanup.
+- **Hardening found on the way.** The lenient read never passes an option-like commit string (such as
+  `--output=x`) to `git show`.
+
+**The probes, after the fix** (each is now a test on the builder's synthetic `World`):
+
+| Probe | Before (verification) | After |
+|---|---|---|
+| P1: P1b ran 240 min, watcher $3.0719, `expected.bundle_sha256` empty, INVALID | counted $2.00; `--admit P2` exit 0 | counted **$3.18**; cleanup confirmed (the watch record shows it); `--admit P2` decides exactly as its complete-spec twin: ADMIT, total $58.26 |
+| P2: as P1, but the watcher saw `terminated_confirmed: false`, `final_state: running` | no cleanup flag; `--admit P2` exit 0 | counted $3.18; **UNCONFIRMED**; `--admit P2` **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b` |
+| P3: as P2 with a complete spec, but a stale watch-record pin | no cleanup flag; exit 0 | counted $3.18; **UNCONFIRMED**; **exit 1**. Also exit 1 when the stale file was rewritten to say "terminated" after its pin was taken |
+| P4: M1 ran 20,000 s, cleanup `complete: false`, `compute_identity_uncertain: true`, instance `UNKNOWN`, `expected.instance_id` empty, INVALID | counted $11.66; `--admit P1b` exit 0 at $57.08 | counted **$15.58**; **UNCONFIRMED**; `--admit P1b` **exit 1** with `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` and `OVER_CEILING:$61.00 > $60.00` |
+| P5 (positive control): P4 with a complete spec | $15.58; exit 1, the same two reasons | unchanged: $15.58; exit 1, the same two reasons |
+
+About P1. The count is now right. P1b's own watch record, with a matching hash, shows the machine terminated with no
+volume left. So its cleanup is confirmed, and the admission is the same as for the complete spec. The round-1
+disposition stands: a basis breach with a confirmed cleanup is counted at what it recorded; it is not by itself a
+stop. Whether every basis breach should stop the study is still open for Codex or the owner.
+
+**Tests** (`test_study_spend.py`): `test_round2_p1_an_empty_spec_field_no_longer_undercounts`,
+`test_round2_p2_unconfirmed_cleanup_with_an_empty_spec_field_blocks`,
+`test_round2_p3_unconfirmed_cleanup_with_a_stale_pin_blocks`, `test_round2_p4_empty_instance_id_is_counted_and_blocks`,
+`test_round2_p5_positive_control_complete_spec`, `test_round2_no_readable_receipt_is_unconfirmed` (INVALID naming no
+receipt; a pinned receipt missing from git; an option-like commit, with a spy showing `git` is never called),
+`test_round2_a_proven_capacity_refusal_is_not_unconfirmed` (proven: not flagged, even when rejected for a wrong
+source; a later provider call or a stale pin: flagged), `test_round2_running_past_its_lifetime_is_unconfirmed` (M1 at
+3 h 00 min: not flagged; at 4 h 00 min 01 s: flagged and the report exits 1; P1b at 3 h against a 130-min deadline:
+flagged).
+
+**Limits, stated honestly.**
+1. The training launcher's receipt has **no volume list**. For training jobs, "no retained volume" rests on the
+   launcher's own "complete" cleanup and the terminated instance. The gate does not check the disk itself.
+2. An id the spec leaves empty is not guessed. In P1 the confirmation rests on the verified records agreeing with
+   each other and with the ids the spec does give.
+3. A stale pin never confirms. So a slot whose committed pin is wrong stays `UNCONFIRMED` for good, even if the
+   machine is in fact gone. That is a stop-and-report to the owner, by design.
+4. **An `INVALID` slot that names no receipt now blocks every admission.** There is no "cancelled, never launched"
+   path. A slot that never ran should stay `PLANNED` (a mandatory one keeps its cap reserved). Whether a cancellation
+   rule is wanted is a new open question (7) below.
+5. "Past its lifetime" counts from the admission time, not the launch time. A launch made later than the admission
+   makes the flag early, never late. While a slot is `RUNNING` every admission is refused anyway; the flag adds the
+   stop-and-report reason and makes the report exit 1.
+6. Behaviour change before commit: a `DONE` row whose pins are stale now also shows `UNCONFIRMED`. Fixing the pins
+   before the commit (allowed, as before) clears it.
+
+### MINOR-B: a DONE admission must have been committed as RUNNING (`study_spend.py`)
+
+**Done.** At `DONE`, the slot's admission record must appear, **identical**, in a committed version of
+`STUDY_SLOTS.json` that shows the slot `RUNNING`. Otherwise the receipt is rejected
+(`ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW`). A rejected slot is never "started", and every admission is refused until
+it is marked `INVALID`. The pre-gate rows S1, S2 and P1a are exempt, as before. Every committed version is searched,
+not only HEAD.
+
+**Test.** `test_round2_p6_a_hand_written_admission_is_refused`: M1 `DONE` with an admission dated
+2000-01-01, `--admit` never run: **REJECTED** (was ACCEPTED at $8.94), not started, `--admit M2` exit 1
+`DONE_RECEIPT_REJECTED:M1`. Control: the same record, committed as `RUNNING`: ACCEPTED. A committed `RUNNING` record
+that differs from the `DONE` one: exit 2 `HISTORY_VIOLATION: M1 was RUNNING`. The test world now writes the committed
+`RUNNING` version that `--admit` plus "commit and push" would leave; its fake git lists history newest first, like
+`git log`. `test_admitted_job_end_to_end` now commits the real `--admit` output and uses no synthetic version.
+
+**Limit.** A `RUNNING` row typed by hand **and committed** is still accepted. The gate cannot tell who wrote a
+committed line. A history rewrite (force-push) is outside the check, as before.
+
+### MINOR-C: the reader's exemption is the one finished job only (`read_results.py`)
+
+**Done.** The exemption is now keyed to **both** the template sha256 `dc05f4afd885d135...` **and** the instance id
+`i-09e14d4afd0e0ebfa` (`EXEMPT_WITHOUT_INSTANCE_LINE`). Any other launch whose `env.txt` has no `instance_id=` line is
+refused: `ROUTE_NOT_ACCEPTED`, `MACHINE_INSTANCE_ID_MISSING`, exit 3. The reading's text for the finished job is
+unchanged, so `RESULTS_READING.json` is byte-identical.
+
+**Not changed, on purpose.** `job.sh.template` and `watch.py` are unchanged: a job-code change needs its own review.
+**The next launch from `larger_question_t4_job/` needs a template that writes `instance_id=`.** Today's template still
+has sha256 `dc05f4af` (checked by a test) and writes no such line. So a new launch with it would be refused at the
+reader. This is written in that folder's `README.md` and in `PREREQUISITE_SLOTS.md`.
+
+**Tests** (`test_read_results.py`): `test_instance_line_exemption_is_only_the_finished_job` (the finished job:
+accepted, exit 0; the same template on a new instance: exit 3; the same instance with another template: exit 3),
+`test_the_current_template_is_not_exempt_on_a_new_launch` (hashes today's `job.sh.template`, finds `dc05f4af`, and
+shows a new launch with it is refused, exit 3).
+
+### NOTE-D: not decided
+
+A training job that launched and then failed counts as "started" for the owner's $30.00 stop (verification probe P7:
+M1-M3 each fail after 60 s; all three count; spent $10.33; the stop is then off). The behaviour is unchanged. It is
+listed as open question 6 in `PREREQUISITE_SLOTS.md` and below. It is not yet in `STUDY_SLOTS.json`: that file's
+open-question list is inside the frozen definitions digest, so adding it needs a re-freeze in a reviewed change.
+
+### Checks run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `python -B test_study_spend.py` | **49 passed, 0 failed** (40 before + 9 new) |
+| `python -B test_read_results.py` | **31 passed, 0 failed** (29 before + 2 new; the old in-test exemption case moved into them) |
+| Mutation check (scratch script, not committed): switch each fix off, rerun the 9 new study-spend tests | no fail-closed cleanup: 7 fail; any admission accepted: P6 fails; no lenient cost figures: P1-P5 fail |
+| `python -B study_spend.py --no-write` (real slots, report mode) | **exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92**; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed |
+| Real state regenerated into a scratch file | **byte-identical** to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| `read_results.py --no-write` (finished job `i-09e14d4afd0e0ebfa`) | **exit 0; ROUTE_ACCEPTED**; script and job verdict INTEGRATION_CHECKS_PASS; JOB START 2026-09-24T05:55:04Z inside [05:53:38Z, 06:28:42Z]; instance id NOT_WRITTEN (exempt: template `dc05f4af` and this instance) |
+| Real reading regenerated in memory | **byte-identical** to the committed `RESULTS_READING.json` |
+| Finished job's `results/`, `launch_record.json`, `watch_record.json`; `STUDY_SLOTS.json`; `job.sh.template`; `watch.py` | `git diff` empty |
+| Real `--admit` | **not run** (it writes the slot RUNNING) |
+
+No real figure changed. The real slots file has no slot that the new rules touch: S1, S2 and P1a are accepted pre-gate
+rows (S1 is a proven refusal; S2 and P1a have verified, confirmed cleanups), and nothing is `RUNNING` or `INVALID`.
+
+### Claim states
+
+- **Real (measured here):** the two test runs, the mutation check, the real report, the real reading, both
+  byte-identical regenerations.
+- **Open:** a fresh verifier and Codex's review of round 2; open questions 1-5 in `STUDY_SLOTS.json`; questions 6 and 7
+  below (FLAG_FOR_HUMAN_REVIEW).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, until round 2 is verified.
+
+### Open questions (not decided by the builder)
+
+6. Does a training job that launched and then failed count as "started" for the $30.00 stop? (NOTE-D.)
+7. Should a slot that was never admitted and never launched have a way to be cancelled? Today, marking it `INVALID`
+   stops the study (fail closed); leaving it `PLANNED` keeps its cap reserved.
+
+### Exposure
+
+Read: this file; `study_spend.py`, `test_study_spend.py`, `STUDY_SLOTS.json` (slot ids, statuses, receipt specs,
+open questions), `PREREQUISITE_SLOTS.md`; `read_results.py`, `test_read_results.py`, `README.md`; the finished job's
+`launch_record.json` (instance id, template sha256, launch time only); the sha256 of `job.sh.template` and a grep of it
+for `instance_id`; the S2 receipt at `1ddf6a1e` (top-level field names, its `cleanup` section and its `stages` only); the head of
+`CHANGELOG.md` and the commit lists of this branch. The real reader read `results/` through the program; only its
+verdict fields were printed. Wrote: `study_spend.py`, `test_study_spend.py`, `PREREQUISITE_SLOTS.md`, this section,
+`read_results.py`, `test_read_results.py`, `README.md` (of the T4 job); scratch files only in the session scratch
+folder. Not written: `STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json`, `RESULTS_READING.json`, `job.sh.template`,
+`watch.py`, `CHANGELOG.md` (the coordinator batches it). No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed
+file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript.
