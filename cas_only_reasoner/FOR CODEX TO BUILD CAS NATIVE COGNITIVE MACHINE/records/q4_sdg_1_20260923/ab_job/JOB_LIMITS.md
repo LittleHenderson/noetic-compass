@@ -1,7 +1,7 @@
 # Q4-SDG-1 A-versus-B training job: job limits (written before launch)
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover). Runner: the Claude coordinator. Not launched.
-Rules: `research/helm_cas_expression_lab/q4_ab_rules.py`; spec `Q4_SDG_AB_SPEC_v0_2.md` revision 2 (its status line
+Rules: `research/helm_cas_expression_lab/q4_ab_rules.py`; spec `Q4_SDG_AB_SPEC_v0_2.md` revision 3c (its status line
 must say FROZEN_BEFORE_LAUNCH with the approved frozen_sha256).
 
 ## What it does
@@ -45,7 +45,7 @@ must say FROZEN_BEFORE_LAUNCH with the approved frozen_sha256).
 | Per run | `RUN_WALL_SECONDS` 3,000 s; the smoke projection (x 1.25) must fit both the run and the job limit |
 | **Worst case** | (0.526 + 0.005 public address + 100 x 0.08 / 730 disk) x 240 / 60 = **$2.1678** |
 | **Ceiling** | **$5.00 for the whole A-versus-B job**, the data build included |
-| Ceiling arithmetic | measured data-build cost bound (from its watch record; worst case $0.0813) + $2.1678 <= $5.00. Worst total $2.2491 |
+| Ceiling arithmetic | measured data-build cost bound (from its watch record; worst case $0.0813) + $2.1678 <= $5.00. Worst total $2.24916 (exact); measured data build $0.0023, so the admitted total is at most $2.1701 |
 | Concurrency | refuses while any GPU machine is running (account GPU quota 8 vCPU; one GPU job at a time) |
 | Retries | none; a failure is recorded, uploaded and reported |
 

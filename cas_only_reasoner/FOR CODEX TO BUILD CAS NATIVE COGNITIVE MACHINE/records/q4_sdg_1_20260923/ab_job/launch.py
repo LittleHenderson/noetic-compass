@@ -61,15 +61,15 @@ FORBIDDEN = re.compile(r"(_eval\.jsonl$|sealed|hset1a|hset1b)", re.IGNORECASE)
 JOB_FILES = ["launch.py", "job.sh.template", "watch.py", "JOB_LIMITS.md"]
 FROZEN_STATUS_LINE = re.compile(rb"^[*][*]Status: FROZEN_BEFORE_LAUNCH[*][*] frozen_sha256 `([0-9a-f]{64})`", re.MULTILINE)
 DATA_BUILD_MANIFEST = "records/q4_sdg_1_20260923/data_build_job/results/manifest.json"
-# The reviewed rules and programs (spec v0.2 revision 2). Any change to them after review changes these values, and
+# The reviewed rules and programs (spec v0.2 revision 3c, frozen 2cee0311 after the focused check 5838a249). Any change to them after review changes these values, and
 # the launch is refused until a review approves the change and this file is updated in a commit of its own.
-APPROVED_FROZEN_SHA256 = "3100f37603cbc0e351cfbad2e2832bd769819d906338f7cf08966b916ee42f11"
+APPROVED_FROZEN_SHA256 = "5b03862a653902699921d668f11cb67c98689e6c80a5d89f76f78fbe962901cb"
 APPROVED_LF_SHA256 = {
-    LAB + "q4_ab_rules.py": "e990f76e5b9af11e6abc08b89ba1de2fb496920b4cc436299ef63af3fad011bf",
+    LAB + "q4_ab_rules.py": "807ebbef4f6e41f9b53a868a8c319cba657695d3ada65462189dd2f2588e7fa6",
     LAB + "q4_ab_prep.py": "b0601e5382df15441526bf334fb8c548ee6a379d4b633a81adb60e40fca8fd23",
     LAB + "q4_ab_train.py": "4d793a6afed5ddf6e399fcbcfff2bb1799a28ee725ab98cf4d59578e1bce8cd4",
-    LAB + "read_q4_ab_results.py": "40769840df0de81b02ebce738715dc0cf2810cc49457810d50577485c2811e60",
-    SPEC: "7829d623fe7bbbb6a41252bf2177c0e73fdd2188dc8e6ae576c62afa7649018a",
+    LAB + "read_q4_ab_results.py": "a3c94499862b18ac96d89ea26cf25f6d8f9e2ab3d1e56cf35965239abeeca5c1",
+    SPEC: "9ec17522568a79bdc2999fb7abc6efaef0cff9e21c5d3acd718b645311f2798d",
 }
 GPU_FAMILIES = ["g4dn.*", "g5.*", "g6.*", "g6e.*", "g7.*", "p3.*", "p4d.*", "p5.*"]
 
