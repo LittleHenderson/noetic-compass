@@ -237,7 +237,7 @@ made before that training. No active source, original NOT_READY admission, ledge
 `records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md` (A2.7 clarification/A2.8), this handoff,
 `R/LAUNCH_REQUEST.json` and `R/PREPARATION_VALIDATION.json`.
 
-**Commit:** content commit will be pinned in the delivery record after it exists; no self-hash is invented.
+**Commit:** reading-stage content `4ac3faddb3f7134b63f5691173e36cf6bc01ce91`. The following record-only commit pins this delivery and refreshes the handoff hash.
 
 **Checks actually performed:** one bounded public source/design review at
 `e45727070d01b453efca0597a77becdbc5c66722`, prior policy comparison at

@@ -146,6 +146,10 @@
     "protected_material_read": false,
     "active_job_source_edited": false,
     "original_frozen_admission_edited": false,
-    "old_validation_snapshots_are_not_current_ledger_proof": true
+    "old_validation_snapshots_are_not_current_ledger_proof": true,
+    "content_commit": "4ac3faddb3f7134b63f5691173e36cf6bc01ce91",
+    "staged_git_hash_bindings_verified": true,
+    "git_diff_check": "PASS",
+    "exact_owned_staged_files": 6
   }
 }
