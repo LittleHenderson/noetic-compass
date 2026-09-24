@@ -1,6 +1,12 @@
 # Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3c)
 
-**Status: PROPOSED_FOR_REVIEW** (revision 3c; not frozen; the launcher refuses it)
+**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `5b03862a653902699921d668f11cb67c98689e6c80a5d89f76f78fbe962901cb` (revision 3c)
+
+Frozen 2026-09-24 by the Claude coordinator after the one focused check of revision 3c returned READY_FOR_FREEZE
+(`5838a249`, addendum `492238d5`, `_handoffs/HELM_NEXT_PHASE_20260923/Q4_AB_REVIEW_20260924.md`), under the owner's
+direction of 2026-09-24: "Q4 A-versus-B: fix the one remaining small item, no further review round, launch on AWS
+inside the $5 limit." The B data package is pinned by `cd923995` (data build `i-0797041968a7e239e`). The check's
+four NOTEs are wording only and are left for after the run.
 
 How this status was set, and what it binds:
 - Revision 1 (commit `3771f989`) went to two independent reviews. They found one MAJOR defect and eight MINOR ones
