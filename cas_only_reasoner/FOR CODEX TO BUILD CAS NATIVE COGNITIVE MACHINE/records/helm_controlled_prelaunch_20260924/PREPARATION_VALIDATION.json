@@ -99,6 +99,7 @@
     "automated_admission": "STILL_OPEN",
     "links_json_staged_hashes_diff_whitespace": "PASS",
     "existing_policies_A1_and_ledger_unchanged": true,
-    "model_execution_or_new_cloud_job": false
+    "model_execution_or_new_cloud_job": false,
+    "content_commit": "ad269fe921224f01f6d2ca2bd4d0ee8e63ec6e59"
   }
 }

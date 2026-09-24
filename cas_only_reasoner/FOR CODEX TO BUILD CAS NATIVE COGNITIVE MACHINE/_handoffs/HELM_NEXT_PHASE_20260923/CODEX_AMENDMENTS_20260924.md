@@ -130,7 +130,7 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 
 ## P1a public completion: item5 advances, main hold retained
 
-**Resolution:** d/c/b/a all PASS at `b0fd06ff522e61b0efd125f9f568acfa9e532a2e`; returned input/source identity and same-instance cleanup receipts are consistent. Generic reader admission and complete cost enforcement remain open. **Changed files:** `R/ROUTE_PREREQUISITE_COMPLETION_20260924.md/json`, this handoff, plan, manifest, cost state, launch request and validation. **Commit:** content commit containing this update, pinned in the next delivery record and bus DONE.
+**Resolution:** d/c/b/a all PASS at `b0fd06ff522e61b0efd125f9f568acfa9e532a2e`; returned input/source identity and same-instance cleanup receipts are consistent. Generic reader admission and complete cost enforcement remain open. **Changed files:** `R/ROUTE_PREREQUISITE_COMPLETION_20260924.md/json`, this handoff, plan, manifest, cost state, launch request and validation. **Commit:** public completion review `ad269fe921224f01f6d2ca2bd4d0ee8e63ec6e59`; subsequent record-only commit pins this delivery.
 
 **Checks actually performed:** nine public Git receipts, complete verdicts/status/exit, input/source identity equality, row-file hash/counts and same-instance watcher evidence. [Scope and limits](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_COMPLETION_20260924.md). No held-out, binary or archive content read; no model/cloud execution.
 
