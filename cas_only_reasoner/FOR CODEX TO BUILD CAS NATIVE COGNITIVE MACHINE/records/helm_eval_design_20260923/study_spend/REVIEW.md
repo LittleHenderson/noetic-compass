@@ -1428,3 +1428,254 @@ script and a regenerated state copy. The probes' temporary folders and the N8 re
 untracked `aws_probe_job/dry_run_machine_script.sh` is not the verifier's and was left alone. No AWS call, no torch,
 no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript,
 no real `--admit`.
+
+## v2 (Codex Q1-Q9)
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Builder: Claude (temporary builder). This implements the Codex decisions, read in
+full at `c3a128ee` on `codex/helm-controlled-prelaunch-20260924`: `POLICY_DECISIONS_20260924.md` ("Spending decisions:
+Q1-Q9", R3-F, "Envelope consequences") and `SPEND_STATIC_REVIEW_20260924.md` (findings 1 and 2). It is the builder's
+own record, **not** an independent acceptance: Codex reviews these bounded changes next.
+
+In plain words: the gate now allows exactly one machine launch per admission; a retry gets its own row and its own
+admission. An admission is good for five minutes and one use, and a last check runs just before the launch. The search
+for hidden launch attempts no longer trusts a job id, a source prefix or a file path alone. Every admission binds the
+source, bundle, worker and checker, and a mismatch stops the study while the machine is still checked and paid for. A
+job that broke a limit stops the study for good. Every main training run that started a machine counts toward the
+owner's $30 stop. A never-used slot can be cancelled. The S1 rule is accepted. The earlier $1.9180 of preparation
+spend is now counted, so plan C is **$59.00 with $1.00 to spare, and not final**.
+
+### The prospectively reviewed schema revision (0.3 to 0.4)
+
+Codex Q9 says: if the frozen schema cannot express one-attempt-per-admission and retry rows, retries are forbidden until
+a prospectively reviewed schema revision exists. This is that revision, for review. It is implementation preparation;
+no statistical rule changed.
+
+| | Before (0.3) | After (0.4) |
+|---|---|---|
+| Slots schema | `claude.helm-repair-controlled-1.study-slots/0.3` | `.../0.4` |
+| Frozen definitions digest | `82e809500f14ad8988b3b45ad6a7265f0601a5791f13cb8ea5a4608771456764` | `a9fed7896aab374c6c2ce994dfe697999e37c960366107a1532b7d66b1760ecb` |
+| S1, S2, P1a rows | frozen whole | **byte-identical** (checked by the revision script) |
+| Every row's status, receipt, admission, attempts | as committed | **unchanged** (checked) |
+| P1b, P2, E1 rows; every cap, basis, seed, arm, flag; the $60 / $30 / $0.10 constants | as committed | unchanged |
+| M1-M6 `preconditions_outside_money_gate` and note | the builder's list | **Codex's Q5 list** (below) |
+| New rows | none | **PRIOR** (frozen whole; R9) |
+| New list | none | `attempt_rows: []` (append-only state, outside the digest; R1) |
+| `open_questions_for_owner_or_codex`, `owner_stop.rule` and `.counting`, `about` | open questions 1-5 | rewritten as decided or open, with the Codex source |
+| New statuses | none | `CANCELLED_NOT_LAUNCHED` (R7), `CLOSED_NO_LAUNCH` (R1, R5) |
+
+The committed history check still passes against every earlier 0.3 version.
+
+### Disposition
+
+| Rule | What was decided | Done | Test |
+|---|---|---|---|
+| R1 (Q9 + finding 1) | one admission = one RunInstances attempt; a retry is a new attempt row with its own cap reserved and its own fresh admission; an expired unused admission is closed with proof of no launch and reissued, never rewritten as PLANNED | `attempt_rows` (id `<slot>.<n>`, the slot's frozen definition); a second attempt under one admission is a latched breach; a row may be appended only after the previous attempt is settled; `CLOSED_NO_LAUNCH`; RUNNING to PLANNED is `HISTORY_VIOLATION` | `test_v2_r1_one_admission_one_attempt_a_retry_needs_its_own_row_and_admission` |
+| R2 (R3-F) | recompute under a single-writer lock immediately before each attempt; valid 5 min, single use; expiry, another attempt, a changed input or a lost lock needs a fresh check; the record binds inventory hash, gate version, cap, remaining reserve, cumulative bound, main starts, launch identity | `ADMISSION.lock`; the admission record's binding fields; `--launch-check`; the receipt's launch time must lie in the 300-s validity | `test_v2_r2_an_admission_is_recomputed_under_a_lock_valid_300_s_and_single_use` |
+| R3 (finding 2 / L, Q8) | any source prefix; listed only by path AND sha256; watched skipped only by a pinned sha256 or a listed instance id; reconcile HEAD and disk | the search rewritten; X1, X2, X3 | `test_v2_r3_x1_...`, `test_v2_r3_x2_...`, `test_v2_r3_x3_...` |
+| R4 (Q8) | bind source, bundle, worker, checker for watched and training; wrong source: result INVALID, admissions blocked, cleanup still inspected, true cost counted | `IDENTITY_FIELDS`; `IDENTITY_NOT_THE_ADMITTED` rejects at DONE; `WRONG_IDENTITY_BLOCKS_THE_STUDY`; the source left the "not this launch" test | `test_v2_r4_source_bundle_worker_checker_are_bound_and_a_mismatch_blocks_but_cleanup_is_inspected` |
+| R5 (Q4) | a limit breach blocks all further admissions, latched, even after cleanup; a prelaunch tool failure with proof of no instance does not | `LIMIT_BREACH_LATCHED`; `CLOSED_NO_LAUNCH` with an optional pinned `pointer_prelaunch_failure` receipt | `test_v2_r5_a_limit_breach_latches_the_study_but_a_prelaunch_failure_with_no_instance_does_not` |
+| R6 (Q3/Q6) | count every main attempt that started an instance, failed or repeated, no reset; a proven refusal does not count; an uncertain start blocks; the $30 stop before every admission while fewer than 3 have started, latched; smoke and prerequisites never count, their costs do | the started rule; `MAIN_START_UNCERTAIN` | `test_v2_r6_every_started_main_attempt_counts_and_the_stop_stays_latched` |
+| R7 (Q7) | `CANCELLED_NOT_LAUNCHED`, append-only, with evidence; releases optional reserve only; a cancelled mandatory row makes the comparison incomplete and blocks main admissions | as decided; the mandatory cap stays reserved | `test_v2_r7_cancelled_not_launched` |
+| R8 (Q1) | the S1 accounting rule is accepted, conditional on its pinned provider failure evidence; record which evidence resolves the launcher's flag | the override now says ACCEPTED and names the evidence in `override_resolved_by` | `test_v2_r8_the_s1_rule_is_accepted_and_names_its_provider_evidence` |
+| R9 (envelope) | include the earlier $1.9180 as DONE rows or one conservative row, pending the owner; print plan C's bound and headroom; do not call $57.08 final | one row, PRIOR ($1.92); `plan_C_is_final: false` and why | `test_v2_r9_the_prior_spend_row_and_plan_c_bound` |
+| Q5 | M1-M6 preconditions are Codex's list, declared, checked by the technical admission, not the money gate | the lists and note replaced | `test_v2_q5_main_preconditions_are_the_codex_list_printed_and_not_checked_by_the_money_gate` |
+
+### R1: one admission, one attempt; retries are attempt rows
+
+- A row that lists more than one attempt under one admission is now a **latched breach**
+  (`MORE_THAN_ONE_ATTEMPT_UNDER_ONE_ADMISSION`). The round-4 positive test (a refusal then a clean run, both listed) is
+  still counted at **$10.54**, but `--admit M2` now gives **exit 1** `LIMIT_BREACH_LATCHED:M1` (round 4 admitted it at
+  $55.96). The `attempts` field stays only so such a violation is counted and visible.
+- A retry is `{"id": "M1.2", "slot": "M1", "attempt": 2, ...}` in `attempt_rows`. The program expands it into a row with
+  M1's frozen cap, basis, seed, arm and flags, so every existing check applies to it. Test: M1's attempt 1 was a
+  capacity refusal ($1.60); M1.2 is reserved while PLANNED (reserve **$51.64**); `--admit M1.2` gives **exit 0**,
+  total **$58.68** ($7.04 + $11.66 + $39.98), and the arithmetic names "the replacement cap of attempt 2 of M1".
+- An attempt row before the previous attempt is settled, or with the wrong number: exit 2. Removing a committed attempt
+  row: exit 2 (append-only). A retry while an earlier attempt's cleanup is unconfirmed: exit 1.
+- An unused admission closed as `CLOSED_NO_LAUNCH` with no launch in its window: $0.00, no cleanup flag, and
+  `--admit M1.2` exit 0. With a launch found in its window: $11.66 and `UNCONFIRMED`. RUNNING rewritten as PLANNED:
+  exit 2 `HISTORY_VIOLATION: M1 was RUNNING ... never rewritten as PLANNED`.
+
+### R2: the five-minute, single-use admission under a lock
+
+- `--admit` takes `ADMISSION.lock` (created exclusively beside the slots file), recomputes the whole account, and on
+  ADMIT keeps the lock (state `ADMITTED`); on a refusal or an error it releases the lock it took. A lock held by an
+  open admission, or by another gate process, refuses (`LOCK_HELD`). A lock left by an admission whose row is settled
+  is released by the next `--admit`.
+- The record binds: `valid_until_utc` = admission + 300 s; `inventory_sha256` (one hash over the gate version, the
+  program, the canonical pre-admission slots document and the whole recomputed account); `gate_version`, `cap_usd`,
+  `remaining_mandatory_reserve_usd`, `cumulative_upper_bound_usd`, `main_starts`, `lock_nonce`, and the launch
+  identity (source, bundle, worker, checker; seed and arm for training). A record without these fields is refused
+  (`ADMISSION_RECORD_MISSING_BINDING`).
+- `--launch-check` recomputes the pre-admission state (the row put back as it was before `--admit` wrote it) and
+  compares its inventory hash. Test on P1b admitted at 12:00:00: at 12:04:59 `LAUNCH_ONCE` (exit 0), and the lock
+  becomes `LAUNCH_CHECKED`; a second check `ADMISSION_ALREADY_USED`; at 12:05:00 `ADMISSION_EXPIRED`; lock deleted
+  `LOCK_LOST`; P1a's watch record changed after the admission `INPUT_CHANGED`. A second `--admit` while the lock is
+  held: `LOCK_HELD:P1b`, and the lock stays.
+- The receipt binding stays, with the 300-s window: a P1b launch at 09:05:00 on a 09:00:00 admission is
+  `LAUNCHED_AFTER_THE_ADMISSION_VALIDITY` and `UNCONFIRMED`. The search for unlisted attempts still uses the lifetime
+  window, so a launch after the validity is still found.
+
+### R3: the unlisted-attempt search (finding L; the verifier's X1, X2, X3)
+
+| Probe | Round 4 (the verifier) | Now |
+|---|---|---|
+| X2: retry prepared from a new source (5555...), ran 20,000 s, identity lost, unlisted; the row names a refusal | ACCEPTED $1.60; `--admit M2` **exit 0**, $47.02 | `UNLISTED_TRAINING_ATTEMPT:cas-meta2-tpntr-20260924091500-55555555-m-20260917`; **exit 1** `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` |
+| X3: the same job J launched twice; attempt 1 lost its identity; attempt 2 named | **exit 0**, $54.36 | attempt 1's `r/m1_attempt1/result.json` is found (not listed by path and sha256); **exit 1** |
+| X1: P1b attempt 1 committed at HEAD in `p1b/`, deleted from disk; attempt 2 in the same `p1b/`, named | **exit 0**, $55.63 | `UNLISTED_WATCHED_LAUNCH:p1b/launch_record.json instance i-p1b-0901 launched 2026-09-24T09:01:00Z (HEAD)`; **exit 1** |
+
+"Listed" now means: the listed receipt by its own path and pinned sha256, and the sibling records (`provider_NNNN.json`,
+`*_result.json`) in the listed receipt's folder at the listed commit, by their own path and sha256. The siblings are
+needed: every training receipt folder holds many provider records that carry the same job id (S2's folder holds 26).
+S1 and S2 keep their own-source search with no window (they have no admission); on the real data the search still finds
+nothing unlisted.
+
+### R4: identity binding
+
+- `--admit` requires `--source`, `--bundle`, `--worker`, `--checker` for every slot. The receipt must show the same
+  values at `IDENTITY_FIELDS` (training: `authority.source_sha`, `authority.archive_sha256`, `authority.worker_sha256`,
+  `authority.checker_sha256`; watched: `identity.source_commit`, `bundle.sha256`, `identity.worker_sha256`,
+  `identity.checker_sha256`).
+- A mismatch or a missing value: `IDENTITY_NOT_THE_ADMITTED` (rejected at DONE) and `WRONG_IDENTITY_BLOCKS_THE_STUDY`
+  (every admission refused). The cleanup check still inspects the actual machine: M1 with another worker, INVALID, has
+  no cleanup flag, is counted $11.66 and still counts as a main start. This reverses the round-3 choice that made a wrong
+  source `UNCONFIRMED` forever (open question 8, decided).
+- Watched rows now bind source and bundle too, not only the launch time (NOTE K, decided).
+
+### R5: limit breaches latch
+
+- The round-2 probe P1 (P1b ran 240 min, watcher $3.0719, cleanup confirmed, INVALID) is still counted $3.18, but
+  `--admit P2`, `M1` and `E1` now each give **exit 1** `LIMIT_BREACH_LATCHED:P1b` (round 1-4 admitted P2 at $58.26). A
+  training job past 14,400 s with its cleanup confirmed latches too (`ELAPSED_OVER_BASIS`).
+- A `CLOSED_NO_LAUNCH` row whose pinned prelaunch-failure receipt shows no launch, no instance, and no `run_instances`
+  provider record in its folder: $0.00, no latch, no cleanup flag, not a main start; `--admit M2` exit 0. With a
+  `run_instances` record in that folder: not proven, $11.66, `UNCONFIRMED`.
+- The "update limit" (optimizer updates) is **not** checked: no receipt field for the observed update count is read.
+
+### R6: main starts and the $30 stop
+
+- M1 with a rejected receipt (another schema) and M2 INVALID after a failed job, both with a launched instance: both
+  count (round 4 counted neither). A refusal that is not proven (a later provider call): `MAIN_START_UNCERTAIN:M3`,
+  exit 1.
+- M1 and M2 at 14,400 s ($23.32) + S1, S2, P1a ($5.44) + a $2.00 prior row = **$30.76** with 2 starts: `--admit M3`,
+  `P1b`, `E1` all `OWNER_STOP_TRIGGERED`; after M2 moves to INVALID and a retry row M2.2 is appended, `M2.2` and `M3` are
+  still refused.
+- Latching rests on this: the stop is decided with nothing RUNNING, and settled rows only move forward (DONE to INVALID
+  never lowers a count; a cancelled or new PLANNED row adds $0; the start count never falls). A report taken while a job
+  is RUNNING counts that job at its full cap and may show the stop; nothing can be admitted then anyway.
+
+### R7, R8, R9, Q5
+
+- **R7.** Cancelling optional M5: $0.00, it leaves fallback B, `--admit M1` exit 0. Cancelling mandatory M4: reserve
+  still **$51.64**, `COMPARISON_INCOMPLETE:M4` refuses `--admit M1`, while `--admit E1` (the partial-study readout) gives
+  exit 0. A cancelled row with an admission: exit 2. A committed RUNNING row made CANCELLED: exit 2. No evidence: exit 2.
+- **R8.** S1's pins now read "ACCEPTED (Codex Q1, POLICY_DECISIONS_20260924.md at c3a128ee) conditional on the pinned
+  provider failure evidence", and `override_resolved_by` names `provider_0025.json` (sha256
+  `d866fbf594c76b09e591dbd96c6df0ecc712386d54d37e34ef21ca4be2da2b33`, `run_instances`, `FAILED`,
+  `InsufficientInstanceCapacity`), that it is the last provider record at `1ddf6a1e`, the receipt's outcome (zero client
+  retries) and its cleanup. A changed provider record voids the rule and S1 becomes `UNCONFIRMED`.
+- **R9.** PRIOR: analogy_repair_t4_job $0.5596 + $0.67, aws_probe_job $0.4834, hset1a_aws_job $0.0223 + $0.1827 =
+  $1.9180, rounded up to **$1.92**. No $0.10 allowance is added (Codex's arithmetic); with it, plan C would be $59.50.
+  Frozen whole; not validated by this program; its cleanup not re-checked here; scope pending the owner.
+- **Q5.** M1-M6 now list Codex's common conditions (P2's feasibility / exposure receipt, corrected mechanism
+  validation, eighteen checkpoint checks, both-arm route acceptance, the frozen source / data / starting values / worker
+  / checker / environment, reader AWS acceptance, complete all-services reserves, the current single-use technical and
+  spending admissions). M2-M4 need M1's completed VALID reproduction verdict, not "M1 was admitted first". M5 and M6 need
+  the valid-mismatch predicate, reviewed B admissions and funding within $60, not an owner approval token. The note says
+  they are checked by the technical admission, not the money gate, and that a status label proves nothing without its
+  receipts.
+
+### Existing tests whose expectations changed (because a decided rule changed them)
+
+- The test world's job times and watched launches moved inside the 300-s validity (09:01:SS; 09:02:00). No money figure
+  changed.
+- `test_round4_two_attempts_...` (renamed `..._under_one_admission_are_counted_and_now_latch_the_study`): exit 1, R1.
+- `test_round2_p1_...`: the same decision as its twin, now exit 1 `LIMIT_BREACH_LATCHED:P1b`, R5.
+- `test_round2_a_proven_capacity_refusal_...` (wrong source) and `test_round3_launch_window_...` (the other arm's
+  source): cleanup confirmed, wrong identity blocks, R4.
+- `test_rejected_or_invalid_training_never_counts_as_started`: **removed**; its rule is the one Codex Q3/Q6 reversed
+  (replaced by `test_v2_r6_...`).
+- Needles renamed: `LAUNCH_AFTER_THE_ADMISSION_LIFETIME` to `..._VALIDITY`; `SOURCE_NOT_THE_ADMITTED_SOURCE` and
+  `BUNDLE_NOT_THE_ADMITTED_BUNDLE` to `IDENTITY_NOT_THE_ADMITTED:<field>`. The S1 override test reads "ACCEPTED".
+
+### Mutation check (scratch script, not committed)
+
+Each rule was switched off, one at a time, in a temporary copy of `study_spend.py`; the eleven rule tests ran each time.
+
+| Switched off | Rule tests that fail |
+|---|---|
+| nothing (as written) | none |
+| R1: a second attempt under one admission not a breach | r1 |
+| R1: attempt rows not reserved | r1 |
+| R1: attempt row allowed before the previous attempt settles | r1 |
+| R2: validity back to 14,400 s | r2 |
+| R2: single use off / inventory check off / expiry check off / lock never held | r2 (each) |
+| R3: admitted source prefix only | x2 |
+| R3: a listed job id skipped everywhere | x3 |
+| R3: watched records skipped by path | x1 |
+| R4: identity not checked / a wrong identity does not block | r4 (each) |
+| R5: money and time breaches both off | r5 (run by hand: the script's first rewrite of this switch did not apply; with only the money half off, the time codes still catch both test cases) |
+| R5: a closure ignores a RunInstances record | r5 |
+| R6: only accepted receipts count as started | r4, r6 |
+| R6: an uncertain start does not block | r6 |
+| R7: a cancelled mandatory row does not block / its cap released | r7 (each) |
+| R8: the rule still CLAUDE_PROPOSED | r8 |
+| R9: the prior row counted at zero | r6, r9 |
+
+### Checks run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `a98221dd` |
+| `python -B test_study_spend.py` (final run, once) | **80 passed, 0 failed** (69 before: 1 removed, 12 added) |
+| `python -B test_read_results.py` (once) | **31 passed, 0 failed** (unchanged file) |
+| Mutation check | the table above |
+| Real report (`main([])`, state written to a scratch file, then installed as `STUDY_SPEND_STATE.json`) | **exit 0; spent upper bound $7.36** (S1 $1.60, S2 $3.29, P1a $0.55, PRIOR $1.92); remaining mandatory caps **$51.64**; **plan C $59.00, headroom $1.00, `plan_C_is_final: false`**; $59.50 with the prior allowance; fallback B +$23.32 does not fit (M5 would total $70.66); nothing rejected, shared, unconfirmed, latched or uncertain; no main start; sensitivity S1 $69.06, S2 $67.37, P1a $61.45; about 2 s |
+| Real `--admit` / `--launch-check` | **not run** |
+
+### Limits, stated honestly
+
+1. **Today's launchers do not write `worker_sha256` or `checker_sha256`.** Every receipt from them fails R4. Each
+   launcher used for P1b, P2, E1 and M1-M4 must add both fields where `IDENTITY_FIELDS` reads them, or the gate stops
+   the study. The same holds for a job prepared from HEAD instead of the admitted source (finding M; Codex Q9: the
+   scripts must accept the admitted source).
+2. **A training receipt shows no launch time,** only the time its job id was prepared. So the runner must admit, commit
+   and push, prepare, run `--launch-check`, and launch, all inside 300 s. Codex R3-A puts preparation before admission;
+   that order needs the training launcher to record its RunInstances time first. Open.
+3. **`--launch-check` is a runner step.** The gate cannot prove a launcher called it; the receipt's launch time inside
+   the validity is the evidence it can bind afterwards. Wiring it into the launchers is open.
+4. **The lock is a file in one checkout.** Across machines, the fetched-remote-tip check and the push race are the
+   single-writer guard (round 4).
+5. **`CLOSED_NO_LAUNCH` proof is the program's search** of the admission window (git and the working tree), plus an
+   optional pinned prelaunch-failure receipt. It is not a provider query.
+6. **S1 and S2 keep their own-source search**, because they have no admission window; their completeness rests on the
+   round-4 verifier's full history search.
+7. **PRIOR is declared, not validated**, and its jobs' cleanup is not re-checked here.
+8. **Not changed here:** P1b's price (Codex: g7, not T4), E1's real scope, retention beyond 12 months, the canonical
+   campaign cap, the technical admission itself.
+
+### Claim states
+
+- **Real (measured here):** the test runs; the mutation check; the real report and its numbers; the schema revision's
+  byte checks on S1, S2, P1a and every row's mutable state.
+- **Open:** Codex's review of v2; the launcher and runner items in limits 1-3 (open item 10 in `STUDY_SLOTS.json`);
+  open question 1 (PRIOR's scope) and 5 (retention).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, before Codex's review and before the
+  launchers write the bound hashes.
+
+### Exposure
+
+Read: Codex `POLICY_DECISIONS_20260924.md` and `SPEND_STATIC_REVIEW_20260924.md` at `c3a128ee` (fetched read-only);
+this file (rounds 4 and the round-4 verification); `study_spend.py`; `test_study_spend.py`; `PREREQUISITE_SLOTS.md`;
+`STUDY_SLOTS.json`. A scratch script printed only the **key names** (not values) of S2's `result.json` at `1ddf6a1e`
+(its `ledger_before` / `ledger_after` keys were skipped, never printed or inspected) and of P1a's
+`launch_record.json`; the file names in S2's receipt folder; and the key names, operation and state of three of S2's
+provider records. `grep` over `typed_pointer_launch.py` for launch-time fields. The real report read receipts only
+through the program; it printed summary lines only. Wrote: `study_spend.py`, `test_study_spend.py`, `STUDY_SLOTS.json`
+(the 0.4 revision, by a script that asserted S1/S2/P1a and every mutable field unchanged), `STUDY_SPEND_STATE.json`
+(program output, not hand-edited), `PREREQUISITE_SLOTS.md`, this section. Scratch only (the session scratch folder):
+the revision script, the edit scripts, the mutation scripts and their temporary copies, the scratch state. Not written:
+`CHANGELOG.md` (the coordinator batches it), any job code or launcher. The untracked
+`aws_probe_job/dry_run_machine_script.sh` is not the builder's and was left alone. No AWS call, no torch, no model, no
+`*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript, no real
+`--admit`.

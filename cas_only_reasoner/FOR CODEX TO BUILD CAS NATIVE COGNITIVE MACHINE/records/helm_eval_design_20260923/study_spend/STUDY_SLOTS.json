@@ -1,24 +1,26 @@
 {
- "schema": "claude.helm-repair-controlled-1.study-slots/0.3",
+ "schema": "claude.helm-repair-controlled-1.study-slots/0.4",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
- "about": "The ONE list of study slots. FROZEN (study_spend.py FROZEN_DEFINITIONS_SHA256): everything except, for slots other than the pre-gate S1/S2/P1a, the four mutable fields status, receipt, invalid_reason and admission. Only `study_spend.py --admit` sets a slot RUNNING (with its admission record); the runner then fills the receipt and sets DONE (or INVALID with a reason) and commits. Moves are forward-only against every committed version. Money strings are exact US dollars.",
+ "about": "The ONE list of study slots, schema 0.4 (V2, Codex Q1-Q9 at c3a128ee). FROZEN (study_spend.py FROZEN_DEFINITIONS_SHA256): everything except, for rows other than the frozen-whole S1/S2/P1a/PRIOR, the mutable fields status, receipt, invalid_reason, admission, attempts, cancellation and closure, and the append-only attempt_rows list. Only `study_spend.py --admit` sets a row RUNNING (with its admission record: valid 300 s, one RunInstances attempt); the runner then fills the receipt and sets DONE (or INVALID with a reason), or closes an unused admission as CLOSED_NO_LAUNCH, and commits. A never-admitted row may be CANCELLED_NOT_LAUNCHED. A retry is a new attempt row with its own admission. Moves are forward-only against every committed version. Money strings are exact US dollars.",
  "ceiling_usd": "60.00",
  "owner_stop": {
   "usd": "30.00",
   "before_training_job_number": 3,
-  "rule": "if the spend upper bound passes (is strictly greater than) $30.00 while fewer than 3 slots marked counts_toward_training_stop are RUNNING or DONE, stop: every admission is refused and the runner reports to the owner",
-  "counting": "only the main-comparison training jobs M1-M6 count (the owner's words were 'before the third seed'); a job counts as started when RUNNING, or DONE with an ACCEPTED pointer_finished receipt. An AWS capacity refusal, a rejected receipt and an INVALID slot never count, and the smoke runs S1 and S2 do not, so the stop stays active as long as possible"
+  "rule": "before every admission while fewer than 3 main training attempts (rows marked counts_toward_training_stop) have started an instance: if the spend upper bound is strictly greater than $30.00, stop: every admission is refused and the runner reports to the owner. Settled rows only move forward, so once triggered the stop stays triggered",
+  "counting": "Codex Q3/Q6: only the main-comparison training attempts of M1-M6 (and their attempt rows) count; the normal third is M3 after M1 and M2. Every main attempt whose hash-verified receipt, bound to its admission, shows a launched instance counts, accepted or not, failed or repeated, with no reset. A RunInstances refusal proven to create no instance, and a CLOSED_NO_LAUNCH row proven to create none, do not count (their cost does). An uncertain start blocks every admission. The smoke runs S1 and S2 and the prerequisite jobs do not count; their costs do"
  },
  "allowances": {
   "s3_transfer_per_job_usd": "0.10",
   "basis": "coordinator decision: a stated S3/transfer/retention allowance of $0.10 per job, added on top of the machine+address+disk bound (watched jobs) or on top of the training launcher's own $1.48 ancillary allowance (training jobs). It covers S3 requests, transfer out of AWS and 12 months of storage of up to about 0.36 GB of retained objects at $0.023 per GB-month. Measured sizes today: S2 retains 49,097,828 bytes of artifacts; P1a stored a 10,230,760-byte bundle plus about 1 MB of uploads. No better measured figure exists; no provider invoice is read. LIMIT: storage is covered for 12 months only; the evidence buckets are kept with no end date (DELETION_DENIED), so storage after 12 months is OUTSIDE this bound (open question 5)."
  },
  "open_questions_for_owner_or_codex": [
-  "1 FLAG_FOR_HUMAN_REVIEW: other AWS jobs in this design folder are NOT slots: analogy_repair_t4_job attempt 1 $0.5596 and attempt 2 $0.67, aws_probe_job $0.4834, hset1a_aws_job attempt 1 $0.0223 and attempt 2 $0.1827 (total $1.9180, +$0.50 if each got the $0.10 allowance; watcher figures, not program-validated). Are they inside the $60.00? If yes, plan C's $2.92 headroom falls to about $0.50. The gate cannot see a job that is not listed.",
-  "2 FLAG_FOR_HUMAN_REVIEW: does the owner's $60.00 cap SPEND (this program: worst-case upper bounds) or the training launcher's fixed $15.00 BOOKINGS per job (Codex codex-0007: $90 for plan C, $120 for plan B, including the existing $30)? Under bookings, plan C is over the ceiling.",
-  "3 FLAG_FOR_HUMAN_REVIEW: which job is 'the third seed' for the $30.00 stop? Counted as training jobs M1-M6 with M1 included (M1 and M2 share seed 20260917), the stop is checked last at M3's admission; the owner may have meant M4.",
-  "4 FLAG_FOR_HUMAN_REVIEW: the S1 capacity-refusal rule is CLAUDE_PROPOSED; it overrides the launcher's own compute_identity_uncertain=True, and S1's provider log shows no cleanup calls after provider_0025. Plan C fits only with it ($67.14 without). Codex or the owner must accept or reject it.",
-  "5 FLAG_FOR_HUMAN_REVIEW: the $0.10 retention allowance covers 12 months; the evidence buckets have no end date."
+  "1 INCLUDED, SCOPE OPEN (FLAG_FOR_HUMAN_REVIEW): the earlier preparation jobs in this design folder (analogy_repair_t4_job attempt 1 $0.5596 and attempt 2 $0.67, aws_probe_job $0.4834, hset1a_aws_job attempt 1 $0.0223 and attempt 2 $0.1827; total $1.9180, watcher figures, not program-validated) are counted conservatively as the prior-spend row PRIOR ($1.92), per Codex 'Envelope consequences' (c3a128ee). Whether they belong inside the $60.00 stays the owner's scope decision. The $0.10 allowance per job (+$0.50) is not added; the state file shows that total.",
+  "2 DECIDED (Codex Q2): the $60.00 caps study charges, bounded across all attempts and required remaining work (this program's worst-case spend). The $15.00 launcher bookings are bookkeeping reservations, not invoices; they are never refunded or rewritten; C's $90 and B's $120 booking figures do not raise the ceiling; the canonical campaign cap must also pass on its own (outside this program).",
+  "3 DECIDED (Codex Q3/Q6): the third main attempt is normally M3 after M1 and M2; the stop counts every main attempt that started an instance (see owner_stop.counting).",
+  "4 DECIDED (Codex Q1): the S1 capacity-refusal accounting rule is ACCEPTED, conditional on the pinned provider failure evidence (provider_0025.json, sha256 d866fbf5...), zero retries, no instance or volume left and the temporary resources removed; the program names that evidence with every report. S1's canonical $15 booking stays. Never reused for an ambiguous launched job.",
+  "5 OPEN (FLAG_FOR_HUMAN_REVIEW): the $0.10 allowance covers 12 months of retention; the plan's horizon was execution + 30 days after E1; the evidence buckets have no end date. Codex: keep both assumptions visible; reconcile object sizes, transfer, requests and retention before the final freeze; report ongoing charges beyond the bound.",
+  "6-9 DECIDED (Codex Q6-Q9): a launched-then-failed main job counts as started; a never-admitted row may be CANCELLED_NOT_LAUNCHED; a wrong source, bundle, worker or checker invalidates the result and blocks the study while cleanup is still inspected; one admission authorizes one RunInstances attempt, and a retry is a new attempt row with its own admission. See REVIEW.md 'v2 (Codex Q1-Q9)'.",
+  "10 OPEN (for the runner and the launchers; the gate refuses until they hold): every launcher must write worker_sha256 and checker_sha256 where IDENTITY_FIELDS reads them; the prepare scripts must take the admitted source commit instead of HEAD; the runner runs --launch-check immediately before RunInstances; a training job is prepared after its admission and launched inside the 300-s validity, because its receipt shows no launch time but the job id's preparation time."
  ],
  "slots": [
   {
@@ -120,6 +122,50 @@
    },
    "runtime_bound": "in-machine timer 120 min; operating-system power-off at 123 min; destroyed on shutdown; client deadline 130 min (watch.py terminates and waits for 'terminated')",
    "timing_feasibility": "MEASURED: 35.1 min from launch to watch end; the check script 1,690.1 s of its 3,600 s limit"
+  },
+  {
+   "id": "PRIOR",
+   "what": "earlier preparation AWS jobs in this design folder, run before the study gate existed: one conservative prior-spend row (Codex 'Envelope consequences', c3a128ee); not a machine slot",
+   "status": "DONE",
+   "mandatory": true,
+   "counts_toward_training_stop": false,
+   "cap_usd": "1.92",
+   "cap_basis": {
+    "kind": "prior_spend",
+    "items": [
+     {
+      "job": "analogy_repair_t4_job",
+      "attempt": 1,
+      "usd": "0.5596"
+     },
+     {
+      "job": "analogy_repair_t4_job",
+      "attempt": 2,
+      "usd": "0.67"
+     },
+     {
+      "job": "aws_probe_job",
+      "attempt": 1,
+      "usd": "0.4834"
+     },
+     {
+      "job": "hset1a_aws_job",
+      "attempt": 1,
+      "usd": "0.0223"
+     },
+     {
+      "job": "hset1a_aws_job",
+      "attempt": 2,
+      "usd": "0.1827"
+     }
+    ],
+    "source": "the jobs' own watcher figures, as listed in open question 1 and in Codex 'Envelope consequences' (c3a128ee); not validated by this program",
+    "allowance_note": "no $0.10 S3/transfer/retention allowance is added (Codex's arithmetic: $57.08 + $1.9180 = $58.998, rounded up to $59.00); with it the five jobs would add $0.50 more, shown in the state file"
+   },
+   "receipt": {
+    "kind": "prior_spend_declared"
+   },
+   "scope": "PENDING the owner's scope decision (FLAG_FOR_HUMAN_REVIEW): included conservatively so that no charge is hidden; never excluded merely to fit"
   },
   {
    "id": "P1b",
@@ -226,9 +272,17 @@
     "the unchanged source (Helm 2.0, 20208c92) and M1's launch folder are reviewed",
     "M1 is the first training slot admitted (plan order)",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   },
   {
    "id": "M2",
@@ -260,11 +314,19 @@
    "timing_feasibility": "MEASURED for Helm 2.0 (10,471.8 to 10,529.1 s); the repaired code adds the analogy head",
    "preconditions_outside_money_gate": [
     "the repaired source is built and reviewed",
-    "M1 was admitted first",
+    "M1's completed VALID reproduction verdict, not merely that M1 was admitted first: under plan C it must reproduce; under a predeclared, funded fallback B a valid mismatch can instead change control provenance",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   },
   {
    "id": "M3",
@@ -296,11 +358,19 @@
    "timing_feasibility": "as M2",
    "preconditions_outside_money_gate": [
     "the repaired source is built and reviewed",
-    "M1 was admitted first",
+    "M1's completed VALID reproduction verdict, not merely that M1 was admitted first: under plan C it must reproduce; under a predeclared, funded fallback B a valid mismatch can instead change control provenance",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   },
   {
    "id": "M4",
@@ -332,11 +402,19 @@
    "timing_feasibility": "as M2",
    "preconditions_outside_money_gate": [
     "the repaired source is built and reviewed",
-    "M1 was admitted first",
+    "M1's completed VALID reproduction verdict, not merely that M1 was admitted first: under plan C it must reproduce; under a predeclared, funded fallback B a valid mismatch can instead change control provenance",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   },
   {
    "id": "E1",
@@ -404,12 +482,20 @@
     "expected": null
    },
    "preconditions_outside_money_gate": [
-    "fallback B was chosen by the owner",
+    "the valid-mismatch predicate (M1's completed VALID mismatch verdict), reviewed fallback-B admissions and funding within $60.00; not a new owner approval token",
     "the unchanged source (Helm 2.0, 20208c92) is reviewed",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   },
   {
    "id": "M6",
@@ -439,12 +525,21 @@
     "expected": null
    },
    "preconditions_outside_money_gate": [
-    "fallback B was chosen by the owner",
+    "the valid-mismatch predicate (M1's completed VALID mismatch verdict), reviewed fallback-B admissions and funding within $60.00; not a new owner approval token",
     "the unchanged source (Helm 2.0, 20208c92) is reviewed",
     "P1b passed",
-    "E1 is built and reviewed"
+    "E1 is built and reviewed",
+    "P2's actual custodian feasibility / exposure receipt, with a testable primary claim and supported inference assumptions",
+    "corrected mechanism validation",
+    "all eighteen checkpoint checks enumerated",
+    "both-arm route acceptance",
+    "the frozen source, data, starting values, worker, checker and environment",
+    "reader AWS acceptance",
+    "complete all-services reserves",
+    "the current single-use technical admission and the current single-use spending admission"
    ],
-   "preconditions_note": "listed from the plan text and the builder review of bb942461; checked by the separate technical admission, NOT by the money gate; Codex or the owner to confirm"
+   "preconditions_note": "Codex Q5 (POLICY_DECISIONS_20260924.md at c3a128ee): the earlier list is necessary but incomplete. These are declared preconditions, checked by the separate technical admission, NOT by this money gate. No inference may be made from a status label without opening and checking its bound public receipts. The money gate and the technical gate both run."
   }
- ]
+ ],
+ "attempt_rows": []
 }

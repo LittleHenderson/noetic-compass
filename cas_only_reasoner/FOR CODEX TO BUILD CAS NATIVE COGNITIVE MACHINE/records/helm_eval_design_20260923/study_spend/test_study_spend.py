@@ -3,10 +3,12 @@
 Covers Codex review codex-0007 (defects 1-4), the builder review of bb942461 (MAJOR 1-4, MINOR 1-4), the round-2
 verification of d89721b4 (MAJOR-A probes P1-P5, MINOR-B probe P6), the round-3 verification of 269d13c8 (MAJOR-E
 probes N1a, N1b, N2a, N2b, N3; NOTE-F probe N4) and the round-4 verification of d2098474 (MAJOR-H probes N6a-N6d;
-MINOR probe N8): every wrongful ADMIT a reviewer found has a negative test here. Synthetic receipts only; a fake git
-reader; temporary folders. The two N8 tests build tiny real git repositories (and a local bare "remote") in a
-temporary folder; nothing touches the network. No AWS, no torch; the real slots file and receipts are never read or
-changed.
+MINOR probe N8): every wrongful ADMIT a reviewer found has a negative test here. V2 (Codex Q1-Q9, R3-F and the static
+review findings 1-2 at c3a128ee): one named test per rule, test_v2_r1 ... test_v2_r9 and test_v2_q5, plus the
+verifier's X1, X2 and X3 as negative tests. Synthetic receipts only; a fake git reader; temporary folders. The two N8
+tests build tiny real git repositories (and a local bare "remote") in a temporary folder; nothing touches the network.
+No AWS, no torch; the real receipts are never read; the real slots file is only read (json and load_slots, no
+admission, no write) by test_v2_q5.
 Run: python -B test_study_spend.py   (also collectable by pytest)
 """
 import atexit
@@ -27,6 +29,7 @@ import study_spend as ss  # noqa: E402
 
 C1 = "a" * 40
 SRC_UNCHANGED, SRC_REPAIRED, SRC_WATCHED = "4" * 40, "3" * 40, "e" * 40
+BUNDLE, WORKER, CHECKER = "c" * 64, "5" * 64, "6" * 64      # V2 R4: what every admission binds, beside the source
 ADMITTED, NOW = "2026-09-24T09:00:00Z", "2026-09-24T12:00:00Z"
 S1_PATH, S2_PATH, LAST = "r/s1/result.json", "r/s2/result.json", "r/s1/provider_0025.json"
 # The pre-gate smoke's two attempts, in the launcher's job id format (round 4: S1 and S2 are scanned by seed + source)
@@ -104,7 +107,8 @@ class FakeGit:
 def pointer(job, source, iid, elapsed=2431.2951856, seed=20260917):
     return {"schema": ss.POINTER_SCHEMA, "job": job, "request": {"job": job},
             "authority": {"job": job, "source_sha": source, "instance_type": "g7.2xlarge", "instance_seconds_max": 14400,
-                          "worker_config": {"design": {"model_seed": seed}}},
+                          "worker_config": {"design": {"model_seed": seed}}, "archive_sha256": BUNDLE,
+                          "worker_sha256": WORKER, "checker_sha256": CHECKER},
             "preflight": {"instance_type": "g7.2xlarge", "rate_ceiling_usd": "2.52",
                           "observed_on_demand_hourly_usd": ["2.5200000000"]},
             "launch": {"instance_id": iid, "job": job}, "elapsed_seconds": elapsed, "status": "AWS_CANDIDATE_FINISHED",
@@ -134,7 +138,8 @@ def provider(job):
 LAUNCH = {"schema": "claude.larger-question-t4-launch/0.1", "instance_id": "i-p1a", "launched_utc": "2026-09-24T05:53:38Z",
           "approved": {"machine": "g4dn.2xlarge", "price_per_hour_usd": 0.752, "dollar_ceiling": 3.0},
           "root_volume_gb": 100, "client_deadline_minutes": 130,
-          "identity": {"source_commit": SRC_WATCHED}, "bundle": {"sha256": "b" * 64}}
+          "identity": {"source_commit": SRC_WATCHED, "worker_sha256": WORKER, "checker_sha256": CHECKER},
+          "bundle": {"sha256": "b" * 64}}
 WATCH = {"schema": "claude.larger-question-t4-watch/0.1", "instance_id": "i-p1a", "launched_utc": "2026-09-24T05:53:38Z",
          "watch_ended_utc": "2026-09-24T06:28:42Z", "minutes_from_launch_to_watch_end": 35.1, "cost_upper_bound_usd": 0.4489,
          "terminated_confirmed": True, "final_state": "terminated", "volumes_of_this_job_remaining": []}
@@ -187,6 +192,7 @@ class World:
             training_slot("M1"), training_slot("M2"), training_slot("M3"), training_slot("M4"),
             slot("E1", "PLANNED", "2.00", e1, planned_watched()),
             training_slot("M5", mandatory=False)]
+        self.attempt_rows = []                      # V2 R1: append-only attempt rows
         self.program = self.tmp / "study_spend.py"
         self.program.write_bytes(b"# program under test\n")
         # Slots whose DONE / INVALID row gets NO synthetic committed RUNNING version in build() (round 2 MINOR-B).
@@ -209,31 +215,45 @@ class World:
                              "bundle_sha256": bundle}}
 
     def by_id(self, sid):
-        return next(s for s in self.slots if s["id"] == sid)
+        return next(s for s in self.slots + self.attempt_rows if s["id"] == sid)
 
-    def admission(self, sid, source, bundle=None, when=ADMITTED):
+    def attempt_row(self, sid, n, status="PLANNED"):
+        """V2 R1: append attempt n of slot sid; the row carries only id, slot, attempt and mutable fields."""
         s = self.by_id(sid)
-        a = {"slot": sid, "admitted_utc": when, "source_sha": source}
-        if "training" in s:
-            a.update(model_seed=s["training"]["model_seed"], arm=s["training"]["arm"])
-        else:
-            a["bundle_sha256"] = bundle
+        row = {"id": "%s.%d" % (sid, n), "slot": sid, "attempt": n, "status": status,
+               "receipt": planned_pointer() if "training" in s else planned_watched()}
+        self.attempt_rows.append(row)
+        return row
+
+    def admission(self, sid, source, bundle=None, when=ADMITTED, worker=WORKER, checker=CHECKER):
+        s = self.by_id(sid)
+        a = {"slot": sid, "admitted_utc": when, "source_sha": source, "bundle_sha256": bundle or BUNDLE,
+             "worker_sha256": worker, "checker_sha256": checker}         # V2 R4: every slot binds all four
+        training = s.get("training") or (self.by_id(s["slot"]).get("training") if "slot" in s else None)
+        if training:
+            a.update(model_seed=training["model_seed"], arm=training["arm"])
         s["admission"] = a
 
     def source_of(self, sid):
-        return SRC_REPAIRED if self.by_id(sid)["training"]["arm"] == "REPAIRED" else SRC_UNCHANGED
+        s = self.by_id(sid)
+        arm = (s.get("training") or self.by_id(s["slot"])["training"])["arm"]
+        return SRC_REPAIRED if arm == "REPAIRED" else SRC_UNCHANGED
+
+    def seed_of(self, sid):
+        s = self.by_id(sid)
+        return (s.get("training") or self.by_id(s["slot"])["training"])["model_seed"]
 
     def job_id(self, sid, job_ts=None, seed=None, source=None):
-        """The launcher's job id format. Unless job_ts is given, each slot launches at its own minute (09:15 for M1)
-        inside its lifetime after ADMITTED 09:00 (round 3: before 13:00 for a training slot)."""
-        job_ts = job_ts or "2026092409%02d00" % (10 + [s["id"] for s in self.slots].index(sid))
-        return "cas-meta2-tpntr-%s-%s-m-%d" % (job_ts, (source or self.source_of(sid))[:8],
-                                               seed or self.by_id(sid)["training"]["model_seed"])
+        """The launcher's job id format. Unless job_ts is given, each slot's job is prepared at its own second of
+        09:01 (09:01:05 for M1), inside the admission's 300-s validity after ADMITTED 09:00 (V2 R2)."""
+        ids = [s["id"] for s in self.slots + self.attempt_rows]
+        job_ts = job_ts or "202609240901%02d" % ids.index(sid)
+        return "cas-meta2-tpntr-%s-%s-m-%d" % (job_ts, (source or self.source_of(sid))[:8], seed or self.seed_of(sid))
 
     def done_training(self, sid, elapsed, job_ts=None, seed=None):
         s, src = self.by_id(sid), self.source_of(sid)
         job, path = self.job_id(sid, job_ts, seed), "r/%s/result.json" % sid.lower()
-        self.receipts[path] = pointer(job, src, "i-" + sid, elapsed, seed=seed or s["training"]["model_seed"])
+        self.receipts[path] = pointer(job, src, "i-" + sid, elapsed, seed=seed or self.seed_of(sid))
         s["status"], s["receipt"] = "DONE", self.pointer_spec(path, job, src, "i-" + sid)
         self.admission(sid, src)
 
@@ -249,11 +269,27 @@ class World:
     def refused_training(self, sid):
         s, src, job = self.by_id(sid), self.source_of(sid), self.job_id(sid)
         s["status"] = "DONE"
-        s["receipt"] = self.refusal_receipt("r/%s" % sid.lower(), job, src, s["training"]["model_seed"])
+        s["receipt"] = self.refusal_receipt("r/%s" % sid.lower(), job, src, self.seed_of(sid))
         self.admission(sid, src)
 
-    def done_watched(self, sid, folder, machine="g4dn.2xlarge", price=0.752, launched="2026-09-24T10:00:00Z",
-                     ended="2026-09-24T10:35:00Z", minutes=35.0, cost=0.4489, deadline=130, bundle="c" * 64,
+    def prelaunch_failure_receipt(self, folder, job, src, seed, run_instances=False):
+        """V2 R5: a launcher that failed BEFORE RunInstances (no launch, no instance); returns its closure spec."""
+        d = refusal(job, src, seed=seed)
+        d.update(status="AWS_CANDIDATE_PREFLIGHT_REFUSED", outcome={"exception_type": "RuntimeError",
+                                                                    "exception": "preflight refused"})
+        d["cleanup"].update(failures=[])
+        self.receipts[folder + "/result.json"] = d
+        self.providers[folder + "/provider_0001.json"] = {"operation": "budget_reservation", "state": "REQUESTED",
+                                                          "job": job}
+        names = ["provider_0001.json", "result.json"]
+        if run_instances:
+            self.providers[folder + "/provider_0002.json"] = provider(job)
+            names.insert(1, "provider_0002.json")
+        self.trees[folder] = names
+        return {"kind": "pointer_prelaunch_failure", "git_commit": C1, "path": folder + "/result.json", "sha256": None}
+
+    def done_watched(self, sid, folder, machine="g4dn.2xlarge", price=0.752, launched="2026-09-24T09:02:00Z",
+                     ended="2026-09-24T09:37:00Z", minutes=35.0, cost=0.4489, deadline=130, bundle="c" * 64,
                      admitted_bundle=None, **watch_extra):
         s, iid = self.by_id(sid), "i-" + sid.lower()
         launch = copy.deepcopy(LAUNCH)
@@ -278,10 +314,12 @@ class World:
         for path, doc in self.files.items():
             (self.tmp / path).parent.mkdir(parents=True, exist_ok=True)
             (self.tmp / path).write_bytes(enc(doc))
-        for s in self.slots:        # pin a DONE / INVALID receipt and every listed launch attempt (round 4)
+        for s in self.slots + self.attempt_rows:     # pin a DONE / INVALID receipt, every listed attempt (round 4)
             specs = list(s.get("attempts") or []) + ([s["receipt"]] if s["status"] in ("DONE", "INVALID") else [])
+            specs += [s["closure"]["receipt"]] if (s.get("closure") or {}).get("receipt") else []   # V2 R1 / R5
             for r in specs:
-                if r["kind"] in ("pointer_finished", "pointer_capacity_refusal") and r.get("path") and r.get("sha256") is None:
+                if (r["kind"] in ("pointer_finished", "pointer_capacity_refusal", "pointer_prelaunch_failure")
+                        and r.get("path") and r.get("sha256") is None):
                     r["sha256"] = sha(self.git.blobs[(C1, r["path"])])
                 if r["kind"] == "pointer_capacity_refusal" and r["last_provider_record"]["sha256"] is None:
                     r["last_provider_record"]["sha256"] = sha(self.git.blobs[(C1, r["last_provider_record"]["path"])])
@@ -295,31 +333,41 @@ class World:
         if not any(raw == program for _commit, raw in self.git.program_versions):
             self.git.program_versions.append(("p%039d" % len(self.git.program_versions), program))
         synthetic = []
-        for s in self.slots:    # what `--admit` + "commit and push" would have left in git history (round 2 MINOR-B)
-            if (s["status"] in ("DONE", "INVALID") and isinstance(s.get("admission"), dict)
+        for s in self.slots + self.attempt_rows:    # what `--admit` + "commit and push" would have left (round 2 MINOR-B)
+            if (s["status"] in ("DONE", "INVALID", "CLOSED_NO_LAUNCH") and isinstance(s.get("admission"), dict)
                     and s["id"] not in ss.PRE_GATE_DONE and s["id"] not in self.uncommitted_running):
+                watched = "training" not in (self.by_id(s["slot"]) if "slot" in s else s)
                 planned = copy.deepcopy(s)
-                planned.update(status="PLANNED", receipt=planned_pointer() if "training" in s else planned_watched())
-                for key in ("admission", "invalid_reason", "attempts"):
+                planned.update(status="PLANNED", receipt=planned_watched() if watched else planned_pointer())
+                for key in ("admission", "invalid_reason", "attempts", "closure"):
                     planned.pop(key, None)
                 before = enc({"schema": ss.SCHEMA, "note": "committed before %s was admitted" % s["id"], "slots": [planned]})
-                if s["id"] not in self.bare_admission:          # the fields `--admit` writes (round 3 NOTE-F)
-                    s["admission"].setdefault("gate", ss.ADMIT_GATE)
-                    s["admission"].setdefault("program_sha256", sha(program))
-                    s["admission"].setdefault("slots_sha256_before", sha(before))
-                synthetic.append((s, before))
+                if s["id"] not in self.bare_admission:          # the fields `--admit` writes (round 3 NOTE-F, V2)
+                    a = s["admission"]
+                    admitted = ss.utc(a.get("admitted_utc"))
+                    a.setdefault("gate", ss.ADMIT_GATE)
+                    a.setdefault("program_sha256", sha(program))
+                    a.setdefault("slots_sha256_before", sha(before))
+                    for field, value in (("gate_version", ss.GATE_VERSION), ("inventory_sha256", "9" * 64),
+                                         ("lock_nonce", "n" * 32), ("cap_usd", s.get("cap_usd") or "11.66"),
+                                         ("remaining_mandatory_reserve_usd", "0.00"),
+                                         ("cumulative_upper_bound_usd", "0.00"), ("main_starts", 0),
+                                         ("valid_until_utc", ss.fmt(ss.validity_end(admitted)) if admitted else "?")):
+                        a.setdefault(field, value)
+                synthetic.append((s, before, watched))
         doc = {"schema": ss.SCHEMA, "ceiling_usd": "60.00",
                "owner_stop": {"usd": "30.00", "before_training_job_number": 3, "rule": "stop"},
                "allowances": {"s3_transfer_per_job_usd": "0.10"}, "open_questions_for_owner_or_codex": ["q"],
-               "slots": self.slots}
+               "slots": self.slots, "attempt_rows": self.attempt_rows}
         (self.tmp / "slots.json").write_text(json.dumps(doc), encoding="utf-8")
         self.frozen = ss.definitions_digest(doc)
-        for s, before in synthetic:     # the version --admit started from, then the committed RUNNING row
+        for s, before, watched in synthetic:     # the version --admit started from, then the committed RUNNING row
             row = copy.deepcopy(s)
-            row.update(status="RUNNING", receipt=planned_pointer() if "training" in s else planned_watched())
+            row.update(status="RUNNING", receipt=planned_watched() if watched else planned_pointer())
             row.pop("invalid_reason", None)
+            row.pop("closure", None)
             self.git.versions.append(("%040d" % len(self.git.versions), before))
-            self.git.versions.append(("%040d" % len(self.git.versions), enc(dict(doc, slots=[row]))))
+            self.git.versions.append(("%040d" % len(self.git.versions), enc(dict(doc, slots=[row], attempt_rows=[]))))
         return self
 
     def edit_slots(self, fn):
@@ -331,13 +379,17 @@ class World:
         """Pretend the slots file as it is now was committed."""
         self.git.versions.append(("%040d" % len(self.git.versions), (self.tmp / "slots.json").read_bytes()))
 
-    def run(self, *argv):
+    def run(self, *argv, now=NOW):
         out = io.StringIO()
         with redirect_stdout(out):
             code = ss.main(list(argv) + ["--no-write"], git=self.git, root=self.tmp, slots_file=self.tmp / "slots.json",
-                           state_file=self.tmp / "state.json", frozen=self.frozen, program_file=self.program, now=NOW)
+                           state_file=self.tmp / "state.json", frozen=self.frozen, program_file=self.program, now=now)
         text = out.getvalue()
-        return code, (json.loads(text) if argv and argv[0] == "--admit" else text)
+        return code, (json.loads(text) if argv and argv[0] in ("--admit", "--launch-check") else text)
+
+    def lock(self):
+        path = self.tmp / ss.LOCK_NAME
+        return json.loads(path.read_bytes()) if path.exists() else None
 
     def account(self, now=NOW):
         loaded = ss.load_slots(self.tmp / "slots.json", self.frozen)
@@ -363,10 +415,16 @@ def rejected(w, sid, needle):
     assert any(needle in p for p in row["receipt_problems"]), (needle, row["receipt_problems"])
 
 
+def admit_with(sid, source):
+    """V2 R4: every admission binds the source, bundle, worker and checker."""
+    return ("--admit", sid, "--source", source, "--bundle", BUNDLE, "--worker", WORKER, "--checker", CHECKER)
+
+
 def admit_args(sid):
-    if sid in ("P1b", "P2", "E1"):
-        return ("--admit", sid, "--source", SRC_WATCHED, "--bundle", "c" * 64)
-    return ("--admit", sid, "--source", SRC_REPAIRED if TRAINING.get(sid, (0, "REPAIRED"))[1] == "REPAIRED" else SRC_UNCHANGED)
+    if sid.split(".")[0] in ("P1b", "P2", "E1"):
+        return admit_with(sid, SRC_WATCHED)
+    arm = TRAINING.get(sid.split(".")[0], (0, "REPAIRED"))[1]
+    return admit_with(sid, SRC_REPAIRED if arm == "REPAIRED" else SRC_UNCHANGED)
 
 
 # ---------------------------------------------------------------------------------------------------- baseline
@@ -375,7 +433,7 @@ def test_baseline_accepts_all_three_receipts_with_exact_bounds():
     assert w.row("S1")["counted_usd"] == "1.60"   # 25.666 s x 2.52/3600 + 1.48 + 0.10 = 1.597966 -> 1.60
     assert w.row("S2")["counted_usd"] == "3.29"   # 2431.295 s -> 3.281907 -> 3.29
     assert w.row("P1a")["counted_usd"] == "0.55"  # max(0.4489, 0.448829) + 0.10 -> 0.55
-    assert "CLAUDE_PROPOSED" in w.row("S1")["receipt_pins"]["override"]
+    assert "ACCEPTED" in w.row("S1")["receipt_pins"]["override"]           # V2 R8 (Codex Q1)
     loaded, acct = w.account()
     assert acct["spent"] == Decimal("5.44") and acct["rejected"] == [] and acct["shared"] == {}
     code, text = w.run()
@@ -570,8 +628,11 @@ def test_admit_needs_source_and_bundle():
     assert w.run("--admit", "P1b")[0] == 2
     assert w.run("--admit", "P1b", "--source", SRC_WATCHED)[0] == 2
     assert w.run("--admit", "P1b", "--source", "e" * 39, "--bundle", "c" * 64)[0] == 2
-    assert w.run("--admit", "M1", "--source", SRC_UNCHANGED, "--bundle", "c" * 64)[0] == 2
+    assert w.run("--admit", "M1", "--source", SRC_UNCHANGED, "--bundle", "c" * 64)[0] == 2          # V2 R4: and the
+    assert w.run("--admit", "P1b", "--source", SRC_WATCHED, "--bundle", BUNDLE, "--worker", WORKER)[0] == 2  # worker,
+    assert w.run("--admit", "M1", "--source", SRC_UNCHANGED, "--bundle", BUNDLE, "--checker", CHECKER)[0] == 2  # checker
     assert json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))["slots"][3]["status"] == "PLANNED"
+    assert w.lock() is None                                              # an error releases the lock it took (V2 R2)
 
 
 def test_admit_refuses_over_ceiling():
@@ -589,7 +650,7 @@ def test_admit_exactly_at_ceiling_passes():
 
 
 def test_admit_refuses_slot_not_planned_running_or_rejected_receipt():
-    code, out = world().run("--admit", "S2", "--source", SRC_REPAIRED)
+    code, out = world().run(*admit_with("S2", SRC_REPAIRED))
     assert code == 1 and "SLOT_NOT_PLANNED:DONE" in out["reasons"], out
 
     def running(w):
@@ -673,16 +734,6 @@ def test_capacity_refusals_never_count_as_started():            # review MAJOR 2
     assert not any(r.startswith("OVER_CEILING") for r in out["reasons"]), out   # 30.20 + 11.66 + 16.66 = 58.52
 
 
-def test_rejected_or_invalid_training_never_counts_as_started():
-    def fn(w):
-        w.done_training("M1", 10500)
-        w.receipts["r/m1/result.json"]["job"] = "job-other"
-        w.done_training("M2", 10500)
-        w.invalid("M2")
-    loaded, acct = world(fn).account()
-    assert acct["training_started"] == [] and acct["rejected"] == ["M1"], acct
-
-
 # ------------------------------------------------------------------------ review MAJOR 1: one receipt, one slot
 def test_a_copied_training_receipt_is_refused_for_both_slots():
     def copy_s2(w):
@@ -720,8 +771,9 @@ def test_a_done_receipt_must_match_its_admission():
     def other_source(w):
         w.done_training("M1", 10500)
         w.by_id("M1")["admission"]["source_sha"] = "9" * 40
-    rejected(world(other_source), "M1", "SOURCE_NOT_THE_ADMITTED_SOURCE")
-    rejected(world(lambda w: w.done_watched("P1b", "p1b", admitted_bundle="d" * 64)), "P1b", "BUNDLE_NOT_THE_ADMITTED_BUNDLE")
+    rejected(world(other_source), "M1", "IDENTITY_NOT_THE_ADMITTED:source_sha")                    # V2 R4
+    rejected(world(lambda w: w.done_watched("P1b", "p1b", admitted_bundle="d" * 64)), "P1b",
+             "IDENTITY_NOT_THE_ADMITTED:bundle_sha256")
     rejected(world(lambda w: w.done_watched("P1b", "p1b", launched="2026-09-24T08:00:00Z", ended="2026-09-24T08:35:00Z")),
              "P1b", "LAUNCH_NOT_AFTER_ADMISSION")
     w = world(lambda w: w.done_watched("P1b", "p1b"))
@@ -733,11 +785,11 @@ def test_one_source_per_training_arm():
         w.done_training("M1", 10500)           # UNCHANGED arm, source 444...
         w.done_training("M2", 10500)           # REPAIRED arm, source 333...
     w = world(fn)
-    code, out = w.run("--admit", "M3", "--source", "5" * 40)
+    code, out = w.run(*admit_with("M3", "5" * 40))
     assert code == 1 and any(r.startswith("ARM_SOURCE_CONFLICT:M2") for r in out["reasons"]), out
-    code, out = w.run("--admit", "M3", "--source", SRC_UNCHANGED)
+    code, out = w.run(*admit_with("M3", SRC_UNCHANGED))
     assert code == 1 and any("M1 is the other arm" in r for r in out["reasons"]), out
-    code, out = w.run("--admit", "M3", "--source", SRC_REPAIRED)
+    code, out = w.run(*admit_with("M3", SRC_REPAIRED))
     assert code == 0 and out["admission_record"]["model_seed"] == 20260918, out
 
 
@@ -746,7 +798,7 @@ def test_admitted_job_end_to_end():
     w.commit_snapshot()                                            # --admit starts from a committed slots file
     assert w.run(*admit_args("P1b"))[0] == 0
     w.commit_snapshot()                                            # the runner commits the RUNNING row, then launches
-    launched, ended = "2026-09-24T12:05:00Z", "2026-09-24T12:40:00Z"
+    launched, ended = "2026-09-24T12:03:00Z", "2026-09-24T12:38:00Z"          # inside the 300-s validity (V2 R2)
     doc = json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))
     w.slots = doc["slots"]
     admission = w.by_id("P1b")["admission"]
@@ -823,7 +875,7 @@ def test_admission_needs_committed_slots_and_program():
 # ------------------------------------------------------------------ review MAJOR 4: a broken basis is never undercounted
 def test_watched_basis_breach_counts_the_recorded_cost_even_after_invalid():
     def breach(w):
-        w.done_watched("P1b", "p1b", launched="2026-09-24T10:00:00Z", ended="2026-09-24T14:00:00Z", minutes=240.0,
+        w.done_watched("P1b", "p1b", launched="2026-09-24T09:02:00Z", ended="2026-09-24T13:02:00Z", minutes=240.0,
                        cost=3.0719, deadline=240)
     w = world(breach)
     rejected(w, "P1b", "DEADLINE_OVER_BASIS")
@@ -887,7 +939,7 @@ def test_report_mode_exit_1_when_a_done_receipt_is_rejected():
 # ------------------------------------ round 2 MAJOR-A: read the receipt first; fail closed on an unconfirmed cleanup
 def p1b_breach(w, bundle_field="c" * 64, **watch_extra):
     """P1b ran 240 min with a watcher cost of $3.0719 (over its 130-min basis), then was marked INVALID."""
-    w.done_watched("P1b", "p1b", launched="2026-09-24T10:00:00Z", ended="2026-09-24T14:00:00Z", minutes=240.0,
+    w.done_watched("P1b", "p1b", launched="2026-09-24T09:02:00Z", ended="2026-09-24T13:02:00Z", minutes=240.0,
                    cost=3.0719, deadline=240, **watch_extra)
     w.by_id("P1b")["receipt"]["expected"]["bundle_sha256"] = bundle_field
     w.invalid("P1b", "ran past its deadline basis")
@@ -912,10 +964,11 @@ def test_round2_p1_an_empty_spec_field_no_longer_undercounts():
         assert row["counted_usd"] == "3.18" and "cleanup" not in row, row      # was $2.00 for the probe
         assert w.account()[1]["spent"] == Decimal("8.62")
     (pc, po), (tc, to) = probe.run(*admit_args("P2")), twin.run(*admit_args("P2"))
-    # The probe now decides exactly as its complete-spec twin. A basis breach whose cleanup is confirmed is counted at
-    # what it recorded and does not by itself stop the study (round-1 disposition; still open for Codex / the owner).
+    # The probe decides exactly as its complete-spec twin. V2 R5 (Codex Q4): a basis breach whose cleanup is confirmed
+    # is counted at what it recorded AND latches every admission shut (round 1 had let it continue).
     assert (pc, po["decision"], po["total_usd"], po["reasons"]) == (tc, to["decision"], to["total_usd"], to["reasons"])
     assert po["total_usd"] == "58.26", po
+    assert pc == 1 and any(r.startswith("LIMIT_BREACH_LATCHED:P1b") for r in po["reasons"]), po
 
 
 def test_round2_p2_unconfirmed_cleanup_with_an_empty_spec_field_blocks():
@@ -1004,10 +1057,11 @@ def test_round2_a_proven_capacity_refusal_is_not_unconfirmed():
         w.refused_training("M1")
         w.by_id("M1")["admission"]["source_sha"] = "9" * 40
     w = world(refused_wrong_source)
-    rejected(w, "M1", "SOURCE_NOT_THE_ADMITTED_SOURCE")
-    # Round 3 (3): the receipt shows a source other than the admitted one, so it is not proven to be THIS slot's
-    # launch. Round 2 left this proven; the ordered round-3 fix binds the source where the receipt shows it.
-    assert w.account()[1]["unconfirmed"] == ["M1"] and "SOURCE_NOT_THE_ADMITTED_SOURCE" in w.row("M1")["cleanup"]
+    rejected(w, "M1", "IDENTITY_NOT_THE_ADMITTED:source_sha")
+    # V2 R4 (Codex Q8): a wrong source no longer leaves the cleanup unconfirmed (the refusal is still this slot's and
+    # still proven), but it blocks the study (WRONG_IDENTITY_BLOCKS_THE_STUDY). Round 3 had made it UNCONFIRMED.
+    acct = w.account()[1]
+    assert acct["unconfirmed"] == [] and "M1" in acct["wrong_identity"], acct["wrong_identity"]
 
     def refused_unproven(w):                                                 # a later provider call breaks the proof
         refused_invalid(w)
@@ -1051,10 +1105,10 @@ def test_round2_p6_a_hand_written_admission_is_refused():
         w.done_training("M1", 10500)
     assert world(committed).row("M1")["receipt"] == "ACCEPTED"
 
-    def committed_2000(w):          # the hand-written date, committed RUNNING: round 3 refuses a launch that far after
-        committed(w)                # its admission (outside admission time + the slot's 14,400 s lifetime)
+    def committed_2000(w):          # the hand-written date, committed RUNNING: a launch that far after its admission
+        committed(w)                # is refused (V2 R2: outside admission time + the 300-s validity)
         w.by_id("M1")["admission"]["admitted_utc"] = "2000-01-01T00:00:00Z"
-    rejected(world(committed_2000), "M1", "LAUNCH_AFTER_THE_ADMISSION_LIFETIME")
+    rejected(world(committed_2000), "M1", "LAUNCH_AFTER_THE_ADMISSION_VALIDITY")
     w = world(committed)                                                     # the DONE row's record differs from the
     w.edit_slots(lambda d: d["slots"][5]["admission"].update(admitted_utc="2026-09-24T09:30:00Z"))   # committed one
     code, out = w.run(*admit_args("M2"))
@@ -1143,7 +1197,7 @@ def test_round3_n2a_n2b_another_jobs_watched_records_no_longer_confirm():
         code, out = w.run(*admit_args("P2"))                                 # was exit 0 ADMIT, total $57.08
         assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], (ids, out)
     w = world(p1b_names_older_watched_records(True, invalid=False))
-    rejected(w, "P1b", "BUNDLE_NOT_THE_ADMITTED_BUNDLE")
+    rejected(w, "P1b", "IDENTITY_NOT_THE_ADMITTED:bundle_sha256")                  # V2 R4
     rejected(w, "P1b", "LAUNCH_NOT_AFTER_ADMISSION")
 
 
@@ -1165,28 +1219,33 @@ def test_round3_n3_another_jobs_capacity_refusal_is_no_longer_proven():
 
 
 def test_round3_launch_window_seed_and_source_bind_the_cleanup():
-    # M1 admitted 09:00; lifetime 14,400 s, so its launch must lie in [09:00:00, 13:00:00).
-    for ts in ("20260924090000", "20260924125959"):                          # positive: inside the window
+    # M1 admitted 09:00; V2 R2: the admission is valid 300 s, so its launch must lie in [09:00:00, 09:05:00).
+    for ts in ("20260924090000", "20260924090459"):                          # positive: inside the validity
         w = world(m1_names(job_ts=ts))
         assert w.account()[1]["unconfirmed"] == [] and "cleanup" not in w.row("M1"), (ts, w.row("M1"))
         code, out = w.run(*admit_args("M2"))
         assert code == 0, (ts, out)
-    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924130000")), "M1", "LAUNCHED_AFTER_THE_ADMISSION_LIFETIME")
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924090500")), "M1", "LAUNCHED_AFTER_THE_ADMISSION_VALIDITY")
     unconfirmed_not_this_launch(world(m1_names(job_ts="20260924085959")), "M1", "LAUNCHED_BEFORE_ADMISSION")
-    rejected(world(m1_names(job_ts="20260924130000", invalid=False)), "M1", "LAUNCH_AFTER_THE_ADMISSION_LIFETIME")
-    # Inside the window, but another seed, or the other arm's source with M1's seed (M2 shares seed 20260917).
-    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924093000", seed=20260918)), "M1", "SEED_NOT_THE_SLOT_SEED")
-    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924093000", source=SRC_REPAIRED)), "M1",
-                                "SOURCE_NOT_THE_ADMITTED_SOURCE")
+    rejected(world(m1_names(job_ts="20260924090500", invalid=False)), "M1", "LAUNCH_AFTER_THE_ADMISSION_VALIDITY")
+    # Inside the validity, but another seed: not this slot's launch.
+    unconfirmed_not_this_launch(world(m1_names(job_ts="20260924090300", seed=20260918)), "M1", "SEED_NOT_THE_SLOT_SEED")
+    # The other arm's source with M1's seed (M2 shares seed 20260917): V2 R4 (Codex Q8) inspects the machine (cleanup
+    # confirmed) and blocks the study through the wrong identity instead.
+    w = world(m1_names(job_ts="20260924090300", source=SRC_REPAIRED))
+    acct = w.account()[1]
+    assert acct["unconfirmed"] == [] and "IDENTITY_NOT_THE_ADMITTED:source_sha" in acct["wrong_identity"]["M1"][0], acct
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and any(r.startswith("WRONG_IDENTITY_BLOCKS_THE_STUDY:M1") for r in out["reasons"]), out
 
     def no_time(w):                                                          # a job id that carries no time
-        m1_names(job_ts="20260924093000")(w)
+        m1_names(job_ts="20260924090300")(w)
         w.receipts[w.by_id("M1")["receipt"]["path"]]["job"] = "job-without-a-time"
         w.by_id("M1")["receipt"]["expected"]["job"] = "job-without-a-time"
     unconfirmed_not_this_launch(world(no_time), "M1", "RECEIPT_SHOWS_NO_LAUNCH_TIME")
-    # P1b: 130-min client deadline, so its launch must lie in [09:00:00, 11:10:00).
-    for launched, ended, ok in (("2026-09-24T11:09:59Z", "2026-09-24T11:44:59Z", True),
-                                ("2026-09-24T11:10:00Z", "2026-09-24T11:45:00Z", False)):
+    # P1b: V2 R2: its launch must lie in [09:00:00, 09:05:00) too.
+    for launched, ended, ok in (("2026-09-24T09:04:59Z", "2026-09-24T09:39:59Z", True),
+                                ("2026-09-24T09:05:00Z", "2026-09-24T09:40:00Z", False)):
         def fn(w, launched=launched, ended=ended):
             w.done_watched("P1b", "p1b", launched=launched, ended=ended)
             w.invalid("P1b", "operator error")
@@ -1194,7 +1253,7 @@ def test_round3_launch_window_seed_and_source_bind_the_cleanup():
         if ok:
             assert w.account()[1]["unconfirmed"] == [], w.row("P1b")
         else:
-            unconfirmed_not_this_launch(w, "P1b", "LAUNCHED_AFTER_THE_ADMISSION_LIFETIME")
+            unconfirmed_not_this_launch(w, "P1b", "LAUNCHED_AFTER_THE_ADMISSION_VALIDITY")
 
 
 def test_round3_an_invalid_rows_admission_must_be_committed_running():
@@ -1314,20 +1373,20 @@ def unlisted(w, sid, needle):
 
 
 def test_round4_n6a_an_unlisted_capacity_refusal_is_found():
-    def fn(w):          # attempt 1 (09:05) refused by AWS, moved aside; attempt 2 (09:15) finished; the row names only 2
-        training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)
-        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+    def fn(w):          # attempt 1 (09:01) refused by AWS, moved aside; attempt 2 (09:03) finished; the row names only 2
+        training_attempt(w, "M1", "m1_attempt1", "20260924090100", refused=True)
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090300"))
     w = world(fn)
     assert w.row("M1")["receipt"] == "ACCEPTED" and w.row("M1")["counted_usd"] == "8.94", w.row("M1")
-    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090500"))
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090100"))
     code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, total $54.36
     assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
 
 
-def test_round4_two_attempts_refusal_then_clean_run_are_both_counted_and_admitted():
-    def fn(w):          # the same two attempts, both listed: attempt 1 counted at its bound, like S1
-        first = training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)
-        second = training_attempt(w, "M1", "m1", "20260924091500")
+def test_round4_two_attempts_under_one_admission_are_counted_and_now_latch_the_study():
+    def fn(w):          # two attempts under ONE admission, both listed: attempt 1 counted at its bound, like S1
+        first = training_attempt(w, "M1", "m1_attempt1", "20260924090100", refused=True)
+        second = training_attempt(w, "M1", "m1", "20260924090300")
         set_row(w, "M1", second, listed=[first, second])
     w = world(fn)
     row = w.row("M1")
@@ -1335,25 +1394,29 @@ def test_round4_two_attempts_refusal_then_clean_run_are_both_counted_and_admitte
     assert "sum over 2 launch attempt(s)" in row["counted_basis"] and "cleanup" not in row, row
     assert set(row["receipt_pins"]) == {"attempt 1", "attempt 2"}, row["receipt_pins"]
     loaded, acct = w.account()
-    assert acct["spent"] == Decimal("15.98") and acct["unconfirmed"] == [] and acct["training_started"] == ["M1"], acct
+    assert acct["spent"] == Decimal("15.98") and acct["unconfirmed"] == [] and acct["training_started"] == ["M1#2"], acct
+    # V2 R1 (Codex Q9): one admission authorizes ONE RunInstances attempt. Round 4 admitted M2 here ($55.96); a second
+    # attempt under one admission is now a latched breach. The retry belongs in its own attempt row (test_v2_r1).
     code, out = w.run(*admit_args("M2"))
-    assert code == 0 and out["decision"] == "ADMIT" and out["total_usd"] == "55.96", out   # 15.98 + 11.66 + 28.32
+    assert code == 1 and out["total_usd"] == "55.96", out                   # 15.98 + 11.66 + 28.32
+    assert any(r.startswith("LIMIT_BREACH_LATCHED:M1") for r in out["reasons"]), out
+    assert "MORE_THAN_ONE_ATTEMPT_UNDER_ONE_ADMISSION" in acct["breaches"]["M1"][0], acct["breaches"]
 
 
 def test_round4_n6b_an_unlisted_machine_that_ran_is_found():
     def attempt1(w):    # attempt 1 launched a machine; it ran 600 s; its cleanup and identity are unconfirmed
-        return training_attempt(w, "M1", "m1_attempt1", "20260924090500", elapsed=600, uncertain=True)
+        return training_attempt(w, "M1", "m1_attempt1", "20260924090100", elapsed=600, uncertain=True)
 
     def named_alone(w):
         attempt1(w)
-        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090300"))
     w = world(named_alone)
-    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090500"))
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924090100"))
     code, out = w.run(*admit_args("M2"))                                     # was exit 0 ADMIT, $54.36
     assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
 
     def both_listed(w):  # listed honestly: attempt 1 is judged on its own and blocks
-        first, second = attempt1(w), training_attempt(w, "M1", "m1", "20260924091500")
+        first, second = attempt1(w), training_attempt(w, "M1", "m1", "20260924090300")
         set_row(w, "M1", second, listed=[first, second])
     w = world(both_listed)
     rejected(w, "M1", "attempt 1: CLEANUP_INCOMPLETE_OR_IDENTITY_UNCERTAIN")
@@ -1364,14 +1427,14 @@ def test_round4_n6b_an_unlisted_machine_that_ran_is_found():
 
 def test_round4_n6c_an_unlisted_watched_launch_is_found():
     def fn(folder):
-        def inner(w):   # attempt 1 (09:05): the watcher saw it still running; its records moved aside
-            watched_attempt(w, "P1b", folder, "2026-09-24T09:05:00Z", "2026-09-24T09:40:00Z", running=True)
-            set_row(w, "P1b", watched_attempt(w, "P1b", "p1b", "2026-09-24T09:45:00Z", "2026-09-24T10:20:00Z"))
+        def inner(w):   # attempt 1 (09:01): the watcher saw it still running; its records moved aside
+            watched_attempt(w, "P1b", folder, "2026-09-24T09:01:00Z", "2026-09-24T09:36:00Z", running=True)
+            set_row(w, "P1b", watched_attempt(w, "P1b", "p1b", "2026-09-24T09:03:00Z", "2026-09-24T09:38:00Z"))
         return inner
     for folder in ("p1b/attempt1", "p1b_try1"):     # in the job folder, and in a new folder elsewhere
         w = world(fn(folder))
         assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")
-        unlisted(w, "P1b", "UNLISTED_WATCHED_LAUNCH:%s/launch_record.json instance i-p1b-0905" % folder)
+        unlisted(w, "P1b", "UNLISTED_WATCHED_LAUNCH:%s/launch_record.json instance i-p1b-0901" % folder)
         code, out = w.run(*admit_args("P2"))                                 # was exit 0 ADMIT, $55.63
         assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], (folder, out)
 
@@ -1379,11 +1442,11 @@ def test_round4_n6c_an_unlisted_watched_launch_is_found():
         for path in ("p1b_gone/launch_record.json", "p1b_gone/watch_record.json"):
             w.git.blobs[("HEAD", "design/" + path)] = enc(w.files.pop(path))
     w = world(lambda w: (fn("p1b_gone")(w), at_head_only(w)))
-    unlisted(w, "P1b", "p1b_gone/launch_record.json instance i-p1b-0905 launched 2026-09-24T09:05:00Z (HEAD)")
+    unlisted(w, "P1b", "p1b_gone/launch_record.json instance i-p1b-0901 launched 2026-09-24T09:01:00Z (HEAD)")
 
     def listed(w):          # both listed: attempt 1's own record shows the machine still running, so it blocks
-        first = watched_attempt(w, "P1b", "p1b/attempt1", "2026-09-24T09:05:00Z", "2026-09-24T09:40:00Z", running=True)
-        second = watched_attempt(w, "P1b", "p1b", "2026-09-24T09:45:00Z", "2026-09-24T10:20:00Z")
+        first = watched_attempt(w, "P1b", "p1b/attempt1", "2026-09-24T09:01:00Z", "2026-09-24T09:36:00Z", running=True)
+        second = watched_attempt(w, "P1b", "p1b", "2026-09-24T09:03:00Z", "2026-09-24T09:38:00Z")
         set_row(w, "P1b", second, listed=[first, second])
     w = world(listed)
     rejected(w, "P1b", "attempt 1: NOT_CONFIRMED_TERMINATED")
@@ -1391,9 +1454,9 @@ def test_round4_n6c_an_unlisted_watched_launch_is_found():
 
 
 def test_round4_n6d_an_unlisted_later_attempt_is_found():
-    def fn(w):          # the row names attempt 1, a proven refusal (09:05); attempt 2 (09:15) ran 20,000 s, identity lost
+    def fn(w):          # the row names attempt 1, a proven refusal (09:01); attempt 2 (09:15) ran 20,000 s, identity lost
         training_attempt(w, "M1", "m1_attempt2", "20260924091500", elapsed=20000, uncertain=True)
-        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090500", refused=True))
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090100", refused=True))
     w = world(fn)
     assert w.row("M1")["receipt"] == "ACCEPTED" and w.row("M1")["counted_usd"] == "1.60", w.row("M1")
     unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:" + w.job_id("M1", "20260924091500"))
@@ -1402,8 +1465,8 @@ def test_round4_n6d_an_unlisted_later_attempt_is_found():
 
 
 def test_round4_attempt_rules():
-    clean = lambda w: training_attempt(w, "M1", "m1", "20260924091500")                           # noqa: E731
-    refused = lambda w: training_attempt(w, "M1", "m1_attempt1", "20260924090500", refused=True)  # noqa: E731
+    clean = lambda w: training_attempt(w, "M1", "m1", "20260924090300")                           # noqa: E731
+    refused = lambda w: training_attempt(w, "M1", "m1_attempt1", "20260924090100", refused=True)  # noqa: E731
     # At DONE the row's receipt must be its last listed attempt.
     w = world(lambda w: (lambda a, b: set_row(w, "M1", a, listed=[a, b]))(clean(w), refused(w)))
     rejected(w, "M1", "RECEIPT_NOT_THE_LAST_LISTED_ATTEMPT")
@@ -1432,12 +1495,12 @@ def test_round4_attempt_rules():
 
 def test_round4_committed_attempts_only_grow():
     def running(w):
-        set_row(w, "M1", planned_pointer(), listed=[training_attempt(w, "M1", "m1_attempt1", "20260924090500",
+        set_row(w, "M1", planned_pointer(), listed=[training_attempt(w, "M1", "m1_attempt1", "20260924090100",
                                                                      refused=True)], status="RUNNING")
     w = world(running)
     w.commit_snapshot()
     first = copy.deepcopy(w.by_id("M1")["attempts"][0])
-    second = training_attempt(w, "M1", "m1", "20260924091500")
+    second = training_attempt(w, "M1", "m1", "20260924090300")
     for edit, ok in ((lambda d: d["slots"][5].update(attempts=[first, second]), True),     # appended: allowed
                      (lambda d: d["slots"][5].pop("attempts"), False),                     # removed
                      (lambda d: d["slots"][5].update(attempts=[second, first]), False),    # reordered
@@ -1453,7 +1516,7 @@ def test_round4_the_scan_reads_head_the_pins_and_the_working_tree():
 
     def base(w):
         nonlocal job
-        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924091500"))
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090300"))
         job = w.job_id("M1", "20260924090500")
     # Working tree only (a refusal receipt written but never committed): found.
     w = world(base)
@@ -1476,11 +1539,11 @@ def test_round4_the_scan_reads_head_the_pins_and_the_working_tree():
 
 
 def test_round4_a_launch_another_slot_claims_is_not_this_slots():
-    def watched(w):     # P1b admitted 09:00 (window to 11:10), DONE; then P2 admitted 10:00 and launched 10:05
-        w.done_watched("P1b", "p1b", launched="2026-09-24T09:10:00Z", ended="2026-09-24T09:45:00Z")
-        w.done_watched("P2", "p2", machine="c7i.2xlarge", price=0.357, launched="2026-09-24T10:05:00Z",
-                       ended="2026-09-24T10:40:00Z", cost=0.22)
-        w.by_id("P2")["admission"]["admitted_utc"] = "2026-09-24T10:00:00Z"
+    def watched(w):     # P1b admitted 09:00 (search window to 11:10), DONE; then P2 admitted 09:30 and launched 09:32
+        w.done_watched("P1b", "p1b", launched="2026-09-24T09:02:00Z", ended="2026-09-24T09:37:00Z")
+        w.done_watched("P2", "p2", machine="c7i.2xlarge", price=0.357, launched="2026-09-24T09:32:00Z",
+                       ended="2026-09-24T10:07:00Z", cost=0.22)
+        w.by_id("P2")["admission"]["admitted_utc"] = "2026-09-24T09:30:00Z"
     w = world(watched)
     assert [w.row(s)["receipt"] for s in ("P1b", "P2")] == ["ACCEPTED", "ACCEPTED"], (w.row("P1b"), w.row("P2"))
     assert w.account()[1]["unconfirmed"] == [], w.row("P1b")         # P2's launch lies in P1b's window: P2 claims it
@@ -1588,6 +1651,372 @@ def test_round4_n8_admit_only_at_the_fetched_remote_tip():
     code, out = w.run(*admit_args("P1b"))
     assert code == 1 and any(r.startswith("NOT_AT_THE_FETCHED_REMOTE_TIP") for r in out["reasons"]), out
     assert json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))["slots"][3]["status"] == "PLANNED"
+
+
+# ------------------------- V2: Codex decisions Q1-Q9 and R3-F, static review findings 1-2 (c3a128ee); one test per rule
+def test_v2_r1_one_admission_one_attempt_a_retry_needs_its_own_row_and_admission():
+    # A second attempt under one admission is a latched breach (Codex Q9 + static review finding 1).
+    def two_under_one(w):
+        first = training_attempt(w, "M1", "m1_attempt1", "20260924090100", refused=True)
+        second = training_attempt(w, "M1", "m1", "20260924090300")
+        set_row(w, "M1", second, listed=[first, second])
+    code, out = world(two_under_one).run(*admit_args("M2"))
+    assert code == 1 and any(r.startswith("LIMIT_BREACH_LATCHED:M1") for r in out["reasons"]), out
+
+    # Attempt 1 of M1 was an AWS capacity refusal. The retry is attempt row M1.2: its own cap is reserved while it is
+    # PLANNED, and its own fresh --admit covers prior spend, the replacement cap, the owner stop and every reserve.
+    def refused_then_row(w):
+        w.refused_training("M1")
+        w.attempt_row("M1", 2)
+    w = world(refused_then_row)
+    loaded, acct = w.account()
+    assert "M1.2" in acct["planned_mandatory"] and acct["reserve"] == Decimal("51.64"), acct["planned_mandatory"]
+    code, out = w.run(*admit_args("M1.2"))
+    assert code == 0 and out["total_usd"] == "58.68", out                  # 7.04 + 11.66 + 39.98
+    assert "the replacement cap of attempt 2 of M1" in out["admission_arithmetic"], out
+    a = out["admission_record"]
+    assert (a["slot"], a["attempt"], a["model_seed"], a["arm"]) == ("M1.2", 2, 20260917, "UNCHANGED"), a
+    doc = json.loads((w.tmp / "slots.json").read_text(encoding="utf-8"))
+    assert doc["attempt_rows"][0]["status"] == "RUNNING" and doc["slots"][5]["status"] == "DONE", doc["attempt_rows"]
+    # Attempt rows are append-only.
+    w = world(refused_then_row)
+    w.commit_snapshot()
+    w.edit_slots(lambda d: d.update(attempt_rows=[]))
+    code, out = w.run(*admit_args("M2"))
+    assert code == 2 and "append-only" in out["error"], out
+    # A retry row needs the previous attempt settled, and the next number.
+    def too_early(w):
+        w.by_id("M1")["status"] = "RUNNING"
+        w.admission("M1", SRC_UNCHANGED)
+        w.attempt_row("M1", 2)
+    code, out = world(too_early).run(*admit_args("P1b"))
+    assert code == 2 and "needs it settled" in out["error"], out
+    code, out = world(lambda w: (w.refused_training("M1"), w.attempt_row("M1", 3))).run(*admit_args("P1b"))
+    assert code == 2 and "number 2" in out["error"], out
+    # The fresh admission needs confirmed cleanup of every earlier attempt.
+    code, out = world(lambda w: (m1_uncertain(w, "i-M1"), w.attempt_row("M1", 2))).run(*admit_args("M1.2"))
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+    # An expired, unused admission is closed with proof of no launch and reissued through the next attempt row.
+    def closed_unused(w):
+        m1 = w.by_id("M1")
+        m1["status"] = "CLOSED_NO_LAUNCH"
+        w.admission("M1", SRC_UNCHANGED)
+        m1["closure"] = {"reason": "the admission expired before any launch",
+                         "evidence": "no launch record, receipt or provider call exists for its window"}
+        w.attempt_row("M1", 2)
+    w = world(closed_unused)
+    row = w.row("M1")
+    assert row["receipt"] == "CLOSED_NO_LAUNCH" and row["counted_usd"] == "0.00" and "cleanup" not in row, row
+    assert w.run(*admit_args("M1.2"))[0] == 0
+
+    def closed_but_launched(w):     # the search of its window finds a launch: not proven, counted, blocks
+        closed_unused(w)
+        job = w.job_id("M1", "20260924090200")
+        w.git.blobs[("HEAD", ss.TRAINING_RECEIPT_HOME + "/receipt_y/result.json")] = enc(pointer(job, SRC_UNCHANGED, "i-y"))
+    w = world(closed_but_launched)
+    assert w.row("M1")["counted_usd"] == "11.66" and w.account()[1]["unconfirmed"] == ["M1"], w.row("M1")
+    # ... and never rewritten as PLANNED.
+    def running(w):
+        w.by_id("M1")["status"] = "RUNNING"
+        w.admission("M1", SRC_UNCHANGED)
+    w = world(running)
+    w.commit_snapshot()
+    w.edit_slots(lambda d: (d["slots"][5].update(status="PLANNED"), d["slots"][5].pop("admission")))
+    code, out = w.run(*admit_args("M1"))
+    assert code == 2 and "HISTORY_VIOLATION: M1 was RUNNING" in out["error"] and "never rewritten as PLANNED" in out["error"]
+
+
+def test_v2_r2_an_admission_is_recomputed_under_a_lock_valid_300_s_and_single_use():
+    def admitted_world():
+        w = world()
+        w.commit_snapshot()
+        code, out = w.run(*admit_args("P1b"))
+        assert code == 0, out
+        w.commit_snapshot()                                       # the RUNNING row is committed (and pushed)
+        return w, out["admission_record"]
+    w, a = admitted_world()
+    # The record binds the inventory hash, gate version, cap, remaining reserve, cumulative bound, main starts and the
+    # launch identity (Codex R3-F).
+    assert a["valid_until_utc"] == "2026-09-24T12:05:00Z" and a["gate_version"] == ss.GATE_VERSION, a
+    assert ss.SHA.match(a["inventory_sha256"]) and a["lock_nonce"] == w.lock()["nonce"], (a, w.lock())
+    assert w.lock()["state"] == "ADMITTED", w.lock()
+    assert (a["cap_usd"], a["remaining_mandatory_reserve_usd"], a["cumulative_upper_bound_usd"], a["main_starts"]) == (
+        "2.00", "49.64", "5.44", 0), a
+    assert (a["source_sha"], a["bundle_sha256"], a["worker_sha256"], a["checker_sha256"]) == (
+        SRC_WATCHED, BUNDLE, WORKER, CHECKER), a
+    # A second writer is refused while the lock is held, and does not release it.
+    code, out = w.run(*admit_args("P2"))
+    assert code == 1 and any(r.startswith("LOCK_HELD:P1b") for r in out["reasons"]), out
+    assert w.lock()["state"] == "ADMITTED"
+    # Immediately before RunInstances: once, inside the 300 s.
+    code, out = w.run("--launch-check", "P1b", now="2026-09-24T12:04:59Z")
+    assert code == 0 and out["decision"] == "LAUNCH_ONCE", out
+    assert w.lock()["state"] == "LAUNCH_CHECKED"
+    code, out = w.run("--launch-check", "P1b", now="2026-09-24T12:04:59Z")
+    assert code == 1 and any(r.startswith("ADMISSION_ALREADY_USED") for r in out["reasons"]), out
+    # Expiry, a lost lock and a changed input each need a fresh check.
+    w, _a = admitted_world()
+    code, out = w.run("--launch-check", "P1b", now="2026-09-24T12:05:00Z")
+    assert code == 1 and any(r.startswith("ADMISSION_EXPIRED") for r in out["reasons"]), out
+    w, _a = admitted_world()
+    (w.tmp / ss.LOCK_NAME).unlink()
+    code, out = w.run("--launch-check", "P1b", now="2026-09-24T12:01:00Z")
+    assert code == 1 and any(r.startswith("LOCK_LOST") for r in out["reasons"]), out
+    w, _a = admitted_world()
+    (w.tmp / "job" / "watch_record.json").write_bytes(enc(dict(WATCH, note="changed after the admission")))
+    code, out = w.run("--launch-check", "P1b", now="2026-09-24T12:01:00Z")
+    assert code == 1 and any(r.startswith("INPUT_CHANGED") for r in out["reasons"]), out
+    # The receipt's own launch time must lie inside the 300-s validity.
+    w = world(lambda w: (w.done_watched("P1b", "p1b", launched="2026-09-24T09:05:00Z", ended="2026-09-24T09:40:00Z"),
+                         w.invalid("P1b", "late")))
+    unconfirmed_not_this_launch(w, "P1b", "LAUNCHED_AFTER_THE_ADMISSION_VALIDITY")
+    # A record without the V2 binding fields is refused.
+    rejected(world(lambda w: (w.done_training("M1", 10500), w.bare_admission.add("M1"))), "M1",
+             "ADMISSION_RECORD_MISSING_BINDING")
+
+
+def test_v2_r3_x1_a_reused_watched_folder_is_found():
+    # The verifier's X1: P1b attempt 1 (09:01, still running) was committed in p1b/, then deleted from the disk;
+    # attempt 2 (09:03, clean) was launched into the same p1b/ and is named. Round 4 skipped the HEAD copy by its path.
+    def fn(w):
+        watched_attempt(w, "P1b", "p1b", "2026-09-24T09:01:00Z", "2026-09-24T09:36:00Z", running=True)
+        for name in ("launch_record.json", "watch_record.json"):
+            w.git.blobs[("HEAD", "design/p1b/" + name)] = enc(w.files["p1b/" + name])
+        set_row(w, "P1b", watched_attempt(w, "P1b", "p1b", "2026-09-24T09:03:00Z", "2026-09-24T09:38:00Z"))
+    w = world(fn)
+    assert w.row("P1b")["receipt"] == "ACCEPTED", w.row("P1b")
+    unlisted(w, "P1b", "UNLISTED_WATCHED_LAUNCH:p1b/launch_record.json instance i-p1b-0901 launched "
+                       "2026-09-24T09:01:00Z (HEAD)")
+    code, out = w.run(*admit_args("P2"))                                     # the verifier saw exit 0, $55.63
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b" in out["reasons"], out
+
+
+def test_v2_r3_x2_a_retry_prepared_from_a_new_source_is_found():
+    # The verifier's X2: M1 admitted 09:00 with 4444...; attempt 1 (09:01) a capacity refusal, named; attempt 2 (09:15)
+    # prepared from 5555..., ran 20,000 s, identity lost, not listed. Round 4 matched the admitted source prefix only.
+    def fn(w):
+        job = w.job_id("M1", "20260924091500", source="5" * 40)
+        r = pointer(job, "5" * 40, "UNKNOWN", 20000)
+        r["cleanup"].update(complete=False, compute_identity_uncertain=True, instance_ids=[], instances={},
+                            failures=["INSTANCE_IDENTITY_UNKNOWN_AFTER_LAUNCH_ATTEMPT"])
+        w.receipts["r/m1_attempt2/result.json"] = r
+        set_row(w, "M1", training_attempt(w, "M1", "m1", "20260924090100", refused=True))
+    w = world(fn)
+    assert w.row("M1")["receipt"] == "ACCEPTED" and w.row("M1")["counted_usd"] == "1.60", w.row("M1")
+    unlisted(w, "M1", "UNLISTED_TRAINING_ATTEMPT:cas-meta2-tpntr-20260924091500-55555555-m-20260917")
+    code, out = w.run(*admit_args("M2"))                                     # the verifier saw exit 0, $47.02
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_v2_r3_x3_the_same_job_launched_twice_is_found():
+    # The verifier's X3: attempt 1 (job J, 09:01) ran and lost its identity; attempt 2 (the same job J) finished clean
+    # and is named. Round 4 skipped J everywhere because the row lists J; now a file counts as listed only by the listed
+    # receipt's own path AND sha256 (or as a sibling record of it at the listed commit).
+    def fn(w):
+        first = training_attempt(w, "M1", "m1_attempt1", "20260924090100", elapsed=600, uncertain=True)
+        job = first["expected"]["job"]
+        w.receipts["r/m1/result.json"] = pointer(job, SRC_UNCHANGED, "i-M1-again", 10500)
+        set_row(w, "M1", w.pointer_spec("r/m1/result.json", job, SRC_UNCHANGED, "i-M1-again"))
+    w = world(fn)
+    assert w.row("M1")["receipt"] == "ACCEPTED", w.row("M1")
+    unlisted(w, "M1", "r/m1_attempt1/result.json")
+    code, out = w.run(*admit_args("M2"))                                     # the verifier saw exit 0, $54.36
+    assert code == 1 and "CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1" in out["reasons"], out
+
+
+def test_v2_r4_source_bundle_worker_checker_are_bound_and_a_mismatch_blocks_but_cleanup_is_inspected():
+    def other_worker(w, invalid=False):
+        w.done_training("M1", 10500)
+        w.receipts["r/m1/result.json"]["authority"]["worker_sha256"] = "7" * 64
+        if invalid:
+            w.invalid("M1", "wrong worker")
+    w = world(other_worker)
+    rejected(w, "M1", "IDENTITY_NOT_THE_ADMITTED:worker_sha256")            # the scientific result is not accepted
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and any(r.startswith("WRONG_IDENTITY_BLOCKS_THE_STUDY:M1") for r in out["reasons"]), out
+    w = world(lambda w: other_worker(w, invalid=True))
+    row, acct = w.row("M1"), w.account()[1]
+    assert "cleanup" not in row and acct["unconfirmed"] == [] and row["counted_usd"] == "11.66", row   # inspected, counted
+    assert "M1" in acct["wrong_identity"] and "M1" in acct["training_started"], acct                  # and it started
+    code, out = w.run(*admit_args("M2"))
+    assert code == 1 and any(r.startswith("WRONG_IDENTITY_BLOCKS_THE_STUDY:M1") for r in out["reasons"]), out
+
+    def no_checker(w):          # a receipt that does not show a bound hash at all is refused too
+        w.done_training("M1", 10500)
+        del w.receipts["r/m1/result.json"]["authority"]["checker_sha256"]
+    rejected(world(no_checker), "M1", "IDENTITY_NOT_THE_ADMITTED:checker_sha256")
+
+    def watched_other_source(w):    # watched slots now bind source and bundle too (NOTE K), not only the launch time
+        w.done_watched("P1b", "p1b")
+        w.files["p1b/launch_record.json"]["identity"]["source_commit"] = "f" * 40
+        w.invalid("P1b", "wrong source")
+    w = world(watched_other_source)
+    acct = w.account()[1]
+    assert acct["unconfirmed"] == [] and "IDENTITY_NOT_THE_ADMITTED:source_sha" in acct["wrong_identity"]["P1b"][0], acct
+    assert w.run(*admit_args("P2"))[0] == 1
+
+
+def test_v2_r5_a_limit_breach_latches_the_study_but_a_prelaunch_failure_with_no_instance_does_not():
+    w = world(p1b_breach)       # 240 min on a 130-min basis; the watcher saw it terminated; INVALID
+    acct = w.account()[1]
+    assert acct["unconfirmed"] == [] and "P1b" in acct["breaches"], acct["breaches"]
+    for sid in ("P2", "M1", "E1"):
+        code, out = w.run(*admit_args(sid))
+        assert code == 1 and any(r.startswith("LIMIT_BREACH_LATCHED:P1b") for r in out["reasons"]), (sid, out)
+    w = world(lambda w: (w.done_training("M1", 20000), w.invalid("M1", "ran long")))   # past 14,400 s, cleanup confirmed
+    acct = w.account()[1]
+    assert acct["unconfirmed"] == [] and any("ELAPSED_OVER_BASIS" in b for b in acct["breaches"]["M1"]), acct["breaches"]
+
+    def prelaunch(run_instances):
+        def fn(w):
+            m1 = w.by_id("M1")
+            m1["status"] = "CLOSED_NO_LAUNCH"
+            w.admission("M1", SRC_UNCHANGED)
+            job = w.job_id("M1", "20260924090100")
+            m1["closure"] = {"reason": "the launcher's preflight refused before RunInstances",
+                             "evidence": "its receipt shows no launch and no instance; its folder holds no RunInstances call",
+                             "receipt": w.prelaunch_failure_receipt("r/m1_preflight", job, SRC_UNCHANGED, 20260917,
+                                                                    run_instances)}
+        return fn
+    w = world(prelaunch(False))
+    acct = w.account()[1]
+    assert w.row("M1")["counted_usd"] == "0.00" and acct["unconfirmed"] == [] and acct["breaches"] == {}, w.row("M1")
+    assert acct["training_started"] == [] and acct["uncertain"] == [], acct
+    assert w.run(*admit_args("M2"))[0] == 0
+    w = world(prelaunch(True))                        # its folder shows a RunInstances call: not proven, blocks
+    assert w.account()[1]["unconfirmed"] == ["M1"] and w.row("M1")["counted_usd"] == "11.66", w.row("M1")
+    assert "CLOSURE_FOLDER_SHOWS_A_RUNINSTANCES_CALL" in w.row("M1")["cleanup"], w.row("M1")
+
+
+def test_v2_r6_every_started_main_attempt_counts_and_the_stop_stays_latched():
+    def started(w):             # accepted or not, failed or not: a machine ran for M1 and for M2
+        w.done_training("M1", 10500)
+        w.receipts["r/m1/result.json"]["schema"] = "someone-else/1"
+        w.done_training("M2", 10500)
+        w.receipts["r/m2/result.json"].update(status="AWS_CANDIDATE_FAILED")
+        w.invalid("M2", "the job failed after its launch")
+    loaded, acct = world(started).account()
+    assert acct["rejected"] == ["M1"] and acct["training_started"] == ["M1", "M2"], acct   # round 4 counted neither
+
+    def unproven(w):            # neither a proven refusal nor a proven launch: an uncertain start blocks
+        w.refused_training("M3")
+        w.trees["r/m3"] = w.trees["r/m3"] + ["provider_0004.json"]
+        w.invalid("M3", "unclear")
+    code, out = world(unproven).run(*admit_args("P1b"))
+    assert code == 1 and any(r.startswith("MAIN_START_UNCERTAIN:M3") for r in out["reasons"]), out
+
+    def over_30(w):             # 2 main starts ($23.32) + S1, S2, P1a ($5.44) + a prior $2.00 = $30.76
+        w.done_training("M1", 14400)
+        w.done_training("M2", 14400)
+        w.slots.append(slot("PRIOR", "DONE", "2.00", {"kind": "prior_spend", "items": [
+            {"job": "prep_job", "attempt": 1, "usd": "2.00"}]}, {"kind": "prior_spend_declared"}))
+    w = world(over_30)
+    loaded, acct = w.account()
+    assert acct["spent"] == Decimal("30.76") and acct["training_started"] == ["M1", "M2"], acct
+    for sid in ("M3", "P1b", "E1"):
+        code, out = w.run(*admit_args(sid))
+        assert code == 1 and any(r.startswith("OWNER_STOP_TRIGGERED") for r in out["reasons"]), (sid, out)
+    w = world(lambda w: (over_30(w), w.invalid("M2", "re-marked"), w.attempt_row("M2", 2)))  # no reset by moving on
+    for sid in ("M2.2", "M3"):
+        code, out = w.run(*admit_args(sid))
+        assert code == 1 and any(r.startswith("OWNER_STOP_TRIGGERED") for r in out["reasons"]), (sid, out)
+
+
+def test_v2_r7_cancelled_not_launched():
+    note = {"reason": "not needed", "evidence": "never admitted; no attempt, receipt or resource exists"}
+    w = world(lambda w: w.by_id("M5").update(status="CANCELLED_NOT_LAUNCHED", cancellation=dict(note)))
+    loaded, acct = w.account()                   # optional: $0.00 and its cap leaves fallback B
+    assert w.row("M5")["counted_usd"] == "0.00" and acct["optional"] == [] and acct["comparison_incomplete"] == [], acct
+    assert w.run(*admit_args("M1"))[0] == 0
+    w = world(lambda w: w.by_id("M4").update(status="CANCELLED_NOT_LAUNCHED", cancellation=dict(note)))
+    loaded, acct = w.account()                   # mandatory: its cap stays reserved; the comparison is incomplete
+    assert acct["comparison_incomplete"] == ["M4"] and acct["reserve"] == Decimal("51.64"), acct
+    code, out = w.run(*admit_args("M1"))
+    assert code == 1 and any(r.startswith("COMPARISON_INCOMPLETE:M4") for r in out["reasons"]), out
+    code, out = w.run(*admit_args("E1"))         # the partial-study readout is not a main admission
+    assert code == 0 and "M4" in out["admission_arithmetic"], out
+
+    def admitted(w):                             # only a never-admitted row may be cancelled
+        w.by_id("M4").update(status="CANCELLED_NOT_LAUNCHED", cancellation=dict(note))
+        w.admission("M4", SRC_REPAIRED)
+    assert world(admitted).run(*admit_args("E1"))[0] == 2
+
+    def running(w):
+        w.by_id("M4")["status"] = "RUNNING"
+        w.admission("M4", SRC_REPAIRED)
+    w = world(running)
+    w.commit_snapshot()
+    w.edit_slots(lambda d: (d["slots"][8].update(status="CANCELLED_NOT_LAUNCHED", cancellation=dict(note)),
+                            d["slots"][8].pop("admission")))
+    code, out = w.run(*admit_args("E1"))
+    assert code == 2 and "HISTORY_VIOLATION: M4 was RUNNING" in out["error"], out
+    no_evidence = world(lambda w: w.by_id("M5").update(status="CANCELLED_NOT_LAUNCHED", cancellation={"reason": "x"}))
+    assert no_evidence.run(*admit_args("M1"))[0] == 2
+
+
+def test_v2_r8_the_s1_rule_is_accepted_and_names_its_provider_evidence():
+    w = world()
+    pins = w.row("S1")["receipt_pins"]
+    assert "ACCEPTED" in pins["override"] and ss.Q1_ACCEPTANCE in pins["override"], pins
+    resolved, last = pins["override_resolved_by"], w.by_id("S1")["receipt"]["last_provider_record"]
+    assert resolved["last_provider_record"]["path"] == LAST and resolved["last_provider_record"]["sha256"] == last["sha256"]
+    assert "max retries: 0" in resolved["receipt_outcome"] and w.row("S1")["counted_usd"] == "1.60", resolved
+    # Conditional on that evidence: a changed provider record voids the rule, and S1's cleanup is unconfirmed.
+    w = world(after_pin=lambda w: w.git.blobs.update({(C1, LAST): enc(dict(provider(S1_JOB), note="edited"))}))
+    assert "override_resolved_by" not in (w.row("S1").get("receipt_pins") or {})
+    assert w.account()[1]["unconfirmed"] == ["S1"]
+
+
+PRIOR_ITEMS = [{"job": "analogy_repair_t4_job", "attempt": 1, "usd": "0.5596"},
+               {"job": "analogy_repair_t4_job", "attempt": 2, "usd": "0.67"},
+               {"job": "aws_probe_job", "attempt": 1, "usd": "0.4834"},
+               {"job": "hset1a_aws_job", "attempt": 1, "usd": "0.0223"},
+               {"job": "hset1a_aws_job", "attempt": 2, "usd": "0.1827"}]
+
+
+def test_v2_r9_the_prior_spend_row_and_plan_c_bound():
+    def fn(w):
+        w.slots.append(slot("PRIOR", "DONE", "1.92", {"kind": "prior_spend", "items": copy.deepcopy(PRIOR_ITEMS)},
+                            {"kind": "prior_spend_declared"}))
+    w = world(fn)
+    row, (loaded, acct) = w.row("PRIOR"), w.account()
+    assert row["receipt"] == "DECLARED_PRIOR_SPEND" and row["counted_usd"] == "1.92" and "cleanup" not in row, row
+    state = ss.state_document(loaded, acct)
+    assert (state["spent_upper_bound_usd"], state["plan_C_worst_case_total_usd"], state["headroom_usd"]) == (
+        "7.36", "59.00", "1.00"), state
+    assert state["plan_C_is_final"] is False and state["plan_C_if_each_prior_job_also_got_the_0.10_allowance_usd"] == "59.50"
+    code, out = w.run(*admit_args("P1b"))
+    assert code == 0 and out["total_usd"] == "59.00", out
+    assert world(lambda w: (fn(w), w.by_id("PRIOR").update(cap_usd="1.91"))).run(*admit_args("P1b"))[0] == 2
+
+
+Q5_COMMON = ("P2's actual custodian feasibility / exposure receipt", "corrected mechanism validation",
+             "all eighteen checkpoint checks enumerated", "both-arm route acceptance",
+             "the frozen source, data, starting values, worker, checker and environment", "reader AWS acceptance",
+             "complete all-services reserves",
+             "the current single-use technical admission and the current single-use spending admission")
+
+
+def test_v2_q5_main_preconditions_are_the_codex_list_printed_and_not_checked_by_the_money_gate():
+    real = pathlib.Path(__file__).resolve().parent / "STUDY_SLOTS.json"         # read only: no admission, no write
+    rows = {s["id"]: s for s in json.loads(real.read_text(encoding="utf-8"))["slots"]}
+    for sid in ("M1", "M2", "M3", "M4", "M5", "M6"):
+        listed = rows[sid]["preconditions_outside_money_gate"]
+        for item in Q5_COMMON:
+            assert any(p.startswith(item) for p in listed), (sid, item)
+        assert "Codex Q5" in rows[sid]["preconditions_note"] and "NOT by this money gate" in rows[sid]["preconditions_note"]
+    for sid in ("M2", "M3", "M4"):
+        listed = rows[sid]["preconditions_outside_money_gate"]
+        assert any("completed VALID reproduction verdict" in p for p in listed) and "M1 was admitted first" not in listed
+    for sid in ("M5", "M6"):
+        listed = rows[sid]["preconditions_outside_money_gate"]
+        assert any("valid-mismatch predicate" in p and "not a new owner approval token" in p for p in listed), listed
+        assert "fallback B was chosen by the owner" not in listed
+    assert ss.load_slots(real)["digest"] == ss.FROZEN_DEFINITIONS_SHA256          # the re-frozen digest holds
+    w = world(lambda w: w.by_id("M1").update(preconditions_outside_money_gate=rows["M1"]["preconditions_outside_money_gate"]))
+    code, out = w.run(*admit_args("M1"))          # printed with the decision; the money gate admits on money alone
+    assert code == 0 and out["preconditions_outside_money_gate"] == rows["M1"]["preconditions_outside_money_gate"], out
 
 
 def run_all():
