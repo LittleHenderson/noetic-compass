@@ -1,0 +1,38 @@
+{
+ "counts": {
+  "skipped_non_text": 2469,
+  "visible_A_dev.jsonl": {
+   "rows": 0,
+   "differ": 0
+  },
+  "visible_A_train.jsonl": {
+   "rows": 0,
+   "differ": 0
+  },
+  "visible_C_dev.jsonl": {
+   "rows": 256,
+   "differ": 0
+  },
+  "visible_C_train.jsonl": {
+   "rows": 2048,
+   "differ": 0
+  },
+  "visible_G_dev.jsonl": {
+   "rows": 256,
+   "differ": 0
+  },
+  "visible_G_train.jsonl": {
+   "rows": 2048,
+   "differ": 0
+  },
+  "visible_R_dev.jsonl": {
+   "rows": 237,
+   "differ": 0
+  },
+  "visible_R_train.jsonl": {
+   "rows": 2048,
+   "differ": 0
+  }
+ },
+ "examples": []
+}

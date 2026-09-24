@@ -1,0 +1,79 @@
+#!/bin/bash
+# Q4-SDG-1 error-panel diagnostic on ONE throwaway g4dn.xlarge (T4). Claude coordinator, temporary takeover.
+# NO credentials on this machine: ONE download and TWO uploads through time-limited links. Forward and backward passes
+# only; no optimizer is ever created and no weight is written. It always ends by shutting down and is destroyed then.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "q4 error panel hard limit" || true                          # kill switch 0
+LOG=/var/log/q4_error_panel_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/q4_panel
+mkdir -p "$WORK/out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                                # kill switch 2
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 180; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 600 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir bundle && tar -xzf bundle.tar.gz -C bundle || { STATUS=bundle_extract_failed; exit 1; }
+cp bundle/identity.json "$WORK/out/identity.json"
+if find bundle -type f | grep -Ei '(_eval\.jsonl$|sealed)'; then STATUS=CUSTODY_REFUSED_ON_MACHINE; exit 1; fi
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+uv pip install --python "$PY" "torch==__TORCH_VERSION__" --index-url https://download.pytorch.org/whl/cu128 || { STATUS=torch_install_failed; exit 1; }
+uv pip install --python "$PY" "numpy==__NUMPY_VERSION__" pytest || { STATUS=numpy_pytest_install_failed; exit 1; }
+{ "$PY" --version; uname -a; nproc; free -m; nvidia-smi; echo "bundle_sha256=__BUNDLE_SHA256__"; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+"$PY" -c "import torch,sys; ok=torch.cuda.is_available(); print('cuda', ok, torch.cuda.get_device_name(0) if ok else None); sys.exit(0 if ok and 'T4' in torch.cuda.get_device_name(0) else 1)" \
+  || { STATUS=GPU_REQUIRED_T4_NOT_FOUND; exit 1; }
+
+export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 CUBLAS_WORKSPACE_CONFIG=:4096:8
+LAB="$WORK/bundle/pkg/research/helm_cas_expression_lab"
+RUNDIR="$WORK/bundle/pkg/records/q4_authorized_20260922/run_001"
+cd "$LAB"
+
+# STAGE A (no torch): the panel selection must equal the builder's local digest. Stop on any difference.
+STATUS=stageA_select
+"$PY" -B q4_error_panel.py select --run-dir "$RUNDIR" --data-dir data/q3_v0_7 > "$WORK/out/stageA_select.json" 2> "$WORK/out/stageA_select.err"
+A=$?
+DIGEST=$("$PY" -c "import json,sys; print(json.load(open(sys.argv[1]))['digest'])" "$WORK/out/stageA_select.json" 2>/dev/null)
+echo "stageA exit=$A digest=$DIGEST"
+if [ "$A" -ne 0 ] || [ "$DIGEST" != "__SELECTION_DIGEST__" ]; then STATUS=SELECTION_NOT_REPRODUCED; exit 1; fi
+
+# STAGE B (no torch): the builder's torch-free tests, here on Linux without the optional Rust engine. Recorded; not a stop.
+STATUS=stageB_tests
+"$PY" -B -m pytest -q -p no:cacheprovider test_q4_sdg_curriculum.py test_q4_error_panel.py \
+  --junitxml "$WORK/out/stageB_junit.xml" > "$WORK/out/stageB_pytest.log" 2>&1
+B=$?
+tail -n 3 "$WORK/out/stageB_pytest.log"
+
+# STAGE C: the diagnostic (stage 0 replay, then questions 3, 4, 5, 6). No optimizer.
+STATUS=stageC_panel
+( START=$(date +%s); "$PY" -B q4_error_panel.py run --run-dir "$RUNDIR" --data-dir data/q3_v0_7 --out "$WORK/out/panel" \
+    --device cuda:0 --max-wall-seconds __PANEL_WALL_SECONDS__; CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) \
+  > "$WORK/out/stageC_panel.log" 2>&1
+C=$?
+tail -n 5 "$WORK/out/stageC_panel.log"
+sha256sum "$RUNDIR/checkpoint/model_state.pt" > "$WORK/out/checkpoint_sha256_after.txt"
+echo "stageA=$A stageB_tests=$B stageC_panel=$C" > "$WORK/out/EXIT_CODES"
+cat "$WORK/out/EXIT_CODES"
+if [ "$C" -eq 0 ] && [ -f "$WORK/out/panel/result.json" ]; then STATUS=done; else STATUS="finished_with_failures $(cat "$WORK/out/EXIT_CODES")"; fi
+exit 0
