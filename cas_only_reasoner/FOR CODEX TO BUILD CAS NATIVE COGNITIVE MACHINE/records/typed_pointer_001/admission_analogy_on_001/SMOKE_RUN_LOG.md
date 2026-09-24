@@ -38,3 +38,19 @@ That order was itself an owner-authorised placement amendment of 2026-09-11, mad
 
 Either way a retry is a new, recorded attempt with a new admission and a new $15.00 reservation. There are no
 automatic retries.
+
+## Attempt 2 (2026-09-24): preparation
+
+**Owner approval to launch.** The owner's words: "YES to launching the side-by-side training of the repaired Helm.
+You approved up to $60." The plan and its rules are in `PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md` section 0, on
+`research/helm-integration-20260923` at `197caa32`.
+
+**Attempt 1's records are renamed, not changed.** Every byte is kept:
+- `smoke/` is now `smoke_attempt1/`;
+- `receipt_analogy_on_smoke_20260917/` is now `receipt_analogy_on_smoke_20260917_attempt1/`.
+
+The absolute paths written inside `smoke_attempt1/smoke.json` still name the old folders. That file is history and
+is not edited.
+
+**Attempt 2 is a new, recorded job.** It has a new stamp, a new admission and a new $15.00 ledger booking. It is not
+an automatic retry. It uses the same reviewed code, and the zone preference is unchanged (us-west-2a first).
