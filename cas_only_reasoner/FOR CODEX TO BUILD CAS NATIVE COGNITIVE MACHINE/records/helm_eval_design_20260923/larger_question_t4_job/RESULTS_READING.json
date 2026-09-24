@@ -21,9 +21,16 @@
  },
  "cleanup_evidence": {
   "accepted": true,
+  "bound_to_instance": "i-09e14d4afd0e0ebfa",
+  "problems": [],
   "terminated_confirmed": true,
   "volumes_of_this_job_remaining": []
  },
+ "exit_code": {
+  "rule": "0 only for ROUTE_ACCEPTED; 3 job PASS but route not accepted; 1 any other job verdict",
+  "value": 0
+ },
+ "instance_id": "i-09e14d4afd0e0ebfa",
  "job_status": "done",
  "job_verdict": "INTEGRATION_CHECKS_PASS",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
@@ -61,7 +68,7 @@
   "reasons": [],
   "verdict": "ROUTE_ACCEPTED"
  },
- "schema": "claude.larger-question-t4-reading/0.1",
+ "schema": "claude.larger-question-t4-reading/0.2",
  "script": {
   "complete": true,
   "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
@@ -85,6 +92,7 @@
   "verdict": "INTEGRATION_CHECKS_PASS",
   "wall_seconds": 1690.097118063
  },
+ "script_verdict": "INTEGRATION_CHECKS_PASS",
  "source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
  "stage0_smoke": {
   "cuda_available": true,
@@ -104,7 +112,9 @@
   "cost_upper_bound_usd": 0.4489,
   "dollar_ceiling": 3.0,
   "final_state": "terminated",
+  "instance_id": "i-09e14d4afd0e0ebfa",
   "job_status": "done",
+  "launched_utc": "2026-09-24T05:53:38Z",
   "minutes_from_launch_to_watch_end": 35.1,
   "outcome": "RESULTS_RECEIVED",
   "terminated_confirmed": true,
