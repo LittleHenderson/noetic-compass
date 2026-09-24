@@ -1,0 +1,130 @@
+#!/bin/bash
+# Historical gates + rescore job (readout item 7), mode __MODE__. CLAUDE_BUILT_CLAUDE_CHECKED.
+# Adapted from records/typed_pointer_001/aws_rescore_job (T01) and ../../hset2_aws_job. Runs as root through cloud-init
+# on a throwaway CPU machine. NO credentials here: one download and two uploads, through time-limited links.
+# No model is trained or run and torch is never installed. It always ends by shutting down; the machine is destroyed then.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "gates job hard limit" || true                     # kill switch 0: the OS's own power-off
+LOG=/var/log/gates_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/gates_job
+OUT="$WORK/out"
+mkdir -p "$OUT"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                       # kill switch 2: ANY exit uploads and shuts down
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$OUT/STATUS"
+  cp "$LOG" "$OUT/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+( while true; do echo "$(date -u +%T) $(free -m | awk 'NR==2{print "used_mb="$3" available_mb="$7}')" >> "$OUT/memory.log"; sleep 30; done ) &
+
+# ---- THE MACHINE'S OWN ID (IMDSv2). The reader binds these results to the launched instance with it.
+STATUS=instance_id
+TOKEN=$(curl -sS --max-time 10 -X PUT -H "X-aws-ec2-metadata-token-ttl-seconds: 300" http://169.254.169.254/latest/api/token)
+IID=$(curl -sS --max-time 10 -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+[[ "$IID" =~ ^i-[0-9a-f]{8,17}$ ]] || { STATUS=instance_id_unreadable; exit 1; }
+echo "instance_id=$IID" > "$OUT/env.txt"
+
+# ---- TOOLS (pinned versions; the machine refuses any other)
+export HOME=/root
+STATUS=tools
+curl -LsSf --max-time 300 "https://astral.sh/uv/__UV_VERSION__/install.sh" | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+[ "$(uv --version | cut -d' ' -f2)" = "__UV_VERSION__" ] || { STATUS=uv_version_mismatch; exit 1; }
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+[ "$("$PY" -c 'import platform; print(platform.python_version())')" = "__PYTHON_VERSION__" ] || { STATUS=python_version_mismatch; exit 1; }
+uv pip install --python "$PY" "pytest==__PYTEST_VERSION__" || { STATUS=pytest_install_failed; exit 1; }
+{ "$PY" --version; uname -a; echo "nproc=$(nproc)"; free -m; grep -m1 "model name" /proc/cpuinfo; echo "uv_version=$(uv --version)";
+  echo "python_binary_sha256=$(sha256sum "$(readlink -f "$PY")" | cut -d' ' -f1)"; echo "bundle_sha256=__BUNDLE_SHA256__";
+  echo "source_commit=__SOURCE_COMMIT__"; echo "mode=__MODE__"; uv pip freeze --python "$PY"; } >> "$OUT/env.txt" 2>&1
+cat "$OUT/env.txt"
+
+# ---- THE BUNDLE (public course material, code, receipts and weights only; built from git objects)
+STATUS=bundle
+curl -fsS --retry 3 --max-time 900 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+if [ "__MODE__" = "1" ]; then COPIES="gates hist trust t1 t2 t3"; else COPIES="gates"; fi
+for c in $COPIES; do mkdir "pkg_$c" && tar -xzf bundle.tar.gz -C "pkg_$c" || { STATUS=bundle_extract_failed; exit 1; }; done
+rm -f bundle.tar.gz
+export PYTHONDONTWRITEBYTECODE=1
+"$PY" -B "$WORK/pkg_gates/claude/machine_gates.py" anchors --root "$WORK/pkg_gates" > "$OUT/anchors_check.log" 2>&1 \
+  || { STATUS=anchor_mismatch; cat "$OUT/anchors_check.log"; exit 1; }
+cat "$OUT/anchors_check.log"
+
+R=records/typed_pointer_001
+MG="$WORK/pkg_gates/claude/machine_gates.py"
+STATUS=running
+if [ "__MODE__" = "1" ]; then
+  # 1. the frozen grader on the Helm 2.0 study; must reproduce the committed reading exactly
+  ( "$PY" -B "$MG" gates --mode 1 --tree "$WORK/pkg_gates/tree" --study __STUDY__ --out "$OUT"; C=$?
+    echo "gates=$C" > "$OUT/EXIT_gates"; exit $C ) > "$OUT/gates.log" 2>&1 &
+  P1=$!
+  # 2. rescorer 0.4, R1.7 steps 3 and 4 (historical-compatibility mode; both expect exit 4)
+  ( cd "$WORK/pkg_hist/tree"
+    "$PY" -B $R/trusted_rescore.py --historical-compatibility --check-reading $R/trusted_rescore_reading_helm2_experimental.json \
+      --out $R/historical_check_helm2_experimental_r1.json; A=$?
+    "$PY" -B $R/trusted_rescore.py --historical-compatibility --study __STUDY__ \
+      --anchor $R/trust_anchor_helm2_experimental_20208c92.json --out $R/historical_compat_reading_helm2_experimental_0_4r1.json; B=$?
+    cp $R/historical_check_helm2_experimental_r1.json $R/historical_compat_reading_helm2_experimental_0_4r1.json "$OUT/" 2>/dev/null
+    printf "hist_check=%s\nhist_reading=%s\n" "$A" "$B" > "$OUT/EXIT_hist" ) > "$OUT/rescore_historical.log" 2>&1 &
+  P2=$!
+  STAGES="$P1 $P2"
+  # 3. rescorer 0.4, R1.7 step 6 (trusted mode: a NEW schema-0.4 anchor, then a full rescore; expect 0 and RESCORE_OK)
+  ( cd "$WORK/pkg_trust/tree"
+    "$PY" -B $R/trusted_rescore.py --study __STUDY__ --anchor $R/trust_anchor_helm2_experimental_v0_4.json --write-anchor; A=$?
+    B=not_run
+    if [ "$A" -eq 0 ]; then
+      "$PY" -B $R/trusted_rescore.py --study __STUDY__ --anchor $R/trust_anchor_helm2_experimental_v0_4.json \
+        --frozen-reading $R/admission_001/gate_reading.json --out $R/trusted_rescore_reading_helm2_experimental_0_4r1.json; B=$?
+    fi
+    cp $R/trust_anchor_helm2_experimental_v0_4.json $R/trusted_rescore_reading_helm2_experimental_0_4r1.json "$OUT/" 2>/dev/null
+    printf "anchor=%s\nrescore=%s\n" "$A" "$B" > "$OUT/EXIT_trust" ) > "$OUT/rescore_trusted.log" 2>&1 &
+  STAGES="$STAGES $!"
+  # 4. rescorer 0.4, R1.7 step 5: the three test files with the slow tests on, one process and one copy each
+  i=0
+  for T in test_trusted_rescore test_historical_compatibility test_historical_rescore_rule; do
+    i=$((i + 1))
+    ( cd "$WORK/pkg_t$i/tree" && HELM_RUN_SLOW_TESTS=1 "$PY" -m pytest $R/$T.py -q -p no:cacheprovider --durations=15 -rs \
+        --junitxml="$OUT/$T.xml"; C=$?; echo "$T=$C" > "$OUT/EXIT_$T" ) > "$OUT/$T.log" 2>&1 &
+    STAGES="$STAGES $!"
+  done
+  # wait for the six stage jobs only -- never for the timer or the two log loops, which never end
+  for p in $STAGES; do wait "$p"; done
+else
+  # 1. the frozen grader on the repaired study (prereg A5.3: allowed only under ITEM2_PASS, checked by launch.py)
+  "$PY" -B "$MG" gates --mode 2 --tree "$WORK/pkg_gates/tree" --study __STUDY__ --out "$OUT" > "$OUT/gates.log" 2>&1
+  echo "gates=$?" > "$OUT/EXIT_gates"
+  # 2. rescorer 0.4, trusted mode, against the fresh reading placed beside the study (its default frozen reading)
+  ( cd "$WORK/pkg_gates/tree"
+    A=not_run; B=not_run
+    if [ -f "$OUT/gate_reading_fresh.json" ] && [ ! -e "$(dirname __STUDY__)/gate_reading.json" ]; then
+      cp "$OUT/gate_reading_fresh.json" "$(dirname __STUDY__)/gate_reading.json"
+      "$PY" -B $R/trusted_rescore.py --study __STUDY__ --anchor $R/__ANCHOR2__ --write-anchor; A=$?
+      if [ "$A" -eq 0 ]; then
+        "$PY" -B $R/trusted_rescore.py --study __STUDY__ --anchor $R/__ANCHOR2__ --out $R/__READING2__; B=$?
+      fi
+      cp $R/__ANCHOR2__ $R/__READING2__ "$OUT/" 2>/dev/null
+    fi
+    printf "anchor=%s\nrescore=%s\n" "$A" "$B" > "$OUT/EXIT_trust" ) > "$OUT/rescore_trusted.log" 2>&1
+fi
+cat "$OUT"/EXIT_* > "$OUT/EXIT_CODES" 2>/dev/null
+cat "$OUT/EXIT_CODES"
+tail -n 8 "$OUT"/*.log
+"$PY" -B "$MG" decide --mode __MODE__ --out "$OUT" > "$OUT/decide.log" 2>&1
+D=$?
+cat "$OUT/decide.log"
+if [ "$D" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures decide=$D"; fi
+exit 0
