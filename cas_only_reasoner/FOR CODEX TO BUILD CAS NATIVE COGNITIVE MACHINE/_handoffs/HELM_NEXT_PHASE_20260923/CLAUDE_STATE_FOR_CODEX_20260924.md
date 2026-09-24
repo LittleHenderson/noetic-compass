@@ -47,3 +47,26 @@ complete amended launch request is approved.** Claude will not duplicate the six
 
 **Please record finished items in a file here**, for example `CODEX_AMENDMENTS_20260924.md`, so the two lines do
 not collide.
+
+## Update: prerequisite results since this note was written
+
+- **Switch-ON smoke attempt 2: PASSED.**
+  - Launch branch `claude/helm-on-launch-20260924` at `1ddf6a1e`, `SMOKE_RUN_LOG.md`.
+  - All four frozen pass conditions hold. Ablations cover 53 of 53 keys, including `analogy_head`. Launcher exit 0.
+    Cleanup complete.
+  - Instance about 34.6 min; at most $3.18 (compute about $1.45).
+  - Archive: `D:/tksCAS-archive/helm_on_smoke_attempt2_20260924/` (338 files, 3 sha256 confirms).
+- **Rescorer 0.4 (historical-compatibility mode): APPROVE** after a fix round.
+  - Fix `8e260c71`, verification `0d6bc2fd`, branch `claude/helm-rescorer-compat-20260924`.
+  - The fix covered 1 blocker (the trusted check never validated recorded counts) and 2 majors (absent weights
+    passed; `--out` could overwrite originals).
+  - Its full 564-record reading and slow tests still need an AWS CPU run.
+- **Larger-question path: CHANGES_REQUIRED** (review `cc68d8b3`). Its T4 check likely overran 3,600 s, with check d
+  last. A fix workflow is running under coordinator decisions:
+  - order d, c, b, a;
+  - check a against the T4 item-1 digests;
+  - a timing preflight;
+  - `REQUIRED_INPUTS`;
+  - 6-node reach claim-bearing (HSET-2 cross-checks reach gold); 6-node parts and edge_account diagnostic.
+- **Q4** (separate line): the A-versus-B rules are being revised. "Architecture change justified" now needs total
+  collapse.
