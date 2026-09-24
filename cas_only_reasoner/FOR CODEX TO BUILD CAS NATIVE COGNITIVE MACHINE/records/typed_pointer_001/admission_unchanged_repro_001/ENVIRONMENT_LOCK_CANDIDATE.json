@@ -1,0 +1,75 @@
+{
+  "schema": "helm.reproduction-environment/1",
+  "status": "FROZEN",
+  "source_commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "image": {
+    "ami_id": "ami-0fbbd0facbc9e3cff",
+    "provider": "aws",
+    "region": "us-west-2"
+  },
+  "runtime": {
+    "kernel": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "machine": "x86_64",
+    "os": "Linux",
+    "python_implementation": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "python_version": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS"
+  },
+  "accelerator": {
+    "compute_capability": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "driver_version": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "gpu_model": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+    "instance_type": "g7.2xlarge"
+  },
+  "libraries": {
+    "cuda_runtime": "12.8",
+    "cudnn": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "packages": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+    "torch": "2.11.0+cu128"
+  },
+  "numerics": {
+    "cudnn_allow_tf32": false,
+    "deterministic_algorithms": true,
+    "dtype": "float32",
+    "environment_variables": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+    },
+    "float32_matmul_precision": "highest",
+    "matmul_allow_tf32": false,
+    "seeds": {
+      "encoder_seed": 20260916,
+      "model_seed": 20260917,
+      "python_seed": 20260917,
+      "source_seed": 101
+    },
+    "thread_counts": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS"
+  },
+  "comparison": {
+    "required_equal": [
+      "image.ami_id",
+      "image.provider",
+      "image.region",
+      "runtime.kernel",
+      "runtime.machine",
+      "runtime.os",
+      "runtime.python_implementation",
+      "runtime.python_version",
+      "accelerator.compute_capability",
+      "accelerator.driver_version",
+      "accelerator.gpu_model",
+      "accelerator.instance_type",
+      "libraries.cuda_runtime",
+      "libraries.cudnn",
+      "libraries.packages",
+      "libraries.torch",
+      "numerics.cudnn_allow_tf32",
+      "numerics.deterministic_algorithms",
+      "numerics.dtype",
+      "numerics.environment_variables",
+      "numerics.float32_matmul_precision",
+      "numerics.matmul_allow_tf32",
+      "numerics.seeds",
+      "numerics.thread_counts"
+    ],
+    "diagnostic_only": []
+  }
+}

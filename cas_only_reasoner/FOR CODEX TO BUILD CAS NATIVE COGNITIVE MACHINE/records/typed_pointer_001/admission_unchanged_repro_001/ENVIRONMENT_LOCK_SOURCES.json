@@ -1,0 +1,1183 @@
+{
+  "schema": "cncm.helm-unchanged-reproduction-environment-lock-sources/1",
+  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+  "state": "CANDIDATE_NOT_YET_CHECKED_BY_CODEX",
+  "lock": {
+    "path": "records/typed_pointer_001/admission_unchanged_repro_001/ENVIRONMENT_LOCK_CANDIDATE.json",
+    "schema": "helm.reproduction-environment/1"
+  },
+  "arm": {
+    "job_kind": "UNCHANGED_ARM_REPRODUCTION",
+    "model_seed": 20260917,
+    "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+    "reference_receipt": {
+      "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+      "path": "records/typed_pointer_001/receipt_20260917"
+    }
+  },
+  "path_root": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/",
+  "public_refs": [
+    "origin/claude/helm-unchanged-reader-rev-20260924",
+    "origin/codex/helm-controlled-prelaunch-20260924"
+  ],
+  "unestablished_marker": "UNESTABLISHED_FROM_PUBLIC_HISTORICAL_RECORDS",
+  "rule": "A lock field is FILLED only when its complete value is established by RUN_RECORD, PACKAGE_CODE, PACKAGE_CODE_WITH_PINNED_LIBRARY_DEFAULT or IMAGE_METADATA evidence. Every other field holds the exact marker and is a BLOCKER. Nothing was taken from the laptop, and nothing was guessed. SAME_IMAGE_OTHER_JOB candidates are listed with their citations but are not written into the lock.",
+  "evidence_classes": {
+    "RUN_RECORD": "A committed receipt of the Helm 2.0 seed-17 run itself (seeds 18 and 19 corroborate).",
+    "PACKAGE_CODE": "Code of the pinned package (source 20208c92, archive c42370c4) that the run executed and passed through; the run completed.",
+    "PACKAGE_CODE_WITH_PINNED_LIBRARY_DEFAULT": "As PACKAGE_CODE, where the package leaves a setting at the pinned library's documented default (torch 2.11.0+cu128, run-recorded).",
+    "IMAGE_METADATA": "The cloud provider's own description (describe_images) of the recorded, immutable AMI.",
+    "SAME_IMAGE_OTHER_JOB": "A record from a DIFFERENT job on the same AMI and instance type. NOT accepted as establishing a Helm 2.0 value here; shown only as a candidate for a Codex ruling."
+  },
+  "filled": {
+    "image.ami_id": {
+      "value": "ami-0fbbd0facbc9e3cff",
+      "class": "RUN_RECORD",
+      "why": "Each seed receipt preflight.json records the AMI the run was launched from.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/preflight.json",
+          "pointer": [
+            "ami"
+          ],
+          "equals": "ami-0fbbd0facbc9e3cff"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/preflight.json",
+          "pointer": [
+            "ami"
+          ],
+          "equals": "ami-0fbbd0facbc9e3cff"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/preflight.json",
+          "pointer": [
+            "ami"
+          ],
+          "equals": "ami-0fbbd0facbc9e3cff"
+        }
+      ]
+    },
+    "image.provider": {
+      "value": "aws",
+      "class": "RUN_RECORD",
+      "why": "The run priced and launched an Amazon EC2 instance: its preflight quotes ServiceCode AmazonEC2 and its launch record names EC2 instance i-002bc241f50ca41b5. \"aws\" is the provider name the lock uses.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/preflight.json",
+          "pointer": [
+            "pricing_query",
+            "ServiceCode"
+          ],
+          "equals": "AmazonEC2"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/launch.json",
+          "pointer": [
+            "instance_id"
+          ],
+          "equals": "i-002bc241f50ca41b5"
+        }
+      ]
+    },
+    "image.region": {
+      "value": "us-west-2",
+      "class": "RUN_RECORD",
+      "why": "Each seed receipt preflight.json records region us-west-2.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/preflight.json",
+          "pointer": [
+            "region"
+          ],
+          "equals": "us-west-2"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/preflight.json",
+          "pointer": [
+            "region"
+          ],
+          "equals": "us-west-2"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/preflight.json",
+          "pointer": [
+            "region"
+          ],
+          "equals": "us-west-2"
+        }
+      ]
+    },
+    "runtime.machine": {
+      "value": "x86_64",
+      "class": "IMAGE_METADATA",
+      "why": "The provider's own description of the recorded AMI gives Architecture x86_64; an x86_64 image boots only an x86_64 machine, which reports machine x86_64.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "41ff84071a15a21ea3b2d8d37add7f459d34434f",
+          "path": "research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/readiness_001/03_ami.json",
+          "pointer": [
+            "response",
+            "Images",
+            0,
+            "ImageId"
+          ],
+          "equals": "ami-0fbbd0facbc9e3cff"
+        },
+        {
+          "kind": "json",
+          "commit": "41ff84071a15a21ea3b2d8d37add7f459d34434f",
+          "path": "research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/readiness_001/03_ami.json",
+          "pointer": [
+            "response",
+            "Images",
+            0,
+            "Architecture"
+          ],
+          "equals": "x86_64"
+        }
+      ]
+    },
+    "runtime.os": {
+      "value": "Linux",
+      "class": "PACKAGE_CODE",
+      "why": "The run passed the worker preflight, which calls _cuda(), whose execution_guard() refuses unless platform.system() == \"Linux\"; the run completed. The AMI record also says Linux/UNIX.",
+      "citations": [
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/teaching_cycle/gpu_adapter.py",
+          "contains": "require(platform.system() == \"Linux\", \"LINUX_WORKER_REQUIRED\")"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "torch, device = _cuda()"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "status"
+          ],
+          "equals": "COMPLETE_TYPED_POINTER_ARM"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "source_sha"
+          ],
+          "equals": "20208c923d41c24614504d4ecc2b289ecb66eda8"
+        },
+        {
+          "kind": "json",
+          "commit": "41ff84071a15a21ea3b2d8d37add7f459d34434f",
+          "path": "research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/readiness_001/03_ami.json",
+          "pointer": [
+            "response",
+            "Images",
+            0,
+            "PlatformDetails"
+          ],
+          "equals": "Linux/UNIX"
+        }
+      ]
+    },
+    "accelerator.gpu_model": {
+      "value": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+      "class": "RUN_RECORD",
+      "why": "The worker recorded torch.cuda.get_device_name() in worker_report.json runtime.gpu_name (all three seeds).",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "gpu_name"
+          ],
+          "equals": "NVIDIA RTX PRO 4500 Blackwell Server Edition"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "gpu_name"
+          ],
+          "equals": "NVIDIA RTX PRO 4500 Blackwell Server Edition"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "gpu_name"
+          ],
+          "equals": "NVIDIA RTX PRO 4500 Blackwell Server Edition"
+        }
+      ]
+    },
+    "accelerator.instance_type": {
+      "value": "g7.2xlarge",
+      "class": "RUN_RECORD",
+      "why": "Each seed receipt preflight.json records instance type g7.2xlarge.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/preflight.json",
+          "pointer": [
+            "instance_type"
+          ],
+          "equals": "g7.2xlarge"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/preflight.json",
+          "pointer": [
+            "instance_type"
+          ],
+          "equals": "g7.2xlarge"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/preflight.json",
+          "pointer": [
+            "instance_type"
+          ],
+          "equals": "g7.2xlarge"
+        }
+      ]
+    },
+    "libraries.cuda_runtime": {
+      "value": "12.8",
+      "class": "RUN_RECORD",
+      "why": "The worker recorded torch.version.cuda in worker_report.json runtime.cuda_version (all three seeds).",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "cuda_version"
+          ],
+          "equals": "12.8"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "cuda_version"
+          ],
+          "equals": "12.8"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "cuda_version"
+          ],
+          "equals": "12.8"
+        }
+      ]
+    },
+    "libraries.torch": {
+      "value": "2.11.0+cu128",
+      "class": "RUN_RECORD",
+      "why": "The worker recorded torch.__version__ in worker_report.json runtime.torch_version (all three seeds) and refuses to run unless it is exactly 2.11.0+cu128.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "torch_version"
+          ],
+          "equals": "2.11.0+cu128"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260918/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "torch_version"
+          ],
+          "equals": "2.11.0+cu128"
+        },
+        {
+          "kind": "json",
+          "commit": "27fd569831660f35f49c342ceef139c8110a766c",
+          "path": "records/typed_pointer_001/receipt_20260919/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "torch_version"
+          ],
+          "equals": "2.11.0+cu128"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "require(report[\"runtime\"][\"torch_version\"] == \"2.11.0+cu128\""
+        }
+      ]
+    },
+    "numerics.cudnn_allow_tf32": {
+      "value": false,
+      "class": "PACKAGE_CODE",
+      "why": "The worker preflight the run executed sets torch.backends.cudnn.allow_tf32 = False.",
+      "citations": [
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "torch.backends.cudnn.allow_tf32 = False"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "report[\"runtime\"] = {\"device\": str(device), \"torch_version\": str(torch.__version__),"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "status"
+          ],
+          "equals": "COMPLETE_TYPED_POINTER_ARM"
+        }
+      ]
+    },
+    "numerics.deterministic_algorithms": {
+      "value": true,
+      "class": "PACKAGE_CODE",
+      "why": "The worker preflight the run executed sets torch.use_deterministic_algorithms(True).",
+      "citations": [
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "torch.use_deterministic_algorithms(True)"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "report[\"runtime\"] = {\"device\": str(device), \"torch_version\": str(torch.__version__),"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "status"
+          ],
+          "equals": "COMPLETE_TYPED_POINTER_ARM"
+        }
+      ]
+    },
+    "numerics.dtype": {
+      "value": "float32",
+      "class": "PACKAGE_CODE_WITH_PINNED_LIBRARY_DEFAULT",
+      "why": "The learner builds its parameters as float32 (explicit dtype=torch.float32, or torch's default float32 for nn.Linear/LayerNorm). Nothing in the shipped archive changes the default dtype or uses autocast, half or bfloat16 casts. The run's checkpoint records its encoder tensors as float32LE.",
+      "citations": [
+        {
+          "kind": "sha256",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/input/source.zip",
+          "equals": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8"
+        },
+        {
+          "kind": "zip_absent",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/input/source.zip",
+          "pattern": "set_default_dtype|set_default_tensor_type|autocast|\\.half\\(\\)|\\.bfloat16\\(\\)|to\\(torch\\.(?:float16|bfloat16|half)|dtype=torch\\.(?:float16|bfloat16|half)"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+          "contains": "self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/final_checkpoint.json",
+          "pointer": [
+            "metadata",
+            "run_identity",
+            "encoder_identity",
+            "profile",
+            "dtype"
+          ],
+          "equals": "float32LE"
+        }
+      ]
+    },
+    "numerics.environment_variables": {
+      "value": {
+        "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+      },
+      "class": "PACKAGE_CODE",
+      "why": "The worker preflight sets CUBLAS_WORKSPACE_CONFIG=:4096:8 before torch is imported. No module the run loaded sets a thread or numerics variable (the run's own loaded_sources.json lists none of the package modules that do). The other variables the bootstrap sets (PYTHONDONTWRITEBYTECODE, AWS_MAX_ATTEMPTS, AWS_PAGER, CAS_META2_RUN_TEACHING_CYCLE) do not affect predictions and are not lock values. See disclosed residual R1: no record lists the rest of the process environment.",
+      "citations": [
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "os.environ[\"CUBLAS_WORKSPACE_CONFIG\"] = \":4096:8\""
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "research/CAS_META_2_COMPOSITION/aws/graph_training_curriculum_launch.py",
+          "contains": "\"export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''\","
+        },
+        {
+          "kind": "text",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/loaded_sources.json",
+          "contains": "cas_meta2/typed_teaching/pointer_learner.py"
+        },
+        {
+          "kind": "text_absent",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/loaded_sources.json",
+          "absent": [
+            "cas_meta2/campaign.py",
+            "cas_meta2/campaign_v2.py",
+            "cas_meta2/campaign_v3.py",
+            "cas_meta2/train.py",
+            "cas_meta2/train_v2.py",
+            "cas_meta2/train_v3.py",
+            "cas_meta2/br_construction_v8.py",
+            "cas_meta2/child_qualification_gpu_v8.py",
+            "cas_meta2/condition_skill_v9/train.py",
+            "cas_meta2/diagnostic_v8/gpu.py",
+            "cas_meta2/saved_repair_gpu_v8.py"
+          ]
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "status"
+          ],
+          "equals": "COMPLETE_TYPED_POINTER_ARM"
+        }
+      ]
+    },
+    "numerics.float32_matmul_precision": {
+      "value": "highest",
+      "class": "PACKAGE_CODE_WITH_PINNED_LIBRARY_DEFAULT",
+      "why": "Nothing in the shipped archive calls set_float32_matmul_precision or sets fp32_precision, and the preflight sets matmul allow_tf32 = False. In the pinned torch 2.11.0 (version recorded by the run), \"highest\" is the default and is the setting equivalent to allow_tf32 = False.",
+      "library_semantics": "PyTorch 2.11.0, docstring of torch.set_float32_matmul_precision (torch/__init__.py): the \"highest\" setting is the default, equivalent to setting torch.backends.cuda.matmul.allow_tf32 = False. Public library documentation; this checker does not re-read it.",
+      "citations": [
+        {
+          "kind": "sha256",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/input/source.zip",
+          "equals": "c42370c4941384c852feda33303dd70a01e956d28953cf07dd1b981220f31ed8"
+        },
+        {
+          "kind": "zip_absent",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/input/source.zip",
+          "pattern": "set_float32_matmul_precision|fp32_precision"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "torch.backends.cuda.matmul.allow_tf32 = False"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "runtime",
+            "torch_version"
+          ],
+          "equals": "2.11.0+cu128"
+        }
+      ]
+    },
+    "numerics.matmul_allow_tf32": {
+      "value": false,
+      "class": "PACKAGE_CODE",
+      "why": "The worker preflight the run executed sets torch.backends.cuda.matmul.allow_tf32 = False.",
+      "citations": [
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "torch.backends.cuda.matmul.allow_tf32 = False"
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "report[\"runtime\"] = {\"device\": str(device), \"torch_version\": str(torch.__version__),"
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "status"
+          ],
+          "equals": "COMPLETE_TYPED_POINTER_ARM"
+        }
+      ]
+    },
+    "numerics.seeds": {
+      "value": {
+        "encoder_seed": 20260916,
+        "model_seed": 20260917,
+        "python_seed": 20260917,
+        "source_seed": 101
+      },
+      "class": "RUN_RECORD",
+      "why": "The seed-17 run recorded model_seed, encoder_seed and source_seed in worker_report.json design, and python_seed in the checkpoint init_args; the worker builds the learner with python_seed=model_seed.",
+      "citations": [
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "design",
+            "model_seed"
+          ],
+          "equals": 20260917
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "design",
+            "encoder_seed"
+          ],
+          "equals": 20260916
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+          "pointer": [
+            "design",
+            "source_seed"
+          ],
+          "equals": 101
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/final_checkpoint.json",
+          "pointer": [
+            "metadata",
+            "init_args",
+            "python_seed"
+          ],
+          "equals": 20260917
+        },
+        {
+          "kind": "json",
+          "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+          "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/model_identity.json",
+          "pointer": [
+            "python_seed"
+          ],
+          "equals": 20260917
+        },
+        {
+          "kind": "text",
+          "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+          "path": "cncm/typed_pointer_worker.py",
+          "contains": "python_seed=model_seed"
+        }
+      ]
+    }
+  },
+  "blockers": {
+    "runtime.kernel": {
+      "why_not_established": "No Helm 2.0 record states the kernel release.",
+      "established_part": null,
+      "candidate": {
+        "value": "6.17.0-1020-aws",
+        "class": "SAME_IMAGE_OTHER_JOB",
+        "why": "pip install report (platform_release) of teaching job 003 on the same AMI.",
+        "citations": [
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "bootstrap_evidence/torch_install.json",
+            "pointer": [
+              "environment",
+              "platform_release"
+            ],
+            "equals": "6.17.0-1020-aws"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "imageId"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "instanceType"
+            ],
+            "equals": "g7.2xlarge"
+          }
+        ]
+      },
+      "to_resolve": "Established only if Codex rules that a record from ANOTHER job on the same immutable AMI (ami-0fbbd0facbc9e3cff, g7.2xlarge, no package upgrade or reboot in the Helm 2.0 bootstrap) establishes this field for the Helm 2.0 run. Until then it stays a blocker."
+    },
+    "runtime.python_implementation": {
+      "why_not_established": "No Helm 2.0 record states it. The bootstrap runs the first of python3.12, python3.11, python3 found on the image and builds a venv from it; which interpreter that is, is a property of the image, not of the package.",
+      "established_part": null,
+      "candidate": {
+        "value": "CPython",
+        "class": "SAME_IMAGE_OTHER_JOB",
+        "why": "pip install report of teaching job 003 on the same AMI and instance type.",
+        "citations": [
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "bootstrap_evidence/torch_install.json",
+            "pointer": [
+              "environment",
+              "platform_python_implementation"
+            ],
+            "equals": "CPython"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "imageId"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "instanceType"
+            ],
+            "equals": "g7.2xlarge"
+          }
+        ]
+      },
+      "to_resolve": "Established only if Codex rules that a record from ANOTHER job on the same immutable AMI (ami-0fbbd0facbc9e3cff, g7.2xlarge, no package upgrade or reboot in the Helm 2.0 bootstrap) establishes this field for the Helm 2.0 run. Until then it stays a blocker."
+    },
+    "runtime.python_version": {
+      "why_not_established": "No Helm 2.0 record states it. requirements-gpu.txt only allows Python 3.11 or 3.12; the bootstrap takes python3.12 first when the image has it.",
+      "established_part": {
+        "note": "The bootstrap order python3.12, python3.11, python3 (package code).",
+        "citations": [
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/aws/graph_training_curriculum_launch.py",
+            "contains": "\"for p in python3.12 python3.11 python3; do\","
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/aws/recurrent_cjt_launch.py",
+            "contains": "base = next((c for c in ('python3.12', 'python3.11', 'python3')"
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+            "contains": "# AWS Linux Python 3.11/3.12 only; never install or run locally."
+          }
+        ]
+      },
+      "candidate": {
+        "value": "3.12.3",
+        "class": "SAME_IMAGE_OTHER_JOB",
+        "why": "Teaching job 003 on the same AMI records Python 3.12.3; the graph6read and typed-course jobs on the same AMI, with the same bootstrap, show python3.12 selected.",
+        "citations": [
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "bootstrap_evidence/torch_install.json",
+            "pointer": [
+              "environment",
+              "python_full_version"
+            ],
+            "equals": "3.12.3"
+          },
+          {
+            "kind": "zip_text",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "contains": "\"python\":\"3.12.3 (main"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "imageId"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "instanceType"
+            ],
+            "equals": "g7.2xlarge"
+          },
+          {
+            "kind": "text",
+            "commit": "38b5ea965891e0ca2dfba9dc8d764f88074cef32",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/serial_console/console_i-0460ab42e053672d7.txt",
+            "contains": "+ PY=python3.12"
+          },
+          {
+            "kind": "json",
+            "commit": "9ca4a65325a3ae10b309890fc261231b4f8a0f8c",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/preflight.json",
+            "pointer": [
+              "ami"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "json",
+            "commit": "9ca4a65325a3ae10b309890fc261231b4f8a0f8c",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/launch.json",
+            "pointer": [
+              "instance_id"
+            ],
+            "equals": "i-0460ab42e053672d7"
+          },
+          {
+            "kind": "text",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/console_decoded.log",
+            "contains": "+ PY=python3.12"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/preflight.json",
+            "pointer": [
+              "ami"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/launch.json",
+            "pointer": [
+              "instance_id"
+            ],
+            "equals": "i-0016c39d90143e316"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/instance.json",
+            "pointer": [
+              "InstanceId"
+            ],
+            "equals": "i-0016c39d90143e316"
+          }
+        ]
+      },
+      "to_resolve": "Established only if Codex rules that a record from ANOTHER job on the same immutable AMI (ami-0fbbd0facbc9e3cff, g7.2xlarge, no package upgrade or reboot in the Helm 2.0 bootstrap) establishes this field for the Helm 2.0 run. Until then it stays a blocker."
+    },
+    "accelerator.compute_capability": {
+      "why_not_established": "No Helm 2.0 record states it, and no project record of any job does either (torch.cuda.get_device_capability was never recorded).",
+      "established_part": null,
+      "candidate": null,
+      "external_note": "NVIDIA's public GPU tables list Blackwell RTX PRO GPUs as compute capability 12.0. That is a vendor specification, not a historical record of this run; it is not verified here and is not offered as a candidate.",
+      "to_resolve": "A ruling that vendor specification of the recorded GPU model establishes this field, or leave it a blocker."
+    },
+    "accelerator.driver_version": {
+      "why_not_established": "No Helm 2.0 record states the NVIDIA driver version.",
+      "established_part": null,
+      "candidate": {
+        "value": "595.91.07",
+        "class": "SAME_IMAGE_OTHER_JOB",
+        "why": "The serial consoles of two other jobs on the same AMI and instance type (graph6read 2026-09-12; typed course 2026-09-17) show the kernel loading NVIDIA open module 595.91.07.",
+        "citations": [
+          {
+            "kind": "text",
+            "commit": "38b5ea965891e0ca2dfba9dc8d764f88074cef32",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/serial_console/console_i-0460ab42e053672d7.txt",
+            "contains": "NVRM: loading NVIDIA UNIX Open Kernel Module for x86_64  595.91.07"
+          },
+          {
+            "kind": "json",
+            "commit": "9ca4a65325a3ae10b309890fc261231b4f8a0f8c",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/preflight.json",
+            "pointer": [
+              "ami"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "json",
+            "commit": "9ca4a65325a3ae10b309890fc261231b4f8a0f8c",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912062331-b34e3d92/launch.json",
+            "pointer": [
+              "instance_id"
+            ],
+            "equals": "i-0460ab42e053672d7"
+          },
+          {
+            "kind": "text",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/console_decoded.log",
+            "contains": "NVRM: loading NVIDIA UNIX Open Kernel Module for x86_64  595.91.07"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/preflight.json",
+            "pointer": [
+              "ami"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/launch.json",
+            "pointer": [
+              "instance_id"
+            ],
+            "equals": "i-0016c39d90143e316"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/instance.json",
+            "pointer": [
+              "InstanceId"
+            ],
+            "equals": "i-0016c39d90143e316"
+          }
+        ]
+      },
+      "to_resolve": "Established only if Codex rules that a record from ANOTHER job on the same immutable AMI (ami-0fbbd0facbc9e3cff, g7.2xlarge, no package upgrade or reboot in the Helm 2.0 bootstrap) establishes this field for the Helm 2.0 run. Until then it stays a blocker."
+    },
+    "libraries.cudnn": {
+      "why_not_established": "The Helm 2.0 bootstrap installed torch==2.11.0 from the cu128 index without hashes and recorded neither the installed wheels nor torch.backends.cudnn.version().",
+      "established_part": null,
+      "candidate": {
+        "value": "9.19.0",
+        "class": "SAME_IMAGE_OTHER_JOB",
+        "why": "Two other jobs that installed torch==2.11.0 from the same index on the same AMI show pip resolving nvidia-cudnn-cu12==9.19.0.56 as a pin of torch itself. torch reports cuDNN as major.minor.patch (91900), so the lock form would be 9.19.0.",
+        "citations": [
+          {
+            "kind": "zip_text",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "bootstrap_evidence/bootstrap.log",
+            "contains": "Collecting nvidia-cudnn-cu12==9.19.0.56 (from torch==2.11.0)"
+          },
+          {
+            "kind": "zip_text",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "bootstrap_evidence/environment.txt",
+            "contains": "nvidia-cudnn-cu12==9.19.0.56"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "imageId"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "zip_json",
+            "commit": "4847bd9fa7e32136090586065282ae36ecc80aaf",
+            "path": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/job_003/launch/partial_collected/artifacts.zip",
+            "member": "train/worker_identity.json",
+            "pointer": [
+              "instance",
+              "instanceType"
+            ],
+            "equals": "g7.2xlarge"
+          },
+          {
+            "kind": "text",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/console_decoded.log",
+            "contains": "Collecting nvidia-cudnn-cu12==9.19.0.56 (from torch==2.11.0)"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/preflight.json",
+            "pointer": [
+              "ami"
+            ],
+            "equals": "ami-0fbbd0facbc9e3cff"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/receipt_002/launch.json",
+            "pointer": [
+              "instance_id"
+            ],
+            "equals": "i-0016c39d90143e316"
+          },
+          {
+            "kind": "json",
+            "commit": "a047110726dae3900466cf0f67c67e98efc3a3c1",
+            "path": "records/typed_numeric_001/monitoring_002_20260917T030443848998Z/instance.json",
+            "pointer": [
+              "InstanceId"
+            ],
+            "equals": "i-0016c39d90143e316"
+          }
+        ]
+      },
+      "to_resolve": "Established only if Codex rules that a record from ANOTHER job on the same immutable AMI (ami-0fbbd0facbc9e3cff, g7.2xlarge, no package upgrade or reboot in the Helm 2.0 bootstrap) establishes this field for the Helm 2.0 run. Until then it stays a blocker."
+    },
+    "libraries.packages": {
+      "why_not_established": "The field needs every installed wheel with name, version and SHA-256. The Helm 2.0 bootstrap installed torch and requirements-gpu.txt without hashes and recorded no installed-package list, so no SHA-256 of any third-party wheel and no transitive dependency version is recorded. No other job installed the same requirement set on the same date, so there is no complete candidate.",
+      "established_part": {
+        "rows_with_sha256": [
+          {
+            "name": "casformer_reference",
+            "version": "0.1.0",
+            "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+          },
+          {
+            "name": "cas_neural_cjt",
+            "version": "0.2.0",
+            "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+          }
+        ],
+        "versions_without_sha256": [
+          {
+            "name": "torch",
+            "version": "2.11.0+cu128"
+          },
+          {
+            "name": "numpy",
+            "version": "2.2.6"
+          },
+          {
+            "name": "jsonschema",
+            "version": "4.26.0"
+          },
+          {
+            "name": "pytest",
+            "version": "9.0.2"
+          }
+        ],
+        "citations": [
+          {
+            "kind": "json",
+            "commit": "3da10d84652988190f66e3c239ee5cdeee8cc9dc",
+            "path": "research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_20208c92/receipt.json",
+            "pointer": [
+              "manifest",
+              "wheels",
+              "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+              "sha256"
+            ],
+            "equals": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+          },
+          {
+            "kind": "json",
+            "commit": "3da10d84652988190f66e3c239ee5cdeee8cc9dc",
+            "path": "research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_20208c92/receipt.json",
+            "pointer": [
+              "manifest",
+              "wheels",
+              "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+              "sha256"
+            ],
+            "equals": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+          },
+          {
+            "kind": "sha256",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+            "equals": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379"
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+            "contains": "numpy==2.2.6"
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+            "contains": "jsonschema==4.26.0"
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+            "contains": "pytest==9.0.2"
+          },
+          {
+            "kind": "text",
+            "commit": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+            "path": "research/CAS_META_2_COMPOSITION/aws/recurrent_cjt_launch.py",
+            "contains": "'--disable-pip-version-check', 'torch==2.11.0',"
+          },
+          {
+            "kind": "json",
+            "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+            "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/worker_report.json",
+            "pointer": [
+              "runtime",
+              "torch_version"
+            ],
+            "equals": "2.11.0+cu128"
+          }
+        ]
+      },
+      "candidate": null,
+      "to_resolve": "No public historical record can complete this field. Only a ruling that changes what the field must contain for a historical run could; otherwise it stays a blocker."
+    },
+    "numerics.thread_counts": {
+      "why_not_established": "No module the run loaded sets a thread count, so torch used its machine-dependent default, and no record captured torch.get_num_threads() or the CPU count.",
+      "established_part": {
+        "note": "The run set no thread count (no loaded module sets one).",
+        "citations": [
+          {
+            "kind": "text",
+            "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+            "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/loaded_sources.json",
+            "contains": "cas_meta2/typed_teaching/pointer_learner.py"
+          },
+          {
+            "kind": "text_absent",
+            "commit": "c8d5c430eec23a8fadd98bbcd045fecf03d86239",
+            "path": "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/loaded_sources.json",
+            "absent": [
+              "cas_meta2/campaign.py",
+              "cas_meta2/campaign_v2.py",
+              "cas_meta2/campaign_v3.py",
+              "cas_meta2/train.py",
+              "cas_meta2/train_v2.py",
+              "cas_meta2/train_v3.py",
+              "cas_meta2/br_construction_v8.py",
+              "cas_meta2/child_qualification_gpu_v8.py",
+              "cas_meta2/condition_skill_v9/train.py",
+              "cas_meta2/diagnostic_v8/gpu.py",
+              "cas_meta2/saved_repair_gpu_v8.py"
+            ]
+          }
+        ]
+      },
+      "candidate": null,
+      "to_resolve": "No public historical record can establish this field. It stays a blocker unless Codex rules otherwise."
+    }
+  },
+  "blocker_list": [
+    "runtime.kernel",
+    "runtime.python_implementation",
+    "runtime.python_version",
+    "accelerator.compute_capability",
+    "accelerator.driver_version",
+    "libraries.cudnn",
+    "libraries.packages",
+    "numerics.thread_counts"
+  ],
+  "disclosed_residuals": [
+    {
+      "id": "R1",
+      "field": "numerics.environment_variables",
+      "text": "The lock holds the one prediction-affecting variable the package sets. No record lists the rest of the Helm 2.0 process environment, so the ABSENCE of other prediction-affecting variables (for example NVIDIA_TF32_OVERRIDE, PYTHONHASHSEED, OMP_NUM_THREADS) is not recorded. It is disclosed here, not written as a blocker, because revision 5 refuses a lock whose environment_variables lacks the pinned CUBLAS_WORKSPACE_CONFIG."
+    },
+    {
+      "id": "R2",
+      "field": "numerics.float32_matmul_precision",
+      "text": "The value rests on package code plus the pinned library's documented default, not on a recorded observation. If Codex does not accept that class, this field becomes a ninth blocker."
+    },
+    {
+      "id": "R3",
+      "field": "numerics.dtype",
+      "text": "Same class as R2 for the nn.Linear/LayerNorm layers created without an explicit dtype."
+    }
+  ]
+}
