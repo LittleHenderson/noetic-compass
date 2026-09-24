@@ -1,0 +1,274 @@
+{
+  "schema": "cas.closed-loop.source-bindings/0.1",
+  "lane": "CAS-CLOSED-LOOP-1",
+  "utc": "2026-09-24T17:05:27.059320+00:00",
+  "source_commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+  "source_branch": "research/helm-integration-20260923",
+  "inspection": "Two focused locator/interface passes plus exact referenced-file reads; no blanket content search or repository-wide absence claim",
+  "components": [
+    {
+      "id": "reference_controller",
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_engine.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "306a64fe93a94fd156fbb66339a8fd7b2ead9323",
+      "sha256": "87577847c4c6bce8e12652dbde4c7f6ecd6874275b7c1c80e01d44e9a9d5cae7",
+      "bytes": 96574,
+      "entry_points_inspected": [
+        "waterfill",
+        "RC01Engine"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Reference routing/repair order; not a second live coordinator"
+    },
+    {
+      "id": "reference_commit",
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_coordinator.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "ff8f50f1f5e84e4d82c32e4a6c375b24bdb100d0",
+      "sha256": "f687d074cab77c5ffd71f7a8a577cbe362b8ecf9b212ad72a4c1544836b8d87b",
+      "bytes": 31226,
+      "entry_points_inspected": [
+        "HardenedCoordinator",
+        "PublicationCoordinator"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Reference authority boundaries; native coordinator remains authoritative for selected witness"
+    },
+    {
+      "id": "reference_types",
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_types.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "614ee08ba03a61636ae7ed2e23764d7dcfdcdc3c",
+      "sha256": "9729e590276a7dcb8ac23e22b6c5343ff97bfdf8bf9224ce7a0df1e5cb1e6068",
+      "bytes": 21103,
+      "entry_points_inspected": [
+        "Cause",
+        "EffectCandidate",
+        "ComputeBudget"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Do not silently cast distinct native/reference state schemas"
+    },
+    {
+      "id": "compiler_ohm",
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/cas_ohm.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "bb6c70f7b41c50c110ea62d769edab885d212d0c",
+      "sha256": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "bytes": 14027,
+      "entry_points_inspected": [
+        "make_scale",
+        "make_quantity",
+        "attention_flow",
+        "required_drive",
+        "effective_constraint"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Exact declared design quantities; not calibrated observations"
+    },
+    {
+      "id": "diagnostic_ohm",
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "17295cd374d460407ee24f7c1233ffd2498acf9c",
+      "sha256": "418e77a091cd9c68ada54016c15f762b836bb3c998a8080f5e2678a8291537f9",
+      "bytes": 44828,
+      "entry_points_inspected": [
+        "i_pred",
+        "delta_current",
+        "asom",
+        "check_eligibility",
+        "require_eligible"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Independent diagnostics; missing calibration remains unavailable"
+    },
+    {
+      "id": "pcba_reader",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_reader.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "afef4a7b1ab3020a2c91df9a2a1542af2533cdb5",
+      "sha256": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+      "bytes": 18221,
+      "entry_points_inspected": [],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Syntax only; PASS confers no executable semantics"
+    },
+    {
+      "id": "pcba_check",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_check.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "e5e328f168ce928c68adccb070c9ac76fc7f97d9",
+      "sha256": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb",
+      "bytes": 21391,
+      "entry_points_inspected": [],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Static checks remain distinct from execution"
+    },
+    {
+      "id": "pcba_component_adapter",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_component_adapter.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "9d10bdf390c721455cf5eb4181d845823d19a93a",
+      "sha256": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd",
+      "bytes": 17666,
+      "entry_points_inspected": [],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Reuse supported component contract, not whole circuit solver"
+    },
+    {
+      "id": "native_host",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/native_engine.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "225a8f05c017dacce5dde7f0b60cf9136b5c9ef6",
+      "sha256": "e547accecf3860959a6ce75613c657af6c1743ef2e40487efd075df4f0333d5b",
+      "bytes": 22693,
+      "entry_points_inspected": [
+        "NativeMachine.start",
+        "NativeMachine.advance",
+        "NativeMachine.journal"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Checked single-method witness"
+    },
+    {
+      "id": "native_coordinator",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/native_kernel.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "976b5bdaaa43db5ffae29c3a6c047e1e8ca505e9",
+      "sha256": "f102da3558530bdf2342f7270e13229fdb95c4ba18c79823f268b9ae6e42ec89",
+      "bytes": 34048,
+      "entry_points_inspected": [
+        "NativeCoordinator"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Existing authoritative commit only"
+    },
+    {
+      "id": "compound_host",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/compound_engine.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "c9b639033a84de8f030ca9f5e9e9b091265dbc3a",
+      "sha256": "4ac54f42a0827961c2b833c5fadb6349b3f41e371a5eb9e71389669a3b1bc82e",
+      "bytes": 15817,
+      "entry_points_inspected": [
+        "CompoundMachine.start",
+        "CompoundMachine.advance",
+        "CompoundMachine.journal",
+        "CompoundMachine.rollback"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Selected two-level acquisition witness"
+    },
+    {
+      "id": "compound_model",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/compound_model.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "4001643ceed589d0307e5fe1248d6905a9b48621",
+      "sha256": "142ae1a416c1280cd5cbe2e1ad60776223ebb33de32136ceebb600dde3856ac8",
+      "bytes": 19230,
+      "entry_points_inspected": [
+        "create_problem",
+        "CompoundFrame",
+        "CompoundCall"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Exact caller/frame/source/input identity"
+    },
+    {
+      "id": "compound_coordinator",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/compound_kernel.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "852924b49cca26a2f7b3e33e52cb0688a4f3f13c",
+      "sha256": "2e82c718d56ad68329c30bbdcc03481f8ea6766a8cc8a7ab83b4e377077fc966",
+      "bytes": 35494,
+      "entry_points_inspected": [
+        "CompoundCoordinator"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Selected live commit authority; never replaced by atlas"
+    },
+    {
+      "id": "compound_recovery",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/compound_recovery.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "f01a6641dd2a8b176fe438fe6c2f2d2148b508aa",
+      "sha256": "bf4fd92512a9509b1c36746af2b9df795ad4a3fdfa580bb318bc4c0c7ba5f9db",
+      "bytes": 15197,
+      "entry_points_inspected": [
+        "recover_compound_journal"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Replay with caller-trusted genesis/ingress/anchor"
+    },
+    {
+      "id": "native_atlas",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_native_adapter.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "976c72e0931eb7c6bd6c7dad25c905771b998302",
+      "sha256": "046eca92d80ced6e517f18917aede7c319dbff1e28b14060400c21d6a40a4e5b",
+      "bytes": 12725,
+      "entry_points_inspected": [
+        "native_atlas_from_journal"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Read-only projection from semantic recovery"
+    },
+    {
+      "id": "compound_atlas",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_compound_adapter.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "2245e78ecc92b3005fbd0a4103f5581cc336222d",
+      "sha256": "5793b49ba31ba3ea46b234e6d6e63fcd8e9f089a92cf8c622ac2d8e9779426e3",
+      "bytes": 31337,
+      "entry_points_inspected": [
+        "compound_atlas_from_journal",
+        "work_from_catalog"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Exact event projection; actual work distinguished from reservation"
+    },
+    {
+      "id": "scoped_atlas",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_scoped_compound.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "67a03e1b495b351f27ea3bb48d4e60f22f6509c0",
+      "sha256": "63667ff1b170efd2f105114cf6bfdc2c1a9d5071e4d01997ba4439fc4b9bb289",
+      "bytes": 15386,
+      "entry_points_inspected": [
+        "ScopePath",
+        "check_path"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Snapshot-bound navigation, never authority"
+    },
+    {
+      "id": "ohm_atlas",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_ohm_atlas.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "571f8e0e614801f1537890a8fcd59225f52181bb",
+      "sha256": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f",
+      "bytes": 30449,
+      "entry_points_inspected": [
+        "exact_address",
+        "resolve_address"
+      ],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Existing declared-profile address semantics; do not apply design-document schema to native journals"
+    },
+    {
+      "id": "renderer",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/render_rpa_view.py",
+      "commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+      "git_blob": "29eaa15750edfcff7060ad48bc8db9f8c61aaf67",
+      "sha256": "e3facb51458aac200dc97b89bbf6070511bd54344d2d617ab72cfbf78a779bb9",
+      "bytes": 33729,
+      "entry_points_inspected": [],
+      "owner": "existing upstream component workstream; read-only in this lane",
+      "boundary": "Reuse existing offline display, no new controller"
+    }
+  ],
+  "q4_status": "Existing Claude Q4 owner supplies saved public error summary later; no model or protected outputs opened",
+  "runtime_validation": "NOT_RUN",
+  "new_execution_profile": "cas.closed-loop.native-stage/0.1"
+}

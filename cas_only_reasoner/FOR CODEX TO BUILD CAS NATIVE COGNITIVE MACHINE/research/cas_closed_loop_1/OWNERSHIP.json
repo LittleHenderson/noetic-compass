@@ -1,0 +1,23 @@
+{
+  "schema": "cas.closed-loop.ownership/0.1",
+  "builder": "Codex /root in existing Helm task",
+  "reviewer": "Claude existing coordinator; one focused changed-path review",
+  "aws_runner": "Claude existing runner",
+  "worktree": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1",
+  "branch": "codex/cas-closed-loop-1",
+  "base_commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+  "allowed_write_root": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/cas_closed_loop_1/",
+  "upstream_components": "READ_ONLY",
+  "active_studies": "Helm and required readout first; no active-source edit, preemption or duplicate process",
+  "excluded_worktrees": [
+    "original dirty OneDrive checkout",
+    "Claude Helm integration, repaired launch, unchanged reproduction and reader trees",
+    "Q4 tree",
+    "DeepSeek CAS_RRK_v0.1",
+    "Codex Helm amendment worktree except its independently assigned reviews"
+  ],
+  "authorization_record": "_handoffs/CAS_CLOSED_LOOP_1/DIRECTIVE.md at 2636bbb6e0f41a37ba2c20df08cdf51185718617",
+  "authorization_status": "Agent-authored transcription checked against standing project delegation; not owner signature or launch receipt",
+  "resource_envelope": "Separate supervisor-selected30 USD planning envelope in immutable package; no money reserved or spent here; actual jobs require Claude current priced bounded admission",
+  "paid_jobs_started": 0
+}

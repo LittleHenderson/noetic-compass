@@ -1,0 +1,137 @@
+{
+  "schema": "cas.closed-loop.return-address-test-map/0.1",
+  "source_commit": "2636bbb6e0f41a37ba2c20df08cdf51185718617",
+  "addendum": "_handoffs/CAS_CLOSED_LOOP_1/CAS_RPA_RETURN_ADDRESS_ADDENDUM_v1.md",
+  "mapping": [
+    {
+      "acceptance_ids": [
+        "AT15",
+        "AT20"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+      "function": "test_real_nested_construction_installs_program_and_resumes_exact_parent",
+      "sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+      "source_assertion": "Two acquisition depths, root identity and installed dependencies",
+      "new_adapter_case_needed": "Bind each waiting frame to its own snapshot/node address",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT16",
+        "AT17",
+        "AT19",
+        "AT27"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+      "function": "test_wrong_return_frame_cannot_resume_or_write_parent",
+      "sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+      "source_assertion": "Wrong frame cannot resume parent",
+      "new_adapter_case_needed": "Wrong atlas address cannot choose another native continuation",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT16",
+        "AT17",
+        "AT19",
+        "AT27"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+      "function": "test_duplicate_and_stale_requests_do_not_open_a_call_or_spend_work",
+      "sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+      "source_assertion": "Duplicate/stale native requests rejected",
+      "new_adapter_case_needed": "Repeated view event cannot dispatch a new native request",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT10",
+        "AT21",
+        "AT22"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py",
+      "function": "test_actual_source_fresh_process_recovers_each_cut_then_reuses_program",
+      "sha256": "2e9a039661e79e8386031836b7fd573d425d2e588a9ece7c003cc783eb0c4c17",
+      "source_assertion": "Real-profile fresh process replay and reuse",
+      "new_adapter_case_needed": "Preserve root/parent address chain across restart",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT10",
+        "AT21",
+        "AT22"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py",
+      "function": "test_failures_replay_exact_refusal_costs_and_unwind",
+      "sha256": "2e9a039661e79e8386031836b7fd573d425d2e588a9ece7c003cc783eb0c4c17",
+      "source_assertion": "Failure/refusal work and unwind replay",
+      "new_adapter_case_needed": "Do not reconstruct budget from suspended snapshot",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT24",
+        "AT25",
+        "AT26"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adapter.py",
+      "function": "test_suspended_frame_and_next_action_are_exact_read_only_projections",
+      "sha256": "94033b21bf292ce7b7c77717459cd47af00713a02d0f850fe526b61db0922abc",
+      "source_assertion": "Read-only frame projection",
+      "new_adapter_case_needed": "Equal/missing profiles cannot merge two call occurrences",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT24",
+        "AT25",
+        "AT26"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+      "function": "test_focus_and_hypothesis_only_change_view_handles",
+      "sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+      "source_assertion": "Focus changes view only",
+      "new_adapter_case_needed": "Layout/recentering leaves return-address resolution unchanged",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT10",
+        "AT21",
+        "AT27"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+      "function": "test_stale_duplicate_proposal_does_not_reuse_previous_work_charge",
+      "sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+      "source_assertion": "No duplicate work-charge reuse",
+      "new_adapter_case_needed": "Adapter preserves one event/address association",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT24",
+        "AT27"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+      "function": "test_resealed_false_journal_still_fails_actual_semantic_replay",
+      "sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+      "source_assertion": "Resealing cannot bypass semantic recovery",
+      "new_adapter_case_needed": "No successful adapter view from tampered replay",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    },
+    {
+      "acceptance_ids": [
+        "AT25",
+        "AT27"
+      ],
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_scoped_compound.py",
+      "function": "test_leaf_entry_nonchild_jump_and_wrong_snapshot_are_refused",
+      "sha256": "633ddfb3002d84f4da6ac3ed178c6820d2d31244ca1024c9d6d1d2a891edb5fe",
+      "source_assertion": "Wrong snapshot navigation refused",
+      "new_adapter_case_needed": "Use exact matching frame/snapshot, no nearest-node fallback",
+      "execution_status": "NOT_RUN_BY_CODEX"
+    }
+  ],
+  "limit": "Source assertions located, not passing test claims. No nested trace produced by this task yet."
+}

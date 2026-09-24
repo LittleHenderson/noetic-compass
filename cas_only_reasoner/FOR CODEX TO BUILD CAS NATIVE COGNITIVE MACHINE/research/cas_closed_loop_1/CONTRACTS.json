@@ -1,0 +1,69 @@
+{
+  "schema": "cas.closed-loop.contracts/0.1",
+  "status": "M1_SELECTED_CONTRACT_RUNTIME_ADAPTER_NOT_IMPLEMENTED",
+  "runtime": "cncm.compound-journal/0.5",
+  "profile": "cas.closed-loop.native-stage/0.1",
+  "authority": "Only existing CompoundCoordinator commits native state; reference controller can propose allocation, renderer cannot resume callers",
+  "state_axes": {
+    "readiness": [
+      "READY",
+      "BLOCKED",
+      "UNAVAILABLE"
+    ],
+    "region_state": "Separate diagnostic field; UNASSESSED absent eligible measurement",
+    "semantic_outcome": "Native checked result and commitment status, never inferred from flow",
+    "diagnostic_availability": [
+      "ELIGIBLE",
+      "UNASSESSED",
+      "INVALID"
+    ]
+  },
+  "quantity_contract": {
+    "unit": "native_transition_attempt",
+    "window": "one explicitly identified host-step observation window; event interval and monotonic wall interval retained separately",
+    "I_predicted": "Declared design prediction via pinned compiler Ohm facade, separately sourced V/R; not derived from I_executed",
+    "I_allocated": "Integer grant for at most one permitted next native stage in this first profile; allocation alone creates no event",
+    "I_executed": "Observed coordinator trace event occurrences from the invoked native step, including rejected attempts; zero when actuator disabled",
+    "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
+    "independence": "Observe executor trace after invocation, not by copying grant or substituting Ohm output",
+    "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met"
+  },
+  "first_actuator": {
+    "operation": "CompoundMachine.advance(allow_acquisition=...) through one typed, budget-masked host-step adapter",
+    "scope": "Positive grant permits one next existing native stage; zero/disabled grant performs no advance; acquisition flag only permits the existing acquisition transition",
+    "native_budget": "Current native budget remains binding; wrapper cannot reset, refund or exceed it; exact deeper work still charged by coordinator",
+    "not_supported": [
+      "Arbitrary PCBA passive transfer execution",
+      "General feedback/timing/circuit simulation",
+      "New CJT/World casts",
+      "Neural online updates",
+      "General shared-child fan-out"
+    ]
+  },
+  "board_profile": {
+    "parent_transformation": "Existing compound root call and checked application",
+    "prerequisite_acquisition": "Existing primitive/compound construction, qualification and installation intents",
+    "verification_commit": "Existing checked proof and authorized commitment; no answer supplied by adapter",
+    "pcba_boundary": "Parse and check declared supported boards with existing reader; only explicitly mapped native operations execute; all other constructs refused as unsupported"
+  },
+  "return_contract": {
+    "identity": [
+      "episode/run",
+      "branch",
+      "source_snapshot",
+      "root_goal",
+      "root_call_occurrence",
+      "immediate_parent_call",
+      "frame_or_continuation",
+      "saved_resume_stage",
+      "inputs_digest",
+      "source_profile",
+      "bias_version_at_suspension"
+    ],
+    "atlas": "Snapshot-bound node/frame address plus authoritative native continuation reference. Profile coordinates and screen layout cannot select recipients. No new live registry.",
+    "repair": "Qualified deltas pass existing coordinator; historical parent hash is not restored over legitimate repaired state",
+    "budget": "Use current charged ledger; saved remaining budget is history, not spend authority",
+    "duplicates": "Existing native stale/duplicate checks; atlas binding must not add second resume",
+    "claim": "Exact local return only; no exactly-once external effect assertion"
+  }
+}
