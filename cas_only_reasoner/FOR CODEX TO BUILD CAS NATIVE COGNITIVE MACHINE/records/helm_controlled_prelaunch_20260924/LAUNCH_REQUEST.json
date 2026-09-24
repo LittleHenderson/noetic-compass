@@ -1,0 +1,72 @@
+{
+  "schema": "helm.controlled.launch-request/1",
+  "name": "HELM-REPAIR-CONTROLLED-1",
+  "status": "NOT_READY_FOR_FINAL_LAUNCH_APPROVAL",
+  "launch_authorized": false,
+  "main_launch_hold": true,
+  "source_coordination_commit": "91968e5d17747e7d60b6d4d37b3124657b035a67",
+  "selected_proposal": "C_WITH_DISCLOSED_HISTORICAL_CONTROLS_AND_CONDITIONAL_B_FALLBACK",
+  "stronger_fresh_control_design": "B",
+  "seeds": [
+    20260917,
+    20260918,
+    20260919
+  ],
+  "count_C": {
+    "existing_attempts": 2,
+    "future_jobs": 7,
+    "main_training_jobs": 4,
+    "all_attempted_or_proposed_slots": 9
+  },
+  "count_full_B_fallback": {
+    "existing_attempts": 2,
+    "future_jobs": 9,
+    "main_training_jobs": 6,
+    "all_attempted_or_proposed_slots": 11
+  },
+  "actual_spend_ceiling_usd": 60,
+  "actual_spend_horizon": "execution plus 30 days after E1; subsequent retained storage separately reported",
+  "per_slot_cap_sum_C_usd": 94,
+  "per_slot_cap_sum_B_usd": 124,
+  "completion_at_maximum_runtimes_guaranteed": false,
+  "fixed_ledger_reservation_per_attempt_usd": 15,
+  "already_booked_study_reservations_usd": 30,
+  "proposed_total_reservations_C_usd": 135,
+  "proposed_total_reservations_B_usd": 165,
+  "primary_checkpoint": {
+    "name": "final.pt",
+    "main_updates": 1470
+  },
+  "per_training_job_total_updates_max": 1488,
+  "mechanism_checkpoint_readings": 18,
+  "Q4_in_scope": false,
+  "historical_grader_changed": false,
+  "protected_splits_changed": false,
+  "A1_changed": false,
+  "policy_file_sha256": {
+    "REPRODUCTION_POLICY.md": "7d8bf0db405ae02fbf4dd62eeac51a076b2192822ede6325bed9facc6e7d0f10",
+    "REPRODUCTION_POLICY.json": "1cdef00fd7c2b2794021fc859234799d2dfb50ea7cbf323096956898cad68c2b",
+    "STATISTICAL_POLICY.json": "f8d6e1e594ff0f90e23056a27060830bafba15800dc0db70e9060994b94cac5b",
+    "EXECUTION_MANIFEST.json": "753682d77820544bebff57e35a351759d8426f144163357876f3af5c50585ab6",
+    "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "a98024a71ce793ac87b4e8842437019d189cba39768db09a8eeaebe03d60a14c",
+    "COST_AND_JOB_ENVELOPE.md": "c544f6bb3f401a756c615902940e5156902267aeececb28c4a45d904f4fa7e82",
+    "COST_STATE.json": "8d75ecb0fac7524382266817ac70a5a16a15eae26ab1956c69d54a6324f42367"
+  },
+  "blocking_results": [
+    "S1 final receipt and cleanup",
+    "P1 complete route/identity-reader/corrected-probe acceptance",
+    "P2 final custodian aggregate feasibility and split receipt with primary testable",
+    "main packages and environment frozen",
+    "reproduction panel and reader source pins frozen",
+    "reviewed admission and cumulative budget enforcement",
+    "bounded retention/collection implementation"
+  ],
+  "approval_requested_now": false,
+  "reason_approval_not_requested": "Complete empirical prerequisite results and immutable main execution pins are not yet available; no results are invented.",
+  "preparation_document_sha256": {
+    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "fd0cabc908c91bf7d800f09d6bcd5918b309ee70781fd24616f1e5496b09dfbd",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "d1760056d9896999fcab3b562e94eb838ccbcbd3623c66aad67bcce065704a4a",
+    "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
+    "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "52fd4dbe8329e6cbabef2a638e8f15f3aa6ba25101436210828d92d76e96432e"
+  }
+}

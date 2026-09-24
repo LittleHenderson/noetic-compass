@@ -11,7 +11,8 @@ simple counts, genuine no-match/no-path cases, and structures withheld from teac
 the success rules before tuning."
 
 **Status.** No model has been run on anything here, and nothing here is a result. The reviewer's numbers are
-estimates made with throwaway salts. The build prints the real ones before any model is read.
+estimates made with throwaway salts. The build prints the actual informative-case and effective-unit counts before
+main-comparison training. Amendment A2 below is a proposed correction for final owner review; it authorizes no run.
 
 ## 0. How each review finding is answered
 
@@ -168,7 +169,7 @@ printed.
 | Kind | Registered comparators |
 |---|---|
 | Reach | constant ABSENT; constant DIRECT; rank-last child; one-hop; lowest-rank child; two-hop via the first child; **three-hop via the first child** (the BFS variant for the BFS rule); participant-2; degree rule |
-| Analogy | always NO_MATCH; first candidate; node and edge count match; joint degree-multiset match; **`FLAG_ANCHOR`** (a same-degree candidate whose whole and participants have the focus's (in, out) degrees); best fixed candidate position; candidate-only novelty; **`STATUS_BY_COUNT`** (NO_MATCH if fewer than m same-degree other-domain candidates, m at its best value on the cell); other-domain-only (the unique other-domain same-degree candidate, else NO_MATCH) |
+| Analogy | always NO_MATCH; first candidate; node and edge count match; joint degree-multiset match; **`FLAG_ANCHOR`** (a same-degree candidate whose whole and participants have the focus's (in, out) degrees); **every fixed non-focus candidate position 1 through 7**; candidate-only novelty; **every `STATUS_BY_COUNT_m`, m = 0 through 8**, with the complete answer rule fixed in A2.1; other-domain-only (the unique other-domain same-degree candidate, else NO_MATCH) |
 | Correspondence | always NO_MATCH; identity by rank order; degree-sorted matching; **`DEGREE_GUESS_THEN_CHECK`** (one degree-sorted guess, check every edge, NO_MATCH on failure); **`FLAG_ANCHOR_GUESS_THEN_CHECK`** (map the whole and participants first, then guess by degree, then check) |
 
 **The line.** A comparator may make **one** guess and check it. It may not search. Exact search is the ceiling.
@@ -182,14 +183,17 @@ printed.
 
 ## 7. Success rules, FIXED BEFORE ANY TUNING (read by a program)
 
-**Per cell, per run: `BEATS_ALL_REGISTERED_BARS`.**
+**Per cell, per run: the original cluster-level `BEATS_ALL_REGISTERED_BARS` calculation.**
 - For **every** registered comparator X of the cell: b_X = clusters the model gets right and X gets wrong, and c_X =
   the reverse.
 - The cell passes iff, for every X, b_X > c_X and the exact one-sided p(b_X, b_X + c_X) <= 1/100. There is no
   zero-loss veto.
-- This is an intersection-union test, so it needs no multiplicity correction.
+- Beating all bars is a single conjunction. The intersection-union argument needs no correction *within that
+  conjunction* if its component tests are valid. It does not establish independence, nor does it cover the separate
+  claims below. A2 adds group and shared-shape sensitivity checks for the one confirmatory claim; the original
+  cluster calculations remain visible as conditional/diagnostic results.
 
-**Before any model is read, printed per cell:**
+**Before main-comparison training, printed per cell (actual build, never a throwaway-salt estimate):**
 - clusters;
 - W_X for every comparator; the binding W is the smallest W_X;
 - for analogy, distinct degree groups;
@@ -197,6 +201,8 @@ printed.
 - conditional power on the HSET-1A grid (bar accuracy +0.10, +0.20, +0.30 and 1.0; never-loses fractions 0.5, 0.75
   and 1.0);
 - the trained answer states of the kind (for example, whether NO_MATCH was ever trained).
+- A2's degree-group and shared-shape component counts, informative counts and power grid, alongside the original
+  cluster counts. No raw-question or raw-cluster power number is labelled effective-unit power.
 
 **Floor.** A cell reads `can_carry_a_claim: false` if clusters < 10, or binding W < 10, or (analogy) distinct degree
 groups < 10. Its claim is then `NOT_TESTABLE`, and the cell is never dropped to rescue it.
@@ -214,8 +220,10 @@ Each claim below means: that arm's cell(s) pass in **all 3 runs of that arm**, w
 | `CORRESPONDENCE_BEYOND_DEGREE_5[arm]` (secondary) | `TEST_NEW_5/CORRESPONDENCE` | all correspondence comparators |
 | `ANALOGY_BEYOND_DEGREE_5`, `REACH_..._5` | — | **`NOT_TESTABLE`, declared now** |
 
-**Family-wise risk.** There are up to 5 testable base claims per arm, each with a false-pass risk of at most about 0.01
-per run. None is pooled or traded against another.
+**Multiple claims.** A2 fixes one confirmatory claim: `REPAIR_IMPROVES_ANALOGY_6`. Every base claim in this table,
+including each arm's three-run conjunction, remains registered and reported as exploratory. Its nominal 0.01
+calculation does not carry a study-wide 0.01 guarantee. Neither repeated seeds nor correlated checkpoints justify
+multiplying p-values. No exploratory finding becomes confirmatory after TEST is read.
 
 ### 7.2 The controlled repaired-versus-unchanged comparison (the owner's next model experiment)
 
@@ -233,8 +241,10 @@ Both train on the same course, with the same seeds and matched starts. Each seed
 **`REPAIR_IMPROVES_ANALOGY_6`** requires all four:
 1. `REPAIR_BEATS_UNCHANGED_ANALOGY` on `TEST_NEW_6/ANALOGY` in all 3 seed pairs;
 2. `ANALOGY_BEYOND_DEGREE_6[repaired]`;
-3. probe v0.2 `PRESENT_GRAPH_AND_DOMAIN` on every trained repaired checkpoint that is read (prereg A5);
-4. **no regression** on the gate set below.
+3. the corrected, version-pinned probe's `PRESENT_GRAPH_AND_DOMAIN` on every preregistered trained repaired checkpoint
+   in A5; the v0.2 bystander-normalization flaw must be resolved and validated before this gate can pass (A2.6);
+4. **no regression detected by the listed paired tests** on the gate set below. This is not a preservation or
+   noninferiority claim. A2 also requires the group and shared-shape checks for the primary analogy claim.
 
 **The gate set, fixed now:**
 - **H1:** `G_LEARN_population`, computed by `records/typed_pointer_001/evaluate_gates.py` on Helm's historical
@@ -248,6 +258,9 @@ Both train on the same course, with the same seeds and matched starts. Each seed
   b′ = the reverse.
 - It is a regression iff c′ > b′ and the exact one-sided p(c′, b′ + c′) <= 1/100.
 - Threshold crossings (one arm passes a gate and the other fails it) are reported by name, as information only.
+- Always print b′, c′, ties, both accuracies, the accuracy difference and all old-gate crossings, even if no test
+  flags regression. Six losses and zero gains have p = 1/64 and are not flagged at 0.01. The historical grader and
+  its frozen rule are unchanged; A2 adds reporting and limits the wording of the new comparison.
 
 **What is always reported.** Every paired result, even when `REPAIR_IMPROVES_ANALOGY_6` fails. That keeps findings such
 as "focus-aware, but only by degree" (review N4).
@@ -257,6 +270,8 @@ as "focus-aware, but only by degree" (review N4).
 - Hyperparameters, schedules and model choices may be tuned only on DEV.
 - Every change after a DEV reading is logged with its date and reason.
 - TEST is read once per registered run, only after the owner approves the run plan.
+- The fixed primary endpoint is `final.pt` after 1,470 main updates. Intermediate checkpoint probes
+  are mandatory mechanism checks, not a way to select a better TEST endpoint (A2.5).
 
 ## 8. Custody
 
@@ -315,3 +330,137 @@ The delta review's verdict was `APPROVE_WITH_CHANGES`. No build has run, and no 
   same-domain distractor and for the half without. This is diagnostic; the pass rule is unchanged.
 - **D6: future public shapes.** After the build, any new public 6-node shape must be a DEV-side class, and any new
   public 5-node shape must be a `DEV_NEW_5` class. Anything else is refused before use.
+
+## Amendment A2 (2026-09-24): controlled-study statistical policy (`PROPOSED`; no launch authority)
+
+This amendment fixes the remaining choices before results. It preserves A1, every protected split, every registered
+cell and every `NOT_TESTABLE` result. It does not modify the historical grader or reinterpret completed historical
+receipts. The machine-readable companion is `../helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json`.
+These are specification changes; they are not evidence that the builder or scorer already implements them.
+
+### A2.1 Complete finite comparator families
+
+- For an eight-world analogy packet, remove the focus and order the seven remaining displayed aliases by their
+  numeric alias index (W0, W1, ...). `FIXED_POSITION_j`, j = 1,...,7, always returns that position as its candidate.
+- For `STATUS_BY_COUNT_m`, m = 0,...,8, let E be the ordered non-focus candidates with the focus's joint degree
+  multiset and a different domain. Return NO_MATCH if `len(E) < m` or E is empty; otherwise return E[0]. The answer
+  carries the ordinary analogy candidate reference and is scored by the same frozen checker. Both presentations
+  must pass, as for the model. This freezes both the status decision and the candidate chosen after it.
+- Every family member is a registered bar, with its own W, gains, losses and p-value. There is no TEST-fitted
+  threshold, no TEST-fitted position and no selection by highest accuracy or most favourable paired p-value.
+  Duplicate predictions may share a calculation, but all registered rule IDs remain in the report. DEV may be
+  used for model development; it cannot delete a bar or change these comparator families.
+
+### A2.2 Units, dependencies and the limits of inference
+
+The two presentations of an item, MATCH/NO_MATCH twins, and rooted questions from the same shape are not treated
+as independent observations. Keep the original section 5 binary cluster scores and their exact paired calculations
+unchanged. Label those calculations `CONDITIONAL_CLUSTER_DIAGNOSTIC`; report their sampling assumptions.
+
+Add these two predeclared views for every claim-bearing cell:
+
+1. **Degree groups.** Group the original clusters by their focus's joint degree multiset and node count. In a paired
+   model/comparator or repaired/unchanged comparison, compute each group's mean of the original binary-score
+   differences using exact rational arithmetic. The group is a win if the mean is positive, a loss if negative,
+   and a tie if zero. Groups receive equal weight in the sign test. Also report the original aggregate accuracy
+   difference; a passing direction must be positive in both views.
+2. **Shared-shape components.** Before models are read, collect the canonical shape classes appearing in every
+   packet role and presentation for each degree group: focus, partner, target, decoy, distractor and filler. Connect
+   two degree groups if those sets intersect, and take transitive connected components. Never split a component
+   after outcomes. For each component, take the equally weighted mean of its constituent degree-group differences;
+   its sign is one sensitivity-test observation. Print the component count and size distribution. The class list
+   and membership stay with the custodian; only permitted aggregates and non-answer-revealing receipts are public.
+
+For either view, with B positive signs and C negative signs, use the exact one-sided sign-test tail
+`sum(comb(B+C,k), k=B..B+C) / 2**(B+C)`; if B+C is zero, p = 1. Ties do not enter the denominator. Require B > C,
+positive overall accuracy difference, and p <= 0.01. The shared-shape view is a conservative sensitivity check;
+components do **not** prove independence. A p-value interpretation is conditional on independent units and
+exchangeability of positive and negative paired differences under the null. The builder/scorer review must state
+whether its sampling construction supports those assumptions. If it cannot, set `INFERENCE_ASSUMPTIONS_UNSUPPORTED`:
+report all scores and conditional p-values, but issue no confirmatory statistical claim.
+
+The MIX sampler is not a promise of representative performance on arbitrary graphs. The claim concerns the
+registered generator, eligible protected strata and these three seed pairs. It does not establish that the repair
+helps every seed, arbitrary larger graphs, or every possible no-learning algorithm. The 10-group floor measures
+available information and variety; it is not proof of independence.
+
+### A2.3 One confirmatory claim; all other results remain visible
+
+- The sole confirmatory claim is `REPAIR_IMPROVES_ANALOGY_6`, at alpha = 0.01. Its performance component requires
+  repaired to beat unchanged and every registered analogy bar at **each of the three** fixed seed pairs, using
+  both additional views in A2.2. Its inferential p-value is the maximum of the required degree-group and
+  shared-shape-component p-values. This intersection-union rule is valid only when those component tests are valid;
+  it does not require independent seeds and never uses `0.01 ** 3`. Also retain the original cluster-level nominal
+  pass as an additional acceptance condition, labelled conditional/diagnostic. It is not included as a claimed
+  valid inferential p-value. Requiring this extra condition cannot increase the grouped test's false-pass risk.
+- The corrected mechanism gate and the absence of a listed regression flag are additional acceptance conditions.
+  Passing them does not turn a failure to detect regression into proof of preservation. Use the caption:
+  **"The repair improved registered six-node analogy performance in all three seed pairs, cleared the registered
+  bars and mechanism checks, and had no regression detected by the listed tests."** Attach the scope and control
+  provenance limitation, including the two historical controls when option C is retained.
+- Every other arm/cell result, the section 7.1 base claims, reach variants, five-node correspondence and distractor
+  halves are mandatory exploratory results. Preserve their original nominal 0.01 calculations and report
+  `EXPLORATORY_NOMINAL_PASS`, `EXPLORATORY_NO_NOMINAL_PASS`, or `NOT_TESTABLE`. They have no confirmatory allocation
+  and no claimed study-wide false-positive guarantee. No selective omission, post-TEST promotion, or pooled rescue.
+- A `NOT_TESTABLE` primary cell makes the primary claim `NOT_TESTABLE`; it does not make another cell primary.
+  A failed assumption check makes it `INFERENCE_ASSUMPTIONS_UNSUPPORTED`. A missing required mechanism validation
+  makes it `MECHANISM_GATE_OPEN`. Keep the underlying scores and reasons in every case.
+
+### A2.4 Actual feasibility table before main training
+
+The authorized custodian build must emit the following **actual** aggregate table before the main comparison is
+submitted for launch approval. Do not use a throwaway-salt estimate, a count from HSET-1A, or a blank schema as a result.
+
+- For every registered cell and bar: original cluster count; shapes; degree groups; shared-shape components;
+  their size distributions; original W_X; W_X in the group and component views; and each view's binding minimum.
+  Here W_X is the number of units in which a perfect model could improve on X under that view's aggregation.
+  For repaired versus unchanged the corresponding actual informative count is unknowable before both models are
+  scored; report `NOT_YET_OBSERVED`, plus the structural maximum and conditional power scenarios. Do not call it
+  the realized discordant count. Report actual B, C and B+C once both outputs exist.
+- Keep all existing floors. In addition, a confirmatory analogy claim needs at least 10 degree groups, 10
+  shared-shape components, and binding W >= 10 in **each** additional view. If any floor fails, preserve
+  `NOT_TESTABLE` and its reason. Do not redraw the salt, substitute foci, remove fillers, drop a bar or change a
+  grouping rule to pass. A later design would require a new preregistration and new authorization before results.
+- Recompute the HSET-1A power grid at the original-cluster, group and component levels separately, using that
+  level's actual unit weights and sizes. Print the assumed gain/loss model, bar accuracy +0.10/+0.20/+0.30/1.0
+  settings and never-loses fractions 0.5/0.75/1.0. Where a raw accuracy grid does not identify group-sign power,
+  print `NOT_IDENTIFIED_FROM_RAW_ACCURACY` and use the explicit conditional sign-power calculation below.
+- For each available unit count n, print conditional sign-test power for discordant counts d = 0,...,n and positive
+  sign probabilities q = 0.60, 0.70, 0.80, 1.00: sum the Binomial(d,q) probability over B values whose exact null
+  tail at q=0.5 is <= 0.01. Include the all-win minimum of 7 discordant units, and distinguish this sensitivity
+  calculation from a forecast of actual model power. Use exact sums; no simulated performance may stand in for results.
+- Print answer-state exposure, split disjointness, both-arm packet-route acceptance, flag-image rates, and the
+  full listed/omitted regression-gate set. The actual table and immutable builder/scorer receipts must be attached
+  to the final request. Missing or failed receipts are a pretraining blocker, even if training could run technically.
+
+### A2.5 Endpoint and checkpoint accounting
+
+`final.pt`, after 1,470 main updates, is the sole primary endpoint for every arm and seed. The separate 16
+interference and 2 replay updates make the whole job's maximum allowance 1,488; they are not part of `final.pt`.
+Fix this before running and print the phase schedule and artifact hash in each manifest.
+The eighteen preregistered trained-checkpoint mechanism checks are an all-checkpoint requirement under A5, not
+eighteen chances to select a passing endpoint. The launch manifest must enumerate all eighteen by seed, phase,
+checkpoint path and update count; a mismatch or missing entry blocks launch. Initial untrained controls, if probed,
+are labelled separately and do not replace any of the eighteen checks.
+
+Intermediate checkpoints are evaluated only on the preregistered public mechanism probe; protected TEST is read
+only at the fixed final endpoint, once per registered run. Retain every failed or missing mechanism check and all
+final losses. Training more, selecting an earlier checkpoint or switching to a favourable seed after a TEST reading
+is not permitted under this plan. Historical before/after grading remains unchanged.
+
+### A2.6 Mechanism validation and non-regression language
+
+Probe v0.2 recomputes candidate-set normalization after changing the bystander. That can change unchanged
+candidates' normalized scores without a raw-score interaction. Its present result cannot close the repaired
+mechanism gate. Before any main run, pin a reviewed correction that holds the reference normalization fixed or
+uses a validated raw-score interaction metric, and freeze its thresholds and directional criterion before model
+results. Required public validation includes candidate-independent scorers returning zero bystander interaction,
+a scorer with a known true interaction returning the expected nonzero change, invariance to the permitted score
+offset/scale transformation, and a signed test for the claimed movement toward the favoured set. Preserve v0.2
+receipts as historical diagnostics; do not grandfather them into the corrected gate. Missing validation stays open.
+
+Report **"no regression detected by the listed paired tests"** when that is the actual outcome. Always show every
+loss, gain, tie, accuracy change, p-value and old-gate crossing; include six-loss/zero-gain sensitivity explicitly.
+Do not say "no ability lost", "preserved performance" or "noninferior" from failure to reject this test. A stronger
+zero-observed-loss or noninferiority rule would require its own owner-approved predeclared margin and analysis;
+this amendment does not silently add one or alter the historical grader.

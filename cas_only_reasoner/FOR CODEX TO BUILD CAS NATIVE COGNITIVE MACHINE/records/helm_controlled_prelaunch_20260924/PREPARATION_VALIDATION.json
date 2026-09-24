@@ -1,0 +1,18 @@
+{
+  "verification": "static document/JSON inspection only; no test suite/build/model/cloud job",
+  "A1_normalized_bytes_unchanged": true,
+  "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
+  "JSON_parsed": [
+    "COST_STATE.json",
+    "EXECUTION_MANIFEST.json",
+    "LAUNCH_REQUEST.json",
+    "REPRODUCTION_POLICY.json",
+    "STATISTICAL_POLICY.json"
+  ],
+  "launch_request_referenced_hashes_match": true,
+  "main_plan_relative_links_exist": true,
+  "git_diff_check": "PASS",
+  "historical_grader_edited": false,
+  "model_implementation_edited": false,
+  "protected_data_accessed": false
+}

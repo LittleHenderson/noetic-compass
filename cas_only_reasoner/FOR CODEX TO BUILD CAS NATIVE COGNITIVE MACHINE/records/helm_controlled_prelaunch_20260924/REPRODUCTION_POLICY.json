@@ -1,0 +1,23 @@
+{
+  "schema": "helm.controlled.reproduction-policy/1",
+  "status": "PROPOSED_FOR_FINAL_PLAN",
+  "frozen_before_reproduction_result_required": true,
+  "historical_source": "20208c923d41c24614504d4ecc2b289ecb66eda8",
+  "reproduction_seed": 20260917,
+  "file_hash_preserved": true,
+  "learned_state_tolerance": 0,
+  "required_for_C": [
+    "artifact_and_environment_admission_valid",
+    "complete_learned_state_identical",
+    "complete_registered_output_panel_identical"
+  ],
+  "continuation_identity_reported_separately": true,
+  "file_mismatch_alone_triggers_fallback": false,
+  "missing_or_invalid_evidence": "ADMISSION_INVALID_STOP",
+  "valid_state_or_output_mismatch": "DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY",
+  "fallback_requires_named_plan_approval_and_headroom": true,
+  "output_panel_manifest_sha256": null,
+  "reader_source_sha256": null,
+  "reader_acceptance_receipt_sha256": null,
+  "main_launch_ready": false
+}

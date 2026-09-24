@@ -1,0 +1,348 @@
+{
+  "schema": "helm.controlled-prelaunch-cost-state/1",
+  "read_only": true,
+  "no_job_launched_by_this_review": true,
+  "region": "us-west-2",
+  "observed_utc": "2026-09-24T04:08:17.479320+00:00",
+  "source_launch_branch": "1fcc15e5fe0183da4572741e4efa675698640ab5",
+  "source_integration": "197caa322d20ae6830928b20c5b16933e93cd00d",
+  "instances": [
+    {
+      "id": "i-0c3028734c8885542",
+      "type": "g6e.xlarge",
+      "state": "stopped",
+      "launch_utc": "2026-08-24T18:35:33+00:00",
+      "availability_zone": "us-west-2c",
+      "job": null,
+      "public_ipv4_allocated": false,
+      "volumes": [
+        "vol-01cc880a770c10854"
+      ]
+    },
+    {
+      "id": "i-039b7ae505c4c6245",
+      "type": "g7.2xlarge",
+      "state": "running",
+      "launch_utc": "2026-09-24T03:38:48+00:00",
+      "availability_zone": "us-west-2a",
+      "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "public_ipv4_allocated": true,
+      "volumes": [
+        "vol-0bbd58d49a4782ed3"
+      ],
+      "elapsed_seconds_as_observed": "1773.528324",
+      "elapsed_compute_at_public_rate_usd": "1.241470",
+      "billing_caveat": "Elapsed wall time times public rate; not finalized AWS billing; running and incomplete."
+    }
+  ],
+  "volumes": [
+    {
+      "id": "vol-01cc880a770c10854",
+      "size_gib": 300,
+      "type": "gp3",
+      "state": "in-use",
+      "created_utc": "2026-08-24T18:35:34.581000+00:00",
+      "attachments": [
+        {
+          "instance": "i-0c3028734c8885542",
+          "delete_on_termination": true,
+          "state": "attached"
+        }
+      ]
+    },
+    {
+      "id": "vol-0bbd58d49a4782ed3",
+      "size_gib": 75,
+      "type": "gp3",
+      "state": "in-use",
+      "created_utc": "2026-09-24T03:38:49.583000+00:00",
+      "attachments": [
+        {
+          "instance": "i-039b7ae505c4c6245",
+          "delete_on_termination": true,
+          "state": "attached"
+        }
+      ]
+    }
+  ],
+  "current_smoke_local_receipt": {
+    "result_exists": false,
+    "launch_exists": true,
+    "reservation_exists": true
+  },
+  "ledger": {
+    "revision": 106,
+    "updated_utc": "2026-09-24T03:38:27.360908+00:00",
+    "total_reserved_usd": "831.00",
+    "remaining_unreserved_usd": "4169.00",
+    "owner_task_cap_usd": "5000.00",
+    "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
+    "sha256": "42eb28a1186deb026e0bd09a195f0787e5203428b10a989aa6adb3a3ef424e9f",
+    "study_reservations": [
+      {
+        "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+        "source_sha": "70490111bceb02c63ab4fb9c89c2d0645d92c2a7",
+        "reserved_usd": "15.00",
+        "reserved_utc": "2026-09-24T02:15:06.812076+00:00",
+        "status": "RESERVED_NO_AUTOMATIC_REFUND"
+      },
+      {
+        "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+        "source_sha": "3df31d965bb2eabb168ae7efbf03300a1a1144d7",
+        "reserved_usd": "15.00",
+        "reserved_utc": "2026-09-24T03:38:27.359952+00:00",
+        "status": "RESERVED_NO_AUTOMATIC_REFUND"
+      }
+    ]
+  },
+  "rate_card": {
+    "observed_utc": "2026-09-24T04:03:34.496600+00:00",
+    "source": "AWS Pricing GetProducts, us-east-1 endpoint, US West (Oregon), Linux Shared OnDemand, effective2026-09-01",
+    "usd_per_hour": {
+      "g7.2xlarge": "2.52",
+      "g4dn.2xlarge": "0.752",
+      "g4dn.xlarge": "0.526",
+      "c7i.2xlarge": "0.357"
+    },
+    "gp3_usd_per_gb_month": "0.08",
+    "public_ipv4_usd_per_hour": "0.005",
+    "s3_standard_first50tb_usd_per_gb_month": "0.023",
+    "billing_not_receipt": true,
+    "s3_tier1_usd_per_request": "0.000005",
+    "s3_tier2_usd_per_request": "0.0000004",
+    "internet_egress_first10tb_usd_per_gb_without_free_tier": "0.09",
+    "request_egress_rates_observed_utc": "2026-09-24T04:11:17.922065+00:00"
+  },
+  "cost_explorer": [
+    {
+      "period": {
+        "Start": "2026-09-23",
+        "End": "2026-09-24"
+      },
+      "estimated": true,
+      "service_usd": {
+        "AWS CloudTrail": "0",
+        "AWS Glue": "0",
+        "AWS Key Management Service": "0.055555556",
+        "AWS Lambda": "0",
+        "AWS Secrets Manager": "0.0233333352",
+        "EC2 - Other": "0.580323026",
+        "Amazon Elastic Compute Cloud - Compute": "0.7371482504",
+        "Amazon Simple Queue Service": "0",
+        "Amazon Simple Storage Service": "0.0042788686",
+        "Amazon Virtual Private Cloud": "0.01057778",
+        "AmazonCloudWatch": "0"
+      }
+    },
+    {
+      "period": {
+        "Start": "2026-09-24",
+        "End": "2026-09-25"
+      },
+      "estimated": true,
+      "service_usd": {}
+    }
+  ],
+  "study_bucket_metadata": [
+    {
+      "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+      "object_count": 4,
+      "total_bytes": 6754096,
+      "latest_modified_utc": "2026-09-24T02:15:10+00:00",
+      "content_not_read": true,
+      "protected_names_not_opened": true
+    },
+    {
+      "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "object_count": 144,
+      "total_bytes": 51586314,
+      "latest_modified_utc": "2026-09-24T04:07:48+00:00",
+      "content_not_read": true,
+      "protected_names_not_opened": true
+    }
+  ],
+  "control_path_observation": {
+    "observed_utc": "2026-09-24T04:03:45Z",
+    "child_pid": 27980,
+    "child_program": "python.exe",
+    "child_has_typed_pointer_launch": true,
+    "child_has_reduced_schedule": true,
+    "child_has_smoke_receipt": true,
+    "child_has_run_on_study": false,
+    "child_has_main_seed_receipt": false,
+    "parent_pid": 75376,
+    "parent_program": "python.exe",
+    "parent_reads_stdin": true,
+    "parent_stdin_program_not_observable": true,
+    "source_one_job_then_return": "typed_pointer_launch.py:947-955",
+    "not_a_guarantee_no_other_controller_will_launch": true
+  },
+  "cloudtrail_runinstances_since_0200Z": [
+    {
+      "event_utc": "2026-09-24T02:15:27Z",
+      "job": "cas-meta2-tpntr-20260924021244-70490111-m-20260917",
+      "error": "Server.InsufficientInstanceCapacity",
+      "instances": []
+    },
+    {
+      "event_utc": "2026-09-24T03:38:48Z",
+      "job": "cas-meta2-tpntr-20260924033550-3df31d96-m-20260917",
+      "error": null,
+      "instances": [
+        "i-039b7ae505c4c6245"
+      ]
+    }
+  ],
+  "proposed_slots": [
+    {
+      "id": "S0",
+      "purpose": "historical capacity-refused smoke attempt",
+      "state": "ATTEMPTED_NO_INSTANCE",
+      "reservation_usd": "15",
+      "compute_usd": "0"
+    },
+    {
+      "id": "S1",
+      "purpose": "existing replacement smoke",
+      "state": "RUNNING_AT_SNAPSHOT",
+      "reservation_usd": "15",
+      "cap_usd": "15",
+      "instance": "g7.2xlarge",
+      "hours_max": 4,
+      "disk_gib": 75
+    },
+    {
+      "id": "P1",
+      "purpose": "public larger-question route, identity reader and revised mechanism calibration",
+      "state": "PROPOSED_NO_LAUNCH",
+      "reservation_usd": "15",
+      "cap_usd": "3",
+      "instance": "g4dn.2xlarge",
+      "hours_max": 2,
+      "disk_gib": 100
+    },
+    {
+      "id": "P2",
+      "purpose": "HSET-2 custodian build plus pretraining informative-case counts",
+      "state": "PROPOSED_NO_LAUNCH",
+      "reservation_usd": "15",
+      "cap_usd": "1",
+      "instance": "c7i.2xlarge",
+      "hours_max": 2,
+      "disk_gib": 20
+    },
+    {
+      "id": "M1",
+      "purpose": "Fresh unchanged20260917 first; predeclared learned-state and public output reproduction comparison",
+      "job_count": 1,
+      "state": "PROPOSED_NO_LAUNCH",
+      "reservation_each_usd": "15",
+      "cap_each_usd": "15",
+      "instance": "g7.2xlarge",
+      "hours_max_each": 4,
+      "disk_gib_each": 75
+    },
+    {
+      "id": "M2-M4",
+      "purpose": "Repaired20260917,20260918,20260919 in order",
+      "job_count": 3,
+      "state": "PROPOSED_NO_LAUNCH",
+      "reservation_each_usd": "15",
+      "cap_each_usd": "15",
+      "instance": "g7.2xlarge",
+      "hours_max_each": 4,
+      "disk_gib_each": 75
+    },
+    {
+      "id": "M5-M6",
+      "purpose": "two additional fresh OFF only if preregistered fallback selected and funded",
+      "state": "OPTIONAL_PROPOSED_NO_LAUNCH",
+      "job_count": 2,
+      "reservation_each_usd": "15",
+      "cap_each_usd": "15",
+      "instance": "g7.2xlarge",
+      "hours_max_each": 4,
+      "disk_gib_each": 75
+    },
+    {
+      "id": "E1",
+      "purpose": "18 mechanism reads, six final endpoints, historical gates, reader/custody checks",
+      "state": "PROPOSED_NO_LAUNCH",
+      "reservation_usd": "15",
+      "cap_usd": "15",
+      "instance": "g7.2xlarge",
+      "hours_max": 4,
+      "disk_gib": 75
+    }
+  ],
+  "proposed_count_and_caps": {
+    "C": {
+      "total_attempts": 9,
+      "future_jobs": 7,
+      "total_reservations_usd": "135",
+      "future_reservations_usd": "105",
+      "sum_per_job_caps_excluding_capacity_refusal_usd": "94"
+    },
+    "B_or_full_fallback": {
+      "total_attempts": 11,
+      "future_jobs": 9,
+      "total_reservations_usd": "165",
+      "future_reservations_usd": "135",
+      "sum_per_job_caps_excluding_capacity_refusal_usd": "124"
+    },
+    "aggregate_actual_spend_ceiling_usd": "60",
+    "approved_for_launch_by_this_review": false,
+    "cap_may_stop_before_completion": true,
+    "fixed15_prerequisite_ledger_booking_is_proposed_not_existing_receipt": true,
+    "proposed_total_excludes_Q4_and_other_historical_work": true
+  },
+  "planning_arithmetic": {
+    "main_duration_hours_per_job_historical_assumption": "2.9",
+    "C_main_compute_usd": "29.232",
+    "B_main_compute_usd": "43.848",
+    "C_main_compute_disk_ipv4_usd": "29.3866666667",
+    "B_main_compute_disk_ipv4_usd": "44.08",
+    "P1_P2_E1_combined_planning_allowance_usd": "19",
+    "C_planning_main_plus_allowances_excluding_smoke_usd": "48.3866666667",
+    "B_planning_main_plus_allowances_excluding_smoke_usd": "63.08",
+    "g7_4h_compute_only_usd": "10.08",
+    "C_all_six_g7_jobs_max_compute_only_usd": "60.48",
+    "B_all_eight_g7_jobs_max_compute_only_usd": "80.64",
+    "infrastructure_formula": "hourly_compute*h + disk_gib*0.08*h/720 + IPv4_count*0.005*h; excludes S3, requests, downloads, tax and continued retention",
+    "qualifier": "Timing estimate is historical, not measured for repair. P1/P2/E1 allowances are bounds, not expected runtime estimates. No worst-case completion guarantee within60."
+  },
+  "proposed_retention": {
+    "allowance_included_in_E1_usd": "1",
+    "study_evidence_gib_max": 10,
+    "tier1_requests_max": 10000,
+    "tier2_requests_max": 100000,
+    "internet_egress_gib_max": 2,
+    "horizon": "Through 30 days after E1; prior study exposure included; re-estimate after long delays",
+    "estimated_bounded_30day_storage_request_download_cost_usd_less_than": "0.54",
+    "implemented_and_verified": false,
+    "day30_automatic_deletion": false,
+    "after_horizon": "Keep under existing owner policy; ongoing charges reported separately outside the finite execution envelope",
+    "not_lifetime60dollar_guarantee": true
+  },
+  "subsequent_coordination_record": {
+    "commit": "91968e5d17747e7d60b6d4d37b3124657b035a67",
+    "path": "_handoffs/HELM_NEXT_PHASE_20260923/CLAUDE_STATE_FOR_CODEX_20260924.md",
+    "main_comparison": "HELD_UNTIL_COMPLETE_AMENDED_REQUEST_APPROVED",
+    "existing_smoke": "Already launched under earlier approval; coordinator will file result",
+    "custodian": "Existing Claude custodian; protected content not accessed by this review",
+    "technical_lock_verified": false
+  },
+  "budget_admission_policy": {
+    "aggregate_ceiling_usd": 60,
+    "incurred_charge_basis": "conservative bound including unbilled runtime; reconcile with attributed billing",
+    "reserve_before_each_start": [
+      "next_job_cap",
+      "unspent_prerequisite_caps",
+      "E1_cap_including_retention"
+    ],
+    "all_future_training_max_caps_reserved": false,
+    "complete_training_not_guaranteed": true,
+    "incomplete_status": "COMPARISON_INCOMPLETE",
+    "stop_before_third_training_if_spend_exceeds_usd": 30
+  }
+}

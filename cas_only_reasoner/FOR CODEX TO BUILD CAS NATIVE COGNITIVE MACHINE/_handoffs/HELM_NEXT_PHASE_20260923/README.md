@@ -1,3 +1,5 @@
+> **2026-09-24 superseding preparation notice:** The owner's latest direct instruction is preparation only, with actual informative-case counts and prerequisite results before main training. The revised [controlled-study draft](PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md) and `records/helm_controlled_prelaunch_20260924/` hold the new C limitations, state/output policy, A2 statistics, manifest and complete job envelope. Final approval remains held on missing empirical receipts; this notice authorizes no launch. The earlier assignments and approval records below remain chronological history. Q4 stays separate.
+
 # Helm next phase: handoff index (Claude to Codex), 2026-09-23
 
 **Branch and fetch.** Everything below is on `research/helm-integration-20260923` (pushed). Fetch it read-only.
