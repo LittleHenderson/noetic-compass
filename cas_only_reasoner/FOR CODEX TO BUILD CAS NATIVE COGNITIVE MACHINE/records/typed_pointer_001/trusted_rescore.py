@@ -18,7 +18,8 @@ WHAT 0.4 CHANGES (owner direction 2026-09-24, item 2 "RESCORER"):
     output). It accepts ONLY the recognised mistake: the exact 0.2 description (canonical sha256 frozen below as
     RECOGNISED_MISTAKE), and ONLY for the records on the frozen list HISTORICAL_EXCEPTION (identified by sha256_lf).
     It first verifies the original evidence: every hash the anchor names, the frozen grader reading, each run's
-    own artifact manifest and the four label-deciding files it pins, and the checkpoint digests as recorded.
+    own artifact manifest and the four label-deciding files it pins, and (revision 1) every checkpoint weight file
+    that manifest records, byte for byte -- an absent one is incomplete evidence, refused by name.
     It then applies the PRESERVED HISTORICAL RULE, never the recorded description. Every output carries a
     WARNING and both rule descriptions side by side. It never writes to an original record.
   * BOTH MODES refuse unknown, altered, incomplete or incompatible evidence. A new run -- anything not on the
@@ -28,32 +29,56 @@ WHAT 0.4 CHANGES (owner direction 2026-09-24, item 2 "RESCORER"):
   * 0.3 is kept as history only: byte-identical at history/trusted_rescore_0_3.py (sha256_lf 50295072...) and in
     git at 60e382b0. Its behaviour -- accept a 0.2 anchor and only report the wrong description -- is gone here.
 
+WHAT 0.4 REVISION 1 CHANGES (review REVIEW_RESCORER_0_4_6e7f62a1.md, commit 4c89e737; coordinator decision 1):
+
+  * A TRUSTED --check-reading NEVER gives trusted acceptance. It re-derives decisions from counts that a file
+    states; it does not rescore. Its best verdict is READING_CONSISTENT_NOT_RESCORED, exit 5, with the label
+    NOT_DERIVED. Only a full rescore (RESCORE_OK, exit 0) is trusted acceptance. The recorded counts must also be
+    possible: p_one_sided present, kinds distinct and drawn from the anchor's kind_of, world ids from its world_of,
+    gained + broken at most the population, worlds at most gained, before/after counts that add up, every recorded
+    check PASS (the two historical checks NOT_REQUESTED), and agreement with the pinned frozen grader reading.
+  * CHECKPOINT WEIGHTS. An absent or unverifiable checkpoint weight file is INCOMPLETE evidence, refused by name in
+    both modes: HISTORICAL_EVIDENCE_INCOMPLETE in historical mode, RUN_EVIDENCE_INCOMPLETE in trusted mode. Never
+    PASS, never exit 4, never exit 0. New anchors (schema 0.4) pin the run manifest and every checkpoint digest it
+    records; --write-anchor byte-checks every weight file first and refuses if one is absent or altered.
+  * --out IS CREATE-ONLY. An existing path (any file, above all an original record) is refused by name BEFORE any
+    work starts, and the file is opened with mode "x", which also defeats a hard link or a file that appears late.
+  * The decision reads every threshold from the hashed HISTORICAL_RULE; the whole RECOGNISED_MISTAKE is hashed.
+  * Usage errors exit 64. A malformed reading or anchor field is refused by name, never a crash.
+
 HOW IT IS ORDERED (the order is the point):
 
   1. SAFE CHECKS, which only read files. The tool's own frozen constants first, then the anchor (well-formed,
      known schema, complete), its rule description and the mode, then (historical mode only) the original
      evidence. Then: the study file's identity and its seed set, the frozen grader's hash, the hash of EVERY source
-     file the private checker executes, and for every prediction file its hash, duplicate ids, missing or extra
-     ids, non-finite numbers and duplicate JSON keys. Every reason found is collected.
-  2. THE GATE. If the constants, the anchor, its rule description, the historical evidence, the study, the grader
-     or the checker code does not match, the checker code is NEVER IMPORTED OR RUN.
+     file the private checker executes, (trusted mode, revision 1) the run evidence -- each run manifest as the
+     anchor pinned it and every checkpoint weight file it records, byte for byte -- and for every prediction file
+     its hash, duplicate ids, missing or extra ids, non-finite numbers and duplicate JSON keys. Every reason found
+     is collected.
+  2. THE GATE. If the constants, the anchor, its rule description, the historical or run evidence, the study, the
+     grader or the checker code does not match, the checker code is NEVER IMPORTED OR RUN.
   3. CHECKS THAT RUN THE CHECKER. Cached bytecode is ignored, so what runs is compiled from the very sources that
      were just hashed. Every prediction is re-checked, the label is re-derived from those fresh results only with
      the preserved historical rule, and it is compared with the frozen grader's reading (and, in historical mode,
      with the six frozen historical decisions).
   4. ORIGINALS. The small original records of both historical studies (anchors, readings, frozen grader readings,
      run manifests), the label-deciding files of the historical study this run reads, and every file named on the
-     command line are hashed byte for byte before and after the run; any change is a rejection. An output path that
-     is ANY original record the historical list names (label-deciding files included) is refused and nothing is written.
+     command line are hashed byte for byte before and after the run; any change is a rejection. --out is
+     create-only: an existing path is refused before any work (OUTPUT_EXISTS), and so is any original record the
+     historical list names, even one that was deleted (OUTPUT_WOULD_OVERWRITE_ORIGINAL). Nothing is written then.
 
 EVERY CHECK HAS A STATUS: PASS, FAIL, NOT_RUN (it could not run -- which is not the same as failing), or
 NOT_REQUESTED (the caller or the mode said so explicitly). The verdict and exit code are
     REJECT                        2  if any reason was recorded (irreversible: nothing later can clear a reason);
     RESCORE_INCOMPLETE            3  if nothing failed but a check that was supposed to run did not;
-    RESCORE_OK                    0  trusted mode, every check PASS or NOT_REQUESTED;
-    HISTORICAL_COMPATIBILITY_OK   4  historical mode, every check PASS (never 0: a script that expects 0 does not
-                                     mistake the historical exception for plain trusted acceptance).
---check-reading uses READING_VERIFIED (0), REJECT (2), CHECK_INCOMPLETE (3) and HISTORICAL_COMPATIBILITY_OK (4).
+    RESCORE_OK                    0  trusted mode, full rescore, every check PASS or NOT_REQUESTED -- the ONLY
+                                     trusted acceptance;
+    HISTORICAL_COMPATIBILITY_OK   4  historical mode, every check PASS except RUN_EVIDENCE, which is NOT_REQUESTED
+                                     there (HISTORICAL_EVIDENCE covers it). Never 0: a script that expects 0 does
+                                     not mistake the historical exception for plain trusted acceptance.
+--check-reading uses REJECT (2), CHECK_INCOMPLETE (3), HISTORICAL_COMPATIBILITY_OK (4, historical mode only) and
+READING_CONSISTENT_NOT_RESCORED (5, trusted mode: consistent counts are not a rescore). It never exits 0.
+A usage error exits 64. --write-anchor exits 0 when the anchor was written and 2 when it was refused.
 
 HASH POLICY (cncm.hash-policy/1.0). Every pinned file here is text. Each pin records TWO digests: the
 LF-normalised one (CRLF -> LF only; nothing else is touched) which is what gets COMPARED, and the raw one
@@ -63,12 +88,12 @@ compares RAW bytes: it proves the files were not rewritten, not merely that thei
 LIMIT, stated plainly: an anchor written by the same session that built the model is not independent
 custody. Every anchor and reading carries `custody: EVALUATION_NOT_INDEPENDENT`.
 
-Usage:
+Usage (every --out must be a NEW path):
     python records/typed_pointer_001/trusted_rescore.py --study <study.json> --anchor <NEW path> --write-anchor   # create-only
-    python records/typed_pointer_001/trusted_rescore.py --study <study.json> [--frozen-reading <gate_reading.json>]
+    python records/typed_pointer_001/trusted_rescore.py --study <study.json> [--frozen-reading <gate_reading.json>] --out <NEW path>
     python records/typed_pointer_001/trusted_rescore.py --study <study.json> --safe-only        # file checks only, seconds
-    python records/typed_pointer_001/trusted_rescore.py --check-reading <reading.json>         # no checker import, seconds
-  The frozen historical records only (explicit flag, recorded in the output):
+    python records/typed_pointer_001/trusted_rescore.py --check-reading <reading.json>         # no checker import, seconds; never exit 0
+  The frozen historical records only (explicit flag, recorded in the output; the checkpoint weight files must be present):
     python records/typed_pointer_001/trusted_rescore.py --historical-compatibility \\
         --check-reading records/typed_pointer_001/trusted_rescore_reading_helm1_certified.json
     python records/typed_pointer_001/trusted_rescore.py --historical-compatibility \\
@@ -93,17 +118,22 @@ PACKAGE = HERE.parents[1]
 CODE_ROOT = PACKAGE / "research" / "CAS_META_2_COMPOSITION"
 
 TOOL_VERSION = "0.4"
+TOOL_REVISION = 1                                   # 0.4 revision 1: the review of 6e7f62a1 (commit 4c89e737)
 SCHEMA = "cncm.trusted-rescore-reading/0.4"
-CHECK_SCHEMA = "cncm.trusted-rescore-reading-check/0.1"
-ANCHOR_SCHEMA = "cncm.trusted-rescore-anchor/0.3"
+CHECK_SCHEMA = "cncm.trusted-rescore-reading-check/0.2"
+ANCHOR_SCHEMA = "cncm.trusted-rescore-anchor/0.4"   # pins the run manifest and every checkpoint digest
+ANCHOR_SCHEMA_0_3 = "cncm.trusted-rescore-anchor/0.3"   # 0.4 before revision 1: no run-manifest or checkpoint pins
 HISTORICAL_ANCHOR_SCHEMA = "cncm.trusted-rescore-anchor/0.2"
 HISTORICAL_READING_SCHEMA = "cncm.trusted-rescore-reading/0.2"
 READING_SCHEMA_0_3 = "cncm.trusted-rescore-reading/0.3"
-KNOWN_ANCHOR_SCHEMAS = (HISTORICAL_ANCHOR_SCHEMA, ANCHOR_SCHEMA)
+KNOWN_ANCHOR_SCHEMAS = (HISTORICAL_ANCHOR_SCHEMA, ANCHOR_SCHEMA_0_3, ANCHOR_SCHEMA)
 KNOWN_READING_SCHEMAS = (HISTORICAL_READING_SCHEMA, READING_SCHEMA_0_3, SCHEMA)
 PHASES = ("course_p00", "course_p10")
 LABEL_FILES = tuple("%s_%s.json" % (ph, kind) for ph in PHASES for kind in ("predictions", "scoring"))
-MIN_IMPROVED_KINDS, MIN_IMPROVED_WORLDS = 2, 2
+CHECKPOINT_SUFFIX = ".pt"
+EXIT_CODES = {"RESCORE_OK": 0, "REJECT": 2, "RESCORE_INCOMPLETE": 3, "CHECK_INCOMPLETE": 3,
+              "HISTORICAL_COMPATIBILITY_OK": 4, "READING_CONSISTENT_NOT_RESCORED": 5}
+EXIT_USAGE = 64
 HISTORICAL_RULE = {
     "id": "HELM_HISTORICAL_PAIRED_RULE_20260919",
     "test": "exact one-sided Binomial(b+c, 1/2) upper tail at b",
@@ -131,6 +161,8 @@ RECOGNISED_MISTAKE = {
     "written_by_tool_sha256_lf": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a",
     "written_by_tool_commit": "8b2bb942",
 }
+# sha256 of the canonical JSON bytes of the WHOLE RECOGNISED_MISTAKE (revision 1: every field, not only the description).
+RECOGNISED_MISTAKE_SHA256 = "fddc692ee219b0d6efe18675aa169bca693edd4e2b69918bd7ad818778c27a40"
 
 # ---- the frozen list of historical records the exception covers: two studies, six seed decisions ----------
 # Paths are package-relative. Digests are sha256_lf of the files as last committed (anchors and readings at
@@ -209,16 +241,21 @@ CODE_CLOSURE = tuple(["research/CAS_META_2_COMPOSITION/cas_meta2/__init__.py"] +
     "input_frames.py", "matched_contract.py", "pointer_contract.py", "practice_contract.py", "slots.py", "source.py",
     "tokenization.py", "worker_contract.py")] + ["records/typed_practice_001/evaluate_gates.py"])
 
-SAFE_CHECKS = ("TOOL_CONSTANTS", "ANCHOR_READABLE", "RULE_DESCRIPTION", "HISTORICAL_EVIDENCE", "STUDY_IDENTITY", "SEED_SET",
-               "EVALUATOR_IDENTITY", "CHECKER_CODE_IDENTITY", "PREDICTIONS_IDENTITY", "ID_SET", "FINITE_NUMBERS", "WELL_FORMED_JSON")
+SAFE_CHECKS = ("TOOL_CONSTANTS", "ANCHOR_READABLE", "RULE_DESCRIPTION", "HISTORICAL_EVIDENCE", "RUN_EVIDENCE", "STUDY_IDENTITY",
+               "SEED_SET", "EVALUATOR_IDENTITY", "CHECKER_CODE_IDENTITY", "PREDICTIONS_IDENTITY", "ID_SET", "FINITE_NUMBERS",
+               "WELL_FORMED_JSON")
 CHECKER_CHECKS = ("CHECKER_PROFILE", "COURSE_IDENTITY", "POPULATION_IDENTITY", "CODE_CLOSURE_COMPLETE", "CODE_UNCHANGED_DURING_RUN",
                   "RESCORE", "SCORING_FILE_AGREEMENT", "FROZEN_GRADER_AGREEMENT", "HISTORICAL_DECISIONS")
 FINAL_CHECKS = ("ORIGINALS_UNCHANGED",)
-GATE = ("TOOL_CONSTANTS", "ANCHOR_READABLE", "RULE_DESCRIPTION", "HISTORICAL_EVIDENCE", "STUDY_IDENTITY", "SEED_SET",
-        "EVALUATOR_IDENTITY", "CHECKER_CODE_IDENTITY")
+GATE = ("TOOL_CONSTANTS", "ANCHOR_READABLE", "RULE_DESCRIPTION", "HISTORICAL_EVIDENCE", "RUN_EVIDENCE", "STUDY_IDENTITY",
+        "SEED_SET", "EVALUATOR_IDENTITY", "CHECKER_CODE_IDENTITY")
 READING_CHECKS = ("TOOL_CONSTANTS", "READING_READABLE", "RULE_DESCRIPTION", "HISTORICAL_EVIDENCE", "ANCHOR_EVIDENCE",
                   "READING_CONSISTENCY", "DECISIONS_REPLAYED", "ORIGINALS_UNCHANGED")
 NOT_REQUESTED_TRUSTED = {"status": "NOT_REQUESTED", "detail": "trusted mode: the historical exception is not in use"}
+NOT_REQUESTED_HISTORICAL = {"status": "NOT_REQUESTED", "detail": "historical mode: the run manifests and checkpoint weight files are "
+                                                                 "verified under HISTORICAL_EVIDENCE, against the frozen list"}
+# In a clean trusted reading every check is PASS, except these two, which trusted mode records as NOT_REQUESTED.
+TRUSTED_NOT_REQUESTED = ("HISTORICAL_EVIDENCE", "HISTORICAL_DECISIONS")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -255,12 +292,13 @@ def rule_sha(rule):
 
 
 def _rel(path):
-    """Package-relative with forward slashes when the path is inside the package; otherwise the path as given."""
+    """Package-relative with forward slashes when the path is inside the package; otherwise the resolved absolute path
+    (revision 1: never a bare relative path, which a later reader would take as package-relative)."""
     path = pathlib.Path(path)
     try:
         return path.resolve().relative_to(PACKAGE.resolve()).as_posix()
     except ValueError:
-        return path.as_posix()
+        return path.resolve().as_posix()
 
 
 def _key(path):
@@ -351,10 +389,21 @@ def historical_decision(b, c, n_kinds, n_worlds):
     """
     if any(type(v) is not int or v < 0 for v in (b, c, n_kinds, n_worlds)):
         raise ValueError("nonnegative integer counts required")
+    rule = HISTORICAL_RULE                                 # revision 1: every threshold comes from the hashed rule
     p = Fraction(sum(math.comb(b + c, k) for k in range(b, b + c + 1)), 2 ** (b + c))
-    passed = (b > c and p <= Fraction(HISTORICAL_RULE["alpha"])
-              and n_kinds >= MIN_IMPROVED_KINDS and n_worlds >= MIN_IMPROVED_WORLDS)
+    passed = ((b > c or rule["require_b_greater_than_c"] is not True)
+              and (c == 0 or rule["zero_loss_veto"] is not True)
+              and p <= Fraction(rule["alpha"])
+              and n_kinds >= rule["min_improved_kinds"] and n_worlds >= rule["min_improved_worlds"])
     return p, passed
+
+
+def historical_label(passes):
+    """The study label from the per-seed decisions, under the rule's all_seeds_must_pass (the only form it defines)."""
+    if HISTORICAL_RULE["all_seeds_must_pass"] is not True:
+        raise ValueError("the preserved rule defines the label only when every seed must pass")
+    passes = list(passes)
+    return "LEARNS_NEW_WORLDS" if passes and all(p is True for p in passes) else "NO_TRANSFER_TO_NEW_WORLDS"
 
 
 def historical_seed_result(b, c, kinds, worlds):
@@ -389,7 +438,8 @@ def constants_problems():
     bad = []
     if rule_sha(HISTORICAL_RULE) != HISTORICAL_RULE_SHA256:
         bad.append("HISTORICAL_RULE")
-    if rule_sha(RECOGNISED_MISTAKE["recorded_description"]) != RECOGNISED_MISTAKE["recorded_description_sha256"]:
+    if (rule_sha(RECOGNISED_MISTAKE["recorded_description"]) != RECOGNISED_MISTAKE["recorded_description_sha256"]
+            or _sha(_canon(RECOGNISED_MISTAKE)) != RECOGNISED_MISTAKE_SHA256):
         bad.append("RECOGNISED_MISTAKE")
     if _sha(_canon(HISTORICAL_EXCEPTION)) != HISTORICAL_EXCEPTION_SHA256:
         bad.append("HISTORICAL_EXCEPTION")
@@ -474,24 +524,176 @@ def snapshot(paths):
     return {_rel(p): (_raw_sha_stream(p)[0] if pathlib.Path(p).is_file() else None) for p in paths}
 
 
-def _originals_check(run, paths, before, out_path, guard):
+def _originals_check(run, paths, before):
     after = snapshot(paths)
     changed = sorted(rel for rel in set(before) | set(after) if before.get(rel) != after.get(rel))
     if changed:
         run.fail("ORIGINALS_UNCHANGED", "ORIGINAL_CHANGED_DURING_RUN", "these originals changed during the run: %s" % changed[:6])
-    if out_path and _key(out_path) in {_key(p) for p in guard}:
-        run.fail("ORIGINALS_UNCHANGED", "OUTPUT_WOULD_OVERWRITE_ORIGINAL", "--out %s is an original record; nothing was written" % _rel(out_path))
     run.passed("ORIGINALS_UNCHANGED", "%d original files byte-identical before and after (raw sha256)" % sum(1 for v in after.values() if v))
     return {"files_checked": len(after), "files_present": sum(1 for v in after.values() if v), "unchanged": not changed,
             "raw_sha256_after": after}
 
 
-def _write_output(run, out_path, record):
-    if not out_path or any(r.startswith("OUTPUT_WOULD_OVERWRITE_ORIGINAL:") for r in run.reasons):
+def output_refusal(out_path, guard):
+    """--out is CREATE-ONLY (revision 1). Checked BEFORE any work. Returns (code, detail), or None when the path is new.
+    An original record on the historical list -- even one that has been deleted -- or a file named on this command line
+    is OUTPUT_WOULD_OVERWRITE_ORIGINAL; any other existing path (a file, a directory, a link) is OUTPUT_EXISTS."""
+    if not out_path:
+        return None
+    if _key(out_path) in {_key(p) for p in guard}:
+        return ("OUTPUT_WOULD_OVERWRITE_ORIGINAL", "--out %s is an original record or a file named on this command line; "
+                "nothing was done and nothing was written" % _rel(out_path))
+    if os.path.lexists(out_path):
+        return ("OUTPUT_EXISTS", "--out %s already exists; outputs are create-only, so nothing was done and nothing was "
+                "written" % _rel(out_path))
+    return None
+
+
+def _print_output_refusal(refusal, mode):
+    print(json.dumps({"verdict": "REJECT", "reject_reasons": ["%s:%s" % refusal]}, indent=1))
+    print("  mode: %s" % mode)
+    return EXIT_CODES["REJECT"]
+
+
+def _write_output(out_path, record):
+    """Create-only: mode "x" fails if the path exists, including a hard link or a file that appeared during the run."""
+    if not out_path:
+        return True
+    try:
+        with open(out_path, "x", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(record, indent=1, sort_keys=True))
+    except FileExistsError:
+        print("OUTPUT_EXISTS: --out %s appeared during the run; nothing was written" % _rel(out_path))
         return False
-    with open(out_path, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(record, indent=1, sort_keys=True))
     return True
+
+
+# ---- run manifests and checkpoint weight files (revision 1, coordinator decision 1) ---------------
+def read_run_manifest(path):
+    """Strictly parse a run's artifact_manifest.json into {name: row}. Raises ValueError on anything malformed:
+    duplicate keys, non-finite numbers, no artifacts list, a row without a name, or a name listed twice."""
+    body, problems = strict_json(pathlib.Path(path).read_text(encoding="utf-8"))
+    if problems.duplicate_keys or problems.nonfinite:
+        raise ValueError("duplicate keys or non-finite numbers")
+    if not isinstance(body, dict) or not isinstance(body.get("artifacts"), list):
+        raise ValueError("no artifacts list")
+    rows = {}
+    for row in body["artifacts"]:
+        if not isinstance(row, dict) or not isinstance(row.get("name"), str):
+            raise ValueError("an artifact row without a name")
+        if row["name"] in rows:
+            raise ValueError("artifact %s is listed twice" % row["name"])
+        rows[row["name"]] = row
+    return rows
+
+
+def _well_formed_digest(row):
+    return (isinstance(row, dict) and isinstance(row.get("sha256"), str) and re.fullmatch("[0-9a-f]{64}", row["sha256"]) is not None
+            and type(row.get("bytes")) is int and row["bytes"] >= 0)
+
+
+def checkpoint_rows(rows):
+    """The checkpoint weight files a run manifest records."""
+    return {name: row for name, row in rows.items() if name.endswith(CHECKPOINT_SUFFIX)}
+
+
+def verify_checkpoints(seed, ckpts, art, incomplete, altered):
+    """READS files only. Byte-check every checkpoint weight file the run manifest records. An absent or unverifiable
+    weight file is INCOMPLETE evidence (coordinator decision 1): it is refused by name, never passed, never counted as
+    a match. Returns (summary, problems); the summary's status is MATCH only when EVERY recorded file matched."""
+    summary = {"what": "checkpoint weight files, seed %s" % seed, "path": _rel(art), "recorded": len(ckpts),
+               "byte_checked": 0, "matching": 0, "absent": [], "unverifiable": [], "altered": []}
+    problems = []
+    if not ckpts:
+        problems.append((incomplete, "seed %s: the run manifest records no checkpoint weight file" % seed))
+    for name, row in sorted(ckpts.items()):
+        if not _well_formed_digest(row) or re.fullmatch(r"[A-Za-z0-9_.-]+", name) is None or name.startswith("."):
+            summary["unverifiable"].append(name)
+            problems.append((incomplete, "seed %s: checkpoint %s is unverifiable (no well-formed recorded digest, or not a "
+                             "plain file name); an unverifiable weight file is incomplete evidence" % (seed, name)))
+            continue
+        path = art / name
+        if not path.is_file():
+            summary["absent"].append(name)
+            problems.append((incomplete, "seed %s: checkpoint weight file %s is absent here; an absent weight file is "
+                             "incomplete evidence" % (seed, name)))
+            continue
+        digest, size = _raw_sha_stream(path)
+        summary["byte_checked"] += 1
+        if digest == row["sha256"] and size == row["bytes"]:
+            summary["matching"] += 1
+        else:
+            summary["altered"].append(name)
+            problems.append((altered, "seed %s: checkpoint %s differs from its recorded digest" % (seed, name)))
+    summary["status"] = ("ALTERED" if summary["altered"] else
+                         "MATCH" if ckpts and summary["matching"] == len(ckpts) else "INCOMPLETE")
+    return summary, problems
+
+
+def _receipt_path(recorded):
+    """A recorded path: package-relative when relative, else as given."""
+    path = pathlib.Path(str(recorded))
+    return path if path.is_absolute() else PACKAGE / path
+
+
+def run_evidence_pins(rdir):
+    """What a NEW anchor pins about a run beyond its predictions: the run manifest, and every checkpoint digest it
+    records. READS files only. None when there is no readable manifest (then the anchor is incomplete)."""
+    mpath = pathlib.Path(rdir) / "artifact_manifest.json"
+    if not mpath.is_file():
+        return None
+    try:
+        rows = read_run_manifest(mpath)
+    except (ValueError, UnicodeDecodeError, OSError):
+        return None
+    return {"manifest": {"path": _rel(mpath), "pin": file_pin(mpath)},
+            "checkpoints": {name: {"sha256": row.get("sha256"), "bytes": row.get("bytes")}
+                            for name, row in sorted(checkpoint_rows(rows).items())}}
+
+
+def verify_run_evidence(seed, pinned, rdir, prediction_pins):
+    """READS files only (trusted mode and --write-anchor). The run manifest must be the one the anchor pinned; it must
+    agree with the anchor's prediction pins; every checkpoint weight file it records must be present here and
+    byte-identical. Returns (items, problems)."""
+    incomplete, altered = "RUN_EVIDENCE_INCOMPLETE", "RUN_EVIDENCE_ALTERED"
+    mpath = pathlib.Path(rdir) / "artifact_manifest.json"
+    mpin = _get(pinned, "manifest", "pin", "sha256_lf")
+    item = {"what": "run manifest, seed %s" % seed, "path": _rel(mpath), "pinned_sha256_lf": mpin, "observed_sha256_lf": None}
+    if not isinstance(mpin, str):
+        return [dict(item, status="NOT_PINNED")], [(incomplete, "seed %s: the anchor pins no run manifest" % seed)]
+    if not mpath.is_file():
+        return [dict(item, status="ABSENT")], [(incomplete, "seed %s: the run manifest is absent: %s" % (seed, _rel(mpath)))]
+    item["observed_sha256_lf"] = _lf_sha(mpath)
+    if item["observed_sha256_lf"] != mpin:
+        return [dict(item, status="ALTERED")], [(altered, "seed %s: the run manifest differs from the one the anchor pinned" % seed)]
+    items, problems = [dict(item, status="MATCH")], []
+    try:
+        rows = read_run_manifest(mpath)
+    except (ValueError, UnicodeDecodeError, OSError) as error:
+        return items, [(incomplete, "seed %s: the run manifest is unreadable (%s)" % (seed, error))]
+    for ph in PHASES:
+        row = rows.get("%s_predictions.json" % ph)
+        if not _well_formed_digest(row):
+            problems.append((incomplete, "seed %s: the run manifest has no digest for %s_predictions.json" % (seed, ph)))
+        elif row["sha256"] != _get(prediction_pins, ph, "sha256_lf"):
+            problems.append((altered, "seed %s: %s_predictions.json: the anchor's pin and the run manifest disagree" % (seed, ph)))
+    ckpts = checkpoint_rows(rows)
+    recorded = {name: {"sha256": row.get("sha256"), "bytes": row.get("bytes")} for name, row in ckpts.items()}
+    if recorded != _get(pinned, "checkpoints"):
+        problems.append((altered, "seed %s: the checkpoint digests the anchor pinned are not the ones the run manifest records" % seed))
+    summary, more = verify_checkpoints(seed, ckpts, pathlib.Path(rdir) / "collected/results/artifacts", incomplete, altered)
+    return items + [summary], problems + more
+
+
+def evidence_detail(items):
+    """How many evidence items were listed, and how many files were actually byte-checked (review MAJOR 2)."""
+    items = items or []
+    ckpt = [i for i in items if "byte_checked" in i]
+    files = sum(1 for i in items if "byte_checked" not in i and i.get("observed_sha256_lf"))
+    weights = sum(i["byte_checked"] for i in ckpt)
+    recorded = sum(i["recorded"] for i in ckpt)
+    return "%d evidence items; %d files byte-checked, including %d of %d recorded checkpoint weight files" % (
+        len(items), files + weights, weights, recorded)
 
 
 # ---- historical evidence ----------------------------------------------------------------------
@@ -537,10 +739,8 @@ def historical_evidence(name, anchor, receipt_override=None, frozen_reading=None
         if mpath is None:
             continue
         try:
-            manifest, mprob = strict_json(mpath.read_text(encoding="utf-8"))
-            rows = {r["name"]: r for r in manifest["artifacts"]}
-            assert not mprob.duplicate_keys and not mprob.nonfinite
-        except Exception as error:
+            rows = read_run_manifest(mpath)
+        except (ValueError, UnicodeDecodeError, OSError) as error:
             problems.append(("HISTORICAL_EVIDENCE_INCOMPLETE", "seed %s: run manifest unreadable (%s)" % (seed, type(error).__name__)))
             continue
         art = mpath.parent / "collected/results/artifacts"
@@ -564,31 +764,11 @@ def historical_evidence(name, anchor, receipt_override=None, frozen_reading=None
                 anchored = _get(anchor, "seeds", seed, "predictions", fname[:-len("_predictions.json")], "sha256_lf")
                 if anchored != row["sha256"]:
                     problems.append(("HISTORICAL_EVIDENCE_ALTERED", "%s: the anchor's pin and the run's manifest disagree" % what))
-        # checkpoint digests AS RECORDED: the frozen manifest must carry a well-formed digest for every checkpoint;
-        # a checkpoint that is present here must match it. The weights are not decision evidence and are excluded from
-        # this checkout on purpose, so an absent weight file is reported, not refused.
-        ckpts = [r for r in rows.values() if str(r.get("name", "")).endswith(".pt")]
-        summary = {"what": "checkpoint digests as recorded, seed %s" % seed, "path": _rel(art), "recorded": len(ckpts),
-                   "present_and_matching": 0, "present_and_altered": 0, "absent_here": 0}
-        if not ckpts:
-            problems.append(("HISTORICAL_EVIDENCE_INCOMPLETE", "seed %s: the run manifest records no checkpoint digest" % seed))
-        for row in ckpts:
-            if not (isinstance(row.get("sha256"), str) and re.fullmatch("[0-9a-f]{64}", row["sha256"]) and type(row.get("bytes")) is int):
-                problems.append(("HISTORICAL_EVIDENCE_INCOMPLETE", "seed %s: checkpoint %s has no well-formed recorded digest" % (seed, row.get("name"))))
-                continue
-            path = art / row["name"]
-            if not path.is_file():
-                summary["absent_here"] += 1
-                continue
-            digest, size = _raw_sha_stream(path)
-            if digest == row["sha256"] and size == row["bytes"]:
-                summary["present_and_matching"] += 1
-            else:
-                summary["present_and_altered"] += 1
-                problems.append(("HISTORICAL_EVIDENCE_ALTERED", "seed %s: checkpoint %s differs from its recorded digest" % (seed, row["name"])))
-        summary["status"] = ("ALTERED" if summary["present_and_altered"] else
-                             "RECORDED_DIGESTS_ONLY" if summary["absent_here"] == summary["recorded"] else "MATCH")
+        # checkpoint weight files (revision 1, coordinator decision 1): every one the frozen manifest records must be
+        # present here and byte-identical. An absent or unverifiable one is INCOMPLETE evidence, refused by name.
+        summary, more = verify_checkpoints(seed, checkpoint_rows(rows), art, "HISTORICAL_EVIDENCE_INCOMPLETE", "HISTORICAL_EVIDENCE_ALTERED")
         items.append(summary)
+        problems.extend(more)
     return items, problems
 
 
@@ -638,10 +818,11 @@ def safe_anchor_part(study_path, receipt_override):
     for job in study["jobs"]:
         rdir, how = _resolve_receipt(job, receipt_override)
         art = rdir / "collected/results/artifacts"
-        seeds[str(job["model_seed"])] = {"receipt_dir": _rel(rdir), "receipt_resolved_from": how,
-                                         "predictions": {ph: file_pin(art / ("%s_predictions.json" % ph)) for ph in PHASES}}
+        pins = {ph: (file_pin(art / ("%s_predictions.json" % ph)) if (art / ("%s_predictions.json" % ph)).is_file() else None) for ph in PHASES}
+        seeds[str(job["model_seed"])] = {"receipt_dir": _rel(rdir), "receipt_resolved_from": how, "predictions": pins,
+                                         "run_evidence": run_evidence_pins(rdir)}
     return {"schema": ANCHOR_SCHEMA, "written": datetime.date.today().isoformat(), "tool_version": TOOL_VERSION,
-            "hash_policy": HASH_POLICY,
+            "tool_revision": TOOL_REVISION, "hash_policy": HASH_POLICY,
             "study": {"path": _rel(study_path), "pin": file_pin(study_path)}, "seed_set": sorted(seeds),
             "grader": {"path": _rel(GRADER), "pin": file_pin(GRADER)},
             "checker": {"code_closure": code_closure_pins()},
@@ -665,6 +846,20 @@ def write_anchor(study_path, anchor_path, receipt_override, material=None):
     missing = [rel for rel, pin in anchor["checker"]["code_closure"].items() if pin is None]
     if missing:
         print("ANCHOR_REFUSED: checker source files are missing: %s" % missing)
+        return 2
+    # revision 1: an anchor pins only run evidence that was byte-checked here and now -- above all the weights
+    problems = []
+    for seed, s in sorted(anchor["seeds"].items()):
+        absent = [ph for ph, pin in s["predictions"].items() if pin is None]
+        if absent:
+            problems.append(("PREDICTIONS_IDENTITY", "seed %s: prediction files absent: %s" % (seed, absent)))
+        if s["run_evidence"] is None:
+            problems.append(("RUN_EVIDENCE_INCOMPLETE", "seed %s: no readable run manifest under %s" % (seed, s["receipt_dir"])))
+            continue
+        problems += verify_run_evidence(seed, s["run_evidence"], _receipt_path(s["receipt_dir"]), s["predictions"])[1]
+    if problems:
+        print("ANCHOR_REFUSED: the run evidence is incomplete or altered; an anchor is written only over byte-checked "
+              "run manifests and checkpoint weight files: %s" % ["%s:%s" % p for p in problems[:8]])
         return 2
     m = material or _load_frozen_and_checker()
     uncovered = [rel for rel in executed_package_modules() if rel not in CODE_CLOSURE]
@@ -692,11 +887,13 @@ def anchor_missing_fields(anchor):
             ("population", "question_ids"), ("population", "kind_of"), ("population", "world_of"),
             ("expected_record_ids",), ("expected_record_count",), ("seeds",), ("pass_rule",), ("tool", "pin", "sha256_lf"),
             ("custody",)]
-    if anchor.get("schema") == ANCHOR_SCHEMA:
+    if anchor.get("schema") in (ANCHOR_SCHEMA_0_3, ANCHOR_SCHEMA):
         need += [("pass_rule_sha256",), ("tool_version",)]
     missing = [".".join(path) for path in need if _get(anchor, *path) is None]
     if missing:
         return missing
+    if not isinstance(anchor["seeds"], dict):
+        return ["seeds (not an object)"]
     if not isinstance(anchor["seed_set"], list) or not anchor["seed_set"]:
         missing.append("seed_set (empty)")
     closure = anchor["checker"]["code_closure"]
@@ -713,7 +910,27 @@ def anchor_missing_fields(anchor):
                 missing.append("seeds.%s.predictions.%s.sha256_lf" % (seed, ph))
         if not _get(anchor, "seeds", str(seed), "receipt_dir"):
             missing.append("seeds.%s.receipt_dir" % seed)
+        if anchor["schema"] == ANCHOR_SCHEMA:             # revision 1: the run manifest and every checkpoint digest
+            evidence = _get(anchor, "seeds", str(seed), "run_evidence")
+            if not isinstance(_get(evidence, "manifest", "pin", "sha256_lf"), str):
+                missing.append("seeds.%s.run_evidence.manifest.pin.sha256_lf" % seed)
+            ckpts = _get(evidence, "checkpoints")
+            if not isinstance(ckpts, dict) or not ckpts or not all(_well_formed_digest(r) for r in ckpts.values()):
+                missing.append("seeds.%s.run_evidence.checkpoints (none, or one without a well-formed digest)" % seed)
     return missing
+
+
+def anchor_type_problems(anchor):
+    """Fields the checks index into must have the right JSON type. A wrong type is MALFORMED, never a crash."""
+    want = [(("study", "path"), str), (("study", "pin", "sha256_lf"), str), (("grader", "pin", "sha256_lf"), str),
+            (("tool", "pin", "sha256_lf"), str), (("checker", "profile_digest"), str), (("course_digest",), str),
+            (("population", "digest"), str), (("population", "question_ids"), list), (("population", "kind_of"), dict),
+            (("population", "world_of"), dict), (("expected_record_count",), int), (("custody",), str), (("schema",), str)]
+    bad = [".".join(path) for path, kind in want if not isinstance(_get(anchor, *path), kind)]
+    for seed, s in (anchor.get("seeds") or {}).items():
+        if not isinstance(s, dict) or not isinstance(s.get("receipt_dir"), str):
+            bad.append("seeds.%s" % seed)
+    return bad
 
 
 # ---------------------------------------------------------------------------------------------
@@ -764,6 +981,10 @@ def _read_anchor(run, anchor_path):
     if missing:
         run.fail("ANCHOR_READABLE", "ANCHOR_INCOMPLETE", "missing or empty: %s" % missing[:8])
         return None
+    wrong = anchor_type_problems(anchor)
+    if wrong:
+        run.fail("ANCHOR_READABLE", "ANCHOR_MALFORMED", "fields of the wrong JSON type: %s" % wrong[:8])
+        return None
     run.passed("ANCHOR_READABLE", _rel(anchor_path))
     return anchor
 
@@ -772,7 +993,8 @@ def _anchor_rule_and_mode(run, anchor, anchor_path, mode):
     """RULE_DESCRIPTION, and the anchor-level part of HISTORICAL_EVIDENCE. Returns what the output needs to show."""
     recorded = anchor["pass_rule"]
     rsha, asha = rule_sha(recorded), _lf_sha(anchor_path)
-    info = {"anchor_sha256_lf": asha, "recorded_rule": recorded, "recorded_rule_sha256": rsha, "entry": None, "evidence": None}
+    info = {"anchor_sha256_lf": asha, "recorded_rule": recorded, "recorded_rule_sha256": rsha, "entry": None, "evidence": None,
+            "run_evidence": None}
     if mode == TRUSTED:
         run.checks["HISTORICAL_EVIDENCE"] = dict(NOT_REQUESTED_TRUSTED)
         if rsha != HISTORICAL_RULE_SHA256:
@@ -780,9 +1002,12 @@ def _anchor_rule_and_mode(run, anchor, anchor_path, mode):
             run.fail("RULE_DESCRIPTION", "RULE_DESCRIPTION_MISMATCH",
                      "the anchor records %s, not the preserved historical rule; refused for trusted acceptance%s" % (
                          describe_rule(rsha), (" (this is the frozen historical anchor %r; it can be read only with %s)" % (listed, HISTORICAL_FLAG)) if listed else ""))
-        elif anchor["schema"] == ANCHOR_SCHEMA and anchor.get("pass_rule_sha256") != rsha:
+        elif anchor["schema"] in (ANCHOR_SCHEMA_0_3, ANCHOR_SCHEMA) and anchor.get("pass_rule_sha256") != rsha:
             run.fail("RULE_DESCRIPTION", "RULE_DESCRIPTION_MISMATCH", "pass_rule_sha256 does not match the recorded pass_rule")
-        if anchor["schema"] != ANCHOR_SCHEMA:
+        if anchor["schema"] == ANCHOR_SCHEMA_0_3:
+            run.fail("ANCHOR_READABLE", "ANCHOR_SCHEMA_OUTDATED", "anchor schema %r pins no run manifest and no checkpoint digest "
+                     "(incomplete evidence); trusted mode needs %r -- write a NEW anchor with --write-anchor" % (anchor["schema"], ANCHOR_SCHEMA))
+        elif anchor["schema"] != ANCHOR_SCHEMA:
             run.fail("ANCHOR_READABLE", "ANCHOR_SCHEMA_OUTDATED", "anchor schema %r; trusted mode needs %r -- write a NEW anchor with --write-anchor "
                      "(create-only; the original is kept as history)" % (anchor["schema"], ANCHOR_SCHEMA))
         run.passed("RULE_DESCRIPTION", "the preserved historical rule (sha256 %s)" % rsha[:16])
@@ -820,7 +1045,8 @@ def _safe_checks(run, study_path, anchor_path, receipt_override, mode=TRUSTED, f
         info["evidence"] = items
         for code, detail in problems:
             run.fail("HISTORICAL_EVIDENCE", code, detail)
-        run.passed("HISTORICAL_EVIDENCE", "%d original evidence items verified against frozen or recorded digests" % len(items))
+        run.passed("HISTORICAL_EVIDENCE", "verified against frozen or recorded digests: " + evidence_detail(items))
+        run.checks["RUN_EVIDENCE"] = dict(NOT_REQUESTED_HISTORICAL)
     try:
         study = json.loads(pathlib.Path(study_path).read_text(encoding="utf-8"))
         jobs = study["jobs"]
@@ -845,6 +1071,20 @@ def _safe_checks(run, study_path, anchor_path, receipt_override, mode=TRUSTED, f
         elif a["sha256_lf"] != b["sha256_lf"]:
             run.fail("CHECKER_CODE_IDENTITY", "CHECKER_CODE_IDENTITY", "%s differs from the anchor" % rel)
     run.passed("CHECKER_CODE_IDENTITY", "%d source files" % len(now))
+    if mode == TRUSTED:                                   # revision 1: the run manifest and every checkpoint weight file
+        run_items = []
+        for job in jobs:
+            seed = str(job["model_seed"])
+            pinned = _get(anchor, "seeds", seed)
+            if not isinstance(pinned, dict):
+                continue                                  # SEED_SET already names a seed the anchor does not know
+            rdir, _ = _resolve_receipt(job, receipt_override)
+            items, problems = verify_run_evidence(seed, pinned.get("run_evidence"), rdir, pinned.get("predictions"))
+            run_items += items
+            for code, detail in problems:
+                run.fail("RUN_EVIDENCE", code, detail)
+        info["run_evidence"] = run_items
+        run.passed("RUN_EVIDENCE", "run manifests as anchored: " + evidence_detail(run_items))
 
     expected = anchor.get("expected_record_ids") or []
     predictions = {}
@@ -930,8 +1170,11 @@ def _print_historical(block):
 def rescore(study_path, anchor_path, receipt_override, out_path, material=None, frozen_reading=None,
             compare_frozen=True, safe_only=False, historical_compatibility=False):
     mode = HISTORICAL if historical_compatibility else TRUSTED
-    run = _Run()
     guard = protected_paths(anchor_path, study_path, frozen_reading)
+    refusal = output_refusal(out_path, guard)
+    if refusal:                                           # revision 1: create-only, refused before ANY work
+        return _print_output_refusal(refusal, mode)
+    run = _Run()
     watched = snapshot_paths(anchor_path, study_path, frozen_reading)
     before = snapshot(watched)
     anchor, study, predictions, info = _safe_checks(run, study_path, anchor_path, receipt_override or {}, mode, frozen_reading, compare_frozen)
@@ -1027,7 +1270,7 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
         if any((before_import[r] or {}).get("sha256_lf") != (after_import[r] or {}).get("sha256_lf") for r in CODE_CLOSURE):
             run.fail("CODE_UNCHANGED_DURING_RUN", "CODE_CHANGED_DURING_RUN", "a checker source file changed between the gate and the end of the run")
         run.passed("CODE_UNCHANGED_DURING_RUN")
-        label = "LEARNS_NEW_WORLDS" if per_seed and all(s["passed"] for s in per_seed.values()) else "NO_TRANSFER_TO_NEW_WORLDS"
+        label = historical_label(s["passed"] for s in per_seed.values())
 
         # the frozen grader's reading: beside the study by default; --frozen-reading when it lives elsewhere; in
         # historical mode always the original on the frozen list (verified in step 1)
@@ -1038,7 +1281,8 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
                 fpath = PACKAGE / HISTORICAL_EXCEPTION[info["entry"]]["frozen_grader_reading"][0]
             else:
                 fpath = pathlib.Path(frozen_reading) if frozen_reading else pathlib.Path(study_path).parent / "gate_reading.json"
-            comparison.update({"frozen_reading_present": fpath.is_file(), "frozen_reading_path": _rel(fpath)})
+            comparison.update({"frozen_reading_present": fpath.is_file(), "frozen_reading_path": _rel(fpath),
+                               "frozen_reading_pin": file_pin(fpath) if fpath.is_file() else None})
             if not fpath.is_file():
                 run.not_run("FROZEN_GRADER_AGREEMENT", "no gate_reading.json at %s" % _rel(fpath))
             else:
@@ -1065,7 +1309,7 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
         else:
             run.checks["HISTORICAL_DECISIONS"] = dict(NOT_REQUESTED_TRUSTED)
 
-    originals = _originals_check(run, watched, before, out_path, guard)
+    originals = _originals_check(run, watched, before)
     statuses = [c["status"] for c in run.checks.values()]
     ok = "HISTORICAL_COMPATIBILITY_OK" if mode == HISTORICAL else "RESCORE_OK"
     verdict = "REJECT" if run.reasons else ("RESCORE_INCOMPLETE" if "NOT_RUN" in statuses else ok)
@@ -1074,16 +1318,16 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
     elif not imported:
         label = "NOT_DERIVED"
     hist_block = _historical_block(info, per_seed and {s: {k: v[k] for k in ("gained", "broken", "p_one_sided", "passed")} for s, v in per_seed.items()}) if mode == HISTORICAL else None
-    reading = {"schema": SCHEMA, "tool_version": TOOL_VERSION, "mode": _mode_block(mode),
+    reading = {"schema": SCHEMA, "tool_version": TOOL_VERSION, "tool_revision": TOOL_REVISION, "mode": _mode_block(mode),
                "verdict": verdict, "label_rederived": label, "reject_reasons": run.reasons, "checks": run.checks,
                "imported_checker_code": imported, "bytecode_policy": bytecode_policy, "material_supplied_by_caller": material is not None,
                "anchor": {"path": _rel(anchor_path), "pin": file_pin(anchor_path) if pathlib.Path(anchor_path).is_file() else None},
                "tool": {"path": _rel(__file__), "pin": file_pin(__file__)}, "hash_policy": HASH_POLICY["policy_id"],
                "rule": _rule_block(info["recorded_rule"] if info else None),
-               "historical_exception": hist_block, "originals": originals,
+               "historical_exception": hist_block, "run_evidence": (info or {}).get("run_evidence"), "originals": originals,
                "per_seed": per_seed, "comparison_with_frozen_grader": comparison, "custody": CUSTODY,
                "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was re-checked with the private checker"}
-    _write_output(run, out_path, reading)
+    written = _write_output(out_path, reading)
     print(json.dumps({k: reading[k] for k in ("verdict", "label_rederived", "reject_reasons")}, indent=1))
     print("  mode: %s" % mode)
     if hist_block:
@@ -1093,15 +1337,17 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
         print("  seed %s: frozen18 %s -> %s, gained %d broken %d, p %s, passed %s, rescored %s, disagreements %s" % (
             seed, s["frozen_18_before"], s["frozen_18_after"], s["gained"], s["broken"], s["p_one_sided"], s["passed"],
             [s["phases"][ph]["rescored"] for ph in PHASES], [s["phases"][ph]["disagreements"] for ph in PHASES]))
-    return {"RESCORE_OK": 0, "REJECT": 2, "RESCORE_INCOMPLETE": 3, "HISTORICAL_COMPATIBILITY_OK": 4}[verdict]
+    return EXIT_CODES[verdict] if written else EXIT_CODES["REJECT"]
 
 
 # ---- verify a committed reading WITHOUT rescoring ---------------------------------------------
 def reading_missing_fields(reading):
     need = [("anchor", "path"), ("anchor", "pin", "sha256_lf"), ("tool", "pin", "sha256_lf"), ("per_seed",),
             ("label_rederived",), ("verdict",), ("reject_reasons",), ("checks",)]
-    if reading.get("schema") == SCHEMA:
-        need += [("rule", "recorded_in_anchor"), ("rule", "applied"), ("mode", "name")]
+    current = reading.get("schema") == SCHEMA
+    if current:
+        need += [("rule", "recorded_in_anchor"), ("rule", "applied"), ("mode", "name"), ("tool_revision",),
+                 ("comparison_with_frozen_grader", "frozen_reading_path"), ("comparison_with_frozen_grader", "frozen_reading_pin", "sha256_lf")]
     elif reading.get("schema") == READING_SCHEMA_0_3:
         need += [("anchor_rule_metadata",), ("historical_rule_applied",)]
     else:
@@ -1112,14 +1358,138 @@ def reading_missing_fields(reading):
     if not isinstance(reading["per_seed"], dict) or not reading["per_seed"]:
         missing.append("per_seed (empty)")
         return missing
+    fields = ["gained", "broken", "kinds_improved", "worlds_improved", "passed", "receipt_dir"]
+    if current:                                           # revision 1: everything the replay and the sanity checks need
+        fields += ["p_one_sided", "world_ids_improved", "frozen_18_before", "frozen_18_after"]
     for seed, s in reading["per_seed"].items():
-        for field in ("gained", "broken", "kinds_improved", "worlds_improved", "passed", "receipt_dir"):
+        for field in fields:
             if _get(s, field) is None:
                 missing.append("per_seed.%s.%s" % (seed, field))
         for ph in PHASES:
-            if not _get(s, "phases", ph, "predictions_sha256_lf"):
-                missing.append("per_seed.%s.phases.%s.predictions_sha256_lf" % (seed, ph))
+            for field in ["predictions_sha256_lf"] + (["rescored", "disagreements", "scoring_rows_compared"] if current else []):
+                if _get(s, "phases", ph, field) is None or _get(s, "phases", ph, field) == "":
+                    missing.append("per_seed.%s.phases.%s.%s" % (seed, ph, field))
     return missing
+
+
+def reading_type_problems(reading):
+    """Fields the checks index into must have the right JSON type: a wrong type is READING_MALFORMED, never a crash."""
+    want = [(("anchor", "path"), str), (("anchor", "pin", "sha256_lf"), str), (("tool", "pin", "sha256_lf"), str),
+            (("per_seed",), dict), (("label_rederived",), str), (("verdict",), str), (("reject_reasons",), list), (("checks",), dict)]
+    if reading.get("schema") == SCHEMA:
+        want += [(("rule", "recorded_in_anchor"), dict), (("rule", "applied"), dict), (("mode", "name"), str),
+                 (("comparison_with_frozen_grader", "frozen_reading_path"), str),
+                 (("comparison_with_frozen_grader", "frozen_reading_pin", "sha256_lf"), str)]
+    elif reading.get("schema") == HISTORICAL_READING_SCHEMA:
+        want += [(("comparison_with_frozen_grader", "frozen_reading_path"), str)]
+    bad = [".".join(path) for path, kind in want if not isinstance(_get(reading, *path), kind)]
+    for seed, s in (reading.get("per_seed") or {}).items() if isinstance(reading.get("per_seed"), dict) else ():
+        if not isinstance(s, dict) or not isinstance(s.get("phases"), dict) or not isinstance(s.get("receipt_dir"), str) \
+                or not isinstance(s.get("passed"), bool):
+            bad.append("per_seed.%s" % seed)
+    for name, c in (reading.get("checks") or {}).items() if isinstance(reading.get("checks"), dict) else ():
+        if not isinstance(c, dict):
+            bad.append("checks.%s" % name)
+    return bad
+
+
+def reading_count_problems(reading, anchor):
+    """The recorded counts must be POSSIBLE for the anchored population (review BLOCKER 1): distinct kinds and worlds
+    drawn from the anchor's kind_of / world_of, gained + broken at most the population, no more kinds or worlds than
+    gains, before/after counts that add up, and every prediction of every phase re-checked with no disagreement."""
+    pop = anchor["population"]["question_ids"]
+    n, expected_n = len(pop), anchor["expected_record_count"]
+    kinds_ok, worlds_ok = set(anchor["population"]["kind_of"].values()), set(anchor["population"]["world_of"].values())
+    bad = []
+    for seed, s in sorted(reading["per_seed"].items()):
+        g, c, w = s.get("gained"), s.get("broken"), s.get("worlds_improved")
+        if any(type(v) is not int or v < 0 for v in (g, c, w)):
+            bad.append("%s: gained, broken and worlds_improved must be nonnegative integers" % seed)
+            continue
+        kinds = s.get("kinds_improved")
+        if not isinstance(kinds, list) or not all(isinstance(k, str) for k in kinds):
+            bad.append("%s: kinds_improved is not a list of kind names" % seed)
+            continue
+        if len(set(kinds)) != len(kinds):
+            bad.append("%s: kinds_improved names a kind more than once: %s" % (seed, kinds))
+        if not set(kinds) <= kinds_ok:
+            bad.append("%s: %s are not kinds of the anchored population %s" % (seed, sorted(set(kinds) - kinds_ok), sorted(kinds_ok)))
+        if g + c > n:
+            bad.append("%s: gained %d + broken %d is more than the %d-question population" % (seed, g, c, n))
+        if len(set(kinds)) > g or w > g:
+            bad.append("%s: %d kinds and %d worlds improved from only %d gains" % (seed, len(set(kinds)), w, g))
+        if w > len(worlds_ok):
+            bad.append("%s: %d worlds improved, but the anchored population has %d worlds" % (seed, w, len(worlds_ok)))
+        ids = s.get("world_ids_improved")
+        if ids is not None:
+            if not isinstance(ids, list) or not all(isinstance(x, str) for x in ids) or len(set(ids)) != len(ids):
+                bad.append("%s: world_ids_improved is not a list of distinct world ids" % seed)
+            elif not set(ids) <= worlds_ok:
+                bad.append("%s: world_ids_improved names worlds outside the anchored population" % seed)
+            elif len(ids) != w:
+                bad.append("%s: worlds_improved is %d but %d world ids are listed" % (seed, w, len(ids)))
+        before, after = s.get("frozen_18_before"), s.get("frozen_18_after")
+        if before is not None or after is not None:
+            if type(before) is not int or type(after) is not int or not (0 <= before <= n and 0 <= after <= n):
+                bad.append("%s: frozen_18_before / frozen_18_after are not counts within the population" % seed)
+            elif after != before + g - c or c > before or g > n - before:
+                bad.append("%s: before %d, gained %d, broken %d, after %d do not add up" % (seed, before, g, c, after))
+        for ph in PHASES:
+            entry = _get(s, "phases", ph) or {}
+            done, differ, compared = entry.get("rescored"), entry.get("disagreements"), entry.get("scoring_rows_compared")
+            if done is not None or differ is not None:
+                if done != expected_n or differ != 0:
+                    bad.append("%s:%s: %r of %d predictions re-checked, %r disagreements" % (seed, ph, done, expected_n, differ))
+            if compared is not None and compared != done:
+                bad.append("%s:%s: %r scoring rows compared for %r predictions re-checked" % (seed, ph, compared, done))
+    return bad
+
+
+def trusted_reading_clean_problems(reading):
+    """A clean 0.4 trusted reading records EXACTLY this tool's checks, every one PASS except the two historical
+    checks (NOT_REQUESTED in trusted mode), and records that the tool itself loaded and ran the checker."""
+    bad, names, checks = [], set(SAFE_CHECKS + CHECKER_CHECKS + FINAL_CHECKS), reading["checks"]
+    if set(checks) != names:
+        bad.append("the reading's checks are not exactly this tool's checks (missing %s, extra %s)" % (
+            sorted(names - set(checks))[:6], sorted(set(checks) - names)[:6]))
+    for name in sorted(names & set(checks)):
+        want = "NOT_REQUESTED" if name in TRUSTED_NOT_REQUESTED else "PASS"
+        if _get(checks, name, "status") != want:
+            bad.append("check %s is %r; a clean trusted reading records %s" % (name, _get(checks, name, "status"), want))
+    if reading.get("imported_checker_code") is not True:
+        bad.append("the reading does not record that the checker ran")
+    if reading.get("material_supplied_by_caller") is not False:
+        bad.append("the checker material was supplied by a caller, not loaded by the tool")
+    return bad
+
+
+def trusted_frozen_grader_problems(reading, replay, label):
+    """Compare the replayed decisions with the frozen grader reading the rescore PINNED (review BLOCKER 1). This narrows
+    the gap but cannot close it: a frozen grader reading is itself built from scoring files. Returns (problems, info)."""
+    cmp = reading["comparison_with_frozen_grader"]
+    rel, pin = cmp["frozen_reading_path"], cmp["frozen_reading_pin"]["sha256_lf"]
+    path = _receipt_path(rel)
+    if not path.is_file():
+        return [("READING_EVIDENCE_INCOMPLETE", "the frozen grader reading the reading pinned is absent: %s" % rel)], None
+    if _lf_sha(path) != pin:
+        return [("READING_EVIDENCE_ALTERED", "the frozen grader reading at %s is not the one the reading pinned" % rel)], None
+    try:
+        gate, problems = strict_json(path.read_text(encoding="utf-8"))
+        if not isinstance(gate, dict) or not isinstance(gate.get("seeds"), dict) or problems.duplicate_keys or problems.nonfinite:
+            raise ValueError("not a frozen grader reading")
+        per = {seed: compare_seed_result(_get(gate, "seeds", seed, "G_LEARN_population") or {}, r) for seed, r in sorted(replay.items())}
+    except (ValueError, TypeError, UnicodeDecodeError) as error:
+        return [("READING_EVIDENCE_INCOMPLETE", "the frozen grader reading %s is unreadable (%s)" % (rel, type(error).__name__))], None
+    out = []
+    if set(gate["seeds"]) != set(replay):
+        out.append(("FROZEN_GRADER_DISAGREES", "seed sets differ: frozen grader %s, reading %s" % (sorted(gate["seeds"]), sorted(replay))))
+    for seed, row in per.items():
+        if not row["agree"]:
+            out.append(("FROZEN_GRADER_DISAGREES", "seed %s: %s differ from the frozen grader reading" % (
+                seed, sorted(k for k, v in row["field_agreement"].items() if not v))))
+    if gate.get("label") != label:
+        out.append(("FROZEN_GRADER_DISAGREES", "label: frozen grader %r, replay %r" % (gate.get("label"), label)))
+    return out, {"path": rel, "sha256_lf": pin, "frozen_label": gate.get("label"), "per_seed": per}
 
 
 def _merge(run, sub, default_check):
@@ -1141,15 +1511,12 @@ def _reading_consistency(run, reading, anchor, entry=None):
                 run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", "%s:%s: the reading's predictions digest is not the anchor's" % (seed, ph))
         if s.get("receipt_dir") != _get(anchor, "seeds", seed, "receipt_dir"):
             run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", "%s: the reading's receipt is not the anchor's" % seed)
-        for field in ("gained", "broken", "worlds_improved"):
-            if type(s.get(field)) is not int or s[field] < 0:
-                run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", "%s: %s is not a nonnegative integer" % (seed, field))
-        if not isinstance(s.get("kinds_improved"), list):
-            run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", "%s: kinds_improved is not a list" % seed)
+    for detail in reading_count_problems(reading, anchor):        # revision 1: the counts must be possible
+        run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", detail)
     if entry is not None and _get(reading, "comparison_with_frozen_grader", "frozen_reading_path") != entry["frozen_grader_reading"][0]:
         run.fail("READING_CONSISTENCY", "READING_INCONSISTENT", "the reading was compared with %r, not the original frozen grader reading %s" % (
             _get(reading, "comparison_with_frozen_grader", "frozen_reading_path"), entry["frozen_grader_reading"][0]))
-    run.passed("READING_CONSISTENCY", "seeds, predictions digests and receipts agree with the anchor")
+    run.passed("READING_CONSISTENCY", "seeds, predictions digests and receipts agree with the anchor; the recorded counts are possible")
 
 
 def replay_historical(name, recorded_per_seed, gate, recorded_label=None):
@@ -1179,7 +1546,7 @@ def replay_historical(name, recorded_per_seed, gate, recorded_label=None):
             problems.append(("HISTORICAL_DECISION_MISMATCH", "seed %s: replay %s, frozen grader %s, frozen list %s" % (seed, replay, grader, frozen)))
         if rec["passed"] is not wrong:
             problems.append(("HISTORICAL_EXCEPTION_INCOMPATIBLE", "seed %s: the recorded decision %s is not what the recognised mistake gives (%s)" % (seed, rec["passed"], wrong)))
-    label = "LEARNS_NEW_WORLDS" if rows and all(r["replay_with_the_preserved_rule"]["passed"] for r in rows.values()) else "NO_TRANSFER_TO_NEW_WORLDS"
+    label = historical_label(r["replay_with_the_preserved_rule"]["passed"] for r in rows.values())
     if label != entry["label"] or _get(gate, "label") != entry["label"]:
         problems.append(("HISTORICAL_DECISION_MISMATCH", "label: replay %s, frozen grader %s, frozen list %s" % (label, _get(gate, "label"), entry["label"])))
     if recorded_label is not None:
@@ -1193,7 +1560,7 @@ def _check_reading_body(run, reading, reading_path, mode, info):
     rsha = _lf_sha(reading_path)
     info["reading_sha256_lf"] = rsha
     schema = reading["schema"]
-    apath = PACKAGE / reading["anchor"]["path"]
+    apath = _receipt_path(reading["anchor"]["path"])
     anchor = None
     if not apath.is_file():
         run.fail("ANCHOR_EVIDENCE", "READING_EVIDENCE_INCOMPLETE", "the anchor the reading names is absent: %s" % reading["anchor"]["path"])
@@ -1229,17 +1596,23 @@ def _check_reading_body(run, reading, reading_path, mode, info):
                 (" (this is the frozen historical reading %r; it can be read only with %s)" % (listed, HISTORICAL_FLAG)) if listed else ""))
         run.passed("RULE_DESCRIPTION", "the preserved historical rule, recorded and applied")
         if schema != SCHEMA:
-            run.fail("READING_READABLE", "READING_SCHEMA_OUTDATED", "reading schema %r; trusted acceptance needs %r" % (schema, SCHEMA))
+            run.fail("READING_READABLE", "READING_SCHEMA_OUTDATED", "reading schema %r; this check needs %r" % (schema, SCHEMA))
+        elif reading.get("tool_revision") != TOOL_REVISION:
+            run.fail("READING_READABLE", "READING_SCHEMA_OUTDATED", "reading written by tool revision %r; this check needs revision %r "
+                     "(checkpoint and frozen-grader pins)" % (reading.get("tool_revision"), TOOL_REVISION))
         elif _get(reading, "mode", "name") != TRUSTED:
             run.fail("READING_CONSISTENCY", "READING_NOT_TRUSTED", "a historical-compatibility reading is never a trusted reading")
         if reading["verdict"] != "RESCORE_OK" or reading["reject_reasons"]:
             run.fail("READING_CONSISTENCY", "READING_NOT_CLEAN", "recorded verdict %r with %d reasons" % (reading["verdict"], len(reading["reject_reasons"])))
+        if schema == SCHEMA:                              # revision 1: every recorded check, exactly
+            for detail in trusted_reading_clean_problems(reading):
+                run.fail("READING_CONSISTENCY", "READING_NOT_CLEAN", detail)
         if run.reasons or anchor is None:
             return "VOID_REJECTED"
         sub = _Run()
-        _safe_checks(sub, PACKAGE / anchor["study"]["path"], apath, {}, TRUSTED)
+        _safe_checks(sub, _receipt_path(anchor["study"]["path"]), apath, {}, TRUSTED)
         _merge(run, sub, "ANCHOR_EVIDENCE")
-        run.passed("ANCHOR_EVIDENCE", "every pin the anchor names matches the file on disk")
+        run.passed("ANCHOR_EVIDENCE", "every pin the anchor names matches the file on disk, the run manifests and checkpoint weight files included")
         _reading_consistency(run, reading, anchor)
         if run.failed("READING_CONSISTENCY"):
             run.not_run("DECISIONS_REPLAYED", "the reading is inconsistent with its anchor")
@@ -1247,13 +1620,21 @@ def _check_reading_body(run, reading, reading_path, mode, info):
         replay = {}
         for seed, s in sorted(reading["per_seed"].items()):
             p, passed = historical_decision(s["gained"], s["broken"], len(s["kinds_improved"]), s["worlds_improved"])
-            replay[seed] = {"gained": s["gained"], "broken": s["broken"], "p_one_sided": str(p), "passed": passed, "recorded_passed": s["passed"]}
-            if s["passed"] is not passed or s.get("p_one_sided", str(p)) != str(p):
-                run.fail("DECISIONS_REPLAYED", "READING_DECISION_MISMATCH", "seed %s: recorded %s, the preserved rule gives %s (p %s)" % (seed, s["passed"], passed, p))
-        label = "LEARNS_NEW_WORLDS" if replay and all(r["passed"] for r in replay.values()) else "NO_TRANSFER_TO_NEW_WORLDS"
+            replay[seed] = {"gained": s["gained"], "broken": s["broken"], "p_one_sided": str(p), "passed": passed,
+                            "recorded_p_one_sided": s["p_one_sided"], "recorded_passed": s["passed"],
+                            "kinds_improved": sorted(s["kinds_improved"]), "world_ids_improved": sorted(s["world_ids_improved"])}
+            if s["passed"] is not passed or s["p_one_sided"] != str(p):
+                run.fail("DECISIONS_REPLAYED", "READING_DECISION_MISMATCH", "seed %s: recorded %s (p %s), the preserved rule gives %s (p %s)" % (
+                    seed, s["passed"], s["p_one_sided"], passed, p))
+        label = historical_label(r["passed"] for r in replay.values())
         if reading["label_rederived"] != label:
             run.fail("DECISIONS_REPLAYED", "READING_DECISION_MISMATCH", "recorded label %s, the preserved rule gives %s" % (reading["label_rederived"], label))
-        run.passed("DECISIONS_REPLAYED", "%d seed decisions re-derived from the recorded counts" % len(replay))
+        problems, frozen = trusted_frozen_grader_problems(reading, replay, label)
+        for code, detail in problems:
+            run.fail("DECISIONS_REPLAYED", code, detail)
+        info["frozen_grader"] = frozen
+        run.passed("DECISIONS_REPLAYED", "%d seed decisions re-derived from the RECORDED counts and compared with the pinned frozen "
+                   "grader reading; this is NOT a rescore" % len(replay))
         info["decisions"] = replay
         return label
 
@@ -1282,10 +1663,10 @@ def _check_reading_body(run, reading, reading_path, mode, info):
     if anchor is None:
         return "VOID_REJECTED"
     sub = _Run()
-    _, _, _, sub_info = _safe_checks(sub, PACKAGE / anchor["study"]["path"], apath, {}, HISTORICAL)
+    _, _, _, sub_info = _safe_checks(sub, _receipt_path(anchor["study"]["path"]), apath, {}, HISTORICAL)
     info["evidence"] = (sub_info or {}).get("evidence")
     _merge(run, sub, "ANCHOR_EVIDENCE")
-    run.passed("HISTORICAL_EVIDENCE", "%d original evidence items verified" % len(info["evidence"] or []))
+    run.passed("HISTORICAL_EVIDENCE", "verified against frozen or recorded digests: " + evidence_detail(info["evidence"]))
     run.passed("ANCHOR_EVIDENCE", "every pin the anchor names matches the file on disk")
     _reading_consistency(run, reading, anchor, entry)
     frel, fsha = entry["frozen_grader_reading"]
@@ -1302,14 +1683,19 @@ def _check_reading_body(run, reading, reading_path, mode, info):
 
 
 def check_reading(reading_path, out_path=None, historical_compatibility=False):
-    """Verify a committed reading WITHOUT rescoring and without importing any checker code."""
+    """Verify a committed reading WITHOUT rescoring and without importing any checker code. In trusted mode this is
+    never trusted acceptance: at best READING_CONSISTENT_NOT_RESCORED (exit 5). Only a full rescore gives exit 0."""
     mode = HISTORICAL if historical_compatibility else TRUSTED
-    run = _Run(READING_CHECKS)
     reading_path = pathlib.Path(reading_path)
     guard = protected_paths(reading_path)
+    refusal = output_refusal(out_path, guard)
+    if refusal:                                           # revision 1: create-only, refused before ANY work
+        return _print_output_refusal(refusal, mode)
+    run = _Run(READING_CHECKS)
     watched = snapshot_paths(reading_path)
     before = snapshot(watched)
-    info = {"reading_sha256_lf": None, "entry": None, "recorded_rule": None, "applied_rule_recorded": None, "evidence": None, "decisions": None}
+    info = {"reading_sha256_lf": None, "entry": None, "recorded_rule": None, "applied_rule_recorded": None, "evidence": None,
+            "decisions": None, "frozen_grader": None}
     label = "VOID_REJECTED"
     _constants_check(run)
     reading = None
@@ -1329,30 +1715,52 @@ def check_reading(reading_path, out_path=None, historical_compatibility=False):
             run.fail("READING_READABLE", "READING_INCOMPLETE", "missing or empty: %s" % missing[:8])
             reading = None
     if reading is not None:
+        wrong = reading_type_problems(reading)
+        if wrong:
+            run.fail("READING_READABLE", "READING_MALFORMED", "fields of the wrong JSON type: %s" % wrong[:8])
+            reading = None
+    if reading is not None:
         run.passed("READING_READABLE", _rel(reading_path))
         if not run.failed("TOOL_CONSTANTS"):
-            label = _check_reading_body(run, reading, reading_path, mode, info)
+            try:
+                label = _check_reading_body(run, reading, reading_path, mode, info)
+            except (TypeError, ValueError, KeyError, AttributeError, IndexError) as error:     # refused by name, never a crash
+                run.fail("READING_READABLE", "READING_MALFORMED", "the reading or the evidence it names has an unexpected structure "
+                         "(%s: %s)" % (type(error).__name__, str(error)[:120]))
     if mode == TRUSTED and run.checks["HISTORICAL_EVIDENCE"]["status"] == "NOT_RUN":
         run.checks["HISTORICAL_EVIDENCE"] = dict(NOT_REQUESTED_TRUSTED)
-    originals = _originals_check(run, watched, before, out_path, guard)
+    originals = _originals_check(run, watched, before)
     statuses = [c["status"] for c in run.checks.values()]
-    ok = "HISTORICAL_COMPATIBILITY_OK" if mode == HISTORICAL else "READING_VERIFIED"
+    ok = "HISTORICAL_COMPATIBILITY_OK" if mode == HISTORICAL else "READING_CONSISTENT_NOT_RESCORED"
     verdict = "REJECT" if run.reasons else ("CHECK_INCOMPLETE" if "NOT_RUN" in statuses else ok)
-    if run.reasons:
+    replayed = label if (mode == TRUSTED and verdict == ok) else None
+    if verdict == "REJECT":
         label = "VOID_REJECTED"
+    elif verdict != "HISTORICAL_COMPATIBILITY_OK":
+        label = "NOT_DERIVED"                             # consistent recorded counts are not a derived label
     hist_block = _historical_block(info, info["decisions"]) if mode == HISTORICAL else None
-    record = {"schema": CHECK_SCHEMA, "tool_version": TOOL_VERSION, "mode": _mode_block(mode),
-              "verdict": verdict, "label": label, "reject_reasons": run.reasons, "checks": run.checks,
-              "reading": {"path": _rel(reading_path), "sha256_lf": info["reading_sha256_lf"]},
-              "tool": {"path": _rel(__file__), "pin": file_pin(__file__)}, "hash_policy": HASH_POLICY["policy_id"],
+    tool_pin = file_pin(__file__)
+    record = {"schema": CHECK_SCHEMA, "tool_version": TOOL_VERSION, "tool_revision": TOOL_REVISION, "mode": _mode_block(mode),
+              "verdict": verdict, "label": label, "trusted_acceptance": False, "rescored": False,
+              "label_replayed_from_recorded_counts": replayed,
+              "reject_reasons": run.reasons, "checks": run.checks,
+              "reading": {"path": _rel(reading_path), "sha256_lf": info["reading_sha256_lf"],
+                          "written_by_this_tool_file": _get(reading, "tool", "pin", "sha256_lf") == tool_pin["sha256_lf"] if reading else None},
+              "tool": {"path": _rel(__file__), "pin": tool_pin}, "hash_policy": HASH_POLICY["policy_id"],
               "rule": _rule_block(info["recorded_rule"], info["applied_rule_recorded"]),
-              "historical_exception": hist_block, "decisions": info["decisions"], "originals": originals, "custody": CUSTODY,
-              "boundary": "no checker code was imported or run; decisions were re-derived from the counts the reading recorded, and the evidence behind it was verified by hash"}
-    _write_output(run, out_path, record)
+              "historical_exception": hist_block, "decisions": info["decisions"], "frozen_grader": info["frozen_grader"],
+              "originals": originals, "custody": CUSTODY,
+              "boundary": "no checker code was imported or run and NOTHING WAS RESCORED; decisions were re-derived from the counts the "
+                          "reading recorded, and the evidence behind it was verified by hash. Only a full rescore (RESCORE_OK, exit 0) "
+                          "is trusted acceptance."}
+    written = _write_output(out_path, record)
     print(json.dumps({k: record[k] for k in ("verdict", "label", "reject_reasons")}, indent=1))
     print("  mode: %s" % mode)
     if hist_block:
         _print_historical(hist_block)
+    if mode == TRUSTED and verdict == ok:
+        print("  NOT A RESCORE: the recorded counts are consistent (label %s), which is not trusted acceptance; "
+              "only a full rescore (RESCORE_OK, exit 0) is" % replayed)
     print("  checks:", ", ".join("%s=%s" % (k, v["status"]) for k, v in run.checks.items()))
     for seed, row in sorted((info["decisions"] or {}).items()):
         if mode == HISTORICAL:
@@ -1362,12 +1770,21 @@ def check_reading(reading_path, out_path=None, historical_compatibility=False):
                 row["decision_recorded_in_the_original_record"],
                 "  <- the recognised mistake" if row["recorded_decision_differs_from_history"] else ""))
         else:
-            print("  seed %s: gained %d broken %d, p %s -> %s" % (seed, row["gained"], row["broken"], row["p_one_sided"], row["passed"]))
-    return {"READING_VERIFIED": 0, "REJECT": 2, "CHECK_INCOMPLETE": 3, "HISTORICAL_COMPATIBILITY_OK": 4}[verdict]
+            print("  seed %s: gained %d broken %d, p %s -> %s (recorded counts, not rescored)" % (
+                seed, row["gained"], row["broken"], row["p_one_sided"], row["passed"]))
+    return EXIT_CODES[verdict] if written else EXIT_CODES["REJECT"]
+
+
+class _Parser(argparse.ArgumentParser):
+    """A usage error has its own exit code (64), never 2, which is REJECT."""
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        print("%s: USAGE_ERROR: %s" % (self.prog, message), file=sys.stderr)
+        sys.exit(EXIT_USAGE)
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser = _Parser(description=__doc__.split("\n")[0])
     parser.add_argument("--study", default=None)
     parser.add_argument("--anchor", default=None)
     parser.add_argument("--write-anchor", action="store_true", help="write a NEW anchor (create-only; never over an existing file)")
@@ -1388,6 +1805,9 @@ def main():
         parser.error("--study is required unless --check-reading is given")
     study = pathlib.Path(args.study)
     anchor = pathlib.Path(args.anchor) if args.anchor else HERE / ("trust_anchor_%s.json" % study.parent.name)
+    bad = [r for r in args.receipt if "=" not in r]
+    if bad:
+        parser.error("--receipt takes seed=dir; got %s" % bad)
     override = dict(r.split("=", 1) for r in args.receipt)
     if args.write_anchor:
         if args.historical_compatibility:

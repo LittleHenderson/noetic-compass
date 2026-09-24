@@ -340,3 +340,269 @@ Claim status:
   S3/AWS, the meta1 ledger, other worktrees' files, and Claude transcripts.
   - None of the sealed, eval or hset1 paths is checked out here. I checked this by file name only, with `git ls-files`.
   - I started a recursive grep over this worktree's own files, then stopped it. It printed nothing.
+
+---
+
+## Revision 1 (2026-09-23): the review's BLOCKER 1, MAJOR 2 and MAJOR 3, plus MINOR 4 and MINOR 5
+
+- Label: **CLAUDE_BUILT_CLAUDE_CHECKED** (temporary takeover while Codex is away).
+- Builder: Claude, temporary builder. It answers the review `REVIEW_RESCORER_0_4_6e7f62a1.md` (commit `4c89e737`).
+- Cost: $0. No AWS. No torch. No checker import. No course load. Small pure-Python checks only, one at a time.
+- Custody: `EVALUATION_NOT_INDEPENDENT`. The same model family built 0.4, reviewed it, and built this revision.
+  An independent (non-Claude) review is still owed.
+- The tool is still version `0.4`. Its outputs now also carry `tool_revision: 1`.
+- Sections 1 to 12 above describe 0.4 before this revision. Where they disagree with this section, this section wins.
+  The main points they get wrong now: section 3 "a clean 0.4 trusted reading → `READING_VERIFIED` (exit 0)";
+  section 3 "an absent [checkpoint] is reported as `RECORDED_DIGESTS_ONLY`, not refused"; section 9 (replaced by R1.7).
+
+### R1.1 What changed, finding by finding
+
+| Finding | What the tool does now |
+|---|---|
+| **BLOCKER 1**: trusted `--check-reading` gave exit 0 to hand-edited counts | A trusted `--check-reading` is **never** trusted acceptance. Its best verdict is `READING_CONSISTENT_NOT_RESCORED`, exit **5**, label `NOT_DERIVED`. The record says `trusted_acceptance: false` and `rescored: false`. Only a full rescore (`RESCORE_OK`, exit 0) is trusted acceptance. `READING_VERIFIED` is gone. |
+| | The recorded counts must be possible, in both modes: `p_one_sided` present (0.4 readings); kinds distinct and taken from the anchor's `kind_of`; world ids distinct, taken from its `world_of`, and as many as `worlds_improved`; `gained + broken` at most the population (18); no more kinds or worlds than gains; `frozen_18_after = frozen_18_before + gained - broken`; every phase re-checked in full (564) with 0 disagreements. |
+| | A clean trusted reading must record exactly this tool's checks: every one `PASS`, except `HISTORICAL_EVIDENCE` and `HISTORICAL_DECISIONS` (`NOT_REQUESTED` in trusted mode). It must record that the tool itself loaded and ran the checker. So a reading made with `--no-frozen-reading` is `READING_NOT_CLEAN` here. |
+| | The reading must pin the frozen grader reading it was compared with (new field `frozen_reading_pin`). The check verifies that pin, then compares counts, p, decision, kinds, worlds and label with it (`FROZEN_GRADER_DISAGREES`). |
+| | **The limit, stated plainly.** A forger who writes the reading AND a matching frozen grader reading gets exit 5. Never 0. The test `test_forged_counts_for_a_run_that_truly_fails_never_exit_0` shows this on purpose. |
+| **MAJOR 2**: absent checkpoint weights passed in both modes | Coordinator decision (1) is in the code. An absent or unverifiable weight file is **incomplete evidence**, refused by name: `HISTORICAL_EVIDENCE_INCOMPLETE` in historical mode, `RUN_EVIDENCE_INCOMPLETE` in trusted mode. Never `PASS`, never exit 4, never exit 0. "Unverifiable" means no well-formed recorded digest, or a name that is not a plain file name. |
+| | A seed with some weights present and some absent is `INCOMPLETE`, never `MATCH`. `RECORDED_DIGESTS_ONLY` is gone. |
+| | New anchors use schema `cncm.trusted-rescore-anchor/0.4`. Each seed pins `run_evidence`: the run manifest (path and sha256) and every checkpoint digest it records (name, sha256, bytes). A `0.3` anchor is now `ANCHOR_SCHEMA_OUTDATED` ("pins no run manifest and no checkpoint digest"). No 0.3 anchor exists in this repository. |
+| | New safe check `RUN_EVIDENCE` (trusted mode, part of the gate): the manifest must be the one the anchor pinned (`RUN_EVIDENCE_ALTERED` otherwise), it must agree with the anchor's prediction pins, and every weight file it records must be present and byte-identical. In historical mode it is `NOT_REQUESTED`, because `HISTORICAL_EVIDENCE` already covers the frozen manifests and their weights. |
+| | `--write-anchor` byte-checks every weight file **before** it loads anything, and refuses (`ANCHOR_REFUSED`) if one is absent or altered. So a fresh anchor pins only weights that were checked. |
+| | `HISTORICAL_EVIDENCE`'s detail now says how many files were byte-checked, not only how many items were listed. Example: "19 evidence items; 31 files byte-checked, including 15 of 15 recorded checkpoint weight files". |
+| **MAJOR 3**: `--out` could overwrite unlisted originals | `--out` is **create-only**. It is checked **before any work**: an existing path is `OUTPUT_EXISTS`; an original on the historical list (even a deleted one) or a file named on the same command line is `OUTPUT_WOULD_OVERWRITE_ORIGINAL`. Nothing is read, nothing is written, exit 2. The file is opened with mode `"x"`, which also stops a hard link and a file that appears during the run (then exit 2, nothing written). |
+| **MINOR 4**: thresholds outside the hashed rule | `historical_decision` reads every threshold from `HISTORICAL_RULE` (alpha, b > c, the veto flag, kinds, worlds). The label comes from `historical_label`, which honours `all_seeds_must_pass`. The module constants `MIN_IMPROVED_KINDS` / `MIN_IMPROVED_WORLDS` are removed, so there is no second copy. The whole `RECOGNISED_MISTAKE` is hashed: `RECOGNISED_MISTAKE_SHA256` = `fddc692ee219b0d6efe18675aa169bca693edd4e2b69918bd7ad818778c27a40`. |
+| **MINOR 5**: overloaded exit codes; crashes | Usage errors exit **64** (including `--receipt` without `=`, which crashed before). A reading or anchor field of the wrong JSON type is `READING_MALFORMED` / `ANCHOR_MALFORMED` by name, never a traceback. A safety net turns any other unexpected structure in a reading into `READING_MALFORMED`. `--write-anchor` still exits 0 when it writes an anchor (see R1.8, item 2). |
+| **NOTE 6** | Stated in R1.7, step 4. |
+| **NOTE 7** | Partly: `--check-reading` now requires the frozen grader comparison. A trusted **rescore** with `--no-frozen-reading` can still give `RESCORE_OK`. Open for the coordinator (R1.8, item 1). |
+| **NOTE 8** | Decisions (4) and (5) are restated as open items for Codex (R1.8, items 3 and 4). |
+| **NOTE 9** | Decision (3), fresh anchors, can now go ahead on AWS after a re-review, with the weights bundled (R1.7, step 6). |
+
+One more change, found while building: `_rel` returned a relative path unchanged when it was outside the package, and
+later readers took it as package-relative. It now returns the resolved absolute path.
+
+### R1.2 Exit codes now
+
+| Exit | Meaning |
+|---|---|
+| 0 | `RESCORE_OK`: trusted mode, full rescore. The **only** trusted acceptance. (Also: `--write-anchor` wrote the anchor.) |
+| 2 | `REJECT`: at least one named reason. Also every `--out` refusal and `ANCHOR_REFUSED`. |
+| 3 | `RESCORE_INCOMPLETE` / `CHECK_INCOMPLETE`: nothing failed, but a check that should run did not. |
+| 4 | `HISTORICAL_COMPATIBILITY_OK`: historical mode only, all evidence present and verified, weights included. |
+| 5 | `READING_CONSISTENT_NOT_RESCORED`: trusted `--check-reading` only. Consistent counts, not a rescore. |
+| 64 | Usage error. |
+
+### R1.3 Files (all LF and ASCII, so raw sha256 = sha256_lf)
+
+| File | sha256 | Change |
+|---|---|---|
+| `records/typed_pointer_001/trusted_rescore.py` | `c3d6bdd08f9f9f613fb77e1d590b557fd0e28df2d78b26f6ffd5b91661d5cdb1` | 0.4 → 0.4 revision 1 (was `2f10feac...`) |
+| `records/typed_pointer_001/test_historical_compatibility.py` | `d5eb5c22ea1fbd06630b4ecb7bceb49555574ae365475d37f4fe9605be6e5a1d` | rewritten for revision 1 (was `e9027873...`) |
+| `records/typed_pointer_001/test_trusted_rescore.py` | `edefa58bead6a47cb47510dd3014d113f3af67c2cb9c910f4c3302633a52ec56` | sandbox and new tests (was `154706e8...`) |
+| `records/typed_pointer_001/test_historical_rescore_rule.py` | `58d95cf01d3eb01da18db7fefa6d087cc3ce82a2e9c621110cd8da8464d6458e` | unchanged, still passes |
+| `records/typed_pointer_001/history/trusted_rescore_0_3.py` | `50295072dd662fac1bf51021e8abd8395621ebafc8d35e8f8e4949120e35f8cc` | unchanged |
+
+Not changed: every anchor, reading, receipt, run manifest, frozen grader reading, `evaluate_gates.py`, every checker
+and slot file, `aws_rescore_job/`, and `BRAIN_LINEAGE.md`.
+
+### R1.4 How the tests changed
+
+**The weights are not in this checkout.** All 30 historical checkpoint weight files are absent here (98,903,652 bytes
+in total). So under decision (1) the historical mode must refuse them on this laptop. The tests now say so:
+
+- **Without the weights (this checkout).** Each of the four committed historical readings (the originals and the AWS
+  copies) gives exit **2**, 15 reasons, each one `HISTORICAL_EVIDENCE_INCOMPLETE` naming one weight file. The replay
+  still runs, and all six decisions still agree with the frozen grader and the frozen list. Before this revision the
+  same run gave exit 4. These tests skip themselves when the weights are present (on AWS).
+- **With every weight file (SIMULATED here).** A sandbox copy of each study gets a placeholder file for every weight,
+  and the test swaps the tool's file-hash function for a stand-in. The stand-in reports the recorded digest for
+  exactly those placeholder bytes at exactly those paths, and hashes everything else for real. This reaches the
+  acceptance path: exit 4, every check PASS, 15 of 15 weights `MATCH`, the six decisions, the warning, and both
+  descriptions. **This is simulated. It proves the acceptance logic, not the real weights.**
+- **With the real weights (AWS only).** New `test_with_the_real_weights_the_historical_check_reading_gives_exit_4`
+  (4 cases, seconds each, no course load) and the existing full-rescore test. Both **fail** (they do not skip) if a
+  weight file is missing, so an unbundled job cannot look like a pass.
+- **Trusted-mode sandbox.** It is a new run, so it now has its own run manifest and two small placeholder weight files
+  whose true digests that manifest records. The tool byte-checks them for real (no stand-in).
+
+Tests that assumed the old behaviour, and what happened to each (the review named them):
+
+| Test | Now |
+|---|---|
+| `test_historical_compatibility.py:378` (six decisions, exit 4) | Split: without the weights (exit 2, named) and with simulated weights (exit 4). Real weights: AWS test. |
+| `test_historical_compatibility.py:435` (accepted `RECORDED_DIGESTS_ONLY`) | Uses simulated weights; every item must be `MATCH`, 15 byte-checked. |
+| `test_historical_compatibility.py:441` (sandbox accepted) | Now asserts both: refused for the weights only, then accepted with simulated weights. |
+| `test_trusted_rescore.py` committed-anchors test | Expects exactly the 15 named weight refusals here; expects none on AWS. It also fails on a partial bundle. |
+| slow `test_clean_copy_through_the_command_line...` | Its sandbox now has byte-checked placeholder weights; it also asserts `RUN_EVIDENCE = PASS`. |
+| slow `test_altered_scores_...rewritten_manifest` | The rewritten manifest is now refused at the gate, `RUN_EVIDENCE_ALTERED`, before any import. |
+| `check()` / `safe()` / `run()` helpers | A new output name every call (create-only). |
+
+New fast tests, one or more per failure scenario in the review:
+
+- BLOCKER 1: the reviewer's own scenario (Helm 2.0 seed `20260919`'s four label files as a new run; truth 7/1, p =
+  9/256, FAIL). The honest reading gives exit 5. The hand-written 12/0 reading gives exit 2, `FROZEN_GRADER_DISAGREES`.
+  With a forged frozen grader reading as well, exit 5, never 0. Plus 21 defect cases, each refused by exactly one
+  expected code. I also ran them one by one in a scratch script and printed the codes:
+
+| Defect | Exit | Codes |
+|---|---|---|
+| 99 gains in an 18-question population | 2 | `READING_INCONSISTENT` |
+| one kind counted twice (`reach`, `reach`) | 2 | `READING_INCONSISTENT` |
+| no `p_one_sided` | 2 | `READING_INCOMPLETE` |
+| a kind outside the population | 2 | `READING_INCONSISTENT` |
+| more worlds than gains | 2 | `READING_INCONSISTENT` |
+| before and after do not add up | 2 | `READING_INCONSISTENT` |
+| a phase not fully re-checked (500 of 564) | 2 | `READING_INCONSISTENT` |
+| a wrong p | 2 | `READING_DECISION_MISMATCH` |
+| a flipped decision | 2 | `READING_DECISION_MISMATCH` |
+| a receipt that is not the anchor's | 2 | `READING_INCONSISTENT` |
+| no checks at all (`{}`) | 2 | `READING_NOT_CLEAN` |
+| a check `NOT_RUN` | 2 | `READING_NOT_CLEAN` |
+| no frozen grader comparison | 2 | `READING_NOT_CLEAN` |
+| no `RUN_EVIDENCE` check | 2 | `READING_NOT_CLEAN` |
+| the checker never ran | 2 | `READING_NOT_CLEAN` |
+| an unclean verdict | 2 | `READING_NOT_CLEAN` |
+| a historical mode | 2 | `READING_NOT_TRUSTED` |
+| a wrong rule | 2 | `RULE_DESCRIPTION_MISMATCH` |
+| written before revision 1 (no `tool_revision`) | 2 | `READING_INCOMPLETE` |
+| no pinned frozen grader reading | 2 | `READING_INCOMPLETE` |
+| `anchor.path` is a JSON object | 2 | `READING_MALFORMED` |
+
+- Also for BLOCKER 1: the frozen grader reading changed after the pin (`READING_EVIDENCE_ALTERED`); a weight file gone
+  after the reading (`RUN_EVIDENCE_INCOMPLETE`); the command line gives exit 5 and prints "NOT A RESCORE".
+- MAJOR 2: absent, altered and rewritten-manifest cases in trusted mode (refused before any import); an anchor without
+  run evidence (`ANCHOR_INCOMPLETE`); a 0.3 anchor (`ANCHOR_SCHEMA_OUTDATED`); `--write-anchor` refuses absent or
+  altered weights before loading anything, for a sandbox run and for the real Helm 1.0 study; a partly present seed is
+  `INCOMPLETE`, not `MATCH`; unit tests of the weight check (unverifiable digest, not a plain name, none recorded).
+- MAJOR 3: every path the review listed (the AWS copy of the reading, the study, `evaluate_gates.py`, a checker source,
+  a copy of the tool) and a plain existing file, in both modes, for `--check-reading` and for a rescore. Each is refused
+  before any work: the test replaces `snapshot`, `_safe_checks` and `_check_reading_body` with functions that fail if
+  called. The bytes are unchanged. Also a deleted original, a hard link, a file that appears during the run, and the
+  command line.
+- MINOR 4: a changed threshold changes the decision **and** shows as `TOOL_CONSTANTS_ALTERED`; an edited
+  `written_by_tool_sha256_lf` shows too. MINOR 5: usage errors exit 64; a malformed field is refused, not a crash.
+
+### R1.5 What I ran on the laptop, and the results
+
+Free memory at the start: 745 MB of 16,085 MB. Every run: `PYTHONDONTWRITEBYTECODE=1`, `-p no:cacheprovider`, one at a time.
+
+| Run | Result | Time |
+|---|---|---|
+| baseline, `test_historical_compatibility.py` before any change | 43 passed, 2 skipped | 28.70 s |
+| `test_trusted_rescore.py` | **27 passed, 9 skipped** (slow) | 6.52 s |
+| `test_historical_compatibility.py` | **60 passed, 6 skipped** (AWS) | 23.61 s |
+| `test_historical_rescore_rule.py` | **774 passed** | 0.55 s |
+| **Total** | **861 passed, 15 skipped, 0 failed** | |
+
+Command-line smoke runs (no `--out`, so nothing was written):
+
+| Run | Exit | Result |
+|---|---|---|
+| historical `--check-reading`, helm1 | 2 | `REJECT`; 15 × `HISTORICAL_EVIDENCE_INCOMPLETE` (the weights) |
+| historical `--check-reading`, helm2 | 2 | the same; the three decisions still replayed and agree |
+| trusted `--check-reading`, helm1 AWS copy | 2 | `RULE_DESCRIPTION_MISMATCH`, `READING_SCHEMA_OUTDATED` |
+| trusted rescore, helm1 anchor | 2 | `RULE_DESCRIPTION_MISMATCH`, `ANCHOR_SCHEMA_OUTDATED`; checker not imported |
+| historical `--safe-only`, helm2 anchor | 2 | 15 × `HISTORICAL_EVIDENCE_INCOMPLETE`; every other file check `PASS`; `RUN_EVIDENCE = NOT_REQUESTED` |
+| historical `--check-reading --out <existing file>` | 2 | `OUTPUT_EXISTS`; the file's sha256 unchanged (`a8f875c5...` before and after) |
+| `--check-reading x --study y` | 64 | `USAGE_ERROR` |
+| `--receipt nosign` | 64 | `USAGE_ERROR` (was a crash) |
+
+Claim status:
+
+- **Ran here:** the fast tests and smoke runs above; my scratch probe of the 21 defect cases.
+- **Simulated here:** "every weight file present and matching", in the historical acceptance tests (see R1.4).
+- **Not run:** the full 564-record historical readings, the 15 slow/AWS tests, a real `--write-anchor` (it loads the
+  course), and any check of the real weight files. All need AWS with the weights bundled.
+
+### R1.6 Anchor and reading format changes
+
+- Anchor schema `0.4` adds `tool_revision` and, per seed, `run_evidence`:
+  `{"manifest": {"path", "pin"}, "checkpoints": {"<name>.pt": {"sha256", "bytes"}}}`.
+- Reading schema stays `cncm.trusted-rescore-reading/0.4`. It adds `tool_revision`, `run_evidence` and
+  `comparison_with_frozen_grader.frozen_reading_pin`. A 0.4 reading without `tool_revision` (made before this
+  revision) is `READING_INCOMPLETE`. None was ever committed.
+- Check record schema `cncm.trusted-rescore-reading-check/0.2` adds `trusted_acceptance` (always false), `rescored`
+  (always false), `label_replayed_from_recorded_counts`, `frozen_grader` and `reading.written_by_this_tool_file`.
+
+### R1.7 What must run on AWS (replaces section 9)
+
+Do these only **after a re-review of this revision**.
+
+1. **Bundle** the tool, the three test files, `evaluate_gates.py`, `records/typed_practice_001/evaluate_gates.py`, and
+   **the 30 real checkpoint weight files** (98,903,652 bytes). Each goes at
+   `records/typed_pointer_001/<receipt>/collected/results/artifacts/<name>`, where `<name>` is `final.pt`, `initial.pt`,
+   `pass_01.pt`, `prelast.pt` and `retained.pt`, and `<receipt>` is each of `receipt_helm1_certified_20260917`,
+   `_20260918`, `_20260919`, `receipt_20260917`, `receipt_20260918`, `receipt_20260919`.
+   - I do not know where the weights are kept. I did not look: S3 and the archive are off-limits to me.
+   - The old `aws_rescore_job/launch.py` bundle list names neither the new test file nor the weights. I did not
+     change it.
+   - The tool byte-checks every weight file against the frozen manifests. A wrong or missing file is refused by name.
+2. **Do not reuse `job.sh.template` unchanged.** It writes over original paths; 0.4 refuses that on purpose.
+3. **The quick historical check** (seconds each, no course load). Expect exit 4:
+   `python records/typed_pointer_001/trusted_rescore.py --historical-compatibility --check-reading records/typed_pointer_001/trusted_rescore_reading_helm1_certified.json --out records/typed_pointer_001/historical_check_helm1_certified_r1.json`
+   and the same for `trusted_rescore_reading_helm2_experimental.json` with its own new `--out` name.
+4. **The full historical readings** (about 14 min each). Expect exit 4. Every `--out` must be a NEW path:
+   ```
+   python records/typed_pointer_001/trusted_rescore.py --historical-compatibility \
+     --study records/typed_pointer_001/study_helm1_certified.json \
+     --anchor records/typed_pointer_001/trust_anchor_helm1_certified.json \
+     --out records/typed_pointer_001/historical_compat_reading_helm1_certified_0_4r1.json
+   python records/typed_pointer_001/trusted_rescore.py --historical-compatibility \
+     --study records/typed_pointer_001/admission_001/study.json \
+     --anchor records/typed_pointer_001/trust_anchor_helm2_experimental_20208c92.json \
+     --out records/typed_pointer_001/historical_compat_reading_helm2_experimental_0_4r1.json
+   ```
+   Review NOTE 6: `--check-reading` will refuse these two new files in both modes (`HISTORICAL_EXCEPTION_UNKNOWN_READING`
+   in historical mode, `RULE_DESCRIPTION_MISMATCH` in trusted mode). That is by design: the frozen list pins only the
+   original 0.2 readings. The only way to verify them again is to run step 4 again.
+5. **The slow tests.** The historical full-rescore test repeats step 4; skip one or the other to save about 28 min:
+   ```
+   HELM_RUN_SLOW_TESTS=1 python -m pytest records/typed_pointer_001/test_trusted_rescore.py \
+     records/typed_pointer_001/test_historical_compatibility.py records/typed_pointer_001/test_historical_rescore_rule.py \
+     -q -p no:cacheprovider -rs
+   ```
+   With the weights bundled, the "without the weights" tests skip themselves and the AWS tests run.
+6. **Decision (3), fresh trusted anchors**, if the owner or coordinator wants them. Schema 0.4 now pins the weights,
+   so these anchors will not be out of date on arrival. Use new names (create-only):
+   ```
+   python records/typed_pointer_001/trusted_rescore.py --study records/typed_pointer_001/study_helm1_certified.json \
+     --anchor records/typed_pointer_001/trust_anchor_helm1_certified_v0_4.json --write-anchor
+   python records/typed_pointer_001/trusted_rescore.py --study records/typed_pointer_001/study_helm1_certified.json \
+     --anchor records/typed_pointer_001/trust_anchor_helm1_certified_v0_4.json \
+     --frozen-reading records/typed_pointer_001/admission_helm1_certified/gate_reading.json \
+     --out records/typed_pointer_001/trusted_rescore_reading_helm1_certified_0_4r1.json
+   ```
+   Expect exit 0 and `RESCORE_OK`. Do the same for helm2 with `admission_001/study.json` and
+   `admission_001/gate_reading.json`. A later `--check-reading` of such a reading gives exit **5**, not 0, by design.
+
+### R1.8 Open items
+
+1. **NOTE 7, coordinator's call.** A trusted rescore with `--no-frozen-reading` can still give `RESCORE_OK` (exit 0).
+   Should that count as incomplete evidence? `--check-reading` already requires the comparison.
+2. **`--write-anchor` exits 0** when it writes an anchor. It is a different command from a rescore, and 0 keeps
+   `&&` chains working. The review (MINOR 5) suggested a code of its own. Coordinator's call.
+3. **For Codex, decision (4):** the study's nested pins (authority, owner and request files) are still not re-verified.
+4. **For Codex, decision (5):** `BRAIN_LINEAGE.md` still states the wrong seed-`20260917` decision at lines 300 and
+   302-304 (the review's line numbers at `4c89e737`). Lines 17-27 already hold a dated correction that takes precedence.
+5. **The weight files.** Where they are kept, and who bundles them (R1.7, step 1).
+6. **CHANGELOG and spec sheet.** Still outside this sparse checkout; not updated.
+7. **Independent review.** Still owed, by Codex on return or another model family.
+
+### R1.9 EXPOSURE: every file outside this working copy that I opened, for this revision
+
+- **Pre-loaded into my context by the tool that runs me. I did not open these:**
+  `C:\Users\wakil\.claude\CLAUDE.md`; `C:\Users\wakil\OneDrive\Desktop\tksCAS\CLAUDE.md`; the auto-memory index
+  `C:\Users\wakil\.claude\projects\C--Users-wakil-OneDrive-Desktop-tksCAS\memory\MEMORY.md`. It names the sealed-test
+  archive folder and some sealed-build facts (for example "HSET-1A reach W=2"). It holds no TEST world, record id or answer.
+- **Not project files:** the Python install and pytest; PowerShell's memory query (`Win32_OperatingSystem`).
+- **My scratchpad** (`C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad`):
+  `probe_defects.py`, and `r1_h2.json` (a check record; deleted).
+- **Git Bash's `/tmp`:** `o1.txt`, the smoke runs' console text. Deleted.
+- **Temporary test folders** under the system temp directory, made by the tests and my probe. They held copies of
+  files from this worktree only, and were removed.
+- **The shared git object store, through git commands only** (`git status`, `git diff`, `git log`, `git ls-files`,
+  `git rev-parse`, then `git add`, `git commit` and `git push` for this commit):
+  `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/vision-next/.git`.
+  No `git show` of any other branch or file. `git push` talks to GitHub, not AWS.
+- **Not opened:** `D:/tksCAS-archive/`, any `*SEALED*`/`*sealed*` file, any `*_eval.jsonl`, any hset1a/hset1b path,
+  S3/AWS, the meta1 ledger, other worktrees' files, and Claude transcripts.

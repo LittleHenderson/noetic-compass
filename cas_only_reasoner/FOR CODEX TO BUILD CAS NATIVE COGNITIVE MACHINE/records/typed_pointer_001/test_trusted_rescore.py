@@ -15,9 +15,13 @@ predictions of the sandbox seed per run: the clean copy through the command line
 without a rewritten manifest, an absent scoring file, a malformed answer, profile / course / population
 identity, agreement and disagreement with a frozen grader reading, and executed-but-not-anchored code.
 
-The sandbox is a copy of the certified Helm 1.0 seed 20260918's four files with a one-seed study.
+The sandbox is a copy of the certified Helm 1.0 seed 20260918's four files with a one-seed study. 0.4 revision 1:
+it is a NEW run, so it also gets its own run manifest and two small placeholder checkpoint files whose TRUE digests
+that manifest records. The tool byte-checks them like any weights (RUN_EVIDENCE). They are not real weights; the
+real weights of the historical runs are byte-checked only on AWS (test_historical_compatibility.py, slow tests).
 """
 import hashlib
+import itertools
 import json
 import os
 import pathlib
@@ -42,20 +46,46 @@ slow = pytest.mark.skipif(os.environ.get("HELM_RUN_SLOW_TESTS") != "1",
 
 
 # --- sandbox -------------------------------------------------------------------------------------
-def _make_sandbox():
+PLACEHOLDER_CHECKPOINTS = ("initial.pt", "final.pt")
+_OUT = itertools.count()
+
+
+def _make_sandbox(source=SOURCE_RECEIPT, seed=CERTIFIED_SEED, study_file=HERE / "study_helm1_certified.json"):
+    """A NEW one-seed run: the four label files of `source`, two placeholder checkpoint files, and the run's own
+    manifest recording the true digests of all six (label files LF-normalised, as the hash policy compares them)."""
     tmp = pathlib.Path(tempfile.mkdtemp(prefix="trusted_rescore_"))
     target = tmp / "receipt" / "collected/results/artifacts"
     target.mkdir(parents=True)
+    rows = []
     for name in FILES:
-        shutil.copy(SOURCE_RECEIPT / name, target / name)
-    study = json.loads((HERE / "study_helm1_certified.json").read_text(encoding="utf-8"))
-    study["jobs"] = [dict(j, receipt_dir=str(tmp / "receipt_as_recorded_elsewhere")) for j in study["jobs"] if str(j["model_seed"]) == CERTIFIED_SEED]
+        shutil.copy(source / name, target / name)
+        pin = T.file_pin(target / name)
+        rows.append({"name": name, "sha256": pin["sha256_lf"], "bytes": pin["bytes_lf"]})
+    for name in PLACEHOLDER_CHECKPOINTS:
+        body = ("placeholder checkpoint %s of a sandbox run -- not real weights" % name).encode("utf-8")
+        (target / name).write_bytes(body)
+        rows.append({"name": name, "sha256": hashlib.sha256(body).hexdigest(), "bytes": len(body)})
+    (tmp / "receipt" / "artifact_manifest.json").write_bytes(json.dumps({"artifacts": rows}, indent=1, sort_keys=True).encode("utf-8"))
+    study = json.loads(pathlib.Path(study_file).read_text(encoding="utf-8"))
+    study["jobs"] = [dict(j, receipt_dir=str(tmp / "receipt_as_recorded_elsewhere")) for j in study["jobs"] if str(j["model_seed"]) == str(seed)]
     (tmp / "study.json").write_text(json.dumps(study), encoding="utf-8")
     return tmp
 
 
 def override(tmp):
     return {CERTIFIED_SEED: str(tmp / "receipt")}
+
+
+def historical_weights_missing():
+    """The checkpoint weight files that the frozen run manifests of both historical studies record, and that are absent
+    here. On the laptop: all 30 (they are not in this checkout). On AWS, with the weights bundled: none."""
+    missing = []
+    for entry in T.HISTORICAL_EXCEPTION.values():
+        for mrel, _ in entry["receipt_manifests"].values():
+            art = T.PACKAGE / mrel.rsplit("/", 1)[0] / "collected/results/artifacts"
+            rows = json.loads((T.PACKAGE / mrel).read_text(encoding="utf-8"))["artifacts"]
+            missing += [str(art / r["name"]) for r in rows if r["name"].endswith(T.CHECKPOINT_SUFFIX) and not (art / r["name"]).is_file()]
+    return missing
 
 
 def _course_part_without_loading():
@@ -67,7 +97,10 @@ def _course_part_without_loading():
 
 
 @pytest.fixture()
-def fast():
+def fast(monkeypatch):
+    def refuse(*a, **k):                                  # a fast test must never load the course (minutes, and memory)
+        raise AssertionError("the checker must not be imported or run in a fast test")
+    monkeypatch.setattr(T, "_load_frozen_and_checker", refuse)
     tmp = _make_sandbox()
     anchor = T.safe_anchor_part(tmp / "study.json", override(tmp))
     part = _course_part_without_loading()
@@ -79,7 +112,7 @@ def fast():
 
 
 def run(tmp, **kw):
-    out = tmp / "reading.json"
+    out = tmp / ("reading_%03d.json" % next(_OUT))       # --out is create-only (0.4 revision 1): a new name every time
     code = T.rescore(tmp / "study.json", tmp / "anchor.json", override(tmp), out, **kw)
     return code, json.loads(out.read_text(encoding="utf-8"))
 
@@ -156,8 +189,8 @@ def test_study_identity_and_seed_set(fast):
     study = json.loads((fast / "study.json").read_text(encoding="utf-8"))
     study["jobs"][0]["model_seed"] = 20260917                              # a different seed slipped into the study
     (fast / "study.json").write_text(json.dumps(study), encoding="utf-8")
-    T.rescore(fast / "study.json", fast / "anchor.json", {"20260917": str(fast / "receipt")}, fast / "reading.json")
-    r = json.loads((fast / "reading.json").read_text(encoding="utf-8"))
+    T.rescore(fast / "study.json", fast / "anchor.json", {"20260917": str(fast / "receipt")}, fast / "seed_set_reading.json")
+    r = json.loads((fast / "seed_set_reading.json").read_text(encoding="utf-8"))
     assert {"STUDY_IDENTITY", "SEED_SET"} <= set(codes(r))
     assert_checker_never_ran(r)
 
@@ -266,18 +299,101 @@ ANCHOR_SHA256_LF = {
 }
 
 
-def test_the_committed_anchors_are_the_pinned_ones_and_every_file_they_pin_is_the_file_on_disk():
+def test_the_committed_anchors_are_the_pinned_ones_and_every_file_they_pin_is_the_file_on_disk(tmp_path, monkeypatch):
     # 0.4: the committed anchors are the 0.2 HISTORICAL anchors. Trusted mode refuses them (wrong rule description);
     # their evidence is checked file by file in the explicit historical-compatibility mode.
+    # 0.4 revision 1: the 15 checkpoint weight files per study are not in this checkout, so each is refused BY NAME as
+    # incomplete evidence; every OTHER pinned file must match. The weights are byte-checked by the slow tests on AWS.
+    def refuse(*a, **k):
+        raise AssertionError("the checker must not be imported or run in this test")
+    monkeypatch.setattr(T, "_load_frozen_and_checker", refuse)
     studies = {"trust_anchor_helm1_certified.json": "study_helm1_certified.json", "trust_anchor_helm2_experimental_20208c92.json": "admission_001/study.json"}
+    weights_here = not historical_weights_missing()                      # False on the laptop; True on AWS with the bundle
+    assert weights_here or len(historical_weights_missing()) == 30       # all or nothing: a partial bundle fails here
     for name, digest in ANCHOR_SHA256_LF.items():
         assert T.file_pin(HERE / name)["sha256_lf"] == digest, "ANCHOR_CHANGED:%s" % name
         anchor = json.loads((HERE / name).read_text(encoding="utf-8"))
         assert anchor["schema"] == T.HISTORICAL_ANCHOR_SCHEMA and anchor["custody"].startswith("EVALUATION_NOT_INDEPENDENT") and len(anchor["checker"]["code_closure"]) == 18
-        out = pathlib.Path(tempfile.mkdtemp()) / "safe.json"
-        T.rescore(HERE / studies[name], HERE / name, {}, out, safe_only=True, historical_compatibility=True)   # file checks only: seconds
+        out = tmp_path / ("safe_%s" % name)
+        code = T.rescore(HERE / studies[name], HERE / name, {}, out, safe_only=True, historical_compatibility=True)   # file checks only: seconds
         reading = json.loads(out.read_text(encoding="utf-8"))
-        assert reading["reject_reasons"] == [] and all(reading["checks"][c]["status"] == "PASS" for c in T.SAFE_CHECKS)
+        assert all(reading["checks"][c]["status"] == "PASS" for c in T.SAFE_CHECKS if c not in ("HISTORICAL_EVIDENCE", "RUN_EVIDENCE"))
+        assert reading["checks"]["RUN_EVIDENCE"]["status"] == "NOT_REQUESTED"
+        items = reading["historical_exception"]["evidence"]
+        assert all(i["status"] == "MATCH" for i in items if "byte_checked" not in i)            # every other pinned file matches
+        if weights_here:
+            assert code == 3 and reading["reject_reasons"] == [] and reading["checks"]["HISTORICAL_EVIDENCE"]["status"] == "PASS"
+            assert [i["status"] for i in items if "byte_checked" in i] == ["MATCH"] * 3
+        else:
+            assert code == 2 and len(reading["reject_reasons"]) == 15, reading["reject_reasons"]
+            assert all(r.startswith("HISTORICAL_EVIDENCE_INCOMPLETE:") and "checkpoint weight file" in r and "is absent here" in r
+                       for r in reading["reject_reasons"])
+            assert [i["status"] for i in items if "byte_checked" in i] == ["INCOMPLETE"] * 3     # never MATCH without the weights
+
+
+# ---- 0.4 revision 1: run evidence (the run manifest and every checkpoint weight file) in TRUSTED mode ----
+def test_a_new_anchor_pins_the_run_manifest_and_every_checkpoint_digest(fast):
+    anchor = json.loads((fast / "anchor.json").read_text(encoding="utf-8"))
+    evidence = anchor["seeds"][CERTIFIED_SEED]["run_evidence"]
+    assert anchor["schema"] == T.ANCHOR_SCHEMA == "cncm.trusted-rescore-anchor/0.4" and anchor["tool_revision"] == T.TOOL_REVISION
+    assert evidence["manifest"]["pin"]["sha256_lf"] == T.file_pin(fast / "receipt/artifact_manifest.json")["sha256_lf"]
+    assert sorted(evidence["checkpoints"]) == sorted(PLACEHOLDER_CHECKPOINTS)
+    for name, row in evidence["checkpoints"].items():
+        assert row == {"sha256": hashlib.sha256(art(fast, name).read_bytes()).hexdigest(), "bytes": art(fast, name).stat().st_size}
+
+
+def _rewrite_manifest(tmp):
+    path = tmp / "receipt/artifact_manifest.json"
+    body = json.loads(path.read_text(encoding="utf-8"))
+    body["artifacts"] = [r for r in body["artifacts"] if r["name"] != "final.pt"]          # "forget" one checkpoint
+    path.write_bytes(json.dumps(body).encode("utf-8"))
+
+
+@pytest.mark.parametrize("damage,expected", [
+    (lambda t: art(t, "final.pt").unlink(), "RUN_EVIDENCE_INCOMPLETE"),
+    (lambda t: art(t, "final.pt").write_bytes(b"other weights"), "RUN_EVIDENCE_ALTERED"),
+    (lambda t: (t / "receipt/artifact_manifest.json").unlink(), "RUN_EVIDENCE_INCOMPLETE"),
+    (_rewrite_manifest, "RUN_EVIDENCE_ALTERED"),
+], ids=["absent-checkpoint", "altered-checkpoint", "absent-manifest", "rewritten-manifest"])
+def test_absent_or_altered_run_evidence_is_refused_by_name_before_any_import(fast, damage, expected):
+    damage(fast)
+    code, r = run(fast)                                                   # NOT safe_only: the gate itself must stop the import
+    assert code == 2 and codes(r) == [expected] and r["checks"]["RUN_EVIDENCE"]["status"] == "FAIL", r["reject_reasons"]
+    assert r["label_rederived"] == "VOID_REJECTED"
+    assert_checker_never_ran(r)
+
+
+def test_an_anchor_without_run_evidence_pins_is_incomplete_and_a_0_3_anchor_is_outdated(fast):
+    edit_anchor(fast, lambda a: a["seeds"][CERTIFIED_SEED].pop("run_evidence"))
+    code, r = run(fast)
+    assert code == 2 and codes(r) == ["ANCHOR_INCOMPLETE"] and "run_evidence" in r["reject_reasons"][0]
+    edit_anchor(fast, lambda a: a.update(schema=T.ANCHOR_SCHEMA_0_3))   # what 0.4 wrote before revision 1
+    code, r = run(fast)
+    assert code == 2 and codes(r) == ["ANCHOR_SCHEMA_OUTDATED"] and "pins no run manifest" in r["reject_reasons"][0]
+    assert_checker_never_ran(r)
+
+
+def test_write_anchor_byte_checks_the_weights_before_it_loads_anything(fast):
+    art(fast, "initial.pt").unlink()
+    new = fast / "new_anchor.json"
+    assert T.write_anchor(fast / "study.json", new, override(fast)) == 2 and not new.exists()   # the loader guard never fired
+    art(fast, "initial.pt").write_bytes(b"not the recorded bytes")
+    assert T.write_anchor(fast / "study.json", new, override(fast)) == 2 and not new.exists()
+
+
+def test_checkpoint_sets_are_match_only_when_every_file_matched(tmp_path):
+    (tmp_path / "a.pt").write_bytes(b"x")
+    good = {"sha256": hashlib.sha256(b"x").hexdigest(), "bytes": 1}
+    rows = {"a.pt": good, "b.pt": {"sha256": "not-a-digest", "bytes": 1}, "c.pt": {"sha256": "0" * 64, "bytes": 1}}
+    summary, problems = T.verify_checkpoints("s", rows, tmp_path, "INCOMPLETE_CODE", "ALTERED_CODE")
+    assert summary["status"] == "INCOMPLETE" and summary["matching"] == 1                      # partly present is NOT a match
+    assert summary["unverifiable"] == ["b.pt"] and summary["absent"] == ["c.pt"]
+    assert [p[0] for p in problems] == ["INCOMPLETE_CODE", "INCOMPLETE_CODE"] and "b.pt" in problems[0][1] and "c.pt" in problems[1][1]
+    assert T.verify_checkpoints("s", {"a.pt": good}, tmp_path, "I", "A")[0]["status"] == "MATCH"
+    summary, problems = T.verify_checkpoints("s", {}, tmp_path, "I", "A")
+    assert summary["status"] == "INCOMPLETE" and [p[0] for p in problems] == ["I"]              # no checkpoint recorded at all
+    summary, problems = T.verify_checkpoints("s", {"../a.pt": good}, tmp_path / "sub", "I", "A")
+    assert summary["unverifiable"] == ["../a.pt"] and [p[0] for p in problems] == ["I"]         # not a plain file name
 
 
 def test_the_committed_readings_retain_their_historical_tool_identity():
@@ -319,6 +435,7 @@ def test_clean_copy_through_the_command_line_reproduces_the_certified_numbers(re
     assert r["checks"]["FROZEN_GRADER_AGREEMENT"]["status"] == "NOT_REQUESTED"
     assert all(r["checks"][k]["status"] == "NOT_REQUESTED" for k in ("HISTORICAL_EVIDENCE", "HISTORICAL_DECISIONS"))   # 0.4 trusted mode
     assert all(v["status"] == "PASS" for k, v in r["checks"].items() if k not in ("FROZEN_GRADER_AGREEMENT", "HISTORICAL_EVIDENCE", "HISTORICAL_DECISIONS"))
+    assert r["checks"]["RUN_EVIDENCE"]["status"] == "PASS" and r["tool_revision"] == T.TOOL_REVISION   # revision 1: weights byte-checked
 
 
 def _flip_scores(tmp):
@@ -339,7 +456,9 @@ def test_altered_scores_are_rejected_with_or_without_a_rewritten_manifest(real, 
     manifest = [{"name": "course_p10_scoring.json", "bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}]
     (real / "receipt" / "artifact_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")   # the forgery that fooled the frozen grader
     _, r = run(real, material=material, compare_frozen=False)
-    assert r["verdict"] == "REJECT" and codes(r) == ["SCORING_FILE_DISAGREES_WITH_RESCORE"]
+    # 0.4 revision 1: the anchor pins the run manifest, so the rewritten manifest is refused at the gate, by name
+    assert r["verdict"] == "REJECT" and codes(r) == ["RUN_EVIDENCE_ALTERED"]
+    assert_checker_never_ran(r)
 
 
 @slow
