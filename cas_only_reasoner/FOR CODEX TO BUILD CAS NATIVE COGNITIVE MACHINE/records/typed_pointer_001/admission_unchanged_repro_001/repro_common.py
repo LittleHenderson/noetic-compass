@@ -3,14 +3,14 @@
 WHAT THIS FOLDER DOES. It freezes ONE AWS job and later reads its result:
   * the job: seed 20260917 of the historical Helm 2.0 source 20208c92, full registered 10-pass schedule, trained by
     the same launcher (`aws/typed_pointer_launch.py`) on g7.2xlarge, from the same committed package;
-  * the reading: Codex's reproduction policy revision 1 (commit bc46b36e, `REPRODUCTION_POLICY.json`), implemented
-    exactly. Three verdicts only:
+  * the reading: Codex's reproduction policy revision 1 (`REPRODUCTION_POLICY.json`, pinned in `policy_pins.json`),
+    implemented exactly. Three verdicts only:
       STATE_AND_PANEL_REPRODUCED_FOR_ONE_SEED            valid evidence AND identical learned state AND identical panel;
       DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY   valid evidence, but learned state or any panel record differs;
       ADMISSION_INVALID_STOP                             any missing, corrupt or misbound evidence (never a fallback).
     Checkpoint-FILE identity and optimizer/RNG CONTINUATION identity are printed separately and never decide.
 
-REVISION 2 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED). Conformed to policy bc46b36e (Codex amendment item 2):
+REVISION 2 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED). Conformed to Codex's policy revision 1 (Codex amendment item 2):
   * the old rule (final.pt file sha256) and its prose "status line" parser are GONE. Nothing here reads a status word
     out of prose (review finding V1);
   * two machine-readable states replace them:
@@ -21,6 +21,15 @@ REVISION 2 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED). Conformed to policy bc46b3
     `--dry-run` and every test run without either state. No approval word is ever inserted anywhere;
   * the complete public panel (564 course records), the numerical environment and the reader's own source are pinned.
 
+REVISION 3 (2026-09-24, CLAUDE_BUILT_CLAUDE_CHECKED). Review of 303c281b (CHANGES_REQUIRED):
+  * BLOCKER 1: the policy and owner-record pins moved to `policy_pins.json`, outside the reader digest, so Codex can
+    freeze REPRODUCTION_POLICY.json with the reader digest and a re-pin never changes that digest (no hash cycle);
+  * MAJOR 2: every prerequisite names a committed receipt (commit + path + sha256); the code opens it and checks its
+    content and bindings; the budget figure is read from a committed spend record, never typed in;
+  * MAJOR 3: only a historical `require` refusal (POINTER_/TYPED_ code) is a panel record; any other fault is invalid;
+  * minors: the frozen-before-result rule, the admission re-read at the receipt commit, AMI and shipped-package checks,
+    the starting-state identity as training configuration, owner records in the tip check.
+
 THIS MODULE IMPORTS NOTHING FROM THE LAUNCHER, torch or the network. It lives under `records/`, not `cncm/` or
 `cas_meta2/`, on purpose: `pointer_contract.input_inventory` globs `*.py` under those trees.
 
@@ -29,11 +38,13 @@ it is not an owner signature.
 """
 from decimal import Decimal, InvalidOperation
 from hashlib import sha1, sha256
+import io
 import json
 import os
 from pathlib import Path
 import re
 import subprocess
+from zipfile import BadZipFile, ZipFile
 
 HERE = Path(__file__).resolve().parent
 ROOT = Path(__file__).resolve().parents[3]          # the CNCM folder ("FOR CODEX TO BUILD CAS NATIVE ...")
@@ -97,35 +108,104 @@ INVENTORY_PATHS = {MANIFEST_RECORD: 'results/artifacts/manifest.json',
                    FINAL_PT_WEIGHTS: 'results/artifacts/final.pt'}
 
 # =====================================================================================================================
-# THE POLICY TO IMPLEMENT (Codex, commit bc46b36e). Every file is pinned by blob id, sha256 and size. The sha256
-# values equal the ones `LAUNCH_REQUEST.json` itself pins (checked by `launch_request_violations`).
+# THE POLICY TO IMPLEMENT (Codex; the commit is in policy_pins.json). Every file is pinned by blob id, sha256, size.
+#
+# REVISION 3 (review of 303c281b, BLOCKER 1): the pins are NOT in this module any more. They live in
+# `policy_pins.json`, next to it. Reason: the reader-source digest covers this module, and Codex freezes
+# REPRODUCTION_POLICY.json with that digest. A policy hash inside a reader source is a hash cycle: every re-pin would
+# change the digest the policy must hold. Now a re-pin edits only `policy_pins.json`, which the digest does not cover.
+# The pins file is bound by its sha256 in EXECUTION_ADMISSION.json, frozen/study.json and the evidence instead.
+# `test_no_reader_source_carries_a_pinned_policy_hash` keeps it that way.
 # =====================================================================================================================
-POLICY_COMMIT = 'bc46b36e60d904248fee03e5d7212f0eb5886c38'
-POLICY_BRANCH = 'codex/helm-controlled-prelaunch-20260924'
-POLICY_TRACKING_REF = 'refs/remotes/origin/' + POLICY_BRANCH
-POLICY_FETCH_ARGS = ('fetch', 'origin', POLICY_BRANCH + ':' + POLICY_TRACKING_REF)   # explicit refspec, never a pull
-POLICY_FETCH = 'git ' + ' '.join(POLICY_FETCH_ARGS)
+PINS_NAME = 'policy_pins.json'
+PINS_REL = HERE_REL + '/' + PINS_NAME
+PINS_SCHEMA = 'cncm.helm-unchanged-reproduction-policy-pins/1'
+PINS_TOP_FIELDS = ('label', 'owner_records', 'policy', 'schema', 'why_a_separate_file')
+PINS_POLICY_FILE_NAMES = ('codex_amendments', 'execution_manifest', 'launch_request', 'plan', 'reproduction_policy_json',
+                          'reproduction_policy_md', 'route_and_checkpoint_protocol', 'statistical_policy')
+PINS_OWNER_RECORD_NAMES = ('claude_extension_md', 'codex_standing_json', 'codex_standing_md')
 PRELAUNCH = 'records/helm_controlled_prelaunch_20260924/'
 HANDOFF = '_handoffs/HELM_NEXT_PHASE_20260923/'
+
+
+def _hex(value, length):
+    return type(value) is str and re.fullmatch('[0-9a-f]{%d}' % length, value) is not None
+
+
+def _relative_path(value):
+    """A ROOT-relative path: forward slashes, no leading slash, no empty, '.' or '..' part."""
+    return (type(value) is str and 0 < len(value) <= 400 and not value.startswith('/') and '\\' not in value
+            and all(part not in ('', '.', '..') for part in value.split('/')))
+
+
+def _branch(value):
+    return type(value) is str and re.fullmatch(r'[A-Za-z0-9._/-]{1,120}', value) is not None and '..' not in value
+
+
+def pins_violations(pins):
+    """Every way a parsed pins document is not exactly the expected form. Pure (used at import, before `same`)."""
+    if type(pins) is not dict:
+        return ['PINS_NOT_AN_OBJECT']
+    violations = []
+    if sorted(pins) != list(PINS_TOP_FIELDS) or pins.get('schema') != PINS_SCHEMA or pins.get('label') != LABEL:
+        violations.append('PINS_TOP_FIELDS_SCHEMA_OR_LABEL')
+    policy = pins.get('policy') if type(pins.get('policy')) is dict else {}
+    if sorted(policy) != ['branch', 'commit', 'files'] or not _hex(policy.get('commit'), 40) \
+            or not _branch(policy.get('branch')):
+        violations.append('PINS_POLICY_HEAD')
+    files = policy.get('files') if type(policy.get('files')) is dict else {}
+    if sorted(files) != list(PINS_POLICY_FILE_NAMES):
+        violations.append('PINS_POLICY_FILE_SET')
+    for name, row in files.items():
+        if not (type(row) is dict and sorted(row) == ['blob', 'bytes', 'path', 'sha256'] and _hex(row['blob'], 40)
+                and _hex(row['sha256'], 64) and type(row['bytes']) is int and row['bytes'] > 0
+                and _relative_path(row['path'])):
+            violations.append('PINS_POLICY_FILE:' + str(name))
+    owners = pins.get('owner_records') if type(pins.get('owner_records')) is dict else {}
+    if sorted(owners) != list(PINS_OWNER_RECORD_NAMES):
+        violations.append('PINS_OWNER_RECORD_SET')
+    for name, row in owners.items():
+        if not (type(row) is dict and sorted(row) == ['blob', 'branch', 'commit', 'path', 'sha256']
+                and _hex(row['blob'], 40) and _hex(row['sha256'], 64) and _hex(row['commit'], 40)
+                and _branch(row['branch']) and _relative_path(row['path'])):
+            violations.append('PINS_OWNER_RECORD:' + str(name))
+    return violations
+
+
+def load_pins(raw):
+    """The parsed pins, or an explicit stop at import (never an `assert`). Nothing runs on a bad pins file."""
+    try:
+        pins = json.loads(raw)
+    except ValueError:
+        pins = None
+    violations = pins_violations(pins)
+    if violations:
+        raise SystemExit('UNCHANGED_REPRO_POLICY_PINS_INVALID:' + '|'.join(violations))
+    return pins
+
+
+PINS_RAW = (HERE / PINS_NAME).read_bytes()
+PINS_SHA256 = sha256(PINS_RAW).hexdigest()
+_PINS = load_pins(PINS_RAW)
+POLICY_COMMIT = _PINS['policy']['commit']
+POLICY_BRANCH = _PINS['policy']['branch']
 POLICY_FILES = {   # name: (ROOT-relative path, git blob, sha256, bytes)
-    'reproduction_policy_json': (PRELAUNCH + 'REPRODUCTION_POLICY.json', 'b8d7eb07594288f2120a3745656bf33c148acfb8',
-                                 '13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259', 1785),
-    'reproduction_policy_md': (PRELAUNCH + 'REPRODUCTION_POLICY.md', '8106bce5063b09212189bd871ee138b52518e922',
-                               '92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e', 8257),
-    'execution_manifest': (PRELAUNCH + 'EXECUTION_MANIFEST.json', '8c356375338617063e2c092176be41951bdc7e6e',
-                           'a321e3221335db55a359962f3f800f6bfd1b0e8d46876cc7fec8350cfd366628', 53477),
-    'launch_request': (PRELAUNCH + 'LAUNCH_REQUEST.json', 'f702090ae1c9138d7f13d1d70dd73cba3df90722',
-                       'f2e789bb7798578896f7adb56cc70ff6d95209106861e1bc432504fb02f564d4', 6448),
-    'statistical_policy': (PRELAUNCH + 'STATISTICAL_POLICY.json', '7582843f7b8ab015edab45fe5019bd6f5f52c4ea',
-                           '46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055', 4938),
-    'route_and_checkpoint_protocol': (PRELAUNCH + 'ROUTE_AND_CHECKPOINT_PROTOCOL.md',
-                                      '16a4fb07ee6ffac5ccf9532ba5f4437a58d7c671',
-                                      '8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07', 13128),
-    'plan': (HANDOFF + 'PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md', '2462d1589fb8b5704402c65a0b841029dc1845f3',
-             '2b840818952cb7ed44b1efbf7b2f4518d596340b975eb75f5d4ea4fbc97d4753', 21058),
-    'codex_amendments': (HANDOFF + 'CODEX_AMENDMENTS_20260924.md', '8841955f726766baa742226b445d957d4cc66c27',
-                         '4541ddbccff7804e0fce13f76b1d3e61d8e30fdca431b4df106644ce6410f9c9', 17403),
-}
+    name: (row['path'], row['blob'], row['sha256'], row['bytes'])
+    for name, row in sorted(_PINS['policy']['files'].items())}
+
+
+def tracking_ref(branch):
+    return 'refs/remotes/origin/' + branch
+
+
+def fetch_args(branch):
+    """An explicit refspec into the remote-tracking ref only: never a pull, never a local branch."""
+    return ('fetch', 'origin', branch + ':' + tracking_ref(branch))
+
+
+POLICY_TRACKING_REF = tracking_ref(POLICY_BRANCH)
+POLICY_FETCH_ARGS = fetch_args(POLICY_BRANCH)
+POLICY_FETCH = 'git ' + ' '.join(POLICY_FETCH_ARGS)
 # LAUNCH_REQUEST.json's own names for the files it pins, mapped to POLICY_FILES names.
 LAUNCH_REQUEST_POLICY_NAMES = {'REPRODUCTION_POLICY.md': 'reproduction_policy_md',
                                'REPRODUCTION_POLICY.json': 'reproduction_policy_json',
@@ -152,6 +232,7 @@ DECIDING_LEVELS = ('learned_state', 'output')          # plus evidence validity;
 # pinned REPRODUCTION_POLICY.json, so a changed policy stops every tool until the reader is conformed again.
 READER_RULE = {
     'schema': 'helm.controlled.reproduction-policy/1',
+    'frozen_before_reproduction_result_required': True,     # revision 3 (review finding 5); enforced by the reader
     'historical_source': SOURCE_SHA,
     'reproduction_seed': MODEL_SEED,
     'file_hash_preserved': True,
@@ -237,13 +318,17 @@ PREDICTIVE_RUN_IDENTITY = ('learner_profile', 'encoder_identity', 'core_rounds',
 PREDICTIVE_METADATA = ('learnable_names',)
 # Training configuration (policy: "Training-configuration or software differences ... fail the environment-admission
 # check"): a difference makes the evidence INVALID, never a mismatch.
-TRAINING_RUN_IDENTITY = ('optimizer_config', 'initialization', 'scope', 'counters', 'counter_units',
-                         'measured_pooling', 'measured_stability')
+# REVISION 3 (review finding 8): `initial_model_identity` moved HERE from continuation. The route protocol makes the
+# starting state a frozen check that must pass "before its first optimizer update", and the policy's continuation row
+# lists only optimizer, RNG, cursor/revision and counters. A different start is therefore a run that was not the
+# registered one: INVALID, never a fallback-eligible mismatch. Open question for Codex (BUILDER_REPORT 10.6).
+TRAINING_RUN_IDENTITY = ('optimizer_config', 'initialization', 'initial_model_identity', 'scope', 'counters',
+                         'counter_units', 'measured_pooling', 'measured_stability')
 TRAINING_CONTEXT = ('course_sha256', 'condition', 'source_seed')
 TRAINING_INIT_ARGS = ('optimizer_config', 'python_seed', 'device')
-# Continuation (policy: "cursor/model revision and training counters"; plus the starting-state identity).
+# Continuation (policy: "cursor/model revision and training counters").
 CONTINUATION_METADATA = ('cursor', 'model_revision', 'counters', 'training_mode')
-CONTINUATION_RUN_IDENTITY = ('initial_model_identity',)
+CONTINUATION_RUN_IDENTITY = ()
 # Envelope (policy: "file path, root, elapsed time, storage/container layout, run identifier and administrative
 # limits"): excluded from every identity, retained and reported. `run_identity_digest` is derived from run_identity,
 # which carries the run identifier and the limits.
@@ -259,26 +344,33 @@ EVIDENCE_SCHEMA = 'cncm.helm-unchanged-reproduction-evidence/1'
 ACCEPTANCE_SCHEMA = 'cncm.helm-unchanged-reproduction-reader-acceptance/1'
 EVIDENCE_REL = 'records/typed_pointer_001/evidence_unchanged_repro_20260917/reproduction_evidence.json'
 EVIDENCE_MODES = ('READING', 'ACCEPTANCE')
+# The files the ONE reader digest covers. `policy_pins.json` is deliberately NOT one of them (BLOCKER 1, revision 3).
 READER_SOURCE_FILES = ('read_reproduction.py', 'repro_common.py', 'recompute_reproduction_evidence.py')
+
+# ---- panel rows: what is model behaviour and what is an infrastructure fault (review MAJOR 3, revision 3).
+# The historical `require` (source.require, matched_contract.require at 20208c92) raises ValueError whose message is a
+# code starting POINTER_ or TYPED_ (for example POINTER_SLOT_COVERAGE, TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3).
+# Only such a refusal is a panel record ("failed/refused records remain records"). Every other exception, a grader
+# crash, or a prediction for the wrong record is an INFRASTRUCTURE FAULT: the evidence is invalid, never a mismatch.
+HISTORICAL_REFUSAL_PATTERN = r'(POINTER|TYPED)_[A-Z0-9_]+(:[\x20-\x7e]*)?'
+PANEL_INFRASTRUCTURE_FAULT = 'ERROR'
+
+# ---- the training machine as each receipt's preflight.json records it (review MINOR 7, revision 3).
+PREFLIGHT_RECORD = 'preflight.json'
+PREFLIGHT_PINS = {'ami': HISTORICAL_AMI, 'instance_type': EXPECTED_BOUNDS['instance_type'],
+                  'region': EXPECTED_BOUNDS['region']}
+SHIPPED_PACKAGE_RECORD = 'collected/input/source.zip'
+REQUIREMENTS_MEMBER = 'research/CAS_META_2_COMPOSITION/requirements-gpu.txt'
 
 # =====================================================================================================================
 # OWNER AUTHORIZATION (machine-readable, bound by git blob ids). Nothing here parses prose for approval words.
 # =====================================================================================================================
 OWNER_AUTHORIZED = 'STANDING_PROJECT_AUTHORIZATION'
 OWNER_NOT_ESTABLISHED = 'OWNER_AUTHORIZATION_NOT_ESTABLISHED'
-CLAUDE_OWNER_COMMIT = 'ca68690b93db9305ea5839f7308144ce6e0b7cab'
-CLAUDE_OWNER_BRANCH = 'research/helm-integration-20260923'
-OWNER_RECORDS = {   # name: (commit, ROOT-relative path, git blob, sha256)
-    'codex_standing_json': (POLICY_COMMIT, PRELAUNCH + 'OWNER_STANDING_AUTHORIZATION_20260924.json',
-                            '10069e00869439fdbf58760b5ea712b16c652f18',
-                            '7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3'),
-    'codex_standing_md': (POLICY_COMMIT, PRELAUNCH + 'OWNER_STANDING_AUTHORIZATION_20260924.md',
-                          'e6cfe5b99c039ba21ac6ff68394f3648cfee8e5e',
-                          '86d7f14b9a191bb90733d011c8c5d1344a29739498be9c2e48c4e3084fd10687'),
-    'claude_extension_md': (CLAUDE_OWNER_COMMIT, HANDOFF + 'OWNER_STANDING_AUTHORIZATION_CLAUDE_20260924.md',
-                            'f707ce455c08e51c5ce18ae5114a7d5b530a9f82',
-                            '3360eefcf48af6b72b7d807d7e38928ac302353bb21afa398d25b259ba79988e'),
-}
+OWNER_RECORDS = {   # name: (commit, ROOT-relative path, git blob, sha256) -- from policy_pins.json (revision 3)
+    name: (row['commit'], row['path'], row['blob'], row['sha256'])
+    for name, row in sorted(_PINS['owner_records'].items())}
+OWNER_RECORD_BRANCHES = {name: row['branch'] for name, row in sorted(_PINS['owner_records'].items())}
 OWNER_QUOTES = {   # the owner's own words, verbatim, each pinned by sha256
     'standing_authorization': (
         'DO YOU NEED MY APPROVAL FOR ANYTHING? IF SO I HEREBY GRANT YOU IN ADVANCE ALL FUTURE AND CURRENT APPROVAL '
@@ -313,6 +405,26 @@ REQUIRED_PREREQUISITES = (
     'fresh_review_of_this_revision',                   # a fresh reviewer's verdict on this exact revision
 )
 PREREQUISITE_PASS = 'PASS'
+# REVISION 3 (review MAJOR 2): a prerequisite is never self-asserted. Each entry names a receipt by commit and path; the
+# code opens that committed blob, checks its sha256, and checks its CONTENT (schema, pass status, and bindings to this
+# job, this reader and this revision). A 'PASS' plus a 64-hex string no longer passes anything by itself.
+PREREQUISITE_FIELDS = ('receipt_commit', 'receipt_path', 'receipt_sha256', 'status', 'what_passes_it')
+ACCEPTANCE_PASS, ACCEPTANCE_FAIL = 'READER_ACCEPTANCE_PASS', 'READER_ACCEPTANCE_FAIL'
+VACUOUS = 'VACUOUS'
+# The P1 acceptance cases, in the order `recompute_reproduction_evidence.acceptance_mode` records them. `changed_buffer`
+# is VACUOUS for this architecture (no registered buffers at 20208c92); the case passes only while that stays true.
+ACCEPTANCE_CASES = ('self_identity', 'equal_state_different_envelope', 'continuation_only_different', 'changed_value',
+                    'changed_encoder_state', 'missing_key', 'dtype_change', 'altered_output', 'changed_buffer',
+                    'state_equal_output_tampered', 'corrupt_reference')
+REVIEW_RECEIPT_SCHEMA = 'cncm.helm-unchanged-reproduction-review-receipt/1'
+REVIEW_RECEIPT_FIELDS = ('job_kind', 'label', 'model_seed', 'reviewed_commit', 'reviewed_panel_manifest_sha256',
+                         'reviewed_policy_pins_sha256', 'reviewed_reader_source_sha256', 'reviewed_reader_sources_sha256',
+                         'reviewer', 'schema', 'verdict')
+REVIEW_PASS = 'NO_BLOCKER_OR_MAJOR_FINDING_OPEN'      # a reviewer's machine field; prose is never read
+SPEND_RECORD_SCHEMA = 'cncm.helm-unchanged-reproduction-spend-record/1'
+SPEND_RECORD_FIELDS = ('basis', 'job', 'label', 'measured_spend_so_far_usd', 'measured_utc', 'schema', 'sources',
+                       'study')
+STUDY_NAME = 'HELM-REPAIR-CONTROLLED-1'
 
 # ---- the spend gate for --check (plan section 0 as carried by the amended plan): spend so far + per-job <= ceiling.
 CEILING_USD = '60.00'
@@ -443,6 +555,41 @@ def environment_violations(recorded):
             or not same(recorded[key], value)]
 
 
+def environment_unrecorded(recorded):
+    """The recorded-not-pinned keys (driver, cuDNN, Python, kernel) the evidence failed to record at all."""
+    recorded = recorded if type(recorded) is dict else {}
+    return [key for key in ENVIRONMENT_RECORDED_NOT_PINNED if key not in recorded]
+
+
+def is_historical_refusal(message):
+    """True only for a message of the historical `require` form (a POINTER_ or TYPED_ code). Pure."""
+    return type(message) is str and re.fullmatch(HISTORICAL_REFUSAL_PATTERN, message) is not None
+
+
+def preflight_violations(preflight):
+    """Every pinned training-machine field (AMI, instance type, region) the receipt's preflight.json does not match."""
+    preflight = preflight if type(preflight) is dict else {}
+    return [key + '=' + str(preflight.get(key))[:60] for key, value in PREFLIGHT_PINS.items()
+            if not same(preflight.get(key), value)]
+
+
+def shipped_package_violations(raw):
+    """The package a receipt says it shipped must be the pinned archive blob, carrying the pinned requirements file."""
+    if type(raw) is not bytes:
+        return ['SHIPPED_PACKAGE_ABSENT']
+    violations = []
+    if git_object_id(raw) != PACKAGE_BLOBS['source.zip'] or len(raw) != ARCHIVE_BYTES:
+        violations.append('SHIPPED_PACKAGE_IS_NOT_THE_PINNED_ARCHIVE')
+    try:
+        with ZipFile(io.BytesIO(raw)) as bundle:
+            requirements = bundle.read(REQUIREMENTS_MEMBER)
+    except (BadZipFile, KeyError, ValueError):
+        return violations + ['SHIPPED_PACKAGE_HAS_NO_REQUIREMENTS_MEMBER']
+    if digest(requirements) != REQUIREMENTS_GPU_SHA256:
+        violations.append('SHIPPED_REQUIREMENTS_SHA256:' + digest(requirements))
+    return violations
+
+
 def panel_manifest_violations(raw):
     """Every way these bytes are not the pinned panel manifest. Pure."""
     if type(raw) is not bytes:
@@ -475,12 +622,20 @@ def load_panel_manifest(stop, raw=None):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# The policy (Codex, bc46b36e): pins, conformance, currency at the fetched branch tip.
+# The policy (Codex; pinned in policy_pins.json): pins, conformance, currency at the fetched branch tips.
 # ---------------------------------------------------------------------------------------------------------------------
 def policy_pointers():
     return {'commit': POLICY_COMMIT, 'branch': POLICY_BRANCH,
+            'pins': {'path': GIT_PREFIX + PINS_REL, 'sha256': PINS_SHA256},
             'files': {name: {'path': GIT_PREFIX + relative, 'blob': blob, 'sha256': sha, 'bytes': size}
                       for name, (relative, blob, sha, size) in POLICY_FILES.items()}}
+
+
+def evidence_policy_block():
+    """What an evidence file (and so its producer) must say about the policy it was made under. Revision 3 adds the
+    sha256 of `policy_pins.json`, so evidence made under other pins is invalid."""
+    return {'commit': POLICY_COMMIT, 'reproduction_policy_json_sha256': POLICY_FILES['reproduction_policy_json'][2],
+            'policy_pins_sha256': PINS_SHA256}
 
 
 def policy_conformance(policy):
@@ -527,40 +682,71 @@ def read_policy_files(stop):
     return files
 
 
-def policy_tip_violations(tip):
-    """Every pinned file that moved at the fetched branch tip, or a tip that does not contain the pinned commit. Pure."""
+def tip_watch():
+    """`{branch: {'commits': [pinned commits], 'files': {name: (path, blob)}}}`: every pinned file on its own branch.
+
+    Revision 3 (review NOTE 12): the three owner records are watched too, not only the policy files, so a later owner
+    record at a branch tip (a withdrawal, say) stops `--write` and `--check` until a reviewed re-pin. Pure.
+    """
+    watch = {}
+
+    def add(branch, commit, name, relative, blob):
+        entry = watch.setdefault(branch, {'commits': [], 'files': {}})
+        if commit not in entry['commits']:
+            entry['commits'].append(commit)
+        entry['files'][name] = (relative, blob)
+    for name, (relative, blob, _, _) in POLICY_FILES.items():
+        add(POLICY_BRANCH, POLICY_COMMIT, name, relative, blob)
+    for name, (commit, relative, blob, _) in OWNER_RECORDS.items():
+        add(OWNER_RECORD_BRANCHES.get(name, POLICY_BRANCH), commit, 'owner:' + name, relative, blob)
+    return watch
+
+
+def policy_tip_violations(tips):
+    """Every pinned file that moved at its fetched branch tip, or a tip that does not contain a pinned commit. Pure."""
     violations = []
-    if type(tip) is not dict or tip.get('commit') is None:
-        return ['POLICY_TRACKING_REF_MISSING:' + POLICY_TRACKING_REF]
-    blobs = tip.get('blobs') if type(tip.get('blobs')) is dict else {}
-    for name, (_, blob, _, _) in POLICY_FILES.items():
-        if blobs.get(name) != blob:
-            violations.append('MOVED_AT_TIP:' + name + ':' + str(blobs.get(name)))
-    if tip.get('pinned_commit_is_ancestor') is not True:
-        violations.append('PINNED_COMMIT_NOT_IN_TIP')
+    tips = tips if type(tips) is dict else {}
+    for branch, entry in tip_watch().items():
+        tip = tips.get(branch)
+        if type(tip) is not dict or tip.get('commit') is None:
+            violations.append('TRACKING_REF_MISSING:' + tracking_ref(branch))
+            continue
+        blobs = tip.get('blobs') if type(tip.get('blobs')) is dict else {}
+        for name, (_, blob) in entry['files'].items():
+            if blobs.get(name) != blob:
+                violations.append('MOVED_AT_TIP:' + name + ':' + str(blobs.get(name)))
+        if tip.get('pinned_commits_are_ancestors') is not True:
+            violations.append('PINNED_COMMIT_NOT_IN_TIP:' + branch)
     return violations
 
 
-def read_policy_tip(stop, *, fetch):
-    """Fetch the policy branch (explicit refspec), then read the blob of every pinned file at its tip."""
-    if fetch:
-        try:
-            git(*POLICY_FETCH_ARGS)
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
-            stop(False, 'POLICY_TIP_NOT_FETCHED:run `' + POLICY_FETCH + '` by hand; if it fails, stop')
-    if not git_ok('rev-parse', '--verify', '--quiet', POLICY_TRACKING_REF + '^{commit}'):
-        return {'ref': POLICY_TRACKING_REF, 'commit': None, 'blobs': {}, 'pinned_commit_is_ancestor': False}
-    commit = git('rev-parse', POLICY_TRACKING_REF + '^{commit}').decode('ascii').strip()
-    blobs = {name: blob_id(commit, relative) if has_object(commit, relative) else None
-             for name, (relative, _, _, _) in POLICY_FILES.items()}
-    return {'ref': POLICY_TRACKING_REF, 'commit': commit, 'blobs': blobs,
-            'pinned_commit_is_ancestor': git_ok('merge-base', '--is-ancestor', POLICY_COMMIT, commit)}
+def read_policy_tips(stop, *, fetch):
+    """Fetch each watched branch (explicit refspec, remote-tracking ref only), then read each pinned file's blob."""
+    tips = {}
+    for branch, entry in tip_watch().items():
+        if fetch:
+            try:
+                git(*fetch_args(branch))
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+                stop(False, 'POLICY_TIP_NOT_FETCHED:run `git ' + ' '.join(fetch_args(branch))
+                     + '` by hand; if it fails, stop')
+        ref = tracking_ref(branch)
+        if not git_ok('rev-parse', '--verify', '--quiet', ref + '^{commit}'):
+            tips[branch] = {'ref': ref, 'commit': None, 'blobs': {}, 'pinned_commits_are_ancestors': False}
+            continue
+        commit = git('rev-parse', ref + '^{commit}').decode('ascii').strip()
+        tips[branch] = {'ref': ref, 'commit': commit,
+                        'blobs': {name: blob_id(commit, relative) if has_object(commit, relative) else None
+                                  for name, (relative, _) in entry['files'].items()},
+                        'pinned_commits_are_ancestors': all(git_ok('merge-base', '--is-ancestor', pinned, commit)
+                                                            for pinned in entry['commits'])}
+    return tips
 
 
 def check_policy(stop, *, fetch=True, require_current=True):
     """STOP unless the pinned policy files are intact, conformed and consistent with LAUNCH_REQUEST.
 
-    Currency at the fetched branch tip STOPS only when `require_current` (the --write and --check paths). Policy:
+    Currency at the fetched branch tips STOPS only when `require_current` (the --write and --check paths). Policy:
     "A changed plan invalidates affected technical admission evidence" -- the admission, not preparation -- so the
     preparation-only path reports a moved tip and carries on.
     """
@@ -570,14 +756,15 @@ def check_policy(stop, *, fetch=True, require_current=True):
     violations = (policy_conformance(loaded['reproduction_policy_json'])
                   + launch_request_violations(loaded['launch_request']))
     stop(not violations, 'POLICY_IS_NOT_THE_RULE_THE_READER_IMPLEMENTS:' + '|'.join(violations)[:1500])
-    tip = read_policy_tip(stop, fetch=fetch)
-    moved = policy_tip_violations(tip)
+    tips = read_policy_tips(stop, fetch=fetch)
+    moved = policy_tip_violations(tips)
     if require_current:
-        stop(not moved, 'POLICY_OR_PLAN_MOVED:' + '|'.join(moved)[:1500] + ':a changed plan or policy invalidates '
-             'the technical admission; re-pin POLICY_COMMIT and POLICY_FILES after review')
+        stop(not moved, 'POLICY_OR_PLAN_MOVED:' + '|'.join(moved)[:1500] + ':a changed plan, policy or owner record '
+             'invalidates the technical admission; re-pin policy_pins.json after review')
     return {'pointers': policy_pointers(), 'policy': loaded['reproduction_policy_json'],
             'manifest': loaded['execution_manifest'], 'launch_request': loaded['launch_request'],
-            'tip': {'ref': tip['ref'], 'commit': tip['commit'], 'violations': moved}}
+            'tip': {'tips': {branch: {'ref': tip['ref'], 'commit': tip['commit']} for branch, tip in tips.items()},
+                    'violations': moved}}
 
 
 def policy_freeze_violations(policy, manifest, launch_request, bindings, prerequisites):
@@ -679,6 +866,7 @@ def expected_admission_bindings(hashes=None):
     """The exact hashes an admission record must carry for THIS revision of THIS folder."""
     hashes = source_hashes() if hashes is None else hashes
     return {'policy_commit': POLICY_COMMIT,
+            'policy_pins_sha256': PINS_SHA256,
             'policy_files_sha256': {name: pin[2] for name, pin in POLICY_FILES.items()},
             'owner_records_blob': {name: pin[2] for name, pin in OWNER_RECORDS.items()},
             'panel_manifest_sha256': PANEL_MANIFEST_SHA256,
@@ -691,19 +879,230 @@ def expected_admission_bindings(hashes=None):
             'source_sha': SOURCE_SHA, 'model_seed': MODEL_SEED, 'job_kind': JOB_KIND}
 
 
+def load_object(raw):
+    """A JSON object from bytes, or None."""
+    if type(raw) is not bytes:
+        return None
+    try:
+        value = json.loads(raw)
+    except ValueError:
+        return None
+    return value if type(value) is dict else None
+
+
+def acceptance_receipt_violations(document, expected_bindings):
+    """The P1 receipt: READER_ACCEPTANCE_PASS, every registered case in order and passed, made by THIS reader. Pure."""
+    if type(document) is not dict:
+        return ['NOT_A_JSON_OBJECT']
+    violations = []
+    if document.get('schema') != ACCEPTANCE_SCHEMA or document.get('label') != LABEL:
+        violations.append('SCHEMA_OR_LABEL')
+    if document.get('status') != ACCEPTANCE_PASS:
+        violations.append('STATUS:' + str(document.get('status'))[:60])
+    cases = document.get('cases') if type(document.get('cases')) is list else []
+    if [case.get('case') if type(case) is dict else None for case in cases] != list(ACCEPTANCE_CASES):
+        violations.append('CASE_SET_OR_ORDER')
+    if not cases or not all(type(case) is dict and case.get('pass') is True for case in cases):
+        violations.append('A_CASE_DID_NOT_PASS')
+    buffer_cases = [case for case in cases if type(case) is dict and case.get('case') == 'changed_buffer']
+    if not (len(buffer_cases) == 1 and buffer_cases[0].get('status') == VACUOUS
+            and buffer_cases[0].get('reference_buffers') == []):
+        violations.append('CHANGED_BUFFER_NOT_RECORDED_AS_VACUOUS_WITH_NO_BUFFERS')
+    producer = document.get('producer') if type(document.get('producer')) is dict else {}
+    if not (same(producer.get('sources_sha256'), expected_bindings.get('reader_sources_sha256'))
+            and producer.get('reader_source_sha256') == expected_bindings.get('reader_source_sha256')):
+        violations.append('NOT_MADE_BY_THE_ADMITTED_READER')
+    if document.get('panel_manifest_sha256') != PANEL_MANIFEST_SHA256:
+        violations.append('PANEL_MANIFEST')
+    if (document.get('numerical_environment_sha256') != environment_digest()
+            or environment_violations(document.get('environment')) or document.get('environment_violations') != []):
+        violations.append('ENVIRONMENT')
+    return violations
+
+
+def policy_receipt_violations(document, entry, policy):
+    """The frozen-policy prerequisite's receipt IS the pinned REPRODUCTION_POLICY.json at the pinned commit. Pure."""
+    violations = []
+    if (entry.get('receipt_commit') != POLICY_COMMIT
+            or entry.get('receipt_path') != POLICY_FILES['reproduction_policy_json'][0]):
+        violations.append('NOT_THE_PINNED_POLICY_FILE')
+    if type(document) is not dict or not same(document, policy):
+        violations.append('NOT_THE_POLICY_THE_GATE_READ')
+    return violations
+
+
+def manifest_freeze(manifest):
+    return manifest['final_freeze'] if type(manifest) is dict and type(manifest.get('final_freeze')) is dict else {}
+
+
+def environment_receipt_violations(raw, manifest):
+    """The environment-lock receipt is the file the manifest's final freeze names, with dependencies frozen. Pure."""
+    violations = []
+    if manifest_freeze(manifest).get('dependency_lock_sha256') != digest(raw):
+        violations.append('NOT_THE_DEPENDENCY_LOCK_THE_MANIFEST_NAMES')
+    dependencies = manifest.get('dependencies') if type(manifest) is dict else None
+    status = dependencies.get('status') if type(dependencies) is dict else None
+    if type(status) is not str or status.startswith('NOT_READY'):
+        violations.append('MANIFEST_DEPENDENCIES_STATUS:' + str(status)[:60])
+    return violations
+
+
+def packet_receipt_violations(raw, manifest):
+    """The launch-packet receipt is the file the manifest's final freeze names. Pure."""
+    if manifest_freeze(manifest).get('frozen_launch_packet_sha256') != digest(raw):
+        return ['NOT_THE_PACKET_THE_MANIFEST_NAMES']
+    return []
+
+
+def spend_violations(text):
+    """`(violations, summary)`: measured spend so far + $15.00 <= $60.00. The arithmetic is done here. Pure."""
+    if not (type(text) is str and re.fullmatch(r'\d{1,4}(\.\d{1,2})?', text) is not None):
+        return ['SPEND_FIGURE_FORM:' + str(text)[:40]], None
+    try:
+        spent = Decimal(text)
+    except InvalidOperation:
+        return ['SPEND_FIGURE_FORM:' + text], None
+    after = spent + Decimal(PER_JOB_USD)
+    summary = {'spend_so_far_usd': str(spent), 'per_job_bound_usd': PER_JOB_USD,
+               'after_this_job_at_most_usd': str(after), 'ceiling_usd': CEILING_USD}
+    if after > Decimal(CEILING_USD):
+        return ['SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:' + str(after) + '>' + CEILING_USD], summary
+    return [], summary
+
+
+def spend_record_violations(document, job):
+    """`(violations, summary)` for the budget receipt: a committed spend record for THIS job, figure read from it."""
+    if type(document) is not dict:
+        return ['NOT_A_JSON_OBJECT'], None
+    violations = []
+    if (sorted(document) != list(SPEND_RECORD_FIELDS) or document.get('schema') != SPEND_RECORD_SCHEMA
+            or document.get('label') != LABEL or document.get('study') != STUDY_NAME):
+        violations.append('SCHEMA_FIELDS_LABEL_OR_STUDY')
+    if stamp_of(document.get('job')) is None or document.get('job') != job:
+        violations.append('FOR_ANOTHER_JOB:' + str(document.get('job'))[:80])
+    if not (type(document.get('measured_utc')) is str
+            and re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z', document['measured_utc'])):
+        violations.append('MEASURED_UTC')
+    if not (type(document.get('basis')) is str and document['basis'].strip()):
+        violations.append('BASIS')
+    sources = document.get('sources')
+    if not (type(sources) is list and sources and all(
+            type(item) is dict and sorted(item) == ['path', 'sha256'] and _relative_path(item['path'])
+            and _hex(item['sha256'], 64) for item in sources)):
+        violations.append('SOURCES')
+    found, summary = spend_violations(document.get('measured_spend_so_far_usd'))
+    return violations + found, summary
+
+
+def review_receipt_violations(document, expected_bindings):
+    """A fresh reviewer's machine verdict on THIS reader revision and THESE pins. Prose is never read. Pure."""
+    if type(document) is not dict:
+        return ['NOT_A_JSON_OBJECT']
+    violations = []
+    if (sorted(document) != list(REVIEW_RECEIPT_FIELDS) or document.get('schema') != REVIEW_RECEIPT_SCHEMA
+            or not (type(document.get('label')) is str and document['label'].strip())):
+        violations.append('SCHEMA_FIELDS_OR_LABEL')
+    if document.get('verdict') != REVIEW_PASS:
+        violations.append('VERDICT:' + str(document.get('verdict'))[:60])
+    if not (same(document.get('reviewed_reader_sources_sha256'), expected_bindings.get('reader_sources_sha256'))
+            and document.get('reviewed_reader_source_sha256') == expected_bindings.get('reader_source_sha256')):
+        violations.append('NOT_THIS_READER_REVISION')
+    if document.get('reviewed_policy_pins_sha256') != expected_bindings.get('policy_pins_sha256'):
+        violations.append('NOT_THESE_POLICY_PINS')
+    if document.get('reviewed_panel_manifest_sha256') != PANEL_MANIFEST_SHA256:
+        violations.append('NOT_THIS_PANEL')
+    if not (same(document.get('job_kind'), JOB_KIND) and same(document.get('model_seed'), MODEL_SEED)):
+        violations.append('NOT_THIS_JOB_KIND')
+    if not _hex(document.get('reviewed_commit'), 40):
+        violations.append('REVIEWED_COMMIT')
+    reviewer = document.get('reviewer')
+    if not (type(reviewer) is str and reviewer.strip()) or reviewer == RUNNER:
+        violations.append('REVIEWER_NOT_NAMED_OR_IS_THE_BUILDER')
+    return violations
+
+
+def prerequisite_violations(prerequisites, receipts, *, expected_bindings, policy, manifest, job):
+    """`(reasons, spend)`. Each prerequisite must be PASS AND its committed receipt must check out. Pure.
+
+    `receipts` is `read_prerequisite_receipts`' output: `{name: {'commit', 'path', 'raw'}}`, one entry only for a receipt
+    that git holds at a commit anchored in HEAD's (or the receipt commit's) history or the pinned policy commit's.
+    """
+    reasons, spend = [], None
+    prerequisites = prerequisites if type(prerequisites) is dict else {}
+    receipts = receipts if type(receipts) is dict else {}
+    if set(prerequisites) != set(REQUIRED_PREREQUISITES):
+        reasons.append('ADMISSION_PREREQUISITE_SET')
+    for name in REQUIRED_PREREQUISITES:
+        entry = prerequisites.get(name) if type(prerequisites.get(name)) is dict else {}
+        if sorted(entry) != list(PREREQUISITE_FIELDS):
+            reasons.append('PREREQUISITE_FIELDS:' + name)
+        if entry.get('status') != PREREQUISITE_PASS or not is_hex(entry.get('receipt_sha256'), 64):
+            reasons.append('PREREQUISITE_NOT_PASSED:' + name)
+            continue
+        receipt = receipts.get(name) if type(receipts.get(name)) is dict else {}
+        raw = receipt.get('raw')
+        if (type(raw) is not bytes or receipt.get('commit') != entry.get('receipt_commit')
+                or receipt.get('path') != entry.get('receipt_path')):
+            reasons.append('PREREQUISITE_RECEIPT_NOT_A_COMMITTED_ANCHORED_BLOB:' + name)
+            continue
+        if digest(raw) != entry['receipt_sha256']:
+            reasons.append('PREREQUISITE_RECEIPT_SHA256:' + name)
+            continue
+        found, summary = [], None
+        if name == 'reader_acceptance_on_aws_p1':
+            found = acceptance_receipt_violations(load_object(raw), expected_bindings)
+        elif name == 'reproduction_policy_frozen_with_panel_and_reader':
+            found = policy_receipt_violations(load_object(raw), entry, policy)
+        elif name == 'numerical_environment_frozen':
+            found = environment_receipt_violations(raw, manifest)
+        elif name == 'final_launch_packet_frozen':
+            found = packet_receipt_violations(raw, manifest)
+        elif name == 'budget_headroom_verified':
+            found, summary = spend_record_violations(load_object(raw), job)
+        elif name == 'fresh_review_of_this_revision':
+            found = review_receipt_violations(load_object(raw), expected_bindings)
+        else:                                           # a name added to REQUIRED_PREREQUISITES without a checker
+            found = ['NO_CHECKER']
+        reasons.extend('PREREQUISITE_RECEIPT:' + name + ':' + item for item in found)
+        if name == 'budget_headroom_verified' and not found:
+            spend = summary
+    return reasons, spend
+
+
+def read_prerequisite_receipts(raw, *, anchors):
+    """Impure. For each prerequisite of the admission record `raw`: the receipt's bytes, read with
+    `git show <receipt_commit>:<receipt_path>`, ONLY when that commit is an ancestor of (or equal to) one of `anchors`.
+    A missing, malformed or unanchored receipt is simply absent; the pure check then names it."""
+    record = load_object(raw)
+    prerequisites = record.get('prerequisites') if record and type(record.get('prerequisites')) is dict else {}
+    receipts = {}
+    for name in REQUIRED_PREREQUISITES:
+        entry = prerequisites.get(name) if type(prerequisites.get(name)) is dict else {}
+        commit, path = entry.get('receipt_commit'), entry.get('receipt_path')
+        if not (is_hex(commit, 40) and _relative_path(path)):
+            continue
+        if not any(git_ok('merge-base', '--is-ancestor', commit, anchor) for anchor in anchors):
+            continue
+        if has_object(commit, path):
+            receipts[name] = {'commit': commit, 'path': path, 'raw': show(commit, path)}
+    return receipts
+
+
 def execution_admission_state(raw, *, expected_bindings, owner_state, policy, manifest, launch_request,
-                              committed, job=None):
-    """`{'state', 'recorded_state', 'reasons', 'record_sha256', 'job'}`. ADMITTED only when ALL of these hold:
+                              committed, job=None, receipts=None):
+    """`{'state', 'recorded_state', 'reasons', 'record_sha256', 'job', 'spend'}`. ADMITTED only when ALL of these hold:
 
       * the record is JSON with exactly ADMISSION_FIELDS, the pinned schema and label;
       * its `state` is the word ADMITTED (any other word, including an approval word from prose, is NOT_READY);
       * it is for this job kind, seed and source; its `job` has this admission's form and, when `job` is given, equals it;
       * its owner_authorization names STANDING_PROJECT_AUTHORIZATION and the pinned owner-record blobs, AND the owner
         records themselves evaluate to that state now (`owner_state`);
-      * its bindings equal `expected_bindings` exactly (plan, policy, manifest, panel, environment, reader sources);
-      * every REQUIRED_PREREQUISITES entry is PASS with a 64-hex receipt sha256;
+      * its bindings equal `expected_bindings` exactly (plan, policy, pins, manifest, panel, environment, reader);
+      * every REQUIRED_PREREQUISITES entry is PASS AND its committed receipt (`receipts`) checks out: sha256, schema,
+        pass status, and binding to this job / this reader / this revision (`prerequisite_violations`);
       * the pinned policy files' own machine-readable readiness fields agree (`policy_freeze_violations`);
       * the record is committed as is (`committed`), so it is a recorded fact, not a local edit.
+    `spend` is the budget summary read from the budget receipt (None unless that receipt checks out).
     """
     reasons = []
     try:
@@ -712,7 +1111,7 @@ def execution_admission_state(raw, *, expected_bindings, owner_state, policy, ma
         record = None
     if type(record) is not dict:
         return {'state': NOT_READY, 'recorded_state': None, 'reasons': ['ADMISSION_RECORD_ABSENT_OR_NOT_JSON'],
-                'record_sha256': digest(raw) if type(raw) is bytes else None, 'job': None}
+                'record_sha256': digest(raw) if type(raw) is bytes else None, 'job': None, 'spend': None}
     recorded = record.get('state')
     if set(record) != set(ADMISSION_FIELDS):
         reasons.append('ADMISSION_FIELDS')
@@ -741,12 +1140,9 @@ def execution_admission_state(raw, *, expected_bindings, owner_state, policy, ma
         if key not in bindings or key not in expected_bindings or not same(bindings[key], expected_bindings[key]):
             reasons.append('ADMISSION_BINDING:' + key)
     prerequisites = record.get('prerequisites') if type(record.get('prerequisites')) is dict else {}
-    if set(prerequisites) != set(REQUIRED_PREREQUISITES):
-        reasons.append('ADMISSION_PREREQUISITE_SET')
-    for name in REQUIRED_PREREQUISITES:
-        entry = prerequisites.get(name) if type(prerequisites.get(name)) is dict else {}
-        if entry.get('status') != PREREQUISITE_PASS or not is_hex(entry.get('receipt_sha256'), 64):
-            reasons.append('PREREQUISITE_NOT_PASSED:' + name)
+    found, spend = prerequisite_violations(prerequisites, receipts, expected_bindings=expected_bindings, policy=policy,
+                                           manifest=manifest, job=recorded_job)
+    reasons.extend(found)
     reasons.extend(policy_freeze_violations(policy, manifest, launch_request, expected_bindings, prerequisites))
     if recorded == ADMITTED and not (type(record.get('admitted_by')) is str and record['admitted_by'].strip()
                                      and type(record.get('admitted_utc')) is str
@@ -755,8 +1151,9 @@ def execution_admission_state(raw, *, expected_bindings, owner_state, policy, ma
         reasons.append('ADMISSION_ADMITTED_BY_OR_TIME')
     if committed is not True:
         reasons.append('ADMISSION_RECORD_NOT_COMMITTED_AS_IS')
-    return {'state': ADMITTED if (recorded == ADMITTED and not reasons) else NOT_READY, 'recorded_state': recorded,
-            'reasons': reasons, 'record_sha256': digest(raw), 'job': recorded_job}
+    admitted = recorded == ADMITTED and not reasons
+    return {'state': ADMITTED if admitted else NOT_READY, 'recorded_state': recorded,
+            'reasons': reasons, 'record_sha256': digest(raw), 'job': recorded_job, 'spend': spend if admitted else None}
 
 
 def read_execution_admission():
@@ -766,24 +1163,6 @@ def read_execution_admission():
     raw = ADMISSION_PATH.read_bytes()
     committed = has_object('HEAD', ADMISSION_REL) and blob_id('HEAD', ADMISSION_REL) == git_object_id(raw)
     return raw, committed
-
-
-# ---------------------------------------------------------------------------------------------------------------------
-# The spend gate for --check: measured spend so far + $15.00 <= $60.00.
-# ---------------------------------------------------------------------------------------------------------------------
-def spend_gate(text, stop):
-    """The figure is STATED by the operator (dollars, at most two decimals); the arithmetic is enforced here."""
-    form = type(text) is str and re.fullmatch(r'\d{1,4}(\.\d{1,2})?', text) is not None
-    stop(form, 'SPEND_FIGURE_FORM:' + str(text))
-    try:
-        spent = Decimal(text)
-    except InvalidOperation:
-        spent = None
-    stop(spent is not None, 'SPEND_FIGURE_FORM:' + str(text))
-    after = spent + Decimal(PER_JOB_USD)
-    stop(after <= Decimal(CEILING_USD), 'SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:' + str(after) + '>' + CEILING_USD)
-    return {'spend_so_far_usd': str(spent), 'per_job_bound_usd': PER_JOB_USD, 'after_this_job_at_most_usd': str(after),
-            'ceiling_usd': CEILING_USD}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

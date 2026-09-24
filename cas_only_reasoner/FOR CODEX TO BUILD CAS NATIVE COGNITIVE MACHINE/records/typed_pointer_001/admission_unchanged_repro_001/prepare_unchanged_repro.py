@@ -37,9 +37,16 @@ WHAT IT WRITES (--write only). One folder, `frozen/`: `frozen/20260917/{owner,re
 `frozen/study.json`, written into `frozen.partial/`, read back, re-validated with the launcher, then renamed.
 
 --check. Run IMMEDIATELY before `launch_argv`. Launcher-free. It re-runs the existing-folder refusals, the tree and
-untracked rules, both states (with a fresh fetch), `frozen/study.json` against the sha256 --write printed, every
-frozen-file pin and the exact launch argv, the located archive, the ledger path (existence only) and the spend gate
-(measured spend so far, STATED by the operator with its source, + $15.00 <= $60.00).
+untracked rules, both states (with a fresh fetch of every watched branch), `frozen/study.json` against the sha256
+--write printed, every frozen-file pin and the exact launch argv, the located archive, the ledger path (existence
+only) and the spend gate (revision 3: measured spend so far + $15.00 <= $60.00, with the figure READ from the committed
+spend record that the ADMITTED admission names; nothing is typed in).
+
+REVISION 3 (review of 303c281b). Every prerequisite of EXECUTION_ADMISSION.json names a committed receipt (commit, path,
+sha256). `gates()` opens each receipt from its committed blob (anchored in HEAD's history or the pinned policy commit)
+and `repro_common.prerequisite_violations` checks its content: the P1 acceptance receipt (PASS, every registered case,
+made by this reader), the frozen policy file itself, the environment lock and launch packet the manifest names, the
+spend record for this job, and a fresh reviewer's machine verdict on this reader revision and these pins.
 
 WHERE IT MUST RUN. `--dry-run` and `--write` import the launcher, read about 290 git blobs and hash 18 checkpoints:
 not on the laptop (the owner's compute rule). `--print-admission-bindings` and `--check` are launcher-free.
@@ -48,7 +55,7 @@ USAGE (python -B, from the worktree root: deeper folders exceed the Windows path
     python -B prepare_unchanged_repro.py --print-admission-bindings   # read-only: the hashes an admission must carry
     python -B prepare_unchanged_repro.py --dry-run                    # preparation only; writes nothing
     python -B prepare_unchanged_repro.py --write                      # needs ADMITTED; writes frozen/
-    python -B prepare_unchanged_repro.py --check --study-sha256 <hex> --spend-so-far-usd <d.dd> --spend-source <text>
+    python -B prepare_unchanged_repro.py --check --study-sha256 <hex>  # spend read from the admitted spend record
 
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED. Builder: Claude (temporary takeover while Codex is away). This script transcribes
 the owner's words; it is not an owner signature.
@@ -69,7 +76,7 @@ if str(HERE) not in sys.path:
 import repro_common as common  # noqa: E402
 
 stop_unless = common.make_stop('UNCHANGED_REPRO_ADMISSION_STOPPED:')
-STUDY_SCHEMA = 'cncm.typed-pointer-unchanged-reproduction-admission/0.3'
+STUDY_SCHEMA = 'cncm.typed-pointer-unchanged-reproduction-admission/0.4'
 REDUCED_SCHEDULE_MARK = b'CNCM_POINTER_REDUCED_SCHEDULE'
 PREPARATION_ONLY = 'PREPARATION_ONLY_NO_OWNER_OR_EXECUTION_APPROVAL_NEEDED_OR_USED'
 FINAL_PT_FINDING = (
@@ -153,9 +160,11 @@ def gates(*, fetch=True, require_admitted=False, job=None):
     policy = common.check_policy(stop_unless, fetch=fetch, require_current=require_admitted)
     owner = common.owner_authorization_state(common.read_owner_records())
     raw, committed = common.read_execution_admission()
+    receipts = common.read_prerequisite_receipts(raw, anchors=('HEAD', common.POLICY_COMMIT))   # committed blobs only
     admission = common.execution_admission_state(
         raw, expected_bindings=common.expected_admission_bindings(), owner_state=owner, policy=policy['policy'],
-        manifest=policy['manifest'], launch_request=policy['launch_request'], committed=committed, job=job)
+        manifest=policy['manifest'], launch_request=policy['launch_request'], committed=committed, job=job,
+        receipts=receipts)
     if require_admitted:
         stop_unless(owner['state'] == common.OWNER_AUTHORIZED,
                     'OWNER_AUTHORIZATION_NOT_ESTABLISHED:' + '|'.join(owner['reasons'])[:1500])
@@ -335,14 +344,16 @@ def study_record(launch, *, head, gate, package, job, bindings):
                                     'recompute_reproduction_evidence.py (AWS only)',
                         'verdict': 'records/typed_pointer_001/admission_unchanged_repro_001/read_reproduction.py'},
             'builder_finding_final_pt_identity': FINAL_PT_FINDING,
-            'before_launch_required': ['execution_admission ADMITTED for this job (every prerequisite receipt present)',
-                                       'measured spend so far + $15.00 <= $60.00',
+            'before_launch_required': ['execution_admission ADMITTED for this job (every prerequisite receipt '
+                                       'committed, opened and checked)',
+                                       'measured spend so far + $15.00 <= $60.00, read from the committed spend '
+                                       'record the admission names',
                                        'prepare_unchanged_repro.py --check passes, run immediately before launch_argv'],
-            'check_before_launch': ('python -B <this file> --check --study-sha256 <study.json sha256> '
-                                    '--spend-so-far-usd <measured spend so far> --spend-source <where it was read>'),
+            'check_before_launch': 'python -B <this file> --check --study-sha256 <study.json sha256>',
             'not_enforced_by_this_writer': ('the $30 stop before the third training job and the job order are the '
                                             'amended envelope\'s; --check enforces the two states, the policy gate, '
-                                            'the pins and the $60.00 arithmetic on the stated figure'),
+                                            'the pins and the $60.00 arithmetic on the figure read from the '
+                                            'admitted spend record'),
             'limits': launch.BOUNDS, 'jobs': [job], 'launcher': str(common.ROOT / common.LAUNCHER_REL),
             'canonical_ledger': str(launch.CANONICAL_LEDGER), 'automatic_retries': 0,
             'execute_study_py': ('NOT USED: records/typed_pointer_001/execute_study.py requires three jobs and the '
@@ -480,13 +491,13 @@ def check_study(study, admission, *, output=None):
     return job
 
 
-def check_before_launch(*, study_sha256, spend_so_far_usd, spend_source):
+def check_before_launch(*, study_sha256):
+    """Revision 3 (review MAJOR 2): no spend figure is typed in. The spend comes from the committed spend record that the
+    ADMITTED admission names as its `budget_headroom_verified` receipt, re-opened and re-checked here."""
     for path, reason in ((common.partial_of(common.OUTPUT), 'PARTIAL_FOLDER_EXISTS_INSPECT_BY_HAND'),
                          (common.RECEIPT_DIR, 'RECEIPT_EXISTS_NO_AUTOMATIC_RETRY')):
         stop_unless(not path.exists(), reason + ':' + str(path))
     stop_unless(common.OUTPUT.is_dir(), 'NOTHING_FROZEN_RUN_WRITE_FIRST:' + str(common.OUTPUT))
-    stop_unless(type(spend_source) is str and len(spend_source.strip()) >= 8, 'SPEND_SOURCE_REQUIRED')
-    spend = common.spend_gate(spend_so_far_usd, stop_unless)
     head = check_repository()
     frozen = check_frozen_committed()
     raw = (common.OUTPUT / 'study.json').read_bytes()
@@ -496,11 +507,14 @@ def check_before_launch(*, study_sha256, spend_so_far_usd, spend_source):
     frozen_job = (study.get('jobs') or [{}])[0].get('job') if type(study.get('jobs')) is list else None
     gate = gates(fetch=True, require_admitted=True, job=frozen_job)
     job = check_study(study, gate['execution_admission'])
+    spend = gate['execution_admission'].get('spend')
+    stop_unless(type(spend) is dict, 'SPEND_NOT_READ_FROM_THE_ADMITTED_SPEND_RECORD')
     print(json.dumps({'mode': 'CHECK_PASSED_NOTHING_LAUNCHED', 'head': head, 'frozen_files': frozen,
                       **admission_summary(gate), 'policy_tip': gate['policy']['tip'], 'job': job['job'],
-                      'spend': spend, 'spend_figure_source': spend_source.strip(),
-                      'spend_figure_is': 'STATED_BY_THE_OPERATOR_NOT_READ_FROM_A_RECORD',
-                      'not_checked_here': ['the $30 stop before the third training job', 'the amended job order'],
+                      'spend': spend,
+                      'spend_figure_is': 'READ_FROM_THE_COMMITTED_SPEND_RECORD_THE_ADMISSION_NAMES',
+                      'not_checked_here': ['the $30 stop before the third training job', 'the amended job order',
+                                           'spend incurred after the spend record was measured'],
                       'launch_cwd': str(common.ROOT), 'launch_argv': job['launch_argv']}, sort_keys=True), flush=True)
     return 0
 
@@ -509,8 +523,14 @@ def print_admission_bindings():
     """Read-only. The exact bindings an EXECUTION_ADMISSION.json must carry for this revision. No approval involved."""
     print(json.dumps({'mode': 'ADMISSION_BINDINGS_READ_ONLY', 'path': PREPARATION_ONLY,
                       'bindings': common.expected_admission_bindings(),
-                      'required_prerequisites': list(common.REQUIRED_PREREQUISITES)}, sort_keys=True, indent=1),
-          flush=True)
+                      'required_prerequisites': list(common.REQUIRED_PREREQUISITES),
+                      'prerequisite_entry_fields': list(common.PREREQUISITE_FIELDS),
+                      'receipt_schemas': {'reader_acceptance_on_aws_p1': common.ACCEPTANCE_SCHEMA,
+                                          'budget_headroom_verified': common.SPEND_RECORD_SCHEMA,
+                                          'fresh_review_of_this_revision': common.REVIEW_RECEIPT_SCHEMA},
+                      'acceptance_cases': list(common.ACCEPTANCE_CASES),
+                      'policy_pins': {'path': common.GIT_PREFIX + common.PINS_REL, 'sha256': common.PINS_SHA256}},
+                     sort_keys=True, indent=1), flush=True)
     return 0
 
 
@@ -522,15 +542,12 @@ def main(argv=None):
     mode.add_argument('--check', action='store_true')
     mode.add_argument('--print-admission-bindings', action='store_true')
     parser.add_argument('--study-sha256')
-    parser.add_argument('--spend-so-far-usd')
-    parser.add_argument('--spend-source')
     args = parser.parse_args(argv)
     try:
         if args.print_admission_bindings:
             return print_admission_bindings()
         if args.check:
-            return check_before_launch(study_sha256=args.study_sha256, spend_so_far_usd=args.spend_so_far_usd,
-                                       spend_source=args.spend_source)
+            return check_before_launch(study_sha256=args.study_sha256)
         return prepare(write=args.write)
     except subprocess.CalledProcessError as error:
         raise SystemExit('UNCHANGED_REPRO_ADMISSION_STOPPED:GIT:' + ' '.join(map(str, error.cmd))[:400]) from error

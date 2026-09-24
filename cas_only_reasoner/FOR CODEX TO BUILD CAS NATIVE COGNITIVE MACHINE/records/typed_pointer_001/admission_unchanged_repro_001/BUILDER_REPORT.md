@@ -436,3 +436,93 @@ Commit it as is. Only then does `--write` proceed.
 - The tool harness saved one long listing under `C:/Users/wakil/.claude/projects/.../tool-results/`. I did not open it.
 - **Not opened:** any `*_eval.jsonl`, anything named sealed, `D:/tksCAS-archive/`, any salt, the meta1 ledger (not
   even an existence check), S3 or AWS, Claude transcripts, Codex's working copy.
+
+## 10. Revision 3 (2026-09-24): review of 303c281b fixed
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. Built by Claude as the temporary builder. Not an owner signature. Not yet
+reviewed. The review and the disposition of all 14 findings are in `REVIEW.md`, section "Review of 303c281b".
+
+### 10.1 In plain words
+
+- **The reader can now be admitted.** Before, the policy had to hold the reader's digest while the reader held the
+  policy's hash. That can never match. Now the policy hashes live in `policy_pins.json`, which the reader digest does
+  not cover. Codex can freeze the policy with the digest, and a re-pin does not change it.
+- **Nothing passes on its own say-so.** Each of the six prerequisites must name a committed receipt. The code opens
+  it and checks what is inside. The money gate reads the spend from a committed spend record, not from typed text.
+- **A broken machine is not a wrong answer.** A CUDA fault or out-of-memory error during the panel now stops the
+  study (`ADMISSION_INVALID_STOP`). Only the historical model's own coded refusals count as answers.
+- **The reader re-checks instead of trusting.** It re-reads the admission at the receipt commit, checks that the
+  freeze came before the result, checks the training machine (AMI) and the shipped package, and requires the READING
+  mode.
+
+### 10.2 Clause map corrections (supersede the matching rows of 9.2)
+
+| Policy clause | What the code does now | Code |
+|---|---|---|
+| "equal-state/different-envelope, changed-value, **changed-buffer**, missing-key, dtype-change, altered-output and corrupt-reference checks" | changed-buffer is **VACUOUS** for this architecture: no file in `cas_meta2/typed_teaching/` at `20208c92` calls `register_buffer` (I checked); the reviewer also found all 48 state entries at `c8d5c430` are learnable names. The AWS acceptance records `changed_buffer` as VACUOUS with the reference's buffer list and passes it only while that list is empty. A SYNTHETIC pure test shows a changed buffer reads DOES_NOT_REPRODUCE. Not "built" in the sense of a real variant | `re` `acceptance_mode`, test `test_a_changed_buffer_is_a_valid_mismatch_SYNTHETIC` |
+| `file_mismatch_alone_triggers_fallback: false`; file identity "never decides" | still true for decide(). BUT a **binding rule** also exists: a candidate file hash equal to Helm 2.0's own is misbound evidence (final.pt embeds the run id) and reads INVALID. So FILE_IDENTICAL cannot occur in a valid full reading | `rr` `new_reading` (the CONTRADICTION check) |
+| envelope "root ... reported only" | reported, AND a **binding rule**: the root must be the recorded historical root, because the historical loader rebuilds its role tagger from `init_args.root` | `rr` `evaluate_evidence` |
+| continuation = "optimizer tensors/scalars, every saved RNG stream, cursor/model revision and training counters" | the starting-state identity is no longer here. It is training configuration: a difference is INVALID (route protocol: checked "before its first optimizer update"). Open question 10.6-D | `rc` `TRAINING_RUN_IDENTITY` |
+| `frozen_before_reproduction_result_required: true` | in `READER_RULE`; the reader enforces it over git history (one freeze commit before and without the result; one version of the evidence and of the receipt result; admission unchanged after the freeze) | `rr` `history_violations`, `collect_history` |
+| "A preparation-only path must not require inventing launch approval"; "bind ... exact final packet/policy/source hashes; require all technical and budget admissions" | unchanged for the dry run. For ADMITTED, every prerequisite receipt is opened from a committed blob and checked by content | `rc` `read_prerequisite_receipts`, `prerequisite_violations` |
+| "Failed/refused records remain records" | only a historical coded refusal (`POINTER_`/`TYPED_`) is a record. Any other fault invalidates the evidence (open question 10.6-B) | `re` `classify_prediction_error`, `rr` `panel_row_faults` |
+
+### 10.3 P1 on AWS: what changed
+
+- Ship `policy_pins.json` next to the three reader sources. `repro_common.py` reads it at import and stops if it is
+  missing or malformed.
+- The acceptance now has 11 registered cases (`repro_common.ACCEPTANCE_CASES`), in this order: self identity, equal
+  state with a new envelope, continuation-only difference, changed value, changed encoder state, missing key, dtype
+  change, altered output, changed buffer (VACUOUS), state equal with one answer tampered, corrupt reference.
+  `READER_ACCEPTANCE_PASS` needs all 11, in order, passed.
+- The receipt also records `policy_pins_sha256`. It is taken before Codex's freeze, so after a re-pin its pins differ
+  from the admitted ones. That is expected. The admission checks the receipt's reader digest, panel and environment,
+  not its pins.
+- The P1 slot has been split by Codex into P1a (route only; launched) and P1b (reader, probe, admission). This
+  acceptance belongs to P1b.
+
+### 10.4 How to run it now (supersedes 9.4)
+
+```bash
+python -B "$D/test_unchanged_repro.py" -v                              # 99 pure-Python tests
+python -B "$D/prepare_unchanged_repro.py" --print-admission-bindings   # read-only; bindings, receipt kinds, pins sha
+# Not on the laptop (imports the launcher): --dry-run (preparation only), --write (needs ADMITTED).
+python -B "$D/prepare_unchanged_repro.py" --check --study-sha256 <hex>  # spend read from the admitted spend record
+python -B "$D/read_reproduction.py" --receipt-commit <commit>          # exit 0 valid verdict, 2 INVALID_STOP, 1 tool stop
+```
+
+To admit the job later, each prerequisite entry in `EXECUTION_ADMISSION.json` needs `status: PASS`,
+`receipt_commit`, `receipt_path` (relative to the CNCM folder) and `receipt_sha256`. The receipt must be committed in
+this branch's history, or be the pinned policy file at the pinned commit. `--print-admission-bindings` lists the
+receipt schemas.
+
+### 10.5 Checks
+
+See `REVIEW.md`, "R3.5 Checks". In short: 99 of 99 tests pass, none skipped; every mutant in the mutation check was
+caught; the live gates give owner authorization granted and execution admission `NOT_READY` with 16 named reasons;
+`--check` and the reader stop with named tool stops. Nothing imported torch or the launcher. No AWS call. No money
+spent.
+
+### 10.6 Open questions (new or changed; earlier ones in 9.6 stay open unless named here)
+
+- **A (new).** The frozen launch packet must not contain `policy_pins.json` or `EXECUTION_ADMISSION.json`, or a new
+  hash cycle appears. What does the packet contain?
+- **B (extends 9.6 question 4).** Only a historical coded refusal is a panel record; every other fault invalidates the
+  evidence. Confirm.
+- **C.** Accept changed-buffer as VACUOUS for this architecture.
+- **D.** Confirm the starting-state identity as training configuration (INVALID), not continuation.
+- **E (replaces 9.6 question 2).** Codex's branch moved to `42ad8367`: plan, manifest, launch request and amendments
+  changed; the reproduction policy did not. Re-pin after review? It is now a data-only change.
+- **F (replaces 9.6 question 11).** Who writes the spend record, from which sources, and how fresh must it be at
+  `--check`? No age limit is enforced. The $30 stop before the third training job is still not enforced by code.
+- **G.** A separate, unpushed history could hold a different single evidence version. Should the reader also require
+  the receipt commit to be in the fetched tip of this branch?
+- **H.** The review-receipt verdict word `NO_BLOCKER_OR_MAJOR_FINDING_OPEN` is mine; rename if Codex prefers.
+- **I.** The environment-lock receipt is checked only by the manifest's sha256 and `dependencies.status`.
+- Still open from 9.6: 1 (P1 machine type: T4 vs RTX PRO 4500), 3 (missing key / dtype change; now aligned in the
+  tests, ruling still needed), 5 (route), 6 (panel scope), 7 (slot decisions), 8 (environment lock; now partly checked
+  through the preflight AMI), 9 (P1 packaging), 10 (which plan file), 12 (fallback B admissions).
+
+### 10.7 EXPOSURE (revision 3)
+
+See `REVIEW.md`, "R3.8 EXPOSURE". Same session, same reads.

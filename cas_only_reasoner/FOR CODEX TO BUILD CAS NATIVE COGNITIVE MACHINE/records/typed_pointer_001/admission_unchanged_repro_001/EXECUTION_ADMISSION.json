@@ -23,12 +23,13 @@
    "route_and_checkpoint_protocol": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
    "statistical_policy": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055"
   },
-  "reader_rule_sha256": "4f20ad168b571867c03c0a5c482df51a22d6a330ca1609cfa3000d17d2128b38",
-  "reader_source_sha256": "46a595accea1743b5968aadb395e92a9d5d54a9840d69c8dd63362575439a017",
+  "policy_pins_sha256": "d57d32ddef3f060bb2c87c7cfdf0b22f6f55dc6fca69fa54bcd0583eb700d3a0",
+  "reader_rule_sha256": "e612d0efd31089bf864b229542848b07c06c1b767c83e541bf0c46c07bcc04f0",
+  "reader_source_sha256": "f35cd2ae967e950fc65debabd0146adc1ad67445cc74ca56cdc5bf9d98b6b849",
   "reader_sources_sha256": {
-   "read_reproduction.py": "6b810640d8da2eabcf92fcf7e1063b62abf59e14aa72e968dae5e84d56f08b6b",
-   "recompute_reproduction_evidence.py": "077b6344b2e2268f8356343b92e243d7ef58e26eedd1c8c99cce02beea1f62f7",
-   "repro_common.py": "43793f4d04311881da5b2d55d5dd6f8001e404eaea41bc7a40e3c86f3cd29b61"
+   "read_reproduction.py": "1c8bdfa88f43fd4f63f8b12935499e78abe8974ca9128ca3ad87e5ad5c076f3d",
+   "recompute_reproduction_evidence.py": "0bd93daf7a3c3496549eb2da85af28abffc4e0d0d51ae1232483a6763db71383",
+   "repro_common.py": "4fb2a5e319e2a219bf1f10bd4be60e64ad52af32b6cb9bac14280d3bfd0e683f"
   },
   "reference_final_pt_sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
   "source_sha": "20208c923d41c24614504d4ecc2b289ecb66eda8"
@@ -37,7 +38,7 @@
  "job_kind": "UNCHANGED_ARM_REPRODUCTION",
  "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
  "model_seed": 20260917,
- "note": "Technical readiness for ONE job (the unchanged reproduction, seed 20260917 of 20208c92). NOT_READY: no prerequisite has a receipt. Owner authorization is a separate state and is granted (STANDING_PROJECT_AUTHORIZATION, owner records bound by blob). Only a technical admission that changes state to ADMITTED, names the job, carries every receipt sha256 and is committed as is lets prepare_unchanged_repro.py --write or --check proceed. No approval word is used anywhere.",
+ "note": "Technical readiness for ONE job (the unchanged reproduction, seed 20260917 of 20208c92). Revision 3. NOT_READY: no prerequisite has a receipt. Owner authorization is a separate state and is granted (STANDING_PROJECT_AUTHORIZATION, owner records bound by blob). Each prerequisite must name a committed receipt by commit, path and sha256; the code opens it and checks its content. Only a record that says ADMITTED, names the job, carries every checked receipt and is committed as is lets prepare_unchanged_repro.py --write or --check proceed. No approval word is used anywhere.",
  "owner_authorization": {
   "records": {
    "claude_extension_md": "f707ce455c08e51c5ce18ae5114a7d5b530a9f82",
@@ -48,40 +49,46 @@
  },
  "prerequisites": {
   "budget_headroom_verified": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "measured spend so far + $15.00 <= $60.00, read from a named spend record (not operator-stated)"
+   "what_passes_it": "a committed spend record (schema cncm.helm-unchanged-reproduction-spend-record/1) for THIS job with named sources; the code reads measured_spend_so_far_usd from it and requires spend + $15.00 <= $60.00"
   },
   "final_launch_packet_frozen": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "EXECUTION_MANIFEST.json final_freeze.frozen_launch_packet_sha256 set, launch_enabled true, LAUNCH_REQUEST.json launch_enabled true"
+   "what_passes_it": "the committed launch-packet file whose sha256 EXECUTION_MANIFEST.json final_freeze.frozen_launch_packet_sha256 names; manifest and launch request launch_enabled true"
   },
   "fresh_review_of_this_revision": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "a fresh reviewer verdict on the exact reader sources bound below"
+   "what_passes_it": "a committed review receipt (schema cncm.helm-unchanged-reproduction-review-receipt/1) by a reviewer other than the builder, verdict NO_BLOCKER_OR_MAJOR_FINDING_OPEN, on the reader sources and policy pins bound below"
   },
   "numerical_environment_frozen": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "the full environment lock (driver, cuDNN, Python, AMI) recorded in the final manifest, and equal to the P1 evidence environment"
+   "what_passes_it": "the committed environment-lock file whose sha256 EXECUTION_MANIFEST.json final_freeze.dependency_lock_sha256 names, with dependencies.status no longer NOT_READY"
   },
   "reader_acceptance_on_aws_p1": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "recompute_reproduction_evidence.py --mode acceptance on AWS in the P1 slot, receipt status READER_ACCEPTANCE_PASS; its sha256 also written into REPRODUCTION_POLICY.json reader_acceptance_receipt_sha256"
+   "what_passes_it": "the P1 acceptance receipt written by recompute_reproduction_evidence.py --mode acceptance on AWS, committed; the code opens it and requires READER_ACCEPTANCE_PASS, all 11 registered cases in order and passed (changed_buffer VACUOUS with no buffers), producer.reader_source_sha256 and sources equal to the bindings below, and the pinned panel and environment digests; its sha256 must also be REPRODUCTION_POLICY.json reader_acceptance_receipt_sha256"
   },
   "reproduction_policy_frozen_with_panel_and_reader": {
+   "receipt_commit": null,
    "receipt_path": null,
    "receipt_sha256": null,
    "status": "NOT_RUN",
-   "what_passes_it": "a re-pinned REPRODUCTION_POLICY.json whose output_panel_manifest_sha256 and reader_source_sha256 equal the bindings below"
+   "what_passes_it": "the receipt IS the pinned REPRODUCTION_POLICY.json at the pinned commit (policy_pins.json); its output_panel_manifest_sha256 and reader_source_sha256 must equal the bindings below"
   }
  },
  "schema": "cncm.helm-unchanged-reproduction-execution-admission/1",

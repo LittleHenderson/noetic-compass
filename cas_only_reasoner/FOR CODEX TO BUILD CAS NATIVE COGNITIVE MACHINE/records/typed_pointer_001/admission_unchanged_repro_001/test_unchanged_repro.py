@@ -16,6 +16,15 @@ What is tested:
   * the recompute module's pure helpers, and that it stops with GPU_REQUIRED on this laptop BEFORE importing torch;
   * the tree / untracked rules, the atomic writer, the record builders, the spend gate and --check's study check;
   * statically (AST): launcher names exist, the gates run before the launcher, no prose status parser remains.
+Revision 3 (review of 303c281b) adds:
+  * BLOCKER 1: no reader source carries any pinned policy/owner hash (the pins live in policy_pins.json), and a
+    simulated freeze + re-pin leaves the reader digest unchanged;
+  * MAJOR 2: every prerequisite receipt is opened and checked (PASS + any hex no longer passes; a
+    READER_ACCEPTANCE_FAIL receipt whose hash is written is refused; the spend is read from the spend record);
+  * MAJOR 3: an ERROR panel row or an uncoded refusal is ADMISSION_INVALID_STOP, never DOES_NOT_REPRODUCE;
+  * the minors: the admission at the receipt commit, the frozen-before-result history rule (with real git log on this
+    branch), the AMI / shipped-package checks, the starting state as training configuration, the READING mode, a
+    SYNTHETIC buffer case, and missing-key / dtype-change as the pinned loader treats them.
 
 Run:  python -B test_unchanged_repro.py -v      (from the worktree root, with the full path)
 LABEL. CLAUDE_BUILT_CLAUDE_CHECKED.
@@ -30,6 +39,8 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+import zipfile
+import contextlib
 from contextlib import redirect_stdout
 
 HERE = Path(__file__).resolve().parent
@@ -70,6 +81,12 @@ def enc(value):
 
 POLICY_PRESENT = git_has(common.POLICY_COMMIT, common.POLICY_FILES['reproduction_policy_json'][0])
 OWNER_PRESENT = all(git_has(commit, relative) for commit, relative, _, _ in common.OWNER_RECORDS.values())
+ARCHIVE = common.ROOT / common.PACKAGE_REL / 'source.zip'
+ARCHIVE_RAW = ARCHIVE.read_bytes() if ARCHIVE.is_file() else None          # the committed package (about 6 MB)
+PREFLIGHT_OK = {'ami': common.HISTORICAL_AMI, 'instance_type': 'g7.2xlarge', 'region': 'us-west-2',
+                'visible_gpu_count': 1}
+RECORDED_ENV = dict(common.NUMERICAL_ENVIRONMENT, python_version='3.12.3', cudnn_version=91002,
+                    driver_version='580.65.06', platform_release='6.8.0-1024-aws')     # synthetic recorded values
 
 
 def policy_json(name):
@@ -178,31 +195,111 @@ class PolicyPinTests(unittest.TestCase):
         moved['policy_file_sha256']['REPRODUCTION_POLICY.json'] = '0' * 64
         self.assertEqual(common.launch_request_violations(moved), ['LAUNCH_REQUEST_POLICY_PIN:REPRODUCTION_POLICY.json'])
 
+    def current_tips(self):
+        return {branch: {'ref': common.tracking_ref(branch), 'commit': 'f' * 40,
+                         'blobs': {name: blob for name, (_, blob) in entry['files'].items()},
+                         'pinned_commits_are_ancestors': True}
+                for branch, entry in common.tip_watch().items()}
+
     def test_policy_tip_currency(self):
-        tip = {'commit': 'f' * 40, 'blobs': {name: pin[1] for name, pin in common.POLICY_FILES.items()},
-               'pinned_commit_is_ancestor': True}
-        self.assertEqual(common.policy_tip_violations(tip), [])
-        moved = deepcopy(tip)
-        moved['blobs']['plan'] = '3172a221f3a12448029b995e87009284fcce453c'
+        tips = self.current_tips()
+        self.assertEqual(common.policy_tip_violations(tips), [])
+        self.assertEqual(set(tips), {common.POLICY_BRANCH, 'research/helm-integration-20260923'})
+        moved = deepcopy(tips)
+        moved[common.POLICY_BRANCH]['blobs']['plan'] = '3172a221f3a12448029b995e87009284fcce453c'
         self.assertEqual(common.policy_tip_violations(moved),
                          ['MOVED_AT_TIP:plan:3172a221f3a12448029b995e87009284fcce453c'])
-        self.assertEqual(common.policy_tip_violations(dict(tip, pinned_commit_is_ancestor=False)),
-                         ['PINNED_COMMIT_NOT_IN_TIP'])
-        self.assertTrue(common.policy_tip_violations({'commit': None})[0].startswith('POLICY_TRACKING_REF_MISSING'))
+        not_in = deepcopy(tips)
+        not_in[common.POLICY_BRANCH]['pinned_commits_are_ancestors'] = False
+        self.assertEqual(common.policy_tip_violations(not_in), ['PINNED_COMMIT_NOT_IN_TIP:' + common.POLICY_BRANCH])
+        missing = deepcopy(tips)
+        missing[common.POLICY_BRANCH]['commit'] = None
+        self.assertTrue(common.policy_tip_violations(missing)[0].startswith('TRACKING_REF_MISSING'))
+
+    def test_owner_records_are_watched_at_their_branch_tips(self):
+        """Review NOTE 12: a later owner record at a tip (a withdrawal) stops the admitted paths until a re-pin."""
+        tips = self.current_tips()
+        for branch, name in ((common.POLICY_BRANCH, 'owner:codex_standing_json'),
+                             ('research/helm-integration-20260923', 'owner:claude_extension_md')):
+            moved = deepcopy(tips)
+            moved[branch]['blobs'][name] = '6' * 40
+            self.assertEqual(common.policy_tip_violations(moved), ['MOVED_AT_TIP:' + name + ':' + '6' * 40])
+            gone = deepcopy(tips)
+            gone[branch]['blobs'][name] = None
+            self.assertEqual(common.policy_tip_violations(gone), ['MOVED_AT_TIP:' + name + ':None'])
 
     @unittest.skipUnless(POLICY_PRESENT, 'policy commit bc46b36e not fetched')
     def test_a_moved_tip_stops_only_the_admitted_paths(self):
-        saved = common.read_policy_tip
-        moved = {'ref': common.POLICY_TRACKING_REF, 'commit': 'f' * 40, 'pinned_commit_is_ancestor': True,
-                 'blobs': dict({name: pin[1] for name, pin in common.POLICY_FILES.items()}, launch_request='5' * 40)}
+        saved = common.read_policy_tips
+        moved = self.current_tips()
+        moved[common.POLICY_BRANCH]['blobs']['launch_request'] = '5' * 40
         try:
-            common.read_policy_tip = lambda stop_, *, fetch: moved
+            common.read_policy_tips = lambda stop_, *, fetch: moved
             report = common.check_policy(stop, fetch=False, require_current=False)
             self.assertEqual(report['tip']['violations'], ['MOVED_AT_TIP:launch_request:' + '5' * 40])
             with self.assertRaisesRegex(Stopped, '^POLICY_OR_PLAN_MOVED:MOVED_AT_TIP:launch_request'):
                 common.check_policy(stop, fetch=False, require_current=True)
         finally:
-            common.read_policy_tip = saved
+            common.read_policy_tips = saved
+
+    # ---- BLOCKER 1 (review of 303c281b): no hash cycle between the policy and the reader digest ----
+    def test_no_reader_source_carries_a_pinned_policy_hash(self):
+        """Codex freezes REPRODUCTION_POLICY.json with the reader digest. If a reader source held any policy or
+        owner-record hash, every re-pin would change that digest: a cycle. So none may, and the pins file is not a
+        reader source."""
+        self.assertNotIn(common.PINS_NAME, common.READER_SOURCE_FILES)
+        pinned = {common.POLICY_COMMIT}
+        for _, blob, sha, _ in common.POLICY_FILES.values():
+            pinned.update((blob, sha))
+        for commit, _, blob, sha in common.OWNER_RECORDS.values():
+            pinned.update((commit, blob, sha))
+        for name in common.READER_SOURCE_FILES:
+            text = (HERE / name).read_text(encoding='ascii')
+            for value in pinned:
+                for width in (8, len(value)):                      # neither the full hash nor its short form
+                    self.assertNotIn(value[:width], text, (name, value))
+
+    def test_a_policy_freeze_and_re_pin_leave_the_reader_digest_unchanged(self):
+        before = common.reader_source_digest()
+        with tempfile.TemporaryDirectory() as scratch:
+            folder = Path(scratch)
+            for name in common.READER_SOURCE_FILES:
+                (folder / name).write_bytes((HERE / name).read_bytes())
+            pins = json.loads(common.PINS_RAW)
+            frozen = {'reader_source_sha256': before, 'output_panel_manifest_sha256': common.PANEL_MANIFEST_SHA256}
+            raw = common.canonical(frozen)
+            pins['policy']['commit'] = '7' * 40                   # the re-pin after Codex's freeze
+            pins['policy']['files']['reproduction_policy_json'].update(
+                blob=common.git_object_id(raw), sha256=digest(raw), bytes=len(raw))
+            (folder / common.PINS_NAME).write_bytes(enc(pins))
+            self.assertEqual(common.pins_violations(pins), [])
+            self.assertEqual(common.reader_source_digest(common.source_hashes(folder)), before)
+        violations = common.policy_freeze_violations(frozen, {}, {}, common.expected_admission_bindings(), {})
+        self.assertNotIn('POLICY_READER_SOURCE_NOT_FROZEN_TO_THIS_READER', violations)
+        self.assertNotIn('POLICY_PANEL_MANIFEST_NOT_FROZEN_TO_THIS_PANEL', violations)
+
+    def test_the_pins_file_form(self):
+        pins = json.loads(common.PINS_RAW)
+        self.assertEqual(common.pins_violations(pins), [])
+        self.assertEqual(common.load_pins(common.PINS_RAW), pins)
+        self.assertEqual(common.PINS_SHA256, digest(common.PINS_RAW))
+        self.assertEqual(common.expected_admission_bindings()['policy_pins_sha256'], common.PINS_SHA256)
+        self.assertEqual(common.evidence_policy_block()['policy_pins_sha256'], common.PINS_SHA256)
+        for change, reason in (
+                (lambda p: p.update(label='APPROVED'), 'PINS_TOP_FIELDS_SCHEMA_OR_LABEL'),
+                (lambda p: p['policy'].update(commit='BC46B36E' * 5), 'PINS_POLICY_HEAD'),
+                (lambda p: p['policy']['files'].pop('plan'), 'PINS_POLICY_FILE_SET'),
+                (lambda p: p['policy']['files']['plan'].update(bytes=True), 'PINS_POLICY_FILE:plan'),
+                (lambda p: p['policy']['files']['plan'].update(path='../x.md'), 'PINS_POLICY_FILE:plan'),
+                (lambda p: p['owner_records']['codex_standing_md'].update(branch='a..b'),
+                 'PINS_OWNER_RECORD:codex_standing_md')):
+            bad = deepcopy(pins)
+            change(bad)
+            self.assertIn(reason, common.pins_violations(bad))
+        with self.assertRaisesRegex(SystemExit, '^UNCHANGED_REPRO_POLICY_PINS_INVALID'):
+            common.load_pins(b'{"schema": "x"}')
+        with self.assertRaisesRegex(SystemExit, 'PINS_NOT_AN_OBJECT'):
+            common.load_pins(b'not json')
 
     @unittest.skipUnless(POLICY_PRESENT, 'policy commit bc46b36e not fetched')
     def test_the_pinned_policy_is_not_frozen_so_admission_cannot_pass_today(self):
@@ -268,6 +365,36 @@ class PanelAndEnvironmentPinTests(unittest.TestCase):
         self.assertEqual(len(common.environment_violations(None)), len(pinned))
         self.assertEqual(pinned['torch_version'], '2.11.0+cu128')
         self.assertEqual(pinned['gpu_name'], 'NVIDIA RTX PRO 4500 Blackwell Server Edition')
+        self.assertEqual(common.environment_unrecorded(RECORDED_ENV), [])
+        self.assertEqual(common.environment_unrecorded(pinned), list(common.ENVIRONMENT_RECORDED_NOT_PINNED))
+
+    def test_training_machine_and_shipped_package(self):
+        """Review MINOR 7: the preflight AMI, instance and region; the shipped archive and its requirements file."""
+        self.assertEqual(common.preflight_violations(PREFLIGHT_OK), [])
+        self.assertEqual(common.preflight_violations(dict(PREFLIGHT_OK, ami='ami-0123456789abcdef0')),
+                         ['ami=ami-0123456789abcdef0'])
+        self.assertEqual(common.preflight_violations(dict(PREFLIGHT_OK, instance_type='g4dn.xlarge')),
+                         ['instance_type=g4dn.xlarge'])
+        self.assertEqual(len(common.preflight_violations(None)), 3)
+        self.assertEqual(common.shipped_package_violations(None), ['SHIPPED_PACKAGE_ABSENT'])
+        self.assertIn('SHIPPED_PACKAGE_HAS_NO_REQUIREMENTS_MEMBER', common.shipped_package_violations(b'not a zip'))
+        other = io.BytesIO()
+        with zipfile.ZipFile(other, 'w') as bundle:
+            bundle.writestr(common.REQUIREMENTS_MEMBER, b'torch==2.4.0\n')
+        found = common.shipped_package_violations(other.getvalue())
+        self.assertIn('SHIPPED_PACKAGE_IS_NOT_THE_PINNED_ARCHIVE', found)
+        self.assertTrue(any(item.startswith('SHIPPED_REQUIREMENTS_SHA256:') for item in found))
+        if ARCHIVE_RAW is not None:
+            self.assertEqual(common.shipped_package_violations(ARCHIVE_RAW), [])
+
+    def test_historical_refusal_codes(self):
+        """Review MAJOR 3: only the historical `require` form is model behaviour."""
+        for message in ('POINTER_SLOT_COVERAGE', 'TYPED_LEARNER_DEPTH', 'TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3',
+                        'TYPED_MATCHED:X'):
+            self.assertTrue(common.is_historical_refusal(message), message)
+        for message in ('CUDA error: an illegal memory access was encountered', 'out of memory', 'pointer_slot',
+                        'POINTER_', 'TYPED_X:\nnext line', '', None, 3):
+            self.assertFalse(common.is_historical_refusal(message), message)
 
     def test_reader_source_digest(self):
         hashes = common.source_hashes()
@@ -372,20 +499,86 @@ class OwnerAuthorizationTests(unittest.TestCase):
 # State 2: execution admission.
 # =====================================================================================================================
 FAKE_SOURCES = {name: (str(index) * 64)[:64] for index, name in enumerate(common.READER_SOURCE_FILES, start=1)}
-RECEIPT = 'a1' * 32
-PACKET = 'b2' * 32
+NEW_JOB = common.job_name('20260925120000')
+RECEIPT_COMMIT = 'e' * 40                     # a synthetic receipt commit; `read_prerequisite_receipts` is not used here
+LOCK_RAW, PACKET_RAW = b'synthetic dependency lock\n', b'synthetic launch packet\n'
 
 
-def admitted_record(job, **changes):
+def acceptance_receipt(sources=FAKE_SOURCES, **changes):
+    """A synthetic P1 acceptance receipt, as `recompute_reproduction_evidence.acceptance_mode` writes it."""
+    receipt = {'schema': common.ACCEPTANCE_SCHEMA, 'label': common.LABEL, 'status': common.ACCEPTANCE_PASS,
+               'cases': [dict({'case': case, 'pass': True}, **({'status': common.VACUOUS, 'reference_buffers': []}
+                                                               if case == 'changed_buffer' else {}))
+                         for case in common.ACCEPTANCE_CASES],
+               'producer': {'sources_sha256': dict(sources), 'reader_source_sha256': common.reader_source_digest(sources)},
+               'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
+               'numerical_environment_sha256': common.environment_digest(), 'environment': dict(RECORDED_ENV),
+               'environment_violations': []}
+    receipt.update(changes)
+    return receipt
+
+
+def frozen_policy(acceptance_raw=None):
+    """The three Codex records as they would read after the freeze (synthetic)."""
+    acceptance_raw = enc(acceptance_receipt()) if acceptance_raw is None else acceptance_raw
+    return ({'output_panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
+             'reader_source_sha256': common.reader_source_digest(FAKE_SOURCES),
+             'reader_acceptance_receipt_sha256': digest(acceptance_raw), 'main_launch_ready': True},
+            {'launch_enabled': True, 'dependencies': {'status': 'FROZEN'},
+             'final_freeze': {'frozen_launch_packet_sha256': digest(PACKET_RAW),
+                              'dependency_lock_sha256': digest(LOCK_RAW)}},
+            {'launch_enabled': True})
+
+
+def spend_record(job=NEW_JOB, **changes):
+    record = {'schema': common.SPEND_RECORD_SCHEMA, 'label': common.LABEL, 'study': common.STUDY_NAME, 'job': job,
+              'measured_spend_so_far_usd': '21.40', 'measured_utc': '2026-09-25T09:00:00Z',
+              'basis': 'conservative bound including unbilled runtime (synthetic)',
+              'sources': [{'path': 'records/helm_controlled_prelaunch_20260924/COST_STATE.json', 'sha256': 'f' * 64}]}
+    record.update(changes)
+    return record
+
+
+def review_receipt(**changes):
+    receipt = {'schema': common.REVIEW_RECEIPT_SCHEMA, 'label': common.LABEL, 'verdict': common.REVIEW_PASS,
+               'reviewed_reader_sources_sha256': dict(FAKE_SOURCES),
+               'reviewed_reader_source_sha256': common.reader_source_digest(FAKE_SOURCES),
+               'reviewed_policy_pins_sha256': common.PINS_SHA256,
+               'reviewed_panel_manifest_sha256': common.PANEL_MANIFEST_SHA256, 'job_kind': common.JOB_KIND,
+               'model_seed': common.MODEL_SEED, 'reviewed_commit': 'd' * 40, 'reviewer': 'fresh Claude reviewer'}
+    receipt.update(changes)
+    return receipt
+
+
+def synthetic_receipts(job=NEW_JOB, **raws):
+    """`{name: {'commit', 'path', 'raw'}}` exactly as `read_prerequisite_receipts` returns committed receipts."""
+    policy = frozen_policy()[0]
+    default = {'reader_acceptance_on_aws_p1': enc(acceptance_receipt()),
+               'reproduction_policy_frozen_with_panel_and_reader': enc(policy),
+               'numerical_environment_frozen': LOCK_RAW, 'final_launch_packet_frozen': PACKET_RAW,
+               'budget_headroom_verified': enc(spend_record(job)), 'fresh_review_of_this_revision': enc(review_receipt())}
+    default.update(raws)
+    out = {}
+    for name, raw in default.items():
+        if name == 'reproduction_policy_frozen_with_panel_and_reader':
+            commit, path = common.POLICY_COMMIT, common.POLICY_FILES['reproduction_policy_json'][0]
+        else:
+            commit, path = RECEIPT_COMMIT, common.HERE_REL + '/receipts/' + name + '.json'
+        out[name] = {'commit': commit, 'path': path, 'raw': raw}
+    return out
+
+
+def admitted_record(job, receipts=None, **changes):
+    receipts = synthetic_receipts(job) if receipts is None else receipts
     record = {'schema': common.ADMISSION_SCHEMA, 'label': common.LABEL, 'state': common.ADMITTED,
               'job_kind': common.JOB_KIND, 'model_seed': common.MODEL_SEED, 'source_sha': common.SOURCE_SHA,
               'job': job, 'owner_authorization': {'state': common.OWNER_AUTHORIZED,
                                                   'records': {name: pin[2]
                                                               for name, pin in common.OWNER_RECORDS.items()}},
               'bindings': common.expected_admission_bindings(FAKE_SOURCES),
-              'prerequisites': {name: {'status': 'PASS', 'receipt_sha256': (RECEIPT if name == 'reader_acceptance_on_aws_p1'
-                                                                            else PACKET if name == 'final_launch_packet_frozen'
-                                                                            else 'c3' * 32)}
+              'prerequisites': {name: {'status': 'PASS', 'receipt_commit': receipts[name]['commit'],
+                                       'receipt_path': receipts[name]['path'],
+                                       'receipt_sha256': digest(receipts[name]['raw']), 'what_passes_it': 'synthetic'}
                                 for name in common.REQUIRED_PREREQUISITES},
               'admitted_by': 'Claude technical admission under standing project authorization',
               'admitted_utc': '2026-09-25T10:00:00Z', 'note': 'synthetic'}
@@ -393,23 +586,13 @@ def admitted_record(job, **changes):
     return record
 
 
-def frozen_policy():
-    return ({'output_panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
-             'reader_source_sha256': common.reader_source_digest(FAKE_SOURCES),
-             'reader_acceptance_receipt_sha256': RECEIPT, 'main_launch_ready': True},
-            {'launch_enabled': True, 'final_freeze': {'frozen_launch_packet_sha256': PACKET}},
-            {'launch_enabled': True})
-
-
-NEW_JOB = common.job_name('20260925120000')
-
-
-def admission(record, *, owner=common.OWNER_AUTHORIZED, committed=True, job=NEW_JOB, raw=None, freeze=None):
+def admission(record, *, owner=common.OWNER_AUTHORIZED, committed=True, job=NEW_JOB, raw=None, freeze=None,
+              receipts=None):
     policy, manifest, launch_request = freeze or frozen_policy()
     return common.execution_admission_state(
         enc(record) if raw is None else raw, expected_bindings=common.expected_admission_bindings(FAKE_SOURCES),
         owner_state={'state': owner}, policy=policy, manifest=manifest, launch_request=launch_request,
-        committed=committed, job=job)
+        committed=committed, job=job, receipts=synthetic_receipts(job) if receipts is None else receipts)
 
 
 class ExecutionAdmissionTests(unittest.TestCase):
@@ -417,6 +600,97 @@ class ExecutionAdmissionTests(unittest.TestCase):
         state = admission(admitted_record(NEW_JOB))
         self.assertEqual((state['state'], state['reasons']), (common.ADMITTED, []))
         self.assertEqual(state['job'], NEW_JOB)
+        self.assertEqual(state['spend'], {'spend_so_far_usd': '21.40', 'per_job_bound_usd': '15.00',
+                                          'after_this_job_at_most_usd': '36.40', 'ceiling_usd': '60.00'})
+
+    # ---- MAJOR 2 (review of 303c281b): a prerequisite is never self-asserted ----
+    def test_pass_plus_any_hex_without_a_committed_receipt_is_refused(self):
+        """The reviewer's exact scenario: {'status': 'PASS', 'receipt_sha256': 'c3' * 32} with nothing behind it."""
+        record = admitted_record(NEW_JOB)
+        for name in common.REQUIRED_PREREQUISITES:
+            record['prerequisites'][name]['receipt_sha256'] = 'c3' * 32
+        state = admission(record, receipts={})
+        self.assertEqual(state['state'], common.NOT_READY)
+        for name in common.REQUIRED_PREREQUISITES:
+            self.assertIn('PREREQUISITE_RECEIPT_NOT_A_COMMITTED_ANCHORED_BLOB:' + name, state['reasons'])
+        state = admission(record)                                      # committed receipts, but other bytes
+        for name in common.REQUIRED_PREREQUISITES:
+            self.assertIn('PREREQUISITE_RECEIPT_SHA256:' + name, state['reasons'])
+        receipts = synthetic_receipts()
+        receipts['budget_headroom_verified']['path'] = 'records/elsewhere/spend.json'
+        self.assertIn('PREREQUISITE_RECEIPT_NOT_A_COMMITTED_ANCHORED_BLOB:budget_headroom_verified',
+                      admission(admitted_record(NEW_JOB), receipts=receipts)['reasons'])
+
+    def assertReceiptRefused(self, name, raw, reason, *, freeze=None):
+        receipts = synthetic_receipts(**{name: raw})
+        state = admission(admitted_record(NEW_JOB, receipts=receipts), receipts=receipts, freeze=freeze)
+        self.assertEqual(state['state'], common.NOT_READY, (name, reason))
+        self.assertTrue(any(item.startswith('PREREQUISITE_RECEIPT:' + name + ':' + reason) for item in state['reasons']),
+                        (name, reason, state['reasons']))
+        self.assertIsNone(state['spend'])
+        return state
+
+    def test_a_failed_acceptance_receipt_is_refused_even_when_its_hash_is_written(self):
+        name = 'reader_acceptance_on_aws_p1'
+        failed = enc(acceptance_receipt(status=common.ACCEPTANCE_FAIL))
+        state = self.assertReceiptRefused(name, failed, 'STATUS:READER_ACCEPTANCE_FAIL', freeze=frozen_policy(failed))
+        self.assertNotIn('POLICY_READER_ACCEPTANCE_RECEIPT_NOT_FROZEN', state['reasons'])  # the hash WAS written
+        cases = acceptance_receipt()['cases']
+        for bad, reason in (
+                (acceptance_receipt(cases=cases[:-1]), 'CASE_SET_OR_ORDER'),
+                (acceptance_receipt(cases=[dict(cases[0], **{'pass': False})] + cases[1:]), 'A_CASE_DID_NOT_PASS'),
+                (acceptance_receipt(cases=[dict(case, reference_buffers=['running_mean'])
+                                           if case['case'] == 'changed_buffer' else case for case in cases]),
+                 'CHANGED_BUFFER_NOT_RECORDED_AS_VACUOUS_WITH_NO_BUFFERS'),
+                (acceptance_receipt(sources=dict(FAKE_SOURCES, **{'repro_common.py': '9' * 64})),
+                 'NOT_MADE_BY_THE_ADMITTED_READER'),
+                (acceptance_receipt(panel_manifest_sha256='0' * 64), 'PANEL_MANIFEST'),
+                (acceptance_receipt(environment=dict(RECORDED_ENV, gpu_name='Tesla T4')), 'ENVIRONMENT')):
+            raw = enc(bad)
+            self.assertReceiptRefused(name, raw, reason, freeze=frozen_policy(raw))
+
+    def test_policy_environment_and_packet_receipts_are_the_files_codex_names(self):
+        self.assertReceiptRefused('reproduction_policy_frozen_with_panel_and_reader',
+                                  enc(dict(frozen_policy()[0], main_launch_ready=False)),
+                                  'NOT_THE_POLICY_THE_GATE_READ')
+        receipts = synthetic_receipts()
+        receipts['reproduction_policy_frozen_with_panel_and_reader']['commit'] = RECEIPT_COMMIT
+        state = admission(admitted_record(NEW_JOB, receipts=receipts), receipts=receipts)
+        self.assertIn('PREREQUISITE_RECEIPT:reproduction_policy_frozen_with_panel_and_reader:'
+                      'NOT_THE_PINNED_POLICY_FILE', state['reasons'])
+        self.assertReceiptRefused('numerical_environment_frozen', b'another lock\n',
+                                  'NOT_THE_DEPENDENCY_LOCK_THE_MANIFEST_NAMES')
+        policy, manifest, launch_request = frozen_policy()
+        not_ready = (policy, dict(manifest, dependencies={'status': 'NOT_READY_FULL_ENVIRONMENT_NOT_FROZEN'}),
+                     launch_request)
+        self.assertReceiptRefused('numerical_environment_frozen', LOCK_RAW,
+                                  'MANIFEST_DEPENDENCIES_STATUS:NOT_READY_FULL_ENVIRONMENT_NOT_FROZEN', freeze=not_ready)
+        self.assertReceiptRefused('final_launch_packet_frozen', b'another packet\n', 'NOT_THE_PACKET_THE_MANIFEST_NAMES')
+
+    def test_the_budget_is_read_from_a_spend_record_for_this_job(self):
+        name = 'budget_headroom_verified'
+        for bad, reason in ((spend_record(measured_spend_so_far_usd='45.01'),
+                             'SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:60.01>60.00'),
+                            (spend_record(measured_spend_so_far_usd='21.4O'), 'SPEND_FIGURE_FORM:21.4O'),
+                            (spend_record(common.job_name('20260925120001')), 'FOR_ANOTHER_JOB'),
+                            (spend_record(sources=[]), 'SOURCES'),
+                            (spend_record(study='HELM-OTHER'), 'SCHEMA_FIELDS_LABEL_OR_STUDY'),
+                            (spend_record(measured_utc='yesterday'), 'MEASURED_UTC')):
+            self.assertReceiptRefused(name, enc(bad), reason)
+        self.assertEqual(common.spend_record_violations(spend_record(measured_spend_so_far_usd='45.00'), NEW_JOB),
+                         ([], {'spend_so_far_usd': '45.00', 'per_job_bound_usd': '15.00',
+                               'after_this_job_at_most_usd': '60.00', 'ceiling_usd': '60.00'}))
+
+    def test_the_review_receipt_is_a_fresh_reviewers_machine_verdict_on_this_revision(self):
+        name = 'fresh_review_of_this_revision'
+        for bad, reason in ((review_receipt(verdict='CHANGES_REQUIRED'), 'VERDICT:CHANGES_REQUIRED'),
+                            (review_receipt(verdict='APPROVED'), 'VERDICT:APPROVED'),
+                            (review_receipt(reviewed_reader_source_sha256='0' * 64), 'NOT_THIS_READER_REVISION'),
+                            (review_receipt(reviewed_policy_pins_sha256='0' * 64), 'NOT_THESE_POLICY_PINS'),
+                            (review_receipt(reviewer=common.RUNNER), 'REVIEWER_NOT_NAMED_OR_IS_THE_BUILDER'),
+                            (review_receipt(model_seed=20260918), 'NOT_THIS_JOB_KIND'),
+                            (review_receipt(note='prose'), 'SCHEMA_FIELDS_OR_LABEL')):
+            self.assertReceiptRefused(name, enc(bad), reason)
 
     def test_approval_words_in_the_state_field_are_refused(self):
         for word in ('APPROVED_FOR_LAUNCH', 'APPROVED', 'admitted', 'ADMITTED ', 'YES', True, None):
@@ -646,7 +920,8 @@ def panel(answers=ANSWERS, correct=CORRECT, refuse=()):
     return rows
 
 
-def side(job, sha, *, state=None, metadata=None, rows=None, restore='RESTORED', consistent=True, inference=None):
+def side(job, sha, *, state=None, metadata=None, rows=None, restore='RESTORED', consistent=True, inference=None,
+         buffers=()):
     state = parts() if state is None else state
     value = {'file': {'path': '/opt/in/' + sha[:8] + '.pt', 'sha256': sha, 'bytes': REF_BYTES},
              'payload_keys': list(common.PAYLOAD_KEYS), 'payload_schema': common.CHECKPOINT_SCHEMA,
@@ -654,7 +929,7 @@ def side(job, sha, *, state=None, metadata=None, rows=None, restore='RESTORED', 
              'producer_identities_consistent': {key: consistent for key in ('model', 'optimizer', 'encoder', 'rng')},
              'restore': {'status': restore, 'reason': None if restore == 'RESTORED' else 'ValueError:LAYOUT',
                          'loader': recompute.LOADER},
-             'state_dict_keys': sorted(state['model_state']), 'buffers': [],
+             'state_dict_keys': sorted(state['model_state']), 'buffers': list(buffers),
              'inference_mode': dict(common.INFERENCE_MODE) if inference is None else inference,
              'panel': (panel() if rows is None else rows) if restore == 'RESTORED' else [],
              'panel_left_learned_state_unchanged': True}
@@ -664,11 +939,11 @@ def side(job, sha, *, state=None, metadata=None, rows=None, restore='RESTORED', 
 
 
 def evidence(reference=None, candidate=None, *, environment=None, reasons=(), sources=None, candidate_sha=OTHER,
-             root=common.HISTORICAL_PACKAGE_ROOT, levels=None):
+             root=common.HISTORICAL_PACKAGE_ROOT, levels=None, mode='READING'):
     reference = side(common.HELM2_JOB, REF) if reference is None else reference
     candidate = side(NEW_JOB, OTHER) if candidate is None else candidate
     document = recompute.assemble(
-        'READING', environment=dict(common.NUMERICAL_ENVIRONMENT) if environment is None else environment,
+        mode, environment=dict(RECORDED_ENV) if environment is None else environment,
         inputs={'package_root': root, 'reference': {'sha256': REF, 'bytes': REF_BYTES},
                 'candidate': {'sha256': candidate_sha, 'bytes': REF_BYTES}},
         sides={'reference': reference, 'candidate': candidate}, producer_reasons=list(reasons), manifest=MANIFEST,
@@ -678,10 +953,11 @@ def evidence(reference=None, candidate=None, *, environment=None, reasons=(), so
     return json.loads(recompute.encode(document))
 
 
-def verdict_of(document, *, job=NEW_JOB, sha=OTHER, reference_record=None, candidate_record=None):
+def verdict_of(document, *, job=NEW_JOB, sha=OTHER, reference_record=None, candidate_record=None,
+               required_mode='READING'):
     evaluated = reader.evaluate_evidence(document, MANIFEST, expected_candidate_job=job, expected_candidate_sha256=sha,
                                          admitted_sources=FAKE_SOURCES, reference_record_metadata=reference_record,
-                                         candidate_record_metadata=candidate_record)
+                                         candidate_record_metadata=candidate_record, required_mode=required_mode)
     levels = evaluated['levels']
     return (reader.decide(not evaluated['invalid_reasons'], levels['file'], levels['learned_state'], levels['output'],
                           levels['continuation']), common.level_labels(levels), evaluated)
@@ -719,16 +995,22 @@ class EvidenceVerdictTests(unittest.TestCase):
                 side(NEW_JOB, OTHER, state=parts(optimizer_state=lambda o: {**o, 'state': {0: {
                     'exp_avg': T(0.02), 'step': T(1470.0)}}})),
                 side(NEW_JOB, OTHER, state=parts(rng_state=lambda r: {**r, 'python': (3, (1, 2, 4), None)})),
-                side(NEW_JOB, OTHER, metadata=meta(NEW_JOB, counters=1471)),
-                side(NEW_JOB, OTHER, metadata=meta(NEW_JOB, initial='j' * 64))):
+                side(NEW_JOB, OTHER, metadata=meta(NEW_JOB, counters=1471))):
             self.assertVerdict(evidence(candidate=candidate), REPRODUCED,
                                {'continuation': 'CONTINUATION_DIFFERENT', 'learned_state': 'LEARNED_STATE_IDENTICAL'})
 
+    def test_a_different_starting_state_is_training_configuration_so_invalid(self):
+        """Review finding 8 (revision 3): the starting state is a frozen pre-update check, not continuation."""
+        self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, metadata=meta(NEW_JOB, initial='j' * 64))),
+                           INVALID, reason='TRAINING_CONFIGURATION_DIFFERS:run_identity.initial_model_identity')
+
     # ---- DOES_NOT_REPRODUCE_UNDER_REGISTERED_STATE_POLICY (valid evidence) ----
     def test_every_learned_state_difference_is_a_valid_mismatch(self):
+        """Reader semantics on COMPLETE evidence. 'extra key', 'missing key' and 'dtype change' here assume a loader
+        that accepted the checkpoint; the pinned historical loader refuses the last two (next test)."""
         cases = {
             'changed value': parts(model_state=lambda m: {**m, 'round_rate': T(0.5000001)}),
-            'changed buffer': parts(model_state=lambda m: {**m, 'running_mean': T(1.0)}),
+            'extra key': parts(model_state=lambda m: {**m, 'running_mean': T(1.0)}),
             'missing key': parts(model_state=lambda m: {'left.weight': m['left.weight']}),
             'dtype change': parts(model_state=lambda m: {**m, 'round_rate': T(0.5, dtype='torch.float64')}),
             'encoder readout': parts(encoder_state=lambda e: {**e, 'readout': T(0.125, 0.125)}),
@@ -740,6 +1022,34 @@ class EvidenceVerdictTests(unittest.TestCase):
             evaluated = self.assertVerdict(evidence(candidate=candidate), DOES_NOT_REPRODUCE,
                                            {'learned_state': 'LEARNED_STATE_DIFFERENT', 'output': 'OUTPUT_REPRODUCED'})
             self.assertGreater(evaluated['differences']['learned_state_row_count'], 0, label)
+
+    def test_a_changed_buffer_is_a_valid_mismatch_SYNTHETIC(self):
+        """Review MINOR 6. SYNTHETIC: the historical architecture has no buffers (changed-buffer is VACUOUS there).
+        A persistent buffer is an ordinary model_state row and is compared exactly like a parameter."""
+        with_buffer = parts(model_state=lambda m: {**m, 'running_mean': T(1.0)})
+        changed = parts(model_state=lambda m: {**m, 'running_mean': T(2.0)})
+        reference = side(common.HELM2_JOB, REF, state=with_buffer, buffers=['running_mean'])
+        self.assertVerdict(evidence(reference=reference, candidate=side(NEW_JOB, OTHER, state=with_buffer,
+                                                                        buffers=['running_mean'])), REPRODUCED)
+        evaluated = self.assertVerdict(
+            evidence(reference=reference, candidate=side(NEW_JOB, OTHER, state=changed, buffers=['running_mean'])),
+            DOES_NOT_REPRODUCE, {'learned_state': 'LEARNED_STATE_DIFFERENT', 'output': 'OUTPUT_REPRODUCED'})
+        self.assertEqual([row['path'] for row in evaluated['differences']['learned_state_rows']],
+                         [['str:running_mean']])
+        self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, buffers=['not_in_the_state'])), INVALID,
+                           reason='CANDIDATE_BUFFER_NOT_IN_THE_STATE_INVENTORY')
+
+    def test_missing_key_and_dtype_change_as_the_pinned_loader_treats_them(self):
+        """Review NOTE 9: `restore_checkpoint` at 20208c92 refuses both (strict layout fingerprint and restored-identity
+        check), so no panel evidence can exist: ADMISSION_INVALID_STOP, the same answer the AWS acceptance registers.
+        The two readings differ only in whether a loader accepted the checkpoint. Open question 3 stays with Codex."""
+        for state in (parts(model_state=lambda m: {'left.weight': m['left.weight']}),
+                      parts(model_state=lambda m: {**m, 'round_rate': T(0.5, dtype='torch.float64')})):
+            self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, state=state, restore='REFUSED')), INVALID,
+                               {'learned_state': 'LEARNED_STATE_DIFFERENT'},
+                               reason='CANDIDATE_RESTORE_REFUSED_BY_THE_HISTORICAL_LOADER')
+        specs = {case: verdict for case, _, verdict, _ in recompute.acceptance_specs(None)}
+        self.assertEqual((specs['missing_key'], specs['dtype_change']), (INVALID, INVALID))
 
     def test_a_predictive_configuration_difference_is_a_valid_mismatch(self):
         evaluated = self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, metadata=meta(NEW_JOB, core_rounds=9))),
@@ -796,6 +1106,45 @@ class EvidenceVerdictTests(unittest.TestCase):
     def test_committed_record_binding(self):
         self.assertVerdict(evidence(), INVALID, reason='CANDIDATE_METADATA_IS_NOT_THE_COMMITTED_RECORD',
                            candidate_record=meta(NEW_JOB, counters=1))
+
+    def test_infrastructure_faults_are_invalid_never_a_mismatch(self):
+        """Review MAJOR 3: a CUDA fault or out-of-memory partway through the candidate panel, AFTER the reference panel
+        reproduced, must read ADMISSION_INVALID_STOP (no fallback), not DOES_NOT_REPRODUCE."""
+        faulted = panel()
+        for index in (1, 2):                                    # the remaining rows after a device fault
+            faulted[index] = recompute.panel_row(IDS[index], status='ERROR', reason='AcceleratorError:CUDA error',
+                                                 prediction=None, checked=None)
+        # Even if a producer failed to report it, the reader refuses the rows by itself.
+        self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, rows=faulted)), INVALID,
+                           reason='CANDIDATE_PANEL_INFRASTRUCTURE_FAULT_ROWS:2')
+        self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, rows=faulted),
+                                    reasons=['CANDIDATE_PANEL_INFRASTRUCTURE_FAULTS:2:first=typed-input-b:x']),
+                           INVALID, reason='PRODUCER_REPORTED')
+        uncoded = panel()
+        uncoded[0] = recompute.panel_row(IDS[0], status='REFUSED', reason='ValueError:math domain error',
+                                         prediction=None, checked=None)
+        self.assertVerdict(evidence(candidate=side(NEW_JOB, OTHER, rows=uncoded)), INVALID,
+                           reason='CANDIDATE_PANEL_REFUSAL_WITHOUT_A_HISTORICAL_CODE:1')
+        grader = panel()
+        grader[2] = recompute.panel_row(IDS[2], status='ERROR', reason='GRADER:KeyError:kind', prediction=None,
+                                        checked=None)
+        self.assertVerdict(evidence(reference=side(common.HELM2_JOB, REF, rows=grader)), INVALID,
+                           reason='REFERENCE_PANEL_INFRASTRUCTURE_FAULT_ROWS:1')
+
+    def test_acceptance_mode_evidence_is_not_a_reading(self):
+        """Review NOTE 11: the production reading requires mode READING; the acceptance requires ACCEPTANCE."""
+        self.assertVerdict(evidence(mode='ACCEPTANCE'), INVALID, reason='EVIDENCE_MODE_IS_NOT:READING')
+        self.assertVerdict(evidence(), INVALID, reason='EVIDENCE_MODE_IS_NOT:ACCEPTANCE', required_mode='ACCEPTANCE')
+        self.assertVerdict(evidence(mode='ACCEPTANCE'), REPRODUCED, required_mode='ACCEPTANCE')
+
+    def test_the_evidence_must_carry_these_policy_pins_and_the_recorded_environment(self):
+        document = evidence()
+        document['policy']['policy_pins_sha256'] = '0' * 64
+        self.assertVerdict(document, INVALID, reason='EVIDENCE_POLICY_OR_PINS')
+        unrecorded = {key: value for key, value in RECORDED_ENV.items() if key != 'driver_version'}
+        self.assertVerdict(evidence(environment=unrecorded), INVALID, reason='ENVIRONMENT_NOT_RECORDED:driver_version')
+        _, _, evaluated = verdict_of(evidence())
+        self.assertEqual(evaluated['environment_recorded_not_pinned']['python_version'], '3.12.3')
 
     def test_invalid_evidence_still_shows_the_state_difference(self):
         candidate = side(NEW_JOB, OTHER, state=parts(model_state=lambda m: {'left.weight': m['left.weight']}),
@@ -864,8 +1213,34 @@ class RecomputePureTests(unittest.TestCase):
                           'changed_value': DOES_NOT_REPRODUCE, 'changed_encoder_state': DOES_NOT_REPRODUCE,
                           'missing_key': INVALID, 'dtype_change': INVALID, 'altered_output': DOES_NOT_REPRODUCE})
         source = ast.unparse(function(HERE / 'recompute_reproduction_evidence.py', 'acceptance_mode'))
-        for case in ('self_identity', 'state_equal_output_tampered', 'corrupt_reference'):
+        for case in ('self_identity', 'changed_buffer', 'state_equal_output_tampered', 'corrupt_reference'):
             self.assertIn("'" + case + "'", source)
+        # every registered case is built somewhere, and the receipt passes only with the full registered list
+        self.assertEqual(set(common.ACCEPTANCE_CASES), set(table) | {'self_identity', 'changed_buffer',
+                                                                     'state_equal_output_tampered',
+                                                                     'corrupt_reference'})
+        self.assertEqual(len(common.ACCEPTANCE_CASES), 11)
+        self.assertEqual(list(common.ACCEPTANCE_CASES[1:8]), list(table))          # the recorded order
+        self.assertIn('common.ACCEPTANCE_CASES', source)
+        self.assertIn('VACUOUS', source)
+
+    def test_prediction_errors_are_split_into_refusals_and_infrastructure_faults(self):
+        """Review MAJOR 3: only a plain ValueError with a historical code is a refusal."""
+        self.assertEqual(recompute.classify_prediction_error(ValueError('POINTER_SLOT_COVERAGE')),
+                         ('REFUSED', 'POINTER_SLOT_COVERAGE'))
+        self.assertEqual(recompute.classify_prediction_error(ValueError('TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3')),
+                         ('REFUSED', 'TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:3'))
+        for error in (RuntimeError('CUDA error: an illegal memory access was encountered'), MemoryError('oom'),
+                      ValueError('math domain error'), TypeError('POINTER_SLOT_COVERAGE'),
+                      recompute.UnsupportedValue('TYPED_X'), KeyError('answer')):
+            status, reason = recompute.classify_prediction_error(error)
+            self.assertEqual(status, 'ERROR', error)
+            self.assertTrue(reason.startswith(type(error).__name__ + ':'), reason)
+        source = ast.unparse(function(HERE / 'recompute_reproduction_evidence.py', 'run_panel'))
+        self.assertIn('classify_prediction_error', source)
+        self.assertNotIn('except ValueError', source)                   # no bare ValueError-means-refusal any more
+        self.assertIn('_PANEL_INFRASTRUCTURE_FAULTS', ast.unparse(function(HERE / 'recompute_reproduction_evidence.py',
+                                                                           'load_side')))
 
 
 # =====================================================================================================================
@@ -886,7 +1261,8 @@ def record_set(job, value, size, *, metadata, run_ids=None, manifest_rows=None, 
              'bytes': len(checkpoint)}]
     rows = [row for row in rows if row['relative_path'] not in inventory_drop]
     return {common.MANIFEST_RECORD: manifest, common.INVENTORY_RECORD: enc({'job': job, 'files': rows}),
-            common.CHECKPOINT_RECORD: checkpoint, reader.WORKER_REPORT: enc({'runtime': RUNTIME})}
+            common.CHECKPOINT_RECORD: checkpoint, reader.WORKER_REPORT: enc({'runtime': RUNTIME}),
+            common.PREFLIGHT_RECORD: enc(PREFLIGHT_OK)}
 
 
 REQUEST = {'schema': 'cncm.typed-pointer-request/0.1', 'job': NEW_JOB, 'source_sha': common.SOURCE_SHA,
@@ -898,12 +1274,16 @@ def reference_files(value=REF, **options):
     return record_set(common.HELM2_JOB, value, REF_BYTES, metadata=meta(common.HELM2_JOB), **options)
 
 
-def frozen_files(job=NEW_JOB, state=common.ADMITTED, sources=None, rule=None):
+ADMISSION_SHA = '9' * 64
+
+
+def frozen_files(job=NEW_JOB, state=common.ADMITTED, sources=None, rule=None, pins=None):
     sources = FAKE_SOURCES if sources is None else sources
     study = {'status': 'FROZEN_BEFORE_FIRST_RUN', 'source_sha': common.SOURCE_SHA,
              'reading_rule': common.reading_rule_record() if rule is None else rule,
-             'execution_admission': {'state': state, 'job': job, 'bindings': {
-                 'reader_sources_sha256': sources, 'reader_source_sha256': common.reader_source_digest(sources)}},
+             'execution_admission': {'state': state, 'job': job, 'record_sha256': ADMISSION_SHA, 'bindings': {
+                 'reader_sources_sha256': sources, 'reader_source_sha256': common.reader_source_digest(sources),
+                 'policy_pins_sha256': common.PINS_SHA256 if pins is None else pins}},
              'jobs': [{'job': job, 'kind': common.JOB_KIND, 'model_seed': common.MODEL_SEED}]}
     return {'study.json': enc(study), '20260917/request.json': enc(dict(REQUEST, job=job))}
 
@@ -914,6 +1294,7 @@ def receipt_files(value=OTHER, size=REF_BYTES, *, delivered=True, drop=(), overr
              'reduced_schedule.json': enc({'job': NEW_JOB, 'reduced_schedule': None}),
              'collected/results/result.json': enc({'job': NEW_JOB, 'status': 'TYPED_POINTER_DELIVERED',
                                                    'summary': {'schedule_plan_mode': 'REGISTERED'}}),
+             common.SHIPPED_PACKAGE_RECORD: ARCHIVE_RAW,
              **record_set(NEW_JOB, value, size, metadata=meta(NEW_JOB), **options)}
     files.update(overrides or {})
     for name in drop:
@@ -921,15 +1302,30 @@ def receipt_files(value=OTHER, size=REF_BYTES, *, delivered=True, drop=(), overr
     return files
 
 
-def run(reference=None, frozen=None, receipt=None, document=None, sources=None):
+def admitted_state(job=NEW_JOB, **changes):
+    """EXECUTION_ADMISSION.json as `committed_admission_state` would evaluate it at the receipt commit (synthetic)."""
+    return dict({'state': common.ADMITTED, 'recorded_state': common.ADMITTED, 'reasons': [],
+                 'record_sha256': ADMISSION_SHA, 'job': job, 'spend': None}, **changes)
+
+
+HISTORY = {'freeze_commits': ['1' * 40], 'evidence_commits': ['2' * 40], 'receipt_result_commits': ['3' * 40],
+           'freeze_has_receipt': False, 'freeze_has_evidence': False, 'freeze_precedes_receipt': True,
+           'freeze_precedes_evidence': True, 'admission_blob_at_freeze': 'a' * 40,
+           'admission_blob_at_receipt': 'a' * 40}
+
+
+def run(reference=None, frozen=None, receipt=None, document=None, sources=None, state=None, history=None):
     reference = reference_files() if reference is None else reference
     frozen = frozen_files() if frozen is None else frozen
     receipt = receipt_files() if receipt is None else receipt
     raw = recompute.encode(evidence() if document is None else document) if document != 'ABSENT' else None
     return reader.reading(reference.get, frozen.get, receipt.get, lambda: raw, MANIFEST, receipt_commit='c' * 40,
-                          running_sources=FAKE_SOURCES if sources is None else sources)
+                          running_sources=FAKE_SOURCES if sources is None else sources,
+                          admission_state=admitted_state() if state is None else state,
+                          history=dict(HISTORY) if history is None else history)
 
 
+@unittest.skipUnless(ARCHIVE_RAW is not None, 'package archive not in this checkout')
 class ReadingTests(unittest.TestCase):
     def assertInvalid(self, record, reason):
         self.assertEqual(record['verdict'], INVALID)
@@ -1006,6 +1402,95 @@ class ReadingTests(unittest.TestCase):
     def test_the_verdict_is_always_one_of_three_words(self):
         for record in (run(), run(receipt=receipt_files(delivered=False)), run(document='ABSENT')):
             self.assertIn(record['verdict'], common.VERDICTS)
+
+    def test_the_admission_at_the_receipt_commit_decides_not_the_frozen_copy(self):
+        """Review MINOR 4: a hand-written frozen/ folder that claims ADMITTED is not enough."""
+        cases = [
+            (run(state=admitted_state(state=common.NOT_READY, reasons=['ADMISSION_STATE_IS:NOT_READY'])),
+             'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_ADMITTED:ADMISSION_STATE_IS:NOT_READY'),
+            (run(state=admitted_state(record_sha256='8' * 64)), 'FROZEN_ADMISSION_IS_NOT_THE_COMMITTED_ADMISSION_RECORD'),
+            (run(state=admitted_state(job=common.job_name('20260925120001'))),
+             'FROZEN_ADMISSION_IS_NOT_THE_COMMITTED_ADMISSION_RECORD'),
+            (run(state={}), 'EXECUTION_ADMISSION_AT_THE_RECEIPT_COMMIT_IS_NOT_ADMITTED:NOT_EVALUATED'),
+            (run(frozen=frozen_files(pins='0' * 64)), 'FROZEN_UNDER_OTHER_POLICY_PINS'),
+        ]
+        for record, reason in cases:
+            self.assertInvalid(record, reason)
+        record = run()
+        self.assertEqual(record['execution_admission_at_receipt_commit']['record_sha256'], ADMISSION_SHA)
+        self.assertEqual(record['policy_pins_sha256'], common.PINS_SHA256)
+
+    def test_frozen_before_the_result_and_one_version_of_the_evidence(self):
+        """Review MINOR 5: a regenerated evidence file, or a freeze after the result, reads ADMISSION_INVALID_STOP."""
+        for change, reason in (({'evidence_commits': ['2' * 40, '4' * 40]}, 'EVIDENCE_NOT_EXACTLY_ONE_COMMITTED_VERSION:2'),
+                               ({'receipt_result_commits': []}, 'RECEIPT_RESULT_NOT_EXACTLY_ONE_COMMITTED_VERSION:0'),
+                               ({'freeze_commits': ['1' * 40, '5' * 40]}, 'FROZEN_RECORDS_NOT_IN_EXACTLY_ONE_COMMIT:2'),
+                               ({'freeze_has_evidence': True}, 'FROZEN_IN_A_COMMIT_THAT_ALREADY_HELD_THE_RESULT'),
+                               ({'freeze_precedes_evidence': False}, 'FREEZE_IS_NOT_AN_ANCESTOR_OF_THE_RESULT'),
+                               ({'admission_blob_at_receipt': 'b' * 40}, 'ADMISSION_RECORD_CHANGED_AFTER_THE_FREEZE')):
+            self.assertInvalid(run(history=dict(HISTORY, **change)), reason)
+        self.assertInvalid(run(history={}), 'FROZEN_RECORDS_NOT_IN_EXACTLY_ONE_COMMIT:None')
+        record = run()
+        self.assertEqual(record['recorded_by_commit'], {'receipt_commit': 'c' * 40, 'freeze_commit': '1' * 40,
+                                                        'evidence_commit': '2' * 40, 'receipt_result_commit': '3' * 40})
+
+    def test_the_training_machine_and_the_shipped_package(self):
+        """Review MINOR 7: both receipts' preflight AMI; the new receipt's shipped archive and requirements file."""
+        self.assertInvalid(run(receipt=receipt_files(overrides={common.PREFLIGHT_RECORD: enc(dict(
+            PREFLIGHT_OK, ami='ami-0123456789abcdef0'))})),
+            'CANDIDATE_TRAINING_MACHINE_NOT_THE_HISTORICAL_ONE:ami=ami-0123456789abcdef0')
+        self.assertInvalid(run(receipt=receipt_files(drop=(common.PREFLIGHT_RECORD,))),
+                           'CANDIDATE_TRAINING_MACHINE_NOT_THE_HISTORICAL_ONE')
+        reference = reference_files()
+        reference[common.PREFLIGHT_RECORD] = enc(dict(PREFLIGHT_OK, region='us-east-1'))
+        self.assertInvalid(run(reference=reference), 'REFERENCE_TRAINING_MACHINE_NOT_THE_PINNED_ONE:region=us-east-1')
+        self.assertInvalid(run(receipt=receipt_files(overrides={common.SHIPPED_PACKAGE_RECORD: b'PK\x05\x06' + bytes(18)})),
+                           'CANDIDATE_SHIPPED_PACKAGE:SHIPPED_PACKAGE_IS_NOT_THE_PINNED_ARCHIVE')
+        self.assertInvalid(run(receipt=receipt_files(drop=(common.SHIPPED_PACKAGE_RECORD,))),
+                           'CANDIDATE_SHIPPED_PACKAGE:SHIPPED_PACKAGE_ABSENT')
+
+
+class HistoryTests(unittest.TestCase):
+    """The frozen-before-result facts (review MINOR 5): pure rule, plus real `git log` on this branch."""
+
+    def test_the_pure_rule(self):
+        self.assertEqual(reader.history_violations(HISTORY), [])
+        self.assertEqual(len(reader.history_violations(None)), 6)
+
+    @unittest.skipUnless(git_has('HEAD', common.HERE_REL + '/repro_common.py'), 'this folder is not committed here')
+    def test_git_log_pathspecs_resolve_from_the_cncm_root(self):
+        touched = reader.commits_touching('HEAD', common.HERE_REL + '/repro_common.py')
+        self.assertGreaterEqual(len(touched), 1)
+        self.assertTrue(all(common.is_hex(commit, 40) for commit in touched))
+        history = reader.collect_history('HEAD')                  # nothing frozen, no receipt, no evidence yet
+        self.assertEqual((history['freeze_commits'], history['evidence_commits'], history['receipt_result_commits']),
+                         ([], [], []))
+        self.assertIn('FROZEN_RECORDS_NOT_IN_EXACTLY_ONE_COMMIT:0', reader.history_violations(history))
+
+
+class ReceiptReaderTests(unittest.TestCase):
+    """`read_prerequisite_receipts` against real git: only committed blobs at anchored commits are opened."""
+
+    @unittest.skipUnless(git_has('HEAD', common.HERE_REL + '/repro_common.py'), 'this folder is not committed here')
+    def test_anchoring_and_path_form(self):
+        head = common.git('rev-parse', 'HEAD').decode('ascii').strip()
+        relative = common.HERE_REL + '/repro_common.py'
+
+        def record(commit, path):
+            entry = {'status': 'PASS', 'receipt_commit': commit, 'receipt_path': path, 'receipt_sha256': '0' * 64,
+                     'what_passes_it': 'test'}
+            return enc({'prerequisites': {name: entry for name in common.REQUIRED_PREREQUISITES}})
+        found = common.read_prerequisite_receipts(record(head, relative), anchors=('HEAD',))
+        self.assertEqual(set(found), set(common.REQUIRED_PREREQUISITES))
+        self.assertEqual(found['budget_headroom_verified']['raw'], common.show(head, relative))
+        self.assertEqual(common.read_prerequisite_receipts(record(head, '../' + relative), anchors=('HEAD',)), {})
+        self.assertEqual(common.read_prerequisite_receipts(record(head, relative + '.missing'), anchors=('HEAD',)), {})
+        self.assertEqual(common.read_prerequisite_receipts(record('0' * 40, relative), anchors=('HEAD',)), {})
+        self.assertEqual(common.read_prerequisite_receipts(b'not json', anchors=('HEAD',)), {})
+        if git_has(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/collected_inventory.json') and not \
+                common.git_ok('merge-base', '--is-ancestor', common.REFERENCE_COMMIT, 'HEAD'):
+            unanchored = record(common.REFERENCE_COMMIT, common.REFERENCE_RECEIPT_REL + '/collected_inventory.json')
+            self.assertEqual(common.read_prerequisite_receipts(unanchored, anchors=('HEAD',)), {})
 
 
 class RealReferenceTests(unittest.TestCase):
@@ -1153,15 +1638,23 @@ class BuilderTests(unittest.TestCase):
 
 class SpendGateTests(unittest.TestCase):
     def test_measured_spend_plus_the_per_job_bound_must_fit_the_ceiling(self):
-        self.assertEqual(common.spend_gate('45.00', stop)['after_this_job_at_most_usd'], '60.00')
-        with self.assertRaisesRegex(Stopped, 'SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:60.01'):
-            common.spend_gate('45.01', stop)
-        for bad in (None, '', '-1', '1e3', 'NaN', 'inf', '12.345', ' 12', '12,00', '99999'):
-            with self.assertRaisesRegex(Stopped, 'SPEND_FIGURE_FORM'):
-                common.spend_gate(bad, stop)
+        found, summary = common.spend_violations('45.00')
+        self.assertEqual((found, summary['after_this_job_at_most_usd']), ([], '60.00'))
+        found, summary = common.spend_violations('45.01')
+        self.assertEqual(found, ['SPEND_SO_FAR_PLUS_PER_JOB_BOUND_EXCEEDS_CEILING:60.01>60.00'])
+        for bad in (None, '', '-1', '1e3', 'NaN', 'inf', '12.345', ' 12', '12,00', '99999', 21.4):
+            found, summary = common.spend_violations(bad)
+            self.assertTrue(found[0].startswith('SPEND_FIGURE_FORM'), bad)
+            self.assertIsNone(summary)
 
-
-ARCHIVE = common.ROOT / common.PACKAGE_REL / 'source.zip'
+    def test_check_takes_no_typed_spend_figure(self):
+        """Review MAJOR 2: --check reads the spend from the admitted spend record, never from operator text."""
+        with self.assertRaises(SystemExit):
+            with redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                prepare.main(['--check', '--study-sha256', '0' * 64, '--spend-so-far-usd', '1.00'])
+        source = ast.unparse(function(HERE / 'prepare_unchanged_repro.py', 'check_before_launch'))
+        self.assertIn("gate['execution_admission'].get('spend')", source)
+        self.assertNotIn('spend_so_far_usd', source)
 
 
 class CheckStudyTests(unittest.TestCase):
@@ -1324,6 +1817,15 @@ class StaticTests(unittest.TestCase):
         order = [name for _, name in calls(function(HERE / 'read_reproduction.py', 'main'))]
         self.assertLess(order.index('read_policy_files'), order.index('reading'))
         self.assertLess(order.index('admitted_reader_check'), order.index('reading'))
+        for name in ('committed_admission_state', 'collect_history'):          # revision 3: MINOR 4 and MINOR 5
+            self.assertLess(order.index(name), order.index('reading'), name)
+        main_source = ast.unparse(function(HERE / 'read_reproduction.py', 'main'))
+        self.assertIn('common.PINS_RAW', main_source)                           # pins at the receipt commit
+        self.assertIn("required_mode='READING'", ast.unparse(function(HERE / 'read_reproduction.py', 'reading')))
+        state_source = ast.unparse(function(HERE / 'read_reproduction.py', 'committed_admission_state'))
+        self.assertIn('read_prerequisite_receipts', state_source)
+        gate_source = ast.unparse(function(HERE / 'prepare_unchanged_repro.py', 'gates'))
+        self.assertIn('read_prerequisite_receipts', gate_source)
 
     def test_this_folder_s_files_are_ascii_and_lf(self):
         for path in list(HERE.glob('*.py')) + list(HERE.glob('*.md')) + list(HERE.glob('*.json')):

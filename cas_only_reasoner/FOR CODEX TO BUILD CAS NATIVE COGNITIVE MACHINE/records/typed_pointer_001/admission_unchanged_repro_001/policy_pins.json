@@ -1,0 +1,82 @@
+{
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "owner_records": {
+  "claude_extension_md": {
+   "blob": "f707ce455c08e51c5ce18ae5114a7d5b530a9f82",
+   "branch": "research/helm-integration-20260923",
+   "commit": "ca68690b93db9305ea5839f7308144ce6e0b7cab",
+   "path": "_handoffs/HELM_NEXT_PHASE_20260923/OWNER_STANDING_AUTHORIZATION_CLAUDE_20260924.md",
+   "sha256": "3360eefcf48af6b72b7d807d7e38928ac302353bb21afa398d25b259ba79988e"
+  },
+  "codex_standing_json": {
+   "blob": "10069e00869439fdbf58760b5ea712b16c652f18",
+   "branch": "codex/helm-controlled-prelaunch-20260924",
+   "commit": "bc46b36e60d904248fee03e5d7212f0eb5886c38",
+   "path": "records/helm_controlled_prelaunch_20260924/OWNER_STANDING_AUTHORIZATION_20260924.json",
+   "sha256": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3"
+  },
+  "codex_standing_md": {
+   "blob": "e6cfe5b99c039ba21ac6ff68394f3648cfee8e5e",
+   "branch": "codex/helm-controlled-prelaunch-20260924",
+   "commit": "bc46b36e60d904248fee03e5d7212f0eb5886c38",
+   "path": "records/helm_controlled_prelaunch_20260924/OWNER_STANDING_AUTHORIZATION_20260924.md",
+   "sha256": "86d7f14b9a191bb90733d011c8c5d1344a29739498be9c2e48c4e3084fd10687"
+  }
+ },
+ "policy": {
+  "branch": "codex/helm-controlled-prelaunch-20260924",
+  "commit": "bc46b36e60d904248fee03e5d7212f0eb5886c38",
+  "files": {
+   "codex_amendments": {
+    "blob": "8841955f726766baa742226b445d957d4cc66c27",
+    "bytes": 17403,
+    "path": "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md",
+    "sha256": "4541ddbccff7804e0fce13f76b1d3e61d8e30fdca431b4df106644ce6410f9c9"
+   },
+   "execution_manifest": {
+    "blob": "8c356375338617063e2c092176be41951bdc7e6e",
+    "bytes": 53477,
+    "path": "records/helm_controlled_prelaunch_20260924/EXECUTION_MANIFEST.json",
+    "sha256": "a321e3221335db55a359962f3f800f6bfd1b0e8d46876cc7fec8350cfd366628"
+   },
+   "launch_request": {
+    "blob": "f702090ae1c9138d7f13d1d70dd73cba3df90722",
+    "bytes": 6448,
+    "path": "records/helm_controlled_prelaunch_20260924/LAUNCH_REQUEST.json",
+    "sha256": "f2e789bb7798578896f7adb56cc70ff6d95209106861e1bc432504fb02f564d4"
+   },
+   "plan": {
+    "blob": "2462d1589fb8b5704402c65a0b841029dc1845f3",
+    "bytes": 21058,
+    "path": "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md",
+    "sha256": "2b840818952cb7ed44b1efbf7b2f4518d596340b975eb75f5d4ea4fbc97d4753"
+   },
+   "reproduction_policy_json": {
+    "blob": "b8d7eb07594288f2120a3745656bf33c148acfb8",
+    "bytes": 1785,
+    "path": "records/helm_controlled_prelaunch_20260924/REPRODUCTION_POLICY.json",
+    "sha256": "13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259"
+   },
+   "reproduction_policy_md": {
+    "blob": "8106bce5063b09212189bd871ee138b52518e922",
+    "bytes": 8257,
+    "path": "records/helm_controlled_prelaunch_20260924/REPRODUCTION_POLICY.md",
+    "sha256": "92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e"
+   },
+   "route_and_checkpoint_protocol": {
+    "blob": "16a4fb07ee6ffac5ccf9532ba5f4437a58d7c671",
+    "bytes": 13128,
+    "path": "records/helm_controlled_prelaunch_20260924/ROUTE_AND_CHECKPOINT_PROTOCOL.md",
+    "sha256": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07"
+   },
+   "statistical_policy": {
+    "blob": "7582843f7b8ab015edab45fe5019bd6f5f52c4ea",
+    "bytes": 4938,
+    "path": "records/helm_controlled_prelaunch_20260924/STATISTICAL_POLICY.json",
+    "sha256": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055"
+   }
+  }
+ },
+ "schema": "cncm.helm-unchanged-reproduction-policy-pins/1",
+ "why_a_separate_file": "The reader-source digest covers read_reproduction.py, repro_common.py and recompute_reproduction_evidence.py only. Codex freezes REPRODUCTION_POLICY.json with that digest; the policy hashes therefore live here, outside the digest, so a re-pin never changes the reader (review of 303c281b, BLOCKER 1). This file is bound by its sha256 in EXECUTION_ADMISSION.json, frozen/study.json and the evidence."
+}

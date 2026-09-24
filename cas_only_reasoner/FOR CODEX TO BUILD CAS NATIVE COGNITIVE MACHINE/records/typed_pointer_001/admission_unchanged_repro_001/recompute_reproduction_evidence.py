@@ -15,7 +15,10 @@ and a candidate -- and for each one, independently of every identity field the c
   4. restores it through the PINNED HISTORICAL LOADER (`PointerCourseLearner.restore_checkpoint` of source 20208c92,
      from the unpacked, byte-verified historical package) and runs the COMPLETE pinned public panel (564 course records,
      `public_panel_manifest.json`) forward-only through `PointerCourseLearner.predict` (eval mode, no_grad, depth 8),
-     predictions first, then the historical grader (`checker.check_answer`) on every answer;
+     predictions first, then the historical grader (`checker.check_answer`) on every answer. Only a historical
+     `require` refusal (a ValueError with a POINTER_/TYPED_ code) is a REFUSED record; any other exception, a
+     prediction for the wrong record, or a grader crash is an infrastructure fault that makes the evidence invalid
+     (revision 3, review MAJOR 3: never a valid mismatch, never fallback B);
   5. writes ONE evidence file (create-only) that names every input with its sha256. The READER decides; this module
      reports its own level summary only so the reader can cross-check it.
 
@@ -24,8 +27,10 @@ MODES.
   --mode acceptance  the P1 reader acceptance, public inputs only (no new run needed): builds synthetic variants of the
                      reference checkpoint and checks that the reader gives the registered verdict for each one:
                      self identity, equal state with a different envelope, continuation-only difference, changed value,
-                     changed encoder state, missing key, dtype change, altered output, state-equal/output-tampered, and
-                     a corrupt reference. Writes one acceptance receipt (READER_ACCEPTANCE_PASS or _FAIL).
+                     changed encoder state, missing key, dtype change, altered output, changed buffer (VACUOUS: the
+                     architecture has no buffers, and the case fails if one ever appears), state-equal/output-tampered,
+                     and a corrupt reference -- `repro_common.ACCEPTANCE_CASES`, in that order. Writes one acceptance
+                     receipt (READER_ACCEPTANCE_PASS only when every registered case is present, in order, and passed).
 
 FAILS CLOSED. Before torch is imported: `GPU_REQUIRED:LINUX_WORKER_REQUIRED` off Linux (so the laptop can never get as
 far as a torch import) and `GPU_REQUIRED:EXPLICIT_ENABLE_REQUIRED` unless CAS_META2_RUN_TEACHING_CYCLE=1. After:
@@ -37,7 +42,8 @@ WHERE IT RUNS (P1 layout, all paths absolute):
   * the historical package `package_20208c92/source.zip` (sha256 c42370c4...) unpacked at /opt/cas-graph6curr/package,
     the root both historical checkpoints record; this module verifies every one of the 270 members byte for byte and
     refuses any extra .py file there before importing anything from it;
-  * this folder's three reader sources plus `public_panel_manifest.json` in a separate folder (never inside the root);
+  * this folder's three reader sources plus `policy_pins.json` (read at import; revision 3) and
+    `public_panel_manifest.json`, in a separate folder (never inside the root);
   * the reference final.pt and its `final_checkpoint.json` record, taken from git at c8d5c430.
 
 USAGE (on the AWS instance only):
@@ -157,6 +163,20 @@ def walk_rows(value, is_tensor, tensor_row, path=()):
     raise UnsupportedValue('CONTAINER_TYPE:' + type(value).__name__)
 
 
+def classify_prediction_error(error):
+    """`(status, reason)` for an exception raised while predicting one panel record (review MAJOR 3). Pure.
+
+    Only a plain ValueError carrying a historical `require` code (POINTER_... or TYPED_...) is model behaviour: status
+    REFUSED, and it stays a panel record. Anything else -- a CUDA fault, out of memory, a TypeError, a ValueError with no
+    historical code -- is an infrastructure fault: status ERROR, and the producer reports it, so the evidence is invalid
+    (ADMISSION_INVALID_STOP), never a valid mismatch and never fallback B.
+    """
+    reason = str(error)[:300]
+    if type(error) is ValueError and common.is_historical_refusal(reason):
+        return 'REFUSED', reason
+    return common.PANEL_INFRASTRUCTURE_FAULT, type(error).__name__ + ':' + reason
+
+
 def grader_digest(checked):
     return common.value_digest({key: value for key, value in checked.items()
                                 if key not in common.GRADER_EXCLUDED_KEYS})
@@ -247,8 +267,7 @@ def assemble(mode, *, environment, inputs, sides, producer_reasons, manifest, so
             'producer': {'module': Path(__file__).name, 'sources_sha256': dict(sources),
                          'reader_source_sha256': common.reader_source_digest(sources), 'loader': LOADER,
                          'grader': GRADER},
-            'policy': {'commit': common.POLICY_COMMIT,
-                       'reproduction_policy_json_sha256': common.POLICY_FILES['reproduction_policy_json'][2]},
+            'policy': common.evidence_policy_block(),
             'panel_manifest': {'path': common.GIT_PREFIX + common.PANEL_MANIFEST_REL,
                                'sha256': common.PANEL_MANIFEST_SHA256, 'record_count': len(manifest['record_ids'])},
             'environment': environment, 'inputs': inputs, 'sides': sides,
@@ -382,29 +401,36 @@ def tensor_row(torch, path, value):
 
 
 def run_panel(ctx, learner):
-    """Forward-only over the pinned panel in pinned order: ALL predictions first, then the historical grader."""
+    """Forward-only over the pinned panel in pinned order: ALL predictions first, then the historical grader.
+
+    Returns `(rows, faults)`. A historical refusal stays a REFUSED record. Every infrastructure fault (any other
+    exception, a prediction for the wrong record, a grader crash) is an ERROR row AND a named fault; `load_side` turns
+    any fault into a producer invalid reason (revision 3, review MAJOR 3).
+    """
+    fault = common.PANEL_INFRASTRUCTURE_FAULT
     predictions = []
     for record_id in ctx.record_ids:
         try:
             predictions.append((record_id, 'ANSWERED', None,
                                 learner.predict(ctx.packets[record_id], common.PREDICTION_DEPTH)))
-        except ValueError as error:                         # the historical `require` raises ValueError
-            predictions.append((record_id, 'REFUSED', str(error)[:300], None))
-        except Exception as error:                          # noqa: BLE001 - a route error stays a record
-            predictions.append((record_id, 'ERROR', type(error).__name__ + ':' + str(error)[:300], None))
-    rows = []
+        except Exception as error:                          # noqa: BLE001 - classified, never silently a record
+            status, reason = classify_prediction_error(error)
+            predictions.append((record_id, status, reason, None))
+    rows, faults = [], []
     for record_id, status, reason, prediction in predictions:
         checked = None
-        if status == 'ANSWERED' and prediction.get('record_id') != record_id:
-            status, reason = 'ERROR', 'PREDICTION_RECORD_ID_MISMATCH'
+        if status == 'ANSWERED' and (type(prediction) is not dict or prediction.get('record_id') != record_id):
+            status, reason = fault, 'PREDICTION_RECORD_ID_MISMATCH'
         elif status == 'ANSWERED':
             packet = ctx.packets[record_id]
             try:
                 checked = ctx.h.checker.check_answer(packet['source'], packet['record']['query'], prediction['answer'])
-            except Exception as error:                      # noqa: BLE001
-                status, reason = 'ERROR', 'GRADER:' + type(error).__name__ + ':' + str(error)[:200]
+            except Exception as error:                      # noqa: BLE001 - a grader crash is a fault, not a record
+                status, reason = fault, 'GRADER:' + type(error).__name__ + ':' + str(error)[:200]
+        if status == fault:
+            faults.append(record_id + ':' + reason[:120])
         rows.append(panel_row(record_id, status=status, reason=reason, prediction=prediction, checked=checked))
-    return rows
+    return rows, faults
 
 
 def load_side(ctx, *, path, expected_sha256, label):
@@ -453,7 +479,9 @@ def load_side(ctx, *, path, expected_sha256, label):
     side['state_dict_keys'] = sorted(learner.module.state_dict())
     side['buffers'] = sorted(name for name, _ in learner.module.named_buffers())
     before = h.state_identity(torch, dict(learner.module.state_dict()))
-    side['panel'] = run_panel(ctx, learner)
+    side['panel'], faults = run_panel(ctx, learner)
+    if faults:
+        reasons.append(label + '_PANEL_INFRASTRUCTURE_FAULTS:%d:first=%s' % (len(faults), faults[0]))
     side['inference_mode'] = {'module_training': bool(learner.module.training), 'no_grad': True,
                               'prediction_depth': common.PREDICTION_DEPTH, 'entry': 'PointerCourseLearner.predict'}
     side['panel_left_learned_state_unchanged'] = h.state_identity(torch, dict(learner.module.state_dict())) == before
@@ -570,7 +598,7 @@ def judge(case, evidence, ctx, *, job, candidate_sha256, record_metadata, expect
     evaluated = reader.evaluate_evidence(json.loads(encode(evidence)), ctx.manifest, expected_candidate_job=job,
                                          expected_candidate_sha256=candidate_sha256,
                                          admitted_sources=common.source_hashes(),
-                                         reference_record_metadata=record_metadata)
+                                         reference_record_metadata=record_metadata, required_mode=MODE_ACCEPTANCE)
     levels = evaluated['levels']
     verdict = reader.decide(not evaluated['invalid_reasons'], levels['file'], levels['learned_state'],
                             levels['output'], levels['continuation'])
@@ -631,6 +659,15 @@ def acceptance_mode(args):
             if case == 'equal_state_different_envelope':
                 envelope_evidence = evidence
         del payload
+        # changed-buffer (policy acceptance list): VACUOUS for this architecture. pointer_learner.py at 20208c92
+        # registers no buffer, so every model_state entry is a learnable parameter. Buffers would be ordinary
+        # model_state rows (state_dict includes persistent buffers) and are compared the same way; the pure tests carry
+        # a SYNTHETIC buffer case. This case passes ONLY while the restored reference really has no buffers; if one
+        # ever appears, the acceptance FAILS until a real changed-buffer variant is built (revision 3, MINOR 6).
+        buffers = reference.get('buffers')
+        cases.append({'case': 'changed_buffer', 'status': common.VACUOUS, 'reference_buffers': buffers,
+                      'pass': buffers == [],
+                      'why': 'no registered buffers in the historical architecture; nothing to change'})
         if envelope_evidence is not None:           # state equal, one answer tampered: output never overridden
             tampered = json.loads(encode(envelope_evidence))
             row = tampered['sides']['candidate']['panel'][0]
@@ -652,12 +689,15 @@ def acceptance_mode(args):
                                                  common.HELM2_JOB),
                job=common.HELM2_JOB, candidate_sha256=common.REFERENCE_FINAL_PT_SHA256,
                expected_verdict=common.INVALID_STOP, expected_levels={})
-    passed = bool(cases) and all(case['pass'] for case in cases)
+    passed = ([case.get('case') for case in cases] == list(common.ACCEPTANCE_CASES)
+              and all(case['pass'] is True for case in cases))
     receipt = {'schema': common.ACCEPTANCE_SCHEMA, 'label': common.LABEL,
-               'status': 'READER_ACCEPTANCE_PASS' if passed else 'READER_ACCEPTANCE_FAIL', 'cases': cases,
+               'status': common.ACCEPTANCE_PASS if passed else common.ACCEPTANCE_FAIL, 'cases': cases,
+               'registered_cases': list(common.ACCEPTANCE_CASES),
                'environment': recorded, 'environment_violations': violations, 'inputs': inputs,
                'producer': {'sources_sha256': sources, 'reader_source_sha256': common.reader_source_digest(sources)},
-               'policy': common.policy_pointers(), 'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
+               'policy': common.policy_pointers(), 'policy_pins_sha256': common.PINS_SHA256,
+               'panel_manifest_sha256': common.PANEL_MANIFEST_SHA256,
                'numerical_environment_sha256': common.environment_digest(),
                'elapsed_seconds': time.monotonic() - started,
                'what_this_does_not_show': ('Acceptance uses synthetic variants of ONE public checkpoint. It shows the '
