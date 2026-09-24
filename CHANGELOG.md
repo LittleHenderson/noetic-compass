@@ -1,5 +1,38 @@
 # tksCAS — Changelog
 
+## 2026-09-24 — T4 check PASSED; Q4 diagnosed on AWS; owner direction; protected-copy inventory; test design v0.3
+
+- **Acceptance item 1 passed.** The program verdict is `OFF_PRESERVED_ON_T4` (`41071a3f`; cost at most $0.67;
+  both attempts together at most $1.2296 of $3.00).
+  - The repaired Helm with its switch OFF matches the old code bit for bit on all 9 Helm 2.0 models.
+  - The switch-OFF probes read ABSENT on all 9, and stage 0 passed 38 of 38 tests.
+  - The fresh switch-ON probe read MIXED, which is report-only.
+- **Q4 diagnosis** (Q4-SDG-1, AWS T4, at most $0.0673, `736b8839`). The saved Q4 model does not use its input:
+  - one output for all 96 inputs;
+  - field choices at chance even when given the correct earlier tokens (Noetic 36 of 453);
+  - one-field input edits move the right token's probability by less than 0.000004;
+  - its input summary is almost the same for every input (cosine at least 0.9966);
+  - the encoder's gradient is about 1/45 of the decoder's.
+
+  Only 128 updates were run, so this cannot separate "cannot" from "has not yet".
+- **Owner direction recorded verbatim** (`e782898f`):
+  - HSET-2 (5 and 6 nodes, no 7);
+  - a rescorer historical-compatibility mode;
+  - an inventory of protected copies, with nothing deleted;
+  - a named plan for the repaired-versus-unchanged training comparison, for owner launch approval.
+- **Owner integration guidance recorded** (`214687ba`): the CAS-SHARED-RECORD-1 line. A read-only survey found:
+  - three compiler texts;
+  - the compiler's tree loses register placement and missing domains;
+  - Helm's input has no channel for operations or state fields.
+- **Protected-copy inventory** (`69e9a45c`). Names, sizes and hashes only; nothing deleted.
+  - The Q4 protected exam lives in git, with 3,200 copies across 20 working copies and 5 test-run folders.
+  - The HSET-1B salt has no second copy.
+  - A cleanup proposal waits for the owner.
+- **Evaluation design v0.3** (`33f83639`, PROPOSED). 6 nodes main and 5 secondary; analogy and correspondence
+  added; same-count decoys; real no-match and no-path answers; withheld shapes. All success rules are fixed before
+  any build.
+- **In progress:** two builders (the larger-question learner path; the rescorer compatibility mode).
+
 ## 2026-09-23/24 — Temporary takeover (Codex away until 2026-09-28): read-only switch, T4 check, owner decisions, Q4 line
 
 **Who does what.** The owner's takeover order: this Claude session coordinates and keeps the tests. Separate Claude
