@@ -1,0 +1,109 @@
+{
+ "eval_paths_files": [
+  "research/CAS_META_2_COMPOSITION/eval_paths/__init__.py",
+  "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_scope.py",
+  "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_learner.py",
+  "research/CAS_META_2_COMPOSITION/eval_paths/larger_question_fixtures.py",
+  "research/CAS_META_2_COMPOSITION/eval_paths/t4_larger_question_checks.py"
+ ],
+ "installed_wheel_modules": {
+  "cas_cjt": {
+   "distribution": "cas_neural_cjt",
+   "version": "0.2.0"
+  },
+  "casformer": {
+   "distribution": "casformer_reference",
+   "version": "0.1.0"
+  }
+ },
+ "required_inputs": [
+  {
+   "bytes": 4165195,
+   "path": "records/typed_course_001/checks_002/public_course.json",
+   "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+   "why": "the frozen course: 564 packets and the 64-world bank (pointer_contract.load_material)"
+  },
+  {
+   "bytes": 447140,
+   "path": "records/typed_interface_001/checks_002/training_tokenizer.json",
+   "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c",
+   "why": "the frozen tokenizer (load_material; the encoder of check d)"
+  },
+  {
+   "bytes": 685549,
+   "path": "records/typed_matched_001/development_001/compact_development.json",
+   "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4",
+   "why": "read and checked by matched_contract.load_material, which pointer_contract.load_material is"
+  },
+  {
+   "bytes": 36501,
+   "path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+   "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+   "why": "wheel; real_framework imports `casformer` (install with pip --no-deps before the run)"
+  },
+  {
+   "bytes": 221994,
+   "path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+   "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+   "why": "wheel; real_framework imports `cas_cjt` (install with pip --no-deps before the run)"
+  },
+  {
+   "bytes": 2235079,
+   "path": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+   "sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 3670007,
+   "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+   "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 2235079,
+   "path": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+   "sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 3670007,
+   "path": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+   "sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 2235079,
+   "path": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+   "sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 3670007,
+   "path": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+   "sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+   "why": "Helm 2.0 checkpoint (checks a and b)"
+  },
+  {
+   "bytes": 190466,
+   "path": "research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json",
+   "sha256": "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3",
+   "why": "the 41 public fixtures (checks b, c, d)"
+  }
+ ],
+ "required_source_trees": [
+  {
+   "path": "cncm",
+   "pattern": "*.py"
+  },
+  {
+   "path": "research/CAS_META_2_COMPOSITION/cas_meta2",
+   "pattern": "*.py"
+  }
+ ],
+ "root": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+ "runtime": {
+  "environment": "CAS_META2_RUN_TEACHING_CYCLE=1 and Linux for check d",
+  "torch": "a CUDA build; check a needs 2.11.0+cu128 on a T4"
+ },
+ "schema": "claude.helm-larger-question-t4-checks/0.2"
+}

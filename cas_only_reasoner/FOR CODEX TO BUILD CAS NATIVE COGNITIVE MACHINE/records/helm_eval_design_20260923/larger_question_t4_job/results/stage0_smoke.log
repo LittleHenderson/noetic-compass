@@ -1,0 +1,1 @@
+{"cuda_available": true, "cuda_sum": 8.0, "device_name": "Tesla T4", "pass": true, "problems": [], "required_inputs_ok": 12, "schema": "claude.larger-question-t4-smoke/0.1", "source_tree_py_files": {"cncm": 77, "research/CAS_META_2_COMPOSITION/cas_meta2": 164}, "torch": "2.11.0+cu128"}

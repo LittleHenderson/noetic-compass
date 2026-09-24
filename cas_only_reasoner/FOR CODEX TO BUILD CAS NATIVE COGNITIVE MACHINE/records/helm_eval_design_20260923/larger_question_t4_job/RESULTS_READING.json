@@ -1,0 +1,113 @@
+{
+ "accuracy": "NOT LICENSED: plumbing checks on public fixtures; nothing here measures Helm's accuracy",
+ "bundle_sha256": "2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36",
+ "checks": {
+  "a": {
+   "name": "OLD_PACKET_PRESERVATION_AGAINST_T4_HISTORY",
+   "verdict": "PASS"
+  },
+  "b": {
+   "name": "FIXTURES_THROUGH_LEARNER",
+   "verdict": "PASS"
+  },
+  "c": {
+   "name": "SEVEN_NODE_REFUSAL",
+   "verdict": "PASS"
+  },
+  "d": {
+   "name": "FULL_LEARNER_SUBCLASS",
+   "verdict": "PASS"
+  }
+ },
+ "cleanup_evidence": {
+  "accepted": true,
+  "terminated_confirmed": true,
+  "volumes_of_this_job_remaining": []
+ },
+ "job_status": "done",
+ "job_verdict": "INTEGRATION_CHECKS_PASS",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "preflight": {
+  "elapsed_seconds": 203.04943593,
+  "fits": true,
+  "margin": 1.15,
+  "planned_work": {
+   "container_builds": 14,
+   "learner_builds": 4,
+   "learner_course_calls": 1270,
+   "learner_fixture_calls": 74,
+   "pp_course_calls": 3384,
+   "pp_fixture_calls": 189
+  },
+  "projected_total_seconds": 3231.001671499493,
+  "remaining_seconds_unmargined": 2633.0019439734724,
+  "row": "preflight",
+  "timed_calls": {
+   "learner_predict": 3,
+   "predict_packet_course": 16,
+   "predict_packet_fixture_and_grade": 4
+  },
+  "timings": {
+   "container_build": 0.23977314999996224,
+   "learner_build": 0.07723370299999033,
+   "learner_course": 0.3852677219999994,
+   "pp_course": 0.5832429405624922,
+   "pp_fixture": 0.6325173660000019
+  },
+  "wall_seconds": 3600
+ },
+ "problems": {},
+ "route_acceptance": {
+  "reasons": [],
+  "verdict": "ROUTE_ACCEPTED"
+ },
+ "schema": "claude.larger-question-t4-reading/0.1",
+ "script": {
+  "complete": true,
+  "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
+  "device_name": "Tesla T4",
+  "fixture_set_digest": "049b92bb657831ba4df5a50f2135801510b464fa202384e4ec52ebe814ed75f2",
+  "reason": null,
+  "requested": [
+   "d",
+   "c",
+   "b",
+   "a"
+  ],
+  "rows_by_check": {
+   "a": 7,
+   "b": 186,
+   "c": 13,
+   "d": 89,
+   "run": 2
+  },
+  "torch": "2.11.0+cu128",
+  "verdict": "INTEGRATION_CHECKS_PASS",
+  "wall_seconds": 1690.097118063
+ },
+ "source_commit": "e05889eec0f800a9a17b0c39a8d8d37f544b43bf",
+ "stage0_smoke": {
+  "cuda_available": true,
+  "cuda_sum": 8.0,
+  "device_name": "Tesla T4",
+  "pass": true,
+  "problems": [],
+  "required_inputs_ok": 12,
+  "schema": "claude.larger-question-t4-smoke/0.1",
+  "source_tree_py_files": {
+   "cncm": 77,
+   "research/CAS_META_2_COMPOSITION/cas_meta2": 164
+  },
+  "torch": "2.11.0+cu128"
+ },
+ "watch": {
+  "cost_upper_bound_usd": 0.4489,
+  "dollar_ceiling": 3.0,
+  "final_state": "terminated",
+  "job_status": "done",
+  "minutes_from_launch_to_watch_end": 35.1,
+  "outcome": "RESULTS_RECEIVED",
+  "terminated_confirmed": true,
+  "volumes_of_this_job_remaining": []
+ }
+}

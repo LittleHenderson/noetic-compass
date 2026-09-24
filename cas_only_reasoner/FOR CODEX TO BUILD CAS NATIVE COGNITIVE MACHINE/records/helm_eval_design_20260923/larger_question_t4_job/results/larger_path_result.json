@@ -1,0 +1,403 @@
+{
+ "boundary": "Plumbing checks only: forward passes under torch.no_grad(); no optimizer step and no checkpoint written. Nothing here measures Helm's accuracy. The fixtures are public and not an evaluation set. No correct/incorrect field is written, but right/wrong is recomputable from answer_sha256 and check_digest with the public fixture file; acceptable for public fixtures, never for sealed items.",
+ "checks": {
+  "a": {
+   "compared_field": "results[].overall_digest",
+   "models": [
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a",
+     "path": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+     "phase": "initial",
+     "records": 564,
+     "seed": 20260917,
+     "sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004",
+     "switch": false,
+     "t4_reference_overall_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a"
+    },
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806",
+     "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+     "phase": "final",
+     "records": 564,
+     "seed": 20260917,
+     "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb",
+     "switch": false,
+     "t4_reference_overall_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806"
+    },
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365",
+     "path": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+     "phase": "initial",
+     "records": 564,
+     "seed": 20260918,
+     "sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645",
+     "switch": false,
+     "t4_reference_overall_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365"
+    },
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7",
+     "path": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+     "phase": "final",
+     "records": 564,
+     "seed": 20260918,
+     "sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658",
+     "switch": false,
+     "t4_reference_overall_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7"
+    },
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858",
+     "path": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+     "phase": "initial",
+     "records": 564,
+     "seed": 20260919,
+     "sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f",
+     "switch": false,
+     "t4_reference_overall_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858"
+    },
+    {
+     "equal_to_t4_reference": true,
+     "non_original_route_count": 0,
+     "non_original_route_ids": [],
+     "overall_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a",
+     "path": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+     "phase": "final",
+     "records": 564,
+     "seed": 20260919,
+     "sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8",
+     "switch": false,
+     "t4_reference_overall_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a"
+    }
+   ],
+   "name": "OLD_PACKET_PRESERVATION_AGAINST_T4_HISTORY",
+   "reference": {
+    "branch": "origin/research/helm-integration-20260923",
+    "commit": "41071a3f1dd86ffbb00dbf07233c32dcea5e8a1b",
+    "folder": "records/helm_eval_design_20260923/analogy_repair_t4_job/results",
+    "tool_sha256_lf": "21bf01e5411d3d959bd8106f8f6a7ca6ca158d97f4000c0b060d57e99176292e"
+   },
+   "verdict": "PASS"
+  },
+  "b": {
+   "containers": [
+    {
+     "checkpoint": {
+      "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+      "phase": "final",
+      "seed": 20260917,
+      "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb"
+     },
+     "errors": 0,
+     "fixtures": 37,
+     "label": "OFF_HELM20_FINAL_20260917",
+     "switch": false
+    },
+    {
+     "checkpoint": {
+      "path": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+      "phase": "final",
+      "seed": 20260918,
+      "sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658"
+     },
+     "errors": 0,
+     "fixtures": 37,
+     "label": "OFF_HELM20_FINAL_20260918",
+     "switch": false
+    },
+    {
+     "checkpoint": {
+      "path": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+      "phase": "final",
+      "seed": 20260919,
+      "sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8"
+     },
+     "errors": 0,
+     "fixtures": 37,
+     "label": "OFF_HELM20_FINAL_20260919",
+     "switch": false
+    },
+    {
+     "checkpoint": null,
+     "errors": 0,
+     "fixtures": 37,
+     "label": "OFF_FRESH_20260917",
+     "switch": false
+    },
+    {
+     "checkpoint": null,
+     "errors": 0,
+     "fixtures": 37,
+     "label": "ON_FRESH_20260917",
+     "switch": true
+    }
+   ],
+   "fixtures_with_query_positions_past_trained_range": [
+    "F23",
+    "F24",
+    "F25",
+    "F26",
+    "F31",
+    "H03",
+    "H06"
+   ],
+   "name": "FIXTURES_THROUGH_LEARNER",
+   "note": "plumbing only: no correct/incorrect field is written, but right/wrong is recomputable from answer_sha256 and check_digest with the public fixture file; never use this for sealed items",
+   "verdict": "PASS"
+  },
+  "c": {
+   "name": "SEVEN_NODE_REFUSAL",
+   "refusal_rows": 8,
+   "verdict": "PASS"
+  },
+  "d": {
+   "name": "FULL_LEARNER_SUBCLASS",
+   "pairs": [
+    {
+     "counters_equal_after_course": true,
+     "course_packets": 564,
+     "fixture_errors": 0,
+     "fixtures": 37,
+     "label": "ON_FRESH_20260917",
+     "mismatched_record_ids": [],
+     "original_learner_refuses_6_node_correspondence": {
+      "error": {
+       "message": "TYPED_PERMUTATION_BOUND",
+       "type": "AnswerContractError"
+      },
+      "refused": true
+     },
+     "prediction_mismatches": 0,
+     "refusals_ok": true,
+     "same_start": true,
+     "switch": true,
+     "training_refused": [
+      {
+       "method": "stage_batch",
+       "refused": true
+      },
+      {
+       "method": "train_sealed_batch",
+       "refused": true
+      }
+     ],
+     "verdict": "PASS"
+    },
+    {
+     "counters_equal_after_course": true,
+     "course_packets": 71,
+     "fixture_errors": 0,
+     "fixtures": 37,
+     "label": "OFF_FRESH_20260917_EVERY_8TH_COURSE_PACKET",
+     "mismatched_record_ids": [],
+     "original_learner_refuses_6_node_correspondence": {
+      "error": {
+       "message": "TYPED_PERMUTATION_BOUND",
+       "type": "AnswerContractError"
+      },
+      "refused": true
+     },
+     "prediction_mismatches": 0,
+     "refusals_ok": true,
+     "same_start": true,
+     "switch": false,
+     "training_refused": [
+      {
+       "method": "stage_batch",
+       "refused": true
+      },
+      {
+       "method": "train_sealed_batch",
+       "refused": true
+      }
+     ],
+     "verdict": "PASS"
+    }
+   ],
+   "switch_off_scope": "every 8th sorted course packet (71 of 564), all fixtures and refusals; the OFF learners are built through a scoped, restored substitute of pointer_learner._build_container",
+   "verdict": "PASS"
+  }
+ },
+ "complete": true,
+ "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
+ "device_name": "Tesla T4",
+ "fixture_set_digest": "049b92bb657831ba4df5a50f2135801510b464fa202384e4ec52ebe814ed75f2",
+ "inputs": {
+  "eval_paths_lf_sha256": {
+   "__init__.py": "38a1d4f57995cd43b5a0ed1616b2e941726327abed0919f3d8ce7a793f1e0ae4",
+   "larger_question_fixtures.py": "567331464043e7fdb4edffc1dc056f266c75141c312fecdca43d10dff3c3e86d",
+   "larger_question_learner.py": "82e963a4b30b2aab8a8cb7371faaca32b66c011a90bece59d1f9106a7bd7d35d",
+   "larger_question_scope.py": "a09a172510b2f5ad1dd2ba2bc56d6cd46f354b619264bac90d18aa06748f9f32",
+   "t4_larger_question_checks.py": "4d2bdbbf5907860e65696853513430bf0a4516dc46250533e94f2a28e77d72f7"
+  },
+  "files": [
+   {
+    "bytes": 4165195,
+    "path": "records/typed_course_001/checks_002/public_course.json",
+    "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987"
+   },
+   {
+    "bytes": 447140,
+    "path": "records/typed_interface_001/checks_002/training_tokenizer.json",
+    "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c"
+   },
+   {
+    "bytes": 685549,
+    "path": "records/typed_matched_001/development_001/compact_development.json",
+    "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4"
+   },
+   {
+    "bytes": 36501,
+    "path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+    "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+   },
+   {
+    "bytes": 221994,
+    "path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+    "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+   },
+   {
+    "bytes": 2235079,
+    "path": "records/typed_pointer_001/receipt_20260917/checkpoints/initial.pt",
+    "sha256": "59dd46877bd7bf97dbb4059975051cc6102b374d5c387d3a183884048b71b004"
+   },
+   {
+    "bytes": 3670007,
+    "path": "records/typed_pointer_001/receipt_20260917/checkpoints/final.pt",
+    "sha256": "c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb"
+   },
+   {
+    "bytes": 2235079,
+    "path": "records/typed_pointer_001/receipt_20260918/checkpoints/initial.pt",
+    "sha256": "d3c6292f2c0d09e29952bfe353d47fff058741d42c0a8e8dbe7a80eaad8fd645"
+   },
+   {
+    "bytes": 3670007,
+    "path": "records/typed_pointer_001/receipt_20260918/checkpoints/final.pt",
+    "sha256": "a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658"
+   },
+   {
+    "bytes": 2235079,
+    "path": "records/typed_pointer_001/receipt_20260919/checkpoints/initial.pt",
+    "sha256": "93b84558c0123673eabcc462f68afe8ecb1537b598e297ee16f7a7458787ee9f"
+   },
+   {
+    "bytes": 3670007,
+    "path": "records/typed_pointer_001/receipt_20260919/checkpoints/final.pt",
+    "sha256": "c83e0123643a2433e1650bd4898dc28865204fd3d03fbedd22910632caf7dec8"
+   },
+   {
+    "bytes": 190466,
+    "path": "research/CAS_META_2_COMPOSITION/eval_paths/fixtures/larger_question_fixtures_v0_1.json",
+    "sha256": "7f0760c768398c4f1ff221cbd627c2db5367100769b4e2c13b62cb0a4bc95fc3"
+   }
+  ],
+  "source_trees": {
+   "cncm": {
+    "digest": "88742bd715c2c23711dbf846bb699a8182feb8800dae3fa35ec38c3a829fa312",
+    "py_files": 77
+   },
+   "research/CAS_META_2_COMPOSITION/cas_meta2": {
+    "digest": "c6e6ba37291a7fc4bd515da95333039d0d056e0335599ed01b4fa05def704508",
+    "py_files": 164
+   }
+  },
+  "t4_reference_source_lf_sha256": {
+   "cncm/typed_matched_worker.py": "51afa5e5ca908356c53381c30767b65ae9057c388aa2cc0b231fbb5be4dd6522",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781",
+   "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+  },
+  "wheels_installed": {
+   "cas_cjt": {
+    "distribution": "cas_neural_cjt",
+    "version": "0.2.0"
+   },
+   "casformer": {
+    "distribution": "casformer_reference",
+    "version": "0.1.0"
+   }
+  }
+ },
+ "larger_fixtures": 37,
+ "platform": "Linux-7.0.0-1012-aws-x86_64-with-glibc2.39",
+ "preflight": {
+  "elapsed_seconds": 203.04943593,
+  "fits": true,
+  "margin": 1.15,
+  "planned_work": {
+   "container_builds": 14,
+   "learner_builds": 4,
+   "learner_course_calls": 1270,
+   "learner_fixture_calls": 74,
+   "pp_course_calls": 3384,
+   "pp_fixture_calls": 189
+  },
+  "projected_total_seconds": 3231.001671499493,
+  "remaining_seconds_unmargined": 2633.0019439734724,
+  "row": "preflight",
+  "timed_calls": {
+   "learner_predict": 3,
+   "predict_packet_course": 16,
+   "predict_packet_fixture_and_grade": 4
+  },
+  "timings": {
+   "container_build": 0.23977314999996224,
+   "learner_build": 0.07723370299999033,
+   "learner_course": 0.3852677219999994,
+   "pp_course": 0.5832429405624922,
+   "pp_fixture": 0.6325173660000019
+  },
+  "wall_seconds": 3600
+ },
+ "python": "3.14.7",
+ "refusal_fixtures": 4,
+ "requested": [
+  "d",
+  "c",
+  "b",
+  "a"
+ ],
+ "rows_by_check": {
+  "a": 7,
+  "b": 186,
+  "c": 13,
+  "d": 89,
+  "run": 2
+ },
+ "rows_file": "larger_path_result.json.rows.jsonl",
+ "rows_file_sha256": "a1f990652e473208d4e89e872af1ea7b344c647d9671118d2eb1a83a68272b5e",
+ "schema": "claude.helm-larger-question-t4-checks/0.2",
+ "source_lf_sha256": {
+  "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+  "answers_v2.py": "b0bdabfcfac656e4071f192d9bda8ff7dec8b88baf077f29131d8f94497d1bb5",
+  "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+  "checker_v2.py": "d24d8276955bacbe626ebe6293efe7b64c2cf36544100b60175f6d0ab80e6258",
+  "course.py": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+  "focal.py": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+  "pointer_contract.py": "70be7ae7b7b3dbefd6a5d168b04ab7394718d7456a264614236d31b0c9c09b3d",
+  "pointer_inputs.py": "ba920d9e65e20b96dd0614a7131a80b9b87dd9918cb07d94ec5ebb4b628d0ecd",
+  "pointer_learner.py": "2ebb1b086953002272d18e75d397bb233b75f62442d073487ebade2e93487781",
+  "slots.py": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487",
+  "slots_v2.py": "7b9c2c3a0aca938acf0979aa7d74f1fea422726333926f079a5f8e06f5e7d2fb",
+  "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+ },
+ "torch": "2.11.0+cu128",
+ "verdict": "INTEGRATION_CHECKS_PASS",
+ "wall_seconds": 1690.097118063,
+ "wall_seconds_limit": 3600
+}

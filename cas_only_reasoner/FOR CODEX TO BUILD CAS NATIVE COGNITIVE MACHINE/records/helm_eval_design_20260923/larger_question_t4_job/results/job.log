@@ -1,0 +1,187 @@
+JOB START 2026-09-24T05:55:04Z
+bundle.tar.gz: OK
+downloading uv 0.12.18 x86_64-unknown-linux-gnu
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.14.7-linux-x86_64-gnu (download) (34.3MiB)
+ Downloaded cpython-3.14.7-linux-x86_64-gnu (download)
+Installed Python 3.14.7 in 977ms
+ + cpython-3.14.7-linux-x86_64-gnu (python3.14)
+Using CPython 3.14.7
+Creating virtual environment at: venv
+Activate with: source venv/bin/activate
+Using Python 3.14.7 environment at: venv
+Resolved 29 packages in 740ms
+Downloading setuptools (1.2MiB)
+Downloading nvidia-nvshmem-cu12 (132.7MiB)
+Downloading networkx (2.0MiB)
+Downloading torch (782.3MiB)
+Downloading triton (179.6MiB)
+Downloading nvidia-nvjitlink-cu12 (37.4MiB)
+Downloading sympy (6.0MiB)
+Downloading cuda-bindings (7.2MiB)
+Downloading nvidia-cusparse-cu12 (274.9MiB)
+Downloading nvidia-curand-cu12 (60.7MiB)
+ Downloaded setuptools
+Downloading nvidia-cuda-cupti-cu12 (9.8MiB)
+Downloading nvidia-cudnn-cu12 (627.4MiB)
+Downloading nvidia-cusparselt-cu12 (273.9MiB)
+Downloading nvidia-nccl-cu12 (283.0MiB)
+Downloading nvidia-cusolver-cu12 (255.1MiB)
+Downloading nvidia-cublas-cu12 (566.8MiB)
+Downloading nvidia-cufile-cu12 (1.1MiB)
+Downloading nvidia-cuda-nvrtc-cu12 (84.0MiB)
+Downloading nvidia-cufft-cu12 (184.2MiB)
+ Downloaded nvidia-cufile-cu12
+ Downloaded networkx
+ Downloaded cuda-bindings
+ Downloaded sympy
+ Downloaded nvidia-cuda-cupti-cu12
+ Downloaded nvidia-nvjitlink-cu12
+ Downloaded nvidia-curand-cu12
+ Downloaded triton
+ Downloaded nvidia-nvshmem-cu12
+ Downloaded nvidia-cuda-nvrtc-cu12
+ Downloaded nvidia-cusparse-cu12
+ Downloaded nvidia-nccl-cu12
+ Downloaded nvidia-cusolver-cu12
+ Downloaded nvidia-cufft-cu12
+ Downloaded torch
+ Downloaded nvidia-cusparselt-cu12
+ Downloaded nvidia-cudnn-cu12
+ Downloaded nvidia-cublas-cu12
+Prepared 29 packages in 28.14s
+Installed 29 packages in 263ms
+ + cuda-bindings==12.9.7
+ + cuda-pathfinder==1.6.0
+ + cuda-toolkit==12.8.1
+ + filelock==3.32.3
+ + fsspec==2026.7.0
+ + jinja2==3.1.6
+ + markupsafe==3.0.3
+ + mpmath==1.3.0
+ + networkx==3.6.1
+ + nvidia-cublas-cu12==12.8.4.1
+ + nvidia-cuda-cupti-cu12==12.8.90
+ + nvidia-cuda-nvrtc-cu12==12.8.93
+ + nvidia-cuda-runtime-cu12==12.8.90
+ + nvidia-cudnn-cu12==9.19.0.56
+ + nvidia-cufft-cu12==11.3.3.83
+ + nvidia-cufile-cu12==1.13.1.3
+ + nvidia-curand-cu12==10.3.9.90
+ + nvidia-cusolver-cu12==11.7.3.90
+ + nvidia-cusparse-cu12==12.5.8.93
+ + nvidia-cusparselt-cu12==0.7.1
+ + nvidia-nccl-cu12==2.28.9
+ + nvidia-nvjitlink-cu12==12.8.93
+ + nvidia-nvshmem-cu12==3.4.5
+ + nvidia-nvtx-cu12==12.8.90
+ + setuptools==78.1.0
+ + sympy==1.14.0
+ + torch==2.11.0+cu128
+ + triton==3.6.0
+ + typing-extensions==4.16.0
+Using Python 3.14.7 environment at: venv
+Resolved 1 package in 191ms
+Downloading numpy (15.9MiB)
+ Downloaded numpy
+Prepared 1 package in 329ms
+Installed 1 package in 14ms
+ + numpy==2.5.2
+Using Python 3.14.7 environment at: venv
+Resolved 2 packages in 1ms
+Prepared 2 packages in 121ms
+Installed 2 packages in 3ms
+ + cas-neural-cjt==0.2.0 (from file:///root/helm_lq_t4/pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl)
+ + casformer-reference==0.1.0 (from file:///root/helm_lq_t4/pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl)
+Python 3.14.7
+Linux ip-172-31-34-246 7.0.0-1012-aws #12~24.04.1-Ubuntu SMP PREEMPT Wed Aug 12 14:00:57 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+8
+               total        used        free      shared  buff/cache   available
+Mem:           31718        1061       23336           2        7787       30656
+Swap:              0           0           0
+Thu Sep 24 05:55:36 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   32C    P0             33W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+bundle_sha256=2410f269a46d0a8024c7709976557aa1734b7e577cc6cfdb9e9909c53393bd36
+6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9  pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl
+0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee  pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl
+Using Python 3.14.7 environment at: venv
+cas-neural-cjt @ file:///root/helm_lq_t4/pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl
+casformer-reference @ file:///root/helm_lq_t4/pkg/research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl
+cuda-bindings==12.9.7
+cuda-pathfinder==1.6.0
+cuda-toolkit==12.8.1
+filelock==3.32.3
+fsspec==2026.7.0
+jinja2==3.1.6
+markupsafe==3.0.3
+mpmath==1.3.0
+networkx==3.6.1
+numpy==2.5.2
+nvidia-cublas-cu12==12.8.4.1
+nvidia-cuda-cupti-cu12==12.8.90
+nvidia-cuda-nvrtc-cu12==12.8.93
+nvidia-cuda-runtime-cu12==12.8.90
+nvidia-cudnn-cu12==9.19.0.56
+nvidia-cufft-cu12==11.3.3.83
+nvidia-cufile-cu12==1.13.1.3
+nvidia-curand-cu12==10.3.9.90
+nvidia-cusolver-cu12==11.7.3.90
+nvidia-cusparse-cu12==12.5.8.93
+nvidia-cusparselt-cu12==0.7.1
+nvidia-nccl-cu12==2.28.9
+nvidia-nvjitlink-cu12==12.8.93
+nvidia-nvshmem-cu12==3.4.5
+nvidia-nvtx-cu12==12.8.90
+setuptools==78.1.0
+sympy==1.14.0
+torch==2.11.0+cu128
+triton==3.6.0
+typing-extensions==4.16.0
+{"cuda_available": true, "cuda_sum": 8.0, "device_name": "Tesla T4", "pass": true, "problems": [], "required_inputs_ok": 12, "schema": "claude.larger-question-t4-smoke/0.1", "source_tree_py_files": {"cncm": 77, "research/CAS_META_2_COMPOSITION/cas_meta2": 164}, "torch": "2.11.0+cu128"}
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+upload helm_lq_t4_job.log -> http 200
+upload larger_path_result.json.rows.jsonl -> http 200
+checks exit=0 wall=1691s
+d FULL_LEARNER_SUBCLASS PASS
+c SEVEN_NODE_REFUSAL PASS
+b FIXTURES_THROUGH_LEARNER PASS
+a OLD_PACKET_PRESERVATION_AGAINST_T4_HISTORY PASS
+INTEGRATION_CHECKS_PASS 
+checks exit=0 wall=1691s
