@@ -1,0 +1,18 @@
+{
+ "schema": "claude.q4-sdg-1-ab-watch/0.2",
+ "instance_id": "i-0410e43c787fdabdb",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "terminated",
+ "files_downloaded": 128,
+ "launched_utc": "2026-09-24T12:03:48Z",
+ "watch_ended_utc": "2026-09-24T12:41:00Z",
+ "minutes_from_launch_to_watch_end": 37.2,
+ "cost_upper_bound_usd": 0.336,
+ "data_build_cost_upper_bound_usd": 0.0023,
+ "whole_ab_job_cost_upper_bound_usd": 0.3383,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the public address and the gp3 disk",
+ "terminated_confirmed": true,
+ "volumes_of_this_job_remaining": [],
+ "dollar_ceiling_whole_ab_job": 5.0
+}
