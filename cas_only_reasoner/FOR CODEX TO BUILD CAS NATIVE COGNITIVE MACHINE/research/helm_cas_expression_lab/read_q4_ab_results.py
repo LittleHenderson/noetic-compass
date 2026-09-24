@@ -215,7 +215,23 @@ def input_use(checkpoint, arm, prep):
 # ------------------------------------------------------------------------------------------------------------
 # Runs
 # ------------------------------------------------------------------------------------------------------------
-def read_run(root, arm, seed, prep, frozen_sha):
+def run_identity_problems(manifest, arm, seed, prep):
+    """Revision 3c (N3 of the review of c0b2faad): the run manifest's arm, seed and pool_ids_digest must equal the run
+    folder's arm and seed, and the digest of prep.json's pool ids of that arm (the runner's q4_ab_prep.ids_digest).
+    [] = the identity matches."""
+    problems = []
+    if type(manifest.get("arm")) is not str or manifest["arm"] != arm:
+        problems.append("ARM")
+    if type(manifest.get("seed")) is not int or manifest["seed"] != seed:
+        problems.append("SEED")
+    pool = (prep.get("pools") or {}).get(arm)
+    ids = pool.get("ids") if isinstance(pool, dict) else None
+    if not isinstance(ids, list) or manifest.get("pool_ids_digest") != rules.sha(rules.canonical(ids)):
+        problems.append("POOL_IDS_DIGEST")
+    return problems
+
+
+def read_run(root, arm, seed, prep, frozen_sha, *, listed_by_complete_job):
     folder = Path(root) / "runs" / ("%s_%d" % (arm, seed))
     manifest, result = load(folder / "run_manifest.json"), load(folder / "run_result.json")
     reload_record = load(folder / "reload_check.json")
@@ -224,13 +240,33 @@ def read_run(root, arm, seed, prep, frozen_sha):
     final_present = (folder / ("checkpoint_%05d.json" % rules.FINAL)).exists()
     # Review of f32b5739, X1 (coordinator decision 1 of 2026-09-24): the same path check for checkpoint 0.
     zero_present = (folder / ("checkpoint_%05d.json" % 0)).exists()
+    # Revision 3c, Y1 of the review of c0b2faad: a file is also EXPECTED when the run's own later files (or a COMPLETE
+    # job_result.json that lists the run) prove it was written. An expected file that is absent is flagged like a
+    # present file without a reading. A run with a FINAL reading therefore always expects its checkpoint-0 file.
+    zero_expected, final_expected = rules.expected_files(
+        any((folder / ("checkpoint_%05d.json" % k)).exists() for k in rules.CHECKPOINTS[1:]),
+        (folder / "run_result.json").exists() or (folder / "reload_check.json").exists(),
+        listed_by_complete_job is True)
     info = {"arm": arm, "seed": seed, "readings": {}, "exact": {}, "validity": None,
-            "final_checkpoint_file_present": final_present, "checkpoint_0_file_present": zero_present}
+            "final_checkpoint_file_present": final_present, "final_checkpoint_file_expected": final_expected,
+            "checkpoint_0_file_present": zero_present, "checkpoint_0_file_expected": zero_expected,
+            "listed_by_complete_job": listed_by_complete_job is True}
+
+    def flag():
+        info["final_checkpoint_present_without_reading"] = ((final_present or final_expected)
+                                                             and str(rules.FINAL) not in info["readings"])
+        info["checkpoint_0_present_without_reading"] = (zero_present or zero_expected) and "0" not in info["readings"]
+
     problems = []
     if manifest is None:
         info["validity"] = "RUN_INCOMPLETE"
-        info["final_checkpoint_present_without_reading"] = final_present
-        info["checkpoint_0_present_without_reading"] = zero_present
+        flag()
+        return info, {}
+    identity = run_identity_problems(manifest, arm, seed, prep)
+    if identity:                 # revision 3c, N3: no reading at all; its present or expected files are flagged
+        info["validity"] = "RUN_INVALID_RUN_IDENTITY_DIFFERS"
+        info["problems"] = ["RUN_IDENTITY_DIFFERS (%s)" % ", ".join(identity)]
+        flag()
         return info, {}
     if manifest.get("frozen_sha256") != frozen_sha:
         problems.append("FROZEN_SHA_DIFFERS")
@@ -288,9 +324,21 @@ def read_run(root, arm, seed, prep, frozen_sha):
         info["practice"] = {k: result.get(k) for k in ("updates", "presentations", "distinct_rows_seen", "pool_rows",
                                                        "target_tokens", "source_bytes", "train_seconds",
                                                        "eval_seconds", "wall_seconds", "final_weights_sha256")}
-    info["final_checkpoint_present_without_reading"] = final_present and str(rules.FINAL) not in info["readings"]
-    info["checkpoint_0_present_without_reading"] = zero_present and "0" not in info["readings"]
+    flag()
     return info, per_checkpoint
+
+
+def runs_listed_by_complete_job(job):
+    """Revision 3c, Y1: the run names (in run order) that a COMPLETE job_result.json lists; every one is expected, with
+    all its files. A COMPLETE record whose run list is missing or is not a list of names lists all six runs (fail
+    closed: the runner writes COMPLETE only after all six runs, with the list). Names outside RUN_ORDER are ignored."""
+    names = ["%s_%d" % key for key in rules.RUN_ORDER]
+    if job is None or job.get("status") != "COMPLETE":
+        return []
+    listed = job.get("runs")
+    if not isinstance(listed, list) or not all(isinstance(name, str) for name in listed):
+        return names
+    return [name for name in names if name in listed]
 
 
 def final_readings(runs):
@@ -311,8 +359,9 @@ def final_readings(runs):
 
 
 def final_checkpoints_without_reading(runs):
-    """Run names (run order) whose FINAL checkpoint file exists but gave no FINAL reading: a missing run manifest, a
-    wrong identity, or any recomputation failure in that file (verification of 793a4f68, W1). Each one withholds
+    """Run names (run order) whose FINAL checkpoint file exists or is expected but gave no FINAL reading: absent though
+    expected (revision 3c, Y1), a missing run manifest, a run identity that differs (N3), a wrong identity, or any
+    recomputation failure in that file (verification of 793a4f68, W1). Each one withholds
     ARCHITECTURE_CHANGE_JUSTIFIED (reason FINAL_CHECKPOINT_PRESENT_WITHOUT_READING)."""
     out = []
     for key, info in runs.items():
@@ -325,9 +374,11 @@ def final_checkpoints_without_reading(runs):
 
 
 def checkpoint_0_files_without_reading(runs):
-    """Run names (run order) whose checkpoint-0 file exists but gave no checkpoint-0 reading: a missing run manifest,
-    a wrong identity, a file holding no record, or any recomputation failure in that file (review of f32b5739, X1;
-    coordinator decision 1 of 2026-09-24). Any one of them makes the calibration state CALIBRATION_UNREADABLE."""
+    """Run names (run order) whose checkpoint-0 file exists or is expected but gave no checkpoint-0 reading: absent
+    though expected (revision 3c, Y1; so also a run with a FINAL reading and no checkpoint-0 file), a missing run
+    manifest, a run identity that differs (N3), a wrong identity, a file holding no record, or any recomputation
+    failure in that file (review of f32b5739, X1; coordinator decision 1 of 2026-09-24). Any one of them makes the
+    calibration state CALIBRATION_UNREADABLE."""
     out = []
     for key, info in runs.items():
         flagged = info["checkpoint_0_present_without_reading"]
@@ -428,11 +479,19 @@ def verdict(root):
                           + [out["lessons_overall"]])
         return out
     runs, detail = {}, {}
+    listed = runs_listed_by_complete_job(job)                  # revision 3c, Y1
     for arm, seed in rules.RUN_ORDER:
-        info, checkpoints = read_run(root, arm, seed, prep, frozen_sha)
+        info, checkpoints = read_run(root, arm, seed, prep, frozen_sha,
+                                     listed_by_complete_job="%s_%d" % (arm, seed) in listed)
         runs[(arm, seed)] = info
         detail[(arm, seed)] = {"info": info, "checkpoints": checkpoints}
     out["runs"] = {"%s_%d" % key: info for key, info in runs.items()}
+    out["runs_listed_by_complete_job"] = listed
+    out["expected_files_absent_report_only"] = {           # revision 3c, Y1: already inside the two flag lists below
+        "checkpoint_0": ["%s_%d" % k for k, i in runs.items()
+                         if i["checkpoint_0_file_expected"] and not i["checkpoint_0_file_present"]],
+        "final": ["%s_%d" % k for k, i in runs.items()
+                  if i["final_checkpoint_file_expected"] and not i["final_checkpoint_file_present"]]}
     zero = checkpoint_0_report(runs)
     zero_tests = [(r["T1"], r["T2V"], r["T2P"]) for r in zero.values() if r is not None]
     unread_zero = checkpoint_0_files_without_reading(runs)
@@ -452,8 +511,9 @@ def verdict(root):
     for arm in rules.ARMS:
         valid = [level for level, ok in finals[arm] if ok]
         unread_arm = [run for run in unread if run.startswith(arm + "_")]
-        # coordinator decision 2 of 2026-09-24 (review of f32b5739): an unread FINAL file withholds SHOWS_NO_INPUT_USE
-        label, label_reasons = rules.arm_decision(arm, finals[arm], len(unread_arm))
+        # coordinator decision 2 of 2026-09-24 (review of f32b5739): an unread FINAL file withholds SHOWS_NO_INPUT_USE;
+        # revision 3c (N1): a calibration state that is not silent withholds every arm label, its reason alone
+        label, label_reasons = rules.arm_decision(arm, finals[arm], len(unread_arm), out["calibration"])
         out["arms"][arm] = {"label": label, "label_reasons": label_reasons, "final_levels_of_valid_runs": valid,
                             "final_levels_of_runs_not_valid": [level for level, ok in finals[arm] if not ok],
                             "valid_runs": len(valid), "valid_none_runs": valid.count("NONE"),

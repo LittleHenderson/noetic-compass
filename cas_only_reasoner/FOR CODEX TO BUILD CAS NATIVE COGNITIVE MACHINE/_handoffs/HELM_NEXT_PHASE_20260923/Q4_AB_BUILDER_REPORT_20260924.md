@@ -727,3 +727,227 @@ unchanged, and neither imports `q4_ab_rules` or `read_q4_ab_results`.
 - **Not touched:** any `*_eval.jsonl`, any Q3 `sealed*` file, `D:/tksCAS-archive/`, any hset1a/hset1b path, S3 or any
   AWS service, the meta1 budget ledger, other worktrees, Claude transcripts, and the owner's documents on the research
   branch.
+
+## Revision 3c (2026-09-24): expected files, arm labels under a non-silent guard, run identity
+
+**Label:** `CLAUDE_BUILT_CLAUDE_CHECKED`. The builder is a Claude sub-agent (temporary builder). A Claude check of
+Claude work is not an independent review.
+**Status:** built and tested on the laptop in pure Python. **Nothing was launched. No AWS call. No money spent. No
+model built or trained. No torch import.** The spec stays **`PROPOSED_FOR_REVIEW`** (now revision 3c).
+**Scope:** the coordinator's decisions queued on 2026-09-24 (`Q4_AB_COORDINATOR_QUEUE_REV3C.md`, commit `5e65c3a8`)
+on the fresh review of revision 3b (commit `003b051a`, `Q4_AB_REVIEW_20260924.md`). They are quoted word for word in
+the spec, section 18. I applied exactly those decisions; no other rule changed.
+
+### In plain words
+
+- **Y1: a missing file the job DID write now counts against a decisive answer.** Before, the reader only asked "is
+  this file here?". Now it also asks "do the run's own later files prove this file was written?". Example: the
+  reload check reads the final file, so if the reload check's record is here, the final file was written. If such a
+  file is missing, the reader treats it exactly like a file it could not read. So "justified" cannot follow from a
+  deleted file any more. The reviewer's three measured cases now all give "incomplete".
+- **A run with a final reading but no starting file** (the builder's open question) is covered by the same rule. Its
+  final file is a later file, so its starting file must have been written. Missing, it makes the calibration answer
+  `CALIBRATION_UNREADABLE`.
+- **N1: arm labels are withheld when the starting-point check is not silent.** "Calibration" is the check on the
+  untrained model. When it fires, or cannot be read, the tests are not trustworthy on that machine. Now each arm then
+  says "undetermined", with the calibration reason, just like the architecture answer already did.
+- **N2: wording only.** The spec now says the builder's reading of decision 2 is "confirmed", not "open".
+- **N3: each run's record must name the right arm, seed and teaching pool.** If the record in folder `A_20260931`
+  says it is arm B, or another seed, or another pool, the run gives no reading at all and fails closed. Before, a
+  swap of the A and B folders would have flipped "lessons help" into "lessons hurt". A test now does that swap and
+  shows the answer is "incomplete".
+- **N5: `q4_error_panel.py` is unchanged** (checked with `git diff`).
+- Every change can only make a decisive answer rarer. No decisive answer can appear where revision 3b gave none.
+- I did not touch the approved hashes in the launcher. So the launcher still refuses this revision. A test checks it.
+
+### What changed
+
+| Where | Change |
+|---|---|
+| `LAB/q4_ab_rules.py`, new `expected_files` | (starting file expected, final file expected) from three yes/no facts: a later checkpoint file exists; `run_result.json` or `reload_check.json` exists; a COMPLETE job lists the run. Anything but a real yes/no is refused |
+| `LAB/q4_ab_rules.py`, `arm_decision`, `arm_label` | Now take the calibration state (required). Not silent: `ARM_<arm>_INPUT_USE_UNDETERMINED` with the calibration reason alone (`CALIBRATION_REASON`). `ARM_REASONS` gains `INPUT_USE_RULE_FIRES_AT_INITIALISATION` and `CHECKPOINT0_PRESENT_WITHOUT_READING`. A bool or unknown state is refused (`INVALID_CALIBRATION_STATE`) |
+| `LAB/q4_ab_rules.py`, `architecture_decision` | No behaviour change: it reads the arm labels under the silent state only, as before |
+| `LAB/q4_ab_rules.py`, frozen record | New texts `EXPECTED_FILE` and `RUN_IDENTITY`; the calibration, flag, ARM and JUSTIFIED texts say "present or expected"; the ARM text states N1 and "reading confirmed 2026-09-24"; `SPEC_REVISION` says revision 3c. So `frozen_sha256` changes |
+| `LAB/read_q4_ab_results.py`, `read_run` | Flags a starting or final file that is present OR expected and gave no reading. New per-run fields `checkpoint_0_file_expected`, `final_checkpoint_file_expected`, `listed_by_complete_job`. Checks the run identity before anything else is read |
+| `LAB/read_q4_ab_results.py`, new `run_identity_problems`, `runs_listed_by_complete_job` | N3's check (ARM, SEED, POOL_IDS_DIGEST; a mismatch gives `RUN_INVALID_RUN_IDENTITY_DIFFERS` and no reading); the run names a COMPLETE `job_result.json` lists |
+| `LAB/read_q4_ab_results.py`, `verdict` | Passes the calibration state to the arm rule; reports `runs_listed_by_complete_job` and `expected_files_absent_report_only` (report only) |
+| `LAB/Q4_SDG_AB_SPEC_v0_2.md` | Title, status line and status block say revision 3c; authority; 7.3 (N1 first, N2 "confirmed", "present or expected"); 7.4 (expected files, the absent starting file, what stays left out); 7.5; 7.7 (run identity); 9 (arm reasons, reading rule); new section 18 (the queue word for word, the changes, the choices, the tests) |
+| `LAB/test_q4_ab.py` | One new test per decision (five), plus the changes below |
+
+### The reviewer's cases, and more, through the real reader
+
+"Revision 3b" is the reviewer's measurement (I did not re-run revision 3b). Every revision-3c cell is asserted by a
+passing test. B3 = arm B, seed 20260933; pair 3 = both arms on seed 20260933.
+
+| Case | Revision 3b | Revision 3c |
+|---|---|---|
+| Pair 3's starting files deleted (pair 3 passes T2P at the start) | SILENT; **JUSTIFIED** | `CALIBRATION_UNREADABLE`; INCOMPLETE [CHECKPOINT0_PRESENT_WITHOUT_READING]; both runs listed as expected-but-absent |
+| B3 reads fully; its final file deleted | **JUSTIFIED**; ARM_B_SHOWS_NO_INPUT_USE | SILENT; INCOMPLETE [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING]; ARM_B_INPUT_USE_UNDETERMINED [same reason] |
+| B3 reads fully; its whole folder deleted; COMPLETE job lists six runs | **JUSTIFIED**; ARM_B_SHOWS_NO_INPUT_USE | `CALIBRATION_UNREADABLE`; INCOMPLETE [CHECKPOINT0_PRESENT_WITHOUT_READING] |
+| The same, COMPLETE job record without a run list | not measured | the same (builder's choice 1: all six expected) |
+| STOPPED job; B3's final file deleted; only `run_result.json` (or only `reload_check.json`) left | not measured | INCOMPLETE [FINAL_CHECKPOINT_PRESENT_WITHOUT_READING] (each file alone is enough) |
+| Control: STOPPED job; B3 never finished (no final file, no `run_result.json`, no `reload_check.json`) | not measured | left out, as before; JUSTIFIED (2 valid NONE runs per arm; decision 3) |
+| Control: STOPPED job never wrote B3's folder | not measured | nothing flagged; JUSTIFIED |
+| A 20260931: only its starting file deleted | not measured | `CALIBRATION_UNREADABLE`; INCOMPLETE |
+| A 20260931: only its FINAL file left (STOPPED job, no other file) | left out; JUSTIFIED (by the code; not run) | `CALIBRATION_UNREADABLE`; INCOMPLETE |
+
+| N1 case | Revision 3b arm labels | Revision 3c arm labels |
+|---|---|---|
+| Guard fires; arm A reads fully in 2 valid runs | ARM_A_SHOWS_INPUT_USE (by the code) | both arms INPUT_USE_UNDETERMINED [INPUT_USE_RULE_FIRES_AT_INITIALISATION] |
+| A 20260933's starting file unread; arm B input-blind in 3 valid runs | ARM_B_SHOWS_NO_INPUT_USE (by the code) | both arms INPUT_USE_UNDETERMINED [CHECKPOINT0_PRESENT_WITHOUT_READING] |
+| All 4,096 arm cases under each of the two non-silent states (rules only) | 3b's labels | every one INPUT_USE_UNDETERMINED with the one calibration reason; decisive labels were among them, none remain |
+
+| N3 case (B3's run manifest changed; other runs input-blind and valid) | Revision 3c |
+|---|---|
+| arm "A"; seed 20260931; seed as a float; seed missing; pool digest zeros; pool digest of arm A; pool digest missing | `RUN_INVALID_RUN_IDENTITY_DIFFERS` with the named part; no reading; both files flagged; `CALIBRATION_UNREADABLE`; INCOMPLETE; pair 3 PAIR_INCOMPLETE |
+| The A and B folders of all three seeds swapped; B exact on 10 SP1 rows per seed | all six runs `RUN_INVALID_RUN_IDENTITY_DIFFERS`; LESSONS_COMPARISON_INCOMPLETE (control before the swap: LESSONS_HELP_SP1; with the check switched off inside the test: LESSONS_HURT_SP1, the review's point) |
+| `prep.json` without arm B's pool ids (all prep checks still pass) | the 3 A runs RUN_VALID; the 3 B runs `RUN_INVALID_RUN_IDENTITY_DIFFERS` |
+
+**Existing assertions changed on purpose** (the decisions change them):
+- The fixture now writes what the runner writes: `pool_ids_digest` in every run manifest, and the run list in a
+  COMPLETE `job_result.json`. Three tests of a run that was never written (`two_bad`, and two `gap` cases) now use a
+  STOPPED job. With a COMPLETE job that lists the run, Y1 flags it, which is the point of Y1.
+- The two "an absent file is not flagged" blocks of revision 3b (final file, starting file) are removed. The new Y1
+  test asserts the opposite.
+- Arm labels under `CALIBRATION_UNREADABLE` (G1, G3, the four starting-file cases, the missing-manifest case) are now
+  INPUT_USE_UNDETERMINED with the calibration reason (N1).
+- The enumeration test passes the silent state to the arm rule; its counts are unchanged. The label test adds a
+  firing-guard case and expects the two new arm-reason labels.
+
+### Choices I made (disclosed; please review)
+
+1. **A COMPLETE job record without a run list** is read as listing all six runs (fail closed). The runner always
+   writes the list with COMPLETE. Names outside the six runs are ignored.
+2. **The reason names are kept** (`CHECKPOINT0_PRESENT_WITHOUT_READING`, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`):
+   the queue says "the same flag". PRESENT now means "present or expected"; the frozen record says so. The verdict
+   also lists the absent-but-expected files separately, report only.
+3. **Under a non-silent calibration state the arm reason stands alone**, and it is the same reason the architecture
+   label gives. No FINAL reason is added beside it.
+4. **A run whose identity differs gives no reading at all.** Its readings may belong to another arm or seed. Its
+   present or expected files are flagged, so the calibration state becomes `CALIBRATION_UNREADABLE`. A manifest with
+   no other file, in a job that is not COMPLETE, is left out like an unfinished run.
+5. **Only the run manifest's identity is checked**, as the decision names it. Checkpoint files also carry `arm` and
+   `seed`; they are not compared.
+6. **`arm_decision` and `arm_label` take a required calibration argument.** This is a signature change. Only the
+   reader, the rules module itself and the tests call them (checked with `git grep`).
+
+### Checks run (pure Python on the laptop; one process at a time; no torch, no GPU, no AWS)
+
+| Check | Result (measured) |
+|---|---|
+| `git pull --ff-only` | already up to date at `5e65c3a8`; working tree clean before my edits |
+| Rules import check (`python -B -c`: `frozen_sha256()`, two arm decisions, `expected_files`) | ran once; hash `5b03862a...`; torch not imported |
+| Syntax parse (`ast`) of the three changed Python files | OK |
+| Line endings and control bytes (Python byte count) of the four changed LAB files | 0 CR bytes, 0 control characters in each. A first check with `grep -c $'\r'` printed each file's line count, even for untouched files: a shell quoting artefact, not a measurement. The Python byte count is the measurement |
+| `git grep` for callers of `arm_decision`, `arm_label`, `read_run` | only the rules module, the reader and the tests (`q4_error_panel.read_run` is a different, untouched function) |
+| `git diff --quiet -- q4_error_panel.py` | unchanged (N5) |
+| `pytest test_q4_ab.py` (whole file, once, 1,200 s limit) | **48 passed** in 137.11 s (wall 139 s): revision 3b's 43, and 5 new. **0 skipped.** This file has no torch-only test: it runs without torch and asserts torch is never imported, so there was nothing to skip for torch. Free memory: 1,512 MB before; 951 MB and 1,446 MB during |
+| `launch.py` | unchanged; still approves `3100f376...`; the lab's launcher test (in the 48) asserts it refuses this working copy |
+| This report, after appending this section | the first append held ONE real CR byte (a `\r` in heredoc-fed Python became a control character: the known trap). Replaced with the two literal characters; then 0 CR bytes and 0 control characters |
+
+Not re-run: `test_q4_sdg_curriculum.py` and `test_q4_error_panel.py`. Their files and the modules they import are
+unchanged, and neither imports `q4_ab_rules` or `read_q4_ab_results` (checked with `grep`).
+
+### Identity of revision 3c (NOT approved; the launcher still approves revision 2)
+
+- `q4_ab_rules.frozen_sha256()`: `5b03862a653902699921d668f11cb67c98689e6c80a5d89f76f78fbe962901cb`
+  (revision 3b was `38f2f65d...`; revision 2, still approved in `launch.py`, `3100f376...`).
+- LF sha256 of the five files the launcher pins, as committed here:
+  - `LAB/q4_ab_rules.py` `807ebbef4f6e41f9b53a868a8c319cba657695d3ada65462189dd2f2588e7fa6` (changed)
+  - `LAB/q4_ab_prep.py` `b0601e5382df15441526bf334fb8c548ee6a379d4b633a81adb60e40fca8fd23` (unchanged)
+  - `LAB/q4_ab_train.py` `4d793a6afed5ddf6e399fcbcfff2bb1799a28ee725ab98cf4d59578e1bce8cd4` (unchanged)
+  - `LAB/read_q4_ab_results.py` `a3c94499862b18ac96d89ea26cf25f6d8f9e2ab3d1e56cf35965239abeeca5c1` (changed)
+  - `LAB/Q4_SDG_AB_SPEC_v0_2.md` `fff1daeb5f329be42448e097334ce359f0d697170fcbb460d623874a58f1d0c9` (changed; this
+    hash changes again when the status line is set to frozen)
+- `LAB/test_q4_ab.py` `51511f9f869ac42d47354e57921320c315e101363c27cae1f1f7edefa4a23572`.
+- `LAB/q4_error_panel.py` unchanged (`50d21ba6...`; N5).
+
+### Files changed in revision 3c
+
+- `LAB/q4_ab_rules.py`, `LAB/read_q4_ab_results.py`, `LAB/test_q4_ab.py`, `LAB/Q4_SDG_AB_SPEC_v0_2.md`, and this report.
+- NOT changed: `records/q4_sdg_1_20260923/ab_job/launch.py` and every other job file, `q4_ab_prep.py`,
+  `q4_ab_train.py`, `q4_error_panel.py`, `q4_sdg_curriculum.py`, `Q4_SDG_DATA_PINS.json`, every Q3 file and pin,
+  `records/q4_authorized_20260922/`, the review record, the queue file, and every Helm file and budget.
+
+### What remains before the run (in order)
+
+The queue's order: "a fresh review; then the freeze; then the approved hashes in `ab_job/launch.py`, in a commit of
+their own; then the data build; then training within the $5.00 ceiling." The owner's priority limits the review to one
+focused check.
+
+1. **One focused check of revision 3c** (this commit). Not done. It should check the five decisions, the six choices
+   above, and that nothing became more decisive.
+2. **The freeze.** Set the spec's status line to `**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `<hash>`` (the
+   hash above, if the check changes nothing). This changes the spec's LF hash.
+3. **The approved hashes** in `records/q4_sdg_1_20260923/ab_job/launch.py` (`APPROVED_FROZEN_SHA256` and the five
+   `APPROVED_LF_SHA256` values), in a commit of their own, after the freeze commit.
+4. **The data build on AWS** (one `c7i.large`, worst case $0.0813): `data_build_job/launch.py --source-commit <sha>`,
+   then its `watch.py`, then `pin_package.py --write`; then commit `Q4_SDG_DATA_PINS.json`,
+   `data_build_job/results/manifest.json` and `data_build_job/watch_record.json`.
+5. **The training on AWS** (one `g4dn.xlarge` T4, worst case $2.1678; with the data build, worst total $2.2491 of the
+   $5.00 ceiling): `ab_job/launch.py --source-commit <sha>` at a commit that holds all of the above, then `watch.py`,
+   then the local reading with `read_q4_ab_results.py`.
+
+**Other blockers and notes found in the launch path** (read only; I changed none of these files):
+- **The training launcher cannot even dry-run before the data build.** `main()` calls `money_check()` first, and it
+  refuses while `data_build_job/watch_record.json` is missing. `check_frozen` also refuses without the pin
+  (`B_PACKAGE_NOT_PINNED`), and `assemble` refuses without a committed `data_build_job/results/manifest.json`. This is
+  the expected order, not a defect.
+- **The data build does not depend on the freeze.** Its launcher has no approved-hash gate, and its recorded source
+  hashes (`q4_sdg_curriculum.source_pins()`) do not include `q4_ab_rules.py`, `read_q4_ab_results.py` or the spec. So
+  the data build could run before or during the focused check without being invalidated by it. The queue orders it
+  after the hash commit; that is the coordinator's call.
+- **One GPU machine at a time.** The training launcher refuses while any GPU machine is running in us-west-2 (quota 8
+  vCPU). If a Helm GPU job is running then, the launch waits. Not a code blocker.
+- **`ab_job/JOB_LIMITS.md` still says "spec revision 2".** It is a job file (the launcher requires it committed, not a
+  given hash). It should say revision 3c when the hashes are written. Wording only.
+- **Machine time.** The machine timer is 225 min. The runner's own limit is 190 min. Setup (up to about 10 min), the
+  panel check, and the machine-side `pytest test_q4_ab.py` run (recorded, not a stop; about 2.3 min on the
+  laptop, now with more tests) come before it, outside the runner's limit. That leaves a margin of roughly 15 to 20
+  minutes. Not a blocker; worth knowing.
+- **Otherwise the launch path is ready** as far as a read can tell: the pinned files, custody filters, the ceiling
+  arithmetic, the one-machine refusal, the no-retry rule and the safe download are in place and tested; the frozen
+  digests are filled in. It refuses today only because of steps 1 to 4. Nothing here was executed against AWS.
+
+### Open questions (for the coordinator and the owner)
+
+1. Choice 1 (a COMPLETE record without a run list lists all six) and choice 5 (checkpoint files' own `arm`/`seed` not
+   compared) go slightly beyond or stop exactly at the queue's words. Both can only make decisive answers rarer, or
+   leave them as they are.
+2. NOTE N5 (result files written in place; a write cut short stops the whole reader) is skipped by decision, as queued.
+   With Y1, if a person deletes such a broken file to get a verdict, the verdict is now INCOMPLETE, not JUSTIFIED.
+3. The optional stronger form of Y1 (the local reading must match `verdict_on_machine.json`) was not queued and is not
+   built.
+4. Still open from earlier: a teaching-fit floor (the owner's choice); MIXED as the overall lessons answer; the
+   c7i.large price not re-read from AWS; B's exact pool size known only after the data build; the reviewer's NOTEs N2
+   and N5 of earlier rounds (the name SEED_DEPENDENT; arm B's T1 null trusted from the runner).
+
+### EXPOSURE (everything outside my working copy that I opened or used)
+
+- **Git:** `git pull --ff-only` of `claude/q4-sdg-feedback-20260923` (already up to date at `5e65c3a8`); `git log`,
+  `git show --stat` of `003b051a`, `5e65c3a8` and `c0b2faad`; `git show 003b051a` (the review section it added);
+  `git status`, `git diff --stat`, `git diff --quiet` (of `q4_error_panel.py`), `git grep` (callers of the changed
+  functions), `git ls-files --eol` (five files), `git config core.autocrlf`. Then the commit and push of this
+  revision, by explicit path.
+- **My own scratch folder**
+  `C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/5e8709f4-3151-444f-939b-317c01bc3568/scratchpad/`:
+  `queue_body.txt` (a copy of 23 lines of the queue file), `rev3c/section.md` (this section's draft),
+  `rev3c/pytest_all.txt`, and the pytest temporary folder `rev3c/pt_all`. In it the lab fixtures built tiny B packages;
+  the package code wrote, and may have read, its own generated `sealed_*` sidecars there. I opened none of them myself.
+  The harness also kept the background test run's output in its own task folder; I read my `pytest_all.txt` copy.
+- **Memory and disk queries:** five PowerShell reads of free memory (a number only); one `df -h` of C: and D:.
+- **Python and tools:** `C:/Python314/python.exe`, its standard library, pytest from the user site-packages. The
+  pinned compiler's optional Rust `cas_engine` is switched off by the lab fixture. Git Bash (`grep`, `sed`, `awk`,
+  `tail`, `od`, `wc`, `cut`, `tr`, `sha256sum`, `timeout`). No torch, numpy or boto3 import.
+- **Context the harness gave me, not opened by me:** the user's `CLAUDE.md` files and memory index.
+- **Inside the working copy, read:** `Q4_AB_COORDINATOR_QUEUE_REV3C.md` (all); `Q4_AB_REVIEW_20260924.md` (its
+  first lines, and the whole section added in `003b051a`); this report (its revision-3b section); `q4_ab_rules.py` and
+  `read_q4_ab_results.py` (all); `test_q4_ab.py` (lines 1-100 and 474-1500); `Q4_SDG_AB_SPEC_v0_2.md` (the status
+  block, 7.3-7.8, 9, 17); `q4_ab_prep.py` (lines 165-180 and 395-430); `q4_ab_train.py` (lines 265-300 and 505-560);
+  `q4_sdg_curriculum.py` (`source_pins`); `Q4_SDG_DATA_PINS.json`; and, read only, `records/q4_sdg_1_20260923/ab_job/`
+  `launch.py` (all), `job.sh.template` (all), `JOB_LIMITS.md` (all), `watch.py` (lines 1-30 and `grep` lines), and
+  `data_build_job/launch.py` (lines 1-40 and `grep` lines). The tests read visible Q3 v0.7 files and run_001's records
+  through the lab's own fixtures.
+- **Not touched:** any `*_eval.jsonl`, any Q3 `sealed*` file, the Q3/Q4 protected examination, `D:/tksCAS-archive/`,
+  salts, any hset1a/hset1b path, S3 or any AWS service, the meta1 budget ledger, other worktrees, Claude transcripts,
+  every Helm file and budget, and the owner's documents on the research branch.

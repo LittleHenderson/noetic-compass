@@ -1,6 +1,6 @@
-# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3b)
+# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 3c)
 
-**Status: PROPOSED_FOR_REVIEW** (revision 3b; not frozen; the launcher refuses it)
+**Status: PROPOSED_FOR_REVIEW** (revision 3c; not frozen; the launcher refuses it)
 
 How this status was set, and what it binds:
 - Revision 1 (commit `3771f989`) went to two independent reviews. They found one MAJOR defect and eight MINOR ones
@@ -20,10 +20,15 @@ How this status was set, and what it binds:
   still printed SILENT, so both JUSTIFIED and NOT_JUSTIFIED could still be printed. **Revision 3b** applies the
   coordinator's two decisions of 2026-09-24 on that review, quoted word for word in section 17. It stays
   `PROPOSED_FOR_REVIEW`.
+- A fresh review of revision 3b (commit `003b051a`, same review file) returned **CHANGES_REQUIRED** with one MINOR
+  point, Y1: a file the job wrote, but which is absent from the results folder, counted as "never written", so
+  JUSTIFIED could still follow. **Revision 3c** applies the coordinator's decisions on that review (Y1, N1, N2, N3 and
+  the absent checkpoint-0 file; queued 2026-09-24 in `Q4_AB_COORDINATOR_QUEUE_REV3C.md`), quoted word for word in
+  section 18. It stays `PROPOSED_FOR_REVIEW`.
 - The training launcher (`records/q4_sdg_1_20260923/ab_job/launch.py`) still holds revision 2's approved values
-  (`APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256`). Revision 3b's rules hash differs, and this status line is not
-  the frozen one. So the launcher refuses revision 3b (`FROZEN_RULES_NOT_THE_APPROVED_ONES`). A test checks this.
-- After a review approves revision 3b: set this line to the frozen form (`**Status: FROZEN_BEFORE_LAUNCH**` followed
+  (`APPROVED_FROZEN_SHA256` and `APPROVED_LF_SHA256`). Revision 3c's rules hash differs, and this status line is not
+  the frozen one. So the launcher refuses revision 3c (`FROZEN_RULES_NOT_THE_APPROVED_ONES`). A test checks this.
+- After a review approves revision 3c: set this line to the frozen form (`**Status: FROZEN_BEFORE_LAUNCH**` followed
   by the rules hash), then write the new approved values into `launch.py` in a commit of their own.
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover while Codex is away). Experiment id **Q4-SDG-1**. Builder: a
@@ -43,6 +48,7 @@ Claude sub-agent. Nothing here has run on AWS. No model has been trained under t
 - The verification of revision 2 and the coordinator's decisions of 2026-09-24: section 15.
 - The verification of revision 3 and the coordinator's confirmations of 2026-09-24: section 16.
 - The fresh review of revision 3a and the coordinator's decisions of 2026-09-24 on it: section 17.
+- The fresh review of revision 3b and the coordinator's decisions queued on it (2026-09-24): section 18.
 
 **Where every frozen value lives.** `q4_ab_rules.py` (standard library only). This document explains those values. If
 the two ever disagree, the program wins, and the disagreement is a defect to report.
@@ -293,16 +299,29 @@ Labels: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FI
 ### 7.3 Arms
 
 For each arm, over its 3 seeds, at the FINAL checkpoint. A run "has a FINAL reading" when its run manifest and its
-final checkpoint file exist and the file agrees with the reader's recomputation, whether or not the run is valid
-(section 7.7).
+final checkpoint file exist, the manifest's identity matches the run (section 7.7), and the file agrees with the
+reader's recomputation, whether or not the run is valid (section 7.7).
+
+**First, the calibration state** (revision 3c; N1 of the review of revision 3b; section 18). When the calibration
+state (section 7.4) is not INPUT_USE_RULE_SILENT_AT_INITIALISATION, every arm label is withheld: the arm is
+**ARM_<arm>_INPUT_USE_UNDETERMINED**, with the calibration reason alone, also emitted as
+`ARM_<arm>_INPUT_USE_UNDETERMINED_BECAUSE_<REASON>`:
+- INPUT_USE_RULE_FIRES_AT_INITIALISATION gives the reason `INPUT_USE_RULE_FIRES_AT_INITIALISATION`;
+- CALIBRATION_UNREADABLE gives the reason `CHECKPOINT0_PRESENT_WITHOUT_READING`.
+
+This is the same shape as the architecture label (section 7.5, steps 0 and 1). In those states the tests are not
+trustworthy on this machine, so no arm label speaks. It only makes the two decisive arm labels rarer.
+
+**Under a silent calibration state:**
 - **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** VALID runs are FULL (unchanged).
 - **ARM_<arm>_SHOWS_NO_INPUT_USE** iff at least **2** VALID runs are NONE, AND every run of the arm that has a FINAL
-  reading, valid or not, is NONE, AND no run of the arm has a FINAL checkpoint file without a FINAL reading
-  (revision 3b).
+  reading, valid or not, is NONE, AND no run of the arm has a FINAL checkpoint file, present or expected, without a
+  FINAL reading (revision 3b; "expected" is revision 3c, section 7.4).
 - **ARM_<arm>_INPUT_USE_UNDETERMINED** otherwise.
 
-A run with no FINAL reading gives no level to the arm. If that run's FINAL checkpoint file EXISTS (it was written, but
-the reader could not take a reading from it), two rules hold it back:
+A run with no FINAL reading gives no level to the arm. If that run's FINAL checkpoint file EXISTS or is EXPECTED (it
+was written, but the reader could not take a reading from it; section 7.4 says when a file is expected), two rules
+hold it back:
 - **The arm label** (revision 3b; coordinator decision 2 of 2026-09-24, section 17). If the arm would otherwise be
   SHOWS_NO_INPUT_USE, that label is withheld: the arm is **ARM_<arm>_INPUT_USE_UNDETERMINED**, with the named reason
   `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`, also emitted as
@@ -315,12 +334,13 @@ the reader could not take a reading from it), two rules hold it back:
 file cannot make it false: SHOWS_INPUT_USE counts VALID FULL runs only, and a run whose FINAL file gives no reading is
 never valid (it is RUN_INCOMPLETE or RUN_INVALID_<reason>, section 7.7). Whatever that file held, the two valid FULL
 runs still stand. A test fills the unread run with every possible invalid reading and the label stays. So there is no
-gap to close there, and withholding it would make NOT_JUSTIFIED rarer, which decision 2 does not ask for. (The builder's
-reading of that sentence; it is an open question in the builder report.) INPUT_USE_UNDETERMINED claims nothing, so
-there is nothing to withhold.
+gap to close there, and withholding it would make NOT_JUSTIFIED rarer, which decision 2 does not ask for. (This is the
+builder's reading of that sentence, confirmed by the coordinator on 2026-09-24: decision 2 withholds only
+SHOWS_NO_INPUT_USE. Section 18.) INPUT_USE_UNDETERMINED claims nothing, so there is nothing to withhold.
 
 The verdict lists such runs per arm (`final_checkpoints_present_without_reading`). The architecture label is the
-decision; with revision 3b an arm label no longer says SHOWS_NO_INPUT_USE while one of its FINAL files is unread.
+decision; with revision 3b an arm label no longer says SHOWS_NO_INPUT_USE while one of its FINAL files is unread, and
+with revision 3c no arm label speaks while the calibration state is not silent.
 
 ### 7.4 Calibration guard
 
@@ -330,8 +350,9 @@ and the architecture label is ARCHITECTURE_DECISION_INCOMPLETE. Otherwise **INPU
 
 **The calibration state has three values** (revision 3b; coordinator decision 1 of 2026-09-24, section 17). The guard
 can only look at runs whose checkpoint-0 file gave a reading. So the reader first lists every run whose checkpoint-0
-file EXISTS but gives no checkpoint-0 reading (a path check, as for the FINAL file in 3a). Causes: the run manifest is
-missing; the file names another rules hash or another checkpoint; the file holds no record (JSON `null`); or any
+file EXISTS or is EXPECTED (below) but gives no checkpoint-0 reading. Causes: the file is absent though expected
+(revision 3c); the run manifest is missing; the manifest's identity does not match the run (revision 3c, section
+7.7); the file names another rules hash or another checkpoint; the file holds no record (JSON `null`); or any
 recomputation in it fails, including an exact-flag check on SP1, SP2, B_DEV or TEACH_FIT. Then, in this order:
 1. **CALIBRATION_UNREADABLE** if there is at least one such run, whatever the readable runs show. The architecture
    label is then ARCHITECTURE_DECISION_INCOMPLETE with the one reason `CHECKPOINT0_PRESENT_WITHOUT_READING`.
@@ -344,8 +365,32 @@ The verdict still reports what the readable runs showed, in `calibration_guard_f
 never decisive), and lists the unread runs in `checkpoint_0_files_present_without_reading`. Both roads lead to
 INCOMPLETE, so this order changes no decisive label.
 
-A checkpoint-0 file that does NOT exist is not flagged (the path check). Its run is left out of the guard, as before.
-A checkpoint-0 file that holds neither a JSON object nor JSON `null` still stops the whole reader, as before.
+**Expected files** (revision 3c; Y1 of the review of revision 3b and the coordinator's decision on it, section 18).
+A result file is EXPECTED when the run's own later files prove it was written:
+- the FINAL checkpoint file: the run's `run_result.json` or `reload_check.json` exists (both are written after it,
+  and the reload check reads it);
+- the checkpoint-0 file: any later checkpoint file (the FINAL one included), `run_result.json` or `reload_check.json`
+  exists;
+- when `job_result.json` has status COMPLETE, every run it lists is expected, with all its files. (The runner writes
+  COMPLETE only after all six runs, with the list. A COMPLETE record without a list of run names is read as listing
+  all six: fail closed. Builder's choice; section 18.)
+
+An expected file that is ABSENT gets the same flag as a present file without a reading, with the same reason names
+(`CHECKPOINT0_PRESENT_WITHOUT_READING`, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`). In those names, PRESENT means
+present or expected. The rule can only make decisive labels rarer.
+
+So **a run that has a FINAL reading but no checkpoint-0 file is flagged** (the builder's open question in revision 3b;
+the coordinator's decision, section 18): its FINAL file is a later checkpoint, so its starting file is expected, and
+the calibration state is CALIBRATION_UNREADABLE.
+
+What stays left out, as before: a run whose files are neither present nor expected. That is a run that never
+finished, for example after a stop: no FINAL file, no `run_result.json`, no `reload_check.json`, and a job record
+that is not COMPLETE (or does not list it). Decision 3 of 2026-09-24 accepts such a seed ("at least 2 of its arm's 3
+seeds"). A checkpoint-0 file that holds neither a JSON object nor JSON `null` still stops the whole reader, as before.
+
+Each run in the verdict carries `checkpoint_0_file_expected`, `final_checkpoint_file_expected` and
+`listed_by_complete_job`. The verdict lists `runs_listed_by_complete_job`, and, for a person reading it,
+`expected_files_absent_report_only` (the absent-but-expected files; they are already inside the two flag lists).
 
 D and T3 are not in the guard. An untrained model's free outputs may vary with the input, so its level at checkpoint 0
 may be STRUCTURE_OR_OUTPUT_VARIATION; that does not fire the guard. (In revision 2 the guard was "the level at
@@ -363,11 +408,11 @@ In this order:
    reason CHECKPOINT0_PRESENT_WITHOUT_READING (revision 3b; coordinator decision 1, section 17).
 1. The calibration guard fires: **ARCHITECTURE_DECISION_INCOMPLETE**, reason INPUT_USE_RULE_FIRES_AT_INITIALISATION.
 2. Some arm SHOWS_INPUT_USE: **ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE**.
-3. Both arms SHOW_NO_INPUT_USE, and no run has a FINAL checkpoint file without a FINAL reading:
+3. Both arms SHOW_NO_INPUT_USE, and no run has a FINAL checkpoint file, present or expected, without a FINAL reading:
    **ARCHITECTURE_CHANGE_JUSTIFIED**. That is: the calibration state is SILENT (every checkpoint-0 file that exists
-   gave a reading, and none passes T1, T2V or T2P); every run that has a FINAL reading (valid or not) is NONE; each arm
-   has at least 2 VALID NONE runs (coordinator decision 3); and every FINAL checkpoint file that exists gave a reading
-   (verification of revision 3, W1).
+   or is expected gave a reading, and none passes T1, T2V or T2P); every run that has a FINAL reading (valid or not)
+   is NONE; each arm has at least 2 VALID NONE runs (coordinator decision 3); and every FINAL checkpoint file that
+   exists or is expected gave a reading (verification of revision 3, W1; revision 3c, Y1).
 4. Otherwise **ARCHITECTURE_DECISION_INCOMPLETE** (the verdict is withheld), with every reason that applies, each also
    emitted as `ARCHITECTURE_INCOMPLETE_BECAUSE_<REASON>`:
    - `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`: a run with a FINAL reading (valid or
@@ -375,15 +420,16 @@ In this order:
    - `SEED_DEPENDENT`: a run with a FINAL reading (valid or not) is FULL, but no arm has 2 valid FULL runs;
    - `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`: a run that is not valid has a FINAL reading other than NONE;
    - `TOO_FEW_VALID_RUNS`: an arm has fewer than 2 valid runs;
-   - `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`: a run's FINAL checkpoint file exists, but the reader took no FINAL
-     reading from it. Causes: the run manifest is missing; the file names another rules hash or another checkpoint;
-     the file holds no record (for example JSON `null`); or any recomputation in it fails, including an exact-flag
-     check on SP1, SP2, B_DEV or TEACH_FIT. Listed last.
+   - `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`: a run's FINAL checkpoint file exists or is expected (section 7.4),
+     but the reader took no FINAL reading from it. Causes: the file is absent though expected (revision 3c); the run
+     manifest is missing; the manifest's identity does not match the run (revision 3c, section 7.7); the file names
+     another rules hash or another checkpoint; the file holds no record (for example JSON `null`); or any
+     recomputation in it fails, including an exact-flag check on SP1, SP2, B_DEV or TEACH_FIT. Listed last.
 
    Steps 2 and 3 run only when the calibration state is SILENT. In steps 0 and 1 the calibration reason stands alone
    (coordinator confirmation (d) for the guard; the same shape for the third state):
-   - `CHECKPOINT0_PRESENT_WITHOUT_READING`: a run's checkpoint-0 file exists, but the reader took no checkpoint-0
-     reading from it (section 7.4). The calibration state is CALIBRATION_UNREADABLE.
+   - `CHECKPOINT0_PRESENT_WITHOUT_READING`: a run's checkpoint-0 file exists or is expected, but the reader took no
+     checkpoint-0 reading from it (section 7.4). The calibration state is CALIBRATION_UNREADABLE.
 
    Every INCOMPLETE carries at least one reason (a test enumerates every arm of 0 to 3 readings).
 
@@ -396,7 +442,12 @@ cannot count toward "neither arm shows input use". It changes nothing else:
   another run's unreadable file.
 - The calibration guard is unchanged. When it fires, it stays the only reason (coordinator confirmation (d),
   section 16).
-- A run whose FINAL checkpoint file does NOT exist is left out, as before (it cannot have been read by anyone).
+- Revision 3c (Y1): a FINAL checkpoint file that is ABSENT but EXPECTED (section 7.4) is treated the same way. The
+  run's own later files, or a COMPLETE job record that lists the run, prove that the file was written; on the machine
+  the reload check and the machine-side reader read it. So its absence here says nothing about what it held.
+- A run whose FINAL checkpoint file is neither present nor expected is left out, like a run that never finished
+  (decision 3 accepts such a seed). The machine-side reading (`verdict_on_machine.json`) may differ from the local
+  reading in that case; the local reading is the one reported (`JOB_LIMITS.md`).
 - A FINAL file that holds neither a JSON object nor JSON `null` (invalid JSON, duplicate keys, a non-finite number, a
   list) still stops the whole reader with an error, as before: no verdict and no label at all. A test checks this.
 
@@ -472,18 +523,35 @@ B-internal; it enters no rule.
 ### 7.7 Run validity
 
 **RUN_VALID** iff: the run manifest, all 7 checkpoint files, the run result (status COMPLETE, 32,768 updates) and a
-reload check with status RELOAD_REPRODUCED are present; every file carries the frozen-rules hash; and the runner's own
-totals agree with the reader's recomputation (exact flags, teacher-forced counts, distinct outputs, exactly 773 edit
-values in the frozen edit order, 538 value and 235 presence edits). A missing file gives **RUN_INCOMPLETE**. Anything
-else gives **RUN_INVALID_<reason>**.
+reload check with status RELOAD_REPRODUCED are present; the manifest's identity matches the run (below); every file
+carries the frozen-rules hash; and the runner's own totals agree with the reader's recomputation (exact flags,
+teacher-forced counts, distinct outputs, exactly 773 edit values in the frozen edit order, 538 value and 235 presence
+edits). A missing file gives **RUN_INCOMPLETE**. Anything else gives **RUN_INVALID_<reason>**.
+
+**Run identity** (revision 3c; N3 of the review of revision 3b and the coordinator's decision on it, section 18). The
+runner writes `arm`, `seed` and `pool_ids_digest` into every run manifest. The reader checks them against the run
+folder `runs/<arm>_<seed>` and against `prep.json`:
+- `arm` must be the folder's arm (a string);
+- `seed` must be the folder's seed (an int; a float or a bool is refused);
+- `pool_ids_digest` must equal sha256 of the canonical JSON list `prep.json` `pools.<arm>.ids` (the runner's
+  `q4_ab_prep.ids_digest`; for arm A this is the frozen `A_POOL_DIGEST`). A missing list fails.
+
+If any differs, the run fails closed: it is **RUN_INVALID_RUN_IDENTITY_DIFFERS** (the verdict names which of ARM,
+SEED, POOL_IDS_DIGEST in `problems`), it gives **no reading at all** (so no level, no calibration reading, no exact
+flags), and its checkpoint-0 and FINAL files, when present or expected, are flagged as files without a reading. So the
+calibration state is CALIBRATION_UNREADABLE, the architecture label is INCOMPLETE, and its pairs are PAIR_INCOMPLETE.
+Before revision 3c, identity was checked only through the TEACH_FIT rows; if the A and B folders of all three seeds were
+swapped, every pair flipped and LESSONS_HELP printed as LESSONS_HURT (the review's NOTE N3). A test swaps them.
 
 A run that is not valid still counts in the architecture rule when it has a FINAL reading (section 7.3, 7.5). It
 never counts in a pair comparison (section 7.6), and never toward the 2 valid FULL or the 2 valid NONE runs of an arm.
 A run whose FINAL checkpoint file exists but gave no FINAL reading (it is then RUN_INCOMPLETE or RUN_INVALID_<reason>)
 withholds JUSTIFIED (section 7.5, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`) and its arm's SHOWS_NO_INPUT_USE (section
 7.3). A run whose checkpoint-0 file exists but gave no checkpoint-0 reading (again never valid) makes the calibration
-state CALIBRATION_UNREADABLE (section 7.4). Each run in the verdict carries `final_checkpoint_file_present`,
-`final_checkpoint_present_without_reading`, `checkpoint_0_file_present` and `checkpoint_0_present_without_reading`.
+state CALIBRATION_UNREADABLE (section 7.4). Revision 3c: the same holds for a file that is absent but expected
+(section 7.4). Each run in the verdict carries `final_checkpoint_file_present`, `final_checkpoint_file_expected`,
+`final_checkpoint_present_without_reading`, `checkpoint_0_file_present`, `checkpoint_0_file_expected`,
+`checkpoint_0_present_without_reading` and `listed_by_complete_job`.
 
 ### 7.8 Information-only label (coordinator decision 4 of 2026-09-24)
 
@@ -552,9 +620,11 @@ The reader refuses results written under other rules (`NO_VERDICT_FROZEN_RULES_D
 fails any check against the frozen record (`NO_VERDICT_PREP_NOT_FROZEN`, with the failing checks listed): the SP1 and
 SP2 digests, the pinned panel targets, the inspected-row flags, arm A's pool, the edit list, the edit kinds (recomputed
 from each edit's old and new values), the edit count, the SP1 field counts (recounted from the pinned targets), both
-frozen null rates, and well-formed pool counts. It recomputes exactness from tokens, teacher-forced counts from
-per-position bits, and every edit move from raw probabilities, edit by edit (each edit value carries its row and
-position, and must follow `prep.json`'s edit order). A disagreement with the runner's totals makes that run invalid.
+frozen null rates, and well-formed pool counts. It checks each run manifest's identity against its folder and
+`prep.json` (section 7.7). It recomputes exactness from tokens, teacher-forced counts from per-position bits, and
+every edit move from raw probabilities, edit by edit (each edit value carries its row and position, and must follow
+`prep.json`'s edit order). A disagreement with the runner's totals makes that run invalid. A file the run's own later
+files (or a COMPLETE job record) prove was written, but which is absent, is flagged (section 7.4).
 The verdict records the LF sha256 of the reader and of the rules module it ran with.
 
 **The exact output labels** (the reader's `LABELS` constant):
@@ -565,7 +635,7 @@ The verdict records the LF sha256 of the reader and of the rules module it ran w
 - checkpoint: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_OR_OUTPUT_VARIATION`, `INPUT_USE_NONE`
 - calibration: `INPUT_USE_RULE_SILENT_AT_INITIALISATION`, `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `CALIBRATION_UNREADABLE`
 - arm: `ARM_A_…` / `ARM_B_…`: `SHOWS_INPUT_USE`, `SHOWS_NO_INPUT_USE`, `INPUT_USE_UNDETERMINED`
-- arm reason: `ARM_A_…` / `ARM_B_…`: `INPUT_USE_UNDETERMINED_BECAUSE_FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`
+- arm reason: `ARM_A_…` / `ARM_B_…`: `INPUT_USE_UNDETERMINED_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `CHECKPOINT0_PRESENT_WITHOUT_READING` (revision 3c, N1), `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`
 - architecture: `ARCHITECTURE_CHANGE_JUSTIFIED`, `ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE`, `ARCHITECTURE_DECISION_INCOMPLETE`, `ARCHITECTURE_NOT_EVALUATED`
 - architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `CHECKPOINT0_PRESENT_WITHOUT_READING`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_OR_OUTPUT_VARIATION`, `SEED_DEPENDENT`, `NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID`, `TOO_FEW_VALID_RUNS`, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`
 - information only (section 7.8): `FIELDS_NOT_READ_IN_ANY_RUN`
@@ -852,3 +922,79 @@ are replaced by decisions 2 and 1. Its choices 2, 3 and 5 are unchanged.
 - `test_reader_labels_are_the_declared_ones` now also sees `CALIBRATION_UNREADABLE`,
   `ARCHITECTURE_INCOMPLETE_BECAUSE_CHECKPOINT0_PRESENT_WITHOUT_READING` and
   `ARM_B_INPUT_USE_UNDETERMINED_BECAUSE_FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`.
+
+## 18. Changes in revision 3c (the fresh review of revision 3b, and the coordinator's decisions queued on it)
+
+**The review** of revision 3b (commit `c0b2faad`) is recorded in `Q4_AB_REVIEW_20260924.md` (commit `003b051a`). Its
+verdict: CHANGES_REQUIRED, one MINOR finding, no BLOCKER, no MAJOR, six NOTEs.
+- Y1 (MINOR): the reader asked only "is this file here?", never "did the job write this file?". A file the job wrote,
+  but which is absent from the results folder (a starting file, a FINAL file, or a whole run that a COMPLETE
+  `job_result.json` lists), counted as "never written"; the run was left out, and JUSTIFIED could follow. The reviewer
+  measured it three ways.
+- NOTE N1: arm labels still spoke while the calibration state was not silent. NOTE N2: decision 2's second sentence
+  (the builder's reading). NOTE N3: run identity was checked only through TEACH_FIT. NOTE N5: result files are written
+  in place. N4 and N6 need no change.
+
+**Coordinator decisions, queued 2026-09-24** (`_handoffs/HELM_NEXT_PHASE_20260923/Q4_AB_COORDINATOR_QUEUE_REV3C.md`,
+commit `5e65c3a8`), quoted word for word:
+
+> 1. **Y1 (apply).** A result file is **expected** when the run's own later files prove it was written:
+>    - FINAL: `run_result.json` or `reload_check.json` exists;
+>    - checkpoint 0: any later checkpoint, `run_result.json` or `reload_check.json` exists;
+>    - when `job_result.json` is COMPLETE, every run it lists is expected.
+>
+>    An expected file that is absent gets the same flag as a present file without a reading, so it fails closed. It may
+>    only make decisive labels rarer.
+> 2. **N1 (apply).** Arm labels are **withheld**, with a named reason, whenever the calibration state is not SILENT
+>    (that is, FIRES or CALIBRATION_UNREADABLE). This fails closed.
+> 3. **N2 (confirm).** Decision 2 withholds only `SHOWS_NO_INPUT_USE`. That is the builder's reading, and it is
+>    confirmed. Change the spec wording from "open" to "confirmed".
+> 4. **N3 (apply).** Check run identity: the manifest's arm, seed and `pool_ids_digest` must match the folder name and
+>    `prep.json`, or the run fails closed.
+> 5. **N5 (skip).** `q4_error_panel.py` stays unchanged. It is a reviewed, already-run diagnostic.
+> 6. **Absent checkpoint-0 file** (the builder's open question): same fail-closed shape. A run that has a FINAL reading
+>    but no starting file is flagged.
+
+**What revision 3c changed** (code: `q4_ab_rules.py`, `read_q4_ab_results.py`; tests: `test_q4_ab.py`):
+
+| Decision | Change | Where |
+|---|---|---|
+| 1 (Y1) | New `q4_ab_rules.expected_files(later_checkpoint_file, run_result_or_reload_file, listed_by_complete_job)`: the FINAL file is expected iff `run_result.json` or `reload_check.json` exists or a COMPLETE job lists the run; the checkpoint-0 file iff that, or any later checkpoint file exists. `read_run` flags a file that is present or expected and gave no reading (same flags, same reason names). New `runs_listed_by_complete_job`. The verdict adds `runs_listed_by_complete_job`, `expected_files_absent_report_only`, and per run `checkpoint_0_file_expected`, `final_checkpoint_file_expected`, `listed_by_complete_job` | 7.4, 7.5, 7.7, 9 |
+| 2 (N1) | `q4_ab_rules.arm_decision(arm, finals, final_checkpoints_without_reading, calibration)` and `arm_label(...)` take the calibration state (required; anything but one of `CALIBRATION_STATES` is refused). Not silent: `ARM_<arm>_INPUT_USE_UNDETERMINED` with the calibration reason alone (`CALIBRATION_REASON`). `ARM_REASONS` gains `INPUT_USE_RULE_FIRES_AT_INITIALISATION` and `CHECKPOINT0_PRESENT_WITHOUT_READING`. `architecture_decision` reads the arm labels under the silent state only (unchanged behaviour) | 7.3, 9 |
+| 3 (N2) | Section 7.3 says the reading is "confirmed by the coordinator on 2026-09-24"; the frozen `ARM` text says "reading confirmed 2026-09-24". No rule changes | 7.3 |
+| 4 (N3) | New `read_q4_ab_results.run_identity_problems`: the manifest's `arm`, `seed` and `pool_ids_digest` against the folder and `prep.json`. A mismatch: `RUN_INVALID_RUN_IDENTITY_DIFFERS`, no reading at all, present or expected files flagged | 7.7, 9 |
+| 5 (N5) | None. `q4_error_panel.py` is unchanged | - |
+| 6 | Covered by decision 1's rule: a FINAL file is a later checkpoint, so a run with a FINAL reading always expects its checkpoint-0 file; its absence gives CALIBRATION_UNREADABLE | 7.4 |
+| all | The frozen record states `EXPECTED_FILE`, `RUN_IDENTITY`, the arm rule under each calibration state, and "present or expected" in the flag rules; `SPEC_REVISION` says revision 3c. So `frozen_sha256` changes | `q4_ab_rules.frozen_record` |
+
+**Choices the builder made in applying the decisions (disclosed; the reviewer should check them):**
+1. *A COMPLETE job record without a list of run names* is read as listing all six runs (fail closed). The queue says
+   "every run it lists"; the runner always writes the list with COMPLETE, so a record without it is not the runner's.
+   This can only make decisive labels rarer. Names in the list that are not one of the six runs are ignored.
+2. *The reason names are kept.* "Gets the same flag" is read as the same flags and the same reason names
+   (`CHECKPOINT0_PRESENT_WITHOUT_READING`, `FINAL_CHECKPOINT_PRESENT_WITHOUT_READING`); PRESENT in them now means
+   present or expected (stated in the frozen record). The verdict lists the absent-but-expected files separately, for
+   a person reading it, report only.
+3. *The arm reason under a state that is not silent* is the same reason the architecture label gives for that state,
+   and it stands alone (no FINAL reason beside it), the same shape as confirmation (d).
+4. *A run whose identity differs gives no reading at all*, not a reading that counts as an invalid run's reading. Its
+   readings may belong to another arm or seed, so they cannot be counted for this one. Its checkpoint-0 and FINAL files
+   are flagged when present or expected (in practice they always are), so the calibration state becomes
+   CALIBRATION_UNREADABLE. A manifest alone, with no other file and no COMPLETE job, is left out like an unfinished run.
+5. *Only the run manifest's identity is checked*, as the decision names it. Checkpoint files also carry `arm` and
+   `seed`; they are not compared (the frozen-rules hash and the checkpoint number are, as before).
+
+**New or changed tests (torch-free):**
+- New, one per decision: `test_reader_expected_but_absent_file_is_flagged_like_an_unread_one` (decision 1: the
+  review's three cases, a COMPLETE record without a list, each later file alone, and two controls that stay JUSTIFIED:
+  an unfinished run and a run a STOPPED job never wrote); `test_arm_labels_are_withheld_when_calibration_is_not_silent`
+  (decision 2: all 4,096 arms under both non-silent states, bad states refused, and the reader under a firing guard and
+  under CALIBRATION_UNREADABLE); `test_spec_states_the_reading_of_decision_2_as_confirmed` (decision 3);
+  `test_reader_run_identity_must_match_the_folder_and_prep` (decision 4: seven manifest changes, the review's A/B
+  folder swap with a control and a demonstration that without the check the pairs flip to LESSONS_HURT, and a
+  `prep.json` without arm B's pool ids); `test_reader_final_reading_without_a_starting_file_is_flagged` (decision 6).
+- Changed, because the decisions change what they asserted: the fixture writes the runner's `pool_ids_digest` and a
+  COMPLETE record's run list; tests of a run that was never written now use a STOPPED job; the old "absent file is not
+  flagged" blocks (FINAL and checkpoint 0) are removed (the new Y1 test asserts the opposite); arm labels under
+  CALIBRATION_UNREADABLE or a firing guard are now withheld; the enumeration test passes the silent state; the label
+  test adds a firing-guard case.
