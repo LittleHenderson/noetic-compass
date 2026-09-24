@@ -1,0 +1,83 @@
+#!/bin/bash
+# Q4-SDG-1 B-package DATA BUILD on ONE throwaway small CPU machine. Claude coordinator, temporary takeover.
+# NO credentials here: ONE download and THREE uploads through time-limited links. No GPU, no torch, no model.
+# Builds the package twice (--expect-engine python), compares the two builds byte for byte, re-verifies build 1 with
+# the pinned compiler, and returns digests + manifest only. It always ends by shutting down and is destroyed then.
+set -uo pipefail
+trap '' PIPE
+shutdown -h +__MAX_MINUTES__ "q4 data build hard limit" || true                                # kill switch 0
+LOG=/var/log/q4_data_build_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED" ) &   # kill switch 1
+
+WORK=/root/q4_build
+mkdir -p "$WORK/out"
+cd "$WORK"
+STATUS=setup
+upload() { curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true; }
+finish() {                                                                                      # kill switch 2
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  if find "$WORK/out" -type f | grep -Ei '(_eval\.jsonl$|sealed)'; then rm -rf "$WORK/out"; mkdir -p "$WORK/out"; echo "CUSTODY_SCRUBBED" > "$WORK/out/STATUS"; fi
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+( while true; do sleep 120; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 600 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir bundle && tar -xzf bundle.tar.gz -C bundle || { STATUS=bundle_extract_failed; exit 1; }
+cp bundle/identity.json "$WORK/out/identity.json"
+if find bundle -type f | grep -Ei '(_eval\.jsonl$|sealed|hset1a|hset1b)'; then STATUS=CUSTODY_REFUSED_ON_MACHINE; exit 1; fi
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+{ "$PY" --version; uname -a; nproc; free -m; echo "bundle_sha256=__BUNDLE_SHA256__"; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+export PYTHONDONTWRITEBYTECODE=1
+LAB="$WORK/bundle/pkg/research/helm_cas_expression_lab"
+cd "$LAB"
+if "$PY" -c "import cas_engine" 2>/dev/null; then STATUS=RUST_ENGINE_PRESENT_EXPECTED_PYTHON; exit 1; fi
+
+run_stage() {   # name, then the command; the log and the wall time go to out/
+  local name=$1; shift
+  local start=$(date +%s)
+  "$@" > "$WORK/out/$name.log" 2>&1
+  local code=$?
+  echo "exit=$code wall=$(( $(date +%s) - start ))s" >> "$WORK/out/$name.log"
+  tail -n 3 "$WORK/out/$name.log"
+  return $code
+}
+
+STATUS=build_1
+PYTHONHASHSEED=1 run_stage build_1 "$PY" -B q4_sdg_curriculum.py --build --out "$WORK/b1/q4_sdg_v0_1" --size 4096 --expect-engine python
+B1=$?
+[ "$B1" -eq 0 ] || { STATUS=BUILD_1_FAILED; exit 1; }
+STATUS=build_2
+PYTHONHASHSEED=4242 run_stage build_2 "$PY" -B q4_sdg_curriculum.py --build --out "$WORK/b2/q4_sdg_v0_1" --size 4096 --expect-engine python
+B2=$?
+STATUS=verify
+run_stage verify "$PY" -B q4_sdg_curriculum.py --verify --data "$WORK/b1/q4_sdg_v0_1" --unpinned --recompile
+V=$?
+STATUS=digests
+run_stage digests "$PY" -B q4_ab_prep.py package-digests --build "$WORK/b1/q4_sdg_v0_1" --rebuild "$WORK/b2/q4_sdg_v0_1" \
+  --verify-exit "$V" --out "$WORK/out/build_digests.json"
+D=$?
+cp "$WORK/b1/q4_sdg_v0_1/manifest.json" "$WORK/out/manifest.json"
+
+# The whole package (row files included) goes to S3 as an archive; the watcher never downloads it.
+tar -czf "$WORK/package.tar.gz" -C "$WORK/b1" q4_sdg_v0_1 && sha256sum "$WORK/package.tar.gz" | cut -d' ' -f1 > "$WORK/out/package_tar_sha256.txt"
+upload "$WORK/package.tar.gz" "__PACKAGE_URL__"
+
+echo "build_1=$B1 build_2=$B2 verify=$V digests=$D" > "$WORK/out/EXIT_CODES"
+cat "$WORK/out/EXIT_CODES"
+if [ "$B2" -eq 0 ] && [ "$V" -eq 0 ] && [ "$D" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures $(cat "$WORK/out/EXIT_CODES")"; fi
+exit 0
