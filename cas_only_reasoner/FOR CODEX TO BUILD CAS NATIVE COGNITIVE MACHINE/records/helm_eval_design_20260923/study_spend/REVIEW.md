@@ -493,3 +493,149 @@ verdict fields were printed. Wrote: `study_spend.py`, `test_study_spend.py`, `PR
 folder. Not written: `STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json`, `RESULTS_READING.json`, `job.sh.template`,
 `watch.py`, `CHANGELOG.md` (the coordinator batches it). No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed
 file, no `D:/tksCAS-archive/`, no salt, no S3, no meta1 ledger, no transcript.
+
+## Verification of 269d13c8d62bdccdba147e825edf7560bcf07383
+
+Label `CLAUDE_BUILT_CLAUDE_CHECKED`. Verifier: a fresh Claude verifier sub-agent. It did not build the round-2 fixes.
+This is **not** Codex's review and **not** owner acceptance.
+
+**Verdict: CHANGES_REQUIRED.**
+
+In short: round 2 fixes probes P1-P6 as ordered, and the reader fix (MINOR-C) holds. But the gate can still reopen
+after INVALID on evidence about the wrong machine. "Cleanup confirmed" today means "a hash-verified receipt shows *a*
+machine gone". It does not check that the machine is *this slot's*. At DONE the gate itself proves that such a receipt
+is another launch (launched days before the admission) and rejects it. Mark the slot INVALID, and the same receipt
+now counts as proof that this slot's machine is gone. `--admit` then exits 0.
+
+### What was run (laptop, pure Python, one at a time; no AWS call, no torch, no model)
+
+| Check | Result |
+|---|---|
+| `git pull --ff-only` | already up to date; tip `269d13c8` |
+| `python -B test_study_spend.py` | 49 passed, 0 failed |
+| `python -B test_read_results.py` | 31 passed, 0 failed |
+| Real report (`main([])`, state written to a scratch file) | exit 0; spent upper bound $5.44; plan C $57.08; headroom $2.92; fallback B +$23.32 does not fit; nothing rejected, shared or unconfirmed; no training job started |
+| State regenerated | byte-identical to the committed `STUDY_SPEND_STATE.json` (sha256 `6c515c246408e1cb...`) |
+| Real reader on `i-09e14d4afd0e0ebfa` (in memory, no write) | exit 0; ROUTE_ACCEPTED; script and job verdict INTEGRATION_CHECKS_PASS; JOB START 2026-09-24T05:55:04Z inside [05:53:38Z, 06:28:42Z]; instance id NOT_WRITTEN (the exempt pair) |
+| Reading regenerated | byte-identical to the committed `RESULTS_READING.json` |
+| Finished job's files | working tree vs `b0fd06ff` over `results/`, `launch_record.json`, `watch_record.json`, `dry_run_record.json`, `job.sh.template`, `watch.py`: no difference. `STUDY_SLOTS.json`, `STUDY_SPEND_STATE.json`, `RESULTS_READING.json`: unchanged since `e4fbff40`. `job.sh.template` sha256 is still `dc05f4af...` and contains no `instance_id` text |
+| Probes | a scratch script on the builder's own `World` / `FakeGit` and the reader test's `job()` builder; temporary folders only; not committed |
+| Real `--admit` | **not run** (it writes the slot RUNNING) |
+
+### Probes P1-P7, rebuilt from this file
+
+| Probe | Result now | Verdict |
+|---|---|---|
+| P1 | P1b INVALID counted **$3.18** (was $2.00). Cleanup confirmed by P1b's own hash-verified watch record. Spent $8.62. `--admit P2` exit 0 ADMIT, total $58.26 | FIXED as ordered. The count is right; a basis breach with a confirmed cleanup is not a stop (still open) |
+| P2 | $3.18; UNCONFIRMED; `--admit P2` exit 1 `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:P1b` | FIXED |
+| P3 | stale watch-record pin: $3.18; UNCONFIRMED; exit 1, same reason | FIXED |
+| P4 | M1 counted **$15.58** (was $11.66); UNCONFIRMED; spent $21.02; `--admit P1b` exit 1 with `CLEANUP_UNCONFIRMED_STOP_AND_REPORT:M1` and `OVER_CEILING:$61.00 > $60.00` | FIXED |
+| P5 (control) | $15.58; exit 1; the same two reasons | matches P4 |
+| P6 | admission typed by hand (2000-01-01), never committed RUNNING: REJECTED `ADMISSION_NOT_IN_A_COMMITTED_RUNNING_ROW`; not started; `--admit M2` exit 1 `DONE_RECEIPT_REJECTED:M1` | FIXED as ordered (residual: NOTE F) |
+| P7 | M1-M3 each launched and failed after 60 s: started M1, M2, M3; spent $10.33 | unchanged, as ordered (NOTE-D stays open) |
+
+### New findings
+
+**E. MAJOR: after INVALID, another job's clean receipt "confirms" this slot's cleanup** (`study_spend.py`:
+`pointer_cleanup_confirmed` lines 585-598, `watched_cleanup_confirmed` 728-739, `proven_refusal` line 643,
+`cleanup_gap` 879-888).
+
+What happens:
+- The cleanup check asks one question: do hash-verified records show a machine gone? It compares only the ids the
+  spec gives. It never asks: is this the launch this slot's admission allowed?
+- `bind_admission` does ask that (launch after admission, seed, source, bundle). But it runs only at DONE, and all it
+  can do is mark the receipt REJECTED. Marking the slot INVALID then drops the question.
+- So the round-2 escape route is still open through a different door: a wrong receipt path, then INVALID.
+
+Probes (synthetic `World`; M1 or P1b admitted at 09:00 and committed RUNNING; its own machine is never shown gone):
+- **N1a.** M1 INVALID. The spec names another job's clean training receipt (launched 2026-09-17, claimed by no slot).
+  `expected.job` and `expected.instance_id` empty. Counted $11.66. Cleanup "confirmed". `--admit M2` **exit 0 ADMIT**,
+  total $57.08.
+- **N1b.** The same, with that other job's own ids filled in. **Exit 0 ADMIT**, $57.08. The same row as DONE is
+  REJECTED with `LAUNCH_NOT_AFTER_ADMISSION:2026-09-17 12:00:00+00:00 vs admitted 2026-09-24T09:00:00Z`. So the gate
+  knows the receipt is not this launch, and after INVALID it still takes it as cleanup evidence.
+- **N2a / N2b.** P1b INVALID naming an older job's launch and watch records (launched 2026-09-20), ids empty or
+  theirs. Counted $2.00. `--admit P2` **exit 0 ADMIT**, $57.08. As DONE: `BUNDLE_NOT_THE_ADMITTED_BUNDLE`,
+  `LAUNCH_NOT_AFTER_ADMISSION`.
+- **N3.** M1 INVALID naming an older job's capacity refusal (not S1's). It passes as a "proven refusal". `--admit M2`
+  **exit 0 ADMIT**, $57.08. As DONE: `LAUNCH_NOT_AFTER_ADMISSION`.
+- **Control.** M1 INVALID naming its own receipt, which says the identity is uncertain: UNCONFIRMED, exit 1.
+
+Why it matters: such receipts already sit in the repository. The design folder holds five pairs of watched records
+that no slot claims (`analogy_repair_t4_job/` and its `attempt1/`, `aws_probe_job/`, `hset1a_aws_job/` and its
+`attempt1_` files). `typed_pointer_001/` holds 18 older receipt folders. One wrong path on an INVALID row (the row
+the runner writes after trouble) admits the next machine while this slot's machine may still exist. That machine's
+cost is then counted at the cap only.
+
+Fix. For every slot other than S1, S2 and P1a, a cleanup counts as confirmed, and a refusal as proven, only when the
+verified receipt is this slot's admitted launch:
+- the slot has an admission record, and a committed version showed the slot RUNNING with that identical record (the
+  MINOR-B check, applied to INVALID rows as well as DONE rows);
+- the launch time the verified receipt itself shows is at or after `admitted_utc` (training: the time inside the
+  receipt's own `job`; watched: `launched_utc` in both records). A stronger option: also before `admitted_utc` plus
+  the slot's lifetime;
+- training: the receipt's `model_seed` is the slot's seed;
+- otherwise UNCONFIRMED, with a reason such as "the receipt is not this slot's launch".
+
+A wrong source or bundle can stay a rejection reason only; the machine may still be this slot's. Add N1a, N1b, N2a,
+N2b and N3 as negative tests. P1 and the two proven-refusal tests stay as positive controls (their launches come after
+the admission).
+
+**F. NOTE: the admission record need not be one `--admit` wrote** (residual of MINOR-B; the builder states this
+limit). Probe **N4**: a bare record (slot, time 2000-01-01, source, seed, arm; no `gate`, `program_sha256` or
+`slots_sha256_before`) committed as RUNNING: ACCEPTED, counted as started. The fix that was ordered is met. A cheap
+tightening for Codex: require the fields `--admit` writes; `slots_sha256_before` must equal the committed version just
+before the first RUNNING one; `program_sha256` must equal a committed `study_spend.py`. That is still forgeable, but a
+careless hand edit would fail.
+
+**G. NOTE: the next T4 launch must not reuse `larger_question_t4_job/`.** P1a's pins are the working-tree files
+`larger_question_t4_job/launch_record.json` and `watch_record.json`. `launch.py` refuses while `launch_record.json`
+exists. Moving it aside (as `analogy_repair_t4_job/attempt1/` did) changes P1a's pinned files. Probe **N5**: P1a
+REJECTED and UNCONFIRMED; every admission refused (fail closed, not a wrongful admit). P1a cannot be marked INVALID:
+exit 2 `SLOT_DEFINITIONS_CHANGED`, because the row is frozen whole. The study would stop until a reviewed code change.
+The T4 folder's README now speaks of "the next launch from this folder"; it should say the next launch goes to a new
+folder.
+
+### MINOR-C (the reader): verified fixed
+
+| Probe | Result |
+|---|---|
+| C1: template `dc05f4af` + `i-09e14d4afd0e0ebfa`, no line | exit 0 ROUTE_ACCEPTED (the one exempt job) |
+| C2: same template, new instance, no line | exit 3 `MACHINE_INSTANCE_ID_MISSING` |
+| C3: other template, the exempt instance, no line | exit 3 `MACHINE_INSTANCE_ID_MISSING` |
+| C4: new instance, empty `instance_id=` line | exit 3 `MACHINE_INSTANCE_ID_NOT_LAUNCHED_INSTANCE` (the empty id) |
+| C5: new instance, `instance_id =i-new` (space before `=`) | exit 3 `MACHINE_INSTANCE_ID_MISSING` |
+| C6: new instance, two lines (its own and another) | exit 3 `MACHINE_INSTANCE_ID_NOT_LAUNCHED_INSTANCE` |
+| C7: the exempt pair, a line naming another instance | exit 3 `MACHINE_INSTANCE_ID_NOT_LAUNCHED_INSTANCE` |
+| C8: new instance, template field missing | exit 3 `MACHINE_INSTANCE_ID_MISSING` |
+| C9 (control): new instance with its own line | exit 0 ROUTE_ACCEPTED |
+
+`job.sh.template` and `watch.py` are unchanged, as ordered. The next launch needs a template that writes
+`instance_id=`; that is recorded in the T4 README and in `PREREQUISITE_SLOTS.md`.
+
+### NOTE-D: still open, behaviour unchanged
+
+P7 gives the same result as before (M1-M3 started; spent $10.33; the $30.00 stop is then off). It is open question 6.
+Not decided here.
+
+### Claim states
+
+- **Real (measured here):** both test runs; the real report and its byte-identical state; the real reading and its
+  byte-identical regeneration; the file diffs; probes P1-P7, N1a-N5, C1-C9.
+- **Open:** Codex's review; open questions 1-7; NOTE-D; notes F and G (FLAG_FOR_HUMAN_REVIEW).
+- **Not licensed:** any statement that the gate is ready for a real `--admit`, until finding E is fixed and
+  re-verified.
+
+### Exposure
+
+Read: this file; `study_spend.py`; `test_study_spend.py` (helpers and the round-2 tests); `STUDY_SLOTS.json` (ids,
+statuses, caps, flags, receipt specs, `what`); `read_results.py`; `test_read_results.py` (helpers, test names); the
+round-2 diff of the T4 `README.md`; a grep of `launch.py` and `watch.py` for record file names; git name lists of
+`typed_pointer_001/` and of the design folder's record files. The S2 receipt at `1ddf6a1e`: a walk that printed field
+names containing time or cost words. **That walk also printed the receipt's embedded `ledger_before` /
+`ledger_after` snapshot fields and some of their values.** The meta1 ledger file itself was not opened, nothing was
+written to it, and those values are not repeated here. The owner or Codex should know that this receipt carries a
+copy of ledger data. Wrote: this section only. The probe script and the regenerated copies live in the verifier's
+scratch folder. The untracked `aws_probe_job/dry_run_machine_script.sh` in this working copy is not the verifier's
+and was left alone. No AWS call, no torch, no model, no `*_eval.jsonl`, no sealed file, no `D:/tksCAS-archive/`, no
+salt, no S3, no transcript.
