@@ -177,6 +177,36 @@ class JudgeTests(unittest.TestCase):
         self.assertEqual(reasons, ["SEEDS_ARE_NOT_THE_THREE_STUDY_SEEDS:20260917,20260918"])
 
 
+class SelfTestTests(unittest.TestCase):
+    def helm2(self):
+        return {seed: build(SHARED_SHAPES, seed) for seed in ms.SEEDS}
+
+    def test_self_test_passes(self):
+        passed, facts = ms.self_test(self.helm2(), fresh_head(ms.HEAD_SEED), same_bits, numel, flip_bit)
+        self.assertTrue(passed)
+        self.assertEqual((facts["self_compare"], facts["one_flipped_bit"]), (ms.REPRODUCED, ms.NOT_REPRODUCED))
+        self.assertEqual(facts["one_flipped_bit_reasons"],
+                         ["20260918:SHARED_TENSORS_NOT_BIT_EQUAL_TO_HELM2:attention_key.weight"])
+
+    def test_self_test_catches_a_blind_comparison(self):
+        blind = lambda a, b: a.dtype == b.dtype and a.shape == b.shape  # noqa: E731  (ignores the bytes)
+        passed, facts = ms.self_test(self.helm2(), fresh_head(ms.HEAD_SEED), blind, numel, flip_bit)
+        self.assertFalse(passed)
+        self.assertEqual(facts["one_flipped_bit"], ms.REPRODUCED)
+
+    def test_self_test_catches_a_wrong_count(self):
+        helm2 = self.helm2()
+        helm2[20260917] = {name: t for name, t in helm2[20260917].items() if name != "round_rate"}  # 47 tensors
+        passed, facts = ms.self_test(helm2, fresh_head(ms.HEAD_SEED), same_bits, numel, flip_bit)
+        self.assertFalse(passed)
+        self.assertEqual(facts["self_compare"], ms.NOT_REPRODUCED)
+
+    def test_self_test_catches_a_misnamed_fresh_head(self):
+        head = {name.replace("analogy_head.", ""): t for name, t in fresh_head(ms.HEAD_SEED).items()}
+        passed, _ = ms.self_test(self.helm2(), head, same_bits, numel, flip_bit)
+        self.assertFalse(passed)
+
+
 class FileTests(unittest.TestCase):
     def test_read_gradient_counts_reads_ten_passes_in_order(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -224,6 +254,7 @@ class FileTests(unittest.TestCase):
     @unittest.skipUnless(sys.platform == "win32", "laptop-only guard")
     def test_main_refuses_on_the_laptop_without_importing_torch(self):
         self.assertEqual(ms.main(["--on", "20260917=a"]), 1)
+        self.assertEqual(ms.main(["--self-test", "--helm2", "20260917=a"]), 1)
         self.assertNotIn("torch", sys.modules)
 
 

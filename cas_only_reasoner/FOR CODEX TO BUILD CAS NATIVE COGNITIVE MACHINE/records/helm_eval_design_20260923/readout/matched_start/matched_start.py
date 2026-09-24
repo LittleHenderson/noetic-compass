@@ -17,17 +17,23 @@ Verdict words and exit codes:
                                         pinned sha256, or the program was started on the Windows laptop.
 A TOOL_STOP is not a reading. It says the inputs were wrong, not that the start failed to match.
 
+Self-test mode (--self-test, Helm 2.0 files only, no ON file): plan item 6's real-file check. Helm 2.0's initial.pt
+plus the fresh head, compared with itself, must read REPRODUCED, and a copy with one flipped bit must read
+NOT_REPRODUCED. Prints MATCHED_START_SELF_TEST:PASS (exit 0) or MATCHED_START_SELF_TEST:FAIL (exit 4). Run it in
+E1a before the real reading; it proves the torch comparison, the fresh head and the count on real files.
+
 Reading order (prereg A5.1/A5.3/A5.5): this program reads no score, no loss and no analogy answer. From the update
 rows it keeps `gradient_parameter_count` only; from the checkpoints it keeps `model_state` only.
 
 Where it runs: AWS only (inside E1a). torch is imported lazily, only by `main`, and `main` refuses on Windows before
-that import (owner rule: no torch on the laptop). The pure parts (`judge`, `read_gradient_counts`, `check_pin`) are
-tested on the laptop with stand-in tensors: test_matched_start.py.
+that import (owner rule: no torch on the laptop). The pure parts (`judge`, `self_test`, `read_gradient_counts`,
+`check_pin`) are tested on the laptop with stand-in tensors: test_matched_start.py.
 
 Usage (one --on and one --helm2 per seed; DIR holds the ON receipt's initial.pt and pass_NN_updates.jsonl, for
 example receipt_analogy_on_<seed>/checkpoints or receipt_analogy_on_<seed>/collected/results/artifacts):
   python matched_start.py --on 20260917=DIR --on 20260918=DIR --on 20260919=DIR \
       --helm2 20260917=PATH --helm2 20260918=PATH --helm2 20260919=PATH [--out READING.json]
+  python matched_start.py --self-test --helm2 20260917=PATH --helm2 20260918=PATH --helm2 20260919=PATH
 The Helm 2.0 files are records/typed_pointer_001/receipt_<seed>/checkpoints/initial.pt; all three blobs are present
 at commit 27fd5698 and later (seed 20260919's blob d90858ff is NOT in c8d5c430's tree).
 
@@ -120,6 +126,23 @@ def judge(states, fresh_head, gradient_counts, same_bits, numel):
     return (NOT_REPRODUCED if reasons else REPRODUCED), reasons, facts
 
 
+def self_test(helm2_states, fresh_head, same_bits, numel, flip_one_bit):
+    """Plan item 6 check on the real Helm 2.0 files, with no ON file: Helm 2.0's start plus the fresh head, compared
+    with itself, must read REPRODUCED; the same with one bit flipped in one shared tensor must read NOT_REPRODUCED
+    with exactly that one reason. Returns (passed, facts)."""
+    counts = {seed: [GRADIENT_TENSORS] * MAIN_ROWS for seed in SEEDS}
+    states = {seed: ({**helm2_states[seed], **fresh_head}, helm2_states[seed]) for seed in SEEDS}
+    clean, clean_reasons, _ = judge(states, fresh_head, counts, same_bits, numel)
+    seed, name = SEEDS[1], sorted(helm2_states[SEEDS[1]])[0]
+    on = dict(states[seed][0])
+    on[name] = flip_one_bit(on[name])
+    flipped, reasons, _ = judge({**states, seed: (on, states[seed][1])}, fresh_head, counts, same_bits, numel)
+    passed = (clean == REPRODUCED and flipped == NOT_REPRODUCED
+              and reasons == ["%d:SHARED_TENSORS_NOT_BIT_EQUAL_TO_HELM2:%s" % (seed, name)])
+    return passed, {"self_compare": clean, "self_compare_reasons": clean_reasons,
+                    "one_flipped_bit": flipped, "one_flipped_bit_reasons": reasons}
+
+
 def read_gradient_counts(directory):
     """gradient_parameter_count of every main update row, pass 1 to 10 in order. Nothing else is kept."""
     counts = []
@@ -177,6 +200,15 @@ def torch_same_bits(torch):
     return same
 
 
+def torch_flip_one_bit(torch):
+    def flip(tensor):
+        copy = tensor.detach().clone().contiguous()
+        raw = copy.reshape(-1).view(torch.uint8)
+        raw[0] = raw[0] ^ 1
+        return copy
+    return flip
+
+
 def _seed_map(values, flag):
     out = {}
     for value in values or ():
@@ -194,26 +226,35 @@ def main(argv=None):
     parser.add_argument("--on", action="append", help="SEED=DIR with the ON initial.pt and pass_NN_updates.jsonl")
     parser.add_argument("--helm2", action="append", help="SEED=PATH to Helm 2.0's initial.pt for that seed")
     parser.add_argument("--out", help="write the reading here too (create-only)")
+    parser.add_argument("--self-test", action="store_true",
+                        help="Helm 2.0 files only (--helm2): self-compare must pass, one flipped bit must fail")
     args = parser.parse_args(argv)
     try:
         if sys.platform == "win32":
             raise ToolStop("AWS_ONLY_NOT_ON_THE_LAPTOP")
         if args.out and Path(args.out).exists():
             raise ToolStop("OUT_ALREADY_EXISTS:" + args.out)
-        on_dirs, helm2_paths = _seed_map(args.on, "--on"), _seed_map(args.helm2, "--helm2")
-        inputs = {}
-        for seed in SEEDS:
+        helm2_paths = _seed_map(args.helm2, "--helm2")
+        on_dirs = {} if args.self_test else _seed_map(args.on, "--on")
+        inputs = {str(seed): {"helm2_initial_sha256": check_pin(seed, helm2_paths[seed])} for seed in SEEDS}
+        for seed in on_dirs:
             initial = on_dirs[seed] / "initial.pt"
             if not initial.is_file():
                 raise ToolStop("ON_INITIAL_MISSING:%d:%s" % (seed, initial))
-            inputs[str(seed)] = {"helm2_initial_sha256": check_pin(seed, helm2_paths[seed]),
-                                 "on_initial_sha256": sha256_of(initial)}
-        gradient_counts = {seed: read_gradient_counts(on_dirs[seed]) for seed in SEEDS}
+            inputs[str(seed)]["on_initial_sha256"] = sha256_of(initial)
+        gradient_counts = {seed: read_gradient_counts(on_dirs[seed]) for seed in on_dirs}
         import torch
-        states = {seed: (torch_load_state(torch, on_dirs[seed] / "initial.pt"),
-                         torch_load_state(torch, helm2_paths[seed])) for seed in SEEDS}
-        verdict, reasons, facts = judge(states, torch_fresh_head(torch), gradient_counts,
-                                        torch_same_bits(torch), lambda tensor: int(tensor.numel()))
+        helm2_states = {seed: torch_load_state(torch, helm2_paths[seed]) for seed in SEEDS}
+        numel = lambda tensor: int(tensor.numel())  # noqa: E731
+        if args.self_test:
+            passed, facts = self_test(helm2_states, torch_fresh_head(torch), torch_same_bits(torch), numel,
+                                      torch_flip_one_bit(torch))
+            verdict, reasons = "MATCHED_START_SELF_TEST:" + ("PASS" if passed else "FAIL"), []
+        else:
+            states = {seed: (torch_load_state(torch, on_dirs[seed] / "initial.pt"), helm2_states[seed])
+                      for seed in SEEDS}
+            verdict, reasons, facts = judge(states, torch_fresh_head(torch), gradient_counts,
+                                            torch_same_bits(torch), numel)
     except ToolStop as stop:
         print(json.dumps({"schema": SCHEMA, "verdict": TOOL_STOP, "reason": str(stop)}, indent=1))
         print(TOOL_STOP + ":" + str(stop))
@@ -227,6 +268,8 @@ def main(argv=None):
             stream.write(text + "\n")
     print(text)
     print(verdict)
+    if args.self_test:
+        return 0 if verdict.endswith(":PASS") else 4
     return 0 if verdict == REPRODUCED else 3
 
 

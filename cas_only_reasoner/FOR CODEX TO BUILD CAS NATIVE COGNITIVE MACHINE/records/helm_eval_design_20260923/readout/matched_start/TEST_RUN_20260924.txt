@@ -1,3 +1,46 @@
+=== RUN 2 (after adding --self-test mode, self_test() and 4 self-test cases; this run covers the committed code) ===
+2026-09-24T13:55:44Z
+Python 3.14.0
+test_bad_json_is_a_tool_stop (__main__.FileTests.test_bad_json_is_a_tool_stop) ... ok
+test_main_refuses_on_the_laptop_without_importing_torch (__main__.FileTests.test_main_refuses_on_the_laptop_without_importing_torch) ... ok
+test_missing_update_file_is_a_tool_stop (__main__.FileTests.test_missing_update_file_is_a_tool_stop) ... ok
+test_read_gradient_counts_reads_ten_passes_in_order (__main__.FileTests.test_read_gradient_counts_reads_ten_passes_in_order) ... ok
+test_seed_arguments (__main__.FileTests.test_seed_arguments) ... ok
+test_unpinned_helm2_file_is_a_tool_stop (__main__.FileTests.test_unpinned_helm2_file_is_a_tool_stop) ... ok
+test_head_differing_across_seeds_fails (__main__.JudgeTests.test_head_differing_across_seeds_fails) ... ok
+test_missing_seed_fails (__main__.JudgeTests.test_missing_seed_fails) ... ok
+test_one_flipped_bit_in_a_shared_tensor_fails (__main__.JudgeTests.test_one_flipped_bit_in_a_shared_tensor_fails) ... ok
+test_one_flipped_bit_in_the_head_fails (__main__.JudgeTests.test_one_flipped_bit_in_the_head_fails) ... ok
+test_self_compare_passes (__main__.JudgeTests.test_self_compare_passes) ... ok
+test_wrong_gradient_count_fails (__main__.JudgeTests.test_wrong_gradient_count_fails) ... ok
+test_wrong_head_seed_fails (__main__.JudgeTests.test_wrong_head_seed_fails) ... ok
+test_wrong_parameter_count_fails (__main__.JudgeTests.test_wrong_parameter_count_fails) ... ok
+test_wrong_row_total_fails (__main__.JudgeTests.test_wrong_row_total_fails) ... ok
+test_wrong_tensor_sets_fail (__main__.JudgeTests.test_wrong_tensor_sets_fail) ... ok
+test_self_test_catches_a_blind_comparison (__main__.SelfTestTests.test_self_test_catches_a_blind_comparison) ... ok
+test_self_test_catches_a_misnamed_fresh_head (__main__.SelfTestTests.test_self_test_catches_a_misnamed_fresh_head) ... ok
+test_self_test_catches_a_wrong_count (__main__.SelfTestTests.test_self_test_catches_a_wrong_count) ... ok
+test_self_test_passes (__main__.SelfTestTests.test_self_test_passes) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 1.965s
+
+OK
+{
+ "schema": "helm.matched-start-reading/0.1",
+ "verdict": "TOOL_STOP",
+ "reason": "AWS_ONLY_NOT_ON_THE_LAPTOP"
+}
+TOOL_STOP:AWS_ONLY_NOT_ON_THE_LAPTOP
+{
+ "schema": "helm.matched-start-reading/0.1",
+ "verdict": "TOOL_STOP",
+ "reason": "AWS_ONLY_NOT_ON_THE_LAPTOP"
+}
+TOOL_STOP:AWS_ONLY_NOT_ON_THE_LAPTOP
+exit=0
+
+=== RUN 1 (first commit 93de211d; before --self-test existed) ===
 2026-09-24T13:51:53Z
 Python 3.14.0
 test_bad_json_is_a_tool_stop (__main__.FileTests.test_bad_json_is_a_tool_stop) ... ok
@@ -29,4 +72,4 @@ OK
 TOOL_STOP:AWS_ONLY_NOT_ON_THE_LAPTOP
 exit=0
 
-NOTE: this is the one test run. After it, matched_start.py had one docstring-only edit (two line-number references to the head block in pointer_learner.py at 3df31d96 corrected from 859/864 to 861). No code line changed.
+NOTE: after run 1, matched_start.py had one docstring-only edit (two line-number references to the head block in pointer_learner.py at 3df31d96 corrected from 859/864 to 861).
