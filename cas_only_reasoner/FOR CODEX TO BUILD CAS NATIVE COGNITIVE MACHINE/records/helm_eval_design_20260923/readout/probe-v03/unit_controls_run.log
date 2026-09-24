@@ -1,0 +1,65 @@
+unit controls for probe v0.3 -- single run
+utc: 2026-09-24T14:12:48Z
+machine: laptop, pure Python, no torch import in this run
+branch head before commit: c46cac794807def7e87c29c771b1063d7fc5d823
+python 3.14.0 pytest 9.0.2
+sha256_lf e524392375b63419e512f94ccf1cdc147c768f6a1dd7a8f4f8f2a613686760a7 PREREG_ANALOGY_WIRING_PROBE_v0_3.md
+sha256_lf 220d1dcd0b6bbd6af8b8bdbc4bcee0ba23bb981f80a25d4b8c111d4d4269c131 probe_v0_3_metric.py
+sha256_lf 5971a39653b9bce52af17edf24799d1cfbe77f785d0d9426bce748e85163c3a4 probe_v0_3_harness.py
+sha256_lf 57d02ee3e43162a5b01ced56585d136ba6f5f0b34836cc2ea52bd1c0dffd11e3 item2_reader.py
+sha256_lf 70bd071eeb593dcd53ccddefe25a54ec058d13e63070ab23a2144c03432ce18f toy_bank.py
+sha256_lf 8fb8f2fe50699f83bb53f1b38b4333b20037ef75f6782f106a651ce1d1e8b566 test_probe_v0_3.py
+command: python -B -m pytest -v -p no:cacheprovider test_probe_v0_3.py
+-----
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+rootdir: D:\tksCAS-worktrees\helm-integration\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE
+configfile: pyproject.toml
+plugins: anyio-4.12.0, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 41 items
+
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[HELM_LIKE] PASSED [  2%]
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[POSITIVE] PASSED [  4%]
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[ANTI] PASSED [  7%]
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[DOMAIN_ANTI] PASSED [  9%]
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[UNIFORM] PASSED [ 12%]
+test_probe_v0_3.py::test_1_candidate_independent_scorer_gives_bystander_interaction_exactly_zero[STRONG_OWN] PASSED [ 14%]
+test_probe_v0_3.py::test_1b_v02_reads_a_nonzero_leak_on_the_same_candidate_only_table PASSED [ 17%]
+test_probe_v0_3.py::test_2_injected_interaction_reads_k_over_sigma0[0.5] PASSED [ 19%]
+test_probe_v0_3.py::test_2_injected_interaction_reads_k_over_sigma0[-0.25] PASSED [ 21%]
+test_probe_v0_3.py::test_2_injected_interaction_reads_k_over_sigma0[3.0] PASSED [ 24%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-HELM_LIKE] PASSED [ 26%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-POSITIVE] PASSED [ 29%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-ANTI] PASSED [ 31%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-DOMAIN_ANTI] PASSED [ 34%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-UNIFORM] PASSED [ 36%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-COUPLED] PASSED [ 39%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-STRONG_OWN] PASSED [ 41%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[3.0-HIDDEN_AFFINE] PASSED [ 43%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-HELM_LIKE] PASSED [ 46%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-POSITIVE] PASSED [ 48%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-ANTI] PASSED [ 51%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-DOMAIN_ANTI] PASSED [ 53%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-UNIFORM] PASSED [ 56%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-COUPLED] PASSED [ 58%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-STRONG_OWN] PASSED [ 60%]
+test_probe_v0_3.py::test_3_affine_transformation_leaves_every_verdict_unchanged[0.125-HIDDEN_AFFINE] PASSED [ 63%]
+test_probe_v0_3.py::test_3b_offsets_really_differ_per_packet_and_depend_on_the_focus PASSED [ 65%]
+test_probe_v0_3.py::test_3c_noise_verdict_is_also_invariant PASSED       [ 68%]
+test_probe_v0_3.py::test_4_signed_test_detects_movement_toward_and_away_with_the_right_sign PASSED [ 70%]
+test_probe_v0_3.py::test_4b_v02_passes_the_sign_flipped_scorer PASSED    [ 73%]
+test_probe_v0_3.py::test_5a_confound_false_coupling_no_longer_passes PASSED [ 75%]
+test_probe_v0_3.py::test_5b_confound_hidden_coupling_no_longer_passes PASSED [ 78%]
+test_probe_v0_3.py::test_no_dependency_and_coupled_controls PASSED       [ 80%]
+test_probe_v0_3.py::test_incomplete_or_altered_tables_are_refused PASSED [ 82%]
+test_probe_v0_3.py::test_harness_counterfactuals_reach_the_packet_and_leave_the_originals_untouched PASSED [ 85%]
+test_probe_v0_3.py::test_validation_reader_on_the_synthetic_controls PASSED [ 87%]
+test_probe_v0_3.py::test_item2_pass_clears_the_gate_only_with_acceptance PASSED [ 90%]
+test_probe_v0_3.py::test_item2_fail_keeps_every_failure_and_opens_the_gate PASSED [ 92%]
+test_probe_v0_3.py::test_item2_invalid_missing_and_binding_problems PASSED [ 95%]
+test_probe_v0_3.py::test_item2_needs_a_passing_validation_and_registered_entries PASSED [ 97%]
+test_probe_v0_3.py::test_item2_command_line_reads_files_and_never_replaces_its_output PASSED [100%]
+
+======================== 41 passed in 68.19s (0:01:08) ========================
+exit_code: 0
