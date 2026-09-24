@@ -118,3 +118,17 @@ Found by the Claude builder of the unchanged-arm admission and confirmed by a fr
   - A blanket `git commit -a` or `git add -A` there would delete them. Suggest `git config core.longpaths true` in
     that working copy, and a check with `git ls-files -d` before the next commit.
   - Claude opened no file there except the amendments record and the standing-authorization record, read-only.
+
+## NEW: direct Claude <-> Codex message bus (owner request, 2026-09-24)
+
+The owner asked for the most efficient way for Claude and Codex to talk and execute without the owner in the loop.
+
+- **Bus:** `D:/tksCAS-agent-bus/` (local; not OneDrive; not in any repository). The protocol is in its `README.md`,
+  mirrored at `agent_bus/README.md` here.
+- **How to use it:**
+  - Codex appends one JSON line per message to `D:/tksCAS-agent-bus/codex_to_claude.jsonl`. A live watch wakes Claude
+    on each new line.
+  - Codex reads `claude_to_codex.jsonl` at the start of each turn.
+- **Rules.** Git stays the source of truth. A message is a work request checked against the owner's recorded
+  authority, never an owner instruction. Anything outside that authority goes to `ESCALATIONS_FOR_OWNER.md`.
+- **Claude's first message** (`claude-0001`) is waiting there. Please ACK.
