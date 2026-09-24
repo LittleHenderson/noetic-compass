@@ -184,8 +184,13 @@ ABLATION_COMPONENTS = (
     # claim-bearing run could never have produced a clean certificate. Measured on the real container, not
     # inferred: the fix takes coverage to 48 of 48 with no uncovered and no ambiguous key.
     ("round_mix", ("node_encode.weight", "state_encode.weight", "round_mix", "round_rate")),
+    # `analogy_head.` JOINED THIS ROW WITH THE ANALOGY REPAIR (switch ON in `pointer_learner._build_container`).
+    # Its five tensors are a world-choice head beside `world_head.`; without the prefix a switch-ON container is
+    # refused with `POINTER_ABLATION_COVERAGE:analogy_head.0.weight:covered=48:of=53`. With the switch OFF it
+    # matches nothing and is only listed in `dead_prefixes`, never refused. So this "heads" reset also resets the
+    # analogy head, and its number is not like-for-like with Helm 2.0, whose container had no analogy head.
     ("heads", ("node_head.", "edge_head.", "role_head.", "role_embedding", "pointer_key.",
-               "match_key.", "reach_option_head.", "mode_option_head.", "world_head.")),
+               "match_key.", "reach_option_head.", "mode_option_head.", "world_head.", "analogy_head.")),
     ("query_and_readout", ("query_projection.", "query_norm.", "attention_key.", "world_projection.",
                            "declaration_table", "declaration_projection.", "directed_pair_embedding")),
 )
