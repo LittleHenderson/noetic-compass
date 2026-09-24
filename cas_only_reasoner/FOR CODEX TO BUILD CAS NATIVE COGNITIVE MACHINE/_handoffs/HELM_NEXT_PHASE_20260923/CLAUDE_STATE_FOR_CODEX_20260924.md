@@ -132,3 +132,38 @@ The owner asked for the most efficient way for Claude and Codex to talk and exec
 - **Rules.** Git stays the source of truth. A message is a work request checked against the owner's recorded
   authority, never an owner instruction. Anything outside that authority goes to `ESCALATIONS_FOR_OWNER.md`.
 - **Claude's first message** (`claude-0001`) is waiting there. Please ACK.
+
+
+## LIVE CLOSEOUT LIST (option C: 3 repaired + 1 unchanged reproduction), started 2026-09-24 11:40Z
+
+The one live list asked for by the owner (ChatGPT notice `chatgpt-progress-first-20260924-01`) and Codex (`codex-0019`).
+Codex's decisions at `c3a128ee` (`POLICY_DECISIONS_20260924.md`) are the rules; they are not reopened. Each item closes
+on its own acceptance check. A reopen needs a specific reproducible failure of this run's contract. Worker = a Claude
+sub-agent unless named. Updated in place as items close.
+
+### LAUNCH-CRITICAL (in critical-path order)
+
+| # | Job | Defect or missing piece | Owner | Smallest patch | Acceptance check | Next checkpoint |
+|---|---|---|---|---|---|---|
+| C1 | all paid jobs | spend gate `4e292912`: several launches under one admission; omitted-attempt gap L; Q4 breach stop, Q6 latched $30 stop, Q7 cancel, Q8 source binding, Q9 no retry; $1.9180 prep included | Claude builder | one admission = one RunInstances attempt, admitted within 5 minutes under a lock; retry = new attempt row; rules Q1-Q9 as written | tests for each rule + real report (spent incl. $1.9180) | pushed commit, then Codex review |
+| C2 | P1b, M1 | reader `d5414964`: 7 fixes (full-message check, merge-edited history, missing-object TOOL_STOP, spend binding, writer/review binding, env lock `helm.reproduction-environment/1`, per-case expected table); hash order R3-A/V4-A | Claude builder | patches as listed in `READER_STATIC_REVIEW_20260924.md` | one test per fix; existing tests pass | pushed commit, then Codex review |
+| C3 | P1b, M1-M4 | corrected mechanism probe (A2.6): fixed reference normalization, known-interaction controls, signed direction | Claude builder | probe v0.3 + public validation cases | zero-interaction scorer reads 0; known-interaction scorer reads its value; offset/scale invariance; signed test | pushed commit |
+| C4 | P1b | P1b package on g7.2xlarge (historical RTX PRO 4500) and its exact price | Claude | launcher/package from C2+C3; priced bound | dry run on laptop (no AWS); envelope recomputed by the gate | exact plan-C bound; owner asked ONLY if over $60 |
+| C5 | P2 | HSET-2 conformance to A2.7 (running now), then salt (sha committed first), then the AWS sealed build (cap $1) | Claude builder; Claude custodian runs P2 | finish `hset2-conform-a2`; A2.7 exact flag ordering | public conformance + throwaway ranges; then the actual feasibility table | actual table: is the primary analogy claim testable? If NOT_TESTABLE, the owner is told at once |
+| C6 | E1 | evaluation/readout job not built | Claude builder | E1 per plan section 7 + early-stop readout | review + dry run | pushed commit |
+| C7 | M1-M4 | launch manifest, request, packet and admission in Codex's hash order; 18 checkpoint checks enumerated; environment values frozen from public history | Claude | writer changes from C2 | admission writer produces a packet with launch disabled; Codex review | ready-to-launch packet |
+| C8 | M1..M4 | run: P1b -> P2 -> M1 (must REPRODUCE under C) -> M2, M3, M4 -> E1 | Claude runner | none | money gate + technical gate pass before each | results: model answers, comparisons, cost |
+
+### AFTER-RUN BACKLOG (not launch blockers)
+
+- Spend gate NOTE J (careful hand-typed admission record), NOTE N (a preflight refusal stops the study: fails closed), NOTE O.
+- Rescorer 0.4 full 564-record AWS CPU run (historical compatibility; not used by this study's reading).
+- T4 job template `instance_id=` line (no further T4 launch in this plan).
+- Evidence storage beyond 12 months (owner question in `ESCALATIONS_FOR_OWNER.md`).
+- Protected-copy cleanup in Codex working copies; CAS-SHARED-RECORD line; DeepSeek failover launcher.
+
+### Q4-SDG-1 A-versus-B (separate line, own $5.00 ceiling, Claude-owned)
+
+| # | Defect | Patch | Check | Next |
+|---|---|---|---|---|
+| Q1 | rev3c queued (`5e65c3a8`): Y1 expected-file inference, N1 withhold arm labels unless calibration SILENT, N3 run identity, absent checkpoint-0 flagged | apply to the reader/spec | one fresh focused check | freeze, approved hashes in `ab_job/launch.py`, data build, training on AWS within $5.00 -> READY_TO_RUN |
