@@ -67,7 +67,7 @@ The latest HSET-2 public builder report also identifies 24/40 old public DEV cla
 
 ## 5. Proposed job list — current split requires reconciliation
 
-**Current reconciliation update:** Claude launched the route-only portion of P1 at 05:53:38 UTC. There are now three observed study attempts (two delivered instances). Reader/probe/admission checks remain open; current future/total counts and expected charges are unknown until their grouping is fixed. The tables and total9/11 arithmetic below preserve the earlier combined-P1 proposal only. They are not a current complete execution envelope. [Public launch review](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md) records the route's 130-minute outer deadline, $3 cap inside $60, pending results and missing ledger reconciliation. Main execution stays held.
+**Current candidate envelope:** Claude's `3083ea0d` now names C as 10 total attempts / 7 future jobs and fallback as 12 / 9. Three attempts have occurred. The split adds P1a route-only and P1b reader/probe/admission validation; E1 is proposed on a T4 for $2. These bounds and the spending gate are CHANGES_REQUIRED, so the tables below retain only the earlier combined-P1 proposal. [Current accounting/reader review](../../records/helm_controlled_prelaunch_20260924/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md) gives the named revision, $90/$120 proposed canonical bookings, missing evidence and exact fixes. No current expected bill or worst-case completion guarantee is accepted. Main execution remains held.
 
 Every listed slot is one bounded attempt, no automatic retry. The existing smoke is distinguished from future work. Bundling several checks into a slot does not make unrun checks PASS.
 

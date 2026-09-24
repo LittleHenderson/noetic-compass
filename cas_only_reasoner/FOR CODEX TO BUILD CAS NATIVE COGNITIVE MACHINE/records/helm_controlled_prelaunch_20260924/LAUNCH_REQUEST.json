@@ -14,17 +14,17 @@
   ],
   "count_C": {
     "existing_attempts": 3,
-    "future_jobs": null,
+    "future_jobs": 7,
     "main_training_jobs": 4,
-    "all_attempted_or_proposed_slots": null,
-    "status": "NOT_RECONCILED_AFTER_ROUTE_ONLY_P1_LAUNCH"
+    "all_attempted_or_proposed_slots": 10,
+    "status": "CANDIDATE_COUNTS_NAMED_BUDGET_ADMISSION_NOT_READY"
   },
   "count_full_B_fallback": {
     "existing_attempts": 3,
-    "future_jobs": null,
+    "future_jobs": 9,
     "main_training_jobs": 6,
-    "all_attempted_or_proposed_slots": null,
-    "status": "NOT_RECONCILED_AFTER_ROUTE_ONLY_P1_LAUNCH"
+    "all_attempted_or_proposed_slots": 12,
+    "status": "CANDIDATE_COUNTS_NAMED_BUDGET_ADMISSION_NOT_READY"
   },
   "actual_spend_ceiling_usd": 60,
   "actual_spend_horizon": "execution plus 30 days after E1; subsequent retained storage separately reported",
@@ -33,8 +33,8 @@
   "completion_at_maximum_runtimes_guaranteed": false,
   "fixed_ledger_reservation_per_attempt_usd": 15,
   "already_booked_study_reservations_usd": 30,
-  "proposed_total_reservations_C_usd": 135,
-  "proposed_total_reservations_B_usd": 165,
+  "proposed_total_reservations_C_usd": 90,
+  "proposed_total_reservations_B_usd": 120,
   "primary_checkpoint": {
     "name": "final.pt",
     "main_updates": 1470
@@ -49,10 +49,10 @@
     "REPRODUCTION_POLICY.md": "92a69981e4960d5ad30b9be127d8f9879c18f59cf5a40a55299ea5d679ac770e",
     "REPRODUCTION_POLICY.json": "13eee0490ce568cd7d012989c5a3bf59af0abb3c3e650370a0af2f8351cc9259",
     "STATISTICAL_POLICY.json": "46e564a6323c16f5c4cdf96211cc4475d342ece20d8975ed2061cdfd3d0aa055",
-    "EXECUTION_MANIFEST.json": "f0b328d24c5fd007a4d12f4bbd912d498d342e1a96bf52a4540894a5d0292c0d",
+    "EXECUTION_MANIFEST.json": "6df2a0ae5e97c677cd6c7cb82fde48c69fa3a7a783f60d3ee00c5d1be4038733",
     "ROUTE_AND_CHECKPOINT_PROTOCOL.md": "8d6c469b5c2357becf9a7f930fc53cebce57d39de93608ba233cb6635b0efc07",
-    "COST_AND_JOB_ENVELOPE.md": "4341ad956fda87c53134ca777b308966825d80995113c29f8e126f7385f2382f",
-    "COST_STATE.json": "382b0a758d510075627bfe0549627afb24589408277283fa16a3c4523088e928",
+    "COST_AND_JOB_ENVELOPE.md": "6de1abc8bf04f06b03ef548a6c612aa80ef5b43b3723790a8a0ec0045c02a873",
+    "COST_STATE.json": "f8ae05f7de18039be36427d1dc6094079620d76bbf571ccd5e9c29ca6c6b2fa7",
     "CURRENT_COORDINATION_STATE.json": "5a2646fc17d230cf7bfd1c2dc5f0a43203e4757bf199df96620ff33a1a786cd2",
     "LEDGER_RECONCILIATION.json": "28f8e0964eb061be170e9c1bdb9faaab57fc912954ce18f706a49cd59a4dc59e",
     "SMOKE_COMPLETION_RECONCILIATION.json": "70dec66dfd00e986fd29f64ed06a7823ef2206bcd8cd688496a61f2690e196d9",
@@ -61,7 +61,9 @@
     "OWNER_STANDING_AUTHORIZATION_20260924.json": "7a2153567c201aa7163e1dc287a29e00568b8927e5c05f8575c8934abb601fd3",
     "AGENT_BUS_COORDINATION_20260924.md": "d9e5b73b711ca96926b1264585e72ec1691311bf336314312e6405520678a429",
     "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md": "4cc13c829eddf980c641944a7a0de4b76553f56420687f1207a3f661b18c0500",
-    "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json": "410ac2af4d80460726c42eeae9715b137fbc98ccd3ecda18c494323a7eff602e"
+    "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json": "410ac2af4d80460726c42eeae9715b137fbc98ccd3ecda18c494323a7eff602e",
+    "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md": "8fb42b5d10ab6a8dc0cf816abbae7e01d935a0c1bb4320242d223e564c670d75",
+    "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json": "2f7cb1d1b09a8fc259895fabfa8ff901d2a11705e9f1440c577d571d3fc26351"
   },
   "blocking_results": [
     "P1 complete route/identity-reader/corrected-probe acceptance",
@@ -73,13 +75,13 @@
     "existing reader and approval-state parser conform to prospective policy",
     "HSET-2 A2 conformance and public exposure attestation",
     "actual combined prerequisite timing within named slots",
-    "route-only P1 split: remaining paid job count, caps, timing and programmatic ledger reservations reconciled"
+    "candidate remaining slots named; complete cost bounds, identity-bound receipts and enforced per-slot/$30 admission still required"
   ],
   "approval_requested_now": false,
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
-    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "d24d58859520d2beeba063e319549be70479785f111832db19543838b4317b94",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "0812c66d44d9fe125fd39bee7efcb38f8e77928ae72c14fe8561624b5ef3c651",
+    "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "bd222f42b28b2d6fee904a05c40acbcfafb8a72821d96b0ed3e5c4fefd187444",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "cfe05a7449c0eaa0eee39af05ec2c13b6f20cfcf204856b2d1784d964015ee0d",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
@@ -104,7 +106,8 @@
     "B_completion_funded_under_60_on_this_basis": false,
     "prior_hybrid_figures_status": "HISTORICAL_COMBINED_P1_PROPOSAL_REQUIRES_RECONCILIATION",
     "current_expected_total_usd": null,
-    "route_only_inclusive_cap_inside_60_usd": "3.00"
+    "route_only_inclusive_cap_inside_60_usd": "3.00",
+    "claude_candidate_57_59_worst_claim_accepted": false
   },
   "execution_owner": "Claude",
   "preparation_owner": "Codex amendments; Claude existing implementations and custody",
@@ -140,5 +143,11 @@
       "all_attempted_or_proposed_slots": 11
     }
   },
-  "current_job_envelope_status": "NOT_RECONCILED"
+  "current_job_envelope_status": "CANDIDATE_NAMED_COST_ADMISSION_CHANGES_REQUIRED",
+  "previous_combined_P1_reservation_proposal": {
+    "C_usd": 135,
+    "B_usd": 165
+  },
+  "reservation_scope": "Canonical fixed15 bookings for smoke/training only per Claude3083ea0d; nontraining separate study-spend receipts; not implemented by Codex",
+  "candidate_envelope_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json"
 }

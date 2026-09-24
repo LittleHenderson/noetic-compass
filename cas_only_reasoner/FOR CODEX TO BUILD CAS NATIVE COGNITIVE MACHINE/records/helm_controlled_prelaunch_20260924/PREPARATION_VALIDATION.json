@@ -1,6 +1,6 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T06:12:18.408264+00:00",
+  "validated_utc": "2026-09-24T06:22:34.611430+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
@@ -12,6 +12,7 @@
     "LEDGER_RECONCILIATION.json",
     "OWNER_STANDING_AUTHORIZATION_20260924.json",
     "PREPARATION_VALIDATION.json",
+    "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json",
     "REPRODUCTION_POLICY.json",
     "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
     "SMOKE_COMPLETION_RECONCILIATION.json",
@@ -79,5 +80,13 @@
     "content_commit": "b5831b01f574a6b02a427387fe16a87e1e259725",
     "staged_git_bytes_match_all_launch_hashes": true,
     "sparse_staging": "New owned record paths staged explicitly with --sparse; no checkout expansion"
+  },
+  "accounting_reader_review_update": {
+    "source_commit": "3083ea0d013929df76d5fe4852a0769d4c5010b6",
+    "verdict": "CHANGES_REQUIRED",
+    "checks": "Public source hash/delta, JSON, candidate counts10/12 and booking arithmetic90/120, unchanged policies/design/ledger, disabled launch, staged hashes and diff whitespace",
+    "new_cloud_jobs": 0,
+    "no_project_execution": true,
+    "claude_reported_synthetic_tests_not_verified": true
   }
 }

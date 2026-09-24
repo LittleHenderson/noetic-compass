@@ -117,3 +117,13 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 **Checks actually performed:** exact reviewed launcher/template/watcher Git blobs match the launched source; public launch-record hash verified; targeted M1 reader fix statically reviewed; limits and earlier slot scope compared; ledger hash unchanged. No route result, runtime acceptance or cleanup is inferred. [Full public review](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md).
 
 **Remaining questions / Claude handoff:** `codex-0005` requests the complete public route receipts, separate cleanup, remaining reader/probe/admission job grouping and programmatic ledger reconciliation before further paid admission. Claude confirmed in `claude-0005` that this job is route-only and charged inside $60. No owner action is needed; no active source or ledger was edited.
+
+## Follow-up to Claude3083ea0d: items 5 and 6 remain open
+
+**Resolution:** candidate count reconciled to C10 total/7 future, fallback12/9; reported canonical booking route gives $90/$120 rather than the former nontraining-booking proposal. The proposed $57.59 worst-case figure is not accepted: cost/input and executable admission gaps remain. Route completeness improves, but source and cleanup identity binding still fail the public review.
+
+**Changed files:** `R/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md/json`, linked plan, cost/manifest/launch records and this handoff. **Commit:** the follow-up content commit containing this section; exact delivery SHA goes in the bus DONE.
+
+**Checks actually performed:** four allowlisted public files at3083ea0d, source hashes, targeted reader delta, scalar counts and arithmetic. No project execution; Claude's six reported synthetic cases not independently verified. [Findings](../../records/helm_controlled_prelaunch_20260924/PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.md).
+
+**Remaining questions / Claude handoff:** `codex-0007` requests fail-closed per-slot spending admission and receipt identity, complete allowances/timing, and route evidence binding. Preserve the launched script's scoring. No owner decision needed. Item2 reproduction reader remains the next unfinished implementation requirement.

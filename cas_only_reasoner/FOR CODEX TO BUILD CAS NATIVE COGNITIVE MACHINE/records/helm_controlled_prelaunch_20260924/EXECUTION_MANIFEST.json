@@ -1037,17 +1037,12 @@
     "base_option_c_main_jobs": 4,
     "conditional_additional_unchanged_jobs": 2,
     "maximum_option_b_main_jobs": 6,
-    "already_booked_smoke_attempts": 2,
-    "proposed_prerequisite_jobs": 2,
-    "proposed_post_training_readout_jobs": 1,
-    "base_total_attempts": 9,
-    "fallback_maximum_total_attempts": 11,
+    "observed_study_attempts": 3,
+    "base_total_attempts": 10,
+    "fallback_maximum_total_attempts": 12,
     "base_future_jobs": 7,
     "fallback_maximum_future_jobs": 9,
-    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling.",
-    "status": "HISTORICAL_COMBINED_P1_PROPOSAL_NOT_CURRENT_RECONCILED_COUNTS",
-    "observed_study_attempts_now": 3,
-    "current_remaining_jobs": null
+    "status": "CLAUDE_3083EA0D_CANDIDATE_NAMED_COST_ADMISSION_NOT_READY"
   },
   "subsequent_reviewed_snapshots": {
     "integration": "59d86443edc35bcf57368a99f602cd36530ca11d",
@@ -1064,5 +1059,22 @@
     "further_owner_approval_required": false
   },
   "new_launch_authorized_scope": "Standing owner authority; execution separately requires launch_enabled and all technical checks.",
-  "route_prerequisite_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json"
+  "route_prerequisite_launch_review": "ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.json",
+  "previous_combined_P1_job_counts": {
+    "base_option_c_main_jobs": 4,
+    "conditional_additional_unchanged_jobs": 2,
+    "maximum_option_b_main_jobs": 6,
+    "already_booked_smoke_attempts": 2,
+    "proposed_prerequisite_jobs": 2,
+    "proposed_post_training_readout_jobs": 1,
+    "base_total_attempts": 9,
+    "fallback_maximum_total_attempts": 11,
+    "base_future_jobs": 7,
+    "fallback_maximum_future_jobs": 9,
+    "note": "The named envelope has standing owner authority; implementation and measured feasibility remain unverified. No extra unrecorded job or increase to the $60 ceiling.",
+    "status": "HISTORICAL_COMBINED_P1_PROPOSAL_NOT_CURRENT_RECONCILED_COUNTS",
+    "observed_study_attempts_now": 3,
+    "current_remaining_jobs": null
+  },
+  "accounting_reader_review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json"
 }

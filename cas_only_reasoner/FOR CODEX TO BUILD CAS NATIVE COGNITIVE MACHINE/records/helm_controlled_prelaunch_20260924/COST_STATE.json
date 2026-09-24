@@ -376,11 +376,30 @@
     "observed_attempts": 3,
     "delivered_instances": 2,
     "main_training_jobs_completed": 0,
-    "remaining_prerequisite_job_count": null,
-    "current_total_attempt_plan": null,
-    "status": "OLD_COMBINED_P1_ENVELOPE_REQUIRES_RECONCILIATION",
+    "remaining_prerequisite_job_count": 2,
+    "current_total_attempt_plan": 10,
+    "status": "CLAUDE_CANDIDATE_GROUPING_SUPPLIED_COST_AND_ADMISSION_CHANGES_REQUIRED",
     "inclusive_cap_usd": 3,
     "study_ceiling_usd": 60,
     "ledger_booking_status": "NOT_OBSERVED_IN_UNCHANGED_REV106"
+  },
+  "current_candidate_envelope": {
+    "source_commit": "3083ea0d013929df76d5fe4852a0769d4c5010b6",
+    "counts": {
+      "base_option_c_main_jobs": 4,
+      "conditional_additional_unchanged_jobs": 2,
+      "maximum_option_b_main_jobs": 6,
+      "observed_study_attempts": 3,
+      "base_total_attempts": 10,
+      "fallback_maximum_total_attempts": 12,
+      "base_future_jobs": 7,
+      "fallback_maximum_future_jobs": 9,
+      "status": "CLAUDE_3083EA0D_CANDIDATE_NAMED_COST_ADMISSION_NOT_READY"
+    },
+    "canonical_C_total_bookings_usd": 90,
+    "canonical_fallback_total_bookings_usd": 120,
+    "claude_proposed_C_worst_total_usd": "57.59",
+    "accepted_as_conservative_complete_bound": false,
+    "review": "PREREQUISITE_ACCOUNTING_READER_REVIEW_20260924.json"
   }
 }
