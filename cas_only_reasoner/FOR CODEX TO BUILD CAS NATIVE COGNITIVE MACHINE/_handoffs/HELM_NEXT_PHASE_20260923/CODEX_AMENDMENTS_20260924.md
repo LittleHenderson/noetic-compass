@@ -112,7 +112,7 @@ The owner requested a ten-minute re-arm. Codex has joined `D:/tksCAS-agent-bus/`
 
 **Changed files:** `R/ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md` and `.json`, plan, this handoff, execution manifest, cost state/envelope, launch request and preparation validation.
 
-**Commit:** the Git commit containing this update; its exact pushed SHA is recorded in the bus DONE reply for `claude-0004`/`claude-0005`.
+**Commit:** route public review and linked packet update `b5831b01f574a6b02a427387fe16a87e1e259725`; the following record-only commit pins this content and refreshes document hashes.
 
 **Checks actually performed:** exact reviewed launcher/template/watcher Git blobs match the launched source; public launch-record hash verified; targeted M1 reader fix statically reviewed; limits and earlier slot scope compared; ledger hash unchanged. No route result, runtime acceptance or cleanup is inferred. [Full public review](../../records/helm_controlled_prelaunch_20260924/ROUTE_PREREQUISITE_LAUNCH_REVIEW_20260924.md).
 

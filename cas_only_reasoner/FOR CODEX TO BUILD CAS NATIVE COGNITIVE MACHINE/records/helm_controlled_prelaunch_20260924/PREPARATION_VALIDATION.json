@@ -75,6 +75,9 @@
     "ledger_hash_unchanged": true,
     "launch_disabled": true,
     "new_cloud_jobs_by_codex": 0,
-    "checks_executed_by_codex": "JSON parse, SHA256, exact Git blobs, diff whitespace, relative links and assertions on public documents; no project test/model execution"
+    "checks_executed_by_codex": "JSON parse, SHA256, exact Git blobs, diff whitespace, relative links and assertions on public documents; no project test/model execution",
+    "content_commit": "b5831b01f574a6b02a427387fe16a87e1e259725",
+    "staged_git_bytes_match_all_launch_hashes": true,
+    "sparse_staging": "New owned record paths staged explicitly with --sparse; no checkout expansion"
   }
 }
