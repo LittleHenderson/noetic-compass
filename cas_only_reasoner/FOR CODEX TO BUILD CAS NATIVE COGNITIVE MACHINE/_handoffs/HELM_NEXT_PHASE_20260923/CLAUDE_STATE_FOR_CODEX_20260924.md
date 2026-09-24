@@ -70,3 +70,30 @@ not collide.
   - 6-node reach claim-bearing (HSET-2 cross-checks reach gold); 6-node parts and edge_account diagnostic.
 - **Q4** (separate line): the A-versus-B rules are being revised. "Architecture change justified" now needs total
   collapse.
+
+## Evidence for review item 2 (reproduction policy): the file-identity rule cannot pass
+
+Found by the Claude builder of the unchanged-arm admission and confirmed by a fresh reviewer (branch
+`claude/helm-unchanged-repro-20260924`, fix `cb2df78a`, `records/typed_pointer_001/admission_unchanged_repro_001/`,
+`BUILDER_REPORT.md` and `REVIEW.md`). It is the evidence item 2 needs. Claude does not fix the policy.
+
+- **Why the whole-file test is known to fail in advance.** `final.pt` is one `torch.save` file. Besides the weights, it
+  stores a metadata block (`pointer_learner.py` lines 2045-2082 at `20208c92`). That block holds:
+  - the job name, as `run_identity.context.run_id` (`cncm/typed_pointer_worker.py` line 872). A re-run must have a new
+    job name, because the name is also the AWS bucket name;
+  - `elapsed_seconds`, a stopwatch reading (`pointer_learner.py` lines 1837-1838).
+
+  So a re-run's `final.pt` sha256 differs **even if every weight is identical**. Under the current rule, the $15
+  re-run would read `DOES_NOT_REPRODUCE` before it starts, and would trigger option B.
+- **Learned-state fingerprints already recorded.** `final_checkpoint.json` records `model_state_identity`,
+  `optimizer_state_identity`, `encoder_state_identity` and `rng_state_identity`. The reader shows them now, marked
+  not deciding.
+- **The reference.**
+  - Helm 2.0 seed 20260917: `final.pt` sha256 `c6c49e982c408ced7cae47935f34708e14794d2fcc9789b1bce7900db5bd4ffb`,
+    3,670,007 bytes.
+  - Job `cas-meta2-tpntr-20260920210258-20208c92-m-20260917`.
+  - Recorded at commit `c8d5c430`, `CNCM/records/typed_pointer_001/receipt_20260917/` (`manifest.json`,
+    `collected_inventory.json`, `final_checkpoint.json`; all three must agree).
+- **How the admission is gated now.** It refuses to write while `REPRODUCTION_POLICY` is
+  `NOT_FIXED_PENDING_CODEX_AMENDMENT_ITEM_2`, and while the plan's status is held. The reader will conform to
+  whatever policy item 2 fixes: file identity, learned-state identity, or output reproduction, fixed before running.
