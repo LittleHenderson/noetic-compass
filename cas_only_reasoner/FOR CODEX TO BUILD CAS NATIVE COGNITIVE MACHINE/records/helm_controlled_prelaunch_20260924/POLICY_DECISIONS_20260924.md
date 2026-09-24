@@ -142,8 +142,12 @@ existing bookings or hand-edit generated ledger state. The canonical campaign ca
 
 **Q3/Q6 — the $30 stop:** count every main training attempt that actually starts an instance, including a failed
 or repeated seed; no success-only reset. Smoke and nontraining prerequisites do not increment that count but their
-costs remain in cumulative study spend. The normal third main attempt is M3 after M1 OFF17 and M2 ON17. Before
-admitting attempt three or any later main attempt, stop when cumulative spend upper bound is >= $30. A refused
+costs remain in cumulative study spend. The normal third main attempt is M3 after M1 OFF17 and M2 ON17. Preserve
+the inherited early stop exactly: before every new paid admission while fewer than three main attempts have
+started, stop and report if cumulative study spend upper bound exceeds $30. This includes the first, second and
+third main admission, and prerequisite admissions before that point. Once triggered, the stop remains latched;
+no retry or renaming resets it. After the third main start, the $60 ceiling and other stop rules still apply; this
+clarification does not invent a permanent $30 cap for the rest of the study. A refused
 RunInstances call proven to have created no instance does not increment training starts, but remains a cost/attempt
 record. An uncertain start blocks rather than reducing the count. Extra attempts cannot evade the trigger by using
 new IDs or the same slot.

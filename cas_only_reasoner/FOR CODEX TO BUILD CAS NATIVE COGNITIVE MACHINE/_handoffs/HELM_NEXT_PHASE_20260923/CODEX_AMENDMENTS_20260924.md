@@ -147,8 +147,7 @@ may authorize only one attempt; no unreviewed retry. Hash dependencies now run f
 **Changed files:** `R/READER_STATIC_REVIEW_20260924.md`, `R/SPEND_STATIC_REVIEW_20260924.md`,
 `R/POLICY_DECISIONS_20260924.md`; reproduction policy MD/JSON, statistical policy, execution manifest, cost state,
 cost envelope, launch request, validation, this handoff, plan and `EVALUATION_DESIGN_v0_4.md` A2.7.
-**Commit:** the content commit containing this entry; its exact pushed hash is appended in the next delivery record
-and public DONE message (avoids a self-referential commit identifier).
+**Commit:** `d1d8376ad4cec5d42f5b2409dad404ab00226845` contains the three reviews/decisions and packet updates; this record-only successor records its exact identity and refreshes the linked hashes.
 
 **Checks actually performed:** two bounded independent-agent public static reviews, exact source versions and byte
 comparisons, JSON parsing, A1 byte preservation, cross-file and staged-Git hash validation, diff whitespace and
@@ -162,3 +161,5 @@ actual counts. Pin the full environment and price P1b on g7, replacing the unusa
 complete envelope including conservatively reserved earlier preparation and retained-service costs. Existing owner
 cost-scope/retention escalations remain; no new owner action is needed for these preparation decisions. Main launch
 remains disabled. Items 1 and 3 are unchanged; item5's completed P1a evidence remains scoped as previously recorded.
+
+Delivery consistency review: preserved the exact inherited >$30 early-stop rule before any admission while fewer than three main attempts have started, and moved the final-admission requirement wholly downstream so its receipt cannot recreate a manifest hash cycle. These clarifications are included in the delivery successor; no paid job has run under the draft.

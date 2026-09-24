@@ -114,6 +114,14 @@
     "project_execution": false,
     "new_aws_jobs": 0,
     "protected_material_read": false,
-    "content_commit": "PENDING_DELIVERY_RECORD"
+    "content_commit": "d1d8376ad4cec5d42f5b2409dad404ab00226845",
+    "staged_git_hash_bindings_verified": true,
+    "local_markdown_links_verified": true,
+    "exactly_owned_files_staged": 14,
+    "delivery_consistency_review": {
+      "reader": "REMOVED_UPSTREAM_FINAL_ADMISSION_RECEIPT_PLACEHOLDER",
+      "spend": "EXACT_INHERITED_GT30_EARLY_STOP_INCLUDES_ADMISSIONS_BEFORE_FIRST_SECOND_THIRD_START",
+      "no_runtime_execution": true
+    }
   }
 }

@@ -900,11 +900,6 @@
       "id": "corrected_probe_admission",
       "status": "NOT_READY",
       "receipt_sha256": null
-    },
-    {
-      "id": "final_frozen_manifest_and_fresh_admission",
-      "status": "NOT_READY",
-      "receipt_sha256": null
     }
   ],
   "comparison_limit": "C freshly reproduces only seed 20260917. Historical controls for seeds 20260918 and 20260919 are reused and are not demonstrated reproducible. B adds fresh unchanged runs for those two seeds and is the stronger fresh-control comparison.",
@@ -1102,5 +1097,14 @@
     "spend_gate": "4e292912a1efe0a85312574a69291a1af5af5427",
     "hset_builder_review": "bd960bc1ae351f9cf653fd865a9a9996e3c3aa75",
     "status": "FIXES_AND_RUNTIME_ACCEPTANCE_PENDING"
-  }
+  },
+  "downstream_gate_requirements": [
+    {
+      "id": "final_frozen_manifest_and_fresh_admission",
+      "required_before_launch": true,
+      "result_record_location": "DOWNSTREAM_TECHNICAL_ADMISSION_ONLY",
+      "upstream_receipt_hash_permitted": false,
+      "reason": "The admission binds this manifest; its own hash cannot be bound back into the manifest."
+    }
+  ]
 }
