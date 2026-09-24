@@ -41,8 +41,9 @@ LABELS = {
                    "NO_VERDICT_PREP_NOT_FROZEN"),
     "run": ("RUN_VALID", "RUN_INCOMPLETE", "RUN_INVALID_<REASON>"),
     "checkpoint": tuple("INPUT_USE_" + level for level in rules.LEVELS),
-    "calibration": ("INPUT_USE_RULE_SILENT_AT_INITIALISATION", "INPUT_USE_RULE_FIRES_AT_INITIALISATION"),
+    "calibration": rules.CALIBRATION_STATES,
     "arm": ("ARM_<A|B>_SHOWS_INPUT_USE", "ARM_<A|B>_SHOWS_NO_INPUT_USE", "ARM_<A|B>_INPUT_USE_UNDETERMINED"),
+    "arm_reason": tuple("ARM_<A|B>_INPUT_USE_UNDETERMINED_BECAUSE_" + r for r in rules.ARM_REASONS),
     "architecture": ("ARCHITECTURE_CHANGE_JUSTIFIED", "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE",
                      "ARCHITECTURE_DECISION_INCOMPLETE", "ARCHITECTURE_NOT_EVALUATED"),
     "architecture_reason": tuple("ARCHITECTURE_INCOMPLETE_BECAUSE_" + r for r in rules.ARCHITECTURE_REASONS),
@@ -221,12 +222,15 @@ def read_run(root, arm, seed, prep, frozen_sha):
     checkpoints = {k: load(folder / ("checkpoint_%05d.json" % k)) for k in rules.CHECKPOINTS}
     # Verification of 793a4f68, W1: the path is checked, not load()'s value (a file holding JSON null loads as None).
     final_present = (folder / ("checkpoint_%05d.json" % rules.FINAL)).exists()
+    # Review of f32b5739, X1 (coordinator decision 1 of 2026-09-24): the same path check for checkpoint 0.
+    zero_present = (folder / ("checkpoint_%05d.json" % 0)).exists()
     info = {"arm": arm, "seed": seed, "readings": {}, "exact": {}, "validity": None,
-            "final_checkpoint_file_present": final_present}
+            "final_checkpoint_file_present": final_present, "checkpoint_0_file_present": zero_present}
     problems = []
     if manifest is None:
         info["validity"] = "RUN_INCOMPLETE"
         info["final_checkpoint_present_without_reading"] = final_present
+        info["checkpoint_0_present_without_reading"] = zero_present
         return info, {}
     if manifest.get("frozen_sha256") != frozen_sha:
         problems.append("FROZEN_SHA_DIFFERS")
@@ -285,6 +289,7 @@ def read_run(root, arm, seed, prep, frozen_sha):
                                                        "target_tokens", "source_bytes", "train_seconds",
                                                        "eval_seconds", "wall_seconds", "final_weights_sha256")}
     info["final_checkpoint_present_without_reading"] = final_present and str(rules.FINAL) not in info["readings"]
+    info["checkpoint_0_present_without_reading"] = zero_present and "0" not in info["readings"]
     return info, per_checkpoint
 
 
@@ -314,6 +319,20 @@ def final_checkpoints_without_reading(runs):
         flagged = info["final_checkpoint_present_without_reading"]
         if flagged and str(rules.FINAL) in info["readings"]:   # read_run never sets both; fail loudly if it did
             raise ReadError("FLAGGED_RUN_HAS_A_FINAL_READING: %s_%d" % key)
+        if flagged:
+            out.append("%s_%d" % key)
+    return out
+
+
+def checkpoint_0_files_without_reading(runs):
+    """Run names (run order) whose checkpoint-0 file exists but gave no checkpoint-0 reading: a missing run manifest,
+    a wrong identity, a file holding no record, or any recomputation failure in that file (review of f32b5739, X1;
+    coordinator decision 1 of 2026-09-24). Any one of them makes the calibration state CALIBRATION_UNREADABLE."""
+    out = []
+    for key, info in runs.items():
+        flagged = info["checkpoint_0_present_without_reading"]
+        if flagged and "0" in info["readings"]:                  # read_run never sets both; fail loudly if it did
+            raise ReadError("FLAGGED_RUN_HAS_A_CHECKPOINT_0_READING: %s_%d" % key)
         if flagged:
             out.append("%s_%d" % key)
     return out
@@ -415,11 +434,13 @@ def verdict(root):
         detail[(arm, seed)] = {"info": info, "checkpoints": checkpoints}
     out["runs"] = {"%s_%d" % key: info for key, info in runs.items()}
     zero = checkpoint_0_report(runs)
-    fires_at_zero = rules.calibration_guard_fires(
-        (r["T1"], r["T2V"], r["T2P"]) for r in zero.values() if r is not None)
-    out["calibration"] = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION" if fires_at_zero
-                          else "INPUT_USE_RULE_SILENT_AT_INITIALISATION")
+    zero_tests = [(r["T1"], r["T2V"], r["T2P"]) for r in zero.values() if r is not None]
+    unread_zero = checkpoint_0_files_without_reading(runs)
+    # Review of f32b5739, X1 (coordinator decision 1 of 2026-09-24): three calibration states; UNREADABLE comes first
+    out["calibration"] = rules.calibration_state(zero_tests, len(unread_zero))
     out["calibration_guard_tests"] = "T1, T2V, T2P at checkpoint 0 (distinct free outputs and T3 are not in the guard)"
+    out["calibration_guard_fires_over_readable_runs"] = rules.calibration_guard_fires(zero_tests)   # report only
+    out["checkpoint_0_files_present_without_reading"] = unread_zero
     out["calibration_checkpoint_0"] = zero
     out["checkpoint_0_distinct_free_outputs"] = {run: (None if r is None else r["distinct_free_outputs"])
                                                  for run, r in zero.items()}
@@ -427,16 +448,21 @@ def verdict(root):
     unread = final_checkpoints_without_reading(runs)
     out["final_checkpoints_present_without_reading"] = unread
     out["arms"] = {}
+    arm_reason_labels = []
     for arm in rules.ARMS:
         valid = [level for level, ok in finals[arm] if ok]
-        out["arms"][arm] = {"label": rules.arm_label(arm, finals[arm]), "final_levels_of_valid_runs": valid,
+        unread_arm = [run for run in unread if run.startswith(arm + "_")]
+        # coordinator decision 2 of 2026-09-24 (review of f32b5739): an unread FINAL file withholds SHOWS_NO_INPUT_USE
+        label, label_reasons = rules.arm_decision(arm, finals[arm], len(unread_arm))
+        out["arms"][arm] = {"label": label, "label_reasons": label_reasons, "final_levels_of_valid_runs": valid,
                             "final_levels_of_runs_not_valid": [level for level, ok in finals[arm] if not ok],
                             "valid_runs": len(valid), "valid_none_runs": valid.count("NONE"),
                             "full_runs": valid.count("FULL"), "runs_not_valid": len(rules.SEEDS) - len(valid),
-                            "final_checkpoints_present_without_reading": [
-                                run for run in unread if run.startswith(arm + "_")]}
+                            "final_checkpoints_present_without_reading": unread_arm}
+        arm_reason_labels += ["%s_BECAUSE_%s" % (label, reason) for reason in label_reasons]
     arm_labels = [out["arms"][arm]["label"] for arm in rules.ARMS]
-    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(finals, fires_at_zero, len(unread))
+    out["architecture"], out["architecture_reasons"] = rules.architecture_decision(finals, out["calibration"],
+                                                                                   len(unread))
     final_levels = [level for arm in rules.ARMS for level, _ in finals[arm]]
     out["information"] = {"labels": (["FIELDS_NOT_READ_IN_ANY_RUN"] if rules.fields_not_read_in_any_run(final_levels)
                                      else []),
@@ -490,7 +516,7 @@ def verdict(root):
     out["labels"] += ["%s_%d:%s" % (k[0], k[1], v["validity"]) for k, v in runs.items()]
     out["labels"] += ["%s_%d@%s:%s" % (k[0], k[1], rules.FINAL, v["readings"][str(rules.FINAL)]["label"])
                       for k, v in runs.items() if str(rules.FINAL) in v["readings"]]
-    out["labels"] += ([out["calibration"]] + arm_labels + [out["architecture"]]
+    out["labels"] += ([out["calibration"]] + arm_labels + arm_reason_labels + [out["architecture"]]
                       + ["ARCHITECTURE_INCOMPLETE_BECAUSE_" + r for r in out["architecture_reasons"]]
                       + out["information"]["labels"]
                       + list(out["lessons"].values()) + [out["lessons_overall"]])

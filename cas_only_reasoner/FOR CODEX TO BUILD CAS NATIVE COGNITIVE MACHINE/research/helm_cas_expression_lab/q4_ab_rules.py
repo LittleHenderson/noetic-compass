@@ -16,8 +16,9 @@ import json
 from math import comb
 
 SCHEMA = "helm-cas-expression-lab.q4-sdg-ab/0.2"
-SPEC_REVISION = ("v0.2 revision 3a (coordinator decisions of 2026-09-24 after the verification of 294471a5; W1 of "
-                 "the verification of 793a4f68; coordinator confirmations of 2026-09-24; PROPOSED_FOR_REVIEW)")
+SPEC_REVISION = ("v0.2 revision 3b (coordinator decisions of 2026-09-24 after the verification of 294471a5; W1 of "
+                 "the verification of 793a4f68; coordinator confirmations of 2026-09-24; X1 of the review of f32b5739 "
+                 "and the coordinator decisions on it of 2026-09-24; PROPOSED_FOR_REVIEW)")
 EXPERIMENT = "Q4-SDG-1"
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
 
@@ -112,12 +113,25 @@ EDIT_VALUE_COLUMNS = ("p_new_original", "p_new_edited", "p_old_original", "p_old
 # definition ("2 or more distinct free outputs, or T2P passes, while T1 and T2V fail") contains STRUCTURE_ONLY.
 LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_VARIATION", "NONE")
 FIELD_LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS")     # exactly the levels where T1 or T2V passes
-ARCHITECTURE_REASONS = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS",
-                        "STRUCTURE_OR_OUTPUT_VARIATION", "SEED_DEPENDENT", "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID",
-                        "TOO_FEW_VALID_RUNS", "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING")
+ARCHITECTURE_REASONS = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION", "CHECKPOINT0_PRESENT_WITHOUT_READING",
+                        "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_OR_OUTPUT_VARIATION", "SEED_DEPENDENT",
+                        "NOT_NONE_IN_A_RUN_THAT_IS_NOT_VALID", "TOO_FEW_VALID_RUNS",
+                        "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING")
 # A run whose FINAL checkpoint file exists but gives no FINAL reading (a missing run manifest, a wrong identity, or any
 # recomputation failure in that file) cannot be counted as NONE, so it withholds JUSTIFIED (verification of 793a4f68,
 # W1). It only makes JUSTIFIED rarer: NOT_JUSTIFIED and the calibration guard are unchanged.
+# Revision 3b (X1 of the review of f32b5739; coordinator decisions 1 and 2 of 2026-09-24 on it):
+#   - the calibration state has a third value. CALIBRATION_UNREADABLE iff some run's checkpoint-0 file exists but gives
+#     no checkpoint-0 reading (a path check, as for the FINAL file). It comes first, whatever the readable runs show.
+#     The architecture label is then INCOMPLETE with the one reason CHECKPOINT0_PRESENT_WITHOUT_READING, so both
+#     JUSTIFIED and NOT_JUSTIFIED become rarer, never more common;
+#   - an arm with a FINAL checkpoint file without a reading has SHOWS_NO_INPUT_USE withheld (INPUT_USE_UNDETERMINED,
+#     reason FINAL_CHECKPOINT_PRESENT_WITHOUT_READING). SHOWS_INPUT_USE is not withheld: it counts VALID FULL runs only,
+#     and a run whose FINAL file gives no reading is never valid, so that file cannot make it false.
+CALIBRATION_STATES = ("INPUT_USE_RULE_SILENT_AT_INITIALISATION", "INPUT_USE_RULE_FIRES_AT_INITIALISATION",
+                      "CALIBRATION_UNREADABLE")
+CALIBRATION_SILENT, CALIBRATION_FIRES, CALIBRATION_UNREADABLE = CALIBRATION_STATES
+ARM_REASONS = ("FINAL_CHECKPOINT_PRESENT_WITHOUT_READING",)
 INFORMATION_LABELS = ("FIELDS_NOT_READ_IN_ANY_RUN",)               # decision 4: information only, justifies nothing
 LESSON_OUTCOMES = ("HELP", "HURT", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
 OVERALL_LESSON_OUTCOMES = ("HELP", "HURT", "MIXED", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
@@ -211,24 +225,48 @@ def frozen_record() -> dict:
                   "CALIBRATION_GUARD": "fires iff some run passes T1, T2V or T2P at checkpoint 0. Distinct free "
                                        "outputs (and so T3) are NOT in the guard: an untrained model's free outputs "
                                        "may vary. The checkpoint-0 distinct-output count of every run is reported",
+                  "CALIBRATION_STATE": "one of %s, in this order: CALIBRATION_UNREADABLE iff some run's checkpoint-0 "
+                                       "file exists but gives no checkpoint-0 reading (a path check; whatever the "
+                                       "readable runs show); else INPUT_USE_RULE_FIRES_AT_INITIALISATION iff the "
+                                       "guard fires over the runs with a checkpoint-0 reading; else "
+                                       "INPUT_USE_RULE_SILENT_AT_INITIALISATION (coordinator decision 1 of "
+                                       "2026-09-24 on X1 of the review of f32b5739)" % ", ".join(CALIBRATION_STATES),
+                  "CHECKPOINT0_PRESENT_WITHOUT_READING": "a run's checkpoint-0 file exists but gives no checkpoint-0 "
+                                                         "reading (missing run manifest, wrong identity, a file "
+                                                         "holding no record, or any recomputation failure in that "
+                                                         "file, including an exact-flag check on any panel). The "
+                                                         "calibration state is CALIBRATION_UNREADABLE and the "
+                                                         "architecture label is INCOMPLETE with this reason only. "
+                                                         "Makes both JUSTIFIED and NOT_JUSTIFIED rarer, never more "
+                                                         "common",
                   "ARM": "SHOWS_INPUT_USE iff FULL in at least %d valid runs; SHOWS_NO_INPUT_USE iff NONE in at "
-                         "least %d valid runs and every run of the arm that has a FINAL reading (valid or not) is "
-                         "NONE; INPUT_USE_UNDETERMINED otherwise. A run with no FINAL reading is left out of the arm "
-                         "label; if its FINAL checkpoint file exists, the architecture rule withholds JUSTIFIED "
-                         "(FINAL_CHECKPOINT_PRESENT_WITHOUT_READING)" % (ARM_MIN_SEEDS, ARM_MIN_VALID_NONE_RUNS),
-                  "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration guard silent, every run that has a FINAL reading "
-                                                   "(valid or not) is NONE, each arm has at least %d valid NONE "
-                                                   "runs (coordinator decision 3 of 2026-09-24), and no run has a "
-                                                   "FINAL checkpoint file without a FINAL reading (verification of "
-                                                   "793a4f68, W1)" % ARM_MIN_VALID_NONE_RUNS,
+                         "least %d valid runs, every run of the arm that has a FINAL reading (valid or not) is "
+                         "NONE, and no run of the arm has a FINAL checkpoint file without a FINAL reading; "
+                         "INPUT_USE_UNDETERMINED otherwise. When only that last condition fails, SHOWS_NO_INPUT_USE "
+                         "is withheld with the reason FINAL_CHECKPOINT_PRESENT_WITHOUT_READING (coordinator decision "
+                         "2 of 2026-09-24 on the review of f32b5739). SHOWS_INPUT_USE is never withheld for such a "
+                         "file: it counts valid FULL runs only, and a run whose FINAL checkpoint file gives no reading "
+                         "is never valid" % (ARM_MIN_SEEDS, ARM_MIN_VALID_NONE_RUNS),
+                  "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration state INPUT_USE_RULE_SILENT_AT_INITIALISATION, every "
+                                                   "run that has a FINAL reading (valid or not) is NONE, each arm has "
+                                                   "at least %d valid NONE runs (coordinator decision 3 of "
+                                                   "2026-09-24), and no run has a FINAL checkpoint file without a "
+                                                   "FINAL reading (verification of 793a4f68, W1)"
+                                                   % ARM_MIN_VALID_NONE_RUNS,
                   "FINAL_CHECKPOINT_PRESENT_WITHOUT_READING": "a run's FINAL checkpoint file exists but gives no FINAL "
                                                               "reading (missing run manifest, wrong identity, or any "
                                                               "recomputation failure in that file, including an "
                                                               "exact-flag check on any panel). Withholds JUSTIFIED "
-                                                              "only; never changes NOT_JUSTIFIED or the guard",
-                  "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE": "calibration guard silent and some arm "
-                                                                         "SHOWS_INPUT_USE; teaching fit is not tested",
-                  "ARCHITECTURE_DECISION_INCOMPLETE": "otherwise, with every reason that applies from %s"
+                                                              "and its arm's SHOWS_NO_INPUT_USE; never changes "
+                                                              "NOT_JUSTIFIED, SHOWS_INPUT_USE or the calibration state",
+                  "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE": "calibration state "
+                                                                         "INPUT_USE_RULE_SILENT_AT_INITIALISATION and "
+                                                                         "some arm SHOWS_INPUT_USE; teaching fit is "
+                                                                         "not tested",
+                  "ARCHITECTURE_DECISION_INCOMPLETE": "otherwise, with every reason that applies from %s. When the "
+                                                      "calibration state is not silent, its one reason stands alone: "
+                                                      "CALIBRATION_UNREADABLE gives CHECKPOINT0_PRESENT_WITHOUT_READING, "
+                                                      "INPUT_USE_RULE_FIRES_AT_INITIALISATION gives itself"
                                                       % ", ".join(ARCHITECTURE_REASONS),
                   "FIELDS_NOT_READ_IN_ANY_RUN": "information only; justifies nothing by itself: emitted iff at least "
                                                 "one run has a FINAL reading and no run passes T1 or T2V at the FINAL "
@@ -326,37 +364,81 @@ def input_use_level(t1: bool, t2v: bool, t2p: bool, distinct: int) -> str:
     return "NONE"
 
 
+def _file_count(value, error: str) -> int:
+    """A count of files (a non-negative int; a bool, a float or None is refused)."""
+    if type(value) is not int or value < 0:
+        raise ValueError(error)
+    return value
+
+
 def calibration_guard_fires(checkpoint_0_tests) -> bool:
     """checkpoint_0_tests: (T1, T2V, T2P) of every run that has a checkpoint-0 reading. Distinct outputs are not used."""
     return any(t1 or t2v or t2p for t1, t2v, t2p in checkpoint_0_tests)
 
 
-def arm_label(arm: str, finals) -> str:
-    """finals: (FINAL level, run is valid) of every run of this arm that HAS a FINAL reading, valid or not.
-    Runs with no FINAL reading (missing, or an unreadable final checkpoint) are left out here; an unreadable final
-    checkpoint FILE withholds JUSTIFIED in architecture_decision instead (verification of 793a4f68, W1)."""
+def calibration_state(checkpoint_0_tests, checkpoint_0_files_without_reading: int) -> str:
+    """One of CALIBRATION_STATES (coordinator decision 1 of 2026-09-24 on X1 of the review of f32b5739), in this order:
+    CALIBRATION_UNREADABLE iff some run's checkpoint-0 file exists but gave no checkpoint-0 reading (whatever the
+    readable runs show); else INPUT_USE_RULE_FIRES_AT_INITIALISATION iff calibration_guard_fires(checkpoint_0_tests);
+    else INPUT_USE_RULE_SILENT_AT_INITIALISATION. checkpoint_0_tests: (T1, T2V, T2P) of every run that HAS a
+    checkpoint-0 reading. checkpoint_0_files_without_reading: the number of runs whose checkpoint-0 file exists but
+    gave no checkpoint-0 reading (a required non-negative int)."""
+    unread = _file_count(checkpoint_0_files_without_reading, "INVALID_CHECKPOINT_0_FILES_WITHOUT_READING")
+    fires = calibration_guard_fires(checkpoint_0_tests)
+    if unread:
+        return CALIBRATION_UNREADABLE
+    return CALIBRATION_FIRES if fires else CALIBRATION_SILENT
+
+
+def arm_decision(arm: str, finals, final_checkpoints_without_reading: int):
+    """(label, reasons) of one arm. finals: (FINAL level, run is valid) of every run of this arm that HAS a FINAL
+    reading, valid or not. final_checkpoints_without_reading: the number of runs of THIS arm whose FINAL checkpoint file
+    exists but gave no FINAL reading (a required non-negative int).
+    Such a run withholds SHOWS_NO_INPUT_USE: the label is then INPUT_USE_UNDETERMINED with the reason
+    FINAL_CHECKPOINT_PRESENT_WITHOUT_READING (coordinator decision 2 of 2026-09-24 on the review of f32b5739). The reason
+    is named only when it changed the label. SHOWS_INPUT_USE is never withheld for it: that label counts VALID FULL runs
+    only, and a run whose FINAL checkpoint file gives no reading is never valid, so the file cannot make it false."""
+    unread = _file_count(final_checkpoints_without_reading, "INVALID_FINAL_CHECKPOINTS_WITHOUT_READING")
     finals = [(level, bool(valid)) for level, valid in finals]
     valid_levels = [level for level, valid in finals if valid]
     if valid_levels.count("FULL") >= ARM_MIN_SEEDS:
-        return "ARM_%s_SHOWS_INPUT_USE" % arm
+        return "ARM_%s_SHOWS_INPUT_USE" % arm, []
     if (valid_levels.count("NONE") >= ARM_MIN_VALID_NONE_RUNS
             and all(level == "NONE" for level, _ in finals)):
-        return "ARM_%s_SHOWS_NO_INPUT_USE" % arm
-    return "ARM_%s_INPUT_USE_UNDETERMINED" % arm
+        if unread:
+            return "ARM_%s_INPUT_USE_UNDETERMINED" % arm, ["FINAL_CHECKPOINT_PRESENT_WITHOUT_READING"]
+        return "ARM_%s_SHOWS_NO_INPUT_USE" % arm, []
+    return "ARM_%s_INPUT_USE_UNDETERMINED" % arm, []
 
 
-def architecture_decision(finals_by_arm: dict, guard_fires: bool, final_checkpoints_without_reading: int):
+def arm_label(arm: str, finals, final_checkpoints_without_reading: int) -> str:
+    """The label of arm_decision (see there). With final_checkpoints_without_reading = 0 it is revision 3a's arm label
+    (runs with no FINAL reading are left out)."""
+    return arm_decision(arm, finals, final_checkpoints_without_reading)[0]
+
+
+def architecture_decision(finals_by_arm: dict, calibration: str, final_checkpoints_without_reading: int):
     """(label, reasons). finals_by_arm: arm -> (FINAL level, valid) of every run of that arm with a FINAL reading.
+    calibration: the calibration state from calibration_state(), one of CALIBRATION_STATES (anything else, a bool
+    included, is refused). When it is not silent, its reason stands alone (coordinator confirmation (d)):
+    INPUT_USE_RULE_FIRES_AT_INITIALISATION gives itself; CALIBRATION_UNREADABLE gives
+    CHECKPOINT0_PRESENT_WITHOUT_READING (coordinator decision 1 of 2026-09-24 on X1 of the review of f32b5739), so both
+    JUSTIFIED and NOT_JUSTIFIED become rarer, never more common.
     final_checkpoints_without_reading: the number of runs whose FINAL checkpoint file exists but gave no FINAL reading
     (verification of 793a4f68, W1). Any such run withholds JUSTIFIED with the reason
-    FINAL_CHECKPOINT_PRESENT_WITHOUT_READING; it changes nothing else (only JUSTIFIED becomes rarer)."""
-    unread = final_checkpoints_without_reading
-    if type(unread) is not int or unread < 0:
-        raise ValueError("INVALID_FINAL_CHECKPOINTS_WITHOUT_READING")
-    if guard_fires:                                   # coordinator confirmation (d): the guard's reason stays alone
+    FINAL_CHECKPOINT_PRESENT_WITHOUT_READING; it changes nothing else here (only JUSTIFIED becomes rarer). The arm labels
+    used here are over runs with a FINAL reading (arm_label with 0): the unread FINAL files are handled by this rule
+    itself, and the printed arm labels (arm_decision with each arm's count) give the same architecture label, because
+    JUSTIFIED already needs no unread FINAL file and SHOWS_INPUT_USE is never withheld for one."""
+    unread = _file_count(final_checkpoints_without_reading, "INVALID_FINAL_CHECKPOINTS_WITHOUT_READING")
+    if type(calibration) is not str or calibration not in CALIBRATION_STATES:
+        raise ValueError("INVALID_CALIBRATION_STATE")
+    if calibration == CALIBRATION_UNREADABLE:         # coordinator decision 1 on X1: checked first, stands alone
+        return "ARCHITECTURE_DECISION_INCOMPLETE", ["CHECKPOINT0_PRESENT_WITHOUT_READING"]
+    if calibration == CALIBRATION_FIRES:              # coordinator confirmation (d): the guard's reason stays alone
         return "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
     finals = {arm: [(level, bool(valid)) for level, valid in finals_by_arm.get(arm, ())] for arm in ARMS}
-    labels = {arm: arm_label(arm, finals[arm]) for arm in ARMS}
+    labels = {arm: arm_label(arm, finals[arm], 0) for arm in ARMS}
     if any(label.endswith("_SHOWS_INPUT_USE") for label in labels.values()):
         return "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE", []
     if all(label.endswith("_SHOWS_NO_INPUT_USE") for label in labels.values()) and not unread:
