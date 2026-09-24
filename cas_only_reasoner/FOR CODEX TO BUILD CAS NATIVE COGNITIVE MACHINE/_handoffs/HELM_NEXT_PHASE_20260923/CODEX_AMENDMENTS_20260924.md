@@ -20,7 +20,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Changed files:** `PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md`; `R/REPRODUCTION_POLICY.md`; `R/LAUNCH_REQUEST.json`; cost records.
 
-**Commit:** initial amendment `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; latest clarification is part of this delivery revision.
+**Commit:** initial amendment `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; current clarification `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
 
 **Checks actually performed:** read Claude's correction and current handoff; compared C/B seed and job counts; checked the plan retains $60 and does not infer seed-18/19 reproduction.
 
@@ -32,7 +32,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Changed files:** `R/REPRODUCTION_POLICY.md` and `.json`; plan; `R/LAUNCH_REQUEST.json`.
 
-**Commit:** policy definition `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; this delivery adds current implementation evidence and one consistent invalid-evidence label, `ADMISSION_INVALID_STOP`.
+**Commit:** policy definition `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; implementation evidence and label clarification `7cd5ff9da02c7f6ae504b172c0321df80748d12f`; use `ADMISSION_INVALID_STOP`.
 
 **Checks actually performed:** public source/receipt review only. Historical export embeds job ID and elapsed time, so file bytes differ even with equal weights. Reader implementation `cb2df78aa3e6a3c52db3b284e8fe86c431e7ad82` adds plan/policy gates and binds receipt job IDs plus checkpoint hash/byte counts. `read_reproduction.py:64,270–289` still decides by file SHA; state digests are non-deciding metadata and no full public-panel comparison exists. Latest review `0391a3073f02fb00819b0125a467aefad53ccf2e` changes only REVIEW.md and leaves CHANGES_REQUIRED. Its V1 finding shows the prose approval parser can accept a misleading status sentence. Claude's reported 48 checks are not Codex-executed checks.
 
@@ -56,7 +56,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Changed files:** proposed design A2; `R/STATISTICAL_POLICY.json`; plan.
 
-**Commit:** `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; this delivery records the latest builder gaps.
+**Commit:** `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; current builder-gap handoff `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
 
 **Checks actually performed:** A1's unchanged LF bytes hash to `ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9`. Public builder `853e645d7b5da5551257c4271e10c90b5fdb254e`, `hset2_build.py:686–751`, still uses per-cell tuned threshold/position results and has no A2 group/component inference. No real build/count receipt is supplied; a null salt and protected-input guards are not successful build evidence. No protected questions, answers or selection secrets were read.
 
@@ -68,7 +68,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Changed files:** `R/EXECUTION_MANIFEST.json`; `R/ROUTE_AND_CHECKPOINT_PROTOCOL.md`; plan; completed-smoke reconciliation/provider observations.
 
-**Commit:** specification/pins `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; this delivery adds completed-smoke evidence.
+**Commit:** specification/pins `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; completed-smoke evidence `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
 
 **Checks actually performed:** inspected common adapter and 41 public fixture definitions (37 answerable, four expected refusals), source bindings, schedule and checkpoint inventory; no model execution. Larger-route review `cc68d8b3` remains CHANGES_REQUIRED. Claude's current fix workflow specifies d,c,b,a ordering, T4 item-1 digest comparison, timing preflight and REQUIRED_INPUTS; its AWS pass is not inferred. Reduced smoke verifies all 53 ablation keys but skips phase B. Probe v0.2 still has the normalization confound: altering a bystander can move normalized scores of unchanged candidates; absolute contrast also fails to establish the favored direction.
 
@@ -80,7 +80,7 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 
 **Changed files:** plan; `R/LAUNCH_REQUEST.json`; `R/COST_AND_JOB_ENVELOPE.md`; `R/COST_STATE.json`; `R/LEDGER_RECONCILIATION.json`; `R/SMOKE_COMPLETION_RECONCILIATION.json`; `R/SMOKE_PROVIDER_OBSERVATION.json`; `R/CURRENT_COORDINATION_STATE.json`; this handoff and validation record.
 
-**Commit:** initial envelope `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; completion/reconciliation revision will be pinned in the delivery record after the content commit.
+**Commit:** initial envelope `b2a370bd2d06a902a37686ad92e7221be2e0ea71`; completion/reconciliation `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
 
 **Checks actually performed:** read both current bookings in the canonical dirty ledger and compared its committed baseline; rederived slot counts and cost arithmetic; verified public terminal smoke records and provider cleanup metadata. Corrected rounding of the smoke's conservative formula from $3.18 to **$3.19**, not an invoice. Training-only historical estimates are $29.39 C / $44.08 B. Add $19 prerequisite/readout maximum allocations and the $3.19 smoke bound: hybrid planning figures **$51.58 C / $66.27 B**, not measured expected totals. S0 retained and delay-related charges still require attribution within the evidence budget. B is not automatically funded within $60. Historical per-slot caps total $94/$124, but never override the aggregate $60 ceiling. Proposed ledger totals are $135/$165, including the existing $30; bookings are not spending.
 
@@ -91,3 +91,9 @@ Exact recovery observations are in [CURRENT_COORDINATION_STATE.json](../../recor
 Static JSON parsing, cross-file hash checks, local-link checks, A1 preservation, slot arithmetic and `git diff --check` are recorded in `R/PREPARATION_VALIDATION.json`. No local test suite, build, benchmark, model run, training or new AWS job was performed by this preparation. It has zero new cloud job charges. Protected archives, sealed outputs and the tracked Q3 examination were not opened. Public review does not establish outside custody: the label remains `EVALUATION_NOT_INDEPENDENT_OF_THE_PROJECT`.
 
 The main launch is held for real missing results, not for another permission question about already-authorized document preparation. Claude can continue its assigned implementation work using this handoff. The next evidence needed is item2 reader conformance, followed by the remaining item4/item5 prerequisites and the final item6 packet.
+
+## Delivery commit record
+
+- Initial six-item amendment: `b2a370bd2d06a902a37686ad92e7221be2e0ea71`.
+- Current coordination, completed smoke, ledger reconciliation and per-item handoff: `7cd5ff9da02c7f6ae504b172c0321df80748d12f`.
+- This final record-only commit pins the preceding content commit and refreshes its document hashes. It changes no execution rule or launch authority.

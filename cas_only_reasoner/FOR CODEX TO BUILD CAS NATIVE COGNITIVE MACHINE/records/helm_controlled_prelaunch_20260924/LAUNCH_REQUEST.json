@@ -71,7 +71,7 @@
   "reason_approval_not_requested": "Complete empirical prerequisite results and immutable main execution pins are not yet available; no results are invented.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3f8401453c7e36cd8e7f904905959ff593f710adefd26a995f2b35a591116801",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "44c2b2355f7cf7e47b25f9eeb46c7ce7f05d649214128d9789f44dd9ae8b7d14",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "2e6c52fe37e58f10b1404730ee3846292460ebcf0ebf5de10b57850a6a3a5c73",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "28f4d9d2075c4f2aeaacb7fc16db0f32b2f72fd4d1b10a42d69f49d424f5cc7d",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "b870d402d200c9749b18aa34d62edbf935491d193f2124403cd5e86ced283b6e"
   },

@@ -1,6 +1,6 @@
 {
   "verification": "static document/JSON/source review only; no test suite/build/model/cloud job",
-  "validated_utc": "2026-09-24T04:49:05.564949+00:00",
+  "validated_utc": "2026-09-24T04:49:57.997278+00:00",
   "A1_normalized_bytes_unchanged": true,
   "A1_sha256": "ee42898bd901ed4ecbd78c953429e47f55ee139b63522799bbf54426a1888fe9",
   "A1_matches_prior_delivery_raw_section": true,
@@ -30,5 +30,7 @@
   "protected_data_accessed": false,
   "new_cloud_jobs": 0,
   "Claude_reported_tests_not_rerun": true,
-  "bounded_document_review": "Five wording issues resolved: partial E1, postlaunch E1 receipts, reader nonconformance label, retention counted once, delivery commit linkage pending content commit."
+  "bounded_document_review": "Five wording issues resolved: partial E1, postlaunch E1 receipts, reader nonconformance label, retention counted once, exact delivery commit linkage.",
+  "content_commit": "7cd5ff9da02c7f6ae504b172c0321df80748d12f",
+  "committed_git_bytes_match_launch_hashes": true
 }
