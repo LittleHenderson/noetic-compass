@@ -290,11 +290,13 @@ def test_output_must_be_new_and_tampering_is_refused(package, tmp_path):
 
 def test_pinning_is_required_and_create_only(package, tmp_path, monkeypatch):
     out, _ = package
+    pins = tmp_path / "pins.json"
+    body = json.loads(sdg.PINS.read_text(encoding="utf-8"))
+    body["data_versions"] = {}                        # an EMPTY pin file, whatever the real one holds (review of
+    pins.write_text(json.dumps(body), encoding="utf-8")   # 3771f989: pinning the AWS package must not break this test)
+    monkeypatch.setattr(sdg, "PINS", pins)            # the real pin file is never read or written by this test
     with pytest.raises(sdg.LessonError, match="NO_PIN_FOR_THIS_DATA_VERSION"):
         sdg.load_visible_lessons(out, "A", "train")
-    pins = tmp_path / "pins.json"
-    pins.write_bytes(sdg.PINS.read_bytes())
-    monkeypatch.setattr(sdg, "PINS", pins)            # the real pin file is never written by a test
     with pytest.raises(sdg.LessonError, match="PIN_DATA_OUTSIDE_THE_LAB"):
         sdg.pin_dataset(out)
     body = json.loads(pins.read_text(encoding="utf-8"))

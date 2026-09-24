@@ -16,6 +16,7 @@ import json
 from math import comb
 
 SCHEMA = "helm-cas-expression-lab.q4-sdg-ab/0.2"
+SPEC_REVISION = "v0.2 revision 2 (fixes of the two reviews of 3771f989, 2026-09-24)"
 EXPERIMENT = "Q4-SDG-1"
 LABEL = "CLAUDE_BUILT_CLAUDE_CHECKED"
 
@@ -61,6 +62,9 @@ PANELS = {
     "TEACH_FIT": "the first 64 rows of the run's own first epoch: per-run teaching fit, never compared",
 }
 COMPARISON_PANELS = ("SP1", "SP2U", "SP2ALL")
+PRIMARY_PANELS = ("SP1", "SP2U")            # the one overall lessons answer combines these two (SP2ALL is reported)
+MISSING_PANEL = ("LONGER_OR_DEEPER_THAN_TAUGHT: directive section 8's fourth panel is NOT built. The only such "
+                 "visible rows are the protected Q3 G eval (depths 4-5), which no loop may touch")
 
 # ---- B package identity (the pin itself is written after the AWS data build, into Q4_SDG_DATA_PINS.json) ---------
 B_PACKAGE = {"schema": "helm-cas-expression-lab.q4-sdg-lessons/0.1", "size": 4096, "seed": 20260941,
@@ -79,12 +83,31 @@ JOB_WALL_SECONDS = 11400                    # whole q4_ab_train.py run (190 min)
 # ---- the decision rules (M1). Justification from the diagnosis numbers is in the spec, section 7 ----------------
 T1_FIELD = "noetic"
 T1_ALPHA = Fraction(1, 100)
+SP1_NOETIC_NULL = Fraction(90, 799)         # most frequent noetic value among the SP1 targets (N1), measured
+A_POOL_NOETIC_NULL = Fraction(605, 5671)    # most frequent noetic value in arm A's teaching pool (N2), measured
 T2_DELTA = 0.01                             # 2,700 x the largest move the saved model showed (3.6378e-06)
 T2_MIN_SHARE = Fraction(1, 10)
 T2_ALPHA = Fraction(1, 100)
 T3_MIN_DISTINCT = 32                        # of the 256 SP1 rows; the saved model gave 1 distinct output of 96
 PAIR_ALPHA = Fraction(1, 100)
 ARM_MIN_SEEDS = 2                           # "at least 2 of its 3 seeds"
+ARM_MIN_VALID_RUNS = 2                      # an arm "shows no input use" only with at least 2 valid runs
+# One-field edits come in two kinds. A PRESENCE edit adds or removes an optional drive or register, so the input
+# text gets longer or shorter; reading it needs only the input's length or layout. A VALUE edit changes a value in
+# place (same input length). Only value edits test field-value reading (review of 3771f989, MINOR 1).
+EDIT_KIND_RULE = "presence iff field in (drive, register) and 'None' in (from, to); value otherwise"
+VALUE_EDIT_COUNTS = {"noetic": 196, "domain": 185, "drive": 88, "register": 69}     # 538, measured
+PRESENCE_EDIT_COUNTS = {"drive": 108, "register": 127}                             # 235, measured
+VALUE_EDIT_COUNT = sum(VALUE_EDIT_COUNTS.values())
+PRESENCE_EDIT_COUNT = sum(PRESENCE_EDIT_COUNTS.values())
+EDIT_VALUE_COLUMNS = ("p_new_original", "p_new_edited", "p_old_original", "p_old_edited", "masked_choice_original",
+                      "masked_choice_edited", "summary_cosine", "row", "position")
+# Input-use levels of one run at one checkpoint (review of 3771f989, MAJOR). Checked in this order.
+LEVELS = ("FULL", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_ONLY", "NONE")
+ARCHITECTURE_REASONS = ("INPUT_USE_RULE_FIRES_AT_INITIALISATION", "TEACHER_FORCED_ONLY", "PARTIAL_FIELDS",
+                        "STRUCTURE_ONLY", "SEED_DEPENDENT", "TOO_FEW_VALID_RUNS")
+LESSON_OUTCOMES = ("HELP", "HURT", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
+OVERALL_LESSON_OUTCOMES = ("HELP", "HURT", "MIXED", "EFFECT_NOT_SHOWN", "COMPARISON_INCOMPLETE", "NOT_EVALUATED")
 
 # ---- digests measured on the laptop from VISIBLE Q3 v0.7 files (pure Python, 2026-09-24) ------------------------
 Q3_MANIFEST_SHA256 = "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9"
@@ -94,18 +117,24 @@ DIAGNOSTIC_SELECTION_DIGEST = "0b98bfc94a5aed8af2d4fef72378fec7dfa9d46808b09ff30
 INSPECTED_DEV_DIGEST = "d91d914b93a9f131110cce59efb09028f8b71387107a5fe53ffc51ed6ee10105"
 INSPECTED_TRAIN_DIGEST = "1131a9c34c06de6c106c902a039379b9d6b10d795bc268da490763f296a145c8"
 SP1_DIGEST = "dab48792e0a7382c3e224e7c027d677405983b8a67cd522e59ef7add25cfc122"
+SP2_DIGEST = "00e55a809e02ac1fec043443cdb2e6413bbfd5ac3abaa2539534c7e8b793884a"          # [id, content_sha256]
+PANEL_TARGETS_DIGEST = "ba04a4de476cf678be42c71ceb03d90e1d6aba98fda8cb5d7785004f91b7f28a"  # SP1+SP2 targets
 EDIT_PANEL_DIGEST = "05d62b99f52db1a3b2a6511ffe0bb091b9415cc772474bb58d43a72b757c94d2"
+EDIT_KINDS_DIGEST = "c276d894a03804987d1435f160203922de824b59e96c38e07de9bcb23ca6f322"     # [row, position, kind]
 A_POOL_DIGEST = "9064635d86c95ae4886e24ce63810b9d216e22106a10d2645a9efdfe91e21a08"
 A_POOL_ROWS = 1792
 EDIT_COUNT = 773                           # measurable edits on EDIT64 (11 more leaf fields have no compilable edit)
+MEASURED_DIGEST_KEYS = ("diagnostic_selection", "inspected_dev", "inspected_train", "sp1", "sp2", "panel_targets",
+                        "edit_panel", "edit_kinds", "a_pool", "a_pool_rows", "edit_count", "value_edit_count",
+                        "presence_edit_count", "sp1_noetic_null", "a_pool_noetic_null")
 
 STOP_CODES = (
     "GPU_REQUIRED", "RUNTIME_VERSION_MISMATCH", "CUBLAS_WORKSPACE_CONFIG_DIFFERS", "GPU_BUSY_OR_UNKNOWN",
     "CUSTODY_REFUSED", "RUN_001_RECORDS_INCONSISTENT", "Q3_DATA_NOT_PINNED", "COMPILER_ENGINE_NOT_PYTHON",
     "PANEL_DIGEST_MISMATCH", "B_PACKAGE_NOT_PINNED", "B_PIN_NOT_THE_FROZEN_PACKAGE", "B_PACKAGE_BUILD_FAILED",
     "B_PACKAGE_MISMATCH", "STAGE0_NOT_REPRODUCED", "REINIT_NOT_REPRODUCED", "SMOKE_NONDETERMINISTIC",
-    "SMOKE_PAIR_INIT_MISMATCH", "SMOKE_FAILED", "PROJECTED_OVER_TIME", "NUMERICAL_FAILURE", "RUN_WALL_LIMIT",
-    "JOB_WALL_LIMIT",
+    "SMOKE_PAIR_INIT_MISMATCH", "SMOKE_RELOAD_FAILED", "SMOKE_FAILED", "PROJECTED_OVER_TIME", "NUMERICAL_FAILURE",
+    "RUN_WALL_LIMIT", "JOB_WALL_LIMIT",
 )
 
 
@@ -119,42 +148,71 @@ def sha(body: bytes) -> str:
 
 def frozen_record() -> dict:
     """Every frozen value, as JSON. The runner copies it into its results; the reader compares it with its own."""
+    t2_test = ("u = edits with p_new(edited) - p_new(original) >= delta, d = edits with <= -delta; pass iff "
+               "u >= min_share x (edits of this kind) and exact one-sided sign test P(X >= u | u+d, 1/2) <= alpha")
     return {
-        "schema": SCHEMA, "experiment": EXPERIMENT, "label": LABEL, "arms": list(ARMS), "arm_meaning": ARM_MEANING,
+        "schema": SCHEMA, "spec_revision": SPEC_REVISION, "experiment": EXPERIMENT, "label": LABEL,
+        "arms": list(ARMS), "arm_meaning": ARM_MEANING,
         "seeds": list(SEEDS), "run_order": [list(x) for x in RUN_ORDER], "updates": UPDATES,
         "checkpoints": list(CHECKPOINTS), "loss_window": LOSS_WINDOW, "width": WIDTH, "learning_rate": LEARNING_RATE,
         "clip_norm": CLIP_NORM, "optimizer": OPTIMIZER, "loss": LOSS, "init": INIT, "order": ORDER,
         "numerical_policy": NUMERICAL_POLICY, "expected_torch": EXPECTED_TORCH, "expected_python": EXPECTED_PYTHON,
         "eval_decode_max_tokens": EVAL_DECODE_MAX_TOKENS, "sp1_seed": SP1_SEED, "sp1_size": SP1_SIZE,
         "edit_stride": EDIT_STRIDE, "teach_fit_rows": TEACH_FIT_ROWS, "panels": PANELS,
-        "comparison_panels": list(COMPARISON_PANELS), "b_package": B_PACKAGE,
+        "comparison_panels": list(COMPARISON_PANELS), "primary_panels": list(PRIMARY_PANELS),
+        "missing_panel": MISSING_PANEL, "b_package": B_PACKAGE,
         "smoke": {"updates": SMOKE_UPDATES, "checkpoints": list(SMOKE_CHECKPOINTS),
-                  "panel_stride": SMOKE_STRIDE, "edit_row_stride": SMOKE_EDIT_STRIDE},
+                  "panel_stride": SMOKE_STRIDE, "edit_row_stride": SMOKE_EDIT_STRIDE,
+                  "reload": "fresh-process reload of smoke run A_first; SMOKE_RELOAD_FAILED unless RELOAD_REPRODUCED"},
         "time": {"projection_safety": str(PROJECTION_SAFETY), "reload_allowance_seconds": RELOAD_ALLOWANCE_SECONDS,
                  "run_wall_seconds": RUN_WALL_SECONDS, "job_wall_seconds": JOB_WALL_SECONDS},
+        "edits": {"kind_rule": EDIT_KIND_RULE, "value_counts": VALUE_EDIT_COUNTS,
+                  "presence_counts": PRESENCE_EDIT_COUNTS, "value_edit_count": VALUE_EDIT_COUNT,
+                  "presence_edit_count": PRESENCE_EDIT_COUNT, "value_columns": list(EDIT_VALUE_COLUMNS)},
         "rules": {"T1": {"field": T1_FIELD, "alpha": str(T1_ALPHA), "panel": "SP1",
                          "null_rate": "max(most-frequent noetic rate in the arm's teaching pool, "
                                       "most-frequent noetic rate among the SP1 targets)",
+                         "sp1_noetic_null": str(SP1_NOETIC_NULL), "a_pool_noetic_null": str(A_POOL_NOETIC_NULL),
                          "test": "exact one-sided binomial P(X >= k | n, p0) <= alpha, on grammar-masked "
                                  "teacher-forced choices at every noetic position of SP1"},
-                  "T2": {"delta": T2_DELTA, "min_share": str(T2_MIN_SHARE), "alpha": str(T2_ALPHA),
-                         "panel": "EDIT64",
-                         "test": "u = edits with p_new(edited) - p_new(original) >= delta, d = edits with <= -delta; "
-                                 "pass iff u >= min_share x edits and exact one-sided sign test P(X >= u | u+d, 1/2) "
-                                 "<= alpha"},
+                  "T2V": {"delta": T2_DELTA, "min_share": str(T2_MIN_SHARE), "alpha": str(T2_ALPHA),
+                          "panel": "EDIT64 VALUE edits only (%d)" % VALUE_EDIT_COUNT, "test": t2_test,
+                          "meaning": "field-value reading with the correct previous tokens"},
+                  "T2P": {"delta": T2_DELTA, "min_share": str(T2_MIN_SHARE), "alpha": str(T2_ALPHA),
+                          "panel": "EDIT64 PRESENCE edits only (%d)" % PRESENCE_EDIT_COUNT, "test": t2_test,
+                          "meaning": "reading of drive/register presence (input length or layout) only"},
+                  "T2_ALL_EDITS": "reported, never decisive",
                   "T3": {"min_distinct": T3_MIN_DISTINCT, "panel": "SP1",
-                         "test": "distinct free-decoded token sequences on SP1 >= min_distinct"},
-                  "INPUT_USE_DETECTED": "T1 and T2 and T3",
-                  "ARCHITECTURE_CHANGE_JUSTIFIED": "no arm shows INPUT_USE_DETECTED at the FINAL checkpoint in at "
-                                                   "least %d of its 3 seeds" % ARM_MIN_SEEDS,
+                         "test": "distinct free-decoded token sequences on SP1 >= min_distinct",
+                         "meaning": "free generation has not collapsed. NOT evidence of field-value reading: a "
+                                    "structure-only reader reaches 180 distinct outputs on SP1"},
+                  "LEVELS": "checked in order: FULL = T1 and T2V and T3; TEACHER_FORCED_ONLY = (T1 or T2V) and not "
+                            "T3; PARTIAL_FIELDS = T3 and exactly one of T1, T2V; STRUCTURE_ONLY = not T1 and not "
+                            "T2V and T2P; NONE = not T1 and not T2V and not T2P",
+                  "CALIBRATION_GUARD": "fires iff some run's checkpoint-0 level is not NONE",
+                  "ARM": "SHOWS_INPUT_USE iff FULL in at least %d valid runs; SHOWS_NO_INPUT_USE iff at least %d "
+                         "valid runs and every valid run NONE; INPUT_USE_UNDETERMINED otherwise"
+                         % (ARM_MIN_SEEDS, ARM_MIN_VALID_RUNS),
+                  "ARCHITECTURE_CHANGE_JUSTIFIED": "calibration guard silent, and every valid FINAL run of both arms "
+                                                   "is NONE, with at least %d valid runs per arm" % ARM_MIN_VALID_RUNS,
+                  "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE": "calibration guard silent and some arm "
+                                                                         "SHOWS_INPUT_USE; teaching fit is not tested",
+                  "ARCHITECTURE_DECISION_INCOMPLETE": "otherwise, with every reason that applies from %s"
+                                                      % ", ".join(ARCHITECTURE_REASONS),
                   "B_BEATS_A": "per seed pair, exact canonical tree, paired rows: b = B exact and A not, c = A exact "
                                "and B not; b > c and P(X >= b | b+c, 1/2) <= %s" % PAIR_ALPHA,
-                  "LESSONS_HELP": "B_BEATS_A in all 3 seed pairs, per panel"},
+                  "LESSONS_HELP": "B_BEATS_A in all 3 seed pairs, per panel",
+                  "LESSONS_OVERALL": "over the primary panels SP1 and SP2U, in order: NOT_EVALUATED if either is; "
+                                     "COMPARISON_INCOMPLETE if either is; MIXED if one is HELP and the other HURT; "
+                                     "HURT if either is HURT; HELP if both are HELP; EFFECT_NOT_SHOWN otherwise"},
         "digests": {"q3_manifest": Q3_MANIFEST_SHA256, "run_001_plan": RUN_001_PLAN_SHA256,
                     "run_001_weights": RUN_001_WEIGHTS_SHA256, "diagnostic_selection": DIAGNOSTIC_SELECTION_DIGEST,
                     "inspected_dev": INSPECTED_DEV_DIGEST, "inspected_train": INSPECTED_TRAIN_DIGEST,
-                    "sp1": SP1_DIGEST, "edit_panel": EDIT_PANEL_DIGEST, "a_pool": A_POOL_DIGEST,
-                    "a_pool_rows": A_POOL_ROWS, "edit_count": EDIT_COUNT},
+                    "sp1": SP1_DIGEST, "sp2": SP2_DIGEST, "panel_targets": PANEL_TARGETS_DIGEST,
+                    "edit_panel": EDIT_PANEL_DIGEST, "edit_kinds": EDIT_KINDS_DIGEST, "a_pool": A_POOL_DIGEST,
+                    "a_pool_rows": A_POOL_ROWS, "edit_count": EDIT_COUNT, "value_edit_count": VALUE_EDIT_COUNT,
+                    "presence_edit_count": PRESENCE_EDIT_COUNT, "sp1_noetic_null": str(SP1_NOETIC_NULL),
+                    "a_pool_noetic_null": str(A_POOL_NOETIC_NULL)},
         "stop_codes": list(STOP_CODES),
     }
 
@@ -197,3 +255,73 @@ def most_frequent_rate(counts: dict) -> Fraction:
     if total <= 0:
         raise ValueError("EMPTY_CLASS_COUNTS")
     return Fraction(max(counts.values()), total)
+
+
+# ---- digests over panel content (the same functions on the laptop, on the machine and in the reader) ------------
+def panel_targets_digest(rows) -> str:
+    """rows: (id, target_tokens, slot_kinds) of SP1 then SP2, in panel order."""
+    return sha(canonical([[i, list(tokens), list(kinds)] for i, tokens, kinds in rows]))
+
+
+def edit_kind(field, old, new) -> str:
+    """'presence' when a drive or register is added or removed (the input text changes length); else 'value'."""
+    return "presence" if field in ("drive", "register") and "None" in (str(old), str(new)) else "value"
+
+
+def edit_kinds_digest(items) -> str:
+    """items: (row id, target position, kind) of every MEASURABLE edit, in edit order."""
+    return sha(canonical([[row, position, kind] for row, position, kind in items]))
+
+
+# ---- the decision functions (the reader calls these; the spec and the record above say the same in words) -------
+def input_use_level(t1: bool, t2v: bool, t2p: bool, t3: bool) -> str:
+    """One run at one checkpoint. See LEVELS; every combination of the four tests has exactly one level."""
+    if t1 and t2v and t3:
+        return "FULL"
+    if t1 or t2v:
+        return "PARTIAL_FIELDS" if t3 else "TEACHER_FORCED_ONLY"
+    return "STRUCTURE_ONLY" if t2p else "NONE"
+
+
+def arm_label(arm: str, valid_levels) -> str:
+    """valid_levels: the FINAL level of every VALID run of this arm (missing or invalid runs are left out)."""
+    valid_levels = list(valid_levels)
+    if valid_levels.count("FULL") >= ARM_MIN_SEEDS:
+        return "ARM_%s_SHOWS_INPUT_USE" % arm
+    if len(valid_levels) >= ARM_MIN_VALID_RUNS and all(level == "NONE" for level in valid_levels):
+        return "ARM_%s_SHOWS_NO_INPUT_USE" % arm
+    return "ARM_%s_INPUT_USE_UNDETERMINED" % arm
+
+
+def architecture_decision(valid_levels_by_arm: dict, guard_fires: bool):
+    """(label, reasons). valid_levels_by_arm: arm -> FINAL levels of that arm's VALID runs."""
+    if guard_fires:
+        return "ARCHITECTURE_DECISION_INCOMPLETE", ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
+    labels = {arm: arm_label(arm, valid_levels_by_arm.get(arm, ())) for arm in ARMS}
+    if any(label.endswith("_SHOWS_INPUT_USE") for label in labels.values()):
+        return "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE", []
+    if all(label.endswith("_SHOWS_NO_INPUT_USE") for label in labels.values()):
+        return "ARCHITECTURE_CHANGE_JUSTIFIED", []
+    present = [level for arm in ARMS for level in valid_levels_by_arm.get(arm, ())]
+    reasons = [level for level in ("TEACHER_FORCED_ONLY", "PARTIAL_FIELDS", "STRUCTURE_ONLY") if level in present]
+    if "FULL" in present:
+        reasons.append("SEED_DEPENDENT")
+    if any(len(valid_levels_by_arm.get(arm, ())) < ARM_MIN_VALID_RUNS for arm in ARMS):
+        reasons.append("TOO_FEW_VALID_RUNS")
+    return "ARCHITECTURE_DECISION_INCOMPLETE", reasons
+
+
+def overall_lessons(per_panel: dict) -> str:
+    """per_panel: panel -> one of LESSON_OUTCOMES. The one overall answer over PRIMARY_PANELS."""
+    outcomes = [per_panel[p] for p in PRIMARY_PANELS]
+    if "NOT_EVALUATED" in outcomes:
+        return "NOT_EVALUATED"
+    if "COMPARISON_INCOMPLETE" in outcomes:
+        return "COMPARISON_INCOMPLETE"
+    if "HELP" in outcomes and "HURT" in outcomes:
+        return "MIXED"
+    if "HURT" in outcomes:
+        return "HURT"
+    if all(x == "HELP" for x in outcomes):
+        return "HELP"
+    return "EFFECT_NOT_SHOWN"

@@ -158,6 +158,12 @@ def edit_digest(items):
     return rules.sha(rules.canonical([[e["row"], e["path"], e["field"], e["to"], e["observation"]] for e in items]))
 
 
+def edit_kinds(items):
+    """(row, position, kind) of every MEASURABLE edit, in edit order: kind 'value' or 'presence' (q4_ab_rules)."""
+    return [(e["row"], e["position"], rules.edit_kind(e["field"], e["from"], e["to"])) for e in items
+            if e["to"] is not None]
+
+
 def rows_digest(rows):
     return rules.sha(rules.canonical([[r["record_id"], r["content_sha256"]] for r in rows]))
 
@@ -250,10 +256,18 @@ def prepare_q3(run_dir, data_dir, compiler, *, strict=True):
     items = edit_items(edit_rows, compiler)
     panel_contents = {r["content_sha256"] for r in sp1} | {r["content_sha256"] for r in sp2}
     a_pool, a_dropped = teaching_pool(train_rows, {r["record_id"] for r in sp1}, panel_contents)
+    kinds = edit_kinds(items)
     measured = {"diagnostic_selection": seen["selection_digest"], "inspected_dev": seen["dev_digest"],
-                "inspected_train": seen["train_digest"], "sp1": rows_digest(sp1), "edit_panel": edit_digest(items),
+                "inspected_train": seen["train_digest"], "sp1": rows_digest(sp1), "sp2": rows_digest(sp2),
+                "panel_targets": rules.panel_targets_digest(
+                    [(r["record_id"], r["target_tokens"], r["slot_kinds"]) for r in sp1 + sp2]),
+                "edit_panel": edit_digest(items), "edit_kinds": rules.edit_kinds_digest(kinds),
                 "a_pool": ids_digest(a_pool), "a_pool_rows": len(a_pool),
-                "edit_count": sum(1 for e in items if e["to"] is not None)}
+                "edit_count": sum(1 for e in items if e["to"] is not None),
+                "value_edit_count": sum(1 for k in kinds if k[2] == "value"),
+                "presence_edit_count": sum(1 for k in kinds if k[2] == "presence"),
+                "sp1_noetic_null": str(rules.most_frequent_rate(class_counts(sp1, "noetic"))),
+                "a_pool_noetic_null": str(rules.most_frequent_rate(class_counts(a_pool, "noetic")))}
     if strict:
         check_frozen_digests(measured)
     return {"records": records, "train": train, "dev": dev, "train_rows": train_rows, "sp1": sp1, "sp2": sp2,

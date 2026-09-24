@@ -57,7 +57,7 @@ if "$PY" -c "import cas_engine" 2>/dev/null; then STATUS=RUST_ENGINE_PRESENT_EXP
 STATUS=stageA_panels
 "$PY" -B q4_ab_prep.py measure --run-dir "$RUNDIR" --data-dir data/q3_v0_7 > "$WORK/out/stageA_measure.json" 2> "$WORK/out/stageA_measure.err"
 A=$?
-"$PY" -B -c "import json,sys,q4_ab_rules as r; m=json.load(open(sys.argv[1])); d=r.frozen_record()['digests']; bad=[k for k in ('diagnostic_selection','inspected_dev','inspected_train','sp1','edit_panel','a_pool','a_pool_rows','edit_count') if m.get(k)!=d[k]]; print('panel digests differ:', bad) if bad else print('panel digests reproduce'); sys.exit(1 if bad or m.get('compiler_engine')!='python' else 0)" "$WORK/out/stageA_measure.json"
+"$PY" -B -c "import json,sys,q4_ab_rules as r; m=json.load(open(sys.argv[1])); d=r.frozen_record()['digests']; bad=[k for k in r.MEASURED_DIGEST_KEYS if m.get(k)!=d[k]]; print('panel digests differ:', bad) if bad else print('panel digests reproduce'); sys.exit(1 if bad or m.get('compiler_engine')!='python' else 0)" "$WORK/out/stageA_measure.json"
 AD=$?
 if [ "$A" -ne 0 ] || [ "$AD" -ne 0 ]; then STATUS=PANELS_NOT_REPRODUCED; exit 1; fi
 
@@ -67,7 +67,7 @@ STATUS=stageB_tests
 B=$?
 tail -n 3 "$WORK/out/stageB_pytest.log"
 
-# STAGE C: the comparison (pin, gpu gates, stage 0, B rebuild, prep, smoke + projection, 6 runs, reload checks).
+# STAGE C: the comparison (pin, gpu gates, stage 0, B rebuild, prep, smoke + reload + projection, 6 runs, reloads).
 STATUS=stageC_train
 ( START=$(date +%s); "$PY" -B q4_ab_train.py run --run-dir "$RUNDIR" --data-dir data/q3_v0_7 --out "$WORK/out/ab" \
     --device cuda:0 --max-wall-seconds __JOB_WALL_SECONDS__; CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) \

@@ -25,13 +25,19 @@ Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover). Runner: the Claude co
 2. `python pin_package.py --check`, then `python pin_package.py --write`. It refuses unless both builds were
    byte-identical, the verify passed, the manifest hashes to the reported digest, and seeds, size and engine equal the
    frozen package in `q4_ab_rules.py`. It writes one entry into `research/helm_cas_expression_lab/Q4_SDG_DATA_PINS.json`.
-3. Commit the pin file and this folder's records, by explicit path.
+3. Commit the pin file and this folder's records, by explicit path. **`results/manifest.json` must be in that
+   commit.** The training launcher reads it at its source commit and refuses unless it hashes to the pin and every
+   source hash it recorded equals the same file at that commit (review of 3771f989, MINOR 6).
 
-**Known side effect of pinning (open question for Codex/owner).** `test_q4_sdg_curriculum.py::test_pinning_is_required_and_create_only`
-expects `NO_PIN_FOR_THIS_DATA_VERSION` from the REAL pin file for its tiny package. Once the real package is pinned,
-the same call raises `MANIFEST_NOT_THE_PINNED_ONE` instead, so that existing test fails. The one-line fix (point
-`sdg.PINS` at a temporary copy of an empty pin file before the first assertion) is outside this builder's new-files-only
-scope. The A-versus-B job itself never runs that test.
+**Keep the builder unchanged until the training job ends.** The T4 machine rebuilds the package from the training
+job's source commit. If `q4_sdg_curriculum.py` or any other file in the manifest's `sources_lf_sha256` changes after
+this build, the rebuild differs from the pin. The training launcher now refuses that case at $0
+(`B_PACKAGE_SOURCES_CHANGED_SINCE_THE_DATA_BUILD`), instead of the machine stopping at `B_PACKAGE_MISMATCH` after
+setup.
+
+**Side effect of pinning: fixed.** `test_q4_sdg_curriculum.py::test_pinning_is_required_and_create_only` used to read
+the REAL pin file and would have failed once the package is pinned. Since revision 2 (2026-09-24) it points `sdg.PINS`
+at an empty temporary pin file first, so it passes before and after pinning. `q4_sdg_curriculum.py` was not changed.
 
 ## Machine, time and money
 

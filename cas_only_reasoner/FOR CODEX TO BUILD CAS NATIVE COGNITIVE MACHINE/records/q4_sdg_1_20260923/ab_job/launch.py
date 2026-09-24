@@ -6,10 +6,14 @@ ceiling INCLUDING the pinned data build; one GPU machine at a time; no automatic
 stays out of every loop) and the AWS order of 2026-09-23. Rules: research/helm_cas_expression_lab/q4_ab_rules.py and
 Q4_SDG_AB_SPEC_v0_2.md (FROZEN_BEFORE_LAUNCH). Limits: JOB_LIMITS.md in this folder.
 
-Refuses to launch unless, AT THE SOURCE COMMIT: the spec says FROZEN_BEFORE_LAUNCH; the frozen digests are filled in;
-Q4_SDG_DATA_PINS.json holds the B package's pin for the frozen package (engine python, size 4096, seeds 20260941 and
-20260951); the data-build job has a watch record, and its measured cost plus this job's worst case fit $5.00; no GPU
-machine is running; this folder has no launch record yet.
+Refuses to launch unless, AT THE SOURCE COMMIT: the rules hash to APPROVED_FROZEN_SHA256 (the reviewed rules) and the
+spec's status line is '**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `<that hash>`'; the four decision programs and
+the spec have exactly the APPROVED_LF_SHA256 bytes (LF); the frozen digests are filled in; Q4_SDG_DATA_PINS.json holds
+the B package's pin for the frozen package (engine python, size 4096, seeds 20260941 and 20260951); the data build's
+results/manifest.json is committed, hashes to the pinned manifest_sha256, and every source hash it recorded (the
+package builder, its imports, the compiler snapshot, the Q3 files) equals the same file at the source commit (else the
+T4 rebuild would stop at B_PACKAGE_MISMATCH after setup); the data-build job has a watch record, and its measured cost
+plus this job's worst case fit $5.00; no GPU machine is running; this folder has no launch record yet.
 
 The bundle is built from GIT OBJECTS at one reviewed commit (--source-commit, 40 hex, on the Q4-SDG-1 branch):
   research/helm_cas_expression_lab/   top-level .py and .json files, the spec, the pinned compiler snapshot, and the
@@ -55,7 +59,18 @@ WEIGHTS = RUN + "checkpoint/model_state.pt"
 WEIGHTS_SHA256 = "d54f57155a54cbd28621d92af9cb5f45e425c015a559cf80103966ccbf275477"
 FORBIDDEN = re.compile(r"(_eval\.jsonl$|sealed|hset1a|hset1b)", re.IGNORECASE)
 JOB_FILES = ["launch.py", "job.sh.template", "watch.py", "JOB_LIMITS.md"]
-FROZEN_STATUS_LINE = re.compile(rb"^[*][*]Status: FROZEN_BEFORE_LAUNCH[*][*]", re.MULTILINE)
+FROZEN_STATUS_LINE = re.compile(rb"^[*][*]Status: FROZEN_BEFORE_LAUNCH[*][*] frozen_sha256 `([0-9a-f]{64})`", re.MULTILINE)
+DATA_BUILD_MANIFEST = "records/q4_sdg_1_20260923/data_build_job/results/manifest.json"
+# The reviewed rules and programs (spec v0.2 revision 2). Any change to them after review changes these values, and
+# the launch is refused until a review approves the change and this file is updated in a commit of its own.
+APPROVED_FROZEN_SHA256 = "3100f37603cbc0e351cfbad2e2832bd769819d906338f7cf08966b916ee42f11"
+APPROVED_LF_SHA256 = {
+    LAB + "q4_ab_rules.py": "e990f76e5b9af11e6abc08b89ba1de2fb496920b4cc436299ef63af3fad011bf",
+    LAB + "q4_ab_prep.py": "b0601e5382df15441526bf334fb8c548ee6a379d4b633a81adb60e40fca8fd23",
+    LAB + "q4_ab_train.py": "4d793a6afed5ddf6e399fcbcfff2bb1799a28ee725ab98cf4d59578e1bce8cd4",
+    LAB + "read_q4_ab_results.py": "40769840df0de81b02ebce738715dc0cf2810cc49457810d50577485c2811e60",
+    SPEC: "7829d623fe7bbbb6a41252bf2177c0e73fdd2188dc8e6ae576c62afa7649018a",
+}
 GPU_FAMILIES = ["g4dn.*", "g5.*", "g6.*", "g6e.*", "g7.*", "p3.*", "p4d.*", "p5.*"]
 
 
@@ -124,17 +139,62 @@ def check_pin_blob(pins_blob, rules_ns):
     return entry
 
 
-def check_frozen(blobs):
+def lf_sha256(body):
+    return hashlib.sha256(body.replace(b"\r\n", b"\n")).hexdigest()
+
+
+def check_frozen(blobs, approved_frozen=None, approved_lf=None):
+    """The rules, the spec's status line and the decision programs must be the reviewed ones (review MINOR 3)."""
+    approved_frozen = APPROVED_FROZEN_SHA256 if approved_frozen is None else approved_frozen
+    approved_lf = APPROVED_LF_SHA256 if approved_lf is None else approved_lf
+    if not re.fullmatch(r"[0-9a-f]{64}", approved_frozen) or any(
+            not re.fullmatch(r"[0-9a-f]{64}", v) for v in approved_lf.values()):
+        raise SystemExit("LAUNCH_REFUSED: the approved hashes in launch.py are not filled in")
     rules_ns = frozen_rules_of(blobs[LAB + "q4_ab_rules.py"])
     digests = rules_ns["frozen_record"]()["digests"]
     if any(value in ("TO_BE_MEASURED", -1) for value in digests.values()):
         raise SystemExit("LAUNCH_REFUSED: frozen digests are not filled in")
-    if not FROZEN_STATUS_LINE.search(blobs[SPEC]):
-        raise SystemExit("LAUNCH_REFUSED: the spec's status line is not '**Status: FROZEN_BEFORE_LAUNCH**' at this commit")
+    if rules_ns["frozen_sha256"]() != approved_frozen:
+        raise SystemExit("LAUNCH_REFUSED: FROZEN_RULES_NOT_THE_APPROVED_ONES (%s at this commit, approved %s)" % (
+            rules_ns["frozen_sha256"]()[:12], approved_frozen[:12]))
+    status = FROZEN_STATUS_LINE.search(blobs[SPEC])
+    if not status:
+        raise SystemExit("LAUNCH_REFUSED: the spec's status line is not '**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 "
+                         "`<hash>`' at this commit")
+    if status.group(1).decode("ascii") != approved_frozen:
+        raise SystemExit("LAUNCH_REFUSED: the spec's frozen status names another frozen_sha256")
+    changed = sorted(rel for rel, want in approved_lf.items() if rel not in blobs or lf_sha256(blobs[rel]) != want)
+    if changed:
+        raise SystemExit("LAUNCH_REFUSED: APPROVED_SOURCE_CHANGED since the review: %s" % changed)
     if rules_ns["JOB_WALL_SECONDS"] != JOB_WALL_SECONDS or JOB_WALL_SECONDS >= MAX_SECONDS:
         raise SystemExit("LAUNCH_REFUSED: the runner's wall limit must equal JOB_WALL_SECONDS and sit inside the machine timer")
     entry = check_pin_blob(blobs[LAB + "Q4_SDG_DATA_PINS.json"], rules_ns)
     return rules_ns, entry
+
+
+def check_data_build_manifest(manifest_blob, blobs, entry):
+    """Review MINOR 6: the T4 machine rebuilds B from the source commit, and its manifest records the LF sha256 of the
+    builder's sources. Compare, at $0, what the pinned data build recorded with the same files at the source commit."""
+    if lf_sha256(manifest_blob) != entry["manifest_sha256"]:
+        raise SystemExit("LAUNCH_REFUSED: DATA_BUILD_MANIFEST_NOT_THE_PINNED_ONE")
+    try:
+        manifest = json.loads(manifest_blob.replace(b"\r\n", b"\n").decode("utf-8"))
+    except (UnicodeError, ValueError):
+        raise SystemExit("LAUNCH_REFUSED: the data build's manifest.json is unreadable") from None
+    sources = manifest.get("sources_lf_sha256") if isinstance(manifest, dict) else None
+    immutable = manifest.get("q3_immutable_lf_sha256") if isinstance(manifest, dict) else None
+    if not isinstance(sources, dict) or not sources or not isinstance(immutable, dict) or not immutable:
+        raise SystemExit("LAUNCH_REFUSED: the data build's manifest has no source hashes")
+    differ = sorted(name for name, digest in list(sources.items()) + list(immutable.items())
+                    if LAB + name not in blobs or lf_sha256(blobs[LAB + name]) != digest)
+    if (manifest.get("compiler") or {}).get("sha256") != lf_sha256(blobs[COMPILER]):
+        differ.append("compiler snapshot")
+    if manifest.get("q3_v0_7_manifest_sha256") != lf_sha256(blobs[DATA + "manifest.json"]):
+        differ.append("q3_v0_7 manifest")
+    if differ:
+        raise SystemExit("LAUNCH_REFUSED: B_PACKAGE_SOURCES_CHANGED_SINCE_THE_DATA_BUILD: %s (the T4 rebuild would "
+                         "differ from the pin)" % differ)
+    return manifest
 
 
 def money_check(watch_record_path=DATA_BUILD / "watch_record.json"):
@@ -182,10 +242,18 @@ def assemble(commit):
     if hashlib.sha256(blobs[WEIGHTS]).hexdigest() != WEIGHTS_SHA256:
         raise SystemExit("BUNDLE_REFUSED: checkpoint weights differ from d54f5715")
     rules_ns, entry = check_frozen(blobs)
+    try:
+        manifest_blob = read_blobs(commit, [DATA_BUILD_MANIFEST])[DATA_BUILD_MANIFEST]
+    except SystemExit:
+        raise SystemExit("LAUNCH_REFUSED: commit data_build_job/results/manifest.json with the pin; it is missing at "
+                         "%s" % commit[:8]) from None
+    check_data_build_manifest(manifest_blob, blobs, entry)
     files = {"pkg/" + r: b for r, b in blobs.items()}
     identity = {"source_commit": commit, "branch": BRANCH, "files": len(blobs), "weights_sha256": WEIGHTS_SHA256,
                 "b_package_pin": {k: entry[k] for k in ("manifest_sha256", "engine", "size", "seed", "feedback_seed")},
-                "frozen_sha256": rules_ns["frozen_sha256"](),
+                "frozen_sha256": rules_ns["frozen_sha256"](), "approved_frozen_sha256": APPROVED_FROZEN_SHA256,
+                "approved_lf_sha256": APPROVED_LF_SHA256,
+                "data_build_manifest_lf_sha256": lf_sha256(manifest_blob),
                 "lf_sha256": {r: hashlib.sha256(b.replace(b"\r\n", b"\n")).hexdigest() for r, b in blobs.items()
                               if r.startswith(LAB) and r.endswith((".py", ".json", ".md"))},
                 "custody": "no *_eval.jsonl, no *sealed*, no hset1a/hset1b path bundled (checked by name, twice)"}

@@ -16,7 +16,8 @@ Stages, in order. Any stop writes STOP.json with a code from q4_ab_rules.STOP_CO
   b_package the package is rebuilt here (q4_sdg_curriculum.build, --expect-engine python) and must equal the pin.
   prep      prep.json: panels, edits, pools and class counts (create-only).
   smoke     64 updates of A (twice, same seed: must be identical) and B (same starting tensors as A), on thinned
-            panels; then a time projection that must fit the time left (else PROJECTED_OVER_TIME).
+            panels; the fresh-process reload of A_first must reproduce (else SMOKE_RELOAD_FAILED); then a time
+            projection that must fit the time left (else PROJECTED_OVER_TIME).
   runs      A1 B1 A2 B2 A3 B3: UPDATES single-example updates each; the shared panels and the input-use measures at
             every checkpoint; the final weights saved with their sha256; a fresh-process reload check.
 
@@ -196,7 +197,7 @@ def runtime_edits(edit_items, rows_by_id):
             continue
         row = rows_by_id[item["row"]]
         prefix = tuple(row["target_tokens"][:item["position"]])
-        out.append({"row": item["row"], "source_observation": row["observation"],
+        out.append({"row": item["row"], "position": item["position"], "source_observation": row["observation"],
                     "observation": item["observation"], "prefix": prefix,
                     "allowed": prep.allowed_next(prefix), "old": TOKENS.index(item["old_token"]),
                     "new": TOKENS.index(item["new_token"])})
@@ -250,12 +251,10 @@ def evaluate(model, panels, edits, partners, deadlines):
         p0, p1 = ep.softmax(l0), ep.softmax(l1)
         values.append([p0[edit["new"]], p1[edit["new"]], p0[edit["old"]], p1[edit["old"]],
                        ep.choose(l0, edit["allowed"]), ep.choose(l1, edit["allowed"]),
-                       ep.summary_change(b0.values, b1.values)["cosine"]])
+                       ep.summary_change(b0.values, b1.values)["cosine"], edit["row"], edit["position"]])
     timing["edit_seconds"] += time.monotonic() - started
     timing["edits"] += len(values)
-    record["edits"] = {"columns": ["p_new_original", "p_new_edited", "p_old_original", "p_old_edited",
-                                   "masked_choice_original", "masked_choice_edited", "summary_cosine"],
-                       "values": values}
+    record["edits"] = {"columns": list(rules.EDIT_VALUE_COLUMNS), "values": values}
     cosines = [ep.summary_change(bottlenecks[a].values, bottlenecks[b].values)["cosine"]
                for a, b in partners if a in bottlenecks and b in bottlenecks]
     record["summary_similarity"] = {"partner_cosine": ep.describe_values(cosines)}
@@ -368,8 +367,9 @@ def comparable(record):
     return {k: v for k, v in record.items() if k not in ("timing", "elapsed_seconds")}
 
 
-def smoke_and_project(*, pools, shared_panels, edits, partners, device, job_deadline, identity_base, out):
-    """Tiny runs first: A twice (same seed) must be identical; B must start from A's tensors; then the projection."""
+def smoke_and_project(*, pools, shared_panels, edits, partners, device, job_deadline, identity_base, out, prep_path):
+    """Tiny runs first: A twice (same seed) must be identical; B must start from A's tensors; the fresh-process
+    reload of A_first must reproduce (the same path every main run uses); then the time projection."""
     seed = rules.SEEDS[0]
     smoke_edits = edits[::rules.SMOKE_EDIT_STRIDE]
     results = {}
@@ -384,6 +384,10 @@ def smoke_and_project(*, pools, shared_panels, edits, partners, device, job_dead
         b = ep.read_json(out / "smoke" / "A_repeat" / ("checkpoint_%05d.json" % point))
         same = same and rules.canonical(comparable(a)) == rules.canonical(comparable(b))
     pair_init = results["A_first"]["init_state_sha256"] == results["B_first"]["init_state_sha256"]
+    reload_dir = out / "smoke" / "A_first"
+    reload_exit = reload_in_fresh_process(reload_dir, prep_path, device, job_deadline)
+    reload_record = ep.read_json(reload_dir / "reload_check.json") if (reload_dir / "reload_check.json").is_file() else None
+    reload_status = None if reload_record is None else reload_record.get("status")
     timing = collections.Counter()
     for name in results:
         for point in rules.SMOKE_CHECKPOINTS:
@@ -396,6 +400,7 @@ def smoke_and_project(*, pools, shared_panels, edits, partners, device, job_dead
     per_run = rules.UPDATES * per_update + len(rules.CHECKPOINTS) * eval_full + rules.RELOAD_ALLOWANCE_SECONDS
     projected = float(rules.PROJECTION_SAFETY) * per_run * len(rules.RUN_ORDER)
     summary = {"schema": RESULT_SCHEMA, "deterministic_repeat": same, "pair_init_equal": pair_init,
+               "reload_A_first": {"exit": reload_exit, "status": reload_status},
                "seconds_per_update": per_update, "projected_eval_seconds_per_checkpoint": eval_full,
                "projected_seconds_per_run": per_run, "projected_seconds_all_runs_with_safety": projected,
                "seconds_left_in_job": job_deadline.left(), "run_wall_seconds": rules.RUN_WALL_SECONDS,
@@ -409,6 +414,9 @@ def smoke_and_project(*, pools, shared_panels, edits, partners, device, job_dead
         raise JobStop("SMOKE_NONDETERMINISTIC", "two identical smoke runs differ")
     if not pair_init:
         raise JobStop("SMOKE_PAIR_INIT_MISMATCH", "arms A and B do not start from the same tensors")
+    if reload_status != "RELOAD_REPRODUCED":
+        raise JobStop("SMOKE_RELOAD_FAILED", "fresh-process reload of smoke A_first: exit %s, status %s"
+                      % (reload_exit, reload_status))
     if projected > job_deadline.left() or float(rules.PROJECTION_SAFETY) * per_run > rules.RUN_WALL_SECONDS:
         raise JobStop("PROJECTED_OVER_TIME", "%.0f s projected, %.0f s left" % (projected, job_deadline.left()))
     return summary
@@ -427,6 +435,15 @@ def reload_in_fresh_process(run_dir, prep_path, device, job_deadline):
     return code
 
 
+def reload_rows(final_record, prep_record, count=RELOAD_ROWS):
+    """The first `count` SP1 rows that the saved FINAL checkpoint holds, each with its observation from prep.json.
+
+A smoke run's checkpoint holds a thinned SP1 (every SMOKE_STRIDE-th row), so the rows are taken from the checkpoint,
+never from the head of prep.json's SP1 (review of 3771f989: the smoke stage now runs this path)."""
+    observations = {r["id"]: r["observation"] for r in prep_record["panels"]["SP1"]}
+    return [(row, observations[row["id"]]) for row in final_record["panels"]["SP1"]["rows"][:count]]
+
+
 def reload_check(run_dir, prep_path, device):
     require_device(device)
     run_dir = Path(run_dir)
@@ -436,20 +453,19 @@ def reload_check(run_dir, prep_path, device):
     set_deterministic(torch)
     result = ep.read_json(run_dir / "run_result.json")
     final = ep.read_json(run_dir / ("checkpoint_%05d.json" % result["updates"]))
-    rows = ep.read_json(prep_path)["panels"]["SP1"][:RELOAD_ROWS]
+    rows = reload_rows(final, ep.read_json(prep_path))
     model = load_checkpoint(run_dir / "checkpoint", expected_identity=result["identity"],
                             expected_weights_sha256=result["final_weights_sha256"], width=rules.WIDTH, device=device)
-    saved = {r["id"]: r for r in final["panels"]["SP1"]["rows"]}
     limits = DecodeLimits(max_tokens=rules.EVAL_DECODE_MAX_TOKENS)
     mismatches = []
-    for row in rows:
-        again = free_decode(model.encode(encode_observation(row["observation"])), model.next_logits, limits)
-        before = saved.get(row["id"])
-        if before is None or list(again.tokens) != before["free"] or again.outcome != before["outcome"]:
-            mismatches.append({"id": row["id"], "now": list(again.tokens), "saved": None if before is None else before["free"]})
+    for saved, observation in rows:
+        again = free_decode(model.encode(encode_observation(observation)), model.next_logits, limits)
+        if list(again.tokens) != saved["free"] or again.outcome != saved["outcome"]:
+            mismatches.append({"id": saved["id"], "now": list(again.tokens), "saved": saved["free"]})
     state_equal = state_sha256(model) == result["final_state_sha256"]
+    reproduced = bool(rows) and not mismatches and state_equal
     ep.write_once(run_dir / "reload_check.json", {
-        "schema": RESULT_SCHEMA, "status": "RELOAD_REPRODUCED" if not mismatches and state_equal else "RELOAD_MISMATCH",
+        "schema": RESULT_SCHEMA, "status": "RELOAD_REPRODUCED" if reproduced else "RELOAD_MISMATCH",
         "rows_checked": len(rows), "mismatches": mismatches, "state_sha256_equal": state_equal,
         "weights_sha256": result["final_weights_sha256"], "process": "fresh Python process", "pid": os.getpid()})
     return 0
@@ -503,7 +519,8 @@ def run(run_dir, data_dir, out, *, device="cuda:0", max_wall_seconds=rules.JOB_W
         pools = {"A": q3prep["a_pool"], "B": bprep["b_pool"]}
         stage = "smoke"
         smoke_and_project(pools=pools, shared_panels=shared, edits=edits, partners=partners, device=device,
-                          job_deadline=job_deadline, identity_base=identity_base, out=out)
+                          job_deadline=job_deadline, identity_base=identity_base, out=out,
+                          prep_path=out / "prep.json")
         stage = "runs"
         reloads = {}
         for arm, seed in rules.RUN_ORDER:

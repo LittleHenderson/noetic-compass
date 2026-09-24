@@ -1,11 +1,17 @@
-# Q4-SDG-1 A-versus-B comparison, spec v0.2
+# Q4-SDG-1 A-versus-B comparison, spec v0.2 (revision 2)
 
-**Status: PROPOSED_FOR_REVIEW**
+**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `3100f37603cbc0e351cfbad2e2832bd769819d906338f7cf08966b916ee42f11`
 
-How this status changes: after a fresh review approves this spec and the code it names, the coordinator replaces
-the status line above, and nothing else, with the frozen status. The training launcher (`records/q4_sdg_1_20260923/ab_job/launch.py`)
-refuses to launch unless that exact frozen status line is present at the source commit. Any other change after
-that needs a new version number.
+How this status was set, and what it binds:
+- Revision 1 (commit `3771f989`) went to two independent reviews. They found one MAJOR defect and eight MINOR ones
+  (`_handoffs/HELM_NEXT_PHASE_20260923/Q4_AB_REVIEW_20260924.md`). Revision 2 fixes the MAJOR one and every MINOR one
+  that was cheap and safe. The builder set this status only after the MAJOR fix and its tests, as the coordinator's
+  task allowed.
+- The hash above is `q4_ab_rules.frozen_sha256()` of revision 2. The training launcher
+  (`records/q4_sdg_1_20260923/ab_job/launch.py`) refuses to launch unless, at the source commit: this exact status
+  line is present; the rules hash to the same value (`APPROVED_FROZEN_SHA256`); and the four decision programs and
+  this spec have exactly the bytes listed in `APPROVED_LF_SHA256`.
+- Any change after this needs a new version number, a new review, and new approved values in the launcher.
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover while Codex is away). Experiment id **Q4-SDG-1**. Builder: a
 Claude sub-agent. Nothing here has run on AWS. No model has been trained under this spec.
@@ -20,6 +26,7 @@ Claude sub-agent. Nothing here has run on AWS. No model has been trained under t
 - The fresh review `Q4_REVIEW_0b702cb8.md`: this spec fixes M1 (a frozen, program-emitted rule), M2 (shared panels
   that favour neither arm) and A1 (the compiler engine pinned for the build). A3 is addressed only where it touches
   families A-C (section 10).
+- The two reviews of revision 1 (`Q4_AB_REVIEW_20260924.md`): section 14 lists what changed because of them.
 
 **Where every frozen value lives.** `q4_ab_rules.py` (standard library only). This document explains those values. If
 the two ever disagree, the program wins, and the disagreement is a defect to report.
@@ -95,7 +102,7 @@ They do not enter any rule.
 
 **Checkpoints** (measured after this many updates): **0, 128, 512, 2048, 8192, 16384, 32768**. 32,768 is FINAL. The
 final checkpoint is the only one any decision uses. There is no early stopping and no model selection. Checkpoint 0 is
-the untrained model; it calibrates the input-use rule (section 7.4). Checkpoint 128 is run_001's budget. Checkpoint
+the untrained model; it calibrates the input-use tests (section 7.4). Checkpoint 128 is run_001's budget. Checkpoint
 16,384 is v0.1's proposed budget. Evaluation reads the model only; it never touches the optimizer, the training order
 or any random stream, so the checkpoints do not change the training path.
 
@@ -111,8 +118,8 @@ encoder calls and 385 backward passes. So one decoder call costs at most about 1
 | Training, one run (32,768 updates) | 2.7 min | 8.2 min (at 15 ms per update) |
 | One run (7 checkpoints, training, reload check) | 8 min | 20 min |
 | Six runs | 48 min | 120 min |
-| Setup, panels, Stage 0, B rebuild, smoke | 13 min | 22 min |
-| **Training machine** (g4dn.xlarge, $0.541959 per hour with address and disk) | **61 min, $0.55** | **142 min, $1.28** |
+| Setup, panels, Stage 0, B rebuild, smoke (with one reload) | 13.5 min | 22.5 min |
+| **Training machine** (g4dn.xlarge, $0.541959 per hour with address and disk) | **62 min, $0.56** | **143 min, $1.29** |
 | Data-build machine (c7i.large, section 10) | about 10 min, $0.02 | $0.0813 at its deadline |
 
 **Hard ceiling arithmetic.** Data build worst case $0.0813 + training worst case $2.1678 (240-minute client deadline)
@@ -124,17 +131,21 @@ before any main run if the projection does not fit the runner's 190-minute limit
 
 | Panel | Rows | Definition | Role |
 |---|---:|---|---|
-| **SP1** `FAMILIAR_STRUCTURE_NEW_CONTENT` | 256 | Visible Q3 G train rows, reserved before any arm, never taught to either arm. Drawn only from rows the diagnostic never showed (its 48 inspected train rows are excluded). Allocated to the G-train shapes in proportion to their available rows (largest remainder; never more than half of a shape's rows, so every shape keeps rows for arm A). Within a shape: seeded shuffle (20260965) of the rows in file order; shapes in sorted key order. Digest `dab48792...` (`q4_ab_rules.SP1_DIGEST`). | shared; **decisive** |
-| **SP2U** `NEW_STRUCTURE_UNINSPECTED` | 208 | The visible G dev split (the 9 held-out depth-3 shapes) minus the 48 dev rows the diagnostic inspected (old_dev16 plus the 32 in public64; digest `d91d914b...`). | shared; **decisive** |
+| **SP1** `FAMILIAR_STRUCTURE_NEW_CONTENT` | 256 | Visible Q3 G train rows, reserved before any arm, never taught to either arm. Drawn only from rows the diagnostic never showed (its 48 inspected train rows are excluded). Allocated to the G-train shapes in proportion to their available rows (largest remainder; never more than half of a shape's rows, so every shape keeps rows for arm A). Within a shape: seeded shuffle (20260965) of the rows in file order; shapes in sorted key order. Digest `dab48792...` (`q4_ab_rules.SP1_DIGEST`). | shared; **primary** |
+| **SP2U** `NEW_STRUCTURE_UNINSPECTED` | 208 | The visible G dev split (the 9 held-out depth-3 shapes) minus the 48 dev rows the diagnostic inspected (old_dev16 plus the 32 in public64; digest `d91d914b...`). SP2 as a whole: digest `00e55a80...` (`SP2_DIGEST`). | shared; **primary** |
 | **SP2ALL** `NEW_STRUCTURE_ALL` | 256 | The whole visible G dev split, the 48 inspected rows included. | shared; labelled and reported |
 | **B_DEV** | about 256 | The B package's own dev split. **B-internal**: drawn from B's own mixture, so it favours B. | reported only; never in a rule |
-| **TEACH_FIT** | 64 | The first 64 rows of each run's own first epoch. | per run; never compared |
-| **EDIT64** | 64 | SP1 rows 0, 4, 8, ...: 773 compilable one-field edits (196 noetic, 185 domain, 196 drive, 196 register; 11 domain fields have no compilable edit). Digest `05d62b99...`. | the edit-sensitivity measure |
+| **TEACH_FIT** | 64 | The first 64 rows of each run's own first epoch. | per run; reported; never in a rule (section 12) |
+| **EDIT64** | 64 | SP1 rows 0, 4, 8, ...: 773 compilable one-field edits (196 noetic, 185 domain, 196 drive, 196 register; 11 domain fields have no compilable edit). Digest `05d62b99...`. Of the 773: **538 value edits** and **235 presence edits** (section 7.1; kinds digest `c276d894...`). | the edit-sensitivity measure |
+
+The targets of SP1 and SP2 (ids, target tokens, slot kinds, in panel order) are pinned too: digest `ba04a4de...`
+(`PANEL_TARGETS_DIGEST`). The reader judges exactness and recounts the SP1 field values only from these pinned targets.
 
 **SP1 by shape** (rows): `(L L)` 95, `(L (L L))` 53, `((L L) L)` 26, `(L (L (L L)))` 24, `((L L) (L L))` 17,
 `((L L) (L (L L)))` 16, `((L (L L)) L)` 6, `(L ((L L) (L L)))` 6, `((L L) ((L L) (L L)))` 5, and 1-2 rows each for five deep
 shapes. Two G-train shapes have 0 rows here: they have only 4 and 2 rows in all of G train. Targets: 5,337 tokens,
-799 noetic positions.
+799 noetic positions. Measured: 44 distinct (shape, operators) classes and 180 distinct (shape, operators,
+field-presence) classes.
 
 **Exclusion, both ways.**
 - Arm A's pool is G train minus the 256 SP1 rows (digest `9064635d...`, 1,792 rows). No arm-A row has the tree of any
@@ -142,7 +153,8 @@ shapes. Two G-train shapes have 0 rows here: they have only 4 and 2 rows in all 
 - Arm B's pool drops every package row whose tree (content sha256) equals an SP1 or SP2 row. The count dropped is
   written in `prep.json`. The package already excludes G-dev shapes and every Q3 dev text.
 - The panels are fixed before any arm runs: every digest above was measured on the laptop from visible files only,
-  with the pure-Python compiler engine, and the machine must reproduce all of them before any GPU work.
+  with the pure-Python compiler engine, and the machine must reproduce all of them before any GPU work
+  (`q4_ab_rules.MEASURED_DIGEST_KEYS`).
 
 **Which arm do the shared panels favour?** Both are drawn from the family-G distribution, which is arm A's own
 teaching distribution. B meets these shapes in its family-C "mixed allowed shapes" lessons (15% of its pool) and
@@ -153,19 +165,25 @@ therefore not a panel artefact. A B loss may be partly distribution shift; that 
 arm's pool. Against arm A: 6 of the 512 rows are one token away from a teaching row (measured). The reader reports
 every pair comparison again without rows at distance 0 or 1 from either arm.
 
+**A panel the directive asks for is missing, on purpose.** Directive section 8 names four panels. The fourth is
+"Longer or deeper expressions than those taught". It is not built. The only visible rows of that kind are the protected
+Q3 G eval (depths 4 and 5), which no loop may touch; using them needs a pre-registered arm and the owner's approval.
+So this comparison says nothing about longer or deeper expressions.
+
 ## 7. Decision rules (review M1)
 
-A program, `read_q4_ab_results.py`, emits every label below from the result files. No person chooses a label.
+A program, `read_q4_ab_results.py`, emits every label below from the result files. It calls the decision functions in
+`q4_ab_rules.py` (`input_use_level`, `arm_label`, `architecture_decision`, `overall_lessons`). No person chooses a label.
 
-### 7.1 INPUT_USE_DETECTED(arm, seed, checkpoint)
+### 7.1 The four input-use tests (one run, one checkpoint)
 
-**INPUT_USE_DETECTED iff T1 and T2 and T3.** Otherwise **INPUT_USE_NOT_DETECTED**.
-
-**T1: field accuracy above what an input-blind model can reach.**
+**T1: Noetic accuracy above what an input-blind model can reach.**
 - Measure: teacher-forced (correct previous tokens), grammar-masked choices at every **noetic** position of SP1
   (799 positions). k = correct choices.
 - Null rate p0 = the larger of (a) the most frequent noetic value's share in **that arm's teaching pool** and (b) its
-  share among the SP1 targets. For arm A: max(605/5,671, 90/799) = 90/799 = 0.1126.
+  share among the SP1 targets. Both are frozen where they can be: SP1 **90/799** (`SP1_NOETIC_NULL`), arm A's pool
+  **605/5,671** (`A_POOL_NOETIC_NULL`). For arm A, p0 = 90/799 = 0.1126. Arm B's pool rate comes from the pinned
+  package, is written in `prep.json`, and can only raise p0 above 90/799.
 - Pass iff the exact one-sided binomial P(X >= k | 799, p0) <= **1/100**.
 - For arm A this means **k >= 112 of 799 (14.0%)**.
 - Why noetic: in both arms the Noetic is close to uniform over 10 values and nearly independent of the earlier tokens,
@@ -177,54 +195,102 @@ A program, `read_q4_ab_results.py`, emits every label below from the result file
 - Why the larger of the two rates: a model that always writes one value scores that value's panel share. Using the
   larger rate means such a model can never pass.
 
-**T2: the right output moves when one input field changes.**
-- Measure: for each of the 773 EDIT64 edits, with the correct previous tokens held fixed, delta = p(new token | edited
-  input) - p(new token | original input), full-vocabulary softmax.
-- u = edits with delta >= **0.01**; d = edits with delta <= -0.01.
-- Pass iff u >= **1/10** of the edits (78 of 773) AND the exact one-sided sign test P(X >= u | u + d, 1/2) <= **1/100**.
-- Why 0.01: the saved model's largest move over 1,812 edits was 3.6378e-06 (noetic), every median 0.0. 0.01 is about
-  2,700 times that noise floor.
-- Why 1/10: a model that reads even one of the four fields well moves about a quarter of the edits. 1/10 needs
-  real reading of at least part of one field. The sign test needs the moves to go TOWARD the new token, which an
-  untrained model's random input dependence does not do.
+**The two kinds of one-field edit.** Each EDIT64 edit changes one field of one leaf. It is a **presence edit** when it
+adds or removes an optional drive or register (the input text gets longer or shorter). It is a **value edit**
+otherwise (a value changes in place; the input length stays the same). Rule: presence iff the field is drive or
+register and "None" is the old or the new value. Measured on the frozen panel, this rule and the input-length rule
+agree on all 773 edits.
+- Value edits: **538** (noetic 196, domain 185, drive 88, register 69).
+- Presence edits: **235** (drive 108, register 127). Their new tokens: F1 95, REG_T 102, REG_ABSENT 25, F_NONE 13.
+Reading a presence edit needs only the input's length or layout, not any field value.
 
-**T3: free generation depends on the input.**
-- Measure: distinct free-decoded token sequences over the 256 SP1 rows.
-- Pass iff at least **32**.
-- Why 32: the saved model produced 1 distinct output for 96 inputs. SP1 holds 14 shapes, so reading the shape alone
-  gives at most 14 outputs; 32 needs outputs that depend on content.
+For every edit: delta = p(new token | edited input) - p(new token | original input), with the correct previous tokens
+held fixed, full-vocabulary softmax. A rise is delta >= **0.01**; a fall is delta <= -0.01. Why 0.01: the saved model's
+largest move over 1,812 edits was 3.6378e-06 (noetic), every median 0.0. 0.01 is about 2,700 times that noise floor.
+
+**T2V: field-value reading (value edits only, 538).**
+- Pass iff rises u >= **1/10** of 538 (**54**) AND the exact one-sided sign test P(X >= u | u + d, 1/2) <= **1/100**
+  (d = falls).
+- Why: a model that reads even one field's values well moves many of that field's edits toward the new token. The sign
+  test needs the moves to go TOWARD the new token, which an untrained model's random input dependence does not do.
+- Per-field value-edit results are reported, not decisive.
+
+**T2P: presence reading (presence edits only, 235).** The same test on the 235 presence edits (**24** rises needed).
+It shows that the model reads something of its input, but not a field value.
+
+T2 over all 773 edits (revision 1's T2) is reported and never decisive. Measured: a structure-only model passes it.
+
+**T3: free generation has not collapsed.**
+- Measure: distinct free-decoded token sequences over the 256 SP1 rows. Pass iff at least **32**.
+- What it shows: only that free generation depends on the input and is not one fixed output. The saved model produced
+  1 distinct output for 96 inputs.
+- What it does NOT show: field-value reading. A model that reads only shape, operators and field presence can reach
+  **180** distinct outputs on SP1 (measured). T3 therefore never counts as input use on its own. It separates FULL
+  from TEACHER_FORCED_ONLY.
 
 Reported with every reading, never decisive: the summary cosine between SP1 partners of the same shape (the saved
 model: minimum 0.9966), the masked choice changes under edits, first-wrong-decision kinds, outcomes and mean lengths.
 
-### 7.2 Arms
+### 7.2 The input-use level (one run, one checkpoint)
 
-For each arm, over its 3 seeds, at the FINAL checkpoint:
-- **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** valid runs are INPUT_USE_DETECTED.
-- **ARM_<arm>_DOES_NOT_SHOW_INPUT_USE** iff detected runs + runs that are not valid < 2.
-- **ARM_<arm>_INPUT_USE_UNDETERMINED** otherwise (missing or invalid runs could still change the answer).
+Checked in this order. Every combination of the four tests has exactly one level (a test checks all 16).
 
-### 7.3 ARCHITECTURE_CHANGE_JUSTIFIED
+| Level | Condition | In plain words |
+|---|---|---|
+| **FULL** | T1 and T2V and T3 | reads field values, and free generation uses them |
+| **TEACHER_FORCED_ONLY** | (T1 or T2V) and not T3 | reads field values with the correct previous tokens, but free generation collapses |
+| **PARTIAL_FIELDS** | T3 and exactly one of T1, T2V | reads some field values (for example domain, drive and register, not the Noetic) |
+| **STRUCTURE_ONLY** | not T1, not T2V, and T2P | reads drive/register presence, no field value |
+| **NONE** | not T1, not T2V, not T2P | no input reading detected |
 
-- **ARCHITECTURE_CHANGE_NOT_JUSTIFIED** iff some arm SHOWS_INPUT_USE.
-- **ARCHITECTURE_CHANGE_JUSTIFIED** iff every arm DOES_NOT_SHOW_INPUT_USE, that is, no arm shows INPUT_USE_DETECTED at the
-  final checkpoint in at least 2 of its 3 seeds.
-- **ARCHITECTURE_DECISION_INCOMPLETE** otherwise, or when the calibration guard fires (7.4).
-- **ARCHITECTURE_NOT_EVALUATED** when there is no verdict at all (section 8).
+Labels: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_ONLY`,
+`INPUT_USE_NONE`.
 
-"Justified" means only what the owner's decision says: an architecture change may then be designed as a separately
-named, reviewed arm. The rule does not choose the change and does not start it.
+### 7.3 Arms
+
+For each arm, over its 3 seeds, at the FINAL checkpoint, counting only VALID runs (section 7.7):
+- **ARM_<arm>_SHOWS_INPUT_USE** iff at least **2** valid runs are FULL.
+- **ARM_<arm>_SHOWS_NO_INPUT_USE** iff the arm has at least **2** valid runs and every valid run is NONE.
+- **ARM_<arm>_INPUT_USE_UNDETERMINED** otherwise.
 
 ### 7.4 Calibration guard
 
-If any run shows INPUT_USE_DETECTED at checkpoint 0 (untrained), the rule is not trustworthy on this machine:
+If any run's level at checkpoint 0 (untrained) is not NONE, the tests are not trustworthy on this machine:
 **INPUT_USE_RULE_FIRES_AT_INITIALISATION**, and the architecture label is ARCHITECTURE_DECISION_INCOMPLETE. Otherwise
-**INPUT_USE_RULE_SILENT_AT_INITIALISATION**.
+**INPUT_USE_RULE_SILENT_AT_INITIALISATION**. (T3 alone may pass at initialisation; it does not change the level.)
 
-### 7.5 Lessons: B versus A, per panel P in SP1, SP2U, SP2ALL
+### 7.5 The architecture label
 
-For seed pair i (A and B on the same seed), at the FINAL checkpoint, on exact canonical trees (the free-decoded tokens
-equal the target tokens, EOS included, outcome GENERATED), row by row:
+In this order:
+1. The calibration guard fires: **ARCHITECTURE_DECISION_INCOMPLETE**, reason INPUT_USE_RULE_FIRES_AT_INITIALISATION.
+2. Some arm SHOWS_INPUT_USE: **ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE**.
+3. Both arms SHOW_NO_INPUT_USE, that is, every valid FINAL run of both arms is NONE, with at least 2 valid runs per
+   arm: **ARCHITECTURE_CHANGE_JUSTIFIED**.
+4. Otherwise **ARCHITECTURE_DECISION_INCOMPLETE**, with every reason that applies, each also emitted as
+   `ARCHITECTURE_INCOMPLETE_BECAUSE_<REASON>`:
+   - `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_ONLY`: a valid run has that level;
+   - `SEED_DEPENDENT`: a valid run is FULL, but no arm has 2 FULL runs;
+   - `TOO_FEW_VALID_RUNS`: an arm has fewer than 2 valid runs.
+
+**ARCHITECTURE_NOT_EVALUATED** when there is no verdict at all (section 8).
+
+Why this shape (review of revision 1, MAJOR). The owner's decision says: "If neither arm shows input use at the final
+checkpoint, an architecture change is justified." A run that reads its input only partly, or only with the correct
+previous tokens, or only its structure, does show input use. Directive section 3 also says that when behaviour
+differs with correct previous tokens, one should "investigate that training/generation difference rather than blaming
+capacity alone". So JUSTIFIED now needs every valid run of both arms to show no input use at all. A single fully
+reading run already shows the architecture can carry the input, so it blocks JUSTIFIED too (SEED_DEPENDENT).
+
+What the labels mean, and do not mean:
+- "Justified" means only what the owner's decision says: an architecture change may then be designed as a separately
+  named, reviewed arm. The rule does not choose the change and does not start it.
+- "Not justified by the input-use rule" is named by its scope. The rule does not test teaching fit (section 12).
+- "Incomplete" hands the question back to the owner with the named reasons and the full readings.
+
+### 7.6 Lessons: B versus A
+
+Per panel P in SP1, SP2U, SP2ALL. For seed pair i (A and B on the same seed), at the FINAL checkpoint, on exact
+canonical trees (the free-decoded tokens equal the target tokens, EOS included, outcome GENERATED), row by row:
 - b = rows where B is exact and A is not; c = rows where A is exact and B is not.
 - **B_BEATS_A_P_PAIR<i>** iff b > c and the exact one-sided sign test P(X >= b | b + c, 1/2) <= **1/100** (b >= 7 when c = 0).
 - **A_BEATS_B_P_PAIR<i>** by the mirror rule. **NO_PAIRED_DIFFERENCE_P_PAIR<i>** otherwise.
@@ -237,14 +303,25 @@ Then, per panel:
 - **LESSONS_COMPARISON_INCOMPLETE_P** if any pair is incomplete.
 - **LESSONS_EFFECT_NOT_SHOWN_P** otherwise.
 
-B_DEV is reported for both arms and labelled B-internal; it enters no rule.
+**The one answer to "did the lessons help?"** (review of revision 1, MINOR 2). The primary panels are **SP1 and SP2U**.
+`LESSONS_OVERALL_<X>`, in this order:
+- NOT_EVALUATED if either primary panel is not evaluated;
+- COMPARISON_INCOMPLETE if either is incomplete;
+- **MIXED** if one is HELP and the other is HURT;
+- **HURT** if either is HURT;
+- **HELP** only if both are HELP;
+- EFFECT_NOT_SHOWN otherwise.
 
-### 7.6 Run validity
+SP2ALL keeps its own label and never enters the overall answer. B_DEV is reported for both arms and labelled
+B-internal; it enters no rule.
+
+### 7.7 Run validity
 
 **RUN_VALID** iff: the run manifest, all 7 checkpoint files, the run result (status COMPLETE, 32,768 updates) and a
 reload check with status RELOAD_REPRODUCED are present; every file carries the frozen-rules hash; and the runner's own
-totals agree with the reader's recomputation (exact flags, teacher-forced counts, distinct outputs). A missing file
-gives **RUN_INCOMPLETE**. Anything else gives **RUN_INVALID_<reason>**.
+totals agree with the reader's recomputation (exact flags, teacher-forced counts, distinct outputs, exactly 773 edit
+values in the frozen edit order, 538 value and 235 presence edits). A missing file gives **RUN_INCOMPLETE**. Anything
+else gives **RUN_INVALID_<reason>**.
 
 ## 8. Stops
 
@@ -269,7 +346,7 @@ Every stop writes `STOP.json` with its code and ends the job. Nothing is retried
 | `RUN_001_RECORDS_INCONSISTENT` | the original run's plan, weights or records differ from their digests |
 | `Q3_DATA_NOT_PINNED` | the Q3 v0.7 manifest or visible files differ from their pins |
 | `COMPILER_ENGINE_NOT_PYTHON` | the compiler would use the optional Rust engine |
-| `PANEL_DIGEST_MISMATCH` | any panel, the edit list or arm A's pool differs from its frozen digest |
+| `PANEL_DIGEST_MISMATCH` | any panel, the panel targets, the edit list, the edit kinds, arm A's pool or a frozen null rate differs from its frozen value |
 | `B_PACKAGE_NOT_PINNED` | `Q4_SDG_DATA_PINS.json` has no entry for the package |
 | `B_PIN_NOT_THE_FROZEN_PACKAGE` | the pin names another engine, size, seed or folder |
 | `B_PACKAGE_BUILD_FAILED` | the rebuild on the machine fails |
@@ -277,13 +354,16 @@ Every stop writes `STOP.json` with its code and ends the job. Nothing is retried
 | `STAGE0_NOT_REPRODUCED`, `REINIT_NOT_REPRODUCED` | see above |
 | `SMOKE_NONDETERMINISTIC` | two identical 64-update smoke runs differ in any weight or output |
 | `SMOKE_PAIR_INIT_MISMATCH` | arm A and arm B do not start from the same tensors |
+| `SMOKE_RELOAD_FAILED` | the fresh-process reload of smoke run A_first does not report RELOAD_REPRODUCED (the same path every main run uses; checked before any main run) |
 | `SMOKE_FAILED` | reserved for a smoke failure without a more specific code |
 | `PROJECTED_OVER_TIME` | the smoke projection (x 1.25) exceeds the time left or a run's 3,000 s |
 | `NUMERICAL_FAILURE` | a non-finite loss or gradient |
 | `RUN_WALL_LIMIT`, `JOB_WALL_LIMIT` | a run exceeds 3,000 s, or the runner exceeds 11,400 s |
 
 Outside the runner: the in-machine timer (225 min), the shutdown (228 min) and the watcher's client deadline
-(240 min) end the machine whatever happens.
+(240 min) end the machine whatever happens. Before the machine exists, the launcher refuses a source commit whose
+rules, programs or spec are not the approved ones, and a B package whose builder sources changed since the pinned data
+build (section 10).
 
 ## 9. Reading rule
 
@@ -292,22 +372,28 @@ Outside the runner: the in-machine timer (225 min), the shutdown (228 min) and t
 | `q4_ab_train.py` (T4 machine) | visible Q3 v0.7 files, run_001's records and weights, the B package's visible files and manifest, `Q4_SDG_DATA_PINS.json` | `out/ab/`: `gates.json`, `stage0.json`, `prep.json`, `smoke/`, `smoke_summary.json`, `runs/<arm>_<seed>/{run_manifest.json, checkpoint_<NNNNN>.json, updates.json, run_result.json, checkpoint/, reload_check.json, reload.log}`, `job_result.json`, `STOP.json` (all create-only) |
 | `read_q4_ab_results.py` (laptop, and once on the machine) | ONLY `job_result.json`, `STOP.json`, `stage0.json`, `prep.json` and `runs/*/{run_manifest.json, checkpoint_*.json, run_result.json, reload_check.json}`. Never `smoke/`, data, weights, or any eval/sealed name. | `verdict.json` and the label list on standard output |
 
-The reader refuses results written under other rules (`NO_VERDICT_FROZEN_RULES_DIFFER`) and a `prep.json` whose panels
-do not recompute to the frozen digests (`NO_VERDICT_PREP_NOT_FROZEN`). It recomputes exactness from tokens,
-teacher-forced counts from per-position bits, and edit counts from raw probabilities; a disagreement with the
-runner's totals makes that run invalid.
+The reader refuses results written under other rules (`NO_VERDICT_FROZEN_RULES_DIFFER`). It refuses a `prep.json` that
+fails any check against the frozen record (`NO_VERDICT_PREP_NOT_FROZEN`, with the failing checks listed): the SP1 and
+SP2 digests, the pinned panel targets, the inspected-row flags, arm A's pool, the edit list, the edit kinds (recomputed
+from each edit's old and new values), the edit count, the SP1 field counts (recounted from the pinned targets), both
+frozen null rates, and well-formed pool counts. It recomputes exactness from tokens, teacher-forced counts from
+per-position bits, and every edit move from raw probabilities, edit by edit (each edit value carries its row and
+position, and must follow `prep.json`'s edit order). A disagreement with the runner's totals makes that run invalid.
+The verdict records the LF sha256 of the reader and of the rules module it ran with.
 
 **The exact output labels** (the reader's `LABELS` constant):
 - job: `JOB_COMPLETE`, `JOB_STOPPED_<STOP_CODE>`, `JOB_FAILED`, `JOB_RESULT_MISSING`
 - Stage 0: `STAGE0_REPRODUCED`, `STAGE0_NOT_REPRODUCED`, `STAGE0_MISSING`
 - no verdict: `NO_VERDICT_STAGE0`, `NO_VERDICT_PREP_MISSING`, `NO_VERDICT_FROZEN_RULES_DIFFER`, `NO_VERDICT_PREP_NOT_FROZEN`
 - run: `RUN_VALID`, `RUN_INCOMPLETE`, `RUN_INVALID_<REASON>`
-- checkpoint: `INPUT_USE_DETECTED`, `INPUT_USE_NOT_DETECTED`
+- checkpoint: `INPUT_USE_FULL`, `INPUT_USE_TEACHER_FORCED_ONLY`, `INPUT_USE_PARTIAL_FIELDS`, `INPUT_USE_STRUCTURE_ONLY`, `INPUT_USE_NONE`
 - calibration: `INPUT_USE_RULE_SILENT_AT_INITIALISATION`, `INPUT_USE_RULE_FIRES_AT_INITIALISATION`
-- arm: `ARM_A_…` / `ARM_B_…`: `SHOWS_INPUT_USE`, `DOES_NOT_SHOW_INPUT_USE`, `INPUT_USE_UNDETERMINED`
-- architecture: `ARCHITECTURE_CHANGE_JUSTIFIED`, `ARCHITECTURE_CHANGE_NOT_JUSTIFIED`, `ARCHITECTURE_DECISION_INCOMPLETE`, `ARCHITECTURE_NOT_EVALUATED`
+- arm: `ARM_A_…` / `ARM_B_…`: `SHOWS_INPUT_USE`, `SHOWS_NO_INPUT_USE`, `INPUT_USE_UNDETERMINED`
+- architecture: `ARCHITECTURE_CHANGE_JUSTIFIED`, `ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE`, `ARCHITECTURE_DECISION_INCOMPLETE`, `ARCHITECTURE_NOT_EVALUATED`
+- architecture reasons: `ARCHITECTURE_INCOMPLETE_BECAUSE_` + one of `INPUT_USE_RULE_FIRES_AT_INITIALISATION`, `TEACHER_FORCED_ONLY`, `PARTIAL_FIELDS`, `STRUCTURE_ONLY`, `SEED_DEPENDENT`, `TOO_FEW_VALID_RUNS`
 - pair: `B_BEATS_A_<P>_PAIR<i>`, `A_BEATS_B_<P>_PAIR<i>`, `NO_PAIRED_DIFFERENCE_<P>_PAIR<i>`, `PAIR_INCOMPLETE_<P>_PAIR<i>`
 - lessons: `LESSONS_HELP_<P>`, `LESSONS_HURT_<P>`, `LESSONS_EFFECT_NOT_SHOWN_<P>`, `LESSONS_COMPARISON_INCOMPLETE_<P>`, `LESSONS_NOT_EVALUATED_<P>`
+- overall: `LESSONS_OVERALL_HELP`, `LESSONS_OVERALL_HURT`, `LESSONS_OVERALL_MIXED`, `LESSONS_OVERALL_EFFECT_NOT_SHOWN`, `LESSONS_OVERALL_COMPARISON_INCOMPLETE`, `LESSONS_OVERALL_NOT_EVALUATED`
 
 with P in SP1, SP2U, SP2ALL and i in 1, 2, 3. Every verdict also carries `status: PROGRAM_READING_NOT_CERTIFIED` and the
 label `CLAUDE_BUILT_CLAUDE_CHECKED`.
@@ -319,10 +405,16 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
   every file byte for byte, re-verify with the pinned compiler, return digests and the manifest only.
 - **Pin.** The coordinator runs `pin_package.py --write`. It refuses unless the two builds were byte-identical and
   verified, and the manifest's seeds, size and engine equal `q4_ab_rules.B_PACKAGE`. It writes ONE entry into
-  `LAB/Q4_SDG_DATA_PINS.json`, with the engine, size, seeds, every file's sha256 and record count, and provenance.
+  `LAB/Q4_SDG_DATA_PINS.json`, with the engine, size, seeds, every file's sha256 and record count, and provenance. The
+  same commit must add the data build's `results/manifest.json`.
 - **The training job refuses** an unpinned package (launcher and runner) and a rebuilt package that differs from the
   pin (runner: manifest sha256, then `q4_sdg_curriculum.check_pin`, then every declared file hash). The runner rebuilds
   the package on the T4 machine from the same source; row files never travel through the laptop.
+- **Refused at $0 before launch** (review of revision 1, MINOR 6): the launcher reads the committed data-build manifest
+  at the source commit. It must hash to the pin, and every source hash it recorded (`sources_lf_sha256`: the package
+  builder and its imports; the compiler snapshot; the Q3 files) must equal the same file at the source commit
+  (`B_PACKAGE_SOURCES_CHANGED_SINCE_THE_DATA_BUILD`). So `q4_sdg_curriculum.py` stays unchanged from the data build
+  until the training job ends.
 - **A3 (family D).** Family D is not used. This job writes no trigger file. None of its predictions or panel rows may
   ever be used as a family-D trigger. A3(a) touches A-C builds only in one way: a build that fails leaves
   `<out>.partial` behind; both jobs build into fresh folders on throwaway machines and never retry, so it cannot
@@ -345,6 +437,13 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
 - LESSONS_HELP is about these panels, this model and this budget. It is not "CAS SDG lessons help" in general, not
   a Helm result, and not general CAS reasoning.
 - ARCHITECTURE_CHANGE_JUSTIFIED does not choose or start a change. The owner's go-ahead and a separate spec do.
+- **Teaching fit is not tested** (review of revision 1, MINOR 5). Directive section 9 names two triggers for an
+  architecture change: failing "to fit small teaching sets" or to "use input distinctions". The owner's decision
+  names only input use, so the rule tests only that. TEACH_FIT is reported per run and never compared. A run that
+  passes the input-use tests but fits none of its 64 teaching rows still gives
+  ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE, and the label says so by its name. Adding a teaching-fit floor
+  would be a new criterion; that is the owner's choice (open question in the review record).
+- **No claim about longer or deeper expressions** (section 6: directive section 8's fourth panel is not built).
 - No claim about the protected examination.
 
 ## 13. Changes from v0.1 (`Q4_SDG_LESSONS_SPEC_v0_1.md`, kept unchanged)
@@ -355,3 +454,17 @@ label `CLAUDE_BUILT_CLAUDE_CHECKED`.
 - Budget: 32,768 updates (v0.1 proposed 16,384; that point is kept as a checkpoint for comparison).
 - A1: the engine is pinned (`python`) and the package is pinned from a separate, byte-checked build.
 - Money: $5.00 ceiling from the owner's decision.
+
+## 14. Changes in revision 2 (after the two reviews of `3771f989`)
+
+| Review finding | Change |
+|---|---|
+| MAJOR: JUSTIFIED could fire for a model that reads its input | Five input-use levels (7.2); JUSTIFIED only when every valid run of both arms is NONE with 2 or more valid runs per arm; otherwise INCOMPLETE with named reasons (7.5); tests with the reviewers' two fakes and a structure-only fake |
+| MINOR 1: T2 and T3 did not test what the text said | T2V on the 538 value edits (54 rises) decides; T2P on the 235 presence edits defines STRUCTURE_ONLY; T2 on all edits is reported only; T3 restated as a collapse test (7.1) |
+| MINOR 2: no single answer to "did the lessons help?" | SP1 and SP2U are the primary panels; one LESSONS_OVERALL label (7.6) |
+| MINOR 3: the freeze was not tied to the reviewed rules | The status line carries the frozen_sha256; the launcher refuses other rules, and other bytes of the four decision programs or this spec |
+| MINOR 4: the reader trusted prep.json values | Frozen SP1 and arm-A null rates, SP2 and panel-target digests, edit-kind digest; the reader recounts SP1 field values and requires 773 edit values in the frozen order (9) |
+| MINOR 5: two directive items were not covered | Both gaps stated (6, 12); the negative label is named by its scope |
+| MINOR 6: the B rebuild could fail after setup | The launcher compares the data build's source hashes with the source commit at $0 (10) |
+| MINOR 7: the reload path had never run | The smoke stage runs the fresh-process reload before any main run; new stop `SMOKE_RELOAD_FAILED`; the reload now takes its rows from the saved checkpoint |
+| MINOR 8: the pin commit would break an existing test | `test_q4_sdg_curriculum.py` now uses an empty temporary pin file; `q4_sdg_curriculum.py` unchanged |

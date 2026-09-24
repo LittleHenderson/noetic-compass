@@ -1,7 +1,8 @@
 # Q4-SDG-1 A-versus-B training job: job limits (written before launch)
 
 Label: `CLAUDE_BUILT_CLAUDE_CHECKED` (temporary takeover). Runner: the Claude coordinator. Not launched.
-Rules: `research/helm_cas_expression_lab/q4_ab_rules.py`; spec `Q4_SDG_AB_SPEC_v0_2.md` (must say FROZEN_BEFORE_LAUNCH).
+Rules: `research/helm_cas_expression_lab/q4_ab_rules.py`; spec `Q4_SDG_AB_SPEC_v0_2.md` revision 2 (its status line
+must say FROZEN_BEFORE_LAUNCH with the approved frozen_sha256).
 
 ## What it does
 
@@ -9,18 +10,28 @@ Rules: `research/helm_cas_expression_lab/q4_ab_rules.py`; spec `Q4_SDG_AB_SPEC_v
   compare A (family-G teaching) with B (CAS SDG lessons, families A-C); 3 seeds per arm; measure input use at fixed
   checkpoints; a frozen rule decides whether an architecture change is justified.
 - **Stages on the machine:**
-  - A (no torch): `q4_ab_prep.py measure` must reproduce every frozen panel digest, with the Python engine. Stop otherwise.
+  - A (no torch): `q4_ab_prep.py measure` must reproduce every frozen value in `q4_ab_rules.MEASURED_DIGEST_KEYS`
+    (panels, SP2, the panel targets, the edits and their kinds, the counts and both T1 null rates), with the Python
+    engine. Stop otherwise.
   - B (no torch): `pytest test_q4_ab.py`. Recorded; not a stop.
   - C: `q4_ab_train.py run` with its own limit of 11,400 s (190 min): pin check, GPU gates, Stage 0 (the diagnostic's
     16 decodes and update 1 must reproduce here first), the B rebuild (must equal the pin), `prep.json`, the smoke stage
-    and time projection, then A1 B1 A2 B2 A3 B3 with a fresh-process reload check after each run.
+    (determinism, equal starting tensors, then the fresh-process reload of smoke run A_first, else
+    `SMOKE_RELOAD_FAILED`, about 15-30 s) and time projection, then A1 B1 A2 B2 A3 B3 with a fresh-process reload check
+    after each run.
   - D (no torch): `read_q4_ab_results.py` on the machine. The coordinator re-runs it on the downloaded files; that
     local reading is the one reported.
 
 ## Pre-launch refusals (launch.py, at the source commit)
 
-- The spec does not say `FROZEN_BEFORE_LAUNCH`; any frozen digest is not filled in; the runner's wall limit differs.
+- The rules at the source commit do not hash to `APPROVED_FROZEN_SHA256`; the spec's status line is not
+  `**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `<that hash>``; `q4_ab_rules.py`, `q4_ab_prep.py`, `q4_ab_train.py`,
+  `read_q4_ab_results.py` or the spec differ (LF bytes) from `APPROVED_LF_SHA256`; any frozen digest is not filled in;
+  the runner's wall limit differs. (Review of 3771f989, MINOR 3: the launch is tied to the reviewed rules and code.)
 - `Q4_SDG_DATA_PINS.json` has no pin for the frozen package (engine `python`, size 4096, seeds 20260941 and 20260951).
+- `data_build_job/results/manifest.json` is not committed at the source commit, does not hash to the pin, or records a
+  source hash (package builder and its imports, compiler snapshot, Q3 files) that differs from the same file at the
+  source commit: `B_PACKAGE_SOURCES_CHANGED_SINCE_THE_DATA_BUILD` (review MINOR 6).
 - `data_build_job/watch_record.json` is missing, or its measured cost plus this job's worst case exceeds $5.00.
 - A GPU machine is running; this folder already has a `launch_record.json`; the run_001 weights differ from `d54f5715`.
 
@@ -46,12 +57,12 @@ and 385 backward passes, so at most about 1.6 ms per decoder call; the training-
 |---|---|---|
 | Setup (uv, Python, torch) | 7 min | 10 min |
 | Panels, Stage 0, B rebuild, prep | 4 min | 8 min |
-| Smoke (3 x 64 updates, thinned panels) | 2 min | 4 min |
+| Smoke (3 x 64 updates, thinned panels, one fresh-process reload) | 2.5 min | 4.5 min |
 | Evaluation per checkpoint (832 decodes, 832 teacher-forced passes, 773 edits) | 41 s | 90 s |
 | Training per run (32,768 updates) | 2.7 min | 8.2 min (15 ms per update) |
 | Per run (7 checkpoints + reload check) | 8 min | 20 min |
 | Six runs | 48 min | 120 min |
-| **Total machine time** | **about 61 min, about $0.55** | **about 142 min, about $1.28** |
+| **Total machine time** | **about 62 min, about $0.56** | **about 143 min, about $1.29** |
 
 ## Custody
 

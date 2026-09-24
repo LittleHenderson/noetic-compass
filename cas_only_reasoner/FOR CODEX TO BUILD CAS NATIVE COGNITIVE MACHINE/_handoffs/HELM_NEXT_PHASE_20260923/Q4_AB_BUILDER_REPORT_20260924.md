@@ -6,6 +6,10 @@ not an independent review.
 **Status:** built and tested on the laptop in pure Python. **Nothing was launched. No AWS call was made. No money was
 spent. No model was built or trained.** The spec is `PROPOSED_FOR_REVIEW`, not frozen.
 
+**Superseded in part (2026-09-24):** this report describes revision 1 (commit `3771f989`). Two reviews found one MAJOR
+and eight MINOR defects; revision 2 fixes them and freezes the spec. See `Q4_AB_REVIEW_20260924.md`. The file hashes,
+the rules hash and decision 4 below are those of revision 1.
+
 Paths are relative to `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/`. `LAB` =
 `research/helm_cas_expression_lab/`.
 

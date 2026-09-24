@@ -22,6 +22,7 @@ import io
 import json
 from pathlib import Path
 import random
+import re
 import sys
 import tarfile
 
@@ -144,7 +145,10 @@ def test_frozen_digests_reproduce_from_visible_files(q3prep):
     frozen = rules.frozen_record()["digests"]
     for key, value in q3p["measured"].items():
         assert frozen[key] == value, key
+    assert set(q3p["measured"]) == set(rules.MEASURED_DIGEST_KEYS) <= set(frozen)
     assert "TO_BE_MEASURED" not in json.dumps(frozen)
+    assert rules.most_frequent_rate(prep.class_counts(q3p["sp1"], "noetic")) == rules.SP1_NOETIC_NULL == Fraction(90, 799)
+    assert rules.most_frequent_rate(prep.class_counts(q3p["a_pool"], "noetic")) == rules.A_POOL_NOETIC_NULL
 
 
 def test_strict_prep_refuses_a_changed_digest(q3prep, monkeypatch):
@@ -210,6 +214,17 @@ def test_edit_panel_changes_one_field_each(q3prep):
     assert len(runtime) == rules.EDIT_COUNT
     for edit in runtime[:40]:
         assert edit["new"] in edit["allowed"] and edit["old"] in edit["allowed"] and edit["old"] != edit["new"]
+    # value versus presence edits (review MINOR 1): the from/to rule equals the input-length rule on every edit
+    kinds = collections.Counter((rules.edit_kind(e["field"], e["from"], e["to"]), e["field"]) for e in measured)
+    assert {f: kinds[("value", f)] for f in rules.VALUE_EDIT_COUNTS} == rules.VALUE_EDIT_COUNTS
+    assert {f: kinds[("presence", f)] for f in rules.PRESENCE_EDIT_COUNTS} == rules.PRESENCE_EDIT_COUNTS
+    assert (rules.VALUE_EDIT_COUNT, rules.PRESENCE_EDIT_COUNT) == (538, 235)
+    for item in measured:
+        presence = len(item["observation"]) != len(rows[item["row"]]["observation"])
+        assert presence == (rules.edit_kind(item["field"], item["from"], item["to"]) == "presence"), item["observation"]
+    assert collections.Counter(e["new_token"] for e in measured
+                               if rules.edit_kind(e["field"], e["from"], e["to"]) == "presence") == {
+        "F1": 95, "REG_T": 102, "REG_ABSENT": 25, "F_NONE": 13}
 
 
 def test_panel_content_is_excluded_from_b_teaching(tiny, q3prep):
@@ -345,28 +360,70 @@ def test_pin_package_tool_refuses_and_never_overwrites(tiny, tmp_path, monkeypat
 # ------------------------------------------------------------------------------------------------------------
 # 5. the reader, on records made by the runner's own evaluate() with pure-Python fake models
 # ------------------------------------------------------------------------------------------------------------
-class FakeModel:
-    """NOT Q4. `reads_input=True` decodes the true tree of whatever text it is given (a perfect reader);
-    False ignores its input and always writes the same one-state tree. Only for wiring the runner to the reader."""
+FAKE_MODES = ("blind", "reader", "tf_reader_freegen_collapse", "no_noetic", "structure_only")
 
-    def __init__(self, reads_input):
-        self.reads_input, self.texts, self.tokens = reads_input, [], {}
+
+def _structure_only(tokens):
+    """Keep the shape, the operators and whether each leaf has a drive or register; write N0, D_P, F1, REG_T."""
+    out = []
+    for token in tokens:
+        name = TOKENS[token]
+        if re.fullmatch(r"N[0-9]", name):
+            name = "N0"
+        elif name.startswith("D_"):
+            name = "D_P"
+        elif re.fullmatch(r"F[1-7]", name):
+            name = "F1"
+        elif name.startswith("REG_") and name != "REG_ABSENT":
+            name = "REG_T"
+        out.append(TOKENS.index(name))
+    return out
+
+
+class FakeModel:
+    """NOT Q4. Pure-Python stand-ins, only for wiring the runner's evaluate() to the reader. Modes:
+      blind                       ignores its input; always writes the same one-state tree
+      reader                      decodes the true tree of whatever text it is given (a perfect reader)
+      tf_reader_freegen_collapse  reads every field when given the correct previous tokens, but its first free
+                                  decision is always STATE (review of 3771f989, MAJOR: T1 799/799, 1 distinct output)
+      no_noetic                   reads domain, drive and register values, never the Noetic (always N0)
+      structure_only              reads shape, operators and field presence only (review MINOR 1: 180 distinct)
+    """
+
+    def __init__(self, mode):
+        if mode not in FAKE_MODES:
+            raise ValueError(mode)
+        self.mode, self.texts, self.tokens = mode, [], {}
 
     def encode(self, sequence):
         text = bytes(b - 1 for b in sequence.byte_ids).decode("utf-8")
         if text not in self.tokens:
             self.tokens[text] = ast_to_tokens(sdg.parse_surface(text))
             self.texts.append(text)
-        return Bottleneck((float(self.texts.index(text)) if self.reads_input else 0.0, 1.0))
+        return Bottleneck((0.0 if self.mode == "blind" else float(self.texts.index(text)), 1.0))
+
+    def _true_and_wanted(self, bottleneck):
+        if self.mode == "blind":
+            fixed = ast_to_tokens(sdg.leaf_ast(0, "P"))
+            return fixed, fixed
+        true = list(self.tokens[self.texts[int(bottleneck.values[0])]])
+        if self.mode == "no_noetic":
+            return true, [TOKENS.index("N0") if re.fullmatch(r"N[0-9]", TOKENS[t]) else t for t in true]
+        if self.mode == "structure_only":
+            return true, _structure_only(true)
+        return true, true
 
     def next_logits(self, bottleneck, prefix):
-        if self.reads_input:
-            want = self.tokens[self.texts[int(bottleneck.values[0])]]
+        true, want = self._true_and_wanted(bottleneck)
+        n, prefix = len(prefix), tuple(prefix)
+        if self.mode == "tf_reader_freegen_collapse" and n == 0:
+            choice = TOKENS.index("STATE")
+        elif n < len(want) and (prefix == tuple(true[:n]) or prefix == tuple(want[:n])):
+            choice = want[n]
         else:
-            want = ast_to_tokens(sdg.leaf_ast(0, "P"))
+            choice = None
         logits = [0.0] * len(TOKENS)
-        choice = want[len(prefix)] if len(prefix) < len(want) and tuple(want[:len(prefix)]) == tuple(prefix) else None
-        allowed = allowed_next(tuple(prefix))
+        allowed = allowed_next(prefix)
         logits[choice if choice in allowed else min(allowed)] = 5.0
         return tuple(logits)
 
@@ -385,7 +442,7 @@ class _NoDeadline:
 
 @pytest.fixture(scope="module")
 def fake_records(q3prep, tiny):
-    """evaluate() of the RUNNER on the full shared panels, for a blind and a reading fake, per arm's teach rows."""
+    """evaluate() of the RUNNER on the full shared panels and edits, once per fake mode; TEACH_FIT per arm."""
     q3p, _ = q3prep
     bprep = tiny["bprep"]
     record = prep.prep_record(q3p, bprep, sdg.manifest_sha(tiny["b1"]))
@@ -397,12 +454,16 @@ def fake_records(q3prep, tiny):
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(ep, "teacher_logits", _fake_teacher_logits)
         for arm in rules.ARMS:
-            teach = [prep.with_allowed(dict(pools[arm][i], panel="TEACH_FIT"))
-                     for i in prep.stream_indices(len(pools[arm]), rules.SEEDS[0], min(4, len(pools[arm])))]
-            out["teach"][arm] = teach
-            for reads in (False, True):
-                out["records"][(arm, reads)] = train.evaluate(FakeModel(reads), dict(shared, TEACH_FIT=teach), edits,
-                                                              record["sp1_partners"], _NoDeadline())
+            out["teach"][arm] = [prep.with_allowed(dict(pools[arm][i], panel="TEACH_FIT"))
+                                 for i in prep.stream_indices(len(pools[arm]), rules.SEEDS[0], min(4, len(pools[arm])))]
+        for mode in FAKE_MODES:
+            model = FakeModel(mode)
+            base = train.evaluate(model, shared, edits, record["sp1_partners"], _NoDeadline())
+            for arm in rules.ARMS:
+                teach = train.evaluate(model, {"TEACH_FIT": out["teach"][arm]}, [], [], _NoDeadline())
+                body = json.loads(rules.canonical(base))
+                body["panels"]["TEACH_FIT"] = teach["panels"]["TEACH_FIT"]
+                out["records"][(arm, mode)] = body
     out["bytes"] = {key: rules.canonical(value) for key, value in out["records"].items()}
     return out
 
@@ -423,14 +484,22 @@ def _make_exact(record, panel, ids, prep_rows):
     record["panels"][panel]["distinct_free_outputs"] = len({tuple(r["free"]) for r in rows})
 
 
-def write_results(root, fake, *, reads=None, exact=None, stage0="REPRODUCED_16_OF_16", missing=(), reload_bad=(),
-                  init_bad=(), inconsistent=(), job_status="COMPLETE", fires_at_zero=False, frozen_override=None):
-    """A complete synthetic results folder. `reads[(arm, seed)]` = the final-checkpoint model reads its input;
-    `exact[(arm, seed)]` = {panel: ids} made exact at the final checkpoint."""
+def write_results(root, fake, *, reads=None, modes=None, exact=None, stage0="REPRODUCED_16_OF_16", missing=(),
+                  reload_bad=(), init_bad=(), inconsistent=(), job_status="COMPLETE", fires_at_zero=False,
+                  frozen_override=None, mutate_prep=None, mutate_final=None):
+    """A complete synthetic results folder. `modes[(arm, seed)]` = the fake mode of the final-checkpoint model
+    (default blind); `reads[(arm, seed)] = True` is short for mode "reader"; `exact[(arm, seed)]` = {panel: ids} made
+    exact at the final checkpoint; `mutate_prep(record)` and `mutate_final(key, body)` alter the written files."""
     root = Path(root)
+    modes = dict(modes or {})
+    for key, value in (reads or {}).items():
+        if value:
+            modes[key] = "reader"
     record = json.loads(rules.canonical(fake["prep"]))
     if frozen_override:
         record["frozen"] = dict(record["frozen"], **frozen_override)
+    if mutate_prep:
+        mutate_prep(record)
     _write(root / "prep.json", record)
     _write(root / "stage0.json", {"status": stage0, "reinit_update_1": {"reproduced": True}})
     _write(root / "job_result.json", {"status": job_status, "stop_code": None if job_status == "COMPLETE" else "JOB_WALL_LIMIT"})
@@ -444,13 +513,18 @@ def write_results(root, fake, *, reads=None, exact=None, stage0="REPRODUCED_16_O
         _write(folder / "run_manifest.json", {"arm": arm, "seed": seed, "frozen_sha256": frozen, "init_state_sha256": init,
                                               "teach_fit": [prep.panel_row_record(r) for r in teach]})
         for point in rules.CHECKPOINTS:
-            use = (reads or {}).get((arm, seed), False) if point == rules.FINAL else (fires_at_zero and point == 0)
-            body = json.loads(fake["bytes"][(arm, use)])
+            if point == rules.FINAL:
+                mode = modes.get((arm, seed), "blind")
+            else:
+                mode = "reader" if fires_at_zero and point == 0 else "blind"
+            body = json.loads(fake["bytes"][(arm, mode)])
             if point == rules.FINAL:
                 for panel, ids in ((exact or {}).get((arm, seed)) or {}).items():
                     _make_exact(body, panel, ids, record["panels"][panel])
                 if (arm, seed) in inconsistent:
                     body["panels"]["SP1"]["rows"][0]["exact"] = 1 - body["panels"]["SP1"]["rows"][0]["exact"]
+                if mutate_final:
+                    mutate_final((arm, seed), body)
             body.update(arm=arm, seed=seed, checkpoint=point, frozen_sha256=frozen)
             _write(folder / ("checkpoint_%05d.json" % point), body)
         _write(folder / "run_result.json", {"status": "COMPLETE", "updates": rules.UPDATES, "frozen_sha256": frozen,
@@ -462,18 +536,54 @@ def write_results(root, fake, *, reads=None, exact=None, stage0="REPRODUCED_16_O
 S1, S2, S3 = rules.SEEDS
 
 
-def test_runner_records_satisfy_the_reader_and_the_rule_separates_the_fakes(fake_records):
-    blind, reading = fake_records["records"][("A", False)], fake_records["records"][("A", True)]
+def test_runner_records_satisfy_the_reader_and_the_levels_separate_the_fakes(fake_records):
+    """Measured on the RUNNER'S OWN evaluate(): every fake gets the level the review predicts."""
+    prep_record, records = fake_records["prep"], fake_records["records"]
+    blind, reading = records[("A", "blind")], records[("A", "reader")]
     assert blind["panels"]["SP1"]["distinct_free_outputs"] == 1 and blind["panels"]["SP1"]["exact"] == 0
     assert reading["panels"]["SP1"]["exact"] == 256 and reading["panels"]["SP2"]["exact"] == 256
-    assert len(reading["edits"]["values"]) == rules.EDIT_COUNT
+    assert len(reading["edits"]["values"]) == rules.EDIT_COUNT and reading["edits"]["columns"] == list(rules.EDIT_VALUE_COLUMNS)
+    expected = {"blind": "NONE", "reader": "FULL", "tf_reader_freegen_collapse": "TEACHER_FORCED_ONLY",
+                "no_noetic": "PARTIAL_FIELDS", "structure_only": "STRUCTURE_ONLY"}
     for arm in rules.ARMS:
-        assert reader.input_use(fake_records["records"][(arm, False)], arm, fake_records["prep"])["label"] == "INPUT_USE_NOT_DETECTED"
-        detected = reader.input_use(fake_records["records"][(arm, True)], arm, fake_records["prep"])
-        noetic_positions = sum(fake_records["prep"]["sp1_noetic_counts"].values())
-        assert detected["label"] == "INPUT_USE_DETECTED" and detected["T1"]["correct"] == detected["T1"]["n"] == noetic_positions == 799
-    t1 = reader.input_use(blind, "A", fake_records["prep"])["T1"]
-    assert t1["correct"] == fake_records["prep"]["sp1_noetic_counts"]["0"] == 88 and not t1["passes"]   # always N0
+        for mode, level in expected.items():
+            reading_ = reader.input_use(records[(arm, mode)], arm, prep_record)
+            assert (reading_["level"], reading_["label"]) == (level, "INPUT_USE_" + level), (arm, mode)
+    noetic_positions = sum(prep_record["sp1_noetic_counts"].values())
+    full = reader.input_use(reading, "A", prep_record)
+    assert full["T1"]["correct"] == full["T1"]["n"] == noetic_positions == 799
+    assert (full["T2V"]["up"], full["T2V"]["down"], full["T2P"]["up"]) == (rules.VALUE_EDIT_COUNT, 0, rules.PRESENCE_EDIT_COUNT)
+    t1 = reader.input_use(blind, "A", prep_record)["T1"]
+    assert t1["correct"] == prep_record["sp1_noetic_counts"]["0"] == 88 and not t1["passes"]          # always N0
+    # the reviewers' TF_READER_FREEGEN_COLLAPSE: reads every field with the correct prefix; free generation collapses
+    tf = reader.input_use(records[("A", "tf_reader_freegen_collapse")], "A", prep_record)
+    assert tf["T1"]["correct"] == 799 and tf["T2V"]["passes"] and tf["T3"]["distinct_free_outputs"] == 1
+    # reads domain, drive and register values but not the Noetic: T1 fails, T2V passes on the other three fields
+    partial = reader.input_use(records[("A", "no_noetic")], "A", prep_record)
+    assert partial["T1"]["correct"] == 88 and not partial["T1"]["passes"] and partial["T2V"]["passes"]
+    assert partial["T2V"]["up"] == rules.VALUE_EDIT_COUNT - rules.VALUE_EDIT_COUNTS["noetic"] == 342
+    assert partial["T2V_BY_FIELD_REPORTED_NOT_DECISIVE"]["noetic"]["up"] == 0
+    # the reviewers' STRUCTURE_ONLY: passes the OLD T2 (all edits) and T3, but no field-value test
+    structure = reader.input_use(records[("A", "structure_only")], "A", prep_record)
+    assert structure["T1"]["correct"] == 88 and not structure["T2V"]["passes"] and structure["T2V"]["up"] == 0
+    assert structure["T2P"]["up"] == rules.PRESENCE_EDIT_COUNT == 235 and structure["T2P"]["down"] == 0
+    assert structure["T3"]["distinct_free_outputs"] == 180 and structure["T3"]["passes"]
+    assert structure["T2_ALL_EDITS_REPORTED_NOT_DECISIVE"]["passes"]          # the old T2 would have passed
+
+
+def test_level_function_is_a_complete_partition():
+    seen = {}
+    for t1 in (False, True):
+        for t2v in (False, True):
+            for t2p in (False, True):
+                for t3 in (False, True):
+                    seen[(t1, t2v, t2p, t3)] = rules.input_use_level(t1, t2v, t2p, t3)
+    assert set(seen.values()) == set(rules.LEVELS)
+    assert [k for k, v in seen.items() if v == "FULL"] == [(True, True, False, True), (True, True, True, True)]
+    assert all(v == "NONE" for k, v in seen.items() if not (k[0] or k[1] or k[2]))
+    assert all(v == "TEACHER_FORCED_ONLY" for k, v in seen.items() if (k[0] or k[1]) and not k[3])
+    assert all(v == "PARTIAL_FIELDS" for k, v in seen.items() if k[3] and k[0] != k[1])
+    assert all(v == "STRUCTURE_ONLY" for k, v in seen.items() if not k[0] and not k[1] and k[2])
 
 
 def test_reader_b_reads_a_does_not(tmp_path, fake_records):
@@ -482,29 +592,59 @@ def test_reader_b_reads_a_does_not(tmp_path, fake_records):
                         "SP2": set(r["id"] for r in fake_records["prep"]["panels"]["SP2"])} for s in rules.SEEDS}
     v = reader.verdict(write_results(tmp_path, fake_records, reads=reads, exact=exact))
     assert v["job"] == "JOB_COMPLETE" and v["stage0"] == "STAGE0_REPRODUCED"
-    assert v["arms"]["A"]["label"] == "ARM_A_DOES_NOT_SHOW_INPUT_USE" and v["arms"]["B"]["label"] == "ARM_B_SHOWS_INPUT_USE"
-    assert v["architecture"] == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED"
+    assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE" and v["arms"]["B"]["label"] == "ARM_B_SHOWS_INPUT_USE"
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE" and v["architecture_reasons"] == []
     assert v["lessons"] == {"SP1": "LESSONS_HELP_SP1", "SP2U": "LESSONS_HELP_SP2U", "SP2ALL": "LESSONS_HELP_SP2ALL"}
+    assert v["lessons_overall"] == "LESSONS_OVERALL_HELP"
     assert v["pairs"]["SP2U_PAIR1"]["b_B_exact_A_not"] == 208 and v["calibration"] == "INPUT_USE_RULE_SILENT_AT_INITIALISATION"
     assert all(v["runs"]["%s_%d" % k]["validity"] == "RUN_VALID" for k in rules.RUN_ORDER)
 
 
 def test_reader_no_arm_reads_input_justifies_the_architecture_change(tmp_path, fake_records):
-    v = reader.verdict(write_results(tmp_path, fake_records))
-    assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"
+    v = reader.verdict(write_results(tmp_path / "all", fake_records))
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED" and v["architecture_reasons"] == []
+    assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE" and v["arms"]["B"]["label"] == "ARM_B_SHOWS_NO_INPUT_USE"
     assert set(v["lessons"].values()) == {"LESSONS_EFFECT_NOT_SHOWN_SP1", "LESSONS_EFFECT_NOT_SHOWN_SP2U",
                                           "LESSONS_EFFECT_NOT_SHOWN_SP2ALL"}
+    assert v["lessons_overall"] == "LESSONS_OVERALL_EFFECT_NOT_SHOWN"
+    v = reader.verdict(write_results(tmp_path / "one_bad", fake_records, reload_bad={("A", S2)}))
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"             # 2 valid NONE runs per arm are enough
+    v = reader.verdict(write_results(tmp_path / "two_bad", fake_records, reload_bad={("A", S2)}, missing={("A", S3)}))
+    assert v["arms"]["A"]["label"] == "ARM_A_INPUT_USE_UNDETERMINED"
+    assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["TOO_FEW_VALID_RUNS"]
+
+
+def test_reader_architecture_needs_every_valid_run_to_show_no_input_use(tmp_path, fake_records):
+    """Review of 3771f989, MAJOR: a model that reads its input only partly, or only with the correct previous
+    tokens, must never give ARCHITECTURE_CHANGE_JUSTIFIED."""
+    for mode, reason in (("tf_reader_freegen_collapse", "TEACHER_FORCED_ONLY"), ("no_noetic", "PARTIAL_FIELDS"),
+                         ("structure_only", "STRUCTURE_ONLY")):
+        v = reader.verdict(write_results(tmp_path / mode, fake_records, modes={k: mode for k in rules.RUN_ORDER}))
+        assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == [reason], mode
+        assert "ARCHITECTURE_INCOMPLETE_BECAUSE_" + reason in v["labels"]
+        assert v["arms"]["A"]["label"] == "ARM_A_INPUT_USE_UNDETERMINED"
+    # one fully reading seed per arm (2 of 6 runs): the architecture can carry the input -> never JUSTIFIED
+    v = reader.verdict(write_results(tmp_path / "seed", fake_records, reads={("A", S1): True, ("B", S2): True}))
+    assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["SEED_DEPENDENT"]
+    # one partial run among five input-blind runs is enough to withhold JUSTIFIED
+    v = reader.verdict(write_results(tmp_path / "one", fake_records, modes={("B", S3): "no_noetic"}))
+    assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["PARTIAL_FIELDS"]
+    assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_NO_INPUT_USE"
 
 
 def test_reader_two_of_three_seeds_are_enough_and_one_is_not(tmp_path, fake_records):
     v = reader.verdict(write_results(tmp_path / "two", fake_records, reads={("A", S1): True, ("A", S3): True}))
-    assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_INPUT_USE" and v["architecture"] == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED"
+    assert v["arms"]["A"]["label"] == "ARM_A_SHOWS_INPUT_USE"
+    assert v["architecture"] == "ARCHITECTURE_CHANGE_NOT_JUSTIFIED_BY_INPUT_USE_RULE"
     v = reader.verdict(write_results(tmp_path / "one", fake_records, reads={("A", S1): True}))
-    assert v["arms"]["A"]["label"] == "ARM_A_DOES_NOT_SHOW_INPUT_USE" and v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"
+    assert v["arms"]["A"]["label"] == "ARM_A_INPUT_USE_UNDETERMINED"
+    assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["architecture_reasons"] == ["SEED_DEPENDENT"]
     v = reader.verdict(write_results(tmp_path / "gap", fake_records, reads={("A", S1): True}, missing={("A", S3)}))
     assert v["arms"]["A"]["label"] == "ARM_A_INPUT_USE_UNDETERMINED"
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE" and v["runs"]["A_%d" % S3]["validity"] == "RUN_INCOMPLETE"
+    assert v["architecture_reasons"] == ["SEED_DEPENDENT"]
     assert v["lessons"]["SP1"] == "LESSONS_COMPARISON_INCOMPLETE_SP1"
+    assert v["lessons_overall"] == "LESSONS_OVERALL_COMPARISON_INCOMPLETE"
 
 
 def test_reader_lessons_need_all_three_pairs_and_the_sign_test(tmp_path, fake_records):
@@ -515,7 +655,28 @@ def test_reader_lessons_need_all_three_pairs_and_the_sign_test(tmp_path, fake_re
     assert v["pairs"]["SP1_PAIR3"]["p_B_beats_A"] == 1 / 64 and v["lessons"]["SP1"] == "LESSONS_EFFECT_NOT_SHOWN_SP1"
     exact = {("A", s): {"SP1": set(sp1[:10])} for s in rules.SEEDS}
     v = reader.verdict(write_results(tmp_path / "b", fake_records, exact=exact))
-    assert v["lessons"]["SP1"] == "LESSONS_HURT_SP1"
+    assert v["lessons"]["SP1"] == "LESSONS_HURT_SP1" and v["lessons_overall"] == "LESSONS_OVERALL_HURT"
+
+
+def test_reader_one_overall_lessons_answer(tmp_path, fake_records):
+    """Review MINOR 2: one program-emitted answer over the primary panels SP1 and SP2U."""
+    sp1 = [r["id"] for r in fake_records["prep"]["panels"]["SP1"]]
+    sp2u = [r["id"] for r in fake_records["prep"]["panels"]["SP2"] if not r["inspected"]]
+    exact = {("B", s): {"SP1": set(sp1[:10])} for s in rules.SEEDS}
+    v = reader.verdict(write_results(tmp_path / "sp1_only", fake_records, exact=exact))
+    assert v["lessons"]["SP1"] == "LESSONS_HELP_SP1" and v["lessons"]["SP2U"] == "LESSONS_EFFECT_NOT_SHOWN_SP2U"
+    assert v["lessons_overall"] == "LESSONS_OVERALL_EFFECT_NOT_SHOWN" and v["lessons_overall_panels"] == ["SP1", "SP2U"]
+    exact = {("B", s): {"SP1": set(sp1[:10])} for s in rules.SEEDS}
+    for s in rules.SEEDS:
+        exact[("A", s)] = {"SP2": set(sp2u[:10])}
+    v = reader.verdict(write_results(tmp_path / "mixed", fake_records, exact=exact))
+    assert (v["lessons"]["SP1"], v["lessons"]["SP2U"]) == ("LESSONS_HELP_SP1", "LESSONS_HURT_SP2U")
+    assert v["lessons_overall"] == "LESSONS_OVERALL_MIXED"
+    table = {("HELP", "HELP"): "HELP", ("HELP", "EFFECT_NOT_SHOWN"): "EFFECT_NOT_SHOWN", ("HURT", "HELP"): "MIXED",
+             ("EFFECT_NOT_SHOWN", "HURT"): "HURT", ("COMPARISON_INCOMPLETE", "HURT"): "COMPARISON_INCOMPLETE",
+             ("NOT_EVALUATED", "NOT_EVALUATED"): "NOT_EVALUATED"}
+    for (a, b), want in table.items():
+        assert rules.overall_lessons({"SP1": a, "SP2U": b, "SP2ALL": "HURT"}) == want
 
 
 def test_reader_inspected_dev_rows_count_only_in_sp2all(tmp_path, fake_records):
@@ -524,12 +685,14 @@ def test_reader_inspected_dev_rows_count_only_in_sp2all(tmp_path, fake_records):
     v = reader.verdict(write_results(tmp_path, fake_records, exact=exact))
     assert v["lessons"]["SP2ALL"] == "LESSONS_HELP_SP2ALL" and v["lessons"]["SP2U"] == "LESSONS_EFFECT_NOT_SHOWN_SP2U"
     assert v["pairs"]["SP2U_PAIR1"]["b_B_exact_A_not"] == 0 and v["pairs"]["SP2U_PAIR1"]["rows"] == 208
+    assert v["lessons_overall"] == "LESSONS_OVERALL_EFFECT_NOT_SHOWN"      # SP2ALL is not a primary panel
 
 
 def test_reader_refusals_and_invalid_runs(tmp_path, fake_records):
     v = reader.verdict(write_results(tmp_path / "s0", fake_records, stage0="NOT_REPRODUCED_1_OF_16_DIFFER"))
     assert v["stage0"] == "STAGE0_NOT_REPRODUCED" and v["no_verdict"] == "NO_VERDICT_STAGE0"
     assert v["architecture"] == "ARCHITECTURE_NOT_EVALUATED" and "LESSONS_NOT_EVALUATED_SP1" in v["labels"]
+    assert v["lessons_overall"] == "LESSONS_OVERALL_NOT_EVALUATED"
     v = reader.verdict(write_results(tmp_path / "fr", fake_records, frozen_override={"updates": 1}))
     assert v["no_verdict"] == "NO_VERDICT_FROZEN_RULES_DIFFER"
     v = reader.verdict(write_results(tmp_path / "rl", fake_records, reads={("A", S1): True, ("A", S2): True},
@@ -543,6 +706,7 @@ def test_reader_refusals_and_invalid_runs(tmp_path, fake_records):
     v = reader.verdict(write_results(tmp_path / "z", fake_records, reads={("A", S1): True, ("A", S2): True}, fires_at_zero=True))
     assert v["calibration"] == "INPUT_USE_RULE_FIRES_AT_INITIALISATION"
     assert v["architecture"] == "ARCHITECTURE_DECISION_INCOMPLETE"
+    assert v["architecture_reasons"] == ["INPUT_USE_RULE_FIRES_AT_INITIALISATION"]
     v = reader.verdict(write_results(tmp_path / "st", fake_records, job_status="STOPPED"))
     assert v["job"] == "JOB_STOPPED_JOB_WALL_LIMIT"
     empty = tmp_path / "empty"
@@ -555,14 +719,60 @@ def test_reader_refusals_and_invalid_runs(tmp_path, fake_records):
         reader.load(tmp_path / "visible_G_eval.jsonl")
 
 
+def test_reader_recomputes_what_prep_claims(tmp_path, fake_records):
+    """Review MINOR 4: the reader does not trust prep.json's targets, counts, edits or null rates."""
+    assert reader.prep_problems(json.loads(rules.canonical(fake_records["prep"]))) == []
+
+    def sp2_target(record):
+        row = record["panels"]["SP2"][5]
+        row["target_tokens"] = row["target_tokens"][:-2] + row["target_tokens"][-1:] + row["target_tokens"][-2:-1]
+
+    def sp1_counts(record):
+        counts = record["sp1_field_counts"]["noetic"]
+        counts["1"], counts["2"] = counts["1"] + 30, counts["2"] - 30
+
+    def pool_counts(record):
+        record["pools"]["A"]["field_counts"]["noetic"]["2"] += 400
+
+    def edit_kind(record):
+        item = next(e for e in record["edits"] if e["field"] == "drive" and e["from"] == "None" and e["to"])
+        item["from"] = "3"
+
+    def dropped_edit(record):
+        del record["edits"][0]
+
+    for name, mutate, problem in (("t", sp2_target, "PANEL_TARGETS_DIGEST"), ("c", sp1_counts, "SP1_FIELD_COUNTS_RECOMPUTE"),
+                                  ("p", pool_counts, "A_POOL_NOETIC_NULL"), ("k", edit_kind, "EDIT_KINDS_DIGEST"),
+                                  ("d", dropped_edit, "EDIT_PANEL_DIGEST")):
+        v = reader.verdict(write_results(tmp_path / name, fake_records, mutate_prep=mutate))
+        assert v["no_verdict"] == "NO_VERDICT_PREP_NOT_FROZEN" and problem in v["prep_problems"], name
+        assert v["lessons_overall"] == "LESSONS_OVERALL_NOT_EVALUATED"
+
+    def drop_value(key, body):
+        if key == ("B", S1):
+            del body["edits"]["values"][-1]
+
+    def swap_values(key, body):
+        if key == ("B", S1):
+            values = body["edits"]["values"]
+            values[0], values[1] = values[1], values[0]
+    for name, mutate, reason in (("dv", drop_value, "EDIT_COUNT_DIFFERS"), ("sv", swap_values, "EDIT_ORDER_DIFFERS")):
+        v = reader.verdict(write_results(tmp_path / name, fake_records, mutate_final=mutate))
+        run = v["runs"]["B_%d" % S1]
+        assert run["validity"] == "RUN_INVALID_RESULT_INCONSISTENT_AT_%d" % rules.FINAL and reason in run["problems"][0], name
+        assert v["architecture"] == "ARCHITECTURE_CHANGE_JUSTIFIED"              # 2 valid NONE runs per arm remain
+        assert v["lessons_overall"] == "LESSONS_OVERALL_COMPARISON_INCOMPLETE"
+
+
 def test_reader_labels_are_the_declared_ones(tmp_path, fake_records):
-    v = reader.verdict(write_results(tmp_path, fake_records, reads={("B", S1): True}, missing={("A", S2)}))
     patterns = [p.replace("<A|B>", "(A|B)").replace("<STOP_CODE>", "[A-Z0-9_]+").replace("<REASON>", "[A-Z0-9_]+")
                 .replace("<PANEL>", "(SP1|SP2U|SP2ALL)").replace("<i>", "[123]") for group in reader.LABELS.values() for p in group]
-    import re
-    for label in v["labels"]:
-        core = label.split(":")[-1]
-        assert any(re.fullmatch(p, core) for p in patterns), label
+    for name, kwargs in (("mix", {"reads": {("B", S1): True}, "missing": {("A", S2)}}),
+                         ("tf", {"modes": {k: "tf_reader_freegen_collapse" for k in rules.RUN_ORDER}})):
+        v = reader.verdict(write_results(tmp_path / name, fake_records, **kwargs))
+        for label in v["labels"]:
+            core = label.split(":")[-1]
+            assert any(re.fullmatch(p, core) for p in patterns), label
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -582,15 +792,26 @@ def test_exact_binomial_and_sign_tests():
         rules.binomial_upper_tail(1, 2, Fraction(3, 2))
 
 
-def test_t2_boundaries(fake_records):
-    record = json.loads(fake_records["bytes"][("A", True)])
+def test_t2v_boundaries_count_value_edits_only(fake_records):
+    record = json.loads(fake_records["bytes"][("A", "reader")])
     values = record["edits"]["values"]
-    need = -(-len(values) // 10)                            # ceil(E / 10) rises are required
-    for i, value in enumerate(values):
-        value[1] = value[0] + (0.02 if i < need else 0.0)
-    assert reader.input_use(record, "A", fake_records["prep"])["T2"]["passes"]
-    values[need - 1][1] = values[need - 1][0] + 0.009       # just under the frozen delta: not a rise
-    assert not reader.input_use(record, "A", fake_records["prep"])["T2"]["passes"]
+    kinds = [rules.edit_kind(e["field"], e["from"], e["to"]) for e in reader.measurable_edits(fake_records["prep"])]
+    value_positions = [i for i, kind in enumerate(kinds) if kind == "value"]
+    need = -(-rules.VALUE_EDIT_COUNT // 10)                 # ceil(538 / 10) = 54 rises among the value edits
+    assert need == 54 and len(value_positions) == rules.VALUE_EDIT_COUNT
+    for value in values:
+        value[1] = value[0]
+    for i in value_positions[:need]:
+        values[i][1] = values[i][0] + 0.02
+    reading = reader.input_use(record, "A", fake_records["prep"])
+    assert reading["T2V"]["passes"] and reading["T2V"]["up"] == 54 and not reading["T2P"]["passes"]
+    values[value_positions[need - 1]][1] = values[value_positions[need - 1]][0] + 0.009   # under the frozen delta
+    assert not reader.input_use(record, "A", fake_records["prep"])["T2V"]["passes"]
+    for i, kind in enumerate(kinds):                        # presence rises never count toward T2V
+        if kind == "presence":
+            values[i][1] = values[i][0] + 0.5
+    reading = reader.input_use(record, "A", fake_records["prep"])
+    assert not reading["T2V"]["passes"] and reading["T2P"]["passes"] and reading["T2P"]["up"] == 235
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -634,17 +855,29 @@ def test_launch_custody_filters_and_prelaunch_refusals():
     with pytest.raises(SystemExit, match="B_PIN_NOT_THE_FROZEN_PACKAGE"):
         ab.check_pin_blob(json.dumps({"data_versions": {sdg.SCHEMA: dict(entry, engine="rust+python")}}).encode(), rules_ns)
     assert ab.check_pin_blob(json.dumps({"data_versions": {sdg.SCHEMA: entry}}).encode(), rules_ns) == entry
-    blobs = {ab.LAB + "q4_ab_rules.py": (HERE / "q4_ab_rules.py").read_bytes(), ab.SPEC: b"Status: PROPOSED",
-             ab.LAB + "Q4_SDG_DATA_PINS.json": json.dumps({"data_versions": {sdg.SCHEMA: entry}}).encode()}
-    with pytest.raises(SystemExit, match="FROZEN_BEFORE_LAUNCH"):
-        ab.check_frozen(blobs)
-    blobs[ab.SPEC] = b"**Status: PROPOSED_FOR_REVIEW**" + bytes([10]) + b"It becomes FROZEN_BEFORE_LAUNCH after review."
-    with pytest.raises(SystemExit, match="FROZEN_BEFORE_LAUNCH"):
-        ab.check_frozen(blobs)                                   # the word alone is not the status line
-    blobs[ab.SPEC] = b"# Spec" + bytes([10, 10]) + b"**Status: FROZEN_BEFORE_LAUNCH** (reviewed)"
-    assert ab.check_frozen(blobs)[1] == entry
-    spec = (HERE / "Q4_SDG_AB_SPEC_v0_2.md").read_bytes()
-    assert ab.FROZEN_STATUS_LINE.search(spec) is None or b"PROPOSED_FOR_REVIEW" not in spec
+    frozen, nl = rules.frozen_sha256(), bytes([10])
+    rules_blob = (HERE / "q4_ab_rules.py").read_bytes()
+    pins_blob = json.dumps({"data_versions": {sdg.SCHEMA: entry}}).encode()
+
+    def attempt(spec, approved_frozen=frozen, approved_lf=None):
+        blobs = {ab.LAB + "q4_ab_rules.py": rules_blob, ab.SPEC: spec, ab.LAB + "Q4_SDG_DATA_PINS.json": pins_blob}
+        if approved_lf is None:
+            approved_lf = {ab.LAB + "q4_ab_rules.py": ab.lf_sha256(rules_blob), ab.SPEC: ab.lf_sha256(spec)}
+        return ab.check_frozen(blobs, approved_frozen, approved_lf)
+    good = b"# Spec" + nl + nl + b"**Status: FROZEN_BEFORE_LAUNCH** frozen_sha256 `" + frozen.encode() + b"`"
+    assert attempt(good)[1] == entry
+    for spec in (b"Status: PROPOSED", b"**Status: PROPOSED_FOR_REVIEW**" + nl + b"It becomes FROZEN_BEFORE_LAUNCH later.",
+                 b"# Spec" + nl + b"**Status: FROZEN_BEFORE_LAUNCH** (reviewed)"):
+        with pytest.raises(SystemExit, match="FROZEN_BEFORE_LAUNCH"):
+            attempt(spec)                                        # the word alone, or no hash, is not the status line
+    with pytest.raises(SystemExit, match="names another frozen_sha256"):
+        attempt(good.replace(frozen.encode(), b"0" * 64))
+    with pytest.raises(SystemExit, match="FROZEN_RULES_NOT_THE_APPROVED_ONES"):
+        attempt(good, approved_frozen="1" * 64)                  # rules edited after the review (review MINOR 3)
+    with pytest.raises(SystemExit, match="APPROVED_SOURCE_CHANGED"):
+        attempt(good, approved_lf={ab.LAB + "q4_ab_rules.py": "0" * 64, ab.SPEC: ab.lf_sha256(good)})
+    with pytest.raises(SystemExit, match="not filled in"):
+        attempt(good, approved_lf={ab.SPEC: "__SPEC__"})
     long_url = "https://bucket.example/" + "x" * 1600
     for module, extra in ((build, {"PACKAGE_URL": long_url}), (ab, {"TORCH_VERSION": "2.11.0", "NUMPY_VERSION": "2.5.2",
                                                                    "JOB_WALL_SECONDS": 11400})):
@@ -654,6 +887,67 @@ def test_launch_custody_filters_and_prelaunch_refusals():
         assert "__" not in module.fill(template, values)
         with pytest.raises(SystemExit, match="placeholder"):
             module.fill(template, {k: v for k, v in values.items() if k != "RESULTS_URL"})
+
+
+@NEEDS_JOBS
+def test_launcher_approves_exactly_the_committed_rules_programs_and_spec():
+    """launch.py's APPROVED_* values equal this working copy: the rules hash, the spec's frozen status line, and the
+    LF bytes of the four decision programs and the spec. Every check before the pin passes on the real files."""
+    ab = _load(JOBS / "ab_job" / "launch.py", "q4ab_ab_launch3")
+    assert ab.APPROVED_FROZEN_SHA256 == rules.frozen_sha256()
+    blobs = {rel: (ab.PACKAGE / rel).read_bytes() for rel in ab.APPROVED_LF_SHA256}
+    blobs[ab.LAB + "Q4_SDG_DATA_PINS.json"] = (HERE / "Q4_SDG_DATA_PINS.json").read_bytes()
+    for rel, want in ab.APPROVED_LF_SHA256.items():
+        assert ab.lf_sha256(blobs[rel]) == want, rel
+    status = ab.FROZEN_STATUS_LINE.search(blobs[ab.SPEC])
+    assert status and status.group(1).decode() == rules.frozen_sha256() and b"PROPOSED_FOR_REVIEW" not in blobs[ab.SPEC]
+    try:
+        ab.check_frozen(blobs)
+    except SystemExit as error:                               # before the pin exists, only the pin check may refuse
+        assert "B_PACKAGE_NOT_PINNED" in str(error), str(error)
+
+
+@NEEDS_JOBS
+def test_launcher_refuses_b_sources_that_changed_since_the_data_build():
+    """Review MINOR 6: the data build's recorded source hashes must equal the files at the source commit."""
+    ab = _load(JOBS / "ab_job" / "launch.py", "q4ab_ab_launch4")
+    names = set(sdg.source_pins()) | set(sdg.Q3_IMMUTABLE_LF_SHA256)
+    blobs = {ab.LAB + name: (HERE / name).read_bytes() for name in names}
+    blobs[ab.DATA + "manifest.json"] = (DATA / "manifest.json").read_bytes()
+    assert ab.COMPILER in blobs
+    manifest = {"sources_lf_sha256": sdg.source_pins(), "q3_immutable_lf_sha256": sdg.Q3_IMMUTABLE_LF_SHA256,
+                "compiler": historical_compiler.source_receipt(), "q3_v0_7_manifest_sha256": sdg.Q3_V07_MANIFEST_SHA256}
+    blob = json.dumps(manifest, sort_keys=True).encode()
+    entry = {"manifest_sha256": ab.lf_sha256(blob)}
+    assert ab.check_data_build_manifest(blob, blobs, entry)["sources_lf_sha256"] == sdg.source_pins()
+    edited = dict(blobs, **{ab.LAB + "q4_sdg_curriculum.py": blobs[ab.LAB + "q4_sdg_curriculum.py"] + b"# D rounds" + bytes([10])})
+    with pytest.raises(SystemExit, match="B_PACKAGE_SOURCES_CHANGED_SINCE_THE_DATA_BUILD.*q4_sdg_curriculum.py"):
+        ab.check_data_build_manifest(blob, edited, entry)
+    with pytest.raises(SystemExit, match="DATA_BUILD_MANIFEST_NOT_THE_PINNED_ONE"):
+        ab.check_data_build_manifest(blob, blobs, {"manifest_sha256": "0" * 64})
+    empty = json.dumps({"sources_lf_sha256": {}}).encode()
+    with pytest.raises(SystemExit, match="no source hashes"):
+        ab.check_data_build_manifest(empty, blobs, {"manifest_sha256": ab.lf_sha256(empty)})
+    source = (JOBS / "ab_job" / "launch.py").read_text(encoding="utf-8")
+    body = source[source.index("def assemble"):source.index("def build_bundle")]
+    assert body.index("check_frozen(blobs)") < body.index("check_data_build_manifest(") < body.index("identity = {")
+
+
+def test_smoke_stage_runs_the_fresh_process_reload_on_the_checkpoint_rows():
+    """Review MINOR 7: the reload path runs in the smoke stage, before any main run; its rows follow the checkpoint."""
+    source = (HERE / "q4_ab_train.py").read_text(encoding="utf-8")
+    smoke = source[source.index("def smoke_and_project"):source.index("def reload_in_fresh_process")]
+    assert (smoke.index("reload_in_fresh_process(reload_dir") < smoke.index("JobStop(\"SMOKE_RELOAD_FAILED\"")
+            < smoke.index("JobStop(\"PROJECTED_OVER_TIME\""))
+    assert "SMOKE_RELOAD_FAILED" in rules.STOP_CODES
+    run = source[source.index("def run("):]
+    assert run.index("smoke_and_project(") < run.index("stage = \"runs\"")
+    prep_record = {"panels": {"SP1": [{"id": "r%d" % i, "observation": "o%d" % i} for i in range(64)]}}
+    thinned = {"panels": {"SP1": {"rows": [{"id": "r%d" % i} for i in range(0, 64, rules.SMOKE_STRIDE)]}}}
+    rows = train.reload_rows(thinned, prep_record)
+    assert [r[0]["id"] for r in rows] == ["r0", "r16", "r32", "r48"] and [r[1] for r in rows] == ["o0", "o16", "o32", "o48"]
+    full = {"panels": {"SP1": {"rows": [{"id": "r%d" % i} for i in range(64)]}}}
+    assert [r[1] for r in train.reload_rows(full, prep_record)] == ["o%d" % i for i in range(train.RELOAD_ROWS)]
 
 
 def _tar(members):
