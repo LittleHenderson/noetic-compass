@@ -1,0 +1,233 @@
+{
+ "fresh_on": {
+  "complete": true,
+  "label": "FRESH_ON_REPORT_ONLY",
+  "note": "no pass rule; never satisfies item 2 (trained ON); item 3's REACHABILITY label does not apply (A4.4)",
+  "readings": [
+   {
+    "label": "h2on_fresh_20260917",
+    "summary": {
+     "K_positive": 24,
+     "M3z_above_floor": 24,
+     "RC_dom_ok": 24,
+     "bystander_ok": 24,
+     "effect_floor": 0.001,
+     "foci": 24,
+     "max_K": 0.19680851063829788,
+     "max_M3z": 0.03197968538649443,
+     "median_RC": 0.009539493549375286,
+     "top1_changes_reported_not_scored": 0
+    },
+    "switch": true,
+    "verdict": "MIXED"
+   },
+   {
+    "label": "h2on_fresh_20260918",
+    "summary": {
+     "K_positive": 24,
+     "M3z_above_floor": 24,
+     "RC_dom_ok": 24,
+     "bystander_ok": 24,
+     "effect_floor": 0.001,
+     "foci": 24,
+     "max_K": 0.1196808510638298,
+     "max_M3z": 0.004556863997850602,
+     "median_RC": 0.001514925369058025,
+     "top1_changes_reported_not_scored": 66
+    },
+    "switch": true,
+    "verdict": "MIXED"
+   },
+   {
+    "label": "h2on_fresh_20260919",
+    "summary": {
+     "K_positive": 24,
+     "M3z_above_floor": 24,
+     "RC_dom_ok": 24,
+     "bystander_ok": 20,
+     "effect_floor": 0.001,
+     "foci": 24,
+     "max_K": 0.08244680851063829,
+     "max_M3z": 0.0240242270635877,
+     "median_RC": 0.011342056474827309,
+     "top1_changes_reported_not_scored": 0
+    },
+    "switch": true,
+    "verdict": "COUPLED_NOT_COMPARISON"
+   }
+  ]
+ },
+ "item1_verdict": "OFF_PRESERVED_ON_T4",
+ "item2_trained_on": "OPEN: no trained switch-ON checkpoint exists; needs a separate owner-approved training job",
+ "label": "CLAUDE_BUILT_CLAUDE_CHECKED",
+ "models": [
+  "h2_final_20260917",
+  "h2_final_20260918",
+  "h2_final_20260919",
+  "h2_fresh_20260917",
+  "h2_fresh_20260918",
+  "h2_fresh_20260919",
+  "h2_initial_20260917",
+  "h2_initial_20260918",
+  "h2_initial_20260919"
+ ],
+ "per_model": {
+  "h2_final_20260917": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806",
+   "control_equals_reference": true,
+   "off_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "949b371973745a0686537f9c9031451c9d3558a35e0b23c94b79ef5a23155806"
+  },
+  "h2_final_20260918": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7",
+   "control_equals_reference": true,
+   "off_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "5cede80f347b84b05a402e698417153076f3edd053daa32e008ce38f37a050a7"
+  },
+  "h2_final_20260919": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a",
+   "control_equals_reference": true,
+   "off_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "62c188861902422664fcf59535d6b8011b34d7db5bcdb377ab95ce21fc00375a"
+  },
+  "h2_fresh_20260917": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b",
+   "control_equals_reference": true,
+   "off_digest": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "467608a02d4e428d2ea6ca4519ba3e499c93548e706f0caca1db6e3f9ba7377b"
+  },
+  "h2_fresh_20260918": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6",
+   "control_equals_reference": true,
+   "off_digest": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "607a6972ad07704bced414b48804999e0dd3691f425880e97aa7131f3553f7c6"
+  },
+  "h2_fresh_20260919": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412",
+   "control_equals_reference": true,
+   "off_digest": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "e1d1a3e74007f4aac92abef84d284ac58366149fdf00e36542b93bc8b4eae412"
+  },
+  "h2_initial_20260917": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a",
+   "control_equals_reference": true,
+   "off_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "1aaa01da42a8f754470696a6b35b08ac876cead7f36e29e939ae0e720972ba0a"
+  },
+  "h2_initial_20260918": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365",
+   "control_equals_reference": true,
+   "off_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "47e4cfb267aec4f959388aa4c8a4d37d2d52b8c60d7b8d3afb33b8aca3ebd365"
+  },
+  "h2_initial_20260919": {
+   "checkpoint_sha256_ok": true,
+   "control_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858",
+   "control_equals_reference": true,
+   "off_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858",
+   "off_equals_control": true,
+   "off_keys_shapes_equal_control": true,
+   "off_parameter_count": 174303,
+   "off_probe_switch": false,
+   "off_probe_verdict": "FOCUS_TO_CANDIDATE_DEPENDENCY_ABSENT",
+   "reference_digest": "fc2412f665a98884399209c0d0d9b7fa28c56ed0a98786ab2eb196f0467be858"
+  }
+ },
+ "problems": {},
+ "repaired_commit": "ceab6c49f611303f39addfaa3553d81d6f902811",
+ "schema": "claude.analogy-repair-t4-reading/0.1",
+ "stage0_pytest": {
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "tests": 38
+ },
+ "stage0_read_only_check": {
+  "pass": true,
+  "results": {
+   "OFF": {
+    "analogy_head_present": false,
+    "analogy_seed": null,
+    "construction_value": false,
+    "delattr_raises_analogy_focus_comparison": true,
+    "delattr_raises_analogy_seed": true,
+    "dict_write_does_not_change_getattr": true,
+    "getattr_is_bool_equal": true,
+    "parameter_count": 174303,
+    "pass": true,
+    "present_after_delattr_analogy_focus_comparison": true,
+    "present_after_delattr_analogy_seed": true,
+    "setattr_raises_analogy_focus_comparison": true,
+    "setattr_raises_analogy_seed": true,
+    "unchanged_after_setattr_analogy_focus_comparison": true,
+    "unchanged_after_setattr_analogy_seed": true
+   },
+   "ON": {
+    "analogy_head_present": true,
+    "analogy_seed": 20260923,
+    "construction_value": true,
+    "delattr_raises_analogy_focus_comparison": true,
+    "delattr_raises_analogy_seed": true,
+    "dict_write_does_not_change_getattr": true,
+    "getattr_is_bool_equal": true,
+    "parameter_count": 203424,
+    "pass": true,
+    "present_after_delattr_analogy_focus_comparison": true,
+    "present_after_delattr_analogy_seed": true,
+    "setattr_raises_analogy_focus_comparison": true,
+    "setattr_raises_analogy_seed": true,
+    "unchanged_after_setattr_analogy_focus_comparison": true,
+    "unchanged_after_setattr_analogy_seed": true
+   }
+  }
+ },
+ "status": "done"
+}
