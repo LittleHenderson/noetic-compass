@@ -1603,7 +1603,9 @@ def test_launcher_approves_exactly_the_committed_rules_programs_and_spec():
     for rel, want in ab.APPROVED_LF_SHA256.items():
         assert ab.lf_sha256(blobs[rel]) == want, rel
     status = ab.FROZEN_STATUS_LINE.search(blobs[ab.SPEC])
-    assert status and status.group(1).decode() == rules.frozen_sha256() and b"PROPOSED_FOR_REVIEW" not in blobs[ab.SPEC]
+    assert status and status.group(1).decode() == rules.frozen_sha256()
+    # only the STATUS LINE may not say PROPOSED_FOR_REVIEW; the spec's history bullets legitimately quote that word
+    assert re.search(rb"^[*][*]Status: PROPOSED_FOR_REVIEW[*][*]", blobs[ab.SPEC], re.MULTILINE) is None
     try:
         ab.check_frozen(blobs)
     except SystemExit as error:                               # before the pin exists, only the pin check may refuse
