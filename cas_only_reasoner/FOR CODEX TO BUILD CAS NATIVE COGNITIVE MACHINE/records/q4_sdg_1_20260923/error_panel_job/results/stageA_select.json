@@ -1,0 +1,29 @@
+{
+ "consumed_positions_first_16": [
+  1091,
+  1497,
+  1444,
+  696,
+  526,
+  174,
+  63,
+  128,
+  1111,
+  1250,
+  1572,
+  1200,
+  333,
+  1294,
+  1955,
+  1617
+ ],
+ "counts": {
+  "old_dev16": 16,
+  "public64": 64,
+  "teaching16": 16
+ },
+ "digest": "0b98bfc94a5aed8af2d4fef72378fec7dfa9d46808b09ff30f750972387a3059",
+ "init_seed": 20260921,
+ "panel_seed": 20260971,
+ "rule": "old_dev16 = visible G dev rows 0-15; teaching16 = the first 16 consumed training rows in update order; public64 = per G-train shape (sorted key) 2 unconsumed train rows, seeded shuffle; then dev rows 16+ round-robin over the 9 dev shapes (sorted key) up to 32"
+}

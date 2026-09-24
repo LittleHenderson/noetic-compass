@@ -1,0 +1,16 @@
+{
+ "schema": "claude.q4-sdg-1-error-panel-watch/0.1",
+ "instance_id": "i-0bb026161de743f23",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "terminated",
+ "files_downloaded": 18,
+ "launched_utc": "2026-09-24T01:16:05Z",
+ "watch_ended_utc": "2026-09-24T01:23:31Z",
+ "minutes_from_launch_to_watch_end": 7.4,
+ "cost_upper_bound_usd": 0.0673,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 100 GB of gp3 disk at 0.08 per GB-month",
+ "terminated_confirmed": true,
+ "volumes_of_this_job_remaining": [],
+ "dollar_ceiling": 1.0
+}
