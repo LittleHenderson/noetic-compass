@@ -28,13 +28,13 @@ result. The program's own paired tests found `NO_PAIRED_DIFFERENCE` on every pai
 1. **On familiar tree shapes (SP1), almost every miss is a field value, not the tree structure.** Field values
    (noetic, domain, drive, register) are the first wrong decision in 746 of 768 rows for arm A and 709 of 768 for
    arm B. Tree-branch mistakes are 8 (A) and 20 (B). Operator (+ or ×) mistakes are 10 (A) and 28 (B).
-2. **The model reads the noetic of the first leaf. It does not read the noetic of any later leaf.** With the right
-   answer fed in up to each step, the first leaf's noetic is right in 684 of 768 (A) and 763 of 768 (B) cases. The
-   noetic of the 2nd leaf is right in 98 of 768 (A) and 73 of 768 (B) cases. That is the level of always guessing the
-   most common noetic value (90 of 799, about 11.3%). This holds in all six runs. It holds on the model's own taught
-   rows too. It did not improve at any saved checkpoint from 0 to 32,768 updates. In 4 of 6 runs, none of the 132
-   edits that change a later leaf's noetic in the input made the model's chance of the new value rise by 0.01 or
-   more.
+2. **The model gets the first leaf's noetic right. For every later leaf it gets the noetic about as often as a
+   guess.** With the right answer fed in up to each step, the first leaf's noetic is right in 684 of 768 (A) and
+   763 of 768 (B) cases. The noetic of the 2nd leaf is right in 98 of 768 (A) and 73 of 768 (B) cases. That is
+   about the level of always guessing the most common noetic value (90 of 799, about 11.3%). This holds in all six
+   runs (the highest single run is A_20260931, leaf 2 at 43/256). It holds on the model's own taught rows too. It
+   did not improve at any saved checkpoint from 0 to 32,768 updates. In 4 of 6 runs, none of the 132 edits that
+   change a later leaf's noetic in the input made the model's chance of the new value rise by 0.01 or more.
 3. **On new, deeper tree shapes (SP2U, SP2ALL), structure is missing.** The targets are 3 levels deep. The model
    most often writes a tree 2 levels deep with fewer leaves. On SP2U the shape is wrong in 606 of 624 rows (A) and
    565 of 624 rows (B). The "first wrong decision" label hides part of this; see Finding 3.
@@ -147,7 +147,7 @@ What this says in plain words:
   register are weak (see Finding 5). Arm B's first mistake usually comes after leaf 1 was fully right (490 of 757
   wrong rows), and arm B's most common first mistake is `WRONG_NOETIC` (435 of 768 rows).
 
-## Finding 2: the first leaf's noetic is read; later leaves' noetic is not
+## Finding 2: the first leaf's noetic is right; later leaves' noetic is near the guess level
 
 ### Assisted noetic accuracy by leaf (SP1, final checkpoint)
 
@@ -164,9 +164,9 @@ noetic value among the SP1 targets: 90 of 799, about 11.3% (`SP1_NOETIC_NULL` in
 | B_20260933 | 252/256 (98.4%) | 27/256 (10.5%) | 14/161 (8.7%) | 17/126 (13.5%) |
 
 The same pattern shows on SP2U and SP2ALL. Arm totals: leaf 1 noetic is 493/624 (A) and 604/624 (B) on SP2U, and
-603/768 (A) and 742/768 (B) on SP2ALL. Every later-leaf noetic cell on these two panels is between 9.4% and 12.8%. The other three fields do not fall off this way. For example, SP1 later-leaf register is
-46.0% to 54.9% (A) and 71.2% to 73.7% (B). Full per-field, per-leaf numbers are in the JSON
-(`assisted_accuracy_by_field_and_leaf`).
+603/768 (A) and 742/768 (B) on SP2ALL. Every later-leaf noetic cell on these two panels is between 9.4% and
+12.8%. The other three fields do not fall off this way. For example, SP1 later-leaf register is 46.0% to 54.9%
+(A) and 71.2% to 73.7% (B). Full per-field, per-leaf numbers are in the JSON (`assisted_accuracy_by_field_and_leaf`).
 
 ### It did not change during training
 
@@ -186,8 +186,9 @@ SP1 assisted noetic, first leaf vs all later leaves, at every saved checkpoint (
 18-35 of 256 and the later leaves 41-70 of 543.)
 
 The first-leaf noetic jumped from the guess level to nearly all right during training (between 2,048 and 32,768
-updates, depending on the run; B_20260932 first, A_20260931 and A_20260932 last). The later-leaf noetic stayed at the guess level from the untrained model to the end
-(543 × 90/799 ≈ 61 right by guessing).
+updates, depending on the run; B_20260932 first, A_20260931 and A_20260932 last). The later-leaf noetic stayed
+near the guess level from the untrained model to the end (543 × 90/799 ≈ 61 right by guessing; the final counts
+are 43 to 80 of 543).
 
 ### It is the same on the model's own taught rows
 
@@ -212,9 +213,9 @@ T2 step). Value edits only (presence edits left out, as in the frozen rule).
 | B_20260933 | 64 of 64 up | 0 of 132 up | 63 of 63 | 97 of 122 | 26 of 26 | 60 of 62 | 23 of 23 | 39 of 46 |
 
 In 4 of 6 runs, not one of the 132 later-leaf noetic edits raised the model's chance of the new value by 0.01 (the
-"down" counts, in the JSON, are 0 or 1 of 132). The same models do react to later-leaf domain edits. In the other 2 runs (A_20260931, A_20260933) some later-leaf noetic
-edits move the chance up (73 and 46 of 132), but the assisted later-leaf noetic is still near the guess level
-(80/543 and 63/543).
+"down" counts, in the JSON, are 0 or 1 of 132). The same models do react to later-leaf domain edits. In the other
+2 runs (A_20260931, A_20260933) some later-leaf noetic edits move the chance up (73 and 46 of 132), but the
+assisted later-leaf noetic is still near the guess level (80/543 and 63/543).
 
 ### A note on the input-use test (information only; changes no label)
 
@@ -336,7 +337,7 @@ is computed from the bits of its 208 rows. "Rows all right" = rows where every a
 
 In plain words: with help, the models place branches almost perfectly on familiar shapes (about 98%) and less well
 on the new deeper shapes (about 82% to 85%). Noetic is the weakest field everywhere, because every later leaf's
-noetic is at the guess level (Finding 2).
+noetic is near the guess level (Finding 2).
 
 ## One proposal (PROPOSAL: not approved, not run, not costed)
 
@@ -344,7 +345,7 @@ This is Claude's proposal only. It is not a decision. It needs an owner-signed a
 own job-limits file before anything runs. Any run goes to AWS, never the laptop.
 
 - **The error it targets:** the later-leaf noetic (Finding 2). It is the single largest, most regular error in the
-  data: at the guess level in all six runs, on new and taught rows alike.
+  data: near the guess level in all six runs, on new and taught rows alike.
 - **The repair:** train the same model longer. Keep everything else the same: the same arms, the same seeds, the
   same data, the same panels, the same edits and the same saved per-checkpoint records. For example 4 × 32,768 =
   131,072 single-example updates, with extra saved checkpoints in between.
@@ -371,7 +372,7 @@ own job-limits file before anything runs. Any run goes to AWS, never the laptop.
   later-leaf noetic against the guess level 90/799; the later-leaf noetic value edits (how many of 132 move the new
   value up by at least 0.01); and the same on the taught rows.
 - **What it does not target:** the missing structure on SP2 (Finding 3). That stays open.
-- **If it fails:** if the later-leaf noetic stays at the guess level after longer training, that is information for
+- **If it fails:** if the later-leaf noetic stays near the guess level after longer training, that is information for
   the owner. This summary makes no second proposal.
 - **Cost:** not estimated here. For scale only: the upper bound for the whole finished job was $0.3383 of $5.00
   (training machine $0.336 + data build $0.0023). That job ran 6 runs of 32,768 updates each, with the panel
