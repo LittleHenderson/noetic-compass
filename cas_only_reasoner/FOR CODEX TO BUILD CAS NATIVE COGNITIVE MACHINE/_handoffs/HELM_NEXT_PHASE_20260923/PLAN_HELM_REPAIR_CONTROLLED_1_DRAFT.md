@@ -45,6 +45,36 @@ unchanged Helm, trained the same way, beyond every no-learning rule, without reg
 - The smoke adds one more $15 booking per attempt; attempt 1's booking already stands. The current $60 approval
   covers the smoke plus 3 jobs. Options C and B need more.
 
+### 4a. The owner's choice (2026-09-24), verbatim, and how it is applied
+
+The owner's words: "WHICH EVER IS BEST FOR THE OVER ALL MODEL/PROJECT:   A: reuse the old runs, about $22.50;
+C, recommended: re-run one seed to prove the old runs reproduce exactly, then reuse them, about $30;
+B: re-run all three, about $45."
+
+**Applied as option C, with a pre-set fallback to B.** The Claude coordinator chose it under this delegation;
+this is not an owner signature.
+
+**Why C is best for the project:**
+- If one re-run of `20208c92` reproduces Helm 2.0's final checkpoint bit for bit, re-running the other two seeds
+  would only reproduce the same bytes. B would add cost and no evidence.
+- If it does not reproduce, the old runs are not a fair control, and C becomes B **automatically, before any
+  result is read**.
+- A alone rests on an unproven assumption, so it is not chosen.
+
+**The reproduction test, fixed now:**
+- Seed 20260917 of `20208c92`, trained by the same launcher on g7.2xlarge.
+- **`REPRODUCES`** iff the sha256 of its `final.pt` equals the Helm 2.0 receipt's `final.pt` sha256.
+- Anything else reads **`DOES_NOT_REPRODUCE`** and triggers B: seeds 20260918 and 20260919 of `20208c92` are
+  re-run too.
+- The reading is made by a program, before any TEST cell of HSET-2 is read.
+
+**Money.**
+- Expected about $30 for C: 3 repaired jobs + 1 unchanged job.
+- If the fallback runs, about $45 for B.
+- Ledger reservations: 4 x $15, or 6 x $15 with the fallback, plus the smoke bookings.
+- **The final plan still comes to the owner for launch approval with its dollar ceiling.** This choice does not
+  launch anything.
+
 ## 5. Limits (per job, from the launcher's frozen bounds)
 
 | Item | Value |
@@ -89,5 +119,5 @@ unchanged Helm, trained the same way, beyond every no-learning rule, without reg
 ## 9. Open before this plan can be approved
 
 - The four preconditions of section 2.
-- The owner's choice of option A, C or B, and the matching dollar ceiling.
+- ~~The owner's choice of option A, C or B~~: decided 2026-09-24 as C with a pre-set fallback to B (section 4a). The matching dollar ceiling comes with launch approval.
 - The owner's zone decision for g7.2xlarge capacity.
