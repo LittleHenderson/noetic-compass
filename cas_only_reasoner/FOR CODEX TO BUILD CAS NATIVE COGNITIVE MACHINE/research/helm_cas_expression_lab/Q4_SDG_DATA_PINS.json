@@ -1,0 +1,6 @@
+{
+ "data_versions": {},
+ "schema": "helm-cas-expression-lab.q4-sdg-data-pins/0.1",
+ "status": "EMPTY_UNTIL_THE_AWS_BUILD: run q4_sdg_curriculum.py --pin --data data/q4_sdg_v0_1 after --build and --verify --unpinned",
+ "why": "kept OUTSIDE the data folder and separate from Q3_DATA_PINS.json, which this experiment never edits"
+}
