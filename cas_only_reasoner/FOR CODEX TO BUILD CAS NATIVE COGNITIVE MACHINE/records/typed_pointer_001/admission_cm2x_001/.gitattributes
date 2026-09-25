@@ -1,2 +1,4 @@
 # Preserve the exact owner-supplied bytes and intentional Markdown line breaks.
 OWNER_LAUNCH_DIRECTIVE_20260925.md -text whitespace=-blank-at-eol
+seeds/** -text whitespace=cr-at-eol
+*_20260925.json -text whitespace=cr-at-eol
