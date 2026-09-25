@@ -95,7 +95,7 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "312d3e19285c4d5b42686d4409f33e7b51d6823bf470bd7190d9daa9f3f6ec01",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "d838350850fe03645163b58358cbd227626ef300de0c8fb91cd8f67d4d36988a",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "b473c37cd2e5e5ff3a7b4c26d3c908e984af0dc00e343ed3dfe694ac39f9c188",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"
@@ -235,5 +235,26 @@
     "all_in_historical_count_verified": false,
     "runtime_acceptance": "PENDING",
     "retroactive_launch_admission": false
+  },
+  "public_training_progress_20260925": {
+    "record": "PUBLIC_TRAINING_PROGRESS_20260925.json",
+    "record_sha256": "087aaf89c34b90efb8410dfa9857872353ff156ae53118b73e465966f9857407",
+    "R17": "COMPLETION_RECEIPT_PUSHED",
+    "R18": "COMPLETION_RECEIPT_LOCAL_UNTRACKED",
+    "R19": "NOT_VERIFIED",
+    "U17": "NOT_VERIFIED",
+    "efficacy": "NOT_ESTABLISHED",
+    "earlier_running_observation": "HISTORICAL_SNAPSHOT_RETAINED",
+    "retroactive_admission": false
+  },
+  "reader_environment_followup_20260925": {
+    "record": "READER_ENVIRONMENT_FOLLOWUP_20260925.md",
+    "record_sha256": "49a80f1c5b382d7fd78c619f958fbbb79ca69f03bf1e3b1c408bb2aee62a8f91",
+    "source_commit": "6c191fc8eb9505aaa93345435e6e4b44eeb8f544",
+    "status": "PARTIAL_CLOSURE_SAME_MISSING_OBSERVATION_MAJOR_OPEN",
+    "historical_unknown_fields": 8,
+    "unmapped_required_fields": 10,
+    "policy_changed": false,
+    "runtime_acceptance": "PENDING"
   }
 }

@@ -1,0 +1,71 @@
+{
+  "schema": "codex.helm-public-progress/1",
+  "observed_utc": "2026-09-25T00:26:06.963606+00:00",
+  "scope": "PUBLIC_RECEIPT_METADATA_ONLY_NO_MODEL_OR_PROTECTED_OUTPUT_READING",
+  "independent_artifact_rehash_performed": false,
+  "jobs": [
+    {
+      "seed": "20260917",
+      "job": "cas-meta2-tpntr-20260924122512-3df31d96-m-20260917",
+      "instance_id": "i-06b46a8c257e782a5",
+      "evidence_commit": "e17d7d2c3d556cb77329c1dfd8352661397cab26",
+      "evidence_state": "PUSHED_COMMIT",
+      "result_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_20260917/result.json",
+      "result_sha256": "b4a428907bbb9d36abcf57364a7c360e5065d99cfd57b5dbb110e00702bb9abd",
+      "receiver_receipt_sha256": "3f36efd9500c0fd9cb888d140874b1e546ec4ee08d48d860cbb2d230915e78f2",
+      "recorded_status": "AWS_CANDIDATE_FINISHED",
+      "completed_deliverable": true,
+      "recorded_required_artifacts": 102,
+      "recorded_verified_artifacts": 102,
+      "recorded_missing": [],
+      "recorded_compute_cleanup": "COMPLETE",
+      "recorded_instances": {
+        "i-06b46a8c257e782a5": "CONFIRMED_TERMINATED"
+      },
+      "evidence_retained": true,
+      "cost_bound_including_allowance_usd": "9.13",
+      "cost_basis": "R17 commit message: 9.03 plus 0.10 allowance; not provider invoice"
+    },
+    {
+      "seed": "20260918",
+      "job": "cas-meta2-tpntr-20260924122512-3df31d96-m-20260918",
+      "instance_id": "i-01b733c5e2012a41d",
+      "evidence_commit": null,
+      "evidence_state": "CLAUDE_LOCAL_UNTRACKED_LEFT_UNTOUCHED",
+      "result_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/receipt_analogy_on_20260918/result.json",
+      "result_sha256": "9be66edc3d33e51d962043ddec4b8546eb097042fc01d17c470c0037470718fb",
+      "receiver_receipt_sha256": "d6b81d332c06b3d8316e1c11ad15739a07eb63301c619e126cdf77f3a9cbdb27",
+      "recorded_status": "AWS_CANDIDATE_FINISHED",
+      "completed_deliverable": true,
+      "recorded_required_artifacts": 102,
+      "recorded_verified_artifacts": 102,
+      "recorded_missing": [],
+      "recorded_compute_cleanup": "COMPLETE",
+      "recorded_instances": {
+        "i-01b733c5e2012a41d": "CONFIRMED_TERMINATED"
+      },
+      "evidence_retained": true,
+      "cost_bound_including_allowance_usd": null,
+      "cost_basis": "UNVERIFIED_CURRENT_COST"
+    }
+  ],
+  "R19_completion": "NOT_VERIFIED",
+  "U17_completion": "NOT_VERIFIED",
+  "comparison_efficacy": "NOT_ESTABLISHED",
+  "cumulative_actual_spend": "NOT_RECONCILED_CURRENT_RECEIPTS_REQUIRED",
+  "prior_draft_retroactively_admitted": false,
+  "policies_changed": false,
+  "new_jobs_started_by_codex": 0,
+  "active_source_or_ledger_modified": false,
+  "coordination_message": "codex-0030",
+  "provider_query": {
+    "observed_utc": "2026-09-25T00:21:34Z",
+    "region": "us-west-2",
+    "instances_requested": [
+      "i-06b46a8c257e782a5",
+      "i-0410e43c787fdabdb"
+    ],
+    "returned_instance_count": 0,
+    "limitation": "No returned records is not independent completion/termination proof; completion above comes from public receipts. R18 not queried directly."
+  }
+}

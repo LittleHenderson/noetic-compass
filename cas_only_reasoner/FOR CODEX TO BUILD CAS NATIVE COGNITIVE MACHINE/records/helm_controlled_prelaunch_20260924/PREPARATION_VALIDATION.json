@@ -168,5 +168,18 @@
     "content_commit": "fe677621edd31dcde0ad0f1bac2558c8df3bd320",
     "staged_hash_bindings": "PASS",
     "json_whitespace_and_arithmetic": "PASS"
+  },
+  "followup_20260925": {
+    "utc": "2026-09-25T00:27:27.067155+00:00",
+    "scope": "STATIC_PUBLIC_SOURCE_AND_RECEIPT_METADATA",
+    "reader_commit": "6c191fc8eb9505aaa93345435e6e4b44eeb8f544",
+    "reader_status": "PARTIAL_CLOSURE_SAME_MAJOR_OPEN",
+    "runtime_tests_run": false,
+    "new_cloud_jobs": 0,
+    "protected_material_read": false,
+    "ledger_mutated": false,
+    "R18_receipt_modified": false,
+    "source_implementation_modified": false,
+    "staged_hash_check": "PASS"
   }
 }

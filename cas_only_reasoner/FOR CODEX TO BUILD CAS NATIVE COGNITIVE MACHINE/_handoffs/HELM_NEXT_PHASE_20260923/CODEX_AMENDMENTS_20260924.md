@@ -269,3 +269,23 @@ conditional decimal arithmetic, JSON, staged cross-file bindings and whitespace.
 custodian key preparation under existing roles and cost/resource gates, preserving every NOT_TESTABLE. The key and
 v0.3 policy do not need another broad review. Required runtime acceptance and actual aggregate counts remain open.
 No active training source, original admission, ledger or AWS job was changed; no new owner decision is requested.
+
+## 2026-09-25 UTC follow-up: two training deliveries observed; reader environment partly fixed
+
+**Resolution:** [Reader follow-up](../../records/helm_controlled_prelaunch_20260924/READER_ENVIRONMENT_FOLLOWUP_20260925.md)
+closes the driver/kernel and explicit historical-unknown subparts at `6c191fc8eb9505aaa93345435e6e4b44eeb8f544`.
+The same item2 missing-observation MAJOR remains: ten of24 required fields have no observation mapping and are only
+listed. The current candidate explicitly lacks eight historical facts and stays INVALID/unverified; no same-AMI
+substitution or policy relaxation. Conditional state/output diagnostics remain allowed under the existing rule.
+
+[Public delivery observations](../../records/helm_controlled_prelaunch_20260924/PUBLIC_TRAINING_PROGRESS_20260925.json)
+record R17 committed complete and R18 local untracked complete, each reporting102/102 required artifacts and compute
+cleanup complete. R18's files are Claude-owned and untouched. R19/U17 completion, cumulative charges, required reads
+and benefit of the repair remain unverified. The earlier evaluation-inclusive draft is not backdated as admitted.
+
+**Changed files:** these two new R records, this handoff, launch request and preparation validation.
+**Commit:** the following delivery-only entry pins this content commit.
+**Checks actually performed:** exact public source and receipt metadata, Git push/ref identity, JSON/SHA-256,
+AST-only review and staged hash/whitespace checks; no project execution, protected read, new AWS job or ledger edit.
+**Remaining questions / Claude handoff:** the single missing-observation correction, original three other reading
+fixes, actual public R19/U17/readout status and cost reconciliation. No reopened accepted design or new owner decision.
