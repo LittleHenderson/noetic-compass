@@ -102,8 +102,14 @@ def admission_for(machine):
         raise GrantRefused("UNADMITTED_RUNTIME_LOCATION")
     for row in manifest["files"]:
         relative = row["destination"]
+        name = None
         if relative.startswith("cncm/") and relative.endswith(".py"):
             name = relative[:-3].replace("/", ".").removesuffix(".__init__")
+        elif relative == "compiler_ohm.py":
+            name = "compiler_ohm"
+        elif relative.startswith("pcba/") and relative.count("/") == 1 and relative.endswith(".py"):
+            name = Path(relative).stem
+        if name is not None:
             loaded = sys.modules.get(name)
             if loaded is not None and Path(loaded.__file__).resolve() != runtime / relative:
                 raise GrantRefused("UNADMITTED_DEPENDENCY_LOCATION")
@@ -318,6 +324,10 @@ def execute_grant(machine, grant):
         raise InvalidNativeObservation("NATIVE_BUDGET_INCREASED_WITHIN_STEP", fault) from fault
     location_after = runtime_location(machine)
     actual_work = primitive_work_for_events(machine, events)
+    if fault is not None:
+        actual_work["status"] = "JOINED_PARTIAL_NATIVE_FAULT"
+        actual_work["complete_totals"] = None
+        actual_work["fault_work_status"] = "UNRECORDED_PRE_FAULT_WORK_UNKNOWN"
     elapsed_ns = time.monotonic_ns() - began
     receipt = {
         "schema": "cas.closed-loop.native-step-receipt/0.1",

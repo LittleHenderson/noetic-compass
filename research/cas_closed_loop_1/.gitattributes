@@ -1,0 +1,3 @@
+provenance/* -text
+evidence/*.json text eol=lf
+evidence/*.jsonl text eol=lf

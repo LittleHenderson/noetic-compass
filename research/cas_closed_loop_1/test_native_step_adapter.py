@@ -83,6 +83,8 @@ def test_native_error_keeps_observed_events_and_never_reports_success(machine, m
     assert receipt["charged_native_policy_units"]["instructions"] >= 0
     assert receipt["observation_validation"] == "VALID_EVENT_CHAIN_STATE_AND_BUDGET"
     assert verify_receipt(receipt)
+    assert receipt["actual_primitive_work"]["complete_totals"] is None
+    assert receipt["actual_primitive_work"]["fault_work_status"] == "UNRECORDED_PRE_FAULT_WORK_UNKNOWN"
     assert receipt["semantic_verdict"] == "NOT_INFERRED_BY_ADAPTER"
 
 

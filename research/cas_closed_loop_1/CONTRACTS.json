@@ -1,6 +1,6 @@
 {
   "schema": "cas.closed-loop.contracts/0.1",
-  "status": "M2_EVENT_BOUND_METER_IMPLEMENTED_TESTED",
+  "status": "M3_ENGINEERING_LOOP_REPLAY_REUSE_CONTROLS_TESTED",
   "runtime": "cncm.compound-journal/0.5",
   "profile": "cas.closed-loop.native-stage/0.1",
   "authority": "Only existing CompoundCoordinator commits native state; reference controller can propose allocation, renderer cannot resume callers",
@@ -21,7 +21,7 @@
   "quantity_contract": {
     "unit": "native_host_step_invocation",
     "window": "one explicitly identified host-step observation window; event interval and monotonic wall interval retained separately",
-    "I_predicted": "UNAVAILABLE until pinned compiler Ohm connection; no fitted resistance or residual.",
+    "I_predicted": "Pinned compiler exact attention_flow on separately declared design V and R before execution; no measured-resistance fit, empirical calibration or valid residual claim.",
     "I_allocated": "Integer grant for at most one permitted next native stage in this first profile; allocation alone creates no event",
     "I_executed": "CPython call events for the pinned CompoundMachine.advance code object and machine identity; I_attempted separately records dispatch attempts.",
     "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
@@ -45,7 +45,8 @@
     "parent_transformation": "Existing compound root call and checked application",
     "prerequisite_acquisition": "Existing primitive/compound construction, qualification and installation intents",
     "verification_commit": "Existing checked proof and authorized commitment; no answer supplied by adapter",
-    "pcba_boundary": "Parse and check declared supported boards with existing reader; only explicitly mapped native operations execute; all other constructs refused as unsupported"
+    "pcba_boundary": "Parse and check declared supported boards with existing reader; only explicitly mapped native operations execute; all other constructs refused as unsupported",
+    "implementation": "Three exact static PCBA source templates with explicit native operation allowlists; no general circuit execution."
   },
   "return_contract": {
     "identity": [

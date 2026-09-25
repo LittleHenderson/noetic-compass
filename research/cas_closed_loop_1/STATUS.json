@@ -1,27 +1,61 @@
 {
   "schema": "cas.closed-loop.recovery-status/0.1",
-  "utc": "2026-09-25T13:22:49.352944+00:00",
-  "status": "M2_EVENT_BOUND_METER_IMPLEMENTED_TESTED",
+  "utc": "2026-09-25T13:33:26.846807+00:00",
+  "status": "M3_ENGINEERING_LOOP_REPLAY_REUSE_CONTROLS_TESTED",
   "tests": {
-    "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_native_step_adapter.py",
-    "passed": 21,
+    "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_native_step_adapter.py research/cas_closed_loop_1/test_closed_loop.py",
+    "passed": 43,
     "failed": 0,
-    "seconds": 15.59
+    "errors": 0,
+    "seconds": 101.8,
+    "test_functions": 29
   },
   "initial_test_attempt": "Output capture omitted session handle; final count unavailable. Subsequent full run retained above.",
   "historical_refs": "MISSING_FROM_LIVE_REPOSITORY",
-  "engineering_demo": "PENDING",
+  "engineering_demo": "CHECKED_PUBLIC_LITERAL_COMPOUND_TASK",
   "model_prediction": "NOT_RUN",
-  "input_use": "Native original parameter packet only",
-  "task_benefit": "UNMEASURED",
+  "input_use": "ORIGINAL_PUBLIC_PARAMETERS; CHANGED_INPUT_REUSE_CHECKED",
+  "task_benefit": "KNOWN_ACQUISITION_WITNESS; GENERAL_BENEFIT_UNMEASURED",
   "cas_specific_advantage": "UNMEASURED",
   "new_paid_jobs": 0,
   "protected_material_read": false,
-  "next": "Join event-bound primitive work, then Ohm/PCBA/native repair/atlas replay",
+  "next": "External review; broader learned/pilot work remains outside current no-model/no-cloud scope",
   "M2_initial_regression": {
     "passed": 20,
     "failed": 1,
     "seconds": 14.87,
     "failure": "Historical validation was called at grant creation but not runtime_location; validation moved to observation entry before native call."
-  }
+  },
+  "bundle_digest": "eae7eb1bedb67af537187d409c89fca9e55a1580d52bf14be9b01e560a198d2c",
+  "push_status": "PENDING_SAFE_BRANCH_PUSH",
+  "M3_attempts": [
+    {
+      "kind": "demo",
+      "status": "FAILED",
+      "reason": "UNSUPPORTED_NATIVE_OPERATION:CHECK_MEMORY_RESOLUTION; actual API mapping corrected"
+    },
+    {
+      "kind": "integration_tests",
+      "passed": 16,
+      "failed": 0,
+      "errors": 3,
+      "seconds": 10.83,
+      "reason": "Owner temp directory unreadable; task-owned test directory selected"
+    },
+    {
+      "kind": "full_tests",
+      "passed": 37,
+      "failed": 0,
+      "errors": 4,
+      "seconds": 27.37,
+      "reason": "Task temp parent missing; mkdir fixed before test setup"
+    },
+    {
+      "kind": "full_tests",
+      "passed": 43,
+      "failed": 0,
+      "errors": 0,
+      "seconds": 101.8
+    }
+  ]
 }
