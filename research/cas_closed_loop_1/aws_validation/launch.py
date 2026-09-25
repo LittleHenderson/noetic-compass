@@ -83,7 +83,8 @@ def execute(directory, expected_hash):
     session = boto3.Session(profile_name=plan["sdk_profile"], region_name=plan["region"])
     config = Config(retries={"total_max_attempts": 1}, connect_timeout=5, read_timeout=30)
     def client(name, region=None):
-        return session.client(name, region_name=region or plan["region"], config=config)
+        selected = config.merge(Config(signature_version="s3v4")) if name == "s3" else config
+        return session.client(name, region_name=region or plan["region"], config=selected)
     ec2, iam, s3, scheduler = (client(name) for name in ("ec2", "iam", "s3", "scheduler"))
     job = plan["job_id"]
     bucket = job + "-" + plan["account_id"]
