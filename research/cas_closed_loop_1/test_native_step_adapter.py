@@ -9,7 +9,7 @@ from cncm.compound_model import create_problem
 from cncm.compound_profile import CompoundProfile, SOURCE_FILES, authority_policy, load_compound_profile
 from research.cas_closed_loop_1.native_step_adapter import (
     GrantRefused, NativeStepFailed, InvalidNativeObservation, RETURN_IDENTITY_FIELDS,
-    execute_grant, grant_for, runtime_location, verify_receipt,
+    execute_grant, grant_for, runtime_location, verify_receipt, primitive_work_for_events,
 )
 
 
@@ -46,7 +46,7 @@ def test_granted_step_observes_native_events_and_stale_reuse_is_refused(machine)
     with pytest.raises(GrantRefused, match="STALE_OR_FOREIGN_GRANT"):
         execute_grant(machine, grant)
     assert machine.state == state
-    assert receipt["actual_primitive_work"] is None  # reservations are not measured instructions
+    assert receipt["actual_primitive_work"]["provenance"].startswith("NATIVE_EXECUTOR_REPORTS")
     assert receipt["semantic_verdict"] == "NOT_INFERRED_BY_ADAPTER"
 
 
@@ -99,6 +99,7 @@ def test_runtime_location_is_detached_and_has_no_coordinate_return_authority(mac
 def test_all_eleven_identity_fields_and_suspended_snapshot_are_retained(machine):
     from cncm.model import TerminalStatus
     captured = {}
+    measured = 0
     while machine.state.halt_status is TerminalStatus.RUNNING:
         location = runtime_location(machine)
         assert set(location["return_identity"]) == set(RETURN_IDENTITY_FIELDS)
@@ -110,8 +111,10 @@ def test_all_eleven_identity_fields_and_suspended_snapshot_are_retained(machine)
             if frame_id in captured:
                 assert identity == captured[frame_id]
             captured[frame_id] = identity
-        execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+        receipt = execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+        measured += receipt["actual_primitive_work"]["measured_totals"]["primitive_instructions"]
     assert len(captured) == 2
+    assert measured > 0
 
 
 def test_signature_failure_is_not_counted_as_entry(machine, monkeypatch):
@@ -158,3 +161,37 @@ def test_wrong_problem_admission_is_refused(machine):
     grant = replace(grant_for(machine, calls=1, allow_acquisition=True), admission_digest="0" * 64)
     with pytest.raises(GrantRefused, match="STALE_OR_FOREIGN_ADMISSION"):
         execute_grant(machine, grant)
+
+
+def test_foreign_loaded_dependency_is_refused(machine, monkeypatch):
+    import cncm.compound_kernel as kernel
+    monkeypatch.setattr(kernel, "__file__", "foreign/cncm/compound_kernel.py")
+    with pytest.raises(GrantRefused, match="UNADMITTED_DEPENDENCY_LOCATION"):
+        grant_for(machine, calls=1, allow_acquisition=True)
+
+
+def test_corrupt_existing_event_is_refused_even_for_zero_grant(machine):
+    machine.advance()
+    grant = grant_for(machine, calls=0, allow_acquisition=True)
+    object.__setattr__(machine.coordinator.trace.events[0], "event_hash", "0" * 64)
+    with pytest.raises(InvalidNativeObservation, match="EXISTING_NATIVE_HISTORY_INVALID"):
+        execute_grant(machine, grant)
+
+
+@pytest.mark.parametrize("enabled,calls", [(False, 1), (True, 0)])
+def test_unexecuted_window_has_zero_measured_primitive_work(machine, enabled, calls):
+    receipt = execute_grant(machine, grant_for(machine, calls=calls, allow_acquisition=True,
+                                              actuator_enabled=enabled))
+    work = receipt["actual_primitive_work"]
+    assert work["status"] == "JOINED"
+    assert work["complete_totals"] == {"primitive_instructions": 0, "original_checks": 0, "linear_checks": 0}
+    assert work["events"] == []
+
+
+def test_work_join_refuses_duplicate_and_changed_event(machine):
+    machine.advance()
+    event = machine.coordinator.trace.events[0]
+    with pytest.raises(InvalidNativeObservation, match="WORK_EVENT_IDENTITY_INVALID"):
+        primitive_work_for_events(machine, [event, event])
+    with pytest.raises(InvalidNativeObservation, match="WORK_EVENT_IDENTITY_INVALID"):
+        primitive_work_for_events(machine, [replace(event, event_hash="0" * 64)])

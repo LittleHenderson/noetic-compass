@@ -20,6 +20,7 @@ from cncm.canonical import digest
 from cncm.compound_engine import CompoundMachine
 from cncm.compound_profile import load_compound_profile
 from cncm.model import TerminalStatus
+from cncm.rpa_compound_adapter import _catalog, work_from_catalog
 
 
 PROFILE = "cas.closed-loop.native-stage/0.1"
@@ -100,6 +101,12 @@ def admission_for(machine):
     if Path(module.__file__).resolve() != runtime / "cncm/compound_engine.py":
         raise GrantRefused("UNADMITTED_RUNTIME_LOCATION")
     for row in manifest["files"]:
+        relative = row["destination"]
+        if relative.startswith("cncm/") and relative.endswith(".py"):
+            name = relative[:-3].replace("/", ".").removesuffix(".__init__")
+            loaded = sys.modules.get(name)
+            if loaded is not None and Path(loaded.__file__).resolve() != runtime / relative:
+                raise GrantRefused("UNADMITTED_DEPENDENCY_LOCATION")
         raw = (runtime / row["destination"]).read_bytes()
         if len(raw) != row["bytes"] or sha256(raw).hexdigest() != row["sha256"]:
             raise GrantRefused("SOURCE_MANIFEST_MISMATCH")
@@ -111,9 +118,60 @@ def admission_for(machine):
             "problem_hash": machine.problem.input_hash}
 
 
+def primitive_work_for_events(machine, events):
+    """Join native executor reports, never substitute grants or reservations.
+
+    The upstream catalog joins run/tick/intent. We additionally bind each result
+    to a sealed event ID/hash in the actual host trace. Missing report counters
+    remain unknown; ordinary inference and wrapper work are outside this meter.
+    """
+    keys = ("primitive_instructions", "original_checks", "linear_checks")
+    state = machine.state
+    catalog = _catalog((*state.native_records, *state.semantic_records, *state.compound_records))
+    reports = {row["report_digest"]: row["body"] for row in catalog["reports"]}
+    actual_events = {(e.event_id, e.event_hash): e for e in machine.coordinator.trace.events}
+    totals = dict.fromkeys(keys, 0)
+    rows, seen, unknown = [], set(), []
+    for event in events:
+        pair = (event.event_id, event.event_hash)
+        if (pair in seen or pair not in actual_events or not event.sealed
+                or event.event_hash != event.computed_hash()
+                or event != actual_events[pair]):
+            raise InvalidNativeObservation("WORK_EVENT_IDENTITY_INVALID")
+        seen.add(pair)
+        wire = event.to_dict()
+        ids = {intent.intent_id for intent in event.proposed_intents}
+        selected = [row for row in catalog["records"] if row["kind"] == "WORK_RESERVATION"
+                    and row["body"].get("run_id") == event.run_id
+                    and row["body"].get("tick") == event.logical_tick - 1
+                    and row["body"].get("intent_id") in ids]
+        refs = sorted(row["record_digest"] for row in selected)
+        work = work_from_catalog(catalog, refs, wire)
+        missing = []
+        for row in selected:
+            observed = [reports[ref["report_digest"]] for ref in row["report_refs"]]
+            if not any("actual_work" in report or "cost" in report for report in observed):
+                missing.append(row["record_digest"])
+        unknown.extend(missing)
+        for key in keys:
+            totals[key] += work[key]
+        rows.append({"event_id": event.event_id, "event_hash": event.event_hash,
+                     "work_record_digests": refs, "work": work, "unmeasured_records": missing})
+    return {"status": "JOINED_PARTIAL" if unknown else "JOINED",
+            "measured_totals": totals, "unmeasured_records": unknown,
+            "complete_totals": None if unknown else totals.copy(), "events": rows,
+            "catalog_digest": catalog["catalog_digest"],
+            "provenance": "NATIVE_EXECUTOR_REPORTS_JOINED_BY_RUN_TICK_INTENT_AND_SEALED_EVENT",
+            "scope": "Native primitive and original/linear check counters; excludes ordinary reasoning and orchestration."}
+
+
 def grant_for(machine, *, calls, allow_acquisition, actuator_enabled=True):
     """Bind a proposal to the current snapshot. This does not execute work."""
     _require_machine(machine)
+    try:
+        machine.result()  # Native validation of the full existing chain and current state.
+    except Exception as error:
+        raise InvalidNativeObservation("EXISTING_NATIVE_HISTORY_INVALID", error) from error
     state = machine.state
     return StepGrant(state.run_id, state.state_hash, state.logical_tick, calls,
                      allow_acquisition, actuator_enabled, digest(admission_for(machine)))
@@ -126,10 +184,15 @@ def runtime_location(machine):
     node or profile is supplied. The existing native frame owns its return.
     """
     _require_machine(machine)
+    try:
+        machine.result()
+    except Exception as error:
+        raise InvalidNativeObservation("EXISTING_NATIVE_HISTORY_INVALID", error) from error
     state = machine.state
     root = state.compound_call
     def identity(frame):
         suspension = None
+        matches = []
         if frame is not None:
             for event in machine.coordinator.trace.events:
                 for intent in event.proposed_intents:
@@ -137,7 +200,10 @@ def runtime_location(machine):
                             and intent.intent_type.value in (
                                 "PUSH_COMPOUND_ACQUISITION", "PUSH_PRIMITIVE_ACQUISITION")
                             and intent.mutation_dict().get("frame", {}).get("frame_id") == frame.frame_id):
-                        suspension = event.pre_state_hash
+                        matches.append(event.pre_state_hash)
+            if len(matches) != 1:
+                raise InvalidNativeObservation("SUSPENSION_EVENT_NOT_UNIQUE")
+            suspension = matches[0]
         return {
             "episode/run": state.run_id,
             "branch": "branch-main",  # CompoundCoordinator's explicit single-branch profile.
@@ -251,6 +317,7 @@ def execute_grant(machine, grant):
     if instructions < 0 or checkers < 0:
         raise InvalidNativeObservation("NATIVE_BUDGET_INCREASED_WITHIN_STEP", fault) from fault
     location_after = runtime_location(machine)
+    actual_work = primitive_work_for_events(machine, events)
     elapsed_ns = time.monotonic_ns() - began
     receipt = {
         "schema": "cas.closed-loop.native-step-receipt/0.1",
@@ -274,8 +341,8 @@ def execute_grant(machine, grant):
                                "pre_state_hash": e.pre_state_hash,
                                "post_state_hash": e.post_state_hash} for e in events],
         "charged_native_policy_units": {"instructions": instructions, "checker_calls": checkers},
-        "actual_primitive_work": None,
-        "actual_primitive_work_status": "NOT_JOINED_USE_EXISTING_EVENT_BOUND_CATALOG",
+        "actual_primitive_work": actual_work,
+        "actual_primitive_work_status": actual_work["status"],
         "native_halt_status": after.halt_status.value,
         "native_commitment_status": after.commitment_state.decision_status,
         "diagnostic_availability": "UNASSESSED",

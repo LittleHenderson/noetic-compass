@@ -1,6 +1,6 @@
 {
   "schema": "cas.closed-loop.contracts/0.1",
-  "status": "M1_RECOVERED_BLOCKERS_AND_HOST_METER_TESTED",
+  "status": "M2_EVENT_BOUND_METER_IMPLEMENTED_TESTED",
   "runtime": "cncm.compound-journal/0.5",
   "profile": "cas.closed-loop.native-stage/0.1",
   "authority": "Only existing CompoundCoordinator commits native state; reference controller can propose allocation, renderer cannot resume callers",
@@ -26,7 +26,8 @@
     "I_executed": "CPython call events for the pinned CompoundMachine.advance code object and machine identity; I_attempted separately records dispatch attempts.",
     "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
     "independence": "Observe executor trace after invocation, not by copying grant or substituting Ohm output",
-    "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met"
+    "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met",
+    "actual_primitive_work": "Existing native work_from_catalog joined by run/tick/intent and sealed event ID/hash. Measured totals separate from policy reservations. Missing counters yield JOINED_PARTIAL and complete_totals=null. Ordinary reasoning and orchestration are outside native primitive scope."
   },
   "first_actuator": {
     "operation": "CompoundMachine.advance(allow_acquisition=...) through one typed, budget-masked host-step adapter",

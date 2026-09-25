@@ -602,6 +602,60 @@
       "destination": "compiler_ohm.py",
       "bytes": 14027,
       "sha256": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_reader.py",
+      "destination": "pcba/pcba_reader.py",
+      "bytes": 18221,
+      "sha256": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_check.py",
+      "destination": "pcba/pcba_check.py",
+      "bytes": 21391,
+      "sha256": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pcba_component_adapter.py",
+      "destination": "pcba/pcba_component_adapter.py",
+      "bytes": 17666,
+      "sha256": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/compiler_pre_ohm_61ed5a45.py",
+      "destination": "pcba/pinned_sources/compiler_pre_ohm_61ed5a45.py",
+      "bytes": 270085,
+      "sha256": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/cas-forex/cas_forex/pcba_syntax.py",
+      "destination": "pcba/pinned_sources/cas-forex/cas_forex/pcba_syntax.py",
+      "bytes": 7741,
+      "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/cas-forex/cas_forex/cjt_syntax.py",
+      "destination": "pcba/pinned_sources/cas-forex/cas_forex/cjt_syntax.py",
+      "bytes": 4943,
+      "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/cas-forex/cas_forex/schemas/pcba.py",
+      "destination": "pcba/pinned_sources/cas-forex/cas_forex/schemas/pcba.py",
+      "bytes": 5998,
+      "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/cas-forex/cas_forex/schemas/cjt.py",
+      "destination": "pcba/pinned_sources/cas-forex/cas_forex/schemas/cjt.py",
+      "bytes": 5771,
+      "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0"
+    },
+    {
+      "source": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/pinned_sources/pcba_book/Appendix_C_CCDL_Language_Reference.md",
+      "destination": "pcba/pinned_sources/pcba_book/Appendix_C_CCDL_Language_Reference.md",
+      "bytes": 81004,
+      "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f"
     }
   ],
   "handoff": [
