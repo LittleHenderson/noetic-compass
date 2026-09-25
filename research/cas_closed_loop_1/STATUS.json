@@ -1,6 +1,6 @@
 {
   "schema": "cas.closed-loop.recovery-status/0.1",
-  "utc": "2026-09-25T13:33:26.846807+00:00",
+  "utc": "2026-09-25T13:36:41.561255+00:00",
   "status": "M3_ENGINEERING_LOOP_REPLAY_REUSE_CONTROLS_TESTED",
   "tests": {
     "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_native_step_adapter.py research/cas_closed_loop_1/test_closed_loop.py",
@@ -27,7 +27,7 @@
     "failure": "Historical validation was called at grant creation but not runtime_location; validation moved to observation entry before native call."
   },
   "bundle_digest": "eae7eb1bedb67af537187d409c89fca9e55a1580d52bf14be9b01e560a198d2c",
-  "push_status": "PENDING_SAFE_BRANCH_PUSH",
+  "push_status": "PUSHED_VERIFIED_REMOTE_HEAD",
   "M3_attempts": [
     {
       "kind": "demo",
@@ -65,5 +65,19 @@
     "seconds": 0.1,
     "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_artifacts.py"
   },
-  "artifact_byte_issue": "13fbff1f normalized evidence line endings; follow-up preserves exact evidence/provenance bytes and forces implementation Python LF. Native JSON semantics unaffected."
+  "artifact_byte_issue": "13fbff1f normalized evidence line endings; follow-up preserves exact evidence/provenance bytes and forces implementation Python LF. Native JSON semantics unaffected.",
+  "tested_implementation_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+  "pushed_implementation_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+  "pushed_branch": "codex/cas-closed-loop-1-recovery-20260925",
+  "committed_byte_verification": {
+    "status": "EXACT_BYTES_VERIFIED",
+    "files": 13
+  },
+  "remaining_interfaces": {
+    "check": "IMPLEMENTED",
+    "demo": "IMPLEMENTED",
+    "replay": "IMPLEMENTED",
+    "observe": "Receipts available through demo; separate CLI subcommand not implemented",
+    "pilot": "REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE"
+  }
 }

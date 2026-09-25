@@ -76,3 +76,5 @@ bounded read-only correctness reviews. DeepSeek review requests use only the
 owner-specified bus. Git push status is recorded separately in `STATUS.json`.
 
 Post-commit artifact QA found Git line-ending normalization changed five retained file byte hashes. The follow-up pins exact evidence bytes and Python source line endings. Four artifact integrity tests passed in 0.10 seconds; all 13 evidence/producer/provenance files match their local recorded hashes. Committed-byte verification is required before push.
+
+Committed-byte verification passed for all 13 files at 8f55cc3a462e438bcf706d7b64ddf9171d218039. GitHub directly reported that exact pushed implementation SHA on codex/cas-closed-loop-1-recovery-20260925. A separate observe CLI and broader atlas UI acceptance remain open; demo receipts provide the current observation interface.
