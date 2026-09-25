@@ -1,0 +1,99 @@
+{
+  "scope": "all enabled AWS regions before HELM 2x launch",
+  "regions": [
+    {
+      "region": "ap-south-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:36.489802+00:00"
+    },
+    {
+      "region": "eu-north-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:34.344229+00:00"
+    },
+    {
+      "region": "eu-west-3",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:34.249859+00:00"
+    },
+    {
+      "region": "eu-west-2",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:34.254970+00:00"
+    },
+    {
+      "region": "eu-west-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:35.363904+00:00"
+    },
+    {
+      "region": "ap-northeast-3",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:35.172563+00:00"
+    },
+    {
+      "region": "ap-northeast-2",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:35.427503+00:00"
+    },
+    {
+      "region": "ap-northeast-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:35.957782+00:00"
+    },
+    {
+      "region": "ca-central-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:36.151405+00:00"
+    },
+    {
+      "region": "sa-east-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:36.616883+00:00"
+    },
+    {
+      "region": "ap-southeast-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:38.116131+00:00"
+    },
+    {
+      "region": "ap-southeast-2",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:37.149922+00:00"
+    },
+    {
+      "region": "eu-central-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:37.521143+00:00"
+    },
+    {
+      "region": "us-east-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:37.336457+00:00"
+    },
+    {
+      "region": "us-east-2",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:37.774322+00:00"
+    },
+    {
+      "region": "us-west-1",
+      "instances": [],
+      "observed_utc": "2026-09-25T15:20:37.875207+00:00"
+    },
+    {
+      "region": "us-west-2",
+      "instances": [
+        {
+          "instance_id": "i-0b2a24317528f3475",
+          "type": "t3.small",
+          "state": "running",
+          "cas_job": "cas-cpu-20260925-151720-47cef2"
+        }
+      ],
+      "observed_utc": "2026-09-25T15:20:38.012885+00:00"
+    }
+  ],
+  "conflicts": [],
+  "status": "CLEAR_FOR_ONE_GPU"
+}

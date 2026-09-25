@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-09-25T15:26:34.587974+00:00",
+  "instance": "i-0adf52b7fa801e08b",
+  "guest_watchdog_markers": [
+    "[   85.051199] cloud-init[1684]: CNCM_GUEST_WATCHDOG_ARMED unit=cas-meta2-tpntr-20260925151836-b981625f-m-20260918-deadline boot_deadline_seconds=24900"
+  ],
+  "console_timestamp": "2026-09-25 15:26:34+00:00",
+  "console_bytes": 65535,
+  "watchdog_mechanism": "Guest systemd timer, not EventBridge Scheduler",
+  "training_progress": "Not inferred from EC2 running state"
+}

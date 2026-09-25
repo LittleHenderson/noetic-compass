@@ -1,0 +1,7 @@
+{
+  "reason": "Existing launcher discovers exact package receipts only under root records; identical receipt points to the already frozen immutable archive. No source, request, package or authority bytes changed.",
+  "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\typed_pointer_001\\package_b981625f\\receipt.json",
+  "target": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\package_b981625f\\receipt.json",
+  "receipt_sha256": "64f538eab7eb21df15ad506ac8608da7132292755c800a832d53a9b19b772d9e",
+  "archive_sha256": "d06fbd116386344e48b2d2a8877f733ced7c7a8f6f1339b3cb4d64ed37f565c7"
+}
