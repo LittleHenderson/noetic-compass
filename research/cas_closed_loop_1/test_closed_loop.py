@@ -134,8 +134,8 @@ def test_real_repair_exact_return_checked_bias_effect_and_event_bound_work(compl
     required = ["PUSH_COMPOUND_ACQUISITION", "PUSH_PRIMITIVE_ACQUISITION", "INSTALL_PRIMITIVE",
                 "RETURN_PRIMITIVE", "CONSTRUCT_COMPOUND", "INSTALL_COMPOUND", "RETURN_COMPOUND", "APPLY_COMPOUND"]
     assert [actions.index(action) for action in required] == sorted(actions.index(action) for action in required)
-    root_ids = {r["after"]["return_identity"]["root_call_occurrence"] for r in rows
-                if r["after"]["return_identity"]["root_call_occurrence"] is not None}
+    root_ids = {r["after"]["root_call"]["call_id"] for r in rows
+                if r["after"]["root_call"] is not None}
     assert len(root_ids) == 1
     atlas = json.loads((directory / "atlas.json").read_text())
     assert [r["event"]["event_hash"] for r in atlas["timeline"]] == [r["event_hash"] for r in journal["episodes"][0]["trace"]]

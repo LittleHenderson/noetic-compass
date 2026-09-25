@@ -23,14 +23,31 @@ def verify(root=HERE, *, git_ref=None):
     artifacts = json.loads(read("evidence/ARTIFACT_MANIFEST.json"))
     source = json.loads(read("RUN_MANIFEST.json"))
     bindings = json.loads(read("SOURCE_BINDINGS.json"))
+    producer = json.loads(read("HISTORICAL_PRODUCER.json"))
+    if (producer.get("schema") != "cas.closed-loop.historical-producer/1"
+            or producer.get("source_commit") != "8f55cc3a462e438bcf706d7b64ddf9171d218039"):
+        raise ValueError("HISTORICAL_PRODUCER_IDENTITY")
+    snapshots = producer["implementation_files"]
+    if len(snapshots) != len(source["implementation_files"]):
+        raise ValueError("HISTORICAL_PRODUCER_FILES")
+    indexed = {row["path"]: row for row in snapshots}
+    if len(indexed) != len(snapshots) or set(indexed) != {row["path"] for row in source["implementation_files"]}:
+        raise ValueError("HISTORICAL_PRODUCER_FILES")
     rows = [("evidence/" + row["path"], row) for row in artifacts["files"]]
-    rows += [(row["path"], row) for row in source["implementation_files"]]
+    for row in source["implementation_files"]:
+        snapshot = indexed[row["path"]]
+        if (snapshot["sha256"] != row["sha256"]
+                or snapshot["snapshot"] != "provenance/producer_8f55cc3a/" + row["path"] + ".txt"):
+            raise ValueError("HISTORICAL_PRODUCER_BINDING")
+        rows.append((snapshot["snapshot"], snapshot))
     rows += [("provenance/" + row["source"].rsplit("/", 1)[-1] + ".txt", row) for row in bindings["handoff"]]
     for name, row in rows:
         raw = read(name)
         if sha256(raw).hexdigest() != row["sha256"] or ("bytes" in row and len(raw) != row["bytes"]):
             raise ValueError("ARTIFACT_BYTES_DIFFER:" + name)
-    return {"status": "EXACT_BYTES_VERIFIED", "files": len(rows), "git_ref": git_ref}
+    return {"status": "EXACT_BYTES_VERIFIED", "files": len(rows), "git_ref": git_ref,
+            "historical_producer_commit": producer["source_commit"],
+            "boundary": "Retained evidence and its original producer bytes only; current source acceptance is separate."}
 
 
 if __name__ == "__main__":

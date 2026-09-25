@@ -1,0 +1,240 @@
+{
+  "schema": "cas.cpu.aws.execution/1",
+  "job_id": "cas-cpu-20260925-151720-47cef2",
+  "freeze_sha256": "79683ce2c2ed18366bc69f4383b2eb116150d7c3c6cedce13356577674f3465f",
+  "source_commit": "318b22ad01304f80ed0f539420792cc951fe297a",
+  "payload_sha256": "62dd8f82cd92ceb18dc9b7565404417987860a4161df2f7cfafa2d2956fcee7a",
+  "runner": "Codex",
+  "start_utc": "2026-09-25T15:19:51.418727+00:00",
+  "resources": {
+    "bucket": "cas-cpu-20260925-151720-47cef2-807562639912",
+    "worker_role": "cas-cpu-20260925-151720-47cef2-worker",
+    "worker_policy": "job-objects",
+    "profile": "cas-cpu-20260925-151720-47cef2-worker",
+    "profile_role": "cas-cpu-20260925-151720-47cef2-worker",
+    "watchdog_role": "cas-cpu-20260925-151720-47cef2-watchdog",
+    "watchdog_policy": "tagged-termination",
+    "security_group": "sg-00233277c3dc640e7",
+    "instance_id": "i-0b2a24317528f3475",
+    "schedule": "cas-cpu-20260925-151720-47cef2"
+  },
+  "cleanup": [
+    {
+      "action": "terminate_instance",
+      "status": "PASS"
+    },
+    {
+      "action": "confirm_terminated",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_console",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_all_outputs",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_schedule",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_security_group",
+      "status": "PASS"
+    },
+    {
+      "action": "remove_profile_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_profile",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_owned_bucket",
+      "status": "PASS"
+    }
+  ],
+  "status": "NO_TERMINAL_RECEIPT",
+  "cloud_calls_retry_count": 0,
+  "maximum_all_services_usd": "1.00",
+  "caller_arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+  "global_concurrency": [
+    {
+      "region": "ap-south-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-north-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-3",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-3",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ca-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "sa-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-2",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-2",
+      "active_instances": []
+    }
+  ],
+  "request_without_userdata": {
+    "ImageId": "ami-07a134137a631b892",
+    "InstanceType": "t3.small",
+    "MinCount": 1,
+    "MaxCount": 1,
+    "ClientToken": "cas-cpu-20260925-151720-47cef2",
+    "Placement": {
+      "AvailabilityZone": "us-west-2a"
+    },
+    "NetworkInterfaces": [
+      {
+        "DeviceIndex": 0,
+        "SubnetId": "subnet-0bb8fa82c2a7177b3",
+        "Groups": [
+          "sg-00233277c3dc640e7"
+        ],
+        "AssociatePublicIpAddress": true,
+        "DeleteOnTermination": true
+      }
+    ],
+    "IamInstanceProfile": {
+      "Name": "cas-cpu-20260925-151720-47cef2-worker"
+    },
+    "CreditSpecification": {
+      "CpuCredits": "standard"
+    },
+    "MetadataOptions": {
+      "HttpTokens": "required",
+      "HttpEndpoint": "enabled",
+      "HttpPutResponseHopLimit": 1
+    },
+    "InstanceInitiatedShutdownBehavior": "terminate",
+    "DisableApiTermination": false,
+    "BlockDeviceMappings": [
+      {
+        "DeviceName": "/dev/sda1",
+        "Ebs": {
+          "VolumeSize": 8,
+          "VolumeType": "gp3",
+          "Encrypted": true,
+          "DeleteOnTermination": true
+        }
+      }
+    ],
+    "TagSpecifications": [
+      {
+        "ResourceType": "instance",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "cas-cpu-20260925-151720-47cef2"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      },
+      {
+        "ResourceType": "volume",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "cas-cpu-20260925-151720-47cef2"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      }
+    ]
+  },
+  "userdata_sha256": "e30ecd4b6bdee32ea783e389442764bbb0adedb33850fcfc25f7113854fce52a",
+  "exact_request_dry_run": "DryRunOperation",
+  "launch_attempted": true,
+  "launch_utc": "2026-09-25T15:20:31.919802+00:00",
+  "watchdog_at_utc": "2026-09-25T15:38:31.919802+00:00",
+  "instance_terminal": {
+    "Code": 48,
+    "Name": "terminated"
+  },
+  "end_utc": "2026-09-25T15:23:56.644501+00:00",
+  "compute_elapsed_seconds": 204.7247165000008,
+  "cleanup_complete": true,
+  "cost": {
+    "all_services_authorized_maximum_usd": "1.00",
+    "forecast_usd": "0.10",
+    "actual_billing_usd": null,
+    "note": "Billing actual unavailable; resource timestamps and prospective envelope retained."
+  }
+}

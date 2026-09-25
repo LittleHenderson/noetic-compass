@@ -13,7 +13,7 @@ import time
 import traceback
 
 HERE = Path(__file__).resolve().parent
-EXPECTED_SOURCE = "318b22ad01304f80ed0f539420792cc951fe297a"
+RUNTIME_COMMIT = "8182ad52b4468f18f140837dffee0e7debcfe786"
 
 
 def utc():
@@ -66,7 +66,19 @@ def execute(directory, expected_hash):
     if sha(frozen) != expected_hash:
         raise ValueError("FROZEN_RECORD_HASH_REQUIRED")
     plan = json.loads(frozen)
-    for field, expected in {"source_commit": EXPECTED_SOURCE, "runner": "Codex", "jobs": 1,
+    if plan.get("schema") != "cas.cpu.aws.freeze/2":
+        raise ValueError("SUPERSEDED_LANE_A_FREEZE")
+    if re.fullmatch(r"[0-9a-f]{40}", plan["source_commit"]) is None or plan["source_commit"] != plan["operational_commit"]:
+        raise ValueError("EXPLICIT_NEW_COMMITTED_SOURCE_REQUIRED")
+    if plan["git_preflight"]["runtime_commit"] != RUNTIME_COMMIT or plan["git_preflight"]["source_commit"] != plan["source_commit"]:
+        raise ValueError("EXACT_INSTANCE_GIT_PREFLIGHT_REQUIRED")
+    permitted_helm = plan.get("permitted_concurrent_helm", {})
+    if permitted_helm != {
+            "instance_id": "i-0adf52b7fa801e08b", "instance_type": "g7.2xlarge", "region": "us-west-2",
+            "job_id": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+            "control": "Root alone controls this known HELM GPU. CPU launcher must not preempt or modify it."}:
+        raise ValueError("EXPLICIT_CONCURRENT_HELM_IDENTITY_REQUIRED")
+    for field, expected in {"runner": "Codex", "jobs": 1,
                            "retry_count": 0, "maximum_all_services_usd": "1.00", "hard_wall_seconds": 1200,
                            "instance_type": "t3.small", "cpu_credits": "standard", "root_gib": 8,
                            "region": "us-west-2", "account_id": "807562639912"}.items():
@@ -154,7 +166,9 @@ def execute(directory, expected_hash):
         if identity["Account"] != plan["account_id"]:
             raise ValueError("WRONG_AWS_ACCOUNT")
         state["caller_arn"] = identity["Arn"]
-        # Fresh global one-machine check. Any unobserved region or active machine blocks.
+        # Owner permits this CPU job alongside one exact known HELM GPU only.
+        # Root alone controls that GPU; this launcher never modifies or preempts it.
+        # Any unobserved region or other active machine still blocks.
         checks = []
         for region in ec2.describe_regions(AllRegions=False)["Regions"]:
             regional = client("ec2", region["RegionName"])
@@ -165,14 +179,19 @@ def execute(directory, expected_hash):
                 if token:
                     kwargs["NextToken"] = token
                 data = regional.describe_instances(**kwargs)
-                active.extend(i["InstanceId"] for r in data["Reservations"] for i in r["Instances"])
+                active.extend({"instance_id": i["InstanceId"], "instance_type": i["InstanceType"],
+                               "region": region["RegionName"]}
+                              for r in data["Reservations"] for i in r["Instances"])
                 token = data.get("NextToken")
                 if not token:
                     break
             checks.append({"region": region["RegionName"], "active_instances": active})
             heartbeat()
-            if active:
-                raise ValueError("ONE_MACHINE_CONCURRENCY_BLOCK")
+            if any(any(item[key] != permitted_helm[key] for key in ("instance_id", "instance_type", "region"))
+                   for item in active):
+                state["global_concurrency"] = checks
+                save()
+                raise ValueError("UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK")
         state["global_concurrency"] = checks
         save()
         s3.create_bucket(Bucket=bucket, CreateBucketConfiguration={"LocationConstraint": plan["region"]})

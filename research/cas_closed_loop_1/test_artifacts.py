@@ -9,12 +9,22 @@ def test_retained_exact_evidence_and_producer_bytes():
 
 
 def test_changed_artifact_bytes_are_refused(tmp_path):
-    for name in ("evidence/ARTIFACT_MANIFEST.json", "RUN_MANIFEST.json", "SOURCE_BINDINGS.json"):
+    for name in ("evidence/ARTIFACT_MANIFEST.json", "RUN_MANIFEST.json", "SOURCE_BINDINGS.json", "HISTORICAL_PRODUCER.json"):
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(HERE / name, target)
     (tmp_path / "evidence/atlas.json").write_text("{}")
     with pytest.raises(ValueError, match="ARTIFACT_BYTES_DIFFER"):
+        verify(tmp_path)
+
+
+def test_changed_historical_producer_snapshot_is_refused(tmp_path):
+    for name in ("evidence", "provenance"):
+        shutil.copytree(HERE / name, tmp_path / name)
+    for name in ("RUN_MANIFEST.json", "SOURCE_BINDINGS.json", "HISTORICAL_PRODUCER.json"):
+        shutil.copyfile(HERE / name, tmp_path / name)
+    (tmp_path / "provenance/producer_8f55cc3a/native_step_adapter.py.txt").write_text("changed")
+    with pytest.raises(ValueError, match="ARTIFACT_BYTES_DIFFER:provenance/producer_8f55cc3a/native_step_adapter.py.txt"):
         verify(tmp_path)
 
 

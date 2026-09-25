@@ -67,13 +67,13 @@ def test_foreign_episode_refused_before_work(machine):
 
 
 def test_native_error_keeps_observed_events_and_never_reports_success(machine, monkeypatch):
-    original = CompoundMachine.advance
+    original = CompoundMachine._execute
 
-    def fail_after_step(self, **kwargs):
-        original(self, **kwargs)
+    def fail_after_step(self, *args, **kwargs):
+        original(self, *args, **kwargs)
         raise RuntimeError("synthetic post-step fault")
 
-    monkeypatch.setattr(CompoundMachine, "advance", fail_after_step)
+    monkeypatch.setattr(CompoundMachine, "_execute", fail_after_step)
     with pytest.raises(NativeStepFailed) as caught:
         execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
     receipt = caught.value.receipt
@@ -104,7 +104,12 @@ def test_all_eleven_identity_fields_and_suspended_snapshot_are_retained(machine)
     measured = 0
     while machine.state.halt_status is TerminalStatus.RUNNING:
         location = runtime_location(machine)
-        assert set(location["return_identity"]) == set(RETURN_IDENTITY_FIELDS)
+        if location["frames"]:
+            assert set(location["return_identity"]) == set(RETURN_IDENTITY_FIELDS)
+            assert location["return_identity"] == location["frame_identities"][-1]
+        else:
+            assert location["return_identity"] is None
+            assert location["frame_identities"] == []
         assert len(RETURN_IDENTITY_FIELDS) == 11
         for identity in location["frame_identities"]:
             frame_id = identity["frame_or_continuation"]["frame_id"]
@@ -119,14 +124,89 @@ def test_all_eleven_identity_fields_and_suspended_snapshot_are_retained(machine)
     assert measured > 0
 
 
-def test_signature_failure_is_not_counted_as_entry(machine, monkeypatch):
-    monkeypatch.setattr(CompoundMachine, "advance", lambda self: None)
-    with pytest.raises(NativeStepFailed) as caught:
+def test_no_frame_has_no_return_identity_before_during_and_after_root_call(machine):
+    first = runtime_location(machine)
+    assert first["root_call"] is None and first["return_identity"] is None
+    observed_root_without_frame = False
+    for _ in range(32):
+        location = runtime_location(machine)
+        if not location["frames"]:
+            assert location["return_identity"] is None
+            assert location["frame_identities"] == []
+            assert location["state_hash"] == machine.state.state_hash
+            observed_root_without_frame |= location["root_call"] is not None
+        if machine.state.halt_status is not TerminalStatus.RUNNING:
+            break
         execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
-    receipt = caught.value.receipt
-    assert receipt["I_attempted"] == receipt["I_executed"] == 0
-    assert receipt["native_event_count"] == 0
-    assert verify_receipt(receipt)
+    assert observed_root_without_frame
+    assert machine.state.halt_status is TerminalStatus.CONCLUDED
+    assert runtime_location(machine)["return_identity"] is None
+
+
+@pytest.mark.parametrize("mode", ["propagate", "swallow", "catch_then_third_call"])
+def test_repeated_dispatch_wrapper_refused_before_native_entry(machine, monkeypatch, mode):
+    original = CompoundMachine.advance
+    wrapper_entered = []
+    before = machine.state
+
+    def repeated_step(self, **kwargs):
+        wrapper_entered.append(True)
+        original(self, **kwargs)
+        try:
+            original(self, **kwargs)
+        except GrantRefused:
+            if mode == "propagate":
+                raise
+        if mode == "catch_then_third_call":
+            original(self, **kwargs)
+
+    monkeypatch.setattr(CompoundMachine, "advance", repeated_step)
+    with pytest.raises(GrantRefused, match="EXACT_NATIVE_DISPATCH_REQUIRED"):
+        execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+    assert wrapper_entered == [] and machine.state == before
+    assert machine.coordinator.trace.events == ()
+
+
+def test_internal_reentry_that_clears_meter_never_publishes_a_count(machine, monkeypatch):
+    original_execute = CompoundMachine._execute
+    original_advance = CompoundMachine.advance
+    reentered = []
+
+    def internally_reentrant_execute(self, *args, **kwargs):
+        result = original_execute(self, *args, **kwargs)
+        if not reentered:
+            reentered.append(True)
+            try:
+                original_advance(self, allow_acquisition=True)
+            except GrantRefused:
+                pass
+            # CPython cleared the hook on its exception: this third entry is
+            # deliberately unmetered. The whole observation must be unusable.
+            original_advance(self, allow_acquisition=True)
+        return result
+
+    monkeypatch.setattr(CompoundMachine, "_execute", internally_reentrant_execute)
+    with pytest.raises(InvalidNativeObservation, match="HOST_ENTRY_METER_INVALIDATED") as caught:
+        execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+    assert reentered == [True]
+    assert caught.value.measurement_status == "INVALID"
+    assert not hasattr(caught.value, "receipt")
+
+
+def test_rehashed_receipt_still_refuses_execution_above_allocation(machine):
+    receipt = execute_grant(machine, grant_for(machine, calls=0, allow_acquisition=True))
+    receipt["I_executed"] = 1
+    receipt["receipt_digest"] = digest({key: value for key, value in receipt.items()
+                                         if key != "receipt_digest"})
+    assert not verify_receipt(receipt)
+
+
+def test_substituted_callable_is_refused_before_entry(machine, monkeypatch):
+    before = machine.state
+    monkeypatch.setattr(CompoundMachine, "advance", lambda self: None)
+    with pytest.raises(GrantRefused, match="EXACT_NATIVE_DISPATCH_REQUIRED"):
+        execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+    assert machine.state == before and machine.coordinator.trace.events == ()
 
 
 def test_receipt_content_digest_detects_alteration(machine):
@@ -137,12 +217,12 @@ def test_receipt_content_digest_detects_alteration(machine):
 
 
 def test_corrupt_post_fault_state_is_not_published_as_verified(machine, monkeypatch):
-    original = CompoundMachine.advance
-    def corrupt_then_fail(self, **kwargs):
-        original(self, **kwargs)
+    original = CompoundMachine._execute
+    def corrupt_then_fail(self, *args, **kwargs):
+        original(self, *args, **kwargs)
         object.__setattr__(self.state, "state_hash", "0" * 64)
         raise RuntimeError("fault after corruption")
-    monkeypatch.setattr(CompoundMachine, "advance", corrupt_then_fail)
+    monkeypatch.setattr(CompoundMachine, "_execute", corrupt_then_fail)
     with pytest.raises(InvalidNativeObservation) as caught:
         execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
     assert caught.value.native_error_type == "RuntimeError"
@@ -197,3 +277,32 @@ def test_work_join_refuses_duplicate_and_changed_event(machine):
         primitive_work_for_events(machine, [event, event])
     with pytest.raises(InvalidNativeObservation, match="WORK_EVENT_IDENTITY_INVALID"):
         primitive_work_for_events(machine, [replace(event, event_hash="0" * 64)])
+
+
+@pytest.mark.parametrize("reseal_state", [False, True])
+def test_work_join_refuses_records_removed_from_trace_bound_state(machine, reseal_state):
+    for _ in range(32):
+        if machine.state.halt_status is not TerminalStatus.RUNNING:
+            break
+        machine.advance()
+    events = machine.coordinator.trace.events
+    original_work = primitive_work_for_events(machine, events)
+    assert original_work["measured_totals"]["primitive_instructions"] > 0
+    assert original_work["catalog_state_binding"] == {
+        "run_id": machine.state.run_id, "state_hash": machine.state.state_hash,
+        "trace_head": machine.state.trace_head, "logical_tick": machine.state.logical_tick,
+    }
+    for field in ("native_records", "semantic_records", "compound_records"):
+        object.__setattr__(machine.state, field, ())
+    if reseal_state:
+        object.__setattr__(machine.state, "state_hash", machine.state.computed_hash())
+    # Events themselves are still sealed and authentic. A self-consistent
+    # replacement catalog is insufficient without its native state/trace join.
+    with pytest.raises(InvalidNativeObservation, match="WORK_STATE_HISTORY_INVALID"):
+        primitive_work_for_events(machine, events)
+
+
+def test_empty_work_join_still_refuses_a_corrupt_state(machine):
+    object.__setattr__(machine.state, "state_hash", "0" * 64)
+    with pytest.raises(InvalidNativeObservation, match="WORK_STATE_HISTORY_INVALID"):
+        primitive_work_for_events(machine, [])

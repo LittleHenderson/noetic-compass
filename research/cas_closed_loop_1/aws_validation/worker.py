@@ -63,6 +63,8 @@ def main():
         if sys.version_info[:2] != (3, 12):
             raise RuntimeError("PYTHON_312_REQUIRED")
         manifest = json.loads((ROOT / "payload_manifest.json").read_text())
+        if manifest["schema"] != "cas.cpu.payload/2":
+            raise ValueError("SUPERSEDED_LANE_A_PAYLOAD")
         for row in manifest["files"]:
             path = ROOT / row["path"]
             if not path.resolve().is_relative_to(ROOT.resolve()):
@@ -78,12 +80,44 @@ def main():
         os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
         os.environ["PIP_DISABLE_PIP_VERSION_CHECK"] = "1"
         os.environ["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+        os.environ["GIT_NO_LAZY_FETCH"] = "1"
+        os.environ["GIT_NO_REPLACE_OBJECTS"] = "1"
+        os.environ["GIT_TERMINAL_PROMPT"] = "0"
+        os.environ["GIT_CONFIG_NOSYSTEM"] = "1"
+        os.environ["GIT_CONFIG_GLOBAL"] = "/dev/null"
+        for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
+            os.environ.pop(name, None)
         command("offline_install", [sys.executable, "-m", "pip", "install", "--no-index", "--no-deps",
                 "--require-hashes", "--find-links", str(ROOT / "wheelhouse"), "--target", str(deps),
                 "-r", str(ROOT / "requirements.lock")], limit=180)
         os.environ["PYTHONPATH"] = str(deps)
         sys.path.insert(0, str(deps))
         command("environment", [sys.executable, "-m", "pip", "freeze", "--path", str(deps)], limit=30)
+        command("git_package_before", ["dpkg-query", "-W", "-f=${Version}", "git"], limit=30, allow_failure=True)
+        before = (out / "git_package_before.stdout").read_text().strip()
+        if before != manifest["git_version"]:
+            sources = ROOT / "git-bootstrap.sources"
+            sources.write_text("Types: deb\nURIs: https://archive.ubuntu.com/ubuntu\nSuites: noble noble-updates\nComponents: main\nSigned-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg\n\n"
+                               "Types: deb\nURIs: https://security.ubuntu.com/ubuntu\nSuites: noble-security\nComponents: main\nSigned-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg\n")
+            os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+            apt = ["apt-get", "-o", "Acquire::Retries=0", "-o", "Acquire::https::Timeout=20",
+                   "-o", "Dir::Etc::sourcelist=" + str(sources), "-o", "Dir::Etc::sourceparts=-"]
+            command("git_dependency_index", apt + ["update"], limit=120)
+            packages = [str(ROOT / "system-packages" / row["filename"]) for row in manifest["git_packages"]]
+            command("git_pinned_install", apt + ["install", "-y", "--no-install-recommends", *packages], limit=120)
+        command("git_package_after", ["dpkg-query", "-W", "-f=${Version}", "git"], limit=30)
+        if (out / "git_package_after.stdout").read_text().strip() != manifest["git_version"]:
+            raise ValueError("PINNED_GIT_PACKAGE_REQUIRED")
+        command("os_package_inventory", ["dpkg-query", "-W", "-f=${Package}\t${Version}\n"], limit=30)
+        command("git_version", ["git", "--version"], limit=30)
+        command("git_longpaths", ["git", "config", "core.longpaths", "true"], limit=30)
+        command("runtime_commit_exists", ["git", "cat-file", "-e", "8182ad52b4468f18f140837dffee0e7debcfe786"], limit=30)
+        command("committed_artifact_check", [sys.executable, str(LANE / "check_artifacts.py"),
+                "--git-ref", manifest["source_commit"]], limit=60)
+        command("instance_runtime_bootstrap", [sys.executable, str(LANE / "bootstrap_runtime.py")], limit=90)
+        record["instance_git_preflight"] = {"status": "PASS", "source_commit": manifest["source_commit"],
+                "runtime_commit": manifest["runtime_commit"], "git_package_version": manifest["git_version"],
+                "object_store": "EXPLICITLY_PARTIAL_PUBLIC_OBJECT_STORE"}
         command("source_check", [sys.executable, str(LANE / "run_closed_loop.py"), "check"], limit=60)
         command("artifact_check", [sys.executable, str(LANE / "check_artifacts.py")], limit=60)
         command("focused_tests", [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
@@ -95,8 +129,8 @@ def main():
         totals = {key: sum(int(s.attrib.get(key, 0)) for s in suites)
                   for key in ("tests", "failures", "errors", "skipped")}
         record["tests"] = totals
-        if totals != {"tests": 47, "failures": 0, "errors": 0, "skipped": 0}:
-            raise ValueError("EXPECTED_47_TESTS_WITHOUT_SKIPS")
+        if totals != {"tests": manifest["expected_tests"], "failures": 0, "errors": 0, "skipped": 0}:
+            raise ValueError("PREDECLARED_TEST_COUNTS_REQUIRED_WITHOUT_SKIPS")
         command("retained_replay", [sys.executable, str(LANE / "run_closed_loop.py"), "replay",
                 "--directory", str(LANE / "evidence"), "--expected-bundle-digest",
                 "eae7eb1bedb67af537187d409c89fca9e55a1580d52bf14be9b01e560a198d2c"], limit=90)

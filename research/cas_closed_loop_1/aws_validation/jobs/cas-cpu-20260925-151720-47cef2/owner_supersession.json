@@ -1,0 +1,21 @@
+{
+  "schema": "cas.cpu.owner-supersession/1",
+  "recorded_utc": "2026-09-25T15:26:31.715733+00:00",
+  "job": "cas-cpu-20260925-151720-47cef2",
+  "status": "STOPPED_UNACCEPTED_AFTER_NEW_OWNER_REQUIREMENTS",
+  "reason": "Owner priority instruction arrived after this frozen predecessor CPU job launched. It requires three scientific fixes, same-commit documentation and exact Git/source/bootstrap instance admission before a fresh Lane A job. Root requested termination; no CAS_AWS_ENGINEERING_VALIDATED claim is permitted.",
+  "source_commit": "318b22ad01304f80ed0f539420792cc951fe297a",
+  "instance_id": "i-0b2a24317528f3475",
+  "tests": "NO_TERMINAL_TEST_RECEIPT",
+  "witness": "UNAVAILABLE",
+  "replay": "UNAVAILABLE",
+  "actual_billing_usd": null,
+  "prospective_all_services_maximum_usd": "1.00",
+  "execution_sha256": "302b7ac7bc407ae53639adbdfc17603eae00153dc5eeac8880161b2e51c88710",
+  "termination": {
+    "Code": 48,
+    "Name": "terminated"
+  },
+  "cleanup_complete": true,
+  "retry_count": 0
+}

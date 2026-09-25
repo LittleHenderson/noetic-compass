@@ -26,7 +26,8 @@ from cncm.rpa_compound_adapter import _catalog, work_from_catalog
 PROFILE = "cas.closed-loop.native-stage/0.1"
 UNIT = "native_host_step_invocation"
 _SHA = re.compile(r"[0-9a-f]{64}\Z")
-_ADVANCE_CODE = CompoundMachine.advance.__code__
+_ADVANCE = CompoundMachine.advance
+_ADVANCE_CODE = _ADVANCE.__code__
 RETURN_IDENTITY_FIELDS = (
     "episode/run", "branch", "source_snapshot", "root_goal", "root_call_occurrence",
     "immediate_parent_call", "frame_or_continuation", "saved_resume_stage",
@@ -57,7 +58,11 @@ class InvalidNativeObservation(RuntimeError):
 
 
 def verify_receipt(receipt):
-    return (type(receipt) is dict and receipt.get("receipt_digest") ==
+    return (type(receipt) is dict
+            and type(receipt.get("I_allocated")) is int
+            and type(receipt.get("I_executed")) is int
+            and 0 <= receipt["I_executed"] <= receipt["I_allocated"] <= 1
+            and receipt.get("receipt_digest") ==
             digest({k: v for k, v in receipt.items() if k != "receipt_digest"}))
 
 
@@ -127,15 +132,21 @@ def admission_for(machine):
 def primitive_work_for_events(machine, events):
     """Join native executor reports, never substitute grants or reservations.
 
-    The upstream catalog joins run/tick/intent. We additionally bind each result
-    to a sealed event ID/hash in the actual host trace. Missing report counters
+    The upstream catalog joins run/tick/intent. Validate the native state and
+    its whole trace before reading the state-owned records, then bind each result
+    to a sealed event ID/hash in that validated trace. Missing report counters
     remain unknown; ordinary inference and wrapper work are outside this meter.
     """
+    _require_machine(machine)
+    try:
+        observed = machine.result()
+    except Exception as error:
+        raise InvalidNativeObservation("WORK_STATE_HISTORY_INVALID", error) from error
     keys = ("primitive_instructions", "original_checks", "linear_checks")
-    state = machine.state
+    state = observed.final_state
     catalog = _catalog((*state.native_records, *state.semantic_records, *state.compound_records))
     reports = {row["report_digest"]: row["body"] for row in catalog["reports"]}
-    actual_events = {(e.event_id, e.event_hash): e for e in machine.coordinator.trace.events}
+    actual_events = {(e.event_id, e.event_hash): e for e in observed.trace}
     totals = dict.fromkeys(keys, 0)
     rows, seen, unknown = [], set(), []
     for event in events:
@@ -167,6 +178,8 @@ def primitive_work_for_events(machine, events):
             "measured_totals": totals, "unmeasured_records": unknown,
             "complete_totals": None if unknown else totals.copy(), "events": rows,
             "catalog_digest": catalog["catalog_digest"],
+            "catalog_state_binding": {"run_id": state.run_id, "state_hash": state.state_hash,
+                                      "trace_head": state.trace_head, "logical_tick": state.logical_tick},
             "provenance": "NATIVE_EXECUTOR_REPORTS_JOINED_BY_RUN_TICK_INTENT_AND_SEALED_EVENT",
             "scope": "Native primitive and original/linear check counters; excludes ordinary reasoning and orchestration."}
 
@@ -197,29 +210,27 @@ def runtime_location(machine):
     state = machine.state
     root = state.compound_call
     def identity(frame):
-        suspension = None
         matches = []
-        if frame is not None:
-            for event in machine.coordinator.trace.events:
-                for intent in event.proposed_intents:
-                    if (intent.intent_id in event.authorized_intent_ids
-                            and intent.intent_type.value in (
-                                "PUSH_COMPOUND_ACQUISITION", "PUSH_PRIMITIVE_ACQUISITION")
-                            and intent.mutation_dict().get("frame", {}).get("frame_id") == frame.frame_id):
-                        matches.append(event.pre_state_hash)
-            if len(matches) != 1:
-                raise InvalidNativeObservation("SUSPENSION_EVENT_NOT_UNIQUE")
-            suspension = matches[0]
+        for event in machine.coordinator.trace.events:
+            for intent in event.proposed_intents:
+                if (intent.intent_id in event.authorized_intent_ids
+                        and intent.intent_type.value in (
+                            "PUSH_COMPOUND_ACQUISITION", "PUSH_PRIMITIVE_ACQUISITION")
+                        and intent.mutation_dict().get("frame", {}).get("frame_id") == frame.frame_id):
+                    matches.append(event.pre_state_hash)
+        if len(matches) != 1:
+            raise InvalidNativeObservation("SUSPENSION_EVENT_NOT_UNIQUE")
+        suspension = matches[0]
         return {
             "episode/run": state.run_id,
             "branch": "branch-main",  # CompoundCoordinator's explicit single-branch profile.
-            "source_snapshot": suspension if frame is not None else state.state_hash,
+            "source_snapshot": suspension,
             "root_goal": machine.problem.reasoning.goal_id,
             "root_call_occurrence": root.call_id if root else None,
             "immediate_parent_call": ({"call_id": frame.call_id,
-                                       "call_digest": frame.parent_call_digest} if frame else None),
-            "frame_or_continuation": frame.to_dict() if frame else None,
-            "saved_resume_stage": frame.resume_stage if frame else None,
+                                       "call_digest": frame.parent_call_digest}),
+            "frame_or_continuation": frame.to_dict(),
+            "saved_resume_stage": frame.resume_stage,
             "inputs_digest": root.inputs_digest if root else None,
             "source_profile": machine.profile.profile_digest,
             "bias_version_at_suspension": suspension,
@@ -235,7 +246,7 @@ def runtime_location(machine):
         "root_goal": machine.problem.reasoning.goal_id,
         "root_call": root.to_dict() if root is not None else None,
         "frames": [frame.to_dict() for frame in state.rpm_stack],
-        "return_identity": identities[-1] if identities else identity(None),
+        "return_identity": identities[-1] if identities else None,
         "frame_identities": identities,
         "bias_version_basis": "SEALED_PRE_STATE_HASH_INCLUDES_BIAS_NOT_A_SEPARATE_BIAS_COUNTER",
         "current_native_budget": state.native_budget.to_dict(),
@@ -272,20 +283,28 @@ def execute_grant(machine, grant):
     old_events = tuple(machine.coordinator.trace.events)
     invoked = 0
     attempted = 0
+    entry_refused = False
     native_ns = 0
     fault = None
     if grant.calls and grant.actuator_enabled:
+        advance = machine.advance
+        if (not inspect.ismethod(advance) or advance.__self__ is not machine
+                or advance.__func__ is not _ADVANCE or advance.__func__.__code__ is not _ADVANCE_CODE):
+            raise GrantRefused("EXACT_NATIVE_DISPATCH_REQUIRED")
         call_started = time.monotonic_ns()
         if sys.getprofile() is not None:
             raise GrantRefused("HOST_ENTRY_METER_REQUIRES_FREE_PROFILE_HOOK")
         def entry_meter(frame, event, arg):
-            nonlocal invoked
+            nonlocal invoked, entry_refused
             if (event == "call" and frame.f_code is _ADVANCE_CODE
                     and frame.f_locals.get("self") is machine):
+                # The pinned native implementation does not re-enter advance.
+                # An unexpected re-entry invalidates the whole measurement.
+                if invoked >= grant.calls:
+                    entry_refused = True
+                    raise GrantRefused("HOST_ENTRY_ALLOCATION_EXCEEDED")
                 invoked += 1
         try:
-            advance = machine.advance
-            inspect.signature(advance).bind(allow_acquisition=grant.allow_acquisition)
             attempted += 1
             sys.setprofile(entry_meter)
             advance(allow_acquisition=grant.allow_acquisition)
@@ -294,6 +313,12 @@ def execute_grant(machine, grant):
         finally:
             sys.setprofile(None)
             native_ns = time.monotonic_ns() - call_started
+    if entry_refused:
+        # A callback exception clears CPython's profile hook. Code that catches
+        # it could execute unmetered work, so never publish a usable count.
+        raise InvalidNativeObservation("HOST_ENTRY_METER_INVALIDATED", fault) from fault
+    if invoked > grant.calls:
+        raise InvalidNativeObservation("HOST_ENTRY_ALLOCATION_EXCEEDED", fault) from fault
     after = machine.state
     all_events = machine.coordinator.trace.events
     if all_events[:len(old_events)] != old_events:

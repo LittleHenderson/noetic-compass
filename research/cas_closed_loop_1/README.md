@@ -4,13 +4,21 @@ This isolated adapter uses the existing native CompoundMachine, coordinator,
 exact compiler Ohm calculation, PCBA reader/checker, work catalog and RPA replay.
 It does not change active Helm/Q4 sources, run a model, or launch cloud work.
 
+The prospective 2026-09-25 correctness amendment is described in
+`HARNESS_SPEC.md` and `CHANGELOG.md`. Its new regression cases require the fresh
+Codex-owned AWS Lane-A validation. Historical evidence remains byte-for-byte
+unchanged and does not establish acceptance of this amended source.
+`HISTORICAL_PRODUCER.json` and preserved producer snapshots support that
+historical check. The fresh prospective source/package freeze binds the amended
+code; its AWS acceptance remains pending.
+
 The live repository lacks historical objects
 `348638c9d9b6069eebab7853db6b98bfef453092` and
 `2636bbb6e0f41a37ba2c20df08cdf51185718617`. This is prospective implementation,
 not a claim to have recovered their history. `SOURCE_BINDINGS.json` pins the
 available native dependency commit and each allowed file's exact bytes.
 
-From the repository root:
+Inside the admitted AWS Lane-A worker, from the repository root:
 
 ```powershell
 $env:PYTHONDONTWRITEBYTECODE='1'
