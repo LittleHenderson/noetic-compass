@@ -95,7 +95,7 @@
   "reason_approval_not_requested": "Owner has granted standing current/future project approval. Missing implementation, actual receipts and fixed inputs are technical blockers, not requests for renewed permission.",
   "preparation_document_sha256": {
     "_handoffs/HELM_NEXT_PHASE_20260923/PLAN_HELM_REPAIR_CONTROLLED_1_DRAFT.md": "3698fe7906b8e4abaa9d8a7234f7db950cb3d39f9c1b0a8bbecb7445f56bf0b6",
-    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "d838350850fe03645163b58358cbd227626ef300de0c8fb91cd8f67d4d36988a",
+    "_handoffs/HELM_NEXT_PHASE_20260923/CODEX_AMENDMENTS_20260924.md": "26e0dfd7d92045b41a97a4b57cd750e5e98204eee33fc4c8e953f56332e2adba",
     "records/helm_eval_design_20260923/EVALUATION_DESIGN_v0_4.md": "b473c37cd2e5e5ff3a7b4c26d3c908e984af0dc00e343ed3dfe694ac39f9c188",
     "records/helm_controlled_prelaunch_20260924/PREPARATION_AUTHORITY.md": "4ea883c77875d862fdfb220060b783b6eb9978501594faca635eef29082b1999",
     "AGENTS.md": "a9aacc1acff0a874f07066d29defe565e86b1a8a894ad1ff1174da0a71c4c367"

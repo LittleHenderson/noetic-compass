@@ -284,7 +284,7 @@ cleanup complete. R18's files are Claude-owned and untouched. R19/U17 completion
 and benefit of the repair remain unverified. The earlier evaluation-inclusive draft is not backdated as admitted.
 
 **Changed files:** these two new R records, this handoff, launch request and preparation validation.
-**Commit:** the following delivery-only entry pins this content commit.
+**Commit:** content `c7e474febdbd2b72bcfe3bf915d938a225b31fa5`; this delivery-only successor records its exact identity and refreshes the handoff hash.
 **Checks actually performed:** exact public source and receipt metadata, Git push/ref identity, JSON/SHA-256,
 AST-only review and staged hash/whitespace checks; no project execution, protected read, new AWS job or ledger edit.
 **Remaining questions / Claude handoff:** the single missing-observation correction, original three other reading
