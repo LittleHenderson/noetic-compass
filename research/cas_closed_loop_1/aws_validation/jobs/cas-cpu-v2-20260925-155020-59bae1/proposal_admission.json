@@ -1,0 +1,26 @@
+{
+  "utc": "2026-09-25T15:51:00.721201+00:00",
+  "status": "PREPARED_NOT_AUTHORIZED_FOR_RETRY",
+  "job_id": "cas-cpu-v2-20260925-155020-59bae1",
+  "source_commit": "3a4d23f0b4909a7e90fa808033ca41a445b7316c",
+  "freeze_sha256": "fab6734ead6fd1a57f497b3bef48c4c282c487c36bd44f37b9b09b50afff1a4f",
+  "payload_sha256": "4e61b22da691a6ea22b366b83fd53573a4565687d80847658fc7efccc643b4d4",
+  "payload_files_verified": 254,
+  "expected_tests": 61,
+  "test_split": {
+    "scientific": 57,
+    "launcher_transport": 4
+  },
+  "code_checks": "AST parse and offline signed-URL construction passed; four new regression cases not executed; live read-only existing-object regional GET returned200.",
+  "execution_decision": "Await explicit owner decision for one new corrected attempt; previous job permits no automatic retry.",
+  "execute_authorized": false,
+  "paid_cloud_work_started": false,
+  "maximum_all_services_usd": "1.00",
+  "hard_wall_seconds": 1200,
+  "prior_reserved_usd": "2.00",
+  "engineering_pool_maximum_usd": "5.00",
+  "proposal_plus_retained_reservations_usd": "3.00",
+  "automatic_retries": 0,
+  "cloud_prerequisites": "Actual account/global concurrency/exact request DryRun checks run only if execution is newly authorized; actual instance Git/artifact/bootstrap and61tests must pass before acceptance.",
+  "claim_boundary": "No CAS_AWS_ENGINEERING_VALIDATED claim."
+}
