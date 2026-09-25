@@ -1,7 +1,7 @@
 {
   "schema": "helm-critical-mass-2x-codex-build-result/1",
   "status": "BUILT_COMMITTED_LOCALLY_NOT_LAUNCHED",
-  "commit": "9f0157ef0e6717095393c273940959c951966d5c",
+  "commit": "422a3933f8d575497600a46c5b17039e4b5ec247",
   "branch": "codex/helm-critical-mass-2x",
   "files": [
     "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/typed_pointer_worker.py",
@@ -15,7 +15,7 @@
     {
       "command": "pytest -q \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_typed_pointer_critical_mass_2x.py\" \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_typed_pointer_critical_mass_2x_admission.py\"",
       "result": "PASS",
-      "summary": "20 passed in 21.05s"
+      "summary": "22 passed in 24.41s"
     },
     {
       "command": "pytest -q \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_typed_pointer_study.py\"",
@@ -47,8 +47,8 @@
     "historical_r18_receipts_modified": false,
     "aws_launched": false
   },
-  "exact_remaining_blocker": "OPEN: no source.zip package and no frozen seed-20260918 owner/request/authority/study records exist yet for commit 9f0157ef0e6717095393c273940959c951966d5c. The admission writer requires a clean full checkout at that exact commit. AWS execution remains explicitly prohibited.",
-  "exact_launch_preparation_command": "python -B \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py\" --package \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_9f0157ef\" --source-sha 9f0157ef0e6717095393c273940959c951966d5c",
-  "exact_admission_dry_run_command_after_package": "python -B \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_cm2x_001/prepare_cm2x_study.py\" --source-sha 9f0157ef0e6717095393c273940959c951966d5c --dry-run",
+  "exact_remaining_blocker": "OPEN: no source.zip package and no frozen seed-20260918 owner/request/authority/study records exist yet for commit 422a3933f8d575497600a46c5b17039e4b5ec247. The admission writer requires a clean full checkout at that exact commit. AWS execution remains explicitly prohibited.",
+  "exact_launch_preparation_command": "python -B \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py\" --package \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_422a3933\" --source-sha 422a3933f8d575497600a46c5b17039e4b5ec247",
+  "exact_admission_dry_run_command_after_package": "python -B \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_cm2x_001/prepare_cm2x_study.py\" --source-sha 422a3933f8d575497600a46c5b17039e4b5ec247 --dry-run",
   "launch_command_executed": false
 }
