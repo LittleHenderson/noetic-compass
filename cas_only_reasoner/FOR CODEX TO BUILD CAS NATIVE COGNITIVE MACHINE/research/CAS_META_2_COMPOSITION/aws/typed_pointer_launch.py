@@ -6,11 +6,17 @@ worker, schemas and job names; the new contract's own admission module, whose `M
 eighteen practice checkpoints so the packaged source scope admits them; a new probe, experiment profile
 and `task_scope`; and a provider class renamed for this study with four methods replaced.
 
-THE INSTANCE ENVELOPE AND THE RESERVATION ARE THE PRACTICE STUDY'S AND ARE NOT CHANGED. 4 h x $2.52 on
-demand + $1.48 ancillary = $11.56, rounded up to $15.00; the owner cap is $45.00 for the three jobs.
-`pointer_contract.RESERVATION_USD` is `practice_contract.RESERVATION_USD` by import, and this launcher
-reads that constant rather than restating the number. The shared lifecycle modules are not modified: this
-module replaces the provider's reservation, watchdog, bootstrap and authority methods instead.
+THE INSTANCE ENVELOPE AND THE RESERVATION ARE RE-DERIVED FOR THIS VERSION, FROM THE USD 20.00 ALL-SERVICES
+CAP AND NOTHING ELSE (critical-mass 2x, `contract.EXPERIMENT_VERSION`). 7 h x $2.52 on demand + $1.48 ancillary
+= $19.12, so the reservation is $19.20 and the all-services worst case is $19.30 including the $0.10
+allowance. `pointer_contract.RESERVATION_USD` is this version's own constant and this launcher reads it rather
+than restating the number; the ledger's own rule (`budget.validate_plan`: reserved >= rate x runtime_max /
+3600 + ancillary) is what forces the reservation up with the limit. The shared lifecycle modules are not
+modified: this module replaces the provider's reservation, watchdog, bootstrap and authority methods instead.
+
+THE SCIENCE IS R18's, UNCHANGED: same model and learner, same course, same batch order, same optimizer, same
+held-back worlds and records, same 59-packet development panel, same private scorer. Only the training
+duration (20 passes against R18's measured 10) and this output envelope move.
 
 Source/package admission is pure. Only explicit execute enters provider code.
 """
@@ -48,11 +54,11 @@ AUTHORITY_SCHEMA = "cncm.typed-pointer-authority/0.1"
 OWNER_SCHEMA = "cncm.typed-pointer-owner/0.1"
 WORKER_NAME = "typed_pointer_worker.py"
 JOB_PATTERN = contract.JOB_PATTERN
-MAX_WALL_SECONDS = contract.MAX_WALL_SECONDS            # numeric child timeout, 12,600 s
-OUTER_TIMEOUT_SECONDS = 13500                           # setup + worker + publication
-BOOT_WATCHDOG_SECONDS = 14100                           # guest-owned poweroff, never cancelled
-INSTANCE_SECONDS_MAX = contract.INSTANCE_SECONDS_MAX    # launcher wait budget, 14,400 s
-RESERVATION_USD = contract.RESERVATION_USD              # "15.00" -- the practice study's envelope, unchanged
+MAX_WALL_SECONDS = contract.MAX_WALL_SECONDS            # numeric child timeout, 23,400 s
+OUTER_TIMEOUT_SECONDS = 24300                           # setup + worker + publication
+BOOT_WATCHDOG_SECONDS = 24900                           # guest-owned poweroff, never cancelled
+INSTANCE_SECONDS_MAX = contract.INSTANCE_SECONDS_MAX    # launcher wait budget, 25,200 s
+RESERVATION_USD = contract.RESERVATION_USD              # "19.20" -- the critical-mass 2x envelope
 # ==================================================================================================================
 # THE SHRUNKEN-SCHEDULE OPT-IN. `None` -- "no smoke was asked for" -- UNLESS `set_smoke_request()` is called.
 #
@@ -223,7 +229,7 @@ def reduced_schedule_record():
 # The main-training update count, read off the contract's own registered schedule rather than restated:
 # every pointer pass is 147 updates whether the pass is stratified or not (`pointer_contract.DESIGN`
 # "schedule_stratified_updates_per_pass" and "schedule_unstratified_updates_per_pass" are both 147), so
-# 10 passes give 1,470 main + 16 interference + 2 validation replays = 1,488, and a later pass-count
+# 20 passes give 2,940 main + 16 interference + 2 validation replays = 2,958, and a later pass-count
 # change cannot silently desynchronise this bound from the schedule.
 UPDATES_PER_PASS = contract.DESIGN["schedule_stratified_updates_per_pass"]
 OPTIMIZER_UPDATES_MAX = (contract.PASSES * UPDATES_PER_PASS
@@ -240,7 +246,12 @@ TRANSIENT_ERROR_CLASSES = frozenset({"EndpointConnectionError", "ConnectTimeoutE
     "ConnectionClosedError", "ResponseStreamingError", "IncompleteReadError", "ProxyConnectionError",
     "ConnectionError", "HTTPClientError"})
 MAX_TRANSIENT_WAIT_ERRORS = 500
-EXPERIMENT = {"profile": "typed_pointer_v1", "candidate": CANDIDATE, "entrypoint": "cncm.typed_pointer_worker.run"}
+EXPERIMENT = {"profile": "typed_pointer_v1", "candidate": CANDIDATE,
+              "entrypoint": "cncm.typed_pointer_worker.run",
+              # The version identity of this tree, carried into the package manifest. The profile stays
+              # "typed_pointer_v1" because it names the PROFILE (schema shapes, transport, lifecycle), not the
+              # training duration; the duration is the contract's and is in `DESIGN`/`typed_design` below.
+              "version": contract.EXPERIMENT_VERSION}
 BOUNDS = {"training": True, "optimizer_updates_max": OPTIMIZER_UPDATES_MAX, "max_wall_seconds": MAX_WALL_SECONDS,
           "jobs": 1, "automatic_retries": 0, "reservation_usd": RESERVATION_USD,
           "instance_type": "g7.2xlarge", "region": "us-west-2", "instance_seconds_max": INSTANCE_SECONDS_MAX}
@@ -408,7 +419,7 @@ def inputs_hash_cross_check(source_sha=None):
     the authority's `inputs_sha256` against `frozen_inputs_hash` (both the launcher's side) and PASSED, while the
     worker compared the packaged manifest against the CONFIG (the contract's side) and correctly REFUSED. Nothing
     tested that the two sides are the same number. This does, so a future divergence of this shape is caught at
-    freeze time for $0 instead of on an instance for about $0.40 and a $15.00 cap commitment.
+    freeze time for $0 instead of after entering this version's $19.20 reservation envelope.
 
     THE JOB NAME AND THE `source_sha` MUST AGREE, because `contract.make_config` requires the name's eight hex
     characters to BE `source_sha[:8]` (`JOB_PARAMETERS`). The first version of this guard passed a placeholder job
@@ -437,6 +448,8 @@ def validate_request(request):
                                                        "manifest_sha256", "launch_authorized"}, "POINTER_REQUEST_FIELDS")
     require(request["schema"] == REQUEST_SCHEMA, "POINTER_REQUEST_SCHEMA")
     require(type(request["job"]) is str and re.fullmatch(JOB_PATTERN, request["job"]), "POINTER_REQUEST_JOB")
+    require(contract.parse_job(request["job"])[1] == contract.RUN_MODEL_SEED,
+            "POINTER_REQUEST_MODEL_SEED")
     for key, pattern in (("source_sha", shared.HEX40), ("archive_sha256", shared.HEX64), ("manifest_sha256", shared.HEX64)):
         require(type(request[key]) is str and pattern.fullmatch(request[key]), "POINTER_REQUEST_HASH:" + key)
     require(request["launch_authorized"] is False, "POINTER_REQUEST_INERT")
@@ -451,9 +464,10 @@ def _check_bounds(document, code):
 def validate_authority(authority, evidence_contract=None):
     """The authority's own fields, plus the three byte bindings RK9 requires.
 
-    `evidence_contract` is the contract THIS job will run under, and it defaults to the registered 10-pass one.
+    `evidence_contract` is the contract THIS job will run under, and it defaults to the registered 20-pass one.
     The smoke path passes its reduced contract (`smoke_evidence_contract()`), because the authority it froze
-    carries that contract's digest; the three claim-bearing jobs keep the default, whose bytes are unchanged.
+    carries that contract's digest; the registered full run keeps the default, and its authority pins that
+    default's digest in `evidence_contract_sha256`.
     """
     identity = {"job", "source_sha", "archive_sha256", "manifest_sha256"}
     fields = identity | set(BOUNDS) | {"schema", "candidate", "owner_authorization_sha256", "inputs_sha256",
@@ -556,11 +570,11 @@ def render_worker():
 
 
 def evidence_contract(plan=None, *, source=None):
-    """The pre-run evidence contract for ONE plan. With `plan=None` this is the REGISTERED 10-pass contract.
+    """The pre-run evidence contract for ONE plan. With `plan=None` this is the REGISTERED 20-pass contract.
 
     THE PLAN IS AN ARGUMENT BECAUSE A REDUCED RUN WRITES FEWER NAMES FROM THE DESIGN (review R2, B2). This
     function used to take no argument and list `_probe().EXPECTED_ARTIFACTS`, which is
-    `expected_artifact_names(FULL_PLAN)` for the registered ten passes. A smoke job runs the reduced plan and
+    `expected_artifact_names(FULL_PLAN)` for the registered pass count. A smoke job runs the reduced plan and
     writes only that plan's names, so `run_evidence.verify_byte_integrity` found the rest missing, set
     `INCOMPLETE`, and `completed_deliverable` came back false -- a PERFECT reduced run returned exit code 1 and
     `execute_study.py`'s `stop_unless(code == 0, 'INCOMPLETE_JOB')` stopped the study. The smoke plan's own
@@ -568,10 +582,11 @@ def evidence_contract(plan=None, *, source=None):
     the same correction on the LAUNCHER side.
 
     NOTHING IS RELAXED: the requirement list is still every name the plan produces, `verify_byte_integrity` still
-    requires all of them, and `completed_deliverable` still requires `COMPLETE_VERIFIED`. The three claim-bearing
-    jobs keep the no-argument form, whose bytes are unchanged: `plan=None` resolves to `_probe().FULL_PLAN`, which
-    IS the plan `EXPECTED_ARTIFACTS` was derived from, and the note text is recomputed from the plan's own
-    numbers, which reproduce the previously hard-coded ones exactly (1,470 main, 16 interference, 2 replay).
+    requires all of them, and `completed_deliverable` still requires `COMPLETE_VERIFIED`. The claim-bearing job
+    keeps the no-argument form: `plan=None` resolves to `_probe().FULL_PLAN`, which IS the plan
+    `EXPECTED_ARTIFACTS` was derived from, and the note text is recomputed from the plan's own numbers. For this
+    version that is 20 passes: 2,940 main, 16 interference and 2 replay updates, and the required set carries
+    every pass 01-20 batches/updates pair plus the pass-10 and pass-20 evaluations.
 
     `source` is the literal JSON request the generated bootstrap carries, when a smoke asked for one; it is
     recorded in the contract so the frozen requirement names the schedule it belongs to.
@@ -730,7 +745,7 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
         return reservation_plan_for(self.bound_config["design"])
 
     def reserve(self, amount):
-        """The inherited lifecycle passes its own $7.00 constant; this study's frozen amount is $15.00."""
+        """The inherited lifecycle passes its own $7.00 constant; this version's frozen amount is $19.20."""
         require(hasattr(self, "bound_config"), "POINTER_RESERVATION_CONFIG_REQUIRED")
         require(not self._reserved and amount == shared.RESERVATION_USD, "POINTER_RESERVATION_CALLER")
         self.calls.append("reserve")
@@ -748,10 +763,10 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
         return any(cls.__name__ in TRANSIENT_ERROR_CLASSES for cls in type(error).__mro__)
 
     def wait(self, job, timeout, *, poll_interval=5.0):
-        """Wait up to the 4-hour envelope, in segments the inherited 2-hour wait accepts.
+        """Wait up to the 7-hour envelope, in segments the inherited 2-hour wait accepts.
 
         The inherited poll has no SDK retries, and any error it raises ends the lifecycle and terminates the
-        instance. Over a ~2-hour job a network blip on the operator's machine is likely, so a transient
+        instance. Over a multi-hour job a network blip on the operator's machine is likely, so a transient
         provider error is recorded and the poll resumes; only the deadline, a terminal instance state, the
         worker's own result, or a non-transient error ends the wait (pre-flight review, 2026-09-18).
         """
@@ -777,7 +792,7 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
                 return outcome
 
     def _user_data(self, bucket):
-        """The matched study's guest watchdog, with this study's 4-hour envelope."""
+        """The matched study's guest watchdog, with this version's 7-hour envelope."""
         require(re.fullmatch(JOB_PATTERN, self.job) is not None, "POINTER_WATCHDOG_JOB")
         require(hasattr(self, "bound_config") and self.bound_config["bucket"] == bucket, "POINTER_CONFIG_BUCKET")
         original = super(matched.TypedMatchedProvider, self)._user_data(bucket)
@@ -803,14 +818,14 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
             'cas_typed_systemctl="$(command -v systemctl)"',
             'cas_typed_timeout="$(command -v timeout)"',
             'cas_typed_unit="' + self.job + '-deadline"',
-            # Boot-relative deadline five minutes inside this study's 14,400 s envelope. Never cancelled.
+            # Boot-relative deadline five minutes inside this version's 25,200 s envelope. Never cancelled.
             '"$cas_typed_systemd_run" --unit="$cas_typed_unit" --on-boot=%ds ' % BOOT_WATCHDOG_SECONDS
             + '--timer-property=AccuracySec=1s --property=Type=oneshot "$cas_typed_shutdown" --poweroff now',
             '"$cas_typed_systemctl" is-active --quiet "$cas_typed_unit.timer"',
             '"$cas_typed_systemctl" show "$cas_typed_unit.timer" --no-pager '
             '--property=ActiveState --property=NextElapseUSecMonotonic',
             'echo "CNCM_GUEST_WATCHDOG_ARMED unit=$cas_typed_unit boot_deadline_seconds=%d"' % BOOT_WATCHDOG_SECONDS,
-            # Setup, the 12,600 s numeric child and its publisher, bounded together below the watchdog.
+            # Setup, the 23,400 s numeric child and its publisher, bounded together below the watchdog.
             '"$cas_typed_timeout" --signal=TERM --kill-after=30s %ds /bin/bash <<\'' % OUTER_TIMEOUT_SECONDS
             + delimiter + "'",
             original.rstrip("\n"), delimiter, "",
@@ -856,7 +871,7 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
 
 
 def validate_reserved_transition(before, after, receipt, request, *, expected_plan):
-    """The shared transition check, with this study's frozen $15.00 amount."""
+    """The shared transition check, with this version's frozen $19.20 amount."""
     prior, current = before["ledger"], after["ledger"]
     require(current["revision"] == prior["revision"] + 1, "RESERVATION_REVISION_MISMATCH")
     require(current["reservations"][:-1] == prior["reservations"], "RESERVATION_NOT_APPEND_ONLY")
@@ -875,11 +890,10 @@ def validate_reserved_transition(before, after, receipt, request, *, expected_pl
 def job_evidence_contract():
     """The contract THIS PROCESS's run will be held to.
 
-    `SMOKE_REQUEST is None` -- the state every claim-bearing job runs in -- returns the REGISTERED 10-pass
-    contract, byte for byte what this launcher has always built, so the three claim-bearing authorities' pinned
-    `evidence_contract_sha256` values still validate. With the opt-in set, the smoke's own reduced contract is
-    returned, and it is the ONLY thing that changes for a smoke: same `verify_byte_integrity`, same
-    `completed_deliverable`, same `main()` exit-code rule.
+    `SMOKE_REQUEST is None` -- the state every claim-bearing job runs in -- returns the REGISTERED 20-pass
+    contract this version's authorities pin in their `evidence_contract_sha256`. With the opt-in set, the
+    smoke's own reduced contract is returned, and it is the ONLY thing that changes for a smoke: same
+    `verify_byte_integrity`, same `completed_deliverable`, same `main()` exit-code rule.
     """
     return evidence_contract() if SMOKE_REQUEST is None else smoke_evidence_contract()
 

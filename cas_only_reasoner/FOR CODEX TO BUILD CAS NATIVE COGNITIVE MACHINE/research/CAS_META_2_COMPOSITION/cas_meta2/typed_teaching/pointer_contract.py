@@ -2,12 +2,15 @@
 answers about worlds it never read?
 
 Owner-approved 2026-09-19: option 1, "pointer answers plus the checkpoint check", after both corrections
-were accepted. The course, the hold-out, the teaching order, the ten passes and the random start are the
-practice study's, reused BY IMPORT and never re-derived, so the two studies are comparable question for
-question. What changes is the machine's relation to its input: one focus world is read as a small directed
-graph, the question is expressed by pointing at that graph's nodes, and the answer is a pointer into the
-input instead of a label drawn from a fixed bank. No teacher, final panel, numerical runtime or provider
-is imported here.
+were accepted. The course, the hold-out, the teaching order and the random start are the practice study's,
+reused BY IMPORT and never re-derived, so the two studies are comparable question for question. What changes
+is the machine's relation to its input: one focus world is read as a small directed graph, the question is
+expressed by pointing at that graph's nodes, and the answer is a pointer into the input instead of a label
+drawn from a fixed bank. No teacher, final panel, numerical runtime or provider is imported here.
+
+THIS TREE IS THE CRITICAL-MASS 2x VERSION (`EXPERIMENT_VERSION`): the registered training duration is 20
+passes, twice R18's measured 10, and the science around it is R18's unchanged -- see the version block below
+`SOURCE_SEED`. Passes 10 and 20 are both evaluated and neither is selected over the other.
 
 DELIBERATE OPEN ITEMS, each written as a mechanism waiting for a measured decision, never guessed:
 
@@ -87,11 +90,21 @@ BUCKET_SUFFIX = "-807562639912"
 CONDITION = practice.CONDITION
 MODEL_SEEDS = practice.MODEL_SEEDS
 SOURCE_SEED, ENCODER_SEED = practice.SOURCE_SEED, practice.ENCODER_SEED
-PASSES = practice.PASSES           # 10, INHERITED AND NOT FREEZABLE AS-IS -- see the note below.
-PASS_CHECKPOINTS = practice.PASS_CHECKPOINTS
-FULL_COURSE_CHECKPOINTS = practice.FULL_COURSE_CHECKPOINTS
-INTERFERENCE_UPDATES, INTERFERENCE_BATCH = practice.INTERFERENCE_UPDATES, practice.INTERFERENCE_BATCH
-REPLAY_UPDATES = practice.REPLAY_UPDATES
+# ----------------------------------------------------------------------------------------------------------------
+# VERSION. This tree is the CRITICAL-MASS 2x version of the pointer study: the registered full run trains
+# TWICE as long as R18's, and nothing else about the science moves. `EXPERIMENT_VERSION` is the identity every
+# record of this version carries (DESIGN, the worker config, the package manifest, the admission study record),
+# so a 20-pass artifact can never be read as a 10-pass one. `VERSION_PASS_MULTIPLIER` says the ONLY axis of the
+# change in one number: 2x the registered passes, 4x/8x deliberately NOT implemented.
+#
+# WHAT IS IDENTICAL TO R18, by import and by unchanged constant: the model and learner, the course, the
+# held-back worlds and records, the stratified batch order, the optimizer and its settings, the 59-packet
+# development panel, the private scorer, and the 564-record registry. See `_INHERITED` below, which is the
+# pointer study's own list of fields copied unchanged from the matched study, and `DESIGN`, which adds only
+# this version's own numbers on top of it.
+EXPERIMENT_VERSION = "cncm.typed-pointer-critical-mass-2x/1"
+VERSION_PASS_MULTIPLIER = 2
+RUN_MODEL_SEED = 20260918
 # ----------------------------------------------------------------------------------------------------------------
 # TRAINING LENGTH IS A DELIBERATE, MEASURED CHOICE -- DO NOT INHERIT 10 PASSES BY DEFAULT.
 #
@@ -104,18 +117,60 @@ REPLAY_UPDATES = practice.REPLAY_UPDATES
 # improvement to the neurons, so that ceiling is RAISED here -- a new candidate is entitled to its own registered
 # limit -- to permit up to MAX_PASSES_PERMITTED passes and no more.
 #
-# PASSES itself must be set from the smoke job's MEASURED per-update cost, not guessed, and the same measurement
-# must re-check MAX_CORE_CALLS: the pointer machine calls the registered ^6 block once per node per round
-# (~4 nodes x 8 rounds = 32 calls per world read) against the old machine's 8, so the core-call budget may bind
-# before the update budget does. Both are recorded in DESIGN and must be reconciled before the study is frozen.
+# PASSES IS NOW SET, FROM A MEASUREMENT -- the decision this comment always demanded. The measurement is the
+# DELIVERED R17 job (seed 20260917, 10 passes, `records/typed_pointer_001/receipt_analogy_on_20260917`,
+# result `elapsed_seconds` 10,516.263135700006, worker clock 9,895.504149891001 s of a 12,300 s deadline, so
+# 80.5 % of the deadline was used and the loss was still falling):
+#
+#     measured per update          7,197.795890278999 s / 1,470 updates = 4.896459789305442 s
+#     measured per evaluation      1,088.1962510759972 s / 21            = 51.81886909885701 s
+#     measured phase A             890.397366079 s over 3 checkpoints
+#     measured worker-side glue    719.1146424570053 s
+#     20 passes projected          719.1146424570053 + 2,940 x 4.896459789305442
+#                                  + 18 x 51.81886909885701 + 890.397366079 = 16,937.84343287343 s worker clock
+#     projected INSTANCE seconds   16,937.84343287343 + 598.1888835440004 (the measured non-worker overhead
+#                                  this machine already carries) = 17,536.03231641743 s
+#     projected cost               17,536.03231641743 / 3,600 x 2.5200000000 + 1.48 = $13.76
+#
+# The core-call budget is re-checked against the same measurement, as this comment requires: 20 passes x 1,176
+# presentations x 8 rounds = 188,160 core calls against the registered 600,000 MAX_CORE_CALLS (31.4 %), so the
+# update budget (2,940 + 16 = 2,956 of 3,544) binds first and neither is close. Both are recorded in DESIGN.
 # ----------------------------------------------------------------------------------------------------------------
+PASSES = 20                        # = VERSION_PASS_MULTIPLIER x practice.PASSES, set from the measurement above
+# PASS 10 AND PASS 20 ARE BOTH EVALUATED. 10 keeps the R18 comparison point (state at the duration R18 ran);
+# 20 is this version's own final state. No best-checkpoint selection: both are written, both are scored, and
+# the gate reads pass 20 (the registered final pass) exactly as it read pass 10 before.
+PASS_CHECKPOINTS = (0, 1, 2, 4, 6, 8, 10, 20)
+FULL_COURSE_CHECKPOINTS = (0, 1, 10, 20)
+INTERFERENCE_UPDATES, INTERFERENCE_BATCH = practice.INTERFERENCE_UPDATES, practice.INTERFERENCE_BATCH
+REPLAY_UPDATES = practice.REPLAY_UPDATES
 MAX_PASSES_PERMITTED = 24
 LEARNER_MAX_UPDATES_CEILING = MAX_PASSES_PERMITTED * 147 + INTERFERENCE_UPDATES   # 3544, permits 24 passes
 MAX_CORE_CALLS = practice.MAX_CORE_CALLS
-WORKER_DEADLINE_SECONDS = practice.WORKER_DEADLINE_SECONDS
-MAX_WALL_SECONDS = practice.MAX_WALL_SECONDS
-RESERVATION_USD = practice.RESERVATION_USD
-INSTANCE_SECONDS_MAX = practice.INSTANCE_SECONDS_MAX
+# ----------------------------------------------------------------------------------------------------------------
+# THE RESOURCE ENVELOPE, RE-DERIVED FROM A USD 20.00 ALL-SERVICES CAP AND NOTHING ELSE.
+#
+# The observed on-demand rate is $2.5200000000/h for g7.2xlarge in us-west-2 and the ancillary allowance this
+# launcher reserves is $1.48 (both carried unchanged from R18/R17). The binding rule is the ledger's own:
+# `budget.validate_plan` requires `reserved_usd >= rate x runtime_seconds_max / 3600 + ancillary`, so the
+# reservation and the instance limit are one arithmetic decision:
+#
+#     instance_seconds_max  25,200 s = 7 h exactly
+#     declared cost bound   2.5200000000 x 7 + 1.48                        = $19.12
+#     reservation           19.20  (>= the bound; the ledger's rule above)  = $19.20
+#     other services        0.10 allowance                                 = $0.10
+#     ALL SERVICES          19.20 + 0.10                                    = $19.30  <= $20.00
+#
+# The limit is 1.44 x the projected instance seconds above, which is R18's own safety ratio (14,400 / 10,234.598687940716
+# = 1.41); it is NOT tightened to the projection because a killed run is paid for and returns nothing.
+# The deadline chain below keeps R18's own spreads (300 / 900 / 600 / 300 s) and its 2,100 s of total
+# non-worker envelope slack, so the ordering checks in `aws/typed_pointer_launch.py` still hold:
+#     23,100 < 23,400 < 24,300 < 24,900 < 25,200  and  7,200 < 24,900 < 25,200
+# ----------------------------------------------------------------------------------------------------------------
+WORKER_DEADLINE_SECONDS = 23100
+MAX_WALL_SECONDS = 23400
+RESERVATION_USD = "19.20"
+INSTANCE_SECONDS_MAX = 25200
 
 # ----------------------------------------------------------------------------------------------------------------
 # STRATIFIED. The owner's decision of 2026-09-19, recorded verbatim in `DESIGN["owner_approval"]`: the option
@@ -277,7 +332,9 @@ def pointer_schedule(frozen, passes=None, stratified=None):
     run stopped at pass 10 with the loss still falling and 44.4 % of its deadline unused -- so the pointer study must
     be able to run longer. See `pre_design/LEARNING_LEVERS.md`.
 
-    `OPEN:` the value of `PASSES` itself. It is set from the smoke job's MEASURED per-update cost, not guessed.
+    `CLOSED:` the value of `PASSES` itself is 20, set from the DELIVERED R17 job's MEASURED per-update cost -- see
+    the measurement block beside `PASSES` above -- and the stratified whole-schedule digest below is derived from
+    it rather than frozen as a literal.
     """
     count = PASSES if passes is None else passes
     layered = STRATIFIED if stratified is None else stratified
@@ -915,14 +972,24 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "initialization": "REGISTERED_RANDOM_PER_MODEL_SEED_AFTER_PHASE_A_RESTORES",
     "condition": CONDITION, "source_seed": SOURCE_SEED, "encoder_seed": ENCODER_SEED,
     "model_seeds": list(MODEL_SEEDS), "passes": PASSES, "holdout_unit": "FOCUS_WORLD",
+    # THE VERSION IDENTITY, carried into the package manifest (`experiment`/`typed_design`), the worker config
+    # and the worker report, so no 20-pass artifact can be read as an R18 10-pass one.
+    "experiment_version": EXPERIMENT_VERSION, "pass_multiplier_over_r18": VERSION_PASS_MULTIPLIER,
+    "run_model_seed": RUN_MODEL_SEED,
+    "training_duration_change_only": ("SAME_MODEL_DATA_BATCH_ORDER_OPTIMIZER_HOLDOUT_DEV_PANEL_SCORING_AND_SOURCE_LOGIC_"
+                                      "AS_R18_ONLY_THE_TRAINING_DURATION_AND_THE_OUTPUT_ENVELOPE_MOVE"),
+    "learning_rate_schedule": "CONSTANT_AS_HELM_1_0", "planned_main_updates": None,
+    "evaluated_at_both_durations": True, "best_checkpoint_selection": False,
     # The single pass a reader must know about before trusting any per-kind statement: STRATIFIED, one record of
     # each of the eight kinds in EVERY update at the same 147 updates per pass, chosen by the owner's 2026-09-19
     # decision (see `owner_approval`). `schedule_stratified_absent_updates_as_is` is the as-is branch's own
     # measurement (REVIEW_SYNTHESIS.md section 4.7), kept beside it so the comparison travels with the field
     # rather than having to be re-derived; under stratification every one of those eight counts is 0.
     # `schedule_stratified_batches_digest` is the DERIVED whole-schedule digest for the registered `PASSES`
-    # (review R2, M4), never the ten-pass literal: a shipped design that carried a ten-pass digest while the
-    # job ran another pass count would be a false statement about the job.
+    # (review R2, M4), never a literal: a shipped design that carried another pass count's digest while the
+    # job ran this one would be a false statement about the job. For 20 passes it is NOT the ten-pass value
+    # `1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304`; the import-time check below and
+    # `tests/test_typed_pointer_critical_mass_2x.py` both assert that difference.
     "schedule_stratified": STRATIFIED,
     "schedule_stratified_decision": "OWNER_DECISION_STRATIFY_AND_TRAIN_LONGER_RECOMMENDED",
     "schedule_stratified_updates_per_pass": 147, "schedule_stratified_presentations_per_pass": 1176,

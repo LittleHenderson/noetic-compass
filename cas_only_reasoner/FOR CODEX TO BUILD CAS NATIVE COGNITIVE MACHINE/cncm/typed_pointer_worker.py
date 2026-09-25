@@ -54,10 +54,12 @@ PLAN item 4). Differences, each deliberate:
   introduced here either.
 
 - DG9 -- THIS JOB MEASURES ITS OWN COST. `phase_timings.json` records per-phase elapsed seconds, the
-  measured seconds per update and per evaluation, and the projection of the registered ten-pass job.
-  The practice figure is 5,465.811116456 s of worker clock and 6,064 s of instance time against a
-  `WORKER_DEADLINE_SECONDS` of 12,300; the pointer machine's per-update cost is UNMEASURED, and this
-  job's timing is what measures it. Nothing is rounded anywhere in this file.
+  measured seconds per update and per evaluation, and the projection of the registered job. The practice
+  figure is 5,465.811116456 s of worker clock and 6,064 s of instance time against a
+  `WORKER_DEADLINE_SECONDS` of 12,300; the pointer machine's per-update cost was UNMEASURED until the
+  delivered R17 job measured it at 4.896459789305442 s per update, which is what set this version's 20
+  passes and its 23,100 s deadline (see the measurement block beside `PASSES` in `pointer_contract.py`).
+  Nothing is rounded anywhere in this file.
 
 - THE EVIDENCE PUBLISHER IS CREATE-ONLY. Every file this worker places under ``results/`` is complete
   before its final name exists: pass logs grow in ``<results parent>/pointer_staging`` (outside
@@ -202,7 +204,14 @@ ABLATION_PHASES = ("ablation_baseline",) + tuple("ablation_" + name for name, _ 
 REDUCED_SCHEDULE_ENV = "CNCM_POINTER_REDUCED_SCHEDULE"
 REDUCED_SCHEDULE_KEYS = frozenset({"passes", "updates", "evaluations", "phase_a", "reloads", "phase_b",
                                    "ablations", "retention", "interference", "replays"})
-OWNER_PROJECTION_THRESHOLD_SECONDS = 11000
+OWNER_PROJECTION_THRESHOLD_SECONDS = 25200
+# The owner's approved INSTANCE envelope for THIS version, in instance seconds, and the number
+# `within_owner_threshold` is decided against. For the critical-mass 2x version the approved envelope IS the
+# contract's instance limit: 25,200 s = 7 h at the observed $2.5200000000/h, plus the $1.48 ancillary, plus a
+# $0.10 allowance for the other services, is $19.30 of a $20.00 all-services cap. (R18's own threshold was
+# 11,000 s against its 14,400 s limit; this version's is its limit because the cap, not a round number, is
+# what the owner approved.) Crossing it still requires a new owner approval -- it is a spend boundary, not a
+# target, and the projection is compared against it, never the reverse.
 # DG9. The MEASURED non-worker overhead of one AWS pointer job: the instance seconds that are not the
 # worker's own clock -- boot, package install and delivery. `pre_design/AWS_SMOKE_S10_PLAN.md:29` measures it
 # as 6,064 s of instance time minus the practice worker's own 5,465.811116456 s of `elapsed_seconds`, which
@@ -892,6 +901,19 @@ def _seed_and_double_build(ctx):
     model_seeded_at = time.monotonic()
     model_already_present = ctx.get("main") is not None
     main = build(seed)
+    # CRITICAL-MASS 2x changes duration, not the optimizer trajectory. Omitting
+    # `planned_main_updates` is the learner's explicit constant-rate mode; a
+    # caller that slips in the later cosine seam is refused before training.
+    require(design["optimizer_config"]["learning_rate"] == 0.003
+            and set(limits) == {"max_updates", "max_core_calls", "max_wall_seconds"}
+            and design["planned_main_updates"] is None
+            and design["learning_rate_schedule"] == "CONSTANT_AS_HELM_1_0"
+            and main.planned_main_updates is None
+            and main.learning_rate_schedule == "CONSTANT_AS_HELM_1_0"
+            and all(group["lr"] == 0.003 for group in main.optimizer.param_groups),
+            "POINTER_CONSTANT_LEARNING_RATE")
+    ctx["report"]["learning_rate"] = 0.003
+    ctx["report"]["learning_rate_schedule"] = main.learning_rate_schedule
     # (b) a SECOND, independent build of the WHOLE model: the container identity must be equal.
     second = build(seed)
     whole_first = _container_identity(torch, main.module)
@@ -1695,6 +1717,7 @@ def deliver(results, artifacts, report, *, failed):
     summary = {key: report.get(key) for key in ("job", "source_sha", "status", "runtime", "elapsed_seconds",
         "condition", "model_seed", "failure", "main_training_delta", "interference_delta", "global_actual_work",
         "checkpoint_reload_verified", "scores", "development_scores", "retention_scores", "pass_summaries",
+        "learning_rate", "learning_rate_schedule",
         "initial_model_identity", "whole_container_identity", "model_identity", "phase_timings",
         "schedule_plan_mode", "claimed_bearing_run", "claim_bearing", "checkpoint_check_phase_a_status",
         "checkpoint_check_phase_b_status", "ablation_status", "artifacts_dropped_from_the_required_set",
