@@ -57,5 +57,13 @@
       "errors": 0,
       "seconds": 101.8
     }
-  ]
+  ],
+  "artifact_tests": {
+    "passed": 4,
+    "failed": 0,
+    "errors": 0,
+    "seconds": 0.1,
+    "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_artifacts.py"
+  },
+  "artifact_byte_issue": "13fbff1f normalized evidence line endings; follow-up preserves exact evidence/provenance bytes and forces implementation Python LF. Native JSON semantics unaffected."
 }

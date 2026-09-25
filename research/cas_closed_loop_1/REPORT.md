@@ -74,3 +74,5 @@ No model/AWS job, purchase or process termination occurred. Upstream sources
 were read-only. The root agent was the sole writer; a separate agent performed
 bounded read-only correctness reviews. DeepSeek review requests use only the
 owner-specified bus. Git push status is recorded separately in `STATUS.json`.
+
+Post-commit artifact QA found Git line-ending normalization changed five retained file byte hashes. The follow-up pins exact evidence bytes and Python source line endings. Four artifact integrity tests passed in 0.10 seconds; all 13 evidence/producer/provenance files match their local recorded hashes. Committed-byte verification is required before push.

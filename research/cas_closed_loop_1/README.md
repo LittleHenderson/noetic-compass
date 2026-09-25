@@ -16,6 +16,7 @@ From the repository root:
 $env:PYTHONDONTWRITEBYTECODE='1'
 python research/cas_closed_loop_1/bootstrap_runtime.py
 python research/cas_closed_loop_1/run_closed_loop.py check
+python research/cas_closed_loop_1/check_artifacts.py
 python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_native_step_adapter.py research/cas_closed_loop_1/test_closed_loop.py
 python research/cas_closed_loop_1/run_closed_loop.py demo --output research/cas_closed_loop_1/demo/new-run
 ```
