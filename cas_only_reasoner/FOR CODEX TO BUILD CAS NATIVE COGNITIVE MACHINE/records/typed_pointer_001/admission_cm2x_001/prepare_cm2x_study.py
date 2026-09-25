@@ -97,7 +97,14 @@ RECEIPT_DIR = ROOT / 'records/typed_pointer_001/receipt_cm2x_20260918'
 
 
 def digest(raw):
-    return contract.digest(raw)
+    """sha256 over BYTES -- the launcher's own digest, and the one every record field here is bound with.
+
+    NOT `pointer_contract.digest`, which canonicalises its argument as JSON first: the authority's
+    `owner_authorization_sha256`, `design_sha256` and the manifest digest are all raw-byte digests of canonical
+    JSON, and using the JSON-canonicalising one raises `TypeError: Object of type bytes is not JSON
+    serializable` on the first `digest(canonical(...))` call. Found by a local rehearsal of this freeze.
+    """
+    return launch.digest(raw)
 
 
 def canonical(value):

@@ -70,6 +70,11 @@ def test_the_cost_bound_is_the_ledgers_own_arithmetic_and_fits_the_usd_20_cap(wr
     assert bound["receipt_of_the_basis"] == "records/typed_pointer_001/receipt_analogy_on_20260917"
 
 
+def test_the_writer_hashes_canonical_record_bytes_without_recanonicalising_them(writer):
+    raw = writer.canonical({"record": "bytes"})
+    assert writer.digest(raw) == sha256(raw).hexdigest()
+
+
 def test_the_study_record_names_both_durations_and_the_pass_11_to_20_artifacts(writer):
     study = writer.study_record("a" * 40, {"packaged_version": writer.VERSION, "packaged_passes": 20},
                                 {"inputs_sha256": "b" * 64, "design_sha256": "c" * 64,
