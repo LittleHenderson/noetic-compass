@@ -1,0 +1,22 @@
+{
+  "utc": "2026-09-25T15:38:10.157141+00:00",
+  "type": "SUPPLEMENTAL_FORECAST_EXPLANATION",
+  "frozen_records_modified": false,
+  "source": "b981625fdc9c28a5c80a18453216686a1d5357af pointer_contract.py lines 125-134; R17 phase_timings.json",
+  "training_seconds": "14395.591780557999480",
+  "worker_glue_seconds": "719.1146424570053",
+  "evaluation_count": 23,
+  "evaluation_count_basis": "18 regular + 5 ablation",
+  "evaluation_rate_seconds": "51.81886909885701",
+  "evaluation_seconds": "1191.83398927371123",
+  "phase_a_seconds": "890.397366079",
+  "worker_seconds": "17196.937778367716010",
+  "nonworker_seconds": "598.1888835440004",
+  "nonworker_basis": "Inherited practice-run allowance: 6064 - 5465.811116456; recorded in R17 projection, not newly measured R17 instance overhead.",
+  "instance_seconds": "17795.126661911716410",
+  "ec2_usd_hour": "2.52",
+  "ancillary_usd": "1.48",
+  "expected_usd": "13.94",
+  "cap_usd": "20.00",
+  "boundary": "Forecast explanation only. No actual runtime, spending or model-result claim; no changed frozen fields."
+}
