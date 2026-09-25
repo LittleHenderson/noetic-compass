@@ -1,0 +1,17 @@
+{
+  "utc": "2026-09-25T18:59:47.913305+00:00",
+  "job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+  "instance": "i-0adf52b7fa801e08b",
+  "instance_state": "terminated",
+  "state_transition_reason": "User initiated (2026-09-25 18:51:46 GMT)",
+  "launch_utc": "2026-09-25T15:22:20+00:00",
+  "block_device_mappings": [],
+  "security_groups_remaining": 0,
+  "worker_role": "NoSuchEntity",
+  "timer_role": "NoSuchEntity",
+  "worker_profile": "NoSuchEntity",
+  "evidence_bucket": "RETAINED",
+  "bucket": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918-807562639912",
+  "evidence_archive_storage_active": true,
+  "paid_compute_active": false
+}

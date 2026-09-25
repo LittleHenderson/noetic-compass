@@ -1,0 +1,214 @@
+{
+  "schema": "helm.critical-mass-failure-closeout/1",
+  "utc": "2026-09-25T19:01:22.628059+00:00",
+  "job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+  "source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+  "operator_exit_code": 1,
+  "outcome": "FAILED_INCOMPLETE_NOT_CERTIFIED",
+  "completed_main_updates": 2108,
+  "planned_main_updates": 2940,
+  "failure": {
+    "detail": "TYPED_MATCHED:PRACTICE_DEADLINE_EXCEEDED",
+    "schema": "cncm.typed-pointer-failure/0.1",
+    "type": "ValueError"
+  },
+  "cause": {
+    "practice_limit_seconds": 12300,
+    "pointer_limit_seconds": 23100,
+    "observed_failure_elapsed_seconds": 12301.5,
+    "description": "Pointer main/interference/replay aliases call the practice training helper, which checks the practice contract deadline using the original worker start time. Outer pointer limits do not replace this inherited guard.",
+    "source_locations": [
+      "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/practice_contract.py:64",
+      "cncm/typed_practice_worker.py:32",
+      "cncm/typed_practice_worker.py:61",
+      "cncm/typed_practice_worker.py:107",
+      "cncm/typed_practice_worker.py:125",
+      "cncm/typed_pointer_worker.py:429",
+      "cncm/typed_pointer_worker.py:1080",
+      "cncm/typed_pointer_worker.py:1144",
+      "cncm/typed_pointer_worker.py:1233",
+      "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py:171"
+    ]
+  },
+  "pass10": {
+    "cursor": 1470,
+    "course": {
+      "correct": 502,
+      "excluded": {
+        "correct": 65,
+        "total": 79
+      },
+      "held_back": {
+        "correct": 115,
+        "total": 127
+      },
+      "total": 564,
+      "trained": {
+        "correct": 322,
+        "total": 358
+      }
+    },
+    "development": {
+      "correct": 8,
+      "cursor": 1470,
+      "pass": 10,
+      "total": 59
+    },
+    "status": "MEASURED_NOT_CERTIFIED"
+  },
+  "pass20": {
+    "status": "NOT_PRODUCED"
+  },
+  "scientific_boundary": "No completed 2x result or training-length comparison; no extrapolation to pass20. Main checkpoint at1470 preserved. No protected scoring/prediction bodies parsed.",
+  "preservation": {
+    "downloaded_objects": 538,
+    "downloaded_bytes": 187270971,
+    "hash_mismatches": [],
+    "required_artifacts": 128,
+    "verified_required_artifacts": 74,
+    "missing_required_artifacts": 54,
+    "complete": false,
+    "contract_not_reduced": true,
+    "checkpoint_deserialized": false,
+    "private_archive_retained": true
+  },
+  "cleanup": {
+    "archive_object_prefix": "results/",
+    "bucket_deleted": false,
+    "collection_verified": false,
+    "complete": true,
+    "compute_identity_uncertain": false,
+    "deletion_decision": {
+      "archive_state": "DELETION_DENIED",
+      "decision": "DENY",
+      "denial_is_sticky": true,
+      "logging_an_error_never_opens_this_path": true,
+      "never_sufficient_on_its_own": [
+        "the worker reported FINISHED",
+        "exit code zero",
+        "the expected number of checkpoints exists",
+        "a retention timer expired",
+        "every file the worker declared was downloaded",
+        "the bucket name is not in the resource plan anymore"
+      ],
+      "reasons": [
+        "COLLECTION_NOT_COMPLETE_VERIFIED",
+        "NO_APPROVED_RETENTION_POLICY",
+        "INDEPENDENT_BACKUP_NOT_VERIFIED",
+        "NO_APPROVED_DELETION_POLICY"
+      ],
+      "schema": "cas.run-evidence-deletion-decision/1",
+      "when_allowed": "an approved policy, an elapsed minimum protection period, a complete verified collection, a verified independent backup, and the separate authorised cleanup policy"
+    },
+    "evidence_archive": "RETAINED_PENDING_COLLECTION",
+    "evidence_deleted": false,
+    "evidence_retained": true,
+    "failures": [],
+    "instance_ids": [
+      "i-0adf52b7fa801e08b"
+    ],
+    "instances": {
+      "i-0adf52b7fa801e08b": "CONFIRMED_TERMINATED"
+    },
+    "instances_termination_pending": [],
+    "post_cleanup_observations": {
+      "i-0adf52b7fa801e08b": {
+        "state": "terminated"
+      }
+    },
+    "results_deleted": false,
+    "retained_bucket": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918-807562639912",
+    "retention_reason": "EVIDENCE_RETENTION_IS_INDEPENDENT_OF_COMPUTE: the bucket is a durable private archive with one prefix per run, and this path has no erasure step. Disposal needs an approved policy, an elapsed minimum protection period, a complete verified collection and a verified independent backup.",
+    "roles_removed": true,
+    "schedule_removed": "NOT_APPLICABLE",
+    "security_group_deleted": true
+  },
+  "provider_check": {
+    "utc": "2026-09-25T18:59:47.913305+00:00",
+    "job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+    "instance": "i-0adf52b7fa801e08b",
+    "instance_state": "terminated",
+    "state_transition_reason": "User initiated (2026-09-25 18:51:46 GMT)",
+    "launch_utc": "2026-09-25T15:22:20+00:00",
+    "block_device_mappings": [],
+    "security_groups_remaining": 0,
+    "worker_role": "NoSuchEntity",
+    "timer_role": "NoSuchEntity",
+    "worker_profile": "NoSuchEntity",
+    "evidence_bucket": "RETAINED",
+    "bucket": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918-807562639912",
+    "evidence_archive_storage_active": true,
+    "paid_compute_active": false
+  },
+  "budget": {
+    "reservation_usd": "19.20",
+    "all_services_cap_usd": "20.00",
+    "reservation_preserved": true,
+    "actual_invoice": "UNAVAILABLE",
+    "observed_compute_rate_usd_per_hour": "2.52",
+    "instance_terminated_by_utc": "2026-09-25T18:57:25.675426+00:00",
+    "compute_cost_upper_estimate_usd": 9.034,
+    "estimate_is_provider_invoice": false,
+    "retained_archive_storage_remains_active": true
+  },
+  "next_action": "Prepare prospective helper deadline fix and focused regression tests; execute no paid validation or training retry without a new explicit owner authorization and finite frozen admission.",
+  "paid_compute_active": false,
+  "evidence_archive_storage_active": true,
+  "files": [
+    {
+      "path": "failure.json",
+      "bytes": 1799,
+      "sha256": "681b59b4ab9de90aeac08a1cbe79b77c70adbaba12467d6adcb0771076005037"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1631119,
+      "sha256": "2949dd92398f90f4689ba849d7e4e22b91ac2025d6785495aa2f3cc079b8d2a2"
+    },
+    {
+      "path": "receiver_receipt.json",
+      "bytes": 3667,
+      "sha256": "2a5b037b568a4a2ad4673bff93ea838f9ebe97c0d936c258cc8d45bd611b20de"
+    },
+    {
+      "path": "collected_inventory.json",
+      "bytes": 142488,
+      "sha256": "43bceb522cdb23065bc184cdc372517d18d4074535dd68efdce844adc1a60b78"
+    },
+    {
+      "path": "download_hash_verification.json",
+      "bytes": 324,
+      "sha256": "4715a4118364855190dcf8df5db8fdedf2b81d4d9f858f1eb891d93be555c2b1"
+    },
+    {
+      "path": "post_cleanup_provider_check.json",
+      "bytes": 670,
+      "sha256": "1e33121b1aa767344c4476dd65bcdc6e8beae432ef273fc04620dd12229c630e"
+    },
+    {
+      "path": "collected/results/artifacts/measurements.json",
+      "bytes": 3393,
+      "sha256": "5e04d6adb13987f5de5129d7d26f88ee77f08dc42a34fe1581917fb82642cedf"
+    },
+    {
+      "path": "collected/results/artifacts/worker_report.json",
+      "bytes": 81276,
+      "sha256": "da615abf56493ccc8e64ced993170347b3a13392a0ebe4d66f039a67ca6c4514"
+    },
+    {
+      "path": "collected/results/evidence/typed_progress_0421.json",
+      "bytes": 151,
+      "sha256": "3172c78c7bf61c3c051cb48db9e923c6952499ec1d620bb1ae0cdfa3ed683a96"
+    },
+    {
+      "path": "collected/results/evidence/main_checkpoint_1470.json",
+      "bytes": 31828,
+      "sha256": "fbc40dcb40e413b70a98bdbbd9634420371258fdec0d53739387feb07d9cf953"
+    },
+    {
+      "path": "collected/results/evidence/main_checkpoint_1470.pt",
+      "bytes": 4025999,
+      "sha256": "375f0dae403cc8ac99489f736720498097ab3fabc6a9f5e12d4902f67f526ee4"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "helm.public-midpoint-identity-comparison/1",
+  "utc": "2026-09-25T18:14:08.169780+00:00",
+  "job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+  "source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+  "verdict": "RECORDED_STATE_IDENTITIES_AND_COUNTERS_MATCH_R18_AT_1470",
+  "r18_sidecar_path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\critical_mass_review\\final_checkpoint.json",
+  "r18_sidecar_sha256": "6a81ea5e67ec1e29dcbf1057d1b3c4ad3c7e586dad4886f912a73812df0cd9f8",
+  "midpoint_sidecar_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\midpoint_capture_cm2x_20260918\\main_checkpoint_1470.json",
+  "midpoint_sidecar_sha256": "fbc40dcb40e413b70a98bdbbd9634420371258fdec0d53739387feb07d9cf953",
+  "pin_source": "main_checkpoint_1470.json: checkpoint.sha256 and checkpoint.bytes",
+  "checkpoint_pin_verified": true,
+  "comparisons": {
+    "cursor": {
+      "equal": true,
+      "r18": 1470,
+      "fresh_20_pass_midpoint": 1470
+    },
+    "model_revision": {
+      "equal": true,
+      "r18": 1470,
+      "fresh_20_pass_midpoint": 1470
+    },
+    "counters": {
+      "equal": true,
+      "r18": {
+        "backward_attempts": 1470,
+        "backward_calls": 1470,
+        "core_forward_attempts": 110000,
+        "core_forward_calls": 110000,
+        "optimizer_step_attempts": 1470,
+        "optimizer_updates": 1470,
+        "packet_forward_calls": 13750,
+        "prediction_calls": 13750,
+        "private_loss_plan_calls": 11760,
+        "sample_core_passes": 110000,
+        "staged_batches": 1470
+      },
+      "fresh_20_pass_midpoint": {
+        "backward_attempts": 1470,
+        "backward_calls": 1470,
+        "core_forward_attempts": 110000,
+        "core_forward_calls": 110000,
+        "optimizer_step_attempts": 1470,
+        "optimizer_updates": 1470,
+        "packet_forward_calls": 13750,
+        "prediction_calls": 13750,
+        "private_loss_plan_calls": 11760,
+        "sample_core_passes": 110000,
+        "staged_batches": 1470
+      }
+    },
+    "model_state_identity": {
+      "equal": true,
+      "r18": "59a899d848fa0957a1136f02353e2d5d96b15e496e6dd952c00ff71cb4b7266a",
+      "fresh_20_pass_midpoint": "59a899d848fa0957a1136f02353e2d5d96b15e496e6dd952c00ff71cb4b7266a"
+    },
+    "optimizer_state_identity": {
+      "equal": true,
+      "r18": "d3449130ea0453b45599da48a70f17a1d42470d24ab1155cb510ee531fcc6faa",
+      "fresh_20_pass_midpoint": "d3449130ea0453b45599da48a70f17a1d42470d24ab1155cb510ee531fcc6faa"
+    },
+    "encoder_state_identity": {
+      "equal": true,
+      "r18": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+      "fresh_20_pass_midpoint": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4"
+    },
+    "rng_state_identity": {
+      "equal": true,
+      "r18": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337",
+      "fresh_20_pass_midpoint": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+    }
+  },
+  "r18_checkpoint_sha256": "e6f3ca4d71b2b73da57e0ae3a038c4d855bb2ec4a07d12e9b2ae0f41ced1cb94",
+  "midpoint_checkpoint_sha256": "375f0dae403cc8ac99489f736720498097ab3fabc6a9f5e12d4902f67f526ee4",
+  "run_identity": {
+    "r18": "4103fdf5fe544bcae3f204c949d1b5fb09ec0edb9e34a6e102b0e5be69dc85ce",
+    "fresh_20_pass": "7e3cd155fe8a4fc0cf7090998e5d858df0f470d430a6a1f2278b796ad7f949af",
+    "equal": false
+  },
+  "interpretation": "Saved state hash fields and every counter match at the fixed midpoint. The checkpoint files have different run identities and file hashes; byte-identical checkpoint files are not claimed. No local model load or numeric reload test was performed. Final scores and run acceptance remain pending.",
+  "private_scoring_read": false,
+  "new_cloud_job_started": false
+}

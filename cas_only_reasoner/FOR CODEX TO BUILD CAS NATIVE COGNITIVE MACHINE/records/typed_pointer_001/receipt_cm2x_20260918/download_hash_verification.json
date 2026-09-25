@@ -1,0 +1,8 @@
+{
+  "utc": "2026-09-25T18:58:17.506713+00:00",
+  "method": "Opaque streaming SHA256 and size recomputation against collected_inventory; no private body parsing",
+  "file_count": 538,
+  "bytes": 187270971,
+  "mismatches": [],
+  "inventory_sha256": "43bceb522cdb23065bc184cdc372517d18d4074535dd68efdce844adc1a60b78"
+}

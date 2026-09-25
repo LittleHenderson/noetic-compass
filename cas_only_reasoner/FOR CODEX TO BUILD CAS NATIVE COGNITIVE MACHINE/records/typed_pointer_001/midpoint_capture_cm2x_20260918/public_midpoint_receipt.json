@@ -1,0 +1,37 @@
+{
+  "utc": "2026-09-25T18:05:51.933970+00:00",
+  "job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+  "source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+  "status": "MIDPOINT_CHECKPOINT_CAPTURED_AND_FILE_HASH_VERIFIED",
+  "completed_main_updates": 1470,
+  "main_course_complete": false,
+  "checkpoint_bytes": 4025999,
+  "checkpoint_sha256": "375f0dae403cc8ac99489f736720498097ab3fabc6a9f5e12d4902f67f526ee4",
+  "checkpoint_metadata_sha256": "fbc40dcb40e413b70a98bdbbd9634420371258fdec0d53739387feb07d9cf953",
+  "saved_identity_fields": {
+    "cursor": 1470,
+    "model_revision": 1470,
+    "counters": {
+      "backward_attempts": 1470,
+      "backward_calls": 1470,
+      "core_forward_attempts": 110000,
+      "core_forward_calls": 110000,
+      "optimizer_step_attempts": 1470,
+      "optimizer_updates": 1470,
+      "packet_forward_calls": 13750,
+      "prediction_calls": 13750,
+      "private_loss_plan_calls": 11760,
+      "sample_core_passes": 110000,
+      "staged_batches": 1470
+    },
+    "model_state_identity": "59a899d848fa0957a1136f02353e2d5d96b15e496e6dd952c00ff71cb4b7266a",
+    "optimizer_state_identity": "d3449130ea0453b45599da48a70f17a1d42470d24ab1155cb510ee531fcc6faa",
+    "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+    "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337",
+    "run_identity_digest": "7e3cd155fe8a4fc0cf7090998e5d858df0f470d430a6a1f2278b796ad7f949af"
+  },
+  "checkpoint_deserialized": false,
+  "scientific_aggregate_readout": "AWAIT_FINAL_PUBLIC_WORKER_REPORT; private item-level scoring files not opened",
+  "run_complete": false,
+  "paid_cloud_work_active": true
+}

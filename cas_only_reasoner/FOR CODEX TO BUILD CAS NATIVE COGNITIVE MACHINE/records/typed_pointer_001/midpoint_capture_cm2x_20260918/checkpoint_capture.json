@@ -1,0 +1,20 @@
+{
+  "utc": "2026-09-25T18:05:14.094988+00:00",
+  "files": [
+    {
+      "key": "results/evidence/main_checkpoint_1470.pt",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\midpoint_capture_cm2x_20260918\\main_checkpoint_1470.pt",
+      "bytes": 4025999,
+      "sha256": "375f0dae403cc8ac99489f736720498097ab3fabc6a9f5e12d4902f67f526ee4",
+      "modified_utc": "2026-09-25T17:55:40+00:00"
+    },
+    {
+      "key": "results/evidence/main_checkpoint_1470.json",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\midpoint_capture_cm2x_20260918\\main_checkpoint_1470.json",
+      "bytes": 31828,
+      "sha256": "fbc40dcb40e413b70a98bdbbd9634420371258fdec0d53739387feb07d9cf953",
+      "modified_utc": "2026-09-25T17:55:40+00:00"
+    }
+  ],
+  "checkpoint_deserialized": false
+}
