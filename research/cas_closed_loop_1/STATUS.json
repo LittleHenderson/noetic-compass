@@ -1,0 +1,21 @@
+{
+  "schema": "cas.closed-loop.recovery-status/0.1",
+  "utc": "2026-09-25T13:22:49.352944+00:00",
+  "status": "M1_IMPLEMENTED_TESTED",
+  "tests": {
+    "command": "python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_native_step_adapter.py",
+    "passed": 16,
+    "failed": 0,
+    "seconds": 12.84
+  },
+  "initial_test_attempt": "Output capture omitted session handle; final count unavailable. Subsequent full run retained above.",
+  "historical_refs": "MISSING_FROM_LIVE_REPOSITORY",
+  "engineering_demo": "PENDING",
+  "model_prediction": "NOT_RUN",
+  "input_use": "Native original parameter packet only",
+  "task_benefit": "UNMEASURED",
+  "cas_specific_advantage": "UNMEASURED",
+  "new_paid_jobs": 0,
+  "protected_material_read": false,
+  "next": "Join event-bound primitive work, then Ohm/PCBA/native repair/atlas replay"
+}
