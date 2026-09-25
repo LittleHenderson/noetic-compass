@@ -1,0 +1,37 @@
+{
+  "schema": "helm.prospective-deadline-fix-static-check/1",
+  "utc": "2026-09-25T19:04:52.955722+00:00",
+  "files": [
+    {
+      "path": "cncm/typed_practice_worker.py",
+      "sha256": "1063c4f71457a7651cd30ecc2390c042fb63f9526ef3627ee35a1236c8cc62af",
+      "ast_syntax": "PASS"
+    },
+    {
+      "path": "cncm/typed_pointer_worker.py",
+      "sha256": "8928b154ee84238de34cc51b9013bef06dca553dad900c77495d898c6ab3e834",
+      "ast_syntax": "PASS"
+    },
+    {
+      "path": "tests/test_typed_pointer_deadline_routing.py",
+      "sha256": "9972d1d9fceba4a98616d3c2acf9a7fcc17dd4a57b6055aa4388e58959e3ddcd",
+      "ast_syntax": "PASS"
+    }
+  ],
+  "focused_test_count": 8,
+  "test_names": [
+    "test_pointer_logged_update_passes_after_old_practice_deadline",
+    "test_pointer_replay_update_passes_after_old_practice_deadline",
+    "test_pointer_strict_deadline_applies_before_any_update_work",
+    "test_practice_default_deadline_remains_unchanged",
+    "test_logged_helper_forwards_callback_and_original_start",
+    "test_pointer_wrappers_forward_all_inputs_and_own_callback",
+    "test_update_outputs_and_seal_before_target_order_are_preserved",
+    "test_main_interference_and_replay_routes_call_pointer_wrappers"
+  ],
+  "tests_executed": false,
+  "ast_syntax": "PASS",
+  "scope": "Deadline helper selection only; no contract, optimizer, data, scoring or LR changes",
+  "aws_job_launched": false,
+  "validation_blocker": "New finite AWS validation attempt has not been authorized under the no-retry rule."
+}

@@ -104,9 +104,11 @@ def _append(path, raw):
         stream.write(raw); stream.flush(); os.fsync(stream.fileno())
 
 
-def _stage_and_train(learner, batch, packets, seal_path, *, started):
+def _stage_and_train(learner, batch, packets, seal_path, *, started, deadline=None):
     """Seal the batch's public predictions durably, read back, THEN derive targets and update."""
-    _deadline(started)
+    # Other studies reuse this operation with their own frozen worker deadline.
+    # Preserve the practice guard for callers that do not supply one.
+    (_deadline if deadline is None else deadline)(started)
     require(batch["cursor"] in (None, learner.cursor), "PRACTICE_BATCH_CURSOR")
     selected = [packets[key] for key in batch["record_ids"]]
     staged = learner.stage_batch(selected, batch["depth"], cursor=learner.cursor,
@@ -122,11 +124,11 @@ def _stage_and_train(learner, batch, packets, seal_path, *, started):
     return staged["bytes"], update
 
 
-def _train_logged(learner, batch, packets, staging, batches_log, updates_log, *, started):
+def _train_logged(learner, batch, packets, staging, batches_log, updates_log, *, started, deadline=None):
     """One update whose seal and record are appended to the staging logs; the staging seal is then removed."""
     seal_path = staging / "seal.json"
     require(not seal_path.exists(), "STAGING_SEAL_EXISTS")
-    raw, update = _stage_and_train(learner, batch, packets, seal_path, started=started)
+    raw, update = _stage_and_train(learner, batch, packets, seal_path, started=started, deadline=deadline)
     _append(batches_log, raw)
     _append(updates_log, canonical(update))
     seal_path.unlink()

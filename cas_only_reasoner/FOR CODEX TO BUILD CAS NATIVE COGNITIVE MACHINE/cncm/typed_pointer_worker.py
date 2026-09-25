@@ -426,13 +426,23 @@ _publish_bytes = practice_worker._publish_bytes
 _publish = practice_worker._publish
 _move_in = practice_worker._move_in
 _seal_predictions = practice_worker._seal_predictions
-_train_logged = practice_worker._train_logged
-_stage_and_train = practice_worker._stage_and_train
 _split_score = practice_worker._split_score
 _sampled = base._representatives
 _partial_checkpoint = base._partial_checkpoint
 _score_seal = base._score_seal
 _counter_delta = base.counter_delta
+
+
+def _train_logged(learner, batch, packets, staging, batches_log, updates_log, *, started):
+    """Use the pointer study's elapsed-time guard for main and interference updates."""
+    return practice_worker._train_logged(learner, batch, packets, staging, batches_log, updates_log,
+                                         started=started, deadline=_deadline)
+
+
+def _stage_and_train(learner, batch, packets, seal_path, *, started):
+    """Use the same pointer guard for validation replay updates."""
+    return practice_worker._stage_and_train(learner, batch, packets, seal_path,
+                                            started=started, deadline=_deadline)
 
 
 def _three_key_state(module):
