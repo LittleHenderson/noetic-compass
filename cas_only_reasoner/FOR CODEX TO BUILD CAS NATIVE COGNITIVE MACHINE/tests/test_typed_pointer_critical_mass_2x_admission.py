@@ -91,7 +91,7 @@ def test_the_study_record_names_both_durations_and_the_pass_11_to_20_artifacts(w
     assert study["best_checkpoint_selection"] is False
     required = study["required_artifacts"]
     assert required["covers_passes_11_to_20"] is True
-    assert required["count"] == 126 and len(required["pass_output_names_required"]) == 20
+    assert required["count"] == 128 and len(required["pass_output_names_required"]) == 20
     assert "pass_11_batches.jsonl" in required["pass_output_names_required"]
     assert "pass_20_updates.jsonl" in required["pass_output_names_required"]
     assert required["pass_10_evaluations"] == ["course_p10", "development_p10"]
@@ -208,3 +208,13 @@ def test_the_r18_admission_record_is_byte_identical_to_its_frozen_digest():
     assert record["source_sha"] == "3df31d965bb2eabb168ae7efbf03300a1a1144d7"
     # R18's own 10-pass package identity, still the one it was frozen with.
     assert record["archive_sha256"] == "0020c28080c2c9432ff5b627e14db5c3fbe433b0b1397d454d4ee0637ba23377"
+
+
+def test_owner_directive_is_exact_and_refuses_changed_bytes(writer, monkeypatch, tmp_path):
+    assert sha256(writer.OWNER_DIRECTIVE.read_bytes()).hexdigest() == writer.OWNER_DIRECTIVE_SHA256
+    assert 'Then launch **2x**.' in writer.owner_directive()
+    altered = tmp_path / 'altered-directive.md'
+    altered.write_text('Different authority')
+    monkeypatch.setattr(writer, 'OWNER_DIRECTIVE', altered)
+    with pytest.raises(ValueError, match='OWNER_DIRECTIVE_BYTES'):
+        writer.owner_directive()

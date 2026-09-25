@@ -28,7 +28,9 @@ class EvidenceUpdateCounts(unittest.TestCase):
     def check_counts(self,plan,main,interference,replays):
         record=self.evidence(plan)
         self.assertEqual(record['notes'][0],f"{plan['passes']} passes: {main} main, {interference} interference and {replays} validation replay updates, {main+interference+replays} actual total.")
-        self.assertEqual(len(record['requirements']),4)
+        self.assertEqual(len(record['requirements']), 6 if plan['passes'] == 20 and plan['updates'] is None else 4)
+        keys={row['key'] for row in record['requirements']}
+        self.assertEqual('results/evidence/main_checkpoint_1470.pt' in keys, plan['passes']==20 and plan['updates'] is None)
 
     def test_full_20_pass_totals(self):self.check_counts(dict(self.full),2940,16,2)
     def test_default_plan_totals(self):self.assertEqual(self.evidence()['notes'][0],self.evidence(self.full)['notes'][0])

@@ -209,20 +209,21 @@ def test_required_artifacts_cover_every_pass_from_11_to_20():
     for number in range(11, 21):
         assert "pass_%02d_batches.jsonl" % number in required, "pass 11-20 outputs are required"
     assert len(worker.FULL_PLAN["evaluation_phases"]) == 18
-    assert worker.EVIDENCE_REQUIRED_COUNT == len(required) + 3
+    assert worker.EVIDENCE_REQUIRED_COUNT == len(required) + 3 + 2
     # The launcher's pre-run evidence contract is the one the job record pins: it must require exactly the
     # names the registered plan produces, plus the terminal envelope and the artifact inventory.
     document = launch.evidence_contract()
     keys = set(launch.run_evidence.contract_keys(document))
     assert keys == ({"results/result.json", "results/result.json.sha256", "results/artifacts/manifest.json"}
-                    | {"results/artifacts/" + name for name in required})
+                    | {"results/artifacts/" + name for name in required}
+                    | {"results/evidence/main_checkpoint_1470.pt", "results/evidence/main_checkpoint_1470.json"})
     assert document["required_count"] == len(keys) == worker.EVIDENCE_REQUIRED_COUNT
     assert document["cannot_shrink_after_a_failure"] is True
     assert document["worker_may_not_amend_required"] is True
     assert document["notes"][0].startswith("20 passes: ")
     # The ten-pass contract this version descends from required 102 keys; the difference is exactly the ten
-    # new passes' two files each plus the pass-20 evaluation pair.
-    assert len(keys) == 126 and len(keys) - 102 == 10 * 2 + 4
+    # new passes' two files each, pass-20 evaluations, and pass-10 state plus sidecar.
+    assert len(keys) == 128 and len(keys) - 102 == 10 * 2 + 4 + 2
 
 
 # ----------------------------------------------------------------------------------------------------------------

@@ -37,7 +37,7 @@ USAGE (run with `python -B`):
     python -B prepare_cm2x_study.py --source-sha <S> --dry-run
     python -B prepare_cm2x_study.py --source-sha <S> --write
 
-LABEL. Coordinator direction, transcribed by the builder; NOT an owner signature. The USD 20.00 all-services
+LABEL. Owner-supplied execution directive transcribed by Codex; NOT an owner signature. The USD 20.00 all-services
 cap is the envelope this job record must fit; a launch still requires the launch operator's own authorization.
 """
 import argparse
@@ -59,23 +59,25 @@ from cas_meta2.typed_teaching import pointer_contract as contract  # noqa: E402
 SEED = 20260918
 VERSION = contract.EXPERIMENT_VERSION
 STUDY_SCHEMA = 'cncm.typed-pointer-critical-mass-2x-study-admission/0.1'
-OWNER_SCHEMA_NOTE = ('COORDINATOR DIRECTION, NOT AN OWNER SIGNATURE: this record fixes the envelope the '
-                     '20-pass registered full run must fit. It authorizes no spend by itself.')
-# The coordinator's own words, quoted verbatim from the builder brief. They are NOT the owner's words, and
-# the record says so in `answered_by`, `transcribed_by_agent` and `authority_note`.
-COORDINATOR_INSTRUCTION_RAW = ('Add or adjust only what is necessary so pass 10 and pass 20 are both '
-                               'evaluated, the new 20-pass run is treated as the registered full run for this '
-                               'new experiment version, required artifacts include pass 11-20 outputs, and '
-                               'wall/instance limits plus job record fit a USD 20 all-services cap.')
-COORDINATOR_MESSAGE_FULL_RAW = ('Build the smallest prospective versioned 20-pass experiment that keeps all '
-                                'scientific inputs/settings equal to R18 except training duration and '
-                                'necessary resource/output envelope. Preserve one-machine, no-retry, cleanup '
-                                'requirements. Do not launch AWS.')
-APPROVAL_CONTEXT = ('Critical-mass 2x: ONE fresh 20-pass run on the switch-ON Helm training path, seed '
-                    '20260918, after R17 (the same study at 10 passes, seed 20260917) was delivered.')
-SCOPE = ('The single registered full run of the critical-mass 2x version: model seed 20260918, 20 passes, '
-         'one machine, no automatic retry, cleanup required. Replaces the R18 10-pass registered full run '
-         'for this version; the R18 admission records stay untouched and are cited, not rewritten.')
+OWNER_DIRECTIVE = HERE / 'OWNER_LAUNCH_DIRECTIVE_20260925.md'
+OWNER_DIRECTIVE_SHA256 = 'c4e5b13b56cff788104eba296cf8d3d44008d03afc5fdd790baef8092b28c780'
+OWNER_SCHEMA_NOTE = ('Owner-supplied execution directive, transcribed by Codex; not an owner signature. '
+                    'One fresh 20-pass job, finite USD 20 all-services cap, no retry, verified cleanup.')
+APPROVAL_CONTEXT = ('Owner supplied CODEX_COMPLETE_HELM_CAS_AWS_DIRECTIVE.md on 2026-09-25. '
+                    'Sections 5-6 permit the prospective from-scratch 20-pass path when exact R18 continuation '
+                    'is unsupported and direct launch after preflight and finite admission.')
+SCOPE = ('ONE fresh 20-pass critical-mass 2x run, seed 20260918, constant LR 0.003; '
+         'one GPU globally, no automatic retry, cleanup required. Historical R18 admission/results unchanged. '
+         'This record does not authorize 4x or 8x under the 2x caps.')
+
+
+def owner_directive():
+    raw = OWNER_DIRECTIVE.read_bytes()
+    if launch.digest(raw) != OWNER_DIRECTIVE_SHA256:
+        raise ValueError('CM2X_ADMISSION_STOPPED:OWNER_DIRECTIVE_BYTES')
+    return raw.decode('utf-8')
+
+
 ALL_SERVICES_CAP_USD = '20.00'
 OTHER_SERVICES_ALLOWANCE_USD = '0.10'
 # The measured basis of the projection: the DELIVERED R17 job (10 passes, seed 20260917). Raw fields are
@@ -276,13 +278,15 @@ def build(source_sha, package, job, *, owner_question):
     evidence_contract_sha256 = launch.run_evidence.contract_digest(launch.evidence_contract())
     r18_raw = R18_JOB_RECORD.read_bytes() if R18_JOB_RECORD.is_file() else None
     owner = {'schema': launch.OWNER_SCHEMA, 'candidate': launch.CANDIDATE,
-             'owner_instruction_raw': COORDINATOR_INSTRUCTION_RAW,
-             'owner_message_full_raw': COORDINATOR_MESSAGE_FULL_RAW,
-             'owner_question': owner_question, 'answered_date': '2026-09-24',
-             'answered_by': 'coordinator direction to the builder (not the owner)',
+             'owner_instruction_raw': 'Then launch **2x**.',
+             'owner_message_full_raw': owner_directive(),
+             'owner_directive_sha256': OWNER_DIRECTIVE_SHA256,
+             'owner_directive_file': OWNER_DIRECTIVE.name,
+             'owner_question': owner_question, 'answered_date': '2026-09-25',
+             'answered_by': 'owner-supplied execution document; Codex transcription',
              'approval_context': APPROVAL_CONTEXT, 'scope': SCOPE,
              'authority_note': OWNER_SCHEMA_NOTE, 'transcribed_by_agent': True, 'is_owner_signature': False,
-             'label': 'DEEPSEEK_BUILT_CODEX_TO_REVIEW', 'runner': 'Codex (launch operator)',
+             'label': 'CODEX_PROSPECTIVE_OWNER_DIRECTIVE_TRANSCRIPTION', 'runner': 'Codex (launch operator)',
              'job': job, 'job_kind': 'registered_full_run', 'experiment_version': VERSION,
              'condition': contract.CONDITION, 'model_seed': SEED, 'bounds': launch.BOUNDS,
              'cost_bound': cost_bound(),

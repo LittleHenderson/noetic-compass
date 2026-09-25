@@ -340,7 +340,7 @@ def expected_artifact_names(plan):
 
 
 EXPECTED_ARTIFACTS = expected_artifact_names(FULL_PLAN)
-EVIDENCE_REQUIRED_COUNT = len(EXPECTED_ARTIFACTS) + 3
+EVIDENCE_REQUIRED_COUNT = len(EXPECTED_ARTIFACTS) + 3 + 2  # terminal files plus pass-10 state/sidecar
 require(set(FULL_PLAN["evaluation_phases"]) == set(
     tuple("course_p%02d" % number for number in FULL)
     + tuple("heldback_p%02d" % number for number in HELD_ONLY)

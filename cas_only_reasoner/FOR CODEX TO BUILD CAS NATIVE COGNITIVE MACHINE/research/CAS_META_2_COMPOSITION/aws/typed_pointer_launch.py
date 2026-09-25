@@ -600,6 +600,11 @@ def evidence_contract(plan=None, *, source=None):
     # Explicit reduced updates truncate the entire schedule, not each pass.
     main_updates = (plan["updates"] if plan["updates"] is not None else
                     plan["passes"] * contract.DESIGN["schedule_stratified_updates_per_pass"])
+    # Require the already-written pass-10 state; this changes delivery only.
+    # Reduced plans that never reach the boundary must not claim this state.
+    if plan["passes"] == 20 and plan["updates"] is None:
+        names["results/evidence/main_checkpoint_1470.pt"] = "exact pre-interference pass-10 state"
+        names["results/evidence/main_checkpoint_1470.json"] = "pass-10 state identities and cursor"
     parts = [main_updates, contract.INTERFERENCE_UPDATES if plan["interference"] else 0,
              contract.REPLAY_UPDATES if plan["replays"] else 0]
     document = run_evidence.contract(EXPERIMENT["profile"], [
