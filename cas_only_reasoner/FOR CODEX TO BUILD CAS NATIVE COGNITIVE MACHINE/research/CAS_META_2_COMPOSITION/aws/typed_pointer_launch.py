@@ -597,10 +597,10 @@ def evidence_contract(plan=None, *, source=None):
              "results/artifacts/manifest.json": "artifact inventory"}
     names.update({"results/artifacts/" + name: "complete typed-pointer worker evidence"
                   for name in worker.expected_artifact_names(plan)})
-    parts = [plan["passes"] * contract.DESIGN["schedule_stratified_updates_per_pass"]
-             - (contract.INTERFERENCE_UPDATES if plan["interference"] else 0)
-             - (contract.REPLAY_UPDATES if plan["replays"] else 0),
-             contract.INTERFERENCE_UPDATES if plan["interference"] else 0,
+    # Explicit reduced updates truncate the entire schedule, not each pass.
+    main_updates = (plan["updates"] if plan["updates"] is not None else
+                    plan["passes"] * contract.DESIGN["schedule_stratified_updates_per_pass"])
+    parts = [main_updates, contract.INTERFERENCE_UPDATES if plan["interference"] else 0,
              contract.REPLAY_UPDATES if plan["replays"] else 0]
     document = run_evidence.contract(EXPERIMENT["profile"], [
         run_evidence.requirement(key, title, kind="json" if key.endswith(".json") else "file")

@@ -130,13 +130,14 @@ def test_the_registered_duration_fits_the_envelope_the_measurement_projects():
     main_updates = contract.PASSES * 147
     assert main_updates == 2940
     # The registered full plan's own evaluation count, read from the worker rather than restated here.
-    evaluation_phases = len(worker.FULL_PLAN["evaluation_phases"])
-    assert evaluation_phases == 18
+    evaluation_phases = (len(worker.FULL_PLAN["evaluation_phases"])
+                         + len(worker.FULL_PLAN["ablation_phases"]))
+    assert evaluation_phases == 23
     projected_worker_seconds = (R17_OTHER_SECONDS + main_updates * seconds_per_update
                                 + evaluation_phases * seconds_per_evaluation + R17_PHASE_A_SECONDS)
-    assert projected_worker_seconds == pytest.approx(16937.84343287343, rel=0, abs=1e-6)
+    assert projected_worker_seconds == pytest.approx(17196.937778367716, rel=0, abs=1e-6)
     projected_instance_seconds = projected_worker_seconds + NON_WORKER_OVERHEAD_SECONDS
-    assert projected_instance_seconds == pytest.approx(17536.03231641743, rel=0, abs=1e-6)
+    assert projected_instance_seconds == pytest.approx(17795.126661911716, rel=0, abs=1e-6)
     # The run must FINISH inside the limits it declares, or the limit is theatre.
     assert projected_worker_seconds < contract.WORKER_DEADLINE_SECONDS == 23100
     assert projected_instance_seconds < contract.INSTANCE_SECONDS_MAX == 25200

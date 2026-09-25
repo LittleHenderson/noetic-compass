@@ -63,10 +63,10 @@ def test_the_cost_bound_is_the_ledgers_own_arithmetic_and_fits_the_usd_20_cap(wr
     assert bound["all_services_cap_usd"] == "20.00"
     assert bound["headroom_to_cap_usd"] == "0.70"
     assert bound["ledger_rule_verdict"] == "PASS"
-    assert bound["expected_cost_usd"] == "13.76"
+    assert bound["expected_cost_usd"] == "13.94"
     # The expected cost is the delivered R17 job's own measured seconds per update, projected over 20 passes.
-    assert bound["projected_instance_seconds"] == "17536.03231641743"
-    assert float(bound["projected_instance_seconds"]) / 3600 * 2.52 + 1.48 == pytest.approx(13.7552, abs=1e-4)
+    assert bound["projected_instance_seconds"] == "17795.126661911716"
+    assert float(bound["projected_instance_seconds"]) / 3600 * 2.52 + 1.48 == pytest.approx(13.9366, abs=1e-4)
     assert bound["receipt_of_the_basis"] == "records/typed_pointer_001/receipt_analogy_on_20260917"
 
 
@@ -119,9 +119,37 @@ def test_the_records_carry_the_version_and_the_new_bounds(writer):
 
 def test_the_writer_has_not_run_and_its_targets_are_free(writer):
     assert not writer.SEED_OUTPUT.exists() and not writer.PARTIAL_OUTPUT.exists()
+    assert not writer.OWNER_PROBE.exists()
     assert writer.RECEIPT_DIR.name == "receipt_cm2x_20260918"
     assert not writer.RECEIPT_DIR.exists()
     assert writer.SEED == 20260918 and writer.package_dir("a" * 40).name == "package_aaaaaaaa"
+
+
+def test_the_owner_probe_is_removed_even_when_the_launcher_refuses_the_record(writer):
+    """A refused owner record must leave no probe file behind for the next run to trip over."""
+    authority = {"job": "cas-meta2-tpntr-20260924120000-aaaaaaaa-m-20260918",
+                 "owner_authorization_sha256": "f" * 64, "bounds": writer.launch.BOUNDS}
+    with pytest.raises(ValueError) as refusal:
+        writer.validate_owner_record(b"{}", authority)
+    assert "POINTER_OWNER_FILE_HASH" in str(refusal.value)
+    assert not writer.OWNER_PROBE.exists()
+
+
+def test_failed_exclusive_create_preserves_another_invocations_probe(writer, tmp_path, monkeypatch):
+    probe = tmp_path / "owner_probe.json"
+    monkeypatch.setattr(writer, "OWNER_PROBE", probe)
+    real_open = open
+
+    def lose_exclusive_create(path, mode):
+        assert path == probe and mode == "xb"
+        with real_open(path, mode) as stream:
+            stream.write(b"another invocation")
+        raise FileExistsError("another invocation created the probe")
+
+    monkeypatch.setattr(writer, "open", lose_exclusive_create, raising=False)
+    with pytest.raises(FileExistsError):
+        writer.validate_owner_record(b"{}", {})
+    assert probe.read_bytes() == b"another invocation"
 
 
 def test_the_writer_stops_on_a_bad_or_uncommitted_source(writer):
@@ -137,23 +165,39 @@ def test_the_writer_stops_on_a_bad_or_uncommitted_source(writer):
     assert "BUILD_THE_PACKAGE_FIRST" in str(refusal.value)
 
 
-def test_quoted_status_paths_are_read_back_as_paths_with_spaces(writer):
-    """`git status --porcelain` quotes this tree's paths, because they contain spaces."""
-    assert writer.porcelain_path(' "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/x"') == \
-        "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/x"
-    assert writer.porcelain_path(' "quote\\"inside"') == 'quote"inside'
-    assert writer.porcelain_path(" plain/path") == "plain/path"
-    # Git writes forward slashes and reports paths from the REPOSITORY ROOT; pathlib on Windows writes
-    # backslashes and the writer's paths start at the CNCM folder. Both are reconciled, so the writer's own
-    # declared outputs compare equal to what git actually reports in this worktree.
-    package = writer.repo_path(writer.PACKAGE_PARENT)
-    assert package == ("cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/"
-                       "research/CAS_META_2_COMPOSITION/records/typed_pointer_001")
-    line = '?? "%s/"' % package
-    path = writer.git_path(writer.porcelain_path(line[3:]))
-    assert path == package + "/" and path.startswith(package + "/")
-    # The seed outputs are a DIFFERENT prefix and must not be tolerated by the package rule.
-    assert not path.startswith(writer.repo_path(writer.SEED_OUTPUT) + "/")
+def test_the_tree_check_tolerates_only_the_seed_folder_and_this_source_package(writer):
+    """The rule, and the two things that made it fail in a rehearsal, are both exercised here for real."""
+    prefix = writer.launch.shared.GIT_PREFIX
+    assert writer.tolerated("a" * 40) == (
+        prefix + "records/typed_pointer_001/admission_cm2x_001/seeds/",
+        prefix + "research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_aaaaaaaa/")
+    # `seeds.partial/` is deliberately NOT tolerated (`seeds/` does not prefix it).
+    assert not any(hold.endswith("seeds.partial/") for hold in writer.tolerated("a" * 40))
+    # AND THE REAL CHECK, on this worktree: it runs `git status` read-only from the CNCM folder, so the
+    # coordination folder OUTSIDE that tree cannot appear, and every path that does appear is spelled the way
+    # git spells it (forward slashes, repository-root relative). Both were rehearsal failures.
+    dirty = writer.dirty_paths(writer.git("rev-parse", "HEAD").strip())
+    assert isinstance(dirty, list)
+    assert not any("coordination" in entry for entry in dirty)
+    # Each entry is a two-character status code, a space, then the repository-root-relative path.
+    assert all(entry[2] == " " and entry[3:].startswith(prefix) for entry in dirty)
+
+
+def test_a_declared_output_is_tolerated_and_a_stray_file_is_not(writer):
+    """A real untracked package directory for this source is tolerated; a stray file is reported."""
+    package = writer.package_dir("b" * 40)
+    stray = writer.ROOT / "records/typed_pointer_001/admission_cm2x_001/stray_probe.txt"
+    package.mkdir(parents=True)
+    try:
+        (package / "probe.txt").write_bytes(b"x")
+        stray.write_bytes(b"x")
+        dirty = writer.dirty_paths("b" * 40)
+        assert not any("package_bbbbbbbb" in entry for entry in dirty), dirty
+        assert any("stray_probe.txt" in entry for entry in dirty), dirty
+    finally:
+        (package / "probe.txt").unlink()
+        package.rmdir()
+        stray.unlink()
 
 
 def test_the_r18_admission_record_is_byte_identical_to_its_frozen_digest():

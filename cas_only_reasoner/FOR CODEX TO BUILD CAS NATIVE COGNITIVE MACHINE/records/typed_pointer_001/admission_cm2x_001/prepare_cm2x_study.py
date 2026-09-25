@@ -47,7 +47,6 @@ import json
 from pathlib import Path
 import re
 import sys
-import tempfile
 from zipfile import ZipFile
 
 HERE = Path(__file__).resolve().parent
@@ -86,12 +85,13 @@ R17_RECEIPT = 'records/typed_pointer_001/receipt_analogy_on_20260917'
 R17_SECONDS_PER_UPDATE = '4.896459789305442'
 R17_UPDATES = 1470
 NON_WORKER_OVERHEAD_SECONDS = '598.1888835440004'
-PROJECTED_WORKER_SECONDS = '16937.84343287343'
-PROJECTED_INSTANCE_SECONDS = '17536.03231641743'
-EXPECTED_COST_USD = '13.76'
+PROJECTED_WORKER_SECONDS = '17196.937778367716'
+PROJECTED_INSTANCE_SECONDS = '17795.126661911716'
+EXPECTED_COST_USD = '13.94'
 R18_JOB_RECORD = ROOT / 'records/typed_pointer_001/admission_analogy_on_001/seeds/20260918/request.json'
 SEED_OUTPUT = HERE / 'seeds'
 PARTIAL_OUTPUT = HERE / 'seeds.partial'
+OWNER_PROBE = HERE / 'owner_probe.json'
 PACKAGE_PARENT = ROOT / 'research/CAS_META_2_COMPOSITION/records/typed_pointer_001'
 RECEIPT_DIR = ROOT / 'records/typed_pointer_001/receipt_cm2x_20260918'
 
@@ -121,7 +121,7 @@ def git(*arguments):
 
 
 def git_path(path):
-    """A path spelled the way `git status` spells it: FORWARD slashes, on every platform.
+    """A path spelled the way git spells it: FORWARD slashes, on every platform.
 
     This writer's own paths come from `pathlib`, which uses backslashes on Windows, while git always reports
     forward slashes. Comparing the two without normalising them never matches, which is how the tolerance check
@@ -130,59 +130,55 @@ def git_path(path):
     return str(path).replace('\\', '/')
 
 
-def repo_path(path):
-    """This writer's path as `git status --porcelain` reports it: relative to the REPOSITORY ROOT.
+def tolerated(source_sha):
+    """Repository-relative prefixes of the ONLY untracked paths this writer tolerates at HEAD == source.
 
-    The writer lives inside the CNCM folder, and `git status --porcelain` (unlike plain `git status`) always
-    reports paths from the repository root, prefixed with the CNCM tree's own path inside the repository. The
-    two spellings have to be reconciled before the tolerance check can mean anything.
+    Its own `seeds/` folder and ITS OWN package `package_<sha8>/`, and nothing else: `seeds.partial/` is not
+    tolerated (`seeds/` does not prefix it) and another source's package is not either. The rule is the R18
+    writer's own (`admission_analogy_on_001/on_study_common.tolerated_prefixes`), narrowed to the one package
+    this version builds.
     """
-    return launch.shared.GIT_PREFIX + git_path(path.relative_to(ROOT))
+    return tuple(launch.shared.GIT_PREFIX + git_path(path.relative_to(ROOT)) + '/'
+                 for path in (SEED_OUTPUT, package_dir(source_sha)))
 
 
-def porcelain_path(field):
-    """`git status --porcelain`'s path field, with git's C-style quoting undone.
+def dirty_paths(source_sha):
+    """Every changed or untracked path under the CNCM tree, except the declared outputs.
 
-    Git quotes a path that contains a space (or a byte outside ASCII) as `"..."` and escapes backslashes and
-    double quotes inside it. This tree's paths all contain spaces, so every status line this writer reads is
-    quoted; comparing the raw field against a plain path silently mismatches.
+    THREE details are load-bearing, and the first two were found by a local rehearsal of this freeze:
+      * `-z` is the NUL-separated form, which does NOT C-quote paths. The default form quotes every path in
+        this tree, because they all contain spaces, and a quoted field never equals a plain one;
+      * the pathspec `.` (run from the CNCM folder) limits the report to this tree, so the coordination folder
+        at the worktree root -- outside the CNCM tree, and not this writer's business -- cannot block a freeze;
+      * the paths come back relative to the REPOSITORY ROOT, so `--show-prefix` is checked first and the
+        tolerated prefixes carry it. Both are exactly what the R18 writer does.
     """
-    path = field.strip()
-    if len(path) >= 2 and path.startswith('"') and path.endswith('"'):
-        body, out, index = path[1:-1], [], 0
-        while index < len(body):
-            character = body[index]
-            if character == '\\' and index + 1 < len(body):
-                index += 1
-                escape = body[index]
-                out.append({'n': '\n', 't': '\t', '"': '"', '\\': '\\'}.get(escape, escape))
-            else:
-                out.append(character)
-            index += 1
-        return ''.join(out)
-    return path
+    prefix = git('-c', 'core.autocrlf=false', 'rev-parse', '--show-prefix').strip()
+    stop_unless(prefix == launch.shared.GIT_PREFIX, 'GIT_PREFIX:' + prefix)
+    allowed = tolerated(source_sha)
+    fields = launch.shared._run_git(['-c', 'core.autocrlf=false', 'status', '--porcelain=v1', '-z',
+                                     '--untracked-files=all', '--', '.'], ROOT).split(b'\0')
+    dirty, index = [], 0
+    while index < len(fields):
+        entry = fields[index]
+        index += 1
+        if not entry:
+            continue
+        code, path = entry[:2].decode('ascii'), entry[3:].decode('utf-8')
+        if 'R' in code or 'C' in code:
+            index += 1                      # a rename or copy carries its source path as the next field
+        if code == '??' and path.startswith(allowed):
+            continue
+        dirty.append(code + ' ' + path)
+    return dirty
 
 
 def check_source(source_sha):
-    """The commit is HEAD, and the only worktree changes are this writer's own declared outputs.
-
-    `git status --porcelain` C-QUOTES any path with a space in it, and every path in this tree has one
-    ("FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE"). Reading the path without undoing that quoting made the
-    tolerance check compare `"cas_only_reasoner/...` against `cas_only_reasoner/...` and refuse the writer's own
-    untracked package directory -- found by a local rehearsal of this freeze, before any spend.
-    """
+    """The commit is HEAD, and the only worktree changes are this writer's own declared outputs."""
     stop_unless(type(source_sha) is str and launch.shared.HEX40.fullmatch(source_sha) is not None, 'SOURCE_SHA_FORM')
     head = git('-c', 'core.autocrlf=false', 'rev-parse', 'HEAD').strip()
     stop_unless(head == source_sha, 'HEAD_IS_NOT_THE_SOURCE_COMMIT:%s' % head[:12])
-    status = git('-c', 'core.autocrlf=false', 'status', '--porcelain')
-    # `git status --porcelain` reports paths relative to the REPOSITORY ROOT, while this writer's paths are
-    # relative to the CNCM folder it lives in, so the repository's own prefix is what makes them comparable.
-    tolerated = tuple(repo_path(path) for path in (SEED_OUTPUT, PARTIAL_OUTPUT, PACKAGE_PARENT))
-    unexpected = []
-    for line in status.splitlines():
-        path = git_path(porcelain_path(line[3:]))
-        if not any(path == hold or path.startswith(hold + '/') for hold in tolerated):
-            unexpected.append(line.strip())
+    unexpected = dirty_paths(source_sha)
     stop_unless(not unexpected, 'UNEXPECTED_WORKTREE_CHANGE:' + '|'.join(unexpected)[:2000])
     stop_unless(RECEIPT_DIR.is_dir() is False, 'RECEIPT_DIR_ALREADY_EXISTS:' + str(RECEIPT_DIR))
     return head
@@ -190,6 +186,27 @@ def check_source(source_sha):
 
 def package_dir(source_sha):
     return PACKAGE_PARENT / ('package_' + source_sha[:8])
+
+
+def validate_owner_record(owner_raw, authority):
+    """Validate the owner bytes with the launcher's own `validate_owner`, through a probe file this writer owns.
+
+    A probe beside this writer, not `tempfile`: the freeze must not depend on the operator's TEMP being
+    writable (a local rehearsal of this freeze hit `PermissionError` creating a temporary directory while the
+    worktree itself was writable), and `validate_owner` takes a path. The probe is removed in a `finally`, so a
+    refused record leaves nothing behind; if the process is killed mid-write, its presence stops the next run
+    (`OWNER_PROBE_LEFT_BEHIND_INSPECT_BY_HAND`) rather than being silently reused.
+    """
+    stop_unless(not OWNER_PROBE.exists(), 'OWNER_PROBE_LEFT_BEHIND_INSPECT_BY_HAND')
+    created = False
+    try:
+        with open(OWNER_PROBE, 'xb') as stream:
+            created = True
+            stream.write(owner_raw)
+        return launch.validate_owner(OWNER_PROBE, authority)
+    finally:
+        if created and OWNER_PROBE.exists():
+            OWNER_PROBE.unlink()
 
 
 def verify_package(source_sha):
@@ -291,10 +308,7 @@ def build(source_sha, package, job, *, owner_question):
     stop_unless(authority['worker_config']['design']['experiment_version'] == VERSION, 'CONFIG_VERSION')
     launch.validate_request(request)
     launch.validate_authority(authority)
-    with tempfile.TemporaryDirectory(prefix='prepare_cm2x_') as scratch:
-        probe = Path(scratch) / 'owner.json'
-        probe.write_bytes(owner_raw)
-        launch.validate_owner(probe, authority)
+    validate_owner_record(owner_raw, authority)
     return owner_raw, request, authority
 
 

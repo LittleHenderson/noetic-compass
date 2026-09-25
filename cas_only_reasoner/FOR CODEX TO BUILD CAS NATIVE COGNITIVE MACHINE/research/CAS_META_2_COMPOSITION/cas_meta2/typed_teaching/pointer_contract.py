@@ -127,10 +127,11 @@ RUN_MODEL_SEED = 20260918
 #     measured phase A             890.397366079 s over 3 checkpoints
 #     measured worker-side glue    719.1146424570053 s
 #     20 passes projected          719.1146424570053 + 2,940 x 4.896459789305442
-#                                  + 18 x 51.81886909885701 + 890.397366079 = 16,937.84343287343 s worker clock
-#     projected INSTANCE seconds   16,937.84343287343 + 598.1888835440004 (the measured non-worker overhead
-#                                  this machine already carries) = 17,536.03231641743 s
-#     projected cost               17,536.03231641743 / 3,600 x 2.5200000000 + 1.48 = $13.76
+#                                  + (18 regular + 5 ablation) x 51.81886909885701
+#                                  + 890.397366079 = 17,196.937778367716 s worker clock
+#     projected INSTANCE seconds   17,196.937778367716 + 598.1888835440004 (the measured non-worker overhead
+#                                  this machine already carries) = 17,795.126661911716 s
+#     projected cost               17,795.126661911716 / 3,600 x 2.5200000000 + 1.48 = $13.94
 #
 # The core-call budget is re-checked against the same measurement, as this comment requires: 20 passes x 1,176
 # presentations x 8 rounds = 188,160 core calls against the registered 600,000 MAX_CORE_CALLS (31.4 %), so the
@@ -161,7 +162,7 @@ MAX_CORE_CALLS = practice.MAX_CORE_CALLS
 #     other services        0.10 allowance                                 = $0.10
 #     ALL SERVICES          19.20 + 0.10                                    = $19.30  <= $20.00
 #
-# The limit is 1.44 x the projected instance seconds above, which is R18's own safety ratio (14,400 / 10,234.598687940716
+# The limit is 1.42 x the projected instance seconds above, close to R18's safety ratio (14,400 / 10,234.598687940716
 # = 1.41); it is NOT tightened to the projection because a killed run is paid for and returns nothing.
 # The deadline chain below keeps R18's own spreads (300 / 900 / 600 / 300 s) and its 2,100 s of total
 # non-worker envelope slack, so the ordering checks in `aws/typed_pointer_launch.py` still hold:

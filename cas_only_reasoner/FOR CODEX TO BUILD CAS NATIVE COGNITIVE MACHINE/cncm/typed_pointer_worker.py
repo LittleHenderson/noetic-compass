@@ -1637,6 +1637,8 @@ def _phase_timings(ctx):
     phase_a_seconds = sum(row["elapsed_seconds"] for row in phase_a.get("checkpoints", {}).values())
     phase_a_count = len(phase_a.get("checkpoints", {}))
     registered_updates = PASSES * stats["updates_per_pass"]
+    registered_evaluations = (len(FULL_PLAN["evaluation_phases"])
+                              + len(FULL_PLAN["ablation_phases"]))
     elapsed = report.get("elapsed_seconds", time.monotonic() - ctx["started"])
     # The registered phases this plan did NOT run. Their cost is in this job's `unmeasured` only if they ran.
     unmeasured_terms = sorted((["checkpoint_check_phase_b"] if not plan["phase_b"] else [])
@@ -1645,12 +1647,12 @@ def _phase_timings(ctx):
     if seconds_per_update is not None and phase_a_count:
         unmeasured = elapsed - training - sum(evaluation_seconds) - phase_a_seconds
         projected_seconds = (unmeasured + registered_updates * seconds_per_update
-                             + (seconds_per_evaluation or 0.0) * len(FULL_PLAN["evaluation_phases"])
+                             + (seconds_per_evaluation or 0.0) * registered_evaluations
                              + phase_a_seconds / phase_a_count * len(PHASE_A_CHECKPOINTS))
         projected_instance_seconds = projected_seconds + MEASURED_NON_WORKER_OVERHEAD_SECONDS
         within_on_the_measured_terms_only = projected_instance_seconds <= OWNER_PROJECTION_THRESHOLD_SECONDS
         projection = {"registered_passes": PASSES, "registered_main_updates": registered_updates,
-                      "registered_evaluations": len(FULL_PLAN["evaluation_phases"]),
+                      "registered_evaluations": registered_evaluations,
                       "measured_updates": measured_updates, "seconds_per_update": seconds_per_update,
                       "projected_main_training_seconds": registered_updates * seconds_per_update,
                       "measured_evaluations": measured_evaluations,
