@@ -1,0 +1,41 @@
+{
+  "utc": "2026-09-25T15:45:04.329056+00:00",
+  "status": "STOP_REQUESTED_AFTER_BOOTSTRAP_FAILURE",
+  "instance_id": "i-0bf46499002bb0484",
+  "job_id": "cas-cpu-v2-20260925-153825-a227f8",
+  "reason": "Cloud-init final scripts_user failed at 15:40:06Z; no output objects or test receipt; stop unproductive CPU spend. No retry.",
+  "sanitized_boot_failure_context": [
+    "",
+    "         Starting \u001b[0;1;39msystemd-timedated.service\u001b[0m - Time & Date Service...",
+    "",
+    "[\u001b[0;32m  OK  \u001b[0m] Started \u001b[0;1;39msystemd-timedated.service\u001b[0m - Time & Date Service.",
+    "",
+    "2026/09/25 15:40:05Z: SSM Agent unable to acquire credentials: <error>no valid credentials could be retrieved for ec2 identity. Default Host Management Err: error calling RequestManagedInstanceRoleToken: AccessDeniedException: Systems Manager's instance management role is not configured for account: 807562639912",
+    "\tstatus code: 400, request id: 7a5a8387-6ca3-4581-a350-cae961efcfb2</error>",
+    "[\u001b[0;32m  OK  \u001b[0m] Finished \u001b[0;1;39msnapd.seeded.service\u001b[0m - Wait until snapd is fully seeded.",
+    "[\u001b[0;32m  OK  \u001b[0m] Reached target \u001b[0;1;39mmulti-user.target\u001b[0m - Multi-User System.",
+    "[\u001b[0;32m  OK  \u001b[0m] Reached target \u001b[0;1;39mgraphical.target\u001b[0m - Graphical Interface.",
+    "         Starting \u001b[0;1;39mcloud-final.service\u001b[0m - Cloud-init: Final Stage...",
+    "         Starting \u001b[0;1;39msystemd-update-utmp-runle\u2026\u001b[0m- Record Runlevel Change in UTMP...",
+    "[\u001b[0;32m  OK  \u001b[0m] Finished \u001b[0;1;39msystemd-update-utmp-runle\u2026e\u001b[0m - Record Runlevel Change in UTMP.",
+    "[   14.911745] cloud-init[999]: Cloud-init v. 26.1-0ubuntu1~24.04.1 running 'modules:final' at Fri, 25 Sep 2026 15:40:06 +0000. Up 14.87 seconds.",
+    "[   14.956097] cloud-init[999]: Shutdown scheduled for Fri 2026-09-25 15:58:06 UTC, use 'shutdown -c' to cancel.",
+    "[   15.475718] cloud-init[999]: 2026-09-25 15:40:06,691 - cc_scripts_user.py[WARNING]: Failed to run module scripts_user (scripts in /var/lib/cloud/instance/scripts)",
+    "[   15.478199] cloud-init[999]: 2026-09-25 15:40:06,691 - log_util.py[WARNING]: Running module scripts_user (<module 'cloudinit.config.cc_scripts_user' from '/usr/lib/python3/dist-packages/cloudinit/config/cc_scripts_user.py'>) failed",
+    "ci-info: no authorized SSH keys fingerprints found for user ubuntu.",
+    "<14>Sep 25 15:40:06 cloud-init: #############################################################"
+  ],
+  "terminate_response": [
+    {
+      "InstanceId": "i-0bf46499002bb0484",
+      "CurrentState": {
+        "Code": 32,
+        "Name": "shutting-down"
+      },
+      "PreviousState": {
+        "Code": 16,
+        "Name": "running"
+      }
+    }
+  ]
+}

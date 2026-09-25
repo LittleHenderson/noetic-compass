@@ -1,0 +1,23 @@
+{
+  "utc": "2026-09-25T15:48:36.842581+00:00",
+  "status": "FAILED_BOOTSTRAP_UNACCEPTED",
+  "job_id": "cas-cpu-v2-20260925-153825-a227f8",
+  "instance_id": "i-0bf46499002bb0484",
+  "source_commit": "f6253e1a0fdb576d5484447eb6dacf0109f16fed",
+  "freeze_sha256": "0914379c1f7f136cf67a3bb066d8485f0d8894fc30436bdc9d0e951c298b4dcb",
+  "execution_sha256": "707788444bd789714727efe5e719ee2c216b67c17617eb270706de4f29e69e02",
+  "cleanup_complete": true,
+  "cleanup_actions_passed": 13,
+  "required_instance_git_preflight": "NO_RECEIPT",
+  "focused_tests": "NO_RECEIPT",
+  "witness": "NO_RECEIPT",
+  "fresh_process_replay": "NO_RECEIPT",
+  "bootstrap_observation": "Cloud-init scripts_user failed at 2026-09-25T15:40:06Z; exact in-instance exception absent.",
+  "transport_evidence": "Independent existing-object check reproduced default global presign failure HTTP403 SignatureDoesNotMatch; explicit regional endpoint HTTP200. This supports a prospective fix, not conclusive original in-instance causation.",
+  "post_cleanup_probe_caveat": "transport_diagnosis.json follows bucket deletion and cannot prove original cause.",
+  "automatic_retries": 0,
+  "new_paid_attempt_started": false,
+  "reservation_retained_usd": "1.00",
+  "actual_billing_usd": null,
+  "claim_boundary": "NOT CAS_AWS_ENGINEERING_VALIDATED. No learned CAS, comparative advantage or production claim."
+}

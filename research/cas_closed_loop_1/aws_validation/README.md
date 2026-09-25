@@ -88,6 +88,21 @@ Only v2 freezes are accepted. One exact-request EC2 DryRunOperation precedes
 one paid launch attempt. No launch retry, old marker reuse or automatic restart.
 Importing these modules or freezing a package performs no AWS operations.
 
+Prospective transport correction after cas-cpu-v2-20260925-153825-a227f8:
+S3 uses an explicit regional endpoint and path-style SigV4 addressing. A separate
+read-only check against an existing public HELM phase object reproduced a
+global-host presign failure and a successful regional-host request. The failed
+CPU job's exact in-instance cause remains unconfirmed. Its job bytes and freeze
+are unchanged, and this change authorizes no retry.
+
+Bootstrap failures print one safe JSON record before emergency upload attempts.
+It includes only a bounded error type, HTTP status and an allowlisted error code;
+URLs, response messages, exception text and credentials are excluded. The four
+launcher-only cases in test_launch_transport.py use offline SDK construction and
+mocked HTTP failures. They remain separate from the 57 CAS scientific cases.
+The prospective worker runs both groups, requiring exactly 61 passing cases.
+The failed 57-case freeze remains unchanged and supplies no runtime acceptance.
+
 ## Limits, evidence and cleanup
 
 One t3.small, standard credits, encrypted 8 GiB gp3 root, Ubuntu 24.04,
@@ -118,3 +133,8 @@ only this job's resources. Uncertain launches, unverified termination or failed
 collection retain dependencies and report the exact blocker. START, PROGRESS
 and END use the existing Codex coordination heartbeat. Historical jobs and
 receipts remain unchanged.
+
+The prospective launcher also collects and redacts live console output before
+termination into console_before_termination.json, then keeps the separate
+post-termination console.json capture. A live-console failure cannot suppress
+the termination attempt.

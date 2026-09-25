@@ -24,11 +24,38 @@ def sha(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def service_client(session, config, name, region):
+    from botocore.config import Config
+    options = {"region_name": region, "config": config}
+    if name == "s3":
+        # Pin the endpoint itself: region_name alone can still presign a global
+        # S3 host. This regional path-style form has a read-only transport receipt.
+        options["endpoint_url"] = "https://s3." + region + ".amazonaws.com"
+        options["config"] = config.merge(Config(signature_version="s3v4", s3={"addressing_style": "path"}))
+    return session.client(name, **options)
+
+
 def userdata(plan, download_url, failure_url, evidence_url):
     # Do not persist or print presigned URLs; they are limited to this job's objects.
-    bootstrap = '''import hashlib,json,os,pathlib,subprocess,sys,urllib.request,zipfile
-root=pathlib.Path('/opt/cas-job');root.mkdir(exist_ok=False)
+    bootstrap = '''import hashlib,json,os,pathlib,subprocess,sys,urllib.error,urllib.request,zipfile,xml.etree.ElementTree as ET
+def safe_failure(exc):
+    error_type=type(exc).__name__
+    if error_type not in {'HTTPError','URLError','ValueError','RuntimeError','OSError','FileExistsError','BadZipFile','TimeoutError'}:
+        error_type='UNCLASSIFIED_ERROR'
+    result={'status':'BOOTSTRAP_OR_WORKER_FAILED','error_type':error_type,'http_status':None,'code':None}
+    if isinstance(exc,urllib.error.HTTPError):
+        if isinstance(exc.code,int) and 100<=exc.code<=599: result['http_status']=exc.code
+        try:
+            code=ET.fromstring(exc.read(8192)).findtext('Code')
+            if code in {'AuthorizationQueryParametersError','SignatureDoesNotMatch','AccessDenied','NoSuchKey','InvalidAccessKeyId','ExpiredToken','RequestTimeTooSkewed','InvalidToken','RequestExpired','PermanentRedirect','AuthorizationHeaderMalformed'}:
+                result['code']=code
+        except BaseException: pass
+    elif isinstance(exc,(ValueError,RuntimeError)) and exc.args in [('PAYLOAD_IDENTITY',),('UNSAFE_ARCHIVE',),('WORKER_FAILED',)]:
+        result['code']=exc.args[0]
+    return result
+root=pathlib.Path('/opt/cas-job')
 try:
+    root.mkdir(exist_ok=False)
     with urllib.request.urlopen(DOWNLOAD,timeout=30) as response: raw=response.read(64*1024*1024+1)
     if len(raw)>64*1024*1024 or hashlib.sha256(raw).hexdigest()!=DIGEST: raise ValueError('PAYLOAD_IDENTITY')
     archive=root/'payload.zip';archive.write_bytes(raw)
@@ -39,7 +66,8 @@ try:
     code=subprocess.call([sys.executable,str(root/'research/cas_closed_loop_1/aws_validation/worker.py'),'--bucket',BUCKET,'--region',REGION])
     if code: raise RuntimeError('WORKER_FAILED')
 except BaseException as exc:
-    failure=json.dumps({'status':'BOOTSTRAP_OR_WORKER_FAILED','error_type':type(exc).__name__,'code':str(exc) if isinstance(exc,(ValueError,RuntimeError)) else None}).encode()
+    failure=json.dumps(safe_failure(exc)).encode()
+    print(failure.decode('utf-8'),flush=True)
     archive=root/'outputs.tar.gz'
     if archive.is_file() and archive.stat().st_size<=32*1024*1024:
         try: urllib.request.urlopen(urllib.request.Request(EVIDENCE,data=archive.read_bytes(),method='PUT'),timeout=30).close()
@@ -95,8 +123,7 @@ def execute(directory, expected_hash):
     session = boto3.Session(profile_name=plan["sdk_profile"], region_name=plan["region"])
     config = Config(retries={"total_max_attempts": 1}, connect_timeout=5, read_timeout=30)
     def client(name, region=None):
-        selected = config.merge(Config(signature_version="s3v4")) if name == "s3" else config
-        return session.client(name, region_name=region or plan["region"], config=selected)
+        return service_client(session, config, name, region or plan["region"])
     ec2, iam, s3, scheduler = (client(name) for name in ("ec2", "iam", "s3", "scheduler"))
     job = plan["job_id"]
     bucket = job + "-" + plan["account_id"]
@@ -310,6 +337,19 @@ def execute(directory, expected_hash):
                 cleanup_safe = False
                 state["uncertain_launch"] = "Instance not resolved; retain dependencies and require operator observation, never resubmit launch."
         if instance_id:
+            def console(filename):
+                result = ec2.get_console_output(InstanceId=instance_id, Latest=True)
+                output = result.pop("Output", "")
+                result["provider_output_sha256"] = sha(output.encode())
+                try:
+                    output = base64.b64decode("".join(output.split()), validate=True).decode("utf-8", errors="replace")
+                except ValueError:
+                    pass
+                result["ConsoleText"] = redact(output)
+                (evidence / filename).write_text(json.dumps(redact(result), default=str, indent=2))
+            # Capture while live: terminated instances can return empty console text.
+            # A collection failure must not prevent the termination attempt.
+            action("collect_console_before_termination", lambda: console("console_before_termination.json"))
             action("terminate_instance", lambda: ec2.terminate_instances(InstanceIds=[instance_id]))
             def wait_terminated():
                 deadline = time.monotonic() + 150
@@ -323,17 +363,7 @@ def execute(directory, expected_hash):
                 raise TimeoutError("TERMINATION_NOT_CONFIRMED")
             if not action("confirm_terminated", wait_terminated):
                 cleanup_safe = False
-            def console():
-                result = ec2.get_console_output(InstanceId=instance_id, Latest=True)
-                output = result.pop("Output", "")
-                result["provider_output_sha256"] = sha(output.encode())
-                try:
-                    output = base64.b64decode("".join(output.split()), validate=True).decode("utf-8", errors="replace")
-                except ValueError:
-                    pass
-                result["ConsoleText"] = redact(output)
-                (evidence / "console.json").write_text(json.dumps(redact(result), default=str, indent=2))
-            action("collect_console", console)
+            action("collect_console", lambda: console("console.json"))
         collected = True
         if "bucket" in state["resources"]:
             def collect():

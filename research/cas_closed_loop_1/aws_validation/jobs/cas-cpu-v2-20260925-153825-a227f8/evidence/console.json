@@ -1,0 +1,20 @@
+{
+  "InstanceId": "i-0bf46499002bb0484",
+  "Timestamp": "2026-09-25 15:45:37+00:00",
+  "ResponseMetadata": {
+    "RequestId": "5b1f6a4d-5e73-4451-877e-934a297c4222",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "x-amzn-requestid": "5b1f6a4d-5e73-4451-877e-934a297c4222",
+      "cache-control": "no-cache, no-store",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "content-type": "text/xml;charset=UTF-8",
+      "content-length": "308",
+      "date": "Fri, 25 Sep 2026 15:45:37 GMT",
+      "server": "AmazonEC2"
+    },
+    "RetryAttempts": 0
+  },
+  "provider_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "ConsoleText": ""
+}

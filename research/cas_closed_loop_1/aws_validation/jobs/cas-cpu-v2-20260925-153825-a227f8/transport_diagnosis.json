@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-25T15:45:49.511376+00:00",
+  "probe": "Read-only bootstrap transport diagnosis; no job retry",
+  "sdk_endpoint": "https://s3.us-west-2.amazonaws.com",
+  "presigned_hostname": "cas-cpu-v2-20260925-153825-a227f8-807562639912.s3.amazonaws.com",
+  "http_status": 400,
+  "s3_error_code": "AuthorizationQueryParametersError",
+  "s3_error_message": "Error parsing the X-Amz-Credential parameter; the region 'us-west-2' is wrong; expecting 'us-east-1'"
+}

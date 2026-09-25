@@ -123,7 +123,8 @@ def main():
         command("focused_tests", [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
                 "--junitxml=" + str(out / "pytest.xml"),
                 str(LANE / "test_native_step_adapter.py"), str(LANE / "test_closed_loop.py"),
-                str(LANE / "test_artifacts.py")], allow_failure=True)
+                str(LANE / "test_artifacts.py"),
+                str(LANE / "aws_validation/test_launch_transport.py")], allow_failure=True)
         root = ET.parse(out / "pytest.xml").getroot()
         suites = [root] if root.tag == "testsuite" else list(root.findall("testsuite"))
         totals = {key: sum(int(s.attrib.get(key, 0)) for s in suites)

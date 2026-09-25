@@ -1,5 +1,19 @@
 # CAS-CLOSED-LOOP-1 change log
 
+## 2026-09-25 — Prospective bootstrap transport correction
+
+Lane A v2 at f6253e1a failed startup and produced no test receipt. Its instance
+was terminated and all 13 owned cleanup actions passed. The exact in-instance
+exception was not captured. An independent read-only check reproduced failure
+of the default global S3 presigned URL and success with the regional endpoint.
+
+The prospective launcher pins the regional endpoint, prints a safe structured
+bootstrap error before emergency upload, and captures live console output
+before termination. Four launcher regressions join the 57 scientific cases for
+a future 61-case run. Only syntax and offline URL construction have passed;
+runtime tests remain unexecuted. This correction grants no automatic retry and
+does not establish CAS_AWS_ENGINEERING_VALIDATED.
+
 ## 2026-09-25 — Prospective adapter correctness amendment
 
 - Emit `return_identity: null` whenever there is no live acquisition frame.

@@ -1,0 +1,22 @@
+{
+  "utc": "2026-09-25T15:47:04.808862+00:00",
+  "type": "READ_ONLY_EXISTING_PUBLIC_OBJECT_TRANSPORT_CHECK",
+  "existing_bucket_job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+  "object": "results/evidence/phase_worker_started.json",
+  "results": [
+    {
+      "construction": "sdk_default",
+      "hostname": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918-807562639912.s3.amazonaws.com",
+      "http_status": 403,
+      "s3_error_code": "SignatureDoesNotMatch",
+      "s3_error_message": "The request signature we calculated does not match the signature you provided. Check your key and signing method."
+    },
+    {
+      "construction": "explicit_regional",
+      "hostname": "s3.us-west-2.amazonaws.com",
+      "http_status": 200,
+      "bytes": 50
+    }
+  ],
+  "boundary": "No new job, mutation or retry. Original CAS in-instance exception was not captured. Post-cleanup CAS bucket probe cannot establish original causation."
+}
