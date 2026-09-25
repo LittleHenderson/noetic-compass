@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-25T15:39:00.710790+00:00",
+  "status": "PASS_FROZEN_ADMISSION_NOT_RUNTIME_VALIDATION",
+  "source_commit": "f6253e1a0fdb576d5484447eb6dacf0109f16fed",
+  "job_id": "cas-cpu-v2-20260925-153825-a227f8",
+  "freeze_sha256": "0914379c1f7f136cf67a3bb066d8485f0d8894fc30436bdc9d0e951c298b4dcb",
+  "payload_sha256": "b9f9373ee707dc5ec18e69ecf2dce17a6830aff004c2b984934f875add1833d9",
+  "payload_files_verified": 252,
+  "expected_tests": 57,
+  "git_probe_sha256": "2fb66b1e7543d1cacb01585b642c5f7f3d86df6aac18a0900b2ca9120d6ddcfe",
+  "named_source_issues": "Implemented with same-commit tests, CHANGELOG.md and HARNESS_SPEC.md; instance execution pending",
+  "previous_cpu_status": "STOPPED_UNACCEPTED; terminated and cleanup verified",
+  "prior_reservation_usd": "1.00",
+  "fresh_maximum_usd": "1.00",
+  "pool_maximum_usd": "5.00",
+  "automatic_retries": 0,
+  "next_action": "One actual AWS CPU validation; required instance Git/artifact/bootstrap gates precede workload."
+}

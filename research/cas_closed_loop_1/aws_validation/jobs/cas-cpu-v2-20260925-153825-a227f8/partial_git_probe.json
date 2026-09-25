@@ -1,0 +1,46 @@
+{
+  "schema": "cas.public-git-resolution-probe/1",
+  "source_commit": "f6253e1a0fdb576d5484447eb6dacf0109f16fed",
+  "probe_directory": "C:\\Users\\wakil\\AppData\\Local\\Temp\\cas-public-git-probe-9zr1ohid",
+  "started_at_utc": "2026-09-25T15:37:43.777619+00:00",
+  "scope": "Lightweight original Git object/path resolution and public artifact hashes only; no download, freeze, AWS call, bootstrap, or CAS workload test.",
+  "package_builder_sha256": "6e7a3ee1f34207a97a9a52a121c2202f3b0f01799e8d6f7c0686026f2b81ac6d",
+  "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "object_inventory_sha256": "3da95d3bb180510c60a3e40ef4c531b5f9539a0d1c31c54ab36198b3a03fd1a9",
+  "excluded_job_paths": [
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/ATTEMPT_STARTED.json",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/evidence/console.json",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/evidence/download_inventory.json",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/execution.json",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/freeze.json",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/freeze.sha256",
+    "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/owner_supersession.json"
+  ],
+  "original_git_objects_verified": 183,
+  "original_git_object_types": {
+    "commit": 2,
+    "tree": 33,
+    "blob": 148
+  },
+  "runtime_paths_verified": 108,
+  "runtime_total_bytes": 2460302,
+  "current_public_source_paths_verified": 43,
+  "artifact_check_command": [
+    "C:/Python314/python.exe",
+    "-B",
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\cas-public-git-probe-9zr1ohid\\research\\cas_closed_loop_1\\check_artifacts.py",
+    "--git-ref",
+    "f6253e1a0fdb576d5484447eb6dacf0109f16fed"
+  ],
+  "artifact_check_returncode": 0,
+  "artifact_result": {
+    "status": "EXACT_BYTES_VERIFIED",
+    "files": 13,
+    "git_ref": "f6253e1a0fdb576d5484447eb6dacf0109f16fed",
+    "historical_producer_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+    "boundary": "Retained evidence and its original producer bytes only; current source acceptance is separate."
+  },
+  "status": "PASS",
+  "elapsed_seconds": 7.795,
+  "finished_at_utc": "2026-09-25T15:37:51.570426+00:00"
+}
