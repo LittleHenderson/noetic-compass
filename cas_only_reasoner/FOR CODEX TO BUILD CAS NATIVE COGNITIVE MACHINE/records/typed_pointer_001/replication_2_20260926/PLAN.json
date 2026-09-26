@@ -1,0 +1,256 @@
+{
+  "schema": "helm.cm2x-replication-two-seeds.plan/1",
+  "experiment": "HELM-CM2X-REPLICATION-2",
+  "utc": "2026-09-26T18:02:33.958949+00:00",
+  "frozen_before_new_results": true,
+  "owner_directive_sha256": "c4c49ac8ef4a79cd48c447d7e4d525636321c2729bed0c62f763c053eea59ba3",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "reference_job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+  "reference_admission_commit": "3fee35e9c6da7146f252a29018522709ce78da1f",
+  "reference_closeout_commit": "970975819a4557cb293a10273bef9571491aa1d5",
+  "reference_closeout_sha256": "bca8bfcfdfefffc5f2bf9979b75da5dd975c4e10fb026f3bbee65a7cf606dfc7",
+  "package_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+  "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+  "reference_role": "Already-observed exploratory seed 20260918; not rerun.",
+  "seeds": [
+    20260917,
+    20260919
+  ],
+  "jobs": [
+    {
+      "seed": 20260917,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260917",
+      "receipt_dir": "records/typed_pointer_001/replication_2_20260926/receipts/20260917",
+      "ledger_reservation_usd": "19.20",
+      "additional_all_services_allowance_usd": "0.80",
+      "all_services_cap_usd": "20.00"
+    },
+    {
+      "seed": 20260919,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260919",
+      "receipt_dir": "records/typed_pointer_001/replication_2_20260926/receipts/20260919",
+      "ledger_reservation_usd": "19.20",
+      "additional_all_services_allowance_usd": "0.80",
+      "all_services_cap_usd": "20.00"
+    }
+  ],
+  "sequential": true,
+  "automatic_retries": 0,
+  "second_seed_rule": "Run 20260919 after 20260917 completes correctly and evidence and compute cleanup are verified, regardless of score. Use its already-frozen plan and fresh operational/budget checks. Operational failure stops sequencing without retry or substitute.",
+  "allowed_differences": [
+    "Model seed and fresh random initialization",
+    "New job identity",
+    "Output destinations",
+    "Prospective resource/admission records",
+    "External admission context selects only the two frozen seeds; no scientific training/scoring source edits"
+  ],
+  "science": {
+    "model_and_dimensions": "unchanged exact c45 source",
+    "training_data_split_and_order": "unchanged",
+    "source_seed": 101,
+    "encoder_seed": 20260916,
+    "optimizer": "AdamW",
+    "optimizer_config": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-8,
+      "learning_rate": 0.003,
+      "weight_decay": 0.01
+    },
+    "learning_rate_schedule": "CONSTANT_AS_HELM_1_0",
+    "planned_main_updates": null,
+    "passes": 20,
+    "updates_per_pass": 147,
+    "pass10_main_updates": 1470,
+    "pass20_main_updates": 2940,
+    "pass_checkpoints": [
+      0,
+      1,
+      2,
+      4,
+      6,
+      8,
+      10,
+      20
+    ],
+    "full_course_checkpoints": [
+      0,
+      1,
+      10,
+      20
+    ],
+    "required_artifacts": 128,
+    "mandatory_pass10_state": true,
+    "mandatory_final_state": true,
+    "best_checkpoint_selection": false,
+    "retention_interference_replay_checks": "unchanged",
+    "initialization_from_reference_checkpoint": false
+  },
+  "primary": {
+    "population": "Previously examined hard-development set of 59 questions",
+    "per_seed_delta": "pass20 correct minus the same seed pass10 correct",
+    "report": [
+      "correct/59 at both endpoints",
+      "percentages",
+      "change in correct answers",
+      "change in percentage points"
+    ],
+    "labels": {
+      "both_positive": "The direction of the hard-development gain repeated in both additional seeds.",
+      "one_positive": "Mixed replication.",
+      "neither_positive": "The original hard-development gain did not repeat in these additional seeds."
+    },
+    "report_magnitudes_and_regressions": true,
+    "two_new_seed_mean": "Mean of the two new within-seed count changes",
+    "three_seed_summary": "Explicitly descriptive; 20260918 remains exploratory"
+  },
+  "secondary": [
+    "Held-back correct/127",
+    "Full course correct/564",
+    "Trained subset correct/358",
+    "Excluded subset correct/79 separately",
+    "Registered retention before/after interference, not pass10/pass20 retention",
+    "Existing per-pass first/last/mean raw batch losses and mean gradient squared norm, with exact source definitions",
+    "Runtime/resource use",
+    "All operational failures and unresolved limits"
+  ],
+  "interpretation_limits": [
+    "No significance, threshold/phase-transition, general intelligence, or CAS-specific advantage claim.",
+    "More seeds test initialization robustness, not independent new test environments.",
+    "No best seed/checkpoint/subset selection.",
+    "No second-plan changes based on the first result."
+  ],
+  "environment": {
+    "instance_type": "g7.2xlarge",
+    "region": "us-west-2",
+    "ami": "ami-0fbbd0facbc9e3cff",
+    "gpu_name_contains": "RTX PRO 4500",
+    "visible_gpu_count": 1,
+    "torch_version": "2.11.0+cu128",
+    "cuda_version": "12.8",
+    "same_reference_package": true,
+    "material_difference_rule": "Disclose before spending; do not label exact replication."
+  },
+  "forecast": {
+    "basis_job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+    "measured_worker_seconds": 17263.692052139,
+    "measured_launch_to_operator_terminal_seconds": 17833.527596,
+    "measured_nonworker_window_seconds": 569.835543861,
+    "measured_training_seconds": 14359.965947061,
+    "measured_evaluations": 23,
+    "startup_collection_cleanup_allowance_seconds": 1200,
+    "worker_forecast_with_20_percent_margin_seconds": 20716.4304625668,
+    "instance_forecast_with_margin_seconds": 21916.4304625668,
+    "worker_deadline_seconds": 23100,
+    "numeric_child_seconds": 23400,
+    "outer_timeout_seconds": 24300,
+    "guest_shutdown_seconds": 24900,
+    "instance_seconds_max": 25200
+  },
+  "budget": {
+    "new_campaign_cap_usd": "45.00",
+    "historical_budget_reused": false,
+    "per_seed_all_services_caps_usd": [
+      "20.00",
+      "20.00"
+    ],
+    "shared_ceiling_usd": "5.00",
+    "planned_shared_reservations": {
+      "one_cpu_validation": "0.25",
+      "two_existing_reviewer_checks_combined": "0.50",
+      "final_collection_and_read_only_monitor": "0.25"
+    },
+    "total_planned_all_services_ceiling_usd": "41.00",
+    "unallocated_campaign_headroom_usd": "4.00",
+    "current_compute_rate_usd_per_hour": "2.52",
+    "per_seed_compute_max_usd": "17.64",
+    "per_seed_launcher_ancillary_reservation_usd": "1.48",
+    "per_seed_canonical_ledger_reservation_usd": "19.20",
+    "per_seed_additional_allowance_usd": "0.80",
+    "cpu_rate_usd_per_hour": "0.085",
+    "cpu_hard_seconds": 1200,
+    "cpu_all_services_cap_usd": "0.25",
+    "actual_bills_available": false,
+    "price_before_each_paid_job_required": true,
+    "all_paid_calls_and_helpers_in_campaign_accounting": true,
+    "retention": {
+      "paid_period_days": 90,
+      "upper_stored_gb_per_training_job": "1.00",
+      "s3_standard_usd_per_gb_month": "0.023",
+      "per_seed_90_day_storage_bound_usd": "0.069",
+      "evidence_download_upper_gb_per_job": "1.00",
+      "egress_conservative_usd_per_gb": "0.09",
+      "request_allowance_usd_per_job": "0.10",
+      "ebs_gp3_gib": 75,
+      "ebs_usd_per_gb_month": "0.08",
+      "ebs_compute_window_bound_usd": "0.059",
+      "ipv4_compute_window_bound_usd": "0.035",
+      "cleanup_allowance_usd_per_job": "0.10",
+      "covered_within_ancillary_plus_additional_allowance": true,
+      "after_paid_period": "Evidence remains retained. At current rates continuing storage is at most USD 0.023 per job per month per 1 GB. This disclosed obligation does not expand the finite campaign cap. Reconcile retention before the funded period expires; no automatic deletion."
+    }
+  },
+  "concurrency": {
+    "one_experiment_gpu_at_a_time": true,
+    "reviewed_production_allowlist": [
+      {
+        "instance_id": "i-0bd0a082507a51ae3",
+        "instance_type": "t3.small",
+        "region": "us-west-2",
+        "tags": {
+          "Lane": "customer-production",
+          "Name": "nc-customer-app",
+          "Purpose": "render-to-aws-migration",
+          "Project": "noetic-compass"
+        },
+        "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+      },
+      {
+        "instance_id": "i-02137d196e671b5c1",
+        "instance_type": "t3.small",
+        "region": "us-west-2",
+        "tags": {
+          "Purpose": "render-to-aws-migration",
+          "Lane": "accounts-canary",
+          "Project": "noetic-compass",
+          "Name": "nc-canary-app"
+        },
+        "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+      }
+    ],
+    "no_web_instance_mutations": true,
+    "fresh_all_enabled_regions_check_before_launch": true
+  },
+  "verification": {
+    "reuse_unchanged_69_cases_plus_6_subtests": "Successful source c45; terminal receipt SHA256 7557b3cb00f24fab6b662f72a7d23f2e8ea7eeffb23174d8373400275bf3fbfc",
+    "focused_aws_gate": "New seed/admission positive and negative cases plus relevant deadline/update/checkpoint/artifact checks; no local test/model execution.",
+    "package_reuse": "Reverify successful source.zip, manifest and public source identities. No new scientific package build needed.",
+    "required_before_second": "First terminal success, 128/128 receiver verification, independent cleanup, remaining budget, exact second-seed/source/package, fresh price/environment/concurrency gates"
+  },
+  "monitor": {
+    "mode": "read-only",
+    "interval_seconds": 300,
+    "may_launch_retry_or_alter_job": false,
+    "separate_from_launch_operator": true,
+    "stop_when_both_jobs_recorded_terminal": true
+  },
+  "reviewer": {
+    "identity": "Existing DeepSeek public reviewer only",
+    "checks": [
+      "One focused public plan and operational source-difference check",
+      "One final public-results review"
+    ],
+    "combined_cost_cap_usd": "0.50",
+    "no_new_team": true
+  },
+  "exclusions": [
+    "CAS-CLOSED-LOOP",
+    "4x/8x",
+    "Architecture changes",
+    "Website migration",
+    "Promotion/deployment",
+    "Protected material or credentials"
+  ]
+}

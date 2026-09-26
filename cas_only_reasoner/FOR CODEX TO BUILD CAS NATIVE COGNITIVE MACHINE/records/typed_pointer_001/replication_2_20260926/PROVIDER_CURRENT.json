@@ -1,0 +1,692 @@
+{
+  "observed_utc": "2026-09-26T17:59:04.463487+00:00",
+  "region": "us-west-2",
+  "provider_mutations": false,
+  "account_id": "807562639912",
+  "rates": {
+    "g7.2xlarge": {
+      "query": {
+        "ServiceCode": "AmazonEC2",
+        "Filters": [
+          {
+            "Type": "TERM_MATCH",
+            "Field": "instanceType",
+            "Value": "g7.2xlarge"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "regionCode",
+            "Value": "us-west-2"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "operatingSystem",
+            "Value": "Linux"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "tenancy",
+            "Value": "Shared"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "preInstalledSw",
+            "Value": "NA"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "capacitystatus",
+            "Value": "Used"
+          }
+        ]
+      },
+      "request_id": "03081f88-6248-441c-81e5-a1c05c29c61c",
+      "prices": [
+        {
+          "sku": "DA5FVRBHTKBSVJWJ",
+          "attributes": {
+            "enhancedNetworkingSupported": "Yes",
+            "intelTurboAvailable": "Yes",
+            "memory": "32.0 GiB",
+            "dedicatedEbsThroughput": "Up to 8000 Mbps",
+            "vcpu": "8",
+            "classicnetworkingsupport": "false",
+            "capacitystatus": "Used",
+            "locationType": "AWS Region",
+            "storage": "1x440 GB NVMe SSD",
+            "instanceFamily": "GPU instance",
+            "operatingSystem": "Linux",
+            "intelAvx2Available": "Yes",
+            "instanceFamilyCategory": "Accelerated Computing",
+            "regionCode": "us-west-2",
+            "physicalProcessor": "Intel Xeon Scalable (Granite Rapids)",
+            "clockSpeed": "3.9 GHz",
+            "ecu": "NA",
+            "networkPerformance": "Up to 60 Gigabit",
+            "servicename": "Amazon Elastic Compute Cloud",
+            "gpuMemory": "32 GB",
+            "dedicatedEbsThroughputDescription": "4000 Mbps",
+            "vpcnetworkingsupport": "true",
+            "instanceType": "g7.2xlarge",
+            "tenancy": "Shared",
+            "usagetype": "USW2-BoxUsage:g7.2xlarge",
+            "normalizationSizeFactor": "1",
+            "gpu": "1",
+            "intelAvxAvailable": "Yes",
+            "processorFeatures": "Intel AMX; Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo",
+            "servicecode": "AmazonEC2",
+            "licenseModel": "No License required",
+            "currentGeneration": "Yes",
+            "preInstalledSw": "NA",
+            "location": "US West (Oregon)",
+            "processorArchitecture": "64-bit",
+            "marketoption": "OnDemand",
+            "operation": "RunInstances",
+            "availabilityzone": "NA"
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "Hrs",
+          "endRange": "Inf",
+          "description": "$2.52 per On Demand Linux g7.2xlarge Instance Hour",
+          "appliesTo": [],
+          "rateCode": "DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7",
+          "beginRange": "0",
+          "pricePerUnit": {
+            "USD": "2.5200000000"
+          }
+        }
+      ],
+      "more": false
+    },
+    "c6i.large": {
+      "query": {
+        "ServiceCode": "AmazonEC2",
+        "Filters": [
+          {
+            "Type": "TERM_MATCH",
+            "Field": "instanceType",
+            "Value": "c6i.large"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "regionCode",
+            "Value": "us-west-2"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "operatingSystem",
+            "Value": "Linux"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "tenancy",
+            "Value": "Shared"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "preInstalledSw",
+            "Value": "NA"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "capacitystatus",
+            "Value": "Used"
+          }
+        ]
+      },
+      "request_id": "ff51b23e-ec84-43b7-8e1f-e1f9b63408ec",
+      "prices": [
+        {
+          "sku": "Q5M5AMCZFUSR83SW",
+          "attributes": {
+            "enhancedNetworkingSupported": "Yes",
+            "intelTurboAvailable": "Yes",
+            "memory": "4 GiB",
+            "dedicatedEbsThroughput": "Up to 10000 Mbps",
+            "vcpu": "2",
+            "classicnetworkingsupport": "false",
+            "capacitystatus": "Used",
+            "locationType": "AWS Region",
+            "storage": "EBS only",
+            "instanceFamily": "Compute optimized",
+            "operatingSystem": "Linux",
+            "intelAvx2Available": "Yes",
+            "instanceFamilyCategory": "Compute Optimized",
+            "regionCode": "us-west-2",
+            "physicalProcessor": "Intel Xeon 8375C (Ice Lake)",
+            "clockSpeed": "3.5 GHz",
+            "ecu": "NA",
+            "networkPerformance": "Up to 12500 Megabit",
+            "servicename": "Amazon Elastic Compute Cloud",
+            "gpuMemory": "NA",
+            "dedicatedEbsThroughputDescription": "650 Mbps",
+            "vpcnetworkingsupport": "true",
+            "instanceType": "c6i.large",
+            "tenancy": "Shared",
+            "usagetype": "USW2-BoxUsage:c6i.large",
+            "normalizationSizeFactor": "4",
+            "intelAvxAvailable": "Yes",
+            "processorFeatures": "Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo",
+            "servicecode": "AmazonEC2",
+            "licenseModel": "No License required",
+            "currentGeneration": "Yes",
+            "preInstalledSw": "NA",
+            "location": "US West (Oregon)",
+            "processorArchitecture": "64-bit",
+            "marketoption": "OnDemand",
+            "operation": "RunInstances",
+            "availabilityzone": "NA"
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "Hrs",
+          "endRange": "Inf",
+          "description": "$0.085 per On Demand Linux c6i.large Instance Hour",
+          "appliesTo": [],
+          "rateCode": "Q5M5AMCZFUSR83SW.JRTCKXETXF.6YS6EN2CT7",
+          "beginRange": "0",
+          "pricePerUnit": {
+            "USD": "0.0850000000"
+          }
+        }
+      ],
+      "more": false
+    },
+    "s3_standard": {
+      "query": {
+        "ServiceCode": "AmazonS3",
+        "Filters": [
+          {
+            "Type": "TERM_MATCH",
+            "Field": "regionCode",
+            "Value": "us-west-2"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "usagetype",
+            "Value": "USW2-TimedStorage-ByteHrs"
+          }
+        ]
+      },
+      "request_id": "e1131b02-9274-4aab-9385-3d64da0d0a5b",
+      "prices": [
+        {
+          "sku": "Z3FQZG73HYSPVABR",
+          "attributes": {
+            "volumeType": "Standard",
+            "storageClass": "General Purpose",
+            "regionCode": "us-west-2",
+            "servicecode": "AmazonS3",
+            "durability": "99.999999999%",
+            "usagetype": "USW2-TimedStorage-ByteHrs",
+            "locationType": "AWS Region",
+            "location": "US West (Oregon)",
+            "servicename": "Amazon Simple Storage Service",
+            "availability": "99.99%",
+            "operation": ""
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "GB-Mo",
+          "endRange": "Inf",
+          "description": "$0.021 per GB - storage used / month over 500 TB",
+          "appliesTo": [],
+          "rateCode": "Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3",
+          "beginRange": "512000",
+          "pricePerUnit": {
+            "USD": "0.0210000000"
+          }
+        },
+        {
+          "sku": "Z3FQZG73HYSPVABR",
+          "attributes": {
+            "volumeType": "Standard",
+            "storageClass": "General Purpose",
+            "regionCode": "us-west-2",
+            "servicecode": "AmazonS3",
+            "durability": "99.999999999%",
+            "usagetype": "USW2-TimedStorage-ByteHrs",
+            "locationType": "AWS Region",
+            "location": "US West (Oregon)",
+            "servicename": "Amazon Simple Storage Service",
+            "availability": "99.99%",
+            "operation": ""
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "GB-Mo",
+          "endRange": "51200",
+          "description": "$0.023 per GB - first 50 TB / month of storage used",
+          "appliesTo": [],
+          "rateCode": "Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE",
+          "beginRange": "0",
+          "pricePerUnit": {
+            "USD": "0.0230000000"
+          }
+        },
+        {
+          "sku": "Z3FQZG73HYSPVABR",
+          "attributes": {
+            "volumeType": "Standard",
+            "storageClass": "General Purpose",
+            "regionCode": "us-west-2",
+            "servicecode": "AmazonS3",
+            "durability": "99.999999999%",
+            "usagetype": "USW2-TimedStorage-ByteHrs",
+            "locationType": "AWS Region",
+            "location": "US West (Oregon)",
+            "servicename": "Amazon Simple Storage Service",
+            "availability": "99.99%",
+            "operation": ""
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "GB-Mo",
+          "endRange": "512000",
+          "description": "$0.022 per GB - next 450 TB / month of storage used",
+          "appliesTo": [],
+          "rateCode": "Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS",
+          "beginRange": "51200",
+          "pricePerUnit": {
+            "USD": "0.0220000000"
+          }
+        }
+      ],
+      "more": false
+    },
+    "ebs_gp3": {
+      "query": {
+        "ServiceCode": "AmazonEC2",
+        "Filters": [
+          {
+            "Type": "TERM_MATCH",
+            "Field": "regionCode",
+            "Value": "us-west-2"
+          },
+          {
+            "Type": "TERM_MATCH",
+            "Field": "usagetype",
+            "Value": "USW2-EBS:VolumeUsage.gp3"
+          }
+        ]
+      },
+      "request_id": "8a1c3329-9f6e-422f-b2b6-eeececc44d6c",
+      "prices": [
+        {
+          "sku": "BB8UJWJ4XPFJB95G",
+          "attributes": {
+            "maxThroughputvolume": "2000 MiB/s",
+            "volumeType": "General Purpose",
+            "maxIopsvolume": "80000",
+            "usagetype": "USW2-EBS:VolumeUsage.gp3",
+            "locationType": "AWS Region",
+            "maxVolumeSize": "64 TiB",
+            "storageMedia": "SSD-backed",
+            "regionCode": "us-west-2",
+            "servicecode": "AmazonEC2",
+            "volumeApiName": "gp3",
+            "location": "US West (Oregon)",
+            "servicename": "Amazon Elastic Compute Cloud",
+            "operation": ""
+          },
+          "effective_date": "2026-09-01T00:00:00Z",
+          "unit": "GB-Mo",
+          "endRange": "Inf",
+          "description": "$0.08 per GB-month of General Purpose (gp3) provisioned storage - US West (Oregon)",
+          "appliesTo": [],
+          "rateCode": "BB8UJWJ4XPFJB95G.JRTCKXETXF.6YS6EN2CT7",
+          "beginRange": "0",
+          "pricePerUnit": {
+            "USD": "0.0800000000"
+          }
+        }
+      ],
+      "more": false
+    }
+  },
+  "images": [
+    {
+      "ImageId": "ami-07a134137a631b892",
+      "Name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260923",
+      "State": "available",
+      "Architecture": "x86_64",
+      "CreationDate": "2026-09-23T11:56:59.000Z",
+      "OwnerId": "099720109477",
+      "RootDeviceName": "/dev/sda1",
+      "VirtualizationType": "hvm",
+      "BlockDeviceMappings": [
+        {
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "SnapshotId": "snap-056b092df5c9eceb2",
+            "VolumeSize": 8,
+            "VolumeType": "gp3",
+            "Encrypted": false
+          },
+          "DeviceName": "/dev/sda1"
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "VirtualName": "ephemeral0"
+        },
+        {
+          "DeviceName": "/dev/sdc",
+          "VirtualName": "ephemeral1"
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-0fbbd0facbc9e3cff",
+      "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+      "State": "available",
+      "Architecture": "x86_64",
+      "CreationDate": "2026-08-21T14:48:09.000Z",
+      "OwnerId": "898082745236",
+      "RootDeviceName": "/dev/sda1",
+      "VirtualizationType": "hvm",
+      "BlockDeviceMappings": [
+        {
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "Iops": 3000,
+            "SnapshotId": "snap-0f7c1eb40403fe3fc",
+            "VolumeSize": 75,
+            "VolumeType": "gp3",
+            "Throughput": 125,
+            "Encrypted": false
+          },
+          "DeviceName": "/dev/sda1"
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "VirtualName": "ephemeral0"
+        },
+        {
+          "DeviceName": "/dev/sdc",
+          "VirtualName": "ephemeral1"
+        }
+      ]
+    }
+  ],
+  "g7_instance_type": {
+    "InstanceType": "g7.2xlarge",
+    "CurrentGeneration": true,
+    "FreeTierEligible": false,
+    "SupportedUsageClasses": [
+      "on-demand",
+      "spot"
+    ],
+    "SupportedRootDeviceTypes": [
+      "ebs"
+    ],
+    "SupportedVirtualizationTypes": [
+      "hvm"
+    ],
+    "BareMetal": false,
+    "Hypervisor": "nitro",
+    "ProcessorInfo": {
+      "SupportedArchitectures": [
+        "x86_64"
+      ],
+      "SustainedClockSpeedInGhz": 3.9,
+      "Manufacturer": "Intel"
+    },
+    "VCpuInfo": {
+      "DefaultVCpus": 8,
+      "DefaultCores": 8,
+      "DefaultThreadsPerCore": 1,
+      "ValidCores": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "ValidThreadsPerCore": [
+        1
+      ]
+    },
+    "MemoryInfo": {
+      "SizeInMiB": 32768
+    },
+    "InstanceStorageSupported": true,
+    "InstanceStorageInfo": {
+      "TotalSizeInGB": 440,
+      "Disks": [
+        {
+          "SizeInGB": 440,
+          "Count": 1,
+          "Type": "ssd"
+        }
+      ],
+      "NvmeSupport": "required",
+      "EncryptionSupport": "required"
+    },
+    "EbsInfo": {
+      "EbsOptimizedSupport": "default",
+      "EncryptionSupport": "supported",
+      "EbsOptimizedInfo": {
+        "BaselineBandwidthInMbps": 4000,
+        "BaselineThroughputInMBps": 500.0,
+        "BaselineIops": 16000,
+        "MaximumBandwidthInMbps": 8000,
+        "MaximumThroughputInMBps": 1000.0,
+        "MaximumIops": 32000
+      },
+      "NvmeSupport": "required",
+      "MaximumEbsAttachments": 32,
+      "AttachmentLimitType": "dedicated"
+    },
+    "NetworkInfo": {
+      "NetworkPerformance": "Up to 60 Gigabit",
+      "MaximumNetworkInterfaces": 4,
+      "MaximumNetworkCards": 1,
+      "DefaultNetworkCardIndex": 0,
+      "NetworkCards": [
+        {
+          "NetworkCardIndex": 0,
+          "NetworkPerformance": "Up to 60 Gigabit",
+          "MaximumNetworkInterfaces": 4,
+          "AdditionalFlexibleNetworkInterfaces": 0,
+          "BaselineBandwidthInGbps": 40.0,
+          "PeakBandwidthInGbps": 60.0,
+          "DefaultEnaQueueCountPerInterface": 8,
+          "MaximumEnaQueueCount": 32,
+          "MaximumEnaQueueCountPerInterface": 8
+        }
+      ],
+      "Ipv4AddressesPerInterface": 64,
+      "Ipv6AddressesPerInterface": 64,
+      "Ipv6Supported": true,
+      "EnaSupport": "required",
+      "EfaSupported": false,
+      "EncryptionInTransitSupported": true,
+      "EnaSrdSupported": false,
+      "FlexibleEnaQueuesSupport": "supported",
+      "ConnectionTrackingConfiguration": {
+        "DefaultTcpEstablishedTimeout": 350,
+        "DefaultUdpTimeout": 30,
+        "DefaultUdpStreamTimeout": 180
+      },
+      "SecondaryNetworkSupported": false,
+      "Ipv4AddressesPerSecondaryInterface": 0
+    },
+    "GpuInfo": {
+      "Gpus": [
+        {
+          "Name": "RTX PRO 4500",
+          "Manufacturer": "NVIDIA",
+          "Count": 1,
+          "LogicalGpuCount": 1,
+          "GpuPartitionSize": 1.0,
+          "Workloads": [
+            "ml-ai",
+            "graphics"
+          ],
+          "MemoryInfo": {
+            "SizeInMiB": 32768
+          }
+        }
+      ],
+      "TotalGpuMemoryInMiB": 32768
+    },
+    "PlacementGroupInfo": {
+      "SupportedStrategies": [
+        "cluster",
+        "partition",
+        "spread"
+      ]
+    },
+    "HibernationSupported": false,
+    "BurstablePerformanceSupported": false,
+    "DedicatedHostsSupported": false,
+    "AutoRecoverySupported": false,
+    "SupportedBootModes": [
+      "legacy-bios",
+      "uefi"
+    ],
+    "NitroEnclavesSupport": "supported",
+    "NitroTpmSupport": "supported",
+    "NitroTpmInfo": {
+      "SupportedVersions": [
+        "2.0"
+      ]
+    },
+    "PhcSupport": "unsupported",
+    "RebootMigrationSupport": "unsupported",
+    "SupportedInRegion": true
+  },
+  "active_instances": [
+    {
+      "InstanceId": "i-0c3028734c8885542",
+      "InstanceType": "g6e.xlarge",
+      "State": {
+        "Code": 80,
+        "Name": "stopped"
+      },
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "cas-bridge-control-20260822"
+        }
+      ],
+      "ImageId": "ami-039f004668b2adc12",
+      "Placement": {
+        "AvailabilityZoneId": "usw2-az3",
+        "GroupName": "",
+        "Tenancy": "default",
+        "AvailabilityZone": "us-west-2c"
+      }
+    },
+    {
+      "InstanceId": "i-0bd0a082507a51ae3",
+      "InstanceType": "t3.small",
+      "State": {
+        "Code": 16,
+        "Name": "running"
+      },
+      "Tags": [
+        {
+          "Key": "Lane",
+          "Value": "customer-production"
+        },
+        {
+          "Key": "Name",
+          "Value": "nc-customer-app"
+        },
+        {
+          "Key": "Purpose",
+          "Value": "render-to-aws-migration"
+        },
+        {
+          "Key": "Project",
+          "Value": "noetic-compass"
+        }
+      ],
+      "ImageId": "ami-0661cce2d6259c605",
+      "Placement": {
+        "AvailabilityZoneId": "usw2-az4",
+        "GroupName": "",
+        "Tenancy": "default",
+        "AvailabilityZone": "us-west-2d"
+      }
+    },
+    {
+      "InstanceId": "i-02137d196e671b5c1",
+      "InstanceType": "t3.small",
+      "State": {
+        "Code": 16,
+        "Name": "running"
+      },
+      "Tags": [
+        {
+          "Key": "Purpose",
+          "Value": "render-to-aws-migration"
+        },
+        {
+          "Key": "Lane",
+          "Value": "accounts-canary"
+        },
+        {
+          "Key": "Project",
+          "Value": "noetic-compass"
+        },
+        {
+          "Key": "Name",
+          "Value": "nc-canary-app"
+        }
+      ],
+      "ImageId": "ami-0661cce2d6259c605",
+      "Placement": {
+        "AvailabilityZoneId": "usw2-az4",
+        "GroupName": "",
+        "Tenancy": "default",
+        "AvailabilityZone": "us-west-2d"
+      }
+    }
+  ],
+  "reference_provider": {
+    "schema": "helm.corrected-preparation.provider/1",
+    "observed_utc": "2026-09-26T05:20:42.681049+00:00",
+    "account_id": "807562639912",
+    "region": "us-west-2",
+    "zone": "us-west-2a",
+    "ami": "ami-07a134137a631b892",
+    "subnet_id": "subnet-0bb8fa82c2a7177b3",
+    "vpc_id": "vpc-0df2f8cc1b9f23838",
+    "root_device": "/dev/sda1",
+    "rates_usd_per_hour": {
+      "t3.small": "0.0208000000",
+      "g7.2xlarge": "2.5200000000",
+      "c6i.large": "0.0850000000"
+    },
+    "provider_mutations": false,
+    "concurrency": "Fresh global active-instance gate runs immediately before new CPU launch",
+    "permitted_concurrent_instances": [
+      {
+        "instance_id": "i-0bd0a082507a51ae3",
+        "instance_type": "t3.small",
+        "region": "us-west-2",
+        "tags": {
+          "Lane": "customer-production",
+          "Name": "nc-customer-app",
+          "Purpose": "render-to-aws-migration",
+          "Project": "noetic-compass"
+        },
+        "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+      },
+      {
+        "instance_id": "i-02137d196e671b5c1",
+        "instance_type": "t3.small",
+        "region": "us-west-2",
+        "tags": {
+          "Purpose": "render-to-aws-migration",
+          "Lane": "accounts-canary",
+          "Project": "noetic-compass",
+          "Name": "nc-canary-app"
+        },
+        "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+      }
+    ],
+    "fixed_cpu_capacity_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\rerun_20260926_corrected_preparation\\jobs\\helm-prep-20260926-052635-afc35e\\prospective_cpu_capacity_correction.json"
+  }
+}
