@@ -346,8 +346,9 @@ def _committed_rows(source_sha, root=None, *, repository=None):
             raise ValueError("POINTER_INVENTORY_BLOB_MISSING:%s:%s" % (name, str(error)[:200])) from error
     # Take the blob id and size from git's own tree rather than from the bytes just read, so one side of the
     # comparison is git's record of the commit and the other is the content that tree names. The pathspec is the
-    # inventory's OWN top-level directories, derived rather than assumed, so a new directory cannot be missed.
-    trees = tuple(sorted({name.split("/")[0] + "/" for name in names}))
+    # complete explicit public inventory, so an unrelated omitted blob in a public partial checkout is
+    # never queried. Every required inventory blob still undergoes all size/object/hash checks below.
+    trees = tuple(sorted(names))
     sizes = {}
     listing = shared._run_git(["-c", "core.autocrlf=false", "ls-tree", "-r", "-l", "-z", source_sha,
                                "--"] + [shared.GIT_PREFIX + tree for tree in trees], repository)

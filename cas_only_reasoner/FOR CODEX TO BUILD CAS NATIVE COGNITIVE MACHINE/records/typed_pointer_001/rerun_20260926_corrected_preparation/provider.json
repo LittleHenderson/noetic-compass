@@ -1,0 +1,17 @@
+{
+  "schema": "helm.corrected-preparation.provider/1",
+  "observed_utc": "2026-09-26T05:20:42.681049+00:00",
+  "account_id": "807562639912",
+  "region": "us-west-2",
+  "zone": "us-west-2a",
+  "ami": "ami-07a134137a631b892",
+  "subnet_id": "subnet-0bb8fa82c2a7177b3",
+  "vpc_id": "vpc-0df2f8cc1b9f23838",
+  "root_device": "/dev/sda1",
+  "rates_usd_per_hour": {
+    "t3.small": "0.0208000000",
+    "g7.2xlarge": "2.5200000000"
+  },
+  "provider_mutations": false,
+  "concurrency": "Fresh global active-instance gate runs immediately before new CPU launch"
+}

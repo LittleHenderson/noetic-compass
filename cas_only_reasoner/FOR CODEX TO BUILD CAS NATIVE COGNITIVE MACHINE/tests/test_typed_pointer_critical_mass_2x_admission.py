@@ -117,11 +117,13 @@ def test_the_records_carry_the_version_and_the_new_bounds(writer):
     assert writer.launch.BOUNDS["optimizer_updates_max"] == 2958
 
 
-def test_the_writer_has_not_run_and_its_targets_are_free(writer):
-    assert not writer.SEED_OUTPUT.exists() and not writer.PARTIAL_OUTPUT.exists()
+def test_the_original_writer_has_run_once_and_its_historical_targets_are_frozen(writer):
+    assert writer.SEED_OUTPUT.is_dir() and not writer.PARTIAL_OUTPUT.exists()
     assert not writer.OWNER_PROBE.exists()
     assert writer.RECEIPT_DIR.name == "receipt_cm2x_20260918"
-    assert not writer.RECEIPT_DIR.exists()
+    assert writer.RECEIPT_DIR.is_dir()
+    request = json.loads((writer.SEED_OUTPUT / "20260918/request.json").read_bytes())
+    assert request["job"] == "cas-meta2-tpntr-20260925151836-b981625f-m-20260918"
     assert writer.SEED == 20260918 and writer.package_dir("a" * 40).name == "package_aaaaaaaa"
 
 
@@ -135,8 +137,8 @@ def test_the_owner_probe_is_removed_even_when_the_launcher_refuses_the_record(wr
     assert not writer.OWNER_PROBE.exists()
 
 
-def test_failed_exclusive_create_preserves_another_invocations_probe(writer, tmp_path, monkeypatch):
-    probe = tmp_path / "owner_probe.json"
+def test_failed_exclusive_create_preserves_another_invocations_probe(writer, monkeypatch):
+    probe = writer.HERE / "owner_probe_contention_test.json"
     monkeypatch.setattr(writer, "OWNER_PROBE", probe)
     real_open = open
 
@@ -147,9 +149,12 @@ def test_failed_exclusive_create_preserves_another_invocations_probe(writer, tmp
         raise FileExistsError("another invocation created the probe")
 
     monkeypatch.setattr(writer, "open", lose_exclusive_create, raising=False)
-    with pytest.raises(FileExistsError):
-        writer.validate_owner_record(b"{}", {})
-    assert probe.read_bytes() == b"another invocation"
+    try:
+        with pytest.raises(FileExistsError):
+            writer.validate_owner_record(b"{}", {})
+        assert probe.read_bytes() == b"another invocation"
+    finally:
+        probe.unlink(missing_ok=True)
 
 
 def test_the_writer_stops_on_a_bad_or_uncommitted_source(writer):
@@ -210,11 +215,14 @@ def test_the_r18_admission_record_is_byte_identical_to_its_frozen_digest():
     assert record["archive_sha256"] == "0020c28080c2c9432ff5b627e14db5c3fbe433b0b1397d454d4ee0637ba23377"
 
 
-def test_owner_directive_is_exact_and_refuses_changed_bytes(writer, monkeypatch, tmp_path):
+def test_owner_directive_is_exact_and_refuses_changed_bytes(writer, monkeypatch):
     assert sha256(writer.OWNER_DIRECTIVE.read_bytes()).hexdigest() == writer.OWNER_DIRECTIVE_SHA256
     assert 'Then launch **2x**.' in writer.owner_directive()
-    altered = tmp_path / 'altered-directive.md'
-    altered.write_text('Different authority')
-    monkeypatch.setattr(writer, 'OWNER_DIRECTIVE', altered)
-    with pytest.raises(ValueError, match='OWNER_DIRECTIVE_BYTES'):
-        writer.owner_directive()
+    altered = writer.HERE / 'altered_directive_test.md'
+    try:
+        altered.write_text('Different authority')
+        monkeypatch.setattr(writer, 'OWNER_DIRECTIVE', altered)
+        with pytest.raises(ValueError, match='OWNER_DIRECTIVE_BYTES'):
+            writer.owner_directive()
+    finally:
+        altered.unlink(missing_ok=True)
