@@ -26,6 +26,12 @@ PUBLIC_PATHS = {
     "/health",
     "/health/db",
     "/health/ready",
+    # Deployment identity probe. Public for the same reason /health is: the root-CI deploy
+    # evidence collector must read which artifact and commit are running without holding an
+    # application credential. It returns identifiers only (commit SHA, image digest, build id,
+    # deployment service id) and never credential material, so it is deliberately kept out of
+    # the authenticated surface rather than handed a token path it does not need.
+    "/deployment",
     "/auth/token",
     # Invite redemption is public: a brand-new user has no token yet, so the redeem endpoint must
     # be reachable unauthenticated. It is fail-closed on the invite code itself (the store rejects

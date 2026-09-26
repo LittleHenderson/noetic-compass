@@ -33,6 +33,13 @@ RUN groupadd --gid 1000 ncuser && \
 
 WORKDIR /app
 
+# Which protected commit this image was built from. The deployment passes it as a build
+# argument, so the image itself carries the answer to "what am I?" and the running process can
+# report it at /deployment. Left empty when unknown, and the endpoint reports null rather than
+# inventing a value.
+ARG NC_BUILD_COMMIT_SHA=""
+ENV NC_BUILD_COMMIT_SHA=${NC_BUILD_COMMIT_SHA}
+
 # Install only runtime dependencies (no maturin/Rust)
 COPY requirements-runtime.txt .
 RUN pip install --no-cache-dir -r requirements-runtime.txt
