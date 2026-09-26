@@ -1,5 +1,19 @@
 # The learning brain — lineage record
 
+## 2026-09-26 corrected HELM critical-mass 2x launched
+
+AWS independently reported instance i-06e9e0febc3881439 RUNNING at
+2026-09-26T05:58:18Z; launch time was 05:57:31 UTC in us-west-2.
+Job cas-meta2-tpntr-20260926054903-c45f775f-m-20260918 uses source
+c45f775f225dd06cc20cdf313f0a0398486e0d61 and admission
+3fee35e9c6da7146f252a29018522709ce78da1f. The canonical ledger records a
+new USD19.20 reservation; every earlier reservation is unchanged.
+The all-services allocation is USD21.45 under the finite USD21.50 cap.
+The single operator remains active with zero retries and required cleanup.
+Pass-10 state, pass-20 evaluation and all 128 artifacts remain required.
+No new measured score or completed 2x result is claimed. See
+records/typed_pointer_001/admission_cm2x_rerun_001/LAUNCH_OBSERVATION_20260926.json.
+
 ## 2026-09-26 corrected HELM critical-mass 2x admission
 
 A fresh 20-pass attempt is frozen after 69 AWS regression cases and six subtests

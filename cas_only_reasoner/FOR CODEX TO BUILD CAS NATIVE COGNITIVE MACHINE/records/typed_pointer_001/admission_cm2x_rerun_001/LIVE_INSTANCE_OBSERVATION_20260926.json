@@ -1,0 +1,17 @@
+{
+  "observed_utc": "2026-09-26T05:58:18.959635+00:00",
+  "instance_id": "i-06e9e0febc3881439",
+  "instance_type": "g7.2xlarge",
+  "state": "running",
+  "launch_utc": "2026-09-26T05:57:31+00:00",
+  "region": "us-west-2",
+  "availability_zone": "us-west-2a",
+  "image_id": "ami-0fbbd0facbc9e3cff",
+  "tags": [
+    {
+      "Key": "cas_meta_job",
+      "Value": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918"
+    }
+  ],
+  "describe_request_id": "6f649929-e6d2-44aa-82dc-b48f0e24c2e0"
+}

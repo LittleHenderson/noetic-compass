@@ -1,0 +1,61 @@
+{
+  "schema": "helm.corrected-rerun.launch-observation/1",
+  "utc": "2026-09-26T05:59:10.951868+00:00",
+  "status": "LAUNCHED_INSTANCE_RUNNING",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "scientific_basis": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "admission_commit": "3fee35e9c6da7146f252a29018522709ce78da1f",
+  "job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+  "package_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+  "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+  "test_cases_passed": 69,
+  "subtests_passed": 6,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "provider_observation": {
+    "observed_utc": "2026-09-26T05:58:18.959635+00:00",
+    "instance_id": "i-06e9e0febc3881439",
+    "instance_type": "g7.2xlarge",
+    "state": "running",
+    "launch_utc": "2026-09-26T05:57:31+00:00",
+    "region": "us-west-2",
+    "availability_zone": "us-west-2a",
+    "image_id": "ami-0fbbd0facbc9e3cff",
+    "tags": [
+      {
+        "Key": "cas_meta_job",
+        "Value": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918"
+      }
+    ],
+    "describe_request_id": "6f649929-e6d2-44aa-82dc-b48f0e24c2e0"
+  },
+  "reservation_usd": "19.20",
+  "all_services_reserved_and_prospective_usd": "21.45",
+  "all_services_hard_cap_usd": "21.50",
+  "canonical_ledger": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "ledger_revision": 110,
+  "ledger_sha256_observed": "ff0cf548db7e5b1f3f4c7af083f016e24016b00da496469eb3990544ab3fbea7",
+  "historical_reservations_unchanged": true,
+  "aws_side_reservation": {
+    "bucket": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918-807562639912",
+    "key": "reservation/reservation_receipt.json",
+    "status": "RECORDED"
+  },
+  "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_rerun_20260918",
+  "monitor_session_id": 48566,
+  "operator_pid": 8312,
+  "automatic_retries": 0,
+  "cleanup_required": true,
+  "instance_seconds_max": 25200,
+  "pass10_state_required": true,
+  "pass20_evaluation_required": true,
+  "required_artifacts": 128,
+  "result_boundary": "Live EC2 instance RUNNING verified. No completed training, numeric reload, pass-20 score or completed 2x claim.",
+  "evidence_hashes": {
+    "launch.json": "0f0acb6c8ad24c1dd54c18f3cbf2cadbd2ec5cb3cfdc32e57643c0091daf677b",
+    "preflight.json": "2af541b5e120c23dda5a97a1551320755cc355d95781381d08f72e37e44a780a",
+    "reservation.json": "80a30deff03e598ac8cc55c1d61c538fdb2bfcf9d5d0f0723f193543e532758d",
+    "evidence_contract.json": "0d5b773a4fd4f4ae0d0fd26191bb0af0386447d37dd3d7d39ed911e723064977"
+  }
+}
