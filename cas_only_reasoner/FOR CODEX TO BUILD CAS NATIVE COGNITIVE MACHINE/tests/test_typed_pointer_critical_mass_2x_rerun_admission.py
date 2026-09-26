@@ -80,20 +80,26 @@ def test_rerun_study_marks_attempt_two_without_changing_experiment_version():
 
 def test_public_partial_checkout_metadata_query_covers_exact_inventory(monkeypatch, tmp_path):
     launch = load_writer().launch
-    bodies = {"cncm/public.py": b"public\n", "research/public.py": b"metadata\n"}
+    bodies = {"cncm/public_%02d.py" % i: ("public %d\n" % i).encode() for i in range(35)}
     rows = [{"path": name, "bytes": len(raw), "sha256": sha256(raw).hexdigest()}
             for name, raw in sorted(bodies.items())]
     monkeypatch.setattr(launch.contract, "input_inventory", lambda root: rows)
+    queried = []
     def git(args, repository):
         if args[2] == "show":
             name = args[3].split(":", 1)[1].removeprefix(launch.shared.GIT_PREFIX)
             return bodies[name]
         assert args[:7] == ["-c", "core.autocrlf=false", "ls-tree", "-r", "-l", "-z", "a" * 40]
-        assert args[7:] == ["--"] + [launch.shared.GIT_PREFIX + name for name in sorted(bodies)]
+        assert args[7] == "--"
+        names = [name.removeprefix(launch.shared.GIT_PREFIX) for name in args[8:]]
+        assert 1 <= len(names) <= 16
+        assert names == sorted(bodies)[len(queried):len(queried) + len(names)]
+        queried.extend(names)
         return b"".join(("100644 blob %s %d\t%s%s\0" % (launch._git_object_id(raw), len(raw),
-                         launch.shared.GIT_PREFIX, name)).encode() for name, raw in sorted(bodies.items()))
+                         launch.shared.GIT_PREFIX, name)).encode() for name in names for raw in [bodies[name]])
     monkeypatch.setattr(launch.shared, "_run_git", git)
     assert launch._committed_rows("a" * 40, tmp_path, repository=tmp_path) == rows
+    assert queried == sorted(bodies)
 
 
 def test_public_partial_checkout_still_refuses_incorrect_blob_size(monkeypatch, tmp_path):

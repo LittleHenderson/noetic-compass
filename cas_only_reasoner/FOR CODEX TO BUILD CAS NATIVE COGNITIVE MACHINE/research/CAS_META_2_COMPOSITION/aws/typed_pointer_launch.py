@@ -350,8 +350,11 @@ def _committed_rows(source_sha, root=None, *, repository=None):
     # never queried. Every required inventory blob still undergoes all size/object/hash checks below.
     trees = tuple(sorted(names))
     sizes = {}
-    listing = shared._run_git(["-c", "core.autocrlf=false", "ls-tree", "-r", "-l", "-z", source_sha,
-                               "--"] + [shared.GIT_PREFIX + tree for tree in trees], repository)
+    # Bound argument length on the Windows orchestration host as well as Linux.
+    listing = b"".join(shared._run_git(
+        ["-c", "core.autocrlf=false", "ls-tree", "-r", "-l", "-z", source_sha, "--"]
+        + [shared.GIT_PREFIX + name for name in trees[start:start + 16]], repository)
+        for start in range(0, len(trees), 16))
     for entry in listing.split(b"\0"):
         if not entry:
             continue
