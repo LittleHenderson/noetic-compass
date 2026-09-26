@@ -165,15 +165,15 @@ class SurfaceUrlPolicyTests(unittest.TestCase):
             (
                 (
                     "health",
-                    "https://cas-harness-customer-api.onrender.com/health",
+                    "https://api.noeticcompass.com/health",
                 ),
                 (
                     "readiness",
-                    "https://cas-harness-customer-api.onrender.com/health/ready",
+                    "https://api.noeticcompass.com/health/ready",
                 ),
                 (
                     "openapi",
-                    "https://cas-harness-customer-api.onrender.com/openapi.json",
+                    "https://api.noeticcompass.com/openapi.json",
                 ),
             ),
         )

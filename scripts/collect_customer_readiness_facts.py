@@ -26,7 +26,7 @@ from typing import Any, Callable, Mapping, Sequence
 
 REPORT_SCHEMA_VERSION = "cas_harness_customer_readiness_machine_report.v1"
 DRAFT_SCHEMA_VERSION = "cas_harness_customer_readiness_machine_draft.v1"
-PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
+PRODUCTION_API_ORIGIN = "https://api.noeticcompass.com"
 PINNED_SURFACES: tuple[tuple[str, str], ...] = (
     ("health", f"{PRODUCTION_API_ORIGIN}/health"),
     ("readiness", f"{PRODUCTION_API_ORIGIN}/health/ready"),

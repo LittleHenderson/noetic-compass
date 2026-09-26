@@ -71,7 +71,7 @@ PRIVATE_TICKET_SELECTOR_SCHEMA_VERSION = (
 )
 REPOSITORY = "LittleHenderson/noetic-compass"
 LANDING_ORIGIN = "https://cascompass.ai"
-PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
+PRODUCTION_SERVICE_ID = "i-0bd0a082507a51ae3"
 AUTHORITY_URI = f"{PRODUCTION_API_ORIGIN}/internal/acceptance/support-crm"
 _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_RE = re.compile(r"^dep-[A-Za-z0-9]+$")

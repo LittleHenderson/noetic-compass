@@ -39,7 +39,7 @@ except ImportError:  # Direct ``python scripts/...`` execution.
     )
 
 
-DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
+DEFAULT_BASE_URL = "https://api.noeticcompass.com"
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 
 

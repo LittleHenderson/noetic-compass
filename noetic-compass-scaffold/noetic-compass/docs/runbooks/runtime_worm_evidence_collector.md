@@ -19,7 +19,7 @@ manifest, or create customer-production `ACCEPT`.
   `RENDER_API_KEY`. It is likewise environment-only.
 
 The fixed production API is
-`https://cas-harness-customer-api.onrender.com`. A different origin, redirect,
+`https://api.noeticcompass.com`. A different origin, redirect,
 embedded credential, query, or fragment fails closed.
 
 ## Hosted Render Shell command (preferred)
@@ -32,7 +32,7 @@ logout before writing either output. The synthetic owner is never the
 configured primary owner and cannot authorize publication.
 
 Use a separate single-use Render operator API key. Run this block from Render
-Shell on service `srv-d9bijbjtqb8s73cn4n20`; enter the key only at the hidden
+Shell on service `i-0bd0a082507a51ae3`; enter the key only at the hidden
 prompt, then revoke that key immediately after the command exits:
 
 ```bash

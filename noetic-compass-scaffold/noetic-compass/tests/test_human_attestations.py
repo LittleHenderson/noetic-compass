@@ -1230,7 +1230,7 @@ def test_authenticated_route_creates_reads_and_revokes_exact_attestation(
         assert created.status_code == 201, created.text
         output = created.json()
         public_path = output["attestation_artifact_uri"].removeprefix(
-            "https://cas-harness-customer-api.onrender.com"
+            "https://api.noeticcompass.com"
         )
         public = client.get(public_path)
         assert public.status_code == 200

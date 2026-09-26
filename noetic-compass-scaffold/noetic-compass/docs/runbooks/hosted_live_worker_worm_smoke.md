@@ -6,7 +6,7 @@ quotas, legal copy, or account smoke scripts.
 
 ## Required Inputs
 
-- `--base-url`: deployed customer CAS Harness API, exact default `https://cas-harness-customer-api.onrender.com`
+- `--base-url`: deployed customer CAS Harness API, exact default `https://api.noeticcompass.com`
 - `--bearer-token`: API bearer token, or set `CAS_HARNESS_API_TOKEN`
 - `--worker-url`: hosted live worker URL, or set `ATLAS_LIVE_WORKER_URL`
 - `--worker-token`: worker shared secret, or set `ATLAS_LIVE_WORKER_TOKEN`
@@ -16,7 +16,7 @@ quotas, legal copy, or account smoke scripts.
 
 ```powershell
 python scripts/hosted_live_worker_worm_smoke.py `
-  --base-url https://cas-harness-customer-api.onrender.com `
+  --base-url https://api.noeticcompass.com `
   --bearer-token $env:CAS_HARNESS_API_TOKEN `
   --worker-url $env:ATLAS_LIVE_WORKER_URL `
   --worker-token $env:ATLAS_LIVE_WORKER_TOKEN `
