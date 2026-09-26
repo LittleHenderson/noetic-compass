@@ -184,7 +184,66 @@ railway domain add api.noetic-compass.com
 
 ---
 
-## Cloud Deployment (Render API Backend)
+## AWS App Runner (current production backend for the accounts-off beta API)
+
+Since 2026-09-26 the accounts-off beta API behind the public dashboard at
+`https://noeticcompass.com` runs on AWS App Runner in `us-west-2`. It replaced the
+Render lane, which stopped serving: every request to
+`https://noetic-compass-api.onrender.com/...` returned HTTP 503 with the response header
+`x-render-routing: suspend`, and the same header appeared on `cas-harness-customer-api`
+and on the `atlas-viewer-app` static site. Render's own status page reported all systems
+operational, so the suspension was account-side, not platform-side.
+
+| Item | Value |
+|------|-------|
+| Service name | `noetic-compass-api` |
+| Service ARN | `arn:aws:apprunner:us-west-2:807562639912:service/noetic-compass-api/c359ce499746402592cd872d97bd9124` |
+| Public URL | `https://bmxq2dmdam.us-west-2.awsapprunner.com` |
+| Image | `807562639912.dkr.ecr.us-west-2.amazonaws.com/noetic-compass-api:v1` |
+| Instance | `0.25` vCPU / `512` MB, 1 provisioned instance, auto-deploy on image push |
+| Health check | `HTTP /health`, `10` s interval |
+| AWS account | `807562639912`, user `cas-g5-operator`, region `us-west-2` |
+
+The dashboard reaches this service through the `/api/:path*` rewrite in
+`dashboard/vercel.json`. Browsers still call `https://noeticcompass.com/api/...` on the
+same origin; Vercel proxies to App Runner over HTTPS.
+
+**Auth contract.** `POST /auth/token` is refused with 401 unless the request carries an
+`X-Auth-Mint-Secret` header equal to the API's `NC_AUTH_MINT_SECRET`. The dashboard sends
+that header from `VITE_AUTH_MINT_SECRET`, and the deployed bundle carries the same value,
+so any visitor can mint a token without an account. Change one side without the other and
+login breaks.
+
+**Model calls.** The service runs `NC_DEFAULT_LLM_PROVIDER=mock` and `NC_MOCK_LLM=true`,
+matching repository-root `render.yaml`. No provider API key is stored in AWS. Real model
+calls require adding a provider key to the service's runtime environment variables.
+
+**Rebuilding the image.** The image compiles the `cas-engine` Rust crate, so build it in
+the cloud rather than on a small laptop:
+
+1. `git archive --format=zip -o nc-api-source.zip origin/master -- noetic-compass-scaffold/noetic-compass`
+2. Upload the zip to `s3://nc-api-build-807562639912-usw2/source/nc-api-source.zip`
+3. Run CodeBuild project `nc-api-image-build` (S3 source, image
+   `aws/codebuild/standard:7.0`, privileged mode, `BUILD_GENERAL1_MEDIUM`). It builds
+   `Dockerfile.api` and pushes `noetic-compass-api:v1`; raise `IMAGE_TAG` for a new tag.
+4. App Runner redeploys automatically when the tracked tag is pushed.
+
+Full migration helper scripts: `C:\Users\wakil\nc-aws-migration\` (not committed).
+
+**Cost.** A provisioned App Runner instance bills about `$0.064`/vCPU-hour plus
+`$0.007`/GB-hour, so about `$14`/month at 730 hours. ECR storage is about `$0.10`/GB-month
+for a `138.1` MB image; the S3 source zip is `10.9` MB; CodeBuild is about `$0.02`/minute
+on `BUILD_GENERAL1_MEDIUM` and the 2026-09-26 build used `119` seconds of build time.
+
+**Still on Render.** `cas-harness-customer-api` with `cas-harness-customer-postgres`, the
+accounts-canary private service with `cas-harness-postgres-accounts-canary`, and the
+`atlas-viewer-app` static site. The accounts-off Render lane
+(`noetic-compass-api.onrender.com`) is no longer in the request path; retire it only after
+the remaining lanes have moved.
+
+---
+
+## Cloud Deployment (Render API Backend — accounts-off lane superseded by App Runner)
 
 ### Managed production deployment
 
