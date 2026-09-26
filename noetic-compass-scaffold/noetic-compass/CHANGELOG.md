@@ -1,5 +1,46 @@
 # Noetic Compass — Progress Log
 
+## Public dashboard API moved from Render to AWS App Runner (Sep 26, 2026)
+
+**Headline.** `https://noeticcompass.com/login` was broken for every visitor. The page
+itself loaded and its code was never at fault — a locally started API answered the exact
+call the page makes (`POST /auth/token`) with 200 and a token. What failed was the host
+behind it: every request to `https://noeticcompass.com/api/...` returns HTTP 503 because
+Render had suspended the workspace. Measured on 2026-09-26: `noetic-compass-api.onrender.com`,
+`cas-harness-customer-api.onrender.com`, and even the `atlas-viewer-app` static site all
+return 503 with the response header `x-render-routing: suspend`, while Render's status page
+reported "All Systems Operational". The whole Render workspace is suspended, not one
+service. The repository's own scheduled production monitor had been failing on the same
+cause since 2026-07-29 (open issue #208, latest failure 2026-09-26T00:54Z:
+`production runtime monitor FAIL: /health/ready returned invalid JSON (HTTP 503)`).
+
+**What changed.**
+
+- Built `Dockerfile.api` (Python API plus the Rust `cas-engine` wheel) in AWS CodeBuild —
+  the laptop cannot compile the Rust crate with about 1 GB free RAM — and pushed it to ECR
+  as `noetic-compass-api:v1`. Image size `138.1` MB; build phase `119` s.
+- Created App Runner service `noetic-compass-api` in `us-west-2`, `0.25` vCPU / `512` MB,
+  1 provisioned instance, health check `HTTP /health`, at
+  `https://bmxq2dmdam.us-west-2.awsapprunner.com`.
+- `dashboard/vercel.json`: the `/api/:path*` rewrite now targets the App Runner URL
+  instead of `https://noetic-compass-api.onrender.com`.
+- `NC_AUTH_MINT_SECRET` on the service was set to the value already shipped inside the
+  deployed dashboard bundle, so the existing frontend needed no change to authenticate.
+- Model calls run in mock mode (`NC_DEFAULT_LLM_PROVIDER=mock`, `NC_MOCK_LLM=true`),
+  matching repository-root `render.yaml`. No provider key is stored in AWS.
+
+**Verified against the live AWS service.** `/health` → 200 `{"status":"ok","version":"0.1.0","engine":"cas-engine"}`;
+`POST /auth/token` with the dashboard's mint header → 200 with a token; `GET /scenarios`
+with that token → 200, `400348` bytes.
+
+**Not migrated yet.** `cas-harness-customer-api` plus `cas-harness-customer-postgres`, the
+accounts-canary private service plus `cas-harness-postgres-accounts-canary`, and the
+`atlas-viewer-app` static site. The accounts-off Render lane is now out of the request
+path but still exists in the account.
+
+**Cost.** About `$14`/month for the App Runner provisioned instance, plus pennies for ECR,
+S3, and CodeBuild. Details and rebuild steps: `docs/DEPLOYMENT.md`.
+
 ## PAID-tenant security — per-tenant usage-quota ENGINE (inert; route wiring pending) (Jun 5, 2026)
 
 **Headline.** The metering primitive for paid accounts (`launch/paid-quotas`, stacked on tenant-iso):
