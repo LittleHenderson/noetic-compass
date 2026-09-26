@@ -1,5 +1,27 @@
 # The learning brain — lineage record
 
+## 2026-09-26 corrected HELM critical-mass 2x completed; measured, not certified
+
+The fresh seed-20260918 run completed 20 passes and all 2,940 main updates.
+Fixed pass-10 -> pass-20 public scores: course 502/564 -> 487/564,
+held-back 115/127 -> 111/127, trained 322/358 -> 315/358,
+excluded 65/79 -> 61/79, and harder development 8/59 -> 17/59.
+The development gain accompanies a held-back regression. No general learning,
+all-seed relational acceptance, or new certification is established.
+
+Job cas-meta2-tpntr-20260926054903-c45f775f-m-20260918 used source
+c45f775f225dd06cc20cdf313f0a0398486e0d61 and admission
+3fee35e9c6da7146f252a29018522709ce78da1f. The receiver verified 128/128
+required artifacts; mandatory pass-10 state is preserved and byte-verified.
+The operator exited 0; seven independent checks confirm compute cleanup.
+Private evidence remains retained with storage active. USD21.45 allocated
+under USD21.50; this is not an invoice. The canonical ledger is unchanged.
+No failed historical attempt or reservation was revised. No CAS or 4x/8x launch.
+Full public comparison and exact evidence bindings:
+records/typed_pointer_001/closeout_cm2x_rerun_20260926/RESULTS.md and CLOSEOUT.json.
+Earlier launch/admission paragraphs below remain time-stamped historical states.
+
+
 ## 2026-09-26 corrected HELM critical-mass 2x launched
 
 AWS independently reported instance i-06e9e0febc3881439 RUNNING at

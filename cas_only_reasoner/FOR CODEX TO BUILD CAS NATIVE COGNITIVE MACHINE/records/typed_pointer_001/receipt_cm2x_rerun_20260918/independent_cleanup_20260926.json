@@ -1,0 +1,65 @@
+{
+  "schema": "helm.corrected-rerun.independent-cleanup/1",
+  "utc": "2026-09-26T17:39:59.803279+00:00",
+  "job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+  "checks": [
+    {
+      "check": "instance_terminated_or_absent_after_confirmed_termination",
+      "pass": true,
+      "observed": "ABSENT_FROM_DESCRIBE",
+      "prior_confirmed_terminated_utc": "2026-09-26T10:55:46.046318+00:00",
+      "request_id": "7ffbba88-29eb-4d63-ae81-4656a59196b0"
+    },
+    {
+      "check": "job_security_group_absent",
+      "pass": true,
+      "found": 0,
+      "request_id": "b51cd404-c505-4e01-adf3-010d46cda23f"
+    },
+    {
+      "check": "no_nonterminated_job_instance",
+      "pass": true,
+      "found": [],
+      "request_id": "174bac33-be57-4a18-b94e-f8e59dbb2270"
+    },
+    {
+      "check": "worker_role_absent",
+      "pass": true,
+      "observed": "NoSuchEntity",
+      "request_id": "66df6387-b56a-40df-9a9e-e74303f0fd57"
+    },
+    {
+      "check": "timer_role_absent",
+      "pass": true,
+      "observed": "NoSuchEntity",
+      "request_id": "deb13ea9-ea3c-40a8-a93c-94b952505c0d"
+    },
+    {
+      "check": "worker_profile_absent",
+      "pass": true,
+      "observed": "NoSuchEntity",
+      "request_id": "e965fb8b-e314-423f-a6ef-9dbaffa6bf70"
+    },
+    {
+      "check": "worker_policy_absent",
+      "pass": true,
+      "observed": "NoSuchEntity",
+      "request_id": "db8c649d-4c2c-40c4-8820-1c6be0ef2020"
+    }
+  ],
+  "all_compute_identity_checks_passed": true,
+  "scheduler": "NOT_APPLICABLE_FOR_FROZEN_LAUNCHER",
+  "archive": {
+    "bucket": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918-807562639912",
+    "retained": true,
+    "public_access_block": {
+      "BlockPublicAcls": true,
+      "IgnorePublicAcls": true,
+      "BlockPublicPolicy": true,
+      "RestrictPublicBuckets": true
+    },
+    "storage_active": true,
+    "deletion_authorized": false
+  },
+  "provider_invoice_obtained": false
+}
