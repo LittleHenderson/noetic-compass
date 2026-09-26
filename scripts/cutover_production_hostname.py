@@ -22,8 +22,6 @@ import time
 import urllib.error
 import urllib.request
 
-import boto3
-
 REGION = "us-west-2"
 ACCOUNT = "807562639912"
 HOSTNAME = "api.noeticcompass.com"
@@ -31,9 +29,17 @@ DISTRIBUTION_ID = "E1RBLENB7B6YEA"
 CERT_ARN = f"arn:aws:acm:us-east-1:{ACCOUNT}:certificate/ec714143-cd52-49a6-bd7b-f828a0d4a760"
 SSM_LANE = "/noetic-compass/customer-production"
 
-cf = boto3.client("cloudfront", region_name="us-east-1")
-acm = boto3.client("acm", region_name="us-east-1")
-ssm = boto3.client("ssm", region_name=REGION)
+
+def _client(service: str, region: str):
+    """Create an AWS client lazily.
+
+    The AWS deployment control check runs with the standard library alone, so this module must
+    import without boto3 installed. Clients are therefore built inside the functions that need
+    them, never at module scope.
+    """
+    import boto3 as _boto3
+
+    return _boto3.client(service, region_name=region)
 
 
 def log(m):
@@ -55,12 +61,14 @@ def dns_ready():
 
 
 def cert_issued():
+    acm = _client("acm", "us-east-1")
     status = acm.describe_certificate(CertificateArn=CERT_ARN)["Certificate"]["Status"]
     log(f"certificate status: {status}")
     return status == "ISSUED"
 
 
 def attach_alias():
+    cf = _client("cloudfront", "us-east-1")
     dist = cf.get_distribution(Id=DISTRIBUTION_ID)["Distribution"]
     config = dist["DistributionConfig"]
     config["CallerReference"] = f"nc-api-alias-{int(time.time())}"
@@ -84,6 +92,7 @@ def attach_alias():
 
 
 def wait_for_deployment(timeout=900):
+    cf = _client("cloudfront", "us-east-1")
     deadline = time.time() + timeout
     while time.time() < deadline:
         status = cf.get_distribution(Id=DISTRIBUTION_ID)["Distribution"]["Status"]
@@ -155,6 +164,7 @@ def verify(*, bootstrap_owner: bool):
     if bootstrap_owner:
         log("=== bootstrap first owner and make an authenticated request ===")
         try:
+            ssm = _client("ssm", REGION)
             secret = ssm.get_parameter(
                 Name=f"{SSM_LANE}/NC_ACCOUNT_BOOTSTRAP_SECRET", WithDecryption=True
             )["Parameter"]["Value"]
