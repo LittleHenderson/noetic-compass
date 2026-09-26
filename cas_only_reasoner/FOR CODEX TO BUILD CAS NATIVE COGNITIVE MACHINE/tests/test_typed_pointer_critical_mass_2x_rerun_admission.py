@@ -46,8 +46,8 @@ def test_rerun_keeps_the_science_and_finite_resource_bounds():
     bound = writer.cost_bound()
     assert bound["reservation_plus_allowance_usd"] == "19.30"
     assert bound["all_services_cap_usd"] == "21.50"
-    assert bound["all_services_prospective_total_usd"] == "21.20"
-    assert bound["headroom_to_cap_usd"] == "0.30"
+    assert bound["all_services_prospective_total_usd"] == "21.45"
+    assert bound["headroom_to_cap_usd"] == "0.05"
 
 
 def test_rerun_directive_is_byte_bound_and_names_the_no_reuse_rule():

@@ -113,9 +113,9 @@ def main(bucket, region):
         if (out / "git_head.stdout").read_text().strip() != SOURCE:
             raise ValueError("GIT_SOURCE_IDENTITY")
         cncm = repo / manifest["cncm_prefix"]
-        command("focused_tests", [sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider",
+        command("focused_tests", [sys.executable, "-B", "-m", "pytest", "-vv", "--maxfail=1", "--tb=short", "-p", "no:cacheprovider",
                 "--junitxml=" + str(out / "pytest.xml"), *manifest["test_files"]],
-                cwd=cncm, limit=480, allow_failure=True)
+                cwd=cncm, limit=600, allow_failure=True)
         junit = ET.parse(out / "pytest.xml").getroot()
         suites = [junit] if junit.tag == "testsuite" else list(junit.findall("testsuite"))
         record["tests"] = {key: sum(int(s.attrib.get(key, 0)) for s in suites)

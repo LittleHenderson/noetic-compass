@@ -117,8 +117,8 @@ def execute(directory, expected_hash):
     if sha(directive) != plan["owner_directive_sha256"]:
         raise ValueError("OWNER_DIRECTIVE_CHANGED")
     for field, expected in {"runner": "Codex", "jobs": 1,
-                           "retry_count": 0, "maximum_all_services_usd": "0.60", "hard_wall_seconds": 1200,
-                           "instance_type": "t3.small", "cpu_credits": "standard", "root_gib": 8,
+                           "retry_count": 0, "maximum_all_services_usd": "0.25", "hard_wall_seconds": 1200,
+                           "instance_type": "c6i.large", "cpu_credits": "not_applicable", "root_gib": 8,
                            "region": "us-west-2", "account_id": "807562639912"}.items():
         if plan[field] != expected:
             raise ValueError("FROZEN_ENVELOPE_DIFFERS:" + field)
@@ -129,14 +129,14 @@ def execute(directory, expected_hash):
         raise ValueError("PAYLOAD_CHANGED_AFTER_FREEZE")
     # Separate truthful CPU reservation. The existing canonical campaign API
     # only admits GPU families; never falsify t3.small as a GPU or edit it.
-    # This create-only receipt consumes 0.60 of this new owner's 21.50 envelope.
+    # This create-only receipt consumes 0.25 of this new owner's 21.50 envelope.
     # Historical reservations are never refunded or revised.
     reservation = {"schema": "helm.validation.budget-reservation/1", "job": plan["job_id"],
-        "source_sha": SOURCE, "archive_sha256": plan["payload_sha256"], "reserved_usd": "0.60",
+        "source_sha": SOURCE, "archive_sha256": plan["payload_sha256"], "reserved_usd": "0.25",
         "reserved_utc": utc().isoformat(), "status": "RESERVED_NO_AUTOMATIC_REFUND",
         "owner_directive_sha256": plan["owner_directive_sha256"], "freeze_sha256": expected_hash,
         "combined_new_attempt_cap_usd": "21.50", "training_reservation_usd": "19.20",
-        "other_services_allowance_usd": "0.10", "historical_prerequisites_reserved_usd": "1.30", "combined_declared_usd": "21.20",
+        "other_services_allowance_usd": "0.10", "historical_prerequisites_reserved_usd": "1.90", "combined_declared_usd": "21.45",
         "scope": "One CPU validation prerequisite of the new HELM attempt; canonical GPU ledger unchanged"}
     with (directory / "validation_reservation.json").open("x", encoding="utf-8") as stream:
         json.dump(reservation, stream, indent=2)
@@ -155,7 +155,7 @@ def execute(directory, expected_hash):
     state = {"schema": "helm.validation.aws.execution/1", "job_id": job, "freeze_sha256": expected_hash,
              "source_commit": plan["source_commit"], "payload_sha256": plan["payload_sha256"],
              "runner": "Codex", "start_utc": utc().isoformat(), "resources": {}, "cleanup": [],
-             "status": "PRELAUNCH", "cloud_calls_retry_count": 0, "maximum_all_services_usd": "0.60"}
+             "status": "PRELAUNCH", "cloud_calls_retry_count": 0, "maximum_all_services_usd": "0.25"}
     secret_strings = []
     last_heartbeat = 0.0
     def redact(value):
@@ -290,7 +290,7 @@ def execute(directory, expected_hash):
         request = {"ImageId": plan["ami"], "InstanceType": plan["instance_type"], "MinCount": 1, "MaxCount": 1,
             "ClientToken": job, "Placement": {"AvailabilityZone": plan["zone"]},
             "NetworkInterfaces": [{"DeviceIndex": 0, "SubnetId": plan["subnet_id"], "Groups": [sg], "AssociatePublicIpAddress": True, "DeleteOnTermination": True}],
-            "IamInstanceProfile": {"Name": profile}, "CreditSpecification": {"CpuCredits": "standard"},
+            "IamInstanceProfile": {"Name": profile},
             "MetadataOptions": {"HttpTokens": "required", "HttpEndpoint": "enabled", "HttpPutResponseHopLimit": 1},
             "InstanceInitiatedShutdownBehavior": "terminate", "DisableApiTermination": False,
             "BlockDeviceMappings": [{"DeviceName": plan["root_device"], "Ebs": {"VolumeSize": 8, "VolumeType": "gp3", "Encrypted": True, "DeleteOnTermination": True}}],
@@ -460,7 +460,7 @@ def execute(directory, expected_hash):
         state["end_utc"] = utc().isoformat()
         state["compute_elapsed_seconds"] = None if launched_at is None else time.monotonic() - launched_at
         state["cleanup_complete"] = cleanup_safe and collected and all(row["status"] == "PASS" for row in state["cleanup"])
-        state["cost"] = {"all_services_authorized_maximum_usd": "0.60", "forecast_usd": "0.10",
+        state["cost"] = {"all_services_authorized_maximum_usd": "0.25", "forecast_usd": "0.05",
                          "actual_billing_usd": None, "note": "Billing actual unavailable; resource timestamps and prospective envelope retained."}
         heartbeat("END", force=True)
         save()

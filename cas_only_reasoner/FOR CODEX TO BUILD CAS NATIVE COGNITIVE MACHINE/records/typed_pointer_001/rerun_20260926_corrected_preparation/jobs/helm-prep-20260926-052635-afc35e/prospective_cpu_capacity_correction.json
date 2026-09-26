@@ -1,0 +1,12 @@
+{
+  "utc": "2026-09-26T05:39:05.552655+00:00",
+  "instance_type": "c6i.large",
+  "hourly_usd": "0.0850000000",
+  "hard_wall_seconds": 1200,
+  "compute_max_usd": "0.02833333333333333333333333333",
+  "new_preparation_cap_usd": "0.25",
+  "total_after_preserved_reservations_usd": "21.45",
+  "owner_cap_usd": "21.50",
+  "credits": "not applicable; fixed CPU capacity",
+  "old_job_cleanup_verified": true
+}

@@ -102,11 +102,16 @@ def prepare(wheelhouse, git_packages_dir, authorization_file, authorization_sha2
         "records/typed_pointer_001/pre_design/contract_pins/checkpoint_pins.json",
         "records/typed_practice_001/evaluate_gates.py",
     })
+    historical_public_metadata = {
+        "records/typed_pointer_001/admission_cm2x_001/seeds/20260918/request.json",
+        "records/typed_pointer_001/receipt_cm2x_20260918/launch.json",
+    }
+    names.update(historical_public_metadata)
     if any("/.." in name or name.startswith("/") for name in names):
         raise ValueError("UNSAFE_ALLOWLIST")
     excluded = ("records/typed_pointer_001/admission_cm2x_001/seeds/",
                 "records/typed_pointer_001/receipt_cm2x_20260918/")
-    if any(name.startswith(excluded) for name in names):
+    if any(name.startswith(excluded) and name not in historical_public_metadata for name in names):
         raise ValueError("HISTORICAL_OUTPUT_ACCIDENTALLY_INCLUDED")
     repository = git("rev-parse", "--show-toplevel").decode().strip()
     wanted = {PREFIX + item for item in names}
@@ -148,7 +153,8 @@ def prepare(wheelhouse, git_packages_dir, authorization_file, authorization_sha2
         "source_commit": SOURCE, "status": "EXPLICITLY_PARTIAL_PUBLIC_OBJECT_STORE",
         "objects": object_rows, "allowlisted_paths": sorted(entries),
         "excluded_historical_output_prefixes": [PREFIX + p for p in excluded],
-        "boundary": "Exact original commit, tree metadata, public allowlisted blobs only. Protected blob contents absent. No remote, lazy fetch, synthesized commit or complete clone claim. Historical outputs omitted only in disposable validation fixture; original records unchanged.",
+        "explicit_public_metadata_exceptions": sorted(historical_public_metadata),
+        "boundary": "Exact original commit, tree metadata, public allowlisted blobs only. Protected blob contents absent. No remote, lazy fetch, synthesized commit or complete clone claim. Historical output bodies omitted; only explicit original public request/launch metadata included in disposable validation fixture; original records unchanged.",
     })
     for item in GIT_PACKAGES:
         raw = (git_packages_dir / item["filename"]).read_bytes()
@@ -180,7 +186,7 @@ def prepare(wheelhouse, git_packages_dir, authorization_file, authorization_sha2
                 "files": files, "dependencies": PINS, "expected_tests": 69,
                 "test_files": TESTS, "cncm_prefix": PREFIX, "allowlisted_paths": sorted(entries),
                 "git_version": "1:2.43.0-1ubuntu7.3", "git_packages": GIT_PACKAGES,
-                "test_checkout_boundary": "Historical outputs omitted only in disposable fixture; exact unchanged scientific code/tests."}
+                "test_checkout_boundary": "Historical bodies omitted; two original public request/launch metadata files retained for the historical-target regression. Exact scientific source/tests."}
     payload["payload_manifest.json"] = canonical(manifest)
     job = "helm-prep-" + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:6]
     directory = HERE / "jobs" / job
@@ -202,13 +208,13 @@ def prepare(wheelhouse, git_packages_dir, authorization_file, authorization_sha2
         "owner_directive_reference": str(authorization_file.resolve()), "owner_directive_sha256": sha(directive),
         **{key: provider[key] for key in required_provider},
         "provider_reference_sha256": sha(provider_raw), "sdk_profile": provider.get("sdk_profile", "default"),
-        "instance_type": "t3.small", "cpu_credits": "standard", "root_gib": 8,
+        "instance_type": "c6i.large", "cpu_credits": "not_applicable", "root_gib": 8,
         "root_type": "gp3", "root_encrypted": True, "root_delete_on_termination": True,
         "jobs": 1, "retry_count": 0, "permitted_concurrent_instances": provider["permitted_concurrent_instances"],
         "worker_seconds": 900, "operator_seconds": 1020, "os_shutdown_minutes": 18,
         "scheduler_after_seconds": 1080, "hard_wall_seconds": 1200,
-        "maximum_all_services_usd": "0.60", "forecast_all_services_usd": "0.10",
-        "ec2_usd_per_hour_upper_bound": "0.021",
+        "maximum_all_services_usd": "0.25", "forecast_all_services_usd": "0.05",
+        "ec2_usd_per_hour_upper_bound": "0.085",
         "purpose": "69 public HELM prelaunch tests and exact-source source.zip build; no training",
         "payload_file": "payload.zip", "payload_sha256": sha(archive_raw), "payload_bytes": len(archive_raw),
         "payload_manifest_sha256": sha(payload["payload_manifest.json"]),

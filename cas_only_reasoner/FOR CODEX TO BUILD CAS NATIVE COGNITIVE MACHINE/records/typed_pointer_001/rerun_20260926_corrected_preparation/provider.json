@@ -10,7 +10,8 @@
   "root_device": "/dev/sda1",
   "rates_usd_per_hour": {
     "t3.small": "0.0208000000",
-    "g7.2xlarge": "2.5200000000"
+    "g7.2xlarge": "2.5200000000",
+    "c6i.large": "0.0850000000"
   },
   "provider_mutations": false,
   "concurrency": "Fresh global active-instance gate runs immediately before new CPU launch",
@@ -39,5 +40,6 @@
       },
       "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
     }
-  ]
+  ],
+  "fixed_cpu_capacity_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\rerun_20260926_corrected_preparation\\jobs\\helm-prep-20260926-052635-afc35e\\prospective_cpu_capacity_correction.json"
 }

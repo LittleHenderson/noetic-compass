@@ -1,0 +1,17 @@
+{
+  "schema": "helm.validation.budget-reservation/1",
+  "job": "helm-prep-20260926-052635-afc35e",
+  "source_sha": "ddc598e85d7e166af5c0e2f355aea08b135c4559",
+  "archive_sha256": "5fbdd7c78b14f36d5f363c98d08581652060b626e16c16016b8ccb31772d02e3",
+  "reserved_usd": "0.60",
+  "reserved_utc": "2026-09-26T05:26:55.146357+00:00",
+  "status": "RESERVED_NO_AUTOMATIC_REFUND",
+  "owner_directive_sha256": "d364190935104c04c855d925e5259170f6d9f956e407ce0746c21932f719c68e",
+  "freeze_sha256": "ec0921c1984bfde7d34e44309be20b55c533d8c789ca0af48bbd39e8969f7342",
+  "combined_new_attempt_cap_usd": "21.50",
+  "training_reservation_usd": "19.20",
+  "other_services_allowance_usd": "0.10",
+  "historical_prerequisites_reserved_usd": "1.30",
+  "combined_declared_usd": "21.20",
+  "scope": "One CPU validation prerequisite of the new HELM attempt; canonical GPU ledger unchanged"
+}

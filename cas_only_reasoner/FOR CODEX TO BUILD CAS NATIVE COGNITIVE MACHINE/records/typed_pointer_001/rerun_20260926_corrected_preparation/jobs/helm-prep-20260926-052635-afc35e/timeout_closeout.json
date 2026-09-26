@@ -1,0 +1,20 @@
+{
+  "schema": "helm.preparation-timeout-closeout/1",
+  "job": "helm-prep-20260926-052635-afc35e",
+  "source_sha": "ddc598e85d7e166af5c0e2f355aea08b135c4559",
+  "instance_id": "i-0b9f7522e63a14239",
+  "error_type": "TimeoutError",
+  "error": "VALIDATION_COMMAND_DEADLINE:focused_tests",
+  "test_command_seconds": 480,
+  "partial_failure_marker_present": true,
+  "complete_test_result": false,
+  "package_produced": false,
+  "admission_dry_run_passed": false,
+  "operator_cleanup_steps": 13,
+  "independent_cleanup_checks": 8,
+  "resources_terminated_and_removed": true,
+  "reservation_usd": "0.60",
+  "reservation_unchanged": true,
+  "archive_retained_storage_active": true,
+  "prospective_fix": "Only two original public historical metadata files in checkout plus fixed-capacity CPU for unchanged69-test gate; new job, no restart."
+}
