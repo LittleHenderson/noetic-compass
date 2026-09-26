@@ -1,0 +1,23 @@
+{
+  "utc": "2026-09-26T18:42:04.237529+00:00",
+  "error": "ModuleNotFoundError: No module named prepare_replication",
+  "phase": "standalone operator import, before attempt marker or AWS calls",
+  "failed_process_pid": 65556,
+  "aws_resources_created": false,
+  "training_reservations_created": false,
+  "additional_spend_usd": "0.00",
+  "smallest_fix": "Explicitly put each entry script directory on sys.path before importing sibling operational modules. Scientific code and validated admission functions unchanged.",
+  "capability_checks": [
+    {
+      "script": "campaign_operator.py",
+      "mode": "argparse help only; no execution or cloud calls",
+      "exit_code": 0
+    },
+    {
+      "script": "launch_replication.py",
+      "mode": "argparse help only; no execution or cloud calls",
+      "exit_code": 0
+    }
+  ],
+  "prior_execution_freeze_sha256": "f2cb63892c60c32d7abade8cd8ad8ab48436868161aacc02f7ebdcfaddbe4bf0"
+}

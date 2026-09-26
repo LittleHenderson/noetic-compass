@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import prepare_replication as admission
 import provider_gates as provider
 
