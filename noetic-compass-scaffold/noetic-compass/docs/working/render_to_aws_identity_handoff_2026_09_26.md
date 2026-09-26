@@ -111,6 +111,36 @@ identity moves, the customer and canary entries must leave both, leaving only ac
 This does not shut down any Render service; it stops the repository claiming Render is where
 production runs.
 
+It turns out the Render manifest does **not** have to be narrowed for the origin to move. The
+entanglement is in
+`scripts/tests/test_acceptance_authority_contract_alignment.py`, which asserted that the code
+constant `PRODUCTION_SERVICE_ID` equalled the Render blueprint's service id. That assertion is
+what ties the two together, and replacing it with a check against `.aws/deployment-control.json`
+is enough to separate them — the Render manifest may keep describing the suspended Render
+services it still governs. That smaller edit was made and passes.
+
+### Measured scope of the swap, from an attempted run
+
+The value substitution was applied once to find out what it actually costs, then reverted. The
+numbers below are measured, not estimated:
+
+| Measure | Result |
+|---------|--------|
+| Files changed by the value substitution alone | **39** |
+| Test result afterwards (`scripts/tests`) | **143 failed, 588 passed** |
+| Where the failures are | all in `test_verify_customer_production_acceptance.py` |
+
+The failures are not spread out; they are one wall in one file. That file's fixtures encode the
+Render identity directly — the Render service id `srv-d9bijbjtqb8s73cn4n20`, the onrender
+origin, and the `render_*` receipt keys — so every fixture has to be rebuilt around the AWS
+shape before the constants can move. There is no partial ordering that leaves the suite green:
+the constants and the fixtures have to change together, in one change, with the acceptance
+gates run afterwards.
+
+Also learned: `.aws/deployment-control.json` must be excluded from the substitution. Its
+`superseded` entries are the record of which Render services this migration replaced, and
+rewriting them would destroy that record.
+
 ### The sweep
 
 `scripts/plan_render_hostname_sweep.py` (committed, dry run by default) reports 38 files and 52
