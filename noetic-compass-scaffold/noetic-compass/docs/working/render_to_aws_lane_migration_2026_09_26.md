@@ -158,6 +158,31 @@ Lanes live on AWS and verified:
 Control plane: `.aws/deployment-control.json` plus `scripts/verify_aws_deployment_control.py`
 now declare AWS, and `aws-deployment-control-offline` is a required status check on `master`.
 
+### Atlas viewer moved to S3 + CloudFront
+
+The Render static site `atlas-viewer-app.onrender.com` was suspended with the rest of the
+workspace. It now builds in CodeBuild and publishes to a private S3 bucket read only by a
+CloudFront distribution:
+
+| Item | Value |
+|------|-------|
+| Build | CodeBuild `nc-atlas-viewer-build`, Node 20, `npm ci` then `npm run build`, then `aws s3 sync` |
+| Bucket | `nc-atlas-viewer-807562639912`, public access fully blocked |
+| Distribution | `E3S21FTH7DN5N5` → `https://dkpql0p4015ev.cloudfront.net` |
+| API base | `https://api.noeticcompass.com/atlas`, set at build time |
+
+The API base is the **final** hostname rather than a temporary CloudFront address, so the site
+does not need rebuilding when DNS lands.
+
+Verified live: `/` returns 200 with the Atlas shell, `/audit-console` returns 200 with the Audit
+Console shell, and a deep link such as `/cockpit/session/abc` returns 200 with the Atlas shell
+rather than a 404. Bundle inspection confirms `api.noeticcompass.com` is compiled in and no
+`onrender.com` host remains in any shipped asset.
+
+The manifest now carries the Atlas lane as a fourth entry, and the verifier refuses a static
+lane whose `apiBaseUrl` is not under the declared production origin, so the console cannot be
+quietly wired back to an old host.
+
 Secrets: the values that existed only in Render's dashboard were read through the Render API
 by a temporary GitHub OIDC job and written into SSM Parameter Store. **All ten continuity keys
 were recovered and adopted**, which matters more than it first appeared: the evidence bucket is

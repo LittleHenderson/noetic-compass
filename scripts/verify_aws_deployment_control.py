@@ -33,7 +33,7 @@ RUNBOOK_PATH = Path(
 )
 EXPECTED_ACCOUNT = "807562639912"
 EXPECTED_REGION = "us-west-2"
-EXPECTED_LANES = ["accounts-off", "customer-production", "accounts-canary"]
+EXPECTED_LANES = ["accounts-off", "customer-production", "accounts-canary", "atlas-viewer"]
 
 # Values that must never be committed into a control manifest.
 SECRET_PATTERNS = [
@@ -101,7 +101,8 @@ def validate_manifest(manifest: Mapping[str, Any]) -> list[dict[str, Any]]:
         for field in ("kind", "branch", "imageTag", "healthCheckPath", "publicIngress"):
             _require(field in lane, f"{label} is missing {field}")
         _require(lane["healthCheckPath"].startswith("/"), f"{label} healthCheckPath must be a path")
-        _require(bool(str(lane["imageTag"]).strip()), f"{label} must pin an imageTag")
+        if lane["kind"] != "s3-cloudfront":
+            _require(bool(str(lane["imageTag"]).strip()), f"{label} must pin an imageTag")
         if lane["publicIngress"]:
             origin = lane.get("publicOrigin")
             _require(
@@ -156,6 +157,21 @@ def validate_manifest(manifest: Mapping[str, Any]) -> list[dict[str, Any]]:
     _require(
         authority["originFrontDomain"] in {"d2zcr7t1an5spf.cloudfront.net"},
         "originFrontDomain must name the live CloudFront domain",
+    )
+
+    # The Atlas viewer consumes the production API. Its declared base must be the
+    # production origin, so the console can never be wired to a stale or temporary host.
+    atlas = by_name["atlas-viewer"]
+    _require(bool(atlas.get("bucket")), "atlas-viewer must name its bucket")
+    _require(bool(atlas.get("distributionId")), "atlas-viewer must name its distribution")
+    atlas_base = str(atlas.get("apiBaseUrl", ""))
+    _require(
+        atlas_base.startswith(origin + "/") or atlas_base == origin,
+        f"atlas-viewer apiBaseUrl must be under the production origin {origin}, found {atlas_base!r}",
+    )
+    _require(
+        atlas.get("staticAwsKeys") is False,
+        "atlas-viewer must not use static AWS keys; CloudFront reads the bucket by origin access control",
     )
 
     superseded = manifest["superseded"]
