@@ -123,6 +123,32 @@ class OfflineControlTests(unittest.TestCase):
             with self.assertRaises(control.ControlError):
                 control.validate_runbook_agreement(root, document)
 
+    def test_atlas_must_not_point_at_a_stale_api(self) -> None:
+        document = manifest()
+        lane(document, "atlas-viewer")["apiBaseUrl"] = "https://old-host.example.com/atlas"
+        with self.assertRaises(control.ControlError) as ctx:
+            control.validate_manifest(document)
+        self.assertIn("apiBaseUrl", str(ctx.exception))
+
+    def test_atlas_must_name_its_bucket_and_distribution(self) -> None:
+        document = manifest()
+        del lane(document, "atlas-viewer")["bucket"]
+        with self.assertRaises(control.ControlError):
+            control.validate_manifest(document)
+
+    def test_atlas_must_not_use_static_aws_keys(self) -> None:
+        document = manifest()
+        lane(document, "atlas-viewer")["staticAwsKeys"] = True
+        with self.assertRaises(control.ControlError):
+            control.validate_manifest(document)
+
+    def test_static_lane_must_point_at_the_production_origin(self) -> None:
+        document = manifest()
+        document["authority"]["productionApiOrigin"] = "https://elsewhere.example.com"
+        lane(document, "customer-production")["publicOrigin"] = "https://elsewhere.example.com"
+        with self.assertRaises(control.ControlError):
+            control.validate_manifest(document)
+
 
 if __name__ == "__main__":
     unittest.main()
