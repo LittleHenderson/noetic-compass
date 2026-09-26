@@ -64,7 +64,10 @@ def run(freeze_hash):
     state = {"schema":"helm.replication.operator/1","started_utc":provider.utc(),"freeze_sha256":freeze_hash,
              "operator_pid":__import__("os").getpid(),"automatic_retries":0,
              "seeds":[{"seed":r["seed"],"job":r["job"],"state":"NOT_LAUNCHED"} for r in plan["jobs"]]}
-    write_new(HERE / "CAMPAIGN_ATTEMPT_STARTED.json", state)
+    # One invocation per exact frozen operational source. Prior prelaunch failures
+    # remain immutable; job receipts and the canonical ledger independently forbid
+    # duplicate AWS jobs across operational versions.
+    write_new(HERE / ("CAMPAIGN_ATTEMPT_" + freeze_hash + ".json"), state)
     def save(phase):
         state["updated_utc"] = provider.utc()
         state["phase"] = phase
@@ -85,14 +88,15 @@ def run(freeze_hash):
             verify_frozen(freeze)
             receipt = ROOT / row["receipt_dir"]
             admission.require(not receipt.exists(), "RECEIPT_ALREADY_EXISTS")
+            receipt.parent.mkdir(parents=True, exist_ok=True)
             preflight = provider.before_launch(plan)
-            write_new(HERE/"observations"/(str(row["seed"])+"_prelaunch.json"), preflight)
+            write_new(HERE/"observations"/freeze_hash/(str(row["seed"])+"_prelaunch.json"), preflight)
             study = json.loads((HERE/"admission"/str(row["seed"])/"study.json").read_bytes())
             ledger = admission.launch.validate_ledger_path(admission.launch.CANONICAL_LEDGER)
             ledger_doc = json.loads(ledger.read_bytes())
             admission.require(not any(x["job"] == row["job"] for x in ledger_doc["reservations"]), "JOB_ALREADY_RESERVED")
-            logdir = HERE/"operator_logs"
-            logdir.mkdir(exist_ok=True)
+            logdir = HERE/"operator_logs"/freeze_hash
+            logdir.mkdir(parents=True, exist_ok=True)
             with (logdir/(str(row["seed"])+".stdout")).open("xb") as out, (logdir/(str(row["seed"])+".stderr")).open("xb") as err:
                 child = subprocess.Popen([sys.executable,"-B",str(HERE/"launch_replication.py"),*study["job_record"]["launch_argv"]],
                                          cwd=ROOT, stdout=out, stderr=err, stdin=subprocess.DEVNULL)
@@ -111,7 +115,7 @@ def run(freeze_hash):
             worker = json.loads((receipt/"curriculum_result.json").read_bytes())
             successful_terminal(result,receiver,worker,row)
             cleanup = provider.cleanup(row["job"],result["launch"]["instance_id"])
-            write_new(HERE/"observations"/(str(row["seed"])+"_independent_cleanup.json"),cleanup)
+            write_new(HERE/"observations"/freeze_hash/(str(row["seed"])+"_independent_cleanup.json"),cleanup)
             admission.require(cleanup["all_passed"], "INDEPENDENT_CLEANUP_FAILED")
             current.update(state="COMPLETED_VERIFIED",finished_utc=provider.utc(),
                            instance_id=result["launch"]["instance_id"],required_artifacts_verified=128,

@@ -1,0 +1,52 @@
+{
+  "utc": "2026-09-26T18:48:49.676145+00:00",
+  "exact_error": "FRESH_RECEIPT_DIRECTORY_REQUIRED",
+  "cause": "New nested receipt parent did not exist; original unchanged launcher requires fresh child and existing parent.",
+  "old_operator_state": {
+    "schema": "helm.replication.operator/1",
+    "started_utc": "2026-09-26T18:44:19.598418+00:00",
+    "freeze_sha256": "033e28a24f11884c49f16866d476d88d4c8f739ca6939194072adf14821c21c7",
+    "operator_pid": 22332,
+    "automatic_retries": 0,
+    "seeds": [
+      {
+        "seed": 20260917,
+        "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260917",
+        "state": "OPERATIONAL_FAILURE_NO_RETRY",
+        "child_pid": 34892,
+        "operator_started_utc": "2026-09-26T18:44:28.281881+00:00",
+        "operator_exit_code": 1
+      },
+      {
+        "seed": 20260919,
+        "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260919",
+        "state": "NOT_LAUNCHED_BLOCKED"
+      }
+    ],
+    "updated_utc": "2026-09-26T18:46:28.300435+00:00",
+    "phase": "STOPPED_ON_OPERATIONAL_FAILURE_NO_RETRY",
+    "error": "REPLICATION_STOPPED:TRAINING_OPERATOR_EXIT:1",
+    "error_type": "ValueError"
+  },
+  "provider_absence_checks": [
+    {
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260917",
+      "instance_ids": [],
+      "job_security_group_absent": true,
+      "job_bucket_absent": true,
+      "receipt_directory_absent": true
+    },
+    {
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260919",
+      "instance_ids": [],
+      "job_security_group_absent": true,
+      "job_bucket_absent": true,
+      "receipt_directory_absent": true
+    }
+  ],
+  "canonical_ledger_byte_identical": true,
+  "aws_training_resources_created": false,
+  "additional_training_reservation": false,
+  "extra_spend_usd": "0.00",
+  "remediation": "Create only the receipt parent before invoking the unchanged launcher. Preserve old attempt marker and issue a new source-hash-bound operator invocation after this zero-resource preflight fix; never reuse or restart an AWS job."
+}

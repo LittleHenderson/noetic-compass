@@ -1,0 +1,19 @@
+{
+  "schema": "helm.replication.operator/1",
+  "started_utc": "2026-09-26T18:44:19.598418+00:00",
+  "freeze_sha256": "033e28a24f11884c49f16866d476d88d4c8f739ca6939194072adf14821c21c7",
+  "operator_pid": 22332,
+  "automatic_retries": 0,
+  "seeds": [
+    {
+      "seed": 20260917,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260917",
+      "state": "NOT_LAUNCHED"
+    },
+    {
+      "seed": 20260919,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260919",
+      "state": "NOT_LAUNCHED"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\replication_2_20260926\launch_replication.py", line 27, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\replication_2_20260926\launch_replication.py", line 24, in main
+    return admission.launch.main(args[cut + 1:])
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\aws\typed_pointer_launch.py", line 974, in main
+    result = execute(request, authority, provider, receipt_dir=args.receipt_dir,
+                     owner_authorization_path=args.owner_authorization, ledger_path=ledger_path)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\aws\typed_pointer_launch.py", line 919, in execute
+    return lifecycle.execute(request, authority, provider, ledger_path=ledger_path,
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        receipt_dir=receipt_dir, owner_authorization_path=owner_authorization_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        validate_reserved_transition_fn=lambda before, after, receipt, request:
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            validate_reserved_transition(before, after, receipt, request, expected_plan=provider.reservation_plan()))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\aws\graph_training_candidate_launch.py", line 742, in execute
+    directory = prepare_evidence(receipt_dir if receipt_dir is not None else
+                                 Path(ledger_path).parent / (RECEIPT_PREFIX + request["job"]))
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\aws\graph_training_curriculum_launch.py", line 202, in prepare_evidence
+    require(not path.exists() and path.parent.is_dir(), "FRESH_RECEIPT_DIRECTORY_REQUIRED")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\aws\graph_training_curriculum_launch.py", line 168, in require
+    raise ValueError(code)
+ValueError: FRESH_RECEIPT_DIRECTORY_REQUIRED

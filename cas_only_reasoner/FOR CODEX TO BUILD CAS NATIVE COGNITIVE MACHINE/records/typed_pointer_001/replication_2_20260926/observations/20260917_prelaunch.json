@@ -1,0 +1,73 @@
+{
+  "utc": "2026-09-26T18:44:28.245435+00:00",
+  "instance_type": "g7.2xlarge",
+  "region": "us-west-2",
+  "actual_current_price": {
+    "usd_per_hour": "2.5200000000",
+    "query": {
+      "instanceType": "g7.2xlarge",
+      "regionCode": "us-west-2",
+      "operatingSystem": "Linux",
+      "tenancy": "Shared",
+      "preInstalledSw": "NA",
+      "capacitystatus": "Used"
+    },
+    "request_id": "b2b6dd0b-b2c1-478c-af58-d7721776d696"
+  },
+  "image": {
+    "ImageId": "ami-0fbbd0facbc9e3cff",
+    "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+    "State": "available",
+    "CreationDate": "2026-08-21T14:48:09.000Z",
+    "Architecture": "x86_64"
+  },
+  "regions_checked": [
+    "ap-south-1",
+    "eu-north-1",
+    "eu-west-3",
+    "eu-west-2",
+    "eu-west-1",
+    "ap-northeast-3",
+    "ap-northeast-2",
+    "ap-northeast-1",
+    "ca-central-1",
+    "sa-east-1",
+    "ap-southeast-1",
+    "ap-southeast-2",
+    "eu-central-1",
+    "us-east-1",
+    "us-east-2",
+    "us-west-1",
+    "us-west-2"
+  ],
+  "active_instances": [
+    {
+      "region": "us-west-2",
+      "instance_id": "i-0bd0a082507a51ae3",
+      "instance_type": "t3.small",
+      "state": "running",
+      "production_allowlist_match": true,
+      "tags": {
+        "Lane": "customer-production",
+        "Name": "nc-customer-app",
+        "Purpose": "render-to-aws-migration",
+        "Project": "noetic-compass"
+      }
+    },
+    {
+      "region": "us-west-2",
+      "instance_id": "i-02137d196e671b5c1",
+      "instance_type": "t3.small",
+      "state": "running",
+      "production_allowlist_match": true,
+      "tags": {
+        "Purpose": "render-to-aws-migration",
+        "Lane": "accounts-canary",
+        "Project": "noetic-compass",
+        "Name": "nc-canary-app"
+      }
+    }
+  ],
+  "conflicts": [],
+  "provider_mutations": false
+}

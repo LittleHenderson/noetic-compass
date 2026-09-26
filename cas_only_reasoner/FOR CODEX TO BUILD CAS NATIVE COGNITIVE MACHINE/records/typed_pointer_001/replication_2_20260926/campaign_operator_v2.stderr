@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\replication_2_20260926\campaign_operator.py", line 142, in <module>
+    run(args.freeze_sha256)
+    ~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\replication_2_20260926\campaign_operator.py", line 108, in run
+    admission.require(child.returncode == 0, "TRAINING_OPERATOR_EXIT:" + str(child.returncode))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\helm-cm2x-rerun-20260925\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\replication_2_20260926\prepare_replication.py", line 26, in require
+    raise ValueError("REPLICATION_STOPPED:" + reason)
+ValueError: REPLICATION_STOPPED:TRAINING_OPERATOR_EXIT:1

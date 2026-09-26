@@ -27,5 +27,5 @@
   "prior_failed_validation_reservation_usd": "0.25",
   "campaign_total_ceiling_usd": "41.25",
   "actual_billing_usd": null,
-  "post_test_operator_policy_change": "Only optional reviewer-unavailability disposition was aligned with owner directive; no tested admission, seed, science, evidence or sequencing-success predicate was changed. Explicit entry-directory imports were then added to both standalone operator wrappers after a zero-resource import failure; both entry points passed argparse-help capability probes. No unit/model test ran locally."
+  "post_test_operator_policy_change": "Only optional reviewer-unavailability disposition was aligned with owner directive; no tested admission, seed, science, evidence or sequencing-success predicate was changed. Explicit entry-directory imports were then added to both standalone operator wrappers after a zero-resource import failure; both entry points passed argparse-help capability probes. No unit/model test ran locally. A second zero-resource preflight failure was traced to a missing receipt parent. The operator now creates that parent and uses immutable per-freeze invocation/observation/log paths, preserving both previous local failures. No backend training launch or reservation occurred in either failure."
 }
