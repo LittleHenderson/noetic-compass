@@ -1,0 +1,374 @@
+{
+  "schema": "helm.package-only.terminal-receipt/1",
+  "status": "FAILED",
+  "source_commit": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "commands": [
+    {
+      "name": "offline_install",
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "--require-hashes",
+        "--find-links",
+        "/opt/helm-package-only/wheelhouse",
+        "--target",
+        "/opt/helm-package-only/deps",
+        "-r",
+        "/opt/helm-package-only/requirements.lock"
+      ],
+      "cwd": "/opt/helm-package-only",
+      "returncode": 0,
+      "elapsed_seconds": 14.464225099,
+      "stdout": {
+        "sha256": "b5002b11d133f1e825a56e111014217d4b2f1350f0b4794c079f38daa843e29a",
+        "bytes": 1952,
+        "file": "offline_install.stdout"
+      },
+      "stderr": {
+        "sha256": "abd6f7249a473f07f501069dde0fe2436ada294e0816606ef6d35309752ff944",
+        "bytes": 364,
+        "file": "offline_install.stderr"
+      }
+    },
+    {
+      "name": "environment",
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "freeze",
+        "--path",
+        "/opt/helm-package-only/deps"
+      ],
+      "cwd": "/opt/helm-package-only",
+      "returncode": 0,
+      "elapsed_seconds": 0.8152703149999994,
+      "stdout": {
+        "sha256": "ec089ed54dcf052e909c63bcf8664fcd95de8fa763232f2ba50f909ec391b52c",
+        "bytes": 202,
+        "file": "environment.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "environment.stderr"
+      }
+    },
+    {
+      "name": "git_package_before",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Version}",
+        "git"
+      ],
+      "cwd": "/opt/helm-package-only",
+      "returncode": 0,
+      "elapsed_seconds": 0.029592643999997392,
+      "stdout": {
+        "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e",
+        "bytes": 19,
+        "file": "git_package_before.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_package_before.stderr"
+      }
+    },
+    {
+      "name": "git_package_after",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Version}",
+        "git"
+      ],
+      "cwd": "/opt/helm-package-only",
+      "returncode": 0,
+      "elapsed_seconds": 0.0161560680000008,
+      "stdout": {
+        "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e",
+        "bytes": 19,
+        "file": "git_package_after.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_package_after.stderr"
+      }
+    },
+    {
+      "name": "os_package_inventory",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Package}\t${Version}\n"
+      ],
+      "cwd": "/opt/helm-package-only",
+      "returncode": 0,
+      "elapsed_seconds": 0.0160310480000021,
+      "stdout": {
+        "sha256": "c692807884d79864b8fdad68fd15cb467bd57dbb6ecc27fd5adf8342533d736e",
+        "bytes": 19463,
+        "file": "os_package_inventory.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "os_package_inventory.stderr"
+      }
+    },
+    {
+      "name": "git_commit_exists",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "cat-file",
+        "-e",
+        "a5fcf527b5f2c47a3a9b1f170977c55371845af0^{commit}"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.06525055299999849,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_commit_exists.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_commit_exists.stderr"
+      }
+    },
+    {
+      "name": "git_index",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "read-tree",
+        "a5fcf527b5f2c47a3a9b1f170977c55371845af0"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.3217415800000012,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index.stderr"
+      }
+    },
+    {
+      "name": "git_index_names",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.032315715000002854,
+      "stdout": {
+        "sha256": "941b3f998c88a4160191eefccb01be568b5a0635f7b3ed966e3f1f0151536513",
+        "bytes": 4996967,
+        "file": "git_index_names.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index_names.stderr"
+      }
+    },
+    {
+      "name": "git_skip_unselected",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "update-index",
+        "--skip-worktree",
+        "-z",
+        "--stdin"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.3536884700000016,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_skip_unselected.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_skip_unselected.stderr"
+      }
+    },
+    {
+      "name": "git_include_selected",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "update-index",
+        "--no-skip-worktree",
+        "-z",
+        "--stdin"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.13326901199999952,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_include_selected.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_include_selected.stderr"
+      }
+    },
+    {
+      "name": "git_head",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/opt/helm-package-only/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.0039001310000017497,
+      "stdout": {
+        "sha256": "6ddf2f853cf0689a0221cebdf473b2f4eb6f965c7fe5d0a2ca74ccbf33ad480e",
+        "bytes": 41,
+        "file": "git_head.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_head.stderr"
+      }
+    },
+    {
+      "name": "package_build",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py",
+        "--package",
+        "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/typed_pointer_001/package_a5fcf527",
+        "--source-sha",
+        "a5fcf527b5f2c47a3a9b1f170977c55371845af0"
+      ],
+      "cwd": "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+      "returncode": 1,
+      "elapsed_seconds": 29.917995240000003,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "package_build.stdout"
+      },
+      "stderr": {
+        "sha256": "623511e2a71708fbdc97fdaf462d617ed52827e7a566fa3deb9cb0d56eab3a13",
+        "bytes": 1657,
+        "file": "package_build.stderr"
+      }
+    }
+  ],
+  "started_utc": "2026-09-26T00:30:24.052280+00:00",
+  "prior_test_case_count": 41,
+  "scope": "Exact-commit package build only; prior tests bound as input, no new tests, CUDA/model/training acceptance.",
+  "payload_manifest_sha256": "71c7a180062374d3b1f0e12ab705773ef120b5a0e937fd98a6ebaff243301fe3",
+  "test_checkout_boundary": "Historical outputs omitted only in disposable fixture; exact unchanged scientific code/tests.",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "successful_prior_tests": {
+    "boundary": "Original worker status FAILED retained: aggregate-count wrapper false negative after 41 cases and 6 subtests passed. This job only builds the package; runs no tests or training.",
+    "errors": 0,
+    "failures": 0,
+    "files": [
+      {
+        "bytes": 18258,
+        "path": "prior_test_evidence/terminal_test_receipt.json",
+        "sha256": "53cc02fec57fb647bb46bc23c9d7bf3f57c83c6ec7c969d682f81586cea12954"
+      },
+      {
+        "bytes": 6667,
+        "path": "prior_test_evidence/pytest.xml",
+        "sha256": "a4244109f8bf5496432b26701e1bc376f886a2f256aa9b49f2384f02c483faff"
+      },
+      {
+        "bytes": 113,
+        "path": "prior_test_evidence/focused_tests.stdout",
+        "sha256": "82cd57103edd4db6e22f44321f92786fb7411e87879b318eda26f78c8103c9b4"
+      },
+      {
+        "bytes": 0,
+        "path": "prior_test_evidence/focused_tests.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 350,
+        "path": "prior_test_evidence/terminal.json",
+        "sha256": "1b301f35f103bade923545fb39d137a07e4a1328fd57cecc82339815bc16fc12"
+      },
+      {
+        "bytes": 2717,
+        "path": "prior_test_evidence/freeze.json",
+        "sha256": "9b4c898c73049f611a63660437a36b57bd843a18301fde5f162f25e544451d2f"
+      }
+    ],
+    "junit_tests_including_subtests": 47,
+    "original_payload_sha256": "121234bebefe75bee8d4074958f74f9d5423086cbf3b98bd3400434c8febe228",
+    "original_results_archive_sha256": "5d47f4e94a64a26bc540a296d05a7fca234f16d193f7fe16e07bd547ea53c9ab",
+    "original_terminal_sha256": "1b301f35f103bade923545fb39d137a07e4a1328fd57cecc82339815bc16fc12",
+    "original_validation_freeze_sha256": "9b4c898c73049f611a63660437a36b57bd843a18301fde5f162f25e544451d2f",
+    "original_validation_job": "helm-val-20260926-001905-58f7e7",
+    "schema": "helm.package-only.successful-tests/1",
+    "skipped": 0,
+    "source_commit": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+    "successful_subtests": 6,
+    "suite_counts": {
+      "test_typed_pointer_critical_mass_2x": 14,
+      "test_typed_pointer_critical_mass_2x_admission": 12,
+      "test_typed_pointer_critical_mass_update_counts": 7,
+      "test_typed_pointer_deadline_routing": 8
+    },
+    "test_case_count": 41
+  },
+  "tests_executed_this_job": 0,
+  "error_type": "RuntimeError",
+  "error": "COMMAND_FAILED:package_build",
+  "finished_utc": "2026-09-26T00:31:11.656343+00:00",
+  "elapsed_seconds": 47.604197815
+}

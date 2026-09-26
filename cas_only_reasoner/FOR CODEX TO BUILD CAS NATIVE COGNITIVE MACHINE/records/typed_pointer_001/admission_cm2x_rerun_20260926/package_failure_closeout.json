@@ -1,0 +1,59 @@
+{
+  "schema": "helm.rerun.package-blocker/1",
+  "recorded_utc": "2026-09-26T00:34:33.070661+00:00",
+  "status": "TRAINING_NOT_LAUNCHED_PACKAGE_GATE_FAILED",
+  "source_commit": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "tests_passed": 41,
+  "successful_subtests": 6,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "validation_job": "helm-val-20260926-001905-58f7e7",
+  "validation_instance_id": "i-08e50017cbe86a76f",
+  "validation_wrapper_failure_preserved": "EXPECTED_41_PASS_WITHOUT_SKIPS despite successful41cases+6subtests aggregate47",
+  "package_job": "helm-pkg-20260926-002850-3d0f24",
+  "package_instance_id": "i-0983caf04f516eb66",
+  "package_failure": "Exact-source packager calls Git ls-tree -r -l for top-level directories; omitted unrelated blob sizes return BAD in public partial object store, causing ValueError before source.zip construction.",
+  "package_result_sha256": "7bad7bdcbcdf114b80dc476c293fca2f0969b112f2c39ebcd65c4c001ef53dd9",
+  "package_stderr_sha256": "623511e2a71708fbdc97fdaf462d617ed52827e7a566fa3deb9cb0d56eab3a13",
+  "package_download_inventory_hash_checks": 25,
+  "source_zip_produced": false,
+  "new_training_admission_created": false,
+  "new_training_reservation_created": false,
+  "training_instance_id": null,
+  "training_status": "NOT_LAUNCHED",
+  "original_failed_helm_unchanged": true,
+  "both_cpu_instances_terminated": true,
+  "both_operator_cleanup_complete": true,
+  "evidence_archives_retained_storage_active": true,
+  "reservations_preserved_usd": {
+    "validation": "0.60",
+    "package": "0.10"
+  },
+  "prospective_training_reservation_usd": "19.20",
+  "other_services_allowance_usd": "0.10",
+  "existing_combined_envelope_usd": "20.00",
+  "proposed_one_additional_package_build_cap_usd": "0.10",
+  "proposed_total_cap_usd": "20.10",
+  "proposal_status": "PREPARED_ONLY_NEW_OWNER_AUTHORIZATION_REQUIRED",
+  "cost_reason": "Additional package-build attempt would increase conservative reservations; measured training runtime still fits its existing19.20 envelope. This is not a measured training-runtime overrun.",
+  "automatic_retries": 0,
+  "next_action": "Prepare operational metadata-query correction, retain existing scientific source and every historical receipt, then await explicit owner authorization for new build attempt and20.10 cap.",
+  "independent_cleanup": [
+    {
+      "job": "helm-val-20260926-001905-58f7e7",
+      "receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260926\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\rerun_20260926_validation\\jobs\\helm-val-20260926-001905-58f7e7\\independent_cleanup.json",
+      "sha256": "ae6b0ab33b4f3102f6a9ac8db65fc76882163fa312cbd1374a5902209a3fd0f4",
+      "checks_passed": 8,
+      "checks_total": 8
+    },
+    {
+      "job": "helm-pkg-20260926-002850-3d0f24",
+      "receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260926\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\rerun_20260926_validation\\package_only\\jobs\\helm-pkg-20260926-002850-3d0f24\\independent_cleanup.json",
+      "sha256": "f12552a4d2eccfa3e596d170d5195a50d6a93dc807268c36c33d06edbec6c638",
+      "checks_passed": 8,
+      "checks_total": 8
+    }
+  ],
+  "updated_utc": "2026-09-26T00:37:15.058378+00:00"
+}

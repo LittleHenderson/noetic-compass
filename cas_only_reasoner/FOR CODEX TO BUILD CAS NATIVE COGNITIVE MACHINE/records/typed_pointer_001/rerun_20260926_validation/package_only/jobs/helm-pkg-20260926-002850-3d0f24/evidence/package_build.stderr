@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py", line 978, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py", line 948, in main
+    print(json.dumps(build_pointer_package(args.package, source_sha=args.source_sha)))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py", line 675, in build_pointer_package
+    rows = frozen_inputs()
+           ^^^^^^^^^^^^^^^
+  File "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py", line 389, in frozen_inputs
+    _INVENTORY_CACHE[commit] = _committed_rows(commit)
+                               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/helm-package-only/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py", line 359, in _committed_rows
+    sizes[path.decode("utf-8").removeprefix(shared.GIT_PREFIX)] = (fields[2].decode("ascii"), int(fields[3]))
+                                                                                              ^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: b'BAD'

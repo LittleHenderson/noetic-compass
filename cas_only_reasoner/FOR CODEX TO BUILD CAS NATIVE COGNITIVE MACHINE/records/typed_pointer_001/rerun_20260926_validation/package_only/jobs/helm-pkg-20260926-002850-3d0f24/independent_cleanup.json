@@ -1,0 +1,117 @@
+{
+  "schema": "helm.validation-independent-cleanup/1",
+  "observed_utc": "2026-09-26T00:34:08.969227+00:00",
+  "job_id": "helm-pkg-20260926-002850-3d0f24",
+  "account_id": "807562639912",
+  "region": "us-west-2",
+  "execution_receipt_sha256": "e5ea1bf196a7d1bac778e8e0cdcd7a81cee9ee5c74c3e91cabf858d70c1634f1",
+  "checks": [
+    {
+      "name": "instance_terminated",
+      "status": "PASS",
+      "observed": [
+        {
+          "InstanceId": "i-0983caf04f516eb66",
+          "State": {
+            "Code": 48,
+            "Name": "terminated"
+          },
+          "StateTransitionReason": "User initiated (2026-09-26 00:31:13 GMT)",
+          "LaunchTime": "2026-09-26T00:29:57+00:00",
+          "BlockDeviceMappings": []
+        }
+      ]
+    },
+    {
+      "name": "security_group_absent",
+      "status": "PASS",
+      "provider_error_code": "InvalidGroup.NotFound",
+      "http_status": 400
+    },
+    {
+      "name": "worker_role_absent",
+      "status": "PASS",
+      "provider_error_code": "NoSuchEntity",
+      "http_status": 404
+    },
+    {
+      "name": "watchdog_role_absent",
+      "status": "PASS",
+      "provider_error_code": "NoSuchEntity",
+      "http_status": 404
+    },
+    {
+      "name": "worker_profile_absent",
+      "status": "PASS",
+      "provider_error_code": "NoSuchEntity",
+      "http_status": 404
+    },
+    {
+      "name": "scheduler_job_absent",
+      "status": "PASS",
+      "provider_error_code": "ResourceNotFoundException",
+      "http_status": 404
+    },
+    {
+      "name": "evidence_bucket_retained",
+      "status": "PASS",
+      "bucket": "helm-pkg-20260926-002850-3d0f24-807562639912",
+      "object_count": 5,
+      "object_bytes": 38629996
+    },
+    {
+      "name": "evidence_bucket_private",
+      "status": "PASS",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "public_group_grant_count": 0
+    }
+  ],
+  "compute_and_owned_transient_resources_clean": true,
+  "evidence_archive_intentionally_retained": true,
+  "storage_remains_active": true,
+  "object_metadata_only": [
+    {
+      "Key": "inputs/payload.zip",
+      "LastModified": "2026-09-26T00:29:34+00:00",
+      "ETag": "\"eb9f345aff97bd01c95dc817e091f04b\"",
+      "Size": 38199739,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "outputs/bootstrap_failure.json",
+      "LastModified": "2026-09-26T00:31:13+00:00",
+      "ETag": "\"a5b27e26466a63b0d7a0a6e5b61ce75e\"",
+      "Size": 116,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "outputs/emergency_evidence.tar.gz",
+      "LastModified": "2026-09-26T00:31:13+00:00",
+      "ETag": "\"eedf988d5a8ee3e170ded6f29979096f\"",
+      "Size": 214862,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "outputs/outputs.tar.gz",
+      "LastModified": "2026-09-26T00:31:13+00:00",
+      "ETag": "\"eedf988d5a8ee3e170ded6f29979096f\"",
+      "Size": 214862,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "outputs/terminal.json",
+      "LastModified": "2026-09-26T00:31:13+00:00",
+      "ETag": "\"4572df864403c8a603b9db7208503162\"",
+      "Size": 417,
+      "StorageClass": "STANDARD"
+    }
+  ],
+  "object_bodies_read": false,
+  "provider_mutations": false,
+  "claim_boundary": "Independent read-only cleanup confirmation only. Failed job remains failed; this record does not alter test, package, admission, or reservation status."
+}

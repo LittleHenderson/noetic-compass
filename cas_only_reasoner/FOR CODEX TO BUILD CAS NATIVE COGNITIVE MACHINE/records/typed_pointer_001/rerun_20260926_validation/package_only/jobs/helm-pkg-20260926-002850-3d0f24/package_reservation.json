@@ -1,0 +1,17 @@
+{
+  "schema": "helm.package-only.budget-reservation/1",
+  "job": "helm-pkg-20260926-002850-3d0f24",
+  "source_sha": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "archive_sha256": "7e50f2cd1a90dd3356553197b47e5ec1e7f5a5604b233d2414ddf9082e85db6a",
+  "reserved_usd": "0.10",
+  "reserved_utc": "2026-09-26T00:29:09.372926+00:00",
+  "status": "RESERVED_NO_AUTOMATIC_REFUND",
+  "owner_directive_sha256": "560cd01271e7bac76c7c1f69f3b63d84c3192e2bc8199393e6a074cab02084c2",
+  "freeze_sha256": "70904c67128ff34f81e2501e72a1105861a7692d51c53bb1667367d2b54db0d6",
+  "combined_new_attempt_cap_usd": "20.00",
+  "training_reservation_usd": "19.20",
+  "other_services_allowance_usd": "0.10",
+  "original_validation_reservation_usd": "0.60",
+  "combined_declared_usd": "20.00",
+  "scope": "One CPU package build completing the new HELM prelaunch sequence; prior tests reused, canonical GPU ledger unchanged"
+}
