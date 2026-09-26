@@ -222,3 +222,39 @@ files and 52 occurrences to rewrite, and five files to leave alone with a stated
 (historical records, the Render blueprints, the hand-edited runbook, and the two Render control
 scripts that grep *for* the Render host on purpose). It defaults to a dry run.
 
+## Cost: measured, and a warning about what dominates it
+
+Measured on 2026-09-26 from Cost Explorer, month to date (1–26 September). Cost Explorer lags by
+several hours, so the lanes' own compute is not yet visible in it.
+
+| Line | Amount | Note |
+|------|--------|------|
+| EC2 compute, `g7.2xlarge` | **$149.60** | not this migration |
+| EC2 other (EBS volumes) | $20.44 | mostly volumes not belonging to the lanes |
+| Tax | $18.69 | |
+| KMS, Secrets Manager, VPC, S3 | $2.91 | migration-related services |
+| **Attributed to the migration** | **$2.91** | measured; the lanes' EC2 hours have not posted yet |
+
+**A `g7.2xlarge` was running while this was measured** — `i-06e9e0febc3881439`, launched
+2026-09-26T05:57:31Z, tagged `cas_meta_job: cas-meta2-tpntr-20260926054903-c45f775f-m-20260918`.
+It is a CAS research job, not part of this migration, and at roughly $1.50/hour it costs more per
+day than the whole migrated platform costs per month. It was left alone deliberately: it is
+somebody's running job, not mine to terminate. Anyone reading this while costs look wrong should
+check that instance first.
+
+Calculated run rate for the migrated platform, from published rates at 730 hours:
+
+| Component | Per month |
+|-----------|-----------|
+| 2 × EC2 `t3.small` | $30.37 |
+| EBS, 50 GB gp3 across three volumes | $4.00 |
+| 2 × RDS `db.t4g.micro` + 40 GB gp3 + managed secrets | $28.76 |
+| App Runner, 0.25 vCPU / 512 MB provisioned | $14.24 |
+| CloudFront, S3, ECR, CodeBuild | ≈ $2.00 |
+| **Total** | **≈ $79** |
+
+So the migrated platform runs at about **$79/month**, against roughly $46/month of Render
+services and databases that are suspended and serving nothing. The migration is slightly more
+expensive than what it replaces and is the only side of that comparison that works.
+
+
