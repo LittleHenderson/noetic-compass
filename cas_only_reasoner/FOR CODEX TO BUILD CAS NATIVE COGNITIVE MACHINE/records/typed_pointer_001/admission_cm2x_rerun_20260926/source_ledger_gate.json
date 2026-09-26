@@ -1,0 +1,190 @@
+{
+  "schema": "helm.cm2x-rerun-source-ledger-gate/1",
+  "observed_utc": "2026-09-26T00:10:40.691231+00:00",
+  "scope": "Read-only public source delta and canonical ledger inspection; no execution, tests, cloud calls, reservations, or scientific certification.",
+  "source_sha": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "historical_source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+  "scientific_launcher_scope": [
+    "cncm/**",
+    "research/** excluding records/**"
+  ],
+  "changed_source_paths": [
+    "cncm/typed_pointer_worker.py",
+    "cncm/typed_practice_worker.py"
+  ],
+  "only_two_deadline_routing_files_changed": true,
+  "source_byte_checks": [
+    {
+      "path": "cncm/typed_pointer_worker.py",
+      "git_blob_sha256": "8928b154ee84238de34cc51b9013bef06dca553dad900c77495d898c6ab3e834",
+      "working_bytes_sha256": "8928b154ee84238de34cc51b9013bef06dca553dad900c77495d898c6ab3e834",
+      "exact_match": true
+    },
+    {
+      "path": "cncm/typed_practice_worker.py",
+      "git_blob_sha256": "1063c4f71457a7651cd30ecc2390c042fb63f9526ef3627ee35a1236c8cc62af",
+      "working_bytes_sha256": "1063c4f71457a7651cd30ecc2390c042fb63f9526ef3627ee35a1236c8cc62af",
+      "exact_match": true
+    }
+  ],
+  "routing": {
+    "worker_start_origin": "cncm/typed_pointer_worker.py:1761; copied unchanged into ctx at :1777",
+    "main": "cncm/typed_pointer_worker.py:1090-1091 passes ctx[started] to local _train_logged",
+    "interference": "cncm/typed_pointer_worker.py:1154 passes ctx[started] to local _train_logged",
+    "replay": "cncm/typed_pointer_worker.py:1243-1244 passes ctx[started] to local _stage_and_train",
+    "pointer_wrappers": "cncm/typed_pointer_worker.py:436-445 forwards started=started and deadline=_deadline",
+    "practice_forwarding": "cncm/typed_practice_worker.py:127-131 forwards both arguments unchanged",
+    "effective_call": "cncm/typed_practice_worker.py:107-111 chooses explicit callback, otherwise unchanged practice _deadline",
+    "pointer_guard": "cncm/typed_pointer_worker.py:410-412 uses original elapsed time < pointer_contract.WORKER_DEADLINE_SECONDS (23100)",
+    "practice_default": "cncm/typed_practice_worker.py:61-62 continues using practice_contract.WORKER_DEADLINE_SECONDS (12300) when callback omitted",
+    "static_conclusion": "PASS_SOURCE_INSPECTION_ONLY; focused regression execution remains a separate admission gate"
+  },
+  "guard_table": [
+    {
+      "phase": "main/interference/replay helper",
+      "seconds": 23100,
+      "clock_origin": "Pointer run() entry monotonic clock, never reset for these helper routes",
+      "source_refs": [
+        "cncm/typed_pointer_worker.py:410",
+        "cncm/typed_pointer_worker.py:436",
+        "cncm/typed_pointer_worker.py:442",
+        "cncm/typed_pointer_worker.py:1761",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py:171"
+      ],
+      "note": ""
+    },
+    {
+      "phase": "checkpoint/evaluation/reload surrounding worker guards",
+      "seconds": 23100,
+      "clock_origin": "Original pointer run clock",
+      "source_refs": [
+        "cncm/typed_pointer_worker.py:470",
+        "cncm/typed_pointer_worker.py:1047",
+        "cncm/typed_pointer_worker.py:1053",
+        "cncm/typed_pointer_worker.py:1079",
+        "cncm/typed_pointer_worker.py:1115",
+        "cncm/typed_pointer_worker.py:1211"
+      ],
+      "note": "Checkpoint serialization itself has no separate helper timer; surrounding worker checks and numeric-child timeout cover it."
+    },
+    {
+      "phase": "evaluation scoring helper",
+      "seconds": 3300,
+      "clock_origin": "Fresh clock immediately before each scoring call",
+      "source_refs": [
+        "cncm/typed_pointer_worker.py:487",
+        "cncm/typed_course_worker.py:148",
+        "cncm/typed_course_worker.py:160",
+        "cncm/typed_course_worker.py:72",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/worker_contract.py:23"
+      ],
+      "note": "Pointer original-clock deadline is rechecked immediately after scoring; public call boundary inspected, private checker bodies not read."
+    },
+    {
+      "phase": "pointer learner elapsed guard",
+      "seconds": 23100,
+      "clock_origin": "Per learner construction clock; restored checkpoints preserve elapsed_before",
+      "source_refs": [
+        "cncm/typed_pointer_worker.py:892",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py:1867",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py:1897",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py:2225"
+      ],
+      "note": "Original worker clock remains the earlier outer limit across reconstruction."
+    },
+    {
+      "phase": "numeric child",
+      "seconds": 23400,
+      "clock_origin": "subprocess.run child start, after installation/bootstrap setup",
+      "source_refs": [
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:548",
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:561",
+        "research/CAS_META_2_COMPOSITION/aws/recurrent_cjt_launch.py:493",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py:172"
+      ],
+      "note": "Source template rewrite replaces timeout=MAX_WALL_SECONDS+1800 with timeout=MAX_WALL_SECONDS."
+    },
+    {
+      "phase": "outer bootstrap/setup/child/publication",
+      "seconds": 24300,
+      "clock_origin": "timeout command start inside guest user-data",
+      "source_refs": [
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:58",
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:833"
+      ],
+      "note": "TERM then kill-after=30s; includes package installation and result publication."
+    },
+    {
+      "phase": "guest watchdog",
+      "seconds": 24900,
+      "clock_origin": "Boot-relative systemd --on-boot timer",
+      "source_refs": [
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:59",
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:826"
+      ],
+      "note": "Poweroff watchdog is not cancelled; source is independently earlier than instance envelope."
+    },
+    {
+      "phase": "operator wait envelope",
+      "seconds": 25200,
+      "clock_origin": "TypedPointerProvider.wait entry monotonic clock after launch",
+      "source_refs": [
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:770",
+        "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:779",
+        "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py:174"
+      ],
+      "note": "Wait origin is not launch time or exact provider billing cutoff. Guest boot watchdog is the independent in-instance bound."
+    }
+  ],
+  "canonical_ledger": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+    "derivation_refs": [
+      "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:263",
+      "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:509",
+      "research/CAS_META_2_COMPOSITION/aws/typed_matched_launch.py:20",
+      "research/CAS_META_2_COMPOSITION/aws/typed_matched_launch.py:48",
+      "research/CAS_META_2_COMPOSITION/aws/typed_matched_launch.py:130"
+    ],
+    "sha256": "12b8cb5f3433cf172f220924ec2677ffe5bd4cfc6cf3a04e6fbca52c509448d2",
+    "revision": 109,
+    "reservation_count": 111,
+    "owner_task_cap_usd": "5000.00",
+    "total_reserved_usd": "880.20",
+    "remaining_unreserved_usd": "4119.80",
+    "arithmetic_matches_recorded": true,
+    "new_training_reservation_usd": "19.20",
+    "headroom_after_one_new_training_reservation_usd": "4100.60",
+    "historical_job": "cas-meta2-tpntr-20260925151836-b981625f-m-20260918",
+    "historical_row_count": 1,
+    "historical_reserved_usd": "19.20",
+    "historical_status": "RESERVED_NO_AUTOMATIC_REFUND",
+    "historical_source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+    "historical_archive_sha256": "d06fbd116386344e48b2d2a8877f733ced7c7a8f6f1339b3cb4d64ed37f565c7",
+    "historical_row_sha256_canonical_json": "aa2525630f7e4e6463321d9c45fe04722766b1f7e5b36b8336320969ff659fea",
+    "historical_19_20_preserved": true,
+    "no_automatic_refund": true,
+    "ledger_mutated": false,
+    "limitation": "Snapshot arithmetic and exact launcher path inspected; launcher must validate history and reserve atomically at execution. Campaign headroom is not additional attempt authorization."
+  },
+  "new_attempt_envelope_source": {
+    "reservation_usd": "19.20",
+    "declared_compute_plus_ancillary_bound_usd": "19.12",
+    "other_services_allowance_usd": "0.10",
+    "all_services_bound_usd": "19.30",
+    "owner_new_attempt_cap_usd": "20.00",
+    "instance_type": "g7.2xlarge",
+    "jobs": 1,
+    "automatic_retries": 0,
+    "reference": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_contract.py:152-174"
+  },
+  "remaining_separate_gates": [
+    "Authorized AWS focused test receipts",
+    "Component-based measured runtime forecast against applicable clock origins",
+    "Exact-source new package/admission identities",
+    "Live EC2 concurrency preflight",
+    "Atomic launcher ledger validation/reservation"
+  ],
+  "tests_run": false,
+  "cloud_calls_made": false,
+  "launch_readiness_claim": false
+}

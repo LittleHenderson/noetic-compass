@@ -1,0 +1,156 @@
+{
+  "schema": "helm.cm2x.rerun-component-forecast/1",
+  "utc": "2026-09-26T00:09:38.951991+00:00",
+  "source_sha": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "projected_worker_seconds": "17196.937778367716010",
+  "projected_instance_seconds": "17795.126661911716410",
+  "expected_cost_usd": "13.94",
+  "guard_fit": true,
+  "basis": "Keep the historical component projection from exact source a5fcf527 pointer_contract.py:125-134: main2940*4.896459789305442 +23 evaluations*51.81886909885701 +890.397366079 phaseA +719.1146424570053 combined worker glue/tail. Add598.1888835440004 inherited practice non-worker allowance. New failed-run public main-only window1480..2100 measures4.879467741935484s/update, slightly faster; do not replace component forecast with blended elapsed/updates.",
+  "forecast_is_measured_new_full_run": false,
+  "source_contract_sha256": "bc3094549880b4c1010c297168cc8beb9f8b44985aa394b0d755f51281e4c78c",
+  "components_seconds": {
+    "main_training_2940_updates": "14395.591780557999480",
+    "regular_evaluations_18_and_ablation_evaluations_5": "1191.83398927371123",
+    "checkpoint_phase_a": "890.397366079",
+    "combined_worker_glue_and_tail": "719.1146424570053",
+    "bootstrap_and_other_non_worker_allowance": "598.1888835440004"
+  },
+  "component_accounting": {
+    "regular_evaluations": "Four full-course checkpoints(0,1,10,20), four held-back-only checkpoints(2,4,6,8), eight development evaluations, two retention evaluations =18. Five ablation evaluations add23 total.",
+    "combined_worker_glue_and_tail": "Historical R17 residual after subtracting main training, named evaluations and phaseA from its full worker clock. Includes initial preparation, 16 interference updates, two replay updates, checkpoint/reload work, phaseB, final verification/publication. These terms are not zero, but individually timed R17 receipts were unavailable in the exact known receipt directories inspected. This is a combined historical allowance, not separate measured durations for this attempt.",
+    "non_worker": "598.1888835440004 is inherited practice measurement6064-5465.811116456 for boot/install/delivery. It is not newly measured R17 or failed-run bootstrap.",
+    "margin": "Point projection is below23100 worker by5903.062221632284s and25200 instance by7404.873338088284s. This margin absorbs timing variation and unsplit-tail uncertainty; it does not guarantee successful completion."
+  },
+  "fresh_failed_run_public_measurements": {
+    "source_sha": "b981625fdc9c28a5c80a18453216686a1d5357af",
+    "main_only_window_start": {
+      "completed_main_updates": 1480,
+      "current_pass": 11,
+      "elapsed_seconds": 9237.06,
+      "index": 358,
+      "schema": "cncm.typed-course-progress/0.1",
+      "total_main_updates": 2940,
+      "typed_course_phase": "main_training"
+    },
+    "main_only_window_end": {
+      "completed_main_updates": 2100,
+      "current_pass": 15,
+      "elapsed_seconds": 12262.33,
+      "index": 420,
+      "schema": "cncm.typed-course-progress/0.1",
+      "total_main_updates": 2940,
+      "typed_course_phase": "main_training"
+    },
+    "main_only_updates": 620,
+    "main_only_seconds": "3025.27",
+    "main_only_seconds_per_update": "4.879467741935483870967741935",
+    "main_2940_at_this_rate_seconds": "14345.63516129032258064516129",
+    "phase_a_seconds": 887.9880087699999,
+    "completed_named_eval_phases": 14,
+    "completed_named_eval_seconds": 838.9093749999988,
+    "remaining_tail_was_not_reached": true,
+    "blended_12301_seconds_divided_by2108_not_used": true
+  },
+  "deadline_table": [
+    {
+      "guard": "pointer helper/main/interference/replay",
+      "seconds": 23100,
+      "clock_origin": "original typed_pointer_worker.run monotonic started",
+      "coverage": "Main and interference _train_logged wrappers and replay _stage_and_train wrapper pass pointer _deadline and original started into practice helpers; no12300 practice default remains on pointer training paths.",
+      "source": "cncm/typed_pointer_worker.py:410,436-445,1091,1154,1244;cncm/typed_practice_worker.py:107-131"
+    },
+    {
+      "guard": "pointer input/checkpoint/evaluation/phaseB/ablation",
+      "seconds": 23100,
+      "clock_origin": "same original worker started",
+      "coverage": "Pointer guard around phases and in packet/checkpoint loops. Evaluation shared scorer uses its own fresh per-call clock, then pointer elapsed guard is rechecked.",
+      "source": "cncm/typed_pointer_worker.py:472-488,525-547,748,796,831,1318-1332,1380,1535,1832,1837,1886"
+    },
+    {
+      "guard": "shared sealed scorer per evaluation",
+      "seconds": 3300,
+      "clock_origin": "fresh time.monotonic() immediately before each _score_seal call",
+      "coverage": "Each evaluation scoring call only; independent of original worker elapsed. Pointer23100 guard surrounds and follows it. The largest measured entire fullcourse evaluation was191.918146096s, so this observed combined prediction+scoring duration is already below scorer3300.",
+      "source": "cncm/typed_pointer_worker.py:485-488;cncm/typed_course_worker.py:72-73,148-160;research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/worker_contract.py:23"
+    },
+    {
+      "guard": "numeric child subprocess",
+      "seconds": 23400,
+      "clock_origin": "child subprocess invocation; starts before pointer run",
+      "coverage": "Model worker plus initialization and child completion.",
+      "source": "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:57,554-566"
+    },
+    {
+      "guard": "outer shell",
+      "seconds": 24300,
+      "clock_origin": "guest bootstrap body shell start",
+      "coverage": "setup, numeric child and publication; TERM then kill-after30s.",
+      "source": "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:58,833-835"
+    },
+    {
+      "guard": "guest watchdog",
+      "seconds": 24900,
+      "clock_origin": "guest boot monotonic time via systemd --on-boot",
+      "coverage": "Guest poweroff, never cancelled.",
+      "source": "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:59,826-832"
+    },
+    {
+      "guard": "instance wait/envelope",
+      "seconds": 25200,
+      "clock_origin": "operator wait monotonic deadline; contract budget is declared instance envelope",
+      "coverage": "Operator wait returns remote timeout then cleanup; boot watchdog is independent. No claim operator wait starts exactly at EC2 LaunchTime.",
+      "source": "research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py:770-797;pointer_contract.py:174"
+    }
+  ],
+  "budget": {
+    "region": "us-west-2",
+    "instance_type": "g7.2xlarge",
+    "hourly_rate_basis_usd": "2.52",
+    "rate_must_be_rechecked_at_admission": true,
+    "instance_seconds_max": 25200,
+    "ancillary_allowance_usd": "1.48",
+    "declared_training_cost_bound_usd": "19.12",
+    "training_reservation_usd": "19.20",
+    "prospective_validation_cap_usd": "0.60",
+    "other_services_allowance_usd": "0.10",
+    "combined_prospective_bound_usd": "19.90",
+    "new_attempt_all_services_cap_usd": "20.00",
+    "historical_reservations_not_reused": true,
+    "automatic_retries": 0
+  },
+  "unknowns": [
+    "No pass20 or tail runtime was measured by the failed20-pass job.",
+    "Historical R17 components are carried by pinned source comments and existing clarification; independently split tail timing is unavailable.",
+    "New provider price and no-conflict state must pass root admission.",
+    "Storage archive is retained subject to evidence deletion guard; allowance is a prospective envelope, not provider invoice."
+  ],
+  "disposition": "The available separated measurements do not prove USD20 impossible. Component forecast and fixed envelope support proceeding only after focused tests, current price and other admission gates pass. No training result or test-pass claim.",
+  "evidence": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_20260918\\collected\\results\\artifacts\\worker_report.json",
+      "bytes": 81276,
+      "sha256": "da615abf56493ccc8e64ced993170347b3a13392a0ebe4d66f039a67ca6c4514"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_20260918\\collected\\results\\artifacts\\checkpoint_check_phase_a.json",
+      "bytes": 56282,
+      "sha256": "4feb42b172bff6a1a37b0cc2a87eec24c01ca68f19a1bef07e9cfa1779235629"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_20260918\\collected\\results\\evidence\\typed_progress_0358.json",
+      "bytes": 193,
+      "sha256": "c7a10f9ba0540ed44f9704be2a5a6da47a5ddba5305689c1d69532dc36ecf27b"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_20260918\\collected\\results\\evidence\\typed_progress_0420.json",
+      "bytes": 194,
+      "sha256": "8a90792cef31f6e62ac18ba9939e2496554ea642beb93c938e5a78fe2621fbd6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-launch-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_cm2x_001\\FORECAST_CLARIFICATION_20260925.json",
+      "bytes": 1086,
+      "sha256": "6c4e869700c831b803dcf368586171b3f14f6fee530888ec44507f2d20a24aea"
+    }
+  ]
+}

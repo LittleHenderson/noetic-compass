@@ -1,0 +1,20 @@
+{
+  "utc": "2026-09-26T00:07:57.819537+00:00",
+  "authority": "Owner live task message transcribed by Codex, not a signature",
+  "owner_request_sha256": "560cd01271e7bac76c7c1f69f3b63d84c3192e2bc8199393e6a074cab02084c2",
+  "source_commit": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "all_services_attempt_cap_usd": "20.00",
+  "training_reservation_usd": "19.20",
+  "prelaunch_validation_cap_usd": "0.60",
+  "other_services_allowance_usd": "0.10",
+  "sum_reserved_and_allowances_usd": "19.90",
+  "previous_attempt_reservation_unchanged": true,
+  "original_60_dollar_study_unchanged": true,
+  "cas_retry_authorized": false,
+  "automatic_retries": 0,
+  "instance_training_seconds_max": 25200,
+  "validation_seconds_max": 1200,
+  "one_active_machine_at_a_time": true,
+  "training_jobs": 1,
+  "validation_is_prelaunch_only": true
+}

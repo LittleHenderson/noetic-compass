@@ -1,0 +1,144 @@
+{
+  "schema": "helm.rerun.validation-provider-facts/1",
+  "observed_utc": "2026-09-26T00:15:51.586846+00:00",
+  "account_id": "807562639912",
+  "region": "us-west-2",
+  "zone": "us-west-2a",
+  "ami": "ami-07a134137a631b892",
+  "subnet_id": "subnet-0bb8fa82c2a7177b3",
+  "vpc_id": "vpc-0df2f8cc1b9f23838",
+  "root_device": "/dev/sda1",
+  "instance_type": "t3.small",
+  "root_volume_gib": 8,
+  "root_volume_type": "gp3",
+  "provider_mutations": false,
+  "underlying_safe_describe": {
+    "ssm_parameter": {
+      "Name": "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id",
+      "Type": "String",
+      "Value": "ami-07a134137a631b892",
+      "Version": 77,
+      "LastModifiedDate": "2026-09-23T05:20:34.050000-07:00",
+      "DataType": "aws:ec2:image"
+    },
+    "image": {
+      "ImageId": "ami-07a134137a631b892",
+      "OwnerId": "099720109477",
+      "State": "available",
+      "Architecture": "x86_64",
+      "VirtualizationType": "hvm",
+      "RootDeviceType": "ebs",
+      "RootDeviceName": "/dev/sda1",
+      "Name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260923",
+      "Description": "Canonical, Ubuntu, 24.04, amd64 noble image",
+      "CreationDate": "2026-09-23T11:56:59.000Z",
+      "BlockDeviceMappings": [
+        {
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "SnapshotId": "snap-056b092df5c9eceb2",
+            "VolumeSize": 8,
+            "VolumeType": "gp3",
+            "Encrypted": false
+          },
+          "DeviceName": "/dev/sda1"
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "VirtualName": "ephemeral0"
+        },
+        {
+          "DeviceName": "/dev/sdc",
+          "VirtualName": "ephemeral1"
+        }
+      ],
+      "Public": true
+    },
+    "availability_zones": [
+      {
+        "ZoneName": "us-west-2a",
+        "ZoneId": "usw2-az2",
+        "RegionName": "us-west-2",
+        "State": "available",
+        "OptInStatus": "opt-in-not-required"
+      }
+    ],
+    "instance_type_offerings": [
+      {
+        "InstanceType": "t3.small",
+        "LocationType": "availability-zone",
+        "Location": "us-west-2a"
+      }
+    ],
+    "networks": [
+      {
+        "subnet": {
+          "SubnetId": "subnet-0bb8fa82c2a7177b3",
+          "VpcId": "vpc-0df2f8cc1b9f23838",
+          "AvailabilityZone": "us-west-2a",
+          "State": "available",
+          "DefaultForAz": true,
+          "MapPublicIpOnLaunch": true,
+          "AvailableIpAddressCount": 4091,
+          "CidrBlock": "172.31.32.0/20"
+        },
+        "vpc": {
+          "VpcId": "vpc-0df2f8cc1b9f23838",
+          "State": "available",
+          "IsDefault": true,
+          "CidrBlock": "172.31.0.0/16"
+        },
+        "route_tables": [
+          {
+            "RouteTableId": "rtb-0675e087f07dba3c3",
+            "VpcId": "vpc-0df2f8cc1b9f23838",
+            "Associations": [
+              {
+                "Main": true,
+                "RouteTableAssociationId": "rtbassoc-03c61f37a815604a8",
+                "RouteTableId": "rtb-0675e087f07dba3c3",
+                "AssociationState": {
+                  "State": "associated"
+                }
+              }
+            ],
+            "Routes": [
+              {
+                "DestinationCidrBlock": "172.31.0.0/16",
+                "GatewayId": "local",
+                "Origin": "CreateRouteTable",
+                "State": "active"
+              },
+              {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": "igw-0a37a4259ed7e1992",
+                "Origin": "CreateRoute",
+                "State": "active"
+              }
+            ]
+          }
+        ],
+        "internet_gateways": [
+          {
+            "InternetGatewayId": "igw-0a37a4259ed7e1992",
+            "Attachments": [
+              {
+                "State": "available",
+                "VpcId": "vpc-0df2f8cc1b9f23838"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "gates": {
+    "account_matches": true,
+    "official_canonical_ubuntu_24_04_x86_64_available": true,
+    "t3_small_offered_in_zone": true,
+    "default_public_subnet_with_attached_igw": true,
+    "root_device_dev_sda1": true,
+    "eight_gib_root_meets_image_minimum": true
+  },
+  "scope": "Read-only provider facts for serial CPU validation. Does not prove instance capacity, tests, launch, or concurrency clearance."
+}
