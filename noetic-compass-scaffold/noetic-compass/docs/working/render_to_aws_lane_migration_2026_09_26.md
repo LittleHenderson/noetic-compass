@@ -257,4 +257,45 @@ So the migrated platform runs at about **$79/month**, against roughly $46/month 
 services and databases that are suspended and serving nothing. The migration is slightly more
 expensive than what it replaces and is the only side of that comparison that works.
 
+## Login and an authenticated request, proven on AWS
+
+Step 4 asks for TLS, `/health`, login, and one real authenticated API request. Only the hostname
+needs DNS; the login does not, so it was done against the lane's CloudFront origin.
+
+| Step | Result |
+|------|--------|
+| Bootstrap the first owner | **200** — account `acct-2f7d1fe4e1350edbbd3b13d1653d4b75`, role `owner`, tenant `primary`, status `active` |
+| Log in | **200** — token issued, 429 characters |
+| `GET /api/cas-harness/audit/sessions` with the token | **200** `{"sessions":[]}` |
+| The same path without the token | **401** |
+| `GET /notation/grammar` with the token | **200**, returns the CAS grammar |
+| The same path without the token | **401** |
+
+The pairs are the proof: the token is what made the difference, not a public path returning 200
+by design.
+
+Identity used: `migration-verification@noeticcompass.com`, chosen so it does not pretend to be the
+owner's real account. The store's retry-safe recovery path can re-bind this owner to a real
+identity later with a new credential, which is what it is designed for. The generated credential
+lives in SSM at `/noetic-compass/customer-production/NC_VERIFICATION_OWNER_CREDENTIAL` and is
+never printed or committed. `NC_ACCOUNT_BOOTSTRAP_SECRET` is still present; the lane's own
+blueprint says to delete it once the first owner is verified, which is a config change left to
+the owner.
+
+### A posture worth knowing before anyone calls it a bug
+
+Customer account credentials are deliberately refused on operational routes. `GET /config` and
+`GET /scenarios` answer **403** `{"detail":"Route is unavailable to customer account credentials."}`
+with a valid owner token, and **401** without one. The allowlist in `api/middleware/auth.py` is:
+
+```
+/auth/, /accounts/, /billing/, /evidence, /health, /notation, /api/support/tickets,
+/api/cas-harness/audit/session, /api/cas-harness/audit/sessions
+```
+
+So a 403 on `/config` from a customer token is correct behaviour, not a defect. Anything
+verifying this lane should expect 401 for an unauthenticated call, 403 for an authenticated call
+to a route outside the allowlist, and 200 only inside it.
+
+
 
