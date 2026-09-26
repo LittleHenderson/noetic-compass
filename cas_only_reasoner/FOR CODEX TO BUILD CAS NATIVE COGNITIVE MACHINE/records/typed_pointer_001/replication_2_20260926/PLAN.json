@@ -55,7 +55,7 @@
         0.9,
         0.999
       ],
-      "eps": 1e-8,
+      "eps": 1e-08,
       "learning_rate": 0.003,
       "weight_decay": 0.01
     },
@@ -160,10 +160,11 @@
     "planned_shared_reservations": {
       "one_cpu_validation": "0.25",
       "two_existing_reviewer_checks_combined": "0.50",
-      "final_collection_and_read_only_monitor": "0.25"
+      "final_collection_and_read_only_monitor": "0.25",
+      "corrected_admission_validation_after_representation_fix": "0.25"
     },
-    "total_planned_all_services_ceiling_usd": "41.00",
-    "unallocated_campaign_headroom_usd": "4.00",
+    "total_planned_all_services_ceiling_usd": "41.25",
+    "unallocated_campaign_headroom_usd": "3.75",
     "current_compute_rate_usd_per_hour": "2.52",
     "per_seed_compute_max_usd": "17.64",
     "per_seed_launcher_ancillary_reservation_usd": "1.48",
@@ -252,5 +253,7 @@
     "Website migration",
     "Promotion/deployment",
     "Protected material or credentials"
-  ]
+  ],
+  "preparation_failure_reference": "jobs/helm-replprep-20260926-182014-22f482/FAILURE_CLOSEOUT.json",
+  "preparation_revision_note": "Original pre-training plan preserved at 75ab2048. Only preparation accounting changed after one failed non-training CPU validation; comparisons, seed order, science, training package and both job IDs are unchanged."
 }

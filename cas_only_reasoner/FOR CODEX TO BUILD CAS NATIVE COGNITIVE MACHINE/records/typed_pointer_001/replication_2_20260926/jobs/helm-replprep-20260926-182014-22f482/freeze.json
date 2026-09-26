@@ -1,0 +1,82 @@
+{
+  "account_id": "807562639912",
+  "ami": "ami-07a134137a631b892",
+  "cleanup": "Terminate and verify; collect/hash outputs; remove owned compute/security/IAM/scheduler resources. Retain private validation evidence bucket with storage active. Prior HELM/CAS evidence and reservations untouched.",
+  "cleanup_required": true,
+  "cost_boundary": "Prospective cap, not provider invoice or monetary kill switch; guest/operator/scheduler timers bound compute.",
+  "cpu_credits": "not_applicable",
+  "ec2_usd_per_hour_upper_bound": "0.085",
+  "expected_tests": 32,
+  "forecast_all_services_usd": "0.05",
+  "frozen_at_utc": "2026-09-26T18:20:14.171301+00:00",
+  "hard_wall_seconds": 1200,
+  "instance_type": "c6i.large",
+  "job_id": "helm-replprep-20260926-182014-22f482",
+  "jobs": 1,
+  "launcher_sha256": "7ffd3e11e7e0de3e8acecd5b6c10de89e03cce964d1eb170a1942253f3ab4b87",
+  "maximum_all_services_usd": "0.25",
+  "operational_source": "Separate exact-hash files; science unchanged",
+  "operator_seconds": 1020,
+  "os_shutdown_minutes": 18,
+  "owner_directive_reference": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\replication_2_20260926\\OWNER_DIRECTIVE.txt",
+  "owner_directive_sha256": "c4c49ac8ef4a79cd48c447d7e4d525636321c2729bed0c62f763c053eea59ba3",
+  "package_source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "payload_bytes": 65954254,
+  "payload_file": "payload.zip",
+  "payload_manifest_sha256": "93b88f2a4ffd8d7dbfd9b226347144449f340d92fe699da4cdb1a9ba386a6635",
+  "payload_sha256": "d4cea4dbd5b4246e251303e0f31f4d37498c728007a45e06f36e92cda1f32d32",
+  "permitted_concurrent_instances": [
+    {
+      "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT",
+      "instance_id": "i-0bd0a082507a51ae3",
+      "instance_type": "t3.small",
+      "region": "us-west-2",
+      "tags": {
+        "Lane": "customer-production",
+        "Name": "nc-customer-app",
+        "Project": "noetic-compass",
+        "Purpose": "render-to-aws-migration"
+      }
+    },
+    {
+      "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT",
+      "instance_id": "i-02137d196e671b5c1",
+      "instance_type": "t3.small",
+      "region": "us-west-2",
+      "tags": {
+        "Lane": "accounts-canary",
+        "Name": "nc-canary-app",
+        "Project": "noetic-compass",
+        "Purpose": "render-to-aws-migration"
+      }
+    }
+  ],
+  "provider_reference_sha256": "4aaeb140d9710d3867a205260ac930bd8439e9a5f8dccf994434417a27a72a77",
+  "purpose": "32 focused public replication admission/deadline/update tests, both admission dry-runs, exact reference package verification. No model/training.",
+  "region": "us-west-2",
+  "retry_count": 0,
+  "root_delete_on_termination": true,
+  "root_device": "/dev/sda1",
+  "root_encrypted": true,
+  "root_gib": 8,
+  "root_type": "gp3",
+  "runner": "Codex",
+  "scheduler_after_seconds": 1080,
+  "schema": "helm.validation.aws.freeze/1",
+  "sdk_profile": "default",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "subnet_id": "subnet-0bb8fa82c2a7177b3",
+  "test_files": [
+    "records/typed_pointer_001/replication_2_20260926/test_replication_admission.py",
+    "tests/test_typed_pointer_deadline_routing.py",
+    "tests/test_typed_pointer_critical_mass_update_counts.py"
+  ],
+  "vpc_id": "vpc-0df2f8cc1b9f23838",
+  "worker_seconds": 900,
+  "worker_sha256": "1268b370c20ce42e692546933c57a42a050a847710961546e7d2e5cfd0ab8896",
+  "zone": "us-west-2a",
+  "operational_source_commit": "75ab2048e6bba3bc62c4af06cfe36f1260e2ea5e",
+  "campaign": "HELM-CM2X-REPLICATION-2",
+  "campaign_cap_usd": "45.00",
+  "history_reused": false
+}

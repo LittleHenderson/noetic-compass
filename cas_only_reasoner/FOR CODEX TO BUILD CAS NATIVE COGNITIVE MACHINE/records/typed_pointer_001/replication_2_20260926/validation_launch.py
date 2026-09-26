@@ -136,7 +136,7 @@ def execute(directory, expected_hash):
         "reserved_utc": utc().isoformat(), "status": "RESERVED_NO_AUTOMATIC_REFUND",
         "owner_directive_sha256": plan["owner_directive_sha256"], "freeze_sha256": expected_hash,
         "campaign_cap_usd": "45.00", "two_seed_caps_usd": "40.00",
-        "other_shared_bounds_usd": "0.75", "historical_budget_reused": False, "combined_declared_usd": "41.00",
+        "other_shared_bounds_usd": "1.00", "historical_budget_reused": False, "combined_declared_usd": "41.25",
         "scope": "One CPU validation prerequisite of HELM-CM2X-REPLICATION-2; canonical GPU ledger unchanged"}
     with (directory / "validation_reservation.json").open("x", encoding="utf-8") as stream:
         json.dump(reservation, stream, indent=2)

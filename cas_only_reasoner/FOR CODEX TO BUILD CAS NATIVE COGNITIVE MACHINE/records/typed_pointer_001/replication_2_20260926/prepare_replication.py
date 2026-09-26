@@ -86,7 +86,9 @@ def assert_only_seed_difference(config, reference, seed):
     require(config["inputs"] == reference["inputs"] and config["inputs_sha256"] == reference["inputs_sha256"], "INPUTS_CHANGED")
     expected = deepcopy(reference["design"])
     expected["model_seed"] = seed
-    require(config["design"] == expected, "SCIENTIFIC_DESIGN_CHANGED")
+    # Compare the exact serialized worker design, as the original authority does.
+    # planned_work.relations is tuples in Python and lists in its JSON receipt.
+    require(canonical(config["design"]) == canonical(expected), "SCIENTIFIC_DESIGN_CHANGED")
     require(launch.contract.parse_job(config["job"])[1] == seed, "CONFIG_JOB_SEED")
     require(config["bucket"] == config["job"] + "-" + launch.shared.RESOURCE_PLAN["account"], "CONFIG_BUCKET")
 

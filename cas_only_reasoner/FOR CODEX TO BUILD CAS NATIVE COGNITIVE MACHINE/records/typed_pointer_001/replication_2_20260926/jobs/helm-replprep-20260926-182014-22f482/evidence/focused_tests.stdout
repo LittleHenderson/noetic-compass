@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+rootdir: /opt/helm-validation/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE
+collecting ... collected 32 items
+
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260917] FAILED [  3%]
+
+=================================== FAILURES ===================================
+_ test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260917] _
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py:19: in test_registered_seed_keeps_source_science_package_and_all_128_requirements
+    records = writer.build_records(plan, PLAN_HASH, seed)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+records/typed_pointer_001/replication_2_20260926/prepare_replication.py:102: in build_records
+    assert_only_seed_difference(config, reference, seed)
+records/typed_pointer_001/replication_2_20260926/prepare_replication.py:89: in assert_only_seed_difference
+    require(config["design"] == expected, "SCIENTIFIC_DESIGN_CHANGED")
+records/typed_pointer_001/replication_2_20260926/prepare_replication.py:26: in require
+    raise ValueError("REPLICATION_STOPPED:" + reason)
+E   ValueError: REPLICATION_STOPPED:SCIENTIFIC_DESIGN_CHANGED
+-------- generated xml file: /opt/helm-validation/aws-output/pytest.xml --------
+=========================== short test summary info ============================
+FAILED records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260917] - ValueError: REPLICATION_STOPPED:SCIENTIFIC_DESIGN_CHANGED
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+============================== 1 failed in 23.97s ==============================
