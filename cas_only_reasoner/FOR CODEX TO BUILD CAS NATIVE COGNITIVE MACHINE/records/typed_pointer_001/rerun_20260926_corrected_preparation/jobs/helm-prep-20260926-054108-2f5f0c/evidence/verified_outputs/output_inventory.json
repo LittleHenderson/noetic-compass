@@ -1,0 +1,162 @@
+[
+  {
+    "path": "environment.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "environment.stdout",
+    "bytes": 202,
+    "sha256": "ec089ed54dcf052e909c63bcf8664fcd95de8fa763232f2ba50f909ec391b52c"
+  },
+  {
+    "path": "focused_tests.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused_tests.stdout",
+    "bytes": 9600,
+    "sha256": "c3fa9036746cbce3b1e91a90bcc5b92d85a079524600b966c9a5f4f02c618533"
+  },
+  {
+    "path": "git_commit_exists.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_commit_exists.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_head.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_head.stdout",
+    "bytes": 41,
+    "sha256": "10eaf86c1c6702125a0f24baba4d43f0b64b62bb1e101f377915eda6ec31c433"
+  },
+  {
+    "path": "git_include_selected.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_include_selected.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_index.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_index.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_index_names.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_index_names.stdout",
+    "bytes": 5008851,
+    "sha256": "c34b91d9c036ae439813327f2a79d8393351681cf9f900224dbcc248470e998f"
+  },
+  {
+    "path": "git_package_after.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_package_after.stdout",
+    "bytes": 19,
+    "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e"
+  },
+  {
+    "path": "git_package_before.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_package_before.stdout",
+    "bytes": 19,
+    "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e"
+  },
+  {
+    "path": "git_skip_unselected.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "git_skip_unselected.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "offline_install.stderr",
+    "bytes": 364,
+    "sha256": "abd6f7249a473f07f501069dde0fe2436ada294e0816606ef6d35309752ff944"
+  },
+  {
+    "path": "offline_install.stdout",
+    "bytes": 1924,
+    "sha256": "7310aaecfad426f5fb73c28a136581e99cf78fe1a1a56dc0cd6dfc781fef1aee"
+  },
+  {
+    "path": "os_package_inventory.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "os_package_inventory.stdout",
+    "bytes": 19463,
+    "sha256": "c692807884d79864b8fdad68fd15cb467bd57dbb6ecc27fd5adf8342533d736e"
+  },
+  {
+    "path": "package/receipt.json",
+    "bytes": 124210,
+    "sha256": "c1df163ca1b02e4cc7cd64c483331a47ff8b640e4aa2511972a5188a782b6d18"
+  },
+  {
+    "path": "package/source.zip",
+    "bytes": 6110997,
+    "sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119"
+  },
+  {
+    "path": "package_build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "package_build.stdout",
+    "bytes": 127776,
+    "sha256": "95a2ae24a0ecf7928fd18e859db6331f19a13e9fa9669b06199a6ce200028266"
+  },
+  {
+    "path": "pytest.xml",
+    "bytes": 10811,
+    "sha256": "c81153b27e3e7974a1bc522f6f7efb22594f80a66efb0ebf6334937632043a2f"
+  },
+  {
+    "path": "rerun_admission_dry_run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "rerun_admission_dry_run.stdout",
+    "bytes": 3057,
+    "sha256": "dcee1800d7241a7f939b9d3e51dc0471d107429d7e83263f94d6d4036c87974b"
+  },
+  {
+    "path": "terminal_test_receipt.json",
+    "bytes": 26404,
+    "sha256": "7557b3cb00f24fab6b662f72a7d23f2e8ea7eeffb23174d8373400275bf3fbfc"
+  }
+]

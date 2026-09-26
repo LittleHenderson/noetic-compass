@@ -1,5 +1,20 @@
 # The learning brain — lineage record
 
+## 2026-09-26 corrected HELM critical-mass 2x admission
+
+A fresh 20-pass attempt is frozen after 69 AWS regression cases and six subtests
+passed, an exact-source package build, an admission dry-run and verified CPU
+cleanup. Scientific basis a5fcf527 is preserved; the packaging metadata query
+is limited to the complete public inventory. Source commit c45f775f225dd06cc20cdf313f0a0398486e0d61.
+Job cas-meta2-tpntr-20260926054903-c45f775f-m-20260918 has not yet launched at this admission checkpoint.
+Seed 20260918, AdamW, constant LR 0.003, unset planned_main_updates, and the
+model/data/order/scoring are fixed. Pass-10 state and pass-10/pass-20 evaluations
+are mandatory; all 128 artifacts remain required. No new learned result or
+completed 2x claim. The original failed job and all historical reservations
+remain unchanged. See records/typed_pointer_001/admission_cm2x_rerun_001/
+FINAL_ADMISSION_GATES.json. Prospective total USD21.45; owner hard cap USD21.50.
+
+
 ## 2026-09-23 peer T4 reference: measured mechanism, acceptance still open
 
 Peer evidence dfe15fa6462866a449ddff4d6b04006ae6f3c665 records the absent

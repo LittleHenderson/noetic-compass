@@ -1,0 +1,54 @@
+{
+  "utc": "2026-09-26T05:48:24.131568+00:00",
+  "job": "helm-prep-20260926-054108-2f5f0c",
+  "checks": [
+    {
+      "check": "instance_terminated",
+      "pass": true,
+      "state": "terminated"
+    },
+    {
+      "check": "security_group_absent",
+      "pass": true,
+      "provider_code": "InvalidGroup.NotFound"
+    },
+    {
+      "check": "worker_role_absent",
+      "pass": true,
+      "provider_code": "NoSuchEntity"
+    },
+    {
+      "check": "worker_profile_absent",
+      "pass": true,
+      "provider_code": "NoSuchEntity"
+    },
+    {
+      "check": "watchdog_role_absent",
+      "pass": true,
+      "provider_code": "NoSuchEntity"
+    },
+    {
+      "check": "schedule_absent",
+      "pass": true,
+      "provider_code": "ResourceNotFoundException"
+    },
+    {
+      "check": "worker_policy_absent",
+      "pass": true,
+      "provider_code": "NoSuchEntity"
+    },
+    {
+      "check": "watchdog_policy_absent",
+      "pass": true,
+      "provider_code": "NoSuchEntity"
+    }
+  ],
+  "passed": true,
+  "evidence_retained": {
+    "bucket": "helm-prep-20260926-054108-2f5f0c-807562639912",
+    "status": "RETAINED_PRIVATE_EVIDENCE",
+    "storage_active": true,
+    "deletion_authorized": false,
+    "reason": "Owner requires evidence preservation; compute and job dependencies cleaned separately."
+  }
+}

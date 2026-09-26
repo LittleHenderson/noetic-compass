@@ -1,0 +1,7 @@
+{
+  "schema": "helm.local-package-locator/1",
+  "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\typed_pointer_001\\package_c45f775f\\source.zip",
+  "archive_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+  "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "original_aws_receipt_sha256": "c1df163ca1b02e4cc7cd64c483331a47ff8b640e4aa2511972a5188a782b6d18"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PRELAUNCH_GATES_PASS",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "package_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+  "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+  "package_bytes": 6110997,
+  "cleanup_checks": 8,
+  "global_regions_checked": 17,
+  "non_experiment_exemptions": [
+    "i-0bd0a082507a51ae3",
+    "i-02137d196e671b5c1"
+  ],
+  "test_cases": 69,
+  "subtests": 6,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "aws_admission_dry_run": "PASS",
+  "prospective_all_services_usd": "21.45",
+  "owner_hard_cap_usd": "21.50",
+  "package_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\typed_pointer_001\\package_c45f775f"
+}

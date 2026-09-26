@@ -1,0 +1,267 @@
+{
+  "schema": "helm.validation.aws.execution/1",
+  "job_id": "helm-prep-20260926-054108-2f5f0c",
+  "freeze_sha256": "16129cd9c758d307c32c9309e43d0c36427bb5e23c0e8b2e6a2d492c325df991",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "payload_sha256": "39c165127c7f1d059f1294b6d24801c014a5023df8c19bb8a81f5c49dba8ec02",
+  "runner": "Codex",
+  "start_utc": "2026-09-26T05:41:30.401091+00:00",
+  "resources": {
+    "bucket": "helm-prep-20260926-054108-2f5f0c-807562639912",
+    "worker_role": "helm-prep-20260926-054108-2f5f0c-worker",
+    "worker_policy": "job-objects",
+    "profile": "helm-prep-20260926-054108-2f5f0c-worker",
+    "profile_role": "helm-prep-20260926-054108-2f5f0c-worker",
+    "watchdog_role": "helm-prep-20260926-054108-2f5f0c-watchdog",
+    "watchdog_policy": "tagged-termination",
+    "security_group": "sg-07ce032fae008290e",
+    "instance_id": "i-0c1e56a6b1cf15858",
+    "schedule": "helm-prep-20260926-054108-2f5f0c"
+  },
+  "cleanup": [
+    {
+      "action": "collect_console_before_termination",
+      "status": "PASS"
+    },
+    {
+      "action": "terminate_instance",
+      "status": "PASS"
+    },
+    {
+      "action": "confirm_terminated",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_console",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_all_outputs",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_schedule",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_security_group",
+      "status": "PASS"
+    },
+    {
+      "action": "remove_profile_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_profile",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_role",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS_HELM_VALIDATION_AND_PACKAGE_ONLY",
+  "cloud_calls_retry_count": 0,
+  "maximum_all_services_usd": "0.25",
+  "caller_arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+  "global_concurrency": [
+    {
+      "region": "ap-south-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-north-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-3",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-3",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ca-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "sa-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-2",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-2",
+      "active_instances": [
+        {
+          "instance_id": "i-0bd0a082507a51ae3",
+          "instance_type": "t3.small",
+          "region": "us-west-2",
+          "tags": {
+            "Lane": "customer-production",
+            "Name": "nc-customer-app",
+            "Purpose": "render-to-aws-migration",
+            "Project": "noetic-compass"
+          }
+        },
+        {
+          "instance_id": "i-02137d196e671b5c1",
+          "instance_type": "t3.small",
+          "region": "us-west-2",
+          "tags": {
+            "Purpose": "render-to-aws-migration",
+            "Lane": "accounts-canary",
+            "Project": "noetic-compass",
+            "Name": "nc-canary-app"
+          }
+        }
+      ]
+    }
+  ],
+  "request_without_userdata": {
+    "ImageId": "ami-07a134137a631b892",
+    "InstanceType": "c6i.large",
+    "MinCount": 1,
+    "MaxCount": 1,
+    "ClientToken": "helm-prep-20260926-054108-2f5f0c",
+    "Placement": {
+      "AvailabilityZone": "us-west-2a"
+    },
+    "NetworkInterfaces": [
+      {
+        "DeviceIndex": 0,
+        "SubnetId": "subnet-0bb8fa82c2a7177b3",
+        "Groups": [
+          "sg-07ce032fae008290e"
+        ],
+        "AssociatePublicIpAddress": true,
+        "DeleteOnTermination": true
+      }
+    ],
+    "IamInstanceProfile": {
+      "Name": "helm-prep-20260926-054108-2f5f0c-worker"
+    },
+    "MetadataOptions": {
+      "HttpTokens": "required",
+      "HttpEndpoint": "enabled",
+      "HttpPutResponseHopLimit": 1
+    },
+    "InstanceInitiatedShutdownBehavior": "terminate",
+    "DisableApiTermination": false,
+    "BlockDeviceMappings": [
+      {
+        "DeviceName": "/dev/sda1",
+        "Ebs": {
+          "VolumeSize": 8,
+          "VolumeType": "gp3",
+          "Encrypted": true,
+          "DeleteOnTermination": true
+        }
+      }
+    ],
+    "TagSpecifications": [
+      {
+        "ResourceType": "instance",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "helm-prep-20260926-054108-2f5f0c"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      },
+      {
+        "ResourceType": "volume",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "helm-prep-20260926-054108-2f5f0c"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      }
+    ]
+  },
+  "userdata_sha256": "4026caf5d3595188535da27cbfdb74e901beafb6f3eec1a2bd96ca11f3d869d3",
+  "exact_request_dry_run": "DryRunOperation",
+  "launch_attempted": true,
+  "launch_utc": "2026-09-26T05:42:08.674775+00:00",
+  "watchdog_at_utc": "2026-09-26T06:00:08.674775+00:00",
+  "instance_terminal": {
+    "Code": 48,
+    "Name": "terminated"
+  },
+  "retained_evidence_archive": {
+    "bucket": "helm-prep-20260926-054108-2f5f0c-807562639912",
+    "status": "RETAINED_PRIVATE_EVIDENCE",
+    "storage_active": true,
+    "deletion_authorized": false,
+    "reason": "Owner requires evidence preservation; compute and job dependencies cleaned separately."
+  },
+  "end_utc": "2026-09-26T05:47:25.722086+00:00",
+  "compute_elapsed_seconds": 317.0473448999983,
+  "cleanup_complete": true,
+  "cost": {
+    "all_services_authorized_maximum_usd": "0.25",
+    "forecast_usd": "0.05",
+    "actual_billing_usd": null,
+    "note": "Billing actual unavailable; resource timestamps and prospective envelope retained."
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "key": "outputs/outputs.tar.gz",
+    "sha256": "003e9389db7f9b7a91be8f35a24fc139fa0324d5b08e2c7bf7fd7c9a9683206c",
+    "bytes": 6354065
+  },
+  {
+    "key": "outputs/terminal.json",
+    "sha256": "f6746ebfb30b432b0a4f50529ec82c87ca9aafb9b1238f12e70d8d8289fcc3d8",
+    "bytes": 731
+  }
+]
