@@ -142,3 +142,58 @@ Until step 9, Render remains the declared production authority. Steps 1–6 are 
 create AWS resources that serve nothing until a control-plane change points at them. The
 accounts-off lane is already cut over and can be rolled back by reverting the `vercel.json`
 rewrite to the Render URL in one commit.
+
+## Progress log
+
+### 2026-09-26, later the same day
+
+Lanes live on AWS and verified:
+
+| Lane | Result |
+|------|--------|
+| accounts-off | App Runner; login mints a token, `/scenarios` returns 400546 bytes |
+| customer-production | EC2 `i-0bd0a082507a51ae3` + private RDS behind CloudFront; `ready: true` except the live worker |
+| accounts-canary | EC2 `i-02137d196e671b5c1`, zero inbound rules, container bound to loopback; ports 8000, 22 and 443 all unreachable from outside |
+
+Control plane: `.aws/deployment-control.json` plus `scripts/verify_aws_deployment_control.py`
+now declare AWS, and `aws-deployment-control-offline` is a required status check on `master`.
+
+Secrets: the values that existed only in Render's dashboard were read through the Render API
+by a temporary GitHub OIDC job and written into SSM Parameter Store. **All ten continuity keys
+were recovered and adopted**, which matters more than it first appeared: the evidence bucket is
+**not empty**. It holds 27 Object-Locked objects under `cas-harness/customer-production/`
+(newest 2026-08-14) and 5 under `cas-harness/accounts-canary/` (newest 2026-07-13). Had the
+lanes started with freshly generated receipt and pseudonym keys, those existing receipts would
+no longer verify. Regenerating secrets was the wrong instinct; recovering them was the right
+one.
+
+Provider integrations, tested individually:
+
+| Integration | Result |
+|-------------|--------|
+| Airtable CRM | **works** — HTTP 200 against base `appXBoYskbfjNaFTs`, table `Leads`, 1 record returned |
+| Live worker | credentials restored, but `hilj2rzs54gi06-8080.proxy.runpod.net` answers **HTTP 403**, so the pod is down. Both lanes therefore report `ready: false` with `live_worker: unreachable` |
+
+### Constraint discovered: the production identity is one tuple
+
+`scripts/tests/test_acceptance_authority_contract_alignment.py` pins the production identity
+as a single tuple — API origin, Render service id `srv-d9bijbjtqb8s73cn4n20`, service name,
+Render disk id `dsk-d9bijbjtqb8s73cn4o60`, and the root-CI deploy identity — and asserts that
+roughly ten modules agree on it: the authority contract constant, the runtime verifier, the
+readiness collector, the alert builder, the CRM, journey and operational collectors, the
+root-CI collector, the Render blueprint verifier, and the Atlas route contract.
+
+Consequence: **the origin cannot move to AWS while the Render identity remains.** Rewriting the
+files that name the Render API host fails that test, because the Render blueprint verifier must
+keep expecting Render's own service URL for its live check to pass.
+
+So the hostname sweep and the retirement of the Render identity are the *same* change, not two.
+That reorders the plan: Render cannot be retired strictly last. Either the Render identity for
+the migrated lanes is retired together with the sweep, or the declared origin stays on Render
+until it is.
+
+The sweep itself is scripted and ready: `scripts/plan_render_hostname_sweep.py` reports 38
+files and 52 occurrences to rewrite, and five files to leave alone with a stated reason
+(historical records, the Render blueprints, the hand-edited runbook, and the two Render control
+scripts that grep *for* the Render host on purpose). It defaults to a dry run.
+
