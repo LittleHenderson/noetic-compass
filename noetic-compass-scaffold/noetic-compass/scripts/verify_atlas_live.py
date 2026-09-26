@@ -22,7 +22,7 @@ import httpx
 
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
 REALMODE_PASS = "REAL_PYTHIA_WEIGHTS_LOADED"
-DEFAULT_API_URL = "https://cas-harness-customer-api.onrender.com"
+DEFAULT_API_URL = "https://api.noeticcompass.com"
 DEFAULT_TIMEOUT_SECONDS = 15.0
 
 

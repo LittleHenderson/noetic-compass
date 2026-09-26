@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  const ticketEndpoint = 'https://cas-harness-customer-api.onrender.com/api/support/public/tickets';
-  const noticeEndpoint = 'https://cas-harness-customer-api.onrender.com/api/support/public/privacy-notice';
+  const ticketEndpoint = 'https://api.noeticcompass.com/api/support/public/tickets';
+  const noticeEndpoint = 'https://api.noeticcompass.com/api/support/public/privacy-notice';
   const expectedNoticeUrl = 'https://cascompass.ai/privacy';
   const noticeVersionPattern = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
   const noticeDigestPattern = /^[0-9a-f]{64}$/;

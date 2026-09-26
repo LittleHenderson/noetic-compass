@@ -100,7 +100,7 @@ Verification:
 ```bash
 curl http://127.0.0.1:8080/health
 curl http://127.0.0.1:8080/health/realmode
-curl https://cas-harness-customer-api.onrender.com/atlas/live/health/realmode
+curl https://api.noeticcompass.com/atlas/live/health/realmode
 ```
 
 The real-mode endpoint must show:
@@ -124,7 +124,7 @@ The API fleet executor can now be driven by this worker process:
 
 ```bash
 python scripts/run_fleet_worker.py \
-  --api-base-url https://cas-harness-customer-api.onrender.com \
+  --api-base-url https://api.noeticcompass.com \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id <exact-open-weight-model-id> \
@@ -183,7 +183,7 @@ CAS_FLEET_SCENARIO_PATH=/workspace/cas/scenarios/alpha_25.json \
 CAS_FLEET_PROBE_WEIGHTS_PATH=/workspace/cas/probes/gpt-neox-20b_probe.json \
 CAS_FLEET_COVER_MAP_PATH=/workspace/cas/covers/gpt-neox-20b_covers.json \
 python scripts/run_fleet_worker.py \
-  --api-base-url https://cas-harness-customer-api.onrender.com \
+  --api-base-url https://api.noeticcompass.com \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id EleutherAI/gpt-neox-20b \

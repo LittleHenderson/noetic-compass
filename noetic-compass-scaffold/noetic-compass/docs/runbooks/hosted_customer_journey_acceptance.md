@@ -35,11 +35,11 @@ manifest.
 - Create a separate, single-use Render operator API key for this collection.
   It must be supplied only to the collector child process with the silent
   prompt below and must be able to read deploy metadata for customer service
-  `srv-d9bijbjtqb8s73cn4n20`. Never add any Render account key to the production
+  `i-0bd0a082507a51ae3`. Never add any Render account key to the production
   service environment, an environment group, a secret file, a command
   argument, command text, shell history, or either output. Do not reuse,
   revoke, or rotate an existing CI/automation key for this collection.
-- Run from Render Shell on customer service `srv-d9bijbjtqb8s73cn4n20`. The collector
+- Run from Render Shell on customer service `i-0bd0a082507a51ae3`. The collector
   refuses to run unless `RENDER_SERVICE_ID` matches that service and
   `RENDER_GIT_COMMIT` matches `--master-head`; this prevents a plausible
   receipt from being collected by a different service or source revision. The
@@ -135,11 +135,11 @@ operational digests such as packet, share-token, provider-response, and
 Object-Lock SHA-256 values; those are not replacements for customer identity
 or trace subjects.
 
-The command intentionally pins `https://cas-harness-customer-api.onrender.com`; an
+The command intentionally pins `https://api.noeticcompass.com`; an
 alternate origin, credentialized URL, query, or redirect target is refused.
 Before any tenant, account, entitlement, audit, or share mutation, it performs
 an authenticated read-only `GET` of exactly
-`/v1/services/srv-d9bijbjtqb8s73cn4n20/deploys/<deploy-id>` at
+`/v1/services/i-0bd0a082507a51ae3/deploys/<deploy-id>` at
 `https://api.render.com`. The response must bind the supplied deploy ID and
 master SHA to status `live`, trigger `new_commit`, and monotonic, non-future
 `createdAt`/`finishedAt` timestamps. After share revocation and both session

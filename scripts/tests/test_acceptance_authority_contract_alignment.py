@@ -331,11 +331,11 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                     )
 
     def test_customer_provider_identity_is_aligned_across_active_contracts(self) -> None:
-        origin = "https://cas-harness-customer-api.onrender.com"
-        service_id = "srv-d9bijbjtqb8s73cn4n20"
+        origin = "https://api.noeticcompass.com"
+        service_id = "i-0bd0a082507a51ae3"
         service_name = "cas-harness-customer-api"
-        disk_id = "dsk-d9bijbjtqb8s73cn4o60"
-        disk_name = "cas-harness-customer-support"
+        disk_id = "vol-056e0897eb5b72c4c"
+        disk_name = "customer-support"
         disk_mount = "/var/customer-support"
         lead_path = f"{disk_mount}/leads.jsonl"
 
@@ -385,18 +385,25 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
         self.assertEqual(crm_collector.PRODUCTION_DISK_MOUNT_PATH, disk_mount)
         self.assertEqual(crm_collector.PRODUCTION_LEAD_STORE_PATH, lead_path)
 
-        customer = blueprint_verifier.EXPECTED_CUSTOMER_BLUEPRINT
-        self.assertEqual(customer["id"], "exs-d9biqt37uimc73ajh99g")
-        self.assertEqual(customer["project"]["id"], "prj-d9biitbtqb8s73cn3le0")
-        self.assertEqual(
-            customer["providerEnvironment"]["id"],
-            "evm-d9biitbtqb8s73cn3leg",
+        # Production authority is the AWS deployment control, not the Render blueprints.
+        # Render suspended the whole workspace on 2026-09-26 and its lanes stopped serving
+        # production. The Render manifest and its verifier still describe those suspended
+        # services truthfully, but they no longer define what production IS, so the identity
+        # asserted here is checked against the declared AWS authority instead.
+        aws_manifest = json.loads(
+            (ROOT / ".aws" / "deployment-control.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(customer["services"][0]["id"], service_id)
-        self.assertEqual(customer["services"][0]["url"], origin)
-        self.assertEqual(customer["services"][0]["disk"]["id"], disk_id)
-        self.assertEqual(
-            customer["databases"][0]["id"], "dpg-d9biitbtqb8s73cn3mgg-a"
+        self.assertEqual(aws_manifest["authority"]["productionApiOrigin"], origin)
+        customer_lane = next(
+            lane for lane in aws_manifest["lanes"] if lane["name"] == "customer-production"
+        )
+        self.assertEqual(customer_lane["instanceId"], service_id)
+        self.assertEqual(customer_lane["publicOrigin"], origin)
+        self.assertIs(customer_lane["database"]["publiclyAccessible"], False)
+        self.assertIs(customer_lane["staticAwsKeys"], False)
+        self.assertTrue(
+            all(entry["authoritative"] is False for entry in aws_manifest["superseded"]),
+            "every superseded provider entry must be marked non-authoritative",
         )
         self.assertEqual(blueprint_verifier.EXPECTED_PENDING_BLUEPRINTS, [])
 

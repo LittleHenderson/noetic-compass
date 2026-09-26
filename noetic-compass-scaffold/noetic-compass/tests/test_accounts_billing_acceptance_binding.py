@@ -237,8 +237,8 @@ def _evidence(invoice: PaidInvoiceReconciliationRecord) -> dict[str, object]:
         "observed_at_utc": stamp,
         "artifact_uri": acceptance_authority_url("accounts_billing"),
         "artifact_sha256": hashlib.sha256(b"accounts-billing-artifact").hexdigest(),
-        "api_base_url": "https://cas-harness-customer-api.onrender.com",
-        "service_id": "srv-d9bijbjtqb8s73cn4n20",
+        "api_base_url": "https://api.noeticcompass.com",
+        "service_id": "i-0bd0a082507a51ae3",
         "customer_lane": "public-customer",
         **PSEUDONYMIZER.metadata(),
         "tenant_subject": PSEUDONYMIZER.subject(

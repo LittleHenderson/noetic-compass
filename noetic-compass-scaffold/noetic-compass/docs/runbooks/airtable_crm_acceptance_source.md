@@ -64,7 +64,7 @@ closed as `sync_failed`; it cannot earn `synced`.
 
 ## Prerequisites
 
-- Run from Render Shell on customer service `srv-d9bijbjtqb8s73cn4n20`.
+- Run from Render Shell on customer service `i-0bd0a082507a51ae3`.
 - `RENDER_GIT_COMMIT` must equal the supplied exact protected `master` SHA.
 - Provide `RENDER_API_KEY` to that shell process only. The collector performs
   authenticated, no-redirect reads of the exact service and supplied deploy,
