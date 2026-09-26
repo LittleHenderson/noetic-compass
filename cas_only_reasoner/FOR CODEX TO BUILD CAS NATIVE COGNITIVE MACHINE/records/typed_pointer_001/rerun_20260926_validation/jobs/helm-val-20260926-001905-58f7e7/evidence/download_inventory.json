@@ -1,0 +1,22 @@
+[
+  {
+    "key": "outputs/bootstrap_failure.json",
+    "sha256": "cc418bd836dc81dd3bc0e264be8c9a192c0f442bcf3d619ec6c27f9e42ebe089",
+    "bytes": 116
+  },
+  {
+    "key": "outputs/emergency_evidence.tar.gz",
+    "sha256": "5d47f4e94a64a26bc540a296d05a7fca234f16d193f7fe16e07bd547ea53c9ab",
+    "bytes": 215690
+  },
+  {
+    "key": "outputs/outputs.tar.gz",
+    "sha256": "5d47f4e94a64a26bc540a296d05a7fca234f16d193f7fe16e07bd547ea53c9ab",
+    "bytes": 215690
+  },
+  {
+    "key": "outputs/terminal.json",
+    "sha256": "1b301f35f103bade923545fb39d137a07e4a1328fd57cecc82339815bc16fc12",
+    "bytes": 350
+  }
+]

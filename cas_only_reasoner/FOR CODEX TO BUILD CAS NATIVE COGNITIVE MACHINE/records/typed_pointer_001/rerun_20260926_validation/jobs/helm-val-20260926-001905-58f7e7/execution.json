@@ -1,0 +1,247 @@
+{
+  "schema": "helm.validation.aws.execution/1",
+  "job_id": "helm-val-20260926-001905-58f7e7",
+  "freeze_sha256": "9b4c898c73049f611a63660437a36b57bd843a18301fde5f162f25e544451d2f",
+  "source_commit": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "payload_sha256": "121234bebefe75bee8d4074958f74f9d5423086cbf3b98bd3400434c8febe228",
+  "runner": "Codex",
+  "start_utc": "2026-09-26T00:20:34.200709+00:00",
+  "resources": {
+    "bucket": "helm-val-20260926-001905-58f7e7-807562639912",
+    "worker_role": "helm-val-20260926-001905-58f7e7-worker",
+    "worker_policy": "job-objects",
+    "profile": "helm-val-20260926-001905-58f7e7-worker",
+    "profile_role": "helm-val-20260926-001905-58f7e7-worker",
+    "watchdog_role": "helm-val-20260926-001905-58f7e7-watchdog",
+    "watchdog_policy": "tagged-termination",
+    "security_group": "sg-02044c7ec8a3f228c",
+    "instance_id": "i-08e50017cbe86a76f",
+    "schedule": "helm-val-20260926-001905-58f7e7"
+  },
+  "cleanup": [
+    {
+      "action": "collect_console_before_termination",
+      "status": "PASS"
+    },
+    {
+      "action": "terminate_instance",
+      "status": "PASS"
+    },
+    {
+      "action": "confirm_terminated",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_console",
+      "status": "PASS"
+    },
+    {
+      "action": "collect_all_outputs",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_schedule",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_security_group",
+      "status": "PASS"
+    },
+    {
+      "action": "remove_profile_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_profile",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_worker_role",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_policy",
+      "status": "PASS"
+    },
+    {
+      "action": "delete_watchdog_role",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAILED",
+  "cloud_calls_retry_count": 0,
+  "maximum_all_services_usd": "0.60",
+  "caller_arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+  "global_concurrency": [
+    {
+      "region": "ap-south-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-north-1",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-3",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-3",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "ap-northeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ca-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "sa-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-1",
+      "active_instances": []
+    },
+    {
+      "region": "ap-southeast-2",
+      "active_instances": []
+    },
+    {
+      "region": "eu-central-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-east-2",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-1",
+      "active_instances": []
+    },
+    {
+      "region": "us-west-2",
+      "active_instances": []
+    }
+  ],
+  "request_without_userdata": {
+    "ImageId": "ami-07a134137a631b892",
+    "InstanceType": "t3.small",
+    "MinCount": 1,
+    "MaxCount": 1,
+    "ClientToken": "helm-val-20260926-001905-58f7e7",
+    "Placement": {
+      "AvailabilityZone": "us-west-2a"
+    },
+    "NetworkInterfaces": [
+      {
+        "DeviceIndex": 0,
+        "SubnetId": "subnet-0bb8fa82c2a7177b3",
+        "Groups": [
+          "sg-02044c7ec8a3f228c"
+        ],
+        "AssociatePublicIpAddress": true,
+        "DeleteOnTermination": true
+      }
+    ],
+    "IamInstanceProfile": {
+      "Name": "helm-val-20260926-001905-58f7e7-worker"
+    },
+    "CreditSpecification": {
+      "CpuCredits": "standard"
+    },
+    "MetadataOptions": {
+      "HttpTokens": "required",
+      "HttpEndpoint": "enabled",
+      "HttpPutResponseHopLimit": 1
+    },
+    "InstanceInitiatedShutdownBehavior": "terminate",
+    "DisableApiTermination": false,
+    "BlockDeviceMappings": [
+      {
+        "DeviceName": "/dev/sda1",
+        "Ebs": {
+          "VolumeSize": 8,
+          "VolumeType": "gp3",
+          "Encrypted": true,
+          "DeleteOnTermination": true
+        }
+      }
+    ],
+    "TagSpecifications": [
+      {
+        "ResourceType": "instance",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "helm-val-20260926-001905-58f7e7"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      },
+      {
+        "ResourceType": "volume",
+        "Tags": [
+          {
+            "Key": "CASJob",
+            "Value": "helm-val-20260926-001905-58f7e7"
+          },
+          {
+            "Key": "Runner",
+            "Value": "Codex"
+          }
+        ]
+      }
+    ]
+  },
+  "userdata_sha256": "8299a740cae1635e1dbb90fbe3c8ad47b97def5b6b0928d6098cead1f574f1b7",
+  "exact_request_dry_run": "DryRunOperation",
+  "launch_attempted": true,
+  "launch_utc": "2026-09-26T00:21:17.424560+00:00",
+  "watchdog_at_utc": "2026-09-26T00:39:17.424560+00:00",
+  "instance_terminal": {
+    "Code": 48,
+    "Name": "terminated"
+  },
+  "retained_evidence_archive": {
+    "bucket": "helm-val-20260926-001905-58f7e7-807562639912",
+    "status": "RETAINED_PRIVATE_EVIDENCE",
+    "storage_active": true,
+    "deletion_authorized": false,
+    "reason": "Owner requires evidence preservation; compute and job dependencies cleaned separately."
+  },
+  "end_utc": "2026-09-26T00:23:07.434103+00:00",
+  "compute_elapsed_seconds": 110.00973669999803,
+  "cleanup_complete": true,
+  "cost": {
+    "all_services_authorized_maximum_usd": "0.60",
+    "forecast_usd": "0.10",
+    "actual_billing_usd": null,
+    "note": "Billing actual unavailable; resource timestamps and prospective envelope retained."
+  }
+}

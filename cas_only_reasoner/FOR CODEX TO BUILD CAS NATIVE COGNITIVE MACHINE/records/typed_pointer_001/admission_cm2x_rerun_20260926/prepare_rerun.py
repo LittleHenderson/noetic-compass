@@ -7,6 +7,7 @@ from pathlib import Path
 import importlib.util
 import json
 import subprocess
+from decimal import Decimal
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
@@ -61,14 +62,21 @@ def cost_bound():
     forecast = json.loads((HERE / 'forecast.json').read_bytes())
     if forecast['guard_fit'] is not True:
         raise ValueError('RUNTIME_FORECAST_DOES_NOT_FIT')
+    combined = Decimal(result['reservation_usd']) + Decimal('0.60') + Decimal('0.10') + Decimal(base.OTHER_SERVICES_ALLOWANCE_USD)
+    if combined > Decimal(base.ALL_SERVICES_CAP_USD):
+        raise ValueError('COMBINED_ATTEMPT_EXCEEDS_OWNER_CAP')
     result.update(expected_basis=forecast['basis'],
                   projected_worker_seconds=str(forecast['projected_worker_seconds']),
                   projected_instance_seconds=str(forecast['projected_instance_seconds']),
                   expected_cost_usd=str(forecast['expected_cost_usd']),
                   receipt_of_the_basis=str(HERE / 'forecast.json'),
                   prelaunch_validation_cap_usd='0.60',
-                  total_new_attempt_reservations_and_allowances_usd='19.90',
-                  headroom_after_validation_usd='0.10')
+                  package_only_build_cap_usd='0.10',
+                  training_plus_other_subtotal_usd='19.30',
+                  reservation_plus_allowance_usd=str(combined),
+                  headroom_to_cap_usd=str(Decimal(base.ALL_SERVICES_CAP_USD) - combined),
+                  total_new_attempt_reservations_and_allowances_usd=str(combined),
+                  headroom_after_prerequisites_usd='0.00')
     return result
 
 original_build = base.build
