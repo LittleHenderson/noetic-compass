@@ -1,0 +1,31 @@
+{
+  "schema": "helm.replication.validation-acceptance/1",
+  "utc": "2026-09-26T18:35:44.703851+00:00",
+  "status": "PASS_HELM_REPLICATION_VALIDATION_ONLY",
+  "job": "helm-replprep-20260926-182842-c2170c",
+  "instance_id": "i-053d2a2055a7e21f4",
+  "test_cases": 32,
+  "subtests": 6,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "both_admission_dry_runs": "PASS",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "tested_operational_commit": "ce3bee2ac98ca06244d96f2c88211b5c08b1b6c7",
+  "package": {
+    "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+    "archive_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+    "archive_bytes": 6110997,
+    "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+    "reused_without_rebuilding": true
+  },
+  "test_receipt_sha256": "b57dcc77aa9758de51a40567806af82d57d145210bd42b1ea502d7265b348bd4",
+  "operator_cleanup_passed": 13,
+  "independent_cleanup_passed": 8,
+  "private_archive_retained": true,
+  "reservation_preserved_usd": "0.25",
+  "prior_failed_validation_reservation_usd": "0.25",
+  "campaign_total_ceiling_usd": "41.25",
+  "actual_billing_usd": null,
+  "post_test_operator_policy_change": "Only optional reviewer-unavailability disposition was aligned with owner directive; no tested admission, seed, science, evidence or sequencing-success predicate was changed."
+}

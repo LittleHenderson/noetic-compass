@@ -1,0 +1,12 @@
+{
+  "utc": "2026-09-26T18:32:59.049601+00:00",
+  "scope": "Owner explicitly makes existing DeepSeek review conditional on availability under established limits.",
+  "request": "codex-helm-replication-2-focused-plan-20260926-01",
+  "correction": "codex-helm-replication-2-focused-plan-correction-20260926-01",
+  "outcome": "UNAVAILABLE_UNDER_ESTABLISHED_LIMITS",
+  "evidence": "Public requests were delivered. No complete reply or new reviewer START appeared; latest reviewer END is 17:55:58Z for prior closeout. Existing wake cursor remains 2026-09-25T19:18:32Z. Existing checker has no explicit cost bound; did not start a replacement reviewer or unbounded provider call.",
+  "review_claim": "NO_REVIEW_SUCCESS_CLAIMED",
+  "review_spend_initiated_by_codex_usd": "0.00",
+  "review_allowance_retained_usd": "0.50",
+  "operator_gate_change": "Allow recorded reviewer unavailability as the owner directive permits; all test, source, budget and evidence gates remain mandatory."
+}

@@ -1,0 +1,558 @@
+{
+  "schema": "helm.validation.terminal-test-receipt/1",
+  "status": "PASS_HELM_REPLICATION_VALIDATION_ONLY",
+  "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "commands": [
+    {
+      "name": "offline_install",
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "--require-hashes",
+        "--find-links",
+        "/opt/helm-validation/wheelhouse",
+        "--target",
+        "/opt/helm-validation/deps",
+        "-r",
+        "/opt/helm-validation/requirements.lock"
+      ],
+      "cwd": "/opt/helm-validation",
+      "returncode": 0,
+      "elapsed_seconds": 3.6863381529999995,
+      "stdout": {
+        "sha256": "7310aaecfad426f5fb73c28a136581e99cf78fe1a1a56dc0cd6dfc781fef1aee",
+        "bytes": 1924,
+        "file": "offline_install.stdout"
+      },
+      "stderr": {
+        "sha256": "abd6f7249a473f07f501069dde0fe2436ada294e0816606ef6d35309752ff944",
+        "bytes": 364,
+        "file": "offline_install.stderr"
+      }
+    },
+    {
+      "name": "environment",
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "freeze",
+        "--path",
+        "/opt/helm-validation/deps"
+      ],
+      "cwd": "/opt/helm-validation",
+      "returncode": 0,
+      "elapsed_seconds": 0.21583255099999832,
+      "stdout": {
+        "sha256": "ec089ed54dcf052e909c63bcf8664fcd95de8fa763232f2ba50f909ec391b52c",
+        "bytes": 202,
+        "file": "environment.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "environment.stderr"
+      }
+    },
+    {
+      "name": "git_package_before",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Version}",
+        "git"
+      ],
+      "cwd": "/opt/helm-validation",
+      "returncode": 0,
+      "elapsed_seconds": 0.007833204000000649,
+      "stdout": {
+        "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e",
+        "bytes": 19,
+        "file": "git_package_before.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_package_before.stderr"
+      }
+    },
+    {
+      "name": "git_package_after",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Version}",
+        "git"
+      ],
+      "cwd": "/opt/helm-validation",
+      "returncode": 0,
+      "elapsed_seconds": 0.007719806000000773,
+      "stdout": {
+        "sha256": "b8d5a195b846e7bcf8f126f41c4fbaac560049711b1a9589c8c30d55e45ba38e",
+        "bytes": 19,
+        "file": "git_package_after.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_package_after.stderr"
+      }
+    },
+    {
+      "name": "os_package_inventory",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Package}\t${Version}\n"
+      ],
+      "cwd": "/opt/helm-validation",
+      "returncode": 0,
+      "elapsed_seconds": 0.007658112000001438,
+      "stdout": {
+        "sha256": "c692807884d79864b8fdad68fd15cb467bd57dbb6ecc27fd5adf8342533d736e",
+        "bytes": 19463,
+        "file": "os_package_inventory.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "os_package_inventory.stderr"
+      }
+    },
+    {
+      "name": "git_commit_exists",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "cat-file",
+        "-e",
+        "c45f775f225dd06cc20cdf313f0a0398486e0d61^{commit}"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.1274065489999998,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_commit_exists.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_commit_exists.stderr"
+      }
+    },
+    {
+      "name": "git_index",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "read-tree",
+        "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.11483742000000063,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index.stderr"
+      }
+    },
+    {
+      "name": "git_index_names",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "ls-files",
+        "-z"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.015975330999999926,
+      "stdout": {
+        "sha256": "c34b91d9c036ae439813327f2a79d8393351681cf9f900224dbcc248470e998f",
+        "bytes": 5008851,
+        "file": "git_index_names.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_index_names.stderr"
+      }
+    },
+    {
+      "name": "git_skip_unselected",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "update-index",
+        "--skip-worktree",
+        "-z",
+        "--stdin"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.11188693300000097,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_skip_unselected.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_skip_unselected.stderr"
+      }
+    },
+    {
+      "name": "git_include_selected",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "update-index",
+        "--no-skip-worktree",
+        "-z",
+        "--stdin"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.06727883800000001,
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_include_selected.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_include_selected.stderr"
+      }
+    },
+    {
+      "name": "git_head",
+      "argv": [
+        "git",
+        "-c",
+        "core.longpaths=true",
+        "-c",
+        "core.autocrlf=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/opt/helm-validation/repo",
+      "returncode": 0,
+      "elapsed_seconds": 0.003747478000001081,
+      "stdout": {
+        "sha256": "10eaf86c1c6702125a0f24baba4d43f0b64b62bb1e101f377915eda6ec31c433",
+        "bytes": 41,
+        "file": "git_head.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "git_head.stderr"
+      }
+    },
+    {
+      "name": "focused_tests",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "pytest",
+        "-vv",
+        "--maxfail=1",
+        "--tb=short",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=/opt/helm-validation/aws-output/pytest.xml",
+        "records/typed_pointer_001/replication_2_20260926/test_replication_admission.py",
+        "tests/test_typed_pointer_deadline_routing.py",
+        "tests/test_typed_pointer_critical_mass_update_counts.py"
+      ],
+      "cwd": "/opt/helm-validation/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+      "returncode": 0,
+      "elapsed_seconds": 126.26681933399999,
+      "stdout": {
+        "sha256": "6023525bd950c6fbdd5c5cf240f051b4ebfa9937fa5c4ac2b07bd6e6a6107751",
+        "bytes": 5512,
+        "file": "focused_tests.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "focused_tests.stderr"
+      }
+    },
+    {
+      "name": "replication_admission_dry_run",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "records/typed_pointer_001/replication_2_20260926/prepare_replication.py",
+        "--plan-sha256",
+        "a6375b7651fd7817c1c5f156f1af475d540be5f386948cf3714802875e604ebf",
+        "--dry-run"
+      ],
+      "cwd": "/opt/helm-validation/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+      "returncode": 0,
+      "elapsed_seconds": 73.64384064200001,
+      "stdout": {
+        "sha256": "4f5946537f5ea939dfcbfff56ed9a96c3781f900d32d705a3530e877c9a8cdec",
+        "bytes": 919,
+        "file": "replication_admission_dry_run.stdout"
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "file": "replication_admission_dry_run.stderr"
+      }
+    }
+  ],
+  "started_utc": "2026-09-26T18:30:32.355483+00:00",
+  "expected_tests": 32,
+  "scope": "Focused two-seed admission checks and exact reference package verification; unchanged earlier tests reused; no CUDA/model/training acceptance.",
+  "payload_manifest_sha256": "a2f3d07910e47b5c744cd6e8769dcaff379d187ebefe1f591c47bb06cf006540",
+  "test_checkout_boundary": "Original c45 public partial Git checkout, real commit/trees/allowlisted blobs unchanged. New operational records overlay from separately committed source with exact bytes and hashes; they are not claimed to belong to c45. Training archive is exact successful c45 reuse.",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "tests": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_cases": [
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260917]",
+      "seconds": "34.325",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260919]",
+      "seconds": "33.714",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_unapproved_replication_seed_rejected[20260918]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_unapproved_replication_seed_rejected[42]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_unapproved_replication_seed_rejected[True]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_selected_seed_rejects_a_different_job_seed",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_scientific_design_difference_rejected",
+      "seconds": "0.002",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_authority_cannot_disagree_with_seed_in_job",
+      "seconds": "50.554",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_seed_context_restores_original_after_failure",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_reference_request_still_uses_original_default_gate",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_wrong_plan_hash_rejected_before_any_record",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_both_seed_plans_fixed_before_results_and_separate_receipts",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_second_seed_gate_requires_operational_success_not_good_scores[None]",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_second_seed_gate_requires_operational_success_not_good_scores[failed]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_second_seed_gate_requires_operational_success_not_good_scores[missing_artifact]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_second_seed_gate_requires_operational_success_not_good_scores[wrong_seed]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "records.typed_pointer_001.replication_2_20260926.test_replication_admission",
+      "name": "test_second_seed_gate_requires_operational_success_not_good_scores[incomplete_passes]",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_logged_helper_forwards_callback_and_original_start",
+      "seconds": "0.045",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_main_interference_and_replay_routes_call_pointer_wrappers",
+      "seconds": "0.046",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_pointer_logged_update_passes_after_old_practice_deadline",
+      "seconds": "0.032",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_pointer_replay_update_passes_after_old_practice_deadline",
+      "seconds": "0.029",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_pointer_strict_deadline_applies_before_any_update_work",
+      "seconds": "0.033",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_pointer_wrappers_forward_all_inputs_and_own_callback",
+      "seconds": "0.028",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_practice_default_deadline_remains_unchanged",
+      "seconds": "0.033",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_deadline_routing.DeadlineRouting",
+      "name": "test_update_outputs_and_seal_before_target_order_are_preserved",
+      "seconds": "0.036",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_10_pass_totals_without_altering_historical_receipts",
+      "seconds": "0.007",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_default_plan_totals",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_full_20_pass_totals",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_full_updates_without_auxiliary_work",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_one_update_without_auxiliary_work",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_reduced_literal_remains_non_claim_bearing",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "classname": "tests.test_typed_pointer_critical_mass_update_counts.EvidenceUpdateCounts",
+      "name": "test_reduced_updates_cap_the_entire_schedule",
+      "seconds": "0.000",
+      "status": "PASS"
+    }
+  ],
+  "collected_test_cases": 32,
+  "subtests": 6,
+  "package": {
+    "source_commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+    "archive_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+    "archive_bytes": 6110997,
+    "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+    "reused_without_rebuilding": true
+  },
+  "operational_source_commit": "ce3bee2ac98ca06244d96f2c88211b5c08b1b6c7",
+  "admission_dry_run": "PASS",
+  "finished_utc": "2026-09-26T18:33:56.963540+00:00",
+  "elapsed_seconds": 204.60814671199998
+}

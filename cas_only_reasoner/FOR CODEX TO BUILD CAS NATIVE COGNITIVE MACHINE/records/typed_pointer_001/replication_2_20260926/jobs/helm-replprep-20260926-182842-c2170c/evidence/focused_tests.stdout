@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+rootdir: /opt/helm-validation/repo/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE
+collecting ... collected 32 items
+
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260917] PASSED [  3%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_registered_seed_keeps_source_science_package_and_all_128_requirements[20260919] PASSED [  6%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_unapproved_replication_seed_rejected[20260918] PASSED [  9%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_unapproved_replication_seed_rejected[42] PASSED [ 12%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_unapproved_replication_seed_rejected[True] PASSED [ 15%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_selected_seed_rejects_a_different_job_seed PASSED [ 18%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_scientific_design_difference_rejected PASSED [ 21%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_authority_cannot_disagree_with_seed_in_job PASSED [ 25%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_seed_context_restores_original_after_failure PASSED [ 28%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_reference_request_still_uses_original_default_gate PASSED [ 31%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_wrong_plan_hash_rejected_before_any_record PASSED [ 34%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_both_seed_plans_fixed_before_results_and_separate_receipts PASSED [ 37%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_second_seed_gate_requires_operational_success_not_good_scores[None] PASSED [ 40%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_second_seed_gate_requires_operational_success_not_good_scores[failed] PASSED [ 43%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_second_seed_gate_requires_operational_success_not_good_scores[missing_artifact] PASSED [ 46%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_second_seed_gate_requires_operational_success_not_good_scores[wrong_seed] PASSED [ 50%]
+records/typed_pointer_001/replication_2_20260926/test_replication_admission.py::test_second_seed_gate_requires_operational_success_not_good_scores[incomplete_passes] PASSED [ 53%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_logged_helper_forwards_callback_and_original_start PASSED [ 56%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_main_interference_and_replay_routes_call_pointer_wrappers PASSED [ 59%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_pointer_logged_update_passes_after_old_practice_deadline PASSED [ 62%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_pointer_replay_update_passes_after_old_practice_deadline PASSED [ 65%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_pointer_strict_deadline_applies_before_any_update_work 
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_pointer_strict_deadline_applies_before_any_update_work PASSED [ 68%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_pointer_wrappers_forward_all_inputs_and_own_callback PASSED [ 71%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_practice_default_deadline_remains_unchanged 
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_practice_default_deadline_remains_unchanged PASSED [ 75%]
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_update_outputs_and_seal_before_target_order_are_preserved 
+tests/test_typed_pointer_deadline_routing.py::DeadlineRouting::test_update_outputs_and_seal_before_target_order_are_preserved PASSED [ 78%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_10_pass_totals_without_altering_historical_receipts PASSED [ 81%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_default_plan_totals PASSED [ 84%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_full_20_pass_totals PASSED [ 87%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_full_updates_without_auxiliary_work PASSED [ 90%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_one_update_without_auxiliary_work PASSED [ 93%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_reduced_literal_remains_non_claim_bearing PASSED [ 96%]
+tests/test_typed_pointer_critical_mass_update_counts.py::EvidenceUpdateCounts::test_reduced_updates_cap_the_entire_schedule PASSED [100%]
+
+-------- generated xml file: /opt/helm-validation/aws-output/pytest.xml --------
+============== 32 passed, 6 subtests passed in 125.94s (0:02:05) ===============

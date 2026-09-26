@@ -1,0 +1,49 @@
+{
+  "utc": "2026-09-26T18:35:44.689333+00:00",
+  "checks": [
+    {
+      "gate": "instance_terminated",
+      "passed": true,
+      "observed": "terminated"
+    },
+    {
+      "gate": "security_group_absent",
+      "passed": true
+    },
+    {
+      "gate": "worker_role_absent",
+      "passed": true,
+      "observed": "NoSuchEntity"
+    },
+    {
+      "gate": "watchdog_role_absent",
+      "passed": true,
+      "observed": "NoSuchEntity"
+    },
+    {
+      "gate": "profile_absent",
+      "passed": true,
+      "observed": "NoSuchEntity"
+    },
+    {
+      "gate": "worker_policy_absent",
+      "passed": true,
+      "observed": "NoSuchEntity"
+    },
+    {
+      "gate": "watchdog_policy_absent",
+      "passed": true,
+      "observed": "NoSuchEntity"
+    },
+    {
+      "gate": "scheduler_absent",
+      "passed": true,
+      "observed": "ResourceNotFoundException"
+    }
+  ],
+  "all_passed": true,
+  "retained_private_archive": "helm-replprep-20260926-182842-c2170c-807562639912",
+  "storage_active": true,
+  "deletion_authorized": false,
+  "provider_mutations": false
+}

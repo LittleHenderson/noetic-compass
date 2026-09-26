@@ -1,0 +1,73 @@
+{
+  "utc": "2026-09-26T18:28:42.321924+00:00",
+  "instance_type": "c6i.large",
+  "region": "us-west-2",
+  "actual_current_price": {
+    "usd_per_hour": "0.0850000000",
+    "query": {
+      "instanceType": "c6i.large",
+      "regionCode": "us-west-2",
+      "operatingSystem": "Linux",
+      "tenancy": "Shared",
+      "preInstalledSw": "NA",
+      "capacitystatus": "Used"
+    },
+    "request_id": "7c7793a8-6c8f-441f-87c2-7204c419cd74"
+  },
+  "image": {
+    "ImageId": "ami-07a134137a631b892",
+    "Name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260923",
+    "State": "available",
+    "CreationDate": "2026-09-23T11:56:59.000Z",
+    "Architecture": "x86_64"
+  },
+  "regions_checked": [
+    "ap-south-1",
+    "eu-north-1",
+    "eu-west-3",
+    "eu-west-2",
+    "eu-west-1",
+    "ap-northeast-3",
+    "ap-northeast-2",
+    "ap-northeast-1",
+    "ca-central-1",
+    "sa-east-1",
+    "ap-southeast-1",
+    "ap-southeast-2",
+    "eu-central-1",
+    "us-east-1",
+    "us-east-2",
+    "us-west-1",
+    "us-west-2"
+  ],
+  "active_instances": [
+    {
+      "region": "us-west-2",
+      "instance_id": "i-0bd0a082507a51ae3",
+      "instance_type": "t3.small",
+      "state": "running",
+      "production_allowlist_match": true,
+      "tags": {
+        "Lane": "customer-production",
+        "Name": "nc-customer-app",
+        "Purpose": "render-to-aws-migration",
+        "Project": "noetic-compass"
+      }
+    },
+    {
+      "region": "us-west-2",
+      "instance_id": "i-02137d196e671b5c1",
+      "instance_type": "t3.small",
+      "state": "running",
+      "production_allowlist_match": true,
+      "tags": {
+        "Purpose": "render-to-aws-migration",
+        "Lane": "accounts-canary",
+        "Project": "noetic-compass",
+        "Name": "nc-canary-app"
+      }
+    }
+  ],
+  "conflicts": [],
+  "provider_mutations": false
+}

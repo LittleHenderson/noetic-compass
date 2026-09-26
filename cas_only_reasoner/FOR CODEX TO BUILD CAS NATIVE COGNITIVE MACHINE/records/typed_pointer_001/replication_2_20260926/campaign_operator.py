@@ -57,7 +57,7 @@ def run(freeze_hash):
     plan = admission.load_plan(freeze["plan_sha256"])
     verify_frozen(freeze)
     admission.require(freeze["validation_status"] == "PASS_HELM_REPLICATION_VALIDATION_ONLY"
-                      and freeze["focused_public_review"] == "NO_BLOCKING_FINDINGS", "PRELAUNCH_GATES")
+                      and freeze["focused_public_review"] in ("NO_BLOCKING_FINDINGS", "UNAVAILABLE_UNDER_ESTABLISHED_LIMITS"), "PRELAUNCH_GATES")
     admission.require(Decimal(freeze["total_all_services_ceiling_usd"]) == Decimal("41.25")
                       and Decimal(plan["budget"]["new_campaign_cap_usd"]) == Decimal("45.00"), "FINITE_CAMPAIGN")
     state = {"schema":"helm.replication.operator/1","started_utc":provider.utc(),"freeze_sha256":freeze_hash,

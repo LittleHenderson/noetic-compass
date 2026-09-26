@@ -1,0 +1,25 @@
+{
+  "utc": "2026-09-26T18:36:58.182442+00:00",
+  "canonical_ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "before_sha256": "ff0cf548db7e5b1f3f4c7af083f016e24016b00da496469eb3990544ab3fbea7",
+  "revision": 110,
+  "total_reserved_usd": "899.40",
+  "no_new_seed_reservation": true,
+  "training_ledger_reservations_planned_usd": [
+    "19.20",
+    "19.20"
+  ],
+  "seed_all_services_ceiling_usd": [
+    "20.00",
+    "20.00"
+  ],
+  "failed_cpu_reservation_preserved_usd": "0.25",
+  "passed_cpu_reservation_usd": "0.25",
+  "review_reserved_usd": "0.50",
+  "collection_monitor_allowance_usd": "0.25",
+  "campaign_total_prospective_ceiling_usd": "41.25",
+  "campaign_hard_cap_usd": "45.00",
+  "unallocated_usd": "3.75",
+  "historical_records_changed": false,
+  "provider_actual_bill_available": false
+}
