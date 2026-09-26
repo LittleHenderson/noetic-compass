@@ -1,0 +1,44 @@
+{
+  "schema": "helm.corrected-rerun.source-ledger-gate/1",
+  "utc": "2026-09-26T05:24:09.668019+00:00",
+  "source_sha": "452604a67769dff6df5f298e5193e1376cedf60a",
+  "scientific_basis": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "changed_scientific_or_launcher_paths": [
+    "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/typed_pointer_launch.py"
+  ],
+  "only_packaging_metadata_changed": true,
+  "canonical_ledger": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "canonical_ledger_sha256": "12b8cb5f3433cf172f220924ec2677ffe5bd4cfc6cf3a04e6fbca52c509448d2",
+  "canonical_ledger_top_level_fields": [
+    "amendment",
+    "approval",
+    "no_automatic_refund",
+    "owner_task_cap_usd",
+    "predecessor",
+    "previous_state_sha256",
+    "remaining_unreserved_usd",
+    "reservations",
+    "revision",
+    "schema",
+    "scope",
+    "total_reserved_usd",
+    "updated_utc"
+  ],
+  "original_ledger_preserved": true,
+  "training_bound": {
+    "training": true,
+    "optimizer_updates_max": 2958,
+    "max_wall_seconds": 23400,
+    "jobs": 1,
+    "automatic_retries": 0,
+    "reservation_usd": "19.20",
+    "instance_type": "g7.2xlarge",
+    "region": "us-west-2",
+    "instance_seconds_max": 25200
+  },
+  "contract_sha256": "bc3094549880b4c1010c297168cc8beb9f8b44985aa394b0d755f51281e4c78c",
+  "prior_component_forecast_reference": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm-cm2x-rerun-20260926/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/typed_pointer_001/admission_cm2x_rerun_20260926/forecast.json",
+  "prospective_total_usd": "20.60",
+  "owner_cap_usd": "21.50",
+  "reservation_created_by_this_inspection": false
+}

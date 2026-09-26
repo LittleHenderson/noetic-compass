@@ -204,7 +204,7 @@ def prepare(wheelhouse, git_packages_dir, authorization_file, authorization_sha2
         "provider_reference_sha256": sha(provider_raw), "sdk_profile": provider.get("sdk_profile", "default"),
         "instance_type": "t3.small", "cpu_credits": "standard", "root_gib": 8,
         "root_type": "gp3", "root_encrypted": True, "root_delete_on_termination": True,
-        "jobs": 1, "retry_count": 0, "permitted_concurrent_instances": [],
+        "jobs": 1, "retry_count": 0, "permitted_concurrent_instances": provider["permitted_concurrent_instances"],
         "worker_seconds": 900, "operator_seconds": 1020, "os_shutdown_minutes": 18,
         "scheduler_after_seconds": 1080, "hard_wall_seconds": 1200,
         "maximum_all_services_usd": "0.60", "forecast_all_services_usd": "0.10",

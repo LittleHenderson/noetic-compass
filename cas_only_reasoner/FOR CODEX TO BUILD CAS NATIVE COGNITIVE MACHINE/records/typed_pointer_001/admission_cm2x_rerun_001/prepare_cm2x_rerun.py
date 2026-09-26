@@ -88,7 +88,7 @@ _BASE_STUDY_RECORD = base.study_record
 def cost_bound():
     bound = _BASE_COST_BOUND()
     prior = Decimal("0.60") + Decimal("0.10")
-    preparation = Decimal("0.60")
+    preparation = Decimal("1.20")  # Two distinct immutable CPU preparation reservations.
     total = Decimal(bound["reservation_plus_allowance_usd"]) + prior + preparation
     base.stop_unless(total <= Decimal("21.50"), "TOTAL_RERUN_CAP_EXCEEDED")
     bound.update({"historical_prerequisite_reservations_usd": str(prior),

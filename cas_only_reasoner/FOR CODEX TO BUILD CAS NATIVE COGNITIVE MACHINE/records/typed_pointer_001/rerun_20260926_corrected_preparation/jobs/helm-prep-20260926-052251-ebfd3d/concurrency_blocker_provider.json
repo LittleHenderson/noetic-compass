@@ -1,0 +1,63 @@
+{
+  "observed_utc": "2026-09-26T05:24:35.450758+00:00",
+  "region": "us-west-2",
+  "instances": [
+    {
+      "InstanceId": "i-0bd0a082507a51ae3",
+      "InstanceType": "t3.small",
+      "State": {
+        "Code": 16,
+        "Name": "running"
+      },
+      "LaunchTime": "2026-09-26 02:55:40+00:00",
+      "Tags": [
+        {
+          "Key": "Lane",
+          "Value": "customer-production"
+        },
+        {
+          "Key": "Name",
+          "Value": "nc-customer-app"
+        },
+        {
+          "Key": "Purpose",
+          "Value": "render-to-aws-migration"
+        },
+        {
+          "Key": "Project",
+          "Value": "noetic-compass"
+        }
+      ],
+      "StateTransitionReason": ""
+    },
+    {
+      "InstanceId": "i-02137d196e671b5c1",
+      "InstanceType": "t3.small",
+      "State": {
+        "Code": 16,
+        "Name": "running"
+      },
+      "LaunchTime": "2026-09-26 05:05:43+00:00",
+      "Tags": [
+        {
+          "Key": "Purpose",
+          "Value": "render-to-aws-migration"
+        },
+        {
+          "Key": "Lane",
+          "Value": "accounts-canary"
+        },
+        {
+          "Key": "Project",
+          "Value": "noetic-compass"
+        },
+        {
+          "Key": "Name",
+          "Value": "nc-canary-app"
+        }
+      ],
+      "StateTransitionReason": ""
+    }
+  ],
+  "provider_mutations": false
+}

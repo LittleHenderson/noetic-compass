@@ -7,14 +7,26 @@
   "new_corrected_preparation_reservation_usd": "0.60",
   "prospective_training_reservation_usd": "19.20",
   "other_services_allowance_usd": "0.10",
-  "total_prospective_all_services_usd": "20.60",
+  "total_prospective_all_services_usd": "21.20",
   "owner_hard_cap_usd": "21.50",
-  "unallocated_headroom_usd": "0.90",
+  "unallocated_headroom_usd": "0.30",
   "preparation_instance": "t3.small",
   "preparation_hard_wall_seconds": 1200,
   "preparation_expected_test_cases": 69,
   "preparation_jobs": 1,
   "automatic_retries": 0,
-  "sequence": ["focused tests", "exact committed package", "admission dry-run", "download verified evidence", "terminate and verify cleanup", "local record freeze", "single training launch"],
-  "boundary": "Prospective reservations, not provider billing. Historic receipts unchanged. No protected historical result bodies are read."
+  "sequence": [
+    "focused tests",
+    "exact committed package",
+    "admission dry-run",
+    "download verified evidence",
+    "terminate and verify cleanup",
+    "local record freeze",
+    "single training launch"
+  ],
+  "boundary": "Prospective reservations, not provider billing. Historic receipts unchanged. No protected historical result bodies are read.",
+  "prior_prelaunch_gate_reservation_usd": "0.60",
+  "prior_prelaunch_gate_job": "helm-prep-20260926-052251-ebfd3d",
+  "prior_prelaunch_gate_resources_created": false,
+  "concurrency_rule": "Refuse conflicting active experiments. Only two exact frozen existing production application identities/tags are exempt; never mutate those apps."
 }

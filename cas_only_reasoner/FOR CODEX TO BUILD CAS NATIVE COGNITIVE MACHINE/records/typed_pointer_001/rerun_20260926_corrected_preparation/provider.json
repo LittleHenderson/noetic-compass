@@ -13,5 +13,31 @@
     "g7.2xlarge": "2.5200000000"
   },
   "provider_mutations": false,
-  "concurrency": "Fresh global active-instance gate runs immediately before new CPU launch"
+  "concurrency": "Fresh global active-instance gate runs immediately before new CPU launch",
+  "permitted_concurrent_instances": [
+    {
+      "instance_id": "i-0bd0a082507a51ae3",
+      "instance_type": "t3.small",
+      "region": "us-west-2",
+      "tags": {
+        "Lane": "customer-production",
+        "Name": "nc-customer-app",
+        "Purpose": "render-to-aws-migration",
+        "Project": "noetic-compass"
+      },
+      "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+    },
+    {
+      "instance_id": "i-02137d196e671b5c1",
+      "instance_type": "t3.small",
+      "region": "us-west-2",
+      "tags": {
+        "Purpose": "render-to-aws-migration",
+        "Lane": "accounts-canary",
+        "Project": "noetic-compass",
+        "Name": "nc-canary-app"
+      },
+      "classification": "EXISTING_PRODUCTION_APP_NOT_EXPERIMENT"
+    }
+  ]
 }

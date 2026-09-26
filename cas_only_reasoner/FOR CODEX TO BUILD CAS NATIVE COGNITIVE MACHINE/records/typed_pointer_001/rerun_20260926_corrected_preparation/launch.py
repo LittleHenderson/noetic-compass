@@ -101,8 +101,16 @@ def execute(directory, expected_hash):
         raise ValueError("WRONG_HELM_VALIDATION_FREEZE")
     if plan["source_commit"] != SOURCE or plan["package_source_commit"] != SOURCE:
         raise ValueError("EXACT_HELM_SOURCE_REQUIRED")
-    if plan.get("permitted_concurrent_instances") != []:
-        raise ValueError("SERIAL_VALIDATION_REQUIRED")
+    exemptions = {row["instance_id"]: row for row in plan["permitted_concurrent_instances"]}
+    if set(exemptions) != {"i-0bd0a082507a51ae3", "i-02137d196e671b5c1"}:
+        raise ValueError("EXACT_EXISTING_PRODUCTION_APP_IDENTITIES_REQUIRED")
+    for row in exemptions.values():
+        if (row["instance_type"] != "t3.small" or row["region"] != "us-west-2" or
+                row["tags"].get("Project") != "noetic-compass" or
+                row["tags"].get("Purpose") != "render-to-aws-migration" or
+                row["tags"].get("Lane") not in {"customer-production", "accounts-canary"} or
+                "CASJob" in row["tags"]):
+            raise ValueError("PRODUCTION_APP_EXEMPTION_SCOPE")
     if plan.get("expected_tests") != 69:
         raise ValueError("EXACT_69_TEST_GATE_REQUIRED")
     directive = (directory / "owner_directive.md").read_bytes()
@@ -128,7 +136,7 @@ def execute(directory, expected_hash):
         "reserved_utc": utc().isoformat(), "status": "RESERVED_NO_AUTOMATIC_REFUND",
         "owner_directive_sha256": plan["owner_directive_sha256"], "freeze_sha256": expected_hash,
         "combined_new_attempt_cap_usd": "21.50", "training_reservation_usd": "19.20",
-        "other_services_allowance_usd": "0.10", "historical_prerequisites_reserved_usd": "0.70", "combined_declared_usd": "20.60",
+        "other_services_allowance_usd": "0.10", "historical_prerequisites_reserved_usd": "1.30", "combined_declared_usd": "21.20",
         "scope": "One CPU validation prerequisite of the new HELM attempt; canonical GPU ledger unchanged"}
     with (directory / "validation_reservation.json").open("x", encoding="utf-8") as stream:
         json.dump(reservation, stream, indent=2)
@@ -208,7 +216,7 @@ def execute(directory, expected_hash):
         if identity["Account"] != plan["account_id"]:
             raise ValueError("WRONG_AWS_ACCOUNT")
         state["caller_arn"] = identity["Arn"]
-        # Serial validation: any active instance in any enabled region blocks.
+        # Serial experiments: only the two exact frozen existing production apps are exempt.
         checks = []
         for region in ec2.describe_regions(AllRegions=False)["Regions"]:
             regional = client("ec2", region["RegionName"])
@@ -220,14 +228,17 @@ def execute(directory, expected_hash):
                     kwargs["NextToken"] = token
                 data = regional.describe_instances(**kwargs)
                 active.extend({"instance_id": i["InstanceId"], "instance_type": i["InstanceType"],
-                               "region": region["RegionName"]}
+                               "region": region["RegionName"], "tags": {t["Key"]: t["Value"] for t in i.get("Tags", [])}}
                               for r in data["Reservations"] for i in r["Instances"])
                 token = data.get("NextToken")
                 if not token:
                     break
             checks.append({"region": region["RegionName"], "active_instances": active})
             heartbeat()
-            if active:
+            unexpected = [row for row in active if row["instance_id"] not in exemptions or
+                          any(row[key] != exemptions[row["instance_id"]][key]
+                              for key in ("instance_type", "region", "tags"))]
+            if unexpected:
                 state["global_concurrency"] = checks
                 save()
                 raise ValueError("UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK")
