@@ -1,0 +1,143 @@
+{
+  "schema": "helm.parallel.reconciliation/1",
+  "utc": "2026-09-27T15:07:27.822824+00:00",
+  "status": "BOUNDED_SOURCE_PACKETS_RETURNED_CORRECTIONS_OPEN",
+  "handoff_source": "5c81654a2796fba0b0d07f615ec0af18d0f11136",
+  "actual_deliveries": {
+    "utc": "2026-09-27T15:05:06.447509+00:00",
+    "claude": {
+      "implementation_commit": "819afab5238ba1c7dd61ad7511d132f11af4b525",
+      "records_head": "123c2b5d7cd40ebc282c40e61830fb10482a4bf8",
+      "actual_return": "https://github.com/LittleHenderson/noetic-compass/pull/245#issuecomment-5857003020",
+      "files": [
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py",
+          "blob": "bc6dc871106e81fef9a466d8aa89afab9fedd5d0",
+          "sha256": "56f2f11e27c97aaabe7ef07bb0e6796600b6bd553621502ef3cff66ea6ed3877",
+          "bytes": 12991
+        },
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+          "blob": "f360cf51451950b34b379f7b8dc2fb1a2ab88ee0",
+          "sha256": "c0382d4553579e6e1ec29b56a8f15044a874afc4bf7ee087752d482a5038ffdb",
+          "bytes": 9420
+        },
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py",
+          "blob": "27296d92a34f86d84751ab9ce23e6c0e5ceb19ca",
+          "sha256": "51d4bc0a0f0ba707f3088aa3dbdbe6071640f3d3f935f93174e318e37b3334b8",
+          "bytes": 6260
+        },
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+          "blob": "29439079ad8ff6a92e66707d976e18d1f2b4c968",
+          "sha256": "69fef0bee03fe6d10fd8eacf14e5a8da2dae0b3bdec3b607d3d3bb73d44366ba",
+          "bytes": 8563
+        },
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/README.md",
+          "blob": "09f3673c7b975a36486826d6e56ea18eb1a8fbce",
+          "sha256": "01f89b952a152064e2f8c9aafff605f7eac675f3b5527deb8aeea3ef91e573e6",
+          "bytes": 7863
+        },
+        {
+          "path": "research/helm_growth_experiments/residual_world_v1/plan_tests_local_junit.xml",
+          "blob": "b814ec06c302c1de79287072701e0ba782d0c461",
+          "sha256": "6f3e8073f30f7431d9ad128921ec05e102520a5293789bfb528b47db77750415",
+          "bytes": 2897
+        }
+      ],
+      "numerical_execution": "NOT_RUN",
+      "old_local_tests": "14 reported at19653ec; retained engineering evidence, not AWS acceptance",
+      "review": "SOURCE_FINDINGS_OPEN; B initialization RNG, verified optimizer object-name mapping, enabled+optimizer reload, finite-intermediate refusal"
+    },
+    "deepseek": {
+      "actual_return": "deepseek-parallel-capability-01-p2-20260927-05",
+      "files": [
+        {
+          "path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\p2_result_reader.py",
+          "sha256": "8ff36ac62d310ab47b5e1ad764b9c2be3d2daed2b0066f8d5715e7430f127a45",
+          "bytes": 23034
+        },
+        {
+          "path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\p2_episode_schema.json",
+          "sha256": "3bba6855fcee6bb0eddadfeb2bd133f042b54384ef44476ec2baa0af9f32c47c",
+          "bytes": 3132
+        },
+        {
+          "path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\p2_episode_and_taxonomy_tests.py",
+          "sha256": "42b2b6ca431d880ac5bb3ced3cf48c6222153d2d25176bd628d524f302d8b69d",
+          "bytes": 5831
+        },
+        {
+          "path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\p2_public_receipts_manifest.json",
+          "sha256": "6881e8352e8ab4ac6e24d1802c6ac712843be948d65e31ec2792e0d566040351",
+          "bytes": 5920
+        }
+      ],
+      "review": "INPUT_BOUNDARY_CORRECTION_REQUIRED",
+      "old_local_tests": "17 lead-reported; no AWS acceptance",
+      "corrected_response_received": false
+    },
+    "new_cloud_jobs": 0,
+    "new_paid_calls": 0,
+    "new_agents": 0,
+    "codex_tests_or_models_executed": 0
+  },
+  "scope": {
+    "schema": "helm.parallel.lease/1",
+    "utc": "2026-09-27T15:00:08.463840+00:00",
+    "task": "PARALLEL-CAPABILITY-01-P1",
+    "lead": "Claude",
+    "actual_session": "session_011hJxopymaeoPQ67KvchtwW",
+    "existing_implementation": "19653ec8ea5a363303cd5263dc2a01df45d67d6f",
+    "status": "ACKNOWLEDGED_MOVED_SOURCE_PACKET_COMPLETE_FINDINGS_OPEN",
+    "exclusive_writes": [
+      "research/helm_growth_experiments/residual_world_v1/**"
+    ],
+    "one_time_move_from": "research/cas_closed_loop_1/claude_lead_20260927/growth_specialist/**",
+    "continuation_of_existing_packet": true,
+    "remaining_seconds_max": 300,
+    "new_dispatch": false,
+    "children": 0,
+    "new_paid_calls": 0,
+    "cloud_jobs": 0,
+    "tests_or_models": 0,
+    "source_handoff": "5c81654a2796fba0b0d07f615ec0af18d0f11136",
+    "actual_return": "https://github.com/LittleHenderson/noetic-compass/pull/245#issuecomment-5857003020",
+    "implementation_commit": "819afab5238ba1c7dd61ad7511d132f11af4b525",
+    "records_head": "123c2b5d7cd40ebc282c40e61830fb10482a4bf8",
+    "ack_observed_utc": "2026-09-27T15:07:27.822824+00:00"
+  },
+  "continuation": {
+    "implementation": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+    "focused_tests": "29 AWS passes at697b8f7;30th case at49d3e23 NOT_RUN",
+    "numerical_proof": "a1 FAILED_BEFORE_RESTORE; corrected source NOT_RUN; no continuation job",
+    "next_dependency": "Separate applicable finite disposition for corrected numerical preparation; no automatic retry or new compute authorized by this addendum",
+    "parent": "5b37699d52e530a9ecd3563e235f0884630225da2fbe27489767a196c0f7a109",
+    "originals_preserved": true
+  },
+  "joint": {
+    "source": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+    "actual_passes": 144,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "fresh_process_reload": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+    "cleanup": "INDEPENDENTLY_VERIFIED",
+    "scope": "Symbolic engineering only; no learned-CAS acceptance"
+  },
+  "permitted_aggregate_manifest": "P2_PUBLIC_RECEIPTS_MANIFEST.json",
+  "p2_scope_amendment": "Reuse existing reviewer-owned review/p2_* files; no duplicate parallel_capability_01 implementation. Prior per-item/family report is not accepted evidence under this manifest.",
+  "p1_limit_amendment": "Already-started25-minute packet reconciled; remaining5 minutes used for namespace move. No new20-minute packet or allowance granted.",
+  "no_numeric_or_runtime_acceptance": true,
+  "codex_new_resources": {
+    "cloud_jobs": 0,
+    "paid_model_calls": 0,
+    "subagents": 0,
+    "training": 0,
+    "tests": 0,
+    "checkpoint_deserializations": 0,
+    "budget_changes": 0
+  }
+}
