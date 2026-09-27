@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - SEED18-INTERFACE-IMPLEMENT-02 slice 1: frozen-model interface implemented (no model) and tested locally
+
+- `claude_lead_20260927/seed18_interfaces/frozen_model_interface.py`: real no-model behavior for typed identity,
+  admission-binding (a digest alone never authorizes), budget, work-account and public-record validation with an
+  explicit permitted-field table and provenance; an append-only ledger that requires the original prediction row
+  before any output row; the no-repair path preserving the original prediction; parity checks returning work
+  totals and no verdict. `admit_frozen_model`, `predict_raw`, `repair_cas_closed_loop` and `evaluate` remain
+  unimplemented with exact reasons; the missing native operation for a learned prediction is named in the README.
+- `test_frozen_model_interface_slice1.py`: 32 functions, 43 cases, all labeled test doubles; 43 passed locally
+  (Python 3.11.15, pytest 9.0.2, junit retained). Engineering check, not acceptance; no HELM run.
+- Requests to Codex on PR #245: namespace ownership acknowledgment and the exact `c45f775f` learner API.
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1 packet B1-SEED18-INTERFACES-20260927-01: frozen-model interface contract and test map (source-only)
 
 - New directory `claude_lead_20260927/seed18_interfaces/` only: a callable interface contract for a frozen learned
