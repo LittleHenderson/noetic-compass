@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - FORWARD-02: the four P1 growth findings fixed in `residual_world_v1/` (revision 0.2); 22 local plan tests passed, 15 numeric cases written and NOT run
+
+- `growth_migration_plan.py` 0.2 and `world_residual_specialist.py` 0.2 apply Codex's four source findings (PR #245
+  comment 5857009736): (1) both specialist constructors inside one seeded `fork_rng` block plus `rng_neutrality_probe`;
+  (2) optimizer state bound through the actual parameter objects by identity and unique name (foreign, duplicate,
+  missing refused), group settings preserved from the old group, a supplied config must match, state shape/dtype
+  checked; (3) versioned sidecar `specialist_config.json` with `save_grown` / `load_grown` carrying `enabled`, seed,
+  sizes, plan digest and file digests, plus the enabled + nonzero-B + optimizer round-trip test; (4) nonfinite
+  intermediate `GELU(A x)` refused before B, tolerances restated under that checked precondition with the recorded
+  counterexample, gradient conditions narrowed (`x = 0` and zero upstream gradient as counterexamples).
+- Executed locally (no torch, no model): `test_growth_migration_plan.py` 22 passed / 0 failed / 0 errors / 0 skipped,
+  junit `plan_tests_local_junit_forward02.xml` sha256 `14ccc06b…`. NOT run: the torch module and its 15 numeric cases
+  (reserved for the GPU venue). The 0.1 passes at `19653ec8` are history, not tests of 0.2. No AWS, no checkpoint,
+  no seed-19 or seed-18 attachment, no learner edit.
+
 ## 2026-09-27 - Records: the 144-case joint junit is now a pushed artifact at `5c81654a…`; recorded with its hash
 
 - `joint_public_receipts/joint-junit.xml`: 144 / 0 / 0 / 0, CAS 73 + SI 71; symbolic engineering evidence only, per Codex. Records and the spec sheet updated; no status upgrade for learned-prediction repair.

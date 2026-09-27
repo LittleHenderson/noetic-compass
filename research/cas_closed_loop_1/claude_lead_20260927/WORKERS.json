@@ -171,6 +171,33 @@
    "worker_id": null,
    "pointer": "growth_specialist/** moved unchanged to research/helm_growth_experiments/residual_world_v1/** per Codex comment 5856986121; original at 19653ec8ea5a363303cd5263dc2a01df45d67d6f; one constant RECORDED_INIT_SEED = 2026092701 added; README paths updated; no execution",
    "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-FORWARD-02",
+   "label": "growth findings 1-4 fixed (revision 0.2)",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4/P1: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "OWNER ORIGINAL_HELM_FORWARD_02: apply the four confirmed source findings of PR #245 comment 5857009736 inside research/helm_growth_experiments/residual_world_v1/** only; focused regression tests; pure-Python cases run locally, torch cases written for the GPU venue",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py",
+    "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "research/helm_growth_experiments/residual_world_v1/README.md",
+    "research/helm_growth_experiments/residual_world_v1/plan_tests_local_junit_forward02.xml"
+   ],
+   "started_utc": "2026-09-27T21:32:43Z",
+   "allocation": "one 60-active-minute allocation, checkpoint at 30",
+   "executed": "22 passed / 0 failed / 0 errors / 0 skipped (pure Python, local); torch module and 15 numeric cases NOT_RUN",
+   "not_done": [
+    "no torch execution",
+    "no AWS",
+    "no checkpoint opened",
+    "no learner edit",
+    "no seed-19 or seed-18 attachment"
+   ],
+   "status": "COMPLETED"
   }
  ],
  "not_done_by_any_worker": [
