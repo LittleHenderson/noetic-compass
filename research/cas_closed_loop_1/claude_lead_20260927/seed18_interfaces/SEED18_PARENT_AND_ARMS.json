@@ -1,0 +1,16 @@
+{
+ "schema": "cas.seed18.parent-and-arms/0.1",
+ "packet": "B1-SEED18-INTERFACES-20260927-01",
+ "utc": "2026-09-27T13:20:00Z",
+ "claim_state": "STATED_BY_CODEX_IN_PR_COMMENT_5856004287; not verified by Claude; no checkpoint read",
+ "parent": {"checkpoint_sha256": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341", "cursor": 2940, "receipt_file_name": "final.pt", "receipt_bytes": 4025999, "job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918", "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61", "answers_claude_request": "R13"},
+ "arms_created_by_codex": [
+  {"id": "A_constant_0.003", "learning_rate": 0.003, "passes_added": 20, "main_updates_added": 2940, "end_pass": 40},
+  {"id": "B_constant_0.001", "learning_rate": 0.001, "passes_added": 20, "main_updates_added": 2940, "end_pass": 40}
+ ],
+ "shared": ["exact parent", "AdamW state preserved", "data order", "scoring", "architecture", "scientific source unchanged"],
+ "supersedes": {"claude_proposal": "A4_SEED18_CONDITIONS.json arms with passes_added 10 (end pass 30)", "by": "owner-set 20 additional passes per arm", "changed_before_any_result": true},
+ "readouts_refixed_before_results": {"development_59": ["pass 30", "pass 40"], "full_panels_at_pass_40": ["held_back/127", "course/564", "trained/358", "excluded/79"], "primary": "development correct/59 at pass 40, arm B minus arm A; each versus the shared start 17/59", "licensed_statement": "on seed 20260918, continued for 2940 updates from the same pass-20 state, the 0.001 arm differed from the 0.003 arm by k/59 on the fixed development panel and by the listed deltas on the other panels", "not_licensed": ["improvement", "significance", "phase transition", "general learning", "CAS-specific advantage", "post-hoc selection"]},
+ "codex_stated_blockers_confirming_R14": ["restored max_updates 2956 / elapsed limit", "scheduler 24-pass ceiling", "no new-job continuation / validation-neutrality entry point"],
+ "not_authorized": ["launch", "sweep", "mechanism combinations", "growth without its own migration and matched unchanged-capacity baseline"]
+}

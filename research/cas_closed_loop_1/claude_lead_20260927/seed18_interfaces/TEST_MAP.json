@@ -1,0 +1,26 @@
+{
+ "schema": "cas.seed18.frozen-model-interface-test-map/0.1",
+ "packet": "B1-SEED18-INTERFACES-20260927-01",
+ "status": "DECLARED_NOT_WRITTEN_NOT_RUN",
+ "proposed_test_file": "research/cas_closed_loop_1/test_seed18_interfaces.py (does not exist; requires a new packet naming the scope)",
+ "venues": {"CPU_DRY": "refusal and structure cases that never load a model; runnable in the CPU protocol", "ADMITTED_AWS": "cases that load the frozen checkpoint; only through Codex's runner after explicit admission"},
+ "cases": [
+  {"id": "test_frozen_model_sha_mismatch_refused_before_load", "invariant": "I1", "venue": "CPU_DRY", "path": "both", "proves": "a file with a different SHA-256 or size is refused before restore_checkpoint is reached"},
+  {"id": "test_frozen_model_cursor_mismatch_refused_after_restore", "invariant": "I1", "venue": "ADMITTED_AWS", "path": "both", "proves": "restored cursor != declared cursor 2940 refuses the handle"},
+  {"id": "test_handle_exposes_predict_only", "invariant": "I2", "venue": "CPU_DRY", "path": "both", "proves": "stage_batch, train_sealed_batch and export_checkpoint are TRAINING_ENTRY_POINT_FORBIDDEN through the handle"},
+  {"id": "test_cpu_device_is_gpu_required_not_fallback", "invariant": "I3", "venue": "CPU_DRY", "path": "both", "proves": "a non-CUDA device refuses with GPU_REQUIRED and makes no prediction"},
+  {"id": "test_prediction_record_persisted_before_repair_and_frozen", "invariant": "I4", "venue": "ADMITTED_AWS", "path": "both", "proves": "the ledger holds the PredictionRecord before either repair function is entered; the dataclass is frozen"},
+  {"id": "test_prediction_body_private_digest_public", "invariant": "I10", "venue": "CPU_DRY", "path": "both", "proves": "validate_record_is_public_safe refuses a record carrying a body"},
+  {"id": "test_repair_none_verified_output_equals_prediction", "invariant": "I5", "venue": "ADMITTED_AWS", "path": "NONE", "proves": "verified_output_sha256 == prediction_sha256 and native counts are 0"},
+  {"id": "test_repair_cas_uses_existing_grant_and_records_receipt", "invariant": "I5", "venue": "ADMITTED_AWS", "path": "CAS_CLOSED_LOOP", "proves": "the receipt schema cas.closed-loop.native-step-receipt/0.1 is digested into native_receipt_sha256; I_executed <= I_allocated <= 1"},
+  {"id": "test_repair_cas_without_receipt_is_refused", "invariant": "I5", "venue": "CPU_DRY", "path": "CAS_CLOSED_LOOP", "proves": "NATIVE_RECEIPT_MISSING"},
+  {"id": "test_disabled_actuator_records_prediction_and_zero_native_execution", "invariant": "I8", "venue": "ADMITTED_AWS", "path": "CAS_CLOSED_LOOP", "proves": "actuator_enabled=False keeps the PredictionRecord and yields native_calls_executed 0 (mirrors test_disabled_actuator_retains_allocation_without_execution)"},
+  {"id": "test_same_items_order_evaluator_budget_across_paths", "invariant": "I6", "venue": "CPU_DRY", "path": "both", "proves": "episode_parity_check refuses ITEM_ORDER_MISMATCH, EVALUATOR_MISMATCH, BUDGET_MISMATCH"},
+  {"id": "test_predictions_identical_by_digest_across_paths", "invariant": "I7", "venue": "ADMITTED_AWS", "path": "both", "proves": "the same item under the frozen model gives equal raw digests on NONE and CAS; a difference is PREDICTION_NOT_PRESERVED"},
+  {"id": "test_work_account_complete_on_both_paths", "invariant": "I8", "venue": "ADMITTED_AWS", "path": "both", "proves": "every WorkAccount field present and non-negative; CAS path work strictly includes native units"},
+  {"id": "test_prediction_budget_exhaustion_refuses_before_call", "invariant": "I8", "venue": "CPU_DRY", "path": "both", "proves": "PREDICTION_BUDGET_EXHAUSTED before the learner is called"},
+  {"id": "test_interface_computes_no_score_or_threshold", "invariant": "I9", "venue": "CPU_DRY", "path": "both", "proves": "episode_parity_check returns totals only; no verdict field exists"},
+  {"id": "test_fresh_process_reload_of_episode_records", "invariant": "I4", "venue": "ADMITTED_AWS", "path": "both", "proves": "records reload in a fresh process with the same host admission and identical digests (mirrors test_witness_reloads_in_a_fresh_process_with_same_host_admission)"}
+ ],
+ "counts": {"declared_cases": 16, "cpu_dry": 8, "admitted_aws": 8, "written": 0, "executed": 0}
+}
