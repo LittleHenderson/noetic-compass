@@ -1,5 +1,10 @@
 # HELM-Q1 offline packet 1
 
+Packet 2 adds coordination/codex/run_p2_checks.py and 15 launcher regression
+methods (58 builder methods total). No runner is enrolled; all tests remain
+NOT_RUN. Read coordination/codex/P2_RETURN.md for the current implementation pin,
+runner block and exact commands. No local testing or new cloud spend is authorized.
+
 Implemented source: strict fixture-bound records, an independent verifier,
 exhaustive and pruned classical search, bounded uniform sampling, and an offline
 backend that refuses submission. Tests are authored but NOT_RUN. Q0, independent

@@ -61,7 +61,7 @@ MSI performed file inspection, manifest hashing, static Python/JSON parsing and
 Git preparation/publication only. New tests: 43 authored, 0 collected/executed,
 0 passes/failures/skips, 43 NOT_RUN. Supplied tests: 22 NOT_RUN in this session.
 The historic 22/22 helper result belongs to the package's original Linux receipt.
-DeepSeek separately reports 42 local passes against earlier uncommitted files;
+DeepSeek's later report is 49 cases, 47 local passes and 2 NOT_RUN against earlier files;
 these were outside the AWS-only venue rule and do not validate this final source.
 See coordination/codex/REVIEW_RESPONSE.md for attributed source fixes and limits.
 
@@ -98,3 +98,7 @@ remaining; reset timestamp 1791048924. Credits balance 0, ordinary usage allowed
 These are account-wide observations, not Q1-only usage. This session's monetary
 model cost is not exposed. Q1 cloud jobs/spend and hardware calls are all zero;
 no child was started. See evidence/PUBLICATION.json for the checkpoint record.
+
+Packet 2 supersedes the current inventory with 58 builder methods, all NOT_RUN.
+The 43 count above remains the packet-1 inventory. See P2_ACK.json, P2_CHANNEL.md,
+P2_RUNNER_CONTRACT.md and P2_RETURN.md for the launcher and current source status.

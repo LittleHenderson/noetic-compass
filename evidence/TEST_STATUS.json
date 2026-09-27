@@ -1,8 +1,8 @@
 {
   "schema": "helm-q1-test-status/1",
   "current_status": "NOT_RUN",
-  "new_tests": {"authored_methods": 43, "collected": 0, "executed": 0, "passed": 0,
-                "failed": 0, "errors": 0, "skipped": 0, "not_run_methods": 43},
+  "new_tests": {"authored_methods": 58, "collected": 0, "executed": 0, "passed": 0,
+                "failed": 0, "errors": 0, "skipped": 0, "not_run_methods": 58},
   "supplied_helper_tests_current_session": {"authored_methods": 22, "collected": 0,
     "executed": 0, "passed": 0, "failed": 0, "skipped": 0, "not_run_methods": 22},
   "historical_helper_receipt": {"reported_executed": 22, "reported_passed": 22,
@@ -17,9 +17,11 @@
   "independent_review": "EARLIER_UNCOMMITTED_SOURCE_REVIEW_RECEIVED; FIXES_NOT_INDEPENDENTLY_CHECKED",
   "reviewer_report_not_adopted_as_acceptance": {
     "author": "Q1-DeepSeek", "source": "review/REVIEW_Q1_DEEPSEEK_PACKET1.md",
-    "reported_executed": 42, "reported_passed": 42,
+    "reported_collected": 49, "reported_executed": 47, "reported_passed": 47, "reported_not_run": 2,
     "venue": "MSI local; outside the standing AWS-only test instruction",
-    "codex_reexecuted": false, "exact_final_commit_verified": false
+    "codex_reexecuted": false, "exact_final_commit_verified": false,
+    "status": "REPORTED_NONADMITTED_EXECUTION",
+    "latest_count_source": "coordination/deepseek/ACK_START_RESULT.md and review/out/e_schemas.json"
   },
   "performance_claim": null
 }

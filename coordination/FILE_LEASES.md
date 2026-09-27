@@ -23,3 +23,9 @@ the predicate or tune its schedule. Tests may compare independent behavior.
 No host runtime slices are admitted in packet 1. No hidden/protected tests,
 checkpoints or upstream history are dependencies. Host changes stay with their
 incumbent owner. Job-store and budget implementation remain Codex-owned later work.
+
+Packet 2 marker HELM-Q1-P2-20260927-A: Codex alone integrates the canonical branch.
+Claude and DeepSeek must use separate working copies and Q1 contribution branches
+or exact hashed exports. Earlier shared-root files are historical inputs, not
+permission for further builder-checkout writes. Actual returned locations are
+recorded in coordination/codex/P2_CHANNEL.md.
