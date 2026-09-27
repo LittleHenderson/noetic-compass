@@ -1,7 +1,7 @@
 {
  "schema": "cas.seed18.frozen-model-interface-test-map/0.1",
  "packet": "B1-SEED18-INTERFACES-20260927-01",
- "status": "SLICE_1_WRITTEN_AND_EXECUTED_LOCALLY; MODEL_AND_CAS_PATH_CASES_NOT_WRITTEN",
+ "status": "SLICE_1_EXECUTED_LOCALLY (2022be45, former path); SLICE_2_WRITTEN_NOT_RUN (packet B1-SEED18-IMPLEMENT-02); test file moved to research/cas_closed_loop_1/test_seed18_interfaces.py",
  "proposed_test_file": "research/cas_closed_loop_1/test_seed18_interfaces.py (does not exist; requires a new packet naming the scope)",
  "venues": {
   "CPU_DRY": "refusal and structure cases that never load a model; runnable in the CPU protocol",
@@ -15,7 +15,8 @@
    "path": "both",
    "proves": "a file with a different SHA-256 or size is refused before restore_checkpoint is reached",
    "slice1_status": "NOT_WRITTEN",
-   "slice1_written_as": "needs admit_frozen_model (exact c45 API)"
+   "slice1_written_as": "needs admit_frozen_model (exact c45 API)",
+   "slice2_status": "WRITTEN_NOT_RUN: test_admit_refuses_sha_mismatch_before_any_load, test_admit_refuses_size_mismatch_before_reading_bytes, test_admit_refuses_a_missing_or_symlinked_checkpoint_path"
   },
   {
    "id": "test_frozen_model_cursor_mismatch_refused_after_restore",
@@ -24,7 +25,8 @@
    "path": "both",
    "proves": "restored cursor != declared cursor 2940 refuses the handle",
    "slice1_status": "NOT_WRITTEN",
-   "slice1_written_as": "admitted-AWS only"
+   "slice1_written_as": "admitted-AWS only",
+   "slice2_status": "WRITTEN_NOT_RUN (double restore): test_admit_refuses_cursor_mismatch_after_a_double_restore; AWS variant NOT_RUN"
   },
   {
    "id": "test_handle_exposes_predict_only",
@@ -33,7 +35,8 @@
    "path": "both",
    "proves": "stage_batch, train_sealed_batch and export_checkpoint are TRAINING_ENTRY_POINT_FORBIDDEN through the handle",
    "slice1_status": "NOT_WRITTEN",
-   "slice1_written_as": "needs admit_frozen_model (exact c45 API)"
+   "slice1_written_as": "needs admit_frozen_model (exact c45 API)",
+   "slice2_status": "WRITTEN_NOT_RUN: test_admit_with_a_double_restore_returns_a_predict_only_handle"
   },
   {
    "id": "test_cpu_device_is_gpu_required_not_fallback",
@@ -42,7 +45,8 @@
    "path": "both",
    "proves": "a non-CUDA device refuses with GPU_REQUIRED and makes no prediction",
    "slice1_status": "WRITTEN_EXECUTED_LOCALLY_PASSED",
-   "slice1_written_as": "test_identity_on_cpu_is_gpu_required_not_a_fallback"
+   "slice1_written_as": "test_identity_on_cpu_is_gpu_required_not_a_fallback",
+   "slice2_status": "EXECUTED_LOCALLY_PASSED (identity) + WRITTEN_NOT_RUN (admission): test_admit_on_cpu_is_gpu_required_before_any_load"
   },
   {
    "id": "test_prediction_record_persisted_before_repair_and_frozen",
@@ -51,7 +55,8 @@
    "path": "both",
    "proves": "the ledger holds the PredictionRecord before either repair function is entered; the dataclass is frozen",
    "slice1_status": "WRITTEN_EXECUTED_LOCALLY_PASSED (no-model double); AWS variant NOT_RUN",
-   "slice1_written_as": "test_repair_none_is_refused_until_the_prediction_is_recorded, test_repair_none_preserves_the_original_prediction, test_an_output_without_its_prediction_row_cannot_be_appended"
+   "slice1_written_as": "test_repair_none_is_refused_until_the_prediction_is_recorded, test_repair_none_preserves_the_original_prediction, test_an_output_without_its_prediction_row_cannot_be_appended",
+   "slice2_status": "EXECUTED_LOCALLY_PASSED (slice 1) + WRITTEN_NOT_RUN: test_predict_raw_charges_then_stores_then_records_in_that_order; AWS variant NOT_RUN"
   },
   {
    "id": "test_prediction_body_private_digest_public",
@@ -60,7 +65,8 @@
    "path": "both",
    "proves": "validate_record_is_public_safe refuses a record carrying a body",
    "slice1_status": "WRITTEN_EXECUTED_LOCALLY_PASSED",
-   "slice1_written_as": "test_a_body_field_is_refused_by_name_before_anything_else, test_a_short_string_is_not_automatically_safe, test_unlisted_or_missing_fields_are_refused, test_public_check_opens_no_file"
+   "slice1_written_as": "test_a_body_field_is_refused_by_name_before_anything_else, test_a_short_string_is_not_automatically_safe, test_unlisted_or_missing_fields_are_refused, test_public_check_opens_no_file",
+   "slice2_status": "EXECUTED_LOCALLY_PASSED + WRITTEN_NOT_RUN: test_short_prediction_bodies_cannot_hide_in_a_free_field, test_short_bodies_in_item_id_and_admission_ref_are_refused, test_real_structured_forms_are_accepted_without_free_text"
   },
   {
    "id": "test_repair_none_verified_output_equals_prediction",
@@ -160,7 +166,10 @@
   "written_in_slice1": 10,
   "not_written": 6,
   "slice1_additional_functions": 32,
-  "slice1_executed_cases": 43
+  "slice1_executed_cases": 43,
+  "written_total": 13,
+  "executed_cases": 43,
+  "written_not_run_functions": 14
  },
  "slice1_execution": {
   "test_file": "test_frozen_model_interface_slice1.py",
@@ -176,5 +185,20 @@
   "junit": "slice1_local_junit.xml",
   "junit_sha256": "4bac225e97af304e6a160cbc090bd22a3aadd45ed14609cb43914578b65647f7",
   "test_doubles": "every record is a labeled test double with provenance CLAUDE_TEST_DOUBLE_NOT_A_HELM_RUN; no HELM run"
+ },
+ "test_file": "research/cas_closed_loop_1/test_seed18_interfaces.py",
+ "slice2_written": {
+  "packet": "CONT19-IMPLEMENT-01 coordination / B1-SEED18-IMPLEMENT-02 (comment 5856489964)",
+  "functions_total_in_file": 46,
+  "functions_added": 14,
+  "cases_added_static_count": 17,
+  "cases_total_static_count": 58,
+  "executed": 0,
+  "note": "Codex bounds for this packet forbid local tests, imports and model execution; ast.parse only. Slice-1's 43-case run predates the bounds and stays a record. The two removed slice-1 cases (admit_frozen_model and predict_raw as unimplemented) are superseded by the slice-2 implementations.",
+  "gpu_dependent_never_exercised": [
+   "restore_checkpoint",
+   "predict"
+  ],
+  "doubles": "DoubleLearner, DoubleStore, _rng_guard_double: labeled test doubles, no model"
  }
 }

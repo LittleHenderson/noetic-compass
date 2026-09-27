@@ -1,18 +1,23 @@
-"""Slice-1 tests for frozen_model_interface (owner task SEED18-INTERFACE-IMPLEMENT-02).
+"""Tests for the seed-18 frozen-model interface (slice 1 executed locally at commit 2022be45 from its former path
+claude_lead_20260927/seed18_interfaces/test_frozen_model_interface_slice1.py; slice 2 written, NOT run).
 
 EVERY object built here is a TEST DOUBLE. No HELM model, checkpoint, run, answer key or private body exists
-behind any value; every digest is the SHA-256 of a labeled string; every record carries the provenance
-``CLAUDE_TEST_DOUBLE_NOT_A_HELM_RUN``. Nothing here is a HELM run or a HELM result.
+behind any value; every digest is the SHA-256 of a labeled string or of test-double bytes; every record carries the
+provenance ``CLAUDE_TEST_DOUBLE_NOT_A_HELM_RUN``. Nothing here is a HELM run or a HELM result. GPU-dependent
+operations (the real restore and predict) are never exercised; doubles stand in for their record shapes only.
 """
+import contextlib
 import hashlib
+import inspect
 import pathlib
 import sys
 
 import pytest
 
 HERE = pathlib.Path(__file__).resolve().parent
-if str(HERE) not in sys.path:
-    sys.path.insert(0, str(HERE))
+NAMESPACE = HERE / "claude_lead_20260927" / "seed18_interfaces"
+if str(NAMESPACE) not in sys.path:
+    sys.path.insert(0, str(NAMESPACE))
 import frozen_model_interface as fmi  # noqa: E402
 
 TEST_DOUBLE = "CLAUDE_TEST_DOUBLE_NOT_A_HELM_RUN"
@@ -89,7 +94,7 @@ def refused(code):
     return pytest.raises(fmi.InterfaceRefused, match="^" + code)
 
 
-# --- constants and typed identity -----------------------------------------------------------------------
+# ===================================================== slice 1 (executed locally at 2022be45: 43 passed) ======
 
 def test_constants_bind_the_codex_stated_parent_and_sources():
     assert fmi.PARENT_CHECKPOINT_SHA256 == "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341"
@@ -127,8 +132,6 @@ def test_identity_of_the_wrong_type_is_refused():
         fmi.validate_frozen_model_identity({"checkpoint_sha256": h("checkpoint")})
 
 
-# --- admission binding: a hash alone does not authorize ------------------------------------------------
-
 def test_admission_with_a_self_issued_authority_is_not_authorization():
     identity = double_identity()
     with refused("AUTHORIZATION_NOT_PROVEN"):
@@ -147,8 +150,6 @@ def test_admission_binding_is_structural_and_says_so():
     assert result["identity_digest"] == fmi.identity_digest(identity)
     assert result["structural_check_only"] is True and result["signature_verified"] is False
 
-
-# --- budget and work account -------------------------------------------------------------------------------
 
 def test_budget_validation_and_exhaustion_refuse_before_the_call():
     fmi.validate_budget(double_budget())
@@ -178,8 +179,6 @@ def test_work_account_is_checked_against_the_budget():
     with refused("EVALUATOR_BUDGET_EXHAUSTED"):
         fmi.validate_work_account(double_work(evaluator_calls=4), budget=double_budget())
 
-
-# --- public-record validation: explicit permitted fields, formats, provenance ----------------------------
 
 def test_prediction_record_double_is_public_safe():
     assert fmi.validate_record_is_public_safe(double_prediction(1, 1)) == "PredictionRecord"
@@ -238,8 +237,6 @@ def test_dict_record_without_a_known_schema_is_refused():
     with refused("RECORD_SCHEMA_INVALID"):
         fmi.validate_record_is_public_safe({"item_id": "x"})
 
-
-# --- ledger ordering: original prediction before repair ----------------------------------------------------
 
 def test_ledger_assigns_and_enforces_sequence():
     ledger = fmi.RecordLedger(TEST_DOUBLE)
@@ -308,8 +305,6 @@ def test_none_path_output_that_changed_the_digest_is_refused():
         fmi.validate_system_output_record(changed)
 
 
-# --- parity: same items, order, evaluator, budget, frozen model, raw predictions ------------------------------
-
 def _paths(n=2, cas_raw_label=None, cas_item_order=None):
     """Builds a NONE path through the real ledger and a CAS path from labeled doubles."""
     ledger = fmi.RecordLedger(TEST_DOUBLE)
@@ -374,11 +369,7 @@ def test_parity_refuses_wrong_path_labels_and_missing_receipts():
                                  evaluator_none=double_evaluator(), evaluator_cas=double_evaluator())
 
 
-# --- unimplemented paths say so, exactly -----------------------------------------------------------------
-
 @pytest.mark.parametrize("name,call", [
-    ("admit_frozen_model", lambda: fmi.admit_frozen_model(double_identity(), path="/nonexistent", host=None)),
-    ("predict_raw", lambda: fmi.predict_raw(None, double_item(1), budget=double_budget(), ledger=fmi.RecordLedger(TEST_DOUBLE))),
     ("repair_cas_closed_loop", lambda: fmi.repair_cas_closed_loop(double_prediction(1, 1), None, calls=1, allow_acquisition=True,
                                                                   actuator_enabled=True, evaluator=double_evaluator(),
                                                                   budget=double_budget(), ledger=fmi.RecordLedger(TEST_DOUBLE))),
@@ -393,3 +384,251 @@ def test_refusal_codes_are_a_closed_set():
     with pytest.raises(ValueError, match="UNKNOWN_REFUSAL_CODE:BOGUS"):
         fmi.InterfaceRefused("BOGUS")
     assert fmi.InterfaceRefused("GPU_REQUIRED", "why").code == "GPU_REQUIRED"
+
+
+# ===================================================== slice 2 (written for packet B1-SEED18-IMPLEMENT-02; NOT run) ==
+
+@pytest.mark.parametrize("override", [
+    {"device_name": "42"}, {"device_name": "yes"}, {"torch_version": "no"}, {"torch_version": "the answer is 7"},
+])
+def test_short_prediction_bodies_cannot_hide_in_a_free_field(override):
+    record = fmi.asdict(double_prediction(1, 1))
+    record.update(override)
+    with refused("PUBLIC_FIELD_FORMAT_INVALID"):
+        fmi.validate_record_is_public_safe(record)
+
+
+def test_short_bodies_in_item_id_and_admission_ref_are_refused():
+    record = fmi.asdict(double_prediction(1, 1))
+    record["item"]["item_id"] = "yes"
+    with refused("PUBLIC_FIELD_FORMAT_INVALID"):
+        fmi.validate_record_is_public_safe(record)
+    identity = double_identity()
+    with refused("PUBLIC_FIELD_FORMAT_INVALID"):
+        fmi.validate_admission_binding(identity, double_admission(identity, admission_ref="the answer is 7"))
+    fmi.validate_admission_binding(identity, double_admission(identity, admission_ref="admission://codex-runner/comment-5856489964"))
+
+
+def test_real_structured_forms_are_accepted_without_free_text():
+    record = fmi.asdict(double_prediction(1, 1))
+    record["device_name"] = "cuda:0"
+    record["torch_version"] = "2.11.0+cu128"
+    record["item"]["item_id"] = "development:" + h("item")[:16]
+    assert fmi.validate_record_is_public_safe(record) == "PredictionRecord"
+
+
+def _checkpoint_file(tmp_path, identity, *, size=None, bytes_override=None):
+    """Writes TEST-DOUBLE bytes (not a model) whose size and digest match ``identity`` unless overridden."""
+    body = bytes_override if bytes_override is not None else (b"\x00" * (size if size is not None else identity.checkpoint_bytes))
+    path = tmp_path / "double_checkpoint.pt"
+    path.write_bytes(body)
+    return path
+
+
+def _matching_identity(body):
+    return double_identity(checkpoint_sha256=hashlib.sha256(body).hexdigest(), checkpoint_bytes=len(body))
+
+
+class DoubleLearner:
+    """TEST DOUBLE of a restored learner clone: records calls, never computes anything."""
+
+    def __init__(self, cursor=2940, result=b"double-prediction-bytes"):
+        self.cursor = cursor
+        self.result = result
+        self.predict_calls = []
+        self.stage_batch_calls = 0
+
+    def predict(self, packet, depth):
+        self.predict_calls.append((packet, depth))
+        return self.result
+
+    def stage_batch(self, *args, **kwargs):
+        self.stage_batch_calls += 1
+
+
+class DoubleStore:
+    """TEST DOUBLE of the venue's private store: hashes what it is given and returns a receipt; keeps no body."""
+
+    def __init__(self, bad_ref=False):
+        self.puts = 0
+        self.bad_ref = bad_ref
+
+    def put(self, raw):
+        self.puts += 1
+        digest = hashlib.sha256(raw).hexdigest()
+        ref = "private://test-double-store/" + (h("wrong") if self.bad_ref else digest)
+        return fmi.PrivateBodyReceipt(ref=ref, sha256=digest, nbytes=len(raw))
+
+
+def _rng_guard_double(log):
+    @contextlib.contextmanager
+    def guard():
+        log.append("enter")
+        yield
+        log.append("exit")
+    return guard
+
+
+def test_admit_refuses_a_missing_or_symlinked_checkpoint_path(tmp_path):
+    identity = double_identity()
+    admission = double_admission(identity)
+    with refused("CHECKPOINT_PATH_INVALID"):
+        fmi.admit_frozen_model(identity, admission, path=tmp_path / "missing.pt", device="cuda:0")
+    real = _checkpoint_file(tmp_path, identity)
+    link = tmp_path / "link.pt"
+    link.symlink_to(real)
+    with refused("CHECKPOINT_PATH_INVALID"):
+        fmi.admit_frozen_model(identity, admission, path=link, device="cuda:0")
+
+
+def test_admit_refuses_size_mismatch_before_reading_bytes(tmp_path, monkeypatch):
+    identity = double_identity()
+    path = _checkpoint_file(tmp_path, identity, size=10)
+    import builtins
+    real_open = builtins.open
+
+    def counting_open(*args, **kwargs):
+        raise AssertionError("bytes must not be read when the size already differs")
+
+    monkeypatch.setattr(builtins, "open", counting_open)
+    with refused("FROZEN_MODEL_BYTES_MISMATCH"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0")
+    monkeypatch.setattr(builtins, "open", real_open)
+
+
+def test_admit_refuses_sha_mismatch_before_any_load(tmp_path):
+    identity = double_identity()
+    path = _checkpoint_file(tmp_path, identity)  # right size, wrong bytes for the double's digest
+    calls = []
+    with refused("FROZEN_MODEL_SHA_MISMATCH"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0",
+                               restore=lambda *a, **k: calls.append(1), framework_factory=lambda: None,
+                               encoder=object(), torch=object(), rng_guard=_rng_guard_double([]))
+    assert calls == []
+
+
+def test_admit_on_cpu_is_gpu_required_before_any_load(tmp_path):
+    body = b"\x01" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    calls = []
+    with refused("GPU_REQUIRED"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cpu",
+                               restore=lambda *a, **k: calls.append(1), framework_factory=lambda: None,
+                               encoder=object(), torch=object(), rng_guard=_rng_guard_double([]))
+    assert calls == []
+
+
+def test_admit_without_restore_dependencies_stops_at_the_cpu_dry_boundary(tmp_path):
+    body = b"\x02" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    with refused("RESTORE_DEPENDENCIES_NOT_SUPPLIED"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0")
+
+
+def test_admit_with_a_double_restore_returns_a_predict_only_handle(tmp_path):
+    body = b"\x03" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    learner = DoubleLearner()
+    seen = {}
+    frameworks = []
+
+    def restore(torch, framework, encoder, *, path, expected_sha256, expected_run_identity_digest, device,
+                expected_learnable_names=None):
+        seen.update(torch=torch, framework=framework, encoder=encoder, path=path, sha=expected_sha256,
+                    rid=expected_run_identity_digest, device=device, names=expected_learnable_names)
+        return learner
+
+    def framework_factory():
+        frameworks.append(object())
+        return frameworks[-1]
+
+    log = []
+    encoder, torch = object(), object()
+    handle = fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0", restore=restore,
+                                    framework_factory=framework_factory, encoder=encoder, torch=torch,
+                                    rng_guard=_rng_guard_double(log))
+    assert seen == dict(torch=torch, framework=frameworks[0], encoder=encoder, path=str(path),
+                        sha=identity.checkpoint_sha256, rid=identity.run_identity_digest, device="cuda:0", names=None)
+    assert len(frameworks) == 1, "one fresh framework per admission"
+    assert handle.predict("double-packet") == b"double-prediction-bytes"
+    assert learner.predict_calls == [("double-packet", 8)] and log == ["enter", "exit"]
+    assert handle.predict_calls == 1
+    for name in ("stage_batch", "train_sealed_batch", "export_checkpoint"):
+        with refused("TRAINING_ENTRY_POINT_FORBIDDEN"):
+            getattr(handle, name)
+    assert learner.stage_batch_calls == 0
+    with pytest.raises(AttributeError):
+        handle.something_else
+
+
+def test_admit_refuses_cursor_mismatch_after_a_double_restore(tmp_path):
+    body = b"\x04" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    with refused("FROZEN_MODEL_CURSOR_MISMATCH"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0",
+                               restore=lambda *a, **k: DoubleLearner(cursor=2941), framework_factory=lambda: None,
+                               encoder=object(), torch=object(), rng_guard=_rng_guard_double([]))
+
+
+def test_admit_takes_no_host_and_names_the_separate_si_contract():
+    assert "host" not in inspect.signature(fmi.admit_frozen_model).parameters
+    assert fmi.SI_HOST_NEURAL_PARENT_CONTRACT.startswith("SEPARATE")
+    assert fmi.UNACCEPTED_GPU_OPERATIONS == ("restore_checkpoint", "predict")
+
+
+def _admitted_handle(tmp_path, learner, log):
+    body = b"\x05" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    return fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0",
+                                  restore=lambda *a, **k: learner, framework_factory=lambda: None,
+                                  encoder=object(), torch=object(), rng_guard=_rng_guard_double(log))
+
+
+def test_predict_raw_charges_then_stores_then_records_in_that_order(tmp_path):
+    learner, log = DoubleLearner(), []
+    handle = _admitted_handle(tmp_path, learner, log)
+    ledger = fmi.RecordLedger(TEST_DOUBLE)
+    budget = fmi.BudgetLedger(double_budget(prediction_calls_max=1))
+    store = DoubleStore()
+    record = fmi.predict_raw(handle, double_item(1), "double-packet", budget_ledger=budget, ledger=ledger,
+                             private_store=store, device_name="test-double-no-device", torch_version="test-double-no-torch")
+    assert store.puts == 1 and ledger.rows == (record,) and record.prediction_sequence == 1
+    assert record.raw_output_sha256 == hashlib.sha256(b"double-prediction-bytes").hexdigest()
+    assert record.raw_output_bytes == len(b"double-prediction-bytes")
+    assert record.private_body_ref.endswith("/" + record.raw_output_sha256)
+    assert "double-prediction-bytes" not in fmi.canonical_bytes(fmi.asdict(record)).decode()
+    assert fmi.validate_record_is_public_safe(record) == "PredictionRecord"
+    assert budget.snapshot()["spent"]["prediction"] == 1 and log == ["enter", "exit"]
+    with refused("PREDICTION_BUDGET_EXHAUSTED"):
+        fmi.predict_raw(handle, double_item(2), "double-packet", budget_ledger=budget, ledger=ledger,
+                        private_store=store, device_name="test-double-no-device", torch_version="test-double-no-torch")
+    assert len(learner.predict_calls) == 1 and store.puts == 1 and len(ledger.rows) == 1
+
+
+def test_predict_raw_refuses_an_inconsistent_store_receipt(tmp_path):
+    learner, log = DoubleLearner(), []
+    handle = _admitted_handle(tmp_path, learner, log)
+    ledger = fmi.RecordLedger(TEST_DOUBLE)
+    budget = fmi.BudgetLedger(double_budget())
+    with refused("PRIVATE_STORE_RECEIPT_INVALID"):
+        fmi.predict_raw(handle, double_item(1), "double-packet", budget_ledger=budget, ledger=ledger,
+                        private_store=DoubleStore(bad_ref=True), device_name="test-double-no-device",
+                        torch_version="test-double-no-torch")
+    assert ledger.rows == ()
+
+
+def test_predict_raw_refuses_a_none_result(tmp_path):
+    learner, log = DoubleLearner(result=None), []
+    handle = _admitted_handle(tmp_path, learner, log)
+    ledger = fmi.RecordLedger(TEST_DOUBLE)
+    budget = fmi.BudgetLedger(double_budget())
+    store = DoubleStore()
+    with refused("PREDICTION_OUTPUT_INVALID"):
+        fmi.predict_raw(handle, double_item(1), "double-packet", budget_ledger=budget, ledger=ledger,
+                        private_store=store, device_name="test-double-no-device", torch_version="test-double-no-torch")
+    assert store.puts == 0 and ledger.rows == ()

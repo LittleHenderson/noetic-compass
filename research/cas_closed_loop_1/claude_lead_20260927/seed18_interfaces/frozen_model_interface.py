@@ -1,38 +1,52 @@
 """Frozen learned model interface, with and without the current CAS repair path.
 
-Owner task SEED18-INTERFACE-IMPLEMENT-02 (2026-09-27), continuing packet B1-SEED18-INTERFACES-20260927-01.
+Owner task SEED18-INTERFACE-IMPLEMENT-02 (slice 1, 2026-09-27) and Codex packet
+CONT19-IMPLEMENT-01 coordination / B1-SEED18-IMPLEMENT-02 (slice 2, comment 5856489964).
 
-Slice 1 (this file) implements real no-model behavior:
+Implemented, no model needed:
 - typed validation of identities, admission bindings, budgets, work accounts and records;
-- public-record validation by an explicit permitted-field table, typed formats and provenance
-  (a short string is not automatically safe; a digest alone does not prove authorization);
+- public-record validation by an explicit permitted-field table with typed formats and provenance. There is no
+  free-text field anywhere: every string is a digest, an enumerated value, a UTC stamp, a structured reference or
+  a structured identifier, so a prediction body of any length cannot be placed in a public record;
 - an append-only ledger that enforces "the original prediction is recorded before any repair";
 - the no-repair path (``NONE``) that preserves the original prediction unchanged;
-- item, order, evaluator and budget parity checks that return work totals and no verdict.
+- item, order, evaluator and budget parity checks that return work totals and no verdict;
+- ``admit_frozen_model`` up to its CPU-dry boundary: identity and admission checks, checkpoint path, size and
+  SHA-256 checks, the CUDA-only device rule, and the requirement that the venue supplies the restore dependencies.
+  The restore itself and ``predict`` are GPU-dependent and remain EXPLICITLY UNACCEPTED until the admitted venue
+  runs them: this module never imports torch or the learner; the venue injects them;
+- ``FrozenModelHandle``: a predict-only wrapper around a separately restored clone; ``stage_batch``,
+  ``train_sealed_batch`` and ``export_checkpoint`` are refusals;
+- ``predict_raw``: charge the budget, call the handle once under the venue's RNG guard, store the body privately,
+  then append the public record.
 
-Still unimplemented, each with its exact reason in ``NOT_IMPLEMENTED_REASONS``: ``admit_frozen_model`` and
-``predict_raw`` (they need the exact learner API from ``c45f775f`` through Codex, not the archived copy),
-``repair_cas_closed_loop`` (no native operation consumes a learned prediction; see README), ``evaluate``
-(needs the admitted evaluator; this module never reads an answer key).
+Still unimplemented, each with its exact reason in ``NOT_IMPLEMENTED_REASONS``: ``repair_cas_closed_loop`` (no
+native operation consumes a learned prediction; see README) and ``evaluate`` (needs the admitted evaluator; this
+module never reads an answer key).
 
-Plain-English reading guide:
-- "Frozen learned model" = one exact checkpoint file, named by its SHA-256, that is only ever asked to predict.
-- "Repair path" = what happens to a raw prediction before it becomes the system's answer. ``NONE`` means the raw
-  prediction is the answer. ``CAS_CLOSED_LOOP`` means the existing adapter drives the native runtime.
-- "Provenance" = which kind of world a record comes from: an admitted HELM run, or a labeled test double.
+Confirmed learner API (Codex, source inspection of ``c45f775f``, file sha256 ``0f424d86…``):
+``PointerCourseLearner.restore_checkpoint(torch, framework, encoder, *, path, expected_sha256,
+expected_run_identity_digest, device, expected_learnable_names=None)``; ``framework`` must be a freshly built
+pointer framework, not preloaded with container weights; ``encoder`` must be the frozen typed encoder;
+``predict(packet, depth)`` with depth exactly 8; it calls ``module.eval()`` and increments inference counters, so
+prediction runs on a separate restored clone and all global RNG is preserved around each call.
 
-This module imports only the standard library. It never imports torch, the learner, the CAS adapter or the
-SI host, and it never opens a file.
+Separate contract, not implied here: the SI ``TrustedHost`` at ``d7808d59`` has a ``checkpoint=None`` engineering
+contract and does not admit neural parents. ``admit_frozen_model`` takes an ``AdmissionBinding``, never a host.
+
+This module imports only the standard library. The only file it ever opens is the checkpoint named by an
+admitted identity, to hash it; it never opens a private body or an answer key.
 """
 
 from dataclasses import asdict, dataclass, fields, is_dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import re
 import time
 
-INTERFACE_SCHEMA = "cas.seed18.frozen-model-interface/0.2"
+INTERFACE_SCHEMA = "cas.seed18.frozen-model-interface/0.3"
 PREDICTION_RECORD_SCHEMA = "cas.seed18.prediction-record/0.1"
 SYSTEM_OUTPUT_RECORD_SCHEMA = "cas.seed18.system-output-record/0.1"
 WORK_ACCOUNT_SCHEMA = "cas.seed18.work-account/0.1"
@@ -41,12 +55,22 @@ LEDGER_SCHEMA = "cas.seed18.record-ledger/0.1"
 PARITY_TOTALS_SCHEMA = "cas.seed18.parity-totals/0.1"
 
 SCIENTIFIC_SOURCE = "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+LEARNER_SOURCE_FILE_SHA256 = "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8"
 CAS_SOURCE = "7bbf1e0f7bae635126c05b3203cca706ea8654dc"
 JOINT_SOURCE = "d7808d59c13ea94c6ff35d2327a4acb8535daabc"
 NATIVE_RUNTIME = "8182ad52b4468f18f140837dffee0e7debcfe786"
 PARENT_CHECKPOINT_SHA256 = "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341"
 PARENT_CHECKPOINT_BYTES = 4025999
 PARENT_CURSOR = 2940
+
+PREDICT_DEPTH = 8
+RESTORE_SIGNATURE = ("PointerCourseLearner.restore_checkpoint(torch, framework, encoder, *, path, expected_sha256, "
+                     "expected_run_identity_digest, device, expected_learnable_names=None)")
+PREDICT_SIGNATURE = "PointerCourseLearner.predict(packet, depth) with depth == 8"
+FORBIDDEN_HANDLE_ATTRIBUTES = ("stage_batch", "train_sealed_batch", "export_checkpoint")
+UNACCEPTED_GPU_OPERATIONS = ("restore_checkpoint", "predict")
+SI_HOST_NEURAL_PARENT_CONTRACT = ("SEPARATE: the SI TrustedHost at d7808d59 has a checkpoint=None engineering "
+                                  "contract and does not admit neural parents; this interface never passes a host")
 
 REPAIR_PATHS = ("NONE", "CAS_CLOSED_LOOP")
 PANELS = ("course", "held_back", "trained", "excluded", "development")
@@ -56,8 +80,6 @@ ADMITTING_AUTHORITIES = ("CODEX_RUNNER_ADMISSION", "OWNER_SIGNED_ADMISSION")
 EMPTY_WORK_DIGEST = hashlib.sha256(b"{}").hexdigest()
 
 NOT_IMPLEMENTED_REASONS = {
-    "admit_frozen_model": "NOT_IMPLEMENTED_AWAITING_EXACT_C45_LEARNER_API",
-    "predict_raw": "NOT_IMPLEMENTED_AWAITING_EXACT_C45_LEARNER_API",
     "repair_cas_closed_loop": "NOT_IMPLEMENTED_MISSING_NATIVE_OPERATION_FOR_LEARNED_PREDICTION",
     "evaluate": "NOT_IMPLEMENTED_REQUIRES_ADMITTED_EVALUATOR",
 }
@@ -65,12 +87,14 @@ NOT_IMPLEMENTED_REASONS = {
 # Every refusal this module can raise. A refusal is a named ValueError; nothing is silently downgraded.
 REFUSALS = (
     "FROZEN_MODEL_SHA_MISMATCH", "FROZEN_MODEL_BYTES_MISMATCH", "FROZEN_MODEL_CURSOR_MISMATCH",
-    "FROZEN_MODEL_MISMATCH", "GPU_REQUIRED", "TRAINING_ENTRY_POINT_FORBIDDEN",
+    "FROZEN_MODEL_MISMATCH", "CHECKPOINT_PATH_INVALID", "GPU_REQUIRED", "RESTORE_DEPENDENCIES_NOT_SUPPLIED",
+    "TRAINING_ENTRY_POINT_FORBIDDEN",
     "IDENTITY_FIELD_INVALID", "AUTHORIZATION_NOT_PROVEN", "PROVENANCE_INVALID",
     "RECORD_TYPE_INVALID", "RECORD_SCHEMA_INVALID",
     "PUBLIC_FIELD_NOT_PERMITTED", "PUBLIC_FIELD_FORMAT_INVALID", "PREDICTION_BODY_IN_PUBLIC_RECORD",
     "PREDICTION_BUDGET_EXHAUSTED", "NATIVE_BUDGET_EXHAUSTED", "EVALUATOR_BUDGET_EXHAUSTED", "BUDGET_MISMATCH",
     "LEDGER_SEQUENCE_MISMATCH", "PREDICTION_NOT_RECORDED_BEFORE_REPAIR", "PREDICTION_NOT_PRESERVED",
+    "PREDICTION_OUTPUT_INVALID", "PRIVATE_STORE_RECEIPT_INVALID",
     "OUTPUT_PREDICTION_LINK_BROKEN", "REPAIR_PATH_UNKNOWN", "REPAIR_PATH_MISMATCH",
     "EVALUATOR_MISMATCH", "ITEM_ORDER_MISMATCH", "NATIVE_RECEIPT_MISSING", "WORK_ACCOUNT_INCOMPLETE",
 )
@@ -198,28 +222,50 @@ class SystemOutputRecord:
     provenance: str
 
 
+@dataclass(frozen=True)
+class PrivateBodyReceipt:
+    """What the venue's private store returns after it has written a raw prediction body. The body itself never
+    passes back through this interface; only its reference, digest and size do."""
+    ref: str
+    sha256: str
+    nbytes: int
+
+
 # ----------------------------------------------------------------------------------------------------------
-# Public-record validation: explicit permitted fields, typed formats, provenance. No file is ever opened.
+# Public-record validation: explicit permitted fields, typed formats, provenance. No free-text field exists.
 # ----------------------------------------------------------------------------------------------------------
 
 _HEX64 = re.compile(r"\A[0-9a-f]{64}\Z")
 _HEX40 = re.compile(r"\A[0-9a-f]{40}\Z")
-_IDENT = re.compile(r"\A[A-Za-z0-9][A-Za-z0-9._:/+-]{0,127}\Z")
 _UTC = re.compile(r"\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z\Z")
 _PRIVATE_REF = re.compile(r"\Aprivate://[a-z0-9-]{1,64}/[0-9a-f]{64}\Z")
+_CUDA_DEVICE = re.compile(r"\Acuda(:\d{1,2})?\Z")
+# Structured identifiers: a real form, or the exact labeled test-double form. Neither admits free text.
+_DEVICE_NAME = re.compile(r"\A(cuda:\d{1,2}|test-double-no-device)\Z")
+_TORCH_VERSION = re.compile(r"\A(\d{1,3}\.\d{1,3}\.\d{1,3}(\+cu\d{2,3})?|test-double-no-torch)\Z")
+_ITEM_ID = re.compile(r"\A((course|held_back|trained|excluded|development):[0-9a-f]{8,64}|double-item-\d{1,6})\Z")
+_ADMISSION_REF = re.compile(r"\A(admission://(codex-runner|owner-signed)/[A-Za-z0-9._-]{1,120}"
+                            r"|test-double-admission-ref-\d{1,6})\Z")
 
 
 def _is_int(value):
     return type(value) is int  # bool is deliberately excluded
 
 
+def _matches(pattern):
+    return lambda v: type(v) is str and pattern.match(v) is not None
+
+
 KIND_CHECKS = {
-    "hex64": lambda v: type(v) is str and _HEX64.match(v) is not None,
+    "hex64": _matches(_HEX64),
     "hex64_or_none": lambda v: v is None or (type(v) is str and _HEX64.match(v) is not None),
-    "hex40": lambda v: type(v) is str and _HEX40.match(v) is not None,
-    "identifier": lambda v: type(v) is str and _IDENT.match(v) is not None,
-    "utc": lambda v: type(v) is str and _UTC.match(v) is not None,
-    "private_ref": lambda v: type(v) is str and _PRIVATE_REF.match(v) is not None,
+    "hex40": _matches(_HEX40),
+    "utc": _matches(_UTC),
+    "private_ref": _matches(_PRIVATE_REF),
+    "device_name": _matches(_DEVICE_NAME),
+    "torch_version": _matches(_TORCH_VERSION),
+    "item_id": _matches(_ITEM_ID),
+    "admission_ref": _matches(_ADMISSION_REF),
     "nonneg_int": lambda v: _is_int(v) and v >= 0,
     "pos_int": lambda v: _is_int(v) and v > 0,
     "bool_or_none": lambda v: v is None or type(v) is bool,
@@ -235,7 +281,7 @@ PUBLIC_FIELD_KINDS = {
     },
     "AdmissionBinding": {
         "schema": ("enum", (ADMISSION_BINDING_SCHEMA,)), "identity_digest": "hex64",
-        "admitted_by": ("enum", ADMITTING_AUTHORITIES), "admission_ref": "identifier", "admitted_utc": "utc",
+        "admitted_by": ("enum", ADMITTING_AUTHORITIES), "admission_ref": "admission_ref", "admitted_utc": "utc",
         "provenance": ("enum", PROVENANCE_VALUES),
     },
     "EvaluatorIdentity": {"evaluator_sha256": "hex64", "answer_key_sha256": "hex64", "panel": ("enum", PANELS)},
@@ -244,13 +290,13 @@ PUBLIC_FIELD_KINDS = {
         "evaluator_calls_max": "nonneg_int", "wall_seconds_max": "pos_int",
     },
     "ItemRef": {
-        "item_id": "identifier", "inputs_sha256": "hex64", "panel": ("enum", PANELS),
+        "item_id": "item_id", "inputs_sha256": "hex64", "panel": ("enum", PANELS),
         "depth": "nonneg_int", "sequence": "pos_int",
     },
     "PredictionRecord": {
         "schema": ("enum", (PREDICTION_RECORD_SCHEMA,)), "model": ("record", "FrozenModelIdentity"),
         "item": ("record", "ItemRef"), "raw_output_sha256": "hex64", "raw_output_bytes": "pos_int",
-        "private_body_ref": "private_ref", "device_name": "identifier", "torch_version": "identifier",
+        "private_body_ref": "private_ref", "device_name": "device_name", "torch_version": "torch_version",
         "produced_utc": "utc", "prediction_sequence": "pos_int", "provenance": ("enum", PROVENANCE_VALUES),
     },
     "WorkAccount": {
@@ -265,6 +311,7 @@ PUBLIC_FIELD_KINDS = {
         "verified_output_sha256": "hex64", "checked_effect": "bool_or_none", "work": ("record", "WorkAccount"),
         "produced_utc": "utc", "output_sequence": "pos_int", "provenance": ("enum", PROVENANCE_VALUES),
     },
+    "PrivateBodyReceipt": {"ref": "private_ref", "sha256": "hex64", "nbytes": "pos_int"},
 }
 
 SCHEMA_TO_RECORD = {
@@ -307,7 +354,8 @@ def validate_record_is_public_safe(record, *, expected=None):
     Refuses, in this order: a body-like field name (``PREDICTION_BODY_IN_PUBLIC_RECORD``); any extra or missing
     field (``PUBLIC_FIELD_NOT_PERMITTED``); a provenance outside ``PROVENANCE_VALUES`` (``PROVENANCE_INVALID``);
     any value not in its declared format (``PUBLIC_FIELD_FORMAT_INVALID``). Nested records are checked the same
-    way. No file is opened; no body, key or private value is read. Returns the record type name.
+    way. Because no field admits free text, a prediction body of any length, short or long, cannot pass. No file
+    is opened; no body, key or private value is read. Returns the record type name.
     """
     name, items = _record_name_and_items(record, expected)
     for key in items:
@@ -369,8 +417,8 @@ def validate_admission_binding(identity, admission):
     """A hash alone does not prove authorization.
 
     The admission must name this identity's digest AND an explicit admitting authority from
-    ``ADMITTING_AUTHORITIES`` under a reference the admitted venue can check. This is a structural check: it
-    verifies no signature, and says so in its result (``signature_verified`` is False). Refuses
+    ``ADMITTING_AUTHORITIES`` under a structured reference the admitted venue can check. This is a structural
+    check: it verifies no signature, and says so in its result (``signature_verified`` is False). Refuses
     ``AUTHORIZATION_NOT_PROVEN`` for a self-issued, unknown or mismatched admission.
     """
     digest = validate_frozen_model_identity(identity)
@@ -447,6 +495,19 @@ def validate_system_output_record(output, *, budget=None):
         if output.native_receipt_sha256 is None:
             _refuse("NATIVE_RECEIPT_MISSING", "CAS path output without an adapter receipt digest")
     return output
+
+
+def validate_private_body_receipt(receipt):
+    """The store's receipt must be internally consistent: the reference must end in the body's own digest."""
+    if type(receipt) is not PrivateBodyReceipt:
+        _refuse("PRIVATE_STORE_RECEIPT_INVALID", "PrivateBodyReceipt required")
+    try:
+        validate_record_is_public_safe(receipt)
+    except InterfaceRefused as refusal:
+        _refuse("PRIVATE_STORE_RECEIPT_INVALID", refusal.code + ": " + refusal.detail)
+    if not receipt.ref.endswith("/" + receipt.sha256):
+        _refuse("PRIVATE_STORE_RECEIPT_INVALID", "reference does not end in the body digest")
+    return receipt
 
 
 # ----------------------------------------------------------------------------------------------------------
@@ -551,21 +612,120 @@ def _now_utc():
 
 
 # ----------------------------------------------------------------------------------------------------------
-# Paths
+# Frozen model admission and prediction (GPU-dependent steps explicitly unaccepted until the admitted venue)
 # ----------------------------------------------------------------------------------------------------------
 
-def admit_frozen_model(identity, *, path, host):
-    """Hash the file at ``path`` and refuse before any load unless size and SHA-256 equal ``identity``; then
-    restore through the learner's own restore path on a CUDA device and return a predict-only handle.
-    Not implemented: the exact learner API from ``c45f775f`` is required first (asked of Codex)."""
-    raise NotImplementedError(NOT_IMPLEMENTED_REASONS["admit_frozen_model"])
+class FrozenModelHandle:
+    """A predict-only wrapper around a SEPARATELY RESTORED clone of the learner.
+
+    The venue restores the clone for this handle alone, so the caller's own container keeps its mode and
+    counters. Every ``predict`` runs inside the venue's ``rng_guard`` (a callable returning a context manager
+    that snapshots and restores all global RNG: torch CPU, torch CUDA, Python ``random``). Depth is fixed at
+    ``PREDICT_DEPTH``. ``stage_batch``, ``train_sealed_batch`` and ``export_checkpoint`` are refusals through
+    this handle. It is a discipline boundary, not a sandbox: the underlying object is kept private by name.
+    """
+
+    def __init__(self, learner, *, identity, admission, rng_guard):
+        if not callable(rng_guard):
+            _refuse("RESTORE_DEPENDENCIES_NOT_SUPPLIED", "rng_guard must be a callable returning a context manager")
+        self._learner = learner
+        self.identity = identity
+        self.admission = admission
+        self._rng_guard = rng_guard
+        self.predict_calls = 0
+
+    def __getattr__(self, name):
+        if name in FORBIDDEN_HANDLE_ATTRIBUTES:
+            _refuse("TRAINING_ENTRY_POINT_FORBIDDEN", name + " is not reachable through a frozen-model handle")
+        raise AttributeError(name)
+
+    def predict(self, packet):
+        with self._rng_guard():
+            result = self._learner.predict(packet, PREDICT_DEPTH)
+        self.predict_calls += 1
+        return result
 
 
-def predict_raw(handle, item, *, budget, ledger):
-    """Charge the budget, call the learner's ``predict`` exactly once, write the private body, then the public
-    record, then return. Not implemented for the same reason as ``admit_frozen_model``."""
-    raise NotImplementedError(NOT_IMPLEMENTED_REASONS["predict_raw"])
+def admit_frozen_model(identity, admission, *, path, device, restore=None, framework_factory=None, encoder=None,
+                       torch=None, rng_guard=None):
+    """Admit exactly one checkpoint for prediction, refusing at the first failed step.
 
+    Order: (1) identity and admission binding (a digest alone never admits); (2) ``path`` must be a regular file
+    and not a symlink (``CHECKPOINT_PATH_INVALID``); (3) its size must equal ``identity.checkpoint_bytes``
+    (``FROZEN_MODEL_BYTES_MISMATCH``, checked before any byte is read); (4) its SHA-256 must equal
+    ``identity.checkpoint_sha256`` (``FROZEN_MODEL_SHA_MISMATCH``); (5) ``device`` must be a CUDA device
+    (``GPU_REQUIRED``; CPU is never a fallback); (6) the venue must supply ``restore`` (the learner's
+    ``restore_checkpoint`` bound method), ``framework_factory`` (builds a FRESH pointer framework, never preloaded),
+    the frozen typed ``encoder``, ``torch`` and ``rng_guard`` (``RESTORE_DEPENDENCIES_NOT_SUPPLIED``).
+
+    Step 6 is the CPU-dry boundary: without those dependencies nothing is loaded and the refusal is the result.
+    With them, the restore is called exactly as ``RESTORE_SIGNATURE`` describes, the restored clone's ``cursor``
+    must equal ``identity.cursor`` (``FROZEN_MODEL_CURSOR_MISMATCH``), and a predict-only handle is returned.
+    The restore and every later ``predict`` are GPU-dependent and remain unaccepted until the admitted venue
+    runs them. No host object is taken: ``SI_HOST_NEURAL_PARENT_CONTRACT`` stays separate.
+    """
+    validate_admission_binding(identity, admission)
+    location = os.fspath(path)
+    if os.path.islink(location) or not os.path.isfile(location):
+        _refuse("CHECKPOINT_PATH_INVALID", "checkpoint must be a regular file and not a symlink")
+    size = os.path.getsize(location)
+    if size != identity.checkpoint_bytes:
+        _refuse("FROZEN_MODEL_BYTES_MISMATCH", "file has %d bytes, identity says %d" % (size, identity.checkpoint_bytes))
+    with open(location, "rb") as stream:
+        digest = sha256_hex(stream.read())
+    if digest != identity.checkpoint_sha256:
+        _refuse("FROZEN_MODEL_SHA_MISMATCH", "file digest does not equal the admitted identity")
+    if type(device) is not str or _CUDA_DEVICE.match(device) is None:
+        _refuse("GPU_REQUIRED", "device %r; CPU inference is never a fallback" % (device,))
+    missing = [name for name, value in (("restore", restore), ("framework_factory", framework_factory),
+                                        ("encoder", encoder), ("torch", torch), ("rng_guard", rng_guard))
+               if value is None or (name in ("restore", "framework_factory", "rng_guard") and not callable(value))]
+    if missing:
+        _refuse("RESTORE_DEPENDENCIES_NOT_SUPPLIED",
+                "CPU-dry boundary: the admitted venue must supply " + ", ".join(missing))
+    framework = framework_factory()
+    learner = restore(torch, framework, encoder, path=location, expected_sha256=identity.checkpoint_sha256,
+                      expected_run_identity_digest=identity.run_identity_digest, device=device,
+                      expected_learnable_names=None)
+    if getattr(learner, "cursor", None) != identity.cursor:
+        _refuse("FROZEN_MODEL_CURSOR_MISMATCH", "restored cursor %r, identity cursor %d"
+                % (getattr(learner, "cursor", None), identity.cursor))
+    return FrozenModelHandle(learner, identity=identity, admission=admission, rng_guard=rng_guard)
+
+
+def predict_raw(handle, item, packet, *, budget_ledger, ledger, private_store, device_name, torch_version):
+    """Charge the budget, call the handle exactly once, store the body privately, then append the public record.
+
+    The order is fixed and enforced by construction: a budget refusal happens before the call; the venue's
+    ``private_store.put(raw)`` returns a ``PrivateBodyReceipt`` (reference, digest, size) and the body never
+    passes back through this interface; the public ``PredictionRecord`` is appended last and returned. A
+    ``None`` result is ``PREDICTION_OUTPUT_INVALID``. The call itself is GPU-dependent and unaccepted until the
+    admitted venue runs it.
+    """
+    if type(handle) is not FrozenModelHandle:
+        _refuse("RECORD_TYPE_INVALID", "FrozenModelHandle required")
+    if type(ledger) is not RecordLedger or type(budget_ledger) is not BudgetLedger:
+        _refuse("RECORD_TYPE_INVALID", "RecordLedger and BudgetLedger required")
+    if private_store is None or not callable(getattr(private_store, "put", None)):
+        _refuse("PRIVATE_STORE_RECEIPT_INVALID", "private_store must expose put(raw) -> PrivateBodyReceipt")
+    validate_item_ref(item)
+    budget_ledger.charge_prediction()
+    raw = handle.predict(packet)
+    if raw is None:
+        _refuse("PREDICTION_OUTPUT_INVALID", "the learner returned None")
+    receipt = validate_private_body_receipt(private_store.put(raw))
+    record = PredictionRecord(schema=PREDICTION_RECORD_SCHEMA, model=handle.identity, item=item,
+                              raw_output_sha256=receipt.sha256, raw_output_bytes=receipt.nbytes,
+                              private_body_ref=receipt.ref, device_name=device_name, torch_version=torch_version,
+                              produced_utc=_now_utc(), prediction_sequence=ledger.next_sequence(),
+                              provenance=ledger.provenance)
+    ledger.append(record)
+    return record
+
+
+# ----------------------------------------------------------------------------------------------------------
+# Paths
+# ----------------------------------------------------------------------------------------------------------
 
 def repair_none(prediction, *, evaluator, budget, ledger):
     """The path WITHOUT CAS. The verified output is the raw prediction itself, by construction.

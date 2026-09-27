@@ -133,3 +133,29 @@ receipt would be issued for a window in which more entries occurred than the gra
 existed before the window is likewise unmetered because `threading.setprofile` applies only to threads started
 afterwards. The adapter therefore guarantees the count only for the tested attacker class named above; a caller
 that changes interpreter hooks is outside the guarantee, and no isolation claim is made for it.
+
+## Amendment 2026-09-27 (Claude, packet B1-SEED18-IMPLEMENT-02): seed-18 frozen-model interface
+
+Interface-specific section only; no runtime, adapter, control or SI change. Exclusive scope:
+`claude_lead_20260927/seed18_interfaces/*` and `test_seed18_interfaces.py`.
+
+- A frozen learned model is exactly one checkpoint named by size and SHA-256. A digest alone never authorizes it:
+  `admit_frozen_model` requires an `AdmissionBinding` naming the identity digest and an admitting authority under a
+  structured reference; the interface verifies no signature and says so. It takes no host: the SI TrustedHost at
+  `d7808d59` (`checkpoint=None`) is a separate contract and does not admit neural parents.
+- Admission order: identity, admission, regular file and no symlink, size before any byte is read, SHA-256 before
+  any load, CUDA-only device, then the CPU-dry boundary `RESTORE_DEPENDENCIES_NOT_SUPPLIED`. The restore
+  (`PointerCourseLearner.restore_checkpoint(torch, framework, encoder, *, path, expected_sha256,
+  expected_run_identity_digest, device, expected_learnable_names=None)`, fresh framework, frozen typed encoder) and
+  `predict(packet, 8)` are GPU-dependent and unaccepted until the admitted venue runs them. The handle exposes
+  `predict` only; `stage_batch`, `train_sealed_batch`, `export_checkpoint` are refusals; prediction runs on a
+  separate restored clone under the venue's RNG guard.
+- The original neural prediction is a separate public record (digest, size, private reference) written before
+  any repair; the body never enters a public record. Public records carry exactly their permitted fields in typed
+  formats with a closed provenance set; there is no free-text field, so a short body cannot hide in one.
+- Repair path `NONE` preserves the prediction digest with zero native work. Repair path `CAS_CLOSED_LOOP` is not
+  implemented: no operation in `control.OPERATIONS` consumes a learned prediction, and the equation witness is not
+  reported as a neural repair. Parity across paths requires the same items, order, frozen model, raw digests,
+  budget and evaluator, and returns totals only.
+- Status: slice 1 executed locally (43 passed, commit `2022be45`, engineering check); slice 2 written, not run;
+  nothing here is acceptance. Refusal codes are the closed set in `frozen_model_interface.REFUSALS`.

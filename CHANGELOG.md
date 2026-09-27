@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - Packet B1-SEED18-IMPLEMENT-02 slice 2: admission boundary, predict-only handle, raw prediction; tests written, not run
+
+- `seed18_interfaces/frozen_model_interface.py`: typed formats for every string field (no free text, so short
+  bodies are refused by format); `admit_frozen_model` up to its CPU-dry boundary (admission binding, path, size
+  before bytes, SHA-256 before load, CUDA only, then `RESTORE_DEPENDENCIES_NOT_SUPPLIED`) using Codex's confirmed
+  `c45f775f` API; `FrozenModelHandle` (predict-only, depth 8, RNG guard, separate clone); `predict_raw` (charge,
+  one call, private receipt, public record last). Restore and predict stay GPU-dependent and unaccepted.
+- Tests moved to the Codex-assigned lane path `research/cas_closed_loop_1/test_seed18_interfaces.py`; 14 functions
+  (17 cases) added and NOT run under the packet's bounds (syntax parsed only); slice 1's 43-case local run stands.
+- Interface sections added to `HARNESS_SPEC.md` and `CONTRACTS.json` (amendment); no runtime or adapter change.
+
 ## 2026-09-27 - SEED18-INTERFACE-IMPLEMENT-02 slice 1: frozen-model interface implemented (no model) and tested locally
 
 - `claude_lead_20260927/seed18_interfaces/frozen_model_interface.py`: real no-model behavior for typed identity,
