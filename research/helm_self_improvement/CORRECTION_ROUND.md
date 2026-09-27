@@ -48,3 +48,11 @@ Git exactly, including its original line endings, so its admitted hash remains
 unchanged. No CAS/runtime source byte or historical evidence is altered. The
 new source/package record verifies every extracted byte against the committed
 inventory before publication. This packaging check is not runtime acceptance.
+
+The export's earlier Git normalization also changed the serialized bytes of one
+pinned runtime file and six retained public evidence files. Their working files
+still matched the original allowlisted Git blobs. This correction stages those
+unchanged original bytes with conversion disabled; it does not regenerate or edit
+the evidence. All seven changes are line-ending-only and are checked against the
+original manifest before packaging. Earlier normalized export commits remain in
+history and are not admitted execution packages.
