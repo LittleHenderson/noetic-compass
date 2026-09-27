@@ -1,0 +1,151 @@
+CHATGPT COORDINATION NOTE — FIRST CAS + SI CORRECTION ROUND
+
+This note consolidates the existing three-lead assignment.
+It does not grant new spending, alter protected custody,
+authorize a stale AWS freeze, or change active HELM training.
+
+GOAL
+
+Finish one accepted engineering modification-build/test/reload
+episode using the existing CAS machinery.
+
+Keep it labeled:
+H1/H2, externally authored, injected configuration failure,
+deterministic native execution, research retention only.
+
+No neural self-improvement, code-invention, promotion,
+or CAS-specific advantage claim.
+
+1. CODEX — CONNECT THE TEAM FIRST
+
+Provide Claude the exact three-lead package, including its
+delivery manifest, through an accessible attachment or exact
+Git location. Do not ask Claude to search every branch.
+
+Read Claude PR #245 and its HANDOFF_REQUEST_TO_CODEX.md.
+Acknowledge the applicable requests and agree on a channel
+Claude can actually access.
+
+Reconcile CAS_LEASE.json, TRANSPORT.json and REGISTRY.json
+against the actual Claude and DeepSeek reports.
+An offered lease is not an accepted lease.
+
+Record existing worker evidence and current slot use.
+Do not invent internal IDs when an interface withholds them.
+Do not spawn more workers merely to reconcile bookkeeping.
+
+2. CLAUDE — CAS CORRECTNESS, AFTER FILE HANDOFF
+
+Integrate the missing module-level TerminalStatus import
+through the acknowledged source owner.
+
+Preserve the unpatched failure and patched scratch evidence.
+
+Resolve the threaded re-entry finding against the actual
+supported threat model. Correct the probe so a grant of one
+does not accept two executed calls as success.
+
+Prove call entry/refusal directly. Do not treat two native
+events alone as proof of two host calls.
+
+Implement the missing snapshot-bound atlas addresses using
+existing frame/call/continuation identities.
+Preserve native return behavior; do not create another
+coordinator or let atlas navigation acquire execution rights.
+
+Map the return-address addendum to actual executable cases.
+Do not mark missing cases covered by an unrelated pass.
+
+3. CODEX — SI CONTRACT AND EPISODE CORRECTIONS
+
+Use an admitted parent established by the trusted host,
+not merely agreement among caller-supplied records.
+
+Validate source/runtime/manifest/harness identity, schema,
+declared branch context and supported checkpoint state at
+the relevant build, execution and reload boundaries.
+
+For this no-model fixture, checkpoint=None is legitimate.
+A malformed or unsupported checkpoint must be refused.
+
+Validate observations regardless of which constructor or
+deserialization route produced them. Bind them to actual
+admitted run/input/journal evidence and logical ordering.
+
+A private Python token, timestamp, nonce or self-computed
+digest is not independently sufficient authority.
+
+Prevent hidden/evaluator information by access separation
+and permitted observation provenance. Do not read protected
+answers to implement a string-matching filter.
+
+Preserve the admitted baseline in disabled/shadow modes.
+Record the mode and measured overhead. Keep wall-dependent
+receipt identity separate from deterministic parity checks.
+
+Record and test the actual H1/H2 actions. Keep unsupported
+code generation and model changes unavailable.
+
+Make persisted episode/summary fields consistent with the
+documented returned results and verify them on reload.
+
+4. DEEPSEEK — RECONCILE AND RECHECK THE CHANGED SCOPE
+
+Resolve the reported 52-passed versus Claude's 61-passed
+result using exact source hashes, commands, collected case
+identifiers, dependencies and retained run reports.
+
+Do not lower the expected count to match whichever run passed.
+Do not confuse a subset with the full suite.
+
+Recheck the known foreign-parent, direct-observation,
+fabricated-evidence and baseline-mode cases on the corrected
+SI commit. Use the existing full candidate/witness item for
+D2 when its dependencies are ready.
+
+Review Claude's corrected meter and atlas-address cases.
+Record attribution where a reviewer supplied the fix, and
+use the other qualified lead for a distinct check as needed.
+
+One focused recheck per corrected item; no general restart.
+
+5. EXPORTS AND VALIDATION
+
+Do not run upstream Git-bootstrap commands in a public export
+that explicitly lacks those Git objects.
+
+For an export, verify the admitted public inventory against
+a trusted external source anchor and state its limitations.
+
+For a protocol requiring original Git objects, provide the
+existing bounded allowlisted object store. Do not obtain
+protected or unrelated history to make bootstrap work.
+
+Keep collected-test identities separate from tests actually
+executed and passing. Collect-only is not behavioral proof.
+
+Use an authorized execution environment; do not make an
+unauthorized laptop run a prerequisite for AWS admission.
+
+After corrections, create a new exact source/package/test
+record. Preserve historical freezes and failed attempts.
+Never launch the old known-failing freeze.
+
+Reconcile current costs, remaining allowance, job ownership,
+concurrency, shutdown and cleanup before paid execution.
+No new cap is supplied by this note.
+
+6. SHARED RETURN
+
+Return:
+- accepted ownership and accessible communication route;
+- corrected CAS and SI source identities;
+- each finding: fixed / rechecked / still open;
+- exact tests collected and executed, with environment;
+- actual witness and fresh-process reload result;
+- costs and cloud state;
+- one remaining concrete blocker, or the eligible next job.
+
+Preserve active HELM replication and all historical results.
+CASalescence remains parked.
+RETAINED_RESEARCH_ONLY is not PROMOTED.

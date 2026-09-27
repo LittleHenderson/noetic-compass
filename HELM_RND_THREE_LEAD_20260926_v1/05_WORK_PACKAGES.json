@@ -1,0 +1,653 @@
+{
+  "schema": "helm.three-lead.task-plan/1",
+  "package_id": "HELM-RND-THREE-LEAD-20260926-v1",
+  "status": "PREPARED_NOT_DISPATCHED",
+  "author": "ChatGPT",
+  "actual_agent_registry_created": false,
+  "active_jobs_changed": false,
+  "max_active_subagents_global": 4,
+  "max_active_subagents_per_lead": 2,
+  "recursive_spawning": false,
+  "first_packet_wall_seconds_default": 1800,
+  "limits_note": "Smaller existing enforceable allowance prevails; actual call/token/cost limits required before dispatch.",
+  "waves": [
+    {
+      "wave": 1,
+      "tasks": [
+        "C1",
+        "C3-R",
+        "A1",
+        "D1"
+      ]
+    },
+    {
+      "wave": 2,
+      "tasks": [
+        "C2",
+        "C5",
+        "A2",
+        "D2"
+      ]
+    },
+    {
+      "wave": 3,
+      "tasks": [
+        "C3",
+        "A3",
+        "D3",
+        "D5"
+      ]
+    },
+    {
+      "wave": 4,
+      "tasks": [
+        "C4",
+        "A4",
+        "D4",
+        "D2"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "C0",
+      "lead": "Codex",
+      "title": "Protect and close current replication",
+      "depends_on": [],
+      "phase": "INCUMBENT",
+      "source_requirement_ids": [],
+      "logical_write_scope": [],
+      "required_evidence": [
+        "Current public run state",
+        "Per-seed endpoint comparison",
+        "128-item evidence contracts and cleanup status"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Existing operator continues; not a request for another launch or worker."
+    },
+    {
+      "task_id": "C1",
+      "lead": "Codex",
+      "title": "Self-description and contracts",
+      "depends_on": [],
+      "phase": "SI0/SI1",
+      "source_requirement_ids": [
+        "SI-T01",
+        "SI-T02",
+        "SI-T03"
+      ],
+      "logical_write_scope": [
+        "SI/contracts",
+        "SI/self_description",
+        "their tests"
+      ],
+      "required_evidence": [
+        "Real source/checkpoint and visibility",
+        "Disabled/shadow parity",
+        "Stale/foreign rejection"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "C2",
+      "lead": "Codex",
+      "title": "First harness candidate episode",
+      "depends_on": [
+        "C1"
+      ],
+      "phase": "SI2",
+      "source_requirement_ids": [
+        "SI-T04",
+        "SI-T05",
+        "SI-T06",
+        "SI-T07",
+        "SI-T08",
+        "SI-T09"
+      ],
+      "logical_write_scope": [
+        "SI/harness",
+        "candidate-builder tests"
+      ],
+      "required_evidence": [
+        "Actual changed execution",
+        "No-change/harmful rejection",
+        "Build/test/retain-or-reject/reload"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "C3-R",
+      "lead": "Codex",
+      "title": "Read-only growth seam reconnaissance",
+      "depends_on": [],
+      "phase": "SI0/SI1",
+      "source_requirement_ids": [
+        "SI-T10",
+        "SI-T11",
+        "SI-T12"
+      ],
+      "logical_write_scope": [],
+      "required_evidence": [
+        "Module-specific supported operator",
+        "Shape/optimizer migration proposal"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Read-only; implementation is C3 after C1."
+    },
+    {
+      "task_id": "C3",
+      "lead": "Codex",
+      "title": "One trainable growth operator",
+      "depends_on": [
+        "C1",
+        "C3-R"
+      ],
+      "phase": "SI3",
+      "source_requirement_ids": [
+        "SI-T10",
+        "SI-T11",
+        "SI-T12",
+        "SI-T13",
+        "SI-T14",
+        "SI-T15",
+        "SI-T22"
+      ],
+      "logical_write_scope": [
+        "SI/growth",
+        "its tests"
+      ],
+      "required_evidence": [
+        "Declared function behavior",
+        "Optimizer/gradient/update evidence",
+        "Reload/rollback",
+        "Matched extra-training comparison when admitted"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "C4",
+      "lead": "Codex",
+      "title": "Native modification-policy plumbing",
+      "depends_on": [
+        "C1",
+        "C2"
+      ],
+      "phase": "SI4",
+      "source_requirement_ids": [
+        "SI-T20",
+        "SI-T21",
+        "SI-T23"
+      ],
+      "logical_write_scope": [
+        "SI/learning",
+        "SI/experiments",
+        "their tests"
+      ],
+      "required_evidence": [
+        "Permitted improvement episodes",
+        "Teacher/native provenance",
+        "Frozen policy comparison"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Growth-decision subtask additionally requires C3; harness-only work need not wait for C3."
+    },
+    {
+      "task_id": "C5",
+      "lead": "Codex",
+      "title": "HELM-side lifecycle and CAS integration",
+      "depends_on": [
+        "C1"
+      ],
+      "phase": "SI1/SI2",
+      "source_requirement_ids": [
+        "SI-T15",
+        "SI-T16",
+        "SI-T17",
+        "SI-T18",
+        "SI-T19",
+        "SI-T25",
+        "SI-T26"
+      ],
+      "logical_write_scope": [
+        "SI/lifecycle",
+        "SI/integration",
+        "their tests"
+      ],
+      "required_evidence": [
+        "Versioned CAS interface",
+        "Expected-parent activation",
+        "Compatible rollback/reload",
+        "Read-only atlas"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Real integration acceptance requires relevant A1/A2/A3 evidence; early interface tests do not claim that."
+    },
+    {
+      "task_id": "A1",
+      "lead": "Claude",
+      "title": "Current CAS adapter correctness closure",
+      "depends_on": [],
+      "phase": "CAS M1/M2",
+      "source_requirement_ids": [
+        "AT01",
+        "AT02",
+        "AT03",
+        "AT04",
+        "AT05",
+        "AT06",
+        "AT09",
+        "AT10",
+        "AT14",
+        "AT15",
+        "AT18",
+        "AT19"
+      ],
+      "logical_write_scope": [
+        "leased CAS adapter internals",
+        "correctness tests"
+      ],
+      "required_evidence": [
+        "Acknowledged lease",
+        "Current-source acceptance map",
+        "Smallest verified correction"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Source-writing blocked until Codex lease acknowledged; public inspection remains available."
+    },
+    {
+      "task_id": "A2",
+      "lead": "Claude",
+      "title": "Exact nested return and RPA projection",
+      "depends_on": [
+        "A1"
+      ],
+      "phase": "CAS M2/M3",
+      "source_requirement_ids": [
+        "AT15",
+        "AT16",
+        "AT17",
+        "AT19",
+        "AT20",
+        "AT21",
+        "AT22",
+        "AT24",
+        "AT25",
+        "AT26",
+        "AT27",
+        "RPA-RETURN-1"
+      ],
+      "logical_write_scope": [
+        "leased CAS return/RPA adapters",
+        "addendum tests"
+      ],
+      "required_evidence": [
+        "Immediate-parent return",
+        "Same-profile separation",
+        "Stale/duplicate/cancel refusal",
+        "Restart with spent-work preservation"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "A3",
+      "lead": "Claude",
+      "title": "Actual metering and witness controls",
+      "depends_on": [
+        "A1"
+      ],
+      "phase": "CAS M2/M3",
+      "source_requirement_ids": [
+        "AT07",
+        "AT08",
+        "AT09",
+        "AT10",
+        "AT11",
+        "AT12",
+        "AT13",
+        "AT18",
+        "AT20",
+        "AT21",
+        "AT22",
+        "AT23"
+      ],
+      "logical_write_scope": [
+        "leased CAS instrument/witness files",
+        "control tests"
+      ],
+      "required_evidence": [
+        "Wrong method",
+        "Low budget",
+        "Wrong Effect despite positive flow",
+        "Disabled actuator",
+        "Reuse/invalidation"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "A4",
+      "lead": "Claude",
+      "title": "One frozen learned adapter",
+      "depends_on": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "phase": "CAS M4",
+      "source_requirement_ids": [
+        "AT28",
+        "AT29",
+        "AT30",
+        "AT31"
+      ],
+      "logical_write_scope": [
+        "CAS learned-adapter namespace",
+        "its visibility tests"
+      ],
+      "required_evidence": [
+        "Existing public errors",
+        "Frozen model/checkpoint binding",
+        "Actual model predictions",
+        "No target channel"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Selecting HELM instead of Q4 requires a prospective explicit protocol identity, not silent substitution."
+    },
+    {
+      "task_id": "A5",
+      "lead": "Claude",
+      "title": "CAS validation/pilot delivery",
+      "depends_on": [
+        "A1"
+      ],
+      "phase": "CAS M2-M5",
+      "source_requirement_ids": [
+        "AT32",
+        "AT33",
+        "AT34",
+        "AT35",
+        "AT36"
+      ],
+      "logical_write_scope": [
+        "CAS-only validation/package/report tools"
+      ],
+      "required_evidence": [
+        "Current source/test/environment binding",
+        "Costed request to one runner",
+        "Deterministic witness/replay and honest report"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Engineering validation can proceed after relevant A2/A3; learned pilot additionally requires A4 and D4 protocol."
+    },
+    {
+      "task_id": "D1",
+      "lead": "DeepSeek",
+      "title": "Independent source/contract review",
+      "depends_on": [],
+      "phase": "REVIEW",
+      "source_requirement_ids": [
+        "SI-T01",
+        "SI-T02",
+        "SI-T03",
+        "AT01",
+        "AT02",
+        "AT03"
+      ],
+      "logical_write_scope": [
+        "reviewer/D1"
+      ],
+      "required_evidence": [
+        "Pinned identities",
+        "Actual public scope",
+        "Minimal defects"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": ""
+    },
+    {
+      "task_id": "D2",
+      "lead": "DeepSeek",
+      "title": "Harness/actuator integrity review",
+      "depends_on": [],
+      "phase": "REVIEW",
+      "source_requirement_ids": [
+        "SI-T04",
+        "SI-T05",
+        "SI-T06",
+        "SI-T07",
+        "SI-T08",
+        "SI-T09",
+        "AT11",
+        "AT16",
+        "AT18",
+        "AT23"
+      ],
+      "logical_write_scope": [
+        "reviewer/D2"
+      ],
+      "required_evidence": [
+        "Real behavior changes",
+        "Leakage/false benefit controls",
+        "Original predictions preserved"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Dispatch only when C2 or A3 supplies an actual pinned item."
+    },
+    {
+      "task_id": "D3",
+      "lead": "DeepSeek",
+      "title": "Neural migration and usefulness review",
+      "depends_on": [],
+      "phase": "REVIEW",
+      "source_requirement_ids": [
+        "SI-T10",
+        "SI-T11",
+        "SI-T12",
+        "SI-T13",
+        "SI-T14",
+        "SI-T22"
+      ],
+      "logical_write_scope": [
+        "reviewer/D3"
+      ],
+      "required_evidence": [
+        "Module mathematics",
+        "Migration/optimizer proof",
+        "Trainability versus benefit distinction"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Dispatch when C3-R/C3 has an actual artifact."
+    },
+    {
+      "task_id": "D4",
+      "lead": "DeepSeek",
+      "title": "Prospective comparison/attribution review",
+      "depends_on": [],
+      "phase": "REVIEW",
+      "source_requirement_ids": [
+        "AT32",
+        "AT34",
+        "AT36",
+        "SI-T20",
+        "SI-T21",
+        "SI-T22",
+        "SI-T23",
+        "SI-T26"
+      ],
+      "logical_write_scope": [
+        "reviewer/D4"
+      ],
+      "required_evidence": [
+        "Grouped data and fixed protocol",
+        "F/G/C and growth/policy comparators",
+        "Cost/retention/uncertainty"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Needed before affected pilot/native-policy outcomes, not a global blocker on unrelated engineering."
+    },
+    {
+      "task_id": "D5",
+      "lead": "DeepSeek",
+      "title": "Lifecycle/resource/replay integrity review",
+      "depends_on": [],
+      "phase": "REVIEW",
+      "source_requirement_ids": [
+        "AT10",
+        "AT15",
+        "AT17",
+        "AT19",
+        "AT21",
+        "AT22",
+        "AT24",
+        "AT25",
+        "AT27",
+        "AT33",
+        "AT35",
+        "SI-T15",
+        "SI-T16",
+        "SI-T17",
+        "SI-T18",
+        "SI-T19",
+        "SI-T24",
+        "SI-T25"
+      ],
+      "logical_write_scope": [
+        "reviewer/D5"
+      ],
+      "required_evidence": [
+        "Exact return",
+        "Corruption/stale activation refusal",
+        "Independent cleanup evidence",
+        "Enforced bounds"
+      ],
+      "status": "PLANNED_NOT_DISPATCHED",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "Dispatch when C5/A2/A5 supplies an actual pinned item."
+    },
+    {
+      "task_id": "FUTURE-COALESCENCE",
+      "lead": "Unassigned",
+      "title": "Reversible multi-HELM cooperation/identity",
+      "depends_on": [],
+      "phase": "PARKED",
+      "source_requirement_ids": [],
+      "logical_write_scope": [],
+      "required_evidence": [
+        "Later separate plan, not current implementation"
+      ],
+      "status": "PARKED_NO_EXECUTION",
+      "worker_session_id": null,
+      "worker_model": null,
+      "lease_id": null,
+      "exact_source_sha": null,
+      "exact_acceptance_command": null,
+      "resource_record_id": null,
+      "note": "No worker, source changes, model merge, experiment or spend assigned."
+    }
+  ]
+}

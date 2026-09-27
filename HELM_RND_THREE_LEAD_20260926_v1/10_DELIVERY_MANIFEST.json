@@ -1,0 +1,70 @@
+{
+  "schema": "helm.directive-delivery/1",
+  "package_id": "HELM-RND-THREE-LEAD-20260926-v1",
+  "author": "ChatGPT",
+  "purpose": "Three-lead role and subagent directives grounded in existing HELM-SI/CAS plans",
+  "delivery_state": "PREPARED_FOR_ISSUE",
+  "source_code_modified": false,
+  "jobs_launched": 0,
+  "agents_spawned": 0,
+  "agent_acknowledgments_obtained": 0,
+  "installed_on_msi": false,
+  "file_hashes_are_integrity_not_signatures": true,
+  "files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 4676,
+      "sha256": "5ee2364f5cf09336d3a82d8059275520a9c979c2836c84c25e3955d510e47db8"
+    },
+    {
+      "path": "01_MASTER_DIRECTIVE.md",
+      "bytes": 17325,
+      "sha256": "eea57c66d22f33afa3a8cfea8cafd06be91e39174fd2b5bcf37725abf1bfef71"
+    },
+    {
+      "path": "02_CODEX_DIRECTIVE.md",
+      "bytes": 8702,
+      "sha256": "761753e55f32c5f7471dfdf5f1bf064d57547d3d6147709e272692b67885b558"
+    },
+    {
+      "path": "03_CLAUDE_DIRECTIVE.md",
+      "bytes": 9372,
+      "sha256": "a2b155de18c3507fb72961f845f8769d38fc28f137a93aeb62f173b15eb53811"
+    },
+    {
+      "path": "04_DEEPSEEK_DIRECTIVE.md",
+      "bytes": 8112,
+      "sha256": "feaa3c3338daa2d3028582e8e39b9bc8a3742407987ef5fbdd1cc060c4003ba2"
+    },
+    {
+      "path": "05_WORK_PACKAGES.json",
+      "bytes": 16797,
+      "sha256": "11c509031b27ab34cd5e0579d4e0a9cd2cf4a9a78f89c54c1c8a650360a3ae69"
+    },
+    {
+      "path": "06_CASALESCENCE_LATER.md",
+      "bytes": 5431,
+      "sha256": "9e6e3a339fc8c2264a4b34bcec64fcfc7848deb7f48b10a6bc23fade47e66702"
+    },
+    {
+      "path": "07_SOURCE_INDEX.md",
+      "bytes": 6362,
+      "sha256": "abca4549696c7342ae733f895fac792af364a7381ff812c6d1a9054adb0d3317"
+    },
+    {
+      "path": "08_JOB_AND_AGENT_PACKET_TEMPLATES.json",
+      "bytes": 3624,
+      "sha256": "52d85c15590e91409c9477bd3d7b7467b23fcdb185848eb94dbbd5c9a63b843f"
+    },
+    {
+      "path": "09_COPY_PASTE_MESSAGES.md",
+      "bytes": 4405,
+      "sha256": "27d648b21a85894afa2d492ec66bf7e59183fbe8d4fe12bae8e47bf5050e58dd"
+    },
+    {
+      "path": "sources/HELM_SELF_IMPROVEMENT_BUILD_DIRECTIVE_v1_0.md",
+      "bytes": 37804,
+      "sha256": "406bdf2dfcc9e590ca63b6fea7f1e5a20ea9abb6ef07229062198e8e615ae47b"
+    }
+  ]
+}
