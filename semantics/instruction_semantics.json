@@ -1,0 +1,22 @@
+{
+  "schema": "helm-q1-instruction-semantics/1",
+  "source": "fixtures/public/q1-mod4.json (sha256 678e977d976037d2b09183ebfa88003970687260feed4e33ddf0b95fd20c9877 at commit 35236511)",
+  "cas_native": false,
+  "note": "Synthetic algorithm fixture. These are not Noetic, Drive, Domain or Register operations and are not mapped to any CAS primitive.",
+  "data_register": {"value": "x = lsb + 2*msb", "qubits": "lsb then msb, allocated by RegisterLayout"},
+  "instructions": [
+    {"code": 0, "name": "ID",   "arithmetic": "x",           "gates": [],                                                        "inverse": "ID"},
+    {"code": 1, "name": "INC",  "arithmetic": "(x + 1) % 4", "gates": ["X msb controlled on lsb", "X lsb"],                       "inverse": "DEC"},
+    {"code": 2, "name": "DEC",  "arithmetic": "(x + 3) % 4", "gates": ["X lsb", "X msb controlled on lsb"],                       "inverse": "INC"},
+    {"code": 3, "name": "NOT2", "arithmetic": "3 - x",       "gates": ["X lsb", "X msb"],                                         "inverse": "NOT2"}
+  ],
+  "controlled_form": "every gate of an instruction receives the slot's two opcode controls (positive for opcode bits equal to 1, negated for bits equal to 0); an unmet pattern leaves the data register untouched",
+  "classification_per_directive_section_4": {
+    "ID": "reversible (identity)",
+    "INC": "reversible (permutation of Z4)",
+    "DEC": "reversible (permutation of Z4)",
+    "NOT2": "reversible (permutation of Z4)",
+    "admitted_CAS_operations": "NONE inventoried; no approved source export supplied"
+  },
+  "invalid_encodings": "none: two-bit opcodes and two-bit data cover exactly the four codes and four values"
+}
