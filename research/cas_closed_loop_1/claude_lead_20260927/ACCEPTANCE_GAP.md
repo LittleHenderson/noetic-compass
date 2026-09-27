@@ -36,6 +36,28 @@ replay = `EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT`. Run record: `run_20260927T050
   prospective fix supported by an out-of-instance reproduction only (`transport_followup.json`).
 - Everything M4/M5 (learned adapter, matched pilot) stays `NOT_STARTED` / refused under the current no-model scope.
 
-## Worker A2 acceptance map
+## Worker A2 acceptance map (bounded, read-only; full table in `A2_acceptance_audit.md` / `.json`)
 
-See `A2_acceptance_audit.md` / `.json` in this directory once the worker's report is attached.
+Classification of the 36 acceptance ids at `aa600668`: 12 `COVERED_BY_TEST`, 15 `PARTIAL`, 1 `EVIDENCE_ONLY` (AT08,
+no residual is ever computed), 8 `NOT_APPLICABLE_YET` (AT28–AT35, tasks T08–T12 not started; `pilot` refused).
+Static case count matches the freeze: 30 + 22 + 5 + 4 = 61.
+
+- **Strict first gap in dependency order: AT03** (task T02). T01's ids have a tracked execution against source
+  byte-identical to the head (`a227f8/partial_git_probe.json`: `check_artifacts.py --git-ref f6253e1a` =
+  `EXACT_BYTES_VERIFIED`). Every id from AT03 onward depends on the 57-case suite, which had no tracked execution
+  against `f6253e1a`/`aa600668` before this directory's runs. Those runs are now tracked here; they are local, not AWS.
+- **First demonstrable defect: AT05 (also AT15, AT27)**: the `NameError` above. The worker reached it independently.
+- **Next gap after the repair (M3 atlas parity, T07; addendum RPA-RETURN-1):** the `RETURN_ADDRESS_TEST_MAP.json`
+  on `codex/cas-closed-loop-1` names ten adapter-level cases (`new_adapter_case_needed`). Zero are present in the
+  61-case suite; three have partial analogs; seven are absent. Root cause: `runtime_location` emits
+  `atlas_binding: None` (`native_step_adapter.py` line 253), so no snapshot-bound atlas address exists to test. The
+  exact nested return delivered here is at the runtime-identity level (eleven fields per live frame), not yet at the
+  atlas-address level the addendum asks for. The five upstream native tests the map cites exist at the runtime commit
+  but are not part of the frozen suite.
+- **Documentary discrepancy (AT01):** `missing_from_live_repository` is contradicted in this clone; both objects
+  resolve, and `2636bbb6` is the base commit of `codex/cas-closed-loop-1`.
+- **Historical evidence note:** `evidence/events.jsonl` row 0 (producer `8f55cc3a`) carries a non-null
+  `return_identity` with null fields while `frames == []`, which the amended `HARNESS_SPEC.md` now forbids. The
+  historical bytes are intentionally unchanged; the amended rule applies to new receipts only.
+- Smaller items: AT07 tests assert a bare `ValueError` without the refusal name and have no overflow or
+  scale-mismatch case; AT12 has no large-drive cap case; AT17 asserts the terminal reason only as set membership.

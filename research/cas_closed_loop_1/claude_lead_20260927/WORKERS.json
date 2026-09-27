@@ -1,0 +1,71 @@
+{
+ "schema": "cas.closed-loop.claude-workers/0.1",
+ "lead": "Claude (this session), branch claude/focused-mccarthy-uj45ul, base aa6006683d9e798c85667dc0d389a604b0e99053",
+ "identifier_policy": "The harness withholds its internal subagent identifiers from user-facing text. Each worker is identified here by wave label, agent type, launch order, scope, measured usage from the harness completion notice, and the content hash of the report it returned.",
+ "workers": [
+  {
+   "wave": "A1",
+   "label": "frozen-protocol-local-run",
+   "executor": "lead session itself (Bash), no subagent",
+   "scope": "Run the frozen public CPU acceptance protocol locally on the exact head and on a scratch worktree with the one-line test-import repair; no AWS, no model, no Codex file edit.",
+   "code": "run_local_protocol.py",
+   "code_sha256": "41250166111cf059f4f46399e229723bcae775649407431938a471801d1658e7",
+   "runs": {
+    "run_20260927T045459Z": "61 collected, 5 failed, 56 passed (3 NameError + 2 boto3 missing)",
+    "run_20260927T045944Z": "61 collected, 3 failed, 58 passed (NameError only)",
+    "run_20260927T050137Z_patched_worktree": "61 passed; retained replay, witness, fresh-process replay PASS"
+   },
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "A2",
+   "label": "acceptance-gap-audit",
+   "executor": "general-purpose subagent, launched 2nd (background), read-only",
+   "scope": "Map AT01..AT36 to concrete tests/evidence at the head; name the first current acceptance gap; count collected cases; compare RETURN_ADDRESS_TEST_MAP.json to the 61-case suite.",
+   "report": "A2_acceptance_audit.md / .json",
+   "status": "COMPLETED",
+   "usage_from_harness_notice": {
+    "subagent_tokens": 322066,
+    "tool_uses": 42,
+    "duration_ms": 964243
+   },
+   "report_sha256": {
+    "md": "1fa3de7595e7c080555a198840df2b2edfad2845353999d9bc4acd7edc65c338",
+    "json": "53e5a679d3dc21a2c8d131649a1b87261a532d22bde7bc8b2a2861bec6ac6971"
+   },
+   "result": "12 COVERED_BY_TEST, 15 PARTIAL, 1 EVIDENCE_ONLY, 8 NOT_APPLICABLE_YET; strict first gap AT03; first demonstrable defect AT05/AT15/AT27 (NameError); 0/10 addendum atlas-address cases present (atlas_binding None); 61-case count confirmed statically"
+  },
+  {
+   "wave": "A3",
+   "label": "adapter-adversarial-review",
+   "executor": "general-purpose subagent, launched 3rd (background), read-only",
+   "scope": "Verify the three DeepSeek CHANGES_REQUIRED items in native_step_adapter.py and its tests; adversarial bypass search; Python 3.11 vs 3.12 hazards.",
+   "usage_from_harness_notice": {
+    "subagent_tokens": 204126,
+    "tool_uses": 27,
+    "duration_ms": 719855
+   },
+   "report": "A3_adapter_review.md / .json",
+   "report_sha256": {
+    "md": "93a081d829cb39d2b71ea8c8780f9be655325111926cc3e98e204d9da7959b43",
+    "json": "47a50264ee06dc69eddc950bba04e469d1eafcef076eb3873f3af7a3420066ea"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings_carried_to_codex": [
+    "F1 MAJOR: NameError in two amended regression tests (confirmed by A1)",
+    "F2 MAJOR: per-thread sys.setprofile meter; confirmed by lead probe probe_threaded_reentry.py against the real adapter",
+    "MINOR: `observed` rebinding at native_step_adapter.py:169",
+    "NOTEs: getprofile finally-check, I_attempted unconstrained, catalog_state_binding unconsumed, unreachable line 320"
+   ],
+   "status": "COMPLETED"
+  }
+ ],
+ "not_done_by_any_worker": [
+  "No AWS operation",
+  "No model call",
+  "No edit to Codex-owned files",
+  "No protected material read",
+  "No HELM job, source, receipt or custody change",
+  "No `pilot`"
+ ]
+}

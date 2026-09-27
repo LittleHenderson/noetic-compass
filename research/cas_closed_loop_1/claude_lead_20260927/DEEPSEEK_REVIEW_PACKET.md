@@ -1,7 +1,7 @@
 # DeepSeek review packet: Claude's pinned public implementation (2026-09-27)
 
 **Reviewer:** DeepSeek, through the owner's bus (Claude cannot reach it; the owner relays this file).
-**Reviewed commit:** `c9d62a71c2ff14cfaceb148672c1553d7bbb3cd5` on `claude/focused-mccarthy-uj45ul` (base `aa6006683d9e798c85667dc0d389a604b0e99053`,
+**Reviewed commit:** see `PINNED_COMMIT.txt` (written by the commit that follows the one adding these hashes) on `claude/focused-mccarthy-uj45ul` (base `aa6006683d9e798c85667dc0d389a604b0e99053`,
 `codex/cas-closed-loop-1-aws-validation-20260925`). The pull request for this branch targets that base.
 
 Scope: only the files listed below plus the lineage `CHANGELOG.md` entry. No Codex-owned file in
@@ -31,11 +31,18 @@ Scope: only the files listed below plus the lineage `CHANGELOG.md` entry. No Cod
 | Path (under `research/cas_closed_loop_1/claude_lead_20260927/`) | Bytes | SHA-256 |
 |---|---:|---|
 | `.gitattributes` | 55 | `f5d5b0c512b86ad7fe5525e065f4f5152ce44c69cd3ab78904a9467c911b75ba` |
-| `ACCEPTANCE_GAP.md` | 3041 | `889d1120727429e7268200fa5c0433f726ba69666745db0cf1406d598521984c` |
-| `HANDOFF_REQUEST_TO_CODEX.md` | 8482 | `a7a3af05c5b153b3b0bd6bc44ec600d323e109251e41426aeda1c680cb2112bc` |
+| `A2_acceptance_audit.json` | 85359 | `53e5a679d3dc21a2c8d131649a1b87261a532d22bde7bc8b2a2861bec6ac6971` |
+| `A2_acceptance_audit.md` | 6862 | `1fa3de7595e7c080555a198840df2b2edfad2845353999d9bc4acd7edc65c338` |
+| `A3_adapter_review.json` | 25791 | `47a50264ee06dc69eddc950bba04e469d1eafcef076eb3873f3af7a3420066ea` |
+| `A3_adapter_review.md` | 6852 | `93a081d829cb39d2b71ea8c8780f9be655325111926cc3e98e204d9da7959b43` |
+| `ACCEPTANCE_GAP.md` | 5311 | `db859ec66d25ef96e0aa72ad3c6b309e5a87c9cd17347e24790e1ae12adcf471` |
+| `HANDOFF_REQUEST_TO_CODEX.md` | 12718 | `af4fbda7afbda7a4f024674a84c9ea828e845bbfe5590380f0c18799cc8b3215` |
 | `NESTED_RETURN_TRACE.json` | 8779 | `294794112e3c8a6e40efe56ce982a415184664300501210e2ba78048e427244e` |
 | `PROPOSED_PATCH_test_native_step_adapter_import.diff` | 738 | `d88c14c9381ff86260023426ce7b1f4bcd1896a401eb1f5e2f125882ce411aeb` |
 | `README.md` | 1911 | `93828c841d8303c14cdf04eee9d94a2379e279da9df5e168ebd8f28eb7ebd04d` |
+| `WORKERS.json` | 3564 | `85a04466b16fe0673eeb948c98651388c43e30220378b425de244a2019ca0798` |
+| `probe_threaded_reentry.py` | 2656 | `594a503c0510977e9781fc4c003397ce75ab748304f476f1ffbd3df64add2da8` |
+| `probe_threaded_reentry_result.txt` | 430 | `131bc928d29a9bf6ef49430d90d700feab821eb8ac9793ac1de6a7018ef5e045` |
 | `run_20260927T045459Z/artifact_check.stderr` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `run_20260927T045459Z/artifact_check.stdout` | 249 | `898e46f835ada295059542b9625b4ec2a58909a5ea162b280fa7c63e05ef7e21` |
 | `run_20260927T045459Z/committed_artifact_check.stderr` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |

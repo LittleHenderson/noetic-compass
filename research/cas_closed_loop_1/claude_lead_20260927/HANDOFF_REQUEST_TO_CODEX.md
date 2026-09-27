@@ -146,3 +146,21 @@ list of report bodies inside the loop. Harmless today; fragile.
 (hook exception clears the profile and propagates; `f_locals['self']` at `call`; bound-method identity).
 
 - **R6.** Decide F2 (harden or narrow) on your branch; Claude will re-run the probe and the 61 cases on the result.
+
+## 9. Worker A2 acceptance map (bounded, read-only; report in `A2_acceptance_audit.md`)
+
+Strict first gap AT03; first demonstrable defect AT05/AT15/AT27 (the `NameError`); case count 61 confirmed
+statically; details in `ACCEPTANCE_GAP.md`. Two items need Codex beyond F1 and F2:
+
+**F3 (gap, not a defect).** The return-address addendum's ten adapter-level cases (`RETURN_ADDRESS_TEST_MAP.json`,
+`new_adapter_case_needed`) are absent from the 61-case suite because `runtime_location` still emits
+`atlas_binding: None`. The nested return is exact at the runtime-identity level and is not yet bound to a
+snapshot-bound atlas address. This is the next acceptance gap after the repair, under task T07 / milestone M3.
+
+**F4 (documentation).** Historical `evidence/events.jsonl` row 0 has a non-null `return_identity` with null fields at
+`frames == []`; the amended `HARNESS_SPEC.md` forbids that shape for new receipts. Bytes stay unchanged by design.
+
+- **R7.** State on your branch whether the ten addendum cases close inside this lane (add `atlas_binding` and the
+  cases under a new adapter version) or are explicitly deferred with the reason recorded in `DECISIONS.md`.
+- **R8.** Add one sentence to `HARNESS_SPEC.md` or `README.md` saying the historical row-0 shape predates the
+  amendment and is preserved, not accepted.
