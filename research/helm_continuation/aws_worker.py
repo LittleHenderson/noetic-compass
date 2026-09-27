@@ -62,6 +62,7 @@ def execute(bucket, region):
         env.update({'PYTHONDONTWRITEBYTECODE': '1', 'HELM_CONT19_VENUE': 'ADMITTED_AWS',
                     'PYTEST_DISABLE_PLUGIN_AUTOLOAD': '1', 'AWS_MAX_ATTEMPTS': '1', 'AWS_PAGER': '',
                     'CONT19_PARENT_METADATA': str(base / 'parent_metadata.json'),
+                    'CONT19_LEGACY_ROOT': str(root),
                     'PYTHONPATH': str(base / 'implementation/research')})
         python = root / 'venv/bin/python'
         base_python = next((shutil.which(p) for p in ('python3.12', 'python3.11') if shutil.which(p)), None)
@@ -81,8 +82,8 @@ def execute(bucket, region):
             suites = ET.parse(output / 'focused.xml').getroot()
             suites = [suites] if suites.tag == 'testsuite' else list(suites)
             receipt['tests'] = {k: sum(int(s.get(k, 0)) for s in suites) for k in ('tests', 'failures', 'errors', 'skipped')}
-            if receipt['tests'] != {'tests': 29, 'failures': 0, 'errors': 0, 'skipped': 0}:
-                raise ValueError('EXACT_29_FOCUSED_CASES_REQUIRED')
+            if receipt['tests'] != {'tests': 30, 'failures': 0, 'errors': 0, 'skipped': 0}:
+                raise ValueError('EXACT_30_FOCUSED_CASES_REQUIRED')
         command('numeric_worker', [str(python), '-B', '-m', 'helm_continuation.worker',
             '--root', str(root), '--parent', str(base / 'parent.pt'), '--plan', str(base / 'child_plan.json'),
             '--out', str(output / 'numeric'), '--mode', 'proof' if config['phase'] == 'preparation' else 'train'],

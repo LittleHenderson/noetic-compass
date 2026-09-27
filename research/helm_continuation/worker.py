@@ -120,9 +120,26 @@ def run(root, parent, plan, out, mode):
             proof_pin = main.export_checkpoint(out / 'proof2941.pt')
             reload = clone(proof_pin)
             c.require(c.state_snapshot(reload, legacy) == after_a, 'PROOF_CHILD_RELOAD')
+            post_update_rng = c.rng_snapshot(torch)
+            # Refuse the next stage at the actual new ceiling before any forward.
+            limit_clone = clone(initial)
+            limit_clone.cursor = limit_clone.model_revision = c.FINAL
+            limit_clone.counters['optimizer_updates'] = c.FINAL
+            limit_before = c.state_snapshot(limit_clone, legacy)
+            try:
+                limit_clone.stage_batch([packets[k] for k in batches[c.START]['record_ids']],
+                    batches[c.START]['depth'], cursor=c.FINAL,
+                    occurrence_ids=batches[c.START]['occurrence_ids'])
+            except ValueError as error:
+                c.require('TYPED_LEARNER_BATCH_CURSOR_OR_BUDGET' in str(error), 'WRONG_LIMIT_REFUSAL')
+            else:
+                raise ValueError('CHILD_FINAL_LIMIT_DID_NOT_STOP')
+            c.require(c.state_snapshot(limit_clone, legacy) == limit_before, 'LIMIT_REFUSAL_CHANGED_STATE')
+            c.restore_rng(torch, post_update_rng)
             report['proof'] = {'parent_state': before, 'next_state': after_a,
                 'bitwise_next_step_equal_with_and_without_validation': True,
                 'child_reload_exact': True, 'next_batch_sha256': c.digest(batches[c.START]),
+                'final_limit_refuses_before_forward': True,
                 'next_update': 2941, 'main_parent_hash_unchanged': sha256(parent.read_bytes()).hexdigest() == c.PARENT_SHA,
                 'preparation_updates': 2, 'training_job_updates': 0,
                 'loss_a': update_a['raw_batch_loss'], 'loss_b': update_b['raw_batch_loss']}

@@ -81,7 +81,7 @@ def extend_batch_stream(contract, frozen):
     Compare the complete overlapping 24-pass stream with the unmodified contract,
     which continues to reject 40. Nothing raises its registered ceiling.
     """
-    old, _ = contract.schedule(frozen, passes=24, stratified=True)
+    old, _ = contract.pointer_schedule(frozen, passes=24, stratified=True)
     base, _ = contract.matched.schedule(frozen, contract.CONDITION)
     held, trained, excluded = contract.split(frozen)
     one = contract._stratified_pass(frozen, base, set(trained))

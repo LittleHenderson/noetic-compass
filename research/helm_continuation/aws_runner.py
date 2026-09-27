@@ -368,7 +368,7 @@ def execute(directory, expected_hash):
             if terminal.get("status") == plan["expected_status"]:
                 if terminal.get("parent_sha256") != plan["parent_sha256"]:
                     raise ValueError("TERMINAL_PARENT_MISMATCH")
-                if plan["phase"] == "preparation" and (terminal.get("tests") != {"tests": 29, "failures": 0, "errors": 0, "skipped": 0} or terminal.get("restore_proof") != "PASS_RESTORE_NEXT_STEP_ONLY"):
+                if plan["phase"] == "preparation" and (terminal.get("tests") != {"tests": 30, "failures": 0, "errors": 0, "skipped": 0} or terminal.get("restore_proof") != "PASS_RESTORE_NEXT_STEP_ONLY"):
                     raise ValueError("RESTORE_TESTS_AND_NUMERICAL_PROOF_REQUIRED")
         state["status"] = terminal["status"] if terminal else ("FAILED_BOOTSTRAP_UNACCEPTED" if "bootstrap_failure" in state else "NO_TERMINAL_RECEIPT")
     except BaseException as exc:

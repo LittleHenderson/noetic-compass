@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from types import SimpleNamespace
 import time
+import sys
 
 import pytest
 from . import continuation as c
@@ -104,3 +105,19 @@ def test_wrong_parent_bytes_refused_before_torch(tmp_path):
     path = tmp_path / 'wrong.pt'; path.write_bytes(b'0' * 4025999)
     with pytest.raises(ValueError, match='WRONG_PARENT_BYTES'):
         c.restore_parent(None, None, None, None, path, 'cuda:0')
+
+
+def test_real_frozen_schedule_api_prefix_and_next_batch():
+    """Regression for failed preparation a1: actual API, not a schedule double."""
+    root = Path(os.environ['CONT19_LEGACY_ROOT'])
+    sys.path[:0] = [str(root), str(root / 'research/CAS_META_2_COMPOSITION')]
+    from cas_meta2.typed_teaching import pointer_contract as contract
+    frozen, _, _ = contract.load_material(root)
+    with pytest.raises(ValueError, match='POINTER_PASSES_BOUND'):
+        contract.pointer_schedule(frozen, passes=40, stratified=True)
+    old, _ = contract.pointer_schedule(frozen, passes=24, stratified=True)
+    stream = c.extend_batch_stream(contract, frozen)
+    assert stream[:len(old)] == old
+    assert len(stream) == 5880 and stream[2940]['cursor'] == 2940 and stream[2940]['pass'] == 21
+    assert stream[4410]['pass'] == 31 and stream[5879]['pass'] == 40
+    assert contract.MAX_PASSES_PERMITTED == 24
