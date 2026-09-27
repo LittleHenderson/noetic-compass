@@ -18,6 +18,14 @@ Monorepo-level log. Subprojects keep their own changelogs
   61/61 pass, retained replay and fresh-process replay `EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT`, witness `x=3`,
   12 host entries, 18 native events, journal digest identical to the historical evidence.
 - Found that objects `348638c9` and `2636bbb6`, recorded as `MISSING_FROM_LIVE_REPOSITORY`, are present on origin.
+- Worker A3 (bounded, read-only) confirms the three DeepSeek items are implemented at the head and adds one
+  confirmed MAJOR: the `sys.setprofile` host-entry meter is per-thread, so a monkeypatched `_execute` that runs a
+  second `advance` on a new thread yields a verifying receipt with `I_executed=1` while the native trace grew by
+  two events (`probe_threaded_reentry.py`). Codex to harden or narrow the specification (R6).
+- Worker A2 (bounded, read-only) maps AT01-AT36: 12 covered by test, 15 partial, 1 evidence-only, 8 not yet
+  applicable; strict first gap AT03; next gap after the repair is the absent atlas address binding
+  (`atlas_binding: None`, 0 of 10 addendum cases). Records, worker record and DeepSeek packet under
+  `research/cas_closed_loop_1/claude_lead_20260927/`; reviewed content commit pinned in `PINNED_COMMIT.txt`.
 - Claim boundary: local Python 3.11 checks only; not `CAS_AWS_ENGINEERING_VALIDATED`; no paid job, model call,
   protected read, HELM change or Lane A launch.
 
