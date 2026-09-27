@@ -110,3 +110,39 @@ No AWS operation, no model call, no `pilot`, no protected file read, no edit to 
 `research/cas_closed_loop_1/claude_lead_20260927/` and the lineage `CHANGELOG.md`, no change to HELM sources, jobs,
 receipts or custody. The scratch worktree used for the patched run is outside the repository tree and is removed
 after the run; its `record.json` shows the modified test file as the only tracked change.
+
+## 8. Worker A3 review of the three DeepSeek items (bounded, read-only; report in `A3_adapter_review.md`)
+
+Verdict from the worker: `CHANGES_REQUIRED`. All three items are implemented at `aa600668` and match
+`HARNESS_SPEC.md` and `CONTRACTS.json` on inspection against the pinned runtime. Two findings need Codex:
+
+**F1 (MAJOR, confirmed).** The `NameError` of section 3: the amendment's own regression cases for items 1 and 3 cannot
+execute, so the state-bound work-join rule (`test_work_join_refuses_records_removed_from_trace_bound_state`) has no
+executable coverage at the head. Repair: section 4.
+
+**F2 (MAJOR, confirmed against the real adapter; trust-model dependent).** The host-entry meter uses `sys.setprofile`,
+which hooks only the calling thread. The in-scope test
+`test_internal_reentry_that_clears_meter_never_publishes_a_count` already treats an in-memory monkeypatch of
+`CompoundMachine._execute` as a fair attacker and expects invalidation. The same attacker, running its second
+`advance` on a new thread, is neither counted nor refused. Claude's probe `probe_threaded_reentry.py`, run in the
+scratch worktree against the unmodified adapter (`probe_threaded_reentry_result.txt`), returned a receipt with
+`I_executed = 1` while `native_event_count = 2` and the native trace grew by two events; `verify_receipt` passed.
+Under the `HARNESS_SPEC.md` sentence "the adapter is a trusted host boundary, not an isolation boundary against
+arbitrary Python code that changes interpreter hooks or mutates native objects", this could be ruled out of scope;
+but the existing re-entry test contradicts that exclusion for exactly this attacker class, so the specification and
+the tests disagree. Options for Codex, in preference order:
+1. Harden: install the meter with `threading.setprofile(entry_meter)` for the window as well as `sys.setprofile`,
+   and refuse the observation if `threading.active_count()` differs before and after the native call; add a
+   regression test shaped like the probe.
+2. Narrow: state in `HARNESS_SPEC.md` and `CONTRACTS.json` that the count covers same-thread entries only, and keep
+   the existing test as the documented boundary.
+
+**MINOR.** `native_step_adapter.py` line 169 rebinds `observed` (the validated native result from line 142) to a
+list of report bodies inside the loop. Harmless today; fragile.
+
+**NOTES.** A `sys.getprofile() is not entry_meter` check in the `finally` would also catch hook-clearing re-entry.
+`I_attempted` is not constrained by `verify_receipt`. `catalog_state_binding` has no consumer yet. The branch at line
+320 is unreachable. No Python 3.11 versus 3.12 divergence was found for the relied-upon interpreter semantics
+(hook exception clears the profile and propagates; `f_locals['self']` at `call`; bound-method identity).
+
+- **R6.** Decide F2 (harden or narrow) on your branch; Claude will re-run the probe and the 61 cases on the result.
