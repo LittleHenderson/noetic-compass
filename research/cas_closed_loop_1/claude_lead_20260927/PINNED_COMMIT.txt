@@ -1,4 +1,6 @@
-reviewed_commit_sha=c54788823c7b80d71888229788afd79b902b1ee6
+reviewed_commit_sha=cbb92eb39b98810c446dc28e9a19e335ebfcde89
 branch=claude/focused-mccarthy-uj45ul
 base=aa6006683d9e798c85667dc0d389a604b0e99053
-note=This commit pins the preceding content commit. Verify any file with: git show c54788823c7b80d71888229788afd79b902b1ee6:research/cas_closed_loop_1/claude_lead_20260927/<path> | sha256sum
+lease=CAS-CORRECTION-20260927-01
+leased_file_heads=f56415199dddccc7dd75cd8503a3280badf69082 (packet 1), 0cb7b48d790cbc8e8ff69a258d9255c7967f1a59 (packet 2)
+note=This commit pins the preceding content commit. Verify any file with: git show cbb92eb39b98810c446dc28e9a19e335ebfcde89:<path> | sha256sum
