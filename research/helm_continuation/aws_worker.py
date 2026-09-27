@@ -63,6 +63,7 @@ def execute(bucket, region):
                     'PYTEST_DISABLE_PLUGIN_AUTOLOAD': '1', 'AWS_MAX_ATTEMPTS': '1', 'AWS_PAGER': '',
                     'CONT19_PARENT_METADATA': str(base / 'parent_metadata.json'),
                     'CONT19_LEGACY_ROOT': str(root),
+                    'CONT19_FORWARD_JOB_DIR': str(base),
                     'PYTHONPATH': str(base / 'implementation/research')})
         python = root / 'venv/bin/python'
         base_python = next((shutil.which(p) for p in ('python3.12', 'python3.11') if shutil.which(p)), None)
@@ -84,6 +85,16 @@ def execute(bucket, region):
             receipt['tests'] = {k: sum(int(s.get(k, 0)) for s in suites) for k in ('tests', 'failures', 'errors', 'skipped')}
             if receipt['tests'] != {'tests': 30, 'failures': 0, 'errors': 0, 'skipped': 0}:
                 raise ValueError('EXACT_30_FOCUSED_CASES_REQUIRED')
+            if config.get('amendment_sha256'):
+                command('forward02_tests', [str(python), '-B', '-m', 'pytest', '-q', '-p', 'no:cacheprovider',
+                    '--junitxml=' + str(output / 'forward02.xml'),
+                    str(base / 'implementation/research/helm_continuation/test_forward02_admission.py')], 60, env)
+                suites = ET.parse(output / 'forward02.xml').getroot()
+                suites = [suites] if suites.tag == 'testsuite' else list(suites)
+                receipt['forward02_tests'] = {k: sum(int(s.get(k, 0)) for s in suites)
+                    for k in ('tests', 'failures', 'errors', 'skipped')}
+                if receipt['forward02_tests'] != {'tests': 8, 'failures': 0, 'errors': 0, 'skipped': 0}:
+                    raise ValueError('EXACT_FORWARD02_CASES_REQUIRED')
         command('numeric_worker', [str(python), '-B', '-m', 'helm_continuation.worker',
             '--root', str(root), '--parent', str(base / 'parent.pt'), '--plan', str(base / 'child_plan.json'),
             '--out', str(output / 'numeric'), '--mode', 'proof' if config['phase'] == 'preparation' else 'train'],
@@ -99,7 +110,8 @@ def execute(bucket, region):
         (output / 'outer_receipt.json').write_text(json.dumps(receipt, indent=2))
         public = output / 'numeric/public_result.json'
         if public.exists(): upload(public, 'outputs/public_result.json')
-        for name in ('focused.xml', 'focused_tests.stdout', 'focused_tests.stderr', 'outer_receipt.json'):
+        for name in ('focused.xml', 'focused_tests.stdout', 'focused_tests.stderr', 'outer_receipt.json',
+                     'forward02.xml', 'forward02_tests.stdout', 'forward02_tests.stderr'):
             path = output / name
             if path.exists(): upload(path, 'outputs/' + name)
         archive = base / 'outputs.tar.gz'

@@ -115,7 +115,11 @@ def execute(directory, expected_hash):
                 row["tags"].get("Lane") not in {"customer-production", "accounts-canary"} or
                 "CASJob" in row["tags"]):
             raise ValueError("PRODUCTION_APP_EXEMPTION_SCOPE")
-    validate_freeze(plan, directory)
+    if plan.get('amendment_sha256'):
+        from forward02_admission import validate_freeze as validate_forward02_freeze
+        validate_forward02_freeze(plan, directory)
+    else:
+        validate_freeze(plan, directory)
     directive = (directory / "owner_directive.md").read_bytes()
     if sha(directive) != plan["owner_directive_sha256"]:
         raise ValueError("OWNER_DIRECTIVE_CHANGED")
@@ -370,6 +374,8 @@ def execute(directory, expected_hash):
                     raise ValueError("TERMINAL_PARENT_MISMATCH")
                 if plan["phase"] == "preparation" and (terminal.get("tests") != {"tests": 30, "failures": 0, "errors": 0, "skipped": 0} or terminal.get("restore_proof") != "PASS_RESTORE_NEXT_STEP_ONLY"):
                     raise ValueError("RESTORE_TESTS_AND_NUMERICAL_PROOF_REQUIRED")
+                if plan['phase'] == 'preparation' and plan.get('amendment_sha256') and terminal.get('forward02_tests') != {'tests': 8, 'failures': 0, 'errors': 0, 'skipped': 0}:
+                    raise ValueError('FORWARD02_ACCOUNTING_TESTS_REQUIRED')
         state["status"] = terminal["status"] if terminal else ("FAILED_BOOTSTRAP_UNACCEPTED" if "bootstrap_failure" in state else "NO_TERMINAL_RECEIPT")
     except BaseException as exc:
         state["status"] = "FAILED"
