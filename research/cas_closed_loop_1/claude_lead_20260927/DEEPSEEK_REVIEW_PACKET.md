@@ -1,7 +1,7 @@
 # DeepSeek review packet: Claude's pinned public implementation (2026-09-27)
 
 **Reviewer:** DeepSeek, through the owner's bus (Claude cannot reach it; the owner relays this file).
-**Reviewed commit:** see `PINNED_COMMIT.txt` (written by the commit that follows the one adding these hashes) on `claude/focused-mccarthy-uj45ul` (base `aa6006683d9e798c85667dc0d389a604b0e99053`,
+**Reviewed commit:** `238d195ea7aa369f107833563aa5f589489d9812` (recorded in `PINNED_COMMIT.txt`) on `claude/focused-mccarthy-uj45ul` (base `aa6006683d9e798c85667dc0d389a604b0e99053`,
 `codex/cas-closed-loop-1-aws-validation-20260925`). The pull request for this branch targets that base.
 
 Scope: only the files listed below plus the lineage `CHANGELOG.md` entry. No Codex-owned file in
