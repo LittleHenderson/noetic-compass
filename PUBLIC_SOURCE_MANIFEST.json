@@ -1,11 +1,11 @@
 {
   "schema": "helm.public-source-export/1",
-  "exported_utc": "2026-09-27T04:51:21.191276+00:00",
-  "source_commit": "aa6006683d9e798c85667dc0d389a604b0e99053",
+  "exported_utc": "2026-09-27T06:41:50.069708+00:00",
+  "source_commit": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
   "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786",
-  "source_repository_common_dir": "C:/Users/wakil/.codex/audits/helm-cncm-20260924/repo/.git",
-  "source_workspace": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\cas-closed-loop-1-aws-20260925",
-  "source_status": "CLEAN_TRACKED_AND_PUBLIC_LANE",
+  "source_repository_common_dir": "REMOTE_GIT_PUBLIC_BLOBS_VERIFIED_AT_EXACT_REF",
+  "source_workspace": "https://github.com/LittleHenderson/noetic-compass/tree/7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+  "source_status": "CLAUDE_COMPLETED_ISOLATED_SOURCE_PACKET; AWS_ACCEPTANCE_NOT_RUN",
   "preserved_original": true,
   "export_kind": "PUBLIC_FILES_ONLY_NO_UPSTREAM_GIT_HISTORY",
   "excluded": [
@@ -30,18 +30,18 @@
     },
     {
       "path": "research/cas_closed_loop_1/CONTRACTS.json",
-      "bytes": 5591,
-      "sha256": "a372fc3a832cf43e72a609b9a91de7f95198c032e4201d836535a82532fdc121"
+      "bytes": 7146,
+      "sha256": "3ad198ca195f3268f8618a0df545318aae6ef437cc0ca112644d42a7fd51aa8b"
     },
     {
       "path": "research/cas_closed_loop_1/DECISIONS.md",
-      "bytes": 2037,
-      "sha256": "542667c2875b6d3ec6400004b81c4abc1ccac32079e1f2eb084ce8f8ab0af9be"
+      "bytes": 5717,
+      "sha256": "6bdfdb9dc744461fd22214a1080785294dafb18ef8e404b877a0d8ee43079f3a"
     },
     {
       "path": "research/cas_closed_loop_1/HARNESS_SPEC.md",
-      "bytes": 3879,
-      "sha256": "ae67eef826c3fe90633abfacb1a35ec4db1a3cd8cc529298e2498b90556f26ad"
+      "bytes": 9509,
+      "sha256": "569506e474e84fa8ce2fd2e3e0135dabb7070bf1bf6109df4352e89a567bf896"
     },
     {
       "path": "research/cas_closed_loop_1/HISTORICAL_PRODUCER.json",
@@ -55,13 +55,18 @@
     },
     {
       "path": "research/cas_closed_loop_1/README.md",
-      "bytes": 4098,
-      "sha256": "08978209eeb51d1de0bfbb5e5f14bcc49e36e3483c9f4e41d9da1a801af47dd1"
+      "bytes": 5373,
+      "sha256": "32a97ae3a96b5be1471f6beb43ee50cbccb8672ac8083c4a6d73985f8c5c2323"
     },
     {
       "path": "research/cas_closed_loop_1/REPORT.md",
       "bytes": 4885,
       "sha256": "4b751fe0a0bf2c398bc81a2010a3e9152fec1755d9aaa6931e9b2e9b5f81afcd"
+    },
+    {
+      "path": "research/cas_closed_loop_1/RETURN_ADDRESS_TEST_MAP.json",
+      "bytes": 13577,
+      "sha256": "d4c942228527bb48bbb2fc3fbbe0cd6b73417aa76f0e67726d601658eef859cb"
     },
     {
       "path": "research/cas_closed_loop_1/RUN_MANIFEST.json",
@@ -710,8 +715,8 @@
     },
     {
       "path": "research/cas_closed_loop_1/native_step_adapter.py",
-      "bytes": 19224,
-      "sha256": "a45ab1744a8b7f7d40c2b3d667713d70689ee63f3ccad2875b36051d6d30b974"
+      "bytes": 31196,
+      "sha256": "ab1c437a0485eef9bb4268a992bc4c4719565755fc4891d9be75db6d6ed6af38"
     },
     {
       "path": "research/cas_closed_loop_1/provenance/CONTRACTS.json.txt",
@@ -770,8 +775,14 @@
     },
     {
       "path": "research/cas_closed_loop_1/test_native_step_adapter.py",
-      "bytes": 14724,
-      "sha256": "905a7592ce389195dafdcf91e8c20a39d504d5efc8ee448c66fdd2b1af21d1c3"
+      "bytes": 16988,
+      "sha256": "41f04d470abbafc09b426522c5215cf91be5bd8ef5be102541f3072bd6aecfb2"
+    },
+    {
+      "path": "research/cas_closed_loop_1/test_return_addresses.py",
+      "bytes": 16289,
+      "sha256": "64685d38a4dbb71617d29f4c28daa42e4e1185809144d54c4d1d9b858374b512"
     }
-  ]
+  ],
+  "original_cas_base": "aa6006683d9e798c85667dc0d389a604b0e99053"
 }

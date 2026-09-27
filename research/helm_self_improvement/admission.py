@@ -18,9 +18,9 @@ from .contracts import (CandidateBuild, FailureObservation, HarnessConfig, Modif
                         SelfDescription, candidate_configuration, digest, public_observation)
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_SHA = "aa6006683d9e798c85667dc0d389a604b0e99053"
+SOURCE_SHA = "7bbf1e0f7bae635126c05b3203cca706ea8654dc"
 RUNTIME_SHA = "8182ad52b4468f18f140837dffee0e7debcfe786"
-MANIFEST_SHA = "e547726c83c40d2cefabd87a9214e6f1bccdc39ecb90ca40101f9b65648f3ca6"
+MANIFEST_SHA = "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c"
 BRANCH = "codex/helm-si-three-lead-20260927"
 HARNESS_FILES = ("__init__.py", "contracts.py", "admission.py", "native_bridge.py", "episode.py")
 OBSERVATION_FIELDS = ("run_id", "run_sequence", "input_sha256", "trace_sha256",

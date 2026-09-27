@@ -18,18 +18,19 @@ host-filesystem access is outside this fixture's threat model; this is not an
 OS sandbox. Never manufacture admission from candidate-supplied records.
 
 At build, execution and reload, the host checks the separately admitted parent:
-CAS source, runtime source, all 152 public source files, five harness files,
+CAS source, runtime source, all 154 public source files, five harness files,
 schema, declared branch and checkpoint. Checkpoint `None` is the only supported
 state. A Git checkout must also have the declared branch; a history-free export
 uses the operator's admitted branch context. Unknown checkpoint states fail.
 
 `SOURCE_ANCHOR_VERIFIED.json` records byte-for-byte comparison of this public
-inventory with exact allowlisted blobs in the original Git object store. CAS
-base is `aa6006683d9e798c85667dc0d389a604b0e99053`; runtime is
+inventory with exact allowlisted blobs in the original Git object store. Corrected CAS
+source is `7bbf1e0f7bae635126c05b3203cca706ea8654dc`; its original base is
+`aa6006683d9e798c85667dc0d389a604b0e99053`. Runtime is
 `8182ad52b4468f18f140837dffee0e7debcfe786`. All 108 runtime dependencies are
 materialized. Do not run upstream Git bootstrap in this export. Source provenance
-does not establish behavioral acceptance. Claude's pending corrected CAS source
-must be integrated and admitted under a new inventory before joint acceptance.
+does not establish behavioral acceptance. Claude's completed corrected CAS packet is integrated under the new inventory.
+Joint AWS behavioral acceptance is still pending.
 
 The host records the actual baseline run, original public input, journal,
 receipts and sequence in its append-only evidence directory. It reconstructs
@@ -96,12 +97,18 @@ local Claude checks and old freezes are preserved, not reclassified as acceptanc
 
 ## Open acceptance gates
 
-All new SI regression behaviors remain NOT_RUN. Claude owns the missing import,
-threaded call-entry/refusal correction and snapshot-bound atlas addresses; Codex
-has not modified CAS files in this export. DeepSeek's focused SI recheck and D2
+All new SI regression behaviors remain NOT_RUN. Claude delivered the missing
+import, threaded call-entry/refusal correction and snapshot-bound atlas addresses.
+Codex integrated those exact source bytes; new AWS checks remain NOT_RUN. DeepSeek's focused SI recheck and D2
 witness review remain pending. The historical CAS count discrepancy is reconciled: DeepSeek retracts 52 as a
 full-suite figure; it is the two-file subset (30 + 22). The four-file suite has
 61 cases (plus 5 artifact and 4 transport cases), verified in Claude's retained
 case inventory. DeepSeek's original raw subset JUnit remains unavailable. H3/H4,
 neural checkpoints, policy learning, promotion/rollback and benefit experiments
 remain unavailable in this bounded fixture.
+
+The complete planned joint command includes all five corrected CAS test files,
+including the ten-row atlas addendum and wiring case, plus both SI test files.
+It supplies an explicit new output-directory basetemp outside the source export
+so CAS and SI fixture configuration cannot place trusted host evidence inside
+source. See JOINT_ACCEPTANCE_PLAN.json. That record is not a job admission.

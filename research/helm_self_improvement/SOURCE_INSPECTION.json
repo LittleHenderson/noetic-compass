@@ -1,6 +1,6 @@
 {
   "schema": "helm.si.source-inspection/2",
-  "utc": "2026-09-27T06:24:39.023295+00:00",
+  "utc": "2026-09-27T06:41:50.256818+00:00",
   "base_si_commit": "52d625ac62f06fa947c0ff5c141fcbf0027456bc",
   "method": "AST parse and static parameter/fixture expansion only; no imports or project execution",
   "ast_files": [
@@ -10,7 +10,7 @@
     },
     {
       "path": "research/helm_self_improvement/admission.py",
-      "sha256": "0b7019b48f0f13fcd5e8c9d43b0d1fc4de6fc5b25baf775afb6a4becb72d8699"
+      "sha256": "f1c2c1cf166b06af04468f33b692493ee3010f016094731da35a523f0e5dad60"
     },
     {
       "path": "research/helm_self_improvement/conftest.py",
@@ -876,11 +876,12 @@
   "runtime_status": "NOT_RUN",
   "witness": "NOT_RUN",
   "fresh_process_reload": "NOT_RUN",
-  "aws_status": "NOT_ADMITTED_CORRECTED_JOINT_CAS_SOURCE_AND_RESOURCE_GATES_OPEN",
+  "aws_status": "NOT_ADMITTED_NEW_EXACT_JOINT_JOB_RESOURCE_GATES_OPEN",
   "acceptance_command": "HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --junitxml=/opt/helm-si-output/si-junit.xml research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
-  "source_ownership": "Codex SI namespace only; original 152 CAS/runtime files unchanged and checked against external original Git",
+  "source_ownership": "Codex SI; completed Claude CAS packet integrated by exact public Git bytes; runtime and historical evidence preserved",
   "actual_child_agents": [],
   "behavioral_environment": null,
   "inspection_environment": "Windows; Python AST parser only",
-  "source_anchor_record_sha256": "ee9fdb3e0045c17ef1a54046bc0453b6047371bbce2549105218e03676fe6d2f"
+  "source_anchor_record_sha256": "d7d9d6a853dff4c12885c792f51b1906b305fbebaae4957b07dfda77140994c8",
+  "cas_source_commit": "7bbf1e0f7bae635126c05b3203cca706ea8654dc"
 }

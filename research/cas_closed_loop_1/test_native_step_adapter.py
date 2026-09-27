@@ -6,6 +6,7 @@ import pytest
 from cncm.canonical import digest
 from cncm.compound_engine import CompoundMachine
 from cncm.compound_model import create_problem
+from cncm.model import TerminalStatus
 from cncm.compound_profile import CompoundProfile, SOURCE_FILES, authority_policy, load_compound_profile
 from research.cas_closed_loop_1.native_step_adapter import (
     GrantRefused, NativeStepFailed, InvalidNativeObservation, RETURN_IDENTITY_FIELDS,
@@ -306,3 +307,47 @@ def test_empty_work_join_still_refuses_a_corrupt_state(machine):
     object.__setattr__(machine.state, "state_hash", "0" * 64)
     with pytest.raises(InvalidNativeObservation, match="WORK_STATE_HISTORY_INVALID"):
         primitive_work_for_events(machine, [])
+
+
+def test_foreign_thread_entry_inside_window_never_publishes_a_count(machine, monkeypatch):
+    """Same attacker class as the re-entry test above, with the second advance on a new thread.
+
+    No interpreter hook is installed, replaced or cleared here. Real entries into the
+    pinned advance are counted directly from the patched _execute's caller frame, per
+    (thread, frame); two native events are never used as proof of two host calls.
+    A grant of one must never yield a usable receipt for this window.
+    """
+    import sys
+    import threading
+    original_execute = CompoundMachine._execute
+    original_advance = CompoundMachine.advance
+    pinned = CompoundMachine.advance.__code__
+    direct_entries, reentered, foreign = [], [], []
+
+    def entering_execute(self, *args, **kwargs):
+        caller = sys._getframe(1)
+        if caller.f_code is pinned and caller.f_locals.get("self") is machine:
+            key = (threading.get_ident(), id(caller))
+            if key not in direct_entries:
+                direct_entries.append(key)
+        result = original_execute(self, *args, **kwargs)
+        if not reentered:
+            reentered.append(True)
+            def second_entry():
+                try:
+                    original_advance(self, allow_acquisition=True)
+                    foreign.append("RETURNED")
+                except BaseException as error:  # record, never hide
+                    foreign.append(type(error).__name__)
+            worker = threading.Thread(target=second_entry)
+            worker.start()
+            worker.join()
+        return result
+
+    monkeypatch.setattr(CompoundMachine, "_execute", entering_execute)
+    with pytest.raises(InvalidNativeObservation, match="HOST_ENTRY_METER_INVALIDATED") as caught:
+        execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True))
+    assert reentered == [True] and foreign == ["GrantRefused"]  # refused before its body ran
+    assert len(direct_entries) == 1  # only the window thread ever entered the pinned advance
+    assert caught.value.measurement_status == "INVALID" and not hasattr(caught.value, "receipt")
+    assert sys.getprofile() is None and threading.getprofile() is None  # hooks restored

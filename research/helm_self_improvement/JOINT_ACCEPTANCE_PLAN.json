@@ -1,0 +1,323 @@
+{
+  "schema": "helm.si.joint-acceptance-plan/1",
+  "utc": "2026-09-27T06:44:54.440148+00:00",
+  "status": "PREPARED_NOT_ADMITTED_NOT_RUN",
+  "execute_authorized": false,
+  "corrected_cas_source": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+  "runtime_source": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "public_manifest_sha256": "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c",
+  "cas_declared_counts_by_ast": {
+    "test_native_step_adapter.py": 31,
+    "test_closed_loop.py": 22,
+    "test_artifacts.py": 5,
+    "aws_validation/test_launch_transport.py": 4,
+    "test_return_addresses.py": 11
+  },
+  "cas_declared_functions": [
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_disabled_actuator_retains_allocation_without_execution",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_zero_grant_does_not_make_native_call",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_invalid_grant_never_reaches_executor",
+      "declared_cases": 4
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_foreign_episode_refused_before_work",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_native_error_keeps_observed_events_and_never_reports_success",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_repeated_dispatch_wrapper_refused_before_native_entry",
+      "declared_cases": 3
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_internal_reentry_that_clears_meter_never_publishes_a_count",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_rehashed_receipt_still_refuses_execution_above_allocation",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_substituted_callable_is_refused_before_entry",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_receipt_content_digest_detects_alteration",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_corrupt_post_fault_state_is_not_published_as_verified",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_simulated_profile_is_not_admitted",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_wrong_problem_admission_is_refused",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_foreign_loaded_dependency_is_refused",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_corrupt_existing_event_is_refused_even_for_zero_grant",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_unexecuted_window_has_zero_measured_primitive_work",
+      "declared_cases": 2
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_work_join_refuses_duplicate_and_changed_event",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_work_join_refuses_records_removed_from_trace_bound_state",
+      "declared_cases": 2
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_empty_work_join_still_refuses_a_corrupt_state",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+      "function": "test_foreign_thread_entry_inside_window_never_publishes_a_count",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_exact_pinned_ohm_calculation",
+      "declared_cases": 2
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_invalid_ohm_inputs_refused",
+      "declared_cases": 4
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_foreign_loaded_control_dependency_is_not_admitted",
+      "declared_cases": 2
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_supported_boards_static_check_and_operation_mask",
+      "declared_cases": 3
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_bounded_negative_controls_cannot_commit",
+      "declared_cases": 4
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_wrong_method_is_rejected_and_failed_work_remains_charged",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_fresh_process_replays_retained_journal",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_truncated_observation_refused_before_native_replay",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_closed_loop.py",
+      "function": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_artifacts.py",
+      "function": "test_retained_exact_evidence_and_producer_bytes",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_artifacts.py",
+      "function": "test_changed_artifact_bytes_are_refused",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_artifacts.py",
+      "function": "test_changed_historical_producer_snapshot_is_refused",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_artifacts.py",
+      "function": "test_ambiguous_git_reference_is_refused",
+      "declared_cases": 2
+    },
+    {
+      "file": "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+      "function": "test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+      "function": "test_non_s3_clients_keep_normal_service_endpoints",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+      "function": "test_safe_error_record_drops_messages_urls_and_unknown_codes",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+      "function": "test_download_failure_prints_safe_json_before_failed_emergency_upload",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row2_wrong_address_cannot_select_another_continuation",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row3_repeated_resolution_dispatches_nothing",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row4_address_chain_survives_fresh_process_recovery",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row6_equal_or_missing_profiles_never_merge_callers",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row8_one_suspension_event_per_address",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row9_tampered_view_or_journal_cannot_resolve",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+      "declared_cases": 1
+    },
+    {
+      "file": "research/cas_closed_loop_1/test_return_addresses.py",
+      "function": "test_runtime_location_atlas_binding_is_the_address_chain_or_null",
+      "declared_cases": 1
+    }
+  ],
+  "si_declared_cases_by_ast": 69,
+  "joint_declared_cases_by_ast": 142,
+  "collected_node_ids": null,
+  "executed": false,
+  "passed": null,
+  "failed": null,
+  "skipped": null,
+  "acceptance_command": "HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=/opt/helm-si-output/pytest-temp --junitxml=/opt/helm-si-output/joint-junit.xml research/cas_closed_loop_1/test_native_step_adapter.py research/cas_closed_loop_1/test_closed_loop.py research/cas_closed_loop_1/test_artifacts.py research/cas_closed_loop_1/aws_validation/test_launch_transport.py research/cas_closed_loop_1/test_return_addresses.py research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
+  "collection_is_separate": "Collect exact node IDs in the admitted AWS environment; collection is not execution. Preserve complete suite; never lower count to subset.",
+  "atlas_addendum_rows_static_function_binding_verified": 10,
+  "atlas_wiring_case_static_function_binding_verified": 1,
+  "actual_witness": "NOT_RUN",
+  "fresh_process_reload": "NOT_RUN",
+  "required_dependencies": {
+    "python": "3.12; record exact patch",
+    "pytest": "9.0.2",
+    "pydantic": "2.12.5",
+    "pydantic_core": "2.41.5",
+    "boto3": "1.43.87",
+    "botocore": "1.43.87"
+  },
+  "cost_cap_granted_here": null,
+  "new_cloud_jobs": 0,
+  "no_bootstrap": "Export contains exact runtime bytes. Do not run original Git bootstrap. If a different protocol requires original objects, provide only its bounded allowlisted store.",
+  "gates": [
+    "Focused public corrected-source recheck",
+    "Existing allowance and active HELM concurrency/priority",
+    "New exact source/package/case admission with time/cost/shutdown/ownership cleanup"
+  ],
+  "claim": "H1/H2; externally authored; injected configuration failure; deterministic native execution; research retention only"
+}
