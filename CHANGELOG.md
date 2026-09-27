@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - PARALLEL-CAPABILITY-01 P1: one optional residual world specialist with by-name migration (plan tests run; torch tests not run)
+
+- `claude_lead_20260927/growth_specialist/`: `growth_migration_plan.py` (pure Python: preserved names and
+  signatures, two new parameters with exact shapes, A-nonzero/B-zero init with a recorded seed, by-name optimizer
+  mapping with positional guessing refused, stated tolerances, digest, JSON round trip) and 14 tests, all passed
+  locally; `world_residual_specialist.py` (torch: explicit size 16, `attach_specialist` registering last,
+  `migrate_optimizer` carrying state by name with zero-initialized new entries, `scored_world` call site) and 7
+  numeric tests reserved for the GPU venue, written and NOT run. Confirmed against the exact `c45f775f` world
+  head (lines 856-858, width 38). Not attached to seed 19, seed 18 or the original learner; no checkpoint opened.
+- One defect caught and fixed by the local tests before commit: the fingerprint name pattern rejected capitalized
+  segments, which would have refused the specialist's own parameter names.
+
 ## 2026-09-27 - Records: Codex-reported joint execution (144 passed at 49d3e23) recorded as reported, not verified
 
 - Codex reports on PR #245 that the seven-file joint suite ran in AWS at source `49d3e23c…` with 144 passed and a

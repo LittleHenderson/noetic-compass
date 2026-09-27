@@ -120,6 +120,49 @@
     "A4_GROWTH_CAS_REQUIREMENTS_20260927.md": "dc405564e070356dca6511e7dd55b85fe3db53e21bc53a144aa8638bbec85cc7"
    },
    "status": "COMPLETED_PREPARATION_NOT_RUN"
+  },
+  {
+   "wave": "P1",
+   "label": "optional-residual-world-specialist",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "PARALLEL-CAPABILITY-01 P1: one explicitly sized optional residual specialist on the world-candidate input, by-name migration code, plan validator, tests; pending Codex's namespace assignment, written in Claude's isolated lead area",
+   "exclusive_files": [
+    "claude_lead_20260927/growth_specialist/README.md",
+    "claude_lead_20260927/growth_specialist/growth_migration_plan.py",
+    "claude_lead_20260927/growth_specialist/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "claude_lead_20260927/growth_specialist/plan_tests_local_junit.xml",
+    "claude_lead_20260927/growth_specialist/test_growth_migration_plan.py",
+    "claude_lead_20260927/growth_specialist/world_residual_specialist.py"
+   ],
+   "limits": {
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "checkpoints_opened": 0,
+    "local_runs": "pure-Python plan tests only (no torch installed)",
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "growth_migration_plan.py": "955befa755258d5e22097cc6dd57927a47c45b37162d27b7689d3725c2118fe5",
+    "world_residual_specialist.py": "c0382d4553579e6e1ec29b56a8f15044a874afc4bf7ee087752d482a5038ffdb",
+    "test_growth_migration_plan.py": "51d4bc0a0f0ba707f3088aa3dbdbe6071640f3d3f935f93174e318e37b3334b8",
+    "numeric_gpu/test_world_residual_specialist_numeric.py": "69fef0bee03fe6d10fd8eacf14e5a8da2dae0b3bdec3b607d3d3bb73d44366ba",
+    "plan_tests_local_junit.xml": "6f3e8073f30f7431d9ad128921ec05e102520a5293789bfb528b47db77750415"
+   },
+   "executed": {
+    "plan_tests": {
+     "tests": 14,
+     "passed": 14,
+     "failed": 0,
+     "errors": 0,
+     "skipped": 0,
+     "python": "3.11.15",
+     "pytest": "9.0.2"
+    },
+    "numeric_gpu_tests": "NOT_RUN (reserved venue)"
+   },
+   "status": "COMPLETED_FIRST_SOURCE_PACKET"
   }
  ],
  "not_done_by_any_worker": [
@@ -159,6 +202,6 @@
   "active_workers_under_claude": 0,
   "maximum_under_claude": 2,
   "maximum_global": 4,
-  "note": "Both packets executed serially; zero active workers."
+  "note": "All packets executed serially; zero active workers."
  }
 }
