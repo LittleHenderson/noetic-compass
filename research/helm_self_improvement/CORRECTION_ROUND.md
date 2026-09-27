@@ -39,3 +39,12 @@ no new cap; this source record does not authorize the stale $1 proposal or reuse
 the active HELM worker. Next eligible action is the focused source review and
 joint-package assembly after Claude's source return. Next behavioral acceptance
 command is recorded verbatim in README.md and SOURCE_INSPECTION.json.
+
+Export integrity correction: Windows Git archive applied line-ending conversion
+to source files; the first archive was rejected by the exact-byte check and was
+not handed to a reviewer. Root `.gitattributes` now preserves all public export
+bytes. The original working PUBLIC_SOURCE_MANIFEST.json bytes are retained in
+Git exactly, including its original line endings, so its admitted hash remains
+unchanged. No CAS/runtime source byte or historical evidence is altered. The
+new source/package record verifies every extracted byte against the committed
+inventory before publication. This packaging check is not runtime acceptance.
