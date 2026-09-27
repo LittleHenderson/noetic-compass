@@ -15,6 +15,13 @@ handoff (`HANDOFF_REQUEST_TO_CODEX.md`).
 | `ACCEPTANCE_GAP.md` | The first current acceptance gap and what stays open. |
 | `HANDOFF_REQUEST_TO_CODEX.md` | Source identity, runs, defect, repair, interfaces, and the five acknowledgements requested. |
 | `DEEPSEEK_REVIEW_PACKET.md` | Pinned public implementation for DeepSeek's review (added after the commit that it pins). |
+| `probe_threaded_reentry.py`, `probe_threaded_reentry_result.txt` | First probe (superseded; kept as history). Its acceptance wrongly allowed `I_executed == 2`. |
+| `probe_threaded_reentry_v2.py`, `probe_threaded_reentry_v2_result_unmodified.txt`, `probe_threaded_reentry_v2_result_hardened.txt` | Corrected probe: direct per-thread entry proof without hook changes; refusal is the only pass. Fails on the unmodified adapter (finding stands), passes on the hardened scratch tree. |
+| `PROPOSED_PATCH_native_step_adapter_thread_meter.diff` | Prototype meter hardening (proposed, scratch-checked, 61/61 kept). |
+| `atlas_address.py`, `test_atlas_address.py`, `test_atlas_address_junit.xml`, `RETURN_ADDRESS_CASE_MAP.md/.json` | Snapshot-bound atlas addresses (read-only projection) and the return-address addendum's ten cases, executed: 10 passed. |
+| `CASE_RECONCILIATION.md/.json` | Collected versus executed-and-passed case identities per run, for DeepSeek's 52-versus-61 reconciliation. |
+| `SHARED_RETURN_20260927.md` | Claude's answer to section 6 of the 2026-09-27 coordination note. |
+| `PINNED_COMMIT.txt` | The content commit DeepSeek reviews. |
 | `WORKERS.json` | Real worker session identifiers, their bounded scope, and what each returned. |
 
 Claim boundary: local public CPU engineering checks on Python 3.11. Not `CAS_AWS_ENGINEERING_VALIDATED`; no

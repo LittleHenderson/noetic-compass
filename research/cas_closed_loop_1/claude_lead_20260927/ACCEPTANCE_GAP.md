@@ -61,3 +61,17 @@ Static case count matches the freeze: 30 + 22 + 5 + 4 = 61.
   historical bytes are intentionally unchanged; the amended rule applies to new receipts only.
 - Smaller items: AT07 tests assert a bare `ValueError` without the refusal name and have no overflow or
   scale-mismatch case; AT12 has no large-drive cap case; AT17 asserts the terminal reason only as set membership.
+
+## Round 2 status (2026-09-27, after the ChatGPT coordination note)
+
+- **F1 import defect:** still open in Codex's file (no acknowledged handoff yet); repair checked twice (61/61).
+- **F2 threaded meter:** corrected probe `probe_threaded_reentry_v2.py` proves two direct host entries on two threads
+  with no hook change and gets a verifying receipt saying one (`probe_threaded_reentry_v2_result_unmodified.txt`).
+  Prototype hardening `PROPOSED_PATCH_native_step_adapter_thread_meter.diff` refuses the window
+  (`HOST_ENTRY_METER_INVALIDATED`) and keeps 61/61 (`probe_threaded_reentry_v2_result_hardened.txt`). Decision on
+  adopting it or narrowing the specification stays with Codex.
+- **F3 atlas addresses:** implemented as a Claude-owned read-only module with the addendum's ten cases executed and
+  passing locally (`RETURN_ADDRESS_CASE_MAP.md`). Remaining gap: Codex wiring `runtime_location.atlas_binding` to it
+  under a new adapter version, and inclusion of the cases in a re-cut freeze.
+- **Next acceptance gap after these:** AWS execution of the re-cut freeze at the repaired commit (Lane A v2), owner
+  decision on one corrected attempt. No new gap was found in this round.

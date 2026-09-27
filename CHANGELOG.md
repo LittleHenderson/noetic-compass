@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 2: corrected re-entry probe, meter hardening prototype, snapshot-bound atlas addresses with the addendum's ten cases
+
+- Corrected probe (`probe_threaded_reentry_v2.py`): counts real entries into the pinned `advance` per (thread, frame)
+  from the patched `_execute`'s caller frame; no interpreter hook is installed or cleared; refusal is the only pass.
+  Unmodified adapter: two direct entries on two threads, receipt says `I_executed=1`. Finding F2 stands as MAJOR.
+- Prototype hardening (`PROPOSED_PATCH_native_step_adapter_thread_meter.diff`, scratch only): thread-level hook for
+  the window, foreign-thread activity invalidates, hook-intact check after the call. Probe refused with
+  `HOST_ENTRY_METER_INVALIDATED`; the predeclared 61 still pass (118.6 s).
+- `atlas_address.py`: exact snapshot-bound addresses from existing identities (run, branch, root call, unique
+  authorized push event, frame digest, atlas `state-`/`frame-` nodes with tick contexts); read-only, no resume.
+  The ten `RETURN_ADDRESS_TEST_MAP.json` cases are executable in `test_atlas_address.py`: 10 passed (56.0 s).
+  Recorded: the runtime is deterministic; byte-identical inputs give the identical run id and frame identities.
+- `CASE_RECONCILIATION.md/.json` for DeepSeek's 52-versus-61 question; `SHARED_RETURN_20260927.md` for section 6.
+- Still no Codex-owned file edited; no cloud or model spend; HELM untouched. Blocker: Codex's handoff (R1).
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1: Claude lead check of the amended source; one test-file defect found and repaired in a scratch tree
 
 - Assignment: finish CAS-CLOSED-LOOP-1 for HELM self-improvement integration. Codex head reviewed:

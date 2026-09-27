@@ -67,5 +67,21 @@
   "No protected material read",
   "No HELM job, source, receipt or custody change",
   "No `pilot`"
- ]
+ ],
+ "round_2_2026_09_27": {
+  "executor": "lead session itself; no subagent workers were spawned in round 2 (the note said not to spawn workers merely to reconcile bookkeeping)",
+  "work": [
+   "corrected probe v2 and its two recorded runs",
+   "meter hardening prototype in a scratch worktree, 61/61 kept",
+   "atlas_address.py and the ten addendum cases, 10 passed",
+   "CASE_RECONCILIATION for DeepSeek",
+   "SHARED_RETURN_20260927.md"
+  ],
+  "report_sha256": {
+   "probe_v2": "c4bbe7b4f8bb324426bd5f4bb91abaae1e5742c0043a88e309872f5e19e35011",
+   "atlas_address": "f42ad85ea1d6e8b693d34801b403bbd388b12fa0639387a3b58aff69c97086b6",
+   "test_atlas_address": "a373ea6147ab4e370b220db4c56b695501f0099ad7b86e385a03a14a9b673f97",
+   "thread_meter_patch": "7b3215eee2d796f3be132c80ed15061f21a2e3ecb4d3654b88a18d7c49912b1e"
+  }
+ }
 }
