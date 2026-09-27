@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1: Claude lead check of the amended source; one test-file defect found and repaired in a scratch tree
+
+- Assignment: finish CAS-CLOSED-LOOP-1 for HELM self-improvement integration. Codex head reviewed:
+  `aa600668` on `codex/cas-closed-loop-1-aws-validation-20260925`; Claude branch `claude/focused-mccarthy-uj45ul`
+  starts there. All Claude files are under `research/cas_closed_loop_1/claude_lead_20260927/`; no Codex-owned file
+  edited pending the acknowledged handoff.
+- Ran the frozen public CPU protocol locally three times (`run_local_protocol.py`, mirrors `aws_validation/worker.py`).
+  Exact head: 61 collected, 3 fail with `NameError: TerminalStatus` at `test_native_step_adapter.py:138` and `:285`
+  (module-level import missing; introduced by `f6253e1a`). These are the regression cases for DeepSeek items (1)
+  no-frame return identity and (3) state-bound work join. The AWS worker's 61/0/0/0 gate would fail on this alone.
+- With the one-line module-level import (proposed patch, sha256 `d88c14c9...`), in a detached scratch worktree:
+  61/61 pass, retained replay and fresh-process replay `EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT`, witness `x=3`,
+  12 host entries, 18 native events, journal digest identical to the historical evidence.
+- Found that objects `348638c9` and `2636bbb6`, recorded as `MISSING_FROM_LIVE_REPOSITORY`, are present on origin.
+- Claim boundary: local Python 3.11 checks only; not `CAS_AWS_ENGINEERING_VALIDATED`; no paid job, model call,
+  protected read, HELM change or Lane A launch.
+
 ## 2026-09-04 - CASformer v0.2 source freeze
 
 - Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.

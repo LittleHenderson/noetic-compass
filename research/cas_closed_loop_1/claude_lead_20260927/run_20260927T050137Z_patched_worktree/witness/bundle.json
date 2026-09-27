@@ -1,0 +1,88 @@
+{
+  "schema": "cas.closed-loop.replay-bundle/0.1",
+  "admission": {
+    "source_manifest_digest": "8a049806015330674ed1cada8cdd6092069833bf28880ad07eedd311a0436d5d",
+    "profile_digest": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+    "problem_hash": "97aa1c884719ef1608b96b12aef12df9b7f570e1d692d561d89b7134db0726a7"
+  },
+  "trusted_genesis": {
+    "schema_version": "cncm.compound-problem/0.5",
+    "reasoning": {
+      "schema_version": "cncm.problem/0.1",
+      "problem_id": "compound-equation",
+      "goal_id": "goal-compound",
+      "seed": 0,
+      "entities": [
+        {
+          "entity_id": "x",
+          "entity_type": "variable"
+        }
+      ],
+      "predicates": [
+        {
+          "predicate_id": "nested_checked",
+          "argument_types": [
+            "variable"
+          ],
+          "transitive": false
+        }
+      ],
+      "facts": [],
+      "rules": [],
+      "query": {
+        "predicate": "nested_checked",
+        "arguments": [
+          "x"
+        ],
+        "polarity": true,
+        "evidence_status": "unknown",
+        "provenance": [],
+        "scope": "global"
+      },
+      "candidates": [],
+      "rpm_resolvers": [],
+      "foundation_ref": null,
+      "budgets": {
+        "max_ticks": 128,
+        "max_branches": 8,
+        "max_rpm_depth": 8,
+        "max_inference_steps": 64,
+        "max_memory_queries": 8,
+        "max_repeat_states": 3
+      }
+    },
+    "variable": "x",
+    "parameters": [
+      [
+        "a",
+        "2"
+      ],
+      [
+        "b",
+        "3"
+      ],
+      [
+        "c",
+        "5"
+      ],
+      [
+        "d",
+        "7"
+      ],
+      [
+        "e",
+        "35"
+      ]
+    ],
+    "budget": {
+      "instructions_remaining": 100000,
+      "checker_calls_remaining": 10000
+    },
+    "updates": [],
+    "construction_limit": 420
+  },
+  "trusted_ingress": [],
+  "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+  "receipts_digest": "13cba66e340d91c25bfa0fe3546c45474e7ba97e340f72ab72a3368678390470",
+  "bundle_digest": "8048bba869c47c00a8f9e306f727accfb146533f654eb02210eb8e7d038971ee"
+}

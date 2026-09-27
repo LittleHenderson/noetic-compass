@@ -1,0 +1,280 @@
+{
+  "schema": "cas.closed-loop.claude-local-protocol/0.1",
+  "wave": "A1",
+  "start_utc": "2026-09-27T04:54:59.547045+00:00",
+  "status": "FAILED",
+  "paid_job": false,
+  "model_invocations": 0,
+  "aws_calls": 0,
+  "codex_files_edited": 0,
+  "commands": [
+    {
+      "name": "git_head",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "start_utc": "2026-09-27T04:54:59.547059+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:54:59.551163+00:00",
+      "stdout_sha256": "5df8208072eface0970a5cb62a17a09f804e6ab9483df280a87dca5f56bd35ba"
+    },
+    {
+      "name": "git_branch",
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "start_utc": "2026-09-27T04:54:59.551516+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:54:59.555514+00:00",
+      "stdout_sha256": "46ef180f584b3238e19e400ae72d4a1fb4648e8d7ed01a331b599eca64478aa7"
+    },
+    {
+      "name": "git_status",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "start_utc": "2026-09-27T04:54:59.555840+00:00",
+      "seconds": 0.466,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.022323+00:00",
+      "stdout_sha256": "14bfbcb3c96529458bfbaee2b102c9ca167eacfbe5c247f1b986819b725e6c1e"
+    },
+    {
+      "name": "git_version",
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "start_utc": "2026-09-27T04:55:00.024544+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.028972+00:00",
+      "stdout_sha256": "25f3602b5caaf92437be1e76b53698e8d73f14a6c71c2e91c8d5875f923ab29f"
+    },
+    {
+      "name": "pin_pytest",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pytest; print(pytest.__version__)"
+      ],
+      "start_utc": "2026-09-27T04:55:00.029404+00:00",
+      "seconds": 0.165,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.194437+00:00",
+      "stdout_sha256": "cb59c54a0c419202b393c39beebcdbef094e480bdea5c82290050c265a1f7508"
+    },
+    {
+      "name": "pin_pydantic",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pydantic; print(pydantic.__version__)"
+      ],
+      "start_utc": "2026-09-27T04:55:00.195192+00:00",
+      "seconds": 0.064,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.259916+00:00",
+      "stdout_sha256": "927b51cf165a5c12be3de8a0116ed5e8ae74f9020e2607ccc32060b7d6b89ae3"
+    },
+    {
+      "name": "pin_pydantic_core",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pydantic_core; print(pydantic_core.__version__)"
+      ],
+      "start_utc": "2026-09-27T04:55:00.260378+00:00",
+      "seconds": 0.064,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.325219+00:00",
+      "stdout_sha256": "7fbf8cb7ef3f8a8af8a9d274021400502157f56e4414582989d34077b8f87f06"
+    },
+    {
+      "name": "runtime_commit_exists",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "8182ad52b4468f18f140837dffee0e7debcfe786"
+      ],
+      "start_utc": "2026-09-27T04:55:00.325712+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.330073+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "historical_object_348638c9",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "348638c9d9b6069eebab7853db6b98bfef453092"
+      ],
+      "start_utc": "2026-09-27T04:55:00.330528+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.334843+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "historical_object_2636bbb6",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "2636bbb6e0f41a37ba2c20df08cdf51185718617"
+      ],
+      "start_utc": "2026-09-27T04:55:00.335292+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.339571+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "committed_artifact_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/check_artifacts.py",
+        "--git-ref",
+        "aa6006683d9e798c85667dc0d389a604b0e99053"
+      ],
+      "start_utc": "2026-09-27T04:55:00.340082+00:00",
+      "seconds": 0.114,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.454815+00:00",
+      "stdout_sha256": "05985770249987b772737104d2a775baf98eb7c448139b264ba345f502d22d48"
+    },
+    {
+      "name": "runtime_bootstrap",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/bootstrap_runtime.py"
+      ],
+      "start_utc": "2026-09-27T04:55:00.455198+00:00",
+      "seconds": 0.264,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:00.719982+00:00",
+      "stdout_sha256": "b26c5c04916f42fc0552946472a4a202ebc1167cabd9dd4c7c75ae1b9122164e"
+    },
+    {
+      "name": "source_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/run_closed_loop.py",
+        "check"
+      ],
+      "start_utc": "2026-09-27T04:55:00.720504+00:00",
+      "seconds": 0.365,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:01.085687+00:00",
+      "stdout_sha256": "c6ca5405058987d067e3c3d7670f6af6be426ad3b2fc8ba7e196bbf0b4802ce5"
+    },
+    {
+      "name": "artifact_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/check_artifacts.py"
+      ],
+      "start_utc": "2026-09-27T04:55:01.086209+00:00",
+      "seconds": 0.064,
+      "returncode": 0,
+      "end_utc": "2026-09-27T04:55:01.150620+00:00",
+      "stdout_sha256": "898e46f835ada295059542b9625b4ec2a58909a5ea162b280fa7c63e05ef7e21"
+    },
+    {
+      "name": "focused_tests",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045459Z/pytest.xml",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_native_step_adapter.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_closed_loop.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_artifacts.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/aws_validation/test_launch_transport.py"
+      ],
+      "start_utc": "2026-09-27T04:55:01.151162+00:00",
+      "seconds": 73.525,
+      "returncode": 1,
+      "end_utc": "2026-09-27T04:56:14.676048+00:00",
+      "stdout_sha256": "6b9b05f3cb069842729076712fa1f4ad5cbb65bd766948b123e8bd1b9fe05a5f"
+    }
+  ],
+  "claim_boundary": "LOCAL public CPU engineering check of the amended source only. Not CAS_AWS_ENGINEERING_VALIDATED. Does not replace the Codex-owned Lane A AWS job, its instance Git preflight, or its pinned Python 3.12 wheelhouse. No learned-model, comparative-advantage or production claim.",
+  "source_commit": "aa6006683d9e798c85667dc0d389a604b0e99053",
+  "git_branch": "claude/focused-mccarthy-uj45ul",
+  "git_status_porcelain": [
+    "?? research/cas_closed_loop_1/claude_lead_20260927/"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 09:26:23) [GCC 13.3.0]",
+    "executable": "/usr/local/bin/python3",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+    "git": "git version 2.43.0",
+    "pins_observed": {
+      "pytest": "9.0.2",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5"
+    },
+    "pins_declared_by_aws_package": {
+      "python": "3.12 (AWS worker requirement; not satisfied locally)",
+      "pytest": "9.0.2",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5"
+    }
+  },
+  "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "historical_objects_in_this_clone": {
+    "348638c9d9b6069eebab7853db6b98bfef453092": "PRESENT_ON_ORIGIN",
+    "2636bbb6e0f41a37ba2c20df08cdf51185718617": "PRESENT_ON_ORIGIN"
+  },
+  "runtime_bootstrap": {
+    "status": "MATERIALIZED_PINNED_PUBLIC_SOURCE",
+    "files": 108,
+    "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786"
+  },
+  "source_check": {
+    "status": "SOURCE_ADMITTED",
+    "source_manifest_digest": "8a049806015330674ed1cada8cdd6092069833bf28880ad07eedd311a0436d5d",
+    "profile_digest": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+    "problem_hash": "97aa1c884719ef1608b96b12aef12df9b7f570e1d692d561d89b7134db0726a7"
+  },
+  "artifact_check": {
+    "status": "EXACT_BYTES_VERIFIED",
+    "files": 13,
+    "git_ref": null,
+    "historical_producer_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+    "boundary": "Retained evidence and its original producer bytes only; current source acceptance is separate."
+  },
+  "tests": {
+    "tests": 61,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0,
+    "expected_tests": 61,
+    "by_file": {
+      "research.cas_closed_loop_1.test_native_step_adapter": 30,
+      "research.cas_closed_loop_1.test_closed_loop": 22,
+      "research.cas_closed_loop_1.test_artifacts": 5,
+      "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests": 4
+    },
+    "seconds": 73.525
+  },
+  "error_type": "ValueError",
+  "error": "PREDECLARED_TEST_COUNTS_REQUIRED_WITHOUT_SKIPS",
+  "end_utc": "2026-09-27T04:56:14.682705+00:00",
+  "seconds": 75.136
+}
