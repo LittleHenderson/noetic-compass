@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.config import settings
@@ -16,6 +17,7 @@ from api.errors import (
     llm_error_handler,
     pipeline_stage_error_handler,
     scoring_error_handler,
+    validation_error_handler,
 )
 from api.middleware.auth import JWTAuthMiddleware
 from api.middleware.rate_limit import RateLimitMiddleware
@@ -611,6 +613,9 @@ app.add_exception_handler(DialViolationError, dial_violation_handler)  # type: i
 app.add_exception_handler(ScoringError, scoring_error_handler)  # type: ignore[arg-type]
 app.add_exception_handler(LLMError, llm_error_handler)  # type: ignore[arg-type]
 app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # type: ignore[arg-type]
+# Replace FastAPI's default validation handler, which echoes the offending input. For a
+# credential field that means returning the credential to the caller; see api/errors.py.
+app.add_exception_handler(RequestValidationError, validation_error_handler)  # type: ignore[arg-type]
 
 # Routes
 app.include_router(health.router)
