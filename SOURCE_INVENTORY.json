@@ -35,6 +35,18 @@
     }
   ],
   "dependencies": {"python": ">=3.10", "third_party_packages": [], "installs_performed": 0},
+  "packet_2": {
+    "marker": "HELM-Q1-P2-20260927-A",
+    "starting_commit": "35236511b2f56bddcb50f06bfc74e3c7e6d2de24",
+    "launcher": "coordination/codex/run_p2_checks.py",
+    "runner_contract": "coordination/codex/P2_RUNNER_CONTRACT.md",
+    "approved_runners": [],
+    "execution_receipt": null,
+    "non_execution_checkpoint": "evidence/P2_NOT_RUN.json",
+    "permitted_registry_read": "D:/tksCAS-worktrees/codex-cas-closed-loop-1/.coordination/helm_rnd_three_lead_v1/REGISTRY.json",
+    "registry_sha256": "29ddfca38b0ea12656ae9e92a0413b722deb74597909d50120ee89fe23b104dc",
+    "runner_finding": "Registry records historical incumbent jobs and null active instance/job. It contains no Q1 custodian/grant, live free-capacity record or process-tree control attestation. No provider state or incumbent instance was probed."
+  },
   "host_runtime_slices": [],
   "checkpoint_digest": null,
   "checkpoint_reason": "Synthetic fixture does not load a model; live HELM checkpoint not admitted.",

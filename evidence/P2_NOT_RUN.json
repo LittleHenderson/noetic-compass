@@ -1,0 +1,42 @@
+{
+  "schema": "helm-q1-p2-author-checkpoint/1",
+  "kind": "AUTHOR_CHECKPOINT_NOT_EXECUTION_RECEIPT",
+  "marker": "HELM-Q1-P2-20260927-A",
+  "author": "Q1-Codex",
+  "session_id": "01a0e385-db6e-7a71-beca-f6ef3a6c5e04",
+  "source_start": "35236511b2f56bddcb50f06bfc74e3c7e6d2de24",
+  "delivered_source_pin_record": "coordination/codex/P2_RETURN.md",
+  "status": "SOURCE_IMPLEMENTED_EXECUTION_NOT_RUN",
+  "new_regression_methods": 15,
+  "builder_tests": {"authored": 58, "collected": 0, "executed": 0, "passed": 0, "failed": 0, "errors": 0, "skipped": 0, "not_run": 58},
+  "supplied_helper_tests": {"authored": 22, "collected": 0, "executed": 0, "passed": 0, "failed": 0, "errors": 0, "skipped": 0, "not_run": 22},
+  "launcher_invocations": 0,
+  "required_commands": [
+    {"command": "python -m helm_quantum inventory --read-only", "status": "NOT_RUN"},
+    {"command": "python -m helm_quantum baseline --mode disabled", "status": "NOT_RUN"},
+    {"command": "python -m helm_quantum validate --fixture q1-mod4", "status": "NOT_RUN"},
+    {"command": "python -m unittest discover -s input_package/original_package/tests -v", "status": "NOT_RUN"},
+    {"command": "python -m unittest discover -s tests -p test_*.py -v", "status": "NOT_RUN"}
+  ],
+  "runner_search": {
+    "record": "D:/tksCAS-worktrees/codex-cas-closed-loop-1/.coordination/helm_rnd_three_lead_v1/REGISTRY.json",
+    "record_sha256": "29ddfca38b0ea12656ae9e92a0413b722deb74597909d50120ee89fe23b104dc",
+    "record_observed_utc": "2026-09-27T15:09:13.803800+00:00",
+    "historical_record_owner": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+    "historical_instances_not_borrowed": ["i-0d511f5d28e37a0d9", "i-08dd58f77e2af1ae6"],
+    "q1_custodian": null, "q1_grant": null, "current_runner": null,
+    "current_free_capacity": null, "process_tree_control_evidence": null,
+    "provider_state_probed": false,
+    "finding": "No Q1-compatible authorized runner identified. Historical cleanup records are not an offer of capacity or current provider-state proof."
+  },
+  "proposed_limits_not_authority": {"cpus": 1, "aggregate_memory_bytes": 536870912, "total_wall_seconds": 60, "serial_packets": 1},
+  "actual_resource_measurements": null,
+  "cloud_jobs": [], "cloud_spend_created_usd": "0.00", "cloud_cleanup": "NOT_APPLICABLE_NO_JOB",
+  "hardware_calls": 0, "quantum_tasks": 0, "quantum_shots": 0, "children": 0,
+  "model_usage_cost_usd": null,
+  "usage_status": "Current limit tool request did not complete. Prior packet account-wide observation is historical, not Q1 cost.",
+  "reviewer_history": {"collected_reported": 49, "executed_reported": 47, "passed_reported": 47, "not_run_reported": 2,
+    "status": "REPORTED_NONADMITTED_EXECUTION", "validates_corrected_source": false},
+  "q0_complete": false, "independent_acceptance": false,
+  "next_deliverable": "Custodian-backed existing-runner admission artifact bound to the P2 source, including actual instance/grant, free capacity, isolation and existing one-CPU/512-MiB/60-second enforcement; otherwise keep execution NOT_RUN."
+}

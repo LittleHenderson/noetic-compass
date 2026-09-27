@@ -1,0 +1,141 @@
+HELM-Q1 / PACKET 2 / CODEX
+Issuer: ChatGPT-Q1, Q1 manager.
+Marker: HELM-Q1-P2-20260927-A.
+
+Continue the NEW Q1-Codex session, not the incumbent HELM
+operator. This refines Q1 assignments; it grants no new
+compute or spending authority.
+
+SOURCE
+Repository: LittleHenderson/noetic-compass
+Canonical Q1 branch: codex/helm-q1-offline-20260927
+Verified starting commit:
+35236511b2f56bddcb50f06bfc74e3c7e6d2de24
+
+Handoff:
+https://github.com/LittleHenderson/noetic-compass/blob/35236511b2f56bddcb50f06bfc74e3c7e6d2de24/coordination/codex/HANDOFF.md
+
+MSI workspace:
+C:/Users/wakil/HELM-Q1/q1-offline-20260927
+
+Read AGENTS.md, FILE_LEASES.md, the Codex review response
+and manager checkpoint. Retain the package's shared rules
+and full original directive. If your Q1 source has advanced,
+inspect only that Q1 delta, preserve work, and record the
+new pin. No full upstream/history fetch or branch sweep.
+
+PRIMARY DELIVERABLE
+Make the existing contract/reference packet reproducibly
+executable under an admitted bounded runner, while keeping
+quantum submission disabled.
+
+1. ACK AND COMMUNICATION
+
+Write coordination/codex/P2_ACK.json as yourself. State
+actual session ID, source pin, owned paths, environment,
+other work, children, limits, and this marker.
+
+Continue your existing lease. Keep the canonical Q1 branch
+single-writer under Codex integration.
+
+Claude and DeepSeek must use separate working copies and
+their own Q1 contribution branches or exact hashed exports.
+Record their returned locations in:
+coordination/codex/P2_CHANNEL.md
+
+Read their actual acknowledgments; do not author them.
+Preserve authorship when incorporating received artifacts.
+
+The Q1 coordination files are the channel. No issue creation,
+blocked-action retry, bot-trigger mentions or paid wakeups.
+Report inaccessible transport rather than asking the owner
+to relay every ordinary reply.
+
+2. EXECUTABLE CODE, NOT ANOTHER READINESS DOCUMENT
+
+Implement coordination/codex/run_p2_checks.py, or an
+equivalent concrete launcher within your lease, with
+regression tests in your owned test files.
+
+It must refuse without independently established runner
+admission and enforceable process-tree limits. A venue name,
+environment variable, matching caller hashes or editable
+JSON cannot grant authority.
+
+For admitted execution, pin/check source, invoke the real
+CLI and two suites, preserve stdout/stderr, exit codes,
+timing and available resource measurements, and write an
+honest structured receipt. Do not fabricate unsupported
+metrics or acceptance.
+
+Required commands from the Q1 root:
+
+python -m helm_quantum inventory --read-only
+python -m helm_quantum baseline --mode disabled
+python -m helm_quantum validate --fixture q1-mod4
+python -m unittest discover -s input_package/original_package/tests -v
+python -m unittest discover -s tests -p 'test_*.py' -v
+
+Use fake/offline dependencies, no provider SDK readiness
+calls. Tests actually added may change the previous
+43-method inventory; reconcile the real source rather
+than fixing counts to 43.
+
+3. EXECUTION VENUE
+
+Identify an already-authorized Q1-compatible AWS runner
+from permitted records, including its actual custodian,
+applicable grant, free capacity and incumbent-job isolation.
+
+Do not provision, start, borrow or modify an instance,
+service or budget.
+
+The proposed ceiling is one CPU, 512 MiB aggregate
+process-tree memory, one serial test packet and 60 seconds
+total wall time. These are limits to verify, not a grant or
+proof of feasibility. Refuse if the existing runner cannot
+enforce them without changing protected controls.
+
+No authorized runner means deliver the launcher/tests as
+NOT_RUN and name the exact missing grant/runner/control.
+No MSI test fallback, dependency installation into active
+environments, or changing AGENTS.md to grant yourself
+permission. Missing host profiling does not block this
+isolated code.
+
+4. SOURCE AND REVIEW HANDOFF
+
+Preserve the implemented run_id/proposal_digest binding
+and SearchBudgetExhausted correction. Let DeepSeek challenge
+them on pinned source; fix concrete reproduced or
+source-demonstrated defects in your own files.
+
+Publish a narrow compiler boundary for Claude using the
+existing QuantumProblem and public fixture, not a second
+schema. Do not replace Claude's compiler with a lookup or
+present the current refusal backend as quantum execution.
+
+Correct the stale reviewer-count reference: the later report
+is 49 cases, 47 reported local passes, 2 NOT_RUN. Preserve it
+as non-admitted historical execution, not tests of corrected
+source. Keep Q0 open and quantum tasks/shots/cloud allocation
+at zero.
+
+RETURN
+
+Publish coordination/codex/P2_RETURN.md with:
+source commit, changed files, actual commands/outcomes or
+NOT_RUN, separate authored/collected/executed/pass/fail/
+error/skip counts, raw receipt locations, resource authority,
+unresolved defects and one next deliverable.
+
+Record usage as exposed; unknown model cost is not zero.
+
+Work serially, no child agents, at most 30 active minutes,
+then a concrete checkpoint. Report during active work at
+the existing five-minute interval; no idle polling or
+claimed continuous supervision.
+
+Preserve all incumbent jobs, queues, source and automation.
+Begin eligible source work now; do not end with
+acknowledgment alone.

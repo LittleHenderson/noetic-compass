@@ -1,0 +1,23 @@
+{
+  "schema": "helm-q1-p2-ack/1",
+  "marker": "HELM-Q1-P2-20260927-A",
+  "author": "Q1-Codex",
+  "actual_session_id": "01a0e385-db6e-7a71-beca-f6ef3a6c5e04",
+  "worker": "/root",
+  "status": "ACK_AND_SOURCE_WORK_STARTED",
+  "source_pin": "35236511b2f56bddcb50f06bfc74e3c7e6d2de24",
+  "branch": "codex/helm-q1-offline-20260927",
+  "workspace": "C:/Users/wakil/HELM-Q1/q1-offline-20260927",
+  "environment": "MSI; lightweight editing, inspection and Git transport only",
+  "owned_paths": ["coordination/codex/", "helm_quantum/ excluding compiler/", "tests/test_contracts.py", "tests/test_classical.py", "tests/test_cli.py", "tests/test_backend.py", "schemas/", "fixtures/public/", "config/", "evidence/", "SOURCE_INVENTORY.json", "README.md", "coordination/FILE_LEASES.md"],
+  "existing_local_change_preserved": "coordination/manager/CHECKPOINT_20260927_01.md",
+  "other_work": "NONE in this dedicated Q1 session",
+  "children": 0,
+  "limits": {"active_minutes_max": 30, "cloud_allocation_usd": "0.00", "tasks": 0, "shots": 0},
+  "proposed_test_envelope_not_a_grant": {"cpus": 1, "aggregate_memory_bytes": 536870912, "total_wall_seconds": 60, "serial_packets": 1},
+  "runner_admitted": false,
+  "tests_executed": 0,
+  "model_cost_usd": null,
+  "usage_note": "Current limit request did not complete; prior packet's account-wide observation is historical, not refreshed.",
+  "communication": "Q1 coordination files only; no issue creation or wakeups; Codex is canonical-branch integrator"
+}
