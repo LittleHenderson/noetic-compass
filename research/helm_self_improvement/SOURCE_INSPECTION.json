@@ -1,6 +1,6 @@
 {
   "schema": "helm.si.source-inspection/1",
-  "utc": "2026-09-27T04:58:35.918816+00:00",
+  "utc": "2026-09-27T05:00:05.632156+00:00",
   "method": "AST parse only; no imports or project execution",
   "ast_files": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "path": "research/helm_self_improvement/contracts.py",
-      "sha256": "3c0ee85e8cff86aa4e188f051ad012bf6ffcbf2b97bc96d37fbc021ddc2cf190"
+      "sha256": "a58b8785df0d2ed16adc21c7bf5b92963112d6561062cf94e8bfe5959a53c8c3"
     },
     {
       "path": "research/helm_self_improvement/episode.py",
@@ -21,11 +21,11 @@
     },
     {
       "path": "research/helm_self_improvement/native_bridge.py",
-      "sha256": "afacc40cdc5af0322218b35817a8db3ff88a357f4b5c9e6efc89739a305b6b10"
+      "sha256": "29555c3800f88db5edc223eb5c8c8af5b3d615ff9e208d54e9e0574bb0af106f"
     },
     {
       "path": "research/helm_self_improvement/test_contracts.py",
-      "sha256": "965a702bc3f7d02c711b6b85015e1fb777e6f5a98fe152363ceb8715d929eac0"
+      "sha256": "da9303285ad0d46938b2ce1145702d6584279b9444d3f070be104f1a344fdcba"
     },
     {
       "path": "research/helm_self_improvement/test_episode.py",
@@ -33,7 +33,7 @@
     }
   ],
   "test_functions": 13,
-  "declared_cases_by_static_inventory": 30,
+  "declared_cases_by_static_inventory": 31,
   "collected_cases": null,
   "passed": null,
   "failed": null,

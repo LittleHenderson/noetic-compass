@@ -12,6 +12,13 @@ ROOT = Path(__file__).resolve().parents[2]
 CAS = ROOT / "research/cas_closed_loop_1"
 RUNTIME = CAS / "_runtime"
 HOST_STEP_LIMIT = 32
+HARNESS_FILES = ("__init__.py", "contracts.py", "native_bridge.py", "episode.py")
+
+
+def harness_identity():
+    """Bind this integration implementation as well as the upstream CAS source."""
+    here = Path(__file__).resolve().parent
+    return digest({name: hashlib.sha256((here / name).read_bytes()).hexdigest() for name in HARNESS_FILES})
 
 
 def verify_source(expected_manifest_sha256=None):
@@ -33,10 +40,13 @@ def verify_source(expected_manifest_sha256=None):
 
 def parent_identity(branch="codex/helm-si-three-lead-20260927"):
     manifest, manifest_sha = verify_source()
-    return ParentIdentity(manifest["source_commit"], manifest["runtime_commit"], branch, manifest_sha)
+    return ParentIdentity(manifest["source_commit"], manifest["runtime_commit"], branch, manifest_sha,
+                          harness_sha256=harness_identity())
 
 
 def _runtime(parent):
+    if parent.harness_sha256 != harness_identity():
+        raise ValueError("HARNESS_IMPLEMENTATION_CHANGED")
     manifest, _ = verify_source(parent.source_manifest_sha256)
     if manifest["source_commit"] != parent.source_sha or manifest["runtime_commit"] != parent.runtime_sha:
         raise ValueError("RUNTIME_SOURCE_MISMATCH")

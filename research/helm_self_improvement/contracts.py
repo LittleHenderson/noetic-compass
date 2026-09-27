@@ -24,6 +24,7 @@ class ParentIdentity:
     branch: str
     source_manifest_sha256: str
     checkpoint_sha256: str | None = None
+    harness_sha256: str | None = None
     schema: str = SCHEMA
 
 

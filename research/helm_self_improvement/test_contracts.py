@@ -18,7 +18,7 @@ def case(operation="CHANGE_CONFIG", parameters=(True,)):
 
 @pytest.mark.parametrize("field,value", [("source_sha", "f" * 40), ("runtime_sha", "f" * 40),
     ("branch", "foreign"), ("checkpoint_sha256", "f" * 64), ("schema", "foreign"),
-    ("source_manifest_sha256", "f" * 64)])
+    ("source_manifest_sha256", "f" * 64), ("harness_sha256", "f" * 64)])
 def test_parent_binding_rejects_every_identity_mismatch(field, value):
     d, o, p = case()
     with pytest.raises(ValueError, match="STALE_OR_FOREIGN"):
