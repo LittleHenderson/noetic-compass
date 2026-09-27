@@ -1,0 +1,47 @@
+{
+  "schema": "helm.si.source-inspection/1",
+  "utc": "2026-09-27T04:58:35.918816+00:00",
+  "method": "AST parse only; no imports or project execution",
+  "ast_files": [
+    {
+      "path": "research/helm_self_improvement/__init__.py",
+      "sha256": "32c9baf5d45995cbf6ef1a7fafe7a746ef62555813eca1636f5aa66d5d0a8603"
+    },
+    {
+      "path": "research/helm_self_improvement/conftest.py",
+      "sha256": "2079a56c38084b9bfb3eb2b431a41f4456873f18c3357ce0d6acd7474b6553c0"
+    },
+    {
+      "path": "research/helm_self_improvement/contracts.py",
+      "sha256": "3c0ee85e8cff86aa4e188f051ad012bf6ffcbf2b97bc96d37fbc021ddc2cf190"
+    },
+    {
+      "path": "research/helm_self_improvement/episode.py",
+      "sha256": "7ab133baa08f4a9ee4b8b0656aaa978b6a6f42d12c53f35edcbf62b53fca7210"
+    },
+    {
+      "path": "research/helm_self_improvement/native_bridge.py",
+      "sha256": "afacc40cdc5af0322218b35817a8db3ff88a357f4b5c9e6efc89739a305b6b10"
+    },
+    {
+      "path": "research/helm_self_improvement/test_contracts.py",
+      "sha256": "965a702bc3f7d02c711b6b85015e1fb777e6f5a98fe152363ceb8715d929eac0"
+    },
+    {
+      "path": "research/helm_self_improvement/test_episode.py",
+      "sha256": "425f0e8de7d8863c01bcce988eeb5e8ff0b4dd2a351e09f94829049edfa693cd"
+    }
+  ],
+  "test_functions": 13,
+  "declared_cases_by_static_inventory": 30,
+  "collected_cases": null,
+  "passed": null,
+  "failed": null,
+  "skipped": null,
+  "runtime_status": "NOT_RUN",
+  "aws_status": "NOT_ADMITTED_INCUMBENT_PRIORITY_AND_FINITE_SI_ALLOWANCE_REQUIRED",
+  "acceptance_command": "python -B -m pytest -q -p no:cacheprovider research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
+  "source_ownership": "Codex SI namespace only; CAS public source unchanged",
+  "actual_child_agents": [],
+  "serial_reason": "The available child interface exposes no enforceable finite token/tool/cost/time limits. Package section5 fallback; no additional model calls."
+}
