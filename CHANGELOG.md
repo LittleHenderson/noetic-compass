@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1 packet B1-SEED18-INTERFACES-20260927-01: frozen-model interface contract and test map (source-only)
+
+- New directory `claude_lead_20260927/seed18_interfaces/` only: a callable interface contract for a frozen learned
+  model with (`CAS_CLOSED_LOOP`) and without (`NONE`) the current CAS repair path, every operation unimplemented,
+  not imported or executed; the contract as JSON (ten invariants, fifteen refusals); a test map of 16 declared cases
+  (written 0, executed 0); the remaining validation commands; Codex's stated seed-18 parent (`5a8a3069…`, cursor
+  `2940`) and the two arms (constant `0.003` vs `0.001`, 20 additional passes) with readouts re-fixed before results.
+- Raw neural predictions are separate digest-bound records from verified system outputs; same items, order,
+  evaluator and budget across paths. No coordinator, growth, scorer, threshold or acceptance claim.
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 4: joint-validation delivery package (A5) and seed-18 preparation (A4), records only
 
 - No source, test, HELM, seed-19, growth or Q4 file changed; no test, model, cloud or worker run. Both packets were
