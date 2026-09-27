@@ -63,7 +63,7 @@
       "source_profile",
       "bias_version_at_suspension"
     ],
-    "atlas": "Snapshot-bound node/frame address plus authoritative native continuation reference. Profile coordinates and screen layout cannot select recipients. No new live registry.",
+    "atlas": "Snapshot-bound node/frame address for every live frame in runtime_location.atlas_binding (null with no frame), built from run, branch, root call, the unique authorized push event, the frame digest and the pinned projection's state-/frame- node identities with tick-bound contexts; resolved by exact match against a rendered view. Profile coordinates and screen layout cannot select recipients and are never inputs. No new live registry; no resume, dispatch or commit from an address; the coordinator remains authoritative.",
     "repair": "Qualified deltas pass existing coordinator; historical parent hash is not restored over legitimate repaired state",
     "budget": "Use current charged ledger; saved remaining budget is history, not spend authority",
     "duplicates": "Existing native stale/duplicate checks; atlas binding must not add second resume",
@@ -78,6 +78,13 @@
       "lease": "CAS-CORRECTION-20260927-01",
       "change": "I_executed: thread-aware meter and explicit claim boundary; no primitive or authority change.",
       "evidence": "claude_lead_20260927/probe_threaded_reentry_v2_result_unmodified.txt and _hardened.txt; test_foreign_thread_entry_inside_window_never_publishes_a_count"
+    },
+    {
+      "date": "2026-09-27",
+      "author": "Claude",
+      "lease": "CAS-CORRECTION-20260927-01",
+      "change": "return_contract.atlas: atlas_binding populated from existing identities; addendum cases executable in test_return_addresses.py; RETURN_ADDRESS_TEST_MAP.json 0.2.",
+      "evidence": "test_return_addresses.py (11 cases) executed locally; claude_lead_20260927 records"
     }
   ]
 }

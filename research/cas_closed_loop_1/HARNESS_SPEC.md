@@ -93,3 +93,26 @@ real entries from the patched callee's caller frame without touching hooks, prod
 (`probe_threaded_reentry_v2_result_unmodified.txt`), and is refused by this adapter
 (`probe_threaded_reentry_v2_result_hardened.txt`). The same-file regression case is
 `test_foreign_thread_entry_inside_window_never_publishes_a_count`.
+
+## Amendment 2026-09-27 (Claude, lease `CAS-CORRECTION-20260927-01`): snapshot-bound atlas addresses
+
+`runtime_location` now carries `atlas_binding`: one exact address per live acquisition frame, in stack order, or
+`null` when no frame exists. An address is built only from identities that already exist in the pinned runtime and
+the pinned atlas projection: the run, `branch-main`, the root goal and root call occurrence, the unique authorized
+`PUSH_*_ACQUISITION` event that created the frame (sealed event id and hash, tick, pre- and post-state hashes), the
+frame itself with its content digest, and the atlas node identities `state-<pre_state_hash>` (the snapshot the caller
+waits in, with the tick-bound `AtlasContext` the projection assigns), `state-<post_state_hash>` (the first state in
+which the frame exists) and `frame-<frame_id>`. `resolve_atlas_address(view, address)` checks an address against a
+rendered view by exact key match and returns `RESOLVED_LIVE_FRAME` or `RESOLVED_HISTORICAL_FRAME_NOT_LIVE`, or refuses
+with a named reason. There is no nearest-node fallback.
+
+Authority, stated exactly. An address is a lookup key and a display binding. It is not a resume token: nothing in the
+adapter resumes, dispatches, commits or advances from an address, and the existing coordinator remains the only
+writer of native state. Profile coordinates are never an input and are refused if supplied. The view's focus,
+hypothesis handle and presentation are ignored by resolution. Two callers with equal or absent profiles never merge:
+distinctness comes from run, event and frame identity. A machine started from byte-identical inputs reaches the
+identical run id and frame identities; that is one episode identity, not two callers. Historical receipts are
+unchanged; the field is populated in new receipts only.
+
+Executable mapping of the return-address addendum: `RETURN_ADDRESS_TEST_MAP.json` (0.2) and
+`test_return_addresses.py`. Local execution by Claude is an engineering check, not AWS acceptance.

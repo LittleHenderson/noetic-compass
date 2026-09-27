@@ -69,3 +69,21 @@ benefit, a CAS-specific comparative advantage, production readiness or a release
 
 The root agent is the sole writer. A bounded read-only agent reviewed specific
 correctness questions; messages to DeepSeek are confined to the owner's bus.
+
+## Lease `CAS-CORRECTION-20260927-01` (Claude, 2026-09-27)
+
+Changes under the lease are listed in `DECISIONS.md` and dated amendments in `HARNESS_SPEC.md` and `CONTRACTS.json`.
+The four frozen test files now collect 62 cases; the new `test_return_addresses.py` collects 11 (ten return-address
+addendum rows plus one wiring case, see `RETURN_ADDRESS_TEST_MAP.json`). No total is hardcoded; a new freeze declares
+what the corrected source collects. To run the addendum cases after `bootstrap_runtime.py`:
+
+```powershell
+python -m pytest -q -p no:cacheprovider research/cas_closed_loop_1/test_return_addresses.py
+```
+
+Notes preserving history: `SOURCE_BINDINGS.json` is byte-frozen because its digest is the admission identity of the
+retained evidence bundle; its `missing_from_live_repository` entry describes Codex's local partial clone at recovery
+time, and both objects (`348638c9`, `2636bbb6`) are present on `origin`. Historical `evidence/events.jsonl` row 0
+carries a pre-amendment `return_identity` shape at `frames == []`; those bytes are preserved, not accepted, and the
+amended no-frame rule applies to new receipts only. Claude's local runs are engineering checks; acceptance remains the
+AWS worker sequence on a re-cut freeze run by Codex under an owner decision.

@@ -49,3 +49,11 @@
   commit with the count the source actually collects.
 - Local pytest runs on Python 3.11 are engineering checks before each push. Acceptance remains the AWS worker
   sequence on a re-cut freeze, run by Codex under an owner decision.
+- R7. Snapshot-bound atlas addresses are implemented inside the leased adapter, not as a second controller or a
+  renderer-owned registry: `atlas_address_for_frame`, `atlas_address_chain`, `check_atlas_address`,
+  `resolve_atlas_address`, and `runtime_location.atlas_binding` (null with no frame). Every identity is existing
+  runtime or projection identity; no profile coordinate, focus or layout is an input; nothing resumes from an address.
+  The addendum's ten rows plus one wiring case are executable in `test_return_addresses.py`, mapped one to one in
+  `RETURN_ADDRESS_TEST_MAP.json` (0.2), which also preserves the 0.1 upstream rows with `NOT_RUN_BY_CODEX`. The round-2
+  origin under `claude_lead_20260927/` became a shim and a pointer; its bytes stay in git history. Whether the new
+  file joins the frozen suite is Codex's freeze decision; the lane files do not hardcode a total.

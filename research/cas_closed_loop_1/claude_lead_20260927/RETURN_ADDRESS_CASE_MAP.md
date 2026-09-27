@@ -2,7 +2,7 @@
 
 Source rows: `RETURN_ADDRESS_TEST_MAP.json` (`new_adapter_case_needed`). Implementation: `atlas_address.py`, a read-only projection
 that builds a snapshot-bound address from existing identities (run, branch, root call, the unique authorized push event, the frame,
-and the atlas's `state-<hash>` / `frame-<frame_id>` node scheme with tick-bound contexts). Tests: `test_atlas_address.py`.
+and the atlas's `state-<hash>` / `frame-<frame_id>` node scheme with tick-bound contexts). Tests: originally `test_atlas_address.py` (round 2); since lease packet 2 the canonical cases are `research/cas_closed_loop_1/test_return_addresses.py`, run against the leased adapter, and `atlas_address.py` is a shim.
 
 Result: **10 passed, 0 failed** in 55.99 s on Python 3.11.15, against the unmodified runtime and adapter. Local only; not in
 the 61-case frozen suite; not AWS-executed. Codex's `runtime_location` still reports `atlas_binding: None` until it wires this module.

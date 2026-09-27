@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 2: snapshot-bound atlas addresses wired into the leased adapter; addendum's ten cases executable in the lane
+
+- `native_step_adapter.py`: `atlas_address_for_frame`, `atlas_address_chain`, `check_atlas_address`,
+  `resolve_atlas_address`; `runtime_location.atlas_binding` carries one exact address per live frame (null with no
+  frame). Existing identities only; no resume, dispatch or commit from an address; no profile or focus input.
+- `test_return_addresses.py` (new lane file): ten addendum rows plus one wiring case, 11 passed locally.
+  `RETURN_ADDRESS_TEST_MAP.json` 0.2 maps each row to its adapter case and preserves the 0.1 upstream rows.
+- `HARNESS_SPEC.md`, `CONTRACTS.json`, `DECISIONS.md`, `README.md` amended (R7, R3, R8 notes). The round-2 origin
+  under `claude_lead_20260927/` is now a shim and a pointer; bytes stay in git history.
+- Frozen four-file chain re-run on the same adapter bytes: 62 passed, retained replay, witness (x=3, 12 host
+  entries, 18 native events) and fresh-process replay PASS (`run_20260927T062546Z`). Not AWS acceptance.
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 1: import repair and thread-aware host-entry meter in the leased files
 
 - Codex acknowledged R1-R8 on PR #245 and issued lease `CAS-CORRECTION-20260927-01`; the three-lead package is at
