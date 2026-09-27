@@ -1,0 +1,97 @@
+{
+  "schema_version": "cncm.native-authority-manifest/0.2",
+  "runtime_version": "0.2.0",
+  "opt_in": true,
+  "default_runtime_unchanged": "0.1.0",
+  "acceptance_status": "EVIDENCE_REQUIRED_PER_SOURCE_PROFILE",
+  "authority_source_snapshot": {
+    "path": "cas_reasoner.txt",
+    "sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+  },
+  "preserved_default_manifest": {
+    "path": "AUTHORITY_MANIFEST.yaml",
+    "sha256": "2d47c64141cffc8df0af2492a92efa5a746f9f7f177c0d1a9f5a1187a2875a49"
+  },
+  "spec": "spec/CNCM_NATIVE_PROCEDURES_v0.2.md",
+  "wire_contracts": [
+    "schemas/native_v0_2/problem.schema.json",
+    "schemas/native_v0_2/state.schema.json",
+    "schemas/native_v0_2/proof.schema.json",
+    "schemas/native_v0_2/accepted_intent.schema.json",
+    "schemas/native_v0_2/trace.schema.json",
+    "schemas/native_v0_2/journal.schema.json",
+    "schemas/native_v0_2/evidence.schema.json",
+    "schemas/native_v0_2/source_profile.schema.json"
+  ],
+  "issuer_matrix": {
+    "REQUEST_PROCEDURE_CALL": {
+      "issuer": "procedure_controller",
+      "capability": "request_typed_procedure_call",
+      "target_scope": "native_calls"
+    },
+    "PUSH_ACQUISITION": {
+      "issuer": "rpm_controller",
+      "capability": "suspend_for_procedure_acquisition",
+      "target_scope": "rpm_stack"
+    },
+    "SELECT_PROCEDURE": {
+      "issuer": "procedure_controller",
+      "capability": "select_finite_candidate",
+      "target_scope": "procedural_memory"
+    },
+    "INSTALL_PROCEDURE": {
+      "issuer": "procedure_controller",
+      "capability": "install_checked_procedure",
+      "target_scope": "procedural_memory"
+    },
+    "RETURN_ACQUISITION": {
+      "issuer": "rpm_controller",
+      "capability": "resume_exact_procedure_caller",
+      "target_scope": "rpm_stack"
+    },
+    "APPLY_PROCEDURE": {
+      "issuer": "procedure_controller",
+      "capability": "apply_checked_procedure",
+      "target_scope": "branch:branch-main"
+    },
+    "ROLLBACK_PROCEDURE": {
+      "issuer": "procedure_controller",
+      "capability": "rollback_procedure_head",
+      "target_scope": "procedural_memory"
+    }
+  },
+  "work_allocations": {
+    "SELECT_PROCEDURE": {
+      "instructions": 144,
+      "checker_calls": 24
+    },
+    "INSTALL_PROCEDURE": {
+      "instructions": 60,
+      "checker_calls": 10
+    },
+    "APPLY_PROCEDURE": {
+      "instructions": 6,
+      "checker_calls": 1
+    }
+  },
+  "engineering_wire_validation_recipe": [
+    "These JSON Schemas are engineering wire-checking contracts exercised by tests; the live runtime does not invoke a JSON Schema validator.",
+    "Reject duplicate JSON keys and non-JSON types before lossy serialization. Use an exact raw-integer type check at accepted typed-field boundaries; preserve rejected proposal payloads as evidence.",
+    "Validate the selected closed wire schema with local references resolved offline.",
+    "For each record, explicitly parse body_json and validate record_body_KIND as a separate engineering check; contentSchema annotations alone do not enforce this.",
+    "Wire-shape success is not runtime admission, mathematical verification, integrity validation or replay acceptance."
+  ],
+  "live_runtime_gates": {
+    "invokes_json_schema_validator": false,
+    "typed_deserialization": "Strict native dataclass parsers enforce accepted raw types, rational and identity bounds, immutable snapshots and bounded state. CanonicalRecord enforces a known kind, bounded canonical JSON body and content digest; it does not validate each body against record_body_KIND.",
+    "transition_authority": "The versioned coordinator constructs record bodies and enforces live issuer, scope, state, budget, qualification and mathematical checking gates.",
+    "persisted_authority": "replay_native_journal reconstructs every persisted transition and record through the coordinator under a caller-trusted genesis and complete journal digest; saved state and record bodies are never imported as authority."
+  },
+  "trust_boundary": "The Python host, source profile and externally retained complete journal anchor are trusted inputs. Hashes and role labels do not authenticate a principal.",
+  "non_claims": [
+    "JSON Schema proves no mathematical truth or installation authority.",
+    "Canonical records are immutable evidence; semantic reference validation requires native replay.",
+    "A trace can retain rejected malformed proposals; accepted_intent is the separate admission shape.",
+    "No neural learning, arbitrary program synthesis, secret evaluation custody, external actions or full-machine completion."
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "runtime_version": "0.3.0",
+  "capability": "cncm.solve-linear/0.1",
+  "authorities": {
+    "REQUEST_EQUATION": [
+      "equation_controller",
+      "request_equation"
+    ],
+    "DECOMPOSE_EQUATION": [
+      "equation_controller",
+      "discover_dependencies"
+    ],
+    "PUSH_DEPENDENCY": [
+      "rpm_controller",
+      "suspend_for_dependency"
+    ],
+    "RETURN_DEPENDENCY": [
+      "rpm_controller",
+      "resume_checked_dependency"
+    ],
+    "BIND_EQUATION": [
+      "equation_controller",
+      "bind_checked_dependencies"
+    ],
+    "PUSH_PROCEDURE": [
+      "rpm_controller",
+      "suspend_for_nested_procedure"
+    ],
+    "SELECT_PROCEDURE": [
+      "procedure_controller",
+      "select_nested_candidate"
+    ],
+    "INSTALL_PROCEDURE": [
+      "procedure_controller",
+      "install_nested_procedure"
+    ],
+    "RETURN_PROCEDURE": [
+      "rpm_controller",
+      "resume_nested_procedure"
+    ],
+    "APPLY_EQUATION": [
+      "equation_controller",
+      "apply_checked_equation"
+    ],
+    "FAIL_CALL": [
+      "rpm_controller",
+      "record_nested_failure"
+    ],
+    "ROLLBACK_PROCEDURE": [
+      "procedure_controller",
+      "rollback_nested_procedure"
+    ]
+  },
+  "work_allocations": {
+    "SELECT_PROCEDURE": {
+      "instructions": 144,
+      "checker_calls": 24
+    },
+    "INSTALL_PROCEDURE": {
+      "instructions": 60,
+      "checker_calls": 10
+    },
+    "BIND_EQUATION": {
+      "instructions": 12,
+      "checker_calls": 0
+    },
+    "APPLY_EQUATION": {
+      "instructions": 18,
+      "checker_calls": 2
+    }
+  },
+  "qualification_policy": "38070b353652700d0f5dcb89523be04e591fe24900937d556d1c1700fd15ce90",
+  "max_equations": 16,
+  "max_terms": 4,
+  "max_frames": 8,
+  "max_json_integer_bits": 512,
+  "failed_checks_charged": true,
+  "allocation_refunds": false,
+  "native_batch_limit": 1,
+  "max_journal_bytes": 33554432,
+  "max_journal_events": 1024,
+  "max_episodes": 16,
+  "external_actions": false,
+  "constitutional_learning": false,
+  "neural_learning": false,
+  "caller_supplied_execution_order": false
+}

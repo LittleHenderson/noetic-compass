@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/intent.schema.json",
+  "title": "CNCM Intent v0.1",
+  "description": "The exact trace-safe Intent.to_dict() envelope. It preserves rejected malformed mutation objects and kernel-generated schema-safe surrogates. Validate an accepted typed mutation with #/$defs/accepted_intent; issuer/capability authorization, state/goal/envelope binding, provenance-bound content IDs, and semantic reconstruction remain kernel duties.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intent_id",
+    "intent_type",
+    "issuer_subsystem",
+    "required_capability",
+    "target_scope",
+    "branch_id",
+    "goal_id",
+    "precondition",
+    "proposed_mutation",
+    "created_at_tick",
+    "provenance"
+  ],
+  "properties": {
+    "intent_id": { "type": "string", "pattern": "^intent-[0-9a-f]{16}$" },
+    "intent_type": { "$ref": "#/$defs/intent_type" },
+    "issuer_subsystem": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "required_capability": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "target_scope": { "type": "string", "minLength": 1 },
+    "branch_id": { "$ref": "#/$defs/nullable_identifier" },
+    "goal_id": { "$ref": "#/$defs/nullable_identifier" },
+    "precondition": { "$ref": "#/$defs/precondition" },
+    "proposed_mutation": { "$ref": "#/$defs/trace_mutation_object" },
+    "created_at_tick": { "type": "integer", "minimum": 0 },
+    "provenance": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json#/$defs/provenance" }
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullable_identifier": {
+      "oneOf": [
+        { "$ref": "proposition.schema.json#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "intent_type": {
+      "type": "string",
+      "enum": [
+        "FORK_BRANCH",
+        "DERIVE_PROPOSITION",
+        "RECORD_DECOMPOSITION",
+        "RECORD_CONTRADICTION",
+        "SET_BRANCH_STATUS",
+        "DISCARD_BRANCH",
+        "RECORD_COMPARISON",
+        "PUSH_RPM",
+        "RETURN_RPM",
+        "DECISION_COMMIT",
+        "WRITE_EPISODE",
+        "HALT",
+        "EXTERNAL_ACTION",
+        "PROTECTED_PATCH"
+      ]
+    },
+    "precondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_hash"],
+      "properties": { "state_hash": { "$ref": "#/$defs/hash" } }
+    },
+    "trace_json_value": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "integer" },
+        { "type": "number" },
+        { "type": "string" },
+        { "type": "array", "items": { "$ref": "#/$defs/trace_json_value" } },
+        { "$ref": "#/$defs/trace_mutation_object" }
+      ]
+    },
+    "trace_mutation_object": {
+      "$comment": "This is the one intentionally open payload object: a sealed trace must retain rejected malformed proposals instead of rewriting them into an accepted typed mutation. All surrounding artifact and accepted-mutation objects are closed.",
+      "type": "object",
+      "propertyNames": { "type": "string" },
+      "additionalProperties": { "$ref": "#/$defs/trace_json_value" }
+    },
+    "empty_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "fork_branch_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch"],
+      "properties": { "branch": { "$ref": "branch_frame.schema.json" } }
+    },
+    "proof_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proof"],
+      "properties": { "proof": { "$ref": "branch_frame.schema.json#/$defs/proof_step" } }
+    },
+    "decomposition_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decomposition"],
+      "properties": { "decomposition": { "$ref": "branch_frame.schema.json#/$defs/decomposition_record" } }
+    },
+    "contradiction_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["atom_key"],
+      "properties": { "atom_key": { "type": "string", "minLength": 1 } }
+    },
+    "status_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["BLOCKED", "CONTRADICTED", "DOMINATED", "ADMISSIBLE", "SELECTED"]
+        }
+      }
+    },
+    "discard_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason"],
+      "properties": { "reason": { "const": "candidate expansion complete" } }
+    },
+    "comparison_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report"],
+      "properties": { "report": { "$ref": "machine_state.schema.json#/$defs/comparison_report" } }
+    },
+    "push_rpm_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frame"],
+      "properties": { "frame": { "$ref": "rpm_frame.schema.json" } }
+    },
+    "return_rpm_mutation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["frame_id", "success", "proof"],
+          "properties": {
+            "frame_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+            "success": { "const": true },
+            "proof": { "$ref": "branch_frame.schema.json#/$defs/proof_step" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["frame_id", "success", "failure_status", "detail"],
+          "properties": {
+            "frame_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+            "success": { "const": false },
+            "failure_status": { "const": "NEEDS_INFORMATION" },
+            "detail": { "const": "resolver did not establish its declared target" }
+          }
+        }
+      ]
+    },
+    "commitment_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principled_gate",
+        "derivation_complete",
+        "comparison_stable",
+        "rpm_sufficient",
+        "contradiction_free",
+        "provenance_present",
+        "operational_ready"
+      ],
+      "properties": {
+        "principled_gate": { "const": true },
+        "derivation_complete": { "const": true },
+        "comparison_stable": { "const": true },
+        "rpm_sufficient": { "const": true },
+        "contradiction_free": { "const": true },
+        "provenance_present": { "const": true },
+        "operational_ready": { "const": true }
+      }
+    },
+    "commit_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conclusion", "gate_results"],
+      "properties": {
+        "conclusion": { "$ref": "proposition.schema.json" },
+        "gate_results": { "$ref": "#/$defs/commitment_gates" }
+      }
+    },
+    "episode_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["episode"],
+      "properties": { "episode": { "$ref": "machine_state.schema.json#/$defs/episodic_record" } }
+    },
+    "halt_mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "lacunae", "diagnostics"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["CONCLUDED", "NEEDS_INFORMATION", "CONFLICT_UNRESOLVED", "INADMISSIBLE", "BUDGET_EXHAUSTED"]
+        },
+        "lacunae": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "diagnostics": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+      }
+    },
+    "when_fork_branch": {
+      "if": { "properties": { "intent_type": { "const": "FORK_BRANCH" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/fork_branch_mutation" } } }
+    },
+    "when_derive_proposition": {
+      "if": { "properties": { "intent_type": { "const": "DERIVE_PROPOSITION" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/proof_mutation" } } }
+    },
+    "when_record_decomposition": {
+      "if": { "properties": { "intent_type": { "const": "RECORD_DECOMPOSITION" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/decomposition_mutation" } } }
+    },
+    "when_record_contradiction": {
+      "if": { "properties": { "intent_type": { "const": "RECORD_CONTRADICTION" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/contradiction_mutation" } } }
+    },
+    "when_set_branch_status": {
+      "if": { "properties": { "intent_type": { "const": "SET_BRANCH_STATUS" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/status_mutation" } } }
+    },
+    "when_discard_branch": {
+      "if": { "properties": { "intent_type": { "const": "DISCARD_BRANCH" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/discard_mutation" } } }
+    },
+    "when_record_comparison": {
+      "if": { "properties": { "intent_type": { "const": "RECORD_COMPARISON" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/comparison_mutation" } } }
+    },
+    "when_push_rpm": {
+      "if": { "properties": { "intent_type": { "const": "PUSH_RPM" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/push_rpm_mutation" } } }
+    },
+    "when_return_rpm": {
+      "if": { "properties": { "intent_type": { "const": "RETURN_RPM" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/return_rpm_mutation" } } }
+    },
+    "when_decision_commit": {
+      "if": { "properties": { "intent_type": { "const": "DECISION_COMMIT" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/commit_mutation" } } }
+    },
+    "when_write_episode": {
+      "if": { "properties": { "intent_type": { "const": "WRITE_EPISODE" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/episode_mutation" } } }
+    },
+    "when_halt": {
+      "if": { "properties": { "intent_type": { "const": "HALT" } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/halt_mutation" } } }
+    },
+    "when_prohibited": {
+      "if": { "properties": { "intent_type": { "enum": ["EXTERNAL_ACTION", "PROTECTED_PATCH"] } }, "required": ["intent_type"] },
+      "then": { "properties": { "proposed_mutation": { "$ref": "#/$defs/empty_mutation" } } }
+    },
+    "accepted_intent": {
+      "$comment": "Structural typed-mutation profile only. Kernel authorization and semantic reconstruction are stricter and authoritative.",
+      "allOf": [
+        { "$ref": "#" },
+        { "$ref": "#/$defs/when_fork_branch" },
+        { "$ref": "#/$defs/when_derive_proposition" },
+        { "$ref": "#/$defs/when_record_decomposition" },
+        { "$ref": "#/$defs/when_record_contradiction" },
+        { "$ref": "#/$defs/when_set_branch_status" },
+        { "$ref": "#/$defs/when_discard_branch" },
+        { "$ref": "#/$defs/when_record_comparison" },
+        { "$ref": "#/$defs/when_push_rpm" },
+        { "$ref": "#/$defs/when_return_rpm" },
+        { "$ref": "#/$defs/when_decision_commit" },
+        { "$ref": "#/$defs/when_write_episode" },
+        { "$ref": "#/$defs/when_halt" },
+        { "$ref": "#/$defs/when_prohibited" }
+      ]
+    }
+  }
+}

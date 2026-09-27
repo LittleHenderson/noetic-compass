@@ -1,0 +1,471 @@
+{
+  "artifact": "CAS Native Cognitive Machine deterministic reference demonstrator",
+  "artifact_short_name": "CNCM-RRK",
+  "contract_version": "0.1",
+  "runtime_version": "0.1.0",
+  "status": "REFERENCE-DEMONSTRATOR-ONLY",
+  "authority_rule": "A lower-precedence source MUST NOT override a higher-precedence source. Unresolved conflicts MUST remain OPEN-SEMANTICS and MUST NOT be guessed.",
+  "authority_source_snapshot": {
+    "path": "cas_reasoner.txt",
+    "bytes": 400316,
+    "lines": 14616,
+    "sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea",
+    "role": "The exact in-homebase build charter from which this bounded manifest and every implementation claim are derived."
+  },
+  "source_precedence": [
+    "AUTHORITY_MANIFEST.yaml",
+    "spec/AUTHORITY_CONTRACT_v0.1.md",
+    "spec/CAS_CORE_ONTOLOGY_v0.1.md",
+    "spec/FOUNDATION_DRIVE_ADAPTER_v0.1.md",
+    "spec/COMPILER_RUNTIME_BOUNDARY_v0.1.md",
+    "spec/CAS_RRK_SPEC_v0.1.md",
+    "spec/CAS_SEM_MVP_v0.1.md",
+    "spec/CCB_L1_LANGUAGE_BOARD_v0.1.md",
+    "spec/CCB_D1_DIALOGUE_CONTROL_BOARD_v0.1.md",
+    "spec/CAS_CONVERSATION_PROTOCOL_v0.1.md",
+    "spec/CCB_L1_GRAMMAR_APPRENTICESHIP_v0.1.md",
+    "spec/CCB_T1_COGNITIVE_APPRENTICESHIP_v0.1.md",
+    "spec/CAS_MATH_MVP_v0.1.md",
+    "spec/CAS_KERNEL_IR_v0.1.md",
+    "spec/NON_GOALS_v0.1.md",
+    "spec/CAS_OHM_ATTENTION_INTEGRATION_PROTOCOL_v0.1.md",
+    "spec/CONFORMANCE_PLAN_v0.1.md",
+    "schemas/*.schema.json",
+    "cas_reasoner.txt",
+    "separately frozen CAS/TKS ontologies",
+    "implementation and fixtures",
+    "conversation notes"
+  ],
+  "phase_0_contracts": {
+    "required_artifacts": [
+      "AUTHORITY_MANIFEST.yaml",
+      "spec/CAS_CORE_ONTOLOGY_v0.1.md",
+      "spec/FOUNDATION_DRIVE_ADAPTER_v0.1.md",
+      "spec/COMPILER_RUNTIME_BOUNDARY_v0.1.md",
+      "spec/CAS_KERNEL_IR_v0.1.md",
+      "spec/NON_GOALS_v0.1.md",
+      "spec/CONFORMANCE_PLAN_v0.1.md"
+    ],
+    "artifact_set_present": true,
+    "exit_gate": "OPEN",
+    "open_blockers": [
+      "canonical TKS Foundation and Sub-Foundation meanings",
+      "Foundation-to-Drive mapping",
+      "canonical Prime Desire root identifier",
+      "D/W/P sufficiency semantics",
+      "executable semantics for open Noetics and Registers",
+      "complete source-conflict disposition and final Phase 0 acceptance"
+    ],
+    "rule": "Artifact presence does not resolve OPEN-SEMANTICS and does not close Phase 0."
+  },
+  "wire_versions": {
+    "problem_packet": "cncm.problem/0.1",
+    "evidence_packet": "cncm.evidence/0.1",
+    "run_summary": "cncm.run-summary/0.1",
+    "replay_report": "cncm.replay/0.1",
+    "conversation_fixture": "cas.conversation_fixture/0.1",
+    "dialogue_act_protocol": "cas.dialogue_act/0.1",
+    "dialogue_state_protocol": "cas.dialogue_state/0.1",
+    "dialogue_turn_protocol": "cas.dialogue_turn/0.1",
+    "referent_protocol": "cas.referent/0.1",
+    "response_plan_protocol": "cas.response_plan/0.1",
+    "semantic_packet_protocol": "cas.semantic_packet/0.1",
+    "conversation_trace_transport": "cncm.conversation-trace/0.1",
+    "conversation_turn_transport": "cncm.conversation-turn/0.1",
+    "dialogue_state_transport": "cncm.dialogue-state/0.1",
+    "execution_parity_transport": "cncm.execution-parity/0.1",
+    "math_problem": "cncm.math-problem/0.1",
+    "math_result": "cncm.math-result/0.1",
+    "math_evidence": "cncm.math-evidence/0.1",
+    "math_counterexample": "cncm.math-counterexample/0.1",
+    "math_checker": "cncm.math-checker/0.1",
+    "cas_ohm_stage_record_contract_only": "cncm.cas-ohm-stage/0.1",
+    "teacher_role_assignment_contract_only": "cas.teacher_role_assignment/0.1",
+    "teaching_episode_contract_only": "cas.teaching_episode/0.1",
+    "apprenticeship_qualification_receipt_contract_only": "cas.apprenticeship_qualification_receipt/0.1",
+    "apprenticeship_lineage_contract_only": "cas.apprenticeship_lineage/0.1"
+  },
+  "conversation_contracts": {
+    "spec_paths": [
+      "spec/CCB_L1_LANGUAGE_BOARD_v0.1.md",
+      "spec/CCB_D1_DIALOGUE_CONTROL_BOARD_v0.1.md",
+      "spec/CAS_CONVERSATION_PROTOCOL_v0.1.md"
+    ],
+    "protocol_schema_paths": [
+      "schemas/dialogue_act.schema.json",
+      "schemas/dialogue_state.schema.json",
+      "schemas/dialogue_turn.schema.json",
+      "schemas/referent.schema.json",
+      "schemas/response_plan.schema.json",
+      "schemas/semantic_packet.schema.json"
+    ],
+    "fixture_root": "fixtures/conversation",
+    "fixture_claim_boundary": "The eight cas.* fixture documents are PROVISIONAL contract artifacts. Their structure and static semantic-pair consistency are checked, but implementation status is UNSUPPORTED and runtime/evidence qualification remains NOT_RUN.",
+    "transport_boundary": "The bounded implemented cncm.* conversation transport is distinct from the broader cas.* protocol documents. No full-schema adapter or protocol-conformance qualification is claimed."
+  },
+  "canonical_cas_core": {
+    "closed_set": true,
+    "noetics": ["^0", "^1", "^2", "^3", "^4", "^5", "^6", "^7", "^8", "^9"],
+    "domains": ["P", "C", "E", "O"],
+    "domain_order": ["P", "C", "E", "O"],
+    "drive_rails": ["F1", "F2", "F3", "F4", "F5", "F6", "F7"],
+    "drive_labels": {
+      "F1": "Unity",
+      "F2": "Wisdom",
+      "F3": "Vitality",
+      "F4": "Connection",
+      "F5": "Agency",
+      "F6": "Structure",
+      "F7": "Purpose"
+    },
+    "registers": ["T", "A", "f", "E"],
+    "namespace_warning": "Domain E and register E are distinct typed identifiers. Drive rails F1-F7 are not TKS Foundation identifiers."
+  },
+  "noetic_semantics": {
+    "admitted_meanings": {
+      "^6": "decompose a declared candidate into explicit premises, assumptions, dependencies, contradictions, constraints, and unknowns",
+      "^8": "surface candidate associations without granting truth",
+      "^9": "record the conclusion of an admitted verified derivation"
+    },
+    "reference_runtime_realization": {
+      "^6": "implemented as deterministic decomposition records",
+      "^8": "not generated by the runtime; v0.1 accepts caller-declared candidates only",
+      "^9": "implemented as verified proof steps for exact recall, modus ponens, transitivity, and RPM child results",
+      "coordinate_storage": "no noetic/domain/drive/register coordinate field is present in the v0.1 packet or runtime IR"
+    },
+    "open_identifiers": ["^0", "^1", "^2", "^3", "^4", "^5", "^7"],
+    "open_status": "OPEN-SEMANTICS"
+  },
+  "ontology_boundaries": {
+    "tks_foundation_identifiers": ["TF1", "TF2", "TF3", "TF4", "TF5", "TF6", "TF7"],
+    "tks_subfoundation_identifier_pattern": "^TF[1-7][a-d]$",
+    "foundation_meanings_status": "OPEN-SEMANTICS",
+    "subfoundation_meanings_status": "OPEN-SEMANTICS",
+    "foundation_to_drive_adapter_status": "OPEN-SEMANTICS",
+    "dwp_sufficiency_status": "OPEN-SEMANTICS",
+    "runtime_rule": "foundation_ref may carry one opaque TF1-TF7 or TF1a-TF7d identifier; v0.1 has no D/W/P fields, calculation, or routing",
+    "prohibition": "The runtime MUST NOT alias TF identifiers to F1-F7 or infer Foundation meanings, Drive allocation, or D/W/P sufficiency."
+  },
+  "runtime_envelope": {
+    "implementation_language": "Python >=3.11",
+    "execution_model": "deterministic single-threaded",
+    "input": "strict typed ProblemPacket",
+    "authoritative_state_model": "intent-driven atomic single writer",
+    "branch_model": "immutable branch frames replaced atomically",
+    "time_model": "logical ticks only",
+    "canonical_json": "all mapping keys recursively must be strings; object keys sorted; compact separators; ASCII escaping; NaN and Infinity rejected",
+    "hash_format": "SHA-256 lowercase hexadecimal, exactly 64 characters, with no prefix",
+    "raw_english_reasoning_authority": "prohibited",
+    "neural_or_llm_authority": "prohibited",
+    "external_actions": "prohibited",
+    "external_tools_and_network": "prohibited in the kernel",
+    "cas_ohm_runtime_authority": "prohibited in runtime 0.1.0; the adopted follow-on attention protocol is contract-only and grants no current scheduler, state, proof, commitment, memory-write, action, or permission authority",
+    "constitutional_or_procedural_learning": "prohibited",
+    "working_memory_updates": "admitted",
+    "committed_episodic_writes": "admitted within one persistent CognitiveMachine",
+    "public_nonempty_episodic_import": "prohibited",
+    "private_exact_runresult_replay_snapshot": "admitted only as a trusted same-process implementation boundary; underscore APIs are not security controls and do not cryptographically prove RunResult ownership",
+    "per_run_learning_queue": "one successful WRITE_EPISODE records its episode_id; later writes in that run reject as DUPLICATE_ID; a new boot clears this disposition while retaining same-instance memory",
+    "host_adapter_note": "The CLI reads and writes files by explicit host request; this adapter is outside the reasoning authority boundary."
+  },
+  "frozen_runtime_sets": {
+    "intent_types": [
+      "FORK_BRANCH",
+      "DERIVE_PROPOSITION",
+      "RECORD_DECOMPOSITION",
+      "RECORD_CONTRADICTION",
+      "SET_BRANCH_STATUS",
+      "DISCARD_BRANCH",
+      "RECORD_COMPARISON",
+      "PUSH_RPM",
+      "RETURN_RPM",
+      "DECISION_COMMIT",
+      "WRITE_EPISODE",
+      "HALT",
+      "EXTERNAL_ACTION",
+      "PROTECTED_PATCH"
+    ],
+    "terminal_statuses": [
+      "RUNNING",
+      "CONCLUDED",
+      "NEEDS_INFORMATION",
+      "NEEDS_CAPABILITY",
+      "CONFLICT_UNRESOLVED",
+      "INADMISSIBLE",
+      "BUDGET_EXHAUSTED",
+      "LOOP_LIMIT_REACHED",
+      "DEADLOCK",
+      "FAULT"
+    ],
+    "component_requestable_halts": [
+      "CONCLUDED",
+      "NEEDS_INFORMATION",
+      "CONFLICT_UNRESOLVED",
+      "INADMISSIBLE",
+      "BUDGET_EXHAUSTED"
+    ],
+    "reserved_or_kernel_only_halts": {
+      "NEEDS_CAPABILITY": "unavailable to components in v0.1",
+      "LOOP_LIMIT_REACHED": "unavailable to components in v0.1",
+      "DEADLOCK": "unavailable to components in v0.1",
+      "FAULT": "kernel final-tick fail-safe only"
+    },
+    "inference_operations": [
+      "RECALL",
+      "ASSOCIATE",
+      "DECOMPOSE",
+      "INFER_MODUS_PONENS",
+      "INFER_TRANSITIVE",
+      "RPM_CHILD_RESULT"
+    ],
+    "accepted_derivation_operations": [
+      "RECALL",
+      "INFER_MODUS_PONENS",
+      "INFER_TRANSITIVE",
+      "RPM_CHILD_RESULT"
+    ],
+    "prohibited_intents": ["EXTERNAL_ACTION", "PROTECTED_PATCH"],
+    "rejection_reasons": [
+      "UNAUTHORIZED_ISSUER",
+      "INTENT_TYPE_PROHIBITED",
+      "INVALID_TARGET_SCOPE",
+      "STALE_SNAPSHOT",
+      "INTENT_CONFLICT",
+      "BRANCH_NOT_FOUND",
+      "BRANCH_NOT_WRITABLE",
+      "INVALID_PROOF",
+      "DUPLICATE_ID",
+      "BRANCH_BUDGET_EXHAUSTED",
+      "INFERENCE_BUDGET_EXHAUSTED",
+      "MEMORY_BUDGET_EXHAUSTED",
+      "STACK_FAULT",
+      "RPM_DEPTH_EXHAUSTED",
+      "RPM_CYCLE",
+      "COMMITMENT_GATES_FAILED",
+      "UNRESOLVED_CONTRADICTION",
+      "UNSEALED_TRACE",
+      "UNCOMMITTED_LEARNING_SOURCE",
+      "DISCARDED_BRANCH_REFERENCE",
+      "INVALID_TERMINAL_STATUS",
+      "MALFORMED_MUTATION"
+    ]
+  },
+  "math_extension": {
+    "source_lines": "cas_reasoner.txt lines 6904-7691 and 12990-13025",
+    "status": "IMPLEMENTED-BOUNDED-STANDALONE",
+    "theory_id": "cncm.q-linear/0.1",
+    "implemented": [
+      "exact canonical integers and rationals",
+      "bounded ASCII expression and statement parser",
+      "addition, subtraction, multiplication, guarded division, equality, and strict less-than",
+      "exact linear normalization and substitution",
+      "content-bound proof-step reconstruction with fixed branch, theory, and checker identities",
+      "one-variable linear-equation proof generation and final substitution check",
+      "deterministic bounded-integer counterexample search",
+      "tamper-evident result and evidence digests",
+      "independent semantic proof-result and counterexample-search re-execution",
+      "derived and verified claim support bound to semantically rechecked receipt chains"
+    ],
+    "authority": {
+      "candidate_self_verification": false,
+      "checker_state_write_authority": false,
+      "checker_or_benchmark_autonomous_mutation": false,
+      "floating_point_authoritative_state": false,
+      "bounded_counterexample_absence_counts_as_proof": false
+    },
+    "integration_limit": "Math receipts are not yet embedded in RRK MachineState or committed through a versioned RRK math intent; the transaction coordinator remains the required sole writer for that next integration."
+  },
+  "follow_on_proposals": {
+    "source_append_lines": "cas_reasoner.txt lines 8812-10029",
+    "status": "PROPOSED-NOT-IMPLEMENTED",
+    "items": [
+      "CAS Foundry",
+      "Cognitive Board Studio",
+      "CADA web workbench",
+      "browser canvas and editor",
+      "collaboration",
+      "registry and publishing"
+    ],
+    "required_next_contract": "Freeze a versioned Board Ontology and Capability Specification before implementation. This manifest grants none of those facilities runtime authority."
+  },
+  "qualification_proposal": {
+    "name": "CRQS v0.1 — CAS Reasoning Qualification Standard",
+    "source_append_lines": "cas_reasoner.txt lines 10031-11171",
+    "status": "PROPOSED-NOT-IMPLEMENTED",
+    "specification_status": "OPEN-SPECIFICATION",
+    "proposed_outputs": {
+      "task_difficulty_grade": "D0-D10",
+      "native_cas_reasoning_generation": "CAS-G0-CAS-G10 plus non-certifying research designation CAS-GΩ",
+      "capability_vector": "CV with twelve proposed dimensions scored 0.0-5.0",
+      "evidence_maturity": "E0-E6",
+      "deployment_authority": "A0-A5",
+      "reference_model_benchmark": "RMB, optional and separate from native CAS qualification"
+    },
+    "proposed_components_not_present": [
+      "task manifest and difficulty grader",
+      "CAS-G evaluator",
+      "Capability Vector scorer",
+      "evidence-tier evaluator",
+      "deployment-authority evaluator",
+      "reference-model benchmark",
+      "protected and held-out qualification suites",
+      "causal-ablation and anti-gaming harness",
+      "failure-localization evaluator",
+      "repair engine and qualification bench"
+    ],
+    "separation_rule": {
+      "capability": "what behavior is demonstrated under a frozen task contract",
+      "evidence": "how mature and independently supported the capability claim is",
+      "authority": "what action a separately governed policy permits",
+      "prohibition": "Capability, evidence, and authority MUST NOT be inferred from one another. A repair recommendation MUST NOT authorize a patch, promotion, or action."
+    },
+    "current_artifact_status": {
+      "crqs_grade_earned": false,
+      "current_tests_are_crqs_qualification": false,
+      "current_goldens_are_crqs_qualification": false,
+      "rule": "The current tests and goldens are engineering-conformance artifacts for CNCM-RRK v0.1 only. Topology, test counts, traces, evidence packets, or golden stability MUST NOT be translated into any CRQS result."
+    },
+    "required_next_contract": "Freeze a separate versioned CAS Reasoning Qualification Standard covering schemas, operational definitions, calibration, cumulative gates, held-out/protected evaluation, evaluator independence, anti-gaming controls, report semantics, and repair ontology before implementation or grading."
+  },
+  "cas_ohm_attention_protocol": {
+    "name": "CAS-Ohm Attention Integration Protocol v0.1",
+    "status": "ADOPTED-DESIGN-DIRECTION / CONTRACT-ONLY / NOT-RUNTIME-INTEGRATED",
+    "spec_path": "spec/CAS_OHM_ATTENTION_INTEGRATION_PROTOCOL_v0.1.md",
+    "schema_path": "schemas/cas_ohm_stage_record.schema.json",
+    "wire_version": "cncm.cas-ohm-stage/0.1",
+    "current_runtime_reads_record": false,
+    "current_runtime_emits_record": false,
+    "current_scheduler_uses_cas_ohm": false,
+    "adopted_roles": [
+      "typed native attention-flow accounting",
+      "bounded deterministic resource allocation after a future KIR admission",
+      "test-point diagnostics and probe ranking",
+      "profile-specific neural calibration under held-out validation",
+      "proposed CAS-GEM memory-candidate work allocation"
+    ],
+    "prohibited_authorities": [
+      "truth",
+      "meaning",
+      "proof",
+      "validity",
+      "commitment",
+      "permission",
+      "memory occurrence",
+      "memory write",
+      "state mutation",
+      "halt",
+      "causal identification",
+      "external action",
+      "self modification"
+    ],
+    "integration_rule": "The stage record is a hash-chain-capable diagnostic sidecar bound after a sealed TraceEvent, emits no CNCM intent, and cannot change state, trace, proof, conclusion, commitment, RPM, or episodic memory. Append-only retention must be independently verified. A future scheduler may read only a separate pre-schedule AttentionAllocationPlan after a new authority/KIR version and removal, neutrality, fairness, determinism, and non-authority tests.",
+    "neural_rule": "Neural activation is not native CAS attention without an explicit profile bridge. Same-sample resistance reconstruction is circular and prohibited; calibration and held-out validation splits must be disjoint."
+  },
+  "casformer_research_prototype": {
+    "name": "CASformer v0.1",
+    "status": "REFERENCE_IMPLEMENTATION / NOT_TRAINED / NOT_KERNEL_INTEGRATED",
+    "path": "research/CASFORMER_v0_1",
+    "current_kernel_imports_component": false,
+    "current_runtime_reads_trace": false,
+    "current_runtime_emits_trace": false,
+    "training_run_completed": false,
+    "empirical_neural_validation_completed": false,
+    "software_scope": [
+      "positive CAS-Ohm attention routing",
+      "reference-normalized available-flow telemetry and CJT flow gate",
+      "local relation-ID-selected operators (not canonical CAS-Sem types)",
+      "causal decoder-style language-model shell",
+      "differential positive-conductance signed map",
+      "differentiable passive graph solve",
+      "checksum-bound, contract-checked zero-authority neural traces"
+    ],
+    "equivalence_boundary": "Scalar routing is exactly compilable to ordinary attention with a log-conductance bias. Differential rails are a signed-map parameterization. Neither establishes unique neural expressiveness.",
+    "authority": {
+      "truth": false,
+      "meaning": false,
+      "proof": false,
+      "validity": false,
+      "commitment": false,
+      "permission": false,
+      "memory_occurrence": false,
+      "memory_write": false,
+      "state_mutation": false,
+      "halt": false,
+      "causal_identification": false,
+      "external_action": false,
+      "self_modification": false,
+      "emits_cncm_intents": false
+    },
+    "claim_boundary": "Executable engineering reference starting point only, not a complete recurrent reasoning transistor. No persistent governed Bias/memory lifecycle, language ability, reasoning ability, sample-efficiency, OOD, CAS-specific advantage, biological validity, CNCM integration, CRQS, evidence-tier, deployment-grade, or production-readiness claim is established."
+  },
+  "local_external_dependency_inventory": {
+    "status": "DISCOVERED-READ-ONLY / NOT-INTEGRATED",
+    "cas_compiler": {
+      "canonical_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "entrypoint": "python -B -m api.notation <expression> --mode run",
+      "role": "Validate embedded CAS notation and emit compiler artifacts; compiler success is not truth, memory, runtime-admission, or write authority."
+    },
+    "cas_sdg": {
+      "canonical_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-synthetic",
+      "role": "Generate versioned synthetic fixtures and ground truth; every embedded CAS expression still requires independent validation by the canonical compiler."
+    },
+    "boundary": "Both systems remain external read-only dependencies until a reviewed adapter binds exact source/artifact digests inside this homebase. No dependency is taken on the protected CAS_RRK_v0.1 sibling."
+  },
+  "cognitive_apprenticeship_local_lab": {
+    "name": "CCB-T1 Cognitive Apprenticeship and Teaching Board local laboratory",
+    "status": "EXPERIMENTAL_LOCAL_CCB_T1_QUALIFICATION / NOT_KERNEL_INTEGRATED",
+    "spec_path": "spec/CCB_T1_COGNITIVE_APPRENTICESHIP_v0.1.md",
+    "schema_paths": [
+      "schemas/teacher_role_assignment.schema.json",
+      "schemas/teaching_episode.schema.json",
+      "schemas/apprenticeship_qualification_receipt.schema.json",
+      "schemas/apprenticeship_lineage.schema.json"
+    ],
+    "runtime_path": "cncm/cognitive_apprenticeship.py",
+    "implemented_demo_cases": [
+      "exact_reasoning_math",
+      "tool_use_procedure",
+      "source_grounded_changing_fact",
+      "protected_authority_rejection"
+    ],
+    "state_scope": "LOCAL CCB-T1 STORE ONLY",
+    "teacher_roles_are_live_models": false,
+    "cas_sdg_adapter_live": false,
+    "cas_ohm_runtime_record_emission": false,
+    "cncm_state_writes": 0,
+    "cas_rrk_commits": 0,
+    "cas_rrk_promotion_receipt": false,
+    "boundary": "Local teacher-role records, deterministic curriculum expansion, qualification/retention receipts, TeachingEpisodes, versions, rollback lineage, and CAS-Ohm-shaped observations are experimental host-side artifacts only. They do not install native knowledge or skill and grant no authority."
+  },
+  "claim_limits": {
+    "complete_cas_semantics": false,
+    "complete_ccdl_runtime": false,
+    "general_intelligence": false,
+    "consciousness": false,
+    "production_readiness": false,
+    "formal_verification": false,
+    "empirical_neural_validation": false,
+    "crqs_qualification_implemented": false,
+    "crqs_grade_earned": false,
+    "qualification_bench_implemented": false,
+    "repair_engine_implemented": false,
+    "cas_math_mvp_implemented": true,
+    "cas_math_rrk_state_integration": false,
+    "mathematical_learning_implemented": false,
+    "cas_ohm_attention_protocol_adopted": true,
+    "cas_ohm_runtime_integration": false,
+    "cas_ohm_neural_validation": false,
+    "casformer_reference_implementation": true,
+    "casformer_neural_training": false,
+    "casformer_kernel_integration": false,
+    "casformer_advantage_established": false,
+    "cas_gem_retrieval_implemented": false,
+    "language_apprenticeship_local_lab_implemented": true,
+    "cognitive_apprenticeship_local_lab_implemented": true,
+    "cognitive_apprenticeship_kernel_integrated": false,
+    "live_teacher_integrated": false,
+    "live_cas_sdg_integrated": false,
+    "kernel_procedural_learning_implemented": false,
+    "permitted_claim": "A bounded deterministic Python reference demonstrator for the explicitly implemented typed symbolic and standalone exact CAS-Math subsets, plus isolated local language and domain-neutral apprenticeship qualification laboratories with zero kernel authority."
+  }
+}

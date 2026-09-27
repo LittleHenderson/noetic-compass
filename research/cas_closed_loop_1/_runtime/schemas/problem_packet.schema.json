@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/problem_packet.schema.json",
+  "title": "CNCM ProblemPacket v0.1",
+  "description": "The strict external packet accepted by ProblemPacket.from_dict(). Cross-object arity, entity typing, unique IDs, range restriction, and transitivity declarations are additionally enforced by the runtime parser.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "problem_id",
+    "goal_id",
+    "seed",
+    "entities",
+    "predicates",
+    "facts",
+    "rules",
+    "query"
+  ],
+  "properties": {
+    "schema_version": { "const": "cncm.problem/0.1" },
+    "problem_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "seed": { "type": "integer", "minimum": 0 },
+    "entities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/entity_decl" }
+    },
+    "predicates": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/predicate_decl" }
+    },
+    "facts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/asserted_ground_proposition" }
+    },
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "rule.schema.json" }
+    },
+    "query": { "$ref": "#/$defs/ground_proposition" },
+    "candidates": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/candidate_spec" },
+      "default": []
+    },
+    "rpm_resolvers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resolver_spec" },
+      "default": []
+    },
+    "foundation_ref": {
+      "type": ["string", "null"],
+      "pattern": "^TF[1-7]([a-d])?$",
+      "default": null
+    },
+    "budgets": { "$ref": "#/$defs/budget_limits", "default": {} }
+  },
+  "$defs": {
+    "entity_decl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "entity_type"],
+      "properties": {
+        "entity_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "entity_type": { "$ref": "proposition.schema.json#/$defs/identifier" }
+      }
+    },
+    "predicate_decl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate_id", "argument_types"],
+      "properties": {
+        "predicate_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "argument_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "proposition.schema.json#/$defs/identifier" }
+        },
+        "transitive": { "type": "boolean", "default": false }
+      }
+    },
+    "ground_proposition": {
+      "allOf": [
+        { "$ref": "proposition.schema.json" },
+        {
+          "properties": {
+            "arguments": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "proposition.schema.json#/$defs/identifier" }
+            }
+          }
+        }
+      ]
+    },
+    "asserted_ground_proposition": {
+      "allOf": [
+        { "$ref": "#/$defs/ground_proposition" },
+        {
+          "required": ["evidence_status", "provenance"],
+          "properties": {
+            "evidence_status": { "const": "asserted" },
+            "provenance": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "proposition.schema.json#/$defs/provenance" }
+            }
+          }
+        }
+      ]
+    },
+    "hypothetical_ground_proposition": {
+      "allOf": [
+        { "$ref": "#/$defs/ground_proposition" },
+        {
+          "required": ["evidence_status", "provenance"],
+          "properties": {
+            "evidence_status": { "const": "hypothetical" },
+            "provenance": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "proposition.schema.json#/$defs/provenance" }
+            }
+          }
+        }
+      ]
+    },
+    "candidate_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id"],
+      "properties": {
+        "candidate_id": {
+          "allOf": [
+            { "$ref": "proposition.schema.json#/$defs/identifier" },
+            { "not": { "const": "root" } }
+          ]
+        },
+        "facts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/asserted_ground_proposition" },
+          "default": []
+        },
+        "assumptions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hypothetical_ground_proposition" },
+          "default": []
+        },
+        "hard_constraints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ground_proposition" },
+          "default": []
+        }
+      }
+    },
+    "resolver_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "facts"],
+      "properties": {
+        "target": { "$ref": "#/$defs/ground_proposition" },
+        "facts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/asserted_ground_proposition" }
+        },
+        "rules": {
+          "type": "array",
+          "items": { "$ref": "rule.schema.json" },
+          "default": []
+        }
+      }
+    },
+    "budget_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_ticks": { "type": "integer", "minimum": 2, "default": 128 },
+        "max_branches": { "type": "integer", "minimum": 1, "default": 8 },
+        "max_rpm_depth": { "type": "integer", "minimum": 1, "default": 4 },
+        "max_inference_steps": { "type": "integer", "minimum": 1, "default": 64 },
+        "max_memory_queries": { "type": "integer", "minimum": 1, "default": 8 },
+        "max_repeat_states": { "type": "integer", "minimum": 1, "default": 3 }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "cas.closed-loop.historical-producer/1",
+  "source_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+  "purpose": "Exact original implementation bytes for retained historical evidence. This is not acceptance of the amended current source.",
+  "implementation_files": [
+    {
+      "path": "native_step_adapter.py",
+      "snapshot": "provenance/producer_8f55cc3a/native_step_adapter.py.txt",
+      "sha256": "b76873b8f733749fe592ede6b22823dabb814256f878fdc51b6a2a1ded491d43",
+      "bytes": 17857
+    },
+    {
+      "path": "control.py",
+      "snapshot": "provenance/producer_8f55cc3a/control.py.txt",
+      "sha256": "2586109dcdf6be45a448e58dbdcffa4f11b6a552cec94b64ccce3a1794ca5d7e",
+      "bytes": 5083
+    },
+    {
+      "path": "run_closed_loop.py",
+      "snapshot": "provenance/producer_8f55cc3a/run_closed_loop.py.txt",
+      "sha256": "f6b83d7a38a9014516c645a0ea03e21b8310ce8e1230ea635074b8a4554d1390",
+      "bytes": 9244
+    },
+    {
+      "path": "bootstrap_runtime.py",
+      "snapshot": "provenance/producer_8f55cc3a/bootstrap_runtime.py.txt",
+      "sha256": "5f2ad6a23ebb0d7aaaaa64dcd00f15827e58be3f25aef977b83cf5ff31795bdd",
+      "bytes": 1259
+    }
+  ]
+}

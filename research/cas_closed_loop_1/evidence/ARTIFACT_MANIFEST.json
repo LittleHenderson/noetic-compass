@@ -1,0 +1,30 @@
+{
+  "schema": "cas.closed-loop.artifact-manifest/0.1",
+  "files": [
+    {
+      "path": "atlas.json",
+      "bytes": 1094544,
+      "sha256": "626d9fca8201d80f23dacc42621302f661500fc24f4420d8b35e7d99702c1220"
+    },
+    {
+      "path": "bundle.json",
+      "bytes": 2235,
+      "sha256": "2ebe776fa376c67d193c4197d38ffc1050d26e05921e9c9bd4cbc4e65068c88e"
+    },
+    {
+      "path": "events.jsonl",
+      "bytes": 176624,
+      "sha256": "1807281d34a02dca320b90824c0ec9ca83a9e73273e812d6f3a4082757fbc584"
+    },
+    {
+      "path": "journal.json",
+      "bytes": 1066452,
+      "sha256": "72d518b80f9bfb71c880ce457c109bf73cb445a10004f74c00dd201fefcb0eac"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1143,
+      "sha256": "bc7ab2368fa5d4d32db5c002865331cc73dd8c75797403f65ebb62855e6ee4b6"
+    }
+  ]
+}

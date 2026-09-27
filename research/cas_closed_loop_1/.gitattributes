@@ -1,0 +1,5 @@
+provenance/producer_8f55cc3a/** -text whitespace=cr-at-eol
+HISTORICAL_PRODUCER.json -text whitespace=cr-at-eol
+aws_validation/*.py -text whitespace=cr-at-eol
+aws_validation/OWNER_PRIORITY_20260925.md -text whitespace=cr-at-eol
+aws_validation/jobs/** -text whitespace=cr-at-eol

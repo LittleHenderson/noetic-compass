@@ -1,0 +1,58 @@
+{
+  "runtime_version": "0.4.0",
+  "authorities": {
+    "STORE_SOURCE": [
+      "semantic_memory_controller",
+      "store_anchored_source"
+    ],
+    "RECALL_MEMORY": [
+      "semantic_memory_controller",
+      "recall_scoped_source"
+    ],
+    "CHECK_MEMORY_RESOLUTION": [
+      "semantic_memory_controller",
+      "check_memory_resolution"
+    ]
+  },
+  "work_allocations": {
+    "STORE_SOURCE": {
+      "instructions": 12,
+      "checker_calls": 1
+    },
+    "RECALL_MEMORY": {
+      "instructions": 12,
+      "checker_calls": 1
+    },
+    "CHECK_MEMORY_RESOLUTION": {
+      "instructions": 16,
+      "checker_calls": 1
+    }
+  },
+  "max_statements": 256,
+  "max_references": 48,
+  "max_semantic_records": 1024,
+  "max_journal_bytes": 50331648,
+  "max_journal_events": 1024,
+  "max_episodes": 16,
+  "trusted_ingress": "exact externally supplied statement digests with quiescent append-only host extensions",
+  "ingress_recovery": "externally supplied initial set and ordered extension schedule",
+  "source_statuses": [
+    "USER_ATTESTED",
+    "TEST_FIXTURE"
+  ],
+  "factual_verification": false,
+  "conditional_arithmetic_only": true,
+  "source_head_key": [
+    "scope",
+    "key",
+    "source_id"
+  ],
+  "source_mutation_window": "before first equation call",
+  "independent_resolution_check": true,
+  "failed_checks_charged": true,
+  "allocation_refunds": false,
+  "unreachable_equations": "retained in original problem; excluded from resolved problem",
+  "external_actions": false,
+  "constitutional_learning": false,
+  "neural_learning": false
+}

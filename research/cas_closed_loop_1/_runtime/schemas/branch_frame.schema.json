@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/branch_frame.schema.json",
+  "title": "CNCM BranchFrame v0.1",
+  "description": "The exact BranchFrame.to_dict() artifact shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "branch_id",
+    "parent_branch_id",
+    "active_goal_id",
+    "candidate_id",
+    "assumptions",
+    "propositions",
+    "recalled_memory_ids",
+    "proof_steps",
+    "decompositions",
+    "hard_constraints",
+    "contradictions",
+    "unknowns",
+    "status",
+    "created_at_tick"
+  ],
+  "properties": {
+    "branch_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "parent_branch_id": {
+      "oneOf": [
+        { "$ref": "proposition.schema.json#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "active_goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "candidate_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "assumptions": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json" }
+    },
+    "propositions": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json" }
+    },
+    "recalled_memory_ids": { "$ref": "#/$defs/string_list" },
+    "proof_steps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/proof_step" }
+    },
+    "decompositions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/decomposition_record" }
+    },
+    "hard_constraints": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json" }
+    },
+    "contradictions": { "$ref": "#/$defs/string_list" },
+    "unknowns": { "$ref": "#/$defs/string_list" },
+    "status": {
+      "type": "string",
+      "enum": ["OPEN", "BLOCKED", "CONTRADICTED", "DOMINATED", "ADMISSIBLE", "SELECTED", "COMMITTED", "DISCARDED", "FAULTED"]
+    },
+    "created_at_tick": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "string_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "substitution_pair": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "string",
+          "pattern": "^\\?[A-Za-z_][A-Za-z0-9_.:\\-]*$"
+        },
+        { "$ref": "proposition.schema.json#/$defs/identifier" }
+      ],
+      "items": false
+    },
+    "proof_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "operation",
+        "premise_keys",
+        "rule_id",
+        "conclusion",
+        "substitution",
+        "branch_id",
+        "verified",
+        "provenance"
+      ],
+      "properties": {
+        "step_id": { "type": "string", "pattern": "^proof-[0-9a-f]{16}$" },
+        "operation": {
+          "type": "string",
+          "enum": ["RECALL", "INFER_MODUS_PONENS", "INFER_TRANSITIVE", "RPM_CHILD_RESULT"]
+        },
+        "premise_keys": { "$ref": "#/$defs/string_list" },
+        "rule_id": {
+          "oneOf": [
+            { "$ref": "proposition.schema.json#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "conclusion": { "$ref": "proposition.schema.json" },
+        "substitution": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/substitution_pair" }
+        },
+        "branch_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "verified": { "type": "boolean" },
+        "provenance": {
+          "type": "array",
+          "items": { "$ref": "proposition.schema.json#/$defs/provenance" }
+        }
+      }
+    },
+    "decomposition_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "premises",
+        "assumptions",
+        "dependencies",
+        "contradictions",
+        "unknowns",
+        "required_prerequisites",
+        "predicted_effects"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "premises": { "$ref": "#/$defs/string_list" },
+        "assumptions": { "$ref": "#/$defs/string_list" },
+        "dependencies": { "$ref": "#/$defs/string_list" },
+        "contradictions": { "$ref": "#/$defs/string_list" },
+        "unknowns": { "$ref": "#/$defs/string_list" },
+        "required_prerequisites": { "$ref": "#/$defs/string_list" },
+        "predicted_effects": { "$ref": "#/$defs/string_list" }
+      }
+    }
+  }
+}

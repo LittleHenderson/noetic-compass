@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/trace_event.schema.json",
+  "title": "CNCM TraceEvent v0.1",
+  "description": "The exact sealed TraceEvent.to_dict() artifact shape. Proposed intents use the trace-safe Intent envelope, which deliberately preserves rejected malformed mutation payloads; accepted mutation shapes are available at intent.schema.json#/$defs/accepted_intent. Event-hash, state-chain, partition, and parent-chain reconstruction remain runtime verification duties.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "parent_event_id",
+    "logical_tick",
+    "run_id",
+    "runtime_version",
+    "pre_state_hash",
+    "enabled_components",
+    "scheduled_components",
+    "proposed_intents",
+    "authorized_intent_ids",
+    "rejected_intents",
+    "committed_mutations",
+    "post_state_hash",
+    "terminal_status",
+    "previous_event_hash",
+    "event_hash",
+    "sealed"
+  ],
+  "properties": {
+    "event_id": { "type": "string", "pattern": "^event-run-[0-9a-f]{16}-[0-9]{6,}$" },
+    "parent_event_id": {
+      "oneOf": [
+        { "type": "string", "pattern": "^event-run-[0-9a-f]{16}-[0-9]{6,}$" },
+        { "type": "null" }
+      ]
+    },
+    "logical_tick": { "type": "integer", "minimum": 1 },
+    "run_id": { "type": "string", "pattern": "^run-[0-9a-f]{16}$" },
+    "runtime_version": { "const": "0.1.0" },
+    "pre_state_hash": { "$ref": "#/$defs/hash" },
+    "enabled_components": { "$ref": "#/$defs/identifier_list" },
+    "scheduled_components": { "$ref": "#/$defs/identifier_list" },
+    "proposed_intents": {
+      "type": "array",
+      "items": { "$ref": "intent.schema.json" }
+    },
+    "authorized_intent_ids": { "$ref": "#/$defs/intent_id_list" },
+    "rejected_intents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rejected_intent" }
+    },
+    "committed_mutations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "post_state_hash": { "$ref": "#/$defs/hash" },
+    "terminal_status": { "$ref": "machine_state.schema.json#/$defs/terminal_status" },
+    "previous_event_hash": { "$ref": "#/$defs/hash_or_empty" },
+    "event_hash": { "$ref": "#/$defs/hash" },
+    "sealed": { "const": true }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "hash_or_empty": { "type": "string", "pattern": "^$|^[0-9a-f]{64}$" },
+    "identifier_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "intent_id_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^intent-[0-9a-f]{16}$" }
+    },
+    "rejected_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent_id", "reason", "detail"],
+      "properties": {
+        "intent_id": { "type": "string", "pattern": "^intent-[0-9a-f]{16}$" },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "UNAUTHORIZED_ISSUER",
+            "INTENT_TYPE_PROHIBITED",
+            "INVALID_TARGET_SCOPE",
+            "STALE_SNAPSHOT",
+            "INTENT_CONFLICT",
+            "BRANCH_NOT_FOUND",
+            "BRANCH_NOT_WRITABLE",
+            "INVALID_PROOF",
+            "DUPLICATE_ID",
+            "BRANCH_BUDGET_EXHAUSTED",
+            "INFERENCE_BUDGET_EXHAUSTED",
+            "MEMORY_BUDGET_EXHAUSTED",
+            "STACK_FAULT",
+            "RPM_DEPTH_EXHAUSTED",
+            "RPM_CYCLE",
+            "COMMITMENT_GATES_FAILED",
+            "UNRESOLVED_CONTRADICTION",
+            "UNSEALED_TRACE",
+            "UNCOMMITTED_LEARNING_SOURCE",
+            "DISCARDED_BRANCH_REFERENCE",
+            "INVALID_TERMINAL_STATUS",
+            "MALFORMED_MUTATION"
+          ]
+        },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}
