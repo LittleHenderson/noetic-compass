@@ -1,20 +1,24 @@
-"""SI1 records for the existing native acquisition harness, before outcome access.
-
-Only finite typed configuration/composition is executable. These records neither
-authorize a model change nor authenticate themselves as an independent review.
-"""
+"""Typed H1/H2 data. Authority belongs to the separately admitted host."""
 from dataclasses import asdict, dataclass
 import hashlib
 import json
 
-SCHEMA = "helm.si.native-acquisition/1"
+SCHEMA = "helm.si.native-acquisition/2"
 OPERATIONS = ("NO_CHANGE", "CHANGE_CONFIG", "COMPOSE_SUPPORTED_COMPONENTS")
 COMPONENTS = ("parent_transform", "prerequisite_acquisition", "verification_commit")
+PROVENANCE = "PUBLIC_ENGINEERING_HOST_RECORDED_CONFIGURATION_FIXTURE"
+VISIBILITY = "PUBLIC_ORIGINAL_INPUT_AND_RUNTIME_TRACE_ONLY"
+ENTRYPOINT = "research.cas_closed_loop_1.run_closed_loop.run_episode"
 
 
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
                                      allow_nan=False).encode()).hexdigest()
+
+
+def require_hash(value, length=64):
+    if type(value) is not str or len(value) != length or any(c not in "0123456789abcdef" for c in value):
+        raise ValueError("MALFORMED_IDENTITY_HASH")
 
 
 @dataclass(frozen=True)
@@ -23,9 +27,21 @@ class ParentIdentity:
     runtime_sha: str
     branch: str
     source_manifest_sha256: str
+    harness_sha256: str
     checkpoint_sha256: str | None = None
-    harness_sha256: str | None = None
     schema: str = SCHEMA
+
+    def __post_init__(self):
+        require_hash(self.source_sha, 40)
+        require_hash(self.runtime_sha, 40)
+        require_hash(self.source_manifest_sha256)
+        require_hash(self.harness_sha256)
+        if self.schema != SCHEMA:
+            raise ValueError("INCOMPATIBLE_PARENT_SCHEMA")
+        if type(self.branch) is not str or not self.branch or len(self.branch) > 200:
+            raise ValueError("INVALID_BRANCH_CONTEXT")
+        if self.checkpoint_sha256 is not None:
+            raise ValueError("CHECKPOINT_NOT_SUPPORTED")
 
 
 @dataclass(frozen=True)
@@ -41,23 +57,57 @@ class HarnessConfig:
 class SelfDescription:
     parent: ParentIdentity
     config: HarnessConfig
-    entrypoint: str = "research.cas_closed_loop_1.run_closed_loop.run_episode"
+    entrypoint: str = ENTRYPOINT
     supported_edits: tuple = OPERATIONS
     model_execution: str = "NOT_SUPPORTED_IN_THIS_SYMBOLIC_ENGINEERING_SLICE"
     tensor_shapes: tuple = ()
+    tensor_dtypes: tuple = ()
+    trainable_parameters: int = 0
+    visibility: str = VISIBILITY
     observed_memory_bytes: int | None = None
+
+    def __post_init__(self):
+        ParentIdentity(**asdict(self.parent))
+        HarnessConfig(**asdict(self.config))
+        if (self.entrypoint != ENTRYPOINT or self.supported_edits != OPERATIONS or
+                self.tensor_shapes or self.tensor_dtypes or type(self.trainable_parameters) is not int or
+                self.trainable_parameters != 0 or self.visibility != VISIBILITY or
+                self.model_execution != "NOT_SUPPORTED_IN_THIS_SYMBOLIC_ENGINEERING_SLICE"):
+            raise ValueError("UNSUPPORTED_SELF_DESCRIPTION")
+        if self.observed_memory_bytes is not None and (type(self.observed_memory_bytes) is not int or self.observed_memory_bytes < 0):
+            raise ValueError("INVALID_MEMORY_MEASUREMENT")
 
 
 @dataclass(frozen=True)
 class FailureObservation:
     parent: ParentIdentity
+    run_id: str
+    run_sequence: int
     input_sha256: str
     trace_sha256: str
+    journal_digest: str
     original_prediction: str | None
     checked_effect: bool
     feedback: str
-    provenance: str = "PUBLIC_ENGINEERING_INJECTED_ACQUISITION_DISABLED"
-    visibility: str = "PUBLIC_ORIGINAL_INPUT_AND_RUNTIME_TRACE_ONLY"
+    provenance: str = PROVENANCE
+    visibility: str = VISIBILITY
+
+    def __post_init__(self):
+        ParentIdentity(**asdict(self.parent))
+        if (type(self.run_id) is not str or not self.run_id.startswith("run_") or
+                len(self.run_id) != 10 or not self.run_id[4:].isdigit() or
+                type(self.run_sequence) is not int or self.run_sequence < 1):
+            raise ValueError("INVALID_RUN_ORDER")
+        for value in (self.input_sha256, self.trace_sha256, self.journal_digest):
+            require_hash(value)
+        if self.provenance != PROVENANCE or self.visibility != VISIBILITY:
+            raise ValueError("NON_PUBLIC_OBSERVATION_PROVENANCE")
+        if type(self.checked_effect) is not bool or self.feedback not in ("BLOCKED", "CHECKED"):
+            raise ValueError("INVALID_PUBLIC_FEEDBACK")
+        if (self.feedback == "CHECKED") != self.checked_effect:
+            raise ValueError("INCONSISTENT_PUBLIC_FEEDBACK")
+        if self.original_prediction is not None and (type(self.original_prediction) is not str or len(self.original_prediction) > 256):
+            raise ValueError("INVALID_PUBLIC_PREDICTION")
 
 
 @dataclass(frozen=True)
@@ -66,10 +116,22 @@ class ModificationProposal:
     observation_sha256: str
     operation: str
     parameters: tuple
-    proposer: str
-    hypothesis: str
-    alternatives: tuple
+    proposer: str = "EXTERNALLY_AUTHORED_FIXTURE"
+    hypothesis: str = "PERMIT_EXISTING_PREREQUISITE_ACQUISITION"
+    alternatives: tuple = ("NO_CHANGE",)
     attribution: str = "ENGINEERING_ASSISTED"
+
+    def __post_init__(self):
+        ParentIdentity(**asdict(self.parent))
+        require_hash(self.observation_sha256)
+        if (self.proposer != "EXTERNALLY_AUTHORED_FIXTURE" or
+                self.hypothesis != "PERMIT_EXISTING_PREREQUISITE_ACQUISITION" or
+                self.alternatives != ("NO_CHANGE",) or self.attribution != "ENGINEERING_ASSISTED"):
+            raise ValueError("UNSUPPORTED_PROPOSAL_CHANNEL")
+        if self.operation not in OPERATIONS:
+            raise ValueError("UNSUPPORTED_EDIT_MODE")
+        if type(self.parameters) is not tuple:
+            raise ValueError("TYPED_PARAMETERS_REQUIRED")
 
 
 @dataclass(frozen=True)
@@ -79,63 +141,64 @@ class CandidateBuild:
     config: HarnessConfig
     candidate_id: str
     edit_level: str
+    build_sequence: int
     isolation: str = "TYPED_DATA_ONLY_NO_CANDIDATE_CODE_PATH_OR_IMPORT"
 
 
 def public_observation(parent, payload):
-    expected = {"input_sha256", "trace_sha256", "original_prediction", "checked_effect", "feedback"}
+    expected = {"run_id", "run_sequence", "input_sha256", "trace_sha256", "journal_digest",
+                "original_prediction", "checked_effect", "feedback"}
     if type(payload) is not dict or set(payload) != expected:
         raise ValueError("NON_PUBLIC_OR_UNKNOWN_OBSERVATION_FIELDS")
-    if payload["feedback"] not in ("BLOCKED", "CHECKED", "FAILED"):
-        raise ValueError("UNSUPPORTED_FEEDBACK")
-    if type(payload["checked_effect"]) is not bool:
-        raise ValueError("BOOLEAN_EFFECT_REQUIRED")
-    if payload["original_prediction"] is not None and type(payload["original_prediction"]) is not str:
-        raise ValueError("RAW_PUBLIC_PREDICTION_REQUIRED")
-    for field in ("input_sha256", "trace_sha256"):
-        value = payload[field]
-        if type(value) is not str or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
-            raise ValueError("OBSERVATION_DIGEST_REQUIRED")
     return FailureObservation(parent=parent, **payload)
 
 
-def build_candidate(description, observation, proposal):
-    if not isinstance(description, SelfDescription) or not isinstance(observation, FailureObservation):
-        raise ValueError("TYPED_OBSERVATION_REQUIRED")
-    if type(proposal) is not ModificationProposal:
-        raise ValueError("TYPED_PROPOSAL_REQUIRED")
-    if proposal.parent != description.parent or observation.parent != description.parent:
-        raise ValueError("STALE_OR_FOREIGN_PARENT")
-    if proposal.observation_sha256 != digest(asdict(observation)):
-        raise ValueError("WRONG_OBSERVATION")
-    if proposal.attribution != "ENGINEERING_ASSISTED" or not proposal.proposer:
-        raise ValueError("PROPOSER_ATTRIBUTION_REQUIRED")
-    if type(proposal.parameters) is not tuple:
-        raise ValueError("TYPED_PARAMETERS_REQUIRED")
+def candidate_configuration(description, proposal):
+    if proposal.operation not in description.supported_edits:
+        raise ValueError("UNSUPPORTED_EDIT_MODE")
     if proposal.operation == "NO_CHANGE":
         if proposal.parameters:
             raise ValueError("NO_CHANGE_HAS_NO_PARAMETERS")
-        config, level = description.config, "H1"
-    elif proposal.operation == "CHANGE_CONFIG":
+        return description.config, "H1"
+    if proposal.operation == "CHANGE_CONFIG":
         if len(proposal.parameters) != 1 or type(proposal.parameters[0]) is not bool:
             raise ValueError("ONLY_ALLOW_ACQUISITION_BOOLEAN_IS_EDITABLE")
-        config, level = HarnessConfig(proposal.parameters[0]), "H1"
-    elif proposal.operation == "COMPOSE_SUPPORTED_COMPONENTS":
-        if proposal.parameters not in (COMPONENTS, (COMPONENTS[0], COMPONENTS[2])):
-            raise ValueError("UNSUPPORTED_COMPOSITION_OR_MISSING_OBLIGATION")
-        config, level = HarnessConfig("prerequisite_acquisition" in proposal.parameters), "H2"
-    else:
-        raise ValueError("UNSUPPORTED_EDIT_MODE")
-    body = {"parent": asdict(description.parent), "proposal": asdict(proposal), "config": asdict(config)}
-    return CandidateBuild(description.parent, proposal, config, digest(body), level)
+        return HarnessConfig(proposal.parameters[0]), "H1"
+    if proposal.parameters not in (COMPONENTS, (COMPONENTS[0], COMPONENTS[2])):
+        raise ValueError("UNSUPPORTED_COMPOSITION_OR_MISSING_OBLIGATION")
+    return HarnessConfig(COMPONENTS[1] in proposal.parameters), "H2"
 
 
-def execution_config(description, observation, candidate, mode):
+def build_candidate(host, description, observation, proposal):
+    from .admission import TrustedHost
+    if type(host) is not TrustedHost:
+        raise ValueError("TRUSTED_HOST_ADMISSION_REQUIRED")
+    # Validation repeats at boundaries, including directly constructed/deserialized data.
+    host.validate_description(description)
+    host.verify_observation(observation)
+    if type(proposal) is not ModificationProposal:
+        raise ValueError("TYPED_PROPOSAL_REQUIRED")
+    ModificationProposal(**(asdict(proposal) | {"parent": proposal.parent}))
+    host.validate_parent(proposal.parent)
+    if proposal.observation_sha256 != digest(asdict(observation)):
+        raise ValueError("WRONG_OBSERVATION")
+    config, level = candidate_configuration(description, proposal)
+    sequence = host.next_sequence()
+    body = {"parent": asdict(host.parent), "proposal": asdict(proposal), "config": asdict(config),
+            "edit_level": level, "build_sequence": sequence}
+    candidate = CandidateBuild(host.parent, proposal, config, digest(body), level, sequence)
+    host.record_build(candidate, observation)
+    return candidate
+
+
+def execution_config(host, description, observation, candidate, mode):
+    from .admission import TrustedHost
+    if type(host) is not TrustedHost:
+        raise ValueError("TRUSTED_HOST_ADMISSION_REQUIRED")
+    host.validate_description(description)
     if mode not in ("disabled", "shadow", "active"):
         raise ValueError("UNKNOWN_EXECUTION_MODE")
-    if mode == "disabled":
-        return description.config
-    rebuilt = build_candidate(description, observation, candidate.proposal)
-    if rebuilt != candidate:
-        raise ValueError("CANDIDATE_BUILD_ALTERED")
-    return description.config if mode == "shadow" else candidate.config
+    # Disabled ignores the proposal but never takes baseline settings from it.
+    if mode != "disabled":
+        host.verify_candidate(description, observation, candidate)
+    return candidate.config if mode == "active" else host.baseline_config

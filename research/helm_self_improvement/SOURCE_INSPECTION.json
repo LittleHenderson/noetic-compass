@@ -1,47 +1,886 @@
 {
-  "schema": "helm.si.source-inspection/1",
-  "utc": "2026-09-27T05:00:05.632156+00:00",
-  "method": "AST parse only; no imports or project execution",
+  "schema": "helm.si.source-inspection/2",
+  "utc": "2026-09-27T06:24:39.023295+00:00",
+  "base_si_commit": "52d625ac62f06fa947c0ff5c141fcbf0027456bc",
+  "method": "AST parse and static parameter/fixture expansion only; no imports or project execution",
   "ast_files": [
     {
       "path": "research/helm_self_improvement/__init__.py",
       "sha256": "32c9baf5d45995cbf6ef1a7fafe7a746ef62555813eca1636f5aa66d5d0a8603"
     },
     {
+      "path": "research/helm_self_improvement/admission.py",
+      "sha256": "0b7019b48f0f13fcd5e8c9d43b0d1fc4de6fc5b25baf775afb6a4becb72d8699"
+    },
+    {
       "path": "research/helm_self_improvement/conftest.py",
-      "sha256": "2079a56c38084b9bfb3eb2b431a41f4456873f18c3357ce0d6acd7474b6553c0"
+      "sha256": "f5dcecfee9a434a980315729a667235faa51f1b13326df324350b59766011044"
     },
     {
       "path": "research/helm_self_improvement/contracts.py",
-      "sha256": "a58b8785df0d2ed16adc21c7bf5b92963112d6561062cf94e8bfe5959a53c8c3"
+      "sha256": "63a9d304daf09082b56f8dce2ce7e4426b5c6e99eb1781e0950c398b55857483"
     },
     {
       "path": "research/helm_self_improvement/episode.py",
-      "sha256": "7ab133baa08f4a9ee4b8b0656aaa978b6a6f42d12c53f35edcbf62b53fca7210"
+      "sha256": "be7baeb54d6e559028a6668f19cdbd883d7f542851ece8edc337f93eab269d47"
     },
     {
       "path": "research/helm_self_improvement/native_bridge.py",
-      "sha256": "29555c3800f88db5edc223eb5c8c8af5b3d615ff9e208d54e9e0574bb0af106f"
+      "sha256": "bb322b3a6d31920d764b599d7a820cf2cee707150b9056fbdd400ddd83a8a640"
     },
     {
       "path": "research/helm_self_improvement/test_contracts.py",
-      "sha256": "da9303285ad0d46938b2ce1145702d6584279b9444d3f070be104f1a344fdcba"
+      "sha256": "72b360171b642a2850a92238978dca91dea56a95d4e0917e36c9801d92d46b8d"
     },
     {
       "path": "research/helm_self_improvement/test_episode.py",
-      "sha256": "425f0e8de7d8863c01bcce988eeb5e8ff0b4dd2a351e09f94829049edfa693cd"
+      "sha256": "461d1254b3b10ea8f027d4b5f243227f0bd5b23169676f2315ecca60b636ec5b"
     }
   ],
-  "test_functions": 13,
-  "declared_cases_by_static_inventory": 31,
+  "test_functions": 21,
+  "declared_cases_by_static_inventory": 69,
+  "declared_cases": [
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_all_caller_records_agree_but_foreign_parent_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_00",
+          "value_source": "('source_sha', 'f' * 40)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_all_caller_records_agree_but_foreign_parent_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_01",
+          "value_source": "('runtime_sha', 'f' * 40)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_all_caller_records_agree_but_foreign_parent_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_02",
+          "value_source": "('branch', 'foreign/branch')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_all_caller_records_agree_but_foreign_parent_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_03",
+          "value_source": "('source_manifest_sha256', 'f' * 64)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_all_caller_records_agree_but_foreign_parent_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_04",
+          "value_source": "('harness_sha256', 'f' * 64)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_no_model_fixture_refuses_every_non_null_checkpoint",
+      "dimensions": [
+        {
+          "parameter": "checkpoint",
+          "id": "case_00",
+          "value_source": "'NOT-A-SHA256'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_no_model_fixture_refuses_every_non_null_checkpoint",
+      "dimensions": [
+        {
+          "parameter": "checkpoint",
+          "id": "case_01",
+          "value_source": "'f' * 64"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_no_model_fixture_refuses_every_non_null_checkpoint",
+      "dimensions": [
+        {
+          "parameter": "checkpoint",
+          "id": "case_02",
+          "value_source": "{}"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_no_model_fixture_refuses_every_non_null_checkpoint",
+      "dimensions": [
+        {
+          "parameter": "checkpoint",
+          "id": "case_03",
+          "value_source": "1"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_wrong_schema_refused_on_deserialization",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_provenance_validated_at_every_boundary",
+      "dimensions": [
+        {
+          "parameter": "route",
+          "id": "case_00",
+          "value_source": "'direct'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_provenance_validated_at_every_boundary",
+      "dimensions": [
+        {
+          "parameter": "route",
+          "id": "case_01",
+          "value_source": "'json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_provenance_validated_at_every_boundary",
+      "dimensions": [
+        {
+          "parameter": "route",
+          "id": "case_02",
+          "value_source": "'bypass_init'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_00",
+          "value_source": "('input_sha256', 'f' * 64)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_01",
+          "value_source": "('trace_sha256', 'f' * 64)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_02",
+          "value_source": "('journal_digest', 'f' * 64)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_03",
+          "value_source": "('run_id', 'run_999999')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_04",
+          "value_source": "('run_sequence', 999999)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_05",
+          "value_source": "('original_prediction', 'fabricated')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_unknown_fields_refused_without_reading_any_protected_value",
+      "dimensions": [
+        {
+          "parameter": "field",
+          "id": "case_00",
+          "value_source": "'answer_key'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_unknown_fields_refused_without_reading_any_protected_value",
+      "dimensions": [
+        {
+          "parameter": "field",
+          "id": "case_01",
+          "value_source": "'future_outcome'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_unknown_fields_refused_without_reading_any_protected_value",
+      "dimensions": [
+        {
+          "parameter": "field",
+          "id": "case_02",
+          "value_source": "'evaluator_score'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_observation_unknown_fields_refused_without_reading_any_protected_value",
+      "dimensions": [
+        {
+          "parameter": "field",
+          "id": "case_03",
+          "value_source": "'checkpoint_path'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_proposal_text_channels_are_finite_identifiers",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_00",
+          "value_source": "('hypothesis', 'arbitrary text')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_proposal_text_channels_are_finite_identifiers",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_01",
+          "value_source": "('alternatives', ('arbitrary',))"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_proposal_text_channels_are_finite_identifiers",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_02",
+          "value_source": "('proposer', 'foreign')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_configuration_cannot_expand_authority_or_execute_code",
+      "dimensions": [
+        {
+          "parameter": "parameters",
+          "id": "case_00",
+          "value_source": "(1,)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_configuration_cannot_expand_authority_or_execute_code",
+      "dimensions": [
+        {
+          "parameter": "parameters",
+          "id": "case_01",
+          "value_source": "(float('nan'),)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_configuration_cannot_expand_authority_or_execute_code",
+      "dimensions": [
+        {
+          "parameter": "parameters",
+          "id": "case_02",
+          "value_source": "(True, 500)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_configuration_cannot_expand_authority_or_execute_code",
+      "dimensions": [
+        {
+          "parameter": "parameters",
+          "id": "case_03",
+          "value_source": "('../grader.py',)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_configuration_cannot_expand_authority_or_execute_code",
+      "dimensions": [
+        {
+          "parameter": "parameters",
+          "id": "case_04",
+          "value_source": "('import os',)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unisolated_edit_modes_are_unavailable",
+      "dimensions": [
+        {
+          "parameter": "operation",
+          "id": "case_00",
+          "value_source": "'PATCH_ALLOWED_MODULE'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unisolated_edit_modes_are_unavailable",
+      "dimensions": [
+        {
+          "parameter": "operation",
+          "id": "case_01",
+          "value_source": "'ADD_TYPED_MODULE'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unisolated_edit_modes_are_unavailable",
+      "dimensions": [
+        {
+          "parameter": "operation",
+          "id": "case_02",
+          "value_source": "'RAISE_BUDGET'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unsupported_self_description_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_00",
+          "value_source": "('entrypoint', 'foreign')"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unsupported_self_description_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_01",
+          "value_source": "('supported_edits', ('NO_CHANGE',))"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unsupported_self_description_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_02",
+          "value_source": "('observed_memory_bytes', -1)"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_unsupported_self_description_is_refused",
+      "dimensions": [
+        {
+          "parameter": "field,value",
+          "id": "case_03",
+          "value_source": "('tensor_dtypes', ('float32',))"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_fabricated_baseline_config_refused_even_when_disabled",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_build_order_and_candidate_identity_are_bound_to_host_ledger",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_no_change_and_h2_preserve_required_components",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_contracts.py",
+      "function": "test_changed_external_policy_cannot_be_accepted_by_old_anchor",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_actual_h1_h2_or_no_change_is_recorded_and_persisted",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_actual_h1_h2_or_no_change_is_recorded_and_persisted",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_actual_h1_h2_or_no_change_is_recorded_and_persisted",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_witness_reloads_in_a_fresh_process_with_same_host_admission",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_witness_reloads_in_a_fresh_process_with_same_host_admission",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_witness_reloads_in_a_fresh_process_with_same_host_admission",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_disabled_shadow_preserve_admitted_parent_and_record_measured_overhead",
+      "dimensions": [
+        {
+          "parameter": "baseline_enabled",
+          "id": "case_00",
+          "value_source": "False"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_disabled_shadow_preserve_admitted_parent_and_record_measured_overhead",
+      "dimensions": [
+        {
+          "parameter": "baseline_enabled",
+          "id": "case_01",
+          "value_source": "True"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        },
+        {
+          "parameter": "file",
+          "id": "case_00",
+          "value_source": "'candidate_build.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        },
+        {
+          "parameter": "file",
+          "id": "case_01",
+          "value_source": "'candidate/events.jsonl'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        },
+        {
+          "parameter": "file",
+          "id": "case_02",
+          "value_source": "'baseline/journal.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        },
+        {
+          "parameter": "file",
+          "id": "case_03",
+          "value_source": "'candidate/summary.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        },
+        {
+          "parameter": "file",
+          "id": "case_00",
+          "value_source": "'candidate_build.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        },
+        {
+          "parameter": "file",
+          "id": "case_01",
+          "value_source": "'candidate/events.jsonl'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        },
+        {
+          "parameter": "file",
+          "id": "case_02",
+          "value_source": "'baseline/journal.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        },
+        {
+          "parameter": "file",
+          "id": "case_03",
+          "value_source": "'candidate/summary.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        },
+        {
+          "parameter": "file",
+          "id": "case_00",
+          "value_source": "'candidate_build.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        },
+        {
+          "parameter": "file",
+          "id": "case_01",
+          "value_source": "'candidate/events.jsonl'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        },
+        {
+          "parameter": "file",
+          "id": "case_02",
+          "value_source": "'baseline/journal.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        },
+        {
+          "parameter": "file",
+          "id": "case_03",
+          "value_source": "'candidate/summary.json'"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_self_recomputed_episode_digest_does_not_authenticate_new_disposition",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_self_recomputed_episode_digest_does_not_authenticate_new_disposition",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_self_recomputed_episode_digest_does_not_authenticate_new_disposition",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_fabricated_summary_and_inventory_cannot_replace_host_run",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "CHANGE_CONFIG"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_fabricated_summary_and_inventory_cannot_replace_host_run",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "COMPOSE_SUPPORTED_COMPONENTS"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_fabricated_summary_and_inventory_cannot_replace_host_run",
+      "dimensions": [
+        {
+          "fixture": "completed_episode",
+          "value": "NO_CHANGE"
+        }
+      ],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    },
+    {
+      "file": "research/helm_self_improvement/test_episode.py",
+      "function": "test_failure_preserves_native_work_and_has_no_retry",
+      "dimensions": [],
+      "status": "DECLARED_STATIC_NOT_COLLECTED"
+    }
+  ],
   "collected_cases": null,
   "passed": null,
   "failed": null,
   "skipped": null,
   "runtime_status": "NOT_RUN",
-  "aws_status": "NOT_ADMITTED_INCUMBENT_PRIORITY_AND_FINITE_SI_ALLOWANCE_REQUIRED",
-  "acceptance_command": "python -B -m pytest -q -p no:cacheprovider research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
-  "source_ownership": "Codex SI namespace only; CAS public source unchanged",
+  "witness": "NOT_RUN",
+  "fresh_process_reload": "NOT_RUN",
+  "aws_status": "NOT_ADMITTED_CORRECTED_JOINT_CAS_SOURCE_AND_RESOURCE_GATES_OPEN",
+  "acceptance_command": "HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --junitxml=/opt/helm-si-output/si-junit.xml research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
+  "source_ownership": "Codex SI namespace only; original 152 CAS/runtime files unchanged and checked against external original Git",
   "actual_child_agents": [],
-  "serial_reason": "The available child interface exposes no enforceable finite token/tool/cost/time limits. Package section5 fallback; no additional model calls."
+  "behavioral_environment": null,
+  "inspection_environment": "Windows; Python AST parser only",
+  "source_anchor_record_sha256": "ee9fdb3e0045c17ef1a54046bc0453b6047371bbce2549105218e03676fe6d2f"
 }

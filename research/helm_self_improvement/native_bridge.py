@@ -1,58 +1,25 @@
-"""C5 bridge to the source-pinned CAS interface; it owns no native state writer."""
+"""Host-only bridge to the pinned CAS coordinator; no alternate state writer."""
 from dataclasses import asdict
-import hashlib
 import json
 from pathlib import Path
 import sys
 import time
 
-from .contracts import HarnessConfig, ParentIdentity, digest, execution_config, public_observation
+from .admission import ROOT, OBSERVATION_FIELDS, TrustedHost, write_new
+from .contracts import HarnessConfig, digest, execution_config, public_observation
 
-ROOT = Path(__file__).resolve().parents[2]
 CAS = ROOT / "research/cas_closed_loop_1"
 RUNTIME = CAS / "_runtime"
 HOST_STEP_LIMIT = 32
-HARNESS_FILES = ("__init__.py", "contracts.py", "native_bridge.py", "episode.py")
+PARITY_FIELDS = ("input_sha256", "trace_sha256", "journal_digest", "original_prediction",
+                 "checked_effect", "feedback", "config_consumed", "operations", "host_entries",
+                 "host_step_limit", "state_hash", "primitive_work", "model_calls", "neural_prediction")
 
 
-def harness_identity():
-    """Bind this integration implementation as well as the upstream CAS source."""
-    here = Path(__file__).resolve().parent
-    return digest({name: hashlib.sha256((here / name).read_bytes()).hexdigest() for name in HARNESS_FILES})
-
-
-def verify_source(expected_manifest_sha256=None):
-    raw = (ROOT / "PUBLIC_SOURCE_MANIFEST.json").read_bytes()
-    manifest_sha = hashlib.sha256(raw).hexdigest()
-    if expected_manifest_sha256 is not None and manifest_sha != expected_manifest_sha256:
-        raise ValueError("SOURCE_MANIFEST_CHANGED")
-    manifest = json.loads(raw)
-    for row in manifest["files"]:
-        rel = Path(row["path"])
-        target = ROOT / rel
-        if rel.is_absolute() or ".." in rel.parts or target.is_symlink() or not target.resolve().is_relative_to(ROOT.resolve()):
-            raise ValueError("SOURCE_PATH_ESCAPE")
-        data = target.read_bytes()
-        if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
-            raise ValueError("PINNED_CAS_SOURCE_CHANGED:" + row["path"])
-    return manifest, manifest_sha
-
-
-def parent_identity(branch="codex/helm-si-three-lead-20260927"):
-    manifest, manifest_sha = verify_source()
-    return ParentIdentity(manifest["source_commit"], manifest["runtime_commit"], branch, manifest_sha,
-                          harness_sha256=harness_identity())
-
-
-def _runtime(parent):
-    if parent.harness_sha256 != harness_identity():
-        raise ValueError("HARNESS_IMPLEMENTATION_CHANGED")
-    manifest, _ = verify_source(parent.source_manifest_sha256)
-    if manifest["source_commit"] != parent.source_sha or manifest["runtime_commit"] != parent.runtime_sha:
-        raise ValueError("RUNTIME_SOURCE_MISMATCH")
-    if parent.checkpoint_sha256 is not None:
-        raise ValueError("NEURAL_CHECKPOINT_NOT_SUPPORTED")
-    # Trusted, verified host code only. A candidate cannot select import locations.
+def _runtime(host):
+    if type(host) is not TrustedHost:
+        raise ValueError("TRUSTED_HOST_ADMISSION_REQUIRED")
+    host.validate_parent(host.parent)
     sys.dont_write_bytecode = True
     if str(RUNTIME) not in sys.path:
         sys.path.insert(0, str(RUNTIME))
@@ -60,76 +27,111 @@ def _runtime(parent):
     from cncm.compound_profile import load_compound_profile
     from research.cas_closed_loop_1 import run_closed_loop as native
     from research.cas_closed_loop_1.native_step_adapter import admission_for
+    for name in ("cncm.compound_engine", "cncm.compound_profile"):
+        if not Path(sys.modules[name].__file__).resolve().is_relative_to(RUNTIME.resolve()):
+            raise ValueError("FOREIGN_IMPORTED_RUNTIME")
+    if not Path(native.__file__).resolve().is_relative_to(CAS.resolve()):
+        raise ValueError("FOREIGN_IMPORTED_ADAPTER")
     return CompoundMachine, load_compound_profile, native, admission_for
 
 
-def run_branch(parent, config, *, destination=None):
+def _semantic(machine, journal, rows, genesis, config, native):
+    checked = native.effect_check(machine)
+    return {"input_sha256": digest(genesis.to_dict()), "trace_sha256": digest(journal),
+            "journal_digest": journal["journal_digest"], "original_prediction": machine.result().output,
+            "checked_effect": checked, "feedback": "CHECKED" if checked else "BLOCKED",
+            "config_consumed": asdict(config), "operations": [r["board_binding"]["operation"] for r in rows],
+            "host_entries": sum(r["I_executed"] for r in rows), "host_step_limit": HOST_STEP_LIMIT,
+            "state_hash": machine.state.state_hash,
+            "primitive_work": {k: sum(r["actual_primitive_work"]["measured_totals"][k] for r in rows)
+                               for k in ("primitive_instructions", "original_checks", "linear_checks")},
+            "model_calls": 0, "neural_prediction": "NOT_RUN"}
+
+
+def _run_branch(host, config, *, mode, candidate_id=None, validation_ns=0):
+    before = time.monotonic_ns()
+    CompoundMachine, load_profile, native, admission = _runtime(host)
     if type(config) is not HarnessConfig:
         raise ValueError("TYPED_CONFIGURATION_REQUIRED")
-    CompoundMachine, load_profile, native, admission = _runtime(parent)
+    run_id, destination = host.begin_run(config, mode, candidate_id)
     genesis = native.public_problem()
     machine = CompoundMachine(load_profile(), trusted_ingress=())
     machine.start(genesis)
     admitted = admission(machine)
-    if destination is not None:
-        destination = Path(destination)
-        destination.mkdir(parents=True, exist_ok=False)
+    setup_ns = time.monotonic_ns() - before
     started = time.monotonic_ns()
     try:
         rows = native.run_episode(machine, allow_acquisition=config.allow_acquisition,
                                   actuator_enabled=True, limit=HOST_STEP_LIMIT)
     except Exception as error:
-        if destination is not None:
-            failure = {"status": "FAILED_NOT_RETRIED", "error_type": type(error).__name__,
-                       "error": str(error), "config_consumed": asdict(config),
-                       "wall_ns": time.monotonic_ns() - started,
-                       "native_fault_receipt": getattr(error, "receipt", None),
-                       "work_refunded": False, "partial_state_verified": False}
-            (destination / "failure.json").write_text(json.dumps(failure, indent=2) + "\n", encoding="utf-8")
-            try:
-                (destination / "partial_journal.json").write_text(
-                    json.dumps(machine.journal(), indent=2) + "\n", encoding="utf-8")
-            except Exception as capture_error:
-                (destination / "journal_capture_error.txt").write_text(
-                    type(capture_error).__name__ + ": " + str(capture_error), encoding="utf-8")
+        failure = {"status": "FAILED_NOT_RETRIED", "error_type": type(error).__name__,
+                   "error": str(error), "mode": mode, "config_consumed": asdict(config),
+                   "wall_ns": time.monotonic_ns() - started, "native_fault_receipt": getattr(error, "receipt", None),
+                   "work_refunded": False, "partial_state_verified": False}
+        write_new(destination / "failure.json", failure)
+        write_new(destination / "partial_journal.json", machine.journal())
+        host.append("RUN_FAILED", {"run_id": run_id, "failure": failure})
         raise
-    wall_ns = time.monotonic_ns() - started
+    runtime_ns = time.monotonic_ns() - started
+    post_started = time.monotonic_ns()
     journal = machine.journal()
-    checked = native.effect_check(machine)
-    prediction = machine.result().output
-    result = {"input_sha256": digest(genesis.to_dict()), "trace_sha256": digest(journal),
-              "original_prediction": prediction, "checked_effect": checked,
-              "feedback": "CHECKED" if checked else "BLOCKED"}
-    operations = [row["board_binding"]["operation"] for row in rows]
-    summary = {**result, "config_consumed": asdict(config), "operations": operations,
-               "host_entries": sum(row["I_executed"] for row in rows),
-               "host_step_limit": HOST_STEP_LIMIT, "wall_ns": wall_ns,
-               "state_hash": machine.state.state_hash,
-               "primitive_work": {key: sum(row["actual_primitive_work"]["measured_totals"][key]
-                                           for row in rows)
-                                  for key in ("primitive_instructions", "original_checks", "linear_checks")},
-               "model_calls": 0, "neural_prediction": "NOT_RUN"}
-    if destination is not None:
-        # The existing native replay schema and verifier remain authoritative.
-        body = {"schema": "cas.closed-loop.replay-bundle/0.1", "admission": admitted,
-                "trusted_genesis": genesis.to_dict(), "trusted_ingress": [],
-                "journal_digest": journal["journal_digest"], "receipts_digest": native.digest(rows)}
-        bundle = {**body, "bundle_digest": native.digest(body)}
-        for name, value in (("bundle.json", bundle), ("journal.json", journal), ("summary.json", summary)):
-            (destination / name).write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
-        with (destination / "events.jsonl").open("x", encoding="utf-8") as stream:
-            for row in rows:
-                stream.write(json.dumps(row, separators=(",", ":")) + "\n")
-        summary["bundle_digest"] = bundle["bundle_digest"]
-        summary["native_replay"] = native.replay(destination, bundle["bundle_digest"], export_atlas=True) if checked else None
-    return summary, public_observation(parent, result)
+    summary = _semantic(machine, journal, rows, genesis, config, native)
+    body = {"schema": "cas.closed-loop.replay-bundle/0.1", "admission": admitted,
+            "trusted_genesis": genesis.to_dict(), "trusted_ingress": [],
+            "journal_digest": journal["journal_digest"], "receipts_digest": native.digest(rows)}
+    bundle = {**body, "bundle_digest": native.digest(body)}
+    write_new(destination / "bundle.json", bundle)
+    write_new(destination / "journal.json", journal)
+    with (destination / "events.jsonl").open("x", encoding="utf-8") as stream:
+        for row in rows:
+            stream.write(json.dumps(row, separators=(",", ":")) + "\n")
+    replay = native.replay(destination, bundle["bundle_digest"], export_atlas=True) if summary["checked_effect"] else None
+    summary.update({"bundle_digest": bundle["bundle_digest"], "native_replay": replay, "mode": mode,
+                    "candidate_id": candidate_id, "runtime_wall_ns": runtime_ns,
+                    "host_setup_ns": setup_ns, "mode_validation_ns": validation_ns,
+                    "verification_and_persistence_ns": time.monotonic_ns() - post_started,
+                    "overhead_definition": "Host setup + mode validation + verification/persistence; excludes final summary and host-ledger write.",
+                    "receipt_identity_includes_wall_fields": True,
+                    "deterministic_parity": {k: summary[k] for k in PARITY_FIELDS}})
+    # Persist only after bundle/replay/overhead fields are final. Returned value equals saved JSON.
+    summary = host.finish_run(run_id, summary)
+    return summary, public_observation(host.parent, {k: summary[k] for k in OBSERVATION_FIELDS})
 
 
-def execute_candidate(description, observation, candidate, *, mode, destination=None):
-    config = execution_config(description, observation, candidate, mode)
-    return run_branch(description.parent, config, destination=destination)
+def run_baseline(host):
+    return _run_branch(host, host.baseline_config, mode="baseline")
 
 
-def replay_native(parent, directory, expected_bundle_digest):
-    _, _, native, _ = _runtime(parent)
-    return native.replay(directory, expected_bundle_digest)
+def execute_candidate(host, description, observation, candidate, *, mode):
+    started = time.monotonic_ns()
+    config = execution_config(host, description, observation, candidate, mode)
+    return _run_branch(host, config, mode=mode, candidate_id=candidate.candidate_id if candidate else None,
+                       validation_ns=time.monotonic_ns() - started)
+
+
+def verify_run_semantics(host, summary, directory):
+    _, load_profile, native, admission = _runtime(host)
+    trusted = host.verified_run(summary["run_id"])
+    if summary != trusted or json.loads((directory / "summary.json").read_bytes()) != summary:
+        raise ValueError("PERSISTED_SUMMARY_DIFFERS_FROM_HOST_RUN")
+    bundle = json.loads((directory / "bundle.json").read_bytes())
+    journal = json.loads((directory / "journal.json").read_bytes())
+    rows = [json.loads(line) for line in (directory / "events.jsonl").read_text(encoding="utf-8").splitlines()]
+    if (bundle["bundle_digest"] != summary["bundle_digest"] or
+            native.digest({k: v for k, v in bundle.items() if k != "bundle_digest"}) != bundle["bundle_digest"] or
+            native.digest(rows) != bundle["receipts_digest"] or not all(native.verify_receipt(r) for r in rows)):
+        raise ValueError("RUN_RECEIPTS_CHANGED")
+    genesis = native.CompoundProblem.from_dict(bundle["trusted_genesis"])
+    if genesis.to_dict() != native.public_problem().to_dict() or bundle["trusted_ingress"] != []:
+        raise ValueError("RUN_INPUT_NOT_PUBLIC_FIXTURE")
+    machine = native.recover_compound_journal(journal, trusted_genesis=genesis, trusted_ingress=(),
+        expected_journal_digest=bundle["journal_digest"], profile=load_profile())
+    if admission(machine) != bundle["admission"] or machine.journal() != journal:
+        raise ValueError("RUN_NATIVE_REPLAY_MISMATCH")
+    semantic = _semantic(machine, journal, rows, genesis, HarnessConfig(**summary["config_consumed"]), native)
+    if any(summary[k] != semantic[k] for k in PARITY_FIELDS) or summary["deterministic_parity"] != semantic:
+        raise ValueError("RUN_SEMANTIC_SUMMARY_MISMATCH")
+    replay = native.replay(directory, summary["bundle_digest"]) if summary["checked_effect"] else None
+    if replay != summary["native_replay"]:
+        raise ValueError("RUN_REPLAY_REPORT_MISMATCH")
+    return replay
