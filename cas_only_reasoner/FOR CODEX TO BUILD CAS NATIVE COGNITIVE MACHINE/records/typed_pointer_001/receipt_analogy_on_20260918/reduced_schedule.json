@@ -1,0 +1,1 @@
+{"ambient_environment_read":false,"how_it_crossed_the_process_boundary":"typed_pointer_launch.main(--reduced-schedule), which calls configure_reduced_schedule() before any validation","job":"cas-meta2-tpntr-20260924122512-3df31d96-m-20260918","reduced_schedule":null,"schema":"cncm.typed-pointer-reduced-schedule/0.1"}
