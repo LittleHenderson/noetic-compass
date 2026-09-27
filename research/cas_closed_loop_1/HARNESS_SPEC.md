@@ -159,3 +159,16 @@ Interface-specific section only; no runtime, adapter, control or SI change. Excl
   budget and evaluator, and returns totals only.
 - Status: slice 1 executed locally (43 passed, commit `2022be45`, engineering check); slice 2 written, not run;
   nothing here is acceptance. Refusal codes are the closed set in `frozen_model_interface.REFUSALS`.
+
+### Amendment 2026-09-27 (Claude, packet B1-SEED18-API-BIND-03): binding to the exact `c45f775f` learner slice
+
+Read-only reconciliation against `cas_only_reasoner/…/typed_teaching/pointer_learner.py` at `c45f775f` (file sha256
+`0f424d86…`, blob `d07012d4…`, `restore_checkpoint` at line 2144, `predict` at line 1954). Two mismatches found and
+fixed in the interface, source-only: the restore now runs inside the venue's RNG guard, because the learner rewrites
+global RNG while restoring; and `identity.learnable_names` is passed as `expected_learnable_names`, so the learner's
+own name-set guard is retained instead of skipped. The clone's `cursor` and `model_revision` are both checked.
+Everything else matched: CUDA-only device, regular-file and SHA checks on the same bytes, run-identity digest,
+depth-8 prediction on the separate clone, the three forbidden methods. Full mapping in
+`claude_lead_20260927/seed18_interfaces/API_BINDING_c45f775f.json`. Unchanged: prediction repair is not
+implemented (the native checked operation is missing); restore and predict remain GPU-dependent and unaccepted;
+no test was executed.

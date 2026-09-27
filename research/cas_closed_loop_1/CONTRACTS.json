@@ -143,6 +143,29 @@
         "WORK_ACCOUNT_INCOMPLETE"
       ],
       "status": "slice 1 executed locally (43 passed, commit 2022be45); slice 2 written, not run; not acceptance"
+    },
+    {
+      "date": "2026-09-27",
+      "author": "Claude (packet B1-SEED18-API-BIND-03; append-only interface amendment)",
+      "subject": "seed-18 frozen-model interface reconciled against the exact c45f775f learner slice",
+      "source": {
+        "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+        "file_sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+        "blob": "d07012d48d8543c342bffaa7a8ec67c6e69ccc9c",
+        "restore_checkpoint_line": 2144,
+        "predict_line": 1954
+      },
+      "fixes": [
+        "restore_checkpoint runs inside the venue's RNG guard (the loader rewrites global RNG)",
+        "expected_learnable_names is passed from identity.learnable_names so the learner's POINTER_CHECKPOINT_EXPECTED_NAMES guard is retained",
+        "clone model_revision checked with cursor"
+      ],
+      "unchanged_claims": [
+        "prediction repair NOT implemented (native checked operation missing)",
+        "restore and predict GPU-dependent and unaccepted",
+        "tests written, not executed"
+      ],
+      "record": "claude_lead_20260927/seed18_interfaces/API_BINDING_c45f775f.json"
     }
   ]
 }

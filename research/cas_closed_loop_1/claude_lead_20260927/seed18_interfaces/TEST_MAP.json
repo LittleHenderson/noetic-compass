@@ -200,5 +200,12 @@
    "predict"
   ],
   "doubles": "DoubleLearner, DoubleStore, _rng_guard_double: labeled test doubles, no model"
+ },
+ "api_bind_03": {
+  "functions_added": 3,
+  "cases_added_static": 7,
+  "cases_total_static": 65,
+  "executed": 0,
+  "note": "learnable-names format (5 cases), model_revision mismatch, binding constants; NOT run"
  }
 }

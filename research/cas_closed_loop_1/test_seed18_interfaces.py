@@ -33,7 +33,7 @@ def double_identity(**over):
     base = dict(checkpoint_sha256=h("checkpoint"), checkpoint_bytes=4096, cursor=2940, model_revision=2940,
                 model_state_identity=h("model_state"), optimizer_state_identity=h("optimizer_state"),
                 encoder_state_identity=h("encoder_state"), rng_state_identity=h("rng_state"),
-                run_identity_digest=h("run_identity"))
+                run_identity_digest=h("run_identity"), learnable_names=("double.bias", "double.weight"))
     base.update(over)
     return fmi.FrozenModelIdentity(**base)
 
@@ -432,8 +432,9 @@ def _matching_identity(body):
 class DoubleLearner:
     """TEST DOUBLE of a restored learner clone: records calls, never computes anything."""
 
-    def __init__(self, cursor=2940, result=b"double-prediction-bytes"):
+    def __init__(self, cursor=2940, result=b"double-prediction-bytes", model_revision=None):
         self.cursor = cursor
+        self.model_revision = cursor if model_revision is None else model_revision
         self.result = result
         self.predict_calls = []
         self.stage_batch_calls = 0
@@ -539,6 +540,7 @@ def test_admit_with_a_double_restore_returns_a_predict_only_handle(tmp_path):
                 expected_learnable_names=None):
         seen.update(torch=torch, framework=framework, encoder=encoder, path=path, sha=expected_sha256,
                     rid=expected_run_identity_digest, device=device, names=expected_learnable_names)
+        log.append("restore")
         return learner
 
     def framework_factory():
@@ -551,10 +553,12 @@ def test_admit_with_a_double_restore_returns_a_predict_only_handle(tmp_path):
                                     framework_factory=framework_factory, encoder=encoder, torch=torch,
                                     rng_guard=_rng_guard_double(log))
     assert seen == dict(torch=torch, framework=frameworks[0], encoder=encoder, path=str(path),
-                        sha=identity.checkpoint_sha256, rid=identity.run_identity_digest, device="cuda:0", names=None)
+                        sha=identity.checkpoint_sha256, rid=identity.run_identity_digest, device="cuda:0",
+                        names=["double.bias", "double.weight"])
     assert len(frameworks) == 1, "one fresh framework per admission"
+    assert log == ["enter", "restore", "exit"], "the restore itself runs inside the RNG guard"
     assert handle.predict("double-packet") == b"double-prediction-bytes"
-    assert learner.predict_calls == [("double-packet", 8)] and log == ["enter", "exit"]
+    assert learner.predict_calls == [("double-packet", 8)] and log == ["enter", "restore", "exit", "enter", "exit"]
     assert handle.predict_calls == 1
     for name in ("stage_batch", "train_sealed_batch", "export_checkpoint"):
         with refused("TRAINING_ENTRY_POINT_FORBIDDEN"):
@@ -572,6 +576,30 @@ def test_admit_refuses_cursor_mismatch_after_a_double_restore(tmp_path):
         fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0",
                                restore=lambda *a, **k: DoubleLearner(cursor=2941), framework_factory=lambda: None,
                                encoder=object(), torch=object(), rng_guard=_rng_guard_double([]))
+
+
+@pytest.mark.parametrize("names", [("has space",), ("b.w", "a.w"), ("a.w", "a.w"), (), "a.w"])
+def test_learnable_names_must_be_sorted_unique_structured_parameter_names(names):
+    with refused("PUBLIC_FIELD_FORMAT_INVALID"):
+        fmi.validate_frozen_model_identity(double_identity(learnable_names=names))
+
+
+def test_admit_refuses_model_revision_mismatch_after_a_double_restore(tmp_path):
+    body = b"\x06" * 4096
+    identity = _matching_identity(body)
+    path = _checkpoint_file(tmp_path, identity, bytes_override=body)
+    with refused("FROZEN_MODEL_CURSOR_MISMATCH"):
+        fmi.admit_frozen_model(identity, double_admission(identity), path=path, device="cuda:0",
+                               restore=lambda *a, **k: DoubleLearner(cursor=2940, model_revision=2939),
+                               framework_factory=lambda: None, encoder=object(), torch=object(),
+                               rng_guard=_rng_guard_double([]))
+
+
+def test_binding_constants_name_the_exact_public_slice():
+    assert fmi.LEARNER_SOURCE_FILE_SHA256 == "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8"
+    assert fmi.LEARNER_SOURCE_BLOB == "d07012d48d8543c342bffaa7a8ec67c6e69ccc9c"
+    assert fmi.LEARNER_SOURCE_LINES["restore_checkpoint"] == 2144 and fmi.LEARNER_SOURCE_LINES["predict"] == 1954
+    assert set(fmi.FORBIDDEN_HANDLE_ATTRIBUTES) <= set(fmi.LEARNER_SOURCE_LINES)
 
 
 def test_admit_takes_no_host_and_names_the_separate_si_contract():

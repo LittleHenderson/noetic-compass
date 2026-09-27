@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - Packet B1-SEED18-API-BIND-03: interface reconciled against the exact c45f775f learner slice; two mismatches fixed
+
+- Verified from git: `pointer_learner.py` at `c45f775f` sha256 `0f424d86…`, blob `d07012d4…`. Fixed in
+  `frozen_model_interface.py` (0.4): restore runs inside the venue's RNG guard (the loader rewrites global RNG);
+  `identity.learnable_names` (new required, structured, sorted field) is passed as `expected_learnable_names`
+  so the learner's guard is retained; `model_revision` checked with `cursor`. Mapping and the exact next AWS
+  test command in `API_BINDING_c45f775f.json`; append-only amendments in `HARNESS_SPEC.md` and `CONTRACTS.json`.
+- Tests: 3 functions (7 cases) added, doubles updated; written, NOT run (packet bounds). No repair claim.
+
 ## 2026-09-27 - Packet B1-SEED18-IMPLEMENT-02 slice 2: admission boundary, predict-only handle, raw prediction; tests written, not run
 
 - `seed18_interfaces/frozen_model_interface.py`: typed formats for every string field (no free text, so short

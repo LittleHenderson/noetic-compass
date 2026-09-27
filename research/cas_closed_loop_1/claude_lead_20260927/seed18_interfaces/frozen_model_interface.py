@@ -46,7 +46,7 @@ import os
 import re
 import time
 
-INTERFACE_SCHEMA = "cas.seed18.frozen-model-interface/0.3"
+INTERFACE_SCHEMA = "cas.seed18.frozen-model-interface/0.4"
 PREDICTION_RECORD_SCHEMA = "cas.seed18.prediction-record/0.1"
 SYSTEM_OUTPUT_RECORD_SCHEMA = "cas.seed18.system-output-record/0.1"
 WORK_ACCOUNT_SCHEMA = "cas.seed18.work-account/0.1"
@@ -68,6 +68,24 @@ RESTORE_SIGNATURE = ("PointerCourseLearner.restore_checkpoint(torch, framework, 
                      "expected_run_identity_digest, device, expected_learnable_names=None)")
 PREDICT_SIGNATURE = "PointerCourseLearner.predict(packet, depth) with depth == 8"
 FORBIDDEN_HANDLE_ATTRIBUTES = ("stage_batch", "train_sealed_batch", "export_checkpoint")
+# Exact public learner slice this interface is reconciled against (packet B1-SEED18-API-BIND-03).
+LEARNER_SOURCE_PATH = ("cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/"
+                       "CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py")
+LEARNER_SOURCE_BLOB = "d07012d48d8543c342bffaa7a8ec67c6e69ccc9c"
+LEARNER_SOURCE_LINES = {"restore_checkpoint": 2144, "predict": 1954, "stage_batch": 1964,
+                        "train_sealed_batch": 1999, "export_checkpoint": 2104, "_require_cuda_device": 1734}
+# The learner's own refusal codes and how this interface relates to each (interface checks run first).
+LEARNER_REFUSAL_MAP = {
+    "TYPED_LEARNER_CUDA_REQUIRED": "GPU_REQUIRED (interface refuses a non-CUDA device before the call)",
+    "TYPED_CHECKPOINT_FILE_BOUND": "CHECKPOINT_PATH_INVALID (regular file, no symlink; the 256 MiB bound is the learner's)",
+    "TYPED_CHECKPOINT_SHA": "FROZEN_MODEL_SHA_MISMATCH (interface hashes the same bytes before any load)",
+    "TYPED_CHECKPOINT_RUN_IDENTITY": "passthrough; identity.run_identity_digest must equal metadata run_identity_digest",
+    "POINTER_CHECKPOINT_EXPECTED_NAMES": "passthrough; identity.learnable_names is passed as expected_learnable_names",
+    "TYPED_CHECKPOINT_CURSOR": "passthrough; then FROZEN_MODEL_CURSOR_MISMATCH if the clone's cursor or model_revision differ from the identity",
+    "TYPED_CHECKPOINT_RNG_VALUES": "passthrough; the restore rewrites global RNG, so the whole restore runs inside rng_guard",
+    "TYPED_LEARNER_PENDING_BATCH": "not reachable: the clone is freshly restored and never staged",
+    "POINTER_PREDICTION_DEPTH": "passthrough; the handle always passes PREDICT_DEPTH (mirror of contract.DESIGN['prediction_depth'])",
+}
 UNACCEPTED_GPU_OPERATIONS = ("restore_checkpoint", "predict")
 SI_HOST_NEURAL_PARENT_CONTRACT = ("SEPARATE: the SI TrustedHost at d7808d59 has a checkpoint=None engineering "
                                   "contract and does not admit neural parents; this interface never passes a host")
@@ -131,6 +149,7 @@ class FrozenModelIdentity:
     encoder_state_identity: str
     rng_state_identity: str
     run_identity_digest: str
+    learnable_names: tuple
     scientific_source: str = SCIENTIFIC_SOURCE
     device_class: str = DEVICE_CLASS_REQUIRED
 
@@ -246,6 +265,14 @@ _TORCH_VERSION = re.compile(r"\A(\d{1,3}\.\d{1,3}\.\d{1,3}(\+cu\d{2,3})?|test-do
 _ITEM_ID = re.compile(r"\A((course|held_back|trained|excluded|development):[0-9a-f]{8,64}|double-item-\d{1,6})\Z")
 _ADMISSION_REF = re.compile(r"\A(admission://(codex-runner|owner-signed)/[A-Za-z0-9._-]{1,120}"
                             r"|test-double-admission-ref-\d{1,6})\Z")
+_PARAMETER_NAME = re.compile(r"\A[a-z_][a-z0-9_]*(\.[a-z0-9_]+)*\Z")
+
+
+def _is_parameter_names(value):
+    """A sorted, duplicate-free tuple of 1 to 512 structured parameter names (e.g. ``world_head.0.weight``)."""
+    return (type(value) is tuple and 0 < len(value) <= 512
+            and all(type(name) is str and _PARAMETER_NAME.match(name) is not None for name in value)
+            and list(value) == sorted(set(value)))
 
 
 def _is_int(value):
@@ -266,6 +293,7 @@ KIND_CHECKS = {
     "torch_version": _matches(_TORCH_VERSION),
     "item_id": _matches(_ITEM_ID),
     "admission_ref": _matches(_ADMISSION_REF),
+    "parameter_names": _is_parameter_names,
     "nonneg_int": lambda v: _is_int(v) and v >= 0,
     "pos_int": lambda v: _is_int(v) and v > 0,
     "bool_or_none": lambda v: v is None or type(v) is bool,
@@ -277,6 +305,7 @@ PUBLIC_FIELD_KINDS = {
         "checkpoint_sha256": "hex64", "checkpoint_bytes": "pos_int", "cursor": "nonneg_int",
         "model_revision": "nonneg_int", "model_state_identity": "hex64", "optimizer_state_identity": "hex64",
         "encoder_state_identity": "hex64", "rng_state_identity": "hex64", "run_identity_digest": "hex64",
+        "learnable_names": "parameter_names",
         "scientific_source": "hex40", "device_class": ("enum", (DEVICE_CLASS_REQUIRED,)),
     },
     "AdmissionBinding": {
@@ -658,6 +687,12 @@ def admit_frozen_model(identity, admission, *, path, device, restore=None, frame
     ``restore_checkpoint`` bound method), ``framework_factory`` (builds a FRESH pointer framework, never preloaded),
     the frozen typed ``encoder``, ``torch`` and ``rng_guard`` (``RESTORE_DEPENDENCIES_NOT_SUPPLIED``).
 
+    Reconciled against the exact public slice (``LEARNER_SOURCE_PATH`` at ``SCIENTIFIC_SOURCE``, blob
+    ``LEARNER_SOURCE_BLOB``, ``restore_checkpoint`` at line 2144): the restore is called with
+    ``expected_learnable_names=list(identity.learnable_names)`` so the learner's ``POINTER_CHECKPOINT_EXPECTED_NAMES``
+    guard is retained, and it runs inside ``rng_guard`` because the learner rewrites global RNG while restoring.
+    The clone's ``cursor`` and ``model_revision`` must both equal the identity.
+
     Step 6 is the CPU-dry boundary: without those dependencies nothing is loaded and the refusal is the result.
     With them, the restore is called exactly as ``RESTORE_SIGNATURE`` describes, the restored clone's ``cursor``
     must equal ``identity.cursor`` (``FROZEN_MODEL_CURSOR_MISMATCH``), and a predict-only handle is returned.
@@ -684,12 +719,16 @@ def admit_frozen_model(identity, admission, *, path, device, restore=None, frame
         _refuse("RESTORE_DEPENDENCIES_NOT_SUPPLIED",
                 "CPU-dry boundary: the admitted venue must supply " + ", ".join(missing))
     framework = framework_factory()
-    learner = restore(torch, framework, encoder, path=location, expected_sha256=identity.checkpoint_sha256,
-                      expected_run_identity_digest=identity.run_identity_digest, device=device,
-                      expected_learnable_names=None)
-    if getattr(learner, "cursor", None) != identity.cursor:
-        _refuse("FROZEN_MODEL_CURSOR_MISMATCH", "restored cursor %r, identity cursor %d"
-                % (getattr(learner, "cursor", None), identity.cursor))
+    # The learner's restore rewrites global RNG (torch CPU, torch CUDA, Python random) while verifying the
+    # checkpoint's RNG identity, so the whole restore runs inside the venue's guard, not only each predict.
+    with rng_guard():
+        learner = restore(torch, framework, encoder, path=location, expected_sha256=identity.checkpoint_sha256,
+                          expected_run_identity_digest=identity.run_identity_digest, device=device,
+                          expected_learnable_names=list(identity.learnable_names))
+    if getattr(learner, "cursor", None) != identity.cursor or getattr(learner, "model_revision", None) != identity.model_revision:
+        _refuse("FROZEN_MODEL_CURSOR_MISMATCH", "restored cursor %r / revision %r, identity cursor %d / revision %d"
+                % (getattr(learner, "cursor", None), getattr(learner, "model_revision", None),
+                   identity.cursor, identity.model_revision))
     return FrozenModelHandle(learner, identity=identity, admission=admission, rng_guard=rng_guard)
 
 

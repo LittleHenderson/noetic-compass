@@ -1,8 +1,8 @@
 {
- "schema": "cas.seed18.frozen-model-interface-contract/0.3",
+ "schema": "cas.seed18.frozen-model-interface-contract/0.4",
  "packet": "B1-SEED18-INTERFACES-20260927-01",
  "utc": "2026-09-27T13:20:00Z",
- "status": "SLICE_2_WRITTEN_NOT_RUN (packet B1-SEED18-IMPLEMENT-02); SLICE_1_EXECUTED_LOCALLY at 2022be45; repair_cas_closed_loop and evaluate NOT_IMPLEMENTED; restore_checkpoint and predict GPU-dependent and UNACCEPTED until the admitted venue",
+ "status": "API-BIND-03: reconciled against the exact c45f775f public slice (blob d07012d4); two mismatches fixed (restore inside rng_guard; expected_learnable_names passed); tests written NOT run; repair_cas_closed_loop and evaluate NOT_IMPLEMENTED; restore/predict unaccepted",
  "module": "frozen_model_interface.py",
  "bindings": {
   "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
@@ -161,6 +161,7 @@
  },
  "si_host_contract": "SEPARATE: the SI TrustedHost at d7808d59 has a checkpoint=None engineering contract and does not admit neural parents; admit_frozen_model takes an AdmissionBinding, never a host",
  "test_file": "research/cas_closed_loop_1/test_seed18_interfaces.py",
- "module_sha256": "ec49ff8fd494d76375352dc7171368052f9543f0c7a0ecbd772681dbbcc50b53",
- "test_file_sha256": "d2c4793e70d7cd8543f044be8c9948c58c8e0498b9a5d845156a0fa7cd72a8d3"
+ "module_sha256": "86865b40c88a040e9de29dc3fa01fa652080f0817fcdd1881a18341f171cf5be",
+ "test_file_sha256": "22f271e7ab5d3f2136ac10e035cb71cd5a3506b0e2e6c3f5241c7e3343991210",
+ "api_binding": "API_BINDING_c45f775f.json"
 }

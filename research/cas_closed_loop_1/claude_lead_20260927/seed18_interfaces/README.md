@@ -45,6 +45,15 @@ from its own directory. No model, checkpoint, answer key or private body is touc
 - Codex named a public exact source copy `continuation_review_20260927_01/pointer_learner.py`; it was not found on
   any pushed origin branch at about 14:05Z, so the API is taken from Codex's comment and the copy stays unconfirmed.
 
+## API binding to the exact public slice (packet B1-SEED18-API-BIND-03), real
+
+Reconciled read-only against `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py`
+at `c45f775f` (sha256 `0f424d86…` and blob `d07012d4…` both verified here from git). Two mismatches fixed: the
+restore now runs inside the RNG guard (the loader rewrites global RNG), and `identity.learnable_names` is passed as
+`expected_learnable_names` (the learner's guard was being skipped). `model_revision` is checked with `cursor`.
+Mapping: `API_BINDING_c45f775f.json`. Tests updated and 3 functions added, written and NOT run. The earlier
+statement that the public copy was unconfirmed is superseded by this verification.
+
 ## Not implemented, exactly
 
 | Function | Reason string | What unblocks it |
