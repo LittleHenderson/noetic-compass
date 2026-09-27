@@ -16,8 +16,11 @@ from pathlib import Path
 from ..contracts import QuantumProblem
 from ..wire import Record, require
 from .predicate import CompiledPredicate, PredicateSpec, UnsupportedCapability, compile_predicate
+from .resources import SimulationBudget, estimate_resources
+from .search import SCHEDULE, diffusion
 
 SUPPORTED_FAMILY = "synthetic-mod4-instruction-synthesis"
+ARTIFACT_FORMAT = "helm-q1-compiler-artifact/1"
 COMPILER_DIR = Path(__file__).resolve().parent
 
 
@@ -66,3 +69,48 @@ def compile_problem(problem: QuantumProblem) -> tuple:
         total_qubits=pred.layout.total, gate_count=len(pred.circuit),
         execution_authority="NONE", origin="compiler-artifact-not-a-proposal")
     return pred, binding
+
+
+def compile(problem: QuantumProblem) -> tuple:  # noqa: A001 - name fixed by P2_COMPILER_BOUNDARY.md
+    """Entry point named in coordination/codex/P2_COMPILER_BOUNDARY.md.
+
+    Same behaviour as compile_problem: returns (CompiledPredicate, CompilerBinding).
+    """
+    return compile_problem(problem)
+
+
+def artifact(pred: CompiledPredicate, binding: CompilerBinding,
+             budget: SimulationBudget | None = None) -> dict:
+    """Serialized compiler artifact: a plain JSON-able description of the circuit.
+
+    Format ARTIFACT_FORMAT. It describes a circuit and its finite resource model;
+    it is not a proposal, a receipt, a verification or an execution grant.
+    """
+    require(type(pred) is CompiledPredicate and type(binding) is CompilerBinding, "typed inputs required")
+    require(binding.circuit_digest == pred.circuit_digest, "binding does not describe this circuit")
+    budget = SimulationBudget() if budget is None else budget
+    model = estimate_resources(pred, budget)
+    layout = pred.layout
+    return {
+        "format": ARTIFACT_FORMAT,
+        "binding": binding.to_dict(),
+        "register_layout": layout.allocation(),
+        "instruction_order": "slot 0 executes first; slot k is selected by qubits 2k (opcode MSB) and 2k+1 (opcode LSB)",
+        "decoding_order": pred.spec.decoding_order,
+        "measurement": "measure selection qubits 0..2L-1 only; workspace qubits are restored to |0> by the circuit",
+        "gate_model": "abstract gates X, Z, H with positive and negated controls; qubit i is bit i of the basis index",
+        "circuit": pred.circuit.to_dict(),
+        "circuit_digest": pred.circuit_digest,
+        "structure": {
+            "per_input_block": ["prepare data = x", "execute selected program under opcode controls",
+                                "flip flag_i iff data equals target_i", "inverse of execute",
+                                "inverse of prepare"],
+            "mark": "multi-controlled Z over all flags (phase -1 iff every input matches)",
+            "cleanup": "exact inverse of the whole flag block; data and flags return to |0>; "
+                       "selection preserved up to the marking phase",
+        },
+        "schedule": dict(SCHEDULE),
+        "diffusion_gates": len(diffusion(pred)),
+        "resource_model": model.to_dict(),
+        "execution_authority": "NONE",
+    }

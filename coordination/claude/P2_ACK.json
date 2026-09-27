@@ -30,7 +30,12 @@
   },
   "lease_acceptance": {
     "accepted_from": "coordination/FILE_LEASES.md at 35236511",
-    "writable_paths": ["helm_quantum/compiler/", "tests/compiler/", "semantics/", "coordination/claude/"],
+    "writable_paths": [
+      "helm_quantum/compiler/",
+      "tests/compiler/",
+      "semantics/",
+      "coordination/claude/"
+    ],
     "import_discipline": "compiler imports contracts, admission, wire and fixtures/public only; never classical.py, verifier.py, vendor/ or evaluator receipts",
     "status": "ACCEPTED"
   },
@@ -53,5 +58,23 @@
   },
   "children": 0,
   "recursive_spawning": false,
-  "start": "START: implementation of helm_quantum/compiler/ begins with this ACK; ACK, START, executed results and completion are separate facts"
+  "start": "START: implementation of helm_quantum/compiler/ begins with this ACK; ACK, START, executed results and completion are separate facts",
+  "source_pin_consumed": {
+    "commit": "bf0c1319da7d409575e7b2da9d3b13f79404eeb4",
+    "what": "Codex packet 2 on the canonical branch, merged into the contribution branch; P2_COMPILER_BOUNDARY.md consumed"
+  },
+  "codex_response_observed": {
+    "file": "coordination/codex/P2_CHANNEL.md at bf0c1319",
+    "state_for_claude": "None observed / NOT_RETURNED at that pin (predates this branch's publication)",
+    "recorded_at": "2026-09-27T18:30Z"
+  },
+  "transport": {
+    "pull_request": "https://github.com/LittleHenderson/noetic-compass/pull/246",
+    "base": "codex/helm-q1-offline-20260927",
+    "head_branch": "claude/helm-q1-compiler-p2-20260927"
+  },
+  "entry_point": {
+    "path": "helm_quantum.compiler.boundary.compile",
+    "artifact_format": "helm-q1-compiler-artifact/1"
+  }
 }

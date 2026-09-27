@@ -1,8 +1,11 @@
+import json
 import unittest
 from unittest.mock import patch
 
 from helm_quantum.admission import admit_offline_fixture
-from helm_quantum.compiler.boundary import CompilerBinding, compile_problem, compiler_source_digest
+from helm_quantum.compiler.boundary import (ARTIFACT_FORMAT, CompilerBinding, artifact, compile_problem,
+                                            compiler_source_digest)
+from helm_quantum.compiler.boundary import compile as compile_entry
 from helm_quantum.compiler.predicate import CompiledPredicate, UnsupportedCapability
 from helm_quantum.contracts import QuantumProblem
 from helm_quantum.wire import ContractError
@@ -74,6 +77,34 @@ class BoundaryTest(unittest.TestCase):
         fields["target_outputs"] = [1, 2, 3, 0]
         with self.assertRaises(ContractError):
             QuantumProblem.from_dict(fields, admission=self.context)
+
+    def test_named_entry_point_compile_matches_compile_problem(self):
+        pred_a, binding_a = compile_entry(self.problem)
+        pred_b, binding_b = compile_problem(self.problem)
+        self.assertIsInstance(pred_a, CompiledPredicate)
+        self.assertEqual(binding_a.circuit_digest, binding_b.circuit_digest)
+        self.assertEqual(binding_a.to_dict(), binding_b.to_dict())
+
+    def test_artifact_is_json_serializable_and_names_its_format(self):
+        pred, binding = compile_problem(self.problem)
+        art = artifact(pred, binding)
+        text = json.dumps(art, sort_keys=True)
+        self.assertEqual(art["format"], ARTIFACT_FORMAT)
+        self.assertEqual(json.loads(text)["circuit_digest"], pred.circuit_digest)
+        self.assertEqual(len(art["circuit"]["gates"]), binding.gate_count)
+        self.assertEqual(art["resource_model"]["total_qubits"], 12)
+        self.assertEqual(art["register_layout"]["selection_count"], 6)
+        self.assertEqual(art["execution_authority"], "NONE")
+        self.assertEqual(art["decoding_order"], self.problem.decoding_order)
+        self.assertFalse(art["schedule"]["tuned_from_solution_count"])
+        for forbidden in ("origin", "run_id", "shots", "accepted"):
+            self.assertNotIn(forbidden, art)
+
+    def test_artifact_refuses_a_binding_for_another_circuit(self):
+        pred_a, _ = compile_problem(self.problem)
+        _, binding_p = compile_problem(admit_offline_fixture("parity").problem())
+        with self.assertRaises(ContractError):
+            artifact(pred_a, binding_p)
 
     def test_compiler_source_digest_is_stable_and_hex(self):
         a, b = compiler_source_digest(), compiler_source_digest()

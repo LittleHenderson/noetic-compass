@@ -8,9 +8,10 @@ Marker: HELM-Q1-P2-20260927-A. Author: Q1-Claude (new compiler lead). Session:
 | Item | Value |
 | --- | --- |
 | Base (verified starting commit) | `35236511b2f56bddcb50f06bfc74e3c7e6d2de24` on `codex/helm-q1-offline-20260927` |
+| Q1 pin consumed | `bf0c1319da7d409575e7b2da9d3b13f79404eeb4` (Codex packet 2) merged into the contribution branch by a merge commit; no Q1-Claude file changed in the merge; test merge was conflict-free |
 | Contribution branch | `claude/helm-q1-compiler-p2-20260927` (mirrored on the harness session branch `claude/sweet-darwin-ltjq0z`) |
 | Transport | draft pull request https://github.com/LittleHenderson/noetic-compass/pull/246 from the contribution branch into `codex/helm-q1-offline-20260927`; the canonical branch and Codex's files were not written. Posting it does not mean Codex has read it; Codex's actual response will be recorded when it arrives |
-| Compiler source digest | `77a3eb362ac4d00c3ca85ecedb21117a53602e55bfbbbb621772abc877261609` (`compiler_source_digest()` over `helm_quantum/compiler/*.py`) |
+| Compiler source digest | `870bbb77c1d9bf7f138cea70d9710ba5635001785457eeb9b6024c88b83bc808` (`compiler_source_digest()` over `helm_quantum/compiler/*.py`, after adding the named `compile` entry point and `artifact()`); the first push was `77a3eb362ac4d00c3ca85ecedb21117a53602e55bfbbbb621772abc877261609` |
 | Instruction semantics digest | `e687ad515ef05d8c9261d58031b0358ebbf594947f37712e9ed314eb3b6d5ef9` |
 | Circuit digest, add2 target | `48d3d89e63035e5eab077188900d9a522a5fba8ee9999cab4b0090e367879210` |
 | Circuit digest, parity target | `bf06aa452f927a06dfa1afd215aa4edc7fbfc518d06db56e5d302cd220d2b928` |
@@ -27,8 +28,8 @@ deadline, so they differ per run; the binding records whichever problem was comp
 - `helm_quantum/compiler/predicate.py` — `PredicateSpec`, `RegisterLayout`, `compile_predicate`: the length-L semantic predicate (conditional execution for all four public inputs, target checks, phase mark, full uncomputation). Precise `UnsupportedCapability` errors.
 - `helm_quantum/compiler/search.py` — bounded BBHT amplitude amplification on the local simulator; `SearchOutcome`.
 - `helm_quantum/compiler/resources.py` — `SimulationBudget`, `ResourceModel`, `admit_simulation` (fail-closed gate before any state is allocated).
-- `helm_quantum/compiler/boundary.py` — `compile_problem(QuantumProblem) -> (CompiledPredicate, CompilerBinding)`; `compiler_source_digest()`.
-- `tests/compiler/` — 50 test methods plus `reference.py`, an independent evaluator used only by tests.
+- `helm_quantum/compiler/boundary.py` — `compile(problem)` (the entry point named in `coordination/codex/P2_COMPILER_BOUNDARY.md`, same as `compile_problem`) `-> (CompiledPredicate, CompilerBinding)`; `artifact(pred, binding)` serializes the circuit, layout, ordering, cleanup sequence, schedule and resource model as format `helm-q1-compiler-artifact/1` (about 30 KB of JSON); `compiler_source_digest()`.
+- `tests/compiler/` — 53 test methods plus `reference.py`, an independent evaluator used only by tests.
 - `semantics/` — instruction semantics, register layout, CAS/RPM/RPA mapping with the UNSUPPORTED list.
 
 ## Compiler interface and public input binding
@@ -41,7 +42,16 @@ problem = admit_offline_fixture("add2").problem()      # Codex's admitted Quantu
 pred, binding = compile_problem(problem)               # reads public fields only; no mutation
 model = estimate_resources(pred, SimulationBudget())   # finite model, no simulation
 outcome = bounded_search(pred, SimulationBudget(seed=0))  # local ideal simulation, bounded
+
+from helm_quantum.compiler import compile, artifact       # entry point named by Codex's boundary note
+pred, binding = compile(problem)
+art = artifact(pred, binding)                          # JSON-able, format helm-q1-compiler-artifact/1
 ```
+
+Entry-point path: `helm_quantum.compiler.boundary.compile`. Artifact format:
+`helm-q1-compiler-artifact/1` (binding, register layout, instruction and measurement
+ordering, abstract gate list, structure and cleanup sequence, BBHT schedule, resource
+model, `execution_authority = "NONE"`).
 
 `compile_problem` reads `family`, `domain`, `instruction_library`, `program_length`,
 `max_program_length`, `prerequisites`, `target_outputs`, `decoding_order`, and the digests.
@@ -119,9 +129,9 @@ python -m unittest discover -s tests/compiler -p 'test_*.py' -v
 
 | Suite | Collected | Executed | Pass | Fail | Error | Skip | NOT_RUN |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| tests/compiler (Q1-Claude), this container | 50 | 50 | 50 | 0 | 0 | 0 | 0 |
-| tests/compiler (Q1-Claude), admitted AWS venue | 50 | 0 | — | — | — | — | 50 |
-| tests/ (Q1-Codex) | 43 (collection only, unchanged by this work) | 0 | — | — | — | — | 43 |
+| tests/compiler (Q1-Claude), this container, merged tree | 53 | 53 | 53 | 0 | 0 | 0 | 0 |
+| tests/compiler (Q1-Claude), admitted AWS venue | 53 | 0 | — | — | — | — | 53 |
+| tests/ (Q1-Codex) at the merged tree | 58 (collection only; matches Codex's packet-2 inventory; unchanged by this work) | 0 | — | — | — | — | 58 |
 
 Execution venue: the owner-opened Claude cloud session container, not MSI and not an
 AWS runner; bounds enforced: one CPU (`taskset -c 0`), `ulimit -v 524288` (512 MiB
@@ -166,6 +176,25 @@ A Codex-owned proposal path for simulator-sourced candidates: an admitted `origi
 `LOCAL_IDEAL_SIMULATION`, a receipt `execution_kind` for it, and the binding of
 `SearchOutcome.program` into `propose`/`verify`. Then DeepSeek's distinct check of the
 pinned compiler commit, and an admitted-venue run of both suites with a commit-bound receipt.
+
+## Codex packet 2 consumed (actual response record)
+
+Read at pin `bf0c1319`: `coordination/codex/P2_COMPILER_BOUNDARY.md`, `P2_CHANNEL.md`,
+`P2_RETURN.md`, `P2_ACK.json`, `P2_RUNNER_CONTRACT.md`, `P2_REQUEST.txt` and the
+FILE_LEASES packet-2 addendum. Codex's channel file records Q1-Claude as
+"None observed / NOT_RETURNED"; that was accurate at Codex's pin, which predates this
+branch's publication. This return, the ACK and the pull request are the returned
+location; Codex records it in `P2_CHANNEL.md` on its next packet. In response to the
+boundary note: the entry point is now exposed under the requested name `compile`, the
+serialized artifact names its format, and six selection qubits are counted separately
+from the two data and four flag qubits (12 total). The admitted runner's five commands
+do not include `tests/compiler`; adding a sixth serial command for it is Codex's
+decision in its launcher, proposed here, not made.
+
+Transport externality: opening or pushing this pull request triggers the repository's
+Vercel preview build automatically; it fails at the root-directory step because the Q1
+lineage has no dashboard, and it starts no HELM, simulator or cloud job. Reported once
+on the pull request; not fixable inside this lease.
 
 ## Usage and limits
 

@@ -11,14 +11,15 @@ receipt, a verification, an execution grant or a HELM/CAS mapping.
 from .ir import Circuit, Gate
 from .reversible import DataRegister, LIBRARY, PRIMITIVES, instruction_gates, inverse_instruction_gates
 from .predicate import CompiledPredicate, PredicateSpec, RegisterLayout, compile_predicate
-from .boundary import CompilerBinding, UnsupportedCapability, compile_problem, compiler_source_digest
+from .boundary import (ARTIFACT_FORMAT, CompilerBinding, UnsupportedCapability, artifact, compile,
+                       compile_problem, compiler_source_digest)
 from .resources import ResourceBoundExceeded, ResourceModel, SimulationBudget, admit_simulation, estimate_resources
 from .search import SearchOutcome, bounded_search
 
 __all__ = [
     "Circuit", "Gate", "DataRegister", "LIBRARY", "PRIMITIVES", "instruction_gates",
     "inverse_instruction_gates", "CompiledPredicate", "PredicateSpec", "RegisterLayout",
-    "compile_predicate", "CompilerBinding", "UnsupportedCapability", "compile_problem",
-    "compiler_source_digest", "ResourceBoundExceeded", "ResourceModel", "SimulationBudget",
+    "compile_predicate", "ARTIFACT_FORMAT", "CompilerBinding", "UnsupportedCapability", "artifact",
+    "compile", "compile_problem", "compiler_source_digest", "ResourceBoundExceeded", "ResourceModel", "SimulationBudget",
     "admit_simulation", "estimate_resources", "SearchOutcome", "bounded_search",
 ]
