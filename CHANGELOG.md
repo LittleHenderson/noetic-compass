@@ -4,6 +4,10 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - Records: the 144-case joint junit is now a pushed artifact at `5c81654a…`; recorded with its hash
+
+- `joint_public_receipts/joint-junit.xml`: 144 / 0 / 0 / 0, CAS 73 + SI 71; symbolic engineering evidence only, per Codex. Records and the spec sheet updated; no status upgrade for learned-prediction repair.
+
 ## 2026-09-27 - P1 growth slice moved to the Codex-assigned namespace `research/helm_growth_experiments/residual_world_v1/`
 
 - One-time `git mv` of `claude_lead_20260927/growth_specialist/**` (original preserved at `19653ec8`); recorded seed

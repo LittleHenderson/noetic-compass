@@ -1385,6 +1385,26 @@
    "review": "DeepSeek review pending, not claimed passed"
   },
   "verification_attempted_here_2026-09-27T14:50Z": "git fetch of 49d3e23c succeeded as an unreferenced object; no origin branch contains it; the named receipts directory is not in that commit's tree; no junit or verification file reachable from this repository, so no artifact path can be cited",
-  "consequence_for_this_package": "Declared-count note: Codex's plan and receipt say 144 for the seven files versus this package's 142 by AST (73 CAS + 69 SI at d7808d59); the difference lies outside Claude's files at source 49d3e23 and is Codex's to reconcile. Status of the joint suite in this record: executed per Codex's report; not verified from any pushed artifact; not acceptance of learned-prediction CAS repair or any comparative benefit (Codex's own boundary)."
+  "consequence_for_this_package": "Declared-count note: Codex's plan and receipt say 144 for the seven files versus this package's 142 by AST (73 CAS + 69 SI at d7808d59); the difference lies outside Claude's files at source 49d3e23 and is Codex's to reconcile. Status of the joint suite in this record: executed per Codex's report; not verified from any pushed artifact; not acceptance of learned-prediction CAS repair or any comparative benefit (Codex's own boundary).",
+  "artifact_verified_here_2026-09-27T15:05Z": {
+   "claim_state": "REAL_ARTIFACT_IN_GIT: junit read from the pushed commit and hashed here; the run itself was Codex's; not acceptance of learned-prediction CAS repair",
+   "commit": "5c81654a2796fba0b0d07f615ec0af18d0f11136",
+   "branch": "codex/helm-si-three-lead-20260927",
+   "path": "research/helm_parallel_capability_20260927/joint_public_receipts/joint-junit.xml",
+   "junit_sha256": "43ceb3d3b5725e7a979b73b993c35c17d7fda9f08a841f8ea7e3e8222487e37a",
+   "totals": {
+    "tests": 144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+   },
+   "declared_split_per_codex": "CAS 73 + SI 71 (two tests added in test_episode.py)",
+   "other_receipts_in_same_directory": [
+    "admission.json",
+    "fresh_process_reload.json",
+    "independent_verification.json",
+    "joint_worker_public_projection.json"
+   ]
+  }
  }
 }
