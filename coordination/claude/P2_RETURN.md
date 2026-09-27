@@ -9,7 +9,7 @@ Marker: HELM-Q1-P2-20260927-A. Author: Q1-Claude (new compiler lead). Session:
 | --- | --- |
 | Base (verified starting commit) | `35236511b2f56bddcb50f06bfc74e3c7e6d2de24` on `codex/helm-q1-offline-20260927` |
 | Contribution branch | `claude/helm-q1-compiler-p2-20260927` (mirrored on the harness session branch `claude/sweet-darwin-ltjq0z`) |
-| Transport | draft pull request from the contribution branch into `codex/helm-q1-offline-20260927`; the canonical branch and Codex's files were not written |
+| Transport | draft pull request https://github.com/LittleHenderson/noetic-compass/pull/246 from the contribution branch into `codex/helm-q1-offline-20260927`; the canonical branch and Codex's files were not written. Posting it does not mean Codex has read it; Codex's actual response will be recorded when it arrives |
 | Compiler source digest | `77a3eb362ac4d00c3ca85ecedb21117a53602e55bfbbbb621772abc877261609` (`compiler_source_digest()` over `helm_quantum/compiler/*.py`) |
 | Instruction semantics digest | `e687ad515ef05d8c9261d58031b0358ebbf594947f37712e9ed314eb3b6d5ef9` |
 | Circuit digest, add2 target | `48d3d89e63035e5eab077188900d9a522a5fba8ee9999cab4b0090e367879210` |
