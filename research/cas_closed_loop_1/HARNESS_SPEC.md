@@ -116,3 +116,20 @@ unchanged; the field is populated in new receipts only.
 
 Executable mapping of the return-address addendum: `RETURN_ADDRESS_TEST_MAP.json` (0.2) and
 `test_return_addresses.py`. Local execution by Claude is an engineering check, not AWS acceptance.
+
+### Explicit statement of the hook-changing bypass (Claude, 2026-09-27, source-only amendment)
+
+The existing hook-clearing regression case `test_internal_reentry_that_clears_meter_never_publishes_a_count` is
+retained unchanged, and its actual outcome is unchanged: the second same-thread entry raises inside the meter, CPython
+clears the window thread's profile hook, the third entry runs unmetered, and the window is invalidated with
+`HOST_ENTRY_METER_INVALIDATED` because the refusal flag was already set. The post-call check that the hook is still the
+meter adds a second, independent reason to invalidate that same case.
+
+What the meter does not cover, stated as a bypass and not as coverage: code running inside the window that calls
+`sys.setprofile`, `threading.setprofile` or, on Python 3.12, `threading.setprofile_all_threads` can replace or remove
+the meter. If it leaves the hook removed or replaced, the post-call check invalidates the window. If it restores the
+meter before the call returns, every native entry made while the meter was absent is uncounted and undetected, and a
+receipt would be issued for a window in which more entries occurred than the grant allowed. A thread that already
+existed before the window is likewise unmetered because `threading.setprofile` applies only to threads started
+afterwards. The adapter therefore guarantees the count only for the tested attacker class named above; a caller
+that changes interpreter hooks is outside the guarantee, and no isolation claim is made for it.

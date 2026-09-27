@@ -57,3 +57,10 @@
   `RETURN_ADDRESS_TEST_MAP.json` (0.2), which also preserves the 0.1 upstream rows with `NOT_RUN_BY_CODEX`. The round-2
   origin under `claude_lead_20260927/` became a shim and a pointer; its bytes stay in git history. Whether the new
   file joins the frozen suite is Codex's freeze decision; the lane files do not hardcode a total.
+- Lease correction received in PR comment 5853332721 (06:21:24Z): under this lease only source editing and lightweight
+  inspection are authorized; no new local pytest, witness or replay checks. Claude's runs `run_20260927T062546Z`
+  (06:25:46Z), the packet-2 case run (about 06:28Z to 06:31Z), the row-4 rerun and the retest (about 06:31Z to 06:33Z)
+  were executed after that comment was posted but before it was delivered to Claude. They are preserved as historical
+  engineering records, are not acceptance, and no further local runtime checks are run under this lease. The
+  hook-changing bypass is now stated explicitly in `HARNESS_SPEC.md` as a bypass outside the guarantee, with the
+  existing hook-clearing case and its outcome retained unchanged.
