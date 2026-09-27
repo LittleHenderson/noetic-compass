@@ -1,0 +1,59 @@
+{
+  "package": "HELM-Q1 v1.0",
+  "date": "2026-09-27",
+  "purpose": "File integrity only; not an execution or spending authorization",
+  "files": {
+    "HANDOFF_TO_EXISTING_LEADS.md": {
+      "sha256": "7d3a8fd966e09a1f684ef96a92ad02363e9baa7f9ee0e4924d5673c07eaf8617",
+      "bytes": 2328
+    },
+    "HELM_Q1_EXECUTABLE_DIRECTIVE_v1_0.md": {
+      "sha256": "bd51f9265c616569bc05c853b2e868d829ffc31bf7ef82666cab039ae0328a16",
+      "bytes": 38059
+    },
+    "HELM_Q1_Executable_Directive_v1_0.pdf": {
+      "sha256": "111027d76b1dc208e2a9486b6edba92d669a7d2c314365b13a4f1af7310b63be",
+      "bytes": 83278
+    },
+    "README_START_HERE.md": {
+      "sha256": "991049ab5f61dd7977c13f5f59873777672af5f3e08fa810456240b4d33b4f1b",
+      "bytes": 2136
+    },
+    "config/policy.json": {
+      "sha256": "a4ea9c0f79a7e7e7f717689ab469c8f3fa99ccc29fb46f898f887a222d923eb9",
+      "bytes": 890
+    },
+    "receipts/DELIVERY_STATUS.json": {
+      "sha256": "ebe0e095847fdf4db9b10e3c32244486f70303af8b16ec3623df6203fc0f7d0d",
+      "bytes": 1487
+    },
+    "receipts/classical_fixture_reference.json": {
+      "sha256": "0f55fff50a56202e7f838b897c18f93e6992a798ed8eadcdec345a77b966290f",
+      "bytes": 360
+    },
+    "receipts/helper_tests.txt": {
+      "sha256": "8e53f11383bbd5ec307545a68768d80169d0f9039ab63690798a27a0d0c91dd5",
+      "bytes": 1985
+    },
+    "receipts/illustrative_quote.json": {
+      "sha256": "242f67e4a6c6e8d7f83f84512319f73a073388b840f1efc2ee3cef4682fcabb3",
+      "bytes": 471
+    },
+    "receipts/offline_policy_check.json": {
+      "sha256": "2be63c8f9677f1f81858241cc35c492ab8a2e955dd1f4bea6c69123d9f193541",
+      "bytes": 167
+    },
+    "sources/price_snapshot.json": {
+      "sha256": "1730c132bcf6d032687c6970462f0d0c89717b851a37cc9610ef76e8a6a0cbd6",
+      "bytes": 584
+    },
+    "tests/test_q1_tools.py": {
+      "sha256": "5aeeebbc61469b8a70bd8c5d395b88746b6aebf4a2de320f48909dbbe91b5bdc",
+      "bytes": 3810
+    },
+    "tools/q1_tools.py": {
+      "sha256": "6731ecd9298e40e0f9943a968b8c225fefe66c9baffccdfdc94493b9cb343adb",
+      "bytes": 6793
+    }
+  }
+}

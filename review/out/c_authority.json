@@ -1,0 +1,231 @@
+{
+  "probe": "C-authority-refusal",
+  "reviewer": "Q1-DeepSeek",
+  "package_root": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "counts": {
+    "PASS": 12,
+    "NOT_RUN": 1
+  },
+  "cases": [
+    {
+      "id": "C1",
+      "requirement": "binding identity is factory-derived from admitted state",
+      "outcome": "PASS",
+      "detail": {
+        "binding": {
+          "parent_ref": "offline-fixture:root",
+          "snapshot_ref": "offline-fixture:mod4-v1",
+          "snapshot_digest": "678e977d976037d2b09183ebfa88003970687260feed4e33ddf0b95fd20c9877",
+          "branch_id": "offline-fixture:branch-0",
+          "caller_id": "offline-fixture:caller-0",
+          "caller_frame": "offline-fixture:frame-0",
+          "continuation": "offline-fixture:return-0",
+          "checkpoint_digest": null
+        },
+        "snapshot_digest_is_file_digest": true,
+        "caller_supplied_identity_fields": 0
+      }
+    },
+    {
+      "id": "C2",
+      "requirement": "a caller cannot mint trusted admission",
+      "outcome": "PASS",
+      "detail": {
+        "none_token": "REFUSED: caller cannot mint trusted admission",
+        "fresh_object_token": "REFUSED: caller cannot mint trusted admission"
+      }
+    },
+    {
+      "id": "C3",
+      "requirement": "deserialized problem cannot assert its own caller identity",
+      "outcome": "PASS",
+      "detail": {
+        "no_context": "REFUSED: trusted context required",
+        "forged_caller": "REFUSED: problem differs from independently admitted offline fixture"
+      }
+    },
+    {
+      "id": "C4",
+      "requirement": "foreign return address is refused",
+      "outcome": "PASS",
+      "detail": {
+        "foreign_binding": "REFUSED: wrong return address"
+      }
+    },
+    {
+      "id": "C5",
+      "requirement": "malformed return-address identity fields are refused",
+      "outcome": "PASS",
+      "detail": {
+        "short_digest": "REFUSED: invalid snapshot_digest",
+        "uppercase_digest": "REFUSED: invalid snapshot_digest",
+        "empty_string": "REFUSED: invalid snapshot_ref",
+        "non_str": "REFUSED: invalid snapshot_ref",
+        "oversize": "REFUSED: invalid continuation"
+      }
+    },
+    {
+      "id": "C6",
+      "requirement": "expired admission refuses further use",
+      "outcome": "PASS",
+      "detail": {
+        "expired": "REFUSED: admission expired"
+      }
+    },
+    {
+      "id": "C7",
+      "requirement": "non-zero spend, tasks and shots are refused by contract",
+      "outcome": "PASS",
+      "detail": {
+        "refusals": {
+          "nonzero_shots": "REFUSED: invalid max_shots",
+          "nonzero_tasks": "REFUSED: invalid max_tasks",
+          "nonzero_cost": "REFUSED: zero spending only",
+          "over_program_bound": "REFUSED: invalid max_programs"
+        },
+        "accepted_zero_budget_limits": {
+          "max_programs": 64,
+          "max_transitions": 256,
+          "max_wall_ms": 1000,
+          "max_memory_mib": 64,
+          "max_shots": 0,
+          "max_tasks": 0,
+          "max_cost_usd": "0.00"
+        }
+      }
+    },
+    {
+      "id": "C8",
+      "requirement": "offline backend refuses every execution verb",
+      "outcome": "PASS",
+      "detail": {
+        "capabilities": {
+          "backend": "offline-only",
+          "execution_kind": "NO_QUANTUM_EXECUTION",
+          "compile_available": false,
+          "submit_available": false,
+          "max_tasks": 0,
+          "max_shots": 0
+        },
+        "refusals": {
+          "no_grant": "REFUSED: SUBMISSION_REFUSED: no trusted execution grant; zero task budget",
+          "empty_grant": "REFUSED: SUBMISSION_REFUSED: no trusted execution grant; zero task budget",
+          "forged_grant": "REFUSED: SUBMISSION_REFUSED: no trusted execution grant; zero task budget",
+          "compile": "REFUSED: COMPILER_NOT_INTEGRATED: awaiting Q1-Claude's reviewed source",
+          "poll": "REFUSED: UNKNOWN_JOB: this backend cannot create a job",
+          "cancel": "REFUSED: UNKNOWN_JOB: no provider cancellation was performed",
+          "decode": "REFUSED: UNADMITTED_RESULT: no quantum result source exists"
+        },
+        "estimate": {
+          "status": "UNAVAILABLE_COMPILER_RESOURCE_ESTIMATE",
+          "quote": null,
+          "qubits": null,
+          "gates": null,
+          "authorized_cloud_budget_usd": "0.00",
+          "submission_allowed": false
+        }
+      }
+    },
+    {
+      "id": "C9",
+      "requirement": "CLI submit refuses with a supplied TRUSTED_GRANT string",
+      "outcome": "PASS",
+      "detail": {
+        "exit_code": 2,
+        "status": "REFUSED",
+        "reason": "SUBMISSION_REFUSED: no trusted execution grant; zero task budget",
+        "refused_before_reading_request_file": true
+      }
+    },
+    {
+      "id": "C10",
+      "requirement": "spent + reserved arithmetic refuses any over-cap spend",
+      "outcome": "PASS",
+      "detail": {
+        "exact_cap_boundary": true,
+        "one_cent_over": false,
+        "zero_budget_any_spend": false,
+        "zero_budget_zero_spend": true
+      }
+    },
+    {
+      "id": "C11",
+      "requirement": "atomic in-flight reservation and duplicate-submit recovery",
+      "outcome": "NOT_RUN",
+      "detail": "NOT_RUN: no atomic budget/job store exists; missing ['helm_quantum/budget.py', 'helm_quantum/job_store.py']. The helper states it is pure arithmetic only. Duplicate-submit recovery requires provider idempotency reconciliation, which cannot be exercised without an adapter and must not be probed with a real provider."
+    },
+    {
+      "id": "C12",
+      "requirement": "no caller-supplied grant variant changes the refusal",
+      "outcome": "PASS",
+      "detail": {
+        "grant_variants_tested": 6,
+        "accepted": 0,
+        "single_refusal_reason": "SUBMISSION_REFUSED: no trusted execution grant; zero task budget",
+        "outcomes": [
+          [
+            "None",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ],
+          [
+            "'TRUSTED_GRANT'",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ],
+          [
+            "{'trusted_execution_grant': True}",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ],
+          [
+            "{'authorized': True, 'budget_usd': '10.0",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ],
+          [
+            "<object object at 0x00000205C90909B0>",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ],
+          [
+            "<__main__.Grant object at 0x00000205C9DB",
+            "SUBMISSION_REFUSED: no trusted execution grant; zero task budget"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "C13",
+      "requirement": "receipt carries no candidate binding (latent provenance gap)",
+      "outcome": "PASS",
+      "detail": {
+        "receipt_fields": [
+          "actual_backend",
+          "binding",
+          "candidates_checked",
+          "compilation_settings",
+          "device_properties_digest",
+          "elapsed_ns",
+          "estimated_charges_usd",
+          "execution_kind",
+          "job_ids",
+          "measurement_order",
+          "mode",
+          "native_circuit_digest",
+          "observed_counts",
+          "problem_digest",
+          "quote_id",
+          "reconciled_charges_usd",
+          "requested_backend",
+          "schema",
+          "shots",
+          "status"
+        ],
+        "program_binding_fields": [],
+        "candidate_related_fields": [
+          "candidates_checked"
+        ],
+        "candidate_related_fields_are_counts_only": true,
+        "candidates_checked_r1": 64,
+        "candidates_checked_r2": 1,
+        "finding": "A receipt attests to a problem, not to a candidate. Any two receipts for the same problem are both valid, so a receipt cannot prove that a specific program was produced by a run."
+      }
+    }
+  ]
+}

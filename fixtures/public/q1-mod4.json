@@ -1,0 +1,16 @@
+{
+  "schema": "helm-q1-public-fixture/1",
+  "family": "synthetic-mod4-instruction-synthesis",
+  "domain": [0, 1, 2, 3],
+  "instructions": [
+    {"code": 0, "name": "ID", "semantics": "x"},
+    {"code": 1, "name": "INC", "semantics": "(x + 1) % 4"},
+    {"code": 2, "name": "DEC", "semantics": "(x + 3) % 4"},
+    {"code": 3, "name": "NOT2", "semantics": "3 - x"}
+  ],
+  "program_length": 3,
+  "decoding_order": "instruction-left-to-right;two-bit-op-msb-first",
+  "targets": {"add2": [2, 3, 0, 1], "parity": [0, 1, 0, 1]},
+  "cas_native": false,
+  "solution_ids_or_counts": null
+}

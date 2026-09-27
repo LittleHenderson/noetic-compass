@@ -1,0 +1,182 @@
+{
+  "probe": "D-claims-integrity",
+  "reviewer": "Q1-DeepSeek",
+  "package_root": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "counts": {
+    "PASS": 10,
+    "NOT_RUN": 1
+  },
+  "cases": [
+    {
+      "id": "D1",
+      "requirement": "forged hardware and mismatched-backend receipts are refused",
+      "outcome": "PASS",
+      "detail": {
+        "braket_hardware": "REFUSED: backend not admitted",
+        "ibm_hardware": "REFUSED: backend not admitted",
+        "mismatched_backend": "REFUSED: backend not admitted"
+      }
+    },
+    {
+      "id": "D2",
+      "requirement": "simulator, shot, measurement and job claims are refused offline",
+      "outcome": "PASS",
+      "detail": {
+        "simulator_kind": "REFUSED: backend not admitted",
+        "shots_without_execution": "REFUSED: invalid shots",
+        "counts_without_measurement": "REFUSED: no observed_counts in an offline classical receipt",
+        "jobs_offline": "REFUSED: no job_ids in an offline classical receipt"
+      }
+    },
+    {
+      "id": "D3",
+      "requirement": "provider cost and quote fields cannot be populated offline",
+      "outcome": "PASS",
+      "detail": {
+        "estimated_charge": "REFUSED: zero provider cost only",
+        "reconciled_charge": "REFUSED: reconciled_charges_usd must be unknown/not applicable",
+        "quote_id": "REFUSED: quote_id must be unknown/not applicable"
+      }
+    },
+    {
+      "id": "D4",
+      "requirement": "the admitted receipt claims only offline classical work",
+      "outcome": "PASS",
+      "detail": {
+        "schema": "helm-q1-receipt/1",
+        "problem_digest": "124ab0889d2af40e6b6f26067d8c981b6beffd6b4f682a822df372ce2cc77d81",
+        "binding": {
+          "parent_ref": "offline-fixture:root",
+          "snapshot_ref": "offline-fixture:mod4-v1",
+          "snapshot_digest": "678e977d976037d2b09183ebfa88003970687260feed4e33ddf0b95fd20c9877",
+          "branch_id": "offline-fixture:branch-0",
+          "caller_id": "offline-fixture:caller-0",
+          "caller_frame": "offline-fixture:frame-0",
+          "continuation": "offline-fixture:return-0",
+          "checkpoint_digest": null
+        },
+        "mode": "disabled",
+        "requested_backend": "offline-classical",
+        "actual_backend": "offline-classical",
+        "execution_kind": "CLASSICAL_OFFLINE",
+        "device_properties_digest": null,
+        "native_circuit_digest": null,
+        "compilation_settings": [],
+        "measurement_order": "NOT_APPLICABLE",
+        "shots": 0,
+        "observed_counts": [],
+        "job_ids": [],
+        "elapsed_ns": 1,
+        "candidates_checked": 1,
+        "quote_id": null,
+        "estimated_charges_usd": "0.00",
+        "reconciled_charges_usd": null,
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "id": "D5",
+      "requirement": "verification refuses retention and forged verifier identity",
+      "outcome": "PASS",
+      "detail": {
+        "true_retained": false,
+        "refusals": {
+          "retained_true": "REFUSED: no host retention bridge admitted",
+          "forged_verifier_digest": "REFUSED: foreign verifier",
+          "unrecomputed_outputs": "REFUSED: verifier outputs must be recomputed"
+        },
+        "disposition": "VERIFIED_OFFLINE_ONLY"
+      }
+    },
+    {
+      "id": "D6",
+      "requirement": "no mode grants dispatch, write authority or retention",
+      "outcome": "PASS",
+      "detail": {
+        "disabled": {
+          "mode": "disabled",
+          "quantum_dispatch_allowed": false,
+          "authoritative_write_allowed": false,
+          "retention_allowed": false,
+          "disposition": "BASELINE_ONLY"
+        },
+        "shadow": {
+          "mode": "shadow",
+          "quantum_dispatch_allowed": false,
+          "authoritative_write_allowed": false,
+          "retention_allowed": false,
+          "disposition": "COMPARE_ONLY"
+        },
+        "research": {
+          "mode": "research",
+          "quantum_dispatch_allowed": false,
+          "authoritative_write_allowed": false,
+          "retention_allowed": false,
+          "disposition": "CANDIDATES_ONLY_NO_HOST_BRIDGE"
+        }
+      }
+    },
+    {
+      "id": "D7",
+      "requirement": "mode dispositions are distinct and claim no promotion",
+      "outcome": "PASS",
+      "detail": {
+        "disabled": "VERIFIED_OFFLINE_ONLY",
+        "shadow": "VERIFIED_SHADOW_ONLY",
+        "research": "VERIFIED_RESEARCH_CANDIDATE"
+      }
+    },
+    {
+      "id": "D8",
+      "requirement": "no provider SDK or network import exists in the package",
+      "outcome": "PASS",
+      "detail": {
+        "sdk_imports": [],
+        "network_imports": [],
+        "files_scanned": 13
+      }
+    },
+    {
+      "id": "D9",
+      "requirement": "no learning or model-training code exists in this packet",
+      "outcome": "PASS",
+      "detail": {
+        "learning_tokens": [],
+        "neural_learning_implemented": false,
+        "note": "No learning capability exists in this packet; any learning claim would be unsupported."
+      }
+    },
+    {
+      "id": "D10",
+      "requirement": "unimplemented capabilities report absence, not success",
+      "outcome": "PASS",
+      "detail": {
+        "capabilities": {
+          "backend": "offline-only",
+          "execution_kind": "NO_QUANTUM_EXECUTION",
+          "compile_available": false,
+          "submit_available": false,
+          "max_tasks": 0,
+          "max_shots": 0
+        },
+        "estimate": {
+          "status": "UNAVAILABLE_COMPILER_RESOURCE_ESTIMATE",
+          "quote": null,
+          "qubits": null,
+          "gates": null,
+          "authorized_cloud_budget_usd": "0.00",
+          "submission_allowed": false
+        },
+        "source_inventory_file_exists": true,
+        "inventory_exit_code": 0,
+        "inventory_response": null
+      }
+    },
+    {
+      "id": "D11",
+      "requirement": "reversible compiler: predicate parity, superposition, ancilla cleanup",
+      "outcome": "NOT_RUN",
+      "detail": "NOT_RUN: helm_quantum/compiler/ does not exist in this handoff. Q1-Claude has issued ACK/START not observed. Six selection qubits, total qubit count, depth and ancilla cleanup cannot be reviewed because no compiler source has been published."
+    }
+  ]
+}

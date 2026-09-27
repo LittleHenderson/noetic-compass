@@ -1,0 +1,19 @@
+{
+  "status": "ILLUSTRATIVE_OFFLINE_ESTIMATE_NOT_A_LIVE_QUOTE",
+  "price_observed_on": "2026-09-27",
+  "device": "rigetti_cepheus",
+  "tasks": 10,
+  "shots_per_task": 1000,
+  "qpu_only_per_task_usd": "0.725000",
+  "qpu_only_total_usd": "7.250000",
+  "excluded": [
+    "host compute",
+    "storage",
+    "taxes",
+    "optional mitigation constraints",
+    "managed notebooks",
+    "reservations",
+    "account-specific terms"
+  ],
+  "cloud_submission_authorized": false
+}

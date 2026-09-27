@@ -1,0 +1,6 @@
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+helm_quantum/vendor/q1_tools.py -text
+input_package/** -text
+review/out/** -text

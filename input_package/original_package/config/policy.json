@@ -1,0 +1,28 @@
+{
+  "schema": "helm-q1-planning-policy/1.0",
+  "mode": "offline",
+  "quantum_feature_default": "disabled",
+  "cloud_submission_enabled": false,
+  "paid_fallback_enabled": false,
+  "training_changes_enabled": false,
+  "authoritative_write_enabled": false,
+  "cloud_budget_usd": "0.00",
+  "trusted_execution_grant": null,
+  "proposed_pilot_not_authorized": {
+    "qpu_allowance_usd": "10.00",
+    "host_candidate_monthly_usd": "24.00",
+    "max_tasks": 10,
+    "shots_per_task": 1000,
+    "max_concurrent_quantum_tasks": 1
+  },
+  "required_before_cloud": [
+    "admitted_source_identity",
+    "independent_compiler_and_verifier_review",
+    "current_account_plan_and_device_access",
+    "fresh_price_quote",
+    "approved_budget_or_verified_free_quota",
+    "trusted_host_execution_grant",
+    "provider_cap_and_inflight_cost_reservation",
+    "protected_data_and_active_job_isolation"
+  ]
+}

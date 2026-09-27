@@ -1,0 +1,25 @@
+{
+  "schema": "helm-q1-test-status/1",
+  "current_status": "NOT_RUN",
+  "new_tests": {"authored_methods": 43, "collected": 0, "executed": 0, "passed": 0,
+                "failed": 0, "errors": 0, "skipped": 0, "not_run_methods": 43},
+  "supplied_helper_tests_current_session": {"authored_methods": 22, "collected": 0,
+    "executed": 0, "passed": 0, "failed": 0, "skipped": 0, "not_run_methods": 22},
+  "historical_helper_receipt": {"reported_executed": 22, "reported_passed": 22,
+    "python": "3.13.5", "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "source": "input_package/original_package/receipts/DELIVERY_STATUS.json",
+    "not_reexecuted_by_q1_codex": true},
+  "commands": ["python -m unittest discover -s input_package/original_package/tests -v",
+               "python -m unittest discover -s tests -p test_*.py -v"],
+  "blocker": "MSI is editing/inspection/orchestration only. No existing AWS Q1 runner and allowance was identified. New cloud spending and use of incumbent jobs are prohibited.",
+  "acceptance_requirements": 40,
+  "helm_acceptance_executed": 0,
+  "independent_review": "EARLIER_UNCOMMITTED_SOURCE_REVIEW_RECEIVED; FIXES_NOT_INDEPENDENTLY_CHECKED",
+  "reviewer_report_not_adopted_as_acceptance": {
+    "author": "Q1-DeepSeek", "source": "review/REVIEW_Q1_DEEPSEEK_PACKET1.md",
+    "reported_executed": 42, "reported_passed": 42,
+    "venue": "MSI local; outside the standing AWS-only test instruction",
+    "codex_reexecuted": false, "exact_final_commit_verified": false
+  },
+  "performance_claim": null
+}

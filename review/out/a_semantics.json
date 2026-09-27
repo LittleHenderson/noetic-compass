@@ -1,0 +1,214 @@
+{
+  "probe": "A-instruction-semantics",
+  "reviewer": "Q1-DeepSeek",
+  "package_root": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "counts": {
+    "PASS": 10
+  },
+  "cases": [
+    {
+      "id": "S1",
+      "requirement": "published instruction semantics on all four inputs",
+      "outcome": "PASS",
+      "detail": {
+        "operations": 4,
+        "domain_size": 4,
+        "all_bijective": true,
+        "not2_equals_bitwise_xor_3": true
+      }
+    },
+    {
+      "id": "S2",
+      "requirement": "left-to-right ordered composition",
+      "outcome": "PASS",
+      "detail": {
+        "inc_then_not2": [
+          2,
+          1,
+          0,
+          3
+        ],
+        "not2_then_inc": [
+          0,
+          3,
+          2,
+          1
+        ],
+        "order_is_observable": true,
+        "only_not2_breaks_commutation": true
+      }
+    },
+    {
+      "id": "S3",
+      "requirement": "64-program corpus, 6 add2 solutions, 0 parity solutions",
+      "outcome": "PASS",
+      "detail": {
+        "corpus": 64,
+        "add2_count": 6,
+        "parity_count": 0,
+        "distinct_reachable_transforms": 8,
+        "add2_solution_ids": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            0
+          ]
+        ],
+        "transform_multiset": [
+          [
+            0,
+            1,
+            2,
+            3
+          ],
+          [
+            0,
+            3,
+            2,
+            1
+          ],
+          [
+            1,
+            0,
+            3,
+            2
+          ],
+          [
+            1,
+            2,
+            3,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            3
+          ],
+          [
+            2,
+            3,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            2,
+            1,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "S4",
+      "requirement": "negative fixture has a bijectivity impossibility reason",
+      "outcome": "PASS",
+      "detail": {
+        "generators_bijective": true,
+        "target_injective": false,
+        "implies_unsat": true
+      }
+    },
+    {
+      "id": "S5",
+      "requirement": "reviewer reference agrees with direct_outputs and run_program",
+      "outcome": "PASS",
+      "detail": {
+        "programs_cross_checked": 64,
+        "inputs_per_program": 4,
+        "agreements": 64,
+        "disagreements": 0
+      }
+    },
+    {
+      "id": "S6",
+      "requirement": "public fixture carries no solution IDs or counts",
+      "outcome": "PASS",
+      "detail": {
+        "fixture_has_solution_data": false,
+        "targets_match_spec": true,
+        "cas_native": false
+      }
+    },
+    {
+      "id": "S7",
+      "requirement": "accepted witness matches reviewer-computed target",
+      "outcome": "PASS",
+      "detail": {
+        "witness": [
+          1,
+          1,
+          0
+        ],
+        "outputs": [
+          2,
+          3,
+          0,
+          1
+        ],
+        "accepted": true,
+        "disposition": "VERIFIED_OFFLINE_ONLY"
+      }
+    },
+    {
+      "id": "S8",
+      "requirement": "near-miss and identity candidates are rejected",
+      "outcome": "PASS",
+      "detail": {
+        "identity_rejected": true,
+        "one_input_off_rejected": true
+      }
+    },
+    {
+      "id": "S9",
+      "requirement": "parity exhaustive search reports UNSAT_PROVED with reason",
+      "outcome": "PASS",
+      "detail": {
+        "status": "UNSAT_PROVED",
+        "proof": "all 64 programs evaluated over all four inputs; compositions of ID/INC/DEC/NOT2 are bijective; target is not",
+        "candidates_checked": 64
+      }
+    },
+    {
+      "id": "S10",
+      "requirement": "structured baseline agrees with reviewer reachability",
+      "outcome": "PASS",
+      "detail": {
+        "structured_add2": "VALID_CANDIDATE",
+        "structured_parity": "UNSAT_PROVED"
+      }
+    }
+  ]
+}

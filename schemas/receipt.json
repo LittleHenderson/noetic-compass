@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QuantumRunReceipt offline fixture v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "run_id", "problem_digest", "proposal_digest", "binding", "mode", "requested_backend", "actual_backend", "execution_kind", "device_properties_digest", "native_circuit_digest", "compilation_settings", "measurement_order", "shots", "observed_counts", "job_ids", "elapsed_ns", "candidates_checked", "quote_id", "estimated_charges_usd", "reconciled_charges_usd", "status"],
+  "properties": {
+    "schema": {"const": "helm-q1-receipt/1"},
+    "run_id": {"type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "problem_digest": {"$ref": "common.json#/$defs/digest"},
+    "proposal_digest": {"anyOf": [{"$ref": "common.json#/$defs/digest"}, {"type": "null"}]},
+    "binding": {"$ref": "common.json#/$defs/binding"},
+    "mode": {"$ref": "common.json#/$defs/mode"},
+    "requested_backend": {"const": "offline-classical"},
+    "actual_backend": {"const": "offline-classical"},
+    "execution_kind": {"const": "CLASSICAL_OFFLINE"},
+    "device_properties_digest": {"const": null},
+    "native_circuit_digest": {"const": null},
+    "compilation_settings": {"const": []},
+    "measurement_order": {"const": "NOT_APPLICABLE"},
+    "shots": {"const": 0}, "observed_counts": {"const": []}, "job_ids": {"const": []},
+    "elapsed_ns": {"type": "integer", "minimum": 0, "maximum": 9223372036854775807},
+    "candidates_checked": {"type": "integer", "minimum": 0, "maximum": 64},
+    "quote_id": {"const": null}, "estimated_charges_usd": {"const": "0.00"},
+    "reconciled_charges_usd": {"const": null},
+    "status": {"enum": ["COMPLETED", "BUDGET_EXHAUSTED"]}
+  }
+}

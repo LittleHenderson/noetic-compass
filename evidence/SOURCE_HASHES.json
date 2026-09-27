@@ -1,0 +1,280 @@
+{
+  "kind": "STATIC_SOURCE_INSPECTION_NOT_TEST_EXECUTION",
+  "scope": "Codex-owned source and immutable input only; other leads excluded",
+  "python_files_parsed": 20,
+  "json_files_parsed": 19,
+  "authored_test_method_count": 43,
+  "authored_test_ids": [
+    "test_backend.BackendTest.test_capabilities_and_estimate_do_not_claim_readiness",
+    "test_backend.BackendTest.test_every_mode_and_fake_grant_refused_without_network",
+    "test_backend.BackendTest.test_environment_does_not_grant_authority",
+    "test_backend.BackendTest.test_compile_poll_cancel_decode_refuse_honestly",
+    "test_classical.ClassicalTest.test_independent_checker_all_64_programs",
+    "test_classical.ClassicalTest.test_order_of_composition",
+    "test_classical.ClassicalTest.test_verifier_does_not_use_reference",
+    "test_classical.ClassicalTest.test_exhaustive_positive_and_full_count",
+    "test_classical.ClassicalTest.test_exhaustive_negative_proof",
+    "test_classical.ClassicalTest.test_pruned_search_matches_exhaustive",
+    "test_classical.ClassicalTest.test_uniform_negative_does_not_claim_impossibility",
+    "test_classical.ClassicalTest.test_sampling_is_reproducible_and_bounded",
+    "test_classical.ClassicalTest.test_timeout_is_not_unsat",
+    "test_classical.ClassicalTest.test_contract_failures_are_not_relabelled_budget_exhaustion",
+    "test_classical.ClassicalTest.test_helper_reused_without_solution_table",
+    "test_cli.CliTest.test_actual_first_command_fresh_process",
+    "test_cli.CliTest.test_real_validate_boundary",
+    "test_cli.CliTest.test_real_negative_baseline",
+    "test_cli.CliTest.test_compare_and_sampling",
+    "test_cli.CliTest.test_submit_refuses_without_reading_files",
+    "test_cli.CliTest.test_compile_reports_missing_compiler",
+    "test_cli.CliTest.test_invalid_program_cannot_pass_cli",
+    "test_cli.CliTest.test_no_implicit_cloud_fallback",
+    "test_contracts.ContractsTest.test_problem_roundtrip",
+    "test_contracts.ContractsTest.test_all_record_roundtrips",
+    "test_contracts.ContractsTest.test_unknown_fields_and_schema",
+    "test_contracts.ContractsTest.test_missing_fields",
+    "test_contracts.ContractsTest.test_all_return_address_fields_bound",
+    "test_contracts.ContractsTest.test_malformed_checkpoint",
+    "test_contracts.ContractsTest.test_limits_are_strict_and_admitted",
+    "test_contracts.ContractsTest.test_no_caller_supplied_authority",
+    "test_contracts.ContractsTest.test_admission_cannot_be_constructed_or_copied",
+    "test_contracts.ContractsTest.test_direct_constructor_and_replace_validate",
+    "test_contracts.ContractsTest.test_semantics_and_scorer_cannot_change",
+    "test_contracts.ContractsTest.test_expired_admission",
+    "test_contracts.ContractsTest.test_duplicate_nonfinite_and_oversize_json",
+    "test_contracts.ContractsTest.test_proposal_invalid_program_and_origin",
+    "test_contracts.ContractsTest.test_forged_receipt_hardware_and_cost",
+    "test_contracts.ContractsTest.test_forged_verdict_and_retention",
+    "test_contracts.ContractsTest.test_result_deserialization_cannot_bypass_checks",
+    "test_contracts.ContractsTest.test_receipt_binds_exact_proposal",
+    "test_contracts.ContractsTest.test_context_never_serialized",
+    "test_contracts.ContractsTest.test_disabled_shadow_research_do_not_retain"
+  ],
+  "tests_collected": 0,
+  "tests_executed": 0,
+  "files": {
+    "AGENTS.md": {
+      "sha256": "9958aa224ce03a96ed5caedc93985c8fbc98a31b4a762266e3eb1f75fe21636c",
+      "bytes": 1054
+    },
+    "config/policy.json": {
+      "sha256": "a4ea9c0f79a7e7e7f717689ab469c8f3fa99ccc29fb46f898f887a222d923eb9",
+      "bytes": 890
+    },
+    "coordination/codex/HANDOFF.md": {
+      "sha256": "da56daa12fd28e20734cd26080113a36e1fcf479a4769016649417aa8aa77fc0",
+      "bytes": 5076
+    },
+    "coordination/codex/inspect_source.py": {
+      "sha256": "cfcd19105be4dd7b6138af6bf34c62a1e903516ea4b63d495276dce561bb2cc0",
+      "bytes": 2525
+    },
+    "coordination/codex/ISSUE_BODY.md": {
+      "sha256": "bdcfefd0f341d016c500460057e2866cad00cddc47fe9366e7cf46ca625d6dd0",
+      "bytes": 2761
+    },
+    "coordination/codex/REVIEW_RESPONSE.md": {
+      "sha256": "cc25fd693bca61146d8d60d6f128e6ebeb55fe8aff6a30d5ec9be3ff53ec74ce",
+      "bytes": 3088
+    },
+    "coordination/FILE_LEASES.md": {
+      "sha256": "7d1e11bec9b56152ae57794b393ab6ff1e9578d37520f860ea99d69d1e2abf87",
+      "bytes": 1908
+    },
+    "evidence/ACCEPTANCE_COVERAGE.md": {
+      "sha256": "e47b31a68023e75736b4a6af630970f98ed8eecdf0e1d10ba7775e309cff6d99",
+      "bytes": 1984
+    },
+    "evidence/TEST_STATUS.json": {
+      "sha256": "40bebe0433e1aa591e8c84b35bdb411ca9d0c366d1e3a66542dc947848ee3107",
+      "bytes": 1541
+    },
+    "fixtures/public/q1-mod4.json": {
+      "sha256": "678e977d976037d2b09183ebfa88003970687260feed4e33ddf0b95fd20c9877",
+      "bytes": 580
+    },
+    "helm_quantum/__init__.py": {
+      "sha256": "8b515a2f618718d93e920bc65237a6318384aa6050ea94965010498b08fd87d5",
+      "bytes": 101
+    },
+    "helm_quantum/__main__.py": {
+      "sha256": "759b594c4ae50744ff458ff41a875fba8eb061c4aede4283b0a1c2cd4453b123",
+      "bytes": 4236
+    },
+    "helm_quantum/admission.py": {
+      "sha256": "12de788d2d5c70b3eadd7f47f3e57d572c19d5962c58538bb119fc9d98d95a81",
+      "bytes": 3634
+    },
+    "helm_quantum/backends/__init__.py": {
+      "sha256": "ea4eabc6071e398c74bcd175a621f3aa3774485f19de57b3b346d3f57be6a567",
+      "bytes": 61
+    },
+    "helm_quantum/backends/base.py": {
+      "sha256": "cb6a792efeb386b48031843870d2bcd279eb11c86a44b023258a52ea3a83a552",
+      "bytes": 845
+    },
+    "helm_quantum/backends/offline.py": {
+      "sha256": "768184c293c8d4228fb4b82c603dff7e22b3c8e8bec7c59fa295e4c6e5943bdf",
+      "bytes": 1448
+    },
+    "helm_quantum/classical.py": {
+      "sha256": "365a34c52bdae88287cbbaebf3575cb7459f304cd9e0a8b7191f3b43a95ead67",
+      "bytes": 5412
+    },
+    "helm_quantum/contracts.py": {
+      "sha256": "c1c2b05be84cdb05d7e0928e007c6994d8ff33e5207d8a121bd16a4f2d862fd4",
+      "bytes": 9251
+    },
+    "helm_quantum/eligibility.py": {
+      "sha256": "5cf11aa70c3df4c59fe8758b7d312bee4cb73172c2fe61f5e9a2bf8065bbd9bc",
+      "bytes": 670
+    },
+    "helm_quantum/vendor/__init__.py": {
+      "sha256": "697c6e3a67f5809a226dea84e08c6c00c074b71ea2af9df1fd62c4e4db654f45",
+      "bytes": 67
+    },
+    "helm_quantum/vendor/q1_tools.py": {
+      "sha256": "6731ecd9298e40e0f9943a968b8c225fefe66c9baffccdfdc94493b9cb343adb",
+      "bytes": 6793
+    },
+    "helm_quantum/verifier.py": {
+      "sha256": "a51bd2a0ddd9333b0e58387a5a9647e98ea7a206f3c7a066ba092fa634d4de5d",
+      "bytes": 2047
+    },
+    "helm_quantum/wire.py": {
+      "sha256": "cc3ef1aa25073eed498765c1b7b1918fb5f7f886aa339130af542da78532d075",
+      "bytes": 3327
+    },
+    "input_package/00_START_HERE.md": {
+      "sha256": "e0597dafabcd3398897a151249ad20cf21261a34c5bfd6865629d32df1d66fe6",
+      "bytes": 2899
+    },
+    "input_package/01_SHARED_RULES.md": {
+      "sha256": "946bf4fc6146ad488fa92fdfbf1f690d0a228a1457f52baa52dfea8e8e2e4b40",
+      "bytes": 6765
+    },
+    "input_package/02_CODEX_Q1.md": {
+      "sha256": "8a4cbe222ecff0553287daeec953788c1ac05e88c91df147ecb0ee3f69006f2a",
+      "bytes": 4237
+    },
+    "input_package/03_CLAUDE_Q1.md": {
+      "sha256": "c37a4c1d26a47a18e98847dc029f72543dc264ba718570b3c4990a136bcd53f1",
+      "bytes": 4224
+    },
+    "input_package/04_DEEPSEEK_Q1.md": {
+      "sha256": "2ffe0c1dacc050ff130ca89e80b0340c28ebefd655fd79f7f70632342d7a0ad1",
+      "bytes": 3951
+    },
+    "input_package/05_CHATGPT_Q1_MANAGER.md": {
+      "sha256": "e52cd55fd78bef0b299989aedb7635a6e02c0886046b8e6563b0b5705d6f8c1e",
+      "bytes": 5552
+    },
+    "input_package/HANDOFF_MANIFEST.json": {
+      "sha256": "ffcd71c6d85edfc3bc334dc92936523587912ca387b1e4c48fbc3c16daa03864",
+      "bytes": 3492
+    },
+    "input_package/original_package/config/policy.json": {
+      "sha256": "a4ea9c0f79a7e7e7f717689ab469c8f3fa99ccc29fb46f898f887a222d923eb9",
+      "bytes": 890
+    },
+    "input_package/original_package/HANDOFF_TO_EXISTING_LEADS.md": {
+      "sha256": "7d3a8fd966e09a1f684ef96a92ad02363e9baa7f9ee0e4924d5673c07eaf8617",
+      "bytes": 2328
+    },
+    "input_package/original_package/HELM_Q1_EXECUTABLE_DIRECTIVE_v1_0.md": {
+      "sha256": "bd51f9265c616569bc05c853b2e868d829ffc31bf7ef82666cab039ae0328a16",
+      "bytes": 38059
+    },
+    "input_package/original_package/HELM_Q1_Executable_Directive_v1_0.pdf": {
+      "sha256": "111027d76b1dc208e2a9486b6edba92d669a7d2c314365b13a4f1af7310b63be",
+      "bytes": 83278
+    },
+    "input_package/original_package/MANIFEST_SHA256.json": {
+      "sha256": "8d6f224ce9a153f2f1b3a19d59ecc08129e6238c95b7b797278cbe3610ebc572",
+      "bytes": 2089
+    },
+    "input_package/original_package/README_START_HERE.md": {
+      "sha256": "991049ab5f61dd7977c13f5f59873777672af5f3e08fa810456240b4d33b4f1b",
+      "bytes": 2136
+    },
+    "input_package/original_package/receipts/classical_fixture_reference.json": {
+      "sha256": "0f55fff50a56202e7f838b897c18f93e6992a798ed8eadcdec345a77b966290f",
+      "bytes": 360
+    },
+    "input_package/original_package/receipts/DELIVERY_STATUS.json": {
+      "sha256": "ebe0e095847fdf4db9b10e3c32244486f70303af8b16ec3623df6203fc0f7d0d",
+      "bytes": 1487
+    },
+    "input_package/original_package/receipts/helper_tests.txt": {
+      "sha256": "8e53f11383bbd5ec307545a68768d80169d0f9039ab63690798a27a0d0c91dd5",
+      "bytes": 1985
+    },
+    "input_package/original_package/receipts/illustrative_quote.json": {
+      "sha256": "242f67e4a6c6e8d7f83f84512319f73a073388b840f1efc2ee3cef4682fcabb3",
+      "bytes": 471
+    },
+    "input_package/original_package/receipts/offline_policy_check.json": {
+      "sha256": "2be63c8f9677f1f81858241cc35c492ab8a2e955dd1f4bea6c69123d9f193541",
+      "bytes": 167
+    },
+    "input_package/original_package/sources/price_snapshot.json": {
+      "sha256": "1730c132bcf6d032687c6970462f0d0c89717b851a37cc9610ef76e8a6a0cbd6",
+      "bytes": 584
+    },
+    "input_package/original_package/tests/test_q1_tools.py": {
+      "sha256": "5aeeebbc61469b8a70bd8c5d395b88746b6aebf4a2de320f48909dbbe91b5bdc",
+      "bytes": 3810
+    },
+    "input_package/original_package/tools/q1_tools.py": {
+      "sha256": "6731ecd9298e40e0f9943a968b8c225fefe66c9baffccdfdc94493b9cb343adb",
+      "bytes": 6793
+    },
+    "input_package/PREPARATION_RECEIPT.json": {
+      "sha256": "0a68763563d50649619438aac7c5f9f8b5e6c6cfb30d5f3d1e72cc668254cd0c",
+      "bytes": 659
+    },
+    "README.md": {
+      "sha256": "7b71f13658f0cca049a1a12ae60c77b650c9661f89557a6e49c884d9b3b0dfcc",
+      "bytes": 6049
+    },
+    "schemas/common.json": {
+      "sha256": "fbb3b22470a842e100ed25dc190774c2908ba6eafbaa778b2f36c12749d70589",
+      "bytes": 1678
+    },
+    "schemas/problem.json": {
+      "sha256": "244a1e0ae25f55664fd0e8b33c63cdd7b8d74b30e552a2fe7392abbe21ca1308",
+      "bytes": 1837
+    },
+    "schemas/proposal.json": {
+      "sha256": "6ca47d962272a35aa74c6fb1c99aa6880f68dcc5f7b1527f37adf780b98e0844",
+      "bytes": 583
+    },
+    "schemas/receipt.json": {
+      "sha256": "8436a7f743b0c9e0d24a8c4fd1668af8d610239b4ec9dd3042afdd52b6030a67",
+      "bytes": 1793
+    },
+    "schemas/verification.json": {
+      "sha256": "db510efbd5c90c83a9cd7030854aa051ccb5fc0f5117498f89f8202a2d97c39f",
+      "bytes": 1164
+    },
+    "SOURCE_INVENTORY.json": {
+      "sha256": "6dd30d1f007bc9537cc8d65650d668f6104d0eed7b42fdb5897ef5e1642f00f5",
+      "bytes": 3392
+    },
+    "tests/test_backend.py": {
+      "sha256": "3f8609071f976a99cecdff971c1d04402ba14202dfa44b6cffe066e485112dd6",
+      "bytes": 1858
+    },
+    "tests/test_classical.py": {
+      "sha256": "b35ec3cd579d09eff45ed33e8b3618ddfee5146e8ef9958e646156da6bf93e9b",
+      "bytes": 4394
+    },
+    "tests/test_cli.py": {
+      "sha256": "27022f922fc1ea3f70d450c7ef69c270af40124bd662e645ca41c1effb571e30",
+      "bytes": 2476
+    },
+    "tests/test_contracts.py": {
+      "sha256": "725812974278fdf1a744fb664a85b0e0b6476d6e00db4bef41ab33d8fb19bc8c",
+      "bytes": 10016
+    }
+  }
+}

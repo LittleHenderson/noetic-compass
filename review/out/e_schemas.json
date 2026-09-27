@@ -1,0 +1,69 @@
+{
+  "probe": "E-schema-contract-drift",
+  "reviewer": "Q1-DeepSeek",
+  "package_root": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "counts": {
+    "PASS": 5
+  },
+  "cases": [
+    {
+      "id": "E1",
+      "requirement": "schema field sets equal the live contract field sets",
+      "outcome": "PASS",
+      "detail": {
+        "problem.json": {
+          "fields": 19,
+          "match": true
+        },
+        "proposal.json": {
+          "fields": 6,
+          "match": true
+        },
+        "receipt.json": {
+          "fields": 20,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "E2",
+      "requirement": "no schema constant contradicts the enforcing code",
+      "outcome": "PASS",
+      "detail": {
+        "pinned_fields_checked": 10,
+        "drift": {},
+        "status_enum": [
+          "COMPLETED",
+          "BUDGET_EXHAUSTED"
+        ]
+      }
+    },
+    {
+      "id": "E3",
+      "requirement": "a produced receipt satisfies its declared schema",
+      "outcome": "PASS",
+      "detail": {
+        "live_receipt_agrees_with_schema": true,
+        "const_fields_checked": 14
+      }
+    },
+    {
+      "id": "E4",
+      "requirement": "a schema-valid record still cannot mint authority",
+      "outcome": "PASS",
+      "detail": {
+        "refused_without_admission": "trusted context required",
+        "schema_alone_grants_nothing": true
+      }
+    },
+    {
+      "id": "E5",
+      "requirement": "no schema admits credential or grant material",
+      "outcome": "PASS",
+      "detail": {
+        "credential_tokens_found": [],
+        "schemas_scanned": 5
+      }
+    }
+  ]
+}

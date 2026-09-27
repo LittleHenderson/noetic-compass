@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QuantumVerification offline fixture v1",
+  "$comment": "The Python constructor recomputes all outputs and verdicts; this schema cannot attest correctness.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "problem_digest", "binding", "mode", "program", "verifier_digest", "outputs", "inputs_checked", "accepted", "disposition", "retained"],
+  "properties": {
+    "schema": {"const": "helm-q1-verification/1"},
+    "problem_digest": {"$ref": "common.json#/$defs/digest"},
+    "binding": {"$ref": "common.json#/$defs/binding"},
+    "mode": {"$ref": "common.json#/$defs/mode"},
+    "program": {"$ref": "common.json#/$defs/program"},
+    "verifier_digest": {"$ref": "common.json#/$defs/digest"},
+    "outputs": {"type": "array", "minItems": 4, "maxItems": 4,
+                "items": {"type": "integer", "minimum": 0, "maximum": 3}},
+    "inputs_checked": {"const": 4}, "accepted": {"type": "boolean"},
+    "disposition": {"enum": ["REJECTED", "VERIFIED_OFFLINE_ONLY", "VERIFIED_SHADOW_ONLY", "VERIFIED_RESEARCH_CANDIDATE"]},
+    "retained": {"const": false}
+  }
+}

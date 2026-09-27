@@ -1,0 +1,209 @@
+{
+  "probe": "B-oracle-leakage",
+  "reviewer": "Q1-DeepSeek",
+  "package_root": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "counts": {
+    "PASS": 10
+  },
+  "cases": [
+    {
+      "id": "O1",
+      "requirement": "independent verifier does not import evaluator/answer material",
+      "outcome": "PASS",
+      "detail": {
+        "verifier_imports": [
+          ".contracts",
+          ".contracts.QuantumProblem",
+          ".contracts.QuantumProposal",
+          ".contracts.QuantumVerification",
+          ".contracts.validate_program",
+          ".wire",
+          ".wire.require",
+          "__future__",
+          "__future__.annotations"
+        ],
+        "forbidden_hits": [],
+        "delegates_to_helper": false
+      }
+    },
+    {
+      "id": "O2",
+      "requirement": "verifier accepts no caller-supplied valid flag",
+      "outcome": "PASS",
+      "detail": {
+        "verify_args": [
+          "problem",
+          "proposal"
+        ],
+        "reads_returned_valid_flag": false
+      }
+    },
+    {
+      "id": "O3",
+      "requirement": "compiler import ban is stated; compiler not yet present",
+      "outcome": "PASS",
+      "detail": {
+        "compiler_dir_exists": false,
+        "lease_states_import_ban": true,
+        "status": "NOT_APPLICABLE_NO_COMPILER"
+      }
+    },
+    {
+      "id": "O4",
+      "requirement": "public fixture exports no solution IDs or counts",
+      "outcome": "PASS",
+      "detail": {
+        "fixture_keys": [
+          "cas_native",
+          "decoding_order",
+          "domain",
+          "family",
+          "instructions",
+          "program_length",
+          "schema",
+          "solution_ids_or_counts",
+          "targets"
+        ],
+        "solution_ids_or_counts": null,
+        "answer_bearing_fields": [],
+        "leaked_tokens": []
+      }
+    },
+    {
+      "id": "O5",
+      "requirement": "no enumerated answer list in the predicate path",
+      "outcome": "PASS",
+      "detail": {
+        "answer_list_identifiers": [],
+        "program_shaped_literals": [],
+        "evaluator_counts_reported_to_humans_only": true
+      }
+    },
+    {
+      "id": "O6",
+      "requirement": "predicate is reconstructible from the public spec alone",
+      "outcome": "PASS",
+      "detail": {
+        "spec_only_solutions": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            0
+          ]
+        ],
+        "spec_only_count": 6,
+        "matches_builder_acceptance": true
+      }
+    },
+    {
+      "id": "O7",
+      "requirement": "builder acceptance set matches reviewer spec-only search",
+      "outcome": "PASS",
+      "detail": {
+        "builder_accepted_programs": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            0
+          ]
+        ],
+        "count": 6
+      }
+    },
+    {
+      "id": "O8",
+      "requirement": "no evaluator count is hardcoded into the search",
+      "outcome": "PASS",
+      "detail": {
+        "integer_constants": [
+          0,
+          true,
+          2,
+          3,
+          4,
+          12,
+          32,
+          64,
+          1000000
+        ],
+        "solution_count_hardcoded": false,
+        "constant_loop_bounds": []
+      }
+    },
+    {
+      "id": "O9",
+      "requirement": "bounded sampling is not reported as unsatisfiability",
+      "outcome": "PASS",
+      "detail": {
+        "exhaustive": {
+          "status": "UNSAT_PROVED",
+          "proof": "all 64 programs evaluated over all four inputs; compositions of ID/INC/DEC/NOT2 are bijective; target is not"
+        },
+        "uniform_8_samples": {
+          "status": "NO_CANDIDATE_WITHIN_BUDGET",
+          "candidates_checked": 8
+        }
+      }
+    },
+    {
+      "id": "O10",
+      "requirement": "helper matches reviewer counts and exports no program IDs",
+      "outcome": "PASS",
+      "detail": {
+        "add2_valid_program_count": 6,
+        "negative_valid_program_count": 0,
+        "answer_program_ids_exported": false
+      }
+    }
+  ]
+}

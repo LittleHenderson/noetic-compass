@@ -1,0 +1,13 @@
+{
+  "observed_on": "2026-09-27",
+  "currency": "USD",
+  "source": "https://aws.amazon.com/braket/pricing/",
+  "scope": "Illustrative on-demand QPU-only rates; no account quote or execution permission",
+  "rates": {
+    "rigetti_cepheus": {"task": "0.30", "shot": "0.000425"},
+    "iqm_garnet": {"task": "0.30", "shot": "0.00145"},
+    "ionq_forte": {"task": "0.30", "shot": "0.08"}
+  },
+  "excluded": ["host compute", "storage", "taxes", "optional mitigation constraints", "managed notebooks", "reservations", "account-specific terms"],
+  "live_submission_requires_repricing": true
+}

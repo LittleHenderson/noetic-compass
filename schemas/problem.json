@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QuantumProblem offline fixture v1",
+  "$comment": "Structural checks do not admit a source, deadline, scorer, parent or execution grant.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "request_id", "source_digest", "compiler_digest", "operations_digest", "binding", "family", "domain", "instruction_library", "program_length", "max_program_length", "prerequisites", "goal", "target_outputs", "decoding_order", "limits", "deadline_unix_ms", "mode", "verifier_digest"],
+  "properties": {
+    "schema": {"const": "helm-q1-problem/1"},
+    "request_id": {"$ref": "common.json#/$defs/identity"},
+    "source_digest": {"$ref": "common.json#/$defs/digest"},
+    "compiler_digest": {"const": null},
+    "operations_digest": {"$ref": "common.json#/$defs/digest"},
+    "binding": {"$ref": "common.json#/$defs/binding"},
+    "family": {"const": "synthetic-mod4-instruction-synthesis"},
+    "domain": {"const": [0, 1, 2, 3]},
+    "instruction_library": {"const": ["ID", "INC", "DEC", "NOT2"]},
+    "program_length": {"const": 3}, "max_program_length": {"const": 3},
+    "prerequisites": {"const": []}, "goal": {"enum": ["add2", "parity"]},
+    "target_outputs": {"enum": [[2, 3, 0, 1], [0, 1, 0, 1]]},
+    "decoding_order": {"const": "instruction-left-to-right;two-bit-op-msb-first"},
+    "limits": {"$ref": "common.json#/$defs/limits"},
+    "deadline_unix_ms": {"type": "integer", "minimum": 1},
+    "mode": {"$ref": "common.json#/$defs/mode"},
+    "verifier_digest": {"$ref": "common.json#/$defs/digest"}
+  },
+  "allOf": [{"if": {"properties": {"goal": {"const": "add2"}}},
+             "then": {"properties": {"target_outputs": {"const": [2, 3, 0, 1]}}},
+             "else": {"properties": {"target_outputs": {"const": [0, 1, 0, 1]}}}}]
+}

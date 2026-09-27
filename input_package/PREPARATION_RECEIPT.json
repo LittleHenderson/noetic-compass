@@ -1,0 +1,14 @@
+{
+  "author": "ChatGPT",
+  "utc": "2026-09-27T15:21:11.555115+00:00",
+  "status": "PREPARED_NOT_DISPATCHED",
+  "original_manifest_sha256": "8d6f224ce9a153f2f1b3a19d59ecc08129e6238c95b7b797278cbe3610ebc572",
+  "original_files_verified": 13,
+  "original_files_mismatched": 0,
+  "source_tests_executed_by_this_preparation": 0,
+  "new_sessions_started": 0,
+  "new_model_calls": 0,
+  "new_cloud_jobs": 0,
+  "original_package_unchanged": true,
+  "note": "Owner will open Q1 sessions manually. Original receipts preserved, not new acceptance. First packaging expression had a syntax error before executing; corrected without any original-file change."
+}

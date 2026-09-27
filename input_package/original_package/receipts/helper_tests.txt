@@ -1,0 +1,27 @@
+test_bool_tasks_refused (test_q1_tools.HelpersTest.test_bool_tasks_refused) ... ok
+test_budget_exact_boundary (test_q1_tools.HelpersTest.test_budget_exact_boundary) ... ok
+test_budget_includes_inflight (test_q1_tools.HelpersTest.test_budget_includes_inflight) ... ok
+test_default_policy_valid (test_q1_tools.HelpersTest.test_default_policy_valid) ... ok
+test_fake_grant_refused (test_q1_tools.HelpersTest.test_fake_grant_refused) ... ok
+test_fixture_limit_refused (test_q1_tools.HelpersTest.test_fixture_limit_refused) ... ok
+test_full_fixture (test_q1_tools.HelpersTest.test_full_fixture) ... ok
+test_invalid_input_refused (test_q1_tools.HelpersTest.test_invalid_input_refused) ... ok
+test_invalid_operation_refused (test_q1_tools.HelpersTest.test_invalid_operation_refused) ... ok
+test_ionq_quote (test_q1_tools.HelpersTest.test_ionq_quote) ... ok
+test_iqm_quote (test_q1_tools.HelpersTest.test_iqm_quote) ... ok
+test_nan_refused (test_q1_tools.HelpersTest.test_nan_refused) ... ok
+test_negative_budget_refused (test_q1_tools.HelpersTest.test_negative_budget_refused) ... ok
+test_negative_tasks_refused (test_q1_tools.HelpersTest.test_negative_tasks_refused) ... ok
+test_nonzero_policy_budget_refused (test_q1_tools.HelpersTest.test_nonzero_policy_budget_refused) ... ok
+test_positive_witness (test_q1_tools.HelpersTest.test_positive_witness) ... ok
+test_rigetti_quote (test_q1_tools.HelpersTest.test_rigetti_quote) ... ok
+test_submission_flag_refused (test_q1_tools.HelpersTest.test_submission_flag_refused) ... ok
+test_unknown_device_refused (test_q1_tools.HelpersTest.test_unknown_device_refused) ... ok
+test_unknown_schema_refused (test_q1_tools.HelpersTest.test_unknown_schema_refused) ... ok
+test_zero_budget_refuses_positive (test_q1_tools.HelpersTest.test_zero_budget_refuses_positive) ... ok
+test_zero_shots_refused (test_q1_tools.HelpersTest.test_zero_shots_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.002s
+
+OK

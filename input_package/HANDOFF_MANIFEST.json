@@ -1,0 +1,90 @@
+{
+  "package": "HELM-Q1 new sessions 20260927 v1",
+  "purpose": "Integrity only, not authority",
+  "files": {
+    "00_START_HERE.md": {
+      "bytes": 2899,
+      "sha256": "e0597dafabcd3398897a151249ad20cf21261a34c5bfd6865629d32df1d66fe6"
+    },
+    "01_SHARED_RULES.md": {
+      "bytes": 6765,
+      "sha256": "946bf4fc6146ad488fa92fdfbf1f690d0a228a1457f52baa52dfea8e8e2e4b40"
+    },
+    "02_CODEX_Q1.md": {
+      "bytes": 4237,
+      "sha256": "8a4cbe222ecff0553287daeec953788c1ac05e88c91df147ecb0ee3f69006f2a"
+    },
+    "03_CLAUDE_Q1.md": {
+      "bytes": 4224,
+      "sha256": "c37a4c1d26a47a18e98847dc029f72543dc264ba718570b3c4990a136bcd53f1"
+    },
+    "04_DEEPSEEK_Q1.md": {
+      "bytes": 3951,
+      "sha256": "2ffe0c1dacc050ff130ca89e80b0340c28ebefd655fd79f7f70632342d7a0ad1"
+    },
+    "05_CHATGPT_Q1_MANAGER.md": {
+      "bytes": 5552,
+      "sha256": "e52cd55fd78bef0b299989aedb7635a6e02c0886046b8e6563b0b5705d6f8c1e"
+    },
+    "PREPARATION_RECEIPT.json": {
+      "bytes": 659,
+      "sha256": "0a68763563d50649619438aac7c5f9f8b5e6c6cfb30d5f3d1e72cc668254cd0c"
+    },
+    "original_package/MANIFEST_SHA256.json": {
+      "bytes": 2089,
+      "sha256": "8d6f224ce9a153f2f1b3a19d59ecc08129e6238c95b7b797278cbe3610ebc572"
+    },
+    "original_package/HANDOFF_TO_EXISTING_LEADS.md": {
+      "bytes": 2328,
+      "sha256": "7d3a8fd966e09a1f684ef96a92ad02363e9baa7f9ee0e4924d5673c07eaf8617"
+    },
+    "original_package/HELM_Q1_EXECUTABLE_DIRECTIVE_v1_0.md": {
+      "bytes": 38059,
+      "sha256": "bd51f9265c616569bc05c853b2e868d829ffc31bf7ef82666cab039ae0328a16"
+    },
+    "original_package/HELM_Q1_Executable_Directive_v1_0.pdf": {
+      "bytes": 83278,
+      "sha256": "111027d76b1dc208e2a9486b6edba92d669a7d2c314365b13a4f1af7310b63be"
+    },
+    "original_package/README_START_HERE.md": {
+      "bytes": 2136,
+      "sha256": "991049ab5f61dd7977c13f5f59873777672af5f3e08fa810456240b4d33b4f1b"
+    },
+    "original_package/config/policy.json": {
+      "bytes": 890,
+      "sha256": "a4ea9c0f79a7e7e7f717689ab469c8f3fa99ccc29fb46f898f887a222d923eb9"
+    },
+    "original_package/receipts/DELIVERY_STATUS.json": {
+      "bytes": 1487,
+      "sha256": "ebe0e095847fdf4db9b10e3c32244486f70303af8b16ec3623df6203fc0f7d0d"
+    },
+    "original_package/receipts/classical_fixture_reference.json": {
+      "bytes": 360,
+      "sha256": "0f55fff50a56202e7f838b897c18f93e6992a798ed8eadcdec345a77b966290f"
+    },
+    "original_package/receipts/helper_tests.txt": {
+      "bytes": 1985,
+      "sha256": "8e53f11383bbd5ec307545a68768d80169d0f9039ab63690798a27a0d0c91dd5"
+    },
+    "original_package/receipts/illustrative_quote.json": {
+      "bytes": 471,
+      "sha256": "242f67e4a6c6e8d7f83f84512319f73a073388b840f1efc2ee3cef4682fcabb3"
+    },
+    "original_package/receipts/offline_policy_check.json": {
+      "bytes": 167,
+      "sha256": "2be63c8f9677f1f81858241cc35c492ab8a2e955dd1f4bea6c69123d9f193541"
+    },
+    "original_package/sources/price_snapshot.json": {
+      "bytes": 584,
+      "sha256": "1730c132bcf6d032687c6970462f0d0c89717b851a37cc9610ef76e8a6a0cbd6"
+    },
+    "original_package/tests/test_q1_tools.py": {
+      "bytes": 3810,
+      "sha256": "5aeeebbc61469b8a70bd8c5d395b88746b6aebf4a2de320f48909dbbe91b5bdc"
+    },
+    "original_package/tools/q1_tools.py": {
+      "bytes": 6793,
+      "sha256": "6731ecd9298e40e0f9943a968b8c225fefe66c9baffccdfdc94493b9cb343adb"
+    }
+  }
+}

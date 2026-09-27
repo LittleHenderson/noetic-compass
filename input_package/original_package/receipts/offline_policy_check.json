@@ -1,0 +1,5 @@
+{
+  "status": "VALID_OFFLINE_PLANNING_POLICY",
+  "cloud_submission_authorized": false,
+  "warning": "This check is not a production authority or budget controller."
+}

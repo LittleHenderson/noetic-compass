@@ -1,0 +1,62 @@
+{
+  "schema": "helm-q1-source-inventory/1",
+  "q0_complete": false,
+  "scope": "bounded offline contracts and classical synthetic fixture",
+  "identity": {
+    "lead": "Q1-Codex",
+    "codex_thread_id": "01a0e385-db6e-7a71-beca-f6ef3a6c5e04",
+    "collaboration_agent": "/root",
+    "host": "MSI",
+    "workspace": "C:/Users/wakil/HELM-Q1/q1-offline-20260927",
+    "branch": "codex/helm-q1-offline-20260927",
+    "upstream_history_imported": false
+  },
+  "tree_mapping": {"research/helm_quantum/": ".", "python_package": "helm_quantum/"},
+  "admitted_sources": [
+    {
+      "path": "input_package/original_package/MANIFEST_SHA256.json",
+      "sha256": "8d6f224ce9a153f2f1b3a19d59ecc08129e6238c95b7b797278cbe3610ebc572",
+      "role": "immutable supplied source and instruction manifest"
+    },
+    {
+      "path": "input_package/original_package/HELM_Q1_EXECUTABLE_DIRECTIVE_v1_0.md",
+      "sha256": "bd51f9265c616569bc05c853b2e868d829ffc31bf7ef82666cab039ae0328a16",
+      "role": "full directive read, including later gates; no spending authority"
+    },
+    {
+      "path": "helm_quantum/vendor/q1_tools.py",
+      "sha256": "6731ecd9298e40e0f9943a968b8c225fefe66c9baffccdfdc94493b9cb343adb",
+      "role": "unmodified classical helper; evaluator only; no compiler input"
+    },
+    {
+      "path": "fixtures/public/q1-mod4.json",
+      "sha256": "678e977d976037d2b09183ebfa88003970687260feed4e33ddf0b95fd20c9877",
+      "role": "public operation semantics and target outputs, no solved program IDs/counts"
+    }
+  ],
+  "dependencies": {"python": ">=3.10", "third_party_packages": [], "installs_performed": 0},
+  "host_runtime_slices": [],
+  "checkpoint_digest": null,
+  "checkpoint_reason": "Synthetic fixture does not load a model; live HELM checkpoint not admitted.",
+  "supported_modes": ["disabled", "shadow", "research"],
+  "mode_scope": "offline fixture only; all modes refuse quantum submission and host writes",
+  "baseline_command": "python -m helm_quantum baseline --mode disabled",
+  "test_commands": [
+    "python -m unittest discover -s input_package/original_package/tests -v",
+    "python -m unittest discover -s tests -p test_*.py -v"
+  ],
+  "execution": {
+    "tests": "NOT_RUN", "baseline": "NOT_RUN", "profile": "NOT_RUN",
+    "local_scope": "lightweight source editing, syntax inspection, integrity checks and Git transport",
+    "required_test_venue": "identified already-authorized AWS runner",
+    "blocker": "No Q1-specific existing runner, grant, resource allowance or free capacity was supplied. Incumbent environments and budgets are outside this packet.",
+    "new_cloud_jobs": 0, "hardware_calls": 0, "new_cloud_spend_usd": "0.00"
+  },
+  "profile": {"cold_start_ms": null, "peak_rss_bytes": null, "cpu_throughput": null,
+              "checkpoint_bytes": null, "accelerator": null, "peak_vram_bytes": null,
+              "linux_x86_64_verified": false, "linux_arm64_verified": false},
+  "missing_runtime_connection": "An incumbent-owner-approved public export of the actual admitted snapshot, RPM return-address, verifier and research-retention interfaces, with file digests. No full history or checkpoint is needed for this packet.",
+  "acceptance": {"independently_reviewed": false, "host_integrated": false,
+                 "simulator_executed": false, "hardware_executed": false,
+                 "retained_research_only": false, "promoted": false}
+}

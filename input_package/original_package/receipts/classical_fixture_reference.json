@@ -1,0 +1,10 @@
+{
+  "status": "CLASSICAL_REFERENCE_ONLY_NOT_QUANTUM_OR_HELM",
+  "program_length": 3,
+  "candidates_checked": 64,
+  "inputs_per_candidate": 4,
+  "add2_valid_program_count": 6,
+  "nonbijective_target_valid_program_count": 0,
+  "answer_program_ids_exported": false,
+  "warning": "Do not use evaluator counts or solved IDs to construct/tune the quantum search."
+}

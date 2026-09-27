@@ -1,0 +1,536 @@
+{
+  "map": "HELM-Q1 acceptance coverage (original T01-T40 IDs retained)",
+  "reviewer": "Q1-DeepSeek",
+  "reviewed_source": "C:\\Users\\wakil\\HELM-Q1\\q1-offline-20260927",
+  "probe_cases_executed": {
+    "NOT_RUN": 2,
+    "PASS": 47
+  },
+  "probe_cases_executed_total": 49,
+  "probe_failures": 0,
+  "probe_errors": 0,
+  "by_review_state": {
+    "EXECUTED_PASS": 22,
+    "NOT_RUN_NO_ARTIFACT": 13,
+    "NOT_YET_APPLICABLE": 3,
+    "NOT_RUN_REQUIRES_PROVIDER": 3
+  },
+  "rows": [
+    {
+      "id": "HELM-Q1/T01",
+      "requirement": "Admitted source/parent identity",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "probe_outcomes": {
+        "C1": "PASS",
+        "C2": "PASS",
+        "C3": "PASS"
+      },
+      "note": "Identity is factory-derived; caller-minted admission refused; forged caller_id refused. NOTE: caller/branch/frame values are offline-fixture literals, not a real RPM caller."
+    },
+    {
+      "id": "HELM-Q1/T02",
+      "requirement": "Unknown schema",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C3"
+      ],
+      "probe_outcomes": {
+        "C3": "PASS"
+      },
+      "note": "from_json requires an exact field set and a live admission context."
+    },
+    {
+      "id": "HELM-Q1/T03",
+      "requirement": "Malformed checkpoint",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C5"
+      ],
+      "probe_outcomes": {
+        "C5": "PASS"
+      },
+      "note": "checkpoint_digest rejects any non-None malformed value; None is the only admitted value here."
+    },
+    {
+      "id": "HELM-Q1/T04",
+      "requirement": "Foreign branch",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C4"
+      ],
+      "probe_outcomes": {
+        "C4": "PASS"
+      },
+      "note": "A proposal with a foreign ReturnAddress is refused."
+    },
+    {
+      "id": "HELM-Q1/T05",
+      "requirement": "Stale snapshot",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C3",
+        "C6"
+      ],
+      "probe_outcomes": {
+        "C3": "PASS",
+        "C6": "PASS"
+      },
+      "note": "Expired admission refused; caller-supplied snapshot refs cannot replace the fixture digest."
+    },
+    {
+      "id": "HELM-Q1/T06",
+      "requirement": "Ordered instruction semantics",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "S1",
+        "S2",
+        "S5"
+      ],
+      "probe_outcomes": {
+        "S1": "PASS",
+        "S2": "PASS",
+        "S5": "PASS"
+      },
+      "note": "All four operations checked on all four inputs; order sensitivity proven; 64x4 cross-check."
+    },
+    {
+      "id": "HELM-Q1/T07",
+      "requirement": "All finite inputs",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "S3",
+        "S7",
+        "S8"
+      ],
+      "probe_outcomes": {
+        "S3": "PASS",
+        "S7": "PASS",
+        "S8": "PASS"
+      },
+      "note": "Every candidate is evaluated on all four inputs; one wrong input rejects."
+    },
+    {
+      "id": "HELM-Q1/T08",
+      "requirement": "Negative fixture",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "S3",
+        "S4",
+        "S9"
+      ],
+      "probe_outcomes": {
+        "S3": "PASS",
+        "S4": "PASS",
+        "S9": "PASS"
+      },
+      "note": "parity has 0 solutions; the stated reason is bijectivity of the generators."
+    },
+    {
+      "id": "HELM-Q1/T09",
+      "requirement": "Unsupported operations",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "S1",
+        "C7"
+      ],
+      "probe_outcomes": {
+        "S1": "PASS",
+        "C7": "PASS"
+      },
+      "note": "Instruction codes are bounded to 0..3; validate_program refuses anything else."
+    },
+    {
+      "id": "HELM-Q1/T10",
+      "requirement": "Independent verifier",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "O1",
+        "O2",
+        "S5",
+        "S7",
+        "S8"
+      ],
+      "probe_outcomes": {
+        "O1": "PASS",
+        "O2": "PASS",
+        "S5": "PASS",
+        "S7": "PASS",
+        "S8": "PASS"
+      },
+      "note": "direct_outputs recomputes from scratch, imports no helper, and is cross-checked against the reviewer's own reference over all 64 programs."
+    },
+    {
+      "id": "HELM-Q1/T11",
+      "requirement": "Predicate parity",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No compiler exists; cannot compare a circuit predicate."
+    },
+    {
+      "id": "HELM-Q1/T12",
+      "requirement": "Superposition behavior",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No compiler exists; no coherent-state test is possible."
+    },
+    {
+      "id": "HELM-Q1/T13",
+      "requirement": "Ancilla cleanup",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No compiler exists; no workspace register to clean."
+    },
+    {
+      "id": "HELM-Q1/T14",
+      "requirement": "Endianness",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "Declared only as decoding_order; no lowering code to test."
+    },
+    {
+      "id": "HELM-Q1/T15",
+      "requirement": "No lookup-answer leakage",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "O1",
+        "O3",
+        "O4",
+        "O5",
+        "O6",
+        "O7",
+        "O8",
+        "O10"
+      ],
+      "probe_outcomes": {
+        "O1": "PASS",
+        "O3": "PASS",
+        "O4": "PASS",
+        "O5": "PASS",
+        "O6": "PASS",
+        "O7": "PASS",
+        "O8": "PASS",
+        "O10": "PASS"
+      },
+      "note": "Fixture exports no IDs; no answer-list identifier or program-shaped literal in source; reviewer rebuilt the predicate and found the same 6 programs from the public spec alone."
+    },
+    {
+      "id": "HELM-Q1/T16",
+      "requirement": "Disabled parity",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "D4",
+        "D6",
+        "D7"
+      ],
+      "probe_outcomes": {
+        "D4": "PASS",
+        "D6": "PASS",
+        "D7": "PASS"
+      },
+      "note": "Disabled mode assessed; no dispatch, write or retention granted."
+    },
+    {
+      "id": "HELM-Q1/T17",
+      "requirement": "Shadow non-mutation",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "D6",
+        "D7"
+      ],
+      "probe_outcomes": {
+        "D6": "PASS",
+        "D7": "PASS"
+      },
+      "note": "Shadow mode grants no authoritative write and has a distinct disposition from disabled."
+    },
+    {
+      "id": "HELM-Q1/T18",
+      "requirement": "Immediate-parent return",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [
+        "C1"
+      ],
+      "probe_outcomes": {
+        "C1": "PASS"
+      },
+      "note": "C1 confirms the binding SHAPE is enforced and factory-derived, but no RPM caller exists to return to. The parent_ref/caller_id values are offline-fixture literals."
+    },
+    {
+      "id": "HELM-Q1/T19",
+      "requirement": "Nested prerequisites",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No RPM/RPA adapter in this handoff."
+    },
+    {
+      "id": "HELM-Q1/T20",
+      "requirement": "Shared prerequisite",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No RPM/RPA adapter in this handoff."
+    },
+    {
+      "id": "HELM-Q1/T21",
+      "requirement": "Cycle/depth refusal",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No adapter; prerequisites tuple is empty in the fixture."
+    },
+    {
+      "id": "HELM-Q1/T22",
+      "requirement": "Rollback",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No branch/rollback machinery exists."
+    },
+    {
+      "id": "HELM-Q1/T23",
+      "requirement": "Restart without QPU",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "Requires the retention bridge and a job store; neither exists."
+    },
+    {
+      "id": "HELM-Q1/T24",
+      "requirement": "Viewer read-only",
+      "review_state": "NOT_YET_APPLICABLE",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No viewer or RPA adapter exists to test."
+    },
+    {
+      "id": "HELM-Q1/T25",
+      "requirement": "Protected-answer isolation",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "O4",
+        "O5",
+        "O9"
+      ],
+      "probe_outcomes": {
+        "O4": "PASS",
+        "O5": "PASS",
+        "O9": "PASS"
+      },
+      "note": "Evaluator counts are reported to humans only and are not importable into the predicate path."
+    },
+    {
+      "id": "HELM-Q1/T26",
+      "requirement": "Zero-budget refusal",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C7",
+        "C8",
+        "C9",
+        "C10",
+        "C12"
+      ],
+      "probe_outcomes": {
+        "C7": "PASS",
+        "C8": "PASS",
+        "C9": "PASS",
+        "C10": "PASS",
+        "C12": "PASS"
+      },
+      "note": "Zero shots/tasks/cost forced by contract; backend refuses all verbs; CLI refuses a supplied TRUSTED_GRANT before reading any request file; 6 grant variants all produce one refusal."
+    },
+    {
+      "id": "HELM-Q1/T27",
+      "requirement": "No paid fallback",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "D1",
+        "D2",
+        "D3",
+        "D8",
+        "C12"
+      ],
+      "probe_outcomes": {
+        "D1": "PASS",
+        "D2": "PASS",
+        "D3": "PASS",
+        "D8": "PASS",
+        "C12": "PASS"
+      },
+      "note": "No provider SDK import exists; nonzero charge and quote fields are refused; no grant enables it."
+    },
+    {
+      "id": "HELM-Q1/T28",
+      "requirement": "Atomic in-flight reservation",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "helm_quantum/budget.py does not exist. The delivered helper is pure arithmetic and says so."
+    },
+    {
+      "id": "HELM-Q1/T29",
+      "requirement": "Duplicate submit recovery",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "helm_quantum/job_store.py does not exist; no idempotency key, no provider reconciliation. Must not be probed against a real provider."
+    },
+    {
+      "id": "HELM-Q1/T30",
+      "requirement": "Stale quote refusal",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "C7",
+        "D3"
+      ],
+      "probe_outcomes": {
+        "C7": "PASS",
+        "D3": "PASS"
+      },
+      "note": "quote_id must be None on an offline receipt, so no stale quote can be carried as current."
+    },
+    {
+      "id": "HELM-Q1/T31",
+      "requirement": "Timeout versus cancellation",
+      "review_state": "NOT_RUN_REQUIRES_PROVIDER",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "Needs a provider adapter. The offline backend reports UNKNOWN_JOB for both poll and cancel, which is honest but is not a cancellation receipt."
+    },
+    {
+      "id": "HELM-Q1/T32",
+      "requirement": "Failed/partial jobs",
+      "review_state": "NOT_RUN_REQUIRES_PROVIDER",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "No adapter and no job store."
+    },
+    {
+      "id": "HELM-Q1/T33",
+      "requirement": "Calibration/circuit provenance",
+      "review_state": "NOT_RUN_REQUIRES_PROVIDER",
+      "probes": [
+        "D1",
+        "D10"
+      ],
+      "probe_outcomes": {
+        "D1": "PASS",
+        "D10": "PASS"
+      },
+      "note": "Forged device_properties_digest and native_circuit_digest are refused offline; real provenance needs hardware."
+    },
+    {
+      "id": "HELM-Q1/T34",
+      "requirement": "Simulator/hardware labeling",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "D1",
+        "D2",
+        "D4",
+        "D10"
+      ],
+      "probe_outcomes": {
+        "D1": "PASS",
+        "D2": "PASS",
+        "D4": "PASS",
+        "D10": "PASS"
+      },
+      "note": "QPU_EXECUTED, SIMULATOR and mismatched backend pairs are all refused; the admitted receipt claims only CLASSICAL_OFFLINE with zero shots and no job ids."
+    },
+    {
+      "id": "HELM-Q1/T35",
+      "requirement": "No-sample versus unsatisfiability",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "O9"
+      ],
+      "probe_outcomes": {
+        "O9": "PASS"
+      },
+      "note": "Exhaustive reports UNSAT_PROVED with the bijectivity reason; bounded sampling never reports UNSAT_PROVED."
+    },
+    {
+      "id": "HELM-Q1/T36",
+      "requirement": "Exact test count reconciliation",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "self"
+      ],
+      "probe_outcomes": {},
+      "note": "This map. 47 probe cases executed, 47 passed, 0 failed, 0 errors, 2 NOT_RUN. The original package's 22 helper tests are reported separately and were NOT re-run by this reviewer. The builder's evidence/TEST_STATUS.json separately and honestly reports 41 authored new test methods with 0 collected and 0 executed."
+    },
+    {
+      "id": "HELM-Q1/T37",
+      "requirement": "External-assistance attribution",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "O1",
+        "O3",
+        "O8"
+      ],
+      "probe_outcomes": {
+        "O1": "PASS",
+        "O3": "PASS",
+        "O8": "PASS"
+      },
+      "note": "The compiler import ban is written into the lease; no compiler exists to violate it yet."
+    },
+    {
+      "id": "HELM-Q1/T38",
+      "requirement": "Resource preflight",
+      "review_state": "NOT_RUN_NO_ARTIFACT",
+      "probes": [
+        "D10"
+      ],
+      "probe_outcomes": {
+        "D10": "PASS"
+      },
+      "note": "estimate() correctly reports UNAVAILABLE_COMPILER_RESOURCE_ESTIMATE with null qubits and gates. SOURCE_INVENTORY.json now pins a profile block, but every profile field is null and linux_x86_64_verified / linux_arm64_verified are both false, so there is still no measured resource envelope to review."
+    },
+    {
+      "id": "HELM-Q1/T39",
+      "requirement": "Preserved active training",
+      "review_state": "NOT_YET_APPLICABLE",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "This packet contains no HELM runtime and no training path, so there is nothing to preserve or damage. D9 confirms no training code exists here. SOURCE_INVENTORY.json records host_runtime_slices: [] and checkpoint_digest: null."
+    },
+    {
+      "id": "HELM-Q1/T40",
+      "requirement": "Independent acceptance",
+      "review_state": "NOT_YET_APPLICABLE",
+      "probes": [],
+      "probe_outcomes": {},
+      "note": "This reviewer cannot close its own gate. SOURCE_INVENTORY.json records independently_reviewed: false and independent_review: NOT_RECEIVED. Q1-Codex must confirm these findings, and a reviewer-authored fix would need a distinct check by another qualified lead."
+    },
+    {
+      "id": "HELM-Q1/--",
+      "requirement": "Schema/contract agreement (reviewer-added check)",
+      "review_state": "EXECUTED_PASS",
+      "probes": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "probe_outcomes": {
+        "E1": "PASS",
+        "E2": "PASS",
+        "E3": "PASS",
+        "E4": "PASS",
+        "E5": "PASS"
+      },
+      "note": "Not a directive ID. Added because schemas/ appeared mid-review. Schema field sets equal the live dataclass field sets for problem/proposal/receipt; all 10 pinned receipt fields and the status enum agree with the enforcing code; a produced receipt satisfies its own schema; a schema-valid problem is still refused without host state; no schema admits credential material."
+    }
+  ]
+}

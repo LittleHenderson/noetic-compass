@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Structure only. Python constructors also require independently admitted live context.",
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity": {"type": "string", "minLength": 1, "maxLength": 256},
+    "mode": {"enum": ["disabled", "shadow", "research"]},
+    "program": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {"type": "integer", "minimum": 0, "maximum": 3}
+    },
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["parent_ref", "snapshot_ref", "snapshot_digest", "branch_id", "caller_id", "caller_frame", "continuation", "checkpoint_digest"],
+      "properties": {
+        "parent_ref": {"$ref": "#/$defs/identity"},
+        "snapshot_ref": {"$ref": "#/$defs/identity"},
+        "snapshot_digest": {"$ref": "#/$defs/digest"},
+        "branch_id": {"$ref": "#/$defs/identity"},
+        "caller_id": {"$ref": "#/$defs/identity"},
+        "caller_frame": {"$ref": "#/$defs/identity"},
+        "continuation": {"$ref": "#/$defs/identity"},
+        "checkpoint_digest": {"const": null}
+      }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_programs", "max_transitions", "max_wall_ms", "max_memory_mib", "max_shots", "max_tasks", "max_cost_usd"],
+      "properties": {
+        "max_programs": {"const": 64}, "max_transitions": {"const": 1024},
+        "max_wall_ms": {"const": 1000}, "max_memory_mib": {"const": 64},
+        "max_shots": {"const": 0}, "max_tasks": {"const": 0},
+        "max_cost_usd": {"const": "0.00"}
+      }
+    }
+  }
+}

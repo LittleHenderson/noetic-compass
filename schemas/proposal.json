@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QuantumProposal offline fixture v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "problem_digest", "binding", "mode", "program", "origin"],
+  "properties": {
+    "schema": {"const": "helm-q1-proposal/1"},
+    "problem_digest": {"$ref": "common.json#/$defs/digest"},
+    "binding": {"$ref": "common.json#/$defs/binding"},
+    "mode": {"$ref": "common.json#/$defs/mode"},
+    "program": {"$ref": "common.json#/$defs/program"},
+    "origin": {"const": "offline-classical"}
+  }
+}
