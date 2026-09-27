@@ -5,6 +5,9 @@ Local isolated repository: C:/Users/wakil/HELM-Q1/q1-offline-20260927.
 Dedicated private transport: LittleHenderson/noetic-compass, branch
 codex/helm-q1-offline-20260927. This branch starts from an empty repository and
 contains no incumbent history. It is not based on or assigned to PR #245.
+Implementation commit: 9624018983090ea77ae1a332669cd64877ff69ea, pushed and
+read back through GitHub on 2026-09-27. The published handoff blob matched the
+local Git blob; the original manifest retained its exact SHA256 and 2089 bytes.
 
 Exact branch link:
 https://github.com/LittleHenderson/noetic-compass/tree/codex/helm-q1-offline-20260927
@@ -44,8 +47,11 @@ mode non-mutation and all zero-submission paths. Distinguish static findings
 from executed probes. Preserve author attribution; Codex fixes Codex files.
 
 New ChatGPT-Q1 manager: write only coordination/manager/. Confirm each lead's
-actual access, session ID, ACK and START separately. The Git issue is the Q1
-message location; it does not wake a model. DeepSeek and manager local ACKs were
+actual access, session ID, ACK and START separately. The coordination namespace
+on this dedicated Git branch is the Q1 message location; it does not wake a model.
+No issue was created by Codex. The manager reported its separate issue attempt
+blocked; Codex did not retry that action on the manager's behalf.
+DeepSeek and manager local ACKs were
 read; their actual remote access and Claude's ACK remain unconfirmed. Do not post
 as another lead or repurpose the old queues.
 
@@ -86,3 +92,9 @@ Next concrete deliverable: a commit-bound execution receipt for the two suites
 plus DeepSeek's independent probe findings. Claude's predicate/resource packet
 can be authored in parallel in its separate lease. Next Codex implementation is
 the reviewed compiler adapter; quantum submission stays disabled.
+
+Session limits last observed: Codex Pro shared seven-day window 27% used, 73%
+remaining; reset timestamp 1791048924. Credits balance 0, ordinary usage allowed.
+These are account-wide observations, not Q1-only usage. This session's monetary
+model cost is not exposed. Q1 cloud jobs/spend and hardware calls are all zero;
+no child was started. See evidence/PUBLICATION.json for the checkpoint record.

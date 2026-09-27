@@ -2,7 +2,7 @@
   "kind": "STATIC_SOURCE_INSPECTION_NOT_TEST_EXECUTION",
   "scope": "Codex-owned source and immutable input only; other leads excluded",
   "python_files_parsed": 20,
-  "json_files_parsed": 19,
+  "json_files_parsed": 20,
   "authored_test_method_count": 43,
   "authored_test_ids": [
     "test_backend.BackendTest.test_capabilities_and_estimate_do_not_claim_readiness",
@@ -61,16 +61,16 @@
       "bytes": 890
     },
     "coordination/codex/HANDOFF.md": {
-      "sha256": "da56daa12fd28e20734cd26080113a36e1fcf479a4769016649417aa8aa77fc0",
-      "bytes": 5076
+      "sha256": "7d23da45d8bde47b7dd1153eb7f2b49b4ec4d2a95249c5ca449ba7be2af81aed",
+      "bytes": 5898
     },
     "coordination/codex/inspect_source.py": {
       "sha256": "cfcd19105be4dd7b6138af6bf34c62a1e903516ea4b63d495276dce561bb2cc0",
       "bytes": 2525
     },
     "coordination/codex/ISSUE_BODY.md": {
-      "sha256": "bdcfefd0f341d016c500460057e2866cad00cddc47fe9366e7cf46ca625d6dd0",
-      "bytes": 2761
+      "sha256": "53a94aeab710e7c7a150bd3a752da27be483852a83735de166aa027d1ab69117",
+      "bytes": 2977
     },
     "coordination/codex/REVIEW_RESPONSE.md": {
       "sha256": "cc25fd693bca61146d8d60d6f128e6ebeb55fe8aff6a30d5ec9be3ff53ec74ce",
@@ -83,6 +83,10 @@
     "evidence/ACCEPTANCE_COVERAGE.md": {
       "sha256": "e47b31a68023e75736b4a6af630970f98ed8eecdf0e1d10ba7775e309cff6d99",
       "bytes": 1984
+    },
+    "evidence/PUBLICATION.json": {
+      "sha256": "482c8acca20ae3b6f752da0c665ec6d86002a7d8058f1731fd9d76dee0cf296e",
+      "bytes": 2784
     },
     "evidence/TEST_STATUS.json": {
       "sha256": "40bebe0433e1aa591e8c84b35bdb411ca9d0c366d1e3a66542dc947848ee3107",

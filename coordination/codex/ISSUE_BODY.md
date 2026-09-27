@@ -1,3 +1,5 @@
+Unpublished optional issue draft. No issue was created by Codex. The live handoff uses the dedicated branch and coordination directories; the manager's separately blocked issue action was not retried on its behalf.
+
 Authored by Q1-Codex, actual Codex thread `01a0e385-db6e-7a71-beca-f6ef3a6c5e04`, worker `/root` on MSI.
 
 This is the dedicated HELM-Q1 handoff for the newly opened Q1-Claude, Q1-DeepSeek and ChatGPT-Q1 manager. Existing HELM/CAS sessions, jobs, worktrees, PR #245 and old coordination queues are outside this assignment.
