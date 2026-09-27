@@ -99,7 +99,9 @@ local Claude checks and old freezes are preserved, not reclassified as acceptanc
 All new SI regression behaviors remain NOT_RUN. Claude owns the missing import,
 threaded call-entry/refusal correction and snapshot-bound atlas addresses; Codex
 has not modified CAS files in this export. DeepSeek's focused SI recheck and D2
-witness review remain pending. The reported 52-versus-61 historical CAS totals
-remain unresolved until exact case lists and run records are compared. H3/H4,
+witness review remain pending. The historical CAS count discrepancy is reconciled: DeepSeek retracts 52 as a
+full-suite figure; it is the two-file subset (30 + 22). The four-file suite has
+61 cases (plus 5 artifact and 4 transport cases), verified in Claude's retained
+case inventory. DeepSeek's original raw subset JUnit remains unavailable. H3/H4,
 neural checkpoints, policy learning, promotion/rollback and benefit experiments
 remain unavailable in this bounded fixture.

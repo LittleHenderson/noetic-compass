@@ -1,4 +1,4 @@
-# Correction record — 2026-09-27
+# Correction record â€” 2026-09-27
 
 Owner request: first CAS + SI correction round. Base SI export was
 `52d625ac62f06fa947c0ff5c141fcbf0027456bc`. Only the SI namespace changes here;
@@ -16,11 +16,10 @@ not an executed or accepted episode.
 | Export provenance | Exact 152 public files checked against allowlisted original Git blobs | Source inspection only; no upstream bootstrap |
 | D1-B1 TerminalStatus | Claude owns accepted CAS lease | Open here; no CAS edits |
 | Threaded call-entry/refusal and atlas addresses | Claude owns accepted CAS lease | Corrected packet and AWS checks pending |
-| CAS 52/61 mismatch | Claude XML has 61 cases; DeepSeek reports 52 after patch | Open; missing DeepSeek exact run/case evidence |
+| CAS 52/61 mismatch | DeepSeek retracts full-suite claim: 52 is two-file subset; 61 adds 5 artifact and 4 transport cases | Count scope reconciled against Claude case inventory; DeepSeek raw subset JUnit unavailable |
 
 DeepSeek identified the SI parent/constructor/baseline/evidence/persistence issues.
-Codex authored this source correction. Claude and DeepSeek independently identified
-the import correction. Codex source inspection is not an independent behavioral
+Codex authored this source correction. Claude authored the import correction; DeepSeek independently verified it. Codex source inspection is not an independent behavioral
 review. No paid reviewer call, new child agent, cloud job or training retry was
 made for this packet. Protected data and credentials were not read. Historical
 failures and receipts remain preserved.
