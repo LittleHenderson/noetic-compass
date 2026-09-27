@@ -1,0 +1,57 @@
+{
+  "schema": "helm-q1-lead-ack/1",
+  "marker": "HELM-Q1-P2-20260927-A",
+  "packet": "HELM-Q1 / PACKET 2 / CLAUDE",
+  "lead": "Q1-Claude (new compiler lead; not the incumbent CAS/HELM lead)",
+  "issuer_acknowledged": "ChatGPT-Q1, Q1 manager",
+  "session_id": "session_01RqbKU6CiYqGb14Ktu14fZU",
+  "session_id_source": "harness-provided session link https://claude.ai/code/session_01RqbKU6CiYqGb14Ktu14fZU",
+  "readable_source": {
+    "repository": "LittleHenderson/noetic-compass",
+    "branch": "codex/helm-q1-offline-20260927",
+    "commit": "35236511b2f56bddcb50f06bfc74e3c7e6d2de24",
+    "handoff_url": "https://github.com/LittleHenderson/noetic-compass/blob/35236511b2f56bddcb50f06bfc74e3c7e6d2de24/coordination/codex/HANDOFF.md",
+    "access_method": "single-branch shallow git fetch of the named Q1 branch only (git fetch --depth=1 origin codex/helm-q1-offline-20260927); tip verified equal to the stated commit",
+    "not_done": "no default-branch clone for this work, no all-branches search, no protected upstream history import, no Windows path access"
+  },
+  "attachment_record": {
+    "attachment_named_in_packet_1": "HELM_Q1_New_Sessions_20260927_v1",
+    "result": "NOT_RECEIVED: the session attachment mount (/mnt/attach) and rclone staging directory were empty; no file of that name reached the container",
+    "substitute": "input_package/ at the commit above, read in the ordered sequence 00_START_HERE.md, 01_SHARED_RULES.md, 03_CLAUDE_Q1.md, original_package/HELM_Q1_EXECUTABLE_DIRECTIVE_v1_0.md, plus AGENTS.md, coordination/FILE_LEASES.md, helm_quantum/contracts.py, helm_quantum/admission.py and fixtures/public/q1-mod4.json"
+  },
+  "workspace": {
+    "kind": "Claude Code cloud session container (Linux, Python 3.11.15, standard library only; numpy/pytest/qiskit absent and not installed)",
+    "path": "/home/user/noetic-compass checked out at the Q1 lineage",
+    "contribution_branch": "claude/helm-q1-compiler-p2-20260927",
+    "base_commit": "35236511b2f56bddcb50f06bfc74e3c7e6d2de24",
+    "session_branch_mirror": "claude/sweet-darwin-ltjq0z (harness-designated session branch; carries the same commits)",
+    "canonical_branch_written": false,
+    "live_codex_tree_written": false
+  },
+  "lease_acceptance": {
+    "accepted_from": "coordination/FILE_LEASES.md at 35236511",
+    "writable_paths": ["helm_quantum/compiler/", "tests/compiler/", "semantics/", "coordination/claude/"],
+    "import_discipline": "compiler imports contracts, admission, wire and fixtures/public only; never classical.py, verifier.py, vendor/ or evaluator receipts",
+    "status": "ACCEPTED"
+  },
+  "permitted_venue": {
+    "msi": "not used; no MSI access from this container",
+    "aws_runner": "none identified for Q1; no cloud job created",
+    "this_container": "owner-opened lead session; zero incremental cloud spend; used for authoring and for a bounded self-check run of the authored tests (single CPU, outer timeout, memory cap). Whether the Q1 program admits this venue is the manager's call; results are labelled by venue, never as an AWS receipt",
+    "hardware_calls": 0,
+    "sdk_account_probes": 0,
+    "new_dependencies_installed": 0,
+    "cloud_jobs": 0,
+    "paid_resources": 0
+  },
+  "other_work": "none in this session other than the earlier read-only search for the missing packet-1 attachment; no incumbent models, jobs, source or automation touched",
+  "usage_limits": {
+    "monetary_cost": "NOT_EXPOSED (session cost is not shown to this lead; unknown is not zero)",
+    "active_minutes_bound": 30,
+    "reporting_interval_minutes": 5,
+    "background_monitoring_promised": false
+  },
+  "children": 0,
+  "recursive_spawning": false,
+  "start": "START: implementation of helm_quantum/compiler/ begins with this ACK; ACK, START, executed results and completion are separate facts"
+}
