@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - Records: Codex-reported joint execution (144 passed at 49d3e23) recorded as reported, not verified
+
+- Codex reports on PR #245 that the seven-file joint suite ran in AWS at source `49d3e23c…` with 144 passed and a
+  clean witness and reload. The commit is on origin only as an unreferenced object and the named receipts are not in
+  its tree, so no artifact path exists here; the spec sheet keeps `ENGINEERED-NOT-VALIDATED` and records the report
+  with that claim state. The 144-versus-142 declared count is Codex's to reconcile. No file of Claude's changed.
+
 ## 2026-09-27 - Packet B1-SEED18-API-BIND-03: interface reconciled against the exact c45f775f learner slice; two mismatches fixed
 
 - Verified from git: `pointer_learner.py` at `c45f775f` sha256 `0f424d86…`, blob `d07012d4…`. Fixed in

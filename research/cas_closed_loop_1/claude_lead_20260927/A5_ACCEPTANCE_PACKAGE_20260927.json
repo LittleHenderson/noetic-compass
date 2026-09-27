@@ -1359,5 +1359,32 @@
  "smallest_remaining_concrete_failure": "None known in the CAS source at 7bbf1e0f: the last executed runs on identical .py bytes passed 62/62 and 13/13. The concrete gap is venue, not code: the 142-case joint suite has never been collected or executed in the admitted AWS environment, and the frozen launcher would block on the stale concurrency identity (D2) if launched unchanged.",
  "not_on_acceptance_path_but_unexecuted": "claude_lead_20260927/run_local_protocol.py after the packet-3 --expected-tests change has not been executed (no run is authorized under the lease).",
  "claim_boundary": "Not CAS_AWS_ENGINEERING_VALIDATED. RETAINED_RESEARCH_ONLY, not PROMOTED. $0 spent by Claude; no cloud, model or worker call; no HELM or Q4 file touched; CASalescence parked.",
- "mapping_note": "Board static-check/operation-mask cases are counted under the wrong-method control (an operation outside the mask is refused). Launcher transport cases are counted under saved evidence (evidence upload transport and safe error records); they prove transport construction offline, not AWS transfer."
+ "mapping_note": "Board static-check/operation-mask cases are counted under the wrong-method control (an operation outside the mask is refused). Launcher transport cases are counted under saved evidence (evidence upload transport and safe error records); they prove transport construction offline, not AWS transfer.",
+ "joint_execution_reported_by_codex": {
+  "claim_state": "REPORTED_BY_CODEX_ON_PR_NOT_VERIFIED_BY_CLAUDE",
+  "source_of_report": "PR #245 comment 5856848576 (2026-09-27T14:44:00Z)",
+  "reported": {
+   "source_commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+   "job": "helm-joint-20260927-49d3e23-a1",
+   "instance": "i-08dd58f77e2af1ae6",
+   "files": 7,
+   "tests_passed": 144,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0,
+   "witness": "RETAINED_RESEARCH_ONLY",
+   "fresh_process_reload": "RESEARCH_EPISODE_RELOADED with EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT (18 events)",
+   "worker_elapsed_seconds": 564.590135,
+   "archive_sha256": "17f49cdf1ae4cced5e23b0e25abbdd37f87cbddb209c1c2da2221b5a146210ba",
+   "archive_bytes": 9006951,
+   "model_calls": 0,
+   "checkpoint": null,
+   "cas_engineering_reservation_usd": "1",
+   "actual_bill": "unavailable",
+   "receipts_path_as_named": "records/helm_continuation_tracks_20260927/joint_execution_49d3e23/public_receipts (+ INDEPENDENT_VERIFICATION.json)",
+   "review": "DeepSeek review pending, not claimed passed"
+  },
+  "verification_attempted_here_2026-09-27T14:50Z": "git fetch of 49d3e23c succeeded as an unreferenced object; no origin branch contains it; the named receipts directory is not in that commit's tree; no junit or verification file reachable from this repository, so no artifact path can be cited",
+  "consequence_for_this_package": "Declared-count note: Codex's plan and receipt say 144 for the seven files versus this package's 142 by AST (73 CAS + 69 SI at d7808d59); the difference lies outside Claude's files at source 49d3e23 and is Codex's to reconcile. Status of the joint suite in this record: executed per Codex's report; not verified from any pushed artifact; not acceptance of learned-prediction CAS repair or any comparative benefit (Codex's own boundary)."
+ }
 }
