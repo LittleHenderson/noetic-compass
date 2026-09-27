@@ -35,6 +35,23 @@ SENSITIVE_VALIDATION_FIELDS = frozenset(
 REDACTED = "<redacted>"
 
 
+def _redact_value(value: Any) -> Any:
+    """Replace sensitive values anywhere inside a submitted input.
+
+    The submitted input is often a nested object - an audit target carries an ``api_key`` beside
+    its kind, for example - so redacting only when the field name itself looks sensitive would
+    miss the credential inside. Nested keys are checked by name at every level.
+    """
+    if isinstance(value, dict):
+        return {
+            key: (REDACTED if str(key).lower() in SENSITIVE_VALIDATION_FIELDS else _redact_value(item))
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [_redact_value(item) for item in value]
+    return value
+
+
 def redacted_validation_errors(exc: RequestValidationError) -> list[dict[str, Any]]:
     """Return this exception's errors with sensitive inputs replaced."""
     redacted: list[dict[str, Any]] = []
@@ -43,6 +60,8 @@ def redacted_validation_errors(exc: RequestValidationError) -> list[dict[str, An
         location = [str(part).lower() for part in item.get("loc", ())]
         if any(part in SENSITIVE_VALIDATION_FIELDS for part in location):
             item["input"] = REDACTED
+        elif "input" in item:
+            item["input"] = _redact_value(item["input"])
         redacted.append(item)
     return redacted
 
@@ -50,8 +69,17 @@ def redacted_validation_errors(exc: RequestValidationError) -> list[dict[str, An
 async def validation_error_handler(
     _request: Request, exc: RequestValidationError
 ) -> JSONResponse:
-    """422 with the same detail as FastAPI's default, minus any credential value."""
-    return JSONResponse(status_code=422, content={"detail": redacted_validation_errors(exc)})
+    """422 with the same detail as FastAPI's default, minus any credential value.
+
+    ``jsonable_encoder`` is required, not cosmetic: the error context can hold the original
+    exception object (``ctx: {"error": ValueError(...)}``) for validator failures, and returning
+    that raw makes the response unserialisable. FastAPI's own handler encodes it the same way.
+    """
+    from fastapi.encoders import jsonable_encoder
+
+    return JSONResponse(
+        status_code=422, content={"detail": jsonable_encoder(redacted_validation_errors(exc))}
+    )
 
 
 class DialViolationError(Exception):

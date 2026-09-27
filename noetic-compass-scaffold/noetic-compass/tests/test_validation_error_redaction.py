@@ -114,6 +114,27 @@ class ValidationRedactionTests(unittest.TestCase):
             self.assertEqual(item["input"], REDACTED)
         self.assertEqual(redacted[4]["input"], "visible")
 
+    def test_nested_credentials_are_redacted_inside_a_submitted_object(self) -> None:
+        # An audit target carries its credential beside its kind, so redacting only by top-level
+        # field name would miss it. The fixture string here is a marker the platform already uses
+        # to mean "this must never leave the browser".
+        class FakeValidationError(Exception):
+            def errors(self):  # noqa: ANN201
+                return [
+                    {
+                        "type": "value_error",
+                        "loc": ("body", "target"),
+                        "msg": "hosted_open_weight target must not include credentials",
+                        "input": {"kind": "hosted_open_weight", "api_key": "should-not-leave-browser"},
+                        "ctx": {"error": ValueError("target must not include credentials")},
+                    }
+                ]
+
+        redacted = redacted_validation_errors(FakeValidationError())  # type: ignore[arg-type]
+        submitted = redacted[0]["input"]
+        self.assertEqual(submitted["kind"], "hosted_open_weight")
+        self.assertEqual(submitted["api_key"], REDACTED)
+
     def test_response_body_contains_no_credential_shaped_string(self) -> None:
         # A belt-and-braces check: nothing in the serialised error may look like a credential.
         with TestClient(app) as client:
