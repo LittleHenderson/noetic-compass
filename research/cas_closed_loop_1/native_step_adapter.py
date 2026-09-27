@@ -14,6 +14,7 @@ from pathlib import Path
 import re
 import inspect
 import sys
+import threading
 import time
 
 from cncm.canonical import digest
@@ -292,27 +293,51 @@ def execute_grant(machine, grant):
                 or advance.__func__ is not _ADVANCE or advance.__func__.__code__ is not _ADVANCE_CODE):
             raise GrantRefused("EXACT_NATIVE_DISPATCH_REQUIRED")
         call_started = time.monotonic_ns()
-        if sys.getprofile() is not None:
+        if sys.getprofile() is not None or threading.getprofile() is not None:
             raise GrantRefused("HOST_ENTRY_METER_REQUIRES_FREE_PROFILE_HOOK")
+        # Claim boundary: this meter counts entries into the pinned advance on
+        # the window thread and on threads started inside the window, and it
+        # invalidates the window on any foreign-thread Python activity or a
+        # cleared hook. It is not isolation against arbitrary Python: code that
+        # installs, replaces or clears interpreter hooks, or a thread that
+        # already existed before the window, is outside the tested attacker
+        # class (same-process, in-memory patching of native internals).
+        window_thread = threading.get_ident()
+        foreign_thread_seen = False
+        hook_intact = False
         def entry_meter(frame, event, arg):
-            nonlocal invoked, entry_refused
+            nonlocal invoked, entry_refused, foreign_thread_seen
+            if threading.get_ident() != window_thread:
+                # The pinned native runtime is single-threaded. Any Python
+                # activity on another thread inside the window invalidates it.
+                foreign_thread_seen = True
             if (event == "call" and frame.f_code is _ADVANCE_CODE
                     and frame.f_locals.get("self") is machine):
                 # The pinned native implementation does not re-enter advance.
                 # An unexpected re-entry invalidates the whole measurement.
-                if invoked >= grant.calls:
+                if invoked >= grant.calls or threading.get_ident() != window_thread:
                     entry_refused = True
                     raise GrantRefused("HOST_ENTRY_ALLOCATION_EXCEEDED")
                 invoked += 1
         try:
             attempted += 1
             sys.setprofile(entry_meter)
+            threading.setprofile(entry_meter)  # threads started inside the window
             advance(allow_acquisition=grant.allow_acquisition)
         except Exception as error:
             fault = error
         finally:
+            hook_intact = sys.getprofile() is entry_meter
             sys.setprofile(None)
+            threading.setprofile(None)
             native_ns = time.monotonic_ns() - call_started
+        if not hook_intact:
+            # The hook was cleared or replaced inside the window (a callback
+            # exception clears it; foreign code could too). Unmetered work may
+            # have run, so never publish a usable count.
+            entry_refused = True
+        if foreign_thread_seen:
+            entry_refused = True
     if entry_refused:
         # A callback exception clears CPython's profile hook. Code that catches
         # it could execute unmetered work, so never publish a usable count.

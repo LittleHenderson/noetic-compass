@@ -1,0 +1,8 @@
+ M CHANGELOG.md
+ M research/cas_closed_loop_1/CONTRACTS.json
+ M research/cas_closed_loop_1/DECISIONS.md
+ M research/cas_closed_loop_1/HARNESS_SPEC.md
+ M research/cas_closed_loop_1/claude_lead_20260927/run_local_protocol.py
+ M research/cas_closed_loop_1/native_step_adapter.py
+ M research/cas_closed_loop_1/test_native_step_adapter.py
+?? research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/

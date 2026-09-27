@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 1: import repair and thread-aware host-entry meter in the leased files
+
+- Codex acknowledged R1-R8 on PR #245 and issued lease `CAS-CORRECTION-20260927-01`; the three-lead package is at
+  `880957f5` (11/11 manifest hashes verified). Claude acknowledged the exact scope before editing.
+- `test_native_step_adapter.py`: module-level `TerminalStatus` import (R1) and a new regression case for a foreign-
+  thread entry inside the window. `native_step_adapter.py`: thread-aware meter with an explicit claim boundary (R6).
+  `HARNESS_SPEC.md`, `CONTRACTS.json`, `DECISIONS.md` amended in the same commit.
+- `SOURCE_BINDINGS.json` deliberately untouched: its digest is the retained evidence's admission identity.
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 2: corrected re-entry probe, meter hardening prototype, snapshot-bound atlas addresses with the addendum's ten cases
 
 - Corrected probe (`probe_threaded_reentry_v2.py`): counts real entries into the pinned `advance` per (thread, frame)

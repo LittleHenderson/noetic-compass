@@ -27,3 +27,25 @@
   work. Receipt content hashes detect edits but are not signatures or authority.
 - Owner's current instruction explicitly permits focused lightweight local
   tests and forbids AWS/model jobs. No paid job or model inference is required.
+
+# Lease `CAS-CORRECTION-20260927-01` decisions (Claude, 2026-09-27)
+
+- Lease accepted on PR #245 (comment 5853300431) before any edit. Writable scope as offered, with two carve-outs
+  recorded there: `SOURCE_BINDINGS.json` is not edited because its content digest is the `source_manifest_digest`
+  in the retained evidence bundle's admission (`8a049806…`), so a byte change would fail `retained_replay`; the lane
+  `CHANGELOG.md` is outside the lease, so lane change entries live here.
+- R1. `test_native_step_adapter.py` now imports `TerminalStatus` at module level. The three amended regression
+  cases that raised `NameError` at `aa600668` execute. Both the failing head runs and the patched scratch run are
+  preserved under `claude_lead_20260927/run_*`.
+- R6. Attacker model resolved against the specification: `HARNESS_SPEC.md` excludes hook changes; the adapter's own
+  in-scope test patches `CompoundMachine._execute` in memory, so that class is inside the guarantee. A second entry
+  on a thread started inside the window, with no hook change, is the same class and was neither counted nor refused
+  (corrected probe: two direct entries, receipt says one). The meter is now installed on threads started inside the
+  window, refuses a foreign-thread entry at its call event, invalidates the window on any foreign-thread activity,
+  and checks after the call that the hook is intact. Residual, stated: a thread that existed before the window is
+  not covered; Python 3.12's `threading.setprofile_all_threads` could cover it and was not used, to keep 3.11 and
+  3.12 behavior identical. No isolation-against-arbitrary-Python claim is made. Regression case added in the same
+  file, so the collected count of the four frozen files is no longer 61; the freeze must be re-cut at the corrected
+  commit with the count the source actually collects.
+- Local pytest runs on Python 3.11 are engineering checks before each push. Acceptance remains the AWS worker
+  sequence on a re-cut freeze, run by Codex under an owner decision.

@@ -68,3 +68,28 @@ is not acceptance. No current AWS validation claim is made by this document.
 checked against the historical `RUN_MANIFEST.json`. That historical evidence
 proves the original producer's retained bytes; it does not accept this amended
 source. The fresh prospective source/package freeze binds the current code.
+
+## Amendment 2026-09-27 (Claude, lease `CAS-CORRECTION-20260927-01`): host-entry meter across threads
+
+The rule "any unexpected re-entry invalidates the whole observation" is now enforced for threads too. Before the
+native call the dispatcher requires both `sys.getprofile()` and `threading.getprofile()` to be free. During the
+window the meter is installed on the window thread and, through `threading.setprofile`, on every thread started
+inside the window. Any Python call event on a thread other than the window thread invalidates the window. An entry
+into the pinned `advance` from a foreign thread is refused at its call event, before its body runs. After the call
+the dispatcher checks that the window thread's hook is still the meter; a cleared or replaced hook invalidates the
+window. An invalidated window raises `InvalidNativeObservation("HOST_ENTRY_METER_INVALIDATED")` and produces no
+receipt and no usable count.
+
+Claim boundary, stated exactly. The tested attacker class is same-process, in-memory patching of native internals
+(for example `CompoundMachine._execute`) that installs, replaces or clears no interpreter hook, on the window thread
+or on a thread it starts. That is the class the two re-entry regression cases exercise. This meter is not isolation
+against arbitrary Python: code that changes interpreter hooks, or a thread that already existed before the window,
+is outside the tested class and outside this specification's guarantee. A hook or a thread census is not an
+isolation boundary and is not claimed as one.
+
+Evidence for this amendment: the corrected probe `claude_lead_20260927/probe_threaded_reentry_v2.py`, which counts
+real entries from the patched callee's caller frame without touching hooks, produced a verifying receipt with
+`I_executed = 1` after two direct entries on two threads against the previous adapter
+(`probe_threaded_reentry_v2_result_unmodified.txt`), and is refused by this adapter
+(`probe_threaded_reentry_v2_result_hardened.txt`). The same-file regression case is
+`test_foreign_thread_entry_inside_window_never_publishes_a_count`.

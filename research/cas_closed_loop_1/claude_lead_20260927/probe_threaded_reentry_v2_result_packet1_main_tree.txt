@@ -1,0 +1,6 @@
+# probe_threaded_reentry_v2.py against the leased adapter in the main tree after packet 1 edits, 2026-09-27T06:21:22Z, Python 3.11.15
+PROBE2 direct_entries: 1 distinct threads: 1
+PROBE2 foreign thread: ['ATTEMPTED', 'RAISED:GrantRefused']
+PROBE2 trace grew by: 1 (not used as proof of entries)
+PROBE2 refused: InvalidNativeObservation HOST_ENTRY_METER_INVALIDATED measurement_status: INVALID
+1 passed in 0.38s

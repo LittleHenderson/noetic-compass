@@ -24,7 +24,6 @@ LANE = HERE.parent
 ROOT = LANE.parents[1]
 RUNTIME_COMMIT = "8182ad52b4468f18f140837dffee0e7debcfe786"
 RETAINED_BUNDLE_DIGEST = "eae7eb1bedb67af537187d409c89fca9e55a1580d52bf14be9b01e560a198d2c"
-EXPECTED_TESTS = 61
 
 
 def utc():
@@ -36,6 +35,12 @@ def sha(path):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--expected-tests", type=int, required=True,
+                        help="predeclared case count for the four frozen files; never hardcoded")
+    args = parser.parse_args()
+    EXPECTED_TESTS = args.expected_tests
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = HERE / ("run_" + stamp)
     out.mkdir(parents=True, exist_ok=False)
@@ -44,6 +49,7 @@ def main():
     env.update({"PYTHONDONTWRITEBYTECODE": "1", "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
                 "GIT_TERMINAL_PROMPT": "0"})
     record = {"schema": "cas.closed-loop.claude-local-protocol/0.1", "wave": "A1",
+              "expected_tests_argument": EXPECTED_TESTS,
               "start_utc": utc(), "status": "RUNNING", "paid_job": False,
               "model_invocations": 0, "aws_calls": 0, "codex_files_edited": 0,
               "commands": [], "claim_boundary": (

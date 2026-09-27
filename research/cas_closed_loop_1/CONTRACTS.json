@@ -23,7 +23,7 @@
     "window": "one explicitly identified host-step observation window; event interval and monotonic wall interval retained separately",
     "I_predicted": "Pinned compiler exact attention_flow on separately declared design V and R before execution; no measured-resistance fit, empirical calibration or valid residual claim.",
     "I_allocated": "Integer grant for at most one permitted next native stage in this first profile; allocation alone creates no event",
-    "I_executed": "CPython call events for the exact pinned CompoundMachine.advance bound method, code object and machine identity. Substituted dispatch wrappers are refused before entry. Any unexpected re-entry that clears the meter invalidates the entire observation without a receipt or usable count. Receipt verification requires exact integers 0 <= I_executed <= I_allocated <= 1. I_attempted separately records dispatch attempts.",
+    "I_executed": "CPython call events for the exact pinned CompoundMachine.advance bound method, code object and machine identity, metered on the window thread and on threads started inside the window (threading.setprofile). Substituted dispatch wrappers are refused before entry. Any unexpected re-entry, any Python activity on a foreign thread inside the window, or a hook found cleared or replaced after the call invalidates the entire observation without a receipt or usable count. Receipt verification requires exact integers 0 <= I_executed <= I_allocated <= 1. I_attempted separately records dispatch attempts. Claim boundary: the tested attacker class is same-process in-memory patching of native internals without hook changes; this is not isolation against arbitrary Python (hook changes, pre-existing threads).",
     "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
     "independence": "Observe executor trace after invocation, not by copying grant or substituting Ohm output",
     "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met",
@@ -70,5 +70,14 @@
     "claim": "Exact local return only; no exactly-once external effect assertion",
     "bias_version_basis": "Suspension event pre_state_hash identifies saved native state including Bias; no separate native Bias counter exists."
   },
-  "receipt_integrity": "Content digest and validated native event chain; no signature or independent authenticity claim."
+  "receipt_integrity": "Content digest and validated native event chain; no signature or independent authenticity claim.",
+  "amendments": [
+    {
+      "date": "2026-09-27",
+      "author": "Claude",
+      "lease": "CAS-CORRECTION-20260927-01",
+      "change": "I_executed: thread-aware meter and explicit claim boundary; no primitive or authority change.",
+      "evidence": "claude_lead_20260927/probe_threaded_reentry_v2_result_unmodified.txt and _hardened.txt; test_foreign_thread_entry_inside_window_never_publishes_a_count"
+    }
+  ]
 }
