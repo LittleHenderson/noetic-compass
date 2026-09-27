@@ -1,0 +1,145 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=/opt/helm-validation/joint-output/pytest-temp",
+        "--junitxml=/opt/helm-validation/joint-output/joint-junit.xml",
+        "research/cas_closed_loop_1/test_native_step_adapter.py",
+        "research/cas_closed_loop_1/test_closed_loop.py",
+        "research/cas_closed_loop_1/test_artifacts.py",
+        "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+        "research/cas_closed_loop_1/test_return_addresses.py",
+        "research/helm_self_improvement/test_contracts.py",
+        "research/helm_self_improvement/test_episode.py"
+      ],
+      "name": "seven_file_pytest",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "bd00d933d05b11a27e2c1b11959a0cd77aee7c9d010af7cb076348f054c85b7f"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "research.helm_self_improvement.episode",
+        "--trusted-admission",
+        "/opt/helm-validation/joint-output/admission.json",
+        "--expected-admission-sha256",
+        "c2986c32801c401720135f8da581acbd577ec263fae6bb21185bb4dd8eaf349d",
+        "--host-evidence",
+        "/opt/helm-validation/joint-output/host-evidence",
+        "witness",
+        "--output",
+        "/opt/helm-validation/joint-output/episode",
+        "--operation",
+        "CHANGE_CONFIG"
+      ],
+      "name": "witness",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "fe5d5ca684f916233c29528c28f48376d9df89ce48605db162f2c7e0e2ff209d"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "research.helm_self_improvement.episode",
+        "--trusted-admission",
+        "/opt/helm-validation/joint-output/admission.json",
+        "--expected-admission-sha256",
+        "c2986c32801c401720135f8da581acbd577ec263fae6bb21185bb4dd8eaf349d",
+        "--host-evidence",
+        "/opt/helm-validation/joint-output/host-evidence",
+        "reload",
+        "--directory",
+        "/opt/helm-validation/joint-output/episode",
+        "--expected-episode-digest",
+        "01ab9d53e14994de790616d0f8acd5293a7245b34f3397ae60d469e0c2be4321"
+      ],
+      "name": "fresh_process_reload",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "21c9c395520862674eca6229d216439762676799836b68d4d214a79f037aa683"
+    }
+  ],
+  "elapsed_seconds": 557.7994438390001,
+  "files": [
+    "research/cas_closed_loop_1/test_native_step_adapter.py",
+    "research/cas_closed_loop_1/test_closed_loop.py",
+    "research/cas_closed_loop_1/test_artifacts.py",
+    "research/cas_closed_loop_1/aws_validation/test_launch_transport.py",
+    "research/cas_closed_loop_1/test_return_addresses.py",
+    "research/helm_self_improvement/test_contracts.py",
+    "research/helm_self_improvement/test_episode.py"
+  ],
+  "implementation_commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+  "junit": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 144
+  },
+  "predecessor_collected_count": 142,
+  "predecessor_count_is_not_pass_evidence": true,
+  "reload": {
+    "candidate_id": "bf2de0043a120df35a22bc521c6fd0485e5322927d4b5e73c646dd3ea47ab0f2",
+    "disposition": "RETAINED_RESEARCH_ONLY",
+    "model_calls": 0,
+    "native_replay": {
+      "events": 18,
+      "final_state_hash": "ccb3e99a3323c208fda0a6b634b4b024db44843bec90a77487513c5dcb409444",
+      "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+      "status": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT"
+    },
+    "promotion": "NOT_REQUESTED_RESEARCH_ONLY",
+    "status": "RESEARCH_EPISODE_RELOADED"
+  },
+  "status": "JOINT_ENGINEERING_CHECKS_COMPLETED",
+  "witness": {
+    "actual_action": {
+      "after_config": {
+        "allow_acquisition": true
+      },
+      "before_config": {
+        "allow_acquisition": false
+      },
+      "edit_level": "H1",
+      "operation": "CHANGE_CONFIG"
+    },
+    "authorship": {
+      "checked": "existing public Effect checker and native replay",
+      "executed": "existing CompoundMachine through source-pinned CAS adapter",
+      "observed": "admitted host native run",
+      "proposed": "EXTERNALLY_AUTHORED_FIXTURE"
+    },
+    "claim": "H1/H2; EXTERNALLY_AUTHORED; INJECTED_CONFIGURATION_FAILURE; DETERMINISTIC_NATIVE_EXECUTION; RESEARCH_RETENTION_ONLY",
+    "episode_digest": "01ab9d53e14994de790616d0f8acd5293a7245b34f3397ae60d469e0c2be4321",
+    "host_policy_sha256": "c2986c32801c401720135f8da581acbd577ec263fae6bb21185bb4dd8eaf349d",
+    "limits": {
+      "automatic_retries": 0,
+      "branches": 2,
+      "generated_code": false,
+      "host_entries_per_branch_max": 32,
+      "model_calls": 0
+    },
+    "parent": {
+      "branch": "codex/helm-si-three-lead-20260927",
+      "checkpoint_sha256": null,
+      "harness_sha256": "fb040c2f63633e607113ad3e095398241f7dd36b99023017b76e42ea25843d28",
+      "runtime_sha": "8182ad52b4468f18f140837dffee0e7debcfe786",
+      "schema": "helm.si.native-acquisition/2",
+      "source_manifest_sha256": "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c",
+      "source_sha": "7bbf1e0f7bae635126c05b3203cca706ea8654dc"
+    },
+    "promotion": "NOT_REQUESTED_RESEARCH_ONLY"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "helm.joint.independent-verification/1",
+  "utc": "2026-09-27T14:42:20.230139+00:00",
+  "job_id": "helm-joint-20260927-49d3e23-a1",
+  "source_commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+  "freeze_sha256": "cfe3869173a26790172e0dc94a7d74c4b12286a212f90bf268cdd518c09cddde",
+  "instance_id": "i-08dd58f77e2af1ae6",
+  "instance_state": "terminated",
+  "instance_request_id": "cbd6a9ce-863f-4307-8559-235694f828e5",
+  "remaining_owned_volumes": [],
+  "remaining_owned_network_interfaces": [],
+  "remaining_owned_security_groups": [],
+  "provider_verified_absent": [
+    "worker_role",
+    "watchdog_role",
+    "profile",
+    "schedule"
+  ],
+  "cleanup_complete": true,
+  "retained_bucket": "helm-joint-20260927-49d3e23-a1-807562639912",
+  "private_access_block": {
+    "BlockPublicAcls": true,
+    "IgnorePublicAcls": true,
+    "BlockPublicPolicy": true,
+    "RestrictPublicBuckets": true
+  },
+  "retained_objects": [
+    {
+      "key": "outputs/joint-junit.xml",
+      "bytes": 22985
+    },
+    {
+      "key": "outputs/joint_worker_receipt.json",
+      "bytes": 14244
+    },
+    {
+      "key": "outputs/outer_receipt.json",
+      "bytes": 1054
+    },
+    {
+      "key": "outputs/outputs.tar.gz",
+      "bytes": 9006951
+    },
+    {
+      "key": "outputs/terminal.json",
+      "bytes": 886
+    }
+  ],
+  "archive_sha256": "17f49cdf1ae4cced5e23b0e25abbdd37f87cbddb209c1c2da2221b5a146210ba",
+  "archive_bytes": 9006951,
+  "tests": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 144
+  },
+  "actual_seven_file_command_verified": true,
+  "witness": {
+    "operation": "CHANGE_CONFIG",
+    "disposition": "RETAINED_RESEARCH_ONLY",
+    "baseline_checked": false,
+    "candidate_checked": true,
+    "actual_operations_changed": true,
+    "model_calls": 0,
+    "source_manifest_sha256": "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c",
+    "host_policy_sha256": "c2986c32801c401720135f8da581acbd577ec263fae6bb21185bb4dd8eaf349d",
+    "episode_digest": "01ab9d53e14994de790616d0f8acd5293a7245b34f3397ae60d469e0c2be4321",
+    "eleven_episode_file_hashes_verified": true
+  },
+  "fresh_process_reload": {
+    "candidate_id": "bf2de0043a120df35a22bc521c6fd0485e5322927d4b5e73c646dd3ea47ab0f2",
+    "disposition": "RETAINED_RESEARCH_ONLY",
+    "model_calls": 0,
+    "native_replay": {
+      "events": 18,
+      "final_state_hash": "ccb3e99a3323c208fda0a6b634b4b024db44843bec90a77487513c5dcb409444",
+      "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+      "status": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT"
+    },
+    "promotion": "NOT_REQUESTED_RESEARCH_ONLY",
+    "status": "RESEARCH_EPISODE_RELOADED"
+  },
+  "worker_elapsed_seconds": 564.5901351319999,
+  "all_services_reservation_usd": "1.00",
+  "fresh_compute_hourly_usd": [
+    "0.0850000000"
+  ],
+  "provider_actual_bill_usd": null,
+  "claim": "H1/H2 symbolic native engineering; externally authored fixture; no neural or comparative benefit claim; learned CAS prediction repair unaccepted",
+  "independent_deepseek_review": "PENDING_FOR_NEW_EXECUTION_EVIDENCE"
+}

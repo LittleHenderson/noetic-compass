@@ -1,0 +1,22 @@
+{
+  "baseline_config": {
+    "allow_acquisition": false
+  },
+  "branch": "codex/helm-si-three-lead-20260927",
+  "candidate_access": "TYPED_PUBLIC_DATA_ONLY_NO_FILES_OR_EXECUTION",
+  "checkpoint_sha256": null,
+  "harness_files": {
+    "__init__.py": "32c9baf5d45995cbf6ef1a7fafe7a746ef62555813eca1636f5aa66d5d0a8603",
+    "admission.py": "f1c2c1cf166b06af04468f33b692493ee3010f016094731da35a523f0e5dad60",
+    "contracts.py": "63a9d304daf09082b56f8dce2ce7e4426b5c6e99eb1781e0950c398b55857483",
+    "episode.py": "be7baeb54d6e559028a6668f19cdbd883d7f542851ece8edc337f93eab269d47",
+    "native_bridge.py": "0c2e3576a489af37477eb36a5f74ada2ff8a17e7629557b0d2724c63871f4473"
+  },
+  "host_step_limit": 32,
+  "manifest_sha256": "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c",
+  "runtime_sha": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "schema": "helm.si.host-admission/1",
+  "source_anchor_kind": "OPERATOR_VERIFIED_ALLOWLISTED_ORIGINAL_GIT_BYTES",
+  "source_anchor_ref": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+  "source_sha": "7bbf1e0f7bae635126c05b3203cca706ea8654dc"
+}

@@ -1,0 +1,115 @@
+{
+  "schema": "helm.parallel.source-handoff/1",
+  "task": "PARALLEL-CAPABILITY-01-P1",
+  "utc": "2026-09-27T14:52:43.109013+00:00",
+  "lead": "Claude",
+  "lead_session_last_reported": "session_011hJxopymaeoPQ67KvchtwW",
+  "no_new_child_dispatched": true,
+  "predecessor_completed": "B1-SEED18-API-BIND-03 at6d2d5595a30d36b61f087e45fb844706490b22fc; return5856804903",
+  "scope_type": "New bounded C3 implementation slice; not all C3 or runtime ownership",
+  "exclusive_writes": [
+    "research/helm_growth_experiments/residual_world_v1/**"
+  ],
+  "read_only_exclusions": [
+    "research/helm_continuation/**",
+    "research/helm_self_improvement/**",
+    "research/cas_closed_loop_1/**",
+    "original learner/graders/checkpoints/results/budgets",
+    "all frozen and running experiment files"
+  ],
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "references": {
+    "learner": {
+      "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+      "sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/c45f775f225dd06cc20cdf313f0a0398486e0d61/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py"
+    },
+    "recon": {
+      "commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+      "git_path": "research/helm_self_improvement/GROWTH_RECON.md",
+      "sha256": "18397375dae620d3715c948204c62152aad7113670d9658d45b38dd3ba70dcf7",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/49d3e23c6e9e8e108df546fbd540d3645494f886/research/helm_self_improvement/GROWTH_RECON.md"
+    },
+    "encoder": {
+      "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/encoder.py",
+      "sha256": "a5dcc50a4cfde6fed16f952b40bb98f2e87d24f3d40e117f8ef96507c57434ef",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/c45f775f225dd06cc20cdf313f0a0398486e0d61/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/encoder.py"
+    },
+    "state_identity_helpers": {
+      "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py",
+      "sha256": "d87b49caed6d59e1d9715066ef030f55e09228a474c3a67e2535a3c54b3619ca",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/c45f775f225dd06cc20cdf313f0a0398486e0d61/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/learner.py"
+    }
+  },
+  "learner_slices": {
+    "candidate_width": [
+      234,
+      249
+    ],
+    "world_head_definition": [
+      856,
+      858
+    ],
+    "world_candidate_input_and_scalar_score": [
+      1530,
+      1567
+    ],
+    "named_parameter_registration_and_AdamW": [
+      1777,
+      1847
+    ],
+    "gradient_update_and_lr_behavior": [
+      1999,
+      2086
+    ],
+    "checkpoint_export": [
+      2104,
+      2141
+    ],
+    "checkpoint_restore_and_optimizer_mapping": [
+      2144,
+      2240
+    ],
+    "named_parameter_identity_map": [
+      2320,
+      2337
+    ]
+  },
+  "fixed_candidate": {
+    "operation": "old_world_score(x) + B * GELU(A*x)",
+    "hidden_units": 16,
+    "bias": false,
+    "input_width": "derive and refuse mismatch against c45 WORLD_CANDIDATE_WIDTH; confirm from exact source",
+    "output_width": 1,
+    "new_parameter_count": "16 * (WORLD_CANDIDATE_WIDTH + 1)",
+    "A_init": "nonzero, separately seeded recorded local generator; do not consume parent RNG",
+    "B_init": "zero",
+    "initialization_seed": 2026092701,
+    "numerical_tolerance": "Declare in source before numerical execution; no arbitrary-hardware bitwise preservation claim"
+  },
+  "required_delivery": [
+    "working optional module and explicit named-state migration code",
+    "old names/shapes and compatible AdamW moments/step preserved; no positional guessing",
+    "new named parameters registered, intentional zero moments and step0",
+    "new schema sidecar/versioned copied-parent migration plan with safe-boundary refusal",
+    "disabled, finite-input contribution, I/O/refusal, preservation, counts, save/reload, migration consistency tests",
+    "two-step trainability/contribution probes written for admitted numerical venue",
+    "exact commit and RUN/NOT_RUN return"
+  ],
+  "limits": {
+    "wall_seconds": 1200,
+    "inspection_edit_calls": 12,
+    "dispatches": 1,
+    "children": 0,
+    "new_paid_calls": 0,
+    "cloud_jobs": 0,
+    "real_checkpoint_deserialization": 0,
+    "local_test_or_model_execution": 0,
+    "automatic_retries": 0
+  },
+  "stopping": "20 minutes or12 inspection/edit calls, whichever first; return implemented portion and exact unfinished connection. No platform wait. No seed19 attachment or seed18 LR-pair mixing.",
+  "claim": "Optional exploratory growth source; not diagnosis or benefit acceptance"
+}

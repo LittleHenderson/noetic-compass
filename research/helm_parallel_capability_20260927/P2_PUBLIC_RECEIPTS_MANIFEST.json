@@ -1,0 +1,372 @@
+{
+  "schema": "helm.permitted-public-receipt-manifest/1",
+  "task": "PARALLEL-CAPABILITY-01-P2",
+  "utc": "2026-09-27T14:52:43.109013+00:00",
+  "canonical_store_replaced": false,
+  "strict_allowlist": true,
+  "path_discovery_or_recursive_globbing": false,
+  "max_input_bytes": 1048576,
+  "receipts": [
+    {
+      "id": "seed20260917_public_curriculum",
+      "role": "aggregate_learning_result",
+      "seed": 20260917,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_collection_recovery_20260927\\receipts\\20260917\\curriculum_result.json",
+      "sha256": "8412d039d4ca6cacf154e802ede2d508a810d7f921c079cbf7fab9519f1169be",
+      "bytes": 38732,
+      "permitted_visibility": "already-released public curriculum summary; aggregate values and state metadata only",
+      "permitted_json_pointers": [
+        "/schema",
+        "/status",
+        "/job",
+        "/boundary",
+        "/failure",
+        "/summary"
+      ],
+      "do_not_follow": [
+        "/artifacts",
+        "any embedded filesystem or cloud path"
+      ],
+      "source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "evaluator_identity": "NOT_EXPLICITLY_DECLARED_IN_AGGREGATE; warn unless independently bound by permitted metadata",
+      "checkpoint_phase": "scores.course_p10/course_p20 and development_scores are main-run readouts; retention_scores are separate pre/post-interference",
+      "available_fields": {
+        "scores": {
+          "course_p00": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p01": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p10": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p20": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "heldback_p02": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p04": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p06": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p08": [
+            "correct",
+            "held_back",
+            "total"
+          ]
+        },
+        "development_row_keys": [
+          "correct",
+          "cursor",
+          "pass",
+          "total"
+        ]
+      }
+    },
+    {
+      "id": "seed20260918_public_curriculum",
+      "role": "aggregate_learning_result",
+      "seed": 20260918,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_cm2x_rerun_20260918\\curriculum_result.json",
+      "sha256": "6cd741999885cbd86408ff3757e8f8cb440fa7abe5826fd43157f81a85ceb15a",
+      "bytes": 38723,
+      "permitted_visibility": "already-released public curriculum summary; aggregate values and state metadata only",
+      "permitted_json_pointers": [
+        "/schema",
+        "/status",
+        "/job",
+        "/boundary",
+        "/failure",
+        "/summary"
+      ],
+      "do_not_follow": [
+        "/artifacts",
+        "any embedded filesystem or cloud path"
+      ],
+      "source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "evaluator_identity": "NOT_EXPLICITLY_DECLARED_IN_AGGREGATE; warn unless independently bound by permitted metadata",
+      "checkpoint_phase": "scores.course_p10/course_p20 and development_scores are main-run readouts; retention_scores are separate pre/post-interference",
+      "available_fields": {
+        "scores": {
+          "course_p00": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p01": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p10": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p20": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "heldback_p02": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p04": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p06": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p08": [
+            "correct",
+            "held_back",
+            "total"
+          ]
+        },
+        "development_row_keys": [
+          "correct",
+          "cursor",
+          "pass",
+          "total"
+        ]
+      }
+    },
+    {
+      "id": "seed20260919_public_curriculum",
+      "role": "aggregate_learning_result",
+      "seed": 20260919,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm-cm2x-rerun-20260925\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\replication_2_20260926\\receipts\\20260919\\curriculum_result.json",
+      "sha256": "d322973d7e477f29067573d713c3c4f097b2e635b3859a93f397615306b65efd",
+      "bytes": 38731,
+      "permitted_visibility": "already-released public curriculum summary; aggregate values and state metadata only",
+      "permitted_json_pointers": [
+        "/schema",
+        "/status",
+        "/job",
+        "/boundary",
+        "/failure",
+        "/summary"
+      ],
+      "do_not_follow": [
+        "/artifacts",
+        "any embedded filesystem or cloud path"
+      ],
+      "source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "evaluator_identity": "NOT_EXPLICITLY_DECLARED_IN_AGGREGATE; warn unless independently bound by permitted metadata",
+      "checkpoint_phase": "scores.course_p10/course_p20 and development_scores are main-run readouts; retention_scores are separate pre/post-interference",
+      "available_fields": {
+        "scores": {
+          "course_p00": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p01": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p10": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "course_p20": [
+            "correct",
+            "excluded",
+            "held_back",
+            "total",
+            "trained"
+          ],
+          "heldback_p02": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p04": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p06": [
+            "correct",
+            "held_back",
+            "total"
+          ],
+          "heldback_p08": [
+            "correct",
+            "held_back",
+            "total"
+          ]
+        },
+        "development_row_keys": [
+          "correct",
+          "cursor",
+          "pass",
+          "total"
+        ]
+      }
+    },
+    {
+      "id": "seed17_verified_public_summary",
+      "role": "aggregate_reference",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_collection_recovery_20260927\\SEED17_VERIFIED_PUBLIC_SUMMARY.json",
+      "sha256": "147a4dfe2a6cf454855b0082651b4df3b0966c90ecc17f200fd6d8f88e4dcdfb",
+      "bytes": 10573,
+      "permitted_visibility": "public aggregate/status/metadata only",
+      "do_not_follow": [
+        "any embedded filesystem or cloud path"
+      ],
+      "staleness_note": "Historical fields stay historical; seed17 summary pending-seed19 text predates both-seed completion"
+    },
+    {
+      "id": "seed18_public_closeout",
+      "role": "aggregate_reference",
+      "path": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\HELM_CORRECTED_RERUN_CLOSEOUT_20260926.json",
+      "sha256": "bca8bfcfdfefffc5f2bf9979b75da5dd975c4e10fb026f3bbee65a7cf606dfc7",
+      "bytes": 9046,
+      "permitted_visibility": "public aggregate/status/metadata only",
+      "do_not_follow": [
+        "any embedded filesystem or cloud path"
+      ],
+      "staleness_note": null
+    },
+    {
+      "id": "continuation_preparation_failure",
+      "role": "infrastructure_failure",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\cont19_implementation_01\\evidence\\public_result.json",
+      "sha256": "a02bff836e15b6fff64f3fb53b00dd8d2cea83cfe4fb09ece7b28f8569848a71",
+      "bytes": 1364,
+      "permitted_visibility": "public aggregate/status/metadata only",
+      "do_not_follow": [
+        "any embedded filesystem or cloud path"
+      ],
+      "staleness_note": null
+    },
+    {
+      "id": "continuation_implementation_status",
+      "role": "infrastructure_correction_status",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\CONT19_IMPLEMENTATION_RETURN_49d3e23.json",
+      "sha256": "5eddf81c496b4fec86f72b3bf0a4fdc47311617ce854b8d3314ad9f873d4bff0",
+      "bytes": 5316,
+      "permitted_visibility": "public aggregate/status/metadata only",
+      "do_not_follow": [
+        "any embedded filesystem or cloud path"
+      ],
+      "staleness_note": null
+    },
+    {
+      "id": "joint_verified_execution",
+      "role": "engineering_execution",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\joint_execution_49d3e23\\INDEPENDENT_VERIFICATION.json",
+      "sha256": "b6580ee16e45be7f4180d44f88aa27513dfce9367f5e2d0bdacb5a2b04919ea4",
+      "bytes": 3197,
+      "permitted_visibility": "public aggregate/status/metadata only",
+      "do_not_follow": [
+        "any embedded filesystem or cloud path"
+      ],
+      "staleness_note": null
+    }
+  ],
+  "public_per_item_correctness_inputs": [],
+  "task_family_detail": "Inspect declared aggregate fields only. No extra permission to open scoring/prediction artifacts. If absent request public per-family counts and transitions from custodian; never infer transitions from totals.",
+  "analysis_boundary": "Each seed own pass10/pass20; seed18 exploratory; repeatedly examined development59 is not untouched final evaluation; retain regressions/unknowns; no significance or capacity diagnosis",
+  "reference_sources": {
+    "descriptive_metric_helpers": {
+      "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+      "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/matched_analysis.py",
+      "sha256": "136b5f350e349b57693029a9c972b663e17912af9e5b594b860d8664cf0d0482",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/c45f775f225dd06cc20cdf313f0a0398486e0d61/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/matched_analysis.py"
+    },
+    "SI_contract": {
+      "commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+      "git_path": "research/helm_self_improvement/contracts.py",
+      "sha256": "63a9d304daf09082b56f8dce2ce7e4426b5c6e99eb1781e0950c398b55857483",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/49d3e23c6e9e8e108df546fbd540d3645494f886/research/helm_self_improvement/contracts.py"
+    },
+    "SI_episode": {
+      "commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+      "git_path": "research/helm_self_improvement/episode.py",
+      "sha256": "be7baeb54d6e559028a6668f19cdbd883d7f542851ece8edc337f93eab269d47",
+      "github_url": "https://github.com/LittleHenderson/noetic-compass/blob/49d3e23c6e9e8e108df546fbd540d3645494f886/research/helm_self_improvement/episode.py"
+    }
+  },
+  "reader_reuse_limits": "matched_analysis accuracy/transitions/transition_panel/family_score are pure descriptive formula references. Its join_scoring and full legacy readers open prediction/sealed material; do not invoke those. Old fixed160-update endpoints are incompatible with this pass10/pass20 report. No production evaluator modification.",
+  "explicit_exclusions": [
+    "checkpoints/*.pt",
+    "*_predictions.json",
+    "*_scoring.json",
+    "result.json",
+    "sealed result archives",
+    "question/answer/examination bodies",
+    "salts and credentials",
+    "answer-exposed Git history"
+  ],
+  "reviewer_owned_scope": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\parallel_capability_01",
+  "outputs": [
+    "public_report.py",
+    "episode_record_validator.py derived from existing SI contract",
+    "input_manifest.json referencing this allowlist",
+    "report.json and report.md generated from permitted saved aggregates",
+    "test files with RUN/NOT_RUN status",
+    "focused growth counterexamples only once exact Claude source supplied"
+  ],
+  "limits": {
+    "wall_seconds": 1800,
+    "inspection_edit_calls": 20,
+    "dispatches": 1,
+    "children": 0,
+    "new_paid_calls": 0,
+    "cloud_jobs": 0,
+    "model_execution": 0,
+    "policy_training": 0,
+    "automatic_retries": 0,
+    "venue": "Existing lightweight local read-only receipt analysis only; no pytest/model execution or AWS admission flag set locally. Write tests as NOT_RUN."
+  }
+}

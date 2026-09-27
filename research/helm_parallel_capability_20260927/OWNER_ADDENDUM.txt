@@ -1,0 +1,245 @@
+HELM R&D — PARALLEL CAPABILITY PREPARATION
+Addendum: PARALLEL-CAPABILITY-01
+
+PURPOSE
+
+Use genuinely available lead/worker capacity for two concrete
+deliverables while the existing execution work proceeds:
+
+P1: one isolated neural-growth implementation;
+P2: an executable analysis of saved public learning results.
+
+This is an addition to the existing assignments, not a reset.
+Do not duplicate an already-started equivalent task.
+
+CURRENT PRIORITIES STAY FIRST
+
+Codex retains integration and AWS operator ownership.
+
+Do not interrupt the current joint CAS/SI job, its evidence
+collection or cleanup. Reconcile its latest state before action.
+
+Seed-19 unchanged continuation remains the main learning
+priority. Neither P1 nor P2 becomes a launch prerequisite.
+
+Do not alter any running or frozen experiment, original
+checkpoint, historical result, evaluator or budget record.
+
+No new training, inference, cloud launch, paid reviewer wake,
+automatic retry or model promotion is authorized by this
+parallel-preparation packet.
+
+------------------------------------------------------------
+CODEX — SHORT HANDOFF; KEEP THE CRITICAL PATH
+------------------------------------------------------------
+
+1. Check existing task ownership before adding assignments.
+
+2. Supply Claude an accessible exact public source packet for:
+- the original scientific source c45f775f225dd06cc20cdf313f0a0398486e0d61;
+- the existing GROWTH_RECON.md;
+- the relevant world-scoring module, parameter registration,
+  optimizer-state mapping and checkpoint interfaces.
+
+Use exact Git paths/commits or an accessible allowlisted
+export. Do not make a cloud lead search all branches or rely
+on an MSI-only path.
+
+3. Assign Claude a NEW, non-overlapping experimental growth
+namespace. This is an explicit bounded delegation of a C3
+implementation packet, not transfer of all C3 or runtime
+ownership. Record the actual file scope.
+
+Do not allow edits to Track A, the original learner, the
+in-flight package, or another worker's active files.
+
+4. Supply DeepSeek the exact already-permitted public result
+manifest and existing aggregate readers. Do not copy private
+answer, prediction or examination bodies into the handoff.
+
+5. Continue the current execution/continuation work.
+Do not personally take on these extra implementation packets
+if that would delay the critical path.
+
+------------------------------------------------------------
+P1 — CLAUDE: IMPLEMENT ONE OPTIONAL GROWTH MODULE
+------------------------------------------------------------
+
+Continue the existing C3-R reconnaissance rather than
+repeating a broad architecture review.
+
+The recorded candidate is a residual specialist attached to
+the same world-candidate input and scalar output:
+
+    old_world_score(x) + B * GELU(A*x)
+
+Confirm this against the exact provided source before coding.
+This is an exploratory capacity option, not an established
+diagnosis of HELM's hard-question failures.
+
+First source packet:
+
+A. Implement one explicitly sized optional module, not a
+   width/depth sweep. Preserve the existing external I/O.
+
+B. Implement the parameter/migration mapping:
+   - original parameters preserved by name and shape;
+   - original compatible AdamW state preserved;
+   - new parameters registered explicitly;
+   - new optimizer moments/step initialized deliberately;
+   - randomness for new initialization recorded separately;
+   - no positional optimizer-state guessing.
+
+C. Follow the examined initialization proposal:
+   A initialized nonzero, B initialized zero.
+   Do not initialize both paths to zero.
+   Record why B can learn first and why A may need a later
+   update before its gradient is informative.
+
+D. Write tests for:
+   - disabled behavior;
+   - initial contribution under stated finite-input conditions;
+   - input/output compatibility and invalid-shape refusal;
+   - exact old-parameter and optimizer-state preservation;
+   - expected new-parameter counts and optimizer registration;
+   - save/reload and migration-plan consistency;
+   - suitable two-step trainability and contribution probes,
+     reserved for the authorized numerical venue.
+
+Do not claim bitwise function preservation on arbitrary
+hardware. State and test any numerical tolerance before
+seeing the result.
+
+Do not deserialize or mutate a real HELM checkpoint merely
+to prepare this source packet. Any later real migration
+uses a copied, admitted parent at a declared safe boundary.
+
+Do not attach the module to seed 19.
+Do not mix it into seed 18's learning-rate-only comparison.
+A later growth comparison needs its own unchanged-capacity
+control and declared compute/time/exposure matching rule.
+
+Return an implemented optional module and migration code,
+actual test files, exact source commit, and RUN/NOT_RUN status.
+No empty method skeleton presented as completed growth.
+If an interface is genuinely missing, name that specific
+connection and return the working portion.
+
+------------------------------------------------------------
+P2 — DEEPSEEK: EXTRACT USEFUL EVIDENCE FROM SAVED RESULTS
+------------------------------------------------------------
+
+Work in your reviewer-owned area.
+Reuse existing readers where possible; do not create a new
+production evaluator or a second canonical results store.
+
+Implement a read-only report generator accepting an explicit
+manifest of permitted public receipts.
+
+Produce:
+
+A. Each seed's own pass-10 versus pass-20 comparison.
+
+B. Task-family breakdowns where the released records support
+   them: gains, losses, unchanged results and denominators.
+
+C. Where public per-item correctness is already available:
+   wrong->right, right->wrong, wrong->wrong and right->right.
+   Do not infer these transitions from aggregate totals.
+
+D. Missing-data and comparability warnings:
+   mismatched source/model/evaluator, different denominators,
+   missing measurements, development versus final evaluation,
+   and original versus post-interference checkpoint state.
+
+E. A compact candidate failure taxonomy:
+   distinguish model task failures from infrastructure faults.
+   A misspelled Python function is not a neural reasoning
+   weakness, and low accuracy alone does not prove insufficient
+   model capacity.
+
+F. A small improvement-episode schema/validator derived from
+   the existing SI records, not a competing schema hierarchy.
+
+   Preserve:
+   observation source and permitted visibility;
+   natural versus injected failure;
+   attempted change and actual author;
+   measured outcome and cost;
+   negative/unknown outcomes;
+   research retention versus promotion.
+
+   Mark untested remedies as hypotheses.
+   Do not invent successful training examples.
+
+Do not open protected question/answer bodies, salts, sealed
+results or answer-exposed Git history to fill gaps.
+
+If the current public receipts lack task-family detail,
+return the supported aggregate analysis and the exact
+aggregate field request to the established custodian.
+Do not block the whole packet or run new model inference.
+
+Do not train a policy on these records in this packet.
+Previously released evaluation feedback remains development
+history; do not relabel it as an untouched final test.
+
+Prepare independent reviewer-owned growth counterexamples
+when Claude's exact implementation becomes available.
+Do not edit Claude's working files.
+
+Return executable reader/validator code, permitted-input
+manifest, actual supported report, test status and limitations.
+This is descriptive analysis, not a new claim of significance.
+
+------------------------------------------------------------
+WORKERS, VENUES AND STOPPING
+------------------------------------------------------------
+
+Use existing leads first. There are no fictional subagents.
+
+If supported bounded worker interfaces are actually available,
+register real IDs and exclusive file scopes, within at most
+two active children per lead and four globally.
+
+If not available, use serial lead execution. Do not wait
+for a new agent platform or create recursive teams.
+
+One bounded 30-minute initial source packet per working lead,
+or the smaller applicable existing limit. Return completed
+code and an exact unfinished step when the limit is reached.
+
+Use only execution venues already permitted for that lead
+and packet. New public tests may be written now.
+An unavailable test venue means NOT_RUN, not a fabricated pass
+or a reason to stop writing unrelated code.
+
+Do not set an AWS-admission environment flag locally to
+circumvent execution controls.
+
+Any metered agent use must have an applicable finite allowance.
+No new paid job or budget increase is granted here.
+Do not assume prepaid balance is permission for unlimited use.
+
+Keep the existing active-work heartbeat and stricter interval
+where applicable. No paid idle polling.
+
+------------------------------------------------------------
+SHARED RETURN
+------------------------------------------------------------
+
+STATUS:
+TASK / ACTUAL LEAD OR WORKER:
+EXACT SOURCE AND OWNED FILES:
+IMPLEMENTED:
+EXECUTED / PASS / FAIL / SKIP / NOT_RUN:
+SUPPORTED FINDING:
+WHAT REMAINS UNKNOWN:
+RESOURCE USE:
+NEXT CONCRETE ACTION:
+
+No broad redesign, new benchmark campaign, architecture sweep,
+automatic training extension or CASalescence implementation.
+
+The finish line is useful code and evidence ready for the
+next experiment, without delaying the experiment in flight.
