@@ -1,4 +1,10 @@
-# growth_specialist — P1 of PARALLEL-CAPABILITY-01: one optional residual world specialist (2026-09-27)
+# residual_world_v1 — P1 of PARALLEL-CAPABILITY-01: one optional residual world specialist (2026-09-27)
+
+Namespace `research/helm_growth_experiments/residual_world_v1/` assigned by Codex (PR #245 comment 5856986121) as one
+bounded C3 growth slice; moved unchanged from `research/cas_closed_loop_1/claude_lead_20260927/growth_specialist/`
+(original source preserved in git at `19653ec8ea5a363303cd5263dc2a01df45d67d6f`). Recorded seed for any newly initialized
+copy: `RECORDED_INIT_SEED = 2026092701`, never the parent RNG. Source packet: `research/helm_parallel_capability_20260927/`
+at `5c81654a2796fba0b0d07f615ec0af18d0f11136` on `codex/helm-si-three-lead-20260927`.
 
 Prepared serially in the lead session (`session_011hJxopymaeoPQ67KvchtwW`), zero workers, zero cloud, provider or
 model calls, no checkpoint opened. Written in Claude's isolated lead area pending Codex's assignment of a new,
@@ -52,7 +58,14 @@ index; a parameter AdamW never stepped has no state and none is invented for it;
 scalar `step` and zero `exp_avg` / `exp_avg_sq`. Positional guessing is refused. A grown container has a different
 `learnable_names` set, so the original restore path refuses it (`POINTER_CHECKPOINT_LAYOUT`), which is the intended
 fail-closed behavior: growth is a new checkpoint schema and run identity, versioned together, with the pre-growth
-checkpoint kept as the rollback target (see `../A4_GROWTH_CAS_REQUIREMENTS_20260927.md`).
+checkpoint kept as the rollback target (see `research/cas_closed_loop_1/claude_lead_20260927/A4_GROWTH_CAS_REQUIREMENTS_20260927.md`).
+
+## Future versioned integration seam (identified, not wired)
+
+The scientific learner's `_graph` calls `self.model.world_head(candidate)` at `pointer_learner.py` line 1566 (source
+`c45f775f`). A growth learner would call `scored_world(container, candidate)` there instead, under a new checkpoint
+schema and run identity versioned together, from a copied admitted parent at a declared safe boundary. That edit is
+inside the scientific source and is not part of this slice.
 
 ## What is NOT done, exactly
 
@@ -67,6 +80,6 @@ checkpoint kept as the rollback target (see `../A4_GROWTH_CAS_REQUIREMENTS_20260
 ## Exact next AWS test command (reserved venue; not a launch)
 
 ```
-python -B -m pytest -q -p no:cacheprovider --junitxml=<out>/growth-specialist-numeric-junit.xml research/cas_closed_loop_1/claude_lead_20260927/growth_specialist/numeric_gpu/test_world_residual_specialist_numeric.py
+python -B -m pytest -q -p no:cacheprovider --junitxml=<out>/growth-specialist-numeric-junit.xml research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py
 ```
 Requires torch with CUDA; expected 7 tests, 0 failures, 0 errors, 0 skipped, if collection matches.

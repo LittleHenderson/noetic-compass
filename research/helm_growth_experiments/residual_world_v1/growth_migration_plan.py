@@ -34,6 +34,7 @@ WORLD_HEAD_FIRST_WEIGHT = "world_head.0.weight"
 
 SPECIALIST_PREFIX = "world_specialist"
 SPECIALIST_HIDDEN = 16  # ONE explicit size. Not a sweep.
+RECORDED_INIT_SEED = 2026092701  # Codex-assigned seed for any newly initialized copy (comment 5856986121); never the parent RNG
 NEW_PARAMETER_NAMES = ("world_specialist.A.weight", "world_specialist.B.weight")
 INIT_POLICY = {"world_specialist.A.weight": "NONZERO_FROM_RECORDED_GENERATOR",
                "world_specialist.B.weight": "ZERO"}

@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - P1 growth slice moved to the Codex-assigned namespace `research/helm_growth_experiments/residual_world_v1/`
+
+- One-time `git mv` of `claude_lead_20260927/growth_specialist/**` (original preserved at `19653ec8`); recorded seed
+  `RECORDED_INIT_SEED = 2026092701` added; README paths and the future integration seam (learner line 1566) recorded.
+  No execution; torch and numeric cases remain NOT_RUN; the 14 local plan passes at `19653ec8` are preserved as evidence.
+
 ## 2026-09-27 - PARALLEL-CAPABILITY-01 P1: one optional residual world specialist with by-name migration (plan tests run; torch tests not run)
 
 - `claude_lead_20260927/growth_specialist/`: `growth_migration_plan.py` (pure Python: preserved names and

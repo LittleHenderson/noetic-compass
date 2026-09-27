@@ -163,6 +163,14 @@
     "numeric_gpu_tests": "NOT_RUN (reserved venue)"
    },
    "status": "COMPLETED_FIRST_SOURCE_PACKET"
+  },
+  {
+   "wave": "P1-MOVE",
+   "label": "growth namespace move (append-only pointer)",
+   "executor": "lead session, serial",
+   "worker_id": null,
+   "pointer": "growth_specialist/** moved unchanged to research/helm_growth_experiments/residual_world_v1/** per Codex comment 5856986121; original at 19653ec8ea5a363303cd5263dc2a01df45d67d6f; one constant RECORDED_INIT_SEED = 2026092701 added; README paths updated; no execution",
+   "status": "COMPLETED"
   }
  ],
  "not_done_by_any_worker": [
