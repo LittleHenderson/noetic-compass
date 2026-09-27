@@ -1,0 +1,85 @@
+{
+ "schema": "cas.claude.seed18-comparison-prereg/0.1",
+ "utc": "2026-09-27T13:05:00Z",
+ "status": "PREPARED_NOT_ADMITTED_NOT_RUN",
+ "frozen_before_new_results": true,
+ "launch_authorized": false,
+ "reservation_usd": null,
+ "reference": {
+  "job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+  "instance_id": "i-06e9e0febc3881439",
+  "instance_type": "g7.2xlarge",
+  "region": "us-west-2",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "scientific_basis": "a5fcf527b5f2c47a3a9b1f170977c55371845af0",
+  "package_sha256": "38761e9595c321eeab09a368a699a993b7db7616c4f2f15fb716dc78a9066119",
+  "manifest_sha256": "f083fb087ce2eac2394b81856a2aea8f239e7b7d327d27a71160e4dcb6bc2b5d",
+  "closeout_status": "COMPLETED_20_PASSES_MEASURED_NOT_CERTIFIED",
+  "model_seed": 20260918,
+  "source_seed": 101,
+  "encoder_seed": 20260916,
+  "condition": "MIXED_SAME_ITEMS",
+  "course_sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987",
+  "optimizer": "AdamW",
+  "optimizer_config": {"betas": [0.9, 0.999], "eps": 1e-08, "learning_rate": 0.003, "weight_decay": 0.01},
+  "learning_rate_schedule": "CONSTANT_AS_HELM_1_0",
+  "passes": 20,
+  "updates_per_pass": 147,
+  "main_updates": 2940,
+  "total_optimizer_updates_including_interference_and_replay": 2958,
+  "public_readouts": {
+   "pass_10": {"course": [502, 564], "held_back": [115, 127], "trained": [322, 358], "excluded": [65, 79], "development": [8, 59]},
+   "pass_20": {"course": [487, 564], "held_back": [111, 127], "trained": [315, 358], "excluded": [61, 79], "development": [17, 59]}
+  },
+  "pass10_checkpoint_metadata": {"file": "main_checkpoint_1470.json", "cursor": 1470, "model_revision": 1470, "bytes": 4025999,
+   "model_state_identity": "59a899d848fa0957a1136f02353e2d5d96b15e496e6dd952c00ff71cb4b7266a",
+   "optimizer_state_identity": "d3449130ea0453b45599da48a70f17a1d42470d24ab1155cb510ee531fcc6faa",
+   "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+   "limits": {"max_core_calls": 600000, "max_updates": 2956, "max_wall_seconds": 23100}},
+  "pass20_state_candidates_from_receipt_manifest": {
+   "final.pt": {"bytes": 4025999, "sha256": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341", "metadata": "final_checkpoint.json", "metadata_sha256": "c30ad905b5193cf219c52816e0c40bda294c9ec745564ac6cf3c36bf3d9a6e4b"},
+   "prelast.pt": {"bytes": 4025999, "sha256": "8e16f36c0a5d8e8fe9a4ab15cbe6593c2f0c4be71dcd5d66c706bbbced831765", "metadata": "prelast_checkpoint.json", "metadata_sha256": "ad3352d29a370957f2680ff9b52f53ee4c308dd728714925605e4e9617a2fdfd"},
+   "retained.pt": {"bytes": 4025999, "sha256": "4e66f573369ac7156ea7df489f7148576185cb5ce9ee68b8b4466dafe06b26a6", "metadata": "retained_checkpoint.json", "metadata_sha256": "ef8bb584eaa445fdb740c0cc653f3bd11de027ff3e6dd4772b698c7a36e7d718"}
+  },
+  "start_state_identity": "OPEN: Codex names the file whose metadata cursor is 2940 (main course complete, before interference and replay steps)",
+  "receiver_receipt_sha256": "f85ab054a1441654cc1f33dc6b59d7e3a41db73560df228fa3398deab27a26c2",
+  "record_branch": "origin/codex/helm-cm2x-replication-2-20260926",
+  "record_commit": "b44a3596e"
+ },
+ "arms": [
+  {"id": "A_unchanged_continuation", "learning_rate": 0.003, "learning_rate_schedule": "CONSTANT_AS_HELM_1_0", "optimizer_state": "PRESERVED_FROM_CHECKPOINT", "passes_added": 10, "main_updates_added": 1470, "end_pass": 30},
+  {"id": "B_lower_constant_learning_rate", "learning_rate": 0.001, "learning_rate_schedule": "CONSTANT_AS_HELM_1_0", "optimizer_state": "PRESERVED_FROM_CHECKPOINT", "passes_added": 10, "main_updates_added": 1470, "end_pass": 30}
+ ],
+ "matched_factors": ["scientific source c45f775f", "architecture and learnable names", "training examples, split, order, holdout, scoring", "start checkpoint copy (model, optimizer moments, encoder, three RNG streams, cursor, revision, counters)", "weight_decay 0.01, betas [0.9, 0.999], eps 1e-08", "training amount 1470 main updates", "interference and replay checks", "no best-checkpoint selection", "zero automatic retries", "one experiment GPU at a time, sequential"],
+ "single_change": {"factor": "constant learning rate", "from": 0.003, "to": 0.001, "fixed_at_utc": "2026-09-27T13:05:00Z", "adjustable_after_results": false},
+ "optimizer_reset": "NOT_PART_OF_ARM_B; a reset would be a separate third condition",
+ "readouts": {
+  "pass_25": ["development correct/59"],
+  "pass_30": ["development correct/59", "held_back correct/127", "course correct/564", "trained correct/358", "excluded correct/79"],
+  "primary": "development correct/59 at pass 30, arm B minus arm A; each arm also versus the shared start 17/59",
+  "secondary": ["held_back delta vs 111/127", "course delta vs 487/564", "trained delta vs 315/358", "excluded delta vs 61/79", "interference retention before/after as measured"],
+  "licensed_statement": "on seed 20260918, continued for 1470 updates from the same pass-20 state, the 0.001 arm differed from the 0.003 arm by k/59 on the fixed development panel and by the listed deltas on the other panels",
+  "not_licensed": ["improvement", "significance", "phase transition", "general learning", "CAS-specific advantage", "any post-hoc checkpoint, panel or subset selection"]
+ },
+ "continuation_seam_finding": {
+  "inspected_copy": "records/helm_failure_research_20260922/agents/A2/source_copies/helm2/pointer_learner.py",
+  "inspected_copy_sha256": "21dabd21bb2909ff5990e2b11fd45b75558dce82992c34edfe12f8f556cd5084",
+  "exact_c45_file_sha256_per_codex_growth_recon": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+  "matches_exact_c45_file": false,
+  "observations": [
+   "restore_checkpoint builds the learner with optimizer_config=init_args['optimizer_config'] and limits=init_args['limits'] from the checkpoint metadata (copy lines 2140-2141)",
+   "step learning rate is read from optimizer_config['learning_rate'] every update (copy lines 1825, 2006-2008)",
+   "TYPED_CHECKPOINT_CURSOR requires cursor <= limits['max_updates']; pass-10 metadata records max_updates 2956"
+  ],
+  "consequence": "both arms need one declared continuation seam (new run identity, migration record for init_args.optimizer_config.learning_rate and init_args.limits, original checkpoint as rollback target); to be confirmed on the exact c45f775f bytes by Codex; reuse the seed-19 continuation seam for arm A",
+  "claim_state": "INSPECTED_ON_ARCHIVED_COPY_NOT_EXECUTED"
+ },
+ "file_scope": {
+  "claude_writes_only": "research/cas_closed_loop_1/claude_lead_20260927/",
+  "experimental_copies_and_admissions": "Codex-named path under Codex's records tree, e.g. records/typed_pointer_001/seed18_continuation_20260927/{armA_unchanged,armB_lr0.001}/; Claude writes no configuration file there",
+  "excluded": ["Codex C3 neural-growth files", "seed-19 continuation files", "Q4 sources", "c45f775f scientific source", "original seed-18 checkpoints"]
+ },
+ "cost_sizing_not_a_reservation": {"basis_worker_seconds_for_2940_updates": 17263.692052139, "projected_worker_seconds_per_arm_before_overhead": 8600, "hourly_usd_recorded": "2.52", "rough_usd_per_arm": "6", "rough_usd_both_arms_with_ancillary": "12-14", "ledger": "Codex's campaign_ledger.json (revision 110, total reserved 899.40 at 2026-09-26T18:36:58Z)"},
+ "dependencies_on_codex": ["explicit experimental file scope", "pass-20 main-course state file identity (cursor 2940)", "seam confirmation on exact c45f775f bytes", "seed-19 continuation seam identity for reuse", "owner-signed admission and reservation before any launch"],
+ "not_authorized": ["launch", "reservation", "rate sweep", "scientific source change", "optimizer reset", "4x/8x extension", "CASalescence", "any seed-19 or Q4 edit"]
+}

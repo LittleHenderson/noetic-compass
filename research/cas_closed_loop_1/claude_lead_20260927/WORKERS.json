@@ -58,6 +58,68 @@
     "NOTEs: getprofile finally-check, I_attempted unconstrained, catalog_state_binding unconsumed, unreachable line 320"
    ],
    "status": "COMPLETED"
+  },
+  {
+   "wave": "A5",
+   "label": "current-joint-validation-delivery",
+   "executor": "lead session itself (Bash/python), SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "The Agent interface cannot enforce exclusive files, a spending limit or a global worker cap, and the harness withholds subagent identifiers; the owner's rule for that case is serial execution in the existing session.",
+   "scope": "Exact CAS test inventory mapped to the owner's five acceptance items; declared-versus-executed separation; exact next acceptance command and route through Codex's runner; dependencies on Codex; smallest remaining concrete failure. Inspection and records only; no pytest, witness, replay, cloud, model or worker call.",
+   "exclusive_files": [
+    "claude_lead_20260927/A5_ACCEPTANCE_PACKAGE_20260927.md",
+    "claude_lead_20260927/A5_ACCEPTANCE_PACKAGE_20260927.json"
+   ],
+   "dependencies": [
+    "CASE_RECONCILIATION.json (recorded case identities)",
+    "JOINT_ACCEPTANCE_PLAN.json at d7808d59 (read-only)",
+    "aws_validation/worker.py, launch.py, package.py (read-only)"
+   ],
+   "limits": {
+    "new_runs": 0,
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "md": "c509499a5e68f64348c1e96054fb7229338ab4882533a310f2291126c0e9355a",
+    "json": "509af522969ad45494040fd7fe3314b9d918e1757fd0a4f450b89b2256458b76"
+   },
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "A4",
+   "label": "seed18-comparison-and-learned-component-preparation",
+   "executor": "lead session itself (Bash/python), SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5",
+   "scope": "Preregistered seed-18 bounded comparison (unchanged continuation versus one predefined constant learning rate 0.001) from copies of the same verified pass-20 state; CAS-assisted seed-18 path (gated); CAS-side requirements for Codex C3's neural growth. Read-only inspection of Codex's committed HELM records on origin/codex/helm-cm2x-replication-2-20260926 and of the archived 2026-09-22 pointer_learner.py copy; no model loaded or run; no checkpoint read.",
+   "exclusive_files": [
+    "claude_lead_20260927/A4_SEED18_COMPARISON_PREREG_20260927.md",
+    "claude_lead_20260927/A4_SEED18_CONDITIONS.json",
+    "claude_lead_20260927/A4_CAS_ASSISTED_SEED18_PATH_20260927.md",
+    "claude_lead_20260927/A4_GROWTH_CAS_REQUIREMENTS_20260927.md"
+   ],
+   "dependencies": [
+    "Codex: explicit experimental file scope",
+    "Codex: pass-20 main-course state identity (cursor 2940)",
+    "Codex: continuation seam confirmation on exact c45f775f bytes",
+    "Owner: admission and reservation before any launch"
+   ],
+   "limits": {
+    "new_runs": 0,
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "gpu_jobs": 0,
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "A4_SEED18_COMPARISON_PREREG_20260927.md": "0cf8a0e7ddb111575a1e27d2cf2df5a61fb2d4ca57097dbb121f4393e21bdfae",
+    "A4_SEED18_CONDITIONS.json": "65803f808a9d27133fd81044fe95170ddf14b2872dc5f5b775c1c0edcde7e486",
+    "A4_CAS_ASSISTED_SEED18_PATH_20260927.md": "b39655283bfe8c0d057bbba5a7e2e8b1478aa6d89755232e97d21585b02661a7",
+    "A4_GROWTH_CAS_REQUIREMENTS_20260927.md": "dc405564e070356dca6511e7dd55b85fe3db53e21bc53a144aa8638bbec85cc7"
+   },
+   "status": "COMPLETED_PREPARATION_NOT_RUN"
   }
  ],
  "not_done_by_any_worker": [
@@ -92,5 +154,11 @@
    "1": "f56415199dddccc7dd75cd8503a3280badf69082 (R1, R6, spec/contracts/decisions)",
    "2": "0cb7b48d790cbc8e8ff69a258d9255c7967f1a59 (R7, addendum cases, R3/R8 notes)"
   }
+ },
+ "global_limits_declared": {
+  "active_workers_under_claude": 0,
+  "maximum_under_claude": 2,
+  "maximum_global": 4,
+  "note": "Both packets executed serially; zero active workers."
  }
 }

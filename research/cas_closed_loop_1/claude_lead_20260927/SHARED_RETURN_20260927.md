@@ -90,3 +90,46 @@ Preserved: active HELM replication, all historical freezes, failed attempts, rec
 - Costs and cloud state: $0; no job, instance, bucket or launch; HELM untouched.
 - One remaining blocker: Codex's re-cut freeze at the corrected commit (declaring the collected count) and the owner's
   decision on one bounded CPU attempt. Never freeze `fab6734e…`.
+
+## Round 4 (owner's two-track follow-through, 2026-09-27 ~13:10Z) — first return
+
+Claim states: **real** = checked here with a retained record; **prepared** = written before any result, not run;
+**open** = needs another party. Nothing in this round executed a test, model, cloud job or worker.
+
+- **Tasks and workers.** Packets A5 (joint-validation delivery) and A4 (seed-18 preparation) were executed
+  **serially in this session**; no worker was dispatched, because the interface cannot enforce exclusive files or
+  limits and withholds worker identifiers. Recorded in `WORKERS.json` (0 active under Claude; caps 2 and 4).
+- **Source and exclusive files.** CAS `7bbf1e0f7bae635126c05b3203cca706ea8654dc`; SI `d7808d59c13ea94c6ff35d2327a4acb8535daabc`
+  (tip of `codex/helm-si-three-lead-20260927`, **no successor**, checked ~13:00Z). Claude wrote only
+  `claude_lead_20260927/A5_ACCEPTANCE_PACKAGE_20260927.{md,json}`, `A4_SEED18_COMPARISON_PREREG_20260927.md`,
+  `A4_SEED18_CONDITIONS.json`, `A4_CAS_ASSISTED_SEED18_PATH_20260927.md`, `A4_GROWTH_CAS_REQUIREMENTS_20260927.md`,
+  plus this file, `WORKERS.json`, `HANDOFF_REQUEST_TO_CODEX.md`, the root `CHANGELOG.md` and one row in
+  `docs/CAS_HARNESS_SPEC_SHEET.md`. No leased source file, HELM, seed-19, growth or Q4 file changed.
+- **What changed since the round-3 return.** Nothing in the CAS source (`.py` bytes byte-identical from
+  `0cb7b48d` to `7bbf1e0f`). New: the exact 73-case CAS inventory mapped to the owner's five acceptance items with
+  executed status per case (real, local, not acceptance); the 69 SI cases listed as declared, never run by Claude;
+  the seed-18 preregistration; the gated CAS-assisted path; the growth requirements.
+- **Exact next acceptance command.** The joint command verbatim from `JOINT_ACCEPTANCE_PLAN.json` at `d7808d59`
+  (seven files, `HELM_SI_EXECUTION_VENUE=ADMITTED_AWS`, basetemp `/opt/helm-si-output/pytest-temp`, junit
+  `/opt/helm-si-output/joint-junit.xml`), expected `142/0/0/0` only if collection matches; route: Codex's runner;
+  see `A5_ACCEPTANCE_PACKAGE_20260927.md` section 4. Claude launches nothing.
+- **Prepared seed-18 comparison and its matching baseline.** Arm A: unchanged continuation, AdamW constant `0.003`,
+  moments preserved, +1470 main updates to pass 30. Arm B: identical except constant `0.001`. Both from copies of the
+  same verified pass-20 seed-18 state (job `cas-meta2-tpntr-20260926054903-c45f775f-m-20260918`; candidate file
+  `final.pt` sha256 `5a8a3069…`, cursor to be confirmed by Codex). Readouts fixed: development/59 at passes 25 and
+  30; held-back/127, course/564, trained/358, excluded/79 at pass 30. Licensed statement fixed; no improvement claim.
+  Finding (inspected on the archived 2026-09-22 copy, not the exact `c45f775f` bytes): the restore path takes the
+  learning rate and `max_updates` from the checkpoint metadata, so **both** arms need one declared continuation seam
+  (Codex's scope), the same seam the seed-19 continuation needs.
+- **Specific dependencies on Codex.** D1 re-cut/joint freeze declaring the collected count and the
+  `test_return_addresses.py` decision; D2 the frozen concurrency identity in `launch.py`/`package.py` still names the
+  2026-09-25 seed-18 instance `i-0adf52b7fa801e08b`, so an unchanged launch would block with
+  `UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK` while seed 19 runs; D3 owner-signed execution and cost admission;
+  D4 SI-1/SI-2 open. For A4: explicit experimental file scope, the pass-20 main-course state identity, seam
+  confirmation, the seed-19 seam identity for reuse.
+- **Cloud and spending state.** Claude: `$0`, no cloud call, no job, no model call, no worker. Codex's records
+  (read-only): seed-18 reference reserved `19.20` USD under a `21.50` cap; replication-2 campaign cap `45.00` USD with
+  `41.25` planned and `3.75` unallocated at 2026-09-26T18:36:58Z; canonical ledger revision 110 total reserved
+  `899.40` USD. The seed-19 continuation's current spend is Codex's to report.
+- **Still parked / unchanged.** CASalescence parked; `RETAINED_RESEARCH_ONLY`, not `PROMOTED`; active HELM
+  replication and all historical results preserved; DeepSeek's review target stays `cbb92eb3…` (`PINNED_COMMIT.txt`).

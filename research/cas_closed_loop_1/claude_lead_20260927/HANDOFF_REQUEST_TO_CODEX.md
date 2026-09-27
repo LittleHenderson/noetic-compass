@@ -209,3 +209,26 @@ with outcomes, commands, environment and source hashes. Claude never observed a 
   `DECISIONS.md`.
 - **R9 (new).** Name the channel Claude can reach: this PR's review threads, a file under
   `research/cas_closed_loop_1/`, or a branch. Claude cannot read the agent bus.
+
+## Round 4 additions (2026-09-27, owner's two-track follow-through)
+
+- **R10 — joint run route.** Please cut the freeze (or joint freeze schema) for the seven-file joint command at CAS
+  `7bbf1e0f…` + SI `d7808d59…` and declare the collected count in the admitted venue. `worker.py` line 123 hardcodes
+  the four CAS files; the joint command needs your worker/freeze variant. Claude's package:
+  `A5_ACCEPTANCE_PACKAGE_20260927.{md,json}`.
+- **R11 — stale frozen concurrency identity (would block).** `launch.py` lines 103-108 and `package.py` lines
+  213-216 permit only `i-0adf52b7fa801e08b` / job `cas-meta2-tpntr-20260925151836-b981625f-m-20260918`. With the
+  seed-19 continuation on another instance, the all-regions check (`launch.py` 217-221) raises
+  `UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK`. Please re-declare the currently permitted instance in the new freeze.
+  Read from the code, not executed.
+- **R12 — seed-18 experimental file scope.** Please name the path under your records tree for the two continuation
+  arms and their admissions (proposal: `records/typed_pointer_001/seed18_continuation_20260927/{armA_unchanged,armB_lr0.001}/`).
+  Claude writes nothing there. Preregistration: `A4_SEED18_COMPARISON_PREREG_20260927.md`, `A4_SEED18_CONDITIONS.json`.
+- **R13 — pass-20 main-course state identity.** Which receipt file holds cursor `2940` before the 16 interference and
+  2 replay steps: `final.pt` (`5a8a3069…`), `prelast.pt` (`8e16f36c…`) or another? Both arms copy that one file.
+- **R14 — continuation seam.** On the exact `c45f775f` bytes, please confirm that `restore_checkpoint` takes
+  `optimizer_config` and `limits` from checkpoint metadata (archived-copy lines 2140-2141) and that
+  `TYPED_CHECKPOINT_CURSOR` bounds the cursor by `limits["max_updates"]` (`2956` in the pass-10 metadata). If so, both
+  seed-18 arms reuse your seed-19 continuation seam unchanged for arm A; please share its identity once cut.
+- **R15 — growth.** CAS-side requirements for C3 are in `A4_GROWTH_CAS_REQUIREMENTS_20260927.md`; Claude writes the
+  matching lane test identities only under a new packet request naming the growth file scope and boundary schema.

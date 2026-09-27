@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 4: joint-validation delivery package (A5) and seed-18 preparation (A4), records only
+
+- No source, test, HELM, seed-19, growth or Q4 file changed; no test, model, cloud or worker run. Both packets were
+  executed serially in the lead session (`claude_lead_20260927/WORKERS.json`).
+- `A5_ACCEPTANCE_PACKAGE_20260927.{md,json}`: the 73 CAS case identities mapped to the owner's five acceptance
+  items with executed status per case (62/62 and 11/11 local, Python 3.11.15, not acceptance); 69 SI cases declared,
+  never run by Claude; the joint command verbatim from `JOINT_ACCEPTANCE_PLAN.json` at `d7808d59` (142 declared,
+  `NOT_RUN`); dependencies D1-D4 on Codex, including the stale frozen concurrency identity in `launch.py`/`package.py`.
+- `A4_SEED18_COMPARISON_PREREG_20260927.md` + `A4_SEED18_CONDITIONS.json`: unchanged continuation (AdamW constant
+  `0.003`) versus one predefined constant `0.001`, both from copies of the same verified pass-20 seed-18 state,
+  +1470 main updates to pass 30, readouts and licensed statement fixed before results; finding that both arms need a
+  declared continuation seam (restore path binds learning rate and `max_updates` to checkpoint metadata; inspected on
+  an archived copy, to be confirmed on the exact `c45f775f` bytes). `A4_CAS_ASSISTED_SEED18_PATH_20260927.md`
+  (gated on joint acceptance; the Ohm fixture is not a neural invocation) and `A4_GROWTH_CAS_REQUIREMENTS_20260927.md`
+  (for Codex C3). One `ENGINEERED-NOT-VALIDATED` row added to `docs/CAS_HARNESS_SPEC_SHEET.md`.
+
 ## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 2: snapshot-bound atlas addresses wired into the leased adapter; addendum's ten cases executable in the lane
 
 - `native_step_adapter.py`: `atlas_address_for_frame`, `atlas_address_chain`, `check_atlas_address`,
