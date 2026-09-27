@@ -17,3 +17,12 @@ Failing case identities per run:
 Full per-case list with outcomes, commands, environment and source hashes: `CASE_RECONCILIATION.json`.
 
 Claude never observed a 52-passed result. Reconciling that figure needs its exact source hash, command, junit and dependency list.
+
+## Lease packets (frozen four files now collect 62)
+
+| Run | Tree | Collected | Passed | Failed |
+|---|---|---:|---:|---:|
+| `run_20260927T061830Z` | lease packet 1 edits in the main tree (import + thread meter + new regression case), Python 3.11 | 62 | 62 | 0 |
+| `run_20260927T062546Z` | lease packet 2 edits in the main tree (atlas addresses wired), Python 3.11 | 62 | 62 | 0 |
+
+Lane addendum cases (packet 2): 13 of 13 passed (`test_return_addresses_junit_packet2.xml`).

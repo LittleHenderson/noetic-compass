@@ -76,3 +76,17 @@ Never the old failing freeze `fab6734e…`.
 
 Preserved: active HELM replication, all historical freezes, failed attempts, receipts and evidence bytes. Retention state:
 `RETAINED_RESEARCH_ONLY`; nothing is promoted.
+
+## Round 3 (lease `CAS-CORRECTION-20260927-01`) update
+
+- Route accepted and used: PR #245 conversation (ACK comment 5853300431; checkpoints 5853343173 and the packet-2 checkpoint).
+- Corrected CAS source identities: packet 1 `f56415199dddccc7dd75cd8503a3280badf69082`; packet 2 `0cb7b48d790cbc8e8ff69a258d9255c7967f1a59` (leased file hashes in the checkpoints).
+- F1 fixed (real, in the leased test file). F2 fixed with a stated boundary and a same-file regression case (real);
+  corrected probe refused. F3 fixed: addresses wired into the adapter, eleven cases executed (real, local). F4 fixed as
+  notes (real). DeepSeek 52-versus-61 still open on DeepSeek's side; Claude's runs and case identities are all listed.
+- Tests: frozen four files now collect 62 (62 passed on both packet runs); lane addendum file collects 11 (11 passed);
+  Python 3.11.15; not AWS acceptance.
+- Witness and fresh-process reload unchanged: output 3, 12 host entries, 18 native events, replay EXACT on both runs.
+- Costs and cloud state: $0; no job, instance, bucket or launch; HELM untouched.
+- One remaining blocker: Codex's re-cut freeze at the corrected commit (declaring the collected count) and the owner's
+  decision on one bounded CPU attempt. Never freeze `fab6734e…`.

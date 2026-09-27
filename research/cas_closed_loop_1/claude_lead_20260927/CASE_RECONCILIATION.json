@@ -1102,6 +1102,737 @@
      "seconds": 0.002
     }
    ]
+  },
+  "run_20260927T061830Z": {
+   "description": "lease packet 1 edits in the main tree (import + thread meter + new regression case), Python 3.11",
+   "source_commit": "4060126ca30a80dab0fc5b7396aa15f516f0a1b3",
+   "git_status_porcelain": [
+    " M CHANGELOG.md",
+    " M research/cas_closed_loop_1/CONTRACTS.json",
+    " M research/cas_closed_loop_1/DECISIONS.md",
+    " M research/cas_closed_loop_1/HARNESS_SPEC.md",
+    " M research/cas_closed_loop_1/claude_lead_20260927/run_local_protocol.py",
+    " M research/cas_closed_loop_1/native_step_adapter.py",
+    " M research/cas_closed_loop_1/test_native_step_adapter.py",
+    "?? research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/"
+   ],
+   "expected_tests_argument": 62,
+   "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 09:26:23) [GCC 13.3.0]",
+    "executable": "/usr/local/bin/python3",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+    "git": "git version 2.43.0",
+    "pins_observed": {
+     "pytest": "9.0.2",
+     "pydantic": "2.12.5",
+     "pydantic_core": "2.41.5"
+    },
+    "pins_declared_by_aws_package": {
+     "python": "3.12 (AWS worker requirement; not satisfied locally)",
+     "pytest": "9.0.2",
+     "pydantic": "2.12.5",
+     "pydantic_core": "2.41.5"
+    }
+   },
+   "command": [
+    "/usr/local/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/pytest.xml",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_native_step_adapter.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_closed_loop.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_artifacts.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/aws_validation/test_launch_transport.py"
+   ],
+   "returncode": 0,
+   "collected": 62,
+   "executed_and_passed": 62,
+   "failed": 0,
+   "errors": 0,
+   "skipped": 0,
+   "junit_sha256": "390cdd8471d3384008794e5df4368c9001a6a3531485ea51ed8097cbe2c7c98d",
+   "cases": [
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_disabled_actuator_retains_allocation_without_execution",
+     "status": "PASSED",
+     "seconds": 0.046
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_zero_grant_does_not_make_native_call",
+     "status": "PASSED",
+     "seconds": 0.042
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+     "status": "PASSED",
+     "seconds": 0.123
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[True]",
+     "status": "PASSED",
+     "seconds": 0.024
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[-1]",
+     "status": "PASSED",
+     "seconds": 0.027
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[2]",
+     "status": "PASSED",
+     "seconds": 0.024
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[1.0]",
+     "status": "PASSED",
+     "seconds": 0.023
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_episode_refused_before_work",
+     "status": "PASSED",
+     "seconds": 0.035
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_native_error_keeps_observed_events_and_never_reports_success",
+     "status": "PASSED",
+     "seconds": 0.115
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+     "status": "PASSED",
+     "seconds": 0.014
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+     "status": "PASSED",
+     "seconds": 20.45
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+     "status": "PASSED",
+     "seconds": 19.97
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[propagate]",
+     "status": "PASSED",
+     "seconds": 0.032
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[swallow]",
+     "status": "PASSED",
+     "seconds": 0.03
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[catch_then_third_call]",
+     "status": "PASSED",
+     "seconds": 0.03
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_internal_reentry_that_clears_meter_never_publishes_a_count",
+     "status": "PASSED",
+     "seconds": 0.103
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_rehashed_receipt_still_refuses_execution_above_allocation",
+     "status": "PASSED",
+     "seconds": 0.036
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_substituted_callable_is_refused_before_entry",
+     "status": "PASSED",
+     "seconds": 0.03
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_receipt_content_digest_detects_alteration",
+     "status": "PASSED",
+     "seconds": 0.033
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_post_fault_state_is_not_published_as_verified",
+     "status": "PASSED",
+     "seconds": 0.094
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_simulated_profile_is_not_admitted",
+     "status": "PASSED",
+     "seconds": 0.018
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_wrong_problem_admission_is_refused",
+     "status": "PASSED",
+     "seconds": 0.029
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_loaded_dependency_is_refused",
+     "status": "PASSED",
+     "seconds": 0.014
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_existing_event_is_refused_even_for_zero_grant",
+     "status": "PASSED",
+     "seconds": 0.045
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[False-1]",
+     "status": "PASSED",
+     "seconds": 0.033
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[True-0]",
+     "status": "PASSED",
+     "seconds": 0.033
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_duplicate_and_changed_event",
+     "status": "PASSED",
+     "seconds": 0.029
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[False]",
+     "status": "PASSED",
+     "seconds": 6.955
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[True]",
+     "status": "PASSED",
+     "seconds": 6.922
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_empty_work_join_still_refuses_a_corrupt_state",
+     "status": "PASSED",
+     "seconds": 0.013
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_thread_entry_inside_window_never_publishes_a_count",
+     "status": "PASSED",
+     "seconds": 0.098
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-4-3]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-6-2]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[1-0]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[NaN-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[Infinity-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[-1-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+     "status": "PASSED",
+     "seconds": 0.18
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[compiler_ohm]",
+     "status": "PASSED",
+     "seconds": 0.017
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[pcba_check]",
+     "status": "PASSED",
+     "seconds": 0.016
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+     "status": "PASSED",
+     "seconds": 0.046
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[parent_transform]",
+     "status": "PASSED",
+     "seconds": 0.004
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[prerequisite_acquisition]",
+     "status": "PASSED",
+     "seconds": 0.004
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[verification_commit]",
+     "status": "PASSED",
+     "seconds": 0.003
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options0]",
+     "status": "PASSED",
+     "seconds": 0.388
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options1]",
+     "status": "PASSED",
+     "seconds": 2.319
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options2]",
+     "status": "PASSED",
+     "seconds": 0.584
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options3]",
+     "status": "PASSED",
+     "seconds": 0.209
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_wrong_method_is_rejected_and_failed_work_remains_charged",
+     "status": "PASSED",
+     "seconds": 2.285
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+     "status": "PASSED",
+     "seconds": 33.992
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_fresh_process_replays_retained_journal",
+     "status": "PASSED",
+     "seconds": 9.394
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_truncated_observation_refused_before_native_replay",
+     "status": "PASSED",
+     "seconds": 0.013
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+     "status": "PASSED",
+     "seconds": 12.396
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_retained_exact_evidence_and_producer_bytes",
+     "status": "PASSED",
+     "seconds": 0.003
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_changed_artifact_bytes_are_refused",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_changed_historical_producer_snapshot_is_refused",
+     "status": "PASSED",
+     "seconds": 0.006
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[--output=elsewhere]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[HEAD~1:secret]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_download_failure_prints_safe_json_before_failed_emergency_upload",
+     "status": "PASSED",
+     "seconds": 0.023
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+     "status": "PASSED",
+     "seconds": 0.23
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_non_s3_clients_keep_normal_service_endpoints",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_safe_error_record_drops_messages_urls_and_unknown_codes",
+     "status": "PASSED",
+     "seconds": 0.002
+    }
+   ]
+  },
+  "run_20260927T062546Z": {
+   "description": "lease packet 2 edits in the main tree (atlas addresses wired), Python 3.11",
+   "source_commit": "f56415199dddccc7dd75cd8503a3280badf69082",
+   "git_status_porcelain": [
+    " M research/cas_closed_loop_1/CONTRACTS.json",
+    " M research/cas_closed_loop_1/DECISIONS.md",
+    " M research/cas_closed_loop_1/HARNESS_SPEC.md",
+    " M research/cas_closed_loop_1/README.md",
+    " M research/cas_closed_loop_1/claude_lead_20260927/RETURN_ADDRESS_CASE_MAP.md",
+    " M research/cas_closed_loop_1/claude_lead_20260927/atlas_address.py",
+    " M research/cas_closed_loop_1/claude_lead_20260927/test_atlas_address.py",
+    " M research/cas_closed_loop_1/native_step_adapter.py",
+    "?? research/cas_closed_loop_1/RETURN_ADDRESS_TEST_MAP.json",
+    "?? research/cas_closed_loop_1/claude_lead_20260927/run_20260927T062546Z/",
+    "?? research/cas_closed_loop_1/test_return_addresses.py"
+   ],
+   "expected_tests_argument": 62,
+   "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 09:26:23) [GCC 13.3.0]",
+    "executable": "/usr/local/bin/python3",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+    "git": "git version 2.43.0",
+    "pins_observed": {
+     "pytest": "9.0.2",
+     "pydantic": "2.12.5",
+     "pydantic_core": "2.41.5"
+    },
+    "pins_declared_by_aws_package": {
+     "python": "3.12 (AWS worker requirement; not satisfied locally)",
+     "pytest": "9.0.2",
+     "pydantic": "2.12.5",
+     "pydantic_core": "2.41.5"
+    }
+   },
+   "command": [
+    "/usr/local/bin/python3",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T062546Z/pytest.xml",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_native_step_adapter.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_closed_loop.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/test_artifacts.py",
+    "/home/user/noetic-compass/research/cas_closed_loop_1/aws_validation/test_launch_transport.py"
+   ],
+   "returncode": 0,
+   "collected": 62,
+   "executed_and_passed": 62,
+   "failed": 0,
+   "errors": 0,
+   "skipped": 0,
+   "junit_sha256": "2f90bfdb37b8dbcb06cada6bb97088e21fdbd3f5aa21d1a44ab6d594f2e5f7c6",
+   "cases": [
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_disabled_actuator_retains_allocation_without_execution",
+     "status": "PASSED",
+     "seconds": 0.039
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_zero_grant_does_not_make_native_call",
+     "status": "PASSED",
+     "seconds": 0.034
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+     "status": "PASSED",
+     "seconds": 0.116
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[True]",
+     "status": "PASSED",
+     "seconds": 0.022
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[-1]",
+     "status": "PASSED",
+     "seconds": 0.022
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[2]",
+     "status": "PASSED",
+     "seconds": 0.021
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[1.0]",
+     "status": "PASSED",
+     "seconds": 0.021
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_episode_refused_before_work",
+     "status": "PASSED",
+     "seconds": 0.028
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_native_error_keeps_observed_events_and_never_reports_success",
+     "status": "PASSED",
+     "seconds": 0.097
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+     "status": "PASSED",
+     "seconds": 0.013
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+     "status": "PASSED",
+     "seconds": 19.998
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+     "status": "PASSED",
+     "seconds": 20.335
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[propagate]",
+     "status": "PASSED",
+     "seconds": 0.032
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[swallow]",
+     "status": "PASSED",
+     "seconds": 0.031
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[catch_then_third_call]",
+     "status": "PASSED",
+     "seconds": 0.037
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_internal_reentry_that_clears_meter_never_publishes_a_count",
+     "status": "PASSED",
+     "seconds": 0.106
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_rehashed_receipt_still_refuses_execution_above_allocation",
+     "status": "PASSED",
+     "seconds": 0.034
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_substituted_callable_is_refused_before_entry",
+     "status": "PASSED",
+     "seconds": 0.03
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_receipt_content_digest_detects_alteration",
+     "status": "PASSED",
+     "seconds": 0.033
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_post_fault_state_is_not_published_as_verified",
+     "status": "PASSED",
+     "seconds": 0.095
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_simulated_profile_is_not_admitted",
+     "status": "PASSED",
+     "seconds": 0.018
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_wrong_problem_admission_is_refused",
+     "status": "PASSED",
+     "seconds": 0.028
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_loaded_dependency_is_refused",
+     "status": "PASSED",
+     "seconds": 0.013
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_existing_event_is_refused_even_for_zero_grant",
+     "status": "PASSED",
+     "seconds": 0.044
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[False-1]",
+     "status": "PASSED",
+     "seconds": 0.033
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[True-0]",
+     "status": "PASSED",
+     "seconds": 0.034
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_duplicate_and_changed_event",
+     "status": "PASSED",
+     "seconds": 0.035
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[False]",
+     "status": "PASSED",
+     "seconds": 6.722
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[True]",
+     "status": "PASSED",
+     "seconds": 6.966
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_empty_work_join_still_refuses_a_corrupt_state",
+     "status": "PASSED",
+     "seconds": 0.013
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_thread_entry_inside_window_never_publishes_a_count",
+     "status": "PASSED",
+     "seconds": 0.116
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-4-3]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-6-2]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[1-0]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[NaN-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[Infinity-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[-1-1]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+     "status": "PASSED",
+     "seconds": 0.223
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[compiler_ohm]",
+     "status": "PASSED",
+     "seconds": 0.016
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[pcba_check]",
+     "status": "PASSED",
+     "seconds": 0.016
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+     "status": "PASSED",
+     "seconds": 0.051
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[parent_transform]",
+     "status": "PASSED",
+     "seconds": 0.003
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[prerequisite_acquisition]",
+     "status": "PASSED",
+     "seconds": 0.004
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[verification_commit]",
+     "status": "PASSED",
+     "seconds": 0.003
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options0]",
+     "status": "PASSED",
+     "seconds": 0.364
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options1]",
+     "status": "PASSED",
+     "seconds": 2.339
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options2]",
+     "status": "PASSED",
+     "seconds": 0.581
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options3]",
+     "status": "PASSED",
+     "seconds": 0.195
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_wrong_method_is_rejected_and_failed_work_remains_charged",
+     "status": "PASSED",
+     "seconds": 2.193
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+     "status": "PASSED",
+     "seconds": 33.751
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_fresh_process_replays_retained_journal",
+     "status": "PASSED",
+     "seconds": 9.622
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_truncated_observation_refused_before_native_replay",
+     "status": "PASSED",
+     "seconds": 0.018
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_closed_loop::test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+     "status": "PASSED",
+     "seconds": 12.886
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_retained_exact_evidence_and_producer_bytes",
+     "status": "PASSED",
+     "seconds": 0.003
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_changed_artifact_bytes_are_refused",
+     "status": "PASSED",
+     "seconds": 0.002
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_changed_historical_producer_snapshot_is_refused",
+     "status": "PASSED",
+     "seconds": 0.006
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[--output=elsewhere]",
+     "status": "PASSED",
+     "seconds": 0.001
+    },
+    {
+     "id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[HEAD~1:secret]",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_download_failure_prints_safe_json_before_failed_emergency_upload",
+     "status": "PASSED",
+     "seconds": 0.01
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+     "status": "PASSED",
+     "seconds": 0.225
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_non_s3_clients_keep_normal_service_endpoints",
+     "status": "PASSED",
+     "seconds": 0.0
+    },
+    {
+     "id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_safe_error_record_drops_messages_urls_and_unknown_codes",
+     "status": "PASSED",
+     "seconds": 0.003
+    }
+   ]
   }
  },
  "reading": [
@@ -1110,5 +1841,66 @@
   "Run 3 executed every downstream step (retained replay, witness, fresh-process replay).",
   "A 52-passed figure does not match any Claude run; if it came from a run without boto3/botocore AND without the import repair on a subset, its exact junit, source hash and command are needed to reconcile. Claude did not observe 52 anywhere.",
   "Python 3.11.15 here versus the AWS pin 3.12: the NameError and the boto3 absence are interpreter-independent."
- ]
+ ],
+ "lane_addendum_cases_packet2": {
+  "description": "test_return_addresses.py (11) + claude_lead pointer (1) + corrected probe (1) against the packet-2 adapter, Python 3.11",
+  "collected": 13,
+  "executed_and_passed": 13,
+  "cases": [
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row2_wrong_address_cannot_select_another_continuation",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row3_repeated_resolution_dispatches_nothing",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row4_address_chain_survives_fresh_process_recovery",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row6_equal_or_missing_profiles_never_merge_callers",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row8_one_suspension_event_per_address",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row9_tampered_view_or_journal_cannot_resolve",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.test_return_addresses::test_runtime_location_atlas_binding_is_the_address_chain_or_null",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.claude_lead_20260927.test_atlas_address::test_round2_shim_resolves_to_the_leased_adapter",
+    "status": "PASSED"
+   },
+   {
+    "id": "research.cas_closed_loop_1.claude_lead_20260927.probe_threaded_reentry_v2::test_probe_v2_grant_of_one_never_yields_receipt_after_second_host_entry",
+    "status": "PASSED"
+   }
+  ],
+  "junit_sha256": "63d6b3d195e9cbbaefc4f97731af0a1341c72b0ad9a105632576578cca05604f"
+ },
+ "expected_tests_note": "The predeclared total for the four frozen files is 61 at aa600668 and 62 from lease packet 1 (one regression case added). Totals are declared per freeze, never hardcoded; the runner takes --expected-tests."
 }

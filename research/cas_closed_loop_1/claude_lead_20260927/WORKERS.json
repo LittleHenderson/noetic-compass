@@ -83,5 +83,14 @@
    "test_atlas_address": "a373ea6147ab4e370b220db4c56b695501f0099ad7b86e385a03a14a9b673f97",
    "thread_meter_patch": "7b3215eee2d796f3be132c80ed15061f21a2e3ecb4d3654b88a18d7c49912b1e"
   }
+ },
+ "round_3_lease_2026_09_27": {
+  "lease": "CAS-CORRECTION-20260927-01",
+  "ack_comment": 5853300431,
+  "executor": "lead session, SERIAL_EXECUTION_NO_SUBAGENT_INTERFACE; zero workers, provider calls, cloud jobs",
+  "packets": {
+   "1": "f56415199dddccc7dd75cd8503a3280badf69082 (R1, R6, spec/contracts/decisions)",
+   "2": "0cb7b48d790cbc8e8ff69a258d9255c7967f1a59 (R7, addendum cases, R3/R8 notes)"
+  }
  }
 }
