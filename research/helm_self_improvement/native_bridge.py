@@ -69,8 +69,12 @@ def _run_branch(host, config, *, mode, candidate_id=None, validation_ns=0):
                    "wall_ns": time.monotonic_ns() - started, "native_fault_receipt": getattr(error, "receipt", None),
                    "work_refunded": False, "partial_state_verified": False}
         write_new(destination / "failure.json", failure)
-        write_new(destination / "partial_journal.json", machine.journal())
         host.append("RUN_FAILED", {"run_id": run_id, "failure": failure})
+        try:
+            write_new(destination / "partial_journal.json", machine.journal())
+        except Exception as journal_error:
+            write_new(destination / "partial_journal_failure.json",
+                      {"error_type": type(journal_error).__name__, "error": str(journal_error)})
         raise
     runtime_ns = time.monotonic_ns() - started
     post_started = time.monotonic_ns()
@@ -105,7 +109,8 @@ def run_baseline(host):
 def execute_candidate(host, description, observation, candidate, *, mode):
     started = time.monotonic_ns()
     config = execution_config(host, description, observation, candidate, mode)
-    return _run_branch(host, config, mode=mode, candidate_id=candidate.candidate_id if candidate else None,
+    return _run_branch(host, config, mode=mode,
+                       candidate_id=candidate.candidate_id if mode != "disabled" and candidate else None,
                        validation_ns=time.monotonic_ns() - started)
 
 

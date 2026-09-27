@@ -132,3 +132,30 @@ def test_failure_preserves_native_work_and_has_no_retry(tmp_path, monkeypatch):
     failure = json.loads((path / "failure.json").read_bytes())
     assert failure["status"] == "FAILED_NOT_RETRIED" and failure["work_refunded"] is False
     assert json.loads((path / "partial_journal.json").read_bytes())["episodes"][0]["trace"]
+
+
+def test_disabled_mode_does_not_stamp_unverified_candidate_identity(tmp_path):
+    from types import SimpleNamespace
+    host = host_for(tmp_path / "authority")
+    baseline, observation = run_baseline(host)
+    result, _ = execute_candidate(host, SelfDescription(host.parent, host.baseline_config),
+        observation, SimpleNamespace(candidate_id="unverified"), mode="disabled")
+    assert result["candidate_id"] is None
+    assert result["deterministic_parity"] == baseline["deterministic_parity"]
+
+
+def test_journal_failure_does_not_replace_original_failure(tmp_path, monkeypatch):
+    host = host_for(tmp_path / "authority")
+    _, _, native, _ = _runtime(host)
+    def fail(machine, **options):
+        def broken():
+            raise ValueError("JOURNAL_UNAVAILABLE")
+        monkeypatch.setattr(machine, "journal", broken)
+        raise RuntimeError("ORIGINAL_FAILURE")
+    monkeypatch.setattr(native, "run_episode", fail)
+    with pytest.raises(RuntimeError, match="ORIGINAL_FAILURE"):
+        run_baseline(host)
+    failures = [e for e in host.events() if e["kind"] == "RUN_FAILED"]
+    assert len(failures) == 1
+    path = host.evidence_root / "runs" / failures[0]["body"]["run_id"]
+    assert json.loads((path / "partial_journal_failure.json").read_bytes())["error"] == "JOURNAL_UNAVAILABLE"
