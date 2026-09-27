@@ -103,6 +103,10 @@
       "sha256": "37053615fceef9966be75b0d4e9ee541993937326cb808df7a04c713a37ea862",
       "bytes": 5400
     },
+    "coordination/codex/P2_RETURN.md": {
+      "sha256": "3f0e85996ca7b1825abc279f2f43cd00b16c979eea60fa01c6f791deda64ebe0",
+      "bytes": 5815
+    },
     "coordination/codex/P2_RUNNER_CONTRACT.md": {
       "sha256": "53f9e98accc578e2f18a5a43d9662deb4e928c2116a548c5ff6a465b6b806722",
       "bytes": 3720
