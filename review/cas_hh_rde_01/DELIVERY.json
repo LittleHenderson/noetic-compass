@@ -1,0 +1,62 @@
+{
+  "bus_records": [
+    "deepseek-cas-hh-rde-01-first-return-20260928-08",
+    "deepseek-cas-hh-rde-01-hash-correction-20260928-09",
+    "deepseek-cas-hh-rde-01-second-return-20260928-10",
+    "deepseek-growth15-focused-review-20260928-11"
+  ],
+  "cloud_jobs": 0,
+  "cost_usd": "0.00",
+  "deliverables": [
+    {
+      "bytes": 11590,
+      "path": "review/cas_hh_rde_01/d_study_preregistration.py",
+      "sha256": "1f7675171f74d35e103c5f422ad4ea212984709ac150be62db3b0b0cd99401a3"
+    },
+    {
+      "bytes": 24117,
+      "path": "review/cas_hh_rde_01/d_probe_reachability_and_intervention.py",
+      "sha256": "4094493cbdc546e3a061c19692c6352f6d71d9f9c3f3d2e845ca2fc98afa1dd5"
+    },
+    {
+      "bytes": 26287,
+      "path": "review/cas_hh_rde_01/d_focused_controls.py",
+      "sha256": "9f46f3ba9cbd75631275e18a6291b256309ca194267eb712bb1b098d6db1c1cd"
+    },
+    {
+      "bytes": 8120,
+      "path": "review/cas_hh_rde_01/RETURN_2.md",
+      "sha256": "e67d834cf8c6e33a4d88840554b897fc18c14eabcaeef09a4dfadbb1de79d7d1"
+    },
+    {
+      "bytes": 6429,
+      "path": "review/cas_hh_rde_01/GROWTH15_FOCUSED_REVIEW.md",
+      "sha256": "66f97e3e00541d4879dec9294d4b70fae0a007b03f75c9145751bff1d681b325"
+    }
+  ],
+  "executed": {
+    "d_focused_controls.py": "34 passed, 0 failed, 0 errors, 0 skipped",
+    "d_probe_reachability_and_intervention.py": "17 passed, 2 skipped"
+  },
+  "findings": [
+    "D-RDE-01 BLOCKER",
+    "D-RDE-02 MAJOR",
+    "D-RDE-03 MAJOR",
+    "D-RDE-04 MAJOR",
+    "D-RDE-05 MAJOR",
+    "D-GRW15-01 MAJOR",
+    "D-GRW15-02 MINOR",
+    "D-GRW15-03 OBSERVATION"
+  ],
+  "frozen_digest": "40246cb6fbe60a9c7147fe7ef53941b55b86ad2ba6d559b83454adbfc9f8fb60",
+  "model_loads": 0,
+  "paid_calls": 0,
+  "report_sha256": "9c299eeae62f6d3d8d735209dee385671e6f6c96eaba2342ef5beddc9164b7d6",
+  "schema": "cas-hh-rde-01.deepseek-second-return/2",
+  "studied_commits": {
+    "cas_hh_rde_01_package": "62bb7f714810db5047eb07ef616c6ddfe470fca9",
+    "growth15_results": "38c2ecc48",
+    "growth_scientific": "c70e1a04"
+  },
+  "study": "CAS-HH-RDE-01-D-DIAG-1"
+}
