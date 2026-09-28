@@ -1,0 +1,10 @@
+{
+  "schema_version": "cas_harness_tks_probe_bundle_definition_lock.v1",
+  "bundle_id": "definition_locked_tks_fixture_20260603",
+  "definition_source": "api/resources/tks_owner_locked_definitions_20260603.json",
+  "definition_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0",
+  "fixture_source": "docs/working/definition_locked_tks_mtc_20260603/definition_locked_tks40_f28_fixture_20260603.json",
+  "fixture_sha256": "812b4a73c2c4c70c36c52500897e8a7afabb29430e2f93eb06823a2ad38bb1bf",
+  "probe_status": "definition_fixture_locked_no_trained_probe_claim",
+  "honesty_boundary": "This manifest locks the definition source required by customer audit creation. It does not claim a trained probe is verified; a future trained probe bundle must keep this definition_sha256 or customer audits are refused."
+}

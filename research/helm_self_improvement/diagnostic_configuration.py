@@ -35,6 +35,11 @@ from pathlib import Path
 
 from .harness_capture_vendor import probe_runner as harness
 
+try:  # the emitter's own text is the authority for capture meanings; pinned copy below, checked by test
+    from . import observation as _emitter
+except Exception:  # pragma: no cover -- Codex's emitter absent from this tree
+    _emitter = None
+
 CONTRACT_SCHEMA = "helm.harness.capture.contract/1"
 CAPTURE_RECORD_SCHEMA = "helm.harness.raw-capture/0.1"
 CONFIGURATION_SCHEMA = "helm.harness.configuration-record/0.1"
@@ -125,6 +130,32 @@ SITES = tuple(SITE_SEMANTICS)
 TENSOR_SITES = tuple(site for site in SITES if SITE_SEMANTICS[site]["basis"]
                      not in ("READING", "DECISIONS", "ANSWER", "SLOT_SCORES"))
 LOGIT_SITES = ("head.node", "head.reach", "head.node_pointer")
+
+# Codex's emitter (`observation.py` at `fd4215728209ef90948323d1268f2db664bc88ed`): receipt schema, modes, kinds and
+# the VERBATIM `MEANINGS` strings its events carry. `raw_capture` accepts a capture whose meaning is either this
+# emitter text or the site table's own text, and nothing else (HH05). A test checks this copy against the module.
+EMITTER_SOURCE = "fd4215728209ef90948323d1268f2db664bc88ed"
+OBSERVATION_SCHEMA = "helm.harness.observation/1"
+OBSERVATION_MODES = ("OFF", "OBSERVE_ONLY", "NO_OP_CONTROL")
+OBSERVATION_KINDS = ("parts", "reach")
+EMITTER_MEANINGS = {
+    "input.mapping": "Actual public pointer_inputs.read_packet mapping; ranked nodes, query and adjacency, not labels/answers.",
+    "graph.initial_state": "RMS-normalized node_encode output; rows in reading world/node-rank order, columns learned state coordinates.",
+    "graph.round_input": "Actual _rounds observe seam: encoded blend of normalized self/parent/child states entering core_block; projected coordinates, not individual hidden MLP neurons.",
+    "graph.round_update": "Actual core_block output before capped residual addition; learned state coordinates.",
+    "graph.round_state": "Actual normalized node state after the round residual update; same-checkpoint basis only.",
+    "graph.node_state": "Final node states, world order then node rank; width64 learned state coordinates.",
+    "graph.query_state": "Encoded query plus named node states; width64 learned state coordinates.",
+    "graph.pointer_query": "Pointer key projected from query; width64 dot-product coordinates.",
+    "head.node": "node_head logits: row per node and two declared yes/no output categories; not neurons.",
+    "head.reach": "reach_option_head logits in ABSENT,DIRECT order.",
+    "head.node_pointer": "Dot product of candidate node states and pointer_query, in requested rank order.",
+    "answer.scores": "Original slot scores in original declared symbol order; no rescoring.",
+    "answer.decisions": "Original slots.score_decisions output.",
+    "answer.assembly": "Original slots.assemble_answer output; model prediction, not evaluator acceptance.",
+}
+assert set(EMITTER_MEANINGS) == set(SITE_SEMANTICS)
+EMITTER_CAS_LABEL = "UNKNOWN_NOT_FITTED"
 
 CONFIGURATION_KINDS = ("ACTUAL_UNIT_SET", "PROJECTED_COORDINATE_SET", "DIRECTION", "SUBSPACE",
                        "CROSS_ROUND_PATTERN", "UNKNOWN")
@@ -305,7 +336,7 @@ def raw_capture(*, checkpoint_sha256, input_sha256, source_sha256, site, call_in
         _refuse("CAPTURE_DTYPE", repr(dtype))
     if type(device) is not str or not device:
         _refuse("CAPTURE_DEVICE", repr(device))
-    if coordinate_meaning != semantics["coordinate_meaning"]:
+    if coordinate_meaning not in (semantics["coordinate_meaning"], EMITTER_MEANINGS[site]):
         _refuse("COORDINATE_MEANING_MISMATCH", "%s: %r" % (site, coordinate_meaning))
     values = tuple(_finite_float(v, "CAPTURE_NONFINITE") for v in signed_values)
     if len(values) != math.prod(shape):
@@ -323,6 +354,100 @@ def row_values(capture, row):
         _refuse("CAPTURE_ROW", "row %r of %d" % (row, capture.rows))
     width = capture.width
     return capture.signed_values[row * width:(row + 1) * width]
+
+
+# ---------------------------------------------------------------------------------------------------------
+# Binding to the actual emitter receipt (`observation.Capture.receipt()` at fd421572)
+# ---------------------------------------------------------------------------------------------------------
+
+def _emitter_canonical(value):
+    """Byte-identical to `observation.canonical`: sort_keys, compact separators, allow_nan=False, ASCII."""
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+
+
+def _emitter_sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def expected_hits_for(site, kind, forwards=1):
+    """Mirror of `Capture.expected`: per-round sites fire CORE_ROUNDS times; Parts packets never reach the two Reach sites."""
+    if site not in SITE_SEMANTICS:
+        _refuse("SITE_UNKNOWN", repr(site))
+    if kind not in OBSERVATION_KINDS:
+        _refuse("OBSERVATION_KIND", repr(kind))
+    if type(forwards) is not int or forwards < 0:
+        _refuse("EXPECTED_FORWARD_CALLS", repr(forwards))
+    if kind == "parts" and site in ("head.reach", "head.node_pointer"):
+        return 0
+    return forwards * (CORE_ROUNDS if site.startswith("graph.round_") else 1)
+
+
+def verify_observation(receipt, *, retained_receipt_sha256=None):
+    """Recompute the emitter's receipt digest; an externally retained digest, when supplied, must match too.
+
+    A digest the receipt carries proves only that the bytes were not corrupted in transport (DeepSeek F4): an
+    editor can recompute it. Claims above transport integrity need `retained_receipt_sha256` from outside the
+    artifact (the host ledger written by `retain_observation`).
+    """
+    if type(receipt) is not dict or receipt.get("schema") != OBSERVATION_SCHEMA:
+        _refuse("OBSERVATION_SCHEMA", repr(receipt.get("schema") if type(receipt) is dict else type(receipt)))
+    body = {k: v for k, v in receipt.items() if k != "receipt_sha256"}
+    if receipt.get("receipt_sha256") != _emitter_sha(_emitter_canonical(body)):
+        _refuse("OBSERVATION_TAMPERED", "receipt_sha256 does not match the body")
+    if retained_receipt_sha256 is not None and retained_receipt_sha256 != receipt["receipt_sha256"]:
+        _refuse("OBSERVATION_ANCHOR_MISMATCH", "externally retained digest differs")
+    if body.get("mode") not in OBSERVATION_MODES or body.get("kind") not in OBSERVATION_KINDS:
+        _refuse("OBSERVATION_MODE_OR_KIND", "%r / %r" % (body.get("mode"), body.get("kind")))
+    if body.get("source_sha256") != LEARNER_SHA256:
+        _refuse("OBSERVATION_SOURCE", repr(body.get("source_sha256")))
+    if set(body.get("coverage", {})) != set(SITES):
+        _refuse("OBSERVATION_COVERAGE_SITES", "coverage must name all 14 contract sites")
+    if body.get("authority") != "NO_PROMOTION_NO_EXECUTION" or body.get("harvest_enabled") is not False:
+        _refuse("OBSERVATION_AUTHORITY")
+    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED" if retained_receipt_sha256 is not None else "SELF_CONSISTENT_ONLY"
+    return body
+
+
+def captures_from_observation(receipt, site, *, retained_receipt_sha256=None):
+    """The emitter's events for one tensor site, as validated `RawCapture`s, with that site's coverage."""
+    body = verify_observation(receipt, retained_receipt_sha256=retained_receipt_sha256)
+    if body["mode"] == "OFF":
+        _refuse("OBSERVATION_DISABLED", "capture was OFF; there are no observations")
+    if site not in TENSOR_SITES:
+        _refuse("SITE_NOT_TENSOR", repr(site))
+    row = body["coverage"][site]
+    prefixes = tuple(s + ":" for s in SITES)
+    site_errors = [e for e in body.get("errors", ()) if e.startswith(site + ":") or not e.startswith(prefixes)]
+    if not body.get("complete", False):
+        site_errors.append("RECEIPT_INCOMPLETE")
+    cov = coverage(int(row["expected_calls"]), int(row["observed_calls"]), int(row["stored_calls"]), site_errors)
+    captures = []
+    for event in body.get("events", ()):
+        if event.get("site") != site:
+            continue
+        if "signed_values" not in event:
+            _refuse("SITE_NOT_TENSOR", "%s event carries no tensor" % site)
+        if event.get("basis") != BASIS or event.get("cas_label") != EMITTER_CAS_LABEL:
+            _refuse("CAPTURE_EMITTER_FIELDS", "basis/cas_label must be %s/%s" % (BASIS, EMITTER_CAS_LABEL))
+        if event.get("preview_is_causal_dataset") is not False:
+            _refuse("CAPTURE_EMITTER_FIELDS", "a top-K preview is not a causal dataset")
+        captures.append(raw_capture(
+            checkpoint_sha256=event["checkpoint_sha256"], input_sha256=event["input_sha256"],
+            source_sha256=event["source_sha256"], site=site, call_index=int(event["call_index"]),
+            round_index=event["round_index"], shape=tuple(int(v) for v in event["shape"]),
+            dtype=str(event["dtype"]).replace("torch.", ""), device=str(event["device"]),
+            coordinate_meaning=event["coordinate_meaning"], signed_values=event["signed_values"]))
+    captures.sort(key=lambda c: c.call_index)
+    if len(captures) != cov.stored_calls:
+        _refuse("COVERAGE_OVERCOUNT", "%d events for %d stored calls" % (len(captures), cov.stored_calls))
+    return tuple(captures), cov
+
+
+def detect_from_observation(receipt, *, site, row, k, split, family, retained_receipt_sha256=None):
+    """Name a configuration from a COMPLETE emitter receipt only; an incomplete receipt names nothing."""
+    captures, cov = captures_from_observation(receipt, site, retained_receipt_sha256=retained_receipt_sha256)
+    require_complete(cov, "detect_from_observation(%s)" % site)
+    return detect_top_k(captures, row=row, k=k, split=split, family=family)
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -594,7 +719,10 @@ def configuration_to_json(record):
     return canonical(body) + "\n"
 
 
-def configuration_from_json(text):
+def configuration_from_json(text, *, retained_record_sha256=None):
+    """Self-carried digest = transport integrity only; pass the externally retained sha256 of the text for more."""
+    if retained_record_sha256 is not None and hashlib.sha256(text.encode()).hexdigest() != retained_record_sha256:
+        _refuse("CONFIGURATION_ANCHOR_MISMATCH", "externally retained digest differs")
     body = json.loads(text)
     expected = body.pop("record_digest", None)
     if expected != digest(body):

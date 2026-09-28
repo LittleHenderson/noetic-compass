@@ -9,7 +9,7 @@ Package received at `62bb7f714810db5047eb07ef616c6ddfe470fca9`; receipt ACK: PR 
 |---|---|
 | Vendored Harness source read and hash-checked (`543666e5…`) | real (computed here) |
 | Learner anchors at `c45f775f` (`_rounds` observe 1197-1198, `core_block` call 1199, `pointer_key` 1313, `node_head` 1347, `_node_options` 1417, `_reach_options` 1512, `world_head` 1566) | real (read from the exact retained copy, sha256 `0f424d86…`) |
-| Bridge modules and 33 test cases | written |
+| Bridge modules and 38 test cases | written |
 | Any test executed | NOT_RUN (packet forbids local pytest/torch; torch absent here) |
 | Any HELM capture, checkpoint, witness, intervention on HELM | not done |
 | Acceptance rows HH01-HH21 | obligations, none passed |
@@ -54,8 +54,8 @@ pilot; `CLAIM_LEVEL_OUTSIDE_PILOT`).
 
 | File | Cases | Needs |
 |---|---:|---|
-| `test_diagnostic_configuration.py` | 18 | Python only |
-| `test_diagnostic_intervention.py` | 15 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
+| `test_diagnostic_configuration.py` | 22 | Python only (imports Codex's `observation` module) |
+| `test_diagnostic_intervention.py` | 16 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
 
 Exact acceptance command (inside an admitted job; the namespace `conftest.py` refuses otherwise):
 
@@ -63,7 +63,7 @@ Exact acceptance command (inside an admitted job; the namespace `conftest.py` re
 HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/hh-rde-01-claude-junit.xml -rA research/helm_self_improvement/test_diagnostic_configuration.py research/helm_self_improvement/test_diagnostic_intervention.py
 ```
 
-Expected `33 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
+Expected `38 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
 
 ## Witness protocol
 
@@ -79,3 +79,29 @@ admission.
 Codex's `observation.py` emitter producing contract-shaped raw captures (identity + tensor + coverage fields) from the
 learner's `observe` callback and the head calls, plus the admitted checkpoint identity. With those, the first witness
 can run in one admitted job on the existing runner. Claude launches nothing.
+
+## Binding to Codex's real emitter (second packet, same allocation)
+
+Received by Git object: Codex `fd4215728209ef90948323d1268f2db664bc88ed` (`observation.py`, `observation_sites.py`,
+`test_observation.py`, `diagnostic_worker.py`, `cas_hh_rde_01/IMPLEMENTED_SOURCE_MAP.md`, `aws_runner.py`,
+`aws_worker.py`, `diagnostic_admission.py`, vendored evidence/definition-lock files) and DeepSeek's relay at
+`8e0ec2592` (`DELIVERY.json` sha256 `d9f26d5b…`; five deliverables verified 5/5 against declared bytes and sha256;
+the four earlier files are the same blobs at `fd421572` and `8e0ec259`).
+
+| Binding | Function | Real / written |
+|---|---|---|
+| Emitter meanings, modes, expected-call rule, canonical form equal the module's | `EMITTER_MEANINGS`, `OBSERVATION_MODES`, `expected_hits_for`, `_emitter_canonical` | real (import-checked here against `observation.py`; also a written test) |
+| Receipt digest recomputed; external anchor optional | `verify_observation(receipt, retained_receipt_sha256=)` | written |
+| One site's events to validated captures + coverage | `captures_from_observation` | written |
+| Configuration only from a COMPLETE receipt | `detect_from_observation` | written |
+| Parts packet expects 0 `head.reach` hits in `apply` | `apply(..., expected_hits=expected_hits_for(site, kind))` | written |
+| External anchors on every verifier; atlas view refuses without one | `verify_receipt`, `verify_evidence`, `rpa_projection`, `configuration_from_json` | written |
+
+Interplay recorded in `apply`'s docstring: the emitter's `graph.round_input` emit fires before `core_block`, so a
+passive capture there records the unmodified input; the intervention receipt is the record of the change and the
+`graph.round_update` capture shows its effect. The emitter binds `learner._graph` for one forward and disables
+`stage_batch`; the hooks touch neither.
+
+DeepSeek findings as they touch this lease: D-RDE-02 (no silent eraser) and D-RDE-03 (no transferred probe) are
+consistent with `suppression_factor` scoping and `probe_validity`; F4 (self-carried digest is not tamper evidence)
+adopted as above; D-RDE-04 (files missing) is now falsified by `d0d2e14f` and `fd421572` on the branches.

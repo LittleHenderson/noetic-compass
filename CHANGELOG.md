@@ -4,7 +4,7 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (33 cases written, NOT RUN)
+## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (38 cases written, NOT RUN)
 
 - Package `62bb7f71` (`research/helm_self_improvement/cas_hh_rde_01/`) received by exact Git object; receipt ACK posted on PR
   #245 (comment 5876863361). Lease: `diagnostic_configuration.py`, `diagnostic_intervention.py` and their two test files
@@ -27,14 +27,25 @@ Monorepo-level log. Subprojects keep their own changelogs
   fault labeled INJECTED, 24 packet forwards, zero optimizer updates), plus `evidence_record` / `rpa_projection`
   (digest-sealed branch bound to input, checkpoint, action and outcome; harvest ingestion `DISABLED_NOT_ADMITTED`;
   the atlas view is read-only with no execution or mutation authority).
-- Tests: 18 pure-Python cases and 15 torch cases on a labeled fixture container (`FIXTURE_NOT_HELM`, CUDA required by
+- Tests: 22 pure-Python cases and 16 torch cases on a labeled fixture container (`FIXTURE_NOT_HELM`, CUDA required by
   default). Written, NOT RUN: the packet forbids local pytest and torch execution, and torch is not installed here.
   Compile and import checks only. Spec sheet status `ENGINEERED-NOT-VALIDATED`. Exact package blobs from `62bb7f71`
   (`__init__.py`, `harness_capture_vendor/`, `cas_hh_rde_01/`) are copied unchanged into this branch so the imports
   resolve; they are not edits.
+- Bound to Codex's actual emitter (`observation.py` at `fd421572`, received by Git object): `EMITTER_MEANINGS` is a
+  verbatim pinned copy of the emitter's `MEANINGS` (checked against the module by test); `verify_observation` recomputes
+  the emitter's `receipt_sha256` with a byte-identical canonical form; `captures_from_observation` turns one site's
+  events into validated captures with that site's coverage (an incomplete receipt yields captures but
+  `detect_from_observation` names nothing); `expected_hits_for` mirrors `Capture.expected` (a Parts packet expects 0
+  `head.reach` hits) and feeds `apply(expected_hits=...)`. DeepSeek's F4 point adopted: every verifier takes an
+  externally retained digest, the self-carried digest counts as transport integrity only, and `rpa_projection`
+  refuses without an external anchor. Codex's namespace blobs at `fd421572` are copied unchanged so imports resolve.
+  DeepSeek's five reviewer deliverables at `8e0ec259` verified against `DELIVERY.json` (bytes and sha256, 5/5).
+  Cases now 22 pure-Python + 16 torch = 38, still NOT RUN. The passive parity job Codex reported
+  (`helm-hh-rde-parity-20260928-a1`, source `fd421572`) is Codex's; nothing launched here.
 - Not done: no HELM capture, no checkpoint opened, no witness executed, no AWS, no paid call, no learner edit. Smallest
-  remaining dependency: Codex's `observation.py` emitter producing contract-shaped raw captures, plus the admitted
-  checkpoint identity for the witness.
+  remaining dependency: the completed passive parity result (Codex's job) and a frozen protocol review, after which an
+  intervention witness needs its own admitted job.
 
 ## 2026-09-28 - Growth 15-case package ran on a real CUDA job at c70e1a04: 14 passed, 1 failed; revision 0.3 fixes the optimizer reload device defect (NOT RUN)
 

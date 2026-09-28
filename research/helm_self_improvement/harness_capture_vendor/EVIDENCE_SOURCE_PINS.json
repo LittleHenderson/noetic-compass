@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "source_commit": "e8537e6ce9e93242fb11dec36c03dbcafa86042c",
+      "source_path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_merged_evidence_packets.py",
+      "destination": "cas_harness_merged_evidence_packets.py",
+      "sha256": "5c66026cff30adb133ce23e94c968cb86104608a5fef9d304253b706615079e3",
+      "bytes": 27399,
+      "git_blob": "cbe37a00acca42c4a4f95b86a3a2f32942aab248"
+    },
+    {
+      "source_commit": "e8537e6ce9e93242fb11dec36c03dbcafa86042c",
+      "source_path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_tks_definition_lock.py",
+      "destination": "cas_harness_tks_definition_lock.py",
+      "sha256": "08569c8e9e59f1ed2fe0c4b9a48fa8adb94398cca9dcb5ba3f32c7b11ea16f94",
+      "bytes": 4707,
+      "git_blob": "398c85cb3599640aef40c91fb170e21cf68853ee"
+    },
+    {
+      "source_commit": "e8537e6ce9e93242fb11dec36c03dbcafa86042c",
+      "source_path": "noetic-compass-scaffold/noetic-compass/api/resources/tks_owner_locked_definitions_20260603.json",
+      "destination": "tks_owner_locked_definitions_20260603.json",
+      "sha256": "5c358c9a114a478092e70c0289bfd171d8613cccf99e8069e26e194a2e294628",
+      "bytes": 24943,
+      "git_blob": "9d8f6c0a9815d168ab73bb077f24b34f1f294410"
+    },
+    {
+      "source_commit": "e8537e6ce9e93242fb11dec36c03dbcafa86042c",
+      "source_path": "noetic-compass-scaffold/noetic-compass/api/resources/tks_definition_probe_bundle_manifest.v1.json",
+      "destination": "tks_definition_probe_bundle_manifest.v1.json",
+      "sha256": "da185210762e5f846b8699f4b8b87ef1749382ba979526cde1c9a9204e054423",
+      "bytes": 830,
+      "git_blob": "37274874d4c8abf27e42381773e66f3244b40279"
+    }
+  ]
+}

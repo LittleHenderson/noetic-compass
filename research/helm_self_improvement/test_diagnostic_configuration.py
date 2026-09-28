@@ -192,6 +192,9 @@ def test_hh16_configuration_json_round_trips_and_detects_tampering():
                                                      split="DISCOVERY", family="F"))
     text = dc.configuration_to_json(record)
     assert dc.configuration_from_json(text) == record
+    import hashlib as _hashlib
+    assert dc.configuration_from_json(text, retained_record_sha256=_hashlib.sha256(text.encode()).hexdigest()) == record
+    _refused("CONFIGURATION_ANCHOR_MISMATCH", dc.configuration_from_json, text, retained_record_sha256="0" * 64)
     body = json.loads(text)
     body["signed_values"][0] = body["signed_values"][0] + 1.0
     _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, json.dumps(body))
@@ -277,16 +280,26 @@ def test_hh17_evidence_record_binds_branch_to_input_checkpoint_action_outcome_an
                                   changed_prediction_id="typed-prediction-" + "2" * 64, checked_outcome=outcome)
     assert evidence["harvest_ingestion"] == "DISABLED_NOT_ADMITTED" and evidence["native_decision"] is False
     assert evidence["promotion"] == "NOT_POSSIBLE_FROM_THIS_RECORD" and evidence["selected_by"] == di.ACTOR
-    view = di.rpa_projection(evidence)
-    assert view["executable"] is False and view["mutation_authority"] is None
+    with pytest.raises(di.InterventionRefused) as info:
+        di.rpa_projection(evidence, retained_evidence_sha256=None)
+    assert info.value.code == "EXTERNAL_ANCHOR_REQUIRED"
+    view = di.rpa_projection(evidence, retained_evidence_sha256=evidence["evidence_digest"])
+    assert view["executable"] is False and view["mutation_authority"] is None and view["anchor"] == "EXTERNAL_ANCHOR_VERIFIED"
     assert view["parent_checkpoint_sha256"] == CKPT and view["input_sha256"] == INPUT_A and view["action"] == "SUPPRESS"
     assert view["outcome"]["checked_outcome"] == outcome and view["lineage"]["evidence_digest"] == evidence["evidence_digest"]
     assert view["branch_id"].startswith("helm-branch-")
     tampered = dict(evidence)
     tampered["applied"] = False
     with pytest.raises(di.InterventionRefused) as info:
-        di.rpa_projection(tampered)
+        di.rpa_projection(tampered, retained_evidence_sha256=evidence["evidence_digest"])
     assert info.value.code == "EVIDENCE_TAMPERED"
+    # DeepSeek F4: an editor who recomputes the carried digest passes the self-check; only the outside anchor catches it
+    recomputed = {k: v for k, v in tampered.items() if k != "evidence_digest"}
+    recomputed["evidence_digest"] = dc.digest(recomputed)
+    assert di.verify_evidence(recomputed)["anchor"] == "SELF_CONSISTENT_ONLY"
+    with pytest.raises(di.InterventionRefused) as info:
+        di.rpa_projection(recomputed, retained_evidence_sha256=evidence["evidence_digest"])
+    assert info.value.code == "EVIDENCE_ANCHOR_MISMATCH"
     with pytest.raises(di.InterventionRefused) as info:
         di.evidence_record(declaration=declaration, receipt=receipt, configuration_id="helm-configuration-" + "c" * 64,
                            split="CONFIRMATION", baseline_prediction_id="typed-prediction-" + "1" * 64,
@@ -316,4 +329,132 @@ def test_hh17_unfinalized_receipt_and_not_applied_branches_are_recorded_honestly
                                   split="DISCOVERY", baseline_prediction_id="p", changed_prediction_id=None,
                                   checked_outcome={"metric": "NONE"})
     assert evidence["receipt_status"] == "NO_OP_FAILED" and evidence["applied"] is False
-    assert di.rpa_projection(evidence)["outcome"]["receipt_status"] == "NO_OP_FAILED"
+    view = di.rpa_projection(evidence, retained_evidence_sha256=evidence["evidence_digest"])
+    assert view["outcome"]["receipt_status"] == "NO_OP_FAILED"
+
+
+# ---------------------------------------------------------------------------------------------------------
+# Binding to Codex's actual emitter (`observation.py` at fd421572)
+# ---------------------------------------------------------------------------------------------------------
+
+class _StubTensor:
+    """Duck-typed stand-in for the emitter's tensor protocol (detach/shape/numel/reshape/cpu/tolist); no torch."""
+
+    def __init__(self, shape, values):
+        self.shape, self._values = list(shape), list(values)
+        self.dtype, self.device = "torch.float32", "cuda:0"
+
+    def numel(self):
+        return len(self._values)
+
+    def detach(self):
+        return self
+
+    def reshape(self, *_):
+        return self
+
+    def cpu(self):
+        return self
+
+    def tolist(self):
+        return list(self._values)
+
+
+def _emitted_receipt(*, kind="parts", skip_site=None, nodes=3, width=64):
+    from . import observation
+    cap = observation.Capture(checkpoint_sha256=CKPT, input_sha256=INPUT_A, kind=kind, rounds=dc.CORE_ROUNDS, mode="OBSERVE_ONLY")
+
+    def emit(site, value, round_index=None):
+        if site != skip_site:
+            cap.emit(site, value, round_index)
+
+    def block(seed):
+        return _StubTensor((nodes, width), [((seed * 7 + i) % 11 - 5) * 0.25 for i in range(nodes * width)])
+    emit("input.mapping", {"record_id": "r", "query": {"kind_name": kind}})
+    emit("graph.initial_state", block(1))
+    for r in range(dc.CORE_ROUNDS):
+        emit("graph.round_input", block(10 + r), r)
+        emit("graph.round_update", block(20 + r), r)
+        emit("graph.round_state", block(30 + r), r)
+    emit("graph.node_state", block(2))
+    emit("graph.query_state", _StubTensor((width,), [0.5] * width))
+    emit("graph.pointer_query", _StubTensor((width,), [-0.5] * width))
+    emit("head.node", _StubTensor((nodes, 2), [1.0, -1.0] * nodes))
+    if kind == "reach":
+        emit("head.reach", _StubTensor((2,), [0.3, -0.3]))
+        emit("head.node_pointer", _StubTensor((nodes,), [0.1, 0.2, 0.3]))
+    emit("answer.scores", {"s": [0.0, 1.0]})
+    emit("answer.decisions", {"s": "A"})
+    emit("answer.assembly", {"answer": "A"})
+    cap.closed = cap.cleanup_complete = True
+    return cap.receipt()
+
+
+def test_hh01_emitter_constants_are_the_codex_observation_module_values():
+    from . import observation
+    assert observation.MEANINGS == dc.EMITTER_MEANINGS
+    assert observation.MODES == dc.OBSERVATION_MODES
+    for kind in dc.OBSERVATION_KINDS:
+        cap = observation.Capture(checkpoint_sha256=CKPT, input_sha256=INPUT_A, kind=kind, rounds=dc.CORE_ROUNDS)
+        assert {s: cap.expected[s] for s in dc.SITES} == {s: dc.expected_hits_for(s, kind) for s in dc.SITES}
+    sample = {"z": [1.5, -2, None], "a": {"b": "c"}}
+    assert dc._emitter_canonical(sample) == observation.canonical(sample)
+    assert observation.LEARNER_SHA256 == dc.LEARNER_SHA256 and observation.SCIENTIFIC_SOURCE == dc.SCIENTIFIC_SOURCE
+    _refused("OBSERVATION_KIND", dc.expected_hits_for, "head.reach", "world")
+
+
+def test_hh04_complete_emitter_receipt_binds_to_captures_and_detection_matches_direct_top_k():
+    receipt = _emitted_receipt(kind="parts")
+    assert receipt["complete"] is True and receipt["status"] == "CAPTURED"
+    captures, cov = dc.captures_from_observation(receipt, "graph.round_input")
+    assert cov.complete and cov.expected_calls == cov.observed_calls == cov.stored_calls == dc.CORE_ROUNDS
+    assert [c.round_index for c in captures] == list(range(dc.CORE_ROUNDS))
+    assert captures[0].dtype == "float32" and captures[0].shape == (3, 64) and captures[0].basis == "NODE_ROW_BLOCK_INPUT"
+    assert captures[0].coordinate_meaning == dc.EMITTER_MEANINGS["graph.round_input"]
+    record = dc.detect_from_observation(receipt, site="graph.round_input", row=1, k=4, split="DISCOVERY", family="F-emitted")
+    assert record == dc.detect_top_k(captures, row=1, k=4, split="DISCOVERY", family="F-emitted")
+    assert record.kind == "PROJECTED_COORDINATE_SET" and record.checkpoint_sha256 == CKPT
+    heads, head_cov = dc.captures_from_observation(receipt, "head.node")
+    assert head_cov.complete and heads[0].shape == (3, 2) and heads[0].round_index is None
+    reach, reach_cov = dc.captures_from_observation(receipt, "head.reach")
+    assert reach == () and reach_cov.expected_calls == 0 and reach_cov.complete
+    _refused("SITE_NOT_TENSOR", dc.captures_from_observation, receipt, "answer.assembly")
+    verified = dc.verify_observation(receipt, retained_receipt_sha256=receipt["receipt_sha256"])
+    assert verified["anchor"] == "EXTERNAL_ANCHOR_VERIFIED"
+    assert dc.verify_observation(receipt)["anchor"] == "SELF_CONSISTENT_ONLY"
+
+
+def test_hh04_incomplete_emitter_receipt_yields_captures_but_names_no_configuration():
+    receipt = _emitted_receipt(kind="parts", skip_site="graph.round_state")
+    assert receipt["complete"] is False and receipt["status"] == "INCOMPLETE"
+    captures, cov = dc.captures_from_observation(receipt, "graph.round_input")
+    assert len(captures) == dc.CORE_ROUNDS and not cov.complete and "RECEIPT_INCOMPLETE" in cov.errors
+    _refused("COVERAGE_INCOMPLETE", dc.detect_from_observation, receipt, site="graph.round_input", row=0, k=2,
+             split="DISCOVERY", family="F")
+    missing, missing_cov = dc.captures_from_observation(receipt, "graph.round_state")
+    assert missing == () and missing_cov.observed_calls == 0 and missing_cov.expected_calls == dc.CORE_ROUNDS
+    off = _emitted_receipt(kind="reach")
+    reach, reach_cov = dc.captures_from_observation(off, "head.reach")
+    assert reach_cov.complete and reach[0].shape == (2,) and reach[0].signed_values == (0.3, -0.3)
+
+
+def test_hh16_emitter_receipt_tamper_and_anchor_mismatch_are_refused():
+    receipt = _emitted_receipt(kind="parts")
+    tampered = dict(receipt)
+    tampered["complete"] = True
+    tampered["errors"] = []
+    tampered["events"] = list(receipt["events"])
+    tampered["events"][3] = dict(tampered["events"][3], signed_values=[0.0] * (3 * 64))
+    _refused("OBSERVATION_TAMPERED", dc.captures_from_observation, tampered, "graph.round_input")
+    _refused("OBSERVATION_ANCHOR_MISMATCH", dc.captures_from_observation, receipt, "graph.round_input",
+             retained_receipt_sha256="0" * 64)
+    from . import observation
+    cap = observation.Capture(checkpoint_sha256=CKPT, input_sha256=INPUT_A, kind="parts", rounds=dc.CORE_ROUNDS, mode="OFF")
+    cap.closed = cap.cleanup_complete = True
+    _refused("OBSERVATION_DISABLED", dc.captures_from_observation, cap.receipt(), "graph.round_input")
+    relabeled = dict(receipt)
+    relabeled["events"] = [dict(e, coordinate_meaning="hidden MLP neuron index") if e["site"] == "graph.round_input" else e
+                           for e in receipt["events"]]
+    body = {k: v for k, v in relabeled.items() if k != "receipt_sha256"}
+    relabeled["receipt_sha256"] = dc._emitter_sha(dc._emitter_canonical(body))
+    _refused("COORDINATE_MEANING_MISMATCH", dc.captures_from_observation, relabeled, "graph.round_input")

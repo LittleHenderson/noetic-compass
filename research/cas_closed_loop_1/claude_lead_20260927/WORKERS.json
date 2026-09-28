@@ -299,11 +299,11 @@
    ],
    "started_utc": "2026-09-28T19:17:06Z",
    "allocation": "90 active minutes shared per lead; checkpoints at 30 and 60",
-   "checkpoint_30_min": "both modules written; tests in progress",
+   "checkpoint_30_min": "both modules written; tests in progress; first return posted (comment 5877114683) at about 21 active minutes",
    "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
    "cases_written": {
-    "test_diagnostic_configuration.py": 18,
-    "test_diagnostic_intervention.py": 15
+    "test_diagnostic_configuration.py": 22,
+    "test_diagnostic_intervention.py": 16
    },
    "not_done": [
     "no local test run",
@@ -312,7 +312,13 @@
     "no learner, runner or authority edit",
     "no witness executed"
    ],
-   "status": "COMPLETED"
+   "status": "COMPLETED",
+   "binding_to_emitter": {
+    "codex_source": "fd4215728209ef90948323d1268f2db664bc88ed",
+    "deepseek_relay": "8e0ec2592",
+    "deepseek_deliverables_verified": "5/5 bytes and sha256 against DELIVERY.json",
+    "copied_unchanged_from_fd421572": "research/helm_self_improvement/ (Codex's files; the four leased files untouched)"
+   }
   }
  ],
  "not_done_by_any_worker": [
