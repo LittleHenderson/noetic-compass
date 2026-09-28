@@ -278,6 +278,41 @@
     "no learner or checkpoint edit"
    ],
    "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-HH-RDE-01-A-20260928",
+   "label": "CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "one child permitted by the package; none needed for four leased files; allocation not subdivided",
+   "scope": "Codex comment 5876786278 + owner directive CAS-HH-RDE-01: implement configuration/readout and bounded within-checkpoint intervention bridge in the four leased files per 03_CLAUDE_DIRECTIVE.md; reuse vendored Harness probe_runner.py; no learner/runner/authority edits; no local tests or model execution; no cloud launch",
+   "exclusive_files": [
+    "research/helm_self_improvement/diagnostic_configuration.py",
+    "research/helm_self_improvement/diagnostic_intervention.py",
+    "research/helm_self_improvement/test_diagnostic_configuration.py",
+    "research/helm_self_improvement/test_diagnostic_intervention.py"
+   ],
+   "copied_unchanged_from_62bb7f71": [
+    "research/helm_self_improvement/__init__.py",
+    "research/helm_self_improvement/harness_capture_vendor/",
+    "research/helm_self_improvement/cas_hh_rde_01/"
+   ],
+   "started_utc": "2026-09-28T19:17:06Z",
+   "allocation": "90 active minutes shared per lead; checkpoints at 30 and 60",
+   "checkpoint_30_min": "both modules written; tests in progress",
+   "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
+   "cases_written": {
+    "test_diagnostic_configuration.py": 16,
+    "test_diagnostic_intervention.py": 15
+   },
+   "not_done": [
+    "no local test run",
+    "no AWS or paid call",
+    "no HELM capture or checkpoint",
+    "no learner, runner or authority edit",
+    "no witness executed"
+   ],
+   "status": "COMPLETED"
   }
  ],
  "not_done_by_any_worker": [

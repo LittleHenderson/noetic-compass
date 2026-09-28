@@ -1,0 +1,252 @@
+"""Pure-Python cases for the configuration/readout bridge (no torch, no model). Written, NOT RUN locally.
+
+Acceptance rows exercised: HH01 (contract pin, reuse manifest), HH02 (probe compatibility vs validity),
+HH04 (coverage), HH05 (coordinate meaning, no hidden-unit relabeling), HH07 (Harness detector reused
+unchanged, readout calibration labeled), HH08 (no confirmation fitting, freeze), HH09 (canonical CAS names,
+no EXACT mapping), HH16 (record digest and tamper detection), HH20 (claim levels).
+"""
+import json
+
+import pytest
+
+from . import diagnostic_configuration as dc
+from .harness_capture_vendor import probe_runner as harness
+
+CKPT = "a" * 64
+SRC = dc.LEARNER_SHA256
+INPUT_A = "1" * 64
+INPUT_B = "2" * 64
+
+
+def _capture(site="graph.round_input", *, round_index=0, rows=3, width=8, values=None, input_sha256=INPUT_A,
+             call_index=0, meaning=None):
+    if values is None:
+        values = [((r * width + c) % 7 - 3) * 0.5 for r in range(rows) for c in range(width)]
+    return dc.raw_capture(checkpoint_sha256=CKPT, input_sha256=input_sha256, source_sha256=SRC, site=site,
+                          call_index=call_index, round_index=round_index, shape=(rows, width), dtype="float32",
+                          device="cuda:0",
+                          coordinate_meaning=dc.SITE_SEMANTICS[site]["coordinate_meaning"] if meaning is None else meaning,
+                          signed_values=values)
+
+
+def _refused(code, function, *args, **kwargs):
+    with pytest.raises(dc.ConfigurationRefused) as info:
+        function(*args, **kwargs)
+    assert info.value.code == code, (info.value.code, code)
+
+
+def test_hh01_contract_file_matches_module_constants_and_vendored_harness_hash():
+    contract = dc.load_contract()
+    pinned = dc.check_contract(contract)
+    assert pinned["sites"] == 14 and tuple(contract["sites"]) == dc.SITES
+    import hashlib
+    vendored = dc.CONTRACT_PATH.parent.parent / "harness_capture_vendor" / "probe_runner.py"
+    assert hashlib.sha256(vendored.read_bytes()).hexdigest() == dc.HARNESS_VENDOR_SHA256
+    drifted = dict(contract)
+    drifted["sites"] = list(contract["sites"])[:-1]
+    _refused("CONTRACT_SITES", dc.check_contract, drifted)
+
+
+def test_hh01_reuse_manifest_classifies_every_vendored_name_and_pins_both_parents():
+    manifest = dc.reuse_manifest()
+    for name in ("CaptureState", "_top_k_neurons", "_softmax_margin", "EraserIntervention", "capture_probes"):
+        assert hasattr(harness, name)
+        assert manifest["reuse"][name]["relationship"] in dc.REUSE_RELATIONSHIPS
+    assert manifest["reuse"]["_top_k_neurons"]["relationship"] == "EXACT_SHARED_IMPLEMENTATION"
+    assert manifest["reuse"]["_softmax_margin"]["relationship"] == "VERSIONED_ADAPTATION"
+    assert manifest["helm"]["learner_sha256"] == dc.LEARNER_SHA256
+    assert manifest["cas_parent"]["noetics"]["^6"] == "Male" and manifest["cas_parent"]["noetics"]["^9"] == "Below/Effect"
+    assert all(not row["hidden_unit"] for row in manifest["sites"].values())
+    assert manifest["authority"] == "OBSERVATION_ONLY_NO_PROMOTION" and manifest["capture_default"] == "OFF"
+
+
+def test_hh04_missing_hook_is_incomplete_coverage_and_overcount_is_refused():
+    assert dc.coverage(8, 8, 8).complete
+    missing = dc.coverage(8, 7, 7)
+    assert not missing.complete and missing.observed_calls == 7
+    assert not dc.coverage(8, 8, 8, errors=("hook raised",)).complete
+    assert not dc.coverage(8, 8, 7).complete
+    _refused("COVERAGE_OVERCOUNT", dc.coverage, 8, 9, 9)
+    _refused("COVERAGE_INCOMPLETE", dc.require_complete, missing, "readout")
+
+
+def test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_wrong_counts():
+    capture = _capture()
+    assert capture.basis == "NODE_ROW_BLOCK_INPUT" and capture.rows == 3 and capture.width == 8
+    _refused("COORDINATE_MEANING_MISMATCH", _capture, meaning="hidden MLP neuron index")
+    _refused("CAPTURE_NONFINITE", _capture, values=[float("nan")] * 24)
+    _refused("CAPTURE_VALUE_COUNT", _capture, values=[0.0] * 23)
+    _refused("CAPTURE_ROUND_INDEX", _capture, round_index=dc.CORE_ROUNDS)
+    _refused("CAPTURE_ROUND_INDEX", _capture, site="head.reach", round_index=0)
+    _refused("SITE_NOT_TENSOR", _capture, site="answer.assembly", round_index=None)
+    _refused("SITE_UNKNOWN", _capture, site="mlp.layer3")
+
+
+def test_hh07_top_k_detector_is_the_vendored_harness_function_with_relabeled_output():
+    captures = [_capture(round_index=r) for r in range(3)]
+    record = dc.detect_top_k(captures, row=1, k=4, split="DISCOVERY", family="F-fixture")
+    state = harness.CaptureState()
+    for capture in captures:
+        state.mlp_post[capture.round_index] = list(dc.row_values(capture, 1))
+    expected = harness._top_k_neurons(state, 4)
+    assert record.coordinates == tuple((e["layer"], e["index"]) for e in expected)
+    assert record.signed_values == tuple(e["activation"] for e in expected)
+    assert any(v < 0 for v in record.signed_values), "inhibition must survive abs-ranking"
+    assert record.kind == "PROJECTED_COORDINATE_SET" and record.hidden_unit is False
+    assert record.detector["harness_function"] == "_top_k_neurons"
+    assert record.claim_level == "OBSERVED_CONFIGURATION" and record.cas_definition["mapping_class"] == "UNKNOWN"
+    assert record.configuration_id.startswith("helm-configuration-")
+
+
+def test_hh05_actual_unit_kind_is_refused_for_every_contract_site():
+    capture = _capture()
+    for site in dc.TENSOR_SITES:
+        assert dc.SITE_SEMANTICS[site]["hidden_unit"] is False
+    _refused("CONFIGURATION_NOT_HIDDEN_UNIT", dc.build_configuration, captures=[capture], row=0,
+             coordinates=[(0, 1)], signed_values=[0.5], split="DISCOVERY", family="F",
+             detector={"name": "x", "version": "1", "harness_function": "_top_k_neurons",
+                       "relationship": "EXACT_SHARED_IMPLEMENTATION"}, kind="ACTUAL_UNIT_SET")
+
+
+def test_hh08_configuration_cannot_be_named_on_confirmation_and_unfrozen_cannot_be_used_there():
+    capture = _capture()
+    _refused("CONFIGURATION_FIT_ON_CONFIRMATION", dc.detect_top_k, [capture], row=0, k=2, split="CONFIRMATION",
+             family="F")
+    record = dc.detect_top_k([capture], row=0, k=2, split="DISCOVERY", family="F")
+    _refused("CONFIGURATION_NOT_FROZEN", dc.require_frozen, record, "CONFIRMATION")
+    frozen = dc.freeze_configuration(record)
+    assert dc.require_frozen(frozen, "CONFIRMATION") is frozen
+    _refused("CONFIGURATION_ALREADY_FROZEN", dc.freeze_configuration, frozen)
+    from dataclasses import replace
+    moved = replace(frozen, coordinates=((0, 7),) + frozen.coordinates[1:])
+    _refused("CONFIGURATION_NOT_FROZEN", dc.require_frozen, moved, "CONFIRMATION")
+
+
+def test_support_keeps_signed_coactivation_and_inhibition_per_coordinate():
+    base = _capture(round_index=0)
+    record = dc.detect_top_k([base], row=2, k=3, split="DISCOVERY", family="F")
+    flipped = _capture(round_index=0, input_sha256=INPUT_B, values=[-v for v in base.signed_values])
+    response = dc.support(record, [base, flipped])
+    assert response["support"] == 2 and response["inputs"] == (INPUT_A, INPUT_B)
+    for row in response["per_coordinate"]:
+        assert row["positive"] + row["negative"] + row["zero"] == 2
+        assert abs(row["mean_signed"]) < 1e-12 and row["stdev"] is not None
+    _refused("SUPPORT_ROUND_MISSING", dc.support, record, [_capture(round_index=1, input_sha256=INPUT_B)])
+
+
+def test_hh09_cas_mapping_uses_canonical_names_only_and_is_never_exact():
+    mapping = dc.cas_mapping("^3", "E", "f", "PROPOSED")
+    assert mapping["name"] == "Negative" and mapping["domain"] == "E" and mapping["register"] == "f"
+    assert dc.cas_mapping() == {"noetic": None, "name": None, "domain": None, "register": None, "mapping_class": "UNKNOWN"}
+    _refused("CAS_MAPPING_EXACT_UNSUPPORTED", dc.cas_mapping, "^3", mapping_class="EXACT")
+    _refused("CAS_NOETIC_NONCANONICAL", dc.cas_mapping, "Aversion", mapping_class="PROPOSED")
+    _refused("CAS_NOETIC_NONCANONICAL", dc.cas_mapping, "^10", mapping_class="PROPOSED")
+    _refused("CAS_DOMAIN", dc.cas_mapping, "^3", "X", None, "PROPOSED")
+    _refused("CAS_MAPPING_CLASS", dc.cas_mapping, "^3", mapping_class="UNKNOWN")
+    _refused("CAS_MAPPING_UNLABELED", dc.cas_mapping, None, "P", None, "UNKNOWN")
+    capture = _capture()
+    _refused("CAS_MAPPING_PREMATURE", dc.build_configuration, captures=[capture], row=0, coordinates=[(0, 0)],
+             signed_values=[1.0], split="DISCOVERY", family="F", kind="PROJECTED_COORDINATE_SET",
+             detector={"name": "x", "version": "1", "harness_function": "_top_k_neurons",
+                       "relationship": "EXACT_SHARED_IMPLEMENTATION"},
+             cas_definition=dc.cas_mapping("^3", mapping_class="ADAPTED"))
+
+
+def test_hh20_claim_levels_are_monotone_evidenced_and_capped_at_the_pilot_ceiling():
+    record = dc.freeze_configuration(dc.detect_top_k([_capture()], row=0, k=2, split="DISCOVERY", family="F"))
+    evidence = {"controls": ["shuffled_labels", "input_only"], "artifact": "x.json", "artifact_sha256": "b" * 64}
+    selective = dc.assign_claim(record, "STIMULUS_SELECTIVE", evidence)
+    assert selective.claim_level == "STIMULUS_SELECTIVE" and len(selective.evidence) == 1
+    _refused("CLAIM_EVIDENCE", dc.assign_claim, record, "STIMULUS_SELECTIVE", {"controls": [], "artifact": "x"})
+    _refused("CLAIM_LEVEL_DOWNGRADE", dc.assign_claim, selective, "OBSERVED_CONFIGURATION", evidence)
+    _refused("CLAIM_LEVEL_OUTSIDE_PILOT", dc.assign_claim, selective, "TARGETED_REPAIR_GAIN_SUPPORTED", evidence)
+    _refused("CLAIM_EVIDENCE", dc.assign_claim, selective, "TASK_CAUSAL_CONTRIBUTION_SUPPORTED", evidence)
+    causal = dc.assign_claim(selective, "TASK_CAUSAL_CONTRIBUTION_SUPPORTED",
+                             dict(evidence, intervention_receipt_sha256="c" * 64,
+                                  matched_control_receipt_sha256="d" * 64, task_metric="PARTS_REACH_SCORES"))
+    assert causal.claim_level == "TASK_CAUSAL_CONTRIBUTION_SUPPORTED"
+    _refused("CLAIM_EVIDENCE", dc.assign_claim, selective, "TASK_CAUSAL_CONTRIBUTION_SUPPORTED",
+             dict(evidence, intervention_receipt_sha256="c" * 64, matched_control_receipt_sha256="d" * 64,
+                  task_metric="PROBE_ACCURACY"))
+    unfrozen = dc.detect_top_k([_capture()], row=0, k=2, split="DISCOVERY", family="F")
+    _refused("CONFIGURATION_NOT_FROZEN", dc.assign_claim, unfrozen, "STIMULUS_SELECTIVE", evidence)
+
+
+def test_hh09_proposed_label_becomes_adapted_only_through_readout_evidence():
+    capture = _capture()
+    record = dc.build_configuration(captures=[capture], row=0, coordinates=[(0, 0), (0, 1)], signed_values=[1.0, -1.0],
+                                    split="DISCOVERY", family="F", kind="PROJECTED_COORDINATE_SET",
+                                    detector={"name": "x", "version": "1", "harness_function": "_top_k_neurons",
+                                              "relationship": "EXACT_SHARED_IMPLEMENTATION"},
+                                    cas_definition=dc.cas_mapping("^4", "C", None, "PROPOSED"))
+    frozen = dc.freeze_configuration(record)
+    evidence = {"controls": ["shuffled_labels", "capacity_matched_generic"], "artifact": "r.json",
+                "artifact_sha256": "e" * 64}
+    supported = dc.assign_claim(dc.assign_claim(frozen, "STIMULUS_SELECTIVE", evidence), "CAS_READOUT_SUPPORTED", evidence)
+    assert supported.cas_definition["mapping_class"] == "ADAPTED" and supported.cas_definition["name"] == "Vibration"
+    assert frozen.cas_definition["mapping_class"] == "PROPOSED"
+
+
+def test_hh16_configuration_json_round_trips_and_detects_tampering():
+    record = dc.freeze_configuration(dc.detect_top_k([_capture(round_index=r) for r in range(2)], row=1, k=3,
+                                                     split="DISCOVERY", family="F"))
+    text = dc.configuration_to_json(record)
+    assert dc.configuration_from_json(text) == record
+    body = json.loads(text)
+    body["signed_values"][0] = body["signed_values"][0] + 1.0
+    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, json.dumps(body))
+    body = json.loads(text)
+    body["coordinates"][0] = [0, 0]
+    body["record_digest"] = dc.digest({k: v for k, v in body.items() if k != "record_digest"})
+    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, json.dumps(body))
+
+
+def test_hh02_pythia_probe_is_mechanically_compatible_but_never_valid_without_helm_calibration():
+    probe = dc.ProbeIdentity("blindspot_covers", "e8537e6c", "PYTHIA_160M", 8, "PYTHIA_DISCOVERY", "f" * 64)
+    mechanical = dc.probe_compatibility(probe, "graph.round_input", 8)
+    assert mechanical["mechanical"] is True and mechanical["valid_on_helm"] is False
+    _refused("PROBE_WIDTH_MISMATCH", dc.probe_compatibility, probe, "graph.round_input", 64)
+    _refused("PROBE_VALIDITY_UNESTABLISHED", dc.probe_validity, probe, None)
+    _refused("PROBE_SUBSTRATE_TRANSFER_UNVALIDATED", dc.probe_validity, probe,
+             {"substrate": "PYTHIA_160M", "source_sha256": SRC, "split": "DISCOVERY"})
+    _refused("PROBE_FIT_SPLIT", dc.probe_validity, probe,
+             {"substrate": "HELM", "source_sha256": SRC, "split": "CONFIRMATION"})
+    valid = dc.probe_validity(probe, {"substrate": "HELM", "source_sha256": SRC, "split": "DISCOVERY",
+                                      "checkpoint_sha256": CKPT, "cases": 12, "coefficients_sha256": "f" * 64,
+                                      "controls": ["shuffled_labels"]})
+    assert valid["valid_on_helm"] is True and valid["cases"] == 12
+
+
+def test_hh07_readout_margin_reuses_harness_formula_and_labels_pythia_calibration():
+    readout = dc.readout_margin([2.0, -1.0], "head.reach")
+    assert readout["raw_margin"] == 3.0 and readout["normalised"] == harness._softmax_margin([2.0, -1.0])
+    assert readout["calibration"] == "PYTHIA_160M_EMPIRICAL_NOT_HELM_CALIBRATED"
+    assert readout["claim"] == "READOUT_LEVEL_ONLY_NOT_TASK_CAUSAL"
+    _refused("READOUT_SITE", dc.readout_margin, [1.0, 2.0], "graph.round_input")
+    _refused("READOUT_OPTIONS", dc.readout_margin, [1.0], "head.reach")
+    _refused("READOUT_NONFINITE", dc.readout_margin, [1.0, float("inf")], "head.node_pointer")
+
+
+def test_site_table_names_parts_and_reach_paths_without_world_head():
+    assert dc.SITE_SEMANTICS["head.node"]["answer_path"] == "PARTS"
+    assert dc.SITE_SEMANTICS["head.reach"]["answer_path"] == "REACH"
+    assert dc.SITE_SEMANTICS["head.node_pointer"]["answer_path"] == "REACH"
+    assert not any("world_head" in row["tensor"] for row in dc.SITE_SEMANTICS.values())
+    assert all(row["anchor"].startswith("pointer_learner.py:") for row in dc.SITE_SEMANTICS.values())
+
+
+def test_witness_protocol_is_source_bound_and_inside_the_pilot_envelope():
+    from . import diagnostic_intervention as di
+    protocol = di.witness_protocol()
+    resources = protocol["resources"]
+    assert resources["packet_forwards_max"] <= resources["packet_forwards_envelope"]
+    assert resources["conditions"] == len(protocol["conditions"]) <= resources["conditions_max"]
+    assert len(protocol["hypotheses"]) <= resources["hypotheses_max"] and resources["helm_optimizer_updates"] == 0
+    assert resources["claude_launches"] == 0 and protocol["checkpoint"]["count"] == 1
+    assert protocol["source"]["learner_sha256"] == dc.LEARNER_SHA256
+    assert protocol["source"]["site_module"] == ("core_block", "pre")
+    injected = [h for h in protocol["hypotheses"] if h["kind"] == "INJECTED_FAULT_PLUMBING_CHECK"]
+    assert len(injected) == 1 and injected[0]["not_evidence_of"] == "any natural HELM fault"
+    assert [c["id"] for c in protocol["conditions"] if c.get("label") == "INJECTED"] == ["C5"]
+    assert all(c["action"] in di.ACTIONS or c["action"] == "BASELINE_UNINSTRUMENTED" for c in protocol["conditions"])
+    assert protocol["expected_calls_per_forward"]["core_block"] == dc.CORE_ROUNDS
