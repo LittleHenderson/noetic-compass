@@ -4,7 +4,7 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (31 cases written, NOT RUN)
+## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (33 cases written, NOT RUN)
 
 - Package `62bb7f71` (`research/helm_self_improvement/cas_hh_rde_01/`) received by exact Git object; receipt ACK posted on PR
   #245 (comment 5876863361). Lease: `diagnostic_configuration.py`, `diagnostic_intervention.py` and their two test files
@@ -24,8 +24,10 @@ Monorepo-level log. Subprojects keep their own changelogs
   before/after values under a byte bound, statuses `APPLIED` / `APPLIED_NO_CHANGE` / `NOT_APPLIED` / `NO_OP_VERIFIED` /
   `NO_OP_FAILED` / `OBSERVED` / `OBSERVED_INCOMPLETE`, gold-informed donors capped at
   `ORACLE_ASSISTED_DIAGNOSIS_NOT_DEPLOYABLE`, and `witness_protocol()` (six conditions, two hypotheses, one injected
-  fault labeled INJECTED, 24 packet forwards, zero optimizer updates).
-- Tests: 16 pure-Python cases and 15 torch cases on a labeled fixture container (`FIXTURE_NOT_HELM`, CUDA required by
+  fault labeled INJECTED, 24 packet forwards, zero optimizer updates), plus `evidence_record` / `rpa_projection`
+  (digest-sealed branch bound to input, checkpoint, action and outcome; harvest ingestion `DISABLED_NOT_ADMITTED`;
+  the atlas view is read-only with no execution or mutation authority).
+- Tests: 18 pure-Python cases and 15 torch cases on a labeled fixture container (`FIXTURE_NOT_HELM`, CUDA required by
   default). Written, NOT RUN: the packet forbids local pytest and torch execution, and torch is not installed here.
   Compile and import checks only. Spec sheet status `ENGINEERED-NOT-VALIDATED`. Exact package blobs from `62bb7f71`
   (`__init__.py`, `harness_capture_vendor/`, `cas_hh_rde_01/`) are copied unchanged into this branch so the imports

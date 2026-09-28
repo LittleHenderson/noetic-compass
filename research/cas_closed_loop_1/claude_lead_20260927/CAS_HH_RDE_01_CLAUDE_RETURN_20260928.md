@@ -9,7 +9,7 @@ Package received at `62bb7f714810db5047eb07ef616c6ddfe470fca9`; receipt ACK: PR 
 |---|---|
 | Vendored Harness source read and hash-checked (`543666e5…`) | real (computed here) |
 | Learner anchors at `c45f775f` (`_rounds` observe 1197-1198, `core_block` call 1199, `pointer_key` 1313, `node_head` 1347, `_node_options` 1417, `_reach_options` 1512, `world_head` 1566) | real (read from the exact retained copy, sha256 `0f424d86…`) |
-| Bridge modules and 31 test cases | written |
+| Bridge modules and 33 test cases | written |
 | Any test executed | NOT_RUN (packet forbids local pytest/torch; torch absent here) |
 | Any HELM capture, checkpoint, witness, intervention on HELM | not done |
 | Acceptance rows HH01-HH21 | obligations, none passed |
@@ -34,7 +34,8 @@ Package received at `62bb7f714810db5047eb07ef616c6ddfe470fca9`; receipt ACK: PR 
 
 `diagnostic_intervention.py`: `suppression_factor`, `donor`, `declare`, `matched_control`, `verify_matched`,
 `bind_sites`, `state_digest`, `apply` (context manager), `finalize`, `require_applied`, `receipt_to_json` /
-`verify_receipt`, `witness_protocol`.
+`verify_receipt`, `witness_protocol`, `evidence_record` / `verify_evidence` / `rpa_projection` (read-only atlas view;
+harvest ingestion `DISABLED_NOT_ADMITTED`).
 
 Hookable sites without a learner change: `graph.round_input` (pre-hook `core_block`), `graph.round_update`
 (post-hook `core_block`), `graph.pointer_query` (`pointer_key`), `head.node` (`node_head`), `head.reach`
@@ -53,7 +54,7 @@ pilot; `CLAIM_LEVEL_OUTSIDE_PILOT`).
 
 | File | Cases | Needs |
 |---|---:|---|
-| `test_diagnostic_configuration.py` | 16 | Python only |
+| `test_diagnostic_configuration.py` | 18 | Python only |
 | `test_diagnostic_intervention.py` | 15 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
 
 Exact acceptance command (inside an admitted job; the namespace `conftest.py` refuses otherwise):
@@ -62,7 +63,7 @@ Exact acceptance command (inside an admitted job; the namespace `conftest.py` re
 HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/hh-rde-01-claude-junit.xml -rA research/helm_self_improvement/test_diagnostic_configuration.py research/helm_self_improvement/test_diagnostic_intervention.py
 ```
 
-Expected `31 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
+Expected `33 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
 
 ## Witness protocol
 

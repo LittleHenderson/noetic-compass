@@ -250,3 +250,70 @@ def test_witness_protocol_is_source_bound_and_inside_the_pilot_envelope():
     assert [c["id"] for c in protocol["conditions"] if c.get("label") == "INJECTED"] == ["C5"]
     assert all(c["action"] in di.ACTIONS or c["action"] == "BASELINE_UNINSTRUMENTED" for c in protocol["conditions"])
     assert protocol["expected_calls_per_forward"]["core_block"] == dc.CORE_ROUNDS
+
+
+def _finalized_receipt(declaration, di, status_hits):
+    receipt = di.Receipt(di.RECEIPT_SCHEMA, di.declaration_digest(declaration), declaration.action, declaration.operation,
+                         declaration.site, declaration.module_attribute, declaration.hook_kind, 1, 1, 1)
+    receipt.hits.extend(status_hits)
+    receipt.hooks_removed, receipt.parameters_unchanged = True, True
+    return di.finalize(receipt)
+
+
+def test_hh17_evidence_record_binds_branch_to_input_checkpoint_action_outcome_and_rpa_view_cannot_execute():
+    from . import diagnostic_intervention as di
+    declaration = di.declare(action="SUPPRESS", site="head.reach", checkpoint_sha256=CKPT, input_sha256=INPUT_A,
+                             source_sha256=SRC, rows=(0,), coordinates=(1,), gain=1.0, hypothesis_id="H1",
+                             predicted_change="reach margin falls")
+    hit = {"call_index": 0, "round_index": None, "shape": [2], "dtype": "float32", "device": "cuda:0", "targeted": True,
+           "changed_count": 1, "untargeted_unchanged": True, "max_abs_delta": 0.7, "delta_norm": 0.7,
+           "target_norm_before": 0.7, "before": [0.7], "after": [0.0]}
+    receipt = _finalized_receipt(declaration, di, [hit])
+    assert receipt.status == "APPLIED"
+    outcome = {"metric": "CHECKED_ANSWER", "evaluator": "UNCHANGED_INDEPENDENT_EVALUATOR", "baseline_correct": True,
+               "changed_correct": False}
+    evidence = di.evidence_record(declaration=declaration, receipt=receipt, configuration_id="helm-configuration-" + "c" * 64,
+                                  split="CONFIRMATION", baseline_prediction_id="typed-prediction-" + "1" * 64,
+                                  changed_prediction_id="typed-prediction-" + "2" * 64, checked_outcome=outcome)
+    assert evidence["harvest_ingestion"] == "DISABLED_NOT_ADMITTED" and evidence["native_decision"] is False
+    assert evidence["promotion"] == "NOT_POSSIBLE_FROM_THIS_RECORD" and evidence["selected_by"] == di.ACTOR
+    view = di.rpa_projection(evidence)
+    assert view["executable"] is False and view["mutation_authority"] is None
+    assert view["parent_checkpoint_sha256"] == CKPT and view["input_sha256"] == INPUT_A and view["action"] == "SUPPRESS"
+    assert view["outcome"]["checked_outcome"] == outcome and view["lineage"]["evidence_digest"] == evidence["evidence_digest"]
+    assert view["branch_id"].startswith("helm-branch-")
+    tampered = dict(evidence)
+    tampered["applied"] = False
+    with pytest.raises(di.InterventionRefused) as info:
+        di.rpa_projection(tampered)
+    assert info.value.code == "EVIDENCE_TAMPERED"
+    with pytest.raises(di.InterventionRefused) as info:
+        di.evidence_record(declaration=declaration, receipt=receipt, configuration_id="helm-configuration-" + "c" * 64,
+                           split="CONFIRMATION", baseline_prediction_id="typed-prediction-" + "1" * 64,
+                           changed_prediction_id=None, checked_outcome=outcome)
+    assert info.value.code == "EVIDENCE_PREDICTION"
+    with pytest.raises(di.InterventionRefused) as info:
+        di.evidence_record(declaration=declaration, receipt=receipt, configuration_id="helm-configuration-" + "c" * 64,
+                           split="CONFIRMATION", baseline_prediction_id="p", changed_prediction_id="q",
+                           checked_outcome={"metric": "CHECKED_ANSWER", "evaluator": "CANDIDATE_SELF_REPORT"})
+    assert info.value.code == "EVIDENCE_OUTCOME"
+
+
+def test_hh17_unfinalized_receipt_and_not_applied_branches_are_recorded_honestly():
+    from . import diagnostic_intervention as di
+    declaration = di.declare(action="NO_OP_CONTROL", site="head.node", checkpoint_sha256=CKPT, input_sha256=INPUT_A,
+                             source_sha256=SRC, rows=(0,), coordinates=(0,), hypothesis_id="H1", predicted_change="none")
+    raw = di.Receipt(di.RECEIPT_SCHEMA, di.declaration_digest(declaration), declaration.action, declaration.operation,
+                     declaration.site, declaration.module_attribute, declaration.hook_kind, 1, 1, 1)
+    with pytest.raises(di.InterventionRefused) as info:
+        di.evidence_record(declaration=declaration, receipt=raw, configuration_id="helm-configuration-" + "c" * 64,
+                           split="DISCOVERY", baseline_prediction_id="p", changed_prediction_id="p",
+                           checked_outcome={"metric": "NONE"})
+    assert info.value.code == "EVIDENCE_RECEIPT_UNFINALIZED"
+    failed = _finalized_receipt(declaration, di, [])
+    assert failed.status == "NO_OP_FAILED"
+    evidence = di.evidence_record(declaration=declaration, receipt=failed, configuration_id="helm-configuration-" + "c" * 64,
+                                  split="DISCOVERY", baseline_prediction_id="p", changed_prediction_id=None,
+                                  checked_outcome={"metric": "NONE"})
+    assert evidence["receipt_status"] == "NO_OP_FAILED" and evidence["applied"] is False
+    assert di.rpa_projection(evidence)["outcome"]["receipt_status"] == "NO_OP_FAILED"

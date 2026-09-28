@@ -302,7 +302,7 @@
    "checkpoint_30_min": "both modules written; tests in progress",
    "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
    "cases_written": {
-    "test_diagnostic_configuration.py": 16,
+    "test_diagnostic_configuration.py": 18,
     "test_diagnostic_intervention.py": 15
    },
    "not_done": [

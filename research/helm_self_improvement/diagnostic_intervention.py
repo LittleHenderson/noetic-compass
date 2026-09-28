@@ -594,3 +594,80 @@ def witness_protocol():
                            "authority": AUTHORITY, "basis": BASIS, "actor": ACTOR,
                            "level_reachable": "TASK_CAUSAL_CONTRIBUTION_SUPPORTED at most; no repair, no promotion, no native attribution"},
     }
+
+
+# ---------------------------------------------------------------------------------------------------------
+# Evidence record and read-only RPA projection (HH16, HH17; research traces stay out of harvest ingestion)
+# ---------------------------------------------------------------------------------------------------------
+
+EVIDENCE_SCHEMA = "helm.harness.diagnostic-evidence/0.1"
+RPA_PROJECTION_SCHEMA = "helm.harness.rpa-projection/0.1"
+HARVEST_INGESTION = "DISABLED_NOT_ADMITTED"
+OUTCOME_METRICS = ("PARTS_REACH_SCORES", "CHECKED_ANSWER", "NONE")
+
+
+def evidence_record(*, declaration, receipt, configuration_id, split, baseline_prediction_id, changed_prediction_id,
+                    checked_outcome, selected_by=ACTOR):
+    """One branch = input + parent checkpoint + action + outcome, digest-sealed, never promotable from here."""
+    if not isinstance(declaration, Declaration) or not isinstance(receipt, Receipt):
+        _refuse("EVIDENCE_TYPES")
+    if receipt.status is None or receipt.status not in STATUSES:
+        _refuse("EVIDENCE_RECEIPT_UNFINALIZED")
+    if receipt.declaration_digest != declaration_digest(declaration):
+        _refuse("RECEIPT_DECLARATION_MISMATCH")
+    if split not in ("DISCOVERY", "CONFIRMATION", "SYNTHETIC_FIXTURE"):
+        _refuse("EVIDENCE_SPLIT", repr(split))
+    if type(checked_outcome) is not dict or checked_outcome.get("metric") not in OUTCOME_METRICS:
+        _refuse("EVIDENCE_OUTCOME", "metric must be one of %r" % (OUTCOME_METRICS,))
+    if checked_outcome["metric"] != "NONE" and checked_outcome.get("evaluator") != "UNCHANGED_INDEPENDENT_EVALUATOR":
+        _refuse("EVIDENCE_OUTCOME", "task outcomes come from the unchanged independent evaluator only")
+    if receipt.status in ("APPLIED", "APPLIED_NO_CHANGE") and changed_prediction_id is None:
+        _refuse("EVIDENCE_PREDICTION", "an applied intervention needs its changed raw prediction id")
+    for name, value in (("baseline_prediction_id", baseline_prediction_id), ("changed_prediction_id", changed_prediction_id)):
+        if value is not None and (type(value) is not str or not value):
+            _refuse("EVIDENCE_PREDICTION", name)
+    if type(configuration_id) is not str or not configuration_id.startswith("helm-configuration-"):
+        _refuse("EVIDENCE_CONFIGURATION", repr(configuration_id))
+    body = {"schema": EVIDENCE_SCHEMA, "checkpoint_sha256": declaration.checkpoint_sha256,
+            "input_sha256": declaration.input_sha256, "source_sha256": declaration.source_sha256,
+            "configuration_id": configuration_id, "declaration_digest": receipt.declaration_digest,
+            "receipt_digest": digest(asdict(receipt)), "action": declaration.action, "operation": declaration.operation,
+            "site": declaration.site, "round_index": declaration.round_index, "receipt_status": receipt.status,
+            "applied": receipt.applied, "split": split, "baseline_prediction_id": baseline_prediction_id,
+            "changed_prediction_id": changed_prediction_id, "checked_outcome": dict(checked_outcome),
+            "selected_by": selected_by, "native_decision": False, "claim_ceiling": declaration.claim_ceiling,
+            "harvest_ingestion": HARVEST_INGESTION, "training_visibility": "NONE",
+            "authority": AUTHORITY, "basis": BASIS, "promotion": "NOT_POSSIBLE_FROM_THIS_RECORD"}
+    body["evidence_digest"] = digest(body)
+    return body
+
+
+def verify_evidence(evidence):
+    body = dict(evidence)
+    expected = body.pop("evidence_digest", None)
+    if expected != digest(body) or body.get("schema") != EVIDENCE_SCHEMA:
+        _refuse("EVIDENCE_TAMPERED")
+    if body.get("harvest_ingestion") != HARVEST_INGESTION or body.get("promotion") != "NOT_POSSIBLE_FROM_THIS_RECORD":
+        _refuse("EVIDENCE_AUTHORITY")
+    return body
+
+
+def rpa_projection(evidence):
+    """What the atlas may show: a branch bound to input, parent checkpoint, action and outcome. View only."""
+    body = verify_evidence(evidence)
+    branch = {"schema": RPA_PROJECTION_SCHEMA,
+              "branch_id": "helm-branch-" + digest([body["checkpoint_sha256"], body["input_sha256"],
+                                                    body["declaration_digest"], body["receipt_digest"]]),
+              "parent_checkpoint_sha256": body["checkpoint_sha256"], "input_sha256": body["input_sha256"],
+              "action": body["action"], "operation": body["operation"], "site": body["site"],
+              "round_index": body["round_index"], "outcome": {"receipt_status": body["receipt_status"],
+                                                             "applied": body["applied"],
+                                                             "checked_outcome": body["checked_outcome"]},
+              "lineage": {"configuration_id": body["configuration_id"], "declaration_digest": body["declaration_digest"],
+                          "receipt_digest": body["receipt_digest"], "evidence_digest": evidence["evidence_digest"],
+                          "baseline_prediction_id": body["baseline_prediction_id"],
+                          "changed_prediction_id": body["changed_prediction_id"]},
+              "selected_by": body["selected_by"], "native_decision": body["native_decision"],
+              "claim_ceiling": body["claim_ceiling"], "view_authority": "READ_ONLY_NO_EXECUTION_NO_MUTATION",
+              "executable": False, "mutation_authority": None}
+    return branch
