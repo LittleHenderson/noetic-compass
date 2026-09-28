@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-28 - Growth handoff: numerical validation package for the 15 unrun cases, four-level validation ladder, exact real-checkpoint integration step (no execution, no learner edit)
+
+- `residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.{md,json}`: source binding to `c70e1a04` with per-file
+  sha256 pins (`numeric_gpu/SOURCE_PINS_c70e1a04.sha256`), dependencies, exact commands, the 15 numeric identities
+  (derived by AST; torch absent here) and the 22 pure-Python identities (collected locally), output paths, resource
+  requirements, venue rule (designated runner after the seed-19 slot releases; never the active training instance),
+  pass/fail semantics. Prepared, NOT RUN.
+- `residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.{md,json}`: the four levels kept apart (standalone
+  tests; migration of an actual copied checkpoint; training with growth; measured benefit); verified line numbers in
+  the exact `c45f775f` learner for why a grown container is refused today; the restricted L2 driver specified (not
+  written); the minimal six-touch-point learner change for L3, for a lease to scope. Nothing implemented in the learner.
+- Growth remains `ENGINEERED-NOT-VALIDATED` at every level. No AWS, no torch, no checkpoint, no seed-19 or seed-18 change.
+
 ## 2026-09-27 - FORWARD-02: the four P1 growth findings fixed in `residual_world_v1/` (revision 0.2); 22 local plan tests passed, 15 numeric cases written and NOT run
 
 - `growth_migration_plan.py` 0.2 and `world_residual_specialist.py` 0.2 apply Codex's four source findings (PR #245

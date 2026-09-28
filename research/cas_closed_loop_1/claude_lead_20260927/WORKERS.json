@@ -198,6 +198,34 @@
     "no seed-19 or seed-18 attachment"
    ],
    "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-HANDOFF-20260928",
+   "label": "growth handoff: validation package, ladder, integration step",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4/P1: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "OWNER 'ORIGINAL HELM - CORRECTED GROWTH HANDOFF': verified handoff receipt for c70e1a04; numerical validation package for the 15 unrun cases; four-level distinction; exact real-checkpoint integration step named, not implemented; no reviewer counterexamples had arrived",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.md",
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.md",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_c70e1a04.sha256",
+    "research/helm_growth_experiments/residual_world_v1/README.md"
+   ],
+   "started_utc": "2026-09-28T01:05:05Z",
+   "allocation": "remaining FORWARD-02 source-work time (13 of 60 active minutes used on 2026-09-27); no reset",
+   "executed": "none with torch; pytest --collect-only on the pure-Python file (22 ids) and sha256sum -c on the pins (4 OK)",
+   "not_done": [
+    "no torch execution",
+    "no AWS",
+    "no checkpoint opened",
+    "no learner edit",
+    "no seed-19 or seed-18 change",
+    "L2 driver not written"
+   ],
+   "status": "COMPLETED"
   }
  ],
  "not_done_by_any_worker": [

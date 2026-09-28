@@ -1,0 +1,162 @@
+{
+ "schema": "cas.growth.world-residual-specialist.numerical-validation-package/0.1",
+ "prepared_utc": "2026-09-28T01:10:00Z",
+ "prepared_by": "Claude lead session session_011hJxopymaeoPQ67KvchtwW, serial, no execution",
+ "owner_task": "ORIGINAL HELM - CORRECTED GROWTH HANDOFF (after FORWARD-02 delivery c70e1a04)",
+ "claim_state": "PREPARED, NOT RUN. Nothing in this package has executed with torch anywhere. A junit produced by the designated runner from this exact binding is the only thing that changes that.",
+ "validation_level": {
+  "this_package_establishes_at_most": "L1 standalone module tests on a labeled test-double container",
+  "ladder": {
+   "L1_standalone_module_tests": "the 15 numeric cases + 22 pure-Python cases below; test double container; no HELM checkpoint, no learner",
+   "L2_migration_of_an_actual_copied_HELM_checkpoint": "NOT covered by L1. Needs a copied admitted parent, the exact learner's restore path, a GPU job and Codex's framework/encoder builders; see REAL_CHECKPOINT_INTEGRATION_STEP_20260928.md",
+   "L3_additional_training_with_growth": "NOT covered by L1 or L2. Needs the learner integration under a source lease, a new checkpoint schema and run identity, a continuation seam, and a separate finite job allowance",
+   "L4_measured_task_benefit": "NOT covered by L1-L3. Needs an unchanged-capacity control, a declared matching rule and a preregistered readout; no claim is made or licensed here"
+  },
+  "rule": "Passing L1 does not establish L2, L3 or L4."
+ },
+ "source_binding": {
+  "commit": "c70e1a048d5130e5268b4a6556265aa53225b6c1",
+  "branch": "claude/focused-mccarthy-uj45ul",
+  "pr": "LittleHenderson/noetic-compass#245",
+  "pins_file": "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_c70e1a04.sha256",
+  "pins_file_sha256_of_content": "c5f7e3965a3e14f07df57d8c6a06334984da294ea3603e7e00169d66e85a7bd2",
+  "file_sha256": {
+   "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py": "0dcf4c05975711f10559a19599eb8a10503c135a2b2ee075e15d0c1640caba29",
+   "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py": "ae49a34117db4a88ef36a9bdbbde8cfb4b79b565453eb1debe12de90df54e996",
+   "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py": "21ea6597212bc949e6524811673be5f5e63de9ab1c0feaa6637ed078d291cba4",
+   "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py": "c48c42050d48d81890dc78d3947e4a91edc5559c80b85e23ff84004e8eddaaaf"
+  },
+  "verify_before_running": "cd <repo> && git checkout c70e1a048d5130e5268b4a6556265aa53225b6c1 -- research/helm_growth_experiments/residual_world_v1/ && sha256sum -c research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_c70e1a04.sha256",
+  "refuse_if": "any pin line is not OK; then the run is not a run of this package"
+ },
+ "dependencies": {
+  "python": "3.11.x (prepared under 3.11.15)",
+  "pytest": ">=8 (prepared under 9.0.2)",
+  "torch": "any 2.x with CUDA; the tests use torch.optim.AdamW(foreach=False, fused=False, capturable=False), torch.random.fork_rng, torch.load(weights_only=True), torch.cuda.get_rng_state_all",
+  "cuda": "one visible CUDA device; the numeric file raises RuntimeError('GPU_REQUIRED: ...') at import without it, which pytest reports as a collection ERROR, never as a pass",
+  "network": "none",
+  "datasets": "none",
+  "checkpoints": "none (the container under test is a test double)",
+  "repository_files": "only the four pinned files; nothing outside the namespace is imported",
+  "env_flags": "none required; do not set any AWS-admission flag locally"
+ },
+ "commands": [
+  {
+   "id": "C0-verify-pins",
+   "cwd": "<repo>",
+   "command": "sha256sum -c research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_c70e1a04.sha256",
+   "expected": "4 lines ending in OK"
+  },
+  {
+   "id": "C1-numeric-gpu",
+   "cwd": "<repo>",
+   "command": "python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/growth-specialist-numeric-junit.xml -rA research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+   "expected_if_collection_matches": {
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+   }
+  },
+  {
+   "id": "C2-plan-pure-python",
+   "cwd": "<repo>",
+   "command": "python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/growth-plan-junit.xml -rA research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py",
+   "expected_if_collection_matches": {
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+   },
+   "note": "second record of the 22 cases already passed locally at c70e1a04 (junit sha256 14ccc06b...); optional"
+  },
+  {
+   "id": "C3-hash-outputs",
+   "cwd": "<out>",
+   "command": "sha256sum growth-specialist-numeric-junit.xml growth-plan-junit.xml > junit-sha256.txt",
+   "expected": "two lines"
+  }
+ ],
+ "expected_collected_identities": {
+  "numeric_gpu": {
+   "count": 15,
+   "how_derived": "AST of the pinned file (torch absent here, so not collected locally); no parametrize decorators",
+   "ids": [
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_disabled_specialist_returns_the_base_object_unchanged",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_initial_contribution_is_exactly_zero_when_the_intermediate_is_finite",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_nonfinite_and_wrong_shape_inputs_are_refused",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_attach_preserves_originals_and_optimizer_state_exactly_and_counts_new_parameters",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_state_dict_save_reload_and_plan_consistency",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_two_step_trainability_b_first_then_a_under_generic_inputs_and_sum_loss",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_contribution_ablation_after_two_steps",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding1_constructing_the_specialist_leaves_cpu_and_cuda_generators_exactly_unchanged",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding1_counterexample_of_the_0_1_layout_is_detected_by_the_probe",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding2_migration_refuses_a_group_that_is_not_the_verified_parameter_set",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding2_group_settings_come_from_the_old_group_and_a_differing_config_is_refused",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding3_enabled_nonzero_b_and_optimizer_state_survive_save_and_reload_together",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding3_missing_or_tampered_sidecar_and_files_are_refused",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding4_extreme_finite_input_overflows_the_intermediate_and_is_refused_before_b",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding4_zero_input_and_zero_upstream_gradient_leave_b_without_gradient"
+   ]
+  },
+  "plan_pure_python": {
+   "count": 22,
+   "how_derived": "pytest --collect-only locally at c70e1a04",
+   "ids": [
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_source_constants_match_the_exact_learner",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_plan_builds_validates_and_counts",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_plan_json_round_trip_is_consistent",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_tampered_plan_json_is_refused",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_bad_sizes_and_missing_seed_are_refused[kwargs0-HIDDEN_SIZE_INVALID]",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_bad_sizes_and_missing_seed_are_refused[kwargs1-HIDDEN_SIZE_INVALID]",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_bad_sizes_and_missing_seed_are_refused[kwargs2-INPUT_WIDTH_INVALID]",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_bad_sizes_and_missing_seed_are_refused[kwargs3-INIT_SEED_MISSING]",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_parent_without_world_head_is_refused",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_name_collision_and_bad_rows_are_refused",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_both_zero_initialization_is_refused",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_optimizer_state_mapping_is_by_name_and_refuses_reordering",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_tolerances_and_learning_order_are_stated_before_any_result",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_refusal_codes_are_a_closed_set",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding1_plan_records_both_constructors_inside_the_seeded_fork",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding2_binding_is_by_object_identity_and_refuses_foreign_duplicate_and_missing",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding2_mapping_indices_must_agree_with_verified_bindings_on_both_sides",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding2_group_settings_are_preserved_and_a_supplied_config_must_match",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding3_sidecar_carries_enabled_seed_sizes_and_digests_and_round_trips",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding3_tampered_or_malformed_sidecar_is_refused",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_finding4_tolerances_state_the_intermediate_precondition_and_gradient_counterexamples",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py::test_file_sha256_matches_hashlib"
+   ]
+  }
+ },
+ "output_paths": {
+  "root": "<out> = a job-owned directory the runner names, e.g. /opt/helm-si-output/growth-residual-world-v1-<job-id>/",
+  "files": [
+   "growth-specialist-numeric-junit.xml",
+   "growth-plan-junit.xml",
+   "junit-sha256.txt",
+   "pytest-temp/ (may be deleted after the junit is hashed)"
+  ],
+  "publish": "junit files + junit-sha256.txt + the job identity to PR #245 (public aggregate evidence only; the tests read no protected answers and produce none)"
+ },
+ "resource_requirements": {
+  "gpu": "one CUDA device, any size; the largest tensor is the test double's Linear(196, 64) plus the world head; well under 100 MB of device memory",
+  "cpu_ram": "< 2 GB",
+  "disk": "< 50 MB in <out> (three tmp_path directories with two .pt files each of a few hundred KB)",
+  "wall_time_estimate": "under 2 minutes of test time after torch import; no training loop beyond two AdamW steps per case",
+  "venue": "the designated runner, AFTER the seed-19 job helm-cont19-p20-p40-20260927-a1 releases the shared GPU slot and a separate finite job allowance is recorded; never on the active training instance i-0ab8b5a4bee9d0dc4",
+  "budget": "no new budget granted by this package; whatever separate finite allowance Codex records"
+ },
+ "pass_fail_semantics": {
+  "pass": "junit says tests=15 failures=0 errors=0 skipped=0 for C1 and the pins verified; then the L1 torch halves of findings 1-4 move from NOT_RUN to real (executed) for this exact binding",
+  "collection_error": "tests=0 or errors>0 with 'GPU_REQUIRED' means the venue had no CUDA; NOT a pass, NOT a fail of the code",
+  "any_failure": "report the failing ids verbatim; do not rerun on a different commit; Claude fixes in the namespace on the next authorized slice",
+  "never": "no status word above ENGINEERED-NOT-VALIDATED follows from this package; L2-L4 stay open"
+ },
+ "rules": [
+  "no launch by Claude",
+  "not on the active training instance",
+  "not mixed into seed 18's learning-rate-only pair",
+  "no attachment to seed 19",
+  "no checkpoint deserialized by these tests"
+ ]
+}
