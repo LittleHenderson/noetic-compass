@@ -1,0 +1,350 @@
+{
+  "utc": "2026-09-28T05:06:36.239070+00:00",
+  "reader_sha256": "a1fa7a4e1c72ac5279479ae3ce2df81536fd26c1a443629aa515a2875248c518",
+  "report_sha256": "af5bd5d104e536821f2432772ba3ac2ce9d37cc60c7bf671e74db412c78d31eb",
+  "reviewed_ids": [
+    "READER-R1",
+    "READER-R2",
+    "READER-R3",
+    "READER-R4"
+  ],
+  "disposition": "ADOPTED_FOR_DECLARED_AGGREGATES_ONLY",
+  "input_receipts": 8,
+  "path_audit_permitted_fields_only": true,
+  "null_pointer_receipts_no_field_inspection": true,
+  "max_input_bound_before_read": true,
+  "source_is_not_evaluator_identity": true,
+  "actual_local_work": "Source inspection plus allowlisted lightweight public receipt analysis; no pytest or numerical model execution",
+  "reviewer_reported_fixture_tests": "28 passed1 skipped reported by DeepSeek; not AWS acceptance",
+  "superseded_reports": "RETAINED_NOT_ADOPTED",
+  "scope_limit": "Reader does not emit trained/held/excluded in its compact course table; closeout reads these directly from permitted aggregates. No per-item/family transitions inferred.",
+  "seed_arms": [
+    {
+      "boundary_present": true,
+      "course_aggregates": {
+        "course_p00": {
+          "correct": 22,
+          "total": 564
+        },
+        "course_p01": {
+          "correct": 453,
+          "total": 564
+        },
+        "course_p10": {
+          "correct": 476,
+          "total": 564
+        },
+        "course_p20": {
+          "correct": 496,
+          "total": 564
+        }
+      },
+      "development_aggregates": {
+        "development_p0": {
+          "correct": 3,
+          "total": 59
+        },
+        "development_p1": {
+          "correct": 2,
+          "total": 59
+        },
+        "development_p10": {
+          "correct": 6,
+          "total": 59
+        },
+        "development_p2": {
+          "correct": 4,
+          "total": 59
+        },
+        "development_p20": {
+          "correct": 8,
+          "total": 59
+        },
+        "development_p4": {
+          "correct": 2,
+          "total": 59
+        },
+        "development_p6": {
+          "correct": 3,
+          "total": 59
+        },
+        "development_p8": {
+          "correct": 6,
+          "total": 59
+        }
+      },
+      "evaluator_identity": {
+        "evaluator_identity": {},
+        "found": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "note": "a source hash identifies the code, not the grader; evaluator compatibility is not inferred from source agreement",
+        "source_identity": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "status": "SOURCE_ONLY_EVALUATOR_UNBOUND"
+      },
+      "failure_field": null,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260917",
+      "pass10_pass20_pair": "AVAILABLE_FROM_PERMITTED_NESTED_AGGREGATES",
+      "per_item_transitions": "NOT_AVAILABLE_AND_MAY_NOT_BE_INFERRED_FROM_TOTALS",
+      "seed": 20260917,
+      "status": "TYPED_POINTER_DELIVERED",
+      "summary_keys_available": [
+        "ablation_status",
+        "artifacts_dropped_from_the_required_set",
+        "boundary",
+        "checkpoint_check_phase_a_status",
+        "checkpoint_check_phase_b_status",
+        "checkpoint_reload_verified",
+        "claim_bearing",
+        "claimed_bearing_run",
+        "condition",
+        "degraded_checks",
+        "degraded_checks_absent_means",
+        "development_scores",
+        "elapsed_seconds",
+        "failure",
+        "global_actual_work",
+        "initial_model_identity",
+        "interference_delta",
+        "job",
+        "learning_on_held_back_established",
+        "learning_rate",
+        "learning_rate_schedule",
+        "main_training_delta",
+        "model_identity",
+        "model_seed",
+        "pass_summaries",
+        "phase_timings",
+        "report_only_status",
+        "retention_scores",
+        "runtime",
+        "schedule_plan_mode",
+        "scores",
+        "source_sha",
+        "status",
+        "whole_container_identity"
+      ],
+      "task_family_detail": "NOT_AVAILABLE_FROM_PERMITTED_FIELDS"
+    },
+    {
+      "boundary_present": true,
+      "course_aggregates": {
+        "course_p00": {
+          "correct": 0,
+          "total": 564
+        },
+        "course_p01": {
+          "correct": 445,
+          "total": 564
+        },
+        "course_p10": {
+          "correct": 502,
+          "total": 564
+        },
+        "course_p20": {
+          "correct": 487,
+          "total": 564
+        }
+      },
+      "development_aggregates": {
+        "development_p0": {
+          "correct": 10,
+          "total": 59
+        },
+        "development_p1": {
+          "correct": 4,
+          "total": 59
+        },
+        "development_p10": {
+          "correct": 8,
+          "total": 59
+        },
+        "development_p2": {
+          "correct": 4,
+          "total": 59
+        },
+        "development_p20": {
+          "correct": 17,
+          "total": 59
+        },
+        "development_p4": {
+          "correct": 4,
+          "total": 59
+        },
+        "development_p6": {
+          "correct": 10,
+          "total": 59
+        },
+        "development_p8": {
+          "correct": 11,
+          "total": 59
+        }
+      },
+      "evaluator_identity": {
+        "evaluator_identity": {},
+        "found": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "note": "a source hash identifies the code, not the grader; evaluator compatibility is not inferred from source agreement",
+        "source_identity": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "status": "SOURCE_ONLY_EVALUATOR_UNBOUND"
+      },
+      "failure_field": null,
+      "job": "cas-meta2-tpntr-20260926054903-c45f775f-m-20260918",
+      "pass10_pass20_pair": "AVAILABLE_FROM_PERMITTED_NESTED_AGGREGATES",
+      "per_item_transitions": "NOT_AVAILABLE_AND_MAY_NOT_BE_INFERRED_FROM_TOTALS",
+      "seed": 20260918,
+      "status": "TYPED_POINTER_DELIVERED",
+      "summary_keys_available": [
+        "ablation_status",
+        "artifacts_dropped_from_the_required_set",
+        "boundary",
+        "checkpoint_check_phase_a_status",
+        "checkpoint_check_phase_b_status",
+        "checkpoint_reload_verified",
+        "claim_bearing",
+        "claimed_bearing_run",
+        "condition",
+        "degraded_checks",
+        "degraded_checks_absent_means",
+        "development_scores",
+        "elapsed_seconds",
+        "failure",
+        "global_actual_work",
+        "initial_model_identity",
+        "interference_delta",
+        "job",
+        "learning_on_held_back_established",
+        "learning_rate",
+        "learning_rate_schedule",
+        "main_training_delta",
+        "model_identity",
+        "model_seed",
+        "pass_summaries",
+        "phase_timings",
+        "report_only_status",
+        "retention_scores",
+        "runtime",
+        "schedule_plan_mode",
+        "scores",
+        "source_sha",
+        "status",
+        "whole_container_identity"
+      ],
+      "task_family_detail": "NOT_AVAILABLE_FROM_PERMITTED_FIELDS"
+    },
+    {
+      "boundary_present": true,
+      "course_aggregates": {
+        "course_p00": {
+          "correct": 73,
+          "total": 564
+        },
+        "course_p01": {
+          "correct": 445,
+          "total": 564
+        },
+        "course_p10": {
+          "correct": 478,
+          "total": 564
+        },
+        "course_p20": {
+          "correct": 496,
+          "total": 564
+        }
+      },
+      "development_aggregates": {
+        "development_p0": {
+          "correct": 0,
+          "total": 59
+        },
+        "development_p1": {
+          "correct": 6,
+          "total": 59
+        },
+        "development_p10": {
+          "correct": 14,
+          "total": 59
+        },
+        "development_p2": {
+          "correct": 4,
+          "total": 59
+        },
+        "development_p20": {
+          "correct": 17,
+          "total": 59
+        },
+        "development_p4": {
+          "correct": 5,
+          "total": 59
+        },
+        "development_p6": {
+          "correct": 6,
+          "total": 59
+        },
+        "development_p8": {
+          "correct": 10,
+          "total": 59
+        }
+      },
+      "evaluator_identity": {
+        "evaluator_identity": {},
+        "found": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "note": "a source hash identifies the code, not the grader; evaluator compatibility is not inferred from source agreement",
+        "source_identity": {
+          "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61"
+        },
+        "status": "SOURCE_ONLY_EVALUATOR_UNBOUND"
+      },
+      "failure_field": null,
+      "job": "cas-meta2-tpntr-20260926180233-c45f775f-m-20260919",
+      "pass10_pass20_pair": "AVAILABLE_FROM_PERMITTED_NESTED_AGGREGATES",
+      "per_item_transitions": "NOT_AVAILABLE_AND_MAY_NOT_BE_INFERRED_FROM_TOTALS",
+      "seed": 20260919,
+      "status": "TYPED_POINTER_DELIVERED",
+      "summary_keys_available": [
+        "ablation_status",
+        "artifacts_dropped_from_the_required_set",
+        "boundary",
+        "checkpoint_check_phase_a_status",
+        "checkpoint_check_phase_b_status",
+        "checkpoint_reload_verified",
+        "claim_bearing",
+        "claimed_bearing_run",
+        "condition",
+        "degraded_checks",
+        "degraded_checks_absent_means",
+        "development_scores",
+        "elapsed_seconds",
+        "failure",
+        "global_actual_work",
+        "initial_model_identity",
+        "interference_delta",
+        "job",
+        "learning_on_held_back_established",
+        "learning_rate",
+        "learning_rate_schedule",
+        "main_training_delta",
+        "model_identity",
+        "model_seed",
+        "pass_summaries",
+        "phase_timings",
+        "report_only_status",
+        "retention_scores",
+        "runtime",
+        "schedule_plan_mode",
+        "scores",
+        "source_sha",
+        "status",
+        "whole_container_identity"
+      ],
+      "task_family_detail": "NOT_AVAILABLE_FROM_PERMITTED_FIELDS"
+    }
+  ]
+}

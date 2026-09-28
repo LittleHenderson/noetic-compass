@@ -1,0 +1,143 @@
+{
+  "schema": "helm.seed18-lr-fixed-package/2",
+  "utc": "2026-09-27T12:52:11.932545+00:00",
+  "task_id": "B1-SEED18-LR-20260927-01",
+  "status": "SOURCE_PACKAGE_COMPLETE_NUMERICAL_ACCEPTANCE_AND_ADMISSION_NOT_RUN",
+  "baseline_parent": {
+    "schema": "helm.continuation-parent-pin/1",
+    "seed": 20260918,
+    "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+    "sha256": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341",
+    "bytes": 4025999,
+    "original_preserved": true,
+    "receiver_inventory_match": true,
+    "run_identity_digest": "06a448aa8eb2e0df9d209004c8dd81884716706cf0bc31f87971643c787ada01",
+    "cursor": 2940,
+    "model_revision": 2940,
+    "state_identities": {
+      "model_state_identity": "a5753bc5d9cca3750e21365905bb28fcb711b4fc31ab1544be0475b8ecc3cf13",
+      "optimizer_state_identity": "b460c98160fdefbafc31b4c97314b5e6724651aa41de60fd3dd82d2412d53aec",
+      "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+      "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+    },
+    "saved_limits": {
+      "max_core_calls": 600000,
+      "max_updates": 2956,
+      "max_wall_seconds": 23100
+    },
+    "elapsed_seconds": 15197.319470228,
+    "optimizer_config": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "learning_rate": 0.003,
+      "weight_decay": 0.01
+    },
+    "numeric_restore_executed_this_task": false
+  },
+  "changed_parent": {
+    "schema": "helm.continuation-parent-pin/1",
+    "seed": 20260918,
+    "source_sha": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+    "sha256": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341",
+    "bytes": 4025999,
+    "original_preserved": true,
+    "receiver_inventory_match": true,
+    "run_identity_digest": "06a448aa8eb2e0df9d209004c8dd81884716706cf0bc31f87971643c787ada01",
+    "cursor": 2940,
+    "model_revision": 2940,
+    "state_identities": {
+      "model_state_identity": "a5753bc5d9cca3750e21365905bb28fcb711b4fc31ab1544be0475b8ecc3cf13",
+      "optimizer_state_identity": "b460c98160fdefbafc31b4c97314b5e6724651aa41de60fd3dd82d2412d53aec",
+      "encoder_state_identity": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+      "rng_state_identity": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337"
+    },
+    "saved_limits": {
+      "max_core_calls": 600000,
+      "max_updates": 2956,
+      "max_wall_seconds": 23100
+    },
+    "elapsed_seconds": 15197.319470228,
+    "optimizer_config": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "learning_rate": 0.003,
+      "weight_decay": 0.01
+    },
+    "numeric_restore_executed_this_task": false
+  },
+  "factor": "constant learning rate only",
+  "conditions": [
+    {
+      "id": "baseline",
+      "learning_rate": 0.003,
+      "planned_child_job": "helm-seed18-lr003-p20-p40-v1"
+    },
+    {
+      "id": "lr_0001",
+      "learning_rate": 0.001,
+      "planned_child_job": "helm-seed18-lr001-p20-p40-v1"
+    }
+  ],
+  "state_migration": "Preserve parent weights, AdamW moments/step, encoder, RNG and next cursor; changed condition changes only AdamW group learning rate and corresponding explicitly versioned policy metadata after verified restore. Never reset optimizer.",
+  "same_additional_main_updates": 2940,
+  "measurements_total_updates": [
+    2940,
+    4410,
+    5880
+  ],
+  "total_passes_max": 40,
+  "evaluator": "Exact original public evaluator, source c45f775f225dd06cc20cdf313f0a0398486e0d61, original populations kept separate",
+  "primary_comparison": "within-seed pass40 minus own parent pass20, then changed-rate delta minus unchanged-rate delta; report runtime/cost differences",
+  "success_thresholds": null,
+  "best_checkpoint_selection": false,
+  "automatic_sweep": false,
+  "automatic_retry": false,
+  "cloud_spend_authorized_by_this_preparation": false,
+  "dependencies": [
+    "Separate prospective proof and per-arm execution allowance/ledger",
+    "AWS focused tests and numerical proofs for this exact source",
+    "One GPU globally; growth check completes/cleans first"
+  ],
+  "next_deliverable": "AWS real restore/next-step/reload/validation-neutrality proof for both LR policies, then separately admitted serial arm jobs. No automatic sweep.",
+  "later_stages": {
+    "B2": "one supported growth operation versus unchanged capacity extra training; blocked on actual migration/trainability validation and frozen resource-matching rule",
+    "B3": "frozen model with/without validated CAS repair; blocked on corrected joint CAS/SI AWS execution; retain neural predictions separately"
+  },
+  "CASalescence": "PARKED",
+  "predecessor_record": "FIXED_COMPARISON_PREPARATION.json retained unchanged",
+  "implementation_namespace": "research/helm_seed18_lr_comparison/",
+  "implementation_basis": "copy of cd5ce96 continuation, changed only seed18 parent binding and explicit LR policy with retained AdamW state",
+  "source_parent": "cd5ce96ca0a64e0dbe82562bedf565e1bf66bfc7",
+  "schedule_sha256": "96c39e206a9dedf7c4ad6515c564d9522a1160ce80de7222c035bc5aacd47146",
+  "resource_matching": {
+    "rule": "Same2940 additional updates, exact batches/order/data, readouts and5880 stop; one same-instance-class GPU per job serially",
+    "comparison_unit": "within same seed parent; not independent-seed replication",
+    "cost_matching": "Equal exposure/update budget, not claimed equal runtime/cost; record both separately",
+    "numeric_worker_wall_seconds_max": 25200,
+    "core_calls_max_per_child": 600000,
+    "provider_deadline_seconds_max": 27000,
+    "proposed_training_ceiling_usd_per_arm": "20.00",
+    "proposed_pair_cleanup_reserve_usd": "2.00",
+    "status": "PROPOSAL_ONLY_NO_RESERVATION_NO_SPEND; separate finite proof and arm admission required before execution"
+  },
+  "acceptance": {
+    "cases_written": 33,
+    "cases_executed_this_revision": 0,
+    "proof": "NOT_RUN",
+    "training": "NOT_RUN",
+    "required_checks": [
+      "Exact clean seed18 parent and state pins",
+      "Changed arm changes group LR/config only; moments and steps exact",
+      "Real next batch2940 to next cursor2941",
+      "Bitwise validation neutrality and child reload in each arm",
+      "Both arms share schedule/evaluator; incompatible parents, crossed LR labels and changed schedule refused",
+      "Fresh per-condition ledger, limits and independent shutdown"
+    ]
+  }
+}

@@ -1,0 +1,383 @@
+{
+  "schema": "helm.cont19.final-public-closeout/1",
+  "utc": "2026-09-28T05:05:55.143269+00:00",
+  "session": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+  "session_role": "ORIGINAL_HELM_NOT_Q1",
+  "job": "helm-cont19-p20-p40-20260927-a1",
+  "executing_source": "cd5ce96ca0a64e0dbe82562bedf565e1bf66bfc7",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "parent_sha256": "5b37699d52e530a9ecd3563e235f0884630225da2fbe27489767a196c0f7a109",
+  "original_parent_opaque_hash_rechecked": true,
+  "loaded_source_attestation_matches_proof": true,
+  "schedule_sha256": "96c39e206a9dedf7c4ad6515c564d9522a1160ce80de7222c035bc5aacd47146",
+  "main_updates": 5880,
+  "additional_main_updates": 2940,
+  "rows": [
+    {
+      "pass": 20,
+      "main_updates": 2940,
+      "hard": {
+        "pass": 20,
+        "cursor": 2940,
+        "correct": 17,
+        "total": 59
+      },
+      "course": {
+        "correct": 496,
+        "total": 564,
+        "held_back": {
+          "correct": 114,
+          "total": 127
+        },
+        "trained": {
+          "correct": 321,
+          "total": 358
+        },
+        "excluded": {
+          "correct": 61,
+          "total": 79
+        }
+      },
+      "checkpoint": {
+        "sha256": "deda5ea28d4bdfb63a93b0841fff8cc2d1b8db6c66fd6a213b39b87346f8f2ad",
+        "bytes": 4068175,
+        "state": {
+          "model": "476dbd0fb337912369c48d63811914ff67c99343dcb54c5ef4cd9d80de4f048c",
+          "optimizer": "fea164124734cbc9379aa8a7c12209a7d96f02c64f7254b6739570be27d7be1f",
+          "encoder": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+          "rng": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337",
+          "cursor": 2940,
+          "model_revision": 2940,
+          "counters": {
+            "core_forward_attempts": 209064,
+            "core_forward_calls": 209064,
+            "sample_core_passes": 209064,
+            "packet_forward_calls": 26133,
+            "prediction_calls": 26133,
+            "staged_batches": 2940,
+            "backward_attempts": 2940,
+            "backward_calls": 2940,
+            "optimizer_step_attempts": 2940,
+            "optimizer_updates": 2940,
+            "private_loss_plan_calls": 23520
+          },
+          "training_mode": true,
+          "pending": false,
+          "failed": false
+        },
+        "run_identity_digest": "d94d847d0de3d1c04c252688f89d9b43292cbc3219fe9645a3739a04ac682c64"
+      }
+    },
+    {
+      "pass": 30,
+      "main_updates": 4410,
+      "hard": {
+        "pass": 30,
+        "cursor": 4410,
+        "correct": 17,
+        "total": 59
+      },
+      "course": {
+        "correct": 505,
+        "total": 564,
+        "held_back": {
+          "correct": 117,
+          "total": 127
+        },
+        "trained": {
+          "correct": 325,
+          "total": 358
+        },
+        "excluded": {
+          "correct": 63,
+          "total": 79
+        }
+      },
+      "checkpoint": {
+        "sha256": "97424646d4fcb2ded92dbd87faa743ccc463c489ea901249ea13f6807b75babe",
+        "bytes": 4068175,
+        "state": {
+          "model": "8586305ebab4db230d1887828623094a567e2af1d1550069a8d7ce48341c6e02",
+          "optimizer": "36ec43fb7d872d4056c234eb706a1b20cea8b7dae66d513f05f05e98e7196eca",
+          "encoder": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+          "rng": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337",
+          "cursor": 4410,
+          "model_revision": 4410,
+          "counters": {
+            "core_forward_attempts": 303144,
+            "core_forward_calls": 303144,
+            "sample_core_passes": 303144,
+            "packet_forward_calls": 37893,
+            "prediction_calls": 37893,
+            "staged_batches": 4410,
+            "backward_attempts": 4410,
+            "backward_calls": 4410,
+            "optimizer_step_attempts": 4410,
+            "optimizer_updates": 4410,
+            "private_loss_plan_calls": 35280
+          },
+          "training_mode": true,
+          "pending": false,
+          "failed": false
+        },
+        "run_identity_digest": "d94d847d0de3d1c04c252688f89d9b43292cbc3219fe9645a3739a04ac682c64"
+      }
+    },
+    {
+      "pass": 40,
+      "main_updates": 5880,
+      "hard": {
+        "pass": 40,
+        "cursor": 5880,
+        "correct": 15,
+        "total": 59
+      },
+      "course": {
+        "correct": 496,
+        "total": 564,
+        "held_back": {
+          "correct": 114,
+          "total": 127
+        },
+        "trained": {
+          "correct": 321,
+          "total": 358
+        },
+        "excluded": {
+          "correct": 61,
+          "total": 79
+        }
+      },
+      "checkpoint": {
+        "sha256": "de1792023fb1cac631ca3d731f106a88f0a11a8f1553072ff08f41c1960dbe6c",
+        "bytes": 4068175,
+        "state": {
+          "model": "92d88887eb221e79436fd06f408f0d41cb02ba7e5d3b280be69d7bf29fd23155",
+          "optimizer": "61acddbc2bb88a86764a04f250e72a8b9c654ec6f22fb74e8675d4077e0abd3e",
+          "encoder": "15d3ba3557aa8fb6142e0497d7978de798fef775dffb41080fc87798e139eae4",
+          "rng": "599066cd639e7b0ac328c4a047af8c241fb413dd6fd89de70060876666153337",
+          "cursor": 5880,
+          "model_revision": 5880,
+          "counters": {
+            "core_forward_attempts": 397224,
+            "core_forward_calls": 397224,
+            "sample_core_passes": 397224,
+            "packet_forward_calls": 49653,
+            "prediction_calls": 49653,
+            "staged_batches": 5880,
+            "backward_attempts": 5880,
+            "backward_calls": 5880,
+            "optimizer_step_attempts": 5880,
+            "optimizer_updates": 5880,
+            "private_loss_plan_calls": 47040
+          },
+          "training_mode": true,
+          "pending": false,
+          "failed": false
+        },
+        "run_identity_digest": "d94d847d0de3d1c04c252688f89d9b43292cbc3219fe9645a3739a04ac682c64"
+      }
+    }
+  ],
+  "losses": [
+    {
+      "pass": 21,
+      "cursor": 3087,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26132915016478164,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 22,
+      "cursor": 3234,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26127026106565704,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 23,
+      "cursor": 3381,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26122589754630693,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 24,
+      "cursor": 3528,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26118921020033664,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 25,
+      "cursor": 3675,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26115605997390756,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 26,
+      "cursor": 3822,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26112762910732534,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 27,
+      "cursor": 3969,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2611040702954504,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 28,
+      "cursor": 4116,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26108548255254643,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 29,
+      "cursor": 4263,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2610716483138726,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 30,
+      "cursor": 4410,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26106206269429105,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 31,
+      "cursor": 4557,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2610562029139646,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 32,
+      "cursor": 4704,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26105360079440554,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 33,
+      "cursor": 4851,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2610551369965436,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 34,
+      "cursor": 4998,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.26106153717477076,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 35,
+      "cursor": 5145,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2610666129433391,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 36,
+      "cursor": 5292,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2610620779472796,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 37,
+      "cursor": 5439,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.5124971386403198,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 38,
+      "cursor": 5586,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.4101732464012016,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 39,
+      "cursor": 5733,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2883476922429682,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    },
+    {
+      "pass": 40,
+      "cursor": 5880,
+      "updates": 147,
+      "mean_raw_batch_loss": 0.2583979866554132,
+      "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss; arithmetic mean across this pass batches."
+    }
+  ],
+  "loss_definition": "Unchanged c45 train_sealed_batch raw_batch_loss, arithmetic mean across147 batches of the named pass; not hard-question accuracy. Child did not retrain pass20.",
+  "retention_interference": "NOT_PRODUCED_BY_THIS_CHILD; no new metric invented",
+  "collection": {
+    "declared_artifacts": 84,
+    "verified_hashes": 84,
+    "archive_sha256": "3d2f8a601c91dbf796152d30dfe56a8b1559fcc66845a0781113dc473c0dedda",
+    "archive_bytes": 37227300,
+    "protected_bodies_read": false
+  },
+  "cleanup": {
+    "complete": true,
+    "observed_utc": "2026-09-28T04:56:43.014089+00:00",
+    "instance": "ABSENT_FROM_PROVIDER_LISTINGS_AFTER_TERMINATION",
+    "security_group": "ABSENT",
+    "schedule": "ABSENT",
+    "worker_role": "ABSENT",
+    "watchdog_role": "ABSENT",
+    "profile": "ABSENT",
+    "volumes": 0,
+    "network_interfaces": 0,
+    "private_archive": "RETAINED",
+    "production_resources_touched": false
+  },
+  "recovery": {
+    "stale_execution_preserved": true,
+    "failed_confirmation_preserved": true,
+    "all_temporary_execution_records_preserved": true,
+    "receipt_sha256": "d0886fe3399de083dc7e233b7e55ede3178af8b7844899d9b36dc2f81d0ff94c",
+    "source_record": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\forward02\\training\\closeout_20260928\\CLOSEOUT_RECOVERY.json"
+  },
+  "cost": {
+    "campaign_total_cap_usd": "26.00",
+    "historical_reservations_usd": {
+      "first_preparation": "2.00",
+      "corrective_preparation": "2.00",
+      "training_evaluation": "20.00",
+      "protected_readout_cleanup": "2.00"
+    },
+    "actual_invoice_usd": null,
+    "cost_explorer_job_tag": "No matching CASJob tag returned; not evidence of zero cost",
+    "cost_explorer_read_request_id": "41f287bf-b1b8-4d73-b4be-615f96423689",
+    "launch_utc": "2026-09-27T21:54:47.354689+00:00",
+    "last_runner_observation_utc": "2026-09-28T02:21:25.340870+00:00",
+    "runner_elapsed_seconds": 15997.9870453,
+    "hourly_price_usd": "2.52",
+    "estimated_compute_through_last_runner_observation_usd": 11.198591,
+    "limitation": "Runner observation ended before provider termination was confirmed; final instance-billed duration unavailable. This estimate excludes any later terminating interval, storage, network and preparation attempts; not an invoice.",
+    "numeric_worker_elapsed_seconds": 15600.749297416,
+    "retained_private_storage_bytes": 46336276,
+    "retained_storage_active": true
+  },
+  "review": {
+    "id": "deepseek-current-evidence-growth-20260928-07",
+    "P1-M1": "Addressed by independent schedule and next-batch digest equality; training schedule also matched retained proof. No source patch to the completed run.",
+    "P1-M2": "Prelaunch numerical proof reached2941 only; no full-pass rehearsal before launch. Completed training now supplies subsequent evidence through5880, not retroactive prelaunch verification."
+  },
+  "interpretation": "MEASURED_NOT_CERTIFIED; descriptive development-panel results; no significance/capacity/CAS advantage claim",
+  "pass30_disposition": "DEVELOPMENT_CANDIDATE_ONLY_NOT_PROMOTED",
+  "automatic_extension": false
+}
