@@ -9,7 +9,7 @@
  },
  "levels": {
   "L1": "standalone module tests: written; 22 pure-Python passed locally; 15 numeric NOT RUN",
-  "L2": "migration of an actual copied HELM checkpoint: not started; restricted form needs no learner edit; driver specified, not written",
+  "L2": "migration of an actual copied HELM checkpoint: driver written (injected loader/builders), 9 local cases passed, 4 GPU cases on a double loader NOT RUN; real migration not started",
   "L3": "additional training with growth: not started; needs six learner touch points under a lease",
   "L4": "measured task benefit: no claim; needs L3 plus control and preregistered readout"
  },
@@ -37,7 +37,7 @@
   "checkpoint_schema_constant": 164
  },
  "L2_restricted_driver": {
-  "file_to_write": "research/helm_growth_experiments/residual_world_v1/migrate_real_parent.py (next authorized slice; NOT written now)",
+  "file_to_write": "research/helm_growth_experiments/residual_world_v1/migrate_real_parent.py (WRITTEN 2026-09-28; 9 pure-Python cases passed locally; torch path NOT RUN; real migration not started)",
   "steps": [
    "restore a COPY of an admitted parent via PointerCourseLearner.restore_checkpoint with expected_learnable_names",
    "capture old named parameters and cloned tensors",
@@ -53,7 +53,8 @@
    "framework and encoder built as the worker builds them (cncm.typed_matched_worker._framework)",
    "GPU job after the seed-19 slot releases",
    "a separate finite allowance"
-  ]
+  ],
+  "builder_interfaces_bound": "EXACT_BUILDER_INTERFACES in migrate_real_parent.py, read from cd5ce96c worker.py 50/79-83 and continuation.py 147-160; injected, never imported"
  },
  "L3_minimal_learner_change": [
   {

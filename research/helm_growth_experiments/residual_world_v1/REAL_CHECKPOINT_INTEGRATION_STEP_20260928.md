@@ -42,7 +42,7 @@ TRAINED by the learner without the edits below.
 
 ## L2, restricted form: no learner edit, needs a GPU job and Codex's builders (the smallest remaining real-model step)
 
-Driver `migrate_real_parent.py` (to be written in this namespace on the next authorized slice; not written now):
+Driver `migrate_real_parent.py` — **written 2026-09-28 (owner packet REAL-CHECKPOINT CONNECTION)**; its steps are the list below. Pure-Python parts passed 9 local cases; the torch path is NOT RUN; a real migration has not started:
 
 1. Inputs: a COPY of an admitted parent checkpoint (never the live seed-19 or seed-18 files), its `expected_sha256`,
    its `expected_run_identity_digest`, the `framework` and `encoder` built the way Codex's worker builds them

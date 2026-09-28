@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-28 - Growth L2 driver written: migrate a COPY of an admitted parent into a grown candidate (injected guarded loader; 9 local cases passed; GPU cases NOT RUN)
+
+- `residual_world_v1/migrate_real_parent.py`: preflight (copy sha256 must equal the declared parent; fresh output
+  directory not nested with the parent's; CUDA required), the injected `restore_checkpoint` call with its exact
+  keywords, `ROLLBACK_PARENT.json`, specialist attached DISABLED, AdamW state migrated under the verified mapping with
+  the learner's own `optimizer_config`, exact-preservation gate, same-object forward probe, grown candidate written in
+  Claude's format, digest-sealed `REAL_PARENT_MIGRATION_RECORD.json` carrying the claim boundary (GraphForward at line
+  1566 still ignores the specialist; no training; no benefit). `EXACT_BUILDER_INTERFACES` records the production builder
+  calls read from the executing source `cd5ce96c`. The four pinned files of the 15-case package are unchanged (4 OK).
+- Executed locally (no torch): `test_migrate_real_parent.py` 9 passed / 0 failed / 0 errors / 0 skipped, junit
+  `driver_tests_local_junit.xml`. NOT run: the driver's torch path and `numeric_gpu/test_migrate_real_parent_numeric.py`
+  (4 cases on a labeled double loader; a separate file, not a second execution request). No real parent restored; no
+  learner or checkpoint edited; no AWS. DeepSeek's latest review of `c70e1a04` is not reachable here (not on the PR, not
+  in git at 03:18Z); its identity was requested.
+
 ## 2026-09-28 - Growth handoff: numerical validation package for the 15 unrun cases, four-level validation ladder, exact real-checkpoint integration step (no execution, no learner edit)
 
 - `residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.{md,json}`: source binding to `c70e1a04` with per-file
