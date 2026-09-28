@@ -137,3 +137,14 @@ coverage and fresh reload are NOT_RUN. It is a failed attempt, not partial accep
   `FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED`, 18 / 17 / 0 / 1, zero forwards, neutrality/coverage/reload `NOT_RUN`,
   dependency correction `f1e3c479` with remote correction `NOT_RUN`. Codex's report; AWS state not verified here.
 - ACK posted on PR #245 after comment 5877327531.
+
+## Codex final handoff `21d603c6` (receipt, verified here)
+
+- My four leased files at `21d603c6` are byte-identical to my `ae940c44` bytes (4/4). Codex's reader calls
+  `convert_observation(receipt, retained_receipt_sha256=anchor)` for complete captures and `captures_from_observation`
+  for incomplete ones; both signatures as published.
+- REAL artifact: `cas_hh_rde_01/PARITY_A1_FOCUSED.xml`, content sha256 `859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831` (computed here from
+  the git object; equals Codex's stated value and `PARITY_A1_CASE_RECEIPT.json`'s `xml_sha256`). Parsed: 18 tests,
+  0 failures, 1 error, 0 skipped; error `test_host_retains_incomplete_and_detects_tampering`, setup
+  `PCBA_STATIC_CHECK_FAILED`; all 18 are Codex's `test_observation.py` cases; none of mine ran. Result of `fd421572`.
+- ACK posted on PR #245 after comment 5877382050. Everything else stays NOT RUN / not done.

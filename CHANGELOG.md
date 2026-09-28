@@ -60,6 +60,11 @@ Monorepo-level log. Subprojects keep their own changelogs
   Codex's `reload_configuration_inputs` binds to `captures_from_observation` / `verify_observation` / `expected_hits_for`
   after the host-ledger anchor (signatures unchanged at `ae940c44`); `CLOSEOUT_RECOVERY.json` (sha256 `e7eb7d49…`)
   records the failed parity attempt as `FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED`, 18/17/0/1, zero forwards.
+- Codex final handoff `21d603c6` received: my `ae940c44` bytes integrated unchanged (4/4 verified); Codex's reader now
+  calls `convert_observation` for complete captures. The real AWS JUnit is in git at
+  `21d603c6:research/helm_self_improvement/cas_hh_rde_01/PARITY_A1_FOCUSED.xml`, content sha256 `859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831`
+  (computed here): 18 tests, 0 failures, 1 setup error, 0 skipped; all 18 are Codex's cases; none of mine ran. It is
+  the result of `fd421572`, not of current source. Recorded as a real negative artifact.
 - Not done: no HELM capture, no checkpoint opened, no witness executed, no AWS, no paid call, no learner edit. Smallest
   remaining dependency: the completed passive parity result (Codex's job) and a frozen protocol review, after which an
   intervention witness needs its own admitted job.

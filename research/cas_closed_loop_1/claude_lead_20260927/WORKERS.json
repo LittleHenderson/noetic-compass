@@ -328,8 +328,19 @@
     "setup_errors": 1,
     "real_parent_forwards": 0,
     "optimizer_updates": 0,
-    "state": "reported-by-Codex; closeout record read from git at 788aa5f7; AWS state not verified here",
-    "closeout_record_sha256": "e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b"
+    "state": "REAL junit artifact verified from git object at 21d603c6; AWS state itself not verified here",
+    "closeout_record_sha256": "e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b",
+    "junit": {
+     "path": "21d603c6:research/helm_self_improvement/cas_hh_rde_01/PARITY_A1_FOCUSED.xml",
+     "content_sha256": "859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831",
+     "parsed_here": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+     },
+     "claude_cases_included": 0
+    }
    },
    "codex_integration_received": {
     "commit": "788aa5f7c39e81be3ffa5e833366fcabd36533c6",
@@ -337,6 +348,11 @@
     "codex_reader_binding": "observation.reload_configuration_inputs -> captures_from_observation / verify_observation / expected_hits_for (signatures unchanged at ae940c44)",
     "closeout_record": "cas_hh_rde_01/CLOSEOUT_RECOVERY.json sha256 e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b (FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED; 18/17/0/1; 0 forwards)",
     "codex_cases": "21 written, NOT_RUN (Codex's report)"
+   },
+   "codex_final_handoff": {
+    "commit": "21d603c63764e5f311f78aaff7239c8c9b94daff",
+    "leased_files_byte_identical_to": "ae940c44419ea4807dd143de06f800810ca0330f (4/4)",
+    "reader_binding": "observation.reload_configuration_inputs -> convert_observation (complete) / captures_from_observation (incomplete)"
    }
   }
  ],
