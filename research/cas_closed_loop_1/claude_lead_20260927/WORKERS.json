@@ -254,6 +254,30 @@
     "DeepSeek review of c70e1a04 not reachable, not reconciled"
    ],
    "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-REV03-20260928",
+   "label": "optimizer reload device defect fix after the real 14/15 run",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "packet bound: 0 children",
+   "scope": "Codex packet in PR #245 comment 5863856084: fix the observed optimizer reload device defect and strengthen its exact device/value regression in the existing residual_world_v1 files; keep c70e1a04 and the failed receipt intact; 20 active minutes; at most 12 inspection/edit calls; no local pytest/torch",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_rev03.sha256",
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/README.md"
+   ],
+   "started_utc": "2026-09-28T05:09:11Z",
+   "allocation": "20 active minutes, 12 calls maximum",
+   "executed": "NONE (no pytest, no torch, per the packet); syntax parsed only",
+   "not_done": [
+    "no local test run",
+    "no AWS",
+    "no learner or checkpoint edit"
+   ],
+   "status": "COMPLETED"
   }
  ],
  "not_done_by_any_worker": [

@@ -3,7 +3,7 @@
  "prepared_utc": "2026-09-28T01:10:00Z",
  "prepared_by": "Claude lead session session_011hJxopymaeoPQ67KvchtwW, serial, no execution",
  "owner_task": "ORIGINAL HELM - CORRECTED GROWTH HANDOFF (after FORWARD-02 delivery c70e1a04)",
- "claim_state": "PREPARED, NOT RUN. Nothing in this package has executed with torch anywhere. A junit produced by the designated runner from this exact binding is the only thing that changes that.",
+ "claim_state": "EXECUTED ONCE at c70e1a04 (14 passed / 1 failed, real junit in git). Revision 0.3 fix prepared, NOT RUN. A junit from the rev03 pins is the only thing that changes that.",
  "validation_level": {
   "this_package_establishes_at_most": "L1 standalone module tests on a labeled test-double container",
   "ladder": {
@@ -158,5 +158,67 @@
   "not mixed into seed 18's learning-rate-only pair",
   "no attachment to seed 19",
   "no checkpoint deserialized by these tests"
- ]
+ ],
+ "executions": [
+  {
+   "job_id": "helm-growth15-c70e1a-20260928-a1",
+   "instance": "i-04c625eff1aa383aa",
+   "operator_source": "72357ed8a3bb2b1aba44b13a3f194184ef0e1acd",
+   "package_commit_used": "a6fe92393dcce5309a4c08e558970d74a89c8447",
+   "source_pins_used": "c70e1a048d5130e5268b4a6556265aa53225b6c1 (four pins, reported verified by Codex)",
+   "environment_reported": "Python 3.11.15, torch 2.11.0+cu128, CUDA 12.8, one NVIDIA RTX PRO 4500",
+   "result": {
+    "tests": 15,
+    "passed": 14,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0
+   },
+   "failed_ids": [
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py::test_finding3_enabled_nonzero_b_and_optimizer_state_survive_save_and_reload_together"
+   ],
+   "failure_message": "RuntimeError: Expected all tensors to be on the same device, but got other is on cuda:0, different from other tensors on cpu (when checking argument in method wrapper_CUDA__equal)",
+   "root_cause": "load_grown loaded the optimizer file with map_location=<cuda device>; a non-capturable non-fused AdamW keeps the scalar step on CPU, so the reloaded step sat on CUDA and torch.equal against the original CPU step raised",
+   "junit": {
+    "path_at_commit": "38c2ecc4:research/helm_growth_validation/results_20260928/growth-specialist-numeric-junit.xml",
+    "content_sha256_computed_here_from_git": "d0b56715960e5b595c74e8b0e84356859623b65f229b51bccf8fab7b3139922a",
+    "companion": "38c2ecc4:research/helm_growth_validation/results_20260928/GROWTH15_RESULT.json"
+   },
+   "claim_state": "REAL: the junit is an object in git at 38c2ecc4 (hash computed here); job, instance, environment and artifact-hash verification are Codex's report. 14/15 is not acceptance of anything above L1; the negative result is preserved.",
+   "cost_reported": "one separate USD 3 job; no continuation funds used; no automatic rerun"
+  }
+ ],
+ "revision_0_3": {
+  "reason": "fix the observed optimizer reload device defect (owner packet after the real run)",
+  "changed_files": [
+   "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+   "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py"
+  ],
+  "unchanged_files": [
+   "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py",
+   "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py"
+  ],
+  "pins_file": "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_rev03.sha256",
+  "file_sha256": {
+   "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py": "0dcf4c05975711f10559a19599eb8a10503c135a2b2ee075e15d0c1640caba29",
+   "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py": "ca2f0f1e38d34a71993ca83ba04b5f3c364e99bc6b192a625024ae9b979b20e0",
+   "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py": "21ea6597212bc949e6524811673be5f5e63de9ab1c0feaa6637ed078d291cba4",
+   "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py": "bc66e9933369982dc2a31d5232d6e888dd37e9af970d658dc388fcbce76aa52f"
+  },
+  "fix": "load_grown loads grown_optimizer.pt with map_location='cpu'; Optimizer.load_state_dict then places the moments on each parameter's device and leaves step on CPU; new verify_optimizer_placement refuses any other placement and is called after every optimizer load (migrate_optimizer, load_grown)",
+  "regression": "round-trip case now checks device and dtype before exact value for every optimizer tensor and asserts CPU step / device moments on both sides; new case reproduces the 0.2 defect on purpose (map_location=<cuda> relocates step) and shows the 0.3 loader keeps placement and exact values; the attach test checks placement after migration",
+  "expected_collected": {
+   "numeric_gpu": 16,
+   "plan_pure_python": 22
+  },
+  "claim_state": "written, NOT RUN (no local pytest or torch execution was permitted in this packet)",
+  "next_acceptance_command": "cd <repo> && git checkout <rev03-commit> -- research/helm_growth_experiments/residual_world_v1/ && sha256sum -c research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_rev03.sha256 && python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/growth-specialist-numeric-rev03-junit.xml -rA research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+  "expected_if_collection_matches": {
+   "tests": 16,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "venue_rule": "separate prospective source-bound admission on the designated runner; nothing launched automatically; no continuation funds"
+ }
 }

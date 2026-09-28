@@ -144,6 +144,8 @@ def test_attach_preserves_originals_and_optimizer_state_exactly_and_counts_new_p
     for name in gmp.NEW_PARAMETER_NAMES:
         entry = new_optimizer.state_dict()["state"][mapping["new"][name]["new_index"]]
         assert float(entry["step"]) == 0.0 and bool((entry["exp_avg"] == 0).all()) and bool((entry["exp_avg_sq"] == 0).all())
+        assert entry["step"].device.type == "cpu" and entry["exp_avg"].device == torch.device(DEVICE)
+    assert log["placement"]["step_device"] == "cpu" and log["placement"]["moment_devices"] == [str(torch.device(DEVICE))]
     with pytest.raises(gmp.PlanRefused, match="^SPECIALIST_ALREADY_ATTACHED"):
         _attach(container)
 
@@ -277,7 +279,16 @@ def test_finding3_enabled_nonzero_b_and_optimizer_state_survive_save_and_reload_
     for index, entry in before_optimizer["state"].items():
         for key, value in entry.items():
             other = after_optimizer["state"][index][key]
-            assert torch.equal(value, other) if torch.is_tensor(value) else value == other, (index, key)
+            if torch.is_tensor(value):
+                # device and dtype are part of exactness: the real job's failure was a CPU step versus a CUDA step
+                assert value.device == other.device and value.dtype == other.dtype, (index, key, value.device, other.device)
+                assert torch.equal(value, other), (index, key)
+            else:
+                assert value == other, (index, key)
+        assert entry["step"].device.type == "cpu" and after_optimizer["state"][index]["step"].device.type == "cpu", index
+        for key in ("exp_avg", "exp_avg_sq"):
+            assert after_optimizer["state"][index][key].device == torch.device(DEVICE), (index, key)
+    assert wrs.verify_optimizer_placement(optimizer2)["step_device"] == "cpu"
     old_group = {k: v for k, v in before_optimizer["param_groups"][0].items() if k != "params"}
     gmp.settings_preserved(old_group, optimizer2.param_groups[0])
     assert torch.equal(wrs.scored_world(fresh, x).detach(), before_output)
@@ -341,3 +352,33 @@ def test_finding4_zero_input_and_zero_upstream_gradient_leave_b_without_gradient
     specialist.zero_grad(set_to_none=True)
     specialist(x, base).sum().backward()  # the stated conditions: generic nonzero x and dL/dy = 1
     assert bool((specialist.B.weight.grad != 0).any())
+
+
+def test_finding3_reload_keeps_cpu_step_and_device_moments_and_the_0_2_defect_is_reproduced(tmp_path):
+    """Revision 0.3 regression for the real failure in job helm-growth15-c70e1a-20260928-a1 (14 passed, 1 failed at
+    c70e1a04): loading the optimizer file with map_location=<cuda> moved the CPU scalar step to CUDA."""
+    container, specialist, plan, mapping, optimizer, x = _grown_after_steps(steps=2)
+    assert wrs.verify_optimizer_placement(optimizer)["step_device"] == "cpu"  # the source's AdamW keeps step on CPU
+    wrs.save_grown(container, optimizer, plan, tmp_path)
+    # the 0.2 defect, reproduced on purpose: a device map_location moves step to CUDA
+    moved = torch.load(tmp_path / gmp.GROWN_OPTIMIZER_FILE, map_location=DEVICE, weights_only=True)
+    first = next(iter(moved["state"].values()))
+    assert first["step"].device.type == "cuda", "map_location=<cuda> relocates the scalar step: the defect's mechanism"
+    # the 0.3 loader keeps CPU step and device moments, and every value is exactly equal
+    fresh = _container()
+    specialist2, optimizer2, sidecar2, plan2 = wrs.load_grown(fresh, tmp_path, device=DEVICE)
+    placement = wrs.verify_optimizer_placement(optimizer2)
+    assert placement["step_device"] == "cpu" and placement["moment_devices"] == [str(torch.device(DEVICE))]
+    assert placement["entries_with_state"] == len(optimizer2.param_groups[0]["params"])
+    before, after = optimizer.state_dict()["state"], optimizer2.state_dict()["state"]
+    for index in before:
+        for key in ("step", "exp_avg", "exp_avg_sq"):
+            assert before[index][key].device == after[index][key].device and torch.equal(before[index][key], after[index][key]), (index, key)
+    # an optimizer whose step was relocated is refused by the verifier
+    bad = torch.optim.AdamW(list(fresh.parameters()), foreach=False, fused=False, capturable=False)
+    bad.load_state_dict(moved)
+    with torch.no_grad():
+        for entry in bad.state.values():
+            entry["step"] = entry["step"].to(DEVICE)
+    with pytest.raises(gmp.PlanRefused, match="^OPTIMIZER_STATE_INCOMPATIBLE: step"):
+        wrs.verify_optimizer_placement(bad)

@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-28 - Growth 15-case package ran on a real CUDA job at c70e1a04: 14 passed, 1 failed; revision 0.3 fixes the optimizer reload device defect (NOT RUN)
+
+- Real result (junit in git at `38c2ecc4`, content sha256 `d0b56715…`; job `helm-growth15-c70e1a-20260928-a1` reported by
+  Codex): 15 collected, 14 passed, 1 failed, 0 errors, 0 skipped. The failure was the enabled + nonzero-B + optimizer
+  round trip: `load_grown` loaded `grown_optimizer.pt` with `map_location=<cuda>`, which moved the CPU scalar `step` of a
+  non-capturable AdamW to CUDA, and `torch.equal` against the original CPU step raised. Negative result preserved.
+- Revision 0.3 (`world_residual_specialist.py`, numeric test only; the plan module and its 22 cases unchanged): the
+  optimizer file is loaded on CPU and AdamW's own load policy places tensors; `verify_optimizer_placement` refuses any
+  other placement after every optimizer load; the round-trip case checks device and dtype before exact value; a new
+  16th case reproduces the defect on purpose and shows the fix. Pins `numeric_gpu/SOURCE_PINS_rev03.sha256`.
+  Written, NOT RUN: this packet permitted no local pytest or torch execution. Next acceptance needs a separate
+  prospective source-bound admission on the designated runner (expected 16 / 0 / 0 / 0 if collection matches).
+- Codex acknowledged the L2 driver scope and supplied the builder binding (`4526518e:research/helm_growth_validation/
+  CLAUDE_BUILDER_HANDOFF.json`: framework seed 20260918, seed-18 parent sha256 `5a8a3069…`, run digest `06a448aa…`,
+  cursor 2940, 53 learnable names). L2 migration still not executed. Status stays `ENGINEERED-NOT-VALIDATED`.
+
 ## 2026-09-28 - Growth L2 driver written: migrate a COPY of an admitted parent into a grown candidate (injected guarded loader; 9 local cases passed; GPU cases NOT RUN)
 
 - `residual_world_v1/migrate_real_parent.py`: preflight (copy sha256 must equal the declared parent; fresh output

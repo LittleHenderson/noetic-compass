@@ -22,7 +22,12 @@ CPU-dry tests. It does not import, modify or attach to the original learner; ``a
 container that carries a ``world_head`` and registers the specialist as its LAST submodule, which keeps the
 original parameter order as an unchanged prefix.
 
-Claim state: implemented, NOT RUN anywhere at the time of writing (no torch in the preparing container).
+Revision 0.3 (2026-09-28): the real job helm-growth15-c70e1a-20260928-a1 ran the 15 cases at c70e1a04 (14 passed,
+1 failed). The failure was ``load_grown`` loading the optimizer file with ``map_location=<cuda>``, which moved the
+CPU scalar ``step`` to CUDA; fixed by loading on CPU and verifying placement (``verify_optimizer_placement``).
+That fix is NOT RUN at the time of writing; the failed receipt at c70e1a04 is kept as history.
+
+Claim state at 0.2: implemented, NOT RUN anywhere at the time of writing (no torch in the preparing container).
 No checkpoint is deserialized or mutated by this file; a real migration later copies an admitted parent at a
 declared safe boundary and records the plan produced here.
 """
@@ -173,6 +178,36 @@ def _state_compatible(entry, parameter, name):
         _refuse("OPTIMIZER_STATE_INCOMPATIBLE", "no step for " + name)
 
 
+def verify_optimizer_placement(optimizer):
+    """Every optimizer state tensor must sit where a non-capturable, non-fused AdamW keeps it: the scalar ``step``
+    on CPU as float32, the moments on the parameter's device with the parameter's dtype. torch's own
+    ``load_state_dict`` policy produces exactly this from a CPU-loaded state; loading the file with
+    ``map_location=<cuda device>`` moved ``step`` to CUDA, which is the defect the real job caught (job
+    helm-growth15-c70e1a-20260928-a1: ``torch.equal`` on a CPU ``step`` versus a CUDA ``step`` raised).
+    Refuses ``OPTIMIZER_STATE_INCOMPATIBLE`` and returns a placement summary."""
+    if len(optimizer.param_groups) != 1:
+        _refuse("OPTIMIZER_GROUPS_UNSUPPORTED")
+    group = optimizer.param_groups[0]
+    if group.get("capturable", False) or group.get("fused", False):
+        _refuse("OPTIMIZER_STATE_INCOMPATIBLE", "the source's AdamW is non-capturable and non-fused; placement policy assumes that")
+    entries, moment_devices = 0, set()
+    for parameter in group["params"]:
+        entry = optimizer.state.get(parameter)
+        if not entry:
+            continue
+        step = entry.get("step")
+        if not torch.is_tensor(step) or step.device.type != "cpu" or step.dtype != torch.float32 or step.dim() != 0:
+            _refuse("OPTIMIZER_STATE_INCOMPATIBLE", "step must be a CPU float32 scalar tensor, got %r" % (step,))
+        for key in ("exp_avg", "exp_avg_sq"):
+            value = entry.get(key)
+            if not torch.is_tensor(value) or value.device != parameter.device or value.dtype != parameter.dtype \
+                    or tuple(value.shape) != tuple(parameter.shape):
+                _refuse("OPTIMIZER_STATE_INCOMPATIBLE", "%s must live on %s with dtype %s" % (key, parameter.device, parameter.dtype))
+            moment_devices.add(str(value.device))
+        entries += 1
+    return {"entries_with_state": entries, "step_device": "cpu", "moment_devices": sorted(moment_devices)}
+
+
 def migrate_optimizer(old_optimizer, container, *, mapping, old_named_parameters, optimizer_config=None):
     """Build the grown AdamW and carry every original parameter's state over through a VERIFIED binding.
 
@@ -217,9 +252,11 @@ def migrate_optimizer(old_optimizer, container, *, mapping, old_named_parameters
                                                 "exp_avg_sq": torch.zeros_like(parameter)}
     new_optimizer.load_state_dict(new_state)
     settings_preserved(settings, new_optimizer.param_groups[0])
+    placement = verify_optimizer_placement(new_optimizer)
     return new_optimizer, {"carried_by_name": carried, "original_without_state": absent,
                            "new_with_zero_state": sorted(mapping["new"]), "settings_preserved": sorted(settings),
-                           "old_group_names": list(old_names), "new_group_names": list(new_names)}
+                           "old_group_names": list(old_names), "new_group_names": list(new_names),
+                           "placement": placement}
 
 
 def preservation_report(old_named_tensors, container, old_optimizer, new_optimizer, mapping):
@@ -304,7 +341,11 @@ def load_grown(container, directory, *, device):
     names = bind_group_parameters(params, container.named_parameters())
     if list(names) != list(sidecar["optimizer_parameter_names"]):
         _refuse("OPTIMIZER_BINDING_INVALID", "the fresh container's verified group order differs from the sidecar")
-    saved = torch.load(directory / GROWN_OPTIMIZER_FILE, map_location=device, weights_only=True)
+    # Load the optimizer file on CPU, never on the device: ``Optimizer.load_state_dict`` then moves the moments to
+    # each parameter's device and, for a non-capturable non-fused AdamW, leaves the scalar ``step`` on CPU, which
+    # is exactly the placement the saved optimizer had. ``map_location=device`` moved ``step`` to CUDA and broke
+    # the exact comparison in the real job (revision 0.3 fix; the failed receipt at c70e1a04 is kept as history).
+    saved = torch.load(directory / GROWN_OPTIMIZER_FILE, map_location="cpu", weights_only=True)
     if len(saved["param_groups"]) != 1 or len(saved["param_groups"][0]["params"]) != len(params):
         _refuse("OPTIMIZER_STATE_INCOMPATIBLE", "saved optimizer group does not match the verified group")
     named = dict(container.named_parameters())
@@ -314,4 +355,5 @@ def load_grown(container, directory, *, device):
     optimizer.load_state_dict(saved)  # restores state AND the saved group settings onto the single group
     saved_settings = {k: v for k, v in saved["param_groups"][0].items() if k != "params"}
     settings_preserved(saved_settings, optimizer.param_groups[0])
+    verify_optimizer_placement(optimizer)  # CPU step, device moments; refuses otherwise
     return specialist, optimizer, sidecar, plan
