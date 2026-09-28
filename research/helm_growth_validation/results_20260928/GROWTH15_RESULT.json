@@ -1,0 +1,72 @@
+{
+  "schema": "helm.growth15.actual-result/1",
+  "utc": "2026-09-28T05:08:38.703354+00:00",
+  "job_id": "helm-growth15-c70e1a-20260928-a1",
+  "instance_id": "i-04c625eff1aa383aa",
+  "operator_source_commit": "72357ed8a3bb2b1aba44b13a3f194184ef0e1acd",
+  "growth_source_commit": "c70e1a048d5130e5268b4a6556265aa53225b6c1",
+  "package_commit": "a6fe92393dcce5309a4c08e558970d74a89c8447",
+  "status": "FAILED_NUMERICAL_CHECK_NO_RETRY",
+  "counts": {
+    "collected": 15,
+    "passed": 14,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "case": "test_finding3_enabled_nonzero_b_and_optimizer_state_survive_save_and_reload_together",
+      "message": "RuntimeError: Expected all tensors to be on the same device, but got other is on cuda:0, different from other tensors on cpu (when checking argument in method wrapper_CUDA__equal)",
+      "traceback": "tmp_path = PosixPath('/opt/helm-validation/outputs/pytest-temp/test_finding3_enabled_nonzero_0')\n\n    def test_finding3_enabled_nonzero_b_and_optimizer_state_survive_save_and_reload_together(tmp_path):\n        container, specialist, plan, mapping, optimizer, x = _grown_after_steps(steps=2)\n        before_output = wrs.scored_world(container, x).detach().clone()\n        before_state = {k: v.detach().clone() for k, v in container.state_dict().items()}\n        before_optimizer = optimizer.state_dict()\n        sidecar = wrs.save_grown(container, optimizer, plan, tmp_path)\n        assert sidecar[\"enabled\"] is True and sidecar[\"init_seed\"] == SEED and sidecar[\"hidden\"] == gmp.SPECIALIST_HIDDEN\n        assert set(json.loads((tmp_path / gmp.SIDECAR_FILE).read_text())[\"files\"]) == {gmp.GROWN_STATE_FILE, gmp.GROWN_OPTIMIZER_FILE}\n        fresh = _container()\n        specialist2, optimizer2, sidecar2, plan2 = wrs.load_grown(fresh, tmp_path, device=DEVICE)\n        assert sidecar2 == sidecar and plan2 == plan\n        assert specialist2.enabled is True and bool((specialist2.B.weight != 0).any())\n        for name, tensor in fresh.state_dict().items():\n            assert torch.equal(tensor, before_state[name]), name\n        after_optimizer = optimizer2.state_dict()\n        assert set(after_optimizer[\"state\"]) == set(before_optimizer[\"state\"])\n        for index, entry in before_optimizer[\"state\"].items():\n            for key, value in entry.items():\n                other = after_optimizer[\"state\"][index][key]\n>               assert torch.equal(value, other) if torch.is_tensor(value) else value == other, (index, key)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^\nE               RuntimeError: Expected all tensors to be on the same device, but got other is on cuda:0, different from other tensors on cpu (when checking argument in method wrapper_CUDA__equal)\n\nresearch/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py:280: RuntimeError"
+    }
+  ],
+  "passed_cases": [
+    "test_disabled_specialist_returns_the_base_object_unchanged",
+    "test_initial_contribution_is_exactly_zero_when_the_intermediate_is_finite",
+    "test_nonfinite_and_wrong_shape_inputs_are_refused",
+    "test_attach_preserves_originals_and_optimizer_state_exactly_and_counts_new_parameters",
+    "test_state_dict_save_reload_and_plan_consistency",
+    "test_two_step_trainability_b_first_then_a_under_generic_inputs_and_sum_loss",
+    "test_contribution_ablation_after_two_steps",
+    "test_finding1_constructing_the_specialist_leaves_cpu_and_cuda_generators_exactly_unchanged",
+    "test_finding1_counterexample_of_the_0_1_layout_is_detected_by_the_probe",
+    "test_finding2_migration_refuses_a_group_that_is_not_the_verified_parameter_set",
+    "test_finding2_group_settings_come_from_the_old_group_and_a_differing_config_is_refused",
+    "test_finding3_missing_or_tampered_sidecar_and_files_are_refused",
+    "test_finding4_extreme_finite_input_overflows_the_intermediate_and_is_refused_before_b",
+    "test_finding4_zero_input_and_zero_upstream_gradient_leave_b_without_gradient"
+  ],
+  "source_pins_verified": true,
+  "runtime": {
+    "python": "3.11.15 (main, Aug  7 2026, 02:25:55) [Clang 22.1.3 ]",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "device_count": 1,
+    "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition"
+  },
+  "worker_elapsed_seconds": 91.74015037199999,
+  "archive_sha256": "b4395b5f5e340610f3cfcf6a228e23846a21225a2dfc9e362ba13b1514c0b183",
+  "archive_bytes": 247899,
+  "inventory_verified": 32,
+  "junit_sha256": "d0b56715960e5b595c74e8b0e84356859623b65f229b51bccf8fab7b3139922a",
+  "boundary": "L1 standalone test-double numerical check; no original HELM checkpoint loaded; L2-L4 not established",
+  "diagnosis": {
+    "established": "Roundtrip test reached comparison after model parameters and enabled/nonzero specialist checks; optimizer tensor comparison raised CPU/CUDA device mismatch.",
+    "source_location": "world_residual_specialist.py:307 loads optimizer file with map_location=device; constructor at313 is AdamW(capturable=False,fused=False).",
+    "smallest_proposed_fix": "Claude should preserve optimizer tensor placement on reload, in particular CPU scalar step state for noncapturable AdamW, while retaining GPU moments and original values. Deserialize optimizer state without forcing every tensor to CUDA; verify original and reloaded device/value identities. Do not weaken the comparison to conceal device migration.",
+    "inference_limit": "Traceback does not print the exact index/key; step-tensor attribution is a source-based inference, not direct tensor-body inspection."
+  },
+  "responsible_lead": "Claude owns growth module fix; Codex owns separate prospective execution admission; DeepSeek focused independent review",
+  "financial": {
+    "separate_cap_usd": "3.00",
+    "execution_reserved_usd": "2.00",
+    "cleanup_reserve_usd": "1.00",
+    "price_usd_hour": "2.52",
+    "actual_bill_usd": null,
+    "continuation_funds_used": "0.00"
+  },
+  "cleanup_status": "PROVIDER_SHUTTING_DOWN; original runner timeout and receipts preserved. Final independent resource verification pending.",
+  "automatic_retry": false,
+  "additional_paid_attempts": 0
+}

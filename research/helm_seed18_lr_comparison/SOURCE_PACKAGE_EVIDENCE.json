@@ -1,0 +1,72 @@
+{
+  "schema": "helm.seed18-lr-source-evidence/1",
+  "cases_written": 33,
+  "cases_actually_run": 0,
+  "case_inventory_ast": [
+    {
+      "name": "test_admitted_aws_venue",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_exact_parent_metadata",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_incompatible_parent_refused",
+      "expanded_count": 7
+    },
+    {
+      "name": "test_new_identity_accounting_and_limits_required",
+      "expanded_count": 14
+    },
+    {
+      "name": "test_new_wall_clock_does_not_reuse_old_elapsed",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_child_wall_limit_stops",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_child_update_overrun_stops",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_child_core_budget_uses_new_charges_and_stops",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_direct_fresh_construction_is_refused",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_wrong_parent_bytes_refused_before_torch",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_real_frozen_schedule_api_prefix_and_next_batch",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_two_fixed_lr_conditions_and_no_crossed_label",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_extended_schedule_is_part_of_child_identity",
+      "expanded_count": 1
+    },
+    {
+      "name": "test_seed19_parent_refused",
+      "expanded_count": 1
+    }
+  ],
+  "files": {
+    "continuation.py": "58bf46ad872b297c62f8e050d7e4dcee5a291262ace47006cea54a9b937133ef",
+    "test_continuation.py": "7ee12dab4ddbe86b9493471f93f9fefb186c3f2b23ed862952c098b62856f9a2",
+    "worker.py": "11a9ffcbd80aa1c996d358b389f4e58c303972732df2077c6ff7db708e67c408",
+    "__init__.py": "2ada442071ab24544e442aa4b98648331e6bddace2bd2c718c0ba4644a32bff3"
+  },
+  "source_inspection": "AST syntax and written parameterization count only; no pytest/model import",
+  "parent_copies_opaque_hash_verified": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341",
+  "status": "NUMERICAL_ACCEPTANCE_NOT_RUN"
+}
