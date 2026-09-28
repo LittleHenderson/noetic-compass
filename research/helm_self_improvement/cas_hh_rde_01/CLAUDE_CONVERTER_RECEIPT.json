@@ -1,0 +1,37 @@
+{
+  "task": "CAS-HH-RDE-01",
+  "source": "5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa",
+  "actual_ack_comment": 5877233839,
+  "original_four_file_lease": true,
+  "files": [
+    {
+      "path": "research/helm_self_improvement/diagnostic_configuration.py",
+      "sha256": "05d9ec30a011f7fe8094773561b4eb8bdf2d9c395fc5126fd07591874cb9249f",
+      "test_functions": 0,
+      "run_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/diagnostic_intervention.py",
+      "sha256": "4c82ffc7cfeb5133f1ca8778f8cea7be223bb6a145a71519e40799c3f7c601b1",
+      "test_functions": 0,
+      "run_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/test_diagnostic_configuration.py",
+      "sha256": "e38fa0f098a706d19c0988f6a0cd70ba3de7f2d5bfa0d10378e9c9cd386bac75",
+      "test_functions": 22,
+      "run_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/test_diagnostic_intervention.py",
+      "sha256": "225c2aff069c597d148a65e3d5e2389bf97b55a4c35620669336108e65f97cbc",
+      "test_functions": 16,
+      "run_by_codex": 0
+    }
+  ],
+  "status": "RECEIVED_NOT_RUN",
+  "source_hashes_verified": true,
+  "prior_delivery_retained_in_git": "f1e3c479a5cf8d63a34607fe2224c6527ba0110a",
+  "deepseek_relay_ack": "5877233839 explicitly verified all5 delivery files at8e0ec259",
+  "paid_retry": false
+}

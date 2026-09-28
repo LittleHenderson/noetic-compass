@@ -339,7 +339,28 @@ def test_hh16_receipt_json_round_trips_binds_its_declaration_and_detects_tamperi
     text = di.receipt_to_json(receipt)
     body = di.verify_receipt(text, declaration)
     assert body["status"] == "APPLIED" and body["actor"] == di.ACTOR and body["authority"] == "OBSERVATION_ONLY_NO_PROMOTION"
+    import hashlib
+    assert di.verify_receipt(text, declaration, retained_receipt_sha256=hashlib.sha256(text.encode()).hexdigest())["status"] == "APPLIED"
+    _refused("RECEIPT_ANCHOR_MISMATCH", di.verify_receipt, text, declaration, retained_receipt_sha256="0" * 64)
     _refused("RECEIPT_DECLARATION_MISMATCH", di.verify_receipt, text, _declare("SUPPRESS", gain=0.5))
     tampered = json.loads(text)
     tampered["status"] = "APPLIED_NO_CHANGE"
     _refused("RECEIPT_TAMPERED", di.verify_receipt, json.dumps(tampered), declaration)
+
+
+def test_hh15_expected_hits_from_the_emitter_rule_make_an_unexpected_reach_hit_not_applied():
+    from .diagnostic_configuration import expected_hits_for
+    model = _model()
+    declaration = _declare("SUPPRESS", gain=1.0, site="head.reach", rows=(0,), coordinates=(0,), round_index=None)
+    hidden, query = _inputs()
+    # a Parts packet never reaches head.reach (emitter rule: 0 expected); the fixture calls it anyway -> over-count
+    with di.apply(model, declaration, torch=torch, expected_forward_calls=1,
+                  expected_hits=expected_hits_for("head.reach", "parts")) as receipt:
+        with torch.no_grad():
+            model(hidden, query)
+    assert receipt.expected_hits == 0 and len(receipt.hits) == 1 and receipt.status == "NOT_APPLIED"
+    with di.apply(model, declaration, torch=torch, expected_forward_calls=1,
+                  expected_hits=expected_hits_for("head.reach", "reach")) as receipt:
+        with torch.no_grad():
+            model(hidden, query)
+    assert receipt.expected_hits == 1 and receipt.status == "APPLIED"

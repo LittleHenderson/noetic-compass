@@ -1,0 +1,113 @@
+{
+  "schema": "helm.hh-rde.closeout-recovery/1",
+  "task": "CAS-HH-RDE-01",
+  "original_helm_session": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+  "not_q1": true,
+  "job_id": "helm-hh-rde-parity-20260928-a1",
+  "instance_id": "i-08e6891563527434d",
+  "executed_source": "fd4215728209ef90948323d1268f2db664bc88ed",
+  "freeze_sha256": "95ce6622dee13d11b819c123e0dc685c18e27e5e74d47df3df4255758ec08426",
+  "payload_sha256": "ae09907d9e9ab071ba2970a37d05f5f5802748111e05b67a516ed601a56a438e",
+  "status": "FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED",
+  "failure": {
+    "check": "test_host_retains_incomplete_and_detects_tampering setup",
+    "error": "PCBA_STATIC_CHECK_FAILED",
+    "tests_collected": 18,
+    "passed": 17,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "model_forwards": 0,
+    "optimizer_updates": 0,
+    "real_parent_neutrality": "NOT_RUN",
+    "actual_capture_coverage": "NOT_RUN",
+    "fresh_process_reload": "NOT_RUN"
+  },
+  "diagnosis": "Source/log inference: Pydantic2 omitted from isolated diagnostic venv. Incumbent parser dependency added in f1e3c479a5cf8d63a34607fe2224c6527ba0110a; remote correction NOT_RUN.",
+  "responsible_lead": "Codex integration/packaging",
+  "original_execution": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\cas_hh_rde_01\\parity_a1\\execution.json",
+    "sha256": "68875b2f8e6cddd7a0356b7d69ed50e4c1da8eb7f680369532476b3a0668b991",
+    "cleanup_complete": false,
+    "preserved": true
+  },
+  "cleanup_recovery": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\cas_hh_rde_01\\CLEANUP_RECOVERY_20260928T194628Z.json",
+    "sha256": "3635c2a9ac7cd5278816dcda091b27f2f4c99f7c83b5d742e3eec4e747dbc61b",
+    "provider_terminated_observed_utc": "2026-09-28T19:46:28.180271+00:00",
+    "actions": [
+      {
+        "action": "delete_owned_deadline_schedule",
+        "status": "PASS"
+      },
+      {
+        "action": "delete_owned_security_group",
+        "status": "PASS"
+      },
+      {
+        "action": "delete_owned_profile",
+        "status": "PASS"
+      },
+      {
+        "action": "delete_owned_worker_role",
+        "status": "PASS"
+      },
+      {
+        "action": "delete_owned_watchdog_role",
+        "status": "PASS"
+      }
+    ]
+  },
+  "independent_verification": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\cas_hh_rde_01\\INDEPENDENT_CLOSEOUT_20260928T194641Z.json",
+    "sha256": "68c351594a6edb63114a81280a1840d55c3dc812a262d6f5a477965ec3d4a522",
+    "observed_utc": "2026-09-28T19:46:37.921741+00:00",
+    "checks": {
+      "owned_instance_terminal": true,
+      "volumes_absent": true,
+      "security_groups_absent": true,
+      "network_interfaces_absent": true,
+      "worker_role_absent": true,
+      "watchdog_role_absent": true,
+      "profile_absent": true,
+      "shutdown_schedule_absent": true
+    },
+    "complete": true
+  },
+  "archive": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\helm_continuation_tracks_20260927\\cas_hh_rde_01\\parity_a1\\evidence\\outputs.tar.gz",
+    "sha256": "59014d980fd61766b253376abd7cab83282c18ae63d8ca22574d0f14d6f4b497",
+    "receiver_files_verified": 22,
+    "preserved": true
+  },
+  "retained_storage": {
+    "bucket": "helm-hh-rde-parity-20260928-a1-807562639912",
+    "bytes": 9275986,
+    "objects": 6,
+    "all_public_access_blocked": true,
+    "disposition": "RETAINED_PRIVATE_EVIDENCE_NO_DELETE",
+    "actual_bill_usd": null
+  },
+  "cost": {
+    "pilot_total_cap_usd": "12.00",
+    "parity_reservation_usd": "2.00",
+    "protected_cleanup_usd": "2.00",
+    "discovery_unadmitted_usd": "6.00",
+    "confirmation_unadmitted_usd": "2.00",
+    "hourly_usd": "2.52",
+    "provider_launch_utc": "2026-09-28T19:34:22+00:00",
+    "first_observed_terminated_utc": "2026-09-28T19:46:28.180271+00:00",
+    "observed_duration_upper_bound_seconds": 726.180271,
+    "estimated_compute_upper_bound_usd": 0.508326,
+    "estimate_is_actual_bill": false,
+    "actual_provider_bill_usd": null,
+    "other_services_actual_usd": null,
+    "retained_storage_continues": true,
+    "historical_campaign_funds_used_usd": "0.00",
+    "historical_reservations_unchanged": true
+  },
+  "retry": false,
+  "corrective_job_admitted": false,
+  "next_execution_dependency": "Separate prospective corrective admission within owner authority; original parity attempt is consumed. No automatic retry or discovery/confirmation/reserve borrowing.",
+  "created_utc": "2026-09-28T19:50:07.885190+00:00"
+}

@@ -365,7 +365,10 @@ def receipt_to_json(receipt):
     return canonical(body) + "\n"
 
 
-def verify_receipt(text, declaration=None):
+def verify_receipt(text, declaration=None, *, retained_receipt_sha256=None):
+    """Self-carried digest = transport integrity only; an externally retained sha256 of the text adds more."""
+    if retained_receipt_sha256 is not None and hashlib.sha256(text.encode()).hexdigest() != retained_receipt_sha256:
+        _refuse("RECEIPT_ANCHOR_MISMATCH", "externally retained digest differs")
     body = json.loads(text)
     expected = body.pop("receipt_digest", None)
     if expected != digest(body):
@@ -476,8 +479,16 @@ def _store(receipt, declaration, hit, key, values):
 
 
 @contextmanager
-def apply(model, declaration, *, torch, expected_forward_calls):
+def apply(model, declaration, *, torch, expected_forward_calls, expected_hits=None):
     """Register one hook, yield the receipt, always remove the hook and check state, then finalize.
+
+    `expected_hits` overrides the default `forwards x (CORE_ROUNDS or 1)`; take it from
+    `diagnostic_configuration.expected_hits_for(site, kind)` so a Parts packet expects 0 `head.reach` hits.
+    Interplay with Codex's passive emitter (`observation_sites.instrumented_graph`): its `graph.round_input`
+    emit fires BEFORE `model.core_block(hidden_input)`, so a passive capture at that site records the
+    UNMODIFIED input; this receipt is the record of the modification, and the `graph.round_update` capture
+    shows its effect. The emitter's `capture_helm` binds `learner._graph` for one packet forward and disables
+    `stage_batch`; these hooks touch neither.
 
     Passive operations (OBSERVE_ONLY) catch their own errors, record them, and return None so the learner
     finishes with an incomplete receipt. Sham and active operations raise through the forward: a failed
@@ -490,10 +501,14 @@ def apply(model, declaration, *, torch, expected_forward_calls):
     bound = bind_sites(model, torch, sites=(declaration.site,))[declaration.site]
     module = bound["module"]
     per_round = SITE_SEMANTICS[declaration.site]["per_round"]
-    expected_hits = expected_forward_calls * (CORE_ROUNDS if per_round else 1)
+    if expected_hits is None:
+        expected_hits = expected_forward_calls * (CORE_ROUNDS if per_round else 1)
+    elif type(expected_hits) is not int or expected_hits < 0:
+        _refuse("EXPECTED_HITS", repr(expected_hits))
+    expected_targeted = expected_forward_calls if expected_hits else 0
     receipt = Receipt(RECEIPT_SCHEMA, declaration_digest(declaration), declaration.action, declaration.operation,
                       declaration.site, declaration.module_attribute, declaration.hook_kind, expected_forward_calls,
-                      expected_hits, expected_forward_calls, module_type=bound["type"], module_widths=bound["widths"],
+                      expected_hits, expected_targeted, module_type=bound["type"], module_widths=bound["widths"],
                       claim_ceiling=declaration.claim_ceiling)
     receipt.state_digest_before = state_digest(model, torch)
     pre_count, post_count = len(module._forward_pre_hooks), len(module._forward_hooks)
@@ -642,19 +657,27 @@ def evidence_record(*, declaration, receipt, configuration_id, split, baseline_p
     return body
 
 
-def verify_evidence(evidence):
+def verify_evidence(evidence, *, retained_evidence_sha256=None):
+    """The carried digest proves transport integrity only (an editor can recompute it, DeepSeek F4);
+    the externally retained digest, when given, must match. The result names which level was checked."""
     body = dict(evidence)
     expected = body.pop("evidence_digest", None)
     if expected != digest(body) or body.get("schema") != EVIDENCE_SCHEMA:
         _refuse("EVIDENCE_TAMPERED")
     if body.get("harvest_ingestion") != HARVEST_INGESTION or body.get("promotion") != "NOT_POSSIBLE_FROM_THIS_RECORD":
         _refuse("EVIDENCE_AUTHORITY")
+    if retained_evidence_sha256 is not None and retained_evidence_sha256 != expected:
+        _refuse("EVIDENCE_ANCHOR_MISMATCH", "externally retained digest differs")
+    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED" if retained_evidence_sha256 is not None else "SELF_CONSISTENT_ONLY"
     return body
 
 
-def rpa_projection(evidence):
-    """What the atlas may show: a branch bound to input, parent checkpoint, action and outcome. View only."""
-    body = verify_evidence(evidence)
+def rpa_projection(evidence, *, retained_evidence_sha256):
+    """What the atlas may show: a branch bound to input, parent checkpoint, action and outcome. View only.
+    The view is built only from evidence anchored by a digest held OUTSIDE the artifact."""
+    if retained_evidence_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "the atlas shows only externally anchored evidence")
+    body = verify_evidence(evidence, retained_evidence_sha256=retained_evidence_sha256)
     branch = {"schema": RPA_PROJECTION_SCHEMA,
               "branch_id": "helm-branch-" + digest([body["checkpoint_sha256"], body["input_sha256"],
                                                     body["declaration_digest"], body["receipt_digest"]]),
@@ -668,6 +691,7 @@ def rpa_projection(evidence):
                           "baseline_prediction_id": body["baseline_prediction_id"],
                           "changed_prediction_id": body["changed_prediction_id"]},
               "selected_by": body["selected_by"], "native_decision": body["native_decision"],
-              "claim_ceiling": body["claim_ceiling"], "view_authority": "READ_ONLY_NO_EXECUTION_NO_MUTATION",
+              "claim_ceiling": body["claim_ceiling"], "anchor": body["anchor"],
+              "view_authority": "READ_ONLY_NO_EXECUTION_NO_MUTATION",
               "executable": False, "mutation_authority": None}
     return branch

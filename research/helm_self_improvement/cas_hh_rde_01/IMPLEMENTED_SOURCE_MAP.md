@@ -49,7 +49,9 @@ passive adapter; Claude owns the separately validated intervention layer.
 ## Bounded witness and acceptance boundary
 
 `aws_worker.py` reuses the existing validation transport and legacy dependency
-bootstrap. It runs 18 focused tests and, if they pass, six real forwards:
+bootstrap. The original `fd421572` job ran 18 focused tests; the current
+source contains 21 focused cases (three added readout-boundary cases, NOT_RUN).
+If the exact inventory passes, the worker then runs six real forwards:
 OFF/OBSERVE_ONLY/NO_OP_CONTROL for one public Parts and one public Reach input.
 Selection is fixed lexicographically before any prediction. This is engineering
 replay, not independent confirmation, task accuracy or a causal study. No gold
@@ -95,3 +97,42 @@ is sized or fitted. D-RDE-04: Codex files now implemented; Claude lease remains
 separate. D-RDE-05: external operator policy/retained hashes and incumbent ledger
 anchors are mandatory. These are source dispositions pending the actual AWS
 test, not claims that the review findings are experimentally closed.
+
+## Executed failure and received successor
+
+`helm-hh-rde-parity-20260928-a1` executed `fd4215728209ef90948323d1268f2db664bc88ed`
+on `i-08e6891563527434d`. Actual outcome: **17 passed, 1 fixture setup error,
+0 failures, 0 skipped**. `PCBA_STATIC_CHECK_FAILED` occurred before the real
+parent witness. Model forwards and optimizer updates were zero. Real-model
+neutrality, actual site coverage and fresh-process retention/reload are **NOT_RUN**.
+
+The isolated diagnostic venv omitted the incumbent Pydantic dependency. The
+source-only packaging correction in `f1e3c479a5cf8d63a34607fe2224c6527ba0110a`
+adds the same `pydantic==2.12.5` / `pydantic-core==2.41.5` dependency used by the
+existing CAS integration, plus a version/import receipt. This diagnosis is
+source/log inference; the corrected parser path has not been executed.
+
+The original cleanup timeout remains in `execution.json`. A separate exact-job
+recovery confirmed provider termination, removed the declared temporary
+resources and independently verified their absence. All **22/22** archived
+files match the receiver inventory. The private evidence archive is retained.
+See `CLOSEOUT_RECOVERY.json`: estimated compute through first observed termination
+is **USD0.508326**, not an actual provider bill. The separate USD2 parity
+reservation and USD12 pilot cap remain recorded; protected cleanup reserve is
+not borrowed. This failed attempt is consumed. No corrected job is admitted.
+
+Claude's actual second receipt/return is PR245 comment **5877233839**. He
+verified the Codex `fd421572` files and all five DeepSeek delivery files at
+`8e0ec259`. His four exclusive files at
+`5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa` are integrated byte-for-byte;
+their **38 written cases remain NOT_RUN**. See `CLAUDE_CONVERTER_RECEIPT.json`.
+`reload_configuration_inputs` calls his `captures_from_observation` only after
+the existing host's external-anchor reload. It checks event identity, coverage
+and round/call order, preserves signed coordinate meanings, and names no CAS
+configuration from incomplete evidence. The fresh-process worker is wired to
+that readout boundary. It does not authorize interventions or a second host.
+
+DeepSeek's actual receipt remains `deepseek-cas-hh-rde-01-second-return-20260928-10`
+for `62bb7f71`. The newer adapter and cleanup handoff are sent through the same
+channel; an acknowledgment or review of the latest source is still pending.
+No paid reviewer wake or replacement team has been started.

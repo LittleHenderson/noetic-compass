@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 import torch
 
-from .observation import Capture, capture_helm, canonical, sha, retain_observation, reload_observation
+from .observation import Capture, capture_helm, canonical, sha, retain_observation, reload_observation, reload_configuration_inputs
 from .harness_capture_vendor.probe_runner import CaptureState
 
 
@@ -135,3 +135,58 @@ def test_host_retains_incomplete_and_detects_tampering(admitted_case):
 def test_forged_host_refused():
     with pytest.raises(ValueError,match='EXISTING_HOST_REQUIRED'):
         retain_observation(SimpleNamespace(),capture().receipt(),native_run_id='forged')
+
+
+def _synthetic_complete_parts_receipt():
+    # This fixture exercises conversion only. It is not a real HELM forward.
+    c=capture(rounds=8)
+    for site,expected in c.expected.items():
+        for call in range(expected):
+            if site.startswith('graph.'):
+                value=torch.full((1,64),-2.)
+            elif site=='head.node':
+                value=torch.tensor([[-1.,2.]])
+            elif site=='input.mapping':
+                value={'query':{'kind_name':'parts'},'synthetic_fixture':True}
+            else:
+                value={'synthetic_fixture':True}
+            c.emit(site,value,call if site.startswith('graph.round_') else None)
+    c.closed=c.cleanup_complete=True
+    receipt=c.receipt()
+    assert receipt['complete']
+    return receipt
+
+
+def test_anchored_configuration_conversion_preserves_coordinates(admitted_case):
+    host,_,baseline,_=admitted_case
+    receipt=_synthetic_complete_parts_receipt()
+    anchor=retain_observation(host,receipt,native_run_id=baseline['run_id'])
+    result=reload_configuration_inputs(host,anchor['ledger_event_digest'])
+    assert result['complete'] and result['named_configurations']==[] and not result['promotion']
+    raw=result['capture_series']['graph.node_state'][0]
+    assert raw.dtype=='float32' and raw.signed_values==(-2.,)*64
+    assert raw.checkpoint_sha256==receipt['checkpoint_sha256']
+    assert len(result['capture_series']['head.reach'])==0
+    assert result['rpa_projection']['execute_action'] is None
+
+
+def test_configuration_readout_keeps_missing_capture_incomplete(admitted_case):
+    host,_,baseline,_=admitted_case
+    c=capture(rounds=8);c.closed=c.cleanup_complete=True
+    anchor=retain_observation(host,c.receipt(),native_run_id=baseline['run_id'])
+    result=reload_configuration_inputs(host,anchor['ledger_event_digest'])
+    assert result['status']=='INCOMPLETE_CAPTURE_INPUTS' and not result['complete']
+    assert result['named_configurations']==[]
+    assert all(not series for series in result['capture_series'].values())
+    with pytest.raises(ValueError,match='EXTERNAL_OBSERVATION_ANCHOR_REQUIRED'):
+        reload_configuration_inputs(host,'f'*64)
+
+
+def test_configuration_readout_refuses_mixed_event_parent(admitted_case):
+    host,_,baseline,_=admitted_case
+    receipt=_synthetic_complete_parts_receipt()
+    receipt['events'][0]['checkpoint_sha256']='c'*64
+    receipt['receipt_sha256']=sha(canonical({k:v for k,v in receipt.items() if k!='receipt_sha256'}))
+    anchor=retain_observation(host,receipt,native_run_id=baseline['run_id'])
+    with pytest.raises(ValueError,match='CONFIGURATION_EVENT_IDENTITY'):
+        reload_configuration_inputs(host,anchor['ledger_event_digest'])

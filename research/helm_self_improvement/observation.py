@@ -292,3 +292,58 @@ def reload_observation(host, expected_event_digest):
                 "native_trace_sha256":row["native_trace_sha256"],
                 "capture_receipt_sha256":row["receipt_sha256"], "execute_action":None},
             "promotion":False}
+
+
+def reload_configuration_inputs(host, expected_event_digest):
+    """Convert an externally anchored capture through Claude's existing reader.
+
+    This is a readout boundary, not a second custody or promotion authority.
+    Partial observations remain partial; no detector is fitted or named here.
+    """
+    from .diagnostic_configuration import (
+        TENSOR_SITES, captures_from_observation, expected_hits_for, verify_observation,
+    )
+    loaded = reload_observation(host, expected_event_digest)
+    receipt = loaded["observation"]
+    anchor = loaded["rpa_projection"]["capture_receipt_sha256"]
+    body = verify_observation(receipt, retained_receipt_sha256=anchor)
+    if body.get("scientific_source") != SCIENTIFIC_SOURCE:
+        raise ValueError("CONFIGURATION_SCIENTIFIC_SOURCE")
+    identity = {key:body[key] for key in
+                ("checkpoint_sha256", "input_sha256", "source_sha256", "scientific_source")}
+    if not all(type(identity[key]) is str and re.fullmatch("[0-9a-f]{64}", identity[key])
+               for key in ("checkpoint_sha256", "input_sha256")):
+        raise ValueError("CONFIGURATION_IDENTITY")
+    events = body["events"]
+    if any(e.get("site") not in MEANINGS or any(e.get(k) != v for k,v in identity.items())
+           for e in events):
+        raise ValueError("CONFIGURATION_EVENT_IDENTITY")
+    counts = Counter(e["site"] for e in events)
+    for site, row in body["coverage"].items():
+        if (any(type(row.get(k)) is not int or row[k] < 0 for k in
+                ("expected_calls", "observed_calls", "stored_calls"))
+                or row["expected_calls"] != expected_hits_for(site, body["kind"])
+                or not row["stored_calls"] <= row["observed_calls"] <= row["expected_calls"]
+                or row["stored_calls"] != counts[site]):
+            raise ValueError("CONFIGURATION_COVERAGE")
+        site_events = [e for e in events if e["site"] == site]
+        if (any(type(e["call_index"]) is not int for e in site_events)
+                or [e["call_index"] for e in site_events] != list(range(len(site_events)))
+                or any(e["round_index"] != (e["call_index"] if site.startswith("graph.round_") else None)
+                       for e in site_events)):
+            raise ValueError("CONFIGURATION_CALL_ORDER")
+    complete = (body["mode"] != "OFF" and body["cleanup_complete"] is True and not body["errors"]
+                and all(r["expected_calls"] == r["observed_calls"] == r["stored_calls"]
+                        for r in body["coverage"].values()))
+    if body["complete"] is not complete:
+        raise ValueError("CONFIGURATION_FALSE_COVERAGE_CLAIM")
+    series, coverage = {}, {}
+    for site in TENSOR_SITES:
+        series[site], cov = captures_from_observation(receipt, site, retained_receipt_sha256=anchor)
+        coverage[site] = asdict(cov)
+    return {"schema":"helm.harness.anchored-configuration-inputs/1",
+            "status":"CAPTURE_INPUTS_READY" if body["complete"] else "INCOMPLETE_CAPTURE_INPUTS",
+            "complete":body["complete"], "capture_series":series, "coverage":coverage,
+            "native_run_id":loaded["native_run_id"], "receipt_sha256":anchor,
+            "rpa_projection":loaded["rpa_projection"], "named_configurations":[],
+            "claim":"READOUT_ONLY_NO_HELM_CAS_CALIBRATION", "promotion":False}

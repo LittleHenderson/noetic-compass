@@ -42,7 +42,7 @@ def validate_freeze(p,directory):
            'maximum_all_services_usd':'2.00','campaign_total_cap_usd':'12.00',
            'hard_wall_seconds':1800,'operator_seconds':1500,'scheduler_after_seconds':1800,
            'instance_type':'g7.2xlarge','root_gib':75,'region':'us-west-2','account_id':'807562639912',
-           'expected_tests':18,'expected_status':'PASS_HH_RDE_PARITY_RELOAD','parent_sha256':PARENT,
+           'expected_tests':21,'expected_status':'PASS_HH_RDE_PARITY_RELOAD','parent_sha256':PARENT,
            'max_packet_forwards':6,'max_optimizer_updates':0,'max_raw_capture_bytes':16777216,
            'max_inputs':2,'max_checkpoints':1,'max_conditions':3,'automatic_retries':0}
     for key,value in exact.items():require(p.get(key)==value,'DIAGNOSTIC_FREEZE_FIELD:'+key)

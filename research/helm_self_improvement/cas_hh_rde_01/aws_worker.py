@@ -79,7 +79,7 @@ def execute(bucket,region):
             '--basetemp='+str(out/'test-temp'),'--junitxml='+str(out/'focused.xml'),'-rA',
             base/'source/research/helm_self_improvement/test_observation.py'],180)
         counts()
-        if (result['tests']!={'tests':18,'failures':0,'errors':0,'skipped':0}
+        if (result['tests']!={'tests':21,'failures':0,'errors':0,'skipped':0}
                 or sorted(result['case_names'])!=sorted(cfg['expected_case_names'])):
             raise ValueError('EXACT_TEST_INVENTORY')
         module=[python,'-B','-m','research.helm_self_improvement.diagnostic_worker']

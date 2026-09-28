@@ -11,7 +11,7 @@ from pathlib import Path
 import sys
 import time
 
-from .observation import capture_helm, canonical, sha, retain_observation, reload_observation
+from .observation import capture_helm, canonical, sha, retain_observation, reload_observation, reload_configuration_inputs
 from .admission import write_new, file_hash
 
 
@@ -135,9 +135,17 @@ def reload(directory, policy_sha256, retained_sha256):
     host=TrustedHost(directory/"admission.json",policy_sha256,directory/"host-evidence")
     retained=json.loads((directory/"retained.json").read_bytes())
     rows=[reload_observation(host,r["ledger_event_digest"]) for r in retained["anchors"]]
+    readouts=[reload_configuration_inputs(host,r["ledger_event_digest"]) for r in retained["anchors"]]
+    if (len(rows) != 2 or not all(r["observation"]["complete"] for r in rows)
+            or not all(r["complete"] for r in readouts)):
+        raise ValueError("FRESH_RELOAD_INCOMPLETE_CAPTURE")
     write_new(directory/"fresh_reload.json",{"status":"PASS_FRESH_PROCESS_OBSERVATION_RELOAD",
         "captures":len(rows),"complete":all(r["observation"]["complete"] for r in rows),
-        "rpa_projections":[r["rpa_projection"] for r in rows],"promotion":False})
+        "rpa_projections":[r["rpa_projection"] for r in rows],"promotion":False,
+        "configuration_readouts":[{"receipt_sha256":r["receipt_sha256"],"status":r["status"],
+            "complete":r["complete"],"coverage":r["coverage"],
+            "series_counts":{s:len(c) for s,c in r["capture_series"].items()},
+            "named_configurations":r["named_configurations"]} for r in readouts]})
     return 0
 
 
