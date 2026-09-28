@@ -54,6 +54,7 @@ DONOR_PROVENANCE = ("STIMULUS_ONLY", "GOLD_INFORMED")
 CLAIM_CEILINGS = ("WITHIN_CHECKPOINT_DIAGNOSTIC", "ORACLE_ASSISTED_DIAGNOSIS_NOT_DEPLOYABLE")
 STATUSES = ("OBSERVED", "OBSERVED_INCOMPLETE", "NO_OP_VERIFIED", "NO_OP_FAILED", "APPLIED",
             "APPLIED_NO_CHANGE", "NOT_APPLIED")
+MODEL_BINDINGS = ("CALLER_VERIFIED", "UNVERIFIED_SELF_REPORTED")
 DEFAULT_MAX_RECEIPT_BYTES = 8 * 1024 * 1024
 FLOAT_BYTES = 4
 
@@ -312,6 +313,31 @@ def bind_sites(model, torch, sites=tuple(HOOK_SITES)):
     return bound
 
 
+def caller_binding(model, torch, *, checkpoint_sha256, source_sha256, restored_by):
+    """Built by the GUARDED CALLER right after the guarded restore, never from a declaration's strings.
+
+    The declaration's own checkpoint/source hashes do not authenticate the `nn.Module` handed to `apply`; this
+    record ties that exact object's parameter bytes (`state_digest`) to the checkpoint and source the caller
+    restored under its own admission, and names the restorer.
+    """
+    _hex64(checkpoint_sha256, "BINDING_CHECKPOINT")
+    _hex64(source_sha256, "BINDING_SOURCE")
+    if type(restored_by) is not str or not restored_by:
+        _refuse("BINDING_RESTORER", "name the guarded loader, e.g. PointerCourseLearner.restore_checkpoint")
+    return {"schema": "helm.harness.caller-binding/0.1", "model_state_digest": state_digest(model, torch),
+            "checkpoint_sha256": checkpoint_sha256, "source_sha256": source_sha256, "restored_by": restored_by}
+
+
+def verify_caller_binding(model, torch, declaration, binding):
+    if type(binding) is not dict or binding.get("schema") != "helm.harness.caller-binding/0.1":
+        _refuse("MODEL_BINDING_INVALID", "caller_binding record required")
+    if (binding.get("checkpoint_sha256"), binding.get("source_sha256")) != (declaration.checkpoint_sha256, declaration.source_sha256):
+        _refuse("MODEL_BINDING_MISMATCH", "declaration names a different checkpoint or source than the caller restored")
+    if binding.get("model_state_digest") != state_digest(model, torch):
+        _refuse("MODEL_BINDING_MISMATCH", "the module's parameter bytes are not the ones the caller bound")
+    return "CALLER_VERIFIED"
+
+
 def state_digest(model, torch):
     hasher = hashlib.sha256()
     for name, tensor in sorted(model.state_dict().items()):
@@ -351,6 +377,8 @@ class Receipt:
     status: object = None
     applied: object = None
     claim_ceiling: object = None
+    model_binding: str = "UNVERIFIED_SELF_REPORTED"
+    restored_by: object = None
     actor: str = ACTOR
     authority: str = AUTHORITY
     basis: str = BASIS
@@ -479,8 +507,13 @@ def _store(receipt, declaration, hit, key, values):
 
 
 @contextmanager
-def apply(model, declaration, *, torch, expected_forward_calls, expected_hits=None):
+def apply(model, declaration, *, torch, expected_forward_calls, expected_hits=None, binding=None):
     """Register one hook, yield the receipt, always remove the hook and check state, then finalize.
+
+    `binding` is the guarded caller's `caller_binding` record. Without it the receipt is marked
+    `UNVERIFIED_SELF_REPORTED`: the hooks still run and the hits are still recorded, but `require_applied`
+    (the scoring gate) and `evidence_record` refuse it. The declaration's checkpoint/source strings never
+    authenticate the module by themselves and never confer authority or success.
 
     `expected_hits` overrides the default `forwards x (CORE_ROUNDS or 1)`; take it from
     `diagnostic_configuration.expected_hits_for(site, kind)` so a Parts packet expects 0 `head.reach` hits.
@@ -510,6 +543,9 @@ def apply(model, declaration, *, torch, expected_forward_calls, expected_hits=No
                       declaration.site, declaration.module_attribute, declaration.hook_kind, expected_forward_calls,
                       expected_hits, expected_targeted, module_type=bound["type"], module_widths=bound["widths"],
                       claim_ceiling=declaration.claim_ceiling)
+    if binding is not None:
+        receipt.model_binding = verify_caller_binding(model, torch, declaration, binding)
+        receipt.restored_by = binding["restored_by"]
     receipt.state_digest_before = state_digest(model, torch)
     pre_count, post_count = len(module._forward_pre_hooks), len(module._forward_hooks)
     passive = declaration.operation == "OBSERVE_ONLY"
@@ -548,9 +584,11 @@ def apply(model, declaration, *, torch, expected_forward_calls, expected_hits=No
 
 
 def require_applied(receipt):
-    """Gate before task scoring: only APPLIED or APPLIED_NO_CHANGE may be scored as an intervention."""
+    """Gate before task scoring: only APPLIED or APPLIED_NO_CHANGE on a caller-verified module may be scored."""
     if receipt.status not in ("APPLIED", "APPLIED_NO_CHANGE"):
         _refuse("INTERVENTION_NOT_APPLIED", "status %r, errors %r" % (receipt.status, receipt.errors))
+    if receipt.model_binding != "CALLER_VERIFIED":
+        _refuse("MODEL_BINDING_UNVERIFIED", "the module was not bound by the guarded caller; strings alone do not authenticate it")
     return receipt
 
 
@@ -630,6 +668,8 @@ def evidence_record(*, declaration, receipt, configuration_id, split, baseline_p
         _refuse("EVIDENCE_RECEIPT_UNFINALIZED")
     if receipt.declaration_digest != declaration_digest(declaration):
         _refuse("RECEIPT_DECLARATION_MISMATCH")
+    if receipt.model_binding != "CALLER_VERIFIED":
+        _refuse("MODEL_BINDING_UNVERIFIED", "evidence needs a caller-bound module")
     if split not in ("DISCOVERY", "CONFIRMATION", "SYNTHETIC_FIXTURE"):
         _refuse("EVIDENCE_SPLIT", repr(split))
     if type(checked_outcome) is not dict or checked_outcome.get("metric") not in OUTCOME_METRICS:
@@ -651,6 +691,7 @@ def evidence_record(*, declaration, receipt, configuration_id, split, baseline_p
             "applied": receipt.applied, "split": split, "baseline_prediction_id": baseline_prediction_id,
             "changed_prediction_id": changed_prediction_id, "checked_outcome": dict(checked_outcome),
             "selected_by": selected_by, "native_decision": False, "claim_ceiling": declaration.claim_ceiling,
+            "model_binding": receipt.model_binding, "restored_by": receipt.restored_by,
             "harvest_ingestion": HARVEST_INGESTION, "training_visibility": "NONE",
             "authority": AUTHORITY, "basis": BASIS, "promotion": "NOT_POSSIBLE_FROM_THIS_RECORD"}
     body["evidence_digest"] = digest(body)

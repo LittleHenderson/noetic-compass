@@ -9,7 +9,7 @@ Package received at `62bb7f714810db5047eb07ef616c6ddfe470fca9`; receipt ACK: PR 
 |---|---|
 | Vendored Harness source read and hash-checked (`543666e5…`) | real (computed here) |
 | Learner anchors at `c45f775f` (`_rounds` observe 1197-1198, `core_block` call 1199, `pointer_key` 1313, `node_head` 1347, `_node_options` 1417, `_reach_options` 1512, `world_head` 1566) | real (read from the exact retained copy, sha256 `0f424d86…`) |
-| Bridge modules and 38 test cases | written |
+| Bridge modules and 41 test cases | written |
 | Any test executed | NOT_RUN (packet forbids local pytest/torch; torch absent here) |
 | Any HELM capture, checkpoint, witness, intervention on HELM | not done |
 | Acceptance rows HH01-HH21 | obligations, none passed |
@@ -54,8 +54,8 @@ pilot; `CLAIM_LEVEL_OUTSIDE_PILOT`).
 
 | File | Cases | Needs |
 |---|---:|---|
-| `test_diagnostic_configuration.py` | 22 | Python only (imports Codex's `observation` module) |
-| `test_diagnostic_intervention.py` | 16 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
+| `test_diagnostic_configuration.py` | 24 | Python only (imports Codex's `observation` module) |
+| `test_diagnostic_intervention.py` | 17 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
 
 Exact acceptance command (inside an admitted job; the namespace `conftest.py` refuses otherwise):
 
@@ -63,7 +63,7 @@ Exact acceptance command (inside an admitted job; the namespace `conftest.py` re
 HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/hh-rde-01-claude-junit.xml -rA research/helm_self_improvement/test_diagnostic_configuration.py research/helm_self_improvement/test_diagnostic_intervention.py
 ```
 
-Expected `38 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
+Expected `41 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
 
 ## Witness protocol
 
@@ -105,3 +105,24 @@ passive capture there records the unmodified input; the intervention receipt is 
 DeepSeek findings as they touch this lease: D-RDE-02 (no silent eraser) and D-RDE-03 (no transferred probe) are
 consistent with `suppression_factor` scoping and `probe_validity`; F4 (self-carried digest is not tamper evidence)
 adopted as above; D-RDE-04 (files missing) is now falsified by `d0d2e14f` and `fd421572` on the branches.
+
+## Third packet, same allocation: Codex's parity report and two lease asks
+
+**Parity attempt (Codex's report, comment 5877140015; reported-by-Codex-not-verified, no junit hash yet).** 18 collected,
+17 passed, 0 failures, 1 setup error. The error is in `test_host_retains_incomplete_and_detects_tampering`: the native
+baseline fixture raised `PCBA_STATIC_CHECK_FAILED`; Codex's source/log diagnosis is a missing pinned `pydantic` in the
+diagnostic venv. Consequence: zero real-parent forwards and zero optimizer updates, so passive neutrality, 14-site
+coverage and fresh reload are NOT_RUN. It is a failed attempt, not partial acceptance. Paid attempt 1 is consumed.
+
+**Exact callables added (written, NOT RUN).**
+- `diagnostic_configuration.convert_observation(receipt, *, retained_receipt_sha256)` -> versioned record
+  `helm.harness.converted-observation/0.1`. Anchor mandatory; refuses `OBSERVATION_INCOMPLETE`, `SITE_UNKNOWN`,
+  `CAPTURE_DTYPE_UNKNOWN`, and (through `raw_capture`, unchanged) `COORDINATE_MEANING_MISMATCH`; maps only
+  `torch.<dtype>` -> `<dtype>`; preserves the emitter's raw meaning, identity and `binding`; tensor sites carry
+  validated captures + coverage, non-tensor sites carry event counts and public-value digests, zero-expected sites
+  are marked `expected_zero`; `conversion_digest` sealed.
+- `diagnostic_intervention.caller_binding(model, torch, *, checkpoint_sha256, source_sha256, restored_by)` and
+  `apply(..., binding=)`: the guarded caller builds the binding after its restore; `apply` verifies the module's
+  parameter digest and the declaration's checkpoint/source against it; receipts carry `model_binding`
+  (`CALLER_VERIFIED` or `UNVERIFIED_SELF_REPORTED`); `require_applied` and `evidence_record` refuse anything but
+  `CALLER_VERIFIED`. Declaration strings alone never authenticate the module or confer success.

@@ -443,6 +443,70 @@ def captures_from_observation(receipt, site, *, retained_receipt_sha256=None):
     return tuple(captures), cov
 
 
+CONVERSION_SCHEMA = "helm.harness.converted-observation/0.1"
+# The only dtype spellings the emitter is known to produce (`str(tensor.dtype)`); anything else is refused.
+DTYPE_REPRESENTATIONS = {"torch." + name: name for name in DTYPES}
+
+
+def convert_observation(receipt, *, retained_receipt_sha256):
+    """The versioned conversion entry point Codex calls after host reload, with the external anchor (mandatory).
+
+    Validates identity, integrity (self digest AND the retained digest), mode, source and full coverage; refuses an
+    incomplete receipt, an unknown site, an unknown dtype spelling, or a meaning that is not the emitter's own or
+    the site table's (that guard is `raw_capture`'s and is not relaxed here). Maps only `torch.<dtype>` to
+    `<dtype>`; the original meaning string and the emitter identity/binding are preserved verbatim in the result.
+    Non-tensor sites and sites with zero expected calls are reported as such, never as tensors or as absences.
+    """
+    if retained_receipt_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "conversion needs the digest retained by the host ledger")
+    body = verify_observation(receipt, retained_receipt_sha256=retained_receipt_sha256)
+    if body["mode"] == "OFF":
+        _refuse("OBSERVATION_DISABLED", "capture was OFF; nothing to convert")
+    if body.get("complete") is not True or body.get("status") != "CAPTURED" or body.get("errors"):
+        _refuse("OBSERVATION_INCOMPLETE", "status %r, errors %r" % (body.get("status"), body.get("errors")))
+    for event in body.get("events", ()):
+        if event.get("site") not in SITE_SEMANTICS:
+            _refuse("SITE_UNKNOWN", repr(event.get("site")))
+        dtype = event.get("dtype")
+        if dtype is not None and dtype not in DTYPE_REPRESENTATIONS:
+            _refuse("CAPTURE_DTYPE_UNKNOWN", "%s: %r" % (event["site"], dtype))
+    sites, tensor_sites = {}, 0
+    for site in SITES:
+        events = [e for e in body["events"] if e.get("site") == site]
+        cov_row = body["coverage"][site]
+        if site in TENSOR_SITES:
+            captures, cov = captures_from_observation(receipt, site, retained_receipt_sha256=retained_receipt_sha256)
+            require_complete(cov, "convert_observation(%s)" % site)
+            sites[site] = {"tensor": True, "coverage": asdict(cov), "captures": captures,
+                           "raw_meaning": EMITTER_MEANINGS[site], "site_table_meaning": SITE_SEMANTICS[site]["coordinate_meaning"],
+                           "basis": SITE_SEMANTICS[site]["basis"], "anchor": SITE_SEMANTICS[site]["anchor"],
+                           "expected_zero": cov.expected_calls == 0}
+            tensor_sites += 1
+        else:
+            for event in events:
+                if "signed_values" in event or event.get("shape") is not None or "public_value" not in event:
+                    _refuse("SITE_NOT_TENSOR", "%s must carry a public value, not a tensor" % site)
+            cov = coverage(int(cov_row["expected_calls"]), int(cov_row["observed_calls"]), int(cov_row["stored_calls"]))
+            require_complete(cov, "convert_observation(%s)" % site)
+            sites[site] = {"tensor": False, "coverage": asdict(cov), "events": len(events),
+                           "public_value_sha256": tuple(_emitter_sha(_emitter_canonical(e["public_value"])) for e in events),
+                           "raw_meaning": EMITTER_MEANINGS[site]}
+    result = {"schema": CONVERSION_SCHEMA, "emitter_schema": OBSERVATION_SCHEMA, "emitter_source": EMITTER_SOURCE,
+              "receipt_sha256": receipt["receipt_sha256"], "anchor": body["anchor"],
+              "identity": {"checkpoint_sha256": body["checkpoint_sha256"], "input_sha256": body["input_sha256"],
+                           "source_sha256": body["source_sha256"], "scientific_source": body.get("scientific_source")},
+              "mode": body["mode"], "kind": body["kind"], "binding": body.get("binding"),
+              "dtype_map": dict(DTYPE_REPRESENTATIONS), "sites": sites, "tensor_sites": tensor_sites,
+              "capture_overhead_ns": body.get("capture_overhead_ns"), "captured_json_bytes": body.get("captured_json_bytes"),
+              "claim": "OBSERVATION_ONLY_CAUSALITY_UNMEASURED", "authority": AUTHORITY}
+    result["conversion_digest"] = digest({k: v for k, v in result.items()
+                                          if k != "sites"} | {"sites": {s: {kk: vv for kk, vv in row.items() if kk != "captures"}
+                                                                        | ({"capture_digests": [capture_digest(c) for c in row["captures"]]}
+                                                                           if row["tensor"] else {})
+                                                                        for s, row in sites.items()}})
+    return result
+
+
 def detect_from_observation(receipt, *, site, row, k, split, family, retained_receipt_sha256=None):
     """Name a configuration from a COMPLETE emitter receipt only; an incomplete receipt names nothing."""
     captures, cov = captures_from_observation(receipt, site, retained_receipt_sha256=retained_receipt_sha256)

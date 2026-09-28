@@ -260,6 +260,7 @@ def _finalized_receipt(declaration, di, status_hits):
                          declaration.site, declaration.module_attribute, declaration.hook_kind, 1, 1, 1)
     receipt.hits.extend(status_hits)
     receipt.hooks_removed, receipt.parameters_unchanged = True, True
+    receipt.model_binding, receipt.restored_by = "CALLER_VERIFIED", "test-double-loader"
     return di.finalize(receipt)
 
 
@@ -279,6 +280,16 @@ def test_hh17_evidence_record_binds_branch_to_input_checkpoint_action_outcome_an
                                   split="CONFIRMATION", baseline_prediction_id="typed-prediction-" + "1" * 64,
                                   changed_prediction_id="typed-prediction-" + "2" * 64, checked_outcome=outcome)
     assert evidence["harvest_ingestion"] == "DISABLED_NOT_ADMITTED" and evidence["native_decision"] is False
+    assert evidence["model_binding"] == "CALLER_VERIFIED" and evidence["restored_by"] == "test-double-loader"
+    unbound = _finalized_receipt(declaration, di, [hit])
+    unbound.model_binding, unbound.restored_by = "UNVERIFIED_SELF_REPORTED", None
+    with pytest.raises(di.InterventionRefused) as info:
+        di.evidence_record(declaration=declaration, receipt=unbound, configuration_id="helm-configuration-" + "c" * 64,
+                           split="CONFIRMATION", baseline_prediction_id="p", changed_prediction_id="q", checked_outcome=outcome)
+    assert info.value.code == "MODEL_BINDING_UNVERIFIED"
+    with pytest.raises(di.InterventionRefused) as info:
+        di.require_applied(unbound)
+    assert info.value.code == "MODEL_BINDING_UNVERIFIED"
     assert evidence["promotion"] == "NOT_POSSIBLE_FROM_THIS_RECORD" and evidence["selected_by"] == di.ACTOR
     with pytest.raises(di.InterventionRefused) as info:
         di.rpa_projection(evidence, retained_evidence_sha256=None)
@@ -458,3 +469,52 @@ def test_hh16_emitter_receipt_tamper_and_anchor_mismatch_are_refused():
     body = {k: v for k, v in relabeled.items() if k != "receipt_sha256"}
     relabeled["receipt_sha256"] = dc._emitter_sha(dc._emitter_canonical(body))
     _refused("COORDINATE_MEANING_MISMATCH", dc.captures_from_observation, relabeled, "graph.round_input")
+
+
+def test_hh16_convert_observation_is_versioned_anchored_and_reports_every_site_honestly():
+    receipt = _emitted_receipt(kind="parts")
+    _refused("EXTERNAL_ANCHOR_REQUIRED", dc.convert_observation, receipt, retained_receipt_sha256=None)
+    _refused("OBSERVATION_ANCHOR_MISMATCH", dc.convert_observation, receipt, retained_receipt_sha256="0" * 64)
+    converted = dc.convert_observation(receipt, retained_receipt_sha256=receipt["receipt_sha256"])
+    assert converted["schema"] == dc.CONVERSION_SCHEMA and converted["emitter_source"] == dc.EMITTER_SOURCE
+    assert converted["anchor"] == "EXTERNAL_ANCHOR_VERIFIED" and converted["receipt_sha256"] == receipt["receipt_sha256"]
+    assert converted["identity"]["checkpoint_sha256"] == CKPT and converted["identity"]["source_sha256"] == SRC
+    assert set(converted["sites"]) == set(dc.SITES) and converted["tensor_sites"] == len(dc.TENSOR_SITES)
+    rounds = converted["sites"]["graph.round_input"]
+    assert rounds["tensor"] is True and len(rounds["captures"]) == dc.CORE_ROUNDS and rounds["coverage"]["complete"]
+    assert rounds["raw_meaning"] == dc.EMITTER_MEANINGS["graph.round_input"]
+    assert rounds["captures"][0].coordinate_meaning == dc.EMITTER_MEANINGS["graph.round_input"]
+    assert rounds["captures"][0].dtype == "float32" and converted["dtype_map"]["torch.float32"] == "float32"
+    reach = converted["sites"]["head.reach"]
+    assert reach["tensor"] is True and reach["captures"] == () and reach["expected_zero"] is True and reach["coverage"]["complete"]
+    mapping = converted["sites"]["input.mapping"]
+    assert mapping["tensor"] is False and mapping["events"] == 1 and len(mapping["public_value_sha256"]) == 1
+    assert converted["sites"]["answer.assembly"]["tensor"] is False and converted["claim"] == "OBSERVATION_ONLY_CAUSALITY_UNMEASURED"
+    assert len(converted["conversion_digest"]) == 64
+    again = dc.convert_observation(receipt, retained_receipt_sha256=receipt["receipt_sha256"])
+    assert again["conversion_digest"] == converted["conversion_digest"]
+
+
+def test_hh16_convert_observation_refuses_incomplete_unknown_dtype_and_unknown_site():
+    incomplete = _emitted_receipt(kind="parts", skip_site="graph.round_update")
+    _refused("OBSERVATION_INCOMPLETE", dc.convert_observation, incomplete, retained_receipt_sha256=incomplete["receipt_sha256"])
+    receipt = _emitted_receipt(kind="reach")
+
+    def reseal(edited):
+        body = {k: v for k, v in edited.items() if k != "receipt_sha256"}
+        edited["receipt_sha256"] = dc._emitter_sha(dc._emitter_canonical(body))
+        return edited
+    odd_dtype = dict(receipt)
+    odd_dtype["events"] = [dict(e, dtype="torch.int64") if e["site"] == "head.reach" else e for e in receipt["events"]]
+    reseal(odd_dtype)
+    _refused("CAPTURE_DTYPE_UNKNOWN", dc.convert_observation, odd_dtype, retained_receipt_sha256=odd_dtype["receipt_sha256"])
+    foreign_site = dict(receipt)
+    foreign_site["events"] = list(receipt["events"]) + [dict(receipt["events"][2], site="mlp.layer3")]
+    reseal(foreign_site)
+    _refused("SITE_UNKNOWN", dc.convert_observation, foreign_site, retained_receipt_sha256=foreign_site["receipt_sha256"])
+    tensor_in_public_site = dict(receipt)
+    tensor_in_public_site["events"] = [dict(e, signed_values=[0.0, 1.0], shape=[2]) if e["site"] == "answer.scores" else e
+                                       for e in receipt["events"]]
+    reseal(tensor_in_public_site)
+    _refused("SITE_NOT_TENSOR", dc.convert_observation, tensor_in_public_site,
+             retained_receipt_sha256=tensor_in_public_site["receipt_sha256"])

@@ -73,6 +73,10 @@ def _refused(code, function, *args, **kwargs):
     assert info.value.code == code, (info.value.code, code)
 
 
+def _binding(model):
+    return di.caller_binding(model, torch, checkpoint_sha256=CKPT, source_sha256=LEARNER_SHA256, restored_by="fixture-loader")
+
+
 def _baseline(model):
     hidden, query = _inputs()
     with torch.no_grad():
@@ -221,11 +225,12 @@ def test_hh11_suppress_on_all_zero_targets_is_applied_no_change_not_applied_succ
         model.reach_option_head[0].weight.zero_()
         model.reach_option_head[0].bias.zero_()
     hidden, query = _inputs()
-    with di.apply(model, declaration, torch=torch, expected_forward_calls=1) as receipt:
+    with di.apply(model, declaration, torch=torch, expected_forward_calls=1, binding=_binding(model)) as receipt:
         with torch.no_grad():
             model(hidden, query)
     assert receipt.status == "APPLIED_NO_CHANGE" and receipt.applied is True
     assert receipt.targeted_hits()[0]["changed_count"] == 0
+    assert receipt.model_binding == "CALLER_VERIFIED" and receipt.restored_by == "fixture-loader"
     assert di.require_applied(receipt) is receipt
 
 
@@ -364,3 +369,34 @@ def test_hh15_expected_hits_from_the_emitter_rule_make_an_unexpected_reach_hit_n
         with torch.no_grad():
             model(hidden, query)
     assert receipt.expected_hits == 1 and receipt.status == "APPLIED"
+
+
+def test_hh15_declaration_strings_never_authenticate_the_module_only_the_caller_binding_does():
+    model = _model()
+    declaration = _declare("SUPPRESS", gain=1.0)
+    hidden, query = _inputs()
+    with di.apply(model, declaration, torch=torch, expected_forward_calls=1) as receipt:
+        with torch.no_grad():
+            model(hidden, query)
+    assert receipt.status == "APPLIED" and receipt.model_binding == "UNVERIFIED_SELF_REPORTED"
+    _refused("MODEL_BINDING_UNVERIFIED", di.require_applied, receipt)
+    other = _model()
+    with torch.no_grad():
+        other.core_block.weight.add_(0.5)
+    stale = _binding(other)
+    with pytest.raises(di.InterventionRefused) as info:
+        with di.apply(model, declaration, torch=torch, expected_forward_calls=1, binding=stale):
+            pass
+    assert info.value.code == "MODEL_BINDING_MISMATCH"
+    assert not model.core_block._forward_pre_hooks
+    wrong_checkpoint = dict(_binding(model), checkpoint_sha256="b" * 64)
+    with pytest.raises(di.InterventionRefused) as info:
+        with di.apply(model, declaration, torch=torch, expected_forward_calls=1, binding=wrong_checkpoint):
+            pass
+    assert info.value.code == "MODEL_BINDING_MISMATCH"
+    _refused("MODEL_BINDING_INVALID", lambda: di.verify_caller_binding(model, torch, declaration, {"schema": "other"}))
+    _refused("BINDING_RESTORER", di.caller_binding, model, torch, checkpoint_sha256=CKPT, source_sha256=LEARNER_SHA256, restored_by="")
+    with di.apply(model, declaration, torch=torch, expected_forward_calls=1, binding=_binding(model)) as bound:
+        with torch.no_grad():
+            model(hidden, query)
+    assert bound.model_binding == "CALLER_VERIFIED" and di.require_applied(bound) is bound

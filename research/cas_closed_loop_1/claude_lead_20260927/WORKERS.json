@@ -302,8 +302,8 @@
    "checkpoint_30_min": "both modules written; tests in progress; first return posted (comment 5877114683) at about 21 active minutes",
    "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
    "cases_written": {
-    "test_diagnostic_configuration.py": 22,
-    "test_diagnostic_intervention.py": 16
+    "test_diagnostic_configuration.py": 24,
+    "test_diagnostic_intervention.py": 17
    },
    "not_done": [
     "no local test run",
@@ -318,6 +318,17 @@
     "deepseek_relay": "8e0ec2592",
     "deepseek_deliverables_verified": "5/5 bytes and sha256 against DELIVERY.json",
     "copied_unchanged_from_fd421572": "research/helm_self_improvement/ (Codex's files; the four leased files untouched)"
+   },
+   "codex_parity_attempt_reported": {
+    "job": "helm-hh-rde-parity-20260928-a1",
+    "source": "fd4215728209ef90948323d1268f2db664bc88ed",
+    "collected": 18,
+    "passed": 17,
+    "failures": 0,
+    "setup_errors": 1,
+    "real_parent_forwards": 0,
+    "optimizer_updates": 0,
+    "state": "reported-by-Codex-not-verified; junit hash not posted"
    }
   }
  ],
