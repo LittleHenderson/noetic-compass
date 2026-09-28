@@ -1,0 +1,26 @@
+{
+  "task": "CAS-HH-RDE-01",
+  "failed_job": "helm-hh-rde-parity-20260928-a1",
+  "executed_source": "fd4215728209ef90948323d1268f2db664bc88ed",
+  "tests": {
+    "collected": 18,
+    "passed": 17,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "failing_case": "test_host_retains_incomplete_and_detects_tampering",
+  "failed_check": "PCBA_STATIC_CHECK_FAILED",
+  "model_forwards": 0,
+  "optimizer_updates": 0,
+  "model_neutrality": "NOT_RUN",
+  "fresh_process_reload": "NOT_RUN",
+  "diagnosis": "The isolated HELM venv installs only torch, frozen neural wheels, numpy, jsonschema and pytest. Pinned CAS pcba_component_adapter imports Pydantic2; the incumbent joint_outer_worker explicitly installs pydantic2.12.5. Diagnostic outer worker omitted it. Original checker catches ImportError as E-COMP-DEPENDENCY, then control.py raises generic PCBA_STATIC_CHECK_FAILED. Logs verify dependency absence; full checker diagnostic is not included in the pytest error, so the root cause is source/log inference pending remote recheck.",
+  "smallest_fix": "Install the incumbent pinned Pydantic2.12.5/core2.41.5 dependency in the new isolated diagnostic venv; record versions/import readiness before tests. Do not change checker or original source.",
+  "responsible_lead": "Codex integration/packaging",
+  "fix_execution": "NOT_RUN_SOURCE_ONLY",
+  "automatic_retry": false,
+  "paid_attempts_used": 1,
+  "future_execution": "NO_AUTOMATIC_CORRECTIVE_ADMISSION",
+  "created_utc": "2026-09-28T19:40:09.286426+00:00"
+}

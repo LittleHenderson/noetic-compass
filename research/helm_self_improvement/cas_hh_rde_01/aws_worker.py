@@ -69,7 +69,12 @@ def execute(bucket,region):
         run('frozen_wheels',[python,'-m','pip','install','--disable-pip-version-check','--no-deps',*wheels],90)
         run('requirements',[python,'-m','pip','install','--disable-pip-version-check','--retries','0',
                             '-r',root/'research/CAS_META_2_COMPOSITION/requirements-gpu.txt'],180)
-        run('pytest_install',[python,'-m','pip','install','--disable-pip-version-check','--retries','0','pytest==9.0.2'],120)
+        # Same parser dependency as the incumbent joint_outer_worker. The frozen
+        # HELM requirements alone intentionally do not include the CAS parser.
+        run('harness_dependencies',[python,'-m','pip','install','--disable-pip-version-check','--retries','0',
+                                    'pytest==9.0.2','pydantic==2.12.5','pydantic-core==2.41.5'],120)
+        readiness="import importlib.metadata as m,json; names={'pytest':'9.0.2','pydantic':'2.12.5','pydantic_core':'2.41.5'}; actual={n:m.version(n) for n in names}; print(json.dumps(actual)); assert actual==names, 'HARNESS_DEPENDENCY_VERSION'; from pydantic import BaseModel, Field, model_validator"
+        run('harness_dependency_receipt',[python,'-B','-c',readiness],30)
         run('focused_tests',[python,'-B','-m','pytest','-q','-p','no:cacheprovider',
             '--basetemp='+str(out/'test-temp'),'--junitxml='+str(out/'focused.xml'),'-rA',
             base/'source/research/helm_self_improvement/test_observation.py'],180)

@@ -1,0 +1,39 @@
+{
+  "task": "CAS-HH-RDE-01",
+  "original_helm_session": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+  "claude_source": "d0d2e14fabb7100a8463cb26ddf00bfaa1cd352a",
+  "receipt_comment": 5877114683,
+  "received_files": [
+    {
+      "path": "research/helm_self_improvement/diagnostic_configuration.py",
+      "sha256": "a9d03279cc65db9e9704acf958f0ea64e50921bef0d802feb2f6b53d023cdda7",
+      "declared_tests": 0,
+      "executed_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/diagnostic_intervention.py",
+      "sha256": "7e5c048a626dc6a0c9b3f522ad1766fc899e7c027e410cc65a0fd96ab7cb6959",
+      "declared_tests": 0,
+      "executed_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/test_diagnostic_configuration.py",
+      "sha256": "c41db3b78ee643d0f868eea70b1903fccd93a6cf99fd720a099a2b7676587fcb",
+      "declared_tests": 18,
+      "executed_by_codex": 0
+    },
+    {
+      "path": "research/helm_self_improvement/test_diagnostic_intervention.py",
+      "sha256": "58dbe559662bbd81b6c8e1bd4730f48b8ed2235eeea92600ef1b971efcab7744",
+      "declared_tests": 15,
+      "executed_by_codex": 0
+    }
+  ],
+  "byte_changes_to_claude_files": false,
+  "claim": "RECEIVED_NOT_VALIDATED",
+  "interface_finding": "Actual observation torch-prefixed dtype and coordinate-meaning strings refuse in raw_capture; Claude owns explicit versioned conversion fix in same lease. Request5877171228.",
+  "running_or_failed_source_preserved": "fd4215728209ef90948323d1268f2db664bc88ed",
+  "codex_source_correction": "Install same pydantic2.12.5/core2.41.5 as incumbent CAS integration dependency; receipt import versions. NOT_RUN.",
+  "paid_retry": false,
+  "time": "2026-09-28T19:43:45.242304+00:00"
+}
