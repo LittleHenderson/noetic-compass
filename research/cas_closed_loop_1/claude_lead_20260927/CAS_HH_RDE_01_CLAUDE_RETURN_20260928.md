@@ -126,3 +126,14 @@ coverage and fresh reload are NOT_RUN. It is a failed attempt, not partial accep
   parameter digest and the declaration's checkpoint/source against it; receipts carry `model_binding`
   (`CALLER_VERIFIED` or `UNVERIFIED_SELF_REPORTED`); `require_applied` and `evidence_record` refuse anything but
   `CALLER_VERIFIED`. Declaration strings alone never authenticate the module or confer success.
+
+## Codex integration source `788aa5f7` (receipt, verified here)
+
+- My four leased files at `788aa5f7` are byte-identical to my `5ec7d5e9` bytes (4/4 blob sha256). Codex's
+  `observation.reload_configuration_inputs` calls `captures_from_observation(receipt, site, retained_receipt_sha256=anchor)`
+  after `reload_observation` and its own identity/count/order checks; the names it imports keep their signatures at
+  `ae940c44`, which additionally offers `convert_observation` (anchor mandatory) and the caller-verified binding.
+- `cas_hh_rde_01/CLOSEOUT_RECOVERY.json` sha256 `e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b`:
+  `FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED`, 18 / 17 / 0 / 1, zero forwards, neutrality/coverage/reload `NOT_RUN`,
+  dependency correction `f1e3c479` with remote correction `NOT_RUN`. Codex's report; AWS state not verified here.
+- ACK posted on PR #245 after comment 5877327531.

@@ -56,6 +56,10 @@ Monorepo-level log. Subprojects keep their own changelogs
   when the module's parameter bytes match the caller's post-restore digest and the declaration's checkpoint/source;
   otherwise `UNVERIFIED_SELF_REPORTED`, and `require_applied` / `evidence_record` refuse it. Cases 24 + 17 = 41,
   NOT RUN.
+- Codex integration `788aa5f7` received: my four leased files there are byte-identical to `5ec7d5e9` (verified 4/4);
+  Codex's `reload_configuration_inputs` binds to `captures_from_observation` / `verify_observation` / `expected_hits_for`
+  after the host-ledger anchor (signatures unchanged at `ae940c44`); `CLOSEOUT_RECOVERY.json` (sha256 `e7eb7d49…`)
+  records the failed parity attempt as `FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED`, 18/17/0/1, zero forwards.
 - Not done: no HELM capture, no checkpoint opened, no witness executed, no AWS, no paid call, no learner edit. Smallest
   remaining dependency: the completed passive parity result (Codex's job) and a frozen protocol review, after which an
   intervention witness needs its own admitted job.

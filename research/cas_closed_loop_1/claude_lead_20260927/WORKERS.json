@@ -328,7 +328,15 @@
     "setup_errors": 1,
     "real_parent_forwards": 0,
     "optimizer_updates": 0,
-    "state": "reported-by-Codex-not-verified; junit hash not posted"
+    "state": "reported-by-Codex; closeout record read from git at 788aa5f7; AWS state not verified here",
+    "closeout_record_sha256": "e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b"
+   },
+   "codex_integration_received": {
+    "commit": "788aa5f7c39e81be3ffa5e833366fcabd36533c6",
+    "leased_files_byte_identical_to": "5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa (verified by blob sha256, 4/4)",
+    "codex_reader_binding": "observation.reload_configuration_inputs -> captures_from_observation / verify_observation / expected_hits_for (signatures unchanged at ae940c44)",
+    "closeout_record": "cas_hh_rde_01/CLOSEOUT_RECOVERY.json sha256 e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b (FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED; 18/17/0/1; 0 forwards)",
+    "codex_cases": "21 written, NOT_RUN (Codex's report)"
    }
   }
  ],
