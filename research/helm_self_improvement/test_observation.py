@@ -163,6 +163,7 @@ def test_anchored_configuration_conversion_preserves_coordinates(admitted_case):
     anchor=retain_observation(host,receipt,native_run_id=baseline['run_id'])
     result=reload_configuration_inputs(host,anchor['ledger_event_digest'])
     assert result['complete'] and result['named_configurations']==[] and not result['promotion']
+    assert len(result['conversion_digest'])==64
     raw=result['capture_series']['graph.node_state'][0]
     assert raw.dtype=='float32' and raw.signed_values==(-2.,)*64
     assert raw.checkpoint_sha256==receipt['checkpoint_sha256']
@@ -176,6 +177,7 @@ def test_configuration_readout_keeps_missing_capture_incomplete(admitted_case):
     anchor=retain_observation(host,c.receipt(),native_run_id=baseline['run_id'])
     result=reload_configuration_inputs(host,anchor['ledger_event_digest'])
     assert result['status']=='INCOMPLETE_CAPTURE_INPUTS' and not result['complete']
+    assert result['conversion_digest'] is None
     assert result['named_configurations']==[]
     assert all(not series for series in result['capture_series'].values())
     with pytest.raises(ValueError,match='EXTERNAL_OBSERVATION_ANCHOR_REQUIRED'):

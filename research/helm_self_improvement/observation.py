@@ -301,7 +301,7 @@ def reload_configuration_inputs(host, expected_event_digest):
     Partial observations remain partial; no detector is fitted or named here.
     """
     from .diagnostic_configuration import (
-        TENSOR_SITES, captures_from_observation, expected_hits_for, verify_observation,
+        TENSOR_SITES, captures_from_observation, convert_observation, expected_hits_for, verify_observation,
     )
     loaded = reload_observation(host, expected_event_digest)
     receipt = loaded["observation"]
@@ -337,13 +337,19 @@ def reload_configuration_inputs(host, expected_event_digest):
                         for r in body["coverage"].values()))
     if body["complete"] is not complete:
         raise ValueError("CONFIGURATION_FALSE_COVERAGE_CLAIM")
-    series, coverage = {}, {}
-    for site in TENSOR_SITES:
-        series[site], cov = captures_from_observation(receipt, site, retained_receipt_sha256=anchor)
-        coverage[site] = asdict(cov)
+    series, coverage, converted = {}, {}, None
+    if complete:
+        converted = convert_observation(receipt, retained_receipt_sha256=anchor)
+        series = {s:converted["sites"][s]["captures"] for s in TENSOR_SITES}
+        coverage = {s:converted["sites"][s]["coverage"] for s in TENSOR_SITES}
+    else:
+        for site in TENSOR_SITES:
+            series[site], cov = captures_from_observation(receipt, site, retained_receipt_sha256=anchor)
+            coverage[site] = asdict(cov)
     return {"schema":"helm.harness.anchored-configuration-inputs/1",
             "status":"CAPTURE_INPUTS_READY" if body["complete"] else "INCOMPLETE_CAPTURE_INPUTS",
             "complete":body["complete"], "capture_series":series, "coverage":coverage,
             "native_run_id":loaded["native_run_id"], "receipt_sha256":anchor,
+            "conversion_digest":converted["conversion_digest"] if converted else None,
             "rpa_projection":loaded["rpa_projection"], "named_configurations":[],
             "claim":"READOUT_ONLY_NO_HELM_CAS_CALIBRATION", "promotion":False}

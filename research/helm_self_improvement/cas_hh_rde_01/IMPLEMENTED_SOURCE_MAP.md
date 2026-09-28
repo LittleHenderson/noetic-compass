@@ -124,9 +124,12 @@ not borrowed. This failed attempt is consumed. No corrected job is admitted.
 Claude's actual second receipt/return is PR245 comment **5877233839**. He
 verified the Codex `fd421572` files and all five DeepSeek delivery files at
 `8e0ec259`. His four exclusive files at
-`5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa` are integrated byte-for-byte;
-their **38 written cases remain NOT_RUN**. See `CLAUDE_CONVERTER_RECEIPT.json`.
-`reload_configuration_inputs` calls his `captures_from_observation` only after
+`5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa` were integrated byte-for-byte in
+`788aa5f7c39e81be3ffa5e833366fcabd36533c6`. His explicit successor
+`ae940c44419ea4807dd143de06f800810ca0330f` (return comment **5877296724**)
+is now integrated with **41 written cases, all NOT_RUN**. See
+`CLAUDE_FINAL_RECEIPT.json`; earlier receipt/source remain in history.
+`reload_configuration_inputs` calls his `convert_observation` only after
 the existing host's external-anchor reload. It checks event identity, coverage
 and round/call order, preserves signed coordinate meanings, and names no CAS
 configuration from incomplete evidence. The fresh-process worker is wired to
@@ -136,3 +139,9 @@ DeepSeek's actual receipt remains `deepseek-cas-hh-rde-01-second-return-20260928
 for `62bb7f71`. The newer adapter and cleanup handoff are sent through the same
 channel; an acknowledgment or review of the latest source is still pending.
 No paid reviewer wake or replacement team has been started.
+
+`PARITY_A1_FOCUSED.xml` is the byte-identical public AWS JUnit member, SHA256
+`859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831`.
+`PARITY_A1_CASE_RECEIPT.json` lists each actual case and binds that XML to the
+retained archive. These are the failed original job's results, never results
+for the newer 21-case Codex or 41-case Claude source.

@@ -143,6 +143,7 @@ def reload(directory, policy_sha256, retained_sha256):
         "captures":len(rows),"complete":all(r["observation"]["complete"] for r in rows),
         "rpa_projections":[r["rpa_projection"] for r in rows],"promotion":False,
         "configuration_readouts":[{"receipt_sha256":r["receipt_sha256"],"status":r["status"],
+            "conversion_digest":r["conversion_digest"],
             "complete":r["complete"],"coverage":r["coverage"],
             "series_counts":{s:len(c) for s,c in r["capture_series"].items()},
             "named_configurations":r["named_configurations"]} for r in readouts]})

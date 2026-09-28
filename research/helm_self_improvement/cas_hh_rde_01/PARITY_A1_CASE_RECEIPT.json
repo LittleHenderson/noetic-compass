@@ -1,0 +1,141 @@
+{
+  "schema": "helm.hh-rde.public-test-receipt/1",
+  "executed_source": "fd4215728209ef90948323d1268f2db664bc88ed",
+  "job": "helm-hh-rde-parity-20260928-a1",
+  "archive_sha256": "59014d980fd61766b253376abd7cab83282c18ae63d8ca22574d0f14d6f4b497",
+  "xml_member": "evidence/focused.xml",
+  "xml_sha256": "859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831",
+  "case_count": 18,
+  "cases": [
+    {
+      "name": "test_off_is_default_and_does_not_capture",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.001",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_missing_site_never_reports_success",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_signed_detached_snapshot_does_not_retain_graph",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.001",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_noop_and_observe_have_identical_capture_payloads",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_wrong_shape_is_incomplete_and_original_object_returns",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_wrong_round_is_refused_in_receipt",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_unknown_site_is_not_accepted",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_extra_call_is_not_accepted",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_byte_limit_precedes_tensor_conversion",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_elapsed_capture_limit_is_enforced",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_nonfinite_capture_is_incomplete",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_wrong_parent_refused_before_forward",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.001",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_nested_or_incumbent_observer_refused",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_unsupported_active_mode_refused",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_non_parts_reach_refused",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_pythia_container_is_reused_without_probe_coefficients",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    },
+    {
+      "name": "test_host_retains_incomplete_and_detects_tampering",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.416",
+      "status": "ERROR",
+      "error_messages": [
+        "failed on setup with \"ValueError: PCBA_STATIC_CHECK_FAILED\""
+      ]
+    },
+    {
+      "name": "test_forged_host_refused",
+      "classname": "source.research.helm_self_improvement.test_observation",
+      "seconds": "0.000",
+      "status": "PASS",
+      "error_messages": []
+    }
+  ],
+  "real_parent_witness": "NOT_RUN",
+  "test_type": "FOCUSED_CAPTURE_AND_REFUSAL_CHECKS_NOT_REAL_MODEL_NEUTRALITY"
+}

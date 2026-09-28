@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="18" time="1.671" timestamp="2026-09-28T19:37:49.685875+00:00" hostname="ip-172-31-40-31"><testcase classname="source.research.helm_self_improvement.test_observation" name="test_off_is_default_and_does_not_capture" time="0.001" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_missing_site_never_reports_success" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_signed_detached_snapshot_does_not_retain_graph" time="0.001" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_noop_and_observe_have_identical_capture_payloads" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_wrong_shape_is_incomplete_and_original_object_returns" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_wrong_round_is_refused_in_receipt" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_unknown_site_is_not_accepted" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_extra_call_is_not_accepted" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_byte_limit_precedes_tensor_conversion" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_elapsed_capture_limit_is_enforced" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_nonfinite_capture_is_incomplete" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_wrong_parent_refused_before_forward" time="0.001" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_nested_or_incumbent_observer_refused" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_unsupported_active_mode_refused" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_non_parts_reach_refused" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_pythia_container_is_reused_without_probe_coefficients" time="0.000" /><testcase classname="source.research.helm_self_improvement.test_observation" name="test_host_retains_incomplete_and_detects_tampering" time="0.416"><error message="failed on setup with &quot;ValueError: PCBA_STATIC_CHECK_FAILED&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/opt/helm-validation/outputs/test-temp'), _trace=&lt;pluggy._tracing.TagTracer...1209c1c10&gt;, _basetemp=PosixPath('/opt/helm-validation/outputs/test-temp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def admitted_case(tmp_path_factory):
+        host = host_for(tmp_path_factory.mktemp("admitted"))
+&gt;       baseline, observation = run_baseline(host)
+                                ^^^^^^^^^^^^^^^^^^
+
+source/research/helm_self_improvement/conftest.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source/research/helm_self_improvement/native_bridge.py:106: in run_baseline
+    return _run_branch(host, host.baseline_config, mode="baseline")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source/research/helm_self_improvement/native_bridge.py:64: in _run_branch
+    rows = native.run_episode(machine, allow_acquisition=config.allow_acquisition,
+source/research/cas_closed_loop_1/run_closed_loop.py:37: in run_episode
+    row = controlled_step(machine, allow_acquisition=allow_acquisition, actuator_enabled=actuator_enabled)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source/research/cas_closed_loop_1/control.py:78: in controlled_step
+    binding = checked_board(board, operation, board_source)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'verification_commit', operation = 'CHECK_MEMORY_RESOLUTION'
+source = 'board verification_commit { cjt step: CJT&lt; ^8^C|T | ^5^C|T =&gt; ^9^C|T &gt;; }'
+
+    def checked_board(name, operation, source=None):
+        source = BOARDS[name] if source is None else source
+        checked = check_pcba_document(source)
+        if not checked["valid"]:
+&gt;           raise ValueError("PCBA_STATIC_CHECK_FAILED")
+E           ValueError: PCBA_STATIC_CHECK_FAILED
+
+source/research/cas_closed_loop_1/control.py:32: ValueError</error></testcase><testcase classname="source.research.helm_self_improvement.test_observation" name="test_forged_host_refused" time="0.000" /></testsuite></testsuites>
