@@ -1,0 +1,35 @@
+{
+  "utc": "2026-09-28T05:11:28.225180+00:00",
+  "job_id": "helm-growth15-c70e1a-20260928-a1",
+  "numerical_status": "FAILED_NUMERICAL_CHECK_NO_RETRY",
+  "counts": {
+    "tests": 15,
+    "passed": 14,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "instance_id": "i-04c625eff1aa383aa",
+  "first_termination_confirmation_utc": "2026-09-28T05:10:16.060028+00:00",
+  "provider_state": "terminated",
+  "cleanup_complete": true,
+  "force_termination_called": false,
+  "all_owned_temporary_resources": "independently absent (SG, schedule, roles, profile, ENI, volumes)",
+  "retained_private_storage_bytes": 532185,
+  "archive_retained": true,
+  "original_execution_timeout_retained": true,
+  "original_32_artifact_verification_retained": true,
+  "financial": {
+    "campaign_cap_usd": "3.00",
+    "execution_reservation_usd": "2.00",
+    "cleanup_reserve_usd": "1.00",
+    "ec2_price_usd_per_hour": "2.52",
+    "observed_launch_to_termination_confirmation_seconds": 529.898316,
+    "estimated_compute_upper_bound_through_observed_confirmation_usd": 0.370929,
+    "actual_bill_usd": null,
+    "note": "Observed-duration estimate, not provider bill; separate from CONT19. Retained storage remains active.",
+    "new_paid_attempts": 0
+  },
+  "next_eligible_execution": "None automatically. Claude optimizer-reload device fix and focused review, then a separate applicable finite admission for any new numerical attempt.",
+  "recovery_receipt_sha256": "a0026869467b6ddad33aa112a7f30b325eab167dc429c6f7126c245765a25d6e"
+}
