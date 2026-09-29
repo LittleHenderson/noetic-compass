@@ -493,9 +493,30 @@
    "scope": "review the Stage A/B adaptation only where it touches my contracts (non-fitting cases and invalid-site paths intact; the 15 fit-dependent cases not executed; passive job cannot reach fit/delta/binding edits; canonical identity/coverage preserved); fix a concrete defect in my own files only if found, as a declared successor; no new scheme, fit, experiment or coverage document",
    "source_changes": "NONE; six files still byte-identical to 1ec610f3 at head ac661e61c and at Codex af9fb57e (6/6 re-hashed)",
    "executed": "NONE",
-   "status": "REVIEW_DELIVERED_PACKET_OPEN; about 14 of 30 minutes used (receipt 18:43-18:47Z, review 19:09-19:19Z); remaining time reserved for the C01 diff",
+   "status": "A01 RETURNED 19:16Z; recorded about 14 of 30 active minutes (wall-clock about 7); receipt + transition review delivered; no source change",
    "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
    "hot_handoff_5896847088": "manager HOT-HANDOFF-01: read-only version-transition review of Codex's diagnostic_admission.py / aws_worker.py / aws_runner.py at af9fb57e plus the staged request; delivered as CB1_A01_STAGE_TRANSITION_REVIEW_20260929.md and a PR comment; no Codex file edited"
+  },
+  {
+   "wave": "P4-AUTONOMY-24H-01-A02-20260929",
+   "label": "PRIMARY-AUTONOMY-24H-01/A02 / Claude: disposition of Codex C01 operational diff e373ef1b",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "activation": "manager queue comment 5896916786; input = Codex object e373ef1b1931c674616ef53d06703ff1027de550 (comment 5896960640); started 2026-09-29T19:16:21Z; posted once with the disposition",
+   "scope": "review only the three changed files under cas_hh_rde_01/ against the seven-item checklist; PASS/BLOCKER; no Codex file edited",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "source_changes": "NONE; six files match 1ec610f3 at e373ef1b (6/6)",
+   "executed": "NONE; local text parse of DEPENDENCIES.txt and STAGED_VALIDATION_REQUEST.json only (44 pins, hash 41b403ea..., 108/62 identities)",
+   "disposition": "BLOCKER: LimitFSIZE=16777216 in the staged systemd-run unit breaks the torch install and contradicts the 32 MiB archive bound; PASS on CPU separation, staged admission, per-stage test IDs, worker timeout/collection, B prerequisite design; four non-blocking findings",
+   "status": "DISPOSITION_POSTED_PACKET_OPEN; about 9 of 30 minutes used; waiting for a Codex successor removing LimitFSIZE",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CB1_A02_C01_DIFF_DISPOSITION_20260929.md"
   }
  ],
  "not_done_by_any_worker": [

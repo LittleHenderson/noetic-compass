@@ -406,3 +406,14 @@ Stage A phase; the worker always enters the witness after tests; the runner's te
 witness-only literals; constraints and dependency inventory apply only to the corrective phase; memory/CPU cgroup
 limits, the log bound and the approval expiry are not enforced anywhere in the incumbent; setup maxima sum to 990 s
 against a stated 900 s. Nothing in my six files changes. No Codex file edited. Nothing run. A01 about 14 of 30 used.
+
+### A01 returned; A02 activated on Codex C01 object `e373ef1b` (comment 5896960640)
+
+A02 started 19:16:21Z. Only `diagnostic_admission.py`, `aws_worker.py`, `aws_runner.py` changed from `1b89af69`; my six
+files unchanged (6/6). Disposition posted: `BLOCKER` on `LimitFSIZE=16777216` in the staged `systemd-run` unit (per-file
+limit inherited by pip; the torch install writes files far larger than 16 MiB; also contradicts the 32 MiB archive
+bound; fix = drop the property, totals are already enforced by `output_bounds()`); `PASS` on CPU separation, staged
+admission, per-stage test IDs, worker timeout/collection and the B prerequisite design; four non-blocking findings
+(exact instance-ID pin skipped for staged, single-reviewer PASS gate, systemd-run exit/env attestation, JUnit file
+names vs request). Local text check: `DEPENDENCIES.txt` parses to 44 pins with hash `41b403ea…`; 108/62 identities
+consistent. Full text: `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`. Nothing run. A02 about 9 of 30 used.
