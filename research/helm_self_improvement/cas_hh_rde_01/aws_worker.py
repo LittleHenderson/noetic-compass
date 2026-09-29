@@ -36,6 +36,7 @@ def execute(bucket,region):
          'CUDA_VISIBLE_DEVICES':'0','PYTEST_DISABLE_PLUGIN_AUTOLOAD':'1',
          'HELM_CONT19_VENUE':'ADMITTED_AWS','HELM_HH_RDE_VENUE':'ADMITTED_AWS',
          'HELM_SI_EXECUTION_VENUE':'ADMITTED_AWS','PYTHONPATH':str(base/'source')}
+    corrective=cfg.get('phase')=='parity_corrective_setup'
     def run(label,argv,maximum):
         remaining=min(maximum,1380-(time.monotonic()-start))
         if remaining<=0:raise TimeoutError('TOTAL_WORKER_LIMIT')
@@ -45,10 +46,11 @@ def execute(bucket,region):
         row['returncode']=p.returncode
         if p.returncode:raise RuntimeError('COMMAND_FAILED:'+label)
     def counts():
-        tree=ET.parse(out/'focused.xml')
-        root=tree.getroot();suites=[root] if root.tag=='testsuite' else list(root.iter('testsuite'))
+        paths=[out/'fixture.xml',out/'focused.xml'] if corrective else [out/'focused.xml']
+        trees=[ET.parse(p) for p in paths if p.exists()]
+        suites=[s for t in trees for s in t.iter('testsuite')]
         result['tests']={k:sum(int(s.get(k,'0')) for s in suites) for k in ('tests','failures','errors','skipped')}
-        result['case_names']=[x.get('name') for x in tree.iter('testcase')]
+        result['case_names']=[x.get('name') for t in trees for x in t.iter('testcase')]
     try:
         if sys.platform!='linux':raise ValueError('AWS_LINUX_ONLY')
         for pin in cfg['inputs']:
@@ -62,24 +64,47 @@ def execute(bucket,region):
         if not python:raise ValueError('SUPPORTED_PYTHON_REQUIRED')
         run('venv',[python,'-m','venv',root/'venv'],90)
         python=str(root/'venv/bin/python')
+        constraints=['-c',str(base/'constraints.txt')] if corrective else []
         run('torch',[python,'-m','pip','install','--disable-pip-version-check','--retries','0',
-                     'torch==2.11.0','--index-url','https://download.pytorch.org/whl/cu128'],600)
+                     *constraints,'torch==2.11.0','--index-url','https://download.pytorch.org/whl/cu128'],600)
         wheels=sorted((root/'research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist').glob('*.whl'))
         if not wheels:raise ValueError('FROZEN_WHEELS_REQUIRED')
         run('frozen_wheels',[python,'-m','pip','install','--disable-pip-version-check','--no-deps',*wheels],90)
         run('requirements',[python,'-m','pip','install','--disable-pip-version-check','--retries','0',
-                            '-r',root/'research/CAS_META_2_COMPOSITION/requirements-gpu.txt'],180)
+                            *constraints,'-r',root/'research/CAS_META_2_COMPOSITION/requirements-gpu.txt'],180)
         # Same parser dependency as the incumbent joint_outer_worker. The frozen
         # HELM requirements alone intentionally do not include the CAS parser.
         run('harness_dependencies',[python,'-m','pip','install','--disable-pip-version-check','--retries','0',
-                                    'pytest==9.0.2','pydantic==2.12.5','pydantic-core==2.41.5'],120)
+                                    *constraints,'pytest==9.0.2','pydantic==2.12.5','pydantic-core==2.41.5'],120)
         readiness="import importlib.metadata as m,json; names={'pytest':'9.0.2','pydantic':'2.12.5','pydantic_core':'2.41.5'}; actual={n:m.version(n) for n in names}; print(json.dumps(actual)); assert actual==names, 'HARNESS_DEPENDENCY_VERSION'; from pydantic import BaseModel, Field, model_validator"
         run('harness_dependency_receipt',[python,'-B','-c',readiness],30)
-        run('focused_tests',[python,'-B','-m','pytest','-q','-p','no:cacheprovider',
-            '--basetemp='+str(out/'test-temp'),'--junitxml='+str(out/'focused.xml'),'-rA',
-            base/'source/research/helm_self_improvement/test_observation.py'],180)
+        if corrective:
+            inventory="import importlib.metadata as m,json; from pathlib import Path; c=json.loads(Path('job.json').read_bytes()); actual={n:m.version(n) for n in c['dependency_versions']}; print(json.dumps({'observed':actual,'expected':c['dependency_versions'],'pydantic_imports':'BaseModel,Field,model_validator imported by prior gate'})); assert actual==c['dependency_versions'],'DEPENDENCY_INVENTORY_MISMATCH'"
+            run('exact_dependency_inventory',[python,'-B','-c',inventory],30)
+            run('full_installed_inventory',[python,'-m','pip','freeze','--all'],30)
+            files=[base/'source'/p for p in cfg['test_files']]
+            run('actual_collection',[python,'-B','-m','pytest','--collect-only','-q',*files],60)
+            collection=[line.strip() for line in (out/'actual_collection.stdout').read_text().splitlines() if '::test_' in line]
+            names=[line.rsplit('::',1)[1] for line in collection]
+            if sorted(names)!=sorted(cfg['expected_case_names']) or len(names)!=62:
+                raise ValueError('ACTUAL_COLLECTION_IDENTITY_MISMATCH')
+            (out/'actual_collection.json').write_text(json.dumps({'nodeids':collection,'count':len(names)},indent=2))
+            fixture=str(files[0])+'::test_host_retains_incomplete_and_detects_tampering'
+            fixture_nodeid=next(n for n in collection if n.endswith('::test_host_retains_incomplete_and_detects_tampering'))
+            run('previously_failed_fixture',[python,'-B','-m','pytest','-q','-p','no:cacheprovider',
+                '--basetemp='+str(out/'fixture-temp'),'--junitxml='+str(out/'fixture.xml'),'-rA',fixture],90)
+            counts()
+            if result['tests']!={'tests':1,'failures':0,'errors':0,'skipped':0}:raise ValueError('PCBA_FIXTURE_GATE')
+            result['unchanged_pcba_fixture']='PASS_BEFORE_NEURAL_MODEL_LOAD'
+            run('focused_tests',[python,'-B','-m','pytest','-q','-p','no:cacheprovider',
+                '--basetemp='+str(out/'test-temp'),'--junitxml='+str(out/'focused.xml'),'-rA',
+                '--deselect='+fixture_nodeid,*files],180)
+        else:
+            run('focused_tests',[python,'-B','-m','pytest','-q','-p','no:cacheprovider',
+                '--basetemp='+str(out/'test-temp'),'--junitxml='+str(out/'focused.xml'),'-rA',
+                base/'source/research/helm_self_improvement/test_observation.py'],180)
         counts()
-        if (result['tests']!={'tests':21,'failures':0,'errors':0,'skipped':0}
+        if (result['tests']!={'tests':62 if corrective else 21,'failures':0,'errors':0,'skipped':0}
                 or sorted(result['case_names'])!=sorted(cfg['expected_case_names'])):
             raise ValueError('EXACT_TEST_INVENTORY')
         module=[python,'-B','-m','research.helm_self_improvement.diagnostic_worker']
@@ -107,7 +132,7 @@ def execute(bucket,region):
     except BaseException as error:
         result.update(error_type=type(error).__name__,error=str(error))
         (out/'worker_exception.txt').write_text(traceback.format_exc())
-        if (out/'focused.xml').exists():counts()
+        if (out/'focused.xml').exists() or (out/'fixture.xml').exists():counts()
         if (out/'numeric/public_result.json').exists():
             failed=json.loads((out/'numeric/public_result.json').read_bytes())
             result.update(packet_forwards=failed['packet_forwards'],parity_status=failed['status'])
