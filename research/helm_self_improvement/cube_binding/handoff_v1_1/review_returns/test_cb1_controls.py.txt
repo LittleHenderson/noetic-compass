@@ -1,0 +1,626 @@
+"""CB1-D executable controls. Run: python -m pytest -q <this file>
+
+Every test here is model-free, CPU-only, and executes against the reviewer-owned fixtures
+in `cb1_relational_fixtures.py`. Nothing imports a builder's module, because the builder's
+`cube_binding/` namespace does not exist at the inspected source `54dac34e`; that absence is
+recorded as an open dependency rather than worked around.
+
+Exact equality is used for every symbolic claim. A numeric tolerance appears only where a
+float is genuinely computed, and it is named at the point of use.
+
+One fixture rule, stated once, because it decides what each counterexample can prove. An
+authored pair that names a role on each side (`source:direct` -> `target:direct`) is a
+COMPLETE binding: the role carries the structural slot and the filler carries the entity. A
+fixture that must catch endpoint-bag collapse instead authors BARE fillers inside one frame,
+which are deliberately unnamed as to pairing. The tests below assert that the naive bag
+collapses the unpaired case and that the association signature does not.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
+
+from cb1_relational_fixtures import (  # noqa: E402
+    CLOSURE_SURFACES, Refused, RelationFrame, SplitPlan,
+    audit_public_closure, bag_payload, bounded_role_vocabulary, endpoint_only_scheme,
+    endpoint_sets,
+    frame_association_signature, frame_digest, frame_pairing_signature, frames_from_scene,
+    naive_endpoint_role_bag,
+    naive_role_name_multiset, naive_unscoped_bag, pairing_preserving_scheme,
+    permutation_baseline_derivation, private_target_independence, resource_guard,
+    relation_frame_pairs, role_labeled_bindings, role_path_count, scene_active_passive,
+    scene_analogy_preserves_relations_only, scene_direct_indirect_incomplete,
+    scene_pairing_swap, scene_repeated_occurrence_same_role, scene_reversed_roles,
+    scene_shared_constituent_two_wholes, scene_two_events_same_people, sha,
+    training_only_normalization, tpr_reconstruct, truncated_is_not_absent, unvec, vec,
+)
+
+EDGE_SWAP = scene_pairing_swap()
+ROLE_SWAP = scene_reversed_roles()
+
+
+def _frames(scene, predicate, prefix):
+    return frames_from_scene(scene, predicate=predicate, prefix=prefix)
+
+
+# ===========================================================================
+# 1. Relational counterexamples (CB03, CB04, CB05, CB06, CB07, CB08)
+# ===========================================================================
+def test_cb03_a_complete_binding_separates_the_swapped_pairing():
+    a = _frames(EDGE_SWAP["scene_A"], "contains", "A")
+    b = _frames(EDGE_SWAP["scene_B"], "contains", "B")
+    assert [frame.edge_pairing for frame in a] == ["COMPLETE"]
+    assert len(a) == 1, "a role-labelled scene is one frame carrying both edges"
+    assert endpoint_sets(a) == endpoint_sets(b), "fixture precondition: same endpoint sets"
+    assert relation_frame_pairs(a) == [("A", "B"), ("C", "D")]
+    assert relation_frame_pairs(b) == [("A", "D"), ("C", "B")]
+    assert frame_pairing_signature(a[0]) != frame_pairing_signature(b[0]), (
+        "the pairing signature separates the two arrangements")
+    assert bag_payload(a) == bag_payload(b), (
+        "the endpoint bag cannot separate them: both reduce to sources {A, C} against "
+        "targets {B, D}. A representation shaped like the bag passes this scene while "
+        "losing it, which is the whole point of the fixture")
+
+
+def test_cb03_an_endpoint_role_bag_collapses_a_repeated_unpaired_edge():
+    """v1.1 3.1: keep every filler and every role name, still lose how many pairs there are."""
+    edge = EDGE_SWAP["unpaired_scene"]["edges"][0]
+    one = _frames({"scene": [edge]}, "contains", "one")
+    two = _frames({"scene": [(edge[0], edge[1]), (edge[0], edge[1])]}, "contains", "two")
+    assert len(two) == 2, "the list body is one frame per authored edge"
+    assert two[0].bindings == two[1].bindings, "the two copies carry the same binding"
+    assert all(frame.edge_pairing == "UNPAIRED" for frame in one + two)
+    assert endpoint_sets(one) == endpoint_sets(two), "both copies hold the same endpoints"
+    from cb1_relational_fixtures import naive_endpoint_role_bag as _bag
+
+    def bag_edges(corpus):
+        """The bag's own view: one source list and one target list per frame."""
+        entry = _bag(corpus)[0]
+        return entry["sources"], entry["targets"]
+
+    assert set(bag_edges(one)[0]) == set(bag_edges(two)[0]) == {"A"}
+    assert set(bag_edges(one)[1]) == set(bag_edges(two)[1]) == {"B"}
+    assert one[0].bindings.count(("target:direct", "B")) == 1
+    assert two[0].bindings.count(("target:direct", "B")) == 1
+    assert [filler for _, filler in two[0].bindings].count("B") == 1, (
+        "each frame holds one copy, so a per-frame bag reports one copy either way; which "
+        "is exactly why the per-frame bag cannot carry the count")
+    assert naive_role_name_multiset(one) != naive_role_name_multiset(two), (
+        "the raw name multiset is the only thing that grows, and it does not say which "
+        "frame the extra copy came from")
+    assert len(two) == 2, (
+        "the frame-preserving record keeps both copies as separate frames; the frame count "
+        "is the multiplicity, and it is exactly what a per-frame bag drops")
+    assert frame_association_signature(two) != frame_association_signature(one), (
+        "the association signature separates them while the bag does not")
+    uniform = [RelationFrame(frame_ref="c", predicate="contains",
+                             bindings=two[0].bindings, edge_pairing="UNPAIRED"),
+               RelationFrame(frame_ref="c", predicate="contains",
+                             bindings=two[0].bindings, edge_pairing="UNPAIRED")]
+    assert bag_payload(uniform) == bag_payload(two), (
+        "the bag also cannot tell which frame each copy came from")
+
+
+def test_cb03_role_reversal_changes_the_canonical_record():
+    a = _frames(ROLE_SWAP["scene_A"], "HELP", "A")
+    b = _frames(ROLE_SWAP["scene_B"], "HELP", "B")
+    assert {filler for frame in a for _, filler in frame.bindings} == {"Doctor", "Teacher"}
+    assert frame_digest(a) != frame_digest(b)
+    assert frame_association_signature(a) != frame_association_signature(b)
+    assert naive_endpoint_role_bag(a) != naive_endpoint_role_bag(b)
+
+
+def test_cb04_active_and_passive_preserve_semantic_participants():
+    fixture = scene_active_passive()
+    active = _frames({"scene": fixture["active"]}, "HELP", "active")
+    passive = _frames({"scene": fixture["passive"]}, "HELP", "passive")
+    assert frame_pairing_signature(active[0]) == frame_pairing_signature(passive[0]), (
+        "the semantic participants are preserved while surface syntax changes")
+    assert frame_association_signature(active) != frame_association_signature(passive), (
+        "the two recordings are distinct frames even though they carry the same binding, "
+        "so the association signature keeps the reference and this one does not")
+    assert fixture["syntactic_subject"]["active"] != fixture["syntactic_subject"]["passive"], (
+        "the syntactic subject really does change, so a parser that equates syntax with "
+        "the semantic helper role fails this fixture")
+
+
+def test_cb05_two_events_with_the_same_people_do_not_collapse():
+    fixture = scene_two_events_same_people()
+    frames = _frames({"scene": fixture["scene"]}, "HELP", "e")
+    assert len(frames) == 2, "two events are two frames, not one"
+    assert frames[0].frame_ref != frames[1].frame_ref
+    assert frame_association_signature(frames) != frame_association_signature(frames[:1]), (
+        "dropping the second event must change the association record")
+    merged = RelationFrame(frame_ref="e:merged", predicate="HELP",
+                           bindings=list(frames[0].bindings) + list(frames[1].bindings))
+    assert sha(merged.canonical()) not in (sha(frames[0].canonical()), sha(frames[1].canonical()))
+    assert sorted(sources for sources, _ in
+                  [(entry["sources"], entry["targets"])
+                   for entry in naive_endpoint_role_bag(frames)]) != \
+        sorted(sources for sources, _ in
+               [(entry["sources"], entry["targets"])
+                for entry in naive_endpoint_role_bag(frames[:1])]), (
+        "the bag does change here, because the two events exchange which filler is the "
+        "helper; the collapse case is the repeated-occurrence fixture above, where the "
+        "endpoint sets really are identical")
+    vocabulary = lambda corpus: (sorted(set(naive_role_name_multiset(corpus)["roles"])),
+                                 sorted(set(naive_role_name_multiset(corpus)["fillers"])))
+    assert vocabulary(frames) == vocabulary(frames[:1]), (
+        "one event and two use the same role and filler vocabulary; only the counts grow")
+    assert len(naive_role_name_multiset(frames)["fillers"]) == 4, (
+        "so the multiset sizes are the only trace, and they do not say which event a "
+        "binding belongs to")
+
+
+def test_cb05_repeated_occurrence_in_the_same_role_keeps_multiplicity():
+    fixture = scene_repeated_occurrence_same_role()
+    frames = _frames({"scene": fixture["scene"]}, "contains", "r")
+    bindings = list(frames[0].bindings)
+    repeats = bindings.count(("target:direct", "Wheel"))
+    assert repeats == 2, "the repeated occurrence is two bindings: %r" % (bindings,)
+    wheel_slots = [index for index, pair in enumerate(bindings)
+                   if pair == ("target:direct", "Wheel")]
+    assert wheel_slots == [1, 3], wheel_slots
+    assert frames[0].occurrence_refs[1] != frames[0].occurrence_refs[3], (
+        "the two occurrences of Wheel in the same role carry distinct references")
+    assert len(set(frames[0].occurrence_refs)) == len(bindings), (
+        "every binding has its own occurrence reference")
+    once = RelationFrame(frame_ref="r:0", predicate="contains",
+                         bindings=[("source:direct", "Bicycle"), ("target:direct", "Wheel")])
+    assert sha(frames[0].canonical()) != sha(once.canonical())
+    assert endpoint_sets(frames) == endpoint_sets([once]), (
+        "one occurrence and two have the same endpoint sets")
+    assert naive_endpoint_role_bag(frames) != naive_endpoint_role_bag([once]), (
+        "here the bag does see the multiset, because each side is role-named; the "
+        "single-frame unpaired form above is where the bag loses it")
+
+
+def test_cb06_shared_constituent_is_not_shared_physical_identity():
+    fixture = scene_shared_constituent_two_wholes()
+    frames = _frames({"scene": fixture["scene"]}, "contains", "s")
+    pairs = relation_frame_pairs(frames)
+    assert ("Bicycle", "Wheel") in pairs and ("Cart", "Wheel") in pairs, pairs
+    assert fixture["forbidden_reading"] not in json.dumps(frames[0].canonical()), (
+        "the record must not assert one physical wheel")
+    assert len({ref for ref in [pair[0] for pair in pairs]}) == 3, (
+        "three distinct wholes or parts act as sources; the shared constituent is a "
+        "shared concept reference, not a shared object identity")
+
+
+def test_cb07_direct_indirect_absent_and_unknown_are_four_states():
+    fixture = scene_direct_indirect_incomplete()
+    assert _answer("LIST_PARTS", "Bicycle", inventory=fixture["closed_inventory"]) == "DIRECT"
+    assert _answer("REACHED_VIA", "Bicycle", "Rim",
+                   inventory=fixture["closed_inventory"]) == "INDIRECT"
+    assert _answer("REACHED_VIA", "Rim", "Bicycle",
+                   inventory=fixture["closed_inventory"]) == "ABSENT"
+    assert _answer("LIST_PARTS", "Unseen",
+                   inventory=fixture["open_inventory"]) == "UNKNOWN", (
+        "an open inventory means unknown, not absent")
+
+
+def test_cb07_an_empty_list_is_not_evidence_of_no_parts():
+    assert truncated_is_not_absent({"value": [], "declared_complete": False}) == "UNKNOWN"
+    assert truncated_is_not_absent({"value": [], "declared_complete": True}) == []
+    assert truncated_is_not_absent({"value": "DIRECT", "budget_truncated": True}) == "UNKNOWN"
+
+
+def test_cb08_mapping_must_preserve_directed_relations():
+    fixture = scene_analogy_preserves_relations_only()
+    assert _mapping_ok(fixture) == "ACCEPTED"
+    assert _mapping_ok(dict(fixture, relation_rows=[])) == "REJECTED", (
+        "nouns placed in rows are not a relation mapping")
+    reversed_rows = dict(fixture, relation_rows=[
+        {"technical": ("Bicycle", "Wheel"), "analogical": ("Rope", "Kit")},
+        {"technical": ("Wheel", "Rim"), "analogical": ("Rope", "Strand")}])
+    assert _mapping_ok(reversed_rows) == "REJECTED", "a direction-reversing map is rejected"
+
+
+def test_cb08_partial_analogy_declares_unmapped_items():
+    partial = {"coverage": "partial", "unmapped_items": ["bell", "chain"]}
+    assert partial["unmapped_items"], "a partial analogy names what it does not map"
+
+
+def test_answer_bearing_role_labels_are_refused():
+    for label in ("the correct answer", "on the successful path", "gold_route", "solution_class"):
+        with pytest.raises(Refused) as caught:
+            RelationFrame(frame_ref="x", predicate="contains",
+                          bindings=[("source:direct", "A"), (label, "B")])
+        assert caught.value.code == "ANSWER_BEARING_ROLE_LABEL"
+
+
+def test_undeclared_predicates_are_refused_not_silently_admitted():
+    with pytest.raises(Refused) as caught:
+        RelationFrame(frame_ref="x", predicate="causes", bindings=[("source", "A")])
+    assert caught.value.code == "UNDECLARED_PREDICATE"
+
+
+def test_a_role_path_deeper_than_two_segments_is_refused():
+    with pytest.raises(Refused) as caught:
+        RelationFrame(frame_ref="x", predicate="contains",
+                      bindings=[("source:direct:extra", "A")])
+    assert caught.value.code == "ROLE_PATH_DEPTH"
+
+
+# ===========================================================================
+# 2. Split and provenance validators (CB17, CB24, CB25)
+# ===========================================================================
+def _families():
+    return {
+        "bicycle": [{"id": "b1", "family": "bicycle", "underlying_graph": "g1",
+                     "linked_views": ["technical", "analogy", "story"]},
+                    {"id": "b2", "family": "bicycle", "underlying_graph": "g1",
+                     "linked_views": ["technical"]}],
+        "kit": [{"id": "k1", "family": "kit", "underlying_graph": "g2",
+                 "linked_views": ["technical", "analogy"]}],
+        "cart": [{"id": "c1", "family": "cart", "underlying_graph": "g3",
+                  "linked_views": ["technical"]}],
+    }
+
+
+def test_cb24_family_grouped_splits_audit_clean():
+    plan = SplitPlan(families=_families())
+    plan.assign("bicycle", "discovery")
+    plan.assign("kit", "confirmation")
+    plan.assign("cart", "validation")
+    audit = plan.audit()
+    assert audit["ok"], audit["problems"]
+    assert audit["families"] == 3 and audit["assigned"] == 3
+
+
+def test_cb24_linked_views_travel_with_their_family():
+    plan = SplitPlan(families=_families())
+    plan.assign("bicycle", "discovery")
+    plan.assign("kit", "discovery")
+    plan.assign("cart", "confirmation")
+    assert plan.audit()["ok"]
+    for member in _families()["bicycle"]:
+        assert member["linked_views"], "presentations of one lesson family are grouped"
+
+
+def test_split_leak_is_detected_when_one_underlying_graph_spans_two_splits():
+    families = _families()
+    families["kit"][0]["underlying_graph"] = "g1"
+    plan = SplitPlan(families=families)
+    plan.assign("bicycle", "discovery")
+    plan.assign("kit", "confirmation")
+    plan.assign("cart", "validation")
+    audit = plan.audit()
+    assert not audit["ok"]
+    assert {problem["code"] for problem in audit["problems"]} == {"UNDERLYING_GRAPH_SPLIT_LEAK"}
+
+
+def test_unassigned_family_is_reported_rather_than_defaulted():
+    plan = SplitPlan(families=_families())
+    plan.assign("bicycle", "discovery")
+    audit = plan.audit()
+    assert not audit["ok"]
+    assert {problem["code"] for problem in audit["problems"]} == {"FAMILY_UNASSIGNED"}
+
+
+def test_analysis_and_learner_holdouts_are_declared_non_substitutable():
+    separation = SplitPlan(families=_families()).assert_learner_and_analysis_are_separate()
+    assert separation["substitutable"] is False
+    assert "DISCOVER" in separation["note"]
+
+
+# ===========================================================================
+# 3. Public-input independence and closure (CB10, CB11, CB15)
+# ===========================================================================
+def _public_view(target):
+    """A correct builder's public view: identical for every private target."""
+    return {"task_text": "What are the direct parts of Bicycle?",
+            "public_options": ["Wheel", "Rim", "Handlebar"],
+            "node_order": ["Bicycle", "Wheel", "Frame"],
+            "choice_order": [0, 1, 2],
+            "public_ids": ["n1", "n2", "n3"]}
+
+
+def _leaky_public_view(target):
+    """A failing builder: the public option order depends on the private answer."""
+    view = dict(_public_view(target))
+    view["choice_order"] = [1, 0, 2] if target.get("answer") == 0 else [0, 1, 2]
+    return view
+
+
+def test_cb10_public_view_is_identical_for_every_private_target():
+    report = private_target_independence(_public_view, [{"answer": 0}, {"answer": 1}, {"answer": 2}])
+    assert report["ok"] is True
+    assert report["distinct_public_digests"] == 1
+
+
+def test_cb10_a_target_dependent_option_order_is_caught():
+    report = private_target_independence(_leaky_public_view, [{"answer": 0}, {"answer": 1}])
+    assert report["ok"] is False, "the leak must be detected, not tolerated"
+    assert report["distinct_public_digests"] == 2
+
+
+def test_cb11_every_closure_surface_is_audited_explicitly():
+    view, masked, absent = _audited_view()
+    audit = audit_public_closure(view, declared_masked=masked, declared_absent=absent)
+    assert audit["surfaces_audited"] == len(CLOSURE_SURFACES)
+    states = {row["surface"]: row["state"] for row in audit["rows"]}
+    assert "UNAUDITED" not in states.values(), "silence is not an audited state"
+    assert audit["ok"] is True, audit["problems"]
+    assert states["answer_field"] == "WITHHELD_MASKED"
+    assert states["family_id"] == "DECLARED_ABSENT"
+
+
+def test_cb11_an_unaudited_surface_fails_the_audit():
+    view, masked, absent = _audited_view()
+    audit = audit_public_closure(view, declared_masked=masked,
+                                 declared_absent=tuple(item for item in absent
+                                                       if item != "cache_keys"))
+    assert audit["ok"] is False
+    assert {problem["code"] for problem in audit["problems"]} == {"SURFACE_UNAUDITED"}
+    assert {problem["surface"] for problem in audit["problems"]} == {"cache_keys"}
+
+
+def test_cb11_audit_metadata_must_not_reach_the_learner_view():
+    view, masked, absent = _audited_view()
+    view = dict(view, family_id="bicycle", split_id="confirmation")
+    still_absent = tuple(item for item in absent if item not in ("family_id", "split_id"))
+    audit = audit_public_closure(view, declared_masked=masked, declared_absent=still_absent)
+    codes = {problem["code"] for problem in audit["problems"]}
+    assert "AUDIT_METADATA_REACHED_LEARNER_VIEW" in codes
+    assert {problem["surface"] for problem in audit["problems"]
+            if problem["code"] == "AUDIT_METADATA_REACHED_LEARNER_VIEW"} == {"family_id", "split_id"}
+
+
+def test_cb11_a_present_answer_field_fails_the_closure_audit():
+    view, masked, absent = _audited_view()
+    view = dict(view, answer_field="Wheel")
+    audit = audit_public_closure(view, declared_masked=masked, declared_absent=absent)
+    assert "PRIVATE_SURFACE_PRESENT" in {problem["code"] for problem in audit["problems"]}
+    assert audit["ok"] is False
+
+
+def test_cb15_activation_only_and_assisted_conditions_stay_separable():
+    conditions = {"activation_only": {"features": ["hidden_state"]},
+                  "hybrid": {"features": ["hidden_state", "query_marks"]},
+                  "input_only": {"features": ["public_edges"]},
+                  "oracle_assisted": {"features": ["hidden_state"], "oracle": True}}
+    assert len({sha(value) for value in conditions.values()}) == len(conditions)
+    assert conditions["oracle_assisted"]["oracle"] is True
+
+
+# ===========================================================================
+# 4. Role-scheme and fitting algebra (CB16, CB17, CB19, CB20)
+# ===========================================================================
+def test_cb16_the_role_vocabulary_is_bounded_not_one_role_per_sample():
+    frames = _frames(EDGE_SWAP["scene_A"], "contains", "A")
+    report = role_path_count(frames)
+    assert report["bounded"] is True
+    assert report["distinct_declared_roles"] <= len(bounded_role_vocabulary(max_depth=2))
+    assert report["one_role_per_sample_is_bounded"] is False, (
+        "inventing a fresh role for every sample is refused as a design, not rewarded")
+    assert report["roles_if_one_per_sample"] == report["samples"]
+
+
+def test_cb16_frame_scoped_scheme_separates_the_swapped_pairing():
+    a = _frames(EDGE_SWAP["scene_A"], "contains", "A")
+    b = _frames(EDGE_SWAP["scene_B"], "contains", "B")
+    scheme = pairing_preserving_scheme()
+    encoded_a, encoded_b = scheme.encode(a), scheme.encode(b)
+    assert encoded_a["blocks"] == encoded_b["blocks"], (
+        "recorded limitation: a scheme whose role paths name only the endpoint side SORTS "
+        "the fillers by side, so two edges inside one frame collapse. Frame scope alone does "
+        "not save it. A builder using this scheme must keep one frame per edge, or add the "
+        "edge identity to the role path")
+    split_a = _frames([("A", "B"), ("C", "D")], "contains", "sa")
+    split_b = _frames([("A", "D"), ("C", "B")], "contains", "sb")
+    assert scheme.encode(split_a)["blocks"] != scheme.encode(split_b)["blocks"], (
+        "with one frame per edge the same scheme separates the two arrangements")
+
+
+def test_cb16_a_role_outside_the_declared_vocabulary_is_refused():
+    scheme = endpoint_only_scheme()
+    frames = [RelationFrame(frame_ref="m:0", predicate="corresponds_to",
+                            bindings=[("source:mapped", "Bicycle"), ("target:mapped", "Kit")])]
+    with pytest.raises(Refused) as caught:
+        scheme.encode(frames)
+    assert caught.value.code == "ROLE_NOT_IN_VOCABULARY"
+
+
+def test_cb16_a_bare_authored_pair_is_not_silently_read_as_a_role_name():
+    with pytest.raises(Refused) as caught:
+        role_labeled_bindings([("A", "B")], "contains", bare=None)
+    assert caught.value.code == "BARE_ENDPOINT_FORM"
+    assert role_labeled_bindings([("A", "B")], "contains") == [("source:direct", "A"),
+                                                              ("target:direct", "B")]
+
+
+def test_cb16_dimensions_are_checked_against_the_reference_formulation():
+    result = tpr_reconstruct(bindings=[("A", "r0"), ("B", "r1")],
+                             filler_embedding={"A": [1.0, 0.0], "B": [0.0, 1.0]},
+                             role_embedding={"r0": [1.0, 0.0, 0.0], "r1": [0.0, 1.0, 0.0]},
+                             weight=[[1.0] * 6, [0.5] * 6], bias=[0.25, -0.25])
+    assert result["dims"] == {"d_f": 2, "d_r": 3, "d_h": 2, "d_f_times_d_r": 6}
+    assert result["parameters"] == {"weight": 12, "bias": 2, "trainable": 14}
+    assert len(result["z_hat"]) == 2
+
+
+def test_cb16_a_wrong_weight_width_is_refused_before_any_arithmetic():
+    with pytest.raises(Refused) as caught:
+        tpr_reconstruct(bindings=[("A", "r0")], filler_embedding={"A": [1.0, 0.0]},
+                        role_embedding={"r0": [1.0, 0.0, 0.0]}, weight=[[1.0] * 5], bias=[0.0])
+    assert caught.value.code == "WEIGHT_COLUMN_MISMATCH"
+
+
+def test_cb16_bias_length_is_a_single_affine_bias_not_a_second_application():
+    with pytest.raises(Refused) as caught:
+        tpr_reconstruct(bindings=[("A", "r0")], filler_embedding={"A": [1.0]},
+                        role_embedding={"r0": [1.0]}, weight=[[1.0]], bias=[0.0, 0.0])
+    assert caught.value.code == "BIAS_LENGTH_MISMATCH"
+
+
+def test_cb19_a_zero_weight_zero_bias_reconstruction_returns_exactly_zero():
+    result = tpr_reconstruct(bindings=[("A", "r0"), ("B", "r0")],
+                             filler_embedding={"A": [3.0], "B": [-2.0]},
+                             role_embedding={"r0": [1.0]}, weight=[[0.0]], bias=[0.0])
+    assert result["z_hat"] == [0.0], "no hidden constant may appear from nowhere"
+    assert result["summed_occurrences"] == [1.0], "3.0 + (-2.0) sums to 1.0"
+
+
+def test_cb19_single_bias_application_is_measurable():
+    common = dict(bindings=[("A", "r0")], filler_embedding={"A": [1.0]},
+                  role_embedding={"r0": [1.0]}, weight=[[1.0]])
+    once = tpr_reconstruct(bias=[5.0], **common)["z_hat"][0]
+    twice = tpr_reconstruct(bias=[10.0], **common)["z_hat"][0]
+    assert once == 6.0
+    assert twice == 11.0
+    assert twice - once == 5.0, "one bias tensor, applied once"
+
+
+def test_cb20_vec_ordering_is_fixed_and_round_trips():
+    matrix = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
+    assert vec(matrix) == [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+    assert unvec(vec(matrix), rows=2, columns=3) == matrix
+    with pytest.raises(Refused) as caught:
+        vec(matrix, ordering="column_major")
+    assert caught.value.code == "UNSUPPORTED_VEC_ORDER"
+
+
+def test_cb20_sum_of_occurrences_is_order_invariant_but_weight_is_not():
+    filler = {"A": [1.0, 0.0], "B": [0.0, 1.0]}
+    role = {"r0": [1.0, 0.0], "r1": [0.0, 1.0]}
+    forward = tpr_reconstruct(bindings=[("A", "r0"), ("B", "r1")], filler_embedding=filler,
+                              role_embedding=role, weight=[[1.0] * 4], bias=[0.0])
+    backward = tpr_reconstruct(bindings=[("B", "r1"), ("A", "r0")], filler_embedding=filler,
+                               role_embedding=role, weight=[[1.0] * 4], bias=[0.0])
+    assert forward["summed_occurrences"] == backward["summed_occurrences"]
+    differing = tpr_reconstruct(bindings=[("A", "r0"), ("B", "r1")], filler_embedding=filler,
+                                role_embedding=role, weight=[[0.0, 1.0, 2.0, 3.0]], bias=[0.0])
+    assert differing["summed_occurrences"] == forward["summed_occurrences"]
+    assert differing["z_hat"] != forward["z_hat"], (
+        "the sum is order-invariant; the weight is what makes the result order-sensitive")
+
+
+def test_cb19_a_row_scope_that_sums_the_whole_graph_is_named_not_adopted():
+    design = {"row_scope": "RECEIVING_NODE_ONLY", "graph_summed_into_every_row": False,
+              "reason": "a reconstruction shape fitting is not evidence that every row may "
+                        "read the whole graph"}
+    assert design["graph_summed_into_every_row"] is False
+    refused = {"row_scope": "WHOLE_GRAPH_IN_EVERY_ROW", "graph_summed_into_every_row": True}
+    assert refused["graph_summed_into_every_row"] is True, (
+        "recorded so the refused design is named rather than silently adopted")
+
+
+def test_cb17_the_permutation_baseline_is_not_transplanted_without_a_derivation():
+    with pytest.raises(Refused) as caught:
+        permutation_baseline_derivation(-1)
+    assert caught.value.code == "PERMUTATION_INPUT"
+    assert permutation_baseline_derivation(3) == 6
+    derivation = {"paper_baseline": "1/n! over token orders",
+                  "graph_task_equivalent": False,
+                  "reason": "a graph task scores directed edges, not a sequence order",
+                  "adopted": False}
+    assert derivation["adopted"] is False
+
+
+def test_cb17_an_atomic_pair_baseline_is_declared_as_the_comparison():
+    baseline = {"name": "atomic_pair", "learns": "one independent score per filler pair",
+                "shares_structure_across_examples": False}
+    structured = {"name": "frame_pairing", "learns": "one shared role/filler composition",
+                  "shares_structure_across_examples": True}
+    assert baseline["shares_structure_across_examples"] != structured["shares_structure_across_examples"]
+
+
+def test_cb16_normalization_uses_fit_statistics_only():
+    fit = [[1.0, 10.0], [2.0, 20.0], [3.0, 30.0]]
+    result = training_only_normalization(fit, [[100.0, 1000.0]])
+    assert result["statistics_source"] == "FIT_SPLIT_ONLY"
+    assert result["fit_statistics"]["mean"] == [2.0, 20.0]
+    assert result["held_rows_normalized"][0][0] > 100.0
+    assert training_only_normalization(fit, [[0.0, 0.0]])["fit_statistics"] == result["fit_statistics"]
+
+
+def test_cb16_the_resource_guard_terminates_and_reports_truncation():
+    assert resource_guard(rows_seen=10, max_rows=10, seconds_elapsed=1.0, max_seconds=10.0,
+                          parameters=5, max_parameters=100)["status"] == "WITHIN_BUDGET"
+    assert resource_guard(rows_seen=11, max_rows=10, seconds_elapsed=1.0, max_seconds=10.0,
+                          parameters=5, max_parameters=100) == {"status": "BUDGET_TRUNCATED",
+                                                                "reason": "ROW_BUDGET"}
+    assert resource_guard(rows_seen=1, max_rows=10, seconds_elapsed=1.0, max_seconds=10.0,
+                          parameters=101, max_parameters=100) == {"status": "REFUSED",
+                                                                  "reason": "PARAMETER_BUDGET"}
+
+
+def test_cb16_reconstruction_error_and_task_correctness_are_separate_metrics():
+    metrics = {"reconstruction_error": 0.031, "original_answer_agreement": 0.94,
+               "task_accuracy": 0.61, "counterfactual_success": 0.0,
+               "collateral_change": 0.12, "abstentions": 3}
+    assert set(metrics) >= {"reconstruction_error", "task_accuracy", "counterfactual_success"}
+    assert metrics["counterfactual_success"] != metrics["task_accuracy"]
+
+
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+def _audited_view():
+    """A learner view with every closure surface in a declared state.
+
+    Present: what the learner legitimately receives. Masked: content deliberately
+    withheld. Declared absent: audited and genuinely not there. A surface in none of the
+    three is `UNAUDITED` and fails the audit.
+    """
+    present = {"task_text", "choice_order", "choice_membership", "node_order",
+               "public_ids", "public_options", "auxiliary_features"}
+    masked = ("mask_shape", "answer_field")
+    absent = tuple(sorted(set(CLOSURE_SURFACES) - present - set(masked)))
+    view = {"task_text": "What are the direct parts of Bicycle?",
+            "choice_order": [0, 1, 2],
+            "choice_membership": ["Wheel", "Rim", "Handlebar"],
+            "node_order": ["Bicycle", "Wheel", "Frame"],
+            "public_ids": ["n1", "n2", "n3"],
+            "public_options": ["Wheel", "Rim", "Handlebar"],
+            "auxiliary_features": ["degree_in", "degree_out"]}
+    return view, masked, absent
+
+
+def _answer(operation, *arguments, inventory):
+    edges = {tuple(pair) for pair in inventory["contains"]}
+    complete = inventory["completeness"] == "complete"
+    if operation == "LIST_PARTS":
+        if [target for source, target in edges if source == arguments[0]]:
+            return "DIRECT"
+        return "ABSENT" if complete else "UNKNOWN"
+    if operation == "REACHED_VIA":
+        source, target = arguments
+        if (source, target) in edges:
+            return "DIRECT"
+        frontier, seen, depth = {source}, {source}, 0
+        while frontier and depth < 8:
+            frontier = {b for a, b in edges if a in frontier and b not in seen}
+            seen |= frontier
+            depth += 1
+            if target in seen:
+                return "INDIRECT"
+        return "ABSENT" if complete else "UNKNOWN"
+    raise AssertionError("unknown operation %r" % operation)
+
+
+def _mapping_ok(fixture):
+    technical = {tuple(pair) for pair in fixture["technical"]["contains"]}
+    analogical = {tuple(pair) for pair in fixture["analogical"]["contains"]}
+    rows = fixture.get("relation_rows") or []
+    if not rows:
+        return "REJECTED"
+    if {tuple(row["technical"]) for row in rows} != technical:
+        return "REJECTED"
+    if {tuple(row["analogical"]) for row in rows} != analogical:
+        return "REJECTED"
+    node_map = {row["technical"]: row["analogical"] for row in fixture["node_role_rows"]}
+    for source, target in technical:
+        if node_map.get(source) is None or node_map.get(target) is None:
+            return "REJECTED"
+        if (node_map[source], node_map[target]) not in analogical:
+            return "REJECTED"
+    return "ACCEPTED"

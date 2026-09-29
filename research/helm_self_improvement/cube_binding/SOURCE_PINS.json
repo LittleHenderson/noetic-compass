@@ -1,0 +1,35 @@
+{
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "modules": {
+    "cube_node": {
+      "module": "cas_meta2.graph_teaching.cube_node",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/cube_node.py",
+      "sha256": "9d3363a960298715c0b13256593693dff7b07d70563b9a1b044d5d9042431e4a"
+    },
+    "cube_profile": {
+      "module": "cas_meta2.graph_teaching.cube_profile",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/cube_profile.py",
+      "sha256": "08493344a5daff10e2fcaed5a1711cdf5299a7fa3e332f5efb63a75e5ac8bfef"
+    },
+    "source": {
+      "module": "cas_meta2.typed_teaching.source",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+      "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+    },
+    "answers": {
+      "module": "cas_meta2.typed_teaching.answers",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+    },
+    "course": {
+      "module": "cas_meta2.typed_teaching.course",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+    },
+    "slots": {
+      "module": "cas_meta2.typed_teaching.slots",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+    }
+  }
+}

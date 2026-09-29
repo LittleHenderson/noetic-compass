@@ -1,0 +1,23 @@
+{
+  "reviewer": "DeepSeek",
+  "return_id": "deepseek-cb1-d-first-return-20260929-15",
+  "status": "REVIEWER_REPORTED_43_LOCAL_CONTROLS_NOT_ADOPTED_AS_CB1_INTEGRATION_ACCEPTANCE",
+  "permission_receipt": "PENDING_RECONCILIATION",
+  "files": [
+    {
+      "source": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\cas_hh_rde_01\\cube_binding\\CB1_D_RETURN.md",
+      "delivered": "handoff_v1_1/review_returns/CB1_D_RETURN.md",
+      "sha256": "98092a8a24e862638e49fc0f9cd035c7f2fe8f83c8005da297438cf045d9530b"
+    },
+    {
+      "source": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\cas_hh_rde_01\\cube_binding\\cb1_relational_fixtures.py",
+      "delivered": "handoff_v1_1/review_returns/cb1_relational_fixtures.py.txt",
+      "sha256": "ea6b43ca33660e81eb4a56db3ed8c1c480a5b3489ddbb1ef74f8277d51c0c596"
+    },
+    {
+      "source": "D:\\tksCAS-worktrees\\codex-cas-closed-loop-1\\.coordination\\helm_rnd_three_lead_v1\\review\\cas_hh_rde_01\\cube_binding\\test_cb1_controls.py",
+      "delivered": "handoff_v1_1/review_returns/test_cb1_controls.py.txt",
+      "sha256": "0f0a795b423cb82afad5539d4c4daac2dbec616cd2c83b1a0332bb70c9f2880c"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Review snapshots retain original bytes, including historical line endings.
+reference_source/*.txt -text
+handoff_v1_1/review_returns/* -text

@@ -1,0 +1,100 @@
+{
+  "role": "ACTUAL_DELIVERED_SUBSET_NOT_FULL_UPSTREAM_MANIFEST",
+  "files": [
+    {
+      "path": "handoff_v1_1/00_START_HERE.md",
+      "sha256": "2a4a652682a95d7c3fcecf0c2a297e7fa6274f44841a3dbcd99d9497cbd913d3",
+      "bytes": 2451
+    },
+    {
+      "path": "handoff_v1_1/01_CODEX_CB1.md",
+      "sha256": "20362f1865fff9ebd600c25e5197621e52dfab849766f7d6088b50444c4991b8",
+      "bytes": 5388
+    },
+    {
+      "path": "handoff_v1_1/02_CLAUDE_CB1.md",
+      "sha256": "86b451a7f7a9b1705a4bba35e1234373fe361a33d1fbb6275aa91817adf2bf62",
+      "bytes": 5278
+    },
+    {
+      "path": "handoff_v1_1/03_DEEPSEEK_CB1.md",
+      "sha256": "ff55f073c8c05cbd9e7a94c0b8fcc99eb7fb8de3df1cc984afbec62b4dcba3ca",
+      "bytes": 4705
+    },
+    {
+      "path": "handoff_v1_1/04_IMPLEMENTATION_TASKS.json",
+      "sha256": "fc53719daadd79e7889b278bbadac440df1042143f6578f1a3e9393d03b30dbe",
+      "bytes": 4253
+    },
+    {
+      "path": "handoff_v1_1/05_REQUIREMENT_AND_GATE_MAP.json",
+      "sha256": "1362cd476ea6472ccacc0090efdeadb26d7a532e7824bddf29bfd8bc2e81abd4",
+      "bytes": 8235
+    },
+    {
+      "path": "handoff_v1_1/06_SOURCE_AND_STATUS_NOTES.md",
+      "sha256": "8cf8ff8d07e0814b7725aefd7c43b8b74ef94b092d455540f75898074db16d14",
+      "bytes": 6117
+    },
+    {
+      "path": "handoff_v1_1/07_CHANGES_FROM_v1_0.md",
+      "sha256": "ad73c5ee1c6a2304a44c9c818feb86d0afa7ebe4dda059f442acfb8ad6403f42",
+      "bytes": 4016
+    },
+    {
+      "path": "handoff_v1_1/08_RESOURCE_AND_SCOPE.json",
+      "sha256": "e94bdfd8cb185ce9d17b2714b0496cbcc8461eb4be26663e6875b9cc17588b5e",
+      "bytes": 2281
+    },
+    {
+      "path": "handoff_v1_1/CAS_Cube_Binding_Manager_Directive_v1_1.md",
+      "sha256": "2d12f3c89f52a35a1caf1857fe308a78b08d1149e38e24332235657548d9dec5",
+      "bytes": 84156
+    },
+    {
+      "path": "handoff_v1_1/MANIFEST.json",
+      "sha256": "8a365a7b86047b21a860bfe526af349df98285fcf36f512b59350cadc4909f54",
+      "bytes": 3400
+    },
+    {
+      "path": "handoff_v1_1/references/2608.29530v1.pdf",
+      "sha256": "e2b5a958b825a23f3acb6861d7f7fd3784b2e53981c6fb6f527817c852893da5",
+      "bytes": 1912393
+    },
+    {
+      "path": "handoff_v1_1/references/CAS_HARNESS_HELM_RDE_01_Complete_20260928.md",
+      "sha256": "6c1dbddc1cc8b46695e12a03e1d84634818944c318f1c6b53bf80c07b1cd8c83",
+      "bytes": 52303
+    },
+    {
+      "path": "handoff_v1_1/references/Cube_Node_Schema_v0.1.md",
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b",
+      "bytes": 25974
+    },
+    {
+      "path": "handoff_v1_1/references/CUBE_TEACHING_PROFILE_001.md",
+      "sha256": "442fe3165ed3acaab6e906de3cae632f6da487669c2e458d8b556db92440da0d",
+      "bytes": 14390
+    },
+    {
+      "path": "handoff_v1_1/review_returns/CB1_D_RETURN.md",
+      "sha256": "98092a8a24e862638e49fc0f9cd035c7f2fe8f83c8005da297438cf045d9530b",
+      "bytes": 7243
+    },
+    {
+      "path": "handoff_v1_1/review_returns/cb1_relational_fixtures.py.txt",
+      "sha256": "ea6b43ca33660e81eb4a56db3ed8c1c480a5b3489ddbb1ef74f8277d51c0c596",
+      "bytes": 35910
+    },
+    {
+      "path": "handoff_v1_1/review_returns/PROVENANCE.json",
+      "sha256": "61c9eed6df746510d7bac0acb57b685ce2026a3f80a1302bd664f4cbaffa8b4c",
+      "bytes": 1270
+    },
+    {
+      "path": "handoff_v1_1/review_returns/test_cb1_controls.py.txt",
+      "sha256": "0f0a795b423cb82afad5539d4c4daac2dbec616cd2c83b1a0332bb70c9f2880c",
+      "bytes": 33331
+    }
+  ]
+}

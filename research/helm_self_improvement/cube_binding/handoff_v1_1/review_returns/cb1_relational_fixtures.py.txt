@@ -1,0 +1,771 @@
+"""CB1-D: independent relational fixtures, split/visibility validators and role-scheme algebra.
+
+OWNER: DeepSeek independent reviewer lane. Reviewer-only area:
+    review/cas_hh_rde_01/cube_binding/*
+
+DIRECTIVE
+---------
+CAS-HH-RDE-01-CB1 v1.1, lead file `03_DEEPSEEK_CB1.md`, task **CB1-D**:
+"Write the relational counterexamples independently; write split and provenance validators;
+require the actual public-input closure to be independent of private targets; write algebra
+and fitting controls ... Prepare one frozen natural-structure study after the passive
+prerequisite."
+
+Second source packet, items 1-4. Item 5 is a plan only: the study is frozen and NOT_RUN,
+because the incumbent passive capture has not produced a real HELM forward.
+
+WHAT THIS FILE IS
+-----------------
+Reviewer-owned Python. It imports no project code except the two frozen prompt-parsing
+tables recorded in the implementation prompt, and it reuses the owner's canonical cube
+vocabulary verbatim rather than inventing a parallel one:
+
+    face_1..face_6, core, contains, LIST_PARTS, FIND_SHARED_PART, REACHED_VIA,
+    availability in {populated, unknown, not_applicable},
+    completeness in {complete, partial, unknown}
+
+in the meaning fixed by `Cube_Node_Schema_v0.1.md` and already implemented in
+`cube_node.py` at scientific source `c45f775f`. Face numbers are not Noetic numbers, the
+core is not ^0, and `depends_on` is a prerequisite statement rather than proven cause.
+Nothing here renames a face.
+
+WHY THE COUNTEREXAMPLES LOOK LIKE THIS
+--------------------------------------
+The v1.1 hardening says an endpoint-role bag can lose event and edge association even
+while it keeps every filler name and every role name. So the fixtures do not only check
+that two structures differ; they check the **reason** they differ. For each pair, a naive
+representation is written on purpose and shown to collapse the two structures. If a
+builder's representation behaves like the naive one, it is caught by construction rather
+than by opinion.
+
+The endpoint-role bag is a real risk here, not a straw man: two agents independently
+proposed it. Codex's CB1-C names "input-origin binding sidecars"; Claude's CB1-A names a
+filler/role tensor product. The counterexample exists so that whichever shape arrives can
+be shown to keep or to lose pairing.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+
+# ---------------------------------------------------------------------------
+# Owner vocabulary, verbatim. Never edited to fit a representation.
+# ---------------------------------------------------------------------------
+FACE_KEYS = ("face_1", "face_2", "face_3", "face_4", "face_5", "face_6")
+FACE_MEANINGS = {
+    "core": "stable identity and intended meaning in the declared context",
+    "face_1": "technical name, definition and function",
+    "face_2": "context, environment and interactions",
+    "face_3": "analogy or metaphor with an explicit scope and limits",
+    "face_4": "explicit correspondence across presentations",
+    "face_5": "decomposition and structural inspection",
+    "face_6": "recomposition and story or process presentation",
+}
+AVAILABILITY = ("populated", "unknown", "not_applicable")
+COMPLETENESS = ("complete", "partial", "unknown")
+CORE_KINDS = ("concept", "instance", "event", "procedure")
+DECLARED_PREDICATES = ("contains", "corresponds_to", "depends_on")
+# The v1.1 section-3 illustration uses HELP(helper, recipient). It is a fixture predicate,
+# not a newly admitted CAS operation: naming it registers no executable behaviour, and the
+# initial teaching profile still uses `contains` alone.
+ILLUSTRATION_PREDICATES = ("HELP",)
+KNOWN_PREDICATES = DECLARED_PREDICATES + ILLUSTRATION_PREDICATES
+FORBIDDEN_ROLE_WORDS = ("answer", "correct", "solution", "expected", "gold", "success",
+                        "solved", "verifier")
+
+
+def canonical(value) -> bytes:
+    """One ordering, one spelling. Used for every digest in this file."""
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()
+
+
+def sha(value) -> str:
+    return hashlib.sha256(canonical(value)).hexdigest()
+
+
+class Refused(Exception):
+    """A refusal is a result. The code names which rule was broken."""
+
+    def __init__(self, code, detail=""):
+        super().__init__(code if not detail else "%s: %s" % (code, detail))
+        self.code = code
+
+
+def _refuse(code, detail=""):
+    raise Refused(code, detail)
+
+
+# ===========================================================================
+# 1. Fixtures: scenes that must be told apart, each with the reason
+# ===========================================================================
+def scene_pairing_swap():
+    """v1.1 3.1: same fillers, same predicate, same endpoint sets, different edges."""
+    return {
+        "scene_A": {"contains": [("A", "B"), ("C", "D")]},
+        "scene_B": {"contains": [("A", "D"), ("C", "B")]},
+        "fillers": ["A", "B", "C", "D"],
+        "predicate": "contains",
+        "expected_distinction": "EDGE_ASSOCIATION",
+        # Deliberately unpaired: one authored frame whose endpoint pairs are not
+        # individually role-annotated, for the two-copies-of-one-edge collapse case.
+        "unpaired_scene": {"edges": [["A", "B"], ["A", "B"]]},
+    }
+
+
+def scene_reversed_roles():
+    """v1.1 3: same two concepts, roles exchanged (HELP illustration)."""
+    return {
+        "scene_A": {"HELP": [("helper:Doctor", "recipient:Teacher")]},
+        "scene_B": {"HELP": [("helper:Teacher", "recipient:Doctor")]},
+        "fillers": ["Doctor", "Teacher"],
+        "predicate": "HELP",
+        "expected_distinction": "ROLE_ASSIGNMENT",
+    }
+
+
+def scene_active_passive():
+    """v1.1 3: surface syntax changes, semantic participants do not."""
+    return {
+        "active": {"HELP": [("helper:Doctor", "recipient:Teacher")]},
+        "passive": {"HELP": [("helper:Doctor", "recipient:Teacher")]},
+        "surface": {"active": "The doctor helped the teacher.",
+                    "passive": "The teacher was helped by the doctor."},
+        "syntactic_subject": {"active": "Doctor", "passive": "Teacher"},
+        "expected_distinction": "NONE_SEMANTICALLY",
+    }
+
+
+def scene_two_events_same_people():
+    """v1.1 3: two events involving the same people must not collapse into one."""
+    return {
+        "scene": {"event_1": {"HELP": [("helper:Doctor", "recipient:Teacher")]},
+                  "event_2": {"HELP": [("helper:Teacher", "recipient:Doctor")]}},
+        "fillers": ["Doctor", "Teacher"],
+        "expected_distinction": "EVENT_SCOPE",
+    }
+
+
+def scene_repeated_occurrence_same_role():
+    """v1.1 3.1: the same filler twice in the same role in one frame."""
+    return {
+        "scene": {"contains": [("Bicycle", "Wheel"), ("Bicycle", "Wheel")]},
+        "multiplicity": {"Bicycle": 1, "Wheel": 2},
+        "expected_distinction": "OCCURRENCE_MULTIPLICITY",
+    }
+
+
+def scene_shared_constituent_two_wholes():
+    """v1.1 3 / schema 4: a shared constituent is not one physical object."""
+    return {
+        "scene": {"contains": [("Bicycle", "Wheel"), ("Cart", "Wheel"), ("Wheel", "Rim")]},
+        "shared_constituent": "Wheel",
+        "wholes": ["Bicycle", "Cart"],
+        "forbidden_reading": "the two wholes share one physical wheel",
+        "expected_distinction": "SHARED_CONSTITUENT_NOT_IDENTITY",
+    }
+
+
+def scene_direct_indirect_incomplete():
+    """Schema 4: direct part, indirect part, absent, and unknown are four things."""
+    return {
+        "closed_inventory": {"contains": [("Bicycle", "Wheel"), ("Wheel", "Rim")],
+                             "completeness": "complete"},
+        "open_inventory": {"contains": [("Bicycle", "Wheel")], "completeness": "unknown"},
+        "questions": [("LIST_PARTS", "Bicycle"), ("REACHED_VIA", "Bicycle", "Rim"),
+                      ("REACHED_VIA", "Rim", "Bicycle"), ("LIST_PARTS", "Unseen")],
+        "expected_distinction": "DIRECT_INDIRECT_ABSENT_UNKNOWN",
+    }
+
+
+def scene_analogy_preserves_relations_only():
+    """Schema 5: a mapping keeps declared directed relations, not literal identity."""
+    return {
+        "technical": {"contains": [("Bicycle", "Wheel"), ("Wheel", "Rim")]},
+        "analogical": {"contains": [("Kit", "Rope"), ("Rope", "Strand")]},
+        "node_role_rows": [{"role": "whole", "technical": "Bicycle", "analogical": "Kit"},
+                           {"role": "part", "technical": "Wheel", "analogical": "Rope"},
+                           {"role": "part", "technical": "Rim", "analogical": "Strand"}],
+        "relation_rows": [{"technical": ("Bicycle", "Wheel"), "analogical": ("Kit", "Rope")},
+                          {"technical": ("Wheel", "Rim"), "analogical": ("Rope", "Strand")}],
+        "expected_distinction": "RELATION_PRESERVING_NOT_IDENTITY",
+    }
+
+
+class RelationFrame:
+    """A structure/event frame holding role-labelled endpoint bindings.
+
+    `frame_ref` is the event or structure identity; `bindings` is an ordered multiset of
+    (role_path, filler_ref) pairs. Multiplicity is kept, so a repeated occurrence in the
+    same role is two bindings, not one.
+
+    A role path has at most two segments, `role` or `role:endpoint`, matching the bounded
+    vocabulary in `bounded_role_vocabulary`. `helper:Doctor` is therefore read as role
+    `helper` with filler `Doctor`, not as a role name containing a filler.
+    """
+
+    def __init__(self, *, frame_ref, predicate, bindings, occurrence_refs=None,
+                 edge_pairing="COMPLETE"):
+        self.frame_ref = frame_ref
+        if edge_pairing not in ("COMPLETE", "UNPAIRED"):
+            _refuse("UNKNOWN_EDGE_PAIRING", edge_pairing)
+        self.edge_pairing = edge_pairing
+        if predicate not in KNOWN_PREDICATES:
+            _refuse("UNDECLARED_PREDICATE", predicate)
+        self.predicate = predicate
+        parsed = []
+        for role, filler in bindings:
+            role, filler = str(role), str(filler)
+            if role.count(":") > 1:
+                _refuse("ROLE_PATH_DEPTH", role)
+            if any(word in role.lower() for word in FORBIDDEN_ROLE_WORDS):
+                _refuse("ANSWER_BEARING_ROLE_LABEL", role)
+            parsed.append((role, filler))
+        self.bindings = tuple(parsed)
+        self.occurrence_refs = (tuple(occurrence_refs) if occurrence_refs
+                                else tuple("%s#%d" % (frame_ref, index)
+                                           for index in range(len(self.bindings))))
+
+    def canonical(self):
+        return {"frame_ref": self.frame_ref, "predicate": self.predicate,
+                "edge_pairing": self.edge_pairing,
+                "bindings": [list(pair) for pair in self.bindings],
+                "occurrence_refs": list(self.occurrence_refs)}
+
+
+def frames_from_scene(scene, *, predicate, prefix):
+    """Turn one authored scene into relation frames, one frame per event/structure.
+
+    Accepts either a fixture dictionary whose `scene` key holds the mapping, or the
+    mapping itself. An event scope appears as `event_*` keys; anything else is one frame.
+    Authored endpoint pairs are role-labelled by `role_labeled_bindings`.
+    """
+    body = scene["scene"] if isinstance(scene, dict) and "scene" in scene else scene
+    if isinstance(body, list):
+        # A list body is a list of separate one-edge frames. That is the frame-preserving
+        # reading: if the whole list were one frame, a repeated identical edge would be
+        # indistinguishable from the edge appearing once, which is the collapse the
+        # counterexamples exist to catch. A caller that wants one frame passes a mapping.
+        frames = []
+        for index, pair in enumerate(body):
+            frames.append(RelationFrame(
+                frame_ref="%s:edge%d" % (prefix, index), predicate=predicate,
+                bindings=role_labeled_bindings([pair], predicate),
+                edge_pairing="UNPAIRED"))
+        return frames
+    if not isinstance(body, dict):
+        _refuse("SCENE_SHAPE", repr(type(body).__name__))
+    events = sorted(key for key in body if key.startswith("event_"))
+    out = []
+    if events:
+        for event_ref in events:
+            pairs = body[event_ref][predicate]
+            unpaired = any(endpoint_is_bare(left, predicate) or endpoint_is_bare(right, predicate)
+                           for left, right in pairs)
+            out.append(RelationFrame(
+                frame_ref="%s:%s" % (prefix, event_ref), predicate=predicate,
+                bindings=role_labeled_bindings(pairs, predicate),
+                edge_pairing="UNPAIRED" if unpaired else "COMPLETE"))
+        return out
+    if predicate not in body:
+        _refuse("SCENE_PREDICATE_ABSENT", predicate)
+    pairs = body[predicate]
+    unpaired = any(endpoint_is_bare(left, predicate) or endpoint_is_bare(right, predicate)
+                   for left, right in pairs)
+    out.append(RelationFrame(frame_ref="%s:0" % prefix, predicate=predicate,
+                             bindings=role_labeled_bindings(pairs, predicate),
+                             edge_pairing="UNPAIRED" if unpaired else "COMPLETE"))
+    return out
+
+
+DEFAULT_ENDPOINT_ROLES = {"contains": ("source:direct", "target:direct"),
+                          "corresponds_to": ("source:mapped", "target:mapped"),
+                          "depends_on": ("source:prerequisite", "target:dependent"),
+                          "HELP": ("helper", "recipient")}
+
+
+def role_labeled_bindings(pairs, predicate, *, bare="default_roles"):
+    """Turn authored endpoint pairs into role-labelled bindings.
+
+    Three authored forms are accepted and must not be confused:
+
+    * ("helper:Doctor", "recipient:Teacher") - each element is already 
+ole:filler.
+    * (("helper", "Doctor"), ("recipient", "Teacher")) - explicit tuples.
+    * ("Wheel", "Rim") - a bare source/target pair, which takes the default endpoint
+      roles declared for its predicate. Pass are=None to refuse this form instead.
+
+    A bare form is never silently treated as a role name.
+    """
+    if predicate not in DEFAULT_ENDPOINT_ROLES:
+        _refuse("NO_DEFAULT_ENDPOINT_ROLES", predicate)
+    out = []
+    for pair in pairs:
+        left, right = pair
+        if isinstance(left, (tuple, list)) and isinstance(right, (tuple, list)):
+            out.append((str(left[0]), str(left[1])))
+            out.append((str(right[0]), str(right[1])))
+            continue
+        left, right = str(left), str(right)
+        if ":" not in left or ":" not in right:
+            if bare is None:
+                _refuse("BARE_ENDPOINT_FORM", "%r / %r" % (left, right))
+            default_source, default_target = DEFAULT_ENDPOINT_ROLES[predicate]
+            out.append((default_source, left.strip()))
+            out.append((default_target, right.strip()))
+            continue
+        left_role, _, left_filler = left.partition(":")
+        right_role, _, right_filler = right.partition(":")
+        left_is_source = left_role in ("source", "helper", "whole")
+        right_is_target = right_role in ("target", "recipient", "part")
+        if left_is_source and right_is_target:
+            out.append((left_role, left_filler))
+            out.append((right_role, right_filler))
+        elif right_is_target or (right_role in ("source", "helper", "whole")
+                                 and left_role in ("target", "recipient", "part")):
+            out.append((right_role, right_filler))
+            out.append((left_role, left_filler))
+        else:
+            _refuse("UNCLASSIFIED_ROLE_PATH", "%r / %r" % (left_role, right_role))
+    return out
+
+
+# --- deliberately naive representations, used to prove the fixtures have teeth ---
+def endpoint_side(role_path):
+    """Which endpoint a role path names. Refuses rather than guessing a default."""
+    head = role_path.split(":", 1)[0]
+    if head in ("source", "helper", "whole"):
+        return "source"
+    if head in ("target", "recipient", "part"):
+        return "target"
+    _refuse("UNCLASSIFIED_ROLE_PATH", role_path)
+
+
+def naive_endpoint_role_bag(frames):
+    """Keep every filler and every role name; lose which endpoint pairs with which."""
+    bag = []
+    for frame in frames:
+        parts = [(endpoint_side(role), role, filler) for role, filler in frame.bindings]
+        sources = sorted(item[2] for item in parts if item[0] == "source")
+        targets = sorted(item[2] for item in parts if item[0] == "target")
+        bag.append({"frame_ref": frame.frame_ref, "predicate": frame.predicate,
+                    "sources": sources, "targets": targets})
+    return bag
+
+
+def naive_unscoped_bag(frames):
+    """Keep fillers, drop frame identity entirely."""
+    fillers = sorted(filler for frame in frames for _, filler in frame.bindings)
+    return {"fillers": fillers}
+
+
+def naive_role_name_multiset(frames):
+    """Keep role names and filler names as two independent multisets."""
+    return {"roles": sorted(role for frame in frames for role, _ in frame.bindings),
+            "fillers": sorted(filler for frame in frames for _, filler in frame.bindings)}
+
+
+def edge_set(frames):
+    """The set of (source filler, target filler) pairs actually asserted, cross-frame."""
+    pairs = set()
+    for frame in frames:
+        pending = {"source": [], "target": []}
+        for role, filler in frame.bindings:
+            pending[endpoint_side(role)].append(filler)
+        for left in pending["source"]:
+            for right in pending["target"]:
+                pairs.add((left, right))
+    return pairs
+
+
+def endpoint_sets(frames):
+    sources, targets = set(), set()
+    for frame in frames:
+        for role, filler in frame.bindings:
+            (sources if endpoint_side(role) == "source" else targets).add(filler)
+    return {"sources": sorted(sources), "targets": sorted(targets)}
+
+
+def frame_digest(frames) -> str:
+    return sha([frame.canonical() for frame in frames])
+
+
+def endpoint_is_bare(value, predicate):
+    """True when an authored endpoint is a bare filler rather than a declared endpoint role."""
+    text = str(value)
+    if text not in DEFAULT_ENDPOINT_ROLES[predicate]:
+        return False
+    return True
+
+
+def relation_frame_pairs(frames):
+    """Authored endpoint pairs, recovered per frame in authored order."""
+    out = []
+    for frame in frames:
+        pending = {"source": [], "target": []}
+        for role, filler in frame.bindings:
+            pending[endpoint_side(role)].append(filler)
+        for index, left in enumerate(pending["source"]):
+            right = pending["target"][index] if index < len(pending["target"]) else None
+            out.append((left, right))
+    return out
+
+
+def bag_payload(frames):
+    """The endpoint bag with the frame reference dropped.
+
+    Two recordings of one structure legitimately have different frame references. Dropping
+    the reference leaves exactly what the bag is: a source multiset and a target multiset.
+    """
+    payload = []
+    for entry in naive_endpoint_role_bag(frames):
+        payload.append({"predicate": entry["predicate"], "sources": entry["sources"],
+                        "targets": entry["targets"]})
+    return sha(payload)
+
+
+def frame_pairing_signature(frame):
+    """The frame's role/filler pairing with the frame reference held out.
+
+    Two scenes that are meant to carry the same semantic participants must agree here even
+    when they are separate recordings and therefore have different frame references. The
+    association signature keeps the reference; this one deliberately does not.
+    """
+    from dataclasses import replace as _replace
+    try:
+        neutral = _replace(frame, frame_ref="#")
+    except Exception:
+        neutral = RelationFrame(frame_ref="#", predicate=frame.predicate,
+                                bindings=frame.bindings,
+                                occurrence_refs=("#",) * len(frame.bindings),
+                                edge_pairing=frame.edge_pairing)
+    return sha(neutral.canonical())
+
+
+def frame_association_signature(frames):
+    """(frame, role, filler) triples with multiplicity.
+
+    This is the association the endpoint bag drops. For an UNPAIRED frame the triples are
+    recorded in authored order, so two unpaired copies differ from one.
+    """
+    triples = []
+    for frame in frames:
+        if frame.edge_pairing == "UNPAIRED":
+            for role, filler in frame.bindings:
+                triples.append([frame.frame_ref, role, filler])
+        else:
+            triples.extend(sorted([frame.frame_ref, role, filler]
+                                  for role, filler in frame.bindings))
+    return sha(triples)
+
+
+# ===========================================================================
+# 2. Split and provenance validators
+# ===========================================================================
+# Analysis holdout and learner holdout are different programs (v1.1 8.2). They are
+# tracked separately and never substituted for one another.
+SPLIT_NAMES = ("discovery", "validation", "confirmation")
+
+
+class SplitPlan:
+    """Family-grouped split assignment with linked views kept together."""
+
+    def __init__(self, *, families):
+        self.families = {family: tuple(members) for family, members in families.items()}
+        self.assignment = {}
+
+    def assign(self, family, split):
+        if family not in self.families:
+            _refuse("UNKNOWN_FAMILY", family)
+        if split not in SPLIT_NAMES:
+            _refuse("UNKNOWN_SPLIT", split)
+        if family in self.assignment and self.assignment[family] != split:
+            _refuse("SPLIT_REASSIGNMENT", family)
+        self.assignment[family] = split
+
+    def audit(self):
+        problems = []
+        for family in sorted(self.families):
+            if family not in self.assignment:
+                problems.append({"code": "FAMILY_UNASSIGNED", "family": family})
+                continue
+            for member in self.families[family]:
+                linked = member.get("linked_views", ())
+                if len(set(linked)) != len(tuple(linked)):
+                    problems.append({"code": "LINKED_VIEW_DUPLICATED", "family": family,
+                                     "member": member.get("id")})
+                if member.get("family") not in (None, family):
+                    problems.append({"code": "MEMBER_FAMILY_MISMATCH", "family": family,
+                                     "member": member.get("id"), "declared": member.get("family")})
+        seen = {}
+        for family, split in self.assignment.items():
+            for member in self.families[family]:
+                key = member.get("underlying_graph")
+                if key is None:
+                    continue
+                if key in seen and seen[key] != split:
+                    problems.append({"code": "UNDERLYING_GRAPH_SPLIT_LEAK", "graph": key,
+                                     "splits": sorted({seen[key], split})})
+                seen[key] = split
+        return {"schema": "cb1.split-audit/1", "ok": not problems, "problems": problems,
+                "families": len(self.families), "assigned": len(self.assignment)}
+
+    def assert_learner_and_analysis_are_separate(self):
+        """A pair withheld from the analysis fit is not thereby withheld from HELM."""
+        return {"schema": "cb1.holdout-separation/1",
+                "analysis_holdout": "withheld from reconstructor fitting",
+                "learner_holdout": "withheld from the learner's own training and tuning",
+                "substitutable": False,
+                "note": "P1 withholds combinations from DISCOVER fitting, not from the target "
+                        "model's original training; an unexplored pair for the analysis model "
+                        "may still be familiar to HELM."}
+
+
+def public_view_bytes(view) -> bytes:
+    return canonical(view)
+
+
+def private_target_independence(public_view_for_target, targets):
+    """The public view must be identical for every private target.
+
+    `public_view_for_target(target)` is the builder's own public-view function. It is
+    called once per candidate target; if any two calls disagree, the public view is a
+    function of the private target and the fixture fails.
+    """
+    digests = {}
+    for target in targets:
+        digests[canonical(target).decode()] = sha(public_view_for_target(target))
+    distinct = sorted(set(digests.values()))
+    return {"schema": "cb1.target-independence/1", "targets": len(targets),
+            "distinct_public_digests": len(distinct), "ok": len(distinct) == 1,
+            "per_target": digests}
+
+
+# ===========================================================================
+# 3. Public-input closure audit
+# ===========================================================================
+# Every place a learner view could carry private information. Each is either present in
+# the declared learner view, explicitly withheld (masked), or explicitly absent. Silence
+# is not an audited state.
+CLOSURE_SURFACES = ("task_text", "answer_field", "choice_order", "choice_membership",
+                    "mask_shape", "retrieval_keys", "cache_keys", "node_order",
+                    "public_ids", "adjacent_faces", "analogy_text", "recomposition_story",
+                    "cached_encodings", "retrieved_examples", "public_options",
+                    "auxiliary_features", "family_id", "split_id", "source_provenance",
+                    "teacher_origin", "receipt_hashes")
+
+
+def audit_public_closure(learner_view, *, declared_masked=(), declared_absent=()):
+    """Audit the whole visible closure, not just an `answer` field.
+
+    Returns one row per surface with an explicit state. A surface that is neither
+    declared nor visibly present is reported `UNAUDITED`, which fails the audit.
+    """
+    rows = []
+    problems = []
+    masked = set(declared_masked)
+    absent = set(declared_absent)
+    for surface in CLOSURE_SURFACES:
+        present = surface in learner_view and learner_view[surface] not in (None, (), [], {})
+        if surface in masked:
+            state = "WITHHELD_MASKED"
+        elif surface in absent:
+            state = "DECLARED_ABSENT"
+        elif present:
+            state = "PRESENT_IN_LEARNER_VIEW"
+        else:
+            state = "UNAUDITED"
+            problems.append({"code": "SURFACE_UNAUDITED", "surface": surface})
+        rows.append({"surface": surface, "state": state})
+    forbidden_role_surfaces = {"answer_field"}
+    for surface in forbidden_role_surfaces & set(learner_view):
+        if learner_view[surface] is not None:
+            problems.append({"code": "PRIVATE_SURFACE_PRESENT", "surface": surface})
+    audit_meta = {"family_id", "split_id", "source_provenance", "teacher_origin"}
+    for surface in sorted(audit_meta & set(learner_view)):
+        if surface not in masked and surface not in absent:
+            problems.append({"code": "AUDIT_METADATA_REACHED_LEARNER_VIEW", "surface": surface})
+    return {"schema": "cb1.closure-audit/1", "ok": not problems, "rows": rows,
+            "problems": problems, "surfaces_audited": len(rows)}
+
+
+# ===========================================================================
+# 4. Role schemes, and the algebra behind them
+# ===========================================================================
+def bounded_role_vocabulary(*, max_depth=2):
+    """A finite declared grammar. Not one fresh role per sample."""
+    roles = set()
+    for side in ("source", "target"):
+        roles.add(side)
+        if max_depth >= 2:
+            roles.add("%s:direct" % side)
+            roles.add("%s:indirect" % side)
+            roles.add("%s:event_participant" % side)
+    return tuple(sorted(roles))
+
+
+class RoleScheme:
+    """Bounded role vocabulary plus occurrence and scope rules."""
+
+    def __init__(self, *, name, role_paths, occurrence="MULTISET", scope="FRAME",
+                 version="1.0"):
+        if scope not in ("FRAME", "GLOBAL"):
+            _refuse("UNSUPPORTED_SCOPE", scope)
+        self.version = version
+        self.name = name
+        self.role_paths = tuple(sorted(set(role_paths)))
+        if not self.role_paths:
+            _refuse("EMPTY_ROLE_VOCABULARY", name)
+        self.occurrence = occurrence
+        self.scope = scope
+
+    def identity(self):
+        return {"schema": "cb1.role-scheme/1", "name": self.name, "version": self.version,
+                "role_paths": list(self.role_paths), "occurrence": self.occurrence,
+                "scope": self.scope, "digest": sha([self.name, self.version,
+                                                    list(self.role_paths),
+                                                    self.occurrence, self.scope])}
+
+    def encode(self, frames):
+        """One vector per frame: sum of outer(role_basis, filler_basis)."""
+        width = len(self.role_paths)
+        rows = []
+        for frame in frames:
+            block = [[0.0] * width for _ in range(len(self.fillers(frames)))]
+            for role, filler in frame.bindings:
+                if role not in self.role_paths:
+                    _refuse("ROLE_NOT_IN_VOCABULARY", role)
+                block[self.fillers(frames).index(filler)][self.role_paths.index(role)] += 1.0
+            rows.append(block)
+        return {"role_paths": list(self.role_paths), "fillers": self.fillers(frames),
+                "blocks": rows, "scope": self.scope}
+
+    @staticmethod
+    def fillers(frames):
+        return sorted({filler for frame in frames for _, filler in frame.bindings})
+
+
+def endpoint_only_scheme():
+    """A scheme that keeps fillers and endpoint sides and therefore loses pairing."""
+    return RoleScheme(name="endpoint_only", role_paths=("source", "target"), scope="GLOBAL")
+
+
+def pairing_preserving_scheme():
+    """A scheme whose scope is the frame, so two edges never merge into one bag."""
+    return RoleScheme(name="frame_pairing",
+                      role_paths=("source:direct", "source:indirect",
+                                  "target:direct", "target:indirect"),
+                      scope="FRAME")
+
+
+def role_path_count(frames, *, horizon=3):
+    """How many distinct roles a scheme would need if each sample invented its own.
+
+    A scheme that grows one role per sample is not a bounded grammar. This is the
+    quantity CB16's "bounded parameter and fit count" has to pin down.
+    """
+    distinct = {role for frame in frames for role, _ in frame.bindings}
+    samples = sum(len(frame.bindings) for frame in frames)
+    return {"distinct_declared_roles": len(distinct), "samples": samples,
+            "roles_if_one_per_sample": samples,
+            "one_role_per_sample_is_bounded": False,
+            "bounded": len(distinct) <= horizon * 4}
+
+
+def permutation_baseline_derivation(n_items):
+    """Do NOT transplant the paper's 1/n! baseline without a derivation.
+
+    Returns the permutation count for n distinct items, which is a sequence statistic,
+    not a graph statistic. The caller must state why a graph task inherits it.
+    """
+    if type(n_items) is not int or n_items < 0:
+        _refuse("PERMUTATION_INPUT")
+    return math.factorial(n_items)
+
+
+# --- tensor-product algebra, in plain Python, with the dimensions pinned ----------------
+def outer(left, right):
+    return [[a * b for b in right] for a in left]
+
+
+def vec(matrix, *, ordering="row_major"):
+    """One documented ordering, fixed across fitting, reload and editing."""
+    if ordering != "row_major":
+        _refuse("UNSUPPORTED_VEC_ORDER", ordering)
+    return [value for row in matrix for value in row]
+
+
+def unvec(flat, *, rows, columns, ordering="row_major"):
+    if ordering != "row_major" or len(flat) != rows * columns:
+        _refuse("VEC_SHAPE", "%r vs %r" % (len(flat), (rows, columns)))
+    return [list(flat[index * columns:(index + 1) * columns]) for index in range(rows)]
+
+
+def tpr_reconstruct(*, bindings, filler_embedding, role_embedding, weight, bias, ordering="row_major"):
+    """The reference formulation from v1.1 7.2, with dimensions checked explicitly."""
+    rows = len(weight)
+    columns = len(weight[0]) if rows else 0
+    d_f = len(next(iter(filler_embedding.values()))) if filler_embedding else 0
+    d_r = len(next(iter(role_embedding.values()))) if role_embedding else 0
+    if columns != d_f * d_r:
+        _refuse("WEIGHT_COLUMN_MISMATCH", "%d != %d*%d" % (columns, d_f, d_r))
+    if len(bias) != rows:
+        _refuse("BIAS_LENGTH_MISMATCH", "%d != %d" % (len(bias), rows))
+    accumulated = [0.0] * columns
+    for filler, role in bindings:
+        if filler not in filler_embedding or role not in role_embedding:
+            _refuse("MISSING_EMBEDDING", "%s / %s" % (filler, role))
+        product = vec(outer(filler_embedding[filler], role_embedding[role]), ordering=ordering)
+        for index, value in enumerate(product):
+            accumulated[index] += value
+    out = []
+    for row in range(rows):
+        total = bias[row]
+        for column in range(columns):
+            total += weight[row][column] * accumulated[column]
+        out.append(total)
+    out_flat = vec(weight, ordering=ordering)
+    return {"z_hat": out, "summed_occurrences": accumulated,
+            "dims": {"d_f": d_f, "d_r": d_r, "d_h": rows, "d_f_times_d_r": d_f * d_r},
+            "parameters": {"weight": len(out_flat), "bias": len(bias),
+                           "trainable": len(out_flat) + len(bias)}}
+
+
+def training_only_normalization(fit_rows, held_rows):
+    """Normalize with fit statistics only; held-out rows never influence the transform."""
+    if not fit_rows:
+        _refuse("NORMALIZATION_NO_FIT_ROWS")
+    columns = len(fit_rows[0])
+    means = [sum(row[column] for row in fit_rows) / len(fit_rows) for column in range(columns)]
+    variances = [sum((row[column] - means[column]) ** 2 for row in fit_rows) / len(fit_rows)
+                 for column in range(columns)]
+    scales = [math.sqrt(value) if value > 1e-12 else 1.0 for value in variances]
+
+    def apply(rows):
+        return [[(row[column] - means[column]) / scales[column] for column in range(columns)]
+                for row in rows]
+
+    return {"fit_statistics": {"mean": means, "scale": scales},
+            "fit_rows_normalized": apply(fit_rows),
+            "held_rows_normalized": apply(held_rows),
+            "statistics_source": "FIT_SPLIT_ONLY"}
+
+
+def resource_guard(*, rows_seen, max_rows, seconds_elapsed, max_seconds, parameters, max_parameters):
+    """Finite termination for the analysis fit. Exhaustion is a result, not a crash."""
+    if rows_seen > max_rows:
+        return {"status": "BUDGET_TRUNCATED", "reason": "ROW_BUDGET"}
+    if seconds_elapsed > max_seconds:
+        return {"status": "BUDGET_TRUNCATED", "reason": "WALL_BUDGET"}
+    if parameters > max_parameters:
+        return {"status": "REFUSED", "reason": "PARAMETER_BUDGET"}
+    return {"status": "WITHIN_BUDGET", "reason": None}
+
+
+def truncated_is_not_absent(question_result):
+    """An exhausted or truncated exploration must not become a false `absent`."""
+    if question_result.get("budget_truncated"):
+        return "UNKNOWN"
+    if question_result.get("declared_complete") is False:
+        return "UNKNOWN"
+    return question_result.get("value", "UNKNOWN")
