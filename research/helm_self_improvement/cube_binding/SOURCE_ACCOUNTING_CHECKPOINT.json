@@ -1,0 +1,20 @@
+{
+  "task": "CB1-C",
+  "session": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+  "record_kind": "ACCOUNTING_CHECKPOINT_NOT_RESET",
+  "allocation_max_seconds": 1800,
+  "accepted_utc": "2026-09-29T05:50:38+00:00",
+  "accounting_cutoff_utc": "2026-09-29T06:07:17.939742+00:00",
+  "root_wall_seconds_conservatively_charged": 999.94,
+  "child_id": "/root/cb1_contract_review",
+  "child_seconds_conservatively_charged": 130,
+  "total_seconds_charged_at_cutoff": 1129.94,
+  "remaining_seconds_at_cutoff": 670.06,
+  "effective_stop_utc": "2026-09-29T06:18:28Z",
+  "code_commit": "c9b0bfd37b0968251415037c08cb13fe246c49ec",
+  "test_execution": 0,
+  "model_jobs": 0,
+  "new_cloud_reservations_usd": 0,
+  "new_paid_calls": 0,
+  "prior_allocation_reset": false
+}
