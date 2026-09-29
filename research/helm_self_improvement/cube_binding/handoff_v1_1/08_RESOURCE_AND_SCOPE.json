@@ -1,0 +1,55 @@
+{
+  "document_kind": "resource_reconciliation_plan_not_admission",
+  "directive": "CAS-HH-RDE-01-CB1",
+  "version": "1.1",
+  "new_spend_authorized_by_preparation_usd": 0,
+  "new_model_job_slots": 0,
+  "new_source_minutes": 0,
+  "new_local_test_permission": false,
+  "helm_optimizer_updates": 0,
+  "latest_read_historical_parent": {
+    "ceiling_usd": 12,
+    "original_preparation_reservation_usd": 2,
+    "corrective_preparation_reservation_usd": 2,
+    "remaining_discovery_allocation_usd": 4,
+    "confirmation_readout_allocation_usd": 2,
+    "protected_cleanup_allocation_usd": 2,
+    "initial_model_slots": 2,
+    "consumed_model_slots": 2,
+    "unspent_allocations_are_not_available_attempts": true,
+    "actual_bills": "UNAVAILABLE_IN_READ_RECORD"
+  },
+  "parent_source_limits_to_reconcile": {
+    "minutes_per_lead_max": 90,
+    "initial_children_per_lead": 1,
+    "children_per_lead_max": 2,
+    "global_original_children_max": 4,
+    "no_local_test_execution_in_current_capture_contract": true
+  },
+  "next_numerical_admission_required_fields": [
+    "exact_parent_source_checkpoint",
+    "task_and_public_projection",
+    "capture_site_dependency_schedule",
+    "analysis_filler_role_vocab_dimensions_parameters",
+    "discovery_validation_confirmation_split_hashes",
+    "fit_seed_regularization_and_selection_attempts",
+    "max_analysis_optimizer_updates",
+    "max_samples_rows_forwards_conditions",
+    "max_wall_seconds_memory_capture_bytes_storage",
+    "provider_current_price_and_all_services_cap",
+    "existing_reservations_and_remaining_allowance",
+    "independent_deadline_and_ownership_cleanup",
+    "retry_policy_and_attempt_id",
+    "visibility_custodian_and_evaluator_identity"
+  ],
+  "operating_rules": [
+    "one GPU globally and preserve incumbent jobs",
+    "no third RDE job implied",
+    "no budget or allocation duplication on reissue",
+    "no original checkpoint/scorer/authority edits",
+    "source work proceeds only inside remaining acknowledged permission",
+    "manager prospectively resolves scope/time/venue under standing approvals; genuine owner-only dependency explicitly named",
+    "new full-model training and active interventions need their own applicable admission",
+    "no Q1 source, schedule, budget or runner changes"
+  ]
+}

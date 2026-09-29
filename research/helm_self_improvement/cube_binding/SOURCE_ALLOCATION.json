@@ -1,0 +1,29 @@
+{
+  "schema": "helm.source-extension/1",
+  "task": "CB1-C",
+  "parent": "CAS-HH-RDE-01-CB1 v1.1",
+  "session": "01a0d113-8a6e-7f51-8e17-ce8d505d0126",
+  "authority": "Owner reply: Authorize 30 source minutes",
+  "accepted_utc": "2026-09-29T05:50:38Z",
+  "source_minutes_max": 30,
+  "prior_allocation_reset": false,
+  "prior_charged_minutes": 87.82649905,
+  "prior_remaining_consumed_by_intake_minutes": 2.17350095,
+  "extra_read_only_reconciliation_seconds_observed": 37,
+  "code_edits_before_extension": 0,
+  "new_cloud_spend_usd": 0,
+  "model_jobs": 0,
+  "test_execution_authorized": false,
+  "upstream_source": "54dac34efa62db4d8a877fdcfe15f4b8a02346bf",
+  "max_children": 1,
+  "child_source_minutes_included": true,
+  "scope": [
+    "cube_binding/contracts.py",
+    "cube_binding/public_task_adapter.py",
+    "cube_binding/consumer_bridge.py",
+    "cube_binding/evidence_view.py",
+    "own tests",
+    "source handoff records"
+  ],
+  "deadline_utc": "2026-09-29T06:20:38Z"
+}

@@ -1,0 +1,249 @@
+{
+  "document_kind": "planning_manifest_not_execution_authority",
+  "directive": "CAS-HH-RDE-01-CB1",
+  "version": "1.1",
+  "original_requirement_ids_preserved": 36,
+  "outside_original_team_release": [
+    "CB33",
+    "CB34"
+  ],
+  "new_subchecks": {
+    "CB03": [
+      "same-endpoint-sets-distinct-edge-pairing"
+    ],
+    "CB05": [
+      "event-association-and-repeated-occurrence-survive-encoding"
+    ],
+    "CB10": [
+      "historical-three-choice-to-current-typed-packet-explicit-profile"
+    ],
+    "CB16": [
+      "representation-only-primary-fit",
+      "bounded-parameter-and-fit-count"
+    ],
+    "CB19": [
+      "single-affine-bias-and-native-scale-delta"
+    ],
+    "CB20": [
+      "actual-descendant-recomputation-not-stale-cache"
+    ]
+  },
+  "requirements": {
+    "CB01": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB02": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB03": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB04": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB05": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB06": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB07": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB08": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB09": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB10": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB11": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB12": {
+      "earliest_gate": "G2A_INCUMBENT_PASSIVE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB13": {
+      "earliest_gate": "G2A_INCUMBENT_PASSIVE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB14": {
+      "earliest_gate": "G2A_INCUMBENT_PASSIVE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB15": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB16": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB17": {
+      "earliest_gate": "G3_NATURAL_STRUCTURE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB18": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB19": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB20": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB21": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB22": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB23": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB24": {
+      "earliest_gate": "G3_NATURAL_STRUCTURE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB25": {
+      "earliest_gate": "G3_NATURAL_STRUCTURE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB26": {
+      "earliest_gate": "G4_TEACHING_OR_REMEDY",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB27": {
+      "earliest_gate": "G4_TEACHING_OR_REMEDY",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB28": {
+      "earliest_gate": "G4_TEACHING_OR_REMEDY",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB29": {
+      "earliest_gate": "G3_NATURAL_STRUCTURE",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB30": {
+      "earliest_gate": "G1_SOURCE_WITH_G2B_EXECUTION",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB31": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB32": {
+      "earliest_gate": "G1_SOURCE_WITH_G2B_EXECUTION",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB33": {
+      "earliest_gate": "DEFERRED_Q1_EXTERNAL",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB34": {
+      "earliest_gate": "DEFERRED_Q1_EXTERNAL",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB35": {
+      "earliest_gate": "G1_SOURCE_CONTRACTS",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    },
+    "CB36": {
+      "earliest_gate": "G2B_BINDING_ENGINEERING",
+      "implementation_status": "UNASSESSED_MAP_EXISTING_TESTS_FIRST",
+      "executed_here": false,
+      "counts_as_current_pass": false
+    }
+  }
+}

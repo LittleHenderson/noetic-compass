@@ -1,0 +1,119 @@
+{
+  "document_kind": "proposed_task_plan",
+  "status": "PREPARED_NOT_DISPATCHED",
+  "no_quantum_assignment": true,
+  "tasks": [
+    {
+      "id": "CB1-INTAKE",
+      "owner_proposed": "Manager/Codex",
+      "deliverable": "Record actual current source, acknowledged remaining limits and exclusive file mapping",
+      "inputs": [
+        "source pointers",
+        "prior failed job and source-only fix"
+      ],
+      "boundary": "none; no new code read outside allowlists",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-C",
+      "owner_proposed": "Codex",
+      "deliverable": "Implement public cube/current-task boundary and typed consumer/evidence bridge",
+      "inputs": [
+        "acknowledged file scope",
+        "existing cube schema/profile",
+        "current HELM task source"
+      ],
+      "boundary": "real-model acceptance depends on G2A, source authoring does not",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-A",
+      "owner_proposed": "Claude",
+      "deliverable": "Implement bounded role scheme, reconstructor and binding delta operators",
+      "inputs": [
+        "acknowledged file scope",
+        "public sidecar contract",
+        "paper and existing intervention API"
+      ],
+      "boundary": "no fitting on HELM before admitted captures/fit plan",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-D",
+      "owner_proposed": "DeepSeek",
+      "deliverable": "Implement independent pairing/split/leakage/algebra controls",
+      "inputs": [
+        "reviewer-owned scope",
+        "public contracts and exact source"
+      ],
+      "boundary": "natural causal adjudication waits for actual task outputs",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-PASSIVE",
+      "owner_proposed": "Incumbent RDE owners",
+      "deliverable": "Complete already-defined passive prerequisite",
+      "inputs": [
+        "current narrow helper correction",
+        "legitimate separately applicable execution record"
+      ],
+      "boundary": "both original model-job slots consumed; no third job in this document",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-ENGINEERING",
+      "owner_proposed": "Codex runner / Claude / DeepSeek",
+      "deliverable": "Execute and review one binding engineering witness",
+      "inputs": [
+        "G2A accepted",
+        "source tests reviewed",
+        "independent finite numerical admission"
+      ],
+      "boundary": "no active model intervention before eligible admission",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-RESEARCH",
+      "owner_proposed": "Claude / DeepSeek; Codex runner",
+      "deliverable": "Fit and confirm one natural-structure hypothesis",
+      "inputs": [
+        "admitted capture and fit splits",
+        "frozen method and controls",
+        "finite measured resource record"
+      ],
+      "boundary": "analysis fitting not authorized by frozen-HELM status alone",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-PRODUCT",
+      "owner_proposed": "Codex / Claude",
+      "deliverable": "Expose evidence-bound read-only record and reuse in later SI research",
+      "inputs": [
+        "existing Harness/RPA APIs",
+        "actual receipts or explicitly synthetic examples"
+      ],
+      "boundary": "no UI promotion or automatic training harvest",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    },
+    {
+      "id": "CB1-REMEDY",
+      "owner_proposed": "Existing owners after new admission",
+      "deliverable": "One targeted change and unaided retained-capability evaluation",
+      "inputs": [
+        "supported diagnosis or verified software defect",
+        "new learner/architecture/teaching protocol"
+      ],
+      "boundary": "future stage; no current HELM updates",
+      "status": "PLANNED_NOT_STARTED_BY_PACKAGE",
+      "actual_worker_id": null
+    }
+  ]
+}

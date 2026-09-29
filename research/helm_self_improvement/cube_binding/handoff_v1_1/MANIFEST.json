@@ -1,0 +1,106 @@
+{
+  "kind": "document-package-integrity-only",
+  "directive": "CAS-HH-RDE-01-CB1",
+  "version": "1.1",
+  "file_count": 19,
+  "project_tests_run": 0,
+  "agents_dispatched": 0,
+  "new_jobs": 0,
+  "files": [
+    {
+      "path": "00_START_HERE.md",
+      "bytes": 2451,
+      "sha256": "2a4a652682a95d7c3fcecf0c2a297e7fa6274f44841a3dbcd99d9497cbd913d3"
+    },
+    {
+      "path": "01_CODEX_CB1.md",
+      "bytes": 5388,
+      "sha256": "20362f1865fff9ebd600c25e5197621e52dfab849766f7d6088b50444c4991b8"
+    },
+    {
+      "path": "02_CLAUDE_CB1.md",
+      "bytes": 5278,
+      "sha256": "86b451a7f7a9b1705a4bba35e1234373fe361a33d1fbb6275aa91817adf2bf62"
+    },
+    {
+      "path": "03_DEEPSEEK_CB1.md",
+      "bytes": 4705,
+      "sha256": "ff55f073c8c05cbd9e7a94c0b8fcc99eb7fb8de3df1cc984afbec62b4dcba3ca"
+    },
+    {
+      "path": "04_IMPLEMENTATION_TASKS.json",
+      "bytes": 4253,
+      "sha256": "fc53719daadd79e7889b278bbadac440df1042143f6578f1a3e9393d03b30dbe"
+    },
+    {
+      "path": "05_REQUIREMENT_AND_GATE_MAP.json",
+      "bytes": 8235,
+      "sha256": "1362cd476ea6472ccacc0090efdeadb26d7a532e7824bddf29bfd8bc2e81abd4"
+    },
+    {
+      "path": "06_SOURCE_AND_STATUS_NOTES.md",
+      "bytes": 6117,
+      "sha256": "8cf8ff8d07e0814b7725aefd7c43b8b74ef94b092d455540f75898074db16d14"
+    },
+    {
+      "path": "07_CHANGES_FROM_v1_0.md",
+      "bytes": 4016,
+      "sha256": "ad73c5ee1c6a2304a44c9c818feb86d0afa7ebe4dda059f442acfb8ad6403f42"
+    },
+    {
+      "path": "08_RESOURCE_AND_SCOPE.json",
+      "bytes": 2281,
+      "sha256": "e94bdfd8cb185ce9d17b2714b0496cbcc8461eb4be26663e6875b9cc17588b5e"
+    },
+    {
+      "path": "CAS_Cube_Binding_Manager_Directive_v1_1.md",
+      "bytes": 84156,
+      "sha256": "2d12f3c89f52a35a1caf1857fe308a78b08d1149e38e24332235657548d9dec5"
+    },
+    {
+      "path": "references/2608.29530v1.pdf",
+      "bytes": 1912393,
+      "sha256": "e2b5a958b825a23f3acb6861d7f7fd3784b2e53981c6fb6f527817c852893da5"
+    },
+    {
+      "path": "references/CAS_HARNESS_HELM_RDE_01_Complete_20260928.md",
+      "bytes": 52303,
+      "sha256": "6c1dbddc1cc8b46695e12a03e1d84634818944c318f1c6b53bf80c07b1cd8c83"
+    },
+    {
+      "path": "references/CONTEXT_1_PAPER_AND_HARNESS.md",
+      "bytes": 19919,
+      "sha256": "6b55b5e2e1a7bf8b7301d0def2dbab4849d8546ab3f4e29f80e5e7e0b947fb3e"
+    },
+    {
+      "path": "references/CONTEXT_2_CUBE_AND_BINDING.txt",
+      "bytes": 10461,
+      "sha256": "12f401405093cca7b5028e250e5a8f1ee440b2dc57996175b33bd6f03870bab3"
+    },
+    {
+      "path": "references/CONTEXT_3_PRELIMINARY_MANAGER_HANDOFF.txt",
+      "bytes": 11146,
+      "sha256": "9dba6d2d706c7579d3a592f53ffca2311b7c9b362da16ef849ba6ae454e653cf"
+    },
+    {
+      "path": "references/CUBE_TEACHING_PROFILE_001.md",
+      "bytes": 14390,
+      "sha256": "442fe3165ed3acaab6e906de3cae632f6da487669c2e458d8b556db92440da0d"
+    },
+    {
+      "path": "references/Cube_Node_Schema_v0.1.md",
+      "bytes": 25974,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    {
+      "path": "references/ORIGINAL_CAS_Cube_Binding_Manager_Directive_v1_0.md",
+      "bytes": 67344,
+      "sha256": "012ed5734eb63f7a270306c8d78954fe9375b29eaaf95b8a45a5cd6a2ec30b07"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 2353,
+      "sha256": "f3689aac54b8150d2b7890e12eb347e30630bc1ea7d074920544413f5c369a13"
+    }
+  ]
+}
