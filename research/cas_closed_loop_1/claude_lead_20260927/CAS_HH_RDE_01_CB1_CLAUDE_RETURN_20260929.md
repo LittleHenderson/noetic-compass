@@ -443,3 +443,12 @@ reviewer receipts required by code, runtime receipt gains two attestation fields
 output-monitor race tolerated. Two of my four non-blocking findings closed, one became a required gate, one is
 doc-only. Six files unchanged. Nothing run. A02 about 20 of 30 used. Full text in
 `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.
+
+### A02: Codex C02 object `e16c00ed` changed-scope check posted
+
+Worker delta `PASS` (exit 7 accepted only for the explicit `runtime_probe` sentinel; the sixteen existing commands keep
+exit 0; no weakening of the 108/62 runs). Runner and admission byte-identical to `a8518511`; collector unwired; the
+freeze still refuses without measured runtime fields and both reviewer receipts. The boot-attestation proposal is a
+document; it moves measured fields from pre-spend to post-boot/pre-work on the same attempt, which is an owner-level
+timing decision I do not make. Six files unchanged. Nothing run. A02 about 25 of 30 used. Full text in
+`CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.

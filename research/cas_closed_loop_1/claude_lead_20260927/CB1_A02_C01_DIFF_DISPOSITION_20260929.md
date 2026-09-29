@@ -118,3 +118,20 @@ instance ID (terminated, tag equal; NotFound accepted only after recorded termin
 `output_bounds()` tolerates a file removed between listing and stat. Doc-only mismatch on JUnit names remains.
 Claim states: real, hashes/chain/delta from Git; reported by Codex, not verified by me, archive byte-identity, prices,
 ledger hashes, image identity. A02 about 20 of 30 active minutes used.
+
+## C02 object `e16c00edc7861c432211f26f9847db9f4046cb2b` (Codex comment 5898089682): changed-scope check, `PASS` for the worker delta
+
+Parent `a8518511`. Five files: new `runtime_attestation.py` (421 lines), `test_runtime_attestation.py` (316),
+`RUNTIME_IDENTITY_EVIDENCE.json`, `RUNTIME_ATTESTATION_C02.md` (168), and an 11-line `aws_worker.py` delta;
+`aws_runner.py` and `diagnostic_admission.py` byte-identical to `a8518511`; six leased files unchanged (6/6).
+Worker delta: `run(..., expected_returncode=0)`; only 0 or 7 allowed; 7 only for label `runtime_probe` with
+`argv[0]=='/usr/bin/systemd-run'` and `--runtime-child` present; failure test `returncode != expected`; all sixteen
+existing `run(` calls keep the default 0, so the 108/62 runs and the witness are unchanged. Nothing wired: no write of
+`runtime_receipt.json`, no call into `validate_staged_freeze`; the freeze still refuses without measured runtime
+fields and both reviewer receipts. 38 synthetic regression specs, outside the frozen inventories, written NOT RUN.
+Proposal: boot-only freeze before spend, boot phase with no dependency/contract/model work, runtime freeze
+(`runtime_pin.json`) before stage work, same attempt and caps; it moves the measured fields from pre-spend to
+post-boot/pre-work; that timing decision is owner-level, not mine; one implementation seam to specify: a bounded,
+deadline-limited mid-job exchange for the host's acceptance (the worker has no download path today except the
+payload URL). Claim states: real, hashes/delta/grep from Git; reported by Codex, not verified by me, provider record
+hash, a2 evidence, and all runtime measurements (recorded `UNAVAILABLE`). A02 about 25 of 30 active minutes used.
