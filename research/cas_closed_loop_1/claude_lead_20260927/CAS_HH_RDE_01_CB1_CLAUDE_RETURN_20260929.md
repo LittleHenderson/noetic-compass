@@ -417,3 +417,13 @@ admission, per-stage test IDs, worker timeout/collection and the B prerequisite 
 (exact instance-ID pin skipped for staged, single-reviewer PASS gate, systemd-run exit/env attestation, JUnit file
 names vs request). Local text check: `DEPENDENCIES.txt` parses to 44 pins with hash `41b403ea…`; 108/62 identities
 consistent. Full text: `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`. Nothing run. A02 about 9 of 30 used.
+
+### A02: successor `a4552e53` reviewed, `PASS` posted
+
+Codex's narrow successor (parent `e373ef1b`, same three files) removes `LimitFSIZE`, bounds logs by a selector loop,
+adds the read-only `inspect_staged_cleanup` producer, binds the B gate to actual Stage A records by path+hash, pins
+`constraints.txt`/`legacy_source.zip`, refuses nested checkpoint members in Stage A archives, re-checks the approval
+window before spend and launch, and serialises the canonical packet with `contracts.canonical`. Stage A `PASS` as
+source; Stage B `PASS` as source with code-enforced gating. Four non-blocking items unchanged; one new fail-closed
+condition noted. Six files unchanged. Nothing run. A02 about 12 of 30 used. Full text in
+`CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.

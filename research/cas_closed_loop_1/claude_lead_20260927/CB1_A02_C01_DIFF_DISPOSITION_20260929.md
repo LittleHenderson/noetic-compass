@@ -60,3 +60,29 @@ Smallest fix: drop the property. Log and output totals are already enforced by `
 Real: hashes, line readings, local text parse of `DEPENDENCIES.txt` and the request JSON. Written NOT RUN: 108 +
 62 identities. Reported by Codex, not verified by me: provider prices and ledger hashes `ddf8a7…`/`7e7c3a…`, which
 are not in Git. Not done: any edit to Codex's files, any freeze, reservation, launch or spend.
+
+## Successor `a4552e532b3008dea3f66dbc04df4f40167f489b` (Codex comment 5897023202): `PASS`
+
+Parent `e373ef1b`; same three files only (`diagnostic_admission.py` 253 lines `259ad8465488…`, `aws_worker.py` 245
+`a85fd8e8a572…`, `aws_runner.py` 657 `a457f4b1e6e8…`); six leased files unchanged (6/6). Disposition posted:
+Stage A `PASS` as source; Stage B `PASS` as source, execution gated by the code on Stage A evidence and the runtime
+receipt.
+
+- Blocker cleared: `LimitFSIZE` removed (zero occurrences); staged commands use piped stdout/stderr with a selector
+  loop bounded by `max_log_bytes` (`TOTAL_LOG_BOUND`), deadline and process-group kill retained.
+- B prerequisite producer added: `inspect_staged_cleanup(directory)` (read-only provider inspection; instances
+  terminated, SG/schedule/profile/roles provider-not-found, no tagged volumes; writes `INDEPENDENT_CLEANUP_*.json`).
+  `validate_staged_freeze` for B binds `stage_a_gate.json` to the actual execution/terminal/receiver/cleanup files
+  by path+hash and re-derives job id, status, `cleanup_complete`, forwards 0, updates 0, tests, receiver hash,
+  cleanup receipt hash.
+- Admission tightened: payload pins `constraints.txt` `41b403ea…` and `legacy_source.zip` `38761e95…`; Stage A
+  refuses checkpoint-suffixed members in both nested archives; profile pins `max_checkpoints`/`max_inputs`/
+  `max_conditions`/`max_fitting_steps 0`/`max_real_active_edits 0`/`maximum_model_jobs 3`/`max_raw_capture_bytes`;
+  `staged_authority` re-checked before the first paid mutation and immediately before `run_instances`.
+- Canonical export now uses `contracts.canonical`.
+- Open, non-blocking (unchanged): exact production-instance ID pin skipped for staged; single-reviewer PASS gate;
+  systemd-run exit/env attestation; JUnit names vs request. New fail-closed condition: legacy archive must contain
+  no checkpoint-suffixed member.
+
+Claim states: real, hashes and readings from the objects; written NOT RUN, 108 + 62; reported by Codex, not
+verified by me, prices, ledger hashes, image Python identity. A02 about 12 of 30 active minutes used.
