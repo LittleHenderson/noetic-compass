@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-29 - CAS-HH-RDE-01-CB1 v1.1 / CB1-A: bounded role scheme, tensor-product reconstructor and single-application binding edits (source-only, NOT RUN)
+
+- Package received at Codex commit `fe2db4e90430274e93556543b345c7dbaeef568f` (`research/helm_self_improvement/cube_binding/handoff_v1_1/`):
+  14 of 19 manifest files present and byte-identical, 5 named subset omissions, 0 mismatches. Receipt and scope acknowledged on PR #245
+  (comment 5884579738) before writing.
+- New exclusive files under `research/helm_self_improvement/cube_binding/`: `role_schemes.py` (`IDENTITY_ONLY`, `ENDPOINT_BAG`, `RELATION_ENDPOINT`,
+  `EVENT_FRAME`; bounded shape-independent role vocabulary; occurrence keys outside the fitted features; answer-bearing fields refused),
+  `reconstructor.py` (`TPR` and `ATOMIC_PAIR` kinds; explicit dimensions and `FILLER_MAJOR` vec order; activation-reconstruction loss only;
+  bounded step count; analysis holdout leak refusal; train-only z-score; digest-anchored reload), `binding_edits.py` (`NO_CHANGE` and
+  `FILLER_REPLACEMENT`; bias cancels; sigma-only rescale; frozen plan; delta composed into the incumbent `SAME_INPUT_PATCH` donor and
+  declaration at `graph.round_update`; `verify_single_application` refuses double application). 22 cases written (9 + 8 + 5), 0 collected,
+  0 executed. `diagnostic_configuration.py` / `diagnostic_intervention.py` unchanged; passive `emit` stays read-only; no Codex or DeepSeek file touched.
+- Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
+  Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
+
 ## 2026-09-29 - CAS-HH-RDE-01: corrective passive job ran; my 41 cases at ae940c44 executed for real: 40 passed, 1 test-helper defect; one-line fix (NOT RUN)
 
 - REAL, verified from the git objects at `54dac34e`: `cas_hh_rde_01/PARITY_A2_FOCUSED.xml` sha256 `20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b`

@@ -401,6 +401,45 @@
     "diff_vs_ae940c44": "one call line + comment only",
     "state": "NOT_RUN"
    }
+  },
+  {
+   "wave": "P1-HH-RDE-01-CB1-A-20260929",
+   "label": "CAS-HH-RDE-01-CB1 v1.1 / CB1-A: bounded role scheme, TPR reconstructor, single-application binding edits",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "one child permitted; none needed for three modules and three test files; shared allocation not subdivided",
+   "scope": "owner directive CB1 v1.1 + 02_CLAUDE_CB1.md at fe2db4e9 (Codex comment 5884514028): implement role_schemes.py, reconstructor.py, binding_edits.py and their tests in research/helm_self_improvement/cube_binding/; reuse the incumbent declare/apply path; no passive emit made writable; no Codex/DeepSeek/RDE file edited; no local tests or model execution; no cloud launch",
+   "package_commit": "fe2db4e90430274e93556543b345c7dbaeef568f",
+   "package_manifest_check": "14 of 19 present and byte-identical; 5 named subset omissions; 0 mismatches",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "shared_trivial_file": "research/helm_self_improvement/cube_binding/__init__.py (one docstring line; Codex may overwrite identically)",
+   "acknowledged_utc": "2026-09-29T05:58:00Z",
+   "started_utc": "2026-09-29T05:58:31Z",
+   "allocation": "90 active minutes shared per lead, no reset; about 54 used before this packet",
+   "executed": "NONE (no pytest, no torch, per the contract and the namespace conftest); py_compile only",
+   "cases_written": {
+    "test_role_schemes.py": 9,
+    "test_reconstructor.py": 8,
+    "test_binding_edits.py": 5
+   },
+   "not_done": [
+    "no local test run",
+    "no AWS or paid call",
+    "no model or checkpoint",
+    "no fitted coefficients",
+    "no edit applied",
+    "no Codex, DeepSeek, learner, runner or authority edit",
+    "no claim about HELM"
+   ],
+   "status": "SOURCE_WRITTEN_NOT_RUN",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md"
   }
  ],
  "not_done_by_any_worker": [
