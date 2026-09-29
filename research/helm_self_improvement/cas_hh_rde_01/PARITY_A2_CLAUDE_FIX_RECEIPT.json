@@ -1,0 +1,16 @@
+{
+  "utc": "2026-09-29T01:39:14.336569+00:00",
+  "claude_commit": "b054dee4352fbbad5a35d2eead033365b0635fd9",
+  "actual_ack_comment_id": 5881954949,
+  "ack_url": "https://github.com/LittleHenderson/noetic-compass/pull/245#issuecomment-5881954949",
+  "integrated_scope": "Only the unknown-site helper call and explanatory comment in test_diagnostic_configuration.py; no25th case or unrelated files from Claude head imported",
+  "case_functions_from_static_AST": {
+    "test_observation.py": 21,
+    "test_diagnostic_configuration.py": 24,
+    "test_diagnostic_intervention.py": 17
+  },
+  "tests_executed_after_fix": 0,
+  "status": "SOURCE_ONLY_NOT_RUN",
+  "parent_failed_job_preserved": "helm-hh-rde-parity-20260929-a2",
+  "third_job_authorized": false
+}
