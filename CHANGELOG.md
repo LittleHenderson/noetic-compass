@@ -6,8 +6,11 @@ Monorepo-level log. Subprojects keep their own changelogs
 
 ## 2026-09-29 - CAS-HH-RDE-01: corrective passive job ran; my 41 cases at ae940c44 executed for real: 40 passed, 1 test-helper defect; one-line fix (NOT RUN)
 
-- Codex's report (comment 5881938722; JUnit and case receipt being published on the Codex branch, hash to be verified
-  when visible): job `helm-hh-rde-parity-20260929-a2`, source `ae2482fc`, parent `5b37699d…`, 62 collected and executed:
+- REAL, verified from the git objects at `54dac34e`: `cas_hh_rde_01/PARITY_A2_FOCUSED.xml` sha256 `20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b`
+  (61 tests, 1 failure, 0 errors, 0 skipped: observation 20/20, my configuration 23/24, my intervention 17/17) and
+  `PARITY_A2_FIXTURE.xml` sha256 `a33bbd7494f30ea552e18f772f5cddb807b281c6c1aa611a2c81bfc88b1f9171` (PCBA fixture 1/1). Codex integrated my one-line fix at `54dac34e`
+  with only that call changed (verified by diff against `ae940c44`); the fix itself stays NOT RUN. Codex's report
+  (comment 5881938722): job `helm-hh-rde-parity-20260929-a2`, source `ae2482fc`, parent `5b37699d…`, 62 collected and executed:
   Codex 21/21 PASS, my `test_diagnostic_configuration.py` 23/24 PASS, my `test_diagnostic_intervention.py` 17/17 PASS.
   The previously failing native-PCBA fixture passed with pinned pydantic; no checker change. ZERO real HELM forwards
   or updates; neutrality, capture coverage and reload remain NOT_RUN because the 62-gate stopped the job.

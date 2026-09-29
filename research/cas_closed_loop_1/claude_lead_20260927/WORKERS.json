@@ -377,7 +377,29 @@
     "real_forwards": 0,
     "failure": "test_hh05... helper KeyError on unknown site before raw_capture refusal",
     "fix": "explicit meaning on that call; SITE_UNKNOWN expectation unchanged",
-    "state": "reported-by-Codex; junit hash to verify when published"
+    "state": "REAL: junits verified from git objects at 54dac34e",
+    "junits": {
+     "PARITY_A2_FOCUSED.xml": {
+      "sha256": "20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b",
+      "tests": 61,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "claude_configuration": "23 pass / 1 fail",
+      "claude_intervention": "17 pass",
+      "observation": "20 pass"
+     },
+     "PARITY_A2_FIXTURE.xml": {
+      "sha256": "a33bbd7494f30ea552e18f772f5cddb807b281c6c1aa611a2c81bfc88b1f9171",
+      "tests": 1,
+      "failures": 0
+     }
+    }
+   },
+   "fix_integrated_by_codex": {
+    "commit": "54dac34efa62db4d8a877fdcfe15f4b8a02346bf",
+    "diff_vs_ae940c44": "one call line + comment only",
+    "state": "NOT_RUN"
    }
   }
  ],

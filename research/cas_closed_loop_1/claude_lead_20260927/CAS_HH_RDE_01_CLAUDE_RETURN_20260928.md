@@ -180,3 +180,14 @@ Job `helm-hh-rde-parity-20260929-a2` at `ae2482fc`: 62 collected and executed; C
 intervention 17/17; PCBA fixture PASS; zero real forwards; neutrality/capture/reload NOT_RUN. First real execution of my
 cases: 40 of 41 at `ae940c44` passed. Failure: `test_hh05...` helper `KeyError` (`_capture(site="mlp.layer3")` looked the
 site up before `raw_capture` could refuse). Fix: explicit meaning on that one call. JUnit hash to be verified when visible.
+
+## Verified corrective artifacts at `54dac34e` (2026-09-29 01:40Z)
+
+| Artifact | sha256 (computed here) | Parsed |
+|---|---|---|
+| `cas_hh_rde_01/PARITY_A2_FOCUSED.xml` | `20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b` | 61 tests, 1 failure, 0 errors, 0 skipped: observation 20/20, my configuration 23/24 (`test_hh05…` `KeyError: 'mlp.layer3'`), my intervention 17/17 |
+| `cas_hh_rde_01/PARITY_A2_FIXTURE.xml` | `a33bbd7494f30ea552e18f772f5cddb807b281c6c1aa611a2c81bfc88b1f9171` | 1 test, 0 failures (the PCBA fixture, run first) |
+
+Codex integrated my fix at `54dac34e`: the diff against `ae940c44` is the one call line plus a comment; the other three
+leased files are byte-identical to `ae940c44`. Fix NOT RUN; both pilot job slots consumed; no third job. My cases' first
+real execution stands at 40 of 41 passed (L1 only). Passive parity still unproved.
