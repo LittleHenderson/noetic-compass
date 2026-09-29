@@ -215,3 +215,43 @@ Note: adding `max_positions` to `Scheme` changes every `scheme_digest`; nothing 
 old digests (all NOT RUN). Updated identities: `role_schemes.py` sha256 `6cd3ce0cd2dca1352aff1263c1ce8cc13e6d34e15f28a3dc45760d770a91a445` (401 lines); `test_role_schemes.py`
 sha256 `166545eba84c767aedd9ef278a6adafaef6b6a1a5e00818b4d1096760cb0625d` (180 lines, 10 cases). Written now 24 (10 + 8 + 6); collected 0; executed 0. About 4 more active
 minutes (15:15Z–15:19Z); about 11 remain. The CB37–CB42 coverage map waits on the package reaching Git.
+
+## Addendum 15:25Z — receipt of the second v1.1 package at `701d41854b6063918dd2408a71bae51400cabe55` and CB37–CB42 coverage map (by reading; nothing run)
+
+Received as Git data objects (no branch ref), fetched by commit id. Verified from the blobs: directive
+`CAS_Cube_Binding_Manager_Directive_v1_1.md` 98008 bytes sha256
+`38444787948c627755585315a3b82e137e6d8f09d62d8a12abb6ce7c269714f1`; `ORIGINAL_CLAUDE_SCOPE.txt` 2436 bytes sha256
+`e8ffc3d58f43a607507f7a9a671145d86c1c6c862f20ad1e245872889a8d9b2e`; 17 files in `handoff_20260929_38444787/`
+(source review, analysis/change log, three scopes, manager handoff, revision record, manifest, Codex intake receipt,
+five DeepSeek `review_return_16` snapshots). The earlier `2d12f3c8…` directive is preserved and not equated.
+
+My scope file focuses CB03–08, CB15–25, CB29, CB37/39–41 and HH07–14. Coverage of the six new rows against my six
+files (head `c69a68a4`; DeepSeek protocol files and Codex serializers are not mine):
+
+| Row | Requirement (directive §19) | My files | State |
+|---|---|---|---|
+| CB37 | Task meaning and role namespace pinned; named argument convention; asymmetric direction; separate cube-view / public-text / event-binding identities | `RELATION_ENDPOINT` pins direction by name (`out` = filler is a part of the receiving whole, `in` = filler is a whole containing the receiving part) and `test_cb07` checks the asymmetry per row; structural roles, `EVENT_FRAME` roles and fillers (public labels) are three separate namespaces; cube faces never enter my files. | COVERED on the analysis side; the named whole/part serializer is Codex's (its receipt: PARTIAL) |
+| CB38 | Answer-menu shortcuts accounted for | Not my file (packet view / controls). My fit refuses answers, labels, scores and splits as inputs (`FIT_INPUT_FORBIDDEN`). | NOT MINE; no shortcut possible through my fit |
+| CB39 | Structural specificity separated from withholding; crossed relation-versus-position edit; separate structure-selection / novel-binding panels | `POSITIONAL` scheme (`c69a68a4`) is the position arm; `delta`/`edit_bindings` are scheme-agnostic, so the same `FILLER_REPLACEMENT` runs under `RELATION_ENDPOINT` and `POSITIONAL` for the crossed comparison; novel-binding withholding is separate (`holdout_pairs`, `HOLDOUT_LEAK`, `ATOMIC_PAIR` refusing unseen pairs). | COVERED as source; panel definitions are DeepSeek's (Codex receipt: REVIEWER_SOURCE_AVAILABLE_NOT_INTEGRATED) |
+| CB40 | Intervention location respects actual computation; before/after nonlinear normalization; observation forwarding; directed aggregation; recomputed consumers | Edit at `graph.round_update` = `core_block` output, before the residual add and before the next `_rms_unit`; the delta is never commuted across the learner's row-dependent nonlinear normalization (source review line 74); analysis-side `TRAIN_ZSCORE` is a fit statistic on captured values, not a model transform; `DESCENDANT_RECOMPUTATION` record; fixture test shows heads recomputed. | COVERED by design, `SOURCE_CONSISTENT_NOT_EXECUTED`; observation forwarding and directed aggregation are Codex/HELM-side (its receipt: PARTIAL) |
+| CB41 | Analysis apparatus admits a simpler or negative model; frozen structured/atomic-pair calibration; order-insensitive comparison; no fit-only systematicity claim | `ATOMIC_PAIR` kind with `parameter_count` reported next to `TPR`; `IDENTITY_ONLY` and `ENDPOINT_BAG` baselines; binding sets canonically sorted, `same_records` order-insensitive; labelled synthetic calibration written in `test_reconstructor.py`; no systematicity claim made anywhere. | COVERED as source; calibration NOT RUN |
+| CB42 | Six-view value measured fairly | Not my file; my scheme never consumes face contents. | NOT MINE |
+
+Other scope items: no successful-path / correct-answer labels as roles (`FORBIDDEN_FIELDS`, `FIT_INPUT_FORBIDDEN`)
+COVERED; multiplicity and paired event membership COVERED (`test_cb05`); parameter counts, regularization policy
+(L2 on `W` only, no low-rank constraint: declared), normalization statistics (`mean`, `sigma`, `zero_variance_dims`),
+fit split (`holdout_pairs`) and step bound (`max_steps`) reported in the fit manifest; affine offset once, native scale
+restored, one application per site/round, finite bound, cleanup COVERED; auxiliary decoder = separate measurement
+(`agreement_record`; no decoder in my files); counterfactual success separate from original correctness COVERED;
+residuals reported per sample, never discarded. OPEN (minor, not changed now): `fit` bounds steps and dimensions but
+carries no wall-clock or memory bound of its own; the job-level bound applies. NOT BUILT by decision: the optional
+three-state algebraic screen.
+
+One frozen candidate hypothesis (a hypothesis, not a run plan): for one checkpoint (Codex's named candidate
+`5b37699d…`), site `graph.round_update`, one declared round, a `RELATION_ENDPOINT` TPR reconstructor fitted on
+activation reconstruction only predicts the counterfactual Parts answer change of one `FILLER_REPLACEMENT` edit
+beyond the matched `POSITIONAL` edit, the `NO_CHANGE` control and the incumbent matched control; original-task
+correctness recorded separately. Smallest unresolved dependency: a real, host-anchored complete capture at that site
+(Gate 2A) plus a separately admitted venue; then Codex's integration of my four changed files.
+
+Allowance: about 4 more active minutes (15:20Z–15:24Z); about 7 remain. No source changed in this addendum.

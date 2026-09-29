@@ -33,6 +33,10 @@ Monorepo-level log. Subprojects keep their own changelogs
   Q1 stays excluded. Difference-to-source record for my six files written into the return record (all memo themes covered or recorded except one gap:
   position-versus-relation control). Gap closed: `POSITIONAL` scheme added to `role_schemes.py` (`6cd3ce0cd2dc…`, packet-rank positions, edges ignored,
   bounded by `max_positions`) with one test (`166545eba84c…`; 24 written, 0 executed). Package and `ORIGINAL_CLAUDE_SCOPE.txt` still not in Git; CB37–CB42 map pending.
+- 15:25Z: second v1.1 package received from Codex as Git objects at `701d4185` (directive `38444787…` 98008 bytes and `ORIGINAL_CLAUDE_SCOPE.txt`
+  `e8ffc3d5…` verified from the blobs). CB37–CB42 coverage map against my six files written into the return record: CB37/39/40/41 covered as source
+  on my side (CB40 placement `SOURCE_CONSISTENT_NOT_EXECUTED`), CB38/CB42 not my files; one minor open item (no wall/memory bound inside `fit`);
+  one frozen candidate hypothesis stated. No source changed. About 7 active minutes remain.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 
