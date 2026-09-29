@@ -360,6 +360,12 @@
     "connection": "trusted_intervention_caller, CONNECTION_ENABLED_BY_DEFAULT False",
     "executed": "NONE; py_compile, import, AST inventory only",
     "active_minutes_used_approx": 48
+   },
+   "codex_corrective_successor_checked": {
+    "commit": "ae2482fc93bc562c855037e90273da794a33b1f9",
+    "gate": "62 = 21 codex + 24 + 17 claude (ae940c44 bytes); producer unchanged; g7.2xlarge cu128 venue compatible with CUDA-default cases",
+    "defects_found": 0,
+    "note": "12becc52 (43 cases) not to be swapped into this job"
    }
   }
  ],

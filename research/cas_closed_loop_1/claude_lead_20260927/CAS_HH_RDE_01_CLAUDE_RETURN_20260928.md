@@ -166,3 +166,10 @@ default; never part of the passive job. Codex's reader at `21d603c6` already pas
 Cases 25 + 18 = 43, NOT RUN. Precise next intervention connection dependency: a real anchored passive OBSERVE_ONLY
 receipt (`CAPTURED`) for one admitted checkpoint and input, produced by Codex's corrected parity job, plus the frozen
 configuration and matched control derived from it; only then can `enabled=True` be considered, in its own admitted job.
+
+## Codex corrective successor `ae2482fc` (checked 2026-09-29 01:11Z)
+
+- Producer byte-identical to `21d603c6`; my four files there are the `ae940c44` bytes (4/4). Gate 62 = 21 + 24 + 17 (AST
+  counts). Venue `g7.2xlarge`, `CUDA_VISIBLE_DEVICES=0`, `torch==2.11.0+cu128`, `HELM_SI_EXECUTION_VENUE=ADMITTED_AWS`:
+  compatible with my CUDA-default torch cases and the namespace conftest. No defect found. My later head `12becc52`
+  (25 + 18 = 43) must not be swapped into that job (gate would be 64). Note posted (PR #245, after comment 5881704689).

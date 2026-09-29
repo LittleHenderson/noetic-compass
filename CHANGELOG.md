@@ -29,6 +29,9 @@ Monorepo-level log. Subprojects keep their own changelogs
   input and source; frozen anchored configuration; verified matched control; hookable active site; single
   checkpoint; no pending training batch; witness digest) and then runs exactly one `learner.predict` inside `apply`.
   Never mixed into the passive job; no training entry is ever called.
+- Codex's corrective successor `ae2482fc` (checked 01:11Z): producer unchanged; gate 62 = 21 + 24 + 17 with my
+  `ae940c44` bytes; `g7.2xlarge` / `cu128` / `ADMITTED_AWS` venue is compatible with my CUDA-default cases; no
+  defect; `12becc52` (43 cases) must not be swapped into that job.
 - Codex's `reload_configuration_inputs` at `21d603c6` already passes the anchor to both converter calls, so the
   mandatory-anchor change is compatible with the integrated reader. Cases: 25 pure-Python + 18 torch = 43, written,
   NOT RUN. Spec sheet `ENGINEERED-NOT-VALIDATED`. Growth `residual_world_v1` rev 0.3 untouched at `86af9a90`.
