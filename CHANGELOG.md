@@ -49,6 +49,9 @@ Monorepo-level log. Subprojects keep their own changelogs
   Codex's `prepare_plan_consumer_declaration`/`verify_plan_consumer_receipt` and the POSITIONAL-accepting `analysis_binding_rows` reviewed by reading:
   the six confirmation points hold as source, no concrete defect; two Codex-side assumptions recorded (packet-digest identity rule and idempotent
   validation; hard-coded width 64). 61 cases written in the integrated tree, 0 executed.
+- Final Codex successor `af9fb57e` (test-only, +4 lines in Codex's `test_plan_connection.py`) and request tree `1b89af69` acknowledged: my six files
+  unchanged (6/6); Stage A's 108 identities include my 10 role-scheme cases and the 41 RDE cases, and exclude my 15 fit-dependent cases as
+  intended. DO NOT EXECUTE observed; nothing run. Packet PRIMARY-CB1-INTEGRATE-01: about 18 of 30 active minutes used, no further work pending.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

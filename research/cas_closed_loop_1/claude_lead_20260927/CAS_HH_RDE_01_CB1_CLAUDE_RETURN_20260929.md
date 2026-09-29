@@ -362,3 +362,15 @@ Codex's synthetic `Plan` in `test_plan_connection` is built directly (no reconst
 `FitBudget` does not touch it.
 
 Packet clock: about 13 of 30 active minutes used (17:54Z–18:07Z). Nothing run, nothing fitted.
+
+### Final test-only successor `af9fb57ec45b2e4202a2fbedb26283fc15a4e16b` and request tree `1b89af69ce10a8396c10ee6aa1e4ee0f6d31c6b0` (comment 5895929645), checked 18:11Z
+
+Both fetched by commit id. My six files at both commits still match `1ec610f3` (6/6). `ca875df8`→`af9fb57e` changes only
+Codex's `test_plan_connection.py` (+4 lines: the synthetic `input.mapping` event carries `query.kind_name = parts`).
+`1b89af69` adds the `primary_integration_20260929/` documents (staged validation request, 108 Stage A identities,
+inventory, ledger, dispositions, my acknowledgment 5895860746 retained verbatim as `CLAUDE_ACTUAL_ACK.json`).
+Stage A (108 non-fitting contracts on AWS CPU, DO NOT EXECUTE, not admitted) lists my 10 `test_role_schemes.py`
+cases and the 24 + 17 RDE cases at `54dac34e` bytes; my 9 reconstructor and 6 binding-edit cases are excluded as
+fit-dependent (each calls `fit`), the corrected `ROW` fixture preserved. Stage B is the incumbent passive witness only.
+Acknowledged in a comment after 18:12Z. Nothing executed; no allocation inferred. Packet clock: about 18 of 30
+active minutes used (17:54Z–18:12Z). No further work of mine pending in this packet.
