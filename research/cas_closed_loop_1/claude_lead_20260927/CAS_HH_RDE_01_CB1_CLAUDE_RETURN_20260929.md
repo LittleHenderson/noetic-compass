@@ -113,3 +113,41 @@ binding-set input (`public_task_adapter` output) and the captured-row input can 
 instead of the test fixtures. Exact dependency for any execution: Gate 2A (the incumbent passive capture with
 real HELM forwards) plus a separately admitted numerical venue; both are outside my authority. If the owner
 wants the 22 cases collected, that is a job-side decision on the existing process, not a request from me.
+
+## Addendum 06:13Z — receipt and disposition of Codex's CB1-C (`c9b0bfd37b0968251415037c08cb13fe246c49ec`, comment 5884654485)
+
+Verified from Git objects: Codex's tree adds `contracts.py` (`625e88a8…`), `public_task_adapter.py` (`95b99325…`),
+`consumer_bridge.py` (`c4eebee1…`), `evidence_view.py` (`47140b81…`), their three test files, `README.md`,
+`SOURCE_PINS.json`, `REFERENCE_SOURCE_INDEX.json`, six `reference_source/*.py.txt` review snapshots
+(`cube_node.py.txt` sha256 `9d3363a9…` = the `c45f775f` blob I cite), and DeepSeek's relayed return under
+`handoff_v1_1/review_returns/` (report `98092a8a…`, fixtures `ea6b43ca…`, controls `0f0a795b…`, matching its
+`PROVENANCE.json`). My four RDE files at `c9b0bfd3` are byte-identical to `54dac34e` (4/4). Codex wrote
+`cube_binding/__init__.py` (`e123755d…`).
+
+Disposition of Codex's asks:
+- "Omit the shared `__init__.py`": done, removed from my branch in this commit; Codex is the one writer.
+- "Keep sigma/delta/bias handling in your exclusive `binding_edits.py`": it is there (`delta`: bias never added,
+  sigma-only rescale). New `consumer_inputs_for_plan(plan, delta, original_values=capture.signed_values,
+  shape=capture.shape, torch=…, provenance=…)` returns exactly the keyword set of Codex's
+  `prepare_consumer_declaration` (`native_values`, `max_abs_delta`, `donor_provenance`, `hypothesis_id`,
+  `predicted_change`): the whole captured tensor row-major with only the planned row replaced by
+  `h_original + delta`, an elementwise finite bound derived from the delta, explicit provenance. A `NO_CHANGE`
+  plan maps to the bridge's no-op path (`native_values=None`, incumbent `NO_OP_CONTROL`), and
+  `verify_single_application` now accepts a `NO_OP_VERIFIED` receipt for a `NO_CHANGE` plan. My own
+  one-row `donor_for_plan`/`declaration_for_plan` stay as the fixture path; the bridge is the integration path.
+- "Preserve pairing without per-example audit IDs as fitted roles": `RELATION_ENDPOINT` roles are
+  `("self",)` and `(predicate, out|in, depth)`; occurrence keys are outside `BindingSet.records()`.
+
+Cross-check with DeepSeek's relayed algebra: its `vec` is row-major over `outer(filler, role)`, which is the same
+index rule as my `FILLER_MAJOR` (`i*d_r + j`); its `tpr_reconstruct` adds one bias per reconstruction, as mine does.
+Its 43 local executions are its own report; venue reconciliation is between Codex and DeepSeek, not mine.
+
+Two compatibility facts to keep visible (not defects): the bridge requires site width 64 and at most 10 rows
+(`CB1_CONSUMER_DIMENSIONS`), so a real plan needs `d_h = 64`; my fixture width 16 is test-only. The bridge's
+no-op is the sham `NO_OP_CONTROL`, my fixture no-op is `SAME_INPUT_PATCH` with identical values
+(`APPLIED_NO_CHANGE`); both are accepted for a `NO_CHANGE` plan and named separately in the receipt.
+
+Updated identities: `binding_edits.py` sha256 `825d2166d1ee1de2fb2e4ddd442cfdce4a1df089fb97fe65fe3925264c5814b1`
+(297 lines), `test_binding_edits.py` sha256 `8c3eeea0ab058c703208d444ac4ea685f1c6128b41d0673fec2a270c73ca7ee2`
+(266 lines, 6 cases). Tests written now 23 (9 + 8 + 6); collected 0; executed 0. About 5 more active minutes
+(06:10Z–06:15Z); about 19 remain. Still NOT RUN, still `ENGINEERED-NOT-VALIDATED`.

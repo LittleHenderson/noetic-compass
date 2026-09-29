@@ -189,6 +189,48 @@ def test_double_application_and_unverified_binding_are_refused():
     _refused("NOT_APPLIED", be.verify_single_application, none, plan, d, torch=torch)
 
 
+def test_consumer_inputs_match_codex_bridge_contract_whole_tensor_one_row_changed():
+    """Shape of what `consumer_bridge.prepare_consumer_declaration` (CB1-C, `c9b0bfd3`) takes: all rows,
+    row-major, only the planned row differs, finite elementwise bound, explicit provenance."""
+    scheme = _scheme()
+    rec = _fitted(scheme)
+    old = _rows(scheme, ("A", "B"), ("C", "D"))[0]
+    edit = be.declare_edit("FILLER_REPLACEMENT", role_path=("contains", "out", "1"), old_filler="B", new_filler="D", occurrence=("A", "B"))
+    new = be.edit_bindings(old, edit)
+    plan = _plan(rec, old, new, edit, "PREDICTED_ANSWER_CHANGE")
+    d = be.delta(rec, old, new, torch=torch)
+    g = torch.Generator(device="cpu").manual_seed(4)
+    captured = torch.randn(NODES, WIDTH, generator=g)
+    signed_values = captured.reshape(-1).tolist()                       # Codex emitter convention: row-major flatten
+    inputs = be.consumer_inputs_for_plan(plan, d, original_values=signed_values, shape=(NODES, WIDTH), torch=torch)
+    assert set(inputs) == {"native_values", "max_abs_delta", "donor_provenance", "hypothesis_id", "predicted_change"}
+    assert inputs["donor_provenance"] == "STIMULUS_ONLY" and inputs["hypothesis_id"] == "H_CB1_FIXTURE"
+    values = torch.tensor(inputs["native_values"]).reshape(NODES, WIDTH)
+    assert torch.equal(values[1:], captured[1:])                          # every other row byte-equal
+    assert torch.allclose(values[0] - captured[0], d.to("cpu"), atol=1e-6)
+    assert all(abs(n - o) <= inputs["max_abs_delta"] for n, o in zip(inputs["native_values"], signed_values))
+    assert inputs["max_abs_delta"] > 0 and inputs["max_abs_delta"] < float(d.abs().max().item()) * 1.001 + 1e-9
+    no_change = be.consumer_inputs_for_plan(_plan(rec, old, old, be.declare_edit("NO_CHANGE"), "NO_CHANGE"),
+                                            be.delta(rec, old, old, torch=torch), original_values=signed_values, shape=(NODES, WIDTH), torch=torch)
+    assert no_change["native_values"] is None and no_change["max_abs_delta"] is None and no_change["donor_provenance"] is None
+    _refused("CAPTURE_SHAPE", be.consumer_inputs_for_plan, plan, d, original_values=signed_values[:-1], shape=(NODES, WIDTH), torch=torch)
+    _refused("ROW", be.consumer_inputs_for_plan, plan, d, original_values=signed_values[:WIDTH], shape=(1, WIDTH), torch=torch)
+    gold = be.consumer_inputs_for_plan(plan, d, original_values=signed_values, shape=(NODES, WIDTH), torch=torch, provenance="GOLD_INFORMED")
+    assert gold["donor_provenance"] == "GOLD_INFORMED"
+    _refused("PROVENANCE", be.consumer_inputs_for_plan, plan, d, original_values=signed_values, shape=(NODES, WIDTH), torch=torch, provenance="ANSWER_KEY")
+    # the bridge's no-op path yields an incumbent NO_OP_CONTROL receipt; a NO_CHANGE plan accepts it
+    model = _model()
+    decl = di.declare(action="NO_OP_CONTROL", site=be.EDIT_SITE, checkpoint_sha256=CKPT, input_sha256=INPUT, source_sha256=LEARNER_SHA256,
+                      rows=tuple(range(NODES)), coordinates=tuple(range(WIDTH)), round_index=ROUND)
+    hidden, query = _inputs()
+    with di.apply(model, decl, torch=torch, expected_forward_calls=1, binding=_binding(model)) as receipt:
+        model(hidden, query)
+    assert receipt.status == "NO_OP_VERIFIED"
+    check = be.verify_single_application(receipt, _plan(rec, old, old, be.declare_edit("NO_CHANGE"), "NO_CHANGE"),
+                                         be.delta(rec, old, old, torch=torch), torch=torch)
+    assert check["status"] == "NO_OP_VERIFIED" and check["single_application"] is True
+
+
 def test_edit_and_plan_refusals():
     scheme = _scheme()
     rec = _fitted(scheme)

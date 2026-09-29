@@ -210,6 +210,46 @@ def donor_for_plan(plan, delta_vector, original_row, *, torch, capture_digest, p
                     values=patched.detach().to("cpu").reshape(-1).tolist())
 
 
+def consumer_inputs_for_plan(plan, delta_vector, *, original_values, shape, torch, provenance="STIMULUS_ONLY"):
+    """The keyword set Codex's `consumer_bridge.prepare_consumer_declaration` takes (CB1-C at `c9b0bfd3`).
+
+    Codex's bridge replaces the WHOLE captured tensor of the site (all rows, all coordinates) from an
+    externally anchored complete capture. `original_values` is that capture's row-major `signed_values`
+    and `shape` its `(rows, width)`. This composes `h_original + delta` into the planned row only, leaves
+    every other row byte-equal to the capture, and derives the finite `max_abs_delta` bound from the delta.
+    A NO_CHANGE plan maps to the bridge's no-op path (`native_values=None`, incumbent NO_OP_CONTROL).
+    Nothing here is executed; the returned dict is data for the bridge, which returns a declaration only."""
+    if len(shape) != 2:
+        _refuse("CAPTURE_SHAPE", "row-wise site capture (rows, width) required, got %r" % (tuple(shape),))
+    rows, width = int(shape[0]), int(shape[1])
+    if rows <= 0 or width <= 0 or len(original_values) != rows * width:
+        _refuse("CAPTURE_SHAPE", "%d values for shape %r" % (len(original_values), tuple(shape)))
+    if plan.row >= rows:
+        _refuse("ROW", "plan row %d outside %d captured rows" % (plan.row, rows))
+    if not torch.is_tensor(delta_vector):
+        _refuse("DELTA_TYPE", repr(type(delta_vector)))
+    base = dict(hypothesis_id=plan.hypothesis_id, predicted_change="%s:%s" % (plan.expected_effect, plan_digest(plan)[:16]))
+    if plan.expected_effect == "NO_CHANGE":
+        if float(delta_vector.to(torch.float32).norm().item()) != 0.0:
+            _refuse("NO_CHANGE_NOT_ZERO")
+        return dict(base, native_values=None, max_abs_delta=None, donor_provenance=None)
+    if tuple(delta_vector.shape) != (width,):
+        _refuse("DELTA_SHAPE", "expected (%d,), got %r" % (width, tuple(delta_vector.shape)))
+    if provenance not in di.DONOR_PROVENANCE:
+        _refuse("PROVENANCE", repr(provenance))
+    norm = float(delta_vector.to(torch.float32).norm().item())
+    if norm > plan.max_delta_norm:
+        _refuse("DELTA_NORM_EXCEEDED", "%r > %r" % (norm, plan.max_delta_norm))
+    values = [float(v) for v in original_values]
+    start = plan.row * width
+    original_row = torch.tensor(values[start:start + width], dtype=torch.float32)
+    patched = (original_row + delta_vector.detach().to("cpu", torch.float32)).tolist()
+    values[start:start + width] = patched
+    max_abs = max(abs(new - old) for new, old in zip(patched, original_values[start:start + width]))
+    max_abs_delta = max_abs * (1.0 + 1e-6) + 1e-12          # the bridge requires |new - old| <= bound, elementwise
+    return dict(base, native_values=values, max_abs_delta=max_abs_delta, donor_provenance=provenance)
+
+
 def declaration_for_plan(plan, donor, *, width):
     """The incumbent declaration: SAME_INPUT_PATCH on one row, all `width` coordinates, one round."""
     if type(width) is not int or width <= 0 or len(donor.values) != width:
@@ -225,7 +265,8 @@ def verify_single_application(receipt, plan, delta_vector, *, torch):
     change, on a caller-verified module, hooks removed, parameters unchanged. Anything else refuses."""
     if not isinstance(receipt, di.Receipt):
         _refuse("RECEIPT_TYPE", repr(type(receipt)))
-    if receipt.site != plan.site or receipt.operation != "SAME_INPUT_PATCH":
+    no_op = plan.expected_effect == "NO_CHANGE" and receipt.operation == "NO_OP_CONTROL"   # the bridge's no-op path
+    if receipt.site != plan.site or (receipt.operation != "SAME_INPUT_PATCH" and not no_op):
         _refuse("RECEIPT_MISMATCH", "%s/%s" % (receipt.site, receipt.operation))
     targeted = receipt.targeted_hits()
     if len(targeted) > 1:
@@ -243,7 +284,8 @@ def verify_single_application(receipt, plan, delta_vector, *, torch):
         _refuse("COLLATERAL_ROWS_CHANGED")
     planned_norm = float(delta_vector.to(torch.float32).norm().item())
     if plan.expected_effect == "NO_CHANGE":
-        if receipt.status != "APPLIED_NO_CHANGE" or hit["changed_count"] != 0:
+        wanted = "NO_OP_VERIFIED" if no_op else "APPLIED_NO_CHANGE"
+        if receipt.status != wanted or hit["changed_count"] != 0:
             _refuse("NO_CHANGE_NOT_VERIFIED", "status %s changed %d" % (receipt.status, hit["changed_count"]))
     else:
         if receipt.status != "APPLIED":

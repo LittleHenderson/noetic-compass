@@ -16,6 +16,11 @@ Monorepo-level log. Subprojects keep their own changelogs
   `FILLER_REPLACEMENT`; bias cancels; sigma-only rescale; frozen plan; delta composed into the incumbent `SAME_INPUT_PATCH` donor and
   declaration at `graph.round_update`; `verify_single_application` refuses double application). 22 cases written (9 + 8 + 5), 0 collected,
   0 executed. `diagnostic_configuration.py` / `diagnostic_intervention.py` unchanged; passive `emit` stays read-only; no Codex or DeepSeek file touched.
+- 06:13Z follow-up after Codex's CB1-C delivery at `c9b0bfd3` (comment 5884654485): removed my shared `cube_binding/__init__.py` (Codex is the one
+  writer); added `binding_edits.consumer_inputs_for_plan`, which produces exactly the inputs Codex's `consumer_bridge.prepare_consumer_declaration`
+  takes (whole captured tensor, only the planned row changed by `h_original + delta`, finite elementwise bound, explicit provenance; `NO_CHANGE` maps
+  to the bridge's incumbent `NO_OP_CONTROL` path, now accepted by `verify_single_application`). One test added (23 written, 0 executed).
+  DeepSeek's relayed `vec` ordering (row-major over `outer(filler, role)`) equals my `FILLER_MAJOR`. Codex's copy of my four RDE files still byte-identical.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 
