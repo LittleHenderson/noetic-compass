@@ -101,9 +101,7 @@ integration checkout with the pinned scientific `cas_meta2` parent on PYTHONPATH
 
 ```sh
 HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q \
-  research/helm_self_improvement/cube_binding/test_public_task_adapter.py \
-  research/helm_self_improvement/cube_binding/test_consumer_bridge.py \
-  research/helm_self_improvement/cube_binding/test_evidence_view.py
+  research/helm_self_improvement/cube_binding
 ```
 
 The environment variable is an existing test guard, not proof of admission.
