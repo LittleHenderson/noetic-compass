@@ -493,8 +493,9 @@
    "scope": "review the Stage A/B adaptation only where it touches my contracts (non-fitting cases and invalid-site paths intact; the 15 fit-dependent cases not executed; passive job cannot reach fit/delta/binding edits; canonical identity/coverage preserved); fix a concrete defect in my own files only if found, as a declared successor; no new scheme, fit, experiment or coverage document",
    "source_changes": "NONE; six files still byte-identical to 1ec610f3 at head ac661e61c and at Codex af9fb57e (6/6 re-hashed)",
    "executed": "NONE",
-   "status": "RECEIPT_POSTED_PACKET_OPEN; about 4 of 30 minutes used; waiting for Codex packet C01 diff as a Git object; nothing to correct in the existing request tree 1b89af69",
-   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md"
+   "status": "REVIEW_DELIVERED_PACKET_OPEN; about 14 of 30 minutes used (receipt 18:43-18:47Z, review 19:09-19:19Z); remaining time reserved for the C01 diff",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
+   "hot_handoff_5896847088": "manager HOT-HANDOFF-01: read-only version-transition review of Codex's diagnostic_admission.py / aws_worker.py / aws_runner.py at af9fb57e plus the staged request; delivered as CB1_A01_STAGE_TRANSITION_REVIEW_20260929.md and a PR comment; no Codex file edited"
   }
  ],
  "not_done_by_any_worker": [

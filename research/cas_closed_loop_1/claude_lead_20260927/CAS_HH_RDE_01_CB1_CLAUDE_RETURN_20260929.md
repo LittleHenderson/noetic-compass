@@ -394,3 +394,15 @@ passive witness with no path into `fit`, `delta` or binding edits). Six files st
 (6/6 re-hashed at head and at `af9fb57e`). Claim states: real, the hashes; reported-by-manager-not-verified, the
 owner approval, dollar caps and extra model slot, none of which I execute; not done, no test, fit, model load,
 worker, wake, cloud job or spend. This PR is my only team route; no relay elsewhere.
+
+### A01 hot handoff (comment 5896847088): version-transition review delivered
+
+Read-only review of Codex's `diagnostic_admission.py`, `aws_worker.py`, `aws_runner.py` at `af9fb57e` and the staged
+request at `1b89af69`, against the seven checklist items (Stage A no checkpoint / no witness fall-through; 108/62
+inventory and three prerequisites; pins; expiry/deadline/output limits; A cleanup before B; zero fit / active edits;
+one extra B slot, no retry). Exact functions, lines and smallest changes are in
+`CB1_A01_STAGE_TRANSITION_REVIEW_20260929.md` and the PR comment. Findings useful to C01: the freeze table refuses any
+Stage A phase; the worker always enters the witness after tests; the runner's terminal check and price probe are
+witness-only literals; constraints and dependency inventory apply only to the corrective phase; memory/CPU cgroup
+limits, the log bound and the approval expiry are not enforced anywhere in the incumbent; setup maxima sum to 990 s
+against a stated 900 s. Nothing in my six files changes. No Codex file edited. Nothing run. A01 about 14 of 30 used.
