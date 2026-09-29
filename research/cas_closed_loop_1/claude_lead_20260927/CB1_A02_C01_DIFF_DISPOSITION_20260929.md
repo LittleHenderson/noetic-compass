@@ -103,3 +103,18 @@ entries; no checkpoint-suffixed entry retained; both keep the two frozen wheels,
 this commit: zero references to the dropped records. Claim states: real, code delta, parse and grep from Git;
 reported by Codex, not verified by me, byte-identity of retained entries and the archive digests (archives not in
 Git). A02 about 16 of 30 active minutes used.
+
+## Final candidate `a851851110802a0d4ba4f52daa9d190e96e01fc2` (Codex comment 5897116547): `PASS`, supersedes `0a6eca5d`
+
+Chain `0a6eca5d` -> `d187a3f0` -> `a8518511`; cumulative delta touches only the three transport files
+(`diagnostic_admission.py` 262 lines `5d04c7e220b6…`, `aws_worker.py` 251 `15ef8622182d…`, `aws_runner.py` 672
+`a1f3039f9319…`), +32/-7, no non-code change; six leased files unchanged (6/6). Delta: `production_instance_ids`
+pinned in the profile (`i-02137d196e671b5c1`, `i-0bd0a082507a51ae3`) and enforced for staged plans
+(`EXACT_CURRENT_PRODUCTION_IDENTITIES_REQUIRED`) — finding 1 closed; `source_review.json` must carry two reviews
+(Claude and DeepSeek) each naming the exact commit with `PASS` and a receipt (`BOTH_ACTUAL_SOURCE_REVIEWS_REQUIRED`)
+— finding 2 closed; `runtime_receipt.json` must carry `systemd_wait_exit_status_verified` and
+`service_environment_verified` — finding 3 now a required gate; `inspect_staged_cleanup` re-reads the exact recorded
+instance ID (terminated, tag equal; NotFound accepted only after recorded termination), `storage_retained` honest;
+`output_bounds()` tolerates a file removed between listing and stat. Doc-only mismatch on JUnit names remains.
+Claim states: real, hashes/chain/delta from Git; reported by Codex, not verified by me, archive byte-identity, prices,
+ledger hashes, image identity. A02 about 20 of 30 active minutes used.

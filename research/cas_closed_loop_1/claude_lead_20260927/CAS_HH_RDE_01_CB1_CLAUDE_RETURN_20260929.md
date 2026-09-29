@@ -435,3 +435,11 @@ plus the no-checkpoint scan on both nested archives for both stages, and a proje
 no checkpoint suffix retained, required wheels/requirements/cas_meta2 kept). Grep confirms no Stage A test or module
 reads the dropped records. Six files unchanged. Nothing run. A02 about 16 of 30 used. Full text in
 `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.
+
+### A02: final candidate `a8518511` reviewed, `PASS` posted (supersedes `0a6eca5d`)
+
+Delta from `0a6eca5d` is 32/7 lines in the three transport files: production-instance IDs pinned and enforced, both
+reviewer receipts required by code, runtime receipt gains two attestation fields, exact-instance cleanup re-read,
+output-monitor race tolerated. Two of my four non-blocking findings closed, one became a required gate, one is
+doc-only. Six files unchanged. Nothing run. A02 about 20 of 30 used. Full text in
+`CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.

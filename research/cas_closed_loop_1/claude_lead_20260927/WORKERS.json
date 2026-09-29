@@ -515,10 +515,11 @@
    "source_changes": "NONE; six files match 1ec610f3 at e373ef1b (6/6)",
    "executed": "NONE; local text parse of DEPENDENCIES.txt and STAGED_VALIDATION_REQUEST.json only (44 pins, hash 41b403ea..., 108/62 identities)",
    "disposition": "BLOCKER: LimitFSIZE=16777216 in the staged systemd-run unit breaks the torch install and contradicts the 32 MiB archive bound; PASS on CPU separation, staged admission, per-stage test IDs, worker timeout/collection, B prerequisite design; four non-blocking findings",
-   "status": "PASS POSTED FOR 0a6eca5d; about 16 of 30 minutes used; nothing pending unless the three transport files change again",
+   "status": "PASS POSTED FOR a8518511; about 20 of 30 minutes used; nothing pending unless the transport files change again; next Codex-owned: runtime_receipt.json, freeze, reservation; DeepSeek PASS now code-required",
    "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CB1_A02_C01_DIFF_DISPOSITION_20260929.md",
    "successor_a4552e53": "PASS as source for Stage A and Stage B (B execution gated by code on Stage A evidence + runtime receipt); LimitFSIZE removed; log streams bounded by selector loop; inspect_staged_cleanup producer added; B gate binds actual A records by path+hash; payload pins constraints/legacy archive; Stage A refuses nested checkpoint members; staged_authority re-checked before spend and launch; canonical export via contracts.canonical",
-   "candidate_0a6eca5d": "PASS as source for Stage A and B, supersedes a4552e53; delta = per-stage legacy archive pins (0f8bde13 A / e728bc51 B), no-checkpoint scan on both nested archives for both stages, STAGED_SOURCE_PROJECTIONS.json (A 255 entries, B 258, 21/18 record entries excluded, no checkpoint suffix retained; wheels, requirements-gpu.txt and CAS_META_2_COMPOSITION retained); grep: no Stage A test or module reads the dropped records"
+   "candidate_0a6eca5d": "PASS as source for Stage A and B, supersedes a4552e53; delta = per-stage legacy archive pins (0f8bde13 A / e728bc51 B), no-checkpoint scan on both nested archives for both stages, STAGED_SOURCE_PROJECTIONS.json (A 255 entries, B 258, 21/18 record entries excluded, no checkpoint suffix retained; wheels, requirements-gpu.txt and CAS_META_2_COMPOSITION retained); grep: no Stage A test or module reads the dropped records",
+   "final_candidate_a8518511": "PASS as source for Stage A and B, supersedes 0a6eca5d; production_instance_ids pinned and enforced (finding 1 closed); two-review source_review.json required (finding 2 closed); runtime receipt requires systemd wait-exit and service-environment attestation (finding 3 now gated); exact-instance cleanup re-read; output monitor race tolerated"
   }
  ],
  "not_done_by_any_worker": [
