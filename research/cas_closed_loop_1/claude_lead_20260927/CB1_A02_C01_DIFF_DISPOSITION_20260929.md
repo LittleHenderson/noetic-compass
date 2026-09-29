@@ -147,3 +147,26 @@ same source-only terms. A02 returned at about 28 of 30 active minutes. No Claude
 owned defect, A04 only on delivered execution evidence. WAIT: owner decision on boot-attestation timing or another
 source of runtime measurements (owner/Codex); DeepSeek exact-source receipt on the frozen commit (DeepSeek via the
 manager's route).
+
+## After A02: Codex C02 successors `c36ffd7a` and `376b3d20`, C02 FINAL RETURN (records only, no packet active)
+
+- `c36ffd7ae3246e4d7a937a524169a67721811557` (Codex comment 5898301940): `diagnostic_admission.py` changed
+  (`dc93171f72b4…`, +30/-3: host-fixed canonical ledger path, `require_canonical_staged_ledger`, corrective custody
+  binding, Stage A slot `None` / Stage B slot `3` bound in reservation and freeze); `aws_worker.py` and
+  `aws_runner.py` byte-identical to `2cf9aeee`; six leased files unchanged (6/6). DeepSeek D01 (on `a8518511`) and
+  D02 (on `e16c00ed`) reports added under `cas_hh_rde_01/reviewer_returns/`; they name no defect in my files.
+  Posted WAIT note (comment 5898323784): no Claude receipt on `c36ffd7a` without an allocated packet; the 30-line
+  delta shows nothing in my scope.
+- `376b3d20d4dcd3ad94bb9660582c5dcb55d1f2d4` (comment 5898339507): only unwired `runtime_bootstrap_spec.py`, its
+  test file and `D01_DISPOSITIONS_C02.md` changed; transport bytes equal `c36ffd7a`; six files unchanged. Nothing
+  posted.
+- Codex C02 FINAL RETURN (comment 5898396285, 20:38Z): final source `376b3d20`; 54 specs written (39 runtime, 9
+  ledger, 6 bootstrap), 0 run; C03 NOT_STARTED. DeepSeek D02b (on `c36ffd7a`) and D02c (on `376b3d20`) relayed by
+  Codex: D01-02 closed on source, D01-01 (circular runtime gate) CONFIRMED/PENDING, Stage A/B admission
+  CHANGES_REQUIRED, execution BLOCKED.
+- Standing WAIT: owner decision on the same-job boot-only attestation phase (`RUNTIME_ATTESTATION_C02.md`) or another
+  source of runtime measurements; Codex wiring of the bounded acceptance exchange and bootstrap; both reviewer
+  receipts on the exact frozen commit (a Claude receipt needs an allocation).
+- Claim states: real, hashes from the Git objects; reported by Codex, not verified by me, DeepSeek's route and
+  dispositions, specification counts, reservation hashes; not done, no test, freeze, reservation, launch or spend
+  by anyone that I have verified. 21:30Z check-in: no change.

@@ -458,3 +458,12 @@ timing decision I do not make. Six files unchanged. Nothing run. A02 about 25 of
 Transport files and my six files unchanged; my PASS carries to `2cf9aeee`. A02 returned at about 28 of 30 active
 minutes. No Claude packet active. WAIT named: owner decision on boot-attestation timing or another source of the
 runtime measurements; DeepSeek exact-source receipt on the frozen commit. Nothing run.
+
+### After A02: Codex successors `c36ffd7a` / `376b3d20` and C02 final return; no Claude packet active
+
+`c36ffd7a` changed the admission file (ledger custody), so my PASS does not carry; WAIT note posted (5898323784).
+`376b3d20` adds unwired bootstrap fragments only. Codex closed C02 at 20:38Z with final source `376b3d20`; 54 specs
+written, 0 run. DeepSeek's four dispositions are relayed by Codex; the circular runtime gate stays confirmed and
+pending. Six files unchanged throughout. Standing WAIT: owner decision on boot-attestation timing or another source
+of runtime measurements; allocation for any Claude receipt on the frozen commit; DeepSeek receipt on that commit.
+Nothing run. 21:30Z check-in: no change.
