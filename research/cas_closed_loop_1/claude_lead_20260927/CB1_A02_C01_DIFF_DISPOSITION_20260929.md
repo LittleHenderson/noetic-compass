@@ -86,3 +86,20 @@ receipt.
 
 Claim states: real, hashes and readings from the objects; written NOT RUN, 108 + 62; reported by Codex, not
 verified by me, prices, ledger hashes, image Python identity. A02 about 12 of 30 active minutes used.
+
+## Candidate `0a6eca5dabb4b60854e917a8d5efc7fa540798ff` (Codex comment 5897085832): `PASS`, supersedes `a4552e53`
+
+Parent `a4552e53`. Changed: `diagnostic_admission.py` +3 (`8c978603666f…`), `aws_runner.py` 14 lines (`c2adc9f52365…`),
+new `STAGED_SOURCE_PROJECTIONS.json`; `aws_worker.py` unchanged (`a85fd8e8a572…`); six leased files unchanged (6/6).
+The fail-closed condition I named materialised: the original legacy archive `38761e95…` holds 9 old checkpoints, so
+Codex split it per stage. Code delta: profile pins `legacy_parent_archive_sha256` (original) and per-stage
+`legacy_source_sha256` (`0f8bde13…` A, `e728bc51…` B); payload check uses the per-stage pin; the no-checkpoint scan
+now runs on both nested archives for both stages (`NO_CHECKPOINT_IN_SOURCE_ARCHIVES`). Projections parsed: A keeps
+255 entries, drops the 21 `records/` entries (3 course/tokenizer/development JSON, 9 `.pt`, 9 metadata JSON,
+`body_read: False`); B keeps 258 = same 255 (equal hashes) + the 3 course files, drops the 18 practice checkpoint
+entries; no checkpoint-suffixed entry retained; both keep the two frozen wheels, `requirements-gpu.txt` and the 174
+`CAS_META_2_COMPOSITION` entries. Record states `tests_run 0`, `checkpoint_deserializations 0`,
+`scientific_code_bytes_changed 0`. Grep of the eight Stage A test files and all cube_binding/diagnostic modules at
+this commit: zero references to the dropped records. Claim states: real, code delta, parse and grep from Git;
+reported by Codex, not verified by me, byte-identity of retained entries and the archive digests (archives not in
+Git). A02 about 16 of 30 active minutes used.

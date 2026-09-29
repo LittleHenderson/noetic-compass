@@ -427,3 +427,11 @@ window before spend and launch, and serialises the canonical packet with `contra
 source; Stage B `PASS` as source with code-enforced gating. Four non-blocking items unchanged; one new fail-closed
 condition noted. Six files unchanged. Nothing run. A02 about 12 of 30 used. Full text in
 `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.
+
+### A02: candidate `0a6eca5d` reviewed, `PASS` posted (supersedes `a4552e53`)
+
+The legacy archive held 9 old checkpoints, so Codex split it per stage; the code delta is the per-stage archive pin
+plus the no-checkpoint scan on both nested archives for both stages, and a projections record (A 255 entries, B 258,
+no checkpoint suffix retained, required wheels/requirements/cas_meta2 kept). Grep confirms no Stage A test or module
+reads the dropped records. Six files unchanged. Nothing run. A02 about 16 of 30 used. Full text in
+`CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.
