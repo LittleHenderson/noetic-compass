@@ -37,6 +37,7 @@ Monorepo-level log. Subprojects keep their own changelogs
   `e8ffc3d5…` verified from the blobs). CB37–CB42 coverage map against my six files written into the return record: CB37/39/40/41 covered as source
   on my side (CB40 placement `SOURCE_CONSISTENT_NOT_EXECUTED`), CB38/CB42 not my files; one minor open item (no wall/memory bound inside `fit`);
   one frozen candidate hypothesis stated. No source changed. About 7 active minutes remain.
+- Packet PRIMARY-AUTONOMY-24H-01/A01 (ChatGPT manager dispatch 5896439234, relayed owner approval not verified in my channel; separate 30-minute clock from 18:43Z): receipt posted; scope is review of the Stage A/B adaptation where it touches my contracts; C01 diff not yet delivered; six files unchanged (6/6 vs `1ec610f3`); nothing run; about 4 of 30 minutes used, held open.
 - Packet PRIMARY-CB1-INTEGRATE-01 (owner, separate 30-minute clock from 17:54Z): fit resource boundary closed in `reconstructor.py`
   (`FitBudget`/`declare_budget`, mandatory `budget=` on `fit`, pre-allocation sample/parameter/tensor refusals, cooperative deadline and `cancel()`
   checked before every step, injectable clock, manifest records the contract and `python_checks_are_hard_memory_limits: False`; the hard bound is the

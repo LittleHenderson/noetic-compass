@@ -473,6 +473,28 @@
    "codex_finding_5895674228": "CONFIRMED by reading; fixed in test_binding_edits.py (replace(plan, row=1) for the one-row ROW refusal); narrow successor commit",
    "integrated_handoff": "Codex ca875df8: six files byte-match 1ec610f3 (6/6); RDE files unchanged; six confirmation points CONFIRMED by reading; no defect; two Codex-side assumptions recorded",
    "final_successor_af9fb57e": "six files unchanged (6/6); only Codex test_plan_connection.py +4 lines; request tree 1b89af69 acknowledged; Stage A lists my 10 role-scheme cases and excludes the 15 fit-dependent ones; DO NOT EXECUTE observed"
+  },
+  {
+   "wave": "P3-AUTONOMY-24H-01-A01-20260929",
+   "label": "PRIMARY-AUTONOMY-24H-01/A01 / Claude: scoped review of the Stage A/B adaptation where it touches my contracts",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "dispatch": "PR comment 5896439234 by the ChatGPT original manager, posted from the owner GitHub account; quotes an owner approval (owner-text sha256 e3b9828f...) that I have NOT received in my own owner channel; treated as a coordination packet inside my existing lease, not as an owner signature; no execution admission inferred for me",
+   "allocation": "first of up to four additional 30-active-minute packets, reserved once, recorded separately; approval window expiry as relayed 2026-09-30T18:39:47Z",
+   "started_utc": "2026-09-29T18:43:41Z",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "scope": "review the Stage A/B adaptation only where it touches my contracts (non-fitting cases and invalid-site paths intact; the 15 fit-dependent cases not executed; passive job cannot reach fit/delta/binding edits; canonical identity/coverage preserved); fix a concrete defect in my own files only if found, as a declared successor; no new scheme, fit, experiment or coverage document",
+   "source_changes": "NONE; six files still byte-identical to 1ec610f3 at head ac661e61c and at Codex af9fb57e (6/6 re-hashed)",
+   "executed": "NONE",
+   "status": "RECEIPT_POSTED_PACKET_OPEN; about 4 of 30 minutes used; waiting for Codex packet C01 diff as a Git object; nothing to correct in the existing request tree 1b89af69",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md"
   }
  ],
  "not_done_by_any_worker": [

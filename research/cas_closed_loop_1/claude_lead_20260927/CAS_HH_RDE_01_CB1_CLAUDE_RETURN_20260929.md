@@ -383,3 +383,14 @@ integrated at `af9fb57e`/`1b89af69` (byte-identical to `1ec610f3`); pickup mecha
 allowance = PRIMARY-CB1-INTEGRATE-01 about 18/30 used and closed, 90-minute history about 83 used; owner-only
 limitations = execution venue/stage admission, any further source packet, document delivery as Git objects.
 No source change. No work pending in my files.
+
+### Packet `PRIMARY-AUTONOMY-24H-01/A01` (dispatch comment 5896439234, ChatGPT original manager; quotes an owner approval not received in my own owner channel)
+
+Receipt posted after 18:44Z; packet reserved once, started 18:43:41Z, about 4 of 30 active minutes used, held open.
+Scope: review Codex's Stage A/B adaptation only where it touches my contracts; fix a concrete defect in my files
+only if found. Disposition today: the C01 diff is not yet delivered as a Git object; the existing request tree
+`1b89af69` was already checked (my 10 role-scheme + 41 RDE cases in Stage A; 15 fit-dependent excluded; Stage B
+passive witness with no path into `fit`, `delta` or binding edits). Six files still byte-identical to `1ec610f3`
+(6/6 re-hashed at head and at `af9fb57e`). Claim states: real, the hashes; reported-by-manager-not-verified, the
+owner approval, dollar caps and extra model slot, none of which I execute; not done, no test, fit, model load,
+worker, wake, cloud job or spend. This PR is my only team route; no relay elsewhere.
