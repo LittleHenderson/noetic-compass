@@ -1,0 +1,82 @@
+{
+ "schema": "cas.seed18.api-binding/0.1",
+ "packet": "B1-SEED18-API-BIND-03 (comment 5856749306)",
+ "utc": "2026-09-27T14:50:00Z",
+ "claim_state": "REAL: source bytes read from git at c45f775f and hashed here; NOT_RUN: nothing executed; interface edits syntax-parsed only",
+ "source": {
+  "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+  "sha256_verified_here": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+  "blob_verified_here": "d07012d48d8543c342bffaa7a8ec67c6e69ccc9c",
+  "lines": 2337
+ },
+ "mapping": [
+  {
+   "interface": "admit_frozen_model(... restore=...)",
+   "source": "PointerCourseLearner.restore_checkpoint(cls, torch, framework, encoder, *, path, expected_sha256, expected_run_identity_digest, device, expected_learnable_names=None) @2144",
+   "status": "MATCH after fix: expected_learnable_names now passed from identity.learnable_names (was None; the learner's POINTER_CHECKPOINT_EXPECTED_NAMES guard was being skipped)"
+  },
+  {
+   "interface": "with rng_guard(): restore(...)",
+   "source": "restore_checkpoint sets torch/cuda/python global RNG from the checkpoint and verifies TYPED_CHECKPOINT_RNG_VALUES (@2228-2236)",
+   "status": "FIXED: restore now runs inside the venue's RNG guard (was outside; only predict was guarded)"
+  },
+  {
+   "interface": "_CUDA_DEVICE check -> GPU_REQUIRED",
+   "source": "_require_cuda_device(torch, device) @1734, code TYPED_LEARNER_CUDA_REQUIRED, no CPU fallback",
+   "status": "MATCH (interface refuses earlier)"
+  },
+  {
+   "interface": "CHECKPOINT_PATH_INVALID + size + SHA-256 before load",
+   "source": "TYPED_CHECKPOINT_FILE_BOUND (is_file, not symlink, 0 < size <= 256 MiB) and TYPED_CHECKPOINT_SHA on the same bytes",
+   "status": "MATCH (interface checks first; the 256 MiB bound stays the learner's)"
+  },
+  {
+   "interface": "identity.run_identity_digest",
+   "source": "expected_run_identity_digest == metadata['run_identity_digest'] == digest(metadata['run_identity']) (TYPED_CHECKPOINT_RUN_IDENTITY)",
+   "status": "MATCH: the venue fills the identity from the checkpoint metadata JSON"
+  },
+  {
+   "interface": "post-restore cursor and model_revision checks",
+   "source": "restored.cursor = metadata['cursor']; restored.model_revision = metadata['model_revision'] (@2223-2224); TYPED_CHECKPOINT_CURSOR requires cursor == model_revision <= limits['max_updates']",
+   "status": "MATCH after fix: model_revision now checked too"
+  },
+  {
+   "interface": "FrozenModelHandle.predict(packet) -> learner.predict(packet, 8)",
+   "source": "predict(self, packet, depth) @1954: requires _pending is None, depth in (1,2,4,8) and depth == PREDICTION_DEPTH (= contract.DESIGN['prediction_depth'] @388); module.eval(); torch.no_grad(); returns result['prediction']",
+   "status": "MATCH: PREDICT_DEPTH 8 mirrors the design value Codex stated; a differing design refuses POINTER_PREDICTION_DEPTH fail-closed; the eval mode change lands on the separate clone"
+  },
+  {
+   "interface": "FORBIDDEN_HANDLE_ATTRIBUTES",
+   "source": "stage_batch @1964, train_sealed_batch @1999, export_checkpoint @2104 exist on the learner",
+   "status": "MATCH: refused through the handle; every other attribute (e.g. pass0_saturation) is AttributeError"
+  },
+  {
+   "interface": "framework_factory() once per admission",
+   "source": "docstring: framework must be freshly built, not preloaded (POINTER_CHECKPOINT_BLOCK_MISMATCH otherwise)",
+   "status": "MATCH by construction; not verifiable by the interface"
+  },
+  {
+   "interface": "execution_guard()",
+   "source": "restore imports ..teaching_cycle.gpu_adapter.execution_guard (relative import)",
+   "status": "NOTE: the venue must call the bound classmethod inside its package; the interface cannot supply it"
+  }
+ ],
+ "mismatches_found": 2,
+ "mismatches_fixed": 2,
+ "not_claimed": [
+  "prediction repair is NOT implemented: no native checked operation consumes a learned prediction",
+  "restore and predict remain GPU-dependent and unaccepted",
+  "no test executed in this packet"
+ ],
+ "next_aws_test_command": "HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=/opt/helm-si-output/pytest-temp --junitxml=/opt/helm-si-output/seed18-interfaces-junit.xml research/cas_closed_loop_1/test_seed18_interfaces.py",
+ "expected_if_collection_matches": {
+  "tests": 65,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "note": "65 = 58 static + 5 (learnable-name parametrization) + 1 (model_revision) + 1 (binding constants); collection in the admitted venue decides; symlink creation must be permitted in basetemp"
+ },
+ "module_sha256": "86865b40c88a040e9de29dc3fa01fa652080f0817fcdd1881a18341f171cf5be",
+ "test_file_sha256": "22f271e7ab5d3f2136ac10e035cb71cd5a3506b0e2e6c3f5241c7e3343991210"
+}

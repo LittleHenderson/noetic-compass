@@ -1,0 +1,1410 @@
+{
+ "schema": "cas.closed-loop.claude-acceptance-package/0.1",
+ "utc": "2026-09-27T13:03:34Z",
+ "packet": "A5 current joint-validation delivery (executed serially in the lead session; no worker)",
+ "status": "PREPARED_FOR_CODEX_RUNNER_NOT_EXECUTED_IN_ADMITTED_VENUE",
+ "claim_states": {
+  "EXECUTED_LOCALLY_PASSED": "ran in Claude's container on Python 3.11.15 with a retained junit record; engineering check, not acceptance",
+  "DECLARED_NOT_RUN": "test identity exists in source (AST) and was never executed by Claude",
+  "NOT_RUN_IN_ADMITTED_VENUE": "no AWS execution exists for this source"
+ },
+ "source_identities": {
+  "cas_source_commit": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+  "cas_branch": "claude/focused-mccarthy-uj45ul",
+  "cas_base_commit": "aa6006683d9e798c85667dc0d389a604b0e99053",
+  "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "si_source_commit": "d7808d59c13ea94c6ff35d2327a4acb8535daabc",
+  "si_branch": "codex/helm-si-three-lead-20260927",
+  "si_successor_check": "git fetch at 2026-09-27 ~13:00Z: d7808d59 is the branch tip; no successor commit exists; JOINT_ACCEPTANCE_PLAN.json at d7808d59 already names corrected_cas_source 7bbf1e0f",
+  "public_manifest_sha256": "e59767f232c0c6eec3918ab653ffd6c564d25506fd45663307527ceab56d6d6c",
+  "python_bytes_unchanged_since_last_execution": {
+   "from": "0cb7b48d790cbc8e8ff69a258d9255c7967f1a59",
+   "to": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+   "git_diff_stat_py": "(empty: no .py file changed)"
+  },
+  "file_sha256_at_head": {
+   "native_step_adapter.py": "ab1c437a0485eef9bb4268a992bc4c4719565755fc4891d9be75db6d6ed6af38",
+   "test_native_step_adapter.py": "41f04d470abbafc09b426522c5215cf91be5bd8ef5be102541f3072bd6aecfb2",
+   "test_closed_loop.py": "5c73bfe03eb5100f2ea52009ac91ff676fee9d1ba4b8407ef41168eda384e9b1",
+   "test_artifacts.py": "2a98f3db8eec7b2cbb95201946660b223549e0dd26a65ae01806bd6835d5ef09",
+   "aws_validation/test_launch_transport.py": "de6c756de8f550e8b1155c80d6de39eb9f97a4149543c595027bdada4f74c37f",
+   "test_return_addresses.py": "64685d38a4dbb71617d29f4c28daa42e4e1185809144d54c4d1d9b858374b512",
+   "RETURN_ADDRESS_TEST_MAP.json": "d4c942228527bb48bbb2fc3fbbe0cd6b73417aa76f0e67726d601658eef859cb",
+   "control.py": "2586109dcdf6be45a448e58dbdcffa4f11b6a552cec94b64ccce3a1794ca5d7e",
+   "run_closed_loop.py": "f6b83d7a38a9014516c645a0ea03e21b8310ce8e1230ea635074b8a4554d1390",
+   "conftest.py": "ee015df905eb6fa2801f75b2deded766872979a0235ea4d826f70dd4310c4d5a",
+   "SOURCE_BINDINGS.json": "b49bf5f450c1a39a94625e6e1d635d542234dc22753b377702900b0ca1ce3156",
+   "aws_validation/worker.py": "5250cd83e3315486c171ded0b3cd94c158901bd0f8af6101258133bbb034d92d",
+   "aws_validation/launch.py": "5a165d06ace487c8bbc35b4ab579dfd40e0a6b789782d15c543d2ab779394913",
+   "aws_validation/package.py": "1afb2644c7b7c1cd7165ad34ad45a172b276e821630bd762917205ac41f0d302"
+  }
+ },
+ "declared_counts": {
+  "cas_by_file": {
+   "test_native_step_adapter.py": 31,
+   "test_closed_loop.py": 22,
+   "test_artifacts.py": 5,
+   "aws_validation/test_launch_transport.py": 4,
+   "test_return_addresses.py": 11
+  },
+  "cas_total": 73,
+  "si_by_file_functions": {
+   "test_contracts.py": 14,
+   "test_episode.py": 7
+  },
+  "si_declared_cases_by_ast_per_codex_plan": 69,
+  "joint_declared_cases_by_ast_per_codex_plan": 142
+ },
+ "owner_acceptance_items": {
+  "1_actual_work_allocation_and_execution_measurement": [
+   "test_corrupt_existing_event_is_refused_even_for_zero_grant",
+   "test_disabled_actuator_retains_allocation_without_execution",
+   "test_empty_work_join_still_refuses_a_corrupt_state",
+   "test_foreign_episode_refused_before_work",
+   "test_foreign_thread_entry_inside_window_never_publishes_a_count",
+   "test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+   "test_internal_reentry_that_clears_meter_never_publishes_a_count",
+   "test_invalid_grant_never_reaches_executor",
+   "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+   "test_receipt_content_digest_detects_alteration",
+   "test_rehashed_receipt_still_refuses_execution_above_allocation",
+   "test_repeated_dispatch_wrapper_refused_before_native_entry",
+   "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+   "test_substituted_callable_is_refused_before_entry",
+   "test_unexecuted_window_has_zero_measured_primitive_work",
+   "test_work_join_refuses_duplicate_and_changed_event",
+   "test_work_join_refuses_records_removed_from_trace_bound_state",
+   "test_wrong_method_is_rejected_and_failed_work_remains_charged",
+   "test_zero_grant_does_not_make_native_call"
+  ],
+  "2_exact_nested_caller_return": [
+   "test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+   "test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+   "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+   "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+   "test_row2_wrong_address_cannot_select_another_continuation",
+   "test_row6_equal_or_missing_profiles_never_merge_callers",
+   "test_runtime_location_is_detached_and_has_no_coordinate_return_authority"
+  ],
+  "3_snapshot_bound_rpa_addresses": [
+   "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+   "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+   "test_row2_wrong_address_cannot_select_another_continuation",
+   "test_row3_repeated_resolution_dispatches_nothing",
+   "test_row4_address_chain_survives_fresh_process_recovery",
+   "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+   "test_row6_equal_or_missing_profiles_never_merge_callers",
+   "test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+   "test_row8_one_suspension_event_per_address",
+   "test_row9_tampered_view_or_journal_cannot_resolve",
+   "test_runtime_location_atlas_binding_is_the_address_chain_or_null"
+  ],
+  "4a_control_wrong_method": [
+   "test_foreign_loaded_control_dependency_is_not_admitted",
+   "test_foreign_loaded_dependency_is_refused",
+   "test_substituted_callable_is_refused_before_entry",
+   "test_supported_boards_static_check_and_operation_mask",
+   "test_wrong_method_is_rejected_and_failed_work_remains_charged",
+   "test_wrong_problem_admission_is_refused"
+  ],
+  "4b_control_insufficient_budget": [
+   "test_bounded_negative_controls_cannot_commit",
+   "test_invalid_grant_never_reaches_executor",
+   "test_rehashed_receipt_still_refuses_execution_above_allocation",
+   "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger"
+  ],
+  "4c_control_incorrect_result": [
+   "test_corrupt_post_fault_state_is_not_published_as_verified",
+   "test_exact_pinned_ohm_calculation",
+   "test_invalid_ohm_inputs_refused",
+   "test_native_error_keeps_observed_events_and_never_reports_success",
+   "test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+   "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+   "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+   "test_simulated_profile_is_not_admitted"
+  ],
+  "4d_control_disabled_actuator": [
+   "test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+   "test_disabled_actuator_retains_allocation_without_execution",
+   "test_unexecuted_window_has_zero_measured_primitive_work"
+  ],
+  "5_saved_evidence_replay_fresh_process_reload": [
+   "test_ambiguous_git_reference_is_refused",
+   "test_changed_artifact_bytes_are_refused",
+   "test_changed_historical_producer_snapshot_is_refused",
+   "test_download_failure_prints_safe_json_before_failed_emergency_upload",
+   "test_fresh_process_replays_retained_journal",
+   "test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+   "test_non_s3_clients_keep_normal_service_endpoints",
+   "test_retained_exact_evidence_and_producer_bytes",
+   "test_row3_repeated_resolution_dispatches_nothing",
+   "test_row4_address_chain_survives_fresh_process_recovery",
+   "test_row9_tampered_view_or_journal_cannot_resolve",
+   "test_safe_error_record_drops_messages_urls_and_unknown_codes",
+   "test_truncated_observation_refused_before_native_replay"
+  ]
+ },
+ "cas_cases": [
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_disabled_actuator_retains_allocation_without_execution",
+   "function": "test_disabled_actuator_retains_allocation_without_execution",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4d_control_disabled_actuator"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_zero_grant_does_not_make_native_call",
+   "function": "test_zero_grant_does_not_make_native_call",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+   "function": "test_granted_step_observes_native_events_and_stale_reuse_is_refused",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[True]",
+   "function": "test_invalid_grant_never_reaches_executor",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[-1]",
+   "function": "test_invalid_grant_never_reaches_executor",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[2]",
+   "function": "test_invalid_grant_never_reaches_executor",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_invalid_grant_never_reaches_executor[1.0]",
+   "function": "test_invalid_grant_never_reaches_executor",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_episode_refused_before_work",
+   "function": "test_foreign_episode_refused_before_work",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_native_error_keeps_observed_events_and_never_reports_success",
+   "function": "test_native_error_keeps_observed_events_and_never_reports_success",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+   "function": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+   "function": "test_all_eleven_identity_fields_and_suspended_snapshot_are_retained",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+   "function": "test_no_frame_has_no_return_identity_before_during_and_after_root_call",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[propagate]",
+   "function": "test_repeated_dispatch_wrapper_refused_before_native_entry",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[swallow]",
+   "function": "test_repeated_dispatch_wrapper_refused_before_native_entry",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_repeated_dispatch_wrapper_refused_before_native_entry[catch_then_third_call]",
+   "function": "test_repeated_dispatch_wrapper_refused_before_native_entry",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_internal_reentry_that_clears_meter_never_publishes_a_count",
+   "function": "test_internal_reentry_that_clears_meter_never_publishes_a_count",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_rehashed_receipt_still_refuses_execution_above_allocation",
+   "function": "test_rehashed_receipt_still_refuses_execution_above_allocation",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_substituted_callable_is_refused_before_entry",
+   "function": "test_substituted_callable_is_refused_before_entry",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_receipt_content_digest_detects_alteration",
+   "function": "test_receipt_content_digest_detects_alteration",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_post_fault_state_is_not_published_as_verified",
+   "function": "test_corrupt_post_fault_state_is_not_published_as_verified",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_simulated_profile_is_not_admitted",
+   "function": "test_simulated_profile_is_not_admitted",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_wrong_problem_admission_is_refused",
+   "function": "test_wrong_problem_admission_is_refused",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_loaded_dependency_is_refused",
+   "function": "test_foreign_loaded_dependency_is_refused",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_corrupt_existing_event_is_refused_even_for_zero_grant",
+   "function": "test_corrupt_existing_event_is_refused_even_for_zero_grant",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[False-1]",
+   "function": "test_unexecuted_window_has_zero_measured_primitive_work",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4d_control_disabled_actuator"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_unexecuted_window_has_zero_measured_primitive_work[True-0]",
+   "function": "test_unexecuted_window_has_zero_measured_primitive_work",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4d_control_disabled_actuator"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_duplicate_and_changed_event",
+   "function": "test_work_join_refuses_duplicate_and_changed_event",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[False]",
+   "function": "test_work_join_refuses_records_removed_from_trace_bound_state",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_work_join_refuses_records_removed_from_trace_bound_state[True]",
+   "function": "test_work_join_refuses_records_removed_from_trace_bound_state",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_empty_work_join_still_refuses_a_corrupt_state",
+   "function": "test_empty_work_join_still_refuses_a_corrupt_state",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_native_step_adapter::test_foreign_thread_entry_inside_window_never_publishes_a_count",
+   "function": "test_foreign_thread_entry_inside_window_never_publishes_a_count",
+   "file": "test_native_step_adapter.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-4-3]",
+   "function": "test_exact_pinned_ohm_calculation",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_exact_pinned_ohm_calculation[12-6-2]",
+   "function": "test_exact_pinned_ohm_calculation",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[1-0]",
+   "function": "test_invalid_ohm_inputs_refused",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[NaN-1]",
+   "function": "test_invalid_ohm_inputs_refused",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[Infinity-1]",
+   "function": "test_invalid_ohm_inputs_refused",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_invalid_ohm_inputs_refused[-1-1]",
+   "function": "test_invalid_ohm_inputs_refused",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+   "function": "test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[compiler_ohm]",
+   "function": "test_foreign_loaded_control_dependency_is_not_admitted",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_foreign_loaded_control_dependency_is_not_admitted[pcba_check]",
+   "function": "test_foreign_loaded_control_dependency_is_not_admitted",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+   "function": "test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4d_control_disabled_actuator"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[parent_transform]",
+   "function": "test_supported_boards_static_check_and_operation_mask",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[prerequisite_acquisition]",
+   "function": "test_supported_boards_static_check_and_operation_mask",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_supported_boards_static_check_and_operation_mask[verification_commit]",
+   "function": "test_supported_boards_static_check_and_operation_mask",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options0]",
+   "function": "test_bounded_negative_controls_cannot_commit",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options1]",
+   "function": "test_bounded_negative_controls_cannot_commit",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options2]",
+   "function": "test_bounded_negative_controls_cannot_commit",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_bounded_negative_controls_cannot_commit[options3]",
+   "function": "test_bounded_negative_controls_cannot_commit",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_wrong_method_is_rejected_and_failed_work_remains_charged",
+   "function": "test_wrong_method_is_rejected_and_failed_work_remains_charged",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "4a_control_wrong_method"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+   "function": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "2_exact_nested_caller_return"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_fresh_process_replays_retained_journal",
+   "function": "test_fresh_process_replays_retained_journal",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_truncated_observation_refused_before_native_replay",
+   "function": "test_truncated_observation_refused_before_native_replay",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_closed_loop::test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+   "function": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation",
+   "file": "test_closed_loop.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_artifacts::test_retained_exact_evidence_and_producer_bytes",
+   "function": "test_retained_exact_evidence_and_producer_bytes",
+   "file": "test_artifacts.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_artifacts::test_changed_artifact_bytes_are_refused",
+   "function": "test_changed_artifact_bytes_are_refused",
+   "file": "test_artifacts.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_artifacts::test_changed_historical_producer_snapshot_is_refused",
+   "function": "test_changed_historical_producer_snapshot_is_refused",
+   "file": "test_artifacts.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[--output=elsewhere]",
+   "function": "test_ambiguous_git_reference_is_refused",
+   "file": "test_artifacts.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_artifacts::test_ambiguous_git_reference_is_refused[HEAD~1:secret]",
+   "function": "test_ambiguous_git_reference_is_refused",
+   "file": "test_artifacts.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_download_failure_prints_safe_json_before_failed_emergency_upload",
+   "function": "test_download_failure_prints_safe_json_before_failed_emergency_upload",
+   "file": "aws_validation/test_launch_transport.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+   "function": "test_get_and_emergency_put_presign_the_explicit_regional_endpoint",
+   "file": "aws_validation/test_launch_transport.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_non_s3_clients_keep_normal_service_endpoints",
+   "function": "test_non_s3_clients_keep_normal_service_endpoints",
+   "file": "aws_validation/test_launch_transport.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests::test_safe_error_record_drops_messages_urls_and_unknown_codes",
+   "function": "test_safe_error_record_drops_messages_urls_and_unknown_codes",
+   "file": "aws_validation/test_launch_transport.py",
+   "last_executed": {
+    "run": "run_20260927T062546Z",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+   "function": "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return",
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row2_wrong_address_cannot_select_another_continuation",
+   "function": "test_row2_wrong_address_cannot_select_another_continuation",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return",
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row3_repeated_resolution_dispatches_nothing",
+   "function": "test_row3_repeated_resolution_dispatches_nothing",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses",
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row4_address_chain_survives_fresh_process_recovery",
+   "function": "test_row4_address_chain_survives_fresh_process_recovery",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses",
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+   "function": "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "1_actual_work_allocation_and_execution_measurement",
+    "3_snapshot_bound_rpa_addresses",
+    "4b_control_insufficient_budget"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row6_equal_or_missing_profiles_never_merge_callers",
+   "function": "test_row6_equal_or_missing_profiles_never_merge_callers",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "2_exact_nested_caller_return",
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+   "function": "test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row8_one_suspension_event_per_address",
+   "function": "test_row8_one_suspension_event_per_address",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row9_tampered_view_or_journal_cannot_resolve",
+   "function": "test_row9_tampered_view_or_journal_cannot_resolve",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses",
+    "5_saved_evidence_replay_fresh_process_reload"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+   "function": "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses",
+    "4c_control_incorrect_result"
+   ]
+  },
+  {
+   "node_id": "research.cas_closed_loop_1.test_return_addresses::test_runtime_location_atlas_binding_is_the_address_chain_or_null",
+   "function": "test_runtime_location_atlas_binding_is_the_address_chain_or_null",
+   "file": "test_return_addresses.py",
+   "last_executed": {
+    "run": "packet-2 lane run (test_return_addresses_junit_packet2.xml)",
+    "status": "PASSED",
+    "python": "3.11.15",
+    "venue": "Claude cloud container (not the admitted AWS venue)",
+    "acceptance": false
+   },
+   "owner_acceptance_items": [
+    "3_snapshot_bound_rpa_addresses"
+   ]
+  }
+ ],
+ "cas_cases_unmapped_to_owner_items": [],
+ "si_functions_declared_not_run_by_claude": {
+  "test_contracts.py": [
+   "test_all_caller_records_agree_but_foreign_parent_is_refused",
+   "test_no_model_fixture_refuses_every_non_null_checkpoint",
+   "test_wrong_schema_refused_on_deserialization",
+   "test_observation_provenance_validated_at_every_boundary",
+   "test_plausible_fabricated_observation_cannot_be_self_authenticated",
+   "test_observation_unknown_fields_refused_without_reading_any_protected_value",
+   "test_proposal_text_channels_are_finite_identifiers",
+   "test_configuration_cannot_expand_authority_or_execute_code",
+   "test_unisolated_edit_modes_are_unavailable",
+   "test_unsupported_self_description_is_refused",
+   "test_fabricated_baseline_config_refused_even_when_disabled",
+   "test_build_order_and_candidate_identity_are_bound_to_host_ledger",
+   "test_no_change_and_h2_preserve_required_components",
+   "test_changed_external_policy_cannot_be_accepted_by_old_anchor"
+  ],
+  "test_episode.py": [
+   "test_actual_h1_h2_or_no_change_is_recorded_and_persisted",
+   "test_witness_reloads_in_a_fresh_process_with_same_host_admission",
+   "test_disabled_shadow_preserve_admitted_parent_and_record_measured_overhead",
+   "test_replay_rejects_changed_public_copy_even_without_changing_semantics",
+   "test_self_recomputed_episode_digest_does_not_authenticate_new_disposition",
+   "test_fabricated_summary_and_inventory_cannot_replace_host_run",
+   "test_failure_preserves_native_work_and_has_no_retry"
+  ]
+ },
+ "executed_evidence": {
+  "frozen_four_files": {
+   "run": "run_20260927T062546Z",
+   "collected": 62,
+   "passed": 62,
+   "failed": 0,
+   "errors": 0,
+   "skipped": 0,
+   "junit_sha256": "2f90bfdb37b8dbcb06cada6bb97088e21fdbd3f5aa21d1a44ab6d594f2e5f7c6",
+   "retained_replay": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+   "witness": {
+    "output": "3",
+    "host_entries": 12,
+    "native_events": 18
+   },
+   "fresh_process_replay": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT"
+  },
+  "lane_addendum": {
+   "junit": "test_return_addresses_junit_packet2.xml",
+   "collected": 13,
+   "passed": 13,
+   "junit_sha256": "63d6b3d195e9cbbaefc4f97731af0a1341c72b0ad9a105632576578cca05604f",
+   "note": "11 test_return_addresses cases + 1 pointer case + 1 corrected probe"
+  },
+  "boundary": "All executions predate Codex's 06:21Z correction or were disclosed (comment 5853444237); none is acceptance. No execution has occurred since 7bbf1e0f, and none is authorized under lease CAS-CORRECTION-20260927-01."
+ },
+ "next_acceptance_command": {
+  "route": "Codex's established runner only. Claude launches nothing.",
+  "joint_command_verbatim_from_JOINT_ACCEPTANCE_PLAN_json_at_d7808d59": "HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=/opt/helm-si-output/pytest-temp --junitxml=/opt/helm-si-output/joint-junit.xml research/cas_closed_loop_1/test_native_step_adapter.py research/cas_closed_loop_1/test_closed_loop.py research/cas_closed_loop_1/test_artifacts.py research/cas_closed_loop_1/aws_validation/test_launch_transport.py research/cas_closed_loop_1/test_return_addresses.py research/helm_self_improvement/test_contracts.py research/helm_self_improvement/test_episode.py",
+  "expected_if_collection_matches_declaration": {
+   "tests": 142,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "cas_only_frozen_protocol_alternative": {
+   "freeze": "python research/cas_closed_loop_1/aws_validation/package.py --freeze --wheelhouse <dir> --source 7bbf1e0f7bae635126c05b3203cca706ea8654dc --expected-tests 62 --authorization-file <owner file> --authorization-sha256 <sha>",
+   "launch": "python research/cas_closed_loop_1/aws_validation/launch.py --execute --job-directory <job dir> --freeze-sha256 <freeze sha>",
+   "worker_gate": "worker.py runs the four hardcoded files and requires tests==expected_tests, failures==errors==skipped==0, then retained replay (bundle eae7eb1b\u2026), witness (output 3, 12 host entries, 18 native events) and fresh-process replay"
+  },
+  "required_dependencies_per_codex_plan": {
+   "python": "3.12 (record exact patch)",
+   "pytest": "9.0.2",
+   "pydantic": "2.12.5",
+   "pydantic_core": "2.41.5",
+   "boto3": "1.43.87",
+   "botocore": "1.43.87"
+  }
+ },
+ "dependencies_on_codex": [
+  {
+   "id": "D1",
+   "item": "Re-cut freeze at 7bbf1e0f (or a joint freeze schema) declaring the collected count; decide whether test_return_addresses.py joins the frozen four files (worker.py focused_tests is hardcoded to the four files; the joint command lists seven files)."
+  },
+  {
+   "id": "D2",
+   "item": "Update the frozen concurrency identity before any launch: launch.py lines 103-108 and package.py lines 213-216 permit only instance i-0adf52b7fa801e08b / job cas-meta2-tpntr-20260925151836-b981625f-m-20260918 (the 2026-09-25 seed-18 job). The seed-19 continuation runs on a different instance, so the global active-instance check (launch.py 217-221) raises UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK unless the currently permitted instance is re-declared. Deterministic from the code; not executed."
+  },
+  {
+   "id": "D3",
+   "item": "Owner-signed execution authorization and cost admission (execute_authorized is false at d7808d59; the prior $1.00 CPU proposal was never executed; never freeze fab6734e\u2026)."
+  },
+  {
+   "id": "D4",
+   "item": "SI-1 and SI-2 (minor, Codex files) remain open at d7808d59; not blockers for collection, but the disabled-mode candidate-id label is unverified until fixed."
+  }
+ ],
+ "smallest_remaining_concrete_failure": "None known in the CAS source at 7bbf1e0f: the last executed runs on identical .py bytes passed 62/62 and 13/13. The concrete gap is venue, not code: the 142-case joint suite has never been collected or executed in the admitted AWS environment, and the frozen launcher would block on the stale concurrency identity (D2) if launched unchanged.",
+ "not_on_acceptance_path_but_unexecuted": "claude_lead_20260927/run_local_protocol.py after the packet-3 --expected-tests change has not been executed (no run is authorized under the lease).",
+ "claim_boundary": "Not CAS_AWS_ENGINEERING_VALIDATED. RETAINED_RESEARCH_ONLY, not PROMOTED. $0 spent by Claude; no cloud, model or worker call; no HELM or Q4 file touched; CASalescence parked.",
+ "mapping_note": "Board static-check/operation-mask cases are counted under the wrong-method control (an operation outside the mask is refused). Launcher transport cases are counted under saved evidence (evidence upload transport and safe error records); they prove transport construction offline, not AWS transfer.",
+ "joint_execution_reported_by_codex": {
+  "claim_state": "REPORTED_BY_CODEX_ON_PR_NOT_VERIFIED_BY_CLAUDE",
+  "source_of_report": "PR #245 comment 5856848576 (2026-09-27T14:44:00Z)",
+  "reported": {
+   "source_commit": "49d3e23c6e9e8e108df546fbd540d3645494f886",
+   "job": "helm-joint-20260927-49d3e23-a1",
+   "instance": "i-08dd58f77e2af1ae6",
+   "files": 7,
+   "tests_passed": 144,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0,
+   "witness": "RETAINED_RESEARCH_ONLY",
+   "fresh_process_reload": "RESEARCH_EPISODE_RELOADED with EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT (18 events)",
+   "worker_elapsed_seconds": 564.590135,
+   "archive_sha256": "17f49cdf1ae4cced5e23b0e25abbdd37f87cbddb209c1c2da2221b5a146210ba",
+   "archive_bytes": 9006951,
+   "model_calls": 0,
+   "checkpoint": null,
+   "cas_engineering_reservation_usd": "1",
+   "actual_bill": "unavailable",
+   "receipts_path_as_named": "records/helm_continuation_tracks_20260927/joint_execution_49d3e23/public_receipts (+ INDEPENDENT_VERIFICATION.json)",
+   "review": "DeepSeek review pending, not claimed passed"
+  },
+  "verification_attempted_here_2026-09-27T14:50Z": "git fetch of 49d3e23c succeeded as an unreferenced object; no origin branch contains it; the named receipts directory is not in that commit's tree; no junit or verification file reachable from this repository, so no artifact path can be cited",
+  "consequence_for_this_package": "Declared-count note: Codex's plan and receipt say 144 for the seven files versus this package's 142 by AST (73 CAS + 69 SI at d7808d59); the difference lies outside Claude's files at source 49d3e23 and is Codex's to reconcile. Status of the joint suite in this record: executed per Codex's report; not verified from any pushed artifact; not acceptance of learned-prediction CAS repair or any comparative benefit (Codex's own boundary).",
+  "artifact_verified_here_2026-09-27T15:05Z": {
+   "claim_state": "REAL_ARTIFACT_IN_GIT: junit read from the pushed commit and hashed here; the run itself was Codex's; not acceptance of learned-prediction CAS repair",
+   "commit": "5c81654a2796fba0b0d07f615ec0af18d0f11136",
+   "branch": "codex/helm-si-three-lead-20260927",
+   "path": "research/helm_parallel_capability_20260927/joint_public_receipts/joint-junit.xml",
+   "junit_sha256": "43ceb3d3b5725e7a979b73b993c35c17d7fda9f08a841f8ea7e3e8222487e37a",
+   "totals": {
+    "tests": 144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+   },
+   "declared_split_per_codex": "CAS 73 + SI 71 (two tests added in test_episode.py)",
+   "other_receipts_in_same_directory": [
+    "admission.json",
+    "fresh_process_reload.json",
+    "independent_verification.json",
+    "joint_worker_public_projection.json"
+   ]
+  }
+ }
+}

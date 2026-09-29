@@ -1,0 +1,422 @@
+{
+  "schema": "cas.closed-loop.claude-local-protocol/0.1",
+  "wave": "A1",
+  "expected_tests_argument": 62,
+  "start_utc": "2026-09-27T06:18:30.201132+00:00",
+  "status": "PASS_LOCAL_PUBLIC_ENGINEERING_CHECK_ONLY",
+  "paid_job": false,
+  "model_invocations": 0,
+  "aws_calls": 0,
+  "codex_files_edited": 0,
+  "commands": [
+    {
+      "name": "git_head",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "start_utc": "2026-09-27T06:18:30.201197+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.205213+00:00",
+      "stdout_sha256": "8f1d08b3deb6ca75c5923777263340c63c4d3e5959d4564886350db3a7d94380"
+    },
+    {
+      "name": "git_branch",
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "start_utc": "2026-09-27T06:18:30.205554+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.209612+00:00",
+      "stdout_sha256": "46ef180f584b3238e19e400ae72d4a1fb4648e8d7ed01a331b599eca64478aa7"
+    },
+    {
+      "name": "git_status",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "start_utc": "2026-09-27T06:18:30.210576+00:00",
+      "seconds": 0.017,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.227688+00:00",
+      "stdout_sha256": "34394814da01fc3fc76bf3a52679caf44e97657f4975873e58b6ac540b882729"
+    },
+    {
+      "name": "git_version",
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "start_utc": "2026-09-27T06:18:30.229473+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.233430+00:00",
+      "stdout_sha256": "25f3602b5caaf92437be1e76b53698e8d73f14a6c71c2e91c8d5875f923ab29f"
+    },
+    {
+      "name": "pin_pytest",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pytest; print(pytest.__version__)"
+      ],
+      "start_utc": "2026-09-27T06:18:30.233712+00:00",
+      "seconds": 0.164,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.398349+00:00",
+      "stdout_sha256": "cb59c54a0c419202b393c39beebcdbef094e480bdea5c82290050c265a1f7508"
+    },
+    {
+      "name": "pin_pydantic",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pydantic; print(pydantic.__version__)"
+      ],
+      "start_utc": "2026-09-27T06:18:30.398833+00:00",
+      "seconds": 0.114,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.513318+00:00",
+      "stdout_sha256": "927b51cf165a5c12be3de8a0116ed5e8ae74f9020e2607ccc32060b7d6b89ae3"
+    },
+    {
+      "name": "pin_pydantic_core",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-c",
+        "import pydantic_core; print(pydantic_core.__version__)"
+      ],
+      "start_utc": "2026-09-27T06:18:30.513845+00:00",
+      "seconds": 0.064,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.578444+00:00",
+      "stdout_sha256": "7fbf8cb7ef3f8a8af8a9d274021400502157f56e4414582989d34077b8f87f06"
+    },
+    {
+      "name": "runtime_commit_exists",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "8182ad52b4468f18f140837dffee0e7debcfe786"
+      ],
+      "start_utc": "2026-09-27T06:18:30.579000+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.583286+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "historical_object_348638c9",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "348638c9d9b6069eebab7853db6b98bfef453092"
+      ],
+      "start_utc": "2026-09-27T06:18:30.583728+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.587983+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "historical_object_2636bbb6",
+      "argv": [
+        "git",
+        "cat-file",
+        "-e",
+        "2636bbb6e0f41a37ba2c20df08cdf51185718617"
+      ],
+      "start_utc": "2026-09-27T06:18:30.588391+00:00",
+      "seconds": 0.004,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.592552+00:00",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "committed_artifact_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/check_artifacts.py",
+        "--git-ref",
+        "4060126ca30a80dab0fc5b7396aa15f516f0a1b3"
+      ],
+      "start_utc": "2026-09-27T06:18:30.593023+00:00",
+      "seconds": 0.114,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:30.707859+00:00",
+      "stdout_sha256": "8f2b9ce46a6f203735e528ca651791f2dec9944838ad005b82c532bb1d5d11e0"
+    },
+    {
+      "name": "runtime_bootstrap",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/bootstrap_runtime.py"
+      ],
+      "start_utc": "2026-09-27T06:18:30.708298+00:00",
+      "seconds": 0.315,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:31.023182+00:00",
+      "stdout_sha256": "b26c5c04916f42fc0552946472a4a202ebc1167cabd9dd4c7c75ae1b9122164e"
+    },
+    {
+      "name": "source_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/run_closed_loop.py",
+        "check"
+      ],
+      "start_utc": "2026-09-27T06:18:31.023723+00:00",
+      "seconds": 0.416,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:31.439925+00:00",
+      "stdout_sha256": "c6ca5405058987d067e3c3d7670f6af6be426ad3b2fc8ba7e196bbf0b4802ce5"
+    },
+    {
+      "name": "artifact_check",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/check_artifacts.py"
+      ],
+      "start_utc": "2026-09-27T06:18:31.440443+00:00",
+      "seconds": 0.465,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:18:31.906146+00:00",
+      "stdout_sha256": "898e46f835ada295059542b9625b4ec2a58909a5ea162b280fa7c63e05ef7e21"
+    },
+    {
+      "name": "focused_tests",
+      "argv": [
+        "/usr/local/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml=/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/pytest.xml",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_native_step_adapter.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_closed_loop.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/test_artifacts.py",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/aws_validation/test_launch_transport.py"
+      ],
+      "start_utc": "2026-09-27T06:18:31.906691+00:00",
+      "seconds": 118.449,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:20:30.355809+00:00",
+      "stdout_sha256": "7b5bffa68fd277069c752fb0d687d67f5e812527a4b2ee5067799fd0b2f40fe4"
+    },
+    {
+      "name": "retained_replay",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/run_closed_loop.py",
+        "replay",
+        "--directory",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/evidence",
+        "--expected-bundle-digest",
+        "eae7eb1bedb67af537187d409c89fca9e55a1580d52bf14be9b01e560a198d2c"
+      ],
+      "start_utc": "2026-09-27T06:20:30.357006+00:00",
+      "seconds": 9.294,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:20:39.650998+00:00",
+      "stdout_sha256": "e51f2c082d5d61cbb9267d36d140ecfa7b640b8fca5b3702fabb86d46a9ba7c9"
+    },
+    {
+      "name": "witness",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/run_closed_loop.py",
+        "demo",
+        "--output",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/witness"
+      ],
+      "start_utc": "2026-09-27T06:20:39.651863+00:00",
+      "seconds": 33.59,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:21:13.242504+00:00",
+      "stdout_sha256": "f4fa8a50f2d46ec04d0c77ec26e7d6b3c9492dd44d5ddabbdb9a47526962017f"
+    },
+    {
+      "name": "fresh_process_replay",
+      "argv": [
+        "/usr/local/bin/python3",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/run_closed_loop.py",
+        "replay",
+        "--directory",
+        "/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/witness",
+        "--expected-bundle-digest",
+        "c753a1ea203a38aa69e786e7f71e94b4c7556c3844e3279b7192cdabc014d89c"
+      ],
+      "start_utc": "2026-09-27T06:21:13.243322+00:00",
+      "seconds": 9.66,
+      "returncode": 0,
+      "end_utc": "2026-09-27T06:21:22.903210+00:00",
+      "stdout_sha256": "e51f2c082d5d61cbb9267d36d140ecfa7b640b8fca5b3702fabb86d46a9ba7c9"
+    }
+  ],
+  "claim_boundary": "LOCAL public CPU engineering check of the amended source only. Not CAS_AWS_ENGINEERING_VALIDATED. Does not replace the Codex-owned Lane A AWS job, its instance Git preflight, or its pinned Python 3.12 wheelhouse. No learned-model, comparative-advantage or production claim.",
+  "source_commit": "4060126ca30a80dab0fc5b7396aa15f516f0a1b3",
+  "git_branch": "claude/focused-mccarthy-uj45ul",
+  "git_status_porcelain": [
+    " M CHANGELOG.md",
+    " M research/cas_closed_loop_1/CONTRACTS.json",
+    " M research/cas_closed_loop_1/DECISIONS.md",
+    " M research/cas_closed_loop_1/HARNESS_SPEC.md",
+    " M research/cas_closed_loop_1/claude_lead_20260927/run_local_protocol.py",
+    " M research/cas_closed_loop_1/native_step_adapter.py",
+    " M research/cas_closed_loop_1/test_native_step_adapter.py",
+    "?? research/cas_closed_loop_1/claude_lead_20260927/run_20260927T061830Z/"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 09:26:23) [GCC 13.3.0]",
+    "executable": "/usr/local/bin/python3",
+    "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+    "git": "git version 2.43.0",
+    "pins_observed": {
+      "pytest": "9.0.2",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5"
+    },
+    "pins_declared_by_aws_package": {
+      "python": "3.12 (AWS worker requirement; not satisfied locally)",
+      "pytest": "9.0.2",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5"
+    }
+  },
+  "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "historical_objects_in_this_clone": {
+    "348638c9d9b6069eebab7853db6b98bfef453092": "PRESENT_ON_ORIGIN",
+    "2636bbb6e0f41a37ba2c20df08cdf51185718617": "PRESENT_ON_ORIGIN"
+  },
+  "runtime_bootstrap": {
+    "status": "MATERIALIZED_PINNED_PUBLIC_SOURCE",
+    "files": 108,
+    "runtime_commit": "8182ad52b4468f18f140837dffee0e7debcfe786"
+  },
+  "source_check": {
+    "status": "SOURCE_ADMITTED",
+    "source_manifest_digest": "8a049806015330674ed1cada8cdd6092069833bf28880ad07eedd311a0436d5d",
+    "profile_digest": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+    "problem_hash": "97aa1c884719ef1608b96b12aef12df9b7f570e1d692d561d89b7134db0726a7"
+  },
+  "artifact_check": {
+    "status": "EXACT_BYTES_VERIFIED",
+    "files": 13,
+    "git_ref": null,
+    "historical_producer_commit": "8f55cc3a462e438bcf706d7b64ddf9171d218039",
+    "boundary": "Retained evidence and its original producer bytes only; current source acceptance is separate."
+  },
+  "tests": {
+    "tests": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "expected_tests": 62,
+    "by_file": {
+      "research.cas_closed_loop_1.test_native_step_adapter": 31,
+      "research.cas_closed_loop_1.test_closed_loop": 22,
+      "research.cas_closed_loop_1.test_artifacts": 5,
+      "research.cas_closed_loop_1.aws_validation.test_launch_transport.LaunchTransportTests": 4
+    },
+    "seconds": 118.449
+  },
+  "retained_replay": {
+    "status": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+    "final_state_hash": "ccb3e99a3323c208fda0a6b634b4b024db44843bec90a77487513c5dcb409444",
+    "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+    "events": 18
+  },
+  "witness_expectations": {
+    "output": {
+      "expected": "3",
+      "observed": "3",
+      "match": true
+    },
+    "host_entries": {
+      "expected": 12,
+      "observed": 12,
+      "match": true
+    },
+    "native_events": {
+      "expected": 18,
+      "observed": 18,
+      "match": true
+    },
+    "replay_status": {
+      "expected": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+      "observed": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+      "match": true
+    }
+  },
+  "witness": {
+    "schema": "cas.closed-loop.demo-result/0.1",
+    "engineering_demo": "CHECKED",
+    "output": "3",
+    "effect_checked_by_original_substitution": true,
+    "native_events": 18,
+    "host_entries": 12,
+    "measured_native_work": {
+      "primitive_instructions": 19030,
+      "original_checks": 1693,
+      "linear_checks": 32
+    },
+    "complete_compute": null,
+    "unmeasured_records": [
+      "f6f83f5eaab8ead458b722e876ec6263c0a905ddbd1dc37cb65ea4971b993b70"
+    ],
+    "execution_and_observation_ns": 19548528349,
+    "replay": {
+      "status": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+      "final_state_hash": "ccb3e99a3323c208fda0a6b634b4b024db44843bec90a77487513c5dcb409444",
+      "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+      "events": 18
+    },
+    "model_prediction": "NOT_RUN",
+    "input_use": "ORIGINAL_PUBLIC_PARAMETERS_ONLY",
+    "task_benefit": "KNOWN_ENGINEERING_ACQUISITION_WITNESS_NOT_STATISTICAL_ESTIMATE",
+    "cas_specific_advantage": "UNMEASURED",
+    "ASOM": "UNASSESSED",
+    "new_paid_jobs": 0,
+    "bundle_digest": "c753a1ea203a38aa69e786e7f71e94b4c7556c3844e3279b7192cdabc014d89c"
+  },
+  "fresh_process_replay": {
+    "status": "EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+    "final_state_hash": "ccb3e99a3323c208fda0a6b634b4b024db44843bec90a77487513c5dcb409444",
+    "journal_digest": "6e6ecaf1e7c4e96067ca1b3871ba46b03a5cb1900b007f373debfccb67373771",
+    "events": 18
+  },
+  "witness_files": {
+    "atlas.json": {
+      "bytes": 1068385,
+      "sha256": "034884a8675938230c46a73329df3ae2e2b5a71719ab00ce715e6e626b3c9964"
+    },
+    "bundle.json": {
+      "bytes": 2147,
+      "sha256": "85c9ede10da4875f3ce7bcd931e4e076b1454ebed835470e61d40cb75295beba"
+    },
+    "events.jsonl": {
+      "bytes": 174603,
+      "sha256": "f75f6739befcfe518e06d61b3e5d5a842568f4099f93a2bb384f71b09eea2545"
+    },
+    "journal.json": {
+      "bytes": 1063475,
+      "sha256": "c260e7e4bfcf93aea5032876de498847a54d58ea302b990a908583971f11b254"
+    },
+    "result.json": {
+      "bytes": 1112,
+      "sha256": "8a50135c695a25423ff5323b26f371569810762bf1f5df368f009f62c3c35968"
+    }
+  },
+  "end_utc": "2026-09-27T06:21:22.906872+00:00",
+  "seconds": 172.706
+}

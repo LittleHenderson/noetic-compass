@@ -14,13 +14,16 @@ from pathlib import Path
 import re
 import inspect
 import sys
+import threading
 import time
 
-from cncm.canonical import digest
+from cncm.canonical import canonical_json, digest
 from cncm.compound_engine import CompoundMachine
+from cncm.compound_model import CompoundFrame
 from cncm.compound_profile import load_compound_profile
 from cncm.model import TerminalStatus
-from cncm.rpa_compound_adapter import _catalog, work_from_catalog
+from cncm.rpa_compound_adapter import VIEW_SCHEMA, _catalog, work_from_catalog
+from cncm.rpa_model import CONTEXT_SCHEMA
 
 
 PROFILE = "cas.closed-loop.native-stage/0.1"
@@ -33,6 +36,16 @@ RETURN_IDENTITY_FIELDS = (
     "immediate_parent_call", "frame_or_continuation", "saved_resume_stage",
     "inputs_digest", "source_profile", "bias_version_at_suspension",
 )
+ATLAS_ADDRESS_SCHEMA = "cas.closed-loop.atlas-address/0.1"
+ATLAS_BINDING_SCHEMA = "cas.closed-loop.atlas-binding/0.1"
+ATLAS_RESOLUTION_SCHEMA = "cas.closed-loop.atlas-address-resolution/0.1"
+ATLAS_ADDRESS_AUTHORITY = "READ_ONLY_ADDRESS_NOT_A_RESUME_TOKEN"
+ATLAS_ADDRESS_FIELDS = (
+    "schema", "run_id", "branch", "source_profile", "root_goal", "root_call_occurrence",
+    "suspension", "snapshot_node_id", "atlas_context", "waiting_state_node_id",
+    "waiting_atlas_context", "frame_node_id", "continuation", "profile_coordinates", "authority",
+)
+_PUSH_INTENTS = ("PUSH_COMPOUND_ACQUISITION", "PUSH_PRIMITIVE_ACQUISITION")
 
 
 class GrantRefused(ValueError):
@@ -55,6 +68,10 @@ class InvalidNativeObservation(RuntimeError):
         self.validation_error = reason
         self.native_error_type = type(native_fault).__name__ if native_fault else None
         self.measurement_status = "INVALID"
+
+
+class AtlasAddressRefused(ValueError):
+    """An atlas address cannot be built or resolved; the reason is the message."""
 
 
 def verify_receipt(receipt):
@@ -204,7 +221,7 @@ def runtime_location(machine):
     """
     _require_machine(machine)
     try:
-        machine.result()
+        observed = machine.result()
     except Exception as error:
         raise InvalidNativeObservation("EXISTING_NATIVE_HISTORY_INVALID", error) from error
     state = machine.state
@@ -236,6 +253,9 @@ def runtime_location(machine):
             "bias_version_at_suspension": suspension,
         }
     identities = [identity(frame) for frame in state.rpm_stack]
+    # Snapshot-bound atlas addresses for the same live frames, in the same order.
+    # None when no frame exists: no suspension means no address, as no return identity.
+    addresses = [_atlas_address(machine, observed, frame) for frame in state.rpm_stack]
     body = {
         "schema": "cas.closed-loop.runtime-location/0.1",
         "run_id": state.run_id,
@@ -250,11 +270,163 @@ def runtime_location(machine):
         "frame_identities": identities,
         "bias_version_basis": "SEALED_PRE_STATE_HASH_INCLUDES_BIAS_NOT_A_SEPARATE_BIAS_COUNTER",
         "current_native_budget": state.native_budget.to_dict(),
-        "atlas_binding": None,
+        "atlas_binding": ({"schema": ATLAS_BINDING_SCHEMA, "frames": addresses,
+                           "authority": ATLAS_ADDRESS_AUTHORITY} if addresses else None),
         "profile_coordinates": None,
         "authority": "READ_ONLY_LOCATION_NOT_A_RESUME_TOKEN",
     }
     return {**body, "location_digest": digest(body)}
+
+
+# --- Snapshot-bound atlas addresses (return-address addendum RPA-RETURN-1) ---
+# An exact address names episode, branch, source snapshot, root goal, call
+# occurrence and saved continuation, reusing existing runtime identifiers and
+# the atlas's snapshot-bound node scheme from the pinned rpa_compound_adapter:
+# 'state-<hash>' with AtlasContext(run, VIEW_SCHEMA, 'observation-<hash>',
+# 'logical-tick:<n>', n) and 'frame-<frame_id>' for live frames. The address
+# is a lookup key. It grants nothing: nothing here resumes, dispatches,
+# commits or advances; the existing CompoundCoordinator remains the writer.
+# Profile coordinates and view focus are never inputs. There is no
+# nearest-node fallback: exact match or a named refusal.
+
+
+def _atlas_require(condition, reason):
+    if not condition:
+        raise AtlasAddressRefused(reason)
+
+
+def _atlas_context(run_id, tick, state_hash):
+    return {"context_id": run_id, "model_version": VIEW_SCHEMA, "observation_id": "observation-" + state_hash,
+            "observation_time": "logical-tick:" + str(tick), "record_version": tick}
+
+
+def _suspension_event(observed, frame):
+    """The unique authorized push event whose proposed frame is exactly this frame."""
+    matches = []
+    for event in observed.trace:
+        for intent in event.proposed_intents:
+            if (intent.intent_id in event.authorized_intent_ids and intent.intent_type.value in _PUSH_INTENTS
+                    and intent.mutation_dict().get("frame") == frame.to_dict()):
+                matches.append(event)
+    _atlas_require(len(matches) == 1, "SUSPENSION_EVENT_NOT_UNIQUE")
+    event = matches[0]
+    _atlas_require(event.sealed and event.event_hash == event.computed_hash(), "SUSPENSION_EVENT_UNSEALED")
+    return event
+
+
+def _atlas_address(machine, observed, frame):
+    state = observed.final_state
+    _atlas_require(type(frame) is CompoundFrame and any(row == frame for row in state.rpm_stack), "FRAME_NOT_LIVE")
+    event = _suspension_event(observed, frame)
+    root = state.compound_call
+    body = {
+        "schema": ATLAS_ADDRESS_SCHEMA,
+        "run_id": state.run_id,
+        "branch": "branch-main",
+        "source_profile": machine.profile.profile_digest,
+        "root_goal": machine.problem.reasoning.goal_id,
+        "root_call_occurrence": root.call_id if root else None,
+        "suspension": {"event_id": event.event_id, "event_hash": event.event_hash,
+                       "logical_tick": event.logical_tick, "pre_state_hash": event.pre_state_hash,
+                       "post_state_hash": event.post_state_hash},
+        "snapshot_node_id": "state-" + event.pre_state_hash,
+        "atlas_context": _atlas_context(state.run_id, event.logical_tick - 1, event.pre_state_hash),
+        "waiting_state_node_id": "state-" + event.post_state_hash,
+        "waiting_atlas_context": _atlas_context(state.run_id, event.logical_tick, event.post_state_hash),
+        "frame_node_id": "frame-" + frame.frame_id,
+        "continuation": {**frame.to_dict(), "frame_digest": digest(frame.to_dict())},
+        "profile_coordinates": None,
+        "authority": ATLAS_ADDRESS_AUTHORITY,
+    }
+    return {**body, "address_digest": digest(body)}
+
+
+def _validated_result(machine):
+    _require_machine(machine)
+    try:
+        return machine.result()  # native validation of the whole chain and current state
+    except Exception as error:
+        raise AtlasAddressRefused("NATIVE_HISTORY_INVALID") from error
+
+
+def atlas_address_for_frame(machine, frame):
+    """Exact, snapshot-bound address of one live acquisition frame."""
+    return _atlas_address(machine, _validated_result(machine), frame)
+
+
+def atlas_address_chain(machine):
+    """Addresses for every live frame, innermost last, plus the root reference."""
+    observed = _validated_result(machine)
+    state = observed.final_state
+    root = state.compound_call
+    return {"schema": "cas.closed-loop.atlas-address-chain/0.1", "run_id": state.run_id,
+            "state_hash": state.state_hash, "logical_tick": state.logical_tick,
+            "root_goal": machine.problem.reasoning.goal_id,
+            "root_call_occurrence": root.call_id if root else None,
+            "frames": [_atlas_address(machine, observed, frame) for frame in state.rpm_stack],
+            "authority": ATLAS_ADDRESS_AUTHORITY}
+
+
+def check_atlas_address(address):
+    _atlas_require(type(address) is dict and set(address) == set(ATLAS_ADDRESS_FIELDS) | {"address_digest"}, "ADDRESS_FIELDS_INVALID")
+    _atlas_require(address["schema"] == ATLAS_ADDRESS_SCHEMA and address["authority"] == ATLAS_ADDRESS_AUTHORITY, "ADDRESS_SCHEMA_INVALID")
+    body = {key: value for key, value in address.items() if key != "address_digest"}
+    _atlas_require(address["address_digest"] == digest(body), "ADDRESS_DIGEST_MISMATCH")
+    suspension = address["suspension"]
+    _atlas_require(type(suspension) is dict and set(suspension) == {"event_id", "event_hash", "logical_tick", "pre_state_hash", "post_state_hash"}
+                   and all(_SHA.fullmatch(suspension[key]) for key in ("event_hash", "pre_state_hash", "post_state_hash"))
+                   and type(suspension["logical_tick"]) is int and suspension["logical_tick"] >= 1, "ADDRESS_SUSPENSION_INVALID")
+    _atlas_require(address["snapshot_node_id"] == "state-" + suspension["pre_state_hash"]
+                   and address["waiting_state_node_id"] == "state-" + suspension["post_state_hash"]
+                   and address["frame_node_id"] == "frame-" + address["continuation"]["frame_id"], "ADDRESS_NODE_IDS_INCONSISTENT")
+    _atlas_require(address["profile_coordinates"] is None, "PROFILE_COORDINATES_HAVE_NO_ADDRESS_ROLE")
+    return address
+
+
+def resolve_atlas_address(view, address):
+    """Resolve an address against a rendered atlas view: exact match or a named refusal.
+
+    Focus, hypothesis handle and layout of the view are ignored. The result
+    grants nothing; it names nodes for inspection only.
+    """
+    check_atlas_address(address)
+    _atlas_require(type(view) is dict and view.get("schema_version") == VIEW_SCHEMA, "ATLAS_VIEW_REQUIRED")
+    suspension, continuation = address["suspension"], address["continuation"]
+    frame = {key: value for key, value in continuation.items() if key != "frame_digest"}
+    events = [row["event"] for row in view["timeline"] if row["event"]["event_hash"] == suspension["event_hash"]]
+    _atlas_require(len(events) == 1, "SUSPENSION_EVENT_NOT_IN_VIEW")
+    event = events[0]
+    _atlas_require(event["event_id"] == suspension["event_id"] and event["logical_tick"] == suspension["logical_tick"]
+                   and event["pre_state_hash"] == suspension["pre_state_hash"] and event["post_state_hash"] == suspension["post_state_hash"]
+                   and event["run_id"] == address["run_id"], "SUSPENSION_EVENT_MISMATCH")
+    pushed = [intent for intent in event["proposed_intents"] if intent["intent_id"] in event["authorized_intent_ids"]
+              and intent["intent_type"] in _PUSH_INTENTS and intent["proposed_mutation"].get("frame") == frame]
+    _atlas_require(len(pushed) == 1, "SUSPENSION_EVENT_FRAME_MISMATCH")
+    nodes = {node["node_id"]: node for node in view["atlas"]["nodes"]}  # exact keys only; no nearest lookup
+    snapshot = nodes.get(address["snapshot_node_id"])
+    _atlas_require(snapshot is not None, "SNAPSHOT_NODE_NOT_FOUND")
+    _atlas_require(snapshot["kind"] == "state" and snapshot["context"] == {"schema_version": CONTEXT_SCHEMA, **address["atlas_context"]}
+                   and dict(snapshot["fields"]).get("state_hash") == suspension["pre_state_hash"], "SNAPSHOT_NODE_MISMATCH")
+    waiting = nodes.get(address["waiting_state_node_id"])
+    _atlas_require(waiting is not None, "WAITING_NODE_NOT_FOUND")
+    _atlas_require(waiting["kind"] == "state" and waiting["context"] == {"schema_version": CONTEXT_SCHEMA, **address["waiting_atlas_context"]}
+                   and dict(waiting["fields"]).get("state_hash") == suspension["post_state_hash"]
+                   and suspension["event_hash"] in waiting["evidence_refs"], "WAITING_NODE_MISMATCH")
+    live = any(row == frame for row in view["native"]["frames"])
+    frame_node = nodes.get(address["frame_node_id"])
+    if live:
+        expected = [[key, value if type(value) is str else canonical_json(value)] for key, value in sorted(frame.items())]
+        _atlas_require(frame_node is not None and [list(row) for row in frame_node["fields"]] == expected, "LIVE_FRAME_NODE_MISSING_OR_CHANGED")
+        status = "RESOLVED_LIVE_FRAME"
+    else:
+        _atlas_require(frame_node is None, "STALE_FRAME_NODE_PRESENT")
+        status = "RESOLVED_HISTORICAL_FRAME_NOT_LIVE"
+    return {"schema": ATLAS_RESOLUTION_SCHEMA, "status": status, "address_digest": address["address_digest"],
+            "snapshot_node_id": address["snapshot_node_id"], "waiting_state_node_id": address["waiting_state_node_id"],
+            "frame_node_id": address["frame_node_id"] if live else None,
+            "view_current_state_id": view["atlas"]["current_state_id"],
+            "view_focus_node_id": view["atlas"]["focus_node_id"],
+            "authority": "READ_ONLY_RESOLUTION_NO_RESUME_NO_DISPATCH"}
 
 
 def execute_grant(machine, grant):
@@ -292,27 +464,51 @@ def execute_grant(machine, grant):
                 or advance.__func__ is not _ADVANCE or advance.__func__.__code__ is not _ADVANCE_CODE):
             raise GrantRefused("EXACT_NATIVE_DISPATCH_REQUIRED")
         call_started = time.monotonic_ns()
-        if sys.getprofile() is not None:
+        if sys.getprofile() is not None or threading.getprofile() is not None:
             raise GrantRefused("HOST_ENTRY_METER_REQUIRES_FREE_PROFILE_HOOK")
+        # Claim boundary: this meter counts entries into the pinned advance on
+        # the window thread and on threads started inside the window, and it
+        # invalidates the window on any foreign-thread Python activity or a
+        # cleared hook. It is not isolation against arbitrary Python: code that
+        # installs, replaces or clears interpreter hooks, or a thread that
+        # already existed before the window, is outside the tested attacker
+        # class (same-process, in-memory patching of native internals).
+        window_thread = threading.get_ident()
+        foreign_thread_seen = False
+        hook_intact = False
         def entry_meter(frame, event, arg):
-            nonlocal invoked, entry_refused
+            nonlocal invoked, entry_refused, foreign_thread_seen
+            if threading.get_ident() != window_thread:
+                # The pinned native runtime is single-threaded. Any Python
+                # activity on another thread inside the window invalidates it.
+                foreign_thread_seen = True
             if (event == "call" and frame.f_code is _ADVANCE_CODE
                     and frame.f_locals.get("self") is machine):
                 # The pinned native implementation does not re-enter advance.
                 # An unexpected re-entry invalidates the whole measurement.
-                if invoked >= grant.calls:
+                if invoked >= grant.calls or threading.get_ident() != window_thread:
                     entry_refused = True
                     raise GrantRefused("HOST_ENTRY_ALLOCATION_EXCEEDED")
                 invoked += 1
         try:
             attempted += 1
             sys.setprofile(entry_meter)
+            threading.setprofile(entry_meter)  # threads started inside the window
             advance(allow_acquisition=grant.allow_acquisition)
         except Exception as error:
             fault = error
         finally:
+            hook_intact = sys.getprofile() is entry_meter
             sys.setprofile(None)
+            threading.setprofile(None)
             native_ns = time.monotonic_ns() - call_started
+        if not hook_intact:
+            # The hook was cleared or replaced inside the window (a callback
+            # exception clears it; foreign code could too). Unmetered work may
+            # have run, so never publish a usable count.
+            entry_refused = True
+        if foreign_thread_seen:
+            entry_refused = True
     if entry_refused:
         # A callback exception clears CPython's profile hook. Code that catches
         # it could execute unmetered work, so never publish a usable count.

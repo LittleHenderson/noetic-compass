@@ -1,0 +1,144 @@
+{
+ "schema": "cas.closed-loop.claude-return-address-case-map/0.1",
+ "source": "RETURN_ADDRESS_TEST_MAP.json on codex/cas-closed-loop-1 (ten new_adapter_case_needed rows)",
+ "implementation": "claude_lead_20260927/atlas_address.py (read-only projection; no coordinator; no resume rights)",
+ "tests": "claude_lead_20260927/test_atlas_address.py",
+ "junit": "claude_lead_20260927/test_atlas_address_junit.xml",
+ "execution": {
+  "result": "10 passed, 0 failed, 0 errors in 55.99 s",
+  "environment": "Python 3.11.15, Linux container, pytest 9.0.2, pydantic 2.12.5",
+  "tree": "main tree at the branch head; native runtime and Codex adapter unmodified"
+ },
+ "coverage_label": "EXECUTED_AND_PASSED_LOCALLY_IN_CLAUDE_DIRECTORY; not part of the 61-case frozen suite; not AWS-executed; runtime_location.atlas_binding in Codex's adapter is still None until Codex wires the module (R7)",
+ "rows": [
+  {
+   "row": 1,
+   "acceptance_ids": [
+    "AT15",
+    "AT20"
+   ],
+   "new_adapter_case_needed": "Bind each waiting frame to its own snapshot/node address",
+   "test": "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+   "status": "EXECUTED_PASSED",
+   "proves": "Two live frames get distinct snapshot nodes, frame nodes and digests; both resolve RESOLVED_LIVE_FRAME in a view rendered while suspended; the authorized RETURN_PRIMITIVE then RETURN_COMPOUND intents name exactly those frame ids in dependency order; root x=3 COMPLETE; in the final view both resolve RESOLVED_HISTORICAL_FRAME_NOT_LIVE.",
+   "boundary": "The native exact return itself is upstream behavior (test_compound_kernel.py::test_real_nested_construction_installs_program_and_resumes_exact_parent at the runtime commit; not in the 61-case suite). This case binds that behavior to addresses; it does not re-prove the kernel."
+  },
+  {
+   "row": 2,
+   "acceptance_ids": [
+    "AT16",
+    "AT17",
+    "AT19",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Wrong atlas address cannot choose another native continuation",
+   "test": "test_row2_wrong_address_cannot_select_another_continuation",
+   "status": "EXECUTED_PASSED",
+   "proves": "A crossed address (outer suspension with the inner continuation) is refused SUSPENSION_EVENT_FRAME_MISMATCH; a foreign run id is refused SUSPENSION_EVENT_MISMATCH; the module exposes no resume/dispatch/commit/advance name; journal and stack unchanged.",
+   "boundary": "Refusal at the address layer only. Native wrong-frame refusal is upstream (test_wrong_return_frame_cannot_resume_or_write_parent)."
+  },
+  {
+   "row": 3,
+   "acceptance_ids": [
+    "AT16",
+    "AT17",
+    "AT19",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Repeated view event cannot dispatch a new native request",
+   "test": "test_row3_repeated_resolution_dispatches_nothing",
+   "status": "EXECUTED_PASSED",
+   "proves": "Five resolutions and five chain computations leave state hash, trace length, native budget and the journal byte-identical.",
+   "boundary": ""
+  },
+  {
+   "row": 4,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT22"
+   ],
+   "new_adapter_case_needed": "Preserve root/parent address chain across restart",
+   "test": "test_row4_address_chain_survives_fresh_process_recovery",
+   "status": "EXECUTED_PASSED",
+   "proves": "The suspended journal is recovered in a separate Python process (subprocess) with the caller-held journal digest; the recomputed chain, including both address digests and the root call occurrence, equals the original.",
+   "boundary": ""
+  },
+  {
+   "row": 5,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT22"
+   ],
+   "new_adapter_case_needed": "Do not reconstruct budget from suspended snapshot",
+   "test": "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+   "status": "EXECUTED_PASSED",
+   "proves": "The address has no budget or remaining field; after the nested work completes the live ledger is strictly below the frame's entry budget; the entry budget stays in the continuation as history only.",
+   "boundary": ""
+  },
+  {
+   "row": 6,
+   "acceptance_ids": [
+    "AT24",
+    "AT25",
+    "AT26"
+   ],
+   "new_adapter_case_needed": "Equal/missing profiles cannot merge two call occurrences",
+   "test": "test_row6_equal_or_missing_profiles_never_merge_callers",
+   "status": "EXECUTED_PASSED",
+   "proves": "Two occurrences with the same source profile and root goal but different inputs get different run ids, snapshot nodes, frame nodes and digests; one's address is refused in the other's view; a live frame of one machine is FRAME_NOT_LIVE on the other; supplied profile coordinates are refused PROFILE_COORDINATES_HAVE_NO_ADDRESS_ROLE.",
+   "boundary": "Recorded fact: a machine started from byte-identical inputs is deterministic and reaches the identical run id and frame identities; that is the same episode identity, not a merge of two callers."
+  },
+  {
+   "row": 7,
+   "acceptance_ids": [
+    "AT24",
+    "AT25",
+    "AT26"
+   ],
+   "new_adapter_case_needed": "Layout/recentering leaves return-address resolution unchanged",
+   "test": "test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+   "status": "EXECUTED_PASSED",
+   "proves": "AtlasSnapshot.focus to another node and the flat_graph presentation give the same resolution (only the reported focus differs); the journal is unchanged.",
+   "boundary": "The pinned atlas has no geometric layout; focus and flat/graph presentation are the existing view operations."
+  },
+  {
+   "row": 8,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Adapter preserves one event/address association",
+   "test": "test_row8_one_suspension_event_per_address",
+   "status": "EXECUTED_PASSED",
+   "proves": "Two computations of the same frame's address are identical; swapping the suspension event hash for another event's hash is refused SUSPENSION_EVENT_MISMATCH; the unique authorized push event is the one bound.",
+   "boundary": ""
+  },
+  {
+   "row": 9,
+   "acceptance_ids": [
+    "AT24",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "No successful adapter view from tampered replay",
+   "test": "test_row9_tampered_view_or_journal_cannot_resolve",
+   "status": "EXECUTED_PASSED",
+   "proves": "A view whose snapshot node state_hash is altered is refused SNAPSHOT_NODE_MISMATCH; a view missing the waiting node is refused WAITING_NODE_NOT_FOUND; a truncated journal fails native recovery (ContractError) before any address exists; an altered address fails its digest.",
+   "boundary": ""
+  },
+  {
+   "row": 10,
+   "acceptance_ids": [
+    "AT25",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Use exact matching frame/snapshot, no nearest-node fallback",
+   "test": "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+   "status": "EXECUTED_PASSED",
+   "proves": "An address whose snapshot hash differs in one hex digit is refused although the real node is present in the view; after the exact return the frame is FRAME_NOT_LIVE.",
+   "boundary": ""
+  }
+ ]
+}

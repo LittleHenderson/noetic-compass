@@ -1,0 +1,12 @@
+diff --git a/research/cas_closed_loop_1/test_native_step_adapter.py b/research/cas_closed_loop_1/test_native_step_adapter.py
+index 6ad9b03cf..abc292ddd 100644
+--- a/research/cas_closed_loop_1/test_native_step_adapter.py
++++ b/research/cas_closed_loop_1/test_native_step_adapter.py
+@@ -6,6 +6,7 @@ import pytest
+ from cncm.canonical import digest
+ from cncm.compound_engine import CompoundMachine
+ from cncm.compound_model import create_problem
++from cncm.model import TerminalStatus
+ from cncm.compound_profile import CompoundProfile, SOURCE_FILES, authority_policy, load_compound_profile
+ from research.cas_closed_loop_1.native_step_adapter import (
+     GrantRefused, NativeStepFailed, InvalidNativeObservation, RETURN_IDENTITY_FIELDS,

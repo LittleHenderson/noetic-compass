@@ -1,0 +1,85 @@
+{
+  "schema": "helm.harness.capture.contract/1",
+  "task": "CAS-HH-RDE-01",
+  "extends": "ORIGINAL-HELM-DIAG-01",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "learner_sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+  "raw_capture": {
+    "identity": [
+      "checkpoint_sha256",
+      "input_sha256",
+      "source_sha256",
+      "site",
+      "call_index",
+      "round_index"
+    ],
+    "tensor": [
+      "shape",
+      "dtype",
+      "device",
+      "coordinate_meaning",
+      "signed_values"
+    ],
+    "coverage": [
+      "expected_calls",
+      "observed_calls",
+      "stored_calls",
+      "errors",
+      "complete"
+    ],
+    "authority": "OBSERVATION_ONLY_NO_PROMOTION",
+    "basis": "WITHIN_CHECKPOINT_ONLY",
+    "capture_default": "OFF"
+  },
+  "passive_modes": [
+    "OFF",
+    "OBSERVE_ONLY",
+    "NO_OP_CONTROL"
+  ],
+  "sites": [
+    "input.mapping",
+    "graph.initial_state",
+    "graph.round_input",
+    "graph.round_update",
+    "graph.round_state",
+    "graph.node_state",
+    "graph.query_state",
+    "graph.pointer_query",
+    "head.node",
+    "head.reach",
+    "head.node_pointer",
+    "answer.scores",
+    "answer.decisions",
+    "answer.assembly"
+  ],
+  "intervention_connection": "separate acknowledged Claude module; passive emitter ignores callback returns and never writes input tensors; no generic arbitrary code/callback execution from records",
+  "scopes": {
+    "Codex": [
+      "research/helm_self_improvement/observation.py",
+      "research/helm_self_improvement/observation_sites.py",
+      "research/helm_self_improvement/test_observation.py",
+      "research/helm_self_improvement/diagnostic_worker.py",
+      "research/helm_self_improvement/harness_capture_vendor/*",
+      "research/helm_self_improvement/cas_hh_rde_01/*"
+    ],
+    "Claude": [
+      "research/helm_self_improvement/diagnostic_configuration.py",
+      "research/helm_self_improvement/diagnostic_intervention.py",
+      "research/helm_self_improvement/test_diagnostic_configuration.py",
+      "research/helm_self_improvement/test_diagnostic_intervention.py"
+    ],
+    "DeepSeek": [
+      "review/cas_hh_rde_01/*"
+    ]
+  },
+  "limits": {
+    "source_minutes_per_lead": 90,
+    "initial_children_per_lead_max": 1,
+    "max_children_per_lead": 2,
+    "global_original_workers_max": 4,
+    "paid_jobs_by_non_codex": 0,
+    "model_updates": 0,
+    "no_local_test_execution": true
+  },
+  "handoff_status": "REQUESTED_ACK_NOT_YET_RECEIVED"
+}

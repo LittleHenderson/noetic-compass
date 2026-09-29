@@ -1,0 +1,8 @@
+{
+  "source_commit": "e8537e6ce9e93242fb11dec36c03dbcafa86042c",
+  "source_path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
+  "git_blob": "3468723e300fdf4fbb090c0d156b8014825d546d",
+  "sha256": "543666e576a559b1bfd15d9c63b33d401de3dcb47a3af13325700060abca9209",
+  "relationship": "EXACT_SHARED_IMPLEMENTATION",
+  "side_effects": "stdlib imports only; no model/service/credential/harvest import"
+}

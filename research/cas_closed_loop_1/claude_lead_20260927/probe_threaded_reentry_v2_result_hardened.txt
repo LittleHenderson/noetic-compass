@@ -1,0 +1,9 @@
+# probe_threaded_reentry_v2.py against the HARDENED adapter (aa600668 + import patch + PROPOSED_PATCH_native_step_adapter_thread_meter.diff), scratch worktree, 2026-09-27T06:04:09Z, Python 3.11.15
+PROBE2 direct_entries: 1 distinct threads: 1
+PROBE2 foreign thread: ['ATTEMPTED', 'RAISED:GrantRefused']
+PROBE2 trace grew by: 1 (not used as proof of entries)
+PROBE2 refused: InvalidNativeObservation HOST_ENTRY_METER_INVALIDATED measurement_status: INVALID
+1 passed in 0.35s
+# full predeclared 61 with both patches:
+.............................................................            [100%]
+61 passed in 118.58s (0:01:58)

@@ -23,7 +23,7 @@
     "window": "one explicitly identified host-step observation window; event interval and monotonic wall interval retained separately",
     "I_predicted": "Pinned compiler exact attention_flow on separately declared design V and R before execution; no measured-resistance fit, empirical calibration or valid residual claim.",
     "I_allocated": "Integer grant for at most one permitted next native stage in this first profile; allocation alone creates no event",
-    "I_executed": "CPython call events for the exact pinned CompoundMachine.advance bound method, code object and machine identity. Substituted dispatch wrappers are refused before entry. Any unexpected re-entry that clears the meter invalidates the entire observation without a receipt or usable count. Receipt verification requires exact integers 0 <= I_executed <= I_allocated <= 1. I_attempted separately records dispatch attempts.",
+    "I_executed": "CPython call events for the exact pinned CompoundMachine.advance bound method, code object and machine identity, metered on the window thread and on threads started inside the window (threading.setprofile). Substituted dispatch wrappers are refused before entry. Any unexpected re-entry, any Python activity on a foreign thread inside the window, or a hook found cleared or replaced after the call invalidates the entire observation without a receipt or usable count. Receipt verification requires exact integers 0 <= I_executed <= I_allocated <= 1. I_attempted separately records dispatch attempts. Claim boundary: the tested attacker class is same-process in-memory patching of native internals without hook changes; this is not isolation against arbitrary Python (hook changes, pre-existing threads).",
     "other_costs": "Native instruction/checker reservations, actual primitive/check counts, wall time and orchestration overhead remain separate recorded channels; do not call one transition a universal or complete compute unit",
     "independence": "Observe executor trace after invocation, not by copying grant or substituting Ohm output",
     "calibration": "None supplied; no universal attention claim or ASOM pass; signed residual unavailable unless all eligibility/unit/window/source conditions are met",
@@ -63,12 +63,109 @@
       "source_profile",
       "bias_version_at_suspension"
     ],
-    "atlas": "Snapshot-bound node/frame address plus authoritative native continuation reference. Profile coordinates and screen layout cannot select recipients. No new live registry.",
+    "atlas": "Snapshot-bound node/frame address for every live frame in runtime_location.atlas_binding (null with no frame), built from run, branch, root call, the unique authorized push event, the frame digest and the pinned projection's state-/frame- node identities with tick-bound contexts; resolved by exact match against a rendered view. Profile coordinates and screen layout cannot select recipients and are never inputs. No new live registry; no resume, dispatch or commit from an address; the coordinator remains authoritative.",
     "repair": "Qualified deltas pass existing coordinator; historical parent hash is not restored over legitimate repaired state",
     "budget": "Use current charged ledger; saved remaining budget is history, not spend authority",
     "duplicates": "Existing native stale/duplicate checks; atlas binding must not add second resume",
     "claim": "Exact local return only; no exactly-once external effect assertion",
     "bias_version_basis": "Suspension event pre_state_hash identifies saved native state including Bias; no separate native Bias counter exists."
   },
-  "receipt_integrity": "Content digest and validated native event chain; no signature or independent authenticity claim."
+  "receipt_integrity": "Content digest and validated native event chain; no signature or independent authenticity claim.",
+  "amendments": [
+    {
+      "date": "2026-09-27",
+      "author": "Claude",
+      "lease": "CAS-CORRECTION-20260927-01",
+      "change": "I_executed: thread-aware meter and explicit claim boundary; no primitive or authority change.",
+      "evidence": "claude_lead_20260927/probe_threaded_reentry_v2_result_unmodified.txt and _hardened.txt; test_foreign_thread_entry_inside_window_never_publishes_a_count"
+    },
+    {
+      "date": "2026-09-27",
+      "author": "Claude",
+      "lease": "CAS-CORRECTION-20260927-01",
+      "change": "return_contract.atlas: atlas_binding populated from existing identities; addendum cases executable in test_return_addresses.py; RETURN_ADDRESS_TEST_MAP.json 0.2.",
+      "evidence": "test_return_addresses.py (11 cases) executed locally; claude_lead_20260927 records"
+    },
+    {
+      "date": "2026-09-27",
+      "author": "Claude (packet B1-SEED18-IMPLEMENT-02, exclusive scope claude_lead_20260927/seed18_interfaces/* and test_seed18_interfaces.py)",
+      "subject": "seed-18 frozen-model interface (interface-specific section; no runtime or adapter change)",
+      "schemas": [
+        "cas.seed18.frozen-model-interface/0.3",
+        "cas.seed18.prediction-record/0.1",
+        "cas.seed18.system-output-record/0.1",
+        "cas.seed18.work-account/0.1",
+        "cas.seed18.admission-binding/0.1",
+        "cas.seed18.record-ledger/0.1",
+        "cas.seed18.parity-totals/0.1"
+      ],
+      "contract": [
+        "original neural prediction is a separate digest-bound public record written before any repair; the body stays in the venue's private store",
+        "public records have an explicit permitted-field table with typed formats and a closed provenance set; no free-text field",
+        "a digest alone never authorizes a frozen model; an admitting authority and structured reference are required; no signature is verified by the interface",
+        "CUDA only; restore_checkpoint and predict are GPU-dependent and unaccepted until the admitted venue; the predict-only handle refuses stage_batch, train_sealed_batch, export_checkpoint",
+        "repair path NONE preserves the prediction digest; repair path CAS_CLOSED_LOOP is NOT implemented: no native operation consumes a learned prediction",
+        "parity across paths: same items, order, frozen model, raw digests, budget, evaluator; totals only, no verdict",
+        "the SI TrustedHost at d7808d59 (checkpoint=None) is a separate contract and does not admit neural parents"
+      ],
+      "refusals": [
+        "FROZEN_MODEL_SHA_MISMATCH",
+        "FROZEN_MODEL_BYTES_MISMATCH",
+        "FROZEN_MODEL_CURSOR_MISMATCH",
+        "FROZEN_MODEL_MISMATCH",
+        "CHECKPOINT_PATH_INVALID",
+        "GPU_REQUIRED",
+        "RESTORE_DEPENDENCIES_NOT_SUPPLIED",
+        "TRAINING_ENTRY_POINT_FORBIDDEN",
+        "IDENTITY_FIELD_INVALID",
+        "AUTHORIZATION_NOT_PROVEN",
+        "PROVENANCE_INVALID",
+        "RECORD_TYPE_INVALID",
+        "RECORD_SCHEMA_INVALID",
+        "PUBLIC_FIELD_NOT_PERMITTED",
+        "PUBLIC_FIELD_FORMAT_INVALID",
+        "PREDICTION_BODY_IN_PUBLIC_RECORD",
+        "PREDICTION_BUDGET_EXHAUSTED",
+        "NATIVE_BUDGET_EXHAUSTED",
+        "EVALUATOR_BUDGET_EXHAUSTED",
+        "BUDGET_MISMATCH",
+        "LEDGER_SEQUENCE_MISMATCH",
+        "PREDICTION_NOT_RECORDED_BEFORE_REPAIR",
+        "PREDICTION_NOT_PRESERVED",
+        "PREDICTION_OUTPUT_INVALID",
+        "PRIVATE_STORE_RECEIPT_INVALID",
+        "OUTPUT_PREDICTION_LINK_BROKEN",
+        "REPAIR_PATH_UNKNOWN",
+        "REPAIR_PATH_MISMATCH",
+        "EVALUATOR_MISMATCH",
+        "ITEM_ORDER_MISMATCH",
+        "NATIVE_RECEIPT_MISSING",
+        "WORK_ACCOUNT_INCOMPLETE"
+      ],
+      "status": "slice 1 executed locally (43 passed, commit 2022be45); slice 2 written, not run; not acceptance"
+    },
+    {
+      "date": "2026-09-27",
+      "author": "Claude (packet B1-SEED18-API-BIND-03; append-only interface amendment)",
+      "subject": "seed-18 frozen-model interface reconciled against the exact c45f775f learner slice",
+      "source": {
+        "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+        "file_sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+        "blob": "d07012d48d8543c342bffaa7a8ec67c6e69ccc9c",
+        "restore_checkpoint_line": 2144,
+        "predict_line": 1954
+      },
+      "fixes": [
+        "restore_checkpoint runs inside the venue's RNG guard (the loader rewrites global RNG)",
+        "expected_learnable_names is passed from identity.learnable_names so the learner's POINTER_CHECKPOINT_EXPECTED_NAMES guard is retained",
+        "clone model_revision checked with cursor"
+      ],
+      "unchanged_claims": [
+        "prediction repair NOT implemented (native checked operation missing)",
+        "restore and predict GPU-dependent and unaccepted",
+        "tests written, not executed"
+      ],
+      "record": "claude_lead_20260927/seed18_interfaces/API_BINDING_c45f775f.json"
+    }
+  ]
 }

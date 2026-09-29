@@ -1,0 +1,4 @@
+run_*/** -text
+*.json -text
+*.jsonl -text
+*.diff -text

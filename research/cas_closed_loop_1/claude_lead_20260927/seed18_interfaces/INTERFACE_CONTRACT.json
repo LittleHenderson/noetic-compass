@@ -1,0 +1,167 @@
+{
+ "schema": "cas.seed18.frozen-model-interface-contract/0.4",
+ "packet": "B1-SEED18-INTERFACES-20260927-01",
+ "utc": "2026-09-27T13:20:00Z",
+ "status": "API-BIND-03: reconciled against the exact c45f775f public slice (blob d07012d4); two mismatches fixed (restore inside rng_guard; expected_learnable_names passed); tests written NOT run; repair_cas_closed_loop and evaluate NOT_IMPLEMENTED; restore/predict unaccepted",
+ "module": "frozen_model_interface.py",
+ "bindings": {
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "cas_source": "7bbf1e0f7bae635126c05b3203cca706ea8654dc",
+  "joint_source": "d7808d59c13ea94c6ff35d2327a4acb8535daabc",
+  "native_runtime": "8182ad52b4468f18f140837dffee0e7debcfe786",
+  "parent_checkpoint_sha256": "5a8a306911bbe50b7d65e13227e8d4acfbaac871f2eb2b0ae0c0f5bb1b6e7341",
+  "parent_checkpoint_bytes": 4025999,
+  "parent_cursor": 2940,
+  "existing_adapter_calls_used_unchanged": [
+   "grant_for(machine, *, calls, allow_acquisition, actuator_enabled=True)",
+   "execute_grant(machine, grant)",
+   "runtime_location(machine)"
+  ],
+  "existing_learner_calls_used_unchanged": [
+   "PointerCourseLearner.restore_checkpoint(torch, framework, encoder, *, path, expected_sha256, expected_run_identity_digest, device, expected_learnable_names=None)",
+   "PointerCourseLearner.predict(packet, depth)"
+  ],
+  "learner_calls_forbidden_through_the_handle": [
+   "stage_batch",
+   "train_sealed_batch",
+   "export_checkpoint"
+  ]
+ },
+ "paths": {
+  "NONE": "raw prediction is the system output; verified_output_sha256 == prediction_sha256; native calls 0",
+  "CAS_CLOSED_LOOP": "existing adapter drives the native runtime with the prediction as input Idea; receipt digest recorded; verified output is the checked native result"
+ },
+ "invariants": [
+  {
+   "id": "I1",
+   "text": "The frozen model is admitted by size and SHA-256 before any load; a mismatch refuses before restore_checkpoint."
+  },
+  {
+   "id": "I2",
+   "text": "The handle exposes predict only; training, staging and export are refusals."
+  },
+  {
+   "id": "I3",
+   "text": "CUDA device only; CPU inference is GPU_REQUIRED, never a fallback."
+  },
+  {
+   "id": "I4",
+   "text": "PredictionRecord is persisted (private body, public digest) before any repair path runs and is never mutated."
+  },
+  {
+   "id": "I5",
+   "text": "SystemOutputRecord links to its prediction by digest and never replaces it; on NONE the two digests are equal."
+  },
+  {
+   "id": "I6",
+   "text": "Both paths see the same items in the same order, the same evaluator identity and the same budget; episode_parity_check refuses otherwise."
+  },
+  {
+   "id": "I7",
+   "text": "Raw prediction digests for the same item and model are identical across paths (frozen model, identical inputs); a difference is PREDICTION_NOT_PRESERVED."
+  },
+  {
+   "id": "I8",
+   "text": "Every unit of work (prediction calls, native calls allocated and executed, charged native policy units, actual primitive work, evaluator calls, controller and verification wall time) is counted per output on both paths."
+  },
+  {
+   "id": "I9",
+   "text": "No score, threshold, ranking or acceptance verdict is computed by this interface; it returns records and totals only."
+  },
+  {
+   "id": "I10",
+   "text": "No public record carries a prediction body, answer key, salt, credential or private scoring body; digests only."
+  }
+ ],
+ "refusals": [
+  "FROZEN_MODEL_SHA_MISMATCH",
+  "FROZEN_MODEL_BYTES_MISMATCH",
+  "FROZEN_MODEL_CURSOR_MISMATCH",
+  "FROZEN_MODEL_MISMATCH",
+  "CHECKPOINT_PATH_INVALID",
+  "GPU_REQUIRED",
+  "RESTORE_DEPENDENCIES_NOT_SUPPLIED",
+  "TRAINING_ENTRY_POINT_FORBIDDEN",
+  "IDENTITY_FIELD_INVALID",
+  "AUTHORIZATION_NOT_PROVEN",
+  "PROVENANCE_INVALID",
+  "RECORD_TYPE_INVALID",
+  "RECORD_SCHEMA_INVALID",
+  "PUBLIC_FIELD_NOT_PERMITTED",
+  "PUBLIC_FIELD_FORMAT_INVALID",
+  "PREDICTION_BODY_IN_PUBLIC_RECORD",
+  "PREDICTION_BUDGET_EXHAUSTED",
+  "NATIVE_BUDGET_EXHAUSTED",
+  "EVALUATOR_BUDGET_EXHAUSTED",
+  "BUDGET_MISMATCH",
+  "LEDGER_SEQUENCE_MISMATCH",
+  "PREDICTION_NOT_RECORDED_BEFORE_REPAIR",
+  "PREDICTION_NOT_PRESERVED",
+  "PREDICTION_OUTPUT_INVALID",
+  "PRIVATE_STORE_RECEIPT_INVALID",
+  "OUTPUT_PREDICTION_LINK_BROKEN",
+  "REPAIR_PATH_UNKNOWN",
+  "REPAIR_PATH_MISMATCH",
+  "EVALUATOR_MISMATCH",
+  "ITEM_ORDER_MISMATCH",
+  "NATIVE_RECEIPT_MISSING",
+  "WORK_ACCOUNT_INCOMPLETE"
+ ],
+ "not_in_this_contract": [
+  "coordinator",
+  "growth implementation or migration",
+  "scorer",
+  "threshold",
+  "acceptance claim",
+  "any change to the scientific source, the adapter, the SI host or the runtime"
+ ],
+ "task": "SEED18-INTERFACE-IMPLEMENT-02 (owner, 2026-09-27), continuing packet B1-SEED18-INTERFACES-20260927-01",
+ "not_implemented": {
+  "repair_cas_closed_loop": "NOT_IMPLEMENTED_MISSING_NATIVE_OPERATION_FOR_LEARNED_PREDICTION",
+  "evaluate": "NOT_IMPLEMENTED_REQUIRES_ADMITTED_EVALUATOR"
+ },
+ "provenance_values": [
+  "HELM_ADMITTED_RUN",
+  "CLAUDE_TEST_DOUBLE_NOT_A_HELM_RUN"
+ ],
+ "admitting_authorities": [
+  "CODEX_RUNNER_ADMISSION",
+  "OWNER_SIGNED_ADMISSION"
+ ],
+ "implemented": [
+  "validate_record_is_public_safe (explicit permitted-field table, typed formats, provenance; no file opened)",
+  "validate_frozen_model_identity, identity_digest",
+  "validate_admission_binding (digest alone never authorizes; structural, signature_verified false)",
+  "validate_budget, BudgetLedger (charges refuse before work)",
+  "validate_work_account, validate_system_output_record",
+  "RecordLedger (append-only, sequence-enforced, prediction row required before any output row)",
+  "record_prediction",
+  "repair_none (NONE path; verified output digest == raw prediction digest; prediction record unchanged)",
+  "episode_parity_check (items, order, model, raw digests, budget, evaluator; totals only, no verdict)",
+  "typed formats for every string field (digest, enum, UTC, private:// reference, structured device name, torch version, item id, admission reference): no free-text field exists, so a prediction body of any length is refused",
+  "FrozenModelHandle: predict-only wrapper around a separately restored clone; depth fixed at 8; every predict inside the venue's rng_guard; stage_batch, train_sealed_batch, export_checkpoint refused",
+  "admit_frozen_model(identity, admission, *, path, device, restore=None, framework_factory=None, encoder=None, torch=None, rng_guard=None): admission binding, regular-file and no-symlink, size before bytes, SHA-256 before load, CUDA-only device, then the CPU-dry boundary RESTORE_DEPENDENCIES_NOT_SUPPLIED; with dependencies: fresh framework per admission, restore called per RESTORE_SIGNATURE, cursor checked",
+  "predict_raw(handle, item, packet, *, budget_ledger, ledger, private_store, device_name, torch_version): charge, one call, private store receipt validated (reference ends in the body digest), public record appended last"
+ ],
+ "unaccepted_gpu_operations": [
+  "restore_checkpoint",
+  "predict"
+ ],
+ "confirmed_learner_api": {
+  "source": "Codex source inspection of c45f775f225dd06cc20cdf313f0a0398486e0d61 (comment 5856489964)",
+  "file_sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+  "restore": "PointerCourseLearner.restore_checkpoint(torch, framework, encoder, *, path, expected_sha256, expected_run_identity_digest, device, expected_learnable_names=None); framework freshly built, not preloaded; encoder = frozen typed encoder",
+  "predict": "predict(packet, depth) with depth exactly 8; calls module.eval() and increments inference counters; run on a separate restored clone; preserve caller mode/counters and all global RNG",
+  "forbidden_through_handle": [
+   "stage_batch",
+   "train_sealed_batch",
+   "export_checkpoint"
+  ],
+  "public_copy_named_by_codex": "continuation_review_20260927_01/pointer_learner.py; NOT FOUND on any pushed origin branch at 2026-09-27 ~14:05Z; unconfirmed"
+ },
+ "si_host_contract": "SEPARATE: the SI TrustedHost at d7808d59 has a checkpoint=None engineering contract and does not admit neural parents; admit_frozen_model takes an AdmissionBinding, never a host",
+ "test_file": "research/cas_closed_loop_1/test_seed18_interfaces.py",
+ "module_sha256": "86865b40c88a040e9de29dc3fa01fa652080f0817fcdd1881a18341f171cf5be",
+ "test_file_sha256": "22f271e7ab5d3f2136ac10e035cb71cd5a3506b0e2e6c3f5241c7e3343991210",
+ "api_binding": "API_BINDING_c45f775f.json"
+}

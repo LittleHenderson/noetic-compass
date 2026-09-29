@@ -1,0 +1,9 @@
+# probe_threaded_reentry_v2.py against the UNMODIFIED adapter at 621c649fb (main tree), 2026-09-27T06:02:07Z, Python 3.11.15
+PROBE2 direct_entries: 2 distinct threads: 2
+PROBE2 foreign thread: ['ATTEMPTED', 'RETURNED']
+PROBE2 trace grew by: 2 (not used as proof of entries)
+PROBE2 RECEIPT RETURNED: I_allocated/I_executed/I_attempted: 1 1 1 verify_receipt: True
+E       AssertionError: GRANT_OF_ONE_PRODUCED_A_RECEIPT_WITH_2_DIRECT_ENTRIES_ON_2_THREADS
+E       assert {'I_allocated': 1, 'I_attempted': 1, 'I_executed': 1, 'I_predicted': None, ...} is None
+research/cas_closed_loop_1/claude_lead_20260927/probe_threaded_reentry_v2.py:95: AssertionError
+1 failed in 0.59s

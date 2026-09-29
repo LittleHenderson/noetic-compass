@@ -1,0 +1,294 @@
+{
+ "head": "aa6006683d9e798c85667dc0d389a604b0e99053",
+ "amendment_commit": "f6253e1a0fdb576d5484447eb6dacf0109f16fed",
+ "review_scope": "read-only; no repo imports executed; stdlib-only AST and CPython setprofile probes (scratchpad/probe_setprofile.py) on python3.11.15 and python3.12.3; local lead run junit files consulted as evidence",
+ "trust_model": "HARNESS_SPEC.md: trusted host boundary, not an isolation boundary against arbitrary Python that changes interpreter hooks or mutates native objects",
+ "items": [
+  {
+   "id": 1,
+   "name": "no-frame return_identity",
+   "implemented": true,
+   "code_refs": [
+    "research/cas_closed_loop_1/native_step_adapter.py:211-237 identity(frame) is defined only for a real frame; no identity(None) fallback (producer snapshot L199-231 fabricated one with source_snapshot=state.state_hash)",
+    "research/cas_closed_loop_1/native_step_adapter.py:238 identities built only from state.rpm_stack (live acquisition frames; push appends research/cas_closed_loop_1/_runtime/cncm/compound_kernel.py:403, return pops research/cas_closed_loop_1/_runtime/cncm/compound_kernel.py:441)",
+    "research/cas_closed_loop_1/native_step_adapter.py:249-250 return_identity = identities[-1] (top frame) else None; frame_identities = identities",
+    "research/cas_closed_loop_1/native_step_adapter.py:243-248 current state_hash/logical_tick/root_goal/root_call kept as separate context fields",
+    "research/cas_closed_loop_1/native_step_adapter.py:253-255 atlas_binding=None, profile_coordinates=None, authority=READ_ONLY_LOCATION_NOT_A_RESUME_TOKEN",
+    "research/cas_closed_loop_1/native_step_adapter.py:221-222 unique authorized PUSH_* suspension event required; frame_id identity includes push-time state_hash (research/cas_closed_loop_1/_runtime/cncm/compound_kernel.py:133-136) so uniqueness holds within an episode"
+   ],
+   "tests": [
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_all_eleven_identity_fields_and_suspended_snapshot_are_retained:101-124",
+     "status": "PASSES at HEAD",
+     "asserts": "per step: if frames -> return_identity has exactly the 11 RETURN_IDENTITY_FIELDS and equals frame_identities[-1]; else return_identity is None and frame_identities == []; source_snapshot == bias_version_at_suspension and stable per frame_id; exactly 2 frames captured; measured primitive work > 0"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_no_frame_has_no_return_identity_before_during_and_after_root_call:127-143",
+     "status": "FAILS at HEAD (NameError L138)",
+     "asserts": "(intended) null identity at genesis, during root work with root_call set but no frame, and after CONCLUDED; state_hash matches machine"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_runtime_location_is_detached_and_has_no_coordinate_return_authority:91-98",
+     "status": "PASSES",
+     "asserts": "profile_coordinates and atlas_binding None; authority string; mutating returned dict leaves machine.state unchanged"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_closed_loop.py:test_real_repair_exact_return_checked_bias_effect_and_event_bound_work:137-139",
+     "status": "PASSES",
+     "asserts": "single root call id across receipts read from after.root_call (adapted away from return_identity)"
+    }
+   ],
+   "findings": [
+    {
+     "severity": "MAJOR",
+     "title": "Dedicated no-frame regression test cannot execute (NameError: TerminalStatus)",
+     "steps": "Static: test_native_step_adapter.py imports TerminalStatus only inside test_all_eleven_identity_fields_and_suspended_snapshot_are_retained (L102, function-local); the module-level imports (L2-13) do not bind it. Runtime: the predeclared command `python3 -m pytest -q -p no:cacheprovider test_native_step_adapter.py test_closed_loop.py test_artifacts.py aws_validation/test_launch_transport.py` on HEAD aa600668 yields 61 collected / 3 failed: test_no_frame_has_no_return_identity_before_during_and_after_root_call (L138 NameError) and test_work_join_refuses_records_removed_from_trace_bound_state[False|True] (L285 NameError). Reproduced in two independent local runs (claude_lead_20260927/run_20260927T045459Z and run_20260927T045944Z, Python 3.11.15); the failure is version-independent so the 3.12 AWS worker will see the same 3 failures. Fix: add `from cncm.model import TerminalStatus` at module scope of the test file.",
+     "refs": [
+      "research/cas_closed_loop_1/test_native_step_adapter.py:138",
+      "research/cas_closed_loop_1/test_native_step_adapter.py:142",
+      "research/cas_closed_loop_1/test_native_step_adapter.py:2-13",
+      "research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045944Z/pytest.xml",
+      "research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045459Z/pytest.xml",
+      "research/cas_closed_loop_1/CHANGELOG.md:29-31 claims this coverage",
+      "research/cas_closed_loop_1/HARNESS_SPEC.md:59-63 acceptance boundary"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "runtime_location reads machine.state/coordinator.trace after result() instead of the validated result's final_state/trace",
+     "steps": "Equivalent in single-threaded use (result() is built from the same live objects at compound_engine.py:257-262 and nothing intervenes), but inconsistent with the item-3 rule 'take catalog and events from the validated result'.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:207-214",
+      "research/cas_closed_loop_1/native_step_adapter.py:142-149"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "root_call_occurrence/inputs_digest inside a frame identity come from the current root call, not a suspension-time snapshot",
+     "steps": "Within one episode the root call is created once and frames exist only while it is WAITING, so values coincide; a rewritten trace/state is outside the trust model.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:229-234"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "I_allocated >= I_executed / exact dispatch / meter breach invalidation",
+   "implemented": true,
+   "code_refs": [
+    "research/cas_closed_loop_1/native_step_adapter.py:60-66 verify_receipt: type(...) is int for both counters (bool rejected), 0 <= I_executed <= I_allocated <= 1, then content digest recomputed excluding receipt_digest",
+    "research/cas_closed_loop_1/native_step_adapter.py:86-87 StepGrant refuses calls not in (0,1) or non-int",
+    "research/cas_closed_loop_1/native_step_adapter.py:290-293 exact pinned dispatch: inspect.ismethod, __self__ is machine, __func__ is _ADVANCE, __code__ is _ADVANCE_CODE (refused before any entry)",
+    "research/cas_closed_loop_1/native_step_adapter.py:295-296 busy legacy profile hook refused",
+    "research/cas_closed_loop_1/native_step_adapter.py:297-306 entry_meter counts 'call' events for _ADVANCE_CODE with self is machine; second entry sets entry_refused and raises",
+    "research/cas_closed_loop_1/native_step_adapter.py:316-319 entry_refused -> InvalidNativeObservation(HOST_ENTRY_METER_INVALIDATED) with no receipt; research/cas_closed_loop_1/native_step_adapter.py:320-321 belt-and-braces",
+    "research/cas_closed_loop_1/native_step_adapter.py:365-367,391 I_allocated=grant.calls, I_executed=invoked, I_attempted=attempted, digest",
+    "research/cas_closed_loop_1/control.py:84-96 controlled_step pops receipt_digest, adds prediction/board fields, re-digests; counters untouched so verify_receipt holds (asserted at research/cas_closed_loop_1/test_closed_loop.py:73 and by replay research/cas_closed_loop_1/run_closed_loop.py:108)"
+   ],
+   "tests": [
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_repeated_dispatch_wrapper_refused_before_native_entry[propagate|swallow|catch_then_third_call]:146-167",
+     "status": "PASSES",
+     "asserts": "class-level wrapper around advance -> GrantRefused EXACT_NATIVE_DISPATCH_REQUIRED; wrapper never entered; state unchanged; trace empty"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_internal_reentry_that_clears_meter_never_publishes_a_count:170-193",
+     "status": "PASSES",
+     "asserts": "patched _execute re-enters advance (2nd refused+caught, 3rd unmetered) -> InvalidNativeObservation HOST_ENTRY_METER_INVALIDATED, measurement_status INVALID, no .receipt"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_rehashed_receipt_still_refuses_execution_above_allocation:196-201",
+     "status": "PASSES",
+     "asserts": "I_executed=1 > I_allocated=0 with recomputed digest -> verify_receipt False"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_substituted_callable_is_refused_before_entry:204-209",
+     "status": "PASSES",
+     "asserts": "lambda advance refused before entry; state/trace unchanged"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_receipt_content_digest_detects_alteration:212-216",
+     "status": "PASSES",
+     "asserts": "digest mismatch after edit"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_native_error_keeps_observed_events_and_never_reports_success:69-88",
+     "status": "PASSES",
+     "asserts": "fault after a real step -> NativeStepFailed receipt, I_executed=1, verify_receipt True, complete_totals None, fault_work_status set"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_invalid_grant_never_reaches_executor[True|-1|2|1.0]:53-58 ; test_disabled_actuator_retains_allocation_without_execution:24-31 ; test_zero_grant_does_not_make_native_call:34-37 ; test_unexecuted_window_has_zero_measured_primitive_work:263-270",
+     "status": "PASSES",
+     "asserts": "grant validation; disabled/zero grants execute nothing and carry consistent counters"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_closed_loop.py:test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing:68-73",
+     "status": "PASSES",
+     "asserts": "verify_receipt holds for a control.py receipt after pop/re-digest"
+    }
+   ],
+   "findings": [
+    {
+     "severity": "MAJOR",
+     "title": "Entry meter is per-thread: a threaded re-entry inside a patched _execute is neither counted nor refused, yielding a verified receipt with I_executed=1 for two real entries",
+     "steps": "orig_exec=CompoundMachine._execute; orig_adv=CompoundMachine.advance; done=[]; def p(self,*a,**k): r=orig_exec(self,*a,**k); (not done) and (done.append(1), (t:=threading.Thread(target=orig_adv,args=(self,),kwargs={'allow_acquisition':True})).start(), t.join()); return r; monkeypatch CompoundMachine._execute=p; receipt=execute_grant(machine, grant_for(machine, calls=1, allow_acquisition=True)). Expected under HARNESS_SPEC ('refuses an unexpected second entry'): InvalidNativeObservation. Actual: sys.setprofile applies only to the calling thread, so the 'call' event for the second advance is never seen -> invoked=1, entry_refused=False, prefix/chain/budget checks pass (both events are genuine, chained), receipt returned with I_executed=1, native_event_count covering two advances, verify_receipt True. Stdlib probe (scratchpad/probe_setprofile.py case C) confirms invoked=1/refused=False with 2 real entries on both 3.11.15 and 3.12.3. Same threat class as the in-scope test test_internal_reentry_that_clears_meter_never_publishes_a_count (patched _execute re-entry); requires no hook change and no native-object mutation, so it is not obviously excluded by the stated trust model. Hardening: install threading.setprofile(entry_meter) for the window (and clear it), and/or refuse when threading.active_count() changed during the call, or narrow the HARNESS_SPEC/CONTRACTS claim to same-thread entries. Downgrade to NOTE only if the owner rules in-process patching of the pinned class out of scope.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:297-315",
+      "research/cas_closed_loop_1/HARNESS_SPEC.md:29-33",
+      "research/cas_closed_loop_1/CONTRACTS.json quantity_contract.I_executed"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "Hook-clearing re-entry (sys.setprofile(None) inside patched _execute) is undetected; explicitly outside trust model but a one-line check exists",
+     "steps": "Patched _execute calls sys.setprofile(None) then orig_adv(self) -> invoked stays 1, entry_refused False, receipt published. In the finally block, checking `if sys.getprofile() is not entry_meter: entry_refused = True` before clearing would catch both this and the exception-cleared case at no cost.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:313-315"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "I_attempted is unconstrained by verify_receipt",
+     "steps": "I_attempted is always int(calls and actuator_enabled) at HEAD (the only attempted=1/executed=0 path is sys.setprofile raising inside the try, which yields a NativeStepFailed receipt). A re-digested I_attempted=5 passes verify_receipt; spec only constrains I_executed/I_allocated, so no wrong outcome, but the field carries no integrity beyond the digest.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:308-309",
+      "research/cas_closed_loop_1/native_step_adapter.py:367"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "control.py discards the adapter-level digest; only the control-level digest survives",
+     "steps": "receipt.pop('receipt_digest') then re-digest after adding I_predicted/board fields. verify_receipt still holds (counters untouched, canonical JSON sorts keys), and replay verifies every control receipt against the caller-held bundle digest. The adapter's own digest is not retained inside the control receipt, so a control receipt cannot be traced to the adapter output independently - integrity only, as CONTRACTS.receipt_integrity already states.",
+     "refs": [
+      "research/cas_closed_loop_1/control.py:86-96",
+      "research/cas_closed_loop_1/run_closed_loop.py:108"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "verify_receipt does not cross-check counters against events",
+     "steps": "A re-digested receipt with I_executed=0 and non-empty native_event_refs passes verify_receipt; replay's OBSERVATION_EVENT_COVERAGE_MISMATCH and the caller-held bundle digest catch it end-to-end, so no concrete wrong outcome.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:60-66",
+      "research/cas_closed_loop_1/run_closed_loop.py:118-121"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "sys.getprofile() precheck cannot see 3.12 sys.monitoring tools; they do not interfere",
+     "steps": "Probe on 3.12.3: with a COVERAGE_ID sys.monitoring tool active, sys.getprofile() is None and the meter still counts (invoked=1); sys.setprofile succeeds even when PROFILER_ID is claimed by another tool. No refusal path misfires.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:295-296"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "invoked > grant.calls branch is unreachable",
+     "steps": "entry_meter raises before incrementing past grant.calls, so L320 never triggers; harmless.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:320-321"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "state-bound work join",
+   "implemented": true,
+   "code_refs": [
+    "research/cas_closed_loop_1/native_step_adapter.py:141-144 machine.result() called first; any ContractError -> InvalidNativeObservation(WORK_STATE_HISTORY_INVALID) before any record is read",
+    "research/cas_closed_loop_1/native_step_adapter.py:146-149 state = observed.final_state; catalog from that state's native/semantic/compound records; actual_events from observed.trace",
+    "research/cas_closed_loop_1/native_step_adapter.py:152-157 per-event: no duplicate pair, pair must exist in validated trace, sealed, hash recomputed, full dataclass equality with the trace event",
+    "research/cas_closed_loop_1/native_step_adapter.py:181-182 catalog_state_binding = {run_id, state_hash, trace_head, logical_tick} of the validated state",
+    "research/cas_closed_loop_1/_runtime/cncm/compound_engine.py:34-56 CompoundRunResult.__post_init__: state_hash == computed_hash(); profile/ingress/problem binding; full sealed chain from the machine-private initial_state_hash; L55 refuses when state_hash != last post_state_hash or trace_head != last event_hash -> this is what refuses a resealed (self-consistent) state that the trace did not reach",
+    "research/cas_closed_loop_1/_runtime/cncm/compound_engine.py:257-262 result() is not memoized (fresh CompoundRunResult per call); machine.state is the live StateStore object (nested_engine.py:158-160, kernel.py:141-142) so in-place mutations are seen",
+    "research/cas_closed_loop_1/_runtime/cncm/compound_model.py:366-372 to_dict includes compound_records (+ inherited native/semantic records) so any record edit without reseal breaks computed_hash",
+    "research/cas_closed_loop_1/_runtime/cncm/rpa_compound_adapter.py:71-107 validate_evidence_catalog re-derives every record_digest; research/cas_closed_loop_1/_runtime/cncm/rpa_compound_adapter.py:202-226 work_from_catalog re-selects by run/tick-1/intent and requires exact digest-list equality"
+   ],
+   "tests": [
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_work_join_refuses_records_removed_from_trace_bound_state[False|True]:282-302",
+     "status": "FAILS at HEAD (NameError L285) - the ONLY test of the resealed-state rule and of catalog_state_binding",
+     "asserts": "(intended) binding equals live run/state_hash/trace_head/tick; after emptying the three record tuples, with and without recomputing state_hash, join raises WORK_STATE_HISTORY_INVALID"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_empty_work_join_still_refuses_a_corrupt_state:305-308",
+     "status": "PASSES",
+     "asserts": "non-self-consistent state_hash with empty event list -> WORK_STATE_HISTORY_INVALID"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_work_join_refuses_duplicate_and_changed_event:273-279",
+     "status": "PASSES",
+     "asserts": "duplicate pair and altered event_hash -> WORK_EVENT_IDENTITY_INVALID"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_native_step_adapter.py:test_corrupt_existing_event_is_refused_even_for_zero_grant:255-260",
+     "status": "PASSES",
+     "asserts": "corrupt existing event -> EXISTING_NATIVE_HISTORY_INVALID via execute_grant"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/test_closed_loop.py:test_wrong_method_is_rejected_and_failed_work_remains_charged:100-115",
+     "status": "PASSES",
+     "asserts": "rejected-intent event still joins primitive_instructions > 0"
+    },
+    {
+     "ref": "research/cas_closed_loop_1/run_closed_loop.py:replay:118-132 exercised by research/cas_closed_loop_1/test_closed_loop.py:test_real_repair...:125-141 and test_fresh_process_replays_retained_journal:144-151",
+     "status": "PASSES",
+     "asserts": "per-window work re-derived from the final validated state matches receipts on measured_totals/unmeasured_records/events"
+    }
+   ],
+   "findings": [
+    {
+     "severity": "MAJOR",
+     "title": "The only regression test for 'changed state with self-consistent hash is refused' and for catalog_state_binding does not execute (NameError)",
+     "steps": "Static: test_native_step_adapter.py imports TerminalStatus only inside test_all_eleven_identity_fields_and_suspended_snapshot_are_retained (L102, function-local); the module-level imports (L2-13) do not bind it. Runtime: the predeclared command `python3 -m pytest -q -p no:cacheprovider test_native_step_adapter.py test_closed_loop.py test_artifacts.py aws_validation/test_launch_transport.py` on HEAD aa600668 yields 61 collected / 3 failed: test_no_frame_has_no_return_identity_before_during_and_after_root_call (L138 NameError) and test_work_join_refuses_records_removed_from_trace_bound_state[False|True] (L285 NameError). Reproduced in two independent local runs (claude_lead_20260927/run_20260927T045459Z and run_20260927T045944Z, Python 3.11.15); the failure is version-independent so the 3.12 AWS worker will see the same 3 failures. Fix: add `from cncm.model import TerminalStatus` at module scope of the test file. Consequence for item 3 specifically: at HEAD there is zero executable coverage of the resealed-state refusal (the passing test_empty_work_join case uses a non-self-consistent hash) and of catalog_state_binding.",
+     "refs": [
+      "research/cas_closed_loop_1/test_native_step_adapter.py:285",
+      "research/cas_closed_loop_1/test_native_step_adapter.py:291-302",
+      "research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045944Z/pytest.xml",
+      "research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045459Z/pytest.xml"
+     ]
+    },
+    {
+     "severity": "MINOR",
+     "title": "Variable shadowing: `observed` (validated result) is reassigned to a list of report bodies inside the loop",
+     "steps": "L142 observed = machine.result(); L169 observed = [reports[...] ...]. No functional effect today because .final_state/.trace were read at L146/L149 before the loop, but any future read of observed after L169 silently gets the wrong object. Rename the inner variable.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:142",
+      "research/cas_closed_loop_1/native_step_adapter.py:169"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "catalog_state_binding is retained but never consumed or cross-checked",
+     "steps": "execute_grant does not assert actual_work['catalog_state_binding']['state_hash'] == after.state_hash (L350-351), and replay intentionally compares only measured_totals/unmeasured_records/events (run_closed_loop.py:130-132) because the final-state binding differs per window. A one-line assertion in execute_grant would give the field a consumer.",
+     "refs": [
+      "research/cas_closed_loop_1/native_step_adapter.py:350-351",
+      "research/cas_closed_loop_1/native_step_adapter.py:181-182",
+      "research/cas_closed_loop_1/run_closed_loop.py:129-132"
+     ]
+    },
+    {
+     "severity": "NOTE",
+     "title": "Chain anchor is machine-private, not external",
+     "steps": "Mutating records AND rewriting the last trace event (post_state_hash, recomputed event_hash) AND trace_head passes result() because the chain is anchored only at _episodes[-1].initial_state_hash held by the machine. Explicitly outside the trust model (mutates native objects); replay is anchored by the caller-held bundle/journal digests and catches it there.",
+     "refs": [
+      "research/cas_closed_loop_1/_runtime/cncm/compound_engine.py:44-56",
+      "research/cas_closed_loop_1/run_closed_loop.py:100-117"
+     ]
+    }
+   ]
+  }
+ ],
+ "py311_hazards": [
+  "No behavioural difference found between 3.11.15 and 3.12.3 for the semantics the meter relies on: a profile-callback exception clears the profile and propagates; frame.f_locals['self'] is readable at the 'call' event; bound-method identity checks; settrace coexistence (scratchpad/probe_setprofile.py, both interpreters).",
+  "Local lead runs used 3.11.15 while aws_validation/worker.py:64 enforces 3.12 (PYTHON_312_REQUIRED); the three NameError failures are interpreter-independent and will reproduce on 3.12.",
+  "3.12: sys.setprofile is implemented over sys.monitoring; the sys.getprofile() precheck (adapter L295) cannot see sys.monitoring tools (e.g. coverage's sysmon core) but they do not disturb the meter; setprofile also succeeds when PROFILER_ID is already claimed (probe E/F). No refusal misfires; no hazard.",
+  "Syntax/API used (str.removesuffix 3.9+, dataclass slots=True 3.10+, runtime kw_only 3.10+, datetime.timezone.utc) is valid on both. 3.13's PEP 667 f_locals proxy still supports .get - irrelevant for the 3.12 pin.",
+  "Test-side: aws_validation/test_launch_transport requires boto3/botocore (2 failures in the first local run without them); the 61-test gate depends on the pinned wheelhouse, not on the adapter."
+ ],
+ "verdict": "CHANGES_REQUIRED",
+ "verdict_basis": "All three items are implemented at HEAD and the implementation matches HARNESS_SPEC/CONTRACTS on inspection, but 3 of the 61 predeclared cases - the dedicated regression tests for items 1 and 3 - fail with NameError (missing module-level `from cncm.model import TerminalStatus` in test_native_step_adapter.py), reproduced in two local runs at aa600668. The acceptance boundary (all cases must run and pass on the frozen Lane-A source) cannot be met, and the resealed-state rule has no executable coverage. Additionally the per-thread entry meter can be bypassed by a threaded re-entry from a patched _execute (MAJOR, trust-model-dependent). Fix is small: one import line, optional threading.setprofile/getprofile hardening, rename shadowed variable. Corroboration: with only that import added, a sibling run shows 61/61 passing (wt_patch_pytest.xml).",
+ "corroboration": "Sibling worker's patched run (scratchpad/PATCH_test_native_step_adapter_import.diff adds `from cncm.model import TerminalStatus` at module scope; scratchpad/wt_patch_pytest.xml): 61 tests, 0 failures, 0 errors, including test_no_frame_has_no_return_identity_before_during_and_after_root_call and test_work_join_refuses_records_removed_from_trace_bound_state[False|True]. So once executable, the item-1 and item-3 regression tests pass against HEAD's adapter; the defect is confined to the test module's import, not the adapter logic."
+}

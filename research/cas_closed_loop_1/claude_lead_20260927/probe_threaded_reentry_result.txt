@@ -1,0 +1,8 @@
+# probe_threaded_reentry.py run in scratch worktree (aa600668 + test import patch), 2026-09-27T05:10:54Z, Python 3.11.15
+PROBE reentered: [True] thread_error: []
+PROBE receipt I_allocated/I_executed/I_attempted: 1 1 1
+PROBE native_event_count: 2 trace grew by: 2
+PROBE verify_receipt: True execution_status: OBSERVED
+E       AssertionError: SECOND_ENTRY_UNCOUNTED_AND_UNREFUSED
+E       assert (1 == 2 or 2 == 1)
+1 failed in 0.38s

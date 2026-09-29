@@ -1,0 +1,110 @@
+{
+ "schema": "cas.growth.world-residual-specialist.integration-step/0.1",
+ "prepared_utc": "2026-09-28T01:12:00Z",
+ "learner": {
+  "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py",
+  "commit": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "sha256": "0f424d8633f01b69d7ed256a8e687a4ba0f99be71ae85732c50d4c8dcd7a81a8",
+  "lines": 2337
+ },
+ "levels": {
+  "L1": "standalone module tests: written; 22 pure-Python passed locally; 15 numeric NOT RUN",
+  "L2": "migration of an actual copied HELM checkpoint: driver written (injected loader/builders), 9 local cases passed, 4 GPU cases on a double loader NOT RUN; real migration not started",
+  "L3": "additional training with growth: not started; needs six learner touch points under a lease",
+  "L4": "measured task benefit: no claim; needs L3 plus control and preregistered readout"
+ },
+ "verified_lines": {
+  "_build_container": 703,
+  "container_setattr_guard": "~745-752 (refuses only the two analogy names)",
+  "learner_init": 1762,
+  "module_built": 1777,
+  "adamw_group": "1840-1845",
+  "run_identity": "1846-1863",
+  "graph_world_head_call": 1566,
+  "graph_width_check": "1550-1551",
+  "export_checkpoint": 2104,
+  "init_args": "2124-2127",
+  "learnable_names": 2128,
+  "validate_init_args": 1722,
+  "restore_checkpoint": 2144,
+  "restore_plain_container": 2189,
+  "layout_refusal": 2197,
+  "restore_constructor": "2203-2206",
+  "strict_load": 2207,
+  "optimizer_load": 2208,
+  "cursor_bound": "2209-2211",
+  "registered_names": 2323,
+  "checkpoint_schema_constant": 164
+ },
+ "L2_restricted_driver": {
+  "file_to_write": "research/helm_growth_experiments/residual_world_v1/migrate_real_parent.py (WRITTEN 2026-09-28; 9 pure-Python cases passed locally; torch path NOT RUN; real migration not started)",
+  "steps": [
+   "restore a COPY of an admitted parent via PointerCourseLearner.restore_checkpoint with expected_learnable_names",
+   "capture old named parameters and cloned tensors",
+   "attach_specialist on learner.module, disabled",
+   "migrate_optimizer(learner.optimizer, learner.module, mapping, old_named_parameters, optimizer_config=learner.optimizer_config)",
+   "preservation_report: both exact-equality flags required; scored_world equals world_head bit for bit on a finite probe batch",
+   "save_grown to <out>/grown/ (Claude's format) and publish the report, sidecar, digests"
+  ],
+  "shows_if_passed": "exact preservation of a real parent's parameters and AdamW state plus 624 zero-contribution scalars",
+  "does_not_show": "learner restore or training of the grown state (L3); any benefit (L4)",
+  "codex_must_supply": [
+   "parent copy path, expected_sha256, expected_run_identity_digest",
+   "framework and encoder built as the worker builds them (cncm.typed_matched_worker._framework)",
+   "GPU job after the seed-19 slot releases",
+   "a separate finite allowance"
+  ],
+  "builder_interfaces_bound": "EXACT_BUILDER_INTERFACES in migrate_real_parent.py, read from cd5ce96c worker.py 50/79-83 and continuation.py 147-160; injected, never imported"
+ },
+ "L3_minimal_learner_change": [
+  {
+   "touch": 1,
+   "function": "_build_container",
+   "line": 703,
+   "change": "keyword growth=None; when present attach_specialist(...) LAST and set enabled from growth"
+  },
+  {
+   "touch": 2,
+   "function": "PointerCourseLearner.__init__",
+   "line": 1762,
+   "change": "accept growth=None, pass to _build_container at 1777, keep self.growth; AdamW at 1840 covers the specialist automatically"
+  },
+  {
+   "touch": 3,
+   "function": "export_checkpoint",
+   "line": 2104,
+   "change": "init_args gains 'growth': deepcopy(self.growth); schema versioning decided by the lease (CHECKPOINT_SCHEMA at 164)"
+  },
+  {
+   "touch": 4,
+   "function": "_validate_init_args",
+   "line": 1722,
+   "change": "optional 'growth' key; absent means None; present must validate as a sidecar"
+  },
+  {
+   "touch": 5,
+   "function": "restore_checkpoint",
+   "line": 2144,
+   "change": "growth = init_args.get('growth'); build the comparison container at 2189 and cls(...) at 2203 with growth=growth"
+  },
+  {
+   "touch": 6,
+   "function": "GraphForward (world head call)",
+   "line": 1566,
+   "change": "flat = scored_world(self.model, candidate).reshape(-1); bitwise identical when no specialist is attached"
+  }
+ ],
+ "also_needed_for_L3": [
+  "continuation seam (cursor bounded by limits['max_updates'], TYPED_CHECKPOINT_CURSOR 2209-2211)",
+  "new run identity recorded as such",
+  "pre-growth checkpoint kept as rollback",
+  "separate finite allowance"
+ ],
+ "boundaries": [
+  "no learner edit by Claude without an acknowledged lease",
+  "no live seed-19 source/model/optimizer/outputs/test rules touched",
+  "not mixed into seed 18's LR-only pair",
+  "no AWS launch by Claude",
+  "growth not validated at any level"
+ ]
+}

@@ -4,6 +4,388 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-29 - CAS-HH-RDE-01-CB1 v1.1 / CB1-A: bounded role scheme, tensor-product reconstructor and single-application binding edits (source-only, NOT RUN)
+
+- Package received at Codex commit `fe2db4e90430274e93556543b345c7dbaeef568f` (`research/helm_self_improvement/cube_binding/handoff_v1_1/`):
+  14 of 19 manifest files present and byte-identical, 5 named subset omissions, 0 mismatches. Receipt and scope acknowledged on PR #245
+  (comment 5884579738) before writing.
+- New exclusive files under `research/helm_self_improvement/cube_binding/`: `role_schemes.py` (`IDENTITY_ONLY`, `ENDPOINT_BAG`, `RELATION_ENDPOINT`,
+  `EVENT_FRAME`; bounded shape-independent role vocabulary; occurrence keys outside the fitted features; answer-bearing fields refused),
+  `reconstructor.py` (`TPR` and `ATOMIC_PAIR` kinds; explicit dimensions and `FILLER_MAJOR` vec order; activation-reconstruction loss only;
+  bounded step count; analysis holdout leak refusal; train-only z-score; digest-anchored reload), `binding_edits.py` (`NO_CHANGE` and
+  `FILLER_REPLACEMENT`; bias cancels; sigma-only rescale; frozen plan; delta composed into the incumbent `SAME_INPUT_PATCH` donor and
+  declaration at `graph.round_update`; `verify_single_application` refuses double application). 22 cases written (9 + 8 + 5), 0 collected,
+  0 executed. `diagnostic_configuration.py` / `diagnostic_intervention.py` unchanged; passive `emit` stays read-only; no Codex or DeepSeek file touched.
+- 06:13Z follow-up after Codex's CB1-C delivery at `c9b0bfd3` (comment 5884654485): removed my shared `cube_binding/__init__.py` (Codex is the one
+  writer); added `binding_edits.consumer_inputs_for_plan`, which produces exactly the inputs Codex's `consumer_bridge.prepare_consumer_declaration`
+  takes (whole captured tensor, only the planned row changed by `h_original + delta`, finite elementwise bound, explicit provenance; `NO_CHANGE` maps
+  to the bridge's incumbent `NO_OP_CONTROL` path, now accepted by `verify_single_application`). One test added (23 written, 0 executed).
+  DeepSeek's relayed `vec` ordering (row-major over `outer(filler, role)`) equals my `FILLER_MAJOR`. Codex's copy of my four RDE files still byte-identical.
+- 06:19Z after Codex's integration `d27172d5` (comment 5884742440): my six files there are byte-identical to `ccbd8866`; the follow-up is not yet
+  integrated. Row mapping of Codex's `analysis_binding_rows` into my `public_graph`/`row_binding_sets` checked by reading: consistent (row `i` = node
+  `/n{i}`; public labels as fillers; direct branches assumed). Codex's finding CONFIRMED and fixed: `freeze_plan` now refuses a non-finite
+  `max_delta_norm` (`nan`/`inf` previously passed the positivity test and the later donor comparison); one test loop added. `binding_edits.py` `780c1fd1b557…`,
+  `test_binding_edits.py` `bc85180e32eb…`. Still 23 written, 0 executed.
+- 15:15Z: coordination request 5892809590 (a "ChatGPT manager" intake posted from the owner account, self-described as granting nothing) names a second
+  v1.1 directive (`38444787…`, CB37–CB42) not present in any Git branch. Individual receipt posted: package NOT received, versions not equated, scope and
+  hashes restated, the requested reconciliation already delivered at `a16e3aa2`/`65904c16`, dependency = Codex relaying the package to Git. No source changed.
+- 15:20Z owner decision (chat): the newer `38444787…` package takes precedence for research/product requirements; existing code is upgraded, not replaced;
+  Q1 stays excluded. Difference-to-source record for my six files written into the return record (all memo themes covered or recorded except one gap:
+  position-versus-relation control). Gap closed: `POSITIONAL` scheme added to `role_schemes.py` (`6cd3ce0cd2dc…`, packet-rank positions, edges ignored,
+  bounded by `max_positions`) with one test (`166545eba84c…`; 24 written, 0 executed). Package and `ORIGINAL_CLAUDE_SCOPE.txt` still not in Git; CB37–CB42 map pending.
+- 15:25Z: second v1.1 package received from Codex as Git objects at `701d4185` (directive `38444787…` 98008 bytes and `ORIGINAL_CLAUDE_SCOPE.txt`
+  `e8ffc3d5…` verified from the blobs). CB37–CB42 coverage map against my six files written into the return record: CB37/39/40/41 covered as source
+  on my side (CB40 placement `SOURCE_CONSISTENT_NOT_EXECUTED`), CB38/CB42 not my files; one minor open item (no wall/memory bound inside `fit`);
+  one frozen candidate hypothesis stated. No source changed. About 7 active minutes remain.
+- After A02 (no packet active): Codex successors `c36ffd7a` (admission ledger custody change; WAIT note 5898323784, no Claude receipt without allocation) and `376b3d20` (unwired bootstrap fragments only); Codex C02 final return 20:38Z; DeepSeek dispositions relayed by Codex; six files unchanged; nothing run; 21:30Z check-in: no change.
+- A02 RETURNED (about 28 of 30 minutes) after Codex C02 successor `2cf9aeee` (comment 5898123721): transport files and my six files unchanged, `PASS` carries; WAIT named on the owner boot-attestation timing decision and DeepSeek receipt; nothing run.
+- A02 changed-scope check of Codex C02 object `e16c00ed` (comment 5898089682): worker delta `PASS` (exit 7 only for the runtime-probe sentinel; existing commands unchanged); runner/admission byte-identical to `a8518511`; collector unwired; boot-attestation proposal flagged as an owner-level timing decision with one implementation seam; six files unchanged; nothing run; A02 about 25 of 30 minutes used.
+- A02 final candidate `a8518511` (Codex comment 5897116547): `PASS` as source for Stage A and B, superseding `0a6eca5d`; production-instance IDs pinned, two-reviewer receipt required, runtime attestation fields added, exact-instance cleanup re-read; six files unchanged; nothing run; A02 about 20 of 30 minutes used.
+- A02 candidate `0a6eca5d` (Codex comment 5897085832): `PASS` as source for Stage A and B, superseding `a4552e53`; per-stage legacy archive pins and no-checkpoint scan on both nested archives; projections record parsed (A 255 / B 258 entries, checkpoints excluded); six files unchanged; nothing run; A02 about 16 of 30 minutes used.
+- A02 successor `a4552e53` (Codex comment 5897023202): `PASS` as source for Stage A and B; `LimitFSIZE` removed, logs bounded by selector loop, `inspect_staged_cleanup` producer added, B gate bound to actual Stage A records; six files unchanged; nothing run; A02 about 12 of 30 minutes used.
+- A02 (manager queue 5896916786; input Codex object `e373ef1b`, comment 5896960640): disposition posted, `BLOCKER` on `LimitFSIZE=16777216` in the staged `systemd-run` unit (breaks the torch install; contradicts the 32 MiB archive bound), `PASS` on CPU separation, staged admission, per-stage test IDs, worker timeout/collection and B prerequisite design; record `research/cas_closed_loop_1/claude_lead_20260927/CB1_A02_C01_DIFF_DISPOSITION_20260929.md`; nothing run; A02 about 9 of 30 minutes used.
+- A01 hot handoff (manager comment 5896847088): read-only version-transition review of the incumbent AWS transport (`diagnostic_admission.py`, `aws_worker.py`, `aws_runner.py` at `af9fb57e`) delivered in `research/cas_closed_loop_1/claude_lead_20260927/CB1_A01_STAGE_TRANSITION_REVIEW_20260929.md`; no Codex file edited; nothing run; about 14 of 30 A01 minutes used.
+- Packet PRIMARY-AUTONOMY-24H-01/A01 (ChatGPT manager dispatch 5896439234, relayed owner approval not verified in my channel; separate 30-minute clock from 18:43Z): receipt posted; scope is review of the Stage A/B adaptation where it touches my contracts; C01 diff not yet delivered; six files unchanged (6/6 vs `1ec610f3`); nothing run; about 4 of 30 minutes used, held open.
+- Packet PRIMARY-CB1-INTEGRATE-01 (owner, separate 30-minute clock from 17:54Z): fit resource boundary closed in `reconstructor.py`
+  (`FitBudget`/`declare_budget`, mandatory `budget=` on `fit`, pre-allocation sample/parameter/tensor refusals, cooperative deadline and `cancel()`
+  checked before every step, injectable clock, manifest records the contract and `python_checks_are_hard_memory_limits: False`; the hard bound is the
+  named outside job limit). One regression test added; every existing fit call passes a budget. Declared successor for Codex's integration: six files,
+  hashes in the return record; 25 cases written, 0 executed. Nothing fitted.
+- Codex source finding 5895674228 CONFIRMED and fixed (narrow successor): the `ROW` refusal case in `test_binding_edits.py` used a plan frozen with
+  `row=0` against a one-row capture, which is valid; now `replace(plan, row=1)`. `test_binding_edits.py` `fcaf52bd035f…`. Codex integrated the four `c69a68a4`
+  blobs; the fit-budget reconstructor files and this fix remain to integrate.
+- Integrated handoff CONFIRMED: Codex `ca875df8` carries my six files byte-identical to `1ec610f3` (6/6) and my four RDE files unchanged (4/4);
+  Codex's `prepare_plan_consumer_declaration`/`verify_plan_consumer_receipt` and the POSITIONAL-accepting `analysis_binding_rows` reviewed by reading:
+  the six confirmation points hold as source, no concrete defect; two Codex-side assumptions recorded (packet-digest identity rule and idempotent
+  validation; hard-coded width 64). 61 cases written in the integrated tree, 0 executed.
+- Final Codex successor `af9fb57e` (test-only, +4 lines in Codex's `test_plan_connection.py`) and request tree `1b89af69` acknowledged: my six files
+  unchanged (6/6); Stage A's 108 identities include my 10 role-scheme cases and the 41 RDE cases, and exclude my 15 fit-dependent cases as
+  intended. DO NOT EXECUTE observed; nothing run. Packet PRIMARY-CB1-INTEGRATE-01: about 18 of 30 active minutes used, no further work pending.
+- Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
+  Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
+
+## 2026-09-29 - CAS-HH-RDE-01: corrective passive job ran; my 41 cases at ae940c44 executed for real: 40 passed, 1 test-helper defect; one-line fix (NOT RUN)
+
+- REAL, verified from the git objects at `54dac34e`: `cas_hh_rde_01/PARITY_A2_FOCUSED.xml` sha256 `20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b`
+  (61 tests, 1 failure, 0 errors, 0 skipped: observation 20/20, my configuration 23/24, my intervention 17/17) and
+  `PARITY_A2_FIXTURE.xml` sha256 `a33bbd7494f30ea552e18f772f5cddb807b281c6c1aa611a2c81bfc88b1f9171` (PCBA fixture 1/1). Codex integrated my one-line fix at `54dac34e`
+  with only that call changed (verified by diff against `ae940c44`); the fix itself stays NOT RUN. Codex's report
+  (comment 5881938722): job `helm-hh-rde-parity-20260929-a2`, source `ae2482fc`, parent `5b37699d…`, 62 collected and executed:
+  Codex 21/21 PASS, my `test_diagnostic_configuration.py` 23/24 PASS, my `test_diagnostic_intervention.py` 17/17 PASS.
+  The previously failing native-PCBA fixture passed with pinned pydantic; no checker change. ZERO real HELM forwards
+  or updates; neutrality, capture coverage and reload remain NOT_RUN because the 62-gate stopped the job.
+- The one failure is in my test helper, not the adapter: `test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_wrong_counts`
+  called `_capture(site="mlp.layer3")`, and the helper looked the unknown site up in `SITE_SEMANTICS` to build a
+  default meaning, raising `KeyError` before `raw_capture` could refuse `SITE_UNKNOWN`. Fix: that one call now passes
+  an explicit meaning, so the real `raw_capture` refusal is exercised. The `SITE_UNKNOWN` expectation is unchanged.
+  The same helper line exists at `ae940c44` and at my head, so the one-line change applies to either. Source-only, NOT RUN.
+- First real execution of any of my CAS-HH-RDE-01 cases: 40 of 41 at `ae940c44` passed on the GPU runner. This is
+  L1 (standalone module tests), not passive parity and not acceptance. Status stays `ENGINEERED-NOT-VALIDATED`.
+
+## 2026-09-29 - CAS-HH-RDE-01 / A: integration verification against the real producer at 21d603c6; six findings closed in source; trusted intervention connection written DISABLED (43 cases, NOT RUN)
+
+- Owner packet INTEGRATED WITNESS SUPPORT. Codex's branch head is still `21d603c6` (no newer package); the AWS worker
+  there runs only Codex's 21 observation cases plus six real forwards, on a GPU instance; my files are integrated
+  unchanged and are not in that pytest list.
+- Verified against the producer (`observation.Capture.emit`): `signed_values` is the row-major flatten of the emitted
+  tensor, `dtype` is `torch.<name>`, `device` is `str(tensor.device)`, round sites carry `round_index == call_index`;
+  the emitter's `coordinate_preview` uses FLAT indices for display only. Per-kind expected coverage equals
+  `expected_hits_for` for both kinds (import-checked). Findings and smallest fixes, all in the four leased files:
+  (1) the converter did not itself enforce call/round order -> `CAPTURE_CALL_ORDER` / `CAPTURE_ROUND_ORDER` added;
+  (2) preview vs configuration coordinate conventions were implicit -> stated in `convert_observation` output;
+  (3) a configuration record did not carry its receipt provenance, so a fixture record could be claimed above
+  OBSERVED -> `ConfigurationRecord.provenance` added, set only by `detect_from_observation` from a complete anchored
+  receipt, and `assign_claim` refuses `CLAIM_PROVENANCE` otherwise; (4) reload verifiers accepted a missing external
+  anchor -> `verify_observation`, `captures_from_observation`, `detect_from_observation`, `configuration_from_json`,
+  `verify_receipt`, `verify_evidence` now require the retained digest (`EXTERNAL_ANCHOR_REQUIRED`); (5) `apply` had
+  no input binding -> the trusted caller hashes the packet with the emitter's canonical form and refuses
+  `UNADMITTED_INPUT`; (6) the caller binding was built from caller-supplied strings only -> the trusted caller
+  rebuilds it from the checkpoint copy's bytes, the learner's source file hash and `learner.module`'s parameters.
+- `trusted_intervention_caller(...)` written, `CONNECTION_ENABLED_BY_DEFAULT = False`: with `enabled=False` it runs
+  every source check, builds the binding, registers no hook and reports the call it would make; with `enabled=True`
+  it requires a passing `protocol_checks` record (anchored passive OBSERVE_ONLY receipt for the same checkpoint,
+  input and source; frozen anchored configuration; verified matched control; hookable active site; single
+  checkpoint; no pending training batch; witness digest) and then runs exactly one `learner.predict` inside `apply`.
+  Never mixed into the passive job; no training entry is ever called.
+- Codex's corrective successor `ae2482fc` (checked 01:11Z): producer unchanged; gate 62 = 21 + 24 + 17 with my
+  `ae940c44` bytes; `g7.2xlarge` / `cu128` / `ADMITTED_AWS` venue is compatible with my CUDA-default cases; no
+  defect; `12becc52` (43 cases) must not be swapped into that job.
+- Codex's `reload_configuration_inputs` at `21d603c6` already passes the anchor to both converter calls, so the
+  mandatory-anchor change is compatible with the integrated reader. Cases: 25 pure-Python + 18 torch = 43, written,
+  NOT RUN. Spec sheet `ENGINEERED-NOT-VALIDATED`. Growth `residual_world_v1` rev 0.3 untouched at `86af9a90`.
+
+## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (41 cases written, NOT RUN)
+
+- Package `62bb7f71` (`research/helm_self_improvement/cas_hh_rde_01/`) received by exact Git object; receipt ACK posted on PR
+  #245 (comment 5876863361). Lease: `diagnostic_configuration.py`, `diagnostic_intervention.py` and their two test files
+  only. No equivalent DIAG-01 code existed (no commit on any ref for the four paths). Codex's `observation.py` emitter
+  is not written yet; the bridge consumes contract-shaped raw captures by injection and binds active hooks to the
+  container modules the sites name. The learner, runner, authority files and checkpoints are untouched.
+- `diagnostic_configuration.py`: contract pin (`check_contract` refuses drift), coverage where a missing hook is
+  incomplete rather than zero, raw-capture validation that refuses a relabeled `coordinate_meaning` or nonfinite values,
+  the vendored Harness `_top_k_neurons` called unchanged on one node row per round (kind `PROJECTED_COORDINATE_SET`,
+  never a hidden unit), signed support with coactivation and inhibition kept, freeze-before-confirmation, canonical
+  CAS names pinned with `EXACT` mapping refused, monotone evidenced claim levels capped at
+  `TASK_CAUSAL_CONTRIBUTION_SUPPORTED`, Pythia probe compatibility kept apart from validity, readout margin labeled
+  `PYTHIA_160M_EMPIRICAL_NOT_HELM_CALIBRATED`, digest-sealed JSON records, and a reuse manifest.
+- `diagnostic_intervention.py`: explicit declarations (site, round, rows, coordinates, gain, donor with checkpoint /
+  basis / dtype / device, matched control by recorded seed), Harness gain formula, torch hook handles registered inside a
+  context manager and removed on every exit path with a state digest before/after, receipts with per-hit
+  before/after values under a byte bound, statuses `APPLIED` / `APPLIED_NO_CHANGE` / `NOT_APPLIED` / `NO_OP_VERIFIED` /
+  `NO_OP_FAILED` / `OBSERVED` / `OBSERVED_INCOMPLETE`, gold-informed donors capped at
+  `ORACLE_ASSISTED_DIAGNOSIS_NOT_DEPLOYABLE`, and `witness_protocol()` (six conditions, two hypotheses, one injected
+  fault labeled INJECTED, 24 packet forwards, zero optimizer updates), plus `evidence_record` / `rpa_projection`
+  (digest-sealed branch bound to input, checkpoint, action and outcome; harvest ingestion `DISABLED_NOT_ADMITTED`;
+  the atlas view is read-only with no execution or mutation authority).
+- Tests: 24 pure-Python cases and 17 torch cases on a labeled fixture container (`FIXTURE_NOT_HELM`, CUDA required by
+  default). Written, NOT RUN: the packet forbids local pytest and torch execution, and torch is not installed here.
+  Compile and import checks only. Spec sheet status `ENGINEERED-NOT-VALIDATED`. Exact package blobs from `62bb7f71`
+  (`__init__.py`, `harness_capture_vendor/`, `cas_hh_rde_01/`) are copied unchanged into this branch so the imports
+  resolve; they are not edits.
+- Bound to Codex's actual emitter (`observation.py` at `fd421572`, received by Git object): `EMITTER_MEANINGS` is a
+  verbatim pinned copy of the emitter's `MEANINGS` (checked against the module by test); `verify_observation` recomputes
+  the emitter's `receipt_sha256` with a byte-identical canonical form; `captures_from_observation` turns one site's
+  events into validated captures with that site's coverage (an incomplete receipt yields captures but
+  `detect_from_observation` names nothing); `expected_hits_for` mirrors `Capture.expected` (a Parts packet expects 0
+  `head.reach` hits) and feeds `apply(expected_hits=...)`. DeepSeek's F4 point adopted: every verifier takes an
+  externally retained digest, the self-carried digest counts as transport integrity only, and `rpa_projection`
+  refuses without an external anchor. Codex's namespace blobs at `fd421572` are copied unchanged so imports resolve.
+  DeepSeek's five reviewer deliverables at `8e0ec259` verified against `DELIVERY.json` (bytes and sha256, 5/5).
+  Cases now 22 pure-Python + 16 torch = 38, still NOT RUN. The passive parity job Codex reported
+  (`helm-hh-rde-parity-20260928-a1`, source `fd421572`) is Codex's; nothing launched here.
+- Codex's parity attempt `helm-hh-rde-parity-20260928-a1` (Codex's report, comment 5877140015; no junit hash posted
+  yet): 18 collected, 17 passed, 0 failures, 1 setup ERROR (`test_host_retains_incomplete_and_detects_tampering`; the
+  native baseline fixture raised `PCBA_STATIC_CHECK_FAILED` because the diagnostic venv lacked pinned `pydantic`).
+  So: ZERO real-parent forwards, zero optimizer updates; model neutrality, 14-site coverage and fresh reload stay
+  NOT_RUN. Paid attempt 1 consumed; no automatic rerun. Recorded as a failed attempt, not as partial acceptance.
+- Codex's two lease asks (comment 5877171228) implemented: `convert_observation(receipt, retained_receipt_sha256=)`
+  is the versioned conversion entry point (anchor mandatory; refuses incomplete receipts, unknown sites, unknown dtype
+  spellings; maps only `torch.<dtype>`; preserves the emitter's raw meaning and binding; reports non-tensor and
+  zero-expected sites honestly; `raw_capture`'s meaning guard untouched). `caller_binding` / `verify_caller_binding`
+  make the module binding a guarded-caller responsibility: `apply(binding=)` marks a receipt `CALLER_VERIFIED` only
+  when the module's parameter bytes match the caller's post-restore digest and the declaration's checkpoint/source;
+  otherwise `UNVERIFIED_SELF_REPORTED`, and `require_applied` / `evidence_record` refuse it. Cases 24 + 17 = 41,
+  NOT RUN.
+- Codex integration `788aa5f7` received: my four leased files there are byte-identical to `5ec7d5e9` (verified 4/4);
+  Codex's `reload_configuration_inputs` binds to `captures_from_observation` / `verify_observation` / `expected_hits_for`
+  after the host-ledger anchor (signatures unchanged at `ae940c44`); `CLOSEOUT_RECOVERY.json` (sha256 `e7eb7d49…`)
+  records the failed parity attempt as `FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED`, 18/17/0/1, zero forwards.
+- Codex final handoff `21d603c6` received: my `ae940c44` bytes integrated unchanged (4/4 verified); Codex's reader now
+  calls `convert_observation` for complete captures. The real AWS JUnit is in git at
+  `21d603c6:research/helm_self_improvement/cas_hh_rde_01/PARITY_A1_FOCUSED.xml`, content sha256 `859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831`
+  (computed here): 18 tests, 0 failures, 1 setup error, 0 skipped; all 18 are Codex's cases; none of mine ran. It is
+  the result of `fd421572`, not of current source. Recorded as a real negative artifact.
+- Not done: no HELM capture, no checkpoint opened, no witness executed, no AWS, no paid call, no learner edit. Smallest
+  remaining dependency: the completed passive parity result (Codex's job) and a frozen protocol review, after which an
+  intervention witness needs its own admitted job.
+
+## 2026-09-28 - Growth 15-case package ran on a real CUDA job at c70e1a04: 14 passed, 1 failed; revision 0.3 fixes the optimizer reload device defect (NOT RUN)
+
+- Real result (junit in git at `38c2ecc4`, content sha256 `d0b56715…`; job `helm-growth15-c70e1a-20260928-a1` reported by
+  Codex): 15 collected, 14 passed, 1 failed, 0 errors, 0 skipped. The failure was the enabled + nonzero-B + optimizer
+  round trip: `load_grown` loaded `grown_optimizer.pt` with `map_location=<cuda>`, which moved the CPU scalar `step` of a
+  non-capturable AdamW to CUDA, and `torch.equal` against the original CPU step raised. Negative result preserved.
+- Revision 0.3 (`world_residual_specialist.py`, numeric test only; the plan module and its 22 cases unchanged): the
+  optimizer file is loaded on CPU and AdamW's own load policy places tensors; `verify_optimizer_placement` refuses any
+  other placement after every optimizer load; the round-trip case checks device and dtype before exact value; a new
+  16th case reproduces the defect on purpose and shows the fix. Pins `numeric_gpu/SOURCE_PINS_rev03.sha256`.
+  Written, NOT RUN: this packet permitted no local pytest or torch execution. Next acceptance needs a separate
+  prospective source-bound admission on the designated runner (expected 16 / 0 / 0 / 0 if collection matches).
+- Codex acknowledged the L2 driver scope and supplied the builder binding (`4526518e:research/helm_growth_validation/
+  CLAUDE_BUILDER_HANDOFF.json`: framework seed 20260918, seed-18 parent sha256 `5a8a3069…`, run digest `06a448aa…`,
+  cursor 2940, 53 learnable names). L2 migration still not executed. Status stays `ENGINEERED-NOT-VALIDATED`.
+
+## 2026-09-28 - Growth L2 driver written: migrate a COPY of an admitted parent into a grown candidate (injected guarded loader; 9 local cases passed; GPU cases NOT RUN)
+
+- `residual_world_v1/migrate_real_parent.py`: preflight (copy sha256 must equal the declared parent; fresh output
+  directory not nested with the parent's; CUDA required), the injected `restore_checkpoint` call with its exact
+  keywords, `ROLLBACK_PARENT.json`, specialist attached DISABLED, AdamW state migrated under the verified mapping with
+  the learner's own `optimizer_config`, exact-preservation gate, same-object forward probe, grown candidate written in
+  Claude's format, digest-sealed `REAL_PARENT_MIGRATION_RECORD.json` carrying the claim boundary (GraphForward at line
+  1566 still ignores the specialist; no training; no benefit). `EXACT_BUILDER_INTERFACES` records the production builder
+  calls read from the executing source `cd5ce96c`. The four pinned files of the 15-case package are unchanged (4 OK).
+- Executed locally (no torch): `test_migrate_real_parent.py` 9 passed / 0 failed / 0 errors / 0 skipped, junit
+  `driver_tests_local_junit.xml`. NOT run: the driver's torch path and `numeric_gpu/test_migrate_real_parent_numeric.py`
+  (4 cases on a labeled double loader; a separate file, not a second execution request). No real parent restored; no
+  learner or checkpoint edited; no AWS. DeepSeek's latest review of `c70e1a04` is not reachable here (not on the PR, not
+  in git at 03:18Z); its identity was requested.
+
+## 2026-09-28 - Growth handoff: numerical validation package for the 15 unrun cases, four-level validation ladder, exact real-checkpoint integration step (no execution, no learner edit)
+
+- `residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.{md,json}`: source binding to `c70e1a04` with per-file
+  sha256 pins (`numeric_gpu/SOURCE_PINS_c70e1a04.sha256`), dependencies, exact commands, the 15 numeric identities
+  (derived by AST; torch absent here) and the 22 pure-Python identities (collected locally), output paths, resource
+  requirements, venue rule (designated runner after the seed-19 slot releases; never the active training instance),
+  pass/fail semantics. Prepared, NOT RUN.
+- `residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.{md,json}`: the four levels kept apart (standalone
+  tests; migration of an actual copied checkpoint; training with growth; measured benefit); verified line numbers in
+  the exact `c45f775f` learner for why a grown container is refused today; the restricted L2 driver specified (not
+  written); the minimal six-touch-point learner change for L3, for a lease to scope. Nothing implemented in the learner.
+- Growth remains `ENGINEERED-NOT-VALIDATED` at every level. No AWS, no torch, no checkpoint, no seed-19 or seed-18 change.
+
+## 2026-09-27 - FORWARD-02: the four P1 growth findings fixed in `residual_world_v1/` (revision 0.2); 22 local plan tests passed, 15 numeric cases written and NOT run
+
+- `growth_migration_plan.py` 0.2 and `world_residual_specialist.py` 0.2 apply Codex's four source findings (PR #245
+  comment 5857009736): (1) both specialist constructors inside one seeded `fork_rng` block plus `rng_neutrality_probe`;
+  (2) optimizer state bound through the actual parameter objects by identity and unique name (foreign, duplicate,
+  missing refused), group settings preserved from the old group, a supplied config must match, state shape/dtype
+  checked; (3) versioned sidecar `specialist_config.json` with `save_grown` / `load_grown` carrying `enabled`, seed,
+  sizes, plan digest and file digests, plus the enabled + nonzero-B + optimizer round-trip test; (4) nonfinite
+  intermediate `GELU(A x)` refused before B, tolerances restated under that checked precondition with the recorded
+  counterexample, gradient conditions narrowed (`x = 0` and zero upstream gradient as counterexamples).
+- Executed locally (no torch, no model): `test_growth_migration_plan.py` 22 passed / 0 failed / 0 errors / 0 skipped,
+  junit `plan_tests_local_junit_forward02.xml` sha256 `14ccc06b…`. NOT run: the torch module and its 15 numeric cases
+  (reserved for the GPU venue). The 0.1 passes at `19653ec8` are history, not tests of 0.2. No AWS, no checkpoint,
+  no seed-19 or seed-18 attachment, no learner edit.
+
+## 2026-09-27 - Records: the 144-case joint junit is now a pushed artifact at `5c81654a…`; recorded with its hash
+
+- `joint_public_receipts/joint-junit.xml`: 144 / 0 / 0 / 0, CAS 73 + SI 71; symbolic engineering evidence only, per Codex. Records and the spec sheet updated; no status upgrade for learned-prediction repair.
+
+## 2026-09-27 - P1 growth slice moved to the Codex-assigned namespace `research/helm_growth_experiments/residual_world_v1/`
+
+- One-time `git mv` of `claude_lead_20260927/growth_specialist/**` (original preserved at `19653ec8`); recorded seed
+  `RECORDED_INIT_SEED = 2026092701` added; README paths and the future integration seam (learner line 1566) recorded.
+  No execution; torch and numeric cases remain NOT_RUN; the 14 local plan passes at `19653ec8` are preserved as evidence.
+
+## 2026-09-27 - PARALLEL-CAPABILITY-01 P1: one optional residual world specialist with by-name migration (plan tests run; torch tests not run)
+
+- `claude_lead_20260927/growth_specialist/`: `growth_migration_plan.py` (pure Python: preserved names and
+  signatures, two new parameters with exact shapes, A-nonzero/B-zero init with a recorded seed, by-name optimizer
+  mapping with positional guessing refused, stated tolerances, digest, JSON round trip) and 14 tests, all passed
+  locally; `world_residual_specialist.py` (torch: explicit size 16, `attach_specialist` registering last,
+  `migrate_optimizer` carrying state by name with zero-initialized new entries, `scored_world` call site) and 7
+  numeric tests reserved for the GPU venue, written and NOT run. Confirmed against the exact `c45f775f` world
+  head (lines 856-858, width 38). Not attached to seed 19, seed 18 or the original learner; no checkpoint opened.
+- One defect caught and fixed by the local tests before commit: the fingerprint name pattern rejected capitalized
+  segments, which would have refused the specialist's own parameter names.
+
+## 2026-09-27 - Records: Codex-reported joint execution (144 passed at 49d3e23) recorded as reported, not verified
+
+- Codex reports on PR #245 that the seven-file joint suite ran in AWS at source `49d3e23c…` with 144 passed and a
+  clean witness and reload. The commit is on origin only as an unreferenced object and the named receipts are not in
+  its tree, so no artifact path exists here; the spec sheet keeps `ENGINEERED-NOT-VALIDATED` and records the report
+  with that claim state. The 144-versus-142 declared count is Codex's to reconcile. No file of Claude's changed.
+
+## 2026-09-27 - Packet B1-SEED18-API-BIND-03: interface reconciled against the exact c45f775f learner slice; two mismatches fixed
+
+- Verified from git: `pointer_learner.py` at `c45f775f` sha256 `0f424d86…`, blob `d07012d4…`. Fixed in
+  `frozen_model_interface.py` (0.4): restore runs inside the venue's RNG guard (the loader rewrites global RNG);
+  `identity.learnable_names` (new required, structured, sorted field) is passed as `expected_learnable_names`
+  so the learner's guard is retained; `model_revision` checked with `cursor`. Mapping and the exact next AWS
+  test command in `API_BINDING_c45f775f.json`; append-only amendments in `HARNESS_SPEC.md` and `CONTRACTS.json`.
+- Tests: 3 functions (7 cases) added, doubles updated; written, NOT run (packet bounds). No repair claim.
+
+## 2026-09-27 - Packet B1-SEED18-IMPLEMENT-02 slice 2: admission boundary, predict-only handle, raw prediction; tests written, not run
+
+- `seed18_interfaces/frozen_model_interface.py`: typed formats for every string field (no free text, so short
+  bodies are refused by format); `admit_frozen_model` up to its CPU-dry boundary (admission binding, path, size
+  before bytes, SHA-256 before load, CUDA only, then `RESTORE_DEPENDENCIES_NOT_SUPPLIED`) using Codex's confirmed
+  `c45f775f` API; `FrozenModelHandle` (predict-only, depth 8, RNG guard, separate clone); `predict_raw` (charge,
+  one call, private receipt, public record last). Restore and predict stay GPU-dependent and unaccepted.
+- Tests moved to the Codex-assigned lane path `research/cas_closed_loop_1/test_seed18_interfaces.py`; 14 functions
+  (17 cases) added and NOT run under the packet's bounds (syntax parsed only); slice 1's 43-case local run stands.
+- Interface sections added to `HARNESS_SPEC.md` and `CONTRACTS.json` (amendment); no runtime or adapter change.
+
+## 2026-09-27 - SEED18-INTERFACE-IMPLEMENT-02 slice 1: frozen-model interface implemented (no model) and tested locally
+
+- `claude_lead_20260927/seed18_interfaces/frozen_model_interface.py`: real no-model behavior for typed identity,
+  admission-binding (a digest alone never authorizes), budget, work-account and public-record validation with an
+  explicit permitted-field table and provenance; an append-only ledger that requires the original prediction row
+  before any output row; the no-repair path preserving the original prediction; parity checks returning work
+  totals and no verdict. `admit_frozen_model`, `predict_raw`, `repair_cas_closed_loop` and `evaluate` remain
+  unimplemented with exact reasons; the missing native operation for a learned prediction is named in the README.
+- `test_frozen_model_interface_slice1.py`: 32 functions, 43 cases, all labeled test doubles; 43 passed locally
+  (Python 3.11.15, pytest 9.0.2, junit retained). Engineering check, not acceptance; no HELM run.
+- Requests to Codex on PR #245: namespace ownership acknowledgment and the exact `c45f775f` learner API.
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1 packet B1-SEED18-INTERFACES-20260927-01: frozen-model interface contract and test map (source-only)
+
+- New directory `claude_lead_20260927/seed18_interfaces/` only: a callable interface contract for a frozen learned
+  model with (`CAS_CLOSED_LOOP`) and without (`NONE`) the current CAS repair path, every operation unimplemented,
+  not imported or executed; the contract as JSON (ten invariants, fifteen refusals); a test map of 16 declared cases
+  (written 0, executed 0); the remaining validation commands; Codex's stated seed-18 parent (`5a8a3069…`, cursor
+  `2940`) and the two arms (constant `0.003` vs `0.001`, 20 additional passes) with readouts re-fixed before results.
+- Raw neural predictions are separate digest-bound records from verified system outputs; same items, order,
+  evaluator and budget across paths. No coordinator, growth, scorer, threshold or acceptance claim.
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 4: joint-validation delivery package (A5) and seed-18 preparation (A4), records only
+
+- No source, test, HELM, seed-19, growth or Q4 file changed; no test, model, cloud or worker run. Both packets were
+  executed serially in the lead session (`claude_lead_20260927/WORKERS.json`).
+- `A5_ACCEPTANCE_PACKAGE_20260927.{md,json}`: the 73 CAS case identities mapped to the owner's five acceptance
+  items with executed status per case (62/62 and 11/11 local, Python 3.11.15, not acceptance); 69 SI cases declared,
+  never run by Claude; the joint command verbatim from `JOINT_ACCEPTANCE_PLAN.json` at `d7808d59` (142 declared,
+  `NOT_RUN`); dependencies D1-D4 on Codex, including the stale frozen concurrency identity in `launch.py`/`package.py`.
+- `A4_SEED18_COMPARISON_PREREG_20260927.md` + `A4_SEED18_CONDITIONS.json`: unchanged continuation (AdamW constant
+  `0.003`) versus one predefined constant `0.001`, both from copies of the same verified pass-20 seed-18 state,
+  +1470 main updates to pass 30, readouts and licensed statement fixed before results; finding that both arms need a
+  declared continuation seam (restore path binds learning rate and `max_updates` to checkpoint metadata; inspected on
+  an archived copy, to be confirmed on the exact `c45f775f` bytes). `A4_CAS_ASSISTED_SEED18_PATH_20260927.md`
+  (gated on joint acceptance; the Ohm fixture is not a neural invocation) and `A4_GROWTH_CAS_REQUIREMENTS_20260927.md`
+  (for Codex C3). One `ENGINEERED-NOT-VALIDATED` row added to `docs/CAS_HARNESS_SPEC_SHEET.md`.
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 2: snapshot-bound atlas addresses wired into the leased adapter; addendum's ten cases executable in the lane
+
+- `native_step_adapter.py`: `atlas_address_for_frame`, `atlas_address_chain`, `check_atlas_address`,
+  `resolve_atlas_address`; `runtime_location.atlas_binding` carries one exact address per live frame (null with no
+  frame). Existing identities only; no resume, dispatch or commit from an address; no profile or focus input.
+- `test_return_addresses.py` (new lane file): ten addendum rows plus one wiring case, 11 passed locally.
+  `RETURN_ADDRESS_TEST_MAP.json` 0.2 maps each row to its adapter case and preserves the 0.1 upstream rows.
+- `HARNESS_SPEC.md`, `CONTRACTS.json`, `DECISIONS.md`, `README.md` amended (R7, R3, R8 notes). The round-2 origin
+  under `claude_lead_20260927/` is now a shim and a pointer; bytes stay in git history.
+- Frozen four-file chain re-run on the same adapter bytes: 62 passed, retained replay, witness (x=3, 12 host
+  entries, 18 native events) and fresh-process replay PASS (`run_20260927T062546Z`). Not AWS acceptance.
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lease packet 1: import repair and thread-aware host-entry meter in the leased files
+
+- Codex acknowledged R1-R8 on PR #245 and issued lease `CAS-CORRECTION-20260927-01`; the three-lead package is at
+  `880957f5` (11/11 manifest hashes verified). Claude acknowledged the exact scope before editing.
+- `test_native_step_adapter.py`: module-level `TerminalStatus` import (R1) and a new regression case for a foreign-
+  thread entry inside the window. `native_step_adapter.py`: thread-aware meter with an explicit claim boundary (R6).
+  `HARNESS_SPEC.md`, `CONTRACTS.json`, `DECISIONS.md` amended in the same commit.
+- `SOURCE_BINDINGS.json` deliberately untouched: its digest is the retained evidence's admission identity.
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1 lead, round 2: corrected re-entry probe, meter hardening prototype, snapshot-bound atlas addresses with the addendum's ten cases
+
+- Corrected probe (`probe_threaded_reentry_v2.py`): counts real entries into the pinned `advance` per (thread, frame)
+  from the patched `_execute`'s caller frame; no interpreter hook is installed or cleared; refusal is the only pass.
+  Unmodified adapter: two direct entries on two threads, receipt says `I_executed=1`. Finding F2 stands as MAJOR.
+- Prototype hardening (`PROPOSED_PATCH_native_step_adapter_thread_meter.diff`, scratch only): thread-level hook for
+  the window, foreign-thread activity invalidates, hook-intact check after the call. Probe refused with
+  `HOST_ENTRY_METER_INVALIDATED`; the predeclared 61 still pass (118.6 s).
+- `atlas_address.py`: exact snapshot-bound addresses from existing identities (run, branch, root call, unique
+  authorized push event, frame digest, atlas `state-`/`frame-` nodes with tick contexts); read-only, no resume.
+  The ten `RETURN_ADDRESS_TEST_MAP.json` cases are executable in `test_atlas_address.py`: 10 passed (56.0 s).
+  Recorded: the runtime is deterministic; byte-identical inputs give the identical run id and frame identities.
+- `CASE_RECONCILIATION.md/.json` for DeepSeek's 52-versus-61 question; `SHARED_RETURN_20260927.md` for section 6.
+- Still no Codex-owned file edited; no cloud or model spend; HELM untouched. Blocker: Codex's handoff (R1).
+
+## 2026-09-27 - CAS-CLOSED-LOOP-1: Claude lead check of the amended source; one test-file defect found and repaired in a scratch tree
+
+- Assignment: finish CAS-CLOSED-LOOP-1 for HELM self-improvement integration. Codex head reviewed:
+  `aa600668` on `codex/cas-closed-loop-1-aws-validation-20260925`; Claude branch `claude/focused-mccarthy-uj45ul`
+  starts there. All Claude files are under `research/cas_closed_loop_1/claude_lead_20260927/`; no Codex-owned file
+  edited pending the acknowledged handoff.
+- Ran the frozen public CPU protocol locally three times (`run_local_protocol.py`, mirrors `aws_validation/worker.py`).
+  Exact head: 61 collected, 3 fail with `NameError: TerminalStatus` at `test_native_step_adapter.py:138` and `:285`
+  (module-level import missing; introduced by `f6253e1a`). These are the regression cases for DeepSeek items (1)
+  no-frame return identity and (3) state-bound work join. The AWS worker's 61/0/0/0 gate would fail on this alone.
+- With the one-line module-level import (proposed patch, sha256 `d88c14c9...`), in a detached scratch worktree:
+  61/61 pass, retained replay and fresh-process replay `EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT`, witness `x=3`,
+  12 host entries, 18 native events, journal digest identical to the historical evidence.
+- Found that objects `348638c9` and `2636bbb6`, recorded as `MISSING_FROM_LIVE_REPOSITORY`, are present on origin.
+- Worker A3 (bounded, read-only) confirms the three DeepSeek items are implemented at the head and adds one
+  confirmed MAJOR: the `sys.setprofile` host-entry meter is per-thread, so a monkeypatched `_execute` that runs a
+  second `advance` on a new thread yields a verifying receipt with `I_executed=1` while the native trace grew by
+  two events (`probe_threaded_reentry.py`). Codex to harden or narrow the specification (R6).
+- Worker A2 (bounded, read-only) maps AT01-AT36: 12 covered by test, 15 partial, 1 evidence-only, 8 not yet
+  applicable; strict first gap AT03; next gap after the repair is the absent atlas address binding
+  (`atlas_binding: None`, 0 of 10 addendum cases). Records, worker record and DeepSeek packet under
+  `research/cas_closed_loop_1/claude_lead_20260927/`; reviewed content commit pinned in `PINNED_COMMIT.txt`.
+- Claim boundary: local Python 3.11 checks only; not `CAS_AWS_ENGINEERING_VALIDATED`; no paid job, model call,
+  protected read, HELM change or Lane A launch.
+
 ## 2026-09-04 - CASformer v0.2 source freeze
 
 - Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.

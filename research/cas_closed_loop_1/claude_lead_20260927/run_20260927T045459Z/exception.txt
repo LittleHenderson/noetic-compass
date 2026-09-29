@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/user/noetic-compass/research/cas_closed_loop_1/claude_lead_20260927/run_local_protocol.py", line 122, in main
+    raise ValueError("PREDECLARED_TEST_COUNTS_REQUIRED_WITHOUT_SKIPS")
+ValueError: PREDECLARED_TEST_COUNTS_REQUIRED_WITHOUT_SKIPS

@@ -1,0 +1,268 @@
+{
+ "schema": "cas.closed-loop.return-address-test-map/0.2",
+ "supersedes": "cas.closed-loop.return-address-test-map/0.1 at 2636bbb6 (codex/cas-closed-loop-1), rows preserved below as 'upstream'",
+ "addendum": "CAS_RPA_RETURN_ADDRESS_ADDENDUM_v1.md (sha256 6194ca02ae4d1b24c84fd68c17764f7b734a8628c437aadf8aa2a635dc9d1668 as recorded in the three-lead source index)",
+ "implementation": {
+  "file": "research/cas_closed_loop_1/native_step_adapter.py",
+  "symbols": [
+   "atlas_address_for_frame",
+   "atlas_address_chain",
+   "check_atlas_address",
+   "resolve_atlas_address",
+   "runtime_location (atlas_binding)"
+  ],
+  "authority": "READ_ONLY_ADDRESS_NOT_A_RESUME_TOKEN; the existing CompoundCoordinator remains the only writer"
+ },
+ "adapter_tests": "research/cas_closed_loop_1/test_return_addresses.py",
+ "execution_status_legend": {
+  "EXECUTED_LOCALLY_PASSED": "run by Claude on Python 3.11 in the lead's container as an engineering check; not AWS acceptance",
+  "NOT_RUN_BY_CODEX": "carried from the 0.1 map for the upstream native tests at the runtime commit; not part of the frozen lane suite"
+ },
+ "count_note": "Function count and parametrized case count are separate; test_return_addresses.py has 11 functions and 11 cases (ten addendum rows plus one wiring case). Whether the file joins the frozen suite is Codex's freeze decision; nothing hardcodes a total.",
+ "rows": [
+  {
+   "row": 1,
+   "acceptance_ids": [
+    "AT15",
+    "AT20"
+   ],
+   "new_adapter_case_needed": "Bind each waiting frame to its own snapshot/node address",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+    "function": "test_real_nested_construction_installs_program_and_resumes_exact_parent",
+    "file_sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row1_two_nested_frames_bind_distinct_snapshot_addresses_and_return_to_exact_callers",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "Two live frames get distinct snapshot nodes, frame nodes and digests; both resolve RESOLVED_LIVE_FRAME in a view rendered while suspended; the authorized RETURN_PRIMITIVE then RETURN_COMPOUND intents name exactly those frame ids in dependency order; root x=3 COMPLETE; in the final view both resolve RESOLVED_HISTORICAL_FRAME_NOT_LIVE.",
+    "boundary": "The native exact return itself is upstream behavior (test_compound_kernel.py::test_real_nested_construction_installs_program_and_resumes_exact_parent at the runtime commit; not in the 61-case suite). This case binds that behavior to addresses; it does not re-prove the kernel."
+   }
+  },
+  {
+   "row": 2,
+   "acceptance_ids": [
+    "AT16",
+    "AT17",
+    "AT19",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Wrong atlas address cannot choose another native continuation",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+    "function": "test_wrong_return_frame_cannot_resume_or_write_parent",
+    "file_sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row2_wrong_address_cannot_select_another_continuation",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "A crossed address (outer suspension with the inner continuation) is refused SUSPENSION_EVENT_FRAME_MISMATCH; a foreign run id is refused SUSPENSION_EVENT_MISMATCH; the module exposes no resume/dispatch/commit/advance name; journal and stack unchanged.",
+    "boundary": "Refusal at the address layer only. Native wrong-frame refusal is upstream (test_wrong_return_frame_cannot_resume_or_write_parent)."
+   }
+  },
+  {
+   "row": 3,
+   "acceptance_ids": [
+    "AT16",
+    "AT17",
+    "AT19",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Repeated view event cannot dispatch a new native request",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py",
+    "function": "test_duplicate_and_stale_requests_do_not_open_a_call_or_spend_work",
+    "file_sha256": "2d85c98903c4f51e5f84f2ad2a315c471b6e84863e70950f956c2270329bd57d",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row3_repeated_resolution_dispatches_nothing",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "Five resolutions and five chain computations leave state hash, trace length, native budget and the journal byte-identical.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": 4,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT22"
+   ],
+   "new_adapter_case_needed": "Preserve root/parent address chain across restart",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py",
+    "function": "test_actual_source_fresh_process_recovers_each_cut_then_reuses_program",
+    "file_sha256": "2e9a039661e79e8386031836b7fd573d425d2e588a9ece7c003cc783eb0c4c17",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row4_address_chain_survives_fresh_process_recovery",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "The suspended journal is recovered in a separate Python process (subprocess) with the caller-held journal digest; the recomputed chain, including both address digests and the root call occurrence, equals the original.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": 5,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT22"
+   ],
+   "new_adapter_case_needed": "Do not reconstruct budget from suspended snapshot",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py",
+    "function": "test_failures_replay_exact_refusal_costs_and_unwind",
+    "file_sha256": "2e9a039661e79e8386031836b7fd573d425d2e588a9ece7c003cc783eb0c4c17",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row5_address_carries_no_budget_and_resume_uses_the_live_ledger",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "The address has no budget or remaining field; after the nested work completes the live ledger is strictly below the frame's entry budget; the entry budget stays in the continuation as history only.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": 6,
+   "acceptance_ids": [
+    "AT24",
+    "AT25",
+    "AT26"
+   ],
+   "new_adapter_case_needed": "Equal/missing profiles cannot merge two call occurrences",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adapter.py",
+    "function": "test_suspended_frame_and_next_action_are_exact_read_only_projections",
+    "file_sha256": "94033b21bf292ce7b7c77717459cd47af00713a02d0f850fe526b61db0922abc",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row6_equal_or_missing_profiles_never_merge_callers",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "Two occurrences with the same source profile and root goal but different inputs get different run ids, snapshot nodes, frame nodes and digests; one's address is refused in the other's view; a live frame of one machine is FRAME_NOT_LIVE on the other; supplied profile coordinates are refused PROFILE_COORDINATES_HAVE_NO_ADDRESS_ROLE.",
+    "boundary": "Recorded fact: a machine started from byte-identical inputs is deterministic and reaches the identical run id and frame identities; that is the same episode identity, not a merge of two callers."
+   }
+  },
+  {
+   "row": 7,
+   "acceptance_ids": [
+    "AT24",
+    "AT25",
+    "AT26"
+   ],
+   "new_adapter_case_needed": "Layout/recentering leaves return-address resolution unchanged",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+    "function": "test_focus_and_hypothesis_only_change_view_handles",
+    "file_sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row7_focus_and_hypothesis_changes_leave_resolution_unchanged",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "AtlasSnapshot.focus to another node and the flat_graph presentation give the same resolution (only the reported focus differs); the journal is unchanged.",
+    "boundary": "The pinned atlas has no geometric layout; focus and flat/graph presentation are the existing view operations."
+   }
+  },
+  {
+   "row": 8,
+   "acceptance_ids": [
+    "AT10",
+    "AT21",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Adapter preserves one event/address association",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+    "function": "test_stale_duplicate_proposal_does_not_reuse_previous_work_charge",
+    "file_sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row8_one_suspension_event_per_address",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "Two computations of the same frame's address are identical; swapping the suspension event hash for another event's hash is refused SUSPENSION_EVENT_MISMATCH; the unique authorized push event is the one bound.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": 9,
+   "acceptance_ids": [
+    "AT24",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "No successful adapter view from tampered replay",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py",
+    "function": "test_resealed_false_journal_still_fails_actual_semantic_replay",
+    "file_sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row9_tampered_view_or_journal_cannot_resolve",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "A view whose snapshot node state_hash is altered is refused SNAPSHOT_NODE_MISMATCH; a view missing the waiting node is refused WAITING_NODE_NOT_FOUND; a truncated journal fails native recovery (ContractError) before any address exists; an altered address fails its digest.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": 10,
+   "acceptance_ids": [
+    "AT25",
+    "AT27"
+   ],
+   "new_adapter_case_needed": "Use exact matching frame/snapshot, no nearest-node fallback",
+   "upstream": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_scoped_compound.py",
+    "function": "test_leaf_entry_nonchild_jump_and_wrong_snapshot_are_refused",
+    "file_sha256": "633ddfb3002d84f4da6ac3ed178c6820d2d31244ca1024c9d6d1d2a891edb5fe",
+    "execution_status": "NOT_RUN_BY_CODEX",
+    "note": "native-level assertion at runtime commit 8182ad52; not in the lane suite"
+   },
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_row10_near_miss_snapshot_hash_is_refused_not_nearest",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "An address whose snapshot hash differs in one hex digit is refused although the real node is present in the view; after the exact return the frame is FRAME_NOT_LIVE.",
+    "boundary": ""
+   }
+  },
+  {
+   "row": "wiring",
+   "acceptance_ids": [
+    "AT15",
+    "AT24"
+   ],
+   "new_adapter_case_needed": "runtime_location carries the addresses; null with no frame",
+   "adapter_case": {
+    "path": "research/cas_closed_loop_1/test_return_addresses.py",
+    "function": "test_runtime_location_atlas_binding_is_the_address_chain_or_null",
+    "execution_status": "EXECUTED_LOCALLY_PASSED",
+    "proves": "atlas_binding equals the address chain for live frames and is null after the exact return",
+    "boundary": ""
+   }
+  }
+ ]
+}

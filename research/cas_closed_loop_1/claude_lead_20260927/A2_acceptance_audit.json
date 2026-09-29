@@ -1,0 +1,1510 @@
+{
+ "schema": "a2.acceptance-audit/0.1",
+ "head": "aa6006683d9e798c85667dc0d389a604b0e99053",
+ "branch": "claude/focused-mccarthy-uj45ul (== origin/codex/cas-closed-loop-1-aws-validation-20260925)",
+ "audit_scope": "READ-ONLY static audit of research/cas_closed_loop_1/ against ACCEPTANCE_TESTS.json (36 ids) from origin/codex/cas-closed-loop-1; pytest was NOT run by this audit; nothing is marked PASSED.",
+ "execution_status_summary": {
+  "tracked_records": "Last executed test suite: 43 cases at 8f55cc3a (STATUS.json L5-12, pre-amendment adapter) + 4 artifact cases (L61-67). Amended 57-case scientific suite (f6253e1a == aa600668 for all scientific files) and the 4 launcher cases (3a4d23f0): NOT_RUN in any tracked record. AWS jobs: 47cef2 (318b22ad, 47 tests) STOPPED_UNACCEPTED / NO_TERMINAL_RECEIPT; a227f8 (f6253e1a, 57 tests) FAILED_BOOTSTRAP_UNACCEPTED / focused_tests NO_RECEIPT; 59bae1 (3a4d23f0, 61 tests) PREPARED_NOT_AUTHORIZED_FOR_RETRY / execute_authorized false.",
+  "untracked_working_tree": "research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045459Z (git status '??'): local protocol run at aa600668, Python 3.11.15, 61 collected, 56 passed, 5 failed (3 NameError TerminalStatus; 2 boto3/botocore missing); status FAILED; witness/replay not reached. Not part of HEAD; cited only as corroboration of the static NameError finding.",
+  "stale_status_file": "STATUS.json was last modified at 318b22ad and still reports the 8f55cc3a run; CONTRACTS.json.status = CORRECTNESS_AMENDMENT_PENDING_AWS_VALIDATION is the current gate."
+ },
+ "classification_counts": {
+  "PARTIAL": 15,
+  "COVERED_BY_TEST": 12,
+  "EVIDENCE_ONLY": 1,
+  "NOT_APPLICABLE_YET": 8
+ },
+ "rows": [
+  {
+   "id": "AT01",
+   "classification": "PARTIAL",
+   "task": "T01",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/SOURCE_BINDINGS.json",
+     "function_or_key": "runtime_commit / runtime_ref_observed / missing_from_live_repository / files[].bytes+sha256 / handoff[]",
+     "line": "L4-9, L11-682"
+    },
+    {
+     "file": "research/cas_closed_loop_1/DECISIONS.md",
+     "function_or_key": "live repository start + missing objects statement",
+     "line": "L3-11"
+    },
+    {
+     "file": "research/cas_closed_loop_1/bootstrap_runtime.py",
+     "function_or_key": "prepare (SOURCE_IDENTITY_MISMATCH)",
+     "line": "L14-29"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "admission_for (UNADMITTED_RUNTIME_LOCATION, UNADMITTED_DEPENDENCY_LOCATION, SOURCE_MANIFEST_MISMATCH, UNADMITTED_SOURCE_PROFILE)",
+     "line": "L99-129"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "main 'check' -> SOURCE_ADMITTED",
+     "line": "L160-163"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_foreign_loaded_dependency_is_refused",
+     "line": "L248-252"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_simulated_profile_is_not_admitted",
+     "line": "L233-239"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_foreign_loaded_control_dependency_is_not_admitted",
+     "line": "L58-65"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/partial_git_probe.json",
+     "function_or_key": "runtime_paths_verified=108, current_public_source_paths_verified=43, check_artifacts --git-ref f6253e1a PASS",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Identity tests: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). Static artifact/source check executed at f6253e1a (partial_git_probe.json), whose checked files are byte-identical to aa600668.",
+   "note": "Paths/commits are recorded and executable identity checks exist. DISCREPANCY: SOURCE_BINDINGS.json L6-9, DECISIONS.md L3-7, README.md L15-17, STATUS.json L14 and RUN_MANIFEST.json L29 assert 348638c9 and 2636bbb6 are MISSING_FROM_LIVE_REPOSITORY, but in this clone `git cat-file -t` resolves both as commit objects and 2636bbb6 is the base_commit of origin/codex/cas-closed-loop-1 (OWNERSHIP.json). That is an inferred absence tied to the Codex checkout, which AT01 forbids; no test checks the claim."
+  },
+  {
+   "id": "AT02",
+   "classification": "PARTIAL",
+   "task": "T01",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_artifacts.py",
+     "function_or_key": "test_retained_exact_evidence_and_producer_bytes (13 files)",
+     "line": "L7-8"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_artifacts.py",
+     "function_or_key": "test_changed_artifact_bytes_are_refused",
+     "line": "L11-18"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_artifacts.py",
+     "function_or_key": "test_changed_historical_producer_snapshot_is_refused (new at f6253e1a)",
+     "line": "L21-28"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_artifacts.py",
+     "function_or_key": "test_ambiguous_git_reference_is_refused [2 cases]",
+     "line": "L31-34"
+    },
+    {
+     "file": "research/cas_closed_loop_1/check_artifacts.py",
+     "function_or_key": "verify",
+     "line": "L12-50"
+    },
+    {
+     "file": "research/cas_closed_loop_1/.gitignore",
+     "function_or_key": "_runtime/, demo/, .test_tmp/ ignored",
+     "line": "L1-5"
+    },
+    {
+     "file": "research/cas_closed_loop_1/conftest.py",
+     "function_or_key": "pytest_configure task-owned basetemp",
+     "line": "L14-18"
+    },
+    {
+     "file": "research/cas_closed_loop_1/LEDGER.json",
+     "function_or_key": "cleanup: 'No edits to active Helm/Q4 sources'",
+     "line": "L20"
+    },
+    {
+     "file": "research/cas_closed_loop_1/RUN_MANIFEST.json",
+     "function_or_key": "custody",
+     "line": "L28"
+    },
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "protected_material_read=false",
+     "line": "L21"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/execution.json",
+     "function_or_key": "global_concurrency: only declared HELM i-0adf52b7fa801e08b active",
+     "line": "L562-570"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/launch.py",
+     "function_or_key": "EXPLICIT_CONCURRENT_HELM_IDENTITY_REQUIRED / UNDECLARED_ACTIVE_INSTANCE_CONCURRENCY_BLOCK",
+     "line": "L103-108, L215-222"
+    }
+   ],
+   "execution_status_recorded": "test_artifacts: 4 cases passed at 8f55cc3a (STATUS.json L61-67); check_artifacts --git-ref f6253e1a PASS (partial_git_probe.json); new snapshot case NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY.",
+   "note": "Old-receipt byte integrity is executable and tested. 'Active Helm/Q4 source untouched' and 'no protected reads' are declarations only (no test); AWS job records show the HELM GPU was declared and not preempted."
+  },
+  {
+   "id": "AT03",
+   "classification": "PARTIAL",
+   "task": "T02",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "state_axes (readiness / region_state / semantic_outcome / diagnostic_availability)",
+     "line": "L7-20"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "execute_grant receipt: native_halt_status, native_commitment_status, diagnostic_availability='UNASSESSED', asom=None, semantic_verdict='NOT_INFERRED_BY_ADAPTER', execution_status",
+     "line": "L381-386"
+    },
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "controlled_step: parent_readiness_before, region_state='UNASSESSED'",
+     "line": "L83, L91-94"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_disabled_actuator_retains_allocation_without_execution (asom None, diagnostic UNASSESSED)",
+     "line": "L31"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_granted_step_observes_native_events_and_stale_reuse_is_refused (semantic_verdict)",
+     "line": "L50"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_native_error_keeps_observed_events_and_never_reports_success (INVALID_NATIVE_ERROR, semantic_verdict)",
+     "line": "L80, L88"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (I_executed=1 yet no commit; parent_readiness_before BLOCKED)",
+     "line": "L197-200, L209"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Fields are emitted separately and tests assert the adapter never infers a verdict; the wrong-Effect control shows executed=1 does not become acceptance. ASOM/region_state are ALWAYS UNASSESSED (no ELIGIBLE path exists), so no test exercises a diagnostic value competing with readiness or verdict."
+  },
+  {
+   "id": "AT04",
+   "classification": "COVERED_BY_TEST",
+   "task": "T02",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "execute_grant receipt (admission, window{started_utc,elapsed_ns,native_call_ns,wrapper_observation_ns}, unit, entry_meter, I_attempted, receipt_digest)",
+     "line": "L357-391"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "StepGrant.__post_init__ (RUN_ID/STATE_HASH/TICK/ONE_HOST_CALL/ACTUATOR_FLAGS/ADMISSION_DIGEST refusals)",
+     "line": "L79-91"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "execute_grant refusals TYPED_GRANT_REQUIRED, STALE_OR_FOREIGN_ADMISSION, STALE_OR_FOREIGN_GRANT, EPISODE_NOT_RUNNING",
+     "line": "L269-281"
+    },
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "Design(drive_source, constraint_source) / predicted_flow / prediction_window / allocation_policy",
+     "line": "L41-55, L87-90"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_invalid_grant_never_reaches_executor [True,-1,2,1.0]",
+     "line": "L53-58"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_foreign_episode_refused_before_work",
+     "line": "L61-66"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_wrong_problem_admission_is_refused",
+     "line": "L242-245"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_foreign_loaded_dependency_is_refused",
+     "line": "L248-252"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_simulated_profile_is_not_admitted",
+     "line": "L233-239"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_granted_step_observes_native_events_and_stale_reuse_is_refused (post_state_hash bound; provenance NATIVE_EXECUTOR_REPORTS)",
+     "line": "L40-50"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_receipt_content_digest_detects_alteration",
+     "line": "L212-216"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_foreign_loaded_control_dependency_is_not_admitted [compiler_ohm, pcba_check]",
+     "line": "L58-65"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/events.jsonl",
+     "function_or_key": "12 receipts carrying unit/window/prediction_window/allocation_policy/entry_meter",
+     "line": "rows 0-11"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Invalid-origin refusals are tested; source/units/window/policy are on every receipt and digest-bound. I_predicted's origin is a declared design value (control.py L43-46), not a live measurement, and the receipt says so."
+  },
+  {
+   "id": "AT05",
+   "classification": "COVERED_BY_TEST",
+   "task": "T02",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "primitive_work_for_events: WORK_STATE_HISTORY_INVALID; JOINED_PARTIAL + complete_totals=None when counters missing",
+     "line": "L141-144, L177-179"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "execute_grant fault path (complete_totals None, fault_work_status UNRECORDED_PRE_FAULT_WORK_UNKNOWN); InvalidNativeObservation no-receipt paths",
+     "line": "L352-355; L319, L321, L325, L338, L343, L349"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "runtime_location: atlas_binding=None, profile_coordinates=None",
+     "line": "L253-254"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_native_error_keeps_observed_events_and_never_reports_success",
+     "line": "L69-88"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority",
+     "line": "L91-98"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_corrupt_post_fault_state_is_not_published_as_verified",
+     "line": "L219-230"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_internal_reentry_that_clears_meter_never_publishes_a_count (new)",
+     "line": "L170-193"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_corrupt_existing_event_is_refused_even_for_zero_grant",
+     "line": "L255-260"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_unexecuted_window_has_zero_measured_primitive_work [2 cases]",
+     "line": "L263-270"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_work_join_refuses_records_removed_from_trace_bound_state [False,True] (new; NameError at L285)",
+     "line": "L282-302"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_empty_work_join_still_refuses_a_corrupt_state (new)",
+     "line": "L305-308"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "unmeasured_records (1), complete_compute null, ASOM UNASSESSED",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Older cases: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). New cases: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY. STATIC DEFECT at aa600668: test_native_step_adapter.py never imports TerminalStatus at module level (imports L2-13); it is imported only function-locally at L102, but used at L138/L142 (test_no_frame_has_no_return_identity_before_during_and_after_root_call) and L285 (test_work_join_refuses_records_removed_from_trace_bound_state[False|True]). Those 3 cases raise NameError before any assertion. Corroborated by the UNTRACKED working-tree run claude_lead_20260927/run_20260927T045459Z/pytest.xml (61 collected, 56 passed, 5 failed: 3 NameError + 2 boto3/botocore missing; Python 3.11.15, not the required 3.12).",
+   "note": "Assertions match the requirement (no receipt / no count / UNASSESSED on missing or invalid telemetry). The two state-bound-work-join cases, which are the owner-named 'state-bound work join' fix, cannot pass as written because of the NameError."
+  },
+  {
+   "id": "AT06",
+   "classification": "COVERED_BY_TEST",
+   "task": "T02",
+   "milestone": "M1",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "OPERATIONS / BOARDS / checked_board (PCBA_STATIC_CHECK_FAILED, UNSUPPORTED_BOARD_EXECUTION_PROFILE) / controlled_step UNSUPPORTED_NATIVE_OPERATION",
+     "line": "L17-38, L75-77"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_supported_boards_static_check_and_operation_mask [3 boards]",
+     "line": "L76-84"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "board_profile",
+     "line": "L44-50"
+    },
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "M3_attempts[0] demo FAILED UNSUPPORTED_NATIVE_OPERATION (retained negative)",
+     "line": "L32-36"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Static PASS with an unlisted operation (ARBITRARY_PASSIVE_TRANSFER) is refused and an altered board source is refused; only allowlisted native operations map to CompoundMachine.advance."
+  },
+  {
+   "id": "AT07",
+   "classification": "PARTIAL",
+   "task": "T03",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_exact_pinned_ohm_calculation [('12','4',3),('12','6',2)]",
+     "line": "L39-41"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_invalid_ohm_inputs_refused [('1','0'),('NaN','1'),('Infinity','1'),('-1','1')] -- bare pytest.raises(ValueError), no match=",
+     "line": "L44-47"
+    },
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "predicted_flow (single shared scale for drive and constraint)",
+     "line": "L49-55"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "12/4 and 12/6 plus zero-divisor/NaN/Infinity/negative are tested, but refusal NAMES are not asserted and there is no overflow or scale-mismatch case (grep: no 'overflow'/'scale' in tests). The exact arithmetic lives in pinned _runtime/compiler_ohm.py (upstream, not audited here)."
+  },
+  {
+   "id": "AT08",
+   "classification": "EVIDENCE_ONLY",
+   "task": "T03",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "controlled_step: residual=None, residual_status='UNAVAILABLE_UNCALIBRATED_DESIGN_NOT_EMPIRICAL_PREDICTION'",
+     "line": "L94-95"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "quantity_contract.I_predicted / calibration (no measured-resistance fit; no residual)",
+     "line": "L24, L29"
+    },
+    {
+     "file": "research/cas_closed_loop_1/README.md",
+     "function_or_key": "'ASOM and calibrated residuals remain unavailable'",
+     "line": "L57-63"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/events.jsonl",
+     "function_or_key": "residual null in all 12 rows",
+     "line": "rows 0-11"
+    }
+   ],
+   "execution_status_recorded": "No executable check exists; nothing to execute.",
+   "note": "Satisfied by construction: no residual is ever computed, so no cross-unit/window comparison can occur. No test asserts residual is None or that a unit/window mismatch is refused (grep: 'residual' absent from all four test files)."
+  },
+  {
+   "id": "AT09",
+   "classification": "COVERED_BY_TEST",
+   "task": "T03",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_disabled_actuator_retains_allocation_without_execution (I_allocated 1, I_executed 0, no events, state unchanged)",
+     "line": "L24-31"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_zero_grant_does_not_make_native_call",
+     "line": "L34-37"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_unexecuted_window_has_zero_measured_primitive_work [(False,1),(True,0)]",
+     "line": "L263-270"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing (I_predicted set, I_allocated 1, I_executed 0, effect_check False)",
+     "line": "L68-73"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "execute_grant gating `if grant.calls and grant.actuator_enabled`; receipt I_allocated/I_executed/I_attempted",
+     "line": "L289, L365-367"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Directly matches the required assertion including 'not successful control' (effect_check False)."
+  },
+  {
+   "id": "AT10",
+   "classification": "PARTIAL",
+   "task": "T03",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_wrong_method_is_rejected_and_failed_work_remains_charged (rejected intent; native_budget decreased; measured work > 0)",
+     "line": "L100-115"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (rollback keeps native_budget == spent)",
+     "line": "L205-207"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_native_error_keeps_observed_events_and_never_reports_success (charged_native_policy_units >= 0 only)",
+     "line": "L83"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "NATIVE_BUDGET_INCREASED_WITHIN_STEP guard (untested); window.wrapper_observation_ns recorded (unasserted)",
+     "line": "L344-349, L361-362"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/events.jsonl",
+     "function_or_key": "row 0 CHECK_MEMORY_RESOLUTION charged instructions=16, checker_calls=1",
+     "line": "row 0"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Failed checks and canceled/rolled-back work stay charged (tested). Controller overhead is only recorded, never asserted; 'retrieval' is not a distinct channel in this profile. Addendum case 'restart preserves consumed work / replay does not restore an old allowance' has no test (replay compares state, event refs and work rows, not budget)."
+  },
+  {
+   "id": "AT11",
+   "classification": "COVERED_BY_TEST",
+   "task": "T04",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_granted_step_observes_native_events_and_stale_reuse_is_refused (I_executed 1, events > 0, post_state_hash == machine.state)",
+     "line": "L40-50"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_repeated_dispatch_wrapper_refused_before_native_entry [propagate, swallow, catch_then_third_call] (new)",
+     "line": "L146-167"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_substituted_callable_is_refused_before_entry (new)",
+     "line": "L204-209"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_internal_reentry_that_clears_meter_never_publishes_a_count (new)",
+     "line": "L170-193"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_permission_mask_precedes_invalid_ratio_and_preserves_state",
+     "line": "L50-55"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+     "line": "L125-141"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "EXACT_NATIVE_DISPATCH_REQUIRED; CPython call-event meter on the pinned advance code object",
+     "line": "L290-293, L295-310"
+    }
+   ],
+   "execution_status_recorded": "Older cases: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). Dispatch/re-entry cases: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY.",
+   "note": "The actuator is the real CompoundMachine.advance, pinned by receiver, function and code object; state hash and sealed events change only when it runs."
+  },
+  {
+   "id": "AT12",
+   "classification": "PARTIAL",
+   "task": "T04",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "permission mask type check; flow None when not permitted; calls = min(1, floor); no board -> raise (no fallback route)",
+     "line": "L60-62, L75-81"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_permission_mask_precedes_invalid_ratio_and_preserves_state (Design('NaN','0'), permitted=False -> 0/0, state unchanged)",
+     "line": "L50-55"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_bounded_negative_controls_cannot_commit (allow_acquisition False -> NEEDS_CAPABILITY, no commit)",
+     "line": "L87-97"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (BLOCKED, NO_ACTIVE_PRIMITIVE_HEAD, NEEDS_CAPABILITY)",
+     "line": "L208-212"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Mask precedence over an invalid ratio and the no-ready terminal are tested. No large-V case (e.g. Design('1000','1')) asserts the cap to 1, and invalid V with the mask ON (permitted=True) is untested."
+  },
+  {
+   "id": "AT13",
+   "classification": "PARTIAL",
+   "task": "T04",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "StepGrant ONE_HOST_CALL_MAXIMUM; verify_receipt 0 <= I_executed <= I_allocated <= 1",
+     "line": "L86-87, L60-66"
+    },
+    {
+     "file": "research/cas_closed_loop_1/control.py",
+     "function_or_key": "FLOOR_EXACT_PREDICTION_CAP_ONE_AFTER_PERMISSION_MASK",
+     "line": "L80-81, L90"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_invalid_grant_never_reaches_executor (calls=2 / 1.0 / -1 / True refused)",
+     "line": "L53-58"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_rehashed_receipt_still_refuses_execution_above_allocation (new)",
+     "line": "L196-201"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_receipt_content_digest_detects_alteration",
+     "line": "L212-216"
+    }
+   ],
+   "execution_status_recorded": "Older cases: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). Rehashed case: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY.",
+   "note": "Integer-grant cap conservation is covered. Shares/normalization/uniform scaling do not exist in this single-route profile (CONTRACTS.json L33-35) and have no test."
+  },
+  {
+   "id": "AT14",
+   "classification": "PARTIAL",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "NATIVE_TRACE_PREFIX_CHANGED; event-chain and state binding; STALE_OR_FOREIGN_GRANT",
+     "line": "L323-325, L331-343, L277-279"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_granted_step_observes_native_events_and_stale_reuse_is_refused (stale grant refused after state change)",
+     "line": "L45-48"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work (authorized intent order; atlas timeline == journal trace)",
+     "line": "L131-136, L141"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_wrong_method_is_rejected_and_failed_work_remains_charged (intent only via coordinator.execute; rejected_intents)",
+     "line": "L105-110"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "authority: only CompoundCoordinator commits",
+     "line": "L6"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Prior-trace immutability and lawful commitment are tested. 'New diagnosis cannot retroactively alter a route' is not testable here: no diagnosis path exists (region_state always UNASSESSED)."
+  },
+  {
+   "id": "AT15",
+   "classification": "COVERED_BY_TEST",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "RETURN_IDENTITY_FIELDS (11); runtime_location identity(); return_identity None when no frames; SUSPENSION_EVENT_NOT_UNIQUE",
+     "line": "L31-35, L199-257 (L212-237, L249, L221-222)"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_all_eleven_identity_fields_and_suspended_snapshot_are_retained (2 frames captured; identity stable per frame_id)",
+     "line": "L101-124"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_no_frame_has_no_return_identity_before_during_and_after_root_call (new; NameError L138/L142)",
+     "line": "L127-143"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work (single root call id; RETURN_PRIMITIVE/RETURN_COMPOUND order)",
+     "line": "L134-139"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (compound_head preserved; budget == spent)",
+     "line": "L207"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/events.jsonl",
+     "function_or_key": "rows 3-9 frames 1->2->2->2->1->1->1->0 (two nested levels)",
+     "line": "rows 3-9"
+    },
+    {
+     "file": "research/cas_closed_loop_1/HARNESS_SPEC.md",
+     "function_or_key": "Return location",
+     "line": "L8-19"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "return_contract",
+     "line": "L51-72"
+    }
+   ],
+   "execution_status_recorded": "all_eleven case: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). (assertions revised at f6253e1a). no_frame case: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY. STATIC DEFECT at aa600668: test_native_step_adapter.py never imports TerminalStatus at module level (imports L2-13); it is imported only function-locally at L102, but used at L138/L142 (test_no_frame_has_no_return_identity_before_during_and_after_root_call) and L285 (test_work_join_refuses_records_removed_from_trace_bound_state[False|True]). Those 3 cases raise NameError before any assertion. Corroborated by the UNTRACKED working-tree run claude_lead_20260927/run_20260927T045459Z/pytest.xml (61 collected, 56 passed, 5 failed: 3 NameError + 2 boto3/botocore missing; Python 3.11.15, not the required 3.12).",
+   "note": "Two nested prerequisite levels (compound -> primitive) return to the exact caller in both the demo evidence and the test. Addendum 'bind each waiting frame to its own snapshot/node address' is NOT implemented (atlas_binding None, L253) and has no test. Historical evidence rows (8f55cc3a producer) carry a non-null return_identity with null inner fields when frames==[] (row 0), which the amended contract (HARNESS_SPEC L10-11) now forbids; historical bytes are intentionally unchanged."
+  },
+  {
+   "id": "AT16",
+   "classification": "COVERED_BY_TEST",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_wrong_method_is_rejected_and_failed_work_remains_charged (wrong CallProgram install rejected; compound_head None; effect_check False)",
+     "line": "L100-115"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (rolled-back primitive blocks dispatch: NO_ACTIVE_PRIMITIVE_HEAD -> NEEDS_CAPABILITY)",
+     "line": "L202-212"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Unrelated and stale methods are refused. A malformed/invalid artifact relies on upstream qualification (not separately tested). Addendum 'wrong atlas address cannot choose another native continuation' absent (no atlas address exists)."
+  },
+  {
+   "id": "AT17",
+   "classification": "PARTIAL",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_bounded_negative_controls_cannot_commit [allow_acquisition False | NativeBudget(300,100) | rpm_depth_limit 1 | max_ticks 2]",
+     "line": "L87-97"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "run_episode BOUNDED_HOST_STEP_LIMIT_REACHED",
+     "line": "L41-42"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/bundle.json",
+     "function_or_key": "trusted_genesis.reasoning.budgets (max_rpm_depth 8, max_repeat_states 3, max_branches 8)",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Terminal reason is asserted only as membership in {NEEDS_CAPABILITY, BUDGET_EXHAUSTED}, not the precise reason per case; repeated-prerequisite-signature and max_branches termination are not exercised here (upstream behaviour)."
+  },
+  {
+   "id": "AT18",
+   "classification": "COVERED_BY_TEST",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (monkeypatched check_program_call -> output 999 with valid report digest; I_executed 1; compound_call.output None; effect_check False)",
+     "line": "L186-200"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "same test: changed e=999 -> effect_check False",
+     "line": "L174-177"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "effect_check: original-input substitution + COMMITTED required",
+     "line": "L46-57"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Positive allocation/execution with an independently wrong Effect is not committed and fails the independent check."
+  },
+  {
+   "id": "AT19",
+   "classification": "COVERED_BY_TEST",
+   "task": "T05",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_wrong_method_is_rejected_and_failed_work_remains_charged (rejected -> compound_head None; budget charged)",
+     "line": "L110-111"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (rollback: compound_head == original_head; native_budget == spent)",
+     "line": "L205-207"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_native_error_keeps_observed_events_and_never_reports_success (interrupted after step: after.state_hash == machine.state; INVALID_NATIVE_ERROR)",
+     "line": "L69-88"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_corrupt_post_fault_state_is_not_published_as_verified",
+     "line": "L219-230"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "fault-path validation; NativeStepFailed carries receipt without verdict",
+     "line": "L316-343, L392-393"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). (native_error assertions extended at f6253e1a)",
+   "note": "Rejected and interrupted commits leave no partial authoritative state; rollback does not refund work."
+  },
+  {
+   "id": "AT20",
+   "classification": "COVERED_BY_TEST",
+   "task": "T06",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work (CHECKED, output '3', measured work > 0, ordered chain, atlas==journal)",
+     "line": "L125-141"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_fresh_process_replays_retained_journal",
+     "line": "L144-151"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_repeated_dispatch_wrapper_refused_before_native_entry / test_substituted_callable_is_refused_before_entry (real advance only)",
+     "line": "L146-167, L204-209"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "public_problem (no expected answer supplied); demo",
+     "line": "L27-29, L60-97"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/journal.json",
+     "function_or_key": "18 ticks: CHECK_MEMORY_RESOLUTION, REQUEST_COMPOUND, PUSH_COMPOUND_ACQUISITION, PUSH_PRIMITIVE_ACQUISITION, SELECT_PRIMITIVE, INSTALL_PRIMITIVE, RETURN_PRIMITIVE, CONSTRUCT_COMPOUND, INSTALL_COMPOUND, RETURN_COMPOUND, APPLY_COMPOUND, ..., DECISION_COMMIT, HALT",
+     "line": "episodes[0].trace"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "output '3', host_entries 12, native_events 18, replay EXACT_NATIVE_REPLAY_AND_CHECKED_EFFECT",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/events.jsonl + evidence/ARTIFACT_MANIFEST.json + HISTORICAL_PRODUCER.json",
+     "function_or_key": "retained receipts and byte manifest",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/worker.py",
+     "function_or_key": "fresh witness expectations '3' / 12 / 18",
+     "line": "L139-149"
+    }
+   ],
+   "execution_status_recorded": "Demo executed locally at 8f55cc3a (STATUS.json L15; REPORT.md L1-7). Evidence produced at 8f55cc3a by the historical producer (HISTORICAL_PRODUCER.json); no witness produced by the amended source in tracked records (a227f8 witness NO_RECEIPT). Test: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "The chain is produced by real runtime calls on the pinned CompoundMachine with an empty method registry. The retained episode is from the pre-amendment producer; the amended source has produced no witness in tracked records. Addendum nested-return atlas binding absent."
+  },
+  {
+   "id": "AT21",
+   "classification": "PARTIAL",
+   "task": "T06",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_bounded_negative_controls_cannot_commit (NativeBudget(300,100) -> non-completion)",
+     "line": "L87-97"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (no refund on rollback)",
+     "line": "L205-207"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "NATIVE_BUDGET_INCREASED_WITHIN_STEP guard (untested)",
+     "line": "L344-349"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CONTRACTS.json",
+     "function_or_key": "first_actuator.native_budget; return_contract.budget",
+     "line": "L36, L68"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Insufficient cap -> non-completion is tested. No test asserts budget monotonicity across PUSH_*_ACQUISITION subgoals or across replay; the addendum case 'do not reconstruct budget from suspended snapshot' is absent."
+  },
+  {
+   "id": "AT22",
+   "classification": "COVERED_BY_TEST",
+   "task": "T06",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_fresh_process_replays_retained_journal (subprocess replay; final_state_hash equal)",
+     "line": "L144-151"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (recover_compound_journal; e=41 -> '4' without CONSTRUCT_COMPOUND; compound_head equal; invalidation blocks)",
+     "line": "L164-184, L202-212"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "replay",
+     "line": "L100-139"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/worker.py",
+     "function_or_key": "retained_replay + fresh_process_replay steps",
+     "line": "L135-149"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "replay status",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Fresh-process replay, changed-input reuse and explicit invalidation are all tested. Addendum 'preserve root/parent address chain across restart' is covered only by state parity; no address chain exists."
+  },
+  {
+   "id": "AT23",
+   "classification": "COVERED_BY_TEST",
+   "task": "T06",
+   "milestone": "M2",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "positive: test_real_repair_exact_return_checked_bias_effect_and_event_bound_work",
+     "line": "L125-129"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "negative: test_disabled_actuator_keeps_prediction_and_grant_but_executes_nothing / test_wrong_method_is_rejected_and_failed_work_remains_charged / test_bounded_negative_controls_cannot_commit",
+     "line": "L68-73, L100-115, L87-97"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "invalid instrument: test_simulated_profile_is_not_admitted / test_foreign_loaded_dependency_is_refused / test_rehashed_receipt_still_refuses_execution_above_allocation (new) / test_receipt_content_digest_detects_alteration",
+     "line": "L233-239, L248-252, L196-201, L212-216"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "invalid instrument: test_foreign_loaded_control_dependency_is_not_admitted",
+     "line": "L58-65"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). Rehashed-receipt case: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY.",
+   "note": "Known route passes; disabled, wrong-method and bounded routes fail; unadmitted or altered instruments cannot issue a benefit result."
+  },
+  {
+   "id": "AT24",
+   "classification": "PARTIAL",
+   "task": "T07",
+   "milestone": "M3",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work (atlas timeline event hashes == journal trace)",
+     "line": "L140-141"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "replay OBSERVATION_EVENT_COVERAGE_MISMATCH; atlas export from verified journal only",
+     "line": "L118-121, L134-137"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_truncated_observation_refused_before_native_replay",
+     "line": "L154-161"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/atlas.json",
+     "function_or_key": "cncm.rpa-compound-view/0.1: atlas / native / timeline / next_actions",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Executed edges bind to accepted events (tested). Hypothetical/next_actions distinctness is not tested in this suite (upstream test_rpa_compound_adapter per the return map, not part of the 61). Addendum 'one event/address association' absent (no address)."
+  },
+  {
+   "id": "AT25",
+   "classification": "PARTIAL",
+   "task": "T07",
+   "milestone": "M3",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority (mutating location dict, appending 'nearest-flower', leaves machine.state unchanged)",
+     "line": "L91-98"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "atlas_binding None; profile_coordinates None; authority READ_ONLY_LOCATION_NOT_A_RESUME_TOKEN",
+     "line": "L253-257"
+    },
+    {
+     "file": "research/cas_closed_loop_1/README.md",
+     "function_or_key": "'read-only projection ... no resume rights'",
+     "line": "L42-43"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "No flower/graph focus, recenter or relayout operation exists in this subsystem, so the addendum case 'recentering, relayout and missing profiles do not change runtime return destinations' has no adapter-level test; only detachment of the read-only location record is checked."
+  },
+  {
+   "id": "AT26",
+   "classification": "PARTIAL",
+   "task": "T07",
+   "milestone": "M3",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority (profile_coordinates is None)",
+     "line": "L93"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/atlas.json",
+     "function_or_key": "nodes profile40 null / profile_basis null",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/native_step_adapter.py",
+     "function_or_key": "primitive_work_for_events per-event rows",
+     "line": "L175-176"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "replay compares per-row 'events' work, not only totals",
+     "line": "L129-132"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_work_join_refuses_duplicate_and_changed_event",
+     "line": "L273-279"
+    }
+   ],
+   "execution_status_recorded": "Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Missing profile stays None (asserted). Per-child (per-event) work rows are compared in replay, but no test constructs equal totals with differing children; addendum 'equal/missing profiles cannot merge two call occurrences' absent."
+  },
+  {
+   "id": "AT27",
+   "classification": "PARTIAL",
+   "task": "T07",
+   "milestone": "M3",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_truncated_observation_refused_before_native_replay (STEP_RECEIPTS_ALTERED_OR_TRUNCATED)",
+     "line": "L154-161"
+    },
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "replay refusals UNTRUSTED_REPLAY_BUNDLE / STEP_RECEIPTS_ALTERED_OR_TRUNCATED / REPLAY_ADMISSION_MISMATCH / REPLAY_PARITY_OR_EFFECT_FAILED / OBSERVATION_EVENT_COVERAGE_MISMATCH / OBSERVATION_WINDOW_BINDING_MISMATCH / OBSERVED_WORK_DIFFERS_FROM_NATIVE_REPLAY",
+     "line": "L103-132"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_corrupt_existing_event_is_refused_even_for_zero_grant",
+     "line": "L255-260"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_work_join_refuses_records_removed_from_trace_bound_state [False,True] (new; NameError L285)",
+     "line": "L282-302"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_empty_work_join_still_refuses_a_corrupt_state (new)",
+     "line": "L305-308"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+     "function_or_key": "test_rehashed_receipt_still_refuses_execution_above_allocation (new) / test_receipt_content_digest_detects_alteration",
+     "line": "L196-201, L212-216"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_artifacts.py",
+     "function_or_key": "test_changed_artifact_bytes_are_refused / test_changed_historical_producer_snapshot_is_refused (new)",
+     "line": "L11-18, L21-28"
+    }
+   ],
+   "execution_status_recorded": "Older cases: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false). New cases: NOT_RUN anywhere in tracked records: case introduced at f6253e1a (or 3a4d23f0 for launcher cases); job a227f8 FAILED_BOOTSTRAP_UNACCEPTED, job 59bae1 PREPARED_NOT_AUTHORIZED_FOR_RETRY. Two of the new cases are blocked by the NameError (see AT05).",
+   "note": "Truncated and inconsistent/resealed cases are covered; a wrong-VERSION journal/bundle case is not explicit (upstream recover_compound_journal). Addendum 'no successful adapter view from tampered replay' only via replay refusal before atlas export."
+  },
+  {
+   "id": "AT28",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T08",
+   "milestone": "M4",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "next: 'broader learned/pilot work remains outside current no-model/no-cloud scope'",
+     "line": "L22"
+    },
+    {
+     "file": "origin/codex/cas-closed-loop-1: .../research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "T08: CLAUDE_Q4_OWNER_PENDING_SAVED_PUBLIC_SUMMARY",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "No Q4_PUBLIC_ERROR_SUMMARY.json or LEARNED_TASK.json exists in the subsystem at HEAD."
+  },
+  {
+   "id": "AT29",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T09",
+   "milestone": "M4",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "model_prediction NOT_RUN",
+     "line": "L16"
+    },
+    {
+     "file": "research/cas_closed_loop_1/REPORT.md",
+     "function_or_key": "'Learned-model prediction and neural learning: NOT_RUN'",
+     "line": "L67"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "model_prediction NOT_RUN",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "No MODEL_BINDING.json or learned_adapter exists."
+  },
+  {
+   "id": "AT30",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T09",
+   "milestone": "M4",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "public_problem: 'The solver receives no expected answer' (engineering analog only)",
+     "line": "L27-29"
+    },
+    {
+     "file": "research/cas_closed_loop_1/README.md",
+     "function_or_key": "empty method registry; x=7 not supplied (engineering analog)",
+     "line": "L46-51"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "Strict-reading vs compiler-assisted model contracts do not exist; the engineering analog (no gold answer to the deterministic runtime) is not the learned-model side-channel check."
+  },
+  {
+   "id": "AT31",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T09",
+   "milestone": "M4",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_recovered_reuse_changed_inputs_wrong_effect_and_invalidation (e=41 -> '4' is a real input change; engineering analog)",
+     "line": "L179-184"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "No learned-model repair exists to compare against a renamed deterministic call."
+  },
+  {
+   "id": "AT32",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T10",
+   "milestone": "M5",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/run_closed_loop.py",
+     "function_or_key": "main 'pilot' -> MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK",
+     "line": "L158-159"
+    },
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "remaining_interfaces.pilot REFUSED; cas_specific_advantage UNMEASURED",
+     "line": "L81, L19"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "cas_specific_advantage UNMEASURED",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "No PILOT_PROTOCOL.json; RUN_MANIFEST.json at HEAD is the recovery run manifest, not a pilot manifest."
+  },
+  {
+   "id": "AT33",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T10",
+   "milestone": "M5",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/freeze.json",
+     "function_or_key": "maximum_all_services_usd 1.00; engineering_pool_maximum_usd 5.00; hard_wall_seconds 1200; retry_count 0; permitted_concurrent_helm (engineering-lane analog)",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/execution.json",
+     "function_or_key": "global_concurrency (only declared HELM active); cloud_calls_retry_count 0; exact_request_dry_run DryRunOperation",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-155020-59bae1/proposal_admission.json",
+     "function_or_key": "execute_authorized false; prior_reserved_usd 2.00; proposal_plus_retained_reservations_usd 3.00 of 5.00; automatic_retries 0",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/execution.json / owner_supersession.json",
+     "function_or_key": "first job: NO_TERMINAL_RECEIPT; STOPPED_UNACCEPTED; retry_count 0",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/launch.py",
+     "function_or_key": "concurrency block; single run_instances call; RetryPolicy MaximumRetryAttempts 0",
+     "line": "L103-108, L215-222, L278-289, L297"
+    },
+    {
+     "file": "research/cas_closed_loop_1/LEDGER.json",
+     "function_or_key": "local suite: cloud_jobs 0, model_jobs 0",
+     "line": "L5-10"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN. Engineering-lane analog: EVIDENCE_ONLY (records above); test_launch_transport.py covers only S3 endpoint construction and safe error records, not concurrency or retry.",
+   "note": "Pilot resource manifests (T10) do not exist. The engineering Lane-A jobs do record named priced bounded jobs, an all-services maximum, a global concurrency check and zero retries -- evidence only, no test."
+  },
+  {
+   "id": "AT34",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T11",
+   "milestone": "M5",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/worker.py",
+     "function_or_key": "exact predeclared count with zero failures/skips required (engineering analog)",
+     "line": "L133-134"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/failure_review.json",
+     "function_or_key": "focused_tests / witness / fresh_process_replay NO_RECEIPT recorded explicitly",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/owner_supersession.json",
+     "function_or_key": "tests NO_TERMINAL_TEST_RECEIPT",
+     "line": "-"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN.",
+   "note": "No scheduled task/model/condition outputs exist. Engineering analog: failed jobs are recorded as explicit failures, not dropped."
+  },
+  {
+   "id": "AT35",
+   "classification": "NOT_APPLICABLE_YET",
+   "task": "T11",
+   "milestone": "M5",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-20260925-151720-47cef2/execution.json",
+     "function_or_key": "cleanup 13 actions PASS; instance_terminal terminated; cleanup_complete true; cost.actual_billing_usd null",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/execution.json",
+     "function_or_key": "cleanup 13 actions PASS; instance_terminal terminated; cleanup_complete true; cost.actual_billing_usd null",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/operator_bootstrap_stop.json / failure_review.json",
+     "function_or_key": "STOP_REQUESTED_AFTER_BOOTSTRAP_FAILURE; cleanup_actions_passed 13",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/README.md",
+     "function_or_key": "teardown and evidence collection policy",
+     "line": "L120-140"
+    }
+   ],
+   "execution_status_recorded": "Not started / refused: STATUS.json L81 pilot REFUSED_CURRENT_OWNER_NO_MODEL_NO_CLOUD_SCOPE; run_closed_loop.py L158-159 raises MODEL_PILOT_NOT_AUTHORIZED_IN_RECOVERY_TASK; STATUS.json L16 model_prediction NOT_RUN. Engineering-lane analog: EVIDENCE_ONLY (final resource status and cost envelope retained for both launched jobs; actual billing null).",
+   "note": "Pilot teardown (T11) does not exist. Engineering jobs retain provider/owned-resource final status and cost records; no test."
+  },
+  {
+   "id": "AT36",
+   "classification": "PARTIAL",
+   "task": "T12",
+   "milestone": "M5",
+   "artifacts": [
+    {
+     "file": "research/cas_closed_loop_1/REPORT.md",
+     "function_or_key": "Claim boundaries (engineering checked / learned NOT_RUN / benefit UNMEASURED / open items); retained failed attempts",
+     "line": "L63-71, L56-61, L78-80"
+    },
+    {
+     "file": "research/cas_closed_loop_1/STATUS.json",
+     "function_or_key": "engineering_demo / model_prediction / task_benefit / cas_specific_advantage; M2_initial_regression failure; M3_attempts; remaining_interfaces",
+     "line": "L15-19, L23-28, L31-60, L76-82"
+    },
+    {
+     "file": "research/cas_closed_loop_1/evidence/result.json",
+     "function_or_key": "model_prediction NOT_RUN; task_benefit ...; cas_specific_advantage UNMEASURED; ASOM UNASSESSED",
+     "line": "-"
+    },
+    {
+     "file": "research/cas_closed_loop_1/test_closed_loop.py",
+     "function_or_key": "test_real_repair_exact_return_checked_bias_effect_and_event_bound_work (asserts complete_compute None and cas_specific_advantage UNMEASURED)",
+     "line": "L127-129"
+    },
+    {
+     "file": "research/cas_closed_loop_1/CHANGELOG.md",
+     "function_or_key": "'runtime tests remain unexecuted'; 'does not establish CAS_AWS_ENGINEERING_VALIDATED'",
+     "line": "L12-15, L36-45"
+    },
+    {
+     "file": "research/cas_closed_loop_1/aws_validation/worker.py",
+     "function_or_key": "status PASS_ENGINEERING_VALIDATION_ONLY",
+     "line": "L153"
+    }
+   ],
+   "execution_status_recorded": "Interim REPORT.md / STATUS.json describe 8f55cc3a; separation-field assertion: Same-named cases executed locally by Codex at 8f55cc3a against the PRE-amendment adapter (STATUS.json L5-12: 43 passed; L61-67: 4 artifact cases). NOT_RUN at aa600668: the amended 57-case suite (scientific source byte-identical f6253e1a==aa600668) has no tracked execution (CHANGELOG.md L13-14; job a227f8 failure_review.json focused_tests NO_RECEIPT; job 59bae1 proposal_admission.json execute_authorized=false).",
+   "note": "Interim reporting keeps implementation, control, benefit, CAS-specific and release status separate and preserves negatives (M2 failure, M3 failed attempts, both AWS failures). T12 final REPORT/RESULT.json/ARTIFACT_MANIFEST for the lane are not produced. STALE STATUS: STATUS.json (last touched 318b22ad) still says status M3_ENGINEERING_LOOP_REPLAY_REUSE_CONTROLS_TESTED and tests 43 passed; it was not updated at f6253e1a/3a4d23f0/aa600668 -- the amended suite's NOT_RUN status lives only in CHANGELOG.md, HARNESS_SPEC.md, CONTRACTS.json.status and aws_validation records."
+  }
+ ],
+ "first_gap": {
+  "strict_answer": "AT03",
+  "definition_used": "Earliest AT (in T01->T12 order) whose required assertion depends on a check with no tracked execution record against source byte-identical to aa600668.",
+  "justification": [
+   "Scientific source at aa600668 is byte-identical to f6253e1a (git rev-parse blobs equal for native_step_adapter.py, control.py, run_closed_loop.py, bootstrap_runtime.py, check_artifacts.py, conftest.py, test_native_step_adapter.py, test_closed_loop.py, test_artifacts.py, SOURCE_BINDINGS.json, HISTORICAL_PRODUCER.json, RUN_MANIFEST.json); commits 3a4d23f0 and aa600668 touched only aws_validation/* and CHANGELOG.md.",
+   "T01 (AT01, AT02) has a tracked execution against that source: research/cas_closed_loop_1/aws_validation/jobs/cas-cpu-v2-20260925-153825-a227f8/partial_git_probe.json ran check_artifacts.py --git-ref f6253e1a -> EXACT_BYTES_VERIFIED (13 files), runtime_paths_verified 108, current_public_source_paths_verified 43, original_git_objects_verified 183.",
+   "From AT03 onward (T02+) every acceptance id is addressed only by the 57-case scientific suite, which has NO tracked execution against f6253e1a/aa600668: STATUS.json L69 tested_implementation_commit = 8f55cc3a (pre-amendment adapter; 43 cases); CHANGELOG.md L13-14 'runtime tests remain unexecuted'; a227f8 failure_review.json focused_tests NO_RECEIPT; 59bae1 proposal_admission.json execute_authorized=false; README.md L9-13 'AWS acceptance remains pending'.",
+   "The 8f55cc3a local run (43/43) is evidence for the pre-amendment adapter only; native_step_adapter.py changed by 77 lines at f6253e1a (return_identity null when no frame, exact-dispatch pinning, state-bound work join) and the tests changed accordingly (-1 case, +10 cases in test_native_step_adapter.py; +1 in test_artifacts.py; revised assertion in test_closed_loop.py L137-139)."
+  ],
+  "first_demonstrable_defect": {
+   "at_ids": [
+    "AT05",
+    "AT15",
+    "AT27"
+   ],
+   "file": "research/cas_closed_loop_1/test_native_step_adapter.py",
+   "lines": "L138, L142, L285 (use) vs L2-13 (module imports) and L102 (function-local import only)",
+   "symptom": "NameError: name 'TerminalStatus' is not defined in test_no_frame_has_no_return_identity_before_during_and_after_root_call and test_work_join_refuses_records_removed_from_trace_bound_state[False|True] -- exactly the owner-named 'no-frame return_identity' and 'state-bound work join' regressions.",
+   "consequence": "aws_validation/worker.py L133 requires totals == {tests: expected_tests, failures: 0, errors: 0, skipped: 0}; with 3 guaranteed failures the 61-case Lane-A protocol cannot reach PASS_ENGINEERING_VALIDATION_ONLY at aa600668 even after the S3 regional-endpoint fix, so a paid retry of the 59bae1 proposal would fail at focused_tests (after bootstrap, artifact check, runtime bootstrap and source check).",
+   "corroboration_untracked": "Working-tree folder research/cas_closed_loop_1/claude_lead_20260927/run_20260927T045459Z (git status: untracked, not at HEAD) records a local run at aa600668: 61 collected, 56 passed, 5 failed (3 NameError above + 2 ModuleNotFoundError boto3/botocore in test_launch_transport.py), Python 3.11.15 (worker requires 3.12), status FAILED PREDECLARED_TEST_COUNTS_REQUIRED_WITHOUT_SKIPS; no witness/replay reached."
+  },
+  "documentary_discrepancy_preceding_AT03": "AT01: SOURCE_BINDINGS.json L6-9 / DECISIONS.md L3-7 / README.md L15-17 / STATUS.json L14 / RUN_MANIFEST.json L29 declare 348638c9 and 2636bbb6 MISSING_FROM_LIVE_REPOSITORY, yet both resolve as commit objects in this clone (git cat-file -t) and 2636bbb6 is the base_commit of origin/codex/cas-closed-loop-1. This is an inferred absence from a particular checkout -- the pattern AT01 prohibits -- but it is documentary, not an execution gap."
+ },
+ "case_counts": {
+  "method": "Static count of def test_* / unittest methods and @pytest.mark.parametrize argument lists at aa600668; pytest not run by this audit.",
+  "by_file": {
+   "research/cas_closed_loop_1/test_native_step_adapter.py": {
+    "functions": 23,
+    "cases": 30,
+    "parametrized": {
+     "test_invalid_grant_never_reaches_executor": 4,
+     "test_repeated_dispatch_wrapper_refused_before_native_entry": 3,
+     "test_unexecuted_window_has_zero_measured_primitive_work": 2,
+     "test_work_join_refuses_records_removed_from_trace_bound_state": 2
+    }
+   },
+   "research/cas_closed_loop_1/test_closed_loop.py": {
+    "functions": 12,
+    "cases": 22,
+    "parametrized": {
+     "test_exact_pinned_ohm_calculation": 2,
+     "test_invalid_ohm_inputs_refused": 4,
+     "test_foreign_loaded_control_dependency_is_not_admitted": 2,
+     "test_supported_boards_static_check_and_operation_mask": 3,
+     "test_bounded_negative_controls_cannot_commit": 4
+    }
+   },
+   "research/cas_closed_loop_1/test_artifacts.py": {
+    "functions": 4,
+    "cases": 5,
+    "parametrized": {
+     "test_ambiguous_git_reference_is_refused": 2
+    }
+   },
+   "research/cas_closed_loop_1/aws_validation/test_launch_transport.py": {
+    "functions": 4,
+    "cases": 4,
+    "parametrized": {}
+   }
+  },
+  "scientific_cases_counted": 57,
+  "launcher_cases_counted": 4,
+  "total_counted": 61,
+  "declared": {
+   "README.md L103 / CHANGELOG.md L12-13 / 59bae1 freeze.json expected_tests / proposal_admission.json test_split": "57 + 4 = 61"
+  },
+  "match": true,
+  "historical_reconciliation": {
+   "8f55cc3a": "test_native_step_adapter 17 functions/21 cases + test_closed_loop 12/22 = 43 cases, 29 functions (matches STATUS.json L7-11); test_artifacts 3/4 (matches STATUS.json L61-62); total 47 = package.py L69 minimum and job 47cef2 freeze.json '47 focused tests'.",
+   "f6253e1a": "30 + 22 + 5 = 57 (matches job a227f8 admission.json/freeze.json expected_tests 57).",
+   "3a4d23f0/aa600668": "57 + 4 launcher = 61 (matches job 59bae1 freeze.json expected_tests 61)."
+  },
+  "corroboration_untracked": "claude_lead_20260927 pytest.xml by_file: 30 / 22 / 5 / 4 = 61 collected.",
+  "total_functions": 43
+ },
+ "return_map_gaps": {
+  "map_location": "RETURN_ADDRESS_TEST_MAP.json exists only on origin/codex/cas-closed-loop-1 (source_commit 2636bbb6, which the recovery declares missing); it is NOT present at HEAD aa600668.",
+  "upstream_tests_at_head": "None of the five mapped upstream files exist at HEAD aa600668 (git ls-tree HEAD has no test_compound_kernel.py / test_compound_recovery.py / test_rpa_compound_adapter.py / test_rpa_compound_adversarial.py / test_rpa_scoped_compound.py). They exist on origin/codex/cas-closed-loop-1 and at runtime commit 8182ad52 (file sha256 prefixes match the map: 2d85c989.., 2e9a0396.., 94033b21.., 447ebcf6.., 633ddfb3..); all ten named functions were located at the stated files. None is part of the 61-case frozen suite (worker.py L123-127 runs only the four lane files). Their execution_status in the map is NOT_RUN_BY_CODEX and no lane record executes them.",
+  "entries": [
+   {
+    "acceptance_ids": [
+     "AT15",
+     "AT20"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py::test_real_nested_construction_installs_program_and_resumes_exact_parent (L43)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Bind each waiting frame to its own snapshot/node address",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "test_all_eleven_identity_fields_and_suspended_snapshot_are_retained (A L101-124) binds frames to suspension pre-state hashes, but atlas_binding is None (N L253); no node address."
+   },
+   {
+    "acceptance_ids": [
+     "AT16",
+     "AT17",
+     "AT19",
+     "AT27"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py::test_wrong_return_frame_cannot_resume_or_write_parent (L145)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Wrong atlas address cannot choose another native continuation",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "test_runtime_location_is_detached_and_has_no_coordinate_return_authority (A L96-97) appends a 'nearest-flower' return_address to the read-only dict and asserts state unchanged; no atlas address concept exists."
+   },
+   {
+    "acceptance_ids": [
+     "AT16",
+     "AT17",
+     "AT19",
+     "AT27"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_kernel.py::test_duplicate_and_stale_requests_do_not_open_a_call_or_spend_work (L156)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Repeated view event cannot dispatch a new native request",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "Stale grant refused (A L45-48) and repeated host dispatch refused (A L146-167) are host-grant checks, not view-event checks."
+   },
+   {
+    "acceptance_ids": [
+     "AT10",
+     "AT21",
+     "AT22"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py::test_actual_source_fresh_process_recovers_each_cut_then_reuses_program (L280)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Preserve root/parent address chain across restart",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "test_fresh_process_replays_retained_journal (C L144-151) and single root_call id (C L137-139); no address chain."
+   },
+   {
+    "acceptance_ids": [
+     "AT10",
+     "AT21",
+     "AT22"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_compound_recovery.py::test_failures_replay_exact_refusal_costs_and_unwind (L171)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Do not reconstruct budget from suspended snapshot",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "Rollback keeps native_budget == spent (C L205-207); CONTRACTS.json L68 declares; no replay-budget test."
+   },
+   {
+    "acceptance_ids": [
+     "AT24",
+     "AT25",
+     "AT26"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adapter.py::test_suspended_frame_and_next_action_are_exact_read_only_projections (L114)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Equal/missing profiles cannot merge two call occurrences",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "profile_coordinates None asserted (A L93) only."
+   },
+   {
+    "acceptance_ids": [
+     "AT24",
+     "AT25",
+     "AT26"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py::test_focus_and_hypothesis_only_change_view_handles (L140)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Layout/recentering leaves return-address resolution unchanged",
+    "adapter_case_present": "ABSENT",
+    "nearest_adapter_check": "No focus/recenter/relayout operation exists in the lane."
+   },
+   {
+    "acceptance_ids": [
+     "AT10",
+     "AT21",
+     "AT27"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py::test_stale_duplicate_proposal_does_not_reuse_previous_work_charge (L247)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Adapter preserves one event/address association",
+    "adapter_case_present": "PARTIAL_ANALOG",
+    "nearest_adapter_check": "replay OBSERVATION_EVENT_COVERAGE_MISMATCH / OBSERVATION_WINDOW_BINDING_MISMATCH (R L118-128) and test_work_join_refuses_duplicate_and_changed_event (A L273-279) bind events, not addresses."
+   },
+   {
+    "acceptance_ids": [
+     "AT24",
+     "AT27"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_compound_adversarial.py::test_resealed_false_journal_still_fails_actual_semantic_replay (L192)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "No successful adapter view from tampered replay",
+    "adapter_case_present": "PARTIAL_ANALOG",
+    "nearest_adapter_check": "test_truncated_observation_refused_before_native_replay (C L154-161) refuses replay before atlas export; no atlas-view-specific tamper test."
+   },
+   {
+    "acceptance_ids": [
+     "AT25",
+     "AT27"
+    ],
+    "upstream": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_rpa_scoped_compound.py::test_leaf_entry_nonchild_jump_and_wrong_snapshot_are_refused (L172)",
+    "in_61_suite": false,
+    "new_adapter_case_needed": "Use exact matching frame/snapshot, no nearest-node fallback",
+    "adapter_case_present": "PARTIAL_ANALOG",
+    "nearest_adapter_check": "runtime_location SUSPENSION_EVENT_NOT_UNIQUE (N L221-222) requires a unique suspension event but no test triggers it; 'nearest-flower' mutation no-op (A L96-97)."
+   }
+  ],
+  "summary": "0 of 10 required 'new_adapter_case_needed' cases are present as named adapter tests; 3 have partial analogs; 7 are absent. All 10 upstream sources are outside the 61-case suite and absent from HEAD."
+ }
+}

@@ -1,0 +1,347 @@
+{
+ "schema": "cas.closed-loop.claude-nested-return-trace/0.1",
+ "source_commit": "aa6006683d9e798c85667dc0d389a604b0e99053",
+ "patched_test_file_only": true,
+ "witness_bundle_digest": "8048bba869c47c00a8f9e306f727accfb146533f654eb02210eb8e7d038971ee",
+ "receipts": [
+  {
+   "receipt": 0,
+   "operation": "CHECK_MEMORY_RESOLUTION",
+   "board": "verification_commit",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 16,
+    "checker_calls": 1
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED_PARTIAL",
+   "frames_before": 0,
+   "return_identity_before": null,
+   "frames_after": 0,
+   "return_identity_after": null,
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 1,
+   "operation": "REQUEST_COMPOUND",
+   "board": "parent_transform",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 0,
+   "return_identity_before": null,
+   "frames_after": 0,
+   "return_identity_after": null,
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 2,
+   "operation": "PUSH_COMPOUND_ACQUISITION",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 0,
+   "return_identity_before": null,
+   "frames_after": 1,
+   "return_identity_after": "COMPOUND_APPLY",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 3,
+   "operation": "PUSH_PRIMITIVE_ACQUISITION",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 1,
+   "return_identity_before": "COMPOUND_APPLY",
+   "frames_after": 2,
+   "return_identity_after": "COMPOUND_CONSTRUCT",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 4,
+   "operation": "SELECT_PRIMITIVE",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 144,
+    "checker_calls": 24
+   },
+   "measured": {
+    "primitive_instructions": 144,
+    "original_checks": 0,
+    "linear_checks": 24
+   },
+   "work_status": "JOINED",
+   "frames_before": 2,
+   "return_identity_before": "COMPOUND_CONSTRUCT",
+   "frames_after": 2,
+   "return_identity_after": "COMPOUND_CONSTRUCT",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 5,
+   "operation": "INSTALL_PRIMITIVE",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 60,
+    "checker_calls": 10
+   },
+   "measured": {
+    "primitive_instructions": 58,
+    "original_checks": 0,
+    "linear_checks": 8
+   },
+   "work_status": "JOINED",
+   "frames_before": 2,
+   "return_identity_before": "COMPOUND_CONSTRUCT",
+   "frames_after": 2,
+   "return_identity_after": "COMPOUND_CONSTRUCT",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 6,
+   "operation": "RETURN_PRIMITIVE",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 2,
+   "return_identity_before": "COMPOUND_CONSTRUCT",
+   "frames_after": 1,
+   "return_identity_after": "COMPOUND_APPLY",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 7,
+   "operation": "CONSTRUCT_COMPOUND",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 40320,
+    "checker_calls": 1680
+   },
+   "measured": {
+    "primitive_instructions": 18720,
+    "original_checks": 1680,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 1,
+   "return_identity_before": "COMPOUND_APPLY",
+   "frames_after": 1,
+   "return_identity_after": "COMPOUND_APPLY",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 8,
+   "operation": "INSTALL_COMPOUND",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 288,
+    "checker_calls": 12
+   },
+   "measured": {
+    "primitive_instructions": 96,
+    "original_checks": 12,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 1,
+   "return_identity_before": "COMPOUND_APPLY",
+   "frames_after": 1,
+   "return_identity_after": "COMPOUND_APPLY",
+   "readiness_before": "BLOCKED",
+   "first_unmet_prerequisite": "NO_ACTIVE_COMPOUND_HEAD",
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 9,
+   "operation": "RETURN_COMPOUND",
+   "board": "prerequisite_acquisition",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 1,
+   "return_identity_before": "COMPOUND_APPLY",
+   "frames_after": 0,
+   "return_identity_after": null,
+   "readiness_before": "READY",
+   "first_unmet_prerequisite": null,
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 10,
+   "operation": "APPLY_COMPOUND",
+   "board": "parent_transform",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 1,
+   "charged": {
+    "instructions": 24,
+    "checker_calls": 1
+   },
+   "measured": {
+    "primitive_instructions": 12,
+    "original_checks": 1,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 0,
+   "return_identity_before": null,
+   "frames_after": 0,
+   "return_identity_after": null,
+   "readiness_before": "READY",
+   "first_unmet_prerequisite": null,
+   "halt_after": "RUNNING",
+   "commit_after": "UNCOMMITTED"
+  },
+  {
+   "receipt": 11,
+   "operation": "ORDINARY_REASONING_AND_COMMITMENT",
+   "board": "verification_commit",
+   "I_predicted": "1",
+   "I_allocated": 1,
+   "I_executed": 1,
+   "I_attempted": 1,
+   "native_events": 7,
+   "charged": {
+    "instructions": 0,
+    "checker_calls": 0
+   },
+   "measured": {
+    "primitive_instructions": 0,
+    "original_checks": 0,
+    "linear_checks": 0
+   },
+   "work_status": "JOINED",
+   "frames_before": 0,
+   "return_identity_before": null,
+   "frames_after": 0,
+   "return_identity_after": null,
+   "readiness_before": "READY",
+   "first_unmet_prerequisite": null,
+   "halt_after": "CONCLUDED",
+   "commit_after": "COMMITTED"
+  }
+ ],
+ "live_return_identities_after_step": 7,
+ "max_frame_depth": 2,
+ "note": "Read-only projection of receipts in run_20260927T050137Z_patched_worktree/witness/events.jsonl; not a resume token."
+}

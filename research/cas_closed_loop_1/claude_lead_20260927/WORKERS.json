@@ -1,0 +1,567 @@
+{
+ "schema": "cas.closed-loop.claude-workers/0.1",
+ "lead": "Claude (this session), branch claude/focused-mccarthy-uj45ul, base aa6006683d9e798c85667dc0d389a604b0e99053",
+ "identifier_policy": "The harness withholds its internal subagent identifiers from user-facing text. Each worker is identified here by wave label, agent type, launch order, scope, measured usage from the harness completion notice, and the content hash of the report it returned.",
+ "workers": [
+  {
+   "wave": "A1",
+   "label": "frozen-protocol-local-run",
+   "executor": "lead session itself (Bash), no subagent",
+   "scope": "Run the frozen public CPU acceptance protocol locally on the exact head and on a scratch worktree with the one-line test-import repair; no AWS, no model, no Codex file edit.",
+   "code": "run_local_protocol.py",
+   "code_sha256": "41250166111cf059f4f46399e229723bcae775649407431938a471801d1658e7",
+   "runs": {
+    "run_20260927T045459Z": "61 collected, 5 failed, 56 passed (3 NameError + 2 boto3 missing)",
+    "run_20260927T045944Z": "61 collected, 3 failed, 58 passed (NameError only)",
+    "run_20260927T050137Z_patched_worktree": "61 passed; retained replay, witness, fresh-process replay PASS"
+   },
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "A2",
+   "label": "acceptance-gap-audit",
+   "executor": "general-purpose subagent, launched 2nd (background), read-only",
+   "scope": "Map AT01..AT36 to concrete tests/evidence at the head; name the first current acceptance gap; count collected cases; compare RETURN_ADDRESS_TEST_MAP.json to the 61-case suite.",
+   "report": "A2_acceptance_audit.md / .json",
+   "status": "COMPLETED",
+   "usage_from_harness_notice": {
+    "subagent_tokens": 322066,
+    "tool_uses": 42,
+    "duration_ms": 964243
+   },
+   "report_sha256": {
+    "md": "1fa3de7595e7c080555a198840df2b2edfad2845353999d9bc4acd7edc65c338",
+    "json": "53e5a679d3dc21a2c8d131649a1b87261a532d22bde7bc8b2a2861bec6ac6971"
+   },
+   "result": "12 COVERED_BY_TEST, 15 PARTIAL, 1 EVIDENCE_ONLY, 8 NOT_APPLICABLE_YET; strict first gap AT03; first demonstrable defect AT05/AT15/AT27 (NameError); 0/10 addendum atlas-address cases present (atlas_binding None); 61-case count confirmed statically"
+  },
+  {
+   "wave": "A3",
+   "label": "adapter-adversarial-review",
+   "executor": "general-purpose subagent, launched 3rd (background), read-only",
+   "scope": "Verify the three DeepSeek CHANGES_REQUIRED items in native_step_adapter.py and its tests; adversarial bypass search; Python 3.11 vs 3.12 hazards.",
+   "usage_from_harness_notice": {
+    "subagent_tokens": 204126,
+    "tool_uses": 27,
+    "duration_ms": 719855
+   },
+   "report": "A3_adapter_review.md / .json",
+   "report_sha256": {
+    "md": "93a081d829cb39d2b71ea8c8780f9be655325111926cc3e98e204d9da7959b43",
+    "json": "47a50264ee06dc69eddc950bba04e469d1eafcef076eb3873f3af7a3420066ea"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings_carried_to_codex": [
+    "F1 MAJOR: NameError in two amended regression tests (confirmed by A1)",
+    "F2 MAJOR: per-thread sys.setprofile meter; confirmed by lead probe probe_threaded_reentry.py against the real adapter",
+    "MINOR: `observed` rebinding at native_step_adapter.py:169",
+    "NOTEs: getprofile finally-check, I_attempted unconstrained, catalog_state_binding unconsumed, unreachable line 320"
+   ],
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "A5",
+   "label": "current-joint-validation-delivery",
+   "executor": "lead session itself (Bash/python), SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "The Agent interface cannot enforce exclusive files, a spending limit or a global worker cap, and the harness withholds subagent identifiers; the owner's rule for that case is serial execution in the existing session.",
+   "scope": "Exact CAS test inventory mapped to the owner's five acceptance items; declared-versus-executed separation; exact next acceptance command and route through Codex's runner; dependencies on Codex; smallest remaining concrete failure. Inspection and records only; no pytest, witness, replay, cloud, model or worker call.",
+   "exclusive_files": [
+    "claude_lead_20260927/A5_ACCEPTANCE_PACKAGE_20260927.md",
+    "claude_lead_20260927/A5_ACCEPTANCE_PACKAGE_20260927.json"
+   ],
+   "dependencies": [
+    "CASE_RECONCILIATION.json (recorded case identities)",
+    "JOINT_ACCEPTANCE_PLAN.json at d7808d59 (read-only)",
+    "aws_validation/worker.py, launch.py, package.py (read-only)"
+   ],
+   "limits": {
+    "new_runs": 0,
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "md": "c509499a5e68f64348c1e96054fb7229338ab4882533a310f2291126c0e9355a",
+    "json": "509af522969ad45494040fd7fe3314b9d918e1757fd0a4f450b89b2256458b76"
+   },
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "A4",
+   "label": "seed18-comparison-and-learned-component-preparation",
+   "executor": "lead session itself (Bash/python), SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5",
+   "scope": "Preregistered seed-18 bounded comparison (unchanged continuation versus one predefined constant learning rate 0.001) from copies of the same verified pass-20 state; CAS-assisted seed-18 path (gated); CAS-side requirements for Codex C3's neural growth. Read-only inspection of Codex's committed HELM records on origin/codex/helm-cm2x-replication-2-20260926 and of the archived 2026-09-22 pointer_learner.py copy; no model loaded or run; no checkpoint read.",
+   "exclusive_files": [
+    "claude_lead_20260927/A4_SEED18_COMPARISON_PREREG_20260927.md",
+    "claude_lead_20260927/A4_SEED18_CONDITIONS.json",
+    "claude_lead_20260927/A4_CAS_ASSISTED_SEED18_PATH_20260927.md",
+    "claude_lead_20260927/A4_GROWTH_CAS_REQUIREMENTS_20260927.md"
+   ],
+   "dependencies": [
+    "Codex: explicit experimental file scope",
+    "Codex: pass-20 main-course state identity (cursor 2940)",
+    "Codex: continuation seam confirmation on exact c45f775f bytes",
+    "Owner: admission and reservation before any launch"
+   ],
+   "limits": {
+    "new_runs": 0,
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "gpu_jobs": 0,
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "A4_SEED18_COMPARISON_PREREG_20260927.md": "0cf8a0e7ddb111575a1e27d2cf2df5a61fb2d4ca57097dbb121f4393e21bdfae",
+    "A4_SEED18_CONDITIONS.json": "65803f808a9d27133fd81044fe95170ddf14b2872dc5f5b775c1c0edcde7e486",
+    "A4_CAS_ASSISTED_SEED18_PATH_20260927.md": "b39655283bfe8c0d057bbba5a7e2e8b1478aa6d89755232e97d21585b02661a7",
+    "A4_GROWTH_CAS_REQUIREMENTS_20260927.md": "dc405564e070356dca6511e7dd55b85fe3db53e21bc53a144aa8638bbec85cc7"
+   },
+   "status": "COMPLETED_PREPARATION_NOT_RUN"
+  },
+  {
+   "wave": "P1",
+   "label": "optional-residual-world-specialist",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "PARALLEL-CAPABILITY-01 P1: one explicitly sized optional residual specialist on the world-candidate input, by-name migration code, plan validator, tests; pending Codex's namespace assignment, written in Claude's isolated lead area",
+   "exclusive_files": [
+    "claude_lead_20260927/growth_specialist/README.md",
+    "claude_lead_20260927/growth_specialist/growth_migration_plan.py",
+    "claude_lead_20260927/growth_specialist/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "claude_lead_20260927/growth_specialist/plan_tests_local_junit.xml",
+    "claude_lead_20260927/growth_specialist/test_growth_migration_plan.py",
+    "claude_lead_20260927/growth_specialist/world_residual_specialist.py"
+   ],
+   "limits": {
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "checkpoints_opened": 0,
+    "local_runs": "pure-Python plan tests only (no torch installed)",
+    "spend_usd": "0"
+   },
+   "report_sha256": {
+    "growth_migration_plan.py": "955befa755258d5e22097cc6dd57927a47c45b37162d27b7689d3725c2118fe5",
+    "world_residual_specialist.py": "c0382d4553579e6e1ec29b56a8f15044a874afc4bf7ee087752d482a5038ffdb",
+    "test_growth_migration_plan.py": "51d4bc0a0f0ba707f3088aa3dbdbe6071640f3d3f935f93174e318e37b3334b8",
+    "numeric_gpu/test_world_residual_specialist_numeric.py": "69fef0bee03fe6d10fd8eacf14e5a8da2dae0b3bdec3b607d3d3bb73d44366ba",
+    "plan_tests_local_junit.xml": "6f3e8073f30f7431d9ad128921ec05e102520a5293789bfb528b47db77750415"
+   },
+   "executed": {
+    "plan_tests": {
+     "tests": 14,
+     "passed": 14,
+     "failed": 0,
+     "errors": 0,
+     "skipped": 0,
+     "python": "3.11.15",
+     "pytest": "9.0.2"
+    },
+    "numeric_gpu_tests": "NOT_RUN (reserved venue)"
+   },
+   "status": "COMPLETED_FIRST_SOURCE_PACKET"
+  },
+  {
+   "wave": "P1-MOVE",
+   "label": "growth namespace move (append-only pointer)",
+   "executor": "lead session, serial",
+   "worker_id": null,
+   "pointer": "growth_specialist/** moved unchanged to research/helm_growth_experiments/residual_world_v1/** per Codex comment 5856986121; original at 19653ec8ea5a363303cd5263dc2a01df45d67d6f; one constant RECORDED_INIT_SEED = 2026092701 added; README paths updated; no execution",
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-FORWARD-02",
+   "label": "growth findings 1-4 fixed (revision 0.2)",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4/P1: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "OWNER ORIGINAL_HELM_FORWARD_02: apply the four confirmed source findings of PR #245 comment 5857009736 inside research/helm_growth_experiments/residual_world_v1/** only; focused regression tests; pure-Python cases run locally, torch cases written for the GPU venue",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/growth_migration_plan.py",
+    "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+    "research/helm_growth_experiments/residual_world_v1/test_growth_migration_plan.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "research/helm_growth_experiments/residual_world_v1/README.md",
+    "research/helm_growth_experiments/residual_world_v1/plan_tests_local_junit_forward02.xml"
+   ],
+   "started_utc": "2026-09-27T21:32:43Z",
+   "allocation": "one 60-active-minute allocation, checkpoint at 30",
+   "executed": "22 passed / 0 failed / 0 errors / 0 skipped (pure Python, local); torch module and 15 numeric cases NOT_RUN",
+   "not_done": [
+    "no torch execution",
+    "no AWS",
+    "no checkpoint opened",
+    "no learner edit",
+    "no seed-19 or seed-18 attachment"
+   ],
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-HANDOFF-20260928",
+   "label": "growth handoff: validation package, ladder, integration step",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4/P1: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "OWNER 'ORIGINAL HELM - CORRECTED GROWTH HANDOFF': verified handoff receipt for c70e1a04; numerical validation package for the 15 unrun cases; four-level distinction; exact real-checkpoint integration step named, not implemented; no reviewer counterexamples had arrived",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.md",
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.md",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_c70e1a04.sha256",
+    "research/helm_growth_experiments/residual_world_v1/README.md"
+   ],
+   "started_utc": "2026-09-28T01:05:05Z",
+   "allocation": "remaining FORWARD-02 source-work time (13 of 60 active minutes used on 2026-09-27); no reset",
+   "executed": "none with torch; pytest --collect-only on the pure-Python file (22 ids) and sha256sum -c on the pins (4 OK)",
+   "not_done": [
+    "no torch execution",
+    "no AWS",
+    "no checkpoint opened",
+    "no learner edit",
+    "no seed-19 or seed-18 change",
+    "L2 driver not written"
+   ],
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-L2-DRIVER-20260928",
+   "label": "real-parent migration driver (L2, restricted)",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "same as A5/A4/P1: the interface cannot enforce exclusive files or limits and withholds identifiers",
+   "scope": "OWNER 'ORIGINAL HELM - REAL-CHECKPOINT CONNECTION': implement the isolated driver identified in REAL_CHECKPOINT_INTEGRATION_STEP_20260928 in the growth namespace; injected loader and builders; no learner or checkpoint edit; 15-case package untouched",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/migrate_real_parent.py",
+    "research/helm_growth_experiments/residual_world_v1/test_migrate_real_parent.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_migrate_real_parent_numeric.py",
+    "research/helm_growth_experiments/residual_world_v1/driver_tests_local_junit.xml",
+    "research/helm_growth_experiments/residual_world_v1/README.md",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.md",
+    "research/helm_growth_experiments/residual_world_v1/REAL_CHECKPOINT_INTEGRATION_STEP_20260928.json"
+   ],
+   "started_utc": "2026-09-28T03:20:00Z",
+   "allocation": "remaining FORWARD-02 source-work time (about 19 of 60 active minutes used before this packet); no renewal",
+   "executed": "9 passed / 0 failed / 0 errors / 0 skipped (pure Python, local); torch path and 4 GPU cases NOT_RUN; 22-case plan tests re-run, 22 passed; pins 4 OK",
+   "not_done": [
+    "no real parent restored",
+    "no torch execution",
+    "no AWS",
+    "no learner or checkpoint edit",
+    "DeepSeek review of c70e1a04 not reachable, not reconciled"
+   ],
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-REV03-20260928",
+   "label": "optimizer reload device defect fix after the real 14/15 run",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "packet bound: 0 children",
+   "scope": "Codex packet in PR #245 comment 5863856084: fix the observed optimizer reload device defect and strengthen its exact device/value regression in the existing residual_world_v1 files; keep c70e1a04 and the failed receipt intact; 20 active minutes; at most 12 inspection/edit calls; no local pytest/torch",
+   "exclusive_files": [
+    "research/helm_growth_experiments/residual_world_v1/world_residual_specialist.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/test_world_residual_specialist_numeric.py",
+    "research/helm_growth_experiments/residual_world_v1/numeric_gpu/SOURCE_PINS_rev03.sha256",
+    "research/helm_growth_experiments/residual_world_v1/NUMERICAL_VALIDATION_PACKAGE_20260928.json",
+    "research/helm_growth_experiments/residual_world_v1/README.md"
+   ],
+   "started_utc": "2026-09-28T05:09:11Z",
+   "allocation": "20 active minutes, 12 calls maximum",
+   "executed": "NONE (no pytest, no torch, per the packet); syntax parsed only",
+   "not_done": [
+    "no local test run",
+    "no AWS",
+    "no learner or checkpoint edit"
+   ],
+   "status": "COMPLETED"
+  },
+  {
+   "wave": "P1-HH-RDE-01-A-20260928",
+   "label": "CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "one child permitted by the package; none needed for four leased files; allocation not subdivided",
+   "scope": "Codex comment 5876786278 + owner directive CAS-HH-RDE-01: implement configuration/readout and bounded within-checkpoint intervention bridge in the four leased files per 03_CLAUDE_DIRECTIVE.md; reuse vendored Harness probe_runner.py; no learner/runner/authority edits; no local tests or model execution; no cloud launch",
+   "exclusive_files": [
+    "research/helm_self_improvement/diagnostic_configuration.py",
+    "research/helm_self_improvement/diagnostic_intervention.py",
+    "research/helm_self_improvement/test_diagnostic_configuration.py",
+    "research/helm_self_improvement/test_diagnostic_intervention.py"
+   ],
+   "copied_unchanged_from_62bb7f71": [
+    "research/helm_self_improvement/__init__.py",
+    "research/helm_self_improvement/harness_capture_vendor/",
+    "research/helm_self_improvement/cas_hh_rde_01/"
+   ],
+   "started_utc": "2026-09-28T19:17:06Z",
+   "allocation": "90 active minutes shared per lead; checkpoints at 30 and 60",
+   "checkpoint_30_min": "both modules written; tests in progress; first return posted (comment 5877114683) at about 21 active minutes",
+   "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
+   "cases_written": {
+    "test_diagnostic_configuration.py": 25,
+    "test_diagnostic_intervention.py": 18
+   },
+   "not_done": [
+    "no local test run",
+    "no AWS or paid call",
+    "no HELM capture or checkpoint",
+    "no learner, runner or authority edit",
+    "no witness executed"
+   ],
+   "status": "COMPLETED",
+   "binding_to_emitter": {
+    "codex_source": "fd4215728209ef90948323d1268f2db664bc88ed",
+    "deepseek_relay": "8e0ec2592",
+    "deepseek_deliverables_verified": "5/5 bytes and sha256 against DELIVERY.json",
+    "copied_unchanged_from_fd421572": "research/helm_self_improvement/ (Codex's files; the four leased files untouched)"
+   },
+   "codex_parity_attempt_reported": {
+    "job": "helm-hh-rde-parity-20260928-a1",
+    "source": "fd4215728209ef90948323d1268f2db664bc88ed",
+    "collected": 18,
+    "passed": 17,
+    "failures": 0,
+    "setup_errors": 1,
+    "real_parent_forwards": 0,
+    "optimizer_updates": 0,
+    "state": "REAL junit artifact verified from git object at 21d603c6; AWS state itself not verified here",
+    "closeout_record_sha256": "e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b",
+    "junit": {
+     "path": "21d603c6:research/helm_self_improvement/cas_hh_rde_01/PARITY_A1_FOCUSED.xml",
+     "content_sha256": "859d34ca868d52458a9fb64c985afdc1291938a911126f2c9cb936f2dd66f831",
+     "parsed_here": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+     },
+     "claude_cases_included": 0
+    }
+   },
+   "codex_integration_received": {
+    "commit": "788aa5f7c39e81be3ffa5e833366fcabd36533c6",
+    "leased_files_byte_identical_to": "5ec7d5e9bdab4bde85a861f52a64be0fa60cb2aa (verified by blob sha256, 4/4)",
+    "codex_reader_binding": "observation.reload_configuration_inputs -> captures_from_observation / verify_observation / expected_hits_for (signatures unchanged at ae940c44)",
+    "closeout_record": "cas_hh_rde_01/CLOSEOUT_RECOVERY.json sha256 e7eb7d491453491d788e51985537eb84f0a98f70ff4015119c4a961f28f4703b (FAILED_HH_RDE_PARITY_CLEANUP_VERIFIED; 18/17/0/1; 0 forwards)",
+    "codex_cases": "21 written, NOT_RUN (Codex's report)"
+   },
+   "codex_final_handoff": {
+    "commit": "21d603c63764e5f311f78aaff7239c8c9b94daff",
+    "leased_files_byte_identical_to": "ae940c44419ea4807dd143de06f800810ca0330f (4/4)",
+    "reader_binding": "observation.reload_configuration_inputs -> convert_observation (complete) / captures_from_observation (incomplete)"
+   },
+   "integrated_witness_support_20260929": {
+    "codex_head_checked": "21d603c6 (no newer commit)",
+    "findings_closed_in_source": 6,
+    "connection": "trusted_intervention_caller, CONNECTION_ENABLED_BY_DEFAULT False",
+    "executed": "NONE; py_compile, import, AST inventory only",
+    "active_minutes_used_approx": 48
+   },
+   "codex_corrective_successor_checked": {
+    "commit": "ae2482fc93bc562c855037e90273da794a33b1f9",
+    "gate": "62 = 21 codex + 24 + 17 claude (ae940c44 bytes); producer unchanged; g7.2xlarge cu128 venue compatible with CUDA-default cases",
+    "defects_found": 0,
+    "note": "12becc52 (43 cases) not to be swapped into this job"
+   },
+   "corrective_job_reported": {
+    "job": "helm-hh-rde-parity-20260929-a2",
+    "source": "ae2482fc93bc562c855037e90273da794a33b1f9",
+    "collected": 62,
+    "codex": "21/21",
+    "claude_configuration": "23/24",
+    "claude_intervention": "17/17",
+    "real_forwards": 0,
+    "failure": "test_hh05... helper KeyError on unknown site before raw_capture refusal",
+    "fix": "explicit meaning on that call; SITE_UNKNOWN expectation unchanged",
+    "state": "REAL: junits verified from git objects at 54dac34e",
+    "junits": {
+     "PARITY_A2_FOCUSED.xml": {
+      "sha256": "20a92ef2bdf2a1a16b98f037bbbbd7a1dc2854d4bba480dcf2a3b9148771494b",
+      "tests": 61,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "claude_configuration": "23 pass / 1 fail",
+      "claude_intervention": "17 pass",
+      "observation": "20 pass"
+     },
+     "PARITY_A2_FIXTURE.xml": {
+      "sha256": "a33bbd7494f30ea552e18f772f5cddb807b281c6c1aa611a2c81bfc88b1f9171",
+      "tests": 1,
+      "failures": 0
+     }
+    }
+   },
+   "fix_integrated_by_codex": {
+    "commit": "54dac34efa62db4d8a877fdcfe15f4b8a02346bf",
+    "diff_vs_ae940c44": "one call line + comment only",
+    "state": "NOT_RUN"
+   }
+  },
+  {
+   "wave": "P1-HH-RDE-01-CB1-A-20260929",
+   "label": "CAS-HH-RDE-01-CB1 v1.1 / CB1-A: bounded role scheme, TPR reconstructor, single-application binding edits",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "serial_reason": "one child permitted; none needed for three modules and three test files; shared allocation not subdivided",
+   "scope": "owner directive CB1 v1.1 + 02_CLAUDE_CB1.md at fe2db4e9 (Codex comment 5884514028): implement role_schemes.py, reconstructor.py, binding_edits.py and their tests in research/helm_self_improvement/cube_binding/; reuse the incumbent declare/apply path; no passive emit made writable; no Codex/DeepSeek/RDE file edited; no local tests or model execution; no cloud launch",
+   "package_commit": "fe2db4e90430274e93556543b345c7dbaeef568f",
+   "package_manifest_check": "14 of 19 present and byte-identical; 5 named subset omissions; 0 mismatches",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "shared_trivial_file": "research/helm_self_improvement/cube_binding/__init__.py: written at ccbd8866, REMOVED in the follow-up commit after Codex created its own at c9b0bfd3 (one writer)",
+   "acknowledged_utc": "2026-09-29T05:58:00Z",
+   "started_utc": "2026-09-29T05:58:31Z",
+   "allocation": "90 active minutes shared per lead, no reset; about 54 used before this packet; about 29 used in this packet (05:58Z-15:24Z, active minutes only); about 7 remain",
+   "executed": "NONE (no pytest, no torch, per the contract and the namespace conftest); py_compile only",
+   "cases_written": {
+    "test_role_schemes.py": 10,
+    "test_reconstructor.py": 8,
+    "test_binding_edits.py": 6
+   },
+   "not_done": [
+    "no local test run",
+    "no AWS or paid call",
+    "no model or checkpoint",
+    "no fitted coefficients",
+    "no edit applied",
+    "no Codex, DeepSeek, learner, runner or authority edit",
+    "no claim about HELM"
+   ],
+   "status": "SOURCE_WRITTEN_NOT_RUN",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
+   "follow_up_after_codex_c9b0bfd3": "consumer_inputs_for_plan added to binding_edits.py (inputs for Codex consumer_bridge.prepare_consumer_declaration); verify_single_application accepts NO_OP_VERIFIED for NO_CHANGE plans; one test added; my four RDE files at c9b0bfd3 byte-identical to 54dac34e",
+   "codex_integration_d27172d5": "my six files byte-identical to ccbd8866 (6/6); follow-up a16e3aa2 not yet integrated; row mapping of analysis_binding_rows checked by reading, consistent; Codex finding on freeze_plan non-finite max_delta_norm CONFIRMED and fixed (math.isfinite) with a test loop",
+   "owner_decision_20260929_1520Z": "newer 38444787... package takes precedence for research/product requirements; upgrade existing code, do not restart; Q1 excluded; POSITIONAL control scheme added as the one gap found; package itself still not in Git",
+   "second_package_701d4185": "received as Git objects; directive 38444787... and ORIGINAL_CLAUDE_SCOPE.txt e8ffc3d5... verified; CB37-CB42 coverage map in the return record; no source change"
+  },
+  {
+   "wave": "P2-CB1-INTEGRATE-01-20260929",
+   "label": "PRIMARY-CB1-INTEGRATE-01 / Claude: integration handoff successor + fit resource boundary",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "scope": "owner directive PRIMARY-CB1-INTEGRATE-01 (chat text; attached Windows file unreadable): supply Codex the changed files/hashes as a declared successor; close the fit wall-time/memory boundary in the reconstructor files; keep the first hypothesis small; no tests, installs, model loads, fitting, cloud jobs, spending, workers or wakes",
+   "allocation": "ONE additional 30-active-minute packet, recorded separately; the 90-minute history (about 83 used) is not reset",
+   "started_utc": "2026-09-29T17:54:17Z",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "source_changes": "reconstructor.py: FitBudget, declare_budget, preallocation_estimate, fit(budget=, cancel=, clock=) with FIT_BUDGET_REQUIRED / FIT_SAMPLE_LIMIT / FIT_PARAMETER_LIMIT / FIT_TENSOR_LIMIT / FIT_DEADLINE_EXCEEDED / FIT_CANCELLED; test_reconstructor.py and test_binding_edits.py pass budgets; one regression test",
+   "cases_written": {
+    "test_role_schemes.py": 10,
+    "test_reconstructor.py": 9,
+    "test_binding_edits.py": 6
+   },
+   "executed": "NONE; py_compile only",
+   "status": "PACKET_CLOSED_SOURCE_ONLY_NOT_RUN; about 18 of 30 packet minutes used; no further work pending",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
+   "codex_finding_5895674228": "CONFIRMED by reading; fixed in test_binding_edits.py (replace(plan, row=1) for the one-row ROW refusal); narrow successor commit",
+   "integrated_handoff": "Codex ca875df8: six files byte-match 1ec610f3 (6/6); RDE files unchanged; six confirmation points CONFIRMED by reading; no defect; two Codex-side assumptions recorded",
+   "final_successor_af9fb57e": "six files unchanged (6/6); only Codex test_plan_connection.py +4 lines; request tree 1b89af69 acknowledged; Stage A lists my 10 role-scheme cases and excludes the 15 fit-dependent ones; DO NOT EXECUTE observed"
+  },
+  {
+   "wave": "P3-AUTONOMY-24H-01-A01-20260929",
+   "label": "PRIMARY-AUTONOMY-24H-01/A01 / Claude: scoped review of the Stage A/B adaptation where it touches my contracts",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "dispatch": "PR comment 5896439234 by the ChatGPT original manager, posted from the owner GitHub account; quotes an owner approval (owner-text sha256 e3b9828f...) that I have NOT received in my own owner channel; treated as a coordination packet inside my existing lease, not as an owner signature; no execution admission inferred for me",
+   "allocation": "first of up to four additional 30-active-minute packets, reserved once, recorded separately; approval window expiry as relayed 2026-09-30T18:39:47Z",
+   "started_utc": "2026-09-29T18:43:41Z",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "scope": "review the Stage A/B adaptation only where it touches my contracts (non-fitting cases and invalid-site paths intact; the 15 fit-dependent cases not executed; passive job cannot reach fit/delta/binding edits; canonical identity/coverage preserved); fix a concrete defect in my own files only if found, as a declared successor; no new scheme, fit, experiment or coverage document",
+   "source_changes": "NONE; six files still byte-identical to 1ec610f3 at head ac661e61c and at Codex af9fb57e (6/6 re-hashed)",
+   "executed": "NONE",
+   "status": "A01 RETURNED 19:16Z; recorded about 14 of 30 active minutes (wall-clock about 7); receipt + transition review delivered; no source change",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
+   "hot_handoff_5896847088": "manager HOT-HANDOFF-01: read-only version-transition review of Codex's diagnostic_admission.py / aws_worker.py / aws_runner.py at af9fb57e plus the staged request; delivered as CB1_A01_STAGE_TRANSITION_REVIEW_20260929.md and a PR comment; no Codex file edited"
+  },
+  {
+   "wave": "P4-AUTONOMY-24H-01-A02-20260929",
+   "label": "PRIMARY-AUTONOMY-24H-01/A02 / Claude: disposition of Codex C01 operational diff e373ef1b",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "activation": "manager queue comment 5896916786; input = Codex object e373ef1b1931c674616ef53d06703ff1027de550 (comment 5896960640); started 2026-09-29T19:16:21Z; posted once with the disposition",
+   "scope": "review only the three changed files under cas_hh_rde_01/ against the seven-item checklist; PASS/BLOCKER; no Codex file edited",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "source_changes": "NONE; six files match 1ec610f3 at e373ef1b (6/6)",
+   "executed": "NONE; local text parse of DEPENDENCIES.txt and STAGED_VALIDATION_REQUEST.json only (44 pins, hash 41b403ea..., 108/62 identities)",
+   "disposition": "BLOCKER: LimitFSIZE=16777216 in the staged systemd-run unit breaks the torch install and contradicts the 32 MiB archive bound; PASS on CPU separation, staged admission, per-stage test IDs, worker timeout/collection, B prerequisite design; four non-blocking findings",
+   "status": "A02 RETURNED at about 28 of 30 active minutes (19:16:21Z start); no Claude packet active; A03 only for an owned defect, A04 only on delivered execution evidence; WAIT on owner decision (boot-attestation timing) or another source of runtime measurements, and on DeepSeek's exact-source receipt",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CB1_A02_C01_DIFF_DISPOSITION_20260929.md",
+   "successor_a4552e53": "PASS as source for Stage A and Stage B (B execution gated by code on Stage A evidence + runtime receipt); LimitFSIZE removed; log streams bounded by selector loop; inspect_staged_cleanup producer added; B gate binds actual A records by path+hash; payload pins constraints/legacy archive; Stage A refuses nested checkpoint members; staged_authority re-checked before spend and launch; canonical export via contracts.canonical",
+   "candidate_0a6eca5d": "PASS as source for Stage A and B, supersedes a4552e53; delta = per-stage legacy archive pins (0f8bde13 A / e728bc51 B), no-checkpoint scan on both nested archives for both stages, STAGED_SOURCE_PROJECTIONS.json (A 255 entries, B 258, 21/18 record entries excluded, no checkpoint suffix retained; wheels, requirements-gpu.txt and CAS_META_2_COMPOSITION retained); grep: no Stage A test or module reads the dropped records",
+   "final_candidate_a8518511": "PASS as source for Stage A and B, supersedes 0a6eca5d; production_instance_ids pinned and enforced (finding 1 closed); two-review source_review.json required (finding 2 closed); runtime receipt requires systemd wait-exit and service-environment attestation (finding 3 now gated); exact-instance cleanup re-read; output monitor race tolerated",
+   "c02_object_e16c00ed": "changed-scope check: worker delta PASS (exit 7 only for the runtime_probe sentinel; all existing run() calls keep 0); runner/admission byte-identical to a8518511; collector unwired; 38 synthetic specs outside the 108/62; proposal moves measured runtime fields from pre-spend to post-boot/pre-work on the same attempt, an owner-level timing decision, not mine; one seam to specify (bounded mid-job acceptance exchange)",
+   "c02_successor_2cf9aeee": "transport files byte-identical to e16c00ed; PASS carries to 2cf9aeee for A and B; probe argv still matches the worker's exit-7 guard; collector internals are Codex/DeepSeek scope",
+   "after_return": "c36ffd7a changed diagnostic_admission.py (ledger custody); WAIT note posted 5898323784, no receipt without allocation; 376b3d20 adds unwired bootstrap fragments only; Codex C02 FINAL RETURN 20:38Z (final source 376b3d20, 54 specs written 0 run); DeepSeek D01/D02/D02b/D02c relayed by Codex; six files unchanged throughout; 21:30Z check-in: no change"
+  }
+ ],
+ "not_done_by_any_worker": [
+  "No AWS operation",
+  "No model call",
+  "No edit to Codex-owned files",
+  "No protected material read",
+  "No HELM job, source, receipt or custody change",
+  "No `pilot`"
+ ],
+ "round_2_2026_09_27": {
+  "executor": "lead session itself; no subagent workers were spawned in round 2 (the note said not to spawn workers merely to reconcile bookkeeping)",
+  "work": [
+   "corrected probe v2 and its two recorded runs",
+   "meter hardening prototype in a scratch worktree, 61/61 kept",
+   "atlas_address.py and the ten addendum cases, 10 passed",
+   "CASE_RECONCILIATION for DeepSeek",
+   "SHARED_RETURN_20260927.md"
+  ],
+  "report_sha256": {
+   "probe_v2": "c4bbe7b4f8bb324426bd5f4bb91abaae1e5742c0043a88e309872f5e19e35011",
+   "atlas_address": "f42ad85ea1d6e8b693d34801b403bbd388b12fa0639387a3b58aff69c97086b6",
+   "test_atlas_address": "a373ea6147ab4e370b220db4c56b695501f0099ad7b86e385a03a14a9b673f97",
+   "thread_meter_patch": "7b3215eee2d796f3be132c80ed15061f21a2e3ecb4d3654b88a18d7c49912b1e"
+  }
+ },
+ "round_3_lease_2026_09_27": {
+  "lease": "CAS-CORRECTION-20260927-01",
+  "ack_comment": 5853300431,
+  "executor": "lead session, SERIAL_EXECUTION_NO_SUBAGENT_INTERFACE; zero workers, provider calls, cloud jobs",
+  "packets": {
+   "1": "f56415199dddccc7dd75cd8503a3280badf69082 (R1, R6, spec/contracts/decisions)",
+   "2": "0cb7b48d790cbc8e8ff69a258d9255c7967f1a59 (R7, addendum cases, R3/R8 notes)"
+  }
+ },
+ "global_limits_declared": {
+  "active_workers_under_claude": 0,
+  "maximum_under_claude": 2,
+  "maximum_global": 4,
+  "note": "All packets executed serially; zero active workers."
+ }
+}
