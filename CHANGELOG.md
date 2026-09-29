@@ -26,6 +26,9 @@ Monorepo-level log. Subprojects keep their own changelogs
   `/n{i}`; public labels as fillers; direct branches assumed). Codex's finding CONFIRMED and fixed: `freeze_plan` now refuses a non-finite
   `max_delta_norm` (`nan`/`inf` previously passed the positivity test and the later donor comparison); one test loop added. `binding_edits.py` `780c1fd1b557…`,
   `test_binding_edits.py` `bc85180e32eb…`. Still 23 written, 0 executed.
+- 15:15Z: coordination request 5892809590 (a "ChatGPT manager" intake posted from the owner account, self-described as granting nothing) names a second
+  v1.1 directive (`38444787…`, CB37–CB42) not present in any Git branch. Individual receipt posted: package NOT received, versions not equated, scope and
+  hashes restated, the requested reconciliation already delivered at `a16e3aa2`/`65904c16`, dependency = Codex relaying the package to Git. No source changed.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

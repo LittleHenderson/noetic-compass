@@ -177,3 +177,14 @@ positivity only; `nan <= 0` and `inf <= 0` are both False, so a non-finite bound
 Updated identities: `binding_edits.py` sha256 `780c1fd1b557817bcb7f081b229b95ec10b1d9cd69956b698c3b22d21e919776` (301 lines); `test_binding_edits.py` sha256 `bc85180e32eb1ba44f15d0de71f225b774d8cc0dd9433f289af24495451d8440`
 (268 lines, 6 cases). Written 23; collected 0; executed 0. For integration, only these two files changed since
 `ccbd8866`. About 4 more active minutes (06:15Z–06:19Z); about 15 remain. NOT RUN; `ENGINEERED-NOT-VALIDATED`.
+
+## Addendum 15:15Z — coordination request 5892809590 ("ChatGPT ORIGINAL HELM/CAS manager" intake, posted from the owner account; self-described as not an owner signature and granting nothing)
+
+The request names a second v1.1 manager directive (98008 bytes, sha256 `38444787…`, adds CB37–CB42) that collides
+with the one delivered at `fe2db4e9` (84156 bytes, `2d12f3c8…`), plus `ORIGINAL_CLAUDE_SCOPE.txt` (`e8ffc3d5…`).
+None of it is in Git (all remotes re-fetched at 15:13Z; Codex head still `79c872e4`); it exists only at a Windows
+path. Receipt posted as comment after 15:13Z: request received, package NOT received, two directive versions not
+equated; current scope and hashes restated; the "first deliverable" it asks for (reconciliation with Codex's real
+interfaces) is already delivered at `a16e3aa2` / `65904c16`, which the intake did not list; first remaining artifact
+is a CB37–CB42 coverage map, dependent on Codex relaying the package to Git; allowance restated as about 15 of 90
+active minutes (its "24-minute remainder" was my 06:10Z figure). No source changed. NOT RUN.
