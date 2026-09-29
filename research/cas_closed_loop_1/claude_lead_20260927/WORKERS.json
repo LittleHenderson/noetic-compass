@@ -422,10 +422,10 @@
    "shared_trivial_file": "research/helm_self_improvement/cube_binding/__init__.py: written at ccbd8866, REMOVED in the follow-up commit after Codex created its own at c9b0bfd3 (one writer)",
    "acknowledged_utc": "2026-09-29T05:58:00Z",
    "started_utc": "2026-09-29T05:58:31Z",
-   "allocation": "90 active minutes shared per lead, no reset; about 54 used before this packet; about 21 used in this packet (05:58Z-06:19Z); about 15 remain",
+   "allocation": "90 active minutes shared per lead, no reset; about 54 used before this packet; about 25 used in this packet (05:58Z-15:19Z, active minutes only); about 11 remain",
    "executed": "NONE (no pytest, no torch, per the contract and the namespace conftest); py_compile only",
    "cases_written": {
-    "test_role_schemes.py": 9,
+    "test_role_schemes.py": 10,
     "test_reconstructor.py": 8,
     "test_binding_edits.py": 6
    },
@@ -441,7 +441,8 @@
    "status": "SOURCE_WRITTEN_NOT_RUN",
    "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
    "follow_up_after_codex_c9b0bfd3": "consumer_inputs_for_plan added to binding_edits.py (inputs for Codex consumer_bridge.prepare_consumer_declaration); verify_single_application accepts NO_OP_VERIFIED for NO_CHANGE plans; one test added; my four RDE files at c9b0bfd3 byte-identical to 54dac34e",
-   "codex_integration_d27172d5": "my six files byte-identical to ccbd8866 (6/6); follow-up a16e3aa2 not yet integrated; row mapping of analysis_binding_rows checked by reading, consistent; Codex finding on freeze_plan non-finite max_delta_norm CONFIRMED and fixed (math.isfinite) with a test loop"
+   "codex_integration_d27172d5": "my six files byte-identical to ccbd8866 (6/6); follow-up a16e3aa2 not yet integrated; row mapping of analysis_binding_rows checked by reading, consistent; Codex finding on freeze_plan non-finite max_delta_norm CONFIRMED and fixed (math.isfinite) with a test loop",
+   "owner_decision_20260929_1520Z": "newer 38444787... package takes precedence for research/product requirements; upgrade existing code, do not restart; Q1 excluded; POSITIONAL control scheme added as the one gap found; package itself still not in Git"
   }
  ],
  "not_done_by_any_worker": [

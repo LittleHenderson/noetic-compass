@@ -102,6 +102,32 @@ def test_cb07_direct_indirect_shared_and_bounded_depth():
     assert all(b.filler != "Rim" for b in bicycle_1.bindings) and bicycle_1.truncated == 1
 
 
+def test_positional_control_follows_node_order_not_relations():
+    """Owner decision 2026-09-29 (position versus relation): the POSITIONAL control cannot tell the paired-edge
+    scenes apart, RELATION_ENDPOINT can; reordering the nodes changes POSITIONAL records and not the relation ones."""
+    pos = rs.declare_scheme("POSITIONAL", filler_vocabulary=FILLERS, max_positions=4)
+    rel = rs.declare_scheme("RELATION_ENDPOINT", filler_vocabulary=FILLERS, max_path_length=1)
+    nodes = ("A", "B", "C", "D")
+    scene_a, scene_b = _edges(("A", "B"), ("C", "D")), _edges(("A", "D"), ("C", "B"))
+    pos_a = rs.row_binding_sets(pos, rs.public_graph(pos, scene_a, nodes=nodes))
+    pos_b = rs.row_binding_sets(pos, rs.public_graph(pos, scene_b, nodes=nodes))
+    assert not rs.distinguishes(pos, pos_a, pos_b)                       # same order, different edges: identical
+    rel_a = rs.row_binding_sets(rel, rs.public_graph(rel, scene_a, nodes=nodes))
+    rel_b = rs.row_binding_sets(rel, rs.public_graph(rel, scene_b, nodes=nodes))
+    assert rs.distinguishes(rel, rel_a, rel_b)
+    reordered = ("B", "A", "C", "D")
+    pos_r = rs.row_binding_sets(pos, rs.public_graph(pos, scene_a, nodes=reordered))
+    assert rs.distinguishes(pos, pos_a, pos_r)                           # order changed, positions changed
+    rel_r = rs.row_binding_sets(rel, rs.public_graph(rel, scene_a, nodes=reordered))
+    assert sorted(s.records() for s in rel_a) == sorted(s.records() for s in rel_r)   # relations unchanged
+    assert pos_a[0].multiplicity("B", ("position", "1")) == 1 and all(b.role_path != ("position", "0") for b in pos_a[0].bindings)
+    assert len(pos.role_vocabulary) == 1 + 4 and pos.max_positions == 4 and rel.max_positions == 0
+    _refused("POSITION_LIMIT", rs.graph_bindings, rs.declare_scheme("POSITIONAL", filler_vocabulary=FILLERS, max_positions=2),
+             rs.public_graph(rs.declare_scheme("POSITIONAL", filler_vocabulary=FILLERS, max_positions=2), scene_a, nodes=nodes), receiving="A")
+    _refused("MAX_POSITIONS", rs.declare_scheme, "POSITIONAL", filler_vocabulary=FILLERS, max_positions=0)
+    assert rs.scheme_from_json(rs.scheme_to_json(pos), retained_scheme_digest=rs.scheme_digest(pos)) == pos
+
+
 def test_role_vocabulary_is_finite_and_shape_independent():
     rel = rs.declare_scheme("RELATION_ENDPOINT", filler_vocabulary=FILLERS, max_path_length=3)
     assert len(rel.role_vocabulary) == 1 + 2 * 3

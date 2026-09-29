@@ -29,6 +29,10 @@ Monorepo-level log. Subprojects keep their own changelogs
 - 15:15Z: coordination request 5892809590 (a "ChatGPT manager" intake posted from the owner account, self-described as granting nothing) names a second
   v1.1 directive (`38444787…`, CB37–CB42) not present in any Git branch. Individual receipt posted: package NOT received, versions not equated, scope and
   hashes restated, the requested reconciliation already delivered at `a16e3aa2`/`65904c16`, dependency = Codex relaying the package to Git. No source changed.
+- 15:20Z owner decision (chat): the newer `38444787…` package takes precedence for research/product requirements; existing code is upgraded, not replaced;
+  Q1 stays excluded. Difference-to-source record for my six files written into the return record (all memo themes covered or recorded except one gap:
+  position-versus-relation control). Gap closed: `POSITIONAL` scheme added to `role_schemes.py` (`6cd3ce0cd2dc…`, packet-rank positions, edges ignored,
+  bounded by `max_positions`) with one test (`166545eba84c…`; 24 written, 0 executed). Package and `ORIGINAL_CLAUDE_SCOPE.txt` still not in Git; CB37–CB42 map pending.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

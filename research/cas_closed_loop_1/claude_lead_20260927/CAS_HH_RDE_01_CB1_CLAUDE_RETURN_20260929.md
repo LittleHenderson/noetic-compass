@@ -188,3 +188,30 @@ equated; current scope and hashes restated; the "first deliverable" it asks for 
 interfaces) is already delivered at `a16e3aa2` / `65904c16`, which the intake did not list; first remaining artifact
 is a CB37–CB42 coverage map, dependent on Codex relaying the package to Git; allowance restated as about 15 of 90
 active minutes (its "24-minute remainder" was my 06:10Z figure). No source changed. NOT RUN.
+
+## Addendum 15:20Z — owner decision (chat, 2026-09-29): the `38444787…` package takes precedence for research and product requirements; upgrade the existing code, do not restart
+
+Owner instruction received in my session (not an owner-signed record on the PR): adopt the newer, source-reviewed
+package's research/product requirements (98008 bytes, `38444787…`, CB37–CB42); keep the earlier plan's execution
+continuity, the strict Q1 exclusion and all existing implementation; map requirements to what exists and change
+only missing or incorrect parts; apply each requirement at the stage where it matters; no combined master plan.
+The package itself and `ORIGINAL_CLAUDE_SCOPE.txt` (`e8ffc3d5…`) remain unreadable here (Windows path; not in any
+Git branch at 15:17Z).
+
+### Difference-to-source record for my six files against the themes the owner's memo names (by reading; nothing run)
+
+| Theme (owner memo) | My files | State |
+|---|---|---|
+| Whole/part argument order | `RELATION_ENDPOINT`: `(contains, out, d)` = filler is a part of the receiving node; `(contains, in, d)` = filler is a whole containing it; `test_cb07` checks both directions. Codex's `analysis_binding_rows` maps `source`→whole, `target`→part; that its `world["contains"]` is whole→part is Codex's contract (README says so). | COVERED; one Codex-side assumption recorded |
+| "Role" = public text label vs internally represented relationship | Role paths are structural positions derived from public edges, never text labels and never a learned internal relationship; `BindingSet` from `public_graph` is authored structure. No model-inferred binding record exists in my files (readout detectors were not in CB1-A scope); none is claimed. | COVERED for authored; NOT BUILT for inferred (not claimed) |
+| Edit before or after the model's rescaling | Edit site `graph.round_update` = `core_block` output, before the residual add and the next round's RMS (Codex `consumer_schedule`: `CORE_UPDATE_BEFORE_RESIDUAL_NOT_FINAL_NODE_STATE`). Analysis-side `TRAIN_ZSCORE` is a separate, train-only fit statistic; `delta` rescales by sigma only, bias never added. | COVERED as source; placement `SOURCE_CONSISTENT_NOT_EXECUTED` |
+| Which downstream calculations rerun | `DESCENDANT_RECOMPUTATION` record; Codex `consumer_schedule.descendants_in_order`; fixture test shows `node_head` recomputed on the same forward. | RECORDED; real forward NOT RUN |
+| Answer-length / answer-set shortcuts | Reconstructor fit refuses answers, labels, scores, splits (`FIT_INPUT_FORBIDDEN`); choices-only / answer-shape controls belong to Codex's packet view and DeepSeek's controls. | MINE: covered; CONTROL: not my file |
+| Position versus relation | GAP found and closed this addendum: new `POSITIONAL` scheme (receiving-row scope, `(self)` + `(position, k)` by packet row rank, edges ignored, bounded by `max_positions`, default 10 = the bridge's row limit). Test: cannot tell the paired-edge scenes apart, `RELATION_ENDPOINT` can; node reordering changes `POSITIONAL` records and not the relation ones. | ADDED (source-only) |
+| Familiar examples vs new combinations | `HOLDOUT_LEAK` refusal, `ATOMIC_PAIR` control refuses unseen pairs, TPR composes them. | COVERED |
+| Optional algebraic screen | Not implemented, per the owner: not a prerequisite for the first capture. | NOT BUILT (by decision) |
+
+Note: adding `max_positions` to `Scheme` changes every `scheme_digest`; nothing fitted or retained depends on the
+old digests (all NOT RUN). Updated identities: `role_schemes.py` sha256 `6cd3ce0cd2dca1352aff1263c1ce8cc13e6d34e15f28a3dc45760d770a91a445` (401 lines); `test_role_schemes.py`
+sha256 `166545eba84c767aedd9ef278a6adafaef6b6a1a5e00818b4d1096760cb0625d` (180 lines, 10 cases). Written now 24 (10 + 8 + 6); collected 0; executed 0. About 4 more active
+minutes (15:15Z–15:19Z); about 11 remain. The CB37–CB42 coverage map waits on the package reaching Git.

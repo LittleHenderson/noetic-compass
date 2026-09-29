@@ -41,9 +41,16 @@ from ..diagnostic_configuration import AUTHORITY, canonical, digest
 
 SCHEME_SCHEMA = "helm.cube-binding.role-scheme/0.1"
 BINDING_SET_SCHEMA = "helm.cube-binding.binding-set/0.1"
-SCHEME_KINDS = ("IDENTITY_ONLY", "ENDPOINT_BAG", "RELATION_ENDPOINT", "EVENT_FRAME")
+SCHEME_KINDS = ("IDENTITY_ONLY", "ENDPOINT_BAG", "RELATION_ENDPOINT", "EVENT_FRAME", "POSITIONAL")
 SCOPES = {"IDENTITY_ONLY": "GRAPH", "ENDPOINT_BAG": "GRAPH", "RELATION_ENDPOINT": "RECEIVING_ROW",
-          "EVENT_FRAME": "EVENT"}
+          "EVENT_FRAME": "EVENT", "POSITIONAL": "RECEIVING_ROW"}
+# POSITIONAL (owner decision 2026-09-29, "position versus relation" control; manager directive section 7.2
+# "positional structure"): receiving-row scope; (self, ("self",)) plus every other node as (node, ("position", k))
+# where k is the node's packet row rank. It carries NO edge information, so two scenes with the same node order
+# and different edges produce identical records. That is the control's purpose: an effect that this scheme
+# reproduces is following node position, not the relationship. Bounded by `max_positions`.
+DEFAULT_MAX_POSITIONS = 10          # Codex's consumer bridge admits at most 10 rows
+MAX_POSITIONS_LIMIT = 256
 # Copied from `cube_node.FORBIDDEN_FIELD_NAMES` / `FORBIDDEN_PREDICATES` at scientific ref c45f775f
 # (cube_node.py sha256 9d3363a9...), relationship SEMANTIC_CORRESPONDENCE: that module is not importable here.
 FORBIDDEN_FIELDS = ("correct", "correct_index", "answer", "solution", "expected", "target", "gold",
@@ -81,6 +88,7 @@ class Scheme:
     max_path_length: int
     filler_vocabulary: tuple
     role_vocabulary: tuple       # tuple of role paths (tuples of str); finite and shape-independent
+    max_positions: int = 0       # POSITIONAL only; 0 for every other kind
     authority: str = AUTHORITY
 
     def role_index(self, path):
@@ -99,13 +107,16 @@ class Scheme:
 def scheme_digest(scheme):
     return digest({"schema": scheme.schema, "kind": scheme.kind, "scope": scheme.scope,
                    "predicates": [list(p) if isinstance(p, tuple) else p for p in scheme.predicates],
-                   "max_path_length": scheme.max_path_length, "filler_vocabulary": list(scheme.filler_vocabulary),
+                   "max_path_length": scheme.max_path_length, "max_positions": scheme.max_positions,
+                   "filler_vocabulary": list(scheme.filler_vocabulary),
                    "role_vocabulary": [list(r) for r in scheme.role_vocabulary]})
 
 
-def _role_vocabulary(kind, predicates, max_path_length):
+def _role_vocabulary(kind, predicates, max_path_length, max_positions=0):
     if kind == "IDENTITY_ONLY":
         return (("present",),)
+    if kind == "POSITIONAL":
+        return (("self",),) + tuple(("position", str(k)) for k in range(max_positions))
     if kind == "ENDPOINT_BAG":
         return tuple((p, end) for p in predicates for end in ("source", "target"))
     if kind == "RELATION_ENDPOINT":
@@ -119,10 +130,16 @@ def _role_vocabulary(kind, predicates, max_path_length):
     return tuple((profile[0], role) for profile in predicates for role in profile[1:])
 
 
-def declare_scheme(kind, *, filler_vocabulary, predicates=DEFAULT_PREDICATES, max_path_length=2):
+def declare_scheme(kind, *, filler_vocabulary, predicates=DEFAULT_PREDICATES, max_path_length=2,
+                   max_positions=DEFAULT_MAX_POSITIONS):
     """A finite, shape-independent grammar. The vocabulary is fixed at declaration; unknowns refuse later."""
     if kind not in SCHEME_KINDS:
         _refuse("SCHEME_KIND", repr(kind))
+    if kind == "POSITIONAL":
+        if type(max_positions) is not int or not 1 <= max_positions <= MAX_POSITIONS_LIMIT:
+            _refuse("MAX_POSITIONS", "1..%d, got %r" % (MAX_POSITIONS_LIMIT, max_positions))
+    else:
+        max_positions = 0
     fillers = tuple(filler_vocabulary)
     if not fillers or len(set(fillers)) != len(fillers) or len(fillers) > MAX_NODES:
         _refuse("FILLER_VOCABULARY", "non-empty, distinct, at most %d" % MAX_NODES)
@@ -151,7 +168,7 @@ def declare_scheme(kind, *, filler_vocabulary, predicates=DEFAULT_PREDICATES, ma
         if any(p in FORBIDDEN_PREDICATES for p in preds):
             _refuse("PREDICATE_FORBIDDEN", repr(preds))
     return Scheme(SCHEME_SCHEMA, kind, SCOPES[kind], preds, max_path_length, fillers,
-                  _role_vocabulary(kind, preds, max_path_length))
+                  _role_vocabulary(kind, preds, max_path_length, max_positions), max_positions)
 
 
 @dataclass(frozen=True)
@@ -250,6 +267,14 @@ def graph_bindings(scheme, graph, *, receiving=None):
             out.append(Binding(source, (p, "source"), (source, p, target)))
             out.append(Binding(target, (p, "target"), (source, p, target)))
         return _finish(scheme, None, out, 0)
+    if scheme.kind == "POSITIONAL":
+        if receiving is None or receiving not in nodes:
+            _refuse("RECEIVING_NODE", repr(receiving))
+        if len(nodes) > scheme.max_positions:
+            _refuse("POSITION_LIMIT", "%d nodes > max_positions %d" % (len(nodes), scheme.max_positions))
+        out = [Binding(receiving, ("self",), (receiving,))]
+        out += [Binding(n, ("position", str(k)), (n, str(k))) for k, n in enumerate(nodes) if n != receiving]
+        return _finish(scheme, receiving, out, 0)          # edges deliberately ignored: no relation information
     if scheme.kind != "RELATION_ENDPOINT":
         _refuse("SCHEME_SCOPE", scheme.kind)
     if receiving is None or receiving not in nodes:
@@ -351,7 +376,8 @@ def distinguishes(scheme, sets_a, sets_b):
 def scheme_to_json(scheme):
     return canonical({"schema": scheme.schema, "kind": scheme.kind, "scope": scheme.scope,
                       "predicates": [list(p) if isinstance(p, tuple) else p for p in scheme.predicates],
-                      "max_path_length": scheme.max_path_length, "filler_vocabulary": list(scheme.filler_vocabulary),
+                      "max_path_length": scheme.max_path_length, "max_positions": scheme.max_positions,
+                      "filler_vocabulary": list(scheme.filler_vocabulary),
                       "role_vocabulary": [list(r) for r in scheme.role_vocabulary],
                       "scheme_digest": scheme_digest(scheme), "authority": scheme.authority})
 
@@ -366,7 +392,8 @@ def scheme_from_json(text, *, retained_scheme_digest):
     preds = body.get("predicates") or ()
     preds = tuple(tuple(p) for p in preds) if kind == "EVENT_FRAME" else tuple(preds)
     scheme = declare_scheme(kind, filler_vocabulary=tuple(body.get("filler_vocabulary") or ()),
-                            predicates=preds, max_path_length=body.get("max_path_length"))
+                            predicates=preds, max_path_length=body.get("max_path_length"),
+                            max_positions=body.get("max_positions") or DEFAULT_MAX_POSITIONS)
     if scheme_digest(scheme) != retained_scheme_digest:
         _refuse("SCHEME_DIGEST_MISMATCH", "reloaded scheme is not the retained one")
     if tuple(tuple(r) for r in body.get("role_vocabulary") or ()) != scheme.role_vocabulary:
