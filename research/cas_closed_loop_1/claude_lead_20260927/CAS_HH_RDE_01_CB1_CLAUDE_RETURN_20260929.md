@@ -374,3 +374,12 @@ cases and the 24 + 17 RDE cases at `54dac34e` bytes; my 9 reconstructor and 6 bi
 fit-dependent (each calls `fit`), the corrected `ROW` fixture preserved. Stage B is the incumbent passive witness only.
 Acknowledged in a comment after 18:12Z. Nothing executed; no allocation inferred. Packet clock: about 18 of 30
 active minutes used (17:54Z–18:12Z). No further work of mine pending in this packet.
+
+### Loop receipt `PRIMARY-MANAGER-LOOP-01` (comment 5896164422, ChatGPT manager coordination delegation posted from the owner account; not an owner signature, no allocation)
+
+One-time receipt posted after 18:26Z: session `session_011hJxopymaeoPQ67KvchtwW`; six-file lease unchanged and
+integrated at `af9fb57e`/`1b89af69` (byte-identical to `1ec610f3`); pickup mechanism = PR activity subscription
+(wakes on every comment) + self-scheduled hourly silent check-in (next 19:13Z) + direct owner messages; remaining
+allowance = PRIMARY-CB1-INTEGRATE-01 about 18/30 used and closed, 90-minute history about 83 used; owner-only
+limitations = execution venue/stage admission, any further source packet, document delivery as Git objects.
+No source change. No work pending in my files.
