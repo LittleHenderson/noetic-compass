@@ -366,6 +366,18 @@
     "gate": "62 = 21 codex + 24 + 17 claude (ae940c44 bytes); producer unchanged; g7.2xlarge cu128 venue compatible with CUDA-default cases",
     "defects_found": 0,
     "note": "12becc52 (43 cases) not to be swapped into this job"
+   },
+   "corrective_job_reported": {
+    "job": "helm-hh-rde-parity-20260929-a2",
+    "source": "ae2482fc93bc562c855037e90273da794a33b1f9",
+    "collected": 62,
+    "codex": "21/21",
+    "claude_configuration": "23/24",
+    "claude_intervention": "17/17",
+    "real_forwards": 0,
+    "failure": "test_hh05... helper KeyError on unknown site before raw_capture refusal",
+    "fix": "explicit meaning on that call; SITE_UNKNOWN expectation unchanged",
+    "state": "reported-by-Codex; junit hash to verify when published"
    }
   }
  ],

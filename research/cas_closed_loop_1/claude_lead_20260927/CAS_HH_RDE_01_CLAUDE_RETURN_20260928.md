@@ -173,3 +173,10 @@ configuration and matched control derived from it; only then can `enabled=True` 
   counts). Venue `g7.2xlarge`, `CUDA_VISIBLE_DEVICES=0`, `torch==2.11.0+cu128`, `HELM_SI_EXECUTION_VENUE=ADMITTED_AWS`:
   compatible with my CUDA-default torch cases and the namespace conftest. No defect found. My later head `12becc52`
   (25 + 18 = 43) must not be swapped into that job (gate would be 64). Note posted (PR #245, after comment 5881704689).
+
+## 2026-09-29 corrective job result (Codex's report, comment 5881938722)
+
+Job `helm-hh-rde-parity-20260929-a2` at `ae2482fc`: 62 collected and executed; Codex 21/21; my configuration 23/24; my
+intervention 17/17; PCBA fixture PASS; zero real forwards; neutrality/capture/reload NOT_RUN. First real execution of my
+cases: 40 of 41 at `ae940c44` passed. Failure: `test_hh05...` helper `KeyError` (`_capture(site="mlp.layer3")` looked the
+site up before `raw_capture` could refuse). Fix: explicit meaning on that one call. JUnit hash to be verified when visible.

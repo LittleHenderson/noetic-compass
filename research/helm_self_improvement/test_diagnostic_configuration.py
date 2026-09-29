@@ -79,7 +79,8 @@ def test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_
     _refused("CAPTURE_ROUND_INDEX", _capture, round_index=dc.CORE_ROUNDS)
     _refused("CAPTURE_ROUND_INDEX", _capture, site="head.reach", round_index=0)
     _refused("SITE_NOT_TENSOR", _capture, site="answer.assembly", round_index=None)
-    _refused("SITE_UNKNOWN", _capture, site="mlp.layer3")
+    # explicit meaning: the helper must not look the unknown site up itself; the refusal has to come from raw_capture
+    _refused("SITE_UNKNOWN", _capture, site="mlp.layer3", meaning="unknown site meaning")
 
 
 def test_hh07_top_k_detector_is_the_vendored_harness_function_with_relabeled_output():

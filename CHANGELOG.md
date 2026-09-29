@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-29 - CAS-HH-RDE-01: corrective passive job ran; my 41 cases at ae940c44 executed for real: 40 passed, 1 test-helper defect; one-line fix (NOT RUN)
+
+- Codex's report (comment 5881938722; JUnit and case receipt being published on the Codex branch, hash to be verified
+  when visible): job `helm-hh-rde-parity-20260929-a2`, source `ae2482fc`, parent `5b37699d…`, 62 collected and executed:
+  Codex 21/21 PASS, my `test_diagnostic_configuration.py` 23/24 PASS, my `test_diagnostic_intervention.py` 17/17 PASS.
+  The previously failing native-PCBA fixture passed with pinned pydantic; no checker change. ZERO real HELM forwards
+  or updates; neutrality, capture coverage and reload remain NOT_RUN because the 62-gate stopped the job.
+- The one failure is in my test helper, not the adapter: `test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_wrong_counts`
+  called `_capture(site="mlp.layer3")`, and the helper looked the unknown site up in `SITE_SEMANTICS` to build a
+  default meaning, raising `KeyError` before `raw_capture` could refuse `SITE_UNKNOWN`. Fix: that one call now passes
+  an explicit meaning, so the real `raw_capture` refusal is exercised. The `SITE_UNKNOWN` expectation is unchanged.
+  The same helper line exists at `ae940c44` and at my head, so the one-line change applies to either. Source-only, NOT RUN.
+- First real execution of any of my CAS-HH-RDE-01 cases: 40 of 41 at `ae940c44` passed on the GPU runner. This is
+  L1 (standalone module tests), not passive parity and not acceptance. Status stays `ENGINEERED-NOT-VALIDATED`.
+
 ## 2026-09-29 - CAS-HH-RDE-01 / A: integration verification against the real producer at 21d603c6; six findings closed in source; trusted intervention connection written DISABLED (43 cases, NOT RUN)
 
 - Owner packet INTEGRATED WITNESS SUPPORT. Codex's branch head is still `21d603c6` (no newer package); the AWS worker
