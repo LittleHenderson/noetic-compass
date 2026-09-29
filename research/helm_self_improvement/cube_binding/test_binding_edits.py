@@ -4,6 +4,7 @@ locally. Proves: bias cancels, sigma-only rescaling, exact swap-back, single app
 `diagnostic_intervention.apply` at `graph.round_update`, double-application refusal, descendant recomputation
 inside one forward (fixture), and the refusals. Nothing here is HELM."""
 import os
+from dataclasses import replace
 
 import pytest
 import torch
@@ -221,7 +222,9 @@ def test_consumer_inputs_match_codex_bridge_contract_whole_tensor_one_row_change
                                             be.delta(rec, old, old, torch=torch), original_values=signed_values, shape=(NODES, WIDTH), torch=torch)
     assert no_change["native_values"] is None and no_change["max_abs_delta"] is None and no_change["donor_provenance"] is None
     _refused("CAPTURE_SHAPE", be.consumer_inputs_for_plan, plan, d, original_values=signed_values[:-1], shape=(NODES, WIDTH), torch=torch)
-    _refused("ROW", be.consumer_inputs_for_plan, plan, d, original_values=signed_values[:WIDTH], shape=(1, WIDTH), torch=torch)
+    # Codex source finding (PR #245 comment 5895674228): the frozen plan has row=0, which IS valid for a one-row
+    # capture, so the refusal needs a genuinely out-of-range row. `replace` keeps every other plan field.
+    _refused("ROW", be.consumer_inputs_for_plan, replace(plan, row=1), d, original_values=signed_values[:WIDTH], shape=(1, WIDTH), torch=torch)
     gold = be.consumer_inputs_for_plan(plan, d, original_values=signed_values, shape=(NODES, WIDTH), torch=torch, provenance="GOLD_INFORMED")
     assert gold["donor_provenance"] == "GOLD_INFORMED"
     _refused("PROVENANCE", be.consumer_inputs_for_plan, plan, d, original_values=signed_values, shape=(NODES, WIDTH), torch=torch, provenance="ANSWER_KEY")

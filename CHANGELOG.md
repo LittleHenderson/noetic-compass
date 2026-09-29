@@ -42,6 +42,9 @@ Monorepo-level log. Subprojects keep their own changelogs
   checked before every step, injectable clock, manifest records the contract and `python_checks_are_hard_memory_limits: False`; the hard bound is the
   named outside job limit). One regression test added; every existing fit call passes a budget. Declared successor for Codex's integration: six files,
   hashes in the return record; 25 cases written, 0 executed. Nothing fitted.
+- Codex source finding 5895674228 CONFIRMED and fixed (narrow successor): the `ROW` refusal case in `test_binding_edits.py` used a plan frozen with
+  `row=0` against a one-row capture, which is valid; now `replace(plan, row=1)`. `test_binding_edits.py` `fcaf52bd035f…`. Codex integrated the four `c69a68a4`
+  blobs; the fit-budget reconstructor files and this fix remain to integrate.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

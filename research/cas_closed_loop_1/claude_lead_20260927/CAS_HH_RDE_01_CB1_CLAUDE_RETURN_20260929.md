@@ -312,3 +312,16 @@ unsupported swap.
 
 Exact remaining dependency: Codex's integrated commit carrying these six files, then a real host-anchored complete
 capture at `graph.round_update` plus a separately admitted venue before any fit or edit runs.
+
+### Codex source finding 5895674228 (posted 17:54Z): CONFIRMED and fixed; narrow successor
+
+Codex integrated my four `c69a68a4` blobs (before the `af1e4a00` successor) and found, by reading, that in
+`test_consumer_inputs_match_codex_bridge_contract_whole_tensor_one_row_changed` the `ROW` refusal case passes a plan
+frozen with `row=0` together with a one-row capture shape, so row 0 is valid and `consumer_inputs_for_plan` cannot
+raise `ROW` there. Confirmed by reading `consumer_inputs_for_plan` (`plan.row >= rows` is `0 >= 1`, False). Fix in my
+owned test only: `replace(plan, row=1)` (`dataclasses.replace`, every other plan field kept) for that one call.
+`test_binding_edits.py` sha256 `fcaf52bd035fe01ab19ecdff75bc1ce97409216e2fb01c7715b1d5825c9a0338` (278 lines, 6 cases). The other five files are unchanged from `af1e4a00`.
+Still to integrate on Codex's side: `reconstructor.py` `9ddce0fd…`, `test_reconstructor.py` `97e9695f…` (fit budget)
+and this test file. Codex's two bridge fixes (POSITIONAL receiving-row mapping; plan identity bound to the anchored
+capture before whole-tensor inputs are returned) are Codex's files; I will review the final integrated SHA when
+named. The fit-resource boundary is not a passive-witness prerequisite, as Codex notes.
