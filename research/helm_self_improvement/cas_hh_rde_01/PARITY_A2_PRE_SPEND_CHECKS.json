@@ -1,0 +1,67 @@
+{
+  "utc": "2026-09-29T01:24:01.328528+00:00",
+  "source_commit": "ae2482fc93bc562c855037e90273da794a33b1f9",
+  "review_id": "deepseek-cas-hh-rde-corrective-successor-20260929-14",
+  "checks": {
+    "CHECK-1": "PASS_STAGED_CONSTRAINTS_NAME_AND_HASH",
+    "CHECK-2": "PASS_ALL_SEVEN_EXACT_WHEELS_LISTED_IN_OFFICIAL_INDEX",
+    "CHECK-3": "PASS_CONFIGURED_FIRST_TEST_FILE_CONTAINS_EXACT_FIXTURE"
+  },
+  "index_receipts": [
+    {
+      "package": "filelock",
+      "version": "3.32.3",
+      "url": "https://download.pytorch.org/whl/cu128/filelock/",
+      "observed_wheel": "filelock-3.32.3-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "fsspec",
+      "version": "2026.7.0",
+      "url": "https://download.pytorch.org/whl/cu128/fsspec/",
+      "observed_wheel": "fsspec-2026.7.0-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "jinja2",
+      "version": "3.1.6",
+      "url": "https://download.pytorch.org/whl/cu128/jinja2/",
+      "observed_wheel": "jinja2-3.1.6-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "networkx",
+      "version": "3.6.1",
+      "url": "https://download.pytorch.org/whl/cu128/networkx/",
+      "observed_wheel": "networkx-3.6.1-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "sympy",
+      "version": "1.14.0",
+      "url": "https://download.pytorch.org/whl/cu128/sympy/",
+      "observed_wheel": "sympy-1.14.0-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "typing-extensions",
+      "version": "4.16.0",
+      "url": "https://download.pytorch.org/whl/cu128/typing-extensions/",
+      "observed_wheel": "typing_extensions-4.16.0-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    },
+    {
+      "package": "setuptools",
+      "version": "78.1.0",
+      "url": "https://download.pytorch.org/whl/cu128/setuptools/",
+      "observed_wheel": "setuptools-78.1.0-py3-none-any.whl",
+      "method": "web open/find official index, retrieved current tool turn; source page contains exact wheel link"
+    }
+  ],
+  "test_files_first": "research/helm_self_improvement/test_observation.py",
+  "local_test_runs": 0,
+  "model_loads": 0,
+  "cloud_mutations": 0,
+  "transport_limitations": "Local urllib and some curl metadata requests returned WinError10054/connection reset. Official index pages were independently read through web tool. Wheel HEAD success is NOT claimed. No package installed locally. AWS installation/import remains a required gate.",
+  "drde10": "Closed as pinned universal Parts slot source fact by DeepSeek review14."
+}

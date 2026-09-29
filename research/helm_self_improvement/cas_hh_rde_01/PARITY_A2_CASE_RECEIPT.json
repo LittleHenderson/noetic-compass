@@ -1,0 +1,53 @@
+{
+  "job_id": "helm-hh-rde-parity-20260929-a2",
+  "instance_id": "i-0df68da5f2cb9ab74",
+  "executing_source": "ae2482fc93bc562c855037e90273da794a33b1f9",
+  "parent_sha256": "5b37699d52e530a9ecd3563e235f0884630225da2fbe27489767a196c0f7a109",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "freeze_sha256": "cfb2c8bc4a0f370570d09aff1422f2e5057aac5bc3f235f05b7b7ba988d348a5",
+  "actual_collected": 62,
+  "groups": {
+    "test_observation": {
+      "executed": 21,
+      "passed": 21,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test_diagnostic_configuration": {
+      "executed": 24,
+      "passed": 23,
+      "failed": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test_diagnostic_intervention": {
+      "executed": 17,
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "failures": [
+    {
+      "case": "test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_wrong_counts",
+      "file": "test_diagnostic_configuration.py",
+      "message": "KeyError: 'mlp.layer3'"
+    }
+  ],
+  "previously_failed_unchanged_pcba_fixture": "PASS_BEFORE_NEURAL_MODEL_LOAD",
+  "packet_forwards": 0,
+  "optimizer_updates": 0,
+  "capture_coverage": "NOT_RUN",
+  "neutrality": "NOT_RUN",
+  "fresh_reload": "NOT_RUN",
+  "archive_sha256": "2385f56248802ec4d53fc10a1d893f44bb9d47dfc774033d198fbea2ac789a5e",
+  "verified_artifacts": 58,
+  "next_fix_owner": "Claude",
+  "smallest_source_fix": "In test_diagnostic_configuration.py:82 supply explicit meaning to _capture(site=mlp.layer3), avoiding helper dictionary lookup so raw_capture itself can reject SITE_UNKNOWN. No production checker weakening. Fix NOT_RUN.",
+  "cleanup": "PENDING_INDEPENDENT_PROVIDER_TERMINATION_AND_TEMP_RESOURCE_CLOSEOUT",
+  "automatic_retry": false,
+  "model_job_slots_used": 2,
+  "maximum_model_job_slots": 2
+}
