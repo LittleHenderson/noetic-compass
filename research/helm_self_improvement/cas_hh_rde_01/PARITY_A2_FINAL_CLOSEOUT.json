@@ -1,0 +1,117 @@
+{
+  "job_id": "helm-hh-rde-parity-20260929-a2",
+  "instance_id": "i-0df68da5f2cb9ab74",
+  "executing_source": "ae2482fc93bc562c855037e90273da794a33b1f9",
+  "parent_sha256": "5b37699d52e530a9ecd3563e235f0884630225da2fbe27489767a196c0f7a109",
+  "scientific_source": "c45f775f225dd06cc20cdf313f0a0398486e0d61",
+  "freeze_sha256": "cfb2c8bc4a0f370570d09aff1422f2e5057aac5bc3f235f05b7b7ba988d348a5",
+  "actual_collected": 62,
+  "groups": {
+    "test_observation": {
+      "executed": 21,
+      "passed": 21,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test_diagnostic_configuration": {
+      "executed": 24,
+      "passed": 23,
+      "failed": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test_diagnostic_intervention": {
+      "executed": 17,
+      "passed": 17,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "failures": [
+    {
+      "case": "test_hh05_capture_refuses_relabeled_coordinate_meaning_nonfinite_values_and_wrong_counts",
+      "file": "test_diagnostic_configuration.py",
+      "message": "KeyError: 'mlp.layer3'"
+    }
+  ],
+  "previously_failed_unchanged_pcba_fixture": "PASS_BEFORE_NEURAL_MODEL_LOAD",
+  "packet_forwards": 0,
+  "optimizer_updates": 0,
+  "capture_coverage": "NOT_RUN",
+  "neutrality": "NOT_RUN",
+  "fresh_reload": "NOT_RUN",
+  "archive_sha256": "2385f56248802ec4d53fc10a1d893f44bb9d47dfc774033d198fbea2ac789a5e",
+  "verified_artifacts": 58,
+  "next_fix_owner": "Claude",
+  "smallest_source_fix": "In test_diagnostic_configuration.py:82 supply explicit meaning to _capture(site=mlp.layer3), avoiding helper dictionary lookup so raw_capture itself can reject SITE_UNKNOWN. No production checker weakening. Fix NOT_RUN.",
+  "cleanup": "INDEPENDENTLY_VERIFIED",
+  "automatic_retry": false,
+  "model_job_slots_used": 2,
+  "maximum_model_job_slots": 2,
+  "schema": "helm.hh-rde.corrective-closeout/1",
+  "utc": "2026-09-29T01:37:38.851242+00:00",
+  "status": "FAILED_CONTRACT_TEST_NO_MODEL_FORWARD_NO_RETRY",
+  "original_execution_sha256": "9a9465d1f98c188fb1a59885efcabbe0061aec60814999ed66b571f38a2cae5a",
+  "original_cleanup_complete": false,
+  "original_failure_preserved": "TERMINATION_NOT_CONFIRMED",
+  "recovery_record_sha256": "9b6881ea2efec8e57431fcd8a79c6b808a9f3236a050cec74330917f0f23a3d2",
+  "independent_closeout_sha256": "d7b83468f76fb16c89a4f21c631065a889482f5735a846c00dd3d71cb5c636d6",
+  "checks": {
+    "owned_instance_terminal": true,
+    "volumes_absent": true,
+    "security_groups_absent": true,
+    "network_interfaces_absent": true,
+    "worker_role_absent": true,
+    "watchdog_role_absent": true,
+    "profile_absent": true,
+    "shutdown_schedule_absent": true
+  },
+  "provider_instance_state": "terminated",
+  "retained_storage": {
+    "bucket": "helm-hh-rde-parity-20260929-a2-807562639912",
+    "bytes": 9491794,
+    "objects": 6,
+    "all_public_access_blocked": true,
+    "disposition": "RETAINED_PRIVATE_EVIDENCE_NO_DELETE",
+    "actual_bill_usd": null
+  },
+  "pydantic": "2.12.5",
+  "pydantic_core": "2.41.5",
+  "pytest": "9.0.2",
+  "dependency_inventory": "ALL_44_EXACT_PINS_MATCHED",
+  "claude_handoff": "https://github.com/LittleHenderson/noetic-compass/pull/245#issuecomment-5881938722",
+  "third_job_authorized": false,
+  "cost": {
+    "corrective_reserved_usd": "2.00",
+    "original_reserved_usd": "2.00",
+    "campaign_cap_usd": "12.00",
+    "allocation_usd": {
+      "original_preparation": "2.00",
+      "corrected_preparation": "2.00",
+      "discovery": "4.00",
+      "confirmation_readout": "2.00",
+      "protected_cleanup": "2.00"
+    },
+    "hourly_compute_usd": "2.52",
+    "original_reservation_preserved": true,
+    "historical_reservations_released": false,
+    "operator_interval_seconds_not_full_provider_interval": 366.68252859999484,
+    "provider_termination_confirmed_by_utc": "2026-09-29T01:35:15+00:00",
+    "launch_to_confirmed_terminal_upper_seconds": 618.905213,
+    "compute_upper_estimate_usd": 0.433234,
+    "estimate_is_provider_bill": false,
+    "frozen_all_services_forecast_max_usd": "1.76",
+    "other_services_allowance_usd": "0.50",
+    "actual_provider_bill_usd": null,
+    "retained_storage_continues": true,
+    "other_campaign_funds_used": "0.00"
+  },
+  "limitations": [
+    "Zero real HELM forwards; no neural neutrality, coverage, reload, accuracy or causal claim.",
+    "OBSERVE_ONLY and NO_OP_CONTROL share the passive capture path; no active intervention acceptance.",
+    "External custody anchor uses same operator; no independent third-party anchoring claim.",
+    "Fixture correction assigned to Claude; source-only fix NOT_RUN."
+  ]
+}
