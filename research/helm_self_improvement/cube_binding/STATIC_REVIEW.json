@@ -1,0 +1,20 @@
+{
+  "task": "CB1-C",
+  "source": "c9b0bfd37b0968251415037c08cb13fe246c49ec",
+  "reviewer": "/root/cb1_contract_review",
+  "review_mode": "READ_ONLY_SOURCE_NO_IMPORT_OR_EXECUTION",
+  "review_rounds": [
+    {
+      "scope": "Original cube/typed source API and fixture map",
+      "reported_seconds": 130
+    },
+    {
+      "scope": "Implemented adapter/fixture/no-op/reload APIs against exact sources",
+      "reported_seconds": 60,
+      "finding": "No concrete API mismatch or deterministic first-run defect found in requested scope"
+    }
+  ],
+  "cumulative_child_seconds": 190,
+  "runtime_status": "NOT_RUN",
+  "scope_limit": "Does not establish test success, real HELM forward, neutrality, source admission or evidence acceptance"
+}
