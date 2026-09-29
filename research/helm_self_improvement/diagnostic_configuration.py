@@ -382,13 +382,15 @@ def expected_hits_for(site, kind, forwards=1):
     return forwards * (CORE_ROUNDS if site.startswith("graph.round_") else 1)
 
 
-def verify_observation(receipt, *, retained_receipt_sha256=None):
-    """Recompute the emitter's receipt digest; an externally retained digest, when supplied, must match too.
+def verify_observation(receipt, *, retained_receipt_sha256):
+    """Recompute the emitter's receipt digest AND require the externally retained digest (host ledger).
 
     A digest the receipt carries proves only that the bytes were not corrupted in transport (DeepSeek F4): an
-    editor can recompute it. Claims above transport integrity need `retained_receipt_sha256` from outside the
-    artifact (the host ledger written by `retain_observation`).
+    editor can recompute it. Every reload therefore needs `retained_receipt_sha256` from outside the artifact
+    (the host ledger written by `retain_observation`); there is no self-consistent-only path.
     """
+    if retained_receipt_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "reload needs the digest retained by the host ledger")
     if type(receipt) is not dict or receipt.get("schema") != OBSERVATION_SCHEMA:
         _refuse("OBSERVATION_SCHEMA", repr(receipt.get("schema") if type(receipt) is dict else type(receipt)))
     body = {k: v for k, v in receipt.items() if k != "receipt_sha256"}
@@ -404,11 +406,11 @@ def verify_observation(receipt, *, retained_receipt_sha256=None):
         _refuse("OBSERVATION_COVERAGE_SITES", "coverage must name all 14 contract sites")
     if body.get("authority") != "NO_PROMOTION_NO_EXECUTION" or body.get("harvest_enabled") is not False:
         _refuse("OBSERVATION_AUTHORITY")
-    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED" if retained_receipt_sha256 is not None else "SELF_CONSISTENT_ONLY"
+    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED"
     return body
 
 
-def captures_from_observation(receipt, site, *, retained_receipt_sha256=None):
+def captures_from_observation(receipt, site, *, retained_receipt_sha256):
     """The emitter's events for one tensor site, as validated `RawCapture`s, with that site's coverage."""
     body = verify_observation(receipt, retained_receipt_sha256=retained_receipt_sha256)
     if body["mode"] == "OFF":
@@ -440,6 +442,10 @@ def captures_from_observation(receipt, site, *, retained_receipt_sha256=None):
     captures.sort(key=lambda c: c.call_index)
     if len(captures) != cov.stored_calls:
         _refuse("COVERAGE_OVERCOUNT", "%d events for %d stored calls" % (len(captures), cov.stored_calls))
+    if [c.call_index for c in captures] != list(range(len(captures))):
+        _refuse("CAPTURE_CALL_ORDER", "%s call indices %r" % (site, [c.call_index for c in captures]))
+    if SITE_SEMANTICS[site]["per_round"] and any(c.round_index != c.call_index for c in captures):
+        _refuse("CAPTURE_ROUND_ORDER", "%s round index must equal call index (emitter WRONG_ROUND rule)" % site)
     return tuple(captures), cov
 
 
@@ -497,6 +503,9 @@ def convert_observation(receipt, *, retained_receipt_sha256):
                            "source_sha256": body["source_sha256"], "scientific_source": body.get("scientific_source")},
               "mode": body["mode"], "kind": body["kind"], "binding": body.get("binding"),
               "dtype_map": dict(DTYPE_REPRESENTATIONS), "sites": sites, "tensor_sites": tensor_sites,
+              "conventions": {"signed_values": "row-major flatten of the emitted tensor (reshape(-1)); row r occupies [r*width, (r+1)*width)",
+                              "emitter_preview": "coordinate_preview.flat_coordinate = r*width + column; DISPLAY ONLY, never a configuration",
+                              "configuration": "coordinates are (round_index or None, column) of ONE declared row; never flat indices"},
               "capture_overhead_ns": body.get("capture_overhead_ns"), "captured_json_bytes": body.get("captured_json_bytes"),
               "claim": "OBSERVATION_ONLY_CAUSALITY_UNMEASURED", "authority": AUTHORITY}
     result["conversion_digest"] = digest({k: v for k, v in result.items()
@@ -507,11 +516,16 @@ def convert_observation(receipt, *, retained_receipt_sha256):
     return result
 
 
-def detect_from_observation(receipt, *, site, row, k, split, family, retained_receipt_sha256=None):
-    """Name a configuration from a COMPLETE emitter receipt only; an incomplete receipt names nothing."""
+def detect_from_observation(receipt, *, site, row, k, split, family, retained_receipt_sha256):
+    """Name a configuration from a COMPLETE, externally anchored emitter receipt only; it carries that provenance."""
+    body = verify_observation(receipt, retained_receipt_sha256=retained_receipt_sha256)
     captures, cov = captures_from_observation(receipt, site, retained_receipt_sha256=retained_receipt_sha256)
     require_complete(cov, "detect_from_observation(%s)" % site)
-    return detect_top_k(captures, row=row, k=k, split=split, family=family)
+    coverage_row = asdict(cov)
+    coverage_row["errors"] = list(coverage_row["errors"])
+    provenance = {"receipt_sha256": receipt["receipt_sha256"], "receipt_complete": bool(body.get("complete")),
+                  "anchor": body["anchor"], "coverage": coverage_row}
+    return detect_top_k(captures, row=row, k=k, split=split, family=family, provenance=provenance)
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -581,6 +595,7 @@ class ConfigurationRecord:
     evidence: tuple
     frozen: bool
     frozen_digest: object
+    provenance: dict
 
     @property
     def configuration_id(self):
@@ -615,9 +630,29 @@ def cas_mapping(noetic=None, domain=None, register=None, mapping_class="UNKNOWN"
             "mapping_class": mapping_class}
 
 
+FIXTURE_PROVENANCE = {"receipt_sha256": None, "receipt_complete": None, "anchor": "NONE_FIXTURE_CAPTURES", "coverage": None}
+
+
+def _provenance(value):
+    if value is None:
+        return dict(FIXTURE_PROVENANCE)
+    if type(value) is not dict or set(value) != set(FIXTURE_PROVENANCE):
+        _refuse("CONFIGURATION_PROVENANCE", "receipt_sha256, receipt_complete, anchor, coverage required")
+    if value["receipt_sha256"] is not None:
+        _hex64(value["receipt_sha256"], "CONFIGURATION_PROVENANCE")
+        if value["receipt_complete"] is not True or value["anchor"] != "EXTERNAL_ANCHOR_VERIFIED":
+            _refuse("CONFIGURATION_PROVENANCE", "a receipt-backed configuration needs a complete, externally anchored receipt")
+    return dict(value)
+
+
 def build_configuration(*, captures, row, coordinates, signed_values, detector, split, family, kind,
-                        cas_definition=None, response=None):
-    """One configuration over one site of one checkpoint, named from discovery captures only."""
+                        cas_definition=None, response=None, provenance=None):
+    """One configuration over one site of one checkpoint, named from discovery captures only.
+
+    `provenance` names the anchored, complete emitter receipt the captures came from (set by
+    `detect_from_observation`); without it the record is a fixture-capture record and can never be claimed
+    above OBSERVED_CONFIGURATION.
+    """
     captures = tuple(captures)
     if not captures:
         _refuse("CONFIGURATION_NO_CAPTURES")
@@ -667,10 +702,10 @@ def build_configuration(*, captures, row, coordinates, signed_values, detector, 
                                first.basis, kind, bool(semantics["hidden_unit"]), split, family,
                                tuple(sorted({c.input_sha256 for c in captures})), coordinates, signed_values,
                                row, dict(detector), dict(cas), response, "OBSERVED_CONFIGURATION", (),
-                               False, None)
+                               False, None, _provenance(provenance))
 
 
-def detect_top_k(captures, *, row, k, split, family):
+def detect_top_k(captures, *, row, k, split, family, provenance=None):
     """Reuse the Harness top-K detector unchanged on one node row across the captured rounds.
 
     `harness._top_k_neurons` ranks by absolute value and carries the SIGNED value, so inhibition survives.
@@ -696,7 +731,8 @@ def detect_top_k(captures, *, row, k, split, family):
                 "harness_function": "_top_k_neurons", "relationship": HARNESS_REUSE["_top_k_neurons"]["relationship"],
                 "parameters": {"k": k, "row": row, "ranking": "abs_value_desc"}}
     return build_configuration(captures=captures, row=row, coordinates=coordinates, signed_values=values,
-                               detector=detector, split=split, family=family, kind="PROJECTED_COORDINATE_SET")
+                               detector=detector, split=split, family=family, kind="PROJECTED_COORDINATE_SET",
+                               provenance=provenance)
 
 
 def support(record, captures):
@@ -765,6 +801,8 @@ def assign_claim(record, level, evidence):
     _hex64(evidence.get("artifact_sha256"), "CLAIM_EVIDENCE_ARTIFACT_SHA256")
     if not record.frozen:
         _refuse("CONFIGURATION_NOT_FROZEN", "claims above OBSERVED need a frozen configuration")
+    if record.provenance.get("receipt_complete") is not True or record.provenance.get("anchor") != "EXTERNAL_ANCHOR_VERIFIED":
+        _refuse("CLAIM_PROVENANCE", "claims above OBSERVED need a configuration named from a complete, anchored receipt")
     if level == "TASK_CAUSAL_CONTRIBUTION_SUPPORTED":
         if not evidence.get("intervention_receipt_sha256") or not evidence.get("matched_control_receipt_sha256"):
             _refuse("CLAIM_EVIDENCE", "task-causal claims need an intervention receipt and a matched control receipt")
@@ -783,9 +821,11 @@ def configuration_to_json(record):
     return canonical(body) + "\n"
 
 
-def configuration_from_json(text, *, retained_record_sha256=None):
-    """Self-carried digest = transport integrity only; pass the externally retained sha256 of the text for more."""
-    if retained_record_sha256 is not None and hashlib.sha256(text.encode()).hexdigest() != retained_record_sha256:
+def configuration_from_json(text, *, retained_record_sha256):
+    """Reload needs the externally retained sha256 of the text; the carried digest is transport integrity only."""
+    if retained_record_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "reload needs the retained record digest")
+    if hashlib.sha256(text.encode()).hexdigest() != retained_record_sha256:
         _refuse("CONFIGURATION_ANCHOR_MISMATCH", "externally retained digest differs")
     body = json.loads(text)
     expected = body.pop("record_digest", None)
@@ -796,6 +836,7 @@ def configuration_from_json(text, *, retained_record_sha256=None):
     body["coordinates"] = tuple(tuple(pair) for pair in body["coordinates"])
     body["signed_values"] = tuple(body["signed_values"])
     body["evidence"] = tuple(body["evidence"])
+    body["provenance"] = _provenance(body.get("provenance"))
     record = ConfigurationRecord(**body)
     if record.frozen and record.frozen_digest != digest(_identity_body(record)):
         _refuse("CONFIGURATION_RECORD_TAMPERED", "frozen digest")

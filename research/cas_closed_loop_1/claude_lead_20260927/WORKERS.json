@@ -302,8 +302,8 @@
    "checkpoint_30_min": "both modules written; tests in progress; first return posted (comment 5877114683) at about 21 active minutes",
    "executed": "NONE (no pytest, no torch, per the packet); py_compile, import and AST case inventory only",
    "cases_written": {
-    "test_diagnostic_configuration.py": 24,
-    "test_diagnostic_intervention.py": 17
+    "test_diagnostic_configuration.py": 25,
+    "test_diagnostic_intervention.py": 18
    },
    "not_done": [
     "no local test run",
@@ -353,6 +353,13 @@
     "commit": "21d603c63764e5f311f78aaff7239c8c9b94daff",
     "leased_files_byte_identical_to": "ae940c44419ea4807dd143de06f800810ca0330f (4/4)",
     "reader_binding": "observation.reload_configuration_inputs -> convert_observation (complete) / captures_from_observation (incomplete)"
+   },
+   "integrated_witness_support_20260929": {
+    "codex_head_checked": "21d603c6 (no newer commit)",
+    "findings_closed_in_source": 6,
+    "connection": "trusted_intervention_caller, CONNECTION_ENABLED_BY_DEFAULT False",
+    "executed": "NONE; py_compile, import, AST inventory only",
+    "active_minutes_used_approx": 48
    }
   }
  ],

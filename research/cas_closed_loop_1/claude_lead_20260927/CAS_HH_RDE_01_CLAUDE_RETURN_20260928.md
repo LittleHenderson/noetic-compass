@@ -9,7 +9,7 @@ Package received at `62bb7f714810db5047eb07ef616c6ddfe470fca9`; receipt ACK: PR 
 |---|---|
 | Vendored Harness source read and hash-checked (`543666e5…`) | real (computed here) |
 | Learner anchors at `c45f775f` (`_rounds` observe 1197-1198, `core_block` call 1199, `pointer_key` 1313, `node_head` 1347, `_node_options` 1417, `_reach_options` 1512, `world_head` 1566) | real (read from the exact retained copy, sha256 `0f424d86…`) |
-| Bridge modules and 41 test cases | written |
+| Bridge modules and 43 test cases | written |
 | Any test executed | NOT_RUN (packet forbids local pytest/torch; torch absent here) |
 | Any HELM capture, checkpoint, witness, intervention on HELM | not done |
 | Acceptance rows HH01-HH21 | obligations, none passed |
@@ -54,8 +54,8 @@ pilot; `CLAIM_LEVEL_OUTSIDE_PILOT`).
 
 | File | Cases | Needs |
 |---|---:|---|
-| `test_diagnostic_configuration.py` | 24 | Python only (imports Codex's `observation` module) |
-| `test_diagnostic_intervention.py` | 17 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
+| `test_diagnostic_configuration.py` | 25 | Python only (imports Codex's `observation` module) |
+| `test_diagnostic_intervention.py` | 18 | torch; CUDA by default (`HELM_DIAG_TEST_DEVICE`), labeled fixture `FIXTURE_NOT_HELM` |
 
 Exact acceptance command (inside an admitted job; the namespace `conftest.py` refuses otherwise):
 
@@ -63,7 +63,7 @@ Exact acceptance command (inside an admitted job; the namespace `conftest.py` re
 HELM_SI_EXECUTION_VENUE=ADMITTED_AWS python -B -m pytest -q -p no:cacheprovider --basetemp=<out>/pytest-temp --junitxml=<out>/hh-rde-01-claude-junit.xml -rA research/helm_self_improvement/test_diagnostic_configuration.py research/helm_self_improvement/test_diagnostic_intervention.py
 ```
 
-Expected `41 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
+Expected `43 / 0 / 0 / 0` if collection matches. Any other count is the result; do not lower the expectation.
 
 ## Witness protocol
 
@@ -148,3 +148,21 @@ coverage and fresh reload are NOT_RUN. It is a failed attempt, not partial accep
   0 failures, 1 error, 0 skipped; error `test_host_retains_incomplete_and_detects_tampering`, setup
   `PCBA_STATIC_CHECK_FAILED`; all 18 are Codex's `test_observation.py` cases; none of mine ran. Result of `fd421572`.
 - ACK posted on PR #245 after comment 5877382050. Everything else stays NOT RUN / not done.
+
+## 2026-09-29 owner packet: integrated witness support (verification of `21d603c6`)
+
+| Check | Result | Fix (all in the leased files) |
+|---|---|---|
+| Emitted dtype / signed-coordinate conventions | `torch.<dtype>` mapped; `signed_values` row-major flatten matches `row_values`; emitter preview is FLAT-indexed display only | conventions stated in `convert_observation` output |
+| Per-kind expected coverage, round/call order | `expected_hits_for` equals `Capture.expected` (import-checked); order was enforced only by the emitter and Codex's reader | `CAPTURE_CALL_ORDER` / `CAPTURE_ROUND_ORDER` in `captures_from_observation` |
+| Incomplete captures never become complete configurations | converter and `detect_from_observation` refused; but a record carried no provenance | `ConfigurationRecord.provenance`; `CLAIM_PROVENANCE` gate in `assign_claim` |
+| Externally retained identity required on reload | optional on four verifiers | mandatory everywhere (`EXTERNAL_ANCHOR_REQUIRED`) |
+| Self-declared hash does not authenticate a real model | `caller_binding` existed but from caller strings | `trusted_intervention_caller` derives it from checkpoint bytes, learner source hash, `learner.module` |
+| Intervention cannot silently no-op or escape scope | statuses covered no-op; input scope was unbound in `apply` | packet hash (`UNADMITTED_INPUT`), one forward, per-kind expected hits, checkpoint equality |
+
+Connection: `trusted_intervention_caller(learner, packet, kind, checkpoint_path, expected_checkpoint_sha256, declaration,
+torch, enabled=False, protocol=None)`; `protocol_checks(...)` names eight checks that must all be True. Disabled by
+default; never part of the passive job. Codex's reader at `21d603c6` already passes anchors, so it stays compatible.
+Cases 25 + 18 = 43, NOT RUN. Precise next intervention connection dependency: a real anchored passive OBSERVE_ONLY
+receipt (`CAPTURED`) for one admitted checkpoint and input, produced by Codex's corrected parity job, plus the frozen
+configuration and matched control derived from it; only then can `enabled=True` be considered, in its own admitted job.

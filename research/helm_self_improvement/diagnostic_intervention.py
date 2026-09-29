@@ -42,8 +42,9 @@ import random
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
 
-from .diagnostic_configuration import (AUTHORITY, BASIS, CORE_ROUNDS, LEARNER_SHA256, SITE_SEMANTICS,
-                                       canonical, digest, _hex64)
+from .diagnostic_configuration import (AUTHORITY, BASIS, CORE_ROUNDS, LEARNER_SHA256, OBSERVATION_KINDS,
+                                       OBSERVATION_SCHEMA, SITE_SEMANTICS, canonical, digest, expected_hits_for,
+                                       _emitter_canonical, _hex64)
 
 DECLARATION_SCHEMA = "helm.harness.intervention-declaration/0.1"
 RECEIPT_SCHEMA = "helm.harness.intervention-receipt/0.1"
@@ -393,9 +394,11 @@ def receipt_to_json(receipt):
     return canonical(body) + "\n"
 
 
-def verify_receipt(text, declaration=None, *, retained_receipt_sha256=None):
-    """Self-carried digest = transport integrity only; an externally retained sha256 of the text adds more."""
-    if retained_receipt_sha256 is not None and hashlib.sha256(text.encode()).hexdigest() != retained_receipt_sha256:
+def verify_receipt(text, declaration=None, *, retained_receipt_sha256):
+    """Reload needs the externally retained sha256 of the text; the carried digest is transport integrity only."""
+    if retained_receipt_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "reload needs the retained receipt digest")
+    if hashlib.sha256(text.encode()).hexdigest() != retained_receipt_sha256:
         _refuse("RECEIPT_ANCHOR_MISMATCH", "externally retained digest differs")
     body = json.loads(text)
     expected = body.pop("receipt_digest", None)
@@ -698,26 +701,26 @@ def evidence_record(*, declaration, receipt, configuration_id, split, baseline_p
     return body
 
 
-def verify_evidence(evidence, *, retained_evidence_sha256=None):
+def verify_evidence(evidence, *, retained_evidence_sha256):
     """The carried digest proves transport integrity only (an editor can recompute it, DeepSeek F4);
-    the externally retained digest, when given, must match. The result names which level was checked."""
+    the externally retained digest is required and must match."""
+    if retained_evidence_sha256 is None:
+        _refuse("EXTERNAL_ANCHOR_REQUIRED", "reload needs the retained evidence digest")
     body = dict(evidence)
     expected = body.pop("evidence_digest", None)
     if expected != digest(body) or body.get("schema") != EVIDENCE_SCHEMA:
         _refuse("EVIDENCE_TAMPERED")
     if body.get("harvest_ingestion") != HARVEST_INGESTION or body.get("promotion") != "NOT_POSSIBLE_FROM_THIS_RECORD":
         _refuse("EVIDENCE_AUTHORITY")
-    if retained_evidence_sha256 is not None and retained_evidence_sha256 != expected:
+    if retained_evidence_sha256 != expected:
         _refuse("EVIDENCE_ANCHOR_MISMATCH", "externally retained digest differs")
-    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED" if retained_evidence_sha256 is not None else "SELF_CONSISTENT_ONLY"
+    body["anchor"] = "EXTERNAL_ANCHOR_VERIFIED"
     return body
 
 
 def rpa_projection(evidence, *, retained_evidence_sha256):
     """What the atlas may show: a branch bound to input, parent checkpoint, action and outcome. View only.
     The view is built only from evidence anchored by a digest held OUTSIDE the artifact."""
-    if retained_evidence_sha256 is None:
-        _refuse("EXTERNAL_ANCHOR_REQUIRED", "the atlas shows only externally anchored evidence")
     body = verify_evidence(evidence, retained_evidence_sha256=retained_evidence_sha256)
     branch = {"schema": RPA_PROJECTION_SCHEMA,
               "branch_id": "helm-branch-" + digest([body["checkpoint_sha256"], body["input_sha256"],
@@ -736,3 +739,129 @@ def rpa_projection(evidence, *, retained_evidence_sha256):
               "view_authority": "READ_ONLY_NO_EXECUTION_NO_MUTATION",
               "executable": False, "mutation_authority": None}
     return branch
+
+
+# ---------------------------------------------------------------------------------------------------------
+# Trusted caller connection for an eventual bounded intervention -- DISABLED by default (F6/F7)
+# ---------------------------------------------------------------------------------------------------------
+
+CONNECTION_SCHEMA = "helm.harness.intervention-connection/0.1"
+PROTOCOL_SCHEMA = "helm.harness.intervention-protocol/0.1"
+CONNECTION_ENABLED_BY_DEFAULT = False
+CONNECTION_DISABLED = "DISABLED_PENDING_SOURCE_AND_PROTOCOL_CHECKS"
+PROTOCOL_CHECKS = ("passive_receipt_anchored", "passive_receipt_captured_same_scope", "configuration_frozen_and_anchored",
+                   "matched_control_verified", "declaration_site_hookable", "declaration_within_one_checkpoint",
+                   "no_training_entry", "witness_protocol_digest_present")
+
+
+def _file_sha256(path):
+    import pathlib
+    p = pathlib.Path(path)
+    if p.is_symlink() or not p.is_file():
+        _refuse("WRONG_CHECKPOINT_BYTES", "checkpoint copy must be a regular file")
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def protocol_checks(*, declaration, passive_receipt, retained_passive_receipt_sha256, configuration, control,
+                    witness_protocol_digest, learner_pending):
+    """Every named check must be True before the connection may be enabled. Nothing here runs a model."""
+    from .diagnostic_configuration import require_frozen, verify_observation
+    checks = {name: False for name in PROTOCOL_CHECKS}
+    body = None
+    try:
+        body = verify_observation(passive_receipt, retained_receipt_sha256=retained_passive_receipt_sha256)
+        checks["passive_receipt_anchored"] = body["anchor"] == "EXTERNAL_ANCHOR_VERIFIED"
+    except Exception:
+        body = None
+    if body is not None:
+        checks["passive_receipt_captured_same_scope"] = (
+            body.get("status") == "CAPTURED" and body.get("complete") is True and body.get("mode") == "OBSERVE_ONLY"
+            and body.get("checkpoint_sha256") == declaration.checkpoint_sha256
+            and body.get("input_sha256") == declaration.input_sha256
+            and body.get("source_sha256") == declaration.source_sha256)
+    try:
+        require_frozen(configuration, "CONFIRMATION")
+        checks["configuration_frozen_and_anchored"] = (
+            configuration.provenance.get("receipt_complete") is True
+            and configuration.provenance.get("anchor") == "EXTERNAL_ANCHOR_VERIFIED"
+            and configuration.checkpoint_sha256 == declaration.checkpoint_sha256
+            and configuration.site == declaration.site)
+    except Exception:
+        pass
+    try:
+        checks["matched_control_verified"] = bool(verify_matched(control, declaration)["matched"])
+    except Exception:
+        pass
+    checks["declaration_site_hookable"] = declaration.site in HOOK_SITES and declaration.action in ACTIVE_ACTIONS
+    checks["declaration_within_one_checkpoint"] = (declaration.donor is None
+                                                   or declaration.donor.checkpoint_sha256 == declaration.checkpoint_sha256)
+    checks["no_training_entry"] = learner_pending is None
+    checks["witness_protocol_digest_present"] = type(witness_protocol_digest) is str and len(witness_protocol_digest) == 64
+    return {"schema": PROTOCOL_SCHEMA, "checks": checks, "all_passed": all(checks.values()),
+            "declaration_digest": declaration_digest(declaration)}
+
+
+def trusted_intervention_caller(*, learner, packet, kind, checkpoint_path, expected_checkpoint_sha256, declaration, torch,
+                                enabled=CONNECTION_ENABLED_BY_DEFAULT, protocol=None, depth=1,
+                                restored_by="PointerCourseLearner.restore_checkpoint",
+                                expected_learner_sha256=LEARNER_SHA256):
+    """The one connection through which a bounded intervention may ever reach a guarded-restored learner.
+
+    Source checks (always run, never a model call): the checkpoint COPY's bytes hash equals the declared
+    checkpoint (same rule as the emitter's `capture_helm`); the learner's source file hashes to the pinned
+    learner (`expected_learner_sha256`; a fixture may pin its own hash and is then labeled not pinned); the
+    packet hashes, with the emitter's canonical form, to the declaration's `input_sha256`; the declaration's
+    checkpoint equals the copy's; the container is `learner.module`; the caller binding is built from THAT
+    module's parameter bytes. With `enabled=False` (the default) the result records the checks and the call it
+    would make, and registers no hook. With `enabled=True` every `protocol_checks` entry must already be True;
+    then exactly one `learner.predict(packet, depth)` runs inside `apply`, and the receipt is returned.
+    Training entry points are never called; `stage_batch` is never touched.
+    """
+    if kind not in OBSERVATION_KINDS:
+        _refuse("OBSERVATION_KIND", repr(kind))
+    checks = {}
+    checkpoint_sha256 = _file_sha256(checkpoint_path)
+    checks["checkpoint_bytes"] = checkpoint_sha256 == expected_checkpoint_sha256
+    if not checks["checkpoint_bytes"]:
+        _refuse("WRONG_CHECKPOINT_BYTES", "copy hashes to %s" % checkpoint_sha256[:16])
+    if declaration.checkpoint_sha256 != expected_checkpoint_sha256:
+        _refuse("DECLARATION_CHECKPOINT_MISMATCH", "declaration names another checkpoint")
+    graph = getattr(type(learner), "_graph", None)
+    if graph is None or not hasattr(graph, "__code__"):
+        _refuse("UNSUPPORTED_LEARNER_SOURCE", "learner type has no _graph code object")
+    learner_source_sha256 = hashlib.sha256(open(graph.__code__.co_filename, "rb").read()).hexdigest()
+    if learner_source_sha256 != expected_learner_sha256:
+        _refuse("UNSUPPORTED_LEARNER_SOURCE", "learner source %s is not the expected source" % learner_source_sha256[:16])
+    checks["learner_source"] = True
+    checks["learner_source_is_pinned"] = expected_learner_sha256 == LEARNER_SHA256
+    input_sha256 = hashlib.sha256(_emitter_canonical(packet)).hexdigest()
+    if input_sha256 != declaration.input_sha256:
+        _refuse("UNADMITTED_INPUT", "packet hashes to %s, declaration names %s" % (input_sha256[:16], declaration.input_sha256[:16]))
+    checks["input_scope"] = True
+    module = getattr(learner, "module", None)
+    if not isinstance(module, torch.nn.Module):
+        _refuse("MODEL_TYPE", "learner.module is not a torch module")
+    if declaration.source_sha256 != expected_learner_sha256:
+        _refuse("SOURCE_NOT_ADMITTED", "declaration source differs from the learner source pin in force")
+    binding = caller_binding(module, torch, checkpoint_sha256=expected_checkpoint_sha256,
+                             source_sha256=expected_learner_sha256, restored_by=restored_by)
+    checks["caller_binding_built"] = True
+    checks["observer_active"] = "_graph" in learner.__dict__
+    checks["training_disabled_by_observer"] = "stage_batch" in learner.__dict__
+    result = {"schema": CONNECTION_SCHEMA, "declaration_digest": declaration_digest(declaration), "kind": kind,
+              "checks": checks, "binding": binding, "input_sha256": input_sha256,
+              "learner_source_sha256": learner_source_sha256, "expected_hits": expected_hits_for(declaration.site, kind),
+              "would_call": "learner.predict(packet, %d) inside apply(learner.module, declaration, expected_forward_calls=1)" % depth,
+              "authority": AUTHORITY, "basis": BASIS, "actor": ACTOR}
+    if not enabled:
+        result.update(status=CONNECTION_DISABLED, hooks_registered=False, forwards=0, receipt=None, prediction=None)
+        return result
+    if type(protocol) is not dict or protocol.get("schema") != PROTOCOL_SCHEMA or protocol.get("all_passed") is not True \
+            or protocol.get("declaration_digest") != result["declaration_digest"]:
+        _refuse("PROTOCOL_CHECKS_FAILED", "enable only with a passing protocol_checks record for this declaration")
+    with apply(module, declaration, torch=torch, expected_forward_calls=1,
+               expected_hits=result["expected_hits"], binding=binding) as receipt:
+        prediction = learner.predict(packet, depth)
+    result.update(status=receipt.status, hooks_registered=True, forwards=1, receipt=receipt, prediction=prediction,
+                  protocol_digest=digest(protocol))
+    return result

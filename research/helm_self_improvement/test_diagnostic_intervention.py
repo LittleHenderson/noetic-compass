@@ -342,15 +342,16 @@ def test_hh16_receipt_json_round_trips_binds_its_declaration_and_detects_tamperi
         with torch.no_grad():
             model(hidden, query)
     text = di.receipt_to_json(receipt)
-    body = di.verify_receipt(text, declaration)
-    assert body["status"] == "APPLIED" and body["actor"] == di.ACTOR and body["authority"] == "OBSERVATION_ONLY_NO_PROMOTION"
     import hashlib
-    assert di.verify_receipt(text, declaration, retained_receipt_sha256=hashlib.sha256(text.encode()).hexdigest())["status"] == "APPLIED"
+    anchor = hashlib.sha256(text.encode()).hexdigest()
+    _refused("EXTERNAL_ANCHOR_REQUIRED", di.verify_receipt, text, declaration, retained_receipt_sha256=None)
+    body = di.verify_receipt(text, declaration, retained_receipt_sha256=anchor)
+    assert body["status"] == "APPLIED" and body["actor"] == di.ACTOR and body["authority"] == "OBSERVATION_ONLY_NO_PROMOTION"
     _refused("RECEIPT_ANCHOR_MISMATCH", di.verify_receipt, text, declaration, retained_receipt_sha256="0" * 64)
-    _refused("RECEIPT_DECLARATION_MISMATCH", di.verify_receipt, text, _declare("SUPPRESS", gain=0.5))
-    tampered = json.loads(text)
-    tampered["status"] = "APPLIED_NO_CHANGE"
-    _refused("RECEIPT_TAMPERED", di.verify_receipt, json.dumps(tampered), declaration)
+    _refused("RECEIPT_DECLARATION_MISMATCH", di.verify_receipt, text, _declare("SUPPRESS", gain=0.5), retained_receipt_sha256=anchor)
+    tampered = json.dumps(dict(json.loads(text), status="APPLIED_NO_CHANGE"))
+    _refused("RECEIPT_TAMPERED", di.verify_receipt, tampered, declaration,
+             retained_receipt_sha256=hashlib.sha256(tampered.encode()).hexdigest())
 
 
 def test_hh15_expected_hits_from_the_emitter_rule_make_an_unexpected_reach_hit_not_applied():
@@ -400,3 +401,78 @@ def test_hh15_declaration_strings_never_authenticate_the_module_only_the_caller_
         with torch.no_grad():
             model(hidden, query)
     assert bound.model_binding == "CALLER_VERIFIED" and di.require_applied(bound) is bound
+
+
+class FixtureLearner:
+    """A labeled stand-in for the guarded-restored learner: `.module`, class-level `_graph`, `predict`. NOT HELM."""
+    label = FIXTURE_LABEL
+
+    def __init__(self, module):
+        self.module, self._pending = module, None
+
+    def _graph(self, packet):
+        return None
+
+    def predict(self, packet, depth):
+        hidden, query = _inputs()
+        with torch.no_grad():
+            return self.module(hidden, query)
+
+
+def test_trusted_caller_connection_is_disabled_by_default_and_binds_checkpoint_input_and_module(tmp_path):
+    import hashlib
+    from .diagnostic_configuration import _emitter_canonical, digest as cfg_digest, detect_from_observation, freeze_configuration
+    from .test_diagnostic_configuration import _emitted_receipt
+    copy = tmp_path / "parent_copy.pt"
+    copy.write_bytes(b"FIXTURE_NOT_A_REAL_CHECKPOINT")
+    ckpt = hashlib.sha256(copy.read_bytes()).hexdigest()
+    fixture_source = hashlib.sha256(open(__file__, "rb").read()).hexdigest()
+    packet = {"record_id": "fixture-1", "source": {"kind": "fixture"}, "record": {"x": 1}}
+    input_sha = hashlib.sha256(_emitter_canonical(packet)).hexdigest()
+    learner = FixtureLearner(_model())
+    declaration = di.declare(action="SUPPRESS", site="head.reach", checkpoint_sha256=ckpt, input_sha256=input_sha,
+                             source_sha256=fixture_source, rows=(0,), coordinates=(0,), gain=1.0, hypothesis_id="H1",
+                             predicted_change="reach margin falls", allowed_sources=(fixture_source,))
+    # the pinned learner source is the default: a fixture learner is refused unless its own hash is named explicitly
+    _refused("UNSUPPORTED_LEARNER_SOURCE", lambda: di.trusted_intervention_caller(
+        learner=learner, packet=packet, kind="reach", checkpoint_path=copy, expected_checkpoint_sha256=ckpt,
+        declaration=declaration, torch=torch))
+    disabled = di.trusted_intervention_caller(learner=learner, packet=packet, kind="reach", checkpoint_path=copy,
+                                              expected_checkpoint_sha256=ckpt, declaration=declaration, torch=torch,
+                                              expected_learner_sha256=fixture_source)
+    assert disabled["status"] == di.CONNECTION_DISABLED and disabled["hooks_registered"] is False and disabled["forwards"] == 0
+    assert disabled["checks"]["learner_source_is_pinned"] is False and disabled["checks"]["checkpoint_bytes"] is True
+    assert disabled["binding"]["schema"] == "helm.harness.caller-binding/0.1" and disabled["expected_hits"] == 1
+    assert not learner.module.reach_option_head._forward_hooks
+    wrong_copy = tmp_path / "other.pt"
+    wrong_copy.write_bytes(b"DIFFERENT")
+    _refused("WRONG_CHECKPOINT_BYTES", lambda: di.trusted_intervention_caller(
+        learner=learner, packet=packet, kind="reach", checkpoint_path=wrong_copy, expected_checkpoint_sha256=ckpt,
+        declaration=declaration, torch=torch, expected_learner_sha256=fixture_source))
+    _refused("UNADMITTED_INPUT", lambda: di.trusted_intervention_caller(
+        learner=learner, packet=dict(packet, record={"x": 2}), kind="reach", checkpoint_path=copy,
+        expected_checkpoint_sha256=ckpt, declaration=declaration, torch=torch, expected_learner_sha256=fixture_source))
+    _refused("PROTOCOL_CHECKS_FAILED", lambda: di.trusted_intervention_caller(
+        learner=learner, packet=packet, kind="reach", checkpoint_path=copy, expected_checkpoint_sha256=ckpt,
+        declaration=declaration, torch=torch, expected_learner_sha256=fixture_source, enabled=True, protocol=None))
+    receipt = _emitted_receipt(kind="reach", checkpoint_sha256=ckpt, input_sha256=input_sha)
+    # the emitted receipt names the pinned learner source; scope must match the declaration's source pin too
+    configuration = freeze_configuration(detect_from_observation(receipt, site="head.reach", row=0, k=1, split="DISCOVERY",
+                                                                 family="F", retained_receipt_sha256=receipt["receipt_sha256"]))
+    control = di.matched_control(declaration, width=2, seed=3)
+    protocol = di.protocol_checks(declaration=declaration, passive_receipt=receipt,
+                                  retained_passive_receipt_sha256=receipt["receipt_sha256"], configuration=configuration,
+                                  control=control, witness_protocol_digest=cfg_digest(di.witness_protocol()), learner_pending=None)
+    # the passive receipt carries source 0f424d86... (the real pin) while this fixture declaration pins its own file
+    assert protocol["checks"]["passive_receipt_captured_same_scope"] is False and protocol["all_passed"] is False
+    _refused("PROTOCOL_CHECKS_FAILED", lambda: di.trusted_intervention_caller(
+        learner=learner, packet=packet, kind="reach", checkpoint_path=copy, expected_checkpoint_sha256=ckpt,
+        declaration=declaration, torch=torch, expected_learner_sha256=fixture_source, enabled=True, protocol=protocol))
+    forged = dict(protocol, all_passed=True)
+    enabled = di.trusted_intervention_caller(learner=learner, packet=packet, kind="reach", checkpoint_path=copy,
+                                             expected_checkpoint_sha256=ckpt, declaration=declaration, torch=torch,
+                                             expected_learner_sha256=fixture_source, enabled=True, protocol=forged)
+    # a forged protocol record is a caller decision this fixture cannot police; what the connection DOES guarantee:
+    assert enabled["forwards"] == 1 and enabled["status"] == "APPLIED" and enabled["receipt"].model_binding == "CALLER_VERIFIED"
+    assert enabled["receipt"].restored_by == "PointerCourseLearner.restore_checkpoint" and enabled["hooks_registered"] is True
+    assert not learner.module.reach_option_head._forward_hooks and enabled["prediction"] is not None

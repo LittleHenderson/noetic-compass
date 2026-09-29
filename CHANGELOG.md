@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-29 - CAS-HH-RDE-01 / A: integration verification against the real producer at 21d603c6; six findings closed in source; trusted intervention connection written DISABLED (43 cases, NOT RUN)
+
+- Owner packet INTEGRATED WITNESS SUPPORT. Codex's branch head is still `21d603c6` (no newer package); the AWS worker
+  there runs only Codex's 21 observation cases plus six real forwards, on a GPU instance; my files are integrated
+  unchanged and are not in that pytest list.
+- Verified against the producer (`observation.Capture.emit`): `signed_values` is the row-major flatten of the emitted
+  tensor, `dtype` is `torch.<name>`, `device` is `str(tensor.device)`, round sites carry `round_index == call_index`;
+  the emitter's `coordinate_preview` uses FLAT indices for display only. Per-kind expected coverage equals
+  `expected_hits_for` for both kinds (import-checked). Findings and smallest fixes, all in the four leased files:
+  (1) the converter did not itself enforce call/round order -> `CAPTURE_CALL_ORDER` / `CAPTURE_ROUND_ORDER` added;
+  (2) preview vs configuration coordinate conventions were implicit -> stated in `convert_observation` output;
+  (3) a configuration record did not carry its receipt provenance, so a fixture record could be claimed above
+  OBSERVED -> `ConfigurationRecord.provenance` added, set only by `detect_from_observation` from a complete anchored
+  receipt, and `assign_claim` refuses `CLAIM_PROVENANCE` otherwise; (4) reload verifiers accepted a missing external
+  anchor -> `verify_observation`, `captures_from_observation`, `detect_from_observation`, `configuration_from_json`,
+  `verify_receipt`, `verify_evidence` now require the retained digest (`EXTERNAL_ANCHOR_REQUIRED`); (5) `apply` had
+  no input binding -> the trusted caller hashes the packet with the emitter's canonical form and refuses
+  `UNADMITTED_INPUT`; (6) the caller binding was built from caller-supplied strings only -> the trusted caller
+  rebuilds it from the checkpoint copy's bytes, the learner's source file hash and `learner.module`'s parameters.
+- `trusted_intervention_caller(...)` written, `CONNECTION_ENABLED_BY_DEFAULT = False`: with `enabled=False` it runs
+  every source check, builds the binding, registers no hook and reports the call it would make; with `enabled=True`
+  it requires a passing `protocol_checks` record (anchored passive OBSERVE_ONLY receipt for the same checkpoint,
+  input and source; frozen anchored configuration; verified matched control; hookable active site; single
+  checkpoint; no pending training batch; witness digest) and then runs exactly one `learner.predict` inside `apply`.
+  Never mixed into the passive job; no training entry is ever called.
+- Codex's `reload_configuration_inputs` at `21d603c6` already passes the anchor to both converter calls, so the
+  mandatory-anchor change is compatible with the integrated reader. Cases: 25 pure-Python + 18 torch = 43, written,
+  NOT RUN. Spec sheet `ENGINEERED-NOT-VALIDATED`. Growth `residual_world_v1` rev 0.3 untouched at `86af9a90`.
+
 ## 2026-09-28 - CAS-HH-RDE-01 / A: Harness-to-HELM configuration/readout and intervention bridge written in the leased files (41 cases written, NOT RUN)
 
 - Package `62bb7f71` (`research/helm_self_improvement/cas_hh_rde_01/`) received by exact Git object; receipt ACK posted on PR

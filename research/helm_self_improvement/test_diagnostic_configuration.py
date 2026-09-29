@@ -152,9 +152,19 @@ def test_hh09_cas_mapping_uses_canonical_names_only_and_is_never_exact():
              cas_definition=dc.cas_mapping("^3", mapping_class="ADAPTED"))
 
 
+def _anchored_record(site="graph.round_input", row=0, k=2, kind="parts"):
+    receipt = _emitted_receipt(kind=kind)
+    return dc.detect_from_observation(receipt, site=site, row=row, k=k, split="DISCOVERY", family="F-emitted",
+                                      retained_receipt_sha256=receipt["receipt_sha256"])
+
+
 def test_hh20_claim_levels_are_monotone_evidenced_and_capped_at_the_pilot_ceiling():
-    record = dc.freeze_configuration(dc.detect_top_k([_capture()], row=0, k=2, split="DISCOVERY", family="F"))
+    fixture_record = dc.freeze_configuration(dc.detect_top_k([_capture()], row=0, k=2, split="DISCOVERY", family="F"))
     evidence = {"controls": ["shuffled_labels", "input_only"], "artifact": "x.json", "artifact_sha256": "b" * 64}
+    assert fixture_record.provenance["anchor"] == "NONE_FIXTURE_CAPTURES"
+    _refused("CLAIM_PROVENANCE", dc.assign_claim, fixture_record, "STIMULUS_SELECTIVE", evidence)
+    record = dc.freeze_configuration(_anchored_record())
+    assert record.provenance["receipt_complete"] is True and record.provenance["anchor"] == "EXTERNAL_ANCHOR_VERIFIED"
     selective = dc.assign_claim(record, "STIMULUS_SELECTIVE", evidence)
     assert selective.claim_level == "STIMULUS_SELECTIVE" and len(selective.evidence) == 1
     _refused("CLAIM_EVIDENCE", dc.assign_claim, record, "STIMULUS_SELECTIVE", {"controls": [], "artifact": "x"})
@@ -168,17 +178,25 @@ def test_hh20_claim_levels_are_monotone_evidenced_and_capped_at_the_pilot_ceilin
     _refused("CLAIM_EVIDENCE", dc.assign_claim, selective, "TASK_CAUSAL_CONTRIBUTION_SUPPORTED",
              dict(evidence, intervention_receipt_sha256="c" * 64, matched_control_receipt_sha256="d" * 64,
                   task_metric="PROBE_ACCURACY"))
-    unfrozen = dc.detect_top_k([_capture()], row=0, k=2, split="DISCOVERY", family="F")
+    unfrozen = _anchored_record()
     _refused("CONFIGURATION_NOT_FROZEN", dc.assign_claim, unfrozen, "STIMULUS_SELECTIVE", evidence)
 
 
 def test_hh09_proposed_label_becomes_adapted_only_through_readout_evidence():
-    capture = _capture()
-    record = dc.build_configuration(captures=[capture], row=0, coordinates=[(0, 0), (0, 1)], signed_values=[1.0, -1.0],
+    receipt = _emitted_receipt(kind="parts")
+    anchor = receipt["receipt_sha256"]
+    captures, cov = dc.captures_from_observation(receipt, "graph.round_input", retained_receipt_sha256=anchor)
+    provenance = {"receipt_sha256": anchor, "receipt_complete": True, "anchor": "EXTERNAL_ANCHOR_VERIFIED", "coverage": None}
+    _refused("CONFIGURATION_PROVENANCE", dc.build_configuration, captures=captures, row=0, coordinates=[(0, 0)],
+             signed_values=[1.0], split="DISCOVERY", family="F", kind="PROJECTED_COORDINATE_SET",
+             detector={"name": "x", "version": "1", "harness_function": "_top_k_neurons",
+                       "relationship": "EXACT_SHARED_IMPLEMENTATION"},
+             provenance=dict(provenance, receipt_complete=False))
+    record = dc.build_configuration(captures=captures, row=0, coordinates=[(0, 0), (0, 1)], signed_values=[1.0, -1.0],
                                     split="DISCOVERY", family="F", kind="PROJECTED_COORDINATE_SET",
                                     detector={"name": "x", "version": "1", "harness_function": "_top_k_neurons",
                                               "relationship": "EXACT_SHARED_IMPLEMENTATION"},
-                                    cas_definition=dc.cas_mapping("^4", "C", None, "PROPOSED"))
+                                    cas_definition=dc.cas_mapping("^4", "C", None, "PROPOSED"), provenance=provenance)
     frozen = dc.freeze_configuration(record)
     evidence = {"controls": ["shuffled_labels", "capacity_matched_generic"], "artifact": "r.json",
                 "artifact_sha256": "e" * 64}
@@ -187,21 +205,28 @@ def test_hh09_proposed_label_becomes_adapted_only_through_readout_evidence():
     assert frozen.cas_definition["mapping_class"] == "PROPOSED"
 
 
-def test_hh16_configuration_json_round_trips_and_detects_tampering():
+def test_hh16_configuration_json_round_trips_only_with_the_retained_anchor_and_detects_tampering():
+    import hashlib as _hashlib
     record = dc.freeze_configuration(dc.detect_top_k([_capture(round_index=r) for r in range(2)], row=1, k=3,
                                                      split="DISCOVERY", family="F"))
     text = dc.configuration_to_json(record)
-    assert dc.configuration_from_json(text) == record
-    import hashlib as _hashlib
-    assert dc.configuration_from_json(text, retained_record_sha256=_hashlib.sha256(text.encode()).hexdigest()) == record
+    anchor = _hashlib.sha256(text.encode()).hexdigest()
+    _refused("EXTERNAL_ANCHOR_REQUIRED", dc.configuration_from_json, text, retained_record_sha256=None)
+    assert dc.configuration_from_json(text, retained_record_sha256=anchor) == record
     _refused("CONFIGURATION_ANCHOR_MISMATCH", dc.configuration_from_json, text, retained_record_sha256="0" * 64)
     body = json.loads(text)
     body["signed_values"][0] = body["signed_values"][0] + 1.0
-    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, json.dumps(body))
+    edited = json.dumps(body)
+    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, edited,
+             retained_record_sha256=_hashlib.sha256(edited.encode()).hexdigest())
     body = json.loads(text)
     body["coordinates"][0] = [0, 0]
     body["record_digest"] = dc.digest({k: v for k, v in body.items() if k != "record_digest"})
-    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, json.dumps(body))
+    resealed = json.dumps(body)
+    # an editor who recomputes the carried digest still fails: the freeze digest and the outside anchor both differ
+    _refused("CONFIGURATION_RECORD_TAMPERED", dc.configuration_from_json, resealed,
+             retained_record_sha256=_hashlib.sha256(resealed.encode()).hexdigest())
+    _refused("CONFIGURATION_ANCHOR_MISMATCH", dc.configuration_from_json, resealed, retained_record_sha256=anchor)
 
 
 def test_hh02_pythia_probe_is_mechanically_compatible_but_never_valid_without_helm_calibration():
@@ -307,7 +332,9 @@ def test_hh17_evidence_record_binds_branch_to_input_checkpoint_action_outcome_an
     # DeepSeek F4: an editor who recomputes the carried digest passes the self-check; only the outside anchor catches it
     recomputed = {k: v for k, v in tampered.items() if k != "evidence_digest"}
     recomputed["evidence_digest"] = dc.digest(recomputed)
-    assert di.verify_evidence(recomputed)["anchor"] == "SELF_CONSISTENT_ONLY"
+    with pytest.raises(di.InterventionRefused) as info:
+        di.verify_evidence(recomputed, retained_evidence_sha256=None)
+    assert info.value.code == "EXTERNAL_ANCHOR_REQUIRED"
     with pytest.raises(di.InterventionRefused) as info:
         di.rpa_projection(recomputed, retained_evidence_sha256=evidence["evidence_digest"])
     assert info.value.code == "EVIDENCE_ANCHOR_MISMATCH"
@@ -371,9 +398,10 @@ class _StubTensor:
         return list(self._values)
 
 
-def _emitted_receipt(*, kind="parts", skip_site=None, nodes=3, width=64):
+def _emitted_receipt(*, kind="parts", skip_site=None, nodes=3, width=64, checkpoint_sha256=CKPT, input_sha256=INPUT_A):
     from . import observation
-    cap = observation.Capture(checkpoint_sha256=CKPT, input_sha256=INPUT_A, kind=kind, rounds=dc.CORE_ROUNDS, mode="OBSERVE_ONLY")
+    cap = observation.Capture(checkpoint_sha256=checkpoint_sha256, input_sha256=input_sha256, kind=kind,
+                              rounds=dc.CORE_ROUNDS, mode="OBSERVE_ONLY")
 
     def emit(site, value, round_index=None):
         if site != skip_site:
@@ -417,35 +445,43 @@ def test_hh01_emitter_constants_are_the_codex_observation_module_values():
 def test_hh04_complete_emitter_receipt_binds_to_captures_and_detection_matches_direct_top_k():
     receipt = _emitted_receipt(kind="parts")
     assert receipt["complete"] is True and receipt["status"] == "CAPTURED"
-    captures, cov = dc.captures_from_observation(receipt, "graph.round_input")
+    anchor = receipt["receipt_sha256"]
+    _refused("EXTERNAL_ANCHOR_REQUIRED", dc.captures_from_observation, receipt, "graph.round_input", retained_receipt_sha256=None)
+    captures, cov = dc.captures_from_observation(receipt, "graph.round_input", retained_receipt_sha256=anchor)
     assert cov.complete and cov.expected_calls == cov.observed_calls == cov.stored_calls == dc.CORE_ROUNDS
     assert [c.round_index for c in captures] == list(range(dc.CORE_ROUNDS))
     assert captures[0].dtype == "float32" and captures[0].shape == (3, 64) and captures[0].basis == "NODE_ROW_BLOCK_INPUT"
     assert captures[0].coordinate_meaning == dc.EMITTER_MEANINGS["graph.round_input"]
-    record = dc.detect_from_observation(receipt, site="graph.round_input", row=1, k=4, split="DISCOVERY", family="F-emitted")
-    assert record == dc.detect_top_k(captures, row=1, k=4, split="DISCOVERY", family="F-emitted")
+    record = dc.detect_from_observation(receipt, site="graph.round_input", row=1, k=4, split="DISCOVERY", family="F-emitted",
+                                        retained_receipt_sha256=anchor)
+    direct = dc.detect_top_k(captures, row=1, k=4, split="DISCOVERY", family="F-emitted")
+    assert (record.coordinates, record.signed_values) == (direct.coordinates, direct.signed_values)
+    assert record.provenance == {"receipt_sha256": anchor, "receipt_complete": True, "anchor": "EXTERNAL_ANCHOR_VERIFIED",
+                                 "coverage": {"expected_calls": 8, "observed_calls": 8, "stored_calls": 8, "errors": [], "complete": True}}
+    assert direct.provenance["anchor"] == "NONE_FIXTURE_CAPTURES"
     assert record.kind == "PROJECTED_COORDINATE_SET" and record.checkpoint_sha256 == CKPT
-    heads, head_cov = dc.captures_from_observation(receipt, "head.node")
+    heads, head_cov = dc.captures_from_observation(receipt, "head.node", retained_receipt_sha256=anchor)
     assert head_cov.complete and heads[0].shape == (3, 2) and heads[0].round_index is None
-    reach, reach_cov = dc.captures_from_observation(receipt, "head.reach")
+    reach, reach_cov = dc.captures_from_observation(receipt, "head.reach", retained_receipt_sha256=anchor)
     assert reach == () and reach_cov.expected_calls == 0 and reach_cov.complete
-    _refused("SITE_NOT_TENSOR", dc.captures_from_observation, receipt, "answer.assembly")
-    verified = dc.verify_observation(receipt, retained_receipt_sha256=receipt["receipt_sha256"])
+    _refused("SITE_NOT_TENSOR", dc.captures_from_observation, receipt, "answer.assembly", retained_receipt_sha256=anchor)
+    verified = dc.verify_observation(receipt, retained_receipt_sha256=anchor)
     assert verified["anchor"] == "EXTERNAL_ANCHOR_VERIFIED"
-    assert dc.verify_observation(receipt)["anchor"] == "SELF_CONSISTENT_ONLY"
+    _refused("EXTERNAL_ANCHOR_REQUIRED", dc.verify_observation, receipt, retained_receipt_sha256=None)
 
 
 def test_hh04_incomplete_emitter_receipt_yields_captures_but_names_no_configuration():
     receipt = _emitted_receipt(kind="parts", skip_site="graph.round_state")
     assert receipt["complete"] is False and receipt["status"] == "INCOMPLETE"
-    captures, cov = dc.captures_from_observation(receipt, "graph.round_input")
+    anchor = receipt["receipt_sha256"]
+    captures, cov = dc.captures_from_observation(receipt, "graph.round_input", retained_receipt_sha256=anchor)
     assert len(captures) == dc.CORE_ROUNDS and not cov.complete and "RECEIPT_INCOMPLETE" in cov.errors
     _refused("COVERAGE_INCOMPLETE", dc.detect_from_observation, receipt, site="graph.round_input", row=0, k=2,
-             split="DISCOVERY", family="F")
-    missing, missing_cov = dc.captures_from_observation(receipt, "graph.round_state")
+             split="DISCOVERY", family="F", retained_receipt_sha256=anchor)
+    missing, missing_cov = dc.captures_from_observation(receipt, "graph.round_state", retained_receipt_sha256=anchor)
     assert missing == () and missing_cov.observed_calls == 0 and missing_cov.expected_calls == dc.CORE_ROUNDS
     off = _emitted_receipt(kind="reach")
-    reach, reach_cov = dc.captures_from_observation(off, "head.reach")
+    reach, reach_cov = dc.captures_from_observation(off, "head.reach", retained_receipt_sha256=off["receipt_sha256"])
     assert reach_cov.complete and reach[0].shape == (2,) and reach[0].signed_values == (0.3, -0.3)
 
 
@@ -456,19 +492,39 @@ def test_hh16_emitter_receipt_tamper_and_anchor_mismatch_are_refused():
     tampered["errors"] = []
     tampered["events"] = list(receipt["events"])
     tampered["events"][3] = dict(tampered["events"][3], signed_values=[0.0] * (3 * 64))
-    _refused("OBSERVATION_TAMPERED", dc.captures_from_observation, tampered, "graph.round_input")
+    _refused("OBSERVATION_TAMPERED", dc.captures_from_observation, tampered, "graph.round_input",
+             retained_receipt_sha256=tampered["receipt_sha256"])
     _refused("OBSERVATION_ANCHOR_MISMATCH", dc.captures_from_observation, receipt, "graph.round_input",
              retained_receipt_sha256="0" * 64)
     from . import observation
     cap = observation.Capture(checkpoint_sha256=CKPT, input_sha256=INPUT_A, kind="parts", rounds=dc.CORE_ROUNDS, mode="OFF")
     cap.closed = cap.cleanup_complete = True
-    _refused("OBSERVATION_DISABLED", dc.captures_from_observation, cap.receipt(), "graph.round_input")
+    off = cap.receipt()
+    _refused("OBSERVATION_DISABLED", dc.captures_from_observation, off, "graph.round_input", retained_receipt_sha256=off["receipt_sha256"])
+
+    def reseal(edited):
+        body = {k: v for k, v in edited.items() if k != "receipt_sha256"}
+        edited["receipt_sha256"] = dc._emitter_sha(dc._emitter_canonical(body))
+        return edited
     relabeled = dict(receipt)
     relabeled["events"] = [dict(e, coordinate_meaning="hidden MLP neuron index") if e["site"] == "graph.round_input" else e
                            for e in receipt["events"]]
-    body = {k: v for k, v in relabeled.items() if k != "receipt_sha256"}
-    relabeled["receipt_sha256"] = dc._emitter_sha(dc._emitter_canonical(body))
-    _refused("COORDINATE_MEANING_MISMATCH", dc.captures_from_observation, relabeled, "graph.round_input")
+    reseal(relabeled)
+    _refused("COORDINATE_MEANING_MISMATCH", dc.captures_from_observation, relabeled, "graph.round_input",
+             retained_receipt_sha256=relabeled["receipt_sha256"])
+    # round/call order is enforced inside the converter, not only by the emitter or Codex's reader
+    swapped = dict(receipt)
+    swapped["events"] = [dict(e, round_index=(e["round_index"] + 1) % dc.CORE_ROUNDS) if e["site"] == "graph.round_input" else e
+                         for e in receipt["events"]]
+    reseal(swapped)
+    _refused("CAPTURE_ROUND_ORDER", dc.captures_from_observation, swapped, "graph.round_input",
+             retained_receipt_sha256=swapped["receipt_sha256"])
+    duplicated = dict(receipt)
+    duplicated["events"] = [dict(e, call_index=0, round_index=0) if e["site"] == "graph.round_input" and e["call_index"] == 1 else e
+                            for e in receipt["events"]]
+    reseal(duplicated)
+    _refused("CAPTURE_CALL_ORDER", dc.captures_from_observation, duplicated, "graph.round_input",
+             retained_receipt_sha256=duplicated["receipt_sha256"])
 
 
 def test_hh16_convert_observation_is_versioned_anchored_and_reports_every_site_honestly():
@@ -491,6 +547,7 @@ def test_hh16_convert_observation_is_versioned_anchored_and_reports_every_site_h
     assert mapping["tensor"] is False and mapping["events"] == 1 and len(mapping["public_value_sha256"]) == 1
     assert converted["sites"]["answer.assembly"]["tensor"] is False and converted["claim"] == "OBSERVATION_ONLY_CAUSALITY_UNMEASURED"
     assert len(converted["conversion_digest"]) == 64
+    assert "DISPLAY ONLY" in converted["conventions"]["emitter_preview"] and "never flat" in converted["conventions"]["configuration"]
     again = dc.convert_observation(receipt, retained_receipt_sha256=receipt["receipt_sha256"])
     assert again["conversion_digest"] == converted["conversion_digest"]
 
@@ -518,3 +575,38 @@ def test_hh16_convert_observation_refuses_incomplete_unknown_dtype_and_unknown_s
     reseal(tensor_in_public_site)
     _refused("SITE_NOT_TENSOR", dc.convert_observation, tensor_in_public_site,
              retained_receipt_sha256=tensor_in_public_site["receipt_sha256"])
+
+
+def test_protocol_checks_are_all_named_and_fail_closed_on_scope_drift():
+    from . import diagnostic_intervention as di
+    receipt = _emitted_receipt(kind="reach")
+    anchor = receipt["receipt_sha256"]
+    declaration = di.declare(action="SUPPRESS", site="head.reach", checkpoint_sha256=CKPT, input_sha256=INPUT_A,
+                             source_sha256=SRC, rows=(0,), coordinates=(0,), gain=1.0, hypothesis_id="H1",
+                             predicted_change="reach margin falls")
+    configuration = dc.freeze_configuration(dc.detect_from_observation(receipt, site="head.reach", row=0, k=1, split="DISCOVERY",
+                                                                       family="F", retained_receipt_sha256=anchor))
+    control = di.matched_control(declaration, width=2, seed=3)
+    witness = dc.digest(di.witness_protocol())
+    passing = di.protocol_checks(declaration=declaration, passive_receipt=receipt, retained_passive_receipt_sha256=anchor,
+                                 configuration=configuration, control=control, witness_protocol_digest=witness, learner_pending=None)
+    assert passing["all_passed"] is True and set(passing["checks"]) == set(di.PROTOCOL_CHECKS)
+    assert passing["declaration_digest"] == di.declaration_digest(declaration)
+    other_input = _emitted_receipt(kind="reach", input_sha256=INPUT_B)
+    drift = di.protocol_checks(declaration=declaration, passive_receipt=other_input,
+                               retained_passive_receipt_sha256=other_input["receipt_sha256"], configuration=configuration,
+                               control=control, witness_protocol_digest=witness, learner_pending=None)
+    assert drift["all_passed"] is False and drift["checks"]["passive_receipt_captured_same_scope"] is False
+    unanchored = di.protocol_checks(declaration=declaration, passive_receipt=receipt, retained_passive_receipt_sha256=None,
+                                    configuration=configuration, control=control, witness_protocol_digest=witness, learner_pending=None)
+    assert unanchored["checks"]["passive_receipt_anchored"] is False and unanchored["all_passed"] is False
+    unfrozen = di.protocol_checks(declaration=declaration, passive_receipt=receipt, retained_passive_receipt_sha256=anchor,
+                                  configuration=dc.detect_from_observation(receipt, site="head.reach", row=0, k=1, split="DISCOVERY",
+                                                                           family="F", retained_receipt_sha256=anchor),
+                                  control=control, witness_protocol_digest=witness, learner_pending=None)
+    assert unfrozen["checks"]["configuration_frozen_and_anchored"] is False
+    pending = di.protocol_checks(declaration=declaration, passive_receipt=receipt, retained_passive_receipt_sha256=anchor,
+                                 configuration=configuration, control=control, witness_protocol_digest=witness,
+                                 learner_pending={"results": []})
+    assert pending["checks"]["no_training_entry"] is False
+    assert di.CONNECTION_ENABLED_BY_DEFAULT is False
