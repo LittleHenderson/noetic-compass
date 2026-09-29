@@ -67,12 +67,19 @@ def _rows(scheme, *pairs):
     return rs.row_binding_sets(scheme, rs.public_graph(scheme, [{"source_node_id": s, "predicate": "contains", "target_node_id": t} for s, t in pairs]))
 
 
+def _budget(**kw):
+    args = dict(max_samples=64, max_parameters=100_000, max_tensor_elements=1_000_000, deadline_seconds=60.0,
+                outside_runtime_limit="ADMITTED_AWS_JOB_WALL_CLOCK_AND_MEMORY_LIMITS")
+    args.update(kw)
+    return rc.declare_budget(**args)
+
+
 def _fitted(scheme, normalization="NONE"):
     g = torch.Generator(device="cpu").manual_seed(2)
     rows = _rows(scheme, ("A", "B"), ("C", "D"), ("A", "C"))
     samples = [(row, torch.randn(WIDTH, generator=g).to(DEVICE)) for row in rows]
     design = rc.declare_design(scheme, kind="TPR", d_f=3, d_r=2, d_h=WIDTH, site=be.EDIT_SITE, seed=1, max_steps=10, normalization=normalization)
-    return rc.fit(design, samples, torch=torch, device=DEVICE)
+    return rc.fit(design, samples, torch=torch, device=DEVICE, budget=_budget())
 
 
 def _observe_row(model, row):

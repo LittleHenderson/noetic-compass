@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import json
 import math
+import time
 from dataclasses import dataclass, field
 
 from ..diagnostic_configuration import AUTHORITY, canonical, digest
@@ -43,6 +44,7 @@ from .role_schemes import BindingSet, RoleSchemeRefused, Scheme, scheme_digest
 DESIGN_SCHEMA = "helm.cube-binding.reconstructor-design/0.1"
 STATE_SCHEMA = "helm.cube-binding.reconstructor-state/0.1"
 MANIFEST_SCHEMA = "helm.cube-binding.fit-manifest/0.1"
+BUDGET_SCHEMA = "helm.cube-binding.fit-budget/0.1"
 KINDS = ("TPR", "ATOMIC_PAIR")
 NORMALIZATIONS = ("NONE", "TRAIN_ZSCORE")
 VEC_ORDER = "FILLER_MAJOR"           # vec(outer(f, r))[i*d_r + j] = f[i]*r[j]
@@ -136,6 +138,51 @@ def parameter_count(design):
                 "total": design.n_f * design.d_f + design.n_r * design.d_r + shared, "pairs_possible": design.n_f * design.n_r}
     pairs = design.n_f * design.n_r
     return {"pair_symbols": pairs * dfr, "W_and_bias": shared, "total": pairs * dfr + shared, "pairs_possible": pairs}
+
+
+# ---------------------------------------------------------------------------------------------------------
+# Fit resource boundary (owner packet PRIMARY-CB1-INTEGRATE-01, 2026-09-29). Every call to `fit` needs an
+# explicit FitBudget. The checks below are COOPERATIVE Python checks: they refuse before allocation when the
+# declared limits would be exceeded, and they stop the loop at the deadline or on cancellation. They are NOT a
+# hard process-memory or wall-clock limit; the hard limit is the outside runtime named in
+# `outside_runtime_limit` (the admitted job's own wall/memory bounds), which the budget record only points at.
+# ---------------------------------------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class FitBudget:
+    schema: str
+    max_samples: int             # pre-allocation: number of (binding_set, target) samples
+    max_parameters: int          # pre-allocation: parameter_count(design)["total"]
+    max_tensor_elements: int     # pre-allocation: estimated float32 elements held during the fit
+    deadline_seconds: float      # cooperative wall-clock deadline, checked before every optimizer step
+    outside_runtime_limit: str   # the hard limit this budget lives under (job wall/memory), named, never claimed here
+    python_checks_are_hard_memory_limits: bool = False
+
+
+def declare_budget(*, max_samples, max_parameters, max_tensor_elements, deadline_seconds, outside_runtime_limit):
+    for name, value in (("max_samples", max_samples), ("max_parameters", max_parameters),
+                        ("max_tensor_elements", max_tensor_elements)):
+        if type(value) is not int or value < 1:
+            _refuse("FIT_BUDGET", "%s must be a positive int, got %r" % (name, value))
+    if (isinstance(deadline_seconds, bool) or not isinstance(deadline_seconds, (int, float))
+            or not math.isfinite(float(deadline_seconds)) or deadline_seconds <= 0):
+        _refuse("FIT_BUDGET", "deadline_seconds must be a finite positive number, got %r" % (deadline_seconds,))
+    if type(outside_runtime_limit) is not str or not outside_runtime_limit.strip():
+        _refuse("FIT_BUDGET", "name the outside runtime limit (the admitted job's wall/memory bound)")
+    return FitBudget(BUDGET_SCHEMA, max_samples, max_parameters, max_tensor_elements, float(deadline_seconds),
+                     outside_runtime_limit)
+
+
+def preallocation_estimate(design, sample_count):
+    """Float32 elements the fit will hold, estimated BEFORE any tensor exists: targets and predictions
+    (2 * samples * d_h), parameters and their gradients (2 * total), one binding tensor (d_f * d_r).
+    An estimate of what this code allocates, not a measurement of process memory."""
+    if type(sample_count) is not int or sample_count < 0:
+        _refuse("FIT_BUDGET", "sample_count must be a non-negative int")
+    params = parameter_count(design)["total"]
+    elements = 2 * sample_count * design.d_h + 2 * params + design.d_f * design.d_r
+    return {"samples": sample_count, "parameters": params, "tensor_elements": elements,
+            "bytes_estimate_float32": elements * 4}
 
 
 @dataclass
@@ -258,9 +305,28 @@ def _samples(rec, samples, *, torch):
     return out
 
 
-def fit(design, samples, *, torch, device, holdout_pairs=()):
+def fit(design, samples, *, torch, device, budget, holdout_pairs=(), cancel=None, clock=time.monotonic):
     """Bounded gradient fit of activation reconstruction only. `holdout_pairs` are (filler, role_path)
-    combinations that must NOT appear in the training samples (analysis holdout, paper section 8)."""
+    combinations that must NOT appear in the training samples (analysis holdout, paper section 8).
+
+    `budget` (a FitBudget) is mandatory: sample, parameter and tensor limits are checked BEFORE any tensor is
+    allocated; the deadline and the optional `cancel()` callable are checked before every optimizer step.
+    A refusal at any of these points returns nothing: no partial reconstructor is handed back. `clock` is
+    injectable for deterministic tests. These are cooperative checks under the outside runtime limit the
+    budget names; they are not a hard process limit."""
+    if not isinstance(budget, FitBudget):
+        _refuse("FIT_BUDGET_REQUIRED", "fit needs an explicit FitBudget from declare_budget")
+    samples = list(samples)
+    estimate = preallocation_estimate(design, len(samples))
+    if estimate["samples"] > budget.max_samples:
+        _refuse("FIT_SAMPLE_LIMIT", "%d > %d" % (estimate["samples"], budget.max_samples))
+    if estimate["parameters"] > budget.max_parameters:
+        _refuse("FIT_PARAMETER_LIMIT", "%d > %d" % (estimate["parameters"], budget.max_parameters))
+    if estimate["tensor_elements"] > budget.max_tensor_elements:
+        _refuse("FIT_TENSOR_LIMIT", "%d > %d" % (estimate["tensor_elements"], budget.max_tensor_elements))
+    if cancel is not None and not callable(cancel):
+        _refuse("FIT_BUDGET", "cancel must be callable")
+    started = clock()
     rec = initialise(design, torch=torch, device=device)
     data = _samples(rec, samples, torch=torch)
     held = {(f, tuple(r)) for f, r in holdout_pairs}
@@ -291,6 +357,11 @@ def fit(design, samples, *, torch, device, holdout_pairs=()):
     first_loss = last_loss = None
     steps = 0
     for _step in range(design.max_steps):                       # bounded in the loop itself
+        elapsed = clock() - started
+        if elapsed > budget.deadline_seconds:
+            _refuse("FIT_DEADLINE_EXCEEDED", "%.3fs > %.3fs after %d steps" % (elapsed, budget.deadline_seconds, steps))
+        if cancel is not None and cancel():
+            _refuse("FIT_CANCELLED", "after %d steps" % steps)
         optimizer.zero_grad()
         preds = torch.stack([rec.W @ binding_tensor(rec, b, torch=torch) + rec.bias for b, _ in data])
         mse = ((preds - fit_targets) ** 2).mean()
@@ -309,7 +380,12 @@ def fit(design, samples, *, torch, device, holdout_pairs=()):
                     "analysis_optimizer_updates": steps, "helm_optimizer_updates": 0, "fit_loss": FIT_LOSS,
                     "first_loss": first_loss, "last_loss": last_loss, "parameters": parameter_count(design),
                     "holdout_pairs": sorted([f, list(r)] for f, r in held), "zero_variance_dims": list(rec.zero_variance_dims),
-                    "device": rec.device, "dtype": DTYPE, "vec_order": VEC_ORDER, "target_weights": "FROZEN_NOT_A_PARAMETER"}
+                    "device": rec.device, "dtype": DTYPE, "vec_order": VEC_ORDER, "target_weights": "FROZEN_NOT_A_PARAMETER",
+                    "budget": {"schema": budget.schema, "max_samples": budget.max_samples,
+                               "max_parameters": budget.max_parameters, "max_tensor_elements": budget.max_tensor_elements,
+                               "deadline_seconds": budget.deadline_seconds, "elapsed_seconds": float(clock() - started),
+                               "preallocation_estimate": estimate, "outside_runtime_limit": budget.outside_runtime_limit,
+                               "python_checks_are_hard_memory_limits": False}}
     return rec
 
 

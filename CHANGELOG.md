@@ -37,6 +37,11 @@ Monorepo-level log. Subprojects keep their own changelogs
   `e8ffc3d5…` verified from the blobs). CB37–CB42 coverage map against my six files written into the return record: CB37/39/40/41 covered as source
   on my side (CB40 placement `SOURCE_CONSISTENT_NOT_EXECUTED`), CB38/CB42 not my files; one minor open item (no wall/memory bound inside `fit`);
   one frozen candidate hypothesis stated. No source changed. About 7 active minutes remain.
+- Packet PRIMARY-CB1-INTEGRATE-01 (owner, separate 30-minute clock from 17:54Z): fit resource boundary closed in `reconstructor.py`
+  (`FitBudget`/`declare_budget`, mandatory `budget=` on `fit`, pre-allocation sample/parameter/tensor refusals, cooperative deadline and `cancel()`
+  checked before every step, injectable clock, manifest records the contract and `python_checks_are_hard_memory_limits: False`; the hard bound is the
+  named outside job limit). One regression test added; every existing fit call passes a budget. Declared successor for Codex's integration: six files,
+  hashes in the return record; 25 cases written, 0 executed. Nothing fitted.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

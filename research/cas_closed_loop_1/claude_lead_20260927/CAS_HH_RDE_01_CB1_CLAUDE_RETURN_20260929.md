@@ -255,3 +255,60 @@ correctness recorded separately. Smallest unresolved dependency: a real, host-an
 (Gate 2A) plus a separately admitted venue; then Codex's integration of my four changed files.
 
 Allowance: about 4 more active minutes (15:20Z–15:24Z); about 7 remain. No source changed in this addendum.
+
+## Packet PRIMARY-CB1-INTEGRATE-01 (owner directive, 2026-09-29; separate 30-active-minute clock started 17:54:17Z)
+
+Attached file `PRIMARY_HELM_CB1_Integration_Directives_20260929_v1.md` is a Windows path and not readable here;
+this packet follows the directive text in the owner's message. The 90-minute history is not reset; this clock is
+recorded separately. No worker, wake, test, install, model load, fitting, cloud job or spending.
+
+### Fit resource boundary (SECOND item), closed in `reconstructor.py`
+
+New `FitBudget` (schema `helm.cube-binding.fit-budget/0.1`) and `declare_budget(max_samples, max_parameters,
+max_tensor_elements, deadline_seconds, outside_runtime_limit)`; `fit` now REQUIRES `budget=` (refuses
+`FIT_BUDGET_REQUIRED` without one) and takes optional `cancel=` (callable) and `clock=` (injectable, default
+`time.monotonic`). Contract:
+- Pre-allocation, before any tensor exists: `preallocation_estimate(design, n)` = `2·n·d_h + 2·parameters +
+  d_f·d_r` float32 elements (targets and predictions, parameters and gradients, one binding tensor), plus a
+  byte estimate; refusals `FIT_SAMPLE_LIMIT`, `FIT_PARAMETER_LIMIT`, `FIT_TENSOR_LIMIT`.
+- In the loop, before every optimizer step: `FIT_DEADLINE_EXCEEDED` when `clock() - start > deadline_seconds`;
+  `FIT_CANCELLED` when `cancel()` returns true. A refusal returns nothing: no partial reconstructor.
+- Outside runtime limit: `outside_runtime_limit` names the hard bound (the admitted job's wall-clock and memory
+  limits); the manifest records `python_checks_are_hard_memory_limits: False`. These Python checks are
+  cooperative; they are not a process-memory limit and are not claimed as one.
+- The manifest carries the budget, the estimate, `elapsed_seconds` and the outside limit; serialize/deserialize
+  keep it. Every existing fit call in my tests now passes a budget (`_budget()` helper). One regression test added:
+  mandatory budget, six bad declarations, the three pre-allocation refusals, deadline via injected clock,
+  cancellation at the second step, non-callable cancel, and the manifest record round-tripped.
+Nothing is fitted in this packet; the boundary blocks future fitting only.
+
+### Integration handoff (FIRST item): declared successor
+
+Final owned source at this packet's commit (all six files; four changed since `ccbd8866` plus the two reconstructor
+files changed here):
+
+| File | sha256 | Lines | Cases |
+|---|---|---:|---:|
+| `role_schemes.py` | `6cd3ce0cd2dca1352aff1263c1ce8cc13e6d34e15f28a3dc45760d770a91a445` | 401 | |
+| `reconstructor.py` | `9ddce0fd51a9051bf1727bac9f2239e07e038be7f3099d1bd787180b8fd3d248` | 465 | |
+| `binding_edits.py` | `780c1fd1b557817bcb7f081b229b95ec10b1d9cd69956b698c3b22d21e919776` | 301 | |
+| `test_role_schemes.py` | `166545eba84c767aedd9ef278a6adafaef6b6a1a5e00818b4d1096760cb0625d` | 180 | 10 |
+| `test_reconstructor.py` | `97e9695f112c80b7061720140b7849dac390fd640df76f298ca7ab8ad4d94497` | 238 | 9 |
+| `test_binding_edits.py` | `f0c7240488b28913a7387f47d362e2942836e51bc6adc517471df3326488a64c` | 275 | 6 |
+
+Written 25; collected 0; executed 0. Scheme-digest change (from `max_positions`) is prospective: nothing
+fitted or retained under the old digests; historical evidence untouched. When Codex names the integrated commit I
+will byte-compare the six files and confirm: row alignment (`analysis_binding_rows` → `public_graph` order),
+native-scale delta (`delta`, sigma only, bias never added), finite bounds (`MAX_DELTA_NORM`, `FitBudget`),
+`POSITIONAL` versus `RELATION_ENDPOINT` (the crossed control), one application (`verify_single_application`), and
+original downstream recomputation (`DESCENDANT_RECOMPUTATION`, Codex `consumer_schedule`).
+
+### First hypothesis, kept small (unchanged)
+
+One checkpoint (`5b37699d…`), site `graph.round_update`, one declared round; `RELATION_ENDPOINT` versus `POSITIONAL`
+for one `FILLER_REPLACEMENT`; `NO_CHANGE` and the incumbent matched control; counterfactual effect, original-task
+correctness and retained learning recorded as separate columns. No new role sweep, neural head, algebraic screen or
+unsupported swap.
+
+Exact remaining dependency: Codex's integrated commit carrying these six files, then a real host-anchored complete
+capture at `graph.round_update` plus a separately admitted venue before any fit or edit runs.

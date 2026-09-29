@@ -444,6 +444,32 @@
    "codex_integration_d27172d5": "my six files byte-identical to ccbd8866 (6/6); follow-up a16e3aa2 not yet integrated; row mapping of analysis_binding_rows checked by reading, consistent; Codex finding on freeze_plan non-finite max_delta_norm CONFIRMED and fixed (math.isfinite) with a test loop",
    "owner_decision_20260929_1520Z": "newer 38444787... package takes precedence for research/product requirements; upgrade existing code, do not restart; Q1 excluded; POSITIONAL control scheme added as the one gap found; package itself still not in Git",
    "second_package_701d4185": "received as Git objects; directive 38444787... and ORIGINAL_CLAUDE_SCOPE.txt e8ffc3d5... verified; CB37-CB42 coverage map in the return record; no source change"
+  },
+  {
+   "wave": "P2-CB1-INTEGRATE-01-20260929",
+   "label": "PRIMARY-CB1-INTEGRATE-01 / Claude: integration handoff successor + fit resource boundary",
+   "executor": "lead session itself, SERIAL; no subagent dispatched",
+   "worker_id": null,
+   "scope": "owner directive PRIMARY-CB1-INTEGRATE-01 (chat text; attached Windows file unreadable): supply Codex the changed files/hashes as a declared successor; close the fit wall-time/memory boundary in the reconstructor files; keep the first hypothesis small; no tests, installs, model loads, fitting, cloud jobs, spending, workers or wakes",
+   "allocation": "ONE additional 30-active-minute packet, recorded separately; the 90-minute history (about 83 used) is not reset",
+   "started_utc": "2026-09-29T17:54:17Z",
+   "exclusive_files": [
+    "research/helm_self_improvement/cube_binding/role_schemes.py",
+    "research/helm_self_improvement/cube_binding/reconstructor.py",
+    "research/helm_self_improvement/cube_binding/binding_edits.py",
+    "research/helm_self_improvement/cube_binding/test_role_schemes.py",
+    "research/helm_self_improvement/cube_binding/test_reconstructor.py",
+    "research/helm_self_improvement/cube_binding/test_binding_edits.py"
+   ],
+   "source_changes": "reconstructor.py: FitBudget, declare_budget, preallocation_estimate, fit(budget=, cancel=, clock=) with FIT_BUDGET_REQUIRED / FIT_SAMPLE_LIMIT / FIT_PARAMETER_LIMIT / FIT_TENSOR_LIMIT / FIT_DEADLINE_EXCEEDED / FIT_CANCELLED; test_reconstructor.py and test_binding_edits.py pass budgets; one regression test",
+   "cases_written": {
+    "test_role_schemes.py": 10,
+    "test_reconstructor.py": 9,
+    "test_binding_edits.py": 6
+   },
+   "executed": "NONE; py_compile only",
+   "status": "SOURCE_WRITTEN_NOT_RUN; handoff posted; awaiting Codex's integrated commit to byte-compare",
+   "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md"
   }
  ],
  "not_done_by_any_worker": [
