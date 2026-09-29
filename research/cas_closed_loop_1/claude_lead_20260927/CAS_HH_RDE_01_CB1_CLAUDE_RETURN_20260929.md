@@ -151,3 +151,29 @@ Updated identities: `binding_edits.py` sha256 `825d2166d1ee1de2fb2e4ddd442cfdce4
 (297 lines), `test_binding_edits.py` sha256 `8c3eeea0ab058c703208d444ac4ea685f1c6128b41d0673fec2a270c73ca7ee2`
 (266 lines, 6 cases). Tests written now 23 (9 + 8 + 6); collected 0; executed 0. About 5 more active minutes
 (06:10Z–06:15Z); about 19 remain. Still NOT RUN, still `ENGINEERED-NOT-VALIDATED`.
+
+## Addendum 06:19Z — Codex integration `d27172d57a3eb7c4d9fb742676cb6c4156c0ea63` (comment 5884742440): row-mapping check and one source fix
+
+Verified from Git objects: my six files at `d27172d5` are byte-identical to `ccbd8866` (6/6); my follow-up
+`a16e3aa2` (`binding_edits.py`, `test_binding_edits.py`) is not yet in that tree; my four RDE files there are
+byte-identical to `54dac34e` (4/4). Codex's `public_task_adapter.analysis_binding_rows(packet, scheme)` builds
+branch records `source_node_id / predicate="contains" / target_node_id` from public labels, passes the nodes in
+the pointer reader's `/n` rank order, and calls my `public_graph` then `row_binding_sets`.
+
+Row-mapping check (by reading, no execution): consistent. `public_graph` keeps the passed node order and refuses
+an edge naming a node outside it, so row `i` of the returned sets is node `/n{i}`; fillers are the public labels,
+which must be in the scheme's fixed `filler_vocabulary` (an unknown label refuses `FILLER_UNKNOWN`, by design);
+edge order does not matter (binding sets are canonically sorted); a duplicate directed edge refuses
+`DUPLICATE_EDGE`. One assumption to keep visible: `world["contains"]` must be the direct authored branches, not a
+transitive closure, or depth-2 paths would double count; Codex's README states 1–90 acyclic direct branches.
+No defect found in the mapping.
+
+Codex's source finding on `freeze_plan`: CONFIRMED by reading. `max_delta_norm` was checked for type and
+positivity only; `nan <= 0` and `inf <= 0` are both False, so a non-finite bound passed, and later
+`norm > nan` is False as well, so the donor step would not have caught it either. Fix in `binding_edits.py`:
+`math.isfinite` refusal at plan construction (`MAX_DELTA_NORM`); one test loop added covering NaN, +inf, -inf,
+0, negative, bool, string and None. `consumer_inputs_for_plan` inherits the fix through the plan.
+
+Updated identities: `binding_edits.py` sha256 `780c1fd1b557817bcb7f081b229b95ec10b1d9cd69956b698c3b22d21e919776` (301 lines); `test_binding_edits.py` sha256 `bc85180e32eb1ba44f15d0de71f225b774d8cc0dd9433f289af24495451d8440`
+(268 lines, 6 cases). Written 23; collected 0; executed 0. For integration, only these two files changed since
+`ccbd8866`. About 4 more active minutes (06:15Z–06:19Z); about 15 remain. NOT RUN; `ENGINEERED-NOT-VALIDATED`.

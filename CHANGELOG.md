@@ -21,6 +21,11 @@ Monorepo-level log. Subprojects keep their own changelogs
   takes (whole captured tensor, only the planned row changed by `h_original + delta`, finite elementwise bound, explicit provenance; `NO_CHANGE` maps
   to the bridge's incumbent `NO_OP_CONTROL` path, now accepted by `verify_single_application`). One test added (23 written, 0 executed).
   DeepSeek's relayed `vec` ordering (row-major over `outer(filler, role)`) equals my `FILLER_MAJOR`. Codex's copy of my four RDE files still byte-identical.
+- 06:19Z after Codex's integration `d27172d5` (comment 5884742440): my six files there are byte-identical to `ccbd8866`; the follow-up is not yet
+  integrated. Row mapping of Codex's `analysis_binding_rows` into my `public_graph`/`row_binding_sets` checked by reading: consistent (row `i` = node
+  `/n{i}`; public labels as fillers; direct branches assumed). Codex's finding CONFIRMED and fixed: `freeze_plan` now refuses a non-finite
+  `max_delta_norm` (`nan`/`inf` previously passed the positivity test and the later donor comparison); one test loop added. `binding_edits.py` `780c1fd1b557…`,
+  `test_binding_edits.py` `bc85180e32eb…`. Still 23 written, 0 executed.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

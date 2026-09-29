@@ -253,6 +253,8 @@ def test_edit_and_plan_refusals():
     _refused("ROUND_INDEX", be.freeze_plan, rec=rec, state_digest=sd, old_set=old, new_set=new, edit=edit, row=0, round_index=CORE_ROUNDS,
              expected_effect="PREDICTED_ANSWER_CHANGE", hypothesis_id="H", checkpoint_sha256=CKPT, input_sha256=INPUT,
              source_sha256=LEARNER_SHA256, max_delta_norm=1.0)
+    for bad_bound in (float("nan"), float("inf"), -float("inf"), 0, -1.0, True, "1.0", None):   # CB19 finite limit
+        _refused("MAX_DELTA_NORM", _plan, rec, old, new, edit, "PREDICTED_ANSWER_CHANGE", max_norm=bad_bound)
     d = be.delta(rec, old, new, torch=torch)
     tiny = _plan(rec, old, new, edit, "PREDICTED_ANSWER_CHANGE", max_norm=1e-9)
     row_values = torch.zeros(WIDTH, device=DEVICE)

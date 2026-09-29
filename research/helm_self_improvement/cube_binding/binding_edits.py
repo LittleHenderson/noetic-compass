@@ -33,6 +33,7 @@ not match the planned delta, or a receipt without caller-verified model binding.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 from .. import diagnostic_intervention as di
@@ -178,8 +179,11 @@ def freeze_plan(*, rec, state_digest, old_set, new_set, edit, row, round_index, 
         _refuse("EXPECTED_EFFECT", "NO_CHANGE edits expect NO_CHANGE")
     if edit.kind != "NO_CHANGE" and expected_effect == "NO_CHANGE":
         _refuse("EXPECTED_EFFECT", "an active edit must predict its effect")
-    if isinstance(max_delta_norm, bool) or not isinstance(max_delta_norm, (int, float)) or max_delta_norm <= 0:
-        _refuse("MAX_DELTA_NORM", repr(max_delta_norm))
+    # Codex source finding (PR #245 comment 5884742440): `nan <= 0` and `inf <= 0` are both False, so type and
+    # positivity alone let a non-finite bound through to the donor comparison, where `norm > nan` is False too.
+    if (isinstance(max_delta_norm, bool) or not isinstance(max_delta_norm, (int, float))
+            or not math.isfinite(float(max_delta_norm)) or max_delta_norm <= 0):
+        _refuse("MAX_DELTA_NORM", "finite positive number required, got %r" % (max_delta_norm,))
     if type(state_digest) is not str or len(state_digest) != 64:
         _refuse("RECONSTRUCTOR_STATE_DIGEST", "the serialized state digest that will be retained is required")
     return Plan(PLAN_SCHEMA, site, round_index, row, old_set.receiving, edit_digest(edit), binding_set_digest(old_set),
