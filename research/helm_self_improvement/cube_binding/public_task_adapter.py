@@ -84,3 +84,31 @@ def decode_parts(packet, scores):
             "CB1_TASK_NOT_SUPPORTED")
     decisions = rt["slots"].score_decisions(checked, scores)
     return rt["slots"].assemble_answer(checked, decisions)
+
+
+def analysis_binding_rows(packet, scheme):
+    """Public-only connection to Claude's row scheme; never a learner input.
+
+    Uses public labels as fillers, not world hashes/branch IDs/author annotations.
+    The original pointer reader orders node rows by scoped /n rank. Real capture
+    alignment must still be witnessed before fitting or editing a model.
+    """
+    from .role_schemes import public_graph, row_binding_sets
+    checked = public_runtime()["course"].validate_model_packet(packet)
+    require(checked["record"]["query"]["kind"] == "parts" and checked["record"]["supports"] == []
+            and checked["record"]["cue"] is None and len(checked["source"]["worlds"]) == 1,
+            "CB1_ANALYSIS_PACKET_PROFILE")
+    require(scheme.kind == "RELATION_ENDPOINT", "CB1_ANALYSIS_ROW_SCHEME")
+    world = checked["source"]["worlds"][0]
+    nodes = sorted(world["nodes"], key=lambda n: n["ref"])
+    require(all(n["ref"] == world["world_id"] + "/n" + str(i) for i, n in enumerate(nodes)),
+            "CB1_ANALYSIS_ROW_ORDER")
+    labels = {n["ref"]: n["label"] for n in nodes}
+    branches = [{"source_node_id": labels[e["source"]], "predicate": "contains",
+                 "target_node_id": labels[e["target"]]} for e in world["contains"]]
+    graph = public_graph(scheme, branches, nodes=[n["label"] for n in nodes])
+    sets = row_binding_sets(scheme, graph)
+    return {"packet_sha256": digest(checked), "origin": "AUTHORED_PUBLIC_GRAPH_NOT_NEURAL_CAPTURE",
+            "rows": tuple({"row": i, "node_ref": n["ref"], "public_label": n["label"],
+                           "binding_set": binding} for i, (n, binding) in enumerate(zip(nodes, sets))),
+            "capture_alignment": "REAL_WITNESS_NOT_RUN", "fit_authorized": False}

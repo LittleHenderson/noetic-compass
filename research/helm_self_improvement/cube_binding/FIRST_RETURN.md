@@ -69,3 +69,16 @@ Cumulative child use is approximately 190 seconds, included in the same 30-minut
 allowance. The provisional stop was conservatively shortened to 06:16:58Z when
 reserving 90 seconds for this review; no clock was reset. `STATIC_REVIEW.json`
 retains both rounds. This does not change the NOT_RUN status.
+
+## Subsequent source integration in the same bounded packet
+
+Claude's actual first return arrived as comment `5884701512`, source
+`ccbd886647314571c9bb260e1ddd5e0c34e263b0`. Only its six acknowledged files were
+integrated unchanged. Codex added `analysis_binding_rows` to connect the public
+Parts packet to Claude's real public graph/row-binding interfaces, with two
+focused test specifications. Current written inventory is **52**: Codex **30**,
+Claude **22**; collected/executed **0**, all NOT_RUN. Fourteen Python files
+AST-parse; no project import, torch, test, fitting or execution occurred.
+The 60-second static review above covered c9b0bfd37, not this later integration;
+focused independent review of the successor is pending. No extra source time,
+test venue or model job was granted or used.

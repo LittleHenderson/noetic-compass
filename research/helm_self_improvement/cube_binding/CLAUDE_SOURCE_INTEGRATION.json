@@ -1,0 +1,46 @@
+{
+  "utc": "2026-09-29T06:12:38.135246+00:00",
+  "source_commit": "ccbd886647314571c9bb260e1ddd5e0c34e263b0",
+  "actual_return_comment": 5884701512,
+  "integration_scope": "SIX_ACKNOWLEDGED_FILES_ONLY; SHARED_INIT_AND_UNRELATED_DOCS_NOT_IMPORTED",
+  "status": "INTEGRATED_SOURCE_ONLY_NOT_ACCEPTED",
+  "tests": "NOT_RUN",
+  "files": [
+    {
+      "path": "role_schemes.py",
+      "sha256": "423b989245bbd6e3add31d388a2ded065c8017ed3821fe8b803c9f88dde45770",
+      "upstream_blob_unchanged": true
+    },
+    {
+      "path": "reconstructor.py",
+      "sha256": "cb0b3852020140df2404db4fc3be7ad6d651dc97335a0adb460e794e70c97222",
+      "upstream_blob_unchanged": true
+    },
+    {
+      "path": "binding_edits.py",
+      "sha256": "734a589b15e4fc7b76a980f274ecfd4c59ad3f2fb0a42ff4da0ea12a4c907724",
+      "upstream_blob_unchanged": true
+    },
+    {
+      "path": "test_role_schemes.py",
+      "sha256": "8324bcd3b1ab594c264c1f7a9cf2c4fb416a532b16015dbcbbc6006fc53b803a",
+      "upstream_blob_unchanged": true
+    },
+    {
+      "path": "test_reconstructor.py",
+      "sha256": "a12f20f4e0e002f7714c928bf27259de18172697727d23bd38387f5b70c746cd",
+      "upstream_blob_unchanged": true
+    },
+    {
+      "path": "test_binding_edits.py",
+      "sha256": "ebc35f6f561265b9e8876ce21ada9aba089eb162a3b4abeb9dbb900a566457ad",
+      "upstream_blob_unchanged": true
+    }
+  ],
+  "new_connection": "public_task_adapter.analysis_binding_rows(packet, scheme)",
+  "limitations": [
+    "Real capture row alignment NOT_RUN",
+    "Codex full-matrix consumer and Claude single-row declaration remain separate typed plans, never auto-applied",
+    "Active edit, fitting and numerical validation unadmitted"
+  ]
+}

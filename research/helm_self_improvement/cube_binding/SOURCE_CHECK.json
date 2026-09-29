@@ -8,6 +8,12 @@
       "test_names": []
     },
     {
+      "file": "binding_edits.py",
+      "ast": "PARSED",
+      "written_test_functions": 0,
+      "test_names": []
+    },
+    {
       "file": "consumer_bridge.py",
       "ast": "PARSED",
       "written_test_functions": 0,
@@ -30,6 +36,30 @@
       "ast": "PARSED",
       "written_test_functions": 0,
       "test_names": []
+    },
+    {
+      "file": "reconstructor.py",
+      "ast": "PARSED",
+      "written_test_functions": 0,
+      "test_names": []
+    },
+    {
+      "file": "role_schemes.py",
+      "ast": "PARSED",
+      "written_test_functions": 0,
+      "test_names": []
+    },
+    {
+      "file": "test_binding_edits.py",
+      "ast": "PARSED",
+      "written_test_functions": 5,
+      "test_names": [
+        "test_bias_cancels_and_sigma_only_rescaling",
+        "test_no_change_edit_applies_through_incumbent_path_as_applied_no_change",
+        "test_filler_replacement_applies_once_with_the_planned_delta_and_descendants_recompute",
+        "test_double_application_and_unverified_binding_are_refused",
+        "test_edit_and_plan_refusals"
+      ]
     },
     {
       "file": "test_consumer_bridge.py",
@@ -59,7 +89,7 @@
     {
       "file": "test_public_task_adapter.py",
       "ast": "PARSED",
-      "written_test_functions": 17,
+      "written_test_functions": 19,
       "test_names": [
         "test_actual_public_cube_to_current_slots_roundtrip",
         "test_wrong_but_syntactic_prediction_is_not_repaired",
@@ -77,11 +107,44 @@
         "test_audit_branch_ids_and_family_do_not_shape_learner_order",
         "test_cache_is_checkpoint_encoder_and_visibility_bound",
         "test_cycle_and_oversize_inputs_refuse_before_copy",
-        "test_runtime_source_mismatch_refuses"
+        "test_runtime_source_mismatch_refuses",
+        "test_real_claude_row_interface_uses_public_labels_and_preserves_pairing",
+        "test_graph_bag_scheme_is_not_mislabeled_as_per_node_capture_alignment"
+      ]
+    },
+    {
+      "file": "test_reconstructor.py",
+      "ast": "PARSED",
+      "written_test_functions": 8,
+      "test_names": [
+        "test_vec_order_is_filler_major_and_multiplicity_adds",
+        "test_dimensions_and_parameter_counts_are_explicit",
+        "test_bounded_fit_on_labelled_tpr_reduces_reconstruction_error_and_counts_updates",
+        "test_holdout_leak_is_refused_and_unseen_pair_semantics_differ_by_kind",
+        "test_fit_inputs_carry_no_answers_and_wrong_targets_refuse",
+        "test_train_only_zscore_normalisation_zero_variance_and_native_reconstruction",
+        "test_serialization_round_trip_requires_retained_digest",
+        "test_agreement_and_correctness_are_separate_columns"
+      ]
+    },
+    {
+      "file": "test_role_schemes.py",
+      "ast": "PARSED",
+      "written_test_functions": 9,
+      "test_names": [
+        "test_cb03_role_reversal_yields_different_binding_records",
+        "test_cb04_surface_syntax_is_not_a_binding_input",
+        "test_cb05_paired_edge_counterexample_collapses_bag_schemes_but_not_receiving_row_scheme",
+        "test_cb05_repeated_filler_and_two_events_keep_multiplicity_and_occurrence",
+        "test_cb07_direct_indirect_shared_and_bounded_depth",
+        "test_role_vocabulary_is_finite_and_shape_independent",
+        "test_public_graph_refusals",
+        "test_event_frame_refusals",
+        "test_scheme_reload_requires_retained_digest"
       ]
     }
   ],
-  "written_test_functions": 28,
+  "written_test_functions": 52,
   "collected": 0,
   "executed": 0,
   "status": "NOT_RUN"

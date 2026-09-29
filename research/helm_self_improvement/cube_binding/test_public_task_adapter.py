@@ -179,3 +179,25 @@ def test_runtime_source_mismatch_refuses(monkeypatch, tmp_path):
     monkeypatch.setattr(rt["cube_node"], "__file__", str(fake))
     with pytest.raises(ValueError, match="CB1_SOURCE_MISMATCH"):
         public_runtime()
+
+
+def test_real_claude_row_interface_uses_public_labels_and_preserves_pairing():
+    from .public_task_adapter import analysis_binding_rows
+    from .role_schemes import declare_scheme, distinguishes
+    scheme = declare_scheme("RELATION_ENDPOINT", filler_vocabulary=("A", "B", "C", "D"))
+    packet = compiled()["packet"]; before = deepcopy(packet)
+    first = analysis_binding_rows(packet, scheme)
+    second = analysis_binding_rows(compiled(fixture_bundle((("A", "D"), ("C", "B"))))["packet"], scheme)
+    assert [r["public_label"] for r in first["rows"]] == list("ABCD")
+    assert [r["row"] for r in first["rows"]] == list(range(4))
+    assert distinguishes(scheme, [r["binding_set"] for r in first["rows"]],
+                         [r["binding_set"] for r in second["rows"]])
+    assert packet == before and first["fit_authorized"] is False
+
+
+def test_graph_bag_scheme_is_not_mislabeled_as_per_node_capture_alignment():
+    from .public_task_adapter import analysis_binding_rows
+    from .role_schemes import declare_scheme
+    scheme = declare_scheme("ENDPOINT_BAG", filler_vocabulary=("A", "B", "C", "D"))
+    with pytest.raises(ValueError, match="CB1_ANALYSIS_ROW_SCHEME"):
+        analysis_binding_rows(compiled()["packet"], scheme)

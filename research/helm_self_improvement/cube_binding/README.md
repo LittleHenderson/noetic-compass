@@ -84,7 +84,8 @@ all this; the real-model witness and state/RNG/optimizer checks remain NOT_RUN.
 
 ## Test and execution status
 
-`SOURCE_CHECK.json` is an AST-only inventory: 28 test functions written, zero
+`SOURCE_CHECK.json` is an AST-only inventory: 52 test functions written (30 Codex,
+22 Claude), zero
 collected, zero executed, NOT_RUN. It is not pytest collection or a passing test
 result. The synthetic no-op test uses a small test module, not HELM. The evidence
 tests use the existing host fixture and check repeated read-only reload; a fresh
@@ -128,3 +129,19 @@ requested through the existing lane, without a paid wake or extra execution.
 Its pairing-loss finding applies to the forthcoming fitted role scheme: unique
 audit branch IDs must not become per-example fitted roles. Authored frames here
 preserve pairing, but this is not evidence of a neural solution.
+
+## Received Claude source and concrete connection
+
+Claude's actual return comment `5884701512` supplies commit
+`ccbd886647314571c9bb260e1ddd5e0c34e263b0`. The six acknowledged files are
+integrated byte-for-byte, without its initializer or unrelated documents.
+`CLAUDE_SOURCE_INTEGRATION.json` records their hashes. This is source integration,
+not validation of the reconstructor or active edits.
+
+`analysis_binding_rows(packet, scheme)` now feeds the actual `public_graph` and
+`row_binding_sets` interfaces from a validated public Parts packet. It uses public
+labels as fillers, preserves scoped node-row order, and supplies no author/audit
+IDs as fitted roles. Its two tests specify pairing distinction and graph-bag
+refusal. Capture alignment and fitting remain NOT_RUN. The full-matrix Codex
+consumer declaration and Claude's one-row edit declaration are separate plans;
+neither is automatically applied and they must not be nested or applied twice.
