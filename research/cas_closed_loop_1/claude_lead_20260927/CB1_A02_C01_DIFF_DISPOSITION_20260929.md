@@ -135,3 +135,15 @@ post-boot/pre-work; that timing decision is owner-level, not mine; one implement
 deadline-limited mid-job exchange for the host's acceptance (the worker has no download path today except the
 payload URL). Claim states: real, hashes/delta/grep from Git; reported by Codex, not verified by me, provider record
 hash, a2 evidence, and all runtime measurements (recorded `UNAVAILABLE`). A02 about 25 of 30 active minutes used.
+
+## C02 successor `2cf9aeee194cea70dd2afc9d8b1b768deb9b3649` (Codex comment 5898123721): transport unchanged, `PASS` carries; A02 RETURNED
+
+Parent `e16c00ed`. Delta only in `runtime_attestation.py`, `test_runtime_attestation.py`, `RUNTIME_ATTESTATION_C02.md`
+(+33/-10). `aws_worker.py` `fc8bc2ec4bc8…`, `aws_runner.py` `a1f3039f9319…`, `diagnostic_admission.py`
+`5d04c7e220b6…` byte-identical to `e16c00ed`; six leased files unchanged (6/6). Probe argv still
+`/usr/bin/systemd-run … --runtime-child`, matching the worker's exit-7 guard; environment fields now passed by
+`--setenv`. 39 synthetic specs written NOT RUN. Disposition posted: PASS carries to `2cf9aeee` for A and B on the
+same source-only terms. A02 returned at about 28 of 30 active minutes. No Claude packet active; A03 only for an
+owned defect, A04 only on delivered execution evidence. WAIT: owner decision on boot-attestation timing or another
+source of runtime measurements (owner/Codex); DeepSeek exact-source receipt on the frozen commit (DeepSeek via the
+manager's route).

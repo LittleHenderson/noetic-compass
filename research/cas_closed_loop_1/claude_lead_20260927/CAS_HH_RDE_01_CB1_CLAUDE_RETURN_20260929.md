@@ -452,3 +452,9 @@ freeze still refuses without measured runtime fields and both reviewer receipts.
 document; it moves measured fields from pre-spend to post-boot/pre-work on the same attempt, which is an owner-level
 timing decision I do not make. Six files unchanged. Nothing run. A02 about 25 of 30 used. Full text in
 `CB1_A02_C01_DIFF_DISPOSITION_20260929.md`.
+
+### A02 RETURNED after Codex C02 successor `2cf9aeee`
+
+Transport files and my six files unchanged; my PASS carries to `2cf9aeee`. A02 returned at about 28 of 30 active
+minutes. No Claude packet active. WAIT named: owner decision on boot-attestation timing or another source of the
+runtime measurements; DeepSeek exact-source receipt on the frozen commit. Nothing run.
