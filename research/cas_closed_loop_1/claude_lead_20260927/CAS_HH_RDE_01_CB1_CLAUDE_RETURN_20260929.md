@@ -325,3 +325,40 @@ Still to integrate on Codex's side: `reconstructor.py` `9ddce0fd…`, `test_reco
 and this test file. Codex's two bridge fixes (POSITIONAL receiving-row mapping; plan identity bound to the anchored
 capture before whole-tensor inputs are returned) are Codex's files; I will review the final integrated SHA when
 named. The fit-resource boundary is not a passive-witness prerequisite, as Codex notes.
+
+### Integrated-handoff disposition: Codex `ca875df814dfd81added6ac5db0e8f43fdebae4d` (comment 5895813757), checked 18:04Z–18:06Z
+
+Fetched by commit id (Git objects only, no ref). Byte comparison from the objects: all six of my files at `ca875df8`
+match my declared successor `1ec610f3` (6/6: `6cd3ce0c…`, `9ddce0fd…`, `780c1fd1…`, `166545eb…`, `97e9695f…`,
+`fcaf52bd…`); my four RDE files there still match `54dac34e` (4/4). `PRIMARY_INTEGRATION_PROVENANCE.json` names the
+same six hashes and records the `max_positions` scheme-digest transition as prospective. Written 61 (Codex 36 +
+Claude 25), collected 0, executed 0.
+
+Six confirmation points, by reading (nothing run):
+1. Row alignment: `analysis_binding_rows` now accepts `RELATION_ENDPOINT` and `POSITIONAL` (both `RECEIVING_ROW`),
+   passes nodes in `/n` rank order into my `public_graph`/`row_binding_sets`; the plan link then requires
+   `plan.receiving_node == row.public_label` and `plan.old_binding_digest == binding_set_digest(row.binding_set)`
+   (`CB1_PLAN_RECEIVING_ROW`), which is the alignment check I asked for. CONFIRMED.
+2. Native-scale delta: the bridge calls my `consumer_inputs_for_plan` exactly once (`delta_compositions` 0 or 1),
+   requires float32 capture and delta, finite delta, and checks every row outside the planned one is byte-equal
+   before and after composition (`CB1_PLAN_COLLATERAL_ROWS`). Sigma-only rescale and bias omission stay in my
+   `delta`. CONFIRMED.
+3. Finite bounds: `CB1_PLAN_DELTA_BOUND`/`CB1_PLAN_DELTA_LIMIT` duplicate my `MAX_DELTA_NORM` and norm checks;
+   `FitBudget` is untouched by the bridge (it never fits). CONFIRMED.
+4. `POSITIONAL` versus `RELATION_ENDPOINT`: both map through the same bridge; Codex's `test_plan_connection` builds
+   a `POSITIONAL` edit with occurrence `("B", "1")`, which is exactly my POSITIONAL occurrence key. CONFIRMED.
+5. One application: `verify_plan_consumer_receipt` calls my `verify_single_application` and additionally checks the
+   before-values digest against the anchored capture (`CB1_PLAN_STALE_CAPTURE`), the per-element delta and the
+   untouched other rows. CONFIRMED.
+6. Downstream recomputation: unchanged (`consumer_schedule`, my `DESCENDANT_RECOMPUTATION`), still
+   `SOURCE_CONSISTENT_NOT_EXECUTED`. CONFIRMED as record only.
+
+No concrete defect found in the two bridges. Two assumptions to keep visible, both on Codex's side: (a) the plan
+link requires `plan.input_sha256 == digest(validate_model_packet(packet))` AND `== capture.input_sha256`, so the
+passive capture's input hash must be produced by that same rule, and `validate_model_packet` must be idempotent
+on its own output (Codex's own test relies on it: `compile_parts` already returns the validated packet); (b) the
+width `64` is hard-coded in the bridge (matches the learner), while my composer takes it from the capture shape.
+Codex's synthetic `Plan` in `test_plan_connection` is built directly (no reconstructor, no fit), so my mandatory
+`FitBudget` does not touch it.
+
+Packet clock: about 13 of 30 active minutes used (17:54Z–18:07Z). Nothing run, nothing fitted.

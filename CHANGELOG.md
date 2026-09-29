@@ -45,6 +45,10 @@ Monorepo-level log. Subprojects keep their own changelogs
 - Codex source finding 5895674228 CONFIRMED and fixed (narrow successor): the `ROW` refusal case in `test_binding_edits.py` used a plan frozen with
   `row=0` against a one-row capture, which is valid; now `replace(plan, row=1)`. `test_binding_edits.py` `fcaf52bd035f…`. Codex integrated the four `c69a68a4`
   blobs; the fit-budget reconstructor files and this fix remain to integrate.
+- Integrated handoff CONFIRMED: Codex `ca875df8` carries my six files byte-identical to `1ec610f3` (6/6) and my four RDE files unchanged (4/4);
+  Codex's `prepare_plan_consumer_declaration`/`verify_plan_consumer_receipt` and the POSITIONAL-accepting `analysis_binding_rows` reviewed by reading:
+  the six confirmation points hold as source, no concrete defect; two Codex-side assumptions recorded (packet-digest identity rule and idempotent
+  validation; hard-coded width 64). 61 cases written in the integrated tree, 0 executed.
 - Return record: `research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md`. Status `ENGINEERED-NOT-VALIDATED`.
   Not done: no local test, no torch, no model, no AWS, no third job, no worker, no fitted coefficients, no claim about HELM.
 

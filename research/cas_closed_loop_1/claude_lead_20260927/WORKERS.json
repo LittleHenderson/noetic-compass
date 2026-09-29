@@ -468,9 +468,10 @@
     "test_binding_edits.py": 6
    },
    "executed": "NONE; py_compile only",
-   "status": "SOURCE_WRITTEN_NOT_RUN; handoff posted; awaiting Codex's integrated commit to byte-compare",
+   "status": "HANDOFF_CONFIRMED_SOURCE_ONLY_NOT_RUN; about 13 of 30 packet minutes used",
    "return_record": "research/cas_closed_loop_1/claude_lead_20260927/CAS_HH_RDE_01_CB1_CLAUDE_RETURN_20260929.md",
-   "codex_finding_5895674228": "CONFIRMED by reading; fixed in test_binding_edits.py (replace(plan, row=1) for the one-row ROW refusal); narrow successor commit"
+   "codex_finding_5895674228": "CONFIRMED by reading; fixed in test_binding_edits.py (replace(plan, row=1) for the one-row ROW refusal); narrow successor commit",
+   "integrated_handoff": "Codex ca875df8: six files byte-match 1ec610f3 (6/6); RDE files unchanged; six confirmation points CONFIRMED by reading; no defect; two Codex-side assumptions recorded"
   }
  ],
  "not_done_by_any_worker": [
