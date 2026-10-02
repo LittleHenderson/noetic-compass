@@ -1,0 +1,111 @@
+{
+ "times": {
+  "calls": 1600,
+  "rust_ok": 1000,
+  "rust_raised_so_python_fallback": 600,
+  "op_or_domain_depends_on_drive": 0,
+  "first_errors": [
+   [
+    0,
+    1,
+    0,
+    0,
+    "ERROR: domain ascent violation: CO-0^Cognitive \u00d7 CO-0^Principled would ascend"
+   ],
+   [
+    0,
+    2,
+    0,
+    0,
+    "ERROR: domain ascent violation: CO-0^Evaluative \u00d7 CO-0^Principled would ascend"
+   ],
+   [
+    0,
+    2,
+    0,
+    1,
+    "ERROR: domain ascent violation: CO-0^Evaluative \u00d7 CO-0^Cognitive would ascend"
+   ],
+   [
+    0,
+    3,
+    0,
+    0,
+    "ERROR: domain ascent violation: CO-0^Operational \u00d7 CO-0^Principled would ascend"
+   ],
+   [
+    0,
+    3,
+    0,
+    1,
+    "ERROR: domain ascent violation: CO-0^Operational \u00d7 CO-0^Cognitive would ascend"
+   ],
+   [
+    0,
+    3,
+    0,
+    2,
+    "ERROR: domain ascent violation: CO-0^Operational \u00d7 CO-0^Evaluative would ascend"
+   ]
+  ]
+ },
+ "divide": {
+  "calls": 1600,
+  "rust_ok": 400,
+  "rust_raised_so_python_fallback": 1200,
+  "op_or_domain_depends_on_drive": 0,
+  "first_errors": [
+   [
+    0,
+    0,
+    0,
+    1,
+    "ERROR: cross-domain division: CO-0^Principled \u00f7 CO-0^Cognitive requires same domain"
+   ],
+   [
+    0,
+    0,
+    0,
+    2,
+    "ERROR: cross-domain division: CO-0^Principled \u00f7 CO-0^Evaluative requires same domain"
+   ],
+   [
+    0,
+    0,
+    0,
+    3,
+    "ERROR: cross-domain division: CO-0^Principled \u00f7 CO-0^Operational requires same domain"
+   ],
+   [
+    0,
+    1,
+    0,
+    0,
+    "ERROR: cross-domain division: CO-0^Cognitive \u00f7 CO-0^Principled requires same domain"
+   ],
+   [
+    0,
+    1,
+    0,
+    2,
+    "ERROR: cross-domain division: CO-0^Cognitive \u00f7 CO-0^Evaluative requires same domain"
+   ],
+   [
+    0,
+    1,
+    0,
+    3,
+    "ERROR: cross-domain division: CO-0^Cognitive \u00f7 CO-0^Operational requires same domain"
+   ]
+  ]
+ },
+ "fresh_state_explicit_drive": "True",
+ "drive_value_passed_to_rust": "True",
+ "after_one_times_explicit_drive": "1",
+ "synthesize_drives_F2_F5": 5,
+ "rust_drive_for_inputs_True_True": [
+  5,
+  1,
+  1
+ ]
+}

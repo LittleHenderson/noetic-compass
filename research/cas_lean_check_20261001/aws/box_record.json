@@ -1,0 +1,23 @@
+{
+ "schema": "cas-lean-check.box/0.1",
+ "state": "running",
+ "name": "cas-lean-check-20261002T014938Z",
+ "region": "us-west-2",
+ "instance_type": "c7i.xlarge",
+ "price_per_hour_usd": 0.1785,
+ "max_minutes": 180,
+ "dollar_ceiling": 1.0,
+ "worst_case_usd": 0.5855,
+ "ami": "ami-07a134137a631b892",
+ "ami_name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260923",
+ "ssh_allowed_from": "73.53.99.222/32",
+ "purpose": "Lean 4 check of the CAS compiler (compiler.py blob 439c4908)",
+ "key_pair": "cas-lean-check-20261002T014938Z",
+ "local_key_file": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\\044c34ee-22a0-4004-9a00-fc93204c41c9\\scratchpad\\cas-lean-check-20261002T014938Z.pem",
+ "security_group": "sg-024d84af850d500d3",
+ "instance_id": "i-0f6ebdb8b27a89939",
+ "launched_utc": "2026-10-02T01:49:42Z",
+ "subnet": "subnet-0bb8fa82c2a7177b3",
+ "availability_zone": "us-west-2a",
+ "public_ip": "52.42.227.60"
+}

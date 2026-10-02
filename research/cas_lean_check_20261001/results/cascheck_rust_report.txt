@@ -1,0 +1,34 @@
+compiler blob: 439c4908df2718a3ca1e1ff40bda63020cf71efa
+compiler engine: python
+== core rules: 1891 records
+   C: 100 records, 100 agree, 0 disagree
+   A: 1600 records, 1600 agree, 0 disagree
+   D: 16 records, 16 agree, 0 disagree
+   Q: 16 records, 16 agree, 0 disagree
+   P: 100 records, 100 agree, 0 disagree
+   M: 40 records, 40 agree, 0 disagree
+   S: 10 records, 10 agree, 0 disagree
+   L: 9 records, 9 agree, 0 disagree
+== nested words, 2-4 terms: 7371 records
+   N: 7371 records, 7371 agree, 0 disagree
+== core rules from rust_core.txt: 1891 records
+   C: 100 records, 100 agree, 0 disagree
+   A: 1600 records, 1600 agree, 0 disagree
+   D: 16 records, 16 agree, 0 disagree
+   Q: 16 records, 16 agree, 0 disagree
+   P: 100 records, 100 agree, 0 disagree
+   M: 40 records, 40 agree, 0 disagree
+   S: 10 records, 10 agree, 0 disagree
+   L: 9 records, 9 agree, 0 disagree
+== nested words from rust_nest24.txt: 7371 records
+   N: 7371 records, 7371 agree, 0 disagree
+== nested words from rust_nest5.txt: 59049 records
+   N: 59049 records, 59049 agree, 0 disagree
+== FINDING N-A: 542 of 66429 words (1-5 terms) have two or more either-order canonical forms
+   ^2^C|f ∘ ^3^C ∘ ^2^C  ->  [^2^C, ^2^C|f]   (compiler reports: ^2^C)
+   ^2^C ∘ ^3^C ∘ ^2^C|f  ->  [^2^C|f, ^2^C]   (compiler reports: ^2^C|f)
+   ^2^C|f ∘ ^3^C ∘ ^2^C ∘ ^2^C  ->  [^2^C ∘ ^2^C, ^2^C|f ∘ ^2^C]   (compiler reports: ^2^C ∘ ^2^C)
+   ^2^C ∘ ^2^C|f ∘ ^3^C ∘ ^2^C  ->  [^2^C ∘ ^2^C, ^2^C ∘ ^2^C|f]   (compiler reports: ^2^C ∘ ^2^C)
+   ^2^C|f ∘ ^2^C|f ∘ ^3^C ∘ ^2^C  ->  [^2^C|f ∘ ^2^C, ^2^C|f ∘ ^2^C|f]   (compiler reports: ^2^C|f ∘ ^2^C)
+== RESULT: LEAN COPY AGREES WITH THE COMPILER ON EVERY RECORD
+exit=0

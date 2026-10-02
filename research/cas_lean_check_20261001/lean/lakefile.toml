@@ -1,0 +1,9 @@
+name = "CasCheck"
+defaultTargets = ["CasCheck", "cascheck"]
+
+[[lean_lib]]
+name = "CasCheck"
+
+[[lean_exe]]
+name = "cascheck"
+root = "Main"

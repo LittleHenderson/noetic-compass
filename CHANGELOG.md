@@ -1,5 +1,25 @@
 # tksCAS — Changelog
 
+## 2026-10-01 — Lean 4 check of the CAS compiler
+
+Owner request: use Lean to check the logic of the latest CAS compiler
+(`api/notation/compiler.py`, commit 8a3555b8, blob 439c4908). A Lean 4.19.0
+copy of the compiler's rules matched the REAL compiler on all 68,311 programs
+tried, on both the Python fallback and the Rust `cas_engine` path (answer files
+byte-identical). Proved: the `∘` monoid laws, state numbering, D0 = diagonal,
+and (general proof, any length) that the surfacing-member-first nesting
+canonical form is well defined. Findings proved as facts about the code: the
+`->` admissible flag is vacuous for 36 of 40 targets (B1); `∘`/`×` never cancel
+a dual pair but `÷` does (B2); `÷` is commutative and `^0` is not neutral for it
+(B3, B4); the involution respects `∘` for only 46 of 100 pairs (B5); `+` is
+order-sensitive on ties (B6); `x - x = x` (B7); `×` chains compile or not
+depending on brackets, found when Lean refuted my associativity law (B8); the
+either-order nesting form is not unique for 542 of 66,429 words (N-A); the
+Rust route is handed a true/false flag as the drive (R1, no visible output
+change). No `sorryAx`. Ran on one AWS c7i.xlarge (owner yes, ceiling 1.00 USD,
+180-minute self-destruct). Evidence: `research/cas_lean_check_20261001/`
+(README.md, results/). No CAS Harness gate or claim status changes.
+
 ## 2026-09-21 — PCBA circuit and board reader with bounded static checks
 
 Added a whole-document CCDL reader and CLI report with separate parsing,

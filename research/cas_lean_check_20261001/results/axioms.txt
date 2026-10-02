@@ -1,0 +1,48 @@
+'Cas.compose_closed' depends on axioms: [propext]
+'Cas.compose_comm' does not depend on any axioms
+'Cas.compose_assoc' depends on axioms: [propext, Quot.sound]
+'Cas.compose_zero_left' does not depend on any axioms
+'Cas.compose_zero_right' does not depend on any axioms
+'Cas.inv_inv' does not depend on any axioms
+'Cas.inv_fixed_points' does not depend on any axioms
+'Cas.invPair_iff' does not depend on any axioms
+'Cas.stateIndex_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Cas.stateIndex_onto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Cas.D0_is_diagonal' depends on axioms: [propext, Quot.sound]
+'Cas.admissible_refl' depends on axioms: [propext, Quot.sound]
+'Cas.timesDomain_descends' depends on axioms: [propext]
+'Cas.timesDomain_assoc_when_defined' does not depend on any axioms
+'Cas.arrow_descent_flag_always_true' depends on axioms: [propext]
+'Cas.B1_arrow_admissible_is_vacuous' does not depend on any axioms
+'Cas.B1_arrow_admissible_is_vacuous_general' depends on axioms: [propext, Quot.sound]
+'Cas.B2_compose_of_pairs' does not depend on any axioms
+'Cas.B2_compose_never_cancels_a_pair' does not depend on any axioms
+'Cas.B2_divide_cancels_pairs' does not depend on any axioms
+'Cas.B2_compose_inverse' does not depend on any axioms
+'Cas.B3_divide_comm' does not depend on any axioms
+'Cas.B4_divide_zero_not_identity' does not depend on any axioms
+'Cas.B4_divide_examples' does not depend on any axioms
+'Cas.B5_inv_not_hom' does not depend on any axioms
+'Cas.B5_inv_count' does not depend on any axioms
+'Cas.B6_plus_order_matters' does not depend on any axioms
+'Cas.B6_consequence' does not depend on any axioms
+'Cas.B7_minus_self' does not depend on any axioms
+'Cas.B8_times_brackets_matter' does not depend on any axioms
+'Cas.B8_count' does not depend on any axioms
+'Cas.B8_direction' does not depend on any axioms
+'Cas.Nesting.surfacing_partner_landing' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.ordered_no_overlap' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.pair_vanishes_ordered' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.fold_respects_cancel_ordered' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.reach_fold_ordered' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.fold_noRedex' depends on axioms: [propext]
+'Cas.Nesting.normal_form_unique_ordered' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.either_order_two_normal_forms' does not depend on any axioms
+'Cas.Nesting.W5_count' depends on axioms: [Lean.ofReduceBool]
+'Cas.Nesting.reduce_is_irreducible' depends on axioms: [Lean.ofReduceBool]
+'Cas.Nesting.ordered_unique_bounded' depends on axioms: [Lean.ofReduceBool]
+'Cas.Nesting.either_order_answer_is_a_normal_form' depends on axioms: [Lean.ofReduceBool]
+'Cas.Nesting.greedy_criterion_is_optimal' depends on axioms: [Lean.ofReduceBool]
+'Cas.Diff.compiler_was_python_fallback' depends on axioms: [Lean.ofReduceBool]
+'Cas.Diff.core_matches_compiler' depends on axioms: [propext, Lean.ofReduceBool]
+'Cas.Diff.nesting_matches_compiler' depends on axioms: [propext, Lean.ofReduceBool]
