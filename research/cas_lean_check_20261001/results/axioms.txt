@@ -30,6 +30,22 @@
 'Cas.B8_times_brackets_matter' does not depend on any axioms
 'Cas.B8_count' does not depend on any axioms
 'Cas.B8_direction' does not depend on any axioms
+'Cas.B6_count' does not depend on any axioms
+'Cas.B7_minus_keeps_left' depends on axioms: [propext, Quot.sound]
+'Cas.B9_minus_leaves_zero_weight' does not depend on any axioms
+'Cas.B1_larrow_flag' does not depend on any axioms
+'Cas.B1_biarrow_flag' does not depend on any axioms
+'Cas.B1_larrow_flag_general' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.good_tail' depends on axioms: [propext]
+'Cas.Nesting.step_good' depends on axioms: [propext]
+'Cas.Nesting.foldl_good' depends on axioms: [propext]
+'Cas.Nesting.partner_involutive' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.either_overlap' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.pair_vanishes_either' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.fold_respects_cancel_either' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.reach_fold_either' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.normal_form_unique_either_unlabelled' depends on axioms: [propext, Quot.sound]
+'Cas.Nesting.either_order_unique_without_labels' depends on axioms: [Lean.ofReduceBool]
 'Cas.Nesting.surfacing_partner_landing' depends on axioms: [propext, Quot.sound]
 'Cas.Nesting.ordered_no_overlap' depends on axioms: [propext, Quot.sound]
 'Cas.Nesting.pair_vanishes_ordered' depends on axioms: [propext, Quot.sound]

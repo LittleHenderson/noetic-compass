@@ -18,6 +18,9 @@ Record kinds (one per line, numbers separated by spaces):
 * `S code value`: set facts (`|Noetics|` ... `PartitionOf(...)`).
 * `L code noetic domain drive label`: how the compiler itself reads each alphabet letter.
 * `N ...`: one nested word (see `parseN`).
+* Review round 2, all 1,600 ordered state pairs each: `B s t valid admissible descent` (`<-`),
+  `E s t valid admissible descent` (`<->`), `T s t res` (`*`, result state or 99 = refused),
+  `V s t res` (`/`), `X s t dom keys zeros` (`x - y`).
 -/
 namespace Cas.Diff
 open Cas Cas.Nesting
@@ -40,6 +43,37 @@ def checkA : List Nat → Bool
     if arrowCompiles s t then
       valid == 1 && ((adm == 1) == (arrow s t).1) && ((desc == 1) == (arrow s t).2)
     else valid == 0
+  | _ => false
+
+def checkB : List Nat → Bool
+  | [s, t, valid, adm, desc] =>
+    if larrowCompiles s t then
+      valid == 1 && ((adm == 1) == (larrow s t).1) && ((desc == 1) == (larrow s t).2)
+    else valid == 0
+  | _ => false
+
+def checkE : List Nat → Bool
+  | [s, t, valid, adm, desc] =>
+    if biarrowCompiles s t then
+      valid == 1 && ((adm == 1) == (biarrow s t).1) && ((desc == 1) == (biarrow s t).2)
+    else valid == 0
+  | _ => false
+
+def stateCode : Option Nat → Nat
+  | some i => i
+  | none => 99
+
+def checkT : List Nat → Bool
+  | [s, t, res] => res == stateCode (timesState s t)
+  | _ => false
+
+def checkV : List Nat → Bool
+  | [s, t, res] => res == stateCode (divideState s t)
+  | _ => false
+
+/-- `x - y` on single states: the left state comes back, one key, no zero weight. -/
+def checkX : List Nat → Bool
+  | [s, t, dom, keys, zeros] => minus (lit s) (lit t) == lit s && dom == s && keys == 1 && zeros == 0
   | _ => false
 
 def checkD : List Nat → Bool
@@ -138,6 +172,11 @@ def checkRecord : List String → Bool
     | "C" => checkC n
     | "A" => checkA n
     | "D" => checkD n
+    | "B" => checkB n
+    | "E" => checkE n
+    | "T" => checkT n
+    | "V" => checkV n
+    | "X" => checkX n
     | "Q" => checkQ n
     | "P" => checkP n
     | "M" => checkM n
@@ -152,7 +191,8 @@ def countTag (rs : List (List String)) (tag : String) : Nat :=
 
 /-- How many records of each kind the comparison must see, so that "all agree" cannot be vacuous. -/
 def expectedCounts : List (String × Nat) :=
-  [("C", 100), ("A", 1600), ("D", 16), ("Q", 16), ("P", 100), ("M", 40), ("S", 10), ("L", 9)]
+  [("C", 100), ("A", 1600), ("D", 16), ("Q", 16), ("P", 100), ("M", 40), ("S", 10), ("L", 9),
+   ("B", 1600), ("E", 1600), ("T", 1600), ("V", 1600), ("X", 1600)]
 
 def coreRecords : List (List String) := records Generated.coreData
 def nestRecords : List (List String) := records Generated.nestData

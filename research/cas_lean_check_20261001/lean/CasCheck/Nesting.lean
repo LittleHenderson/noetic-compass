@@ -82,6 +82,37 @@ inductive Reach {α : Type} (key : α → Term) (eo : Bool) : List α → List �
 section Proofs
 variable {α : Type} (key : α → Term)
 
+/-- No two neighbours on the stack cancel (head = most recent; `next` was pushed before `top`). -/
+def good (eo : Bool) : List α → Bool
+  | top :: next :: rest => !cancels eo (key next) (key top) && good eo (next :: rest)
+  | _ => true
+
+theorem good_tail (eo : Bool) (top : α) (rest : List α) (h : good key eo (top :: rest) = true) :
+    good key eo rest = true := by
+  cases rest with
+  | nil => rfl
+  | cons n r =>
+    simp only [good, Bool.and_eq_true] at h
+    exact h.2
+
+/-- The loop keeps the stack reduced. -/
+theorem step_good (eo : Bool) (st : List α) (t : α) (h : good key eo st = true) :
+    good key eo (step key eo st t) = true := by
+  cases st with
+  | nil => rfl
+  | cons top rest =>
+    by_cases hc : cancels eo (key top) (key t) = true
+    · simp [step, hc]
+      exact good_tail key eo top rest h
+    · have hf : cancels eo (key top) (key t) = false := by simpa using hc
+      simp [step, hf, good, h]
+
+theorem foldl_good (eo : Bool) (l : List α) : ∀ st : List α, good key eo st = true →
+    good key eo (l.foldl (step key eo) st) = true := by
+  induction l with
+  | nil => intro st h; simpa using h
+  | cons x xs ih => intro st h; simp only [List.foldl_cons]; exact ih _ (step_good key eo st x h)
+
 /-- A surfacing thought's partner is never itself surfacing. -/
 theorem surfacing_partner_landing (n m : Nat) (hs : surfacing n = true) (hp : partner n = some m) :
     surfacing m = false := by
@@ -182,6 +213,131 @@ theorem normal_form_unique_ordered {u v : List α} (h : Reach key false u v)
   simp
 
 end Proofs
+
+/-! ## Either-order reading WITHOUT labels: the canonical form is unique (general proof)
+
+The patent text and the Rust engine (`cas-engine/src/fractals/simplification.rs`, "Theorem 8.12:
+Every fractal has a unique canonical form") cancel a dual pair in either order, on bare digits.
+The proofs below show that this IS unique for words of any length, as long as the terms carry no
+label the cancelling rule ignores (Register etc.). Finding N-A shows it fails once labels are kept. -/
+
+theorem partner_involutive (n m k : Nat) (h1 : partner n = some m) (h2 : partner m = some k) :
+    k = n := by
+  unfold partner at h1
+  split at h1 <;> simp at h1 <;> subst h1 <;> simp [partner] at h2 <;> omega
+
+theorem cancels_either_spec {x y : Term} (h : cancels true x y = true) :
+    partner x.noetic = some y.noetic ∧ x.domain = y.domain ∧ x.drive = y.drive := by
+  simp only [cancels, Bool.true_or, Bool.and_true, Bool.and_eq_true, sameSetting] at h
+  obtain ⟨hp, hd, hr⟩ := h
+  exact ⟨by simpa using hp, by simpa using hd, by simpa using hr⟩
+
+/-- If `x y` and `y z` both cancel (either order), `z` agrees with `x` on everything but the label. -/
+theorem either_overlap (x y z : Term) (h1 : cancels true x y = true) (h2 : cancels true y z = true)
+    (hx : x.label = 0) (hz : z.label = 0) : z = x := by
+  obtain ⟨p1, d1, r1⟩ := cancels_either_spec h1
+  obtain ⟨p2, d2, r2⟩ := cancels_either_spec h2
+  have hn := partner_involutive x.noetic y.noetic z.noetic p1 p2
+  cases x
+  cases z
+  simp_all
+
+def labelFree (w : List Term) : Prop := ∀ t, t ∈ w → t.label = 0
+
+theorem step_labelFree (eo : Bool) (st : List Term) (t : Term) (h : labelFree st) (ht : t.label = 0) :
+    labelFree (step id eo st t) := by
+  intro x hx
+  cases st with
+  | nil =>
+    simp [step] at hx
+    rw [hx]
+    exact ht
+  | cons top rest =>
+    by_cases hc : cancels eo top t = true
+    · simp [step, hc] at hx
+      exact h x (by simp [hx])
+    · simp [step, hc] at hx
+      rcases hx with hx | hx
+      · rw [hx]; exact ht
+      · exact h x (by simpa using hx)
+
+theorem foldl_labelFree (eo : Bool) (l : List Term) : ∀ st : List Term, labelFree st → labelFree l →
+    labelFree (l.foldl (step id eo) st) := by
+  induction l with
+  | nil => intro st h _; simpa using h
+  | cons x xs ih =>
+    intro st h hl
+    simp only [List.foldl_cons]
+    apply ih
+    · exact step_labelFree eo st x h (hl x (by simp))
+    · intro t ht; exact hl t (by simp [ht])
+
+/-- A cancelling pair pushed onto a reduced, label-free stack leaves it as it was (either order). -/
+theorem pair_vanishes_either (a b : Term) (hab : cancels true a b = true)
+    (_ha : a.label = 0) (hb : b.label = 0) (st : List Term)
+    (hst : good id true st = true) (hl : labelFree st) :
+    [a, b].foldl (step id true) st = st := by
+  cases st with
+  | nil => simp [step, hab]
+  | cons top rest =>
+    by_cases hta : cancels true top a = true
+    · have hbt : b = top := either_overlap top a b hta hab (hl top (by simp)) hb
+      rw [hbt]
+      cases rest with
+      | nil => simp [step, hta]
+      | cons r rs =>
+        have hr : cancels true r top = false := by
+          simp only [good, id, Bool.and_eq_true, Bool.not_eq_true'] at hst
+          exact hst.1
+        simp [step, hta, hr]
+    · have hf : cancels true top a = false := by simpa using hta
+      simp [step, hf, hab]
+
+theorem fold_respects_cancel_either (x y : List Term) (a b : Term)
+    (hab : cancels true a b = true) (hall : labelFree (x ++ [a, b] ++ y)) :
+    (x ++ [a, b] ++ y).foldl (step id true) [] = (x ++ y).foldl (step id true) [] := by
+  have hx : labelFree x := fun t ht => hall t (by simp [ht])
+  have ha : a.label = 0 := hall a (by simp)
+  have hb : b.label = 0 := hall b (by simp)
+  simp only [List.foldl_append]
+  rw [pair_vanishes_either a b hab ha hb _ (foldl_good id true x [] rfl)
+        (foldl_labelFree true x [] (fun _ h => by simp at h) hx)]
+
+theorem reach_labelFree {u v : List Term} (h : Reach id true u v) : labelFree u → labelFree v := by
+  induction h with
+  | refl => exact fun hu => hu
+  | tail _ hs ih =>
+    intro hu
+    have hv := ih hu
+    cases hs with
+    | cancel x y a b _ =>
+      intro t ht
+      apply hv t
+      simp only [List.mem_append] at ht ⊢
+      rcases ht with h | h
+      · exact Or.inl (Or.inl h)
+      · exact Or.inr h
+
+theorem reach_fold_either {u v : List Term} (h : Reach id true u v) : labelFree u →
+    u.foldl (step id true) [] = v.foldl (step id true) [] := by
+  induction h with
+  | refl => intro _; rfl
+  | tail h1 hs ih =>
+    intro hu
+    cases hs with
+    | cancel x y a b hab =>
+      rw [ih hu, fold_respects_cancel_either x y a b hab (reach_labelFree h1 hu)]
+
+/-- MAIN RESULT (either-order reading, no labels). Any order of either-order cancellations that
+ends where nothing more cancels ends on the compiler's either-order canonical form, for words of
+any length whose terms carry no label. This is the setting of the patent's / Rust engine's
+"unique canonical form" theorem, and there the claim holds. -/
+theorem normal_form_unique_either_unlabelled {u v : List Term} (h : Reach id true u v)
+    (hv : noRedex id true v = true) (hu : labelFree u) :
+    (u.foldl (step id true) []).reverse = v := by
+  rw [reach_fold_either h hu,
+      fold_noRedex id true v [] hv (by intro top a h1 _; simp at h1)]
+  simp
 
 /-! ## FINDING N-A: the either-order reading has two canonical forms -/
 

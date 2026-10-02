@@ -88,6 +88,24 @@ def main() -> int:
                 core.append("A %d %d 0 2 2" % (s, t))
             else:
                 core.append("A %d %d 1 %d %d" % (s, t, int(rel.admissible), int(rel.domain_descent_ok)))
+    # Review round 2: every ordered pair of the 40 states, for <-, <->, *, / and x - y.
+    for s in range(40):
+        for t in range(40):
+            for tag, sym in (("B", "<-"), ("E", "<->")):
+                rel = run("%s %s %s" % (state_src(s), sym, state_src(t)))
+                if rel is None:
+                    core.append("%s %d %d 0 2 2" % (tag, s, t))
+                else:
+                    core.append("%s %d %d 1 %d %d" % (tag, s, t, int(rel.admissible), int(rel.domain_descent_ok)))
+            for tag, sym in (("T", "*"), ("V", "/")):
+                v = run("%s %s %s" % (state_src(s), sym, state_src(t)))
+                core.append("%s %d %d %d" % (tag, s, t, 99 if v is None else v.dominant_state()))
+            v = run("%s - %s" % (state_src(s), state_src(t)))
+            if v is None:
+                core.append("X %d %d 999 0 0" % (s, t))
+            else:
+                zeros = sum(1 for w in v.states.values() if w == 0.0)
+                core.append("X %d %d %d %d %d" % (s, t, v.dominant_state(), len(v.states), zeros))
     for tag, sym in (("D", "*"), ("Q", "/")):
         for l in range(4):
             for r in range(4):

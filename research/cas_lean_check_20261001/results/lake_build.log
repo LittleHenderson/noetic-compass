@@ -1,8 +1,8 @@
-✔ [2/18] Built CasCheck.Core
-✔ [3/18] Built CasCheck.Generated
-✔ [4/18] Built CasCheck.Core:c.o
-✔ [5/18] Built CasCheck.Nesting
-✔ [6/18] Built CasCheck.Generated:c.o
+✔ [2/18] Built CasCheck.Generated
+✔ [3/18] Built CasCheck.Core
+✔ [4/18] Built CasCheck.Generated:c.o
+✔ [5/18] Built CasCheck.Core:c.o
+✔ [6/18] Built CasCheck.Nesting
 ✔ [7/18] Built CasCheck.Nesting:c.o
 ✔ [8/18] Built CasCheck.Laws
 ✔ [9/18] Built CasCheck.Bounded
@@ -11,12 +11,12 @@
 ✔ [12/18] Built Main
 ✔ [13/18] Built CasCheck.Differential:c.o
 ✔ [14/18] Built CasCheck.DiffTheorems
-✔ [15/18] Built CasCheck
-✔ [17/18] Built Main:c.o
+✔ [15/18] Built Main:c.o
+✔ [16/18] Built CasCheck
 ✔ [18/18] Built cascheck
 Build completed successfully.
 
-real	0m7.952s
-user	0m14.443s
-sys	0m0.545s
+real	0m9.659s
+user	0m20.726s
+sys	0m0.673s
 lake build exit=0

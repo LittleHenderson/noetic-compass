@@ -1,6 +1,6 @@
 {
  "schema": "cas-lean-check.box/0.1",
- "state": "running",
+ "state": "torn_down",
  "name": "cas-lean-check-20261002T014938Z",
  "region": "us-west-2",
  "instance_type": "c7i.xlarge",
@@ -19,5 +19,6 @@
  "launched_utc": "2026-10-02T01:49:42Z",
  "subnet": "subnet-0bb8fa82c2a7177b3",
  "availability_zone": "us-west-2a",
- "public_ip": "52.42.227.60"
+ "public_ip": "52.42.227.60",
+ "torn_down_utc": "2026-10-02T02:32:25Z"
 }

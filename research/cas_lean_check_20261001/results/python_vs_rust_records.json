@@ -1,0 +1,22 @@
+{
+ "core": {
+  "python_records": 9891,
+  "rust_records": 9891,
+  "identical_record_by_record": true,
+  "first_difference": null
+ },
+ "nest_2_4": {
+  "python_records": 7371,
+  "rust_records": 7371,
+  "identical_record_by_record": true,
+  "first_difference": null
+ },
+ "nest_5": {
+  "python_records": 59049,
+  "rust_records": 59049,
+  "identical_record_by_record": true,
+  "first_difference": null
+ },
+ "total_records_each_engine": 76311,
+ "method": "Generated.lean string constants split on the two-character escape backslash-n; text files split on newline; lists compared element by element"
+}

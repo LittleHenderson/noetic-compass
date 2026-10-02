@@ -92,8 +92,12 @@ theorem B1_arrow_admissible_is_vacuous_general (s t : Nat) :
   unfold arrow admissible opOf
   by_cases h : t % 10 = 0 <;> simp [h]
 
-/-- FINDING B2. `∘` and `×` never cancel an involution pair to `^0`:
-`^2 ∘ ^3 = ^5`, `^5 ∘ ^6 = ^1`, `^8 ∘ ^9 = ^7`. -/
+/-- FINDING B2. The digit rule `(a + b) % 10` never cancels an involution pair to `^0`:
+`^2 ∘ ^3 = ^5`, `^5 ∘ ^6 = ^1`, `^8 ∘ ^9 = ^7`. It drives `×`, `compose(...)`, and the legacy
+`composed_operator` field of `∘`, `Phi<...>` and `fractal(...)`. (Review note: the SAME `∘` result
+also carries `nesting.canonical_form`, which DOES cancel `^8^C ∘ ^9^C` to `^0^C`; so one `∘` value
+reports two answers that disagree exactly on the dual pairs. This was already recorded on 2026-09-21
+and is pinned by tests; it conflicts with the book's law `(CO-8 ∘ CO-9) ↔ CO-0`.) -/
 theorem B2_compose_of_pairs : compose 2 3 = 5 ∧ compose 5 6 = 1 ∧ compose 8 9 = 7 := by decide
 
 theorem B2_compose_never_cancels_a_pair : ∀ a, a < 10 → isInvPair a (inv a) = true →
@@ -129,19 +133,73 @@ theorem B5_inv_count : (List.range 10).foldl (fun n a => (List.range 10).foldl
     (fun n b => if inv (compose a b) == compose (inv b) (inv a) then n + 1 else n) n) 0 = 46 := by
   decide
 
-/-- FINDING B6. `+` is not symmetric in what it hands on. When two states tie, `dominant_state`
-keeps the one written FIRST. So `^2^C + ^3^C` is dominated by `^2^C` and `^3^C + ^2^C` by `^3^C`,
-and any operator that reads the dominant state (`×`, `÷`, `∘`, `->`, `compose`, `RPM`) gives
-different answers for the two spellings. -/
+/-- FINDING B6. `+` is not symmetric in what it reports. When two states tie, `dominant_state`
+keeps the one written FIRST. So `^2^C + ^3^C` is dominated by `^2^C` and `^3^C + ^2^C` by `^3^C`
+(90 of the 100 ordered Noetic pairs tie). CORRECTED after review: the type checker refuses a `+`
+result as an operand of `×`, `÷`, `∘` and `compose`, so `(^2^C + ^3^C) × ^5^C` does not compile.
+The tie still reaches `->` (its `domain_descent_ok` flag), `fractal(...)`, and any value passed
+through an `any`-typed binding; those cases were run on the real compiler
+(`results/review_claims_probe_*.json`), not modelled here. -/
 theorem B6_plus_order_matters :
     dominant (plus (lit 12) (lit 13)) = some 12 ∧ dominant (plus (lit 13) (lit 12)) = some 13 := by
   decide
 
-/-- B6, consequence: `(^2^C + ^3^C) × ^5^C` lands on `^7`, `(^3^C + ^2^C) × ^5^C` on `^8`. -/
+/-- B6, counted: for 90 of the 100 ordered Noetic pairs `a ≠ b`, the two spellings of `^a^C + ^b^C`
+report different dominant states. -/
+theorem B6_count :
+    (((List.range 10).flatMap fun a => (List.range 10).map fun b =>
+        dominant (plus (lit (10 + a)) (lit (10 + b))) != dominant (plus (lit (10 + b)) (lit (10 + a)))).filter id).length
+      = 90 := by
+  decide
+
+/-- B6, what the any-typed path then computes: `^7` for one spelling and `^8` for the other. -/
 theorem B6_consequence : compose 2 5 = 7 ∧ compose 3 5 = 8 := by decide
 
-/-- FINDING B7. `-` has no zero: subtracting a state from itself returns the state unchanged. -/
+/-- FINDING B7. `-` has no zero: subtracting a state from itself returns the state's weights
+unchanged. (Review note: the compiler rebuilds the value and drops its Register labels.) -/
 theorem B7_minus_self : ∀ i, i < 40 → minus (lit i) (lit i) = lit i := by decide
+
+/-- B7, wider (raised in review, checked here for all 1,600 pairs): on two single states, `x - y`
+ALWAYS returns `x`'s weights. Different keys: nothing is subtracted. Same key: the left state is
+restored. So on single literals `-` just keeps its left side. -/
+theorem B7_minus_keeps_left (i j : Nat) : minus (lit i) (lit j) = lit i := by
+  unfold minus lit
+  by_cases h : i = j
+  · subst h
+    simp
+  · have h' : j ≠ i := fun e => h e.symm
+    have hb : (j == i) = false := by simpa using h'
+    simp [List.find?, hb]
+
+/-- FINDING B9 (raised in review): `-` can leave a weight of exactly 0. `(^1^C + ^2^C) - ^1^C`
+keeps state 11 with weight 0. CLAUDE.md Correction 4 requires every weight to be above 0
+(the OPEN simplex). -/
+theorem B9_minus_leaves_zero_weight :
+    minus (plus (lit 11) (lit 12)) (lit 11) = [(11, 0), (12, 1)] := by decide
+
+/-- FINDING B1, continued (raised in review). `<-` hands `_is_admissible` the LEFT state's Noetic,
+so its flag is "the LEFT state is not `^0`, or both are the same state". -/
+theorem B1_larrow_flag : ∀ s, s < 40 → ∀ t, t < 40 →
+    (larrow s t).1 = (opOf s != 0 || s == t) := by
+  decide
+
+/-- `<->` flag: "both states are not `^0`, or they are the same state". -/
+theorem B1_biarrow_flag : ∀ s, s < 40 → ∀ t, t < 40 →
+    (biarrow s t).1 = ((opOf s != 0 && opOf t != 0) || s == t) := by
+  decide
+
+/-- B1, the general form for `<-` (every pair of numbers). -/
+theorem B1_larrow_flag_general (s t : Nat) : (larrow s t).1 = (opOf s != 0 || s == t) := by
+  unfold larrow admissible opOf
+  by_cases h : s % 10 = 0
+  · by_cases e : s = t
+    · subst e
+      simp [h]
+    · have e' : t ≠ s := fun x => e x.symm
+      have b1 : (t == s) = false := by simpa using e'
+      have b2 : (s == t) = false := by simpa using e
+      simp [h, b1, b2]
+  · simp [h]
 
 /-- FINDING B8 (found by Lean: the associativity law I first wrote down was FALSE).
 Whether a `×` chain compiles depends on the brackets. `(^1^E × ^1^C) × ^1^O` is refused

@@ -51,6 +51,18 @@ theorem either_order_answer_is_a_normal_form :
     W5.all (fun w => (normalForms true w.length (live id w)).contains (reduce id true w)) = true := by
   native_decide
 
+/-- Remove the label a term carries (Register etc.); the cancelling rule never reads it. -/
+def unlabel (t : Term) : Term := { t with label := 0 }
+
+/-- With labels removed, every one of the 66,429 words has exactly ONE either-order normal form,
+and it is the compiler's. (General proof: `normal_form_unique_either_unlabelled`.) So all 542
+ambiguous words in FINDING N-A are ambiguous only because of the Register label. -/
+theorem either_order_unique_without_labels :
+    W5.all (fun w =>
+      let u := w.map unlabel
+      normalForms true u.length (live id u) == [reduce id true u]) = true := by
+  native_decide
+
 /-- The greedy pairing in `_nesting_criterion` never misses: in all three readings it resolves
 every surfacing thought exactly when some pairing could. -/
 theorem greedy_criterion_is_optimal :

@@ -1,8 +1,13 @@
 compiler blob: 439c4908df2718a3ca1e1ff40bda63020cf71efa
 compiler engine: python
-== core rules: 1891 records
+== core rules: 9891 records
    C: 100 records, 100 agree, 0 disagree
    A: 1600 records, 1600 agree, 0 disagree
+   B: 1600 records, 1600 agree, 0 disagree
+   E: 1600 records, 1600 agree, 0 disagree
+   T: 1600 records, 1600 agree, 0 disagree
+   V: 1600 records, 1600 agree, 0 disagree
+   X: 1600 records, 1600 agree, 0 disagree
    D: 16 records, 16 agree, 0 disagree
    Q: 16 records, 16 agree, 0 disagree
    P: 100 records, 100 agree, 0 disagree
@@ -11,9 +16,14 @@ compiler engine: python
    L: 9 records, 9 agree, 0 disagree
 == nested words, 2-4 terms: 7371 records
    N: 7371 records, 7371 agree, 0 disagree
-== core rules from rust_core.txt: 1891 records
+== core rules from rust_core.txt: 9891 records
    C: 100 records, 100 agree, 0 disagree
    A: 1600 records, 1600 agree, 0 disagree
+   B: 1600 records, 1600 agree, 0 disagree
+   E: 1600 records, 1600 agree, 0 disagree
+   T: 1600 records, 1600 agree, 0 disagree
+   V: 1600 records, 1600 agree, 0 disagree
+   X: 1600 records, 1600 agree, 0 disagree
    D: 16 records, 16 agree, 0 disagree
    Q: 16 records, 16 agree, 0 disagree
    P: 100 records, 100 agree, 0 disagree

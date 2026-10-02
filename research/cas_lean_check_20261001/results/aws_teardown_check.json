@@ -1,0 +1,13 @@
+{
+ "checked_utc": "2026-10-02T02:43:44Z",
+ "instance": [
+  [
+   "i-0f6ebdb8b27a89939",
+   "terminated"
+  ]
+ ],
+ "running_cas_lean_instances": [],
+ "cas_lean_key_pairs": [],
+ "cas_lean_security_groups": [],
+ "cas_lean_volumes": []
+}

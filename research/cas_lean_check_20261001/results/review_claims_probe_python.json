@@ -1,0 +1,786 @@
+{
+ "engine": "python",
+ "claims": [
+  {
+   "id": "B6a",
+   "expectation_from_review": "plus result as an operand of *: expected refused by the type checker",
+   "runs": [
+    {
+     "source": "(^2^C + ^3^C) * ^5^C",
+     "valid": false,
+     "error": "typecheck: TIMES requires singular state operands",
+     "result": null
+    }
+   ]
+  },
+  {
+   "id": "B6b",
+   "expectation_from_review": "plus result through an any-typed binding: expected ^7^C vs ^8^C",
+   "runs": [
+    {
+     "source": "let x: any = ^2^C + ^3^C; x * ^5^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "program",
+      "results": [
+       {
+        "kind": "binding",
+        "name": "x",
+        "value": {
+         "kind": "state",
+         "states": {
+          "12": 0.5,
+          "13": 0.5
+         },
+         "dominant_state": "C2",
+         "dominant_operator": "CO-2",
+         "dominant_domain": "C",
+         "dominant_drive": null
+        }
+       },
+       {
+        "kind": "state",
+        "states": {
+         "17": 1.0
+        },
+        "dominant_state": "C7",
+        "dominant_operator": "CO-7",
+        "dominant_domain": "C",
+        "dominant_drive": null
+       }
+      ],
+      "final_result": {
+       "kind": "state",
+       "states": {
+        "17": 1.0
+       },
+       "dominant_state": "C7",
+       "dominant_operator": "CO-7",
+       "dominant_domain": "C",
+       "dominant_drive": null
+      }
+     }
+    },
+    {
+     "source": "let x: any = ^3^C + ^2^C; x * ^5^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "program",
+      "results": [
+       {
+        "kind": "binding",
+        "name": "x",
+        "value": {
+         "kind": "state",
+         "states": {
+          "12": 0.5,
+          "13": 0.5
+         },
+         "dominant_state": "C3",
+         "dominant_operator": "CO-3",
+         "dominant_domain": "C",
+         "dominant_drive": null
+        }
+       },
+       {
+        "kind": "state",
+        "states": {
+         "18": 1.0
+        },
+        "dominant_state": "C8",
+        "dominant_operator": "CO-8",
+        "dominant_domain": "C",
+        "dominant_drive": null
+       }
+      ],
+      "final_result": {
+       "kind": "state",
+       "states": {
+        "18": 1.0
+       },
+       "dominant_state": "C8",
+       "dominant_operator": "CO-8",
+       "dominant_domain": "C",
+       "dominant_drive": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "B6c",
+   "expectation_from_review": "plus result inside fractal(): expected composed 7 vs 8",
+   "runs": [
+    {
+     "source": "fractal(^2^C + ^3^C, ^5^C)",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "fractal",
+      "sequence": [
+       2,
+       5
+      ],
+      "composed_operator": "CO-7",
+      "orbit_length": 2,
+      "domain": "C",
+      "canonical_form": {
+       "rule": "identity law, then adjacent involution pairs in the same Domain with the same Drive cancel to ^0",
+       "surfacing_member_first": {
+        "cancelled": [],
+        "form": [
+         "^2^C",
+         "^5^C"
+        ]
+       },
+       "either_order": {
+        "cancelled": [],
+        "form": [
+         "^2^C",
+         "^5^C"
+        ]
+       },
+       "agreed": true,
+       "form": [
+        "^2^C",
+        "^5^C"
+       ]
+      },
+      "orbit_class": "NOT_DECIDED_BY_THE_BOOK"
+     }
+    },
+    {
+     "source": "fractal(^3^C + ^2^C, ^5^C)",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "fractal",
+      "sequence": [
+       3,
+       5
+      ],
+      "composed_operator": "CO-8",
+      "orbit_length": 2,
+      "domain": "C",
+      "canonical_form": {
+       "rule": "identity law, then adjacent involution pairs in the same Domain with the same Drive cancel to ^0",
+       "surfacing_member_first": {
+        "cancelled": [],
+        "form": [
+         "^3^C",
+         "^5^C"
+        ]
+       },
+       "either_order": {
+        "cancelled": [],
+        "form": [
+         "^3^C",
+         "^5^C"
+        ]
+       },
+       "agreed": true,
+       "form": [
+        "^3^C",
+        "^5^C"
+       ]
+      },
+      "orbit_class": "NOT_DECIDED_BY_THE_BOOK"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B6d",
+   "expectation_from_review": "mixed-Domain plus as an arrow source: expected domain_descent_ok true vs false",
+   "runs": [
+    {
+     "source": "^2^C + ^3^E -> ^5^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "relation",
+      "relation": "dependency",
+      "admissible": true,
+      "domain_descent_ok": true,
+      "source": {
+       "dominant_state": "C2",
+       "states": {
+        "12": 0.5,
+        "23": 0.5
+       }
+      },
+      "target": {
+       "dominant_state": "C5",
+       "states": {
+        "15": 1.0
+       }
+      }
+     }
+    },
+    {
+     "source": "^3^E + ^2^C -> ^5^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "relation",
+      "relation": "dependency",
+      "admissible": true,
+      "domain_descent_ok": false,
+      "source": {
+       "dominant_state": "E3",
+       "states": {
+        "12": 0.5,
+        "23": 0.5
+       }
+      },
+      "target": {
+       "dominant_state": "C5",
+       "states": {
+        "15": 1.0
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "B6e",
+   "expectation_from_review": "three-term plus: expected dominant ^3^C vs ^1^C",
+   "runs": [
+    {
+     "source": "^1^C + ^2^C + ^3^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "11": 0.25,
+       "12": 0.25,
+       "13": 0.5
+      },
+      "dominant_state": "C3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "C",
+      "dominant_drive": null
+     }
+    },
+    {
+     "source": "^1^C + (^2^C + ^3^C)",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "11": 0.5,
+       "12": 0.25,
+       "13": 0.25
+      },
+      "dominant_state": "C1",
+      "dominant_operator": "CO-1",
+      "dominant_domain": "C",
+      "dominant_drive": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "B9",
+   "expectation_from_review": "minus leaves a zero weight: expected state 11 with weight 0.0",
+   "runs": [
+    {
+     "source": "(^1^C + ^2^C) - ^1^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "11": 0.0,
+       "12": 1.0
+      },
+      "dominant_state": "C2",
+      "dominant_operator": "CO-2",
+      "dominant_domain": "C",
+      "dominant_drive": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "B7a",
+   "expectation_from_review": "minus drops the Register label",
+   "runs": [
+    {
+     "source": "^3^C|A - ^3^C|A",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "13": 1.0
+      },
+      "dominant_state": "C3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "C",
+      "dominant_drive": null
+     }
+    },
+    {
+     "source": "^2^C - ^3^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "12": 1.0
+      },
+      "dominant_state": "C2",
+      "dominant_operator": "CO-2",
+      "dominant_domain": "C",
+      "dominant_drive": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "TC1",
+   "expectation_from_review": "type checker reads the alphabetically first Domain of a plus: expected refused",
+   "runs": [
+    {
+     "source": "(^1^P + ^1^E) -> ^1^C",
+     "valid": false,
+     "error": "typecheck: domain descent violated: E cannot descend to C",
+     "result": null
+    }
+   ]
+  },
+  {
+   "id": "TC2",
+   "expectation_from_review": "expected to compile and report domain_descent_ok false",
+   "runs": [
+    {
+     "source": "(^1^O + ^1^C) -> ^1^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "relation",
+      "relation": "dependency",
+      "admissible": true,
+      "domain_descent_ok": false,
+      "source": {
+       "dominant_state": "O1",
+       "states": {
+        "11": 0.5,
+        "31": 0.5
+       }
+      },
+      "target": {
+       "dominant_state": "C1",
+       "states": {
+        "11": 1.0
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "TC3",
+   "expectation_from_review": "expected to pass the type checker and fail at run time (cross-Domain division)",
+   "runs": [
+    {
+     "source": "(^1^P * ^1^C) / ^1^P",
+     "valid": false,
+     "error": "execution: cross-domain division: C ÷ P",
+     "result": null
+    }
+   ]
+  },
+  {
+   "id": "TC4",
+   "expectation_from_review": "plus with a drive gives a program value; expected run-time error at the arrow",
+   "runs": [
+    {
+     "source": "(^2^C + F_1) -> ^3^C",
+     "valid": false,
+     "error": "execution: ARROW expects state operands",
+     "result": null
+    }
+   ]
+  },
+  {
+   "id": "EM",
+   "expectation_from_review": "v7.7 emergent result over three ^3^P terms: expected state P9 carrying the label",
+   "runs": [
+    {
+     "source": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "9": 1.0
+      },
+      "dominant_state": "P9",
+      "dominant_operator": "CO-9",
+      "dominant_domain": "P",
+      "dominant_drive": null,
+      "emergent_register": "^3^P|Ω"
+     }
+    },
+    {
+     "source": "(^3^P|A * ^3^P|f) = fused",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "6": 1.0
+      },
+      "dominant_state": "P6",
+      "dominant_operator": "CO-6",
+      "dominant_domain": "P",
+      "dominant_drive": null,
+      "emergent_register": "fused"
+     }
+    }
+   ]
+  },
+  {
+   "id": "RG",
+   "expectation_from_review": "co-presence keeps no Register on the result",
+   "runs": [
+    {
+     "source": "^3^P|A + ^3^P|f",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "3": 1.0
+      },
+      "dominant_state": "P3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "P",
+      "dominant_drive": null
+     }
+    }
+   ]
+  },
+  {
+   "id": "RPM",
+   "expectation_from_review": "RPM completeness is 1 whenever a drive is attached",
+   "runs": [
+    {
+     "source": "RPM(^2^C_{F2})",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "rpm",
+      "drive": "F2",
+      "completeness": 1.0,
+      "chain": [
+       "A0 -> D2",
+       "D2 -> W2",
+       "W2 -> P2"
+      ]
+     }
+    },
+    {
+     "source": "RPM(^2^C)",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "rpm",
+      "drive": null,
+      "completeness": 0.0,
+      "chain": [
+       "No explicit drive attached to the source state"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "SET",
+   "expectation_from_review": "membership vs typed set; bare ^n; repeated Register",
+   "runs": [
+    {
+     "source": "^2 ∈ States",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "meta_assertion",
+      "operator": "∈",
+      "holds": true,
+      "message": "CO-2 is a member of States",
+      "left": {
+       "kind": "state",
+       "states": {
+        "2": 1.0
+       },
+       "dominant_state": "P2",
+       "dominant_operator": "CO-2",
+       "dominant_domain": "P",
+       "dominant_drive": null
+      },
+      "right": {
+       "kind": "meta_set",
+       "name": "States",
+       "element_type": "state",
+       "cardinality": 40,
+       "elements": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9",
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "O0",
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5",
+        "O6",
+        "O7",
+        "O8",
+        "O9",
+        "P0",
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+       ]
+      }
+     }
+    },
+    {
+     "source": "StateSet{^2}",
+     "valid": false,
+     "error": "execution: StateSet requires state elements; got CO-2 (use explicit Cognitive States such as ^2^P, P2, or C7)",
+     "result": null
+    },
+    {
+     "source": "^2",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "2": 1.0
+      },
+      "dominant_state": "P2",
+      "dominant_operator": "CO-2",
+      "dominant_domain": "P",
+      "dominant_drive": null
+     }
+    },
+    {
+     "source": "^2|T^C_{F2}|A",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "12": 1.0
+      },
+      "dominant_state": "C2",
+      "dominant_operator": "CO-2",
+      "dominant_domain": "C",
+      "dominant_drive": "F2",
+      "register": "A",
+      "register_name": "Analytical"
+     }
+    }
+   ]
+  },
+  {
+   "id": "NA2",
+   "expectation_from_review": "either-order agreed flag compares positions, not labels",
+   "runs": [
+    {
+     "source": "^3^C ∘ ^2^C ∘ ^3^C",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "fractal",
+      "sequence": [
+       3,
+       2,
+       3
+      ],
+      "composed_operator": "CO-8",
+      "orbit_length": 3,
+      "domain": "C",
+      "canonical_form": {
+       "rule": "identity law, then adjacent involution pairs in the same Domain with the same Drive cancel to ^0",
+       "surfacing_member_first": {
+        "cancelled": [
+         [
+          1,
+          2
+         ]
+        ],
+        "form": [
+         "^3^C"
+        ]
+       },
+       "either_order": {
+        "cancelled": [
+         [
+          0,
+          1
+         ]
+        ],
+        "form": [
+         "^3^C"
+        ]
+       },
+       "agreed": false,
+       "form": null
+      },
+      "orbit_class": "NOT_DECIDED_BY_THE_BOOK"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B8b",
+   "expectation_from_review": "bracket dependence of * chains",
+   "runs": [
+    {
+     "source": "(^1^E * ^1^C) * ^1^O",
+     "valid": false,
+     "error": "execution: domain ascent violation: E × C",
+     "result": null
+    },
+    {
+     "source": "^1^E * (^1^C * ^1^O)",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "33": 1.0
+      },
+      "dominant_state": "O3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "O",
+      "dominant_drive": null
+     }
+    },
+    {
+     "source": "^1^E * ^1^C * ^1^O",
+     "valid": false,
+     "error": "execution: domain ascent violation: E × C",
+     "result": null
+    }
+   ]
+  },
+  {
+   "id": "B8d",
+   "expectation_from_review": "bracket dependence of the reported drive",
+   "runs": [
+    {
+     "source": "(^1^P_{F1} * ^1^C_{F2}) * ^1^E_{F3}",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "23": 1.0
+      },
+      "dominant_state": "E3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "E",
+      "dominant_drive": "F3"
+     }
+    },
+    {
+     "source": "^1^P_{F1} * (^1^C_{F2} * ^1^E_{F3})",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "23": 1.0
+      },
+      "dominant_state": "E3",
+      "dominant_operator": "CO-3",
+      "dominant_domain": "E",
+      "dominant_drive": "F1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B3d",
+   "expectation_from_review": "division's reported drive depends on order",
+   "runs": [
+    {
+     "source": "^2^C_{F2} / ^7^C_{F5}",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "14": 1.0
+      },
+      "dominant_state": "C4",
+      "dominant_operator": "CO-4",
+      "dominant_domain": "C",
+      "dominant_drive": "F2"
+     }
+    },
+    {
+     "source": "^7^C_{F5} / ^2^C_{F2}",
+     "valid": true,
+     "error": null,
+     "result": {
+      "kind": "state",
+      "states": {
+       "14": 1.0
+      },
+      "dominant_state": "C4",
+      "dominant_operator": "CO-4",
+      "dominant_domain": "C",
+      "dominant_drive": "F5"
+     }
+    }
+   ]
+  },
+  {
+   "id": "CH",
+   "expectation_from_review": "chained arrows",
+   "runs": [
+    {
+     "source": "^1^P -> ^1^C -> ^1^E",
+     "valid": false,
+     "error": "typecheck: ARROW requires state-typed operands (got relation)",
+     "result": null
+    }
+   ]
+  }
+ ]
+}

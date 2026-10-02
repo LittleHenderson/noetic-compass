@@ -70,6 +70,32 @@ does not compile at all. -/
 def arrowCompiles (s t : Nat) : Bool :=
   decide (domainOf s ≤ domainOf t)
 
+/-- `<-` (LARROW), lines 5328-5331: the operator handed to `_is_admissible` is the LEFT state's
+Noetic, and the move checked is right -> left. -/
+def larrow (s t : Nat) : Bool × Bool :=
+  (admissible (opOf s) t s, decide (domainOf t ≤ domainOf s))
+
+/-- Type check of `<-` (line 3898): refused when the right Domain comes after the left one. -/
+def larrowCompiles (s t : Nat) : Bool :=
+  decide (domainOf t ≤ domainOf s)
+
+/-- `<->` (BIARROW), lines 5332-5336: both checks, and the Domains must match. -/
+def biarrow (s t : Nat) : Bool × Bool :=
+  (admissible (opOf t) s t && admissible (opOf s) t s, domainOf s == domainOf t)
+
+/-- Type check of `<->` (line 3903): refused unless both sides share a Domain. -/
+def biarrowCompiles (s t : Nat) : Bool :=
+  domainOf s == domainOf t
+
+/-- `×` on two single states (lines 5222-5232 Python, Rust `multiply_states`): the state index of
+the result, or `none` when the Domain step would ascend. -/
+def timesState (s t : Nat) : Option Nat :=
+  (timesDomain (domainOf s) (domainOf t)).map (fun d => stateIndex d (compose (opOf s) (opOf t)))
+
+/-- `÷` on two single states (lines 5233-5243 Python, Rust `divide_states`). -/
+def divideState (s t : Nat) : Option Nat :=
+  (divideDomain (domainOf s) (domainOf t)).map (fun d => stateIndex d (divide (opOf s) (opOf t)))
+
 /-! ## `+` and `-` on states (lines 5141-5185)
 
 A state is a dictionary from state index to weight. Python dictionaries keep insertion order,
