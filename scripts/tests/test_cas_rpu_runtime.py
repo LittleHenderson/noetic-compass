@@ -20,6 +20,7 @@ from cmb import CognitiveMemoryBoard  # noqa: E402
 from rpm import Terminal  # noqa: E402
 
 from banks import DecompositionBank, InferenceBank  # noqa: E402
+from workspace import Status, Workspace  # noqa: E402
 from foundations import FoundationProfile, focused_profile  # noqa: E402
 from runtime import (  # noqa: E402
     DOMAIN_ORDER,
@@ -202,6 +203,204 @@ class TerminationTests(unittest.TestCase):
         with self.assertRaises(RuntimeError_) as ctx:
             processor(max_ticks=3)
         self.assertEqual(ctx.exception.code, "E-RT-002")
+
+
+class LocalizedContradictionTests(unittest.TestCase):
+    """Contradiction is local to the question. Rule C."""
+
+    def test_a_contradiction_off_the_queried_route_does_not_poison_the_answer(self):
+        """The earlier design refused every question the moment any
+        contradiction existed anywhere. A living workspace would be useless
+        after its first dispute."""
+        problem = Problem(
+            "off-route",
+            "leads_to",
+            (("VS", "leads_to", "QS"), ("QS", "leads_to", "IU"), ("AA", "leads_to", "BB")),
+            ("VS", "IU"),
+            negated_premises=(("AA", "leads_to", "BB"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.CONCLUDED)
+        self.assertEqual(episode.answer, "YES")
+        self.assertIn("AA|leads_to|BB", episode.workspace.contradictions())
+
+    def test_a_contradiction_on_the_only_route_is_inadmissible_and_named(self):
+        problem = Problem(
+            "on-route",
+            "leads_to",
+            (("VS", "leads_to", "QS"), ("QS", "leads_to", "IU")),
+            ("VS", "IU"),
+            negated_premises=(("QS", "leads_to", "IU"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.INADMISSIBLE)
+        self.assertIn("QS|leads_to|IU", episode.note)
+
+    def test_a_clean_route_beats_a_contested_one(self):
+        problem = Problem(
+            "bypass",
+            "leads_to",
+            (
+                ("VS", "leads_to", "QS"), ("QS", "leads_to", "IU"),
+                ("VS", "leads_to", "ZZ"), ("ZZ", "leads_to", "IU"),
+            ),
+            ("VS", "IU"),
+            negated_premises=(("QS", "leads_to", "IU"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.CONCLUDED)
+        self.assertEqual(episode.answer, "YES")
+        self.assertEqual(
+            episode.conclusion.support, ("VS|leads_to|ZZ", "ZZ|leads_to|IU")
+        )
+
+    def test_a_route_with_one_contested_and_one_absent_link_is_not_inadmissible(self):
+        """Rule C is 'every absent link is disputed', not 'any link is'. A
+        route that is also missing an undisputed link is simply unknown."""
+        problem = Problem(
+            "mixed",
+            "leads_to",
+            (("VS", "leads_to", "QS"), ("QS", "co_occurs", "IU"), ("IU", "leads_to", "TR")),
+            ("VS", "TR"),
+            negated_premises=(("VS", "leads_to", "QS"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.NEEDS_INFORMATION)
+
+    def test_a_derivable_claim_whose_denial_is_given_is_a_dispute_not_a_yes(self):
+        """A clean chain reaches Z, and 'A does not lead to Z' is also given.
+        Deriving the chain does not make the claim true; it makes the
+        workspace disagree with itself about that exact claim."""
+        problem = Problem(
+            "denied-conclusion",
+            "leads_to",
+            (("VS", "leads_to", "QS"), ("QS", "leads_to", "IU")),
+            ("VS", "IU"),
+            negated_premises=(("VS", "leads_to", "IU"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.INADMISSIBLE)
+        self.assertIn("VS|leads_to|IU", episode.note)
+        self.assertTrue(episode.workspace.contested("VS", "leads_to", "IU"))
+
+    def test_an_explicit_denial_is_a_no_under_an_open_world(self):
+        """Being told something is false is knowledge, not a gap."""
+        problem = Problem(
+            "denied", "leads_to", (), ("VS", "IU"),
+            negated_premises=(("VS", "leads_to", "IU"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.CONCLUDED)
+        self.assertEqual(episode.answer, "NO")
+
+    def test_a_given_denial_outranks_a_partial_route_association_surfaced(self):
+        """Told "VS does not lead to IU", reminded of a route VS -> QS ~ IU by a
+        mere association: the answer is NO in both worlds, not "I do not know".
+        Without this a reasoner would abstain on a question it was explicitly
+        told the answer to, because something reminded it of a route."""
+        for closed in (False, True):
+            ws = Workspace(closed_world=closed)
+            ws.fact("VS", "leads_to", "QS")
+            ws.fact("QS", "co_occurs", "IU")
+            ws.fact("VS", "leads_to", "IU", negated=True)
+            episode = processor().run_in(
+                ws, Problem("denied-partial", "leads_to", (), ("VS", "IU"), closed_world=closed)
+            )
+            self.assertIs(episode.terminal, Terminal.CONCLUDED, closed)
+            self.assertEqual(episode.answer, "NO", closed)
+            self.assertTrue(episode.candidates, "^8 did surface the partial route")
+        # The same with the gap given as a guess rather than an association.
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        ws.hypothesize("QS", "leads_to", "IU", stage="stream")
+        ws.fact("VS", "leads_to", "IU", negated=True)
+        episode = processor().run_in(ws, Problem("denied-guess", "leads_to", (), ("VS", "IU")))
+        self.assertEqual(episode.answer, "NO")
+
+    def test_a_contested_claim_asked_directly_is_a_dispute_not_a_denial(self):
+        """F(a,b), N(a,b), ask a->b: both polarities are held, so the question
+        is inadmissible and names the pair; a denial that is itself disputed
+        is not knowledge."""
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "IU")
+        ws.fact("VS", "leads_to", "IU", negated=True)
+        episode = processor().run_in(ws, Problem("contested", "leads_to", (), ("VS", "IU")))
+        self.assertIs(episode.terminal, Terminal.INADMISSIBLE)
+        self.assertIn("VS|leads_to|IU", episode.note)
+
+
+class SuppliedWorkspaceTests(unittest.TestCase):
+    """`run_in` is the organism's entry point: the workspace outlives the episode."""
+
+    def test_run_in_reasons_against_a_supplied_workspace(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        ws.fact("QS", "leads_to", "IU")
+        episode = processor().run_in(ws, Problem("t", "leads_to", (), ("VS", "IU")))
+        self.assertEqual(episode.answer, "YES")
+        self.assertIs(episode.workspace, ws)
+
+    def test_a_conclusion_landed_earlier_is_held_and_answered_directly(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        ws.fact("QS", "leads_to", "IU")
+        proc = processor()
+        first = proc.run_in(ws, Problem("t1", "leads_to", (), ("VS", "IU")))
+        self.assertIs(first.conclusion.status, Status.DERIVED)
+        second = proc.run_in(ws, Problem("t2", "leads_to", (), ("VS", "IU")))
+        self.assertEqual(second.answer, "YES")
+        infer = next(s for s in second.trace if s.phase is Phase.INFER)
+        self.assertIn("YES", infer.note)
+        self.assertIs(second.conclusion, first.conclusion)
+
+    def test_a_retracted_support_takes_the_held_conclusion_down_with_it(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        ws.fact("QS", "leads_to", "IU")
+        proc = processor()
+        proc.run_in(ws, Problem("t1", "leads_to", (), ("VS", "IU")))
+        ws.retract("QS|leads_to|IU")
+        again = proc.run_in(ws, Problem("t2", "leads_to", (), ("VS", "IU")))
+        self.assertEqual(again.answer, "UNKNOWN")
+
+    def test_route_guesses_are_swept_so_the_next_episode_starts_clean(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        processor().run_in(ws, Problem("t", "leads_to", (), ("VS", "IU")))
+        self.assertEqual([p for p in ws.live() if p.stage == "^8"], [])
+
+    def test_lacunae_reported_are_only_this_episodes(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        proc = processor()
+        proc.run_in(ws, Problem("t1", "leads_to", (), ("VS", "IU")))
+        ws.fact("AA", "leads_to", "BB")
+        second = proc.run_in(ws, Problem("t2", "leads_to", (), ("AA", "CC")))
+        self.assertIn("AA|leads_to|CC", second.note)
+        self.assertNotIn("VS|leads_to|IU", second.note)
+
+    def test_a_supplied_profile_reaches_prime_but_not_the_verdict(self):
+        """Two identical workspaces, two ambitions, one answer and one
+        confidence. (Identical workspaces, not one shared: the first run
+        lands a derived edge that the second would then see as a shorter
+        route -- that is state, not ambition, and a different test.)"""
+        def fresh():
+            ws = Workspace()
+            ws.fact("VS", "leads_to", "QS")
+            ws.fact("QS", "leads_to", "IU")
+            return ws
+        proc = processor()
+        base = proc.run_in(fresh(), Problem("t", "leads_to", (), ("VS", "IU")))
+        keen = proc.run_in(
+            fresh(), Problem("t", "leads_to", (), ("VS", "IU")),
+            profile=focused_profile("F2|A", 1.0),
+        )
+        self.assertEqual(base.answer, keen.answer)
+        self.assertEqual(base.confidence, keen.confidence)
+        self.assertEqual(base.conclusion.support, keen.conclusion.support)
+        self.assertEqual(keen.profile.dominant(), "F2|A")
+        prime = next(s for s in keen.trace if s.phase is Phase.PRIME)
+        self.assertIn("F2|A", prime.note)
 
 
 class TraceTests(unittest.TestCase):

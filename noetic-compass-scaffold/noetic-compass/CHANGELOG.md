@@ -1,5 +1,217 @@
 # Noetic Compass — Progress Log
 
+## HELM ability 2: a told lesson, retained across fresh processes, applied to unfamiliar instances; neural-learning directive received and planned (Oct 6, 2026) — SYMBOLIC DEVELOPMENT/FIRST-LOOK RESULT + PREPARATION
+
+**Label.** The lesson result is a symbolic development demonstration plus a first-look run on 20 unseen seeds; not the frozen result (no custodian, same builder). **Neural change: none.** Everything under the neural-learning directive is preparation.
+
+**Lessons (contract §13).** A lesson is `FACT entails (r, leads_to)`: told, retractable, specific to its relation; while held, the organism lands `s|leads_to|o` as a DERIVED record on every `s -[r]-> o` edge with the edge and the lesson as support, and the existing cascade, dispute and record machinery does the rest. Oracle (`revision.py`), control (`controls.py`) and organism (`organism.py`) carry the same §13 views; `events.lesson()` / `unlesson()`. Generator class L (seven variants: L-before, L-apply, L-compose, L-retract, L-revive, L-specific, L-edge) with untaught twins, opt-in (`lessons=True`) so the registered lesson-free fingerprints stand; lesson fingerprints seeds 0–19: open `4ba1ddd5…`, closed `e66b92c9…`; 34 episodes / 501 events / 110 probes per seed. Tests: lessons 9, sessions 42 (both in CI).
+
+**Measured — first-look, seeds 3000–3019 × 5 fresh processes × 4 paths × 2 worlds (1200 process launches), both worlds identical:** 4400/4400 verdicts per path per world; **140/140 class-L designed probes** correct on every path (20/20 per variant), 0 served from the record; 140/140 untaught twins GAP; 320/320 cross-session retention probes with 40 record hits and **0 stale hits**; 960/960 withdrawals. Fault schedule with lessons, seeds 0–9: 70/70 lesson probes, every recovery exact. Note: `docs/working/helm_lessons_evaluation_2026_10_06.md`; reports under `docs/working/evidence/`. The first attempt of the run stopped on E-MEM-051 when finished stores filled the disk; the harness now deletes each finished store (`--keep-stores` to retain) and the run was repeated in full.
+
+**Neural-learning directive (owner, Oct 6).** Stored as `docs/directives/2026_10_06_helm_neural_learning.md` with the gate answer and four engineering amendments; decision package `docs/working/helm_neural_learning_decision_package_2026_10_06.md` (verified vs reported position, smallest next claim = stages 1–2 as PLAN_AFTER_R8B step (a) on the existing arm M conditional on the actual verdict, R9-mini fallback, owners, PDT windows, approvals needed); plan v1 draft for stages 1–2 (`docs/working/helm_neural_learning_plan_v1_draft_2026_10_06.md`, not frozen; continuation bundle, byte-exactness with no tolerance, discarded-update control); `scripts/helm_neural/bundle_check.py` (stdlib byte-level bundle completeness/verify/compare; 8 tests; CI). The owner-delivered consolidated source handoff is applied to the roadmap as §7 with the active writer's verification note; its seven reporting corrections are applied (PR #248 open; 1200 process launches; RPA diversions six per world; twins-run header; generator suite in CI; raw JSON scratchpad-only; storage gap wording). Gates for any neural run — R8B custody, operator AWS access, ledger and job approval, exact-source binding — are the owner's and operator's; nothing here runs, spends or publishes.
+
+
+## HELM: multi-session evaluation — first-look run on 20 unseen seeds, fault schedule, RPA pinned and reconnected (Oct 6, 2026) — DEVELOPMENT DEMONSTRATION, NOT THE FROZEN RESULT
+
+**Label.** A development demonstration at survival level (a) plus a first-look run on seeds the builder
+had not generated before. No custodian, same builder, level (b) not demonstrated. Full note:
+`docs/working/helm_multi_session_evaluation_2026_10_06.md`; text reports under `docs/working/evidence/`.
+
+**Generator** (`scripts/cas_rpu/sessions.py`, by a delegated agent; 25 tests). `generate_session_set`:
+per seed one context of 27 episodes (16 reused layouts + X-delay/X-revive/X-deep/X-correct/X-hold,
+D-restate, C-cross, N-late, T-compose/T-exact, G-probe per eval plan §8), 385 events, 82 probes,
+five sessions each later one carrying a cross-session designed probe, tokens drawn without replacement
+per context, untaught twins, whole-stream oracle, E-RS-005/006/010 over the whole stream, balance over
+the set. Registered fingerprints (seeds 0–19): open `9e0d35b0…`, closed `deae82a0…`. The pinned
+`generate_revision_set` fingerprints are untouched. Three layouts gained balancing probes the 60%
+ceiling forces (plan amendment log).
+
+**Harness** (`scripts/cas_memory/session_harness.py`; 16 tests, every one running real child
+processes). One fresh OS process per session over `history.Stream`; per-event acknowledgment lines;
+paths recompute / walk / record_dep / record_rpa; scoring via `score_item` relabelled per episode with
+the generator's token-component attribution; retention, transfer, stale-hit, unseen-hit and twin
+columns; fault schedule F1–F16 where the single-document design permits (F14 not applicable: nothing
+is persisted as an index); recovery probes against fresh recompute over the acknowledged prefix;
+`--mirror DIR --replacement` exercises the replacement mechanism offline; bootstrap CI; text + JSON.
+
+**History** (`scripts/cas_rpu/history.py`; 27 tests). `restore(acknowledged_seq=)` refuses with
+**E-MEM-046** when the newest verifying document ends before the host's acknowledged prefix, naming
+the lost rows; `commit` recognises a retry of an event recorded before its ack was lost (same payload
+at the intended seq) and acknowledges it once more with no new row; `attach=` on genesis and restore
+reconnects peripherals before replay; a test-only fault hook at the four points of `save`.
+
+**RPA** (`scripts/cas_memory/rpa_adapter.py`; 11 tests). The loader pins the SHA-256 of the two
+imported files as committed at `eb99855` and refuses other content; `loaded_version()` reports what is
+mounted. CI fetches that commit into a read-only worktree and runs the RPA tests with
+`CAS_RPA_REQUIRED=1` (a skip is a failure). The narrower is reconnected on restore and a record hit
+after a restart is tested — the owner's two concrete items.
+
+**Measured — first-look, seeds 1000–1019, both worlds identical.** Per path per world 3280/3280
+verdicts, 200/200 contested, 1560/1560 named (open), 800/800 withdrawn; 180/180 cross-session
+retention probes, record_dep serving 40 from the record with **0 stale hits**; T-compose 20/20 with 0
+record hits, T-exact 20/20 with 20 hits; 540/540 untaught twins GAP; 0 hits on never-asked pairs.
+record_rpa: identical answers, 40 of 279 hits sent to the walk (a held conclusion restated as a given
+is OBSERVED, not VERIFIED, to the atlas), restore p50 82 ms vs 44 ms. Costs: commit p50 8.4 ms, p95
+15 ms; restore p50 44 ms; session wall p50 0.85 s; max RSS 96 MB (record_dep); 32.7 MB per stream
+directory with retained copies. **Fault schedule, seeds 0–19:** 9/9 recoveries at exactly the
+acknowledged prefix (or one ahead with the retry recognised), 162/162 recovery probes, redeliver,
+redeliver-after-restart, swap, torn-current, corrupt-current, quota, schema-bump all passed;
+corrupt-both refused with E-MEM-046 naming the lost row; the two stopped seeds leave 43 probes per
+path unanswered, reported as unanswered.
+
+**Found by the harness and fixed before the reported runs.** Post-mortem verdicts judged against the
+wrong acknowledgment baseline; probe attribution by span containment mislabelled interleaved
+episodes (a first pass counted 53 retention probes where 180 exist). One flaky failure of the harness
+test file was seen once under CPU contention and did not reproduce in ten further runs; unexplained.
+
+**Not shown.** Level (b): every process ran on one host. The proposed S3 location stays conditional
+on the owner's verification (deletion rules, purpose, build-job read access); no key in chat. K/W/A
+classes excluded pending contract v1 bindings. Speed reported, not claimed.
+
+
+## HELM: the destination written down, the memory work audited and contracted, and lasting memory at survival level (a) (Oct 6, 2026) — PREPARATION
+
+**Label.** Preparation and a development demonstration, per `docs/HELM_VISION_AND_ROADMAP.md` §2. Not a
+frozen result: no held-out set, no evaluation custodian yet, survival level (b) not demonstrated.
+
+**Headline.** The owner's statement of intent for HELM (reasons, learns, retains, improves itself,
+CASalesces, organizes with RPA, built together) is now one canonical document with the gap per
+ability and the gate question every task answers first: *which HELM ability does this advance, and
+what observable behavior will prove it?* The lasting-memory directive is stored under
+`docs/directives/` pointing at it, with the owner's eight decisions in its amendment log. Four
+read-only drafts landed under `docs/working/`: the reuse audit of the RPA/CNCM code at `eb99855`
+(34 requirement rows: 7 reuse unchanged, 16 extend compatibly, 11 unresolved), the memory contract
+v1 (an extension of the Revision Streams contract), the frozen evaluation plan (20 starting
+conditions × 5 fresh processes; measured feasibility ≈ 2.5 h serialized compute, fsync unmeasured),
+and the cross-engine meaning reconciliation (13 conformance fixtures; both engines use an explicit
+polarity boolean, the "negation predicate" is an adapter hazard).
+
+**What changed in code.** `scripts/cas_rpu/history.py`: `Stream` keeps `Organism.consume` as the
+single writer, seals one history document per commit (temp file, fsync, atomic replace, directory
+fsync, read-back verify; previous copies retained, archived beyond a bound, never deleted by code),
+and `restore` replays the rows through a fresh organism, refusing to serve unless the identity
+matches field by field, every recorded outcome replays identically, the rebuilt state's digest
+matches, and the heartbeat audit is silent — validation before the first answer, not at the next
+beat. Bounded limits (events, bytes, retained copies, free space) stop safely and report; nothing is
+discarded. 24 tests, including restarts in fresh operating-system processes compared against the
+recompute control: a taught fact changes a later answer and survives restart without reteaching; a
+retraction or denial in the new process withdraws every dependent and holds after another restart;
+a stale YES never escapes; a tampered document falls back to a verified copy; a broken cascade is
+caught at restore (E-MEM-044). CI runs the file. 417 `cas_rpu` tests, 262 `ccb_r1` tests green.
+
+**Measured (development, this container).** 104 committed rows: commit median 3.6 ms, p95 5.9 ms;
+document 45 KB; restore with replay and reference comparison 16 ms; 2.4 MB written cumulatively.
+
+**Record-first (same day).** `Organism(record_first=True, record_invalidation=...)`: a held YES whose
+record and every root are still assertive is served without a walk; everything else falls back and
+names why. Both of the directive's invalidation modes (whole-context first, dependency as the
+refinement) agree with the oracle on every probe in both worlds, zero faults; the flag never changes
+an answer. Routes at n=80: dependency 11 hits / 170 misses; context 1 hit / 10 rejected (interleaved
+facts invalidate almost every record, as expected). Cost within the organism's own counters: repeat
+asks 10.9 vs 13.7 walk-first. 13 tests, CI-wired; 430 `cas_rpu` tests green. RPA narrowing is not
+implemented, so the "with RPA versus without" comparison cannot run yet.
+
+**Evidence corrections.** The PR 248 body and this log had said the replayer is cheaper per ask;
+the counters are different currencies and are never compared across rows. The unmarked-guess
+ablation is reported as hygiene on this evidence.
+
+**Toward level (b) (same day, owner instruction: dedicated persistent location in the existing AWS
+setup).** `Stream(mirror=...)` mirrors every sealed document to a second location;
+`Stream.restore_from` rebuilds on a machine with none of the local state. Proven offline across three
+fresh processes with each machine's directory destroyed before the next restore. The S3 client
+(`scripts/cas_memory/s3store.py`, Signature V4 over the standard library, never deletes, never leaves
+its prefix; signer matches AWS's published example) lives outside the reasoning package because the
+sever law forbids network reach inside it. The live run is blocked: the sandbox's AWS key is rejected
+by the service (`InvalidAccessKeyId`); the test runs unchanged once a valid key with put/get/list on a
+dedicated prefix is present.
+
+**Record-first with RPA (same day) — measured zero.** `scripts/cas_memory/rpa_adapter.py` projects the
+organism's workspace into an atlas of the RPA model imported from the mounted checkout `eb99855`
+(never copied) and narrows record-first lookups through it; the organism refuses a narrower that adds
+a candidate. Against record-first without RPA: identical verdicts, lacunae, contested keys and routes
+on every probe of both worlds, zero candidates removed, zero faults. The atlas added no measured
+value on this family; reported as zero, kept as the comparison path. The experiment reports the
+path as not run when the checkout is not mounted.
+
+**Not shown, stated.** Level (b) on the real AWS location (blocked on a valid key), any frozen held-out
+result, transfer, cooperation, neural retention. RPA's value over an ordinary record check: measured
+zero on this family.
+
+## The reasoning processor becomes an organism, and gets a task family that can only say what it can say (Oct 6, 2026)
+
+**Headline.** `scripts/cas_rpu` (PR #227) built a processor that reasons natively from CAS
+components — `^8` associates, `^6` decomposes at unity gain, `^9` lands — but every item it
+was tested on is also solved by a breadth-first search, so nothing showed that holding
+beliefs, retracting them, or abstaining with a named gap *did* anything. This work adds the
+layer that was asked for ("turn the organs into an organism: a motivation system, a heartbeat,
+and a harder class of problem where the truth-maintenance and honest-abstention machinery
+actually earns its keep") and corrects the question before answering it: ground truth over a
+finite event stream is a function of the stream, so a two-set replayer with no truth
+maintenance is correct on every probe by construction. **No item in this family can show that
+truth maintenance is necessary or superior.** What it establishes is a convergence contract
+(the organism agrees with recompute-from-scratch on every probe, both worlds, zero heartbeat
+faults), a diagnostic suite (each ablation fails inside the class built to catch it and
+nowhere else), and a cost column reported as measured. The permitted wording is fixed in
+`docs/working/revision_streams_contract_2026_10_06.md` §0 before any number is printed.
+
+**What changed.**
+
+- `scripts/cas_rpu/events.py` — the five event kinds (FACT, HYPOTHESIS, NEGATION, RETRACT,
+  ASK); the shared contract between organism, generator, encoder and oracle.
+- `scripts/cas_rpu/encoder.py` — the English boundary: a closed grammar of five productions,
+  total rejection outside it (`E-ENC-001..008`), exact inverse. This is what "it doesn't read
+  English yet; problems arrive already encoded" means, made checkable: every semantic decision
+  made before the reasoner sees anything is listed, so none can be credited to the reasoner.
+- `scripts/cas_rpu/organism.py` — one workspace, one memory, one processor, a motivation and
+  a heartbeat; `consume(event)`. Holds conclusions across episodes, withdraws them when support
+  dies, refuses to forget a derivation (`E-ORG-001`) or a guess (`E-ORG-002`), audits every
+  standing conclusion every beat (`E-ORG-003`). Motivation moves at low gain (`E-ORG-004`) and
+  is tested to change what is asked and never what is answered.
+- `scripts/cas_rpu/revision.py` — the Revision Streams family: four classes (R retraction, H
+  hypothesis, C contradiction, N lacuna), sixteen variants, a pair-space oracle with no CAS in
+  it, fingerprinted sets with ground truth computed never passed in (`E-RS-005`), a fairness
+  guard against the bank's route bounds (`E-RS-006`), a 60% balance ceiling (`E-RS-007`), paired
+  open/closed worlds byte-identical in events.
+- `scripts/cas_rpu/controls.py` — one replayer with eight rule flags; `ctl_recompute` is the
+  headline at 100% by construction and nine controls are each that class with exactly one flag
+  flipped (introspected).
+- `scripts/cas_rpu/ablations.py` — seven workspace subclasses, each removing one rule, each
+  tested against the base on the same micro-stream.
+- `scripts/cas_rpu/scoring.py`, `revision_experiment.py` — per-probe scoring with the
+  contract's bounds; the runner prints fingerprints first and turns the §0 claims into
+  `--check`, which CI runs at n=80.
+- Seven defects fixed in the live code on the way, each with a test: a refuted hypothesis
+  overwriting a contradicted record; a re-guess outranking evidence; a held conclusion
+  re-derived from itself; a contradiction anywhere refusing every question (now local to the
+  route); `^8` re-triggering on its own guesses; a given denial behind an associative partial
+  route answered "I do not know" instead of NO; a disputed link reported as a gap to acquire.
+
+**Measured** (n=40, seed 20261006, fingerprints `e8d18e66…` open / `ccc1f5c8…` closed, 89
+probes per world): organism 100% on every column in both worlds, 0 faults; `ctl_recompute`
+100%; each ablation fails only inside its class (R 84%, H 68%, C 77% and 91% verdicts for the
+four mechanism ablations; `abl_amnesic_ask` loses only the `named` column; `abl_fixed_world`
+is perfect open and wrong on exactly the closure probes closed); the heartbeat audit raised 8
+and 18 faults on the two broken-cascade ablations. The unmarked-guess ablation changed no
+scored cell on this family: on this evidence the stage mark is hygiene, not correctness. Cost:
+the two work counters are different currencies (a control counts adjacency entries expanded
+plus pairs filtered; an organism counts `Workspace.ask` calls plus propositions scanned) and
+are never compared across rows. Within its own row the organism's repeat asks are not cheaper
+than its first, because `^8` walks every live proposition before a standing conclusion can be
+hit directly.
+
+**Process.** The design was adversarially reviewed by three proposals and six attacks; the
+judge stage was interrupted, so a read-only cross-check of the hand-written contract followed
+(11 contradictions, 11 gaps, 11 overclaims) and §12 of the contract records every amendment.
+Three modules were written by agents in isolated worktrees against the pinned contract, with
+disjoint file ownership, and reviewed in full before landing. The organism and the oracle were
+written independently, and the controls are a third independent implementation of the same
+contract; all three agree on every generated probe.
+
+**Tests.** 393 `cas_rpu` tests, 262 `ccb_r1` tests, demo, experiment `--check`: all green.
+
+**Not shown, stated.** Open-English encoding, recipe coefficients beyond the three shipped,
+register-aware banks (see the results note's Next).
+
 ## Public dashboard API moved from Render to AWS App Runner (Sep 26, 2026)
 
 **Headline.** `https://noeticcompass.com/login` was broken for every visitor. The page

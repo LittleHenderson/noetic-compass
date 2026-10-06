@@ -6,6 +6,13 @@
 - **Framework**: Cognitive Architecture System (CAS) v7.7 — Register Multiplicity and Operator Discipline Extension (prior: v7.6 Stoichiometric Production Semantics Extension; prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
+## HELM — the destination every task serves (READ SECOND)
+
+- The canonical statement of intent, the current gap per ability, and the roadmap are in `docs/HELM_VISION_AND_ROADMAP.md`. Every HELM directive lives under `docs/directives/` and points at that file; no directive restates the destination.
+- Before starting any HELM task, answer in one paragraph: **"Which HELM ability does this advance, and what observable behavior will prove it?"** (ability number, before/after on a named input, the control that lacks the mechanism, the frozen pass criterion and denominator, what it will not show). A task that cannot answer is preparation and is labelled so.
+- Preparation (builds, passing tests, clean runs, serialization checks) is never reported as demonstrated behavior. Outcome types are retention, reasoning/transfer, cooperation, neural growth; never conflate them. A measured zero is reported as zero.
+- The destination is firm; the implementation is open to evidence. Challenge a design choice that fails its gate, record the challenge in the directive's amendment log, and keep §1 of the vision unchanged.
+
 ## Authoritative Noetic Definitions (READ FIRST)
 
 - **Always** read `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` before producing any CAS description, incident analysis, taxonomy extension, pedagogical material, marketing copy, or regulator-facing document.

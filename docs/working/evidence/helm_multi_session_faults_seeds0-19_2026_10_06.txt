@@ -1,0 +1,89 @@
+== multi-session evaluation — open world — 20 seed(s) × 5 session(s), 20 twin(s); fingerprint 9e0d35b0026ddfe3…
+-- walk: verdict 1597/1597 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000); UNANSWERED 43
+   contested  97/97
+   named      621/621
+   withdrawn  392/392
+   retention probes (cross-session designed): 176/176 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 18/18 correct, record hits 0 (must be 0); T-exact: 18/18 correct, record hits 0
+   routes {'disabled': 1597}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 176.6, repeat-ask mean 205.5
+   commit ms p50 9.09 p95 15.72; restore ms p50 39.1 max 114.6; process start ms p50 32.2; session wall ms p50 912; max RSS 41 MB; largest store 32700 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-both       1/1 passed
+   fault corrupt-current    1/1 passed
+   fault quota              1/1 passed
+   fault recovery           9/9 passed
+   fault recovery-probe     162/162 passed
+   fault redeliver          2/2 passed
+   fault redeliver-restart  2/2 passed
+   fault schema-bump        1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+   STOPPED seed10: E-MEM-046: E-MEM-046: history.00000270.json is the newest document that verifies and ends at seq 269, but the host holds acknowledgments through seq 270: rows 270..270 are lost; serving stops (history.current.json: Expecting value: line 1 column 1 (char 0); history.00000271.json: 'utf-8' codec can't decode byte 0xde in position 0: invalid continuation byte)
+   STOPPED seed11: E-MEM-010: E-MEM-010: schema 'helm.memory/99.0' is not helm.memory/1.0
+-- record_dep: verdict 1597/1597 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000); UNANSWERED 43
+   contested  97/97
+   named      621/621
+   withdrawn  392/392
+   retention probes (cross-session designed): 176/176 correct; served from the record 38; STALE HITS 0
+   transfer T-compose: 18/18 correct, record hits 0 (must be 0); T-exact: 18/18 correct, record hits 18
+   routes {'hit': 165, 'miss': 1432}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 176.6, repeat-ask mean 145.5
+   commit ms p50 8.54 p95 15.18; restore ms p50 40.3 max 111.6; process start ms p50 30.3; session wall ms p50 892; max RSS 57 MB; largest store 32644 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-both       1/1 passed
+   fault corrupt-current    1/1 passed
+   fault quota              1/1 passed
+   fault recovery           9/9 passed
+   fault recovery-probe     162/162 passed
+   fault redeliver          2/2 passed
+   fault redeliver-restart  2/2 passed
+   fault schema-bump        1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+   STOPPED seed10: E-MEM-046: E-MEM-046: history.00000270.json is the newest document that verifies and ends at seq 269, but the host holds acknowledgments through seq 270: rows 270..270 are lost; serving stops (history.current.json: Expecting value: line 1 column 1 (char 0); history.00000271.json: 'utf-8' codec can't decode byte 0xde in position 0: invalid continuation byte)
+   STOPPED seed11: E-MEM-010: E-MEM-010: schema 'helm.memory/99.0' is not helm.memory/1.0
+== multi-session evaluation — closed world — 20 seed(s) × 5 session(s), 20 twin(s); fingerprint deae82a05c8af2e0…
+-- walk: verdict 1597/1597 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000); UNANSWERED 43
+   contested  97/97
+   withdrawn  392/392
+   retention probes (cross-session designed): 176/176 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 18/18 correct, record hits 0 (must be 0); T-exact: 18/18 correct, record hits 0
+   routes {'disabled': 1597}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 176.6, repeat-ask mean 205.6
+   commit ms p50 8.08 p95 14.65; restore ms p50 37.5 max 92.1; process start ms p50 28.4; session wall ms p50 786; max RSS 76 MB; largest store 32582 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-both       1/1 passed
+   fault corrupt-current    1/1 passed
+   fault quota              1/1 passed
+   fault recovery           9/9 passed
+   fault recovery-probe     162/162 passed
+   fault redeliver          2/2 passed
+   fault redeliver-restart  2/2 passed
+   fault schema-bump        1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+   STOPPED seed10: E-MEM-046: E-MEM-046: history.00000270.json is the newest document that verifies and ends at seq 269, but the host holds acknowledgments through seq 270: rows 270..270 are lost; serving stops (history.current.json: Expecting value: line 1 column 1 (char 0); history.00000271.json: 'utf-8' codec can't decode byte 0xde in position 0: invalid continuation byte)
+   STOPPED seed11: E-MEM-010: E-MEM-010: schema 'helm.memory/99.0' is not helm.memory/1.0
+-- record_dep: verdict 1597/1597 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000); UNANSWERED 43
+   contested  97/97
+   withdrawn  392/392
+   retention probes (cross-session designed): 176/176 correct; served from the record 38; STALE HITS 0
+   transfer T-compose: 18/18 correct, record hits 0 (must be 0); T-exact: 18/18 correct, record hits 18
+   routes {'hit': 165, 'miss': 1432}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 176.6, repeat-ask mean 145.7
+   commit ms p50 8.12 p95 15.31; restore ms p50 38.6 max 97.9; process start ms p50 29.2; session wall ms p50 807; max RSS 92 MB; largest store 32525 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-both       1/1 passed
+   fault corrupt-current    1/1 passed
+   fault quota              1/1 passed
+   fault recovery           9/9 passed
+   fault recovery-probe     162/162 passed
+   fault redeliver          2/2 passed
+   fault redeliver-restart  2/2 passed
+   fault schema-bump        1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+   STOPPED seed10: E-MEM-046: E-MEM-046: history.00000270.json is the newest document that verifies and ends at seq 269, but the host holds acknowledgments through seq 270: rows 270..270 are lost; serving stops (history.current.json: Expecting value: line 1 column 1 (char 0); history.00000271.json: 'utf-8' codec can't decode byte 0xde in position 0: invalid continuation byte)
+   STOPPED seed11: E-MEM-010: E-MEM-010: schema 'helm.memory/99.0' is not helm.memory/1.0
+store root: /tmp/claude-0/-home-user-noetic-compass/4652e0be-62b1-5750-bfe9-72e332eb76a9/scratchpad/runs/faults

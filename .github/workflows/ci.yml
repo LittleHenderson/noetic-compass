@@ -18,7 +18,10 @@ jobs:
   blueprint_control:
     name: Render Blueprint control (offline)
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # This job also runs every cas_rpu / ccb_r1 suite; it took 246-267 s before the
+    # session-generator, lesson and bundle-checker suites were added and now needs
+    # more than the 5 minutes it had (the gate failed at exactly 5:00 on 2026-10-06).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
 
@@ -139,6 +142,105 @@ jobs:
 
       - name: Run the CAS reasoning processor end to end (no model, no network)
         run: python scripts/cas_rpu/demo.py
+
+      - name: Run the CAS organism tests (persistent session, motivation, heartbeat)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_organism.py'
+
+      - name: Run the controlled-English encoder tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_encoder.py'
+
+      - name: Run the Revision Streams oracle and generator tests (pinned fingerprints)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_revision.py'
+
+      - name: Run the Revision Streams control tests (the oracle minus one rule)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_controls.py'
+
+      - name: Run the Revision Streams ablation tests (the workspace minus one rule)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_ablations.py'
+
+      - name: Run the Revision Streams scoring tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_scoring.py'
+
+      - name: Run the Revision Streams experiment and enforce the contract checks
+        run: python scripts/cas_rpu/revision_experiment.py --check --n 80 --quiet
+
+      - name: Run the lasting-memory tests (save, fresh-process restore, retract across restart; level a)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_memory.py'
+
+      - name: Run the record-first tests (a held YES served without a walk, never a stale one)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_record_first.py'
+
+      - name: Run the replacement-machine tests (restore from the second location after the machine is destroyed; live S3 skips without a key)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_replacement.py'
+
+      - name: Run the continuation-bundle checker tests (neural-learning plan v1 preparation tooling; byte-level, no model)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_helm_neural_bundle_check.py'
+
+      - name: Run the session-generator tests (multi-session streams, class L, registered fingerprints)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_sessions.py'
+
+      - name: "Run the lesson tests (contract section 13 - a told, retractable rule the organism could not apply before)"
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_lessons.py'
+
+      - name: Run the multi-session harness tests (one fresh process per session; fault schedule; replacement mechanism)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_session_harness.py'
+
+      - name: Mount the pinned RPA commit read-only (eb99855 of codex/helm-rpa-recorded-run-20260922)
+        run: |
+          # The RPA path is a comparison column; its tests must RUN in CI, not skip.
+          # The commit lives in this repository, so it is fetched by hash and checked
+          # out into the path rpa_adapter.DEFAULT_ROOT expects. The adapter refuses
+          # any content whose digests differ from the pinned files.
+          git fetch --depth 1 origin eb9985566bd11a89f485d627186ef0efa7177f02
+          git worktree add --detach .claude/worktrees/rpa-readonly eb9985566bd11a89f485d627186ef0efa7177f02
+          chmod -R a-w .claude/worktrees/rpa-readonly || true
+
+      - name: Run the RPA-routing tests (the pinned checkout is mounted, so a skip is a failure)
+        env:
+          CAS_RPA_REQUIRED: "1"
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_rpa_routing.py'
 
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |

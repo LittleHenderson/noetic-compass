@@ -367,11 +367,19 @@ python -m unittest discover -s scripts/tests -p 'test_cas_rpu_*.py'
 
 ## Next
 
-1. **A task family where structure earns its keep.** The honest gap above.
-   Reachability is solved by BFS; find the problems where truth maintenance,
-   retraction, and typed abstention are load-bearing, and control against a
-   solver that lacks them.
-2. **Encoder and decoder peripherals**, with the strict boundary stated above.
+1. ~~**A task family where structure earns its keep.**~~ Done, with a
+   correction to the question: `docs/working/cas_rpu_revision_streams_2026_10_06.md`.
+   The honest gap above turned out to be unclosable on correctness — ground
+   truth over a finite event stream is a function of the stream, so a replayer
+   with no truth maintenance is always right — and the family was built to
+   establish what *can* be established: that an organism which holds, reuses
+   and un-holds conclusions converges with recompute-from-scratch on every
+   probe, that each mechanism's removal fails a named class and nothing else,
+   and what each costs. The contract (`revision_streams_contract_2026_10_06.md`
+   §0) fixes the permitted wording.
+2. ~~**Encoder and decoder peripherals**, with the strict boundary stated above.~~
+   Done for a closed grammar of five productions (`encoder.py`); open English
+   is a different project, see the 2026-10-06 note §3.
 3. **Recipe coefficients for outcomes beyond the three shipped**, and a
    `Consequence` computed by the processor rather than supplied to it.
 4. **Register-aware banks.** The banks currently run analytically (`|A`). `|T`,

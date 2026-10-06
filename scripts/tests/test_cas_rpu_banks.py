@@ -31,7 +31,7 @@ from banks import (  # noqa: E402
     HypothesisBank,
     InferenceBank,
 )
-from workspace import Workspace  # noqa: E402
+from workspace import Status, Workspace  # noqa: E402
 
 
 def graph(*edges, closed=False, relation="leads_to"):
@@ -159,6 +159,68 @@ class DecompositionTests(unittest.TestCase):
         self.assertIs(result.reading.region, Region.CUTOFF)
         self.assertFalse(result.complete)
         self.assertEqual(result.present, ())
+
+
+class LivingWorkspaceBankTests(unittest.TestCase):
+    """Behaviours a bank needs once the workspace outlives one episode."""
+
+    def test_a_direct_premise_is_answered_without_deriving_itself(self):
+        """Asking about a fact you already hold used to raise E-WS-003
+        (self-support). A living workspace is asked that constantly."""
+        ws = graph(("VS", "QS"))
+        candidate = Candidate("c", ("VS", "QS"), "leads_to")
+        result = InferenceBank().land(ws, DecompositionBank().decompose(ws, candidate))
+        self.assertEqual(result.verdict, "YES")
+        self.assertIs(result.conclusion.status, Status.FACT)
+        self.assertIn("direct hit", result.note)
+
+    def test_a_standing_conclusion_is_answered_from_the_record(self):
+        ws = graph(("VS", "QS"), ("QS", "IU"))
+        ws.derive("VS", "leads_to", "IU", ("VS|leads_to|QS", "QS|leads_to|IU"))
+        candidate = Candidate("c", ("VS", "QS", "IU"), "leads_to")
+        result = InferenceBank().land(ws, DecompositionBank().decompose(ws, candidate))
+        self.assertEqual(result.verdict, "YES")
+        self.assertIs(result.conclusion.status, Status.DERIVED)
+        self.assertIn("already held", result.note)
+
+    def test_association_walks_contested_links_so_decomposition_can_name_them(self):
+        ws = graph(("VS", "QS"), ("QS", "IU"))
+        ws.fact("QS", "leads_to", "IU", negated=True)
+        candidates, _ = HypothesisBank().surface(ws, "VS", "IU", "leads_to")
+        self.assertEqual([str(c) for c in candidates], ["VS -> QS -> IU"])
+
+    def test_association_walks_stream_hypotheses_but_not_its_own_route_guesses(self):
+        ws = graph(("VS", "QS"))
+        ws.hypothesize("QS", "leads_to", "IU", stage="stream")
+        ws.hypothesize("VS", "leads_to", "IU", stage="^8")   # a prior guess of its own
+        candidates, _ = HypothesisBank().surface(ws, "VS", "IU", "leads_to")
+        self.assertEqual([str(c) for c in candidates], ["VS -> QS -> IU"])
+
+    def test_association_does_not_walk_negations(self):
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "IU", negated=True)
+        candidates, _ = HypothesisBank().surface(ws, "VS", "IU", "leads_to")
+        self.assertEqual(candidates, [])
+
+    def test_decomposition_reports_contested_separately_from_missing(self):
+        ws = graph(("VS", "QS"))
+        ws.fact("QS", "leads_to", "IU")
+        ws.fact("QS", "leads_to", "IU", negated=True)
+        result = DecompositionBank().decompose(
+            ws, Candidate("c", ("VS", "QS", "IU", "TR"), "leads_to")
+        )
+        self.assertEqual(result.missing, ("QS|leads_to|IU", "IU|leads_to|TR"))
+        self.assertEqual(result.contested, ("QS|leads_to|IU",))
+        self.assertFalse(result.blocked_only_by_dispute)
+
+    def test_a_route_blocked_only_by_dispute_says_so(self):
+        ws = graph(("VS", "QS"))
+        ws.fact("QS", "leads_to", "IU")
+        ws.fact("QS", "leads_to", "IU", negated=True)
+        result = DecompositionBank().decompose(
+            ws, Candidate("c", ("VS", "QS", "IU"), "leads_to")
+        )
+        self.assertTrue(result.blocked_only_by_dispute)
 
 
 class InferenceTests(unittest.TestCase):

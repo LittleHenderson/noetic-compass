@@ -1,0 +1,83 @@
+== multi-session evaluation — open world — 20 seed(s) × 5 session(s), 20 twin(s); fingerprint a57f4b94a9ea81d1…
+-- recompute: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   named      1560/1560
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 0
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'recompute': 3280}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 11.5, repeat-ask mean 14.3
+-- walk: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   named      1560/1560
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 0
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'disabled': 3280}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 202.8
+   commit ms p50 8.69 p95 15.71; restore ms p50 44.0 max 110.3; process start ms p50 32.9; session wall ms p50 887; max RSS 63 MB; largest store 32744 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+-- record_dep: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   named      1560/1560
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 40; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 20
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'hit': 279, 'miss': 3001}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 158.2
+   commit ms p50 8.37 p95 14.78; restore ms p50 43.7 max 115.2; process start ms p50 34.5; session wall ms p50 829; max RSS 96 MB; largest store 32687 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+-- record_rpa: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   named      1560/1560
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 40; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 20
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'hit': 239, 'miss': 3001, 'rejected': 40}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 165.9
+   commit ms p50 8.47 p95 16.43; restore ms p50 82.2 max 405.6; process start ms p50 206.3; session wall ms p50 1185; max RSS 128 MB; largest store 32690 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+== multi-session evaluation — closed world — 20 seed(s) × 5 session(s), 20 twin(s); fingerprint 35ddd5f82ad00854…
+-- recompute: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 0
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'recompute': 3280}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 1.6, repeat-ask mean 2.2
+-- walk: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 0
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'disabled': 3280}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 203.0
+   commit ms p50 8.27 p95 15.03; restore ms p50 38.9 max 103.6; process start ms p50 29.2; session wall ms p50 844; max RSS 169 MB; largest store 32583 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+-- record_dep: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 40; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 20
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'hit': 279, 'miss': 3001}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 158.3
+   commit ms p50 8.51 p95 15.58; restore ms p50 37.5 max 103.4; process start ms p50 31.6; session wall ms p50 856; max RSS 201 MB; largest store 32525 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+-- record_rpa: verdict 3280/3280 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  200/200
+   withdrawn  800/800
+   retention probes (cross-session designed): 180/180 correct; served from the record 40; STALE HITS 0
+   transfer T-compose: 20/20 correct, record hits 0 (must be 0); T-exact: 20/20 correct, record hits 20
+   untaught twins, designed probes: 540/540 GAP as expected
+   routes {'hit': 239, 'miss': 3001, 'rejected': 40}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 178.4, repeat-ask mean 166.1
+   commit ms p50 8.51 p95 16.84; restore ms p50 87.1 max 567.3; process start ms p50 209.5; session wall ms p50 1142; max RSS 233 MB; largest store 32529 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+store root: /tmp/claude-0/-home-user-noetic-compass/4652e0be-62b1-5750-bfe9-72e332eb76a9/scratchpad/runs/heldout
