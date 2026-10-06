@@ -157,6 +157,11 @@ class ItemScore:
         return all(p.verdict_ok for p in self.probes)
 
 
+def _verdict(value: Any) -> str:
+    """Plain string for a verdict given as a string or as a `str`-Enum member."""
+    return str(getattr(value, "value", value))
+
+
 def _bounded(required: Iterable[str], reported: Iterable[str], admissible: Iterable[str]) -> tuple[bool, str]:
     req, rep, adm = set(required), set(reported), set(admissible)
     missing = sorted(req - rep)
@@ -198,20 +203,23 @@ def score_item(
                 f"{item.item_id}: probe at event {probe.event_index} scored against expectation "
                 f"at event {exp.event_index}",
             )
-        if probe.verdict not in VERDICTS:
+        got, expected = _verdict(probe.verdict), _verdict(exp.verdict)
+        if got not in VERDICTS:
             raise ScoringError("E-SC-002", f"{item.item_id}: unknown verdict {probe.verdict!r}")
-        verdict_ok = probe.verdict == exp.verdict
+        if expected not in VERDICTS:
+            raise ScoringError("E-SC-002", f"{item.item_id}: unknown expected verdict {exp.verdict!r}")
+        verdict_ok = got == expected
         contested_ok: bool | None = None
         named_ok: bool | None = None
         detail = ""
         # The two naming columns measure the quality of a right answer's
         # explanation. A wrong verdict is already a miss in the verdict column
         # and is not counted twice here.
-        if exp.verdict == INADMISSIBLE and verdict_ok:
+        if expected == INADMISSIBLE and verdict_ok:
             contested_ok = set(probe.contested) == set(exp.contested_required)
             if not contested_ok:
                 detail = f"contested {sorted(probe.contested)} != {sorted(exp.contested_required)}"
-        if exp.verdict == UNKNOWN and not closed and verdict_ok:
+        if expected == UNKNOWN and not closed and verdict_ok:
             named_ok, why = _bounded(exp.lacunae_required, probe.lacunae, exp.lacunae_admissible)
             if not named_ok:
                 detail = (detail + "; " if detail else "") + why
@@ -223,8 +231,8 @@ def score_item(
                 closed_world=closed,
                 event_index=probe.event_index,
                 designed=(designed_index == probe.event_index),
-                expected=exp.verdict,
-                got=probe.verdict,
+                expected=expected,
+                got=got,
                 verdict_ok=verdict_ok,
                 contested_ok=contested_ok,
                 named_ok=named_ok,
