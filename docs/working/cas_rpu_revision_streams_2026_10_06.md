@@ -126,12 +126,23 @@ The organism's three new organs, in the words of the request that asked for them
 Fingerprints (n=40, seed 20261006, `h3-d4-p1`, pinned in `test_cas_rpu_revision.py`):
 
 ```
-open    PENDING
-closed  PENDING
+open    e8d18e66139859c06fa1656ed9204ceb895504c6023187408aa3637570aae341
+closed  ccc1f5c80d22b9cc600921bbfc24954f5af5e00647b6d963e5e45247f4639bc3
 ```
 
-Per-class probe balance, open world: PENDING. No verdict exceeds the 60%
-ceiling in any class (`E-RS-007`, judged in integers).
+Forty items, ten per class, five diagnostic and five control each, all
+sixteen variants present; 89 probes per world. Per-class probe balance, open
+world (closed is identical with UNKNOWN→NO):
+
+| class | mix |
+|---|---|
+| R | YES 56%, UNKNOWN 44% |
+| H | UNKNOWN 55%, YES 45% |
+| C | YES 55%, INADMISSIBLE 23%, UNKNOWN 23% |
+| N | YES 50%, UNKNOWN 50% |
+
+No verdict exceeds the 60% ceiling in any class (`E-RS-007`, judged in
+integers). The generator also passes `--check` at n=80, which CI runs.
 
 ### 5.1 Convergence
 
@@ -141,7 +152,60 @@ faults. `--check` fails if it does not.
 
 ### 5.2 The matrix (open world; % of probes correct; — = not scored)
 
-PENDING: the table printed by `revision_experiment.py`, reproduced verbatim.
+Printed by `revision_experiment.py`, reproduced verbatim. The closed-world
+table has the same cells except that every `named` column is unscored and
+`abl_fixed_world` falls to 56.0 / 45.5 / 77.3 / 50.0 on R / H / C / N verdicts.
+
+```
+open world — % of probes correct per class and column (— = not scored)
+solver                       R:verdict R:contested  R:named R:withdrawn H:verdict H:contested  H:named H:withdrawn C:verdict C:contested  C:named C:withdrawn N:verdict N:contested  N:named N:withdrawn  work/ask
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ctl_recompute                    100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —         2.4
+ctl_order_blind                   76.0         —      100.0        70.0     100.0         —       83.3       100.0      90.9       100.0    100.0        80.0     100.0         —      100.0         —         2.4
+ctl_no_forget                     56.0         —        —          70.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —         2.4
+ctl_credulous                    100.0         —      100.0       100.0      68.2         —      100.0         0.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —         2.4
+ctl_last_writer                  100.0         —      100.0       100.0     100.0         —      100.0       100.0      77.3         —      100.0       100.0     100.0         —      100.0         —         2.3
+ctl_global_poison                100.0         —      100.0       100.0     100.0         —      100.0       100.0      40.9       100.0      —          80.0     100.0         —      100.0         —         1.9
+ctl_mute                         100.0         —       27.3       100.0     100.0         —       58.3       100.0     100.0       100.0    100.0       100.0     100.0         —       50.0         —         1.8
+ctl_fixed_world                  100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —         2.4
+ctl_memo                          76.0         —      100.0        70.0     100.0         —       83.3       100.0      90.9       100.0    100.0        80.0     100.0         —      100.0         —         2.1
+ctl_memo_flush                   100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —         2.4
+organism                         100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —        12.9
+abl_nontransitive_retract         84.0         —      100.0        70.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —        12.8
+abl_no_firewall                  100.0         —      100.0       100.0      68.2         —      100.0         0.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —        12.9
+abl_last_writer_add              100.0         —      100.0       100.0     100.0         —      100.0       100.0      77.3         —      100.0       100.0     100.0         —      100.0         —        12.9
+abl_no_cascade                   100.0         —      100.0       100.0     100.0         —      100.0       100.0      90.9       100.0    100.0        80.0     100.0         —      100.0         —        12.8
+abl_amnesic_ask                  100.0         —       27.3       100.0     100.0         —       58.3       100.0     100.0       100.0    100.0       100.0     100.0         —       50.0         —        12.9
+abl_fixed_world                  100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —        12.9
+abl_no_sweep                     100.0         —      100.0       100.0     100.0         —      100.0       100.0     100.0       100.0    100.0       100.0     100.0         —      100.0         —        12.9
+```
+
+Per variant (open world, verdict column), which is where "fails exactly" claims
+are read off rather than asserted:
+
+```
+per-variant verdict %
+solver                          C-blocked   C-bypassed      C-stale  C-unrelated     H-bridge    H-confirm    H-control     H-refute N-actionable    N-control        N-gap    R-control       R-deep     R-revive     R-simple      R-stale
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ctl_recompute                       100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_order_blind                     100.0        100.0         50.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0         50.0         50.0        100.0         50.0
+ctl_no_forget                       100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0         66.7         50.0         50.0         50.0         50.0
+ctl_credulous                       100.0        100.0        100.0        100.0         50.0        100.0        100.0         33.3        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_last_writer                      50.0        100.0         50.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_global_poison                    50.0          0.0        100.0         33.3        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_mute                            100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_fixed_world                     100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+ctl_memo                            100.0        100.0         50.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0         50.0         50.0        100.0         50.0
+ctl_memo_flush                      100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+organism                            100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_nontransitive_retract           100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0         50.0        100.0        100.0         50.0
+abl_no_firewall                     100.0        100.0        100.0        100.0         50.0        100.0        100.0         33.3        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_last_writer_add                  50.0        100.0         50.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_no_cascade                      100.0        100.0         50.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_amnesic_ask                     100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_fixed_world                     100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+abl_no_sweep                        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0        100.0
+```
 
 Reading it: `ctl_recompute` and `ctl_memo_flush` are 100% everywhere by
 construction. Each broken control fails in the class whose rule it lacks and
@@ -152,8 +216,9 @@ expose: retraction without cascade fails inside R; a told guess filed as a
 given fails inside H; last-writer-wins and no-dispute-cascade fail inside C;
 an amnesic `ask` loses the `named` column and nothing else; a fixed world is
 perfect on the open set and wrong on exactly the closure probes of the closed
-set. The audit raised PENDING faults for `abl_no_cascade` and PENDING for
-`abl_nontransitive_retract`, and none for the organism.
+set. The audit raised 8 faults for `abl_no_cascade` and 18 for
+`abl_nontransitive_retract` (open world), and none for the organism or for any
+other ablation.
 
 ### 5.3 What the unmarked-guess ablation showed
 
@@ -167,9 +232,35 @@ it. Reported, not claimed.
 
 ### 5.4 Cost
 
-PENDING: the cost table. Two currencies: a control counts adjacency entries
-expanded plus pairs filtered; an organism counts `Workspace.ask` calls plus
-propositions scanned by `^8`. They are not compared across rows. Within rows,
+```
+work per ask, both worlds pooled (design measurement, not one currency: a control counts
+adjacency entries expanded + pairs filtered; an organism counts Workspace.ask calls +
+propositions scanned by ^8. Compare a solver with itself as the stream grows, not across rows.)
+solver                         first ask  repeat ask  n first n repeat
+----------------------------------------------------------------------
+ctl_recompute                        2.0         2.6      148       30
+ctl_order_blind                      2.0         2.6      148       30
+ctl_no_forget                        2.1         2.8      148       30
+ctl_credulous                        2.1         3.0      148       30
+ctl_last_writer                      1.9         2.2      148       30
+ctl_global_poison                    1.6         1.8      148       30
+ctl_mute                             1.7         2.3      148       30
+ctl_fixed_world                      2.3         3.0      148       30
+ctl_memo                             2.0         1.0      148       30
+ctl_memo_flush                       2.0         2.6      148       30
+organism                            12.7        13.7      148       30
+abl_nontransitive_retract           12.7        13.2      148       30
+abl_no_firewall                     12.7        13.7      148       30
+abl_last_writer_add                 12.7        13.7      148       30
+abl_no_cascade                      12.7        13.4      148       30
+abl_amnesic_ask                     12.7        13.8      148       30
+abl_fixed_world                     12.7        13.5      148       30
+abl_no_sweep                        12.7        13.9      148       30
+```
+
+Two currencies: a control counts adjacency entries expanded plus pairs
+filtered; an organism counts `Workspace.ask` calls plus propositions scanned
+by `^8`. They are not compared across rows. Within rows,
 on this family, the organism's repeat asks are not cheaper than its first asks,
 because `HypothesisBank.surface` walks every live proposition on every ask
 before a standing conclusion can be hit directly. The replayer's cost grows

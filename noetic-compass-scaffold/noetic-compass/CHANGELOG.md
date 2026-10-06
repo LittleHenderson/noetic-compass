@@ -1,5 +1,77 @@
 # Noetic Compass — Progress Log
 
+## The reasoning processor becomes an organism, and gets a task family that can only say what it can say (Oct 6, 2026)
+
+**Headline.** `scripts/cas_rpu` (PR #227) built a processor that reasons natively from CAS
+components — `^8` associates, `^6` decomposes at unity gain, `^9` lands — but every item it
+was tested on is also solved by a breadth-first search, so nothing showed that holding
+beliefs, retracting them, or abstaining with a named gap *did* anything. This work adds the
+layer that was asked for ("turn the organs into an organism: a motivation system, a heartbeat,
+and a harder class of problem where the truth-maintenance and honest-abstention machinery
+actually earns its keep") and corrects the question before answering it: ground truth over a
+finite event stream is a function of the stream, so a two-set replayer with no truth
+maintenance is correct on every probe by construction. **No item in this family can show that
+truth maintenance is necessary or superior.** What it establishes is a convergence contract
+(the organism agrees with recompute-from-scratch on every probe, both worlds, zero heartbeat
+faults), a diagnostic suite (each ablation fails inside the class built to catch it and
+nowhere else), and a cost column reported as measured. The permitted wording is fixed in
+`docs/working/revision_streams_contract_2026_10_06.md` §0 before any number is printed.
+
+**What changed.**
+
+- `scripts/cas_rpu/events.py` — the five event kinds (FACT, HYPOTHESIS, NEGATION, RETRACT,
+  ASK); the shared contract between organism, generator, encoder and oracle.
+- `scripts/cas_rpu/encoder.py` — the English boundary: a closed grammar of five productions,
+  total rejection outside it (`E-ENC-001..008`), exact inverse. This is what "it doesn't read
+  English yet; problems arrive already encoded" means, made checkable: every semantic decision
+  made before the reasoner sees anything is listed, so none can be credited to the reasoner.
+- `scripts/cas_rpu/organism.py` — one workspace, one memory, one processor, a motivation and
+  a heartbeat; `consume(event)`. Holds conclusions across episodes, withdraws them when support
+  dies, refuses to forget a derivation (`E-ORG-001`) or a guess (`E-ORG-002`), audits every
+  standing conclusion every beat (`E-ORG-003`). Motivation moves at low gain (`E-ORG-004`) and
+  is tested to change what is asked and never what is answered.
+- `scripts/cas_rpu/revision.py` — the Revision Streams family: four classes (R retraction, H
+  hypothesis, C contradiction, N lacuna), sixteen variants, a pair-space oracle with no CAS in
+  it, fingerprinted sets with ground truth computed never passed in (`E-RS-005`), a fairness
+  guard against the bank's route bounds (`E-RS-006`), a 60% balance ceiling (`E-RS-007`), paired
+  open/closed worlds byte-identical in events.
+- `scripts/cas_rpu/controls.py` — one replayer with eight rule flags; `ctl_recompute` is the
+  headline at 100% by construction and nine controls are each that class with exactly one flag
+  flipped (introspected).
+- `scripts/cas_rpu/ablations.py` — seven workspace subclasses, each removing one rule, each
+  tested against the base on the same micro-stream.
+- `scripts/cas_rpu/scoring.py`, `revision_experiment.py` — per-probe scoring with the
+  contract's bounds; the runner prints fingerprints first and turns the §0 claims into
+  `--check`, which CI runs at n=80.
+- Seven defects fixed in the live code on the way, each with a test: a refuted hypothesis
+  overwriting a contradicted record; a re-guess outranking evidence; a held conclusion
+  re-derived from itself; a contradiction anywhere refusing every question (now local to the
+  route); `^8` re-triggering on its own guesses; a given denial behind an associative partial
+  route answered "I do not know" instead of NO; a disputed link reported as a gap to acquire.
+
+**Measured** (n=40, seed 20261006, fingerprints `e8d18e66…` open / `ccc1f5c8…` closed, 89
+probes per world): organism 100% on every column in both worlds, 0 faults; `ctl_recompute`
+100%; each ablation fails only inside its class (R 84%, H 68%, C 77% and 91% verdicts for the
+four mechanism ablations; `abl_amnesic_ask` loses only the `named` column; `abl_fixed_world`
+is perfect open and wrong on exactly the closure probes closed); the heartbeat audit raised 8
+and 18 faults on the two broken-cascade ablations. The unmarked-guess ablation changed no
+scored cell on this family — reported, not claimed. Cost: the replayer is cheaper per ask on
+this family and the organism's repeat asks are not cheaper than its first, because `^8` walks
+every live proposition before a standing conclusion can be hit directly.
+
+**Process.** The design was adversarially reviewed by three proposals and six attacks; the
+judge stage was interrupted, so a read-only cross-check of the hand-written contract followed
+(11 contradictions, 11 gaps, 11 overclaims) and §12 of the contract records every amendment.
+Three modules were written by agents in isolated worktrees against the pinned contract, with
+disjoint file ownership, and reviewed in full before landing. The organism and the oracle were
+written independently, and the controls are a third independent implementation of the same
+contract; all three agree on every generated probe.
+
+**Tests.** 393 `cas_rpu` tests, 262 `ccb_r1` tests, demo, experiment `--check`: all green.
+
+**Not shown, stated.** Open-English encoding, recipe coefficients beyond the three shipped,
+register-aware banks (see the results note's Next).
+
 ## Public dashboard API moved from Render to AWS App Runner (Sep 26, 2026)
 
 **Headline.** `https://noeticcompass.com/login` was broken for every visitor. The page
