@@ -44,12 +44,15 @@ Receiver steps are exactly worked example A steps 1–5: validate, duplicate and
 - The pinned commit `eb99855` mounted read-only at the path the adapter expects; the 12 existing interchange tests pass against it in this environment (12/12, 1.2 s).
 - The mount carries the semantic and derived journals (`semantic_engine.py`, `derived_*`, `*_recovery.py`), so CNCM-side provenance with `previous_digest` is available for F07 without touching the mount.
 
-## 5. Open before coding
+## 5. Decisions taken at coding time (recorded here, not in the gate answer)
 
-1. F06 meaning decision from the owner (card posted in the project thread 2026-10-06).
-2. Whether the import path lives in `scripts/cas_memory/cncm_interchange.py` (same module, reverse functions) or a sibling `cncm_import.py`. Default: same module, so one pin and one test file govern both directions.
-3. Which branch carries the work: stacked on PR #249 (default) or waited until #249 merges.
+1. F06 meaning: card posted to the owner 2026-10-06; until answered the adapter keeps reporting it. No F06 case arose in this direction (CAS-RPU, the receiver, has route-local conflict semantics; CNCM's refusal status is carried in `source_representation` and not interpreted).
+2. The import path lives in `scripts/cas_memory/cncm_interchange.py` beside the export path (one pin, one module); its tests are `scripts/tests/test_cncm_import.py`.
+3. The work is stacked on PR #249's branch head `d08026f` as a separate draft PR.
+4. What the CNCM side is: a `CncmSource` that holds the givens and commits every change by one run of the pinned kernel on the component packet of the changed pair (the run id is the provenance); guesses and associations are CAS-RPU's own and are told to the receiver directly, never imported (CNCM has neither). Rules do not cross in this direction yet.
+5. Restart: the receiver's history document and the import ledger (`imports.jsonl`, envelopes verbatim with the stream's own event ids) are restored together; every restore replays against `ctl_recompute` on every recorded ask.
 
 ## Amendment log
 
 - 2026-10-06 — created, before any code or run.
+- 2026-10-06 — §5 rewritten from open questions to the decisions taken; §1 unchanged. Results: `docs/working/helm_cooperation_cncm_import_2026_10_06.md`.

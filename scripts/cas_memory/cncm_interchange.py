@@ -386,3 +386,570 @@ def compare_stream(cncm, events, expectations, *, stream_id: str = "s", lesson_p
         for env in envs:
             state.fold(env)
     return cmp
+
+
+# ===========================================================================
+# the reverse direction: CNCM → CAS-RPU
+# ===========================================================================
+#
+# Plan and gate answer: `docs/working/helm_cooperation_reverse_direction_plan_2026_10_06.md`
+# (worked example A of the fixtures draft, §3.3). CNCM is the holder of givens
+# here: every change it holds is committed by a run of the pinned kernel on the
+# component packet of the changed pair, and the run id is the provenance the
+# envelope carries. CAS-RPU is the receiver: a `Stream` whose single writer
+# (`Stream.commit`) is the only way an imported event reaches the organism.
+# The receiver keeps every accepted envelope verbatim in a ledger beside the
+# history document so an answer's support can be followed back by id to the
+# CNCM run it came from.
+#
+#     CNCM commits                   envelope          CAS-RPU accepted event
+#     leads_to(s,o) asserted         FACT, +           events.fact(s,o)
+#     leads_to(s,o) polarity false   FACT, -           events.negation(s,o)
+#     r(s,o) asserted (foreign r)    FACT, relation r  events.fact(s,o,r)
+#     a given dropped by a later run RETRACT, +        events.retract(s,o)   (refused if not a GIVEN here)
+#     {retracts, asserts} pair       CORRECTION        retract then fact, atomically (both or neither)
+#     a CONCLUDED conclusion         DERIVED           rejected E-IX-DERIVED: re-derived here, never imported
+#     a value-bearing statement      (value field)     rejected E-IX-VALUE
+#     a proposal / guess             PROPOSED          rejected E-IX-PROPOSED
+#     another context's scope        context_id ≠      rejected E-IX-CONTEXT
+#     a hop naming this stream       cycle             rejected E-IX-CYCLE
+
+import json as _json
+
+REVERSE_SOURCE = "cncm"
+REVERSE_TARGET = "cas_rpu"
+LEDGER = "imports.jsonl"
+_HYPOTHESIS_NOTE = "a guess is CAS-RPU's own and never a CNCM commit; told directly, not imported"
+
+
+def _sha(obj) -> str:
+    return hashlib.sha256(_json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+class CncmSource:
+    """CNCM as the holder of givens. `tell(event)` changes what it holds and
+    commits the change by one run of the pinned kernel on the component packet
+    of the changed pair, with that pair as the query; the envelope returned
+    carries the run id as provenance and the run's terminal status as the
+    source representation. Guesses are not held (CNCM has no proposal) and
+    raise `E-IX-PROPOSED`. Nothing here touches CAS-RPU."""
+
+    def __init__(self, cncm, *, context_id: str, scope: str = "component") -> None:
+        self.cncm = cncm
+        self.context_id = context_id
+        self.scope = scope
+        self.state = CncmState()
+        self.runs: list[dict] = []
+        self.seq = 0
+
+    def _commit(self, pair: tuple[str, str], label: str):
+        problem_id = f"c{len(self.runs)}_{label}"
+        result = self.cncm.run(self.state.packet(self.cncm, pair, True, problem_id, scope=self.scope))
+        fs = result.final_state
+        run = {"run_id": fs.run_id, "problem_id": problem_id, "terminal_status": result.terminal_status.value,
+               "state_hash": fs.state_hash, "runtime_version": fs.runtime_version,
+               "problem_packet_hash": result.problem.input_hash, "ticks": fs.logical_tick}
+        self.runs.append(run)
+        return result, run
+
+    def _envelope(self, event_type: str, prop: dict, run: dict) -> dict:
+        self.seq += 1
+        body = {
+            "schema_version": ENVELOPE_SCHEMA,
+            "source": {"engine": REVERSE_SOURCE, "engine_version": run["runtime_version"], "schema_version": "cncm.problem/0.1",
+                       "pinned_commit": CNCM_COMMIT, "stream_id": self.context_id},
+            "target": {"engine": REVERSE_TARGET, "schema_version": "revision_streams_contract_2026_10_06", "stream_id": self.context_id},
+            "identity": {"context_id": self.context_id, "world_mode": "open"},
+            "sequence": {"source_seq": self.seq},
+            "event_type": event_type, "status": "accepted",
+            "proposition": prop,
+            "provenance": {"origin": {"hops": [{"engine": REVERSE_SOURCE, "stream_id": self.context_id, "event_id": run["run_id"]}]},
+                           "evidence_ids": [run["run_id"]], "dependency_ids": [], "source_state_digest": run["state_hash"]},
+            "source_representation": {"problem_id": run["problem_id"], "terminal_status": run["terminal_status"],
+                                      "problem_packet_hash": run["problem_packet_hash"], "scope": self.context_id},
+        }
+        return {"event_id": "ix-" + _sha(body)[:24], **body}
+
+    def tell(self, event) -> list[dict]:
+        """Hold `event` on the CNCM side, commit it by a run, and return the envelopes to send."""
+        from events import EventKind
+        s, o, rel = _ident(event.subject), _ident(event.obj), event.relation
+        if event.kind is EventKind.HYPOTHESIS:
+            raise InterchangeError("E-IX-PROPOSED", _HYPOTHESIS_NOTE)
+        if event.kind is EventKind.ASK:
+            raise InterchangeError("E-IX-KIND", "a question is asked of the receiver, not held by the source")
+        if rel == ASSOCIATIVE_RELATION:
+            raise InterchangeError("E-IX-RELATION", "CNCM has no associative relation (F13)")
+        if rel == LESSON_RELATION:
+            raise InterchangeError("E-IX-RULE-UNSUPPORTED", "rules do not cross in this direction yet (plan §2)")
+        rel = _ident(rel)
+        if event.kind is EventKind.FACT:
+            self.state.positive[(rel, s, o)] = f"told-{self.seq + 1}"
+            _, run = self._commit((s, o), "fact")
+            return [self._envelope("FACT", {"predicate": rel, "arguments": [s, o], "polarity": True}, run)]
+        if event.kind is EventKind.NEGATION:
+            if rel != DEFAULT_RELATION:
+                raise InterchangeError("E-IX-RELATION", "a denial is defined for leads_to only")
+            self.state.negative[(s, o)] = f"told-{self.seq + 1}"
+            _, run = self._commit((s, o), "negation")
+            return [self._envelope("FACT", {"predicate": rel, "arguments": [s, o], "polarity": False}, run)]
+        if event.kind is EventKind.RETRACT:
+            # CNCM has no retraction: the later run simply does not carry the given.
+            # Whether this stream ever held it is the receiver's to decide (F08).
+            self.state.positive.pop((rel, s, o), None)
+            _, run = self._commit((s, o), "retract")
+            return [self._envelope("RETRACT", {"predicate": rel, "arguments": [s, o], "polarity": True}, run)]
+        raise InterchangeError("E-IX-KIND", f"unknown kind {event.kind}")
+
+    def conclusion(self, pair: tuple[str, str]) -> dict | None:
+        """A CONCLUDED run's conclusion as a DERIVED envelope: what a receiver must refuse."""
+        result, run = self._commit(pair, "conclusion")
+        if result.terminal_status.value != "CONCLUDED":
+            return None
+        c = result.final_state.commitment_state.conclusion
+        prop = {"predicate": c.predicate, "arguments": list(c.arguments), "polarity": c.polarity, "evidence_status": "derived"}
+        return self._envelope("DERIVED", prop, run)
+
+    def correction(self, old: tuple[str, str], new: tuple[str, str]) -> dict:
+        """An atomic `{retracts, asserts}` pair, as the semantic layer's ASSERT with
+        `previous_digest` would be carried (F07). One run commits both halves."""
+        self.state.positive.pop((DEFAULT_RELATION, *old), None)
+        self.state.positive[(DEFAULT_RELATION, *new)] = f"told-{self.seq + 1}"
+        _, run = self._commit(new, "correction")
+        env = self._envelope("CORRECTION", {"predicate": DEFAULT_RELATION, "arguments": list(new), "polarity": True}, run)
+        env["retracts"] = {"predicate": DEFAULT_RELATION, "arguments": list(old), "polarity": True}
+        env["asserts"] = env.pop("proposition")
+        env["provenance"]["dependency_ids"] = ["previous:" + _sha({"pair": list(old)})[:16]]
+        return env
+
+
+@dataclass(frozen=True)
+class ImportResult:
+    envelope_id: str
+    accepted: bool
+    code: str | None
+    note: str
+    own_event_ids: tuple[str, ...] = ()
+    verdicts: tuple[str | None, ...] = ()
+    withdrawn: tuple[str, ...] = ()
+    round_trip: bool | None = None
+
+
+def _retract_admissible(organism, key: str) -> bool:
+    """The organism's own rule (`Organism._retract`): a given still in `pos`."""
+    from workspace import Status
+    prop = organism.ws.props.get(key)
+    if prop is None:
+        return False
+    if prop.status is Status.FACT:
+        return True
+    return prop.status is Status.CONTRADICTED and not prop.support
+
+
+class Receiver:
+    """The CAS-RPU stream owner for one context. Every import goes through
+    `Stream.commit` (the single writer) with `source="cncm:<envelope id>"`, and
+    every accepted envelope is appended verbatim to `imports.jsonl` beside the
+    history document, with the stream's own event ids. `open` reads the ledger
+    back after a restore so duplicates are still recognised in a new process."""
+
+    def __init__(self, stream, ledger: list[dict] | None = None) -> None:
+        self.stream = stream
+        self.ledger: list[dict] = list(ledger or [])
+        self.results: dict[str, ImportResult] = {}
+        self.rejected: list[dict] = []
+        for entry in self.ledger:
+            self.results[entry["envelope"]["event_id"]] = ImportResult(entry["envelope"]["event_id"], True, None, "from ledger",
+                                                                       tuple(entry["own_event_ids"]), round_trip=entry.get("round_trip"))
+
+    @classmethod
+    def open(cls, stream) -> "Receiver":
+        path = Path(stream.directory) / LEDGER
+        entries = []
+        if path.exists():
+            with path.open("r", encoding="utf-8") as fh:
+                entries = [_json.loads(line) for line in fh if line.strip()]
+        return cls(stream, entries)
+
+    @property
+    def stream_id(self) -> str:
+        return self.stream.identity.stream_id
+
+    # -- validation ----------------------------------------------------------
+
+    def _check(self, env: dict) -> None:
+        if env.get("schema_version") != ENVELOPE_SCHEMA:
+            raise InterchangeError("E-IX-SCHEMA", f"not a {ENVELOPE_SCHEMA} envelope")
+        if env.get("target", {}).get("engine") != REVERSE_TARGET:
+            raise InterchangeError("E-IX-TARGET", "this envelope is not addressed to cas_rpu")
+        ident = env.get("identity", {})
+        if ident.get("context_id") != self.stream.identity.context_id:
+            raise InterchangeError("E-IX-CONTEXT", f"context {ident.get('context_id')!r} is not this stream's {self.stream.identity.context_id!r} (F12)")
+        if ident.get("world_mode") != self.stream.identity.world_mode:
+            raise InterchangeError("E-IX-WORLD", f"world mode {ident.get('world_mode')!r} is not this stream's {self.stream.identity.world_mode!r}")
+        hops = env.get("provenance", {}).get("origin", {}).get("hops", [])
+        if not hops:
+            raise InterchangeError("E-IX-PROVENANCE", "an envelope without an origin hop carries no provenance")
+        for hop in hops:
+            if hop.get("engine") == REVERSE_TARGET and hop.get("stream_id") == self.stream_id:
+                raise InterchangeError("E-IX-CYCLE", "this stream is already in the hop list; an event must not return to its origin")
+        t = env.get("event_type")
+        if t in ("DERIVED",):
+            raise InterchangeError("E-IX-DERIVED", "a conclusion is re-derived by the receiver from its givens, never imported as a given")
+        if t in ("PROPOSED", "HYPOTHESIS"):
+            raise InterchangeError("E-IX-PROPOSED", "a proposal is not evidence (F10)")
+        if t in ("LESSON", "RETRACT_LESSON", "RULE"):
+            raise InterchangeError("E-IX-RULE-UNSUPPORTED", "rules do not cross in this direction yet (plan §2)")
+        if t not in ("FACT", "RETRACT", "CORRECTION"):
+            raise InterchangeError("E-IX-KIND", f"unknown event_type {t!r}")
+        ev = env.get("sequence", {}).get("expected_version")
+        if ev is not None and ev != self.stream.last_committed_seq:
+            raise InterchangeError("E-IX-VERSION", f"expected version {ev} but the stream is at {self.stream.last_committed_seq}")
+        for prop in ([env.get("proposition")] if t != "CORRECTION" else [env.get("retracts"), env.get("asserts")]):
+            if not isinstance(prop, dict):
+                raise InterchangeError("E-IX-PROPOSITION", "a proposition is required")
+            if "value" in prop or "value" in env:
+                raise InterchangeError("E-IX-VALUE", "CAS-RPU has no value slot; a value-bearing statement is refused, never truncated (F13)")
+            if "polarity" not in prop:
+                raise InterchangeError("E-IX-POLARITY", "polarity is required; nothing is defaulted")
+            if len(prop.get("arguments", [])) != 2:
+                raise InterchangeError("E-IX-ARITY", "CAS-RPU holds binary relations only")
+            rel = prop.get("predicate")
+            if rel == ASSOCIATIVE_RELATION:
+                raise InterchangeError("E-IX-RELATION", "an association is never imported as a given (F13)")
+            if rel == LESSON_RELATION:
+                raise InterchangeError("E-IX-RULE-UNSUPPORTED", "a lesson is not a fact between tokens")
+            if not prop["polarity"] and rel != DEFAULT_RELATION:
+                raise InterchangeError("E-IX-RELATION", "a denial is defined for leads_to only")
+
+    @staticmethod
+    def _event(kind: str, prop: dict):
+        from events import Event, EventKind
+        s, o = prop["arguments"]
+        return Event(EventKind(kind), s, o, prop["predicate"])
+
+    def _plan(self, env: dict):
+        """The CAS-RPU events an envelope maps to, in order, or the refusal."""
+        t = env["event_type"]
+        if t == "FACT":
+            p = env["proposition"]
+            return [self._event("fact" if p["polarity"] else "negation", p)]
+        if t == "RETRACT":
+            p = env["proposition"]
+            if not p["polarity"]:
+                raise InterchangeError("E-IX-NEG-RETRACT", "the grammar has no negative retract (F13)")
+            ev = self._event("retract", p)
+            if not _retract_admissible(self.stream.organism, ev.key):
+                raise InterchangeError("E-IX-RETRACT-REFUSED", f"{ev.key} is not a given in this stream (E-ORG-001/002); nothing to withdraw")
+            return [ev]
+        r, a = env["retracts"], env["asserts"]
+        if not r["polarity"]:
+            raise InterchangeError("E-IX-NEG-RETRACT", "the grammar has no negative retract (F13)")
+        rev, aev = self._event("retract", r), self._event("fact" if a["polarity"] else "negation", a)
+        if not _retract_admissible(self.stream.organism, rev.key):
+            raise InterchangeError("E-IX-CORRECTION-REFUSED", f"the correction's retract of {rev.key} would be refused; nothing is half-applied (F07)")
+        return [rev, aev]
+
+    # -- the import ------------------------------------------------------------
+
+    def import_envelope(self, env: dict) -> ImportResult:
+        eid = env.get("event_id", "")
+        if eid in self.results:
+            return self.results[eid]                      # exactly once; the earlier result stands
+        try:
+            self._check(env)
+            events = self._plan(env)
+        except InterchangeError as exc:
+            res = ImportResult(eid, False, exc.code, str(exc))
+            self.rejected.append({"event_id": eid, "code": exc.code, "reason": str(exc)})
+            self.results[eid] = res
+            return res
+        own, verdicts, withdrawn = [], [], []
+        for ev in events:
+            r = self.stream.commit(ev, source=f"cncm:{eid}")
+            own.append(self.stream.rows[-1]["event_id"])
+            verdicts.append(r.verdict)
+            withdrawn.extend(r.withdrawn)
+            if not r.accepted:
+                # Only a RETRACT/CORRECTION can be refused and both were pre-checked; a refusal
+                # here is recorded in the history (REFUSED row) and reported, never hidden.
+                res = ImportResult(eid, False, "E-IX-REFUSED:" + str(r.code), r.note, tuple(own), tuple(verdicts), tuple(withdrawn))
+                self.results[eid] = res
+                return res
+        rt = self._round_trip(env, events[-1])
+        entry = {"envelope": env, "own_event_ids": own, "seq": self.stream.last_committed_seq, "round_trip": rt}
+        self._append(entry)
+        res = ImportResult(eid, True, None, "imported", tuple(own), tuple(verdicts), tuple(withdrawn), rt)
+        self.results[eid] = res
+        return res
+
+    def _round_trip(self, env: dict, last) -> bool:
+        """Re-encode what the workspace now holds for the key and compare it with what was sent."""
+        from events import EventKind
+        from workspace import Status
+        prop = env["asserts"] if env["event_type"] == "CORRECTION" else env["proposition"]
+        if last.kind is EventKind.RETRACT:
+            held = self.stream.organism.ws.props.get(last.key)
+            return held is None or held.status is Status.RETRACTED
+        pid = ("~" if not prop["polarity"] else "") + last.key
+        held = self.stream.organism.ws.props.get(pid)
+        if held is None:
+            return False
+        back = {"predicate": held.relation, "arguments": [held.subject, held.obj], "polarity": not held.negated}
+        return back == {"predicate": prop["predicate"], "arguments": list(prop["arguments"]), "polarity": prop["polarity"]}
+
+    def _append(self, entry: dict) -> None:
+        self.ledger.append(entry)
+        path = Path(self.stream.directory) / LEDGER
+        with path.open("a", encoding="utf-8") as fh:
+            fh.write(_json.dumps(entry, sort_keys=True) + "\n")
+            fh.flush()
+            os.fsync(fh.fileno())
+
+    # -- following an answer back ------------------------------------------------
+
+    def provenance_of(self, response) -> dict:
+        """For a YES answer: the given keys it rests on, and for each the envelope
+        and CNCM run that put it there (the most recent accepted import of that key)."""
+        ep = response.episode
+        if ep is None or ep.conclusion is None:
+            return {"roots": [], "envelopes": {}, "runs": {}}
+        roots = list(self.stream.organism.ws.roots(ep.conclusion.pid)) or [ep.conclusion.pid]
+        by_own = {}
+        for entry in self.ledger:
+            for own in entry["own_event_ids"]:
+                by_own[own] = entry
+        envelopes, runs = {}, {}
+        for row in self.stream.rows:
+            if row["commit_status"] != "ACCEPTED" or row["type"] not in ("FACT", "NEGATION"):
+                continue
+            p = row["payload"]
+            key = ("~" if row["type"] == "NEGATION" else "") + f"{p['subject']}|{p['relation']}|{p['obj']}"
+            if key in roots and row["event_id"] in by_own:
+                env = by_own[row["event_id"]]["envelope"]
+                envelopes[key] = env["event_id"]
+                runs[key] = env["provenance"]["origin"]["hops"][0]["event_id"]
+        return {"roots": sorted(roots), "envelopes": envelopes, "runs": runs}
+
+
+# ---------------------------------------------------------------------------
+# the comparison over a whole stream, with restarts between sessions
+# ---------------------------------------------------------------------------
+
+#: Run in a fresh operating-system process: restore the stream and its ledger,
+#: apply one session's items (imports and the stream's own asks and guesses),
+#: print one JSON line of outcomes.
+_CHILD = r"""
+import json, sys
+sys.path.insert(0, {cas!r}); sys.path.insert(0, {ccb!r}); sys.path.insert(0, {mem!r})
+for banned in ("torch", "openai", "anthropic", "requests"):
+    assert banned not in sys.modules
+from history import Stream
+from controls import ctl_recompute
+from events import Event, EventKind
+import cncm_interchange as ix
+stream = Stream.restore({path!r}, reference=ctl_recompute)
+rx = ix.Receiver.open(stream)
+items = json.load(open({items!r}))
+out = []
+for item in items:
+    if item["op"] == "import":
+        r = rx.import_envelope(item["envelope"])
+        out.append({{"op": "import", "accepted": r.accepted, "code": r.code, "verdicts": list(r.verdicts), "withdrawn": list(r.withdrawn), "round_trip": r.round_trip}})
+    else:
+        e = item["event"]
+        r = stream.commit(Event(EventKind(e["kind"]), e["subject"], e["obj"], e["relation"]))
+        out.append({{"op": item["op"], "accepted": r.accepted, "code": r.code, "verdict": r.verdict, "withdrawn": list(r.withdrawn), "route": r.route}})
+print(json.dumps({{"out": out, "rows": len(stream.rows), "recovered_from": stream.recovered_from}}))
+"""
+
+
+@dataclass
+class ImportComparison:
+    probes: int = 0
+    agree: int = 0
+    disagree: list[dict] = field(default_factory=list)
+    designed_probes: int = 0                 # cross-session designed probes of the stream (the import probes)
+    designed_agree: int = 0
+    by_mechanism: dict[str, list[int]] = field(default_factory=dict)   # letter -> [probes, agree]
+    imports: int = 0
+    imports_accepted: int = 0
+    rejected: dict[str, int] = field(default_factory=dict)
+    refused_expected: int = 0                # retracts the stream itself designs as refused
+    refused_matched: int = 0
+    guesses_told: int = 0
+    associations_told: int = 0
+    withdrawn_total: int = 0
+    round_trip_failures: int = 0
+    restarts: int = 0
+    cncm_runs: int = 0
+    cncm_terminal: dict[str, int] = field(default_factory=dict)
+
+    def summary(self) -> dict:
+        return {
+            "probes": self.probes, "agree": self.agree, "disagree": len(self.disagree),
+            "designed_probes": self.designed_probes, "designed_agree": self.designed_agree,
+            "by_mechanism": {k: {"probes": v[0], "agree": v[1]} for k, v in sorted(self.by_mechanism.items())},
+            "imports": self.imports, "imports_accepted": self.imports_accepted, "rejected": dict(sorted(self.rejected.items())),
+            "refused_expected": self.refused_expected, "refused_matched": self.refused_matched,
+            "guesses_told": self.guesses_told, "associations_told": self.associations_told, "withdrawn": self.withdrawn_total, "round_trip_failures": self.round_trip_failures,
+            "restarts": self.restarts, "cncm_runs": self.cncm_runs, "cncm_terminal": dict(sorted(self.cncm_terminal.items())),
+        }
+
+
+def compare_import_stream(cncm, seed_stream, root, *, restart: str = "in-process", scope: str = "component") -> ImportComparison:
+    """CNCM holds and commits every given of `seed_stream`; CAS-RPU receives them
+    only through the envelope and answers the stream's asks; verdicts are scored
+    against the stream's own oracle. Guesses (HYPOTHESIS) are CAS-RPU's own and
+    are told directly. Between sessions the receiver stream is restored:
+    `"in-process"` replays the history in this process, `"process"` restores it
+    in a fresh operating-system process per session, `None` never restarts.
+    Every restore replays against `ctl_recompute` (the control) on every ASK."""
+    import subprocess
+    sys.path.insert(0, str(REPO / "scripts" / "cas_rpu")); sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
+    from controls import ctl_recompute
+    from events import EventKind
+    from history import Stream
+
+    root = Path(root)
+    sdir = root / f"{seed_stream.context_id}_{'twin' if seed_stream.twin_of is not None else 'primary'}"
+    cmp = ImportComparison()
+    source = CncmSource(cncm, context_id=seed_stream.context_id, scope=scope)
+    stream = Stream.genesis(sdir, organism_id="rx", context_id=seed_stream.context_id, closed_world=seed_stream.closed_world)
+    rx = Receiver(stream)
+    by_index = {x.event_index: x for x in seed_stream.expectations}
+    designed = {ep.designed_probe_index: ep for ep in seed_stream.episodes if ep.cross_session}
+    refused = set(seed_stream.refused)
+
+    def score(i, verdict, accepted, code):
+        ev = seed_stream.events[i]
+        if ev.kind is EventKind.ASK:
+            x = by_index[i]
+            ok = verdict == x.verdict.value
+            cmp.probes += 1; cmp.agree += int(ok)
+            if i in designed:
+                cmp.designed_probes += 1; cmp.designed_agree += int(ok)
+                m = cmp.by_mechanism.setdefault(designed[i].mechanism, [0, 0]); m[0] += 1; m[1] += int(ok)
+            if not ok:
+                cmp.disagree.append({"index": i, "pair": ev.pair, "expected": x.verdict.value, "got": verdict, "variant": designed[i].variant if i in designed else None})
+        elif i in refused:
+            cmp.refused_expected += 1
+            cmp.refused_matched += int(not accepted)
+
+    for k in range(seed_stream.sessions):
+        lo, hi = seed_stream.session_range(k)
+        if k > 0 and restart:
+            cmp.restarts += 1
+        items = []
+        for i in range(lo, hi):
+            ev = seed_stream.events[i]
+            if ev.kind is EventKind.ASK:
+                items.append({"op": "ask", "index": i, "event": ev.canonical()})
+            elif ev.kind is EventKind.HYPOTHESIS:
+                cmp.guesses_told += 1
+                items.append({"op": "guess", "index": i, "event": ev.canonical()})
+            elif ev.relation == ASSOCIATIVE_RELATION:
+                # An association is CAS-RPU's own (`^8` follows it, `^6` rejects it) and
+                # CNCM has no counterpart (F13): told directly, never imported.
+                cmp.associations_told += 1
+                items.append({"op": "associate", "index": i, "event": ev.canonical()})
+            else:
+                for env in source.tell(ev):
+                    cmp.imports += 1
+                    items.append({"op": "import", "index": i, "envelope": env})
+        cmp.cncm_runs = len(source.runs)
+        if restart == "process" and k > 0:
+            items_path = sdir / f"session{k}.json"
+            items_path.write_text(_json.dumps(items), encoding="utf-8")
+            script = _CHILD.format(cas=str(REPO / "scripts" / "cas_rpu"), ccb=str(REPO / "scripts" / "ccb_r1"),
+                                   mem=str(REPO / "scripts" / "cas_memory"), path=str(sdir), items=str(items_path))
+            proc = subprocess.run([sys.executable, "-I", "-c", script], capture_output=True, text=True, timeout=900)
+            if proc.returncode != 0:
+                raise RuntimeError(f"child failed in session {k}:\n{proc.stderr[-4000:]}")
+            outs = _json.loads(proc.stdout.strip().splitlines()[-1])["out"]
+            for item, o in zip(items, outs):
+                if item["op"] == "import":
+                    cmp.imports_accepted += int(o["accepted"])
+                    if not o["accepted"]:
+                        cmp.rejected[o["code"]] = cmp.rejected.get(o["code"], 0) + 1
+                    cmp.withdrawn_total += len(o["withdrawn"])
+                    cmp.round_trip_failures += int(o["accepted"] and not o["round_trip"])
+                    score(item["index"], None, o["accepted"], o["code"])
+                else:
+                    cmp.withdrawn_total += len(o["withdrawn"])
+                    score(item["index"], o["verdict"], o["accepted"], o["code"])
+            stream = Stream.restore(sdir, reference=ctl_recompute)      # the parent re-reads what the child committed
+            rx = Receiver.open(stream)
+            continue
+        if restart == "in-process" and k > 0:
+            stream = Stream.restore(sdir, reference=ctl_recompute)
+            rx = Receiver.open(stream)
+        for item in items:
+            if item["op"] == "import":
+                r = rx.import_envelope(item["envelope"])
+                cmp.imports_accepted += int(r.accepted)
+                if not r.accepted:
+                    cmp.rejected[r.code] = cmp.rejected.get(r.code, 0) + 1
+                cmp.withdrawn_total += len(r.withdrawn)
+                cmp.round_trip_failures += int(r.accepted and not r.round_trip)
+                score(item["index"], None, r.accepted, r.code)
+            else:
+                e = item["event"]
+                from events import Event
+                r = stream.commit(Event(EventKind(e["kind"]), e["subject"], e["obj"], e["relation"]))
+                cmp.withdrawn_total += len(r.withdrawn)
+                score(item["index"], r.verdict, r.accepted, r.code)
+    for run in source.runs:
+        cmp.cncm_terminal[run["terminal_status"]] = cmp.cncm_terminal.get(run["terminal_status"], 0) + 1
+    return cmp
+
+
+def _main(argv=None) -> int:
+    import argparse
+    import tempfile
+    p = argparse.ArgumentParser(description="CNCM → CAS-RPU import comparison over generated session streams")
+    p.add_argument("--seeds", default="0-2", help="e.g. 0-2 or 3000,3001")
+    p.add_argument("--restart", default="process", choices=["process", "in-process", "none"])
+    p.add_argument("--no-twins", action="store_true")
+    p.add_argument("--root", default=None, help="directory for the receiver stores (default: a temporary one)")
+    args = p.parse_args(argv)
+    sys.path.insert(0, str(REPO / "scripts" / "cas_rpu")); sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
+    from sessions import generate_session_set
+    seeds = []
+    for part in args.seeds.split(","):
+        if "-" in part:
+            a, b = part.split("-"); seeds.extend(range(int(a), int(b) + 1))
+        else:
+            seeds.append(int(part))
+    cncm = load_cncm()
+    sset = generate_session_set(seeds, closed_world=False, twins=not args.no_twins)
+    restart = None if args.restart == "none" else args.restart
+    tmp = tempfile.TemporaryDirectory() if args.root is None else None
+    root = Path(args.root) if args.root else Path(tmp.name)
+    print(f"# CNCM → CAS-RPU import comparison; kernel {CNCM_COMMIT[:9]} pinned {loaded_version()['matches_pin']}; seeds {seeds}; restart={args.restart}; open world")
+    totals = {}
+    for label, streams in (("primary", sset.streams), ("twin", sset.twins)):
+        for s in streams:
+            cmp = compare_import_stream(cncm, s, root, restart=restart)
+            sm = cmp.summary()
+            print(f"{label} seed {s.seed}: probes {sm['agree']}/{sm['probes']}; designed {sm['designed_agree']}/{sm['designed_probes']} "
+                  f"{sm['by_mechanism']}; imports {sm['imports_accepted']}/{sm['imports']} rejected {sm['rejected']}; "
+                  f"refused-as-designed {sm['refused_matched']}/{sm['refused_expected']}; guesses told {sm['guesses_told']}; associations told {sm['associations_told']}; "
+                  f"withdrawn {sm['withdrawn']}; round-trip failures {sm['round_trip_failures']}; restarts {sm['restarts']}; "
+                  f"cncm runs {sm['cncm_runs']} {sm['cncm_terminal']}")
+            for d in cmp.disagree:
+                print(f"    DISAGREE {d}")
+            t = totals.setdefault(label, {"probes": 0, "agree": 0, "designed_probes": 0, "designed_agree": 0, "imports": 0, "imports_accepted": 0, "restarts": 0, "round_trip_failures": 0, "streams": 0})
+            for key in ("probes", "agree", "designed_probes", "designed_agree", "imports", "imports_accepted", "restarts", "round_trip_failures"):
+                t[key] += sm[key]
+            t["streams"] += 1
+    for label, t in totals.items():
+        print(f"TOTAL {label}: streams {t['streams']}; probes {t['agree']}/{t['probes']}; designed {t['designed_agree']}/{t['designed_probes']}; "
+              f"imports {t['imports_accepted']}/{t['imports']}; restarts {t['restarts']}; round-trip failures {t['round_trip_failures']}")
+    if tmp is not None:
+        tmp.cleanup()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_main())
