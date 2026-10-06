@@ -25,7 +25,20 @@ The seven L variants and their designed sequences (GAP = UNKNOWN open / NO close
 
 ## Results — first-look run, seeds 3000–3019
 
-*(pending: the run on seeds 3000–3019 is in progress; this section is filled when it completes, and the document is not cited until then)*
+Seeds 3000–3019, never generated before the run (a first attempt stopped in its last path when the container's disk filled with finished stores — E-MEM-051, reported in commit `c89f37a` — and the run was repeated in full after the harness was made to delete each finished store; the seeds were not inspected between the attempts). Fingerprints: open `9f248425f6203ce2…`, closed `7cd0a5c28622e715…`. 40 streams per world (20 primaries + 20 untaught twins), 110 probes per stream, 4400 probes per path per world; 200 fresh processes per path per world, **1200 process launches in all**, plus the in-process recompute control. Both worlds gave identical counts in every column. Text report: `docs/working/evidence/helm_lessons_firstlook_seeds3000-3019_2026_10_06.txt`; the full JSON (scratchpad only) has SHA-256 `18079ada73ac58382e1238cf33bf1050668e86f4ebb6a7e3532f352fcef02ef4`.
+
+| path | verdict | contested | named (open) | withdrawn | **lesson probes (class L designed)** | lesson probes from the record | retention probes (all cross-session) | stale hits | untaught twins, all designed | **untaught twins, L designed** |
+|---|---|---|---|---|---|---|---|---|---|---|
+| recompute (P0) | 4400/4400 | 200/200 | 2360/2360 | 960/960 | 140/140 | 0 | 320/320 | 0 | 680/680 GAP | 140/140 GAP |
+| walk (P1) | 4400/4400 | 200/200 | 2360/2360 | 960/960 | 140/140 | 0 | 320/320 | 0 | 680/680 GAP | 140/140 GAP |
+| **record_dep (P2)** | 4400/4400 | 200/200 | 2360/2360 | 960/960 | **140/140** | 0 | 320/320, 40 from the record | **0** | 680/680 GAP | **140/140 GAP** |
+| record_rpa (P3) | 4400/4400 | 200/200 | 2360/2360 | 960/960 | 140/140 | 0 | 320/320, 40 from the record | 0 | 680/680 GAP | 140/140 GAP |
+
+Per variant, every path: L-before 20/20, L-apply 20/20, L-compose 20/20, L-retract 20/20, L-revive 20/20, L-specific 20/20, L-edge 20/20; the same seven at 20/20 GAP in the twins. T-compose 20/20 by reasoning (0 record hits), T-exact 20/20 from the record (20 hits) as before.
+
+In the directive's words: **what did it learn** — the told rule, applied where it could not answer before (L-before: GAP then YES on the same ask); **did it keep it after restarting** — yes, in fresh processes two sessions later on tokens it had never seen when taught (L-apply 20/20), and a retracted lesson stayed retracted across restarts (L-retract 20/20, withdrawn exact 960/960); **can it use it when the example changes** — yes within the narrow sense the family defines: new instances and compositions of the same rule (L-apply, L-compose), not a different rule; a lesson for one relation did nothing for another (L-specific 20/20) and the untaught twin never gained the ability (140/140 GAP). No lesson probe was served from the record on any path: each is a first ask of a fresh instance or a re-ask after a mutation, so a record hit would have been a stale hit, and there were none. Neural change: none.
+
+Costs (open world): commit p50 10.8 ms, p95 18.9 ms (the stream is 501 events, so the document rewritten per commit is larger than before); restore p50 72 / 68 / 151 ms (walk / record_dep / record_rpa), max 153 / 173 / 760 ms; process start p50 52 / 49 / 231 ms; session wall p50 1.37 / 1.37 / 1.83 s; max RSS 74 / 117 / 159 MB; largest store 55 MB with retained copies. The RPA path again changed no answer and cost the most restore time.
 
 ## Results — fault schedule with lessons, seeds 0–9
 

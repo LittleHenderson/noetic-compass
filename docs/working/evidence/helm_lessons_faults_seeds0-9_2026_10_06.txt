@@ -1,0 +1,81 @@
+== multi-session evaluation — open world — 10 seed(s) × 5 session(s), 10 twin(s); fingerprint 7a1fa89b1d6f5214…
+-- walk: verdict 1100/1100 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  50/50
+   named      450/450
+   withdrawn  240/240
+   retention probes (cross-session designed): 160/160 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 10/10 correct, record hits 0 (must be 0); T-exact: 10/10 correct, record hits 0
+   lessons (class L designed probes): 70/70 correct, 0 from the record; L-apply 10/10, L-before 10/10, L-compose 10/10, L-edge 10/10, L-retract 10/10, L-revive 10/10, L-specific 10/10
+   lessons, untaught twins: 0/0 GAP as expected; 
+   neural change: none (the lesson is a symbolic record in the history document; no parameter exists to change)
+   routes {'disabled': 1100}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 243.7, repeat-ask mean 286.0
+   commit ms p50 10.85 p95 21.90; restore ms p50 71.6 max 171.9; process start ms p50 51.1; session wall ms p50 1308; max RSS 35 MB; largest store 55174 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-current    1/1 passed
+   fault recovery           4/4 passed
+   fault recovery-probe     109/109 passed
+   fault redeliver          1/1 passed
+   fault redeliver-restart  1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+-- record_dep: verdict 1100/1100 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  50/50
+   named      450/450
+   withdrawn  240/240
+   retention probes (cross-session designed): 160/160 correct; served from the record 20; STALE HITS 0
+   transfer T-compose: 10/10 correct, record hits 0 (must be 0); T-exact: 10/10 correct, record hits 10
+   lessons (class L designed probes): 70/70 correct, 0 from the record; L-apply 10/10, L-before 10/10, L-compose 10/10, L-edge 10/10, L-retract 10/10, L-revive 10/10, L-specific 10/10
+   lessons, untaught twins: 0/0 GAP as expected; 
+   neural change: none (the lesson is a symbolic record in the history document; no parameter exists to change)
+   routes {'hit': 115, 'miss': 985}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 243.7, repeat-ask mean 202.7
+   commit ms p50 10.55 p95 21.33; restore ms p50 66.9 max 166.9; process start ms p50 54.2; session wall ms p50 1288; max RSS 46 MB; largest store 55079 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-current    1/1 passed
+   fault recovery           4/4 passed
+   fault recovery-probe     109/109 passed
+   fault redeliver          1/1 passed
+   fault redeliver-restart  1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+== multi-session evaluation — closed world — 10 seed(s) × 5 session(s), 10 twin(s); fingerprint dcaab2634408c3e5…
+-- walk: verdict 1100/1100 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  50/50
+   withdrawn  240/240
+   retention probes (cross-session designed): 160/160 correct; served from the record 0; STALE HITS 0
+   transfer T-compose: 10/10 correct, record hits 0 (must be 0); T-exact: 10/10 correct, record hits 0
+   lessons (class L designed probes): 70/70 correct, 0 from the record; L-apply 10/10, L-before 10/10, L-compose 10/10, L-edge 10/10, L-retract 10/10, L-revive 10/10, L-specific 10/10
+   lessons, untaught twins: 0/0 GAP as expected; 
+   neural change: none (the lesson is a symbolic record in the history document; no parameter exists to change)
+   routes {'disabled': 1100}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 243.7, repeat-ask mean 286.2
+   commit ms p50 10.87 p95 21.34; restore ms p50 70.2 max 179.2; process start ms p50 46.1; session wall ms p50 1296; max RSS 58 MB; largest store 54976 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-current    1/1 passed
+   fault recovery           4/4 passed
+   fault recovery-probe     109/109 passed
+   fault redeliver          1/1 passed
+   fault redeliver-restart  1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+-- record_dep: verdict 1100/1100 (seed-bootstrap 95% CI of mean accuracy 1.000–1.000)
+   contested  50/50
+   withdrawn  240/240
+   retention probes (cross-session designed): 160/160 correct; served from the record 20; STALE HITS 0
+   transfer T-compose: 10/10 correct, record hits 0 (must be 0); T-exact: 10/10 correct, record hits 10
+   lessons (class L designed probes): 70/70 correct, 0 from the record; L-apply 10/10, L-before 10/10, L-compose 10/10, L-edge 10/10, L-retract 10/10, L-revive 10/10, L-specific 10/10
+   lessons, untaught twins: 0/0 GAP as expected; 
+   neural change: none (the lesson is a symbolic record in the history document; no parameter exists to change)
+   routes {'hit': 115, 'miss': 985}; hits on never-asked pairs 0 (must be 0)
+   work units: first-ask mean 243.7, repeat-ask mean 202.9
+   commit ms p50 10.61 p95 19.88; restore ms p50 64.6 max 117.2; process start ms p50 56.8; session wall ms p50 1298; max RSS 68 MB; largest store 54880 KB; heartbeat faults 0
+   survival demonstrated: level (a) only: clean process exit and restart on the same machine
+   fault corrupt-current    1/1 passed
+   fault recovery           4/4 passed
+   fault recovery-probe     109/109 passed
+   fault redeliver          1/1 passed
+   fault redeliver-restart  1/1 passed
+   fault swap               1/1 passed
+   fault torn-current       1/1 passed
+store root: /tmp/claude-0/-home-user-noetic-compass/4652e0be-62b1-5750-bfe9-72e332eb76a9/scratchpad/runs/lessons_faults
