@@ -83,7 +83,7 @@ from enum import Enum
 from typing import Iterable, Iterator, Sequence
 
 import events
-from events import ASSOCIATIVE_RELATION, DEFAULT_RELATION, Event, EventKind
+from events import ASSOCIATIVE_RELATION, DEFAULT_RELATION, LESSON_RELATION, Event, EventKind, is_foreign
 
 __all__ = [
     "BALANCE_CEILING",
@@ -303,6 +303,9 @@ class OracleState:
     assoc: frozenset[Pair]
     held: frozenset[Pair] = frozenset()
     uncertain: frozenset[Pair] = frozenset()
+    #: §13: pairs given under each foreign relation, and the relations whose lesson is held.
+    other: tuple[tuple[str, frozenset[Pair]], ...] = ()
+    ent: frozenset[str] = frozenset()
 
 
 # ---- reachability ----------------------------------------------------------
@@ -406,6 +409,26 @@ class _Ledger:
         self.hyp: set[Pair] = set()
         self.assoc: set[Pair] = set()
         self.tracked: dict[Pair, str] = {}
+        # §13 lessons: foreign-relation edges and the relations whose lesson is held
+        self.other: dict[str, set[Pair]] = {}
+        self.ent: set[str] = set()
+
+    # -- §13 views -----------------------------------------------------------
+
+    def entailed(self) -> set[Pair]:
+        out: set[Pair] = set()
+        for r in self.ent:
+            out |= self.other.get(r, set())
+        return out
+
+    def foreign(self) -> set[Pair]:
+        out: set[Pair] = set()
+        for pairs in self.other.values():
+            out |= pairs
+        return out
+
+    def given(self) -> set[Pair]:
+        return self.pos | self.entailed()
 
     # -- dispatch ------------------------------------------------------------
 
@@ -431,13 +454,24 @@ class _Ledger:
             if relation == ASSOCIATIVE_RELATION:
                 self.assoc.add(pair)
                 return True
-            raise _no_semantics(event, index)
+            if relation == LESSON_RELATION:
+                # §13: the lesson "subject entails leads_to"
+                if event.obj != DEFAULT_RELATION or not is_foreign(event.subject):
+                    raise _no_semantics(event, index)
+                self.ent.add(event.subject)
+                self.hyp -= self.other.get(event.subject, set())
+                return True
+            # §13: a foreign-relation edge; walked by ^8, chained over only when entailed
+            self.other.setdefault(relation, set()).add(pair)
+            if relation in self.ent:
+                self.hyp.discard(pair)
+            return True
         if kind is EventKind.HYPOTHESIS:
             _require_leads_to(event, index)
             # Dead on arrival against a known fact, a known denial, or a
             # conclusion the organism currently holds: the workspace keeps the
             # stronger record and the guess never registers.
-            if pair in self.pos or pair in self.neg or self.tracked.get(pair) == _HELD:
+            if pair in self.given() or pair in self.neg or self.tracked.get(pair) == _HELD:
                 return True
             self.hyp.add(pair)
             return True
@@ -462,7 +496,19 @@ class _Ledger:
                 self.assoc.discard(pair)
                 return True
             return False
-        raise _no_semantics(event, index)
+        if relation == LESSON_RELATION:
+            if event.obj != DEFAULT_RELATION or not is_foreign(event.subject):
+                raise _no_semantics(event, index)
+            if event.subject in self.ent:
+                self.ent.discard(event.subject)
+                return True
+            return False
+        # §13: a foreign-relation edge
+        pairs = self.other.get(relation, set())
+        if pair in pairs:
+            pairs.discard(pair)
+            return True
+        return False
 
     def mutate(self, event: Event, index: int) -> tuple[bool, WithdrawnExpectation]:
         """A RETRACT or NEGATION, with what it does to held conclusions.
@@ -487,7 +533,9 @@ class _Ledger:
         clean_before = self.clean()
         accepted = self._transition(event, index)
         clean_after = self.clean()
-        affected = {pair} if pair in clean_before and pair not in clean_after else set()
+        # §13: a retracted lesson removes every entailed edge at once, so the
+        # affected set is the difference, not the event's own pair.
+        affected = clean_before - clean_after
 
         required: set[Pair] = set()
         permitted: set[Pair] = set()
@@ -514,10 +562,10 @@ class _Ledger:
     # -- views ---------------------------------------------------------------
 
     def contested(self) -> set[Pair]:
-        return self.pos & self.neg
+        return self.given() & self.neg
 
     def clean(self) -> set[Pair]:
-        return self.pos - self.neg
+        return self.given() - self.neg
 
     def walk_graph(self) -> set[Pair]:
         """What `^8` walks: every pair the workspace holds a *positive record*
@@ -525,13 +573,15 @@ class _Ledger:
         themselves are not edges; a positive record under dispute is (the bank
         walks CONTRADICTED), and an associative shadow is walked even when its
         `leads_to` twin is denied, because it is a different proposition."""
-        return self.pos | self.hyp | self.assoc
+        return self.pos | self.hyp | self.assoc | self.foreign()
 
     def snapshot(self) -> OracleState:
         return OracleState(
             frozenset(self.pos), frozenset(self.neg), frozenset(self.hyp), frozenset(self.assoc),
             frozenset(p for p, s in self.tracked.items() if s == _HELD),
             frozenset(p for p, s in self.tracked.items() if s == _UNCERTAIN),
+            tuple(sorted((r, frozenset(ps)) for r, ps in self.other.items() if ps)),
+            frozenset(self.ent),
         )
 
     # -- the verdict (section 3, as amended) and lacunae (section 4) ----------
@@ -580,14 +630,15 @@ class _Ledger:
         on a route `^8` walks, so it counts. A denied pair is never a lacuna
         itself; the frontier product is never admissible -- only guesses,
         associations and the query pair."""
-        g_all = (clean | contested | self.hyp | self.assoc) - (self.neg - self.pos)
-        candidates = self.hyp | self.assoc | {(s, t)}
+        untaught = self.foreign() - self.entailed()          # §13: walked, not chained over
+        g_all = (clean | contested | self.hyp | self.assoc | untaught) - (self.neg - self.given())
+        candidates = self.hyp | self.assoc | untaught | {(s, t)}
         admissible = {
             (u, v) for (u, v) in candidates
             if (u, v) not in clean and (u, v) not in self.neg
             and _reach_star(g_all, s, u) and _reach_star(g_all, v, t)
         }
-        required = admissible & (self.hyp | self.assoc)
+        required = admissible & (self.hyp | self.assoc | untaught)
         return required, admissible
 
 

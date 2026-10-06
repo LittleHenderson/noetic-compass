@@ -414,6 +414,24 @@ probe layout.
   hidden by reinstatement is caught at ask time, never earlier. Stated as
   the rejected alternative.
 
+## 13. Lessons (amendment 2026-10-06; HELM ability 2, roadmap step 5)
+
+**Gate answer.** Ability 2, *learns*. Before: an `ASK(s, t)` whose only route runs through an edge of a foreign relation (`s -[enables]-> u -[leads_to]-> t`) answers UNKNOWN and names `s|leads_to|u` as a lacuna (organism probe, 2026-10-06). After the lesson "`enables` entails `leads_to`" is accepted, the same ask answers YES; in a later fresh process, on tokens never seen when the lesson was taught, the same lesson yields YES; the untaught twin (identical stream, the lesson replaced by an unrelated fact) stays UNKNOWN / NO. Control: fresh recompute from the log under this section's semantics. Criterion: zero verdict disagreements on every L probe in both worlds; untaught twins 100% GAP; zero stale record hits; withdrawn exact when the lesson or an entailed edge is retracted. Not shown: a lesson induced from examples (it is told), lessons in open English, any change to neural weights (none occur; the organism is symbolic, and the report says so).
+
+**Grammar.** A *foreign relation* is any relation other than `leads_to`, `co_occurs` and `entails`. `FACT r (s, o)` and `RETRACT r (s, o)` are admitted for a foreign `r`. A *lesson* is `FACT entails (r, leads_to)` — "while this is held, every `r` edge counts as a `leads_to` edge" — and `RETRACT entails (r, leads_to)` withdraws it. `entails` with any other object, and HYPOTHESIS, NEGATION or ASK under `entails` or under a foreign relation, have no semantics (E-RS-009, unchanged rule). The lesson is a given: told, retractable, never induced.
+
+**Oracle state (§2 extended).** `other[r]`: pairs given under foreign `r` and not since retracted. `ent`: the foreign relations whose lesson is held. Views: `entailed = ⋃_{r ∈ ent} other[r]`; `foreign = ⋃_r other[r]`; `given = pos ∪ entailed`; `contested = given ∩ neg`; `clean = given − neg`. §3 is unchanged over these views. The walk graph is `G_all = (clean ∪ contested ∪ hyp ∪ assoc ∪ foreign) − (neg − given)`: `^8` walks every positive record of any relation, taught or not.
+
+**Transitions.** `FACT r (s,o)`: `other[r].add`; if `r ∈ ent`, `hyp.discard((s,o))`. `FACT entails (r, leads_to)`: `ent.add(r)`; `hyp −= other[r]`. `RETRACT r (s,o)`: ACCEPTED iff `(s,o) ∈ other[r]`, then removed. `RETRACT entails (r, leads_to)`: ACCEPTED iff `r ∈ ent`. `RETRACT leads_to (s,o)` on a pair that is only entailed: REFUSED (the organism holds it as derived: E-ORG-001). `HYPOTHESIS (s,o)`: no-op if `(s,o) ∈ given ∪ neg` or held. `NEGATION`, `ASK`: as before over the views.
+
+**Lacunae (§4 extended).** Candidates are `hyp ∪ assoc ∪ (foreign − entailed) ∪ {(s,t)}`; `required = admissible ∩ (hyp ∪ assoc ∪ (foreign − entailed))`. An untaught foreign edge on a route names its `leads_to` twin as a gap — which is exactly the link `^6` asks for and fails to find.
+
+**Withdrawn (§5 extended).** `affected = clean_before − clean_after` (a set: retracting a lesson removes every entailed edge at once); the rest of §5 is unchanged.
+
+**Organism (§8 extended).** A foreign fact is recorded as a FACT under its own relation, as today. When a lesson for `r` is held and `s -[r]-> o` is given (in either order), the organism **derives** `s|leads_to|o` with support `(s|r|o, r|entails|leads_to)`, stage `lesson`. Everything else is the existing machinery: `^6` finds the derived link present; a conclusion through it carries it in its support; retracting the edge or the lesson cascades through `Workspace.retract`; a denial of the twin's pair makes a contradiction; `RETRACT leads_to` of the twin is refused as derived (E-ORG-001); the record-first dependency check walks to the lesson as a root. The lesson is symbolic knowledge in the history document; no weight anywhere changes.
+
+**Item class L (§7 extended; layouts in `sessions.py`).** L-before (ask → GAP, lesson, ask → YES, "previously could not"); L-apply (lesson in session k, fresh instances in a later session → YES); L-compose (mixed chain of entailed and plain edges → YES); L-retract (lesson retracted across a boundary → GAP, withdrawn required); L-revive; L-specific (control: lesson for `r1`, instances under `r2` → GAP); L-edge (control: an entailed edge retracted → GAP, the lesson stands). Untaught twins for every L probe. Each carries a balancing probe and is admitted by the same guards.
+
 ## 12. Amendments (2026-10-06, after the cross-check)
 
 The judge stage of the design workflow was interrupted; an after-the-fact
@@ -442,3 +460,4 @@ one and already pinned, or fixed in the runtime where it was not:
 | C3/C4/C9 "fails exactly" for ablations | class-level containment checked; probe sets reported | §10, `revision_experiment.py` |
 | C6/C7 §0 provenance and "can beat replay" | corrected | §0 |
 | C10/C11 | wording | §4, §11 |
+| 2026-10-06, lessons | §13 added: foreign relations and the `entails` lesson, oracle views, transitions, lacunae, withdrawn, organism derivation of entailed twins, item class L. Settled by audit as an internal design choice (owner decision 8); the forbidden wordings of §0 apply to every L claim. | §13, `events.py`, `revision.py`, `controls.py`, `organism.py`, `sessions.py` |

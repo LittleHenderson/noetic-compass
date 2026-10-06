@@ -231,16 +231,25 @@ class TransitionTests(unittest.TestCase):
                         self.assertNotIn(e.pair, asked_yes, (item.item_id, e))
 
     def test_an_event_the_contract_gives_no_semantics_is_refused_not_guessed(self):
+        """Contract §1 and §13: a guessed, denied or asked association or foreign
+        edge has no semantics; a lesson must entail `leads_to` from a foreign relation."""
         for bad in (
             events.hypothesis("A", "B", events.ASSOCIATIVE_RELATION),
             events.negation("A", "B", events.ASSOCIATIVE_RELATION),
             events.ask("A", "B", events.ASSOCIATIVE_RELATION),
-            events.fact("A", "B", "owns"),
-            events.retract("A", "B", "owns"),
+            events.hypothesis("A", "B", "owns"),
+            events.negation("A", "B", "owns"),
+            events.ask("A", "B", "owns"),
+            events.Event(events.EventKind.FACT, "owns", "co_occurs", events.LESSON_RELATION),
+            events.Event(events.EventKind.FACT, "leads_to", "owns", events.LESSON_RELATION),
+            events.Event(events.EventKind.RETRACT, "owns", "owns2", events.LESSON_RELATION),
         ):
             with self.assertRaises(RevisionError, msg=str(bad)) as ctx:
                 replay((bad,), closed_world=False)
             self.assertEqual(ctx.exception.code, "E-RS-009")
+        # §13 admits foreign edges and their retraction (a retract of an absent edge is REFUSED, not refused-as-grammar)
+        out = replay((events.fact("A", "B", "owns"), events.retract("A", "B", "owns"), events.retract("A", "B", "owns")), closed_world=False)
+        self.assertEqual(out.refused, (2,))
 
 
 # ---- section 3: the verdict order, one method per rule ----------------------

@@ -28,6 +28,16 @@ from enum import Enum
 
 DEFAULT_RELATION = "leads_to"
 ASSOCIATIVE_RELATION = "co_occurs"
+#: A lesson is a FACT under this relation: `FACT(r, leads_to, relation="entails")`
+#: says "every edge of relation r counts as a leads_to edge while this is held"
+#: (Revision Streams contract §13). Told, retractable, never induced.
+LESSON_RELATION = "entails"
+RESERVED_RELATIONS = (DEFAULT_RELATION, ASSOCIATIVE_RELATION, LESSON_RELATION)
+
+
+def is_foreign(relation: str) -> bool:
+    """A relation the organism cannot chain over until a lesson entails it."""
+    return relation not in RESERVED_RELATIONS
 
 
 class EventKind(str, Enum):
@@ -116,6 +126,20 @@ def retract(subject: str, obj: str, relation: str = DEFAULT_RELATION) -> Event:
 
 def ask(subject: str, obj: str, relation: str = DEFAULT_RELATION) -> Event:
     return Event(EventKind.ASK, subject, obj, relation)
+
+
+def lesson(relation: str) -> Event:
+    """`relation` entails `leads_to`: the one kind of lesson the grammar admits (§13)."""
+    if not is_foreign(relation):
+        raise EventError("E-EV-004", f"a lesson must name a foreign relation, not {relation!r}")
+    return Event(EventKind.FACT, relation, DEFAULT_RELATION, LESSON_RELATION)
+
+
+def unlesson(relation: str) -> Event:
+    """Withdraw the lesson for `relation`."""
+    if not is_foreign(relation):
+        raise EventError("E-EV-004", f"a lesson must name a foreign relation, not {relation!r}")
+    return Event(EventKind.RETRACT, relation, DEFAULT_RELATION, LESSON_RELATION)
 
 
 def associate(subject: str, obj: str) -> Event:

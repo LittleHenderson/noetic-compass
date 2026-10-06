@@ -64,7 +64,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ccb_r1"))
 from cmb import CognitiveMemoryBoard  # noqa: E402
 from rpm import DEFAULT_SUFFICIENCY, Terminal  # noqa: E402
 
-from events import Event, EventKind  # noqa: E402
+from events import DEFAULT_RELATION, LESSON_RELATION, Event, EventKind, is_foreign  # noqa: E402
 from foundations import Drive, FoundationProfile, reasoning_profile  # noqa: E402
 from runtime import (  # noqa: E402
     EXPERIENCE_CELL,
@@ -89,6 +89,8 @@ ENGAGEMENT = DEFAULT_SUFFICIENCY / 10.0
 #: Stage label for hypotheses that arrive from the stream, so they are never
 #: confused with `^8`'s own route guesses (which are swept after each episode).
 STREAM_STAGE = "stream"
+#: Stage mark on a `leads_to` record derived from a foreign edge and a held lesson (§13).
+LESSON_STAGE = "lesson"
 
 
 class OrganismError(RuntimeError):
@@ -568,6 +570,7 @@ class Organism:
     def _fact(self, event: Event, index: int) -> _Outcome:
         wants_before = self.motivation.wants(self.ws)
         prop = self.ws.fact(event.subject, event.relation, event.obj)
+        entailed = self._entail(event, prop)
         satisfied = self._closed(wants_before)
         resolved: tuple[Episode, ...] = ()
         if satisfied and self.motivation.engaged:
@@ -576,7 +579,42 @@ class Organism:
             note = f"given, and now in dispute with its denial: {event.key}"
         else:
             note = f"given as {prop.status.value}"
+        if entailed:
+            note += f"; lesson applied: {', '.join(entailed)}"
         return _Outcome(note=note, satisfied=satisfied, resolved=resolved)
+
+    def _entail(self, event: Event, prop) -> tuple[str, ...]:
+        """Contract §13: a lesson `r entails leads_to` held together with an edge
+        `s -[r]-> o` lands `s|leads_to|o` as a DERIVED record whose support names
+        both. Nothing else is special: `^6` then finds the link present, a
+        conclusion through it carries it in its support, and retracting the edge
+        or the lesson cascades through `Workspace.retract`. A lesson is given,
+        never induced, and no weight anywhere changes."""
+        if prop.status is not Status.FACT:
+            return ()                                   # in dispute, or absorbed: nothing to apply
+        if event.relation == LESSON_RELATION:
+            if event.obj != DEFAULT_RELATION or not is_foreign(event.subject):
+                return ()
+            edges = [p for p in list(self.ws.props.values())
+                     if p.relation == event.subject and not p.negated and p.status in ASSERTIVE]
+            lesson_pid = prop.pid
+        elif is_foreign(event.relation):
+            held = self.ws.props.get(f"{event.relation}|{LESSON_RELATION}|{DEFAULT_RELATION}")
+            if held is None or held.status not in ASSERTIVE:
+                return ()
+            edges, lesson_pid = [prop], held.pid
+        else:
+            return ()
+        landed = []
+        for edge in edges:
+            twin = self.ws.props.get(f"{edge.subject}|{DEFAULT_RELATION}|{edge.obj}")
+            if twin is not None and twin.status in ASSERTIVE:
+                continue                                # already given or derived: nothing to add
+            derived = self.ws.derive(edge.subject, DEFAULT_RELATION, edge.obj, (edge.pid, lesson_pid),
+                                     stage=LESSON_STAGE, cas="^9^C_{F2}|A")
+            if derived.status is Status.DERIVED:
+                landed.append(derived.pid)
+        return tuple(landed)
 
     def _hypothesis(self, event: Event, index: int) -> _Outcome:
         before = self.ws.props.get(event.key)

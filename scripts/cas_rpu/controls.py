@@ -36,7 +36,7 @@ from collections import deque
 from dataclasses import dataclass, field, fields, replace
 from typing import Callable, Sequence
 
-from events import ASSOCIATIVE_RELATION, DEFAULT_RELATION, Event, EventKind
+from events import ASSOCIATIVE_RELATION, DEFAULT_RELATION, LESSON_RELATION, Event, EventKind, is_foreign
 
 Pair = tuple[str, str]
 
@@ -200,9 +200,28 @@ class _State:
     neg: set[Pair] = field(default_factory=set)
     hyp: set[Pair] = field(default_factory=set)
     assoc: set[Pair] = field(default_factory=set)
+    #: §13 lessons: foreign-relation edges by relation, and the relations whose lesson is held.
+    other: dict[str, set[Pair]] = field(default_factory=dict)
+    ent: set[str] = field(default_factory=set)
 
     def copy(self) -> "_State":
-        return _State(set(self.pos), set(self.neg), set(self.hyp), set(self.assoc))
+        return _State(set(self.pos), set(self.neg), set(self.hyp), set(self.assoc),
+                      {r: set(p) for r, p in self.other.items()}, set(self.ent))
+
+    def entailed(self) -> set[Pair]:
+        out: set[Pair] = set()
+        for r in self.ent:
+            out |= self.other.get(r, set())
+        return out
+
+    def foreign(self) -> set[Pair]:
+        out: set[Pair] = set()
+        for pairs in self.other.values():
+            out |= pairs
+        return out
+
+    def given(self) -> set[Pair]:
+        return self.pos | self.entailed()
 
 
 class Replayer:
@@ -233,6 +252,17 @@ class Replayer:
             if ev.relation == ASSOCIATIVE_RELATION:
                 st.assoc.add(pair)
                 return True
+            if ev.relation == LESSON_RELATION:                      # §13: a lesson
+                if ev.obj != DEFAULT_RELATION or not is_foreign(ev.subject):
+                    raise ValueError(f"lesson {ev} has no semantics in this family")
+                st.ent.add(ev.subject)
+                st.hyp -= st.other.get(ev.subject, set())
+                return True
+            if ev.relation != DEFAULT_RELATION:                      # §13: a foreign edge
+                st.other.setdefault(ev.relation, set()).add(pair)
+                if ev.relation in st.ent:
+                    st.hyp.discard(pair)
+                return True
             if not r.dispute:
                 st.neg.discard(pair)          # last writer wins: the denial is overwritten
             st.pos.add(pair)
@@ -242,7 +272,7 @@ class Replayer:
             if not r.firewall:
                 st.pos.add(pair)              # credulous: a guess is filed as a given
                 return True
-            if pair in st.pos or pair in st.neg:
+            if pair in st.given() or pair in st.neg:
                 return True                   # dead on arrival; a no-op, still ACCEPTED
             st.hyp.add(pair)
             return True
@@ -253,7 +283,20 @@ class Replayer:
             st.hyp.discard(pair)
             return True
         if ev.kind is EventKind.RETRACT:
-            target = st.assoc if ev.relation == ASSOCIATIVE_RELATION else st.pos
+            if ev.relation == LESSON_RELATION:                      # §13: withdraw a lesson
+                if ev.obj != DEFAULT_RELATION or not is_foreign(ev.subject):
+                    raise ValueError(f"lesson {ev} has no semantics in this family")
+                if ev.subject not in st.ent:
+                    return False
+                if r.forget:
+                    st.ent.discard(ev.subject)
+                return True
+            if ev.relation == ASSOCIATIVE_RELATION:
+                target = st.assoc
+            elif ev.relation == DEFAULT_RELATION:
+                target = st.pos
+            else:
+                target = st.other.get(ev.relation, set())            # §13: a foreign edge
             if pair not in target:
                 return False                  # never given, or held only as derived: REFUSED
             if r.forget:
@@ -267,8 +310,9 @@ class Replayer:
         r = self.rules
         s, t = ev.pair
         world_closed = closed_world if r.honour_world else False
-        contested = st.pos & st.neg if r.dispute else set()
-        clean = st.pos - contested
+        given = st.given()
+        contested = given & st.neg if r.dispute else set()
+        clean = given - contested
         work = 0
 
         if not r.local and contested:
@@ -304,10 +348,11 @@ class Replayer:
         if r.name_gaps:                                                                  # rule 6 + §4
             # The walk graph keeps contested links (^8 walks them) and drops
             # pairs that are only denied.
-            g_all = (clean | contested | st.hyp | st.assoc) - (st.neg - st.pos)
+            untaught = st.foreign() - st.entailed()                 # §13: walked, not chained over
+            g_all = (clean | contested | st.hyp | st.assoc | untaught) - (st.neg - given)
             adj_g = _adjacency(g_all)
             named = []
-            for u, v in sorted((st.hyp | st.assoc) - clean - st.neg):
+            for u, v in sorted((st.hyp | st.assoc | untaught) - clean - st.neg):
                 a, w1 = _reach_star(adj_g, s, u)
                 b, w2 = _reach_star(adj_g, v, t)
                 work += w1 + w2 + 1

@@ -922,6 +922,7 @@ def main(argv=None) -> int:
     ap.add_argument("--root", default=None, help="store root (default: a fresh temporary directory)")
     ap.add_argument("--faults", action="store_true", help="apply the fault schedule, one fault per seed")
     ap.add_argument("--no-twins", action="store_true")
+    ap.add_argument("--lessons", action="store_true", help="add the L-class lesson episodes (contract section 13); changes the fingerprint")
     ap.add_argument("--mirror", default=None, help="DIR for a second-directory mirror, or 's3' for the dedicated location")
     ap.add_argument("--replacement", action="store_true", help="destroy the local store between sessions; restore from the mirror")
     ap.add_argument("--json", default=None, help="write the full results here")
@@ -937,7 +938,7 @@ def main(argv=None) -> int:
     log = None if args.quiet else (lambda s: print(s, file=sys.stderr, flush=True))
     blob = {}
     for world in args.worlds.split(","):
-        sset = generate_session_set(_parse_seeds(args.seeds), sessions=args.sessions, closed_world=(world == "closed"))
+        sset = generate_session_set(_parse_seeds(args.seeds), sessions=args.sessions, closed_world=(world == "closed"), lessons=args.lessons)
         results = evaluate(sset, root, paths=paths, faults=args.faults, twins=not args.no_twins,
                            mirror=args.mirror, replacement=args.replacement, log=log)
         print(render(results, sset))
