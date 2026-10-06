@@ -46,8 +46,18 @@ implemented, so the "with RPA versus without" comparison cannot run yet.
 the counters are different currencies and are never compared across rows. The unmarked-guess
 ablation is reported as hygiene on this evidence.
 
-**Not shown, stated.** Level (b) survival (machine replacement), any frozen held-out result, RPA's
-value over an ordinary index, transfer, cooperation, neural retention.
+**Toward level (b) (same day, owner instruction: dedicated persistent location in the existing AWS
+setup).** `Stream(mirror=...)` mirrors every sealed document to a second location;
+`Stream.restore_from` rebuilds on a machine with none of the local state. Proven offline across three
+fresh processes with each machine's directory destroyed before the next restore. The S3 client
+(`scripts/cas_memory/s3store.py`, Signature V4 over the standard library, never deletes, never leaves
+its prefix; signer matches AWS's published example) lives outside the reasoning package because the
+sever law forbids network reach inside it. The live run is blocked: the sandbox's AWS key is rejected
+by the service (`InvalidAccessKeyId`); the test runs unchanged once a valid key with put/get/list on a
+dedicated prefix is present.
+
+**Not shown, stated.** Level (b) on the real AWS location (blocked on a valid key), any frozen held-out
+result, RPA's value over an ordinary index, transfer, cooperation, neural retention.
 
 ## The reasoning processor becomes an organism, and gets a task family that can only say what it can say (Oct 6, 2026)
 

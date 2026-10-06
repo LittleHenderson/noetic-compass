@@ -461,6 +461,7 @@ class Organism:
         workspace_factory: type = Workspace,
         record_first: bool = False,
         record_invalidation: str = "context",
+        record_narrow=None,
     ) -> None:
         if record_invalidation not in ("context", "dependency"):
             raise OrganismError(
@@ -477,6 +478,14 @@ class Organism:
         #: exact).
         self.record_first = record_first
         self.record_invalidation = record_invalidation
+        #: Optional narrowing step over the record candidates (memory contract
+        #: M8.6, the "record-first with RPA" path). A callable
+        #: `(key, candidates) -> candidates'` that may only REMOVE candidates;
+        #: returning one the index did not offer is refused (E-ORG-007). The
+        #: organism never imports an atlas; whatever narrows is injected, so a
+        #: measured difference between the two record-first paths is
+        #: attributable to the narrowing alone.
+        self.record_narrow = record_narrow
         self.record_stats: dict[str, int] = {"hit": 0, "miss": 0, "rejected": 0}
         self.last_mutation: int = -1
         #: pid -> index of the ASK whose walk last established or re-validated the
@@ -694,6 +703,15 @@ class Organism:
         established = self.standing.get(key)
         if established is None:
             return "miss", 0, 0
+        if self.record_narrow is not None:
+            narrowed = tuple(self.record_narrow(key, (key,)))
+            if any(c != key for c in narrowed):
+                raise OrganismError(
+                    "E-ORG-007",
+                    f"the narrowing step returned {narrowed!r}, which the record index did not offer",
+                )
+            if not narrowed:
+                return "rejected:narrowed-out", 1, 0
         prop = self.ws.props.get(key)
         if prop is None or prop.status not in ASSERTIVE:
             return "rejected:not-assertive", 1, 0

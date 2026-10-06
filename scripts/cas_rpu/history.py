@@ -43,6 +43,15 @@ Refusal codes:
     E-MEM-045  no document verifies; nothing can be served
     E-MEM-050  a retention limit was reached; the stream stops safely, state unchanged
     E-MEM-051  too little free space to save safely
+    E-MEM-052  the dedicated remote location refused the document (the local one stands;
+               the commit is NOT acknowledged at level (b))
+    E-MEM-053  the remote location holds no verifying document for the stream
+
+Survival level (b) is reached through `mirror`: an object store (an `S3Prefix`
+on the owner's dedicated AWS location, or a `DirectoryStore` standing in for it
+offline) that receives every sealed document after the local write, and from
+which `Stream.restore_from` rebuilds the stream on a machine that has none of
+the local state. The claim each test makes is written in its name.
 """
 
 from __future__ import annotations
@@ -312,7 +321,9 @@ class Stream:
         max_bytes: int = MAX_HISTORY_BYTES,
         max_retained: int = MAX_RETAINED_DOCUMENTS,
         min_free_bytes: int = MIN_FREE_BYTES,
+        mirror=None,
     ) -> None:
+        self.mirror = mirror
         self.identity = identity
         self.organism = organism
         self.directory = Path(directory)
@@ -470,7 +481,27 @@ class Stream:
         shutil.copyfile(target, retained)
         self._fsync_dir()
         self._prune_retained()
+        if self.mirror is not None:
+            self._mirror(data, retained.name)
         return target
+
+    def _remote_name(self, name: str) -> str:
+        return f"{self.identity.stream_id}/{name}"
+
+    def _mirror(self, data: bytes, retained_name: str) -> None:
+        """Put the sealed document in the dedicated remote location, current and retained.
+
+        The remote put happens after the local write succeeds, and the store's
+        own read-back verifies it. A refusal leaves the local document standing
+        and raises E-MEM-052: the commit is acknowledged at level (a) only, and
+        the next commit rewrites the whole document, so a transient refusal is
+        healed by the next successful save.
+        """
+        try:
+            self.mirror.put(self._remote_name(retained_name), data)
+            self.mirror.put(self._remote_name(CURRENT), data)
+        except Exception as exc:  # the store raises its own typed error; name it, never swallow it
+            raise MemoryError_("E-MEM-052", f"{getattr(self.mirror, 'describe', lambda: 'remote')()} refused: {exc}") from exc
 
     def _fsync_dir(self) -> None:
         fd = os.open(self.directory, os.O_RDONLY)
@@ -572,6 +603,27 @@ class Stream:
         return stream
 
     @classmethod
+    def restore_from(cls, store, stream_id: str, directory: Path | str, *, expected: Identity | None = None, reference=None, **limits) -> "Stream":
+        """Rebuild a stream on a machine that has none of its local state.
+
+        Every document the remote holds for `stream_id` is fetched into a fresh
+        local directory, then the ordinary `restore` runs with all its checks
+        (digest, identity, replay, audit). The restored stream keeps `store` as
+        its mirror, so its next commit goes to the same location.
+        """
+        directory = Path(directory)
+        directory.mkdir(parents=True, exist_ok=True)
+        names = [n for n in store.list() if n.startswith(stream_id + "/")]
+        if not names:
+            raise MemoryError_("E-MEM-053", f"{store.describe()} holds nothing for stream {stream_id}")
+        for name in names:
+            local = directory / name.split("/", 1)[1]
+            local.write_bytes(store.get(name))
+        stream = cls.restore(directory, expected=expected, reference=reference, **limits)
+        stream.mirror = store
+        return stream
+
+    @classmethod
     def _open_verified(cls, directory: Path) -> dict:
         candidates = [directory / CURRENT] + sorted(
             (p for p in directory.glob("history.*.json") if p.name != CURRENT), reverse=True
@@ -599,7 +651,9 @@ class Stream:
             f"committed  {self.last_committed_seq + 1} row(s); last seq {self.last_committed_seq}",
             f"document   {self.directory / CURRENT}",
             f"digest     {reference_digest(self.organism)[:16]}…",
-            f"survival   level (a) only: clean process exit and restart on the same machine",
+            (f"survival   level (a) locally; mirrored to {self.mirror.describe()}"
+             if self.mirror is not None else
+             "survival   level (a) only: clean process exit and restart on the same machine"),
         ]
         if self.stopped:
             lines.append(f"stopped    {self.stopped}")

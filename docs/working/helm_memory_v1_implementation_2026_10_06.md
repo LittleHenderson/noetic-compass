@@ -22,7 +22,12 @@ Whole-document rewrite per commit, retained copies included. Reported, not optim
 
 ## Which survival was demonstrated
 
-**(a)** a clean process exit and a restart on the same machine, in fresh operating-system processes under test. **(b)** machine termination and replacement: **not demonstrated**; it needs the authorized storage arrangement identified (directive amendment item 1).
+**(a)** a clean process exit and a restart on the same machine, in fresh operating-system processes under test: demonstrated.
+
+**(b)** machine termination and replacement. The owner's instruction (2026-10-06): use a dedicated persistent location in the existing AWS setup, save there, prove a replacement machine can restore. Status:
+
+- *Mechanism proven offline.* `Stream(mirror=...)` mirrors every sealed document to a second location; `Stream.restore_from` rebuilds on a machine with none of the local state. Test: three fresh processes, each machine's directory destroyed before the next restores from the remote alone; the taught fact is answered, a retraction withdraws its dependents, and the retraction survives the third restart. The second location in that test is a directory, so this proves that nothing is read from the destroyed machine; it does not prove AWS durability.
+- *Live location not yet reached.* The S3 client is written (`scripts/cas_memory/s3store.py`, Signature V4 over the standard library, signer verified against AWS's published example, never deletes, never leaves its prefix) and the live test exists, gated on `HELM_S3_BUCKET` and a valid key. The sandbox's AWS key was rejected by the service on 2026-10-06 (`InvalidAccessKeyId`, against both buckets the repository names, `nc-api-build-807562639912-usw2` and `cas-harness-runpod-92754088`). **What is needed:** a key with `s3:PutObject`, `s3:GetObject` and `s3:ListBucket` on one dedicated prefix of an existing bucket (proposed `s3://nc-api-build-807562639912-usw2/helm-memory/`), set as `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` with `HELM_S3_BUCKET` in the environment; the test then runs unchanged. A genuine second EC2 host is the final step and needs the AWS execution route.
 
 ## Record-first (contract M8), landed the same day
 
