@@ -268,6 +268,12 @@ New: X-delay, X-revive, X-deep, X-correct, X-hold (plain teach s_k / probe s_{k+
 | every replayed update applies exactly once | every injection that redelivers or retries (F8, F9, F11) plus D-redeliver | accepted logical update count in recovered state equals acknowledged count; no answer differs from the reference |
 | zero heartbeat faults on P1–P3 | every event | `Organism.faults` (`organism.py:703`) |
 
+### 5.1a Which survival is claimed (owner decision 2026-10-06, items 1 and 3)
+
+Two different tests, reported separately and never conflated: **(a)** the accepted state survives a clean process exit and a restart on the same machine; **(b)** it survives termination and replacement of the machine. The main suite's fresh-process sessions demonstrate (a). A claim of (b) requires the existing authorized storage arrangement to be identified, its survival verified by an actual replacement, and that run reported on its own. Every result sentence names (a) or (b).
+
+Retention limits are set before the first run as conservative engineering defaults (bytes, events, branches; initial numbers in the memory contract), to be revised from measurements. Reaching a limit stops the run safely and is reported as a limit; it never silently discards accepted knowledge, and a run that hit a limit is reported as "stopped at limit", not as a pass.
+
 ### 5.2 Failure categories (the report counts each separately; a probe may fall into several)
 F-A wrong verdict · F-B wrong contested set · F-C lacuna bound breach · F-D withdrawn bound breach · F-E stale fast-path answer · F-F unsupported fast-path answer · F-G cross-context answer · F-H guess cited or promoted without acceptance · F-I acknowledged update lost · F-J duplicate application · F-K restore validation false pass (digest matched reference but behavior differed, or served before validation) · F-L corruption skipped and served · F-M heartbeat fault · F-N harness or scoring error (E-SC-001/002, generator fault, timeout) · F-O refused/accepted disagreement on a non-ASK event (`Response.accepted` vs oracle `refused`, contract §6).
 
@@ -316,8 +322,9 @@ Identical inputs (fingerprints), seeds, split maps, machine (one instance; its t
 - **Development set**: seeds published in the repository (the PR 248 family seed 20261006 and any others the implementers choose), used for building, debugging and the dry run. Results on it are preparation, never evidence.
 - **Held-out set**: 20 seeds drawn by the custodian from `os.urandom`, plus the custodian's own copy of the expected outcomes. Never seen by implementers before the code freeze. After a failure and fix, a *new* held-out set is drawn (§5.4).
 
-### 7.2 The custodian
-A named person or agent **independent of implementation custody** (not the author of the memory layer, the record paths or this plan; directive lines 68, 107). Named in the manifest before the scored run. Duties: draw and seal the held-out seeds (publish `SHA-256(seeds || nonce)` before the freeze; reveal after the implementation commit hash is published); run the frozen generator and oracle on the held-out seeds in an environment the implementers do not access to produce expected outcomes and their hash; receive the frozen code hash and only then release seeds; receive the raw run artifacts and verify them against the expected-outcome hash. The custodian has no authority to change the plan, the code or the criteria.
+### 7.2 The custodian (owner decision 2026-10-06, directive amendment log item 4)
+
+The custodian need not be a human. A separately controlled evaluation agent or role holds the held-out seeds, the expected answers and their hashes. The requirement is that the builder and the learner cannot inspect or select against the final answers while the implementation is being improved: custody is a different session or process with its own transcript, it receives the frozen implementation hash before revealing anything, and it reveals seeds only after that hash is committed. This is **internal separation of responsibilities**, and the report describes it as exactly that; it is never described as an independent outside audit. The absence of a named human custodian does not stop code preparation.
 
 ### 7.3 What is hashed (the manifest)
 | artifact | hash method | produced by |
@@ -419,3 +426,4 @@ This plan **proposes**; it grants nothing: no merge, push, run, purchase, creden
 | date | change | reason | by |
 |---|---|---|---|
 | 2026-10-06 | v0.1 draft | directive §4–5; vision §3 gate | Claude (drafter) |
+| 2026-10-06 | §7.2 custodian may be a separately controlled agent (internal separation, not outside audit); §5.1a survival (a) vs (b) and bounded retention before first run | owner decisions, directive amendment log items 1, 3, 4 | Claude |

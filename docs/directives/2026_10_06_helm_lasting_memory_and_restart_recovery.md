@@ -297,3 +297,23 @@ Pinned source head: 4377a7da37176a0e9eecb25ad69a85ef89ec96ea. Preserve this orig
 [4] Existing RPA worktree and pinned commit identified on page 1. Branch: codex/helm-rpa-recorded-run-20260922. Relevant sources include cncm/rpa_model.py and rpa_recorded_helm.py. Verify the implementation checkout before editing.
 
 [5] Existing CAS memory substrate proposal and design boundaries
+
+---
+
+## Amendment log
+
+### 2026-10-06 — owner decisions on the points the directive left open
+
+Recorded verbatim in substance from the owner's message ("the following speaks for me, so follow as my word"). These bind every document that points at this directive.
+
+1. **Storage.** A folder on an AWS machine is not automatically lasting storage; it may disappear when the machine is terminated. Reuse the existing authorized storage arrangement and verify what survives shutdown and replacement. Every claim states which test was demonstrated: remembering after closing the program is one test; remembering after replacing the machine is a different one.
+2. **Single writer.** The reuse audit decides. Choose the existing writer that preserves the required meanings and recovery behavior, with a clear explanation; reuse existing code before proposing another journal. The owner does not pick between journal modules.
+3. **Retention limits.** Not "keep everything until measured". Set initial limits on bytes, events and branches before the first run, as conservative engineering choices revised from measurements later. When a limit is reached, stop safely and report it; never silently discard accepted knowledge.
+4. **Evaluation custodian.** Need not be a human. A separately controlled evaluation agent may hold the test material. What matters is that the builder and learner cannot inspect or select against the final answers while improving the implementation. This is internal separation of responsibilities and is never advertised as an independent outside audit. The absence of a named human does not stop code preparation.
+5. **Ownership.** Claude works on the assigned processor portion; Codex coordinates the integration map; DeepSeek's participation remains proposed until the actual current lead is reached. No one implies an agreement exists or starts another unrelated DeepSeek build.
+6. **The 100 sessions.** Keep the design unless the estimate shows a problem: 20 starting conditions, each followed through five fresh processes, not 100 independent starting conditions. The crucial question is what survives each process boundary: a useful correction, its supporting reasons, and any later withdrawal. Opening the program 100 times proves little.
+7. **Budget and access.** No new approval is needed for planning. The $250 project ceiling was explicitly approved; $97.59 is the last verified provisional commitment; actual billing still needs reconciliation. The three earlier $1 approvals belong to their specific jobs and do not fund this experiment. Design and estimation continue while the operator access is restored.
+8. **Implementation.** Silence is not permission. Already-authorized, narrowly scoped implementation proceeds within its existing boundaries once the contract is clear. Writing tests and running them are separate actions under the AWS-only requirement. Pushing implementation changes, opening a new PR, merging and paid execution each fit the applicable authorization. A separate PR may ease review but must extend the existing project, not create a competing build.
+
+**The result wanted, in the owner's words:** useful knowledge that changes answers, survives restart, and stays correct when its supporting facts change. Every decision stays tied to proving that behavior.
+
