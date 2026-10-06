@@ -197,6 +197,12 @@ jobs:
           -s scripts/tests
           -p 'test_cas_rpu_replacement.py'
 
+      - name: Run the continuation-bundle checker tests (neural-learning plan v1 preparation tooling; byte-level, no model)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_helm_neural_bundle_check.py'
+
       - name: Run the session-generator tests (multi-session streams, class L, registered fingerprints)
         run: >-
           python -m unittest discover
