@@ -238,7 +238,12 @@ def contract_checks(open_w: WorldResult, closed_w: WorldResult) -> list[tuple[st
 
 def render_cost(open_w: WorldResult, closed_w: WorldResult) -> str:
     head = f"{'solver':<28}{'first ask':>12}{'repeat ask':>12}{'n first':>9}{'n repeat':>9}"
-    lines = ["work per ask (workspace reads + edge visits; both worlds pooled; design measurement)", head, "-" * len(head)]
+    lines = [
+        "work per ask, both worlds pooled (design measurement, not one currency: a control counts",
+        "adjacency entries expanded + pairs filtered; an organism counts Workspace.ask calls +",
+        "propositions scanned by ^8. Compare a solver with itself as the stream grows, not across rows.)",
+        head, "-" * len(head),
+    ]
     for name in open_w.matrix.solvers:
         first = open_w.runs[name].first_ask_work + closed_w.runs[name].first_ask_work
         repeat = open_w.runs[name].repeat_ask_work + closed_w.runs[name].repeat_ask_work

@@ -140,6 +140,45 @@ jobs:
       - name: Run the CAS reasoning processor end to end (no model, no network)
         run: python scripts/cas_rpu/demo.py
 
+      - name: Run the CAS organism tests (persistent session, motivation, heartbeat)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_organism.py'
+
+      - name: Run the controlled-English encoder tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_encoder.py'
+
+      - name: Run the Revision Streams oracle and generator tests (pinned fingerprints)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_revision.py'
+
+      - name: Run the Revision Streams control tests (the oracle minus one rule)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_controls.py'
+
+      - name: Run the Revision Streams ablation tests (the workspace minus one rule)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_ablations.py'
+
+      - name: Run the Revision Streams scoring tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_scoring.py'
+
+      - name: Run the Revision Streams experiment and enforce the contract checks
+        run: python scripts/cas_rpu/revision_experiment.py --check --n 80 --quiet
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.
