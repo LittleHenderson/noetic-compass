@@ -250,6 +250,14 @@ jobs:
           -s scripts/tests
           -p 'test_cncm_interchange.py'
 
+      - name: Run the CNCM import tests (the reverse direction; a fact held by the pinned Codex kernel changes the organism's answer; a skip is a failure)
+        env:
+          CAS_RPA_REQUIRED: "1"
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cncm_import.py'
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.
