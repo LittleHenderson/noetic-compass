@@ -197,7 +197,25 @@ jobs:
           -s scripts/tests
           -p 'test_cas_rpu_replacement.py'
 
-      - name: Run the RPA-routing tests (skip when the RPA checkout is not mounted)
+      - name: Run the multi-session harness tests (one fresh process per session; fault schedule; replacement mechanism)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_session_harness.py'
+
+      - name: Mount the pinned RPA commit read-only (eb99855 of codex/helm-rpa-recorded-run-20260922)
+        run: |
+          # The RPA path is a comparison column; its tests must RUN in CI, not skip.
+          # The commit lives in this repository, so it is fetched by hash and checked
+          # out into the path rpa_adapter.DEFAULT_ROOT expects. The adapter refuses
+          # any content whose digests differ from the pinned files.
+          git fetch --depth 1 origin eb9985566bd11a89f485d627186ef0efa7177f02
+          git worktree add --detach .claude/worktrees/rpa-readonly eb9985566bd11a89f485d627186ef0efa7177f02
+          chmod -R a-w .claude/worktrees/rpa-readonly || true
+
+      - name: Run the RPA-routing tests (the pinned checkout is mounted, so a skip is a failure)
+        env:
+          CAS_RPA_REQUIRED: "1"
         run: >-
           python -m unittest discover
           -s scripts/tests

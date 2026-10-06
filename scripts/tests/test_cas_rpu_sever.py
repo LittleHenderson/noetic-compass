@@ -99,6 +99,7 @@ class NoModelInTheLoopTests(unittest.TestCase):
             # this package
             "banks", "foundations", "workspace", "runtime", "events", "encoder",
             "organism", "revision", "controls", "ablations", "scoring", "history",
+            "session_types", "sessions",
         }
         for path in sorted(PACKAGE.glob("*.py")):
             for line in path.read_text().splitlines():

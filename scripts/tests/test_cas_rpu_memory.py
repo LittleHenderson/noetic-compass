@@ -257,6 +257,52 @@ class SingleWriterTests(_Tmp):
         self.assertEqual(len(s.rows), 3, "nothing was applied")
         self.assertEqual(s.commit(ask("A", "D"), expected_version=0).verdict, "YES")
 
+    def test_a_retry_of_an_event_recorded_before_its_acknowledgment_was_lost_is_acknowledged_once_more_and_applied_once(self):
+        """A crash between the save and the ack: the host retries with the event's
+        original version. The row at the intended seq holds that very event, so the
+        stream answers with the recorded response and adds nothing."""
+        s = self.genesis()
+        s.run(CHAIN)
+        first = s.commit(fact("X", "Y"), expected_version=2)
+        rows = len(s.rows)
+        again = s.commit(fact("X", "Y"), expected_version=2)          # the retry, after the clock moved
+        self.assertIs(again, first)
+        self.assertEqual(len(s.rows), rows)
+        with self.assertRaises(MemoryError_) as ctx:
+            s.commit(fact("X", "Z"), expected_version=2)             # a different event at a taken seq is stale
+        self.assertEqual(ctx.exception.code, "E-MEM-002")
+        restored = Stream.restore(s.directory, expected=s.identity)
+        self.assertEqual(restored.commit(fact("X", "Y"), expected_version=2).verdict, None)
+        self.assertEqual(len(restored.rows), rows, "recognised across the restart too")
+
+    def test_history_lost_behind_the_acknowledged_prefix_is_refused_and_the_boundary_named(self):
+        """E-MEM-046: when the newest document that verifies ends before what the host
+        acknowledged, serving stops and the refusal names the lost rows. Without the
+        host's acknowledged seq the fallback is silent, so the host must pass it."""
+        s = self.genesis()
+        s.run(CHAIN + [ask("A", "D")])
+        acked = s.last_committed_seq
+        current = s.directory / CURRENT
+        current.write_bytes(b"{torn")
+        newest_retained = sorted(p for p in s.directory.glob("history.*.json") if p.name != CURRENT)[-1]
+        newest_retained.write_bytes(b"\xde\xad")
+        with self.assertRaises(MemoryError_) as ctx:
+            Stream.restore(s.directory, acknowledged_seq=acked)
+        self.assertEqual(ctx.exception.code, "E-MEM-046")
+        self.assertIn(f"rows {acked}..{acked} are lost", str(ctx.exception))
+        fallback = Stream.restore(s.directory)                          # no acknowledged seq: the older copy serves
+        self.assertEqual(fallback.last_committed_seq, acked - 1)
+        self.assertNotEqual(fallback.recovered_from, CURRENT)
+        self.assertEqual(len(fallback.recovery_failures), 2, "both damaged documents are named")
+
+    def test_the_fault_hook_fires_at_the_named_points_of_a_save_and_is_off_by_default(self):
+        s = self.genesis()
+        self.assertIsNone(s.fault_hook)
+        seen = []
+        s.fault_hook = seen.append
+        s.commit(fact("A", "B"))
+        self.assertEqual(seen, ["before-write", "before-replace", "after-replace", "after-save"])
+
     def test_refused_events_are_recorded_as_refused_and_replay_identically(self):
         s = self.genesis()
         s.run(CHAIN + [ask("A", "D"), retract("A", "D"), retract("Q", "Z")])

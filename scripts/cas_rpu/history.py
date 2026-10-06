@@ -41,6 +41,9 @@ Refusal codes:
     E-MEM-043  the rebuilt state's reference digest differs from the footer's
     E-MEM-044  the heartbeat audit faulted at restore
     E-MEM-045  no document verifies; nothing can be served
+    E-MEM-046  the newest verifying document ends before the host's acknowledged
+               prefix: committed history was lost (torn or corrupt after the
+               acknowledgment); the lost boundary is named and serving stops
     E-MEM-050  a retention limit was reached; the stream stops safely, state unchanged
     E-MEM-051  too little free space to save safely
     E-MEM-052  the dedicated remote location refused the document (the local one stands;
@@ -334,6 +337,17 @@ class Stream:
         self.min_free_bytes = min_free_bytes
         self._responses: dict[str, Response] = {}
         self.stopped: str | None = None
+        #: Test-only injection point for the recovery fault schedule: a callable
+        #: `(point) -> None` invoked at the named points of `save`; it may exit
+        #: the process (a crash at that point) and must never be set in service.
+        self.fault_hook = None
+        #: Set by `restore`: which document served and what failed to verify.
+        self.recovered_from: str | None = None
+        self.recovery_failures: tuple[str, ...] = ()
+
+    def _fault(self, point: str) -> None:
+        if self.fault_hook is not None:
+            self.fault_hook(point)
 
     # ---- genesis ------------------------------------------------------------
 
@@ -353,8 +367,14 @@ class Stream:
         record_invalidation: str = "context",
         project_id: str = PROJECT_ID,
         branch_id: str = TRUNK,
+        attach=None,
         **limits,
     ) -> "Stream":
+        """A new stream with an empty history. `attach(organism)`, if given, is
+        called on the fresh organism before anything is saved: it is how a
+        peripheral that is not a constructor argument (the RPA narrower) is
+        injected, and the same callable must be passed to `restore`, because
+        the replay must reproduce every recorded route."""
         identity = Identity(
             organism_id=organism_id,
             context_id=context_id,
@@ -370,7 +390,10 @@ class Stream:
             project_id=project_id,
             branch_id=branch_id,
         )
-        stream = cls(identity, build_organism(identity), directory, **limits)
+        organism = build_organism(identity)
+        if attach is not None:
+            attach(organism)
+        stream = cls(identity, organism, directory, **limits)
         stream.directory.mkdir(parents=True, exist_ok=True)
         stream.save()
         return stream
@@ -393,6 +416,16 @@ class Stream:
         """
         if self.stopped:
             raise MemoryError_("E-MEM-050", f"stream stopped: {self.stopped}")
+        if expected_version is not None and expected_version < self.last_committed_seq:
+            # The host believes the stream is behind where it is. If the row at the
+            # seq it intended holds this very event, the host is retrying an event
+            # whose acknowledgment it never received (a crash between the save and
+            # the ack): acknowledge it once more, change nothing. Otherwise the
+            # version is stale (E-MEM-002 for a mutation; an ASK is serialised).
+            intended = expected_version + 1
+            for row in self.rows:
+                if row["seq"] == intended and row["payload"] == event.canonical():
+                    return self._responses[row["event_id"]]
         if expected_version is not None and expected_version != self.last_committed_seq and event.kind is not EventKind.ASK:
             raise MemoryError_(
                 "E-MEM-002",
@@ -469,12 +502,15 @@ class Stream:
         target = self.directory / CURRENT
         retained = self.directory / f"history.{len(self.rows):08d}.json"   # numbered by rows committed
         tmp = self.directory / f".{CURRENT}.tmp"
+        self._fault("before-write")
         with open(tmp, "wb") as fh:
             fh.write(data)
             fh.flush()
             os.fsync(fh.fileno())
+        self._fault("before-replace")
         os.replace(tmp, target)
         self._fsync_dir()
+        self._fault("after-replace")
         read_back = target.read_bytes()
         if hashlib.sha256(read_back).hexdigest() != hashlib.sha256(data).hexdigest():
             raise MemoryError_("E-MEM-040", "the document read back differs from what was written")
@@ -483,6 +519,7 @@ class Stream:
         self._prune_retained()
         if self.mirror is not None:
             self._mirror(data, retained.name)
+        self._fault("after-save")
         return target
 
     def _remote_name(self, name: str) -> str:
@@ -532,6 +569,8 @@ class Stream:
         *,
         expected: Identity | None = None,
         reference=None,
+        acknowledged_seq: int | None = None,
+        attach=None,
         **limits,
     ) -> "Stream":
         """Rebuild the organism from the newest verifying document and check it before serving.
@@ -543,11 +582,23 @@ class Stream:
         not at the next beat; confirm every standing conclusion is assertive.
         Only then is the stream returned. `reference`, if given, is a callable
         `(events, closed_world) -> run` with `.answers` (a control), compared on
-        every ASK row.
+        every ASK row. `acknowledged_seq`, if given, is the last seq the host
+        holds an acknowledgment for: a verifying document that ends before it
+        means committed history was lost, and the stream refuses to serve
+        (E-MEM-046) naming the lost boundary rather than silently answering
+        from an older state.
         """
         directory = Path(directory)
-        doc = cls._open_verified(directory)
+        doc, opened, failures = cls._open_verified(directory)
         header = doc["header"]
+        if acknowledged_seq is not None and header["last_committed_seq"] < acknowledged_seq:
+            raise MemoryError_(
+                "E-MEM-046",
+                f"{opened} is the newest document that verifies and ends at seq {header['last_committed_seq']}, "
+                f"but the host holds acknowledgments through seq {acknowledged_seq}: "
+                f"rows {header['last_committed_seq'] + 1}..{acknowledged_seq} are lost; serving stops"
+                + (f" ({'; '.join(failures)})" if failures else ""),
+            )
         if header["schema_version"] != SCHEMA_VERSION:
             raise MemoryError_("E-MEM-010", f"schema {header['schema_version']!r} is not {SCHEMA_VERSION}")
         identity = Identity.from_dict(header)
@@ -559,6 +610,8 @@ class Stream:
                 raise MemoryError_("E-MEM-001", f"identity differs on {', '.join(differing)}")
 
         organism = build_organism(identity)
+        if attach is not None:
+            attach(organism)                              # the same peripherals as at genesis, before replay
         rows = doc["rows"]
         seen: set[str] = set()
         responses: dict[str, Response] = {}
@@ -600,10 +653,12 @@ class Stream:
 
         stream = cls(identity, organism, directory, rows=rows, **limits)
         stream._responses = responses
+        stream.recovered_from = opened
+        stream.recovery_failures = tuple(failures)
         return stream
 
     @classmethod
-    def restore_from(cls, store, stream_id: str, directory: Path | str, *, expected: Identity | None = None, reference=None, **limits) -> "Stream":
+    def restore_from(cls, store, stream_id: str, directory: Path | str, *, expected: Identity | None = None, reference=None, acknowledged_seq: int | None = None, attach=None, **limits) -> "Stream":
         """Rebuild a stream on a machine that has none of its local state.
 
         Every document the remote holds for `stream_id` is fetched into a fresh
@@ -619,12 +674,13 @@ class Stream:
         for name in names:
             local = directory / name.split("/", 1)[1]
             local.write_bytes(store.get(name))
-        stream = cls.restore(directory, expected=expected, reference=reference, **limits)
+        stream = cls.restore(directory, expected=expected, reference=reference, acknowledged_seq=acknowledged_seq, attach=attach, **limits)
         stream.mirror = store
         return stream
 
     @classmethod
-    def _open_verified(cls, directory: Path) -> dict:
+    def _open_verified(cls, directory: Path) -> tuple[dict, str, list[str]]:
+        """The newest document whose digest verifies, its file name, and what failed before it."""
         candidates = [directory / CURRENT] + sorted(
             (p for p in directory.glob("history.*.json") if p.name != CURRENT), reverse=True
         )
@@ -638,7 +694,7 @@ class Stream:
                 if digest(body) != doc.get("document_digest"):
                     failures.append(f"{path.name}: document digest mismatch")
                     continue
-                return doc
+                return doc, path.name, failures
             except (ValueError, KeyError, TypeError) as exc:
                 failures.append(f"{path.name}: {exc}")
         raise MemoryError_("E-MEM-045", "no document verifies: " + ("; ".join(failures) or "none found"))

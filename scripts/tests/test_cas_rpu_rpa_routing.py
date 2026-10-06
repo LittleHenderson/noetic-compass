@@ -11,7 +11,9 @@ record-first path. A measured zero is reported as zero.
 
 from __future__ import annotations
 
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -22,6 +24,7 @@ sys.path.insert(0, str(REPO / "scripts" / "cas_memory"))
 
 import rpa_adapter  # noqa: E402
 from events import ask, fact, hypothesis, negation, retract  # noqa: E402
+from history import MemoryError_, Stream  # noqa: E402
 from organism import Organism, OrganismError  # noqa: E402
 from revision import generate_revision_set  # noqa: E402
 
@@ -29,11 +32,43 @@ CHAIN = [fact("A", "B"), fact("B", "C"), fact("C", "D")]
 
 
 class _NeedsRpa(unittest.TestCase):
+    """Skips when the checkout is not mounted — unless `CAS_RPA_REQUIRED=1`, as CI
+    sets after mounting the pinned commit, in which case a skip is a failure:
+    a green run must mean the RPA path ran."""
+
     def setUp(self):
         try:
             self.rpa = rpa_adapter.load_rpa()
         except rpa_adapter.RpaUnavailable as exc:
+            if os.environ.get("CAS_RPA_REQUIRED") == "1":
+                raise AssertionError(f"CAS_RPA_REQUIRED=1 but the RPA path cannot run: {exc}")
             self.skipTest(str(exc))
+
+
+class VersionPinTests(_NeedsRpa):
+    def test_the_loaded_files_are_exactly_those_committed_at_the_pinned_commit(self):
+        v = rpa_adapter.loaded_version()
+        self.assertTrue(v["matches_pin"], v)
+        self.assertEqual(v["files"], rpa_adapter.RPA_FILE_SHA256)
+        if v["head"] is not None:
+            self.assertEqual(v["head"], rpa_adapter.RPA_COMMIT)
+
+    def test_a_checkout_with_different_content_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "cncm").mkdir()
+            (Path(d) / "cncm" / "rpa_model.py").write_text("# not the pinned file\n")
+            (Path(d) / "cncm" / "canonical.py").write_text("# nor this\n")
+            old = os.environ.get("CAS_RPA_ROOT")
+            os.environ["CAS_RPA_ROOT"] = d
+            try:
+                with self.assertRaises(rpa_adapter.RpaUnavailable) as ctx:
+                    rpa_adapter.load_rpa()
+                self.assertIn("not those committed", str(ctx.exception))
+            finally:
+                if old is None:
+                    del os.environ["CAS_RPA_ROOT"]
+                else:
+                    os.environ["CAS_RPA_ROOT"] = old
 
 
 class AtlasProjectionTests(_NeedsRpa):
@@ -112,6 +147,51 @@ class ZeroDifferenceTests(_NeedsRpa):
                 )
                 removed += narrower.stats["removed"]
             self.assertEqual(removed, 0, "the atlas removed a candidate the dependency check kept")
+
+
+class AcrossRestartTests(_NeedsRpa):
+    """The narrower is not a constructor argument, so a restore must reconnect it
+    (`Stream.restore(attach=...)`) before replay: every recorded route is then
+    reproduced, and the atlas-assisted path keeps working after the restart."""
+
+    def _attach(self):
+        rpa = self.rpa
+        made = []
+
+        def attach(organism):
+            n = rpa_adapter.RpaNarrower(organism, "s", rpa)
+            organism.record_narrow = n
+            made.append(n)
+        return attach, made
+
+    def test_the_narrower_is_reconnected_on_restore_and_the_record_path_hits_after_the_restart(self):
+        attach, made = self._attach()
+        with tempfile.TemporaryDirectory() as d:
+            s = Stream.genesis(d, organism_id="o", context_id="c", record_first=True, record_invalidation="dependency", attach=attach)
+            s.run(CHAIN + [ask("A", "D")])
+            self.assertEqual(s.commit(ask("A", "D")).route, "hit")
+            self.assertGreater(made[0].stats["lookups"], 0)
+            attach2, made2 = self._attach()
+            r = Stream.restore(d, expected=s.identity, attach=attach2)
+            self.assertIs(r.organism.record_narrow, made2[0], "the restored organism consults the atlas again")
+            self.assertGreater(made2[0].stats["lookups"], 0, "the replay itself went through the narrower")
+            self.assertEqual(r.commit(ask("A", "D")).route, "hit")
+            r.commit(retract("B", "C"))
+            self.assertEqual(r.commit(ask("A", "D")).verdict, "UNKNOWN")
+            again = Stream.restore(d, expected=s.identity, attach=self._attach()[0])
+            self.assertEqual(again.commit(ask("A", "D")).verdict, "UNKNOWN", "the retraction survived the second restart")
+
+    def test_restoring_without_the_narrower_still_replays_when_every_route_is_narrower_independent(self):
+        """With one candidate per key the atlas removes nothing, so the recorded
+        routes do not depend on it and a restore without `attach` replays cleanly.
+        The pre-registered zero difference, seen from the history side."""
+        attach, _ = self._attach()
+        with tempfile.TemporaryDirectory() as d:
+            s = Stream.genesis(d, organism_id="o", context_id="c", record_first=True, record_invalidation="dependency", attach=attach)
+            s.run(CHAIN + [ask("A", "D"), ask("A", "D"), negation("B", "C"), ask("A", "D")])
+            r = Stream.restore(d, expected=s.identity)
+            self.assertIsNone(r.organism.record_narrow)
+            self.assertEqual(r.last_committed_seq, s.last_committed_seq)
 
 
 if __name__ == "__main__":

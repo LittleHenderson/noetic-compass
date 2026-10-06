@@ -28,8 +28,10 @@ measured difference in verdicts and hits is zero.
 
 from __future__ import annotations
 
+import hashlib
 import importlib
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -40,6 +42,12 @@ DEFAULT_ROOT = (
 )
 RPA_COMMIT = "eb9985566bd11a89f485d627186ef0efa7177f02"
 RPA_BRANCH = "codex/helm-rpa-recorded-run-20260922"
+#: SHA-256 of the two files actually imported, as committed at RPA_COMMIT. The
+#: loader refuses any other content: "the RPA at eb99855" must mean exactly that.
+RPA_FILE_SHA256 = {
+    "cncm/rpa_model.py": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01",
+    "cncm/canonical.py": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a",
+}
 MODEL_VERSION = "cas_rpu.organism-atlas/0.1"
 
 
@@ -51,13 +59,40 @@ def rpa_root() -> Path:
     return Path(os.environ.get("CAS_RPA_ROOT", str(DEFAULT_ROOT)))
 
 
+def loaded_version(root: Path | None = None) -> dict:
+    """What is actually mounted: file digests, and the checkout's HEAD when git can say."""
+    root = root or rpa_root()
+    out = {"root": str(root), "pinned_commit": RPA_COMMIT, "files": {}}
+    for rel in RPA_FILE_SHA256:
+        path = root / rel
+        out["files"][rel] = hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+    try:
+        head = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, timeout=10)
+        out["head"] = head.stdout.strip() if head.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError):
+        out["head"] = None
+    out["matches_pin"] = out["files"] == RPA_FILE_SHA256
+    return out
+
+
 def load_rpa():
-    """Import `cncm.rpa_model` from the mounted checkout, or raise RpaUnavailable."""
+    """Import `cncm.rpa_model` from the mounted checkout, or raise RpaUnavailable.
+
+    Refuses a checkout whose imported files differ from those committed at
+    RPA_COMMIT, so a result labelled "RPA at eb99855" was produced by that code
+    and no other.
+    """
     root = rpa_root()
     if not (root / "cncm" / "rpa_model.py").exists():
         raise RpaUnavailable(
             f"RPA checkout not mounted at {root} (commit {RPA_COMMIT[:9]}, branch {RPA_BRANCH}); "
             "set CAS_RPA_ROOT or mount it read-only"
+        )
+    version = loaded_version(root)
+    if not version["matches_pin"]:
+        raise RpaUnavailable(
+            f"the RPA files at {root} are not those committed at {RPA_COMMIT[:9]}: "
+            f"{version['files']} (HEAD {version['head']}); refusing to load an unpinned version"
         )
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
