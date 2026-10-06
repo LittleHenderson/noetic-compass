@@ -1,0 +1,45 @@
+development 0 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 27.0 s
+development 1 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 23.6 s
+development 2 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 28.5 s
+development 0 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 27.6 s
+development 1 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 16.6 s
+development 2 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 25.7 s
+first-look 3000 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 24.0 s
+first-look 3001 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 25.6 s
+first-look 3002 primary {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 32.1 s
+first-look 3000 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 23.6 s
+first-look 3001 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 21.3 s
+first-look 3002 twin {"probes": 110, "agree": 105, "disagree": 5, "unmapped": 0, "conflict_elsewhere": 9, "conflict_elsewhere_disagree": 5, "agree_excluding_conflict_elsewhere": 110, "rejected_envelopes": 39, "lesson_probes": 28, "lesson_agree": 28} 27.2 s
+TOTALS {
+ "development/agree": 630,
+ "development/conflict_elsewhere": 54,
+ "development/conflict_elsewhere_disagree": 30,
+ "development/disagree": 30,
+ "development/lesson_agree": 168,
+ "development/lesson_probes": 168,
+ "development/probes": 660,
+ "development/rejected_envelopes": 234,
+ "development/unmapped": 0,
+ "first-look/agree": 630,
+ "first-look/conflict_elsewhere": 54,
+ "first-look/conflict_elsewhere_disagree": 30,
+ "first-look/disagree": 30,
+ "first-look/lesson_agree": 168,
+ "first-look/lesson_probes": 168,
+ "first-look/probes": 660,
+ "first-look/rejected_envelopes": 234,
+ "first-look/unmapped": 0
+}
+DISAGREEMENTS {
+ "development/C-blocked/YES->INADMISSIBLE/elsewhere=True": 6,
+ "development/C-bypassed/UNKNOWN->INADMISSIBLE/elsewhere=True": 6,
+ "development/C-bypassed/YES->INADMISSIBLE/elsewhere=True": 6,
+ "development/C-unrelated/UNKNOWN->INADMISSIBLE/elsewhere=True": 6,
+ "development/C-unrelated/YES->INADMISSIBLE/elsewhere=True": 6,
+ "first-look/C-blocked/YES->INADMISSIBLE/elsewhere=True": 6,
+ "first-look/C-bypassed/UNKNOWN->INADMISSIBLE/elsewhere=True": 6,
+ "first-look/C-bypassed/YES->INADMISSIBLE/elsewhere=True": 6,
+ "first-look/C-unrelated/UNKNOWN->INADMISSIBLE/elsewhere=True": 6,
+ "first-look/C-unrelated/YES->INADMISSIBLE/elsewhere=True": 6
+}
+DONE
