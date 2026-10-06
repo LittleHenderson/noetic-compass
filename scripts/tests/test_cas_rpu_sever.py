@@ -92,11 +92,13 @@ class NoModelInTheLoopTests(unittest.TestCase):
     def test_the_package_imports_only_stdlib_and_cas_organs(self):
         allowed = {
             "__future__", "dataclasses", "enum", "math", "sys", "pathlib",
-            "itertools", "typing", "collections",
+            "itertools", "typing", "collections", "re", "random", "hashlib",
+            "json", "string", "argparse", "statistics",
             # CAS organs, themselves model-free
             "cjt_sim", "cmb", "cdab", "rpm",
             # this package
-            "banks", "foundations", "workspace", "runtime",
+            "banks", "foundations", "workspace", "runtime", "events", "encoder",
+            "organism", "revision", "controls", "ablations", "scoring",
         }
         for path in sorted(PACKAGE.glob("*.py")):
             for line in path.read_text().splitlines():
