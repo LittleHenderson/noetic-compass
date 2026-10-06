@@ -33,7 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -57,6 +57,14 @@ from scoring import (  # noqa: E402
 )
 
 ORGANISM = "organism"
+#: The guarded positive-answer path (memory contract M8), in the directive's two
+#: invalidation modes. Both must agree with the oracle on every probe; the
+#: difference between them and the walk-first organism is cost and route, never
+#: a verdict.
+RECORD_FIRST = {
+    "organism_record_ctx": {"record_first": True, "record_invalidation": "context"},
+    "organism_record_dep": {"record_first": True, "record_invalidation": "dependency"},
+}
 
 
 # ---------------------------------------------------------------------------
@@ -70,6 +78,7 @@ class SolverRun:
     faults: int                                      # heartbeat faults (organism-family only)
     first_ask_work: list[int]
     repeat_ask_work: list[int]
+    routes: dict[str, int] = field(default_factory=dict)   # route -> count (record-first rows)
 
 
 def _repeat_flags(events) -> dict[int, bool]:
@@ -98,16 +107,20 @@ def run_control(control: Replayer, stream_set: StreamSet) -> SolverRun:
     return run
 
 
-def run_organism(name: str, stream_set: StreamSet, workspace_factory=None) -> SolverRun:
+def run_organism(name: str, stream_set: StreamSet, workspace_factory=None, **organism_kwargs) -> SolverRun:
     """One fresh Organism per item (contract §6): tokens are per item and an
     organism shared across items would carry routes between them."""
     run = SolverRun(name, [], 0, [], [])
     for item in stream_set.items:
-        kwargs = {"closed_world": stream_set.closed_world}
+        kwargs = {"closed_world": stream_set.closed_world, **organism_kwargs}
         if workspace_factory is not None:
             kwargs["workspace_factory"] = workspace_factory
         org = Organism(**kwargs)
         responses = org.run_stream(item.events)
+        for r in responses:
+            if r.verdict is not None and r.route not in ("walk", "disabled"):
+                key = r.route.split(":")[0]
+                run.routes[key] = run.routes.get(key, 0) + 1
         probes = probes_from_responses(responses)
         withdrawn = withdrawn_from_responses(responses, item.events)
         run.matrix_rows.append((item.item_id, score_item(item, probes, withdrawn)))
@@ -144,6 +157,9 @@ def run_world(stream_set: StreamSet, *, solvers: set[str] | None = None) -> Worl
             runs[control.name] = run_control(control, stream_set)
     if wanted(ORGANISM):
         runs[ORGANISM] = run_organism(ORGANISM, stream_set)
+    for name, kwargs in RECORD_FIRST.items():
+        if wanted(name):
+            runs[name] = run_organism(name, stream_set, **kwargs)
     for abl in ABLATIONS:
         if wanted(abl.name):
             runs[abl.name] = run_organism(abl.name, stream_set, abl.workspace)
@@ -214,10 +230,21 @@ def contract_checks(open_w: WorldResult, closed_w: WorldResult) -> list[tuple[st
         checks.append((f"organism agrees with the oracle on every probe ({label} world)", ok, detail))
         checks.append((f"organism heartbeat raised no fault ({label} world)", w.runs[ORGANISM].faults == 0,
                        f"{w.runs[ORGANISM].faults} fault(s)"))
+    for name in RECORD_FIRST:
+        if name not in open_w.runs:
+            continue
+        for w in (open_w, closed_w):
+            label = "closed" if w.closed_world else "open"
+            ok = w.matrix.perfect(name) and w.runs[name].faults == 0
+            detail = "" if ok else "; ".join(
+                f"{p.item_id}@{p.event_index} {p.variant}: expected {p.expected} got {p.got}" for p in w.matrix.failures[name][:8]
+            ) or f"{w.runs[name].faults} fault(s)"
+            routes = ", ".join(f"{k} {v}" for k, v in sorted(w.runs[name].routes.items()))
+            checks.append((f"{name} agrees with the oracle on every probe, no faults ({label}; routes: {routes})", ok, detail))
     for mech in CLASSES:
         broken_that_fail = [
             name for name in open_w.matrix.solvers
-            if name not in CORRECT_BY_CONSTRUCTION and name != ORGANISM
+            if name not in CORRECT_BY_CONSTRUCTION and name != ORGANISM and name not in RECORD_FIRST
             and any((w.matrix.rate(name, mech, c) or 1.0) < 1.0 for w in (open_w, closed_w) for c in ("verdict", "contested", "named", "withdrawn"))
         ]
         checks.append((f"class {mech} is diagnostic (some broken solver fails it)", bool(broken_that_fail), ", ".join(broken_that_fail)))

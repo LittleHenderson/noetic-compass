@@ -24,6 +24,14 @@ Whole-document rewrite per commit, retained copies included. Reported, not optim
 
 **(a)** a clean process exit and a restart on the same machine, in fresh operating-system processes under test. **(b)** machine termination and replacement: **not demonstrated**; it needs the authorized storage arrangement identified (directive amendment item 1).
 
+## Record-first (contract M8), landed the same day
+
+`Organism(record_first=True, record_invalidation="context" | "dependency")`. Off by default; the organism is then unchanged. On, `_ask` first checks the held record for the exact query key: the pid must be in `standing` and ASSERTIVE, its denial neither asserted nor disputed, the organism unfaulted, and — in dependency mode — every root ASSERTIVE; in context mode, additionally no accepted mutation since the record was last validated. A validated hit is served with no walk and no `Workspace.ask` call, and the response carries `route = "hit"` with the number of dependency edges checked as its work. Everything else routes to the walk and names why (`miss`, `rejected:<check>`).
+
+Hard law: on generated streams in both worlds, both modes agree with walk-first and with the oracle on every probe. Zero faults. Routes at n=80 per world: dependency 11 hits / 170 misses; context 1 hit / 10 rejected / 170 misses — the generator's interleaved facts invalidate almost every record under whole-context invalidation, as the directive's order of work anticipated. Cost, within the organism's own counters: repeat asks 10.9 (dependency) vs 13.7 (walk-first) at n=40; a hit costs the size of its support set. Under the no-cascade ablation the record check refuses the dead-rooted record and the walk reproduces that ablation's own known defect, so the fast path adds no stale answer beyond walk-first. Through `Stream`, the flag is identity and a restored stream hits from the replayed record.
+
+Not implemented: `rpa_routing` and the external index/atlas lookup (M8.6). The comparison "record-first without RPA versus with RPA" therefore cannot run yet.
+
 ## Next
 
-Guarded record-first answering behind a feature flag (contract M8; roadmap step 4), the generator classes the evaluation plan needs (§4), the work meter that counts actual work rather than `len(ws.props)`, then the development-seed dry run on the target instance before anything is frozen.
+The RPA-assisted lookup as a narrowing step over the same records (M8.6), the generator classes the evaluation plan needs (§4), then the development-seed dry run on the target instance before anything is frozen.

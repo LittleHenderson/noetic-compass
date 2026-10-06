@@ -390,11 +390,18 @@ class Response:
     work_scanned: int
     work: int
     beat: BeatReport
+    #: How an ASK was answered: "walk" (the ten-phase cycle), "hit" (a validated
+    #: held YES, no walk), "miss" (record-first on, nothing held),
+    #: "rejected:<check>" (a held record failed validation; the walk answered),
+    #: or "disabled" (record-first off). Non-ASK events carry "".
+    route: str = "walk"
+    records_examined: int = 0
+    dependency_edges_checked: int = 0
 
     def __str__(self) -> str:
         head = f"[{self.index:03d}] {self.event}"
         if self.event.kind is EventKind.ASK:
-            tail = f"-> {self.verdict}"
+            tail = f"-> {self.verdict} [{self.route}]"
             if self.lacunae:
                 tail += f"; lacunae {', '.join(self.lacunae)}"
             if self.contested:
@@ -425,6 +432,10 @@ class _Outcome:
     contested: tuple[str, ...] = ()
     satisfied: tuple[str, ...] = ()
     resolved: tuple[Episode, ...] = field(default_factory=tuple)
+    terminal: Terminal | None = None
+    route: str = ""
+    records_examined: int = 0
+    dependency_edges_checked: int = 0
 
 
 # ---- the organism -----------------------------------------------------------------
@@ -448,7 +459,30 @@ class Organism:
         processor_kwargs: dict | None = None,
         motivation_kwargs: dict | None = None,
         workspace_factory: type = Workspace,
+        record_first: bool = False,
+        record_invalidation: str = "context",
     ) -> None:
+        if record_invalidation not in ("context", "dependency"):
+            raise OrganismError(
+                "E-ORG-006",
+                f"record_invalidation must be 'context' or 'dependency', not {record_invalidation!r}",
+            )
+        #: The guarded positive-answer path (memory contract M8). Off by default:
+        #: the organism is then the walk-first reasoner unchanged. On, only a
+        #: still-valid held YES may be served from the record; everything else
+        #: falls back to the walk. `record_invalidation` is the directive's
+        #: order of work: "context" first (any accepted mutation since the record
+        #: was established invalidates it), "dependency" as the refinement (the
+        #: record's own roots are checked, which the workspace cascade keeps
+        #: exact).
+        self.record_first = record_first
+        self.record_invalidation = record_invalidation
+        self.record_stats: dict[str, int] = {"hit": 0, "miss": 0, "rejected": 0}
+        self.last_mutation: int = -1
+        #: pid -> index of the ASK whose walk last established or re-validated the
+        #: held YES (the record's `derived_at`). `standing` keeps the index that
+        #: first established it; this is what the context check compares.
+        self.validated_at: dict[str, int] = {}
         self.profile = profile or reasoning_profile()
         self.memory = memory or CognitiveMemoryBoard()
         self.ws: MeteredWorkspace = _metered(workspace_factory)(closed_world=closed_world)
@@ -482,6 +516,8 @@ class Organism:
             EventKind.ASK: self._ask,
         }[event.kind]
         outcome = handler(event, index)
+        if event.kind is not EventKind.ASK and outcome.accepted:
+            self.last_mutation = index
 
         # Withdrawal runs before the beat so that a conclusion the cascade
         # took down is reported as withdrawn, not audited as a fault. The
@@ -497,7 +533,7 @@ class Organism:
             code=outcome.code,
             note=outcome.note,
             episode=outcome.episode,
-            terminal=outcome.episode.terminal if outcome.episode is not None else None,
+            terminal=outcome.episode.terminal if outcome.episode is not None else outcome.terminal,
             verdict=outcome.verdict,
             lacunae=outcome.lacunae,
             contested=outcome.contested,
@@ -506,8 +542,11 @@ class Organism:
             resolved=outcome.resolved,
             work_asks=work_asks,
             work_scanned=self._scanned,
-            work=work_asks + self._scanned,
+            work=work_asks + self._scanned + outcome.dependency_edges_checked,
             beat=beat,
+            route=outcome.route,
+            records_examined=outcome.records_examined,
+            dependency_edges_checked=outcome.dependency_edges_checked,
         )
         self.log.append(response)
         return response
@@ -598,6 +637,23 @@ class Organism:
 
     def _ask(self, event: Event, index: int) -> _Outcome:
         self.asks_made += 1
+        route = "disabled"
+        examined = 0
+        edges = 0
+        if self.record_first:
+            route, examined, edges = self._record_check(event, index)
+            if route == "hit":
+                self.record_stats["hit"] += 1
+                self.motivation.perturb(Terminal.CONCLUDED)
+                return _Outcome(
+                    note="answered from the held record; no walk",
+                    verdict="YES",
+                    terminal=Terminal.CONCLUDED,
+                    route=route,
+                    records_examined=examined,
+                    dependency_edges_checked=edges,
+                )
+            self.record_stats["miss" if route == "miss" else "rejected"] += 1
         problem = Problem(
             name=f"ask{self.asks_made}",
             relation=event.relation,
@@ -612,13 +668,49 @@ class Organism:
             and episode.conclusion is not None
         ):
             self.standing.setdefault(episode.conclusion.pid, index)
+            self.validated_at[episode.conclusion.pid] = index
         return _Outcome(
             note=episode.note,
             episode=episode,
             verdict=episode.answer,
             lacunae=lacunae,
             contested=self._contested(episode),
+            route=route,
+            records_examined=examined,
+            dependency_edges_checked=edges,
         )
+
+    def _record_check(self, event: Event, index: int) -> tuple[str, int, int]:
+        """The guarded positive-answer check (memory contract M8.1 step 5).
+
+        Returns (route, records_examined, dependency_edges_checked). Only a
+        held YES is a candidate; every uncertain check falls back to the walk
+        and names what failed. `Workspace.ask` is never used here: it checks
+        no roots, knows nothing of disputed routes, and has side effects
+        (M8.3). Validity is read from the record and its support, so the work
+        performed is the size of the support set walked, not the workspace.
+        """
+        key = event.key
+        established = self.standing.get(key)
+        if established is None:
+            return "miss", 0, 0
+        prop = self.ws.props.get(key)
+        if prop is None or prop.status not in ASSERTIVE:
+            return "rejected:not-assertive", 1, 0
+        if self.heartbeat.faults:
+            return "rejected:faulted-organism", 1, 0
+        counter = self.ws.props.get("~" + key)
+        if counter is not None and counter.status in (*ASSERTIVE, Status.CONTRADICTED):
+            return "rejected:denied-or-disputed", 1, 0
+        if self.record_invalidation == "context" and self.last_mutation > self.validated_at.get(key, established):
+            return "rejected:context-changed", 1, 0
+        roots = self.ws.roots(key)
+        edges = 0
+        for pid in dict.fromkeys((key,) + roots):
+            edges += 1
+            if self.ws.props[pid].status not in ASSERTIVE:
+                return f"rejected:dead-root", 1, edges
+        return "hit", 1, edges
 
     # -- reasoning -------------------------------------------------------------------
 
@@ -691,6 +783,7 @@ class Organism:
         )
         for pid in fallen:
             del self.standing[pid]
+            self.validated_at.pop(pid, None)
         return fallen
 
     # -- inspection ---------------------------------------------------------------------

@@ -228,6 +228,8 @@ def build_organism(identity: Identity) -> Organism:
         processor_kwargs=args.get("processor_kwargs") or None,
         motivation_kwargs=args.get("motivation_kwargs") or None,
         workspace_factory=_factory_from_name(args.get("workspace_factory", "Workspace")),
+        record_first=bool(args.get("record_first", False)),
+        record_invalidation=args.get("record_invalidation", "context"),
     )
 
 
@@ -274,6 +276,7 @@ def outcome_projection(response: Response) -> dict:
         "resolved": len(response.resolved),
         "beat_no": response.beat.beat_no,
         "faults": len(response.beat.faults),
+        "route": response.route,
     }
 
 
@@ -335,6 +338,8 @@ class Stream:
         processor_kwargs: dict | None = None,
         motivation_kwargs: dict | None = None,
         workspace_factory: type = Workspace,
+        record_first: bool = False,
+        record_invalidation: str = "context",
         project_id: str = PROJECT_ID,
         branch_id: str = TRUNK,
         **limits,
@@ -348,6 +353,8 @@ class Stream:
                 "processor_kwargs": processor_kwargs or {},
                 "motivation_kwargs": motivation_kwargs or {},
                 "workspace_factory": _factory_name(workspace_factory),
+                "record_first": record_first,
+                "record_invalidation": record_invalidation,
             },
             project_id=project_id,
             branch_id=branch_id,

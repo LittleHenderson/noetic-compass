@@ -33,6 +33,15 @@ caught at restore (E-MEM-044). CI runs the file. 417 `cas_rpu` tests, 262 `ccb_r
 **Measured (development, this container).** 104 committed rows: commit median 3.6 ms, p95 5.9 ms;
 document 45 KB; restore with replay and reference comparison 16 ms; 2.4 MB written cumulatively.
 
+**Record-first (same day).** `Organism(record_first=True, record_invalidation=...)`: a held YES whose
+record and every root are still assertive is served without a walk; everything else falls back and
+names why. Both of the directive's invalidation modes (whole-context first, dependency as the
+refinement) agree with the oracle on every probe in both worlds, zero faults; the flag never changes
+an answer. Routes at n=80: dependency 11 hits / 170 misses; context 1 hit / 10 rejected (interleaved
+facts invalidate almost every record, as expected). Cost within the organism's own counters: repeat
+asks 10.9 vs 13.7 walk-first. 13 tests, CI-wired; 430 `cas_rpu` tests green. RPA narrowing is not
+implemented, so the "with RPA versus without" comparison cannot run yet.
+
 **Evidence corrections.** The PR 248 body and this log had said the replayer is cheaper per ask;
 the counters are different currencies and are never compared across rows. The unmarked-guess
 ablation is reported as hygiene on this evidence.
