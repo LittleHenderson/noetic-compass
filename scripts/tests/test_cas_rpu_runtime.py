@@ -267,6 +267,22 @@ class LocalizedContradictionTests(unittest.TestCase):
         episode = processor().run(problem)
         self.assertIs(episode.terminal, Terminal.NEEDS_INFORMATION)
 
+    def test_a_derivable_claim_whose_denial_is_given_is_a_dispute_not_a_yes(self):
+        """A clean chain reaches Z, and 'A does not lead to Z' is also given.
+        Deriving the chain does not make the claim true; it makes the
+        workspace disagree with itself about that exact claim."""
+        problem = Problem(
+            "denied-conclusion",
+            "leads_to",
+            (("VS", "leads_to", "QS"), ("QS", "leads_to", "IU")),
+            ("VS", "IU"),
+            negated_premises=(("VS", "leads_to", "IU"),),
+        )
+        episode = processor().run(problem)
+        self.assertIs(episode.terminal, Terminal.INADMISSIBLE)
+        self.assertIn("VS|leads_to|IU", episode.note)
+        self.assertTrue(episode.workspace.contested("VS", "leads_to", "IU"))
+
     def test_an_explicit_denial_is_a_no_under_an_open_world(self):
         """Being told something is false is knowledge, not a gap."""
         problem = Problem(

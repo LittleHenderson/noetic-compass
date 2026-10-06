@@ -84,7 +84,7 @@ from foundations import (  # noqa: E402
     parse_subfoundation,
     reasoning_profile,
 )
-from workspace import ASSERTIVE, Proposition, Workspace  # noqa: E402
+from workspace import ASSERTIVE, Proposition, Status, Workspace  # noqa: E402
 
 
 class Phase(str, Enum):
@@ -446,6 +446,26 @@ class ReasoningProcessor:
                 candidate=str(candidate),
                 verdict=inference.verdict,
             )
+            if (
+                inference.conclusion is not None
+                and inference.conclusion.status is Status.CONTRADICTED
+            ):
+                # The route is sound but the conclusion it lands on is held
+                # FALSE as a given. Deriving it did not make it true; it made
+                # the workspace disagree with itself about this exact claim.
+                # That is a dispute to report, never a YES to emit.
+                key = inference.conclusion.key
+                log(
+                    Phase.COMMIT,
+                    f"derived {key} but its denial is given: disputed",
+                    contested=[key],
+                )
+                return finish(
+                    Terminal.INADMISSIBLE,
+                    "INADMISSIBLE",
+                    f"contradictory premises on the queried route: {key}",
+                    candidates=candidates,
+                )
             if inference.verdict == "YES":
                 landed, chosen = inference, candidate
                 break
