@@ -197,6 +197,12 @@ jobs:
           -s scripts/tests
           -p 'test_cas_rpu_replacement.py'
 
+      - name: Run the session-generator tests (multi-session streams, class L, registered fingerprints)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_sessions.py'
+
       - name: "Run the lesson tests (contract section 13 - a told, retractable rule the organism could not apply before)"
         run: >-
           python -m unittest discover

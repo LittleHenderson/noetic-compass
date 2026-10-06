@@ -840,8 +840,9 @@ def _pct(ns: list[int], q: float) -> float | None:
 
 def render(results: dict[str, PathResult], sset: SessionSet) -> str:
     world = "closed" if sset.closed_world else "open"
+    executed_twins = max((sum(1 for run in r.runs if run.twin) for r in results.values()), default=0)
     lines = [f"== multi-session evaluation — {world} world — {len(sset.streams)} seed(s) × {sset.sessions} session(s), "
-             f"{len(sset.twins)} twin(s); fingerprint {sset.fingerprint()[:16]}…"]
+             f"{executed_twins} twin(s) run of {len(sset.twins)} generated; fingerprint {sset.fingerprint()[:16]}…"]
     for path, r in results.items():
         if r.skipped:
             lines.append(f"-- {path}: NOT RUN — {r.skipped}")
