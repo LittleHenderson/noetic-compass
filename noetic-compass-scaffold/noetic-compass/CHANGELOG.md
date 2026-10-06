@@ -55,9 +55,12 @@ probes per world): organism 100% on every column in both worlds, 0 faults; `ctl_
 four mechanism ablations; `abl_amnesic_ask` loses only the `named` column; `abl_fixed_world`
 is perfect open and wrong on exactly the closure probes closed); the heartbeat audit raised 8
 and 18 faults on the two broken-cascade ablations. The unmarked-guess ablation changed no
-scored cell on this family — reported, not claimed. Cost: the replayer is cheaper per ask on
-this family and the organism's repeat asks are not cheaper than its first, because `^8` walks
-every live proposition before a standing conclusion can be hit directly.
+scored cell on this family: on this evidence the stage mark is hygiene, not correctness. Cost:
+the two work counters are different currencies (a control counts adjacency entries expanded
+plus pairs filtered; an organism counts `Workspace.ask` calls plus propositions scanned) and
+are never compared across rows. Within its own row the organism's repeat asks are not cheaper
+than its first, because `^8` walks every live proposition before a standing conclusion can be
+hit directly.
 
 **Process.** The design was adversarially reviewed by three proposals and six attacks; the
 judge stage was interrupted, so a read-only cross-check of the hand-written contract followed

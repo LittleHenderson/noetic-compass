@@ -225,10 +225,14 @@ other ablation.
 `abl_no_sweep` removes the stage mark on `^8`'s route guesses, so they are
 neither swept nor skipped by the next walk. Through the organism, on a hand
 stream, a lingering guess is named as a gap (tested). On the generated family
-it changed **no scored cell**. That is the honest result: the mark is not
-load-bearing for correctness on this family, relative to the organism that
-lacks it, and the generator does not emit the probe pattern that would show
-it. Reported, not claimed.
+it changed **no scored cell**. That is the honest result: on this evidence the
+mark is hygiene, not correctness — it is not load-bearing for correctness on
+this family, relative to the organism that lacks it, and the generator does
+not emit the probe pattern that would show it. The directive's standard
+applies: add a meaningful probe (one where admitting the guess as a fact would
+change a later answer, with the expected outcomes frozen before the run) or
+report the change as hygiene. Until that probe exists, this is reported as
+hygiene, and a measured difference of zero would be reported as zero.
 
 ### 5.4 Cost
 
