@@ -101,6 +101,45 @@ jobs:
           -s scripts/tests
           -p 'test_ccb_r1_capability_sweep.py'
 
+      - name: Run the CAS reasoning processor Foundation bank tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_foundations.py'
+
+      - name: Run the CAS reasoning processor workspace tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_workspace.py'
+
+      - name: Run the CAS reasoning processor bank tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_banks.py'
+
+      - name: Run the CAS reasoning processor runtime tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_runtime.py'
+
+      - name: Run the CAS reasoning processor sever-the-cord tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_sever.py'
+
+      - name: Run the CAS reasoning processor console tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_repl.py'
+
+      - name: Run the CAS reasoning processor end to end (no model, no network)
+        run: python scripts/cas_rpu/demo.py
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.
