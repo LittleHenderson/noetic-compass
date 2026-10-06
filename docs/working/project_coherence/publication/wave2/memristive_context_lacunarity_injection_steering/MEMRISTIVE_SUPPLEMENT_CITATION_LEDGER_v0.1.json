@@ -1,0 +1,499 @@
+{
+  "schema_version": "project_coherence.publication.wave2.memristive_supplement_citation_ledger.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "publication_status": "PROPOSED SUPPLEMENTAL TRACK / NO CHARTER PAPER NUMBER",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "implementation_conclusion": "NONE",
+  "experimental_conclusion": "NONE / NOT STARTED",
+  "physical_device_conclusion": "NONE",
+  "base_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "authoring_source_snapshot_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "integration_source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+  "source_snapshot_policy": "The base commit preserves the exact historical authoring boundary. Wave 1 engineering citations S6-S12 below bind the corrected integration snapshot and retain their historical authoring bytes and hashes explicitly; this reconciliation promotes no claim.",
+  "checked_on_utc": "2026-08-06",
+  "citation_policy": "Primary papers, books, standards-level scholarly sources, and exact repository artifacts may motivate definitions, type distinctions, or future controls only. Citation presence is not evidence of a CAS implementation, run, device, causal mechanism, cognitive construct, safety effect, product capability, license, canon admission, authorship, submission, peer review, or disclosure authority.",
+  "external_primary_sources": [
+    {
+      "id": "E1",
+      "authors_or_issuer": ["Leon O. Chua"],
+      "year": 1971,
+      "title": "Memristor—The Missing Circuit Element",
+      "container": "IEEE Transactions on Circuit Theory 18(5), 507–519",
+      "source_type": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1109/TCT.1971.1083337",
+      "url": "https://doi.org/10.1109/TCT.1971.1083337",
+      "narrow_use": "Historical definition of the ideal electrical memristor as a charge-flux constitutive element.",
+      "non_inference": "Does not establish a CAS charge-flux mapping, cognitive memory, software implementation, or physical CAS device."
+    },
+    {
+      "id": "E2",
+      "authors_or_issuer": ["Leon O. Chua", "Sung-Mo Kang"],
+      "year": 1976,
+      "title": "Memristive Devices and Systems",
+      "container": "Proceedings of the IEEE 64(2), 209–223",
+      "source_type": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1109/PROC.1976.10092",
+      "url": "https://doi.org/10.1109/PROC.1976.10092",
+      "narrow_use": "General electrical internal-state formulation for memristive systems and distinction from the ideal element.",
+      "non_inference": "Does not make every history-dependent mathematical or software system an electrical memristive system."
+    },
+    {
+      "id": "E3",
+      "authors_or_issuer": ["Dmitri B. Strukov", "Gregory S. Snider", "Duncan R. Stewart", "R. Stanley Williams"],
+      "year": 2008,
+      "title": "The Missing Memristor Found",
+      "container": "Nature 453, 80–83",
+      "source_type": "PEER_REVIEWED_PHYSICAL_DEVICE_REPORT",
+      "doi": "10.1038/nature06932",
+      "url": "https://www.nature.com/articles/nature06932",
+      "narrow_use": "Example of a reported physical nanoscale model and device interpretation, used to distinguish physical-device evidence from equations and software.",
+      "non_inference": "Does not establish a physical CAS component, validate all memristor models, or transfer the reported material behavior to software."
+    },
+    {
+      "id": "E4",
+      "authors_or_issuer": ["Dmitri B. Strukov", "Gregory S. Snider", "Duncan R. Stewart", "R. Stanley Williams"],
+      "year": 2009,
+      "title": "Erratum: The Missing Memristor Found",
+      "container": "Nature 459, 1154",
+      "source_type": "PUBLISHER_CORRIGENDUM",
+      "doi": "10.1038/nature08166",
+      "url": "https://www.nature.com/articles/nature08166",
+      "narrow_use": "Correction record showing that physical-device source use must preserve corrigenda and exact equations.",
+      "non_inference": "Does not validate a CAS device or repair any untested CAS analogy."
+    },
+    {
+      "id": "E5",
+      "authors_or_issuer": ["Massimiliano Di Ventra", "Yuriy V. Pershin", "Leon O. Chua"],
+      "year": 2009,
+      "title": "Circuit Elements With Memory: Memristors, Memcapacitors, and Meminductors",
+      "container": "Proceedings of the IEEE 97(10), 1717–1724",
+      "source_type": "PEER_REVIEWED_REVIEW_AND_GENERALIZATION",
+      "doi": "10.1109/JPROC.2009.2021077",
+      "url": "https://doi.org/10.1109/JPROC.2009.2021077",
+      "narrow_use": "Electrical memory-element family and history/state framing.",
+      "non_inference": "Does not supply a dimension-preserving abstraction from electrical elements to CAS or establish a physical device."
+    },
+    {
+      "id": "E6",
+      "authors_or_issuer": ["Claude Allain", "Michel Cloitre"],
+      "year": 1991,
+      "title": "Characterizing the Lacunarity of Random and Deterministic Fractal Sets",
+      "container": "Physical Review A 44(6), 3552–3558",
+      "source_type": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1103/PhysRevA.44.3552",
+      "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.44.3552",
+      "narrow_use": "Gliding-box, mass-distribution, and scale-dependent lacunarity definition.",
+      "non_inference": "Does not make a single vector coefficient of variation, category-coverage score, or repository label a classical multiscale lacunarity measure."
+    },
+    {
+      "id": "E7",
+      "authors_or_issuer": ["Roy E. Plotnick", "Robert H. Gardner", "Walter W. Hargrove", "Karen Prestegaard", "M. Perlmutter"],
+      "year": 1993,
+      "title": "Lacunarity Indices as Measures of Landscape Texture",
+      "container": "Landscape Ecology 8, 201–211",
+      "source_type": "PEER_REVIEWED_APPLICATION_PAPER",
+      "doi": "10.1007/BF00125351",
+      "url": "https://doi.org/10.1007/BF00125351",
+      "narrow_use": "Multiscale texture interpretation and the requirement to bind box size and pattern domain.",
+      "non_inference": "Does not validate CAS labels, thresholds, category semantics, cognition, or safety."
+    },
+    {
+      "id": "E8",
+      "authors_or_issuer": ["Rudolf E. Kalman"],
+      "year": 1960,
+      "title": "A New Approach to Linear Filtering and Prediction Problems",
+      "container": "Journal of Basic Engineering 82(1), 35–45",
+      "source_type": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1115/1.3662552",
+      "url": "https://doi.org/10.1115/1.3662552",
+      "narrow_use": "Historical state-transition framing for separating latent state, update, observation, and prediction.",
+      "non_inference": "Does not imply that the proposed nonlinear CAS state is linear-Gaussian, identifiable, optimal, or implemented."
+    },
+    {
+      "id": "E9",
+      "authors_or_issuer": ["Isaak D. Mayergoyz"],
+      "year": 1986,
+      "title": "Mathematical Models of Hysteresis",
+      "container": "IEEE Transactions on Magnetics 22(5), 603–608",
+      "source_type": "PEER_REVIEWED_THEORY_PAPER",
+      "doi": "10.1109/TMAG.1986.1064347",
+      "url": "https://doi.org/10.1109/TMAG.1986.1064347",
+      "narrow_use": "Hysteresis as a separately structured mathematical phenomenon with applicability conditions.",
+      "non_inference": "Does not establish a Preisach model, physical hysteresis, or any loop behavior in CAS."
+    },
+    {
+      "id": "E10",
+      "authors_or_issuer": ["Lennart Ljung"],
+      "year": 1999,
+      "title": "System Identification: Theory for the User, Second Edition",
+      "container": "Prentice Hall PTR",
+      "source_type": "AUTHORITATIVE_TECHNICAL_MONOGRAPH",
+      "doi": null,
+      "isbn": "0-13-656695-2",
+      "url": "https://www.rt.isy.liu.se/en/books/sysid/",
+      "narrow_use": "Motivation for explicit model structures, validation, dynamic alternatives, residual analysis, and held-out comparison.",
+      "non_inference": "Does not select a CAS model, prove identifiability, or validate a history-state profile."
+    },
+    {
+      "id": "E11",
+      "authors_or_issuer": ["Alexander Matt Turner", "Lisa Thiergart", "Gavin Leech", "David Udell", "Juan J. Vazquez", "Ulisse Mini", "Monte MacDiarmid"],
+      "year": 2023,
+      "title": "Steering Language Models With Activation Engineering",
+      "container": "arXiv:2308.10248v5",
+      "source_type": "PRIMARY_RESEARCH_PREPRINT",
+      "doi": "10.48550/arXiv.2308.10248",
+      "url": "https://arxiv.org/abs/2308.10248v5",
+      "version": "v5",
+      "last_revised": "2024-10-10",
+      "narrow_use": "Primary example of inference-time activation modification and direction addition.",
+      "non_inference": "Does not validate CAS steering, cognitive semantics, safety, causality, generalization, or a product capability."
+    },
+    {
+      "id": "E12",
+      "authors_or_issuer": ["Andy Zou", "Long Phan", "Sarah Chen", "James Campbell", "Phillip Guo", "Richard Ren", "Alexander Pan", "Xuwang Yin", "Mantas Mazeika", "Ann-Kathrin Dombrowski", "Shashwat Goel", "Nathaniel Li", "Michael J. Byun", "Zifan Wang", "Alex Mallen", "Steven Basart", "Sanmi Koyejo", "Dawn Song", "Matt Fredrikson", "J. Zico Kolter", "Dan Hendrycks"],
+      "year": 2023,
+      "title": "Representation Engineering: A Top-Down Approach to AI Transparency",
+      "container": "arXiv:2310.01405",
+      "source_type": "PRIMARY_RESEARCH_PREPRINT",
+      "doi": "10.48550/arXiv.2310.01405",
+      "url": "https://arxiv.org/abs/2310.01405",
+      "narrow_use": "Primary example of representation-level monitoring and manipulation methods.",
+      "non_inference": "Does not prove that a CAS direction corresponds to a cognitive construct, causal variable, safety mechanism, or generalizable representation."
+    },
+    {
+      "id": "E13",
+      "authors_or_issuer": ["Nina Rimsky", "Nick Gabrieli", "Julian Schulz", "Meg Tong", "Evan Hubinger", "Alexander Turner"],
+      "year": 2024,
+      "title": "Steering Llama 2 via Contrastive Activation Addition",
+      "container": "Proceedings of ACL 2024, 15504–15522",
+      "source_type": "PEER_REVIEWED_PRIMARY_RESEARCH_PAPER",
+      "doi": "10.18653/v1/2024.acl-long.828",
+      "url": "https://aclanthology.org/2024.acl-long.828/",
+      "narrow_use": "Dataset-derived contrastive activation directions and matched steering controls as design precedents.",
+      "non_inference": "Does not transfer reported Llama 2 effects to CAS, another model, another behavior, safety, or causal interpretation."
+    },
+    {
+      "id": "E14",
+      "authors_or_issuer": ["Judea Pearl"],
+      "year": 2009,
+      "title": "Causality: Models, Reasoning, and Inference, Second Edition",
+      "container": "Cambridge University Press",
+      "source_type": "AUTHORITATIVE_CAUSAL_INFERENCE_MONOGRAPH",
+      "doi": "10.1017/CBO9780511803161",
+      "url": "https://doi.org/10.1017/CBO9780511803161",
+      "narrow_use": "Boundary between structural causal identification and association or software manipulation.",
+      "non_inference": "Does not supply a causal graph, identification assumptions, estimand, or causal conclusion for this proposal."
+    },
+    {
+      "id": "E15",
+      "authors_or_issuer": ["Brian A. Nosek", "Charles R. Ebersole", "Alexander C. DeHaven", "David T. Mellor"],
+      "year": 2018,
+      "title": "The Preregistration Revolution",
+      "container": "Proceedings of the National Academy of Sciences 115(11), 2600–2606",
+      "source_type": "PEER_REVIEWED_RESEARCH_PRACTICE_PAPER",
+      "doi": "10.1073/pnas.1708274114",
+      "url": "https://doi.org/10.1073/pnas.1708274114",
+      "narrow_use": "Motivation for separating prediction from post-outcome explanation through preregistration.",
+      "non_inference": "Does not make a preregistered study valid, authorized, causal, reproducible, or successful."
+    },
+    {
+      "id": "E16",
+      "authors_or_issuer": ["Marc Lipsitch", "Eric Tchetgen Tchetgen", "Ted Cohen"],
+      "year": 2010,
+      "title": "Negative Controls: A Tool for Detecting Confounding and Bias in Observational Studies",
+      "container": "Epidemiology 21(3), 383–388",
+      "source_type": "PEER_REVIEWED_METHODS_PAPER",
+      "doi": "10.1097/EDE.0b013e3181d61eeb",
+      "url": "https://doi.org/10.1097/EDE.0b013e3181d61eeb",
+      "narrow_use": "Motivation for negative controls as detectors of selected bias and confounding.",
+      "non_inference": "A passed negative control does not prove the absence of every confounder or establish a causal claim."
+    },
+    {
+      "id": "E17",
+      "authors_or_issuer": ["National Academies of Sciences, Engineering, and Medicine"],
+      "year": 2019,
+      "title": "Reproducibility and Replicability in Science",
+      "container": "The National Academies Press",
+      "source_type": "AUTHORITATIVE_CONSENSUS_REPORT",
+      "doi": "10.17226/25303",
+      "url": "https://doi.org/10.17226/25303",
+      "narrow_use": "Distinction among computational reproducibility, replication, uncertainty, transparency, and scientific review.",
+      "non_inference": "Does not establish reproduction, replication, scientific validity, or publication acceptance for this draft."
+    }
+  ],
+  "internal_source_citations": [
+    {
+      "id": "S1",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "role": "Publication architecture, Gate boundaries, Ring 4 requirements, and current seven-paper list."
+    },
+    {
+      "id": "S2",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "role": "Current CAS-Ohm, PCBA, Harness, physical-telemetry, safety, and product claim states."
+    },
+    {
+      "id": "S3",
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101",
+      "role": "Current theorem inventory and confirmation that this supplement adds no admitted theorem."
+    },
+    {
+      "id": "S4",
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB",
+      "role": "Existing typed symbols, forbidden aliases, and requirement for separate provisional identifiers."
+    },
+    {
+      "id": "S5",
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "role": "Open-versus-held disclosure separation and preservation of confidential Harness methods."
+    },
+    {
+      "id": "S6",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "sha256": "E94E2AB4EFF7FEAC00E68DDB8D22C58D53E29CEB0412BEF908E90E6A962B2306",
+      "bytes": 22136,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3",
+        "bytes": 21367
+      },
+      "role": "Provisional nonphysical state equation, matched memoryless baseline, no-charter-number boundary, and no-result status."
+    },
+    {
+      "id": "S7",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
+      "sha256": "7717F73F6ECDA1A8B849E998617FB2BCF4AD748EE75031091566BB7B044483DA",
+      "bytes": 24237,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "65EDA46D3650CF49DB43709D9748EB1ABD71CE947BD9D77034FB605D002D4F2E",
+        "bytes": 23551
+      },
+      "role": "Open stateful, stochastic, adaptive, and memristive component semantics."
+    },
+    {
+      "id": "S8",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+      "sha256": "4856CB67A58447B0871928A1AC68BF9341094B95A7665CE30E8BDB7E611409CB",
+      "bytes": 26422,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B",
+        "bytes": 24712
+      },
+      "role": "Bounded allowed wording and prohibited physical, material, stateful, and hysteresis inferences."
+    },
+    {
+      "id": "S9",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
+      "sha256": "7E2E69F25BBAB7024403C1386318064F1888A6AFF7CA8671C874A10C5D740638",
+      "bytes": 23888,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "F91A8C4CB0461561D9CEA82CDB1F21CCC211F6BC5CCEFCCA537926635E3D55C1",
+        "bytes": 23052
+      },
+      "role": "Exact Wave 1 engineering source and evidence boundaries."
+    },
+    {
+      "id": "S10",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+      "sha256": "CF5D905CB422C447AB9D9B92F4944A6E24A4224D171CCD3AF633DF9B52E43D0F",
+      "bytes": 15024,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4",
+        "bytes": 14952
+      },
+      "role": "Inherited primary memristor citations and non-inference boundaries."
+    },
+    {
+      "id": "S11",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4",
+      "bytes": 15634,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4",
+        "bytes": 15634
+      },
+      "role": "Existing stateful/memristive research, matched baseline, physical separation, audit, and replication obligations."
+    },
+    {
+      "id": "S12",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+      "bytes": 5533,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+        "bytes": 5251
+      },
+      "role": "Seven-artifact Wave 1 engineering package closure."
+    },
+    {
+      "id": "S13",
+      "path": "docs/working/project_coherence/gate4/README.md",
+      "sha256": "6CC3999A96BF1045A9179FDB333E0E28A9D141F02AE2D34C7484B919786E94DC",
+      "role": "Gate 4 status and scope."
+    },
+    {
+      "id": "S14",
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "5E59C34084D825EC14A8434EBBEAD80BD964D5FDD6DEDF168E9A5A65BD4C056E",
+      "role": "CAS-Ohm operational definitions, steering-alpha profile, controls, and empirical boundary."
+    },
+    {
+      "id": "S15",
+      "path": "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "19707B9213040A3B55DB51132C30B90A6004D15A611EC759906335F2E41450F0",
+      "role": "PCBA typed components and unresolved stateful/time semantics."
+    },
+    {
+      "id": "S16",
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_SOURCE_CONFLICT_EVIDENCE_v0.1.json",
+      "sha256": "F24BD64A21B944724993AC9C3A0996293FE6242E4F724D4B104DBAA7A6505507",
+      "role": "Preserved scale, unit, method, and steering/effective-resistance conflicts."
+    },
+    {
+      "id": "S17",
+      "path": "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json",
+      "sha256": "44DD99A847DA742C3EBEBC06D64452A6868421EE12129E789D1CC790DAE41B74",
+      "role": "Fifty-three Gate 4 criteria and open engineering, formalization, governance, external-validation, and safety boundaries."
+    },
+    {
+      "id": "S18",
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+      "role": "Exact 54-artifact Gate 4 closure."
+    },
+    {
+      "id": "S19",
+      "path": "docs/working/project_coherence/gate5/README.md",
+      "sha256": "9D97D8B9D4FD7206348751A509008F1ACCB80DAF4346CFC87D435FF6D7DACF2C",
+      "role": "Gate 5 status, experimental-not-started boundary, and hardened evidence-spine context."
+    },
+    {
+      "id": "S20",
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "8853CD3280F70FFCE08D5E199E21A8DDCF343E52D63C2E67A0B9F1C2EC60D7B8",
+      "role": "Preregistration, amendments, outcome access, Evidence Packet, and authority separation."
+    },
+    {
+      "id": "S21",
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "sha256": "A36AF54416BE39EBD89D42C5D306426F69898E8B3E5A248A04B30486E60AEBA8",
+      "role": "Forty-seven Gate 5 control, engineering, security, governance, and external-validation criteria."
+    },
+    {
+      "id": "S22",
+      "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "AF263573DAB68D814A09D75CFEBB2ECDD62B08491BD2D1D66C7D5332F682A72A",
+      "role": "Exact current 340-artifact Gate 5 closure."
+    },
+    {
+      "id": "S23",
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "sha256": "EFADC3C9C04C45AFB45953AF068C89D55D533EF14A79476B078C82B348967D1A",
+      "role": "Attack inventory, preserved negatives, noncausal intervention boundary, and unresolved evidence obligations."
+    },
+    {
+      "id": "S24",
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/lacunarity.py",
+      "sha256": "CABBB54E4E49154B83F006630345765AA9BFDA1904179C4685920FF030987A3B",
+      "role": "Source-text evidence of several differently defined repository quantities labelled lacunarity; no runtime or validity inference."
+    },
+    {
+      "id": "S25",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/scoring/lacunarity.rs",
+      "sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+      "bytes": 12564,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+      "observed_checkout_bytes": 12564,
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "9189a0b137b209798dda9e6bb584b3337acbb4f0",
+      "git_blob_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5",
+      "git_blob_content_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5",
+      "git_blob_bytes": 12231,
+      "role": "Rust source-text counterpart for repository-labelled lacunarity and category-gap scores; no conformance or measurement inference."
+    },
+    {
+      "id": "S26",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/lacunarity_gate.py",
+      "sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+      "bytes": 3139,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+      "observed_checkout_bytes": 3139,
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "80976a7adcb4519c166c36f6172ae2e1c65d9394",
+      "git_blob_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A",
+      "git_blob_content_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A",
+      "git_blob_bytes": 3056,
+      "role": "Source-text evidence of a named neural lacunarity gate; no trained, executed, safe, or scientifically valid implementation inference."
+    },
+    {
+      "id": "S27",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-native/tests/test_lacunarity.py",
+      "sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+      "bytes": 4331,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+      "observed_checkout_bytes": 4331,
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "5497b892a00bb99e52a7b3d53527db0757c08eed",
+      "git_blob_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364",
+      "git_blob_content_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364",
+      "git_blob_bytes": 4208,
+      "role": "Source-text evidence of local tests for a repository component; no current execution or scientific inference."
+    },
+    {
+      "id": "S28",
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py",
+      "sha256": "C1B7F4A3535F05504E7B862D23470F72F88AE7AC88757768288B1316F966A13D",
+      "role": "Disabled-by-default research-intervention source and explicit no-live-steering/no-safety boundary."
+    },
+    {
+      "id": "S29",
+      "path": "scripts/verify_project_coherence_gate4.py",
+      "sha256": "D53F45AFAA97C7AADE1375F0DADEFE6B034C3D4115C7E8DC49403802469BB27F",
+      "role": "Authoritative repository-local Gate 4 verifier source."
+    },
+    {
+      "id": "S30",
+      "path": "scripts/verify_project_coherence_gate5.py",
+      "sha256": "A10D1136278DD289BCF4245FC045B9A36535DFD07B25CC90FF20E9CDA134E59B",
+      "role": "Authoritative repository-local integrated Gate 5 verifier source."
+    }
+  ],
+  "external_source_count": 17,
+  "internal_source_count": 30,
+  "unresolved_citation_obligations": [
+    "Independent electrical-engineering review of the ideal-memristor and generalized-memristive-system summaries.",
+    "Independent device-physics review that preserves the 2009 Strukov et al. corrigendum and does not transfer physical claims.",
+    "Independent lacunarity specialist review of the gliding-box formula, scale dependence, and Lambda versus Lambda-minus-one distinction.",
+    "Independent activation-steering review of the primary-source descriptions, limitations, and model-specific scope.",
+    "Independent causal, preregistration, negative-control, reproducibility, and claim-language review.",
+    "Author, contributor, conflict-of-interest, acknowledgement, rights, submission, and disclosure decisions remain unassigned."
+  ],
+  "closure_statement": "This ledger supports a held supplemental research draft only. It does not establish standards conformance, software implementation, execution, physical hardware, electrical behavior, hysteresis, prediction, causality, cognition, safety, product readiness, licensing, canon admission, disclosure permission, authorship, submission, or peer-review acceptance."
+}

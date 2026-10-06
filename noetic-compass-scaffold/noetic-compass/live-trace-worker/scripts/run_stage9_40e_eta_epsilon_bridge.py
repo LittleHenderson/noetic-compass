@@ -118,6 +118,8 @@ class BridgeConfig:
     output: Path
     output_md: Path | None = None
     model_revision: str | None = None
+    model_artifact_manifest_path: Path | None = None
+    model_artifact_manifest_sha256: str | None = None
     torch_dtype: str = "float16"
     device_map: str = "auto"
     per_element: int = 2
@@ -152,7 +154,9 @@ def parse_args() -> Any:
     parser.add_argument("--eval-report", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--output-md", type=Path)
-    parser.add_argument("--model-revision")
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-artifact-manifest-path", required=True, type=Path)
+    parser.add_argument("--model-artifact-manifest-sha256", required=True)
     parser.add_argument("--torch-dtype", default="float16")
     parser.add_argument("--device-map", default="auto")
     parser.add_argument("--per-element", type=int, default=2)
@@ -178,6 +182,8 @@ def main() -> int:
         output=args.output,
         output_md=args.output_md,
         model_revision=args.model_revision,
+        model_artifact_manifest_path=args.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=args.model_artifact_manifest_sha256,
         torch_dtype=args.torch_dtype,
         device_map=args.device_map,
         per_element=args.per_element,
@@ -206,6 +212,26 @@ def main() -> int:
 
 def run_stage9_40e_bridge(config: BridgeConfig) -> dict[str, Any]:
     started = time.perf_counter()
+    model_config = ProbeShardConfig(
+        model_id=config.model_id,
+        worker_id="local-stage9-40e-bridge",
+        audit_id="stage9-40e-eta-epsilon-bridge",
+        job_id="manual-stage9-40e-equivalent",
+        layer_start=0,
+        layer_end=0,
+        shard_id="stage9-40e-eta-epsilon",
+        assigned_methods=("stage9_40e_readout", "eta_epsilon_bridge"),
+        expected_outputs=("40e_readout", "eta_epsilon_likelihood_bridge", "worker_evidence_manifest"),
+        result_path=config.output,
+        model_revision=config.model_revision,
+        model_artifact_manifest_path=config.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=config.model_artifact_manifest_sha256,
+        torch_dtype=config.torch_dtype,
+        device_map=config.device_map,
+        max_scenarios=max(1, config.per_element * 40),
+        max_length=config.max_length,
+        trust_remote_code=config.trust_remote_code,
+    )
     scenario_meta = load_stage9_scenario_meta(config.scenario_path)
     with np.load(config.dataset, allow_pickle=True) as data:
         features = data["features"].astype(np.float32)
@@ -253,26 +279,7 @@ def run_stage9_40e_bridge(config: BridgeConfig) -> dict[str, Any]:
     if not selected_indices:
         raise RuntimeError("No Stage 9 40E test rows survived selection/filtering.")
 
-    model_config = ProbeShardConfig(
-        model_id=config.model_id,
-        worker_id="local-stage9-40e-bridge",
-        audit_id="stage9-40e-eta-epsilon-bridge",
-        job_id="manual-stage9-40e-equivalent",
-        layer_start=0,
-        layer_end=0,
-        shard_id="stage9-40e-eta-epsilon",
-        assigned_methods=("stage9_40e_readout", "eta_epsilon_bridge"),
-        expected_outputs=("40e_readout", "eta_epsilon_likelihood_bridge", "worker_evidence_manifest"),
-        result_path=config.output,
-        model_revision=config.model_revision,
-        torch_dtype=config.torch_dtype,
-        device_map=config.device_map,
-        max_scenarios=len(selected_indices),
-        max_length=config.max_length,
-        trust_remote_code=config.trust_remote_code,
-    )
     lm, tokenizer, model_info = load_open_weight_model(model_config)
-
     conditions = (
         "none",
         "gold_readable",

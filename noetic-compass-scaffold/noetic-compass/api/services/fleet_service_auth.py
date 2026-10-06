@@ -39,6 +39,10 @@ FleetServiceCapability = Literal[
     "merge_distributed",
     "merge_fleet",
     "verify_fleet",
+    "seal_outcome",
+    "attach_evidence_packet",
+    "record_nonreporting",
+    "record_terminal_disposition",
 ]
 
 CAPABILITIES: frozenset[str] = frozenset(
@@ -52,6 +56,10 @@ CAPABILITIES: frozenset[str] = frozenset(
         "merge_distributed",
         "merge_fleet",
         "verify_fleet",
+        "seal_outcome",
+        "attach_evidence_packet",
+        "record_nonreporting",
+        "record_terminal_disposition",
     }
 )
 WORKER_CAPABILITIES: frozenset[str] = frozenset(
@@ -72,6 +80,7 @@ _NONCE_KIND = "fleet_service_nonce"
 _TOKEN_PREFIX = "casfs_"
 _CREDENTIAL_ID_RE = re.compile(r"^fsc_[0-9a-f]{32}$")
 _NONCE_RE = re.compile(r"^[A-Za-z0-9_-]{16,128}$")
+_UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
 _SCHEMA_VERSION = "cas_fleet_service_credential.v1"
 _DUMMY_DIGEST = "0" * 64
 
@@ -177,6 +186,173 @@ class FleetServicePrincipal:
     fleet_id: str
     worker_id: str | None
     capabilities: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class FleetServiceNonceReceipt:
+    """Server-side structural receipt for one durably consumed callback nonce.
+
+    This is not a signature, trusted timestamp, worker attestation, run-nonce
+    issuance receipt, or proof that callback payload bytes are authoritative.
+    It exposes only the exact durable nonce record needed by research adapters
+    to bind an already-authenticated callback to another strict envelope.
+    """
+
+    nonce_id: str
+    credential_id: str
+    tenant_id: str
+    account_id: str
+    audit_id: str
+    fleet_id: str
+    worker_id: str | None
+    capabilities: tuple[str, ...]
+    nonce_sha256: str
+    byte_length: int
+    consumed_at: str
+    expires_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class FleetServiceAuthenticatedCallback:
+    """Principal plus the exact nonce record created by authentication."""
+
+    principal: FleetServicePrincipal
+    nonce_receipt: FleetServiceNonceReceipt
+
+
+@dataclass(frozen=True, slots=True)
+class FleetServiceIntakeBinding:
+    """Exact request identity atomically attached to one callback nonce.
+
+    This is a server-observed HTTP intake record.  It authenticates neither
+    the carrier's author nor the model execution and provides no trusted time.
+    """
+
+    http_method: str
+    route_path: str
+    job_id: str
+    run_id: str
+    authorization_sha256: str | None
+    carrier_sha256: str
+    carrier_byte_length: int
+    lease_token_sha256: str | None = None
+
+    def __post_init__(self) -> None:
+        if not re.fullmatch(r"[A-Z]{3,12}", self.http_method or ""):
+            raise FleetServiceAuthError("Invalid bound-intake HTTP method.")
+        if (
+            not isinstance(self.route_path, str)
+            or not self.route_path.startswith("/")
+            or "?" in self.route_path
+            or "#" in self.route_path
+            or any(character.isspace() for character in self.route_path)
+            or len(self.route_path.encode("utf-8")) > 2048
+        ):
+            raise FleetServiceAuthError("Invalid bound-intake route path.")
+        _required_text(self.job_id, "job_id")
+        _required_text(self.run_id, "run_id")
+        if self.authorization_sha256 is not None and not _UPPER_SHA256_RE.fullmatch(
+            self.authorization_sha256
+        ):
+            raise FleetServiceAuthError(
+                "Bound-intake authorization_sha256 must be uppercase SHA-256."
+            )
+        if self.lease_token_sha256 is not None and not _UPPER_SHA256_RE.fullmatch(
+            self.lease_token_sha256
+        ):
+            raise FleetServiceAuthError(
+                "Bound-intake lease_token_sha256 must be uppercase SHA-256."
+            )
+        if not _UPPER_SHA256_RE.fullmatch(self.carrier_sha256 or ""):
+            raise FleetServiceAuthError(
+                "Bound-intake carrier_sha256 must be uppercase SHA-256."
+            )
+        if (
+            type(self.carrier_byte_length) is not int
+            or self.carrier_byte_length < 0
+            or self.carrier_byte_length > 2_000_000
+        ):
+            raise FleetServiceAuthError("Invalid bound-intake carrier byte length.")
+
+    def to_payload(self) -> dict[str, object]:
+        return {
+            "http_method": self.http_method,
+            "route_path": self.route_path,
+            "job_id": self.job_id,
+            "run_id": self.run_id,
+            "authorization_sha256": self.authorization_sha256,
+            "lease_token_sha256": self.lease_token_sha256,
+            "carrier_sha256": self.carrier_sha256,
+            "carrier_byte_length": self.carrier_byte_length,
+            "assurance": {
+                "scope": "SERVER_OBSERVED_HTTP_INTAKE_ONLY",
+                "payload_authentication": "NOT_ESTABLISHED",
+                "execution_authentication": "NOT_ESTABLISHED",
+                "trusted_time": "NOT_ESTABLISHED",
+            },
+        }
+
+    @classmethod
+    def from_payload(cls, payload: Mapping[str, object]) -> "FleetServiceIntakeBinding":
+        required_keys = {
+            "http_method",
+            "route_path",
+            "job_id",
+            "run_id",
+            "authorization_sha256",
+            "carrier_sha256",
+            "carrier_byte_length",
+            "assurance",
+        }
+        payload_keys = set(payload)
+        if not required_keys.issubset(payload_keys) or not payload_keys.issubset(
+            required_keys | {"lease_token_sha256"}
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        assurance = payload.get("assurance")
+        if assurance != {
+            "scope": "SERVER_OBSERVED_HTTP_INTAKE_ONLY",
+            "payload_authentication": "NOT_ESTABLISHED",
+            "execution_authentication": "NOT_ESTABLISHED",
+            "trusted_time": "NOT_ESTABLISHED",
+        }:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        length = payload.get("carrier_byte_length")
+        if type(length) is not int:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        authorization_sha256 = payload.get("authorization_sha256")
+        if authorization_sha256 is not None and not isinstance(
+            authorization_sha256, str
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        lease_token_sha256 = payload.get("lease_token_sha256")
+        if lease_token_sha256 is not None and not isinstance(
+            lease_token_sha256, str
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        try:
+            return cls(
+                http_method=str(payload["http_method"]),
+                route_path=str(payload["route_path"]),
+                job_id=str(payload["job_id"]),
+                run_id=str(payload["run_id"]),
+                authorization_sha256=authorization_sha256,
+                lease_token_sha256=lease_token_sha256,
+                carrier_sha256=str(payload["carrier_sha256"]),
+                carrier_byte_length=length,
+            )
+        except (KeyError, FleetServiceAuthError) as exc:
+            raise FleetServiceAuthenticationError(
+                "Invalid fleet service credential."
+            ) from exc
+
+
+@dataclass(frozen=True, slots=True)
+class FleetServiceBoundIntakeReceipt:
+    """Authenticated callback plus its same-row exact HTTP intake binding."""
+
+    callback: FleetServiceAuthenticatedCallback
+    intake_binding: FleetServiceIntakeBinding
 
 
 class FleetServiceAuthStore:
@@ -366,7 +542,10 @@ class FleetServiceAuthStore:
         fleet_id: str,
         worker_id: str | None = None,
         now: datetime | None = None,
+        _intake_binding: FleetServiceIntakeBinding | None = None,
     ) -> FleetServicePrincipal:
+        if _intake_binding is not None and type(_intake_binding) is not FleetServiceIntakeBinding:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
         stamp = now or datetime.now(UTC)
         tenant = _required_text(tenant_id, "tenant_id")
         token = (api_credential or "").strip()
@@ -413,18 +592,38 @@ class FleetServiceAuthStore:
         nonce_id = "fsn_" + hashlib.sha256(
             f"{credential.credential_id}:{nonce}".encode("utf-8")
         ).hexdigest()
+        nonce_payload: dict[str, object] = {
+            "schema_version": (
+                "cas_fleet_service_bound_intake_receipt.v2"
+                if _intake_binding is not None
+                else "cas_fleet_service_nonce_receipt.v1"
+            ),
+            "nonce_id": nonce_id,
+            "credential_id": credential.credential_id,
+            "tenant_id": credential.tenant_id,
+            "account_id": owner_account_id,
+            "audit_id": credential.audit_id,
+            "fleet_id": credential.fleet_id,
+            "worker_id": credential.worker_id,
+            "capabilities": list(credential.capabilities),
+            "nonce_sha256": hashlib.sha256(nonce.encode("utf-8")).hexdigest(),
+            "byte_length": len(nonce.encode("utf-8")),
+            "consumed_at": stamp.isoformat(),
+            "expires_at": (stamp + timedelta(seconds=self._clock_skew * 2)).isoformat(),
+        }
+        if _intake_binding is not None:
+            nonce_payload["intake_binding"] = _intake_binding.to_payload()
         nonce_record = LedgerRecord.new(
             tenant_id=tenant,
             kind=_NONCE_KIND,
             record_id=nonce_id,
-            payload={
-                "credential_id": credential.credential_id,
-                "nonce_sha256": hashlib.sha256(nonce.encode("utf-8")).hexdigest(),
-                "consumed_at": stamp.isoformat(),
-                "expires_at": (stamp + timedelta(seconds=self._clock_skew * 2)).isoformat(),
-            },
+            payload=nonce_payload,
             parent_ids=(credential.credential_id, audit_id),
-            source="fleet_service_auth.authenticate",
+            source=(
+                "fleet_service_auth.authenticate_bound_intake"
+                if _intake_binding is not None
+                else "fleet_service_auth.authenticate"
+            ),
             trace_id=audit_id,
         )
         try:
@@ -443,6 +642,302 @@ class FleetServiceAuthStore:
             worker_id=credential.worker_id,
             capabilities=credential.capabilities,
         )
+
+    def authenticate_with_nonce_receipt(
+        self,
+        *,
+        tenant_id: str,
+        api_credential: str,
+        timestamp: str,
+        nonce: str,
+        required_capability: str,
+        audit_id: str,
+        fleet_id: str,
+        worker_id: str | None = None,
+        now: datetime | None = None,
+    ) -> FleetServiceAuthenticatedCallback:
+        """Authenticate once and return the exact durable nonce record.
+
+        ``authenticate`` remains the compatibility surface used by existing
+        routes.  This additive method is for dark research adapters that must
+        compare a strict worker envelope with the server-created nonce record.
+        It does not make the callback timestamp trusted or attest execution.
+        """
+
+        principal = self.authenticate(
+            tenant_id=tenant_id,
+            api_credential=api_credential,
+            timestamp=timestamp,
+            nonce=nonce,
+            required_capability=required_capability,
+            audit_id=audit_id,
+            fleet_id=fleet_id,
+            worker_id=worker_id,
+            now=now,
+        )
+        receipt = self.consumed_nonce_receipt(principal=principal, nonce=nonce)
+        return FleetServiceAuthenticatedCallback(
+            principal=principal,
+            nonce_receipt=receipt,
+        )
+
+    def authenticate_with_bound_intake_receipt(
+        self,
+        *,
+        tenant_id: str,
+        api_credential: str,
+        timestamp: str,
+        nonce: str,
+        required_capability: str,
+        audit_id: str,
+        fleet_id: str,
+        intake_binding: FleetServiceIntakeBinding,
+        worker_id: str | None = None,
+        now: datetime | None = None,
+    ) -> FleetServiceBoundIntakeReceipt:
+        """Consume one callback nonce and its exact intake binding atomically."""
+
+        if type(intake_binding) is not FleetServiceIntakeBinding:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        principal = self.authenticate(
+            tenant_id=tenant_id,
+            api_credential=api_credential,
+            timestamp=timestamp,
+            nonce=nonce,
+            required_capability=required_capability,
+            audit_id=audit_id,
+            fleet_id=fleet_id,
+            worker_id=worker_id,
+            now=now,
+            _intake_binding=intake_binding,
+        )
+        callback = FleetServiceAuthenticatedCallback(
+            principal=principal,
+            nonce_receipt=self.consumed_nonce_receipt(
+                principal=principal,
+                nonce=nonce,
+            ),
+        )
+        receipt = FleetServiceBoundIntakeReceipt(
+            callback=callback,
+            intake_binding=intake_binding,
+        )
+        return self.verify_bound_intake_receipt(receipt)
+
+    def consumed_nonce_receipt(
+        self,
+        *,
+        principal: FleetServicePrincipal,
+        nonce: str,
+    ) -> FleetServiceNonceReceipt:
+        """Re-read and validate a nonce consumed for ``principal``.
+
+        The raw nonce is never returned or stored.  A missing, legacy,
+        cross-principal, or internally inconsistent record fails closed.
+        """
+
+        if not _NONCE_RE.fullmatch(nonce or ""):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        raw = nonce.encode("utf-8")
+        nonce_id = "fsn_" + hashlib.sha256(
+            f"{principal.credential_id}:{nonce}".encode("utf-8")
+        ).hexdigest()
+        try:
+            record = self._store.get(principal.tenant_id, _NONCE_KIND, nonce_id)
+        except StateStoreError as exc:
+            raise FleetServiceAuthenticationError(
+                "Fleet service verification unavailable."
+            ) from exc
+        if record is None:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        payload = record.payload
+        expected_digest = hashlib.sha256(raw).hexdigest()
+        byte_length = payload.get("byte_length")
+        schema_version = payload.get("schema_version")
+        source = record.source
+        schema_source_ok = (
+            schema_version == "cas_fleet_service_nonce_receipt.v1"
+            and source == "fleet_service_auth.authenticate"
+            and "intake_binding" not in payload
+        ) or (
+            schema_version == "cas_fleet_service_bound_intake_receipt.v2"
+            and source == "fleet_service_auth.authenticate_bound_intake"
+            and isinstance(payload.get("intake_binding"), Mapping)
+        )
+        if (
+            not schema_source_ok
+            or payload.get("nonce_id") != nonce_id
+            or payload.get("credential_id") != principal.credential_id
+            or payload.get("tenant_id") != principal.tenant_id
+            or payload.get("account_id") != principal.account_id
+            or payload.get("audit_id") != principal.audit_id
+            or payload.get("fleet_id") != principal.fleet_id
+            or payload.get("worker_id") != principal.worker_id
+            or payload.get("capabilities") != list(principal.capabilities)
+            or not isinstance(payload.get("nonce_sha256"), str)
+            or not hmac.compare_digest(str(payload["nonce_sha256"]), expected_digest)
+            or not isinstance(byte_length, int)
+            or isinstance(byte_length, bool)
+            or byte_length != len(raw)
+            or record.version != 1
+            or record.parent_ids != (principal.credential_id, principal.audit_id)
+            or record.trace_id != principal.audit_id
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        consumed_at = _optional_text(payload.get("consumed_at"))
+        expires_at = _optional_text(payload.get("expires_at"))
+        if consumed_at is None or expires_at is None:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        try:
+            consumed_time = _parse_time(consumed_at)
+            expires_time = _parse_time(expires_at)
+        except ValueError as exc:
+            raise FleetServiceAuthenticationError(
+                "Invalid fleet service credential."
+            ) from exc
+        if expires_time <= consumed_time:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        return FleetServiceNonceReceipt(
+            nonce_id=nonce_id,
+            credential_id=principal.credential_id,
+            tenant_id=principal.tenant_id,
+            account_id=principal.account_id,
+            audit_id=principal.audit_id,
+            fleet_id=principal.fleet_id,
+            worker_id=principal.worker_id,
+            capabilities=principal.capabilities,
+            # Harness-v2 strict artifacts use the repository-wide uppercase
+            # SHA-256 representation.  The durable record remains the exact
+            # lowercase digest historically used by this service.
+            nonce_sha256=expected_digest.upper(),
+            byte_length=byte_length,
+            consumed_at=consumed_at,
+            expires_at=expires_at,
+        )
+
+    def verify_authenticated_callback(
+        self,
+        callback: FleetServiceAuthenticatedCallback,
+    ) -> FleetServiceAuthenticatedCallback:
+        """Re-read a callback carrier against the exact durable nonce row.
+
+        This supports a downstream acceptance adapter without exposing the raw
+        transport nonce.  It proves only that this server ledger contains the
+        one-use record and exact principal scope; it is not a signature, trusted
+        clock, worker attestation, or payload authentication claim.
+        """
+
+        if type(callback) is not FleetServiceAuthenticatedCallback:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        principal = callback.principal
+        receipt = callback.nonce_receipt
+        if (
+            type(principal) is not FleetServicePrincipal
+            or type(receipt) is not FleetServiceNonceReceipt
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        expected_scope = (
+            principal.credential_id,
+            principal.tenant_id,
+            principal.account_id,
+            principal.audit_id,
+            principal.fleet_id,
+            principal.worker_id,
+            principal.capabilities,
+        )
+        receipt_scope = (
+            receipt.credential_id,
+            receipt.tenant_id,
+            receipt.account_id,
+            receipt.audit_id,
+            receipt.fleet_id,
+            receipt.worker_id,
+            receipt.capabilities,
+        )
+        if receipt_scope != expected_scope:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        try:
+            record = self._store.get(receipt.tenant_id, _NONCE_KIND, receipt.nonce_id)
+        except StateStoreError as exc:
+            raise FleetServiceAuthenticationError(
+                "Fleet service verification unavailable."
+            ) from exc
+        if record is None:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        payload = record.payload
+        schema_version = payload.get("schema_version")
+        source = record.source
+        schema_source_ok = (
+            schema_version == "cas_fleet_service_nonce_receipt.v1"
+            and source == "fleet_service_auth.authenticate"
+            and "intake_binding" not in payload
+        ) or (
+            schema_version == "cas_fleet_service_bound_intake_receipt.v2"
+            and source == "fleet_service_auth.authenticate_bound_intake"
+            and isinstance(payload.get("intake_binding"), Mapping)
+        )
+        if (
+            not schema_source_ok
+            or payload.get("nonce_id") != receipt.nonce_id
+            or payload.get("credential_id") != receipt.credential_id
+            or payload.get("tenant_id") != receipt.tenant_id
+            or payload.get("account_id") != receipt.account_id
+            or payload.get("audit_id") != receipt.audit_id
+            or payload.get("fleet_id") != receipt.fleet_id
+            or payload.get("worker_id") != receipt.worker_id
+            or payload.get("capabilities") != list(receipt.capabilities)
+            or str(payload.get("nonce_sha256") or "").upper() != receipt.nonce_sha256
+            or payload.get("byte_length") != receipt.byte_length
+            or payload.get("consumed_at") != receipt.consumed_at
+            or payload.get("expires_at") != receipt.expires_at
+            or record.version != 1
+            or record.parent_ids != (receipt.credential_id, receipt.audit_id)
+            or record.trace_id != receipt.audit_id
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        try:
+            consumed_time = _parse_time(receipt.consumed_at)
+            expires_time = _parse_time(receipt.expires_at)
+        except ValueError as exc:
+            raise FleetServiceAuthenticationError(
+                "Invalid fleet service credential."
+            ) from exc
+        if expires_time <= consumed_time:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        return callback
+
+    def verify_bound_intake_receipt(
+        self,
+        receipt: FleetServiceBoundIntakeReceipt,
+    ) -> FleetServiceBoundIntakeReceipt:
+        """Re-read the exact v2 nonce row and compare its request binding."""
+
+        if type(receipt) is not FleetServiceBoundIntakeReceipt:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        callback = self.verify_authenticated_callback(receipt.callback)
+        nonce_receipt = callback.nonce_receipt
+        try:
+            record = self._store.get(
+                nonce_receipt.tenant_id, _NONCE_KIND, nonce_receipt.nonce_id
+            )
+        except StateStoreError as exc:
+            raise FleetServiceAuthenticationError(
+                "Fleet service verification unavailable."
+            ) from exc
+        if (
+            record is None
+            or record.payload.get("schema_version")
+            != "cas_fleet_service_bound_intake_receipt.v2"
+            or record.source != "fleet_service_auth.authenticate_bound_intake"
+            or not isinstance(record.payload.get("intake_binding"), Mapping)
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        loaded = FleetServiceIntakeBinding.from_payload(
+            record.payload["intake_binding"]  # type: ignore[arg-type]
+        )
+        if loaded != receipt.intake_binding:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        return receipt
 
     def _digest(self, value: str) -> str:
         return hmac.new(self._pepper, value.encode("utf-8"), hashlib.sha256).hexdigest()

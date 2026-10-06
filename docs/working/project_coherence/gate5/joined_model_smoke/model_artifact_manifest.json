@@ -1,0 +1,1 @@
+{"artifacts":[{"byte_count":374998696,"path":"model.safetensors","sha256":"29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270"}],"model_id":"EleutherAI/pythia-160m","model_revision":"50f5173d932e8e61f858120bcb800b97af589f46","model_root":"/model","schema_version":"cas_harness_open_weight_artifact_manifest.v1"}

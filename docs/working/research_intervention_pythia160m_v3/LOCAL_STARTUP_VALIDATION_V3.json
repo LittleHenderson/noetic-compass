@@ -1,0 +1,90 @@
+{
+  "schema_version": "cas_harness_pythia160m_startup_validation.v3",
+  "created_at": "2026-07-29T16:07:27.7091511Z",
+  "status": "V3_SUCCESSOR_LOCK_LOCAL_PASS / RUN_NOT_AUTHORIZED",
+  "source_commit_before_v3_commit": "b34651c5336fe41c6d451cf4f2cbe34bbee7077f",
+  "lock": {
+    "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V3.json",
+    "byte_count": 10047,
+    "sha256": "37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5"
+  },
+  "startup_contract": {
+    "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_STARTUP_CONTRACT_V3.json",
+    "byte_count": 4744,
+    "sha256": "5478dbd7ad54a3cf813c32477fc88827721d774a554b85717cd348f417678cdc"
+  },
+  "environment_manifest": {
+    "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_ENVIRONMENT_MANIFEST_V3.json",
+    "byte_count": 2391,
+    "sha256": "c10867f20733d7bfaefed4dee2a3274697eaf344c349d3a72e366ad685376f05"
+  },
+  "bootstrap": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_v3_bootstrap.py",
+    "byte_count": 14179,
+    "sha256": "88889d5757ef71b243b55772f6e1d31a9246a3a6c47bb2b19bf4ac06dcca69bc"
+  },
+  "executor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor_v3.py",
+    "byte_count": 10284,
+    "sha256": "38b083c685fc4e3f26df2d1aec2cdb0a1beb2ede05bb7513fc8bec6b5edcb7eb"
+  },
+  "auditor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor_v3.py",
+    "byte_count": 3613,
+    "sha256": "22b508f0ede8fff8177c78cda3539c5177162b59599778530da841fdc56d4181"
+  },
+  "test_module": {
+    "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_v3_startup.py",
+    "byte_count": 8676,
+    "sha256": "829d29f4178834b217c0e2284bd3f7ebb01aac313af535f10abea8005edd2b4d"
+  },
+  "exact_interpreter": {
+    "path": "C:\\Python314\\python.exe",
+    "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+    "flags": [
+      "-I",
+      "-B"
+    ],
+    "isolated": 1,
+    "no_user_site": 1,
+    "dont_write_bytecode": 1
+  },
+  "fresh_interpreter_fixture": {
+    "status": "FRESH_INTERPRETER_FRAMEWORK_IMPORT_PASS / RUN_NOT_AUTHORIZED",
+    "torch_version": "2.11.0+cpu",
+    "transformers_version": "5.8.1",
+    "network_attempts_blocked": 1,
+    "socket_restored": true,
+    "model_loads": 0,
+    "tokenizer_loads": 0,
+    "gpu_queries": 0,
+    "output_created": false,
+    "receipt_created": false
+  },
+  "fail_closed_fixtures": {
+    "missing_package_root": "PASS",
+    "drifted_package_root": "PASS",
+    "missing_interpreter": "PASS",
+    "drifted_interpreter_hash": "PASS",
+    "missing_future_receipt_before_framework_import": "PASS",
+    "frameworks_imported_on_failure": [],
+    "output_created_on_failure": false
+  },
+  "independent_lock_validation": "INDEPENDENT_V3_LOCK_VALIDATION_PASS / RUN_NOT_AUTHORIZED",
+  "tests": {
+    "focused_v3": "9 passed in 12.91s",
+    "integrated_v0_v1_v2_v3": "61 passed in 17.35s"
+  },
+  "preserved_v2_evidence_mismatches": 0,
+  "framework_import_fixture_count": 1,
+  "model_loads": 0,
+  "tokenizer_loads": 0,
+  "research_runs": 0,
+  "receipts_created": 0,
+  "nonces_created_or_consumed": 0,
+  "gpu_queries": 0,
+  "network_provider_paid_runpod_calls": 0,
+  "research_output_created": false,
+  "claim_boundary": "Startup compatibility preparation only. No live steering, safety or prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or production result.",
+  "exact_next_authorization": "One separate explicit owner authorization for one fresh, one-use, offline CPU-only Pythia-160M V3 research run. A future receipt must bind the post-commit V3 source commit, V3 lock, startup contract and bootstrap, executor, independent auditor, model/tokenizer, split, intervention map, environment, compute cap, seeds, a new riv3 run ID, a new 64-hex nonce, expiry, and an absent isolated V3 output root."
+}

@@ -10,17 +10,138 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 SupportedHook = Literal[
     "residual_stream",
     "mlp_pre_activation",
     "mlp_post_activation",
+    "mlp_intermediate_post_activation",
     "attention_pattern",
     "attention_head_output",
     "logits",
 ]
+
+ModelExecutionKind = Literal[
+    "demo_schema_only",
+    "real_model_weights",
+    "typed_test_fixture",
+]
+
+
+_QWEN_OBSERVATION_MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
+_QWEN_OBSERVATION_ARCH = {
+    "family": "qwen2",
+    "n_layers": 24,
+    "hidden_size": 896,
+    "mlp_intermediate_dim": 4864,
+    "n_heads": 14,
+    "total_params": 494_032_768,
+}
+
+
+class InterventionHookContract(BaseModel):
+    """Exact tensor semantics for Stage-27F coordinate interventions."""
+
+    contract_version: Literal["harness_v2.mlp_intermediate_eraser.v2"] = (
+        "harness_v2.mlp_intermediate_eraser.v2"
+    )
+    coordinate_space: Literal["mlp_intermediate_post_activation"] = (
+        "mlp_intermediate_post_activation"
+    )
+    module_path_template: Literal[
+        "gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+    ] = "gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+    tensor_role: Literal["forward_pre_hook.input[0]"] = "forward_pre_hook.input[0]"
+    token_selection: Literal["batch_0_last_sequence_position"] = (
+        "batch_0_last_sequence_position"
+    )
+    expected_width_source: Literal["model_arch.mlp_intermediate_dim"] = (
+        "model_arch.mlp_intermediate_dim"
+    )
+    failure_policy: Literal["fail_closed"] = "fail_closed"
+
+
+class ObservationOnlyHookContract(BaseModel):
+    """Exact Qwen probe geometry with intervention support withheld.
+
+    The selected Qwen binding can observe the activated MLP intermediate at
+    ``down_proj``. It has no calibrated Qwen coordinate adapter, so this
+    carrier must never be interpreted as an available steering contract.
+    """
+
+    contract_version: Literal[
+        "harness_v2.qwen2_mlp_intermediate_observation_only.v1"
+    ] = "harness_v2.qwen2_mlp_intermediate_observation_only.v1"
+    capability_status: Literal[
+        "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+    ] = "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+    coordinate_space: Literal["mlp_intermediate_post_activation"] = (
+        "mlp_intermediate_post_activation"
+    )
+    module_path_template: Literal[
+        "model.layers[{layer}].mlp.down_proj"
+    ] = "model.layers[{layer}].mlp.down_proj"
+    tensor_role: Literal["forward_pre_hook.input[0]"] = "forward_pre_hook.input[0]"
+    token_selection: Literal["batch_0_last_sequence_position"] = (
+        "batch_0_last_sequence_position"
+    )
+    expected_width_source: Literal["model_arch.mlp_intermediate_dim"] = (
+        "model_arch.mlp_intermediate_dim"
+    )
+    failure_policy: Literal["fail_closed"] = "fail_closed"
+    unavailable_reason: Literal[
+        "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER"
+    ] = "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER"
+
+ModelIdentityStatus = Literal[
+    "DEMO_OR_UNLOADED",
+    "PINNED_REVISION_ONLY",
+    "PINNED_REVISION_AND_WEIGHTS_SHA256",
+]
+
+
+class RuntimeExecutionEvidence(BaseModel):
+    """Observed execution substrate for a real-model manifest."""
+
+    profile: Literal["development", "production"]
+    device: Literal["cpu", "cuda"]
+    dtype: Literal["torch.float32", "torch.float16", "torch.bfloat16"]
+    torch_version: str = Field(..., min_length=1)
+    torch_native_jit_disabled: bool = False
+    cuda_bfloat16_supported: bool | None = None
+    cuda_runtime_version: str | None = None
+    cuda_driver_version: int | None = Field(default=None, ge=1)
+    cuda_device_name: str | None = Field(default=None, min_length=1)
+    cuda_device_capability: str | None = Field(default=None, min_length=3)
+
+    @model_validator(mode="after")
+    def _production_requires_observed_cuda(self) -> "RuntimeExecutionEvidence":
+        if self.profile == "production":
+            if self.device != "cuda" or self.dtype != "torch.bfloat16":
+                raise ValueError("production runtime evidence requires CUDA bfloat16 execution")
+            if self.torch_native_jit_disabled is not True:
+                raise ValueError("production runtime evidence requires native JIT disabled")
+            if self.cuda_bfloat16_supported is not True:
+                raise ValueError("production runtime evidence requires native CUDA BF16 support")
+            if not (
+                self.cuda_runtime_version
+                and self.cuda_driver_version
+                and self.cuda_device_name
+                and self.cuda_device_capability
+            ):
+                raise ValueError(
+                    "production runtime evidence requires CUDA runtime, driver, device, "
+                    "and capability observations"
+                )
+            if self.torch_version != "2.13.0+cu126":
+                raise ValueError("production runtime evidence requires Torch 2.13.0+cu126")
+            if self.cuda_runtime_version != "12.6":
+                raise ValueError("production runtime evidence requires CUDA runtime 12.6")
+            if self.cuda_driver_version < 12060:
+                raise ValueError("production runtime evidence requires CUDA driver API 12.6+")
+        return self
 
 
 class ModelArch(BaseModel):
@@ -47,9 +168,72 @@ class ModelManifest(BaseModel):
     model_arch: ModelArch
     tokenizer_id: str = Field(..., description="Tokenizer model id (often equal to model_id).")
     supported_hooks: list[SupportedHook] = Field(
-        default_factory=lambda: ["residual_stream", "mlp_post_activation", "attention_pattern", "logits"],
+        default_factory=lambda: [
+            "residual_stream",
+            "mlp_intermediate_post_activation",
+            "attention_pattern",
+            "logits",
+        ],
+    )
+    execution_kind: ModelExecutionKind = Field(
+        default="demo_schema_only",
+        description=(
+            "Typed runtime provenance. Demo/test fixtures remain distinguishable "
+            "from execution on loaded model weights."
+        ),
+    )
+    intervention_hook_contract: (
+        InterventionHookContract | ObservationOnlyHookContract
+    ) = Field(
+        default_factory=InterventionHookContract,
     )
     worker_version: str = Field(default="m1-scaffold", description="Worker code version tag.")
+    requested_revision: str | None = Field(
+        default=None,
+        description="Exact model-repository commit requested from the loader.",
+    )
+    resolved_revision: str | None = Field(
+        default=None,
+        description="Commit reported by the loaded model configuration after resolution.",
+    )
+    revision_verified: bool = Field(
+        default=False,
+        description="True only when resolved_revision exactly equals requested_revision.",
+    )
+    weights_filename: str | None = Field(
+        default=None,
+        description="Exact single-file model-weights artifact verified by the loader.",
+    )
+    weights_sha256: str | None = Field(
+        default=None,
+        description="Worker-recomputed lowercase SHA-256 of weights_filename.",
+    )
+    weights_bytes: int | None = Field(
+        default=None,
+        strict=True,
+        ge=1,
+        description="Worker-counted byte length of weights_filename.",
+    )
+    weights_hash_verified: bool = Field(
+        default=False,
+        description=(
+            "True only when the locally cached weights file matches the pinned "
+            "filename, byte length, and SHA-256 constants."
+        ),
+    )
+    model_identity_status: ModelIdentityStatus = Field(
+        default="DEMO_OR_UNLOADED",
+        description=(
+            "Typed identity strength. PINNED_REVISION_ONLY does not establish "
+            "weights-file identity; real execution requires the stronger status."
+        ),
+    )
+    runtime_execution: RuntimeExecutionEvidence | None = Field(
+        default=None,
+        description=(
+            "Observed device, dtype, Torch, and CUDA substrate for this loaded model."
+        ),
+    )
     is_real_model: bool = Field(
         default=False,
         description=(
@@ -58,3 +242,93 @@ class ModelManifest(BaseModel):
             "claim live-model status while still streaming fakes."
         ),
     )
+
+    @model_validator(mode="after")
+    def _real_model_requires_revision_attestation(self) -> "ModelManifest":
+        qwen_contract = isinstance(
+            self.intervention_hook_contract,
+            ObservationOnlyHookContract,
+        )
+        qwen_identity = (
+            self.model_id == _QWEN_OBSERVATION_MODEL_ID
+            or self.model_arch.family == "qwen2"
+        )
+        if qwen_contract or qwen_identity:
+            observed_arch = {
+                field: getattr(self.model_arch, field)
+                for field in _QWEN_OBSERVATION_ARCH
+            }
+            if not (
+                qwen_contract
+                and self.model_id == _QWEN_OBSERVATION_MODEL_ID
+                and self.tokenizer_id == _QWEN_OBSERVATION_MODEL_ID
+                and observed_arch == _QWEN_OBSERVATION_ARCH
+                and self.model_arch.validated is True
+                and "mlp_intermediate_post_activation" in self.supported_hooks
+            ):
+                raise ValueError(
+                    "Qwen observation contract requires the exact model, tokenizer, "
+                    "architecture, validated MLP observation hook, and observation-only "
+                    "contract"
+                )
+        requested = self.requested_revision
+        resolved = self.resolved_revision
+        exact_match = (
+            isinstance(requested, str)
+            and len(requested) == 40
+            and all(char in "0123456789abcdef" for char in requested)
+            and resolved == requested
+        )
+        if self.revision_verified and not exact_match:
+            raise ValueError(
+                "revision_verified requires equal full lowercase requested/resolved commits"
+            )
+        if self.model_identity_status == "PINNED_REVISION_ONLY" and not self.revision_verified:
+            raise ValueError("PINNED_REVISION_ONLY requires revision_verified")
+        weights_digest_is_exact = (
+            isinstance(self.weights_sha256, str)
+            and len(self.weights_sha256) == 64
+            and all(char in "0123456789abcdef" for char in self.weights_sha256)
+        )
+        weights_metadata_is_complete = (
+            isinstance(self.weights_filename, str)
+            and bool(self.weights_filename)
+            and weights_digest_is_exact
+            and type(self.weights_bytes) is int
+            and self.weights_bytes > 0
+        )
+        if self.weights_hash_verified and not weights_metadata_is_complete:
+            raise ValueError(
+                "weights_hash_verified requires filename, positive byte count, and "
+                "a full lowercase SHA-256"
+            )
+        full_identity = self.model_identity_status == (
+            "PINNED_REVISION_AND_WEIGHTS_SHA256"
+        )
+        if full_identity and not (
+            self.revision_verified and self.weights_hash_verified
+        ):
+            raise ValueError(
+                "PINNED_REVISION_AND_WEIGHTS_SHA256 requires revision and weights verification"
+            )
+        if self.weights_hash_verified and not full_identity:
+            raise ValueError(
+                "verified weights require PINNED_REVISION_AND_WEIGHTS_SHA256 status"
+            )
+        if self.is_real_model and not (
+            self.revision_verified
+            and self.weights_hash_verified
+            and full_identity
+            and self.runtime_execution is not None
+        ):
+            raise ValueError(
+                "is_real_model requires an observed pinned revision, verified weights "
+                "SHA-256, and runtime execution evidence"
+            )
+        if self.is_real_model and self.execution_kind != "real_model_weights":
+            raise ValueError(
+                "is_real_model requires real_model_weights execution provenance"
+            )
+        if self.execution_kind == "real_model_weights" and not self.is_real_model:
+            raise ValueError("real_model_weights requires is_real_model")
+        return self

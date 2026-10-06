@@ -38,6 +38,7 @@ from api.services.production.state_substrate import (
     LedgerRecord,
     LeaseHeld,
     StateStore,
+    StateStoreError,
     VersionConflict,
 )
 from api.services.production.worm_writes import LockReceipt, RetentionPolicy
@@ -374,6 +375,27 @@ class EvidenceStorageScope:
     account_id: str | None = None
 
 
+@dataclass(frozen=True, slots=True)
+class EvidencePacketIndexEntry:
+    """Redacted, tenant-scoped inventory row for configured-store reconciliation.
+
+    Listing an index does not verify the referenced immutable bytes.  Callers
+    must still use ``load_packet_with_content_sha256`` and ``verify_packet`` for
+    each entry before drawing even a structural conclusion.
+    """
+
+    tenant_id: str
+    namespace: str
+    trace_id: str
+    account_id: str | None
+    record_id: str
+    content_sha256: str
+    byte_length: int
+    version_id: str
+    inventory_scope: str = "CONFIGURED_TENANT_STATE_STORE_ONLY"
+    off_registry_execution_absence: str = "NOT_ESTABLISHED"
+
+
 class EvidencePacketRepository:
     """Shared packet bytes, durable tenant index, and append-only hash chain."""
 
@@ -452,6 +474,100 @@ class EvidencePacketRepository:
 
     def packet_reference(self, *, tenant_id: str, namespace: str, trace_id: str) -> str:
         return self.backend.object_url(self._object_key(tenant_id, namespace, trace_id))
+
+    def list_packet_indices(
+        self,
+        *,
+        tenant_id: str,
+        namespace: str | None = None,
+    ) -> tuple[EvidencePacketIndexEntry, ...]:
+        """Enumerate the configured tenant index without treating absence as proof.
+
+        This is intentionally a redacted inventory seam for reconciliation.  A
+        backend/list failure raises ``EvidenceObjectStoreUnavailable`` rather
+        than returning an empty tuple, and every returned row is checked against
+        its deterministic tenant/namespace/trace identity.  The method does not
+        claim global discovery, host-loss survival, or absence of off-registry
+        execution.
+        """
+
+        _require_identity(tenant_id, "inventory")
+        if namespace is not None and not isinstance(namespace, str):
+            raise ValueError("namespace must be text when supplied")
+        try:
+            records = self.store.list(tenant_id, PACKET_INDEX_KIND)
+        except StateStoreError as exc:
+            raise EvidenceObjectStoreUnavailable(
+                "Tenant packet-index enumeration is unavailable."
+            ) from exc
+        result: list[EvidencePacketIndexEntry] = []
+        seen: set[tuple[str, str]] = set()
+        for record in records:
+            payload = record.payload
+            row_namespace = payload.get("namespace")
+            trace_id = payload.get("trace_id")
+            if not isinstance(row_namespace, str):
+                raise EvidenceObjectStoreUnavailable(
+                    "Packet-index inventory contains an invalid namespace."
+                )
+            if namespace is not None and row_namespace != namespace:
+                continue
+            if not isinstance(trace_id, str) or not trace_id:
+                raise EvidenceObjectStoreUnavailable(
+                    "Packet-index inventory contains an invalid trace identity."
+                )
+            key = (row_namespace, trace_id)
+            if key in seen:
+                raise EvidenceObjectStoreUnavailable(
+                    "Packet-index inventory contains a duplicate namespace/trace identity."
+                )
+            seen.add(key)
+            expected_record_id = self._packet_index_id(row_namespace, trace_id)
+            expected_object_key = self._object_key(
+                tenant_id, row_namespace, trace_id
+            )
+            content_sha256 = payload.get("content_sha256")
+            byte_length = payload.get("byte_length")
+            version_id = payload.get("version_id")
+            account_id = payload.get("account_id")
+            if (
+                record.tenant_id != tenant_id
+                or record.kind != PACKET_INDEX_KIND
+                or record.record_id != expected_record_id
+                or record.trace_id != trace_id
+                or record.source != "cas_harness_evidence_object_store"
+                or record.version != 1
+                or payload.get("schema_version")
+                != "cas_harness_evidence_packet_object_index.v1"
+                or payload.get("object_key") != expected_object_key
+                or not isinstance(content_sha256, str)
+                or not _is_sha256(content_sha256)
+                or type(byte_length) is not int
+                or isinstance(byte_length, bool)
+                or byte_length < 1
+                or not isinstance(version_id, str)
+                or not version_id
+                or (
+                    account_id is not None
+                    and (not isinstance(account_id, str) or not account_id)
+                )
+            ):
+                raise EvidenceObjectStoreUnavailable(
+                    "Packet-index inventory row is malformed."
+                )
+            result.append(
+                EvidencePacketIndexEntry(
+                    tenant_id=tenant_id,
+                    namespace=row_namespace,
+                    trace_id=trace_id,
+                    account_id=account_id,
+                    record_id=record.record_id,
+                    content_sha256=content_sha256,
+                    byte_length=byte_length,
+                    version_id=version_id,
+                )
+            )
+        return tuple(sorted(result, key=lambda item: (item.namespace, item.trace_id)))
 
     def hash_log_reference(self, *, tenant_id: str, namespace: str) -> str:
         return (
@@ -1518,6 +1634,7 @@ __all__ = [
     "ImmutablePacketBackend",
     "S3ObjectLockPacketBackend",
     "EvidencePacketRepository",
+    "EvidencePacketIndexEntry",
     "EvidenceStorageScope",
     "PACKET_INDEX_KIND",
     "PUBLICATION_INTENT_KIND",

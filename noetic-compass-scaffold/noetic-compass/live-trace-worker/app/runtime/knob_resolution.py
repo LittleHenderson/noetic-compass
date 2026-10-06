@@ -27,6 +27,7 @@ from typing import Any
 
 from ..schemas.requests import CreateSessionRequest
 from .cover_library import COVER_LIBRARY
+from .model_loader import active_model_binding
 
 
 # -- defaults (post-coercion values the worker reaches for) ----------------
@@ -127,10 +128,9 @@ def resolve_drive(raw: Any) -> str:
     """Coerce a drive selector into a known drive string.
 
     Falls back to the default ``F1`` when missing or malformed.
-    Does NOT enforce membership in ``COVER_LIBRARY`` — the runner
-    decides whether to act on the drive (a drive without a cover set
-    becomes a no-op intervention but the user's choice still echoes
-    back via ``KnobResolutionEvent``).
+    Does NOT enforce membership in ``COVER_LIBRARY``. The runner preserves
+    the requested drive and emits a typed ``REJECTED_NO_COORDINATES`` result;
+    an unsupported drive is never treated as a successful no-op.
     """
     if isinstance(raw, str) and raw.startswith("F"):
         return raw
@@ -151,6 +151,9 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
     """
     raw = raw_knobs(req)
     methods = enabled_methods(req)
+    cover_library_supported = (
+        active_model_binding().stage27f_cover_library_supported
+    )
 
     out: dict[str, dict[str, Any]] = {}
 
@@ -179,13 +182,13 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
 
     # drive_local_eraser — drive + gain. Cover-set membership is
     # checked via ``COVER_LIBRARY`` so the cockpit can flag drives
-    # that have no calibrated cover (no-op intervention).
+    # that will receive a typed fail-closed intervention result.
     eraser = raw.get("drive_local_eraser", {})
     drive = resolve_drive(eraser.get("drive"))
     out["drive_local_eraser"] = {
         "drive": drive,
         "gain": resolve_eraser_gain(eraser.get("gain")),
-        "cover_available": drive in COVER_LIBRARY,
+        "cover_available": cover_library_supported and drive in COVER_LIBRARY,
         "active": "drive_local_eraser" in methods,
     }
 
@@ -196,14 +199,16 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
         out["blindspot_detection"] = {
             "scope": "all_7",
             "drive": "all_7",
-            "cover_available": True,
+            "cover_available": cover_library_supported,
         }
         return out
     bs_resolved = resolve_drive(bs_drive)
     out["blindspot_detection"] = {
         "scope": bs_resolved,
         "drive": bs_resolved,
-        "cover_available": bs_resolved in COVER_LIBRARY,
+        "cover_available": (
+            cover_library_supported and bs_resolved in COVER_LIBRARY
+        ),
     }
 
     return out

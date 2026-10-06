@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 import hashlib
 import json
 import logging
+import re
 from typing import Any, Callable, Literal, Mapping
 from urllib.parse import urlparse
 
@@ -1375,6 +1376,42 @@ class FleetWorkerListResponse(BaseModel):
     workers: list[FleetWorkerResponse]
 
 
+class FleetPrepareRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    model_revision: str | None = Field(default=None, max_length=40)
+    model_artifact_manifest_path: str | None = Field(default=None, max_length=2_048)
+    model_artifact_manifest_sha256: str | None = Field(default=None, max_length=64)
+
+    @model_validator(mode="after")
+    def validate_identity_binding(self) -> "FleetPrepareRequest":
+        values = (
+            self.model_revision,
+            self.model_artifact_manifest_path,
+            self.model_artifact_manifest_sha256,
+        )
+        if all(value is None for value in values):
+            return self
+        if any(value is None for value in values):
+            raise ValueError(
+                "real-model fleet preparation requires revision, artifact manifest path, "
+                "and manifest SHA-256 together"
+            )
+        assert self.model_revision is not None
+        assert self.model_artifact_manifest_path is not None
+        assert self.model_artifact_manifest_sha256 is not None
+        if re.fullmatch(r"[0-9a-f]{40}", self.model_revision) is None:
+            raise ValueError("model_revision must be a full 40-character lowercase commit SHA")
+        path = self.model_artifact_manifest_path
+        if path != path.strip() or not path:
+            raise ValueError("model_artifact_manifest_path must be canonical and non-empty")
+        if not (path.startswith("/") or re.match(r"^[A-Za-z]:[\\/]", path)):
+            raise ValueError("model_artifact_manifest_path must be absolute on the target worker")
+        if re.fullmatch(r"[0-9a-f]{64}", self.model_artifact_manifest_sha256) is None:
+            raise ValueError("model_artifact_manifest_sha256 must be 64 lowercase hex characters")
+        return self
+
+
 class FleetJobResponse(BaseModel):
     job_id: str
     audit_id: str
@@ -1384,6 +1421,11 @@ class FleetJobResponse(BaseModel):
     shard_id: str
     assigned_methods: list[str]
     expected_outputs: list[str]
+    model_id: str | None = None
+    model_revision: str | None = None
+    model_artifact_manifest_path: str | None = None
+    model_artifact_manifest_sha256: str | None = None
+    execution_mode: str | None = None
     status: Literal["queued", "leased", "completed", "failed", "expired"]
     lease_token: str | None = None
     lease_expires_at: str | None = None
@@ -1412,6 +1454,7 @@ class FleetRunResponse(BaseModel):
         "waiting_for_receipts",
         "blocked_failed_worker",
         "blocked_missing_outputs",
+        "blocked_unattested_model",
         "ready_for_verifier",
     ]
     merged_packet_trace_id: str | None = None
@@ -1473,6 +1516,7 @@ class FleetJobReceiptRequest(BaseModel):
     evidence_packet_fragment_payload: dict[str, object] | None = None
     error_message: str | None = Field(default=None, min_length=1, max_length=500)
     job_status: Literal["completed", "failed"] = "completed"
+    execution_mode: Literal["dry_run_control_plane", "external_probe_command"] | None = None
 
     @field_validator("worker_id", "lease_token")
     @classmethod
@@ -1861,13 +1905,22 @@ async def list_fleet_workers(request: Request) -> FleetWorkerListResponse:
 
 @router.post("/distributed/session/{audit_id}/fleet/prepare", response_model=FleetRunResponse)
 async def prepare_distributed_fleet_run(
-    audit_id: str, request: Request
+    audit_id: str,
+    request: Request,
+    req: FleetPrepareRequest | None = None,
 ) -> FleetRunResponse:
     """Create fleet jobs from a dispatched distributed audit run."""
     _require_owned_distributed_audit(request, audit_id)
     try:
         run = prepare_fleet_for_audit(
             audit_id,
+            model_revision=req.model_revision if req is not None else None,
+            model_artifact_manifest_path=(
+                req.model_artifact_manifest_path if req is not None else None
+            ),
+            model_artifact_manifest_sha256=(
+                req.model_artifact_manifest_sha256 if req is not None else None
+            ),
             require_scoped_workers=settings.fleet_service_auth_enabled,
         )
     except FleetExecutorStateError as exc:
@@ -2016,6 +2069,7 @@ async def submit_distributed_fleet_job_receipt(
             evidence_packet_fragment_payload=req.evidence_packet_fragment_payload,
             error_message=req.error_message,
             job_status=req.job_status,
+            execution_mode=req.execution_mode,
             require_scoped_worker=principal is not None,
         )
     except KeyError:
@@ -2074,7 +2128,14 @@ async def verify_distributed_fleet_packet(
         raise HTTPException(status_code=404, detail="Fleet run not found")
     if not run.merged_packet_trace_id:
         raise HTTPException(status_code=409, detail="Merge fleet evidence before verifier review.")
-
+    if run.verifier_gate_status != "ready_for_verifier":
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Fleet run is not backed by complete identity-bound real-model "
+                "attestations and is not eligible for verifier review."
+            ),
+        )
     with _audit_evidence_storage_context(
         request,
         tenant_id=principal.tenant_id if principal is not None else None,

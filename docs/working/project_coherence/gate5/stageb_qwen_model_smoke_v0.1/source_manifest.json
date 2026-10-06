@@ -1,0 +1,89 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_source_manifest.v0.1",
+  "manifest_role": "PREPARATION AND MODEL-BINDING BASELINE ONLY / NOT EXECUTABLE IDENTITY",
+  "git_commit": "648e92cbe3f84e2c4e47f803748c6fcf08909025",
+  "dirty_worktree": false,
+  "files": [
+    {
+      "path": "src/cas_harness_v2/preregistration.py",
+      "byte_length": 44598,
+      "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055"
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "byte_length": 29934,
+      "sha256": "925ec4e994063352ed2cf4d58a185d7d336910c2e9c453927d49ab041b6f28fd"
+    },
+    {
+      "path": "src/cas_harness_v2/worker_protocol.py",
+      "byte_length": 37515,
+      "sha256": "80e04b35072660cc26a0380974723aa2c5aab5fa29f9a31a82844248e8df7733"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_joined_executor.py",
+      "byte_length": 39947,
+      "sha256": "431a75fabda059192140bb98fd0d349d7bf1b12c15f59f006f614255502b2549"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_live_dump_client.py",
+      "byte_length": 12873,
+      "sha256": "5793ed556a8aadea244c1dda67934f8abc5ae5713dba2935a74b6ec67eb95dc2"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_live_worker_join.py",
+      "byte_length": 87101,
+      "sha256": "8a0ee5f551a8131497c55594cb3c95693c3bcfd74d1b3607c322bfa4f055f5c2"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_run_lifecycle.py",
+      "byte_length": 146080,
+      "sha256": "fe597bb097e90acfc6b5c2616241f0c4d92e839c84fe6f7071cc4d838963cb20"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/requests.py",
+      "byte_length": 4604,
+      "sha256": "b417783b2f09fc6212566d66317e93951d4a9e10e841ad99730ea0d916bb7ea7"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/live_trace.py",
+      "byte_length": 11222,
+      "sha256": "f2c63dbdfffb1ed33ee8c61b490d43b670b951eb79687e2be36f5cd794adaa7a"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
+      "byte_length": 29875,
+      "sha256": "a0b1faef05c9d9d5cba442d796f2e61e87de26102871106270202cb26c1990db"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
+      "byte_length": 41934,
+      "sha256": "1ee1443f180ef997c721b647a5266c638b69e0b7e879ec2102086086efeed1ee"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/pythia_runner.py",
+      "byte_length": 15405,
+      "sha256": "81ae9531e8fa4ce2fd68a31ea174372b95c0819b27f22e4d343dcaf847f309bb"
+    },
+    {
+      "path": "scripts/run_project_coherence_gate5_joined_local_gpu_smoke.py",
+      "byte_length": 82175,
+      "sha256": "dad13b35ddac0c575144dd5b7a3503167416be4615cea7fb2ba0cb5577701ac9"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stage_b/GATE5_STAGEB_MODEL_AND_IMAGE_BINDING_v0.1.json",
+      "byte_length": 6377,
+      "sha256": "743c76204010f0aae19e6c65430a9445d4e11f2f441a5dfd2336507c4237b298"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
+      "byte_length": 4598,
+      "sha256": "a598d39d59b095c604b1ed0f12c326fe2a6aacea32df5ea8630943dd559b6e93"
+    }
+  ],
+  "known_nonexecutable_gaps_at_baseline": [
+    "Qwen model-layer and mlp.down_proj probe walking is not implemented at this baseline.",
+    "An Evidence Packet v2 builder for the joined execution path does not exist at this baseline."
+  ],
+  "activation_rule": "This manifest never authorizes execution. Exactly one later EXECUTION_IDENTITY_ADDITION amendment must bind a final clean executable commit and its exact source, tests, image, and builder artifacts before the run may start.",
+  "boundary": "PREPARATION BASELINE ONLY / EXPERIMENT NOT_STARTED / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD"
+}

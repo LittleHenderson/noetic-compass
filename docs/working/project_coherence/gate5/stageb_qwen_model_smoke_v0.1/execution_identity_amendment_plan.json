@@ -1,0 +1,36 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_execution_identity_amendment_plan.v0.1",
+  "artifact_kind": "PROSPECTIVE AMENDMENT REQUIREMENTS / NOT A NORMATIVE AMENDMENT",
+  "normative_amendment_schema": "cas_harness_v2.preregistration_amendment.v1",
+  "base_preregistration_sha256": "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D",
+  "base_preregistration_byte_length": 11762,
+  "base_protected_design_sha256": "41ECD9E07637F457ED4A4832ED436A8A425675DD2B24C6A15EC1033B5E90D59F",
+  "unamended_chain_sha256": "ADAA0B04AC07CF5DB35A225F93FD5A7E9D2D1C8E7C1730986978F766B28F3343",
+  "required_amendment_count": 1,
+  "required_change_class": "EXECUTION_IDENTITY_ADDITION",
+  "required_previous_amendment_sha256": null,
+  "required_outcome_access": {
+    "accessed": false,
+    "evidence_ref": null
+  },
+  "required_additional_artifact_ids": [
+    "stageb-final-executable-code-identity",
+    "stageb-final-executable-source-manifest",
+    "stageb-qwen-probe-adapter-test-receipt",
+    "stageb-evidence-packet-builder-test-receipt",
+    "stageb-final-runtime-image-identity"
+  ],
+  "final_code_identity_requirements": [
+    "exact lowercase 40-character clean Git commit",
+    "dirty_worktree=false at the execution snapshot",
+    "exact source paths with raw SHA-256 and byte length",
+    "Qwen model.layers and mlp.down_proj probe path covered by executed tests",
+    "no-intervention request path covered by executed tests",
+    "one-Packet builder and verification path covered by executed tests",
+    "exact immutable runtime image id, config digest, and size",
+    "Pythia historical binding and receipts remain unchanged"
+  ],
+  "placeholder_policy": "PLACEHOLDERS ARE FORBIDDEN IN THE NORMATIVE AMENDMENT. THE AMENDMENT MUST NOT BE CREATED UNTIL ALL FINAL IDENTITIES EXIST.",
+  "activation_effect": "Only a valid exact-byte amendment satisfying this plan may make the one-run authorization eligible for consumption. It creates no scientific, product, license, or disclosure authority.",
+  "current_execution_authority": "UNAUTHORIZED / NOT EXECUTABLE / EXPERIMENT NOT_STARTED"
+}

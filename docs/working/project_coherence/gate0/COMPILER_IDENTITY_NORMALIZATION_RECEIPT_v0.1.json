@@ -1,0 +1,44 @@
+{
+  "schema_version": "project_coherence_compiler_identity_normalization_receipt.v0.1",
+  "artifact_status": "TECHNICAL_IDENTITY_RECEIPT / REPRODUCIBLE / NOT AN AUTHORITY AMENDMENT",
+  "observed_on": "2026-08-04",
+  "finding_id": "G0-FINDING-COMPILER-LINE-ENDINGS",
+  "upstream_conflict_id": "CONFLICT-ACTIVE-COMPILER-DRIFT",
+  "upstream_migration_id": "MIG-COMPILER-REGISTRY-DRIFT",
+  "registered_identity": {
+    "source_registry_id": "active_python_notation_compiler",
+    "registry_sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+    "bytes": 243046,
+    "line_ending_profile": "LF",
+    "git_commit": "7071aa33e611ef6b90d23418c0d507a933bc45fc",
+    "git_path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+    "git_blob_oid_sha1": "e513899d7065d3381d7dc647fa1d9de191864cf3"
+  },
+  "observed_working_tree_identity": {
+    "absolute_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+    "repository_relative_equivalent": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+    "sha256": "065DC4384F7F52D1D8A081DC2D62AF69980F1F6EA9BF9099D22DE776CE05DF87",
+    "bytes": 248859,
+    "crlf_sequences": 5813,
+    "lone_lf_sequences": 0,
+    "line_ending_profile": "CRLF",
+    "onedrive_and_worktree_bytes_equal": true
+  },
+  "normalization": {
+    "algorithm": "Replace every CRLF byte pair 0D0A with LF byte 0A; perform no other byte transformation.",
+    "normalized_sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+    "normalized_bytes": 243046,
+    "normalized_bytes_equal_registered_git_blob": true,
+    "current_head_git_blob_equal_registry_commit_git_blob": true,
+    "git_diff_registry_commit_to_current_head": "EMPTY"
+  },
+  "technical_conclusion": "The two recorded SHA-256 values identify CRLF and LF serializations of the same compiler text. The normalized current bytes equal the registry-bound Git blob byte-for-byte; no substantive compiler drift was found.",
+  "candidate_disposition": "RESOLVED_BY_REPRODUCIBLE_TEXT_NORMALIZATION",
+  "claim_boundary": [
+    "This receipt proves only the stated byte relation and Git-blob identity.",
+    "It does not prove compiler correctness, test coverage, semantic adequacy, production readiness, or empirical validity.",
+    "It does not amend the owner-signed semantic registry or silently change its registered SHA-256.",
+    "Claim-bearing records should bind both the raw serialization hash and the canonical LF content hash when checkout line endings may vary."
+  ],
+  "upstream_action": "Replace the Phase 0 assertion of substantive drift with this normalization relation during the next reviewed source-matrix revision; retain both raw hashes for forensic reproducibility."
+}

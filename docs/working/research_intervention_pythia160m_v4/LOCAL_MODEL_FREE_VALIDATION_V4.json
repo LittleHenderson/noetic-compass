@@ -1,0 +1,58 @@
+{
+  "schema_version": "cas_harness_pythia160m_layer_specificity_local_validation.v4",
+  "created_at_utc": "2026-07-29T16:42:40Z",
+  "status": "LOCAL_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED",
+  "source_commit_before_preparation": "c638df99a799e79afcb9739478bcc52a197b91d1",
+  "successor_lock": {
+    "path": "docs/working/research_intervention_pythia160m_v4/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V4.json",
+    "byte_count": 12333,
+    "sha256": "d4e1c09f87c1da8ddea92f1646879a9cf932af18930eae30aaf9b4667af91d02"
+  },
+  "layer_specificity_plan": {
+    "path": "docs/working/research_intervention_pythia160m_v4/PYTHIA160M_LAYER_SPECIFICITY_PLAN_V4.json",
+    "byte_count": 4566,
+    "sha256": "7b286f51322a79a3e9bf64402ef5cffe2c5601135013acf80ddc5d034e0ea9d9"
+  },
+  "model_free_controller": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_v4.py",
+    "byte_count": 21880,
+    "sha256": "77f4d22637c82c99b1bf65cba3c85b5548dc046c6fac2bca98327464279d5ef6"
+  },
+  "focused_validation": {
+    "command": "python -m pytest -q noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_layer_specificity_v4.py",
+    "result": "6 passed",
+    "coverage": [
+      "model-free lock validation with zero framework imports, model loads, receipts, or outputs",
+      "disabled-by-default and live-flag fail-closed behavior",
+      "exact 1536-request boundary and complete 12-layer comparison",
+      "synthetic localized packet bounded research-only pass",
+      "synthetic V3-like 0.6146572083234787 wrong-layer ratio fail-closed",
+      "byte-exact V3 terminal evidence preservation"
+    ]
+  },
+  "supporting_regression_validation": {
+    "command": "python -m pytest -q noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_executor.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py",
+    "result": "18 passed"
+  },
+  "direct_lock_validation": {
+    "status": "V4_MODEL_FREE_LOCK_VALIDATION_PASS / RUN_NOT_AUTHORIZED",
+    "request_count": 1536,
+    "calibration_prompt_count": 16,
+    "heldout_prompt_count": 38,
+    "framework_imports": [],
+    "model_loads": 0,
+    "receipt_creations": 0,
+    "output_writes": 0
+  },
+  "noncontrolling_historical_test_note": "A selected V3 startup regression still expects the V3 output root to be absent and therefore reports one stale-state assertion after the authorized V3 run created its terminal packet. The V4 preparation did not edit that historical test or any V3 evidence. The framework-import fixture was not repeated while the unrelated live V5 CPU run was active.",
+  "prohibited_actions_observed": {
+    "receipt_created": false,
+    "model_or_tokenizer_loaded": false,
+    "diagnostic_or_intervention_run": false,
+    "gpu_queried_or_used": false,
+    "network_or_provider_call": false,
+    "paid_or_runpod_compute": false,
+    "live_product_change": false
+  },
+  "claim_boundary": "Preparation-only local validation. It is not live steering, safety steering, prompt-injection prevention, Gate 2, ACCEPT, LICENSED, production readiness, or a production result."
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_preregistration_validation_receipt.v0.1",
+  "validated_at": "2026-08-08T21:15:43.317791Z",
+  "authority": "LOCAL UNATTESTED REPOSITORY VALIDATION ONLY",
+  "status": "PASS / PROSPECTIVE PACKAGE ONLY / NO EXECUTION",
+  "checks": {
+    "json_duplicate_key_validation": "PASS",
+    "protocol_artifact_binding_validation": "PASS",
+    "strict_preregistration_loader": "PASS",
+    "unamended_chain_integrity": "PASS",
+    "worker_request_schema": "PASS",
+    "raw_chat_template_tokens_absent": true,
+    "enabled_methods_exact": [
+      "foundation_probe"
+    ],
+    "probes_exact": [
+      "active_trace",
+      "confidence_margin"
+    ],
+    "synthetic_execution_identity_amendment_load": "PASS / IN MEMORY ONLY / NOT RETAINED",
+    "synthetic_evidence_packet_v2_load": "PASS / IN MEMORY ONLY / NOT RETAINED",
+    "packet_falsifier_observation_cutoff": "PASS / ONLY FACTS AVAILABLE BY PACKET-CONSTRUCTION TIME",
+    "packet_before_final_reconciliation_order": "PASS / FINAL RECONCILIATION IS A POST-PACKET RUNTIME-RECEIPT REQUIREMENT",
+    "future_packet_metric_artifact_count": 7,
+    "future_packet_metric_artifact_ids_unique": true,
+    "future_packet_all_artifact_ids_unique": true,
+    "canonical_output_artifact_id": "stageb-qwen-joined-worker-dump-001",
+    "synthetic_packet_preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+    "synthetic_packet_scientific_eligibility": "INELIGIBLE",
+    "synthetic_packet_structural_completeness": "INCOMPLETE AS EXPECTED BECAUSE THE VALIDATION REGISTRY OMITTED THE REAL 988097824-BYTE WEIGHTS AND OTHER FUTURE RUN ARTIFACTS"
+  },
+  "preregistration": {
+    "sha256": "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D",
+    "byte_length": 11762,
+    "protected_design_sha256": "41ECD9E07637F457ED4A4832ED436A8A425675DD2B24C6A15EC1033B5E90D59F",
+    "unamended_chain_sha256": "ADAA0B04AC07CF5DB35A225F93FD5A7E9D2D1C8E7C1730986978F766B28F3343",
+    "artifact_ref_count": 9,
+    "amendment_count": 0,
+    "outcome_access": "NONE"
+  },
+  "schema_limits": [
+    "Evidence Packet v2 has no neutral REPORT_ONLY control outcome; packet control outcomes are PASS, FAIL, or INVALID, and every non-PASS outcome blocks preregistered criteria.",
+    "The preregistration schema requires a HELD_OUT_REPLICATION split with minimum_groups, target_groups, target_enrolled_rows, and target_analyzed_rows each at least 1; the one-run Stage B Packet must honestly report that row as 0 groups, 0 analyzed, and 1 excluded.",
+    "These limits do not prevent a structurally loadable Packet. They force the honest ceiling REPORTED_CRITERIA_NOT_MET / INELIGIBLE."
+  ],
+  "provider_accounting": {
+    "model_invocations": 0,
+    "runpod_calls": 0,
+    "external_provider_calls": 0,
+    "paid_spend_usd": "0.00"
+  },
+  "boundary": "VALIDATION ONLY / PACKET PRECEDES FINAL RECONCILIATION / EXPERIMENT NOT_STARTED / PACKET NOT CREATED / EXECUTION UNAUTHORIZED PENDING EXACT IDENTITY AMENDMENT / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN / NO DETECTION OR STEERING EFFICACY CLAIM"
+}

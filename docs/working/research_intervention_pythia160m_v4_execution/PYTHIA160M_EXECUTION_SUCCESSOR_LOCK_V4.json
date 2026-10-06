@@ -1,0 +1,212 @@
+{
+  "schema_version": "cas_harness_pythia160m_execution_lock.v4",
+  "lock_id": "PYTHIA160M_LAYER_SPECIFICITY_EXECUTION_V4_20260729",
+  "status": "PROSPECTIVE_EXECUTION_LOCK / EXECUTOR_AUDITOR_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED",
+  "prepared_from_source_commit": "af8cd99cecb0e12b5128125720a079f0e4309018",
+  "purpose": "Receipt-gated real-model executor and independent artifact auditor for the frozen all-12-layer common-readout V4 diagnostic.",
+  "methodology_decision": "The all-layer comparison is retained because a common final-layer readout directly removes V3's unequal-measurement confound while preserving the existing direction, prompt split, no-op, random-direction, wrong-token, wrong-axis, dose-response, collateral, and patch-back controls.",
+  "family_scope": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "architecture": "GPTNeoXForCausalLM",
+    "layer_count": 12,
+    "hidden_size": 768,
+    "gpt2": "EXCLUDED_LATER_COMPARISON"
+  },
+  "preserved_prior_evidence": {
+    "v4_diagnostic_lock": {
+      "path": "docs/working/research_intervention_pythia160m_v4/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V4.json",
+      "byte_count": 12333,
+      "sha256": "d4e1c09f87c1da8ddea92f1646879a9cf932af18930eae30aaf9b4667af91d02"
+    },
+    "v4_layer_specificity_plan": {
+      "path": "docs/working/research_intervention_pythia160m_v4/PYTHIA160M_LAYER_SPECIFICITY_PLAN_V4.json",
+      "byte_count": 4566,
+      "sha256": "7b286f51322a79a3e9bf64402ef5cffe2c5601135013acf80ddc5d034e0ea9d9"
+    },
+    "v4_local_model_free_validation": {
+      "path": "docs/working/research_intervention_pythia160m_v4/LOCAL_MODEL_FREE_VALIDATION_V4.json",
+      "byte_count": 3144,
+      "sha256": "37893405d072e441a6467372e3c75a9552988f6b2b0b561813ca709655271f25"
+    },
+    "v3_terminal_evidence_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v3/runs/pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd/TERMINAL_EVIDENCE_MANIFEST.json",
+      "byte_count": 3766,
+      "sha256": "83f9e34bd7d51bcce6d0d32f48708a1a1f2f3586784f310d8021c30e1ab1340a"
+    }
+  },
+  "frozen_files": {
+    "model_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_MODEL_MANIFEST_V1.json",
+      "byte_count": 2827,
+      "sha256": "e99f29c27aadb7d25cfb74dc91be6e295474e7f86777fccfa9ec7aaa8375667a"
+    },
+    "prompt_split": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_PROMPT_SPLIT_V1.json",
+      "byte_count": 6770,
+      "sha256": "fa24863d6a223eb2d760048c412a6bf0e82b54cff00676c3c0ebc4105d896c47"
+    },
+    "intervention_map_v2": {
+      "path": "docs/working/research_intervention_pythia160m_v2/PYTHIA160M_INTERVENTION_MAP_V2.json",
+      "byte_count": 4964,
+      "sha256": "021eae6fd9f4c9174399a9af54cb5c758d4589950614e4964de05944441cb7ef"
+    },
+    "startup_contract_v3": {
+      "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_STARTUP_CONTRACT_V3.json",
+      "byte_count": 4744,
+      "sha256": "5478dbd7ad54a3cf813c32477fc88827721d774a554b85717cd348f417678cdc"
+    },
+    "environment_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v4_execution/PYTHIA160M_ENVIRONMENT_MANIFEST_V4.json",
+      "byte_count": 2254,
+      "sha256": "efaa86a5ab117012769e4f3c092e5d2926737335bc6177f4f5b4d70a0f9cdf27"
+    },
+    "compute_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v4_execution/PYTHIA160M_COMPUTE_MANIFEST_V4.json",
+      "byte_count": 1162,
+      "sha256": "e2842ce8468778b4ce7e3d8efd91ed0b598bdbe18b447e3ae5126b92b4823629"
+    },
+    "model_free_controller": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_v4.py",
+      "byte_count": 21880,
+      "sha256": "77f4d22637c82c99b1bf65cba3c85b5548dc046c6fac2bca98327464279d5ef6"
+    },
+    "immutable_v2_executor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor.py",
+      "byte_count": 36221,
+      "sha256": "b5f51f854f1ae0b3241bf57e617c439ef0871f76eb06eefc6677ff410619e78e"
+    },
+    "executor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_executor_v4.py",
+      "byte_count": 27005,
+      "sha256": "5b336650cd23b71490e0245b199d0aa756ba42870e40cbebc45f16c502016ca6"
+    },
+    "auditor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_auditor_v4.py",
+      "byte_count": 11570,
+      "sha256": "450f56a02675a6c814bd65e9bdce74345bb4daade681ca5f41b7a9c3fcaaf70c"
+    },
+    "bootstrap": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_bootstrap_v4.py",
+      "byte_count": 7454,
+      "sha256": "dac72ac5cc633b1307c23c7dcc1ab2614c67d01f077b18295662ae3ffdf91b03"
+    },
+    "validation_tests": {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_layer_specificity_execution_v4.py",
+      "byte_count": 9368,
+      "sha256": "2519c3b841f636dc0772cfa0c224b91e8cc811e4cd6ca775be06d89374b5a444"
+    }
+  },
+  "seed_schedule": {
+    "request_seed_base": 460000,
+    "request_seed_rule": "request_seed_base + zero_based_request_index",
+    "bootstrap_seed": 160409,
+    "bootstrap_samples": 2048
+  },
+  "compute_cap": {
+    "mode": "LOCAL_OFFLINE_RESEARCH_ONLY",
+    "device": "CPU_ONLY",
+    "torch_num_threads": 8,
+    "deterministic_algorithms": true,
+    "model_eval_mode": true,
+    "max_prompt_tokens": 128,
+    "max_forward_passes": 1536,
+    "frozen_planned_forward_passes": 1536,
+    "first_prohibited_forward_pass_index_zero_based": 1536,
+    "max_total_prompt_tokens": 262144,
+    "max_wall_clock_seconds": 5400,
+    "max_raw_artifact_bytes": 402653184,
+    "max_generated_tokens": 0,
+    "network_allowed": false,
+    "provider_calls_allowed": false,
+    "paid_compute_allowed": false,
+    "runpod_allowed": false,
+    "gpu_query_allowed": false,
+    "gpu_use_allowed": false,
+    "retry_allowed": false,
+    "resume_allowed": false,
+    "repair_top_up_backfill_allowed": false
+  },
+  "execution_gates": {
+    "feature_flag": "CAS_PYTHIA160M_LAYER_SPECIFICITY_V4_ENABLED",
+    "feature_flag_default": "disabled",
+    "live_flag": "CAS_PYTHIA160M_RESEARCH_LIVE",
+    "live_flag_allowed": false,
+    "nonce_ledger": "docs/working/research_intervention_pythia160m_v4_execution/nonce_ledger",
+    "receipt_status": "ABSENT / CREATION_NOT_AUTHORIZED",
+    "output_status": "ABSENT",
+    "live_worker_integration": "prohibited",
+    "product_decision_integration": "prohibited",
+    "evidence_packet_accept_integration": "prohibited"
+  },
+  "receipt_contract": {
+    "schema_version": "cas_harness_pythia160m_research_authorization.v4",
+    "authorization_kind": "OWNER_ONE_USE_OFFLINE_PYTHIA160M_LAYER_SPECIFICITY_V4",
+    "one_use": true,
+    "maximum_validity_seconds": 86400,
+    "run_id_pattern": "^pythia160m-riv4-[a-z0-9]{16,64}$",
+    "nonce_pattern": "^[0-9a-f]{64}$",
+    "must_bind_frozen_files": [
+      "model_manifest",
+      "prompt_split",
+      "intervention_map_v2",
+      "startup_contract_v3",
+      "environment_manifest",
+      "compute_manifest",
+      "model_free_controller",
+      "immutable_v2_executor",
+      "executor",
+      "auditor",
+      "bootstrap",
+      "validation_tests"
+    ],
+    "must_bind_preserved_evidence": [
+      "v4_diagnostic_lock",
+      "v4_layer_specificity_plan",
+      "v4_local_model_free_validation",
+      "v3_terminal_evidence_manifest"
+    ],
+    "also_must_bind": [
+      "current source commit containing this execution lock",
+      "execution lock SHA-256",
+      "exact 1536-request count",
+      "canonical compute-cap SHA-256",
+      "canonical seed-schedule SHA-256",
+      "fresh run ID and lowercase 64-hex nonce",
+      "expiry no longer than 86400 seconds",
+      "absent isolated output root",
+      "unused nonce marker"
+    ]
+  },
+  "precondition_order": [
+    "launch exact frozen CPython with -I -B and no shell",
+    "validate interpreter, package root, startup contract, bootstrap, execution lock, executor, auditor, controller, manifests, model inventory, prompt split, intervention map, and preserved V3/V4 evidence with standard-library only",
+    "feature flag explicitly enabled and live flag false",
+    "validate fresh one-use receipt and every binding",
+    "validate current commit, run ID, nonce, expiry, absent output, and stale nonce",
+    "consume nonce create-once",
+    "set offline environment and install compatible zero-network guard",
+    "only then import torch and transformers",
+    "only then load exact local tokenizer and model snapshot on CPU",
+    "only after successful model load create isolated output",
+    "execute exactly 1536 requests; request index 1536 is prohibited",
+    "retain every raw artifact and partial failure evidence",
+    "run independent standard-library artifact auditor"
+  ],
+  "expected_terminal_evidence": {
+    "raw_logits_count": 1536,
+    "raw_final_state_count": 1536,
+    "raw_baseline_layer3_state_count": 38,
+    "common_readout_count": 1,
+    "journal": "append-only and hash-bound",
+    "retained_receipt_and_lock": true,
+    "independent_audit_required": true,
+    "partial_failure": "FAIL_CLOSED / RETAINED / NON_REUSABLE / NO RETRY"
+  },
+  "replication": {
+    "second_architecture_required_before_broader_claim": true,
+    "gpt2_status": "LATER / NOT_AUTHORIZED",
+    "broader_claim_status": "OPEN"
+  },
+  "claim_boundary": "Preparation-only V4 execution lock. No receipt exists, no framework/model/tokenizer was loaded, and no model experiment ran. Any future pass remains bounded research evidence and cannot establish live steering, safety steering, prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or a production result."
+}

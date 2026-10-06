@@ -21,15 +21,18 @@ dist/
 venv/
 env/
 
-# Tests + fixtures (not needed at runtime; demo-mode fallback is covered)
+# Tests + fixtures (not needed by the fail-closed production runtime)
 tests/
 fixtures/
 
 # Docs / markdown / acceptance notes
 *.md
 
-# Research + ops surface area not used by the FastAPI app at runtime
-scripts/
+# Research + ops surface area not used by the FastAPI app at runtime.  Preserve
+# the exclusion and admit only the two build-time/sealed Stage C helpers.
+scripts/*
+!scripts/fetch_qwen_stagec_model.py
+!scripts/stagec_batch_entrypoint.py
 scenarios/
 
 # Editor / OS noise

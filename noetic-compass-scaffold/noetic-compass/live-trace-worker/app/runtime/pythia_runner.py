@@ -21,18 +21,55 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from dataclasses import dataclass
 from typing import Any, AsyncIterator
 
 from ..schemas.requests import CreateSessionRequest
-from .cover_library import coords_for_drive
+from ..schemas.manifest import ModelExecutionKind
+from .cover_library import MLP_INTERMEDIATE_POST_ACTIVATION, coords_for_drive
 from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
     resolve_knobs,
 )
-from .probe_runner import EraserIntervention, capture_probes, resolve_probes, summarise
+from .model_loader import (
+    PYTHIA_160M_BINDING_KEY,
+    ModelBinding,
+    active_model_binding,
+    encode_runtime_prompt,
+    require_pythia_runtime_model,
+)
+from .probe_runner import (
+    EraserIntervention,
+    assess_baseline_stability,
+    capture_probes,
+    finalize_intervention_result,
+    mark_unstable_baseline_without_attempt,
+    restore_torch_rng_state,
+    resolve_probes,
+    snapshot_torch_rng_state,
+    summarise,
+)
 from .verification_mode import build_verification_telemetry
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class _OutputSnapshot:
+    logits: Any
+    attentions: tuple[Any, ...] | None
+
+
+def _snapshot_outputs(outputs: Any) -> _OutputSnapshot:
+    """Clone the output evidence so a later forward cannot mutate fallback data."""
+    logits = outputs.logits.detach().clone()
+    raw_attentions = getattr(outputs, "attentions", None)
+    attentions = (
+        tuple(attention.detach().clone() for attention in raw_attentions)
+        if raw_attentions
+        else None
+    )
+    return _OutputSnapshot(logits=logits, attentions=attentions)
 
 
 async def run_pythia(
@@ -54,10 +91,31 @@ async def run_pythia(
 
     Caller wraps each dict into a TokenEvent.
     """
+    binding = active_model_binding()
+    if binding.key != PYTHIA_160M_BINDING_KEY:
+        raise RuntimeError(
+            "generic real-model generation is restricted to the pinned Pythia "
+            "binding; Qwen requires the Stage C runtime-permit capture path"
+        )
+
+    # The environment selection is not evidence that the concrete Python
+    # object is Pythia.  Cross-check the actual family stack before importing
+    # torch, tokenizing, registering hooks, or invoking model(...).
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        expected_layers=n_layers,
+    )
+
     import torch
 
     device = next(model.parameters()).device
-    input_ids = tokenizer(req.prompt, return_tensors="pt").input_ids.to(device)
+    encoded_prompt = encode_runtime_prompt(
+        tokenizer,
+        req.prompt,
+        binding=binding,
+    )
+    input_ids = encoded_prompt["input_ids"].to(device)
     prompt_len = int(input_ids.shape[1])
 
     # Apply seed for the (optional) sampling path.
@@ -74,16 +132,129 @@ async def run_pythia(
     rpm_threshold = float(resolved["rpm_gate_check"]["strictness_threshold"])
     inversion_threshold = float(resolved["inversion_scan"]["severity_threshold"])
     inversion_active = bool(resolved["inversion_scan"]["active"])
-    intervention = _eraser_intervention(req)
+    intervention = _eraser_intervention(
+        req,
+        execution_kind="real_model_weights",
+        expected_coordinate_width=int(model.config.intermediate_size),
+        expected_projected_output_width=int(model.config.hidden_size),
+        model_binding=binding,
+    )
 
     with torch.no_grad():
         for new_idx in range(max_new):
-            with capture_probes(model, n_layers, intervention=intervention) as state:
-                outputs = model(
-                    input_ids,
-                    output_hidden_states=False,
-                    output_attentions=True,
+            intervention_result = None
+            abort_after_rejected_intervention = False
+            if intervention is None:
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as state:
+                    outputs = model(
+                        input_ids,
+                        output_hidden_states=False,
+                        output_attentions=True,
+                    )
+            else:
+                # Two unmodified forwards must first prove exact local output,
+                # geometry, hook-cardinality, and Torch-RNG stability. Only a
+                # stable baseline is eligible for the intervention attempt.
+                baseline_rng_before = snapshot_torch_rng_state()
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as baseline_state:
+                    baseline_outputs_live = model(
+                        input_ids,
+                        output_hidden_states=False,
+                        output_attentions=True,
+                    )
+                baseline_outputs = _snapshot_outputs(baseline_outputs_live)
+                baseline_rng_after = snapshot_torch_rng_state()
+
+                restore_torch_rng_state(baseline_rng_before)
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as stability_control_state:
+                    stability_control_outputs_live = model(
+                        input_ids,
+                        output_hidden_states=False,
+                        output_attentions=True,
+                    )
+                stability_control_outputs = _snapshot_outputs(
+                    stability_control_outputs_live
                 )
+                required_layers = {
+                    layer for layer, _index in intervention.coords if layer >= 0
+                }
+                baseline_output_stable, baseline_geometry_stable = (
+                    assess_baseline_stability(
+                        baseline_state,
+                        baseline_outputs.logits[0, -1],
+                        stability_control_state,
+                        stability_control_outputs.logits[0, -1],
+                        required_layers,
+                    )
+                )
+
+                # A counterfactual is comparable only when it starts from the
+                # exact same global Torch generators as both controls.
+                restore_torch_rng_state(baseline_rng_before)
+                try:
+                    if (
+                        baseline_output_stable is True
+                        and baseline_geometry_stable is True
+                    ):
+                        with capture_probes(
+                            model,
+                            n_layers,
+                            intervention=intervention,
+                            reference_geometry=baseline_state.tensor_geometry,
+                            probe_binding=binding,
+                        ) as state:
+                            outputs = model(
+                                input_ids,
+                                output_hidden_states=False,
+                                output_attentions=True,
+                            )
+                    else:
+                        # Create a typed fail-closed receipt without executing
+                        # an intervention against an already-unstable model.
+                        with capture_probes(
+                            model,
+                            n_layers,
+                            intervention=intervention,
+                            reference_geometry=baseline_state.tensor_geometry,
+                            probe_binding=binding,
+                        ) as state:
+                            mark_unstable_baseline_without_attempt(state)
+                        outputs = baseline_outputs
+                except Exception:
+                    restore_torch_rng_state(baseline_rng_after)
+                    raise
+                intervention_result = finalize_intervention_result(
+                    state,
+                    baseline_outputs.logits[0, -1],
+                    outputs.logits[0, -1],
+                    stability_control_state=stability_control_state,
+                    stability_control_output=(
+                        stability_control_outputs.logits[0, -1]
+                    ),
+                )
+                if not intervention_result.structurally_valid:
+                    # A rejected/failed structural receipt cannot influence
+                    # generation or the emitted activation summary. Preserve
+                    # its attempted-pass evidence, then fall back atomically
+                    # to the paired unmodified forward result.
+                    outputs = baseline_outputs
+                    state = baseline_state
+                    # Make rejected execution observationally atomic: sampling
+                    # continues from exactly the state after one baseline run.
+                    restore_torch_rng_state(baseline_rng_after)
+                    abort_after_rejected_intervention = True
 
             # Last-token logits — used for both confidence + next-token pick.
             logits = outputs.logits[0, -1]  # [vocab]
@@ -126,8 +297,16 @@ async def run_pythia(
                 "inversion_risk": _inversion_risk(summary, inversion_threshold)
                 if inversion_active
                 else None,
+                "eraser_intervention_result": intervention_result,
                 **verification_payload,
             }
+
+            if abort_after_rejected_intervention:
+                logger.warning(
+                    "run_pythia: ending stream after rejected intervention to avoid "
+                    "continuing from unverified mutable model state"
+                )
+                break
 
             # Append next token, continue.
             next_tensor = torch.tensor(
@@ -156,22 +335,55 @@ def _requested_probes(req: CreateSessionRequest) -> set[str]:
     return set(resolve_probes(req.probes))
 
 
-def _eraser_intervention(req: CreateSessionRequest) -> EraserIntervention | None:
-    """Build the runtime MLP-output suppression from resolved knobs.
+def _eraser_intervention(
+    req: CreateSessionRequest,
+    *,
+    execution_kind: ModelExecutionKind = "typed_test_fixture",
+    expected_coordinate_width: int = 3072,
+    expected_projected_output_width: int = 768,
+    model_binding: ModelBinding | None = None,
+) -> EraserIntervention | None:
+    """Build a typed activated-intermediate suppression request.
 
-    Returns ``None`` when the method isn't enabled OR the requested
-    drive has no calibrated cover set (in which case the eraser knob
-    still echoes back via ``KnobResolutionEvent``, but no hook fires).
+    Returns ``None`` only when the method is not enabled. An enabled method
+    with no cover coordinates still returns a request so execution produces a
+    typed fail-closed result rather than a silent no-op.
     """
     if "drive_local_eraser" not in _resolve_enabled_methods(req):
         return None
+    if (
+        execution_kind == "real_model_weights"
+        and model_binding is not None
+        and not model_binding.stage27f_intervention_supported
+    ):
+        raise RuntimeError(
+            "drive_local_eraser coordinates are calibrated only for the pinned "
+            f"Pythia binding; intervention refused for {model_binding.key}"
+        )
     eraser_resolved = resolve_knobs(req)["drive_local_eraser"]
     drive = str(eraser_resolved["drive"])
     gain = float(eraser_resolved["gain"])
-    coords = tuple((coord.layer, coord.index) for coord in coords_for_drive(drive))
-    if not coords:
-        return None
-    return EraserIntervention(coords=coords, gain=gain)
+    cover_coords = coords_for_drive(drive)
+    coords = tuple((coord.layer, coord.index) for coord in cover_coords)
+    coordinate_space = (
+        cover_coords[0].coordinate_space
+        if cover_coords
+        else MLP_INTERMEDIATE_POST_ACTIVATION
+    )
+    source_kind = (
+        "typed_test_fixture"
+        if execution_kind == "typed_test_fixture"
+        else "stage27f_calibrated_cover"
+    )
+    return EraserIntervention(
+        coords=coords,
+        gain=gain,
+        coordinate_space=coordinate_space,
+        execution_kind=execution_kind,
+        source_kind=source_kind,
+        expected_coordinate_width=expected_coordinate_width,
+        expected_projected_output_width=expected_projected_output_width,
+    )
 
 
 def _verification_payload(req: CreateSessionRequest, confidence: float | None) -> dict[str, Any]:

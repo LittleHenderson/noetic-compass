@@ -377,6 +377,17 @@ class Settings(BaseSettings):
             "FLEET_SERVICE_MAX_CLOCK_SKEW_SECONDS",
         ),
     )
+    # Exact-byte Harness-v2 prospective worker lifecycle. This is a dark
+    # research integration flag, not a product or execution license. Enabling
+    # it requires every durable/authenticated prerequisite and the lifespan
+    # must additionally prove that the isolated root kernel is installed.
+    harness_v2_worker_protocol_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED",
+            "HARNESS_V2_WORKER_PROTOCOL_ENABLED",
+        ),
+    )
 
     # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the engine is INERT.
     #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine
@@ -1000,6 +1011,37 @@ class Settings(BaseSettings):
                 "Fleet service auth requires NC_FLEET_SERVICE_CREDENTIAL_PEPPER "
                 "with at least 32 bytes."
             )
+        if self.harness_v2_worker_protocol_enabled:
+            if not self.accounts_enabled:
+                raise RuntimeError(
+                    "NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=true requires "
+                    "NC_ACCOUNTS_ENABLED=true."
+                )
+            if not self.fleet_service_auth_enabled:
+                raise RuntimeError(
+                    "NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=true requires "
+                    "NC_FLEET_SERVICE_AUTH_ENABLED=true."
+                )
+            if not self.evidence_packet_object_store_enabled:
+                raise RuntimeError(
+                    "NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=true requires "
+                    "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true."
+                )
+            database_url = str(self.database_url or "").strip()
+            try:
+                database_scheme = urlsplit(database_url).scheme.lower()
+            except ValueError:
+                database_scheme = ""
+            if database_scheme not in {
+                "postgres",
+                "postgresql",
+                "postgresql+asyncpg",
+            }:
+                raise RuntimeError(
+                    "NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=true requires "
+                    "NC_DATABASE_URL backed by PostgreSQL; SQLite and "
+                    "process-local state cannot support the live route."
+                )
 
         keyring_configured = bool(
             str(self.human_attestation_pseudonym_keyring_json or "").strip()

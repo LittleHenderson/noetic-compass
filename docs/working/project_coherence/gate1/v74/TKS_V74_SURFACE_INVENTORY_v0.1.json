@@ -1,0 +1,97 @@
+{
+  "schema_version": "project_coherence_tks_v74_surface_inventory.v0.1",
+  "document_status": "INTERNAL AUDIT / OPEN / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "scope_statement": "Complete only for declaration headings detected by the recorded regular expression in the registered integrated text; not a proof-completeness or prose-claim-completeness assertion.",
+  "authority_sources": [
+    {
+      "source_id": "SRC-TKS74-MASTER-TEX",
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7.4_MASTER.tex",
+      "sha256": "1CF90D54E89ECE6F1E2EA3F163CF4D4999767038A80AC7B23498CB6B29AEBA53",
+      "role": "REGISTERED_WRAPPER"
+    },
+    {
+      "source_id": "SRC-TKS74-FULL-BEAUTIFUL-TEXT",
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7_4_FULL_BEAUTIFUL.txt",
+      "sha256": "980ABA9F65ED99AC4961A56BE1750C7F344F2741FEE903349EC7BB201A0F414A",
+      "role": "LINE_ADDRESSED_SEMANTIC_SOURCE"
+    },
+    {
+      "source_id": "SRC-TKS74-FULL-BEAUTIFUL-PDF",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_FULL_BEAUTIFUL (1).pdf",
+      "sha256": "1CE09D96468AA668D9DAF8B3F60CB2CEB01714B76365FA4AAD3D0B613EBCA469",
+      "pages": 539,
+      "role": "FROZEN_CITATION_RENDERING"
+    },
+    {
+      "source_id": "SRC-TKS74-REVIEW-CORRECTIONS",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_Review_and_Corrections.pdf",
+      "sha256": "1A010C38DA8A141AB557B5F99AD75A2A660619F95E31C4B74FEFF68E137E587B",
+      "pages": 18,
+      "role": "EXPLICIT_CORRECTION_OVERLAY"
+    },
+    {
+      "source_id": "SRC-TKS74-REFEREE",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_REFEREE_DEFENSIBLE.pdf",
+      "sha256": "E060D44B4C0EA5082391340C1701EEE2A4E0284D31D36410DB8BE138A8505765",
+      "pages": 36,
+      "role": "EXPLICIT_CORRECTION_OVERLAY"
+    },
+    {
+      "source_id": "SRC-TKS74-CORRECTED-CHAPTERS",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_CORRECTED_CHAPTERS.pdf",
+      "sha256": "105ACF6A848296842F0B213E09432F3AE5EDE9425089E83C992BC61665A5442C",
+      "pages": 25,
+      "role": "EXPLICIT_CORRECTION_OVERLAY"
+    }
+  ],
+  "master_input_context": {
+    "authority_warning": "The registered master hash binds the wrapper but not the bytes of its input modules. These hashes are reproducibility context only and are not new authority registrations.",
+    "inputs": [
+      {"name": "TKS_v7.4_CoreCalculus", "sha256": "1B38EF5217AB807862B75505C242B9A41241E5671B7F19EC63BE03D77F162DC5", "bytes": 32434},
+      {"name": "TKS_v7.3_Math", "sha256": "9D19B7AFE27F11C2C0DC4D3E2F981BAB5C2E79EBE2F9AD64216BA93045E1887F", "bytes": 204254},
+      {"name": "TKS_v7.3_Compiler", "sha256": "BB329F6DB1F8F8DF3189B8522127D04CF0C6387F72D191868AEEDD6D38A1F27A", "bytes": 223510},
+      {"name": "TKS_v7.3_Quantum", "sha256": "342CB01EF61CADB848115B3CC926A51DA8951F9A598CFB796CA83E382A9FCD6D", "bytes": 216371},
+      {"name": "TKS_v7.3_Meta", "sha256": "E0CABB43BF2B017FBCD5DC11C6E85EA0C008C9A072FF0F9446416B1099F3DE17", "bytes": 245244},
+      {"name": "TKS_v7.4_Math", "sha256": "66DFB6B4F29815881EF1C81E2D3F86B5B265B28F6979E4D8D92A4751EC68BDB3", "bytes": 81342},
+      {"name": "TKS_v7.4_Semantics", "sha256": "0551CD6B1904B80104223015C87DEA43FB4E85F7A6F94E5E72D44F82E7B57E4F", "bytes": 16090},
+      {"name": "TKS_v7.4_HigherCat", "sha256": "52892B512CD0BFB3410A295314F4544BB06BD67C377B693C2340146B1F05B6E1", "bytes": 18668},
+      {"name": "TKS_v7.4_Geometry", "sha256": "C00F9654BA65FE309838EA03B1461534405CD2F489031F5EA8C2A115D6AE3028", "bytes": 30583}
+    ]
+  },
+  "surface_extraction": {
+    "encoding": "UTF-8 strict",
+    "line_numbering": "one-based physical text lines",
+    "regex": "(?m)^\\s*(Theorem|Proposition|Lemma|Corollary|Claim|Conjecture|Axiom|Definition)\\s+([0-9]+(?:\\.[0-9]+)+)(?:\\s*\\(([^\\n]{0,180}?)\\))?[.\\s]",
+    "canonical_row": "kind<TAB>number<TAB>line<TAB>whitespace-collapsed declaration line",
+    "detected_records": 1258,
+    "counts_by_kind": {
+      "Axiom": 6,
+      "Corollary": 60,
+      "Definition": 768,
+      "Lemma": 4,
+      "Proposition": 181,
+      "Theorem": 239
+    },
+    "heading_sequence_sha256": "7666B6FCE1503321C0B2695EA4C21EA09B8B6585CF43B1DB0EFF69522F69915E",
+    "duplicate_kind_number_keys": {
+      "Theorem 21.12": 2,
+      "Theorem 23.13": 2
+    },
+    "limitations": [
+      "Construction, Example, Remark, unnumbered prose claims, tables, and malformed declaration headings are outside the regex surface.",
+      "Detection does not establish statement identity across duplicate numbering or prove any declaration.",
+      "The manually adjudicated corrigendum is a bounded load-bearing subset, not all 1258 declarations."
+    ]
+  },
+  "placeholder_inventory": {
+    "token": "??",
+    "occurrences": 84,
+    "affected_lines": 71,
+    "line_numbers": [1877, 1887, 1910, 1965, 1999, 2020, 2025, 2048, 2083, 2084, 2092, 2094, 2303, 2316, 2388, 2406, 2457, 2572, 2591, 2639, 2786, 2812, 2813, 2941, 3255, 3259, 3308, 3347, 3348, 3662, 3670, 3702, 3709, 3814, 3921, 4156, 4164, 4202, 4212, 4220, 4244, 4389, 4427, 4486, 4487, 8357, 8358, 8466, 8609, 8764, 8894, 9302, 9456, 9469, 9579, 9959, 9982, 10105, 10529, 10560, 10594, 10643, 10675, 11036, 11037, 11534, 11549, 11586, 12558, 12719, 13189],
+    "canonical_sequence_sha256": "4E03F978CAAD3FBC180BC34952C2E5BF403E9724C3DD6BBA99D6B8727619E3D4",
+    "status": "OPEN"
+  },
+  "claim_boundary": "No empirical, product, clinical, hidden-state, publication-acceptance, or formal-verification claim is made.",
+  "license": "NOT LICENSED"
+}

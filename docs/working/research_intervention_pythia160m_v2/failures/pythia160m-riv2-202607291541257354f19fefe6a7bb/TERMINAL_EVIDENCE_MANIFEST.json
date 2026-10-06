@@ -1,0 +1,68 @@
+{
+  "schema_version": "cas_harness_pythia160m_terminal_evidence_manifest.v2",
+  "status": "FAIL_CLOSED_STARTUP / NON_REUSABLE / NO_RETRY",
+  "run_id": "pythia160m-riv2-202607291541257354f19fefe6a7bb",
+  "source_commit": "44481f45797f1e32888ebfe66afb85a38b19f617",
+  "lock": {
+    "path": "docs/working/research_intervention_pythia160m_v2/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V2.json",
+    "byte_count": 7763,
+    "sha256": "af37bb8d01be55bae0b8b630c1afe7890b0fc7ba50f4a99d1e25b3c59edec70d"
+  },
+  "files": [
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/authorizations/invoke_pythia160m-riv2-202607291541257354f19fefe6a7bb.py",
+      "byte_count": 1331,
+      "sha256": "0de106efd34ffa6d000596edd88da1036124a923a35f3ad634ee86b109992bbc"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/authorizations/pythia160m-riv2-20260729154010-184f6b72aa01ddd1.json",
+      "byte_count": 2707,
+      "sha256": "7fc63b32f8dd838427c87302663ebfee980e2ddcab269ada2113476e7c83fec4"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/authorizations/pythia160m-riv2-202607291541257354f19fefe6a7bb.json",
+      "byte_count": 2705,
+      "sha256": "d7a5ef61cfa89f3cf28f1d0646d868367082ec18906de9f1ed869cb80b6d0b58"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/authorizations/VOID_PREFLIGHT_INVALID_RUN_ID_20260729.json",
+      "byte_count": 834,
+      "sha256": "979502c8858f32dd50a59f7bc9ed6aeee2d2ef97511b055a111b4f08a6f7e944"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/failures/pythia160m-riv2-202607291541257354f19fefe6a7bb/STARTUP_FAILURE_AUDIT.json",
+      "byte_count": 3036,
+      "sha256": "e34dc810788d40bcec805d932112af9d712f3c097d9a4d4a55e8772b46517b2b"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/failures/pythia160m-riv2-202607291541257354f19fefe6a7bb/TERMINAL_STATUS.md",
+      "byte_count": 1999,
+      "sha256": "aa63abeaad5cda76057df1f5a4ca2d9f317342ec8e8370573fe555b94810caf1"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/launcher_pythia160m-riv2-202607291541257354f19fefe6a7bb.stderr.txt",
+      "byte_count": 1447,
+      "sha256": "ba812e2f8ef10c4d5efb178c20542d2358d15e6bc8479521679b272e0dac9ed2"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/launcher_pythia160m-riv2-202607291541257354f19fefe6a7bb.stdout.txt",
+      "byte_count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/working/research_intervention_pythia160m_v2/nonce_ledger/790e7e017b3700c2911c0d2abaadc183e4c0d14e0783faf9b2f07cc88c93a056.used",
+      "byte_count": 282,
+      "sha256": "2b4633795c0cb0feb2a7dbf0e0c1e69867551cec6796f9935c12061f44cf6771"
+    }
+  ],
+  "evidence_summary": {
+    "receipt_preflight": "PASS",
+    "nonce_consumed": true,
+    "terminal_error": "ModuleNotFoundError: No module named 'torch'",
+    "model_loads": 0,
+    "result_packet_created": false,
+    "output_root_created": false,
+    "scientific_audit_available": false
+  },
+  "claim_boundary": "RESEARCH_ONLY / NO LIVE STEERING / NO SAFETY_OR_PROMPT_INJECTION_DEFENSE CLAIM / GATE_2_OPEN / NOT_LICENSED / NO_ACCEPT / NO_PRODUCTION_EFFECT"
+}

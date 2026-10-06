@@ -1,0 +1,297 @@
+{
+  "schema_version": "project_coherence.publication.wave2.lead_correction_acceptance.finding_matrix.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "reviewed_head": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+  "correction_commits": [
+    "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f",
+    "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+    "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+  ],
+  "allowed_dispositions": [
+    "ACCEPTED_AS_TEXT_CORRECTION",
+    "PARTIAL_RETAIN_OPEN",
+    "FAILED"
+  ],
+  "classification_rule": "ACCEPTED_AS_TEXT_CORRECTION applies only to the lead-owned publication wording and evidence scope. Every upstream theorem, specification, proof, citation, implementation, experiment, Gate, canon, product, license, disclosure, and external-review obligation retains its recorded open or not-licensed state.",
+  "entries": [
+    {
+      "id": "RFM-BLK-001",
+      "lane": "FORMAL_MATHEMATICS",
+      "review_class": "BLOCKER",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md:20",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md:83",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md:101",
+        "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json:115",
+        "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json:21"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "Freeze a finite carrier catalog before claiming a finite subcategory.",
+        "Reconcile Python and Lean encodings.",
+        "Keep the general named-finite-set category distinct from a finite profile."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "RFM-BLK-002",
+      "lane": "FORMAL_MATHEMATICS",
+      "review_class": "BLOCKER",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json:108",
+        "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json:115",
+        "docs/working/project_coherence/publication/wave1/formal_math/EVIDENCE_MAP_v0.1.json:74"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "Lean formalization remains open.",
+        "Independent semigroup/dynamics review remains open.",
+        "Bounded executable validation is not a general proof receipt."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "RFM-BLK-003",
+      "lane": "FORMAL_MATHEMATICS",
+      "review_class": "BLOCKER",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json:205",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md:60",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md:366",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md:433",
+        "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json:151"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "Peer-review status remains unverified.",
+        "Independent Proposition 4.1 proof and novelty review remain open.",
+        "Authorship, venue, DOI, and publication metadata remain unresolved."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "CAT-RC-001",
+      "lane": "CATEGORY_THEORY",
+      "review_class": "BLOCKING_ERROR",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md:191",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json:92",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json:152",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:29",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:37",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:97",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:153",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:173"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md lines 208-212 still contain the false upstream witness.",
+        "NOETIC_TOPOS_2_THEOREMS_v0.1.json line 113 still contains the false upstream theorem statement.",
+        "No replacement witness, lifted topology, null-cover fixture, two-coordinate naturality proof, ambient distinctness theorem, or observational interaction result is admitted."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "CAT-RC-002",
+      "lane": "CATEGORY_THEORY",
+      "review_class": "BLOCKING_ERROR",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md:42",
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md:218",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json:222",
+        "docs/working/project_coherence/publication/wave1/category_theory/CITATION_LEDGER_v0.1.json:146"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md lines 261-264 retains older universal finite-dimensional wording.",
+        "Register the cellular variance, coefficient, inner-product, adjoint, domain, and boundedness profile.",
+        "Implement and review any selected matrix or Hilbert-valued profile."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "CAT-RC-003",
+      "lane": "CATEGORY_THEORY",
+      "review_class": "BLOCKING_EVIDENCE_ERROR",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:145",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:153",
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json:173"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "EVD-LEAN-SEED supports only its registered bounded context lemmas and axiom audit.",
+        "Topology generation, representable-sheaf, and reflector formalization remain open.",
+        "Independent category-theory review remains open."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "CAT-RC-004",
+      "lane": "CATEGORY_THEORY",
+      "review_class": "REQUIRED_TERMINOLOGY_CORRECTION",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md:13",
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md:207",
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md:335",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json:105",
+        "docs/working/project_coherence/publication/wave1/category_theory/UNRESOLVED_OBLIGATIONS_v0.1.json:31"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "The older Gate 1 specification retains local atomic-cover and J_atom wording.",
+        "Any upstream terminology change requires a separately versioned specification correction.",
+        "The publication correction does not change the finite topology theorem status."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "B-ENG-001",
+      "lane": "ENGINEERING",
+      "review_class": "PUBLICATION_BLOCKER",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md:174",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:315"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "The projector Gram result remains IN REVIEW / Ring 4.",
+        "No strict-positive-definiteness, cognitive-validity, or capacity inference is admitted."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "B-ENG-002",
+      "lane": "ENGINEERING",
+      "review_class": "PUBLICATION_INTEGRATION_BLOCKER",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md:168",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json:414",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:313",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:328"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "CAS capacity transfer remains PROOF_GAP / IN_REVIEW / Ring 4.",
+        "No CAS-specific isometry or adjoint-intertwining certificate exists.",
+        "Independent proof closure for Formal Paper 3 remains open."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "S-ENG-001",
+      "lane": "ENGINEERING",
+      "review_class": "REQUIRED_STRENGTHENING",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:242",
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:250",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:249"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "Full-scale calibration remains open.",
+        "Q4 semantic validity and held-out interpretation remain open.",
+        "The software result does not establish an empirical response law."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "S-ENG-002",
+      "lane": "ENGINEERING",
+      "review_class": "REQUIRED_STRENGTHENING",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:134",
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:146",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:352"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "No physical SI profile is implemented.",
+        "No authenticated physical telemetry or material mapping exists.",
+        "The physical-telemetry claim remains contradicted and NOT LICENSED."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "S-ENG-003",
+      "lane": "ENGINEERING",
+      "review_class": "REQUIRED_STRENGTHENING",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:318",
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md:325",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:275",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json:288"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "Authenticated-current remains false.",
+        "Trusted-clock and external authority paths remain open.",
+        "Evidence Packet eligibility remains open."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    },
+    {
+      "id": "S-ENG-004",
+      "lane": "ENGINEERING",
+      "review_class": "REQUIRED_CITATION_SCOPE_CORRECTION",
+      "disposition": "ACCEPTED_AS_TEXT_CORRECTION",
+      "accepted_evidence": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md:407",
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md:411",
+        "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json:120"
+      ],
+      "publication_residual": [],
+      "retained_upstream_obligations": [
+        "A primary mutation-testing citation remains open.",
+        "Mutation-testing specification, implementation, score, and independent replay remain open.",
+        "E9 does not prove existing property, fuzz, mutation, or exhaustive coverage."
+      ],
+      "claim_promotion": false,
+      "gate_effect": "NONE"
+    }
+  ],
+  "entry_count": 13,
+  "disposition_counts": {
+    "ACCEPTED_AS_TEXT_CORRECTION": 13,
+    "PARTIAL_RETAIN_OPEN": 0,
+    "FAILED": 0
+  },
+  "retained_review_items_not_reclassified": [
+    "Formal strengthening suggestions RFM-STR-001 through RFM-STR-007 remain open.",
+    "Category required changes CAT-RC-005 through CAT-RC-008 remain open.",
+    "Category strengthening suggestions CAT-SG-001 through CAT-SG-004 remain open.",
+    "All 24 formal, 23 category, and 27 engineering upstream obligations remain open or not licensed."
+  ],
+  "closure_statement": "No disposition closes an upstream theorem, specification, proof, citation, implementation, experiment, Gate, canon, product, license, disclosure, authorship, submission, external-review, safety, clinical, regulatory, physical, empirical, or causal obligation."
+}

@@ -7,7 +7,8 @@ Two jobs:
 * prove the property the reference store deliberately CANNOT satisfy: committed
   records and leases **survive a close/reopen of the real database file**. That
   survival is the entire reason this backend exists, and the restart tests below
-  are what earn it the right to call itself "durable on a single host."
+  establish only close/reopen persistence on one host; they do not establish
+  process-crash, OS-restart, power-loss, or storage-device durability.
 
 Run ONLY this file:
     C:/Python314/python.exe -m pytest tests/test_state_substrate_sqlite.py -q
@@ -15,10 +16,15 @@ Run ONLY this file:
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
+import threading
 import uuid
 
 from api.services.production.state_substrate import (
+    LeaseHeld,
     LedgerRecord,
+    UnknownLease,
+    VersionConflict,
     run_state_store_contract,
 )
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
@@ -165,3 +171,200 @@ def test_reopen_continues_version_sequence(tmp_path):
         assert third.created_at == first.created_at, "created_at immutable across restart + update"
     finally:
         reopened.close()
+
+
+def test_independent_connections_enforce_atomic_put_compare_and_swap(tmp_path):
+    db = tmp_path / "atomic-put.db"
+    first = SqliteStateStore(db)
+    second = SqliteStateStore(db)
+    try:
+        # Fresh row identities make every attempt exercise the version-1 race;
+        # 32 attempts reliably red-test the former select-then-UPSERT TOCTOU while
+        # keeping the same-host regression bounded.
+        for attempt in range(32):
+            record_id = f"run-atomic-{attempt:02d}"
+            created = first.put(
+                LedgerRecord.new(
+                    tenant_id="tenant-a",
+                    kind="run",
+                    record_id=record_id,
+                    payload={"winner": None},
+                ),
+                expected_version=0,
+            )
+            first_view = first.get("tenant-a", "run", record_id)
+            second_view = second.get("tenant-a", "run", record_id)
+            assert first_view == created
+            assert second_view == created
+            barrier = threading.Barrier(2)
+
+            def contend(index: int):
+                store = first if index == 0 else second
+                view = first_view if index == 0 else second_view
+                assert view is not None
+                barrier.wait()
+                try:
+                    result = store.put(
+                        view.with_payload({"winner": index}),
+                        expected_version=view.version,
+                    )
+                    return ("won", index, result)
+                except VersionConflict as exc:
+                    return ("lost", index, exc)
+
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                outcomes = list(pool.map(contend, range(2)))
+            winners = [outcome for outcome in outcomes if outcome[0] == "won"]
+            losers = [outcome for outcome in outcomes if outcome[0] == "lost"]
+            assert len(winners) == 1
+            assert len(losers) == 1
+            stored = first.get("tenant-a", "run", record_id)
+            assert stored is not None
+            assert stored.version == 2
+            assert stored.payload == {"winner": winners[0][1]}
+    finally:
+        first.close()
+        second.close()
+
+
+def test_independent_connection_delete_cannot_race_stale_update(tmp_path):
+    db = tmp_path / "atomic-delete.db"
+    first = SqliteStateStore(db)
+    second = SqliteStateStore(db)
+    try:
+        created = first.put(
+            LedgerRecord.new(
+                tenant_id="tenant-a",
+                kind="run",
+                record_id="delete-or-update",
+                payload={"state": "initial"},
+            ),
+            expected_version=0,
+        )
+        barrier = threading.Barrier(2)
+
+        def delete():
+            barrier.wait()
+            try:
+                first.delete(
+                    "tenant-a",
+                    "run",
+                    "delete-or-update",
+                    expected_version=created.version,
+                )
+                return "deleted"
+            except VersionConflict:
+                return "delete-conflict"
+
+        def update():
+            barrier.wait()
+            try:
+                second.put(
+                    created.with_payload({"state": "updated"}),
+                    expected_version=created.version,
+                )
+                return "updated"
+            except VersionConflict:
+                return "update-conflict"
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            delete_future = pool.submit(delete)
+            update_future = pool.submit(update)
+            outcomes = {delete_future.result(), update_future.result()}
+        assert outcomes in (
+            {"deleted", "update-conflict"},
+            {"updated", "delete-conflict"},
+        )
+        stored = first.get("tenant-a", "run", "delete-or-update")
+        if "deleted" in outcomes:
+            assert stored is None
+        else:
+            assert stored is not None
+            assert stored.version == 2
+            assert stored.payload == {"state": "updated"}
+    finally:
+        first.close()
+        second.close()
+
+
+def test_independent_connections_have_one_live_lease_holder(tmp_path):
+    db = tmp_path / "atomic-acquire.db"
+    first = SqliteStateStore(db)
+    second = SqliteStateStore(db)
+    barrier = threading.Barrier(2)
+    try:
+        def acquire(index: int):
+            barrier.wait()
+            store = first if index == 0 else second
+            try:
+                lease = store.acquire_lease(
+                    "tenant-a",
+                    "shared-resource",
+                    holder=f"holder-{index}",
+                    ttl_seconds=60,
+                    now=_T0,
+                )
+                return ("won", index, lease)
+            except LeaseHeld as exc:
+                return ("lost", index, exc)
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            outcomes = list(pool.map(acquire, range(2)))
+        winners = [outcome for outcome in outcomes if outcome[0] == "won"]
+        losers = [outcome for outcome in outcomes if outcome[0] == "lost"]
+        assert len(winners) == 1
+        assert len(losers) == 1
+        live = second.get_lease(
+            "tenant-a", "shared-resource", now=_T0 + timedelta(seconds=1)
+        )
+        assert live is not None
+        assert live.holder == f"holder-{winners[0][1]}"
+    finally:
+        first.close()
+        second.close()
+
+
+def test_release_and_renew_cannot_resurrect_a_released_lease(tmp_path):
+    db = tmp_path / "atomic-renew-release.db"
+    first = SqliteStateStore(db)
+    second = SqliteStateStore(db)
+    try:
+        for index in range(25):
+            resource_id = f"resource-{index}"
+            lease = first.acquire_lease(
+                "tenant-a",
+                resource_id,
+                holder="holder-a",
+                ttl_seconds=60,
+                now=_T0,
+            )
+            barrier = threading.Barrier(2)
+
+            def renew():
+                barrier.wait()
+                try:
+                    first.renew_lease(
+                        lease.token,
+                        ttl_seconds=60,
+                        now=_T0 + timedelta(seconds=1),
+                    )
+                    return "renewed"
+                except UnknownLease:
+                    return "release-won"
+
+            def release():
+                barrier.wait()
+                second.release_lease(lease.token)
+                return "released"
+
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                renew_future = pool.submit(renew)
+                release_future = pool.submit(release)
+                outcomes = {renew_future.result(), release_future.result()}
+            assert "released" in outcomes
+            assert first.get_lease(
+                "tenant-a", resource_id, now=_T0 + timedelta(seconds=2)
+            ) is None
+    finally:
+        first.close()
+        second.close()

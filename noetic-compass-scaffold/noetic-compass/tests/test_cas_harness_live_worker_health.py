@@ -24,7 +24,7 @@ class _MockResp:
         return self._payload
 
 
-def _install_mock_async_client(monkeypatch, get_handler):
+def _install_mock_async_client(monkeypatch, get_handler, *, request_kwargs=None):
     class _Client:
         def __init__(self, *args, **kwargs):
             pass
@@ -36,6 +36,9 @@ def _install_mock_async_client(monkeypatch, get_handler):
             return False
 
         async def get(self, url, **kwargs):
+            if request_kwargs is not None:
+                request_kwargs.clear()
+                request_kwargs.update(kwargs)
             return await get_handler(url)
 
     monkeypatch.setattr(live_worker.httpx, "AsyncClient", _Client)
@@ -69,6 +72,73 @@ def test_live_worker_health_reachable_real_weights(client, monkeypatch):
     assert body["worker_version"] == "m2-real-pythia"
     assert body["label"] == "Live worker connected · real Pythia weights"
     assert seen["url"].endswith("/health/realmode")
+
+
+def test_live_worker_health_authenticates_protected_realmode(client, monkeypatch):
+    secret = "protected-health-worker-secret"
+    monkeypatch.setattr(live_worker.settings, "atlas_live_worker_token", secret)
+    request_kwargs: dict[str, object] = {}
+
+    async def _get(url):
+        assert url.endswith("/health/realmode")
+        return _MockResp(
+            200,
+            {
+                "verdict": "REAL_PYTHIA_WEIGHTS_LOADED",
+                "is_real_model": True,
+                "model_id": "EleutherAI/pythia-160m",
+                "worker_version": "m2-real-pythia",
+            },
+        )
+
+    _install_mock_async_client(
+        monkeypatch,
+        _get,
+        request_kwargs=request_kwargs,
+    )
+
+    resp = client.get("/api/cas-harness/live-worker/health")
+
+    assert resp.status_code == 200
+    assert resp.json()["real_weights"] is True
+    assert request_kwargs == {
+        "headers": {"X-Atlas-Worker-Token": secret},
+    }
+
+
+def test_live_worker_health_token_rejection_fails_closed_without_leak(
+    client, monkeypatch, caplog
+):
+    secret = "rejected-protected-health-secret"
+    monkeypatch.setattr(live_worker.settings, "atlas_live_worker_token", secret)
+    request_kwargs: dict[str, object] = {}
+
+    async def _get(url):
+        assert url.endswith("/health/realmode")
+        return _MockResp(401, {"detail": f"rejected token {secret}"})
+
+    _install_mock_async_client(
+        monkeypatch,
+        _get,
+        request_kwargs=request_kwargs,
+    )
+
+    resp = client.get("/api/cas-harness/live-worker/health")
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["configured"] is True
+    assert body["reachable"] is False
+    assert body["real_weights"] is False
+    assert body["model_id"] is None
+    assert body["worker_version"] is None
+    assert body["configuration_error"] is None
+    assert body["label"] == live_worker._LABEL_UNREACHABLE
+    assert request_kwargs == {
+        "headers": {"X-Atlas-Worker-Token": secret},
+    }
+    assert secret not in resp.text
+    assert secret not in caplog.text
 
 
 @pytest.mark.parametrize(

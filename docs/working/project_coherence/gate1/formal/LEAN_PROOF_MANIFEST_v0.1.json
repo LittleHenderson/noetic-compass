@@ -1,0 +1,120 @@
+{
+  "schema_version": "project_coherence.lean_proof_manifest.v0.1",
+  "document_status": "GATE 1 FORMAL PROOF SEED / IN REVIEW / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "toolchain": {
+    "lean": "4.32.1",
+    "lean_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "platform": "x86_64-w64-windows-gnu",
+    "toolchain_file": "formal/lean/lean-toolchain",
+    "selection_reason": "Pinned patched stable release; Lean 4.32.1 includes the July 2026 kernel soundness fix documented by the Lean project."
+  },
+  "project": {
+    "lakefile": "formal/lean/lakefile.toml",
+    "root_module": "formal/lean/PSR8Formal.lean",
+    "external_dependencies": [],
+    "build_command": "Set ELAN_HOME to the isolated project toolchain, then run lake build in formal/lean"
+  },
+  "source_artifacts": [
+    {
+      "path": "formal/lean/lean-toolchain",
+      "sha256": "8E3538E0AB5F81A3EE04927D8838C8C674E0E112838B4B3CE87EC218143276AF",
+      "bytes": 25
+    },
+    {
+      "path": "formal/lean/lakefile.toml",
+      "sha256": "4A8867824EA6877970776AAFD9606153842A82CF627E0D3BB40D0308CBCE8D17",
+      "bytes": 105
+    },
+    {
+      "path": "formal/lean/lake-manifest.json",
+      "sha256": "95B2F386990C3A6F47B5ABBC7462D278CD3D64DAED77994AC4E063D6A9827807",
+      "bytes": 143
+    },
+    {
+      "path": "formal/lean/PSR8Formal.lean",
+      "sha256": "65B502B48EB17305ED8D43A47B99961BBE76789B3CD8EDF1FCB9A4842B81B63C",
+      "bytes": 590
+    },
+    {
+      "path": "formal/lean/PSR8Formal/TypedCategory.lean",
+      "sha256": "C99CF906B6DFFC1BA627D22165FDE31275CACAEC8CA070A339E1AA52D8DB984F",
+      "bytes": 1719
+    },
+    {
+      "path": "formal/lean/PSR8Formal/DeterministicLiftCounterexample.lean",
+      "sha256": "9E8375CDCFF1EF498CEDCDFC0E7A5F670590AF2F55784A3789F101198E4FC54A",
+      "bytes": 1872
+    },
+    {
+      "path": "formal/lean/PSR8Formal/DeterministicLiftFunctor.lean",
+      "sha256": "088D69D87A1BAB9863359AA7A2AAB151F6745AD2C997955B74207D4331B8915D",
+      "bytes": 6939
+    },
+    {
+      "path": "formal/lean/PSR8Formal/NoeticContext.lean",
+      "sha256": "0F8DC16DABE89818C4717E5D1232FCD58B4FA1A098709CA449774C5D27E365C4",
+      "bytes": 4300
+    },
+    {
+      "path": "formal/lean/ProofAudit.lean",
+      "sha256": "D2D84A9040D2BA2CC824FE945170A8F7D403407981BEC1E4CAC33AA1927E2942",
+      "bytes": 609
+    },
+    {
+      "path": "formal/lean/DeterministicLiftFunctorAudit.lean",
+      "sha256": "1A0A3413866FBA122CF797618BA26FBECFBCDACB3A00A86C70875C5745A78014",
+      "bytes": 939
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_REPORT_v0.1.md",
+      "sha256": "1037C2C5F7122BA1E938724421AA9F035EF38D7CB4453D63AF96D701E6461CEC",
+      "bytes": 3712
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_MANIFEST_v0.1.json",
+      "sha256": "BEED66D60666D48EF33204779D8DCE0557AD43245E5D89CD63691CC97492C3A2",
+      "bytes": 4509
+    }
+  ],
+  "checked_modules": [
+    {
+      "path": "formal/lean/PSR8Formal/TypedCategory.lean",
+      "scope": "Typed total-function identity, composition, associativity, and endomap-only powers"
+    },
+    {
+      "path": "formal/lean/PSR8Formal/DeterministicLiftCounterexample.lean",
+      "scope": "Exact two-state constant-lift expansion plus separately declared literal matrix/Gram and 2-versus-1 arithmetic fixtures. Generic matrix/Gram/trace/rank definitions and bridge lemmas are not present."
+    },
+    {
+      "path": "formal/lean/PSR8Formal/DeterministicLiftFunctor.lean",
+      "scope": "A_id=I entrywise and on basis vectors; typed composition on basis vectors; zero/one entry characterizations; and exact relational-product support composition. Finite-sum numerical matrix multiplication and arbitrary-vector linearity are not modeled."
+    },
+    {
+      "path": "formal/lean/PSR8Formal/NoeticContext.lean",
+      "scope": "Four-atom ACBE/RPM exhaustiveness, proper global pieces, transverse refinement, and global witness-map separation"
+    }
+  ],
+  "open_formalization_obligations": [
+    "Universal deterministic-lift operator-norm theorem over finite-dimensional real or complex Hilbert spaces",
+    "Full presheaf and sheaf-condition formalization on all sixteen context objects",
+    "Generation of Grothendieck topologies from the two cover bases",
+    "Product-site comparison and legacy round-trip equivalence",
+    "Fixed-order shortlex leastness for the executable closure algorithm",
+    "Finite-map factorial idempotent-power theorem",
+    "Finite-sum numerical matrix multiplication and arbitrary-vector linear extension of the formally checked lift basis laws",
+    "Bridge from the constantTwoLift function to generic matrix, Gram, trace, and rank definitions"
+  ],
+  "validation_snapshot": {
+    "validated_at": "2026-08-04",
+    "lake_build": "PASS",
+    "proof_audit": "PASS",
+    "sorry_ax_present": false,
+    "project_specific_axioms_declared": false,
+    "allowed_kernel_axiom_dependencies": ["propext"],
+    "note": "The two exhaustiveness proofs use Lean's standard propositional extensionality axiom through simplification; the other fourteen audited theorem dependencies are axiom-free."
+  },
+  "claim_boundary": "A successful Lean build kernel-checks only the stated modules. Identity and composition of the deterministic lift are formal at the entry, basis-action, and relational-support levels; finite-sum numerical matrix multiplication and arbitrary-vector linearity remain open. The exact counterexample function is formal; the literal matrix/Gram and 2-versus-1 fixtures are not yet bridged to generic trace/rank definitions. The seed declares no project-specific axioms or sorry, while two finite-set equality proofs use standard propext. It is not independent peer review, empirical validation, a completed Noetic Topos 2.0 proof, or a product-claim license."
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": "project_coherence.adversarial_category_required_changes.v0.1",
+  "document_status": "DRAFT / ALL ITEMS OPEN / RING 4 / NOT LICENSED / HELD",
+  "review_class": "INTERNAL ADVERSARIAL CROSS-REVIEW / NOT EXTERNAL PEER REVIEW",
+  "as_of": "2026-08-05",
+  "reviewed_lane_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
+  "policy": "Blocking errors prevent submission editing of the affected statement. Required nonblocking changes must be completed during lead reconciliation but do not retract the surviving finite theorem. Strengthening suggestions improve precision or reproducibility and do not count as closure criteria unless the lead promotes them into a governing obligation. Every item remains OPEN until exact acceptance evidence is hash-bound and reviewed.",
+  "blocking_errors": [
+    {
+      "id": "CAT-RC-001",
+      "severity": "BLOCKING ERROR",
+      "status": "OPEN",
+      "title": "Replace or retract the representable external-product witness",
+      "affected_claims": ["PUB-P2-006", "PUB-P2-011"],
+      "affected_artifacts": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+        "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md"
+      ],
+      "finding": "For H(c,V)=yC_0(c) x F_A(V), the null-cover condition at (c,empty) requires Hom_C(c,C_0) to be singleton for every c. A general representable is therefore not a J_A-sheaf, and duplicated representable coordinates also obstruct gluing over split contexts.",
+      "required_action": "Either keep ambient distinctness OPEN or replace the representable factor with the terminal C-presheaf after defining the exact lifted L-coordinate topology, stating C nonempty, and checking the witness naturally in both coordinates. Do not infer product-site commutation or J_obs interaction.",
+      "acceptance_evidence": "Corrected lead-owned text and claim/evidence records plus a reviewed proof or executable product-site fixture that includes the null cover and general C-coordinate restrictions.",
+      "blocks_submission_editing": true,
+      "blocks_finite_L_theorem": false
+    },
+    {
+      "id": "CAT-RC-002",
+      "severity": "BLOCKING ERROR",
+      "status": "OPEN",
+      "title": "Narrow the finite-dimensional cellular-Laplacian claim",
+      "affected_claims": ["PUB-P4-005"],
+      "affected_artifacts": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+        "docs/working/project_coherence/publication/wave1/category_theory/CITATION_LEDGER_v0.1.json"
+      ],
+      "finding": "Finite dimensionality is not a universal prerequisite for a cellular-sheaf Laplacian. Bounded Hilbert-valued cellular sheaves can have bounded Laplacians in infinite dimension, and the cited Hansen-Ghrist source discusses that case.",
+      "required_action": "State finite-dimensional real or complex stalks as a requirement of the selected finite executable/matrix-certificate profile. Preserve the valid universal requirements for an explicit linear or Hilbert representation, structure maps, and declared adjoint/inner-product data.",
+      "acceptance_evidence": "Corrected Paper 4, claim-matrix, and citation-ledger wording reviewed against the primary source, with no remaining universal finite-dimensional assertion.",
+      "blocks_submission_editing": true,
+      "blocks_type_separation_architecture": false
+    },
+    {
+      "id": "CAT-RC-003",
+      "severity": "BLOCKING EVIDENCE ERROR",
+      "status": "OPEN",
+      "title": "Correct the PUB-P2-007 evidence edge",
+      "affected_claims": ["PUB-P2-007"],
+      "affected_artifacts": [
+        "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json"
+      ],
+      "finding": "PUB-P2-007 is grouped with the finite-site and Lean seed nodes, but its actual join-equality proof and exhaustive topology execution are in EVD-MODALITY-PROOF and EVD-MODALITY-EXECUTION. The Lean seed explicitly excludes topology generation and reflector formalization.",
+      "required_action": "Give PUB-P2-007 its own edge to EVD-MODALITY-PROOF and EVD-MODALITY-EXECUTION. Remove or narrowly qualify EVD-LEAN-SEED from any edge where it appears to support topology, representable-sheaf, witness, join, or reflector claims beyond its registered lemmas.",
+      "acceptance_evidence": "JSON-valid corrected evidence map with all 20 claims mapped, no unknown or duplicate IDs, and reviewer-confirmed evidence scopes.",
+      "blocks_submission_editing": true,
+      "blocks_underlying_join_theorem": false
+    }
+  ],
+  "required_nonblocking_changes": [
+    {
+      "id": "CAT-RC-004",
+      "severity": "REQUIRED TERMINOLOGY CORRECTION",
+      "status": "OPEN",
+      "title": "Disambiguate J_atom from the standard atomic topology",
+      "affected_claims": ["PUB-P2-007", "PUB-P2-012"],
+      "required_action": "Prefer J_singleton or J_Q. If J_atom is retained as local notation, explicitly say it means the topology generated by the four singleton blocks plus the registered null cover and is not a claim that the standard atomic topology is being used.",
+      "acceptance_evidence": "A terminology search over the reconciled papers and registries shows every use qualified or renamed.",
+      "blocks_submission_editing": false
+    },
+    {
+      "id": "CAT-RC-005",
+      "severity": "REQUIRED CITATION AND HYPOTHESIS CORRECTION",
+      "status": "OPEN",
+      "title": "Separate Vorob'ev regularity, acyclicity, and junction-tree claims",
+      "affected_claims": ["PUB-P4-004"],
+      "required_action": "State the exact Vorob'ev regular-complex theorem. Add a primary source and hypothesis crosswalk before using a modern acyclicity equivalence or junction-tree reconstruction; cover separator-zero cases if a quotient formula is proposed.",
+      "acceptance_evidence": "Citation-ledger entries, theorem-level source locations, and a comparison table tying the chosen Project Coherence hypergraph property to exact source hypotheses.",
+      "blocks_submission_editing": false
+    },
+    {
+      "id": "CAT-RC-006",
+      "severity": "REQUIRED CITATION COMPLETION",
+      "status": "OPEN",
+      "title": "Add an authoritative Farkas-alternative source",
+      "affected_claims": ["PUB-P4-003"],
+      "required_action": "Add a primary or authoritative optimization reference for the exact alternative used and retain the sign convention Aq=b, q>=0 versus A^T y>=0, b^T y<0.",
+      "acceptance_evidence": "New citation-ledger entry and a source-bound use scope; no implementation claim is added.",
+      "blocks_submission_editing": false
+    },
+    {
+      "id": "CAT-RC-007",
+      "severity": "REQUIRED SOURCE-PORTABILITY IMPROVEMENT",
+      "status": "OPEN",
+      "title": "Bind direct legacy sources in the next publication inventory",
+      "affected_claims": ["PUB-P2-001", "PUB-P2-002", "PUB-P2-005", "PUB-P2-010"],
+      "required_action": "List peer_review/journal_submission/main.tex directly in the next source inventory and, if policy permits, place the frozen PDF into a portable content-addressed evidence bundle rather than relying on a Downloads path.",
+      "acceptance_evidence": "Direct source entries with exact bytes and SHA-256, plus a portable PDF locator or an explicit retained portability limitation.",
+      "blocks_submission_editing": false
+    },
+    {
+      "id": "CAT-RC-008",
+      "severity": "REQUIRED TYPE-INTERFACE COMPLETION",
+      "status": "OPEN",
+      "title": "Register cellular-sheaf variance and adjoint profile",
+      "affected_claims": ["PUB-P4-002", "PUB-P4-005"],
+      "required_action": "Declare the face-poset arrow convention, source and target of every linear structure map, coefficient field, finite-versus-Hilbert profile, inner products, and adjoint domain. Any conversion from the contravariant marginal presheaf must state its variance handling explicitly.",
+      "acceptance_evidence": "Typed schema, positive and negative fixtures, and a comparison artifact showing that Grothendieck restrictions, cellular structure maps, kernels, and affine channels cannot be substituted.",
+      "blocks_submission_editing": false
+    }
+  ],
+  "strengthening_suggestions": [
+    {
+      "id": "CAT-SG-001",
+      "severity": "STRENGTHENING SUGGESTION",
+      "status": "OPEN / OPTIONAL UNTIL ADOPTED",
+      "title": "Use theorem-level citation locations",
+      "suggestion": "For the Stacks Project, cite Lemma 7.48.1, Theorem 7.10.10, the sheafification adjunction, Lemma 7.10.15, and Section 7.12 definitions directly rather than relying only on section tags."
+    },
+    {
+      "id": "CAT-SG-002",
+      "severity": "STRENGTHENING SUGGESTION",
+      "status": "OPEN / OPTIONAL UNTIL ADOPTED",
+      "title": "Add minimal executable Paper 4 fixtures before model experiments",
+      "suggestion": "Implement exact rational examples for feasible-nonunique, anticorrelation-infeasible, and regular/acyclic-positive cases before allocating GPU budget. These are CPU-sized and test the certificate semantics independently of the runner."
+    },
+    {
+      "id": "CAT-SG-003",
+      "severity": "STRENGTHENING SUGGESTION",
+      "status": "OPEN / OPTIONAL UNTIL ADOPTED",
+      "title": "Normalize bibliographic names and freeze submission metadata",
+      "suggestion": "Use Michèle Giry in full-name metadata and recheck the Stein preprint version/publication state at the eventual submission freeze."
+    },
+    {
+      "id": "CAT-SG-004",
+      "severity": "STRENGTHENING SUGGESTION",
+      "status": "OPEN / OPTIONAL UNTIL ADOPTED",
+      "title": "Split evidence edges by claim rather than by broad cluster",
+      "suggestion": "Use one edge per claim or per genuinely identical evidence scope. This prevents a bounded Lean seed or one executable certificate from appearing to support every claim in a heterogeneous cluster."
+    }
+  ],
+  "summary": {
+    "blocking_errors_open": 3,
+    "required_nonblocking_changes_open": 5,
+    "strengthening_suggestions_open": 4,
+    "items_closed": 0,
+    "claims_promoted": 0
+  },
+  "global_boundary": "The list records review findings only. It does not modify the Wave 1 artifacts, close OBL-CAT-001, replace external category-theory review, authorize submission or disclosure, admit a theorem, validate an experiment, or grant a license."
+}

@@ -26,6 +26,8 @@ Run ONLY this file:
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import json
 
 import pytest
 
@@ -33,6 +35,7 @@ from api.config import Settings
 from api.services import cas_harness_distributed_audits as da
 from api.services import cas_harness_fleet_executor as fe
 from api.services.cas_harness_scale_planner import ScalePlanRequest
+from api.services.cas_harness_model_provenance import ModelProvenanceManifest, WeightFileRef
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.state_ledger_bootstrap import (
     StateLedgerHandle,
@@ -40,6 +43,43 @@ from api.state_ledger_bootstrap import (
     install_state_ledger,
     teardown_state_ledger,
 )
+
+
+MODEL_REVISION = "a" * 40
+MANIFEST_PATH = "/workspace/model-artifacts.json"
+MANIFEST_SHA256 = "b" * 64
+
+
+def _model_attestation(audit_id: str, job, model_id: str) -> dict:
+    artifacts = [{"path": "config.json", "sha256": "c" * 64, "byte_count": 1}]
+    artifact_set_sha256 = hashlib.sha256(
+        json.dumps(artifacts, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return {
+        "status": "real_model_forward_completed",
+        "audit_id": audit_id,
+        "job_id": job.job_id,
+        "worker_id": job.assigned_worker_id,
+        "model_id": model_id,
+        "model_revision": MODEL_REVISION,
+        "shard_id": job.shard_id,
+        "layer_start": job.layer_start,
+        "layer_end": job.layer_end,
+        "model_info": {
+            "artifact_identity": {
+                "manifest_path": MANIFEST_PATH,
+                "manifest_sha256": MANIFEST_SHA256,
+                "artifact_count": 1,
+                "artifact_set_sha256": artifact_set_sha256,
+                "artifacts": artifacts,
+                "all_artifacts_hash_verified": True,
+                "post_load_reverified": True,
+                "local_files_only": True,
+                "trust_remote_code": False,
+                "use_safetensors": True,
+            }
+        },
+    }
 
 
 @dataclass(frozen=True)
@@ -98,7 +138,20 @@ def _drive_full_flow() -> str:
     shadow-read call site in both live services actually fires while a mirror is installed.
     """
 
-    audit = da.create_distributed_audit(_request(), data_capture_acknowledged=True)
+    request = _request()
+    audit = da.create_distributed_audit(
+        request,
+        data_capture_acknowledged=True,
+        provenance=ModelProvenanceManifest(
+            model_id=request.model_id,
+            source_uri="https://models.example.test/open-weight",
+            license_id="apache-2.0",
+            revision=MODEL_REVISION,
+            weight_files=(
+                WeightFileRef(path="model.safetensors", sha256="d" * 64, size_bytes=1),
+            ),
+        ),
+    )
     audit_id = audit.audit_id
     da.dispatch_distributed_audit(audit_id)
 
@@ -112,12 +165,18 @@ def _drive_full_flow() -> str:
             supported_methods=list(worker.assigned_methods),
         )
 
-    run = fe.prepare_fleet_for_audit(audit_id)
+    run = fe.prepare_fleet_for_audit(
+        audit_id,
+        model_revision=MODEL_REVISION,
+        model_artifact_manifest_path=MANIFEST_PATH,
+        model_artifact_manifest_sha256=MANIFEST_SHA256,
+    )
     assert run is not None and run.jobs, "fleet run must have jobs to drive"
 
     for job in list(run.jobs):
         leased = fe.lease_next_job(audit_id=audit_id, worker_id=job.assigned_worker_id)
         assert leased is not None and leased.lease_token
+        evidence_payload = _model_attestation(audit_id, leased, model_id)
         ref = fe.build_evidence_fragment_ref(
             audit_id=audit_id,
             job_id=leased.job_id,
@@ -128,6 +187,8 @@ def _drive_full_flow() -> str:
             shard_id=leased.shard_id,
             expected_outputs=leased.expected_outputs,
             produced_outputs=list(leased.expected_outputs),
+            evidence_packet_fragment_payload=evidence_payload,
+            execution_mode="external_probe_command",
         )
         fe.submit_job_receipt(
             audit_id=audit_id,
@@ -136,6 +197,8 @@ def _drive_full_flow() -> str:
             lease_token=leased.lease_token,
             produced_outputs=list(leased.expected_outputs),
             evidence_packet_fragment_ref=ref,
+            evidence_packet_fragment_payload=evidence_payload,
+            execution_mode="external_probe_command",
         )
 
     fe.merge_fleet_evidence(audit_id)
@@ -244,7 +307,7 @@ def test_read_authority_flip_serves_from_ledger_after_clearing_the_dict(tmp_path
         audit_before = da.get_distributed_audit(audit_id).to_dict()
         run_before = fe.get_fleet_run(audit_id).to_dict()
         workers_before = {w.worker_id: w.to_dict() for w in fe.list_workers()}
-        assert run_before["verifier_gate_status"] == "ready_for_verifier"
+        assert run_before["verifier_gate_status"] == "blocked_unattested_model"
         assert workers_before
 
         # Audit: self-contained. Clear its dict; the read can ONLY come from the ledger.
@@ -255,7 +318,7 @@ def test_read_authority_flip_serves_from_ledger_after_clearing_the_dict(tmp_path
         fe._FLEET_RUNS.clear()
         served_run = fe.get_fleet_run(audit_id)
         assert served_run.to_dict() == run_before
-        assert served_run.verifier_gate_status == "ready_for_verifier"
+        assert served_run.verifier_gate_status == "blocked_unattested_model"
 
         # Workers last: cleared cache, ledger still serves each (status re-derived 'active').
         fe._WORKERS.clear()
@@ -320,11 +383,14 @@ def test_enable_survives_a_process_restart_on_the_same_path(tmp_path):
             "fragment_refs": len(fragments_before),
         }
 
-        # And the services serve byte-identical durable state after the restart.
+        # Durable state survives, while the rendered verifier gate tightens because raw
+        # model attestation payloads are not stored in the run ledger.
         assert da.get_distributed_audit(audit_id).to_dict() == audit_before
         rehydrated_run = fe.get_fleet_run(audit_id)
         assert fe._run_ledger_payload(rehydrated_run) == run_durable_before
-        assert rehydrated_run.to_dict() == run_rendered_before
+        rehydrated_view = rehydrated_run.to_dict()
+        assert rehydrated_view["verifier_gate_status"] == "blocked_unattested_model"
+        assert rehydrated_view["readiness"]["status"] == "blocked"
         assert {w.worker_id: w.to_dict() for w in fe.list_workers()} == workers_before
         assert set(fe._FRAGMENT_REFS) == fragments_before
     finally:

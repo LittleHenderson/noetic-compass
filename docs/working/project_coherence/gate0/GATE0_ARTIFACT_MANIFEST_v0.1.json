@@ -1,0 +1,58 @@
+{
+  "schema_version": "project_coherence_gate0_artifact_manifest.v0.1",
+  "document_status": "CANDIDATE / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "artifacts": [
+    {
+      "path": "STANDING_EXECUTION_AUTHORITY_RECEIPT_v0.1.json",
+      "sha256": "D2CB33BB545B6DB9754B0206523A66D200527B68EA2CA02BDE12E9CA3820D552",
+      "bytes": 4337,
+      "role": "Bounded noncryptographic transcription of standing execution authority and its exclusions"
+    },
+    {
+      "path": "COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json",
+      "sha256": "1EEC43D754FE799164518E068A9AD9E049872F9ED3236CA3514EDACA0DBB7755",
+      "bytes": 2805,
+      "role": "Reproducible proof that the recorded compiler hashes differ only by CRLF/LF serialization"
+    },
+    {
+      "path": "BASELINE_FREEZE_CANDIDATE_v0.1.json",
+      "sha256": "A8BE9F0D29B9141DB95AC5C39D477BECA22BF39EADA819CDB4B85C2C282528E8",
+      "bytes": 15869,
+      "role": "Conservative authority and identity policy for all 25 Phase 0 source records"
+    },
+    {
+      "path": "GATE0_CLOSURE_MATRIX_v0.1.json",
+      "sha256": "43610106921D2255ACBBE1F24BC01166EE4BF5798D7C33C07544B08053527EB2",
+      "bytes": 23527,
+      "role": "Machine-readable disposition of all six Gate 0 criteria and nineteen source conflicts"
+    },
+    {
+      "path": "term_census/GATE0_LOAD_BEARING_TERM_CENSUS_v0.1.json",
+      "sha256": "6F9418AB3E01D9F11C5C2AB10EEE7F1AF26080A74BFA2A42B6D109408461F987",
+      "bytes": 217479,
+      "role": "Bounded source-linked census of 49 groups, 712 members, and 19 preserved semantic conflicts"
+    },
+    {
+      "path": "term_census/GATE0_TERM_CENSUS_AUDIT_v0.1.md",
+      "sha256": "C7402E300F2AED650C003805817995E4F83B8470D39E3C7B673486F422EA3DD3",
+      "bytes": 9124,
+      "role": "Human-readable census scope, outcome, conflict, validation, and completeness audit"
+    },
+    {
+      "path": "term_census/verify_gate0_term_census.py",
+      "sha256": "A297DE052858FE1845B70122770E91840F5DBCF4E56ED21A1D83D164C9F35352",
+      "bytes": 19377,
+      "role": "Fail-closed source-hash, census-count, locator, coverage, and conflict-preservation verifier"
+    },
+    {
+      "path": "verify_gate0_candidate.py",
+      "sha256": "9331A670C4976A85B6E1EEFF6A0A900B8B0106987A0C41713CB06E9C83718595",
+      "bytes": 24445,
+      "role": "Fail-closed structural, hash, coverage, authority-boundary, and normalization verifier"
+    }
+  ],
+  "manifest_self_hash": null,
+  "self_hash_policy": "The manifest does not hash itself. Bind the manifest SHA-256 in any later Gate 0 acceptance or freeze receipt.",
+  "claim_boundary": "A manifest or verifier PASS proves only artifact identity and implemented checks. It is not canon acceptance, peer review, mathematical verification, empirical validation, product licensing, or disclosure approval."
+}

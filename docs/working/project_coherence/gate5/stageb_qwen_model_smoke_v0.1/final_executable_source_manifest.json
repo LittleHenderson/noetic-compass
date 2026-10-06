@@ -1,0 +1,128 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_final_source_manifest.v0.1",
+  "source_commit": "0ac9f43828566b937b349d8a70da62238580a71c",
+  "dirty_source_paths": false,
+  "files": [
+    {
+      "path": "src/cas_harness_v2/__init__.py",
+      "sha256": "f2fbbaa4c3685da95cbe936f8cbf0a5c726763f41dc02ac621d5db65a69758a6",
+      "byte_length": 3049
+    },
+    {
+      "path": "src/cas_harness_v2/artifacts.py",
+      "sha256": "c58150d72e8b60d4229206c41e177f556e431921488319430e66a0f5307da625",
+      "byte_length": 18568
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet_builder.py",
+      "sha256": "791a45c3a0cb997b2892aac9c1c7f1dde3d41a6e3d514bd02a8d164d74fbaf2b",
+      "byte_length": 32342
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "sha256": "925ec4e994063352ed2cf4d58a185d7d336910c2e9c453927d49ab041b6f28fd",
+      "byte_length": 29934
+    },
+    {
+      "path": "src/cas_harness_v2/preregistration.py",
+      "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055",
+      "byte_length": 44598
+    },
+    {
+      "path": "src/cas_harness_v2/worker_protocol.py",
+      "sha256": "80e04b35072660cc26a0380974723aa2c5aab5fa29f9a31a82844248e8df7733",
+      "byte_length": 37515
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_joined_executor.py",
+      "sha256": "679a7f26ab813892354e3a05c8bb31d722bcf5ebf261c49cc698f6e28ca62e4a",
+      "byte_length": 48700
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_live_worker_join.py",
+      "sha256": "8a0ee5f551a8131497c55594cb3c95693c3bcfd74d1b3607c322bfa4f055f5c2",
+      "byte_length": 87101
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_run_lifecycle.py",
+      "sha256": "fe597bb097e90acfc6b5c2616241f0c4d92e839c84fe6f7071cc4d838963cb20",
+      "byte_length": 146080
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/health.py",
+      "sha256": "3a607fae2d86b4a875f835e36db650e5b2ec63093b11b5c1c3e54bf5744a0951",
+      "byte_length": 3430
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/live_trace.py",
+      "sha256": "f2c63dbdfffb1ed33ee8c61b490d43b670b951eb79687e2be36f5cd794adaa7a",
+      "byte_length": 11222
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
+      "sha256": "91b4213da2029231159548595b80d5555e0ce4e2b364d0c5f0b971d584640c99",
+      "byte_length": 36562
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
+      "sha256": "79295b7a79a05f55827dc8cf210ca8d974d07895fc0d9cadc6634116d3df5164",
+      "byte_length": 43541
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/pythia_runner.py",
+      "sha256": "707aa0954aea73c0274c8a0a8b00363ef79c060f04bc0885b04077167a76ee77",
+      "byte_length": 16459
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
+      "sha256": "a598d39d59b095c604b1ed0f12c326fe2a6aacea32df5ea8630943dd559b6e93",
+      "byte_length": 4598
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stageb-runtime-overlay",
+      "sha256": "1584f0f48e30c7f0e17148b18e4d43e7c94681d994dcc86c20716cc588412d28",
+      "byte_length": 3931
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_container_preflight.py",
+      "sha256": "8b01cd97c657b042aaa01315e93fb2b1794e84e722c658d06a65ae6c96d70d05",
+      "byte_length": 14273
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_qwen_probe_adapter.py",
+      "sha256": "aa070228b8c393806c4d84fb8d75d74bc4da262e473c292e7be0268d9899910d",
+      "byte_length": 11477
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_health.py",
+      "sha256": "8822afdc1874348fc37972c9544e1b5f645fb5b48dc7bb565b1ae1779bda08aa",
+      "byte_length": 9970
+    },
+    {
+      "path": "tests/cas_harness_v2/test_evidence_packet_builder.py",
+      "sha256": "614c47c45cbb106e08dc38d33c8ff56f60c1ea9647ef0758a5ed50b1a199b25f",
+      "byte_length": 29614
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_joined_executor.py",
+      "sha256": "80e5b4074fae35c1b584e73218058a37f597535edd918754a96883ff2f4ea838",
+      "byte_length": 33456
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_live_worker_join.py",
+      "sha256": "6b82514d39839399242d4b9bad1ed07cd542bc2e826757f4133f1a8fe9d48851",
+      "byte_length": 45615
+    },
+    {
+      "path": "scripts/run_project_coherence_gate5_stageb_qwen_smoke.py",
+      "sha256": "fe6464bdf9dd0e76b4c6c055c17ad3727057e29adf28958cc577eaab09f0fd9b",
+      "byte_length": 120147
+    },
+    {
+      "path": "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
+      "sha256": "8b87129f40301db96a2c56313108f13e9a432ce1e790f8476badfca63787c4cc",
+      "byte_length": 26460
+    }
+  ],
+  "boundary": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / RESEARCH ONLY / ONE MODEL INVOCATION / ONE PACKET MAXIMUM / NO INTERVENTION / REPORTED_CRITERIA_NOT_MET / INELIGIBLE / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD"
+}

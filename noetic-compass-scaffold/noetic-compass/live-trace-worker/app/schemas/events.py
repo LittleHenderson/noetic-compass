@@ -13,9 +13,9 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .manifest import ModelManifest
+from .manifest import ModelExecutionKind, ModelManifest
 
 
 class NeuronActivation(BaseModel):
@@ -37,6 +37,330 @@ ConfidenceBand = Literal["high", "medium", "low", "unavailable"]
 VerificationMode = Literal["BALANCED", "HIGH_PRECISION", "MAX_COVERAGE_TRIAGE"]
 VerificationVerdict = Literal["ACCEPT", "FLAG", "SUPPRESS"]
 VerificationScoreSource = Literal["confidence", "proxy_confidence", "unavailable"]
+InterventionStructuralStatus = Literal[
+    "DEMO_NOT_EXECUTED",
+    "REJECTED_NO_COORDINATES",
+    "REJECTED_INVALID_GAIN",
+    "REJECTED_WRONG_COORDINATE_SPACE",
+    "REJECTED_MISSING_PREFLIGHT",
+    "REJECTED_HOOK_CONTRACT",
+    "REJECTED_HOOK_CARDINALITY",
+    "REJECTED_NONFINITE_TENSOR",
+    "REJECTED_RNG_STATE_MISMATCH",
+    "REJECTED_MISSING_STABILITY_CONTROL",
+    "REJECTED_UNSTABLE_BASELINE",
+    "REJECTED_ALL_COORDINATES_INVALID",
+    "REJECTED_PARTIALLY_INVALID_COORDINATES",
+    "REJECTED_RUNTIME_GEOMETRY",
+    "HOOK_NOT_FIRED",
+    "ACTIVATION_UNCHANGED",
+    "OUTPUT_CHANGE_UNAVAILABLE",
+    "OUTPUT_UNCHANGED",
+    "APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED",
+]
+
+
+class _FrozenReplayModel(BaseModel):
+    """Deep-container-safe carrier whose public copy path always revalidates."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        revalidate_instances="always",
+    )
+
+    def model_copy(
+        self,
+        *,
+        update: dict[str, Any] | None = None,
+        deep: bool = False,
+    ) -> "_FrozenReplayModel":
+        payload = self.model_dump(mode="python")
+        if update:
+            payload.update(update)
+        # `deep` has no semantic effect because every nested public collection
+        # in these carriers is immutable and validation reconstructs children.
+        _ = deep
+        return type(self).model_validate(payload)
+
+    def copy(
+        self,
+        *,
+        include: Any = None,
+        exclude: Any = None,
+        update: dict[str, Any] | None = None,
+        deep: bool = False,
+    ) -> "_FrozenReplayModel":
+        if include is not None or exclude is not None:
+            raise TypeError("partial copies are not valid intervention carriers")
+        return self.model_copy(update=update, deep=deep)
+
+    @classmethod
+    def model_construct(
+        cls,
+        _fields_set: set[str] | None = None,
+        **values: Any,
+    ) -> "_FrozenReplayModel":
+        # The Pydantic default intentionally skips validation. That is unsafe
+        # for a public evidence carrier, so this schema closes that escape.
+        _ = _fields_set
+        return cls.model_validate(values)
+
+
+class InterventionCoordinate(_FrozenReplayModel):
+    """One coordinate with its declared tensor space kept attached."""
+
+    layer: int = Field(..., strict=True)
+    index: int = Field(..., strict=True)
+    coordinate_space: str = Field(..., min_length=1)
+
+
+class InterventionTensorGeometry(_FrozenReplayModel):
+    """Observed tensor geometry at the exact intervention hook."""
+
+    layer: int = Field(..., ge=0)
+    shape: tuple[int, ...] = Field(..., min_length=1)
+    rank: int = Field(..., ge=1)
+    width: int = Field(..., ge=1)
+    projected_output_width: int = Field(..., ge=1)
+    coordinate_space: Literal["mlp_intermediate_post_activation"] = (
+        "mlp_intermediate_post_activation"
+    )
+    observation_phase: Literal[
+        "unmodified_forward",
+        "intervention_attempt",
+    ]
+    hook_module_path: str = Field(..., min_length=1)
+    tensor_role: Literal["forward_pre_hook.input[0]"] = "forward_pre_hook.input[0]"
+    dtype: str = Field(default="UNKNOWN", min_length=1)
+    device: str = Field(default="UNKNOWN", min_length=1)
+    all_finite: bool = False
+    rng_state_sha256: str = Field(default="UNAVAILABLE", min_length=1)
+    rng_state_after_sha256: str = Field(default="UNAVAILABLE", min_length=1)
+    hook_call_count: int = Field(default=1, ge=1, strict=True)
+
+    @model_validator(mode="after")
+    def _validate_shape(self) -> "InterventionTensorGeometry":
+        if self.rank != len(self.shape):
+            raise ValueError("rank must equal len(shape)")
+        if self.shape[-1] != self.width:
+            raise ValueError("width must equal the last tensor dimension")
+        for digest in (self.rng_state_sha256, self.rng_state_after_sha256):
+            if digest != "UNAVAILABLE" and not (
+                len(digest) == 64
+                and digest == digest.lower()
+                and all(character in "0123456789abcdef" for character in digest)
+            ):
+                raise ValueError("RNG state identity must be lowercase SHA-256 or UNAVAILABLE")
+        return self
+
+
+class EraserInterventionResult(_FrozenReplayModel):
+    """Fail-closed structural receipt for one drive-local intervention pass."""
+
+    contract_version: Literal["harness_v2.mlp_intermediate_eraser.v2"] = (
+        "harness_v2.mlp_intermediate_eraser.v2"
+    )
+    method_id: Literal["drive_local_eraser"] = "drive_local_eraser"
+    execution_kind: ModelExecutionKind
+    source_kind: Literal[
+        "stage27f_calibrated_cover",
+        "typed_test_fixture",
+        "demo_schema_only",
+    ]
+    structural_status: InterventionStructuralStatus
+    structurally_valid: bool
+    coordinate_space: str = Field(..., min_length=1)
+    hook_semantics: Literal[
+        "gpt_neox.layers[{layer}].mlp.dense_4h_to_h:forward_pre_hook.input[0]"
+    ] = "gpt_neox.layers[{layer}].mlp.dense_4h_to_h:forward_pre_hook.input[0]"
+    token_selection: Literal["batch_0_last_sequence_position"] = (
+        "batch_0_last_sequence_position"
+    )
+    requested_gain: float | None = Field(default=None, allow_inf_nan=False)
+    effective_gain: float | None = Field(default=None, ge=0.0, le=1.0)
+    expected_coordinate_width: int = Field(..., ge=1)
+    expected_projected_output_width: int = Field(..., ge=1)
+    hook_fired: bool = Field(
+        ...,
+        description="True only when every required intervention hook fired.",
+    )
+    required_hook_layers: tuple[int, ...] = Field(default_factory=tuple)
+    hook_fired_layers: tuple[int, ...] = Field(default_factory=tuple)
+    observed_tensor_geometry: tuple[InterventionTensorGeometry, ...] = Field(
+        default_factory=tuple
+    )
+    reference_tensor_geometry: tuple[InterventionTensorGeometry, ...] = Field(
+        default_factory=tuple
+    )
+    stability_control_tensor_geometry: tuple[InterventionTensorGeometry, ...] = Field(
+        default_factory=tuple
+    )
+    requested_coordinates: tuple[InterventionCoordinate, ...] = Field(default_factory=tuple)
+    valid_coordinates: tuple[InterventionCoordinate, ...] = Field(default_factory=tuple)
+    invalid_coordinates: tuple[InterventionCoordinate, ...] = Field(default_factory=tuple)
+    applied_coordinates: tuple[InterventionCoordinate, ...] = Field(default_factory=tuple)
+    activation_changed: bool | None = Field(
+        default=None,
+        description=(
+            "Exact tensor comparison at the selected last-sequence-position "
+            "activated-intermediate hook."
+        ),
+    )
+    output_changed: bool | None = Field(
+        default=None,
+        description=(
+            "Exact comparison of paired baseline/intervention last-token logits; "
+            "a structural observation, not a causal/utility claim."
+        ),
+    )
+    stability_control_performed: bool = False
+    baseline_output_stable: bool | None = None
+    baseline_geometry_stable: bool | None = None
+    detail: str = Field(..., min_length=1)
+
+    @model_validator(mode="after")
+    def _validate_structural_receipt(self) -> "EraserInterventionResult":
+        def _keys(items: tuple[InterventionCoordinate, ...]) -> set[tuple[int, int, str]]:
+            keys = {(item.layer, item.index, item.coordinate_space) for item in items}
+            if len(keys) != len(items):
+                raise ValueError("coordinate attestation lists cannot contain duplicates")
+            return keys
+
+        requested = _keys(self.requested_coordinates)
+        valid = _keys(self.valid_coordinates)
+        invalid = _keys(self.invalid_coordinates)
+        applied = _keys(self.applied_coordinates)
+        if not valid.issubset(requested) or not invalid.issubset(requested):
+            raise ValueError("valid/invalid coordinates must be requested coordinates")
+        if not applied.issubset(valid):
+            raise ValueError("applied coordinates must be valid coordinates")
+        if self.execution_kind != "demo_schema_only" and valid | invalid != requested:
+            raise ValueError("non-demo coordinates must be partitioned valid/invalid")
+        for item in self.valid_coordinates:
+            if (
+                item.layer < 0
+                or item.index < 0
+                or item.coordinate_space != "mlp_intermediate_post_activation"
+                or item.coordinate_space != self.coordinate_space
+            ):
+                raise ValueError("valid coordinates must be non-negative and in hook space")
+        required_layers = set(self.required_hook_layers)
+        fired_layers = set(self.hook_fired_layers)
+        requested_nonnegative_layers = {
+            item.layer for item in self.requested_coordinates if item.layer >= 0
+        }
+        if self.execution_kind != "demo_schema_only" and (
+            required_layers != requested_nonnegative_layers
+        ):
+            raise ValueError("required hook layers must equal requested coordinate layers")
+        if self.hook_fired != (bool(required_layers) and required_layers <= fired_layers):
+            raise ValueError("hook_fired must attest every required hook layer")
+
+        unattributed_delta = (
+            self.structural_status
+            == "APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED"
+        )
+        if self.structurally_valid:
+            raise ValueError(
+                "eraser v2 has no causal attestation path; structurally_valid must be false"
+            )
+        if unattributed_delta and not (
+            not self.structurally_valid
+            and self.hook_fired
+            and self.activation_changed is True
+            and self.output_changed is True
+            and bool(applied)
+            and not invalid
+            and self.requested_gain is not None
+            and self.effective_gain is not None
+            and self.stability_control_performed
+            and self.baseline_output_stable is True
+            and self.baseline_geometry_stable is True
+        ):
+            raise ValueError(
+                "unattributed delta requires exact observed application and stable controls"
+            )
+        if unattributed_delta:
+            geometry_by_layer = {
+                item.layer: item for item in self.observed_tensor_geometry
+            }
+            if len(geometry_by_layer) != len(self.observed_tensor_geometry):
+                raise ValueError("observed tensor geometry must be unique per layer")
+            if any(
+                layer not in geometry_by_layer
+                or geometry_by_layer[layer].observation_phase
+                != "intervention_attempt"
+                or geometry_by_layer[layer].width != self.expected_coordinate_width
+                or geometry_by_layer[layer].projected_output_width
+                != self.expected_projected_output_width
+                or geometry_by_layer[layer].hook_module_path
+                != f"gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+                or geometry_by_layer[layer].tensor_role
+                != "forward_pre_hook.input[0]"
+                or geometry_by_layer[layer].dtype == "UNKNOWN"
+                or geometry_by_layer[layer].device == "UNKNOWN"
+                or not geometry_by_layer[layer].all_finite
+                or len(geometry_by_layer[layer].rng_state_sha256) != 64
+                or len(geometry_by_layer[layer].rng_state_after_sha256) != 64
+                or geometry_by_layer[layer].hook_call_count != 1
+                for layer in required_layers
+            ):
+                raise ValueError("unattributed delta requires exact attempted geometry")
+            reference_by_layer = {
+                item.layer: item for item in self.reference_tensor_geometry
+            }
+            stability_by_layer = {
+                item.layer: item for item in self.stability_control_tensor_geometry
+            }
+            if (
+                len(reference_by_layer) != len(self.reference_tensor_geometry)
+                or len(stability_by_layer)
+                != len(self.stability_control_tensor_geometry)
+            ):
+                raise ValueError("paired tensor geometry must be unique per layer")
+            if any(
+                layer not in reference_by_layer
+                or layer not in stability_by_layer
+                or reference_by_layer[layer].observation_phase
+                != "unmodified_forward"
+                or stability_by_layer[layer].observation_phase
+                != "unmodified_forward"
+                or reference_by_layer[layer].hook_call_count != 1
+                or stability_by_layer[layer].hook_call_count != 1
+                or not reference_by_layer[layer].all_finite
+                or not stability_by_layer[layer].all_finite
+                for layer in required_layers
+            ):
+                raise ValueError("unattributed delta requires exact stability geometry")
+            for layer in required_layers:
+                reference_payload = reference_by_layer[layer].model_dump()
+                stability_payload = stability_by_layer[layer].model_dump()
+                attempted_payload = geometry_by_layer[layer].model_dump()
+                if reference_payload != stability_payload:
+                    raise ValueError("stability geometry must exactly replay reference")
+                attempted_payload["observation_phase"] = "unmodified_forward"
+                if attempted_payload != reference_payload:
+                    raise ValueError("attempted geometry must exactly match reference contract")
+        if self.execution_kind == "demo_schema_only":
+            if self.source_kind != "demo_schema_only":
+                raise ValueError("demo execution requires demo_schema_only source")
+            if self.structural_status != "DEMO_NOT_EXECUTED":
+                raise ValueError("demo execution must be typed DEMO_NOT_EXECUTED")
+            if applied or self.activation_changed is not None or self.output_changed is not None:
+                raise ValueError("demo execution cannot claim intervention measurements")
+            if (
+                self.stability_control_performed
+                or self.baseline_output_stable is not None
+                or self.baseline_geometry_stable is not None
+            ):
+                raise ValueError("demo execution cannot claim a stability control")
+        elif self.execution_kind == "typed_test_fixture":
+            if self.source_kind != "typed_test_fixture":
+                raise ValueError("typed fixtures require typed_test_fixture source")
+        elif self.source_kind != "stage27f_calibrated_cover":
+            raise ValueError("real execution requires the calibrated cover source")
+        return self
 
 
 class NeuronCoverMember(BaseModel):
@@ -152,6 +476,13 @@ class TokenEvent(BaseModel):
     verification_score: float | None = Field(default=None, ge=0.0, le=1.0)
     verification_score_source: VerificationScoreSource | None = Field(default=None)
     verification_invalid_mode: str | None = Field(default=None)
+    eraser_intervention_result: EraserInterventionResult | None = Field(
+        default=None,
+        description=(
+            "Typed structural receipt when drive_local_eraser was requested. "
+            "Absent only when no such intervention was requested."
+        ),
+    )
 
 
 class NeuronCoversEvent(BaseModel):

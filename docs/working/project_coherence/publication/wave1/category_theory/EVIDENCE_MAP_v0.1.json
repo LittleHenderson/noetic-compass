@@ -1,0 +1,217 @@
+{
+  "schema_version": "project_coherence.category_publication_evidence_map.v0.1",
+  "document_status": "DRAFT / SOURCE-BOUND / OPEN / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "evidence_nodes": [
+    {
+      "id": "EVD-LEGACY-SOURCE-IDENTITY",
+      "evidence_class": "SOURCE IDENTITY AND LOCATION",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/SOURCE_VERIFICATION_v0.1.json",
+      "sha256": "17DBE1FADB3D80D435B4D282C53849D392ECB622232E8664A74429BD1753F55C",
+      "supports": ["exact locations of legacy ACBE reflexivity, RPM section-retraction, and coverage reduction"],
+      "does_not_support": ["correctness of every source theorem", "portable frozen PDF bundle", "external review", "empirical interpretation"]
+    },
+    {
+      "id": "EVD-RED-TEAM",
+      "evidence_class": "INTERNAL ADVERSARIAL MATHEMATICAL REVIEW",
+      "path": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6",
+      "supports": ["legacy ACBE/RPM maximal-sieve argument", "legacy non-subcanonicity countermodel", "three-variable probability non-gluing counterexample", "type-separation boundary"],
+      "does_not_support": ["independent specialist acceptance", "proof-assistant verification", "product claims"]
+    },
+    {
+      "id": "EVD-NT2-SPEC",
+      "evidence_class": "GOVERNING SUCCESSOR RESEARCH SPECIFICATION",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A",
+      "supports": ["typed finite context construction", "ambient-versus-resolved distinction", "external mark-record boundary", "backward-comparison target and explicit open gates"],
+      "does_not_support": ["the false arbitrary-representable external-product witness", "ambient product-site distinctness", "completed product-site implementation", "legacy equivalence", "probability gluing", "canon admission"]
+    },
+    {
+      "id": "EVD-NT2-THEOREM-LEDGER",
+      "evidence_class": "SCOPED INTERNAL THEOREM RECORDS",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_THEOREMS_v0.1.json",
+      "sha256": "52E000652C7DECE64C1E2B3F613D85FEFB2F80414CFAAD53AA38FE339B26E536",
+      "supports": ["exact theorem statements, dependencies, proof statuses, and claim boundaries"],
+      "does_not_support": ["correctness of the false upstream ambient external-product witness", "peer review", "publication acceptance", "closure of PROOF_REQUIRED records"]
+    },
+    {
+      "id": "EVD-FINITE-MODEL",
+      "evidence_class": "EXHAUSTIVE FINITE EXECUTION AND UNIT TESTS",
+      "paths": [
+        "docs/working/project_coherence/gate1/noetic_topos2/FINITE_MODEL_CERTIFICATE_v0.1.json",
+        "src/noetic_topos2/finite_site.py",
+        "tests/noetic_topos2/test_finite_site.py"
+      ],
+      "sha256s": [
+        "5CB06FC00641A16BEE4784EAB708D86FF39CEE7AC6E8E1D03DFC32605242A84C",
+        "E2C4D7136BF15858D6ED3525B24CD86B318C71D6149FD39B64C72A0B099852A6",
+        "C88163F9E1D3BC859BF97F0A9A2B56CB35F36627E364FD33F410BF44EA6A6A10"
+      ],
+      "rerun_result": "PASS / 8 tests / 2026-08-05",
+      "supports": ["16-context lattice", "proper global covers", "pullback stability", "16 representable checks", "distinct witness checks", "marked-record derivation invariants"],
+      "does_not_support": ["general product site", "formal proof", "external review", "empirical semantics"]
+    },
+    {
+      "id": "EVD-MODALITY-PROOF",
+      "evidence_class": "INTERNAL MATHEMATICAL PROOF CANDIDATE",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
+      "sha256": "9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0",
+      "supports": ["explicit finite reflector universal property", "J_A join J_R equals the locally named four-singleton-generated topology J_atom (not the standard atomic topology)", "unit-compatible natural isomorphisms M_A M_R ~= M_atom ~= M_R M_A"],
+      "does_not_support": ["strict equality", "PSh(C x L) lift", "observational topology interaction", "probabilistic or enriched result"]
+    },
+    {
+      "id": "EVD-MODALITY-EXECUTION",
+      "evidence_class": "EXHAUSTIVE FINITE TOPOLOGY AND FIXTURE EXECUTION",
+      "paths": [
+        "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_CERTIFICATE_v0.1.json",
+        "src/noetic_topos2/modality_composition/finite_reflectors.py",
+        "tests/noetic_topos2_modality_composition/test_finite_reflectors.py"
+      ],
+      "sha256s": [
+        "648E64A5E760FFAFE326F0FF9194734FE82E8107730D3FC9703951D54315AB0A",
+        "43D32F5AB3FBFA370CC3BB30AE5628116432D4D642552928B733831A05741089",
+        "19B66807B60F62A5FD43DA5AAB823B9D508947917F3074F108133A2EBEFEAD8A"
+      ],
+      "rerun_result": "PASS / 18 fixtures / 298 sieves / 3012 restriction squares / 6 unit tests / 2026-08-05",
+      "supports": ["scoped finite computation agrees with registered expected certificate"],
+      "does_not_support": ["proof by testing", "formalization", "product-site lift", "independent replication"]
+    },
+    {
+      "id": "EVD-LEAN-SEED",
+      "evidence_class": "BOUNDED PROOF-ASSISTANT SEED",
+      "paths": [
+        "docs/working/project_coherence/gate1/formal/LEAN_PROOF_MANIFEST_v0.1.json",
+        "formal/lean/PSR8Formal/NoeticContext.lean"
+      ],
+      "sha256s": [
+        "7C27E50DCD6E45177F279A3B57BCF9B5C27B9D9FE878D34A4AE66742D332EC4A",
+        "0F8DC16DABE89818C4717E5D1232FCD58B4FA1A098709CA449774C5D27E365C4"
+      ],
+      "rerun_result": "PASS / Lean 4.32.1 / 16 axiom audits / 2026-08-05",
+      "supports": ["registered bounded context lemmas and axiom audit"],
+      "does_not_support": ["full presheaf formalization", "topology generation", "reflector theorem", "legacy comparison"]
+    },
+    {
+      "id": "EVD-CATEGORY-ADVERSARIAL-CORRECTION",
+      "evidence_class": "INTERNAL ADVERSARIAL CORRECTION RECEIPT",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/ADVERSARIAL_REVIEW_REPORT_v0.1.md",
+      "sha256": "155CEF080BB34681AE0420E6D7627F1EEE276E8363845CC40BC8E5A32C8FFC7C",
+      "supports": ["retraction of the false arbitrary-representable external-product witness", "finite-context versus ambient product-site scope correction", "ambient distinctness retained OPEN"],
+      "does_not_support": ["replacement ambient witness", "ambient product-site distinctness", "external specialist acceptance", "closure of the upstream Gate 1 record"]
+    },
+    {
+      "id": "EVD-BACKWARD-COMPARISON-GAP",
+      "evidence_class": "REGISTERED OPEN OBLIGATION",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_PROOF_OBLIGATIONS_v0.1.json",
+      "sha256": "FD567E3826E4472EFD013DC7F3DEE514B6AD28B9E41CFFFD10087BE1133746C7",
+      "supports": ["cross-context semantics and product-site comparison remain explicitly OPEN"],
+      "does_not_support": ["backward compatibility", "four-channel equivalence", "cross-context coupling"]
+    },
+    {
+      "id": "EVD-LITERATURE-MARKOV-PROBABILITY-SHEAVES",
+      "evidence_class": "PRIMARY TECHNICAL LITERATURE",
+      "citation_refs": ["CIT-GIRY-1982", "CIT-FRITZ-2020", "CIT-SIMPSON-2017", "CIT-STEIN-2025"],
+      "supports": ["existing categorical probability, Markov-category, and probability-sheaf background", "direct prior-art overlap"],
+      "does_not_support": ["Noetic comparison functor", "novelty", "AI assessment validity"]
+    },
+    {
+      "id": "EVD-LITERATURE-MARGINAL-CONTEXT",
+      "evidence_class": "PRIMARY TECHNICAL LITERATURE",
+      "citation_refs": ["CIT-VOROBEV-1962", "CIT-ABRAMSKY-BRANDENBURGER-2011"],
+      "supports": ["conditional marginal-extension route and global-section obstruction background"],
+      "does_not_support": ["acyclicity of a Noetic cover", "unique extension", "transfer of quantum contextuality to AI"]
+    },
+    {
+      "id": "EVD-LITERATURE-CELLULAR",
+      "evidence_class": "PRIMARY TECHNICAL LITERATURE",
+      "citation_refs": ["CIT-HANSEN-GHRIST-2019", "CIT-ROBINSON-2017"],
+      "supports": ["requirements for weighted cellular sheaves and applied consistency analysis"],
+      "does_not_support": ["existing Noetic linearization", "identity with Markov kernels", "calibrated AI endpoint"]
+    },
+    {
+      "id": "EVD-EMPIRICAL-ABSENCE",
+      "evidence_class": "NEGATIVE EVIDENCE BOUNDARY",
+      "governing_record": "CLM-NOETOPOS-EMPIRICAL-ASSESSMENT",
+      "supports": ["no qualifying empirical estimate or Evidence Packet currently licenses an assessment claim"],
+      "does_not_support": ["any positive or negative empirical conclusion about the proposed method"]
+    }
+  ],
+  "claim_edges": [
+    {
+      "claim_ids": ["PUB-P2-001", "PUB-P2-002", "PUB-P2-005"],
+      "evidence_ids": ["EVD-LEGACY-SOURCE-IDENTITY", "EVD-RED-TEAM"],
+      "strength": "source-bound internal argument and countermodel / independent review open"
+    },
+    {
+      "claim_ids": ["PUB-P2-003", "PUB-P2-004"],
+      "evidence_ids": ["EVD-NT2-SPEC", "EVD-NT2-THEOREM-LEDGER", "EVD-FINITE-MODEL"],
+      "strength": "informal proof plus bounded exhaustive execution / full topology and presheaf formalization open"
+    },
+    {
+      "claim_ids": ["PUB-P2-006"],
+      "evidence_ids": ["EVD-FINITE-MODEL", "EVD-CATEGORY-ADVERSARIAL-CORRECTION"],
+      "strength": "finite-context witness execution plus negative correction receipt / arbitrary-representable ambient witness retracted and ambient distinctness open"
+    },
+    {
+      "claim_ids": ["PUB-P2-007"],
+      "evidence_ids": ["EVD-MODALITY-PROOF", "EVD-MODALITY-EXECUTION"],
+      "strength": "internal topology proof candidate plus exact 298-sieve corroboration / Lean topology formalization and independent review open"
+    },
+    {
+      "claim_ids": ["PUB-P2-008", "PUB-P2-009"],
+      "evidence_ids": ["EVD-MODALITY-PROOF", "EVD-MODALITY-EXECUTION"],
+      "strength": "internal proof candidate plus exact finite corroboration / independent review open"
+    },
+    {
+      "claim_ids": ["PUB-P2-010", "PUB-P2-012"],
+      "evidence_ids": ["EVD-BACKWARD-COMPARISON-GAP"],
+      "strength": "explicit evidence of noncompletion"
+    },
+    {
+      "claim_ids": ["PUB-P2-011"],
+      "evidence_ids": ["EVD-BACKWARD-COMPARISON-GAP", "EVD-CATEGORY-ADVERSARIAL-CORRECTION"],
+      "strength": "explicit noncompletion plus retraction of the proposed ambient witness"
+    },
+    {
+      "claim_ids": ["PUB-P4-001"],
+      "evidence_ids": ["EVD-RED-TEAM", "EVD-LITERATURE-MARGINAL-CONTEXT"],
+      "strength": "finite counterexample plus established primary background"
+    },
+    {
+      "claim_ids": ["PUB-P4-002", "PUB-P4-006"],
+      "evidence_ids": ["EVD-LITERATURE-MARKOV-PROBABILITY-SHEAVES"],
+      "strength": "background and prior-art boundary only; proposed comparison unproved"
+    },
+    {
+      "claim_ids": ["PUB-P4-003", "PUB-P4-004"],
+      "evidence_ids": ["EVD-LITERATURE-MARGINAL-CONTEXT"],
+      "strength": "method and conditional background; no CAS certificate"
+    },
+    {
+      "claim_ids": ["PUB-P4-005"],
+      "evidence_ids": ["EVD-LITERATURE-CELLULAR"],
+      "strength": "established type requirements; Noetic representation open"
+    },
+    {
+      "claim_ids": ["PUB-P4-007", "PUB-P4-008"],
+      "evidence_ids": ["EVD-EMPIRICAL-ABSENCE"],
+      "strength": "nonclaim boundary; no experiment"
+    }
+  ],
+  "missing_evidence": [
+    "independent category-theory review receipt",
+    "full proof-assistant formalization",
+    "typed observational/product-site implementation",
+    "legacy categorical and serialization round trips",
+    "Noetic-to-probability-sheaf comparison functor",
+    "finite marginal certificate implementation",
+    "linear cellular comparison",
+    "joined-runner admitted experiment",
+    "qualifying Evidence Packet",
+    "independent empirical replication",
+    "authorship/disclosure/IP/license approvals"
+  ],
+  "global_boundary": "Evidence of a scoped theorem, execution, or source identity cannot be reused as evidence for an unlisted empirical, causal, scientific, product, safety, disclosure, canon, or licensing claim."
+}

@@ -12,6 +12,7 @@ from app.schemas import (
     Mode7Edge,
     NeuronActivation,
     NeuronCoversEvent,
+    RuntimeExecutionEvidence,
     TokenEvent,
 )
 from app.runtime.model_loader import PYTHIA_160M_MANIFEST as MANIFEST
@@ -23,6 +24,16 @@ def test_manifest_event_round_trip():
     e2 = ManifestEvent.model_validate_json(j)
     assert e2.manifest.model_id == "EleutherAI/pythia-160m"
     assert e2.manifest.is_real_model is False  # m1 invariant
+    assert e2.manifest.execution_kind == "demo_schema_only"
+    assert "mlp_intermediate_post_activation" in e2.manifest.supported_hooks
+    contract = e2.manifest.intervention_hook_contract
+    assert contract.coordinate_space == "mlp_intermediate_post_activation"
+    assert contract.module_path_template == (
+        "gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+    )
+    assert contract.tensor_role == "forward_pre_hook.input[0]"
+    assert contract.token_selection == "batch_0_last_sequence_position"
+    assert contract.failure_policy == "fail_closed"
 
 
 def test_token_event_accepts_optional_confidence():
@@ -74,3 +85,36 @@ def test_create_session_request_defaults():
 def test_create_session_request_validates_prompt_length():
     with pytest.raises(ValidationError):
         CreateSessionRequest(prompt="")
+
+
+def _production_bfloat16_evidence() -> dict:
+    return {
+        "profile": "production",
+        "device": "cuda",
+        "dtype": "torch.bfloat16",
+        "torch_version": "2.13.0+cu126",
+        "torch_native_jit_disabled": True,
+        "cuda_bfloat16_supported": True,
+        "cuda_runtime_version": "12.6",
+        "cuda_driver_version": 13010,
+        "cuda_device_name": "Synthetic Gate5 GPU",
+        "cuda_device_capability": "8.9",
+    }
+
+
+def test_production_runtime_requires_native_bfloat16_and_no_jit():
+    evidence = RuntimeExecutionEvidence.model_validate(
+        _production_bfloat16_evidence()
+    )
+    assert evidence.dtype == "torch.bfloat16"
+    assert evidence.torch_native_jit_disabled is True
+    assert evidence.cuda_bfloat16_supported is True
+
+    for field, value in (
+        ("dtype", "torch.float16"),
+        ("torch_native_jit_disabled", False),
+        ("cuda_bfloat16_supported", False),
+    ):
+        invalid = {**_production_bfloat16_evidence(), field: value}
+        with pytest.raises(ValidationError):
+            RuntimeExecutionEvidence.model_validate(invalid)

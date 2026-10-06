@@ -311,6 +311,30 @@ def test_real_ablation_mean_mode_runs_and_is_real():
     assert math.isfinite(event.logit_delta)
 
 
+@pytest.mark.parametrize(
+    "target",
+    [
+        AblationTargetRequest(layer=5, unit=0, mode="zero"),
+        AblationTargetRequest(layer=0, unit=99, mode="zero"),
+    ],
+)
+def test_real_ablation_effect_refuses_unavailable_target_without_real_claim(
+    target: AblationTargetRequest,
+):
+    model = _build_fake_pythia()
+    tokenizer = _FakeTokenizer()
+    req = CreateSessionRequest(prompt="anything", max_new_tokens=1)
+
+    with pytest.raises(RuntimeError, match="refusing a no-op causal claim"):
+        run_real_ablation_effect(
+            req,
+            model,
+            tokenizer,
+            n_layers=1,
+            target=target,
+        )
+
+
 def test_real_stream_emits_real_ablation_event(monkeypatch: pytest.MonkeyPatch):
     """End-to-end through stream_real_trace: with a real-flagged loaded model
     and a stubbed token runner, requesting a causal ablation must yield a real
@@ -318,7 +342,23 @@ def test_real_stream_emits_real_ablation_event(monkeypatch: pytest.MonkeyPatch):
 
     loaded = LoadedModel(
         manifest=model_loader.PYTHIA_160M_MANIFEST.model_copy(
-            update={"is_real_model": True}
+            update={
+                "is_real_model": True,
+                "execution_kind": "real_model_weights",
+                "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+                "revision_verified": True,
+                "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+                "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+                "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+                "weights_hash_verified": True,
+                    "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+                    "runtime_execution": model_loader.RuntimeExecutionEvidence(
+                        profile="development",
+                        device="cpu",
+                        dtype="torch.float32",
+                        torch_version="2.13.0+cu126",
+                    ),
+            }
         ),
         model=_build_fake_pythia(),
         tokenizer=_FakeTokenizer(),
@@ -417,6 +457,26 @@ def test_real_ablation_control_out_of_range_layer_is_demo_flagged():
     assert event.selectivity_passed is None
 
 
+def test_real_ablation_control_out_of_range_unit_is_demo_flagged():
+    model = _build_fake_pythia()
+    tokenizer = _FakeTokenizer()
+    target = AblationTargetRequest(layer=0, unit=99, mode="zero")
+    req = CreateSessionRequest(prompt="anything", max_new_tokens=1)
+
+    event = run_real_ablation_control(
+        req,
+        model,
+        tokenizer,
+        n_layers=1,
+        target=target,
+    )
+
+    assert event.type == "ablation_control_effect"
+    assert event.is_real_model is False
+    assert event.target_abs_logit_delta is None
+    assert event.selectivity_passed is None
+
+
 def test_real_stream_emits_real_control_event(monkeypatch: pytest.MonkeyPatch):
     """End-to-end through stream_real_trace: with a real-flagged loaded model and
     a stubbed token runner, requesting a causal ablation must yield a real
@@ -425,7 +485,23 @@ def test_real_stream_emits_real_control_event(monkeypatch: pytest.MonkeyPatch):
 
     loaded = LoadedModel(
         manifest=model_loader.PYTHIA_160M_MANIFEST.model_copy(
-            update={"is_real_model": True}
+            update={
+                "is_real_model": True,
+                "execution_kind": "real_model_weights",
+                "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+                "revision_verified": True,
+                "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+                "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+                "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+                "weights_hash_verified": True,
+                    "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+                    "runtime_execution": model_loader.RuntimeExecutionEvidence(
+                        profile="development",
+                        device="cpu",
+                        dtype="torch.float32",
+                        torch_version="2.13.0+cu126",
+                    ),
+            }
         ),
         model=_build_fake_pythia(),
         tokenizer=_FakeTokenizer(),

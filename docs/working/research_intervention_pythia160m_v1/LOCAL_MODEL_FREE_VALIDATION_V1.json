@@ -1,0 +1,81 @@
+{
+  "schema_version": "cas_harness_pythia160m_lock_validation_record.v1",
+  "created_date": "2026-07-29",
+  "status": "LOCAL_MODEL_FREE_VALIDATION_PASS / EXECUTOR_NOT_IMPLEMENTED / RUN_NOT_AUTHORIZED",
+  "source_commit_before_change": "e0b2d233033c1723c332dbaf697417a772d012c1",
+  "validated_files": {
+    "lock": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_RESEARCH_LOCK_V1.json",
+      "byte_count": 7564,
+      "sha256": "ed071defbab6915ba0d155b5865170b0bc7dc6d477f392285799f1d1ecdb9d7d"
+    },
+    "model_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_MODEL_MANIFEST_V1.json",
+      "byte_count": 2827,
+      "sha256": "e99f29c27aadb7d25cfb74dc91be6e295474e7f86777fccfa9ec7aaa8375667a"
+    },
+    "prompt_split": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_PROMPT_SPLIT_V1.json",
+      "byte_count": 6770,
+      "sha256": "fa24863d6a223eb2d760048c412a6bf0e82b54cff00676c3c0ebc4105d896c47"
+    },
+    "intervention_map": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_INTERVENTION_MAP_V1.json",
+      "byte_count": 4720,
+      "sha256": "46b7ddcd78f675a538f6996965789e2c31772430cbdf6d9baf8e0f729294bc72"
+    },
+    "validator": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_lock.py",
+      "byte_count": 18295,
+      "sha256": "849be2a9ce3e9f773698deac534e4e2df9c56cda3393b81b60dad00945288e32"
+    },
+    "tests": {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py",
+      "byte_count": 3646,
+      "sha256": "4aeceac7f81de2dcd9f3e2b72c6b4c221d498b87c3b87435e46888a5a79e631d"
+    }
+  },
+  "validation": {
+    "validator_command": "python noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_lock.py",
+    "validator_exit_code": 0,
+    "validator_status": "LOCAL_MODEL_FREE_VALIDATION_PASS / RUN_NOT_AUTHORIZED",
+    "pytest_command": "python -m pytest noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py -q",
+    "pytest_exit_code": 0,
+    "pytest_result": "5 passed in 1.04s",
+    "integrated_command": "python -m pytest noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_research_intervention_worker.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_research_intervention_auditor.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py -q",
+    "integrated_exit_code": 0,
+    "integrated_result": "39 passed in 1.15s",
+    "fail_closed_cases": [
+      "GPT-2 family substitution",
+      "live receipt state",
+      "unbound executor-ready state",
+      "network-enabled compute drift",
+      "missing patch-back control",
+      "calibration/held-out overlap",
+      "non-unit target direction"
+    ]
+  },
+  "verified_inventory": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "snapshot_file_count": 5,
+    "snapshot_total_bytes": 377113470,
+    "calibration_prompt_count": 16,
+    "heldout_target_contrast_count": 32,
+    "collateral_heldout_count": 6,
+    "target_coordinate_count": 8,
+    "target_l2_norm": 1.0
+  },
+  "negative_evidence": {
+    "framework_imports_performed": false,
+    "model_or_tokenizer_loads_performed": 0,
+    "gpu_queries_performed": 0,
+    "network_calls_performed": 0,
+    "provider_paid_runpod_calls_performed": 0,
+    "live_receipt_created": false,
+    "scoring_or_intervention_output_created": false,
+    "v5_changed": false
+  },
+  "remaining_blocker": "The family-specific real-model executor and independent auditor do not yet exist. They must be implemented, model-free/fake-fixture validated, committed, and bound by a successor lock before the owner can issue a fresh one-use authorization receipt for a Pythia load/run.",
+  "claim_boundary": "Prospective preparation only. No live steering, product behavior, safety steering, prompt-injection prevention, Gate 2, ACCEPT, LICENSED, or production-readiness claim."
+}

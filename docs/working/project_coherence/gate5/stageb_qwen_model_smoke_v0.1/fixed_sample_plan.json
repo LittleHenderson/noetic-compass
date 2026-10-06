@@ -1,0 +1,12 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_fixed_plan.v0.1",
+  "maximum_jobs": 1,
+  "maximum_model_invocations": 1,
+  "maximum_evidence_packets": 1,
+  "automatic_retry": false,
+  "resume": false,
+  "replacement_run": false,
+  "efficacy_power_analysis": "NOT_APPLICABLE / NO INTERVENTION SCIENCE",
+  "held_out_replication": "NOT PERFORMED / FUTURE PACKET MUST REPORT 0 ANALYZED AND 1 EXCLUDED",
+  "terminal_rule": "THE FIRST EXECUTION ATTEMPT IS TERMINAL REGARDLESS OF SUCCESS OR FAILURE"
+}

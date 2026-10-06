@@ -11,6 +11,7 @@ M2_ACCEPTANCE.md on a RunPod box).
 from __future__ import annotations
 
 import asyncio
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -22,14 +23,37 @@ from app.schemas.requests import CreateSessionRequest
 
 
 def _real_manifest() -> ModelManifest:
-    return model_loader.PYTHIA_160M_MANIFEST.model_copy(update={"is_real_model": True})
+    return model_loader.PYTHIA_160M_MANIFEST.model_copy(
+        update={
+            "is_real_model": True,
+            "execution_kind": "real_model_weights",
+            "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+            "revision_verified": True,
+            "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+            "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+            "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+            "weights_hash_verified": True,
+            "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+            "runtime_execution": model_loader.RuntimeExecutionEvidence(
+                profile="development",
+                device="cpu",
+                dtype="torch.float32",
+                torch_version="2.13.0+cu126",
+            ),
+        }
+    )
 
 
 def _force_real_loaded(monkeypatch: pytest.MonkeyPatch) -> None:
     """Install a singleton claiming a real model is loaded."""
     loaded = LoadedModel(
         manifest=_real_manifest(),
-        model=object(),  # truthy placeholder so is_real is True
+        # The dispatcher now cross-checks the concrete family stack before it
+        # may hand the carrier to even a stubbed runner.  Keep this lightweight
+        # while representing the exact 12-layer Pythia/GPT-NeoX family.
+        model=SimpleNamespace(
+            gpt_neox=SimpleNamespace(layers=tuple(object() for _ in range(12)))
+        ),
         tokenizer=object(),
     )
     monkeypatch.setattr(model_loader, "_LOADED", loaded)

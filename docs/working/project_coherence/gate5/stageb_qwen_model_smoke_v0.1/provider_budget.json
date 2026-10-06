@@ -1,0 +1,13 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_provider_budget.v0.1",
+  "expected_execution_provider": "LOCAL NVIDIA GPU ONLY",
+  "runpod_expected": false,
+  "runpod_calls_ceiling": 0,
+  "external_provider_calls_ceiling": 0,
+  "paid_spend_usd_ceiling": "0.00",
+  "network_during_execution": "NONE",
+  "fallback_policy": "FAIL CLOSED / DO NOT START RUNPOD / DO NOT CONTACT AN EXTERNAL MODEL PROVIDER / DO NOT SPEND",
+  "user_reported_runpod_balance_usd": "107.00",
+  "balance_status": "USER REPORTED / UNINSPECTED / NOT AUTHORITY TO SPEND",
+  "boundary": "RUNPOD AND PAID PROVIDER USE ARE OUT OF SCOPE FOR THIS PREREGISTRATION"
+}

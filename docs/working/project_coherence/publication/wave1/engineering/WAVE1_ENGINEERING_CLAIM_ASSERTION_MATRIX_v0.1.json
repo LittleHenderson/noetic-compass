@@ -1,0 +1,420 @@
+{
+  "schema_version": "project_coherence.publication.wave1.engineering_claim_assertion_matrix.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "internal_cross_review": "OPEN",
+  "external_specialist_review": "OPEN",
+  "matrix_rule": "A green bounded-software receipt may support only the exact software contract it exercises. It cannot establish empirical, causal, physical, material, safety, clinical, regulatory, product, canon, license, disclosure, authorship, or peer-review conclusions.",
+  "entries": [
+    {
+      "id": "PCBA-EA-001",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The CAS PCBA v8 Python candidate represents components, ports, signal kinds, units, parameters, nets, state literals, test points, calibration references, and feedback declarations with closed typed contracts.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-001"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/types.py",
+        "src/cas_pcba_v8/contracts.py",
+        "src/cas_pcba_v8/model.py",
+        "tests/cas_pcba_v8/test_drc.py"
+      ],
+      "allowed_wording": "The bound candidate implements and regression-tests the declared typed Python object model.",
+      "prohibited_inference": "Complete CCDL conformance, cognitive validity, physical circuit identity, or product readiness."
+    },
+    {
+      "id": "PCBA-EA-002",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Complete declared board structure participates in an immutable canonical identity, and exact runtime value tags distinguish Boolean true, integer 1, and string true.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-002", "G4-PCBA-009"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/model.py",
+        "src/cas_pcba_v8/finite_values.py",
+        "tests/cas_pcba_v8/test_identity.py",
+        "tests/cas_pcba_v8/test_exact_type_defenses.py"
+      ],
+      "allowed_wording": "The bound software rejects the tested identity collisions and mutation cases.",
+      "prohibited_inference": "Cryptographic authenticity, reviewer identity, or authority from a self-hash."
+    },
+    {
+      "id": "PCBA-EA-003",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The deterministic DRC checks declared component contracts, typed connectivity, driver count, required ports, signal/unit compatibility, calibration linkage, and test-point requirements and fails boards carrying errors.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-003", "G4-PCBA-005", "G4-PCBA-008"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/drc.py",
+        "src/cas_pcba_v8/diagnostics.py",
+        "tests/cas_pcba_v8/test_drc.py",
+        "tests/cas_pcba_v8/test_audit_regressions.py"
+      ],
+      "allowed_wording": "The exact tested DRC contract is implemented for the admitted Python model.",
+      "prohibited_inference": "All invalid boards are detected or the checker is formally complete."
+    },
+    {
+      "id": "PCBA-EA-004",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The DRC uses graph-cycle analysis and conservative per-cycle gain checks for declared feedback in the supported profile.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-007"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/drc.py",
+        "src/cas_pcba_v8/fixtures.py",
+        "tests/cas_pcba_v8/test_drc.py"
+      ],
+      "allowed_wording": "The supported software rejects tested undeclared, no-delay, and unsafe-gain cycles.",
+      "prohibited_inference": "Complete stateful, stochastic, analog, or safety feedback analysis."
+    },
+    {
+      "id": "PCBA-EA-005",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "For supported activation paths, the DRC reports an unreachable threshold when the derived upstream upper bound is below the declared fuse threshold.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_KNOWN_FAULT_REGRESSION",
+      "source_refs": ["G4-PCBA-006", "G4-PCBA-012"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/drc.py",
+        "src/cas_pcba_v8/fixtures.py",
+        "tests/cas_pcba_v8/test_drc.py"
+      ],
+      "allowed_wording": "The candidate diagnoses the bound CSB threshold contradiction as a known fault.",
+      "prohibited_inference": "The known-fault test validates a safety mechanism or repaired design."
+    },
+    {
+      "id": "PCBA-EA-006",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The narrow reference simulator emits deterministic trace and measurement records bound to board, DRC, catalog, decimal-context, source, calibration, and child-lineage identities.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-008"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/simulation.py",
+        "tests/cas_pcba_v8/test_simulation.py",
+        "tests/cas_pcba_v8/test_identity.py"
+      ],
+      "allowed_wording": "The bound software deterministically replays supported fixtures and checks their declared provenance contract.",
+      "prohibited_inference": "A trace proves an external cognitive mechanism, causal effect, measurement validity, or safety effect."
+    },
+    {
+      "id": "PCBA-EA-007",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Only certified total finite deterministic stateless non-stochastic transition tables can cross the candidate TKS v8 adapter, and the certificate binds the exact kernel and PCBA identities.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-010"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/tks_adapter.py",
+        "tests/cas_pcba_v8/test_tks_adapter.py",
+        "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md"
+      ],
+      "allowed_wording": "The adapter certifies a narrow typed structural representation in the finite reference kernel.",
+      "prohibited_inference": "Automatic CAS semantic identity, canon admission, or representation of continuous/stateful dynamics."
+    },
+    {
+      "id": "PCBA-EA-008",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The candidate keeps the mixed-simplex Fisher-Rao profile and optional projector profile type-distinct and binds projector matrix, rank, source/basis, tolerance, and validation residuals.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-PCBA-004", "TERM-FISHER-RAO", "TERM-PROJECTOR-PROFILE"],
+      "evidence_refs": [
+        "src/cas_pcba_v8/geometry.py",
+        "tests/cas_pcba_v8/test_types_and_geometry.py",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"
+      ],
+      "allowed_wording": "The candidate implements two separately named numerical geometry profiles.",
+      "prohibited_inference": "A projector profile is the canonical PCBA address or a validated latent cognitive subspace.",
+      "theorem_authority": "Formal Mathematics Paper 3 at commit 3c8491db6f5559cf090909d9de0efa03d924f53f and source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4; this engineering record is a read-only dependency summary."
+    },
+    {
+      "id": "PCBA-SF-001",
+      "assertion_class": "NEGATIVE_SOURCE_FINDING",
+      "statement": "The consolidated formal CCDL EBNF does not cover the published five-board reference corpus; four boards contain direct syntax counterexamples and one bounded listing has no direct counterexample established by this audit.",
+      "status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_QUARANTINED",
+      "source_refs": ["G4-PCBA-011", "CLM-PCBA-COMPILER-CONFORMANCE"],
+      "evidence_refs": [
+        "docs/working/project_coherence/gate4/PCBA_CCDL_CONSTRUCT_COVERAGE_v0.1.json",
+        "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md"
+      ],
+      "allowed_wording": "The audited corpus-level grammar-coverage claim fails.",
+      "prohibited_inference": "Every individual board is proven unparsable under every implementation."
+    },
+    {
+      "id": "PCBA-SF-002",
+      "assertion_class": "NEGATIVE_SOURCE_FINDING",
+      "statement": "Under the published clamp semantics, the CSB red stage capped at 0.1 cannot cross its downstream 0.9 fuse threshold; the same source also uses non-finite gain without complete latch/fail-closed semantics.",
+      "status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_KNOWN_FAULT_FIXTURE",
+      "source_refs": ["G4-PCBA-012", "CLM-PCBA-CSB-SAFETY-EFFECTIVENESS"],
+      "evidence_refs": [
+        "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+        "src/cas_pcba_v8/fixtures.py",
+        "tests/cas_pcba_v8/test_drc.py"
+      ],
+      "allowed_wording": "The unmodified CSB is a known-fault source fixture.",
+      "prohibited_inference": "The candidate proves a safe repair, hazard coverage, certification, or clinical suitability."
+    },
+    {
+      "id": "PCBA-OPEN-001",
+      "assertion_class": "OPEN_ENGINEERING_OBLIGATION",
+      "statement": "A complete versioned CCDL grammar, parser, canonical round trip, and corpus conformance package do not exist in the admitted candidate.",
+      "status": "OPEN_ENGINEERING",
+      "source_refs": ["G4-PCBA-013", "CLM-PCBA-COMPILER-CONFORMANCE"],
+      "evidence_refs": ["docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json"],
+      "allowed_wording": "The v0.1 candidate exposes only its typed Python model.",
+      "prohibited_inference": "Complete CCDL compiler conformance."
+    },
+    {
+      "id": "PCBA-OPEN-002",
+      "assertion_class": "OPEN_ENGINEERING_OBLIGATION",
+      "statement": "Capacitor, PLL, memory, power, richer feedback, stochastic, and memristive time/state semantics remain unspecified or unvalidated.",
+      "status": "OPEN_ENGINEERING",
+      "source_refs": ["G4-PCBA-014"],
+      "evidence_refs": ["docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json"],
+      "allowed_wording": "Only the narrow declared deterministic profile and bounded within-run fuse state are implemented.",
+      "prohibited_inference": "Stateful or adaptive dynamics are already implemented."
+    },
+    {
+      "id": "PCBA-OPEN-003",
+      "assertion_class": "OPEN_EXTERNAL_VALIDATION",
+      "statement": "No live PCBA calibration, authenticated instrumentation, environmental validity, uncertainty/drift validation, or held-out external result is admitted.",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "source_refs": ["G4-PCBA-015"],
+      "evidence_refs": ["docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json"],
+      "allowed_wording": "Calibration fields are structural/test metadata in this candidate.",
+      "prohibited_inference": "Calibrated measurement or external validity."
+    },
+    {
+      "id": "PCBA-OPEN-004",
+      "assertion_class": "NOT_LICENSED_PRODUCT_CLAIM",
+      "statement": "PCBA safety effectiveness, certification, regulatory compliance, and clinical suitability are not established.",
+      "status": "OPEN_EXTERNAL_VALIDATION / NOT LICENSED",
+      "source_refs": ["G4-PCBA-016", "CLM-PCBA-CSB-SAFETY-EFFECTIVENESS"],
+      "evidence_refs": [
+        "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+        "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json"
+      ],
+      "allowed_wording": "All safety, clinical, and regulatory conclusions remain open.",
+      "prohibited_inference": "Any positive safety, certification, regulatory, or clinical claim."
+    },
+    {
+      "id": "OHM-EA-001",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "The CAS-Ohm candidate keeps quantity kind, exact decimal, unit, measurement kind, method, calibration profile, uncertainty, sample size, lineage, raw evidence, controls, and missingness type-distinct.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-OHM-002", "TERM-CAS-OHM-FIELD-KINDS"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/model.py",
+        "src/cas_ohm_v1/evidence.py",
+        "src/cas_ohm_v1/canonical.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "The bound software enforces the tested measurement and provenance distinctions.",
+      "prohibited_inference": "A typed value is an authenticated measurement or physical telemetry."
+    },
+    {
+      "id": "OHM-EA-002",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Calibration profiles bind the declared model, direction, corpus, splits, methods, tolerances, controls, validity interval, drift, and digest; calibrated held-out resistance is distinguished from same-sample apparent resistance.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-OHM-003", "G4-OHM-004"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/calibration.py",
+        "src/cas_ohm_v1/diagnostics.py",
+        "src/cas_ohm_v1/records.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "The software rejects tested circular same-sample prediction and profile/split mismatches.",
+      "prohibited_inference": "A live calibration or held-out predictive result exists."
+    },
+    {
+      "id": "OHM-EA-003",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Dose-response region and semantic outcome are independent classifications in the candidate.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["OHM-CONFLICT-ASOM-AXES"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/model.py",
+        "src/cas_ohm_v1/synthetic.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "No response region mechanically determines semantic correctness.",
+      "prohibited_inference": "ACTIVE means intended or NON_OHMIC means misaligned."
+    },
+    {
+      "id": "OHM-EA-004",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Q4 bands classify exact pre-clipping Q10 values using [0,2.5), [2.5,5), [5,7.5), and [7.5,infinity); the displayed q10 is clipped at 10 and overload_ratio is retained separately.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "source_refs": ["G4-OHM-006", "OHM-CONFLICT-Q4-BOUNDARIES"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/calibration.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "The candidate has an exact Q4 software classification rule.",
+      "prohibited_inference": "Q4 validates the selected full-scale method or semantic interpretation."
+    },
+    {
+      "id": "OHM-EA-005",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Series, parallel, and gain-product calculations are profile-, unit-, coordinate-, topology-, region-, child-, and provenance-gated structural research operations.",
+      "status": "SUPPORTED_STRUCTURAL_SOFTWARE_ONLY",
+      "source_refs": ["G4-OHM-007", "G4-OHM-008", "OHM-CONFLICT-NETWORK-RULES"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/networks.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "The software computes structural equivalents for admitted research fixtures.",
+      "prohibited_inference": "Network arithmetic is empirically valid, causal, physical, or authenticated."
+    },
+    {
+      "id": "OHM-EA-006",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Residual diagnosis is restricted to matching active, reviewed, replay-time-current held-out instrumented evidence with uncertainty and remains explicitly non-identifying; replay-time status uses caller-supplied replay_as_of and is not authenticated-current.",
+      "status": "SUPPORTED_STRUCTURAL_SOFTWARE_ONLY",
+      "source_refs": ["G4-OHM-005", "OHM-CONFLICT-RESIDUAL-IDENTIFICATION"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/diagnostics.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "A residual may rank follow-up probes under the declared profile.",
+      "prohibited_inference": "Residual sign proves a hidden policy, bypass, opposition, or cause."
+    },
+    {
+      "id": "OHM-EA-007",
+      "assertion_class": "ENGINEERING_ASSERTION",
+      "statement": "Structural research-packet completeness and authenticated Evidence Packet eligibility are separate; replay-time-current uses caller-supplied replay_as_of, while authenticated-current eligibility is false in the current candidate.",
+      "status": "SUPPORTED_BY_BOUNDED_SOFTWARE / AUTHORITY_OPEN",
+      "source_refs": ["G4-OHM-009", "G4-OHM-013", "G4-OHM-014"],
+      "evidence_refs": [
+        "src/cas_ohm_v1/records.py",
+        "src/cas_ohm_v1/calibration.py",
+        "tests/cas_ohm_v1/test_cas_ohm_v1.py"
+      ],
+      "allowed_wording": "No authenticated capability or Evidence Packet path is admitted.",
+      "prohibited_inference": "A self-hash, fixture signature, or local replay time creates independent authority."
+    },
+    {
+      "id": "OHM-SF-001",
+      "assertion_class": "NEGATIVE_SOURCE_FINDING",
+      "statement": "The three CAS-Ohm sources retain eight conflicts or under-specifications across scale/saturation, full-scale method, dimensional bridge, gain, ASOM, network rules, residual identification, and Q4 boundaries.",
+      "status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_QUARANTINED",
+      "source_refs": ["G4-OHM-001"],
+      "evidence_refs": [
+        "docs/working/project_coherence/gate4/CAS_OHM_SOURCE_CONFLICT_EVIDENCE_v0.1.json",
+        "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md"
+      ],
+      "allowed_wording": "The candidate preserves eight exact source conflicts or under-specifications.",
+      "prohibited_inference": "The inherited sources already define one coherent scale, unit, gain, or network law."
+    },
+    {
+      "id": "THM-PROJECTOR-GRAM-KERNEL",
+      "assertion_class": "READ_ONLY_INHERITED_THEOREM_DEPENDENCY",
+      "statement": "For common-rank d > 0 finite-rank orthogonal projectors in one Hilbert space, normalized Hilbert-Schmidt overlap tr(P_i P_j)/d is a positive-semidefinite kernel in [0,1].",
+      "status": "IN_REVIEW / STANDARD_RESULT_CITED / Ring 4",
+      "source_refs": ["PUB-P3-PROP-001@3c8491db6f5559cf090909d9de0efa03d924f53f"],
+      "evidence_refs": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+        "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md"
+      ],
+      "allowed_wording": "The registered standard kernel result is an optional geometry dependency under its stated assumptions.",
+      "prohibited_inference": "Strict positive definiteness, a rank-zero normalized kernel, latent cognitive validity, or capacity.",
+      "theorem_authority": "Formal Mathematics Paper 3 is sole authority: commit 3c8491db6f5559cf090909d9de0efa03d924f53f; source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4."
+    },
+    {
+      "id": "THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
+      "assertion_class": "READ_ONLY_INHERITED_CONJECTURE_DEPENDENCY",
+      "statement": "A proposed CAS projector-capacity specialization would require a CAS-specific representation satisfying every source hypothesis, including the omitted isometry/intertwining identity.",
+      "status": "PROOF_GAP / IN_REVIEW / Ring 4",
+      "source_refs": ["PUB-P3-MSC-001@3c8491db6f5559cf090909d9de0efa03d924f53f"],
+      "evidence_refs": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+        "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md"
+      ],
+      "allowed_wording": "The capacity transfer is an open conjectural dependency.",
+      "prohibited_inference": "Any engineering or empirical capacity bound is established.",
+      "theorem_authority": "Formal Mathematics Paper 3 is sole authority: commit 3c8491db6f5559cf090909d9de0efa03d924f53f; source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4. The CAS transfer remains PROOF_GAP / IN_REVIEW / Ring 4."
+    },
+    {
+      "id": "CLM-CAS-OHM-PHYSICAL-TELEMETRY",
+      "assertion_class": "NOT_LICENSED_PRODUCT_CLAIM",
+      "statement": "CAS-Ohm design scores, proxies, and model-derived quantities are physical electrical telemetry or validated measurements.",
+      "status": "NOT LICENSED / CONTRADICTED_BY_CURRENT_BOUNDARY",
+      "source_refs": ["CLM-CAS-OHM-PHYSICAL-TELEMETRY@0.1"],
+      "evidence_refs": [
+        "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+        "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md"
+      ],
+      "allowed_wording": "Current uninstrumented quantities are design values, scores, proxies, or model-derived values as typed; physical SI quantities are outside CAS-Ohm UnitKind, and generic PCBA Unit.VOLT does not license telemetry.",
+      "prohibited_inference": "Physical voltage, current, resistance, charge, flux, power, telemetry, or a physical profile inferred from a generic unit tag."
+    },
+    {
+      "id": "CLM-CAS-OHM-LOCAL-RESPONSE",
+      "assertion_class": "EMPIRICAL_HYPOTHESIS",
+      "statement": "Within one frozen active-region profile, activation projection varies predictably with randomized steering alpha on held-out prompts.",
+      "status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "source_refs": ["CLM-CAS-OHM-LOCAL-RESPONSE@0.1"],
+      "evidence_refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"],
+      "allowed_wording": "This is a registered hypothesis awaiting a qualifying run.",
+      "prohibited_inference": "The response law has been empirically established."
+    },
+    {
+      "id": "CLM-CAS-OHM-EFFECTIVE-RESISTANCE",
+      "assertion_class": "EMPIRICAL_HYPOTHESIS",
+      "statement": "A calibration-split effective-resistance parameter predicts held-out response and changes as predicted under an independently characterized non-safety constraint manipulation.",
+      "status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "source_refs": ["CLM-CAS-OHM-EFFECTIVE-RESISTANCE@0.1"],
+      "evidence_refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"],
+      "allowed_wording": "This is a registered nonphysical predictive hypothesis.",
+      "prohibited_inference": "Effective resistance is a physical ohm value or validated causal constraint."
+    },
+    {
+      "id": "CLM-CAS-OHM-GAIN-COMPOSITION",
+      "assertion_class": "EMPIRICAL_HYPOTHESIS",
+      "statement": "For coordinate-compatible independently calibrated active-region stages, end-to-end local derivative agrees with the product of local Jacobian/projection gains.",
+      "status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "source_refs": ["CLM-CAS-OHM-GAIN-COMPOSITION@0.1"],
+      "evidence_refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"],
+      "allowed_wording": "This is a registered hypothesis; Fisher-Rao and Jacobian gains remain unbridged.",
+      "prohibited_inference": "Gain multiplication is generally validated or causal."
+    },
+    {
+      "id": "CLM-CAS-OHM-REDUNDANCY",
+      "assertion_class": "EMPIRICAL_HYPOTHESIS",
+      "statement": "Ablating a genuine redundant non-safety branch increases required steering alpha more than matched random-head ablation.",
+      "status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "source_refs": ["CLM-CAS-OHM-REDUNDANCY@0.1"],
+      "evidence_refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"],
+      "allowed_wording": "This is a registered non-safety ablation hypothesis.",
+      "prohibited_inference": "Parallel equivalence, redundancy, or safety benefit is established."
+    },
+    {
+      "id": "CLM-CAS-OHM-RESIDUAL-LOCALIZATION",
+      "assertion_class": "EMPIRICAL_HYPOTHESIS",
+      "statement": "A calibrated residual diagnostic localizes blinded implanted non-safety faults above shuffled and matched-control baselines without identifying hidden causes from residual sign.",
+      "status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "source_refs": ["CLM-CAS-OHM-RESIDUAL-LOCALIZATION@0.1"],
+      "evidence_refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"],
+      "allowed_wording": "This is a registered blinded-localization hypothesis.",
+      "prohibited_inference": "Residuals already identify hidden policies, bypasses, or causes."
+    },
+    {
+      "id": "MEM-OPEN-001",
+      "assertion_class": "PROVISIONAL_RESEARCH_HYPOTHESIS",
+      "statement": "A future CAS response profile may require an explicit history state and could be compared with a matched memoryless profile.",
+      "status": "OPEN / NOT IMPLEMENTED / NOT PREREGISTERED / NOT LICENSED",
+      "source_refs": ["E13", "E14"],
+      "evidence_refs": [
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md"
+      ],
+      "allowed_wording": "Classical memristive systems motivate a nonphysical history-dependent research question.",
+      "prohibited_inference": "CAS contains a physical memristor, validated hysteresis, material device, or stateful implementation."
+    }
+  ],
+  "entry_count": 31,
+  "closure_statement": "No entry changes Gate 4 or Gate 5 status. All experimental, causal, stateful, memristive, physical, material, safety, clinical, regulatory, product, canon, license, disclosure, cross-review, and external-review conclusions remain OPEN."
+}

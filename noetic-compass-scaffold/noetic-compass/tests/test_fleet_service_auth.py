@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
+import hashlib
 import secrets
 
 from fastapi import FastAPI
@@ -29,9 +31,12 @@ from api.services.cas_harness_evidence_object_store import (
 )
 from api.services.evidence_ownership import tenant_owns_trace
 from api.services.fleet_service_auth import (
+    FleetServiceAuthenticatedCallback,
     FleetServiceAuthenticationError,
     FleetServiceAuthorizationError,
     FleetServiceAuthStore,
+    FleetServiceBoundIntakeReceipt,
+    FleetServiceIntakeBinding,
 )
 from api.services.production.state_substrate import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
@@ -288,6 +293,166 @@ def test_nonce_replay_and_concurrent_duplicates_have_exactly_one_winner() -> Non
         _authenticate(auth, credential, nonce=nonce, now=stamp)
 
 
+def test_authenticated_callback_exposes_exact_durable_nonce_receipt_after_restart(
+    tmp_path,
+) -> None:
+    path = tmp_path / "fleet-auth-nonce-receipt.db"
+    stamp = datetime.now(UTC)
+    nonce = secrets.token_urlsafe(24)
+    first_backend = SqliteStateStore(path)
+    first = FleetServiceAuthStore(first_backend, pepper=PEPPER)
+    first.record_audit_owner(
+        tenant_id="tenant-a", account_id="account-a", audit_id="audit-a"
+    )
+    credential = _issue_worker(first, now=stamp)
+    callback = first.authenticate_with_nonce_receipt(
+        tenant_id="tenant-a",
+        api_credential=credential.api_credential,
+        timestamp=str(int(stamp.timestamp())),
+        nonce=nonce,
+        required_capability="submit_receipt",
+        audit_id="audit-a",
+        fleet_id="audit-a",
+        worker_id="probe-worker-1",
+        now=stamp,
+    )
+    assert isinstance(callback, FleetServiceAuthenticatedCallback)
+    assert callback.nonce_receipt.nonce_id.startswith("fsn_")
+    assert callback.nonce_receipt.tenant_id == callback.principal.tenant_id
+    assert callback.nonce_receipt.account_id == callback.principal.account_id
+    assert callback.nonce_receipt.audit_id == callback.principal.audit_id
+    assert callback.nonce_receipt.fleet_id == callback.principal.fleet_id
+    assert callback.nonce_receipt.worker_id == callback.principal.worker_id
+    assert callback.nonce_receipt.capabilities == callback.principal.capabilities
+    assert callback.nonce_receipt.nonce_sha256 == hashlib.sha256(
+        nonce.encode("utf-8")
+    ).hexdigest().upper()
+    assert callback.nonce_receipt.byte_length == len(nonce.encode("utf-8"))
+    first_backend.close()
+
+    second_backend = SqliteStateStore(path)
+    second = FleetServiceAuthStore(second_backend, pepper=PEPPER)
+    reloaded = second.consumed_nonce_receipt(
+        principal=callback.principal,
+        nonce=nonce,
+    )
+    assert reloaded == callback.nonce_receipt
+    assert second.verify_authenticated_callback(callback) is callback
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.verify_authenticated_callback(
+            FleetServiceAuthenticatedCallback(
+                principal=callback.principal,
+                nonce_receipt=replace(reloaded, nonce_id="fsn_" + "f" * 64),
+            )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.authenticate_with_nonce_receipt(
+            tenant_id="tenant-a",
+            api_credential=credential.api_credential,
+            timestamp=str(int((stamp + timedelta(seconds=1)).timestamp())),
+            nonce=nonce,
+            required_capability="submit_receipt",
+            audit_id="audit-a",
+            fleet_id="audit-a",
+            worker_id="probe-worker-1",
+            now=stamp + timedelta(seconds=1),
+        )
+    second_backend.close()
+
+
+def test_bound_intake_nonce_is_atomic_exact_restart_safe_and_non_authoritative(
+    tmp_path,
+) -> None:
+    path = tmp_path / "fleet-auth-bound-intake.db"
+    stamp = datetime.now(UTC)
+    nonce = secrets.token_urlsafe(24)
+    lease_token = secrets.token_hex(32)
+    lease_digest = hashlib.sha256(lease_token.encode("utf-8")).hexdigest().upper()
+    carrier = b'{"strict":"terminal-bytes"}'
+    binding = FleetServiceIntakeBinding(
+        http_method="POST",
+        route_path=(
+            "/api/cas-harness/audit/distributed/session/audit-a/fleet/job/"
+            "job-a/v2/run/run-a/terminal"
+        ),
+        job_id="job-a",
+        run_id="run-a",
+        authorization_sha256="A" * 64,
+        lease_token_sha256=lease_digest,
+        carrier_sha256=hashlib.sha256(carrier).hexdigest().upper(),
+        carrier_byte_length=len(carrier),
+    )
+    first_backend = SqliteStateStore(path)
+    first = FleetServiceAuthStore(first_backend, pepper=PEPPER)
+    first.record_audit_owner(
+        tenant_id="tenant-a", account_id="account-a", audit_id="audit-a"
+    )
+    credential = _issue_worker(first, now=stamp)
+    bound = first.authenticate_with_bound_intake_receipt(
+        tenant_id="tenant-a",
+        api_credential=credential.api_credential,
+        timestamp=str(int(stamp.timestamp())),
+        nonce=nonce,
+        required_capability="submit_receipt",
+        audit_id="audit-a",
+        fleet_id="audit-a",
+        worker_id="probe-worker-1",
+        intake_binding=binding,
+        now=stamp,
+    )
+    assert isinstance(bound, FleetServiceBoundIntakeReceipt)
+    assert bound.intake_binding == binding
+    stored = first_backend.get(
+        "tenant-a", "fleet_service_nonce", bound.callback.nonce_receipt.nonce_id
+    )
+    assert stored is not None
+    assert stored.payload["schema_version"] == "cas_fleet_service_bound_intake_receipt.v2"
+    assert stored.payload["intake_binding"] == binding.to_payload()
+    assert stored.payload["intake_binding"]["lease_token_sha256"] == lease_digest
+    serialized = repr(dict(stored.payload))
+    assert nonce not in serialized
+    assert lease_token not in serialized
+    assert credential.api_credential not in serialized
+    first_backend.close()
+
+    second_backend = SqliteStateStore(path)
+    second = FleetServiceAuthStore(second_backend, pepper=PEPPER)
+    assert second.verify_bound_intake_receipt(bound) == bound
+    assert second.verify_authenticated_callback(bound.callback) is bound.callback
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.verify_bound_intake_receipt(
+            replace(
+                bound,
+                intake_binding=replace(binding, carrier_sha256="B" * 64),
+            )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.verify_bound_intake_receipt(
+            replace(
+                bound,
+                intake_binding=replace(binding, lease_token_sha256="B" * 64),
+            )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        FleetServiceIntakeBinding.from_payload(
+            {**binding.to_payload(), "lease_token": lease_token}
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.authenticate_with_bound_intake_receipt(
+            tenant_id="tenant-a",
+            api_credential=credential.api_credential,
+            timestamp=str(int((stamp + timedelta(seconds=1)).timestamp())),
+            nonce=nonce,
+            required_capability="submit_receipt",
+            audit_id="audit-a",
+            fleet_id="audit-a",
+            worker_id="probe-worker-1",
+            intake_binding=binding,
+            now=stamp + timedelta(seconds=1),
+        )
+    second_backend.close()
+
+
 def test_expiry_revocation_and_consumed_nonce_survive_sqlite_restart(tmp_path) -> None:
     path = tmp_path / "fleet-auth.db"
     stamp = datetime.now(UTC)
@@ -336,6 +501,7 @@ def test_callback_path_allowlist_is_exact_and_feature_stays_dark(monkeypatch) ->
 
 def test_configuration_fails_loud_on_partial_enablement() -> None:
     assert Settings(_env_file=None).fleet_service_auth_enabled is False
+    assert Settings(_env_file=None).harness_v2_worker_protocol_enabled is False
     without_accounts = Settings(
         _env_file=None,
         NC_FLEET_SERVICE_AUTH_ENABLED=True,
@@ -351,6 +517,42 @@ def test_configuration_fails_loud_on_partial_enablement() -> None:
     )
     with pytest.raises(RuntimeError, match="at least 32 bytes"):
         short_pepper.validate_account_storage()
+
+    v2_without_accounts = Settings(
+        _env_file=None,
+        NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=True,
+    )
+    with pytest.raises(RuntimeError, match="requires NC_ACCOUNTS_ENABLED"):
+        v2_without_accounts.validate_account_storage()
+    v2_without_fleet_auth = Settings(
+        _env_file=None,
+        NC_ACCOUNTS_ENABLED=True,
+        NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=True,
+    )
+    with pytest.raises(RuntimeError, match="requires NC_FLEET_SERVICE_AUTH_ENABLED"):
+        v2_without_fleet_auth.validate_account_storage()
+    v2_without_object_lock = Settings(
+        _env_file=None,
+        NC_ACCOUNTS_ENABLED=True,
+        NC_FLEET_SERVICE_AUTH_ENABLED=True,
+        NC_FLEET_SERVICE_CREDENTIAL_PEPPER=PEPPER,
+        NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=True,
+    )
+    with pytest.raises(
+        RuntimeError, match="requires NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED"
+    ):
+        v2_without_object_lock.validate_account_storage()
+    v2_without_postgres = Settings(
+        _env_file=None,
+        NC_ACCOUNTS_ENABLED=True,
+        NC_FLEET_SERVICE_AUTH_ENABLED=True,
+        NC_FLEET_SERVICE_CREDENTIAL_PEPPER=PEPPER,
+        NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=True,
+        NC_HARNESS_V2_WORKER_PROTOCOL_ENABLED=True,
+        NC_DATABASE_URL="sqlite:///local.db",
+    )
+    with pytest.raises(RuntimeError, match="requires NC_DATABASE_URL backed by PostgreSQL"):
+        v2_without_postgres.validate_account_storage()
 
 
 def test_identical_worker_ids_are_isolated_by_audit_scope() -> None:

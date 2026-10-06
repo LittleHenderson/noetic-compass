@@ -1,0 +1,81 @@
+{
+  "schema_version": "project_coherence.gate5_engineering_execution_reconciliation.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "experimental_execution_status": "NOT_STARTED",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "product_route_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "classification": "CANONICAL INGESTION OF RETAINED LOCAL ENGINEERING EVIDENCE / NOT SCIENTIFIC ADMISSION",
+  "local_gpu_canary": {
+    "predecessor": {
+      "run_id": "gate5-pythia-canary-20260807T032759Z-bd28ae7e5a85",
+      "runtime_receipt": "docs/working/project_coherence/gate5/model_smoke/runs/gate5-pythia-canary-20260807T032759Z-bd28ae7e5a85/runtime_receipt.json",
+      "runtime_receipt_sha256": "476b509b74af27049099611c4b1a6f4d31e64c5f000cb5119e0befb893e673b6",
+      "runtime_receipt_bytes": 5057,
+      "status": "ENGINEERING GPU CANARY TERMINAL / FAIL_CLOSED",
+      "classification": "RETAINED INFRASTRUCTURE STARTUP FAILURE"
+    },
+    "successor": {
+      "run_id": "gate5-pythia-canary-20260807T035947Z-9f81c34de1b6",
+      "runtime_receipt": "docs/working/project_coherence/gate5/model_smoke/runs/gate5-pythia-canary-20260807T035947Z-9f81c34de1b6/runtime_receipt.json",
+      "runtime_receipt_sha256": "a31064b998dd63366c00501afffb32e4fae044f79449f25d6719feb1a293f8ac",
+      "runtime_receipt_bytes": 50746,
+      "status": "ENGINEERING GPU CANARY COMPLETE / MECHANICAL PASS",
+      "arms_completed": 6,
+      "model_id": "EleutherAI/pythia-160m",
+      "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+      "runtime_dtype": "torch.bfloat16",
+      "hardware": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "mechanics_observed": [
+        "REAL MODEL LOAD",
+        "ACTIVATION CAPTURE",
+        "HOOK FIRING",
+        "ACTIVATION CHANGE",
+        "ABLATION AND MATCHED-CONTROL EXECUTION",
+        "HASH-BOUND TERMINAL RECEIPT"
+      ],
+      "prompt_injection_detector_status": "NOT VALIDATED / OBSERVED HEURISTIC DISCRIMINATION 0.0",
+      "steering_efficacy_status": "NOT ESTABLISHED / STRUCTURALLY_VALID FALSE / OUTPUT DELTA UNATTRIBUTED",
+      "replication_status": "POST-FAILURE ADAPTED / NOT INDEPENDENTLY REPLICATED"
+    }
+  },
+  "joined_controller_worker": {
+    "predecessor": {
+      "run_id": "gate5-joined-20260807T061801Z-dae9471700c1",
+      "runtime_receipt": "docs/working/project_coherence/gate5/joined_model_smoke/runs/gate5-joined-20260807T061801Z-dae9471700c1/runtime_receipt.json",
+      "runtime_receipt_sha256": "67f69744a6a89a7cd30c6769e2d2cdf1d840e7bb79002fdc8450ce99675b29f9",
+      "runtime_receipt_bytes": 2258,
+      "status": "FAIL_CLOSED",
+      "failure_phase": "PRE-MODEL NETWORK-NONE VERIFIER",
+      "model_invocation_count": 0
+    },
+    "successor": {
+      "run_id": "gate5-joined-20260807T063024Z-5f22d298b5db",
+      "runtime_receipt": "docs/working/project_coherence/gate5/joined_model_smoke_v0.2/runs/gate5-joined-20260807T063024Z-5f22d298b5db/runtime_receipt.json",
+      "runtime_receipt_sha256": "e926723814539814b981978aa013f28cadd46f635fab57f43eab5b0488648bbd",
+      "runtime_receipt_bytes": 3607,
+      "status": "SUCCESS_NO_PACKET_RECORDED",
+      "model_invocation_count": 1,
+      "reconciled": true,
+      "packet_status": "NOT CREATED",
+      "scientific_efficacy": "NOT ESTABLISHED",
+      "transport": "DOCKER_EXEC_LOOPBACK / NETWORK_NONE / LOCAL_ONLY",
+      "storage_authority": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION",
+      "route_status": "NON-ADMITTED LOCAL ENGINEERING ROUTE"
+    }
+  },
+  "provider_accounting": {
+    "runpod_used": false,
+    "provider_calls": 0,
+    "known_spend_usd": "0.00",
+    "reported_available_balance_usd": "107.00",
+    "balance_evidence_class": "USER REPORTED / PROVIDER LEDGER NOT INSPECTED"
+  },
+  "claim_boundary": "LOCAL ENGINEERING MECHANICS ONLY / NO PROMPT-INJECTION DETECTION CLAIM / NO STEERING EFFICACY CLAIM / NO EVIDENCE PACKET / NO AUTHENTICATED SCIENTIFIC EXECUTION / EXPERIMENT NOT_STARTED / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+}

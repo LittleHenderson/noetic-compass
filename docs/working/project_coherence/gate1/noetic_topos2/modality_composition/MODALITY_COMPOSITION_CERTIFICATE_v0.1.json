@@ -1,0 +1,116 @@
+{
+  "schema_version": "noetic_topos2.modality_composition_certificate.v0.1",
+  "document_status": "INTERNAL PROOF CANDIDATE / REVIEW REQUIRED / NOT LICENSED",
+  "as_of": "2026-08-04",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "INTERNAL ONLY",
+  "review_state": "UNASSESSED",
+  "scope": {
+    "base_category": "L = P({(0,0),(0,1),(1,0),(1,1)}) ordered by inclusion",
+    "ambient_category": "PSh(L,Set)",
+    "coefficient_category": "Set",
+    "coverages": [
+      "ACBE coordinate-partition coverage with null cover at empty context",
+      "RPM coordinate-partition coverage with null cover at empty context",
+      "four-singleton atomic coverage with null cover at empty context"
+    ]
+  },
+  "resolution": {
+    "status": "INTERNAL PROOF COMPLETE / REVIEW REQUIRED",
+    "result": "POSITIVE AT FINITE-CONTEXT LEVEL",
+    "theorem_ids": [
+      "THM-NT2-FINITE-JOIN-IS-ATOMIC-v0.1",
+      "THM-NT2-FINITE-MODALITY-COMPOSITION-v0.1"
+    ],
+    "statements": [
+      "J_ACBE join J_RPM equals the four-singleton atomic topology on L",
+      "M_ACBE composed after M_RPM is canonically naturally isomorphic to atomic sheafification",
+      "M_RPM composed after M_ACBE is canonically naturally isomorphic to atomic sheafification",
+      "M_ACBE and M_RPM commute up to canonical natural isomorphism",
+      "The comparisons preserve the reflector units",
+      "At the empty context every reflector value is the singleton empty product"
+    ],
+    "strict_equality_disclaimed": true,
+    "independent_peer_review_complete": false,
+    "proof_assistant_check_complete": false
+  },
+  "assumptions": [
+    "Presheaves are ordinary small Set-valued contravariant functors on the powerset inclusion poset",
+    "ACBE and RPM blocks are the two registered transverse coordinate partitions",
+    "The empty family, rather than a tuple of empty pieces, covers the empty context",
+    "Ordinary Grothendieck-topology generation and associated-sheaf universal properties are used"
+  ],
+  "proof_artifact": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
+  "reference": {
+    "title": "The Stacks Project, Section 7.10: Sheafification",
+    "url": "https://stacks.math.columbia.edu/tag/00W1",
+    "use": "General matching-family definition, associated-sheaf construction, and universal property; the finite reflector formula is proved directly in the scoped proof artifact"
+  },
+  "open_obligations": {
+    "product_site_lift": "OPEN",
+    "observational_topology_interaction": "OPEN",
+    "legacy_compatibility": "OPEN",
+    "formal_verification": "OPEN",
+    "independent_category_theory_review": "OPEN",
+    "marked_object_semantics": "OPEN",
+    "enriched_or_probabilistic_lift": "OPEN",
+    "cross_context_coupling": "OPEN"
+  },
+  "claim_boundary": "The positive result is licensed only as an internal mathematical candidate for PSh(L,Set). It does not license the PSh(C x L) lift, observational-topology interaction, legacy migration, empirical semantics, product behavior, public disclosure, or a claim of peer review.",
+  "execution": {
+    "verifier": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py",
+    "verifier_command": "python docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py",
+    "test_command": "python -m unittest discover -s tests/noetic_topos2_modality_composition -p \"test_*.py\" -v",
+    "registered_test_count": 6
+  },
+  "expected_execution_summary": {
+    "all_checks_pass": true,
+    "fixture_count": 18,
+    "all_fixture_checks_pass": true,
+    "symbolic": {
+      "atom_count": 4,
+      "context_count": 16,
+      "inclusion_count": 81,
+      "sieve_count": 298,
+      "null_cover_exact_at_empty": true,
+      "normalized_support_pullback_stable": true,
+      "both_composite_index_families_are_atomic": true,
+      "generated_join_topology_equals_atomic_topology": true,
+      "generated_join_satisfies_topology_axioms": true,
+      "generated_atomic_satisfies_topology_axioms": true,
+      "join_covering_sieve_count": 168,
+      "atomic_covering_sieve_count": 168,
+      "all_checks_pass": true
+    },
+    "total_nested_sections_checked": 486,
+    "total_restriction_squares_checked": 3012,
+    "total_unit_components_checked": 388
+  },
+  "artifact_hashes": {
+    "src/noetic_topos2/modality_composition/__init__.py": {
+      "sha256": "5ECA55022A655F0A4A1859FDBDF2552A17C2894A80EA074CDE40D858689C5F59",
+      "bytes": 1087
+    },
+    "src/noetic_topos2/modality_composition/finite_reflectors.py": {
+      "sha256": "43D32F5AB3FBFA370CC3BB30AE5628116432D4D642552928B733831A05741089",
+      "bytes": 25196
+    },
+    "tests/noetic_topos2_modality_composition/__init__.py": {
+      "sha256": "3402A10E42373EB944B37390CE2CA335C545CCAB47EC38E13560AC0278217995",
+      "bytes": 79
+    },
+    "tests/noetic_topos2_modality_composition/test_finite_reflectors.py": {
+      "sha256": "19B66807B60F62A5FD43DA5AAB823B9D508947917F3074F108133A2EBEFEAD8A",
+      "bytes": 4390
+    },
+    "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md": {
+      "sha256": "9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0",
+      "bytes": 13126
+    },
+    "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py": {
+      "sha256": "4F2ED1538AB7AA69AC0D852C427BB29703A9CF015680A33AB40AAF955FA12D10",
+      "bytes": 5544
+    }
+  }
+}

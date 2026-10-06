@@ -1,0 +1,4 @@
+authorizations/** -text
+nonce_ledger/** -text
+launcher_*.txt -text
+runs/** -text

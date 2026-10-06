@@ -1,0 +1,128 @@
+{
+  "schema_version": "cas_harness_pythia160m_startup_contract.v3",
+  "status": "PROSPECTIVE / RUN_NOT_AUTHORIZED",
+  "purpose": "Correct the V2 isolated-interpreter package-path failure without changing the frozen scientific plan.",
+  "interpreter": {
+    "path": "C:\\Python314\\python.exe",
+    "byte_count": 106328,
+    "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+    "implementation": "CPython",
+    "version": "3.14.0"
+  },
+  "invocation": {
+    "shell": "none",
+    "required_flags": [
+      "-I",
+      "-B"
+    ],
+    "pythonpath_environment_allowed": false,
+    "preauthorization_fixture_argv": [
+      "C:\\Python314\\python.exe",
+      "-I",
+      "-B",
+      "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_v3_bootstrap.py",
+      "--repo-root",
+      "<ABSOLUTE_REPO_ROOT>",
+      "--lock",
+      "<ABSOLUTE_V3_LOCK_PATH>",
+      "--contract",
+      "<ABSOLUTE_V3_STARTUP_CONTRACT_PATH>",
+      "--framework-import-fixture"
+    ],
+    "future_authorized_run_argv": [
+      "C:\\Python314\\python.exe",
+      "-I",
+      "-B",
+      "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_v3_bootstrap.py",
+      "--repo-root",
+      "<ABSOLUTE_REPO_ROOT>",
+      "--lock",
+      "<ABSOLUTE_V3_LOCK_PATH>",
+      "--contract",
+      "<ABSOLUTE_V3_STARTUP_CONTRACT_PATH>",
+      "--execute",
+      "--receipt",
+      "<ABSOLUTE_FRESH_V3_RECEIPT_PATH>",
+      "--output-root",
+      "<ABSOLUTE_ABSENT_V3_OUTPUT_ROOT>"
+    ]
+  },
+  "package_root": {
+    "path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages",
+    "insertion": "explicit sys.path index 0 only after startup-chain validation",
+    "must_be_absent_before_validation": true
+  },
+  "package_entrypoints": [
+    {
+      "distribution": "torch",
+      "version": "2.11.0",
+      "relative_path": "torch\\__init__.py",
+      "byte_count": 110846,
+      "sha256": "9805fe98af34a65b1ab758c7909cc7b9906f40777257e513968545b19e319aa1"
+    },
+    {
+      "distribution": "transformers",
+      "version": "5.8.1",
+      "relative_path": "transformers\\__init__.py",
+      "byte_count": 40505,
+      "sha256": "29a3ec5ec169e4ed242bc5bebd8577b565b1609e4e75bbfb887c8c1072623172"
+    },
+    {
+      "distribution": "tokenizers",
+      "version": "0.22.2",
+      "relative_path": "tokenizers\\__init__.py",
+      "byte_count": 2739,
+      "sha256": "510d5e23458612433da9f1fe430b5009fb88ba90508ee4340d2397b32c319080"
+    },
+    {
+      "distribution": "safetensors",
+      "version": "0.7.0",
+      "relative_path": "safetensors\\__init__.py",
+      "byte_count": 204,
+      "sha256": "1d8639555b1bddbf9cc61641c21371e7764aa92201e0cd789c85cb4ce00cd567"
+    }
+  ],
+  "bootstrap": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_v3_bootstrap.py",
+    "byte_count": 14179,
+    "sha256": "88889d5757ef71b243b55772f6e1d31a9246a3a6c47bb2b19bf4ac06dcca69bc"
+  },
+  "executor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor_v3.py",
+    "byte_count": 10284,
+    "sha256": "38b083c685fc4e3f26df2d1aec2cdb0a1beb2ede05bb7513fc8bec6b5edcb7eb"
+  },
+  "auditor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor_v3.py",
+    "byte_count": 3613,
+    "sha256": "22b508f0ede8fff8177c78cda3539c5177162b59599778530da841fdc56d4181"
+  },
+  "immutable_v2_delegate": {
+    "executor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor.py",
+      "byte_count": 36221,
+      "sha256": "b5f51f854f1ae0b3241bf57e617c439ef0871f76eb06eefc6677ff410619e78e"
+    },
+    "auditor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor.py",
+      "byte_count": 22774,
+      "sha256": "0d632894fca5c57fdf77f0bb44766bf7a20ae97be6c622ae75c8cfcbd5f10d02"
+    }
+  },
+  "preauthorization_fixture_boundary": {
+    "framework_import_allowed": true,
+    "model_load_allowed": false,
+    "tokenizer_load_allowed": false,
+    "receipt_creation_allowed": false,
+    "output_creation_allowed": false,
+    "gpu_query_allowed": false,
+    "network_allowed": false
+  },
+  "future_execution_boundary": {
+    "framework_import_before_receipt_validation_and_nonce_consumption": false,
+    "model_load_before_framework_import": false,
+    "live_worker_integration": false,
+    "product_decision_integration": false
+  },
+  "claim_boundary": "Startup compatibility preparation only. No model or tokenizer load, intervention, research run, live steering, safety or prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or production result."
+}

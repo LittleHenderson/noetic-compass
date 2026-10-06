@@ -85,6 +85,8 @@ class BridgeConfig:
     axis: str = "foundation"
     readout_kind: str = "centroid"
     model_revision: str | None = None
+    model_artifact_manifest_path: Path | None = None
+    model_artifact_manifest_sha256: str | None = None
     torch_dtype: str = "float16"
     device_map: str = "auto"
     per_drive: int = 16
@@ -126,7 +128,9 @@ def parse_args() -> Any:
         choices=("centroid", "logistic"),
         help="Foundation readout implementation. 'logistic' matches the original sklearn linear-probe methodology.",
     )
-    parser.add_argument("--model-revision")
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-artifact-manifest-path", required=True, type=Path)
+    parser.add_argument("--model-artifact-manifest-sha256", required=True)
     parser.add_argument("--torch-dtype", default="float16")
     parser.add_argument("--device-map", default="auto")
     parser.add_argument("--per-drive", type=int, default=16)
@@ -168,6 +172,8 @@ def main() -> int:
         axis=args.axis,
         readout_kind=args.readout_kind,
         model_revision=args.model_revision,
+        model_artifact_manifest_path=args.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=args.model_artifact_manifest_sha256,
         torch_dtype=args.torch_dtype,
         device_map=args.device_map,
         per_drive=args.per_drive,
@@ -197,6 +203,26 @@ def main() -> int:
 
 def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
     started = time.perf_counter()
+    model_config = ProbeShardConfig(
+        model_id=config.model_id,
+        worker_id="local-eta-epsilon",
+        audit_id="open-weight-eta-epsilon-bridge",
+        job_id="manual-stage7-cpl2-equivalent",
+        layer_start=0,
+        layer_end=0,
+        shard_id="eta-epsilon",
+        assigned_methods=("foundation_probe", "eta_epsilon_bridge"),
+        expected_outputs=("foundation_readout", "eta_epsilon_likelihood_bridge", "worker_evidence_manifest"),
+        result_path=config.output,
+        model_revision=config.model_revision,
+        model_artifact_manifest_path=config.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=config.model_artifact_manifest_sha256,
+        torch_dtype=config.torch_dtype,
+        device_map=config.device_map,
+        max_scenarios=max(1, config.per_drive * 7),
+        max_length=config.max_length,
+        trust_remote_code=config.trust_remote_code,
+    )
     scenario_meta = load_stage7_scenario_meta(config.scenario_path)
     with np.load(config.dataset, allow_pickle=True) as data:
         features = data["features"].astype(np.float32)
@@ -246,26 +272,7 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
     if not selected_indices:
         raise RuntimeError("No Stage 7 same-register drive-cycle test rows survived selection/filtering.")
 
-    model_config = ProbeShardConfig(
-        model_id=config.model_id,
-        worker_id="local-eta-epsilon",
-        audit_id="open-weight-eta-epsilon-bridge",
-        job_id="manual-stage7-cpl2-equivalent",
-        layer_start=0,
-        layer_end=0,
-        shard_id="eta-epsilon",
-        assigned_methods=("foundation_probe", "eta_epsilon_bridge"),
-        expected_outputs=("foundation_readout", "eta_epsilon_likelihood_bridge", "worker_evidence_manifest"),
-        result_path=config.output,
-        model_revision=config.model_revision,
-        torch_dtype=config.torch_dtype,
-        device_map=config.device_map,
-        max_scenarios=len(selected_indices),
-        max_length=config.max_length,
-        trust_remote_code=config.trust_remote_code,
-    )
     lm, tokenizer, model_info = load_open_weight_model(model_config)
-
     conditions = (
         "none",
         "gold_readable",

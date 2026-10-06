@@ -1,0 +1,153 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.unresolved.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "policy": {
+    "blocking": "Must be corrected and re-reviewed before submission or lead-owned registry integration.",
+    "strengthening": "Does not invalidate the current Ring-4 draft, but would improve rigor, traceability, or terminology.",
+    "closure": "This review package closes no upstream obligation and promotes no claim."
+  },
+  "blocking_required_change_count": 3,
+  "blocking_required_changes": [
+    {
+      "id": "RFM-BLK-001",
+      "severity": "HIGH",
+      "category": "MATHEMATICAL SCOPE",
+      "affected": [
+        "PUB-P1-DEF-001",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md:20",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md:83"
+      ],
+      "finding": "The draft alternates between a finite category and the category whose objects are named finite sets. The latter is not a finite category unless a finite object universe is fixed.",
+      "required_change": "Choose and state one type: either the category of finite sets and total functions, or a finite full/subcategory on a frozen finite catalog of named carriers. Reconcile the abstract, definition, claim title, Python scope, and Lean specialization.",
+      "acceptance_evidence": "Revised text and claim matrix with one explicit object universe, followed by category/interface review against stable hashes.",
+      "status": "OPEN"
+    },
+    {
+      "id": "RFM-BLK-002",
+      "severity": "MEDIUM",
+      "category": "EVIDENCE METADATA",
+      "affected": ["PUB-P1-THM-004"],
+      "finding": "The claim's proof_status says STANDARD_RESULT_CITED, but the claim has no citation reference and the citation ledger contains no finite-semigroup source.",
+      "required_change": "Either relabel the evidence as DIRECT ELEMENTARY PROOF / BOUNDED EXECUTABLE VALIDATION / FORMALIZATION OPEN or add and use an appropriate primary or authoritative semigroup citation.",
+      "acceptance_evidence": "Claim/evidence/citation records agree and all citation IDs resolve in the regenerated manifest-bound package.",
+      "status": "OPEN"
+    },
+    {
+      "id": "RFM-BLK-003",
+      "severity": "MEDIUM",
+      "category": "SOURCE STATUS",
+      "affected": [
+        "CIT-OPENAI-TEN-ADVANCES-2026",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md:366",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md:433"
+      ],
+      "finding": "The reviewed source set contains no peer-review receipt, but absence of a receipt does not prove the categorical status label unrefereed.",
+      "required_change": "Use PEER-REVIEW STATUS UNVERIFIED / NO RECEIPT IN REVIEWED SOURCE SET, unless attributable evidence establishes a more specific status.",
+      "acceptance_evidence": "Revised citation and paper wording that makes only source-supported status claims.",
+      "status": "OPEN"
+    }
+  ],
+  "strengthening_suggestion_count": 7,
+  "strengthening_suggestions": [
+    {
+      "id": "RFM-STR-001",
+      "category": "PROOF EXPOSITION",
+      "affected": ["PUB-P1-THM-004"],
+      "suggestion": "Add a three-sentence index/period proof, including the nonempty finite-semigroup convention, even if a reference is also added.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-002",
+      "category": "TERMINOLOGY",
+      "affected": ["PUB-P1-THM-006"],
+      "suggestion": "Rename finite Hutchinson-set stabilization to finite union-image set-operator stabilization so the finite greatest-fixed-subset result cannot be mistaken for the metric Hutchinson attractor theorem.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-003",
+      "category": "HYPOTHESIS PRECISION",
+      "affected": ["PUB-P1-MODEL-001"],
+      "suggestion": "When invoking the classical attractor theorem, state that K and the contraction family are nonempty, the family is finite, and the Hausdorff metric is on nonempty compact subsets.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-004",
+      "category": "CITATION COMPLETENESS",
+      "affected": ["PUB-P3-DEF-001"],
+      "suggestion": "Add an authoritative Fisher-information-geometry source if the final publication teaches the Fisher-Rao formula instead of merely reporting the registered PCBA baseline.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-005",
+      "category": "CLAIM PARTITION",
+      "affected": ["PUB-P3-MSC-001"],
+      "suggestion": "Separate the internally rechecked source proposition from the still-open CAS specialization. One record can state the source theorem and exact hypotheses; a second can remain a CAS transfer conjecture with no intertwiner certificate.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-006",
+      "category": "COUNTEREXAMPLE PRECISION",
+      "affected": ["PUB-P3-CTR-001"],
+      "suggestion": "State the false weakened theorem explicitly, including Lambda as a free retained parameter, or call the example a parameter-underdetermination/nonrealizability witness rather than leaving the weakening implicit.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    },
+    {
+      "id": "RFM-STR-007",
+      "category": "BIBLIOGRAPHIC NORMALIZATION",
+      "affected": ["CIT-BJORCK-GOLUB-1973", "CIT-WELCH-1974"],
+      "suggestion": "Normalize Åke Björck's diacritics and either include Welch's publisher suffix '(Corresp.)' or document the shortened-title convention.",
+      "status": "OPEN / NONBLOCKING FOR RING-4 RETENTION"
+    }
+  ],
+  "retained_upstream_obligation_count": 24,
+  "retained_upstream_obligations": [
+    "PUB-FORMAL-P1-001",
+    "PUB-FORMAL-P1-002",
+    "PUB-FORMAL-P1-003",
+    "PUB-FORMAL-P1-004",
+    "PUB-FORMAL-P1-005",
+    "PUB-FORMAL-P1-006",
+    "PUB-FORMAL-P1-007",
+    "PUB-FORMAL-P1-008",
+    "PUB-FORMAL-P1-009",
+    "PUB-FORMAL-P1-010",
+    "PUB-FORMAL-P3-001",
+    "PUB-FORMAL-P3-002",
+    "PUB-FORMAL-P3-003",
+    "PUB-FORMAL-P3-004",
+    "PUB-FORMAL-P3-005",
+    "PUB-FORMAL-P3-006",
+    "PUB-FORMAL-X-001",
+    "PUB-FORMAL-X-002",
+    "PUB-FORMAL-X-003",
+    "PUB-FORMAL-X-004",
+    "PUB-FORMAL-X-005",
+    "PUB-FORMAL-X-006",
+    "PUB-FORMAL-X-007",
+    "PUB-FORMAL-X-008"
+  ],
+  "review_effect_on_selected_upstream_obligations": [
+    {
+      "id": "PUB-FORMAL-P3-002",
+      "effect": "A bounded internal reproof found Proposition 4.1 correct in the exact source artifact. Qualified external/operator-coding review and any lead-owned closure decision remain OPEN."
+    },
+    {
+      "id": "PUB-FORMAL-X-002",
+      "effect": "The formal-math lane now has one bounded independent internal adversarial review. Cross-lane reconciliation and lead-owned completion remain OPEN."
+    },
+    {
+      "id": "PUB-FORMAL-X-005",
+      "effect": "All 15 registered citations received an internal identity/use audit. Novelty review, legal review, and lead-owned completion remain OPEN."
+    }
+  ],
+  "summary": {
+    "proof_invalidating_errors": 0,
+    "blocking_changes_before_submission_or_registry_integration": 3,
+    "strengthening_suggestions": 7,
+    "upstream_obligations_closed": 0,
+    "external_review_complete": false,
+    "empirical_work_complete": false
+  },
+  "claim_boundary": "No item in this file grants authority to rewrite the reviewed lane, promote canon, release a product claim, disclose confidential material, submit a paper, or change license status."
+}

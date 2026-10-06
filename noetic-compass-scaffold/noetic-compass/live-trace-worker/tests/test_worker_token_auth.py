@@ -15,6 +15,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.auth import WORKER_TOKEN_ENV, WORKER_TOKEN_HEADER
+from app import main
 from app.main import create_app
 
 _TOKEN = "s3cret-worker-token"
@@ -68,13 +69,23 @@ def test_protected_route_accepts_correct_token(monkeypatch, fresh_client):
     assert r.status_code == 200, r.text
 
 
-@pytest.mark.parametrize("path", ["/health", "/health/realmode"])
-def test_health_paths_exempt_even_with_token_set(monkeypatch, fresh_client, path):
-    # RunPod health checks + the API real-mode proxy must work without the
-    # secret, so health endpoints are exempt from the token gate.
+def test_minimal_liveness_is_exempt_even_with_token_set(monkeypatch, fresh_client):
     monkeypatch.setenv(WORKER_TOKEN_ENV, _TOKEN)
-    r = fresh_client.get(path)
+    r = fresh_client.get("/health")
     assert r.status_code == 200, r.text
+
+
+def test_realmode_diagnostics_require_token_when_auth_enabled(
+    monkeypatch,
+    fresh_client,
+):
+    monkeypatch.setenv(WORKER_TOKEN_ENV, _TOKEN)
+    assert fresh_client.get("/health/realmode").status_code == 401
+    accepted = fresh_client.get(
+        "/health/realmode",
+        headers={WORKER_TOKEN_HEADER: _TOKEN},
+    )
+    assert accepted.status_code == 200
 
 
 def test_token_compare_is_whitespace_tolerant_on_header(monkeypatch, fresh_client):
@@ -87,3 +98,19 @@ def test_token_compare_is_whitespace_tolerant_on_header(monkeypatch, fresh_clien
         headers={WORKER_TOKEN_HEADER: f"  {_TOKEN}  "},
     )
     assert r.status_code == 200, r.text
+
+
+def test_production_startup_requires_token(monkeypatch) -> None:
+    monkeypatch.setattr(main.model_loader, "_is_production_profile", lambda: True)
+    monkeypatch.delenv(WORKER_TOKEN_ENV, raising=False)
+    monkeypatch.setattr(main, "_root_filesystem_is_read_only", lambda: True)
+    with pytest.raises(RuntimeError, match="requires ATLAS_LIVE_WORKER_TOKEN"):
+        main._validate_startup_profile()
+
+
+def test_production_startup_requires_read_only_root(monkeypatch) -> None:
+    monkeypatch.setattr(main.model_loader, "_is_production_profile", lambda: True)
+    monkeypatch.setenv(WORKER_TOKEN_ENV, _TOKEN)
+    monkeypatch.setattr(main, "_root_filesystem_is_read_only", lambda: False)
+    with pytest.raises(RuntimeError, match="read-only root filesystem"):
+        main._validate_startup_profile()

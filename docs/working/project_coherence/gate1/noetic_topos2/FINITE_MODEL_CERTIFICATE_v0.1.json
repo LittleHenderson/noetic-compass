@@ -1,0 +1,44 @@
+{
+  "schema_version": "noetic_topos2.finite_model_certificate.v0.1",
+  "document_status": "INTERNAL FINITE CHECK COMPLETE / INDEPENDENT PROOF REVIEW OPEN",
+  "as_of": "2026-08-04",
+  "model_id": "NT2-CONTEXT-2X2-TRANSVERSE-PARTITIONS",
+  "checker": "src/noetic_topos2/finite_site.py",
+  "test": "tests/noetic_topos2/test_finite_site.py",
+  "claim_boundary": "This is exhaustive execution over one sixteen-object finite context site. It is not proof-assistant verification, external peer review, empirical validation, or a product-claim license.",
+  "expected_result": {
+    "atom_count": 4,
+    "context_count": 16,
+    "proper_global_covers": {
+      "ACBE": true,
+      "RPM": true
+    },
+    "jointly_exhaustive": {
+      "ACBE": true,
+      "RPM": true
+    },
+    "pullback_stable": {
+      "ACBE": true,
+      "RPM": true
+    },
+    "representables_are_sheaves": true,
+    "acbe_witness_functorial": true,
+    "rpm_witness_functorial": true,
+    "acbe_witness_is_acbe_sheaf": true,
+    "acbe_witness_is_rpm_sheaf": false,
+    "rpm_witness_is_rpm_sheaf": true,
+    "rpm_witness_is_acbe_sheaf": false,
+    "transverse_refinement_is_singletons": true,
+    "singleton_unmarked_families_coincide": true,
+    "singleton_marked_covers_distinct": true,
+    "marked_cover_roundtrip_stable": true,
+    "marked_pullbacks_bind_parent_provenance": true,
+    "marked_pullbacks_preserve_topology_family": true,
+    "joint_refinement_is_four_singletons": true,
+    "joint_refinement_retains_both_parent_digests": true,
+    "marked_derived_records_resolve": true,
+    "legacy_acbe_identity_forces_maximal_sieve": true,
+    "legacy_rpm_split_epi_forces_identity": true,
+    "all_required_checks_pass": true
+  }
+}

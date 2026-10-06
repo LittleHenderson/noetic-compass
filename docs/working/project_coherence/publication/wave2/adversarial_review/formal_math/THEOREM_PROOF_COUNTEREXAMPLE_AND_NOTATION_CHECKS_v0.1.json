@@ -1,0 +1,183 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.technical_checks.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "reviewed_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+  "check_count": 19,
+  "checks": [
+    {
+      "id": "RFM-CHK-001",
+      "class": "DEFINITION_AND_SCOPE",
+      "subject": "Finite typed-function category",
+      "result": "PASS WITH BLOCKING CLARIFICATION",
+      "analysis": "All finite sets and total functions form a category of finite sets, but not a finite category. A genuinely finite category requires a frozen finite object catalog or another explicit finite object universe.",
+      "finding_refs": ["RFM-BLK-001"]
+    },
+    {
+      "id": "RFM-CHK-002",
+      "class": "THEOREM",
+      "subject": "Typed identity and associativity",
+      "result": "PASS",
+      "analysis": "The equations are pointwise/rfl identities whenever the displayed sources and targets match. The Lean and Python replays passed within their stated scopes.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-003",
+      "class": "FORMAL_INTERFACE",
+      "subject": "Deterministic lift functor language",
+      "result": "PASS AS SCOPED",
+      "analysis": "The Lean module proves entry, basis-action, and relational-support identities. It does not define scalar finite sums, numerical matrix multiplication, arbitrary-vector linearity, or a module-category functor; the draft preserves that boundary.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-004",
+      "class": "THEOREM",
+      "subject": "Maximum-fiber lift norm",
+      "result": "PASS",
+      "analysis": "After ordering the input basis by fibers, A_f^*A_f is a direct sum of J_m blocks. The operator-norm square is therefore max m, trace is |X|, rank(A_f) is |im f|, and A_fA_f^* is the output multiplicity diagonal.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-005",
+      "class": "COUNTEREXAMPLE",
+      "subject": "Two-state constant deterministic lift",
+      "result": "PASS",
+      "analysis": "Direct multiplication verifies idempotence and non-self-adjointness. A^*A has eigenvalues 2 and 0, so the norm is sqrt(2) and A^*A is not a projection; hence A is not a partial isometry or orthogonal projector.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-006",
+      "class": "THEOREM",
+      "subject": "Fixed finite idempotent powers",
+      "result": "PASS WITH EVIDENCE-METADATA CHANGE",
+      "analysis": "For an n-point functional graph, n! exceeds every transient length and is divisible by every cycle length. For one element of a nonempty finite semigroup of size m, eventual powers have index and period at most m, and m! is beyond the index and divisible by the period.",
+      "finding_refs": ["RFM-BLK-002", "RFM-STR-001"]
+    },
+    {
+      "id": "RFM-CHK-007",
+      "class": "ALGORITHM_PROOF",
+      "subject": "Denotational shortlex catalog",
+      "result": "PASS WITH UNIVERSAL FORMALIZATION OPEN",
+      "analysis": "The heap key implements length then declared generator rank. A shorter candidate must be generated from a shorter prefix first; equal-length lexicographic order is inherited from prefix order and generator iteration. First-denotation pruning is therefore sound. The resource guards raise rather than return a partial catalog.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-008",
+      "class": "THEOREM",
+      "subject": "Finite union-image set-operator stabilization",
+      "result": "PASS",
+      "analysis": "H is monotone and H(X) is a subset of X, so H^r(X) descends. If B=H(B), then B=H^r(B) is contained in H^r(X) for every r, so the stabilized set is the greatest fixed subset. Independent enumeration covered 394 small families.",
+      "finding_refs": ["RFM-STR-002"]
+    },
+    {
+      "id": "RFM-CHK-009",
+      "class": "THEOREM_INTERFACE",
+      "subject": "Metric Hutchinson attractor boundary",
+      "result": "PASS WITH HYPOTHESIS-STATING SUGGESTION",
+      "analysis": "Compactness and certified contraction constants are sufficient in the standard theorem, but the final invocation should explicitly state a nonempty compact metric carrier, a finite nonempty contraction family, and the hyperspace of nonempty compact subsets.",
+      "finding_refs": ["RFM-STR-003"]
+    },
+    {
+      "id": "RFM-CHK-010",
+      "class": "LEMMA",
+      "subject": "Norm-aware two-factor approximation",
+      "result": "PASS",
+      "analysis": "Insert and subtract g_tilde f, then apply the triangle inequality and operator-norm submultiplicativity. The order and surrounding norms in the displayed estimate are correct.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-011",
+      "class": "THEOREM",
+      "subject": "Normalized projector Gram kernel",
+      "result": "PASS",
+      "analysis": "The feature map P_x/sqrt(d) in the Hilbert-Schmidt space gives positive semidefiniteness. tr(P_xP_y)=||P_yP_x||_HS^2 lies in [0,d], and duplicate or linearly dependent projectors explain why strict positive definiteness is not guaranteed.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-012",
+      "class": "THEOREM",
+      "subject": "Principal angles and chordal distance",
+      "result": "PASS",
+      "analysis": "The singular values of restricted orthogonal projections are cos(theta_r), giving the trace and chordal identities under the paper's stated convention. The scalar kernel loses the full angle spectrum as stated.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-013",
+      "class": "THEOREM",
+      "subject": "Centered-projector simplex bound",
+      "result": "PASS",
+      "analysis": "For Q_i=P_i-(d/D)I, ||Q_i||_HS^2=d(D-d)/D. Expanding ||sum Q_i||^2 and averaging off-diagonal pairs yields the displayed lower bound; the rearranged N bound is valid only when mu<d/D, exactly as stated.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-014",
+      "class": "THEOREM",
+      "subject": "Projector-feature Welch bound",
+      "result": "PASS",
+      "analysis": "Real symmetric matrices have real dimension D(D+1)/2 and complex Hermitian matrices have real dimension D^2. Applying the Welch bound with these ambient upper bounds gives a valid, possibly loose, necessary condition.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-015",
+      "class": "PRIMARY_SOURCE_PROOF",
+      "subject": "OpenAI manuscript Chapter 2 Proposition 4.1",
+      "result": "PASS IN BOUNDED INTERNAL REPROOF / CAS TRANSFER STILL OPEN",
+      "analysis": "On printed pages 46-47, K(x,y)=tr(P_xP_y)>=0 and Theta_x=(ell_x tensor id)P_x-sqrt(Lambda)BP_x give <Theta_x,Theta_y>=(t(x,y)-Lambda)K(x,y). Summing (t-s)K=(Lambda-s)K+<Theta_x,Theta_y> over C^2, bounding off-diagonal terms by zero, retaining the nonnegative Gram norm, and applying ||sum P_x||_HS^2>=(|C|d)^2/D proves the bound. No dimension, sign, adjoint, or inequality reversal defect was found.",
+      "finding_refs": ["RFM-STR-005"]
+    },
+    {
+      "id": "RFM-CHK-016",
+      "class": "COUNTEREXAMPLE",
+      "subject": "Weakened rank-and-coherence transfer",
+      "result": "PASS WITH PRESENTATION SUGGESTION",
+      "analysis": "For D=d=1, P_1=P_2=I, orthogonal ell_1 and ell_2, s=0, and a free Lambda=1, the proposed weakened inequality says 2<=1. Moreover an isometry B would be a unit vector b in W and the omitted condition would require <b,ell_1>=<b,ell_2>=1, impossible for orthogonal unit vectors. Thus the example isolates the missing hypothesis rather than attacking the full source proposition.",
+      "finding_refs": ["RFM-STR-006"]
+    },
+    {
+      "id": "RFM-CHK-017",
+      "class": "NOTATION_INTERFACE",
+      "subject": "Simplex and projector profiles",
+      "result": "PASS",
+      "analysis": "Delta^o_39, g_FR, the mixed PCBA address, and P_x match the symbol registry. The draft does not equate the Fisher-Rao metric with the projector kernel or replace the baseline.",
+      "finding_refs": ["RFM-STR-004"]
+    },
+    {
+      "id": "RFM-CHK-018",
+      "class": "NOTATION_INTERFACE",
+      "subject": "Projector overlap and code-coordinate symbols",
+      "result": "PASS",
+      "analysis": "The draft distinguishes normalized k(x,y)=tr(P_xP_y)/d, the source proof's unnormalized K(x,y)=tr(P_xP_y), and code-coordinate t(x,y)=<ell_x,ell_y>. Lambda, D, and d retain the source proposition's roles.",
+      "finding_refs": []
+    },
+    {
+      "id": "RFM-CHK-019",
+      "class": "NOTATION_AND_SEMANTIC_INTERFACE",
+      "subject": "TKS/CAS typed boundaries",
+      "result": "PASS / MIGRATION OPEN",
+      "analysis": "TKS Worlds, CAS Domains, CAS Registers, TKS Foundations, CAS Core Drives, typed generator catalogs, linear lifts, simplex addresses, and projector profiles remain distinct. No implementation name or digit is used as a semantic crosswalk.",
+      "finding_refs": []
+    }
+  ],
+  "executable_replay": {
+    "existing_tks_v8_tests": "20 / PASS",
+    "existing_tks_v8_gate1": "PASS",
+    "existing_lean_gate1": "PASS / 16 axiom audits",
+    "existing_integrated_gate1": "PASS / status remains OPEN",
+    "independent_small_model_checks": {
+      "finite_set_operator_families": 394,
+      "finite_endomaps": 289,
+      "random_projector_profiles": 160,
+      "valid_proposition_4_1_equality_examples": 1,
+      "weakened_premise_nonrealizability_examples": 1,
+      "result": "PASS"
+    }
+  },
+  "summary": {
+    "checks": 19,
+    "proof_invalidating_failures": 0,
+    "blocking_scope_or_metadata_findings": 2,
+    "open_formalization_or_transfer_boundaries_preserved": true,
+    "notation_collisions_found": 0
+  },
+  "claim_boundary": "The bounded reproof and executable checks do not constitute external specialist review, full formal verification, semantic validation, an empirical result, or theorem admission."
+}

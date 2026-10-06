@@ -1,0 +1,365 @@
+{
+  "schema_version": "project_coherence.publication.wave2.cas_harness2_evidence_map.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "inventory_date_utc": "2026-08-06",
+  "evidence_rule": "Evidence classes do not automatically promote. Source presence is not execution; local regression is not hosted state; hosted state is not a joined experiment; a joined experiment is not independent scientific validation; scientific validation is not safety, product, licensing, canon, or disclosure authority.",
+  "evidence_classes": [
+    {
+      "id": "EC0",
+      "name": "SOURCE_IDENTITY",
+      "meaning": "Exact bytes, path, SHA-256, byte count, or canonical record identity are present.",
+      "maximum_claim": "The identified source existed in the bound snapshot.",
+      "not_evidence_of": ["execution", "correctness", "hosted state", "authentication", "WORM", "scientific truth", "product readiness", "license", "disclosure"]
+    },
+    {
+      "id": "EC1",
+      "name": "LOCAL_STRUCTURAL_REGRESSION",
+      "meaning": "Bound source passed declared repository-local checks in a mutable local host environment.",
+      "maximum_claim": "The exact local bounded control receipt passed.",
+      "not_evidence_of": ["same-run executed-node identity", "hermeticity", "independence", "joined experiment", "causality", "replication", "product readiness"]
+    },
+    {
+      "id": "EC2",
+      "name": "PRESERVED_NEGATIVE_EVIDENCE",
+      "meaning": "A failure, contradiction, attack, incomplete state, or adverse chronology is retained by exact identity.",
+      "maximum_claim": "The named adverse observation is part of the evidence record.",
+      "not_evidence_of": ["current failure in every environment", "repair acceptance", "positive scientific result", "product verdict"]
+    },
+    {
+      "id": "EC3",
+      "name": "EXTERNAL_MUTABLE_OBSERVATION",
+      "meaning": "A provider, deployment, or production dashboard reported a time-indexed state outside this bound worktree.",
+      "maximum_claim": "The exact external snapshot contains the reported observation, subject to recheck.",
+      "not_evidence_of": ["current provider truth", "Gate 5 admission", "joined protocol", "scientific validity", "human approval"]
+    },
+    {
+      "id": "EC4",
+      "name": "JOINED_RUN_EVIDENCE",
+      "meaning": "One authorized exact execution is transactionally bound to its frozen design, identity, ordering, outcomes, and packet.",
+      "maximum_claim": "The exact joined run occurred under its admitted protocol.",
+      "current_state": "ABSENT / NOT_STARTED",
+      "not_evidence_of": ["independent replication", "generalization", "safety", "product readiness", "license", "disclosure"]
+    },
+    {
+      "id": "EC5",
+      "name": "INDEPENDENT_SCIENTIFIC_VALIDATION",
+      "meaning": "Independent numerical replay, controls, falsifiers, held-out replication, construct/causal review, and claim-language review are complete.",
+      "maximum_claim": "Only the exact reviewed scientific statement within its scope.",
+      "current_state": "ABSENT / OPEN",
+      "not_evidence_of": ["product readiness", "safety certification", "license", "canon admission", "disclosure"]
+    },
+    {
+      "id": "EC6",
+      "name": "WORM_AND_TRUSTED_ORDERING",
+      "meaning": "Exact-version retained bytes, retention state, trust root, time/order, nonce, and one-use transitions are independently verified.",
+      "maximum_claim": "Only the exact retained object/version and ordering facts covered by the receipt and policy.",
+      "current_state": "NOT JOINED TO GATE 5 / OPEN",
+      "not_evidence_of": ["semantic truth", "scientific validity", "product ACCEPT", "license", "disclosure"]
+    },
+    {
+      "id": "EC7",
+      "name": "PRODUCT_AUTHORITY",
+      "meaning": "Current live product, security, operations, commercial, privacy, compliance, support, incident, and human acceptance gates are satisfied.",
+      "maximum_claim": "Only the exact approved product statement at the exact current deployment identity.",
+      "current_state": "OPEN IN THIS RESEARCH LANE",
+      "not_evidence_of": ["scientific truth", "theorem admission", "public disclosure without separate approval"]
+    },
+    {
+      "id": "EC8",
+      "name": "LICENSE_CANON_DISCLOSURE_AUTHORITY",
+      "meaning": "Explicit qualified authorities approve an exact claim, canon transition, or release package and wording.",
+      "maximum_claim": "Only the exact scoped decision recorded by the relevant authority.",
+      "current_state": "NOT LICENSED / CANON EFFECT NONE / HELD",
+      "not_evidence_of": ["broader claims", "unstated versions", "retroactive scientific truth"]
+    }
+  ],
+  "bound_source_anchors": [
+    {
+      "id": "EA-SRC-001",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "bytes": 29793,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-002",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "bytes": 17083,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-003",
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101",
+      "bytes": 12459,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-004",
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "bytes": 7779,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-005",
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "bytes": 16355,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-006",
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "sha256": "1331B9646B6843DEC8352B10870392E46A00BB7574A0CA1981FA970D5D41CC14",
+      "bytes": 60794,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-007",
+      "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+      "bytes": 90499,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-008",
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD",
+      "bytes": 25963,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-009",
+      "path": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+      "sha256": "99F4DA7F58C2BA38C62D6E4D04040416DB57628B2D8E3373DCD989D622299DA9",
+      "bytes": 13747,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-010",
+      "path": "scripts/verify_project_coherence_gate5.py",
+      "sha256": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7",
+      "bytes": 137723,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-011",
+      "path": "src/cas_harness_v2/preregistration.py",
+      "sha256": "C44D56ADDA2F05897346156D1C9352B035FABE7D02B2A309CCA17EB18FD20055",
+      "bytes": 44598,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-012",
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
+      "bytes": 29934,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-013",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_production_todo.md",
+      "sha256": "0E290E9C69A429965D7983CAF622CA2BEF7878026E2D156D393707D29FDAF487",
+      "bytes": 2054992,
+      "evidence_class": "EC3",
+      "source_state": "READ_ONLY MUTABLE SNAPSHOT / NOT JOINED"
+    }
+  ],
+  "current_local_receipt": {
+    "id": "EA-RUN-LOCAL-001",
+    "evidence_class": "EC1",
+    "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -I -B scripts/verify_project_coherence_gate5.py",
+    "verified_on_utc": "2026-08-06",
+    "elapsed_seconds": 204.9,
+    "exit_code": 0,
+    "result": "PASS",
+    "gate5_artifact_count": 325,
+    "syntax_checked_python_count": 296,
+    "shadow_scan_path_count": 1898,
+    "gate4_artifact_count": 54,
+    "claim_record_count": 11,
+    "historical_file_count": 537,
+    "historical_bytes": 95945579,
+    "harness_v2_tests": 113,
+    "harness_v2_subtests": 61,
+    "worker_tests": 364,
+    "numeric_redteam_tests": 32,
+    "api_fleet_launcher_tests": 76,
+    "review_criteria": 47,
+    "required_open_boundaries": 22,
+    "dependency_security": "OPEN_SECURITY / HELD",
+    "experimental_execution": "NOT_STARTED",
+    "gate5_status": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"
+  },
+  "evidence_clusters": [
+    {
+      "id": "EA-CLUSTER-001",
+      "name": "Governance and claim boundary",
+      "evidence_classes": ["EC0"],
+      "matrix_entry_refs": ["H2-THM-003", "H2-CTRL-013", "H2-CLAIM-001", "H2-CLAIM-002", "H2-GOV-001", "H2-GOV-002", "H2-AUTH-001"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-002", "EA-SRC-003", "EA-SRC-004"],
+      "supported_statement": "The controlling records keep successor work Ring 4, NOT LICENSED, HELD, noncanonical, and without automatic product authority.",
+      "boundary": "Source governance can prevent an in-scope software promotion but is not itself external human approval."
+    },
+    {
+      "id": "EA-CLUSTER-002",
+      "name": "Strict input and preregistration controls",
+      "evidence_classes": ["EC0", "EC1"],
+      "matrix_entry_refs": ["H2-CTRL-001", "H2-CTRL-002", "H2-CTRL-003", "H2-CTRL-004", "H2-CTRL-005", "H2-CTRL-006"],
+      "source_refs": ["EA-SRC-005", "EA-SRC-011", "EA-RUN-LOCAL-001"],
+      "supported_statement": "The bound implementation and local regressions enforce the declared strict-input, claim-binding, fixed-plan, unit, control, and identity contracts.",
+      "boundary": "No independent statistics, semantic validation, authentication, or experiment follows from schema acceptance."
+    },
+    {
+      "id": "EA-CLUSTER-003",
+      "name": "Amendment and outcome-access controls",
+      "evidence_classes": ["EC0", "EC1"],
+      "matrix_entry_refs": ["H2-CTRL-007", "H2-CTRL-008", "H2-TRUST-001"],
+      "source_refs": ["EA-SRC-005", "EA-SRC-011", "EA-RUN-LOCAL-001"],
+      "supported_statement": "Bound process-local chain and event controls reject the tested mutation, ordering, cycle, skipped-link, and post-access cases.",
+      "boundary": "Trusted time, durable order, WORM, nonce consumption, replay prevention, and selective-reporting control remain absent."
+    },
+    {
+      "id": "EA-CLUSTER-004",
+      "name": "Evidence Packet v2 and assessment separation",
+      "evidence_classes": ["EC0", "EC1"],
+      "matrix_entry_refs": ["H2-CTRL-009", "H2-CTRL-010", "H2-CTRL-011", "H2-CTRL-012", "H2-CTRL-014", "H2-ENG-004", "H2-ENG-005"],
+      "source_refs": ["EA-SRC-005", "EA-SRC-012", "EA-RUN-LOCAL-001"],
+      "supported_statement": "The local packet contract resolves exact bytes, checks split arithmetic, preserves coherent negative evidence, rejects v1 auto-upgrade, and separates assessment axes.",
+      "boundary": "Semantic equivalence, authenticated roles, global provenance, downstream authority, and scientific eligibility remain open."
+    },
+    {
+      "id": "EA-CLUSTER-005",
+      "name": "Worker identity, intervention, and numerical controls",
+      "evidence_classes": ["EC0", "EC1", "EC2"],
+      "matrix_entry_refs": ["H2-WORKER-001", "H2-WORKER-002", "H2-WORKER-003", "H2-SCI-005", "H2-SCI-006"],
+      "source_refs": ["EA-SRC-006", "EA-SRC-008", "EA-RUN-LOCAL-001"],
+      "supported_statement": "The bound worker source and local tests preserve exact model predicates, structural intervention non-attribution, fail-closed fallback, and the named numerical attack chronology.",
+      "boundary": "No admitted GPU run, coordinate semantics, causal effect, selectivity, safety, utility, or generalization is established."
+    },
+    {
+      "id": "EA-CLUSTER-006",
+      "name": "Historical recovery and negative evidence",
+      "evidence_classes": ["EC0", "EC1", "EC2"],
+      "matrix_entry_refs": ["H2-HIST-001", "H2-HIST-002", "H2-HIST-003"],
+      "source_refs": ["EA-SRC-006", "EA-SRC-008", "EA-RUN-LOCAL-001"],
+      "supported_statement": "The exact bounded V1-V4 recovery and its known failures are preserved and locally reverified.",
+      "boundary": "The recovery is not a current v2 packet, complete historical environment, scientific validation, or production-readiness receipt."
+    },
+    {
+      "id": "EA-CLUSTER-007",
+      "name": "Gate 4 dependency and Gate 5 manifest closure",
+      "evidence_classes": ["EC0", "EC1"],
+      "matrix_entry_refs": ["H2-INT-001", "H2-INT-002", "H2-INT-003", "H2-RECEIPT-001"],
+      "source_refs": ["EA-SRC-006", "EA-SRC-007", "EA-SRC-010", "EA-RUN-LOCAL-001"],
+      "supported_statement": "The current local verifier passed exact repository closure, transitive Gate 4, declared tests, and postflight rehash while preserving both gates as open.",
+      "boundary": "Static closure is not a signature, hermetic runner, semantic correctness, acceptance, license, or disclosure."
+    },
+    {
+      "id": "EA-CLUSTER-008",
+      "name": "Dependency and container candidate",
+      "evidence_classes": ["EC0", "EC1", "EC2"],
+      "matrix_entry_refs": ["H2-ENG-002", "H2-ENG-003", "H2-SCI-006", "H2-PROV-001"],
+      "source_refs": ["EA-SRC-009", "EA-RUN-LOCAL-001"],
+      "supported_statement": "A digest-bound patched candidate and bounded local preflight observations exist.",
+      "boundary": "Raw external evidence is absent; seven findings remain; the direct scan is incomplete; no independent rebuild or real GPU forward exists; OPEN_SECURITY remains controlling."
+    },
+    {
+      "id": "EA-CLUSTER-009",
+      "name": "Product-side source surfaces",
+      "evidence_classes": ["EC0", "EC1"],
+      "matrix_entry_refs": ["H2-HOST-001", "H2-WORM-001"],
+      "source_refs": ["EA-SRC-007"],
+      "supported_statement": "The manifest includes product-side audit, worker, object-store, evidence-anchor, fleet, retention, human-attestation, and publication-authorization source and selected local tests.",
+      "boundary": "Source presence and local tests do not prove hosted configuration, current provider state, WORM, human approval, or joined scientific execution."
+    },
+    {
+      "id": "EA-CLUSTER-010",
+      "name": "External production dashboard",
+      "evidence_classes": ["EC3"],
+      "matrix_entry_refs": ["H2-HOST-002", "H2-CLAIM-002"],
+      "source_refs": ["EA-SRC-013"],
+      "supported_statement": "A mutable external dashboard snapshot contains time-indexed hosted and product-gate observations under other identities.",
+      "boundary": "This lane did not reverify provider state, and the snapshot is not joined to Gate 5 preregistration, outcome access, or Evidence Packet v2."
+    },
+    {
+      "id": "EA-CLUSTER-011",
+      "name": "Joined-run and WORM evidence",
+      "evidence_classes": ["EC4", "EC6"],
+      "matrix_entry_refs": ["H2-TRUST-001", "H2-TRUST-002", "H2-ENG-001", "H2-WORM-001"],
+      "source_refs": ["EA-SRC-005", "EA-SRC-006", "EA-SRC-008"],
+      "supported_statement": "The missing transaction and its closure requirements are explicitly specified in the delta.",
+      "boundary": "No joined-run or Gate 5 WORM receipt exists; these evidence classes are absent."
+    },
+    {
+      "id": "EA-CLUSTER-012",
+      "name": "Scientific validation",
+      "evidence_classes": ["EC5"],
+      "matrix_entry_refs": ["H2-SCI-001", "H2-SCI-002", "H2-SCI-003", "H2-SCI-004", "H2-SCI-005", "H2-SCI-006", "H2-SCI-007", "H2-RESULT-001"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-006", "EA-SRC-008"],
+      "supported_statement": "Scientific prerequisites and noncausal wording are enumerated.",
+      "boundary": "No experimental, audit, replication, causal, safety, utility, or external-review conclusion exists."
+    },
+    {
+      "id": "EA-CLUSTER-013",
+      "name": "Product, safety, license, and canon",
+      "evidence_classes": ["EC7", "EC8"],
+      "matrix_entry_refs": ["H2-CLAIM-001", "H2-CLAIM-002", "H2-CLAIM-003", "H2-GOV-001", "H2-DATA-001"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-002", "EA-SRC-004", "EA-SRC-013"],
+      "supported_statement": "These authority paths are explicitly separate and remain open or not licensed in this lane.",
+      "boundary": "No research artifact in this package supplies product ACCEPT, safety, clinical, regulatory, license, or canon authority."
+    },
+    {
+      "id": "EA-CLUSTER-014",
+      "name": "Disclosure and reproducibility package",
+      "evidence_classes": ["EC8"],
+      "matrix_entry_refs": ["H2-GOV-002", "H2-GOV-003", "H2-PROV-001"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-004"],
+      "supported_statement": "A held internal draft, exact source inventory, and future private replay requirements exist.",
+      "boundary": "No public-release authorization, rights clearance, independent replay, authorship decision, submission, or peer-review acceptance exists."
+    }
+  ],
+  "preserved_negative_evidence": [
+    "Historical v3 committed-LF versus terminal-CRLF byte-identity inconsistency",
+    "Historical v3 wrong-layer control ceiling failure and non-reusable/no-retry state",
+    "Historical v4 ZeroNetworkGuard versus CompatibleZeroNetworkGuard startup defect",
+    "Historical model-free receipt: 43 passed / 4 failed",
+    "Restored v1 worker receipt: 31 failed from absent frozen fixture dependencies",
+    "Intervention coordinate-space mismatch reproducer",
+    "RNG-only output drift and hidden mutable-model-state counterexamples",
+    "Nonfinite, geometry, dtype, rank, shape, device, hook-cardinality, gain, and aliasing attack cases",
+    "Post-validation public-receipt assignment mutation reproducer",
+    "Concurrent Gate 5 manifest mutation caused fail-closed verifier exit",
+    "External build/SBOM/SLSA/scanner raw payloads not retained",
+    "Package scan completed with 3 medium and 4 low unfixed findings",
+    "Direct image/filesystem scan incomplete / pending",
+    "No real GPU forward, joined experiment, Evidence Packet v2 result, audit, or replication"
+  ],
+  "joined_run_minimum_evidence": [
+    "Exact preregistration and final amendment-chain bytes",
+    "Non-caller-selected run authority, nonce, one-use consumption, and execution window",
+    "Exact source, container, dependency, model, tokenizer, data, analysis, runtime, hardware, and numerical-policy identities",
+    "Authenticated executor and independently controlled auditor identities",
+    "Same-run executed protocol-node receipt",
+    "All raw worker events, control outcomes, failures, exclusions, missingness, and result artifacts",
+    "Durable trusted completion and first outcome-access ordering",
+    "Complete anti-selective-reporting registry entry",
+    "Evidence Packet v2 with no caller-selected authoritative status",
+    "Exact-version WORM readback when retention is required"
+  ],
+  "bound_source_anchor_count": 13,
+  "evidence_cluster_count": 14,
+  "evidence_class_count": 9,
+  "closure_statement": "This map records what the current evidence can and cannot support. Only EC0, EC1, EC2, and a contextual EC3 snapshot are present. EC4 through EC8 remain absent, open, not licensed, held, or separately governed as stated."
+}
