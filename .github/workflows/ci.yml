@@ -18,7 +18,10 @@ jobs:
   blueprint_control:
     name: Render Blueprint control (offline)
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # This job also runs every cas_rpu / ccb_r1 suite; it took 246-267 s before the
+    # session-generator, lesson and bundle-checker suites were added and now needs
+    # more than the 5 minutes it had (the gate failed at exactly 5:00 on 2026-10-06).
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
 
