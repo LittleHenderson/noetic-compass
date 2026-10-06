@@ -84,7 +84,7 @@ from foundations import (  # noqa: E402
     parse_subfoundation,
     reasoning_profile,
 )
-from workspace import Proposition, Workspace  # noqa: E402
+from workspace import ASSERTIVE, Proposition, Workspace  # noqa: E402
 
 
 class Phase(str, Enum):
@@ -275,12 +275,47 @@ class ReasoningProcessor:
     # ---- the cycle -------------------------------------------------------
 
     def run(self, problem: Problem) -> Episode:
+        """One problem, one fresh workspace. The original entry point.
+
+        Loads the problem's premises into a new `Workspace` and reasons over
+        it. For a workspace that outlives the episode -- an organism's -- use
+        `run_in`, which this is a thin shell around.
+        """
         ws = Workspace(closed_world=problem.closed_world)
+        for subject, relation, obj in problem.premises:
+            ws.fact(subject, relation, obj)
+        for subject, relation, obj in problem.negated_premises:
+            ws.fact(subject, relation, obj, negated=True)
+        return self.run_in(ws, problem)
+
+    def run_in(
+        self,
+        ws: Workspace,
+        problem: Problem,
+        *,
+        profile: FoundationProfile | None = None,
+    ) -> Episode:
+        """The ten phases against a workspace the caller already holds.
+
+        This is what makes an organism possible: the workspace persists across
+        episodes, so conclusions landed earlier are *held*, retractions since
+        then have already cascaded, and this episode reports only the gaps it
+        itself hit (`ws.lacunae(since=mark)`).
+
+        `profile` lets a caller supply this episode's ambition. It reaches
+        PRIME, COMPARE and the RPM Desire gate -- and nothing else. The
+        evaluation banks cannot take it; see the bias-firewall tests.
+
+        Every exit sweeps the route hypotheses `^8` recorded this episode
+        (`ws.sweep("^8")`), so the bank never re-triggers on its own output.
+        """
+        prof = profile or self.profile
         trace: list[Step] = []
         bank_trace = BankTrace()
         backtracks: list[str] = []
         decompositions: list[Decomposition] = []
         tick = 0
+        loaded = len(problem.premises) + len(problem.negated_premises)
 
         def log(phase: Phase, note: str, **data) -> None:
             nonlocal tick
@@ -288,6 +323,7 @@ class ReasoningProcessor:
             trace.append(Step(tick, phase, PHASE_DOMAIN[phase], note, data))
 
         def finish(terminal: Terminal, answer: str, note: str = "", **kw) -> Episode:
+            ws.sweep("^8")
             return Episode(
                 problem=problem,
                 terminal=terminal,
@@ -297,36 +333,28 @@ class ReasoningProcessor:
                 candidates=kw.pop("candidates", []),
                 decompositions=decompositions,
                 backtracks=backtracks,
-                profile=self.profile,
-                drive_totals=self.profile.drive_totals(),
+                profile=prof,
+                drive_totals=prof.drive_totals(),
                 note=note,
                 **kw,
             )
 
-        # 1 FETCH -- premises into the workspace, experience out of memory.
-        for subject, relation, obj in problem.premises:
-            ws.fact(subject, relation, obj)
-        for subject, relation, obj in problem.negated_premises:
-            ws.fact(subject, relation, obj, negated=True)
+        # 1 FETCH -- the workspace is what it is; experience comes out of memory.
         # `C5` is ^5 Female in the Cognitive domain -- accumulated experience,
         # "the Ideas a Mind is composed of". That is the cell a reasoner consults
         # when asking what it already brings to a problem of this kind.
+        mark = ws.mark()
+        held = len(ws.assertive())
         recalled = self.memory.recall(EXPERIENCE_CELL, decay=False)
         log(
             Phase.FETCH,
-            f"{len(problem.premises)} premise(s) loaded; "
+            f"{loaded} premise(s) loaded, {held} proposition(s) held; "
             f"CMB {'lacuna' if recalled.is_lacuna else f'charge {recalled.charge:.2f}'}",
-            premises=len(problem.premises),
+            premises=loaded,
+            held=held,
             lacuna=recalled.is_lacuna,
+            mark=mark,
         )
-
-        if ws.contradictions():
-            log(Phase.PRIME, "premise set is self-contradictory")
-            return finish(
-                Terminal.INADMISSIBLE,
-                "INADMISSIBLE",
-                f"contradictory premises: {', '.join(ws.contradictions())}",
-            )
 
         # 2 PRIME -- the Foundation engines set the target, and the recipe for
         # the outcome says what that target actually costs. The limiting
@@ -335,12 +363,12 @@ class ReasoningProcessor:
         recipe = REASONING_RECIPES[
             "deduction" if not problem.closed_world else "deduction"
         ]
-        yield_t = recipe.theoretical_yield(self.profile)
-        limiting = recipe.limiting_reagent(self.profile)
+        yield_t = recipe.theoretical_yield(prof)
+        limiting = recipe.limiting_reagent(prof)
         log(
             Phase.PRIME,
             f"target {problem.target_channel}; {recipe}; Y_T={yield_t:.3f}, "
-            f"limiting reagent {limiting}; dominant {self.profile.dominant()}",
+            f"limiting reagent {limiting}; dominant {prof.dominant()}",
             target=problem.target_channel,
             theoretical_yield=yield_t,
             limiting_reagent=limiting,
@@ -365,7 +393,16 @@ class ReasoningProcessor:
             # processor would report "I need information" while being unable to
             # say which. Naming the frontier turns the abstention into a
             # request a caller can actually act on.
-            ws.ask(problem.source, problem.relation, problem.target)
+            direct = ws.ask(problem.source, problem.relation, problem.target)
+            denial = ws.props.get(f"~{problem.source}|{problem.relation}|{problem.target}")
+            if direct == "NO" and denial is not None and denial.status in ASSERTIVE:
+                # The claim is held false, as given. That is an answer under
+                # either world assumption, not an admission of ignorance.
+                log(Phase.DECOMPOSE, "^6: the claim is explicitly denied in the premises")
+                log(Phase.COMMIT, "explicit denial: NO")
+                return finish(
+                    Terminal.CONCLUDED, "NO", "explicitly denied", candidates=candidates
+                )
             forward, backward = self._frontiers(ws, problem)
             log(
                 Phase.DECOMPOSE,
@@ -376,7 +413,7 @@ class ReasoningProcessor:
                 backward=backward,
             )
             return self._prerequisite_stop(
-                ws, problem, trace, log, finish, wisdom=0.0, candidates=candidates
+                ws, problem, trace, log, finish, prof, mark, wisdom=0.0, candidates=candidates
             )
 
         # 4-5 DECOMPOSE and INFER, with backtracking across candidates.
@@ -392,10 +429,12 @@ class ReasoningProcessor:
                 f"{len(decomposition.required)} constituent(s) supported",
                 candidate=str(candidate),
                 missing=list(decomposition.missing),
+                contested=list(decomposition.contested),
             )
             if not decomposition.complete:
+                what = "contested" if decomposition.blocked_only_by_dispute else "missing"
                 backtracks.append(
-                    f"{candidate}: missing {', '.join(decomposition.missing)}"
+                    f"{candidate}: {what} {', '.join(decomposition.missing)}"
                 )
                 continue
 
@@ -418,8 +457,29 @@ class ReasoningProcessor:
                 f"no candidate survived ^6; backtracked {len(backtracks)} time(s)",
                 backtracks=len(backtracks),
             )
+            # Rule C -- contradiction is LOCAL to the question. A route whose
+            # every absent link is held in both polarities is not unknown, it
+            # is disputed, and the question is inadmissible until the dispute
+            # is resolved. A contradiction elsewhere in the workspace, off every
+            # surfaced route, does not poison this answer. (The earlier design
+            # refused every question the moment any contradiction existed,
+            # which made a living workspace useless after its first dispute.)
+            disputed = [d for d in decompositions if d.blocked_only_by_dispute]
+            if disputed:
+                keys = sorted({k for d in disputed for k in d.contested})
+                log(
+                    Phase.COMMIT,
+                    f"the only route(s) run through a disputed link: {', '.join(keys)}",
+                    contested=keys,
+                )
+                return finish(
+                    Terminal.INADMISSIBLE,
+                    "INADMISSIBLE",
+                    f"contradictory premises on the queried route: {', '.join(keys)}",
+                    candidates=candidates,
+                )
             return self._prerequisite_stop(
-                ws, problem, trace, log, finish, wisdom=2.0, candidates=candidates
+                ws, problem, trace, log, finish, prof, mark, wisdom=2.0, candidates=candidates
             )
 
         # 6 COMPARE -- CDAB under a shared bias, so only real divergence shows.
@@ -429,7 +489,7 @@ class ReasoningProcessor:
         planner = RpmPlanner()
         goal = Goal(
             name=problem.name,
-            d=PrereqState(score=10.0 * self.profile.g[_drive_of(problem.target_channel)]),
+            d=PrereqState(score=10.0 * prof.g[_drive_of(problem.target_channel)]),
             w=PrereqState(score=10.0 * confidence),
             p=PrereqState(score=DEFAULT_SUFFICIENCY + 2.0),
         )
@@ -565,7 +625,7 @@ class ReasoningProcessor:
         }
         return sorted(forward), sorted(backward)
 
-    def _prerequisite_stop(self, ws, problem, trace, log, finish, *, wisdom, candidates):
+    def _prerequisite_stop(self, ws, problem, trace, log, finish, prof, mark, *, wisdom, candidates):
         """RPM on a failed reasoning attempt: name which prerequisite is thin.
 
         This is the difference between "no" and "I do not have what I would
@@ -575,11 +635,11 @@ class ReasoningProcessor:
         planner = RpmPlanner()
         goal = Goal(
             name=problem.name,
-            d=PrereqState(score=10.0 * self.profile.g[_drive_of(problem.target_channel)]),
+            d=PrereqState(score=10.0 * prof.g[_drive_of(problem.target_channel)]),
             w=PrereqState(score=wisdom),
             p=PrereqState(score=DEFAULT_SUFFICIENCY + 2.0),
         )
-        lacunae = ws.lacunae()
+        lacunae = ws.lacunae(since=mark)
 
         # Descend into the block rather than merely naming it. The first
         # unmet prerequisite becomes a sub-desire -- "acquire the applicable

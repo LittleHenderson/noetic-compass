@@ -107,6 +107,119 @@ class TruthMaintenanceTests(unittest.TestCase):
         self.assertIs(ws.props["VS|leads_to|IU"].status, Status.FACT)
 
 
+class ContradictionSemanticsTests(unittest.TestCase):
+    """What a polarity collision does depends on what each side *is*."""
+
+    def test_a_negation_refutes_a_hypothesis_rather_than_contradicting_it(self):
+        """A guess was never evidence. Denying it kills the guess and leaves
+        the denial standing; nothing is marked contradicted."""
+        ws = Workspace()
+        ws.hypothesize("A", "leads_to", "B")
+        ws.fact("A", "leads_to", "B", negated=True)
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.RETRACTED)
+        self.assertIs(ws.props["~A|leads_to|B"].status, Status.FACT)
+        self.assertEqual(ws.contradictions(), ())
+        self.assertIn("refuted A|leads_to|B", ws.journal)
+
+    def test_a_hypothesis_arriving_against_an_assertive_denial_is_dead_on_arrival(self):
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B", negated=True)
+        ws.hypothesize("A", "leads_to", "B")
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.RETRACTED)
+        self.assertIs(ws.props["~A|leads_to|B"].status, Status.FACT)
+
+    def test_two_hypotheses_of_opposite_polarity_coexist(self):
+        ws = Workspace()
+        ws.hypothesize("A", "leads_to", "B")
+        ws.hypothesize("A", "leads_to", "B", negated=True)
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.HYPOTHESIS)
+        self.assertIs(ws.props["~A|leads_to|B"].status, Status.HYPOTHESIS)
+        self.assertEqual(ws.contradictions(), ())
+
+    def test_contradiction_cascades_to_what_rested_on_either_side(self):
+        """A conclusion built on a now-disputed premise has lost its footing."""
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B")
+        ws.fact("B", "leads_to", "C")
+        derived = ws.derive("A", "leads_to", "C", ("A|leads_to|B", "B|leads_to|C"))
+        ws.fact("B", "leads_to", "C", negated=True)
+        self.assertIs(ws.props["B|leads_to|C"].status, Status.CONTRADICTED)
+        self.assertIs(ws.props[derived.pid].status, Status.RETRACTED)
+
+    def test_a_disputed_record_absorbs_later_arrivals_of_the_same_claim(self):
+        """Re-asserting, or guessing, a contested claim must not quietly
+        replace half of the contradiction with a fresh record."""
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B")
+        ws.fact("A", "leads_to", "B", negated=True)
+        ws.fact("A", "leads_to", "B")
+        ws.hypothesize("A", "leads_to", "B")
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.CONTRADICTED)
+        self.assertIs(ws.props["~A|leads_to|B"].status, Status.CONTRADICTED)
+        self.assertTrue(ws.contested("A", "leads_to", "B"))
+
+    def test_retracting_one_side_of_a_contradiction_reinstates_the_other(self):
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B")
+        ws.fact("A", "leads_to", "B", negated=True)
+        ws.retract("A|leads_to|B")
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.RETRACTED)
+        self.assertIs(ws.props["~A|leads_to|B"].status, Status.FACT)
+        self.assertFalse(ws.contested("A", "leads_to", "B"))
+        self.assertEqual(ws.ask("A", "leads_to", "B"), "NO")
+
+    def test_contested_is_true_only_when_both_polarities_are_disputed(self):
+        ws = Workspace()
+        self.assertFalse(ws.contested("A", "leads_to", "B"))
+        ws.fact("A", "leads_to", "B")
+        self.assertFalse(ws.contested("A", "leads_to", "B"))
+        ws.fact("A", "leads_to", "B", negated=True)
+        self.assertTrue(ws.contested("A", "leads_to", "B"))
+
+
+class EpisodeScopingTests(unittest.TestCase):
+    """A long-lived workspace must report the gaps *this* episode hit."""
+
+    def test_lacunae_can_be_scoped_to_an_episode_mark(self):
+        ws = Workspace()
+        ws.ask("A", "leads_to", "B")          # an earlier episode's question
+        mark = ws.mark()
+        ws.ask("C", "leads_to", "D")
+        self.assertEqual(ws.lacunae(), ("A|leads_to|B", "C|leads_to|D"))
+        self.assertEqual(ws.lacunae(since=mark), ("C|leads_to|D",))
+
+    def test_re_asking_an_old_question_brings_it_into_the_current_episode(self):
+        ws = Workspace()
+        ws.ask("A", "leads_to", "B")
+        mark = ws.mark()
+        ws.ask("A", "leads_to", "B")
+        self.assertEqual(ws.lacunae(since=mark), ("A|leads_to|B",))
+
+    def test_sweep_retracts_only_the_stage_it_names(self):
+        ws = Workspace()
+        ws.hypothesize("A", "leads_to", "B", stage="^8")
+        ws.hypothesize("C", "leads_to", "D", stage="stream")
+        ws.fact("E", "leads_to", "F")
+        swept = ws.sweep("^8")
+        self.assertEqual(swept, ("A|leads_to|B",))
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.RETRACTED)
+        self.assertIs(ws.props["C|leads_to|D"].status, Status.HYPOTHESIS)
+        self.assertIs(ws.props["E|leads_to|F"].status, Status.FACT)
+
+    def test_a_reasserted_fact_is_live_again_but_its_old_consequences_stay_down(self):
+        """Revival restores the premise, not the conclusions that once rested
+        on it -- those have to be re-derived, because the world may have moved
+        in between."""
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B")
+        ws.fact("B", "leads_to", "C")
+        derived = ws.derive("A", "leads_to", "C", ("A|leads_to|B", "B|leads_to|C"))
+        ws.retract("A|leads_to|B")
+        ws.fact("A", "leads_to", "B")
+        self.assertIs(ws.props["A|leads_to|B"].status, Status.FACT)
+        self.assertIs(ws.props[derived.pid].status, Status.RETRACTED)
+
+
 class WorldAssumptionTests(unittest.TestCase):
     def test_absence_is_unknown_under_an_open_world(self):
         ws = graph(("VS", "QS"))

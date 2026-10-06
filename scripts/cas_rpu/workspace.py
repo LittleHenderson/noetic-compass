@@ -172,7 +172,13 @@ class Workspace:
     closed_world: bool = False
     props: dict[str, Proposition] = field(default_factory=dict)
     journal: list[str] = field(default_factory=list)
-    _asked: set[str] = field(default_factory=set)
+    #: key -> the mark current when it was last asked. Lets an episode report
+    #: only the gaps *it* hit, not every question the workspace ever heard.
+    _asked: dict[str, int] = field(default_factory=dict)
+    _marks: int = 0
+    #: pid -> the status it held before being marked CONTRADICTED, so that
+    #: retracting one side of a contradiction can reinstate the other.
+    _prior: dict[str, Status] = field(default_factory=dict)
 
     # ---- population ------------------------------------------------------
 
@@ -182,13 +188,55 @@ class Workspace:
         A stronger status wins: a claim first surfaced as a hypothesis and
         later derived becomes derived. The reverse never happens -- evidence
         does not decay back into a guess because someone re-guessed it.
+
+        Polarity collisions are resolved by what each side *is*:
+
+          assertive vs assertive   a CONTRADICTION. Both sides are marked and
+                                   everything resting on either side is
+                                   retracted, because a conclusion built on a
+                                   contested premise has lost its footing.
+          assertive vs hypothesis  a REFUTATION. The guess dies; the claim
+                                   stands. A guess was never evidence, so
+                                   nothing it touched needs to fall.
+          hypothesis vs hypothesis coexist. Two guesses that disagree are a
+                                   question, not a crisis.
+
+        A claim arriving against a side that is already CONTRADICTED joins the
+        contradiction rather than quietly reviving one half of it.
         """
-        counter = self.props.get(("" if prop.negated else "~") + prop.key)
-        if counter is not None and counter.status in LIVE and prop.status in LIVE:
-            self.props[counter.pid] = replace(counter, status=Status.CONTRADICTED)
-            self.props[prop.pid] = replace(prop, status=Status.CONTRADICTED)
-            self.journal.append(f"contradiction {prop.key}")
-            return self.props[prop.pid]
+        existing = self.props.get(prop.pid)
+        if existing is not None and existing.status is Status.CONTRADICTED:
+            # A disputed record absorbs re-assertions and guesses of the same
+            # claim alike. Only retracting one side of the dispute changes it;
+            # a fresh arrival must not quietly replace half of a contradiction.
+            return existing
+
+        counter_pid = ("" if prop.negated else "~") + prop.key
+        counter = self.props.get(counter_pid)
+        if counter is not None:
+            if counter.status in ASSERTIVE and prop.status in ASSERTIVE:
+                self._prior[counter.pid] = counter.status
+                self._prior[prop.pid] = prop.status
+                self.props[counter.pid] = replace(counter, status=Status.CONTRADICTED)
+                self.props[prop.pid] = replace(prop, status=Status.CONTRADICTED)
+                self.journal.append(f"contradiction {prop.key}")
+                self._cascade(counter.pid)
+                self._cascade(prop.pid)
+                return self.props[prop.pid]
+            if counter.status is Status.CONTRADICTED and prop.status in ASSERTIVE:
+                self._prior.setdefault(prop.pid, prop.status)
+                self.props[prop.pid] = replace(prop, status=Status.CONTRADICTED)
+                self.journal.append(f"contradiction {prop.key}")
+                return self.props[prop.pid]
+            if counter.status is Status.HYPOTHESIS and prop.status in ASSERTIVE:
+                self.props[counter.pid] = replace(counter, status=Status.RETRACTED)
+                self.journal.append(f"refuted {counter.pid}")
+            elif prop.status is Status.HYPOTHESIS and (
+                counter.status in ASSERTIVE or counter.status is Status.CONTRADICTED
+            ):
+                self.props[prop.pid] = replace(prop, status=Status.RETRACTED)
+                self.journal.append(f"refuted {prop.pid}")
+                return self.props[prop.pid]
 
         existing = self.props.get(prop.pid)
         if existing is not None:
@@ -257,11 +305,45 @@ class Workspace:
         prop = self.props.get(pid)
         if prop is None:
             raise WorkspaceError("E-WS-004", f"cannot retract absent {pid!r}")
+        was_contradicted = prop.status is Status.CONTRADICTED
         self.props[pid] = replace(prop, status=Status.RETRACTED)
+        self._prior.pop(pid, None)
         self.journal.append(f"retracted {pid}")
+        self._cascade(pid)
+        if was_contradicted:
+            # Withdrawing one side of a contradiction leaves the other side
+            # merely asserted again. It gets back the status it had before.
+            counter_pid = ("" if prop.negated else "~") + prop.key
+            counter = self.props.get(counter_pid)
+            if counter is not None and counter.status is Status.CONTRADICTED:
+                prior = self._prior.pop(counter_pid, Status.FACT)
+                self.props[counter_pid] = replace(counter, status=prior)
+                self.journal.append(f"reinstated {counter_pid}")
+
+    def _cascade(self, pid: str) -> None:
+        """Retract everything whose support names `pid`. Transitive."""
         for other in list(self.props.values()):
-            if pid in other.support and other.status not in (Status.RETRACTED,):
+            if pid in other.support and other.status is not Status.RETRACTED:
                 self.retract(other.pid)
+
+    def sweep(self, stage: str) -> tuple[str, ...]:
+        """Retract every live proposition produced by `stage`.
+
+        Used at the end of an episode to clear `^8`'s own route hypotheses,
+        so the bank never re-triggers on its prior output. Nothing can rest on
+        a hypothesis (`derive` refuses), so the cascade is a no-op by law.
+        """
+        swept = tuple(
+            sorted(p.pid for p in self.props.values() if p.status in LIVE and p.stage == stage)
+        )
+        for pid in swept:
+            self.retract(pid)
+        return swept
+
+    def mark(self) -> int:
+        """Advance and return the episode mark. See `lacunae(since=...)`."""
+        self._marks += 1
+        return self._marks
 
     # ---- query -----------------------------------------------------------
 
@@ -309,7 +391,7 @@ class Workspace:
         the lacuna signal the RPM gate turns into a sub-goal.
         """
         key = f"{subject}|{relation}|{obj}"
-        self._asked.add(key)
+        self._asked[key] = self._marks
         prop = self.props.get(key)
         if prop is not None and prop.status in ASSERTIVE:
             return "YES"
@@ -323,13 +405,31 @@ class Workspace:
             sorted({p.key for p in self.props.values() if p.status is Status.CONTRADICTED})
         )
 
-    def lacunae(self) -> tuple[str, ...]:
-        """Questions asked whose answer the workspace could not supply."""
+    def contested(self, subject: str, relation: str, obj: str) -> bool:
+        """Is this exact link held in both polarities, each contradicting the other?"""
+        key = f"{subject}|{relation}|{obj}"
+        pos = self.props.get(key)
+        neg = self.props.get("~" + key)
+        return (
+            pos is not None
+            and neg is not None
+            and pos.status is Status.CONTRADICTED
+            and neg.status is Status.CONTRADICTED
+        )
+
+    def lacunae(self, since: int = 0) -> tuple[str, ...]:
+        """Questions asked whose answer the workspace could not supply.
+
+        `since` restricts the report to questions asked at or after that
+        episode mark, so a long-lived workspace reports the gaps *this*
+        episode hit rather than every unanswered question in its history.
+        """
         return tuple(
             sorted(
                 key
-                for key in self._asked
-                if not (
+                for key, asked_at in self._asked.items()
+                if asked_at >= since
+                and not (
                     (self.props.get(key) and self.props[key].status in ASSERTIVE)
                     or (self.props.get("~" + key) and self.props["~" + key].status in ASSERTIVE)
                 )

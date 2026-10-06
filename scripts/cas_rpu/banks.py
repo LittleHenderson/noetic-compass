@@ -53,6 +53,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ccb_r1"))
 from cjt_sim import CjtSpec, Reading, Region, Scale, measure  # noqa: E402
 
 from workspace import (  # noqa: E402
+    ASSERTIVE,
+    LIVE,
     Pattern,
     Proposition,
     Status,
@@ -108,10 +110,21 @@ class Decomposition:
     present: tuple[str, ...]
     missing: tuple[str, ...]
     reading: Reading
+    #: The subset of `missing` that is absent because it is held in BOTH
+    #: polarities. A missing link is a gap; a contested link is a dispute.
+    #: The runtime treats them differently and so must be able to tell.
+    contested: tuple[str, ...] = ()
 
     @property
     def complete(self) -> bool:
         return not self.missing
+
+    @property
+    def blocked_only_by_dispute(self) -> bool:
+        """Every absent constituent is contested -- the route exists but is
+        argued over, which is the one case that is inadmissible rather than
+        unknown."""
+        return bool(self.missing) and set(self.missing) <= set(self.contested)
 
 
 @dataclass(frozen=True)
@@ -186,9 +199,18 @@ class HypothesisBank:
         if reading.region is Region.CUTOFF:
             return [], reading
 
+        # Association walks everything the workspace *holds a positive record
+        # of* -- facts, assumptions, derivations, stream hypotheses, and links
+        # currently under dispute -- because any of those can bring the next
+        # node to mind. It does NOT walk negations (a denial is not a path) and
+        # it does NOT walk its own earlier route guesses (stage "^8"): a bank
+        # that re-triggers on its prior output is a feedback loop, not a mind.
+        # Whether a walked link is actually *supported* is ^6's question.
         edges: dict[str, list[str]] = {}
-        for prop in ws.assertive():
-            if prop.negated:
+        for prop in ws.props.values():
+            if prop.negated or prop.stage == "^8":
+                continue
+            if prop.status not in LIVE and prop.status is not Status.CONTRADICTED:
                 continue
             if associate_across or prop.relation == relation:
                 edges.setdefault(prop.subject, []).append(prop.obj)
@@ -270,6 +292,7 @@ class DecompositionBank:
         required: list[str] = []
         present: list[str] = []
         missing: list[str] = []
+        contested: list[str] = []
         for left, right in candidate.links():
             key = f"{left}|{candidate.relation}|{right}"
             required.append(key)
@@ -277,6 +300,8 @@ class DecompositionBank:
                 present.append(key)
             else:
                 missing.append(key)
+                if ws.contested(left, candidate.relation, right):
+                    contested.append(key)
 
         if reading.region is Region.CUTOFF:
             # A silent stage found nothing; it must not report a clean bill.
@@ -289,6 +314,7 @@ class DecompositionBank:
             present=tuple(present),
             missing=tuple(missing),
             reading=reading,
+            contested=tuple(contested),
         )
 
     def decompose_query(
@@ -357,6 +383,19 @@ class InferenceBank:
                 reading,
                 f"{len(decomposition.missing)} constituent(s) unsupported: "
                 + ", ".join(decomposition.missing),
+            )
+
+        # A living workspace is often asked about something it already holds
+        # -- a given fact, or a conclusion it landed in an earlier episode. That
+        # is answered from the record, never re-derived from itself (which is
+        # the E-WS-003 self-support refusal, and would otherwise fire on every
+        # one-hop question).
+        key = f"{candidate.nodes[0]}|{candidate.relation}|{candidate.nodes[-1]}"
+        held = ws.props.get(key)
+        if held is not None and held.status in ASSERTIVE:
+            return Inference(
+                held, "YES", tuple(decomposition.present), reading,
+                f"direct hit: already held as {held.status.value}",
             )
 
         conclusion = ws.derive(
