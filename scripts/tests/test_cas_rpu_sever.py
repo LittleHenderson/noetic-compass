@@ -98,7 +98,7 @@ class NoModelInTheLoopTests(unittest.TestCase):
             "cjt_sim", "cmb", "cdab", "rpm",
             # this package
             "banks", "foundations", "workspace", "runtime", "events", "encoder",
-            "organism", "revision", "controls", "ablations", "scoring",
+            "organism", "revision", "controls", "ablations", "scoring", "history",
         }
         for path in sorted(PACKAGE.glob("*.py")):
             for line in path.read_text().splitlines():

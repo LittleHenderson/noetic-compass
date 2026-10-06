@@ -1,5 +1,45 @@
 # Noetic Compass — Progress Log
 
+## HELM: the destination written down, the memory work audited and contracted, and lasting memory at survival level (a) (Oct 6, 2026) — PREPARATION
+
+**Label.** Preparation and a development demonstration, per `docs/HELM_VISION_AND_ROADMAP.md` §2. Not a
+frozen result: no held-out set, no evaluation custodian yet, survival level (b) not demonstrated.
+
+**Headline.** The owner's statement of intent for HELM (reasons, learns, retains, improves itself,
+CASalesces, organizes with RPA, built together) is now one canonical document with the gap per
+ability and the gate question every task answers first: *which HELM ability does this advance, and
+what observable behavior will prove it?* The lasting-memory directive is stored under
+`docs/directives/` pointing at it, with the owner's eight decisions in its amendment log. Four
+read-only drafts landed under `docs/working/`: the reuse audit of the RPA/CNCM code at `eb99855`
+(34 requirement rows: 7 reuse unchanged, 16 extend compatibly, 11 unresolved), the memory contract
+v1 (an extension of the Revision Streams contract), the frozen evaluation plan (20 starting
+conditions × 5 fresh processes; measured feasibility ≈ 2.5 h serialized compute, fsync unmeasured),
+and the cross-engine meaning reconciliation (13 conformance fixtures; both engines use an explicit
+polarity boolean, the "negation predicate" is an adapter hazard).
+
+**What changed in code.** `scripts/cas_rpu/history.py`: `Stream` keeps `Organism.consume` as the
+single writer, seals one history document per commit (temp file, fsync, atomic replace, directory
+fsync, read-back verify; previous copies retained, archived beyond a bound, never deleted by code),
+and `restore` replays the rows through a fresh organism, refusing to serve unless the identity
+matches field by field, every recorded outcome replays identically, the rebuilt state's digest
+matches, and the heartbeat audit is silent — validation before the first answer, not at the next
+beat. Bounded limits (events, bytes, retained copies, free space) stop safely and report; nothing is
+discarded. 24 tests, including restarts in fresh operating-system processes compared against the
+recompute control: a taught fact changes a later answer and survives restart without reteaching; a
+retraction or denial in the new process withdraws every dependent and holds after another restart;
+a stale YES never escapes; a tampered document falls back to a verified copy; a broken cascade is
+caught at restore (E-MEM-044). CI runs the file. 417 `cas_rpu` tests, 262 `ccb_r1` tests green.
+
+**Measured (development, this container).** 104 committed rows: commit median 3.6 ms, p95 5.9 ms;
+document 45 KB; restore with replay and reference comparison 16 ms; 2.4 MB written cumulatively.
+
+**Evidence corrections.** The PR 248 body and this log had said the replayer is cheaper per ask;
+the counters are different currencies and are never compared across rows. The unmarked-guess
+ablation is reported as hygiene on this evidence.
+
+**Not shown, stated.** Level (b) survival (machine replacement), any frozen held-out result, RPA's
+value over an ordinary index, transfer, cooperation, neural retention.
+
 ## The reasoning processor becomes an organism, and gets a task family that can only say what it can say (Oct 6, 2026)
 
 **Headline.** `scripts/cas_rpu` (PR #227) built a processor that reasons natively from CAS

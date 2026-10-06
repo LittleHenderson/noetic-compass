@@ -739,3 +739,8 @@ Only M12 item 1 remains with the owner, and it does not block (a)-level work. Th
 
 Amendments to this contract are made in place with a dated row here, as the base contract does in its §12. It is not forked.
 | 2026-10-06 | Landed in the repository; M12 items 2–13 resolved as engineering defaults (M12a); item 1 left with the owner, non-blocking for level (a) | M12a added | docs/working/helm_memory_contract_v1_draft_2026_10_06.md |
+| 2026-10-06 | Implementation landed as `scripts/cas_rpu/history.py` (`Stream`, `Identity`, `reference_digest`, `canonical_json`/`digest`) rather than inside `organism.py`; `organism.py` is untouched and remains the single writer behind `Stream.commit` | M12a item 2 placement amended; one module, imported by the tests, never duplicated | `scripts/cas_rpu/history.py` |
+| 2026-10-06 | `engine_version` implemented as a digest of the package sources (`scripts/cas_rpu/*.py`, `scripts/ccb_r1/*.py`), which subsumes the commit hash and the explicit constants digest of M1.1 | M1.1 / M12a item 10 amended | `history.engine_version` |
+| 2026-10-06 | Retained copies are numbered by rows committed (`history.<n>.json`), genesis being `00000000`; copies beyond `MAX_RETAINED_DOCUMENTS` move to `archive/` | M4.5 / M10.3 wording | `Stream.save` |
+| 2026-10-06 | First development measurement (104 rows, 8 generated items, this container): commit median 3.6 ms, p95 5.9 ms, max 9.0 ms; current document 45 KB; restore with replay and reference comparison 16 ms; cumulative bytes written 2.4 MB (whole-document rewrite × retained copies). M10.3 numbers unchanged pending the target-instance dry run | measurement recorded, no limit revised | `scripts/tests/test_cas_rpu_memory.py` run |
+
