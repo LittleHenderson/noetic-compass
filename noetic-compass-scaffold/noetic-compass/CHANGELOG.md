@@ -8,7 +8,7 @@
 
 **Measured.** Per stream 105/110 probes agree with the whole-stream oracle; **all 28 lesson probes agree on every primary (YES through the imported lesson) and every twin (GAP)** — 168/168 per set; the 5 disagreements per stream are exactly fixture F06 (a disputed link in the component but off the queried route: C-blocked, C-bypassed, C-unrelated), flagged `conflict_elsewhere`, 30/30 per set. The hand-built §13 stream agrees on all 13 probes. Note: `docs/working/helm_cooperation_cncm_interchange_2026_10_06.md`; evidence `docs/working/evidence/helm_cncm_interchange_seeds0-2_3000-3002_2026_10_06.txt`.
 
-**Also today.** PR #248 merged to master (`b574170`) with owner approval; the branch restarted from master. The live `render-blueprint-auto-sync-live` job fails on master as it did before the merge (its own credentials); unrelated to HELM.
+**Also today.** PR #248 merged to master (`b574170`) with owner approval; the branch restarted from master; this work is open as draft PR #249. The live `render-blueprint-auto-sync-live` job fails on master as it did before the merge (its own credentials); unrelated to HELM.
 
 
 ## HELM ability 2: a told lesson, retained across fresh processes, applied to unfamiliar instances; neural-learning directive received and planned (Oct 6, 2026) — SYMBOLIC DEVELOPMENT/FIRST-LOOK RESULT + PREPARATION
