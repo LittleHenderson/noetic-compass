@@ -195,7 +195,10 @@ class FaultScheduleTests(_Root):
             rec = [s for s in run.sessions if s.session == 1][0]
             self.assertNotEqual(rec.done["recovered_from"], CURRENT, kind)
             self.assertTrue(rec.done["recovery_failures"], "the damage was detected and named")
-            self.assertEqual(rec.done["last_seq"] - len(rec.acks), run.sessions[0].acks[-1]["ack"], "nothing acknowledged was lost")
+            self.assertEqual(rec.done["restored_seq"], run.sessions[0].acks[-1]["ack"], "nothing acknowledged was lost")
+            check = [c for c in run.fault_checks if c["kind"] == kind][0]
+            self.assertTrue(check["ok"], check)
+            self.assertEqual(check["acknowledged_seq"], run.sessions[0].acks[-1]["ack"], "judged against the prefix acknowledged before the restore")
             self.assertTrue(all(p.verdict_ok for p in score.probes) and not unanswered, kind)
 
     def test_history_lost_beyond_retention_stops_serving_and_names_the_boundary(self):

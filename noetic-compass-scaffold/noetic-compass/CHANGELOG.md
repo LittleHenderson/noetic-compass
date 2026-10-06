@@ -1,5 +1,63 @@
 # Noetic Compass — Progress Log
 
+## HELM: multi-session evaluation — first-look run on 20 unseen seeds, fault schedule, RPA pinned and reconnected (Oct 6, 2026) — DEVELOPMENT DEMONSTRATION, NOT THE FROZEN RESULT
+
+**Label.** A development demonstration at survival level (a) plus a first-look run on seeds the builder
+had not generated before. No custodian, same builder, level (b) not demonstrated. Full note:
+`docs/working/helm_multi_session_evaluation_2026_10_06.md`; text reports under `docs/working/evidence/`.
+
+**Generator** (`scripts/cas_rpu/sessions.py`, by a delegated agent; 25 tests). `generate_session_set`:
+per seed one context of 27 episodes (16 reused layouts + X-delay/X-revive/X-deep/X-correct/X-hold,
+D-restate, C-cross, N-late, T-compose/T-exact, G-probe per eval plan §8), 385 events, 82 probes,
+five sessions each later one carrying a cross-session designed probe, tokens drawn without replacement
+per context, untaught twins, whole-stream oracle, E-RS-005/006/010 over the whole stream, balance over
+the set. Registered fingerprints (seeds 0–19): open `9e0d35b0…`, closed `deae82a0…`. The pinned
+`generate_revision_set` fingerprints are untouched. Three layouts gained balancing probes the 60%
+ceiling forces (plan amendment log).
+
+**Harness** (`scripts/cas_memory/session_harness.py`; 16 tests, every one running real child
+processes). One fresh OS process per session over `history.Stream`; per-event acknowledgment lines;
+paths recompute / walk / record_dep / record_rpa; scoring via `score_item` relabelled per episode with
+the generator's token-component attribution; retention, transfer, stale-hit, unseen-hit and twin
+columns; fault schedule F1–F16 where the single-document design permits (F14 not applicable: nothing
+is persisted as an index); recovery probes against fresh recompute over the acknowledged prefix;
+`--mirror DIR --replacement` exercises the replacement mechanism offline; bootstrap CI; text + JSON.
+
+**History** (`scripts/cas_rpu/history.py`; 27 tests). `restore(acknowledged_seq=)` refuses with
+**E-MEM-046** when the newest verifying document ends before the host's acknowledged prefix, naming
+the lost rows; `commit` recognises a retry of an event recorded before its ack was lost (same payload
+at the intended seq) and acknowledges it once more with no new row; `attach=` on genesis and restore
+reconnects peripherals before replay; a test-only fault hook at the four points of `save`.
+
+**RPA** (`scripts/cas_memory/rpa_adapter.py`; 11 tests). The loader pins the SHA-256 of the two
+imported files as committed at `eb99855` and refuses other content; `loaded_version()` reports what is
+mounted. CI fetches that commit into a read-only worktree and runs the RPA tests with
+`CAS_RPA_REQUIRED=1` (a skip is a failure). The narrower is reconnected on restore and a record hit
+after a restart is tested — the owner's two concrete items.
+
+**Measured — first-look, seeds 1000–1019, both worlds identical.** Per path per world 3280/3280
+verdicts, 200/200 contested, 1560/1560 named (open), 800/800 withdrawn; 180/180 cross-session
+retention probes, record_dep serving 40 from the record with **0 stale hits**; T-compose 20/20 with 0
+record hits, T-exact 20/20 with 20 hits; 540/540 untaught twins GAP; 0 hits on never-asked pairs.
+record_rpa: identical answers, 40 of 279 hits sent to the walk (a held conclusion restated as a given
+is OBSERVED, not VERIFIED, to the atlas), restore p50 82 ms vs 44 ms. Costs: commit p50 8.4 ms, p95
+15 ms; restore p50 44 ms; session wall p50 0.85 s; max RSS 96 MB (record_dep); 32.7 MB per stream
+directory with retained copies. **Fault schedule, seeds 0–19:** 9/9 recoveries at exactly the
+acknowledged prefix (or one ahead with the retry recognised), 162/162 recovery probes, redeliver,
+redeliver-after-restart, swap, torn-current, corrupt-current, quota, schema-bump all passed;
+corrupt-both refused with E-MEM-046 naming the lost row; the two stopped seeds leave 43 probes per
+path unanswered, reported as unanswered.
+
+**Found by the harness and fixed before the reported runs.** Post-mortem verdicts judged against the
+wrong acknowledgment baseline; probe attribution by span containment mislabelled interleaved
+episodes (a first pass counted 53 retention probes where 180 exist). One flaky failure of the harness
+test file was seen once under CPU contention and did not reproduce in ten further runs; unexplained.
+
+**Not shown.** Level (b): every process ran on one host. The proposed S3 location stays conditional
+on the owner's verification (deletion rules, purpose, build-job read access); no key in chat. K/W/A
+classes excluded pending contract v1 bindings. Speed reported, not claimed.
+
+
 ## HELM: the destination written down, the memory work audited and contracted, and lasting memory at survival level (a) (Oct 6, 2026) — PREPARATION
 
 **Label.** Preparation and a development demonstration, per `docs/HELM_VISION_AND_ROADMAP.md` §2. Not a

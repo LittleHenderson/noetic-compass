@@ -463,7 +463,7 @@ def run_seed(stream: SeedStream, path: str, root: Path, *, fault: dict | None = 
         run.sessions.append(rec)
         for c in run.fault_checks:
             if c.get("ok") is None and c["kind"] in POST_MORTEM_FAULTS and c.get("boundary") == k:
-                c.update(_post_mortem_verdict(c["kind"], rec, run.acknowledged_seq))
+                c.update(_post_mortem_verdict(c["kind"], rec, spec["acknowledged_seq"]))   # what the host had acknowledged BEFORE this restore
         for a in rec.acks:
             run.outcomes[a["index"]] = a["outcome"]
             ev = all_events[a["index"]]
@@ -607,7 +607,25 @@ class _ItemView:
     designed_probe_index: int = -1
 
 
-def _episode_of(stream: SeedStream, index: int):
+def _owners(stream: SeedStream) -> dict[int, int]:
+    """probe index -> episode position. Spans of different episodes interleave in a
+    generated stream, so containment cannot say whose a probe is; the generator's
+    token-component attribution can (`sessions.probe_owners`). Hand-built streams
+    without that structure fall back to the designed index, then the smallest
+    containing span."""
+    try:
+        from sessions import probe_owners
+        return probe_owners(stream)
+    except Exception:
+        return {}
+
+
+def _episode_of(stream: SeedStream, index: int, owners: dict[int, int] | None = None):
+    for ep in stream.episodes:
+        if ep.designed_probe_index == index:
+            return ep
+    if owners and index in owners:
+        return stream.episodes[owners[index]]
     best = None
     for ep in stream.episodes:
         if ep.start <= index < ep.end and (best is None or (ep.end - ep.start) < (best.end - best.start)):
@@ -632,9 +650,10 @@ def score_run(stream: SeedStream, run: SeedRun):
                      tuple(x for x in stream.expectations if x.event_index not in unanswered),
                      tuple(w for w in stream.withdrawn if w.event_index in run.outcomes))
     score = score_item(view, probes, withdrawn)
+    owners = _owners(stream)
     relabelled = []
     for p in score.probes:
-        ep = _episode_of(stream, p.event_index)
+        ep = _episode_of(stream, p.event_index, owners)
         relabelled.append(replace(p, mechanism=ep.mechanism if ep else "?", variant=ep.variant if ep else "?",
                                   designed=bool(ep and ep.designed_probe_index == p.event_index)))
     rel_w = []
@@ -694,12 +713,13 @@ def _absorb(result: PathResult, stream: SeedStream, run: SeedRun) -> None:
     if score.probes:
         result.per_seed_accuracy.append(sum(p.verdict_ok for p in score.probes) / len(score.probes))
     flags = _repeat_flags(stream.events)
+    owners = _owners(stream)
     for p in score.probes:
         o = run.outcomes[p.event_index]
         route = (o.get("route") or "walk").split(":")[0]
         result.routes[route] = result.routes.get(route, 0) + 1
         (result.work["repeat"] if flags.get(p.event_index) else result.work["first"]).append(p.work)
-        ep = _episode_of(stream, p.event_index)
+        ep = _episode_of(stream, p.event_index, owners)
         hit = o.get("route") == "hit"
         if not flags.get(p.event_index) and hit:
             result.unseen_hits += 1
@@ -868,6 +888,11 @@ def to_json(results: dict[str, PathResult], sset: SessionSet) -> dict:
             "rss_kb": r.rss_kb, "bytes_on_disk": r.bytes_on_disk, "heartbeat_faults": r.heartbeat_faults,
             "fault_checks": r.fault_checks, "stopped": r.stopped, "survival": r.survival,
             "per_seed_accuracy": r.per_seed_accuracy, "ci": bootstrap_ci(r.per_seed_accuracy),
+            "runs": [{"seed": run.seed, "twin": run.twin, "stopped": run.stopped,
+                      "sessions": [{"session": sr.session, "label": sr.label, "returncode": sr.returncode, "acks": len(sr.acks),
+                                    "restored_seq": (sr.done or {}).get("restored_seq"), "recovered_from": (sr.done or {}).get("recovered_from"),
+                                    "wall_ms": sr.wall_ns / 1e6} for sr in run.sessions],
+                      "outcomes": {str(i): o for i, o in sorted(run.outcomes.items())}} for run in r.runs],
         }
     return out
 
