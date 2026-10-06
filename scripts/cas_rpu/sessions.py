@@ -53,14 +53,59 @@ link, `c0..ch` the chain, GAP = UNKNOWN open / NO closed:
                closed world is 5/7 NO, above the 60% ceiling, so two more YES
                probes are carried; the §8.3 table is unchanged and pinned by test.
 
+Lessons (`lessons=True`; contract §13, mechanism letter L): one instance of
+each `LESSON_VARIANTS` entry joins every seed stream's catalog. Each is built
+on an `N-actionable` draw (shuffled setup, shadow, distractors, interleave)
+whose designated link L = (ci, ci+1) is restated under a *foreign* relation
+`r` -- `FACT(ci, ci+1, relation=r)` -- so the chain can only be concluded
+while the lesson `lesson(r)` ("r entails leads_to") is held. Foreign names
+come from `FOREIGN_RELATIONS` (opaque `rel_a`..`rel_j`, never a reserved
+relation), sampled once per seed stream and handed out one per L episode
+(two for L-specific), so no two L episodes of one stream share a relation
+and no lesson can ever teach another episode's edge. The lesson is given
+before the edges in some layouts and after them in others, so both orders
+of §13's "in either order" are exercised. The L episodes are drawn AFTER
+every other episode from the same rng and the same token pool, so the
+`lessons=False` prefix of rng consumption -- and therefore the registered
+fingerprints -- is untouched. Layouts (designed probe marked `*`; every
+designed probe sits after a boundary, as for the other cross-session
+variants, which is why L-before's "previously could not" sequence GAP ->
+lesson -> YES lives in session k+1 after a first GAP in session k):
+
+    L-before   chain with the r edge, ASK -> GAP in s_k (lacuna: the r edge's
+               leads_to twin); ASK -> GAP, lesson(r), ASK -> YES* in s_{k+1};
+               ASK -> YES in s_{k+2} (the lesson crossed a boundary).
+    L-apply    lesson(r) then one taught chain, YES and reverse GAP in s_k; in
+               s_{k+2} a FRESH chain over new tokens with an r edge, never asked
+               before, ASK -> YES*, reverse -> GAP (the transfer probe).
+    L-compose  lesson(r) then a chain with r edges first and last and plain
+               edges between (hops >= 3), YES and reverse GAP in s_k; in s_{k+2}
+               FACT(ch, d) over a fresh d, ASK(c0, d) -> YES*, reverse -> GAP.
+    L-retract  chain, lesson(r), YES in s_k; unlesson(r), ASK -> GAP* (withdrawn
+               required: the held conclusion), sound half -> YES in s_{k+1};
+               ASK -> GAP in s_{k+2}.
+    L-revive   as L-retract to s_{k+1}; lesson(r) again, ASK -> YES* in s_{k+2};
+               YES and reverse GAP in s_{k+3}.
+    L-specific control: lesson(r1); chain with an r1 edge first and an r2 edge
+               last; ASK(c0, c_{h-1}) -> YES (through r1 only) in s_k;
+               ASK(c0, ch) -> GAP* and ASK(c0, c_{h-1}) -> YES in s_{k+1}.
+    L-edge     control: chain, lesson(r), YES and reverse GAP in s_k; in s_{k+1}
+               RETRACT(ci, ci+1, relation=r) (the edge, not the lesson), ASK ->
+               GAP*, RETRACT(ci, ci+1) of the leads_to twin (refused: never
+               given), then a fresh two-hop instance x -[r]-> y -> z, ASK(x, z)
+               -> YES (the lesson stands).
+
 Untaught twins (`twins=True`): for every X-* and T-* episode, every FACT whose
 pair is an edge of the episode's chain (or a bypass leg) is replaced, in
 place, by a FACT between two of the episode's spare tokens (distractor
 sources and interleave nodes), taking ordered spare pairs in first-appearance
 order and skipping pairs the episode already states. No chain node gains an
 out-edge, so no probe gains a route; the designed X/T probes are then GAP in
-both worlds, which is asserted. The twin is a deterministic function of the
-primary, so the rng is consumed identically with twins on or off.
+both worlds, which is asserted. For every L episode the same rule replaces
+each `lesson(r)` event instead (the foreign edges stay; an `unlesson(r)` in
+the twin is then refused); every L designed probe is GAP in the twin, which
+is asserted. The twin is a deterministic function of the primary, so the rng
+is consumed identically with twins on or off.
 
 Rejection codes: the `revision` codes (E-RS-005/006/010 redraw the whole
 seed stream, at most 64 times; E-RS-007 on the finished set; E-RS-008 when a
@@ -83,7 +128,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import events  # noqa: E402
 from session_types import EpisodeSpan, SeedStream, SessionError, SessionSet  # noqa: E402
-from events import DEFAULT_RELATION, Event, EventKind  # noqa: E402
+from events import DEFAULT_RELATION, LESSON_RELATION, Event, EventKind, is_foreign  # noqa: E402
 from revision import (  # noqa: E402
     _POOL,
     _REDRAW,
@@ -107,7 +152,9 @@ __all__ = [
     "CATALOG",
     "CROSS_VARIANTS",
     "EXISTING_VARIANTS",
+    "FOREIGN_RELATIONS",
     "KIND",
+    "LESSON_VARIANTS",
     "balance_report",
     "generate_session_set",
     "probe_owners",
@@ -146,7 +193,32 @@ _DESIGNED_GROUP: dict[str, int] = {
 #: Variants whose teaching the twin removes.
 _TWINNED = tuple(v for v in CROSS_VARIANTS if v[0] in "XT")
 
+#: `CATALOG` is the `lessons=False` catalog; `lessons=True` appends `LESSON_VARIANTS`.
 CATALOG: tuple[str, ...] = EXISTING_VARIANTS + tuple(CROSS_VARIANTS)
+
+#: Contract §13, item class L: variant -> (mechanism, role, base `_draw_item`
+#: variant, nominal group offsets). Module doc for the layouts. Every one is
+#: cross-session, and the designed probe is never in the base group.
+LESSON_VARIANTS: dict[str, tuple[str, str, str, tuple[int, ...]]] = {
+    "L-before": ("L", "diagnostic", "N-actionable", (0, 1, 2)),
+    "L-apply": ("L", "diagnostic", "N-actionable", (0, 2)),
+    "L-compose": ("L", "diagnostic", "N-actionable", (0, 2)),
+    "L-retract": ("L", "diagnostic", "N-actionable", (0, 1, 2)),
+    "L-revive": ("L", "diagnostic", "N-actionable", (0, 1, 2, 3)),
+    "L-specific": ("L", "control", "N-actionable", (0, 1)),
+    "L-edge": ("L", "control", "N-actionable", (0, 1)),
+}
+
+_LESSON_DESIGNED_GROUP: dict[str, int] = {
+    "L-before": 1, "L-apply": 1, "L-compose": 1, "L-retract": 1, "L-revive": 2, "L-specific": 1, "L-edge": 1,
+}
+
+#: Foreign relations an L episode may use: opaque, never `leads_to`, `co_occurs`
+#: or `entails`. Sampled per seed stream; one per L episode, two for L-specific.
+FOREIGN_RELATIONS: tuple[str, ...] = tuple(f"rel_{c}" for c in "abcdefghij")
+assert all(is_foreign(r) for r in FOREIGN_RELATIONS)
+
+_RELATIONS_PER_VARIANT: dict[str, int] = {v: (2 if v == "L-specific" else 1) for v in LESSON_VARIANTS}
 
 _ATTEMPTS = 64
 
@@ -167,6 +239,24 @@ class _Pool:
         out = self.tokens[self.cursor:self.cursor + count]
         self.cursor += count
         return out
+
+
+def _tokens_of(e: Event) -> tuple[str, ...]:
+    """The node tokens an event names: none for a lesson, whose subject is a
+    relation and whose object is `leads_to`."""
+    return () if e.relation == LESSON_RELATION else (e.subject, e.obj)
+
+
+def _nodes(e: Event) -> tuple[str, ...]:
+    """What an event joins for token-component attribution: its node tokens,
+    plus a `~r` node for a foreign relation `r` (so the lesson, the taught
+    edges and a fresh instance of one L episode form one component; `~` is a
+    reserved character, so no token collides). A lesson joins only `~r`."""
+    if e.relation == LESSON_RELATION:
+        return ("~" + e.subject,)
+    if is_foreign(e.relation):
+        return (e.subject, e.obj, "~" + e.relation)
+    return (e.subject, e.obj)
 
 
 def _remap(draft: _Draft, pool: _Pool) -> _Draft:
@@ -264,7 +354,7 @@ class _Episode:
         out: list[str] = []
         for group in self.groups:
             for e in group:
-                for token in (e.subject, e.obj):
+                for token in _tokens_of(e):
                     if token not in out:
                         out.append(token)
         return out
@@ -424,6 +514,132 @@ def _cross(rng: random.Random, diff: StreamDifficulty, pool: _Pool, variant: str
     return ep
 
 
+# ---- item class L: lessons (contract §13) -----------------------------------------
+
+def _foreign_edges(stream: Sequence[Event], relation_of: dict[tuple[str, str], str]) -> list[Event]:
+    """`stream` with the `leads_to` FACT of each pair in `relation_of` restated
+    under that pair's foreign relation, in place; everything else byte for byte."""
+    return [
+        replace(e, relation=relation_of[e.pair])
+        if e.kind is EventKind.FACT and e.relation == DEFAULT_RELATION and e.pair in relation_of else e
+        for e in stream
+    ]
+
+
+def _instance(nodes: Sequence[str], foreign_at: dict[int, str]) -> list[Event]:
+    """A plain chain over `nodes`, in order, with the edges at `foreign_at`
+    (link index -> relation) given under their foreign relation."""
+    return [events.fact(u, v, relation=foreign_at.get(j, DEFAULT_RELATION)) for j, (u, v) in enumerate(_edges(nodes))]
+
+
+def _lesson(rng: random.Random, diff: StreamDifficulty, pool: _Pool, variant: str, relations: Sequence[str]) -> _Episode:
+    """One L episode over `relations` (one name; two for L-specific). Built on
+    an `N-actionable` draw, whose designated link is the last chain FACT
+    before the interleave (as N-late reads it): that link becomes the `r`
+    edge. Module doc for the layouts."""
+    mechanism, role, base, offsets = LESSON_VARIANTS[variant]
+    if variant == "L-compose" and diff.hops < 3:
+        diff = replace(diff, hops=3)                               # two r edges with a plain edge between
+    draft = _remap(_draw_item(rng, diff, _mechanism_of(base)[0], base), pool)
+    stream = draft.stream
+    fa = _first(stream, EventKind.ASK)
+    main = stream[draft.designed_probe]
+    chain = _chain(stream, main)
+    edges = _edges(chain)
+    c0, ch = chain[0], chain[-1]
+    reverse = events.ask(ch, c0)
+    chain_facts = [i for i, e in enumerate(stream)
+                   if e.kind is EventKind.FACT and e.relation == DEFAULT_RELATION and e.pair in edges]
+    link = stream[max(chain_facts)].pair
+    r = relations[0]
+    ep = _Episode(variant, mechanism, role, chain_edges=tuple(edges), protected=frozenset(chain))
+    teach = _foreign_edges(stream[:fa], {link: r})               # setup with the r edge, then the interleave
+
+    if variant == "L-before":
+        ep.say(*teach)
+        ep.probe(main, _Design.GAP)                               # lacuna: the r edge's leads_to twin
+        ep.next_group(offsets[1])
+        ep.probe(main, _Design.GAP)
+        ep.say(events.lesson(r))
+        ep.probe(main, _Design.YES, designed=True)                # previously could not
+        ep.next_group(offsets[2])
+        ep.probe(main, _Design.YES)
+    elif variant == "L-apply":
+        fresh = pool.take(len(chain))
+        ep.chain_edges = ep.chain_edges + tuple(_edges(fresh))
+        ep.protected = ep.protected | set(fresh)
+        ep.say(events.lesson(r), *teach)                          # lesson first, then the one taught instance
+        ep.probe(main, _Design.YES)
+        ep.probe(reverse, _Design.GAP)
+        ep.next_group(offsets[1])
+        ep.say(*_instance(fresh, {edges.index(link): r}))         # tokens the lesson never saw
+        ep.probe(events.ask(fresh[0], fresh[-1]), _Design.YES, designed=True)
+        ep.probe(events.ask(fresh[-1], fresh[0]), _Design.GAP)
+    elif variant == "L-compose":
+        d = pool.take()[0]
+        ep.chain_edges = ep.chain_edges + ((ch, d),)
+        ep.protected = ep.protected | {d}
+        ep.say(events.lesson(r), *_foreign_edges(stream[:fa], {edges[0]: r, edges[-1]: r}))
+        ep.probe(main, _Design.YES)
+        ep.probe(reverse, _Design.GAP)
+        ep.next_group(offsets[1])
+        ep.say(events.fact(ch, d))
+        ep.probe(events.ask(c0, d), _Design.YES, designed=True)
+        ep.probe(events.ask(d, c0), _Design.GAP)
+    elif variant in ("L-retract", "L-revive"):
+        ep.say(*teach, events.lesson(r))                          # edges first, then the lesson
+        ep.probe(main, _Design.YES)
+        ep.next_group(offsets[1])
+        ep.say(events.unlesson(r))                                # withdrawn required: the held conclusion
+        if variant == "L-retract":
+            ep.probe(main, _Design.GAP, designed=True)
+            ep.probe(events.ask(*_sound_half(chain, link)), _Design.YES)
+            ep.next_group(offsets[2])
+            ep.probe(main, _Design.GAP)
+        else:
+            ep.probe(main, _Design.GAP)
+            ep.next_group(offsets[2])
+            ep.say(events.lesson(r))
+            ep.probe(main, _Design.YES, designed=True)
+            ep.next_group(offsets[3])
+            ep.probe(main, _Design.YES)
+            ep.probe(reverse, _Design.GAP)
+    elif variant == "L-specific":
+        r1, r2 = relations[0], relations[1]
+        taught = events.ask(c0, chain[-2])                        # through the r1 edge only
+        ep.say(events.lesson(r1), *_foreign_edges(stream[:fa], {edges[0]: r1, edges[-1]: r2}))
+        ep.probe(taught, _Design.YES)
+        ep.next_group(offsets[1])
+        ep.probe(main, _Design.GAP, designed=True)                # the lesson is for r1, not r2
+        ep.probe(taught, _Design.YES)
+    elif variant == "L-edge":
+        x, y, z = pool.take(3)
+        ep.chain_edges = ep.chain_edges + ((x, y), (y, z))
+        ep.protected = ep.protected | {x, y, z}
+        ep.say(*teach, events.lesson(r))
+        ep.probe(main, _Design.YES)
+        ep.probe(reverse, _Design.GAP)
+        ep.next_group(offsets[1])
+        ep.say(events.retract(*link, relation=r))                 # the edge, not the lesson
+        ep.probe(main, _Design.GAP, designed=True)
+        ep.say(events.retract(*link))                             # the leads_to twin: refused, never given
+        ep.say(*_instance([x, y, z], {0: r}))                     # the lesson stands
+        ep.probe(events.ask(x, z), _Design.YES)
+    else:  # pragma: no cover - LESSON_VARIANTS is the only source of names
+        raise RevisionError("E-RS-004", f"unknown variant {variant!r}")
+
+    if ep.designed_probe is None or ep.designed_probe[0] != _LESSON_DESIGNED_GROUP[variant]:
+        raise RevisionError("E-RS-004", f"{variant}: designed probe is not in group {_LESSON_DESIGNED_GROUP[variant]}")
+    return ep
+
+
+def _lessons(rng: random.Random, diff: StreamDifficulty, pool: _Pool) -> list[_Episode]:
+    """Every L variant once, each over its own foreign relation(s), unique
+    within the stream. Called after every other episode is drawn (module doc)."""
+    names = iter(rng.sample(FOREIGN_RELATIONS, sum(_RELATIONS_PER_VARIANT.values())))
+    return [_lesson(rng, diff, pool, v, [next(names) for _ in range(_RELATIONS_PER_VARIANT[v])]) for v in LESSON_VARIANTS]
+
+
 # ---- placement ------------------------------------------------------------------
 
 def _designed_session(ep: _Episode, base: int, sessions: int) -> int:
@@ -578,16 +794,23 @@ def _stream(laid: _Laid, truths: dict, *, seed: int, context_id: str, closed_wor
 # ---- twins ----------------------------------------------------------------------
 
 def _twin_events(laid: _Laid) -> tuple[Event, ...]:
-    """The primary's events with every X/T teaching FACT replaced in place by a
-    FACT between two spare tokens of the same episode (module doc)."""
+    """The primary's events with every X/T teaching FACT, and every L lesson,
+    replaced in place by a FACT between two spare tokens of the same episode
+    (module doc)."""
     stream = list(laid.events)
     for i, ep in enumerate(laid.episodes):
-        if ep.variant not in _TWINNED:
+        if ep.variant in _TWINNED:
+            positions = [
+                laid.where[(i, g, l)] for g, group in enumerate(ep.groups) for l, e in enumerate(group)
+                if e.kind is EventKind.FACT and e.relation == DEFAULT_RELATION and e.pair in ep.chain_edges
+            ]
+        elif ep.mechanism == "L":
+            positions = [
+                laid.where[(i, g, l)] for g, group in enumerate(ep.groups) for l, e in enumerate(group)
+                if e.kind is EventKind.FACT and e.relation == LESSON_RELATION
+            ]
+        else:
             continue
-        positions = [
-            laid.where[(i, g, l)] for g, group in enumerate(ep.groups) for l, e in enumerate(group)
-            if e.kind is EventKind.FACT and e.relation == DEFAULT_RELATION and e.pair in ep.chain_edges
-        ]
         stated = {e.pair for group in ep.groups for e in group if e.kind is EventKind.FACT and e.relation == DEFAULT_RELATION}
         spares = [t for t in ep.tokens() if t not in ep.protected]
         fresh = [(u, v) for u in spares for v in spares if u != v and (u, v) not in stated]
@@ -604,7 +827,7 @@ def _twin(laid: _Laid, *, seed: int, context_id: str, closed_world: bool) -> See
     for world, truth in truths.items():
         by_index = {x.event_index: x.verdict for x in truth.expectations}
         for i, ep in enumerate(laid.episodes):
-            if ep.variant in _TWINNED:
+            if ep.variant in _TWINNED or ep.mechanism == "L":
                 index = laid.where[(i,) + ep.designed_probe]
                 if by_index[index] is not _Design.GAP.in_world(world):
                     raise RevisionError(
@@ -632,8 +855,9 @@ def probe_owners(stream: SeedStream) -> dict[int, int]:
 
     Spans of different episodes interleave, so containment alone cannot say
     whose a probe is; tokens can, because episodes never share one. Every
-    event joins its two tokens; the component holding an episode's designed
-    probe is that episode's. The one probe that can sit in a component of
+    event joins its two tokens (and, under a foreign relation, that relation,
+    which is unique to one L episode of the stream: see `_nodes`); the
+    component holding an episode's designed probe is that episode's. The one probe that can sit in a component of
     its own is R-control's off-path ask (a distractor cycle that never
     touches the chain): it is attributed to the span that contains it and
     whose designed probe lies inside the component's index range, which is
@@ -652,9 +876,11 @@ def probe_owners(stream: SeedStream) -> dict[int, int]:
     lo: dict[str, int] = {}
     hi: dict[str, int] = {}
     for j, e in enumerate(stream.events):
-        parent[find(e.subject)] = find(e.obj)
+        nodes = _nodes(e)
+        for node in nodes:
+            parent[find(node)] = find(nodes[0])
     for j, e in enumerate(stream.events):
-        root = find(e.subject)
+        root = find(_nodes(e)[0])
         lo[root] = min(lo.get(root, j), j)
         hi[root] = max(hi.get(root, j), j)
     anchor: dict[str, int] = {}
@@ -717,11 +943,16 @@ def balance_report(sset: SessionSet, *, twins: bool = False) -> dict:
 
 # ---- the generator --------------------------------------------------------------
 
-def _draw_seed(rng: random.Random, diff: StreamDifficulty, sessions: int, seed: int) -> tuple[_Laid, dict]:
-    """One attempt at one seed stream: draw, lay out, judge."""
+def _draw_seed(rng: random.Random, diff: StreamDifficulty, sessions: int, seed: int,
+               lessons: bool = False) -> tuple[_Laid, dict]:
+    """One attempt at one seed stream: draw, lay out, judge. The L episodes
+    are drawn last, so with `lessons=False` the rng is consumed exactly as
+    before they existed."""
     pool = _Pool(rng)
     episodes = [_existing(rng, diff, pool, v) for v in EXISTING_VARIANTS]
     episodes += [_cross(rng, diff, pool, v) for v in CROSS_VARIANTS]
+    if lessons:
+        episodes += _lessons(rng, diff, pool)
     laid = _lay_out(rng, episodes, sessions)
     truths = _judge(laid.events, laid.designed, f"seed {seed}")
     return laid, truths
@@ -735,10 +966,14 @@ def generate_session_set(
     name: str = KIND,
     ceiling: float = BALANCE_CEILING,
     twins: bool = True,
+    lessons: bool = False,
 ) -> SessionSet:
     """One seed stream per seed (plus its untaught twin), split into `sessions`.
 
-    Each seed stream carries every variant of `CATALOG` once. It is drawn,
+    Each seed stream carries every variant of `CATALOG` once, plus every
+    variant of `LESSON_VARIANTS` once when `lessons` is set (which changes
+    the fingerprint; with `lessons=False` the output is byte-identical to
+    the generator before class L existed). It is drawn,
     judged against the oracle on every probe in both worlds (E-RS-005), for
     a hypothesis on a held pair (E-RS-010) and against the bank's route
     bounds (E-RS-006) over the WHOLE stream, and redrawn as a whole on any of
@@ -763,7 +998,7 @@ def generate_session_set(
         rng = random.Random(seed)
         for attempt in range(_ATTEMPTS):
             try:
-                laid, truths = _draw_seed(rng, diff, sessions, seed)
+                laid, truths = _draw_seed(rng, diff, sessions, seed, lessons)
                 break
             except RevisionError as exc:
                 if exc.code not in _REDRAW or attempt == _ATTEMPTS - 1:
@@ -806,16 +1041,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--sessions", type=int, default=5)
     parser.add_argument("--hops", type=int, default=StreamDifficulty().hops)
     parser.add_argument("--no-twins", action="store_true")
+    parser.add_argument("--lessons", action="store_true", help="add item class L (contract section 13)")
     args = parser.parse_args(argv)
     diff = StreamDifficulty(hops=args.hops)
     for closed in (False, True):
         sset = generate_session_set(_parse_seeds(args.seeds), diff, sessions=args.sessions,
-                                    closed_world=closed, twins=not args.no_twins)
+                                    closed_world=closed, twins=not args.no_twins, lessons=args.lessons)
         print(f"{'closed' if closed else 'open'} world  seeds={args.seeds} sessions={args.sessions} "
-              f"difficulty={diff.label()}")
+              f"difficulty={diff.label()} lessons={args.lessons}")
         print(f"  fingerprint {sset.fingerprint()}")
         print(f"  summary     {json.dumps(sset.summary(), sort_keys=True)}")
         print(f"  balance     {json.dumps(balance_report(sset)['classes'], sort_keys=True)}")
+        if args.lessons:
+            shape = {s.seed: {"episodes": len(s.episodes), "events": len(s.events), "probes": len(s.expectations)}
+                     for s in sset.streams}
+            print(f"  shape       {json.dumps(shape, sort_keys=True)}")
     return 0
 
 

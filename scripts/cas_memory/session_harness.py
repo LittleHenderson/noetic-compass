@@ -680,6 +680,9 @@ class PathResult:
     exact: dict = field(default_factory=lambda: {"total": 0, "ok": 0, "hits": 0})
     unseen_hits: int = 0
     twin_designed: dict = field(default_factory=lambda: {"total": 0, "ok": 0})
+    #: class L (contract section 13): designed lesson probes, primaries and twins, per variant
+    lessons: dict = field(default_factory=lambda: {"total": 0, "ok": 0, "hits": 0, "by_variant": {}})
+    twin_lessons: dict = field(default_factory=lambda: {"total": 0, "ok": 0, "by_variant": {}})
     routes: dict = field(default_factory=dict)
     work: dict = field(default_factory=lambda: {"first": [], "repeat": []})
     commit_ns: list[int] = field(default_factory=list)
@@ -723,6 +726,15 @@ def _absorb(result: PathResult, stream: SeedStream, run: SeedRun) -> None:
         hit = o.get("route") == "hit"
         if not flags.get(p.event_index) and hit:
             result.unseen_hits += 1
+        if ep is not None and p.designed and ep.mechanism == "L":
+            bucket = result.twin_lessons if run.twin else result.lessons
+            bucket["total"] += 1
+            bucket["ok"] += int(p.verdict_ok)
+            if not run.twin:
+                bucket["hits"] += int(hit)
+            cell = bucket["by_variant"].setdefault(ep.variant, [0, 0])
+            cell[0] += int(p.verdict_ok)
+            cell[1] += 1
         if ep is not None and p.designed:
             if run.twin:
                 result.twin_designed["total"] += 1
@@ -844,6 +856,12 @@ def render(results: dict[str, PathResult], sset: SessionSet) -> str:
                      f"T-exact: {r.exact['ok']}/{r.exact['total']} correct, record hits {r.exact['hits']}")
         if r.twin_designed["total"]:
             lines.append(f"   untaught twins, designed probes: {r.twin_designed['ok']}/{r.twin_designed['total']} GAP as expected")
+        if r.lessons["total"]:
+            by = ", ".join(f"{v} {ok}/{n}" for v, (ok, n) in sorted(r.lessons["by_variant"].items()))
+            lines.append(f"   lessons (class L designed probes): {r.lessons['ok']}/{r.lessons['total']} correct, {r.lessons['hits']} from the record; {by}")
+            tb = ", ".join(f"{v} {ok}/{n}" for v, (ok, n) in sorted(r.twin_lessons["by_variant"].items()))
+            lines.append(f"   lessons, untaught twins: {r.twin_lessons['ok']}/{r.twin_lessons['total']} GAP as expected; {tb}")
+            lines.append("   neural change: none (the lesson is a symbolic record in the history document; no parameter exists to change)")
         lines.append(f"   routes {dict(sorted(r.routes.items()))}; hits on never-asked pairs {r.unseen_hits} (must be 0)")
         fw = statistics.fmean(r.work['first']) if r.work['first'] else None
         rw = statistics.fmean(r.work['repeat']) if r.work['repeat'] else None
@@ -880,6 +898,7 @@ def to_json(results: dict[str, PathResult], sset: SessionSet) -> dict:
             "matrix": None if r.skipped else json.loads(m.to_json()),
             "unanswered": r.unanswered,
             "retention": r.retention, "transfer": r.transfer, "exact": r.exact, "twin_designed": r.twin_designed,
+            "lessons": r.lessons, "twin_lessons": r.twin_lessons,
             "routes": r.routes, "unseen_hits": r.unseen_hits,
             "work_first_mean": statistics.fmean(r.work["first"]) if r.work["first"] else None,
             "work_repeat_mean": statistics.fmean(r.work["repeat"]) if r.work["repeat"] else None,
