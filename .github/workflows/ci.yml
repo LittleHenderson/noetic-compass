@@ -197,6 +197,12 @@ jobs:
           -s scripts/tests
           -p 'test_cas_rpu_replacement.py'
 
+      - name: Run the RPA-routing tests (skip when the RPA checkout is not mounted)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_rpa_routing.py'
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.

@@ -35,8 +35,12 @@ Whole-document rewrite per commit, retained copies included. Reported, not optim
 
 Hard law: on generated streams in both worlds, both modes agree with walk-first and with the oracle on every probe. Zero faults. Routes at n=80 per world: dependency 11 hits / 170 misses; context 1 hit / 10 rejected / 170 misses — the generator's interleaved facts invalidate almost every record under whole-context invalidation, as the directive's order of work anticipated. Cost, within the organism's own counters: repeat asks 10.9 (dependency) vs 13.7 (walk-first) at n=40; a hit costs the size of its support set. Under the no-cascade ablation the record check refuses the dead-rooted record and the walk reproduces that ablation's own known defect, so the fast path adds no stale answer beyond walk-first. Through `Stream`, the flag is identity and a restored stream hits from the replayed record.
 
-Not implemented: `rpa_routing` and the external index/atlas lookup (M8.6). The comparison "record-first without RPA versus with RPA" therefore cannot run yet.
+## Record-first with RPA (contract M8.6), landed the same day — measured zero
+
+The fourth path. `scripts/cas_memory/rpa_adapter.py` imports the RPA model from the mounted checkout (`eb99855`, never copied) and projects one organism's workspace into an atlas that validates under the model's own rules: givens OBSERVED, standing conclusions VERIFIED and reachable from the present with their supports as evidence, told guesses HYPOTHETICAL, contradicted records UNKNOWN, retracted ones REJECTED. `RpaNarrower` is injected as `Organism(record_narrow=...)`; it may only remove candidates (E-ORG-007 otherwise).
+
+Pre-registered expectation: zero difference from the dependency-mode path. **Measured: zero.** On every probe of both worlds at n=40 and n=80 the RPA path has identical verdicts, lacunae, contested keys and routes to record-first without RPA (5 hits / 84 misses per world at n=40), the atlas removed no candidate, no faults. On this family the atlas adds nothing an ordinary record check does not already decide. It stays as the comparison path and for inspection of branches; the experiment reports it as "not run", with the reason, when the checkout is not mounted (CI).
 
 ## Next
 
-The RPA-assisted lookup as a narrowing step over the same records (M8.6), the generator classes the evaluation plan needs (§4), then the development-seed dry run on the target instance before anything is frozen.
+The generator classes the evaluation plan needs (§4), the live S3 run once a valid key is present, then the development-seed dry run on the target instance before anything is frozen.

@@ -65,6 +65,11 @@ RECORD_FIRST = {
     "organism_record_ctx": {"record_first": True, "record_invalidation": "context"},
     "organism_record_dep": {"record_first": True, "record_invalidation": "dependency"},
 }
+#: Record-first with RPA narrowing (the fourth path). Runs only when the RPA
+#: checkout is mounted; otherwise reported as not run, never invented.
+RPA_PATH = "organism_record_rpa"
+#: Paths that did not run, with the reason, for the report.
+not_run: dict[str, str] = {}
 
 
 # ---------------------------------------------------------------------------
@@ -107,15 +112,34 @@ def run_control(control: Replayer, stream_set: StreamSet) -> SolverRun:
     return run
 
 
-def run_organism(name: str, stream_set: StreamSet, workspace_factory=None, **organism_kwargs) -> SolverRun:
+def _rpa_narrower_factory():
+    """The fourth path's narrowing step, if the RPA checkout is mounted; else None.
+
+    Loaded by name at run time so the reasoning package's import law is
+    untouched: the atlas code lives outside it and is injected per organism.
+    """
+    import importlib
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "cas_memory"))
+    try:
+        adapter = importlib.import_module("rpa_adapter")
+        rpa = adapter.load_rpa()
+    except Exception as exc:  # RpaUnavailable, or an import failure in the checkout
+        return None, str(exc)
+    return (lambda org, item_id: adapter.RpaNarrower(org, item_id, rpa)), None
+
+
+def run_organism(name: str, stream_set: StreamSet, workspace_factory=None, attach=None, **organism_kwargs) -> SolverRun:
     """One fresh Organism per item (contract §6): tokens are per item and an
-    organism shared across items would carry routes between them."""
+    organism shared across items would carry routes between them. `attach(org,
+    item_id)` may inject a narrowing step before the stream runs."""
     run = SolverRun(name, [], 0, [], [])
     for item in stream_set.items:
         kwargs = {"closed_world": stream_set.closed_world, **organism_kwargs}
         if workspace_factory is not None:
             kwargs["workspace_factory"] = workspace_factory
         org = Organism(**kwargs)
+        if attach is not None:
+            org.record_narrow = attach(org, item.item_id)
         responses = org.run_stream(item.events)
         for r in responses:
             if r.verdict is not None and r.route not in ("walk", "disabled"):
@@ -160,6 +184,12 @@ def run_world(stream_set: StreamSet, *, solvers: set[str] | None = None) -> Worl
     for name, kwargs in RECORD_FIRST.items():
         if wanted(name):
             runs[name] = run_organism(name, stream_set, **kwargs)
+    if wanted(RPA_PATH):
+        factory, why = _rpa_narrower_factory()
+        if factory is not None:
+            runs[RPA_PATH] = run_organism(RPA_PATH, stream_set, attach=factory, record_first=True, record_invalidation="dependency")
+        else:
+            not_run[RPA_PATH] = why
     for abl in ABLATIONS:
         if wanted(abl.name):
             runs[abl.name] = run_organism(abl.name, stream_set, abl.workspace)
@@ -241,10 +271,22 @@ def contract_checks(open_w: WorldResult, closed_w: WorldResult) -> list[tuple[st
             ) or f"{w.runs[name].faults} fault(s)"
             routes = ", ".join(f"{k} {v}" for k, v in sorted(w.runs[name].routes.items()))
             checks.append((f"{name} agrees with the oracle on every probe, no faults ({label}; routes: {routes})", ok, detail))
+    if RPA_PATH in open_w.runs:
+        for w in (open_w, closed_w):
+            label = "closed" if w.closed_world else "open"
+            ok = w.matrix.perfect(RPA_PATH) and w.runs[RPA_PATH].faults == 0
+            same = w.runs[RPA_PATH].routes == w.runs["organism_record_dep"].routes
+            checks.append((f"{RPA_PATH} agrees with the oracle on every probe, no faults ({label}; routes: "
+                           + ", ".join(f"{k} {v}" for k, v in sorted(w.runs[RPA_PATH].routes.items())) + ")", ok, ""))
+            checks.append((f"{RPA_PATH} vs organism_record_dep ({label}): route mix "
+                           + ("identical — the atlas added zero measured value on this family" if same else f"DIFFERS: {w.runs[RPA_PATH].routes} vs {w.runs['organism_record_dep'].routes}"),
+                           True, ""))
+    else:
+        checks.append((f"{RPA_PATH} not run: {not_run.get(RPA_PATH, 'RPA checkout not mounted')}", True, ""))
     for mech in CLASSES:
         broken_that_fail = [
             name for name in open_w.matrix.solvers
-            if name not in CORRECT_BY_CONSTRUCTION and name != ORGANISM and name not in RECORD_FIRST
+            if name not in CORRECT_BY_CONSTRUCTION and name != ORGANISM and name not in RECORD_FIRST and name != RPA_PATH
             and any((w.matrix.rate(name, mech, c) or 1.0) < 1.0 for w in (open_w, closed_w) for c in ("verdict", "contested", "named", "withdrawn"))
         ]
         checks.append((f"class {mech} is diagnostic (some broken solver fails it)", bool(broken_that_fail), ", ".join(broken_that_fail)))

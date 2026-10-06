@@ -56,8 +56,17 @@ sever law forbids network reach inside it. The live run is blocked: the sandbox'
 by the service (`InvalidAccessKeyId`); the test runs unchanged once a valid key with put/get/list on a
 dedicated prefix is present.
 
+**Record-first with RPA (same day) — measured zero.** `scripts/cas_memory/rpa_adapter.py` projects the
+organism's workspace into an atlas of the RPA model imported from the mounted checkout `eb99855`
+(never copied) and narrows record-first lookups through it; the organism refuses a narrower that adds
+a candidate. Against record-first without RPA: identical verdicts, lacunae, contested keys and routes
+on every probe of both worlds, zero candidates removed, zero faults. The atlas added no measured
+value on this family; reported as zero, kept as the comparison path. The experiment reports the
+path as not run when the checkout is not mounted.
+
 **Not shown, stated.** Level (b) on the real AWS location (blocked on a valid key), any frozen held-out
-result, RPA's value over an ordinary index, transfer, cooperation, neural retention.
+result, transfer, cooperation, neural retention. RPA's value over an ordinary record check: measured
+zero on this family.
 
 ## The reasoning processor becomes an organism, and gets a task family that can only say what it can say (Oct 6, 2026)
 
