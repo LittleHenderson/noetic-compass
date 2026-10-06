@@ -293,6 +293,41 @@ class LocalizedContradictionTests(unittest.TestCase):
         self.assertIs(episode.terminal, Terminal.CONCLUDED)
         self.assertEqual(episode.answer, "NO")
 
+    def test_a_given_denial_outranks_a_partial_route_association_surfaced(self):
+        """Told "VS does not lead to IU", reminded of a route VS -> QS ~ IU by a
+        mere association: the answer is NO in both worlds, not "I do not know".
+        Without this a reasoner would abstain on a question it was explicitly
+        told the answer to, because something reminded it of a route."""
+        for closed in (False, True):
+            ws = Workspace(closed_world=closed)
+            ws.fact("VS", "leads_to", "QS")
+            ws.fact("QS", "co_occurs", "IU")
+            ws.fact("VS", "leads_to", "IU", negated=True)
+            episode = processor().run_in(
+                ws, Problem("denied-partial", "leads_to", (), ("VS", "IU"), closed_world=closed)
+            )
+            self.assertIs(episode.terminal, Terminal.CONCLUDED, closed)
+            self.assertEqual(episode.answer, "NO", closed)
+            self.assertTrue(episode.candidates, "^8 did surface the partial route")
+        # The same with the gap given as a guess rather than an association.
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "QS")
+        ws.hypothesize("QS", "leads_to", "IU", stage="stream")
+        ws.fact("VS", "leads_to", "IU", negated=True)
+        episode = processor().run_in(ws, Problem("denied-guess", "leads_to", (), ("VS", "IU")))
+        self.assertEqual(episode.answer, "NO")
+
+    def test_a_contested_claim_asked_directly_is_a_dispute_not_a_denial(self):
+        """F(a,b), N(a,b), ask a->b: both polarities are held, so the question
+        is inadmissible and names the pair; a denial that is itself disputed
+        is not knowledge."""
+        ws = Workspace()
+        ws.fact("VS", "leads_to", "IU")
+        ws.fact("VS", "leads_to", "IU", negated=True)
+        episode = processor().run_in(ws, Problem("contested", "leads_to", (), ("VS", "IU")))
+        self.assertIs(episode.terminal, Terminal.INADMISSIBLE)
+        self.assertIn("VS|leads_to|IU", episode.note)
+
 
 class SuppliedWorkspaceTests(unittest.TestCase):
     """`run_in` is the organism's entry point: the workspace outlives the episode."""

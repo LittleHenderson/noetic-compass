@@ -225,25 +225,36 @@ class FixedWorld(Workspace):
 
 
 class NoSweep(Workspace):
-    """Rule removed: "Every exit sweeps the route hypotheses `^8` recorded."
+    """Rule removed: `^8` marks its route guesses as its own output.
 
-    `sweep()` reports nothing and retracts nothing, so `^8`'s route guesses
-    (the query pair, filed at stage `"^8"`) outlive the episode that made
-    them. Whether this changes any scored cell on this family is an open
-    question the experiment answers: the hypothesis bank already refuses to
-    walk its own stage, so the predicted effect -- a lingering guess absorbing
-    a later stream hypothesis of the same pair and hiding it from the lacuna
-    report -- requires a probe pattern the generator may never emit. If the
-    matrix shows 100% everywhere, that is reported as "the sweep is not
-    load-bearing for correctness on this family, relative to the organism
-    that lacks it", and nothing more.
+    The bank files every surfaced route's conclusion as a HYPOTHESIS at stage
+    `"^8"`. Two mechanisms key on that mark: the sweep at the end of every
+    episode retracts exactly those records, and the next walk skips them, so a
+    bank never re-triggers on its prior output. Remove the mark and both are
+    gone at once -- the guesses linger and are walked -- which is the one
+    rule, "a stage knows its own output", that the sweep and the skip jointly
+    enforce. Disabling `sweep()` alone changes nothing: the walk would still
+    skip the marked records (measured; see the test).
+
+    With the mark gone, a later question whose route passes through an
+    earlier unanswered question's endpoints is answered along the lingering
+    guess: `^6` asks for it, finds a guess, and names it as a gap. That key is
+    in neither `hyp` nor `assoc` nor the query pair, so the `named` column
+    loses precision. Whether the generated family contains such a probe
+    pattern is for the experiment to report; if it does not, the result is
+    "not load-bearing on this family relative to the organism that lacks it",
+    and nothing more.
     """
 
-    removed = "Workspace.sweep: clearing ^8's route hypotheses at episode end"
-    overrides = ("sweep",)
+    removed = "Workspace.hypothesize: the stage mark on ^8's route guesses"
+    overrides = ("hypothesize",)
 
-    def sweep(self, stage: str) -> tuple[str, ...]:
-        return ()
+    def hypothesize(
+        self, subject: str, relation: str, obj: str, *, stage: str = "^8", negated: bool = False
+    ) -> Proposition:
+        if stage == "^8":
+            stage = ""
+        return super().hypothesize(subject, relation, obj, stage=stage, negated=negated)
 
 
 # ---------------------------------------------------------------------------
@@ -270,7 +281,7 @@ ABLATIONS: tuple[Ablation, ...] = (
     Ablation("abl_no_cascade", NoCascade, NoCascade.removed, ("C-stale",)),
     Ablation("abl_amnesic_ask", AmnesicAsk, AmnesicAsk.removed, ("N-gap:named",)),
     Ablation("abl_fixed_world", FixedWorld, FixedWorld.removed, ("closed-world rule-5 probes",)),
-    Ablation("abl_no_sweep", NoSweep, NoSweep.removed, ()),
+    Ablation("abl_no_sweep", NoSweep, NoSweep.removed, ("named precision after an earlier abstention",)),
 )
 
 BY_NAME: dict[str, Ablation] = {a.name: a for a in ABLATIONS}

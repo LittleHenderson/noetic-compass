@@ -178,6 +178,15 @@ def ablation_verdict(abl: Ablation, open_w: WorldResult, closed_w: WorldResult) 
         closed_bad = not closed_w.matrix.perfect(abl.name)
         ok = open_perfect and closed_bad
         return ok, ("paired-set signature: perfect open, failing closed" if ok else f"unexpected: {column_hits}")
+    if abl.name == "abl_no_sweep":
+        verdict_perfect = all(
+            w.matrix.rate(abl.name, m, "verdict") in (None, 1.0) for w in (open_w, closed_w) for m in CLASSES
+        )
+        named_cells = [w.matrix.rate(abl.name, m, "named") for w in (open_w, closed_w) for m in CLASSES]
+        named_bad = any(r is not None and r < 1.0 for r in named_cells)
+        note = ("the named column loses precision" if named_bad
+                else "no scored cell changed on this family (reported, not claimed)")
+        return verdict_perfect, (f"verdicts unchanged; {note}" if verdict_perfect else f"unexpected verdict change: {column_hits}")
     if abl.name == "abl_amnesic_ask":
         verdict_perfect = all(
             w.matrix.rate(abl.name, m, "verdict") in (None, 1.0) for w in (open_w, closed_w) for m in CLASSES

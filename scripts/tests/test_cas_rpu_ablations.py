@@ -233,19 +233,53 @@ class FixedWorldTests(unittest.TestCase):
 
 
 class NoSweepTests(unittest.TestCase):
-    def test_base_sweep_clears_route_hypotheses(self):
+    def test_base_marks_route_guesses_and_the_sweep_clears_exactly_those(self):
         ws = Workspace()
         ws.hypothesize("A", R, "C")
+        ws.hypothesize("B", R, "C", stage="stream")
+        self.assertEqual(ws.props[AC].stage, "^8")
         self.assertEqual(ws.sweep("^8"), (AC,))
         self.assertIs(ws.props[AC].status, Status.RETRACTED)
+        self.assertIs(ws.props[BC].status, Status.HYPOTHESIS)
 
-    def test_ablated_sweep_leaves_them_in_place(self):
+    def test_ablated_guesses_are_unmarked_so_nothing_is_swept(self):
         ws = NoSweep()
         ws.hypothesize("A", R, "C")
         ws.hypothesize("B", R, "C", stage="stream")
+        self.assertEqual(ws.props[AC].stage, "")
+        self.assertEqual(ws.props[BC].stage, "stream")
         self.assertEqual(ws.sweep("^8"), ())
         self.assertIs(ws.props[AC].status, Status.HYPOTHESIS)
-        self.assertIs(ws.props[BC].status, Status.HYPOTHESIS)
+
+    def test_disabling_the_sweep_alone_would_change_nothing_because_the_walk_skips_the_mark(self):
+        """The reason the ablation removes the mark rather than the sweep."""
+        from banks import HypothesisBank
+        ws = Workspace()
+        ws.fact("A", R, "B")
+        ws.hypothesize("B", R, "C")              # a lingering, still-marked guess
+        found, _ = HypothesisBank().surface(ws, "A", "C", R)
+        self.assertEqual(found, [], "a marked guess is not walked")
+        ws2 = NoSweep()
+        ws2.fact("A", R, "B")
+        ws2.hypothesize("B", R, "C")             # unmarked
+        found2, _ = HypothesisBank().surface(ws2, "A", "C", R)
+        self.assertEqual([c.nodes for c in found2], [("A", "B", "C")], "an unmarked guess is walked")
+
+    def test_through_the_organism_a_lingering_guess_is_named_as_a_gap(self):
+        """The failure the mark prevents: a later question is answered along an
+        earlier question's guess, and ^6 names that guess as something missing.
+        The key is neither a given guess nor an association nor the query pair,
+        so the lacuna report loses precision. Verdicts are unchanged."""
+        from events import ask, associate, fact
+        from organism import Organism
+        stream = [fact("C0", "C1"), fact("C2", "C3"), associate("C1", "C2"), ask("C1", "C3"), ask("C0", "C3")]
+        base = Organism().run_stream(stream)
+        abl = Organism(workspace_factory=NoSweep).run_stream(stream)
+        self.assertEqual([r.verdict for r in base[3:]], ["UNKNOWN", "UNKNOWN"])
+        self.assertEqual([r.verdict for r in abl[3:]], ["UNKNOWN", "UNKNOWN"])
+        self.assertEqual(base[4].lacunae, ("C1|leads_to|C2",))
+        self.assertIn("C1|leads_to|C3", abl[4].lacunae, "the first question's guess, named as a gap")
+        self.assertIn("C1|leads_to|C2", abl[4].lacunae)
 
 
 class OneRuleAtATimeTests(unittest.TestCase):

@@ -65,34 +65,61 @@ class VerdictOrderTests(unittest.TestCase):
             self.assertEqual(a.contested, (K("A", "D"),))
             self.assertEqual(a.lacunae, ())
 
-    def test_rule_2_an_explicit_denial_is_no_in_both_worlds(self):
-        for closed in (False, True):
-            a = ctl_recompute([negation("A", "D"), ask("A", "D")], closed).answers[0]
-            self.assertEqual(a.verdict, NO)
-            self.assertEqual(a.lacunae, (), "a denial is knowledge, not a gap")
-
-    def test_rule_3_a_clean_route_is_yes(self):
+    def test_rule_2_a_clean_route_is_yes(self):
         for closed in (False, True):
             self.assertEqual(verdicts(ctl_recompute, CHAIN + [ask("A", "D")], closed), (YES,))
 
-    def test_rule_4_a_disputed_only_route_is_inadmissible_and_names_the_link(self):
+    def test_rule_3_a_disputed_only_route_is_inadmissible_and_names_the_link(self):
         for closed in (False, True):
             a = ctl_recompute(CHAIN + [negation("B", "C"), ask("A", "D")], closed).answers[0]
             self.assertEqual(a.verdict, INADMISSIBLE)
             self.assertEqual(a.contested, (K("B", "C"),))
 
-    def test_rule_4_contested_required_uses_reflexive_reach_at_both_ends(self):
+    def test_rule_3_a_contested_pair_asked_directly_is_a_dispute_not_a_denial(self):
+        """F(a,b) N(a,b) ask a->b: the denial is itself disputed, so it is not knowledge."""
+        for closed in (False, True):
+            a = ctl_recompute([fact("A", "B"), negation("A", "B"), ask("A", "B")], closed).answers[0]
+            self.assertEqual((a.verdict, a.contested), (INADMISSIBLE, (K("A", "B"),)))
+
+    def test_rule_3_a_denied_pair_behind_a_disputed_route_is_inadmissible(self):
+        stream = [fact("A", "B"), fact("B", "C"), negation("B", "C"), negation("A", "C"), ask("A", "C")]
+        for closed in (False, True):
+            a = ctl_recompute(stream, closed).answers[0]
+            self.assertEqual((a.verdict, a.contested), (INADMISSIBLE, (K("B", "C"),)))
+
+    def test_rule_3_names_contested_links_on_simple_routes_only(self):
+        """A contested link on a cycle through route nodes is not on any simple
+        s->t route, so it is not named -- the same set ^8's walk surfaces."""
+        stream = [fact("S", "A"), fact("A", "B"), fact("B", "C"), fact("C", "A"), fact("C", "T"),
+                  negation("A", "B"), negation("C", "A"), ask("S", "T")]
+        a = ctl_recompute(stream).answers[0]
+        self.assertEqual((a.verdict, a.contested), (INADMISSIBLE, (K("A", "B"),)))
+
+    def test_rule_4_an_explicit_denial_with_no_route_is_no_in_both_worlds(self):
+        for closed in (False, True):
+            a = ctl_recompute([negation("A", "D"), ask("A", "D")], closed).answers[0]
+            self.assertEqual(a.verdict, NO)
+            self.assertEqual(a.lacunae, (), "a denial is knowledge, not a gap")
+
+    def test_rule_4_a_denial_outranks_a_partial_route(self):
+        """A shadow or a guess completes no route; the given denial settles it."""
+        for bridge in (associate("B", "C"), hypothesis("B", "C")):
+            for closed in (False, True):
+                a = ctl_recompute([fact("A", "B"), bridge, negation("A", "C"), ask("A", "C")], closed).answers[0]
+                self.assertEqual((a.verdict, a.lacunae), (NO, ()), (bridge, closed))
+
+    def test_rule_3_contested_required_uses_reflexive_reach_at_both_ends(self):
         first = ctl_recompute(CHAIN + [negation("A", "B"), ask("A", "D")]).answers[0]
         last = ctl_recompute(CHAIN + [negation("C", "D"), ask("A", "D")]).answers[0]
         self.assertEqual((first.verdict, first.contested), (INADMISSIBLE, (K("A", "B"),)))
         self.assertEqual((last.verdict, last.contested), (INADMISSIBLE, (K("C", "D"),)))
 
-    def test_rule_4_names_only_disputes_on_the_route(self):
+    def test_rule_3_names_only_disputes_on_the_route(self):
         stream = CHAIN + [negation("B", "C"), fact("X", "Y"), negation("X", "Y"), ask("A", "D")]
         a = ctl_recompute(stream).answers[0]
         self.assertEqual(a.contested, (K("B", "C"),), "X -> Y is disputed but off the route")
 
-    def test_rule_3_beats_rule_4_when_a_clean_second_route_exists(self):
+    def test_rule_2_beats_rule_3_when_a_clean_second_route_exists(self):
         stream = CHAIN + [fact("A", "E"), fact("E", "D"), negation("B", "C"), ask("A", "D")]
         self.assertEqual(verdicts(ctl_recompute, stream), (YES,))
 
@@ -119,6 +146,19 @@ class LacunaTests(unittest.TestCase):
         a = ctl_recompute(stream).answers[0]
         self.assertEqual(a.verdict, UNKNOWN, "a refuted guess is not a dispute")
         self.assertEqual(a.lacunae, ())
+
+    def test_a_gap_beyond_a_contested_link_is_a_lacuna_and_the_contested_link_is_not(self):
+        """The walk graph keeps the disputed link (^8 walks it); the gap past it is
+        on a surfaced route and is named; the disputed link itself never is."""
+        stream = [fact("A", "B"), associate("B", "C"), fact("C", "D"), negation("A", "B"), ask("A", "D")]
+        a = ctl_recompute(stream).answers[0]
+        self.assertEqual((a.verdict, a.lacunae, a.contested), (UNKNOWN, (K("B", "C"),), ()))
+
+    def test_a_guess_or_denial_under_another_relation_is_refused(self):
+        from events import Event, EventKind
+        for kind in (EventKind.HYPOTHESIS, EventKind.NEGATION):
+            with self.assertRaises(ValueError):
+                ctl_recompute([Event(kind, "A", "B", "co_occurs"), ask("A", "B")])
 
     def test_an_off_route_hypothesis_is_not_a_lacuna(self):
         a = ctl_recompute(GAP + [hypothesis("X", "Y"), ask("A", "D")]).answers[0]

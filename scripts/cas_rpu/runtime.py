@@ -498,6 +498,20 @@ class ReasoningProcessor:
                     f"contradictory premises on the queried route: {', '.join(keys)}",
                     candidates=candidates,
                 )
+            # A denial that was GIVEN is knowledge, whatever association
+            # surfaced. ^8 may have walked a partial route through a shadow or
+            # a guess; ^6 found its links unsupported; and the question is
+            # still settled, because the premises say the claim is false. The
+            # no-candidate branch above consults the same denial; without this
+            # check a reasoner would answer "I do not know" to a question it
+            # was explicitly told the answer to, merely because something
+            # reminded it of a route.
+            denial = ws.props.get(f"~{problem.source}|{problem.relation}|{problem.target}")
+            if denial is not None and denial.status in ASSERTIVE:
+                log(Phase.COMMIT, "explicit denial outranks an unsupported route: NO")
+                return finish(
+                    Terminal.CONCLUDED, "NO", "explicitly denied", candidates=candidates
+                )
             return self._prerequisite_stop(
                 ws, problem, trace, log, finish, prof, mark, wisdom=2.0, candidates=candidates
             )

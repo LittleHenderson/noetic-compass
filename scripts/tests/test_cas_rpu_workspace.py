@@ -188,6 +188,21 @@ class EpisodeScopingTests(unittest.TestCase):
         self.assertEqual(ws.lacunae(), ("A|leads_to|B", "C|leads_to|D"))
         self.assertEqual(ws.lacunae(since=mark), ("C|leads_to|D",))
 
+    def test_a_dispute_is_not_a_gap(self):
+        """A key held in both polarities is contested, not missing; it is named
+        through `contested()`, never as something to go and acquire."""
+        ws = Workspace()
+        ws.fact("A", "leads_to", "B")
+        ws.fact("A", "leads_to", "B", negated=True)
+        ws.ask("A", "leads_to", "B")
+        ws.ask("B", "leads_to", "C")
+        self.assertTrue(ws.contested("A", "leads_to", "B"))
+        self.assertEqual(ws.lacunae(), ("B|leads_to|C",))
+        # Retracting one side reinstates the other; the key is then settled by
+        # an assertive record and still not a lacuna.
+        ws.retract("A|leads_to|B")
+        self.assertEqual(ws.lacunae(), ("B|leads_to|C",))
+
     def test_re_asking_an_old_question_brings_it_into_the_current_episode(self):
         ws = Workspace()
         ws.ask("A", "leads_to", "B")

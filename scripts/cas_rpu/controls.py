@@ -106,10 +106,10 @@ class Rules:
     forget: bool = True
     #: §2 HYPOTHESIS: a guess is not a given; it never enters `pos`.
     firewall: bool = True
-    #: §3 rules 1 and 4: a pair in both `pos` and `neg` is contested, not
+    #: §3 rules 1 and 3: a pair in both `pos` and `neg` is contested, not
     #: overwritten by whichever statement came last.
     dispute: bool = True
-    #: §3 rule 4: a dispute blocks only the routes it lies on.
+    #: §3 rule 3: a dispute blocks only the routes it lies on.
     local: bool = True
     #: §4: an open-world UNKNOWN names the gap(s) that would close it.
     name_gaps: bool = True
@@ -163,6 +163,33 @@ def _reach_star(adj: dict[str, list[str]], s: str, t: str) -> tuple[bool, int]:
     return _reach(adj, s, t)
 
 
+def _simple_routes(adj: dict[str, list[str]], s: str, t: str, *, max_hops: int = 6, limit: int = 64) -> tuple[list[tuple[str, ...]], int]:
+    """Every simple (no repeated node) s→t route up to `max_hops`, breadth first.
+
+    This is the graph `^8` surfaces (`HypothesisBank.surface` walks the same
+    way with `max_hops=6`, `limit=8`); E-RS-006 keeps generated items inside
+    those bounds, so on every scored probe the enumeration is complete. The
+    `limit` here is only a runaway stop. Returns (routes, work).
+    """
+    routes: list[tuple[str, ...]] = []
+    queue = deque([(s, (s,))])
+    work = 0
+    while queue and len(routes) < limit:
+        node, path = queue.popleft()
+        if len(path) - 1 >= max_hops:
+            continue
+        for nxt in adj.get(node, ()):
+            work += 1
+            if nxt in path:
+                continue
+            route = path + (nxt,)
+            if nxt == t:
+                routes.append(route)
+            else:
+                queue.append((nxt, route))
+    return routes, work
+
+
 # ---------------------------------------------------------------------------
 # the replayer
 # ---------------------------------------------------------------------------
@@ -197,6 +224,11 @@ class Replayer:
         """Mutate `st` by one non-ASK event. Returns False when REFUSED."""
         r = self.rules
         pair = ev.pair
+        if ev.kind in (EventKind.HYPOTHESIS, EventKind.NEGATION) and ev.relation != DEFAULT_RELATION:
+            # The family's grammar keys denials and guesses by pair (§1). A
+            # denied or guessed *association* has no semantics here; refusing
+            # it is better than silently denying the `leads_to` pair.
+            raise ValueError(f"{ev.kind.value} under relation {ev.relation!r} has no semantics in this family")
         if ev.kind is EventKind.FACT:
             if ev.relation == ASSOCIATIVE_RELATION:
                 st.assoc.add(pair)
@@ -247,33 +279,32 @@ class Replayer:
         adj_clean = _adjacency(clean)
         found_clean, w = _reach(adj_clean, s, t)
         work += w
-        if (s, t) in st.neg:
-            if found_clean:
-                return Answer(index, s, t, INADMISSIBLE, (), (key_of((s, t)),), work)   # rule 1
-            return Answer(index, s, t, NO, (), (), work)                                 # rule 2
-        if found_clean:
-            return Answer(index, s, t, YES, (), (), work)                                # rule 3
+        if (s, t) in st.neg and found_clean:                                             # rule 1
+            return Answer(index, s, t, INADMISSIBLE, (), (key_of((s, t)),), work)
+        if found_clean:                                                                  # rule 2
+            return Answer(index, s, t, YES, (), (), work)
 
-        if contested:
+        if contested:                                                                    # rule 3
             adj_all = _adjacency(clean | contested)
-            found_all, w = _reach(adj_all, s, t)
+            routes, w = _simple_routes(adj_all, s, t)
             work += w
-            if found_all:                                                                # rule 4
-                keys = []
-                for k in sorted(contested):
-                    a, w1 = _reach_star(adj_all, s, k[0])
-                    b, w2 = _reach_star(adj_all, k[1], t)
-                    work += w1 + w2 + 1
-                    if a and b:
-                        keys.append(key_of(k))
-                return Answer(index, s, t, INADMISSIBLE, (), tuple(keys), work)
+            if routes:
+                on_route = {
+                    (a, b) for route in routes for a, b in zip(route, route[1:]) if (a, b) in contested
+                }
+                keys = tuple(sorted(key_of(k) for k in on_route))
+                return Answer(index, s, t, INADMISSIBLE, (), keys, work)
 
-        if world_closed:
-            return Answer(index, s, t, NO, (), (), work)                                 # rule 5
+        if (s, t) in st.neg:                                                             # rule 4
+            return Answer(index, s, t, NO, (), (), work)
+        if world_closed:                                                                 # rule 5
+            return Answer(index, s, t, NO, (), (), work)
 
         lacunae: tuple[str, ...] = ()
         if r.name_gaps:                                                                  # rule 6 + §4
-            g_all = (clean | contested | st.hyp | st.assoc) - st.neg
+            # The walk graph keeps contested links (^8 walks them) and drops
+            # pairs that are only denied.
+            g_all = (clean | contested | st.hyp | st.assoc) - (st.neg - st.pos)
             adj_g = _adjacency(g_all)
             named = []
             for u, v in sorted((st.hyp | st.assoc) - clean - st.neg):

@@ -423,16 +423,28 @@ class Workspace:
         `since` restricts the report to questions asked at or after that
         episode mark, so a long-lived workspace reports the gaps *this*
         episode hit rather than every unanswered question in its history.
+
+        A dispute is not a gap. A key held CONTRADICTED in either polarity is
+        not reported: the workspace is not missing that information, it holds
+        two incompatible pieces of it, and the processor names such a link
+        through `contested()`, never as something to go and acquire. (This is
+        the lacunarity/contradiction distinction of Clarification 9: absence
+        is one failure, present-and-disputed is another.)
         """
+        def settled(key: str) -> bool:
+            for pid in (key, "~" + key):
+                prop = self.props.get(pid)
+                if prop is not None and (
+                    prop.status in ASSERTIVE or prop.status is Status.CONTRADICTED
+                ):
+                    return True
+            return False
+
         return tuple(
             sorted(
                 key
                 for key, asked_at in self._asked.items()
-                if asked_at >= since
-                and not (
-                    (self.props.get(key) and self.props[key].status in ASSERTIVE)
-                    or (self.props.get("~" + key) and self.props["~" + key].status in ASSERTIVE)
-                )
+                if asked_at >= since and not settled(key)
             )
         )
 
