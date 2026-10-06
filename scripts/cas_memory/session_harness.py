@@ -777,7 +777,14 @@ def schedule_faults(streams, sessions: int, kinds=FAULT_KINDS) -> dict[int, dict
 
 
 def evaluate(sset: SessionSet, root: Path, *, paths=PATHS, faults: bool = False, twins: bool = True,
-             mirror: str | None = None, replacement: bool = False, log=None) -> dict[str, PathResult]:
+             mirror: str | None = None, replacement: bool = False, log=None, keep_stores: bool = False) -> dict[str, PathResult]:
+    """Run every stream of the set on every path. A stream's store (its history
+    document, retained copies and archive, ~30 MB by the end of five sessions) is
+    deleted once its last session has exited unless `keep_stores`: the harness is
+    evaluation scaffolding and a finished store is evidence only through the
+    report, while 240 of them would spend the machine's disk. Deleting a finished
+    store is a harness action, never a memory-engine one — the engine still
+    discards nothing."""
     world = "closed" if sset.closed_world else "open"
     results: dict[str, PathResult] = {}
     rpa_reason = None
@@ -801,6 +808,10 @@ def evaluate(sset: SessionSet, root: Path, *, paths=PATHS, faults: bool = False,
             else:
                 run = run_seed(stream, path, root, fault=plan.get(stream.seed) if stream.twin_of is None else None,
                                mirror=mirror, replacement=replacement)
+                if not keep_stores:
+                    world_dir = root / world / path
+                    ctx = f"seed{stream.seed}{'-twin' if stream.twin_of is not None else ''}-{world}"
+                    shutil.rmtree(world_dir / ctx, ignore_errors=True)
             _absorb(result, stream, run)
             if log:
                 log(f"{world} {path} seed{stream.seed}{' twin' if stream.twin_of is not None else ''}: "
@@ -944,6 +955,7 @@ def main(argv=None) -> int:
     ap.add_argument("--lessons", action="store_true", help="add the L-class lesson episodes (contract section 13); changes the fingerprint")
     ap.add_argument("--mirror", default=None, help="DIR for a second-directory mirror, or 's3' for the dedicated location")
     ap.add_argument("--replacement", action="store_true", help="destroy the local store between sessions; restore from the mirror")
+    ap.add_argument("--keep-stores", action="store_true", help="keep every stream's store on disk after its run (default: delete each finished store)")
     ap.add_argument("--json", default=None, help="write the full results here")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
@@ -959,7 +971,7 @@ def main(argv=None) -> int:
     for world in args.worlds.split(","):
         sset = generate_session_set(_parse_seeds(args.seeds), sessions=args.sessions, closed_world=(world == "closed"), lessons=args.lessons)
         results = evaluate(sset, root, paths=paths, faults=args.faults, twins=not args.no_twins,
-                           mirror=args.mirror, replacement=args.replacement, log=log)
+                           mirror=args.mirror, replacement=args.replacement, log=log, keep_stores=args.keep_stores)
         print(render(results, sset))
         blob[world] = to_json(results, sset)
     if args.json:
