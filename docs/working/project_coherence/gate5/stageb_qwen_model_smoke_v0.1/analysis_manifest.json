@@ -1,0 +1,83 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_analysis_plan.v0.1",
+  "created_at": "2026-08-08T20:50:40.361330Z",
+  "execution_status": "NOT_STARTED",
+  "execution_authority": "INACTIVE PENDING EXACTLY ONE EXECUTION_IDENTITY_ADDITION AMENDMENT",
+  "study_kind": "BOUNDED JOINED ENGINEERING MECHANICS / NO INTERVENTION SCIENCE",
+  "maximum_jobs": 1,
+  "maximum_model_invocations": 1,
+  "maximum_evidence_packets": 1,
+  "automatic_retry": false,
+  "required_order": [
+    "append_execution_identity_amendment_once",
+    "consume_authorization_once",
+    "invoke_joined_worker_at_most_once",
+    "retain_raw_request_response_output",
+    "record_terminal_receipt",
+    "record_outcome_access_once",
+    "create_evidence_packet_v2_once",
+    "verify_packet_assessment",
+    "reconcile_terminal_run"
+  ],
+  "artifact_bindings": {
+    "request": {
+      "artifact_id": "stageb-qwen-request-plan",
+      "sha256": "d4127311457cf48f474d5d262d69910de934fee2d1b47150764992c0fbc3c6d3",
+      "byte_length": 507,
+      "media_type": "application/json"
+    },
+    "output_contract": {
+      "artifact_id": "stageb-qwen-output-contract",
+      "sha256": "3d2720b094d4944ef9b3c84afb1a8188fe7f96816bab397fa781529325f6fe92",
+      "byte_length": 1249,
+      "media_type": "application/json"
+    },
+    "control_plan": {
+      "artifact_id": "stageb-qwen-control-plan",
+      "sha256": "2b9953c6e3a9c517ca848f57a8a537786e2daedff181d44e5f0378b50292ab1f",
+      "byte_length": 1926,
+      "media_type": "application/json"
+    },
+    "evidence_packet_plan": {
+      "artifact_id": "stageb-qwen-evidence-packet-plan",
+      "sha256": "a035c5dcb352ab8e795833d1334de00da3f4d8e0fe8c058f82f0eb0d67582331",
+      "byte_length": 7076,
+      "media_type": "application/json"
+    },
+    "provider_budget": {
+      "artifact_id": "stageb-qwen-provider-budget",
+      "sha256": "f41949e7f96fa9566541f9b6149f5df627325f31a48acf2fde68e40b0d96e6f5",
+      "byte_length": 630,
+      "media_type": "application/json"
+    }
+  },
+  "required_control_reporting": {
+    "stageb-matched-taxonomy-not-performed": "INVALID",
+    "stageb-wrong-layer-not-performed": "INVALID",
+    "stageb-clean-null-not-performed": "INVALID"
+  },
+  "required_packet_ceiling": {
+    "structural_completeness": "COMPLETE IF ALL EXACT ARTIFACTS VERIFY",
+    "preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+    "scientific_eligibility": "INELIGIBLE",
+    "admission_ring": 4,
+    "product_claim_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+    "public_release_allowed": false,
+    "product_route_allowed": false
+  },
+  "forbidden_execution_features": [
+    "activation steering",
+    "activation ablation",
+    "drive_local_eraser",
+    "causal_ablation",
+    "prompt-injection detector scoring",
+    "clean-versus-adversarial comparison",
+    "external provider fallback",
+    "RunPod use",
+    "automatic retry",
+    "second invocation",
+    "second Evidence Packet"
+  ],
+  "boundary": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / NON-ADMITTED ROUTE / RESEARCH ONLY / ENGINEERING MECHANICS / NO DETECTION OR STEERING EFFICACY CLAIM / EXPERIMENT NOT_STARTED / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+}

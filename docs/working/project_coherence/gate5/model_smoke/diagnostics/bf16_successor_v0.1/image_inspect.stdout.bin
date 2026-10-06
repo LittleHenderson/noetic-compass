@@ -1,0 +1,227 @@
+[
+    {
+        "Id": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+        "RepoTags": [
+            "atlas-live-trace-worker:gate5-candidate-v0.2"
+        ],
+        "RepoDigests": [
+            "atlas-live-trace-worker@sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-08-05T21:53:51.615627371Z",
+        "Config": {
+            "User": "10001:10001",
+            "ExposedPorts": {
+                "8080/tcp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "HF_HOME=/worker/.cache/huggingface",
+                "PYTHIA_160M_REVISION=50f5173d932e8e61f858120bcb800b97af589f46",
+                "ATLAS_WORKER_PROFILE=production",
+                "ATLAS_WORKER_REQUIRE_READ_ONLY_ROOTFS=1",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "PYTHONDONTWRITEBYTECODE=1",
+                "PYTHONUNBUFFERED=1",
+                "PORT=8080",
+                "HF_HUB_OFFLINE=1",
+                "TRANSFORMERS_OFFLINE=1"
+            ],
+            "Cmd": [
+                "sh",
+                "-c",
+                "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"
+            ],
+            "WorkingDir": "/worker",
+            "Labels": {
+                "org.opencontainers.image.base.digest": "sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467",
+                "org.opencontainers.image.base.name": "ubuntu:24.04",
+                "org.opencontainers.image.description": "Private FastAPI worker: Pythia-160M + probe pipeline, SSE trace stream, behind the noetic-compass-api proxy.",
+                "org.opencontainers.image.python.digest": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af",
+                "org.opencontainers.image.revision": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+                "org.opencontainers.image.run.auth": "ATLAS_LIVE_WORKER_TOKEN required",
+                "org.opencontainers.image.run.readonly-rootfs": "required",
+                "org.opencontainers.image.run.tmpfs": "/tmp:rw,noexec,nosuid,nodev,size=64m",
+                "org.opencontainers.image.source": "https://github.com/LittleHenderson/noetic-compass",
+                "org.opencontainers.image.title": "atlas-live-trace-worker",
+                "org.opencontainers.image.ubuntu.snapshot": "20260805T000000Z",
+                "org.opencontainers.image.version": "gate5-candidate-v0.2"
+            },
+            "ArgsEscaped": true,
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "python -c \"import os,urllib.request,sys;   url='http://127.0.0.1:%s/health' % os.environ.get('PORT','8080');   sys.exit(0 if urllib.request.urlopen(url, timeout=4).status==200 else 1)\" || exit 1"
+                ],
+                "Interval": 30000000000,
+                "Timeout": 5000000000,
+                "StartPeriod": 60000000000,
+                "Retries": 3
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 4396739765,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:42724e448bf499ec7d4b3c21d6cc68fe665ef677ed393c3dbb5357394e89ff91",
+                "sha256:aa0aaf04f9eaf65a107779502f1762165d05056fb4269b898f8c6c0a73669a88",
+                "sha256:03be7410b38cdb39f508d08bb6ab8ddd98305cd41af895cce9f49ba9143148a0",
+                "sha256:d9beafd569a274609c73cca46de0918bdcff6ebc94ec8e1116a011ded05ec3e7",
+                "sha256:07fb1d5bba7014a7343e2e579a9bedb9ba4c0ac426412d81a1749ee832771cbd",
+                "sha256:8be6a50c6ee3d92f6137f06f4e8284231bcdd60d5fc5b4cd3dff2d179ef2d689",
+                "sha256:db6f0a05dca0092f05cb23a8046c726d91cd21582ba17f5c088cda7c6d578f69",
+                "sha256:d82ccaf15d779115cc960f162b83ac7bbf33098b10705682d445d768c7cee8de",
+                "sha256:cb1ee7b3bc49e97a14c4856ece7cd58f448b8c4b6dce683361071afdfddbc4d1",
+                "sha256:2558b7085dc67d7a668c6e21ee3f9906dfc5e5846ecac84f238e21f927aef0e0",
+                "sha256:60a9295b66123b895f49a8cc70b1a6ee350fbe204df525a8509c342d3c3daf0d",
+                "sha256:1ed80c7d40b0aa27bd9094b61c88b31925a4c775317425bea9f8379056d812aa",
+                "sha256:dfba40e7f05eee3333a151467b1bd1bd5e9a2fd1c0a12e2cf7823d9949cb9885",
+                "sha256:bed3c0df2c5faf1f67596bfb4e4ecba5145c87d1a691e01b17d125f26bb81332",
+                "sha256:7e357a1daa5fecd4a5585b386a6c5915c3cdadc95443c6a5c12d6afff2eea23c",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-08-05T21:55:13.766587282Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+            "size": 856
+        },
+        "Identity": {
+            "Pull": [
+                {
+                    "Repository": "docker.io/library/atlas-live-trace-worker"
+                }
+            ],
+            "Build": [
+                {
+                    "Ref": "vz8s61131470ab8uivga0qcdq",
+                    "CreatedAt": "2026-08-05T21:55:26.978923761Z"
+                }
+            ]
+        }
+    },
+    {
+        "Id": "sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d",
+        "RepoTags": [
+            "atlas-live-trace-worker:gate5-local-canary-bf16-v0.2"
+        ],
+        "RepoDigests": [
+            "atlas-live-trace-worker@sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-08-07T03:44:42.511992508Z",
+        "Config": {
+            "User": "10001:10001",
+            "ExposedPorts": {
+                "8080/tcp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "HF_HOME=/worker/.cache/huggingface",
+                "PYTHIA_160M_REVISION=50f5173d932e8e61f858120bcb800b97af589f46",
+                "ATLAS_WORKER_PROFILE=production",
+                "ATLAS_WORKER_REQUIRE_READ_ONLY_ROOTFS=1",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "PYTHONDONTWRITEBYTECODE=1",
+                "PYTHONUNBUFFERED=1",
+                "PORT=8080",
+                "HF_HUB_OFFLINE=1",
+                "TRANSFORMERS_OFFLINE=1",
+                "TORCH_DISABLE_NATIVE_JIT=1"
+            ],
+            "Cmd": [
+                "sh",
+                "-c",
+                "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"
+            ],
+            "WorkingDir": "/worker",
+            "Labels": {
+                "io.cas-harness.claim-status": "RESEARCH_ONLY_LOCAL_CANARY",
+                "io.cas-harness.overlay.source": "0b7ba0dfb20e15217044ed0ff0766b6654bb19d8",
+                "io.cas-harness.parent.local-image-id": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+                "io.cas-harness.parent.repo-digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+                "io.cas-harness.parent.worker-source": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+                "io.cas-harness.runtime.dtype": "torch.bfloat16",
+                "io.cas-harness.runtime.native-jit": "disabled",
+                "org.opencontainers.image.base.digest": "sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467",
+                "org.opencontainers.image.base.name": "ubuntu:24.04",
+                "org.opencontainers.image.description": "Private FastAPI worker: Pythia-160M + probe pipeline, SSE trace stream, behind the noetic-compass-api proxy.",
+                "org.opencontainers.image.python.digest": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af",
+                "org.opencontainers.image.revision": "0b7ba0dfb20e15217044ed0ff0766b6654bb19d8",
+                "org.opencontainers.image.run.auth": "ATLAS_LIVE_WORKER_TOKEN required",
+                "org.opencontainers.image.run.readonly-rootfs": "required",
+                "org.opencontainers.image.run.tmpfs": "/tmp:rw,noexec,nosuid,nodev,size=64m",
+                "org.opencontainers.image.source": "https://github.com/LittleHenderson/noetic-compass",
+                "org.opencontainers.image.title": "atlas-live-trace-worker",
+                "org.opencontainers.image.ubuntu.snapshot": "20260805T000000Z",
+                "org.opencontainers.image.version": "gate5-local-canary-bf16-v0.2"
+            },
+            "ArgsEscaped": true,
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "python -c \"import os,urllib.request,sys;   url='http://127.0.0.1:%s/health' % os.environ.get('PORT','8080');   sys.exit(0 if urllib.request.urlopen(url, timeout=4).status==200 else 1)\" || exit 1"
+                ],
+                "Interval": 30000000000,
+                "Timeout": 5000000000,
+                "StartPeriod": 60000000000,
+                "Retries": 3
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 4396752923,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:42724e448bf499ec7d4b3c21d6cc68fe665ef677ed393c3dbb5357394e89ff91",
+                "sha256:aa0aaf04f9eaf65a107779502f1762165d05056fb4269b898f8c6c0a73669a88",
+                "sha256:03be7410b38cdb39f508d08bb6ab8ddd98305cd41af895cce9f49ba9143148a0",
+                "sha256:d9beafd569a274609c73cca46de0918bdcff6ebc94ec8e1116a011ded05ec3e7",
+                "sha256:07fb1d5bba7014a7343e2e579a9bedb9ba4c0ac426412d81a1749ee832771cbd",
+                "sha256:8be6a50c6ee3d92f6137f06f4e8284231bcdd60d5fc5b4cd3dff2d179ef2d689",
+                "sha256:db6f0a05dca0092f05cb23a8046c726d91cd21582ba17f5c088cda7c6d578f69",
+                "sha256:d82ccaf15d779115cc960f162b83ac7bbf33098b10705682d445d768c7cee8de",
+                "sha256:cb1ee7b3bc49e97a14c4856ece7cd58f448b8c4b6dce683361071afdfddbc4d1",
+                "sha256:2558b7085dc67d7a668c6e21ee3f9906dfc5e5846ecac84f238e21f927aef0e0",
+                "sha256:60a9295b66123b895f49a8cc70b1a6ee350fbe204df525a8509c342d3c3daf0d",
+                "sha256:1ed80c7d40b0aa27bd9094b61c88b31925a4c775317425bea9f8379056d812aa",
+                "sha256:dfba40e7f05eee3333a151467b1bd1bd5e9a2fd1c0a12e2cf7823d9949cb9885",
+                "sha256:bed3c0df2c5faf1f67596bfb4e4ecba5145c87d1a691e01b17d125f26bb81332",
+                "sha256:7e357a1daa5fecd4a5585b386a6c5915c3cdadc95443c6a5c12d6afff2eea23c",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:840377ef962697b5600d815d84d3a509e46a056c0d5c121625dff2da363dd493",
+                "sha256:9e1a81c9cc868f6238550ec6bfaa2849b5180b10e2583eb7ee44234e321abd52",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-08-07T03:44:42.6868081Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d",
+            "size": 4093,
+            "annotations": {
+                "config.digest": "sha256:f65f9032265a06e464cd1e1f05e4cc1794880efc5bc0071833fe8ae3bc6967a7"
+            }
+        },
+        "Identity": {
+            "Build": [
+                {
+                    "Ref": "hbokyd8vlxzzss85x2au563g9",
+                    "CreatedAt": "2026-08-07T03:44:42.76172636Z"
+                }
+            ]
+        }
+    }
+]

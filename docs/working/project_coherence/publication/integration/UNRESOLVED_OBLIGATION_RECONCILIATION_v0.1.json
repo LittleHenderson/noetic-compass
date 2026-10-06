@@ -1,0 +1,187 @@
+{
+  "schema_version": "project_coherence.publication.integration.unresolved_obligation_reconciliation.v0.1",
+  "document_status": "DRAFT / ALL APPLICABLE ITEMS OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "policy": {
+    "purpose": "Dependency-level reconciliation of lane-local obligations without replacing or closing their local ledgers.",
+    "local_obligation_ids_preserved": true,
+    "absence_from_this_summary_means_closed": false,
+    "review_correction_means_upstream_obligation_closed": false,
+    "software_pass_means_scientific_validation": false,
+    "failed_or_negative_results_retained": true,
+    "default_state": "OPEN"
+  },
+  "source_ledgers": [
+    {
+      "lane": "formal_math",
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 24,
+      "integration_effect": "NONE CLOSED"
+    },
+    {
+      "lane": "category_theory",
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 23,
+      "integration_effect": "NONE CLOSED"
+    },
+    {
+      "lane": "engineering",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 27,
+      "integration_effect": "NONE CLOSED"
+    },
+    {
+      "lane": "formal_math_internal_review",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/UNRESOLVED_AND_REQUIRED_CHANGES_v0.1.json",
+      "declared_blocking_items": 3,
+      "declared_strengthening_items": 7,
+      "integration_effect": "Three blocking wording/metadata changes incorporated at 42d3d2fd and residual sweep f91e622d; acceptance review 64d02d20 accepts the publication text only, while all 24 upstream obligations remain OPEN."
+    },
+    {
+      "lane": "category_theory_internal_review",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/UNRESOLVED_REQUIRED_CHANGES_v0.1.json",
+      "declared_blocking_items": 3,
+      "declared_required_nonblocking_items": 5,
+      "declared_strengthening_items": 4,
+      "integration_effect": "Blocking corrections began at 42d3d2fd and the residual evidence/terminology sweep completed at f91e622d; acceptance review 64d02d20 accepts the publication text only, while upstream Gate 1 corrections and all 23 lane obligations remain OPEN."
+    },
+    {
+      "lane": "engineering_internal_review",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/UNRESOLVED_REQUIRED_CHANGES_v0.1.json",
+      "declared_blocking_items": 2,
+      "declared_strengthening_items": 4,
+      "review_commit": "15a3ff3436dc0b312828309a7000fc877b74d57c",
+      "integration_effect": "Six publication corrections incorporated at e4ccfe30 and accepted as publication-text corrections at 64d02d20; all 27 upstream obligations remain OPEN."
+    },
+    {
+      "lane": "lead_correction_acceptance_review",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/lead_corrections/FINDING_DISPOSITION_MATRIX_v0.1.json",
+      "declared_review_items": 13,
+      "accepted_as_text_corrections": 13,
+      "partial_or_failed": 0,
+      "source_commit": "64d02d200829b86d3bfc11d9a940a13b91dcf06d",
+      "reviewed_head": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+      "integration_effect": "PUBLICATION TEXT ACCEPTED / ZERO UPSTREAM OBLIGATIONS CLOSED / ZERO CLAIM PROMOTIONS"
+    },
+    {
+      "lane": "acbe_wave2",
+      "path": "docs/working/project_coherence/publication/wave2/acbe/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 21,
+      "source_commit": "f1decd9c61dc3df786f69dc19df7b6ba28fc51af",
+      "integration_effect": "IMPORTED / NONE CLOSED / CAUSAL TRANSFER AND EXPERIMENT OPEN"
+    },
+    {
+      "lane": "cas_harness2_wave2",
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 36,
+      "source_commit": "6b3e72dc623366f40256ddb9ebfc725c66d96dd3",
+      "integration_effect": "IMPORTED / NONE CLOSED / JOINED RUN NOT_STARTED"
+    },
+    {
+      "lane": "memristive_wave2",
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 42,
+      "source_commit": "4666004e973ccbfa7b65cf3341aab15bc5f34524",
+      "integration_effect": "IMPORTED / NONE CLOSED / NO IMPLEMENTATION / EXPERIMENT NOT_STARTED / NO PHYSICAL DEVICE / NO PROJECT EXPERIMENTAL RUNPOD OR GPU JOB"
+    }
+  ],
+  "dependency_clusters": [
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-001",
+      "title": "Formal scope, proof, and machine-checking completion",
+      "status": "OPEN",
+      "covers": ["Papers 1-3", "Paper 5 mathematical core", "shared theorem registry"],
+      "retained_work": ["universal proofs beyond bounded fixtures", "full Lean or equivalent formalization", "exact hypotheses for every transfer", "counterexample and negative-result retention", "independent specialist proof review"],
+      "closure_evidence": "Hash-bound complete proof artifacts, machine-kernel receipts for the declared scope, and independent specialist review with every exception dispositioned."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-002",
+      "title": "Ambient Noetic Topos and contextual-probability construction",
+      "status": "OPEN",
+      "covers": ["Paper 2", "Paper 4"],
+      "retained_work": ["define and prove the exact lifted product-site topology", "resolve the null-cover witness without the false arbitrary representable", "compose with observational coverage", "prove or refute backward comparison", "state exact Vorob'ev/acyclicity hypotheses", "add exact marginal-feasibility fixtures"],
+      "closure_evidence": "Typed product-site definitions, proof/counterexample artifacts, exact executable fixtures, source-level citations, and external category/probability review."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-003",
+      "title": "Citation, prior-art, novelty, and portable source binding",
+      "status": "OPEN",
+      "covers": ["all publication tracks"],
+      "retained_work": ["theorem-level source locations", "authoritative Farkas source", "regularity/acyclicity comparison", "direct portable legacy-source bundle", "current publication-status verification", "novelty search", "bibliographic normalization"],
+      "closure_evidence": "Exact citation ledger, content-addressed source bundle, independent novelty review, and submission-date metadata freeze."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-004",
+      "title": "Cross-lane type and notation interfaces",
+      "status": "OPEN",
+      "covers": ["all publication tracks", "shared registries", "legacy migration"],
+      "retained_work": ["owner-reviewed canonical notation decisions", "typed comparison maps", "variance and adjoint declarations", "loss/error budgets", "legacy-to-successor migration crosswalks", "no silent identity from shared symbols"],
+      "closure_evidence": "Versioned canonical registry changes through the governing procedure, positive/negative fixtures, and reviewed 1:1 crosswalks."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-005",
+      "title": "Reference implementations and conformance",
+      "status": "OPEN",
+      "covers": ["Papers 1, 2, 4, 5, and 6"],
+      "retained_work": ["complete CCDL grammar", "Python/Rust and schema conformance", "probability/context fixtures", "ACBE abstraction and defect implementation", "cellular variance fixtures", "stateful PCBA profiles"],
+      "closure_evidence": "Hash-bound implementations, exhaustive or risk-proportionate positive/negative tests, cross-runtime conformance, and independent reproduction."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-006",
+      "title": "Calibration, measurement, numerical, and uncertainty validity",
+      "status": "OPEN",
+      "covers": ["Papers 3, 4, 6, 7, and supplemental memristive track"],
+      "retained_work": ["materialized calibration identities", "profile-specific units and scales", "freshness and drift rules", "uncertainty propagation", "matched numerical replay", "separation of verification from operational validation"],
+      "closure_evidence": "Preregistered calibration/validation splits, retained raw measurements, uncertainty and drift receipts, and independent numerical audit."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-007",
+      "title": "Causal and empirical identification",
+      "status": "OPEN / NOT RUN",
+      "covers": ["Papers 3-7 and supplemental memristive track"],
+      "retained_work": ["intervention-aware ACBE semantics", "clean nulls", "matched controls", "held-out evaluation", "falsifiers", "replication", "separation of diagnostic residuals from hidden-cause identification"],
+      "closure_evidence": "Separately authorized preregistered experiments with Evidence Packet v2, retained failures/nulls, independent replication, and claim-specific statistical review."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-008",
+      "title": "Runner closure, security, provenance, trusted ordering, and WORM",
+      "status": "OPEN_ENGINEERING / OPEN_SECURITY",
+      "covers": ["Paper 7", "all future experimental tracks", "Gate 5"],
+      "retained_work": ["complete executed-bytecode and child-process closure", "locked read-only runner", "direct filesystem/security disposition", "independent reproduction", "trusted time", "WORM anchoring", "joined worker-to-kernel receipt"],
+      "closure_evidence": "Independently attested immutable execution receipts and governing Gate 5 acceptance; current local PASS receipts are insufficient."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-009",
+      "title": "Stateful and memristive semantics versus physical-device claims",
+      "status": "OPEN / NO IMPLEMENTATION / NO PHYSICAL DEVICE",
+      "covers": ["Paper 6", "supplemental memristive track"],
+      "retained_work": ["define a mathematical history state", "memoryless comparator", "hysteresis/path-dependence falsifier", "context/lacunarity/injection/steering observables", "software implementation", "separate physical instrumentation profile if ever authorized"],
+      "closure_evidence": "Typed state equations and software tests for the mathematical profile; separately authorized instrumented evidence and qualified review for any physical-device wording."
+    },
+    {
+      "cluster_id": "PUB-OBL-CLUSTER-010",
+      "title": "Authorship, external review, canon, product, license, disclosure, safety, and submission authority",
+      "status": "OPEN / HELD",
+      "covers": ["all publication tracks and releases"],
+      "retained_work": ["authorship records", "qualified external reviews", "owner conflict decisions", "patent/legal/disclosure review", "safety and product review", "explicit charter/canon freeze decision", "submission package approval"],
+      "closure_evidence": "Exact human and governing receipts from the applicable authorities; silence, a test pass, or an internal draft cannot substitute."
+    }
+  ],
+  "current_counts": {
+    "wave1_lane_local_open_obligations_before_deduplication": 74,
+    "formal_review_findings": 10,
+    "category_review_findings": 12,
+    "engineering_review_findings": 6,
+    "lead_correction_review_items": 13,
+    "lead_correction_text_items_accepted": 13,
+    "acbe_wave2_open_obligations": 21,
+    "harness2_wave2_open_obligations": 36,
+    "memristive_wave2_open_obligations": 42,
+    "wave2_lane_local_open_obligations_before_deduplication": 99,
+    "all_lane_local_open_obligations_before_deduplication": 173,
+    "dependency_clusters": 10,
+    "local_or_review_items_closed_by_this_reconciliation": 0,
+    "wave2_counts_pending_import": false
+  },
+  "global_boundary": "This reconciliation is an index, not a closure ledger. It cannot authorize an experiment, spend, publication, product claim, license, disclosure, canon change, or physical-device statement."
+}

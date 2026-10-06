@@ -1,0 +1,811 @@
+"""Closed exact envelopes used only by the private Harness-v2 route adapter.
+
+The worker authorization and terminal carriers remain canonical root-kernel
+artifacts.  These transport envelopes solve narrower boundary problems: they
+carry the exact preregistration bytes needed to construct a durable run context,
+the one-use run nonce needed for consumption, or one exact output body.  Lease
+tokens and callback credentials are forbidden here and must remain ephemeral
+HTTP/service-boundary capabilities.
+
+Parsing establishes structural equality and exact byte identity only.  It does
+not establish trusted time, payload authorship, model execution, scientific
+validity, product readiness, licensing, or disclosure authority.
+"""
+
+from __future__ import annotations
+
+import base64
+from collections.abc import Mapping
+from dataclasses import dataclass
+from datetime import UTC, datetime
+import hashlib
+import hmac
+import re
+from typing import Any
+
+from cas_harness_v2 import PreregistrationChain, load_preregistration
+from cas_harness_v2._strict_json import load_json_object
+
+
+AUTHORIZATION_REQUEST_SCHEMA = "cas_harness_v2.route_authorization_request.v1"
+CONSUMPTION_REQUEST_SCHEMA = "cas_harness_v2.route_consumption_request.v1"
+TERMINAL_DISPOSITION_REQUEST_SCHEMA = (
+    "cas_harness_v2.route_terminal_disposition_request.v1"
+)
+OUTPUT_RETENTION_SCHEMA = "cas_harness_v2.output_retention.v1"
+OUTCOME_SEAL_REQUEST_SCHEMA = "cas_harness_v2.route_outcome_seal_request.v1"
+PACKET_ATTACHMENT_REQUEST_SCHEMA = (
+    "cas_harness_v2.route_packet_attachment_request.v1"
+)
+NONREPORTING_REQUEST_SCHEMA = "cas_harness_v2.route_nonreporting_request.v1"
+RECONCILIATION_REQUEST_SCHEMA = "cas_harness_v2.reconciliation_request.v1"
+
+_RUN_NONCE_RE = re.compile(r"^[A-Za-z0-9_-]{43}$")
+_UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
+_MAX_ARTIFACT_BYTES = 1_500_000
+_MAX_MEDIA_TYPE_BYTES = 255
+_MAX_PACKET_DEPENDENCIES = 512
+_STRICT_OUTCOME_STATES = frozenset({"SUCCESS", "FAILURE"})
+NONREPORTING_REASON_CODES = {
+    "SUCCESS": frozenset({"SUCCESS_NO_PACKET_RECORDED"}),
+    "FAILURE": frozenset({"TERMINAL_FAILURE_NO_PACKET"}),
+    "INDETERMINATE": frozenset({"NO_OUTCOME_INDETERMINATE"}),
+    "REJECTED": frozenset({"NO_OUTCOME_REJECTED"}),
+    "EXPIRED": frozenset({"NO_OUTCOME_EXPIRED"}),
+}
+TERMINAL_DISPOSITION_REASON_CODES = {
+    "INDETERMINATE": frozenset(
+        {"EXECUTION_COMPLETION_UNRESOLVED", "LEASE_LOST_DURING_RUNNING"}
+    ),
+    "REJECTED": frozenset({"ACTION_REJECTED_BEFORE_CONSUMPTION"}),
+    "EXPIRED": frozenset({"AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION"}),
+}
+
+
+class RouteEnvelopeError(ValueError):
+    """An adapter envelope is ambiguous, malformed, or internally inconsistent."""
+
+
+@dataclass(frozen=True, slots=True)
+class ExactEnvelopeArtifact:
+    artifact_id: str | None
+    media_type: str | None
+    sha256: str
+    byte_length: int
+    raw_bytes: bytes
+
+
+@dataclass(frozen=True, slots=True)
+class ExactEnvelopeBinding:
+    artifact_id: str
+    media_type: str
+    sha256: str
+    byte_length: int
+
+
+@dataclass(frozen=True, slots=True)
+class AuthorizationRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    authorization_id: str
+    authorized_at: datetime
+    expires_at: datetime
+    claim_ledger: ExactEnvelopeArtifact
+    base_preregistration: ExactEnvelopeArtifact
+    amendments: tuple[ExactEnvelopeArtifact, ...]
+    artifact_bodies: tuple[ExactEnvelopeArtifact, ...]
+    chain: PreregistrationChain
+    criteria_status: str = "OPEN"
+    trusted_time: str = "NOT_ESTABLISHED"
+    execution_authentication: str = "NOT_ESTABLISHED"
+    license_status: str = "NOT LICENSED"
+    disclosure_status: str = "HELD"
+
+
+@dataclass(frozen=True, slots=True)
+class ConsumptionRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    run_nonce_b64url: str
+
+
+@dataclass(frozen=True, slots=True)
+class TerminalDispositionRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    terminal_status: str
+    reason_code: str
+
+
+@dataclass(frozen=True, slots=True)
+class OutputRetentionEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    output_name: str
+    artifact: ExactEnvelopeArtifact
+
+
+@dataclass(frozen=True, slots=True)
+class OutcomeSealRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    terminal_status: str
+    terminal_artifact: ExactEnvelopeBinding
+    terminal_event_sha256: str
+    expected_lifecycle_head_sha256: str
+
+
+@dataclass(frozen=True, slots=True)
+class PacketAttachmentRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    terminal_artifact: ExactEnvelopeBinding
+    outcome_access_artifact: ExactEnvelopeBinding
+    sealed_preregistration_chain_sha256: str
+    expected_lifecycle_head_sha256: str
+    packet: ExactEnvelopeArtifact
+    artifact_bodies: tuple[ExactEnvelopeArtifact, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class NonreportingRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    terminal_status: str
+    terminal_artifact: ExactEnvelopeBinding
+    outcome_access_artifact: ExactEnvelopeBinding | None
+    expected_lifecycle_head_sha256: str
+    reason_code: str
+
+
+def load_authorization_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> AuthorizationRequestEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(
+        value,
+        {
+            "schema_version",
+            "authorization_id",
+            "authorization_window",
+            "preregistration_chain",
+            "artifact_bodies",
+        },
+        "$",
+    )
+    if value["schema_version"] != AUTHORIZATION_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {AUTHORIZATION_REQUEST_SCHEMA!r}."
+        )
+    authorization_id = _machine_id(value["authorization_id"], "$.authorization_id")
+    window = _object(value["authorization_window"], "$.authorization_window")
+    _exact_keys(
+        window,
+        {"authorized_at", "expires_at", "time_assurance"},
+        "$.authorization_window",
+    )
+    if window["time_assurance"] != "CALLER_DECLARED_NOT_TRUSTED":
+        raise RouteEnvelopeError(
+            "$.authorization_window.time_assurance must remain "
+            "CALLER_DECLARED_NOT_TRUSTED."
+        )
+    authorized_at = _timestamp(window["authorized_at"], "$.authorization_window.authorized_at")
+    expires_at = _timestamp(window["expires_at"], "$.authorization_window.expires_at")
+    if expires_at <= authorized_at:
+        raise RouteEnvelopeError("Authorization expiry must follow issuance.")
+
+    chain_node = _object(value["preregistration_chain"], "$.preregistration_chain")
+    _exact_keys(
+        chain_node,
+        {"claim_ledger", "base_preregistration", "amendments"},
+        "$.preregistration_chain",
+    )
+    claim_ledger = _exact_artifact(
+        chain_node["claim_ledger"],
+        "$.preregistration_chain.claim_ledger",
+        require_artifact_metadata=False,
+    )
+    base_preregistration = _exact_artifact(
+        chain_node["base_preregistration"],
+        "$.preregistration_chain.base_preregistration",
+        require_artifact_metadata=False,
+    )
+    rows = chain_node["amendments"]
+    if type(rows) is not list or len(rows) > 128:
+        raise RouteEnvelopeError(
+            "$.preregistration_chain.amendments must be an array of at most 128 artifacts."
+        )
+    amendments = tuple(
+        _exact_artifact(
+            row,
+            f"$.preregistration_chain.amendments[{index}]",
+            require_artifact_metadata=False,
+        )
+        for index, row in enumerate(rows)
+    )
+    try:
+        base = load_preregistration(
+            base_preregistration.raw_bytes,
+            claim_ledger_bytes=claim_ledger.raw_bytes,
+        )
+        chain = PreregistrationChain(base)
+        for amendment in amendments:
+            chain.append_amendment(amendment.raw_bytes)
+        chain.assert_integrity()
+    except Exception as exc:
+        raise RouteEnvelopeError(
+            "The preregistration chain failed exact root-kernel replay."
+        ) from exc
+    if chain.outcome_access is not None:
+        raise RouteEnvelopeError(
+            "Authorization issuance requires a pre-outcome preregistration chain."
+        )
+    body_rows = value["artifact_bodies"]
+    if type(body_rows) is not list or len(body_rows) > _MAX_PACKET_DEPENDENCIES:
+        raise RouteEnvelopeError(
+            "$.artifact_bodies must be an array of at most "
+            f"{_MAX_PACKET_DEPENDENCIES} exact artifacts."
+        )
+    artifact_bodies = tuple(
+        _exact_named_artifact(row, f"$.artifact_bodies[{index}]")
+        for index, row in enumerate(body_rows)
+    )
+    body_ids = [item.artifact_id for item in artifact_bodies]
+    if body_ids != sorted(body_ids) or len(set(body_ids)) != len(body_ids):
+        raise RouteEnvelopeError(
+            "$.artifact_bodies must use unique artifact IDs in lexical order."
+        )
+    provided = {item.artifact_id: item for item in artifact_bodies}
+    claim_binding = chain.base.payload.get("claim_binding")
+    claim_reference = (
+        claim_binding.get("claim_ledger")
+        if isinstance(claim_binding, Mapping)
+        else None
+    )
+    claim_artifact_id = (
+        claim_reference.get("artifact_id")
+        if isinstance(claim_reference, Mapping)
+        else None
+    )
+    if type(claim_artifact_id) is not str:
+        raise RouteEnvelopeError(
+            "Preregistration claim-ledger identity is unavailable."
+        )
+    if claim_artifact_id in provided:
+        raise RouteEnvelopeError(
+            "$.artifact_bodies must not duplicate the dedicated claim-ledger body."
+        )
+    unresolved: list[str] = []
+    expected_ids: set[str] = set()
+    for reference in chain.artifact_refs:
+        expected_ids.add(reference.artifact_id)
+        if reference.artifact_id == claim_artifact_id:
+            if not (
+                reference.byte_length == claim_ledger.byte_length
+                and hmac.compare_digest(
+                    reference.sha256.upper(),
+                    claim_ledger.sha256,
+                )
+            ):
+                unresolved.append(reference.artifact_id)
+            continue
+        if (
+            reference.byte_length == claim_ledger.byte_length
+            and hmac.compare_digest(
+                reference.sha256.upper(),
+                claim_ledger.sha256,
+            )
+        ):
+            raise RouteEnvelopeError(
+                "A distinct preregistration artifact clones the claim-ledger bytes."
+            )
+        item = provided.get(reference.artifact_id)
+        if item is None or not _artifact_matches_reference(item, reference):
+            unresolved.append(reference.artifact_id)
+    unexpected = set(provided) - expected_ids
+    if unresolved or unexpected:
+        raise RouteEnvelopeError(
+            "Authorization artifact bodies do not exactly close the pre-outcome "
+            "chain dependency inventory."
+        )
+    return AuthorizationRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        authorization_id=authorization_id,
+        authorized_at=authorized_at,
+        expires_at=expires_at,
+        claim_ledger=claim_ledger,
+        base_preregistration=base_preregistration,
+        amendments=amendments,
+        artifact_bodies=artifact_bodies,
+        chain=chain,
+    )
+
+
+def load_consumption_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> ConsumptionRequestEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(
+        value,
+        {"schema_version", "run_nonce_b64url"},
+        "$",
+    )
+    if value["schema_version"] != CONSUMPTION_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {CONSUMPTION_REQUEST_SCHEMA!r}."
+        )
+    nonce = value["run_nonce_b64url"]
+    if type(nonce) is not str or not _RUN_NONCE_RE.fullmatch(nonce):
+        raise RouteEnvelopeError(
+            "$.run_nonce_b64url must be unpadded base64url for 32 bytes."
+        )
+    try:
+        nonce_bytes = base64.b64decode(nonce + "=", altchars=b"-_", validate=True)
+    except (ValueError, TypeError) as exc:
+        raise RouteEnvelopeError("$.run_nonce_b64url is not canonical base64url.") from exc
+    if (
+        len(nonce_bytes) != 32
+        or base64.urlsafe_b64encode(nonce_bytes).decode("ascii").rstrip("=") != nonce
+    ):
+        raise RouteEnvelopeError(
+            "$.run_nonce_b64url must encode exactly 32 bytes."
+        )
+    return ConsumptionRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        run_nonce_b64url=nonce,
+    )
+
+
+def load_terminal_disposition_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> TerminalDispositionRequestEnvelope:
+    """Load one closed control-plane disposition request.
+
+    The caller supplies only the disposition and its enumerated reason.  Time,
+    lifecycle state, artifact identity, and reporting effects remain
+    server-derived by ``DarkHarnessV2LifecycleService``.
+    """
+
+    snapshot, value = _load(raw)
+    _exact_keys(value, {"schema_version", "terminal_status", "reason_code"}, "$")
+    if value["schema_version"] != TERMINAL_DISPOSITION_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            "schema_version must equal "
+            f"{TERMINAL_DISPOSITION_REQUEST_SCHEMA!r}."
+        )
+    terminal_status = _machine_id(value["terminal_status"], "$.terminal_status")
+    if terminal_status not in TERMINAL_DISPOSITION_REASON_CODES:
+        raise RouteEnvelopeError(
+            "$.terminal_status must be INDETERMINATE, REJECTED, or EXPIRED."
+        )
+    reason_code = _machine_id(value["reason_code"], "$.reason_code")
+    if reason_code not in TERMINAL_DISPOSITION_REASON_CODES[terminal_status]:
+        raise RouteEnvelopeError(
+            "$.reason_code is not allowed for the declared terminal disposition."
+        )
+    return TerminalDispositionRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        terminal_status=terminal_status,
+        reason_code=reason_code,
+    )
+
+
+def load_output_retention_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> OutputRetentionEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(value, {"schema_version", "output_name", "artifact"}, "$")
+    if value["schema_version"] != OUTPUT_RETENTION_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {OUTPUT_RETENTION_SCHEMA!r}."
+        )
+    return OutputRetentionEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        output_name=_machine_id(value["output_name"], "$.output_name"),
+        artifact=_exact_artifact(
+            value["artifact"], "$.artifact", require_artifact_metadata=True
+        ),
+    )
+
+
+def load_outcome_seal_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> OutcomeSealRequestEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(
+        value,
+        {
+            "schema_version",
+            "terminal_status",
+            "terminal_artifact",
+            "terminal_event_sha256",
+            "expected_lifecycle_head_sha256",
+        },
+        "$",
+    )
+    if value["schema_version"] != OUTCOME_SEAL_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {OUTCOME_SEAL_REQUEST_SCHEMA!r}."
+        )
+    terminal_status = value["terminal_status"]
+    if terminal_status not in _STRICT_OUTCOME_STATES:
+        raise RouteEnvelopeError(
+            "$.terminal_status must be SUCCESS or FAILURE for outcome sealing."
+        )
+    return OutcomeSealRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        terminal_status=terminal_status,
+        terminal_artifact=_exact_binding(
+            value["terminal_artifact"], "$.terminal_artifact"
+        ),
+        terminal_event_sha256=_upper_sha256(
+            value["terminal_event_sha256"], "$.terminal_event_sha256"
+        ),
+        expected_lifecycle_head_sha256=_upper_sha256(
+            value["expected_lifecycle_head_sha256"],
+            "$.expected_lifecycle_head_sha256",
+        ),
+    )
+
+
+def load_packet_attachment_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> PacketAttachmentRequestEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(
+        value,
+        {
+            "schema_version",
+            "terminal_artifact",
+            "outcome_access_artifact",
+            "sealed_preregistration_chain_sha256",
+            "expected_lifecycle_head_sha256",
+            "packet",
+            "artifact_bodies",
+        },
+        "$",
+    )
+    if value["schema_version"] != PACKET_ATTACHMENT_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {PACKET_ATTACHMENT_REQUEST_SCHEMA!r}."
+        )
+    packet = _exact_artifact(
+        value["packet"],
+        "$.packet",
+        require_artifact_metadata=False,
+    )
+    rows = value["artifact_bodies"]
+    if type(rows) is not list or len(rows) > _MAX_PACKET_DEPENDENCIES:
+        raise RouteEnvelopeError(
+            "$.artifact_bodies must be an array of at most "
+            f"{_MAX_PACKET_DEPENDENCIES} exact artifacts."
+        )
+    dependencies = tuple(
+        _exact_named_artifact(row, f"$.artifact_bodies[{index}]")
+        for index, row in enumerate(rows)
+    )
+    identifiers = [item.artifact_id for item in dependencies]
+    if identifiers != sorted(identifiers) or len(set(identifiers)) != len(identifiers):
+        raise RouteEnvelopeError(
+            "$.artifact_bodies must use unique artifact IDs in lexical order."
+        )
+    return PacketAttachmentRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        terminal_artifact=_exact_binding(
+            value["terminal_artifact"], "$.terminal_artifact"
+        ),
+        outcome_access_artifact=_exact_binding(
+            value["outcome_access_artifact"], "$.outcome_access_artifact"
+        ),
+        sealed_preregistration_chain_sha256=_upper_sha256(
+            value["sealed_preregistration_chain_sha256"],
+            "$.sealed_preregistration_chain_sha256",
+        ),
+        expected_lifecycle_head_sha256=_upper_sha256(
+            value["expected_lifecycle_head_sha256"],
+            "$.expected_lifecycle_head_sha256",
+        ),
+        packet=packet,
+        artifact_bodies=dependencies,
+    )
+
+
+def load_nonreporting_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> NonreportingRequestEnvelope:
+    snapshot, value = _load(raw)
+    _exact_keys(
+        value,
+        {
+            "schema_version",
+            "terminal_status",
+            "terminal_artifact",
+            "outcome_access_artifact",
+            "expected_lifecycle_head_sha256",
+            "reason_code",
+        },
+        "$",
+    )
+    if value["schema_version"] != NONREPORTING_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {NONREPORTING_REQUEST_SCHEMA!r}."
+        )
+    terminal_status = value["terminal_status"]
+    if terminal_status not in NONREPORTING_REASON_CODES:
+        raise RouteEnvelopeError("$.terminal_status is not nonreporting-eligible.")
+    reason_code = _machine_id(value["reason_code"], "$.reason_code")
+    if reason_code not in NONREPORTING_REASON_CODES[terminal_status]:
+        raise RouteEnvelopeError(
+            "$.reason_code is not allowed for the declared terminal state."
+        )
+    outcome_value = value["outcome_access_artifact"]
+    outcome_binding = (
+        None
+        if outcome_value is None
+        else _exact_binding(outcome_value, "$.outcome_access_artifact")
+    )
+    if (terminal_status in _STRICT_OUTCOME_STATES) != (outcome_binding is not None):
+        raise RouteEnvelopeError(
+            "$.outcome_access_artifact must be exact for strict outcomes and null "
+            "for no-outcome server dispositions."
+        )
+    return NonreportingRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        terminal_status=terminal_status,
+        terminal_artifact=_exact_binding(
+            value["terminal_artifact"], "$.terminal_artifact"
+        ),
+        outcome_access_artifact=outcome_binding,
+        expected_lifecycle_head_sha256=_upper_sha256(
+            value["expected_lifecycle_head_sha256"],
+            "$.expected_lifecycle_head_sha256",
+        ),
+        reason_code=reason_code,
+    )
+
+
+def load_reconciliation_request(raw: bytes | bytearray | memoryview) -> bytes:
+    snapshot, value = _load(raw)
+    _exact_keys(value, {"schema_version"}, "$")
+    if value["schema_version"] != RECONCILIATION_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            f"schema_version must equal {RECONCILIATION_REQUEST_SCHEMA!r}."
+        )
+    return snapshot
+
+
+def _load(raw: bytes | bytearray | memoryview) -> tuple[bytes, dict[str, Any]]:
+    try:
+        return load_json_object(raw)
+    except Exception as exc:
+        raise RouteEnvelopeError("Route envelope is not strict bounded JSON.") from exc
+
+
+def _exact_artifact(
+    value: object,
+    path: str,
+    *,
+    require_artifact_metadata: bool,
+) -> ExactEnvelopeArtifact:
+    node = _object(value, path)
+    metadata = {"artifact_id", "media_type"} if require_artifact_metadata else set()
+    _exact_keys(node, {"sha256", "byte_length", "raw_base64", *metadata}, path)
+    artifact_id = (
+        _machine_id(node["artifact_id"], f"{path}.artifact_id")
+        if require_artifact_metadata
+        else None
+    )
+    media_type = None
+    if require_artifact_metadata:
+        media_type = node["media_type"]
+        if (
+            type(media_type) is not str
+            or not media_type
+            or media_type != media_type.strip()
+            or len(media_type.encode("utf-8")) > _MAX_MEDIA_TYPE_BYTES
+            or any(character.isspace() for character in media_type)
+            or "/" not in media_type
+        ):
+            raise RouteEnvelopeError(f"{path}.media_type is invalid.")
+    digest = node["sha256"]
+    length = node["byte_length"]
+    encoded = node["raw_base64"]
+    if type(digest) is not str or not _UPPER_SHA256_RE.fullmatch(digest):
+        raise RouteEnvelopeError(f"{path}.sha256 must be uppercase SHA-256.")
+    if (
+        type(length) is not int
+        or isinstance(length, bool)
+        or length < 1
+        or length > _MAX_ARTIFACT_BYTES
+    ):
+        raise RouteEnvelopeError(
+            f"{path}.byte_length must be an exact bounded positive integer."
+        )
+    if type(encoded) is not str:
+        raise RouteEnvelopeError(f"{path}.raw_base64 must be text.")
+    try:
+        body = base64.b64decode(encoded, validate=True)
+    except (ValueError, TypeError) as exc:
+        raise RouteEnvelopeError(f"{path}.raw_base64 is invalid.") from exc
+    if (
+        base64.b64encode(body).decode("ascii") != encoded
+        or len(body) != length
+        or not hmac.compare_digest(
+            hashlib.sha256(body).hexdigest().upper(), digest
+        )
+    ):
+        raise RouteEnvelopeError(
+            f"{path} exact byte identity does not match its digest and length."
+        )
+    return ExactEnvelopeArtifact(
+        artifact_id=artifact_id,
+        media_type=media_type,
+        sha256=digest,
+        byte_length=length,
+        raw_bytes=body,
+    )
+
+
+def _exact_named_artifact(value: object, path: str) -> ExactEnvelopeArtifact:
+    node = _object(value, path)
+    _exact_keys(
+        node,
+        {"artifact_id", "sha256", "byte_length", "raw_base64"},
+        path,
+    )
+    exact = _exact_artifact(
+        {
+            "sha256": node["sha256"],
+            "byte_length": node["byte_length"],
+            "raw_base64": node["raw_base64"],
+        },
+        path,
+        require_artifact_metadata=False,
+    )
+    return ExactEnvelopeArtifact(
+        artifact_id=_machine_id(node["artifact_id"], f"{path}.artifact_id"),
+        media_type=None,
+        sha256=exact.sha256,
+        byte_length=exact.byte_length,
+        raw_bytes=exact.raw_bytes,
+    )
+
+
+def _exact_binding(value: object, path: str) -> ExactEnvelopeBinding:
+    node = _object(value, path)
+    _exact_keys(
+        node,
+        {"artifact_id", "media_type", "sha256", "byte_length"},
+        path,
+    )
+    length = node["byte_length"]
+    if (
+        type(length) is not int
+        or isinstance(length, bool)
+        or length < 1
+        or length > 9_223_372_036_854_775_807
+    ):
+        raise RouteEnvelopeError(
+            f"{path}.byte_length must be an exact bounded positive integer."
+        )
+    return ExactEnvelopeBinding(
+        artifact_id=_machine_id(node["artifact_id"], f"{path}.artifact_id"),
+        media_type=_media_type(node["media_type"], f"{path}.media_type"),
+        sha256=_upper_sha256(node["sha256"], f"{path}.sha256"),
+        byte_length=length,
+    )
+
+
+def _artifact_matches_reference(item: ExactEnvelopeArtifact, reference: Any) -> bool:
+    return (
+        item.artifact_id == reference.artifact_id
+        and item.byte_length == reference.byte_length
+        and hmac.compare_digest(item.sha256, reference.sha256.upper())
+    )
+
+
+def _media_type(value: object, path: str) -> str:
+    if (
+        type(value) is not str
+        or not value
+        or value != value.strip()
+        or len(value.encode("utf-8")) > _MAX_MEDIA_TYPE_BYTES
+        or any(character.isspace() for character in value)
+        or "/" not in value
+    ):
+        raise RouteEnvelopeError(f"{path} is invalid.")
+    return value
+
+
+def _upper_sha256(value: object, path: str) -> str:
+    if type(value) is not str or not _UPPER_SHA256_RE.fullmatch(value):
+        raise RouteEnvelopeError(f"{path} must be uppercase SHA-256.")
+    return value
+
+
+def _object(value: object, path: str) -> dict[str, Any]:
+    if type(value) is not dict:
+        raise RouteEnvelopeError(f"{path} must be an exact object.")
+    return value
+
+
+def _exact_keys(value: Mapping[str, Any], expected: set[str], path: str) -> None:
+    if set(value) != expected:
+        raise RouteEnvelopeError(f"{path} has missing or unknown fields.")
+
+
+def _machine_id(value: object, path: str) -> str:
+    if (
+        type(value) is not str
+        or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", value)
+    ):
+        raise RouteEnvelopeError(f"{path} must be an exact machine identifier.")
+    return value
+
+
+def _timestamp(value: object, path: str) -> datetime:
+    if type(value) is not str or not value or value != value.strip():
+        raise RouteEnvelopeError(f"{path} must be a canonical UTC timestamp.")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise RouteEnvelopeError(f"{path} must be a canonical UTC timestamp.") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() != UTC.utcoffset(parsed):
+        raise RouteEnvelopeError(f"{path} must be a canonical UTC timestamp.")
+    normalized = parsed.astimezone(UTC)
+    if value not in {normalized.isoformat(), normalized.isoformat().replace("+00:00", "Z")}:
+        raise RouteEnvelopeError(f"{path} must be a canonical UTC timestamp.")
+    return normalized
+
+
+__all__ = [
+    "AUTHORIZATION_REQUEST_SCHEMA",
+    "AuthorizationRequestEnvelope",
+    "CONSUMPTION_REQUEST_SCHEMA",
+    "ConsumptionRequestEnvelope",
+    "ExactEnvelopeArtifact",
+    "ExactEnvelopeBinding",
+    "NONREPORTING_REQUEST_SCHEMA",
+    "NONREPORTING_REASON_CODES",
+    "NonreportingRequestEnvelope",
+    "OUTPUT_RETENTION_SCHEMA",
+    "OUTCOME_SEAL_REQUEST_SCHEMA",
+    "OutcomeSealRequestEnvelope",
+    "OutputRetentionEnvelope",
+    "PACKET_ATTACHMENT_REQUEST_SCHEMA",
+    "PacketAttachmentRequestEnvelope",
+    "RECONCILIATION_REQUEST_SCHEMA",
+    "RouteEnvelopeError",
+    "TERMINAL_DISPOSITION_REASON_CODES",
+    "TERMINAL_DISPOSITION_REQUEST_SCHEMA",
+    "TerminalDispositionRequestEnvelope",
+    "load_authorization_request_envelope",
+    "load_consumption_request_envelope",
+    "load_nonreporting_request_envelope",
+    "load_outcome_seal_request_envelope",
+    "load_output_retention_envelope",
+    "load_packet_attachment_request_envelope",
+    "load_reconciliation_request",
+    "load_terminal_disposition_request_envelope",
+]

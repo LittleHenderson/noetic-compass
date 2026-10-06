@@ -63,6 +63,9 @@ from pydantic import BaseModel, Field
 
 from api.config import settings
 from api.dependencies.authz import current_tenant, require_role_in_account_mode
+from api.services.cas_harness_instruction_integrity import (
+    build_instruction_integrity_report,
+)
 from api.services.cas_harness_static_evidence_anchor import (
     anchor_static_evidence_packet,
     load_anchored_static_packet_payload,
@@ -194,6 +197,7 @@ class EvidencePacket(BaseModel):
     provenance: dict[str, Any]
     hashes: dict[str, Any]
     claim_levels: list[dict[str, Any]]
+    instruction_integrity: dict[str, Any] | None = None
     caveats: list[str] | None = None
     readout: dict[str, Any] | None = None
     ablation: dict[str, Any] | None = None
@@ -309,6 +313,23 @@ def _scaffold_root() -> Path:
 def _now_iso_utc() -> str:
     """Return current UTC time as an ISO-8601 string with second resolution."""
     return datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _instruction_integrity_payload(
+    *,
+    trace_id: str,
+    input_block: dict[str, Any],
+    output_block: dict[str, Any],
+) -> dict[str, Any]:
+    """Create the packet's deterministic, non-enforcing shadow report."""
+
+    prompt_text = input_block.get("text")
+    output_text = output_block.get("text")
+    return build_instruction_integrity_report(
+        prompt_text=prompt_text if isinstance(prompt_text, str) else None,
+        output_text=output_text if isinstance(output_text, str) else None,
+        evidence_packet_trace_id=trace_id,
+    ).to_dict()
 
 
 def _git_head_sha() -> str | None:
@@ -1003,6 +1024,11 @@ def _dev_fixture_packet() -> EvidencePacket:
         provenance=provenance,
         hashes=hashes,
         claim_levels=claim_levels,
+        instruction_integrity=_instruction_integrity_payload(
+            trace_id=_DEV_FIXTURE_TRACE_ID,
+            input_block=input_block,
+            output_block=output_block,
+        ),
         caveats=caveats,
     )
 
@@ -1106,6 +1132,20 @@ def _dev_fixture_fallback_packet(reason: str | None = None) -> EvidencePacket:
                 "rationale": "Rows are illustrative because deployment-local artifacts were unavailable.",
             },
         ],
+        instruction_integrity=_instruction_integrity_payload(
+            trace_id=_DEV_FIXTURE_TRACE_ID,
+            input_block={
+                "text": "What does ^3^P|A mean and why is it different from ^3^E|f?"
+            },
+            output_block={
+                "text": (
+                    "^3^P|A is principled aversion expressed analytically. "
+                    "^3^E|f is felt aversion in the evaluative domain. This "
+                    "fallback packet exists so reviewers can inspect the Evidence "
+                    "Packet surface even when deployment-local artifacts are absent."
+                )
+            },
+        ),
         caveats=[caveat],
     )
 
@@ -1188,16 +1228,24 @@ def _packet_from_trace(trace_id: str, trace: dict[str, Any]) -> EvidencePacket:
         }
     ]
 
+    input_block = trace.get("input") or {"text": ""}
+    output_block = trace.get("output") or {"text": ""}
+
     return EvidencePacket(
         trace_id=trace_id,
         generated_at=_now_iso_utc(),
-        input=trace.get("input") or {"text": ""},
+        input=input_block,
         cas_expression=trace.get("cas_expression"),
-        output=trace.get("output") or {"text": ""},
+        output=output_block,
         copy_slot_trace=trace.get("copy_slot_trace"),
         provenance=provenance,
         hashes=hashes,
         claim_levels=claim_levels,
+        instruction_integrity=_instruction_integrity_payload(
+            trace_id=trace_id,
+            input_block=input_block,
+            output_block=output_block,
+        ),
         caveats=trace.get("caveats"),
     )
 

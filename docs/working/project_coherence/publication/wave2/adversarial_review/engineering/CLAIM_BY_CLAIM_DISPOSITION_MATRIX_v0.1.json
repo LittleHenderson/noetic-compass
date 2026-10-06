@@ -1,0 +1,342 @@
+{
+  "schema_version": "project_coherence.publication.wave2.adversarial_review.engineering.claim_disposition.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "review_source_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "source_matrix_path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+  "source_matrix_sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B",
+  "formal_authority": {
+    "commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+    "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+    "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+  },
+  "review_rule": "Accept only the source-bounded wording and preserve every prohibited inference. A review disposition does not promote admission ring, license, disclosure, canon, product, empirical, causal, physical, safety, clinical, or regulatory status.",
+  "summary": {
+    "accepted_as_bounded_or_open": 26,
+    "accepted_with_strengthening": 3,
+    "blocking_correction_required": 1,
+    "accepted_open_with_integration_blocker": 1,
+    "total": 31
+  },
+  "entries": [
+    {
+      "id": "PCBA-EA-001",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The CAS PCBA v8 Python candidate represents components, ports, signal kinds, units, parameters, nets, state literals, test points, calibration references, and feedback declarations with closed typed contracts.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The bound types, contracts, model, and DRC tests support the narrow implementation statement.",
+      "required_action": "Preserve candidate and bounded-software qualifiers.",
+      "boundary_preserved": "No CCDL completeness, cognitive validity, physical identity, or product-readiness inference."
+    },
+    {
+      "id": "PCBA-EA-002",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "Complete declared board structure participates in an immutable canonical identity, and exact runtime value tags distinguish Boolean true, integer 1, and string true.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "Canonical identity and exact-type collision defenses are tested in the bound candidate.",
+      "required_action": "Retain exact-version and candidate scope.",
+      "boundary_preserved": "No cryptographic authenticity, semantic equivalence, or tamper-proofing inference."
+    },
+    {
+      "id": "PCBA-EA-003",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The deterministic DRC checks declared component contracts, typed connectivity, driver count, required ports, signal/unit compatibility, calibration linkage, and test-point requirements and fails boards carrying errors.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The implemented checks and fail-on-error behavior are covered by the bound suite.",
+      "required_action": "Do not generalize beyond the supported profile and declared checks.",
+      "boundary_preserved": "No completeness, soundness for every circuit, or safety certification inference."
+    },
+    {
+      "id": "PCBA-EA-004",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The DRC uses graph-cycle analysis and conservative per-cycle gain checks for declared feedback in the supported profile.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "Cycle enumeration and conservative declared-gain checks are implemented and tested.",
+      "required_action": "Keep supported-profile and conservative qualifiers.",
+      "boundary_preserved": "No stability result for stateful, delayed, stochastic, adaptive, nonlinear, or unmodeled feedback."
+    },
+    {
+      "id": "PCBA-EA-005",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_KNOWN_FAULT_REGRESSION",
+      "statement": "For supported activation paths, the DRC reports an unreachable threshold when the derived upstream upper bound is below the declared fuse threshold.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The known-fault fixture confirms the 0.1 upstream clamp cannot cross the 0.9 fuse threshold.",
+      "required_action": "Preserve the known-fault finding and do not imply the source board is repaired.",
+      "boundary_preserved": "Non-finite gain and incomplete latch/fail-closed semantics remain unresolved."
+    },
+    {
+      "id": "PCBA-EA-006",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The narrow reference simulator emits deterministic trace and measurement records bound to board, DRC, catalog, decimal-context, source, calibration, and child-lineage identities.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "Deterministic record and identity binding are supported by the bounded implementation and tests.",
+      "required_action": "Retain narrow reference-simulator wording.",
+      "boundary_preserved": "No operational validity, real-time behavior, physical measurement, or general simulation claim."
+    },
+    {
+      "id": "PCBA-EA-007",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "Only certified total finite deterministic stateless non-stochastic transition tables can cross the candidate TKS v8 adapter, and the certificate binds the exact kernel and PCBA identities.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The adapter rejects the audited out-of-profile transition forms and binds exact identities.",
+      "required_action": "Keep every finite, total, deterministic, stateless, and non-stochastic restriction.",
+      "boundary_preserved": "No general TKS equivalence, stateful dynamics, cognition, or canon migration."
+    },
+    {
+      "id": "PCBA-EA-008",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The candidate keeps the mixed-simplex Fisher-Rao profile and optional projector profile type-distinct and binds projector matrix, rank, source/basis, tolerance, and validation residuals.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The optional projector representation is type-distinct from the canonical simplex representation.",
+      "required_action": "Reference Formal Mathematics Paper 3 for theorem content; do not treat type implementation as theorem satisfaction.",
+      "boundary_preserved": "No state-capacity certificate, equivalence, or replacement of the canonical simplex baseline."
+    },
+    {
+      "id": "PCBA-SF-001",
+      "source_status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_QUARANTINED",
+      "statement": "The consolidated formal CCDL EBNF does not cover the published five-board reference corpus; four boards contain direct syntax counterexamples and one bounded listing has no direct counterexample established by this audit.",
+      "review_disposition": "ACCEPT_NEGATIVE_FINDING",
+      "severity": "NONE",
+      "finding": "Gate 4 reconfirmed four direct grammar counterexamples across the five-board corpus.",
+      "required_action": "Keep the fifth-board wording exact; absence of a found counterexample is not proof of conformance.",
+      "boundary_preserved": "No complete grammar, parser, round trip, or corpus-conformance claim."
+    },
+    {
+      "id": "PCBA-SF-002",
+      "source_status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_KNOWN_FAULT_FIXTURE",
+      "statement": "Under the published clamp semantics, the CSB red stage capped at 0.1 cannot cross its downstream 0.9 fuse threshold; the same source also uses non-finite gain without complete latch/fail-closed semantics.",
+      "review_disposition": "ACCEPT_NEGATIVE_FINDING",
+      "severity": "NONE",
+      "finding": "The arithmetic contradiction and associated source limitations are directly reproducible.",
+      "required_action": "Retain as a quarantined source finding until a versioned replacement and migration decision exist.",
+      "boundary_preserved": "No implication that the board is operationally valid or repaired."
+    },
+    {
+      "id": "PCBA-OPEN-001",
+      "source_status": "OPEN_ENGINEERING",
+      "statement": "A complete versioned CCDL grammar, parser, canonical round trip, and corpus conformance package do not exist in the admitted candidate.",
+      "review_disposition": "ACCEPT_OPEN",
+      "severity": "NONE",
+      "finding": "No inspected artifact closes this obligation.",
+      "required_action": "Remain open pending versioned grammar, parser, round-trip tests, ambiguity tests, corpus conformance, and independent replay.",
+      "boundary_preserved": "No syntax-completeness or language-conformance claim."
+    },
+    {
+      "id": "PCBA-OPEN-002",
+      "source_status": "OPEN_ENGINEERING",
+      "statement": "Capacitor, PLL, memory, power, richer feedback, stochastic, and memristive time/state semantics remain unspecified or unvalidated.",
+      "review_disposition": "ACCEPT_OPEN",
+      "severity": "NONE",
+      "finding": "The bound implementation remains deliberately narrow and lacks these semantics.",
+      "required_action": "Keep all listed dynamics open until separately specified, implemented, and validated.",
+      "boundary_preserved": "No stateful, stochastic, adaptive, memory, power, or memristive behavior claim."
+    },
+    {
+      "id": "PCBA-OPEN-003",
+      "source_status": "OPEN_EXTERNAL_VALIDATION",
+      "statement": "No live PCBA calibration, authenticated instrumentation, environmental validity, uncertainty/drift validation, or held-out external result is admitted.",
+      "review_disposition": "ACCEPT_OPEN",
+      "severity": "NONE",
+      "finding": "The package contains bounded software receipts, not live or external validation.",
+      "required_action": "Remain open pending authenticated, independently reviewed external evidence.",
+      "boundary_preserved": "No live measurement, environmental validity, calibration, drift, or replication claim."
+    },
+    {
+      "id": "PCBA-OPEN-004",
+      "source_status": "OPEN_EXTERNAL_VALIDATION / NOT LICENSED",
+      "statement": "PCBA safety effectiveness, certification, regulatory compliance, and clinical suitability are not established.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "No inspected artifact supplies the required qualified evidence or authority.",
+      "required_action": "Preserve not-licensed status and require domain-qualified independent review before any change.",
+      "boundary_preserved": "No safety, clinical, certification, or regulatory claim."
+    },
+    {
+      "id": "OHM-EA-001",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "The CAS-Ohm candidate keeps quantity kind, exact decimal, unit, measurement kind, method, calibration profile, uncertainty, sample size, lineage, raw evidence, controls, and missingness type-distinct.",
+      "review_disposition": "ACCEPT_WITH_STRENGTHENING",
+      "severity": "REQUIRED_STRENGTHENING",
+      "finding": "The type distinction is supported, but the paper incorrectly implies that physical SI quantities are members of the current UnitKind ontology.",
+      "required_action": "Apply S-ENG-002: state that physical SI quantities are outside the current ontology and require a separately typed physical profile.",
+      "boundary_preserved": "No metrological traceability, physical telemetry, or empirical validity inference."
+    },
+    {
+      "id": "OHM-EA-002",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "Calibration profiles bind the declared model, direction, corpus, splits, methods, tolerances, controls, validity interval, drift, and digest; calibrated held-out resistance is distinguished from same-sample apparent resistance.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The type and validation controls are implemented; same-sample circularity is explicitly excluded.",
+      "required_action": "Preserve split separation, direction, profile, provenance, and validity requirements.",
+      "boundary_preserved": "No evidence that a profile has been empirically calibrated or externally validated."
+    },
+    {
+      "id": "OHM-EA-003",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "Dose-response region and semantic outcome are independent classifications in the candidate.",
+      "review_disposition": "ACCEPT_BOUNDED",
+      "severity": "NONE",
+      "finding": "The two classifications are represented independently in the bound candidate.",
+      "required_action": "Keep the classifications separate in prose and interfaces.",
+      "boundary_preserved": "No claim that either classification is empirically valid or causally meaningful."
+    },
+    {
+      "id": "OHM-EA-004",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
+      "statement": "Q4 bands use exact unrounded values and half-open boundaries at 2.5, 5, and 7.5.",
+      "review_disposition": "ACCEPT_WITH_STRENGTHENING",
+      "severity": "REQUIRED_STRENGTHENING",
+      "finding": "Boundary behavior is correct, but the exact pre-clipping classifier can receive values above 10 while the paper shows Q4 ending at 10.",
+      "required_action": "Apply S-ENG-001: define Q4 as [7.5, infinity) for exact input, or explicitly label [7.5, 10] as the clipped display interval.",
+      "boundary_preserved": "No validation of the full-scale method or semantic interpretation."
+    },
+    {
+      "id": "OHM-EA-005",
+      "source_status": "SUPPORTED_STRUCTURAL_SOFTWARE_ONLY",
+      "statement": "Series, parallel, and gain-product calculations are profile-, unit-, coordinate-, topology-, region-, child-, and provenance-gated structural research operations.",
+      "review_disposition": "ACCEPT_STRUCTURAL_ONLY",
+      "severity": "NONE",
+      "finding": "The implementation enforces the declared structural guards.",
+      "required_action": "Retain structural-only, local-region, covariance, topology, and provenance qualifications.",
+      "boundary_preserved": "No physical circuit law, causal composition, global behavior, or empirical prediction."
+    },
+    {
+      "id": "OHM-EA-006",
+      "source_status": "SUPPORTED_STRUCTURAL_SOFTWARE_ONLY",
+      "statement": "Residual diagnosis is restricted to matching active, reviewed, nonstale, held-out instrumented evidence with uncertainty and remains explicitly non-identifying.",
+      "review_disposition": "ACCEPT_WITH_STRENGTHENING",
+      "severity": "REQUIRED_STRENGTHENING",
+      "finding": "Structural guards and non-identification are preserved, but nonstale is evaluated only relative to caller-supplied replay time.",
+      "required_action": "Apply S-ENG-003: say replay-time-current, not authenticated-current.",
+      "boundary_preserved": "No live freshness, causal diagnosis, hidden-cause identification, or validated localization."
+    },
+    {
+      "id": "OHM-EA-007",
+      "source_status": "SUPPORTED_BY_BOUNDED_SOFTWARE / AUTHORITY_OPEN",
+      "statement": "Structural research-packet completeness and authenticated Evidence Packet eligibility are separate, and authenticated eligibility is false in the current candidate.",
+      "review_disposition": "ACCEPT_BOUNDED_AUTHORITY_OPEN",
+      "severity": "NONE",
+      "finding": "The candidate explicitly separates structural completeness from authority and always denies authenticated-current eligibility.",
+      "required_action": "Preserve the false authenticated-eligibility result until an admitted authority path exists.",
+      "boundary_preserved": "No signature, trusted timestamp, WORM receipt, identity, authorization, or product acceptance."
+    },
+    {
+      "id": "OHM-SF-001",
+      "source_status": "ESTABLISHED_WITH_SOURCE_LOCATORS_AND_QUARANTINED",
+      "statement": "The three CAS-Ohm sources retain eight conflicts or under-specifications across scale/saturation, full-scale method, dimensional bridge, gain, ASOM, network rules, residual identification, and Q4 boundaries.",
+      "review_disposition": "ACCEPT_NEGATIVE_FINDING",
+      "severity": "NONE",
+      "finding": "All eight recorded conflicts were present and were reconfirmed by Gate 4.",
+      "required_action": "Keep the conflicts quarantined; do not silently select a source interpretation as canonical.",
+      "boundary_preserved": "No claim that the candidate resolves historical source conflicts or has canon authority."
+    },
+    {
+      "id": "THM-PROJECTOR-GRAM-KERNEL",
+      "source_status": "IN_REVIEW / STANDARD_RESULT_CITED / Ring 4",
+      "statement": "For common finite-rank orthogonal projectors in one Hilbert space, normalized Hilbert-Schmidt overlap is a positive-semidefinite kernel in [0,1].",
+      "review_disposition": "BLOCKING_CORRECTION_REQUIRED",
+      "severity": "PUBLICATION_BLOCKER",
+      "finding": "The engineering summary omits d > 0; at common rank zero the normalized expression is 0/0 and undefined.",
+      "required_action": "Resolve B-ENG-001 by adding common rank d > 0, and B-ENG-002 by binding Formal Mathematics Paper 3 as sole theorem authority.",
+      "boundary_preserved": "No strict positive-definiteness, capacity result, empirical meaning, or CAS realization."
+    },
+    {
+      "id": "THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
+      "source_status": "PROOF_GAP / IN_REVIEW / Ring 4",
+      "statement": "A proposed CAS projector-capacity specialization would require a CAS-specific representation satisfying every source hypothesis, including the omitted isometry/intertwining identity.",
+      "review_disposition": "ACCEPT_OPEN_WITH_INTEGRATION_BLOCKER",
+      "severity": "PUBLICATION_INTEGRATION_BLOCKER",
+      "finding": "The open status is correct; Formal Mathematics Paper 3 supplies the governing hypotheses and counterexample, but the engineering package lacks its exact cross-lane binding.",
+      "required_action": "Resolve B-ENG-002; keep the theorem a proof gap until a CAS-specific isometry and adjoint-intertwining certificate are verified.",
+      "boundary_preserved": "No CAS capacity bound, implementation certificate, or empirical result."
+    },
+    {
+      "id": "CLM-CAS-OHM-PHYSICAL-TELEMETRY",
+      "source_status": "NOT LICENSED / CONTRADICTED_BY_CURRENT_BOUNDARY",
+      "statement": "CAS-Ohm design scores, proxies, and model-derived quantities are physical electrical telemetry or validated measurements.",
+      "review_disposition": "ACCEPT_CONTRADICTED_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "The current type, source, and evidence boundaries contradict this affirmative claim.",
+      "required_action": "Keep the claim explicitly contradicted and not licensed.",
+      "boundary_preserved": "No physical voltage, current, resistance, charge, flux, power, device, material, or telemetry interpretation."
+    },
+    {
+      "id": "CLM-CAS-OHM-LOCAL-RESPONSE",
+      "source_status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "statement": "Within one frozen active-region profile, activation projection varies predictably with randomized steering alpha on held-out prompts.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "No preregistration, qualified Evidence Packet, randomized held-out result, or independent review is present.",
+      "required_action": "Remain open pending the declared experiment and review obligations.",
+      "boundary_preserved": "No empirical dose-response or causal effect claim."
+    },
+    {
+      "id": "CLM-CAS-OHM-EFFECTIVE-RESISTANCE",
+      "source_status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "statement": "A calibration-split effective-resistance parameter predicts held-out response and changes as predicted under an independently characterized non-safety constraint manipulation.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "The software distinguishes calibrated and apparent quantities, but no held-out predictive experiment exists.",
+      "required_action": "Remain open; prohibit same-sample apparent resistance from predictive evidence.",
+      "boundary_preserved": "No calibrated prediction, causal manipulation, physical resistance, or safety claim."
+    },
+    {
+      "id": "CLM-CAS-OHM-GAIN-COMPOSITION",
+      "source_status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "statement": "For coordinate-compatible independently calibrated active-region stages, end-to-end local derivative agrees with the product of local Jacobian/projection gains.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "Only guarded structural calculations are implemented; the empirical composition claim is untested.",
+      "required_action": "Remain open pending independent calibration, coordinate checks, held-out tests, uncertainty treatment, and review.",
+      "boundary_preserved": "No global gain law, physical amplification, causal composition, or empirical validation."
+    },
+    {
+      "id": "CLM-CAS-OHM-REDUNDANCY",
+      "source_status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "statement": "Ablating a genuine redundant non-safety branch increases required steering alpha more than matched random-head ablation.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "No matched-control ablation result or Evidence Packet is present.",
+      "required_action": "Remain open pending preregistered, non-safety matched-control evidence and independent review.",
+      "boundary_preserved": "No redundancy, causal, model-behavior, or safety-effectiveness claim."
+    },
+    {
+      "id": "CLM-CAS-OHM-RESIDUAL-LOCALIZATION",
+      "source_status": "OPEN / NOT PREREGISTERED / NO EVIDENCE PACKET / NOT LICENSED",
+      "statement": "A calibrated residual diagnostic localizes blinded implanted non-safety faults above shuffled and matched-control baselines without identifying hidden causes from residual sign.",
+      "review_disposition": "ACCEPT_OPEN_NOT_LICENSED",
+      "severity": "NONE",
+      "finding": "The implementation enforces non-identifying structural guards; no blinded localization experiment is admitted.",
+      "required_action": "Remain open and preserve the explicit ban on identifying causes from residual sign.",
+      "boundary_preserved": "No causal diagnosis, hidden-cause identification, safety finding, or validated localization."
+    },
+    {
+      "id": "MEM-OPEN-001",
+      "source_status": "OPEN / NOT IMPLEMENTED / NOT PREREGISTERED / NOT LICENSED",
+      "statement": "A future CAS response profile may require an explicit history state and could be compared with a matched memoryless profile.",
+      "review_disposition": "ACCEPT_OPEN_NOT_IMPLEMENTED",
+      "severity": "NONE",
+      "finding": "No memristive implementation terms, calibrated history state, hysteresis result, device, or physical mapping exist in the bound source and tests.",
+      "required_action": "Remain open until an explicit nonphysical state model, preregistered comparison, evidence, and independent review exist.",
+      "boundary_preserved": "No physical memristor, charge/flux mapping, material device, learned resistance, or validated hysteresis."
+    }
+  ],
+  "entry_count": 31,
+  "closure_statement": "The review permits no claim widening. All experimental, causal, physical, material, stateful, memristive, safety, clinical, regulatory, product, canon, license, disclosure, authorship, cross-review, and external-review conclusions remain OPEN unless explicitly negative or NOT LICENSED."
+}

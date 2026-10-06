@@ -1,0 +1,22 @@
+{
+  "schema_version": "cas_harness_model_tokenizer_identity.v1",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "tokenizer_json": {
+    "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "byte_length": 7031645
+  },
+  "tokenizer_config_json": {
+    "sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "byte_length": 7305
+  },
+  "merges_txt": {
+    "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "byte_length": 1671839
+  },
+  "vocab_json": {
+    "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "byte_length": 2776833
+  },
+  "status": "EXACT IMAGE-BOUND TOKENIZER ARTIFACT SET / NO TOKENIZER CAPABILITY CLAIM"
+}

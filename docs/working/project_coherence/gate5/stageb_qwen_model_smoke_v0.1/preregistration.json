@@ -1,0 +1,291 @@
+{
+  "schema_version": "cas_harness_v2.preregistration.v1",
+  "preregistration_id": "prereg-gate5-stageb-qwen-joined-packet-001",
+  "created_at": "2026-08-08T20:50:40.361330Z",
+  "claim_binding": {
+    "claim_ledger": {
+      "artifact_id": "stageb-qwen-noncanonical-claim-ledger",
+      "sha256": "CCF8C5F879F802C009A90E07EF5CC2C26BA65E297E165B2F1E807B817FEB0230",
+      "byte_length": 3180,
+      "media_type": "application/json"
+    },
+    "claim_id": "CLM-GATE5-STAGEB-QWEN-JOINED-PACKET-MECHANICS",
+    "claim_text": "One bounded Stage B joined engineering run can bind the exact Qwen/Qwen2.5-0.5B-Instruct model and local image, consume one clean instruction request, perform at most one model invocation, retain the exact output and terminal lifecycle evidence, and create at most one Evidence Packet v2; the required intervention-science controls are not performed and the Packet is scientifically ineligible.",
+    "claim_record_sha256": "4981775206E3724D8B241C75ED15EBB052669948463B8BB5968040F492CDA3C5"
+  },
+  "hypothesis": {
+    "primary": "One bounded Stage B joined engineering run can bind the exact Qwen/Qwen2.5-0.5B-Instruct model and local image, consume one clean instruction request, perform at most one model invocation, retain the exact output and terminal lifecycle evidence, and create at most one Evidence Packet v2; the required intervention-science controls are not performed and the Packet is scientifically ineligible.",
+    "null": "The exact bounded joined engineering and single-Packet path does not complete under the frozen identities and one-attempt limits.",
+    "estimand": "Exact binary completion of the bounded joined engineering and one-Packet mechanics path; no model efficacy estimand",
+    "direction": "GREATER"
+  },
+  "units": [
+    {
+      "measure_id": "stageb-run-count",
+      "unit": "count",
+      "operational_definition": "Number of lifecycle run attempts created for this preregistration",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-model-invocation-count",
+      "unit": "count",
+      "operational_definition": "Number of calls crossing the exact joined model-invocation boundary",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-packet-count",
+      "unit": "count",
+      "operational_definition": "Number of Evidence Packet v2 carriers created for this run",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-intervention-count",
+      "unit": "count",
+      "operational_definition": "Number of activation steering, ablation, or drive-local eraser interventions attempted",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-provider-call-count",
+      "unit": "count",
+      "operational_definition": "Number of RunPod or external model-provider calls made during the execution",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-provider-spend-usd",
+      "unit": "USD",
+      "operational_definition": "Known paid provider spend attributable to this execution",
+      "measurement_kind": "MEASURED"
+    },
+    {
+      "measure_id": "stageb-output-byte-count",
+      "unit": "bytes",
+      "operational_definition": "Exact retained output carrier byte length",
+      "measurement_kind": "MEASURED"
+    }
+  ],
+  "splits": [
+    {
+      "split_id": "stageb-engineering-confirmatory",
+      "role": "CONFIRMATORY",
+      "source_artifact": {
+        "artifact_id": "stageb-engineering-confirmatory-split",
+        "sha256": "7297A610841BA059527966EB841CB725676F844ECB8A98433DF33398AD78BF16",
+        "byte_length": 347,
+        "media_type": "application/json"
+      },
+      "allocation_rule": "Exactly one frozen clean-instruction joined engineering carrier",
+      "grouping_key": "stageb-engineering-run",
+      "minimum_groups": 1,
+      "target_groups": 1,
+      "target_enrolled_rows": 1,
+      "target_analyzed_rows": 1,
+      "maximum_missing_rows": 0,
+      "maximum_excluded_rows": 0
+    },
+    {
+      "split_id": "stageb-schema-held-out",
+      "role": "HELD_OUT_REPLICATION",
+      "source_artifact": {
+        "artifact_id": "stageb-schema-heldout-split",
+        "sha256": "A2E6164D6F0820C82443A77227BD94617B9D399667C5D746FB5B4277B33DFFBC",
+        "byte_length": 572,
+        "media_type": "application/json"
+      },
+      "allocation_rule": "Schema-required held-out row is prospectively retained but excluded and not executed because Stage B authorizes no replication",
+      "grouping_key": "stageb-schema-heldout-row",
+      "minimum_groups": 1,
+      "target_groups": 1,
+      "target_enrolled_rows": 1,
+      "target_analyzed_rows": 1,
+      "maximum_missing_rows": 0,
+      "maximum_excluded_rows": 1
+    }
+  ],
+  "fixed_sample_plan": {
+    "stopping_rule": "FIXED_SAMPLE",
+    "interim_outcome_access": "FORBIDDEN",
+    "row_accounting": "DISJOINT_ENROLLED_EQUALS_ANALYZED_PLUS_MISSING_PLUS_EXCLUDED",
+    "exclusion_rule": "The held-out schema carrier is excluded by design; any identity, prompt, intervention, count, or provider drift fails closed",
+    "missing_data_rule": "No imputation, backfill, replacement run, or retry",
+    "deviation_effect": "SCIENTIFICALLY_INELIGIBLE",
+    "power_analysis": {
+      "artifact_id": "stageb-fixed-sample-plan",
+      "sha256": "C199C3D16F9C21EE7A6794253316D0D5CE3ECC672598F2DBC404F9A18CE5725E",
+      "byte_length": 495,
+      "media_type": "application/json"
+    }
+  },
+  "thresholds": [
+    {
+      "threshold_id": "stageb-exactly-one-run",
+      "measure_id": "stageb-run-count",
+      "operator": "EQ",
+      "value": "1",
+      "unit": "count",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-exactly-one-model-invocation",
+      "measure_id": "stageb-model-invocation-count",
+      "operator": "EQ",
+      "value": "1",
+      "unit": "count",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-exactly-one-packet",
+      "measure_id": "stageb-packet-count",
+      "operator": "EQ",
+      "value": "1",
+      "unit": "count",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-zero-interventions",
+      "measure_id": "stageb-intervention-count",
+      "operator": "EQ",
+      "value": "0",
+      "unit": "count",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-zero-provider-calls",
+      "measure_id": "stageb-provider-call-count",
+      "operator": "EQ",
+      "value": "0",
+      "unit": "count",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-zero-provider-spend",
+      "measure_id": "stageb-provider-spend-usd",
+      "operator": "EQ",
+      "value": "0.00",
+      "unit": "USD",
+      "decision_effect": "INVALID_IF_VIOLATED"
+    },
+    {
+      "threshold_id": "stageb-output-bytes-reported",
+      "measure_id": "stageb-output-byte-count",
+      "operator": "GE",
+      "value": "0",
+      "unit": "bytes",
+      "decision_effect": "REPORT_ONLY"
+    }
+  ],
+  "controls": [
+    {
+      "control_id": "stageb-matched-taxonomy-not-performed",
+      "kind": "MATCHED_TAXONOMY",
+      "procedure": "Do not execute an adversarial, taxonomic, clean-versus-injected, or matched-treatment comparison in Stage B",
+      "expected_result": "INVALID / NOT PERFORMED / NO DETECTION STUDY",
+      "failure_effect": "REPORT_ONLY"
+    },
+    {
+      "control_id": "stageb-wrong-layer-not-performed",
+      "kind": "WRONG_LAYER",
+      "procedure": "Do not execute activation steering, ablation, or a wrong-layer comparator in Stage B",
+      "expected_result": "INVALID / NOT PERFORMED / INTERVENTION FORBIDDEN",
+      "failure_effect": "REPORT_ONLY"
+    },
+    {
+      "control_id": "stageb-clean-null-not-performed",
+      "kind": "CLEAN_NULL",
+      "procedure": "Treat the one clean instruction as an engineering carrier, not as a paired null comparison",
+      "expected_result": "INVALID / NOT PERFORMED AS A SCIENTIFIC CONTROL",
+      "failure_effect": "REPORT_ONLY"
+    }
+  ],
+  "falsifiers": [
+    {
+      "falsifier_id": "stageb-bounded-path-violation",
+      "condition": "Any missing identity amendment, identity or prompt drift, intervention attempt, provider call, paid spend, second run, second invocation, second Packet reservation or creation, premature outcome access, missing terminal completion, or claim elevation observable by Packet-construction time",
+      "consequence": "INVALID"
+    }
+  ],
+  "uncertainty": {
+    "method": "Exact deterministic lifecycle and artifact accounting only; no efficacy inference",
+    "confidence_level": "0.95",
+    "multiplicity_correction": "NOT_APPLICABLE",
+    "permutations": 1,
+    "seeds": [
+      1729
+    ],
+    "grouping_unit": "stageb-engineering-run"
+  },
+  "identities": {
+    "model": {
+      "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "weights": {
+        "artifact_id": "qwen25-05b-instruct-model-safetensors",
+        "sha256": "FDF756FA7FCBE7404D5C60E26BFF1A0C8B8AA1F72CED49E7DD0210FE288FB7FE",
+        "byte_length": 988097824,
+        "media_type": "application/vnd.safetensors"
+      },
+      "tokenizer": {
+        "artifact_id": "qwen25-05b-instruct-tokenizer-identity",
+        "sha256": "31662B7B72A660967C5C88483E04996274CCB3F85EAFA62DF5FB030F07FE65A8",
+        "byte_length": 796,
+        "media_type": "application/json"
+      },
+      "license_basis": "Exact open-weight artifacts are bound for private research; no product license decision is made"
+    },
+    "code": {
+      "commit_sha": "648e92cbe3f84e2c4e47f803748c6fcf08909025",
+      "dirty_worktree": false,
+      "source_manifest": {
+        "artifact_id": "stageb-preparation-source-manifest",
+        "sha256": "D27E226EA44E065C17FF053DA0A39FD96B38A85773D97DD469D5E4F587A32BF2",
+        "byte_length": 4104,
+        "media_type": "application/json"
+      },
+      "analysis_manifest": {
+        "artifact_id": "stageb-analysis-manifest",
+        "sha256": "690E1C9D6124CAAE99CD95A9C17C83AF6FDA79B8B827DD861ED12D30B2AB16D1",
+        "byte_length": 3180,
+        "media_type": "application/json"
+      }
+    },
+    "environment": {
+      "environment_id": "gate5-stageb-qwen05b-local-v01",
+      "runtime": "Local Docker NVIDIA GPU / exact additive Qwen image / offline network-none / read-only root",
+      "dependency_lock": {
+        "artifact_id": "stageb-dependency-lock",
+        "sha256": "24BB8C5D31498DE573487376EB808986B52CB0504BA0F63B2E7B76D73E649780",
+        "byte_length": 1230,
+        "media_type": "application/json"
+      },
+      "container_image_digest": "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+      "hardware_profile": "NVIDIA GeForce RTX 4070 Laptop GPU / one local host / actual execution identity must match and be retained"
+    }
+  },
+  "permitted_wording": {
+    "allowed": [
+      "bounded Stage B joined engineering observation",
+      "one Evidence Packet v2 retained with scientific eligibility INELIGIBLE",
+      "RESEARCH ONLY / NOT PRODUCT VALIDATION"
+    ],
+    "forbidden": [
+      "prompt-injection detection validated",
+      "prompt-injection prevention validated",
+      "activation steering validated",
+      "steering efficacy validated",
+      "instruction-following capability established",
+      "scientifically eligible",
+      "Gate 5 closed",
+      "production ready",
+      "licensed",
+      "public release authorized"
+    ],
+    "claim_ceiling": "DIAGNOSTIC_ONLY"
+  },
+  "governance": {
+    "admission_ring": 4,
+    "product_claim_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+    "public_release": false,
+    "product_route": false,
+    "license_decision": "NONE"
+  }
+}

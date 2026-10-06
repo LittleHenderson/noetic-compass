@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.1",
+  "artifact_id": "TKS-V8-TYPED-CORE-PROTOTYPE",
+  "artifact_version": "0.1.0",
+  "document_status": "GATE_1 PROTOTYPE / IN_REVIEW / NOT FROZEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "scope": "Independent executable reference semantics for finite typed objects, total finite-function arrows, typed composition, endomaps, semigroupoid paths, deterministic standard-basis lifts, and fixed-order denotational shortlex normal forms.",
+  "provenance": {
+    "governing_audit": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+    "theorem_ledger": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+    "theorem_record_ids": [
+      "THM-LIFT-NORM-FIBER-FORMULA",
+      "THM-LIFT-OCCUPATION-COUNTEREXAMPLE",
+      "THM-FINITE-IDEMPOTENT-POWER"
+    ]
+  },
+  "integration_boundary": {
+    "active_cas_compiler_modified": false,
+    "production_runtime_dependency": false,
+    "canonical_tks_v8_status": "OPEN",
+    "cas_semantic_transfer_status": "OPEN / NOT LICENSED"
+  },
+  "formal_verification": {
+    "status": "PARTIAL / PRESENT",
+    "claim": "A pinned Lean seed kernel-checks only the exact modules and theorem dependencies named in the linked proof manifest. Universal lift, generic matrix/trace/rank, factorial-power, shortlex, and full-site formalizations remain OPEN.",
+    "manifest_ref": "docs/working/project_coherence/gate1/formal/LEAN_PROOF_MANIFEST_v0.1.json",
+    "environment_probe": {
+      "probed_at": "2026-08-04",
+      "python": "3.14.0",
+      "lean": "4.32.1 / f054605aea4b840552cca2e725580bffd1e1b704 / PRESENT",
+      "lake": "5 / PRESENT",
+      "coqc": "UNAVAILABLE",
+      "agda": "UNAVAILABLE"
+    },
+    "verified_scope": [
+      "Typed total-function identities and associativity plus endomap-only powers",
+      "Exact two-state constant-lift vector expansion and noncontractivity counterexample",
+      "Deterministic-lift identity entrywise and on basis vectors, typed basis composition, and relational-product support composition",
+      "Four-atom ACBE/RPM finite-context exhaustiveness and witness-map lemmas"
+    ],
+    "open_scope": [
+      "Universal deterministic-lift operator-norm theorem",
+      "Generic bridge from constantTwoLift to matrix, Gram, trace, and rank definitions",
+      "Finite-sum numerical matrix multiplication and arbitrary-vector linear extension of the checked lift basis laws",
+      "Finite-map factorial idempotent-power theorem",
+      "Fixed-order shortlex leastness",
+      "Full presheaf, sheaf, topology-generation, and product-site formalization"
+    ]
+  },
+  "validation_snapshot": {
+    "validated_at": "2026-08-04",
+    "result": "PASS",
+    "tests_run": 20,
+    "bounded_exhaustive_cases": {
+      "three_point_associativity_triples": 19683,
+      "endomaps_on_carriers_through_size_four": 289,
+      "typed_maps_with_source_and_target_sizes_through_four": 499,
+      "lift_functor_composition_pairs_through_size_three": 1678
+    },
+    "boundary": "A passing bounded executable suite is not proof-assistant verification or independent specialist review."
+  },
+  "claims": [
+    {
+      "id": "TKS8-KERNEL-CATEGORY-LAWS",
+      "kind": "STANDARD_RESULT",
+      "status": "PARTIAL FORMAL VERIFICATION / EXECUTABLE_VALIDATION",
+      "boundary": "Lean kernel-checks the exact typed-category module; equivalence between the Python implementation and the Lean model remains OPEN."
+    },
+    {
+      "id": "TKS8-KERNEL-LIFT-NORM",
+      "kind": "STANDARD_RESULT",
+      "statement": "For A_f e_x=e_f(x), ||A_f||^2=max_y |f^{-1}(y)|.",
+      "status": "INFORMAL_PROOF_PRESENT / EXECUTABLE_VALIDATION",
+      "boundary": "No empirical, cognitive-dynamics, channel-contractivity, or CAS efficacy claim follows."
+    },
+    {
+      "id": "TKS8-KERNEL-SHORTLEX-NORMAL-FORM",
+      "kind": "DEFINITION_AND_FINITE_ALGORITHM",
+      "status": "INFORMAL_CORRECTNESS_ARGUMENT / EXECUTABLE_VALIDATION",
+      "boundary": "This is denotational minimization over a completed finite closure, not a claim that an inherited rewrite system terminates or is confluent."
+    },
+    {
+      "id": "TKS8-KERNEL-LIFT-FUNCTOR",
+      "kind": "STANDARD_RESULT",
+      "statement": "The standard-basis lift preserves identities and typed composition.",
+      "status": "PARTIAL FORMAL VERIFICATION / EXECUTABLE_VALIDATION",
+      "boundary": "Checked for 1,678 bounded typed-map pairs and in Lean at entry/basis/support levels; finite-sum matrix multiplication, arbitrary-vector linearity, Python-to-Lean equivalence, and CAS semantic transfer remain OPEN."
+    },
+    {
+      "id": "TKS8-KERNEL-RESEARCH-TRANSFER",
+      "kind": "RESEARCH_TRANSFER",
+      "status": "OPEN",
+      "admission_ring": 4,
+      "license_status": "NOT LICENSED"
+    }
+  ],
+  "implementation_files": [
+    "src/tks_v8_core/__init__.py",
+    "src/tks_v8_core/category.py",
+    "src/tks_v8_core/deterministic_lift.py",
+    "src/tks_v8_core/normal_forms.py"
+  ],
+  "artifact_bindings": [
+    {"path": "src/tks_v8_core/__init__.py", "sha256": "6D7559758D5CB9A2CE4A9CD0EC152D0C8A7B9057708429571FEC1374639CDB77", "bytes": 1018, "role": "package exports"},
+    {"path": "src/tks_v8_core/category.py", "sha256": "B69F494814E9D9CD54C80ADD8D6AF850C5A8F762B1A0C6DFC85435BA4458D947", "bytes": 9850, "role": "typed finite-function category"},
+    {"path": "src/tks_v8_core/deterministic_lift.py", "sha256": "A4649F62B44ED0DE820316E930958D2E32E143406DC1F9BC169A8EC533095115", "bytes": 5483, "role": "deterministic standard-basis lift"},
+    {"path": "src/tks_v8_core/normal_forms.py", "sha256": "7C85D6BA77E39F953F59916C907E4D7C9C0564C7AB0E89CAE05087188BC596E5", "bytes": 9889, "role": "denotational shortlex closure"},
+    {"path": "tests/tks_v8_core/test_category.py", "sha256": "0D8592E1231FA02263E63496BE0774441610D3E11A17A6D18DF39DBBCBD789C2", "bytes": 5588, "role": "category and power regressions"},
+    {"path": "tests/tks_v8_core/test_deterministic_lift.py", "sha256": "D14126D80A056ED222DB3DFC58BEA4DFFF0E6466D31C43BC8D7B2F78CE509D01", "bytes": 9142, "role": "lift structure and functor-law regressions"},
+    {"path": "tests/tks_v8_core/test_manifest_boundaries.py", "sha256": "9D3D1DEA155A5E1F8A13638B915EEF28C4DF51A90226B5826BA862BF10F2E097", "bytes": 1965, "role": "claim and integration boundary regression"},
+    {"path": "tests/tks_v8_core/test_normal_forms.py", "sha256": "A4DE6902CC4AD986AAAB1A448473C3D72AE528907577E6F6F1CE328E0C396F9B", "bytes": 5672, "role": "normal-form correctness and resource regressions"},
+    {"path": "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md", "sha256": "F740BA05AB7ADB2DCDF55E271016D127E45073B015497DE8982D44A49F0EA2C4", "bytes": 10917, "role": "formal specification and explicit obligations"},
+    {"path": "docs/working/project_coherence/gate1/formal/LEAN_PROOF_MANIFEST_v0.1.json", "sha256": "7C27E50DCD6E45177F279A3B57BCF9B5C27B9D9FE878D34A4AE66742D332EC4A", "bytes": 5959, "role": "integrated scoped Lean receipt"},
+    {"path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_MANIFEST_v0.1.json", "sha256": "BEED66D60666D48EF33204779D8DCE0557AD43245E5D89CD63691CC97492C3A2", "bytes": 4509, "role": "lift-functor formal subreceipt"},
+    {"path": "scripts/verify_tks_v8_gate1.py", "sha256": "E4FF72C5980059BE9359509827CE4D96F39D12765A003CD25AD5063A0590BC28", "bytes": 4230, "role": "hash and executable test verifier"}
+  ],
+  "binding_boundary": "The manifest does not hash itself. A later reviewed commit or acceptance receipt must bind this manifest SHA-256. Until then this is an uncommitted Gate 1 candidate, not a freeze receipt.",
+  "verification_command": "python scripts/verify_tks_v8_gate1.py"
+}

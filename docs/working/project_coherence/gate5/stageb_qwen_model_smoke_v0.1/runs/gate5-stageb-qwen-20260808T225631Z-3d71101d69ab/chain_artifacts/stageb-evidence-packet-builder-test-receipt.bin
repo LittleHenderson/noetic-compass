@@ -1,0 +1,74 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_packet_path_test_receipt.v0.1",
+  "created_at": "2026-08-08T22:48:58.865610Z",
+  "source_commit": "0ac9f43828566b937b349d8a70da62238580a71c",
+  "commands": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/cas_harness_v2/test_evidence_packet_builder.py",
+        "-q"
+      ],
+      "working_directory": ".",
+      "started_at": "2026-08-08T22:48:58.865636Z",
+      "completed_at": "2026-08-08T22:49:03.484307Z",
+      "exit_code": 0,
+      "stdout_stderr_sha256": "3B5DE8BD330719C0068FEC8517AF63118915837C147CCFCD93B0D4F0CFC11D88",
+      "stdout_stderr_byte_length": 116,
+      "output_tail": ".........................                                            [100%]\r\n25 passed, 4 subtests passed in 3.94s\r\n",
+      "result": "PASSED"
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/test_cas_harness_v2_joined_executor.py",
+        "-q"
+      ],
+      "working_directory": "noetic-compass-scaffold/noetic-compass",
+      "started_at": "2026-08-08T22:49:03.484348Z",
+      "completed_at": "2026-08-08T22:49:09.115716Z",
+      "exit_code": 0,
+      "stdout_stderr_sha256": "1DE492632444416F836DC29F837ED1FA6D8DC2278A0A5E2155CD120CB6E0D466",
+      "stdout_stderr_byte_length": 101,
+      "output_tail": "..................................                                       [100%]\r\n34 passed in 3.27s\r\n",
+      "result": "PASSED"
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
+        "-q"
+      ],
+      "working_directory": ".",
+      "started_at": "2026-08-08T22:49:09.115811Z",
+      "completed_at": "2026-08-08T22:49:11.342632Z",
+      "exit_code": 0,
+      "stdout_stderr_sha256": "2E9C9A234E5A9BFD2C837FACC6768DDACB46C8B6174C89D523EF1D5EC79807D9",
+      "stdout_stderr_byte_length": 101,
+      "output_tail": ".................                                                        [100%]\r\n17 passed in 1.52s\r\n",
+      "result": "PASSED"
+    }
+  ],
+  "covered_contracts": [
+    "exact authorization and completed terminal-receipt replay",
+    "structural-only execution manifest derivation",
+    "complete exact-byte Evidence Packet inventory",
+    "streamed external file-backed weight retention without a full-RAM load",
+    "create-only content-addressed weight materialization and read-only reuse",
+    "outcome access before packet recording",
+    "pre-claim weight preparation and post-outcome Packet reservation ordering",
+    "packet reservation, record, and reconciliation without a second invocation",
+    "INVALID controls retained as REPORTED_CRITERIA_NOT_MET / INELIGIBLE"
+  ],
+  "authority": "LOCAL UNATTESTED REGRESSION / NOT SCIENTIFIC EVIDENCE",
+  "result": "PASSED"
+}

@@ -1,0 +1,172 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_evidence_packet_plan.v0.1",
+  "artifact_kind": "PROSPECTIVE PLAN / NOT AN EVIDENCE PACKET",
+  "packet_schema": "cas_harness_v2.evidence_packet.v2",
+  "future_packet_id": "epv2-stageb-qwen-joined-001",
+  "current_packet_status": "NOT CREATED",
+  "maximum_packet_count": 1,
+  "maximum_packet_carrier_bytes": 2000000,
+  "creation_order": [
+    "append exactly one valid EXECUTION_IDENTITY_ADDITION amendment",
+    "consume exactly one run authorization",
+    "start exactly one joined engineering run",
+    "perform at most one model invocation",
+    "retain exact raw request, response, output, and terminal-completion artifacts",
+    "record terminal execution completion",
+    "record exactly one outcome-access event",
+    "create exactly one Evidence Packet v2",
+    "verify Packet assessment",
+    "record final lifecycle reconciliation and the runtime receipt after Packet recording"
+  ],
+  "required_future_packet_artifacts": [
+    "stageb-qwen-joined-worker-dump-001",
+    "stageb-qwen-execution-manifest-001",
+    "stageb-qwen-metric-run-count-001",
+    "stageb-qwen-worker-response-001",
+    "stageb-qwen-metric-packet-count-001",
+    "stageb-qwen-metric-intervention-count-001",
+    "stageb-qwen-metric-provider-call-count-001",
+    "stageb-qwen-metric-provider-spend-usd-001",
+    "stageb-qwen-metric-output-byte-count-001",
+    "stageb-qwen-confirmatory-accounting-001",
+    "stageb-qwen-heldout-exclusion-001",
+    "stageb-qwen-control-matched-taxonomy-invalid-001",
+    "stageb-qwen-control-wrong-layer-invalid-001",
+    "stageb-qwen-control-clean-null-invalid-001",
+    "stageb-qwen-falsifier-report-001",
+    "stageb-qwen-uncertainty-report-001",
+    "stageb-qwen-result-summary-001"
+  ],
+  "supporting_nonpacket_or_chain_artifacts": [
+    "stageb-qwen-request-001",
+    "stageb-qwen-terminal-receipt-001",
+    "stageb-qwen-runtime-receipt-001",
+    "stageb-qwen-reconciliation-001"
+  ],
+  "packet_artifact_role_plan": {
+    "outcome_artifact": "stageb-qwen-joined-worker-dump-001",
+    "execution_manifest": "stageb-qwen-execution-manifest-001",
+    "metrics": [
+      {
+        "threshold_id": "stageb-exactly-one-run",
+        "evidence_artifact_id": "stageb-qwen-metric-run-count-001"
+      },
+      {
+        "threshold_id": "stageb-exactly-one-model-invocation",
+        "evidence_artifact_id": "stageb-qwen-worker-response-001"
+      },
+      {
+        "threshold_id": "stageb-exactly-one-packet",
+        "evidence_artifact_id": "stageb-qwen-metric-packet-count-001"
+      },
+      {
+        "threshold_id": "stageb-zero-interventions",
+        "evidence_artifact_id": "stageb-qwen-metric-intervention-count-001"
+      },
+      {
+        "threshold_id": "stageb-zero-provider-calls",
+        "evidence_artifact_id": "stageb-qwen-metric-provider-call-count-001"
+      },
+      {
+        "threshold_id": "stageb-zero-provider-spend",
+        "evidence_artifact_id": "stageb-qwen-metric-provider-spend-usd-001"
+      },
+      {
+        "threshold_id": "stageb-output-bytes-reported",
+        "evidence_artifact_id": "stageb-qwen-metric-output-byte-count-001"
+      }
+    ],
+    "controls": [
+      {
+        "control_id": "stageb-matched-taxonomy-not-performed",
+        "evidence_artifact_id": "stageb-qwen-control-matched-taxonomy-invalid-001"
+      },
+      {
+        "control_id": "stageb-wrong-layer-not-performed",
+        "evidence_artifact_id": "stageb-qwen-control-wrong-layer-invalid-001"
+      },
+      {
+        "control_id": "stageb-clean-null-not-performed",
+        "evidence_artifact_id": "stageb-qwen-control-clean-null-invalid-001"
+      }
+    ],
+    "falsifier": {
+      "falsifier_id": "stageb-bounded-path-violation",
+      "evidence_artifact_id": "stageb-qwen-falsifier-report-001"
+    },
+    "split_results": [
+      {
+        "split_id": "stageb-engineering-confirmatory",
+        "evidence_artifact_id": "stageb-qwen-confirmatory-accounting-001"
+      },
+      {
+        "split_id": "stageb-schema-held-out",
+        "evidence_artifact_id": "stageb-qwen-heldout-exclusion-001"
+      }
+    ],
+    "uncertainty_artifact": "stageb-qwen-uncertainty-report-001",
+    "result_summary": "stageb-qwen-result-summary-001"
+  },
+  "artifact_uniqueness_rule": "All 17 Packet artifact IDs are pairwise unique, disjoint from preregistration and outcome-access-chain artifact IDs, and must bind pairwise distinct SHA-256/byte-length content identities. Supporting request, terminal, runtime-receipt, and reconciliation IDs are not reused as Packet refs.",
+  "future_scientific_evidence_plan": {
+    "controls": [
+      {
+        "control_id": "stageb-matched-taxonomy-not-performed",
+        "outcome": "INVALID"
+      },
+      {
+        "control_id": "stageb-wrong-layer-not-performed",
+        "outcome": "INVALID"
+      },
+      {
+        "control_id": "stageb-clean-null-not-performed",
+        "outcome": "INVALID"
+      }
+    ],
+    "confirmatory_split": {
+      "groups": 1,
+      "enrolled_rows": 1,
+      "analyzed_rows": 1,
+      "missing_rows": 0,
+      "excluded_rows": 0
+    },
+    "held_out_split": {
+      "groups": 0,
+      "enrolled_rows": 1,
+      "analyzed_rows": 0,
+      "missing_rows": 0,
+      "excluded_rows": 1
+    },
+    "independent_numerical_audit": "UNAVAILABLE",
+    "replication": "UNAVAILABLE",
+    "claim_language_review": "UNAVAILABLE",
+    "external_scientific_review": "UNAVAILABLE"
+  },
+  "maximum_honest_assessment": {
+    "structural_completeness": "COMPLETE IF AND ONLY IF EVERY EXACT ARTIFACT IS PRESENT AND VERIFIED",
+    "authenticated_execution": "UNAVAILABLE OR PRESENT_UNAUTHENTICATED",
+    "preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+    "scientific_eligibility": "INELIGIBLE",
+    "independent_numerical_audit": "UNAVAILABLE",
+    "replication": "UNAVAILABLE",
+    "claim_language_review": "UNAVAILABLE",
+    "admission_ring": 4,
+    "product_claim_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+    "license_decision": "NONE",
+    "public_release_allowed": false,
+    "product_route_allowed": false
+  },
+  "permanent_blockers": [
+    "schema-required controls are INVALID because they are not performed",
+    "schema-required held-out replication row is excluded and unanalyzed",
+    "authenticated execution is not established",
+    "independent numerical audit is not authenticated",
+    "replication is unavailable",
+    "claim-language review is unavailable",
+    "external scientific review is unavailable"
+  ],
+  "failure_rule": "If a structurally valid Packet cannot be created once after the terminal outcome-access event, retain a terminal packet-construction failure receipt and do not retry or create an alternate Packet.",
+  "post_packet_reconciliation_rule": "Final lifecycle reconciliation is not a Packet falsifier because it occurs after Packet bytes are built, reserved, and recorded. It is a mandatory post-Packet runtime-receipt requirement; failure remains terminal and cannot rewrite or replace the Packet.",
+  "boundary": "ONE PACKET MAXIMUM / INELIGIBLE BY DESIGN / NO SCIENTIFIC OR PRODUCT AUTHORITY"
+}

@@ -1,0 +1,408 @@
+{
+  "schema_version": "project_coherence.gate4_artifact_manifest.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate4_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "manifest_self_hash": null,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "bytes": 17083,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/GATE1_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "17FA8E25C23DD1D3275AAF526E2655A224D026CF3187D548CF4045D10F708B25",
+      "bytes": 6814,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/CAS_CORE_V8_CANDIDATE_SPEC_v0.1.md",
+      "sha256": "5FE6F91D005C7268D32C3943C2851138B30E2492C7D73877A04B30685CFCA1FC",
+      "bytes": 6903,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_SOURCE_CONFLICT_EVIDENCE_v0.1.json",
+      "sha256": "F24BD64A21B944724993AC9C3A0996293FE6242E4F724D4B104DBAA7A6505507",
+      "bytes": 10041,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "5E59C34084D825EC14A8434EBBEAD80BD964D5FDD6DEDF168E9A5A65BD4C056E",
+      "bytes": 7957,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "19707B9213040A3B55DB51132C30B90A6004D15A611EC759906335F2E41450F0",
+      "bytes": 8525,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/GATE4_ADVERSARIAL_REVIEW_v0.1.md",
+      "sha256": "9002378FAAEBA99BA277A65ABC8D198223FF6EC091D742C4B35C1F76D59433A6",
+      "bytes": 16273,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json",
+      "sha256": "44DD99A847DA742C3EBEBC06D64452A6868421EE12129E789D1CC790DAE41B74",
+      "bytes": 45861,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/PCBA_CCDL_CONSTRUCT_COVERAGE_v0.1.json",
+      "sha256": "5BB797EC37CF289B4CBE8DF1256F07425C3DA13AA8CF2DA03E47DFCE1CB46808",
+      "bytes": 5172,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/README.md",
+      "sha256": "6CC3999A96BF1045A9179FDB333E0E28A9D141F02AE2D34C7484B919786E94DC",
+      "bytes": 3854,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "scripts/verify_project_coherence_gate4.py",
+      "sha256": "D53F45AFAA97C7AADE1375F0DADEFE6B034C3D4115C7E8DC49403802469BB27F",
+      "bytes": 27522,
+      "role": "gate4_control_artifact"
+    },
+    {
+      "path": "src/cas_core_v8/__init__.py",
+      "sha256": "869F04EEFC777E0B517D85536B7B052538B774DA46CC80F6C71D247EC74AE4C6",
+      "bytes": 3329,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/_compiler_worker.py",
+      "sha256": "0183DDBC046EDDC2E883B4AEBED70548EBEF410CC90C989B8EBAA13EACA39B66",
+      "bytes": 9601,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/compatibility.py",
+      "sha256": "5CFDA73BD889FD7DB06F03B9213E4FD0C05B2B983D8F0A5D6B31A4F0AB370D64",
+      "bytes": 67050,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/identity.py",
+      "sha256": "BAD1283940F0C26E46DA7279C5645A3D1A2EFDD3A5FFB05E87B78CCD781BDD49",
+      "bytes": 14651,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/registry.py",
+      "sha256": "EAB117FA269AD2826A1C68B5EDFBFF58FEACABF00005E64FB5DBEC417891D009",
+      "bytes": 37725,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/runtime_gate.py",
+      "sha256": "B06F23347110ECF1C4CAF3164A69E6B068DD4530217781B8FA1E3D3818C6D2AE",
+      "bytes": 35223,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_core_v8/semantics.py",
+      "sha256": "7CFF54AA4F77E5F01C819C2FA643F79980FFC2ECD2EE62A8958F8A70841A2983",
+      "bytes": 10394,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/__init__.py",
+      "sha256": "BED4A05999C9DDB0A948B1D663465364C45BB08C0BD6329858178D3CD9446FAA",
+      "bytes": 3960,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/calibration.py",
+      "sha256": "617D331DDB67AA29B83A191C8A1FC4A9D414FA5952AA41DCC491A2CEF0C4B8AF",
+      "bytes": 57033,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/canonical.py",
+      "sha256": "7C4FCA964E67185DA0B5308CF00938DCF2B7E1502FD22DD909F70B3F5845DB21",
+      "bytes": 12889,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/diagnostics.py",
+      "sha256": "4EF7165595BC5CF34992F08517DE6957D7CD905E2EC0C103EB52DD52CF03E7D5",
+      "bytes": 20480,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/evidence.py",
+      "sha256": "E8A24DC9846ABCF1D361D933AADF78A9937EB5A5C54C0AD1E51340E2B4B41D21",
+      "bytes": 8564,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/model.py",
+      "sha256": "83488E9653CE0E99FD6AC7F689A885D281E371655C8D97F04E0DE698F8F4D64C",
+      "bytes": 35783,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/networks.py",
+      "sha256": "9277412AE21850E901D950D376A6D713B6B2159F98695CCCC6E822A5C224CCF4",
+      "bytes": 23174,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/records.py",
+      "sha256": "BA6F00D9A4D25CF58474DA98F7012C479C99104C42CC41E9857AEF87999665EC",
+      "bytes": 18396,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_ohm_v1/synthetic.py",
+      "sha256": "70B7CE3B60117C797AF22EC432A2A2122087449C1625ACE3C31E4DF9B12A971D",
+      "bytes": 10531,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/__init__.py",
+      "sha256": "A985EFE632668AB38B9C2324021651F4F5830A52FFA770D2625401B579DDA061",
+      "bytes": 4004,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/arithmetic.py",
+      "sha256": "05CB01CB4AC3C65BB025BCBAD3FE7B1D6630ABFBB4240E4AD4B4990C62CA97A7",
+      "bytes": 3629,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/boundary.py",
+      "sha256": "8935E5EFB812672ADE8BAF15B7BF5080F1E9C71CA292EF497D7E32DE1A762F68",
+      "bytes": 4010,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/contracts.py",
+      "sha256": "79C2223545EA10BC95C7B5159BE8714C62FE6D5BF3EA3370012232DE4B14628E",
+      "bytes": 12084,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/diagnostics.py",
+      "sha256": "D7324F155E1F80255DE9734EFC840B6D9A239D8E5E4056BF1A921BDD7FBBB42C",
+      "bytes": 13816,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/drc.py",
+      "sha256": "4DB5D02E22117D076F3C60A6E1FCD202EB7C507EE88839324B51B2C08AA1E5BD",
+      "bytes": 39866,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/finite_values.py",
+      "sha256": "AAF36CEBB19A89F228E4AC33E221AF6AA9FD19CCD39649795BFDA4D5A39ECF54",
+      "bytes": 3061,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/fixtures.py",
+      "sha256": "46C621D23AF8DD9EEB4B419A77A650480C96A2DA96E9BE1EB96D5DB361BEEA3C",
+      "bytes": 9556,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/geometry.py",
+      "sha256": "2A5A9154E7C5C7B6BF6ECE6540BA54FAB1570A7876EC9FAF1F31E0220CE57464",
+      "bytes": 17466,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/integrity.py",
+      "sha256": "78DFE8FFFC487E6C1411FBB84D21F4A76632FF07F8E2C214B759DBB458D40847",
+      "bytes": 3681,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/model.py",
+      "sha256": "03870794B6DF6544DEFF3CBDE2BEC1C12E00739B214EE2AF00FAFAB04E782FFD",
+      "bytes": 26172,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/simulation.py",
+      "sha256": "E1197461F4DEAAEC4986C3AAE7DC53B1A279B6B255BBD8B0E4768C01090EFA1E",
+      "bytes": 63791,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/tks_adapter.py",
+      "sha256": "C197CB2F59DE3BC24BB6B66FEC18F92EEBC0034A9050859C1DEA08BA51C86E25",
+      "bytes": 19189,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/types.py",
+      "sha256": "70230BE63B64283E6B8103E9722A11B115BA511270EBF01310F5A76ABA5433A4",
+      "bytes": 6820,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "src/cas_pcba_v8/values.py",
+      "sha256": "A101A1C3932037CFFC2CE3AD8E5C1520B9FA3130BF527BA3FCAE02B9CACBBBB8",
+      "bytes": 13660,
+      "role": "gate4_candidate_source"
+    },
+    {
+      "path": "tests/cas_core_v8/test_compatibility.py",
+      "sha256": "8391DAA3D3D0E0DC590C179860C9B626BF23134F5570B02F7A89B5B84A95BF6E",
+      "bytes": 17197,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_core_v8/test_identity_and_semantics.py",
+      "sha256": "9331CA68CB1F5D8CCD6F2EF77A1C64F5E367B99CCFCA02961A8A73AAF7086B42",
+      "bytes": 13258,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_core_v8/test_registry_and_runtime_gate.py",
+      "sha256": "C5B8D051C7EA675289E7AE16D0CE7A803B69D17D1C1537F9CDAC0548D48CCF00",
+      "bytes": 27492,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_ohm_v1/test_cas_ohm_v1.py",
+      "sha256": "610310A1934783C038CA93B3DB07FBBF6090EFA8D428102FB213A3C7544E1155",
+      "bytes": 72861,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_artifact_integrity.py",
+      "sha256": "E36213A5CCBEA154A139D95C9D326AFAD7C069E314A22621FB176D26C7A7688B",
+      "bytes": 14501,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_audit_regressions.py",
+      "sha256": "3D91F33BC1ACD236BC5158912A2814F44EFD75E1AFF2B5B0E38AC824AC94A904",
+      "bytes": 13655,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_drc.py",
+      "sha256": "19D212D9DD37A1250ABB0C32E0C7C3FB8402C8D6D8DF963E6BD7C84A9D4E2AFB",
+      "bytes": 9086,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_exact_type_defenses.py",
+      "sha256": "F8FE75DC1C089F5E88452EE0C4457C4C22DA41F42BE2CA243DC8885A648F4FE3",
+      "bytes": 7334,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_identity.py",
+      "sha256": "CF9D4763B447BFD284206F0B6451EDDA8A4C85132C98CA0CD4239623D1E9F138",
+      "bytes": 8514,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_simulation.py",
+      "sha256": "6074485E76D2A1FB731FE8B9DEB2709E33F8FAB2C6F2C26474691133BB666829",
+      "bytes": 6828,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_tks_adapter.py",
+      "sha256": "78457EB994D78AF4F0DCBCEF4418A09A840A9785BE24D63FBE3B67FE8414B4B3",
+      "bytes": 7447,
+      "role": "gate4_regression_test"
+    },
+    {
+      "path": "tests/cas_pcba_v8/test_types_and_geometry.py",
+      "sha256": "037EB5E2D8CBAFD4FF29476C1B45FE013AF33C0C52DF4544561A50FEB173806B",
+      "bytes": 7625,
+      "role": "gate4_regression_test"
+    }
+  ],
+  "external_source_bindings": [
+    {
+      "source_id": "SRC-ACTIVE-COMPILER-CURRENT",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+      "sha256": "065DC4384F7F52D1D8A081DC2D62AF69980F1F6EA9BF9099D22DE776CE05DF87",
+      "bytes": 248859
+    },
+    {
+      "source_id": "SRC-PCBA-ENGINEER-20260726",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\CAS_PCBA_Engineer.pdf",
+      "sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+      "bytes": 1973407
+    },
+    {
+      "source_id": "SRC-CAS-OHM-GUIDE-01",
+      "path": "C:\\Users\\wakil\\Downloads\\CAS_Ohm_Quantification_Guide-2.pdf",
+      "sha256": "89AE13C0A5D6208E328E9EDC55F816609BB172076CC13093DCCCCF418145CE64",
+      "bytes": 2610388
+    },
+    {
+      "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+      "path": "C:\\Users\\wakil\\Downloads\\CAS_Ohm_Harness_Operationalization_Addendum_v0_1.docx",
+      "sha256": "0B62BBC66828A273E5458CC4D98EEE9B341554A474CCACB6387B209B5F0BE5E5",
+      "bytes": 16746
+    },
+    {
+      "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "sha256": "9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45",
+      "bytes": 14998
+    }
+  ],
+  "test_suites": [
+    {
+      "name": "CAS Core v8",
+      "test_directory": "tests/cas_core_v8",
+      "expected_tests": 61,
+      "expected_test_ids_sha256": "E2AF5014DE28DD0702211EF32A2757B99B869A13FAFBB0B8D1B18A50A9F8FEF5"
+    },
+    {
+      "name": "CAS PCBA v8",
+      "test_directory": "tests/cas_pcba_v8",
+      "expected_tests": 82,
+      "expected_test_ids_sha256": "D5F776C5F15758CD390470B5A542CCA110784DC5EBB9807B6BE41B2C80453470"
+    },
+    {
+      "name": "CAS-Ohm v1",
+      "test_directory": "tests/cas_ohm_v1",
+      "expected_tests": 65,
+      "expected_test_ids_sha256": "2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF"
+    }
+  ],
+  "required_open_boundaries": [
+    "[G4-OPEN-CANON] Candidate artifacts are not admitted to the canonical theory or any frozen baseline.",
+    "[G4-OPEN-MIGRATION] No migration of existing CAS, Noetic Topos, or v7.4 baselines is authorized before governance closure.",
+    "[G4-OPEN-HERMETICITY] Hermetic, collision-free repository-wide verification and dependency pinning remain open.",
+    "[G4-OPEN-PY-RUST] Python/Rust semantic parity and cross-runtime canonical identity remain unproved.",
+    "[G4-OPEN-CLAIM-AUTHORITY] No candidate output has authority to license scientific, safety, or product claims.",
+    "[G4-OPEN-CCDL-GRAMMAR] Formal CCDL EBNF does not yet cover the published five-board corpus and must be reconciled.",
+    "[G4-OPEN-PCBA-STATEFUL] Stateful and sequential PCBA semantics beyond the bounded candidate models remain open.",
+    "[G4-OPEN-PCBA-CALIBRATION] Instrument calibration, traceability, and real-board measurement validation remain open.",
+    "[G4-OPEN-PCBA-SAFETY] CSB safety effectiveness, hazard coverage, and safety certification remain open.",
+    "[G4-OPEN-OHM-EMPIRICAL] CAS-Ohm hypotheses lack preregistered empirical validation on representative data.",
+    "[G4-OPEN-OHM-UNCERTAINTY] Dependence, covariance, censoring, and uncertainty propagation require external validation.",
+    "[G4-OPEN-PEER-REVIEW] Independent expert review and peer review have not occurred.",
+    "[G4-OPEN-HARNESS-INTEGRATION] Integration with live CAS Harness workers and Evidence Packets remains unproved.",
+    "[G4-OPEN-PRODUCT-READINESS] Production hardening, security, operations, and acceptance testing remain open.",
+    "[G4-OPEN-DISCLOSURE] Public disclosure remains held pending owner authorization and governance closure."
+  ]
+}

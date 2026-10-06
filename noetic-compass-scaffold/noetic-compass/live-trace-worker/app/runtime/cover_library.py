@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from typing import Literal
 
 from ..schemas.events import NeuronCoverMember, band_for_confidence
 
@@ -40,6 +41,18 @@ ALL_DRIVES: tuple[str, ...] = ("F1", "F2", "F3", "F4", "F5", "F6", "F7")
 # and clean_margin/targeted_drop evidence wired into this worker. Keep this
 # tuple synced with COVER_LIBRARY; never add a drive here for UI convenience.
 SUPPORTED_DRIVES: tuple[str, ...] = ALL_DRIVES
+
+# Stage-27F labels were calibrated against the activated 4h-wide MLP tensor,
+# immediately before ``dense_4h_to_h`` projects it back to the residual width.
+# This name is intentionally exact and is shared with the runtime receipt.  A
+# cover coordinate is never implicitly reinterpreted as a residual/post-
+# projection coordinate.
+MLP_INTERMEDIATE_POST_ACTIVATION = "mlp_intermediate_post_activation"
+CoordinateSpace = Literal["mlp_intermediate_post_activation"]
+
+
+class CoverCoordinateError(ValueError):
+    """The static calibrated cover contains an unusable coordinate label."""
 
 
 @dataclass(frozen=True)
@@ -109,6 +122,7 @@ _COORD_RE = re.compile(r"^L(\d+)N(\d+)$")
 class CoverCoord:
     layer: int
     index: int
+    coordinate_space: CoordinateSpace = MLP_INTERMEDIATE_POST_ACTIVATION
 
 
 def cover_for_drive(drive: str) -> dict[str, tuple[str, ...]]:
@@ -161,12 +175,24 @@ def cover_members_for_scope(scope: str) -> dict[str, list[NeuronCoverMember]]:
 
 
 def coords_for_drive(drive: str) -> list[CoverCoord]:
-    """Parse L{layer}N{index} labels into coordinates for runtime hooks."""
+    """Parse a calibrated cover without silently dropping malformed labels.
+
+    Returned coordinates are stable-deduplicated because the same Stage-27F
+    neuron can occur in more than one class cover for a drive.  Every result is
+    explicitly typed in the activated MLP-intermediate coordinate space.
+    """
     out: list[CoverCoord] = []
+    seen: set[tuple[int, int]] = set()
     for labels in cover_for_drive(drive).values():
         for label in labels:
             match = _COORD_RE.match(label)
             if not match:
+                raise CoverCoordinateError(
+                    f"drive {drive!r} contains malformed cover coordinate {label!r}"
+                )
+            key = (int(match.group(1)), int(match.group(2)))
+            if key in seen:
                 continue
-            out.append(CoverCoord(layer=int(match.group(1)), index=int(match.group(2))))
+            seen.add(key)
+            out.append(CoverCoord(layer=key[0], index=key[1]))
     return out

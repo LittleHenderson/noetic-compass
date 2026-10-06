@@ -1,0 +1,29 @@
+# Research-only local joined-execution overlay.
+#
+# The parent is the exact BF16/no-JIT image retained by the successful Gate-5
+# mechanics canary.  This overlay replaces only the audited HTTP route needed
+# to bind one request and its canonical events to the controller-known
+# authorization, prospective run, and invocation identities.  It does not
+# change model, tokenizer, dependencies, CUDA, dtype, or the frozen worker
+# runtime policy.
+
+ARG PARENT_IMAGE=atlas-live-trace-worker:gate5-local-canary-bf16-v0.2@sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG OVERLAY_SOURCE_COMMIT=UNBOUND
+COPY --chown=0:0 --chmod=0444 app/routes/live_trace.py /worker/app/routes/live_trace.py
+RUN test "${#OVERLAY_SOURCE_COMMIT}" -eq 40 \
+    && case "$OVERLAY_SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+
+LABEL org.opencontainers.image.revision="${OVERLAY_SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-local-joined-bf16-v0.1" \
+      io.cas-harness.claim-status="RESEARCH_ONLY_LOCAL_JOINED_MECHANICS" \
+      io.cas-harness.parent.local-image-id="sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d" \
+      io.cas-harness.joined-binding.authority="WORKER_PROCESS_OBSERVATION_ONLY" \
+      io.cas-harness.scientific-status="NOT_ESTABLISHED" \
+      io.cas-harness.gate5-status="OPEN" \
+      io.cas-harness.license-status="NOT_LICENSED" \
+      io.cas-harness.disclosure-status="HELD"
+
+USER 10001:10001

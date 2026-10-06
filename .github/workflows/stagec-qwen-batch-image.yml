@@ -1,0 +1,351 @@
+name: CAS Stage C Qwen Batch Image - Build Only
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_commit:
+        description: Exact 40-character commit to build
+        required: true
+        type: string
+      confirmation:
+        description: Type BUILD STAGE C IMAGE ONLY
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      expected_commit:
+        description: Exact 40-character commit to build
+        required: true
+        type: string
+      confirmation:
+        description: Type BUILD STAGE C IMAGE ONLY
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: stagec-qwen-batch-image-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  build_private_digest_addressed_image:
+    name: build-private-digest-addressed-stagec-image
+    if: ${{ github.actor == github.repository_owner }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      WORKER_DIR: noetic-compass-scaffold/noetic-compass/live-trace-worker
+      PACKAGE_NAME: noetic-compass-stagec-qwen-batch
+    steps:
+      - name: Check out the selected commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Enforce owner intent and immutable source identity
+        env:
+          EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ "$CONFIRMATION" == 'BUILD STAGE C IMAGE ONLY' ]]
+          [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$EXPECTED_COMMIT" == "$GITHUB_SHA" ]]
+          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+          [[ -z "$(git status --porcelain=v1 --untracked-files=all)" ]]
+
+          owner_lower="${GITHUB_REPOSITORY_OWNER,,}"
+          image_name="ghcr.io/${owner_lower}/${PACKAGE_NAME}"
+          printf 'BATCH_IMAGE_NAME=%s\n' "$image_name" >> "$GITHUB_ENV"
+          printf 'BATCH_TAG=stagec-qwen-batch-git-%s\n' "$GITHUB_SHA" >> "$GITHUB_ENV"
+
+      - name: Build clean worker, exact Qwen layer, and sealed batch layer
+        id: build
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          export DOCKER_BUILDKIT=1
+
+          base_ref="cas-stagec-clean-worker:${GITHUB_SHA}"
+          qwen_ref="cas-stagec-qwen-model:${GITHUB_SHA}"
+          batch_ref="${BATCH_IMAGE_NAME}:${BATCH_TAG}"
+          entrypoint_sha256="$({ sha256sum "$WORKER_DIR/scripts/stagec_batch_entrypoint.py"; } | awk '{print $1}')"
+
+          docker build \
+            --file "$WORKER_DIR/Dockerfile" \
+            --build-arg "SOURCE_COMMIT=$GITHUB_SHA" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            --tag "$base_ref" \
+            "$WORKER_DIR"
+          base_config_digest="$(docker image inspect --format '{{.Id}}' "$base_ref")"
+          [[ "$base_config_digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$(docker image inspect --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$base_ref")" == "$GITHUB_SHA" ]]
+
+          # This is the only Stage C build that may use the network.  It pulls
+          # about 1 GB of public, hash-bound Qwen files at the exact revision.
+          docker build \
+            --network=default \
+            --file "$WORKER_DIR/Dockerfile.qwen-stagec-model" \
+            --build-arg "PARENT_IMAGE=$base_ref" \
+            --build-arg "SOURCE_COMMIT=$GITHUB_SHA" \
+            --tag "$qwen_ref" \
+            "$WORKER_DIR"
+          qwen_config_digest="$(docker image inspect --format '{{.Id}}' "$qwen_ref")"
+          [[ "$qwen_config_digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$(docker image inspect --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$qwen_ref")" == "$GITHUB_SHA" ]]
+
+          # The published layer has no build network and cannot acquire or
+          # replace dependencies, model bytes, authorization, or evidence.
+          docker build \
+            --network=none \
+            --file "$WORKER_DIR/Dockerfile.stagec-batch" \
+            --build-arg "PARENT_IMAGE=$qwen_ref" \
+            --build-arg "SOURCE_COMMIT=$GITHUB_SHA" \
+            --build-arg "CLEAN_BASE_CONFIG_DIGEST=$base_config_digest" \
+            --build-arg "QWEN_PARENT_CONFIG_DIGEST=$qwen_config_digest" \
+            --build-arg "STAGEC_ENTRYPOINT_SHA256=$entrypoint_sha256" \
+            --tag "$batch_ref" \
+            "$WORKER_DIR"
+          batch_config_digest="$(docker image inspect --format '{{.Id}}' "$batch_ref")"
+          [[ "$batch_config_digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+
+          [[ "$(docker image inspect --format '{{.Config.User}}' "$batch_ref")" == '10001:10001' ]]
+          [[ "$(docker image inspect --format '{{json .Config.Entrypoint}}' "$batch_ref")" == '["python","-B","/worker/stagec_batch/entrypoint.py"]' ]]
+          [[ "$(docker image inspect --format '{{json .Config.Cmd}}' "$batch_ref")" == '["sealed"]' ]]
+          [[ "$(docker image inspect --format '{{index .Config.Labels "io.cas-harness.stagec.activation"}}' "$batch_ref")" == 'DISABLED_NOT_IMPLEMENTED' ]]
+          [[ "$(docker image inspect --format '{{index .Config.Labels "io.cas-harness.stagec.torch"}}' "$batch_ref")" == '2.13.0+cu126' ]]
+          [[ "$(docker image inspect --format '{{index .Config.Labels "io.cas-harness.stagec.cuda-runtime"}}' "$batch_ref")" == '12.6' ]]
+
+          set +e
+          sealed_output="$(
+            docker run --rm \
+              --network=none \
+              --read-only \
+              --tmpfs /tmp:rw,noexec,nosuid,nodev,size=16m \
+              "$batch_ref" 2>&1
+          )"
+          sealed_status=$?
+          set -e
+          [[ $sealed_status -eq 78 ]]
+          [[ "$sealed_output" == *'"status":"STAGEC_BATCH_FAIL_CLOSED"'* ]]
+          [[ "$sealed_output" == *'"reason":"REQUIRED_INPUT_ROOT_MISSING"'* ]]
+
+          printf 'base_config_digest=%s\n' "$base_config_digest" >> "$GITHUB_OUTPUT"
+          printf 'qwen_config_digest=%s\n' "$qwen_config_digest" >> "$GITHUB_OUTPUT"
+          printf 'batch_config_digest=%s\n' "$batch_config_digest" >> "$GITHUB_OUTPUT"
+          printf 'entrypoint_sha256=%s\n' "$entrypoint_sha256" >> "$GITHUB_OUTPUT"
+
+      - name: Log in without exposing the registry credential
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          printf '%s' "$GHCR_TOKEN" \
+            | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Require a private package and a previously unused commit-derived tag
+        env:
+          PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          metadata="$RUNNER_TEMP/stagec-package-before.json"
+          status="$({
+            curl --silent --show-error --location \
+              --output "$metadata" \
+              --write-out '%{http_code}' \
+              --header 'Accept: application/vnd.github+json' \
+              --header "Authorization: Bearer $PACKAGE_TOKEN" \
+              --header 'X-GitHub-Api-Version: 2022-11-28' \
+              "https://api.github.com/users/${GITHUB_REPOSITORY_OWNER}/packages/container/${PACKAGE_NAME}"
+          })"
+          if [[ "$status" == '200' ]]; then
+            PACKAGE_METADATA="$metadata" python -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          metadata = json.loads(Path(os.environ["PACKAGE_METADATA"]).read_text("utf-8"))
+          if metadata.get("visibility") != "private":
+              raise SystemExit("existing GHCR package is not private; refusing to push")
+          PY
+
+            page=1
+            while :; do
+              versions="$RUNNER_TEMP/stagec-package-versions-${page}.json"
+              versions_status="$({
+                curl --silent --show-error --location \
+                  --output "$versions" \
+                  --write-out '%{http_code}' \
+                  --header 'Accept: application/vnd.github+json' \
+                  --header "Authorization: Bearer $PACKAGE_TOKEN" \
+                  --header 'X-GitHub-Api-Version: 2022-11-28' \
+                  "https://api.github.com/users/${GITHUB_REPOSITORY_OWNER}/packages/container/${PACKAGE_NAME}/versions?per_page=100&page=${page}"
+              })"
+              [[ "$versions_status" == '200' ]]
+              read -r version_count tag_found < <(
+                PACKAGE_VERSIONS="$versions" TARGET_TAG="$BATCH_TAG" python -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          versions = json.loads(Path(os.environ["PACKAGE_VERSIONS"]).read_text("utf-8"))
+          if not isinstance(versions, list):
+              raise SystemExit("package versions response is not a list")
+          target = os.environ["TARGET_TAG"]
+          found = any(
+              target in version.get("metadata", {}).get("container", {}).get("tags", [])
+              for version in versions
+              if isinstance(version, dict)
+          )
+          print(len(versions), "true" if found else "false")
+          PY
+              )
+              if [[ "$tag_found" == 'true' ]]; then
+                printf 'commit-derived tag already exists; refusing workflow overwrite\n' >&2
+                exit 1
+              fi
+              [[ "$version_count" -lt 100 ]] && break
+              ((page += 1))
+              [[ "$page" -le 10000 ]]
+            done
+          elif [[ "$status" != '404' ]]; then
+            printf 'GHCR package metadata check failed with HTTP %s\n' "$status" >&2
+            exit 1
+          fi
+
+      - name: Push only the unused commit-derived batch tag
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          batch_ref="${BATCH_IMAGE_NAME}:${BATCH_TAG}"
+          docker push "$batch_ref"
+
+      - name: Verify private visibility and write the registry receipt
+        env:
+          PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_CONFIG_DIGEST: ${{ steps.build.outputs.base_config_digest }}
+          QWEN_CONFIG_DIGEST: ${{ steps.build.outputs.qwen_config_digest }}
+          BATCH_CONFIG_DIGEST: ${{ steps.build.outputs.batch_config_digest }}
+          ENTRYPOINT_SHA256: ${{ steps.build.outputs.entrypoint_sha256 }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          receipt_dir="$RUNNER_TEMP/stagec-image-receipt"
+          mkdir -p "$receipt_dir"
+
+          metadata="$RUNNER_TEMP/stagec-package-after.json"
+          status="$({
+            curl --silent --show-error --location \
+              --output "$metadata" \
+              --write-out '%{http_code}' \
+              --header 'Accept: application/vnd.github+json' \
+              --header "Authorization: Bearer $PACKAGE_TOKEN" \
+              --header 'X-GitHub-Api-Version: 2022-11-28' \
+              "https://api.github.com/users/${GITHUB_REPOSITORY_OWNER}/packages/container/${PACKAGE_NAME}"
+          })"
+          [[ "$status" == '200' ]]
+          PACKAGE_METADATA="$metadata" python -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          metadata = json.loads(Path(os.environ["PACKAGE_METADATA"]).read_text("utf-8"))
+          if metadata.get("visibility") != "private":
+              raise SystemExit("published GHCR package is not private")
+          PY
+
+          batch_ref="${BATCH_IMAGE_NAME}:${BATCH_TAG}"
+          docker pull "$batch_ref" >/dev/null
+          repo_digest="$({
+            docker image inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "$batch_ref" \
+              | awk -v prefix="${BATCH_IMAGE_NAME}@sha256:" 'index($0,prefix)==1 {print; exit}'
+          })"
+          [[ "$repo_digest" =~ ^${BATCH_IMAGE_NAME}@sha256:[0-9a-f]{64}$ ]]
+          manifest_digest="${repo_digest#*@}"
+          docker buildx imagetools inspect --raw "${BATCH_IMAGE_NAME}@${manifest_digest}" \
+            > "$receipt_dir/manifest.json"
+
+          RECEIPT_DIR="$receipt_dir" \
+          IMAGE_REF="$batch_ref" \
+          MANIFEST_DIGEST="$manifest_digest" \
+          python -B - <<'PY'
+          import datetime as dt
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          receipt_dir = Path(os.environ["RECEIPT_DIR"])
+          manifest_bytes = (receipt_dir / "manifest.json").read_bytes()
+          manifest = json.loads(manifest_bytes)
+          media_type = manifest.get("mediaType")
+          allowed_media_types = {
+              "application/vnd.docker.distribution.manifest.v2+json",
+              "application/vnd.oci.image.manifest.v1+json",
+          }
+          if media_type not in allowed_media_types:
+              raise SystemExit(f"unexpected image manifest media type: {media_type!r}")
+          config_digest = manifest.get("config", {}).get("digest")
+          if config_digest != os.environ["BATCH_CONFIG_DIGEST"]:
+              raise SystemExit("registry config digest does not match the built image")
+
+          receipt = {
+              "schema_version": "cas.stagec.image.registry_receipt.v1",
+              "claim_status": "DESIGN_ONLY",
+              "gate5_status": "OPEN",
+              "experiment_status": "NOT_STARTED",
+              "license_status": "NOT_LICENSED",
+              "disclosure_status": "HELD",
+              "source_commit": os.environ["GITHUB_SHA"],
+              "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "workflow_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "published_tag_ref": os.environ["IMAGE_REF"],
+              "execution_image_ref": os.environ["IMAGE_REF"].split(":", 1)[0] + "@" + os.environ["MANIFEST_DIGEST"],
+              "manifest_digest": os.environ["MANIFEST_DIGEST"],
+              "manifest_media_type": media_type,
+              "manifest_byte_length": len(manifest_bytes),
+              "manifest_capture_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+              "config_digest": config_digest,
+              "clean_base_config_digest": os.environ["BASE_CONFIG_DIGEST"],
+              "qwen_parent_config_digest": os.environ["QWEN_CONFIG_DIGEST"],
+              "entrypoint_sha256": os.environ["ENTRYPOINT_SHA256"],
+              "registry_visibility": "private",
+              "published_tags": ["stagec-qwen-batch-git-" + os.environ["GITHUB_SHA"]],
+              "tag_policy": "WORKFLOW_REFUSES_EXISTING_TAG_NOT_REGISTRY_IMMUTABILITY",
+              "execution_reference_policy": "DIGEST_ONLY",
+              "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+              "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+              "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+              "weights_byte_length": 988097824,
+              "runtime_activation": "DISABLED_NOT_IMPLEMENTED",
+              "runpod_mutation_count": 0,
+          }
+          raw = json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode("utf-8")
+          (receipt_dir / "receipt.canonical.json").write_bytes(raw)
+          (receipt_dir / "receipt.canonical.json.sha256").write_text(
+              hashlib.sha256(raw).hexdigest() + "\n",
+              encoding="ascii",
+          )
+          PY
+
+      - name: Upload the machine-readable image receipt
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: stagec-qwen-batch-image-receipt-${{ github.sha }}
+          path: ${{ runner.temp }}/stagec-image-receipt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove registry credentials
+        if: ${{ always() }}
+        shell: bash
+        run: docker logout ghcr.io >/dev/null 2>&1 || true

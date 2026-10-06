@@ -33,6 +33,7 @@ from api.routes import (
     billing,
     cas_harness_audit,
     cas_harness_live_worker_health,
+    cas_harness_v2_worker_protocol,
     cohort,
     config,
     crm,
@@ -80,6 +81,47 @@ def _browser_managed_cors_credentials_allowed(
     return False
 
 
+def _require_harness_v2_worker_protocol_startup_boundary(app: FastAPI) -> None:
+    """Refuse the dark route without both its package and admitted adapter."""
+
+    if not settings.harness_v2_worker_protocol_enabled:
+        return
+    service = getattr(app.state, "cas_harness_v2_worker_protocol_service", None)
+    if (
+        service is None
+        or getattr(service, "admission_profile", None)
+        != "CAS_HARNESS_V2_PRIVATE_EXACT_ADAPTER_V1"
+    ):
+        raise RuntimeError(
+            "Harness-v2 worker protocol was enabled without the exact admitted "
+            "lifespan adapter; no route fallback is permitted."
+        )
+    try:
+        from api.services.cas_harness_v2_packaging import (
+            verify_packaged_harness_v2_kernel,
+        )
+
+        verify_packaged_harness_v2_kernel()
+        import cas_harness_v2  # noqa: F401
+        from api.services.cas_harness_v2_worker_protocol_adapter import (
+            ADMISSION_PROFILE,
+            AdmittedHarnessV2WorkerProtocolAdapter,
+        )
+    except (ImportError, RuntimeError, ValueError) as exc:
+        raise RuntimeError(
+            "Harness-v2 worker protocol was enabled without the isolated "
+            "and byte-verified cas_harness_v2 package."
+        ) from exc
+    if (
+        type(service) is not AdmittedHarnessV2WorkerProtocolAdapter
+        or service.admission_profile != ADMISSION_PROFILE
+    ):
+        raise RuntimeError(
+            "Harness-v2 worker protocol was enabled without the exact admitted "
+            "lifespan adapter; no route fallback is permitted."
+        )
+
+
 
 
 @asynccontextmanager
@@ -120,6 +162,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.support_public_abuse_guard = None
     app.state.support_public_intake_receipt_store = None
     app.state.crm_privacy_notice_contract = None
+    app.state.fleet_service_auth_store = None
     app.state.acceptance_authority_store = None
     app.state.acceptance_publication_authorization_store = None
     app.state.human_attestation_store = None
@@ -127,6 +170,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.accounts_billing_source_binding_store = None
     app.state.hosted_journey_source_binding_store = None
     app.state.support_crm_source_binding_store = None
+    app.state.cas_harness_v2_worker_protocol_service = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -146,7 +190,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true requires "
             "NC_ACCOUNTS_ENABLED=true."
         )
-
     handle = None
     owned_state_store = None
     database_started = False
@@ -179,6 +222,42 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 shared_store
             )
             configure_evidence_packet_repository(app.state.evidence_packet_repository)
+
+        if settings.fleet_service_auth_enabled:
+            if shared_store is None:
+                raise RuntimeError(
+                    "Fleet service authentication requires a shared StateStore."
+                )
+            from api.services.fleet_service_auth import FleetServiceAuthStore
+
+            app.state.fleet_service_auth_store = FleetServiceAuthStore(
+                shared_store,
+                pepper=settings.fleet_service_credential_pepper,
+                max_clock_skew_seconds=(
+                    settings.fleet_service_max_clock_skew_seconds
+                ),
+            )
+
+        if settings.harness_v2_worker_protocol_enabled:
+            if (
+                app.state.evidence_packet_repository is None
+                or app.state.fleet_service_auth_store is None
+            ):
+                raise RuntimeError(
+                    "Harness-v2 worker protocol durable/authenticated ports are unavailable."
+                )
+            from api.services.cas_harness_v2_worker_protocol_adapter import (
+                build_admitted_harness_v2_worker_protocol_adapter,
+            )
+
+            app.state.cas_harness_v2_worker_protocol_service = (
+                build_admitted_harness_v2_worker_protocol_adapter(
+                    shared_store=shared_store,
+                    repository=app.state.evidence_packet_repository,
+                    auth_store=app.state.fleet_service_auth_store,
+                )
+            )
+        _require_harness_v2_worker_protocol_startup_boundary(app)
 
         if shared_store is not None:
             from api.services.acceptance_publication_authorizations import (
@@ -558,6 +637,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.support_public_intake_receipt_store = None
         app.state.crm_privacy_notice_contract = None
         app.state.support_public_abuse_guard = None
+        app.state.fleet_service_auth_store = None
+        app.state.cas_harness_v2_worker_protocol_service = None
         try:
             if handle is not None:
                 teardown_state_ledger(handle)
@@ -630,6 +711,7 @@ app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
+app.include_router(cas_harness_v2_worker_protocol.router)
 app.include_router(acceptance_publication_authorizations.router)
 app.include_router(human_attestations.router)
 app.include_router(customer_production_acceptance_authority.router)

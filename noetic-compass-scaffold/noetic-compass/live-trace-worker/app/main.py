@@ -1,31 +1,53 @@
-"""Live-trace worker — FastAPI entrypoint.
+"""Live-trace worker FastAPI entrypoint.
 
-M2 change vs M1: a lifespan handler runs ``warm_load`` once at startup so
-the first /sessions request doesn't pay the model-load latency. If the
-load fails (no torch / no GPU / network blocked), the worker stays up and
-serves demo-mode responses — the cockpit's provenance badge then says
-"Live mode unavailable" instead of "actual weights".
+The production lifespan validates authentication and read-only isolation,
+then warm-loads the exact real model. A load failure aborts startup; it cannot
+silently substitute demo execution. Explicit development demo mode remains a
+separate, non-production profile.
 """
 
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from fastapi import FastAPI
 
-from .auth import WorkerTokenMiddleware
+from .auth import WorkerTokenMiddleware, auth_enabled
 from .routes import health, live_trace
 from .runtime import warm_load
+from .runtime import model_loader
 
 logger = logging.getLogger(__name__)
+
+
+def _root_filesystem_is_read_only() -> bool:
+    read_only_flag = getattr(os, "ST_RDONLY", 1)
+    return bool(os.statvfs("/").f_flag & read_only_flag)
+
+
+def _validate_startup_profile() -> None:
+    """Reject an under-protected production container before model loading."""
+
+    if not model_loader._is_production_profile():
+        return
+    if not auth_enabled():
+        raise RuntimeError(
+            "production worker profile requires ATLAS_LIVE_WORKER_TOKEN"
+        )
+    if not _root_filesystem_is_read_only():
+        raise RuntimeError("production worker profile requires a read-only root filesystem")
 
 
 @asynccontextmanager
 async def _lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """Warm-load the model once at startup; tear down would go here."""
+    _validate_startup_profile()
     loaded = warm_load()
+    if model_loader._is_production_profile() and not loaded.is_real:
+        raise RuntimeError("production worker failed to establish real-model readiness")
     logger.info(
         "startup: model_id=%s is_real=%s load_error=%s",
         loaded.manifest.model_id,
@@ -44,15 +66,14 @@ def create_app() -> FastAPI:
             "Private worker that runs Pythia-160M + probe pipeline and "
             "streams trace events as SSE. Lives behind the noetic-compass-api "
             "proxy — browsers never hit this service directly. "
-            "Falls back to a fake schema-valid demo stream if torch is "
-            "unavailable or weights fail to load."
+            "Demo mode is available only when explicitly requested outside "
+            "the fail-closed production profile."
         ),
         lifespan=_lifespan,
     )
-    # Optional app-level auth. No-op unless ATLAS_LIVE_WORKER_TOKEN is set, so
-    # local dev / CI / the existing SSH-tunnel deploy are unaffected. When the
-    # worker's HTTP port is exposed (RunPod proxy), set the env var on both the
-    # worker and the API so only our API can reach it. See
+    # App-level auth remains optional for explicit local/demo profiles. The
+    # production profile refuses startup unless the token is configured on
+    # both the worker and API. See
     # docs/working/atlas_live_worker_launch_grade_exposure_2026_05_31.md.
     app.add_middleware(WorkerTokenMiddleware)
     app.include_router(health.router, tags=["health"])

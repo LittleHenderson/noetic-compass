@@ -3,10 +3,13 @@
 from .events import (
     CompleteEvent,
     ConfidenceBand,
+    EraserInterventionResult,
     ErrorEvent,
     KnobResolutionEvent,
     LiveTraceEvent,
     ManifestEvent,
+    InterventionCoordinate,
+    InterventionTensorGeometry,
     Mode7Edge,
     NeuronActivation,
     NeuronCoverMember,
@@ -16,7 +19,15 @@ from .events import (
     WordSpansEvent,
     band_for_confidence,
 )
-from .manifest import ModelArch, ModelManifest, SupportedHook
+from .manifest import (
+    InterventionHookContract,
+    ModelArch,
+    ModelExecutionKind,
+    ModelManifest,
+    ObservationOnlyHookContract,
+    RuntimeExecutionEvidence,
+    SupportedHook,
+)
 from .requests import CreateSessionRequest, CreateSessionResponse
 
 __all__ = [
@@ -25,11 +36,18 @@ __all__ = [
     "CreateSessionRequest",
     "CreateSessionResponse",
     "ErrorEvent",
+    "EraserInterventionResult",
+    "InterventionCoordinate",
+    "InterventionHookContract",
+    "InterventionTensorGeometry",
     "KnobResolutionEvent",
     "LiveTraceEvent",
     "ManifestEvent",
     "ModelArch",
+    "ModelExecutionKind",
     "ModelManifest",
+    "ObservationOnlyHookContract",
+    "RuntimeExecutionEvidence",
     "Mode7Edge",
     "NeuronActivation",
     "NeuronCoverMember",

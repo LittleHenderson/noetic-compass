@@ -1,4 +1,4 @@
-# Noetic Compass API — multi-stage build
+# Noetic Compass API - multi-stage build
 # Stage 1: build cas-engine Rust crate via maturin
 # Stage 2: lightweight Python runtime with non-root user
 
@@ -49,6 +49,7 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages/cas_engine* /usr/loc
 
 # Copy application code
 COPY api/ api/
+COPY cas_harness_v2/ cas_harness_v2/
 COPY cas-native/ cas-native/
 COPY docs/working/pythia160m_gate1/ docs/working/pythia160m_gate1/
 COPY docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json
@@ -65,6 +66,11 @@ COPY scripts/collect_airtable_crm_acceptance_source.py scripts/collect_airtable_
 COPY scripts/build_support_crm_acceptance_evidence.py scripts/build_support_crm_acceptance_evidence.py
 COPY scripts/publish_customer_production_acceptance_authority.py scripts/publish_customer_production_acceptance_authority.py
 
+# Fail the image build unless the explicitly packaged research kernel can be
+# imported from the Docker context. Source-tree CI separately enforces that this
+# directory remains a byte-for-byte mirror of canonical src/cas_harness_v2.
+RUN python -c "from pathlib import Path; from api.services.cas_harness_v2_packaging import verify_packaged_harness_v2_kernel; verify_packaged_harness_v2_kernel(); import cas_harness_v2; assert Path(cas_harness_v2.__file__).resolve().parent == Path('/app/cas_harness_v2')"
+
 # Set ownership to non-root user
 RUN chown -R ncuser:ncuser /app
 
@@ -72,7 +78,7 @@ USER ncuser
 
 EXPOSE 8000
 
-# Health check — uses the /health endpoint
+# Health check - uses the /health endpoint
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:${PORT:-8000}/health')" || exit 1
 

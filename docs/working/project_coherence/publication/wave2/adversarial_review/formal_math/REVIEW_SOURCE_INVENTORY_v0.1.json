@@ -1,0 +1,127 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.source_inventory.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "review_id": "PROJECT-COHERENCE-WAVE2-ADVERSARIAL-REVIEW-FORMAL-MATH-v0.1",
+  "reviewed_branch": "codex/project-coherence-review-formal",
+  "reviewed_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+  "upstream_source_baseline_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "hash_algorithm": "SHA-256 over exact file bytes",
+  "review_scope": "Read-only adversarial review of the Wave 1 formal-mathematics publication lane. This inventory does not alter or admit any reviewed artifact.",
+  "reviewed_artifact_count": 9,
+  "reviewed_artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 3817,
+      "sha256": "2EAD69003883CADA647A0B050E277C6F077E5C1C30E0ABFD86ADFC0739BF2AF5"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json",
+      "bytes": 10587,
+      "sha256": "3588068E8307D27D9FC479D604A6E60A5F7C40352381569CA113AED1BF868848"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/EVIDENCE_MAP_v0.1.json",
+      "bytes": 14464,
+      "sha256": "3A417C82113FF3547D44DD1F69066D5886C9EE1A6C5358026D699A3F0B2A2535"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/HANDOFF_PACKAGE_v0.1.md",
+      "bytes": 8194,
+      "sha256": "47F53D7F9DA0289B2957A495DFD5DF89C360FAF25B69B8D8BC67AAAE1344C020"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md",
+      "bytes": 18452,
+      "sha256": "2B63EA028264C72CBAA4F9BEB4ADAAB1CE3D5A8AC34D672C660FA3277F16108C"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+      "bytes": 17908,
+      "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
+      "bytes": 16566,
+      "sha256": "E0AAE137C9ECFD7E48E43DED466990121D1403A809B60FB73BC0685C4279F76D"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "bytes": 24421,
+      "sha256": "2FFE25449FBD0710477FE31F76B84ACE2256B200518E8921B702B6C92D9C2EFE"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "bytes": 17319,
+      "sha256": "871E7454F5B4A6926464F3149B236E93EEAAB3FD1B0B7E4B50F19F98375D77F7"
+    }
+  ],
+  "governing_reference_count": 6,
+  "governing_references": [
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "bytes": 29793,
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE"
+    },
+    {
+      "path": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "bytes": 10324,
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6"
+    },
+    {
+      "path": "docs/working/project_coherence/LITERATURE_AND_TRANSFER_AUDIT_v0.1.md",
+      "bytes": 7978,
+      "sha256": "C0468B4B63F5CE3DA8B223C6160C518C8BDE65D060E32492F411928E0FCCD791"
+    },
+    {
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "bytes": 14851,
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB"
+    },
+    {
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "bytes": 12459,
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101"
+    },
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "bytes": 17083,
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F"
+    }
+  ],
+  "nested_source_hash_audit": {
+    "inventory_path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
+    "repository_sources_checked": 42,
+    "repository_sources_matching": 42,
+    "external_registered_sources_checked": 7,
+    "external_registered_sources_matching": 7,
+    "missing_sources": 0,
+    "byte_mismatches": 0,
+    "hash_mismatches": 0,
+    "result": "PASS"
+  },
+  "primary_manuscript_verification": {
+    "source_id": "SRC-TEN-ADVANCES-PRIMARY",
+    "local_path": "C:\\Users\\wakil\\Downloads\\ten-proofs-oai.pdf",
+    "public_url": "https://cdn.openai.com/pdf/ten-proofs-oai.pdf",
+    "bytes": 2266371,
+    "sha256": "64B900D5FAE6FE22F2AE1B8E3B712D20055194A6C81CF343A2455E5898AC7DD6",
+    "remote_bytes_checked": 2266371,
+    "remote_sha256_checked": "64B900D5FAE6FE22F2AE1B8E3B712D20055194A6C81CF343A2455E5898AC7DD6",
+    "remote_matches_local": true,
+    "pdf_page_count": 249,
+    "proposition": "Chapter 2, Proposition 4.1",
+    "printed_pages": "46-47",
+    "physical_pdf_pages": "48-49",
+    "visual_inspection": "PASS",
+    "verified_at": "2026-08-05"
+  },
+  "replay_snapshot": {
+    "tks_v8_unit_tests": "PASS / 20 tests",
+    "tks_v8_gate1_verifier": "PASS / 12 hash-bound artifacts / integration remains OPEN",
+    "lean_gate1_verifier": "PASS / Lean 4.32.1 / 16 theorem axiom audits / scoped only",
+    "integrated_gate1_verifier": "PASS / 23 top-level artifacts / 6 subordinate receipts / Gate 1 remains OPEN",
+    "independent_math_check": "PASS / 394 finite-set-operator families / 289 finite endomaps / 160 random projector profiles / one valid manuscript equality case / one weakened-premise nonrealizability check"
+  },
+  "claim_boundary": "Hash and replay success establish only source identity and the scoped checks named here. They do not promote a reviewed claim, complete external review, validate CAS semantics, authorize disclosure, grant a license, or close an empirical obligation."
+}

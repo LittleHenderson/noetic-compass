@@ -1,0 +1,117 @@
+{
+  "schema_version": "project_coherence.gate5_stageb_model_and_image_binding.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "experimental_execution_status": "NOT_STARTED",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "product_route_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "classification": "LOCAL STAGE B MODEL AND IMAGE IDENTITY BINDING / NOT SCIENTIFIC ADMISSION",
+  "purpose": "Bind the exact instruction-tuned model artifacts and the additive local overlay image built for Stage B, so the image is reproducible and the model identity is canonical. Acquiring and baking a model creates no detection, steering, scientific, product, licensing, or disclosure claim.",
+  "why_a_second_model": "EleutherAI/pythia-160m is a base model and does not reliably follow instructions. Stage B requires a model that follows instructions so that a joined controller-to-worker run exercises a realistic request. This binding adds such a model; it does not replace or retire the pinned pythia-160m binding.",
+  "model": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "revision_kind": "EXACT_40_HEX_COMMIT",
+    "weights_filename": "model.safetensors",
+    "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "weights_bytes": 988097824,
+    "artifact_count": 7,
+    "artifacts": [
+      {
+        "filename": "config.json",
+        "sha256": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+        "bytes": 659
+      },
+      {
+        "filename": "generation_config.json",
+        "sha256": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+        "bytes": 242
+      },
+      {
+        "filename": "merges.txt",
+        "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+        "bytes": 1671839
+      },
+      {
+        "filename": "model.safetensors",
+        "sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+        "bytes": 988097824
+      },
+      {
+        "filename": "tokenizer.json",
+        "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        "bytes": 7031645
+      },
+      {
+        "filename": "tokenizer_config.json",
+        "sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+        "bytes": 7305
+      },
+      {
+        "filename": "vocab.json",
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "bytes": 2776833
+      }
+    ],
+    "acquisition_note": "huggingface_hub snapshot_download returned success after fetching only one of seven files. Per-file size verification caught the silent partial failure. Every file listed here was independently size-checked and hashed after download, and re-verified inside the image at build time.",
+    "architecture_observed": {
+      "num_hidden_layers": 24,
+      "hidden_size": 896,
+      "intermediate_size": 4864,
+      "source": "config.json as loaded by transformers on the host"
+    },
+    "instruction_following_check": {
+      "performed": true,
+      "device": "cpu",
+      "prompt": "Reply with exactly one word: what color is a clear daytime sky?",
+      "reply": "Blue",
+      "meaning": "CHAT TEMPLATE RENDERS AND THE MODEL OBEYS A ONE-WORD CONSTRAINT",
+      "not_meaning": "NO DETECTION, STEERING, SAFETY, OR CAPABILITY CLAIM"
+    }
+  },
+  "image": {
+    "reference": "atlas-live-trace-worker:gate5-stageb-qwen05b-instruct-v0.1",
+    "image_id": "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+    "local_repo_digest": "atlas-live-trace-worker@sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+    "config_sha256": "sha256:ef60af891b0392e20a0d3a56dea801eab4c59d8bd65d4fc05dd1e48f1c622710",
+    "size_bytes": 5949186374,
+    "parent_reference": "atlas-live-trace-worker:gate5-local-joined-bf16-v0.1",
+    "overlay_dockerfile": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
+    "overlay_source_commit": "bff8d6821aa76076fd6d431c926eaa7a5f5a6395",
+    "overlay_kind": "ADDITIVE_MODEL_CACHE_ONLY",
+    "registry_push": "NONE / LOCAL ONLY",
+    "in_image_verification": {
+      "performed": true,
+      "mechanism": "The overlay build hashes all seven staged files inside the image and exits non-zero on any size or digest mismatch.",
+      "result": "QWEN CACHE VERIFIED IN IMAGE",
+      "pythia_cache_retained_assertion": "PASSED",
+      "read_only_cache_assertion_after_overlay": "PASSED"
+    },
+    "additive_guarantees": [
+      "The pinned pythia-160m cache is present and unmodified.",
+      "No operating system, Python, CUDA, or application dependency was rebuilt or reacquired.",
+      "No file was removed.",
+      "No pythia constant in app/runtime/model_loader.py was altered."
+    ]
+  },
+  "known_gaps": {
+    "worker_cannot_serve_this_model_yet": "app/runtime/model_loader.py pins pythia identity in LoadedModel.is_real, _validated_resolved_revision, and _validated_model_artifacts. The weights are present in the image but no loader path selects them. WIRED IS NOT WORKING.",
+    "probe_pipeline_paths_differ": "Worker probe/layer walking targets gpt_neox.layers with mlp_intermediate width 3072. Qwen2.5-0.5B exposes model.layers with mlp width 4864 via mlp.down_proj.",
+    "stage27f_covers_do_not_transfer": "The retained Stage 27F calibrated cover coordinates are pythia-specific and are NOT valid coordinates for this model.",
+    "no_joined_run": "No Stage B joined controller-to-worker run has executed against this image.",
+    "no_evidence_packet": "No Evidence Packet v2 has been created."
+  },
+  "provider_accounting": {
+    "runpod_used": false,
+    "provider_calls": 0,
+    "known_spend_usd": "0.00",
+    "network_use": "MODEL ARTIFACT DOWNLOAD FROM HUGGING FACE ONLY / NO PAID PROVIDER"
+  },
+  "claim_boundary": "LOCAL MODEL AND IMAGE IDENTITY ONLY / NO JOINED RUN / NO EVIDENCE PACKET / NO PROMPT-INJECTION DETECTION CLAIM / NO STEERING EFFICACY CLAIM / NO SCIENTIFIC ADMISSION / NOT PRODUCT VALIDATION / EXPERIMENT NOT_STARTED / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+}

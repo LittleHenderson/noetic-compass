@@ -1,0 +1,85 @@
+{
+  "schema_version": "cas_harness_pythia160m_executor_validation.v2",
+  "created_date": "2026-07-29",
+  "status": "EXECUTOR_AUDITOR_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED",
+  "prepared_from_source_commit": "8263a3fc1846fe551bcf41e1c184ae1d3df09fa1",
+  "successor_lock": {
+    "path": "docs/working/research_intervention_pythia160m_v2/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V2.json",
+    "byte_count": 7763,
+    "sha256": "af37bb8d01be55bae0b8b630c1afe7890b0fc7ba50f4a99d1e25b3c59edec70d",
+    "status": "SUCCESSOR_LOCK_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED"
+  },
+  "implementation": {
+    "executor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor.py",
+      "byte_count": 36221,
+      "sha256": "b5f51f854f1ae0b3241bf57e617c439ef0871f76eb06eefc6677ff410619e78e",
+      "top_level_import_policy": "PYTHON_STANDARD_LIBRARY_ONLY",
+      "framework_import_policy": "ONLY_AFTER_EXACT_LOCK_AND_RECEIPT_VALIDATION / NONCE_CONSUMPTION / ZERO_NETWORK_GUARD"
+    },
+    "independent_auditor": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor.py",
+      "byte_count": 22774,
+      "sha256": "0d632894fca5c57fdf77f0bb44766bf7a20ae97be6c622ae75c8cfcbd5f10d02",
+      "imports_executor": false,
+      "framework_import_policy": "PROHIBITED"
+    }
+  },
+  "frozen_successor_inputs": {
+    "prior_v1_lock_sha256": "ed071defbab6915ba0d155b5865170b0bc7dc6d477f392285799f1d1ecdb9d7d",
+    "model_manifest_sha256": "e99f29c27aadb7d25cfb74dc91be6e295474e7f86777fccfa9ec7aaa8375667a",
+    "prompt_split_sha256": "fa24863d6a223eb2d760048c412a6bf0e82b54cff00676c3c0ebc4105d896c47",
+    "intervention_map_v2_sha256": "021eae6fd9f4c9174399a9af54cb5c758d4589950614e4964de05944441cb7ef",
+    "environment_manifest_sha256": "9d6941826875f054cab87669d80ca955af3d268c7ba8091fffd793570eb8b86a",
+    "compute_manifest_sha256": "92186552c282ef9e82858bac75b3648f9a12b517178d3f107303af06db3067d3"
+  },
+  "verified_contract": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "snapshot_file_count": 5,
+    "calibration_prompt_count": 16,
+    "heldout_prompt_count": 38,
+    "planned_forward_passes": 472,
+    "maximum_forward_passes": 512,
+    "target_layer": 3,
+    "target_token": "prompt_final_non_padding_token",
+    "seed_count": 4,
+    "gpt2": "EXCLUDED_LATER_COMPARISON"
+  },
+  "validation": {
+    "focused_command": "python -m pytest noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_executor.py -q",
+    "focused_result": "13 passed in 3.35s",
+    "integrated_command": "python -m pytest noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_research_intervention_worker.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_research_intervention_auditor.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_executor.py -q",
+    "integrated_result": "52 passed in 3.58s",
+    "independent_auditor_lock_validation": "PASS",
+    "synthetic_complete_packet_audit": "AUDIT_PASS_RESEARCH_ONLY",
+    "static_zero_network_guard": "PASS / ONE SOCKET ATTEMPT BLOCKED / SOCKET RESTORED",
+    "fail_closed_cases": [
+      "feature flag absent",
+      "live flag true",
+      "owner receipt missing",
+      "static invalid receipt cannot authorize",
+      "model family substitution",
+      "model revision drift",
+      "seed drift",
+      "compute/network-policy drift",
+      "executor hash drift",
+      "control-effect ceiling violation",
+      "V1 lock rejects an executor after the successor exists"
+    ]
+  },
+  "negative_evidence": {
+    "framework_imports_performed": false,
+    "model_or_tokenizer_loads": 0,
+    "intervention_or_capture_runs": 0,
+    "gpu_queries": 0,
+    "network_calls": 0,
+    "provider_paid_runpod_calls": 0,
+    "one_use_receipts_created": 0,
+    "research_output_directories_created": 0,
+    "v5_changed": false,
+    "prompt_injection_increment_changed": false
+  },
+  "exact_remaining_authorization": "A separate explicit owner authorization for one fresh, one-use offline Pythia-160M V2 run receipt, created only after the commit containing this successor lock is selected and bound. That receipt must bind the exact commit, lock, executor, auditor, model/tokenizer, split, intervention, environment, compute cap, seeds, new run ID, new 64-hex nonce, expiry, and absent isolated output root.",
+  "claim_boundary": "Preparation only. No live steering, safety steering, prompt-injection prevention, Gate 2, ACCEPT, LICENSED, production readiness, or production result."
+}

@@ -1,0 +1,386 @@
+{
+  "schema_version": "project_coherence.gate5_raw_build_and_security_evidence_receipt.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "experimental_execution_status": "NOT_STARTED",
+  "security_disposition": "OPEN_SECURITY",
+  "live_execution_authorized": false,
+  "candidate_accepted": false,
+  "collection_context": {
+    "collection_parent_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+    "candidate_source_commit": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+    "local_clock_date": "2026-08-05",
+    "trusted_time_established": false,
+    "collector_class": "LOCAL_SELF_OBSERVED / NOT INDEPENDENTLY ATTESTED",
+    "docker_client_version": "29.6.1",
+    "docker_engine_version": "29.6.1",
+    "docker_cli_binary_sha256": "E768033E4B3F0DC760162F417A80360094644D16CD9FB12AD65C9D97508C076F",
+    "buildx_version": "0.35.0-desktop.2",
+    "buildx_commit": "b554ce1decd8b509893b1e7c6227eabfb923d094",
+    "buildkit_version_from_attestation": "0.31.1",
+    "scout_version": "1.21.0",
+    "scout_commit": "9ef488e4004aa6924ec709d3c601e0bd761212c7",
+    "scout_binary_sha256": "115670A40189EB05571130471BBE0AF7743AC5E86D00BA1B42A0546ECF7E1C83",
+    "scanner_database_identity": "NOT EXPOSED OR RETAINED"
+  },
+  "candidate_identity": {
+    "build_ref": "vz8s61131470ab8uivga0qcdq",
+    "image_tag": "atlas-live-trace-worker:gate5-candidate-v0.2",
+    "platform": "linux/amd64",
+    "oci_image_index_digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+    "platform_manifest_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+    "image_config_digest": "sha256:966db6e2e05366be99129af5c866a8f7efbf01b04145c49ef431785fdc1432ed",
+    "attestation_manifest_digest": "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+    "attestation_config_digest": "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+    "image_size_bytes": 4396739765,
+    "source_commit_label_matched": true
+  },
+  "evidence_files": [
+    {
+      "evidence_id": "G5-RAW-BUILDKIT-HISTORY-EXPORT",
+      "role": "NATIVE_BUILDKIT_HISTORY_OCI_ARCHIVE",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/vz8s61131470ab8uivga0qcdq.dockerbuild",
+      "media_type": "application/vnd.oci.image.layout.v1.tar",
+      "bytes": 29058,
+      "sha256": "4E9B23B4CAE00C566AC0BD952F1DDDFF2FCC5811D06F43CA093639369B81E017",
+      "origin": "docker buildx history export --output <path> vz8s61131470ab8uivga0qcdq",
+      "evidence_class": "ORIGINAL LOCAL BUILDKIT RECORD / RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-OCI-INDEX",
+      "role": "ORIGINAL_OCI_IMAGE_INDEX",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/oci-index.json",
+      "media_type": "application/vnd.oci.image.index.v1+json",
+      "bytes": 856,
+      "sha256": "3D747B379938A5148E4A028FF8BA2F242847B17E8842F19F0D2C204B3FE9A95C",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+      "evidence_class": "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-PLATFORM-MANIFEST",
+      "role": "ORIGINAL_OCI_PLATFORM_MANIFEST",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/platform-manifest.json",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "bytes": 3528,
+      "sha256": "60BF92B327EBEC84887C659313A97A6369A24FD5D8EB00A012544FCAFD26BA27",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+      "evidence_class": "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-IMAGE-CONFIG",
+      "role": "ORIGINAL_OCI_IMAGE_CONFIG",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/image-config.json",
+      "media_type": "application/vnd.oci.image.config.v1+json",
+      "bytes": 11727,
+      "sha256": "966DB6E2E05366BE99129AF5C866A8F7EFBF01B04145C49EF431785FDC1432ED",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:966db6e2e05366be99129af5c866a8f7efbf01b04145c49ef431785fdc1432ed",
+      "evidence_class": "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-ATTESTATION-MANIFEST",
+      "role": "ORIGINAL_OCI_ATTESTATION_MANIFEST",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-manifest.json",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "bytes": 839,
+      "sha256": "B1DB5924AB8CE96927F0164C4626CD5EB0C86CBD3FB35C0387B622DD7AE390D1",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+      "evidence_class": "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-ATTESTATION-CONFIG",
+      "role": "ORIGINAL_OCI_ATTESTATION_CONFIG",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-config.json",
+      "media_type": "application/vnd.oci.image.config.v1+json",
+      "bytes": 241,
+      "sha256": "4592EDD32ECC05F0CE5FCA43216DEA1393293B07245DB9582989ED3CB77F5AD7",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+      "evidence_class": "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-ORIGINAL-SPDX",
+      "role": "ORIGINAL_BUILDKIT_IN_TOTO_SPDX_STATEMENT",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/sbom.intoto.spdx.json",
+      "media_type": "application/vnd.in-toto+json; predicate=https://spdx.dev/Document",
+      "bytes": 2957946,
+      "sha256": "8D039B378DFC422BAE2D7479A06BFA2AC9C94A9A19FE8AA115362A28EC41955E",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+      "evidence_class": "ORIGINAL BUILDKIT ATTESTATION / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-ORIGINAL-SLSA",
+      "role": "ORIGINAL_BUILDKIT_IN_TOTO_SLSA_STATEMENT",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/provenance.intoto.slsa-v1.json",
+      "media_type": "application/vnd.in-toto+json; predicate=https://slsa.dev/provenance/v1",
+      "bytes": 45532,
+      "sha256": "F8E3677325D096191BB7EC1D075A34ADDF4E4733A48D3AE442F63C1BB74A6C6F",
+      "origin": "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f",
+      "evidence_class": "ORIGINAL BUILDKIT ATTESTATION / DIGEST-MATCHED RAW BYTES RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-CURRENT-DIRECT-SBOM",
+      "role": "CURRENT_DIRECT_LOCAL_IMAGE_SPDX_REPORT",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.spdx.json",
+      "media_type": "application/spdx+json",
+      "bytes": 869291,
+      "sha256": "5434A19BD5DEF2770FE60929F3AF321713080A94D960B1F9EB4401A9EA812F15",
+      "origin": "docker scout sbom --format spdx --output <path> local://atlas-live-trace-worker:gate5-candidate-v0.2",
+      "evidence_class": "NEW SCOUT 1.21.0 DIRECT LOCAL IMAGE REPORT / RAW REPORT RETAINED"
+    },
+    {
+      "evidence_id": "G5-RAW-CURRENT-DIRECT-CVE-SCAN",
+      "role": "CURRENT_DIRECT_LOCAL_IMAGE_CVE_SARIF_REPORT",
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.cves.exit2.sarif.json",
+      "media_type": "application/sarif+json",
+      "bytes": 38589,
+      "sha256": "5D152C419DC6207D197C29C934E480B281864DAAF233F662B6AD6A69894E75B1",
+      "origin": "docker scout cves --exit-code --format sarif --only-severity critical,high,medium,low --output <path> local://atlas-live-trace-worker:gate5-candidate-v0.2",
+      "evidence_class": "NEW SCOUT 1.21.0 DIRECT LOCAL IMAGE REPORT / RAW REPORT RETAINED"
+    }
+  ],
+  "original_oci_and_attestation_closure": {
+    "index_references_platform_and_attestation_manifests": true,
+    "platform_manifest_references_exact_image_config": true,
+    "attestation_manifest_references_exact_config_and_two_statements": true,
+    "attestation_config_diff_ids_match_statement_digests": true,
+    "image_architecture": "amd64",
+    "image_os": "linux",
+    "image_user": "10001:10001",
+    "image_source_revision": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+    "spdx_predicate_type": "https://spdx.dev/Document",
+    "spdx_version": "SPDX-2.3",
+    "spdx_subject_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+    "spdx_package_records": 199,
+    "spdx_file_records": 3130,
+    "spdx_relationship_records": 3971,
+    "spdx_creators": [
+      "Organization: Anchore, Inc",
+      "Tool: syft-v1.42.3",
+      "Tool: buildkit-v0.31.1"
+    ],
+    "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+    "slsa_subject_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+    "slsa_build_type": "https://github.com/moby/buildkit/blob/master/docs/attestations/slsa-definitions.md",
+    "slsa_builder_id": "",
+    "slsa_resolved_dependency_count": 3,
+    "slsa_source_revision": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+    "slsa_started_on": "2026-08-05T21:53:38.606917835Z",
+    "slsa_finished_on": "2026-08-05T21:55:13.232859726Z",
+    "slsa_request_complete": true,
+    "slsa_resolved_dependencies_complete": false,
+    "independent_signature_or_trust_root": false
+  },
+  "buildkit_history_bundle": {
+    "oci_layout_version": "1.0.0",
+    "member_count": 10,
+    "regular_file_count": 8,
+    "history_record_digest": "sha256:5595d0120176d269bc15ee7030eef2392bd9b7373db290a2c4ac959f33c4be28",
+    "expanded_provenance_predicate_digest": "sha256:36bc87d2b88089eda3958edb5dbcf4cbdd5b5c01e16725e1dbeb49171c23b971",
+    "trace_digest": "sha256:0b2b290a282392c00a2c74122716b45609c1be1132300e2727794858db912cb7",
+    "status_log_digest": "sha256:b0a65a75178d815489cd11cc3a2d89c0e57040e806f78647c81a341738a46305",
+    "build_ref_matched": true,
+    "source_commit_matched": true,
+    "source_repository_matched": true,
+    "provenance_requested_mode": "type=provenance,mode=max",
+    "sbom_requested_mode": "type=sbom",
+    "platform": "linux/amd64",
+    "completed_steps": 36,
+    "total_steps": 36,
+    "cached_steps": 18,
+    "trust_boundary": "LOCAL BUILDKIT CONTENT RECORD / NO INDEPENDENT SIGNER OR TRUST ROOT"
+  },
+  "direct_local_image_reports": {
+    "sbom": {
+      "status": "COMPLETED",
+      "tool": "docker scout 1.21.0",
+      "created_at": "2026-08-05T23:28:12Z",
+      "document_name": "atlas-live-trace-worker",
+      "spdx_version": "SPDX-2.3",
+      "scanner_indexed_component_count": 232,
+      "spdx_package_records_including_root_image": 233,
+      "stdout_stderr_retained": false
+    },
+    "cve_scan": {
+      "status": "COMPLETED_WITH_FINDINGS",
+      "tool": "docker scout 1.21.0",
+      "exit_code": 2,
+      "sarif_version": "2.1.0",
+      "rule_count": 7,
+      "result_count": 7,
+      "severity_counts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 4
+      },
+      "scanner_fixed_version_disposition": "ALL SEVEN REPORTED AS NOT FIXED",
+      "stdout_stderr_retained": false,
+      "scanner_database_identity_retained": false,
+      "networklessness_certified": false
+    },
+    "findings": [
+      {
+        "advisory": "CVE-2024-2236",
+        "severity": "LOW",
+        "purl": "pkg:deb/ubuntu/libgcrypt20@1.10.3-2ubuntu0.1?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2024-56433",
+        "severity": "LOW",
+        "purl": "pkg:deb/ubuntu/shadow@1%3A4.13%2Bdfsg1-4ubuntu3.2?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2026-40228",
+        "severity": "LOW",
+        "purl": "pkg:deb/ubuntu/systemd@255.4-1ubuntu8.16?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2026-27171",
+        "severity": "LOW",
+        "purl": "pkg:deb/ubuntu/zlib@1%3A1.3.dfsg-3.1ubuntu2.1?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2026-13757",
+        "severity": "MEDIUM",
+        "purl": "pkg:deb/ubuntu/p11-kit@0.25.3-4ubuntu2.1?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2026-2219",
+        "severity": "MEDIUM",
+        "purl": "pkg:deb/ubuntu/dpkg@1.22.6ubuntu6.6?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      },
+      {
+        "advisory": "CVE-2026-27456",
+        "severity": "MEDIUM",
+        "purl": "pkg:deb/ubuntu/util-linux@2.39.3-9ubuntu6.5?os_distro=noble&os_name=ubuntu&os_version=24.04",
+        "scanner_fixed_version": "not fixed"
+      }
+    ]
+  },
+  "current_vendor_triage": {
+    "checked_on_local_date": "2026-08-05",
+    "authoritative_source": "Ubuntu Security CVE records",
+    "vendor_vulnerable_or_deferred_count": 6,
+    "vendor_marks_exact_scanned_version_fixed_count": 1,
+    "scanner_vendor_conflict_count": 1,
+    "assessments": [
+      {
+        "advisory": "CVE-2024-2236",
+        "package": "libgcrypt20",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable, fix deferred",
+        "source_url": "https://ubuntu.com/security/CVE-2024-2236",
+        "source_last_updated": "2025-07-11",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      },
+      {
+        "advisory": "CVE-2024-56433",
+        "package": "shadow",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable, fix deferred",
+        "source_url": "https://ubuntu.com/security/CVE-2024-56433",
+        "source_last_updated": "2025-07-11",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      },
+      {
+        "advisory": "CVE-2026-13757",
+        "package": "p11-kit",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable, fix deferred",
+        "source_url": "https://ubuntu.com/security/CVE-2026-13757",
+        "source_last_updated": "2026-07-01",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      },
+      {
+        "advisory": "CVE-2026-2219",
+        "package": "dpkg",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Fixed 1.22.6ubuntu6.6",
+        "source_url": "https://ubuntu.com/security/CVE-2026-2219",
+        "source_last_updated": "2026-05-13",
+        "disposition": "OPEN RECONCILIATION / VENDOR MARKS EXACT SCANNED VERSION FIXED"
+      },
+      {
+        "advisory": "CVE-2026-27171",
+        "package": "zlib",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable",
+        "source_url": "https://ubuntu.com/security/CVE-2026-27171",
+        "source_last_updated": "2026-06-26",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      },
+      {
+        "advisory": "CVE-2026-27456",
+        "package": "util-linux",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable",
+        "source_url": "https://ubuntu.com/security/CVE-2026-27456",
+        "source_last_updated": "2026-04-08",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      },
+      {
+        "advisory": "CVE-2026-40228",
+        "package": "systemd",
+        "ubuntu_release": "24.04 LTS noble",
+        "ubuntu_status": "Vulnerable, fix deferred",
+        "source_url": "https://ubuntu.com/security/CVE-2026-40228",
+        "source_last_updated": "2026-06-06",
+        "disposition": "OPEN / VENDOR CONFIRMS VULNERABLE"
+      }
+    ],
+    "security_decision": "OPEN_SECURITY / SIX VENDOR-CONFIRMED VULNERABLE OR DEFERRED / ONE SCANNER-VENDOR CONFLICT"
+  },
+  "retention_status": {
+    "raw_build_history_retained": true,
+    "raw_original_oci_descriptors_retained": true,
+    "raw_original_buildkit_spdx_retained": true,
+    "raw_original_buildkit_slsa_retained": true,
+    "raw_current_direct_sbom_retained": true,
+    "raw_current_direct_cve_report_retained": true,
+    "raw_payloads_repository_replayable": true,
+    "original_scout_1_24_cve_report_retained": false,
+    "current_scout_process_stdout_stderr_retained": false,
+    "scanner_database_identity_retained": false,
+    "vendor_source_payloads_retained": false,
+    "trusted_time_established": false,
+    "independent_reproduction_completed": false,
+    "independent_attestation_trust_root_established": false,
+    "complete_tool_execution_replayable": false
+  },
+  "unresolved_boundaries": {
+    "direct_local_image_security_findings": "OPEN / 7 SCANNER FINDINGS / 6 VENDOR-CONFIRMED VULNERABLE OR DEFERRED / 1 VENDOR-SCANNER CONFLICT",
+    "original_scout_1_24_cve_report": "NOT RETAINED",
+    "current_scout_process_transcripts": "NOT RETAINED",
+    "sarif_to_candidate_execution_binding": "OPEN / NOT EMBEDDED / INVOCATION NOT RETAINED",
+    "vendor_triage_source_snapshot": "NOT RETAINED / LINKS ONLY",
+    "scanner_database_identity": "OPEN",
+    "networkless_scan_execution": "NOT CERTIFIED",
+    "independent_clean_reproduction": "OPEN",
+    "independent_attestation_trust_root": "OPEN",
+    "trusted_time_and_worm_retention": "OPEN",
+    "gpu_real_forward": "NOT_STARTED",
+    "gate5_engineering_003": "OPEN_SECURITY",
+    "licensing": "NOT LICENSED",
+    "public_disclosure": "HELD"
+  },
+  "claim_boundary": {
+    "integrity_evidence_effect": "RAW LOCAL PAYLOAD RETENTION AND STRUCTURAL CROSS-LINK VERIFICATION ONLY",
+    "external_evidence_effect": "LOCAL SELF-OBSERVED / NOT INDEPENDENTLY ATTESTED",
+    "security_effect": "OPEN_SECURITY",
+    "scientific_effect": "NONE",
+    "canon_effect": "NONE",
+    "product_claim_effect": "NONE",
+    "license_effect": "NONE",
+    "disclosure_effect": "NONE"
+  }
+}

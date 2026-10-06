@@ -1,0 +1,52 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_final_executable_code_identity.v0.1",
+  "created_at": "2026-08-08T22:49:12.330780Z",
+  "source_commit": "0ac9f43828566b937b349d8a70da62238580a71c",
+  "dirty_worktree_at_source_commit": false,
+  "source_manifest": {
+    "artifact_id": "stageb-final-executable-source-manifest",
+    "sha256": "0A063ACCBCF6A52B4C6E22A56AC685970F6E77FDC5522ACABE0CD805042A4B31",
+    "byte_length": 5467,
+    "media_type": "application/json"
+  },
+  "qwen_probe_adapter_test_receipt": {
+    "artifact_id": "stageb-qwen-probe-adapter-test-receipt",
+    "sha256": "A0A097771D3B74080F71F6138CC7A59C79455D757BB9404E910480521FFB6F51",
+    "byte_length": 1697,
+    "media_type": "application/json"
+  },
+  "evidence_packet_builder_test_receipt": {
+    "artifact_id": "stageb-evidence-packet-builder-test-receipt",
+    "sha256": "670DC44DB21F29A66DD9D7A8E1589D3FD507B099FCB9836DD15A3B93BD970D07",
+    "byte_length": 2944,
+    "media_type": "application/json"
+  },
+  "runtime_image_identity": {
+    "artifact_id": "stageb-final-runtime-image-identity",
+    "sha256": "D8A42CC8DEFD6D3CB38E75984E6F52E0D08ADD15654CBEE6E3DC1E7FB148E7BC",
+    "byte_length": 8837,
+    "media_type": "application/json"
+  },
+  "model": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "weights_filename": "model.safetensors",
+    "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "weights_bytes": 988097824
+  },
+  "execution_limits": {
+    "maximum_runs": 1,
+    "maximum_model_invocations": 1,
+    "maximum_packets": 1,
+    "automatic_retry": false,
+    "network": "NONE",
+    "interventions": 0,
+    "provider_calls": 0,
+    "provider_spend_usd": "0.00"
+  },
+  "gate5_status": "OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "boundary": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / RESEARCH ONLY / ONE MODEL INVOCATION / ONE PACKET MAXIMUM / NO INTERVENTION / REPORTED_CRITERIA_NOT_MET / INELIGIBLE / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD"
+}

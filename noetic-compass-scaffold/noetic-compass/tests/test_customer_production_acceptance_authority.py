@@ -978,6 +978,52 @@ def test_worm_revision_reuse_rejects_current_policy_drift() -> None:
         )
 
 
+def test_worm_receipt_revalidation_never_predates_authenticated_receipt() -> None:
+    # The operation stamp is captured before the immutable write.  Model a
+    # write that crosses a whole-second boundary without sleeping in the test.
+    now = datetime.now(UTC).replace(microsecond=0) - timedelta(seconds=10)
+    state = InMemoryStateStore()
+    immutable = _FakeImmutableBackend()
+    evidence, attestations = _bound_legal_evidence(state, now)
+    store = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        human_attestation_store=attestations,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=31),
+    )
+
+    published = store.publish(
+        "legal_publication_approval",
+        evidence,
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+
+    assert published.head_version == 1
+    assert store.load(
+        "legal_publication_approval", now=now + timedelta(seconds=1)
+    ).sha256 == published.sha256
+
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=2),
+    )
+    reactivated = store.publish(
+        "legal_publication_approval",
+        evidence,
+        expected_head_version=deactivated.head_version,
+        expected_previous_sha256=published.sha256,
+        **_operation_authorization("publish"),
+        now=now + timedelta(seconds=3),
+    )
+    assert reactivated.sha256 == published.sha256
+
+
 def test_expired_worm_receipt_cannot_be_reactivated() -> None:
     now = datetime.now(UTC).replace(microsecond=0)
     state = InMemoryStateStore()

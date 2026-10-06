@@ -1,0 +1,111 @@
+{
+  "schema_version": "project_coherence.publication.wave2.memristive_supplement_artifact_manifest.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "publication_status": "PROPOSED SUPPLEMENTAL TRACK / NO CHARTER PAPER NUMBER",
+  "paper_number": null,
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "implementation_conclusion": "NONE",
+  "experimental_conclusion": "NONE / NOT STARTED",
+  "physical_device_conclusion": "NONE",
+  "base_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "integration_source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+  "branch": "codex/project-coherence-wave2-memristive",
+  "manifest_self_hash": null,
+  "self_hash_policy": "NON_SELF_HASHING: this manifest intentionally excludes its own path and digest. Git binds the manifest bytes with the package commit.",
+  "artifact_count": 7,
+  "package_file_count_including_manifest": 8,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md",
+      "sha256": "C6A8007174F8FE2A30021094FF5F24EE9A2E63E6EC61B1A6EAFE25F9C85DC37B",
+      "bytes": 39415,
+      "media_type": "text/markdown",
+      "role": "proposed_supplemental_research_draft_without_charter_paper_number"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_CITATION_LEDGER_v0.1.json",
+      "sha256": "751A3903BB8B957CA49021A31770055CEFDE34DA7BD0E015837437CDDC4D5551",
+      "bytes": 28236,
+      "media_type": "application/json",
+      "role": "primary_external_and_exact_internal_source_citation_ledger"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_EVIDENCE_MAP_v0.1.json",
+      "sha256": "48D02366E9E1242ACD28AF46380698349E6878A444D0479A2E1DEA8191ED9B99",
+      "bytes": 24419,
+      "media_type": "application/json",
+      "role": "typed_evidence_classes_source_anchors_gate_receipts_and_negative_boundaries"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_LEAD_HANDOFF_v0.1.md",
+      "sha256": "0917023D3295E92AF8CA3E28F4F76C2C197204C142B4F29BEE7221454103476B",
+      "bytes": 14542,
+      "media_type": "text/markdown",
+      "role": "lead_editor_integration_and_adversarial_review_handoff"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_SOURCE_INVENTORY_v0.1.json",
+      "sha256": "EF2CD2540034A7B199F940C2317593AC35C706F4EAF4AC38A27D6F94B6BFE2F4",
+      "bytes": 23076,
+      "media_type": "application/json",
+      "role": "exact_wave1_gate4_gate5_registry_and_repository_source_inventory"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_THEOREM_CLAIM_TYPE_MATRIX_v0.1.json",
+      "sha256": "2D8AA5A6B93FD1E2253A56903FF6BC69986BC64FBD258F059BD2B8493F15A573",
+      "bytes": 42202,
+      "media_type": "application/json",
+      "role": "theorem_claim_definition_hypothesis_type_and_boundary_matrix"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "sha256": "356310C2303F62D379F7679FF4F38701E2F083F399C0CC1D8BC19FF0DBA790AA",
+      "bytes": 29696,
+      "media_type": "application/json",
+      "role": "open_obligations_dependencies_required_evidence_and_prohibited_shortcuts"
+    }
+  ],
+  "validation_invariants": [
+    "Every artifact path is repository-relative, POSIX-normalized, unique, and confined to this supplemental lane.",
+    "Every artifact except this manifest contains the exact package status label.",
+    "Every listed SHA-256 is uppercase hexadecimal over exact file bytes and every byte count is exact.",
+    "The manifest path is absent from artifacts and manifest_self_hash is null.",
+    "All JSON artifacts parse with duplicate-key rejection and their declared counts equal their array lengths.",
+    "All external citation identifiers E1 through E17 resolve, every external source is used by the draft, and each source carries a narrow-use and non-inference boundary.",
+    "All 30 internal citation records, 16 bound evidence anchors, 32 key repository sources, and all Wave 1, Gate 4, and Gate 5 manifest records resolve to an explicit historical or active source snapshot and declared hash domain.",
+    "All 50 theorem, claim, type, definition, source, hypothesis, and boundary entries have resolved references and explicit allowed wording, prohibited inference, and closure obligations.",
+    "All 42 unresolved obligations remain open or not started and every dependency resolves within the obligation ledger.",
+    "The ideal electrical memristor, generalized electrical memristive system, conceptual metaphor, mathematical history-state model, software implementation, and physical device remain non-coercible types.",
+    "Classical gliding-box lacunarity remains distinct from repository quantities merely labelled lacunarity unless a future specification proves an exact relation.",
+    "A future stateful candidate must be compared with a matched memoryless baseline; no such experiment is authorized or reported here.",
+    "Gate 4 and Gate 5 local verifier passes preserve OPEN, Ring 4, NOT LICENSED, HELD, NOT FROZEN, and experimental NOT_STARTED boundaries.",
+    "No artifact modifies a shared registry, charter, Wave 1 package, Gate 4 package, Gate 5 package, implementation, product, or runtime environment."
+  ],
+  "internal_cross_review": "LEAD ADVERSARIAL ACCEPTANCE RE-AUDIT COMPLETE / NO CLAIM PROMOTION",
+  "external_specialist_review": "OPEN",
+  "experiment_status": "NO EXPERIMENT EXECUTED / NOT STARTED",
+  "implementation_status": "NO SUPPLEMENT IMPLEMENTATION CLAIMED",
+  "physical_device_status": "NO PHYSICAL DEVICE CLAIMED OR TESTED",
+  "project_experimental_runpod_or_gpu_job": "NONE_LAUNCHED",
+  "required_open_boundaries": [
+    "Independent replay of the lead source-snapshot and cross-lane notation reconciliation",
+    "Publication route without default charter paper numbering",
+    "Independent electrical, device-physics, state-space, hysteresis, lacunarity, steering, and causal review",
+    "Formal semantics for context, memory state, injection, steering, path dependence, hysteresis, and proposed history lacunarity",
+    "Successor executable specification and independent implementation conformance",
+    "Matched memoryless and window-matched baselines with capacity and compute controls",
+    "Preregistered estimands, thresholds, multiplicity, exclusions, falsifiers, negative controls, and stopping rules",
+    "Authorized data, models, environments, worker joins, evidence retention, trusted ordering, WORM, and independent replay",
+    "Execution, held-out replication, robustness, sensitivity, causal identification, and construct validity",
+    "Physical materiality and authenticated instrumentation if any device claim is ever sought",
+    "Safety, clinical, ethics, regulatory, and security validation",
+    "Product readiness, claim licensing, canon admission, authorship, submission, peer review, and disclosure authority"
+  ],
+  "closure_statement": "This non-self-hashing manifest binds a proposed supplemental research package only. It is not a charter amendment or paper number, theorem admission, implementation result, experiment, physical-device result, causal or cognitive finding, safety case, product claim, claim license, canon decision, authorship record, submission authorization, peer-review acceptance, public-disclosure approval, trusted timestamp, signature, or WORM receipt."
+}

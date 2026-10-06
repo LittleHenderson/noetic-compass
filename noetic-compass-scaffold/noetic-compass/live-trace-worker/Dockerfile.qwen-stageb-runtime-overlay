@@ -1,0 +1,93 @@
+# Research-only Stage B runtime-source overlay.
+#
+# The parent already contains the exact frozen dependency closure plus both
+# pinned model caches.  This layer adds a separate application source tree and
+# selects the pinned Qwen instruction model.  The parent's /worker/app tree is
+# retained byte-for-byte; no dependency or model artifact is replaced.
+#
+# A successful build is an engineering identity result only.  It creates no
+# scientific, detection, steering, product, licensing, or disclosure claim.
+# Gate 5 remains OPEN / KEEP_OPEN.
+
+ARG PARENT_IMAGE=atlas-live-trace-worker:gate5-stageb-qwen05b-instruct-v0.1
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG STAGEB_SOURCE_COMMIT=UNBOUND
+ARG STAGEB_APP_TREE_SHA256=UNBOUND
+ARG STAGEB_APP_FILE_COUNT=0
+
+WORKDIR /worker/stageb_source
+COPY --chown=0:0 app ./app
+
+# Bind the copied tree to a clean Git commit and a deterministic source-tree
+# digest.  Tree digest algorithm: for every sorted app/**/*.py path, hash the
+# UTF-8 line "<posix-path>\t<byte-count>\t<lower-sha256>\n", then hash the
+# concatenated lines.  No bytecode is written by this check.
+RUN STAGEB_SOURCE_COMMIT="${STAGEB_SOURCE_COMMIT}" \
+    STAGEB_APP_TREE_SHA256="${STAGEB_APP_TREE_SHA256}" \
+    STAGEB_APP_FILE_COUNT="${STAGEB_APP_FILE_COUNT}" \
+    python -B - <<'PY'
+import hashlib
+import os
+import re
+from pathlib import Path
+
+commit = os.environ["STAGEB_SOURCE_COMMIT"]
+expected_tree = os.environ["STAGEB_APP_TREE_SHA256"]
+expected_count = int(os.environ["STAGEB_APP_FILE_COUNT"])
+if re.fullmatch(r"[0-9a-f]{40}", commit) is None:
+    raise SystemExit("STAGEB_SOURCE_COMMIT must be an exact lowercase Git SHA")
+if re.fullmatch(r"[0-9a-f]{64}", expected_tree) is None:
+    raise SystemExit("STAGEB_APP_TREE_SHA256 must be an exact lowercase SHA-256")
+
+root = Path("app")
+paths = sorted(path for path in root.rglob("*.py") if path.is_file())
+if len(paths) != expected_count:
+    raise SystemExit(
+        f"Stage B app file count mismatch: {len(paths)} != {expected_count}"
+    )
+tree = hashlib.sha256()
+for path in paths:
+    raw = path.read_bytes()
+    compile(raw, path.as_posix(), "exec")
+    line = (
+        f"{path.as_posix()}\t{len(raw)}\t{hashlib.sha256(raw).hexdigest()}\n"
+    ).encode("utf-8")
+    tree.update(line)
+observed_tree = tree.hexdigest()
+if observed_tree != expected_tree:
+    raise SystemExit(
+        f"Stage B app tree digest mismatch: {observed_tree} != {expected_tree}"
+    )
+print(f"STAGE B APP TREE VERIFIED: {len(paths)} files / {observed_tree}")
+PY
+
+RUN chown -R 0:0 /worker/stageb_source \
+    && find /worker/stageb_source -type d -exec chmod 0555 '{}' + \
+    && find /worker/stageb_source -type f -exec chmod 0444 '{}' +
+
+ENV PYTHONPATH=/worker/stageb_source \
+    ATLAS_WORKER_MODEL=qwen2.5-0.5b-instruct
+
+LABEL org.opencontainers.image.revision="${STAGEB_SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-stageb-qwen05b-runtime-v0.1" \
+      io.cas-harness.claim-status="RESEARCH_ONLY_LOCAL_STAGE_B" \
+      io.cas-harness.runtime-overlay.kind="ADDITIVE_SEPARATE_APP_TREE" \
+      io.cas-harness.runtime-overlay.source="${STAGEB_SOURCE_COMMIT}" \
+      io.cas-harness.runtime-overlay.app-tree-sha256="${STAGEB_APP_TREE_SHA256}" \
+      io.cas-harness.runtime-overlay.app-file-count="${STAGEB_APP_FILE_COUNT}" \
+      io.cas-harness.stageb.model-id="Qwen/Qwen2.5-0.5B-Instruct" \
+      io.cas-harness.stageb.model-revision="7ae557604adf67be50417f59c2c2f167def9a775" \
+      io.cas-harness.gate5-status="OPEN" \
+      io.cas-harness.experiment-status="NOT_STARTED" \
+      io.cas-harness.license-status="NOT_LICENSED" \
+      io.cas-harness.disclosure-status="HELD"
+
+USER 10001:10001
+RUN test ! -w /worker/stageb_source \
+    && test ! -w /worker/stageb_source/app \
+    && test ! -w /worker/.cache/huggingface
+
+# The parent CMD is inherited and now resolves app.main from the verified
+# /worker/stageb_source tree through PYTHONPATH and this working directory.

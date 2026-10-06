@@ -1,0 +1,208 @@
+{
+  "schema_version": "project_coherence.cas_ohm_source_conflict_evidence.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "sources": [
+    {
+      "source_id": "SRC-CAS-OHM-GUIDE-01",
+      "sha256": "89AE13C0A5D6208E328E9EDC55F816609BB172076CC13093DCCCCF418145CE64",
+      "locator_system": "PDF page number",
+      "inspection": "Relevant cited pages were rendered and visually inspected."
+    },
+    {
+      "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+      "sha256": "0B62BBC66828A273E5458CC4D98EEE9B341554A474CCACB6387B209B5F0BE5E5",
+      "locator_system": "python-docx paragraph and table-row index",
+      "inspection": "The OOXML content was inspected structurally. LibreOffice failed with a PNG writer error and Word export did not complete, so no page-number claim is made for this source."
+    },
+    {
+      "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+      "sha256": "9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45",
+      "locator_system": "UTF-8 Markdown line number",
+      "inspection": "The cited line ranges were inspected directly from the source bytes."
+    },
+    {
+      "source_id": "SRC-PCBA-ENGINEER-20260726",
+      "sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+      "locator_system": "PDF page number and printed book page",
+      "inspection": "The cited gain-definition pages were rendered and visually inspected."
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "OHM-CONFLICT-SCALE-AND-SATURATION",
+      "kind": "DIRECT_NUMERIC_CONFLICT",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 6",
+          "fact": "Drive is 0.0-10.0, constraint R is 0.1-10.0, and raw attention is computed as V/R."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 12",
+          "fact": "The worked CJT uses sat=8.5 as a component threshold."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator": "lines 20-31 and 51-59",
+          "fact": "Constraint R is 0-100, saturation/cutoff/threshold are 0-1, and sat=8.5 is identified as a mixed-scale error whose component value is 0.85."
+        }
+      ],
+      "disposition": "PRESERVE_AS_PROFILE_CONFLICT",
+      "candidate_rule": "Q10 score, Q100 constraint score, normalized fraction, alpha dose, activation projection, and effective resistance are distinct quantity types; no silent conversion is allowed."
+    },
+    {
+      "id": "OHM-CONFLICT-FULL-SCALE-PROFILE",
+      "kind": "INCOMPATIBLE_CALIBRATION_METHODS",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 6",
+          "fact": "I_FS is a selected board-specific full-scale attention value."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "paragraph 30 and operationalization table row 13",
+          "fact": "I_FS is the per-test-point 95th percentile of absolute directional projection over a fixed hashed corpus."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator": "lines 40-49 and 263-267",
+          "fact": "I_FS is measured once per path at drive rail and constraint floor and does not transfer."
+        }
+      ],
+      "disposition": "SEPARATE_NAMED_PROFILES",
+      "candidate_rule": "Board-selected, corpus-percentile, and rail/floor full-scale procedures remain different calibration methods with different profile digests."
+    },
+    {
+      "id": "OHM-CONFLICT-DIMENSIONAL-BRIDGE",
+      "kind": "UNIT_UNDERSPECIFICATION",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF pages 6, 10, and 18",
+          "fact": "V, R, and I are design-scale quantities related by I_pred=V/R_total."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "operationalization table rows 1, 2, 5, and 12",
+          "fact": "V is steering alpha, I is directional activation projection, contextual R is inferred from a paired delta, and I_pred still uses V/R_total."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator": "lines 90-108 and 326-339",
+          "fact": "The relation is presented as testable design/calibration arithmetic, not as physical voltage or a measured live-model law."
+        }
+      ],
+      "disposition": "REQUIRE_CALIBRATED_UNIT_BRIDGE",
+      "candidate_rule": "Effective resistance may be used only with an explicit alpha-unit per activation-unit calibration; constraint scores never masquerade as that quantity."
+    },
+    {
+      "id": "OHM-CONFLICT-GAIN-DEFINITION",
+      "kind": "DISTINCT_MATHEMATICAL_PROFILES",
+      "evidence": [
+        {
+          "source_id": "SRC-PCBA-ENGINEER-20260726",
+          "locator": "PDF page 56 (book page 40) and PDF page 153 (book page 137)",
+          "fact": "CJT beta is defined by Fisher-Rao small- or large-signal displacement ratios on the open simplex."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "operationalization table row 6",
+          "fact": "Beta is operationalized as a local Jacobian/projection derivative between cause and effect test points."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 13",
+          "fact": "Stage beta values multiply in cascades while attention flow is local at each stage."
+        }
+      ],
+      "disposition": "NO_UNPROVED_IDENTIFICATION",
+      "candidate_rule": "Fisher-Rao gain and local Jacobian/projection gain are separately named profiles until a theorem or experiment supplies a coordinate bridge."
+    },
+    {
+      "id": "OHM-CONFLICT-ASOM-AXES",
+      "kind": "MNEMONIC_OVERLOAD",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 11",
+          "fact": "ASOM is explicitly session-derived and overlays Starved/Aligned/Oversaturated/Misaligned onto cutoff/active/saturation/breakdown."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "paragraphs 14-15 and ASOM table rows 1-4",
+          "fact": "The addendum uses dose-response signatures plus effect-axis outcomes and warns that flat response has multiple causes."
+        }
+      ],
+      "disposition": "SPLIT_RESPONSE_AND_SEMANTIC_AXES",
+      "candidate_rule": "Dose-response region and semantic outcome are classified independently; active does not imply intended and non-ohmic does not imply misaligned."
+    },
+    {
+      "id": "OHM-CONFLICT-NETWORK-RULES",
+      "kind": "VALIDATION_STATUS_CONFLICT",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF pages 13-14 and 18",
+          "fact": "Series addition, reciprocal parallel aggregation, and beta multiplication are presented as working network rules."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator": "lines 206-254",
+          "fact": "The same arithmetic is applied to paths, with a separate warning that co-present guardrails are not parallel routes and flow remains local."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "paragraphs 16-19 and falsification table rows P2-P3",
+          "fact": "Gain composition and parallel conductance are preregistered predictions whose rules must be dropped if the tests fail."
+        }
+      ],
+      "disposition": "CAPABILITY_GATE_EACH_OPERATION",
+      "candidate_rule": "No series, parallel, or gain composition is enabled without coordinate, unit, topology, active-region, and evidence compatibility under the exact profile."
+    },
+    {
+      "id": "OHM-CONFLICT-RESIDUAL-IDENTIFICATION",
+      "kind": "CAUSAL_OVERINTERPRETATION_RISK",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF pages 10 and 16",
+          "fact": "Residual sign is used to suggest hidden opposition, extra amplification, or hidden resistance, while the page also says residual alone is insufficient."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator": "lines 171-202 and 260-277",
+          "fact": "R_hidden is called a residual rather than a component, but positive residual on a safety board is treated as a bypass and saturated-stage residuals are meaningless."
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator": "paragraph 19 and falsification table row P4",
+          "fact": "Hidden content is last in the diagnostic walk and residual validity requires independently identified causes above a shuffled-control baseline."
+        }
+      ],
+      "disposition": "NON_IDENTIFYING_DIAGNOSTIC_ONLY",
+      "candidate_rule": "Residuals retain propagated uncertainty and may rank follow-up probes; they never prove a hidden policy, bypass, or cause. Zero or zero-compatible observations are censored."
+    },
+    {
+      "id": "OHM-CONFLICT-Q4-BOUNDARIES",
+      "kind": "PRECISION_UNDERSPECIFICATION",
+      "evidence": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator": "PDF page 7",
+          "fact": "Q4 is displayed with two-decimal bands 0.00-2.49, 2.50-4.99, 5.00-7.49, and 7.50-10.00 without a rule for higher-precision boundary values."
+        }
+      ],
+      "disposition": "DEFINE_EXACT_HALF_OPEN_BINS",
+      "candidate_rule": "The successor uses exact unrounded comparison against 2.5, 5, and 7.5; normalization may not round a value across a band boundary."
+    }
+  ],
+  "conflict_count": 8,
+  "gate_effect": "KEEP_OPEN",
+  "claim_boundary": "This record preserves source conflicts and under-specifications. It does not validate CAS-Ohm empirically, identify physical quantities, license a product claim, or authorize model intervention.",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD"
+}

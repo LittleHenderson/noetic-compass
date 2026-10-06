@@ -1,0 +1,43 @@
+{
+  "schema_version": "noetic_topos2.proof_obligation_ledger.v0.1",
+  "document_status": "DRAFT / GATE 1 RESEARCH CANDIDATE / NOT LICENSED",
+  "as_of": "2026-08-04",
+  "records": [
+    {
+      "id": "OBL-NT2-CROSS-CONTEXT-SEMANTICS",
+      "version": "0.1",
+      "title": "Canonical semantics beyond four independent resolved channels",
+      "obligation_kind": "DESIGN_AND_PROOF_OBLIGATION",
+      "statement": "Choose and formalize one conservative successor contract: either the structured ambient modal package is the principal Noetic Topos 2.0 semantics, or the resolved semantics gains typed overlap or transition data with proved coherence. The finite discrete product E_legacy^4 alone supplies separation and provenance channels but no cross-atom coupling.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#backward-compatibility-contract",
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#admission-gates"
+      ],
+      "object_types": [
+        "Structured ambient modal package",
+        "Resolved semantics",
+        "Typed overlap or transition data"
+      ],
+      "assumptions": [
+        "The joined context coverage resolves the four singleton atoms",
+        "The proposed product-site comparison is E_res equivalent to E_legacy^4"
+      ],
+      "dependencies": [
+        "THM-NT2-JOIN-DISCRETE-CONTEXT",
+        "THM-NT2-PRODUCT-SITE-BACKWARD-COMPATIBILITY"
+      ],
+      "review_state": "UNASSESSED",
+      "resolution_status": "OPEN",
+      "admission_ring": 4,
+      "acceptance_criteria": [
+        "A single conservative successor contract is selected without asserting unproved equivalences",
+        "The selected contract has typed definitions and explicit coherence obligations",
+        "Any claimed coherence theorem has a schema-valid theorem record and reviewable proof artifact",
+        "The four-independent-channel limitation remains explicit unless cross-context coupling is proved"
+      ],
+      "evidence_artifacts": [],
+      "claim_boundary": "The current finite model is a reference construction. It is not licensed as the final substantive Noetic Topos 2.0 semantics.",
+      "reviewers": []
+    }
+  ]
+}

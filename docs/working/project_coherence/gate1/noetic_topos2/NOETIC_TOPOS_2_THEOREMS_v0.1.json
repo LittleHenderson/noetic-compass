@@ -1,0 +1,280 @@
+{
+  "schema_version": "noetic_topos2.theorem_ledger.v0.1",
+  "record_schema": "../../THEOREM_RECORD.schema.json",
+  "document_status": "DRAFT / GATE 1 RESEARCH CANDIDATE / NOT LICENSED",
+  "as_of": "2026-08-04",
+  "records": [
+    {
+      "id": "THM-NT2-MARKED-COVERAGE",
+      "version": "0.1",
+      "title": "Transverse marked context coverages generate Grothendieck topologies",
+      "statement_kind": "THEOREM",
+      "statement": "On the powerset poset L=P({0,1}x{0,1}), the ACBE and RPM coordinate-partition families, together with the null cover of the empty context, are pullback-stable bases whose generated sieves define Grothendieck topologies J_A and J_R. Parallel immutable mark records preserve cover kind, source authority, evidence references, and pullback ancestry even when the generated unmarked families coincide.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-1",
+        "SOURCE_VERIFICATION_v0.1.json"
+      ],
+      "object_types": [
+        "Finite powerset poset L",
+        "Marked covering families",
+        "Grothendieck topologies J_A and J_R"
+      ],
+      "assumptions": [
+        "Arrows in L are inclusions",
+        "Pullbacks are intersections",
+        "Each marked family at V is {V intersect B_0 -> V, V intersect B_1 -> V}",
+        "The empty family covers the empty context"
+      ],
+      "dependencies": [],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "The topology theorem is mathematical; the hash-stable provenance behavior is an executable serialization invariant. Neither is evidence that either marking measures an empirical property.",
+      "proof_artifacts": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-1",
+        "src/noetic_topos2/finite_site.py"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-NONTRIVIAL-GLOBAL-COVERS",
+      "version": "0.1",
+      "title": "Neither marked global generator contains an identity",
+      "statement_kind": "THEOREM",
+      "statement": "At the four-atom global context, both pieces of the ACBE generator and both pieces of the RPM generator are proper subcontexts. Their generated sieves are nonmaximal.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-1",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "object_types": [
+        "Global context",
+        "ACBE generator",
+        "RPM generator",
+        "Generated sieves"
+      ],
+      "assumptions": [
+        "The context contains all four atoms",
+        "Both coordinate blocks are nonempty and proper"
+      ],
+      "dependencies": [
+        "THM-NT2-MARKED-COVERAGE"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "Nonmaximality repairs the inherited formal collapse; it does not establish semantic correctness of the labels.",
+      "proof_artifacts": [
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-SUBCANONICAL-CONTEXT-FACTOR",
+      "version": "0.1",
+      "title": "The two marked context topologies are subcanonical",
+      "statement_kind": "THEOREM",
+      "statement": "Every representable presheaf on L satisfies the ACBE and RPM generating-cover sheaf conditions, so both generated topologies on the context factor are subcanonical.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-2",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "object_types": [
+        "Representable presheaves on L",
+        "Generated context topologies J_A and J_R"
+      ],
+      "assumptions": [
+        "Representables are evaluated on the inclusion poset",
+        "Each marked cover is jointly exhaustive by union"
+      ],
+      "dependencies": [
+        "THM-NT2-MARKED-COVERAGE"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "This applies to the context factor L only. It does not make the inherited jointly-surjective topology on Noetica subcanonical.",
+      "proof_artifacts": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-2",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-DISTINCT-MODALITIES",
+      "version": "0.1",
+      "title": "ACBE and RPM sheafification modalities are distinct and non-identity",
+      "statement_kind": "THEOREM",
+      "statement": "There is an explicit finite presheaf F_A that is a J_A-sheaf but not a J_R-sheaf, and a symmetric F_R that is a J_R-sheaf but not a J_A-sheaf. Therefore the two reflective sheaf subcategories and their sheafification modalities are distinct on PSh(L). External product with a representable yC_0 lifts the witnesses to the ambient successor topos PSh(C x L), so neither ambient modality is the identity.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-3",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "object_types": [
+        "Finite presheaves F_A and F_R",
+        "Reflective sheaf subcategories",
+        "Sheafification modalities",
+        "Ambient presheaf topos PSh(C x L)"
+      ],
+      "assumptions": [
+        "F_A assigns a bit to every complete ACBE block contained in a context",
+        "F_R is defined symmetrically for RPM blocks"
+      ],
+      "dependencies": [
+        "THM-NT2-MARKED-COVERAGE",
+        "THM-NT2-NONTRIVIAL-GLOBAL-COVERS"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "No commutation or noncommutation claim is made in this version.",
+      "proof_artifacts": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-3",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-RESOLVED-MODALITIES-IDENTITY",
+      "version": "0.1",
+      "title": "The marked modalities restrict to identity on the joined resolved subtopos",
+      "statement_kind": "THEOREM",
+      "statement": "Every object sheaf for J_A join J_R is separately a J_A-sheaf and a J_R-sheaf. Consequently both sheafification reflectors restrict to identity on the fully resolved subtopos E_res; their proved nontriviality applies to the ambient presheaf topos.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#modalities-and-markings"
+      ],
+      "object_types": [
+        "Joined resolved subtopos E_res",
+        "Sheafification reflectors"
+      ],
+      "assumptions": [
+        "E_res is the sheaf subcategory for a topology finer than both J_A and J_R",
+        "Sheafification is the reflector onto its sheaf subcategory"
+      ],
+      "dependencies": [
+        "THM-NT2-DISTINCT-MODALITIES"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "The successor is a structured ambient modal package with a resolved subtopos; it is not the resolved subtopos mislabeled as carrying nontrivial ACBE/RPM modalities.",
+      "proof_artifacts": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#modalities-and-markings"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-JOIN-DISCRETE-CONTEXT",
+      "version": "0.1",
+      "title": "The join of the two context topologies resolves all four atoms",
+      "statement_kind": "THEOREM",
+      "statement": "The common refinement of the ACBE and RPM partitions is the four-singleton partition. Consequently their joined coverage enforces ordinary gluing over the four atomic contexts; on the finite context factor it generates the union topology.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-4",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "object_types": [
+        "Coordinate partitions of L",
+        "Joined context topology"
+      ],
+      "assumptions": [
+        "ACBE partitions by the first coordinate",
+        "RPM partitions by the second coordinate"
+      ],
+      "dependencies": [
+        "THM-NT2-MARKED-COVERAGE"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "This is a structural gluing result for Set-valued context data, not a probabilistic marginal-extension theorem.",
+      "proof_artifacts": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#theorem-nt2-4",
+        "FINITE_MODEL_CERTIFICATE_v0.1.json"
+      ],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-PRODUCT-SITE-BACKWARD-COMPATIBILITY",
+      "version": "0.1",
+      "title": "Legacy-to-v2 product-site round trip",
+      "statement_kind": "CONJECTURE",
+      "statement": "For E=Sh(Noetica,J_legacy), the proposed product-site comparison is intended to identify the resolved subtopos E_res with four marked E channels. A legacy object is placed in a designated neutral channel and terminal objects in the other channels; categorical evaluation at the neutral channel must yield a specified natural isomorphism ev_00 o iota ~= Id_E, while the separate canonical serialization must preserve registered identifiers and hashes by strict equality.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#backward-compatibility-obligation"
+      ],
+      "object_types": [
+        "Legacy sheaf topos E",
+        "Resolved subtopos E_res",
+        "Embedding and evaluation functors",
+        "Canonical serialized records"
+      ],
+      "assumptions": [
+        "The product-site comparison equivalence is established",
+        "A neutral context atom is fixed in the release registry",
+        "Bare legacy site objects are sheafified before marking when J_legacy is not subcanonical"
+      ],
+      "dependencies": [
+        "THM-NT2-JOIN-DISCRETE-CONTEXT"
+      ],
+      "review_state": "UNASSESSED",
+      "migration_disposition": "UNASSESSED",
+      "proof_status": "PROOF_REQUIRED",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "Backward compatibility remains a Gate 1 proof and implementation obligation, not a completed theorem. If proved, the resolved context factor is four independent legacy channels and does not by itself provide cross-channel semantics.",
+      "proof_artifacts": [],
+      "reviewers": []
+    },
+    {
+      "id": "THM-NT2-MODALITY-COMPOSITION",
+      "version": "0.2",
+      "title": "Composition law for ACBE and RPM modalities",
+      "statement_kind": "THEOREM",
+      "statement": "On the exact finite context presheaf category PSh(L,Set), the explicit ACBE and RPM associated-sheaf reflectors commute up to a unit-compatible canonical natural isomorphism, and either composite is naturally isomorphic to sheafification for the joined atomic topology: M_A M_R ~= M_atom ~= M_R M_A and J_atom = J_A join J_R.",
+      "source_refs": [
+        "NOETIC_TOPOS_2_SPEC_v0.1.md#modalities-and-markings",
+        "modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md"
+      ],
+      "object_types": [
+        "Sheafification reflectors on PSh(L,Set)",
+        "Natural isomorphisms",
+        "Finite Grothendieck topologies"
+      ],
+      "assumptions": [
+        "L is the powerset inclusion category on four atoms",
+        "ACBE and RPM are the stated transverse two-block partitions",
+        "The null family covers the empty context",
+        "Presheaves and sheaves are ordinary small Set-valued functors in a fixed universe"
+      ],
+      "dependencies": [
+        "THM-NT2-DISTINCT-MODALITIES"
+      ],
+      "review_state": "IN_REVIEW",
+      "migration_disposition": "IN_REVIEW",
+      "proof_status": "INFORMAL_PROOF_PRESENT",
+      "novelty_status": "NOVELTY_UNASSESSED",
+      "admission_ring": 4,
+      "claim_boundary": "This theorem is scoped to PSh(L,Set). The lift to PSh(C x L), coherence in the C coordinate, interaction with observational covers, proof-assistant verification, and independent category-theory review remain OPEN.",
+      "proof_artifacts": [
+        "modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
+        "modality_composition/MODALITY_COMPOSITION_CERTIFICATE_v0.1.json",
+        "modality_composition/verify_modality_composition.py"
+      ],
+      "reviewers": [
+        "Project Coherence internal finite-context proof lane"
+      ]
+    }
+  ]
+}

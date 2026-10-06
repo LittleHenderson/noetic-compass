@@ -12,6 +12,7 @@ import pytest
 
 from api.config import settings
 from api.middleware.auth import create_token
+from api.services import cas_harness_fleet_executor as fleet_executor
 from api.services.cas_harness_distributed_audits import reset_distributed_audits_for_tests
 from api.services.cas_harness_fleet_executor import (
     build_evidence_fragment_ref,
@@ -22,6 +23,11 @@ from api.services.cas_harness_merged_evidence_packets import (
     load_merged_fleet_evidence_packet_payload,
     reset_merged_fleet_evidence_packets_for_tests,
 )
+
+
+MODEL_REVISION = "a" * 40
+MODEL_ARTIFACT_MANIFEST_PATH = "/workspace/model-artifacts.json"
+MODEL_ARTIFACT_MANIFEST_SHA256 = "b" * 64
 
 
 def setup_function() -> None:
@@ -62,6 +68,22 @@ def _scale_payload(parameter_count_b: int = 20, num_layers: int = 8, **overrides
         "accept_audit_data_capture": True,
     }
     payload.update(overrides)
+    payload.setdefault(
+        "provenance",
+        {
+            "model_id": payload["model_id"],
+            "source_uri": f"https://models.example.test/{payload['model_id']}",
+            "license_id": "apache-2.0",
+            "revision": MODEL_REVISION,
+            "weight_files": [
+                {
+                    "path": "model.safetensors",
+                    "sha256": "c" * 64,
+                    "size_bytes": 1,
+                }
+            ],
+        },
+    )
     return payload
 
 
@@ -116,6 +138,7 @@ def _fragment_ref_for(
     *,
     produced_outputs: list[str] | None = None,
     evidence_packet_fragment_payload: dict | None = None,
+    execution_mode: str | None = None,
 ) -> str:
     produced = produced_outputs or job["expected_outputs"]
     return build_evidence_fragment_ref(
@@ -129,6 +152,81 @@ def _fragment_ref_for(
         expected_outputs=job["expected_outputs"],
         produced_outputs=produced,
         evidence_packet_fragment_payload=evidence_packet_fragment_payload,
+        execution_mode=execution_mode,
+    )
+
+
+def _bound_prepare_payload() -> dict[str, str]:
+    return {
+        "model_revision": MODEL_REVISION,
+        "model_artifact_manifest_path": MODEL_ARTIFACT_MANIFEST_PATH,
+        "model_artifact_manifest_sha256": MODEL_ARTIFACT_MANIFEST_SHA256,
+    }
+
+
+def _real_model_attestation(
+    audit: dict,
+    job: dict,
+    *,
+    extra: dict | None = None,
+) -> dict:
+    artifacts = [
+        {"path": "config.json", "sha256": "d" * 64, "byte_count": 1}
+    ]
+    artifact_set_sha256 = hashlib.sha256(
+        json.dumps(
+            artifacts,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    payload = dict(extra or {})
+    payload.update(
+        {
+            "status": "real_model_forward_completed",
+            "audit_id": audit["audit_id"],
+            "job_id": job["job_id"],
+            "worker_id": job["assigned_worker_id"],
+            "model_id": audit["plan"]["model_id"],
+            "model_revision": MODEL_REVISION,
+            "shard_id": job["shard_id"],
+            "layer_start": job["layer_start"],
+            "layer_end": job["layer_end"],
+            "model_info": {
+                "artifact_identity": {
+                    "manifest_path": MODEL_ARTIFACT_MANIFEST_PATH,
+                    "manifest_sha256": MODEL_ARTIFACT_MANIFEST_SHA256,
+                    "artifact_count": len(artifacts),
+                    "artifact_set_sha256": artifact_set_sha256,
+                    "artifacts": artifacts,
+                    "all_artifacts_hash_verified": True,
+                    "post_load_reverified": True,
+                    "local_files_only": True,
+                    "trust_remote_code": False,
+                    "use_safetensors": True,
+                }
+            },
+        }
+    )
+    return payload
+
+
+def _bound_fragment(
+    audit: dict,
+    job: dict,
+    *,
+    extra: dict | None = None,
+) -> tuple[str, dict]:
+    evidence_payload = _real_model_attestation(audit, job, extra=extra)
+    return (
+        _fragment_ref_for(
+            audit,
+            job,
+            evidence_packet_fragment_payload=evidence_payload,
+            execution_mode="external_probe_command",
+        ),
+        evidence_payload,
     )
 
 
@@ -259,6 +357,7 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
 
     prepared = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     assert prepared.status_code == 200
@@ -280,7 +379,12 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     leased_job = leased.json()
     assert leased_job["status"] == "leased"
     assert leased_job["lease_token"]
-    fragment_ref = _fragment_ref_for(audit, leased_job)
+    assert leased_job["model_id"] == audit["plan"]["model_id"]
+    assert leased_job["model_revision"] == MODEL_REVISION
+    assert leased_job["model_artifact_manifest_path"] == MODEL_ARTIFACT_MANIFEST_PATH
+    assert leased_job["model_artifact_manifest_sha256"] == MODEL_ARTIFACT_MANIFEST_SHA256
+    assert leased_job["execution_mode"] == "external_probe_command"
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased_job)
 
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased_job['job_id']}/receipt",
@@ -289,6 +393,8 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
             "lease_token": leased_job["lease_token"],
             "produced_outputs": leased_job["expected_outputs"],
             "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -392,6 +498,169 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     )
 
 
+def test_bound_prepare_is_idempotent_and_rejects_provenance_or_digest_drift(
+    client,
+    auth_headers,
+):
+    audit = _create_dispatched_audit(
+        client,
+        auth_headers,
+        parameter_count_b=1,
+        num_layers=1,
+    )
+
+    mismatched_revision = {
+        **_bound_prepare_payload(),
+        "model_revision": "e" * 40,
+    }
+    rejected_revision = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=mismatched_revision,
+        headers=auth_headers,
+    )
+    assert rejected_revision.status_code == 409
+    assert "provenance revision" in rejected_revision.text
+
+    first = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
+        headers=auth_headers,
+    )
+    second = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
+        headers=auth_headers,
+    )
+    assert first.status_code == second.status_code == 200
+
+    drifted_digest = {
+        **_bound_prepare_payload(),
+        "model_artifact_manifest_sha256": "f" * 64,
+    }
+    rejected_digest = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=drifted_digest,
+        headers=auth_headers,
+    )
+    assert rejected_digest.status_code == 409
+    assert "different model artifact identity" in rejected_digest.text
+
+
+def test_mutated_in_memory_model_attestation_revokes_verifier_readiness(
+    client,
+    auth_headers,
+):
+    audit = _create_dispatched_audit(
+        client,
+        auth_headers,
+        parameter_count_b=1,
+        num_layers=1,
+    )
+    assignment = audit["worker_evidence"][0]
+    _register_worker(
+        client,
+        auth_headers,
+        assignment,
+        model_id=audit["plan"]["model_id"],
+    )
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+    assert receipt.json()["verifier_gate_status"] == "ready_for_verifier"
+
+    run = fleet_executor.get_fleet_run(audit["audit_id"])
+    assert run is not None
+    payload = run.jobs[0].evidence_packet_fragment_payload
+    assert payload is not None
+    payload["model_info"]["artifact_identity"]["post_load_reverified"] = False
+
+    refreshed = fleet_executor.get_fleet_run(audit["audit_id"])
+    assert refreshed is not None
+    assert refreshed.verifier_gate_status == "blocked_unattested_model"
+    assert refreshed.to_dict()["readiness"]["status"] == "blocked"
+
+    merge = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    )
+    assert merge.status_code == 409
+    assert "unattested model jobs" in merge.text
+
+
+def test_bound_receipt_rejects_nonexact_real_model_completion_status(
+    client,
+    auth_headers,
+):
+    audit = _create_dispatched_audit(
+        client,
+        auth_headers,
+        parameter_count_b=1,
+        num_layers=1,
+    )
+    assignment = audit["worker_evidence"][0]
+    _register_worker(
+        client,
+        auth_headers,
+        assignment,
+        model_id=audit["plan"]["model_id"],
+    )
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    evidence_payload = _real_model_attestation(audit, leased)
+    evidence_payload["status"] = "real_model_forward_skipped"
+    fragment_ref = _fragment_ref_for(
+        audit,
+        leased,
+        evidence_packet_fragment_payload=evidence_payload,
+        execution_mode="external_probe_command",
+    )
+
+    rejected = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
+        },
+        headers=auth_headers,
+    )
+
+    assert rejected.status_code == 409
+    assert "status=real_model_forward_completed" in rejected.text
+
+
 def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_headers, monkeypatch, tmp_path):
     monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
     monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "local")
@@ -401,6 +670,7 @@ def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -408,13 +678,16 @@ def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -464,6 +737,7 @@ def test_fleet_packet_s3_anchor_rereads_object_during_verify(client, auth_header
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -471,13 +745,16 @@ def test_fleet_packet_s3_anchor_rereads_object_during_verify(client, auth_header
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -520,6 +797,7 @@ def test_s3_anchor_verify_detects_remote_object_tampering(client, auth_headers, 
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -527,13 +805,16 @@ def test_s3_anchor_verify_detects_remote_object_tampering(client, auth_headers, 
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -573,6 +854,7 @@ def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tm
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -580,13 +862,16 @@ def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tm
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -709,6 +994,7 @@ def test_s3_anchor_object_lock_metadata_missing_fails_verify(client, auth_header
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -716,13 +1002,16 @@ def test_s3_anchor_object_lock_metadata_missing_fails_verify(client, auth_header
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -762,6 +1051,7 @@ def test_s3_anchor_partial_object_lock_config_fails_loudly(client, auth_headers,
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -769,13 +1059,16 @@ def test_s3_anchor_partial_object_lock_config_fails_loudly(client, auth_headers,
         json={"worker_id": worker_assignment["worker_id"]},
         headers=auth_headers,
     ).json()
+    fragment_ref, evidence_payload = _bound_fragment(audit, leased)
     receipt = client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
         json={
             "worker_id": worker_assignment["worker_id"],
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
-            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": evidence_payload,
+            "execution_mode": "external_probe_command",
         },
         headers=auth_headers,
     )
@@ -830,6 +1123,7 @@ def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
     client.post(
         f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        json=_bound_prepare_payload(),
         headers=auth_headers,
     )
     leased = client.post(
@@ -838,10 +1132,10 @@ def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(
         headers=auth_headers,
     ).json()
     verifier_fragment = _stage19_stage20_verifier_fragment()
-    fragment_ref = _fragment_ref_for(
+    fragment_ref, verifier_fragment = _bound_fragment(
         audit,
         leased,
-        evidence_packet_fragment_payload=verifier_fragment,
+        extra=verifier_fragment,
     )
 
     receipt = client.post(
@@ -851,8 +1145,9 @@ def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(
             "lease_token": leased["lease_token"],
             "produced_outputs": leased["expected_outputs"],
             "evidence_packet_fragment_ref": fragment_ref,
-            "evidence_packet_fragment_payload": verifier_fragment,
-        },
+                "evidence_packet_fragment_payload": verifier_fragment,
+                "execution_mode": "external_probe_command",
+            },
         headers=auth_headers,
     )
     assert receipt.status_code == 200

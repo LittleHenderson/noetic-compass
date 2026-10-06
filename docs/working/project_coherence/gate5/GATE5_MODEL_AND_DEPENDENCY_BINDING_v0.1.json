@@ -1,0 +1,65 @@
+{
+  "schema_version": "project_coherence.gate5_model_and_dependency_binding.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "experimental_execution_status": "NOT_STARTED",
+  "model_binding": {
+    "repository_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "weights_filename": "model.safetensors",
+    "weights_bytes": 374998696,
+    "weights_sha256": "29D2E457A664E41C12C735F20A36DC0956A665F614A54CE5DB21A32E75965270",
+    "loader_policy": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+    "local_cache_byte_verification": "MATCHED_WITHOUT_MODEL_EXECUTION",
+    "in_memory_tensor_identity": "NOT_ESTABLISHED",
+    "artifact_signature_trust_root": "NOT_ESTABLISHED",
+    "execution_receipt": "NOT_CREATED"
+  },
+  "container_binding": {
+    "declared_base_image": "pytorch/pytorch:2.4.0-cuda12.1-cudnn9-runtime",
+    "base_image_digest": null,
+    "built_container_digest": null,
+    "container_digest_bound": false,
+    "hermeticity_status": "NOT_ESTABLISHED"
+  },
+  "dependency_security_hold": {
+    "status": "HELD",
+    "reason_id": "G5-SEC-TRANSFORMERS-CVE-2026-4372",
+    "observed_at_date": "2026-08-04",
+    "affected_package": "transformers",
+    "repository_pin": "4.46.3",
+    "affected_requirement": "transformers==4.46.3",
+    "advisory_id": "CVE-2026-4372",
+    "github_advisory_id": "GHSA-29pf-2h5f-8g72",
+    "affected_range": "<5.3.0",
+    "minimum_fixed_version_reported": "5.3.0",
+    "latest_pypi_release_observed": "5.14.1",
+    "advisory_source": "https://osv.dev/vulnerability/CVE-2026-4372",
+    "advisory_json_source": "https://api.osv.dev/v1/vulns/CVE-2026-4372",
+    "fixed_release_source": "https://pypi.org/project/transformers/5.3.0/",
+    "latest_release_source": "https://pypi.org/project/transformers/",
+    "patched_environment_revalidated": false,
+    "live_execution_authorized": false,
+    "hold_reason": "The declared live-worker dependency is inside the reported affected range. No live, hosted, or claim-bearing Harness v2 execution is admissible until a non-affected exact dependency set and content-addressed container are independently revalidated against the Pythia loader and hook contract.",
+    "hold_release_requirements": [
+      "Pin a non-affected Transformers distribution by exact package artifact digest.",
+      "Bind all transitive Python and native dependencies.",
+      "Revalidate the exact Pythia revision, weights digest, architecture, tokenizer, activated-intermediate hook, RNG pairing, and output comparison in the patched environment.",
+      "Bind the base image and built container by immutable digest.",
+      "Run independent vulnerability and regression review before any model execution authorization."
+    ]
+  },
+  "claim_boundary": {
+    "identity_evidence_effect": "STRUCTURAL_ONLY",
+    "scientific_effect": "NONE",
+    "canon_effect": "NONE",
+    "product_claim_effect": "NONE",
+    "license_effect": "NONE",
+    "disclosure_effect": "NONE"
+  }
+}

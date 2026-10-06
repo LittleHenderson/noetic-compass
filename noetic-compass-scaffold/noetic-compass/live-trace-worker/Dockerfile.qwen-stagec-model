@@ -1,0 +1,60 @@
+# syntax=docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+# Build-only Stage C Qwen model layer.
+#
+# PARENT_IMAGE has no default on purpose.  The owner-triggered workflow must
+# supply the exact clean worker image that it built from the same Git commit.
+# This layer is the only Stage C layer allowed build-time network access.  It
+# acquires the exact public Qwen revision, verifies all seven file identities,
+# stores regular files (never Hugging Face cache symlinks), freezes them
+# root-owned/read-only, and restores the unprivileged worker user.
+
+ARG PARENT_IMAGE
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG SOURCE_COMMIT=UNBOUND
+
+RUN test "${#SOURCE_COMMIT}" -eq 40 \
+    && case "$SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+
+# The worker root was frozen by the clean base.  Reopen only the parent cache
+# directories required to create the additive Qwen tree.  The bind mount keeps
+# the network-capable helper out of the image filesystem.  The final Stage C
+# batch layer is built separately with --network=none.
+RUN --mount=type=bind,source=scripts/fetch_qwen_stagec_model.py,target=/tmp/fetch_qwen_stagec_model.py,readonly \
+    chmod 0755 /worker /worker/.cache /worker/.cache/huggingface /worker/.cache/huggingface/hub \
+    && python -B /tmp/fetch_qwen_stagec_model.py \
+         --snapshot /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775
+
+RUN chown -R 0:0 /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct \
+    && find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type d -exec chmod 0555 '{}' + \
+    && find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type f -exec chmod 0444 '{}' + \
+    && test "$(find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type f | wc -l)" -eq 7 \
+    && test "$(find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type l | wc -l)" -eq 0 \
+    && chmod 0555 /worker/.cache/huggingface/hub /worker/.cache/huggingface /worker/.cache /worker
+
+ENV HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    TORCH_DISABLE_NATIVE_JIT=1 \
+    ATLAS_WORKER_PROFILE=production \
+    ATLAS_WORKER_MODEL=qwen2.5-0.5b-instruct \
+    QWEN_05B_INSTRUCT_REVISION=7ae557604adf67be50417f59c2c2f167def9a775
+
+LABEL org.opencontainers.image.revision="${SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-stagec-qwen05b-model-v0.1" \
+      io.cas-harness.claim-status="DESIGN_ONLY" \
+      io.cas-harness.stagec.model-id="Qwen/Qwen2.5-0.5B-Instruct" \
+      io.cas-harness.stagec.model-revision="7ae557604adf67be50417f59c2c2f167def9a775" \
+      io.cas-harness.stagec.weights-sha256="fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe" \
+      io.cas-harness.stagec.weights-bytes="988097824" \
+      io.cas-harness.stagec.artifact-count="7" \
+      io.cas-harness.stagec.model-files="REGULAR_ROOT_OWNED_READ_ONLY" \
+      io.cas-harness.stagec.network="BUILD_ACQUISITION_ONLY_RUNTIME_EXTERNAL_GUARD_REQUIRED" \
+      io.cas-harness.gate5-status="OPEN" \
+      io.cas-harness.experiment-status="NOT_STARTED" \
+      io.cas-harness.license-status="NOT_LICENSED" \
+      io.cas-harness.disclosure-status="HELD"
+
+USER 10001:10001
+RUN test ! -w /worker/.cache/huggingface \
+    && test ! -w /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775/model.safetensors

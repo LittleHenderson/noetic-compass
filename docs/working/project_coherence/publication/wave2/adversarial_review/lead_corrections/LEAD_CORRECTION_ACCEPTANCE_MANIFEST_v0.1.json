@@ -1,0 +1,86 @@
+{
+  "schema_version": "project_coherence.publication.wave2.lead_correction_acceptance.manifest.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "reviewed_head": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+  "branch": "codex/project-coherence-review-lead-corrections",
+  "review_commit": null,
+  "manifest_self_hash": null,
+  "self_hash_policy": "NON_SELF_HASHING: this manifest intentionally excludes its own path and digest. Git binds the manifest bytes with the review commit.",
+  "artifact_count": 3,
+  "package_file_count_including_manifest": 4,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/lead_corrections/FINDING_DISPOSITION_MATRIX_v0.1.json",
+      "bytes": 15875,
+      "sha256": "AD7FF38EC5F8A39EFE39B78E941AA1016009D984D9231B0EF3D0CD1CF42F1293",
+      "media_type": "application/json",
+      "role": "thirteen_item_exact_acceptance_disposition_matrix"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/lead_corrections/LEAD_CORRECTION_ACCEPTANCE_REPORT_v0.1.md",
+      "bytes": 9810,
+      "sha256": "4A91D86D3959D93EFED240E4217158661A88E60C32FB71422A189901DA6D1ECC",
+      "media_type": "text/markdown",
+      "role": "concise_source_bound_lead_correction_acceptance_report"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/lead_corrections/REVIEW_SOURCE_INVENTORY_v0.1.json",
+      "bytes": 12783,
+      "sha256": "511A37577B74E01D19D5C9F17781C8BE2E8CDF90C71150BB0224853097D42BE2",
+      "media_type": "application/json",
+      "role": "exact_correction_review_upstream_and_verifier_source_inventory"
+    }
+  ],
+  "correction_commits": [
+    "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f",
+    "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+    "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+  ],
+  "acceptance_summary": {
+    "formal_items": 3,
+    "category_items": 4,
+    "engineering_items": 6,
+    "total_items": 13,
+    "accepted_as_text_correction": 13,
+    "partial_retain_open": 0,
+    "failed": 0,
+    "upstream_obligations_closed": 0,
+    "claim_promotions": 0
+  },
+  "verification_summary": {
+    "corrected_wave1_manifest_artifacts": "formal 8 / category 8 / engineering 7 / PASS",
+    "historical_review_manifest_artifacts": "formal 6 / category 5 / engineering 5 / PASS",
+    "json_duplicate_key_rejection": "PASS",
+    "formal_claim_evidence": "20 / 20",
+    "category_claim_evidence": "20 / 20 exactly once",
+    "category_lean_seed_claim_edges": 0,
+    "engineering_claim_ids": "31 / 31 unique",
+    "publication_program_verifier": "PASS / 50 JSON / 8 manifests / 53 artifacts / 141 records / 42 notation-type records / 8 tracks / 10 obligation clusters / 340 Gate 5 snapshot artifacts",
+    "gate1": "PASS / 23 artifacts / 6 subordinate receipts / 16 Lean theorem audits / status OPEN",
+    "gate4": "PASS / 54 artifacts / 208 test methods / 53 criteria / 20 open / status OPEN",
+    "formal_obligations": "24 / 24 OPEN",
+    "category_obligations": "23 / 23 OPEN",
+    "engineering_obligations": "27 / 27 OPEN OR NOT LICENSED"
+  },
+  "validation_invariants": [
+    "Every artifact path is repository-relative, POSIX-normalized, unique, and confined to this lead-correction acceptance lane.",
+    "Every artifact contains the exact status DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD.",
+    "Every listed SHA-256 is uppercase hexadecimal over exact file bytes and every byte count is exact.",
+    "The manifest path is absent from artifacts and manifest_self_hash is null.",
+    "Every JSON artifact parses with duplicate-key rejection and every declared count matches its array length.",
+    "Every one of the thirteen required review IDs appears exactly once and uses an allowed disposition.",
+    "No review item is promoted beyond a publication-text correction.",
+    "No upstream obligation, Gate, canon, product, license, disclosure, theorem, proof, citation program, implementation, experiment, or external review is closed."
+  ],
+  "experiment_status": "NO EXPERIMENT EXECUTED",
+  "gpu_or_runpod_use": "NONE",
+  "external_specialist_review": "OPEN",
+  "closure_statement": "This package is a bounded internal acceptance receipt for publication wording. It is not a theorem admission, proof receipt, upstream specification repair, experiment, scientific result, safety case, clinical or regulatory determination, product verdict, canon decision, license, disclosure approval, authorship record, submission approval, or peer-review acceptance."
+}

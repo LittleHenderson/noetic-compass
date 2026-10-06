@@ -1,0 +1,62 @@
+{
+  "schema_version": "cas_harness_pythia160m_environment_manifest.v4",
+  "status": "PROSPECTIVE / STATICALLY_VERIFIED / RUN_NOT_AUTHORIZED",
+  "operating_system": "Windows",
+  "architecture": "AMD64",
+  "interpreter": {
+    "path": "C:\\Python314\\python.exe",
+    "byte_count": 106328,
+    "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+    "required_flags": [
+      "-I",
+      "-B"
+    ],
+    "shell": "none"
+  },
+  "package_root": {
+    "path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages",
+    "insertion": "Only after exact startup/lock/bootstrap validation; before receipt-gated executor entry; PYTHONPATH remains ignored."
+  },
+  "frameworks": {
+    "torch": {
+      "version": "2.11.0+cpu",
+      "entrypoint_relative_path": "torch\\__init__.py",
+      "entrypoint_byte_count": 110846,
+      "entrypoint_sha256": "9805fe98af34a65b1ab758c7909cc7b9906f40777257e513968545b19e319aa1"
+    },
+    "transformers": {
+      "version": "5.8.1",
+      "entrypoint_relative_path": "transformers\\__init__.py",
+      "entrypoint_byte_count": 40505,
+      "entrypoint_sha256": "29a3ec5ec169e4ed242bc5bebd8577b565b1609e4e75bbfb887c8c1072623172"
+    },
+    "tokenizers": {
+      "version": "0.22.2",
+      "entrypoint_relative_path": "tokenizers\\__init__.py",
+      "entrypoint_byte_count": 2739,
+      "entrypoint_sha256": "510d5e23458612433da9f1fe430b5009fb88ba90508ee4340d2397b32c319080"
+    },
+    "safetensors": {
+      "version": "0.7.0",
+      "entrypoint_relative_path": "safetensors\\__init__.py",
+      "entrypoint_byte_count": 204,
+      "entrypoint_sha256": "1d8639555b1bddbf9cc61641c21371e7764aa92201e0cd789c85cb4ce00cd567"
+    }
+  },
+  "model_snapshot": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "device": "cpu",
+    "dtype": "float32",
+    "local_files_only": true,
+    "trust_remote_code": false
+  },
+  "offline_environment": {
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "HF_DATASETS_OFFLINE": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "CUDA_VISIBLE_DEVICES": ""
+  },
+  "claim_boundary": "Static environment inventory only. No framework, tokenizer, or model was loaded by this preparation."
+}

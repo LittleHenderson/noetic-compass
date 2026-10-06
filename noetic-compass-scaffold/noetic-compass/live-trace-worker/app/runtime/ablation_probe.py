@@ -35,9 +35,26 @@ from typing import Any, Iterator
 
 from ..schemas.events import AblationControlEffectEvent, AblationEffectEvent
 from ..schemas.requests import AblationTargetRequest, CreateSessionRequest
+from .model_loader import (
+    ModelBinding,
+    active_model_binding,
+    require_pythia_runtime_model,
+)
 from .probe_runner import _get_pythia_layers, _softmax_margin
 
 logger = logging.getLogger(__name__)
+
+
+def _require_causal_ablation_binding(
+    model_binding: ModelBinding | None,
+) -> ModelBinding:
+    binding = model_binding or active_model_binding()
+    if not binding.single_unit_causal_ablation_supported:
+        raise RuntimeError(
+            "single-unit causal ablation is unavailable for selected model "
+            f"binding {binding.key!r}; refusing before any model forward"
+        )
+    return binding
 
 
 def ablation_requested(req: CreateSessionRequest) -> bool:
@@ -89,19 +106,17 @@ def _ablate_mlp_unit(
     layers = _get_pythia_layers(model)
     handles: list[Any] = []
     if layers is None or not (0 <= target.layer < min(n_layers, len(layers))):
-        logger.warning(
-            "ablation: target layer %d out of range (n_layers=%d) — no-op hook",
-            target.layer,
-            n_layers,
+        raise RuntimeError(
+            f"ablation target layer {target.layer} is unavailable for "
+            f"n_layers={n_layers}; refusing a no-op causal claim"
         )
-        yield
-        return
 
     mlp = getattr(layers[target.layer], "mlp", None)
     if mlp is None:
-        logger.warning("ablation: layer %d has no .mlp — no-op hook", target.layer)
-        yield
-        return
+        raise RuntimeError(
+            f"ablation target layer {target.layer} has no .mlp; refusing a "
+            "no-op causal claim"
+        )
 
     def _hook(_module: Any, _inputs: Any, output: Any) -> Any:
         try:
@@ -145,6 +160,8 @@ def run_real_ablation_effect(
     tokenizer: Any,
     n_layers: int,
     target: AblationTargetRequest,
+    *,
+    model_binding: ModelBinding | None = None,
 ) -> AblationEffectEvent:
     """Measure a single-target ablation effect on loaded weights.
 
@@ -152,13 +169,33 @@ def run_real_ablation_effect(
     ablated, then reports the measured deltas. The model is NOT mutated: the
     hook is attached only for the ablated pass and removed afterwards.
     """
+    binding = _require_causal_ablation_binding(model_binding)
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        # Authenticate the concrete family before tokenization/forward.  The
+        # target-specific code below separately checks the requested layer
+        # against both ``n_layers`` and the observed stack length.
+        expected_layers=1,
+    )
+
     import torch
 
     device = next(model.parameters()).device
     input_ids = tokenizer(req.prompt, return_tensors="pt").input_ids.to(device)
 
     with torch.no_grad():
-        baseline_logits = _last_token_logits(model, input_ids)
+        baseline_logits, width = _capture_target_mlp_width(
+            model,
+            n_layers,
+            target,
+            input_ids,
+        )
+        if width is None or not (0 <= int(target.unit) < width):
+            raise RuntimeError(
+                f"ablation target layer {target.layer} unit {target.unit} is "
+                "unavailable; refusing a no-op causal claim"
+            )
         baseline_vec = baseline_logits.float().detach().cpu().tolist()
         baseline_id = int(torch.argmax(baseline_logits).item())
 
@@ -255,6 +292,8 @@ def run_real_ablation_control(
     target: AblationTargetRequest,
     n_controls: int = 8,
     seed: int = 42,
+    *,
+    model_binding: ModelBinding | None = None,
 ) -> AblationControlEffectEvent:
     """Measure single-unit ablation selectivity vs random same-layer controls.
 
@@ -270,6 +309,13 @@ def run_real_ablation_control(
     with no numeric deltas — the matched control did not run, so no control
     proof is claimed.
     """
+    binding = _require_causal_ablation_binding(model_binding)
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        expected_layers=1,
+    )
+
     import numpy as np
     import torch
 
@@ -284,7 +330,11 @@ def run_real_ablation_control(
         baseline_id = int(torch.argmax(baseline_logits).item())
         baseline_top_logit = float(baseline_vec[baseline_id].item())
 
-        if width is None or width <= 1:
+        if (
+            width is None
+            or width <= 1
+            or not (0 <= int(target.unit) < width)
+        ):
             return demo_ablation_control(
                 target,
                 detail=(

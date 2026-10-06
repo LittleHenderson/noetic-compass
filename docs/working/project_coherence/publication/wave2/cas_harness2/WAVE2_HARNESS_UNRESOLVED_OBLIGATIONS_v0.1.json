@@ -1,0 +1,379 @@
+{
+  "schema_version": "project_coherence.publication.wave2.cas_harness2_unresolved_obligations.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "internal_cross_review": "OPEN",
+  "external_specialist_review": "OPEN",
+  "obligations": [
+    {
+      "id": "H2-OBL-001",
+      "category": "PUBLICATION_INTEGRATION",
+      "priority": "P0",
+      "status": "OPEN",
+      "obligation": "Reconcile this delta line by line with the existing Gate 5 specification, review matrix, adversarial review, charter, and shared registries without changing those upstream artifacts.",
+      "dependencies": [],
+      "closure_evidence": "Lead-editor review record naming exact package hashes and resolving every conflict or ambiguity.",
+      "prohibited_shortcut": "Treating draft creation or a clean diff as editorial acceptance."
+    },
+    {
+      "id": "H2-OBL-002",
+      "category": "PUBLICATION_INTEGRATION",
+      "priority": "P0",
+      "status": "OPEN",
+      "obligation": "Verify every internal source path, SHA-256, byte count, group aggregate, matrix reference, and citation identifier after final integration.",
+      "dependencies": ["H2-OBL-001"],
+      "closure_evidence": "Duplicate-safe machine validation and a clean integration-commit source inventory receipt.",
+      "prohibited_shortcut": "Assuming hashes remain valid after merge, rebase, formatting, or line-ending conversion."
+    },
+    {
+      "id": "H2-OBL-003",
+      "category": "FORMAL_BOUNDARY",
+      "priority": "P1",
+      "status": "OPEN",
+      "obligation": "Have the formal-math lead verify that CP-1 through CP-8 are described only as bounded executable control propositions and that no new theorem or proof is implied.",
+      "dependencies": ["H2-OBL-001"],
+      "closure_evidence": "Scoped review record over exact draft bytes and theorem-matrix entries.",
+      "prohibited_shortcut": "Calling a passing regression a theorem or mathematical proof."
+    },
+    {
+      "id": "H2-OBL-004",
+      "category": "CITATIONS",
+      "priority": "P1",
+      "status": "OPEN",
+      "obligation": "Independently review every external primary source, DOI, URL, date, version, and sentence-level use.",
+      "dependencies": ["H2-OBL-001"],
+      "closure_evidence": "Citation audit ledger signed or otherwise authenticated by a qualified independent reviewer.",
+      "prohibited_shortcut": "Using a citation's existence as evidence that CAS implements a standard or validates a hypothesis."
+    },
+    {
+      "id": "H2-OBL-005",
+      "category": "TRUSTED_ORDERING",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Select and implement a non-caller-selected trusted-time boundary for preregistration, execution, completion, outcome access, and review events.",
+      "dependencies": [],
+      "closure_evidence": "Exact protocol, trust-root identity, signature verification, clock policy, failure semantics, and independent replay receipt.",
+      "prohibited_shortcut": "Treating caller-declared UTC text, filesystem mtime, Git time, or local wall time as trusted."
+    },
+    {
+      "id": "H2-OBL-006",
+      "category": "TRUSTED_ORDERING",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Materialize durable append-only or WORM ordering for preregistration, amendments, execution authority, completion, outcome access, and packet publication.",
+      "dependencies": ["H2-OBL-005"],
+      "closure_evidence": "Exact-version write/readback receipts, retention policy, predecessor consistency, independent verification, and failure/ambiguity records.",
+      "prohibited_shortcut": "Calling a local hash chain, configuration target, stub, mutable object, or stored boolean WORM."
+    },
+    {
+      "id": "H2-OBL-007",
+      "category": "RUN_AUTHORITY",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Create unpredictable nonces, replay rejection, and atomic one-use run-authority consumption outside worker control.",
+      "dependencies": ["H2-OBL-005", "H2-OBL-006"],
+      "closure_evidence": "Adversarially tested authority service with atomic consumption, duplicate/replay rejection, crash recovery, and durable receipts.",
+      "prohibited_shortcut": "Caller-generated IDs, in-memory consumed flags, or retrying an ambiguous provider effect."
+    },
+    {
+      "id": "H2-OBL-008",
+      "category": "SELECTIVE_REPORTING",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Create a complete run/preregistration/packet registry that exposes abandoned, failed, duplicate, suppressed, and packetless runs.",
+      "dependencies": ["H2-OBL-006", "H2-OBL-007"],
+      "closure_evidence": "Durable total-index invariants, enumeration receipts, orphan recovery, and independent selective-reporting red team.",
+      "prohibited_shortcut": "Validating only the packet selected by the author."
+    },
+    {
+      "id": "H2-OBL-009",
+      "category": "IDENTITY_AND_AUTHENTICATION",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Authenticate executor and execution infrastructure through a non-caller-selected trust root with documented key custody and revocation.",
+      "dependencies": ["H2-OBL-007"],
+      "closure_evidence": "Verified identity, certificate or key lineage, authorization scope, revocation policy, and exact signed execution receipt.",
+      "prohibited_shortcut": "Trusting declared strings, account roles, email addresses, or self-signed receipts as independent identity."
+    },
+    {
+      "id": "H2-OBL-010",
+      "category": "IDENTITY_AND_INDEPENDENCE",
+      "priority": "P1",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Verify auditor, replication team, claim reviewer, and organizational independence, qualifications, affiliations, conflicts, and custody.",
+      "dependencies": ["H2-OBL-009"],
+      "closure_evidence": "Authenticated role and conflict records plus an independent governance review.",
+      "prohibited_shortcut": "Using normalized-distinct strings or separate process names as proof of independence."
+    },
+    {
+      "id": "H2-OBL-011",
+      "category": "JOINED_PROTOCOL",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Specify the exact worker-to-kernel transaction from run admission through packet verification.",
+      "dependencies": ["H2-OBL-005", "H2-OBL-006", "H2-OBL-007", "H2-OBL-009"],
+      "closure_evidence": "Versioned protocol schema, state machine, failure semantics, reference implementation, adversarial tests, and independent review.",
+      "prohibited_shortcut": "Manually combining worker logs and kernel objects after outcomes are known."
+    },
+    {
+      "id": "H2-OBL-012",
+      "category": "HERMETIC_RUNNER",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Execute from an independently controlled, content-bound, read-only source and dependency snapshot.",
+      "dependencies": ["H2-OBL-011"],
+      "closure_evidence": "Attested runner identity, exact source/container/model/data bindings, verified read-only mount, and before/after snapshot hashes.",
+      "prohibited_shortcut": "Calling a mutable local interpreter or ordinary container invocation hermetic."
+    },
+    {
+      "id": "H2-OBL-013",
+      "category": "HERMETIC_RUNNER",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Receipt the actual executed protocol/test node set in the same run as the pass/fail summary.",
+      "dependencies": ["H2-OBL-012"],
+      "closure_evidence": "One signed same-run receipt binding executed node IDs, outputs, return status, and environment identity.",
+      "prohibited_shortcut": "Combining collect-only IDs from one subprocess with a summary from another."
+    },
+    {
+      "id": "H2-OBL-014",
+      "category": "HERMETIC_RUNNER",
+      "priority": "P0",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Close hardlink, reparse-point, cache, bytecode, native-extension, startup-hook, path-injection, race, and before/after ABA substitution paths.",
+      "dependencies": ["H2-OBL-012"],
+      "closure_evidence": "Platform-specific hostile filesystem and loader audit with retained traces and independent reproduction.",
+      "prohibited_shortcut": "Relying only on repository symlink checks or a postflight hash."
+    },
+    {
+      "id": "H2-OBL-015",
+      "category": "SUPPLY_CHAIN_EVIDENCE",
+      "priority": "P0",
+      "status": "OPEN_SECURITY",
+      "obligation": "Retain and hash-bind raw build history, SPDX SBOM, SLSA provenance, scanner output, commands, tool versions, and verification results.",
+      "dependencies": [],
+      "closure_evidence": "Repository-replayable raw payload package with exact derivation and independent signature/trust verification.",
+      "prohibited_shortcut": "Keeping only self-reported digests or prose summaries."
+    },
+    {
+      "id": "H2-OBL-016",
+      "category": "DEPENDENCY_SECURITY",
+      "priority": "P0",
+      "status": "OPEN_SECURITY",
+      "obligation": "Resolve or explicitly disposition all seven current package-scan findings.",
+      "dependencies": ["H2-OBL-015"],
+      "closure_evidence": "Exact patched or risk-accepted artifact identities, rationale, compensating controls, rescans, and independent security review.",
+      "prohibited_shortcut": "Calling 0 critical and 0 high findings a scan PASS while medium/low findings remain unfixed."
+    },
+    {
+      "id": "H2-OBL-017",
+      "category": "DEPENDENCY_SECURITY",
+      "priority": "P0",
+      "status": "OPEN_SECURITY",
+      "obligation": "Complete and retain the direct image/filesystem security scan that is currently INCOMPLETE / PENDING.",
+      "dependencies": ["H2-OBL-015"],
+      "closure_evidence": "Complete raw scan report, tool/input identities, all findings, disposition, and reproducible command.",
+      "prohibited_shortcut": "Substituting the completed SBOM package scan for the incomplete direct scan."
+    },
+    {
+      "id": "H2-OBL-018",
+      "category": "INDEPENDENT_REPRODUCTION",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Independently rebuild and reproduce the exact candidate on separately controlled infrastructure.",
+      "dependencies": ["H2-OBL-015", "H2-OBL-016", "H2-OBL-017"],
+      "closure_evidence": "Clean-room source-to-image and local-control reproduction with exact digest comparison and discrepancy ledger.",
+      "prohibited_shortcut": "A second run by the same writer, host, credentials, or mutable cache."
+    },
+    {
+      "id": "H2-OBL-019",
+      "category": "GPU_NUMERICS",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Define and independently verify exact GPU, autocast/mixed-precision, eager/compiled-hook, multi-device, RNG, dtype, shape, device, finiteness, and repeatability semantics.",
+      "dependencies": ["H2-OBL-012", "H2-OBL-018"],
+      "closure_evidence": "Target-hardware protocol and independently reproduced receipts under the digest-bound environment.",
+      "prohibited_shortcut": "Using CPU fixtures or a model-load canary as GPU scientific evidence."
+    },
+    {
+      "id": "H2-OBL-020",
+      "category": "SEMANTIC_PROVENANCE",
+      "priority": "P1",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Define semantic artifact types, media-type rules, derivations, and cross-run identity for byte-different clones and relabeling.",
+      "dependencies": ["H2-OBL-011"],
+      "closure_evidence": "Versioned semantic registry, provenance mapping, collision tests, and independent adjudication procedure.",
+      "prohibited_shortcut": "Equating hash inequality with semantic difference or hash equality with honest labeling."
+    },
+    {
+      "id": "H2-OBL-021",
+      "category": "DOWNSTREAM_AUTHORITY",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Inventory every PacketAssessment consumer and prove that no assessment value can mint execution, product, publication, license, canon, safety, or disclosure authority.",
+      "dependencies": ["H2-OBL-011"],
+      "closure_evidence": "Admitted authorization policy, complete consumer map, negative capability tests, and independent review.",
+      "prohibited_shortcut": "Assuming conservative producer fields constrain unreviewed consumers."
+    },
+    {
+      "id": "H2-OBL-022",
+      "category": "DATA_RIGHTS_PRIVACY",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Verify rights, consent or lawful basis, retention, privacy, confidentiality, access, redistribution, and deletion obligations for every model, prompt, label, participant, customer, annotator, and provider artifact.",
+      "dependencies": ["H2-OBL-001"],
+      "closure_evidence": "Qualified legal/privacy review bound to exact data inventories and protocol hashes.",
+      "prohibited_shortcut": "Inferring data rights from local possession, a public URL, a model license label, or deidentification prose."
+    },
+    {
+      "id": "H2-OBL-023",
+      "category": "STATISTICAL_DESIGN",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Obtain independent review of the exact estimand, effect size, variance assumptions, grouping, multiplicity, attrition, power, thresholds, uncertainty, and stopping rule.",
+      "dependencies": ["H2-OBL-022"],
+      "closure_evidence": "Resolved statistical review record over exact preregistration and power-analysis bytes.",
+      "prohibited_shortcut": "Treating schema completeness or a power-analysis hash as statistical correctness."
+    },
+    {
+      "id": "H2-OBL-024",
+      "category": "CONTROLS_AND_FALSIFIERS",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Independently review matched-taxonomy, wrong-layer, clean-null, selectivity, baseline-stability, and claim-specific controls and falsifiers before execution.",
+      "dependencies": ["H2-OBL-023"],
+      "closure_evidence": "Resolved control-design record with exact operational definitions, thresholds, alternative explanations, and consequences.",
+      "prohibited_shortcut": "Assuming the three mandatory control names are sufficient for every hypothesis."
+    },
+    {
+      "id": "H2-OBL-025",
+      "category": "EXPERIMENT_AUTHORITY",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Obtain explicit, scoped, budgeted, private authority for one exact preregistered run only after every pre-execution gate closes.",
+      "dependencies": ["H2-OBL-007", "H2-OBL-009", "H2-OBL-011", "H2-OBL-018", "H2-OBL-019", "H2-OBL-022", "H2-OBL-023", "H2-OBL-024"],
+      "closure_evidence": "Exact signed authorization binding the run, budget, identities, window, hardware, data, and prohibited actions.",
+      "prohibited_shortcut": "Treating available compute, owner funding, a prior chat instruction, or a preflight as run authority."
+    },
+    {
+      "id": "H2-OBL-026",
+      "category": "JOINED_EXPERIMENT",
+      "priority": "P0",
+      "status": "NOT_STARTED",
+      "obligation": "Execute one exact-revision joined protocol without altering the frozen design and retain every success, failure, abort, deviation, control, and raw outcome.",
+      "dependencies": ["H2-OBL-025"],
+      "closure_evidence": "Complete authenticated execution receipt, durable outcome-access event, total run-registry entry, and Evidence Packet v2.",
+      "prohibited_shortcut": "Manual reconstruction, rerun after unblinding, suppressed failure, or partial packet."
+    },
+    {
+      "id": "H2-OBL-027",
+      "category": "INDEPENDENT_NUMERICAL_AUDIT",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Recompute every split count, metric, threshold, uncertainty result, control, falsifier, and summary using an independent implementation.",
+      "dependencies": ["H2-OBL-026"],
+      "closure_evidence": "Authenticated clean-room audit artifacts and resolved discrepancy ledger.",
+      "prohibited_shortcut": "Calling the same code twice, sharing hidden helpers, or accepting caller-declared numerical agreement."
+    },
+    {
+      "id": "H2-OBL-028",
+      "category": "HELD_OUT_REPLICATION",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Complete the frozen held-out replication under independently controlled execution and preserve disagreement or failure.",
+      "dependencies": ["H2-OBL-026", "H2-OBL-027"],
+      "closure_evidence": "Authenticated replication packet, exact relation to the original run, independent custody, and discrepancy review.",
+      "prohibited_shortcut": "Reusing confirmatory rows, tuning after the first result, or relabeling disagreement as success."
+    },
+    {
+      "id": "H2-OBL-029",
+      "category": "CAUSAL_AND_CONSTRUCT_VALIDITY",
+      "priority": "P0",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Review construct definitions, causal model, identification assumptions, intervention integrity, negative controls, alternative explanations, robustness, and scope limits.",
+      "dependencies": ["H2-OBL-024", "H2-OBL-026", "H2-OBL-027", "H2-OBL-028"],
+      "closure_evidence": "Independent causal/construct review tied to exact evidence and wording, including unresolved alternatives.",
+      "prohibited_shortcut": "Inferring causality from temporal order, activation change, output change, statistical association, or CAS terminology."
+    },
+    {
+      "id": "H2-OBL-030",
+      "category": "EXTERNAL_PEER_REVIEW",
+      "priority": "P1",
+      "status": "OPEN_EXTERNAL_VALIDATION",
+      "obligation": "Obtain external specialist review of software, security, statistics, causality, construct validity, data rights, provenance, and exact claim language.",
+      "dependencies": ["H2-OBL-027", "H2-OBL-028", "H2-OBL-029"],
+      "closure_evidence": "Stable-hash review records, resolved comments, reviewer independence evidence, and exact scoped decisions.",
+      "prohibited_shortcut": "Treating internal agents, internal red team, draft circulation, or silence as external acceptance."
+    },
+    {
+      "id": "H2-OBL-031",
+      "category": "PRODUCT_READINESS",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Evaluate current security, operations, accounts, billing, quotas, privacy, compliance, support, monitoring, incident response, hosted behavior, and customer journey under the separate production authority.",
+      "dependencies": [],
+      "closure_evidence": "Current exact-deployment acceptance manifest and all required machine and qualified human authorities.",
+      "prohibited_shortcut": "Using Gate 5 tests, a hosted worker, a WORM receipt, or a scientific result as blanket product readiness."
+    },
+    {
+      "id": "H2-OBL-032",
+      "category": "SAFETY_CLINICAL_REGULATORY",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE",
+      "obligation": "Define and execute any applicable safety, clinical, human-subject, risk, and regulatory validation program with qualified authorities.",
+      "dependencies": ["H2-OBL-022", "H2-OBL-029"],
+      "closure_evidence": "Qualified approvals, validated safety case, jurisdiction-specific review, incident controls, and exact allowed claims.",
+      "prohibited_shortcut": "Calling a fail-closed software control a safety, clinical, or regulatory result."
+    },
+    {
+      "id": "H2-OBL-033",
+      "category": "LICENSE_AND_CANON",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE / NOT LICENSED",
+      "obligation": "Make any product-claim license or canon-admission decision through the charter's explicit independent procedure.",
+      "dependencies": ["H2-OBL-030", "H2-OBL-031", "H2-OBL-032"],
+      "closure_evidence": "Exact signed decision identifying claim text, evidence, scope, limitations, status, and authority.",
+      "prohibited_shortcut": "Automatic promotion from theorem status, packet status, reviewer silence, hosted state, or product tests."
+    },
+    {
+      "id": "H2-OBL-034",
+      "category": "DISCLOSURE",
+      "priority": "P0",
+      "status": "OPEN_GOVERNANCE / HELD",
+      "obligation": "Obtain explicit owner and qualified legal, patent, privacy, licensing, and claim-language approval for exact release artifacts and wording.",
+      "dependencies": ["H2-OBL-004", "H2-OBL-022", "H2-OBL-030", "H2-OBL-033"],
+      "closure_evidence": "Content-addressed disclosure authorization with exact included/excluded artifacts, redactions, rights, and approved wording.",
+      "prohibited_shortcut": "Public posting, conference submission, customer packet, or demo based on a draft or informal approval."
+    },
+    {
+      "id": "H2-OBL-035",
+      "category": "REPRODUCIBILITY_PACKAGE",
+      "priority": "P1",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Build and independently replay a rights-controlled private reproducibility package before considering a disclosure-filtered derivative.",
+      "dependencies": ["H2-OBL-018", "H2-OBL-022", "H2-OBL-027", "H2-OBL-034"],
+      "closure_evidence": "Exact source/data/environment/seed/command package, expected failure/output inventory, archival identity, and clean-room replay receipt.",
+      "prohibited_shortcut": "Equating repository availability, FAIR terminology, or a manifest with independent reproducibility."
+    },
+    {
+      "id": "H2-OBL-036",
+      "category": "HISTORICAL_RECOVERY",
+      "priority": "P2",
+      "status": "OPEN_ENGINEERING",
+      "obligation": "Decide whether any additional V1-V4 dependencies or fixtures warrant separately approved exact-source recovery without altering frozen evidence.",
+      "dependencies": ["H2-OBL-001"],
+      "closure_evidence": "Approved scope decision and, if applicable, collision-audited exact-source inventory with retained failures.",
+      "prohibited_shortcut": "Repairing frozen historical artifacts in place or making full historical executability a prerequisite for v2 repair."
+    }
+  ],
+  "obligation_count": 36,
+  "all_obligations_open": true,
+  "closure_statement": "This list is not a promise that every scientific hypothesis will close positively. A negative, null, failed, mixed, unsafe, nonreplicated, or unlicensed outcome must remain visible and may permanently prevent promotion."
+}

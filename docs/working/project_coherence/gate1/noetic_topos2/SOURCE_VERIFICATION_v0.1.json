@@ -1,0 +1,63 @@
+{
+  "schema_version": "noetic_topos2.source_verification.v0.1",
+  "document_status": "LOCAL SOURCE IDENTITY AND VISUAL REVIEW COMPLETE / PORTABLE EVIDENCE BUNDLE OPEN / INTERPRETIVE REVIEW OPEN",
+  "as_of": "2026-08-04",
+  "portability_status": "PARTIAL / repository source portable / frozen PDF content-addressed bundle OPEN",
+  "sources": [
+    {
+      "source_id": "SRC-NOETOPOS-CONSERVATIVE-TEX-REGISTERED",
+      "portable_locator": {
+        "kind": "REPOSITORY_PATH",
+        "path": "peer_review/journal_submission/main.tex"
+      },
+      "local_provenance_path": "C:/Users/wakil/.codex/worktrees/ca0f/tksCAS/peer_review/journal_submission/main.tex",
+      "sha256_raw": "E9885F27581626CCF26AC4809F446AB5044BC92C61923B951B7F4686591BAEF8",
+      "sha256_lf_normalized": "CEE0A4AB335DDAA2BDD4A56030E5B2A7FA0FA350054B1E57278AEC0AE554B0A6",
+      "normalization_note": "The worktree uses 543 CRLF line endings. LF normalization exactly reproduces the owner-signed registry hash; no semantic drift is inferred."
+    },
+    {
+      "source_id": "SRC-NOETOPOS-PDF-FROZEN-REGISTERED-RENDERING",
+      "portable_locator": {
+        "kind": "CONFIGURABLE_BASELINE_ROOT",
+        "relative_path": "noetic-topos (1).pdf",
+        "environment_variable": "PSR8_BASELINE_ROOT",
+        "content_addressed_bundle_path": null,
+        "bundle_status": "OPEN"
+      },
+      "local_provenance_path": "C:/Users/wakil/Downloads/noetic-topos (1).pdf",
+      "sha256_raw": "35772DBA830F0C5ABD63B8316A2750497224731B5CBADF94BA9F59072C178448",
+      "page_count": 8,
+      "render_review": {
+        "method": "Poppler pdftoppm at 144 DPI followed by visual inspection",
+        "pages_reviewed": [1, 2, 3, 4, 5, 6, 7, 8],
+        "layout_result": "PASS",
+        "relevant_visible_locations": [
+          "PDF page 3: ACBE reflexivity includes the identity",
+          "PDF page 4: RPM section-retraction equation epsilon_X o eta_X = id_X",
+          "PDF page 5: Noe-Cov-2, Noe-Cov-3, reduction lemma, and Theorem 6.4",
+          "PDF page 7: legacy topos theorem and noetic-dimension bookkeeping boundary",
+          "PDF page 8: empirical nonclaim and bibliography"
+        ],
+        "defects": []
+      }
+    }
+  ],
+  "source_locations": [
+    {
+      "issue": "ACBE identity collapse",
+      "tex_line": 172,
+      "pdf_page": 3
+    },
+    {
+      "issue": "RPM split-epimorphism collapse",
+      "tex_line": 220,
+      "pdf_page": 4
+    },
+    {
+      "issue": "Coverage definitions and explicit reduction to jointly-surjective coverage",
+      "tex_lines": [326, 345, 361, 367],
+      "pdf_page": 5
+    }
+  ],
+  "claim_boundary": "Local visual and hash verification establishes the identity and readable locations of the governing source on the authoring machine. The repository TeX is portable; the frozen PDF requires PSR8_BASELINE_ROOT or a future content-addressed evidence bundle. This is not agreement with every theorem, external peer review, or empirical validation."
+}

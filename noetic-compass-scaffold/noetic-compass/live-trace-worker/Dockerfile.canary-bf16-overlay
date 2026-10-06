@@ -1,0 +1,29 @@
+# Research-only local successor to the exact Gate-5 v0.2 worker image.
+#
+# This overlay changes only the two audited worker source files needed to bind
+# native BF16/no-JIT execution. It does not rebuild or reacquire the operating
+# system, Python/CUDA closure, model, tokenizer, or application dependencies.
+
+ARG PARENT_IMAGE=atlas-live-trace-worker:gate5-candidate-v0.2@sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG OVERLAY_SOURCE_COMMIT=UNBOUND
+COPY --chown=0:0 --chmod=0444 app/runtime/model_loader.py /worker/app/runtime/model_loader.py
+COPY --chown=0:0 --chmod=0444 app/schemas/manifest.py /worker/app/schemas/manifest.py
+RUN test "${#OVERLAY_SOURCE_COMMIT}" -eq 40 \
+    && case "$OVERLAY_SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+
+ENV TORCH_DISABLE_NATIVE_JIT=1
+
+LABEL org.opencontainers.image.revision="${OVERLAY_SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-local-canary-bf16-v0.2" \
+      io.cas-harness.claim-status="RESEARCH_ONLY_LOCAL_CANARY" \
+      io.cas-harness.parent.local-image-id="sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c" \
+      io.cas-harness.parent.repo-digest="sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c" \
+      io.cas-harness.parent.worker-source="4bff437dbcf6d0d38046e63d2aee823e8f316711" \
+      io.cas-harness.overlay.source="${OVERLAY_SOURCE_COMMIT}" \
+      io.cas-harness.runtime.native-jit="disabled" \
+      io.cas-harness.runtime.dtype="torch.bfloat16"
+
+USER 10001:10001

@@ -1,0 +1,74 @@
+{
+  "schema_version": "cas_harness_pythia160m_execution_preparation_validation.v4",
+  "created_at_utc": "2026-07-29T16:57:39Z",
+  "status": "EXECUTOR_AUDITOR_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED",
+  "source_commit_before_preparation": "af8cd99cecb0e12b5128125720a079f0e4309018",
+  "execution_lock": {
+    "path": "docs/working/research_intervention_pythia160m_v4_execution/PYTHIA160M_EXECUTION_SUCCESSOR_LOCK_V4.json",
+    "byte_count": 9909,
+    "sha256": "ea455981f89c1f418ae13e2c06ac8022e8b9b6508a55f85ae8d12788b4362dd1"
+  },
+  "executor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_executor_v4.py",
+    "byte_count": 27005,
+    "sha256": "5b336650cd23b71490e0245b199d0aa756ba42870e40cbebc45f16c502016ca6"
+  },
+  "independent_auditor": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_auditor_v4.py",
+    "byte_count": 11570,
+    "sha256": "450f56a02675a6c814bd65e9bdce74345bb4daade681ca5f41b7a9c3fcaaf70c"
+  },
+  "isolated_bootstrap": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_bootstrap_v4.py",
+    "byte_count": 7454,
+    "sha256": "dac72ac5cc633b1307c23c7dcc1ab2614c67d01f077b18295662ae3ffdf91b03"
+  },
+  "focused_and_supporting_tests": {
+    "command": "python -m pytest -q noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_layer_specificity_execution_v4.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_layer_specificity_v4.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_executor.py noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_research_lock.py",
+    "result": "38 passed",
+    "framework_imports": [],
+    "model_loads": 0,
+    "output_writes": 0
+  },
+  "verified_preimport_failures": [
+    "missing receipt",
+    "drifted receipt binding",
+    "drifted lock schema",
+    "drifted executor hash",
+    "drifted model manifest hash",
+    "drifted prompt split hash",
+    "drifted intervention/control map hash",
+    "pre-existing output root",
+    "first prohibited forward request at zero-based index 1536"
+  ],
+  "exact_isolated_missing_receipt_fixture": {
+    "interpreter": "C:\\Python314\\python.exe -I -B",
+    "status": "FAIL_CLOSED / RUN_NOT_STARTED",
+    "error": "Fresh one-use V4 owner authorization receipt is missing",
+    "exit_code": 2,
+    "frameworks_imported": [],
+    "model_loads": 0,
+    "output_created": false,
+    "receipt_created": false
+  },
+  "artifact_auditor_scope": [
+    "independent lock and prior-evidence rehash",
+    "retained receipt/lock/result/journal lineage",
+    "1536 raw logits and 1536 final-state artifact rehash",
+    "38 baseline layer-3 state artifact rehash",
+    "common readout recomputation from raw calibration states",
+    "readout margin, downstream logit delta, top1 preservation, layer ratios, fixed bootstrap, patch-back, collateral, cap, and claim-boundary recomputation"
+  ],
+  "prohibited_actions_observed": {
+    "receipt_created": false,
+    "nonce_consumed": false,
+    "framework_imported": false,
+    "model_or_tokenizer_loaded": false,
+    "model_experiment_run": false,
+    "gpu_queried_or_used": false,
+    "network_or_provider_call": false,
+    "paid_or_runpod_compute": false,
+    "live_product_change": false
+  },
+  "claim_boundary": "Preparation-only validation. It is not live steering, safety steering, prompt-injection prevention, Gate 2, ACCEPT, LICENSED, production readiness, or a production result."
+}

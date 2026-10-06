@@ -1,0 +1,329 @@
+{
+  "schema_version": "project_coherence.paper5_theorem_claim_identifiability_matrix.v0.1",
+  "document_status": "DRAFT / OPEN CAUSAL TRANSFER / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+  "paper_id": "ACBE-P5",
+  "mathematical_object_token": "ACA",
+  "identifiability_vocabulary": {
+    "NOT_APPLICABLE_FORMAL": "A definition, theorem, or counterexample whose truth is mathematical rather than causally identified from data.",
+    "DIRECT_INTERVENTIONAL": "The target is estimated from controlled interventions with qualifying execution identity.",
+    "ASSUMPTION_IDENTIFIED": "The target is identified from observational data only under an explicit causal model and stated identification assumptions.",
+    "PARTIALLY_IDENTIFIED": "Only a bound or identified set is supported.",
+    "NOT_IDENTIFIED": "Multiple data-compatible causal models give different target values.",
+    "SIMULATION_ONLY": "The relation is evaluated only in a stipulated synthetic model.",
+    "NOT_IDENTIFIED_NOT_EXECUTED": "The proposed empirical target has neither a completed identifying design nor qualifying execution evidence."
+  },
+  "global_claim_boundary": "No entry establishes empirical causal transfer, cognition, alignment, safety, product performance, canon admission, licensing, disclosure approval, or publication approval. Candidate theorems remain open to independent proof review; empirical hypotheses remain unexecuted.",
+  "records": [
+    {
+      "id": "P5-NAME-001",
+      "statement_kind": "DEFINITION",
+      "title": "Legacy ACBE is not an alias for approximate causal abstraction",
+      "exact_statement": "ACBE_legacy denotes only the registered four-level preorder and designated descent label; ACBE_NT2 denotes a formal marked-context label; ACBE-P5 denotes this publication lane; ACA denotes the new interventional model relation. No pair is type-identical.",
+      "assumptions": [
+        "Registered conservative Noetic Topos source identity E9885F27581626CCF26AC4809F446AB5044BC92C61923B951B7F4686591BAEF8",
+        "Noetic Topos 2.0 source boundary remains controlling"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "SOURCE_VERIFIED / INTERPRETIVE REVIEW OPEN",
+      "source_refs": [
+        "peer_review/journal_submission/main.tex:161",
+        "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md:40"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "Paper 5 introduces ACA as a new typed construct and preserves legacy ACBE separately.",
+      "prohibited_wording": "Legacy ACBE always meant approximate causal abstraction."
+    },
+    {
+      "id": "P5-DEF-001",
+      "statement_kind": "DEFINITION",
+      "title": "Interventional response profile",
+      "exact_statement": "An interventional response profile is M=(C,X,I,K), where C and X are measurable spaces, I is a typed allowed-intervention set, and K:CxI~>X is a Markov kernel whose index carries independently declared intervention semantics.",
+      "assumptions": [
+        "Measurable spaces and kernel are well defined",
+        "Intervention operators are declared independently of the observed conditional law"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "DRAFT DEFINITION / SPECIALIST REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#41-interventional-response-profile"
+      ],
+      "citation_refs": [
+        "CIT-RUBENSTEIN-2017",
+        "CIT-FRITZ-2020"
+      ],
+      "permitted_wording": "The profile packages post-intervention response laws.",
+      "prohibited_wording": "Every Markov kernel is causal."
+    },
+    {
+      "id": "P5-DEF-002",
+      "statement_kind": "DEFINITION",
+      "title": "Approximate causal-abstraction candidate",
+      "exact_statement": "For low/high profiles, A=(tau,kappa,omega,E,d,mu) contains a measurable state map, measurable context map, partial typed intervention map, preregistered evaluation domain, law discrepancy, and optional design distribution.",
+      "assumptions": [
+        "All maps are well typed",
+        "omega is defined on every intervention required by E",
+        "E is nonempty",
+        "Maps and E are frozen before confirmatory outcome access"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "DRAFT DEFINITION / SPECIALIST REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#42-abstraction-candidate"
+      ],
+      "citation_refs": [
+        "CIT-BECKERS-HALPERN-2019",
+        "CIT-BECKERS-EBERHARDT-HALPERN-2020",
+        "CIT-MASSIDDA-ETAL-2023"
+      ],
+      "permitted_wording": "A is a proposed comparison object.",
+      "prohibited_wording": "Choosing a representation automatically determines a valid intervention map."
+    },
+    {
+      "id": "P5-DEF-003",
+      "statement_kind": "DEFINITION",
+      "title": "Interventional commutation defect",
+      "exact_statement": "delta_A(c,i)=d(tau_*K_L(.|c,i),K_H(.|kappa(c),omega(i))). A is epsilon-approximate on E when the supremum of delta_A over E is at most epsilon.",
+      "assumptions": [
+        "The compared laws live on the same high-level measurable space",
+        "d and epsilon are fixed before confirmatory outcomes",
+        "No invalid or unmappable required evaluation is silently dropped"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "DRAFT DEFINITION / SPECIALIST REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#43-interventional-commutation-defect"
+      ],
+      "citation_refs": [
+        "CIT-BECKERS-EBERHARDT-HALPERN-2020",
+        "CIT-RISCHEL-WEICHWALD-2021"
+      ],
+      "permitted_wording": "The defect measures disagreement between two declared intervention-response routes.",
+      "prohibited_wording": "The defect is a universal scalar measure of causality."
+    },
+    {
+      "id": "P5-PROP-001",
+      "statement_kind": "PROPOSITION",
+      "title": "Zero defect is exact commutation on the evaluated domain",
+      "exact_statement": "If d separates probability measures, Delta_infinity(A)=0 if and only if tau_*K_L(.|c,i)=K_H(.|kappa(c),omega(i)) for every (c,i) in E.",
+      "assumptions": [
+        "d is nonnegative and separates probability measures",
+        "E is the exact declared evaluation domain"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "PROOF SKETCH COMPLETE / INDEPENDENT PROOF REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#proposition-61--zero-defect-recovers-exact-commutation"
+      ],
+      "citation_refs": [
+        "CIT-BECKERS-EBERHARDT-HALPERN-2020"
+      ],
+      "permitted_wording": "Zero defect gives exact interventional commutation on E.",
+      "prohibited_wording": "Zero sampled defect proves global causal equivalence."
+    },
+    {
+      "id": "P5-PROP-002",
+      "statement_kind": "PROPOSITION",
+      "title": "Total-variation defects compose subadditively",
+      "exact_statement": "For two map-compatible abstraction candidates on a composition-compatible domain, if their total-variation defects are bounded by epsilon_1 and epsilon_2, the composite defect is bounded by epsilon_1+epsilon_2.",
+      "assumptions": [
+        "Total variation is the registered metric",
+        "State, context, and intervention maps compose",
+        "Evaluation domains and supports are compatible"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "PROOF SKETCH COMPLETE / INDEPENDENT PROOF REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#proposition-62--total-variation-composition-bound"
+      ],
+      "citation_refs": [
+        "CIT-RISCHEL-WEICHWALD-2021"
+      ],
+      "permitted_wording": "Compatible TV defects admit an additive upper bound.",
+      "prohibited_wording": "All abstraction metrics compose additively without further conditions."
+    },
+    {
+      "id": "P5-PROP-003",
+      "statement_kind": "PROPOSITION",
+      "title": "Bounded estimands inherit a total-variation error bound",
+      "exact_statement": "For measurable g:X_H->[0,1], the difference of its expectations under the two high-level response routes is at most their total variation; a two-intervention contrast differs by at most twice a uniform epsilon defect.",
+      "assumptions": [
+        "g takes values in [0,1]",
+        "Total variation uses the supremum-over-events convention",
+        "Both interventions are in E"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "PROOF SKETCH COMPLETE / INDEPENDENT PROOF REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#proposition-63--bounded-estimand-transfer-error"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "Given the interventional laws, the registered bounded estimand transfer error is bounded.",
+      "prohibited_wording": "The bound identifies causal effects from observational data."
+    },
+    {
+      "id": "P5-PROP-004",
+      "statement_kind": "PROPOSITION",
+      "title": "Intervention-map collisions force error when mapped responses differ",
+      "exact_statement": "If two low-level interventions have mapped response laws separated by TV distance gamma but omega maps them to one high-level intervention, at least one abstraction defect is at least gamma/2.",
+      "assumptions": [
+        "Both cases share the mapped high-level context",
+        "The two interventions are evaluated",
+        "Total variation is the registered metric"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "PROOF SKETCH COMPLETE / INDEPENDENT PROOF REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#proposition-64--intervention-collisions-impose-error"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "A many-to-one intervention map has an auditable collision lower bound in this case.",
+      "prohibited_wording": "Every many-to-one intervention map is invalid."
+    },
+    {
+      "id": "P5-CE-001",
+      "statement_kind": "MODEL",
+      "title": "Observational equivalence with different intervention laws",
+      "exact_statement": "The binary SCMs X:=U,Y:=X and Y:=U,X:=Y with U~Bernoulli(1/2) have the same observational joint law but different Y laws under do(X=0).",
+      "assumptions": [
+        "Standard hard-intervention semantics",
+        "U is Bernoulli(1/2)"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "EXPLICIT COUNTEREXAMPLE / INDEPENDENT REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#71-observational-equivalence-does-not-identify-intervention-response"
+      ],
+      "citation_refs": [
+        "CIT-PEARL-1995",
+        "CIT-HAUSER-BUHLMANN-2012"
+      ],
+      "permitted_wording": "Observational equality alone does not identify the intervention response.",
+      "prohibited_wording": "Correlation or observational gluing proves the ACA relation."
+    },
+    {
+      "id": "P5-CE-002",
+      "statement_kind": "MODEL",
+      "title": "Constant-map trivialization",
+      "exact_statement": "A constant state map into a one-state high-level model can achieve zero defect for every low-level model while preserving no state or intervention distinction.",
+      "assumptions": [
+        "The high-level response is constant",
+        "All low-level interventions may collide under omega"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "EXPLICIT COUNTEREXAMPLE / INDEPENDENT REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#72-constant-map-trivialization"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "Low defect requires separate retention and intervention-separation gates.",
+      "prohibited_wording": "Zero defect alone proves a meaningful abstraction."
+    },
+    {
+      "id": "P5-CE-003",
+      "statement_kind": "MODEL",
+      "title": "Average defect can hide worst-case failure",
+      "exact_statement": "With 99 zero-defect cases and one unit-defect case under uniform weighting, Delta_mu=0.01 while Delta_infinity=1.",
+      "assumptions": [
+        "One hundred equally weighted cases",
+        "Defects lie in [0,1]"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "EXPLICIT COUNTEREXAMPLE / INDEPENDENT REVIEW OPEN",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#73-average-defect-can-hide-a-catastrophic-intervention"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "Mean, tail, worst-case, and case-level results must be reported together.",
+      "prohibited_wording": "A small mean defect guarantees uniformly reliable abstraction."
+    },
+    {
+      "id": "P5-BOUND-001",
+      "statement_kind": "PROPOSITION",
+      "title": "Markov composition and sheaf gluing do not entail causal abstraction",
+      "exact_statement": "A stochastic kernel, compatible local distribution family, global extension, naturality square, or low sheaf residual does not establish ACA without independently supplied intervention semantics, maps, and an interventional comparison.",
+      "assumptions": [
+        "Paper 4 type boundary",
+        "No hidden intervention semantics is assumed"
+      ],
+      "causal_identifiability": "NOT_APPLICABLE_FORMAL",
+      "status": "INHERITED BOUNDARY / SPECIALIST REVIEW OPEN",
+      "source_refs": [
+        "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json:PUB-P4-008",
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md:337"
+      ],
+      "citation_refs": [
+        "CIT-FRITZ-2020"
+      ],
+      "permitted_wording": "Paper 4 may organize stochastic evidence that Paper 5 evaluates causally under separate assumptions.",
+      "prohibited_wording": "A Markov or sheaf diagram is already a causal-abstraction theorem."
+    },
+    {
+      "id": "P5-HYP-001",
+      "statement_kind": "EMPIRICAL_HYPOTHESIS",
+      "title": "Synthetic neural/high-level interchange abstraction",
+      "exact_statement": "For one preregistered open-weight model revision, synthetic algorithmic task, high-level causal program, alignment, and intervention grid, the upper confidence bound on Delta_infinity is below epsilon, coverage and non-vacuity gates pass, and the candidate-control specificity margin exceeds m on confirmatory and held-out joined runs.",
+      "assumptions": [
+        "Exact model, data, mapping, intervention, metric, epsilon, m, power, and control specifications are preregistered",
+        "Controlled intervention execution is authentic and semantically faithful",
+        "Confirmatory and replication groups are disjoint",
+        "Independent numerical replay and claim review complete"
+      ],
+      "causal_identifiability": "NOT_IDENTIFIED_NOT_EXECUTED",
+      "status": "OPEN / NOT PREREGISTERED / NOT EXECUTED / NO EVIDENCE PACKET",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#13-proposed-first-experiment",
+        "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md"
+      ],
+      "citation_refs": [
+        "CIT-GEIGER-ETAL-2021",
+        "CIT-LIPSITCH-ETAL-2010",
+        "CIT-HEWITT-LIANG-2019"
+      ],
+      "permitted_wording": "This is a proposed confirmatory hypothesis awaiting a registered joined run.",
+      "prohibited_wording": "CAS/TKS has passed an approximate causal-abstraction test."
+    },
+    {
+      "id": "P5-HYP-002",
+      "statement_kind": "EMPIRICAL_HYPOTHESIS",
+      "title": "Cross-checkpoint or cross-architecture transport",
+      "exact_statement": "A frozen ACA candidate or declared migration of it preserves preregistered defect and specificity thresholds across a separately held-out checkpoint or architecture.",
+      "assumptions": [
+        "Transport population and mapping policy are declared before outcome access",
+        "Measurement invariance and support are tested",
+        "No post hoc remapping is treated as confirmation"
+      ],
+      "causal_identifiability": "NOT_IDENTIFIED_NOT_EXECUTED",
+      "status": "OPEN / DEPENDS ON P5-HYP-001 / NOT EXECUTED",
+      "source_refs": [
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#9-necessary-assumptions"
+      ],
+      "citation_refs": [
+        "CIT-SCHOLKOPF-ETAL-2021"
+      ],
+      "permitted_wording": "Transport is a separate hypothesis.",
+      "prohibited_wording": "One model's ACA result generalizes to other models or deployment contexts."
+    },
+    {
+      "id": "P5-GOV-001",
+      "statement_kind": "PROPOSITION",
+      "title": "Current causal transfer remains open",
+      "exact_statement": "At base commit 143cff40f94cf207a9130d6a7c07975a1fcbf0b9, this package contains no completed ACA preregistration, joined-run raw outcome set, Evidence Packet v2, authenticated execution, independent numerical audit, held-out replication, or external causal review.",
+      "assumptions": [
+        "Repository state at the named base commit",
+        "No external evidence is imported by implication"
+      ],
+      "causal_identifiability": "NOT_IDENTIFIED_NOT_EXECUTED",
+      "status": "OPEN / RING 4 / NOT LICENSED / HELD",
+      "source_refs": [
+        "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+        "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#15-current-evidence-state"
+      ],
+      "citation_refs": [],
+      "permitted_wording": "The causal transfer is open and unexecuted.",
+      "prohibited_wording": "Paper 5 is empirically validated, licensed, public, canonical, or production-ready."
+    }
+  ],
+  "record_count": 15
+}

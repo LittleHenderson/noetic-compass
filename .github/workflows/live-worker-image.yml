@@ -12,6 +12,15 @@ on:
       - '.github/workflows/live-worker-image.yml'
       - 'noetic-compass-scaffold/noetic-compass/live-trace-worker/**'
   workflow_dispatch:
+    inputs:
+      stagec_expected_commit:
+        description: Exact commit for the isolated Stage C build-only lane
+        required: false
+        type: string
+      stagec_confirmation:
+        description: Leave empty for the normal worker image; type BUILD STAGE C IMAGE ONLY for Stage C
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -23,6 +32,7 @@ concurrency:
 
 jobs:
   worker_image:
+    if: ${{ inputs.stagec_confirmation != 'BUILD STAGE C IMAGE ONLY' }}
     name: live-worker-image
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -38,6 +48,7 @@ jobs:
           set -Eeuo pipefail
           docker build \
             --file "$WORKER_DIR/Dockerfile" \
+            --build-arg "SOURCE_COMMIT=$GITHUB_SHA" \
             --label "org.opencontainers.image.revision=$GITHUB_SHA" \
             --tag "$IMAGE_NAME:$GITHUB_SHA" \
             "$WORKER_DIR"
@@ -60,10 +71,23 @@ jobs:
           }
           trap cleanup EXIT
 
+          [[ "$(
+            docker image inspect \
+              --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' \
+              "$IMAGE_NAME:$GITHUB_SHA"
+          )" == "$GITHUB_SHA" ]]
+          docker image inspect \
+            --format '{{range .Config.Env}}{{println .}}{{end}}' \
+            "$IMAGE_NAME:$GITHUB_SHA" \
+            | grep --fixed-strings --line-regexp 'ATLAS_WORKER_PROFILE=production'
+
           docker run --detach \
             --name "$container" \
             --publish 127.0.0.1:18080:8080 \
+            --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m \
             --env PORT=8080 \
+            --env ATLAS_WORKER_PROFILE=development \
             --env LIVE_TRACE_DEMO_MODE=1 \
             --env ATLAS_LIVE_WORKER_TOKEN="$token" \
             "$IMAGE_NAME:$GITHUB_SHA"
@@ -107,9 +131,16 @@ jobs:
 
           docker exec --interactive "$container" python - <<'PY'
           import json
+          import os
           import urllib.request
 
-          with urllib.request.urlopen("http://127.0.0.1:8080/health/realmode", timeout=5) as response:
+          request = urllib.request.Request(
+              "http://127.0.0.1:8080/health/realmode",
+              headers={
+                  "X-Atlas-Worker-Token": os.environ["ATLAS_LIVE_WORKER_TOKEN"],
+              },
+          )
+          with urllib.request.urlopen(request, timeout=5) as response:
               health = json.load(response)
           assert response.status == 200
           assert health["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
@@ -132,3 +163,17 @@ jobs:
           docker push "$IMAGE_NAME:$GITHUB_SHA"
           docker tag "$IMAGE_NAME:$GITHUB_SHA" "$IMAGE_NAME:master"
           docker push "$IMAGE_NAME:master"
+
+  stagec_qwen_batch_image:
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' &&
+        github.actor == github.repository_owner &&
+        inputs.stagec_confirmation == 'BUILD STAGE C IMAGE ONLY' &&
+        inputs.stagec_expected_commit == github.sha
+      }}
+    uses: ./.github/workflows/stagec-qwen-batch-image.yml
+    with:
+      expected_commit: ${{ inputs.stagec_expected_commit }}
+      confirmation: ${{ inputs.stagec_confirmation }}
+    secrets: inherit

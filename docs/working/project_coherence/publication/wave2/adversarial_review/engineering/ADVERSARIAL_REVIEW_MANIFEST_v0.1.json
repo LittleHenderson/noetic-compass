@@ -1,0 +1,109 @@
+{
+  "schema_version": "project_coherence.publication.wave2.adversarial_review.engineering.manifest.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "review_source_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "branch": "codex/project-coherence-review-engineering",
+  "review_commit": null,
+  "manifest_self_hash": null,
+  "self_hash_policy": "NON_SELF_HASHING: this manifest intentionally excludes its own path and digest. Git binds the manifest bytes with the review commit.",
+  "artifact_count": 5,
+  "package_file_count_including_manifest": 6,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/ADVERSARIAL_REVIEW_REPORT_v0.1.md",
+      "sha256": "3AC1F71FCCFCB79D9468CBE17D1103C96399C178807A2A0E43CC6D448EC484CB",
+      "bytes": 10617,
+      "media_type": "text/markdown",
+      "role": "source_bound_engineering_adversarial_review_report"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/CITATION_AUDIT_v0.1.json",
+      "sha256": "0E192A432CA28717A6D55E4C05BED25109FF809E4B807D1EDA84CA5C1181DBF2",
+      "bytes": 9910,
+      "media_type": "application/json",
+      "role": "fifteen_entry_primary_source_and_citation_scope_audit"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/CLAIM_BY_CLAIM_DISPOSITION_MATRIX_v0.1.json",
+      "sha256": "7AD2750277B47440FE8737E48DE29A80238F05D59D4EA948290692296ECAEDCC",
+      "bytes": 24530,
+      "media_type": "application/json",
+      "role": "thirty_one_entry_claim_by_claim_adversarial_disposition_matrix"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/MATH_ENGINEERING_TYPE_INTERFACE_COUNTEREXAMPLE_CHECKS_v0.1.md",
+      "sha256": "34B66E0A4697AC260169987F0C92ACA45FA1E8939E409186F45EC3F0E985F3F3",
+      "bytes": 8296,
+      "media_type": "text/markdown",
+      "role": "mathematical_engineering_type_interface_and_counterexample_audit"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/UNRESOLVED_REQUIRED_CHANGES_v0.1.json",
+      "sha256": "23657C08CAFCDFCE80DC7544959C2FCB42527A9422E3B14F199FA2CCC69732B4",
+      "bytes": 10029,
+      "media_type": "application/json",
+      "role": "two_blockers_four_strengthening_changes_and_preserved_open_obligations"
+    }
+  ],
+  "reviewed_wave1_manifest": {
+    "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+    "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+    "bytes": 5251,
+    "listed_artifact_count": 7
+  },
+  "formal_cross_lane_dependency": {
+    "commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+    "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+    "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4",
+    "bytes": 17908,
+    "authority_rule": "SOLE_MATHEMATICAL_AUTHORITY_FOR_PROJECTOR_GRAM_AND_CAPACITY_TRANSFER_THEOREM_CONTENT"
+  },
+  "verification_summary": {
+    "wave1_package_artifact_hashes_matched": 7,
+    "control_artifact_hashes_matched": 19,
+    "source_and_test_member_hashes_matched": 43,
+    "source_collection_aggregate_hashes_matched": 6,
+    "external_source_bindings_matched": 4,
+    "gate4_result": "PASS",
+    "gate4_elapsed_seconds": 121.1,
+    "test_methods": 208,
+    "parameterized_subtests": 272,
+    "gate4_criteria": 53,
+    "open_gate4_criteria": 20,
+    "direct_ebnf_counterexamples": 4,
+    "published_boards_checked": 5,
+    "cas_ohm_source_conflicts": 8,
+    "gate_status_after_review": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"
+  },
+  "review_summary": {
+    "claims_reviewed": 31,
+    "citations_reviewed": 15,
+    "publication_blockers": 2,
+    "required_strengthening_changes": 4,
+    "verdict": "CONDITIONAL_PASS_AFTER_2_PUBLICATION_BLOCKERS_AND_4_STRENGTHENING_CHANGES"
+  },
+  "validation_invariants": [
+    "Every artifact path is repository-relative, POSIX-normalized, unique, and confined to this engineering adversarial-review lane.",
+    "Every artifact contains the exact status label DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD.",
+    "Every listed SHA-256 is uppercase hexadecimal over exact file bytes and every byte count is exact.",
+    "The manifest path is absent from artifacts and manifest_self_hash is null.",
+    "All JSON artifacts parse with duplicate-key rejection and declared counts equal array lengths.",
+    "The claim disposition matrix contains exactly the 31 source claim identifiers with no duplicate or missing identifier.",
+    "The citation audit contains exactly E1 through E15 with no duplicate or missing identifier.",
+    "No review artifact edits or supersedes a Wave 1 draft, shared registry, specification, or gate decision.",
+    "No OPEN, negative, contradicted, unverified, or NOT LICENSED conclusion is promoted."
+  ],
+  "internal_cross_review": "THIS REVIEW COMPLETE; LEAD INTEGRATION OPEN",
+  "external_specialist_review": "OPEN",
+  "experiment_status": "NO EXPERIMENT EXECUTED",
+  "gpu_or_runpod_use": "NONE",
+  "closure_statement": "This manifest binds an internal adversarial-review package only. It is not a signature, trusted timestamp, WORM receipt, experiment, scientific result, safety case, clinical or regulatory determination, product verdict, canon decision, license, disclosure approval, authorship record, submission approval, or peer-review acceptance."
+}
