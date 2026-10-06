@@ -39,8 +39,8 @@ in that half-configured state.
 5. Check the non-secret readiness response:
 
    ```bash
-   curl --fail-with-body https://cas-harness-customer-api.onrender.com/health/ready
-   curl --fail-with-body https://cas-harness-customer-api.onrender.com/atlas/live/health/realmode
+   curl --fail-with-body https://api.noeticcompass.com/health/ready
+   curl --fail-with-body https://api.noeticcompass.com/atlas/live/health/realmode
    ```
 
 6. Run the protected end-to-end worker/WORM smoke in

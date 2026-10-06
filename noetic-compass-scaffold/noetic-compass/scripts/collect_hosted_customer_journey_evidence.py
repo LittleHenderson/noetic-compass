@@ -103,8 +103,8 @@ PRIVATE_SELECTOR_SCHEMA_VERSION = (
 )
 REPOSITORY = "LittleHenderson/noetic-compass"
 PRODUCTION_APP_URL = "https://atlas.noeticcompass.com/audit-console"
-PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
-PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
+PRODUCTION_API_ORIGIN = "https://api.noeticcompass.com"
+PRODUCTION_SERVICE_ID = "i-0bd0a082507a51ae3"
 RENDER_API_ORIGIN = "https://api.render.com"
 AUTHORITY_URI = f"{PRODUCTION_API_ORIGIN}/internal/acceptance/customer-journey"
 MODEL_ID = "EleutherAI/pythia-160m"

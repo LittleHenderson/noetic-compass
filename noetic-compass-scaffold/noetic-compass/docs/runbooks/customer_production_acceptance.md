@@ -30,15 +30,39 @@ Production authority is limited to these exact lanes:
 
 - repository `LittleHenderson/noetic-compass`;
 - app origin `https://atlas.noeticcompass.com`;
-- API origin `https://cas-harness-customer-api.onrender.com`;
-- Render service `srv-d9bijbjtqb8s73cn4n20` / `cas-harness-customer-api` on
-  protected `master`;
-- the externally supplied protected `master` SHA and public Render deploy ID;
+- API origin `https://api.noeticcompass.com`, the AWS-fronted customer-production lane;
+- AWS account `807562639912`, region `us-west-2`: instance `i-0bd0a082507a51ae3`,
+  CloudFront distribution `E1RBLENB7B6YEA`, database `nc-customer-pg`;
+- secret authority `/noetic-compass/customer-production` in AWS Systems Manager
+  Parameter Store;
+- the externally supplied protected `master` SHA and the AWS deployment identity;
 - the pinned GitHub repository, workflow, job, run, and GitHub Actions App
   identities encoded by the verifier.
 
+The declared AWS deployment control is `.aws/deployment-control.json`, checked offline in
+CI by `scripts/verify_aws_deployment_control.py --offline` and against live resources by
+`--live`.
+
 The private accounts canary, its service, its branch, and any private-canary
-environment are forbidden from satisfying a public gate.
+environment are forbidden from satisfying a public gate. The canary runs on AWS at
+instance `i-02137d196e671b5c1` with zero inbound security-group rules and is reachable
+only through AWS Systems Manager.
+
+## Superseded: Render lane
+
+Production ran on Render until 2026-09-26. Render suspended the whole workspace, every
+service answered HTTP 503 with `x-render-routing: suspend`, and the public dashboard's
+login stopped working for all visitors. The lanes were rebuilt on AWS, and the Render
+entries below are history rather than authority:
+
+- API origin `https://cas-harness-customer-api.onrender.com` (superseded);
+- Render service `srv-d9bijbjtqb8s73cn4n20` / `cas-harness-customer-api` on protected
+  `master` (superseded);
+- Render deploy IDs (superseded by AWS deployment identities).
+
+`.render/blueprint-control.json` and the `render*.yaml` files still describe the suspended
+Render services. They are retained only until those services are retired, and they are not
+production authority.
 
 ## Evidence authority
 

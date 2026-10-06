@@ -32,6 +32,40 @@ async def health_db() -> JSONResponse:
     )
 
 
+@router.get("/deployment")
+async def deployment_identity() -> JSONResponse:
+    """Report which exact artifact, build, and commit this process is running.
+
+    This is the AWS analogue of asking the platform which deploy is live. Render injected a
+    ``RENDER_SERVICE_ID`` and exposed a ``dep-`` deploy id through its API; AWS injects
+    neither, so the deployment writes these identifiers into the environment and the process
+    reports them back. The root-CI deploy evidence collector reads this endpoint and compares
+    it with the registry digest and the build record, so a mismatch between what CI signed off
+    and what is actually serving traffic is detectable rather than assumed.
+
+    Only identifiers are returned. No credential, URL, bucket, or key material is read here,
+    and every absent value is reported as ``null`` so a caller fails closed instead of
+    guessing at a default.
+    """
+    import os
+
+    fields = {
+        "provider": "NC_DEPLOYMENT_PROVIDER",
+        "service_id": "NC_DEPLOYMENT_SERVICE_ID",
+        "service_name": "NC_DEPLOYMENT_SERVICE_NAME",
+        "image_digest": "NC_DEPLOYMENT_IMAGE_DIGEST",
+        "build_id": "NC_DEPLOYMENT_BUILD_ID",
+        "commit_sha": "NC_BUILD_COMMIT_SHA",
+        "region": "NC_DEPLOYMENT_REGION",
+    }
+    reported = {name: (os.environ.get(var) or None) for name, var in fields.items()}
+    reported["configured"] = all(
+        reported[name] is not None
+        for name in ("provider", "service_id", "image_digest", "commit_sha")
+    )
+    return JSONResponse(status_code=200, headers={"Cache-Control": "no-store"}, content=reported)
+
+
 @router.get("/health/ready")
 async def health_ready() -> JSONResponse:
     """Readiness probe: return 200 only when load-bearing systems are healthy.

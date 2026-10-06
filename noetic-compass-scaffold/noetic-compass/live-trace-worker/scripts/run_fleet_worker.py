@@ -3,7 +3,7 @@
 Example dry-run control-plane check:
 
     python scripts/run_fleet_worker.py \
-      --api-base-url https://cas-harness-customer-api.onrender.com \
+      --api-base-url https://api.noeticcompass.com \
       --audit-id cas-dist-... \
       --worker-id probe-worker-001 \
       --model-id customer/open-70b \

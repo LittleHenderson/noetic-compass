@@ -18,7 +18,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 
-DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
+DEFAULT_BASE_URL = "https://api.noeticcompass.com"
 DEFAULT_WORKERS = 25
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 

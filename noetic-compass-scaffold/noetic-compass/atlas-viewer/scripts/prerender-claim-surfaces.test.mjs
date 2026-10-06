@@ -147,7 +147,7 @@ test('pins the fail-closed full Render route replacement', async () => {
   assert.deepEqual(contract, {
     schemaVersion: 'atlas_render_static_routes.v1',
     dashboardManaged: true,
-    requiredApiBaseUrl: 'https://cas-harness-customer-api.onrender.com/atlas',
+    requiredApiBaseUrl: 'https://api.noeticcompass.com/atlas',
     requiredAccountsEnabled: 'true',
     expectedCurrentRoutes: [
       {

@@ -64,7 +64,7 @@ from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
+DEFAULT_BASE_URL = "https://api.noeticcompass.com"
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 
 POSTURE_SHADOW = "enabled_shadow_dict_authoritative"

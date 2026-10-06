@@ -390,7 +390,7 @@ describe('EvidenceDrawer', () => {
   });
 
   it('derives the Evidence Packet host from VITE_ATLAS_API_BASE_URL in hosted builds', async () => {
-    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://cas-harness-customer-api.onrender.com/atlas');
+    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://api.noeticcompass.com/atlas');
     const fetchImpl = vi.fn(async () => jsonResponse(packet));
     vi.stubGlobal('fetch', fetchImpl);
 
@@ -411,9 +411,9 @@ describe('EvidenceDrawer', () => {
     );
 
     const [url] = fetchImpl.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe('https://cas-harness-customer-api.onrender.com/evidence/trace-hosted');
+    expect(url).toBe('https://api.noeticcompass.com/evidence/trace-hosted');
     const [verifyUrl] = fetchImpl.mock.calls[1] as [string, RequestInit];
-    expect(verifyUrl).toBe('https://cas-harness-customer-api.onrender.com/evidence/trace-hosted/verify');
+    expect(verifyUrl).toBe('https://api.noeticcompass.com/evidence/trace-hosted/verify');
   });
 
   it('labels neuron refs as local replay metadata when no trace_id is supplied', () => {

@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://noetic-compass-api.onrender.com/:path*"
+      "destination": "https://bmxq2dmdam.us-west-2.awsapprunner.com/:path*"
     },
     { "source": "/", "destination": "/index.html" },
     { "source": "/audit-console", "destination": "/audit-console/index.html" },
