@@ -4,7 +4,7 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-10-06 PDT - Option B usefulness test: two free practice builds STOP_DO_NOT_LAUNCH; no GPU job; owner decision pending
+## 2026-10-06 PDT - Option B usefulness test: two free practice builds STOP_DO_NOT_LAUNCH; no GPU job; paused by owner 2026-10-07, pending Noetics label trial v2.1 (guide 2b6617c15102, plan 657413f77f18)
 
 Owner order 2026-10-06 4:12 PM Pacific ("SIGNED: option B status table as
 proposed ... run parallel our smartest team of agents"). Development test d1
@@ -23,8 +23,10 @@ Program decision STOP_DO_NOT_LAUNCH again. Reading: the ceiling is structural
 DeepSeek 872 calls (127,467 in / 5,236 out tokens), Gemini free tier, GPU 0.
 Seal step 7 never written, so no status word applies. Nothing deleted. Record:
 cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OPTION_B_BUILD_STOPS_20261007.json.
-Spec sheet section 7.22 and change-log row added in this commit. Owner decides next:
-label more passages, lower the floor in a new plan version, or stop the line.
+Spec sheet section 7.22 and change-log row added in this commit. Owner decision
+2026-10-06 8:00 PM Pacific: Option B PAUSED, pending Noetics label trial v2.1
+(guide 2b6617c15102, plan 657413f77f18); resumes only when that trial yields
+more labeled passages. Recorded in the stop record's owner_decision block.
 
 ## 2026-09-04 - CASformer v0.2 source freeze
 
