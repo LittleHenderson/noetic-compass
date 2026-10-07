@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-06 PDT - Option B usefulness test: two free practice builds STOP_DO_NOT_LAUNCH; no GPU job; owner decision pending
+
+Owner order 2026-10-06 4:12 PM Pacific ("SIGNED: option B status table as
+proposed ... run parallel our smartest team of agents"). Development test d1
+on made-up data RAN on one m6i.xlarge: PRECHECK_COMPLETE_SELFTEST_PASS,
+cleanup VERIFIED, charge 0.09 USD (ledger 97.59 -> 97.68 of 250). Plan 1.0
+chain sealed to step 3A: at 12 practice settings 48 role-step candidates, 30
+pass the key check, 16 survive the no-passage check, 16 selected against a
+floor of 36 (plain-fact 20 of 20). Program decision STOP_DO_NOT_LAUNCH. Plan
+1.1 (brief rules, three program-enforced form-check drops, three writer passes,
+lowest-pass-first selection; floors and both solver rules unchanged) was
+reviewed by two separate sub-agents and rebuilt in the sibling folder
+CASALESCENCE_NOETICS_v0_1__PLAN_v1_1, sealed to step 3A: 57 candidates over
+36 pairs, 40 pass the key check, 20 survive, 15 selected (plain-fact 35).
+Program decision STOP_DO_NOT_LAUNCH again. Reading: the ceiling is structural
+(about 36 open pairs, about 50 percent guessability). Spend: AWS 0.09 USD,
+DeepSeek 872 calls (127,467 in / 5,236 out tokens), Gemini free tier, GPU 0.
+Seal step 7 never written, so no status word applies. Nothing deleted. Record:
+cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OPTION_B_BUILD_STOPS_20261007.json.
+Spec sheet section 7.22 and change-log row added in this commit. Owner decides next:
+label more passages, lower the floor in a new plan version, or stop the line.
+
 ## 2026-09-04 - CASformer v0.2 source freeze
 
 - Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.
