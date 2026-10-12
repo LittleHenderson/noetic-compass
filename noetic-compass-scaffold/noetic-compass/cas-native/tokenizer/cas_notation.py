@@ -62,9 +62,13 @@ KIND_DRIVE = "drive"                          # F_k or Fk
 KIND_REGISTER = "register"                    # |R alone
 KIND_REGISTER_SET = "register_set"            # |⟨R1,R2,...⟩
 KIND_OMEGA = "omega"                          # Ω_label
+KIND_OMEGA_BARE = "omega_bare"                # bare Ω (no _label suffix)
+KIND_THETA_BARE = "theta_bare"                # bare Θ (no opening paren)
+KIND_LAMBDA_BARE = "lambda_bare"              # bare Λ (v7.6 leakage marker)
 KIND_RECIPE_OPENER = "recipe_opener"          # Θ(
 KIND_ARROW = "arrow"                          # →, ←, ↔
 KIND_SET_RELATION = "set_relation"            # ∈ ∉ ⊂ ⊆ ⊃ ⊇ ∪ ∩ ∖ ∅
+KIND_TYPED_CONSTRUCTOR = "typed_constructor"  # NoeticCluster / StateSet / etc.
 
 
 # ---------------------------------------------------------------------------
@@ -97,9 +101,18 @@ _DOMAIN = re.compile(r"\^([PCEO])")
 _DRIVE = re.compile(r"F_?([1-7])")
 _REGISTER = re.compile(r"\|([TAfE])")
 _OMEGA = re.compile(r"Ω_[A-Za-z][A-Za-z0-9_]*")
+_OMEGA_BARE = re.compile(r"Ω(?![_A-Za-z0-9])")
+_THETA_BARE = re.compile(r"Θ(?!\()")
+_LAMBDA_BARE = re.compile(r"Λ(?![_A-Za-z0-9])")
 _RECIPE_OPENER = re.compile(r"Θ\(")
 _ARROW = re.compile(r"→|←|↔|->|<-|<->")
 _SET_RELATION = re.compile(r"∈|∉|⊂|⊆|⊃|⊇|∪|∩|∖|∅")
+# Typed meta-logic constructor names. Anchored full-word: must NOT be followed
+# by a word-class character so we don't accidentally match a longer identifier
+# that begins with one of these names.
+_TYPED_CONSTRUCTOR = re.compile(
+    r"(NoeticCluster|StateCluster|StateSet|RelationCluster|CoverOf|PartitionOf|Product)(?![A-Za-z0-9_])"
+)
 
 
 # Ordered match attempts: (pattern, kind, signature_builder).
@@ -116,9 +129,13 @@ _PATTERN_ORDER = [
     (_DRIVE, KIND_DRIVE, "_f"),
     (_REGISTER, KIND_REGISTER, "_r"),
     (_OMEGA, KIND_OMEGA, "_om"),
+    (_OMEGA_BARE, KIND_OMEGA_BARE, "_om_bare"),
+    (_THETA_BARE, KIND_THETA_BARE, "_th_bare"),
+    (_LAMBDA_BARE, KIND_LAMBDA_BARE, "_la_bare"),
     (_RECIPE_OPENER, KIND_RECIPE_OPENER, "_rec"),
     (_ARROW, KIND_ARROW, "_arr"),
     (_SET_RELATION, KIND_SET_RELATION, "_setrel"),
+    (_TYPED_CONSTRUCTOR, KIND_TYPED_CONSTRUCTOR, "_typed"),
 ]
 
 
@@ -224,6 +241,18 @@ def _omega_signature() -> CASSignature:
     return CASSignature(role_tags=("cas_literal", "omega_target"))
 
 
+def _omega_bare_signature() -> CASSignature:
+    return CASSignature(role_tags=("cas_literal", "omega_bare"))
+
+
+def _theta_bare_signature() -> CASSignature:
+    return CASSignature(role_tags=("cas_literal", "theta_bare", "recipe_function"))
+
+
+def _lambda_bare_signature() -> CASSignature:
+    return CASSignature(role_tags=("cas_literal", "lambda_bare", "leakage_marker"))
+
+
 def _recipe_opener_signature() -> CASSignature:
     return CASSignature(role_tags=("cas_literal", "recipe_opener"))
 
@@ -234,6 +263,10 @@ def _arrow_signature() -> CASSignature:
 
 def _set_relation_signature(symbol: str) -> CASSignature:
     return CASSignature(role_tags=("cas_literal", "set_relation", f"set_relation:{symbol}"))
+
+
+def _typed_constructor_signature(name: str) -> CASSignature:
+    return CASSignature(role_tags=("cas_literal", "typed_constructor", f"typed_constructor:{name}"))
 
 
 # ---------------------------------------------------------------------------
@@ -337,12 +370,20 @@ def _build_signature(builder_key: str, match: re.Match[str]) -> CASSignature:
         return _register_signature(match.group(1))
     if builder_key == "_om":
         return _omega_signature()
+    if builder_key == "_om_bare":
+        return _omega_bare_signature()
+    if builder_key == "_th_bare":
+        return _theta_bare_signature()
+    if builder_key == "_la_bare":
+        return _lambda_bare_signature()
     if builder_key == "_rec":
         return _recipe_opener_signature()
     if builder_key == "_arr":
         return _arrow_signature()
     if builder_key == "_setrel":
         return _set_relation_signature(match.group(0))
+    if builder_key == "_typed":
+        return _typed_constructor_signature(match.group(1))
     raise ValueError(f"unknown builder_key {builder_key!r}")
 
 
@@ -354,9 +395,13 @@ __all__ = [
     "KIND_REGISTER",
     "KIND_REGISTER_SET",
     "KIND_OMEGA",
+    "KIND_OMEGA_BARE",
+    "KIND_THETA_BARE",
+    "KIND_LAMBDA_BARE",
     "KIND_RECIPE_OPENER",
     "KIND_ARROW",
     "KIND_SET_RELATION",
+    "KIND_TYPED_CONSTRUCTOR",
     "CASNotationMatch",
     "match_cas_notation",
     "find_all_cas_notation",
