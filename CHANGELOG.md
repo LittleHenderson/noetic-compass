@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB-G5 RAN ($0): the tolerance-rung reset makes the smooth family reach the pre-sized brain (a_approx 82.42 vs 82.03; G2 PASS, first time in five runs; G4 3 of 3); strict G3 still fails on the `a` control (one fully verified unit kept) -> GREW_WRONG_KIND; correction to the RB-G4 entry; owner ruling RPA = Atlas and the device source map recorded
+
+Owner words: "LM-T6 after search and RB-G5 AND WHAT DOES LM-T6 STAND FOR WHAT DOES
+IT MEAN?" (about 12:40 PM PDT). RB-G5 = RB-G4 + Fix D: a continuation starts at
+rung index 5 (ln 1.05, the scorer's 5% standard) instead of the parent's rung;
+everything else unchanged. 19 laptop parts (13:36-14:25 PDT), tests 33/33 then
+25/25, 334 units, peak 69.2 MB, spend 0. Marks: G1 PASS, G2 PASS (a_approx 82.42
+vs oracle 82.03; F1 100; scale_leak 90.625), G3 FAIL (`a` fired once, kept
+once: V1-V7 passed, held-out 8.01 -> 10.55, 23 of 33 new rows from the added
+corners, 10 from the stricter read; +320 allocated parameters), G4 3 of 3, G5
+265 kept / 0 violations, G6 0. a_approx: 4 -> 8 KEPT (521 new rows, 0 lost),
+8 -> 12 KEPT (218 new, 0 lost), halt at the 12-corner ceiling; 1,248 allocated
+/ 461 used vs the oracle's 1,248 / 450; held-out 70 -> 314 -> 422 (oracle 420);
+equal to the oracle on 13 of 16 outcomes. Reported-only: the stricter read
+alone added 0 rows on a_approx and scale_leak (R1); strict G3 without `a` PASS
+(R3); REFUSAL_ONLY (no two-key check) now keeps units on noise (2 on the
+label-shuffled a_approx, 3 on `a`). Status word GREW_WRONG_KIND by the frozen
+rule; the growth claim stays NOT LICENSED; owner decision open on whether a
+verified unit on `a` (not recipe-shaped per RB-W and Capacity Rules v0.1)
+counts as false growth - any rule change applies only to a new frozen run.
+CORRECTION to the RB-G4 entry below: the tolerance ladder never gets looser
+within a run (that entry says "only loosens"; the spec sheet section 7.32 is
+corrected in place); RB-G4's RESULTS.md gave outcome 09's parent rung as 5, the
+same run reads 3. OWNER RULING "RPA IS ATLAS I MEANT ATLAS" (about 12:30 PM PDT;
+already ruled 2026-10-07 in Downloads/GB2_PLAN_AMENDED_20261007.md) recorded
+under section 7.35 with the device-search source map for cascading RPM depth
+and the Recursive Possibility Atlas. Spec sheet section 7.36, a correction in
+7.32, a note in 7.35 and three change-log rows in this commit.
+
 ## 2026-10-15 PDT - HELM RB-I1 RAN ($0, 134 laptop parts): CAS faculties + 7-Drive loop on the recipe brain - FAILURE on hard gate H1 (empty fit receipt checked after the write) -> INCONCLUSIVE; no faculty or drive word earned even shadow-read; LM-T4 / RB-I2 RAN ($0, 8 parts): language and faculties ride the thought station by station with the Unity Eye report-only - sealed reader INCONCLUSIVE (reader bug on digits in names), corrected reader passes the gates (owner to judge); CONT-3 failed 99.92%
 
 RB-I1 (rb_i1/; owner words "RB-I defaults", design helm_rb_i_faculties_design_v1):
