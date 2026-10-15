@@ -4,6 +4,42 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - CAS Recipe Capacity Rules v0.1 named; RB-W capacity experiment RAN ($0): Limiting-Reagent Rule held 6 of 7; blend law only to ~12 vertices; smooth/noisy laws need an ordinary head; restart fallback (RB-C4) is the one stochastic mechanism that earned its keep
+
+Owner words: "name it and RB-W" (2026-10-15 ~1:40 AM Pacific); vocabulary rule
+"PLEASE JUST USE PARAMETERS". The rules: (1) the Limiting-Reagent Rule of
+scaling - a recipe brain's capacity is a recipe (slots + routes + vertices +
+terms + depth); more parameters help only when each has a real job; scale only
+the kind a frozen test shows limiting; (2) the simplex blend law, error ~
+1/vertices^2 (lsr_t7 1.997); (3) the guardrails (>= 8 new rows, hold-out incl.
+shuffled labels, fewest-nodes-wins with BLEND costed by vertices, eta/epsilon
+receipts, depth <= 5, node cap). RB-W (Documents/Codex/2026-10-15/rb_w/,
+FROZEN before code, verdicts by program): held-out right of 100 - bigger Task
+B 62.5 -> 100 with recipe slots 4 -> 8 (W1 held: 4 slots could hold only 4 of
+8 recipes); smooth 2-input 61.7 -> 82.0 with blend vertices; scale_leak 12 ->
+89.7 with eta/leakage terms; clean 87.5 unchanged by any kind; noise 0.2
+unchanged by any recipe kind but 16.6 with a 4-parameter ordinary head; smooth
+4-input 8.0 -> 10.9 at best (nothing binds it; prediction missed). Each kind
+moved only its own family; the all-4x arm tied the best single kind (no
+memorizing flag); ledger filled where the binding kind grew. W3 FAIL: blend
+exponent 0.7053 over 4/8/16/32 vertices (error bottoms at 12 then rises); T7's
+1.997 reproduces from the same code -> quadratic only up to a per-family vertex
+limit. Boundary: a 223-parameter MLP beats every recipe configuration on smooth
+families (81 vs 11; 82.4 vs 82.0) while the recipe brain wins recipe-shaped
+laws (100 vs 25; 89.7 vs 31.3). RB-C4 (2026-10-14/rb_c4): positive control 8/8,
+all hard gates pass; RESTART_FALLBACK_EARNED_KEEP and RANDOMNESS_EARNED_KEEP on
+depth-3/4 compositions (342/344/264 and 266/212/208 of 512 vs 62 and 0 for the
+fixed start) - a fit-start win, not a proposal win; grammar
+CREATIVITY_DID_NOT_EARN_KEEP; coin twin below; 0 inventions. Across the night,
+randomness as a proposer earned keep in 0 of 8 tests. Also recorded: owner
+ruling N1 nesting direction "outer last, both . and :"; owner amendment that
+recipe-brain self-growth (RB-G) proceeds before roadmap ability 3; owner
+direction that depth-3/4 chains are the standing exam for CJT Bias cascades,
+RPM chains and RPA depth. Failed approaches logged: RB-C2 and RB-C3 stopped at
+their frozen positive control (small-input start rule; order-dependent
+consistency check) before the order-free largest-consistent-set fix. Spec sheet
+section 7.27 and change-log row in this commit.
+
 ## 2026-10-14 PDT - HELM recipe brain RB2c (Task B clean rerun) RAN on AWS (job c26): PASS; RECIPE_COMPOSITION_EARNED true; 0.04 USD
 
 Owner line (verbatim): "option 1 AND APPROVE RB2c: Task B only, reader fix,
