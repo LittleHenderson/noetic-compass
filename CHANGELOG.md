@@ -4,6 +4,39 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB-G4 RAN ($0): warm-start corner re-fit changed nothing (every unit identical to RB-G3; a_approx 38.87 vs 82.03; GREW_WRONG_KIND x 4) - the shortfall is a READ problem (inherited tolerance rung), measured; LM-T5 RAN ($0): the restart-fallback reader on 25 ambiguous free-English rows decided 1, asked on 24, 0 new wrong - VERIFIER_CANNOT_DISCRIMINATE
+
+Owner message (verbatim, ~5:00 AM Pacific): "RB-G4LM-T5LM-T4 defaults". RB-G4 =
+RB-G3 + Fix C (BLEND growth continues the parent's own fitter loop: parent knots
+kept, corner values and seed vertex re-solved after each inserted knot; three or
+more inputs continue lsr_t5 refine). Result: FAIL, GREW_WRONG_KIND; all 310
+engine units behaviourally identical to RB-G3; 14 WARM_START events, 6 warm
+BLENDs admitted, no score moved (F1 100.00, a_approx 38.87, scale_leak 90.625,
+TaskB_d4 25.78; a fired once and rolled back on V6). Warm-start == from-scratch
+BLEND on 13/13 test cases and 22/22 scored complexes. Diagnosis after the run:
+TAU_LADDER [ln 1.5 .. ln 1.05] only loosens within a run; 11 of 14 a_approx
+parents ended on ln 1.5; a continuation inherits that rung, reads no residual on
+6 of the 9 outcomes that never grew (no candidate proposed) and refuses the
+grown BLEND for SUPPORT on 3 (0, 0, 7 new rows; 8 needed). Candidate next steps,
+not authorized: reset the rung at a growth boundary (re-read from ln 1.05), park
+growth, or route smooth residuals to the ordinary head. 11 parts, 24 min 20 s,
+peak 65.8 MB, tests 29/29 then 23/23. LM-T5 (lm_t5/): DET exact start; the
+fallback fires only on purely ambiguous rows (25 eligible after a recount:
+28 ambiguous = 17 state + 10 domain + 1 both, 3 hiding a missing domain word;
+11 ambiguous-plus-missing and 158 purely missing stay out of reach); ENUM (<= 64)
+or SEEDED (8 draws, seeds 11/29/47); verifier without the gold label: round trip,
+compiler, frame consistency, evidence tier; one survivor wins, two or more ->
+CLARIFY, never a coin pick. Result: fired 25; candidate spaces 2 / 2 / 6; one
+survivor on 1 row (V3 decided; MATCH), 24 CLARIFY; MATCH 233 -> 234, MISMATCH 9
+-> 9, UNPARSEABLE 197 -> 172 (+24 CLARIFY); COIN MATCH 5/11/5 with MISMATCH
+20/14/20; SHUFFLED 0; regressions 0; SEEDED = ENUM; V4 decided 0 rows (every
+competing Noetic in the state-ambiguous rows was backed only by colloquial
+aliases). Status word VERIFIER_CANNOT_DISCRIMINATE, named in FROZEN.json before
+the run. Lesson kept as a negative result: the restart fallback transfers only
+where a verifier can decide without the answer key; free-English reading has no
+such verifier, so the honest act is to ask. 5.4 s, 47 MiB, tests 15/15.
+Spec sheet sections 7.32 and 7.33 and two change-log rows in this commit.
+
 ## 2026-10-15 PDT - HELM recipe-brain self-growth operator RB-G: three laptop runs RB-G1 / RB-G2 / RB-G3 ($0), all GREW_WRONG_KIND; the ledger chose the right capacity kind every time and kept no wrong unit, but corner growth on the smooth family reaches neither the pre-sized brain (61.72 / 61.72 / 38.87 vs 82.03) nor a clean strict-G3; language line L1-L3 recorded
 
 Owner words: "design RB-G" + amendment (growth before ability 3; sentence to earn
