@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM U1 RAN on the laptop ($0): the Unity Eye acting - INCONCLUSIVE in both readings; the random-whisper control broke the clean-dialogue gate
+
+Owner words: "U1 now ...BOTH THE EYE AND THE BRAIN SHOULD KNOW ABOUT ONE ANOTHER
+..." and "THE EYE SHOULD ACT AT TIMES AS WELL LIKE OUR UNCONSCIOUS OR SUBCONSCIOUS
+BRAIN ...". Seven arms on synthetic worlds (no eye, report only, whispers only,
+one-way plus autonomic tier, concert, random whispers, checklist), six planted
+fault kinds, 68 clean worlds per arm. 22 laptop parts, 15:00-16:40 PDT, tests
+12/12 in every part, peak 155.8 MiB, 121 source files matched after the run.
+Merged reading sha256 fec73502581ac3fb2e6eefa9564fbbdb3e2b41b04cee3a9c9e5c60b2d7efa8b2.
+Reading 1 (frozen rules): INCONCLUSIVE (G_INSTRUMENT, G_REPLAY, G_CLEAN_A5).
+Reading 2 (amendment U1-A2, written before any merge): INCONCLUSIVE
+(G_CLEAN_A5 only). The A5 random "say it again" whisper made the brain repeat
+answers on 20 of 48 clean dialogues; the frozen rule counts that as worse.
+No keep word, no harm word. Raw marks: A3 and A4 fixed 148/148 planted faults,
+the checklist 128, whispers alone 60; clean interventions 1,816 (concert) vs
+2,605 (one-way) vs 10,152 (checklist); no autonomic action created new
+knowledge; the eye never wrote. Flag kept: had the control passed, the frozen
+rules would have printed EYE_HARMFUL from the faulted-world counts 155/258/258;
+the builder's read-only breakdown says each is a restored clean answer scored
+against no-eye's faulty or lucky answers. Eye acting stays NOT LICENSED; any
+change to the control or yardstick is a new frozen test (e.g. U1b). Spec sheet
+section 7.38 and a change-log row in this commit.
+
 ## 2026-10-15 PDT - HELM RB-I1b RAN once on AWS (job c30, 0.11 USD): INSTRUMENT_ERROR at the first stage - two synthetic datasets rebuilt on Linux did not match their frozen fingerprints; no reading
 
 Owner line (verbatim): "RB-I1b on AWS, cap $2", bound to the sealed package
