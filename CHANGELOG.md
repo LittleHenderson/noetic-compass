@@ -4,6 +4,50 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-14 PDT - HELM recipe brain RB2b (harder exams A+B) RAN on AWS (job c25): Task A PASS but the transformer passed too (BETTER_THAN_T_A false); Task B INSTRUMENT_ERROR (recipes 16/16, every no-recipe baseline <= 6, reader rule tripped); overall NOT_PASS; 0.26 USD
+
+Owner rulings (verbatim): "both" (harder tasks), "RB2 defaults; yes" (six
+defaults; DIV_TOTAL baseline), "RB2b, LM defaults, RB-C defaults, delete them"
+(Task-B generator fix), and the sign line "APPROVE RB2b: harder tasks A+B, arms
+T(A only, re-taught)/RB-det/RB-sto/RB-roundrobin/RB-random/LUT/MLP/DIV_TOTAL,
+marks as preregistered, sealed package dcae7e75, one attempt, cap $2.00."
+Package HELM_RECIPE_BRAIN_20261014_RB2B_SOURCE_RB2B.zip sha256 dcae7e75...687d
+(100 learned values: 68 + 32; RPM Gate; eta/epsilon receipts; 20 seeded world
+draws, marks on the median). One m6i.xlarge us-west-2 i-0b6f208ca7b33389f,
+launched 9:25 PM Pacific, command 4,108.6 s, host 72.8 min, 95/96 tests (the
+one failure writes the frozen reading). Task A (boards scaled 8-16x past every
+taught value): all four RB arms 16/15.5, T re-taught 16/15 (rebuilt identical
+to c21), LUT 4/4 at its proven floor, DIV_TOTAL 16/16 (the known hole), MLP
+7/7 -> task_a PASS; BETTER_THAN_T_A false (T survived scaling; bar not met).
+Task B (4 base recipes taught, held-out chains and best-of-two routes; worlds
+kept only where the bottleneck is not the smallest stock): all RB arms 16/16
+with receipts 480/480 on 20 of 20 draws; LUT 4/4; DIV_TOTAL 4/6; MLP 4/4;
+smallest-input 4/0 (under the <= 8 limit) -> but task_b INSTRUMENT_ERROR,
+reason MISSING_OR_ERROR_smallest_input: the reader flags any `errors` on that
+heuristic's record and it logged 24, all on the sum-of-yields panel where it can
+only emit labels; scored panels had 0 errors. RECIPE_COMPOSITION_EARNED false
+(requires Task B PASS); overall NOT_PASS. Claim status: Task A LICENSED only as
+the reading's claim_if_pass text (scale-freedom is programmed; DIV_TOTAL also
+passes; carry programmed); Task B NOT LICENSED until a clean run; the 16/16 vs
+<= 6 separation is recorded as an indication only. Negatives kept: the
+transformer passes scaled worlds; divide-by-total passes Task A; MLP fails both.
+Charge 0.26 USD (list 0.253551); hold 2.00 consumed; ledger 103.10 -> 101.36 of
+200.00; cleanup VERIFIED by controller and independent check; 401 files
+hash-verified; backup D:/tksCAS-archive/helm_rb2b_c25_20261014/ (456 files,
+three confirms). Same-day laptop results ($0, SYNTHETIC_ONLY) also recorded in
+spec sheet section 7.25: language line lm_t1 (CCE <-> CAS round trip 576/576,
+blind hand set 64/64, SDG English 233/439 vs 118, nested 50/50, meta-logic
+120/120 on the newest compiler 464fd4ad; owner N1 ruling: outer last for both
+. and :), lm_t2 (trajectory on the simplex: seams 96/96 and 48/48, 0 false,
+drift 24/24, 0 invented facts; taught coordinates failed calibration; one
+redesign lm_t2b failed 47/48 -> line stopped), lm_t3 (12/12 fillable grammar
+gaps closed, 0 regressions, 6 meaningless gaps refused with a question; 7
+wordings accepted by the owner), lsr_t6/t7 (blend harm fixed; blend error
+exponent 1.997 vs staircase 0.95). Failed approaches logged: RB2 (first seal)
+had a Task B a one-line heuristic could pass (11-14 of 16) and was re-sealed
+before launch; the reader's instrument rule counts non-applicable-panel errors
+as instrument errors. Spec sheet section 7.25 and change-log row in this commit.
+
 ## 2026-10-14 PDT - HELM recipe brain RB1g2 (recipe INSTEAD of the transformer) RAN on AWS (job c23): PASS as frozen; BETTER_THAN_T true by one world; RECIPE_MATH_EARNED false (lookup table tied); 0.03 USD
 
 Owner's goal, restated 2026-10-14: replace the transformer that is HELM's brain
