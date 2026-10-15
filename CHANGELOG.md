@@ -4,6 +4,43 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB3c "T taught with yields" RAN on AWS (job c29): T_y (97 parameters) and T+_y (385 parameters), taught the same single-recipe yields the recipe brain receives, still near chance on Task B (4/4 and 5/4 of 16) against the recipe brain's frozen 16/16; BETTER_THAN_T_B_YIELDS true (margins 24 and 23 of 32); reading YIELDS_NOT_THE_CAUSE; 1.88 USD
+
+Owner request (verbatim, ~2:10 AM Pacific): "T with yields". Owner line (verbatim,
+~2:50 AM): "APPROVE RB3c: T taught with yields on Task B, arms
+T_y/T+_y/T,T+(frozen c27)/RB-det(frozen c26)/LUT/MLP, marks as preregistered,
+sealed package 165cb6fa, one attempt, cap $5.00." The only change from RB3
+(c27): T and T+ also trained on the single-recipe yields RB receives, as an
+extra training target on the label-free logit direction (mean of the four
+answer scores = log yield, weight 1.0) on the single-recipe lesson worlds of
+each draw (680 yield rows over 20 draws); no parameters added; test worlds
+carry no yield; identical lesson information verified on 20,480 checks and
+identical inputs on 4,720 checks, 0 problems. One m6i.8xlarge
+i-007c383e71b9539e6, launched 2:30 AM Pacific, command 4,047.7 s (41/41
+tests), host 72.5 min; kit as c27, no new limit changes. Medians of 20 draws,
+B-chain / B-alt of 16: T_y 4 [3..6] / 4 [2..7] (sum 8); T+_y 5 [3..8] / 4
+[2..7] (sum 9); frozen c27 T 4 / 3 (7) and T+ 5 / 4.5 (9.5); RB-det frozen c26
+16 / 16 (32); LUT 4 / 4; MLP-B 4 / 4. Reading RB3C_READING.json (sha256
+a106c7b1...): overall PASS; reading YIELDS_NOT_THE_CAUSE; BETTER_THAN_T_B_YIELDS
+true (RB-det >= 4 above T_y AND T+_y: margins 24 and 23); T_COMPOSES_B_YIELDS
+false (neither reached 12/16 on both panels). Change from labels only: T_y +1,
+T+_y -0.5. UNDETERMINED 0; errors 0. Teaching refusals: T_y 1,260 of 10,240
+ticks, T+_y 555 (c27: T 77, T+ 553), jobs counted complete. The transformer
+learned the yields (final median absolute log error T_y 0.31-0.63, T+_y
+0.11-0.32) and still did not compose. LICENSED only in the reading's claim
+sentence: on synthetic recipe worlds only, the yield feedback was not the cause
+of the gap; the programmed composition rule is the remaining difference. NOT
+LICENSED: that no other way of giving T the yields would work; recipes beat
+transformers in general or at other sizes/tasks/teaching rules; learned
+composition by RB; statistical superiority; any non-synthetic claim. Charge
+1.88 USD (hold 5.00 replaced); ledger -> 105.17 of 200.00; cleanup VERIFIED by
+the controller and the independent check; backup
+D:/tksCAS-archive/helm_rb3c_c29_20261015/ (269 files, three confirms, 0
+mismatches). This closes the last asymmetry RB3 named: across RB1g2, RB2b,
+RB2c, RB3 and RB3c the one difference left between the recipe brain and HELM's
+transformer on Task B is the programmed composition rule. Spec sheet section
+7.29 and change-log row in this commit.
+
 ## 2026-10-15 PDT - HELM RB3 "T on B" RAN on AWS (job c27): the GB3 transformer (T, 97 parameters) and a widened T+ (385 parameters, same programmed board-1 copy as RB) both near chance on Task B; recipe brain frozen 16/16 (32 parameters); BETTER_THAN_T_B true (margins 25 and 22.5 of 32); 1.89 USD
 
 Owner line (verbatim): "both T and T+; APPROVE RB3: T on Task B, arms
