@@ -4,6 +4,50 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-14 PDT - HELM recipe brain RB1g2 (recipe INSTEAD of the transformer) RAN on AWS (job c23): PASS as frozen; BETTER_THAN_T true by one world; RECIPE_MATH_EARNED false (lookup table tied); 0.03 USD
+
+Owner's goal, restated 2026-10-14: replace the transformer that is HELM's brain
+with CAS recipes and do better than it. Owner rulings, verbatim: "Yes to
+RB1...$200 aws" (seven preregistration defaults; AWS combined ceiling 200 USD;
+record helm_operator_preparation/budget_ceiling_review_20261014_r1/
+OWNER_CEILING_RULING_20261014.md), "add the gate; ... not wrong/unable to
+determine", "Yes on parallel prod", "Fix A", and the sign line "APPROVE RB1g2:
+recipe instead of transformer, arms T/RB-det/RB-sto/RB-roundrobin/RB-random/LUT,
+marks as GB3 + gate, sealed package 25cd12c0, one attempt, cap $0.50."
+Package HELM_RECIPE_BRAIN_20261014_RB1G2_SOURCE_RB1G2.zip sha256 25cd12c0...b35bf
+(68 learned values vs the transformer's 97; no attention; four CAS recipes
+answer by theoretical yield; witnessed-ratio writer under GB3's memory check;
+RPM Gate returns UNDETERMINED when a prerequisite is absent; refused worlds
+marked LACUNA and revisited on a cadence). One m6i.xlarge us-west-2
+i-0bcfd3e62ecf052c4, launched 7:02 PM Pacific, host 364.4 s, command 42.0 s,
+62 tests OK, GB3 c21's sealed worlds rebuilt with 0 mismatches. Program reading
+RB1G2_READING.json: status PASS; rows 0/1/2 true; RB-det panel 1 16/0/0 and new
+worlds 16/0/0 (T frozen: 15 and 15; mark 12) so BETTER_THAN_T true by a
+one-world count; RECIPE_MATH_EARNED false because the lookup-table arm (same
+gate, same policy, no recipe math) also scored 16/16 and 16/16 (sums 32-32);
+POLICY_EARNED true (four-key mark after 56 presentations vs 61 round-robin, 67
+random); every admitted write passed its eta/epsilon receipt (RB-det 472/472);
+0 UNDETERMINED on scored panels. Licensed: content-carrying on 16 synthetic
+two-board worlds only; recipe instead of transformer on THIS task only. Not
+licensed: recipe math as the source, general replacement, transfer, learned
+carry (programmed), statistical superiority. Owner default D-2 applies: the
+line moves to a harder task a lookup table cannot pass. Charge 0.03 USD (list
+0.021145); 0.50 hold consumed; ledger 101.57 -> 101.10 of 200.00; cleanup
+VERIFIED twice. Same-day laptop screens ($0, SYNTHETIC_ONLY): recipe learner
+100% on 2- and 3-input SDG recipes vs attention stand-in 2-6%
+(fair_data_experiment_v3_bridge2); sdg_bridge_v2 raised SDG coverage 51 -> 576
+of 576 and caught seed_recipe_00459; Lacunarity Machine v1 read of c21 (both
+readwrite misses on key 2; twin a true lacuna); LSR loop T1-T5: shape recovery
+exact (T4), simplex cells = limiting-reagent regions exactly (T5), Thompson
+variety earned nothing, smooth-curve blend 0 -> 227/512 short of the 19/20 mark.
+Failed approaches logged: LSR T1 proposer never fired (fit never
+under-predicts); T2 second route fitted on rows with cut inputs; T5 counted a
+blend as one node and let it bully the correct SUM shape (259 wrong on additive
+data). Spec sheet section 7.24 and change-log row added in this commit.
+Artifacts off-repo under C:/Users/wakil/Documents/Codex/ (gate_b/rb1g2/,
+2026-10-14/lsr_t*/, CAS-Recipe-Network-Comparison-20261011/); backup
+D:/tksCAS-archive/helm_rb1g2_c23_20261014/.
+
 ## 2026-10-07 PDT - Noetics label agreement, attempt 2 (guide v2.1, plan v2.1): run valid; ^1 LABELABLE, ^2-^9 NOT_LABELABLE; 426 passages labeled by both teams
 
 Owner signature 2026-10-06 8:00 PM Pacific ("SIGNED: label-agreement v2.1,
