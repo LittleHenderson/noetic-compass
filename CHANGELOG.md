@@ -4,6 +4,40 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-14 PDT - HELM recipe brain RB2c (Task B clean rerun) RAN on AWS (job c26): PASS; RECIPE_COMPOSITION_EARNED true; 0.04 USD
+
+Owner line (verbatim): "option 1 AND APPROVE RB2c: Task B only, reader fix,
+arms RB-det/RB-sto/RB-roundrobin/RB-random/LUT/MLP/DIV_TOTAL, marks as
+preregistered, sealed package 18d0a2d3, one attempt, cap $0.50." Package
+HELM_RECIPE_BRAIN_20261014_RB2C_SOURCE_RB2C.zip sha256 18d0a2d3...1668. Only
+change from RB2b: label-only arms answer NOT_APPLICABLE on the sum-of-yields
+panel (neither answer nor error; a real crash still voids the task); Task A, T
+and RB-H1 not run; new instrument row C25_EQUALITY (c25's 20 Task-B worlds
+reproduced exactly, 20/20). One m6i.xlarge us-west-2 i-0644dba9702b30c9b, host
+600.6 s, command 288.4 s, 96/96 tests. Task B medians over 20 draws, B-chain /
+B-alt: all four RB arms 16/16 [16..16]; LUT 4/4 at its proven floor; DIV_TOTAL
+4/6; MLP-B 4/4; smallest-input 4/0 with 160 NOT_APPLICABLE reads and 0 errors
+(c25 had 24). Receipts: every admitted write passed on all 20 draws (RB-det
+480/480). UNDETERMINED 0 on scored panels. Reading RB2C_READING.json (sha256
+25f69e58...): task_b PASS, overall PASS, RECIPE_COMPOSITION_EARNED true by the
+preregistered rule (Task B PASS and every no-recipe baseline median < 12).
+LICENSED only in the reading's own claim_if_pass words: recipe composition on
+synthetic recipe worlds; 4 taught recipes; requirements learned from
+single-recipe orders, combined by a programmed MIN / chain / MAX rule; the
+composition rule is programmed, the coefficients are learned. NOT LICENSED:
+general learned composition, transfer, cooperation, language, better than T
+(not run), statistical superiority, any non-synthetic claim. This is the first
+exam on the recipe line where only the recipe mechanism passes (RB1g2: lookup
+table tied; RB2b Task A: the transformer and a divide-by-total table also
+passed). Charge 0.04 USD (list 0.034853); hold 0.50 consumed; ledger 101.86 ->
+101.40 of 200.00; cleanup VERIFIED by controller and independent check; slot
+released; backup D:/tksCAS-archive/helm_rb2c_c26_20261014/ (199 files, three
+confirms). Same-day creativity line ($0): RB-C1 FAILURE (coin twin beat the
+seeded draw; shuffled labels +1; ledger non-monotone; 0 inventions); RB-C2 and
+RB-C3 stopped at the frozen positive control (multi-route fitter); RB-C4
+(order-free consistency + 1e-12 tolerance) in progress. Spec sheet section 7.26
+and change-log row in this commit.
+
 ## 2026-10-14 PDT - HELM recipe brain RB2b (harder exams A+B) RAN on AWS (job c25): Task A PASS but the transformer passed too (BETTER_THAN_T_A false); Task B INSTRUMENT_ERROR (recipes 16/16, every no-recipe baseline <= 6, reader rule tripped); overall NOT_PASS; 0.26 USD
 
 Owner rulings (verbatim): "both" (harder tasks), "RB2 defaults; yes" (six
