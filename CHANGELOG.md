@@ -4,6 +4,49 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM recipe-brain self-growth operator RB-G: three laptop runs RB-G1 / RB-G2 / RB-G3 ($0), all GREW_WRONG_KIND; the ledger chose the right capacity kind every time and kept no wrong unit, but corner growth on the smooth family reaches neither the pre-sized brain (61.72 / 61.72 / 38.87 vs 82.03) nor a clean strict-G3; language line L1-L3 recorded
+
+Owner words: "design RB-G" + amendment (growth before ability 3; sentence to earn
+"the brain added the right capacity when its own ledger said so"), "RB-G
+defaults", "RB-G2", "RB-G3" (2026-10-15, 2:10 AM to 4:20 AM Pacific). Operator:
+SENSE (Lacunarity Machine ledger + shadow-checked cap refusals) -> DIAGNOSE one
+of five kinds by two keys -> GROW ONE UNIT -> FIT -> VERIFY V1..V7 -> KEEP or
+ROLL BACK -> LOG; budget 4, ceiling 4x; arms RBG / NO_GROWTH / ORACLE / RANDOM x3
+/ REFUSAL_ONLY; marks G1..G6, G3 strict (a fired trigger counts even if rolled
+back). RB-G1 (re-fit FIT): G1 PASS (F1 80/80 kept, a_approx 1/1, scale_leak 1/1
+leakage), G2 FAIL (a_approx 61.72 vs 82.03), G3 FAIL (a and a_approx_shuffled
+fired, both rolled back), G4 2 of 3, receipts 254/0, ceiling 0. RB-G2 (+ trigger
+patience, attempt-before-halt): identical scores; both false fires persisted on
+2 of 2 readings (deterministic brain) as checked before the run; a_approx 8 -> 12
+attempted (192 new rows) and rolled back by V6. RB-G3 (+ additive continuation
+FIT: parent tree/levels kept, corners inserted into the parent's complex with no
+re-fit; + out-of-sample witness V_MIN = 2 validation rows over parent and over
+rotated labels): 0 parent rows lost on every kept unit; a_approx 4 -> 8 -> 12
+corners KEPT then HALT_AT_CEILING (allocated 608 -> 928 -> 1,248 parameters,
+used 184 -> 296 -> 299; oracle 1,248 / 450) but only 7 of 16 outcomes accepted
+the additive 8-corner BLEND, so the family scores 38.87 (G2 fails harder); the
+shuffled a_approx false fire became NOISE, but the `a` control still fired on
+REAL validation gains (9 -> 15 right vs 6 on rotated labels in one outcome) and
+was rolled back (4 rows lost); G3 FAIL; receipts 256/0; 10 parts 1,393 s, peak
+66.6 MB. Status: the frozen claim NOT LICENSED; measured instrument rows: right
+kind 3 of 3 runs on 3 of 3 families, 0 wrong units kept, F1 and scale_leak
+reach the pre-sized brain. Exam-design question for the owner: `a` is a
+"no-growth" control by RB-W's family-level reading (+2.93 points at 4x) while
+the per-outcome ledger sees real out-of-sample gains; excusing it alone would
+not change the status word (G2 also fails). Candidate next steps, not
+authorized: warm-start re-fit for corners, or routing smooth residuals to the
+small ordinary head. Also recorded (section 7.31): the CAS language line
+L1-L3 of 2026-10-14 (LM-T1 round trip 576/576, hand set 64/64, SDG English 233
+of 439; LM-T1b nested 100/100 and meta-logic 120/120 under the newest compiler;
+LM-T1c dotted fractals 40/40 under ruling N1; LM-T2 seams 96/96 and 48/48, 0
+false seams, 0 invented facts; LM-T2/T2b taught coordinates NOT CALIBRATED,
+stopped per "redesign once"; LM-T3 12/12 FORM gaps closed, 0 regressions, 7
+wordings accepted by the owner). Translator ENGINEERED-NOT-VALIDATED (form
+only); open English / meaning / HELM-level language claims NOT LICENSED; the
+skin is not yet wired to the recipe brain; L4 (learned CAS-native parser, AWS
+GPU) waits on the owner. Spec sheet sections 7.30 and 7.31 and two change-log
+rows in this commit.
+
 ## 2026-10-15 PDT - HELM RB3c "T taught with yields" RAN on AWS (job c29): T_y (97 parameters) and T+_y (385 parameters), taught the same single-recipe yields the recipe brain receives, still near chance on Task B (4/4 and 5/4 of 16) against the recipe brain's frozen 16/16; BETTER_THAN_T_B_YIELDS true (margins 24 and 23 of 32); reading YIELDS_NOT_THE_CAUSE; 1.88 USD
 
 Owner request (verbatim, ~2:10 AM Pacific): "T with yields". Owner line (verbatim,
