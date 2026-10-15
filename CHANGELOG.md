@@ -4,6 +4,47 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB-I1 RAN ($0, 134 laptop parts): CAS faculties + 7-Drive loop on the recipe brain - FAILURE on hard gate H1 (empty fit receipt checked after the write) -> INCONCLUSIVE; no faculty or drive word earned even shadow-read; LM-T4 / RB-I2 RAN ($0, 8 parts): language and faculties ride the thought station by station with the Unity Eye report-only - sealed reader INCONCLUSIVE (reader bug on digits in names), corrected reader passes the gates (owner to judge); CONT-3 failed 99.92%
+
+RB-I1 (rb_i1/; owner words "RB-I defaults", design helm_rb_i_faculties_design_v1):
+arms pull-sampling / Fisher-Rao geodesic-step / greedy / round-robin / fixed
+priority / faculties-off (RB today) / generator-off / buffer-off / K1 twin / ENUM
+/ COIN over a, a_approx, scale_leak, c, TaskB_d3, TaskB_d4 and controls, seeds
+11/29/47; 02:07-06:50 PDT, longest part 265.3 s, peak 78 MiB, tests 12/12 every
+part. H1 receipts FAILED on 1 of 183 nested admissions (family c, A5, seed 11,
+c_05: the imported lsr_t4 fitter returned an empty fit receipt; the level check
+required a non-empty one and ran AFTER the write) -> INCONCLUSIVE by the frozen
+rule; every other gate holds; shadow reading as if H1 passed still awards no
+word. Held-out of 512: Task B d3 RB today 342/344/264, drive arms 44-414;
+a_approx RB today 232, round-robin 292/292/287, COIN 335/364/302 (the lift is
+the pondering re-fit with the restart fallback, not the drive choice); asking
+32/32 with 0 invented facts in every arm (plain rule ties; RB today 16/32);
+insights 1-16 vs RB today 12/10/9; STARVED greedy 103 < sampling 145 < fixed 206
+< geodesic 259 < round-robin 304 (design forecast wrong). Fisher-Rao formula
+fixed (missing 1/2) before the run. Named, not authorized: RB-I1b with the
+receipt check before the write, ~15 min on one m6i.8xlarge (~0.5 USD).
+LM-T4 / RB-I2 (lm_t4/; owner words: the 4:40 AM circuit direction, "LM-T4
+defaults", the eye direction, "LET'S GO WITH YOUR RECOMMENDATION"; design
+helm_language_faculties_circuit_design_v1 with UNITY_EYE.md and the ruling
+record): stations S0 head, S1 CJT trigger, S2 CJT Bias, S3 CJT arrival, S4
+operating point, S5 RPM link, S6 next stage; attempt 1 WORKER_FAILED in the
+runner (no scored unit; kept, LMT4-A2); attempt 2 manifest 3390ebbd, P11-P18,
+1,067.1 s, peak 148.5 MB, tests 12/12. Taps: 64,756/64,756 round trips,
+106,400/106,400 digest-neutral, answers unchanged 20/20 draws (every arm equals
+the RB2c driver, which equals c26); injections 240/240 right, shuffled 0/240
+(name-match router 240/240 false fires), CLARIFY 48/48, KNOWLEDGE_MISSING 48/48,
+invented 0, earlier by 3.0 vs 7.0 ticks; seams 96/96, false 0, interpolations 0;
+CONT-3 provenance 106,320/106,400 (twin's 80 asking keys written CREATED) FAIL;
+eye 6,716 events, would-FIX 280, would-HELP 7,548, applied nothing, 504
+would-HELP on clean dialogues (U1's false-alarm baseline). Two readings: sealed
+reader INCONCLUSIVE (H2/H10 flagged 192 questions for digits inside copied
+outcome names; 0 real amounts); corrected reader (post-run amendment LMT4-A3;
+sealed reader kept byte-exact) hard gates pass, LANGUAGE_RODE_THE_PATH,
+INJECT_ROUTED, CIRCUIT_EARLIER_NOT_BETTER, EYE_REPORTED. The sealed reading
+governs until the owner accepts LMT4-A3 or a clean re-seal runs (precedent RB2b
+-> RB2c). LSR-family half NOT_EVALUATED (PRC-1). Spec sheet sections 7.34 and
+7.35 and two change-log rows in this commit.
+
 ## 2026-10-15 PDT - HELM RB-G4 RAN ($0): warm-start corner re-fit changed nothing (every unit identical to RB-G3; a_approx 38.87 vs 82.03; GREW_WRONG_KIND x 4) - the shortfall is a READ problem (inherited tolerance rung), measured; LM-T5 RAN ($0): the restart-fallback reader on 25 ambiguous free-English rows decided 1, asked on 24, 0 new wrong - VERIFIER_CANNOT_DISCRIMINATE
 
 Owner message (verbatim, ~5:00 AM Pacific): "RB-G4LM-T5LM-T4 defaults". RB-G4 =
