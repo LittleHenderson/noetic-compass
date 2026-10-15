@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB-I1b RAN once on AWS (job c30, 0.11 USD): INSTRUMENT_ERROR at the first stage - two synthetic datasets rebuilt on Linux did not match their frozen fingerprints; no reading
+
+Owner line (verbatim): "RB-I1b on AWS, cap $2", bound to the sealed package
+RB_I1B_FACULTIES_20261015_SOURCE.zip (sha256 804be249...; RB-I1 with the H1
+receipt fix plus a Linux parallel driver). One m6i.8xlarge i-0ebbfb01c0bda42c8,
+launched 2:46 PM Pacific, host 245.5 s. The package's first stage ran 16 tests:
+12 passed; 4 stopped at the guard "v1 dataset drift" (lsr_t1/families.py
+v1_family) because a_ces_substitutable_bound and c_minratio_noisy_corrupt_bound,
+rebuilt on Linux, did not match their laptop-frozen sha256. Reading of the code:
+both generators use floating-point powers and exp / Gaussian noise
+(fair_data_experiment_v1/data.py:53-54, 108-109), whose last bits can differ
+between the Windows and Linux maths libraries; the laptop's Python 3.12 had
+reproduced the data. The guard worked; the driver stopped before the smoke
+parts, pool and merge (INSTRUMENT_ERROR, exit 3); no status word, gate or mark
+exists; RB-I1's record is unchanged. Named fix, not authorized: ship the frozen
+datasets and worlds as data, load them by hash, add a data-identity stage on the
+host. Charge 0.11 USD (hold 2.00 replaced); ledger 107.17 -> 105.28 of 200.00;
+cleanup VERIFIED by the controller and the independent check; backup
+D:/tksCAS-archive/helm_rb_i1b_c30_20261015/ (145 files, three confirms). Spec
+sheet section 7.37 and a change-log row in this commit.
+
 ## 2026-10-15 PDT - HELM RB-G5 RAN ($0): the tolerance-rung reset makes the smooth family reach the pre-sized brain (a_approx 82.42 vs 82.03; G2 PASS, first time in five runs; G4 3 of 3); strict G3 still fails on the `a` control (one fully verified unit kept) -> GREW_WRONG_KIND; correction to the RB-G4 entry; owner ruling RPA = Atlas and the device source map recorded
 
 Owner words: "LM-T6 after search and RB-G5 AND WHAT DOES LM-T6 STAND FOR WHAT DOES
