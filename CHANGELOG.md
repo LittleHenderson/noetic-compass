@@ -4,6 +4,41 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB3 "T on B" RAN on AWS (job c27): the GB3 transformer (T, 97 parameters) and a widened T+ (385 parameters, same programmed board-1 copy as RB) both near chance on Task B; recipe brain frozen 16/16 (32 parameters); BETTER_THAN_T_B true (margins 25 and 22.5 of 32); 1.89 USD
+
+Owner line (verbatim): "both T and T+; APPROVE RB3: T on Task B, arms
+T/T+/RB-det(frozen c26)/LUT/MLP, marks as preregistered, sealed package
+26a6077f, one attempt, cap $5.00." Launch first blocked by the us-west-2
+on-demand vCPU limit (32, 4 in use by nc-customer-app and nc-canary-app); the
+owner's "raise the quota" was filed (request a8cb6434..., case 179204819400751)
+and granted within 5 minutes (now 64); a 16-CPU fallback seal RB3b (d7ca0f78)
+was built and shelved; the 5.00 hold moved back to c27. One m6i.8xlarge
+i-0f360701d222bd233, launched 12:22 AM Pacific, command 4,071.4 s, host 72.8
+min, 25/25 tests; kit-side limits raised (CPU check 2 -> 32, process limit 128
+-> 4096, controller interval 10 -> 20 s), sealed package untouched. Fairness:
+T receives byte-for-byte the same 8 numbers per board that RB's decoder reads
+(4,720 identical-input checks, 0 problems); T+ also gets RB's programmed copy
+of board 1; both taught with GB3's own step, 512 keyed presentations per draw;
+stated remaining asymmetry: RB also taught single-recipe yields, T labels
+only. Medians of 20 draws, B-chain / B-alt of 16: T 4 [2..5] / 3 [0..7] (sum
+7); T+ 5 [3..8] / 4.5 [3..8] (sum 9.5); RB-det frozen c26 16 / 16 (32); LUT
+and MLP-B 4 / 4. Reading RB3_READING.json (sha256 320a0d49...): overall PASS;
+BETTER_THAN_T_B true (RB-det >= 4 above T AND T+: margins 25 and 22.5);
+T_COMPOSES_B false (neither reached 12/16 on any draw). Teaching refusals: T 77
+total, T+ 553 total (T+ draw 11 refused 455 of 512). LICENSED only in the
+reading's claim_if_pass words (synthetic recipe worlds; Task B; same 20 draws
+as c25/c26). NOT LICENSED: recipes beat transformers in general or at other
+sizes/tasks/teaching rules; that the composition rule rather than the yield
+feedback is the cause; learned composition by RB; statistical superiority; any
+non-synthetic claim. Charge 1.89 USD (hold 5.00 consumed); ledger -> 103.29 of
+200.00; cleanup VERIFIED by controller and independent check; backup
+D:/tksCAS-archive/helm_rb3_c27_20261015/ (249 files, three confirms). With
+RB1g2 (table tie), RB2b (T survived scaling) and RB2c (only recipes pass Task
+B), this is the first run where the recipe brain beats HELM's actual
+transformer on a task the transformer cannot pass. Next named control: teach
+T the single-recipe yields too. Spec sheet section 7.28 and change-log row in
+this commit.
+
 ## 2026-10-15 PDT - CAS Recipe Capacity Rules v0.1 named; RB-W capacity experiment RAN ($0): Limiting-Reagent Rule held 6 of 7; blend law only to ~12 vertices; smooth/noisy laws need an ordinary head; restart fallback (RB-C4) is the one stochastic mechanism that earned its keep
 
 Owner words: "name it and RB-W" (2026-10-15 ~1:40 AM Pacific); vocabulary rule
