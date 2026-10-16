@@ -70,6 +70,29 @@ import torch""",
     ),
     (
         "neural.py",
+        """        registration = self.executable_registration(operation_id)
+        if not isinstance(value, Tensor):
+            raise NeuralCJTError("operation input must be a torch.Tensor")
+        result = self.modules_by_operation[registration.operation_id](value)""",
+        """        registration = self.executable_registration(operation_id)
+        if not isinstance(value, Tensor):
+            raise NeuralCJTError("operation input must be a torch.Tensor")
+        # ROUTE D: hold the case where the operation module can READ it. An operation's `forward`
+        # takes only `value`, so the case cannot arrive as an argument; it is exposed as an
+        # attribute and cleared in a finally so it cannot leak into another call.
+        #
+        # The first version of this patch passed the case IN and then dropped it, which would have
+        # left the operation unable to read it while looking correct at the call site. Found by
+        # importing the patched module and reading what the bank actually did with `case`.
+        self._active_case = case
+        try:
+            result = self.modules_by_operation[registration.operation_id](value)
+        finally:
+            self._active_case = None""",
+        "the bank holds the case where the operation can read it",
+    ),
+    (
+        "neural.py",
         """        transformed = self.operations(operation_id, projected_effect)""",
         """        transformed = self.operations(operation_id, projected_effect, self._active_case)""",
         "the node hands the active case to the operation",
@@ -159,12 +182,20 @@ def main() -> int:
         if os.path.abspath(target).lower() == os.path.abspath(FROZEN).lower():
             print("REFUSED: the target IS the frozen source.")
             return 1
+        # `--apply-to` must still start from a COPY of the frozen source; the flag chooses WHERE
+        # the copy goes, not whether one is made. The first version of this read the target
+        # directly and failed on a directory that did not exist yet.
+        if os.path.isdir(target):
+            shutil.rmtree(target, ignore_errors=True)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        shutil.copytree(FROZEN, target)
+        print("  copied the frozen source into the requested target")
     else:
         shutil.rmtree(os.path.dirname(target), ignore_errors=True)
         os.makedirs(os.path.dirname(target), exist_ok=True)
         shutil.copytree(FROZEN, target)
-        print("  copied %d files into the scratch tree"
-              % sum(len(f) for _, _, f in os.walk(target)))
+    print("  files in the patched tree: %d"
+          % sum(len(f) for _, _, f in os.walk(target)))
 
     print()
     print("=" * 74)
