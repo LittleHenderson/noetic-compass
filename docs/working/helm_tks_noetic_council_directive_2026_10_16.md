@@ -304,7 +304,57 @@ Every one produced a green or a red that was wrong.
 - If the false positive produced a record, **correct the record** — a second erratum is cheaper than
   a wrong claim, and this project keeps its errata on the page rather than editing history.
 
-## 13. Reporting to the owner
+## 13. Portability: what runs where, and what it reads
+
+The council was built on this machine, so its paths are this machine's paths. That is worth stating
+plainly rather than discovering later.
+
+### The machinery is portable
+
+Measured by copying eight files into an empty folder — no journal, no seats directory, no
+environment — and running the loop there: **it runs, writes its own journal, and reaches the same
+diagnosis.** The eight files are `council_loop.py`, the three `run_loop_*.py` runners, the three
+`target_*.py` modules, and `verify_r1_rt_rules.py`.
+
+**A reading that names a path on this machine is not portable; a reading that names a record is.**
+
+### The rule this produced, now enforced in the code
+
+`RT_SPECIFIED` originally listed a **hard-coded worktree directory** to find the R1-RT design. The
+design is **committed** to `origin/claude/project-thread-pmbzd6`; the worktree was only where it was
+written. Had that worktree been removed, the reading would have reported **"no design" while the
+design sat on the branch** — wrong about the one thing it names, which is exactly what section 12
+forbids.
+
+It now reads the live branch through `git show <branch>:<dir>` and falls back to disk only when git
+cannot be reached, and its detail says **which source was used**. The rule generalises: **prefer
+the record to the path.**
+
+### What each target reads, and where it breaks elsewhere
+
+| target | what it reads | portable? |
+|---|---|---|
+| `ENGINE_CANON_FAITHFUL` | the engine candidates under `Documents\Codex\2026-10-16\rpm_council_work\` | **no** — it is a repository of the engine's own repair history, and it is this machine's |
+| `HELM_R1_WAVE1_DONE` | the frozen reader's verdict, the run receipts, the AWS ledger, and the live record through `git show` | **partly** — the record half is portable; the verdict and receipts are files this machine holds |
+| `HELM_R1_RT_HOSTED` | the runtime source, the recipe brain package, `WAVES.md`, and the design on the live branch | **partly** — the design and the plan are portable; the runtime and package are disk copies |
+| any Run reading | the run's own receipts by path | **no** — a receipt lives where it was written |
+
+**None of this is a defect to fix now.** It is a limit to state, because a future agent on another
+machine will otherwise read a green reading and believe it.
+
+### What lives only on this machine, and matters
+
+- the engine of record and the candidates it was selected from,
+- the wave-1 verdict, its receipts, the supervisor receipt, and the AWS ledger,
+- the runtime source and the recipe brain packages,
+- the seat reports under `noetic_loop\seats\`,
+- the loop journal.
+
+The wave-1 **run** is backed up at `D:\tksCAS-archive\helm_r1_w1_c34g_20261016\` with three
+confirmations, and that backup is the durable copy of the result. The rest has no backup, and that
+is recorded here rather than assumed away.
+
+## 14. Reporting to the owner
 
 Every council report to the owner uses the owner's colour scale and ends with the owner's
 required sign-off lines.
@@ -326,7 +376,7 @@ jargon on first use. Separate what was measured from what was inferred from what
 Keep every literal exact. Ask him only for new money, irreversible steps, a new experiment line,
 or a real research choice.
 
-## 14. What is verified, and what is not
+## 15. What is verified, and what is not
 
 **Verified, with its reading:**
 
@@ -342,6 +392,11 @@ or a real research choice.
 | The anti-drift checks fire on drift and stay silent otherwise | 5 exercised cases, all as expected |
 | The loop closes on a real target | `LOOP_JOURNAL.jsonl`: iterations 8–9 blocked, iteration 10 `SATISFIED` |
 | The council corrected its orchestrator | five corrections by five seats in one turn, each verified against the bytes |
+| The council runs from a fresh checkout | eight files copied into an empty folder: the loop ran, wrote its own journal, and reached the same diagnosis |
+| The R1-RT input rule matches the runtime's own oracle | 20,000 random and 98,304 exhaustive cases, 0 disagreements |
+| The R1-RT output rule survives the decoder's arithmetic | 4 constants x 8 labels, 32 of 32 correct, and the all-zero trap demonstrated |
+| The two halves of R1-RT refuse each other | `runtime.py:9` is an unguarded `import torch` and 17 of 34 runtime files import it; `rb/no_torch.py` refuses a process already holding torch and raises on install. Both import orders fail |
+| The runtime cross-checks the brain's routing | `runtime.py:1011-1025` compares three telemetry fields with `torch.equal` against the materialized route and raises on mismatch |
 
 **Not verified, and stated so that nobody assumes otherwise:**
 
@@ -354,10 +409,11 @@ or a real research choice.
 - The independent half depends on a spawn capability existing. Where it does not, the fallback
   applies and must be labelled.
 
-## 15. Amendment log
+## 16. Amendment log
 
 | Date | Change |
 |---|---|
 | 2026-10-16 | **Section 12 added: false-positive resistance.** Five instances of one failure were found in a single session — a check that looks for a token instead of measuring the thing — two of them in the council's own code. Four of the five: the gate reading that matched mere mentions of R1-RT and could have flipped on filesystem walk order; the bridge reading that matched an INERT stub by filename; the supervisor that sealed a clean run FAIL for looking one directory too high; the controller that recorded "launch refused" for an instance that was running and billed for 297 seconds. The rules that follow are now standing: open the artefact rather than counting its name, report mentions as mentions, treat `ok=None` as blocking, state which half of a half-met condition is absent, name every reading's source, and prove a repaired check by re-running it against the input that fooled it. |
+| 2026-10-16 | **Section 13 added: portability.** The council runs from a fresh checkout (measured), but several readings name paths on this machine. The rule that follows is enforced in the code: `RT_SPECIFIED` now reads the design from the live branch through `git show` rather than from a hard-coded worktree path, because the design is committed and the worktree was only where it was written. Prefer the record to the path. |
 | 2026-10-16 | **Third target added: `HELM_R1_RT_HOSTED`** (host the recipe brain inside HELM's own runtime), with its measured state, its three names, its nine marks and five arms, both frozen conversion rules, and its run envelope. Its two open conditions are the bridge code and the owner's word. |
 | 2026-10-16 | Written. The council's first operating session: engine of record established at `H_c8`; two targets defined; ten independent seats run on the HELM-R1 blocker; find section 7.47 and the four stranded sections 7.40–7.43 recorded in the living master record; the wave-1 run backed up with three confirmations. |
