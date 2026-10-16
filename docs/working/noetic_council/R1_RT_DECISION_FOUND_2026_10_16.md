@@ -59,7 +59,42 @@ a reason the other side wrote down on purpose.
 
 Option 3 is written down so that it is on the record as **refused**, not as an available shortcut.
 
-## What the other seats measured that bears on the choice
+## A correction to this turn's own premise, found by seat CO-1 and verified here
+
+The target statement, and the brief the ten seats were given, said: *"the same answers inside HELM
+that wave 1 measured outside it."* **That comparison, as written, is not available.** Measured:
+
+| | GB3, the brain wave 1 beat | `cas_cjt`, the runtime R1-RT would host in |
+|---|---|---|
+| its task | **16 synthetic two-board worlds**, labels `L0`–`L3` | `native.route_dependency_audit/1`, **eight** labels `FIRST_UNSUPPORTED_LEG_0…_6` plus `ALL_LEGS_PRESENT` |
+| where the task's code is | GB3's package ships **no** `cas_cjt` python at all — only `bias_state.schema.json` and `neural_cjt_contracts.schema.json` | `source_r6/native_task.py`, sha256 `ec6d06a45adc66a740e607824786a035a69e9a49967d6c1f70cc66a838709d93` |
+| who knows about the other | GB3's own `README_GB3.md:93` says of itself: *"No native checkpoint, no ASOM, **no native task**…"* | the string `GB3` appears **0** times in the runtime's 34 files |
+
+**So "GB3's slot" and "HELM's own runtime" are not the same machine**, and the target sentence moves
+between them without saying so. Comparing a recipe brain's wave-1 answers with its answers inside
+`cas_cjt` would compare answers to **a different task, on a different label set, in a different
+runtime**. An identity check built on that comparison would be measuring nothing.
+
+**And there is a hash pin standing where the hosted run would have to pass.** `cas_cjt/teaching.py`
+line 31 is `TASK_SOURCE_SHA256 = "ec6d06a4…9d93"`, and lines 52-53 require the task module to be at
+an exact location:
+
+```python
+expected = Path(__file__).resolve().parent.parent / "native_task.py"
+_require(Path(native_task.__file__).resolve() == expected, "TASK_MODULE_LOCATION_MISMATCH")
+```
+
+Re-hashed here: the file at that path **is** `ec6d06a4…9d93`. The runtime does not merely prefer its
+task; it **pins it by content and by location**, and refuses a mismatch. A hosted run does not get
+to choose the task it is scored on.
+
+**What this changes.** The design must first name, in one frozen document with hashes: (i) which
+brain is being replaced, (ii) which task and which label set the hosted run is scored on, and (iii)
+which repair mechanism counts as "the real nested repair". Until those three are named, every mark
+is unanswerable — and that naming is the first real content of the missing design, not a preamble
+to it.
+
+## What else the seats measured that bears on the choice
 
 - **The runtime already implements GB3's task.** `source_r6/native_task.py:18` carries the same
   task id as GB3's `TASK_CONTRACT.md`, the same eight answers in the same order, the same

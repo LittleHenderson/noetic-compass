@@ -292,9 +292,15 @@ def conditions_for() -> List[RequiredCondition]:
             id="RT_SPECIFIED",
             statement="an R1-RT design exists: what runs, on which exam, read by which program",
             understood=Reading(
-                source="WAVES.md, the wave table",
+                source="WAVES.md's wave table, and the two packages' own task definitions",
                 ok=True,
-                detail="WAVES.md's own state for this row is 'not designed'"),
+                detail=("WAVES.md's own state for this row is 'not designed'. And the target "
+                        "sentence is ambiguous in a way that matters: GB3's task is 16 synthetic "
+                        "two-board worlds with labels L0-L3, while the runtime's only task is "
+                        "native.route_dependency_audit/1 with eight labels, pinned by content at "
+                        "teaching.py:31 and by location at :52-53. 'The same answers' as written "
+                        "would compare answers to two different tasks. A design must first name "
+                        "which brain, which task and which repair mechanism, with hashes.")),
             mechanism=mech, established=design, prerequisites=[]),
 
         RequiredCondition(
