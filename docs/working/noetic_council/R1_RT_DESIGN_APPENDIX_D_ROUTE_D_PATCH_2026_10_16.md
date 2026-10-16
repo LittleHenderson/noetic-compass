@@ -160,6 +160,30 @@ It was caught because the probe now **asserts** which copy it loaded instead of 
 arithmetic, and it aborted with `ROUTE D PATCH PRESENT: False` rather than reporting a success that
 meant nothing. The loop is fixed, and the assertion stays.
 
+### Three traps for anyone who writes an extension operation
+
+Found while testing the patch, kept because the next person to write a shim will meet them.
+
+**1. An extension operation that holds a reference to its own bank makes the module graph cyclic.**
+The first version of the test's recorder stored the `RegisteredOperationBank` on itself to read the
+held case. Both are `nn.Module`s, so `state_dict()` walked bank → recorder → bank → … until Python
+raised **`RecursionError`**. The recorder now reads through a **plain callable**, and the probe has a
+sixth check — `state_dict()` has 10 entries and does not recurse — so the cycle cannot come back
+unnoticed. *Module bookkeeping must stay out of the module tree.*
+
+**2. The built-in operations occupy relation indices 0 to 3.** `^6` decompose, `^2` attract, `^3`
+avert and `^8` trigger take them in `OPERATION_REGISTRATIONS`, and `register_operation` refuses a
+duplicate and refuses any index at or above `num_relations`. A new identity therefore needs index 4
+**and** a config with `num_relations` of at least 5. Two attempts died on this before it was measured
+from the source rather than assumed.
+
+**3. An extension operation cannot execute until its contract is bound**, and the contract's own
+validator refuses invented values: `legal_bias_paths` must start with `/memory`, `/rpm`, `/operating`
+or `/theta`, and `memory_interface`, `legal_actions`, `legal_bias_paths`, `plasticity_groups` and
+`governance_requirements` must all be non-empty. The probe copies the real values from
+`cas_cjt/state.py:154-200` rather than guessing; two earlier attempts that guessed were refused, which
+is the schema discipline working as intended rather than an obstacle.
+
 ## 6. What the patch does not do, and cannot claim
 
 - **It is not applied.** Where the runtime source is frozen, a package edit needs a new seal and the
