@@ -342,6 +342,29 @@ the record to the path.**
 **None of this is a defect to fix now.** It is a limit to state, because a future agent on another
 machine will otherwise read a green reading and believe it.
 
+### A junction that copies into infinity
+
+Measured while backing up the working record, and recorded because naive tooling walks straight
+into it.
+
+**`rpm_council_work\E_c5\rpm_council` is a directory junction whose target is `E_c5` — its own
+parent.** It was left behind by an earlier session's copy step. Following it nests `rpm_council`
+inside itself without end.
+
+What that did: `shutil.copytree` followed it, **left 121 directories in the archive**, and then died
+with `WinError 1921` when the path passed the Windows limit. The backup's own tree scan had also
+reported a suspiciously long path, which is what pointed at it.
+
+**The rule that follows: prune reparse points, never follow them.** A backup or a tree scan must skip
+junctions and symlinks and **say how many it skipped**, because a pruned link means the backup does
+not contain that subtree and a reader of the manifest is entitled to know. The three trees now back
+up as 56, 148 and 4 files with the junction pruned and counted, and the engine hashes in the manifest
+match the loop journal's recorded `engine_sha256` exactly — which is how the backup proves it copied
+the right bytes.
+
+**This is also why the council's working record was not already backed up safely.** Wave 1's run was
+backed up; the machinery, the seat reports and the journal were not, and a naive copy of them fails.
+
 ### What lives only on this machine, and matters
 
 - the engine of record and the candidates it was selected from,
@@ -415,5 +438,6 @@ or a real research choice.
 |---|---|
 | 2026-10-16 | **Section 12 added: false-positive resistance.** Five instances of one failure were found in a single session — a check that looks for a token instead of measuring the thing — two of them in the council's own code. Four of the five: the gate reading that matched mere mentions of R1-RT and could have flipped on filesystem walk order; the bridge reading that matched an INERT stub by filename; the supervisor that sealed a clean run FAIL for looking one directory too high; the controller that recorded "launch refused" for an instance that was running and billed for 297 seconds. The rules that follow are now standing: open the artefact rather than counting its name, report mentions as mentions, treat `ok=None` as blocking, state which half of a half-met condition is absent, name every reading's source, and prove a repaired check by re-running it against the input that fooled it. |
 | 2026-10-16 | **Section 13 added: portability.** The council runs from a fresh checkout (measured), but several readings name paths on this machine. The rule that follows is enforced in the code: `RT_SPECIFIED` now reads the design from the live branch through `git show` rather than from a hard-coded worktree path, because the design is committed and the worktree was only where it was written. Prefer the record to the path. |
+| 2026-10-16 | **Junction hazard recorded** in section 13: `rpm_council_work\E_c5\rpm_council` is a junction targeting its own parent, and following it made `shutil.copytree` leave 121 directories and die on the Windows path limit. Reparse points are now pruned and counted, never followed. The council's working record is backed up with three confirmations at `D:\tksCAS-archive\noetic_council_20261016\`, and the manifest's engine hashes match the loop journal's recorded `engine_sha256`. |
 | 2026-10-16 | **Third target added: `HELM_R1_RT_HOSTED`** (host the recipe brain inside HELM's own runtime), with its measured state, its three names, its nine marks and five arms, both frozen conversion rules, and its run envelope. Its two open conditions are the bridge code and the owner's word. |
 | 2026-10-16 | Written. The council's first operating session: engine of record established at `H_c8`; two targets defined; ten independent seats run on the HELM-R1 blocker; find section 7.47 and the four stranded sections 7.40–7.43 recorded in the living master record; the wave-1 run backed up with three confirmations. |
