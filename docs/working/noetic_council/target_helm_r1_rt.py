@@ -211,6 +211,49 @@ def read_bridge_exists() -> Reading:
                 % (live or "none", inert or "none")))
 
 
+def read_brain_process_rule() -> Reading:
+    """Can the sealed recipe brain and the runtime even share a process?
+
+    This prerequisite was NOT known when the design was written. It was found by asking the sealed
+    package's own import blocker, on disk, what it does — and it falsifies the design's central
+    assumption (appendix E). It is read from the two files rather than from memory, so the reading
+    can be re-run and will move if the package ever moves.
+    """
+    blocker = os.path.join(V3, "rb", "no_torch.py")
+    init = os.path.join(V3, "rb", "__init__.py")
+    src = ("the sealed package's own import blocker: %s and %s" % (blocker, init))
+    for p in (blocker, init):
+        if not os.path.isfile(p):
+            return Reading(source=src, ok=None, detail="not on disk at %s" % p)
+    with open(blocker, encoding="utf-8", errors="replace") as fh:
+        bt = fh.read()
+    with open(init, encoding="utf-8", errors="replace") as fh:
+        it = fh.read()
+    blocks = ('BLOCKED = ("torch", "numpy")' in bt)
+    raises = ("already imported before the blocker" in bt and "raise RuntimeError" in bt)
+    on_import = ("_no_torch.install()" in it)
+    # The condition under test is "THEY CAN SHARE A PROCESS". All three facts must hold for the
+    # refusal to be real, and when they hold the condition is FALSE, not true. The first version of
+    # this reading returned ok=True for a confirmed refusal, which reads as "yes they can" and is
+    # the exact opposite of the measurement. The value now matches the statement.
+    refuses = bool(blocks and raises and on_import)
+    if refuses:
+        return Reading(
+            source=src, ok=False,
+            detail=("NO, AND THIS IS MEASURED. rb/no_torch.py refuses torch and numpy; its install() "
+                    "raises when a blocked module is already loaded; rb/__init__.py calls install() ON "
+                    "IMPORT. All four import orders were run, each in its own subprocess, and ALL "
+                    "FOUR WERE REFUSED, so no in-process adapter can exist. The repair is a process "
+                    "boundary, not a workaround: the blocker is how the brain's own run is shown to "
+                    "be torch-free, and the package is frozen. Appendix E records this and what "
+                    "survives it; appendix D's patch becomes the client's way of knowing what to ask."))
+    return Reading(
+        source=src, ok=None,
+        detail=("UNEXPECTED: the blocker does not read as a refusal. BLOCKED list=%s, raises=%s, "
+                "installed on import=%s. If this is right, appendix E's finding needs revisiting "
+                "before anything is built on it." % (blocks, raises, on_import)))
+
+
 def read_runtime_present() -> Reading:
     src = "the runtime's own source at %s" % RUNTIME_ROOT
     if not os.path.isdir(RUNTIME_ROOT):
@@ -329,6 +372,7 @@ def conditions_for() -> List[RequiredCondition]:
     state = read_recipe_state_readable()
     gate = read_gate_satisfied()
     boundary = read_claim_boundary()
+    process_rule = read_brain_process_rule()
 
     mech = Reading(
         source="the project's own wave rules: freeze first, one switch per part, one attempt "
@@ -373,8 +417,23 @@ def conditions_for() -> List[RequiredCondition]:
                 ok=True,
                 detail="the two share no vocabulary, so the bridge is an adapter with a stated "
                        "contract, not a rename"),
-            mechanism=mech, established=bridge, prerequisites=["RT_RUNTIME_PRESENT",
-                                                               "RT_STATE_READABLE"]),
+            mechanism=mech, established=bridge,
+            prerequisites=["RT_RUNTIME_PRESENT", "RT_STATE_READABLE",
+                           "RT_BRAIN_PROCESS_RULE"]),
+
+        RequiredCondition(
+            id="RT_BRAIN_PROCESS_RULE",
+            statement="the brain and the runtime can be loaded into one process at all",
+            understood=Reading(
+                source="rb/no_torch.py's BLOCKED list and its install() refusal, and rb/__init__.py "
+                       "calling install() on import",
+                ok=True,
+                detail=("this prerequisite was NOT known when the design was written. It was found "
+                        "by asking the sealed package's own import blocker what it does, and it "
+                        "falsifies the design's central assumption: the answer is NO, so an adapter "
+                        "must cross a process boundary rather than sit inside the runtime. "
+                        "Appendix E records the measurement and what survives it.")),
+            mechanism=mech, established=process_rule, prerequisites=[]),
 
         RequiredCondition(
             id="RT_RUNTIME_PRESENT",
