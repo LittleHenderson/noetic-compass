@@ -85,6 +85,33 @@ CLIENT_EDITS: List[Tuple[str, str, str, str]] = [
         checkpoint = encode_module_checkpoint(network)""",
         "create() registers extension operations before the envelope is sealed",
     ),
+    (
+        "runtime.py",
+        """        decoder_contracts: Mapping[str, DecoderContract] | None = None,
+        semantic_lineage: Mapping[str, Any] | None = None,
+        enable_teaching: bool = False,
+    ) -> "NeuralCJTRuntime":
+        network = NeuralCJTNetwork(config, node_specs, topology=topology)""",
+        """        decoder_contracts: Mapping[str, DecoderContract] | None = None,
+        semantic_lineage: Mapping[str, Any] | None = None,
+        extension_operations: Mapping[str, Sequence[tuple[Any, Any]]] | None = None,
+        enable_teaching: bool = False,
+    ) -> "NeuralCJTRuntime":
+        network = NeuralCJTNetwork(config, node_specs, topology=topology)
+        # R1-RT CLIENT: `open()` needs the same way in that `create()` has. Without it a reopened
+        # runtime has a node spec naming a client whose module was never registered, and the
+        # checkpoint's key set no longer matches the network's. MEASURED, not predicted: reopening a
+        # store created with a client failed with
+        #     CheckpointError: checkpoint keys do not match the Neural CJT module
+        # That error fires at `load_module_checkpoint` further down, which is why the registration
+        # has to happen here, before the load, and not after it.
+        if extension_operations is not None:
+            for cjt_id, items in extension_operations.items():
+                bank = network.node(cjt_id).operations
+                for registration, module in items:
+                    bank.register_operation(registration, module)""",
+        "open() gains the same way in, before its checkpoint is compared",
+    ),
 ]
 
 EDITS = list(ROUTE_D_EDITS) + CLIENT_EDITS
@@ -158,8 +185,9 @@ def main() -> int:
     print("=" * 78)
     print("RESULT: the client's patch is prepared at %s" % target)
     print("  Nothing under controller_r6_restoration_op13 was written to.")
-    print("  THREE edits are now required where the design expected one. Two are small: one data")
-    print("  table entry, and one block in create(). The consequences the appendix must state:")
+    print("  FOUR edits are now required beyond route D, where the design expected none. Three are")
+    print("  small (a table entry, and two blocks); the fourth is open(), and the consequences the")
+    print("  appendix must state are:")
     print("    (a) the task's own decoder contract pins ^6, so a client run BYPASSES it and supplies")
     print("        its own, which changes what \"the same task\" can be claimed;")
     print("    (b) nothing in the frozen runtime can replace a built-in operation, so a client can")
