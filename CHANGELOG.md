@@ -47,6 +47,42 @@ with their bodies unchanged; the live record already cited §7.43 five times wit
 containing it. Spec sheet section 7.47, a change-log row for it and a change-log row
 for the four, all in this commit.
 
+## 2026-10-16 PDT - ERRATUM to spec sheet section 7.47: four claims in the wave-1 record's first commit were falsified by the council's verification seat and are corrected; a governance gap the first draft missed is now on the page
+
+Section 7.47 was committed as 60321a14 and then adversarially verified by the council's
+seat CO-8 Above/Cause, which was told to falsify it rather than confirm it. It
+falsified four things, each checked here against the file the section itself names:
+
+1. "108 members" was v1's member count printed beside v3's freeze hash. v3's own
+   PACKAGE_FREEZE.json reads member_count_excluding_freeze 110, with 110 members
+   listed.
+2. 3,624fc29 is the v1 PACKAGE_FREEZE.json hash and was presented inside v3's
+   parenthesis. 8c55c413... is v3's.
+3. The money paragraph priced the run at the control record's published 1.536 USD per
+   host hour. The rate the package freezes for itself is 1.5529 USD per host hour
+   (RUN_LIMITS_R1W1.json; the run's own frozen window maximum is 6.2116 USD and its
+   expected range is "about 1.9 to 2.4"). Both arithmetic results are now given, each
+   naming its rate and each labelled arithmetic rather than a bill:
+   1.83684790085348 at the frozen rate, 1.816857734375 at the published one.
+4. The heading read "beat it" without naming synthetic worlds. It now says the win is
+   on the freshly sealed synthetic exam.
+
+CO-8 also found a governance gap the first draft missed, now recorded in the section:
+the owner's approval record binds v1's bytes - its limits_of_this_record names
+b7cee315... and 3624fc29..., and it declares members_checked_against_freeze 108 - while
+the run that produced this result executed v3 (8c55c413...). The frozen
+one-attempt-per-seal rule is satisfied and the re-seals are documented in the reader's
+two amendments, but no fresh owner line bound to v3's hash is established. That does
+not change the reading, which the frozen reader computes from the run's raw output,
+and it widens no claim. It is put to the owner as it stands.
+
+Everything else in 7.47 stands: PASS, R1_BEATS_GB3, 7 of 7 hard gates, 8 of 8
+instrument rows, 32 against 9 and 17/2, the threshold-versus-achieved distinction, the
+supervisor's FAIL markup kept as recorded, seven attempts, and the new backup. No
+negative was deleted and no other number changed. The correction is a second commit on
+purpose: the record keeps the first version and the erratum, rather than pretending the
+first version never existed.
+
 ## 2026-10-16 PDT - M1 H8 verified creative reconstruction policy v0.2 FROZEN (no implementation, nothing scored): the owner moved the line from "can a spare copy be checked" to "is the fault classified" and added a bounded, anchored, verifier-vetoed search for the unclassified case
 
 Policy `M1-H8-VERIFIED-CREATIVE-RECONSTRUCTION` v0.2, document sha256 647ffc444a5911220909a88560a08bca276b5687c87a609729733df89c0386f9 (21,923 bytes, 146 lines); owner-authority record sha256 4afda3bdb1ab89333252a7090373a7293eee5e42dd04b54aaf50f9d51b93b213. Supersedes `M1-H8-VERIFIED-FALLBACK` v0.1 (16773D53DDE1B257EA92F283627A07A1E86F211B239EAD76B5AC7988197303CA), which stays valid and is not withdrawn. The owner's words, quoted verbatim in the record: the creative-radius direction of 2026-10-16, and "propose them as defaults sign v0.2" authorising the four frozen numbers (initial radius 1 mutation unit; widening step x2 on a verifier refusal; hard cap 8 mutation units and at most 4 widening turns; asymmetric at a wrong-answer cost of 20x a refusal, or an undeclared class). Arms A0_STRICT, A1_SPARE and A2_KERNEL; four controls that must fail (no verifier, unanchored, no widening, no consequence); eight safety floors, none averaged away; one wrong exact answer fails the whole result. Claim ceiling: NOTHING SCORED - no implementation exists and no row has been scored. Does not authorise enabling the policy in HELM, changing H8, any H8 pass, any AWS spend, or editing the frozen v5 package or the original M1 failure. New spec-sheet section 7.46 and change-log row added in this commit; next free section number 7.47.
