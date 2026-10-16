@@ -66,6 +66,34 @@ ROWS = [
         "Found by reading the headings back after running it. It now renumbers in place and is "
         "idempotent. |",
     ),
+    (
+        "the reference cell is unnecessary",
+        "| 2026-10-16 | **The one open design question DISSOLVED rather than decided: the reference "
+        "cell is unnecessary.** Appendix F's remaining question was whether the reference cell "
+        "crosses `RT_SHIM_NO_MATH`, since it has to know whether *every* leg is present. A route has "
+        "at most seven legs and `CELLS` is eight, so **a spare cell always exists**. Put a constant "
+        "`1.5` in the spare region, strictly between the two leg values (`3` present, `1` missing): "
+        "with every leg present the minimum is `1.5` and the first cell attaining it is the first "
+        "spare cell, index `k`; with leg `j` missing the minimum is `1` and the first cell attaining "
+        "it is `j`; and the minimum is never `0`, so G2 does not fire. **The bridge writes a per-leg "
+        "membership value and ONE constant. It computes no conjunction and holds no part of the "
+        "answer.** Both encodings ran against the live oracle on the same 323,851 cases: **0 "
+        "disagreements, 0 gated**, and all three answer streams \u2014 padding, reference, and the "
+        "oracle \u2014 are **byte-identical** at "
+        "`c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e`. |",
+    ),
+    (
+        "a refactor that gave both encodings one mapping",
+        "| 2026-10-16 | **A defect in my own refactor, caught by the digest and kept on the page.** "
+        "Refactoring the proof to carry both encodings, I gave **both** of them the padding layout's "
+        "cell mapping. The padding encoding then agreed on all 323,851 cases and the reference "
+        "encoding **disagreed on all 323,851**, because its reference cell sits at index 0 and its "
+        "legs at `1..k`. The disagreement was the refactor's bug, not a property of the encoding, and "
+        "it was visible immediately as two different digests \u2014 `d1d4c303` against the oracle's "
+        "`c591c568`. Each encoding now carries its own mapping and both reproduce the oracle's digest "
+        "exactly. Recorded because a disagreement on EVERY case is the signature of a coding error, "
+        "not of a wrong idea, and the next reader should not have to rediscover that. |",
+    ),
 ]
 
 
