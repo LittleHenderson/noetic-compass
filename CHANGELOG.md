@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-15 PDT - HELM RB-G6 RAN on the laptop ($0): GREW_WRONG_KIND on both world sets - the growth claim stays NOT LICENSED; V8 compactness refused the useless units
+
+Owner words: "“RB-G6” BECAUSE  a CREATES TOO MUCH NOISE ...". Fix E adds V8:
+keep a growth unit only if it explains at least 1 new training row per 4
+parameters it allocates (re-read rows excluded); theta chosen after RB-G5, so
+the run repeats on fresh worlds. 21 laptop parts, 15:54-17:23 PDT, tests pass
+in every part, replay 4/4, 320 units digest-equal with RB-G5. Merged sha256
+32d51f3f745850c7ab2632973130c411ff0f83ca301e7c667a5557266ca1205e. ORIGINAL:
+GREW_WRONG_KIND (V8 refused a's unit, 23 rows / 320 parameters, but strict
+G3 counts the fired trigger; a_approx 82.42 vs pre-sized 82.03, G2 pass).
+FRESH: GREW_WRONG_KIND (the brain's two diagnosis keys never agreed on fresh
+a_approx, so nothing grew: 14.84 vs 87.50, while the plain refusal-count arm
+grew it to 85.94; a_fresh fired again and was rolled back). V8 alone refused
+7 events, all on no-growth controls, and never a planted-world unit the other
+checks would keep; zero-parameter units (routes, depth) are exempt from V8.
+Growth claim NOT LICENSED after six runs. Spec sheet section 7.39 and a
+change-log row in this commit.
+
 ## 2026-10-15 PDT - HELM U1 RAN on the laptop ($0): the Unity Eye acting - INCONCLUSIVE in both readings; the random-whisper control broke the clean-dialogue gate
 
 Owner words: "U1 now ...BOTH THE EYE AND THE BRAIN SHOULD KNOW ABOUT ONE ANOTHER

@@ -1456,6 +1456,50 @@ Owner's words (verbatim, 2026-10-15 afternoon, Pacific): "U1 now ...BOTH THE EYE
 - **Status.** The eye's acting stays **NOT LICENSED**; claim ceiling SYNTHETIC_ONLY; spend 0. Owner decisions recorded, none needed to keep this record: keep or change the A5 control or the clean-dialogue rule; keep the "worse than A0" yardstick on faulted worlds or compare against the true answer key only. Either change means a new frozen test (for example U1b); U1 stays as read.
 - **Artifacts (off-repo):** `Documents\Codex\2026-10-15\u1_unity_eye\` (RESULTS.md sha256 `960ed7b7ee163ebfe5b8d10153dd29e60adb669a1a5c74b7c1f04e07fd246298`, FROZEN.json with amendments U1-A1 and U1-A2, PLAN.json, SOURCE_MANIFEST.json, STATUS.json, runs\U1_MSI_P01–P04 and P41–P58, runs\DRIVER_LOG.txt).
 
+### 7.39 HELM RB-G6 (sixth self-growth run, with the V8 compactness check, on the original and on fresh worlds): `GREW_WRONG_KIND` on both world sets → FAIL; the growth claim stays NOT LICENSED. V8 refused every useless unit on the noise controls, and on the planted worlds no unit the other seven checks would keep (2026-10-15 PDT, $0)
+
+Owner's words (verbatim, 2026-10-15 afternoon, Pacific): "“RB-G6” BECAUSE  a CREATES TOO MUCH NOISE IF I'M CORRECT THAT ALL OF THOSE PARAMETERS IT CREATES DO NOTHING AND ARE FOR NOTHING OR VERY LITTLE DISPORPROTIONAL TO THE NOISE IT CREATES....". So growth on the 4-input control `a` counts as false growth.
+
+- **Design.** Fix E adds check **V8 (compactness)**. A growth unit is kept only if it explains at least 1 new training row for every 4 parameters it allocates. Rows that the same-size stricter re-read already explains do not count. θ = 1/4 was chosen after seeing RB-G5, which is disclosed, so the run repeats on **fresh worlds** (new seeds; no `c`; `a_fresh` keeps the 16 recipe settings of `a`, new rows only). Arms: RBG (the operator), ORACLE (pre-sized), NO_GROWTH, RANDOM (median), REFUSAL_ONLY (grow when refusals pile up). Pre-code freeze sha256 `a19982f8387847e9c45e07b78bb547d49410f1a30f85ece5570f2be392d8ce08`; manifest `9d014708f347ff5cbb9bd10a6335376b778afca235cd9b9f9463142117582114` (306 files).
+- **Reading** (`runs\MERGED.json`, sha256 from the bytes on disk `32d51f3f745850c7ab2632973130c411ff0f83ca301e7c667a5557266ca1205e`): ORIGINAL **`GREW_WRONG_KIND`**, FAIL; FRESH **`GREW_WRONG_KIND`**, FAIL; `claim_licensed` false.
+
+  | Mark | RB-G5 | RB-G6 ORIGINAL | RB-G6 FRESH |
+  |---|---|---|---|
+  | G1 right kind | 🟩 | 🟩 | 🟥 a_approx: 0 fired, 0 kept |
+  | G2 reaches the pre-sized brain | 🟩 | 🟩 a_approx 82.42 vs 82.03 | 🟥 a_approx 14.84 vs 87.50 |
+  | G3 no false growth | 🟥 | 🟥 `a`: 1 fired, 0 kept | 🟥 `a_fresh`: 1 fired, 0 kept |
+  | G4 beats random by 5+ | 🟩 3/3 | 🟩 3/3 | 🟩 2/3 (a_approx gap 0.00) |
+  | G5 receipts | 🟩 | 🟩 259 kept / 0 bad | 🟩 257 / 0 |
+  | G6 ceiling | 🟩 | 🟩 | 🟩 |
+  | G7 rollbacks | 188 | 193 | 175 |
+
+- **Why ORIGINAL fails.** V8 refused `a`'s unit: 23 rows for 320 parameters, with V8 the only failing check. It kept every unit RB-G5 kept (84 of 84). But `a`'s trigger still fired, and strict G3, frozen since RB-G1, counts a fired trigger even when the unit is rolled back. The builder wrote before any code that V8 acts after the trigger and cannot un-fire it. The coordinator's earlier forecast of a G3 pass assumed otherwise.
+- **Why FRESH fails, with neither cause from V8.**
+  1. On fresh a_approx the brain's two diagnosis keys agreed on none of the 16 outcomes. One key read "add a route" on 15 outcomes and "add corners" on 0; the other read "add corners" on 8. So the first reading was KNOWLEDGE_MISSING, nothing fired, and a_approx stayed at 4 corners: 14.84 against the pre-sized 87.50. **The plain refusal-count arm (REFUSAL_ONLY) did grow it, to 85.94.** On these fresh worlds the mechanism-free trigger beat the brain's own ledger diagnosis.
+  2. `a_fresh` fired again; its unit explained 0 new rows and V1 and V8 rolled it back.
+- **What V8 did.**
+  - Kept on ORIGINAL: a_approx 4→8 corners (521/320), 8→12 (218/320), the scale_leak leakage term (781/16), and all 80 F1 slot units (3/4 each).
+  - V8 failed on 143 events; V1 also failed on 136 of them. V8 alone refused 7 events, **all on no-growth controls**. On both sets it never refused a planted-world unit the other seven checks would keep.
+  - The refusal-count arm kept 0 units on no-growth worlds (RB-G5: 5).
+  - Limit found: units that allocate 0 parameters (routes, depth) are exempt from V8. On ORIGINAL `a`, three random-arm depth units were kept, each "explaining" 10 rows, all of them from the stricter re-read alone.
+- **Family scores** (RBG / ORACLE / NO_GROWTH / RANDOM median / REFUSAL_ONLY):
+
+  | Family | ORIGINAL | FRESH |
+  |---|---|---|
+  | F1 | 100 / 100 / 62.50 / 62.50 / 100 | 100 / 100 / 62.50 / 75.00 / 100 |
+  | a_approx | 82.42 / 82.03 / 13.67 / 61.33 / 82.42 | 14.84 / 87.50 / 14.84 / 14.84 / 85.94 |
+  | scale_leak | 90.625 / 89.65 / 11.91 / 11.91 / 11.91 | 90.625 / 90.625 / 12.50 / 12.50 / 12.50 |
+  | `a` | 8.01 on every arm but RANDOM (9.375) | 12.50 on every arm |
+  | S2v2 / S3v2 | 87.50 / 87.50 | 87.50 / 87.50 |
+  | depth family | 25.78 / 43.16 / 0.00 / 25.78 / 25.78 | left out |
+
+- **Run.** 21 laptop parts (G01–G21); 612 units, of which 320 are shared with RB-G5 and all digest-equal. Tests 34/34 in G01 and 28/28 in G02–G21; replay 4/4 equal. Part wall time 3,184.9 s, from 15:54:08 to 17:23:26 PDT, including 37 min waiting for U1's worker. Peak working set 79,585,280 B. Lowest free RAM at launch 185,120 KB. Disclosed launch incident: the first driver failed its preflight under Windows PowerShell 5.1 (`Get-FileHash` missing) before any worker or run folder existed; it was relaunched under PowerShell 7 with the same manifest and sign line, and no source changed. Operator-composed sign line `APPROVE rb_g6, source 9d014708, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.` Spend 0.
+- **Status.** The growth claim "the brain added the right capacity when its own ledger said so" stays **NOT LICENSED**, now after six runs. V8's behaviour is a measured fact of this run; no claim word was frozen for it. Open questions recorded for the owner:
+  - should a refused unit still count as false growth, or should the noise be stopped before the trigger fires?
+  - the two-key diagnosis missed the fresh shortage that the refusal counter caught;
+  - zero-parameter units are exempt from V8.
+- **Artifacts (off-repo):** `Documents\Codex\2026-10-15\rb_g6\` (RESULTS.md sha256 `0c57dc55cbc8e034dfae92d537328e433c7d441832d6c3f60653317ae9930db4`, FROZEN.json, FROZEN.precode.json, SOURCE_MANIFEST.json, runs\MERGED.json, runs\DRIVER_LOG.txt).
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -1748,6 +1792,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-15 | **HELM RB-G6 RAN on the laptop ($0, 21 parts): GREW_WRONG_KIND on both the original and the fresh worlds → FAIL; the growth claim stays NOT LICENSED after six runs.** V8 (keep a unit only if it explains ≥ 1 row per 4 parameters) refused `a`'s unit (23/320) and every other useless unit on the noise controls, and on the planted worlds no unit the other checks would keep. Strict G3 still fails because the trigger fired. On fresh worlds the brain's own two-key diagnosis missed a_approx's shortage (14.84 vs 87.50), while the plain refusal counter grew it to 85.94. New §7.39. | `Documents\Codex\2026-10-15\rb_g6\runs\MERGED.json` (sha256 32d51f3f…); this commit |
 | 2026-10-15 | **HELM U1 RAN on the laptop ($0, 22 parts): the Unity Eye acting on the recipe brain — INCONCLUSIVE in both readings (frozen: G_INSTRUMENT, G_REPLAY, G_CLEAN_A5 failed; amendment U1-A2: G_CLEAN_A5 only). The random-whisper control's repeated answers on clean dialogues broke the clean-dialogue gate; no keep word and no harm word was awarded or refuted.** Raw marks only: the autonomic eye fixed 148 of 148 planted faults in A3 and A4, the checklist 128, whispers alone 60; the concert eye made 1,816 clean interventions against 2,605 one-way and 10,152 checklist. Flag kept: under the frozen rule order the faulted-world counts (155 / 258 / 258) would have printed EYE_HARMFUL had the control passed; the builder's breakdown says every one is a restored clean answer. Eye acting stays NOT LICENSED. New §7.38. | `Documents\Codex\2026-10-15\u1_unity_eye\runs\MERGED_READING.json` (sha256 fec73502…); this commit |
 | 2026-10-15 | **HELM RB-I1b RAN once on AWS (job c30, 0.11 USD) and stopped at its first stage: INSTRUMENT_ERROR, TESTS_FAILED — 4 of 16 tests hit the dataset-drift guard because two synthetic datasets rebuilt on Linux (CES powers and Gaussian noise through the maths library) did not match their laptop-frozen fingerprints; no reading, no mark, no comparison with RB-I1.** New §7.37; named fix (ship the frozen data by hash) not authorized; ledger → 105.28 of 200.00; cleanup VERIFIED twice. | `Documents\Codex\2026-10-15\rb_i1b\run_c30_rb_i1b_20261015\`; this commit |
 | 2026-10-15 | **HELM RB-G5 RAN ($0, laptop, 19 parts): with the tolerance rung reset to the scorer's 5% standard at every growth boundary, the smooth family reached the pre-sized brain for the first time (a_approx 82.42 vs 82.03; G2 PASS; G4 3 of 3); the stricter read alone added 0 of the 739 new rows; the only failing mark is strict G3 — the 4-input `a` control kept one fully verified unit (23 rows from the added corners, 10 from the read; held-out 8.01 → 10.55); status word GREW_WRONG_KIND a fifth time; G3 without `a` PASS (reported only).** New §7.36; the growth claim stays NOT LICENSED; owner decision open on `a`. | `Documents\Codex\2026-10-15\rb_g5\` (runs\MERGED.json sha256 `bdad4713…`); this commit |
