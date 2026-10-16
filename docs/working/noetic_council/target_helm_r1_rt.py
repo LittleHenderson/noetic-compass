@@ -98,14 +98,32 @@ def _grep(root: str, token: str, limit: int = 6) -> List[str]:
 
 
 def read_design_exists() -> Reading:
-    src = "look for an R1-RT design document under %s and in the plan folder" % R1_RT_DIR
-    hits = _search_names(R1_RT_DIR, ("r1_rt", "r1rt", "design"))
-    plan_hits = _search_names(PLAN_DIR, ("r1_rt", "r1rt", "runtime"))
-    n = sum(len(v) for v in hits.values()) + sum(len(v) for v in plan_hits.values())
-    return Reading(source=src, ok=n > 0,
-                   detail=("found %d candidate file(s): %s"
-                           % (n, (list(hits.values()) + list(plan_hits.values()))[:3] if n
-                              else "none — WAVES.md's own words are 'not designed'")))
+    """An R1-RT design exists: the three names, the acceptance test, the shape recommendation.
+
+    Part one is written. Part two (arms, machine, window, cost) waits on the owner's shape choice,
+    because the two shapes need different arms. So this reading reports which parts exist rather
+    than a bare yes/no, and it stays False until the design is complete, because a half-written
+    design is exactly what "not designed" meant.
+    """
+    src = ("look for R1-RT design documents under %s and in the plan folder" % R1_RT_DIR)
+    parts = _search_names(os.path.join(PLAN_DIR, "..", "..", ".."), ("nope",))  # never matches
+    design_dir = os.path.join(
+        r"D:\tksCAS-worktrees\docs-r1w1-wave1-20261016\docs\working\noetic_council")
+    found = []
+    for d in (R1_RT_DIR, design_dir):
+        if os.path.isdir(d):
+            found += [os.path.join(d, f) for f in os.listdir(d)
+                      if "r1_rt" in f.lower() and f.lower().endswith(".md")]
+    has_part1 = any("DESIGN_PART1" in os.path.basename(p) for p in found)
+    has_part2 = any("DESIGN_PART2" in os.path.basename(p) for p in found)
+    return Reading(
+        source=src, ok=(has_part1 and has_part2),
+        detail=("design part one (the three names, the acceptance test, the shape "
+                "recommendation): %s; design part two (arms, machine, window, cost): %s. "
+                "Found %d R1-RT document(s)."
+                % ("present" if has_part1 else "absent",
+                   "present" if has_part2 else "absent — it waits on the owner's shape choice",
+                   len(found))))
 
 
 def read_bridge_exists() -> Reading:
