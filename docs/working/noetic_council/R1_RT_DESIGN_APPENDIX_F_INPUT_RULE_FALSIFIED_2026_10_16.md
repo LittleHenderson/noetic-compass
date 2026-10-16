@@ -132,7 +132,7 @@ exists to draw exactly that line. **Whether it crosses the line is a design ques
 decided here.** The candidate also changes appendix A, which is frozen, so it would need its own
 freeze and the owner's line before any run.
 
-## 9. The candidate's arithmetic, proved against the runtime's own LIVE oracle
+## 8. The candidate's arithmetic, proved against the runtime's own LIVE oracle
 
 **Date:** 2026-10-16. **Status:** the arithmetic in section 7 now agrees with the runtime's own oracle
 on every case tried, using the **live** recipe brain and the **live** `native_task` — not
@@ -210,7 +210,7 @@ The comparison is not vacuous. Every one of the eight labels occurs in the answe
 4. **It is not a runtime result.** No tensor was produced, no decoder ran, no store was written. What
    runs between the label and HELM's runtime is appendix B's rule, unchanged.
 
-## 8. What is not known
+## 9. What is not known
 
 1. Whether the candidate in section 7 survives the `RT_SHIM_NO_MATH` line. **This is the one that
    matters, and it is not a measurement.**
@@ -218,8 +218,10 @@ The comparison is not vacuous. Every one of the eight labels occurs in the answe
    and only the limiting cell carries them, so probably yes — and it is untested.
 3. Whether the gate's other conditions, G3 and G4, fire on the candidate's inputs. None fired in the
    35 cases tried, which is not the same as proving they cannot.
-4. Whether the candidate can be proved **equivalent to the runtime's own oracle** the way appendix A
-   was proved, over the same 118,304 cases. Appendix A's proof is the reason a hosted run's answer
-   could be trusted; the candidate currently has 35 cases and no oracle comparison.
+4. ~~Whether the candidate can be proved equivalent to the runtime's own oracle the way appendix A
+   was proved, over the same 118,304 cases.~~ **ANSWERED by section 8: it was proved on 323,851
+   cases with 0 disagreements, against the LIVE oracle rather than a transcription.** What remains
+   open is not agreement but coverage: the long routes are random and adversarial rather than
+   exhaustive, and full exhaustion is about 2.6e7 cases.
 5. Whether any of this is worth doing, given what it would cost against wave 1's already-licensed
    result. **That is the owner's call, and this appendix does not make it.**
