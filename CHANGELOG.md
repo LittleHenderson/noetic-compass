@@ -83,6 +83,41 @@ negative was deleted and no other number changed. The correction is a second com
 purpose: the record keeps the first version and the erratum, rather than pretending the
 first version never existed.
 
+## 2026-10-16 PDT - SECOND ERRATUM to spec sheet section 7.47: the version gap was real but its consequence was overstated; the three packages are hashed file by file and only instrument and harness files ever changed
+
+The first erratum said the run's authority binding was a gap and left the reader to
+infer the science was in question. That inference was not supported and is withdrawn.
+The three packages were hashed file by file, and the result is unambiguous:
+
+  FROZEN.precode.json   (the marks and hard gates)  identical in v1, v2 and v3
+  FROZEN.json           (the frozen amendments)     identical in v1, v2 and v3
+  r1/merge_r1w1.py      (the only verdict emitter)  identical in v1, v2 and v3
+  tests_r1/test_run_r1w1.py   changed v1 -> v2 only
+  t_on_b/t_b.py               changed v2 -> v3 only
+  PACKAGE_FREEZE.json         version marker, both steps
+  one new AMENDMENT_*.md      the receipt of each change
+
+Not one mark, threshold, floor, gate, arm, world or seed moved, and the scorer never
+changed. The v1 -> v2 change repaired a Gate B instrument that compared all 112 world
+records and so reported 56 in every run whatever the custodian built - a check that
+could never pass, in its own words "measuring its own fixture". The v2 -> v3 change
+repaired the transformer driver demanding a draw's label equal its index while the
+fresh exam labels its draws 6550-6569.
+
+The re-seals were therefore necessary: an instrument that can never pass burns the
+attempt, exactly as it did on c34-c. And every change repairs a defect in the
+instrument or the harness, which falls under the owner's standing rule of 2026-10-15
+that a test broken by its own instrument or control gets a retest, started without
+asking. Nothing the approval was written for was altered.
+
+So the finding, stated at its true size: the coordinator re-sealed twice, correctly,
+and never advanced its own approval record to name v2 or v3, so the paper trail sits
+behind the package instead of the package sitting outside its authority. Two clean ways
+forward and the owner picks - amend the approval record to name each re-seal as it is
+cut, or keep the current binding and let the retest rule cover instrument repairs. No
+new run and no new money is needed on either path. The first erratum stays on the record
+unchanged; this one corrects it.
+
 ## 2026-10-16 PDT - M1 H8 verified creative reconstruction policy v0.2 FROZEN (no implementation, nothing scored): the owner moved the line from "can a spare copy be checked" to "is the fault classified" and added a bounded, anchored, verifier-vetoed search for the unclassified case
 
 Policy `M1-H8-VERIFIED-CREATIVE-RECONSTRUCTION` v0.2, document sha256 647ffc444a5911220909a88560a08bca276b5687c87a609729733df89c0386f9 (21,923 bytes, 146 lines); owner-authority record sha256 4afda3bdb1ab89333252a7090373a7293eee5e42dd04b54aaf50f9d51b93b213. Supersedes `M1-H8-VERIFIED-FALLBACK` v0.1 (16773D53DDE1B257EA92F283627A07A1E86F211B239EAD76B5AC7988197303CA), which stays valid and is not withdrawn. The owner's words, quoted verbatim in the record: the creative-radius direction of 2026-10-16, and "propose them as defaults sign v0.2" authorising the four frozen numbers (initial radius 1 mutation unit; widening step x2 on a verifier refusal; hard cap 8 mutation units and at most 4 widening turns; asymmetric at a wrong-answer cost of 20x a refusal, or an undeclared class). Arms A0_STRICT, A1_SPARE and A2_KERNEL; four controls that must fail (no verifier, unanchored, no widening, no consequence); eight safety floors, none averaged away; one wrong exact answer fails the whole result. Claim ceiling: NOTHING SCORED - no implementation exists and no row has been scored. Does not authorise enabling the policy in HELM, changing H8, any H8 pass, any AWS spend, or editing the frozen v5 package or the original M1 failure. New spec-sheet section 7.46 and change-log row added in this commit; next free section number 7.47.
