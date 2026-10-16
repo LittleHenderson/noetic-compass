@@ -97,6 +97,7 @@ independent thing that has to be solved.
   the *frozen input rule* as written cannot work.
 
 ## 7. A candidate repair: its arithmetic is measured, its permission is not
+*(the reference cell described here is no longer needed — see the padding encoding in section 8)*
 
 The gate fires only because the missing leg's stock is `0`. Give the cells values that are never zero
 and let the brain's own argmin find the leg:
@@ -125,12 +126,15 @@ one leg to seven, and every position of a single missing leg:
 
 Reproduce with `probe_candidate_input_rule.py <v3-package-root>`.
 
-**What is NOT measured, and is the whole remaining question.** The reference cell has to know whether
+**What was NOT measured here, and how it was resolved.** The reference cell has to know whether
 *every* leg is present. That is a conjunction over the same facts the rule already reads, so it may be
 legitimate — but it is closer to the answer than anything else in the bridge, and `RT_SHIM_NO_MATH`
-exists to draw exactly that line. **Whether it crosses the line is a design question and is not
-decided here.** The candidate also changes appendix A, which is frozen, so it would need its own
-freeze and the owner's line before any run.
+exists to draw exactly that line. **That was a design question and it is no longer one.** Section 8
+shows the reference cell is unnecessary: a constant in the always-present spare region does its job,
+and the bridge then holds no part of the answer. The encoding described in this section is kept
+because it is one of the two the proof ran against, and it agrees with the oracle on the same 323,851
+cases. The candidate still changes appendix A, which is frozen, so it needs its own freeze and the
+owner's line before any run.
 
 ## 8. The candidate's arithmetic, proved against the runtime's own LIVE oracle
 
@@ -154,6 +158,62 @@ process boundary the design already has to cross.
 Reproduce with `prove_candidate_vs_oracle.py <v3-package-root> <r6-source-root>`.
 
 <!-- DIGESTS-VERIFIED-BY-THE-WRITER -->
+
+### The reference cell is unnecessary, and the one open design question dissolves
+
+Section 7 left one question open, and called it the one that mattered: the reference cell has to know
+whether *every* leg is present, and deciding whether that crosses the design's own `RT_SHIM_NO_MATH`
+line is a design question rather than a measurement.
+
+**The question can be dissolved instead of decided.** A route has at most seven legs, and `CELLS` is
+eight, so **there is always at least one spare cell**. Give the spare cells a constant value strictly
+between the two leg values:
+
+| cells | value |
+|---|---|
+| `0` to `k-1`, one per route leg | `3` if that leg is present, `1` if not |
+| `k` to `7`, the spare region | the constant **`1.5`** |
+| requirement | `1` everywhere, as before |
+
+Then:
+
+- **every leg present** — all leg cells are `3`, the spare region is `1.5`, so the minimum is `1.5`
+  and the first cell attaining it is the first spare cell, index `k`;
+- **leg `j` missing** — that cell is `1`, which is below `1.5`, so the minimum is `1` and the first
+  cell attaining it is the lowest missing leg's cell, index `j`;
+- **no gate** — the minimum is `1` or `1.5`, never `0`, so G2 does not fire.
+
+The bridge therefore writes a per-leg membership value and **one constant**. It computes no
+conjunction, holds no part of the answer, and does not know whether every leg is present — the brain's
+own argument of the minimum discovers that. `RT_SHIM_NO_MATH` is satisfied by construction rather than
+by a judgement call.
+
+**Measured, not argued.** Both encodings were run against the live oracle on the same 323,851 cases:
+
+| encoding | cases | disagreements | gated | sha256 of the answer stream |
+|---|---|---|---|---|
+| **padding** (no reference cell) | 323,851 | **0** | **0** | `c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e` |
+| reference cell (section 7) | 323,851 | **0** | **0** | `c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e` |
+| the runtime's own oracle | 323,851 | — | — | `c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e` |
+
+All three streams have the **same digest**: not merely equal answers, but byte-identical files.
+
+Run both with:
+
+```
+python -B prove_candidate_vs_oracle.py <v3-package-root> <r6-source-root> padding reference
+```
+
+**A defect found while measuring this, kept on the page.** Refactoring the proof to carry both
+encodings, I gave **both** of them the padding layout's cell mapping. The padding encoding then agreed
+on every case and the reference encoding disagreed on every case, because its reference cell sits at
+index 0 and its legs at `1..k`. The disagreement was the refactor's bug, not a property of the
+encoding, and it was visible immediately as two different digests (`d1d4c303` against `c591c568`).
+Each encoding now carries its own mapping, and both reproduce the oracle's digest exactly.
+
+**What this does not establish.** It does not approve the encoding for a run, and it does not touch
+the four-against-eight alphabet problem in section 5, which is solved here by reading the limiting
+**cell** rather than the label. Section 9 lists what remains.
 
 ### Why this is stronger than appendix A's own proof
 
@@ -212,8 +272,10 @@ The comparison is not vacuous. Every one of the eight labels occurs in the answe
 
 ## 9. What is not known
 
-1. Whether the candidate in section 7 survives the `RT_SHIM_NO_MATH` line. **This is the one that
-   matters, and it is not a measurement.**
+1. ~~Whether the candidate in section 7 survives the `RT_SHIM_NO_MATH` line. This is the one that
+   matters, and it is not a measurement.~~ **DISSOLVED by section 8.** The padding encoding needs no
+   reference cell, so the bridge writes a per-leg membership value and one constant and holds no part
+   of the answer. The question was not decided; the thing it was about turned out to be unnecessary.
 2. Whether the four-slot brain can carry the candidate's answers. It needs one bit plus a leg index,
    and only the limiting cell carries them, so probably yes — and it is untested.
 3. Whether the gate's other conditions, G3 and G4, fire on the candidate's inputs. None fired in the
