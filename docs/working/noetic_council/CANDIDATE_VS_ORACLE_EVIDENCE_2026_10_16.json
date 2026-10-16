@@ -1,0 +1,36 @@
+{
+  "what": "The appendix-F candidate rule against the runtime LIVE oracle",
+  "date": "2026-10-16",
+  "cases_compared": 323851,
+  "disagreements": 0,
+  "gated": 0,
+  "coverage": {
+    "exhaustive_routes": 8736,
+    "exhaustive_cases": 122304,
+    "random_cases": 200000,
+    "adversarial_cases": 1547,
+    "total": 323851
+  },
+  "answer_streams": {
+    "candidate_answers": {
+      "sha256": "c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e",
+      "lines": 323851
+    },
+    "oracle_answers": {
+      "sha256": "c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e",
+      "lines": 323851
+    }
+  },
+  "byte_identical": true,
+  "candidate_side": "a process holding a live RecipeBrain, no torch, rb package refuses torch",
+  "oracle_side": "a process holding the live native_task, which imports torch",
+  "why_two_processes": "the brain and torch cannot share an interpreter; see appendix E",
+  "packages_used": {
+    "recipe_brain": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3",
+    "runtime_source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_r6_restoration_op13\\source_r6"
+  },
+  "reproduce": "C:\\Python314\\python.exe -B prove_candidate_vs_oracle.py <v3-package-root> <r6-source-root>",
+  "not_in_this_repository": "the two 7.2 MB answer files are not committed; the digest above is what makes the run falsifiable. Re-running the committed generator and the two committed runners reproduces the digest.",
+  "what_this_does_not_decide": "whether the reference cell is allowed under RT_SHIM_NO_MATH; that is a design question and is still open",
+  "manifest_digest": "4408294d743034d71baff1eed39f367f8405a68c259680236a9ca36f3171fce6"
+}
