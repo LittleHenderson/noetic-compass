@@ -167,9 +167,16 @@ import torch""",
 
 
 def main() -> int:
+    global FROZEN
     apply_to = None
     if "--apply-to" in sys.argv:
         apply_to = sys.argv[sys.argv.index("--apply-to") + 1]
+    if "--source" in sys.argv:
+        # WHICH cas_cjt this patches. Measured: GB3's carrier ships its OWN cas_cjt (29 modules)
+        # beside its own casformer, and the `gb` scaffold uses THAT one, not the R6 source
+        # (34 modules). They are different trees and the anchors happen to match in both. The
+        # source is therefore a parameter with a default, never an assumption.
+        FROZEN = os.path.abspath(sys.argv[sys.argv.index("--source") + 1])
     target = apply_to or SCRATCH
 
     print("=" * 74)
