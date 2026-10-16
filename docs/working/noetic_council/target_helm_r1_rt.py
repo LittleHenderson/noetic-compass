@@ -210,9 +210,26 @@ def read_gate_satisfied() -> Reading:
             d = json.load(fh)
     reading_half = bool(d and d.get("test_verdict") == "PASS" and d.get("claim_licensed") is True)
 
-    # The owner's half: a record that names R1-RT as approved. Looked for, not assumed.
-    owner_half = [p for p in _grep(R1_RT_DIR, "R1-RT", limit=4)] if os.path.isdir(R1_RT_DIR) else []
-    owner_half += [p for p in _grep(PLAN_DIR, "APPROVE R1-RT", limit=4)]
+    # The owner's half: an APPROVAL, not a mention. The first version of this searched the plan
+    # folder for the string "R1-RT" and got four hits — all of them documents that merely discuss
+    # R1-RT. Seat CO-0 measured that WAVES.md itself contains "R1-RT" and sits in the same folder,
+    # so a different filesystem walk order would have flipped this reading to True without a single
+    # byte changing. That is a false positive of exactly the kind this project keeps getting bitten
+    # by. Approval is now required to be an ADMISSION phrase, and a mere mention is reported as a
+    # mention so the reason is visible.
+    admission = ("approve r1-rt", "approved r1-rt", "approved, design it", "r1-rt approved",
+                 "authorise r1-rt", "authorize r1-rt", "go ahead on r1-rt")
+    mentions = _grep(R1_RT_DIR, "R1-RT", limit=6) if os.path.isdir(R1_RT_DIR) else []
+    mentions += [p for p in _grep(PLAN_DIR, "R1-RT", limit=8)]
+    owner_half = []
+    for p in mentions:
+        try:
+            with open(p, encoding="utf-8", errors="replace") as fh:
+                low = fh.read().lower()
+        except OSError:
+            continue
+        if any(a in low for a in admission):
+            owner_half.append(p)
     gate_line = [l for l in wave.splitlines() if "R1-RT" in l and "Gate" not in l][:1]
 
     if not reading_half:
@@ -222,13 +239,14 @@ def read_gate_satisfied() -> Reading:
         return Reading(
             source=src, ok=None,
             detail=("HALF MET, HALF ABSENT. W1's reading exists and is licensed, so that half is "
-                    "met. No record anywhere approves R1-RT: nothing found under %s or the plan "
-                    "folder. The owner's word is not an agent's to give, so this reading cannot be "
-                    "taken as satisfied and it BLOCKS the gate. WAVES.md: %r"
-                    % (R1_RT_DIR, gate_line[0].strip()[:110] if gate_line else "")))
+                    "met. %d document(s) MENTION R1-RT and NONE of them is an approval: %s. A "
+                    "mention is not a gate. The owner's word is not an agent's to give, so this "
+                    "reading cannot be taken as satisfied and it BLOCKS the gate."
+                    % (len(mentions),
+                       ", ".join(os.path.basename(p) for p in mentions[:4]))))
     return Reading(source=src, ok=True,
                    detail="both halves found: reading licensed, and an approval record naming "
-                          "R1-RT at %s" % owner_half[:2])
+                          "R1-RT as admitted at %s" % owner_half[:2])
 
 
 def read_claim_boundary() -> Reading:
