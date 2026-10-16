@@ -45,6 +45,9 @@ from typing import Any, Dict, List
 from council_loop import Reading, RequiredCondition
 
 R1_RT_DIR = r"C:\Users\wakil\Documents\Codex\2026-10-16\r1_rt"
+REPO = r"C:\Users\wakil\OneDrive\Desktop\tksCAS"
+THREAD_BRANCH = "origin/claude/project-thread-pmbzd6"
+DESIGN_DIR = "docs/working/noetic_council"
 PLAN_DIR = r"C:\Users\wakil\Documents\Codex\2026-10-15\helm_r1_integration_plan_v1"
 WAVES = os.path.join(PLAN_DIR, "WAVES.md")
 README = os.path.join(PLAN_DIR, "README.md")
@@ -75,6 +78,22 @@ def _search_names(root: str, needles: tuple) -> Dict[str, List[str]]:
     return hits
 
 
+def git_show_prefix(prefix: str) -> Optional[str]:
+    """The names under a directory on the live branch, or None if git cannot be reached.
+
+    Reads the RECORD, not a disk path. A design that is committed is on the branch whether or not
+    any particular worktree still exists on this machine.
+    """
+    import subprocess
+    if not os.path.isdir(REPO):
+        return None
+    p = subprocess.run(["git", "show", "%s:%s" % (THREAD_BRANCH, prefix.rstrip("/"))],
+                       cwd=REPO, capture_output=True, timeout=180)
+    if p.returncode != 0:
+        return None
+    return p.stdout.decode("utf-8", errors="replace")
+
+
 def _grep(root: str, token: str, limit: int = 6) -> List[str]:
     """Files whose TEXT contains a token. Reports where, never how many is enough."""
     found: List[str] = []
@@ -100,30 +119,53 @@ def _grep(root: str, token: str, limit: int = 6) -> List[str]:
 def read_design_exists() -> Reading:
     """An R1-RT design exists: the three names, the acceptance test, the shape recommendation.
 
-    Part one is written. Part two (arms, machine, window, cost) waits on the owner's shape choice,
-    because the two shapes need different arms. So this reading reports which parts exist rather
-    than a bare yes/no, and it stays False until the design is complete, because a half-written
-    design is exactly what "not designed" meant.
+    READ FROM THE LIVE BRANCH, not from a disk path. The first version of this reading listed a
+    hard-coded worktree directory. Measured by running the council from a fresh folder: the design
+    is COMMITTED to `origin/claude/project-thread-pmbzd6`, and the worktree was only where it was
+    written. If that worktree is ever removed, the disk version would report "no design" while the
+    design sits on the branch — a reading that is wrong about the thing it names, which is the exact
+    failure section 12 of the directive forbids.
+
+    So: the branch is the source of truth when git can be reached; the disk is the fallback for
+    offline work; and the detail says which was used.
+
+    Part two (arms, machine, window) and appendices A and B (the frozen conversion rules) are part
+    of the design. This stays False until the whole design exists, because a half-written design is
+    what "not designed" meant.
     """
-    src = ("look for R1-RT design documents under %s and in the plan folder" % R1_RT_DIR)
-    parts = _search_names(os.path.join(PLAN_DIR, "..", "..", ".."), ("nope",))  # never matches
-    design_dir = os.path.join(
-        r"D:\tksCAS-worktrees\docs-r1w1-wave1-20261016\docs\working\noetic_council")
-    found = []
-    for d in (R1_RT_DIR, design_dir):
+    src = ("git show %s:%s (the live record), falling back to disk paths"
+           % (THREAD_BRANCH, DESIGN_DIR))
+    branch_names: List[str] = []
+    branch_state = "git could not be read"
+    out = git_show_prefix("docs/working/noetic_council/")
+    if out is not None:
+        branch_names = [os.path.basename(p) for p in out.splitlines() if p.strip()]
+        branch_state = "%d file(s) on the branch" % len(branch_names)
+
+    disk_names: List[str] = []
+    for d in (R1_RT_DIR, os.path.join(
+            r"D:\tksCAS-worktrees\docs-r1w1-wave1-20261016\docs\working\noetic_council")):
         if os.path.isdir(d):
-            found += [os.path.join(d, f) for f in os.listdir(d)
-                      if "r1_rt" in f.lower() and f.lower().endswith(".md")]
-    has_part1 = any("DESIGN_PART1" in os.path.basename(p) for p in found)
-    has_part2 = any("DESIGN_PART2" in os.path.basename(p) for p in found)
+            disk_names += [f for f in os.listdir(d) if f.lower().endswith((".md", ".py"))]
+
+    names = branch_names or disk_names
+    source_used = "the live branch" if branch_names else (
+        "disk only (%s)" % branch_state)
+    low = [n.lower() for n in names]
+    has_part1 = any("design_part1" in n for n in low)
+    has_part2 = any("design_part2" in n for n in low)
+    has_env = any("part3_envelope" in n for n in low)
+    has_rules = any("appendix_a" in n for n in low) and any("appendix_b" in n for n in low)
+    complete = has_part1 and has_part2 and has_env and has_rules
     return Reading(
-        source=src, ok=(has_part1 and has_part2),
-        detail=("design part one (the three names, the acceptance test, the shape "
-                "recommendation): %s; design part two (arms, machine, window, cost): %s. "
-                "Found %d R1-RT document(s)."
-                % ("present" if has_part1 else "absent",
-                   "present" if has_part2 else "absent — it waits on the owner's shape choice",
-                   len(found))))
+        source=src, ok=complete,
+        detail=("read from %s (%s). design part one: %s; part two: %s; the envelope: %s; the "
+                "frozen conversion rules (appendix A and B): %s"
+                % (source_used, branch_state,
+                   "present" if has_part1 else "absent",
+                   "present" if has_part2 else "absent",
+                   "present" if has_env else "absent",
+                   "present" if has_rules else "absent")))
 
 
 def read_bridge_exists() -> Reading:
