@@ -4,6 +4,49 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-16 PDT - HELM-R1 WAVE 1 SCORED (job c34-g, AWS): the recipe brain in GB3's slot beat GB3 on the freshly sealed exam - 32 against 9, and 32 against 17/2 widened; frozen reader PASS, R1_BEATS_GB3, all seven hard gates and all eight instrument rows holding
+
+Owner's wave authority at §7.44 ("M1; R1, cap $10, sha256 of the bytes
+10b8c11da3dfab0c16d194f0a30e95798421490a82e91e346d6d20c0ece2466f) read as wave 1,
+10.00 USD total, c34-g capped at 9.50 USD; the launch's own bound record is
+OWNER_APPROVAL_R1_W1_C34_20261016T132012Z.json (sha256 085424445a94a8ae8de6c66696f949d09b19ee9939ceb0d26112db882c796e58),
+which the controller's authority_record names by hash. One m6i.8xlarge, us-west-2,
+instance i-094c2ae2f0c77fd98, one attempt of sealed package HELM_R1_W1_20261015 v3
+(freeze 8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b).
+132 tests all ok, Ran 132 tests in 4257.943s, 79 of 79 units exit 0,
+instrument_problems 0, deadline_hit false, 4258.260314941406 s of the 13860 s window.
+The frozen reader r1/merge_r1w1.py on the laptop returns PASS, R1_BEATS_GB3,
+claim licensed, ceiling SYNTHETIC_ONLY, 7 of 7 hard gates and 8 of 8 instrument
+rows holding. Panel sums: recipe brain 32 against transformer 9 and widened (385
+parameters) transformer 17/2 - the widened one did worse than the 97-parameter one.
+The reading names margin 4; that is the threshold, the achieved gaps are 23 and
+47/2. RPM Gate off gives 768 pooled wrong answers against 32 with it on.
+CCE_SKIN is SKIN_FORM_BROKEN with a VACUOUS answer half; LACUNA_CADENCE is
+CADENCE_MIXED. Not licensed: anything beyond synthetic worlds, learned carry,
+learned composition, statistical superiority, operation inside HELM's runtime,
+real data, growth, the eye, the atlas, heads or memory fading.
+THE RUN'S OWN COMPLETION MARKUP READS FAIL AND IS KEPT: the stage command exited 0
+and RUN_RECORD.json says exit_code 0 / EXITED, but the job supervisor recorded
+status FAIL, missing_outputs [R1_W1_HOST.json, R1_W1_HOST.json.sha256] and sealed
+COMPLETED_WITH_FAILURES / exit 1, because it checked the stage's declared outputs at
+the stage root while the runner keeps them under out/r1w1_out/. The reading it
+called missing is there, 2858582 bytes, sha256
+c7e73fc1c186c0bc2562067e5800805c785a422aa6b7ef80b96049d80b365d37, exactly what
+the runner and the reader recorded. The defect is recorded for wave 2, not repaired
+in place. Seven attempts, not one: c34 closed out at 0.14 USD, c34-b stopped before
+launch, c34-c died on a dead instrument (about 0.20 USD), c34-d failed to launch,
+c34-e lost the transformer side on a draw-label guard (about 0.40 USD), c34-f
+exited during cloud-init, c34-g is attempt 7; the package was re-sealed between
+attempts (v1 b7cee315, v2 caac6e85, v3 8c55c413), so one attempt per seal holds.
+Seven 9.50 USD holds stand in the ledger, only attempt 1 is reconciled (0.14);
+there is no closeout for c34-g, and no posted bill. All five c34 instances are
+confirmably gone as of this record; the ledger reads 162.45 of the 200.00 ceiling
+with 37.55 unreserved. THIS COMMIT ALSO CARRIES FOUR FINISHED RESULTS THAT EXISTED
+ONLY AS STAGED EDITS - sections 7.40 U1b, 7.41 LM-T6, 7.42 RB-P1 and 7.43 M1 -
+with their bodies unchanged; the live record already cited §7.43 five times without
+containing it. Spec sheet section 7.47, a change-log row for it and a change-log row
+for the four, all in this commit.
+
 ## 2026-10-16 PDT - M1 H8 verified creative reconstruction policy v0.2 FROZEN (no implementation, nothing scored): the owner moved the line from "can a spare copy be checked" to "is the fault classified" and added a bounded, anchored, verifier-vetoed search for the unclassified case
 
 Policy `M1-H8-VERIFIED-CREATIVE-RECONSTRUCTION` v0.2, document sha256 647ffc444a5911220909a88560a08bca276b5687c87a609729733df89c0386f9 (21,923 bytes, 146 lines); owner-authority record sha256 4afda3bdb1ab89333252a7090373a7293eee5e42dd04b54aaf50f9d51b93b213. Supersedes `M1-H8-VERIFIED-FALLBACK` v0.1 (16773D53DDE1B257EA92F283627A07A1E86F211B239EAD76B5AC7988197303CA), which stays valid and is not withdrawn. The owner's words, quoted verbatim in the record: the creative-radius direction of 2026-10-16, and "propose them as defaults sign v0.2" authorising the four frozen numbers (initial radius 1 mutation unit; widening step x2 on a verifier refusal; hard cap 8 mutation units and at most 4 widening turns; asymmetric at a wrong-answer cost of 20x a refusal, or an undeclared class). Arms A0_STRICT, A1_SPARE and A2_KERNEL; four controls that must fail (no verifier, unanchored, no widening, no consequence); eight safety floors, none averaged away; one wrong exact answer fails the whole result. Claim ceiling: NOTHING SCORED - no implementation exists and no row has been scored. Does not authorise enabling the policy in HELM, changing H8, any H8 pass, any AWS spend, or editing the frozen v5 package or the original M1 failure. New spec-sheet section 7.46 and change-log row added in this commit; next free section number 7.47.
