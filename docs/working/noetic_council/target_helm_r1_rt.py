@@ -41,6 +41,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 from typing import Any, Dict, List
 
 from council_loop import Reading, RequiredCondition
@@ -324,6 +325,62 @@ def read_input_rule_survives_gate() -> Reading:
                    "NOT SURVIVED." if ok is False else "unexpectedly survived.")))
 
 
+def read_candidate_rule_proved() -> Reading:
+    """Is the replacement input rule proved against the runtime's own oracle?
+
+    Read from the evidence manifest on the LIVE BRANCH, not from a path on this machine, because the
+    manifest is committed. Falls back to disk only if the branch cannot be read, and says which it
+    used. A manifest that claims agreement without a digest is not a proof, so both are required.
+    """
+    relative = "docs/working/noetic_council/CANDIDATE_VS_ORACLE_EVIDENCE_2026_10_16.json"
+    src = "the evidence manifest on the live branch: %s" % relative
+    raw = None
+    # Use the SAME repo and branch the design reading uses, so this reading cannot silently look at a
+    # different checkout. The first version ran git in PLAN_DIR, which is not a repository, so the
+    # branch lookup always failed and the disk fallback pointed at the wrong tree. It returned
+    # ok=None, which BLOCKS rather than passes, so the mistake showed up instead of passing quietly.
+    if os.path.isdir(REPO):
+        try:
+            proc = subprocess.run(["git", "show", "%s:%s" % (THREAD_BRANCH, relative)],
+                                  cwd=REPO, capture_output=True, timeout=180)
+            if proc.returncode == 0 and proc.stdout.strip():
+                raw = proc.stdout.decode("utf-8", errors="replace")
+        except Exception:
+            raw = None
+    if raw is None:
+        path = os.path.join(REPO, "docs", "working", "noetic_council",
+                            os.path.basename(relative))
+        if not os.path.isfile(path):
+            return Reading(source=src, ok=None,
+                           detail=("the manifest is neither on %s nor at %s. This BLOCKS rather "
+                                   "than passing." % (THREAD_BRANCH, path)))
+        with open(path, encoding="utf-8") as fh:
+            raw = fh.read()
+        src += " (fallback: read from disk at %s)" % path
+    try:
+        d = json.loads(raw)
+    except ValueError as error:
+        return Reading(source=src, ok=None, detail="the manifest is not JSON: %s" % error)
+
+    compared = d.get("cases_compared")
+    disagreed = d.get("disagreements")
+    gated = d.get("gated")
+    streams = d.get("answer_streams") or {}
+    digests = {v.get("sha256") for v in streams.values() if isinstance(v, dict)}
+    identical = len(digests) == 1 and None not in digests
+    ok = (isinstance(compared, int) and compared > 0 and disagreed == 0 and gated == 0
+          and identical and d.get("all_streams_byte_identical") is True)
+    return Reading(
+        source=src, ok=ok,
+        detail=("cases compared %s, disagreements %s, gated %s, all answer streams byte-identical "
+                "%s. Encodings proved: %s. %s"
+                % (compared, disagreed, gated, identical,
+                   ", ".join(sorted((d.get("encodings") or {}).keys())) or "none named",
+                   "PROVED against the live oracle." if ok else
+                   "NOT proved: the manifest does not show zero disagreements over a positive "
+                   "number of cases with one shared digest.")))
+
+
 def read_runtime_present() -> Reading:
     src = "the runtime's own source at %s" % RUNTIME_ROOT
     if not os.path.isdir(RUNTIME_ROOT):
@@ -445,6 +502,7 @@ def conditions_for() -> List[RequiredCondition]:
     process_rule = read_brain_process_rule()
     alphabet = read_answer_alphabet_covers()
     gate_rule = read_input_rule_survives_gate()
+    candidate = read_candidate_rule_proved()
 
     mech = Reading(
         source="the project's own wave rules: freeze first, one switch per part, one attempt "
@@ -492,7 +550,7 @@ def conditions_for() -> List[RequiredCondition]:
             mechanism=mech, established=bridge,
             prerequisites=["RT_RUNTIME_PRESENT", "RT_STATE_READABLE",
                            "RT_BRAIN_PROCESS_RULE", "RT_ANSWER_ALPHABET_COVERS",
-                           "RT_INPUT_RULE_SURVIVES_GATE"]),
+                           "RT_INPUT_RULE_SURVIVES_GATE", "RT_CANDIDATE_RULE_PROVED"]),
 
         RequiredCondition(
             id="RT_ANSWER_ALPHABET_COVERS",
@@ -503,6 +561,19 @@ def conditions_for() -> List[RequiredCondition]:
                 detail=("a bridge that cannot name an answer cannot carry it. The counts are read "
                         "from the files so this reading moves if either package moves.")),
             mechanism=mech, established=alphabet, prerequisites=[]),
+
+        RequiredCondition(
+            id="RT_CANDIDATE_RULE_PROVED",
+            statement="the replacement input rule is proved against the runtime's own oracle",
+            understood=Reading(
+                source="the evidence manifest committed to the live branch",
+                ok=True,
+                detail=("appendix A's rule is falsified, so a replacement is needed before anything "
+                        "can be bridged. The replacement is the padding encoding in appendix F section "
+                        "8: the bridge writes a per-leg membership value and one constant and holds "
+                        "no part of the answer, so RT_SHIM_NO_MATH is satisfied by construction "
+                        "rather than by a judgement call.")),
+            mechanism=mech, established=candidate, prerequisites=[]),
 
         RequiredCondition(
             id="RT_INPUT_RULE_SURVIVES_GATE",
