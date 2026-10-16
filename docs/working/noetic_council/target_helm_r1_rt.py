@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from typing import Any, Dict, List
 
 from council_loop import Reading, RequiredCondition
@@ -254,6 +255,75 @@ def read_brain_process_rule() -> Reading:
                 "before anything is built on it." % (blocks, raises, on_import)))
 
 
+def read_answer_alphabet_covers() -> Reading:
+    """Can the brain name every answer the runtime's task can produce?
+
+    Read from the two files themselves rather than from memory, so this reading moves if either
+    package moves. The brain's slots are `rb/common.py`'s RECIPES, which `RecipeBrain.__init__`
+    uses for `beta`; one readout returns one `beta[winner]`. The task's answers are the length of
+    the generator expression at `native_task.py:23`. Behaviour is reproduced by
+    `probe_answer_alphabet.py`, which reads both from live objects in separate processes.
+    """
+    common = os.path.join(V3, "rb", "common.py")
+    task = os.path.join(os.path.dirname(RUNTIME_ROOT), "native_task.py")
+    src = "the brain's recipe slots in %s and the task's answers at %s" % (common, task)
+    for p in (common, task):
+        if not os.path.isfile(p):
+            return Reading(source=src, ok=None, detail="not on disk at %s" % p)
+    with open(common, encoding="utf-8", errors="replace") as fh:
+        ct = fh.read()
+    with open(task, encoding="utf-8", errors="replace") as fh:
+        tt = fh.read()
+    m = re.search(r"^RECIPES\s*=\s*(\d+)", ct, re.M)
+    n = re.search(r"^ANSWER_LABELS\s*=\s*tuple\(f\"FIRST_UNSUPPORTED_LEG_\{i\}\" for i in range\((\d+)\)\)",
+                  tt, re.M)
+    if not m or not n:
+        return Reading(source=src, ok=None,
+                       detail="could not read either count: RECIPES=%r, range()=%r"
+                              % (bool(m), bool(n)))
+    slots, legs = int(m.group(1)), int(n.group(1))
+    answers = legs + 1                      # the leg labels, plus ALL_LEGS_PRESENT
+    ok = slots >= answers
+    return Reading(
+        source=src, ok=ok,
+        detail=("the brain has %d recipe slots, so ONE readout can return at most %d distinct "
+                "answers; the task produces %d (%d leg labels plus ALL_LEGS_PRESENT). %s "
+                "Reproduced on live objects by probe_answer_alphabet.py."
+                % (slots, slots, answers, legs,
+                   "COVERS." if ok else
+                   "SHORT BY %d: %d of the task's answers can never be named by this brain."
+                   % (answers - slots, answers - slots))))
+
+
+def read_input_rule_survives_gate() -> Reading:
+    """Does appendix A's frozen input rule survive the brain's own RPM Gate?
+
+    Appendix A sets each ingredient's stock to exactly `1` or `0` and the requirement to `1`, so a
+    missing leg yields exactly zero. `rb/brain.py`'s readout refuses when the best yield is zero.
+    This reading finds BOTH facts in the source by opening it, and names the probe that measured
+    the behaviour, because the two facts together are what produce the falsification.
+    """
+    brain = os.path.join(V3, "rb", "brain.py")
+    src = "the gate at %s against appendix A's rule (stock 0 or 1, requirement 1)" % brain
+    if not os.path.isfile(brain):
+        return Reading(source=src, ok=None, detail="not on disk at %s" % brain)
+    with open(brain, encoding="utf-8", errors="replace") as fh:
+        text = fh.read()
+    zero_test = "if best == ZERO:" in text
+    g2_refusal = 'return Readout(UNDETERMINED, "G2", None, values, None)' in text
+    ok = not (zero_test and g2_refusal)
+    return Reading(
+        source=src, ok=ok,
+        detail=("the readout tests `best == ZERO` (%s) and refuses on G2 (%s). Appendix A's stock "
+                "is 0 for a missing leg and its requirement is 1, so the yield is exactly zero and "
+                "the gate fires on EVERY case with a missing leg. %s Measured on a live brain by "
+                "probe_brain_gate_vs_task.py: one leg missing gives UNDETERMINED/G2 at every "
+                "requirement in [0.05, 20], a second recipe gives G1, and the runtime's own dataset "
+                "has every leg present in only 36 of 288 cases. Recorded as appendix F."
+                % (zero_test, g2_refusal,
+                   "NOT SURVIVED." if ok is False else "unexpectedly survived.")))
+
+
 def read_runtime_present() -> Reading:
     src = "the runtime's own source at %s" % RUNTIME_ROOT
     if not os.path.isdir(RUNTIME_ROOT):
@@ -373,6 +443,8 @@ def conditions_for() -> List[RequiredCondition]:
     gate = read_gate_satisfied()
     boundary = read_claim_boundary()
     process_rule = read_brain_process_rule()
+    alphabet = read_answer_alphabet_covers()
+    gate_rule = read_input_rule_survives_gate()
 
     mech = Reading(
         source="the project's own wave rules: freeze first, one switch per part, one attempt "
@@ -419,7 +491,31 @@ def conditions_for() -> List[RequiredCondition]:
                        "contract, not a rename"),
             mechanism=mech, established=bridge,
             prerequisites=["RT_RUNTIME_PRESENT", "RT_STATE_READABLE",
-                           "RT_BRAIN_PROCESS_RULE"]),
+                           "RT_BRAIN_PROCESS_RULE", "RT_ANSWER_ALPHABET_COVERS",
+                           "RT_INPUT_RULE_SURVIVES_GATE"]),
+
+        RequiredCondition(
+            id="RT_ANSWER_ALPHABET_COVERS",
+            statement="the brain can name every answer the runtime's task can produce",
+            understood=Reading(
+                source="rb/common.py's RECIPES against native_task.py:23's answer tuple",
+                ok=True,
+                detail=("a bridge that cannot name an answer cannot carry it. The counts are read "
+                        "from the files so this reading moves if either package moves.")),
+            mechanism=mech, established=alphabet, prerequisites=[]),
+
+        RequiredCondition(
+            id="RT_INPUT_RULE_SURVIVES_GATE",
+            statement="appendix A's frozen input rule survives the brain's own RPM Gate",
+            understood=Reading(
+                source="rb/brain.py's readout gate against appendix A's stock-and-requirement rule",
+                ok=True,
+                detail=("this prerequisite was NOT known when appendix A was frozen. Appendix A "
+                        "itself said nobody had measured whether the brain can answer this task; "
+                        "this is that measurement, and it is NO. Appendix F records it, and records "
+                        "a candidate repair whose arithmetic is measured and whose permission is "
+                        "not.")),
+            mechanism=mech, established=gate_rule, prerequisites=[]),
 
         RequiredCondition(
             id="RT_BRAIN_PROCESS_RULE",
