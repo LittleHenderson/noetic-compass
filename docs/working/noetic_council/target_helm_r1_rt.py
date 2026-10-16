@@ -548,8 +548,14 @@ def conditions_for() -> List[RequiredCondition]:
                 detail="the two share no vocabulary, so the bridge is an adapter with a stated "
                        "contract, not a rename"),
             mechanism=mech, established=bridge,
+            # RT_ANSWER_ALPHABET_COVERS is deliberately NOT a prerequisite. It is a true and
+            # measured fact about the brain's LABEL space, and the design does not use labels to
+            # carry the answer: the padding encoding reads the limiting CELL and maps the cell index
+            # to the runtime's answer. Keeping it as a prerequisite would block the bridge on a
+            # constraint the bridge does not have. It stays in the tree below, unsatisfied, so the
+            # shortfall is still on the record rather than deleted.
             prerequisites=["RT_RUNTIME_PRESENT", "RT_STATE_READABLE",
-                           "RT_BRAIN_PROCESS_RULE", "RT_ANSWER_ALPHABET_COVERS",
+                           "RT_BRAIN_PROCESS_RULE",
                            "RT_INPUT_RULE_SURVIVES_GATE", "RT_CANDIDATE_RULE_PROVED"]),
 
         RequiredCondition(
@@ -558,8 +564,13 @@ def conditions_for() -> List[RequiredCondition]:
             understood=Reading(
                 source="rb/common.py's RECIPES against native_task.py:23's answer tuple",
                 ok=True,
-                detail=("a bridge that cannot name an answer cannot carry it. The counts are read "
-                        "from the files so this reading moves if either package moves.")),
+                detail=("DOCUMENTED LIMITATION, NOT A BLOCKING PREREQUISITE. A bridge that names "
+                        "answers with the brain's LABELS cannot carry four of them, and that is a "
+                        "real shortfall. It does not bind this design: the padding encoding reads "
+                        "the limiting CELL and maps the cell index to the runtime's answer, so the "
+                        "label string is never used. It was removed from RT_BRIDGE_EXISTS's "
+                        "prerequisites rather than being flipped to green, and the measured counts "
+                        "are still read from the files so the shortfall cannot quietly disappear.")),
             mechanism=mech, established=alphabet, prerequisites=[]),
 
         RequiredCondition(
