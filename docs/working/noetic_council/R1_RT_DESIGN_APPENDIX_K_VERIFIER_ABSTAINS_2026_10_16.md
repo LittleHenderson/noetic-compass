@@ -123,7 +123,42 @@ The council's recommendation is **1 or 3, not 2** — and specifically **3 then 
 authority change is the kind of claim that should be reached only after the cheaper options are shown
 to be closed.
 
-## 7. Defects found while measuring
+## 7. The alternative route is closed, so the choice is now a real one
+
+Section 4 named two ways to reach the repair machinery and left the second one — "find another route
+into the repair machinery" — as something to investigate. **It has been investigated. It is closed,
+and the reason is one line.**
+
+Every route into a repair frame passes through `repair.open_repair`, and its first statement is:
+
+```python
+if receipt.disposition is not VerifierDisposition.REPAIR or not receipt.repair_required:
+    raise RepairError("only an independent REPAIR receipt can open a repair frame")
+```
+
+So opening a repair frame **requires** a REPAIR receipt. A REPAIR receipt is produced only by the
+verifier's semantic comparison, which section 2 showed is unreachable for a non-canonical operation.
+The other thirteen call sites of `repair_frame_from_dict` across `runtime.py`,
+`network_coordinator.py` and `persistence.py` either *read back* a frame that was already opened or
+sit inside the same `open_repair` path; none of them opens a frame by another means.
+
+**Therefore there is exactly one door, and it needs a REPAIR receipt.** The two ways named in section
+4 were never two: the second one leads back through the first.
+
+That collapses the decision to two real options, and it is worth being exact about what they are:
+
+- **Accept the weaker claim.** R1-RT reports what it honestly earned: the answers computed inside
+  HELM's runtime, decoded by its own decoder, and withheld by its own verifier. Wave 1 remains the
+  project's licensed result. Nothing further is spent, and no new claim is made.
+- **Make the operation authority-admitted.** This declares that the brain's output carries canonical
+  authority. It would let a REPAIR appear and a nested repair be driven. It is a claim about authority
+  rather than a configuration change, it needs its own seal, and it changes what the project asserts.
+
+There is no third option, and the council recommends the first. The authority change purchases a
+nested repair by asserting something about the brain that this work has not shown — the brain's
+answers were correct on the cases tried, and correctness on cases tried is not authority.
+
+## 8. Defects found while measuring
 
 None in the tools. One in the reading, worth recording because it is the same failure the directive
 names: the design's assumption was written down and built on for several rounds without anyone asking
