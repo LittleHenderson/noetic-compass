@@ -260,7 +260,51 @@ reading's own words. Its verdict is reported as it returns, including when it di
 - **Confusing the machine half with the independent half** — they are reported separately and the
   fallback is always labelled as a fallback.
 
-## 12. Reporting to the owner
+## 12. False-positive resistance: the failure this project keeps repeating
+
+**A check that looks for a token instead of measuring the thing will pass falsely, and it will pass
+falsely silently.** This is not a hypothetical. In one session the council found five instances of
+it, and two of them were in the council's own code.
+
+### The five, with their harmless-looking code
+
+| # | the check | what it actually did | what made it true when it should not have been |
+|---|---|---|---|
+| 1 | the R1-RT gate reading searched the plan folder for the string `R1-RT` | found **four documents that merely mention R1-RT** | `WAVES.md` contains that string and sits in the same folder, so **filesystem walk order alone** could have flipped the gate to satisfied with **no byte changing** |
+| 2 | the bridge reading searched for files named `bridge`/`adapter`/`host_` | matched `cncm_bridge.py` | that file is **INERT** — it grants `INERT_PROPOSAL_ONLY_NOT_ADMITTED_BY_CURRENT_CNCM` and imports no kernel — and it matched a **name search** |
+| 3 | the same reading's second attempt accepted `host_summary.py` | read it as an adapter carrying the recipe brain | it is a **test harness** that merely mentions the word |
+| 4 | a job supervisor tested for the stage's declared outputs at the stage output root | sealed a **clean run as FAIL** | the runner keeps artefacts one directory down (`out/r1w1_out/`), so the file it called missing was present and hash-matching |
+| 5 | a controller recorded `IdempotentParameterMismatch` as "launch refused" | reported that no instance was created | the instance **was running** and billed for **297 seconds** |
+
+Each was written by someone who believed the check measured the thing it named. None of them threw.
+Every one produced a green or a red that was wrong.
+
+### The rules that follow, and they are not optional
+
+1. **A reading must open the artefact, not count its name.** If a condition says an adapter exists,
+   the reading opens the candidate and asks what it does. If a condition says an approval exists, the
+   reading demands an **admission phrase**, not a mention of the subject.
+2. **A mention is never a gate.** Report mentions **as mentions**, with their count and their
+   filenames, so the reason a reading is unsatisfied is visible rather than implied.
+3. **`ok=None` blocks.** A reading that cannot be taken blocks the gate. It never passes, and it is
+   never quietly skipped. This is the one rule that has held throughout.
+4. **A half-met condition is not a met condition, and the reading must say which half is absent.**
+   The R1-RT gate reading is the worked example: *"HALF MET, HALF ABSENT. W1's reading exists and is
+   licensed, so that half is met. 5 document(s) MENTION R1-RT and NONE of them is an approval."*
+5. **Every reading names its own source**, so anyone can re-run it. A reading nobody can re-run is a
+   guess wearing a filename.
+6. **When a check is repaired, the repair is proved by re-running it against the case that fooled
+   it.** Fixing the code is not the proof; showing the old input now fails is.
+
+### What to do when you find one
+
+- Fix the reading, and state in the commit what it used to return and what it returns now.
+- **Keep the old behaviour visible in the code as a comment**, so the next agent does not "simplify"
+  it back into the false positive. Items 1 and 2 above carry exactly such comments.
+- If the false positive produced a record, **correct the record** — a second erratum is cheaper than
+  a wrong claim, and this project keeps its errata on the page rather than editing history.
+
+## 13. Reporting to the owner
 
 Every council report to the owner uses the owner's colour scale and ends with the owner's
 required sign-off lines.
@@ -282,7 +326,7 @@ jargon on first use. Separate what was measured from what was inferred from what
 Keep every literal exact. Ask him only for new money, irreversible steps, a new experiment line,
 or a real research choice.
 
-## 13. What is verified, and what is not
+## 14. What is verified, and what is not
 
 **Verified, with its reading:**
 
@@ -310,8 +354,10 @@ or a real research choice.
 - The independent half depends on a spawn capability existing. Where it does not, the fallback
   applies and must be labelled.
 
-## 14. Amendment log
+## 15. Amendment log
 
 | Date | Change |
 |---|---|
+| 2026-10-16 | **Section 12 added: false-positive resistance.** Five instances of one failure were found in a single session — a check that looks for a token instead of measuring the thing — two of them in the council's own code. Four of the five: the gate reading that matched mere mentions of R1-RT and could have flipped on filesystem walk order; the bridge reading that matched an INERT stub by filename; the supervisor that sealed a clean run FAIL for looking one directory too high; the controller that recorded "launch refused" for an instance that was running and billed for 297 seconds. The rules that follow are now standing: open the artefact rather than counting its name, report mentions as mentions, treat `ok=None` as blocking, state which half of a half-met condition is absent, name every reading's source, and prove a repaired check by re-running it against the input that fooled it. |
+| 2026-10-16 | **Third target added: `HELM_R1_RT_HOSTED`** (host the recipe brain inside HELM's own runtime), with its measured state, its three names, its nine marks and five arms, both frozen conversion rules, and its run envelope. Its two open conditions are the bridge code and the owner's word. |
 | 2026-10-16 | Written. The council's first operating session: engine of record established at `H_c8`; two targets defined; ten independent seats run on the HELM-R1 blocker; find section 7.47 and the four stranded sections 7.40–7.43 recorded in the living master record; the wave-1 run backed up with three confirmations. |
