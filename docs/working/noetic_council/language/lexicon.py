@@ -109,10 +109,21 @@ _RAW_TEMPLATES = [
     (2, "CANON", '{M} ~is attracted toward {I}', None),
     (2, "ALIAS", '{M} ~is drawn to {I}', None),
     (2, "ALIAS", '{I} ~speaks to {M}', None),
+    (2, "ALIAS", '{M} ~likes {I}', None),
+    (2, "ALIAS", '{M} ~loves {I}', None),
+    (2, "ALIAS", '{M} ~is fond of {I}', None),
+    (2, "ALIAS", '{I} ~appeals to {M}', None),
+    (2, "ALIAS", '{M} ~is keen on {I}', None),
+    (2, "ALIAS", '{I} ~draws {M} in', None),
     # ^3 Negative: VISCERAL, never analytical (Clarification 6 anti-drift) -------------------------
     (3, "CANON", '{M} ~is adverse to {I}', None),
     (3, "CANON", '{M} ~is repelled by {I}', None),
     (3, "ALIAS", '{I} ~rubs {M} the wrong way', None),
+    (3, "ALIAS", '{M} ~hates {I}', None),
+    (3, "ALIAS", '{M} ~dislikes {I}', None),
+    (3, "ALIAS", '{I} ~disgusts {M}', None),
+    (3, "ALIAS", '{I} ~puts {M} off', None),
+    (3, "ALIAS", '{I} ~turns {M} off', None),
     # ^4 Vibration: degree optional, and an absent degree is never invented ------------------------
     (4, "CANON", '{I} ~resonates with {M} to degree {D}', None),
     (4, "CANON", '{I} ~resonates with {M}', None),
@@ -120,29 +131,42 @@ _RAW_TEMPLATES = [
     (4, "ALIAS", '{I} ~struck a chord with {M}', None),
     (4, "ALIAS", '{I} ~made an impression on {M}, degree {D}', None),
     (4, "ALIAS", '{I} ~made an impression on {M}', None),
+    (4, "ALIAS", '{I} ~hit {M} hard, degree {D}', None),
+    (4, "ALIAS", '{I} ~hit {M} hard', None),
+    (4, "ALIAS", '{I} ~landed on {M}, degree {D}', None),
+    (4, "ALIAS", '{I} ~landed on {M}', None),
     # ^5 Female: MIND subject ---------------------------------------------------------------------
     (5, "CANON", '{M} ~is impregnated with {I}', None),
     (5, "CANON", '{M} ~is composed of {I}', None),
     (5, "ALIAS", '{I} ~is part of who {W}', None),
+    (5, "ALIAS", '{M} ~is made of {I}', None),
+    (5, "ALIAS", '{I} ~shapes {M}', None),
     # ^6 Male: IDEA subject, "another Idea" -------------------------------------------------------
     (6, "CANON", '{I} ~is impregnated with {J}', None),
     (6, "CANON", '{I} ~is composed of {J}', None),
     (6, "ALIAS", '{I} ~breaks down into {J}', None),
     (6, "ALIAS", '{M} ~breaks {I} down into {J}', None),         # a Mind doing the decomposing
     (6, "ALIAS", '{M} ~unpacks {I} into {J}', None),
+    (6, "ALIAS", '{I} ~breaks apart into {J}', None),
+    (6, "ALIAS", '{M} ~takes {I} apart into {J}', None),
     # ^7 Rhythm: rate/unit/pattern, or not stated -------------------------------------------------
     (7, "CANON", '{M} ~is exposed to {I} at rate {R} per {U}, pattern {P}', None),
     (7, "CANON", '{M} ~is exposed to {I}', None),
     (7, "ALIAS", '{M} ~practices {I} at rate {R} per {U}, pattern {P}', None),
+    (7, "ALIAS", '{M} ~keeps at {I} at rate {R} per {U}, pattern {P}', None),
     # ^8 Above/Cause: two DIFFERENT Ideas ----------------------------------------------------------
     (8, "CANON", '{I} ~triggers {J} to come to {M}', None),
     (8, "ALIAS", '{I} ~reminds {M} of {J}', None),
     (8, "ALIAS", '{I} ~made {M} think of {J}', None),
+    (8, "ALIAS", '{I} ~makes {M} think of {J}', None),
+    (8, "ALIAS", '{I} ~brings {J} to {M}', None),
     # ^9 Below/Effect: the trigger may be unknown, and then it is said as unknown ------------------
     (9, "CANON", '{J} ~is brought to {M} by {I}', None),
     (9, "CANON", '{J} ~is brought to {M} by an unknown trigger', None),
     (9, "ALIAS", '{J} ~came to {M} from {I}', None),
     (9, "ALIAS", '{J} ~came to {M} out of nowhere', None),
+    (9, "ALIAS", '{J} ~popped into {M} from {I}', None),
+    (9, "ALIAS", '{J} ~popped into {M}', None),
 ]
 TEMPLATES = tuple(Template(index, noetic, tier, text, act)
                   for index, (noetic, tier, text, act) in enumerate(_RAW_TEMPLATES))
@@ -184,6 +208,24 @@ VERBS = {
     "struck": _past("struck", "strike"),
     "made": _past("made", "make"),
     "came": _past("came", "come"),
+    # the widened ALIAS tier (owner ruling: the inside stays canonical, the outside varies)
+    "likes": _regular("likes", "like"),
+    "loves": _regular("loves", "love"),
+    "appeals": _regular("appeals", "appeal"),
+    "draws": _regular("draws", "draw"),
+    "hates": _regular("hates", "hate"),
+    "dislikes": _regular("dislikes", "dislike"),
+    "disgusts": _regular("disgusts", "disgust"),
+    "puts": _regular("puts", "put"),
+    "turns": _regular("turns", "turn"),
+    "shapes": _regular("shapes", "shape"),
+    "takes": _regular("takes", "take"),
+    "keeps": _regular("keeps", "keep"),
+    "makes": _regular("makes", "make"),
+    "brings": _regular("brings", "bring"),
+    "hit": _past("hit", "hit"),
+    "landed": _past("landed", "land"),
+    "popped": _past("popped", "pop"),
 }
 
 # --- FUNCTION tier: the closed glue list (TRANSLATOR_SPEC section 3, item 3, plus what the
