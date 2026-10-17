@@ -73,11 +73,44 @@ These were read in full and are cited by path and line in `restart.py`, `eye/rec
 | `2026-10-16\_week_study\E_UNITY_EYE.md` | `cc3dc2a9fb641cfc6fb86cd78368e62ec9af0a644cd170b6f3646e8bb3c67af3` | the fullest guide: what is built, what is measured, the failure and the retest |
 | `2026-10-15\u1b_unity_eye\RESULTS.md` | `7ba09429f017559dce05f514cf55d45249b62590f43989619b0c9158d6db04cb` | the retest that earned keep: 148 vs 128 faults fixed, 1,816 vs 10,152 false interventions |
 
+## Added 2026-10-16: the real fitter underneath the fallback
+
+`restart.py` was built with no recipe book in this folder, so its own `make_start` fits routes
+over cell-binding that the build supplies. Two files put the real machine underneath it, without
+changing `restart.py`, `guard.py` or `rb_c4`.
+
+| file | what it is | sha256 at build time |
+| --- | --- | --- |
+| `real_fit.py` | the adapter: `real_fit_start(terms, train, tau)` returns the `fit_start(start, seed)` that `restart_fallback` calls, running `rb_c4.fitg.route_fit_once` and converting a refusal string to `StartOutcome(refused=...)` and a 5-tuple to `StartOutcome(explained=fit_rows, ...)`; plus `real_restart`, the end-to-end call | `507f0abba7e6397ed883240c898a43711764d0ad99ce446cde7c74d465d45df6` |
+| `REAL_FIT_RESULT.txt` | what the real fitter actually did on real `rb_c4` data: every start, its seed, its rows explained, which start was kept, and the held-out counts with a control. Written by `real_fit.py` and byte-identical across two runs | `05ca6d6fe019751ddf9557b00a26e332760b455b5f0cd63c00170d6f075ce8e8` |
+
+`rb_c4\fitg.py` is unmodified and re-hashes to `62951b1d53359313b19515e131d8cecc590c946a330ab451e0fa2f007b653a19`,
+the same value recorded in the table above, so the real fitter this folder now calls is the same
+file the port was made from.
+
+`real_fit.py` is deliberately **not** in `test_all.py`'s `OWN_MODULES`: it imports `rb_c4`, and
+the suite's own rule (`test_..._imports_nothing_outside_the_standard_library`) is that the
+build's modules do not. Nothing in `test_all.py` was edited, so the suite still reports 49 cases.
+
+Two facts about `rb_c4` found by running it are recorded in `REAL_FIT_RESULT.txt`, not repaired:
+on Task B data start 0 cannot fit any multi-route skeleton (16 of 16 outcomes), and
+`route_fit_once` raises `AssertionError` on a one-route skeleton because `fitg.py:145` always
+builds a MAX node and `lsr_t4/engine.py:73` requires at least two children.
+
 ## How to re-check all of it
 
 ```
 cd C:\Users\wakil\Documents\Codex\2026-10-16\faculties_v2
 python -B test_all.py
+```
+
+In `noetic-compass` the same thing, plus the real-fitter run, which rewrites `REAL_FIT_RESULT.txt`
+from a live run against `C:\Users\wakil\Documents\Codex\2026-10-14\rb_c4`:
+
+```
+cd <worktree>\docs\working\noetic_council\faculties_v2
+python -X utf8 -B test_all.py
+python -X utf8 -B real_fit.py
 ```
 
 The run prints the sha256 of `bias.py` before it prints any case result, re-hashes the four
