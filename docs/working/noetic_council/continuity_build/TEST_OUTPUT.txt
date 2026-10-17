@@ -1,0 +1,47 @@
+continuity_build / test_all.py
+python: 3.14.0  platform: Windows
+build folder: C:\Users\wakil\Documents\Codex\2026-10-16\continuity_build
+frozen station-kind table sha256: 7b9f2e1ad8865deeb6df5abe940ad87d39305e72fcfdfeebcb1de48caecb10e3
+claim ceiling: MECHANISM ONLY. NOT THE BRAIN FEATURE. THE ATLAS LINK IS NOT BUILT.
+undecided markers in the build: 16
+------------------------------------------------------------------------------
+PASS station_kinds_are_the_seven_station_md_names
+PASS frozen_table_digest_and_read_only
+PASS no_invented_thresholds
+PASS seam_fires_when_head_changes_and_step_is_large
+PASS seam_boundary_is_inclusive
+PASS no_seam_when_only_the_step_is_large
+PASS no_seam_when_only_the_head_changes
+PASS station_crossings_inside_one_thought_are_never_seams
+PASS seam_rule_refuses_without_a_threshold
+PASS head_change_inside_one_thought_is_refused
+PASS not_on_open_simplex_refused
+PASS interpolation_across_a_seam_refused
+PASS hold_together_is_co_present_and_not_averaged
+PASS step_size_agrees_with_the_stable_form
+PASS points_and_form_gaps_are_counted
+PASS anchor_and_displacement
+PASS displacement_refuses_a_station_with_no_point
+PASS nested_depth_cap
+PASS same_station_twice_needs_an_index
+PASS drift_is_reported_with_its_clarify
+PASS drift_refuses_without_a_threshold
+PASS provenance_followed
+PASS provenance_created_admitted_and_answered
+PASS provenance_attempted_refused_held_and_open
+PASS provenance_refuses_a_pointer_with_no_provenance
+PASS provenance_refuses_an_unnamed_writer
+PASS shuffled_control_produces_zero_created
+PASS shuffled_control_raises_on_a_created
+PASS shuffled_control_raises_when_empty
+PASS disengage_full_ladder
+PASS disengage_needs_a_reason
+PASS disengage_is_terminal
+PASS disengage_never_guesses_and_names_the_gap
+PASS run_ladder_disengages
+PASS run_ladder_info_supplied_returns_to_normal
+PASS readme_states_the_claim_ceiling_and_every_undecided_line
+------------------------------------------------------------------------------
+TOTAL 36 cases: 36 passed, 0 failed
+RESULT: ALL PASS
+claim ceiling, repeated: MECHANISM ONLY. NOT THE BRAIN FEATURE. THE ATLAS LINK IS NOT BUILT.
