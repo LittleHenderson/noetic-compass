@@ -1,0 +1,110 @@
+{
+  "run_id": "LM_T1B_MSI_ONCE",
+  "timings_seconds": {
+    "tests": 0.5670770999859087,
+    "b1_b2_b3": 0.15908090001903474,
+    "b4_b5_b6_b7": 1.267801599984523,
+    "worker_wall_total": 2.0787173000280745,
+    "worker_cpu_total": 2.03125
+  },
+  "reading": {
+    "hard_marks": {
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "B4": true,
+      "B5": true
+    },
+    "LM_T1b_core": "PASS",
+    "failed_hard_marks": [],
+    "B6_book_examples_exact_of_accepted": "52 of 60",
+    "B7_recipe_grammar_disagreements": 0,
+    "compiler_used": {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\compiler.py",
+      "sha256": "464fd4adfae90a35ba54aa794829da1fe713b9b9cccd68b630ecccfdfbca2f56"
+    },
+    "claim_ceiling": "ENGINEERED-NOT-VALIDATED; FORM only; nesting meaning (N1-N13) not settled"
+  },
+  "tests": {
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "ok": true
+  },
+  "B1": {
+    "state_counts": {
+      "COVERED": 50,
+      "NO_EVIDENCE": 0,
+      "LACUNA": 0,
+      "FADED": 0,
+      "UNCOVERED_NO_WRITE_HISTORY": 0
+    },
+    "probes": 100,
+    "round_trip_ok": 100,
+    "compiler_sequence_ok": 100,
+    "covered_without_charge": 0,
+    "pass": true
+  },
+  "B2": {
+    "cells": 120,
+    "eligible": 120,
+    "ineligible_by_compiler": [],
+    "state_counts": {
+      "COVERED": 120,
+      "NO_EVIDENCE": 0,
+      "LACUNA": 0,
+      "FADED": 0,
+      "UNCOVERED_NO_WRITE_HISTORY": 0
+    },
+    "round_trip_ok": 120,
+    "covered_without_charge": 0,
+    "pass": true
+  },
+  "B3": {
+    "items": 16,
+    "ok": 16,
+    "by_group": {
+      "NESTED": "8 of 8",
+      "METALOGIC": "8 of 8"
+    },
+    "pass": true
+  },
+  "B4": {
+    "parts_checked": 286,
+    "equal": 286,
+    "compiler_valid": 286,
+    "pass": true,
+    "first_unequal": []
+  },
+  "B5": {
+    "recipes_round_trip": 576,
+    "of": 576,
+    "hand_set_ok": 64,
+    "hand_of": 64,
+    "pass": true
+  },
+  "B6": {
+    "cases": 67,
+    "accepted_cases": 60,
+    "rejected_cases": 7,
+    "status_counts_accepted": {
+      "EXACT": 52,
+      "FORM_GAP": 8
+    },
+    "status_counts_rejected": {
+      "NO_CONTENT_REJECTED_BY_COMPILER": 7
+    },
+    "exact_of_accepted": 52,
+    "gaps": {
+      "expression EmergentResult": 1,
+      "expression TypedMetaSetLiteral": 4,
+      "expression RpmCall": 1,
+      "expression CallExpr": 1,
+      "set expression StateLiteral": 1
+    }
+  },
+  "B7": {
+    "seeds": 576,
+    "disagreements": 0
+  }
+}

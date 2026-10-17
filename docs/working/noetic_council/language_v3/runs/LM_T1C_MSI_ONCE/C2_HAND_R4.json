@@ -1,0 +1,35 @@
+{
+  "items": 4,
+  "ok": 4,
+  "pass": true,
+  "rows": [
+    {
+      "id": "R01",
+      "wording": "DIGITS",
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "R02",
+      "wording": "DIGITS",
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "R03",
+      "wording": "WITHIN",
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "R04",
+      "wording": "WITHIN",
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    }
+  ]
+}

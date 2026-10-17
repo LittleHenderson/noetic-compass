@@ -1,0 +1,17 @@
+{
+  "authorized": true,
+  "scope": "LM_T1",
+  "part": "ALL",
+  "run_id": "LM_T1_MSI_ONCE",
+  "environment": "LOCAL_CPU_ONCE",
+  "hostname": "MSI",
+  "source_manifest_sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e",
+  "owner_sign_line": "APPROVE lm_t1, source 0db2fcdb, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "owner_words": "RB2b, LM defaults, RB-C defaults, delete them / Run it locally as long as it Quick if long use aws",
+  "new_spend": 0,
+  "network_allowed": false,
+  "cpu_only": true,
+  "max_wall_seconds": 300,
+  "deadline_epoch": 1792038520.9811532,
+  "created_utc": "2026-10-15T04:23:43.1211245+00:00"
+}

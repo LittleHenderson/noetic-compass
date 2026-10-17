@@ -1,0 +1,17 @@
+{
+  "authorized": true,
+  "scope": "LM_T1C",
+  "part": "ALL",
+  "run_id": "LM_T1C_MSI_ONCE",
+  "environment": "LOCAL_CPU_ONCE",
+  "hostname": "MSI",
+  "source_manifest_sha256": "89c17fddc3063e3b425f5845cdeb5b9b979f65246cf2f53b4e99d2ab4df40012",
+  "owner_sign_line": "APPROVE lm_t1c, source 89c17fdd, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "owner_words": "CAS Φ / Definition 26.1 (outer last) both . and : / oh shit i almost for got about Noetic Fractals nested noetics, as well as meta-logic CAS they both are saved locally in various books and files / RB2b, LM defaults, RB-C defaults, delete them / Run it locally as long as it Quick if long use aws",
+  "new_spend": 0,
+  "network_allowed": false,
+  "cpu_only": true,
+  "max_wall_seconds": 300,
+  "deadline_epoch": 1792040104.4324186,
+  "created_utc": "2026-10-15T04:50:06.5494582+00:00"
+}

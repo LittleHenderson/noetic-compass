@@ -1,0 +1,15 @@
+{
+  "cells": 120,
+  "eligible": 120,
+  "ineligible_by_compiler": [],
+  "state_counts": {
+    "COVERED": 120,
+    "NO_EVIDENCE": 0,
+    "LACUNA": 0,
+    "FADED": 0,
+    "UNCOVERED_NO_WRITE_HISTORY": 0
+  },
+  "round_trip_ok": 120,
+  "covered_without_charge": 0,
+  "pass": true
+}

@@ -1,0 +1,7 @@
+{
+  "recipes": 576,
+  "hand64": 64,
+  "add16": 16,
+  "nest_probes": 100,
+  "pass": true
+}

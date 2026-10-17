@@ -1,0 +1,1062 @@
+{
+  "items": 64,
+  "cce_ok": 64,
+  "lookup_ok": 19,
+  "by_kind": {
+    "POSITIVE_ok": 48,
+    "TRAP_PARSE_ok": 5,
+    "TRAP_REFUSE_ok": 11
+  },
+  "alias_positive_ok": 18,
+  "alias_positive_total": 18,
+  "lookup_alias_positive_ok": 1,
+  "pass": true,
+  "rows": [
+    {
+      "id": "H01",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F1"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H02",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F1",
+        "F7"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H03",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F2",
+        "F4",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H04",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F2",
+        "F3",
+        "F11"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H05",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F3"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H06",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F4"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H07",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F4",
+        "F11"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H08",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F5",
+        "F15"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H09",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F5",
+        "F15"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H10",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F6"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H11",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F6"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H12",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F6"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H13",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F7",
+        "F15",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H14",
+      "kind": "POSITIVE",
+      "wording": "MIXED",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F7",
+        "F16"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H15",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F8",
+        "F11"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H16",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F8",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H17",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F9"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H18",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F9",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H19",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F10",
+        "F15"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H20",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F10",
+        "F11"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H21",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F11",
+        "F19"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H22",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F11",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H23",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F12",
+        "F8"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H24",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F12",
+        "F5"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H25",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F14"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H26",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F14"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H27",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F14",
+        "F5"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H28",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F15"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H29",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F16",
+        "F3"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H30",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F16",
+        "F6"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H31",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F17",
+        "F4"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H32",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F17",
+        "F6"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H33",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F19",
+        "F7"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H34",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F19",
+        "F15"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H35",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F21",
+        "F7"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H36",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F20",
+        "F3"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H37",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F20"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H38",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F20"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H39",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F22"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H40",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F22",
+        "F16"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H41",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F23"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H42",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F23",
+        "F21"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H43",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H44",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H45",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H46",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H47",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H48",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "TURN"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H49",
+      "kind": "TRAP_PARSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F14"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H50",
+      "kind": "TRAP_PARSE",
+      "wording": "ALIAS",
+      "nondefault_order": true,
+      "fundamentals": [
+        "F8"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H51",
+      "kind": "TRAP_PARSE",
+      "wording": "ALIAS",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F5"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H52",
+      "kind": "TRAP_PARSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F23"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H53",
+      "kind": "TRAP_PARSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F16"
+      ],
+      "cce_parse": "PARSED",
+      "cce_refusal": null,
+      "gold_valid": true,
+      "cce_content_equal": true,
+      "cce_round_trip": true,
+      "cce_ok": true,
+      "lookup_ok": true
+    },
+    {
+      "id": "H54",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F4"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NOT_CCE",
+      "cce_refusal_detail": "\"the plan\" is bad",
+      "expected": "NOT_CCE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H55",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F7"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NOT_CCE",
+      "cce_refusal_detail": "banned marker word: because",
+      "expected": "NOT_CCE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H56",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F12"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "HEDGE",
+      "cce_refusal_detail": "might",
+      "expected": "HEDGE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H57",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F15"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "VAGUE_QUANTITY",
+      "cce_refusal_detail": "a lot of",
+      "expected": "VAGUE_QUANTITY",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H58",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F6"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "SAME_IDEA_TRIGGER",
+      "cce_refusal_detail": "^8 needs a different Idea than itself",
+      "expected": "SAME_IDEA_TRIGGER",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H59",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F9"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "UNDECLARED_NAME",
+      "cce_refusal_detail": "Marco",
+      "expected": "UNDECLARED_NAME",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H60",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F19"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "OPERATOR_DISCIPLINE",
+      "cce_refusal_detail": "'combined' with no named result",
+      "expected": "OPERATOR_DISCIPLINE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H61",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F9",
+        "F17"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NOT_CCE",
+      "cce_refusal_detail": "third-person pronoun: She",
+      "expected": "NOT_CCE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H62",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F11"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NOT_CCE",
+      "cce_refusal_detail": "Ana is adverse to \"the slang\", formal register",
+      "expected": "NOT_CCE",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H63",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F20"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NEST_TOO_DEEP",
+      "cce_refusal_detail": "nesting deeper than 2",
+      "expected": "NEST_TOO_DEEP",
+      "cce_ok": true,
+      "lookup_ok": false
+    },
+    {
+      "id": "H64",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "nondefault_order": false,
+      "fundamentals": [
+        "F6"
+      ],
+      "cce_parse": "REFUSED",
+      "cce_refusal": "NOT_CCE",
+      "cce_refusal_detail": "banned marker word: effect",
+      "expected": "NOT_CCE",
+      "cce_ok": true,
+      "lookup_ok": false
+    }
+  ],
+  "lookup_m1_576": 576
+}

@@ -1,0 +1,197 @@
+{
+ "writer": "independent sub-agent; read only FUNDAMENTALS.md, MAP.md, GRAMMAR_CCE_v0_1.md, GRAMMAR_CCE_v0_1b_ADDENDUM.md, GRAMMAR_CCE_v0_1c_R_ADDENDUM.md",
+ "items": [
+  {
+   "id": "R01",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "DIGITS",
+   "text": "The Noetic fractal is 4.7.2.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 7,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED"
+    }
+   }
+  },
+  {
+   "id": "R02",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "DIGITS",
+   "text": "The Noetic fractal is 9.0.6.6.1.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 0,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED"
+    }
+   }
+  },
+  {
+   "id": "R03",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "WITHIN",
+   "text": "The Noetic fractal is Rhythm within Positive within Above/Cause within Female.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 7,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 5,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED"
+    }
+   }
+  },
+  {
+   "id": "R04",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "WITHIN",
+   "text": "The Noetic fractal is Male within Below/Effect.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED"
+    }
+   }
+  }
+ ]
+}

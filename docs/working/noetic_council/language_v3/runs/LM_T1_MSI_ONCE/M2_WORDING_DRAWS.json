@@ -1,0 +1,14 @@
+{
+  "contents": 576,
+  "draws_tried": 13824,
+  "said_failing_readback": 0,
+  "sayable_contents": 576,
+  "coin_tried": 13824,
+  "coin_readback_equal": 0,
+  "distinct_admitted_wordings": {
+    "min": 8,
+    "median": 22.0,
+    "max": 25
+  },
+  "pass": true
+}

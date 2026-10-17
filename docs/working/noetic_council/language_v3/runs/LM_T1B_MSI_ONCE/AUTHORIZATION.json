@@ -1,0 +1,17 @@
+{
+  "authorized": true,
+  "scope": "LM_T1B",
+  "part": "ALL",
+  "run_id": "LM_T1B_MSI_ONCE",
+  "environment": "LOCAL_CPU_ONCE",
+  "hostname": "MSI",
+  "source_manifest_sha256": "db2d4f4076270c3bf4b0a82f1af74eddc2d99e2a92824bf7031a9f00ef27adf9",
+  "owner_sign_line": "APPROVE lm_t1b, source db2d4f40, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "owner_words": "oh shit i almost for got about Noetic Fractals nested noetics, as well as meta-logic CAS they both are saved locally in various books and files / RB2b, LM defaults, RB-C defaults, delete them / Run it locally as long as it Quick if long use aws",
+  "new_spend": 0,
+  "network_allowed": false,
+  "cpu_only": true,
+  "max_wall_seconds": 300,
+  "deadline_epoch": 1792039404.1621587,
+  "created_utc": "2026-10-15T04:38:26.3559779+00:00"
+}
