@@ -1320,6 +1320,20 @@ def the_readout_is_a_display_with_nothing_to_gate_with():
 # --------------------------------------------------------------------------- #
 # The copies, the README, and the undecided list
 # --------------------------------------------------------------------------- #
+def normalized_digest(path):
+    """sha256 of the file with its line endings forced to LF first.
+
+    Why not the raw bytes: git normalizes CRLF to LF on commit, so the raw sha256 of the same
+    committed file differs between a Windows checkout (CRLF) and a Linux one (LF). Codex ran
+    this suite on AWS at commit 4cdcdbd5 and this check failed there for exactly that reason,
+    while passing on the Windows checkout it was written on -- a false green. A provenance check
+    must mean "these are the same file", not "these were checked out on the same OS", so the
+    hash is taken over the normalized bytes and is then identical on every platform.
+    """
+    with open(path, "rb") as handle:
+        return hashlib.sha256(handle.read().replace(b"\r\n", b"\n")).hexdigest()
+
+
 @case
 def the_copied_files_are_byte_identical_to_the_recorded_hashes():
     """PROVENANCE.md says the bytes; this recomputes them and requires a match.
@@ -1342,8 +1356,7 @@ def the_copied_files_are_byte_identical_to_the_recorded_hashes():
 
     for name in sorted(expected_copies):
         path = locate_copy(name)
-        with open(path, "rb") as handle:
-            actual = hashlib.sha256(handle.read()).hexdigest()
+        actual = normalized_digest(path)
         assert actual == recorded[name], (name, actual, recorded[name])
         assert recorded[name] == sources[name], (
             "%s differs from the source it was copied from" % (name,)
@@ -1355,8 +1368,7 @@ def the_copied_files_are_byte_identical_to_the_recorded_hashes():
         origin = os.path.join(SOURCE_FOLDERS[name], name)
         if not os.path.isfile(origin):
             continue  # a checkout without the source package: reported by the runner
-        with open(origin, "rb") as handle:
-            digest = hashlib.sha256(handle.read()).hexdigest()
+        digest = normalized_digest(origin)
         assert digest == sources[name], (
             "the SOURCE %s no longer hashes to the value this build copied; something edited a "
             "package this build is not allowed to modify" % (origin,)
@@ -2210,8 +2222,7 @@ def main() -> int:
           % (rpm_gate.depth.HORIZON, rpm_gate.dwp.DESIRE_BOUND))
     for name in COPIED_MODULES + VENDORED_MODULES:
         path = locate_copy(name)
-        with open(path, "rb") as handle:
-            print("%s sha256: %s" % (name, hashlib.sha256(handle.read()).hexdigest()))
+        print("%s sha256: %s" % (name, normalized_digest(path)))
     sources_seen = sum(
         1
         for name in COPIED_MODULES + VENDORED_MODULES

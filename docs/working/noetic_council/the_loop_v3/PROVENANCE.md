@@ -20,6 +20,29 @@ requires that too. So "nothing in the source packages was modified" is checked r
 asserted. The source it re-hashes for the four engine modules is `dwp_engine_v2`, which is the
 folder this build actually copied from.
 
+## The hash is taken over NORMALIZED bytes, and this was a real false green
+
+Fixed 2026-10-17, after Codex's audit.
+
+As first written, this check hashed the **raw bytes** of each file. git normalizes CRLF to LF on
+commit, so the raw sha256 of the same committed file differs between a Windows checkout (CRLF)
+and a Linux one (LF). The suite therefore **passed on the Windows machine it was written on and
+failed on Linux**. Codex ran it on AWS at commit `4cdcdbd5526ff42056318a136a0fbc52804f2ede` and
+got exactly that: 7 packages passed, `the_loop_v3` failed 1 of 35, the recorded `asom.py` hash
+matching the Windows checkout but not the committed Git blob, and normalizing the line endings
+reproducing the Git blob exactly.
+
+Every earlier "the_loop_v3 35/35" this build reported was true on Windows and **not** true on a
+fresh Linux checkout. That is a false green, and calling it 35/35 without naming the platform was
+wrong.
+
+The check now hashes `sha256(bytes.replace(b"\r\n", b"\n"))` and the twelve recorded values
+(`copy` and `source` for each of the six modules) are recomputed to match. A provenance check
+must mean "these are the same file", not "these were checked out on the same operating system".
+
+Verified by exporting the committed tree with LF endings and running the suite there, not only
+in the Windows working copy.
+
 ## Copied from `continuity_build_v3` (as they already were in `the_loop`)
 
 Source folder: `C:\Users\wakil\Documents\Codex\2026-10-16\continuity_build_v3\`
@@ -30,8 +53,8 @@ Source folder: `C:\Users\wakil\Documents\Codex\2026-10-16\continuity_build_v3\`
 | `asom.py` | `continuity_build_v3\asom.py` | **the readout.** The four-label gauge, used in stage 3 only. |
 | `disengage.py` | `continuity_build_v3\disengage.py` | **the ladder.** The owner's four steps, run in stage 5 only when the gate cannot proceed. |
 
-asom.py copy sha256: 8ebf58277536ff16d133e8066fb53dad30a016f5f1af22d019c0c410e60c11a6
-asom.py source sha256: 8ebf58277536ff16d133e8066fb53dad30a016f5f1af22d019c0c410e60c11a6
+asom.py copy sha256: 6c8f964e7f031a1d3bdf9e6bcf1c4a72101a507bcf8cc6ad4fee28d0e4a6b4fd
+asom.py source sha256: 6c8f964e7f031a1d3bdf9e6bcf1c4a72101a507bcf8cc6ad4fee28d0e4a6b4fd
 disengage.py copy sha256: 78a73a853f920e9f819ceeeb272d21dd513c08ba7355254dd7db0dd5314add98
 disengage.py source sha256: 78a73a853f920e9f819ceeeb272d21dd513c08ba7355254dd7db0dd5314add98
 
