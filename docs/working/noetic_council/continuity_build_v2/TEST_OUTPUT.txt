@@ -1,0 +1,59 @@
+continuity_build_v2 / test_all.py
+python: 3.14.0  platform: Windows
+build folder: C:\Users\wakil\Documents\Codex\2026-10-16\continuity_build_v2
+frozen station-kind table sha256: 7b9f2e1ad8865deeb6df5abe940ad87d39305e72fcfdfeebcb1de48caecb10e3
+atlas report frozen sha256: 4569483a4d02acd645cfb8e83650b96b50f78b88ad3e3389ce1913f9e0f0f832
+atlas report: {'atlas_id': 'continuity_build_v2_report', 'depth': 0, 'max_depth': 2, 'nodes': 5, 'sub_atlases': 1, 'edges': 4, 'kinds': ('CONTEXT', 'FACT', 'GUESS', 'POSSIBILITY'), 'frozen_digest': '4569483a4d02acd645cfb8e83650b96b50f78b88ad3e3389ce1913f9e0f0f832'}
+claim ceiling: MECHANISM ONLY. THE ATLAS IS A MINIMAL OBJECT, NOT HELM VISION ABILITY 6 AT FULL SCOPE. NO LANGUAGE PASSED ACROSS IT.
+undecided markers in the build: 21
+------------------------------------------------------------------------------
+PASS station_kinds_are_the_seven_station_md_names
+PASS frozen_table_digest_and_read_only
+PASS no_invented_thresholds
+PASS seam_fires_when_head_changes_and_step_is_large
+PASS seam_boundary_is_inclusive
+PASS no_seam_when_only_the_step_is_large
+PASS no_seam_when_only_the_head_changes
+PASS station_crossings_inside_one_thought_are_never_seams
+PASS seam_rule_refuses_without_a_threshold
+PASS head_change_inside_one_thought_is_refused
+PASS not_on_open_simplex_refused
+PASS interpolation_across_a_seam_refused
+PASS hold_together_is_co_present_and_not_averaged
+PASS step_size_agrees_with_the_stable_form
+PASS points_and_form_gaps_are_counted
+PASS anchor_and_displacement
+PASS displacement_refuses_a_station_with_no_point
+PASS nested_depth_cap
+PASS same_station_twice_needs_an_index
+PASS drift_is_reported_with_its_clarify
+PASS drift_refuses_without_a_threshold
+PASS provenance_followed
+PASS provenance_created_admitted_and_answered
+PASS provenance_attempted_refused_held_and_open
+PASS provenance_refuses_a_pointer_with_no_provenance
+PASS provenance_refuses_an_unnamed_writer
+PASS shuffled_control_produces_zero_created
+PASS shuffled_control_raises_on_a_created
+PASS shuffled_control_raises_when_empty
+PASS disengage_full_ladder
+PASS disengage_needs_a_reason
+PASS disengage_is_terminal
+PASS disengage_never_guesses_and_names_the_gap
+PASS run_ladder_disengages
+PASS run_ladder_info_supplied_returns_to_normal
+PASS atlas_node_repeats_refused_when_payload_or_kind_differs
+PASS atlas_edge_to_a_missing_node_refused
+PASS atlas_self_loop_and_cycle_refused
+PASS atlas_cross_kind_edge_undeclared_refused_and_reported
+PASS atlas_sub_atlas_nests_and_depth_is_enforced
+PASS crossing_requires_the_edge_to_connect_those_two_nodes
+PASS is_cjt_true_only_for_a_crossing
+PASS s0_binds_to_an_atlas_entry_and_refuses_a_missing_entry
+PASS atlas_path_across_three_nodes_and_zero_kind_pollution
+PASS s0_anchor_can_be_an_atlas_entry_digest_not_a_tree_head
+PASS readme_states_the_claim_ceiling_and_every_undecided_line
+------------------------------------------------------------------------------
+TOTAL 46 cases: 46 passed, 0 failed
+RESULT: ALL PASS
+claim ceiling, repeated: MECHANISM ONLY. THE ATLAS IS A MINIMAL OBJECT, NOT HELM VISION ABILITY 6 AT FULL SCOPE. NO LANGUAGE PASSED ACROSS IT.
