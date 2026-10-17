@@ -112,9 +112,9 @@ Standard library only. No model, no network, no AWS, no spend. Exact arithmetic 
 |---|---|
 | `numbers.py` | the `p/q` number form and the exactness refusals (the Q13 ruling) |
 | `content.py` | `CASContent` — the one record type the round trip must preserve, with the spec's normalisation |
-| `lexicon.py` | the three frozen tiers (CANON / ALIAS / FUNCTION), the 37 frozen frames, the closed word list |
+| `lexicon.py` | the three frozen tiers (CANON / ALIAS / FUNCTION), the 61 frozen frames (20 CANON, 41 ALIAS), the closed word list |
 | `cce_parse.py` | CCE text → `CASContent`; verb frame first, longest match, exactly one parse or a typed refusal |
-| `cce_render.py` | `CASContent` → CCE text; CANON by default (the fixed twin), ALIAS on request |
+| `cce_render.py` | `CASContent` → CCE text; the fixed twin by default, any of the enumerated wordings on request |
 | `roundtrip.py` | the only acceptance test, the write-once receipt log, the three anti-cheat checks, the coverage ledger |
 | `cas_validator.py` | the independent CAS-side validator that never sees the English |
 | `tap.py` | TAP: read a station, say it, or say nothing and count a FORM gap |
