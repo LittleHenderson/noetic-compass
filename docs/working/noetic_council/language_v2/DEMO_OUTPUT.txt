@@ -1,0 +1,123 @@
+========================================================================================
+THE LANGUAGE LAYER -- CAS content <-> a small strict English (CCE cce-v0.1-pq)
+CONTROLLED ENGLISH ONLY. NOT OPEN CONVERSATION. FORM ONLY, NO MEANING CLAIM.
+========================================================================================
+
+========================================================================================
+1. A CAS CONTENT RECORD (a recipe: Theta(Omega_bread))
+========================================================================================
+   turn ANSWER | evidence NONE | gate RIGHT_PATH | omega None | nesting depth 0
+     recipe for Ω_bread:
+       1/3    of ^5, domain C, register None, drive None
+       2      of ^7, domain O, register ['A'], drive F6
+       3/7    of Ω_starter (an outcome)
+       side product 1/9 of Ω_steam (implicit False)
+       helped by Ω_warmth
+       slowed by Ω_draught
+   content digest 88953ff4c70dd543af0e3f491de9a8c0
+
+========================================================================================
+2. THE FIXED TWIN: the CANON sentence, and the parse back
+========================================================================================
+   SAID:    To make Ω_bread, use 1/3 of Female, cognitive; plus 2 of Rhythm, operational, analytical register, for Structure; plus 3/7 of Ω_starter. Side product: 1/9 of Ω_steam. Helped by Ω_warmth. Slowed by Ω_draught.
+   PARSED:  content digest 88953ff4c70dd543af0e3f491de9a8c0
+   SAME RECORD? YES, identical after normalisation
+   receipt: ok=True wording_id=0 rejection_codes=none
+
+========================================================================================
+3. THE SAME RECORD SAID SEVERAL WAYS (each one must parse back to it)
+========================================================================================
+   [00 CANON numbers=exact    definition_ref=False] To make Ω_bread, use 1/3 of Female, cognitive; plus 2 of Rhythm, operational, analytical register, for Structure; plus 3/7 of Ω_starter. Side product: 1/9 of Ω_steam. Helped by Ω_warmth. Slowed by Ω_draught.
+   [01 CANON numbers=exact    definition_ref=False] To make Ω_bread, use 1/3 of Female, cognitive; plus 3/7 of Ω_starter; plus 2 of Rhythm, operational, analytical register, for Structure. Side product: 1/9 of Ω_steam. Helped by Ω_warmth. Slowed by Ω_draught.
+   [02 CANON numbers=exact    definition_ref=False] To make Ω_bread, use 2 of Rhythm, operational, analytical register, for Structure; plus 1/3 of Female, cognitive; plus 3/7 of Ω_starter. Side product: 1/9 of Ω_steam. Helped by Ω_warmth. Slowed by Ω_draught.
+   [06 CANON numbers=exact    definition_ref=True ] To make Ω_bread, use 1/3 of [A Mind impregnated with an Idea, the Ideas a Mind is composed of], cognitive; plus 2 of [The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it], operational, analytical register, for Structure; plus 3/7 of Ω_starter. Side product: 1/9 of Ω_steam. Helped by Ω_warmth. Slowed by Ω_draught.
+----------------------------------------------------------------------------------------
+   What changed between them: the order of the prerequisites and whether a Noetic is
+   named or written out as its verbatim definition in brackets. The number form is
+   another axis -- but 1/3 has no decimal form, so every wording here must write p/q.
+   What did not change: the record. A recipe has no ALIAS tier -- the colloquialisms
+   belong to frames, and section 5 shows those.
+   this record has 24 lossless wordings; 24 of them parse back to it (12 distinct sentences)
+
+========================================================================================
+4. THE NUMBER THAT COULD NOT BE SAID BEFORE THE Q13 RULING
+========================================================================================
+   written 1/3 -> parsed exactly as 1/3 (numerator 1, denominator 3)
+   1/3 rendered back as '1/3' and re-parsed exactly: True
+   a decimal form of 1/3 is REFUSED with the word 'LOSSY_CONVERSION_REFUSED'
+   forms offered for 1/3: ('exact', 'fraction') (no decimal, because there is none)
+   forms offered for 1/2: ('exact', 'fraction', 'decimal', 'word') (a decimal exists, so both are allowed)
+   the recipe above says 1/3, 3/7 and 1/9 -- and never 0.333 or 0.428
+
+========================================================================================
+5. ONE FRAME, MANY WORDINGS
+========================================================================================
+   I have an affinity for "the offer", principled, in analytical and affective registers, for Wisdom.
+   I am attracted toward "the offer", principled, in analytical and affective registers, for Wisdom.
+   I am drawn to "the offer", principled, in analytical and affective registers, for Wisdom.
+   "the offer" speaks to me, principled, in analytical and affective registers, for Wisdom.
+   I have an affinity for "the offer", principled, for Wisdom, in analytical and affective registers.
+   ... 24 lossless wordings in all, all parsing back to the same record.
+   (The words differ. The record does not. That is the whole claim.)
+
+========================================================================================
+6. WHAT IT REFUSES, AND WITH WHICH WORD (it never picks a reading)
+========================================================================================
+   NOT_CCE              "x" is bad.
+   AMBIGUOUS            Ana is composed of "ten years of nursing".
+   SAME_IDEA_TRIGGER    "x" triggers "x" to come to I.
+   HEDGE                Ana might be adverse to "x".
+   VAGUE_QUANTITY       There is a lot of Ω_flour.
+   NOT_CCE              Ana is adverse to "x" because the plan failed.
+   OPERATOR_DISCIPLINE  To make Ω_x, use 2 of (Positive, principled combined with Negative, evaluative).
+----------------------------------------------------------------------------------------
+   The second line is the interesting one: with no declaration, `X is composed of Y`
+   reads two ways (a Mind composed of an Idea, or an Idea composed of another Idea),
+   so the answer is AMBIGUOUS. Add `Ana is a Mind.` and it reads one way:
+   ^5  Ana is a Mind. Ana is impregnated with "ten years of nursing".
+
+========================================================================================
+7. A STATION READ OUT LOUD (TAP), THEN BROUGHT BACK IN (INJECT)
+========================================================================================
+   TAP station S2 (CJT bias):
+     SAID: I checked: To make Ω_dough, use 1/3 of Female, cognitive; plus 2 of Rhythm, operational, analytical register, for Structure. Side product: 3/7 of Ω_steam. Helped by Ω_warmth.
+     receipt ok=True, wrote_nothing=True
+   INJECT that sentence into an empty S2:
+     entered=True, routed to S2 for fit, wrote a value? False
+     the content that left is the content that arrived: YES
+   the whole world digest before and after every tap: UNCHANGED
+   (A tap is a probe. It reads the state; it does not alter the circuit.)
+
+========================================================================================
+8. A STATION WITH A FORM GAP: IT SAYS NOTHING, AND THE GAP IS COUNTED
+========================================================================================
+   S0  FORM_GAP  no sentence (missing form: order shape)
+   S1  SPOKEN    I checked: There is 4 of Ω_leaves.
+   S2  SPOKEN    I checked: To make Ω_dough, use 1/3 of Female, cognitive; plus 2 of Rhythm, operational, analytical register, for Structure. Side product: 3/7 of Ω_steam. Helped by Ω_warmth.
+   S3  FORM_GAP  no sentence (missing form: yield Y_T, limiting reagent, region, outcome)
+   S5  SPOKEN    I checked: Ω_dough needs Ω_leaves first.
+   S6  SPOKEN    New subject: Ω_bread.
+----------------------------------------------------------------------------------------
+   spoken 4, FORM gaps 2, no content 0, refused 0
+   Station S3 holds a theoretical yield, a limiting reagent, a region and an outcome.
+   This English has no form for any of them, so S3 contributes NO sentence. It is
+   counted as a FORM gap and named. Nothing is approximated and nothing is skipped.
+
+========================================================================================
+9. THE THING THAT CANNOT BE TOLD
+========================================================================================
+   said: 'I cannot tell.'
+   exactly, always, and it is never drawn as a wording: True
+
+========================================================================================
+10. THE HONEST SUMMARY
+========================================================================================
+   round trip: content -> English -> content is identical for every wording tried.
+   coverage ledger: 200 cells (10 Noetics x 4 Domains x 5 register values), COVERED 200, LACUNA 0, FADED 0, NO_EVIDENCE 0
+   wordings per content: 24 (recipe), 24 (one frame), 24 (nested frame)
+   learned parameters: 0. Nothing here was fitted to data.
+
+   THIS IS A FORM TRANSLATOR. It speaks a small strict English. It makes no claim about
+   meaning, and it parses roughly none of free English written by a language model.
+   Free English is a different, much larger build.
+========================================================================================
