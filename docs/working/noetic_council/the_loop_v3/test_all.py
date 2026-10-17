@@ -1321,17 +1321,25 @@ def the_readout_is_a_display_with_nothing_to_gate_with():
 # The copies, the README, and the undecided list
 # --------------------------------------------------------------------------- #
 def normalized_digest(path):
-    """sha256 of the file with its line endings forced to LF first.
+    """sha256 of the file with every line ending forced to a single LF first.
 
-    Why not the raw bytes: git normalizes CRLF to LF on commit, so the raw sha256 of the same
-    committed file differs between a Windows checkout (CRLF) and a Linux one (LF). Codex ran
-    this suite on AWS at commit 4cdcdbd5 and this check failed there for exactly that reason,
-    while passing on the Windows checkout it was written on -- a false green. A provenance check
-    must mean "these are the same file", not "these were checked out on the same OS", so the
-    hash is taken over the normalized bytes and is then identical on every platform.
+    Why not the raw bytes: git's stored bytes for the same file differ by machine, because
+    CRLF/LF conversion depends on each checkout's configuration, and a file that has been
+    edited across platforms can end up with a MIX -- Codex's audit found this build's copy
+    carrying one bare CR alongside CRLFs. The raw sha256 of one committed file is therefore
+    not a stable identity. A provenance check must mean "these are the same file", not
+    "these were checked out on the same machine".
+
+    So both forms are collapsed: CRLF -> LF, then a remaining bare CR -> LF. After that the
+    bytes are identical to the file's own text on every platform and in every checkout mode.
+
+    This mattered: Codex ran this suite on AWS (Linux) at commit 4cdcdbd5 and this very check
+    failed there while passing on the Windows checkout it was written on. Every earlier
+    "the_loop_v3 35/35" was true on Windows and false on Linux -- a false green.
     """
     with open(path, "rb") as handle:
-        return hashlib.sha256(handle.read().replace(b"\r\n", b"\n")).hexdigest()
+        raw = handle.read()
+    return hashlib.sha256(raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")).hexdigest()
 
 
 @case
