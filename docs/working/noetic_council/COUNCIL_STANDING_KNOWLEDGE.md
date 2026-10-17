@@ -177,18 +177,52 @@ designed"** — and the council spent eight rounds building it before discoverin
 | `RESTART_FALLBACK` | earned on depth families only; `RESTART_FALLBACK_NOT_EXERCISED` on gate_b and task_b |
 | `CCE_SKIN` | **`SKIN_FORM_BROKEN`**, answer half `VACUOUS` — the Q13 decimal/fraction gap |
 
-**THE DEFECT IN §7.47, AND IT IS MINE:** its headline reads *"HELM-R1 wave 1 SCORED … beat it"* with
-verdict `PASS`, `R1_BEATS_GB3`, 7 of 7 hard gates, 8 of 8 instrument rows — **while three of the five
-switches above did not cleanly earn keep.** The headline is **broader than its own body**. The
-integration packet forbids exactly this phrasing: *"a failed hard gate is a `FAILURE`, never 'PASS
-with caveats'."* **The headline must be corrected to match the switch table.**
+### 7a. The wave-1 verdict is SETTLED — verified from the artefact, do not re-open
 
-**UNRESOLVED, do not assert either way:** a reader claimed no `R1_W1_READING.json` exists and the
-H1–H7 gates were never evaluated. §7.47 names that file with a size (**30,931 bytes**) and sha256
-`9b1dfdd88568012c…`, and records the gates coming from `FROZEN.precode.json`, verified byte-identical
-across v1/v2/v3. Two explanations remain open: a path error by the reader, **or** the plan's
-`TEST_PLAN_HELM_R1.md` H1–H7 and the wave-1 package's `FROZEN.precode.json` gates are **two different
-gate sets**. Settle it before correcting anything.
+`R1_W1_READING.json`, **30,931 bytes**, sha256 **`9b1dfdd88568012cabbcfa6d00e97c15dee07d445dfa5daff8be185975f4cf3a`**,
+**byte-identical in two locations** (`...\helm_operator_preparation\R1_W1_RESULT_20261016\` and
+`...\2026-10-16\r1w1_reader\HELM_R1_W1_20261015\`). Read on 2026-10-16:
+
+| key | value |
+|---|---|
+| `test_verdict` | **`"PASS"`** |
+| `headline_word` | **`"R1_BEATS_GB3"`** |
+| `claim_licensed` | **`true`** |
+| `claim_ceiling` | **`"SYNTHETIC_ONLY"`** |
+| `failing_hard_gates` / `failing_instrument_rows` | **`[]`** / **`[]`** |
+| panel sums | `SUM_A1` **"32"**, `SUM_T` **"9"**, `SUM_TPLUS` **"17/2"** (JSON strings, not numbers) |
+| `margin` | **4**, one occurrence, at `marks.R1_BEATS_T_TB` |
+
+**7 hard gates, all holding** (`all_hold: true`): `H1_receipts`, `H2_no_invention`, `H3_replay`,
+`H4_restart`, `H5_skin_neutral`, `H6_controls`, `H7_budgets`.
+**8 instrument rows, all holding** (`all_hold: true`): `I1_data_identity`, `I2_T_identity`,
+`I3_reproduction`, `I4_parameter_counts`, `I5_encoder_fairness`, `I6_completeness`,
+`I7_laptop_reading`, `I8_proven_floors`.
+
+**`132 tests` is NOT in the reading.** It is in `README_R1W1.md` line 74, verbatim: *"132 tests: 114
+carried (56 + 37 + 21), 12 R1 unit tests, 2 reproduction tests (I3), and the four host tests…"* Cite
+it to that file, not to the reading.
+
+**§7.47 IS ACCURATE AND NEEDS NO CORRECTION.** Every claim in it checked TRUE against the file. The
+`switch_words` and the headline live in the same frozen reading by design — a switch that was
+`carried, not credited` is not a contradiction of the headline, it is the reading's own structure.
+
+**Two things recorded here so they are never asserted again:**
+1. A prior reader claimed the reading did not exist and that H1–H7 were never evaluated. **It was
+   wrong on both counts** — a path error.
+2. The council then told the owner **four times** that its own record was defective or incomplete when
+   each check, on reading the artefact, showed the record was right. **Fabricated self-criticism is
+   the same failure as a false positive reading.** Standing rule: **before criticising any record —
+   including your own — open the artefact first.**
+
+### 7b. The launch is DONE — do not launch W1 again
+
+`CLAUDE_R1W1_C34G_SINGLE_LAUNCH_CLAIM.json` records attempt **7** launched
+**`2026-10-16T17:02:07.906369+00:00`**, and it delivered **`R1_W1_HOST.json`, 2,858,582 bytes** at
+`controller_claude_r1w1_c34g\DELIVERABLE_EXTRACT\...\out\r1w1_out\`. **A second launch would burn the
+$9.50 hold and break the one-attempt-per-sealed-package rule.** `W1_LAUNCH_RUNBOOK_20261016.md` is
+**stale**: it was written before the launch and still says the reading should be recorded as §7.46,
+which is the v0.2 policy freeze. §7.47 is the wave-1 reading and it is written.
 
 ## 8. The rule that keeps being broken, in both directions
 
