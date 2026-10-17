@@ -168,13 +168,21 @@ root above has the same bytes.
 
 ## Files added or changed in `language_v3`
 
-Three copied files were changed. Everything else in the first table is byte-identical to the base, which is what
-the first table's hashes prove.
+Files changed from the 2026-10-14 base:
 
 | file | bytes | sha256 now | what changed |
 |---|---|---|---|
-| `cce.py` | 46446 | `7135d3958ad5890a148fcb65f307b89b9f9966a1b9e25cd7a9a5e1e62a5ee614` | added the `p/q` number form: `FRACTION_RX` inside `NUM_RX`, and `fraction_value`, `is_terminating`, `_place`, `fraction_text_of`, `_decimal_of`, `num` and `decimal_text` replacing the `Decimal`-based `num`; the `LOSSY_CONVERSION_REFUSED` refusal; the coefficient sign check moved from `Decimal` to an exact `Fraction`; and the REFUSE and CLOSE forms in `parse` and `render` with the `_bare_turn` guard. No frame, template, alias, tail word, relation, existing refusal code, nesting limit, fractal rule, recipe shape or normalization rule was touched. |
-| `coverage.py` | 12561 | `2919d2d803eb184b812a0ba92f4594c3962b953a0b8536c848ac0b8e23e8eb5f` | the U-TURN side universe takes its charge from a new `TURN_CHARGES` table, in which REFUSE and CLOSE are charged because the grammar now has their forms. The universe, its six cells and their probe contents are unchanged. |
+| `cce.py` | 51327 | `9e4e6b8e790339a8af4a976edfed2c8fafc6254d217e7e29d8928a99d5603e8b` | added the `p/q` number form (`FRACTION_RX`, `fraction_value`, `is_terminating`, `fraction_text_of`, `num`, `decimal_text`, `LOSSY_CONVERSION_REFUSED`), the `REFUSE` and `CLOSE` turn forms with `_bare_turn`, 5-template varied surface wordings for all five turn types (`CLARIFY`, `REFUSE`, `REFUSE_CLAIM`, `CLOSE`, `ACK`), `_parse_special_turn`, `OMEGA_RX` render validation (`_check_omega`), optional `avoid` set in `say()`, precompiled `_QUOTE_MASK_RX`, and cached `_LEXICON_WORDS`. |
+| `cce_v01b.py` | 16730 | `891f59797ee5727bdd0c6d5bd6425e4d3bb6c14ab03322d4235a5800f3059740` | delegates all special turns (including `REFUSE`, `CLOSE`, and evidence-prefixed special turns) to `cce._parse_special_turn` after stripping `I checked:` / `You said:`, and blocks extra sentences on `REFUSE` and `CLOSE` in `render`. |
+| `cce_v01c.py` | 5319 | `7496f516f6389964b3684d4273d60fd2e07bd3511f78c3d981111baf0bb153d3` | blocks `DOTTED` fractal extra sentences on fixed turn forms (`CLARIFY`, `REFUSE`, `REFUSE_CLAIM`, `CLOSE`, `UNDETERMINED`) in `render`. |
+| `aliaswide.py` | 9120 | `ad0cc3e3bbe4274a99e9878294e9a04bdd8b00ee1e15635f6cf399cfe7020b18` | added `p/q` fraction support in `DIGIT_RE`, `_coef`, and `_cas_tuples` so fractional recipes and free English match without `Decimal('1/3')` failure while keeping terminating values as `Decimal`. |
+| `cas_ast.py` | 13186 | `7e03e2d2374b97737a1fd00eaa06111be36f0fe399a7822e06c1cb4543fb6d67` | `_num` routes through `cce.num` so `p/q` fractions are never converted to lossy floats. |
+| `scoring.py` | 16776 | `f875b212685179be7cbe12a9d3dee1f86b0981b155944a7c25050464ef26613a` | `m7` normalizes coefficients through `_coef_key` (`cce.num`) instead of `str(float(...))`. |
+| `coverage.py` | 12561 | `2919d2d803eb184b812a0ba92f4594c3962b953a0b8536c848ac0b8e23e8eb5f` | the U-TURN side universe takes its charge from `TURN_CHARGES`, in which `REFUSE` and `CLOSE` are charged because the grammar now has their forms. |
+| `worker.py` | 9634 | `a0067e53f9811e17bd8253cb5d5eac92d91543c43b2d605cd3d1af9495e97296` | `run_tests` runs both `test_lm_t1` and `test_lm_t1v3`. |
+| `static_check.py` | 4442 | `dd63960ee2fc4d4bc7212b01850986053c942811bdead7765316610279d8230d` | hashes `test_lm_t1v3.py` and `GRAMMAR_CCE_v0_1_v3_ADDENDUM.md` in `SOURCE_MANIFEST.json`. |
+| `static_check_t1b.py` | 4915 | `99f5011262b7cc6805bad320f5bb0236e3a12ca6b8ab6c238c1b7fc6138cb185` | writes `LF` line endings. |
+| `static_check_t1c.py` | 5261 | `8f3797bc27e19173f523451d3d2deb9ca1df06d70e319c64b1af9d666a2acd65` | writes `LF` line endings. |
 | `README.md` | 7168 | `30d46e6b1587e0acfb80f461a719a898dcdc360a52606236218813ed802a24b3` | the base's own README text is kept word for word; added around it are how to run from inside the repo, the `PYTHONPATH` the base needs, and what this folder adds. |
 
 Files added here; none of them came from the base:
@@ -183,18 +191,24 @@ Files added here; none of them came from the base:
 |---|---|---|
 | `PROVENANCE.md` | this file | not listed: a file cannot hold its own sha256 |
 | `MEASUREMENTS.md` | 6230 | `173ca6eef56d04d9472dda5a14871ed39241f074cb1b63b1e5355fadf63096d2` |
-| `GRAMMAR_CCE_v0_1_v3_ADDENDUM.md` | 6733 | `c6c93153cc937ddb6adf086ed9963f6dbc77df340278c0a6c817c079b7d27cbb` |
-| `test_lm_t1v3.py` | 12738 | `f149b2f24444d2414530b17834cec96012e73981f8ecaf17a540d9dc8d89dc46` |
+| `GRAMMAR_CCE_v0_1_v3_ADDENDUM.md` | 8526 | `58899fd889e726fe1b08220d4c55cbad2bb5d6acea7dad983504d239067f0a0f` |
+| `test_lm_t1v3.py` | 17241 | `1e4b58a6c53514caca7b181778e0b424eecfd889b07d85dabdc7760685706fcc` |
 | `measure_marks.py` | 4589 | `e3fe0d6ae93a7968a0b6a31fea688c33441f22d188f46686ba66733e81328048` |
-| `run_suites.py` | 1987 | `ebd3765b18322489c30215838f1626dc41f34f7d17aa084407f392a479d52058` |
-| `MEASURE_BEFORE.json` | 9126 | `90d93ab61f280339927f58fb51f85171c6aa35c10a12dac9a3db04f76bbae3ea` |
-| `MEASURE_AFTER.json` | 8958 | `438f8e4bbf6e5a1a2de05d3d618f0e16d96b022d59511be54e06618673377e9f` |
+| `run_suites.py` | 1987 | `df9577ebf131222133ffbacff14da977da6714b03ef1492483f2d91a8d4f5bec` |
+| `how_it_talks.py` | 3999 | `43c6209abb0fa39e319e5bf7074057e5ecb2220deb81ce341e0173388fb6227e` |
+| `HOW_IT_TALKS.txt` | 6856 | `1ae0f9bfeb30376d76349d117730c29f16fbec0aa03579a9d7647d2258f89a44` |
+| `MEASURE_BEFORE.json` | 8736 | `9a192974a1d4737981265e7866ba214343f21453d78560030943ca9860c1eda2` |
+| `MEASURE_AFTER.json` | 8577 | `9ff265e30236bc1cc3f76f39b33af5b4e757e4ffd7fb2aa21eac3931c51de1b1` |
 
-Every hash above is the hash of the file as committed. To check one, from this folder:
+Fresh manifests generated for `language_v3` (`worker*.py` `verify_source` passes on all three; the 2026-10-14 base manifest hashes remain recorded in the first table above):
+
+| manifest | bytes | sha256 |
+|---|---|---|
+| `SOURCE_MANIFEST.json` | 9327 | `d4875ac6cb7c2508ba677af379f4bc9d88b678fefdf82ef68a7ddd225b3531ac` |
+| `SOURCE_MANIFEST_T1B.json` | 12113 | `75d47f37685e7bc906011f16afbb174e1d08a366cb704038fe2c04a3ba28713c` |
+| `SOURCE_MANIFEST_T1C.json` | 14333 | `6340fe3e0c193d7eb5e004fc3ebee9d0d9bd131dfdcf5f2b85c69a2ffbcba6ac` |
+
+Every hash above is the hash of the file on disk (LF line endings). To check one, from this folder:
 
     Get-FileHash <file> -Algorithm SHA256
 
-`SOURCE_MANIFEST.json`, `SOURCE_MANIFEST_T1B.json` and `SOURCE_MANIFEST_T1C.json` are the base build's own records
-of the bytes it ran on, and they still list the base's `cce.py`. They were deliberately not rewritten, because
-they are the record of the 2026-10-14 run, and because `worker.py` verifies them: a future run would need its own
-manifest, not an edited one of these.

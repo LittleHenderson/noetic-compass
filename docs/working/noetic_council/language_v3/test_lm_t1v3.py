@@ -266,5 +266,91 @@ class NothingElseMoved(unittest.TestCase):
             self.assertEqual(cce.decimal_text(written), cce.num(written), written)
 
 
+class ExtensionsAndVariedTurns(unittest.TestCase):
+    """Upgrades in language_v3: cce_v01b/c turn support, p/q in aliaswide/cas_ast/scoring, OMEGA_RX render guards, and varied turn wordings."""
+
+    def test_v01b_and_v01c_accept_refuse_close_and_evidence_prefixed_turns(self):
+        import cce_v01b as b
+        import cce_v01c as c01c
+        sentences = (
+            "I will not do that: boundary violation.",
+            "I checked: I will not do that: boundary violation.",
+            "That closes the turn.",
+            "You said: That closes Ω_tea.",
+            "I checked: I cannot support that: no evidence.",
+            "I checked: I need the stock of Ω_leaves for Ω_tea. What is it?",
+            "You said: Are we still on Ω_tea?",
+        )
+        for text in sentences:
+            for mod in (b, c01c):
+                parsed = mod.parse(text)
+                self.assertEqual(mod.render(parsed), text, (mod.__name__, text))
+                self.assertTrue(mod.round_trip(parsed)["ok"], (mod.__name__, text))
+        for turn_kw in ({"turn": "REFUSE", "reason": "boundary violation"},
+                        {"turn": "CLOSE", "topic": "Ω_tea"}):
+            bad = b.empty_content()
+            bad.update(turn_kw)
+            bad["fractal"] = [{"noetic": 8, "domain": None, "register": None, "drive": None},
+                              {"noetic": 9, "domain": None, "register": None, "drive": None}]
+            with self.assertRaises(ValueError):
+                b.render(bad)
+
+    def test_varied_turn_templates_all_round_trip_to_same_canonical_content(self):
+        turn_Fixtures = (
+            content(turn="REFUSE", reason="boundary violation"),
+            content(turn="REFUSE_CLAIM", reason="no evidence"),
+            content(turn="CLOSE"),
+            content(turn="CLOSE", topic="Ω_tea"),
+            content(turn="CLARIFY", topic="Ω_tea", lacunae=["the stock of Ω_leaves"]),
+            content(turn="CLARIFY", topic="Ω_tea"),
+            content(turn="ACK", topic="Ω_tea"),
+        )
+        for c in turn_Fixtures:
+            seen = set()
+            for seed in range(8):
+                res = cce.say(c, seed, avoid=seen)
+                self.assertTrue(res["drawn"], c)
+                self.assertEqual(cce.normalize(cce.parse(res["sentence"])), cce.normalize(c), res["sentence"])
+                seen.add(res["sentence"])
+            self.assertEqual(len(seen), 5, (c, seen))
+
+    def test_omega_rx_render_validation_catches_invalid_tokens(self):
+        base_term = {"kind": "state", "noetic": 2, "domain": "P", "register": None, "drive": None, "coefficient": "1"}
+        bad_recipes = (
+            {"omega": "not_omega", "terms": [base_term], "leakage": [], "catalysts": [], "inhibitors": []},
+            {"omega": "Ω_t", "terms": [base_term],
+             "leakage": [{"coefficient": "1/3", "side": "side product", "implicit": False}],
+             "catalysts": [], "inhibitors": []},
+            {"omega": "Ω_t", "terms": [base_term], "leakage": [], "catalysts": ["heat"], "inhibitors": []},
+            {"omega": "Ω_t", "terms": [base_term], "leakage": [], "catalysts": [], "inhibitors": ["cold"]},
+            {"omega": "Ω_t", "terms": [{"kind": "outcome", "coefficient": "1", "name": "bad_prereq"}],
+             "leakage": [], "catalysts": [], "inhibitors": []},
+        )
+        for rec in bad_recipes:
+            with self.assertRaises(ValueError, msg=str(rec)):
+                cce.render(content(recipe=rec))
+        with self.assertRaises(ValueError):
+            cce.render(content(turn="CLOSE", topic="bad_topic"))
+
+    def test_aliaswide_cas_ast_and_scoring_support_exact_fractions(self):
+        import aliaswide
+        import cas_ast
+        import scoring
+        parsed_cas = {
+            "accepted": True,
+            "omega": "bread",
+            "core": [{"kind": "state", "coefficient": "1/3", "cell": "^9^O", "drive": None, "register": None}],
+            "leakage": [{"coefficient": "1/4", "side": "bread_side", "implicit_coefficient": False}],
+        }
+        eng = "To make bread, use 1/3 of what popped into mind in operational work, with 0.25 of bread_side as side product."
+        res = aliaswide.check(parsed_cas, eng)
+        self.assertEqual(res["verdict"], "MATCH", res)
+        self.assertEqual(cas_ast._num("1/3"), "1/3")
+        self.assertEqual(cas_ast._num("1/4"), "0.25")
+        self.assertEqual(scoring._coef_key("1/3"), "1/3")
+        self.assertEqual(scoring._coef_key(0.25), "0.25")
+
+
 if __name__ == "__main__":
     unittest.main()
+

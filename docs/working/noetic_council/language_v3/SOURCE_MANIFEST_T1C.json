@@ -1,177 +1,177 @@
 {
   "version": "lm-t1c-v0.1c-R",
-  "created_utc": "2026-10-15T04:50:01.569830+00:00",
+  "created_utc": "2026-10-17T07:25:30.715091+00:00",
   "files": [
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce.py",
-      "sha256": "b494598e4b665514d7fd78b89a90186d7e7fc679ab7f407b4826459356289bd3",
-      "bytes": 41546,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\cce.py",
+      "sha256": "9e4e6b8e790339a8af4a976edfed2c8fafc6254d217e7e29d8928a99d5603e8b",
+      "bytes": 51327,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce_v01b.py",
-      "sha256": "25047ba1c3cd3ecb9212aa0cb66f59fad9b8abdb62a9875f403ce59c201228bd",
-      "bytes": 16716,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\cce_v01b.py",
+      "sha256": "891f59797ee5727bdd0c6d5bd6425e4d3bb6c14ab03322d4235a5800f3059740",
+      "bytes": 16730,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cas_ast.py",
-      "sha256": "175fbadf23e9ae11ed94513e6ff382b07e6bb46f78bbc7e764200f3afb8f58ae",
-      "bytes": 13148,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\cas_ast.py",
+      "sha256": "7e03e2d2374b97737a1fd00eaa06111be36f0fe399a7822e06c1cb4543fb6d67",
+      "bytes": 13186,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\t1b.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\t1b.py",
       "sha256": "4a175cad7f95266cf3a86a1974ed2a0c6e30dceab73295037dab85b1c46b0b46",
       "bytes": 13121,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\aliaswide.py",
-      "sha256": "e6afd206736ea9c70bd15a72281c503d15cf7f97da2735cacb476ede8c722211",
-      "bytes": 8421,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\aliaswide.py",
+      "sha256": "ad0cc3e3bbe4274a99e9878294e9a04bdd8b00ee1e15635f6cf399cfe7020b18",
+      "bytes": 9120,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\coverage.py",
-      "sha256": "36e520e5f47074a8815e4c38aa9d82d859877a19aafc225a40749207b9dc22b5",
-      "bytes": 11804,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\coverage.py",
+      "sha256": "2919d2d803eb184b812a0ba92f4594c3962b953a0b8536c848ac0b8e23e8eb5f",
+      "bytes": 12561,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\scoring.py",
-      "sha256": "1712681f0c088f552227f52730172701a6b9a36ad53b2a16f4f276197a24f1d8",
-      "bytes": 16677,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\scoring.py",
+      "sha256": "f875b212685179be7cbe12a9d3dee1f86b0981b155944a7c25050464ef26613a",
+      "bytes": 16776,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\worker_t1c.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\worker_t1c.py",
       "sha256": "fa32d686933aef74afcc33e57a2ec8e74e50dadc772bf188d1e6068ac6f2ee84",
       "bytes": 6182,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce_v01c.py",
-      "sha256": "a043c988f7fda529adb2a3cdf8ad28405f7fe2b7e7c4f96e43bc42ef57a4302f",
-      "bytes": 5143,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\cce_v01c.py",
+      "sha256": "7496f516f6389964b3684d4273d60fd2e07bd3511f78c3d981111baf0bb153d3",
+      "bytes": 5319,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\t1c.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\t1c.py",
       "sha256": "5afecfb42c7f763487cea70ca565f10edb897ff4e74f1458761187ce42fd04f5",
       "bytes": 5260,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1c.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\test_lm_t1c.py",
       "sha256": "27410bf408c430718eba060d484154efb1610c4a496516ec165657665326cdd2",
       "bytes": 1595,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN_T1C.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\FROZEN_T1C.json",
       "sha256": "f69a58e1a5addbb9a854e85d06c0c64ca599af861c714f412d6dfffaffb9f926",
       "bytes": 3230,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1c_R_ADDENDUM.md",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\GRAMMAR_CCE_v0_1c_R_ADDENDUM.md",
       "sha256": "b76d2093fc5058822afc43170bf12133abfa64743f37e8a7de7fd98683bc5119",
       "bytes": 1402,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1c_R_DOTTED4.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_v0_1c_R_DOTTED4.json",
       "sha256": "73b71b44c524753185fcd87180860e5ac9322c2ce3ab29315be092dbd203c86f",
       "bytes": 3778,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1c_R_DOTTED4_FREEZE.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_v0_1c_R_DOTTED4_FREEZE.json",
       "sha256": "d3b17da7097c6d5063c7478df4a8a39f5dfeb87f75f0a4c5697dc6870dc02ae0",
       "bytes": 333,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\supervisor_t1c.ps1",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\supervisor_t1c.ps1",
       "sha256": "87b5de585ab59ca6602e9d692ef92689c89942516e25b78f6f8e95343d67d9fc",
       "bytes": 6514,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\test_lm_t1.py",
       "sha256": "2e6880a7c13a14022814f664e45cb5246bf024e61de754ab459a8e5942d60ce2",
       "bytes": 11799,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1b.py",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\test_lm_t1b.py",
       "sha256": "473fec265b39a685c012e45194ea51c77fe130e0088d025823ebdec8ce468ca6",
       "bytes": 4150,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\static_check_t1c.py",
-      "sha256": "e3bc4102fc728caedeb3883984b1db8d789bf7f8dbfe95f1215498812485c49c",
-      "bytes": 5233,
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\static_check_t1c.py",
+      "sha256": "8f3797bc27e19173f523451d3d2deb9ca1df06d70e319c64b1af9d666a2acd65",
+      "bytes": 5261,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN_T1B.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\FROZEN_T1B.json",
       "sha256": "6a9eae1aa7fdf6ff3ce8c874a291b2ef149b98084d34f57e8a079e8e678717b6",
       "bytes": 6161,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1b_ADDENDUM.md",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\GRAMMAR_CCE_v0_1b_ADDENDUM.md",
       "sha256": "9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241",
       "bytes": 7271,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1b_ADD16.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_v0_1b_ADD16.json",
       "sha256": "cf28d0a065190bbc283e6256de46503917b924e952a3682bfb22dd750fdc1ffc",
       "bytes": 12445,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1b_ADD16_FREEZE.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_v0_1b_ADD16_FREEZE.json",
       "sha256": "44e152b3e20aadb2dfec0d44514cc26e7bc745b147fc4c84f9849eb3b9544277",
       "bytes": 391,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\FROZEN.json",
       "sha256": "ac41c92ea5dc4a44391f7e4366af4f03503b2ddff45a5ddbf66e06948429094f",
       "bytes": 11016,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1.md",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\GRAMMAR_CCE_v0_1.md",
       "sha256": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70",
       "bytes": 14707,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\ALIAS_WIDE_LEXICON_v0_1.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\ALIAS_WIDE_LEXICON_v0_1.json",
       "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0",
       "bytes": 6133,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\OWNER_APPROVAL_EVIDENCE.template.md",
       "sha256": "746e7b37dbeb2ce9dcadf7dd365123fc840a81f5702970246f5030b127df8d52",
       "bytes": 1277,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_v0_1.json",
       "sha256": "653cdc708112410b18c59ce26daf65382eccd94a8f9e49705fcea32eeedab56b",
       "bytes": 47070,
       "role": "LM_T1"
     },
     {
-      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_FREEZE.json",
+      "path": "D:\\tksCAS-worktrees\\repair-performer-20261017\\docs\\working\\noetic_council\\language_v3\\handset\\HAND_SET_FREEZE.json",
       "sha256": "91b49bb98af31e5fb074442f1dc328c564ad846ed6f121f987ce579216962acf",
       "bytes": 511,
       "role": "LM_T1"

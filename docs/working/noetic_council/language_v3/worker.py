@@ -73,7 +73,7 @@ def verify_source(permission):
 def run_tests():
     stream = io.StringIO()
     result = unittest.TextTestRunner(stream=stream, verbosity=2).run(
-        unittest.TestLoader().loadTestsFromName("test_lm_t1"))
+        unittest.TestLoader().loadTestsFromNames(["test_lm_t1", "test_lm_t1v3"]))
     return {"tests": result.testsRun, "failures": len(result.failures), "errors": len(result.errors),
             "ok": result.wasSuccessful(), "details": [str(t) for t, _ in result.failures + result.errors]}
 

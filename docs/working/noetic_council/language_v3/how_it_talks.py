@@ -16,7 +16,7 @@ def say_back(sentence, seeds=(0,)):
     outs = []
     for seed in seeds:
         try:
-            got = cce.say(content, seed)
+            got = cce.say(content, seed, avoid=set(outs))
             outs.append(got["sentence"] if isinstance(got, dict) else str(got))
         except Exception as exc:
             outs.append("<draw failed: %s: %s>" % (type(exc).__name__, exc))
@@ -36,10 +36,9 @@ def show(label, sentence, seeds=(0,)):
         return
     for index, out in enumerate(outs):
         print("  OUT %d: %s" % (index, out))
-    # the round trip: does the spoken sentence read back to the same content?
+    # the round trip: does every spoken sentence read back to the same content?
     try:
-        again = cce.parse(outs[0])
-        same = cce.canonical(again) == cce.canonical(content)
+        same = all(cce.canonical(cce.parse(o)) == cce.canonical(content) for o in outs)
         print("  SAME CONTENT AFTER A ROUND TRIP: %s" % ("YES" if same else "NO"))
     except Exception as exc:
         print("  SAME CONTENT AFTER A ROUND TRIP: NO (%s)" % (str(exc)[:60],))
@@ -63,11 +62,11 @@ show("5. A RECIPE WITH 1/3 - THE p/q RULING. No decimal can hold a third.",
 
 # ---- 4. the things a conversation does ------------------------------------------------
 show("6. A REFUSAL OF AN ACT - the new REFUSE turn",
-     'I will not do that: boundary violation.', seeds=(0,))
-show("7. A CLOSING TURN - the new CLOSE turn", 'That closes the turn.', seeds=(0,))
-show("8. A REFUSAL OF A CLAIM", 'I cannot support that: no evidence.', seeds=(0,))
+     'I will not do that: boundary violation.', seeds=(0, 1, 2, 3, 4))
+show("7. A CLOSING TURN - the new CLOSE turn", 'That closes the turn.', seeds=(0, 1, 2, 3, 4))
+show("8. A REFUSAL OF A CLAIM", 'I cannot support that: no evidence.', seeds=(0, 1, 2, 3, 4))
 show("9. ASKING FOR THE MISSING THING",
-     'I need the amount for \u03a9_x. What is it?', seeds=(0,))
+     'I need the amount for \u03a9_x. What is it?', seeds=(0, 1, 2, 3, 4))
 
 # ---- 5. cause, prerequisite, absence --------------------------------------------------
 show("10. A PREREQUISITE - RPM, one direction only",

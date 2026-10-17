@@ -2,7 +2,7 @@
   "check_type": "STATIC_SOURCE_ONLY",
   "imports": {
     "cce.py": [
-      "decimal",
+      "fractions",
       "hashlib",
       "itertools",
       "json",
@@ -18,6 +18,7 @@
     ],
     "cas_ast.py": [
       "api.notation.compiler",
+      "cce",
       "cce_v01b",
       "decimal",
       "json",
@@ -39,6 +40,7 @@
     "aliaswide.py": [
       "collections",
       "decimal",
+      "fractions",
       "json",
       "pathlib",
       "re",
@@ -126,6 +128,6 @@
     ]
   },
   "problems": [],
-  "source_manifest_sha256": "89c17fddc3063e3b425f5845cdeb5b9b979f65246cf2f53b4e99d2ab4df40012",
+  "source_manifest_sha256": "6340fe3e0c193d7eb5e004fc3ebee9d0d9bd131dfdcf5f2b85c69a2ffbcba6ac",
   "files_hashed": 52
 }

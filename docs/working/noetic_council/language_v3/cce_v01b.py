@@ -301,7 +301,7 @@ def parse(text, max_depth=cce.MAX_NEST_DEPTH):
     if not isinstance(text, str) or not text.strip():
         raise Refusal("NOT_CCE", "empty")
     s = text.strip()
-    if s == cce.FIXED_UNDETERMINED or re.match(r"I need .+ What is it\?$|I cannot support that: |Are we still on ", s):
+    if s == cce.FIXED_UNDETERMINED:
         c = cce.parse(s, max_depth)
         c.update({"fractal": [], "meta": [], "expr": None})
         return c
@@ -314,6 +314,9 @@ def parse(text, max_depth=cce.MAX_NEST_DEPTH):
     c = cce.empty_content()
     c["evidence"] = evidence
     extra = {"fractal": [], "meta": [], "expr": None}
+    if cce._parse_special_turn(s, c):
+        c.update(extra)
+        return c
     minds = set()
     for sent in cce.split_sentences(s):
         if sent.endswith("?"):
@@ -358,7 +361,7 @@ def render(content, rng=None):
                 or base["sequence"] or base["recipe"] or base["stocks"] or base["relations"])
     if not extras:
         return cce.render(base, rng)
-    if base["gate"] == "UNDETERMINED" or base["turn"] in ("CLARIFY", "REFUSE_CLAIM"):
+    if base["gate"] == "UNDETERMINED" or base["turn"] in ("CLARIFY", "REFUSE", "REFUSE_CLAIM", "CLOSE"):
         raise ValueError("a fixed turn form cannot carry extra sentences")
     lead = {"CHECKED": "I checked: ", "USER_SAID": "You said: ", "NONE": ""}[base["evidence"]]
     head = ""

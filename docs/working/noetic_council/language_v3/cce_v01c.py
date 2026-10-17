@@ -103,6 +103,8 @@ def render(content, rng=None):
     base["fractal"] = []
     base.pop("fractal_notation", None)
     bc = b.canonical(base)
+    if bc["gate"] == "UNDETERMINED" or bc["turn"] in ("CLARIFY", "REFUSE", "REFUSE_CLAIM", "CLOSE"):
+        raise ValueError("a fixed turn form cannot carry extra sentences")
     lead = {"CHECKED": "I checked: ", "USER_SAID": "You said: ", "NONE": ""}[bc["evidence"]]
     has_base = (bc["terms"] or bc["sequence"] or bc["recipe"] or bc["stocks"] or bc["relations"] or bc["meta"]
                 or bc["expr"] is not None or bc["topic"] or bc["turn"] != "ANSWER" or bc["gate"] != "RIGHT_PATH")

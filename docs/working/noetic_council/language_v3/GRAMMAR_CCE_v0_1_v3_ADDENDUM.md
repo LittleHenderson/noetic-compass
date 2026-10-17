@@ -100,6 +100,43 @@ The wording was chosen from `api/notation/turn_admissibility.py` (the compiler-a
 - Every turn type with **no** form still raises and is never guessed: `OPEN`, `MIRROR`, `EMPATHIZE`, `PLAN`,
   `REPAIR` raise on render (`turn type … has no CCE v0.1 form`) and a sentence claiming one is refused `NOT_CCE`.
 
+### Varied surface wordings for all five turn types (`rng` draws, `round_trip` verifies)
+
+When `rng=None`, `render` emits the canonical (index 0) sentence for each turn type. When a seeded `rng` is passed
+(including via `cce.say`), `render` draws from 5 closed surface templates per turn type, and `parse` reads every
+template back to the identical canonical content record:
+
+- **REFUSE** (`CLARIFY`/`REFUSE_CLAIM` distinct):
+  1. `I will not do that: <reason>.` (canonical)
+  2. `I must refuse that: <reason>.`
+  3. `That is refused: <reason>.`
+  4. `I cannot comply with that: <reason>.`
+  5. `I refuse that action: <reason>.`
+- **REFUSE_CLAIM**:
+  1. `I cannot support that: <reason>.` (canonical)
+  2. `That claim is not supported: <reason>.`
+  3. `I have no support for that claim: <reason>.`
+  4. `I cannot back that claim: <reason>.`
+  5. `The receipts do not support that: <reason>.`
+- **CLOSE (bare / with `<Ω>`)**:
+  1. `That closes the turn.` / `That closes <Ω>.` (canonical)
+  2. `The turn is now closed.` / `<Ω> is now closed.`
+  3. `We are done with this turn.` / `We are done with <Ω>.`
+  4. `That completes the turn.` / `That completes <Ω>.`
+  5. `Closing the turn now.` / `Closing <Ω> now.`
+- **CLARIFY (with `<slot>` / topic check)**:
+  1. `I need <slot> for <Ω>. What is it?` / `Are we still on <Ω>?` (canonical)
+  2. `Before I can continue with <Ω>, I need <slot>.` / `Are we still working on <Ω>?`
+  3. `Please provide <slot> for <Ω>.` / `Should we stay on <Ω>?`
+  4. `For <Ω>, I still need <slot>.` / `Is the subject still <Ω>?`
+  5. `<Ω> is missing <slot>. What is the value?` / `Do we remain on <Ω>?`
+- **ACK**:
+  1. `New subject: <Ω>.` (canonical)
+  2. `Switching subject to <Ω>.`
+  3. `Moving to <Ω>.`
+  4. `Now on <Ω>.`
+  5. `Turning to <Ω>.`
+
 ### The ledger after this addendum
 
 | side universe | before | after |
@@ -119,3 +156,4 @@ because its probe round-trips through `cce.round_trip`; the charge names the rul
   normalization rule was altered.
 - `U-CATEGORY` keeps its own seven declared lacunae (general `∘` composition, `CoverOf`, `PartitionOf`, union,
   intersection, difference, `let`). They are still LACUNA, because no form was added for them.
+

@@ -39,7 +39,10 @@ EXPR_SYM = {"plus": "+", "minus": "-", "times": "×", "divide": "÷", "arrow": "
 
 
 def _num(x):
-    return format(Decimal(repr(float(x))).normalize(), "f")
+    import cce
+    if isinstance(x, float):
+        return cce.num(repr(x))
+    return cce.num(x)
 
 
 # --- AST -> content ----------------------------------------------------------------------------------------------
