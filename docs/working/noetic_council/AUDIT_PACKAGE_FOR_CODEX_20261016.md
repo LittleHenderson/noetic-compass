@@ -111,6 +111,12 @@ Check each one. A claim with no re-runnable evidence is to be **withdrawn**, not
 CONVERSATION.` — a doubled "NOT". Cosmetic, but it is a defect in a statement about claims, so it must
 be fixed rather than excused.
 
+**D1b — `faculties_v2` FAILS its own suite and must not be trusted.** The Unity Eye plus
+`RESTART_FALLBACK` wiring reports **44 of 48** with `PYTHONHASHSEED=0` and **45 of 48** unseeded — and
+**two runs of identical bytes produced different failure sets.** That is a **reproducibility failure**,
+which breaks `H3_replay`. The test meant to prove the eye cannot write dies on a `NameError` before it
+asserts anything. **Treat that package as unfinished. Do not read its pass count as a pass.**
+
 **D2 — a test that asserted the opposite of a ruling was deleted.** `desire_loop_1000_iterations_depth_stays_0`
 asserted a 1000-cycle loop is legal. The owner's ruling made that false. It was replaced by
 `desire_bound_is_exactly_12_each_way`. **Verify the replacement actually tests what it claims** and that
@@ -154,12 +160,17 @@ Wave 1 is a **closed, passed result** and is **not** part of the eight packages.
 1. **Nothing actually recurses.** The gate **names** a repair and a flatten; it performs neither. No
    engine spawns a child. The loop runs one turn on a caller-supplied cause. **Continuity of thought
    across a real recursion has never been exercised.**
-2. **The 40 Elements are never used.** `validate_profile40` exists in the real atlas; nothing calls it.
+2. **The 40 Elements are never APPLIED to a station point.** **CORRECTION:** `validate_profile40` **IS**
+   called, at `rpa_model.py:185`. An earlier version of this file said "nothing calls it" and that was
+   **FALSE**. The true gap is narrower and still real: every node in the builds gets `profile40=None`
+   (`test_all.py:897-916`), so the profile is validated when present but never populated.
 3. **The atlas can be bound but not walked** — `rpa_ohm_atlas.py` needs `rpa_coordinates.py`, not copied.
 4. **The Bias is a toy** versus the real `BiasState` (readiness axes, operating region, rpm state, bias paths).
 5. **No learning at all** — no witnessed-ratio writer, no growth, no pruning.
 6. **Memory fading (M1) is not built** — only the fallback-policy test package (`768` rows, nothing scored).
-7. **The lacunarity machine's four states not wired** (COVERED / NO_EVIDENCE / LACUNA / FADED).
+7. **One lacunarity state cannot occur.** **CORRECTION:** three of the four states **are** computed over 200
+   cells (`roundtrip.py:302-309`). An earlier version of this file said all four were unwired and that was
+   **FALSE**. Only `NO_EVIDENCE` is unreachable in the current build.
 8. **The Unity Eye and `RESTART_FALLBACK` were never used** until this session's last act.
 
 ---
