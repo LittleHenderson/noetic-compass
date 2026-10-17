@@ -1,0 +1,17 @@
+{
+  "state_counts": {
+    "COVERED": 40,
+    "NO_EVIDENCE": 0,
+    "LACUNA": 0,
+    "FADED": 0,
+    "UNCOVERED_NO_WRITE_HISTORY": 0
+  },
+  "compiler_sequence_equal": 40,
+  "of": 40,
+  "forms_exercised": {
+    "digits": 40,
+    "within": 40
+  },
+  "covered_without_charge": 0,
+  "pass": true
+}

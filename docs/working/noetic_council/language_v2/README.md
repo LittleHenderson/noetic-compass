@@ -1,3 +1,25 @@
+> ## SUPERSEDED by `docs/working/noetic_council/language_v3`
+>
+> Use `language_v3`. This folder is kept as a record and is not deleted. Nothing below this block was edited.
+>
+> The real translator is `lm_t1` (now copied, with two additions, into `language_v3`). This folder was a weaker
+> duplicate of it. Two things it regressed against the real one:
+>
+> 1. **The turn types.** It knows 11 turn names but only four of them have their own sentence. The other seven —
+>    `OPEN`, `MIRROR`, `EMPATHIZE`, `PLAN`, `REPAIR`, `REFUSE`, `CLOSE` — all come out as the same sentence a plain
+>    `ANSWER` produces, and each reads back as `ANSWER`. I measured this here, not taken on report: setting the turn
+>    to any of those seven and rendering gives `I have an affinity for "x".`, and parsing that back gives
+>    `turn=ANSWER` every time. Seven speech acts, one sentence.
+> 2. **Leakage.** The briefing records this folder as failing to read leakage. I checked only lightly and could not
+>    reproduce it in the recipe sense: `To make Ω_bread, use 2 of Female, cognitive. Side product: 1/9 of Ω_steam.`
+>    parses to a recipe whose leakage holds `{"coefficient": "1/9", "side": "Ω_steam", "implicit": false}`, and the
+>    implicit form with no number is read with `"coefficient": null, "implicit": true`. So the record stands as
+>    reported, with that one measured doubt noted against it.
+>
+> One thing this folder contributed, and `language_v3` now carries: **the `p/q` number form** (`numbers.py`), which is
+> the owner's Q13 ruling, together with the `LOSSY_CONVERSION_REFUSED` rule that stops a fraction being turned into
+> a decimal it does not exactly have.
+
 # The language layer v2 — CCE v0.1-pq, with RB-C4's restart fallback wired into the tap
 
 Built 2026-10-16 in `C:\Users\wakil\Documents\Codex\2026-10-16\language_v2\`, as the merged copy of

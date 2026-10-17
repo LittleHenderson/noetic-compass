@@ -1,0 +1,26 @@
+{
+  "headline_rows": 439,
+  "alias_wide": {
+    "MATCH": 233,
+    "UNPARSEABLE_ENGLISH": 197,
+    "MISMATCH": 9
+  },
+  "alias_wide_match": 233,
+  "bridge_v2_on_same_rows": {
+    "UNPARSEABLE_ENGLISH": 321,
+    "MATCH": 118
+  },
+  "mark": 176,
+  "mark_met": true,
+  "second_number_register_and_drive_agree_among_match": 174,
+  "strict_cce_parses_equal": 0,
+  "lookup_equal": 0,
+  "unparseable_reason_counts": {
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+    "NO_STATE_IN_SEGMENT": 148,
+    "NO_DOMAIN_IN_SEGMENT": 56,
+    "AMBIGUOUS_STATE_IN_SEGMENT": 27
+  },
+  "rows_in_files": 5268,
+  "recipe_rows": 481
+}

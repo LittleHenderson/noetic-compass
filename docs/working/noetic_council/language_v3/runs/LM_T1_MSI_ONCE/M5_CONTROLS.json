@@ -1,0 +1,212 @@
+{
+  "M5": {
+    "rows": {
+      "seed_recipe_00459": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "2",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^8^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "2",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^9^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": []
+      },
+      "seed_recipe_00229": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00193": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^C",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^E",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00360": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^E",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^E",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00353": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^C",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00026": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^P",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^2^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": []
+      },
+      "seed_recipe_00320": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^2^P",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^P",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00528": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.7",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^4^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.7",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      }
+    },
+    "positive_control_00459_mismatch": true,
+    "suspect_six_match_flags": 0
+  },
+  "M5b_shuffled": {
+    "pairs": 439,
+    "derangement_valid": true,
+    "shuffled_match": 0,
+    "pass": true
+  }
+}
