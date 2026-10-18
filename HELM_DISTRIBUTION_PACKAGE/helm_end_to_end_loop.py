@@ -19,8 +19,9 @@ from decimal import Decimal
 from typing import Dict, List, Any, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-if HERE not in sys.path:
-    sys.path.insert(0, HERE)
+for sub in [HERE, os.path.join(HERE, "brains"), os.path.join(HERE, "core_engine"), os.path.join(HERE, "real_atlas")]:
+    if os.path.exists(sub) and sub not in sys.path:
+        sys.path.insert(0, sub)
 
 # Import Core Subsystems
 from helm_brain_22x40 import HELMRecipeBrain22x40, d40
@@ -159,7 +160,7 @@ class HELMEndToEndLoop:
                 inputs[ing] = Decimal("10")
         return inputs
 
-    def process_turn(self, user_english: str, tick: int = 1) -> Dict[str, Any]:
+    def process_turn(self, user_english: str, tick: int = 1, current_inventory: Optional[Dict[str, Decimal]] = None) -> Dict[str, Any]:
         """Execute one complete turn of the HELM loop.
         
         Returns:
@@ -183,7 +184,9 @@ class HELMEndToEndLoop:
         }
 
         # Step 1: Extract physical ingredients to determine grounding
-        inputs = self.extract_ingredient_quantities(user_english)
+        inputs = dict(current_inventory) if current_inventory else {}
+        extracted = self.extract_ingredient_quantities(user_english)
+        inputs.update(extracted)
         has_ingredients = len(inputs) > 0
 
         # Step 1a: Check if user prompt is an Autonomous Agentic Goal (Phase 4)
@@ -253,8 +256,7 @@ class HELMEndToEndLoop:
             result["everyday_english_response"] = HELMVoiceAdapter.format_clarify("unverified grammar structure")
             return result
 
-        # Step 3: Extract physical ingredients and evaluate prerequisites
-        inputs = self.extract_ingredient_quantities(user_english)
+        # Step 3: Evaluate physical ingredients and prerequisites
         # Check required base ingredients (Flour and Water are required base)
         has_flour = "Flour" in inputs and inputs["Flour"] > 0
         has_water = "Water" in inputs and inputs["Water"] > 0

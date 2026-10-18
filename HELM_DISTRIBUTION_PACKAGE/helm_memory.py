@@ -46,11 +46,19 @@ class WorkingMemoryContext:
         self.last_plan_steps: List[Dict[str, Any]] = []
         self.last_result_summary: Optional[str] = None
         self.pending_clarification: Optional[str] = None
+        self.user_facts: List[str] = []
         self.user_preferences: Dict[str, Any] = {
             "voice": "everyday",
             "dial_preset": "BALANCED",
             "verbose": False
         }
+
+    def add_user_fact(self, fact: str):
+        cleaned = fact.strip().rstrip(".").strip()
+        if cleaned and cleaned not in self.user_facts:
+            self.user_facts.append(cleaned)
+        # Bounded cap: keep last 20 user narrative facts
+        self.user_facts = self.user_facts[:20]
 
     def update_files(self, files: List[str]):
         for f in files:
@@ -70,6 +78,7 @@ class WorkingMemoryContext:
             "active_files": list(self.active_files),
             "active_tools": list(self.active_tools),
             "inventory": {k: str(v) for k, v in self.inventory.items()},
+            "user_facts": list(self.user_facts),
             "last_goal": self.last_goal,
             "last_plan_steps": self.last_plan_steps,
             "last_result_summary": self.last_result_summary,
@@ -180,11 +189,17 @@ class HELMConversationalMemory:
 
     def summarize_session_state(self) -> str:
         """Generates a warm, direct Everyday American English summary of the conversation."""
-        if not self.turns:
+        if not self.turns and not self.context.user_facts and not self.context.active_files and not self.context.inventory and not self.context.last_goal:
             return "We just started our session. I'm ready to help with code, testing, git control, or recipe planning."
 
         summary_parts = []
-        summary_parts.append(f"We're on Turn {len(self.turns)} of this session.")
+        if self.turns:
+            summary_parts.append(f"We're on Turn {len(self.turns)} of this session.")
+        else:
+            summary_parts.append("We just started our session.")
+
+        if self.context.user_facts:
+            summary_parts.append(f"Recorded notes about you: {'; '.join(self.context.user_facts[:2])}.")
 
         if self.context.active_files:
             summary_parts.append(f"Recently worked files: {', '.join(self.context.active_files[:3])}.")
@@ -194,6 +209,7 @@ class HELMConversationalMemory:
             summary_parts.append(f"Current inventory on hand: {inv_str}.")
 
         if self.context.last_goal:
-            summary_parts.append(f"Last executed goal: '{self.context.last_goal}'.")
+            clean_goal = self.context.last_goal.strip().rstrip(".").strip()
+            summary_parts.append(f"Last executed goal: '{clean_goal}'.")
 
         return " ".join(summary_parts)

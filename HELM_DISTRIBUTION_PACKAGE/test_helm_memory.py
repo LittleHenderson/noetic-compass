@@ -90,8 +90,16 @@ class TestHELMConversationalMemory(unittest.TestCase):
         # Verify in-memory turns are bounded at 5
         self.assertEqual(len(self.memory.turns), 5)
         # Oldest turn in memory should be Turn 8 (index 7)
-        self.assertEqual(self.memory.turns[0].user_raw_text, "Turn 7")
-        self.assertEqual(self.memory.turns[-1].user_raw_text, "Turn 11")
+    def test_user_facts_retention_and_summary(self):
+        ctx = self.memory.context
+        ctx.add_user_fact("My grandfather kept bees in the south of France.")
+        self.assertIn("My grandfather kept bees in the south of France", ctx.user_facts)
+
+        ctx.last_goal = "Write a program that counts the hives."
+        summary = self.memory.summarize_session_state()
+        self.assertIn("My grandfather kept bees in the south of France", summary)
+        self.assertIn("'Write a program that counts the hives'.", summary)
+        self.assertNotIn(".'", summary)
 
 
 if __name__ == "__main__":

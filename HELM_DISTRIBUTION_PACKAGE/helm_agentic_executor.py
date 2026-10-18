@@ -1303,8 +1303,11 @@ class AgenticExecutionEngine:
                 )
 
         if result.get("all_steps_completed"):
+            steps_total = result.get("steps_total", 1)
+            steps_phrase = "the planned step" if steps_total == 1 else f"all {steps_total} planned steps"
+            goal_cleaned = result.get("goal", "").strip().rstrip(".").strip()
             return (
-                f"Done! I completed all {result['steps_total']} planned steps for your goal: '{result['goal']}'.\n"
+                f"Done! I completed {steps_phrase} for your goal: '{goal_cleaned}'.\n"
                 f"Every action was verified through the pre-flight safety gate before running, "
                 f"and full tamper-proof receipts have been logged with zero ungrounded actions."
             )
