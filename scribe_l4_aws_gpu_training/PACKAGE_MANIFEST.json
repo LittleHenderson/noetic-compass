@@ -1,0 +1,11 @@
+{
+  "package_members": {
+    "JOB_SPEC.json": "671ee3b0de1b0162c4a0a2e52c2a0183a006428262b3de37aac13831c2060f80",
+    "aws_launch_scribe.py": "20edd6fbb4b456995709a38ae42cd60ea3c618411352c8d3b2d13426ada3e56d",
+    "build_scribe_gpu_package.py": "7810fe8905b6a8077cd7244f1d149e91767fb88615090668c369b76b1302d765",
+    "cce_shim.py": "12f95fcb95b141e8eb8434f3462d238be6c4d08982cc0d3d13657d0ac4539537",
+    "dataset_generator.py": "a42592473a2bbe979d1e7c206131f24276bf6d896bd36e52348f59639f6f5cd7",
+    "scribe_model.py": "6d816704f16008b1322b6ca066b0bf1398334ded85ffe4f33022656a83ce3cb6",
+    "train_scribe_job.py": "0e866a1236ddc73268088403bc682c066f26462c18080d28b0752d3addd22db4"
+  }
+}

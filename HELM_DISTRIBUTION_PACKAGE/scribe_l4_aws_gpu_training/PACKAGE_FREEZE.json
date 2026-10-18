@@ -1,0 +1,23 @@
+{
+  "built_utc": "2026-10-18T05:23:45Z",
+  "cost_cap_usd": 1.5,
+  "hardware_target": "AWS EC2 g4dn.xlarge (Tesla T4)",
+  "member_names": [
+    "SCRIBE_L4_AWS_GPU/JOB_SPEC.json",
+    "SCRIBE_L4_AWS_GPU/aws_launch_scribe.py",
+    "SCRIBE_L4_AWS_GPU/build_scribe_gpu_package.py",
+    "SCRIBE_L4_AWS_GPU/cce_shim.py",
+    "SCRIBE_L4_AWS_GPU/dataset_generator.py",
+    "SCRIBE_L4_AWS_GPU/scribe_model.py",
+    "SCRIBE_L4_AWS_GPU/train_scribe_job.py",
+    "SCRIBE_L4_AWS_GPU/PACKAGE_MANIFEST.json"
+  ],
+  "package_manifest_sha256": "117d346cdac867d0a2b6fcc605b8e733276b10e81b991feea964e9fe0519886c",
+  "package_name": "SCRIBE_L4_AWS_GPU",
+  "reseal_byte_identical": true,
+  "time_cap_seconds": 600,
+  "total_members": 8,
+  "zip_bytes": 15121,
+  "zip_file": "SCRIBE_L4_AWS_GPU_PACKAGE.zip",
+  "zip_sha256": "7179250cbb17a800280d1b6459f2bb3ee4a23048d6b5a2382020296e8cceb58b"
+}
