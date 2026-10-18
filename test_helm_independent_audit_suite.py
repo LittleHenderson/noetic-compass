@@ -231,11 +231,30 @@ def test_agentic_preflight_rpm_gate_and_dag_planning():
     assert gate1.gate_code == "G-ABSENT"
     assert rec1 is None
 
-    # 2. Path traversal -> G-FORBIDDEN
-    gate2, rec2 = engine.registry.execute_tool("read_file", {"path": "C:\\Windows\\System32\\calc.exe"})
+    # 2. Path traversal -> G-FORBIDDEN (Tested across Linux/macOS/Windows)
+    forbidden_path = os.path.abspath(os.path.join(HERE, "..", "..", "..", "unauthorized_outside_file.txt"))
+    gate2, rec2 = engine.registry.execute_tool("read_file", {"path": forbidden_path})
     assert not gate2.cleared
     assert gate2.gate_code == "G-FORBIDDEN"
     assert rec2 is None
+
+    # 2b. AST/Syntax pre-flight check catches bad syntax before writing
+    bad_code = "def bad(x\n    return x\n"
+    gate2b, rec2b = engine.registry.execute_tool("write_file", {"path": os.path.join(HERE, "bad.py"), "content": bad_code})
+    assert not gate2b.cleared
+    assert gate2b.gate_code == "G-LIMIT"
+    assert rec2b is None
+
+    # 2c. Entropy throttling on speculative actions when valve aperture is narrow
+    gate2c, rec2c = engine.registry.execute_tool(
+        "dispatch_cloud_job",
+        {"job_name": "TEST", "package_path": os.path.join(HERE, "HELM_COMPLETE_DISTRIBUTION_PACKAGE.zip"), "cost_limit_usd": 0.50, "timeout_minutes": 15},
+        valve_aperture=Decimal("0.50"),
+        entropy=Decimal("0.85")
+    )
+    assert not gate2c.cleared
+    assert gate2c.gate_code == "THROTTLED"
+    assert rec2c is None
 
     # 3. Dangerous command -> G-FORBIDDEN
     gate3, rec3 = engine.registry.execute_tool("execute_command", {"command": "rm -rf / --no-preserve-root"})
@@ -301,6 +320,65 @@ def test_unity_eye_supervisory_dial_control_and_software_engineering_tools():
     assert gate_inv.gate_code == "G-ABSENT"
 
 
+# =============================================================================
+# 8. True Topological Planning (Causal Discourse & Parallel DAG Synthesis)
+# =============================================================================
+@case("test_true_topological_planning_adversarial_discourse_and_parallel_dag")
+def test_true_topological_planning_adversarial_discourse_and_parallel_dag():
+    import helm_agentic_executor as ax
+    engine = ax.AgenticExecutionEngine(workspace_root=HERE)
+    planner = engine.planner
+
+    # Case A: Sequential progression (write -> verify -> commit)
+    goal_a = "Write the code math_utils.py, verify it with tests, then commit to git."
+    dag_a = planner.decompose_goal(goal_a)
+    steps_a = dag_a.topological_sort()
+    assert [s.tool_name for s in steps_a] == ["synthesize_code", "execute_command", "git_action"]
+
+    # Case B: Inversion discourse 'Before X, Y' (verify -> synthesize)
+    goal_b = "Before writing any code, run the verification on auth.py, then write the code."
+    dag_b = planner.decompose_goal(goal_b)
+    steps_b = dag_b.topological_sort()
+    assert [s.tool_name for s in steps_b] == ["execute_command", "synthesize_code"]
+    assert steps_b[1].dependencies == [steps_b[0].step_id]
+
+    # Case C: Priority discourse 'First X, then Y' (git recovery -> synthesize)
+    goal_c = "First check git to see what changed and recover the last known good state, then write the code."
+    dag_c = planner.decompose_goal(goal_c)
+    steps_c = dag_c.topological_sort()
+    assert [s.tool_name for s in steps_c] == ["git_action", "synthesize_code"]
+    assert steps_c[1].dependencies == [steps_c[0].step_id]
+
+    # Case D: Compound single-domain operation (git log and diff)
+    goal_d = "Git log and diff."
+    dag_d = planner.decompose_goal(goal_d)
+    steps_d = dag_d.topological_sort()
+    assert len(steps_d) == 1 and steps_d[0].tool_name == "git_action"
+
+    # Case E: Parallel branching DAG with join dependency (read & git in parallel -> design)
+    goal_e = "Inspect README.md and check git status in parallel, then design the system."
+    dag_e = planner.decompose_goal(goal_e)
+    steps_e = dag_e.topological_sort()
+    assert len(steps_e) == 3
+    assert steps_e[0].dependencies == []
+    assert steps_e[1].dependencies == []
+    assert set(steps_e[2].dependencies) == {steps_e[0].step_id, steps_e[1].step_id}
+    assert steps_e[2].tool_name == "systems_design_spec"
+
+    # Case F: Kahn's algorithm cycle detection (verifies acyclicity invariant)
+    cycle_dag = ax.AutonomousPlanDAG(goal="Intentional cycle test")
+    s1 = ax.PlanStep(step_id="step_1", tool_name="execute_command", params={}, dependencies=["step_2"])
+    s2 = ax.PlanStep(step_id="step_2", tool_name="execute_command", params={}, dependencies=["step_1"])
+    cycle_dag.add_step(s1)
+    cycle_dag.add_step(s2)
+    cycle_caught = False
+    try:
+        cycle_dag.topological_sort()
+    except ValueError as e:
+        cycle_caught = "Causal cycle detected" in str(e)
+    assert cycle_caught, "Kahn's algorithm failed to catch circular dependency!"
+
+
 def run_all_tests():
     global passed_cases, failed_cases
     passed_cases = 0
@@ -319,6 +397,7 @@ def run_all_tests():
     test_valve_controller_rpm_interlock_and_entropy_throttle()
     test_agentic_preflight_rpm_gate_and_dag_planning()
     test_unity_eye_supervisory_dial_control_and_software_engineering_tools()
+    test_true_topological_planning_adversarial_discourse_and_parallel_dag()
 
     print("-" * 72)
     print(f"TOTAL CASES: {passed_cases + failed_cases} | PASSED: {passed_cases} | FAILED: {failed_cases}")

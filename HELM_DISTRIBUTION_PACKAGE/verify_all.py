@@ -11,6 +11,14 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "brains"))
 sys.path.insert(0, str(HERE / "core_engine"))
 
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 print("=" * 72)
 print("       HELM & CAS COGNITIVE ARCHITECTURE INDEPENDENT AUDIT SUITE       ")
 print("=" * 72)
