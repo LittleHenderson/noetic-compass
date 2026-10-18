@@ -64,7 +64,7 @@ def parse_cce(text: str) -> Dict[str, Any]:
         missing = m.group(1) if m else "meaning"
         return {"turn_type": "CLARIFY", "missing_slot": missing}
 
-    pattern = r"The (\w+) (\w+) (\w+) the (\w+) (\w+) under (\w+)\."
+    pattern = r"The (\w+) ([\w/]+) (\w+) the (\w+) ([\w/]+) under (\w+)\."
     m = re.match(pattern, text)
     if not m:
         raise ValueError(f"Unparseable CCE string: {text}")

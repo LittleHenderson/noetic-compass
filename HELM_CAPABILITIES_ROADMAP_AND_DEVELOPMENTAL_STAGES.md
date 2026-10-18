@@ -147,6 +147,84 @@ flowchart TD
 
 ---
 
+### 2.5 Autonomous Agentic Capabilities & Action Execution
+*Transforming HELM from a passive recipe calculator into a proactive, autonomous executive agent:*
+
+HELM's stoichiometric architecture provides a unique, insurmountable advantage for autonomous agentic workflows: **uncompromising pre-flight safety and deterministic action bounding.** In standard LLM agents (e.g., AutoGPT, generic ReAct agents), autonomous loops frequently suffer from catastrophic runaways, hallucinated tool calls, infinite retries, and irreversible destruction of data or physical hardware because statistical models cannot prove pre-conditions.
+
+HELM introduces the **Five Tiers of Governed Agentic Autonomy (A1–A5)**:
+
+```mermaid
+flowchart LR
+    Goal["High-Level Human Goal\n('Clean dataset & train model')"] --> A1["A1: Autonomous Goal Decomposition\n(DAG of Bounded Sub-Goals)"]
+    A1 --> A2["A2: Pre-Flight RPM Gating\n(Invariants & Preconditions Checked)"]
+    A2 -->|G-ABSENT: Halt & Alert| Interlock["Action Clamped\n(Zero Unintended Damage)"]
+    A2 -->|GATE_PASS: Permitted| Execute["Action Execution\n(Tools, APIs, Files, Actuators)"]
+    Execute --> A3["A3: Closed-Loop Monitoring\n(Sensorium Invariant Verification)"]
+    A3 -->|Discrepancy Detected| Repair["D/W/P Noetic Repair Loop\n(In-Place Autonomous Self-Correction)"]
+    A3 -->|Invariants Hold| Complete["Verified Action Receipt\n(Cryptographic Proof)"]
+    Complete --> A4["A4: Sheaf Swarm Fleet Delegation\n(Multi-Agent Coordination)"]
+    A4 --> A5["A5: Sovereign Long-Horizon Autonomy"]
+```
+
+1. **Level A1: Autonomous Goal Decomposition & Task Planning:**
+   - Translates open human goals into a topologically sorted Directed Acyclic Graph (DAG) of executable CAS recipe tasks.
+   - Every node in the task graph specifies exact required ingredients (inputs), resource budgets (compute/time/cost), and post-condition invariants.
+2. **Level A2: Pre-Flight Governed Tool & Action Execution:**
+   - External actions—file system modifications, API requests, database updates, shell commands, and robotic actuator pulses—are modeled as stoichiometric reactions.
+   - **The RPM Safety Interlock:** Before any autonomous tool executes, the RPM Gate verifies that all safety prerequisites are present. If disk space is insufficient, authorization is missing, or parameters have high entropy, the gate executes `CLAMPED_HALT` (`G-ABSENT` / `G-LIMIT`), preventing unintended damage.
+3. **Level A3: Closed-Loop Environmental Observation & Autonomous Repair:**
+   - Real-time environmental feedback ($\Omega_{\text{obs}}$) is ingested into multimodal registers after every action.
+   - If real-world state diverges from the predicted recipe outcome (e.g., a file failed to write or a robotic gripper slipped), Station S0 does not crash or loop blindly. It triggers the **`repair_performer` Noetic Functor Loop (Desire/Wisdom/Power)** to diagnose the fault, adjust parameters, and re-execute autonomously until the invariant holds.
+4. **Level A4: Sheaf-Theoretic Multi-Agent Swarms & Fleet Delegation:**
+   - Complex operations are partitioned across specialized sub-agents (e.g., Research Agents, Audit Specialists, Execution Actuators).
+   - Sub-agents communicate exclusively via immutable, receipted messages.
+   - A global supervisor glues local sub-agent solutions together using topological sheaf consistency proofs (`certify_overlap()`), mathematically guaranteeing that no agent's work contradicts another.
+5. **Level A5: Sovereign Long-Horizon Autonomy:**
+   - Multi-day, persistent autonomous workflows operating without human supervision (e.g., continuous overnight integration, autonomous scientific experimentation, real-time cyber defense, long-duration robotic stewardship).
+   - Emits complete, tamper-proof audit trails where every autonomous step is backed by 40-digit Decimal proof receipts.
+
+---
+
+### 2.6 The Human Voice of HELM: Everyday American English (Beyond CAS Lingo)
+*A friendly, natural, everyday voice powered by an uncompromising mathematical core:*
+
+A fundamental directive of HELM's real-world deployment is that **everyday users and professionals should never be forced to speak or read internal CAS jargon**. No everyday user wants to converse with a machine that speaks in esoteric terminology like *"The principled Mind processes the analytical Idea under Wisdom."* Users want clean, warm, intelligent, everyday American English.
+
+#### The Dual-Skin Architecture
+HELM decouples its **Internal Semantic Core** from its **External Natural Voice**:
+
+```
+[ User Dialogue (Clean, Everyday American English) ]
+                     │  ▲
+        Scribe L4    │  │  Natural Voice Adapter
+        Proposer     │  │  (Idiomatic, Conversational, Warm)
+                     ▼  │
+[ Controlled CCE Anchor (parse(render(C)) == C) ]
+                     │  ▲
+                     ▼  │
+[ Immutable CAS Recipe Brain (Stoichiometry, 40-Digit Exact Decimal, RPM Gate) ]
+```
+
+1. **The Internal Anchor (Truth & Conservation):**
+   - The cognitive core operates strictly on structured `CASContent`, 22-ingredient stoichiometric balance, and exact 40-digit Decimal arithmetic. This guarantees zero hallucination, physical conservation, and verifiable receipts.
+2. **The Surface Natural Voice Adapter (Natural American English):**
+   - Maps internal receipts into conversational, idiomatic American English.
+   - Speaks clearly, directly, and warmly with varied sentence structures, avoiding repetitive robotic phrasing.
+   - Explains complex scientific, technical, or mathematical proofs in accessible, plain terms without sacrificing factual precision.
+
+#### Everyday English vs. Internal CAS Jargon Comparison
+
+| Scenario | What the Engine Computes Internally | What a Robotic System Would Say (Unwanted) | How HELM Speaks Naturally in Everyday English |
+|---|---|---|---|
+| **Recipe Production** | $Y_{0.5} = 8.452$, limiting reagent = Flour | *"The operational Mind processes Flour under Structure yielding 8.452."* | *"We're good to go! Based on your ingredients, we can produce exactly 8.45 units. Your limiting ingredient is Flour (5 lbs on hand), which caps this batch."* |
+| **Missing Prerequisite** | `G-ABSENT`: Water missing, halt triggered | *"RPM Gate refusal: Essential ingredient Water absent in operational domain."* | *"I can't run this batch just yet because we're missing Water. Water is essential for this recipe, so I stopped the process to prevent wasting ingredients."* |
+| **Creative Analogy** | Searchlight $R=4$: cross-domain recipe link | *"RPA Searchlight at radius 4 traversed from metallurgy to ceramics."* | *"Looking across related engineering setups, we can borrow a heat-treating technique from ceramics to strengthen this metal alloy. Here's how that would work."* |
+| **Ungrounded Question** | High entropy $H > 0.9$, `CLARIFY` triggered | *"Unparseable semantic token: question lacks principled grounded foundation."* | *"I can't answer that because there are no verified facts or physical recipes connecting those ideas. What specific materials or problem are you looking to solve?"* |
+| **Autonomous Action** | Tool call: Git commit + test sweep | *"Agent A2 executing commit functor with prerequisite verification."* | *"I ran the full test suite (all 288 tests passed) and committed the latest updates to your branch with clean verification receipts."* |
+
+---
+
 ## 3. Official Developmental Stages & Versioning Taxonomy
 
 HELM follows a disciplined semantic milestone taxonomy. Each version represents a verifiable architectural tier with defined claim ceilings and exit criteria:

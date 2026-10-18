@@ -207,6 +207,8 @@ class Recipe22x40Brain:
         }
         return receipt
 
+    evaluate_recipe = evaluate
+
     @classmethod
     def solve_witness_weights(cls, witness_rows, fixed_rho=Decimal("0.5"), thresholds=None):
         """Deterministically solve the 22 ingredient weights using 22 clean witness observations
@@ -257,6 +259,9 @@ class Recipe22x40Brain:
 
         solved_weights = {INGREDIENTS_22[i]: M[i][n] for i in range(n)}
         return cls(weights=solved_weights, rho=rho, thresholds=thresh)
+
+
+HELMRecipeBrain22x40 = Recipe22x40Brain
 
 
 def self_test():
