@@ -25,6 +25,7 @@ if HERE not in sys.path:
 # Import Core Subsystems
 from helm_brain_22x40 import HELMRecipeBrain22x40, d40
 from tks_meta_valve_controller import TKSMetaValveController, ValveTelemetry
+from helm_agentic_executor import AgenticExecutionEngine
 
 # Path to trained Scribe artifacts
 SCRIBE_DIR = os.path.join(HERE, "scribe_l4_aws_gpu_training")
@@ -109,6 +110,9 @@ class HELMEndToEndLoop:
         self.tokenizer = None
         self._init_scribe(weights_path, vocab_path)
 
+        # 4. Initialize Phase 4 Agentic Execution Engine (Level A1/A2)
+        self.agentic_engine = AgenticExecutionEngine(workspace_root=HERE)
+
     def _init_scribe(self, weights_path: Optional[str], vocab_path: Optional[str]):
         v_file = vocab_path or os.path.join(SCRIBE_DIR, "outputs", "scribe_vocab.json")
         w_file = weights_path or os.path.join(SCRIBE_DIR, "outputs", "scribe_l4_weights.pt")
@@ -181,6 +185,17 @@ class HELMEndToEndLoop:
         # Step 1: Extract physical ingredients to determine grounding
         inputs = self.extract_ingredient_quantities(user_english)
         has_ingredients = len(inputs) > 0
+
+        # Step 1a: Check if user prompt is an Autonomous Agentic Goal (Phase 4)
+        agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file", "read file"]
+        is_agentic_request = (not has_ingredients) and any(kw in user_english.lower() for kw in agentic_keywords)
+        if is_agentic_request:
+            dag = self.agentic_engine.decompose_goal(user_english)
+            plan_res = self.agentic_engine.execute_dag(dag)
+            result["loop_status"] = "AGENTIC_PLAN_EXECUTED" if plan_res["all_steps_completed"] else "AGENTIC_PLAN_CLAMPED"
+            result["agentic_plan_result"] = plan_res
+            result["everyday_english_response"] = AgenticExecutionEngine.speak_plan_result(plan_res)
+            return result
 
         # Step 1b: Level L4 Scribe Proposer
         is_clarify = False
@@ -366,6 +381,18 @@ def run_end_to_end_demonstration():
     print("\n[HELM Everyday American English Voice]:")
     print(res3["everyday_english_response"])
     assert res3["loop_status"] == "CLARIFY_REFUSAL"
+
+    # Test Case 4: Autonomous Agentic Action Request (Level A1/A2)
+    prompt_4 = "Audit the codebase instructions and verify local environment."
+    print(f"\n--- TEST 4: Autonomous Agentic Goal Execution (Level A1/A2) ---")
+    print(f"User Prompt: \"{prompt_4}\"")
+    res4 = loop.process_turn(prompt_4, tick=4)
+    print(f"Loop Status: {res4['loop_status']}")
+    print(f"Plan Completed: {res4['agentic_plan_result']['all_steps_completed']} ({res4['agentic_plan_result']['steps_completed']}/{res4['agentic_plan_result']['steps_total']})")
+    print("\n[HELM Everyday American English Voice]:")
+    print(res4["everyday_english_response"])
+    assert res4["loop_status"] == "AGENTIC_PLAN_EXECUTED"
+    assert res4["agentic_plan_result"]["all_steps_completed"]
 
     print("\n" + "=" * 72)
     print("ALL HELM COMPLETE END-TO-END LOOP TESTS PASSED (100% VERIFIED).")

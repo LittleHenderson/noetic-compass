@@ -182,9 +182,37 @@ if faculties_test_f.exists():
 else:
     audit_report["tests"]["faculties_v2"] = {"status": "SKIPPED"}
 
+# -----------------------------------------------------------------------------
+# 6. Verify Phase 4 Agentic Tool Autonomy (Level A1/A2 Execution Engine)
+# -----------------------------------------------------------------------------
+print("\n[6/6] Verifying Phase 4: Agentic Tool Autonomy (Level A1/A2 Execution Engine)...")
+agentic_executor_f = HERE / "helm_agentic_executor.py"
+if agentic_executor_f.exists():
+    try:
+        import subprocess
+        res = subprocess.run([sys.executable, "-X", "utf8", "-B", str(agentic_executor_f)],
+                             capture_output=True, text=True, cwd=str(HERE))
+        if "ALL HELM PHASE 4 AGENTIC AUTONOMY TESTS PASSED" in res.stdout:
+            audit_report["tests"]["agentic_tool_autonomy"] = {
+                "status": "PASS",
+                "tiers": ["A1_Goal_Decomposition", "A2_Preflight_RPM_Gating"],
+                "tools_registered": ["read_file", "write_file", "execute_command", "dispatch_cloud_job"],
+                "safety_gates": ["G-ABSENT", "G-LIMIT", "G-FORBIDDEN", "THROTTLED"],
+                "voice_adapter": "DUAL_SKIN_EVERYDAY_AMERICAN_ENGLISH"
+            }
+            print(">>> PASS: Phase 4 Agentic Tool Autonomy verified (A1 DAG + A2 Pre-flight RPM Gating + Receipts).")
+        else:
+            audit_report["tests"]["agentic_tool_autonomy"] = {"status": "FAIL", "output": res.stdout[-300:]}
+            print(f">>> FAIL: {res.stdout[-300:]}")
+    except Exception as e:
+        audit_report["tests"]["agentic_tool_autonomy"] = {"status": "FAIL", "error": str(e)}
+        print(f">>> FAIL: {e}")
+else:
+    audit_report["tests"]["agentic_tool_autonomy"] = {"status": "SKIPPED"}
+
 
 # -----------------------------------------------------------------------------
-# 6. Audit & Claims Verification Matrix
+# 7. Audit & Claims Verification Matrix
 # -----------------------------------------------------------------------------
 audit_report["claims_verification"] = {
     "stoichiometric_efficiency_win": {

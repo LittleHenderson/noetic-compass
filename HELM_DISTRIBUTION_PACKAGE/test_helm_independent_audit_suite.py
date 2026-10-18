@@ -217,6 +217,47 @@ def test_valve_controller_rpm_interlock_and_entropy_throttle():
     assert allow3 is True
     assert t3.gate_interlock == "GATE_PASS"
 
+# =============================================================================
+# 6. Phase 4 Agentic Tool Autonomy & Pre-Flight RPM Gating
+# =============================================================================
+@case("test_agentic_preflight_rpm_gate_and_dag_planning")
+def test_agentic_preflight_rpm_gate_and_dag_planning():
+    import helm_agentic_executor as ax
+    engine = ax.AgenticExecutionEngine(workspace_root=HERE)
+
+    # 1. Missing file -> G-ABSENT
+    gate1, rec1 = engine.registry.execute_tool("read_file", {"path": "non_existent_file_404.txt"})
+    assert not gate1.cleared
+    assert gate1.gate_code == "G-ABSENT"
+    assert rec1 is None
+
+    # 2. Path traversal -> G-FORBIDDEN
+    gate2, rec2 = engine.registry.execute_tool("read_file", {"path": "C:\\Windows\\System32\\calc.exe"})
+    assert not gate2.cleared
+    assert gate2.gate_code == "G-FORBIDDEN"
+    assert rec2 is None
+
+    # 3. Dangerous command -> G-FORBIDDEN
+    gate3, rec3 = engine.registry.execute_tool("execute_command", {"command": "rm -rf / --no-preserve-root"})
+    assert not gate3.cleared
+    assert gate3.gate_code == "G-FORBIDDEN"
+    assert rec3 is None
+
+    # 4. Over-budget cloud job -> G-LIMIT
+    gate4, rec4 = engine.registry.execute_tool(
+        "dispatch_cloud_job",
+        {"job_name": "TEST_JOB", "package_path": os.path.join(HERE, "HELM_COMPLETE_DISTRIBUTION_PACKAGE.zip"), "cost_limit_usd": 5.00, "timeout_minutes": 15}
+    )
+    assert not gate4.cleared
+    assert gate4.gate_code == "G-LIMIT"
+    assert rec4 is None
+
+    # 5. Autonomous Level A1 DAG planning & execution
+    dag = engine.decompose_goal("Audit codebase instructions and verify local environment")
+    plan_res = engine.execute_dag(dag)
+    assert plan_res["all_steps_completed"] is True
+    assert plan_res["steps_completed"] == plan_res["steps_total"]
+
 
 def run_all_tests():
     global passed_cases, failed_cases
@@ -234,6 +275,7 @@ def run_all_tests():
     test_creativity_dial_boundaries_and_presets()
     test_rpa_searchlight_on_real_atlas_exact_15_candidates()
     test_valve_controller_rpm_interlock_and_entropy_throttle()
+    test_agentic_preflight_rpm_gate_and_dag_planning()
 
     print("-" * 72)
     print(f"TOTAL CASES: {passed_cases + failed_cases} | PASSED: {passed_cases} | FAILED: {failed_cases}")
@@ -245,3 +287,4 @@ def run_all_tests():
 
 if __name__ == "__main__":
     run_all_tests()
+

@@ -184,6 +184,15 @@ flowchart LR
    - Multi-day, persistent autonomous workflows operating without human supervision (e.g., continuous overnight integration, autonomous scientific experimentation, real-time cyber defense, long-duration robotic stewardship).
    - Emits complete, tamper-proof audit trails where every autonomous step is backed by 40-digit Decimal proof receipts.
 
+#### Pre-Flight Stoichiometric Tool Execution Matrix (Implemented in `helm_agentic_executor.py`)
+
+| Tool Action | Prerequisites Checked Prior to Launch | Interlock Gate Refusal | Permitted Behavior (`GATE_PASS`) | Emitted Receipt |
+|---|---|---|---|---|
+| **`read_file`** | File exists on disk, path confined to approved workspace (`check_path_confinement`) | `G-ABSENT` if file missing; `G-FORBIDDEN` if path traversal attempted | Bounded read up to 50,000 characters | Input parameters digest, content SHA-256 digest, elapsed runtime |
+| **`write_file`** | Path confined to workspace, content length $\le 500\text{ KB}$ | `G-FORBIDDEN` if outside sandbox; `G-LIMIT` if content $> 500\text{ KB}$ | Atomic write with parent directory auto-creation | Written byte count, target file SHA-256 digest, side-effects ledger |
+| **`execute_command`** | Command safe (no blacklist regex), timeout $\le 60\text{s}$, working directory confined | `G-FORBIDDEN` on destructive commands (`rm -rf /`, fork bombs); `G-LIMIT` if timeout $> 60\text{s}$ | Subprocess execution with strict OS watchdog timeout | Process exit code, stdout/stderr byte capture, execution elapsed ms |
+| **`dispatch_cloud_job`**| Sealed training ZIP exists on disk, cost ceiling $\le \$1.00$, watchdog runtime $\le 30\text{ min}$ | `G-ABSENT` if package missing; `G-LIMIT` if cost $> \$1.00$ or runtime $> 30\text{ min}$ | Sealed dispatch contract with automatic instance self-termination watchdog | Instance spec, package SHA-256 fingerprint, cost ceiling guarantee |
+
 ---
 
 ### 2.6 The Human Voice of HELM: Everyday American English (Beyond CAS Lingo)
@@ -250,12 +259,22 @@ timeline
 | **v0.1** | **Spark** | Foundational Arithmetic | 40-digit Decimal CES core, `d_pow` natural log/exp, Gauss-Jordan solver, RPM Gate `G-ABSENT` | `SYNTHETIC_ONLY` |
 | **v0.2** | **Compass** | Structure & Language | Seven canonical packages (`288/288` tests), `language_v3` CCE grammar, `repair_performer` D/W/P loops | `ENGINEERED-NOT-VALIDATED` |
 | **v0.3** | **Prism** | Governed Creativity | `faculties_v2` (Wondering, Pondering, Imagination under Rule P), Real RPA Searchlight, 5 Creativity Dials | `ENGINEERED-NOT-VALIDATED` |
-| **v0.4** | **Valve** *(Current Target)* | Information Regulation | Phase 3 `tks_meta_valve_controller`, AWS GPU training harness for adaptive aperture $\sigma$ | `SYNTHETIC_TRAINED` |
-| **v0.5** | **Scribe** | Open Communication | Level L4 CAS-native neural proposer trained on AWS from scratch, CCE round-trip verification | `BOUNDED_ENGLISH_PROPOSER` |
-| **v0.6** | **Sensorium** | Multimodality | Structured perceptual registers $\Omega_{\text{vision}}, \Omega_{\text{audio}}$, physical conservation checks | `PERCEPTUAL_GATED` |
+| **v0.4** | **Valve** | Information Regulation | Phase 3 `tks_meta_valve_controller`, AWS GPU trained dynamic aperture weights, 0-leak RPM interlock | `SYNTHETIC_TRAINED` |
+| **v0.5** | **Scribe** | Open Communication | Level L4 CAS-native neural proposer trained on AWS Tesla T4, end-to-end loop, Dual-Skin voice adapter | `BOUNDED_ENGLISH_PROPOSER` |
+| **v0.6** | **Agentic & Lexicon** *(Current)* | Governed Autonomy | Phase 4 Level A1 DAG planner, Level A2 Pre-Flight RPM Gated tool executor, open-domain semantic bridge | `GOVERNED_AGENTIC_AUTONOMY` |
 | **v1.0** | **Atlas** | Executive Core | Full multi-domain recipe atlas, autonomous idle pondering, closed-loop residual repair | `AUTONOMOUS_RECIPE_MACHINE` |
 | **v2.0** | **Sovereign** | Embodied Autonomy | Sheaf-theoretic multi-agent consistency, physical robotics integration, real-time safety gates | `EMBODIED_VERIFIED` |
 | **v3.0** | **Frontier** | Universal Scale | Planetary-scale self-evolving Recipe Atlas, sub-watt edge cognitive computing | `UNIVERSAL_GENERAL_INTELLIGENCE` |
+
+### 3.1 The "Mechanisms Joined, Meaning Carried" Evolution
+
+A critical architectural milestone acknowledged during independent audit verification:
+- **In HELM v0.5 ("Scribe"):** The end-to-end cognitive pipeline is physically joined:
+  $$\text{User English} \to \text{Level L4 Proposer} \to \text{CCE Gate} \to \text{Phase 3 Valve} \to \text{Station S0 22x40 Brain} \to \text{Voice Adapter}$$
+  Because the Level L4 proposer was trained on a 108-token Noetic vocabulary, the neural network predicts the abstract functional verb frame, while the physical quantity algebra is evaluated by Station S0. The *mechanisms are fully joined*, but open-domain lexical meaning is carried through structured parameter slots rather than fine-grained dense vocabulary embeddings.
+- **In HELM v0.6 ("Agentic & Lexicon"):** 
+  1. **Phase 4 Agentic Tool Autonomy (Level A1/A2):** Implements pre-flight stoichiometric execution (`helm_agentic_executor.py`), allowing HELM to autonomously read files, execute shell commands, and dispatch AWS cloud jobs behind immutable RPM Gate safety interlocks (`G-ABSENT`, `G-LIMIT`, `G-FORBIDDEN`).
+  2. **Lexical Mapping:** Expands the neural proposer's surface vocabulary from synthetic Noetic frames to rich open-domain physical entity embeddings, allowing natural language requests to directly propose multi-ingredient recipe configurations under continuous CCE round-trip verification.
 
 ---
 
