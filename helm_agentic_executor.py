@@ -1276,7 +1276,7 @@ class AgenticExecutionEngine:
         return self.eye.supervise_and_execute(user_goal, self, max_attempts=max_attempts)
 
     @staticmethod
-    def speak_plan_result(result: Dict[str, Any]) -> str:
+    def speak_plan_result(result: Dict[str, Any], concise: bool = False) -> str:
         """Dual-Skin Voice: Format the execution result into warm, natural American English."""
         # Check if supervised result
         if "attempts" in result:
@@ -1284,6 +1284,8 @@ class AgenticExecutionEngine:
             final_mode = result.get("final_mode", "STANDARD")
             goal = result.get("goal", "")
             if result.get("success"):
+                if concise:
+                    return f"All done! Completed your goal '{goal}' on attempt {final_attempt} in {final_mode} mode."
                 if final_attempt == 1:
                     return (
                         f"All done! I successfully planned and completed every step for your goal: '{goal}'.\n"
@@ -1306,6 +1308,8 @@ class AgenticExecutionEngine:
             steps_total = result.get("steps_total", 1)
             steps_phrase = "the planned step" if steps_total == 1 else f"all {steps_total} planned steps"
             goal_cleaned = result.get("goal", "").strip().rstrip(".").strip()
+            if concise:
+                return f"Done! I completed {steps_phrase} for your goal: '{goal_cleaned}'."
             return (
                 f"Done! I completed {steps_phrase} for your goal: '{goal_cleaned}'.\n"
                 f"Every action was verified through the pre-flight safety gate before running, "

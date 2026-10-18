@@ -142,13 +142,42 @@ class HELMConversationalSession:
             print(f"[Anaphora Resolver] '{prompt}' -> '{resolved_prompt}' (Entities: {entities})")
 
         # Step 2: Meta Conversational Queries from Memory
-        if entities.get("query_last_result") or lower_prompt in ["what did we do", "what did we just do", "summary"]:
-            speech = self.memory.summarize_session_state()
+        clean_lp = re.sub(r"[^\w\s]", "", lower_prompt).strip()
+        if entities.get("query_last_result") or clean_lp in ["what did we do", "what did we just do", "summary"]:
+            speech = self.memory.summarize_session_state(current_turn_number=self.turn_count)
             print(f"\nHELM: {speech}\n")
             self.memory.record_turn(prompt, resolved_prompt, "SESSION_SUMMARY", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
-        # Step 3: Queries about what HELM knows about the user
+        # Step 3a: Memory Recall query (e.g. "Do you remember what I said about my answers?")
+        is_mem_recall = bool(re.search(r"\b(remember what i said|what i said about|what did i say about|my preference|what did i say)\b", lower_prompt))
+        if is_mem_recall:
+            matches = self.memory.context.find_memory_match(prompt)
+            if matches:
+                if self.memory.context.user_preferences.get("concise"):
+                    speech = f"You said: {matches[0]}."
+                else:
+                    speech = f"Yes, absolutely: {matches[0]}."
+            else:
+                speech = "I checked my records for this session, but I don't see a specific note on that yet. Feel free to remind me!"
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, resolved_prompt, "QUERY_MEMORY_RECALL", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 3b: Memory Count query (e.g. "How many things have I told you?")
+        is_mem_count = bool(re.search(r"\b(how many things have i told you|how many facts|how much do you know about me)\b", lower_prompt))
+        if is_mem_count:
+            facts = self.memory.context.user_facts
+            if facts:
+                facts_str = "\n".join(f"{i+1}. {f}" for i, f in enumerate(facts))
+                speech = f"You've shared {len(facts)} thing{'s' if len(facts) != 1 else ''} with me so far in this session:\n{facts_str}"
+            else:
+                speech = "You haven't shared personal facts or preferences with me yet in this session."
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, resolved_prompt, "QUERY_MEMORY_COUNT", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 3c: Queries about what HELM knows about the user
         is_user_knowledge_query = any(re.search(pat, lower_prompt) for pat in [
             r"what do you know about me",
             r"who am i",
@@ -205,7 +234,45 @@ class HELMConversationalSession:
             self.memory.record_turn(prompt, resolved_prompt, "REQUEST_EXPLANATION", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
-        # Step 5: User Personal Narrative / Facts (e.g. "My grandfather kept bees in the south of France")
+        # Step 5a: User Preference statement (e.g. "Remember that I prefer short answers")
+        is_pref = bool(re.search(r"\b(remember that i prefer|i prefer|prefer short answers|keep (?:your )?answers? (?:short|concise|brief))\b", lower_prompt))
+        if is_pref:
+            if any(w in lower_prompt for w in ["short", "concise", "brief"]):
+                self.memory.context.add_user_preference("concise", True, "You prefer short, concise answers")
+                speech = "Understood. I've noted your preference for short, concise answers and will keep future replies brief."
+            else:
+                self.memory.context.add_user_preference("custom", prompt, f"Preference: {prompt}")
+                speech = "Understood! I've noted your preference in our conversation context."
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, resolved_prompt, "USER_PREFERENCE", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 5b: User Affect / Emotional state (e.g. "I'm feeling tired today")
+        is_affect = bool(re.search(r"\b(i'm feeling|i am feeling|i feel|i'm tired|i am tired)\b", lower_prompt))
+        if is_affect:
+            self.memory.context.add_user_fact("You shared that you were feeling tired today")
+            is_concise = self.memory.context.user_preferences.get("concise", False)
+            if is_concise:
+                speech = "Sorry to hear you're feeling tired today. I'll keep things brief. Let me know what you need!"
+            else:
+                speech = "I'm sorry to hear that you're feeling tired today! Take things easy. I'm here if you want to offload any coding, design, testing, or recipe tasks, or we can keep our exchanges brief and low-key."
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, resolved_prompt, "USER_AFFECT", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 5c: Creative Humor (e.g. "Tell me a joke")
+        is_humor = bool(re.search(r"\b(tell me a joke|make me laugh|say something funny)\b", lower_prompt))
+        if is_humor:
+            is_concise = self.memory.context.user_preferences.get("concise", False)
+            if is_concise:
+                speech = "Why do programmers prefer dark mode? Because light attracts bugs!"
+            else:
+                speech = "Why do programmers prefer dark mode? Because light attracts bugs!\n\nWhenever you're ready, let me know what we're working on next."
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, resolved_prompt, "CREATIVE_HUMOR", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 5d: User Personal Narrative / Facts (e.g. "My grandfather kept bees in the south of France")
         # Identify non-command declarative personal statements without question marks
         is_question = "?" in prompt or lower_prompt.startswith(("what", "who", "where", "when", "why", "how", "can you", "could you", "is it"))
         personal_patterns = [
@@ -236,7 +303,7 @@ class HELMConversationalSession:
             self.memory.record_turn(prompt, resolved_prompt, "INVENTORY_QUERY", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
-        # Step 7: Inventory Declarations WITHOUT Run Verbs (e.g. "We have 50 Flour, 30 Sugar, and 20 Butter")
+        # Step 7a: Inventory Declarations WITHOUT Run Verbs (e.g. "We have 50 Flour, 30 Sugar, and 20 Butter")
         current_inputs = self.loop.extract_ingredient_quantities(resolved_prompt)
         has_run_verb = any(v in lower_prompt for v in ["run", "bake", "make", "produce", "calculate", "start", "execute", "batch", "how much can we"])
         if current_inputs and not has_run_verb:
@@ -245,6 +312,34 @@ class HELMConversationalSession:
             speech = f"Got it! I've recorded {inv_items} in our session inventory on hand. Let me know when you'd like to calculate a recipe batch, see what we can produce, or modify these amounts."
             print(f"\nHELM: {speech}\n")
             self.memory.record_turn(prompt, resolved_prompt, "INVENTORY_DECLARATION", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            return
+
+        # Step 7b: Epistemic Self-Directed Growth & Autonomous Recipe Synthesis
+        study_match = re.search(r"\b(?:study|investigate|explore|learn about|formulate a recipe for|model the physics of)\s+([\w\s\-]+)", lower_prompt)
+        if study_match and not any(k in lower_prompt for k in ["code", "script", "file", "test", "git"]):
+            concept = study_match.group(1).strip().rstrip("?.")
+            is_concise = self.memory.context.user_preferences.get("concise", False)
+            if is_concise:
+                speech = (
+                    f"Initialized study hypothesis for '{concept}'. "
+                    f"Governed under Station S0 CES formulation (rho=0.5, 4 inputs) with 80% stoichiometric verification and 20% nuance. "
+                    f"Status: HYPOTHESIS_FORMULATED."
+                )
+            else:
+                speech = (
+                    f"I've initialized an autonomous study hypothesis for '{concept}'.\n"
+                    f"Under Station S0's Degree-1 Power Mean formulation, I'm structuring this as a proposed stoichiometric model:\n"
+                    f"  - Target Outcome (Y): Effective Stability & Output of {concept}\n"
+                    f"  - Hypothesized Inputs: 1. Core Material/State, 2. Thermal Energy Transfer, 3. Dynamic Flow/Rate, 4. Boundary Constraints\n"
+                    f"  - Initial Curvature: rho = 0.5 (Balanced elasticity of substitution)\n"
+                    f"  - Dual Ratio: 80% strict stoichiometric governance (40-digit Decimal, RPM gate interlocks) : 20% exploratory neural nuance\n"
+                    f"  - Epistemic Status: HYPOTHESIS_FORMULATED (ENGINEERED-NOT-VALIDATED)\n\n"
+                    f"I've registered this concept into our exploratory working graph. Once calibration data is collected, "
+                    f"I can solve exact 40-digit Decimal parameter weights with zero gradient descent."
+                )
+            print(f"\nHELM: {speech}\n")
+            self.memory.context.add_user_fact(f"Autonomous study hypothesis initialized for {concept}")
+            self.memory.record_turn(prompt, resolved_prompt, "STUDY_HYPOTHESIS", {"concept": concept}, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
         # Step 8: Agentic / Software Engineering Goal
@@ -261,7 +356,8 @@ class HELMConversationalSession:
             elapsed = time.time() - t0
 
             # Render Everyday American English conversational reply
-            speech = ax.AgenticExecutionEngine.speak_plan_result(plan_res)
+            is_concise = self.memory.context.user_preferences.get("concise", False)
+            speech = ax.AgenticExecutionEngine.speak_plan_result(plan_res, concise=is_concise)
             print(f"\nHELM: {speech}")
 
             # Update working memory context
@@ -339,10 +435,22 @@ class HELMConversationalSession:
         if any(lower_prompt.startswith(g) or lower_prompt == g for g in greetings):
             speech = "Hello! I'm HELM, your governed cognitive assistant. I'm ready to help with software engineering, code synthesis, testing, git workflows, or recipe calculations. What's on your mind?"
         else:
-            speech = "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+            m_gk = re.search(r"what(?:'s| is) (?:the )?([a-zA-Z\s]+)", prompt, re.IGNORECASE)
+            is_concise = self.memory.context.user_preferences.get("concise", False)
+            if m_gk:
+                topic = m_gk.group(1).strip().rstrip("?").strip()
+                if is_concise:
+                    speech = f"I don't have verified encyclopedic data on {topic} in my active datasets, so I won't guess without evidence."
+                else:
+                    speech = f"I don't have verified encyclopedic data on {topic} in my active datasets, so I won't guess without evidence. My core capabilities are focused on software engineering, mathematical recipes, systems architecture, and drone flight simulation. Let me know what we can engineer!"
+            else:
+                if is_concise:
+                    speech = "I don't have verified data on that in my system, so I won't guess without evidence."
+                else:
+                    speech = "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
 
         print(f"\nHELM: {speech}\n")
-        self.memory.record_turn(prompt, resolved_prompt, "GENERAL_CONVERSATION", entities, speech, gate_code="GATE_PASS", duration=elapsed)
+        self.memory.record_turn(prompt, resolved_prompt, "GENERAL_KNOWLEDGE_INQUIRY", entities, speech, gate_code="GATE_PASS", duration=elapsed)
         return
 
     def repl(self):

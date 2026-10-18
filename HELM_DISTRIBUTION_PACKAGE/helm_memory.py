@@ -53,6 +53,23 @@ class WorkingMemoryContext:
             "verbose": False
         }
 
+    def add_user_preference(self, key: str, value: Any, note: Optional[str] = None):
+        self.user_preferences[key] = value
+        if note:
+            self.add_user_fact(note)
+
+    def find_memory_match(self, query: str) -> List[str]:
+        tokens = [w for w in re.findall(r'\b\w+\b', query.lower()) if len(w) > 3 and w not in ["what", "said", "about", "remember", "know", "have", "told", "that", "this", "tell"]]
+        matches = []
+        for fact in self.user_facts:
+            f_lower = fact.lower()
+            if any(t in f_lower for t in tokens):
+                matches.append(fact)
+        for k, v in self.user_preferences.items():
+            if any(t in k.lower() or (isinstance(v, str) and t in v.lower()) for t in tokens):
+                matches.append(f"{k}: {v}")
+        return matches
+
     def add_user_fact(self, fact: str):
         cleaned = fact.strip().rstrip(".").strip()
         if cleaned and cleaned not in self.user_facts:
@@ -187,19 +204,25 @@ class HELMConversationalMemory:
     def get_recent_turns(self, n: int = 5) -> List[ConversationTurn]:
         return self.turns[-n:]
 
-    def summarize_session_state(self) -> str:
+    def summarize_session_state(self, current_turn_number: Optional[int] = None) -> str:
         """Generates a warm, direct Everyday American English summary of the conversation."""
-        if not self.turns and not self.context.user_facts and not self.context.active_files and not self.context.inventory and not self.context.last_goal:
+        turn_num = current_turn_number if current_turn_number is not None else (len(self.turns) if self.turns else 0)
+        if turn_num == 0 and not self.context.user_facts and not self.context.active_files and not self.context.inventory and not self.context.last_goal:
             return "We just started our session. I'm ready to help with code, testing, git control, or recipe planning."
 
         summary_parts = []
-        if self.turns:
-            summary_parts.append(f"We're on Turn {len(self.turns)} of this session.")
+        if turn_num > 0:
+            summary_parts.append(f"We're on Turn {turn_num} of this session.")
         else:
             summary_parts.append("We just started our session.")
 
         if self.context.user_facts:
-            summary_parts.append(f"Recorded notes about you: {'; '.join(self.context.user_facts[:2])}.")
+            summary_parts.append(f"Recorded notes about you: {'; '.join(self.context.user_facts[:3])}.")
+
+        # If preferences are active
+        active_prefs = [f"{k}: {v}" for k, v in self.context.user_preferences.items() if k not in ["voice", "dial_preset", "verbose"]]
+        if active_prefs:
+            summary_parts.append(f"Active preferences: {'; '.join(active_prefs)}.")
 
         if self.context.active_files:
             summary_parts.append(f"Recently worked files: {', '.join(self.context.active_files[:3])}.")
@@ -211,5 +234,24 @@ class HELMConversationalMemory:
         if self.context.last_goal:
             clean_goal = self.context.last_goal.strip().rstrip(".").strip()
             summary_parts.append(f"Last executed goal: '{clean_goal}'.")
+
+        # If no files, inventory, or goals, but there were turns, describe conversational topics explored
+        if not self.context.active_files and not self.context.inventory and not self.context.last_goal and self.turns:
+            intents = [t.intent for t in self.turns if t.intent not in ["SESSION_SUMMARY"]]
+            unique_intents = list(dict.fromkeys(intents))
+            if unique_intents:
+                intent_names = {
+                    "USER_NARRATIVE": "personal background",
+                    "USER_AFFECT": "how you're feeling",
+                    "USER_PREFERENCE": "your preferences",
+                    "USER_KNOWLEDGE_QUERY": "what I know about you",
+                    "CREATIVE_HUMOR": "creative humor",
+                    "GENERAL_KNOWLEDGE_INQUIRY": "general questions",
+                    "QUERY_MEMORY_RECALL": "memory lookups",
+                    "QUERY_MEMORY_COUNT": "conversation fact counts",
+                    "GENERAL_CONVERSATION": "general dialogue"
+                }
+                readable = [intent_names.get(i, i.lower().replace("_", " ")) for i in unique_intents[:4]]
+                summary_parts.append(f"Topics explored: {', '.join(readable)}.")
 
         return " ".join(summary_parts)

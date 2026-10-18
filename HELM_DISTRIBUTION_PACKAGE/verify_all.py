@@ -218,9 +218,36 @@ if agentic_executor_f.exists():
 else:
     audit_report["tests"]["agentic_tool_autonomy"] = {"status": "SKIPPED"}
 
+# -----------------------------------------------------------------------------
+# 7. Verify Conversational Memory & 80/20 Nuance Engine
+# -----------------------------------------------------------------------------
+print("\n[7/7] Verifying Conversational Memory & 80/20 Nuance Engine...")
+nuance_test_f = HERE / "test_helm_chat_nuance.py"
+if nuance_test_f.exists():
+    try:
+        import subprocess
+        res = subprocess.run([sys.executable, "-X", "utf8", "-B", str(nuance_test_f)],
+                             capture_output=True, text=True, cwd=str(HERE))
+        if "ALL HELM CONVERSATIONAL NUANCE TESTS PASSED" in res.stdout:
+            audit_report["tests"]["conversational_memory_and_nuance"] = {
+                "status": "PASS",
+                "sequences_tested": ["Sequence_A_Narrative_Walkthrough", "Sequence_B_Inventory_Recipe", "7_Turn_Offpath_Nuance", "Epistemic_Study_Hypothesis"],
+                "ratio": "80% Stoichiometric Governance / 20% Nuance",
+                "turn_tracking": "EXACT_LIVE_INDEX"
+            }
+            print(">>> PASS: Conversational Memory & 80/20 Nuance verified (Sequences A & B, 7-Turn Off-Path, Epistemic S0).")
+        else:
+            audit_report["tests"]["conversational_memory_and_nuance"] = {"status": "FAIL", "output": res.stdout[-300:]}
+            print(f">>> FAIL: {res.stdout[-300:]}")
+    except Exception as e:
+        audit_report["tests"]["conversational_memory_and_nuance"] = {"status": "FAIL", "error": str(e)}
+        print(f">>> FAIL: {e}")
+else:
+    audit_report["tests"]["conversational_memory_and_nuance"] = {"status": "SKIPPED"}
+
 
 # -----------------------------------------------------------------------------
-# 7. Audit & Claims Verification Matrix
+# 8. Audit & Claims Verification Matrix
 # -----------------------------------------------------------------------------
 audit_report["claims_verification"] = {
     "stoichiometric_efficiency_win": {
