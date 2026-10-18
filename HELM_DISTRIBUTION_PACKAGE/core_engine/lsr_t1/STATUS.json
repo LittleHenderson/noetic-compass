@@ -1,0 +1,11 @@
+{
+  "status": "RUN_COMPLETED_TEST_VERDICT_FAILURE",
+  "run_id": "LSR_T1_MSI_RUN2",
+  "source_manifest_sha256": "ec01febfea56cf7696776237ffb073e820d58ba38426e0d6094d683a05156e17",
+  "sign_line": "APPROVE lsr_t1, source ec01febf, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "test_verdict": "FAILURE",
+  "loop_status": "INCONCLUSIVE",
+  "hard_gates": {"M1": true, "M9": true, "M4": false},
+  "earlier_run": "runs/LSR_T1_MSI_ONCE (WORKER_FAILED at JSON write; kept)",
+  "claim": "SYNTHETIC_ONLY; no HELM claim"
+}

@@ -1,0 +1,227 @@
+{
+ "version": "lsr-t1",
+ "status": "FROZEN_BEFORE_OFFICIAL_RUN",
+ "frozen_note": "Written 2026-10-14 (Pacific) by the builder-operator from C:/Users/wakil/Documents/Codex/2026-10-14/lacunarity_oscillator_design_v1 (ARCHITECTURE.md, CONVERGENCE.md, TEST_PLAN.md, OPEN_QUESTIONS.md, lsr_sketch.py, CAS_MAPPING.md). Marks are the designer's PROPOSED marks, taken as frozen. No mark was changed after any data was seen. Dev runs before the official run were bug/timing checks only; see dev_runs.",
+ "claim_ceiling": "SYNTHETIC_ONLY. No HELM claim. No SDG meaning claim (SDG gives shapes only). No per-Omega claim.",
+ "owner_authorization": {
+  "words": [
+   "Run it locally as long as it Quick if long use aws.",
+   "Run both",
+   "Yes on parallel prod"
+  ],
+  "when": "standing rule (fair-data v2 FROZEN.json); 'Run both' 2026-10-14 about 3:10 PM Pacific; 'Yes on parallel prod' 2026-10-14 about 3:15 PM Pacific; relayed by the coordinator in the Claude Code session",
+  "marks_by_proxy": "The owner said 'LSR defaults' is acceptable by proxy of 'Run both' (relayed by the coordinator): the designer's proposed marks are the frozen marks.",
+  "operator_interpretation": "Run on MSI only if under 300 s wall and 300 MiB working set, sockets blocked, no spend; free RAM checked first (>= 150 MB). One process. Longer jobs would be AWS jobs, not run here."
+ },
+ "parallel_production": {
+  "status": "ADMITTED_BY_OWNER_20261014",
+  "owner_words": "Yes on parallel prod",
+  "meaning": "POOLED readout (Clarification 9 s.6 recipe addition applied to recipes with the same Omega) is admitted as CAS production semantics (OPEN_QUESTIONS Q1). Arm A3_LSR_P4 is no longer conditional and mark M6 counts.",
+  "additive_expectation": "pick-the-best (EXCLUSIVE) readout must halt NOT_RECIPE_SHAPED (M5) AND the parallel-production arm must fit b (M6: ARCHITECTURE s.8 claim 3, 4 one-input lines plus a capacity stage). Exact count of recipes admitted is reported. Both readings reported."
+ },
+ "constants": {
+  "S_MIN": 8,
+  "BREAK_ALLOWANCE": 1,
+  "HOLDOUT_ALLOWANCE_vs_INIT": 1,
+  "P_MAX": 6,
+  "C_MAX": 8,
+  "T_ASSIGN": 4,
+  "COEF_BOUNDS": [
+   "1/20",
+   "20"
+  ],
+  "TAU_LADDER": "ln 1.5, 1.4, 1.3, 1.2, 1.1, 1.05 (may only step down)",
+  "tau_formula": "max(ln 1.05, 3 * 1.4826 * MAD(|ln(y/yhat)|)) mapped to the smallest ladder value >= it; ln 1.5 cap",
+  "SHAPED_FLOOR": "4/5 = at least 80 percent of training rows explained at the final tau (OPEN_QUESTIONS Q5 default)",
+  "wall_guard_seconds": 280,
+  "scoring_tolerance": "|yhat - y| <= max(1/50, (1/20)*y), exact Fractions (project 5 percent rule, never tau)"
+ },
+ "row_counts": {
+  "train": 64,
+  "validation": 16,
+  "heldout": 32,
+  "omegas_per_family": 16,
+  "cut": "NONE (estimate fits 300 s; see budget_estimate)"
+ },
+ "families": {
+  "S1": {
+   "law": "fair-data v2 S1_sdg_recipes_clean, imported (16 SDG recipes via v2's v1-bridge route, pad slots)",
+   "expected_dataset_sha256": "497d675be2065ceb7a4c2945e40d8620515ff01331bba190bfad61546c6345fe"
+  },
+  "S2v2": {
+   "law": "16 clean SDG 2-input recipes read through sdg_bridge_v2.parse_recipe (accepted, no leakage tail); y = min_i x_i/a_i; pad slots repeat slot 0; row structure of v2 _sdg_atomic",
+   "n_prerequisites": 2,
+   "selection_seed": 2026101463,
+   "data_seed": 2026101464,
+   "expected_dataset_sha256": "6092fdcc1ba3d8f8a35e7269b5ff8d7620e5c9e50d0023cb770027be13d87a61"
+  },
+  "S3v2": {
+   "law": "16 clean SDG 3-input recipes, as S2v2",
+   "n_prerequisites": 3,
+   "selection_seed": 2026101465,
+   "data_seed": 2026101466,
+   "expected_dataset_sha256": "7d60a3f43121b152a38015aab6bd9a34b330da854488d61b4f126e5402662757"
+  },
+  "a2": {
+   "law": "NEW positive control, designed to fit: y = max(Y_T(Theta1), Y_T(Theta2)), two 3-cell min-ratio recipes per Omega on different cell sets, coefficients U(0.75, 3.25); row structure of v1 atomic_rows",
+   "parameter_seed": 2026101461,
+   "data_seed": 2026101462,
+   "expected_dataset_sha256": "a83c29d3a23f5109caaa0d74f7e5694e0ac7e5b2a349bab64cb40450b35044fb"
+  },
+  "b": {
+   "law": "v1 b_additive_saturating via fair-data v2 data.v1_make_family; sha256 checked against v2 FROZEN"
+  },
+  "a": {
+   "law": "v1 a_ces_substitutable (CES rho 0.5) via fair-data v2 data.v1_make_family; sha256 checked"
+  },
+  "c": {
+   "law": "v1 c_minratio_noisy_corrupt via fair-data v2 data.v1_make_family; sha256 checked"
+  }
+ },
+ "family_order": [
+  "S2v2",
+  "S3v2",
+  "S1",
+  "a2",
+  "b",
+  "a",
+  "c"
+ ],
+ "declared_cells": [
+  "^1^O",
+  "^2^O",
+  "^3^O",
+  "^4^O"
+ ],
+ "declared_cells_by_column": {
+  "x0": "^1^O",
+  "x1": "^2^O",
+  "x2": "^3^O",
+  "x3": "^4^O"
+ },
+ "declared_cells_note": "bridge v2 FROZEN fix3_binder declared_cells_for_a_to_d; operator-declared labels; no Noetic meaning claimed for the columns",
+ "arms": [
+  {
+   "id": "A0_SINGLE",
+   "kind": "single",
+   "what": "today's learner: one recipe per Omega over all 4 cells; coefficients from sdg_bridge_v2.bind_table (witnessed ratio, no bounds); no loop"
+  },
+  {
+   "id": "B1_CHUNK16",
+   "kind": "chunk",
+   "chunk": 16,
+   "what": "dumb baseline A: one recipe per 16 training rows by row index regardless of gaps (4 recipes), EXCLUSIVE readout, no READ-driven proposal, no VERIFY"
+  },
+  {
+   "id": "A1_LSR_X2",
+   "kind": "lsr",
+   "a_max": 2,
+   "allow_pooled": false
+  },
+  {
+   "id": "A2_LSR_X4",
+   "kind": "lsr",
+   "a_max": 4,
+   "allow_pooled": false,
+   "primary": true
+  },
+  {
+   "id": "A3_LSR_P4",
+   "kind": "lsr",
+   "a_max": 4,
+   "allow_pooled": true,
+   "status": "ADMITTED_BY_OWNER_20261014"
+  },
+  {
+   "id": "B2_RANDOM_X4_s11",
+   "kind": "random",
+   "seed": 11,
+   "a_max": 4,
+   "allow_pooled": false
+  },
+  {
+   "id": "B2_RANDOM_X4_s29",
+   "kind": "random",
+   "seed": 29,
+   "a_max": 4,
+   "allow_pooled": false
+  },
+  {
+   "id": "B2_RANDOM_X4_s47",
+   "kind": "random",
+   "seed": 47,
+   "a_max": 4,
+   "allow_pooled": false
+  }
+ ],
+ "seeds_note": "Seeds 11/29/47 drive only the random baseline (rng = Random(seed*1000003 + family_index*1009 + omega_index)). All other arms are deterministic; they are run once and are seed-independent.",
+ "marks": {
+  "M1_do_nothing": "HARD GATE. On S1, S2v2, S3v2: A1, A2 and A3 halt COVERAGE_COMPLETE at cycle 0 with 0 admissions on every Omega, and held-out accuracy equals A0's.",
+  "M2_exact_substitution_a2": "A2 beats A0 by the 5 percent rule on a2 and halts COVERAGE_COMPLETE on >= 12 of 16 Omega.",
+  "M3_smooth_substitution_a": "A2 beats A0 by the 5 percent rule on a.",
+  "M4_loop_earned_something": "HARD GATE. On each of a2 and a: A2 held-out accuracy >= B1's + 0.05 AND >= each B2 seed's + 0.05.",
+  "M5_sum_honesty_exclusive": "On b: A1 and A2 halt NOT_RECIPE_SHAPED on >= 12 of 16 Omega.",
+  "M6_pooled_exact": "On b: A3 halts COVERAGE_COMPLETE on >= 14 of 16 Omega and held-out accuracy >= 0.95. Counts (owner admitted POOLED).",
+  "M7_no_harm_c": "On c: A2 accuracy >= A0's - 0.02 and A2 admissions <= 16 in total.",
+  "M8_mode_discrimination_a2_reported": "On a2: A3 keeps a non-POOLED readout on >= 12 of 16 Omega. Reported only.",
+  "M9_carried_lacunae": "HARD GATE. Every HALT other than COVERAGE_COMPLETE carries a non-empty lacunae list (all arms, all families).",
+  "five_percent_rule": "panel 1 (held-out): NMAE_X <= 0.95 * NMAE_Y AND accuracy_X >= accuracy_Y + 0.05 (fair-data v1 selection rule)",
+  "hard_gates": "M1, M9, M4. If any fails, test_verdict = FAILURE (never PASS with caveats)."
+ },
+ "loop_status_rule": {
+  "EARNED_ITS_KEEP": "M1 and M9 and M4 all pass.",
+  "VERIFY_DID_THE_WORK": "M1 and M9 pass, M4 fails, and on at least one of {a2, a}: A2 beats A0 by the 5 percent rule AND at least one B2 random seed's held-out accuracy is >= A2's - 0.05 (random proposals through the same FIT+VERIFY came within 5 points).",
+  "INCONCLUSIVE": "anything else."
+ },
+ "color_rule": "per family x arm, compared with A0 on panel 1: WHITE if every arm in the family is below 0.10 held-out accuracy; GREEN if the arm beats A0 by the 5 percent rule; YELLOW if accuracy higher AND NMAE lower than A0 but not by the rule; RED otherwise (loses, ties, or halts as predicted). A0 itself is REFERENCE.",
+ "builder_decisions": [
+  "INIT/A0 seed uses the bridge v2 bind_table coefficients (witnessed ratio over all train rows, no COEF_BOUNDS; non-positive -> no seed). The program asserts they equal witnessed_ratio_min. COEF_BOUNDS apply to FIT of proposals (ARCHITECTURE s.5.1).",
+  "Loop-internal tau decisions evaluate exact coefficients in binary64; reported metrics are exact Fractions.",
+  "VERIFY includes ARCHITECTURE s.6.3 'median |ln(y/yhat)| on validation does not rise' (per admission) in addition to the sketch's count rule.",
+  "PROPOSE (A3 only): when under-predicted residual exists and the deficit is spread (top cell pressure < 80 percent), a POOLED_LINES proposal is offered: one single-input line per cell plus a capacity stage, fitted by witnessed_pool_solve_v0 (ARCHITECTURE s.5.3: capacity = most repeated exact y with >= S_MIN repeats; lines solved exactly from the first linearly independent unsaturated claimed rows). It REPLACES the Omega's recipe set (claim 3 needs exactly the 4 lines); VERIFY decides like any proposal. Claimed rows = whole residual.",
+  "SDG shape library: every recipe seed in seeds.jsonl (sha256 df68d244...) is parsed by sdg_bridge_v2.parse_recipe; attested sizes = core prerequisite counts present (2 and 3). Lookup order: attested sizes ascending, then LOOP_EXTENSION sizes 1 and 4. Every proposal carries a source tag and a library receipt (seed count for its shape).",
+  "B2 random: same template space (all 15 cell subsets), P_MAX uniform draws per cycle, same FIT/VERIFY/caps/C_MAX; stops when its draws are all already tried or C_MAX ends.",
+  "A0 and B1 get a HALT from the same halt() rule after one READ (no loop), so every arm reports a halt type with carried gaps.",
+  "READ row states are cross-checked at every HALT against lacunarity_machine_v1.readers.deterministic_read over a Universe of training rows and a Ledger of PROBE (each READ) and CHARGE (first explained) events.",
+  "Panel 2 (chains) is not run (not required by the brief; saves time)."
+ ],
+ "tests": {
+  "code_tests_must_pass_before_run": [
+   "test_halt_carries_gaps",
+   "test_witnessed_ratio_exact",
+   "test_clarification10_plus_never_times",
+   "test_machine_reader_agrees"
+  ],
+  "behavior_tests_recorded_never_block": [
+   "test_clean_sdg_adds_zero_recipes",
+   "test_best_of_two_solved_by_cap2_not_single",
+   "test_additive_halts_not_recipe_shaped_without_parallel_production",
+   "test_parallel_production_fits_additive"
+  ],
+  "note": "Behavior tests read real families (Omega 0 only) and carry results; they are the brief's tests and are reported with their pass/fail, but they cannot block the run (a result must not gate its own measurement)."
+ },
+ "budget_estimate": {
+  "method": "dev timing on Omega 0 only (no metric printed): random arm 0.016-0.047 s CPU per Omega, LSR arms < 0.01 s, tests 0.4 s, data build 0.33 s",
+  "estimate": "7 families x 16 Omega x 8 arm-runs ~ 896 Omega-runs; ESTIMATE 10 to 60 s wall in total. No row cut.",
+  "cut": "NONE"
+ },
+ "dev_runs": [
+  {
+   "when": "2026-10-14 before the official run",
+   "what": "bug and timing checks: dataset generation (hashes only); unit tests; one trace of Omega 0 of a2 (LSR cap 2) and b (A3); timing of one random and one A3 run on Omega 0 of a and c",
+   "seen": "Omega 0 traces: the INIT seed (witnessed ratio over all training rows) never under-predicts a training row (a_i <= x_i/y on every row, so Y_T >= y), so the first READ has only over-predicted residual rows; the design's alternative-recipe and parallel-line proposals are triggered only by under-predicted rows (ARCHITECTURE s.4.2, sketch propose()), so they cannot fire at cycle 0. a2 Omega 0 halted NOISE_LIMITED_RESIDUAL_CARRIED after refusing EFFICIENCY_TERM and CAPACITY_TERM; b Omega 0 (A3) admitted a CAPACITY_TERM then halted NOISE_LIMITED_RESIDUAL_CARRIED. Three behavior tests failed in dev for this reason.",
+   "action": "NO change to the loop, the proposer or any mark (Claude is not the research governor; this is a design finding to report). Added: test split (code vs behavior), and the claim-3 direct check the owner asked for. ARCHITECTURE s.7 step 1 ('rows where Theta2 is the true route are under-predicted') does not hold for witnessed_ratio_min_v1 on all rows; reported as a design finding."
+  }
+ ],
+ "dataset_hash_note": "S2v2, S3v2, a2 hashes recorded from a generation-only pass (no loop, no arm, no score) on 2026-10-14.",
+ "claim3_direct_check_b": "Owner ruling 2026-10-14 asks to test ARCHITECTURE s.8 claim 3 (4 one-input lines + capacity stage fit b exactly). Independent of the proposer: for each b Omega, a POOLED_LINES proposal on all training rows is fitted by witnessed_pool_solve_v0, VERIFIED against the A0 seed (cap 4), and scored on held-out. DIAGNOSTIC of the claim only; it enters no mark and is not an arm.",
+ "run_log": [
+  {
+   "run_id": "LSR_T1_MSI_ONCE",
+   "source_manifest_sha256": "7d051b55e74e10730f5f003b8fc007418271c9f079783051f6e7d2887b94e856",
+   "end": "WORKER_FAILED (exit 1) after 7.76 s wall, 6.92 s CPU, peak 47,349,760 bytes",
+   "cause": "ValueError at JSON write of RESULTS_T1.json: an exact NMAE Fraction exceeds Python's 4300-digit int-to-str limit. All families had been computed; no result file was written; TEST_RESULTS.json was written (code tests ok, behavior tests 1 of 4 passed).",
+   "fix": "worker.py: sys.set_int_max_str_digits(0); new run id LSR_T1_MSI_RUN2. No change to the loop, families, arms or marks. The computation is deterministic, so the rerun cannot select a different outcome."
+  }
+ ]
+}

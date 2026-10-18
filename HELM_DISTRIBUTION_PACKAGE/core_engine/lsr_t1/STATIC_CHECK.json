@@ -1,0 +1,74 @@
+{
+  "checked_at_utc": "2026-10-14T22:12:25.290656+00:00",
+  "check_type": "STATIC_SOURCE_ONLY",
+  "ast_parse": "PASS",
+  "json_parse": "PASS",
+  "imports": {
+    "__init__.py": [],
+    "engine.py": [
+      "__future__",
+      "dataclasses",
+      "fractions",
+      "itertools",
+      "math",
+      "time",
+      "typing"
+    ],
+    "families.py": [
+      "decimal",
+      "engine",
+      "fair_data_experiment_v2_sdg",
+      "fractions",
+      "itertools",
+      "json",
+      "pathlib",
+      "random",
+      "scale_benchmark_v1.data",
+      "sdg_bridge_v2"
+    ],
+    "run_t1.py": [
+      ".",
+      "fractions",
+      "json",
+      "lacunarity_machine.ledger",
+      "lacunarity_machine.readers",
+      "lacunarity_machine.universe",
+      "pathlib",
+      "random",
+      "sdg_bridge_v2",
+      "time"
+    ],
+    "worker.py": [
+      "argparse",
+      "fractions",
+      "hashlib",
+      "io",
+      "json",
+      "lsr_t1",
+      "os",
+      "pathlib",
+      "socket",
+      "sys",
+      "time",
+      "unittest"
+    ],
+    "test_lsr.py": [
+      "fractions",
+      "lacunarity_machine.ledger",
+      "lacunarity_machine.universe",
+      "lsr_t1",
+      "sdg_bridge_v2",
+      "unittest"
+    ],
+    "static_check.py": [
+      "ast",
+      "datetime",
+      "hashlib",
+      "json",
+      "pathlib"
+    ]
+  },
+  "problems": [],
+  "source_manifest_sha256": "ec01febfea56cf7696776237ffb073e820d58ba38426e0d6094d683a05156e17",
+  "files_hashed": 42
+}

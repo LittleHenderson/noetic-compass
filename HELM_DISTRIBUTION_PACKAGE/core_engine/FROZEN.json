@@ -1,0 +1,651 @@
+{
+ "version": "rb-oh1-recipe-brain-ordinary-head-v1",
+ "title": "RB-OH1: recipe brain, ordinary head, test 1 - the CAS-native substitution recipe (SUB) head to head against the tiny from-scratch model (MLP 4-37-1, 223 parameters) on `a`, with ledger routing to small labelled non-neural heads",
+ "status": "FROZEN_BEFORE_CODE_AND_BEFORE_ANY_RUN; AMENDED_BEFORE_THE_MANIFEST (see amendments)",
+ "frozen_note": "Written by the builder-operator (Claude Code subagent of the dispatch session) BEFORE any RB-OH1 code, before any RB-OH1 dataset was built and before any RB-OH1 run. Laptop clock 2026-10-15 17:18 PDT (2026-10-16 00:18 UTC) when started. The owner word 'RB-OH1' was relayed as given at about 4:47 PM Pacific 2026-10-15; earlier records note that relayed times run ahead of this laptop's clock; both are recorded, neither is corrected.",
+ "claim_ceiling": "SYNTHETIC_ONLY. No HELM claim. Every status word is computed by merge_oh1.py from raw counts, separately for ORIGINAL and FRESH; none by prose. Claude is not the research governor: freeze first, run once, report what the program reads. A failed hard mark is a failure.",
+ "owner_authorization": {
+  "owner_words_verbatim": "RB-OH1; U2 defaults; U2 on AWS, cap $3, after U1; HELM-R1 plan",
+  "when": "about 4:47 PM Pacific 2026-10-15, relayed verbatim by the dispatch session (coordinator). The part that concerns this test is 'RB-OH1'.",
+  "coordinator_offer_just_before_verbatim": "To run the head test, say \"RB-OH1\". Its GPU part should cost 13 to 22 cents, with $2.00 set aside.",
+  "earlier_owner_decision_D1_verbatim": "Design the substitution recipe first, and test it head to head against the tiny model. Use a neural head only if nothing CAS-native gets close. Even then it would be trained from scratch, never on borrowed weights, and its answers would be labeled approximate.",
+  "earlier_owner_decision_D1_status": "ACCEPTED_BY_OWNER (about 4:50 PM Pacific 2026-10-15), recorded in helm_rb_ordinary_head_design_v1 README.md section 1 and OPEN_QUESTIONS.md D1. A decision about the path, not a result. Adoption of the shape into CAS stays open (Q1).",
+  "standing_words": [
+   "Run it locally as long as it Quick if long use aws",
+   "use aws as there is only 354 mb of 16 gbs locally",
+   "PLEASE JUST USE PARAMETERS"
+  ],
+  "meaning_recorded": "The owner's word approves RB-OH1 exactly as designed in helm_rb_ordinary_head_design_v1 (TEST_PLAN_RB_OH1.md governs) with every PROPOSED default, including one small AWS GPU job (g4dn.xlarge, us-west-2) for the FRESH tiny model, capped at 2.00 USD. The builder builds and runs the laptop arms and builds the GPU arm as a sealed package; the builder does NOT launch it. The coordinator places the ledger hold and launches.",
+  "operator_interpretation": "Laptop MSI only for the CAS-native arms: each part under 300 s wall and 300 MiB; sockets blocked; no spend; start a part only with >= 150 MB free RAM; one RB-OH1 driver; never start a part while another driver's worker is mid-part (the rb_p1 run_all_parts.ps1 convention). No neural training on the laptop CPU: on the laptop the MLP is only checked for structure (223 parameters, the right shapes, the same initial values as RB-W's TinyMLP), with zero training steps. The sign line is composed by the operator from these words under the relayed delegation; it is not an owner signature.",
+  "sign_line_form_laptop": "APPROVE rb_oh1, source <manifest sha256 first 8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "sign_line_form_gpu": "APPROVE RB-OH1-MLP-FRESH on AWS GPU (g4dn.xlarge, us-west-2), sealed package <sha256 first 8>, one attempt, cap $2.00."
+ },
+ "design_source": {
+  "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1",
+  "governs": "TEST_PLAN_RB_OH1.md",
+  "sha256": {
+   "ARCHITECTURE.md": "162ac4ec2f8575ee8d61bad72c9be6af430f39d2ed795a8c4adec476b48b32c1",
+   "CAS_MAPPING.md": "066c87ef2df26c6519dad1d57c31e9b0a6d4fbc0d56a225c84a811d333fe0ac8",
+   "HEAD_OPTIONS.md": "b108943b7ff046f7e5315877f015571144435d69c4f54efa6f2d899e6c5271ec",
+   "OPEN_QUESTIONS.md": "0af11ac0adc3f0998a22c2bf08b624cb6e4c1b96c63911b6cb3f753303ed926f",
+   "README.md": "0ed543ff71c6e40f7f812c1c18b249c95b0a75487b76be61014c17c115574242",
+   "ROUTING.md": "6c3f8cca40eb6ce81dee714f9ca0b51b9e2f59702d776c08210689cceda7b52d",
+   "TEST_PLAN_RB_OH1.md": "760620a4ad021792d6ec83b3f18d6da81eb3c78a5e39ec03ebeadc41e396362f"
+  },
+  "defaults": "Every PROPOSED default in OPEN_QUESTIONS.md Q1-Q21 is taken as written, except Q18's schedule (deviation DV-01)."
+ },
+ "vocabulary": "A model's adjustable values are called PARAMETERS (owner rule). Points = 100 x held-out RIGHT / held-out rows. Gated = scored behind the RPM Gate. Real input cells = an outcome's input columns after dropping padding copies (a column equal to an earlier column on every training row of that outcome).",
+ "world_sets": {
+  "rule": "Every mark, word and reported row is computed SEPARATELY for ORIGINAL and FRESH from that set's own records. ORIGINAL worlds were seen while designing; FRESH governs the claim.",
+  "ORIGINAL": {
+   "lsr_families": {
+    "a": {
+     "role": "the target: CES rho 1/2, 4 inputs",
+     "core_capacity": "ORACLE = s4_r1_v8_e1_l1_d2 (rb_g1 operator_g worlds: a's oracle = its start)",
+     "dataset_sha256": "e5daf11f3878ef37c07d175297cf27dc2261abb20dd2f40efbbc5b9454025371"
+    },
+    "a_approx": {
+     "role": "smooth, CES rho 1/2, 2 inputs",
+     "core_capacity": "ORACLE = s4_r1_v12_e1_l1_d2",
+     "start_capacity": "s4_r1_v4_e1_l1_d2 (R-CAP, R-RET only)",
+     "dataset_sha256": "0785d6fd78b466497c26a23806660ca38a9c9264d370eb06baaa82f197ea7774"
+    },
+    "c": {
+     "role": "noise: min law, noisy train/validation labels, clean held-out",
+     "core_capacity": "ORACLE = s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "6d92c1056df9550ccb19e035718644725f4ba02d847558ac66a255f52cbbece0"
+    },
+    "scale_leak": {
+     "role": "recipe-shaped control (min with efficiency and leakage)",
+     "core_capacity": "ORACLE = s4_r1_v8_e1_l1_d2",
+     "start_capacity": "s4_r1_v8_e0_l0_d2 (R-CAP only)",
+     "dataset_sha256": "2d2a86c3f9658c493e08ed681e2ad48e6f586b00d60864fffbd8ed6f958a0e4b"
+    },
+    "S2v2": {
+     "role": "recipe-shaped control, clean 2-input min",
+     "core_capacity": "ORACLE = s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "6092fdcc1ba3d8f8a35e7269b5ff8d7620e5c9e50d0023cb770027be13d87a61"
+    },
+    "S3v2": {
+     "role": "recipe-shaped control, clean 3-input min (Q12 kept)",
+     "core_capacity": "ORACLE = s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "7d60a3f43121b152a38015aab6bd9a34b330da854488d61b4f126e5402662757"
+    },
+    "b": {
+     "role": "control: add up to a cap, y = min(C, sum b_i x_i); calibrates the sweep's SUM reading; different-law control for SUB (reported)",
+     "core_capacity": "s4_r1_v8_e1_l1_d2 (1x)",
+     "dataset_sha256": "df667dc781530914701409ce5da0ac1364ed8daabe77b27fe0594c63cedf63e1"
+    },
+    "a_offladder": {
+     "role": "control: CES at rho 0.37 (not on SUB's ladder); reported (Q12 kept)",
+     "core_capacity": "s4_r1_v8_e1_l1_d2 (1x)",
+     "generator": "fair_data_experiment_v1 data: family_parameters('a_ces_substitutable') (the original 16 recipes' weights and scales, parameter seed 2026101411) with params['rho'] set to 0.37; rows by the SAME functions atomic_rows / chain_rows / _finish in the no-dirt branch of synthetic_family, with the data seed as an argument (as rb_g6 units_g6.v1_synthetic_with_data_seed), then lsr_t1 families._from_v1_shape('a_offladder', dataset). Gate before any scored run: the wrapper at rho 0.5 and data seed 2026101412 must reproduce e5daf11f... exactly, else a_offladder is left out and that is recorded.",
+     "rho": "0.37",
+     "data_seed": 2026101571,
+     "seed_search": "No file under Documents\\Codex\\2026-10-14, 2026-10-15 or CAS-Recipe-Network-Comparison-20261011 (.json, .py, .md) uses 202610157x or 202610158x (searched 17:15 PDT).",
+     "dataset_sha256": "d4f2653692aca407b47c4574b966ee14b7d928ccc87836c5b24f4ec0ab54bdfa"
+    },
+    "a_approx_shuffled": {
+     "role": "shuffled-label control",
+     "core_capacity": "its start s4_r1_v4_e1_l1_d2",
+     "dataset_sha256": "b25a450a07f4b98625b975881edd12f3c818203b994f42aa4dc3f31ab40d329d"
+    },
+    "scale_leak_shuffled": {
+     "role": "shuffled-label control",
+     "core_capacity": "its start s4_r1_v8_e0_l0_d2",
+     "dataset_sha256": "21e8213e8447a08a9074b5ff1672113836d7dd6d4c8addc708ac8d85ca5c7465"
+    }
+   },
+   "f1": {
+    "draws": "40-59",
+    "true_capacity": "ORACLE s8_r2_d3 (8 slots, 2 routes, depth 3)",
+    "shuffled_capacity": "start s4_r2_d3",
+    "draw_digests": "rb_g6 FROZEN.json fresh_dataset_hashes.f1_original_draw_digests"
+   },
+   "data_rule": "ORIGINAL datasets through rb_g1 units.lsr_world (unchanged upstream builders with their own sha256 checks); a_offladder through the wrapper above."
+  },
+  "FRESH": {
+   "lsr_families": {
+    "a_fresh": {
+     "role": "a (same 16 recipes, new rows)",
+     "core_capacity": "s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "f8abaf7a52fd7a54068c4ff72adbadff449c1b2734bfdb51bbd73c0b9d955392"
+    },
+    "a_approx_fresh": {
+     "role": "a_approx (new parameters)",
+     "core_capacity": "s4_r1_v12_e1_l1_d2",
+     "dataset_sha256": "8ec0ef639012a773a80439bb0acd06003341e6628d65b28d232973b5b055291a"
+    },
+    "scale_leak_fresh": {
+     "role": "scale_leak",
+     "core_capacity": "s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "e6bf4a5c6f9751bfa22539bdd1828ba63ac06c477f317eb995832c459f49f393"
+    },
+    "S2v2_fresh": {
+     "role": "S2v2",
+     "core_capacity": "s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "5d673efef0b7f042bffd6847958ce1b3a1a21b4db51b670c69cb8e3f1de91545"
+    },
+    "S3v2_fresh": {
+     "role": "S3v2",
+     "core_capacity": "s4_r1_v8_e1_l1_d2",
+     "dataset_sha256": "7f0ff961304cbfff12beec22df025ef8c22a7e010277f500ba9d97ddb0adcd70"
+    },
+    "a_approx_shuffled_fresh": {
+     "role": "a_approx_shuffled",
+     "core_capacity": "s4_r1_v4_e1_l1_d2",
+     "dataset_sha256": "32604cdc11584d7692028cca09803f11fe972253f81d0ef332ebc9db325e6a0e"
+    },
+    "scale_leak_shuffled_fresh": {
+     "role": "scale_leak_shuffled",
+     "core_capacity": "s4_r1_v8_e0_l0_d2",
+     "dataset_sha256": "10d605df814a5544fc0bb11615ddea821b0384727aad22769eb4941e7cb52ceb"
+    }
+   },
+   "f1": {
+    "draws": "60-79",
+    "true_capacity": "s8_r2_d3",
+    "shuffled_capacity": "s4_r2_d3",
+    "draw_digests": "rb_g6 FROZEN.json fresh_dataset_hashes.f1_fresh_draw_digests"
+   },
+   "data_rule": "rb_g6 units_g6.world_data (the same upstream generators at RB-G6's frozen fresh seeds; each dataset checked against rb_g6 FROZEN.json when built). No c_fresh (Q13), no b or a_offladder twins.",
+   "a_fresh_is_the_same_law": "a_fresh keeps a's 16 recipe parameter sets (rb_g6 FROZEN.json disclosure): new rows of the same law, not a new law."
+  },
+  "row_sizes": "per LSR outcome: train 64, validation 16, held-out 32 (4 held-out rows with one real input set to zero); 16 outcomes per LSR family; F1: B-chain 16 and B-alt 16 per draw."
+ },
+ "core": {
+  "what": "A1 RECIPE_ONLY: the existing LSR engine at the family's core capacity, nothing changed. Computed through rb_g6 units_g6's stage-0 LSR unit code (rb_g5 engine_g5.run_omega_g5 with resume=None = rb_g1 run_omega_g with the shadow pass; RB-G1's tests show its tree equals rb_w enginew.run_omega_w's; the shadow pass records the capacity witnesses that diagnose_cell needs and never changes the tree). One unit = one family x capacity x half (8 outcomes), its result built exactly as rb_g6 units_g6.lsr_unit builds it (rb_g1 units.summarize_outcome plus the rb_g4/rb_g5 fields), so its key and digest are comparable with RB-G5's and RB-G6's caches. F1: rb_g6 units_g6.f1_unit at the core capacity (rb_w taskb_w BrainW), plus per-row labels from a BrainW taught the same series.",
+  "per_row_outputs": "For every training, validation and held-out row of every outcome: the core's value (exact fraction) or UNDETERMINED with its gate word, recomputed through lsr_t6 gpredict6's own steps and asserted equal to gpredict6(exact=True, gate=True, unknown_above). Stored in the unit with a sha256 of the per-row block.",
+  "levels": "The core run's admitted levels (fit row ids and tolerance) are read from the run (rb_g3 engine_g3 run.levels_final_list) for SUB's chain receipt.",
+  "instrument_row": "every core unit whose key also exists in RB-G5's runs (COMPLETED parts) or RB-G6's runs (COMPLETED parts, read at merge time) has an equal result digest."
+ },
+ "gate": {
+  "G_ABSENT": "Always binding. RECIPE: the tree's required cells (lsr_t5 required5). RECIPE_SUB: all the outcome's real input cells (Q7 default: the gate binds for SUB). HEAD, control, baseline and MLP answers: all the outcome's real input cells. A row with a zero in any of these -> UNDETERMINED:G-ABSENT.",
+  "G_LIMIT": "The core's learned limits (BLEND ceiling, theoretical-yield bound, 'unknown above'). Default (Q6): binding for every head, control, baseline and the MLP on that outcome: they may not answer a row the core refused by a limit. RECIPE_SUB replaces the core tree and has no limit of its own, so it answers such rows (stated; see R-LIMIT and R-HQ-LIMIT).",
+  "best_possible_gated": "448 / 512 = 87.50 points per LSR family before limit rows."
+ },
+ "answerers": {
+  "SUB": {
+   "form": "Y_rho = ( sum_i c_i * x_i^rho )^(1/rho) over the outcome's real input cells; rho = 0: Y = C * prod x_i^w_i with sum w_i = 1. Parameters n + 1 (5 for 4 inputs, 3 for 2 inputs, 4 for 3 inputs).",
+   "arithmetic": "Python decimal, 40 significant digits, powers as exp(rho * ln x) (decimal exp and ln are correctly rounded); solves are exact over fractions of those 40-digit decimals (Gauss-Jordan, as lsr_t5 blend.inverse), solutions rounded to 40 digits. Same digits on Windows and Linux.",
+   "ladder": [
+    "1",
+    "1/2",
+    "1/3",
+    "1/4",
+    "0",
+    "-1/4",
+    "-1/3",
+    "-1/2",
+    "-1",
+    "-2",
+    "-4"
+   ],
+   "eligible_rows": "training rows with y > 0 and every real input > 0",
+   "witness_rows": "for each real input i in cell order: the eligible row (not yet chosen) with the smallest share x_i / sum of real inputs; ties by training row order",
+   "fit_per_rho": "(1) witnessed solve of the n x n system on the witness rows; if singular or any c_i <= 0 (rho = 0: any weight <= 0) this rho is REFUSED (WITNESS_SINGULAR / WITNESS_NONPOSITIVE). (2) least-squares solve over all eligible rows in the same transformed space (rho = 0: log space with sum w_i = 1); kept as a candidate only if every c_i > 0. Keep the solve that reads back more training rows at the 5% standard; a tie keeps the witnessed one. Receipt field fit = WITNESSED or LEAST_SQUARES.",
+   "choose_rho": "the non-refused rho whose fit reads back the most training rows at the 5% standard (all 64 training rows, value vs label); a tie goes to the smaller rho.",
+   "admission_SUB_REPLACE": "against the core's final tree on that outcome: (1) gained >= 8 (training rows SUB reads back at 5% that the core does not); (2) validation hits at 5% >= the core's, and SUB's median |ln(yhat/y)| on validation <= the core's (lsr_t6 _median_log6 rule); (3) shuffled-label hold-out: validation hits on true labels > hits on labels rotated by half (rb_w enginew.rotate_labels); (4) broken <= 1 (training rows the core reads back and SUB does not); (5) gained / (n + 1) >= 1/4; (6) the receipt passes. All pass -> RECIPE_SUB; the old tree is kept with its digest.",
+   "receipt": "(a) every fit row (WITNESSED: the n witness rows; LEAST_SQUARES: every eligible row) reads back at the 5% standard; (b) the n witness rows read back within 1e-12 relative; (c) CHAIN: every fit row of every level the core admitted still reads back under SUB at that level's own tolerance (lsr_t2 gexplained). Cached at admission, never recomputed.",
+   "limiting_reagent": "NONE_SUBSTITUTION; Excess Capacity NONE.",
+   "label": "RECIPE_SUB (PROPOSED shape)",
+   "variants": "SUB_NO_HALF: the same with 1/2 removed from the ladder (R-SUBGEN). SUB_SEEDED: the ladder reordered to start at the sweep's rho (seed first, the rest in ladder order; ties go to the earlier rung in that order) for A2-sweep."
+  },
+  "heads": {
+   "common": "Fitted on the outcome's 64 training rows only, real input cells only; one head per outcome; answers labelled HEAD:<type> with a band; never written into the recipe book.",
+   "OLS_MIN": "rb_w run_w.hybrid_ols, line for line, except that the fallback cell set (when the core tree is not a single MIN) is the outcome's real input cells instead of all 4 slots (ARCHITECTURE section 2: padding dropped before any head fit). Exact fractions. Parameters = number of cells. Limiting Reagent field ESTIMATED:<cell>.",
+   "LOGLIN_HOM": "ln y = b0 + sum_i b_i ln x_i with sum b_i = 1. Parameters n. Logs in 40-digit decimal, normal equations solved exactly in fractions, predictions via decimal exp.",
+   "LOGQUAD_HOM": "ln y - ln x_n = b0 + sum_{i<n} b_i z_i + sum_{i<=j<n} g_ij z_i z_j with z_i = ln x_i - ln x_n (the homogeneous translog). Parameters 1 + (n - 1) + n(n - 1)/2: 10 for 4 inputs, 3 for 2 inputs, 6 for 3 inputs. Same arithmetic.",
+   "LOGQUAD_FREE": "ln y = b0 + sum_i b_i l_i + sum_{i<=j} g_ij l_i l_j, l_i = ln x_i, no constraints. Parameters 1 + n + n(n + 1)/2: 15 for 4 inputs, 6 for 2 inputs. Control twin. Same arithmetic.",
+   "BLEND_HEAD": "lsr_t5 blend.fit_blend(real cells, train, TARGET_TAU ln 1.05, k_cap = 32) outside the admission loop (refine places corners up to the cap). Exact values. Parameters = vertices x (n + 1).",
+   "KNN_HOM": "control only, never a candidate: the 3 nearest training rows in mix space (shares over real inputs, L1, exact fractions, ties by row order); answer = sum of real inputs x the median of their y / sum. Parameters counted = 64 x (n + 1).",
+   "HEAD_RESIDUAL": "reported only (R-RES): ln(y / yhat_core) = d0 + sum_{i<n} d_i z_i fitted by least squares on training rows where the core answers with yhat > 0 and y > 0; answer yhat_core x exp(correction); exists only where the core answers. Parameters n. Label HEAD_RESIDUAL (named result Omega|corrected)."
+  },
+  "band": "For a head on an outcome with m gate-passing validation rows: sort |ln(yhat/y)| and take the ceil(0.9 m)-th smallest; stored as 'B on k of m validation rows'. Band receipt: the band recomputed from the stored parameters (re-read from their serialized form) on the stored rows equals the stored band.",
+  "error_measure": "err(yhat, y) = 0 if yhat == y; +infinity if exactly one of yhat, y is <= 0 or if yhat <= 0; else |ln(yhat / y)| in 40-digit decimal.",
+  "baselines_A8": "rb_w run_w.run_baselines_unit's LUT, DIV_TOTAL, SMALLEST_INPUT exactly as RB-W defined them (over all 4 slots), scored behind the gate (G-ABSENT on real inputs + G-LIMIT) with ungated counts beside.",
+  "MLP": "4 -> 37 -> 1, ReLU, 223 parameters per outcome, full-batch Adam step 0.01, betas 0.9 / 0.999, eps 1e-8, 300 epochs, MSE on raw y, all 4 input slots (as RB-W built it), initial values drawn exactly as rb_w run_w.TinyMLP.__init__ with random.Random(7) per outcome. ORIGINAL: not run; RB-W's recorded per-outcome counts are the frozen comparison (ungated, laptop CPU, disclosed). FRESH: one AWS GPU job (gpu_arm). Never answers in any CAS-native arm."
+ },
+ "routing": {
+  "per_outcome_word": "diagnose_cell = rb_g3 operator_g3.diagnose (the RB-G6 operator's DIAGNOSE, unchanged) applied to a one-cell stage built from the core unit's own record of that outcome (rb_g4 operator_g4.stage's cell fields). Words: AT_MARK, T1..T5 (T4a/T4b), AMBIGUOUS, NOISE, WITNESS_IN_SAMPLE_ONLY, KNOWLEDGE_MISSING, NOT_RECIPE_SHAPED.",
+  "V8_overlay": "A cell whose word is a T-word of kind K becomes V8_REFUSED when RB-G6's runs\\MERGED.json (sha256 recorded by the merge) holds, for the same world (same world set, data family) in arm RBG, a growth event with kind K, capacity_before equal to the core capacity, outcome ROLLED_BACK and verify.V8_compactness false. If RB-G6's MERGED.json does not exist when the merge runs, the merge writes no reading (status RB_G6_MERGED_MISSING) and stops.",
+  "R0": "n >= 8, n = validation rows where the core answers; else stay (TOO_FEW_ROWS)",
+  "R1": "core hits at the 5% standard on those n rows < ceil(3n/4) (12 of 16)",
+  "R2": "word in {NOT_RECIPE_SHAPED, NOISE, KNOWLEDGE_MISSING, WITNESS_IN_SAMPLE_ONLY, V8_REFUSED}",
+  "R3": "SUB offered through SUB_REPLACE's checks; admitted -> RECIPE_SUB and no head is considered",
+  "R4": "over validation rows where both answer (m rows): (rows with err_head < err_recipe) - (rows with err_recipe < err_head) >= ceil(6m/16); exact ties count for neither",
+  "R5": "over validation rows where the head answers (k rows), for EACH of two rotations of the 16 validation labels in row order (by half: row i takes the label of row (i + 8) mod 16; by a quarter: (i + 4) mod 16): (rows with err(yhat, y_true) < err(yhat, y_rot)) - (rows with the reverse) >= ceil(10k/16)",
+  "R6": "head-attributable training rows (both answer, err_head < err_recipe) / head parameters >= 1/4",
+  "ladder": [
+   "OLS_MIN",
+   "LOGLIN_HOM",
+   "LOGQUAD_HOM",
+   "BLEND_HEAD"
+  ],
+  "climb_rule": "take the smallest rung that passes R4, R5 and R6; move up one rung only if the next rung passes R5 and R6 AND beats the current rung by ceil(6m/16) paired validation rows (m = rows where both answer); stop at the first rung that does not. No rung passes -> stay (NO_HEAD_PASSED).",
+  "sweep_in_A4s": "NOT USED. The primary hybrid A4s offers SUB unseeded on every eligible outcome. Reason (DV-02): HEAD_OPTIONS section 5.7 and TEST_PLAN section 4 say any arm that uses the designed sweep rows is reported apart; that fairness rule governs over ROUTING R3's sentence that a calibrated sweep decides the offer.",
+  "never": "never per row, never by family name, never by held-out rows, never an at-mark outcome, never F1, never KNN, never the MLP in A4s/A4n",
+  "margins_frozen": {
+   "at_mark_line": "ceil(3n/4) = 12 of 16",
+   "head_lead": "ceil(6m/16) = 6 of 16",
+   "reads_the_law": "ceil(10k/16) = 10 of 16, twice (rotation by half and by a quarter)",
+   "compactness_theta": "1/4 (shared with RB-G6 FROZEN fix_E)",
+   "enough_rows": "n >= 8",
+   "return_band": "a head-routed outcome returns when its lead falls to <= 2 net paired rows; leads 3 to 5 keep the current choice (R-RET only)"
+  }
+ },
+ "shape_sweep": {
+  "panel": "Per outcome (clean LSR families and F1's 8 base recipes): base = the component-wise upper median (sorted[len // 2]) of the outcome's training stock vectors over real inputs; scales x1/4, x1, x4; each real input multiplied by 2^k, k = -4..4, the others held; padding slots rebuilt as the generator builds them; labels from the family's own law function (the generator's own float code), clean. c also gets a noisy panel (its noise rule with seed 2026101572), reported only. Shuffled families: no panel (no clean law to ask; DV-09). F1 base: the taught single rows of that recipe in draw 40 (ORIGINAL) / draw 60 (FRESH).",
+  "forms_in_order": [
+   "FLAT: y = the base point's label, every point within the 5% standard (not an ingredient here)",
+   "COMPLEMENT: y = min(x/a, K); a = x/y at the smallest x (y > 0), K = max y",
+   "SUBSTITUTE: y = A + B x from the smallest and largest x; needs A > 0, B > 0",
+   "SUBSTITUTE_CEILING: y = min(K, A + B x); K = max y; A, B from the two smallest x; needs A > 0, B > 0",
+   "PARTIAL(rho) for rho on SUB's ladder except 1 (= SUBSTITUTE): y^rho = A + B x^rho (rho = 0: ln y = A + B ln x) from the smallest and largest x; needs every y > 0, B > 0 and (rho != 0) A > 0",
+   "THRESHOLD: y = max(0, min(x/a, K) - L) from the two smallest-x points with y > 0 (1/a = slope > 0, L > 0) and K - L = max y",
+   "INHIBITOR: y = max(0, A - B x) from the two smallest x; needs A > 0, B > 0"
+  ],
+  "read_rule": "a form is kept only if it reads back EVERY point of the sweep at the 5% standard; the first form in order that does is the reading; none -> UNREAD. Decimal 40 digits for the fit, exact fractions for the read-back test.",
+  "input_word": "over the 3 scales, ignoring FLAT: none left -> NOT_AN_INGREDIENT; all COMPLEMENT/THRESHOLD -> COMPLEMENT_INPUT; all SUBSTITUTE/SUBSTITUTE_CEILING -> SUBSTITUTE_INPUT; all PARTIAL -> PARTIAL_INPUT; all INHIBITOR -> INHIBITOR_INPUT; any UNREAD -> UNREAD_INPUT; else MIXED_INPUT.",
+  "outcome_word": "any UNREAD_INPUT -> UNDETERMINED; ingredient inputs = inputs not NOT_AN_INGREDIENT; none -> UNDETERMINED; all in {COMPLEMENT_INPUT, INHIBITOR_INPUT} with at least one COMPLEMENT_INPUT -> MIN_RECIPE, written MIN_RECIPE+LEAK if any INHIBITOR_INPUT or any THRESHOLD reading; all SUBSTITUTE_INPUT -> SUM_CEILING if any SUBSTITUTE_CEILING reading and every ceiling K agrees with the largest within the 5% standard, SUM if no ceiling reading, MIXED if ceilings disagree; all PARTIAL_INPUT with every rho within one ladder step (index spread <= 1) -> SUB(rho*) with rho* the most frequent rho (ties to the smaller rho); else MIXED.",
+  "role": "a diagnostic, not an answerer; zero parameters; used only by A2-sweep (reported apart), R-SWEEP and I-SWEEP. CAS-Ohm's I-V idea and region words only; CAS-Ohm itself stays a proposed, not validated instrument."
+ },
+ "arms": {
+  "A1": "RECIPE_ONLY: the core alone (laptop)",
+  "A2": "RECIPE_PLUS_SUB: the core; every outcome passing R0, R1 and R2 is offered SUB (unseeded ladder) through SUB_REPLACE's checks; admitted -> RECIPE_SUB. The headline arm; same data as the tiny model. 0 neural parameters.",
+  "A2_sweep": "as A2 but the shape sweep decides the offer and seeds rho: SUB(rho) -> SUB_SEEDED offered; SUM or SUM_CEILING -> no new fit (the core run's own candidate generator already proposes SUM nodes; DV-06); MIN_RECIPE, MIN_RECIPE+LEAK, MIXED, UNDETERMINED, no panel -> no offer. Scored only if I-SWEEP passes; reported apart; never the headline.",
+  "A3": "HEAD_ONLY x each type, every outcome answered by one type behind the gate (G-ABSENT + G-LIMIT): SUB_ONLY (the chosen-rho SUB fit, no recipe checks; no fit -> UNDETERMINED:NO_FIT), OLS_MIN, LOGLIN_HOM, LOGQUAD_HOM, LOGQUAD_FREE, BLEND_HEAD; plus KNN_HOM as a control. 'Best non-neural A3 arm' = the highest of the six non-control types (KNN_HOM excluded).",
+  "A4s": "HYBRID_LEDGER_ROUTED: R0-R2, then R3 (SUB), then the ladder (R4-R6, climb rule). The primary hybrid.",
+  "A4n": "A4s without R3.",
+  "A4m": "A4s with the MLP as a fifth rung above BLEND_HEAD (climb rule unchanged; R6 for the MLP: >= 56 head-attributable rows of 64). FRESH only; computed by the merge from the GPU job's per-row predictions; comparison only.",
+  "A5": "HYBRID_ORACLE_ROUTED, a ceiling, never a claim: per outcome, alt = SUB if SUB_REPLACE admits it on that outcome, else the ladder rung A4s would take with R1 and R2 open (R0, R4-R6 and the climb rule applied); no alt -> core. A5 takes whichever of core and alt has more held-out RIGHT (gated); a tie keeps the core.",
+  "A6": "HYBRID_ALWAYS_HEAD: every outcome to the ladder with R0-R5 ignored and R6 kept: the smallest rung passing R6, climbing when the next passes R6 and beats the current by ceil(6m/16) paired validation rows; none passes R6 -> core.",
+  "A7": "MLP (the tiny model). ORIGINAL: RB-W's recorded per-outcome counts (not run). FRESH: AWS GPU, scored gated (G-ABSENT on real inputs + G-LIMIT) and ungated by the merge.",
+  "A8": "LUT, DIV_TOTAL, SMALLEST_INPUT, gated, ungated beside.",
+  "F1": "F1 runs A1 and A4s only (A4s = A1 by construction: F1 is never routed); F1's head numbers are RB-W's, quoted (LUT 25, MLP 25)."
+ },
+ "scoring": {
+  "LSR": "held-out RIGHT / WRONG / UNDETERMINED per row; RIGHT = |yhat - y| <= max(1/50, y/20) in exact fractions (lsr_t1 run_t1.hit); points = 100 x RIGHT / 512 per family.",
+  "F1": "points = 100 x (median B-chain RIGHT + median B-alt RIGHT) / 32 over the set's 20 draws, median as rb_g1 merge reads it (rb2 common2.median).",
+  "parameters": "core: allocated (rb_g1 caps.allocated, per outcome x 16) and used (rb_w enginew.used_parameters); SUB n + 1; each head its count; MLP 223.",
+  "rows_per_parameter": "per arm and per head: training rows right at the 5% standard per parameter used; per routed head: head-attributable training rows per head parameter."
+ },
+ "marks": {
+  "family_lists": {
+   "main_ORIGINAL": [
+    "a",
+    "a_approx",
+    "c",
+    "scale_leak",
+    "S2v2",
+    "S3v2"
+   ],
+   "main_FRESH": [
+    "a_fresh",
+    "a_approx_fresh",
+    "scale_leak_fresh",
+    "S2v2_fresh",
+    "S3v2_fresh"
+   ],
+   "recipe_shaped_M3": "scale_leak, S2v2, S3v2 and their FRESH twins, and F1",
+   "shuffled_M8": "a_approx_shuffled, scale_leak_shuffled and their FRESH twins; F1_shuffled VACUOUS (reported)",
+   "reported_only": "b and a_offladder (R-SUBGEN, R-SWEEP; b also in I-SWEEP); they enter M3's at-mark clause, M4, M5 and M7 (every family), never M1, M2 or M9 (DV-13)"
+  },
+  "HQ": {
+   "kind": "headline",
+   "ORIGINAL": "on `a`: A2 uses 0 neural parameters AND A2 gated points >= (best non-neural A3 arm points - 2) AND A2 gated RIGHT >= 407 of 512, i.e. A2 points >= 100 x 417 / 512 - 2 = 79.4453125 (RB-W's recorded UNGATED MLP count on `a`: 417 of 512 held-out right, rb_w runs RB_W_MSI_W11 RESULTS_W.json; 81.45 as printed)",
+   "FRESH": "on a_fresh: A2 uses 0 neural parameters AND A2 gated points >= (best non-neural A3 arm points - 2) AND A2 gated points >= (A7 gated points on a_fresh - 2). If the GPU results folder holds a GPU_ARM_NOT_RUN.json record instead of verified results, the bar is 79.4453125 and the word says PROXY_BAR. If it holds neither, the merge writes no reading (GPU_RESULTS_PENDING).",
+   "plain": "within 2 gated points of the tiny model on `a`, on both world sets"
+  },
+  "M1": {
+   "kind": "hard",
+   "test": "per main family: A4s points >= max(A1, A2, best non-neural A3 arm) - 2; F1: A4s answers byte-identical to A1's."
+  },
+  "M2": {
+   "kind": "hard",
+   "test": "A4s's stay/leave choice equals A5's on >= 90% of the main families' outcomes; an outcome where core and alt tie on held-out RIGHT counts as agreement."
+  },
+  "M3": {
+   "kind": "hard",
+   "test": "0 outcomes of scale_leak, S2v2, S3v2 (and FRESH twins) and 0 F1 orders routed or SUB-replaced in A4s; and 0 outcomes in any LSR family of the set whose core is at its mark (R1 false) moved in A4s."
+  },
+  "M4": {
+   "kind": "hard",
+   "test": "every RECIPE answer comes from an outcome whose core admissions all carry a passing receipt, and every RECIPE_SUB answer from a passing SUB receipt; A4s's answer records on outcomes kept on the core are byte-identical to A1's (every LSR family of the set)."
+  },
+  "M5": {
+   "kind": "hard",
+   "test": "every head answer in A4s carries its HEAD:<type> label and a band whose band receipt holds: 100%."
+  },
+  "M6": {
+   "kind": "hard",
+   "test": "rows per parameter reported for every arm, and every A4s head-routed outcome has head-attributable rows per head parameter >= 1/4."
+  },
+  "M7": {
+   "kind": "hard",
+   "test": "invented facts 0: the recipe-book digest (every core tree's canonical form and exact values) is equal before and after the head fits in every unit; writer candidates from head values 0; no arm answers a G-ABSENT row; no head value is worded as exact (head answer records carry form APPROXIMATE)."
+  },
+  "M8": {
+   "kind": "hard",
+   "test": "0 outcomes routed or SUB-replaced in A4s on a_approx_shuffled and scale_leak_shuffled (and FRESH twins). F1_shuffled: VACUOUS, reported."
+  },
+  "M9": {
+   "kind": "hard",
+   "test": "on each main family where A4s routes >= 4 outcomes to heads: those heads' points on those outcomes (100 x RIGHT / (32 x k)) beat the best gated A8 baseline's points on the same outcomes by >= 5."
+  },
+  "M10": {
+   "kind": "licensing",
+   "test": "FRESH: HQ and M1-M9 recomputed on the FRESH set alone (the merge computes every mark per set)."
+  },
+  "I_SWEEP": {
+   "kind": "instrument for the sweep only",
+   "test": "on ORIGINAL clean panels the sweep names S2v2 -> MIN_RECIPE, scale_leak -> MIN_RECIPE+LEAK, F1's 8 base recipes -> MIN_RECIPE, b -> SUM_CEILING, a and a_approx -> SUB(1/2); on >= 15 of 16 outcomes per family (F1: 8 of 8). False -> SWEEP_CALIBRATION_FAILED; A2-sweep is then not scored; nothing else changes."
+  }
+ },
+ "instrument_rows": {
+  "whole_run": [
+   "parts_completed: every part's END.json status COMPLETED",
+   "tests_pass_every_part",
+   "no_deadline_hit: no part reports deadline_hit and no stored unit finished past its deadline",
+   "no_missing_unit: every frozen unit present; duplicates digest-equal",
+   "unit_digests_verify: every stored unit's result digest and per-row block digest recompute equal on load",
+   "datasets_sha256: every unit's dataset sha256 equals the frozen one for its family (a_offladder from amendment A1)",
+   "core_units_equal_rb_g5_rb_g6: every core unit key also present in RB-G5's or RB-G6's COMPLETED parts has an equal result digest",
+   "merge_rerun_equal: the merge re-runs itself in a separate process and the reading body's digest is equal",
+   "sweep_law_reproduces_labels: on every clean family the sweep's law function gives exactly the dataset's own labels on its training rows (c: on its clean held-out rows)"
+  ],
+  "per_set": [
+   "f1_draw_checks_ok and F1 draw digests equal the frozen ones"
+  ],
+  "FRESH_only": [
+   "gpu_files_match_hash_list: when GPU results are present, every returned file's sha256 equals the job's own OUTPUTS_SHA256.json, the job's recorded package sha256 equals the sealed package's, its DATA_IDENTITY stage passed, its tests passed, and MLP_PARITY held (torch predictions on the parity outcome within 1e-6 relative of RB-W's TinyMLP code run on the same instance)"
+  ],
+  "effect": "a whole-run row false makes both sets INSTRUMENT_ERROR; a per-set row false makes that set INSTRUMENT_ERROR. INSTRUMENT_ERROR replaces the set's status word AND its headline word."
+ },
+ "status_words": {
+  "order_per_set": [
+   "1. any instrument row false -> INSTRUMENT_ERROR",
+   "2. else M3 false -> ROUTED_RECIPE_SHAPED; else M8 false -> ROUTED_SHUFFLED; else M4, M5 or M7 false -> RECEIPT_OR_LABEL_BROKEN",
+   "3. else M1, M2, M6 and M9 true -> HYBRID_ROUTING_EARNED; M1, M6 and M9 true with M2 false -> ROUTING_DISAGREES_WITH_ORACLE; otherwise -> HYBRID_NO_BETTER (M6 grouped with M1 and M9; DV-14)"
+  ],
+  "headline_per_set": {
+   "ORIGINAL": "HQ -> SUB_CLOSED_GAP_VS_RBW_UNGATED, else SUB_DID_NOT_CLOSE_GAP",
+   "FRESH": "HQ against the GPU MLP -> SUB_CLOSED_GAP_NO_NEURAL; HQ against the proxy bar (GPU_ARM_NOT_RUN record) -> SUB_CLOSED_GAP_PROXY_BAR; else SUB_DID_NOT_CLOSE_GAP. SUB_NOT_TESTED only if the owner strikes A2 (not struck). If HQ fails on a set, the owner's decision D1 applies there: a neural head may be considered only under a separate owner word (Q2)."
+  },
+  "sweep": "SWEEP_CALIBRATED or SWEEP_CALIBRATION_FAILED (I-SWEEP); changes no other word.",
+  "claim": "The one-sentence claim (design README section 3) is licensed only if HYBRID_ROUTING_EARNED and a SUB_CLOSED_GAP_* word hold on BOTH ORIGINAL and FRESH; a PROXY_BAR word is reported as such in the claim. Even then: SYNTHETIC_ONLY, no HELM claim, not adoption of SUB into CAS (Q1: owner ruling plus IP counsel)."
+ },
+ "controls": {
+  "ladder_without_half": "SUB_NO_HALF on every LSR family, reported for `a` (and a_fresh) in R-SUBGEN: does SUB still reach `a` when 1/2 is not on its ladder?",
+  "off_ladder_family": "a_offladder (CES rho 0.37): SUB's A2 / SUB_ONLY points and admissions, R-SUBGEN.",
+  "different_law_family": "b (min(C, sum b_i x_i)): SUB's A2 / SUB_ONLY points and admissions, R-SUBGEN; and the sweep's SUM_CEILING calibration row.",
+  "mechanism_free": "A8 LUT, DIV_TOTAL, SMALLEST_INPUT, gated.",
+  "memorising": "KNN_HOM.",
+  "shuffled": "a_approx_shuffled, scale_leak_shuffled (+ FRESH twins), F1_shuffled."
+ },
+ "reported_rows": {
+  "R_GATE": "every arm's ungated count beside its gated count",
+  "R_LIMIT": "A4s and A3 with heads allowed to answer rows the core refused by a limit (G-ABSENT still binds)",
+  "R_HQ_LIMIT": "HQ recomputed with A7 under G-ABSENT only (no G-LIMIT), because RECIPE_SUB answers limit rows and a head may not (fairness note)",
+  "R_SUBGATE": "SUB with rho > 0 exempt from the gate (answers zero-input rows: x^rho = 0)",
+  "R_RES": "HEAD_RESIDUAL held-out points",
+  "R_CAP": "the router on the START capacity of a_approx and scale_leak: outcomes routed while a capacity trigger is live (code check, must be 0) and routed with no live trigger (reported)",
+  "R_RET": "a_approx at START (boundary 1) then ORACLE (boundary 2) with the return rules 1-5: every outcome routed at boundary 1 that is at its mark at boundary 2 returns (code check, reported)",
+  "R_EYE": "report-only Unity Eye: for each ORIGINAL `a` and a_approx outcome, A6's head, its band from that outcome's validation rows, and would-quarantine (>= 4 band breaks of 16, or any query outside the outcome's training share envelope) on two panels: clean (the a_fresh outcome of the same index: same law, new rows) and changed law (the a_approx_fresh outcome of the same index). The eye acts on nothing.",
+  "R_SUBGEN": "SUB_NO_HALF on `a`; SUB on a_offladder and on b",
+  "R_SWEEP": "A2-sweep beside A2; the sweep's per-outcome words on every family, ORIGINAL and FRESH; the noisy c panel; the per-input rho readings",
+  "R_MLP_ORIGINAL": "RB-W's recorded per-outcome MLP counts (rb_w runs RB_W_MSI_W02 and RB_W_MSI_W11 RESULTS_W.json) beside A2 and A4s, ungated as recorded",
+  "R_COMPACT": "rows per parameter for every arm and head; allocated and used parameters for the core",
+  "R_CCE": "the count of A4s head answers that would need the PROPOSED Estimate: sentence form (no wording claim)"
+ },
+ "disclosures": [
+  "The routing margins (at-mark line 12 of 16, head lead 6 of 16, reads-the-law 10 of 16 twice, theta 1/4, return band) were set by the designer AFTER reading RB-W's results (the per-outcome held-out counts in rb_w runs RB_W_MSI_W02..W11 RESULTS_W.json). theta = 1/4 was chosen in RB-G6 after seeing RB-G5's numbers and is carried over here, not re-chosen. So ORIGINAL cannot license; FRESH governs.",
+  "RB-W's MLP numbers on ORIGINAL (the frozen comparison, e.g. 417 of 512 = 81.4453125 points on `a`) were scored UNGATED (rows with a zero input were answered) and were run on the laptop CPU inside RB-W's owner-approved LOCAL_CPU_ONCE run. RB-OH1 does not repeat that run (GPU-first rule). Because they are ungated per-outcome counts, ORIGINAL's head-to-head bar is the stricter ungated one, and A4m cannot be formed on ORIGINAL.",
+  "SUB is the generator's own family for `a` and `a_approx` (CES rho 1/2) and 1/2 is on its ladder: a win shows the shape CAN EXPRESS those laws. Only R-SUBGEN (ladder without 1/2, a_offladder, b) speaks to generality.",
+  "a_fresh is the same law as `a` with new rows.",
+  "The gate caps every LSR family at 87.50 points before limit rows.",
+  "16 checking rows per outcome make the routing margins coarse; c's checking labels are noisy; the validation rows are looked at twice (the core's VERIFY, then routing). The held-out rows never inform any fit, band, routing or sweep.",
+  "ORIGINAL worlds were seen while designing; the builder read RB-W's recorded MLP totals (to fix the HQ bar) and RB-G5 / RB-G6 cached unit wall seconds (timing only) before this freeze; no RB-OH1 number exists yet.",
+  "Cross-OS drift: SUB and the log heads use software decimal plus exact fractions (same digits on every OS); BLEND_HEAD orders corners with float logs (same OS only); the MLP is float64 on one GPU. The AWS job loads the laptop-built rows by sha256 and never regenerates data (spec section 7.37 fix).",
+  "The MLP is one network per outcome: 223 x 16 = 3,568 parameters per family.",
+  "Homogeneity is a prior every family here satisfies except b (its cap); R-SUBGEN shows the cost.",
+  "RECIPE_SUB is a PROPOSED label; the shape extends CAS v7.6 and is new matter beyond provisional 64/037,173 (owner ruling plus IP counsel before any adoption or public disclosure; Q21: private records only).",
+  "The Unity Eye is report-only here (OWNER_RULING_UNITY_EYE_ACTING_20261015.md: acting approved only in U1).",
+  "CAS-Ohm is a proposed, not validated instrument; the sweep reuses its I-V idea and region words, nothing it has measured.",
+  "Fairness of the FRESH headline: under the Q6 default the MLP (a head) may not answer rows the core refused by a learned limit, while RECIPE_SUB (a recipe) may; R-HQ-LIMIT reports HQ with the MLP allowed those rows."
+ ],
+ "deviations_from_design_and_resolutions": [
+  {
+   "id": "DV-01",
+   "what": "Q18's default (RB-OH1 laptop parts start after RB-G6's and RB-P1's drivers exit) is replaced by the coordinator's operational instruction: parts interleave with other drivers' parts, and a part never starts while another driver's worker is mid-part (rb_p1 run_all_parts.ps1 convention, plus a 15 s settle and re-check).",
+   "why": "The coordinator's brief for this build. No RB-OH1 part reads RB-G6; only the merge does, after RB-G6's MERGED.json exists."
+  },
+  {
+   "id": "DV-02",
+   "what": "A4s does not use the shape sweep (routing.sweep_in_A4s).",
+   "why": "Internal conflict in the design; the fairness rule of TEST_PLAN section 4 and HEAD_OPTIONS section 5.7 (arms that use designed rows are reported apart) governs, because the test plan governs."
+  },
+  {
+   "id": "DV-03",
+   "what": "The GPU package ships the FRESH datasets (and the one ORIGINAL parity outcome) as hash-checked data, not the core's per-row predictions.",
+   "why": "The GPU job only trains and predicts; gating, scoring and routing happen in the laptop merge, which already holds the core's per-row records. This also lets the package be sealed before any laptop part runs."
+  },
+  {
+   "id": "DV-04",
+   "what": "The MLP parity check runs RB-W's TinyMLP code (copied verbatim, standard library) on the AWS instance's CPU for one ORIGINAL outcome (a_00) and compares the GPU model's per-row predictions with it (1e-6 relative); the reference's counts against RB-W's recorded a_00 counts are reported.",
+   "why": "RB-W kept only counts, and the laptop may not train a network. A reference on the cloud instance is not a laptop neural run and not a claim-bearing run; the GPU model is checked before the CPU reference runs, and nothing falls back to CPU."
+  },
+  {
+   "id": "DV-05",
+   "what": "The launch kit is derived from launch_pilot.py and monitor_pilot.py recovered verbatim from the CJT-DEV-P1 session transcript (C:\\Users\\wakil\\.claude\\projects\\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\\ab083a09-06af-4774-bffd-12c4b554a419.jsonl: one Write plus two Edits of launch_pilot.py, one Write of monitor_pilot.py); the scratchpad files no longer exist on disk. The 'WORKING AWS GPU LANE' paragraph is in memory\\project_cjt_dev_p1_pilot_state.md, not in project_casalescence_op11_claude_gpu_launched_20261004.md as the brief said.",
+   "why": "Recorded so the provenance is checkable."
+  },
+  {
+   "id": "DV-06",
+   "what": "A2-sweep builds no separate SUM fitter for SUM / SUM_CEILING words.",
+   "why": "The core run's own candidate generator already proposes SUM nodes (lsr_t6 gen_candidates6); re-offering them would repeat the engine."
+  },
+  {
+   "id": "DV-07",
+   "what": "The core is computed through rb_g6's unit code (rb_g5 engine at stage 0 with the shadow pass) rather than by calling rb_w enginew.run_omega_w directly.",
+   "why": "Same tree (RB-G1 tests), plus the capacity records diagnose_cell needs and digest-comparable unit keys for the RB-G6 instrument row."
+  },
+  {
+   "id": "DV-08",
+   "what": "The sweep adds two explicit forms, FLAT and INHIBITOR, to HEAD_OPTIONS section 5.4's fit list, and reads THRESHOLD as a rising line with a negative intercept (cut-off), with or without a visible zero.",
+   "why": "Section 5.3's own table names 'flat everywhere' and 'falls as the ingredient grows'; scale_leak's side input is an inhibitor and must be readable for the calibration row MIN_RECIPE+LEAK."
+  },
+  {
+   "id": "DV-09",
+   "what": "Shuffled families get no sweep panel.",
+   "why": "Their labels are permuted, so there is no clean law to ask; A2-sweep makes no offer there."
+  },
+  {
+   "id": "DV-10",
+   "what": "SUB's witness positivity is read literally: a witnessed c_i <= 0 refuses that rho; a least-squares solve is a candidate only if every c_i > 0.",
+   "why": "HEAD_OPTIONS section 1.3 step 3."
+  },
+  {
+   "id": "DV-11",
+   "what": "OLS_MIN's fallback cell set is the real input cells (padding dropped), not all 4 slots.",
+   "why": "ARCHITECTURE section 2 drops padding copies before any head fit (only the MLP keeps all 4 slots); on 4-input families OLS_MIN equals RB-W's HYBRID_OLS exactly (tested)."
+  },
+  {
+   "id": "DV-12",
+   "what": "F1's sweep base point is the component-wise median of that recipe's taught single rows in draw 40 (ORIGINAL) / 60 (FRESH).",
+   "why": "F1 has no per-outcome training table like the LSR families."
+  },
+  {
+   "id": "DV-13",
+   "what": "M1, M2 and M9 read the main families; b and a_offladder are reported controls (they still enter M3's at-mark clause, M4, M5, M7).",
+   "why": "TEST_PLAN section 2 lists them as reported ('scores reported', 'reported; owner may strike')."
+  },
+  {
+   "id": "DV-14",
+   "what": "Status-word step 3 groups M6 with M1 and M9.",
+   "why": "The design's step 3 names M6 among the marks for HYBRID_ROUTING_EARNED but gives no word for M6 alone; grouping avoids inventing a word."
+  },
+  {
+   "id": "DV-15",
+   "what": "The merge needs RB-G6's MERGED.json (V8 overlay) and the GPU results or a GPU_ARM_NOT_RUN record; without them it writes no reading (RB_G6_MERGED_MISSING / GPU_RESULTS_PENDING).",
+   "why": "No silent fallback; the reading is fixed by files, not by an operator choice."
+  },
+  {
+   "id": "DV-16",
+   "what": "R-EYE watches A6's head on each ORIGINAL `a` and a_approx outcome.",
+   "why": "If SUB takes an outcome there is no head band to watch; A6 always names a head when any passes R6."
+  },
+  {
+   "id": "DV-17",
+   "what": "'The merge re-run equals the stored reading' = the merge launches itself again in a separate process (-I) and compares the reading body's digest; the row is part of the reading.",
+   "why": "Makes the row executable inside the one reading."
+  }
+ ],
+ "run_plan": {
+  "units_rule": "Frozen unit list, computed in this order. LSR unit = (world set, family, capacity tag ORACLE or START, half 0 or 1); each computes, for its 8 outcomes: the core (unit result + per-row records + levels), SUB / SUB_NO_HALF / SUB_SEEDED (when its sweep word is SUB(rho)), the seven heads, the residual head, the three baselines, the sweep panel and readings (clean families), R-EYE predictions (ORIGINAL a and a_approx), and the recipe-book digest before and after the head fits. F1 unit = (world set, true or shuffled, 10 draws). F1 sweep unit = (world set). Order: ORIGINAL a, a_approx, c, scale_leak, S2v2, S3v2, b, a_offladder, a_approx_shuffled, scale_leak_shuffled, a_approx@START, scale_leak@START; FRESH a_fresh, a_approx_fresh, scale_leak_fresh, S2v2_fresh, S3v2_fresh, a_approx_shuffled_fresh, scale_leak_shuffled_fresh; then F1 units (ORIGINAL true 40-49, 50-59, shuffled 40-49, 50-59; FRESH true 60-69, 70-79, shuffled 60-69, 70-79); then the two F1 sweep units. 38 LSR units + 8 F1 units + 2 F1 sweep units = 48 units.",
+  "parts": "adaptive single-use parts RB_OH1_MSI_R01, R02, ...: permit -> source check -> sockets blocked -> tests -> load every earlier COMPLETED part's units -> compute missing units in the frozen order; no unit starts after 150 s; a unit not finished by its deadline is discarded and the part ends -> UNITS.json, SUMMARY.json (operator_status DONE when no unit is missing).",
+  "guards": {
+   "hard_wall_seconds": 300,
+   "guard_seconds": 280,
+   "start_guard_seconds": 150,
+   "memory_cap_mib": 300,
+   "free_ram_floor_kb": 153600,
+   "sockets": "blocked",
+   "spend": 0
+  },
+  "driver": "run_all_parts.ps1, started detached through WMI (never from a Claude shell): before every part it waits until no other laptop driver's worker (a python.exe whose command line contains worker.py and not rb_oh1) is mid-part, polling every 60 s, and starts the part as soon as none is seen (rb_p1's rule, copied exactly; amendment A6); total wait cap 6 h; then the supervisor's 150 MB free-RAM gate. Stops at DONE, at a part that does not complete, after two consecutive parts with 0 new units, or at 45 parts. Never kills another run.",
+  "dry_count": "Part 0 (before the manifest): count the units; a crash-only timing smoke (wall seconds only, no score read) of the costliest LSR unit (ORIGINAL a, half 0) and one F1 unit; a projection of parts and CPU minutes. If it projects more than 45 parts or more than 90 minutes of laptop CPU: STOP and report (those parts would go to AWS CPU under a new owner line; never a silent local fallback).",
+  "if_a_part_fails": "Do not patch and silently re-run: record it and report.",
+  "merge": "merge_oh1.py is written and hashed into the manifest before any scored number exists. It runs after the laptop parts, after RB-G6's MERGED.json exists, and after the GPU results (or a GPU_ARM_NOT_RUN record) are in rb_oh1\\gpu_results\\."
+ },
+ "gpu_arm": {
+  "what": "A7-FRESH and the per-row MLP predictions A4m needs: one MLP per outcome on a_fresh, a_approx_fresh, scale_leak_fresh, S2v2_fresh, S3v2_fresh (80 fits), plus the ORIGINAL parity outcome a_00 (torch and RB-W's TinyMLP code).",
+  "runtime": "PyTorch pinned (torch 2.5.1, CUDA 12.1 wheels, the version run-proven on this lane by CJT-DEV-P1.3), float64, deterministic flags (torch.use_deterministic_algorithms(True), CUBLAS_WORKSPACE_CONFIG=:4096:8, cudnn deterministic, no benchmark), fixed seeds; GPU_REQUIRED: exits (code 20, word GPU_REQUIRED) when no CUDA device is present; no CPU fallback; no pretrained weights; the network is built from scratch with RB-W's initial-value rule.",
+  "data": "The laptop builds each dataset once and ships its rows as JSON (floats as exact hex) with frozen file sha256s; the job's DATA_IDENTITY stage checks every file's sha256 and row counts before any test; the job never regenerates data.",
+  "stages": [
+   "GPU_REQUIRED",
+   "PACKAGE_IDENTITY (every member's sha256 against the package's own manifest)",
+   "DATA_IDENTITY",
+   "TESTS (structure: 223 parameters, shapes; initial values equal the TinyMLP rule; Adam step parity on a toy; zero-row fixtures)",
+   "SMOKE (one outcome, 300 epochs, finite outputs)",
+   "PARITY (a_00: torch vs RB-W TinyMLP code on the same rows, 1e-6 relative)",
+   "RUN (80 fits)",
+   "OUTPUTS (per-row predictions as float hex for train, validation and held-out rows; weights as float hex; training receipts: loss at epochs 1, 100, 200, 300, wall seconds, device, versions)",
+   "OUTPUTS_SHA256.json"
+  ],
+  "instance": "one g4dn.xlarge (1 NVIDIA T4, 4 vCPU), us-west-2, an AZ that offers it (not us-west-2d).",
+  "launch_kit": "launch and monitor scripts derived by exact, recorded edits from the recovered launch_pilot.py and monitor_pilot.py: self-terminating user-data (presigned S3 GET of the package and PUT of the results; EXIT-trap shutdown; in-instance timer), InstanceInitiatedShutdownBehavior=terminate, client-side watchdog that force-terminates.",
+  "preflight_read_only": "G and VT On-Demand vCPU quota in us-west-2 (expected 8), the AMI still exists, a default-VPC subnet in an AZ offering g4dn.xlarge, the bucket is reachable; no run-instances, no S3 write, no spend.",
+  "cost": "expected 0.13-0.22 USD at about 0.526 USD per hour list price plus root-disk and public-IPv4 pennies; hold 2.00 USD; one attempt.",
+  "who_launches": "The coordinator (ledger hold, owner sign line, launch, monitor, download, cleanup twice, backup with three sha256 confirmations, ledger closeout). Never the builder.",
+  "never_touch": "the owner's STOPPED standby g6e.xlarge i-0c3028734c8885542; the app servers nc-customer-app and nc-canary-app.",
+  "sealed_package": {
+   "zip": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\RB_OH1_MLP_FRESH_20261015_SOURCE.zip",
+   "zip_sha256": "d3876582f2c73e7fcae27776dbb21233a460c1d1486b30ee1e73c2c77fca03af",
+   "package_freeze_sha256": "39d2bfd97a44e1a9856106baca0dce8de556106aeee6805fb71732f06f0cba46",
+   "superseded_never_released": "3a15404286b315caa90c1138f91a81754b9668d92c8d9900d07278e72a943c45",
+   "sign_line_form": "APPROVE RB-OH1-MLP-FRESH on AWS GPU (g4dn.xlarge, us-west-2), sealed package d3876582, one attempt, cap $2.00."
+  }
+ },
+ "tests": {
+  "list": [
+   "test_sub_recovers_known_ces",
+   "test_sub_refuses_rotated_and_min_law",
+   "test_sub_decimal_digits_independent",
+   "test_log_heads_exact_recovery",
+   "test_head_gate_absent_and_limit",
+   "test_routing_keys_and_climb_fixture",
+   "test_diagnose_cell_equals_one_cell_stage",
+   "test_core_unit_equals_rb_g5_digest",
+   "test_f1_unit_equals_rb_g5_digest",
+   "test_ols_min_equals_rb_w_hybrid_ols",
+   "test_sweep_reads_known_shapes",
+   "test_sweep_law_reproduces_labels",
+   "test_knn_and_baselines_fixture",
+   "test_band_receipt",
+   "test_mlp_structure_no_training",
+   "test_merge_marks_fixture"
+  ],
+  "rule": "All must pass in every part before any unit (worker exit 3 otherwise). Fixtures, RB-G5 stored digests and dataset hashes only; no RB-OH1 scored output is read by any test. A test failing in the dev phase is recorded as an amendment, never weakened silently."
+ },
+ "predictions_written_before_code": {
+  "designer": "TEST_PLAN_RB_OH1.md section 10, copied by reference and frozen as written (sha256 above).",
+  "builder": {
+   "SUB_admitted_on_a_ORIGINAL": "on >= 14 of 16 `a` outcomes about 0.75; on 16 of 16 about 0.5 (some cells may read AMBIGUOUS or a live T-word without a V8 refusal and stay)",
+   "HQ_ORIGINAL": "needs SUB on >= 15 of 16 `a` outcomes (28 vs about 2.5 held-out right each): about 0.55",
+   "HQ_FRESH": "about 0.6 (the gated GPU MLP is expected near 70-79 points on a_fresh; SUB, when admitted, near 87.5)",
+   "M1_every_main_family_ORIGINAL": "about 0.35 (risk: SUB_ONLY reads a_approx's exact law on all 16 outcomes while A4s leaves at-mark outcomes on the 12-corner recipe; and c depends on R5 under noisy validation labels)",
+   "M2": "about 0.6 per set",
+   "M3": "about 0.93",
+   "M8": "about 0.85 per set",
+   "I_SWEEP": "about 0.7",
+   "HYBRID_ROUTING_EARNED": "ORIGINAL about 0.25; both sets about 0.15",
+   "claim_licensed": "about 0.12",
+   "laptop": "38 LSR + 10 F1 units in 8-16 parts, 25-60 min of CPU, peak working set under 160 MB, about 0.7",
+   "GPU_charge": "<= 0.30 USD about 0.85"
+  }
+ },
+ "amendments": [
+  {
+   "id": "A1",
+   "when": "2026-10-15 17:23 PDT (00:23 UTC), after FROZEN.precode.json (sha256 8dbf5da8...) and BEFORE any RB-OH1 code",
+   "what": "a_offladder's dataset sha256 written: d4f2653692aca407b47c4574b966ee14b7d928ccc87836c5b24f4ec0ab54bdfa (1024 / 256 / 512 rows; 64 held-out rows with a zero input). Made by a scratch script (scratchpad scratch_offladder_hash.py, not RB-OH1 code) that calls only the fair_data_experiment_v1 functions named in world_sets.ORIGINAL.lsr_families.a_offladder and printed only hashes, sizes and the gate flag. Wrapper gate: at rho 0.5 and data seed 2026101412 the wrapper gives e5daf11f3878ef37c07d175297cf27dc2261abb20dd2f40efbbc5b9454025371 = v1 expected: PASS, so a_offladder stays in ORIGINAL.",
+   "sets": [
+    "world_sets.ORIGINAL.lsr_families.a_offladder.dataset_sha256"
+   ]
+  },
+  {
+   "id": "A2",
+   "when": "2026-10-15 17:23-17:53 PDT (00:23-00:53 UTC), after A1, BEFORE the manifest and before any part",
+   "what": [
+    "Dev runs, disclosed; no RB-OH1 scored number was read. (1) Crash-only unit smokes printing wall seconds, structure and digest equality with RB-G5's / RB-G6's cached core units only: ORIGINAL S2v2 h0 6.65 s (core digest equal to RB-G5's and RB-G6's), ORIGINAL a h0 48.19 s (core 18.19 s; core digest equal to RB-G5's and RB-G6's). Finding: one unit's JSON reaches 2.26 MB, so each unit is written to its own file and a part reads only the earlier parts' key lists and digests (run_oh1.done_units), keeping a part far below 300 MiB; changed before any part ran.",
+    "(2) Tests: all 16 passed on their first full run (about 4.2 s, isolated interpreter). Before that run, the decimal regression literal in test_sub_decimal_digits_independent was computed by the code under test (it pins the digits for a later cross-OS re-check); the test's correctness check is the independent 90-digit computation beside it.",
+    "(3) GPU package: rb_w run_w.py has CRLF line endings, so the verbatim TinyMLP copy is normalized to LF (content unchanged) and its class-text fingerprint verifies under Python's universal newlines; mlp_job.py's package and data identity checks were made torch-free functions; both before sealing. Laptop checks with ZERO training: the unzipped package's identity functions pass (12 members, 6 data files); running mlp_job.py on the laptop interpreter fails closed at GPU_REQUIRED (exit 20, RUN_SUMMARY FAILED_GPU_REQUIRED; this laptop's user site holds a CPU-only torch, which imported and reported no CUDA device; nothing trained).",
+    "(4) Merge crash tests on FIXTURE data only (a synthetic 2-input law with its own seed posing as S2v2, a and S2v2_fresh; fixture F1 records; fixture GPU outputs; a fixture RB-G6 record): merge exit 0 twice and the separate-process re-run digest equal both times. The first fixture (a min law) exercised the stay branch; the second (a CES law) exercised SUB admission, the head ladder, A4n, A6, A5 and A4m with the MLP rung. Their outputs (fixture numbers only) were inspected to check the merge; no RB-OH1 dataset was involved. No merge code changed after them.",
+    "(5) RB-G6's driver finished (DONE: operator complete, part G21, 00:23 UTC) while RB-OH1 was being built; RB-G6's MERGED.json is read only by merge_oh1.py, later (V8 overlay)."
+   ],
+   "sets": []
+  },
+  {
+   "id": "A3",
+   "when": "2026-10-15 17:53 PDT (00:53 UTC), Part 0 (the dry count), BEFORE the manifest",
+   "what": "Dry count: 48 frozen units (38 LSR, 8 F1, 2 F1-sweep). Crash-only timing smoke, wall seconds only: a h0 48.19 s, S2v2 h0 6.65 s, c h0 41.99 s, b h0 34.58 s, scale_leak START h0 25.28 s, F1 d40-49 true 18.82 s, F1 sweep ORIGINAL 0.01 s. Projection from these and RB-G5's core unit seconds: about 1,080 s (18 min) of unit work plus about 8 s per part for tests and imports; about 7-9 parts of at most 300 s. Far below the stop lines (45 parts, 90 min of laptop CPU), so the run goes ahead locally.",
+   "sets": []
+  },
+  {
+   "id": "A4",
+   "when": "2026-10-15 17:45 PDT (00:45 UTC) sealed; recorded here before the manifest",
+   "what": "The GPU arm package is sealed: C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\RB_OH1_MLP_FRESH_20261015_SOURCE.zip, sha256 3a15404286b315caa90c1138f91a81754b9668d92c8d9900d07278e72a943c45 (416,440 bytes; 13 members; re-seal byte-identical), PACKAGE_FREEZE.json sha256 635cbe31e68bfc5a6d9e833bf6befcbd92dc5ec3240bdf4b325f185d78eeb717. The zip and its source are in the laptop manifest; the merge accepts GPU results only if they record this sha256. The launch kit (launch / monitor / preflight scripts and the launch brief) lives beside it and is NOT in the laptop manifest, so the coordinator may adjust it without touching the seal.",
+   "sets": [
+    "gpu_arm.sealed_package"
+   ]
+  },
+  {
+   "id": "A5",
+   "when": "2026-10-15 18:00-18:05 PDT (01:00-01:05 UTC), after the first manifest 270497dc and BEFORE any part ran",
+   "what": [
+    "The first driver (started 00:55:00 UTC through WMI) was still waiting for a free laptop slot behind another driver's worker; the builder stopped it before any part started (no part folder exists) and wrote the stop into runs\\DRIVER_LOG.txt. The first manifest 270497dc5b4612968fda4bb50ac3471e243517b288956d7c427ca84bfe7fb7d1 was never used by any part.",
+    "Reason: a review of the sealed GPU job for its single cloud attempt found that an unexpected exception would end the job without RUN_SUMMARY.json, and the merge would then read the GPU state as GPU_RESULTS_PENDING forever instead of BROKEN.",
+    "Fix 1 (GPU job, mlp_job.py): an unexpected exception now still writes RUN_SUMMARY.json with status CRASHED and the traceback, plus OUTPUTS_SHA256.json, and exits 27; stage failures keep their own exit codes. Checked on the laptop with ZERO training: a forced error gives exit 27 and a CRASHED summary; the job still fails closed at GPU_REQUIRED (exit 20); the package and data identity functions pass on the unzipped zip.",
+    "Fix 2 (merge_oh1.py load_gpu): a returned out folder that holds no RUN_SUMMARY.json reads BROKEN (so FRESH reads INSTRUMENT_ERROR), never GPU_RESULTS_PENDING. Checked on FIXTURE data: that case reads BROKEN; the earlier CES fixture reading re-runs with an equal digest. Nothing else in the merge changed.",
+    "The GPU package was re-sealed: zip sha256 d3876582f2c73e7fcae27776dbb21233a460c1d1486b30ee1e73c2c77fca03af (416,768 bytes, 13 members, expanded 1,319,310 bytes, re-seal byte-identical), PACKAGE_FREEZE.json sha256 39d2bfd97a44e1a9856106baca0dce8de556106aeee6805fb71732f06f0cba46. The package of A4 (3a15404286b315caa90c1138f91a81754b9668d92c8d9900d07278e72a943c45) is SUPERSEDED: never released, never launched, and no sign line ever named it. The launch kit was re-derived to name the new hash. A new manifest and a new driver follow.",
+    "No mark, threshold, arm, family, world, rule, prediction or test changed."
+   ],
+   "sets": [
+    "gpu_arm.sealed_package"
+   ]
+  },
+  {
+   "id": "A6",
+   "when": "2026-10-15 18:32-18:40 PDT (01:32-01:40 UTC), after part R01 (COMPLETED under manifest ceed2aea; none of its results read) and BEFORE part R02",
+   "what": [
+    "Scheduling only. The driver's 15-second settle (the builder's addition to the rb_p1 convention, DV-01) made the RB-OH1 driver lose every race to drivers that start as soon as the laptop looks free: after R01 ended at 01:19:30 UTC it got no slot for 13 minutes while LM-T6 ran P09-P11, RB-P1 ran P06-P07 and U1b started P03. The coordinator's instruction was to copy rb_p1's waiting convention, so the per-part loop now copies rb_p1/run_all_parts.ps1 exactly (poll every 60 s; start as soon as no other driver's worker is seen; total wait cap 6 h). The driver differs from rb_p1's only in the part prefix (R), the summary path, the absent wait for RB-G6's driver, and its comments.",
+    "Observed and recorded for the coordinator: the shared convention races, because a supervisor spends several seconds on its manifest check before its worker process appears. Starts within seconds of each other: LM-T6 P09 and RB-OH1 R01 (01:16:18 and 01:16:22 UTC), RB-P1 P06 and LM-T6 P10 (01:20:49 and 01:20:50), RB-P1 P07 and U1b P03 (01:30:49 and 01:30:51). R01 itself launched with 223,316 KB free at its supervisor's gate and peaked at 40,501,248 bytes.",
+    "The driver was stopped while waiting before R02 (no R02 folder; no worker running) and the stop is in runs\\DRIVER_LOG.txt. The manifest R01 ran under is kept as runs\\SOURCE_MANIFEST_ceed2aea_used_by_R01.json. A new manifest follows; the merge's instrument rows do not require one manifest across parts, and every unit code file is byte-identical in both manifests (checked file by file after the new static check). R01's units stay valid. No mark, threshold, arm, family, world, rule, prediction or test changed."
+   ],
+   "sets": [
+    "run_plan.driver"
+   ]
+  }
+ ]
+}

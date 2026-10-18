@@ -66,16 +66,31 @@ def test_d_pow_40_digit_precision_no_float():
     assert val_neg == Decimal("0.5"), f"Expected 0.5, got {val_neg}"
 
 
-@case("test_rho_zero_cobb_douglas_continuous_limit")
-def test_rho_zero_cobb_douglas_continuous_limit():
-    weights = {ing: Decimal("1.0") for ing in b22.INGREDIENTS_22}
-    brain = b22.Recipe22x40Brain(weights=weights, rho="0", thresholds={})
-    inputs = {ing: Decimal("10.0") for ing in b22.INGREDIENTS_22}
-    res = brain.evaluate(inputs)
-    assert res["status"] == "EVALUATED"
-    # When all x_i = 10, geometric mean prod(10^w_i) = 10^1 = 10
-    out_val = Decimal(res["output_value"])
-    assert abs(out_val - Decimal("10.0")) < Decimal("1e-35"), f"Expected 10.0, got {out_val}"
+@case("test_rho_zero_cobb_douglas_continuity_and_limit")
+def test_rho_zero_cobb_douglas_continuity_and_limit():
+    # Part A: Codex Counterexample check (22 weights of 1, inputs all 10)
+    # Must yield 10 at both rho = 0.5 and rho = 0 (no scale divergence)
+    weights_codex = {ing: Decimal("1.0") for ing in b22.INGREDIENTS_22}
+    inputs_ten = {ing: Decimal("10.0") for ing in b22.INGREDIENTS_22}
+    brain_05 = b22.Recipe22x40Brain(weights=weights_codex, rho="0.5")
+    brain_00 = b22.Recipe22x40Brain(weights=weights_codex, rho="0")
+    y_05 = Decimal(brain_05.evaluate(inputs_ten)["output_value"])
+    y_00 = Decimal(brain_00.evaluate(inputs_ten)["output_value"])
+    assert abs(y_05 - Decimal("10.0")) < Decimal("1e-35"), f"Codex test failed at rho=0.5: got {y_05}"
+    assert abs(y_00 - Decimal("10.0")) < Decimal("1e-35"), f"Codex test failed at rho=0: got {y_00}"
+
+    # Part B: Epsilon-delta convergence check on arbitrary inputs
+    weights_arb = {ing: Decimal(f"1.{k+1:02d}") for k, ing in enumerate(b22.INGREDIENTS_22)}
+    inputs_arb = {ing: Decimal(f"5.{k+1:02d}") for k, ing in enumerate(b22.INGREDIENTS_22)}
+    brain_limit_target = b22.Recipe22x40Brain(weights=weights_arb, rho="0")
+    y_target = Decimal(brain_limit_target.evaluate(inputs_arb)["output_value"])
+
+    for test_rho in ["0.01", "0.001", "0.0001", "-0.0001", "-0.001", "-0.01"]:
+        b_test = b22.Recipe22x40Brain(weights=weights_arb, rho=test_rho)
+        y_test = Decimal(b_test.evaluate(inputs_arb)["output_value"])
+        err = abs(y_test - y_target)
+        max_allowed_err = abs(Decimal(test_rho)) * Decimal("15.0")  # Linear Taylor convergence
+        assert err < max_allowed_err, f"Continuity violation at rho={test_rho}: err={err} exceeds {max_allowed_err}"
 
 
 @case("test_zero_weight_input_omission_no_keyerror")
@@ -92,7 +107,8 @@ def test_zero_weight_input_omission_no_keyerror():
 
 @case("test_gauss_jordan_solver_stricter_than_1e_35")
 def test_gauss_jordan_solver_stricter_than_1e_35():
-    weights = {ing: Decimal(f"1.{i+1:02d}") for i, ing in enumerate(b22.INGREDIENTS_22)}
+    tot_w = sum(Decimal(f"1.{i+1:02d}") for i in range(22))
+    weights = {ing: Decimal(f"1.{i+1:02d}") / tot_w for i, ing in enumerate(b22.INGREDIENTS_22)}
     thresh = {ing: Decimal(f"0.{i*2:02d}") for i, ing in enumerate(b22.INGREDIENTS_22[:17])}
     gt_brain = b22.Recipe22x40Brain(weights=weights, rho="0.5", thresholds=thresh)
 
@@ -105,7 +121,7 @@ def test_gauss_jordan_solver_stricter_than_1e_35():
 
     solved = b22.Recipe22x40Brain.solve_witness_weights(synthetic_witnesses, fixed_rho="0.5", thresholds=thresh)
     max_err = max(abs(solved.weights[ing] - gt_brain.weights[ing]) for ing in b22.INGREDIENTS_22)
-    assert max_err < Decimal("1e-30"), f"Gauss-Jordan solver error {max_err} exceeds 1e-30 threshold"
+    assert max_err < Decimal("1e-33"), f"Gauss-Jordan solver error {max_err} exceeds 1e-33 threshold"
 
 
 # =============================================================================
@@ -211,7 +227,7 @@ def run_all_tests():
     print("=" * 72)
 
     test_d_pow_40_digit_precision_no_float()
-    test_rho_zero_cobb_douglas_continuous_limit()
+    test_rho_zero_cobb_douglas_continuity_and_limit()
     test_zero_weight_input_omission_no_keyerror()
     test_gauss_jordan_solver_stricter_than_1e_35()
     test_tks28_rpm_gate_halts_on_absent_foundation()

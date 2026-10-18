@@ -1,0 +1,6 @@
+{
+  "source_manifest_sha256": "c40a2bb8bb8d4e8544b489eb47fb2c5c72a71b5d9a9ea75f3d3426ed71b7107c",
+  "files": 354,
+  "missing": [],
+  "sign_line": "APPROVE rb_oh1, source c40a2bb8, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend."
+}

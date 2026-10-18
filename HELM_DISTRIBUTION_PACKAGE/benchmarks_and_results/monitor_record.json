@@ -1,0 +1,9 @@
+{
+  "final_state": "terminated",
+  "results_downloaded": true,
+  "forced_terminate": false,
+  "elapsed_min": 11.4,
+  "est_instance_cost_usd": 0.1,
+  "results_local": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\launch\\results.tar.gz",
+  "results_sha256": "3e640ed0433fb041c9cba7101f013858aa276f9c1936f6faf6473e69ef28e0fa"
+}

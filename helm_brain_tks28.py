@@ -140,29 +140,30 @@ class TKS28RecipeBrain:
                 bottleneck = f
 
         inner_sum = Decimal(0)
-        if self.rho == 0:
-            # Cobb-Douglas limit
-            weighted_sum_c = sum(self.weights.values())
-            if weighted_sum_c == 0:
-                output_y = Decimal(0)
-            else:
-                weighted_ln = Decimal(0)
-                zero_input = False
-                for f in self.foundations:
-                    c_i = self.weights[f]
-                    if c_i > 0:
-                        x_i = net_inputs[f]
-                        if x_i <= 0:
-                            zero_input = True
-                            break
-                        weighted_ln += c_i * x_i.ln()
-                output_y = Decimal(0) if zero_input else (weighted_ln / weighted_sum_c).exp()
+        weighted_sum_c = sum(self.weights.values())
+        if weighted_sum_c == 0:
+            output_y = Decimal(0)
+            inner_sum = Decimal(0)
+        elif self.rho == 0:
+            # Cobb-Douglas limit (continuous weighted power mean as rho -> 0)
+            weighted_ln = Decimal(0)
+            zero_input = False
+            for f in self.foundations:
+                c_i = self.weights[f]
+                if c_i > 0:
+                    x_i = net_inputs[f]
+                    if x_i <= 0:
+                        zero_input = True
+                        break
+                    weighted_ln += (c_i / weighted_sum_c) * x_i.ln()
+            output_y = Decimal(0) if zero_input else weighted_ln.exp()
             inner_sum = output_y
         else:
             for f in self.foundations:
                 c_i = self.weights[f]
                 x_i = net_inputs[f]
-                term = c_i * d_pow(x_i, self.rho)
+                w_i = c_i / weighted_sum_c
+                term = w_i * d_pow(x_i, self.rho)
                 inner_sum += term
 
             inv_rho = Decimal(1) / self.rho

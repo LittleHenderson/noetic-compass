@@ -1,0 +1,258 @@
+{
+  "version": "lsr-t1",
+  "created_utc": "2026-10-14T22:12:25.290656+00:00",
+  "files": [
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\__init__.py",
+      "sha256": "7ebf67f788a8ce18a991d866e217e669bb3585abbb8166432d621c18ec45e6aa",
+      "bytes": 104,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\engine.py",
+      "sha256": "d8589ef494e29add7fefd31be2523fc5f54e9907594d69ea27ddeba41225b751",
+      "bytes": 28210,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\families.py",
+      "sha256": "42e5d21022f1e2cc8cc110af1014f002c5e57dafe7239f2de04760100a168693",
+      "bytes": 8525,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\run_t1.py",
+      "sha256": "5a4b89bea6d8aaccbe7602dc2dd64af95b5303f5187a42eb7bc15fb32e096def",
+      "bytes": 16364,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\worker.py",
+      "sha256": "0d7da03ba7bc34be79fdb26483f6bbe599d80389717c6987415abf698356f16a",
+      "bytes": 7108,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\test_lsr.py",
+      "sha256": "b3ba8bf9fd370335e90a54ae6e9e0ab7af7bfa3c96d303c706ada2b296329675",
+      "bytes": 6221,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\static_check.py",
+      "sha256": "4cc1101723a4d058e819a4a1be2a90d5e8f7af1d46f3288ea598d2c096212758",
+      "bytes": 4882,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\supervisor.ps1",
+      "sha256": "271032d7fe2d8b07b9ee6ec35060a48bd3e8ceb311b8f5b592535e7bd59becbe",
+      "bytes": 6521,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\FROZEN.json",
+      "sha256": "2dddb95eb67360153af79a036cfca0a14eed86abe257c0501a57cb8b22d3e733",
+      "bytes": 13648,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "sha256": "2aa5f8947569533b71f36fe5bab2505d0d4d1322098fbcef98cae4975157ffcc",
+      "bytes": 1050,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\__init__.py",
+      "sha256": "f2c1d437f4d01160f08693928d096164a3b0512a00ba11cd8fe20323866b03a5",
+      "bytes": 89,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\universe.py",
+      "sha256": "93cf1223a7f61858f23abe8a5212e3d6ea3fe5462b5a64f2b717302481b5265b",
+      "bytes": 1797,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\ledger.py",
+      "sha256": "a7573d467c458f40e9dbd8ec269859e5fba8891bdf724c5f3cba7fbaee140c9d",
+      "bytes": 2125,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\readers.py",
+      "sha256": "0fbe90474c6f43232a4d8d90f2e9f25eed946e2cd88d6d2e05dea1f98dc90c3b",
+      "bytes": 5453,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\report.py",
+      "sha256": "737beead899aeb2f490ba9e80b9e83d5737f26410357b33c544c82a182a504fa",
+      "bytes": 1748,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\__init__.py",
+      "sha256": "735557b20b50a5052bd7f428a87dcd0729cb2ff815a94fedd1e0f788509a02d0",
+      "bytes": 529,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\grammar.py",
+      "sha256": "570a12719fe40f74e6c04c37641bf967151f0e836ea5ebedc3f382e23d19dff4",
+      "bytes": 8458,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\english.py",
+      "sha256": "51db117c289886254cd5387c546d8c42e93568ce30fa7885fa0d8a10709a3b67",
+      "bytes": 10850,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\binder.py",
+      "sha256": "b71f1f64879be73979c68f1b737fabf6537b56f1768315adff23650d4ec92f27",
+      "bytes": 7785,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\bridge.py",
+      "sha256": "2b80e071c0b8fe176046f264f353322c57fc013b8c0444b119e71b954c8b4ee0",
+      "bytes": 5782,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\FROZEN.json",
+      "sha256": "ed1052955730450496f02e4232692227cd2a4047a966ddda461dca9b490284f1",
+      "bytes": 10535,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\__init__.py",
+      "sha256": "7cd20e9e19229731b857a826e48dfcd5618147fc6268c6a69f22c34195d0f269",
+      "bytes": 162,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\bridge.py",
+      "sha256": "2bdf4d959b8ddeeab47f2a23ccfec72dec61c8c5568fd86b65c55ba0d534e8c8",
+      "bytes": 12685,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\corpus\\exchange_adapter.py",
+      "sha256": "e52ba51b67d9d0b1578d828ed6488a28689a7f6e5806423ed5f725c3896ccfd3",
+      "bytes": 5612,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\__init__.py",
+      "sha256": "453c58f675ca52243891d2e3bf21d6a7b93c6ddd14cd956eb2c3f656ba7c0ab1",
+      "bytes": 99,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\data.py",
+      "sha256": "2bc625b41c88aa8fcfad6fcd1a6b597db168b5b00ae8d89477620b1de7d5ee61",
+      "bytes": 12514,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\sdg_source.py",
+      "sha256": "4dfe5fa8a58ba1dd5f5947b8dea82f4dd1088a05ae3bdf5c85c86fcda02bb823",
+      "bytes": 6033,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\binder.py",
+      "sha256": "7ce25450741290e78a986094e39a1d0ce078a81edb255fe66fada14a9803beef",
+      "bytes": 8071,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\FROZEN.json",
+      "sha256": "b4a52754d29c9783a9453d82e4745a589f78cf83df35a8a686f8f26f8a431da9",
+      "bytes": 16838,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\__init__.py",
+      "sha256": "6136e2f0006e4acdfaae70210bfe1b3d02d96a351f8709e035c99b95000fcccc",
+      "bytes": 69,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\data.py",
+      "sha256": "cdc64c1765f5722f4d62b1f6a436c5ac20a199cbeb0c27e1f07f5f434665bce1",
+      "bytes": 4370,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\__init__.py",
+      "sha256": "791447aa919e62f039668838a690b9f1ac373f0e559dad7cf3f3ffba79529ea6",
+      "bytes": 80,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\data.py",
+      "sha256": "c9e41d304798f34bf58078e76d10273e7ca152dcb464f3c6ef13f20d8c35acbb",
+      "bytes": 10197,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\FROZEN.json",
+      "sha256": "3769a6424f7d2a3c2a95c9a774f91b8545269fe70ead66d61c9c131fdc716729",
+      "bytes": 10538,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\ARCHITECTURE.md",
+      "sha256": "192a782afe2843535bc13f8c0644f1a0188817017407b60399d097fb7869d2ea",
+      "bytes": 25266,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\CONVERGENCE.md",
+      "sha256": "d7745b0fc94aea284447b308bb0f4e20f2be1fe84a5bd2f1c4641de15087a2e8",
+      "bytes": 6770,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\TEST_PLAN.md",
+      "sha256": "ea2d6ef5c958b29b6ae7d6a5e3b500d5355857c63f85f0a09e75e16d74ac5f36",
+      "bytes": 9151,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\OPEN_QUESTIONS.md",
+      "sha256": "dd5c424768c01259569f5a985746dec5846e8c1f54ac6b6eb0f18e24ded02b85",
+      "bytes": 3664,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\lsr_sketch.py",
+      "sha256": "6fd9535b12d4986ca78ad471287e417cde8c85cdc07735020f90e1b49f2f8106",
+      "bytes": 22422,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_oscillator_design_v1\\CAS_MAPPING.md",
+      "sha256": "811338e028219c0445d18e7e14f8b8dc1f5af35a1b51f45df0395f090def05d3",
+      "bytes": 11389,
+      "role": "DESIGN_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\seeds.jsonl",
+      "sha256": "df68d2447ccd7371f8b9a18e48fa90269914be2505f1a96d92e4164aabe91639",
+      "bytes": 3470287,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Python314\\python.exe",
+      "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+      "bytes": 106328,
+      "role": "EXTERNAL_READ_ONLY"
+    }
+  ]
+}

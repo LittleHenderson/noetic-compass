@@ -1,0 +1,2131 @@
+{
+  "version": "rb-oh1-v1",
+  "created_utc": "2026-10-17T09:32:53.363375+00:00",
+  "files": [
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\__init__.py",
+      "sha256": "2fcab44d299ee7c8051d266fcd3cdf6e567c6b4adfb7ba72a2e0415bdf5d20a6",
+      "bytes": 104,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\worlds_oh1.py",
+      "sha256": "6b355df429b1e1d70dc60b677961ee89a46d34701f01cbbaf32b240e3212bb5a",
+      "bytes": 9346,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\numeric_oh1.py",
+      "sha256": "a4b60049538f83bff928b48a16eb6d959f775f28e06397bb89177ec9a60445ed",
+      "bytes": 3027,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\sub_oh1.py",
+      "sha256": "7f43a3495b82ca43b8514c48923689167179cce1e3dc73131e4c9793a08b7301",
+      "bytes": 11043,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\heads_oh1.py",
+      "sha256": "5c90f2056f6c56b6e8bde323360aec53d1afc0ceba860ad5d4f5317461350f67",
+      "bytes": 10515,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\sweep_oh1.py",
+      "sha256": "a5bf174c3c6b71a70fa746bb995ed9d54167fca258add279ca86c747ffbc5dfc",
+      "bytes": 9200,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\core_oh1.py",
+      "sha256": "b86327210dea4e26e632bcace84afad2cfd903a4e7f84e7e6ee375734798de4c",
+      "bytes": 7171,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\units_oh1.py",
+      "sha256": "383f765bff206d7d3fab5a9ae1dfeea6efa9047284349e160e5c8b196364fef1",
+      "bytes": 11797,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\run_oh1.py",
+      "sha256": "75667ba93f55f8fa695d9b5e97e064d18c2d52dee211e2424c7f4990604f8a0d",
+      "bytes": 3425,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\routing_oh1.py",
+      "sha256": "9577499208827a99eacf7447c5bbee9048b6577d9f76c9ff987bfb51e3f3f9e7",
+      "bytes": 6547,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\merge_oh1.py",
+      "sha256": "718ec43c05fd8fb2b526ee35557ac2b20b81753928f0b89981e58c6fb9c2aaf5",
+      "bytes": 48436,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\test_rboh1.py",
+      "sha256": "bbc0571187c80f451e3da22f1bdd9bf88caabe76f6fe266f53d7599feabbc900",
+      "bytes": 17462,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\worker.py",
+      "sha256": "eaa87bc802b702e05a537e1f64f06795c2feeaf809b7be63d77cf733c30009ad",
+      "bytes": 6178,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\static_check.py",
+      "sha256": "603e45865028a5dfc2d663f839634ba49d81b2db5a83cbf020c8e6d38b9c0454",
+      "bytes": 6914,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\supervisor.ps1",
+      "sha256": "1a338f03fc99bfe337189ef6e88e5ca8347b2d329aa73ff9bb55252d948cfd8d",
+      "bytes": 7441,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\run_all_parts.ps1",
+      "sha256": "a690f9c5893d00ae221a42e24dabb38e3c008ed89720e7a89a64a81edc228548",
+      "bytes": 3377,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\FROZEN.json",
+      "sha256": "bfd945d94e690b17d11304d141026fbc6cdedeab4254eb59a59a982708abf5cc",
+      "bytes": 63491,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\FROZEN.precode.json",
+      "sha256": "8dbf5da83311929115c3ae34b132c9088854992323968da85593a3bd3da40e3d",
+      "bytes": 52806,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\FROZEN.precode.sha256.txt",
+      "sha256": "ff9d911a51f666273ef7b6a77047f4b613adff00c9a66593e32aa16a5cdd9193",
+      "bytes": 172,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "sha256": "59420355c21fe4cab28fc469f9b9dd45491b525f8d4bc25421d67dd59d4f5123",
+      "bytes": 1431,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\OWNER_APPROVAL_EVIDENCE.md",
+      "sha256": "a63660d35aaf3fe9ac3e1d4f6a3f1c118caee295dc051f6d222fb4da6f1f5882",
+      "bytes": 2434,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\build_gpu_package.py",
+      "sha256": "d23015e42db3cd551aeda14150cf1876ceca23a3d6923f9c828752b8114d2f2c",
+      "bytes": 6833,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\make_reference.py",
+      "sha256": "214086f4320213fef817fa393f5265fe424b96d0989c1daec964750228eb445e",
+      "bytes": 1765,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\PACKAGE_FREEZE.json",
+      "sha256": "39d2bfd97a44e1a9856106baca0dce8de556106aeee6805fb71732f06f0cba46",
+      "bytes": 1178,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\RB_OH1_MLP_FRESH_20261015_SOURCE.zip",
+      "sha256": "d3876582f2c73e7fcae27776dbb21233a460c1d1486b30ee1e73c2c77fca03af",
+      "bytes": 416768,
+      "role": "RB_OH1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\a_approx_fresh.json",
+      "sha256": "1d86150b90b3a137df051337c50cef7d0e43cdc881fe69f51a9a0b34934228ad",
+      "bytes": 255003,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\a_fresh.json",
+      "sha256": "9b5d359e1636027c2264d84a6f2a48d201163ea5b5afbd8e3221317d2cc7cf46",
+      "bytes": 275358,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\a_parity.json",
+      "sha256": "de1197a3e09c3028549a670fe0d34e12b7c5312daf05e51853efdb146caccd7a",
+      "bytes": 17298,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\S2v2_fresh.json",
+      "sha256": "b2b35088890fe397b5319eadede7fbf72024dfc692654139f841147f9dd741bb",
+      "bytes": 246995,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\S3v2_fresh.json",
+      "sha256": "ed1ac187dade56f9046a518a9a40a03f5a44dfc35e7ef67337ae6f201d711df2",
+      "bytes": 247380,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\data\\scale_leak_fresh.json",
+      "sha256": "85b4211a2357c7ba0dda382f597c60f10204602a295844a73bf41bae51c8a85c",
+      "bytes": 251776,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\DATA_MANIFEST.json",
+      "sha256": "8b59a8666d0bc09615e61aa832d510d059223315ab66d1add1ff00b633893dfe",
+      "bytes": 1494,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\JOB_SPEC.json",
+      "sha256": "4d4604e41fa0f799ca8d80309780b0524b68dadbd63e57adc0f9eb7da89f4131",
+      "bytes": 1133,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\mlp_job.py",
+      "sha256": "0190ab2bf060a194535e5ca573030898c4008e96001bd76fcfd9724c66121350",
+      "bytes": 15640,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\mlp_spec.py",
+      "sha256": "0070180120dfc94d3e48c3d180693dd89b4f2952979fb13da82e32b3fd3f1c13",
+      "bytes": 1182,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\PACKAGE_MANIFEST.json",
+      "sha256": "5e8e80c01028d1c6314651135552c8455b44fb6a533000c46e4832882b8ded33",
+      "bytes": 1131,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\README_RB_OH1_MLP_FRESH.md",
+      "sha256": "4da9206ea654bce2dec51bfad90e4361c48bc6b721098afe4b6e950639f95f81",
+      "bytes": 1489,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_oh1\\gpu\\package\\tinymlp_reference.py",
+      "sha256": "b986422dfa9a3a24e019cd2c90476f6a267847c3f6f5331b495abb1ae14a853c",
+      "bytes": 3431,
+      "role": "RB_OH1_GPU_PACKAGE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\README.md",
+      "sha256": "0ed543ff71c6e40f7f812c1c18b249c95b0a75487b76be61014c17c115574242",
+      "bytes": 16360,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\ARCHITECTURE.md",
+      "sha256": "162ac4ec2f8575ee8d61bad72c9be6af430f39d2ed795a8c4adec476b48b32c1",
+      "bytes": 15192,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\ROUTING.md",
+      "sha256": "6c3f8cca40eb6ce81dee714f9ca0b51b9e2f59702d776c08210689cceda7b52d",
+      "bytes": 13517,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\HEAD_OPTIONS.md",
+      "sha256": "b108943b7ff046f7e5315877f015571144435d69c4f54efa6f2d899e6c5271ec",
+      "bytes": 26874,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\CAS_MAPPING.md",
+      "sha256": "066c87ef2df26c6519dad1d57c31e9b0a6d4fbc0d56a225c84a811d333fe0ac8",
+      "bytes": 11311,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\TEST_PLAN_RB_OH1.md",
+      "sha256": "760620a4ad021792d6ec83b3f18d6da81eb3c78a5e39ec03ebeadc41e396362f",
+      "bytes": 24087,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_rb_ordinary_head_design_v1\\OPEN_QUESTIONS.md",
+      "sha256": "0af11ac0adc3f0998a22c2bf08b624cb6e4c1b96c63911b6cb3f753303ed926f",
+      "bytes": 7910,
+      "role": "DESIGN"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\__init__.py",
+      "sha256": "38619b10a47135f860d33dce3eb8c0892f4400628164c27a4f387149acfaa9a3",
+      "bytes": 322,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\engine_g6.py",
+      "sha256": "03d91eaa42e9ebec1438632ce0c94ebced5939540129a1d803f7440ef7b0a86c",
+      "bytes": 531,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\units_g6.py",
+      "sha256": "dad85033df57b63f90e2aabd8e8cfc7384ff981aa7f1b7cf25917ec944d95891",
+      "bytes": 11571,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\operator_g6.py",
+      "sha256": "55f0f746995eeba078a79a5e895dd95bd029ab3dbcdb4601fac5b85b183f2be0",
+      "bytes": 16198,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\run_g6.py",
+      "sha256": "42e572b694861ed828d204f3bf5948b793c4b4abaa6ba621cf176550e8f8b91b",
+      "bytes": 7445,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\merge_g6.py",
+      "sha256": "9744fbd556e61f4756e5cc263b84ee33c226e39aeccdb1995f83ee533226eaf3",
+      "bytes": 44670,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\worker.py",
+      "sha256": "acbf2abb034370097957e6bd9cc263326b717de987aabf724a2fc408e461c301",
+      "bytes": 8918,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\test_rbg6.py",
+      "sha256": "e422714798d51d5e9e33fd36a61f17590b951a72c11aeacfe992aa41be855a9a",
+      "bytes": 17920,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\static_check.py",
+      "sha256": "da76525d21e05be13c52ad2e7947a3ec91357a70e26b06f601ba610a3ef2a09a",
+      "bytes": 5697,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\supervisor.ps1",
+      "sha256": "1a3856431d40a457f9a20962374f16d1568dd2d0a16e850344e137ec347527f4",
+      "bytes": 7369,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\run_all_parts.ps1",
+      "sha256": "810d88ab8d471143af8590c60a3f2bd4e79904608904f053167bfbd636b0b469",
+      "bytes": 2972,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\FROZEN.json",
+      "sha256": "8ba69865bd72b9936c107a33553466d7c16c34690a75d8d896f00c22e37c5596",
+      "bytes": 51821,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\FROZEN.precode.json",
+      "sha256": "a19982f8387847e9c45e07b78bb547d49410f1a30f85ece5570f2be392d8ce08",
+      "bytes": 38981,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "sha256": "b6705f01357e6ce6e066acef290e75a532a8410d5fbf0763dede66f3e7afdafb",
+      "bytes": 1451,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\OWNER_APPROVAL_EVIDENCE.md",
+      "sha256": "d9580ece9477128b0ee4d2b6f114b67ec75a1e188160cd69989fb8444ee30362",
+      "bytes": 2728,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g6\\SOURCE_MANIFEST.json",
+      "sha256": "9d014708f347ff5cbb9bd10a6335376b778afca235cd9b9f9463142117582114",
+      "bytes": 79872,
+      "role": "RB_G6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\__init__.py",
+      "sha256": "6998ab83c74325186def359e649f5844e5e2d7c6ced7d6d3811f60ea0875bffc",
+      "bytes": 195,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\engine_g5.py",
+      "sha256": "cab5129800b46912a7022df5926a15001299197e81aec8f2b06e36b9f1808d3f",
+      "bytes": 16208,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\units_g5.py",
+      "sha256": "2ea0f379977b45d8e4b72300892fa5c8a66fa557e21d3d1938cb7d0b432a2a23",
+      "bytes": 6489,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\operator_g5.py",
+      "sha256": "274ee613fa777fcf6da1fc7a4092e815b0bf2341c5ed8da46955efc405559b8a",
+      "bytes": 3597,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\run_g5.py",
+      "sha256": "d9ad1480ac617e9ad365745595d00013d75391786126ce5baca4bd4c0d0fe767",
+      "bytes": 7161,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\merge_g5.py",
+      "sha256": "0185b916341f3fb2abbfdc5b572706993933731f3c0b5122ad39ce3ab8dbbec0",
+      "bytes": 42036,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\worker.py",
+      "sha256": "7e59d3fc8e5f5bf02aa3f94122b5455eb855cf443ed0a7d58d7033b69230c201",
+      "bytes": 8724,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\test_rbg5.py",
+      "sha256": "8603964a950abad877b8c40e500d7322579b547ade2d56f4b7e9bbc44e74d45a",
+      "bytes": 17642,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\static_check.py",
+      "sha256": "f1d0c2fdf05a155226cb3e82cffb15fe2bdcc3880c4ef1a72047ec4aa4d3f895",
+      "bytes": 4913,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\supervisor.ps1",
+      "sha256": "d9c13cbb67cd24b90cf26f3794322fdc9beed016e28cb414a25e59bcbd8a3dd5",
+      "bytes": 7384,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\run_all_parts.ps1",
+      "sha256": "9df9fb175a37bfed859ab7b09d55b1f1de585370ae4fa3acf5254a6dda8fd2ea",
+      "bytes": 1660,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\FROZEN.json",
+      "sha256": "483154c824500d7a537aa4c0ba2bd5b5111d37569810aa7c8dd18af99fa59e80",
+      "bytes": 30108,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "sha256": "b63554d271b897c532f01326b8a1ab4359a18a3b9867734cdad02fb14835f830",
+      "bytes": 1146,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\OWNER_APPROVAL_EVIDENCE.md",
+      "sha256": "89e08e6df949be514564ceb8e6cdc51882ec7412c58a4e8c6e76ce8ee3924871",
+      "bytes": 2013,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\SOURCE_MANIFEST.json",
+      "sha256": "f1882c4f5091a11b74fe899ffaf28caeeecc466cdd5d396ee896c2b853551dca",
+      "bytes": 61258,
+      "role": "RB_G5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G01\\UNITS.json",
+      "sha256": "16610c4451b3398524bf4bcdfaab865fcc81e3916488c5c36f329fd0e646a932",
+      "bytes": 50724,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G01\\SUMMARY.json",
+      "sha256": "4867a826cc337070767642f11a2b49f0de0f9892ce94d969a5c90e7d1dfb364f",
+      "bytes": 358,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G01\\END.json",
+      "sha256": "4d9d7ac67a32b0ff3aa0e418ed71684ac384f7604ddb4c467ec4ef59547fcf88",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G02\\UNITS.json",
+      "sha256": "d2d006abff330d4222d65ff3c9f0b07a07d9740b9eab04bfa76910b2d22440ec",
+      "bytes": 495610,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G02\\SUMMARY.json",
+      "sha256": "9f6ab88618f443d1efcfe08c447bc26b3a1e287622c7e389da6b3ab471f91e94",
+      "bytes": 357,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G02\\END.json",
+      "sha256": "1af4dcd87d8f4a96c47348e46d42611c8b57cc3a7cd779ec19d48c5b22a1c32f",
+      "bytes": 601,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G03\\UNITS.json",
+      "sha256": "57c0b4de1ed631177a67d4def819a7b9edf64e62da62d4a7272f986e287f1e82",
+      "bytes": 651867,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G03\\SUMMARY.json",
+      "sha256": "44ebc34dd87d5f8d75b7e92208da583cda448cbb44ba804cf0476910d953de8f",
+      "bytes": 357,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G03\\END.json",
+      "sha256": "183c2cefc2bff4b462a6793b3bab2e9839317740823c3a19dd4bc4af6008cf0a",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G04\\UNITS.json",
+      "sha256": "7999e4ee9bdc566d63bfdcb5dd52bcbf1d89bebbbae9d9a91e7cae4d4763224e",
+      "bytes": 684708,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G04\\SUMMARY.json",
+      "sha256": "1d5afc1ef07953d8f83d27176b18a93a0d87962205165afe7bceb2978e2be246",
+      "bytes": 357,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G04\\END.json",
+      "sha256": "cb1c6d749e3187aa3d6a55b30ffb41257f76d64fd4f9ea33dcd91ea2c54b94ca",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G05\\UNITS.json",
+      "sha256": "e24d078d98b801cf3399ba675a4afce23e94eb120a5bec8f8790d89b0ce523f9",
+      "bytes": 603802,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G05\\SUMMARY.json",
+      "sha256": "2503958b2ec02ec80167fd7c5ee825b3c667d1dfd3f9456d52475633ad2f46c0",
+      "bytes": 357,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G05\\END.json",
+      "sha256": "614f73adacaf9905ce0f6aceeb42758a345088d51ff449dea70284f00488fa4d",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G06\\UNITS.json",
+      "sha256": "98e95ad72f9a0d7e03d13ff27f8e5c3c618758b988658385f8c7173359d2798f",
+      "bytes": 714577,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G06\\SUMMARY.json",
+      "sha256": "d35d7e93a328fbce8b221acd8853733c44d3109e9c49552c80c0fcd92bf618eb",
+      "bytes": 356,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G06\\END.json",
+      "sha256": "03e1dbf21756489caf4b424b6b397818719a5892d6ba29617da025ed3aefb4d6",
+      "bytes": 600,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G07\\UNITS.json",
+      "sha256": "5956e9a7b413af63fdc40ff72719a48d07a51fe946bc3e2869b9a9ef3ac70106",
+      "bytes": 603854,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G07\\SUMMARY.json",
+      "sha256": "45d9f07e55c989db4ecebe1321be18a7e51dafc2754aacf96b7c044200721753",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G07\\END.json",
+      "sha256": "f8215122d392934602bad7b342533f6fa273324cfc3cd53d390051e8b643c7ae",
+      "bytes": 603,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G08\\UNITS.json",
+      "sha256": "a264aaac245fac84f88545e3ce49f1f2915de22b4cf0b7c29b8a9391b3cdfe98",
+      "bytes": 317743,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G08\\SUMMARY.json",
+      "sha256": "1b7cacca1fb98522c40e9bc0d752e2dbfb7119cfe21b4819f589eeab10878f6f",
+      "bytes": 354,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G08\\END.json",
+      "sha256": "028732e1f5d499c3a2516268a59e3bb83d4fbcfb2204b72078456d10895ef704",
+      "bytes": 601,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G09\\UNITS.json",
+      "sha256": "59ca283f842feeff66a2407eb997f8e18918f44f474ef3e9cb6db9d333fab7ef",
+      "bytes": 179106,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G09\\SUMMARY.json",
+      "sha256": "26b63bdca2809d04a43db2235aef0aa6c8eeb5d4d447bb34a5ffaa5b49ed8c92",
+      "bytes": 356,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G09\\END.json",
+      "sha256": "7448815cb60b6db727ee9a5004194e781e864a1157ad43e342a8fe21f63c2038",
+      "bytes": 603,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G10\\UNITS.json",
+      "sha256": "df54ea2da3fd0417037e24f74c7a16bb43932328214bf4fba1ea41174ecf4cc4",
+      "bytes": 248302,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G10\\SUMMARY.json",
+      "sha256": "4c11a0ff6a8c7d649b7b4bfacc8d7bd0b516178eb90d06a6767bf861f83f4300",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G10\\END.json",
+      "sha256": "73a626e5c8487bf6da79e73b84fbf2e8c40b9203a9de143151d00426bb33707f",
+      "bytes": 603,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G11\\UNITS.json",
+      "sha256": "553d012b9745ef82b322986c5dcd0637061a2920dd060c37d6239a30ad7d25ed",
+      "bytes": 154404,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G11\\SUMMARY.json",
+      "sha256": "e6a0e3a82bd9020146f59091c95324b55e94585fa0ab4a88cf9b355fa524c00f",
+      "bytes": 352,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G11\\END.json",
+      "sha256": "ae18f0c9cc7eaddbb91d47c636a804f8e0e2db92c3d50f9b132d76a9f6a902f9",
+      "bytes": 601,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G12\\UNITS.json",
+      "sha256": "d7752490143a78ad553940717791da69ed000e472262985c62718412be69643c",
+      "bytes": 185075,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G12\\SUMMARY.json",
+      "sha256": "871b6c2ff77b50ba2e4c05fc552073618410dbf79d28ad75fca0d1122d61e4a1",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G12\\END.json",
+      "sha256": "54a7c08f8db249142cdfa7a57f1743813489cfca3d2b3f0fff6d36286dd4f1b9",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G13\\UNITS.json",
+      "sha256": "25f2d39a1b878774c2c2532c736dc1028f8d77f362ab01875e84decef61bfaff",
+      "bytes": 256913,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G13\\SUMMARY.json",
+      "sha256": "fc5fd5b83fb0600b229ab5abc97756f701d0a43c5a6eb24a974a3b9e7798cf34",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G13\\END.json",
+      "sha256": "ec59e5de7423b21d9ceb4ee39bbf0c057d40e40508d44bc3cd095cbb4fa42b98",
+      "bytes": 601,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G14\\UNITS.json",
+      "sha256": "6b3ef8bcc27d6e3042d9b886bf5676101338cd975dc3c9853e1c0148b6345b36",
+      "bytes": 356728,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G14\\SUMMARY.json",
+      "sha256": "1846579119ef0033428af762023b38c1f8e6089af74b05fe933e3f2709d98e01",
+      "bytes": 356,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G14\\END.json",
+      "sha256": "0a43a0cfcdd227a1610c383b84b46b1a6503d45f1545bb60d7ae685eb624bd9c",
+      "bytes": 603,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G15\\UNITS.json",
+      "sha256": "b488414adad1d19623f1f336738b4e1e14847ffdd4d34c3b5dd264b7685be218",
+      "bytes": 648186,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G15\\SUMMARY.json",
+      "sha256": "ae752343f4448883403e81ca712a1ff5b7e0f0f186963a581a88f3eeb13b33ff",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G15\\END.json",
+      "sha256": "5ce6f3ba4ddca3b686658ab633d994949b3b8ded57f15ba249ac8a84a748f37f",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G16\\UNITS.json",
+      "sha256": "6bd474ef3886d7ffab02106f354b758fb066f00ca0125f562aa13d58f101f2b4",
+      "bytes": 533363,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G16\\SUMMARY.json",
+      "sha256": "bfe65b300a2ae5d1a231a1e2a30a6167ffad91bfa2da42b9acfd58dabd647a2b",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G16\\END.json",
+      "sha256": "3079ad090393a600b6ece76b765911a2c3eb4a074f6238b9d553d2fc6cd3ac19",
+      "bytes": 602,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G17\\UNITS.json",
+      "sha256": "1055c452ab5f9093cf13b647a293890dc8e434a539e4208a30401ed4d0757238",
+      "bytes": 667132,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G17\\SUMMARY.json",
+      "sha256": "ff68d34629ee4ce1c70eb19e3ad15b39152f184293cc0792ba07c6f35673d6ef",
+      "bytes": 355,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G17\\END.json",
+      "sha256": "6dda744e7cc3bbb5c8b5ceed722e3d8e097d63c8e089f18a397ad7b8e9a556c2",
+      "bytes": 601,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G18\\UNITS.json",
+      "sha256": "ceda5d7fefe8694339cb4dfd465d739fb7873f55fa0ff5d4d33732fd6b9a419c",
+      "bytes": 53987,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G18\\SUMMARY.json",
+      "sha256": "b07f9ef42d63d7bf677fdd109a30413c071956db02cd20c508b42e4c786114f0",
+      "bytes": 353,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G18\\END.json",
+      "sha256": "89abc411be2d1e204791935c5e8416a9cb414eb3a57ddd88cf43c15f42aea762",
+      "bytes": 600,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G19\\UNITS.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "bytes": 2,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G19\\SUMMARY.json",
+      "sha256": "3c7b452bafbcfdca5572cc897cf4a7561ccac0c22d1d771a0b353798c11444e1",
+      "bytes": 346,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G19\\END.json",
+      "sha256": "7ac63150e0202a7d6ef0b400b651911137a434522a1fee23e33dc291ed1f0458",
+      "bytes": 599,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g5\\runs\\RB_G5_MSI_G19\\FINAL.json",
+      "sha256": "06b2ed1922f93390183959908f102b220d6bee9a4e436a0550e65ad387682760",
+      "bytes": 2119655,
+      "role": "RB_G5_RUNS_READ"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\__init__.py",
+      "sha256": "335321e50ab57a0b02a2d89c1b54eee3bdf48f09b52dc58b022acc2d97eca441",
+      "bytes": 83,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\caps.py",
+      "sha256": "6d8441056c134d68f2a04bc6e47759c5de3a68d09eee4a9b0ba627af3d9f19b3",
+      "bytes": 4056,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\engine_g.py",
+      "sha256": "0ffbfc30f6edd9b77d5b595fba95b823da83e49e85286b44a5b29e270f733d8b",
+      "bytes": 17147,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\depth_g.py",
+      "sha256": "818c769f56b0c767983f08bb0332dfe3c30cf4cd26f43e77cf7708f8a0e1ad2d",
+      "bytes": 15218,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\units.py",
+      "sha256": "e37268e385fa992286fb2038e298024a3baca85ffa682df1332316c2b27da13b",
+      "bytes": 12347,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\operator_g.py",
+      "sha256": "57437b1420c627ef4f1b029236c8545d9ade62e96356163fbca163484bb8e82f",
+      "bytes": 18578,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\run_g1.py",
+      "sha256": "27ef3cf7905538e4d5fbd9f05f4e34998ca140eb14470d20e8a168487df70d8d",
+      "bytes": 5326,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\merge_g1.py",
+      "sha256": "92200d33f860c42ae6a09bd2573a776e7f2cf2eee8951d2fb3d589db75ef2799",
+      "bytes": 15501,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\test_rbg1.py",
+      "sha256": "63038bad2aed3c3e2619e998d5794f94f7f28ba5dbcd44f8847954f1a53d2ca7",
+      "bytes": 15611,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g1\\FROZEN.json",
+      "sha256": "05fc8bfe3e96aaefdd9c3860e62a4c2a964bdbf6d239a443366e2814a63de402",
+      "bytes": 27888,
+      "role": "RB_G1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\__init__.py",
+      "sha256": "24baaa3bc21b62f5f1fb17415b6061fb9dcbf9631883687cd8fa67898fd84903",
+      "bytes": 101,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\operator_g2.py",
+      "sha256": "13b38bc673d9ef1274063d625ffd2474bed9b62c1e3b8e497f11729282b11efc",
+      "bytes": 8958,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\run_g2.py",
+      "sha256": "de1290992b9343b8d6f32632f1d73dc0753bfc47f9ebf767e377eda955ae1b5b",
+      "bytes": 5435,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\merge_g2.py",
+      "sha256": "832c7dfb7a59d8e0b307a811f5fadf712e5cbdd0953b7316644803c3ca450032",
+      "bytes": 17222,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\test_rbg2.py",
+      "sha256": "cda271519b6d99befc58e008c8b91905caa305527cf9110b78835c0310f6a10e",
+      "bytes": 4254,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g2\\FROZEN.json",
+      "sha256": "66924b276d947287bd0a28e9c81d49e2b433bcbe3ee077a9afd6df4a6bb59938",
+      "bytes": 8779,
+      "role": "RB_G2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\__init__.py",
+      "sha256": "d3670bedcb24526efbf091a5bdfd05348811edfcccafb9f118986a6c29341cf3",
+      "bytes": 135,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\blend_g3.py",
+      "sha256": "e18e8c42fa8b2b36cbb9607fbf30a5bf96ac309f907d7c47d3e3b742cf8dd530",
+      "bytes": 3291,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\engine_g3.py",
+      "sha256": "846d13c6ad5a5a02be274a4936df5d6e117211acdc135d2320c3e60305a7bd53",
+      "bytes": 20780,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\units_g3.py",
+      "sha256": "aaaea42eb4f249622898ed01e6b1ce987b33b79909411aaf90e3bf59df6ae5a2",
+      "bytes": 10468,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\operator_g3.py",
+      "sha256": "4c34c85eb501af283d47419a26fa4d96ad4e0bbe188cf48e5309269a88bb0170",
+      "bytes": 18160,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\run_g3.py",
+      "sha256": "577ee240523d9f426ddd776549b6b2e6a86a588874c794cdbc4b590ef27f7e78",
+      "bytes": 5925,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\merge_g3.py",
+      "sha256": "f87ceabb8019c9b82c106f04ce6943f97d1902b2245d6e6d8a8e911784dcef75",
+      "bytes": 22285,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\test_rbg3.py",
+      "sha256": "5dceee3fa63ff3329d45b00427c6739e72d3627bf8eb2297e7872977f3f9706a",
+      "bytes": 22930,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\FROZEN.json",
+      "sha256": "ef2cd28da3692aca615b5852e4079fcd78b3c837de629cd373e199201bdb7a6e",
+      "bytes": 24838,
+      "role": "RB_G3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\__init__.py",
+      "sha256": "e33c348fe74ae95bd134e0c6ba5f4c18872b52f36e4bb13d89eee51b70dceb58",
+      "bytes": 149,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\blend_g4.py",
+      "sha256": "b4ae210b794849fa42d8d55de0bf45acaf2eb1e2201546c582d5b6c7b1bf79cb",
+      "bytes": 3880,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\engine_g4.py",
+      "sha256": "bad24cd320c00cacbdd870f2541e08d59ba2bc76d3e50b7f6f67b5836ee972fc",
+      "bytes": 17031,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\units_g4.py",
+      "sha256": "202524e5e64cedbd5502ed6b5a6bd95326bceead62de9430db22f4840ce8ae84",
+      "bytes": 4338,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\operator_g4.py",
+      "sha256": "be6d67194cb5cb5e1ad3fd9ffd7a9b14b6da906743e5a8faffcc52342439839a",
+      "bytes": 15193,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\run_g4.py",
+      "sha256": "77094b5ccb6742554c945cefc0f4beabcab990b2c09dac605eb0e093ae36775a",
+      "bytes": 5952,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\merge_g4.py",
+      "sha256": "3b784c7b3b8f69b65dca8810d49d5b968097bea4d519079679f85bcc65b485c5",
+      "bytes": 30075,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\test_rbg4.py",
+      "sha256": "6deaa76fcd5d98c30739fc6bde770b1a54d9cb0d61b4f8efcfb88cfc3745488d",
+      "bytes": 22110,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g4\\FROZEN.json",
+      "sha256": "d63853fbd1d0fe0eec90626bc7f5778016e2dd09f7cac9c9f3c5cf160a4082d0",
+      "bytes": 24868,
+      "role": "RB_G4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\__init__.py",
+      "sha256": "1e2f4ab72a47003a2484dc2a28f18cbf260869b8a99e4b1129d0536c4515d079",
+      "bytes": 98,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\enginew.py",
+      "sha256": "bd3f5c3b9e3f4ccf58c4b14d37805a3c028b8eef398de2b2045ffeb92f328660",
+      "bytes": 17675,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\taskb_w.py",
+      "sha256": "3d4cf9de83ae0c6a501c756b566212eeb05fb51d1252acbff4d553345f8a9b7f",
+      "bytes": 25368,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\run_w.py",
+      "sha256": "9e2f23bfc19874eefbd0d88366fb03a95e661bdeb189808f59f3b672373038fe",
+      "bytes": 24104,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\FROZEN.json",
+      "sha256": "306bfc1c2e8cc11c034ee329b96b73591ef3f6382cba23270feddcd005553c88",
+      "bytes": 31822,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\RESULTS.md",
+      "sha256": "0737a6d397174214cde9a90e7f597ff5baf46d1f03bed2b1b5e728e3de46dc51",
+      "bytes": 8632,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\runs\\RB_W_MSI_W02\\RESULTS_W.json",
+      "sha256": "8ad022fe68d79bfa5538cb7f84cffcf54e270e771abaaa86c4eef8c5f0dd642f",
+      "bytes": 704625,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_w\\runs\\RB_W_MSI_W11\\RESULTS_W.json",
+      "sha256": "aaa061b364ec707a532f3656d712db0f902d792739144787d942dbcfa3e03f4c",
+      "bytes": 494120,
+      "role": "RB_W"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\__init__.py",
+      "sha256": "c0825e53658c682a689331f890fe31b6dac01a52ac8fe2cb6843762a7e03f0e1",
+      "bytes": 164,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\casform.py",
+      "sha256": "b9cc1ffdafeb77c487efbe36b77b391b28b27969dbe3f1d653b7aa6a2b0e0ef3",
+      "bytes": 8170,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\fitg.py",
+      "sha256": "62951b1d53359313b19515e131d8cecc590c946a330ab451e0fa2f007b653a19",
+      "bytes": 10746,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\grammar.py",
+      "sha256": "34dc45bd261b800a77ce223fffab5265914ee0655e0b1ebb16e7d80c0a7c2053",
+      "bytes": 12404,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\loop.py",
+      "sha256": "21f7a1bbf0dce31746c6be5dc75cd17479a55d397fc0fd6aa9841dbfe3b1b49b",
+      "bytes": 18967,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\merge_c4.py",
+      "sha256": "e4bd1f2aac698fcc3e884e81933591ffe9e87ac464d326c84429982b4a149df6",
+      "bytes": 3129,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\report_c4.py",
+      "sha256": "842d490421547f805ed1938e663af1aa54364b32766ee6e91dc2183a8c805ad6",
+      "bytes": 3181,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\run_c4.py",
+      "sha256": "80ffca7ef213124c92a51d83012a2d4a249e8c3b7e82de20ac0fb416a7fd525b",
+      "bytes": 35819,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\static_check.py",
+      "sha256": "352e83aeed06fed757447942e2bcfff9eaad1897056f03d653e859ae7ba93083",
+      "bytes": 4051,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\taskb.py",
+      "sha256": "1fd35c1bae49980460bdb19ab53ac206698b59b7cdfe96c5c0c0c4aafbfc0f6a",
+      "bytes": 7856,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\test_rbc4.py",
+      "sha256": "be25236f9cb27c1b6fc867076a1127994ef7eb8c5ce5133043ab52957c6194db",
+      "bytes": 15031,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\worker.py",
+      "sha256": "f387ca4edfa41087e119ba550bc932dd5ec1151fa2d01f23754e1de42ddc2934",
+      "bytes": 7386,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\rb_c4\\FROZEN.json",
+      "sha256": "25b4bf98afbc90850f9c06c5508f4ee5910129e6146bddb5442f3c6d89898353",
+      "bytes": 13483,
+      "role": "RB_C4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\__init__.py",
+      "sha256": "7ebf67f788a8ce18a991d866e217e669bb3585abbb8166432d621c18ec45e6aa",
+      "bytes": 104,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\engine.py",
+      "sha256": "d8589ef494e29add7fefd31be2523fc5f54e9907594d69ea27ddeba41225b751",
+      "bytes": 28210,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\families.py",
+      "sha256": "42e5d21022f1e2cc8cc110af1014f002c5e57dafe7239f2de04760100a168693",
+      "bytes": 8525,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\run_t1.py",
+      "sha256": "5a4b89bea6d8aaccbe7602dc2dd64af95b5303f5187a42eb7bc15fb32e096def",
+      "bytes": 16364,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\static_check.py",
+      "sha256": "4cc1101723a4d058e819a4a1be2a90d5e8f7af1d46f3288ea598d2c096212758",
+      "bytes": 4882,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\test_lsr.py",
+      "sha256": "b3ba8bf9fd370335e90a54ae6e9e0ab7af7bfa3c96d303c706ada2b296329675",
+      "bytes": 6221,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\worker.py",
+      "sha256": "0d7da03ba7bc34be79fdb26483f6bbe599d80389717c6987415abf698356f16a",
+      "bytes": 7108,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t1\\FROZEN.json",
+      "sha256": "2dddb95eb67360153af79a036cfca0a14eed86abe257c0501a57cb8b22d3e733",
+      "bytes": 13648,
+      "role": "LSR_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\__init__.py",
+      "sha256": "b6ed20f45e3bbe2eda2710333e56d9c90d32a0f794d721e7c382c49fb99b1ce2",
+      "bytes": 128,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\engine.py",
+      "sha256": "c9aa0f01e894a8d55d87ca10c494319b847e3e6d28632fb670315256a868aa6d",
+      "bytes": 26484,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\run_t2.py",
+      "sha256": "880c0c617dca92cc7fbe27774960ee2f9f258d226cd013d837aeffa8247be889",
+      "bytes": 13151,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\static_check.py",
+      "sha256": "4f1b5071aa9a67de61fd69a2a09715d6597b186d32adccd6439717008297d036",
+      "bytes": 5117,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\test_lsr2.py",
+      "sha256": "5ec2c5c2d02b87059ac516a6b40b68a26b7e2b4fe4fdbd11ee56a694e887ad2b",
+      "bytes": 11169,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\worker.py",
+      "sha256": "4c764b6e012cf8766a66947222bbd8504cdd8398f02243d1bc70f9216945f4b6",
+      "bytes": 8021,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t2\\FROZEN.json",
+      "sha256": "2328288110233316b5b87453df5116f182797a65ee296655439840726c326fa2",
+      "bytes": 17873,
+      "role": "LSR_T2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\__init__.py",
+      "sha256": "f0953f478e9a2f74836d484a41f3f7c0848d421933b2e04f744eb6cd6f9f82f0",
+      "bytes": 173,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\engine.py",
+      "sha256": "0e48cd011b6da2aba186e7fc967a10230cc5e8f91001359e0b2f3ecd536a1af4",
+      "bytes": 23768,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\run_t3.py",
+      "sha256": "9060182c48c2495adf15a92ba311dc281c9da6d0d684d7ab284f8008838d2a16",
+      "bytes": 11473,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\static_check.py",
+      "sha256": "b963b08b7e38b2bf29179696615f2a23791bd6d4facd78869bbbcac8bc9b1e7c",
+      "bytes": 5404,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\test_lsr3.py",
+      "sha256": "9f4141c031b348a5192b38c6827384476561aaeca6de4e463cef810d0e46b769",
+      "bytes": 16589,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\worker.py",
+      "sha256": "5bc2a90b8ef3d26c6c8761f00d707fcbdf83a160cf25a5f288585f171f4f4b7d",
+      "bytes": 8967,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t3\\FROZEN.json",
+      "sha256": "da7b83478dec87a4f8c4cdf236b595653ac28d6da54165f0b54d8914ffaef693",
+      "bytes": 14966,
+      "role": "LSR_T3"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\__init__.py",
+      "sha256": "f289815d50f9e7155d928e794079abfd767db20d1e3fd244d94acf3144b48979",
+      "bytes": 187,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\engine.py",
+      "sha256": "2047144c1d5f5e3c77ee1694407fe2c703ae3c76b3a396d1f6aac9a640480886",
+      "bytes": 38014,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\families4.py",
+      "sha256": "e77c27316da28320f9cacd0e7b7cbcebbbcfbd2fc87fb88a642826d33631191f",
+      "bytes": 4519,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\run_t4.py",
+      "sha256": "8fd00fbfcf567298d8db9dde8985a4322d15b1420c421bc0d02e8e27f065dfad",
+      "bytes": 21387,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\static_check.py",
+      "sha256": "4261bc3224e2c8b758f589a6a4aee07b7a5bf60d20f30a17558081c5f8e03bec",
+      "bytes": 5634,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\test_lsr4.py",
+      "sha256": "e72a720f07164b8235b3d9eea845fcb133a0885255f327ba96a6253a0006a79c",
+      "bytes": 10696,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\worker.py",
+      "sha256": "4aa3cf2cee7b006470dfede2861de77257f5f16c5d427ff6ac386ca7cd43ca07",
+      "bytes": 8332,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t4\\FROZEN.json",
+      "sha256": "4bab0b141397be0703d3a47a51ca50f207cb9793a4bd1c995e8a5259161c739a",
+      "bytes": 26679,
+      "role": "LSR_T4"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\__init__.py",
+      "sha256": "f19d241be0707a1c782f2af641a91ec2f7a3b1e74b36b2330290b28f7d02a63c",
+      "bytes": 146,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\blend.py",
+      "sha256": "002dbd73875b95adfc3d82d20120b15e075ef9012bc4c8dc38bd406f5ce88095",
+      "bytes": 20998,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\engine5.py",
+      "sha256": "1ebaa05eb33a0887c1c2ee5a0f26963f6e1bd034108de435c828ee4ef88dd250",
+      "bytes": 23398,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\families5.py",
+      "sha256": "9fe0fe3d0ecf9e569b535db830451895ccdc9d248b7fd1de190f5f3400982ac7",
+      "bytes": 4209,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\run_t5.py",
+      "sha256": "ab95440efd0e509760c0b500f79cd9cb53c230b4c49d84825b62b43e8c7973de",
+      "bytes": 23854,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\static_check.py",
+      "sha256": "ab974eb914f0da5d6bb3b2a840e1f3358fcbe51d9901bf40d5e1891fbbba60c5",
+      "bytes": 6035,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\test_lsr5.py",
+      "sha256": "74f5a5fd0424612b55d1e7c55e4ca428d05055563bff85ea351a0e25b7f5b85d",
+      "bytes": 11354,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\worker.py",
+      "sha256": "d4364696fb65457dd2a22755a2f3a227d4b3722407a82fb2aefb7128cd6060ef",
+      "bytes": 8377,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t5\\FROZEN.json",
+      "sha256": "30825df7e8f90479bc77b5fff53ba43542a7cb898b71b5e56e60fa3003006d32",
+      "bytes": 28812,
+      "role": "LSR_T5"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\__init__.py",
+      "sha256": "c21d408cfe4a92ce61d3824b816bfc51217bc1cba02cded5f08ddeb011782238",
+      "bytes": 161,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\blend6.py",
+      "sha256": "91f708b863830be36f169257d325f67e016ef92584b88564039d4e46145019fa",
+      "bytes": 12741,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\engine6.py",
+      "sha256": "c84fb8623985ac4ebeeb02707b57a6434a9548e31532d1f060ae0746073206d9",
+      "bytes": 19776,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\merge6.py",
+      "sha256": "29b594939a6b45b93b804c9acdce92b40d2ed914abad1330607fc7a8563bdaa1",
+      "bytes": 1851,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\run_t6.py",
+      "sha256": "35a7ca69cedaede9f86c9b7624b2c217659d4640d864cde1c0207d8f2a5acd31",
+      "bytes": 24961,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\static_check.py",
+      "sha256": "0562c6943754cc7a05e9ca8e49cae5f573e1fdf4ee93698e5132821b0853ce4e",
+      "bytes": 6556,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\test_lsr6.py",
+      "sha256": "6457d99dcab8ee090289f61f212860eeeecf386c93e9f482c6da3900645582d8",
+      "bytes": 13161,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\worker.py",
+      "sha256": "00c3459a3004771387955e05545bff38f4017fa242b0afd804dbaea7d3b8a7b4",
+      "bytes": 8517,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t6\\FROZEN.json",
+      "sha256": "be8280da7abc248644e79a20603fd2fa8d7dc2fe9f04e655b6f7772341b2b1b0",
+      "bytes": 21889,
+      "role": "LSR_T6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\__init__.py",
+      "sha256": "d40f517aed5416b7f4f6ebdee71cd8d75dfdfc38ab035b851b011f75296989e4",
+      "bytes": 174,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\blend7.py",
+      "sha256": "d2b4bc7bf83947f132884a85593663b6f1fe9d7c1a4ed22fffbe9494b2a251fe",
+      "bytes": 12369,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\engine7.py",
+      "sha256": "6eea875a436b7ac5b3691c70e951d9ac658074a547690baaeaa76bfa3bb621bf",
+      "bytes": 9877,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\merge7.py",
+      "sha256": "9c0db96452698af338093f759d43f7f4eeca02eac58201c12050e72ac3a0acb0",
+      "bytes": 830,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\run_t7.py",
+      "sha256": "d8c28ec571da2286f70ea5242f2a4de9b84f38cf2da2157acb9060a9947aa2f0",
+      "bytes": 21107,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\static_check.py",
+      "sha256": "fe2b9ce565808632f9e358e84fbf36fd9c5f89b025566d35cfae9bff2cdab27e",
+      "bytes": 6880,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\test_lsr7.py",
+      "sha256": "85d38fee148382bf68bc816491ac73ee9e6c1df66df6c168e3df758055cf0484",
+      "bytes": 11793,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\worker.py",
+      "sha256": "ad30352b21b7b54a6d806ebc37c7b35d3dcbc4d950bbb5337518d100279510c8",
+      "bytes": 7853,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lsr_t7\\FROZEN.json",
+      "sha256": "fea7edaf97601f9392ab99d642710dfcf518650b8e8b95fdb5ed4c085a578f8c",
+      "bytes": 19419,
+      "role": "LSR_T7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\__init__.py",
+      "sha256": "f2c1d437f4d01160f08693928d096164a3b0512a00ba11cd8fe20323866b03a5",
+      "bytes": 89,
+      "role": "LACUNARITY_MACHINE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\ledger.py",
+      "sha256": "a7573d467c458f40e9dbd8ec269859e5fba8891bdf724c5f3cba7fbaee140c9d",
+      "bytes": 2125,
+      "role": "LACUNARITY_MACHINE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\readers.py",
+      "sha256": "0fbe90474c6f43232a4d8d90f2e9f25eed946e2cd88d6d2e05dea1f98dc90c3b",
+      "bytes": 5453,
+      "role": "LACUNARITY_MACHINE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\report.py",
+      "sha256": "737beead899aeb2f490ba9e80b9e83d5737f26410357b33c544c82a182a504fa",
+      "bytes": 1748,
+      "role": "LACUNARITY_MACHINE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\universe.py",
+      "sha256": "93cf1223a7f61858f23abe8a5212e3d6ea3fe5462b5a64f2b717302481b5265b",
+      "bytes": 1797,
+      "role": "LACUNARITY_MACHINE"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\__init__.py",
+      "sha256": "735557b20b50a5052bd7f428a87dcd0729cb2ff815a94fedd1e0f788509a02d0",
+      "bytes": 529,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\binder.py",
+      "sha256": "b71f1f64879be73979c68f1b737fabf6537b56f1768315adff23650d4ec92f27",
+      "bytes": 7785,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\bridge.py",
+      "sha256": "2b80e071c0b8fe176046f264f353322c57fc013b8c0444b119e71b954c8b4ee0",
+      "bytes": 5782,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\english.py",
+      "sha256": "51db117c289886254cd5387c546d8c42e93568ce30fa7885fa0d8a10709a3b67",
+      "bytes": 10850,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\grammar.py",
+      "sha256": "570a12719fe40f74e6c04c37641bf967151f0e836ea5ebedc3f382e23d19dff4",
+      "bytes": 8458,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\static_check.py",
+      "sha256": "2e485e1966b899aefd316a951d197b594e6509059cb1491081e3fda1aae9e904",
+      "bytes": 4908,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\tables.py",
+      "sha256": "c402b4d2e82dc59812ed65544f754a36df15bdc3129516fadb07c5da0c94e167",
+      "bytes": 2884,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\test_v2_bridge.py",
+      "sha256": "ebc6700015b9ca3195dedd4f91a49cf0294aac37981dda26a9fa61c16990360c",
+      "bytes": 11098,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\worker.py",
+      "sha256": "2597502a703cf1057bffccbbe3c7bb90f05bad19ad427de720204c42fa0351a9",
+      "bytes": 20475,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\FROZEN.json",
+      "sha256": "ed1052955730450496f02e4232692227cd2a4047a966ddda461dca9b490284f1",
+      "bytes": 10535,
+      "role": "CMP_sdg_bridge_v2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\__init__.py",
+      "sha256": "7cd20e9e19229731b857a826e48dfcd5618147fc6268c6a69f22c34195d0f269",
+      "bytes": 162,
+      "role": "CMP_sdg_bridge"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\bridge.py",
+      "sha256": "2bdf4d959b8ddeeab47f2a23ccfec72dec61c8c5568fd86b65c55ba0d534e8c8",
+      "bytes": 12685,
+      "role": "CMP_sdg_bridge"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\static_check.py",
+      "sha256": "09756f2ca2ca2255fe827907f23eadfb7e8f9374ffee556a50469bf8a91b7a83",
+      "bytes": 3541,
+      "role": "CMP_sdg_bridge"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge\\test_bridge.py",
+      "sha256": "39b7aab1de8ce84c1f5b44118cee566691ecae6d2125e72a1422d19be9f09cb4",
+      "bytes": 15970,
+      "role": "CMP_sdg_bridge"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\__init__.py",
+      "sha256": "453c58f675ca52243891d2e3bf21d6a7b93c6ddd14cd956eb2c3f656ba7c0ab1",
+      "bytes": 99,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\binder.py",
+      "sha256": "7ce25450741290e78a986094e39a1d0ce078a81edb255fe66fada14a9803beef",
+      "bytes": 8071,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\data.py",
+      "sha256": "2bc625b41c88aa8fcfad6fcd1a6b597db168b5b00ae8d89477620b1de7d5ee61",
+      "bytes": 12514,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\evaluation.py",
+      "sha256": "6ae6a0bb299057e5d5d8952d92a0d322b2957bbf06b827587d6c0c5ce2b586bb",
+      "bytes": 3715,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\models.py",
+      "sha256": "553927e7eca43395d4f400d1ba193a2c234129ca40f2c62b164ff892d49ff6c7",
+      "bytes": 10294,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\permit.py",
+      "sha256": "5de47da9c55bf1d13af48bbae15411a5ba23e4e53fd9fd363af170992a64b673",
+      "bytes": 2559,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\sdg_source.py",
+      "sha256": "4dfe5fa8a58ba1dd5f5947b8dea82f4dd1088a05ae3bdf5c85c86fcda02bb823",
+      "bytes": 6033,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\static_check.py",
+      "sha256": "40a26ffd4bb4c5758af1b223b87729941f517613ddc9126b16f219475c2152b1",
+      "bytes": 5258,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\test_v2.py",
+      "sha256": "59e82792b4de453a33804450ee6b8068ce8c57de8c42d610bba91754b9e38e0b",
+      "bytes": 12968,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\training_gate.py",
+      "sha256": "2a0ee8086def3bb6f37437119c33fa873d301a959cb6bcf8f1f34bcb7ea48cd0",
+      "bytes": 1121,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\worker.py",
+      "sha256": "e87a850bfed191ec39ddd8354f5d3fa7b92b910f1ee8fca7a242f836b27159ca",
+      "bytes": 10035,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\FROZEN.json",
+      "sha256": "b4a52754d29c9783a9453d82e4745a589f78cf83df35a8a686f8f26f8a431da9",
+      "bytes": 16838,
+      "role": "CMP_fair_data_experiment_v2_sdg"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\__init__.py",
+      "sha256": "791447aa919e62f039668838a690b9f1ac373f0e559dad7cf3f3ffba79529ea6",
+      "bytes": 80,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\data.py",
+      "sha256": "c9e41d304798f34bf58078e76d10273e7ca152dcb464f3c6ef13f20d8c35acbb",
+      "bytes": 10197,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\evaluation.py",
+      "sha256": "9fe6b8b12f0ce264636187fd99c4bd8f51078d5251eb32939541a4002b040c4b",
+      "bytes": 4503,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\models.py",
+      "sha256": "4ae3038b696f5ba6e69267f0e9847a4cab7f5b4e7900cc40ac86c7edf5a7da89",
+      "bytes": 3947,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\permit.py",
+      "sha256": "5492665036d210faab2207ab80da7045b0dedd0dc154740f9a67bef422ce09a9",
+      "bytes": 3053,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\static_check.py",
+      "sha256": "bc8a37db538104ed99dfc84d2a01ba155a73f1a5f2e2b8b96d7467f7bc5d3ff6",
+      "bytes": 4748,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\test_fair_data.py",
+      "sha256": "899a18231466daa61319112bd89f0d784f90c585a20d901d008a72b43f7f89a3",
+      "bytes": 9989,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\training_gate.py",
+      "sha256": "c9e10eedfd692dfb678383191bd1b3894c2982782ad9b83ac9c0c22403dea237",
+      "bytes": 1116,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\worker.py",
+      "sha256": "05c9530d6d42fd7f423459175372370dcfbb6498d9100c68b6a4a80dc1036f53",
+      "bytes": 8020,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v1\\FROZEN.json",
+      "sha256": "3769a6424f7d2a3c2a95c9a774f91b8545269fe70ead66d61c9c131fdc716729",
+      "bytes": 10538,
+      "role": "CMP_fair_data_experiment_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\__init__.py",
+      "sha256": "6136e2f0006e4acdfaae70210bfe1b3d02d96a351f8709e035c99b95000fcccc",
+      "bytes": 69,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\data.py",
+      "sha256": "cdc64c1765f5722f4d62b1f6a436c5ac20a199cbeb0c27e1f07f5f434665bce1",
+      "bytes": 4370,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\evaluation.py",
+      "sha256": "48b31003e047c9a76d750cc8aeeae8e447a63d33ed7adfa36dd482c0eec8429a",
+      "bytes": 6454,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\models.py",
+      "sha256": "64b0fe91a76f52cac32cd0466f01239f7dfed8eb337dba384781351387ed9bc4",
+      "bytes": 10724,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\permit.py",
+      "sha256": "c759ef3a4381890bf1a11a0401a8cade7b07054ceccb9f29f170d69831bca688",
+      "bytes": 6663,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\prepare_source.py",
+      "sha256": "479188126459ea2a871789c7505e9cf65e0c64e162c1f1579a6ec04798ed2d85",
+      "bytes": 1593,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\static_check.py",
+      "sha256": "2514ac2fc6f79c17b211b6d26316a8782ebc117d8f3e31f60398d288cc7feca2",
+      "bytes": 4150,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\test_scale.py",
+      "sha256": "355cc9e5a2b1a0d5ebedf17d29295c702d1595eab46f7f9269e4917c73ed6891",
+      "bytes": 14076,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\test_supervisor_contract.py",
+      "sha256": "761bc50a2be5c1d9bbb64ebb1f729eb6c5b55ce9738dfe442aadc633f23ef0c5",
+      "bytes": 3058,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\timing.py",
+      "sha256": "aea0141625f91f0a5d8b57300e02a353cac6d7a730a449bf19daa4ea9e782a3d",
+      "bytes": 529,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\training_gate.py",
+      "sha256": "2446506a473d738a20729f0bd596427e9971ed00219ae1b47161deed35b1a85b",
+      "bytes": 1287,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\worker.py",
+      "sha256": "10179cf329b8ae325084ce1416eaec900f007ad0d2773a9f6c92bb4f71b165f7",
+      "bytes": 15548,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\scale_benchmark_v1\\FROZEN.json",
+      "sha256": "da172a6a6807554d0d9805bbdb1b644bdb7d11de5699c79d23884ef52e64d4da",
+      "bytes": 3517,
+      "role": "CMP_scale_benchmark_v1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\corpus\\exchange_adapter.py",
+      "sha256": "e52ba51b67d9d0b1578d828ed6488a28689a7f6e5806423ed5f725c3896ccfd3",
+      "bytes": 5612,
+      "role": "CMP_corpus"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\corpus\\interface.py",
+      "sha256": "84f12ca8e856d2cd06dd6fa15a53ae762e100963ace72b61748aa5065538c9d7",
+      "bytes": 2981,
+      "role": "CMP_corpus"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\corpus\\validate_static.py",
+      "sha256": "744f531b69ddfee7cc714a3fc83cf4c6637d40f9b6db18434314562890934bc4",
+      "bytes": 11106,
+      "role": "CMP_corpus"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\__init__.py",
+      "sha256": "32dba1fad4cd9e1b056a0ef1179df8e8288a9141e218254439bde5f86a8aaec6",
+      "bytes": 423,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\brain.py",
+      "sha256": "ef27cd8fbc761b6910691053201d1b9162282ea2d052f3591eadb93cc25c12c5",
+      "bytes": 12317,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\common.py",
+      "sha256": "490d3db581fba24ba01267be5982df252b97bc1ef90882966156465ce50095a5",
+      "bytes": 2393,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\driver.py",
+      "sha256": "07ab342bf7753a92d7907232cafb038154a7125ed5ca898214df648fb6eefb48",
+      "bytes": 23668,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\lut.py",
+      "sha256": "ffede7b0403c510ca3354d6431972d2ff3944c1c7bee7c0d7b5072d3ecf88206",
+      "bytes": 7220,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\no_torch.py",
+      "sha256": "973276d037c23ff22bbbe2ad6c913dec283bd1b67f792d02e7f9025bc213850b",
+      "bytes": 1482,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\policy.py",
+      "sha256": "609db413c6a59cd74dbaeb695797426b0d893da65e23f5d9f5f247b803545217",
+      "bytes": 11792,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\rows.py",
+      "sha256": "b2409f29fe615f006405197b1bfa57ba18eca345f42a10af33cd991c93159b1b",
+      "bytes": 9029,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\state.py",
+      "sha256": "f601bd9c492d220856666006e3c0dcec0475d7e47bce2169b6b670e0d81624b9",
+      "bytes": 2883,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\worlds.py",
+      "sha256": "a5606471f368223ed00d97b256564bf6e00fd9867b0af6123250d6a323c8c4c9",
+      "bytes": 8359,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb\\writer.py",
+      "sha256": "7167400e118c3d214febc021e65c616776f75ed817a23859741ccb06ae9fcaa8",
+      "bytes": 4856,
+      "role": "RB2C_rb"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\__init__.py",
+      "sha256": "fcdf6e5fdd6fef2aea3bda908e4ba0cffd5d1f3bee4ae23d7cd73c6d50368207",
+      "bytes": 804,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\brain_b.py",
+      "sha256": "e8013d1c656dfb5c2e1b5ef832d1c4980f1b7077c5f733975f1708c42f20a887",
+      "bytes": 6432,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\common2.py",
+      "sha256": "7e11d76994409535902a7f0350bc02e971be1180e2c5d7930cc1395a8afc7842",
+      "bytes": 2904,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\compose.py",
+      "sha256": "8edbf7595433bde5afc3b04e8fde7b28bf4f2c6afbdece649221b301a9cbbd0c",
+      "bytes": 11431,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\driver_rb2.py",
+      "sha256": "e7aeb9fb088b3f0c6f657b955b6f8f591eb0090b399c3c9b5cdb8d82623a3df8",
+      "bytes": 46079,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\lut2.py",
+      "sha256": "c7c81886383ed4c17d07b7e18cf09763fb20b204f3ff44e4c4548b27e4d0169f",
+      "bytes": 10247,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\mlp.py",
+      "sha256": "8ec97aceeaf4a7e2f4e251174b76baa7544f60237f9fe47a7d121b6b332040ef",
+      "bytes": 4458,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\rows_rb2.py",
+      "sha256": "52296013f45a95865184a703f4d2e2c06280e533dce5c18abd188dc3ed1abf3f",
+      "bytes": 20176,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\sdg_select.py",
+      "sha256": "df4f8dd543d76b9eed433b54b85fbf36a75d0ed1ad2db41ed08c6754f647c537",
+      "bytes": 7063,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\state2.py",
+      "sha256": "762aa39ae64db959fa6a1cb0542e303511d953d9ca514ec79e362b3ff2be622d",
+      "bytes": 2457,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\worlds_a.py",
+      "sha256": "a36d4748a4f4b663db75d0c6a592d404651e2e1704b0bf925eb8e17214925581",
+      "bytes": 7471,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\worlds_b.py",
+      "sha256": "aa8383e668ac4d6c043c515cc1a309be00e66df7c24273f2ddc456c5bf2c4512",
+      "bytes": 15343,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\worlds_h1.py",
+      "sha256": "127d549648724190f4cc18505fd6ddb28797e6366392eb0230a4b9d4705941a0",
+      "bytes": 4396,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\rb2\\writer_b.py",
+      "sha256": "cde6b1013eb96726411884ae46ed7b7b88a0ba8f5cbbae115a5c6edf50363a53",
+      "bytes": 3382,
+      "role": "RB2C_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t1\\__init__.py",
+      "sha256": "7ebf67f788a8ce18a991d866e217e669bb3585abbb8166432d621c18ec45e6aa",
+      "bytes": 104,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t1\\engine.py",
+      "sha256": "d8589ef494e29add7fefd31be2523fc5f54e9907594d69ea27ddeba41225b751",
+      "bytes": 28210,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t2\\__init__.py",
+      "sha256": "b6ed20f45e3bbe2eda2710333e56d9c90d32a0f794d721e7c382c49fb99b1ce2",
+      "bytes": 128,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t2\\engine.py",
+      "sha256": "c9aa0f01e894a8d55d87ca10c494319b847e3e6d28632fb670315256a868aa6d",
+      "bytes": 26484,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t3\\__init__.py",
+      "sha256": "f0953f478e9a2f74836d484a41f3f7c0848d421933b2e04f744eb6cd6f9f82f0",
+      "bytes": 173,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t3\\engine.py",
+      "sha256": "0e48cd011b6da2aba186e7fc967a10230cc5e8f91001359e0b2f3ecd536a1af4",
+      "bytes": 23768,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t4\\__init__.py",
+      "sha256": "f289815d50f9e7155d928e794079abfd767db20d1e3fd244d94acf3144b48979",
+      "bytes": 187,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\vendor\\lsr_t4\\engine.py",
+      "sha256": "2047144c1d5f5e3c77ee1694407fe2c703ae3c76b3a396d1f6aac9a640480886",
+      "bytes": 38014,
+      "role": "RB2C_vendor"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\__init__.py",
+      "sha256": "fcdf6e5fdd6fef2aea3bda908e4ba0cffd5d1f3bee4ae23d7cd73c6d50368207",
+      "bytes": 804,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\brain_b.py",
+      "sha256": "e8013d1c656dfb5c2e1b5ef832d1c4980f1b7077c5f733975f1708c42f20a887",
+      "bytes": 6432,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\common2.py",
+      "sha256": "7e11d76994409535902a7f0350bc02e971be1180e2c5d7930cc1395a8afc7842",
+      "bytes": 2904,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\compose.py",
+      "sha256": "8edbf7595433bde5afc3b04e8fde7b28bf4f2c6afbdece649221b301a9cbbd0c",
+      "bytes": 11431,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\driver_rb2.py",
+      "sha256": "3df35391d22edd20659c5f976763e9a84f3016e12bbd29b258c02799bd876235",
+      "bytes": 41670,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\lut2.py",
+      "sha256": "c7c81886383ed4c17d07b7e18cf09763fb20b204f3ff44e4c4548b27e4d0169f",
+      "bytes": 10247,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\mlp.py",
+      "sha256": "8ec97aceeaf4a7e2f4e251174b76baa7544f60237f9fe47a7d121b6b332040ef",
+      "bytes": 4458,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\rows_rb2.py",
+      "sha256": "3e85d918110ef7468041868a3bcda62e6e26d32784344027412b97841bc8efa8",
+      "bytes": 17520,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\sdg_select.py",
+      "sha256": "df4f8dd543d76b9eed433b54b85fbf36a75d0ed1ad2db41ed08c6754f647c537",
+      "bytes": 7063,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\state2.py",
+      "sha256": "762aa39ae64db959fa6a1cb0542e303511d953d9ca514ec79e362b3ff2be622d",
+      "bytes": 2457,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\worlds_a.py",
+      "sha256": "a36d4748a4f4b663db75d0c6a592d404651e2e1704b0bf925eb8e17214925581",
+      "bytes": 7471,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\worlds_b.py",
+      "sha256": "aa8383e668ac4d6c043c515cc1a309be00e66df7c24273f2ddc456c5bf2c4512",
+      "bytes": 15343,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\worlds_h1.py",
+      "sha256": "127d549648724190f4cc18505fd6ddb28797e6366392eb0230a4b9d4705941a0",
+      "bytes": 4396,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2b\\HELM_RECIPE_BRAIN_20261014_RB2B\\rb2\\writer_b.py",
+      "sha256": "cde6b1013eb96726411884ae46ed7b7b88a0ba8f5cbbae115a5c6edf50363a53",
+      "bytes": 3382,
+      "role": "RB2B_rb2"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\sdg_source\\SDG_ROUTING.json",
+      "sha256": "02a93150888e2bbb5c2648c1e74baddaa6b4f5f289bccd06d194a35a462ea848",
+      "bytes": 45427,
+      "role": "RB2C_sdg_source"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\PACKAGE_FREEZE.json",
+      "sha256": "4ebc8bb2df9aa143fb80cda1f4de016b24cb79ae785ab156b5acc9129f5052e7",
+      "bytes": 7969,
+      "role": "RB2C"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\seeds.jsonl",
+      "sha256": "df68d2447ccd7371f8b9a18e48fa90269914be2505f1a96d92e4164aabe91639",
+      "bytes": 3470287,
+      "role": "SHAPE_SEEDS"
+    },
+    {
+      "path": "C:\\Python314\\python.exe",
+      "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+      "bytes": 106328,
+      "role": "PYTHON"
+    }
+  ],
+  "missing": []
+}

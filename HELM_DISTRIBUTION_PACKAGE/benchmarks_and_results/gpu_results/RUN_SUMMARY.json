@@ -1,0 +1,42 @@
+{
+ "env": {
+  "cuda": "12.1",
+  "device": "Tesla T4",
+  "platform": "Linux-6.8.0-1063-aws-x86_64-with-glibc2.35",
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "torch": "2.5.1+cu121"
+ },
+ "package_sha256": "d3876582f2c73e7fcae27776dbb21233a460c1d1486b30ee1e73c2c77fca03af",
+ "stages": {
+  "DATA_IDENTITY": {
+   "pass": true,
+   "seconds": 1.428
+  },
+  "GPU_REQUIRED": {
+   "pass": true,
+   "seconds": 1.409
+  },
+  "PACKAGE_IDENTITY": {
+   "pass": true,
+   "seconds": 1.413
+  },
+  "PARITY": {
+   "pass": true,
+   "seconds": 4.717
+  },
+  "RUN": {
+   "pass": true,
+   "seconds": 36.817
+  },
+  "SMOKE": {
+   "pass": true,
+   "seconds": 3.26
+  },
+  "TESTS": {
+   "pass": true,
+   "seconds": 2.421
+  }
+ },
+ "status": "COMPLETED",
+ "wall_seconds": 36.817
+}
