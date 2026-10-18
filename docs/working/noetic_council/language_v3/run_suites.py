@@ -8,7 +8,7 @@ Run from this folder, with PYTHONPATH as recorded in PROVENANCE.md:
 
     C:\\Python314\\python.exe -X utf8 -B run_suites.py
 
-Expected: 26, 11, 5 (the base suites, unchanged) and 26 (the language_v3 suite).
+Expected: 26, 11, 5 (the base suites, unchanged) and 30 (the language_v3 suite).
 """
 import io
 from pathlib import Path

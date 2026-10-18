@@ -8,6 +8,7 @@ second number (register and drive agreement) reported for MATCH rows.
 """
 from collections import Counter
 from decimal import Decimal
+from fractions import Fraction
 import json
 from pathlib import Path
 import re
@@ -36,7 +37,31 @@ HEDGE_RE = bridge_english._alternation(LEX["hedge_words"])
 LEAK_RE = bridge_english._alternation(LEX["leak_words"] + ["side product"])
 NUMWORD_RE = re.compile(r"(?<![\w'])(" + "|".join(LEX["number_words"]) +
                         r")(?=\s+(?:(?:part|parts|unit|units|measure|measures|portion|portions)\s+)?of\b)")
-DIGIT_RE = bridge_english.NUMBER_RE
+DIGIT_RE = re.compile(r"(?<![\w./])([1-9]\d*/[1-9]\d*|\d+(?:\.\d+)?)(?![\w/])")
+
+
+def _coef(val):
+    s = str(val)
+    if "/" in s:
+        f = Fraction(s)
+        d = f.denominator
+        while d % 2 == 0:
+            d //= 2
+        while d % 5 == 0:
+            d //= 5
+        if d != 1:
+            return f
+        return (Decimal(f.numerator) / Decimal(f.denominator)).normalize()
+    return Decimal(s)
+
+
+def _cas_tuples(parsed):
+    out = []
+    for t in parsed["core"]:
+        out.append((_coef(t["coefficient"]), "prerequisite", t["kind"], t["cell"], False))
+    for leak in parsed["leakage"]:
+        out.append((_coef(leak["coefficient"]), "leakage", "outcome", "Ω_" + leak["side"], False))
+    return out
 
 
 def phrase_hits(text):
@@ -70,7 +95,7 @@ def _segment(original, masked, a, b, stems, number_value):
     seg = masked[a:b]
     warnings = []
     seg_stems = [s for (sa, sb, s) in stems if sa >= a and sb <= b]
-    coefficient = Decimal(number_value)
+    coefficient = _coef(number_value)
     hits = phrase_hits(seg)
     side_stems = [s for s in seg_stems if s.lower().endswith("_side")]
     if side_stems or LEAK_RE.search(seg):
@@ -145,7 +170,7 @@ def extract(text):
 
 def check(parsed_cas, english_text):
     """MATCH / MISMATCH / UNPARSEABLE_ENGLISH, plus the second number (register and drive agreement)."""
-    source = bridge_english.cas_tuples(parsed_cas)
+    source = _cas_tuples(parsed_cas)
     e = extract(english_text)
     out = {"verdict": None, "reasons": [r["code"] for r in e["reasons"]], "second_number_agrees": None,
            "kind": "FORM_CHECK_NOT_SEMANTIC_JUDGE"}
@@ -157,7 +182,7 @@ def check(parsed_cas, english_text):
         cas_meta = {}
         for t in parsed_cas["core"]:
             if t["kind"] == "state":
-                cas_meta.setdefault((Decimal(t["coefficient"]), t["cell"]), []).append(
+                cas_meta.setdefault((_coef(t["coefficient"]), t["cell"]), []).append(
                     ([t["register"]] if t["register"] else [], [t["drive"]] if t["drive"] else []))
         agree = True
         for tup, extra in zip(e["tuples"], e["extras"]):
@@ -174,3 +199,4 @@ def check(parsed_cas, english_text):
     out["offending_pair"] = {"english": [bridge_english.render_tuple(t) for t in eng_only][:1],
                              "cas": [bridge_english.render_tuple(t) for t in cas_only][:1]}
     return out
+

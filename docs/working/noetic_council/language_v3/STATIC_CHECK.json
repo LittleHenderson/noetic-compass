@@ -2,7 +2,7 @@
   "check_type": "STATIC_SOURCE_ONLY",
   "imports": {
     "cce.py": [
-      "decimal",
+      "fractions",
       "hashlib",
       "itertools",
       "json",
@@ -12,6 +12,7 @@
     "aliaswide.py": [
       "collections",
       "decimal",
+      "fractions",
       "json",
       "pathlib",
       "re",
@@ -61,6 +62,18 @@
       "sdg_bridge_v2.grammar",
       "unittest"
     ],
+    "test_lm_t1v3.py": [
+      "aliaswide",
+      "cas_ast",
+      "cce",
+      "cce_v01b",
+      "cce_v01c",
+      "coverage",
+      "fractions",
+      "random",
+      "scoring",
+      "unittest"
+    ],
     "static_check.py": [
       "ast",
       "datetime",
@@ -70,6 +83,6 @@
     ]
   },
   "problems": [],
-  "source_manifest_sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e",
-  "files_hashed": 32
+  "source_manifest_sha256": "d4875ac6cb7c2508ba677af379f4bc9d88b678fefdf82ef68a7ddd225b3531ac",
+  "files_hashed": 34
 }

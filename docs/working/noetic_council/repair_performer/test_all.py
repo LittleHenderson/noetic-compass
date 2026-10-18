@@ -267,8 +267,181 @@ def the_request_field_list_is_not_widened():
 
 
 # --------------------------------------------------------------------------------------------
+# 6. THE THREE FUNCTORS, RETURN ADDRESS, DIRTY PROPAGATION, AND END-TO-END PATH
+# --------------------------------------------------------------------------------------------
+@case
+def desire_block_loops_in_place_and_opens_no_child_even_at_horizon():
+    """A Desire block (D) adds 0 to depth, opens no child, and succeeds even at depth = HORIZON."""
+    ledger = []
+    cause = G.RpmCause(blocked_node="D", depth=D.HORIZON, iterations=4)
+    request = actor.make_request(cause, prerequisites=("desire",))
+    out = actor.perform_repair(request, a_child_that_works, ledger)
+    equal(out["outcome"], actor.REPAIRED, "Desire loop at horizon is exempt from deadlock")
+    equal(out["child_run"], False, "a Desire block opens NO child")
+    equal(out["desire_loop_run"], True, "the iterative Desire loop ran in place")
+    equal(out["after"].verdict, G.PROCEED)
+    depth_line = next(line for line in ledger if line["what"] == "depth_check")
+    equal(depth_line["child_depth"], None, "Desire loop adds no vertical level")
+
+    # Exceeding DESIRE_BOUND (13 > 12) is refused by the gate as DESIRE_BOUND_EXHAUSTED
+    ledger_over = []
+    over_cause = G.RpmCause(blocked_node="D", depth=3, iterations=G.dwp.DESIRE_BOUND + 1)
+    over_out = actor.perform_repair(actor.make_request(over_cause), a_child_that_works, ledger_over)
+    equal(over_out["parent_verdict"].verdict, G.REFUSE)
+    equal(over_out["parent_verdict"].code, G.DESIRE_BOUND_EXHAUSTED)
+    equal(over_out["child_run"], False)
+
+
+@case
+def wisdom_coproduct_block_opens_parallel_children_and_closes():
+    """A Wisdom CO-6 block dispatches parallel children for each part in decomposition."""
+    ledger = []
+    seen_gaps = []
+
+    def parallel_child(**kwargs):
+        seen_gaps.append(kwargs["gap"])
+        return {"ok": True, "detail": "resolved %s" % (kwargs["gap"],)}
+
+    cause = G.RpmCause(
+        blocked_node="W",
+        depth=1,
+        unsatisfied=("part_a", "part_b"),
+        wisdom_route="CO-6",
+        decomposition=("part_a", "part_b"),
+    )
+    request = actor.make_request(cause, prerequisites=("part_a", "part_b"))
+    out = actor.perform_repair(request, parallel_child, ledger)
+    equal(out["outcome"], actor.REPAIRED)
+    equal(out["child_run"], True)
+    equal(tuple(seen_gaps), ("part_a", "part_b"), "both coproduct parts ran in parallel")
+    equal(out["after"].verdict, G.PROCEED)
+
+
+@case
+def return_address_and_real_atlas_glue_back_are_wired():
+    """Step 2 and Step 5 bind a real ReturnAddress on ReturnStack and check real Atlas glue_back."""
+    snap = actor.make_real_atlas_snapshot()
+    st = actor.S.ReturnStack()
+    root_addr = actor.A.ReturnAddress(
+        episode="ep-1",
+        branch="branch-main",
+        snapshot_digest=actor.AB.snapshot_digest_of(snap),
+        bias_version=1,
+        call_id="cjt-root",
+        parent_call_id=None,
+    )
+    ledger = []
+    request = actor.make_request(a_power_block(), prerequisites=("the stock of the ingredient",))
+    out = actor.perform_repair(
+        request,
+        a_child_that_works,
+        ledger,
+        return_stack=st,
+        parent_address=root_addr,
+        glue_nodes=actor.make_real_glue_pair(conflicting=False),
+    )
+    equal(out["outcome"], actor.REPAIRED)
+    ok(out["glue"] is not None and out["glue"].ok is True, "real Atlas glue_back certified overlap")
+    state = st.state_of(root_addr)
+    equal(state.status, actor.S.FINISHED)
+    equal(state.returned_bias_version, 2)
+    equal(state.glue_ok, True)
+
+    # A conflicting glue pair is refused by the real Atlas model
+    st_bad = actor.S.ReturnStack()
+    root_bad = actor.A.ReturnAddress(
+        episode="ep-1",
+        branch="branch-main",
+        snapshot_digest=actor.AB.snapshot_digest_of(snap),
+        bias_version=1,
+        call_id="cjt-root-bad",
+        parent_call_id=None,
+    )
+    ledger_bad = []
+    out_bad = actor.perform_repair(
+        request,
+        a_child_that_works,
+        ledger_bad,
+        return_stack=st_bad,
+        parent_address=root_bad,
+        glue_nodes=actor.make_real_glue_pair(conflicting=True),
+    )
+    equal(out_bad["outcome"], actor.DISENGAGED_GLUE_REFUSED)
+
+
+@case
+def dirty_child_invalidates_ancestors_on_return_stack_and_gate_refuses():
+    """Theorem 27.3: a dirty child marks the ReturnStack chain invalid and the gate refuses."""
+    snap = actor.make_real_atlas_snapshot()
+    st = actor.S.ReturnStack()
+    root_addr = actor.A.ReturnAddress(
+        episode="ep-dirty",
+        branch="branch-main",
+        snapshot_digest=actor.AB.snapshot_digest_of(snap),
+        bias_version=1,
+        call_id="cjt-parent",
+        parent_call_id=None,
+    )
+    ledger = []
+    request = actor.make_request(a_power_block(), prerequisites=("the stock of the ingredient",))
+    out = actor.perform_repair(
+        request,
+        lambda **_kw: {"ok": True, "dirty": True, "dirty_reason": "a Power bypass"},
+        ledger,
+        return_stack=st,
+        parent_address=root_addr,
+    )
+    equal(out["outcome"], actor.DISENGAGED_CHILD_DIRTY)
+    equal(out["after"].verdict, G.REFUSE)
+    equal(out["after"].code, G.ANCESTOR_DIRTY)
+    parent_state = st.state_of(root_addr)
+    equal(parent_state.invalid, True, "the parent thread on ReturnStack is marked invalid")
+
+
+@case
+def detect_cause_from_turn_finds_missing_prerequisites_from_live_bias():
+    """Missing prerequisites are detected from a live BiasSnapshot, not planted."""
+    working = actor.B.Bias("cjt-1")
+    working.write("goal", "Omega_307", "cjt-1")
+    turn_c = actor.cce.empty_content()
+    turn_c["topic"] = "Omega_307"
+    turn_c["outcome"] = [{"omega": "Omega_307", "prereq": "Omega_214"}]
+    turn_c["stock"] = [{"outcome": "Omega_214", "p": 1, "q": 1}]
+
+    cause_before, reqs = actor.detect_cause_from_turn(turn_c, working.snapshot())
+    equal(reqs, ("Omega_214",))
+    equal(cause_before.blocked_node, "P")
+    equal(cause_before.unsatisfied, ("Omega_214",))
+
+    working.write("stock:Omega_214", {"status": "realized"}, "cjt-1")
+    cause_after, _ = actor.detect_cause_from_turn(turn_c, working.snapshot())
+    equal(cause_after.blocked_node, None)
+    equal(cause_after.unsatisfied, ())
+
+
+@case
+def end_to_end_english_in_through_detected_failure_repair_and_english_out():
+    """Full end-to-end trace across all 7 canonical packages."""
+    trace = actor.run_end_to_end(seed=0)
+    equal(trace["round_trip_in_ok"], True, "input English round-trips through language_v3")
+    equal(trace["detected_cause_before"].blocked_node, "P")
+    equal(trace["detected_cause_before"].unsatisfied, ("Ω_214",))
+    equal(trace["repair_out"]["outcome"], actor.REPAIRED)
+    equal(trace["repair_out"]["child_run"], True)
+    ok(trace["repair_out"]["glue"].ok is True, "real Atlas glue_back passed")
+    equal(trace["bias_version_before"], 1)
+    equal(trace["bias_version_after"], 2)
+    equal(trace["detected_cause_after"].blocked_node, None)
+    equal(trace["detected_cause_after"].unsatisfied, ())
+    equal(trace["loop_turn_record"].gate.verdict, G.PROCEED)
+    equal(trace["loop_turn_record"].outcome, L.CONTINUE)
+    equal(trace["round_trip_out_ok"], True, "output English round-trips through language_v3")
+
+
+# --------------------------------------------------------------------------------------------
 # runner
 # --------------------------------------------------------------------------------------------
+
 def main():
     import platform
     print("repair_performer / test_all.py")

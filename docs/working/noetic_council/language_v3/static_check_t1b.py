@@ -59,12 +59,12 @@ def main():
     msha = hashlib.sha256(raw).hexdigest()
     (STAGE / "STATIC_CHECK_T1B.json").write_text(json.dumps({"check_type": "STATIC_SOURCE_ONLY", "imports": imports,
                                                          "problems": problems, "source_manifest_sha256": msha,
-                                                         "files_hashed": len(files)}, indent=2), "utf-8")
+                                                         "files_hashed": len(files)}, indent=2), "utf-8", newline="\n")
     status = {"status": "STATIC_CHECK_" + ("PASS" if not problems else "FAIL") + "_AWAITING_LOCAL_RUN",
               "source_manifest_sha256": msha,
               "sign_line": "APPROVE lm_t1b, source " + msha[:8] + ", LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
               "run_id": "LM_T1B_MSI_ONCE"}
-    (STAGE / "STATUS_T1B.json").write_text(json.dumps(status, indent=2), "utf-8")
+    (STAGE / "STATUS_T1B.json").write_text(json.dumps(status, indent=2), "utf-8", newline="\n")
     print(json.dumps(status))
 
 

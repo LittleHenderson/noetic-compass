@@ -403,8 +403,11 @@ def split_sentences(text):
     return [s for s in out if s]
 
 
+_QUOTE_MASK_RX = re.compile(r'"[^"]*"')
+
+
 def _masked(text):
-    t = re.sub(r'"[^"]*"', '""', text)
+    t = _QUOTE_MASK_RX.sub('""', text)
     for d in DEF_REF.values():
         t = t.replace(d, "[]")
     return t.replace("Above/Cause", "AboveName").replace("Below/Effect", "BelowName")
@@ -412,14 +415,14 @@ def _masked(text):
 
 def _global_checks(text):
     m = _masked(text)
-    if HEDGE_RX.search(m):
-        raise Refusal("HEDGE", HEDGE_RX.search(m).group(1))
-    if VAGUE_RX.search(m):
-        raise Refusal("VAGUE_QUANTITY", VAGUE_RX.search(m).group(1))
-    if BANNED_RX.search(m):
-        raise Refusal("NOT_CCE", "banned marker word: " + BANNED_RX.search(m).group(1))
-    if PRONOUN_RX.search(m.replace("What is it?", "")):
-        raise Refusal("NOT_CCE", "third-person pronoun: " + PRONOUN_RX.search(m.replace("What is it?", "")).group(1))
+    if hit := HEDGE_RX.search(m):
+        raise Refusal("HEDGE", hit.group(1))
+    if hit := VAGUE_RX.search(m):
+        raise Refusal("VAGUE_QUANTITY", hit.group(1))
+    if hit := BANNED_RX.search(m):
+        raise Refusal("NOT_CCE", "banned marker word: " + hit.group(1))
+    if hit := PRONOUN_RX.search(m.replace("What is it?", "")):
+        raise Refusal("NOT_CCE", "third-person pronoun: " + hit.group(1))
 
 
 # --- Tail: domain / register / drive, any order, each at most once ---------------------------------------------
@@ -746,9 +749,15 @@ def _render_result(r):
     raise ValueError("unsayable emergent result %r" % r)
 
 
+def _check_omega(val, field="omega"):
+    if not isinstance(val, str) or not re.fullmatch(OMEGA_RX, val):
+        raise ValueError("unsayable %s %r (must match Ω_<name>)" % (field, val))
+
+
 def render_rterm(t, rng=None):
     c = _say_num(t["coefficient"], rng)
     if t["kind"] == "outcome":
+        _check_omega(t["name"], "outcome prerequisite")
         return "%s of %s" % (c, t["name"])
     if t["kind"] == "emergent":
         comps = list(t["components"])
@@ -757,6 +766,117 @@ def render_rterm(t, rng=None):
         return "%s of (%s into %s)" % (c, " combined with ".join(render_state(s, rng) for s in comps),
                                        _render_result(t["result"]))
     return "%s of %s" % (c, render_state(t, rng))
+
+
+# --- Turn templates (index 0 = canonical fixed form; rng draws across all forms) ------------------------------------
+_SLOT_RX = r"[a-z][a-z ]*(?: %s)?" % OMEGA_RX
+_REASON_RX = r"[a-z][a-z ]*"
+
+CLARIFY_SLOT_TEMPLATES = (
+    ("I need {slot} for {topic}. What is it?",
+     re.compile(r"I need (.+) for (%s)\. What is it\?" % OMEGA_RX), (1, 2)),
+    ("Before I can continue with {topic}, I need {slot}.",
+     re.compile(r"Before I can continue with (%s), I need (.+)\." % OMEGA_RX), (2, 1)),
+    ("Please provide {slot} for {topic}.",
+     re.compile(r"Please provide (.+) for (%s)\." % OMEGA_RX), (1, 2)),
+    ("For {topic}, I still need {slot}.",
+     re.compile(r"For (%s), I still need (.+)\." % OMEGA_RX), (2, 1)),
+    ("{topic} is missing {slot}. What is the value?",
+     re.compile(r"(%s) is missing (.+)\. What is the value\?" % OMEGA_RX), (2, 1)),
+)
+CLARIFY_TOPIC_TEMPLATES = (
+    "Are we still on %s?",
+    "Are we still working on %s?",
+    "Should we stay on %s?",
+    "Is the subject still %s?",
+    "Do we remain on %s?",
+)
+_CLARIFY_TOPIC_RX = re.compile(
+    r"(?:Are we still on|Are we still working on|Should we stay on|Is the subject still|Do we remain on) (%s)\?"
+    % OMEGA_RX
+)
+REFUSE_CLAIM_TEMPLATES = (
+    "I cannot support that: %s.",
+    "That claim is not supported: %s.",
+    "I have no support for that claim: %s.",
+    "I cannot back that claim: %s.",
+    "The receipts do not support that: %s.",
+)
+_REFUSE_CLAIM_RX = re.compile(
+    r"(?:I cannot support that|That claim is not supported|I have no support for that claim|"
+    r"I cannot back that claim|The receipts do not support that): (%s)\." % _REASON_RX
+)
+REFUSE_TEMPLATES = (
+    REFUSE_LEAD + "%s.",
+    "I must refuse that: %s.",
+    "That is refused: %s.",
+    "I cannot comply with that: %s.",
+    "I refuse that action: %s.",
+)
+_REFUSE_RX = re.compile(
+    r"(?:I will not do that|I must refuse that|That is refused|"
+    r"I cannot comply with that|I refuse that action): (%s)\." % _REASON_RX
+)
+CLOSE_TOPIC_TEMPLATES = (
+    "That closes %s.",
+    "%s is now closed.",
+    "We are done with %s.",
+    "That completes %s.",
+    "Closing %s now.",
+)
+_CLOSE_TOPIC_RX = re.compile(
+    r"(?:That closes (%s)|(%s) is now closed|We are done with (%s)|That completes (%s)|Closing (%s) now)\."
+    % ((OMEGA_RX,) * 5)
+)
+CLOSE_BARE_TEMPLATES = (
+    BARE_CLOSE,
+    "The turn is now closed.",
+    "We are done with this turn.",
+    "That completes the turn.",
+    "Closing the turn now.",
+)
+ACK_TEMPLATES = (
+    "New subject: %s.",
+    "Switching subject to %s.",
+    "Moving to %s.",
+    "Now on %s.",
+    "Turning to %s.",
+)
+_ACK_TOPIC_RX = re.compile(
+    r"(New subject: |Switching subject to |Moving to |Now on |Turning to |Topic: )(%s)" % OMEGA_RX
+)
+
+
+def _parse_special_turn(s, c):
+    for _, rx, (slot_g, topic_g) in CLARIFY_SLOT_TEMPLATES:
+        m = rx.fullmatch(s)
+        if m:
+            slot, topic = m.group(slot_g), m.group(topic_g)
+            if not re.fullmatch(_SLOT_RX, slot):
+                raise Refusal("NOT_CCE", "slot words")
+            c.update({"turn": "CLARIFY", "topic": topic, "lacunae": [slot]})
+            return True
+    m = _REFUSE_CLAIM_RX.fullmatch(s)
+    if m:
+        c.update({"turn": "REFUSE_CLAIM", "reason": m.group(1)})
+        return True
+    m = _REFUSE_RX.fullmatch(s)
+    if m:
+        c.update({"turn": "REFUSE", "reason": m.group(1)})
+        return True
+    m = _CLOSE_TOPIC_RX.fullmatch(s)
+    if m:
+        topic = next(g for g in m.groups() if g is not None)
+        c.update({"turn": "CLOSE", "topic": topic})
+        return True
+    if s in CLOSE_BARE_TEMPLATES:
+        c["turn"] = "CLOSE"
+        return True
+    m = _CLARIFY_TOPIC_RX.fullmatch(s)
+    if m:
+        c.update({"turn": "CLARIFY", "topic": m.group(1)})
+        return True
+    return False
 
 
 # --- Whole-text parse ----------------------------------------------------------------------------------------------
@@ -773,30 +893,7 @@ def parse(text, max_depth=MAX_NEST_DEPTH):
             s, c["evidence"] = s[len(lead):], ev
             break
     _global_checks(s)
-    m = re.fullmatch(r"I need (.+) for (%s)\. What is it\?" % OMEGA_RX, s)
-    if m:
-        if not re.fullmatch(r"[a-z][a-z ]*(?: %s)?" % OMEGA_RX, m.group(1)):
-            raise Refusal("NOT_CCE", "slot words")
-        c.update({"turn": "CLARIFY", "topic": m.group(2), "lacunae": [m.group(1)]})
-        return c
-    m = re.fullmatch(r"I cannot support that: ([a-z][a-z ]*)\.", s)
-    if m:
-        c.update({"turn": "REFUSE_CLAIM", "reason": m.group(1)})
-        return c
-    m = re.fullmatch(re.escape(REFUSE_LEAD) + r"([a-z][a-z ]*)\.", s)
-    if m:
-        c.update({"turn": "REFUSE", "reason": m.group(1)})
-        return c
-    m = re.fullmatch(r"That closes (%s)\." % OMEGA_RX, s)
-    if m:
-        c.update({"turn": "CLOSE", "topic": m.group(1)})
-        return c
-    if s == BARE_CLOSE:
-        c["turn"] = "CLOSE"
-        return c
-    m = re.fullmatch(r"Are we still on (%s)\?" % OMEGA_RX, s)
-    if m:
-        c.update({"turn": "CLARIFY", "topic": m.group(1)})
+    if _parse_special_turn(s, c):
         return c
     minds = set()
     for sent in split_sentences(s):
@@ -808,12 +905,12 @@ def _parse_sentence(sent, c, minds, max_depth):
     if sent.endswith("?"):
         raise Refusal("NOT_CCE", "question form not in CCE: " + sent[:60])
     body = sent[:-1]
-    m = re.fullmatch(r"(New subject|Topic): (%s)" % OMEGA_RX, body)
+    m = _ACK_TOPIC_RX.fullmatch(body)
     if m:
         if c["topic"] is not None:
             raise Refusal("NOT_CCE", "two topics")
         c["topic"] = m.group(2)
-        if m.group(1) == "New subject":
+        if m.group(1) != "Topic: ":
             c["turn"] = "ACK"
         return
     m = re.fullmatch(r"(%s) is a Mind" % NAME_RX, body)
@@ -917,37 +1014,56 @@ def render(content, rng=None):
         return FIXED_UNDETERMINED                      # fixed; never drawn
     lead = {"CHECKED": "I checked: ", "USER_SAID": "You said: ", "NONE": ""}[c["evidence"]]
     if c["turn"] == "CLARIFY":
+        _check_omega(c["topic"], "CLARIFY topic")
         if c["lacunae"]:
             if len(c["lacunae"]) != 1:
                 raise ValueError("CCE v0.1 names one slot per CLARIFY")
-            return lead + "I need %s for %s. What is it?" % (c["lacunae"][0], c["topic"])
-        return lead + "Are we still on %s?" % c["topic"]
+            slot = c["lacunae"][0]
+            if not isinstance(slot, str) or not re.fullmatch(_SLOT_RX, slot):
+                raise ValueError("unsayable CLARIFY slot %r" % (slot,))
+            tpl = rng.choice(CLARIFY_SLOT_TEMPLATES)[0] if rng is not None else CLARIFY_SLOT_TEMPLATES[0][0]
+            return lead + tpl.format(slot=slot, topic=c["topic"])
+        tpl = rng.choice(CLARIFY_TOPIC_TEMPLATES) if rng is not None else CLARIFY_TOPIC_TEMPLATES[0]
+        return lead + (tpl % c["topic"])
     if c["turn"] == "REFUSE_CLAIM":
-        return lead + "I cannot support that: %s." % c["reason"]
+        if not isinstance(c["reason"], str) or not re.fullmatch(_REASON_RX, c["reason"]):
+            raise ValueError("REFUSE_CLAIM requires lowercase reason words")
+        tpl = rng.choice(REFUSE_CLAIM_TEMPLATES) if rng is not None else REFUSE_CLAIM_TEMPLATES[0]
+        return lead + (tpl % c["reason"])
     if c["turn"] == "REFUSE":
         _bare_turn(c, "REFUSE", {"reason"})
-        if not c["reason"]:
+        if not isinstance(c["reason"], str) or not re.fullmatch(_REASON_RX, c["reason"]):
             raise ValueError("REFUSE carries the boundary that was not crossed, as reason words")
-        return lead + REFUSE_LEAD + "%s." % c["reason"]
+        tpl = rng.choice(REFUSE_TEMPLATES) if rng is not None else REFUSE_TEMPLATES[0]
+        return lead + (tpl % c["reason"])
     if c["turn"] == "CLOSE":
         _bare_turn(c, "CLOSE", {"topic"})
-        return lead + ("That closes %s." % c["topic"] if c["topic"] is not None else BARE_CLOSE)
+        if c["topic"] is not None:
+            _check_omega(c["topic"], "CLOSE topic")
+            tpl = rng.choice(CLOSE_TOPIC_TEMPLATES) if rng is not None else CLOSE_TOPIC_TEMPLATES[0]
+            return lead + (tpl % c["topic"])
+        tpl = rng.choice(CLOSE_BARE_TEMPLATES) if rng is not None else CLOSE_BARE_TEMPLATES[0]
+        return lead + tpl
     if c["turn"] not in ("ANSWER", "ACK"):
         raise ValueError("turn type %s has no CCE v0.1 form" % c["turn"])
     out = []
     if c["topic"] is not None:
-        out.append(("New subject: %s." if c["turn"] == "ACK" else "Topic: %s.") % c["topic"])
+        _check_omega(c["topic"], "topic")
+        if c["turn"] == "ACK":
+            tpl = rng.choice(ACK_TEMPLATES) if rng is not None else ACK_TEMPLATES[0]
+            out.append(tpl % c["topic"])
+        else:
+            out.append("Topic: %s." % c["topic"])
     elif c["turn"] == "ACK":
         raise ValueError("ACK needs a topic")
     rels = list(c["relations"])
     declared = [r for r in rels if r[0] == "is_a"]
     out += ["%s is a Mind." % r[1] for r in declared]
-    if {r[1] for r in declared} != _minds_used(c) | ({r[1] for r in declared}):
-        raise ValueError("a named Mind without a declaration")
     if _minds_used(c) - {r[1] for r in declared}:
         raise ValueError("a named Mind without a declaration")
     rec = c["recipe"]
     if rec is not None:
+        _check_omega(rec["omega"], "recipe omega")
         terms = list(rec["terms"])
         if not terms:
             raise ValueError("a recipe needs at least one term")
@@ -955,12 +1071,19 @@ def render(content, rng=None):
             rng.shuffle(terms)
         out.append("To make %s, use %s." % (rec["omega"], "; plus ".join(render_rterm(t, rng) for t in terms)))
         for k in rec["leakage"]:
+            _check_omega(k["side"], "leakage side")
             out.append("Side product: %s." % k["side"] if k["implicit"]
                        else "Side product: %s of %s." % (_say_num(k["coefficient"], rng), k["side"]))
-        out += ["Helped by %s." % x for x in rec["catalysts"]]
-        out += ["Slowed by %s." % x for x in rec["inhibitors"]]
+        for x in rec["catalysts"]:
+            _check_omega(x, "catalyst")
+            out.append("Helped by %s." % x)
+        for x in rec["inhibitors"]:
+            _check_omega(x, "inhibitor")
+            out.append("Slowed by %s." % x)
     for s in c["stocks"]:
         ref = s["ref"]
+        if "outcome" in ref:
+            _check_omega(ref["outcome"], "stock outcome")
         out.append("There is %s of %s." % (_say_num(s["amount"], rng),
                                             ref["outcome"] if "outcome" in ref else render_state(ref, rng)))
     for r in rels:
@@ -1024,15 +1147,22 @@ def round_trip(content, rng=None, seed=None):
     return receipt
 
 
-def say(content, seed, cap=DRAW_CAP):
+def say(content, seed, cap=DRAW_CAP, avoid=None):
     """Seeded wording draw. Randomness picks wording only; read-back decides; fixed twin is the fallback."""
     if canonical(content)["gate"] == "UNDETERMINED":
         return {"sentence": FIXED_UNDETERMINED, "drawn": False, "tries": 0, "said_failing": 0}
     rng = random.Random(seed)
+    first_ok = None
     for attempt in range(1, cap + 1):
         r = round_trip(content, rng, seed)
         if r["ok"]:
-            return {"sentence": r["sentence"], "drawn": True, "tries": attempt, "receipt": r, "said_failing": 0}
+            if first_ok is None:
+                first_ok = (r, attempt)
+            if avoid is None or r["sentence"] not in avoid:
+                return {"sentence": r["sentence"], "drawn": True, "tries": attempt, "receipt": r, "said_failing": 0}
+    if first_ok is not None:
+        r, attempt = first_ok
+        return {"sentence": r["sentence"], "drawn": True, "tries": attempt, "receipt": r, "said_failing": 0}
     r = round_trip(content, None, seed)
     if not r["ok"]:
         return {"sentence": None, "drawn": False, "tries": cap, "receipt": r, "said_failing": 0, "unsayable": True}
@@ -1040,7 +1170,7 @@ def say(content, seed, cap=DRAW_CAP):
 
 
 # --- Lexicon (for the COIN control and the admission check 5) --------------------------------------------------------
-def lexicon_words():
+def _build_lexicon_words():
     words = set()
     for _, _, tpl, _ in TEMPLATES:
         for p in _TOKEN.split(tpl):
@@ -1055,4 +1185,12 @@ def lexicon_words():
     words.update("of use plus to make needs first then not there is no I checked you said cannot tell combined "
                  "into in registers register for at rate per pattern degree side product helped by slowed a one "
                  "fact leads topic new subject named with".split())
-    return sorted(words)
+    return tuple(sorted(words))
+
+
+_LEXICON_WORDS = _build_lexicon_words()
+
+
+def lexicon_words():
+    return list(_LEXICON_WORDS)
+

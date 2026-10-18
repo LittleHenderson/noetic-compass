@@ -292,6 +292,12 @@ def m5b(rows):
 DOMAIN_INDEX = {"P": 0, "C": 1, "E": 2, "O": 3}
 
 
+def _coef_key(x):
+    if isinstance(x, float):
+        return cce.num(repr(x))
+    return cce.num(x)
+
+
 def m7(recipes, round_tripped, frame_terms):
     from fair_data_experiment_v2_sdg import sdg_source
     try:
@@ -305,13 +311,13 @@ def m7(recipes, round_tripped, frame_terms):
         if not (art.valid and art.result is not None) or back is None:
             rows.append({"seed_id": r["seed_id"], "agree": False})
             continue
-        theirs = sorted((str(float(q["coefficient"])), q["primitive"]["operator"], q["primitive"]["domain"],
+        theirs = sorted((_coef_key(q["coefficient"]), q["primitive"]["operator"], q["primitive"]["domain"],
                          q["primitive"].get("drive"), q["primitive"].get("register")) for q in art.result.prerequisites)
-        theirs_leak = sorted((str(float(k["coefficient"])), k["target"]) for k in art.result.leakages)
+        theirs_leak = sorted((_coef_key(k["coefficient"]), k["target"]) for k in art.result.leakages)
         rec = cce.canonical(back)["recipe"]
-        ours = sorted((str(float(t["coefficient"])), "CO-%d" % t["noetic"], t["domain"], t["drive"],
+        ours = sorted((_coef_key(t["coefficient"]), "CO-%d" % t["noetic"], t["domain"], t["drive"],
                        t["register"][0] if t["register"] else None) for t in rec["terms"] if t["kind"] == "state")
-        ours_leak = sorted((str(float(k["coefficient"])), k["side"][2:]) for k in rec["leakage"])
+        ours_leak = sorted((_coef_key(k["coefficient"]), k["side"][2:]) for k in rec["leakage"])
         ok = theirs == ours and theirs_leak == ours_leak
         agree += ok
         rows.append({"seed_id": r["seed_id"], "agree": ok})

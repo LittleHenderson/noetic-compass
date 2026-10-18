@@ -5,7 +5,7 @@
   OUT 0: "the offer" speaks to me.
   OUT 1: I am attracted toward "the offer".
   OUT 2: I have an affinity for "the offer".
-  OUT 3: I am attracted toward "the offer".
+  OUT 3: I am drawn to "the offer".
   OUT 4: I am attracted toward "the offer".
   SAME CONTENT AFTER A ROUND TRIP: YES
 
@@ -15,8 +15,8 @@
   IN   : I have an affinity for "the offer".
   OUT 0: I am drawn to "the offer".
   OUT 1: I have an affinity for "the offer".
-  OUT 2: I am drawn to "the offer".
-  OUT 3: I am attracted toward "the offer".
+  OUT 2: I am attracted toward "the offer".
+  OUT 3: "the offer" speaks to me.
   OUT 4: "the offer" speaks to me.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
@@ -26,7 +26,7 @@
   IN   : I am repelled by "the offer".
   OUT 0: I am repelled by "the offer".
   OUT 1: I am adverse to "the offer".
-  OUT 2: I am adverse to "the offer".
+  OUT 2: "the offer" rubs me the wrong way.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
 ================================================================================================
@@ -50,28 +50,44 @@
 6. A REFUSAL OF AN ACT - the new REFUSE turn
 ------------------------------------------------------------------------------------------------
   IN   : I will not do that: boundary violation.
-  OUT 0: I will not do that: boundary violation.
+  OUT 0: I cannot comply with that: boundary violation.
+  OUT 1: I must refuse that: boundary violation.
+  OUT 2: I will not do that: boundary violation.
+  OUT 3: I refuse that action: boundary violation.
+  OUT 4: That is refused: boundary violation.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
 ================================================================================================
 7. A CLOSING TURN - the new CLOSE turn
 ------------------------------------------------------------------------------------------------
   IN   : That closes the turn.
-  OUT 0: That closes the turn.
+  OUT 0: That completes the turn.
+  OUT 1: The turn is now closed.
+  OUT 2: That closes the turn.
+  OUT 3: Closing the turn now.
+  OUT 4: We are done with this turn.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
 ================================================================================================
 8. A REFUSAL OF A CLAIM
 ------------------------------------------------------------------------------------------------
   IN   : I cannot support that: no evidence.
-  OUT 0: I cannot support that: no evidence.
+  OUT 0: I cannot back that claim: no evidence.
+  OUT 1: That claim is not supported: no evidence.
+  OUT 2: I cannot support that: no evidence.
+  OUT 3: The receipts do not support that: no evidence.
+  OUT 4: I have no support for that claim: no evidence.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
 ================================================================================================
 9. ASKING FOR THE MISSING THING
 ------------------------------------------------------------------------------------------------
   IN   : I need the amount for Ω_x. What is it?
-  OUT 0: I need the amount for Ω_x. What is it?
+  OUT 0: For Ω_x, I still need the amount.
+  OUT 1: Before I can continue with Ω_x, I need the amount.
+  OUT 2: I need the amount for Ω_x. What is it?
+  OUT 3: Ω_x is missing the amount. What is the value?
+  OUT 4: Please provide the amount for Ω_x.
   SAME CONTENT AFTER A ROUND TRIP: YES
 
 ================================================================================================
