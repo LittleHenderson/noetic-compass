@@ -192,6 +192,38 @@ flowchart LR
 | **`write_file`** | Path confined to workspace, content length $\le 500\text{ KB}$ | `G-FORBIDDEN` if outside sandbox; `G-LIMIT` if content $> 500\text{ KB}$ | Atomic write with parent directory auto-creation | Written byte count, target file SHA-256 digest, side-effects ledger |
 | **`execute_command`** | Command safe (no blacklist regex), timeout $\le 60\text{s}$, working directory confined | `G-FORBIDDEN` on destructive commands (`rm -rf /`, fork bombs); `G-LIMIT` if timeout $> 60\text{s}$ | Subprocess execution with strict OS watchdog timeout | Process exit code, stdout/stderr byte capture, execution elapsed ms |
 | **`dispatch_cloud_job`**| Sealed training ZIP exists on disk, cost ceiling $\le \$1.00$, watchdog runtime $\le 30\text{ min}$ | `G-ABSENT` if package missing; `G-LIMIT` if cost $> \$1.00$ or runtime $> 30\text{ min}$ | Sealed dispatch contract with automatic instance self-termination watchdog | Instance spec, package SHA-256 fingerprint, cost ceiling guarantee |
+| **`git_action`** | Repository directory confined, action in `[status, diff, log, branch, commit]` | `G-FORBIDDEN` on unapproved git actions; `G-LIMIT` on unconfined repo paths | Safe git operations with timeout $\le 15\text{s}$ | Action code, git output digest, branch/commit audit trail |
+| **`synthesize_code`** | Target path confined, size $\le 500\text{ KB}$, **AST syntax verified (`ast.parse`)** | `G-LIMIT` (`SYNTAX_INVALID`) if code contains SyntaxErrors; `G-FORBIDDEN` if outside sandbox | Zero unverified or broken code ever written to disk | AST validity proof, code SHA-256 digest, byte count |
+| **`systems_design_spec`** | Memory budget $\le 354\text{ MB}$ (owner boundary), latency $\le 30,000\text{ ms}$ | `G-LIMIT` if memory $> 354\text{ MB}$ or latency $> 30\text{s}$ | Emits sealed systems architecture specification | Spec SHA-256 digest, component count, conservation proof |
+| **`web_app_scaffold`** | Target directory confined within approved workspace | `G-FORBIDDEN` if destination path traverses outside workspace | Generates modern, accessible, responsive single-page application scaffold | Scaffolded HTML path, digest, component catalog |
+
+---
+
+### 2.5.1 The Unity Eye: Supervisory F1 Watcher & Dynamic Creativity Dial Control
+*Autonomous lateral problem solving without violating conservation laws:*
+
+In complex real-world workflows, conservative execution occasionally stalls because initial parameters are too rigid or an approach hits an unexpected environmental roadblock. Ordinary LLM agents respond by looping aimlessly or hallucinating nonexistent tools.
+
+HELM implements **The Unity Eye (The F1 Watcher)**—an architectural supervisory watcher based on First-Principles Desire/Unity (D1/F1):
+- **Supervisory Stance:** The Eye does not execute actions directly; it observes execution attempts, records shortfalls (`Shortage`), and tracks failure modes.
+- **Dynamic Dial Escalation Ladder:** When conservative execution stalls or clamps, The Eye dynamically turns the 5 Creativity Dials ($K, \rho, R, \sigma, B$) upward:
+  - **Attempt 1 (Conservative Mode):** $K=4, \rho=-1.0, R=1, B=0, \sigma=0.50$ (Strict execution).
+  - **Attempt 2 (Balanced Mode):** $K=8, \rho=0.5, R=2, B=16, \sigma=0.70$ (Standard exploration).
+  - **Attempt 3 (Exploratory Mode):** $K=16, \rho=0.8, R=4, B=32, \sigma=0.85$ (Wider search and flexible substitution).
+  - **Attempt 4+ (Out-of-the-Box Mode):** $K=32, \rho=1.0, R=8, B=64, \sigma=0.98$ (Maximum radical hypothesis generation).
+- **The Unbending Invariant:** While The Eye opens the **search and hypothesis aperture**, it **NEVER weakens or bypasses the Pre-Flight RPM Gate**. Even at $\sigma=0.98$ and $K=32$, `G-ABSENT` halts any missing prerequisites and `G-FORBIDDEN` blocks dangerous operations. Zero ungrounded actions are permitted.
+
+---
+
+### 2.5.2 True Dynamic Level A1 DAG Planning (Beyond Heuristic Templates)
+*Dynamic semantic goal decomposition into causal topological graphs:*
+
+Rather than relying on hardcoded keyword rules (`if "audit" in goal:`), HELM's `DynamicGoalPlanner`:
+1. Dynamically analyzes open natural language prompts, extracting target files, commands, and multi-step intentions.
+2. Identifies atomic action types (`READ`, `WRITE`, `EXECUTE`, `GIT`, `CODE`, `SYSTEM_DESIGN`, `WEB_SCAFFOLD`, `CLOUD_DISPATCH`).
+3. Connects nodes in strict causal order:
+   $$\text{Inspect Target} \longrightarrow \text{Synthesize Code/Spec} \longrightarrow \text{Verify Tests} \longrightarrow \text{Git Commit}$$
+4. Validates acyclicity and dependency satisfaction before handing the DAG to the Level A2 Pre-Flight Executor.
 
 ---
 
@@ -231,6 +263,61 @@ HELM decouples its **Internal Semantic Core** from its **External Natural Voice*
 | **Creative Analogy** | Searchlight $R=4$: cross-domain recipe link | *"RPA Searchlight at radius 4 traversed from metallurgy to ceramics."* | *"Looking across related engineering setups, we can borrow a heat-treating technique from ceramics to strengthen this metal alloy. Here's how that would work."* |
 | **Ungrounded Question** | High entropy $H > 0.9$, `CLARIFY` triggered | *"Unparseable semantic token: question lacks principled grounded foundation."* | *"I can't answer that because there are no verified facts or physical recipes connecting those ideas. What specific materials or problem are you looking to solve?"* |
 | **Autonomous Action** | Tool call: Git commit + test sweep | *"Agent A2 executing commit functor with prerequisite verification."* | *"I ran the full test suite (all 288 tests passed) and committed the latest updates to your branch with clean verification receipts."* |
+
+---
+
+### 2.7 Software & Systems Engineering Capability Matrix: Coding, Version Control, Systems Architecture, and Web/App Design
+*Grounded, stoichiometric engineering execution without statistical hallucination:*
+
+One of the greatest hazards of current generative AI in software engineering is **silent, hallucinated bugs**—generating code that looks syntactically plausible but violates system invariants, introduces security flaws, invents non-existent APIs, or breaks git history. HELM treats software and systems engineering not as statistical token prediction, but as **Grounded Stoichiometric Engineering Reactions**:
+
+```mermaid
+flowchart TD
+    UserGoal["User Request\n('Build a REST API & web dashboard for recipe tracking')"] --> Planner["Dynamic Level A1 Goal Planner\n(Semantic Action & Dependency Extraction)"]
+    
+    subgraph STOICHIOMETRIC_SUITE ["Governed Software Engineering Tool Suite"]
+        P1["synthesize_code\n(AST Syntax Verification via ast.parse)"]
+        P2["systems_design_spec\n(State Machines, Interface Contracts, Memory <= 354MB)"]
+        P3["web_app_scaffold\n(Responsive UI Layouts & Component Catalog)"]
+        P4["git_action\n(Status, Diff, Branch, Safe Commit Ledger)"]
+        P5["execute_command\n(Unit Testing, Compiler Pass, Linting)"]
+    end
+    
+    subgraph SUPERVISOR ["The Unity Eye (F1 Watcher)"]
+        Watch["Observe Attempts & Failures"]
+        DialMod["Dynamic Dial Escalation\n(Conservative -> Balanced -> Exploratory -> Out-of-the-Box)"]
+    end
+    
+    Planner --> STOICHIOMETRIC_SUITE
+    STOICHIOMETRIC_SUITE -->|Compilation/Test Error| Watch
+    Watch --> DialMod
+    DialMod -->|Lateral Re-Planning| Planner
+    STOICHIOMETRIC_SUITE -->|Passes Pre-Flight & Tests| Release["Sealed Software & Architecture Release\n(Verified 40-Digit Conservation Receipts)"]
+```
+
+#### The Four Pillars of HELM's Software Engineering Architecture
+
+1. **Coding & Programming (`synthesize_code`):**
+   - **Pre-Write AST Syntax Verification:** Before any file is written to disk, HELM parses the code into an Abstract Syntax Tree (`ast.parse` in Python or language grammar verifiers). If syntax errors exist, the Pre-Flight RPM Gate trips with `G-LIMIT` (`SYNTAX_INVALID`), preventing broken files from contaminating the workspace.
+   - **Type Invariants & Formal Contracts:** Functions and classes are treated as input-output conservation systems with declared preconditions and postconditions.
+2. **Version Control & Repository Hygiene (`git_action`):**
+   - **Cryptographic Audit Ledger:** Git is treated as an immutable historical reaction log. Operations (`status`, `diff`, `log`, `branch`, `commit`) are strictly sandboxed within the approved repository root.
+   - **Pre-Flight Tree Verification:** Commits are prohibited if the working tree contains unverified code or failing test cases, guaranteeing zero regression.
+3. **Systems Design & Systems Engineering (`systems_design_spec`):**
+   - **Conservation Laws for Compute:** Systems architectures are bounded by strict stoichiometric resource budgets: memory ceilings ($\le 354\text{ MB}$ to honor host boundaries) and latency ceilings ($\le 30,000\text{ ms}$).
+   - **Deterministic State Machines:** Every system specification defines finite state spaces, valid state transitions, interface contracts, and failure-recovery topologies overseen by The Unity Eye.
+4. **Web & App Design (`web_app_scaffold`):**
+   - **Dual-Skin Presentation Scaffolds:** Generates clean, accessible, responsive user interfaces (HTML5/CSS3/TypeScript) and component architectures that communicate directly with backend CAS recipe DAGs via verified REST or WebSocket protocols.
+
+#### Recommended Developmental Timeline for Software & Systems Engineering
+
+| Developmental Stage | Target Milestone | Software & Systems Engineering Focus | Deliverables & Verification Invariants |
+|---|---|---|---|
+| **Stage v0.6** *(Current)* | **Agentic & Tool Execution** | **Foundational Governed Tool Suite** | Pre-Flight RPM Gated execution for `synthesize_code`, `git_action`, `systems_design_spec`, `web_app_scaffold`; AST pre-write verification; True Dynamic DAG planning. |
+| **Stage v0.7** | **Lexicon & Symbolic Code Graphs** | **AST-to-CAS Symbolic Mapping** | Treating code as directed acyclic symbolic graphs (Noetic verb frames: `Above/Cause` for caller, `Below/Effect` for callee); eliminating hallucinated imports and undefined variables. |
+| **Stage v0.8** | **Verification & Test Synthesis** | **Automated Invariant Proving** | Autonomous property-based test synthesis; formal verification (Hoare logic contracts); automated fault localization and repair via D/W/P Noetic repair loops. |
+| **Stage v0.9** | **Full-Stack Systems Co-Design** | **Multi-Tier Architecture Synthesis** | End-to-end coordinated generation of responsive frontends, backend microservices, database schemas, and AWS CloudFormation/Terraform infrastructure configs. |
+| **Stage v1.0** | **Self-Hosted Autonomous Engineer** | **Autonomous Refactoring & Evolution** | HELM autonomously maintains, benchmarks, refactors, and extends its own codebase under immutable RPM Gate and Rule P constitutional constraints. |
 
 ---
 

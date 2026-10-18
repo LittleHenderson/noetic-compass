@@ -259,6 +259,48 @@ def test_agentic_preflight_rpm_gate_and_dag_planning():
     assert plan_res["steps_completed"] == plan_res["steps_total"]
 
 
+# =============================================================================
+# 7. Unity Eye Supervisory Dial Control & Software Engineering Tools
+# =============================================================================
+@case("test_unity_eye_supervisory_dial_control_and_software_engineering_tools")
+def test_unity_eye_supervisory_dial_control_and_software_engineering_tools():
+    import helm_agentic_executor as ax
+    engine = ax.AgenticExecutionEngine(workspace_root=HERE)
+
+    # 1. AST pre-flight check catches syntax errors before disk write
+    broken_code = "def broken(x\n    return x\n"
+    gate_syn, rec_syn = engine.registry.execute_tool(
+        "synthesize_code",
+        {"path": os.path.join(HERE, "temp_broken.py"), "code_content": broken_code, "language": "python"}
+    )
+    assert not gate_syn.cleared
+    assert gate_syn.gate_code == "G-LIMIT"
+    assert rec_syn is None
+
+    # 2. True Dynamic Level A1 DAG Planning
+    dyn_dag = engine.decompose_goal("Synthesize python code math_utils.py, verify syntax, run test suite, and check git status.")
+    step_ids = list(dyn_dag.steps.keys())
+    assert any("synthesize_code" in s for s in step_ids)
+    assert any("run_verification" in s for s in step_ids)
+    assert any("git_control" in s for s in step_ids)
+
+    # 3. Unity Eye Dial Escalation Ladder
+    eye = engine.eye
+    d1 = eye.modulate_dial_for_attempt(1)
+    assert d1.breadth_K == 4 and d1.valve_novelty_sigma == Decimal("0.50")
+    d4 = eye.modulate_dial_for_attempt(4)
+    assert d4.breadth_K == 32 and d4.valve_novelty_sigma == Decimal("0.98")
+
+    # 4. RPM Gate invariant holds at maximum dial setting
+    gate_inv, _ = engine.registry.execute_tool(
+        "read_file",
+        {"path": "non_existent_eye_check.txt"},
+        valve_aperture=d4.valve_novelty_sigma
+    )
+    assert not gate_inv.cleared
+    assert gate_inv.gate_code == "G-ABSENT"
+
+
 def run_all_tests():
     global passed_cases, failed_cases
     passed_cases = 0
@@ -276,6 +318,7 @@ def run_all_tests():
     test_rpa_searchlight_on_real_atlas_exact_15_candidates()
     test_valve_controller_rpm_interlock_and_entropy_throttle()
     test_agentic_preflight_rpm_gate_and_dag_planning()
+    test_unity_eye_supervisory_dial_control_and_software_engineering_tools()
 
     print("-" * 72)
     print(f"TOTAL CASES: {passed_cases + failed_cases} | PASSED: {passed_cases} | FAILED: {failed_cases}")
