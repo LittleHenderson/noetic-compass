@@ -321,6 +321,47 @@ flowchart TD
 
 ---
 
+### 2.8 Cyber-Physical Virtual Flight & Embodied Drone Simulation (`HELM-AeroVE`)
+*Transforming HELM from a desktop/cloud cognitive agent into a high-speed, physics-grounded autonomous flight executive:*
+
+A critical milestone in HELM's embodied developmental arc is the creation of the **HELM Autonomous Virtual Flight Environment (`HELM-AeroVE`)**—a dedicated, physics-grounded cyber-physical simulator where HELM controls a virtual unmanned aerial vehicle (UAV/drone) navigating dynamic, high-complexity worlds.
+
+#### Key Architectural Requirements & Principles:
+1. **Zero-Cognitive-Leakage Independent World Control (`WorldSim-Orchestrator`):**
+   - The environment is procedurally generated and dynamically reconfigured **completely independently of HELM**.
+   - HELM has zero privileged access to future obstacles, wind vectors, or ground-truth world state; it operates strictly on noisy, delayed sensor streams across a simulated Hardware Abstraction Layer (HAL).
+2. **True Continuous Atmospheric Physics:**
+   - **Aerodynamics & 6-DoF Dynamics:** Rigid-body translation/rotation governed by Newton-Euler equations, gyroscopic rotor precession, and blade-element momentum theory.
+   - **Atmospheric Wind & Turbulence:** 3D vector wind fields with logarithmic boundary layers, Dryden gust models (thermal updrafts, microbursts), and von Kármán spectral turbulence modeling urban canyon wind shear.
+   - **Aerodynamic Boundary Anomalies:** Ground effect cushioning ($z < 2R$), Vortex Ring State (VRS) in steep descents, translational lift, and dynamic air density variations $\rho(h, T, P)$.
+3. **Exhaustive Drone Hardware Digital Twin:**
+   - **Electrical & Propulsion:** 4x/6x BLDC motors with electrical torque curves and winding thermal dissipation; ESCs running digital DShot protocols with active braking; non-linear LiPo battery discharge with Peukert capacity degradation, internal resistance ($R_{\text{int}}$), and instantaneous voltage sag under full throttle.
+   - **Comprehensive Sensor Suite:** Triple-redundant 6-axis IMUs (with Allan variance random walk drift, axis non-orthogonality, and motor vibration coupling), 3-axis magnetometers (with motor trace EMI distortion), barometric altimeters, RTK-GNSS receivers (with urban multipath reflections and satellite blackout), forward stereo depth cameras, downward optical flow, and solid-state LiDAR.
+4. **Dynamic Environmental Obstacles & Multi-Agent Airspace:**
+   - Static: Procedural urban skyscrapers, street canyons, power lines, and complex forest canopies with wind-blown swaying foliage.
+   - Dynamic: Flocks of birds executing Craig Reynolds' Boids flocking model (separation, alignment, cohesion) with panic scattering; cooperative and non-cooperative civilian/commercial drones on intersecting flight paths; moving ground vehicles.
+   - Optics & Weather: Continuous 24-hour day/night solar cycle (blinding direct sun glare to pitch-black $0.001\text{ lux}$ night navigation), volumetric clouds, ground fog with optical extinction ($\beta_{\text{ext}}$), and heavy precipitation with airframe water mass accumulation.
+5. **10-Tier Progressive Complexity Curriculum:**
+   - Tier 1: Calm Lab $\to$ Tier 2: Open Field Breeze $\to$ Tier 3: Forest Waypoint Navigation $\to$ Tier 4: Dynamic Flora & Fauna $\to$ Tier 5: Urban Canyon Wind Shear $\to$ Tier 6: Multi-Vehicle Sense-and-Avoid $\to$ Tier 7: Extreme Weather (Gale/Rain/Fog) $\to$ Tier 8: Day/Night Transition & Zero-Lux $\to$ Tier 9: In-Flight Cyber-Physical Faults (Motor burnout, bent blade, sensor dropouts) $\to$ Tier 10: The Adversarial Gauntlet.
+6. **HELM as Avionics Executive:**
+   - Saliency filtering via Phase 3 Meta Valve ($\sigma$); aerodynamic and tilt envelope clamping via RPM Pre-Flight Gates (`G-LIMIT`, `G-ABSENT`); 40-digit Decimal energy/momentum conservation via Station S0; lateral dynamic spline synthesis via The Unity Eye ($K, \rho, R$); and emergency motor-out spin recovery via the Noetic Repair Loop (Desire/Wisdom/Power).
+
+---
+
+### 2.9 Frontier Cyber-Physical Simulation & Training Testbeds
+*Extending HELM's stoichiometric governance across diverse real-world cyber-physical domains:*
+
+Beyond multi-rotor drone flight, HELM's exact conservation principles and zero-hallucination guarantees are designed to train across six high-consequence physical simulators:
+
+1. **Subterranean & Deep-Sea Swarm Exploration:** Acoustic and inertial navigation in completely GPS-denied, RF-opaque underground mines, collapsed tunnels, and deep-sea trenches ($1,000\text{ bar}$ pressure, zero visibility). Swarms communicate via sparse, sheaf-theoretic topological overlap receipts (`certify_overlap()`).
+2. **Spacecraft Orbital Mechanics & Non-Cooperative Docking:** Microgravity relative motion governed by Clohessy-Wiltshire equations, cold-gas thruster plume impingement, reaction wheel angular momentum saturation, and dynamic eclipse thermal shock ($+120^\circ\text{C}$ to $-150^\circ\text{C}$). The RPM Gate enforces stoichiometric delta-V propellant budgets.
+3. **High-Speed Autonomous EV & Agile Off-Road Rover:** High-speed desert and loose gravel handling governed by Pacejka 'Magic Formula' non-linear tire friction curves, suspension travel, dynamic roll-over stability envelopes, and kinetic energy dissipation receipts.
+4. **Robotic Surgical Micro-Manipulator:** Sub-millimeter endoscopic soft-tissue manipulation and vascular suturing. Viscoelastic deformation physics with an immutable RPM Gate force ceiling ($\le 0.35\text{ N}$) that makes accidental tissue puncture physically impossible.
+5. **Smart Grid & Renewable Microgrid Energy Dispatch:** Continental-scale AC power transmission grids with millisecond-level transient frequency regulation, governor droop, reactive power balance, and lightning busbar faults. Every power dispatch command is proven as a balanced stoichiometric recipe ($P_{\text{gen}} = P_{\text{load}} + P_{\text{loss}}$).
+6. **Chemical Batch Reactor & Bio-Fermentation Plant:** Continuous stirred-tank reactors (CSTR) for synthetic pharmaceuticals. Non-linear Arrhenius reaction kinetics, fluid agitation, jacketed cooling heat transfer, and exotherm runaway prevention. Station S0 balances chemical moles directly, guaranteeing zero toxic by-products or thermal runaways.
+
+---
+
 ## 3. Official Developmental Stages & Versioning Taxonomy
 
 HELM follows a disciplined semantic milestone taxonomy. Each version represents a verifiable architectural tier with defined claim ceilings and exit criteria:
@@ -333,25 +374,35 @@ timeline
     HELM v0.3 Prism : Creative Faculties v2 : Real RPA Searchlight : 5-Dial Control Panel
     HELM v0.4 Valve : Phase 3 Meta Valve System : AWS Trained Aperture : Entropy Throttling
     HELM v0.5 Scribe : Level L4 CAS-Native Proposer : Zero-Pretrained English Bridge
-    HELM v0.6 Sensorium : Multimodal Sensory Registers : Vision/Audio Proposers : Spatial Conservation
-    HELM v1.0 Atlas : Executive General Recipe Brain : Multi-Domain Recipe Atlas : Autonomous Pondering
-    HELM v2.0 Sovereign : Embodied Robotics : Sheaf-Theoretic Multi-Agent Repair
+    HELM v0.6 Agentic : Level A1 DAG Planner : Level A2 Pre-Flight Tool Executor : Software Suite
+    HELM v0.7 Topological : Prerequisite Graph Planner : Temporal Causal Ordering : Kahn Sort
+    HELM v0.8 Memory : Multi-Turn Conversational Memory : Anaphora Resolution : Everyday Voice
+    HELM v0.8.1 Grounding : Dialogic Act Disambiguation : User Narrative Retention : Punctuation Polish
+    HELM v1.0 Atlas : Executive General Recipe Brain : Universal Stoichiometry : Autonomous Pondering
+    HELM v1.1 AeroVE : Virtual Drone Flight Simulator : 6-DoF Physics : 10-Tier Curriculum
+    HELM v1.2 SwarmSim : Sheaf Multi-Drone Swarms : Subterranean / Orbital Simulators
+    HELM v2.0 Sovereign : Physical Hardware Flashing : Real UAV Outdoor Flight : Zero-Crash Warranty
     HELM v3.0 Frontier : Universal General Recipe Intelligence : Sub-Watt Edge Cognitive Core
 ```
 
 ### Detailed Milestone Table
 
-| Version | Codename | Focus Area | Key Architectural Deliverable | Claim Ceiling |
+| Version | Codename | Focus Area | Key Architectural Deliverable | Status / Claim Ceiling |
 |---|---|---|---|---|
-| **v0.1** | **Spark** | Foundational Arithmetic | 40-digit Decimal CES core, `d_pow` natural log/exp, Gauss-Jordan solver, RPM Gate `G-ABSENT` | `SYNTHETIC_ONLY` |
-| **v0.2** | **Compass** | Structure & Language | Seven canonical packages (`288/288` tests), `language_v3` CCE grammar, `repair_performer` D/W/P loops | `ENGINEERED-NOT-VALIDATED` |
-| **v0.3** | **Prism** | Governed Creativity | `faculties_v2` (Wondering, Pondering, Imagination under Rule P), Real RPA Searchlight, 5 Creativity Dials | `ENGINEERED-NOT-VALIDATED` |
-| **v0.4** | **Valve** | Information Regulation | Phase 3 `tks_meta_valve_controller`, AWS GPU trained dynamic aperture weights, 0-leak RPM interlock | `SYNTHETIC_TRAINED` |
-| **v0.5** | **Scribe** | Open Communication | Level L4 CAS-native neural proposer trained on AWS Tesla T4, end-to-end loop, Dual-Skin voice adapter | `BOUNDED_ENGLISH_PROPOSER` |
-| **v0.6** | **Agentic & Lexicon** *(Current)* | Governed Autonomy | Phase 4 Level A1 DAG planner, Level A2 Pre-Flight RPM Gated tool executor, open-domain semantic bridge | `GOVERNED_AGENTIC_AUTONOMY` |
-| **v1.0** | **Atlas** | Executive Core | Full multi-domain recipe atlas, autonomous idle pondering, closed-loop residual repair | `AUTONOMOUS_RECIPE_MACHINE` |
-| **v2.0** | **Sovereign** | Embodied Autonomy | Sheaf-theoretic multi-agent consistency, physical robotics integration, real-time safety gates | `EMBODIED_VERIFIED` |
-| **v3.0** | **Frontier** | Universal Scale | Planetary-scale self-evolving Recipe Atlas, sub-watt edge cognitive computing | `UNIVERSAL_GENERAL_INTELLIGENCE` |
+| **v0.1** | **Spark** | Foundational Arithmetic | 40-digit Decimal CES core, `d_pow` natural log/exp, Gauss-Jordan solver, RPM Gate `G-ABSENT` | `SYNTHETIC_ONLY` ✅ |
+| **v0.2** | **Compass** | Structure & Language | Seven canonical packages (`288/288` tests), `language_v3` CCE grammar, `repair_performer` D/W/P loops | `ENGINEERED-NOT-VALIDATED` ✅ |
+| **v0.3** | **Prism** | Governed Creativity | `faculties_v2` (Wondering, Pondering, Imagination under Rule P), Real RPA Searchlight, 5 Creativity Dials | `ENGINEERED-NOT-VALIDATED` ✅ |
+| **v0.4** | **Valve** | Information Regulation | Phase 3 `tks_meta_valve_controller`, AWS GPU trained dynamic aperture weights, 0-leak RPM interlock | `SYNTHETIC_TRAINED` ✅ |
+| **v0.5** | **Scribe** | Open Communication | Level L4 CAS-native neural proposer trained on AWS Tesla T4, end-to-end loop, Dual-Skin voice adapter | `BOUNDED_ENGLISH_PROPOSER` ✅ |
+| **v0.6** | **Agentic** | Governed Autonomy | Phase 4 Level A1 DAG planner, Level A2 Pre-Flight RPM Gated tool executor, Software Suite | `GOVERNED_AGENTIC_AUTONOMY` ✅ |
+| **v0.7** | **Topological** | Causal Planning | Prerequisite-graph planner, Kahn topological sort, temporal markers ('first... then', 'in parallel') | `TOPOLOGICAL_CAUSAL_PLANNER` ✅ |
+| **v0.8** | **Memory** | Conversational State | Bounded FIFO working memory, anaphora pronoun resolution ('it'), persistent JSONL session logging | `CONVERSATIONAL_WORKING_MEMORY` ✅ |
+| **v0.8.1**| **Grounding** *(Current)*| Dialogic Precision | Disambiguated inventory declarations, grounded explanations, user narrative store, punctuation polish | `DIALOGIC_GROUNDED_CORE` ✅ |
+| **v1.0** | **Atlas** | Executive Core | Full multi-domain recipe atlas, autonomous idle pondering, closed-loop residual repair | `AUTONOMOUS_RECIPE_MACHINE` 📋 |
+| **v1.1** | **AeroVE** | Virtual Flight Sim | 6-DoF Physics, complete BLDC/LiPo digital twin, independent WorldSim, 10-Tier curriculum | `VIRTUAL_EMBODIED_SIMULATION` 📋 |
+| **v1.2** | **SwarmSim** | Swarm & Multi-Domain | Sheaf-theoretic multi-drone swarms, subterranean/orbital simulation testbeds | `MULTI_DOMAIN_SIM_SWARMS` 📋 |
+| **v2.0** | **Sovereign** | Physical Embodiment | Flashed onto physical drone SoC; live outdoor flight in wind/obstacles with RPM Gate interlocks | `EMBODIED_VERIFIED_FLIGHT` 🎯 |
+| **v3.0** | **Frontier** | Universal Scale | Planetary-scale self-evolving Recipe Atlas, sub-watt edge cognitive computing | `UNIVERSAL_GENERAL_INTELLIGENCE` 🎯 |
 
 ### 3.1 The "Mechanisms Joined, Meaning Carried" Evolution
 
