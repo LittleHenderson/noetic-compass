@@ -1,0 +1,22 @@
+{
+  "model_type": "TKS_ADAPTIVE_VALVE_APERTURE_v0.4",
+  "feature_names": [
+    "novelty_entropy",
+    "source_credibility",
+    "prerequisite_ratio",
+    "normalized_radius",
+    "operating_mode_bias"
+  ],
+  "weights": [
+    -3.1026082,
+    1.51951134,
+    3.33129631,
+    -1.06332357,
+    0.52153234
+  ],
+  "bias": -1.55750237,
+  "training_samples": 2000,
+  "final_mse": 0.09699948,
+  "rule_interlock": "RPM_GATE_G_ABSENT_STRICT_OVERRIDE",
+  "training_environment": "LOCAL_CPU_DRYRUN_FAST"
+}
