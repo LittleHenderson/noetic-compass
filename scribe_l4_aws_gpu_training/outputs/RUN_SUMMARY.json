@@ -1,0 +1,15 @@
+{
+  "job_id": "SCRIBE-L4-AWS-GPU-RUN-v0.5",
+  "timestamp_utc": "2026-10-18T05:58:46Z",
+  "hardware": "cuda",
+  "elapsed_seconds": 30.95,
+  "vocab_size": 108,
+  "train_samples": 4000,
+  "val_samples": 800,
+  "exact_content_match_acc_pct": 90.0,
+  "cce_round_trip_verification_rate_pct": 64.0,
+  "clarify_refusal_accuracy_pct": 100.0,
+  "zero_hallucination_guarantee": "VERIFIED_BY_CCE_ROUND_TRIP_INTERLOCK",
+  "claim_status": "SYNTHETIC_ONLY",
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED"
+}

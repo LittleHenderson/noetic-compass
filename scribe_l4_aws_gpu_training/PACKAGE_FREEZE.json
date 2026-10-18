@@ -1,5 +1,5 @@
 {
-  "built_utc": "2026-10-18T05:23:45Z",
+  "built_utc": "2026-10-18T05:55:00Z",
   "cost_cap_usd": 1.5,
   "hardware_target": "AWS EC2 g4dn.xlarge (Tesla T4)",
   "member_names": [
@@ -12,12 +12,12 @@
     "SCRIBE_L4_AWS_GPU/train_scribe_job.py",
     "SCRIBE_L4_AWS_GPU/PACKAGE_MANIFEST.json"
   ],
-  "package_manifest_sha256": "117d346cdac867d0a2b6fcc605b8e733276b10e81b991feea964e9fe0519886c",
+  "package_manifest_sha256": "1f022f389e63a7edf7dcef73960e8c06e71748c3c6dda0a1f82362aca3a7130f",
   "package_name": "SCRIBE_L4_AWS_GPU",
   "reseal_byte_identical": true,
   "time_cap_seconds": 600,
   "total_members": 8,
-  "zip_bytes": 15121,
+  "zip_bytes": 17482,
   "zip_file": "SCRIBE_L4_AWS_GPU_PACKAGE.zip",
-  "zip_sha256": "7179250cbb17a800280d1b6459f2bb3ee4a23048d6b5a2382020296e8cceb58b"
+  "zip_sha256": "45d1ab0b6fe3518d6ddc763df5d94d27dd47f04682f8ba31dcac9c4c8c434f4c"
 }

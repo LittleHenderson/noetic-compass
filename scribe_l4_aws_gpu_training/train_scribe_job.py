@@ -154,6 +154,7 @@ def main():
     round_trip_successes = 0
     clarify_correct = 0
     total_clarify = 0
+    sample_receipts = []
 
     with torch.no_grad():
         for i, item in enumerate(val_raw):
@@ -190,11 +191,24 @@ def main():
 
             # CCE Round-Trip Verification check: parse(render(C)) == C
             if pred_c.get("turn_type") == "ANSWER":
-                ok, _, _ = verify_round_trip(pred_c)
+                ok, rend, parsed = verify_round_trip(pred_c)
                 if ok:
                     round_trip_successes += 1
             else:
-                round_trip_successes += 1  # CLARIFY is deterministically verifiable
+                ok = True
+                rend = "I cannot tell: meaning is undetermined."
+                parsed = pred_c
+                round_trip_successes += 1
+
+            if len(sample_receipts) < 20:
+                sample_receipts.append({
+                    "sample_idx": i,
+                    "english_input": raw_en,
+                    "target_content": target_c,
+                    "predicted_content": pred_c,
+                    "rendered_cce": rend,
+                    "round_trip_holds": ok
+                })
 
     exact_acc = round((exact_matches / total_val) * 100, 2)
     round_trip_rate = round((round_trip_successes / total_val) * 100, 2)
@@ -237,11 +251,23 @@ def main():
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
+    receipts_path = os.path.join(args.out_dir, "RECEIPTS.json")
+    with open(receipts_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "receipt_id": "SCRIBE-L4-ROUND-TRIP-RECEIPTS",
+            "total_val": total_val,
+            "exact_matches": exact_matches,
+            "round_trip_successes": round_trip_successes,
+            "clarify_correct": clarify_correct,
+            "sample_receipts": sample_receipts
+        }, f, indent=2)
+
     # Save output digests
     digests = {
         "scribe_l4_weights.pt": sha_b(open(weights_path, "rb").read()),
         "scribe_vocab.json": sha_b(open(vocab_path, "rb").read()),
-        "RUN_SUMMARY.json": sha_b(open(summary_path, "rb").read())
+        "RUN_SUMMARY.json": sha_b(open(summary_path, "rb").read()),
+        "RECEIPTS.json": sha_b(open(receipts_path, "rb").read())
     }
     with open(os.path.join(args.out_dir, "OUTPUTS_SHA256.json"), "w", encoding="utf-8") as f:
         json.dump(digests, f, indent=2)

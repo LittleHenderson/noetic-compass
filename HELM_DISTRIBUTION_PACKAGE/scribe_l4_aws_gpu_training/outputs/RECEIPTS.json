@@ -1,0 +1,489 @@
+{
+  "receipt_id": "SCRIBE-L4-ROUND-TRIP-RECEIPTS",
+  "total_val": 800,
+  "exact_matches": 720,
+  "round_trip_successes": 512,
+  "clarify_correct": 80,
+  "sample_receipts": [
+    {
+      "sample_idx": 0,
+      "english_input": "Under Purpose, embodied Vibration is processed by the cognitive Male.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Male",
+        "verb": "processes",
+        "object": "Vibration",
+        "register": "E",
+        "domain": "C",
+        "drive": "F7"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "C",
+        "register": "E",
+        "drive": "F7",
+        "verb": "processes",
+        "subject": "Male",
+        "object": "Vibration"
+      },
+      "rendered_cce": "The cognitive Male processes the embodied Vibration under Purpose.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 1,
+      "english_input": "We observe that the Mind (operational) computes a affective Idea with Unity purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "processes",
+        "object": "Idea",
+        "register": "f",
+        "domain": "O",
+        "drive": "F1"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "f",
+        "drive": "F1",
+        "verb": "processes",
+        "subject": "Mind",
+        "object": "Idea"
+      },
+      "rendered_cce": "The operational Mind processes the affective Idea under Unity.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 2,
+      "english_input": "The principled Male intakes the analytical Vibration under Connection.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Male",
+        "verb": "intakes",
+        "object": "Vibration",
+        "register": "A",
+        "domain": "P",
+        "drive": "F4"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "A",
+        "drive": "F4",
+        "verb": "intakes",
+        "subject": "Male",
+        "object": "Vibration"
+      },
+      "rendered_cce": "The principled Male intakes the analytical Vibration under Connection.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 3,
+      "english_input": "We observe that the Mind (evaluative) emits a affective Below/Effect with Connection purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "outputs",
+        "object": "Below/Effect",
+        "register": "f",
+        "domain": "E",
+        "drive": "F4"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "E",
+        "register": "f",
+        "drive": "F4",
+        "verb": "outputs",
+        "subject": "Mind",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The evaluative Mind outputs the affective Below/Effect under Connection.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 4,
+      "english_input": "We observe that the Positive (operational) holds in memory a embodied Idea with Wisdom purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Positive",
+        "verb": "stores",
+        "object": "Idea",
+        "register": "E",
+        "domain": "O",
+        "drive": "F2"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "E",
+        "drive": "F2",
+        "verb": "stores",
+        "subject": "Positive",
+        "object": "Idea"
+      },
+      "rendered_cce": "The operational Positive stores the embodied Idea under Wisdom.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 5,
+      "english_input": "Under Purpose, transcendent Rhythm is output by the operational Negative.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Negative",
+        "verb": "outputs",
+        "object": "Rhythm",
+        "register": "T",
+        "domain": "O",
+        "drive": "F7"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "T",
+        "drive": "F7",
+        "verb": "outputs",
+        "subject": "Negative",
+        "object": "Rhythm"
+      },
+      "rendered_cce": "The operational Negative outputs the transcendent Rhythm under Purpose.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 6,
+      "english_input": "We observe that the Mind (evaluative) thinks through a embodied Idea with Vitality purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "processes",
+        "object": "Idea",
+        "register": "E",
+        "domain": "E",
+        "drive": "F3"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "E",
+        "register": "E",
+        "drive": "F3",
+        "verb": "processes",
+        "subject": "Mind",
+        "object": "Idea"
+      },
+      "rendered_cce": "The evaluative Mind processes the embodied Idea under Vitality.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 7,
+      "english_input": "We observe that the Mind (principled) runs through a embodied Below/Effect with Vitality purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "processes",
+        "object": "Below/Effect",
+        "register": "E",
+        "domain": "P",
+        "drive": "F3"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "E",
+        "drive": "F3",
+        "verb": "processes",
+        "subject": "Mind",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The principled Mind processes the embodied Below/Effect under Vitality.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 8,
+      "english_input": "Under Structure, affective Idea is output by the principled Negative.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Negative",
+        "verb": "outputs",
+        "object": "Idea",
+        "register": "f",
+        "domain": "P",
+        "drive": "F6"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "f",
+        "drive": "F6",
+        "verb": "outputs",
+        "subject": "Negative",
+        "object": "Idea"
+      },
+      "rendered_cce": "The principled Negative outputs the affective Idea under Structure.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 9,
+      "english_input": "The cognitive Female intakes the analytical Below/Effect under Purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Female",
+        "verb": "intakes",
+        "object": "Below/Effect",
+        "register": "A",
+        "domain": "C",
+        "drive": "F7"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "C",
+        "register": "A",
+        "drive": "F7",
+        "verb": "intakes",
+        "subject": "Female",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The cognitive Female intakes the analytical Below/Effect under Purpose.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 10,
+      "english_input": "The operational Male stores the affective Below/Effect under Agency.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Male",
+        "verb": "stores",
+        "object": "Below/Effect",
+        "register": "f",
+        "domain": "O",
+        "drive": "F5"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "f",
+        "drive": "F5",
+        "verb": "stores",
+        "subject": "Male",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The operational Male stores the affective Below/Effect under Agency.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 11,
+      "english_input": "We observe that the Mind (cognitive) evaluates a analytical Below/Effect with Vitality purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "processes",
+        "object": "Below/Effect",
+        "register": "A",
+        "domain": "C",
+        "drive": "F3"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "C",
+        "register": "A",
+        "drive": "F3",
+        "verb": "processes",
+        "subject": "Mind",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The cognitive Mind processes the analytical Below/Effect under Vitality.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 12,
+      "english_input": "operational Female -> processes -> affective Below/Effect [Wisdom].",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Female",
+        "verb": "processes",
+        "object": "Below/Effect",
+        "register": "f",
+        "domain": "O",
+        "drive": "F2"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "f",
+        "drive": "F2",
+        "verb": "processes",
+        "subject": "Female",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The operational Female processes the affective Below/Effect under Wisdom.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 13,
+      "english_input": "We observe that the Female (cognitive) evaluates a embodied Above/Cause with Connection purpose.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Female",
+        "verb": "processes",
+        "object": "Above/Cause",
+        "register": "E",
+        "domain": "C",
+        "drive": "F4"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "C",
+        "register": "E",
+        "drive": "F4",
+        "verb": "processes",
+        "subject": "Female",
+        "object": "Above/Cause"
+      },
+      "rendered_cce": "The cognitive Female processes the embodied Above/Cause under Connection.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 14,
+      "english_input": "In the principled domain, the Positive actively intakes the embodied Vibration driven by Vitality.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Positive",
+        "verb": "intakes",
+        "object": "Vibration",
+        "register": "E",
+        "domain": "P",
+        "drive": "F3"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "E",
+        "drive": "F3",
+        "verb": "intakes",
+        "subject": "Positive",
+        "object": "Vibration"
+      },
+      "rendered_cce": "The principled Positive intakes the embodied Vibration under Vitality.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 15,
+      "english_input": "In the evaluative domain, the Negative actively expresses the analytical Idea driven by Structure.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Negative",
+        "verb": "outputs",
+        "object": "Idea",
+        "register": "A",
+        "domain": "E",
+        "drive": "F6"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "E",
+        "register": "A",
+        "drive": "F6",
+        "verb": "outputs",
+        "subject": "Negative",
+        "object": "Idea"
+      },
+      "rendered_cce": "The evaluative Negative outputs the analytical Idea under Structure.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 16,
+      "english_input": "In the cognitive domain, the Male actively caches the transcendent Above/Cause driven by Wisdom.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Male",
+        "verb": "stores",
+        "object": "Above/Cause",
+        "register": "T",
+        "domain": "C",
+        "drive": "F2"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "C",
+        "register": "T",
+        "drive": "F2",
+        "verb": "stores",
+        "subject": "Male",
+        "object": "Above/Cause"
+      },
+      "rendered_cce": "The cognitive Male stores the transcendent Above/Cause under Wisdom.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 17,
+      "english_input": "In the operational domain, the Mind actively processes the embodied Idea driven by Agency.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "processes",
+        "object": "Idea",
+        "register": "E",
+        "domain": "O",
+        "drive": "F5"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "O",
+        "register": "E",
+        "drive": "F5",
+        "verb": "processes",
+        "subject": "Mind",
+        "object": "Idea"
+      },
+      "rendered_cce": "The operational Mind processes the embodied Idea under Agency.",
+      "round_trip_holds": true
+    },
+    {
+      "sample_idx": 18,
+      "english_input": "In the principled domain, the Positive actively retains the embodied Below/Effect driven by Unity.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Positive",
+        "verb": "stores",
+        "object": "Below/Effect",
+        "register": "E",
+        "domain": "P",
+        "drive": "F1"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "E",
+        "drive": "F1",
+        "verb": "stores",
+        "subject": "Positive",
+        "object": "Below/Effect"
+      },
+      "rendered_cce": "The principled Positive stores the embodied Below/Effect under Unity.",
+      "round_trip_holds": false
+    },
+    {
+      "sample_idx": 19,
+      "english_input": "The principled Mind stores the embodied Vibration under Wisdom.",
+      "target_content": {
+        "turn_type": "ANSWER",
+        "subject": "Mind",
+        "verb": "stores",
+        "object": "Vibration",
+        "register": "E",
+        "domain": "P",
+        "drive": "F2"
+      },
+      "predicted_content": {
+        "turn_type": "ANSWER",
+        "domain": "P",
+        "register": "E",
+        "drive": "F2",
+        "verb": "stores",
+        "subject": "Mind",
+        "object": "Vibration"
+      },
+      "rendered_cce": "The principled Mind stores the embodied Vibration under Wisdom.",
+      "round_trip_holds": true
+    }
+  ]
+}
