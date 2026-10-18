@@ -1,0 +1,23 @@
+{
+  "receipt_id": "HELM-PHASE3-VALVE-ZERO-LEAK-v0.4",
+  "benchmark": "HELM Phase 3 TKS Meta Valve Prerequisite Safety Interlock Benchmark",
+  "timestamp_utc": "2026-10-18T04:20:00Z",
+  "training_samples": 2000,
+  "validation_samples": 500,
+  "missing_prerequisite_rows": 250,
+  "ungated_statistical_leaks": 83,
+  "ungated_leak_rate_pct": 33.2,
+  "gated_rpm_interlock_leaks": 0,
+  "gated_leak_rate_pct": 0.0,
+  "rpm_gate_safety_interlock": "100% ZERO LEAKAGE (PASS)",
+  "claim_status": "SYNTHETIC_ONLY",
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED",
+  "learned_weights": {
+    "novelty_entropy": -3.1026082,
+    "source_credibility": 1.51951134,
+    "prerequisite_ratio": 3.33129631,
+    "normalized_radius": -1.06332357,
+    "operating_mode_bias": 0.52153234
+  },
+  "learned_bias": -1.55750237
+}
