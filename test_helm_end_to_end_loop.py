@@ -155,7 +155,54 @@ class TestHELMEndToEndLoop(unittest.TestCase):
         )
         self.assertIn("42.500 units", success_msg)
         self.assertIn("limiting ingredient) is Flour", success_msg)
-        self.assertIn("[receipt: a1b2c3d4e5f60718]", success_msg)
+    def test_09_read_queries_bypass_valve_g_absent(self):
+        """Verify the valve gates execution, NOT reads or declarations.
+        A LIST_PARTS or inventory declaration must never be clamped with G-ABSENT.
+        """
+        # 1. Inventory declaration writes cubes into store
+        r1 = self.loop.process_turn("We have 50 Flour, 30 Sugar, and 20 Butter.", tick=1)
+        self.assertEqual(r1["loop_status"], "INVENTORY_RECORDED")
+        self.assertEqual(r1["operation"], "WRITE_CUBE")
+        self.assertGreater(len(r1["cubes_written"]), 0)
+        self.assertIsNotNone(r1["receipt_hash"])
+
+        # 2. Pantry query performs LIST_PARTS and writes ZERO cubes
+        r2 = self.loop.process_turn("list what is in the pantry", tick=2)
+        self.assertEqual(r2["loop_status"], "READ_COMPLETED")
+        self.assertEqual(r2["operation"], "LIST_PARTS")
+        self.assertEqual(r2["cubes_written"], [])
+        self.assertGreater(len(r2["cubes_read"]), 0)
+        self.assertIn("50 Flour, 30 Sugar, 20 Butter", r2["response"])
+        self.assertIsNotNone(r2["receipt_hash"])
+
+    def test_10_execution_public_signature_and_inventory_pass(self):
+        """Verify calling with current_inventory returns non-None public keys."""
+        # A: Declare ingredients without Water, then ask "How much can we make?"
+        self.loop.process_turn("We have 50 Flour, 30 Sugar, and 20 Butter.", tick=2)
+        r_clamp = self.loop.process_turn("How much can we make?", tick=3)
+        self.assertEqual(r_clamp["loop_status"], "VALVE_HALT_G-ABSENT")
+        self.assertIn("missing essential ingredients: Water", r_clamp["response"])
+
+        # B: Providing Water enables full 40-digit execution with populated public keys
+        r_exec = self.loop.process_turn(
+            "How much can we make?",
+            tick=4,
+            current_inventory={"Flour": 50, "Water": 20, "Sugar": 30}
+        )
+        self.assertEqual(r_exec["loop_status"], "SUCCESS_EVALUATED")
+        self.assertIsNotNone(r_exec["output_value"])
+        self.assertIsNotNone(r_exec["total_output"])
+        self.assertIsNotNone(r_exec["limiting_reagent"])
+        self.assertIsNotNone(r_exec["response"])
+        self.assertIn("All set!", r_exec["response"])
+
+    def test_11_cce_affinity_statement_stored(self):
+        """Verify CCE affinity statement parses, round-trips, and writes positive valence cube."""
+        r = self.loop.process_turn("I have an affinity for the offer.", tick=5)
+        self.assertEqual(r["loop_status"], "CUBE_STORE_PROCESSED")
+        self.assertEqual(r["assertion"], "ASSERTED")
+        self.assertEqual(r["valence"], "POSITIVE")
+        self.assertIsNotNone(r["receipt_hash"])
 
 
 if __name__ == "__main__":

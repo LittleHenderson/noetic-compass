@@ -3,9 +3,16 @@
 Canonical End-to-End Execution Pipeline:
 1. User Turn (Everyday American English Dialogue / Recipe Request / Cognitive Query).
 2. Level L4 Proposer & CCE Round-Trip Verification Gate (cce.parse / cce.render, eps o eta == id).
-3. Phase 3 Meta Valve Controller (tks_meta_valve_controller.py with calibrated weights and G-ABSENT interlock).
-4. Station S0 22x40 Recipe Brain (helm_brain_22x40.py with 40-digit Decimal CES math) & Unified Cube Store.
-5. Everyday American English Voice Adapter (Honest, warm read-back citing cryptographic 16-char receipt).
+3. Intent Separation:
+   - Reads (LIST_PARTS / pantry queries): Consume nothing, query CubeStore directly (0 cubes written).
+   - Declarations (inventory / facts): Write knowledge cubes into CubeStore with USER_SAID provenance.
+   - Directives / Affect / CCE statements: Round-trip verified & stored as cubes.
+   - Physical Recipe Execution (has run verb): Gated by Phase 3 Meta Valve Controller (G-ABSENT clamp).
+4. Phase 3 Meta Valve Controller (tks_meta_valve_controller.py):
+   - Dynamic aperture sigma prediction from learned weights.
+   - G-ABSENT clamp halting physical batch execution if essential base reagents (Flour, Water) are missing.
+5. Station S0 22x40 Recipe Brain (helm_brain_22x40.py with 40-digit Decimal CES math).
+6. Everyday American English Voice Adapter (Honest, warm read-back citing cryptographic 16-char receipt).
 """
 from __future__ import annotations
 
@@ -139,6 +146,9 @@ class HELMEndToEndLoop:
         else:
             self.turn_processor = None
 
+        # 5. Working inventory on hand
+        self.current_inventory: Dict[str, Decimal] = {}
+
     def extract_ingredient_quantities(self, text: str) -> Dict[str, Decimal]:
         """Extract ingredient amounts from natural English text (e.g. '10 Flour and 8 Water')."""
         inputs: Dict[str, Decimal] = {}
@@ -226,6 +236,8 @@ class HELMEndToEndLoop:
             - recipe_receipt
             - cube_receipt
             - everyday_english_response
+            - response / text (top-level aliases)
+            - output_value / total_output / limiting_reagent (top-level aliases)
             - loop_status
             - receipt_hash
         """
@@ -236,47 +248,129 @@ class HELMEndToEndLoop:
             "valve_telemetry": None,
             "recipe_receipt": None,
             "cube_receipt": None,
+            "output_value": None,
+            "total_output": None,
+            "output": None,
+            "limiting_reagent": None,
             "everyday_english_response": "",
+            "response": "",
+            "text": "",
             "loop_status": "INITIATED",
             "receipt_hash": None
         }
 
-        # Step 1: Ingredient Extraction & Grounding
-        inputs = dict(current_inventory) if current_inventory else {}
+        # Step 1: Ingredient Extraction
         extracted = self.extract_ingredient_quantities(user_english)
-        inputs.update(extracted)
-        has_ingredients = len(inputs) > 0
+        has_extracted_ingredients = len(extracted) > 0
+        user_lower = user_english.lower()
 
         # Step 1a: Check for Phase 4 Agentic Goals
         agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file", "read file"]
-        is_agentic_request = (not has_ingredients) and any(kw in user_english.lower() for kw in agentic_keywords)
+        is_agentic_request = (not has_extracted_ingredients) and any(kw in user_lower for kw in agentic_keywords)
         if is_agentic_request:
             dag = self.agentic_engine.decompose_goal(user_english)
             plan_res = self.agentic_engine.execute_dag(dag)
             result["loop_status"] = "AGENTIC_PLAN_EXECUTED" if plan_res["all_steps_completed"] else "AGENTIC_PLAN_CLAMPED"
             result["agentic_plan_result"] = plan_res
-            result["everyday_english_response"] = AgenticExecutionEngine.speak_plan_result(plan_res)
+            spk = AgenticExecutionEngine.speak_plan_result(plan_res)
+            result["everyday_english_response"] = spk
+            result["response"] = spk
+            result["text"] = spk
             log_str = json.dumps(plan_res.get("execution_log", []), sort_keys=True)
             result["receipt_hash"] = plan_res.get("dag_sha256") or hashlib.sha256(f"AGENTIC_{user_english}_{log_str}".encode("utf-8")).hexdigest()[:16]
             return result
 
         # Step 1b: Adversarial / Ungrounded Refusal Filter
-        is_adversarial = any(w in user_english.lower() for w in ["quantum", "tuesday", "electron sandwich", "superstring"])
-        if is_adversarial and not has_ingredients:
+        is_adversarial = any(w in user_lower for w in ["quantum", "tuesday", "electron sandwich", "superstring"])
+        if is_adversarial and not has_extracted_ingredients:
             result["loop_status"] = "CLARIFY_REFUSAL"
-            result["everyday_english_response"] = HELMVoiceAdapter.format_clarify("physical recipe")
+            msg = HELMVoiceAdapter.format_clarify("physical recipe")
+            result["everyday_english_response"] = msg
+            result["response"] = msg
+            result["text"] = msg
             result["receipt_hash"] = hashlib.sha256(f"CLARIFY_REFUSAL_{user_english}_{tick}".encode("utf-8")).hexdigest()[:16]
             return result
 
         # Step 2: CCE Round-Trip Verification Gate (eps o eta == id)
-        # Check if sentence is CCE or candidate CAS turn
         cce_rt = self.verify_cce_round_trip(user_english)
         result["cce_round_trip"] = cce_rt
 
-        # Step 3: Phase 3 Meta Valve Controller Gate
+        # Step 3: Intent Discrimination: Physical Recipe Execution vs. Store Operations
+        # Physical recipe execution is requested when run/execution verbs are present:
+        # e.g. "how much can we make", "can we produce", "bake a batch", "produce a batch", etc.
+        run_verb_patterns = [
+            r"\bhow much can (?:we|i)\b",
+            r"\bhow much could (?:we|i)\b",
+            r"\bhow much can be made\b",
+            r"\bbake\b",
+            r"\bproduce\b",
+            r"\bcalculate a batch\b",
+            r"\bstart the batch\b",
+            r"\bexecute recipe\b",
+            r"\brun recipe\b",
+            r"\brun the recipe\b",
+            r"\brun batch\b",
+            r"\bcan we produce\b",
+            r"\bcan we make\b",
+            r"\bcan we bake\b",
+            r"\bmake a (?:fresh )?batch\b",
+            r"\bproduce a (?:fresh )?batch\b",
+            r"\bbake a (?:fresh )?batch\b"
+        ]
+        has_run_verb = any(re.search(pat, user_lower) for pat in run_verb_patterns)
+
+        # =========================================================================
+        # PATH A: STORE OPERATIONS (Read Queries, Declarations, Directives, Affect)
+        # =========================================================================
+        # Architectural Invariant: The valve gates EXECUTION, not READS.
+        # A LIST_PARTS or inventory declaration consumes nothing and is never clamped by G-ABSENT.
+        if not has_run_verb:
+            if self.turn_processor is not None:
+                rec = self.turn_processor.process_turn(user_english)
+                result["cube_receipt"] = rec.to_dict()
+                result["receipt_hash"] = rec.receipt_hash
+                result["everyday_english_response"] = rec.response_text
+                result["response"] = rec.response_text
+                result["text"] = rec.response_text
+                result["operation"] = rec.operation
+                result["cubes_read"] = rec.cubes_read
+                result["cubes_written"] = rec.cubes_written
+                result["assertion"] = rec.assertion
+                result["valence"] = rec.valence
+
+                if rec.operation == "LIST_PARTS" or rec.outcome == "READ":
+                    result["loop_status"] = "READ_COMPLETED"
+                elif rec.outcome == "WRITE":
+                    if has_extracted_ingredients:
+                        self.current_inventory.update(extracted)
+                        result["loop_status"] = "INVENTORY_RECORDED"
+                    else:
+                        result["loop_status"] = "CUBE_STORE_PROCESSED"
+                elif rec.outcome == "REFUSE":
+                    result["loop_status"] = "STORE_REFUSAL"
+                elif rec.outcome == "CLARIFY":
+                    result["loop_status"] = "STORE_CLARIFY"
+                else:
+                    result["loop_status"] = f"STORE_{rec.outcome}"
+
+                return result
+
+        # =========================================================================
+        # PATH B: PHYSICAL RECIPE EXECUTION (Gated by Phase 3 Meta Valve & Brain)
+        # =========================================================================
+        # Merge all available ingredients:
+        # 1. Ingredients previously declared and retained in working memory
+        # 2. Ingredients explicitly passed via current_inventory parameter
+        # 3. Ingredients extracted from the immediate user prompt
+        effective_inputs: Dict[str, Decimal] = dict(self.current_inventory)
+        if current_inventory:
+            for k, v in current_inventory.items():
+                effective_inputs[k] = Decimal(str(v))
+        effective_inputs.update(extracted)
+
         # Prerequisite check: Flour and Water are essential base reagents for recipe execution
-        has_flour = "Flour" in inputs and inputs["Flour"] > 0
-        has_water = "Water" in inputs and inputs["Water"] > 0
+        has_flour = "Flour" in effective_inputs and effective_inputs["Flour"] > Decimal("0")
+        has_water = "Water" in effective_inputs and effective_inputs["Water"] > Decimal("0")
         prereqs_ok = bool(has_flour and has_water)
 
         entropy = 0.20 if prereqs_ok else 0.75
@@ -293,7 +387,7 @@ class HELMEndToEndLoop:
 
         allowed, telem = self.valve.evaluate_proposal_flow(
             tick=tick,
-            proposal_name=f"USER_REQUEST_TICK_{tick}",
+            proposal_name=f"USER_RECIPE_EXECUTION_TICK_{tick}",
             prerequisites_present=prereqs_ok,
             novelty_entropy=Decimal(str(entropy)),
             proposal_features=proposal_features
@@ -306,7 +400,7 @@ class HELMEndToEndLoop:
             "reason": telem.reason
         }
 
-        # If valve clamped shut (G-ABSENT), halt immediately to prevent guessing or ungrounded execution
+        # If valve clamped shut (G-ABSENT), halt physical execution immediately
         if not allowed:
             result["loop_status"] = f"VALVE_HALT_{telem.gate_interlock}"
             missing_items = []
@@ -314,41 +408,57 @@ class HELMEndToEndLoop:
                 missing_items.append("Flour")
             if not has_water:
                 missing_items.append("Water")
-            result["everyday_english_response"] = HELMVoiceAdapter.format_missing_prerequisite(
+            msg = HELMVoiceAdapter.format_missing_prerequisite(
                 missing_items, telem.reason
             )
+            result["everyday_english_response"] = msg
+            result["response"] = msg
+            result["text"] = msg
             result["receipt_hash"] = hashlib.sha256(f"VALVE_HALT_{telem.gate_interlock}_{tick}".encode("utf-8")).hexdigest()[:16]
             return result
 
-        # Step 4: Recipe Brain / Cube Store Execution
-        # If user provided partial ingredients, populate remaining active slots with defaults
-        full_inputs = {ing: inputs.get(ing, Decimal("10")) for ing in self.brain.ingredients}
-        full_inputs.update(inputs)
+        # If allowed, execute Station S0 22x40 Recipe Brain in 40-digit Decimal arithmetic
+        full_inputs = {ing: effective_inputs.get(ing, Decimal("10")) for ing in self.brain.ingredients}
+        full_inputs.update(effective_inputs)
 
         brain_receipt = self.brain.evaluate_recipe(full_inputs)
         result["recipe_receipt"] = brain_receipt
 
+        out_val_str = str(brain_receipt.get("output_value", "0"))
+        lim_reagent = brain_receipt.get("limiting_reagent", "Flour")
+
+        result["output_value"] = out_val_str
+        result["total_output"] = out_val_str
+        result["output"] = out_val_str
+        result["limiting_reagent"] = lim_reagent
+
         # Compute receipt hash from 40-digit brain execution
-        receipt_raw = f"{brain_receipt.get('output_value')}_{brain_receipt.get('limiting_reagent')}_{tick}"
+        receipt_raw = f"{out_val_str}_{lim_reagent}_{tick}"
         rec_hash = hashlib.sha256(receipt_raw.encode("utf-8")).hexdigest()[:16]
         result["receipt_hash"] = rec_hash
 
-        # Step 5: Conversational Everyday American English Voice Read-Back
+        # Conversational Everyday American English Voice Read-Back
         if brain_receipt.get("status") == "EVALUATED":
             result["loop_status"] = "SUCCESS_EVALUATED"
-            result["everyday_english_response"] = HELMVoiceAdapter.format_success(
-                output_val=Decimal(str(brain_receipt["output_value"])),
-                limiting_reagent=brain_receipt["limiting_reagent"],
-                inputs=inputs,
+            msg = HELMVoiceAdapter.format_success(
+                output_val=Decimal(out_val_str),
+                limiting_reagent=lim_reagent,
+                inputs=effective_inputs,
                 entropy=entropy,
                 aperture=telem.aperture_sigma,
                 receipt_hash=rec_hash
             )
+            result["everyday_english_response"] = msg
+            result["response"] = msg
+            result["text"] = msg
         else:
             result["loop_status"] = "RECIPE_BRAIN_REFUSAL"
-            result["everyday_english_response"] = HELMVoiceAdapter.format_missing_prerequisite(
-                [brain_receipt.get("limiting_reagent", "ingredient")],
+            msg = HELMVoiceAdapter.format_missing_prerequisite(
+                [lim_reagent],
                 brain_receipt.get("refusal_reason", "Missing input")
             )
+            result["everyday_english_response"] = msg
+            result["response"] = msg
+            result["text"] = msg
 
         return result
