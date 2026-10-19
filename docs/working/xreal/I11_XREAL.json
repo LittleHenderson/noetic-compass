@@ -1,16 +1,16 @@
 {
  "considered": 16,
  "criterion": "design: the M-R frame reaches a learned requirement in FULL on >= 12 of 16 practice recipes whose lines the reader can read (A-XR-6: two readable lines per Beeton recipe)",
- "every_line_learned": 0,
- "learned_right": 15,
+ "every_line_learned": 15,
+ "learned_right": 30,
  "need": 12,
  "pass": true,
  "reached_a_learned_requirement": 15,
  "rows": [
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@2497575",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "1/2 pint of sherry",
     "4 eggs"
@@ -18,13 +18,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@632222",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "1 pint of milk",
     "2 eggs"
@@ -32,13 +32,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@370080",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 carrots",
     "2 small onions"
@@ -46,13 +46,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@991631",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 onions",
     "2 lettuces"
@@ -60,13 +60,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@768280",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "1/2 pint of Espagnole (No. 411)",
     "3 onions"
@@ -74,13 +74,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@2097736",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 large potatoes",
     "4 eggs"
@@ -88,13 +88,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@298632",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "1 turnip",
     "1 small carrot"
@@ -102,13 +102,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@1205328",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 carrots",
     "2 large onions"
@@ -116,7 +116,7 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
@@ -134,9 +134,9 @@
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@1370330",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "1 pint of water",
     "1 onion"
@@ -144,13 +144,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@1879552",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 pints of milk",
     "3 eggs"
@@ -158,13 +158,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@999229",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "6 whole peppers",
     "6 whole allspice"
@@ -172,13 +172,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@574483",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 tench",
     "2 onions"
@@ -186,13 +186,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@870206",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 dozen oysters",
     "3 cloves"
@@ -200,13 +200,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@357207",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "3 carrots",
     "3 turnips"
@@ -214,13 +214,13 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   },
   {
-   "admitted": 1,
+   "admitted": 2,
    "id": "pg:10136@1439059",
-   "learned_right": 1,
+   "learned_right": 2,
    "lines": [
     "2 large onions",
     "6 cloves"
@@ -228,7 +228,7 @@
    "probe": "UNDETERMINED_CLARIFY",
    "statuses": [
     "WITNESS_ADMITTED",
-    "TEACH_REFUSED_RECEIPT_FAILED"
+    "WITNESS_ADMITTED"
    ]
   }
  ],

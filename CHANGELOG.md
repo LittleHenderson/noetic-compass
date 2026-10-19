@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 X-REAL RESEALED as v2 (spec sheet 7.79 amended): recipe parts rebuilt so they are not vacuous; zip a9b4c954...; owner pre-approval bound; NOT LAUNCHED
+
+Coordinator decision (operational, not the owner's): do not ship a part known to be vacuous. v1 c275daed (never signed) is VOID_SUPERSEDED_BY_V2.
+
+- Pairing all ingredients: B holds every ingredient of A once, same unit form, from the whole recipe frame (R-REBOUND frame 1,122 of 1,728 eligible).
+- One witnessed lesson per ingredient, the others at 2x their listed amount, so one ingredient really runs out first; the brain is not changed. Practice: 15 of 16 recipes every ingredient learned (30/30 exact); the 16th uses 1/3 (not exactly holdable).
+- Answerability on the published practice seed text XREAL-ANSWERABILITY-20261019-published-practice-seed: 64 of 64 drawn R-REBOUND items answerable (need 48). R_VACUOUS guard kept. Sentence and fault parts unchanged.
+- Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." APPROVAL_RECORD_XREAL.md binds it to zip a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249 (freeze 67b48541...), cap 1.00 USD. Seed source = sha256(line + ":" + full zip sha256).
+- Slips recorded in the preregistration: the first download's User-Agent held the owner's e-mail (inline curl helper; later requests neutral; the sealed fetch script is test-checked); a git worktree prune was refused by Windows (nothing deleted).
+- Tests from the final seal: 359 OK. Backup D:/tksCAS-archive/x_real_20261019/v2/.
+
 ## 2026-10-19 PDT - HELM-R1 X-REAL packet SEALED, NOT LAUNCHED (spec sheet 7.79): the first exam from other people's text (real food sentences, real cookbook recipes, real kinds of file damage); nothing scored, no claim
 
 Owner word (verbatim): " "FETCH X-REAL"" (design picks Q1-Q8 accepted; the SOURCES.md downloads allowed). Builder: Claude (X-REAL builder session). 0 USD, laptop only; downloads were the only network use.

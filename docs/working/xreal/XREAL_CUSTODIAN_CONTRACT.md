@@ -6,7 +6,8 @@ keys, runs the receiver's checker, seals, and hands over **hashes only** (`XREAL
 
 ## 1. When, where, money
 
-- Only **after** the owner signs the X-REAL line in `OWNER_SIGN_REQUEST_X_REAL.md`. Its exact bytes are the seed source.
+- Only **after** the coordinator writes `APPROVAL_RECORD_XREAL.md` (the owner's verbatim pre-approval line + the final
+  sealed zip's full sha256). The seed source is that line + ":" + that hash (section 3).
 - Laptop, pure Python, one process at a time, at least 300 MB free RAM, each command under 300 s, 0 USD, **no network**.
   No torch, no AWS. Measured peaks: frames build 35-52 MiB; loading all exam frames 164 MiB; checker (practice) 107 MiB.
 - Downloaded source files are untrusted data: never run anything from them; run every command with `python -B -I`
@@ -28,9 +29,15 @@ XR xreal.frames build-pg --sources SRC --out CUS\frames
 XR xreal.frames build-wb --sources SRC --out CUS\frames
 ```
 
-## 3. Seeds — from the owner's own words (`SEED_RULE_XREAL.md`)
+## 3. Seeds — from the owner's own words and the final package bytes (`SEED_RULE_XREAL.md`, A-XR-18)
 
-1. Put the owner's X-REAL line, verbatim, into `CUS\work\OWNER_LINE_XREAL.txt` with no trailing newline.
+The owner pre-approved X-REAL (2026-10-19, verbatim, `OWNER_APPROVALS_20261018.md`): "I PRE-APPROVE BOTH OF THE
+FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." That line names no
+package hash, so the seed source is **sha256(UTF-8 of that verbatim line + ":" + the full sha256 of the final sealed
+X-REAL zip)**. No seed can be known before the package bytes are final.
+
+1. Put the owner's line, verbatim (three spaces after the colon; no trailing newline), into
+   `CUS\work\OWNER_LINE_XREAL.txt`. Use the FINAL sealed zip named in `APPROVAL_RECORD_XREAL.md`.
 2. Run (paths on the laptop):
 
 ```
@@ -44,7 +51,8 @@ XR xreal.seed_rule_xreal --x0-pkg C:\Users\wakil\Documents\Codex\2026-10-15\r1_x
   --derivation X3=C:\Users\wakil\Documents\Codex\2026-10-19\r1_wave3b\x3_custody\work\SEED_DERIVATION_X3.json
   --derivation X4=C:\Users\wakil\Documents\Codex\2026-10-19\r1_wave4\x4_custody\work\SEED_DERIVATION_X4.json
   --derivation X5=C:\Users\wakil\Documents\Codex\2026-10-19\r1_wave5\x5_custody\work\SEED_DERIVATION_X5.json
-  --line-file CUS\work\OWNER_LINE_XREAL.txt --out CUS\work\SEED_DERIVATION_XREAL.json
+  --line-file CUS\work\OWNER_LINE_XREAL.txt --zip <the final sealed HELM_XREAL_20261019_SOURCE_XREAL.zip>
+  --out CUS\work\SEED_DERIVATION_XREAL.json
 ```
 
 It refuses (exit 3) on a wrong derivation file or any overlap, and STOPS (exit 4, `XREAL_BLOCKED_SEED.json`) if a
@@ -83,10 +91,12 @@ ever edited by hand. The two-key agreement must be at least 90% (instrument I2) 
 ```
 XR xreal.custody_xr seal --exam-dir CUS\exam --derivation CUS\work\SEED_DERIVATION_XREAL.json
    --receiver-check CUS\work\RECEIVER_CHECK_XREAL.json --line-file CUS\work\OWNER_LINE_XREAL.txt
+   --zip <the final sealed zip>
 XR xreal.custody_xr carrier --exam-dir CUS\exam --out-dir CUS\carrier\xr
 ```
 
-`seal` refuses unless the check passed and saw exactly these files, and the derivation comes from this exact line. It
+`seal` refuses unless the check passed and saw exactly these files, and the derivation comes from this exact line and
+this exact zip. It
 writes `XREAL_SEAL_RECORD.json` and `XREAL_PINS.json`. `carrier` copies ONLY `INPUTS_XREAL.json` and `XREAL_PINS.json`
 into the host carrier folder `xr` (the host stage refuses a carrier that holds a key file: hard gate HK). Hand over
 the pins file's sha256, the carrier folder's two hashes, and `CUS\work\RECEIVER_CHECK_XREAL.json`'s sha256. Keep

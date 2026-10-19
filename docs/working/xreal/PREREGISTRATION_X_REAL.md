@@ -507,3 +507,67 @@ sample, before any seed exists, and changes no mark, threshold, arm or hard gate
 - **Order of work, stated honestly:** this preregistration (sections 0-14) was frozen before any code (precode hash
   above); the modules were then written, and their unit tests were written after the first modules and before the
   dry run and the seal, not strictly before each module.
+
+## 16. v2 — coordinator decision (operational, not the owner's), 2026-10-19, before any exam exists
+
+Coordinator's words (summary of its message to the builder): do NOT ship a part known to be vacuous; rebuild the two
+recipe parts with "pairing all ingredients" and fix the one-ingredient-per-lesson limit honestly (k witnessed lessons,
+each with a different single ingredient running out first, the others in surplus), keep the R_VACUOUS guard, keep the
+sentence and fault parts unchanged, record the two slips, reseal. v1 (`c275daed…`, never signed) is
+`VOID_SUPERSEDED_BY_V2`.
+
+- **A-XR-14 Pairing all ingredients (supersedes the pairing rule of section 4 and the "not changed" note of
+  A-XR-5).** B is drawn from the WHOLE recipe frame (A1 + A2, any number of lines): the lowest-rank recipe (same part,
+  same seed) other than A whose parsed lines hold every HEAD of A exactly once, each in the same unit form. The
+  R-REBOUND frame is the REBOUND-eligible recipes that have at least one such B (1,122 of 1,728). R-ASIS uses the same
+  B when one exists and otherwise falls back to the lowest-rank recipe sharing at least one HEAD (else `NO_PAIR`). The
+  stock turn is unchanged (B's lines on A's HEADs).
+- **A-XR-15 One witnessed lesson per ingredient, the others in surplus (supersedes the teaching turns of section 4
+  and the tie finding's consequence in A-XR-6).** For each parsed line j of A: `"We made 1 {N} from {L_j} and ran out
+  of {head_j}."` where L_j lists line j as written and every other parsed line with its leading quantity replaced by
+  2 x its value (`mapping.surplus_line`; e.g. "1 1/2 cups flour" -> "3 cups flour"); an unparsed line stays verbatim.
+  So head_j really runs out first and the brain's receipt has one limiting ingredient. These doubled numbers are the
+  only derived numbers in any turn; the checker recomputes every lesson from the re-cut source lines. HELM is not
+  changed. P2 then asks on B's real amounts, scored by K-R (unchanged) and wave 3's three-valued rule.
+  Measured on the practice book (I11 v2, `I11_XREAL.json`): 15 of 16 practice recipes reach a learned requirement and
+  **15 of 16 have EVERY line learned** (30 of 30 values exactly right); the 16th holds "1/3 pint", which has no exact
+  binary64 form, so the brain refuses that batch.
+- **A-XR-16 Answerability check.** The custodian's R-REBOUND draw, run by the builder with the PUBLISHED practice seed
+  text `XREAL-ANSWERABILITY-20261019-published-practice-seed` (never the owner's seed; counts only, no item printed),
+  must give at least 48 agreed ANSWER keys of 64 (`tests_xreal.test_units_xr.TestAnswerability`, laptop only).
+  Result: **64 of 64** (0 ASK, 0 UNDETERMINED). The R_VACUOUS guard (A-XR-5) stays in the reader.
+- **A-XR-17 Predictions v2 (builder, before any exam):** R-REBOUND: HELM now learns whole recipes, but many real lines
+  carry words its reader does not know (modifiers like "granulated", old units like "teaspoonful"), so it will ask on
+  many ANSWER items; R-b (RIGHT on 3/4 of answerable) is likely missed -> `R_SAFE_NOT_CORRECT` about 0.6,
+  `R_MATH_HOLDS_ON_REAL` about 0.25, `R_UNSAFE_ON_REAL` about 0.1. WRONG answers should be rare: when HELM answers,
+  the arithmetic is exact. R-ASIS: `R_ASIS_SAFE` about 0.8. Part S and Part F predictions unchanged.
+- **D-XR-12 (expanded) the e-mail slip.** The very first network request of the build (PG `robots.txt`, 2026-10-19
+  22:03:45Z) was sent by an inline `curl` helper written in the builder's shell command; its User-Agent header held
+  the owner's e-mail address. Every later request (catalog, 281 eBooks, Wikibooks, Tatoeba; and git for Taskmaster,
+  which sends git's own agent string) used the fetch script `work/fetch.sh` with the neutral User-Agent
+  `HELM-XREAL-builder/1 (one-time research fetch)`. The sealed record of the fetch, `xr_contract/fetch_sources.sh`,
+  carries only that neutral header, and a kit test (`test_fetch_script_sends_no_personal_data`) fails if any e-mail
+  address appears in it.
+- **D-XR-14 the git worktree prune refusal.** After the v1 records were merged (PR #373), the builder ran
+  `git worktree remove` on its own temporary worktree and then `git worktree prune`. Prune tried to delete the
+  bookkeeping folders of 67 OLD worktrees in `tksCAS/.git/worktrees/` (other sessions' entries whose folders were
+  already gone); Windows refused every one ("Permission denied"). Nothing was deleted; the builder's own worktree was
+  removed. Not repeated: v2 removes only its own worktree and never prunes.
+
+## 17. Seed source and approval after the owner's pre-approval (written before the v2 seal; A-XR-18)
+
+The owner's words (2026-10-19, verbatim, recorded in `OWNER_APPROVALS_20261018.md`): "I PRE-APPROVE BOTH OF THE
+FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." The coordinator's
+executable mapping (same file, written before this seal): X-REAL, one attempt + one plumbing retry, cap 1.00 USD; the
+approval record = this verbatim line + the final sealed package's sha256.
+
+- **A-XR-18 Seed source.** The line names no package hash, so the custodian's seed text is the verbatim line + ":" +
+  the full sha256 (64 lower-case hex) of the FINAL sealed X-REAL zip, and H = sha256 of that text's UTF-8 bytes (no
+  trailing newline). k1..k4 and everything else in section 13 are unchanged. No seed can be known before the package
+  bytes are final. Code: `seed_rule_xreal.seed_text` / `--zip`; `custody_xr seal --zip` refuses any other zip.
+- **I9 (governance) reads** the approval record: the owner's line verbatim and its sha256, and the record's
+  `package_zip_sha256` and `package_freeze_sha256` equal the package being read. **I10 (seed rule) reads** the
+  derivation: `input_sha256` = sha256(line + ":" + zip sha256) and `zip_sha256` = the package's.
+- `OWNER_SIGN_REQUEST_X_REAL.md` is replaced by `APPROVAL_RECORD_XREAL.md` (the line quoted, the final hash). The
+  coordinator's earlier template line `APPROVE X-REAL: ... sealed package <8 hex> ...` is not needed and is not used as
+  a seed. Any later change of scope, package or cap needs a new owner word.

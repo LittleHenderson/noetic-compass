@@ -111,16 +111,16 @@
    "RA": {
     "-VOICE": {
      "NOT_SCORED": 58,
-     "RIGHT": 6,
-     "UNDETERMINED": 0,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
      "WRONG": 0,
      "items": 64,
      "scored": 6
     },
     "B-ASK": {
      "NOT_SCORED": 58,
-     "RIGHT": 6,
-     "UNDETERMINED": 0,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
      "WRONG": 0,
      "items": 64,
      "scored": 6
@@ -135,82 +135,82 @@
     },
     "FULL": {
      "NOT_SCORED": 58,
-     "RIGHT": 6,
-     "UNDETERMINED": 0,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
      "WRONG": 0,
      "items": 64,
      "scored": 6
     },
     "FULL+EYE_SCAN": {
      "NOT_SCORED": 58,
-     "RIGHT": 6,
-     "UNDETERMINED": 0,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
      "WRONG": 0,
      "items": 64,
      "scored": 6
     },
     "FULL+EYE_SCAN_REPLAY": {
      "NOT_SCORED": 58,
-     "RIGHT": 6,
-     "UNDETERMINED": 0,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
      "WRONG": 0,
      "items": 64,
      "scored": 6
     },
     "answer_keys_right": 0,
-    "answer_keys_scored": 0
+    "answer_keys_scored": 1
    },
    "RB": {
     "-VOICE": {
      "NOT_SCORED": 0,
-     "RIGHT": 13,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
      "WRONG": 0,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "B-ASK": {
      "NOT_SCORED": 0,
-     "RIGHT": 13,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
      "WRONG": 0,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "B-KEYCALC": {
      "NOT_SCORED": 0,
-     "RIGHT": 11,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
      "WRONG": 2,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "FULL": {
      "NOT_SCORED": 0,
-     "RIGHT": 13,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
      "WRONG": 0,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "FULL+EYE_SCAN": {
      "NOT_SCORED": 0,
-     "RIGHT": 13,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
      "WRONG": 0,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "FULL+EYE_SCAN_REPLAY": {
      "NOT_SCORED": 0,
-     "RIGHT": 13,
-     "UNDETERMINED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
      "WRONG": 0,
-     "items": 13,
-     "scored": 13
+     "items": 4,
+     "scored": 4
     },
     "answer_keys_right": 0,
-    "answer_keys_scored": 0
+    "answer_keys_scored": 4
    }
   }
  },
@@ -334,9 +334,9 @@
  "notes": [],
  "schema": "helm.xreal.reading/1",
  "two_key": {
-  "agree": 204,
-  "items": 205,
-  "rate": "204/205"
+  "agree": 195,
+  "items": 196,
+  "rate": "195/196"
  },
  "verdict": "INSTRUMENT_ERROR",
  "void_bad": [],
