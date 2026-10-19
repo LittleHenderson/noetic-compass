@@ -1,0 +1,130 @@
+=== fix H test record (Windows, Python 3.14.0), laptop, 0 USD ===
+=== test_helm_english_in.py (new) ===
+test_no_cas_tokens_in_any_everyday_reply (test_helm_english_in.TestChatEndToEnd.test_no_cas_tokens_in_any_everyday_reply) ... ok
+test_side_parser_is_gone (test_helm_english_in.TestChatEndToEnd.test_side_parser_is_gone) ... ok
+test_free_english_gives_the_same_receipts_as_the_checked_form (test_helm_english_in.TestLoopIntegration.test_free_english_gives_the_same_receipts_as_the_checked_form) ... ok
+test_reader_question_writes_nothing (test_helm_english_in.TestLoopIntegration.test_reader_question_writes_nothing) ... ok
+test_said_gone_is_never_glued_back_from_the_store (test_helm_english_in.TestLoopIntegration.test_said_gone_is_never_glued_back_from_the_store) ... ok
+test_trace_records_the_english_station (test_helm_english_in.TestLoopIntegration.test_trace_records_the_english_station) ... ok
+test_undetermined_for_missing_water_then_success (test_helm_english_in.TestLoopIntegration.test_undetermined_for_missing_water_then_success) ... ok
+test_witnessed_batch_in_english_teaches_through_the_brains_writer (test_helm_english_in.TestLoopIntegration.test_witnessed_batch_in_english_teaches_through_the_brains_writer) ... ok
+test_in_the_chat (test_helm_english_in.TestMoodFactClash.test_in_the_chat) ... ok
+test_no_question_on_success_or_without_a_mood_word (test_helm_english_in.TestMoodFactClash.test_no_question_on_success_or_without_a_mood_word) ... ok
+test_question_added_on_a_refusal_and_facts_unchanged (test_helm_english_in.TestMoodFactClash.test_question_added_on_a_refusal_and_facts_unchanged) ... ok
+test_ten_word_list_and_label (test_helm_english_in.TestMoodFactClash.test_ten_word_list_and_label) ... ok
+test_amounts_that_are_not_facts_are_asked (test_helm_english_in.TestNoNewFacts.test_amounts_that_are_not_facts_are_asked) ... ok
+test_every_amount_read_is_a_number_the_user_said (test_helm_english_in.TestNoNewFacts.test_every_amount_read_is_a_number_the_user_said) ... ok
+test_absent (test_helm_english_in.TestReader.test_absent) ... ok
+test_bake_a_batch_uses_the_conversation_topic_or_asks (test_helm_english_in.TestReader.test_bake_a_batch_uses_the_conversation_topic_or_asks) ... ok
+test_not_mine (test_helm_english_in.TestReader.test_not_mine) ... ok
+test_stock_and_absence_and_topic_in_one_turn (test_helm_english_in.TestReader.test_stock_and_absence_and_topic_in_one_turn) ... ok
+test_stock_list (test_helm_english_in.TestReader.test_stock_list) ... ok
+test_stock_with_unit_words_kept (test_helm_english_in.TestReader.test_stock_with_unit_words_kept) ... ok
+test_topic (test_helm_english_in.TestReader.test_topic) ... ok
+test_witnessed_batch (test_helm_english_in.TestReader.test_witnessed_batch) ... ok
+test_witnessed_batch_missing_parts_are_asked (test_helm_english_in.TestReader.test_witnessed_batch_missing_parts_are_asked) ... ok
+test_contradictions_and_two_products (test_helm_english_in.TestReaderRefuses.test_contradictions_and_two_products) ... ok
+test_conversion_refused (test_helm_english_in.TestReaderRefuses.test_conversion_refused) ... ok
+test_no_number (test_helm_english_in.TestReaderRefuses.test_no_number) ... ok
+test_unknown_ingredient (test_helm_english_in.TestReaderRefuses.test_unknown_ingredient) ... ok
+test_unknown_product (test_helm_english_in.TestReaderRefuses.test_unknown_product) ... ok
+test_a_reading_that_does_not_round_trip_is_a_question (test_helm_english_in.TestRoundTrip.test_a_reading_that_does_not_round_trip_is_a_question) ... ok
+test_borrowed_word_lists (test_helm_english_in.TestRoundTrip.test_borrowed_word_lists) ... ok
+test_every_reading_passes_the_loops_round_trip_check (test_helm_english_in.TestRoundTrip.test_every_reading_passes_the_loops_round_trip_check) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.175s
+
+OK
+
+=== test_helm_end_to_end_loop.py ===
+test_01_canonical_brain_is_station_s0 (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_01_canonical_brain_is_station_s0) ... ok
+test_02_cookie_brain_is_demo_standin_never_default (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_02_cookie_brain_is_demo_standin_never_default) ... ok
+test_03_torch_only_parts_not_imported (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_03_torch_only_parts_not_imported) ... ok
+test_04_no_invented_quantity (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_04_no_invented_quantity) ... ok
+test_08_absent_ingredient_is_undetermined (test_helm_end_to_end_loop.TestCircuit.test_08_absent_ingredient_is_undetermined) ... ok
+test_09_real_gate_called_with_real_request (test_helm_end_to_end_loop.TestCircuit.test_09_real_gate_called_with_real_request) ... ok
+test_10_success_writes_only_after_gate_and_receipt (test_helm_end_to_end_loop.TestCircuit.test_10_success_writes_only_after_gate_and_receipt) ... ok
+test_11_repair_child_glues_actual_result (test_helm_end_to_end_loop.TestCircuit.test_11_repair_child_glues_actual_result) ... ok
+test_12_repair_opens_on_real_detected_failure (test_helm_end_to_end_loop.TestCircuit.test_12_repair_opens_on_real_detected_failure) ... ok
+test_14_unparseable_english_clarifies_with_zero_writes (test_helm_end_to_end_loop.TestEdges.test_14_unparseable_english_clarifies_with_zero_writes) ... ok
+test_15_stated_recipe_not_taken (test_helm_end_to_end_loop.TestEdges.test_15_stated_recipe_not_taken) ... ok
+test_16_pantry_read_writes_nothing (test_helm_end_to_end_loop.TestEdges.test_16_pantry_read_writes_nothing) ... ok
+test_17_kept_paths_and_voice (test_helm_end_to_end_loop.TestEdges.test_17_kept_paths_and_voice) ... ok
+test_18_live_trace (test_helm_end_to_end_loop.TestEdges.test_18_live_trace) ... ok
+test_05_round_trip_checked (test_helm_end_to_end_loop.TestRoundTrip.test_05_round_trip_checked) ... ok
+test_06_round_trip_mismatch_refuses_with_zero_writes (test_helm_end_to_end_loop.TestRoundTrip.test_06_round_trip_mismatch_refuses_with_zero_writes) ... ok
+test_07_missing_checker_is_not_verified (test_helm_end_to_end_loop.TestRoundTrip.test_07_missing_checker_is_not_verified) ... ok
+test_13_written_rule (test_helm_end_to_end_loop.TestValveRule.test_13_written_rule) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.249s
+
+OK
+
+=== test_helm_voice.py ===
+test_chat_speaks_recipe_receipts_through_the_voice (test_helm_voice.LoopAndChatTests.test_chat_speaks_recipe_receipts_through_the_voice) ... ok
+test_receipt_from_loop_result (test_helm_voice.LoopAndChatTests.test_receipt_from_loop_result) ... ok
+test_voice_speaks_the_wired_loop_receipts (test_helm_voice.LoopAndChatTests.test_voice_speaks_the_wired_loop_receipts) ... ok
+test_at_least_eight_per_situation_and_registers_tagged (test_helm_voice.PhrasebookTests.test_at_least_eight_per_situation_and_registers_tagged) ... ok
+test_every_phrasing_and_tail_passes_the_guard_when_eligible (test_helm_voice.PhrasebookTests.test_every_phrasing_and_tail_passes_the_guard_when_eligible) ... ok
+test_no_cas_tokens_anywhere_in_the_phrasebook (test_helm_voice.PhrasebookTests.test_no_cas_tokens_anywhere_in_the_phrasebook) ... ok
+test_plain_templates_pass_the_guard (test_helm_voice.PhrasebookTests.test_plain_templates_pass_the_guard) ... ok
+test_sources_cited (test_helm_voice.PhrasebookTests.test_sources_cited) ... ok
+test_deterministic_for_a_fresh_conversation (test_helm_voice.WriterTests.test_deterministic_for_a_fresh_conversation) ... ok
+test_each_situation_renders_one_to_three_clean_sentences (test_helm_voice.WriterTests.test_each_situation_renders_one_to_three_clean_sentences) ... ok
+test_earlier_facts_reused_with_again_and_pronouns (test_helm_voice.WriterTests.test_earlier_facts_reused_with_again_and_pronouns) ... ok
+test_guard_refuses_an_invented_fact_and_uses_the_plain_template (test_helm_voice.WriterTests.test_guard_refuses_an_invented_fact_and_uses_the_plain_template) ... ok
+test_never_the_same_sentence_twice_in_a_row_and_seed_saved (test_helm_voice.WriterTests.test_never_the_same_sentence_twice_in_a_row_and_seed_saved) ... ok
+test_no_product_echo_when_unit_is_the_product (test_helm_voice.WriterTests.test_no_product_echo_when_unit_is_the_product) ... ok
+test_reading_grade_is_sane (test_helm_voice.WriterTests.test_reading_grade_is_sane) ... ok
+test_register_choice_and_precision (test_helm_voice.WriterTests.test_register_choice_and_precision) ... ok
+test_technical_view_only_when_asked (test_helm_voice.WriterTests.test_technical_view_only_when_asked) ... ok
+test_three_dialogue_acts (test_helm_voice.WriterTests.test_three_dialogue_acts) ... ok
+test_users_own_words_reused_only_when_the_receipt_confirms_them (test_helm_voice.WriterTests.test_users_own_words_reused_only_when_the_receipt_confirms_them) ... ok
+test_validate_receipt (test_helm_voice.WriterTests.test_validate_receipt) ... ok
+test_variety_uses_more_than_one_phrasing (test_helm_voice.WriterTests.test_variety_uses_more_than_one_phrasing) ... ok
+test_verify_catches_numbers_names_dropped_facts_and_wrong_outcomes (test_helm_voice.WriterTests.test_verify_catches_numbers_names_dropped_facts_and_wrong_outcomes) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.541s
+
+OK
+
+=== test_helm_chat_nuance.py (pytest) ===
+.....                                                                    [100%]
+5 passed in 0.28s
+
+=== language_v3 run_suites.py (lm_t1, lm_t1b, lm_t1c, lm_t1v3) ===
+test_lm_t1     Ran 26 tests, failures 0, errors 0 -> OK   (base suite LM-T1 (cce.py))
+test_lm_t1b    Ran 11 tests, failures 0, errors 0 -> OK   (base suite LM-T1b (cce_v01b.py))
+test_lm_t1c    Ran 5 tests, failures 0, errors 0 -> OK   (base suite LM-T1c (cce_v01c.py))
+test_lm_t1v3   Ran 26 tests, failures 0, errors 0 -> OK   (language_v3 suite: p/q numbers and the REFUSE and CLOSE turns)
+ALL SUITES OK
+
+=== language_v3 test_lexicon_v2 (PYTHONPATH per PROVENANCE.md) ===
+Ran 19 tests in 0.282s
+
+OK
+
+=== repair_performer/test_all.py (regression) ===
+RESULT: ALL PASS
+
+=== tks_meta_valve_controller.py self-test ===
+valve self-test: 3 written-rule cases PASS ( ENGINEERED-NOT-VALIDATED )
+
+=== fluency_test_50.py rerun ===
+(empty diff above = FLUENCY_50_OUTPUT.json, RATING_SHEET.md, RATING_KEY.json byte-identical)
+
+=== pyflakes 3.4.0 ===
+new and rewritten files: clean
+helm_chat.py:17:1: 'json' imported but unused
+helm_chat.py:102:15: f-string is missing placeholders
+helm_chat.py:346:26: f-string is missing placeholders
+helm_chat.py:464:23: f-string is missing placeholders
+helm_memory.py:14:1: 'copy' imported but unused
+helm_memory.py:31:5: 'store.AdmissionRefusal' imported but unused
+helm_memory.py:34:5: 'operations.list_parts' imported but unused
+helm_memory.py:34:5: 'operations.find_shared_part' imported but unused
+helm_memory.py:34:5: 'operations.reached_via' imported but unused
+(helm_chat.py 4 and helm_memory.py 5 warnings above: all present on the base commit 077c0353; helm_chat had 5 there)

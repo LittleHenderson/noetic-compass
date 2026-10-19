@@ -245,19 +245,26 @@ class LoopAndChatTests(unittest.TestCase):
         self.assertIsNone(hv.receipt_from_loop_result({"loop_status": "AGENTIC_PLAN_EXECUTED"}))
 
     def test_chat_speaks_recipe_receipts_through_the_voice(self):
-        # Since fix C (2026-10-18) the wired loop refuses free English with a CLARIFY until the English-in
-        # path lands (fixes E/F). The voice must still speak that refusal in everyday words, with no CAS tokens.
+        # Updated by fix H (2026-10-18). Before fix H this test pinned the fix-C stopgap (free English refused with
+        # a CLARIFY, and the stock sentence spoken outside the voice: 1 voice trace). Now the stock sentence goes
+        # through the loop and the voice says it (trace 1); the frosting question reaches the brain, which has
+        # never been taught frosting, so the voice says that in plain words (trace 2). No CAS words anywhere.
         import helm_chat as hc
         s = hc.HELMConversationalSession(mode="everyday", session_id="test_voice_chat")
-        for t in ["We have 50 Flour, 30 Sugar, and 20 Butter.", "Can we bake a batch without Water?"]:
-            f = io.StringIO()
-            with redirect_stdout(f):
-                s.handle_turn(t)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            s.handle_turn("We have 50 Flour, 30 Sugar, and 20 Butter.")
+        out1 = f.getvalue().replace("HELM:", "").strip()
+        self.assertEqual(hv.cas_tokens(out1), [], out1)
+        self.assertIn("recorded", out1.lower())
+        f = io.StringIO()
+        with redirect_stdout(f):
+            s.handle_turn("Can we make frosting?")
         out = f.getvalue().replace("HELM:", "").strip()
         self.assertEqual(hv.cas_tokens(out), [], out)
-        self.assertTrue({"nodata", "clarify", "blocked", "uncertain"} & set(hv.outcome_classes(out)), out)
+        self.assertTrue({"never", "uncertain", "nodata"} & set(hv.outcome_classes(out)), out)
         self.assertNotIn("checked form", out.lower())
-        self.assertEqual(len(s.voice.state.traces), 1)
+        self.assertEqual(len(s.voice.state.traces), 2)
         f = io.StringIO()
         with redirect_stdout(f):
             s.handle_turn("We have 6 Eggs and 20 Water. Bake a batch.")

@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - FIX H: EVERYDAY ENGLISH IN. Plain stock and recipe sentences now reach the licensed brain through the same checked route (laptop, 0 USD, ENGINEERED-NOT-VALIDATED)
+
+New `helm_english_in.py`: a deterministic reader that restates everyday stock/recipe English in the checked form
+(CASContent) and keeps it only if parse(render(C)) == C. "We have 50 flour, 30 sugar and 20 butter", "there's 12 cups
+of flour", "we're out of water", "can we bake bread?", "how much bread can we make?", "bake a batch" (the current
+subject, else a question), and "we made 5 loaves from 10 flour and 8 water and ran out of flour" (a witnessed batch).
+Anything else that needs a guess gets one plain question and writes nothing (22 question codes: unknown ingredient or
+product, no number, approximate, what-if, relative, negated, unit switch, conversion, contradiction, which product,
+stated recipe, incomplete batch, round trip failed). Units are kept as said and compared, never converted.
+- `helm_end_to_end_loop.py`: free English -> reader -> the SAME round trip, gate, brain, store and receipts as a
+  checked-form turn; reader questions end as CLARIFY_ENGLISH_<code>, zero writes; new trace station "English in".
+  Bug fixed: a said-gone ingredient was glued back from an older stored amount; absences are now gated, written and
+  read back, and never re-glued.
+- `helm_chat.py` routes inventory statements through the loop; its side parser is gone (and the second one in
+  `helm_memory.AnaphoraResolver`). Every everyday reply goes through `helm_voice` (reader questions and stock notes
+  included, zero CAS tokens).
+- MOOD_FACT_CLASH_CHECK (ENGINEERED-NOT-VALIDATED, reported only; HELM does not understand sarcasm): a 10-word positive
+  mood list + a refusal/missing/undetermined receipt -> one plain question; facts unchanged.
+- Tests (Windows, Python 3.14.0): new 31 OK; loop 18 OK; voice 22 OK; chat nuance 5 passed (no assertion changed);
+  lm_t1 26 / lm_t1b 11 / lm_t1c 5 / lm_t1v3 26 OK; lexicon_v2 19 OK; repair_performer ALL PASS; valve 3 PASS;
+  fluency harness output byte-identical; pyflakes clean on new/rewritten files. 3 tests updated (they pinned the
+  free-English-refused stopgap): loop test_14, loop test_18, voice chat test.
+- New trace docs/working/traces/HELM_LIVE_TRACE_ENGLISH_IN_20261018.jsonl (136 lines) sha256
+  678c907611fbcf64924bd22524e6ff5a9e517f2a4316885865a4fe97f6062b87; fix-C trace untouched
+  (4f94ccee22ea9829072ebfd59fe7690f56d3f28f49527cf2f39b140283fe6fba). Free-English tick 12 returns brain receipt
+  48ee0b4bac4d2567, identical to checked-form tick 7.
+- Record: docs/working/traces/RESULTS_ENGLISH_IN_20261018.md; spec sheet 7.60.
+- Open gap, stated: a plain number and a unit word are not compared (no unit to disagree with).
+
 ## 2026-10-18 PDT - DWP-T1 RECORDED (Purpose / Wisdom / Power per reagent) AND THE EVENING OWNER RULINGS; spec sheet sections 7.58 and 7.59; laptop, 0 USD, ENGINEERED-NOT-VALIDATED
 
 Text only; no tests to run. Source: Documents/Codex/2026-10-18/dwp_t1/RESULTS.md (sha256 00871a28325eeb9233b75fd8583ca1b65a64381988dc2bb034a70b86f9b49a4d).

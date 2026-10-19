@@ -262,13 +262,22 @@ class TestValveRule(unittest.TestCase):
 class TestEdges(unittest.TestCase):
 
     def test_14_unparseable_english_clarifies_with_zero_writes(self):
+        # Updated by fix H (2026-10-18). English the English-in reader does not claim still gets CLARIFY_NOT_CCE
+        # with zero writes. The two stock/recipe sentences this test used to expect a CLARIFY for are now READ
+        # (that was the whole point of fix H); they are checked at the bottom.
         loop = HELMEndToEndLoop()
-        for text in ("How much bread could we bake with whatever is around?", "We have 50 Flour and 30 Sugar.",
-                     "I have an affinity for the offer."):
+        for text in ("I have an affinity for the offer.", "What is going on with the project today?"):
             res = loop.process_turn(text, tick=1)
             self.assertEqual(res["loop_status"], "CLARIFY_NOT_CCE", text)
             self.assertEqual(res["cubes_written"], [], text)
         self.assertEqual(loop.cube_store.write_history, [])
+        res = loop.process_turn("How much bread could we bake with whatever is around?", tick=2)
+        self.assertEqual(res["loop_status"], "UNDETERMINED_CLARIFY")       # nothing on hand: asks, writes nothing
+        self.assertEqual(res["checked_form"], "Topic: Ω_Bread.")
+        self.assertEqual(res["cubes_written"], [])
+        res = loop.process_turn("We have 50 Flour and 30 Sugar.", tick=3)
+        self.assertEqual(res["loop_status"], "INVENTORY_RECORDED")
+        self.assertEqual({k: str(v) for k, v in loop.stock.items()}, {"Flour": "50", "Sugar": "30"})
 
     def test_15_stated_recipe_not_taken(self):
         loop = HELMEndToEndLoop()
@@ -301,14 +310,16 @@ class TestEdges(unittest.TestCase):
             path = os.path.join(tmp, "trace.jsonl")
             out = E2E.run_live_trace(path)
             statuses = [t["loop_status"] for t in out["turns"]]
+            # Fix H (2026-10-18): tick 5 is free English that is now READ (topic bread, water still unknown ->
+            # UNDETERMINED_CLARIFY instead of CLARIFY_NOT_CCE); ticks 11-12 are the two added free-English turns.
             self.assertEqual(statuses, ["WITNESS_ADMITTED", "WITNESS_ADMITTED", "INVENTORY_RECORDED",
-                                        "UNDETERMINED_CLARIFY", "CLARIFY_NOT_CCE", "INVENTORY_RECORDED",
+                                        "UNDETERMINED_CLARIFY", "UNDETERMINED_CLARIFY", "INVENTORY_RECORDED",
                                         "SUCCESS_EVALUATED", "CONFLICT_UNDETERMINED", "INVENTORY_RECORDED",
-                                        "SUCCESS_EVALUATED"])
+                                        "SUCCESS_EVALUATED", "UNDETERMINED_CLARIFY", "SUCCESS_EVALUATED"])
             with open(path, encoding="utf-8") as fh:
                 records = [json.loads(line) for line in fh]
             stations = {r["station"] for r in records}
-            for name in ("header", "user", "CCE skin", "S0 atlas head", "S1 trigger ^8", "S2 Bias ^5",
+            for name in ("header", "user", "CCE skin", "English in", "S0 atlas head", "S1 trigger ^8", "S2 Bias ^5",
                          "S3 arrival ^9", "S4 operating point", "S5 RPM link", "brain", "store", "S6 next"):
                 self.assertIn(name, stations)
             self.assertEqual(len(out["sha256"]), 64)

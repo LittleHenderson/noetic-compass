@@ -30,16 +30,24 @@ for sub in [HERE, os.path.join(HERE, "brains"), os.path.join(HERE, "core_engine"
 
 import helm_end_to_end_loop as e2e
 import helm_agentic_executor as ax
+import helm_english_in
+from helm_brain_canonical import frac_text
 from helm_memory import HELMConversationalMemory, AnaphoraResolver
-from helm_voice import HELMVoice, receipt_from_loop_result
+from helm_voice import HELMVoice, receipt_from_loop_result, say_name, _norm_name
+
+#: Loop statuses whose own sentence is already plain English; the voice still checks it before it is said.
+PLAIN_LOOP_LINES = ("CLARIFY_STOCK_NOT_RECORDED", "STATED_RECIPE_NOT_TAKEN", "CLARIFY_UNKNOWN_PRODUCT",
+                    "CLARIFY_BATCH_NOT_USABLE", "CLARIFY_ROUND_TRIP_FAILED")
 
 
 class HELMConversationalSession:
     def __init__(self, mode: str = "everyday", session_id: Optional[str] = None):
         self.mode = mode  # "everyday" or "cas_diagnostic"
-        self.loop = e2e.HELMEndToEndLoop()
         self.engine = ax.AgenticExecutionEngine(workspace_root=HERE)
         self.memory = HELMConversationalMemory(session_id=session_id)
+        # Fix H: ONE path for stock and recipe English. The loop writes stock into the same cube store the
+        # conversation memory reads, so a pantry question sees exactly what the loop verified and saved.
+        self.loop = e2e.HELMEndToEndLoop(cube_store=self.memory.context.cube_store)
         self.voice = HELMVoice()  # Fix F: deterministic everyday-English writer over brain receipts
         self.turn_count = 0
 
@@ -71,8 +79,9 @@ class HELMConversationalSession:
         print("   > 'First check git diff to see what changed, then synthesize the patch.'")
         print("   > 'Inspect README.md and git status in parallel, then design the system.'")
         print("\n2. Recipe Calculation & Resource Allocation:")
-        print("   > 'We have 10 Flour, 8 Sugar, 4 Butter, and 2 Water. How much can we produce?'")
-        print("   > 'Can we bake a batch without Water?'")
+        print("   > 'We have 12 cups of flour and 9 cups of water. How much bread can we make?'")
+        print("   > 'We're out of water. Can we bake bread?'")
+        print("   > 'We made 5 loaves from 10 flour and 8 water and ran out of flour.'")
         print("\n3. Systems & Web Design:")
         print("   > 'Scaffold a modern web dashboard for our cognitive workspace.'")
         print("   > 'Design a high-throughput data processing pipeline with bounded memory.'")
@@ -236,6 +245,12 @@ class HELMConversationalSession:
             self.memory.record_turn(prompt, resolved_prompt, "REQUEST_EXPLANATION", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
+        # Step 4b (fix H): stock and recipe English goes through the live loop's English-in route -- the same
+        # gate, brain, store and receipts as the checked form. No side parser saves inventory any more.
+        if self.loop.wants_turn(prompt):
+            self._recipe_turn(prompt, resolved_prompt, entities, t0)
+            return
+
         # Step 5a: User Preference statement (e.g. "Remember that I prefer short answers")
         is_pref = bool(re.search(r"\b(remember that i prefer|i prefer|prefer short answers|keep (?:your )?answers? (?:short|concise|brief))\b", lower_prompt))
         if is_pref:
@@ -366,24 +381,6 @@ class HELMConversationalSession:
             )
             return
 
-        # Step 7a: Inventory Declarations WITHOUT Run Verbs (e.g. "We have 50 Flour, 30 Sugar, and 20 Butter")
-        current_inputs = self.loop.extract_ingredient_quantities(resolved_prompt)
-        has_run_verb = any(v in lower_prompt for v in ["run", "bake", "make", "produce", "calculate", "start", "execute", "batch", "how much can we"])
-        if current_inputs and not has_run_verb:
-            cube_rec = self.memory.process_turn_with_cube_store(prompt)
-            self.memory.context.update_inventory(current_inputs, turn_index=self.turn_count)
-            self.voice.state.note_user_words(prompt)  # keep the user's own words ("5 lbs of flour")
-            inv_items = ", ".join(f"{v} {k}" for k, v in self.memory.context.inventory.items())
-            speech = f"Got it! I've recorded {inv_items} in our session inventory on hand. Let me know when you'd like to calculate a recipe batch, see what we can produce, or modify these amounts."
-            print(f"\nHELM: {speech}\n")
-            rec_hash = cube_rec.receipt_hash if cube_rec else None
-            self.memory.record_turn(
-                prompt, resolved_prompt, "INVENTORY_DECLARATION", entities, speech,
-                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
-                kind="instance", operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
-            )
-            return
-
         # Step 7b: Epistemic Self-Directed Growth & Autonomous Recipe Synthesis
         study_match = re.search(r"\b(?:study|investigate|explore|learn about|formulate a recipe for|model the physics of)\s+([\w\s\-]+)", lower_prompt)
         if study_match and not any(k in lower_prompt for k in ["code", "script", "file", "test", "git"]):
@@ -470,59 +467,6 @@ class HELMConversationalSession:
             print()
             return
 
-        # Step 9: Explicit Recipe Execution Command
-        if current_inputs or has_run_verb:
-            effective_inputs = dict(self.memory.context.inventory)
-            effective_inputs.update(current_inputs)
-
-            res = self.loop.process_turn(resolved_prompt, tick=self.turn_count, current_inventory=effective_inputs)
-            elapsed = time.time() - t0
-
-            if res.get("recipe_receipt") and res["recipe_receipt"].get("status") == "EVALUATED":
-                self.memory.context.inventory.update(effective_inputs)
-
-            # Fix F: speak the brain's receipt in everyday English; the old adapter text stays for the diagnostic view
-            speech = res["everyday_english_response"]
-            voice_receipt = receipt_from_loop_result(res, effective_inputs)
-            if voice_receipt is not None and self.mode == "everyday":
-                is_concise = self.memory.context.user_preferences.get("concise", False)
-                speech = self.voice.render(voice_receipt, user_text=prompt, concise=is_concise).text
-                # Every non-answer keeps the honesty promise in plain words: nothing was written to memory.
-                if voice_receipt.get("kind") != "ANSWER" and "nothing was saved" not in speech.lower():
-                    speech = speech.rstrip() + " Nothing was saved."
-            print(f"\nHELM: {speech}")
-
-            self.memory.context.last_goal = resolved_prompt
-            self.memory.context.last_result_summary = speech
-            self.memory.record_turn(
-                user_raw_text=prompt,
-                resolved_text=resolved_prompt,
-                intent="RECIPE_FOUNDATION_LOOP",
-                entities=entities,
-                helm_response=speech,
-                receipt_hash=res.get("recipe_receipt", {}).get("receipt_hash") if res.get("recipe_receipt") else None,
-                gate_code=res.get("recipe_receipt", {}).get("limiting_reagent", "GATE_PASS") if res.get("recipe_receipt") else "GATE_PASS",
-                duration=elapsed
-            )
-
-            if self.mode == "cas_diagnostic":
-                print("\n" + "-" * 40)
-                print(f"[CAS DIAGNOSTIC TRACE - Turn {self.turn_count}]")
-                print(f"  Loop Status: {res['loop_status']}")
-                if res.get("recipe_receipt"):
-                    rr = res["recipe_receipt"]
-                    print(f"  Total Output (Y): {rr.get('total_output')}")
-                    print(f"  Limiting Reagent: {rr.get('limiting_reagent')}")
-                if res.get("valve_telemetry"):
-                    vt = res["valve_telemetry"]
-                    print(f"  Valve Telemetry : Aperture={vt.get('aperture_sigma')}, Admitted={vt.get('admitted')}")
-                if voice_receipt is not None:
-                    print(f"  Voice Receipt   : {voice_receipt}")
-                print(f"  Elapsed Time    : {elapsed:.3f}s")
-                print("-" * 40)
-            print()
-            return
-
         # Step 10: General Chitchat / Greetings or Ungrounded Refusal
         elapsed = time.time() - t0
         greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "how are you"]
@@ -561,6 +505,90 @@ class HELMConversationalSession:
                 cubes_written=[]
             )
         return
+
+    # ------------------------------------------------------------------ fix H: the recipe turn
+    def _sync_inventory(self):
+        """The conversation's inventory is a MIRROR of the loop's verified stock, never a separate parse."""
+        inv = {}
+        for k, v in self.loop.stock.items():
+            t = frac_text(v)
+            inv[k] = Decimal(t) if "/" not in t else v
+        self.memory.context.inventory = inv
+
+    def _speak(self, res, prompt):
+        """Every everyday reply goes through the voice: stock notes, reader questions, brain receipts."""
+        is_concise = self.memory.context.user_preferences.get("concise", False)
+        status = res.get("loop_status", "")
+        parts = []
+        said_order = [s["name"] for s in (res.get("english_in") or {}).get("stocks") or []]
+        recorded = sorted(res.get("stock_recorded") or [],
+                          key=lambda r: said_order.index(r["name"]) if r["name"] in said_order else len(said_order))
+        absent = res.get("absent_recorded") or []
+        if recorded or absent:
+            parts.append(self.voice.say_stock_noted(recorded, absent, user_text=prompt).text)
+        if status != "INVENTORY_RECORDED":
+            stock_text = {k: frac_text(v) for k, v in self.loop.stock.items()}
+            receipt = receipt_from_loop_result(res, stock_text, units=self.loop.units)
+            if status in PLAIN_LOOP_LINES:
+                line = res.get("everyday_english_response") or ""
+                parts.append(self.voice._say_plain("loop_line", [line], prompt, [line], status).text)
+            elif receipt is not None:
+                parts.append(self.voice.render(receipt, user_text=prompt, concise=is_concise).text)
+            else:
+                parts.append(self.voice.render({"kind": "CLARIFY", "situation": "dont_know"},
+                                               user_text=prompt, concise=is_concise).text)
+        speech = " ".join(p for p in parts if p).strip()
+        if not res.get("cubes_written") and "nothing was saved" not in speech.lower():
+            speech = speech + " Nothing was saved."   # the honesty promise, in plain words, when nothing was written
+        return speech
+
+    def _recipe_turn(self, prompt, resolved_prompt, entities, t0):
+        res = self.loop.process_turn(prompt, tick=self.turn_count)
+        elapsed = time.time() - t0
+        self._sync_inventory()
+        # keep the user's own words for amounts ("12 cups of flour") so the voice can quote them back
+        for name, q in helm_english_in.quantities_said(res.get("english_in") or {}).items():
+            self.voice.state.user_said[_norm_name(say_name(name))] = {
+                "qty": q["qty"], "unit": q["unit"], "words": q["words"], "turn": str(self.voice.state.turn)}
+        if self.mode == "everyday":
+            speech = self._speak(res, prompt)
+        else:
+            speech = res["everyday_english_response"]
+        print(f"\nHELM: {speech}")
+        status = res["loop_status"]
+        self.memory.context.last_goal = prompt
+        self.memory.context.last_result_summary = speech
+        self.memory.record_turn(
+            user_raw_text=prompt,
+            resolved_text=resolved_prompt,
+            intent="INVENTORY_DECLARATION" if status == "INVENTORY_RECORDED" else "RECIPE_FOUNDATION_LOOP",
+            entities=entities,
+            helm_response=speech,
+            receipt_hash=res.get("receipt_hash"),
+            gate_code=(res.get("gate_verdict") or {}).get("verdict", "GATE_PASS"),
+            duration=elapsed,
+            kind="instance",
+            operation="WRITE_CUBE" if res.get("cubes_written") else "NONE",
+            cubes_written=list(res.get("cubes_written") or []),
+        )
+        if self.mode == "cas_diagnostic":
+            print("\n" + "-" * 40)
+            print(f"[CAS DIAGNOSTIC TRACE - Turn {self.turn_count}]")
+            print(f"  Loop Status     : {status}")
+            if res.get("checked_form"):
+                print(f"  Checked form    : {res['checked_form']}")
+            if res.get("english_in"):
+                print(f"  English reader  : {res['english_in'].get('status')} {res['english_in'].get('clarify')}")
+            if res.get("recipe_receipt"):
+                rr = res["recipe_receipt"]
+                print(f"  Yield           : {rr.get('yield')}")
+                print(f"  Limiting        : {rr.get('limiting_reagent')}")
+            if res.get("valve_telemetry"):
+                vt = res["valve_telemetry"]
+                print(f"  Valve           : {vt.get('gate_interlock')} admitted={vt.get('admitted')}")
+            print(f"  Elapsed Time    : {elapsed:.3f}s")
+            print("-" * 40)
+        print()
 
     def repl(self):
         self.print_banner()
