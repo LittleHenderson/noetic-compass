@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - FIXES C AND D: the licensed recipe brain is wired into HELM's live loop; the valve is a written rule (laptop, 0 USD, ENGINEERED-NOT-VALIDATED)
+
+`helm_brain_canonical.py` loads the HELM-R1 wave-1 recipe book by path (freeze
+8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b, 17 member hashes checked, nothing copied).
+`helm_end_to_end_loop.py` now runs CCE round trip -> S0..S6 -> real rpm_gate -> real repair performer ->
+brain -> store write only after the gate and the read-back receipt. The fill-with-ten shortcut and the
+"verified when the checker is missing" shim are gone. A missing ingredient ends UNDETERMINED with a question.
+A real failure is detected by the brain's own writer (refused_conflict, old 2/1, new 5/2) and opens a repair child.
+Valve: written two-table rule, essentials from the recipe's own list, learned weights never loaded.
+Tests (Windows, Python 3.14.0): loop 18 OK, chat nuance 5 passed, valve self-test 3 PASS, repair_performer
+ALL PASS. Live trace docs/working/traces/HELM_LIVE_TRACE_20261018.jsonl sha256
+4f94ccee22ea9829072ebfd59fe7690f56d3f28f49527cf2f39b140283fe6fba. Limits and full record:
+docs/working/traces/RESULTS_WIRE_RECIPE_BRAIN_20261018.md. Not licensed: anything beyond synthetic worlds.
 ## 2026-10-18 PDT - RECORDS CATCH-UP (owner's fix A): spec sheet sections 7.48-7.56 written for the work of 2026-10-16 to 2026-10-18; a roadmap status correction added; nothing upgraded, no negative removed
 
 Owner's approval: "I agree with all of them....please proceed." (2026-10-18, recorded at

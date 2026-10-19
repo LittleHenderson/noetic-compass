@@ -1,28 +1,58 @@
-"""tks_meta_valve_controller.py -- Phase 3 Meta Valve Controller for HELM & CAS.
+"""tks_meta_valve_controller.py -- the HELM valve, as a WRITTEN DETERMINISTIC RULE.
 
-CRITICAL ARCHITECTURAL ROLE (Phase 3 Valve System):
-Acts as the dynamic thermodynamic/noetic pressure regulator between Level L4
-open-domain proposals (sensory/language) and the Level L0-L3 Executive Recipe Brain.
+STATUS: ENGINEERED-NOT-VALIDATED. The rule below is written by hand. It has not passed a frozen test, and no
+claim about its quality is made. Owner approval 2026-10-18 ("plain-rule valve"): the trained 5-weight logistic
+aperture is replaced by a written rule; learned parts stay out of the deciding path until they pass a frozen test.
 
-Regulates information flow, novelty permeability, prerequisite backpressure,
-and enforces RPM Gate safety interlocks:
-- When prerequisites are missing, the valve clamps down (G-ABSENT interlock).
-- When novel creative proposals arrive, the aperture (sigma) controls admittance into
-  the Daydream store (held.py) while preserving the Rule P immutable barrier.
-- Incorporates calibrated weights from train_tks_meta_valve.py for dynamic aperture prediction:
-  sigma*(x) = sigmoid(w^T * x + b).
+WHAT CHANGED
+------------
+  * The learned aperture sigma*(x) = sigmoid(w^T x + b) is GONE from the deciding path. The weights file
+    `tks_meta_valve_weights_v0_4.json` is kept in the repo as a HISTORICAL record only. This module never opens it.
+  * The old Flour/Water hard-code is GONE. The essential reagents are whatever the recipe's OWN prerequisite list
+    says (the caller passes it; the live loop passes the canonical brain's support for that product).
+  * G-ABSENT stays: if any essential reagent is absent, the valve clamps shut.
+
+THE RULE (two written tables, no fitted numbers)
+------------------------------------------------
+Table 1 -- the aperture, from the missing ratio (missing essentials / all essentials):
+
+    | missing_ratio            | aperture                          | interlock |
+    |--------------------------|-----------------------------------|-----------|
+    | 0                        | the dial setting (default 0.75)   | --        |
+    | greater than 0           | 0                                 | G-ABSENT  |
+    | no prerequisite list     | 0                                 | G-ABSENT  |
+
+Table 2 -- the declared noise level of what is flowing in, as a number:
+
+    | noise level | value |
+    |-------------|-------|
+    | EXACT       | 0.00  |   (checked form: the round-trip passed, amounts are exact)
+    | LOW         | 0.25  |
+    | MEDIUM      | 0.50  |
+    | HIGH        | 1.00  |
+
+Decision: G-ABSENT when Table 1 says so. Otherwise GATE_PASS when noise value <= aperture, else G-LIMIT.
+The valve is an operating-point check (station S4). It never decides what is missing -- the RPM gate does that
+-- and it never invents a quantity.
 """
 from __future__ import annotations
 
-import json
-import math
-import os
-import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from decimal import Decimal
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-DEFAULT_WEIGHTS_FILENAME = "tks_meta_valve_weights_v0_4.json"
+STATUS_WORD = "ENGINEERED-NOT-VALIDATED"
+#: Kept for the record. NEVER loaded by this module.
+HISTORICAL_WEIGHTS_FILENAME = "tks_meta_valve_weights_v0_4.json"
+DEFAULT_WEIGHTS_FILENAME = HISTORICAL_WEIGHTS_FILENAME   # backwards-compatible name; still never loaded
+
+NOISE_LEVELS: Dict[str, Decimal] = {
+    "EXACT": Decimal("0.00"),
+    "LOW": Decimal("0.25"),
+    "MEDIUM": Decimal("0.50"),
+    "HIGH": Decimal("1.00"),
+}
+CLAMPED_APERTURE = Decimal("0")
 
 
 @dataclass
@@ -31,237 +61,134 @@ class ValveTelemetry:
     aperture_sigma: Decimal
     inflow_entropy: Decimal
     backpressure: Decimal
-    status: str             # 'OPEN', 'RESTRICTED', 'CLAMPED_HALT'
-    gate_interlock: str     # 'GATE_PASS', 'G-ABSENT', 'G-LIMIT', 'REFUSE:INTERNAL_WITNESS'
+    status: str             # 'OPEN', 'RESTRICTED', 'RESTRICTED_DROP', 'CLAMPED_HALT'
+    gate_interlock: str     # 'GATE_PASS', 'G-ABSENT', 'G-LIMIT'
     admitted_to_held: bool
     reason: str
+    missing_reagents: Optional[List[str]] = None
+    rule: str = "written table (ENGINEERED-NOT-VALIDATED)"
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {"tick": self.tick, "aperture_sigma": str(self.aperture_sigma),
+                "inflow_entropy": str(self.inflow_entropy), "backpressure": str(self.backpressure),
+                "status": self.status, "gate_interlock": self.gate_interlock,
+                "admitted_to_held": self.admitted_to_held, "reason": self.reason,
+                "missing_reagents": list(self.missing_reagents or []), "rule": self.rule}
+
+
+def aperture_by_table(missing_ratio: Optional[Decimal], dial: Decimal) -> Tuple[Decimal, Optional[str]]:
+    """Table 1. Returns (aperture, interlock or None)."""
+    if missing_ratio is None or missing_ratio > 0:
+        return CLAMPED_APERTURE, "G-ABSENT"
+    return dial, None
 
 
 class TKSMetaValveController:
-    """Phase 3 Meta Valve Controller.
-    
-    Controls information flow between high-entropy external proposers and
-    the deterministic, verified CAS recipe ledger.
-    """
+    """The written-rule valve. `aperture_sigma` is the dial (an owner/eye setting), not a learned value."""
 
-    def __init__(self,
-                 default_aperture: Decimal = Decimal("0.7"),
-                 weights_path: Optional[str] = None):
+    status_word = STATUS_WORD
+
+    def __init__(self, default_aperture: Any = Decimal("0.7"), weights_path: Optional[str] = None):
         self.aperture_sigma = Decimal(str(default_aperture))
         self.telemetry_history: List[ValveTelemetry] = []
-        self.total_proposals_received: int = 0
-        self.total_admitted_to_held: int = 0
-        self.total_clamped_halts: int = 0
-        self.weights_model: Optional[Dict[str, Any]] = None
-
-        # Attempt to load calibrated weights if available
-        self._load_weights(weights_path)
-
-    def _load_weights(self, weights_path: Optional[str] = None) -> None:
-        candidate_paths = []
-        if weights_path:
-            candidate_paths.append(weights_path)
-        else:
-            here = os.path.dirname(os.path.abspath(__file__))
-            candidate_paths.append(os.path.join(here, DEFAULT_WEIGHTS_FILENAME))
-            candidate_paths.append(os.path.join(here, "brains", DEFAULT_WEIGHTS_FILENAME))
-            candidate_paths.append(os.path.join(os.path.dirname(here), DEFAULT_WEIGHTS_FILENAME))
-
-        for p in candidate_paths:
-            if os.path.exists(p):
-                try:
-                    with open(p, "r", encoding="utf-8") as f:
-                        self.weights_model = json.load(f)
-                    break
-                except Exception:
-                    continue
+        self.total_proposals_received = 0
+        self.total_admitted_to_held = 0
+        self.total_clamped_halts = 0
+        #: Always None: the learned weights are never loaded. `weights_path` is accepted and ignored.
+        self.weights_model = None
+        self.ignored_weights_path = weights_path
 
     def set_aperture(self, sigma: Any) -> Decimal:
-        """Set valve aperture sigma in [0.0, 1.0]."""
         val = Decimal(str(sigma))
         if not (Decimal("0.0") <= val <= Decimal("1.0")):
             raise ValueError(f"Valve aperture sigma must be between 0.0 and 1.0, got {sigma}")
         self.aperture_sigma = val
         return self.aperture_sigma
 
-    def predict_dynamic_aperture(self, proposal_features: Dict[str, float]) -> Decimal:
-        """Predict optimal aperture sigma using learned weights:
-            sigma*(x) = sigmoid(w^T * x + b)
-        """
-        if not self.weights_model or "weights" not in self.weights_model:
-            return self.aperture_sigma
-
-        feature_names = self.weights_model.get("feature_names", [
-            "novelty_entropy", "source_credibility", "prerequisite_ratio",
-            "normalized_radius", "operating_mode_bias"
-        ])
-        weights = self.weights_model["weights"]
-        bias = self.weights_model.get("bias", 0.0)
-
-        x_vec = [float(proposal_features.get(k, 0.0)) for k in feature_names]
-        logit = sum(w * xi for w, xi in zip(weights, x_vec)) + bias
-        pred_sigma = 1.0 / (1.0 + math.exp(-max(-60.0, min(60.0, logit))))
-        return Decimal(str(round(pred_sigma, 6)))
-
-    def evaluate_proposal_flow(self,
-                              tick: int,
-                              proposal_name: str,
-                              prerequisites_present: bool,
-                              novelty_entropy: Decimal,
-                              is_internal_daydream: bool = False,
-                              proposal_features: Optional[Dict[str, float]] = None) -> Tuple[bool, ValveTelemetry]:
-        """Regulate a proposal's passage through the meta-valve.
-        
-        Returns:
-            (allow_flow, telemetry_record)
-        """
+    def _record(self, telem: ValveTelemetry, allowed: bool) -> Tuple[bool, ValveTelemetry]:
         self.total_proposals_received += 1
-        entropy_d = Decimal(str(novelty_entropy))
-
-        # Dynamic aperture prediction if features are provided
-        effective_sigma = self.aperture_sigma
-        if proposal_features is not None:
-            effective_sigma = self.predict_dynamic_aperture(proposal_features)
-
-        # Rule 1: The RPM Gate Safety Interlock
-        # If essential prerequisites are missing, the valve triggers a pressure drop and clamps shut.
-        if not prerequisites_present:
+        if telem.gate_interlock == "G-ABSENT":
             self.total_clamped_halts += 1
-            telem = ValveTelemetry(
-                tick=tick,
-                aperture_sigma=effective_sigma,
-                inflow_entropy=entropy_d,
-                backpressure=Decimal("1.0"),
-                status="CLAMPED_HALT",
-                gate_interlock="G-ABSENT",
-                admitted_to_held=False,
-                reason=f"RPM Gate Interlock: Essential prerequisite missing for proposal '{proposal_name}'."
-            )
-            self.telemetry_history.append(telem)
-            return False, telem
-
-        # Rule 2: Permeability check based on aperture (sigma)
-        # Higher aperture permits higher-entropy (more unconventional/creative) ideas
-        # Backpressure is inversely proportional to aperture
-        backpressure = max(Decimal("0.0"), Decimal("1.0") - effective_sigma)
-
-        # Proposal passes if its entropy does not exceed the allowed threshold
-        # Max acceptable entropy = effective_sigma
-        if entropy_d <= effective_sigma:
+        if allowed:
             self.total_admitted_to_held += 1
-            telem = ValveTelemetry(
-                tick=tick,
-                aperture_sigma=effective_sigma,
-                inflow_entropy=entropy_d,
-                backpressure=backpressure,
-                status="OPEN" if effective_sigma >= Decimal("0.5") else "RESTRICTED",
-                gate_interlock="GATE_PASS",
-                admitted_to_held=True,
-                reason=f"Proposal '{proposal_name}' passed valve aperture (entropy {entropy_d} <= sigma {effective_sigma})."
-            )
-            self.telemetry_history.append(telem)
-            return True, telem
-        else:
-            # Entropy too high for current aperture setting
-            telem = ValveTelemetry(
-                tick=tick,
-                aperture_sigma=effective_sigma,
-                inflow_entropy=entropy_d,
-                backpressure=backpressure,
-                status="RESTRICTED_DROP",
-                gate_interlock="G-LIMIT",
-                admitted_to_held=False,
-                reason=f"Excess entropy ({entropy_d} > sigma {effective_sigma}). Proposal throttled."
-            )
-            self.telemetry_history.append(telem)
-            return False, telem
+        self.telemetry_history.append(telem)
+        return allowed, telem
+
+    def _decide(self, tick: int, name: str, aperture: Decimal, interlock: Optional[str], noise: Decimal,
+                missing: Optional[List[str]], absent_reason: str) -> Tuple[bool, ValveTelemetry]:
+        if interlock == "G-ABSENT":
+            return self._record(ValveTelemetry(
+                tick=tick, aperture_sigma=aperture, inflow_entropy=noise, backpressure=Decimal("1.0"),
+                status="CLAMPED_HALT", gate_interlock="G-ABSENT", admitted_to_held=False,
+                reason=absent_reason, missing_reagents=missing), False)
+        backpressure = max(Decimal("0.0"), Decimal("1.0") - aperture)
+        if noise <= aperture:
+            return self._record(ValveTelemetry(
+                tick=tick, aperture_sigma=aperture, inflow_entropy=noise, backpressure=backpressure,
+                status="OPEN" if aperture >= Decimal("0.5") else "RESTRICTED", gate_interlock="GATE_PASS",
+                admitted_to_held=True, missing_reagents=missing or [],
+                reason=f"'{name}' passed: noise {noise} <= aperture {aperture} (written table)."), True)
+        return self._record(ValveTelemetry(
+            tick=tick, aperture_sigma=aperture, inflow_entropy=noise, backpressure=backpressure,
+            status="RESTRICTED_DROP", gate_interlock="G-LIMIT", admitted_to_held=False,
+            missing_reagents=missing or [],
+            reason=f"'{name}' throttled: noise {noise} > aperture {aperture} (written table)."), False)
+
+    def evaluate_reagents(self, tick: int, proposal_name: str, essential_reagents: Iterable[str],
+                          present_reagents: Iterable[str], noise_level: str = "EXACT") -> Tuple[bool, ValveTelemetry]:
+        """The live loop's call. `essential_reagents` = the recipe's own prerequisite list."""
+        if noise_level not in NOISE_LEVELS:
+            raise ValueError(f"noise level must be one of {sorted(NOISE_LEVELS)}, got {noise_level!r}")
+        essential = list(dict.fromkeys(essential_reagents))
+        present = set(present_reagents)
+        noise = NOISE_LEVELS[noise_level]
+        if not essential:
+            aperture, interlock = aperture_by_table(None, self.aperture_sigma)
+            return self._decide(tick, proposal_name, aperture, interlock, noise, [],
+                                f"G-ABSENT: '{proposal_name}' has no prerequisite list; nothing can be checked.")
+        missing = [r for r in essential if r not in present]
+        ratio = Decimal(len(missing)) / Decimal(len(essential))
+        aperture, interlock = aperture_by_table(ratio, self.aperture_sigma)
+        return self._decide(tick, proposal_name, aperture, interlock, noise, missing,
+                            f"G-ABSENT: '{proposal_name}' is missing {', '.join(missing)} "
+                            f"({len(missing)} of {len(essential)} prerequisites).")
+
+    def evaluate_proposal_flow(self, tick: int, proposal_name: str, prerequisites_present: bool,
+                               novelty_entropy: Any, is_internal_daydream: bool = False,
+                               proposal_features: Optional[Dict[str, float]] = None) -> Tuple[bool, ValveTelemetry]:
+        """Older call shape, kept for callers that pass a yes/no prerequisite flag and an entropy number.
+        `proposal_features` is accepted and IGNORED: the learned aperture is retired."""
+        del is_internal_daydream, proposal_features
+        ratio = Decimal("0") if prerequisites_present else Decimal("1")
+        aperture, interlock = aperture_by_table(ratio, self.aperture_sigma)
+        return self._decide(tick, proposal_name, aperture, interlock, Decimal(str(novelty_entropy)), None,
+                            f"RPM Gate Interlock: Essential prerequisite missing for proposal '{proposal_name}'.")
 
     def status_summary(self) -> Dict[str, Any]:
-        """Return operational summary of the Phase 3 Valve System."""
         return {
             "subsystem": "tks_meta_valve_controller",
-            "phase": "Phase 3 Valve Controller (Calibrated)",
+            "rule": "written deterministic table",
+            "status_word": STATUS_WORD,
             "current_aperture_sigma": str(self.aperture_sigma),
             "proposals_received": self.total_proposals_received,
             "admitted_to_held": self.total_admitted_to_held,
             "clamped_halts": self.total_clamped_halts,
-            "admittance_rate": f"{(self.total_admitted_to_held / max(1, self.total_proposals_received)) * 100:.1f}%",
             "safety_interlock": "RPM_GATE_G_ABSENT_ACTIVE",
-            "weights_loaded": bool(self.weights_model is not None)
+            "weights_loaded": False,
+            "historical_weights_file_not_loaded": HISTORICAL_WEIGHTS_FILENAME,
         }
 
 
-def self_test():
-    print("Testing TKSMetaValveController (Phase 3 Valve System)...")
-    valve = TKSMetaValveController(default_aperture="0.7")
-    assert valve.aperture_sigma == Decimal("0.7")
-    print(f"[PASS] Default aperture initialized: {valve.aperture_sigma}")
-    print(f"[PASS] Weights loaded status: {valve.weights_model is not None}")
-
-    # Test 1: Normal creative proposal with prerequisites present
-    allowed, t1 = valve.evaluate_proposal_flow(
-        tick=1,
-        proposal_name="CROSS_PLANE_ANALOGY_2B_TO_4C",
-        prerequisites_present=True,
-        novelty_entropy=Decimal("0.45")
-    )
-    assert allowed is True
-    assert t1.gate_interlock == "GATE_PASS"
-    assert t1.admitted_to_held is True
-    print(f"[PASS] Normal creative proposal admitted: {t1.reason}")
-
-    # Test 2: Missing prerequisite triggers CLAMPED_HALT (Zero Hallucination)
-    allowed_missing, t2 = valve.evaluate_proposal_flow(
-        tick=2,
-        proposal_name="MISSING_DATA_SPECULATION",
-        prerequisites_present=False,
-        novelty_entropy=Decimal("0.1")
-    )
-    assert allowed_missing is False
-    assert t2.gate_interlock == "G-ABSENT"
-    assert t2.status == "CLAMPED_HALT"
-    print(f"[PASS] Missing prerequisite clamped by RPM Gate interlock: {t2.reason}")
-
-    # Test 3: Tighten valve to Surgical Mode (sigma = 0.1)
-    valve.set_aperture("0.1")
-    allowed_high_entropy, t3 = valve.evaluate_proposal_flow(
-        tick=3,
-        proposal_name="WILD_METAPHOR_PROPOSAL",
-        prerequisites_present=True,
-        novelty_entropy=Decimal("0.65")
-    )
-    assert allowed_high_entropy is False
-    assert t3.gate_interlock == "G-LIMIT"
-    print(f"[PASS] Surgical mode throttles high entropy: {t3.reason}")
-
-    # Test 4: Dynamic aperture prediction using learned weights
-    if valve.weights_model:
-        features = {
-            "novelty_entropy": 0.20,
-            "source_credibility": 0.95,
-            "prerequisite_ratio": 1.0,
-            "normalized_radius": 0.25,
-            "operating_mode_bias": 0.0
-        }
-        pred_sigma = valve.predict_dynamic_aperture(features)
-        print(f"[PASS] Predicted dynamic aperture for high-credibility proposal: sigma* = {pred_sigma}")
-        assert pred_sigma > Decimal("0.80")
-
-        allowed_dyn, t4 = valve.evaluate_proposal_flow(
-            tick=4,
-            proposal_name="HIGH_CREDIBILITY_PROPOSAL",
-            prerequisites_present=True,
-            novelty_entropy=Decimal("0.20"),
-            proposal_features=features
-        )
-        assert allowed_dyn is True
-        assert t4.gate_interlock == "GATE_PASS"
-        print(f"[PASS] Dynamic proposal admitted: {t4.reason}")
-
-    summary = valve.status_summary()
-    assert summary["clamped_halts"] == 1
-    print("[PASS] TKSMetaValveController summary verified:", summary)
-    print("ALL PHASE 3 META VALVE CONTROLLER TESTS PASSED.")
+def self_test() -> None:
+    valve = TKSMetaValveController(default_aperture="0.75")
+    ok, t = valve.evaluate_reagents(1, "Bread", ["Flour", "Water"], ["Flour", "Water"])
+    assert ok and t.gate_interlock == "GATE_PASS" and t.aperture_sigma == Decimal("0.75")
+    ok, t = valve.evaluate_reagents(2, "Bread", ["Flour", "Water"], ["Flour"])
+    assert not ok and t.gate_interlock == "G-ABSENT" and t.missing_reagents == ["Water"]
+    ok, t = valve.evaluate_reagents(3, "Bread", ["Flour", "Water"], ["Flour", "Water"], noise_level="HIGH")
+    assert not ok and t.gate_interlock == "G-LIMIT"
+    assert valve.weights_model is None
+    print("valve self-test: 3 written-rule cases PASS (", STATUS_WORD, ")")
 
 
 if __name__ == "__main__":
