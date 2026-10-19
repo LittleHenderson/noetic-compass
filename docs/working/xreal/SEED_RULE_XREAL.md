@@ -2,8 +2,10 @@
 
 Program: `xreal/seed_rule_xreal.py` (this package). It is the rule; this page only says it in words.
 
-1. **Seed source.** H = sha256 of the exact UTF-8 bytes of the owner's X-REAL sign line, no trailing newline.
-   k1..k4 = the four 16-hex cuts of H (X0's `k_values`, X0's `seed_rule.py` pinned `09956c6b...`, unchanged).
+1. **Seed source (A-XR-18).** The owner pre-approved X-REAL with a line that names no package hash ("I PRE-APPROVE
+   BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD.").
+   The seed text is that verbatim line + ":" + the full sha256 (64 lower-case hex) of the FINAL sealed X-REAL zip;
+   H = sha256 of the seed text's UTF-8 bytes (no trailing newline). k1..k4 = the four 16-hex cuts of H (X0's `k_values`, X0's `seed_rule.py` pinned `09956c6b...`, unchanged).
 2. **Bands** (each 1,000,000 wide, all above X5's E64 1,878,000,001-1,879,000,000 and F64 1,880,000,001-1,881,000,000,
    and X4's 1,858-1,863 million):
 

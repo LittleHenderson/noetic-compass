@@ -1,37 +1,41 @@
 {
  "label": "XREAL",
  "members": {
+  "ANSWERABILITY_XREAL.json": {
+   "bytes": 152,
+   "sha256": "33974c2e65b36baefb66599333d656643b20fcf2abcd1a03d059e52af9db0ec4"
+  },
   "FORBIDDEN_LIST_XREAL.json": {
    "bytes": 55102,
-   "sha256": "2c04977ee72c44156a801b7db919751f5980393232f7a386a251b832e4b617a9"
+   "sha256": "81a3f337b1bb70344dd22afb60ad557ee163ba2abb125faa6526b0d3cda1e080"
   },
   "FORBIDDEN_LIST_XREAL.json.sha256": {
    "bytes": 92,
-   "sha256": "2759c890866dd0c2e54e150e331eee0d390432fa8f9f99f52f2b59447f5f8fda"
+   "sha256": "61bf3cb7725c0d32564a46b1386fb11bc98a7eda28c091ef997cafba24b56945"
   },
   "FRAMES_PINNED.json": {
    "bytes": 20716,
    "sha256": "0b99ffe21f8532e5a39a2bc03d87e4d7f2106722d0936971af8b679cfcb677a4"
   },
   "FROZEN_XREAL.json": {
-   "bytes": 6901,
-   "sha256": "96b5235e146c1ed97804514254531ce3ecd9e2f408bda1ff8cbb6f88fb050cb6"
+   "bytes": 7470,
+   "sha256": "f79e4cbc4e757c713c68dd775f6eb2a75d7ac676d2cff87da1de963fb4713832"
   },
   "I11_XREAL.json": {
-   "bytes": 4692,
-   "sha256": "3d522ed04258ef02ca0c72566b840c5779c34820945cdf638be2146b9a20970a"
+   "bytes": 4513,
+   "sha256": "bc964927ef786127bdcaa06637707c290f8f141ddf67b693f2c97f9d6ccb6a78"
   },
   "I11_XREAL.json.sha256": {
    "bytes": 81,
-   "sha256": "8f1c2c0aa65effed33800cbb5e7ab6b74149ce2af54bc43fb2e7ba04967b8e93"
+   "sha256": "65988fdbc303987bcae6889dfe106e2925fe00b4884731afcc33777ba093a022"
   },
   "PREREGISTRATION_X_REAL.md": {
-   "bytes": 45318,
-   "sha256": "ca23381881f24e77cf16ef08a2526d03cf7625e40c396c5ac464fda3a90f9490"
+   "bytes": 51470,
+   "sha256": "d011559617faa16a4d2fe353b3c91ee75431b0e057f83973ec181e154ed21674"
   },
   "README_XREAL.md": {
-   "bytes": 3446,
-   "sha256": "df05a0527008558d9da6c205a4faff299aad52fc87e665d0f15080ecc23b408b"
+   "bytes": 3807,
+   "sha256": "8d6601f09f3a9fa2676caf96aed23d7dde62127fa526f1bc9fab65165b8dad6f"
   },
   "RUN_LIMITS_XREAL.json": {
    "bytes": 3641,
@@ -58,56 +62,60 @@
    "sha256": "67d75cbccd4fede9459e429c52028cb1687441b00424d1b11c56caa13676479b"
   },
   "practice/INPUTS_PRACTICE_XREAL.json": {
-   "bytes": 160655,
-   "sha256": "02238f6cd0b0848c2915b10790cb4c6208584494c20b4a162c8132f42570a819"
+   "bytes": 148397,
+   "sha256": "aeda156136ac11dea0fb5a312bd6fbba6cc864eaa248c825b4c23bcb1a38ab1c"
   },
   "practice/INPUTS_PRACTICE_XREAL.json.sha256": {
    "bytes": 93,
-   "sha256": "70d8d7c93804fd8887d67cb8776c0294fa1c5f5ab177b363d9e376f994db46cb"
+   "sha256": "98cee537feced74028802395263ee353765e31d85cb3962998ae6b9e8292e542"
   },
   "practice/KEYS_PRACTICE_XREAL.json": {
-   "bytes": 58342,
-   "sha256": "1d29826df8b7eec2e891a6fac45b5b0cfaaa91dc5a5afe07225d4646f62a0a6f"
+   "bytes": 55174,
+   "sha256": "fa3756df199bf5af85d495f0f92d8bdf26011441f6b49190acf01d1b4aceada7"
   },
   "practice/KEYS_PRACTICE_XREAL.json.sha256": {
    "bytes": 91,
-   "sha256": "ace9784bf4f177f8a26752628859bd0efa66dc06ec7ab4325a3dc7b42c3eca48"
+   "sha256": "bd58dac3e4e4e8f0d7bd85c7b632a5f73586d24388a4dff4a88a0ef9f7358646"
   },
   "practice/SAMPLE_RECORD_PRACTICE_XREAL.json": {
-   "bytes": 250488,
-   "sha256": "1179a3c6d5aaec4af3b845d8ac210ea2f396ef3eceabd18ad4717da210a32236"
+   "bytes": 243503,
+   "sha256": "bf23a3a111a0199de432bcd39ba7d932b65c6a48c7daf0657312af0593925d7d"
   },
   "practice/SAMPLE_RECORD_PRACTICE_XREAL.json.sha256": {
    "bytes": 100,
-   "sha256": "e23070c79b1f12c583e377b44e8c4417b9f309f4c9138dc3f9815d2419c1d882"
+   "sha256": "1ad2ebf6789efc359718308767d5fe3e1c838819ec435ad25334db57b689ace7"
   },
   "tests_xreal/__init__.py": {
    "bytes": 0,
    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "tests_xreal/fixtures/FIXTURE_INPUTS_XR.json": {
-   "bytes": 6883,
-   "sha256": "622332391dc24d5000a92350defb1cc9c9d0179c46d207fe96a88ab54bb65715"
+   "bytes": 6971,
+   "sha256": "2b88de08fa272269289d0510d86550ff1ec52258a7720668820054885a2288ff"
   },
   "tests_xreal/test_keys_b.py": {
    "bytes": 12098,
    "sha256": "c6b47ee1b4db949016e07f24b06c2014e969a7d577901a49468313b4fb5dafbb"
   },
   "tests_xreal/test_kit_xr.py": {
-   "bytes": 3256,
-   "sha256": "62b4e3d97f1cb1ff169598ca4826c9e9e4be74923928c2047f55ba0c760b377f"
+   "bytes": 3683,
+   "sha256": "5cba49df9ea838f5ac5184964daa2eaef33609fa05c4fd132b24a843803b582e"
   },
   "tests_xreal/test_units_xr.py": {
-   "bytes": 23813,
-   "sha256": "63377e7e61c384f6b0347320f93a1625a5a574b08689e407d33057353d2ac2a3"
+   "bytes": 27152,
+   "sha256": "0ad698e109d6d25e85ff121e00c66c7286163237a0f40d29f26c49bfabd83ae8"
   },
   "xr_contract/SEED_RULE_XREAL.md": {
-   "bytes": 2640,
-   "sha256": "aed9a75fbde4cb48ad66d0829fe7e52ad61559ab3301010a4567bba7dd1df156"
+   "bytes": 2939,
+   "sha256": "f3b448e87475114a67549fe26d659f75189d2278babcaeef15616109c667c351"
   },
   "xr_contract/XREAL_CUSTODIAN_CONTRACT.md": {
-   "bytes": 6295,
-   "sha256": "ab939cd4b0ed2e79aa439f93143067f9ccd04b1ee3aa3cc14d63e9b3b076900e"
+   "bytes": 7037,
+   "sha256": "b955293db5e488af3c5561eb0c93e848bd801e28f0dd45bde634b09d4468afac"
+  },
+  "xr_contract/fetch_sources.sh": {
+   "bytes": 1940,
+   "sha256": "5f7c79239eb798e796520249f525c629449722723ba0076dbf4bf79687ed7719"
   },
   "xr_contract/xrun.py": {
    "bytes": 296,
@@ -130,16 +138,16 @@
    "sha256": "6d3925941b7b0211e4d43f19b1417968091ca09c29b15578a48854f4b781be19"
   },
   "xreal/check_xreal_format.py": {
-   "bytes": 14017,
-   "sha256": "71c2e41df4da59793d6f736cf803db0f93de5d2088606697db3d93c3b2ceab24"
+   "bytes": 14295,
+   "sha256": "b5810e66ae7d64faa8141e544a2094a952dcaf5990b8cdca13da28956509ce95"
   },
   "xreal/common_xr.py": {
-   "bytes": 10865,
-   "sha256": "921f57de3aeecb6ee194534c6451e149245781ee28a84888f8c448d86d90f350"
+   "bytes": 11086,
+   "sha256": "3043b927b6a3009bdfa2b90fe2f8852e4bf20a9c91b8e314f71adda87c03170d"
   },
   "xreal/custody_xr.py": {
-   "bytes": 3921,
-   "sha256": "00ff1de2bd187087783513c0fb94fbd1c5bfa4d4f5f151917d84ba18f97f9454"
+   "bytes": 4314,
+   "sha256": "4ed6ae850094406f6a2dc6fdcd389275a052123c099778a73fc7e32adcfe696c"
   },
   "xreal/forbidden.py": {
    "bytes": 5334,
@@ -166,12 +174,12 @@
    "sha256": "d99404c85d885205e6218e148b9bbcef3b57a8920b812d6f5656bc77ca4199ea"
   },
   "xreal/mapping.py": {
-   "bytes": 3840,
-   "sha256": "a838a28a723ac0b22f0ce39f46bdc72fa27bfc051a66ddecda612bd9962bacf7"
+   "bytes": 4953,
+   "sha256": "5507acde94e523a7c52e42061528a9e38f4013da373fa7fab4071e8ac2a9a5f0"
   },
   "xreal/merge_xreal.py": {
-   "bytes": 19695,
-   "sha256": "981d39f44bb356e86fad75483b0ec36f1de80485dfc91cee46ae2d1cd0d56902"
+   "bytes": 20126,
+   "sha256": "6f9160a460443842fc2370d5305318880f75eec302fb0a452c65339c89b999f6"
   },
   "xreal/netguard.py": {
    "bytes": 927,
@@ -190,16 +198,16 @@
    "sha256": "088444ec77c30d3443dc4c81a44eea74d2bd4b88f28594034ff9bfc9ee1e12d0"
   },
   "xreal/sample_xr.py": {
-   "bytes": 13207,
-   "sha256": "99989c1f22f0f40dd8c973ffa8dd115b0919ca1966a72f1e49a6c4fd627f0ccb"
+   "bytes": 16490,
+   "sha256": "b58fa0f295482e44dcabccaffb2337f6928c96b94bb79fec17a9eec03a6f33d3"
   },
   "xreal/score_xr.py": {
    "bytes": 10555,
    "sha256": "70e376e3acfd53d3fecc1a5513687fea10d2c03359f5ef18460c46fc5b3fb38a"
   },
   "xreal/seed_rule_xreal.py": {
-   "bytes": 6719,
-   "sha256": "fee2e3245f645174fd8bb63c97c31f81d12c0af8597928cec1aaeb0fbe6268d4"
+   "bytes": 7976,
+   "sha256": "d50338b5ce2224c24d454c929a81afb17620a96683e06c5f17136cc1a858fbb1"
   },
   "xreal/session_xr.py": {
    "bytes": 19623,
