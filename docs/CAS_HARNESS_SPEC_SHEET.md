@@ -1962,7 +1962,7 @@ Also in that record: the owner's direction that HELM's speech be fluid, everyday
 **The rule this section sets for the record.** A file, a commit message or a roadmap that calls something "the canonical brain", "Station S0 brain" or "the 22x40 brain" does not make it the brain. Only a change to this section, with a new licensed reading and its artifact path, may change the pointer.
 ### 7.57 HELM language line, fix E (dictionary half): alias-wide lexicon v2 — DEV 99 read 0 → 41 (39 right, 2 wrong); sealed 98, scored once, 0 → 34 (32 right, 2 wrong); 439 headline MATCH 233 → 304, MISMATCH 9 → 13 (2026-10-18 PDT, laptop, 0 USD)
 
-Numbered 7.50 to leave 7.48-7.49 to the same evening's docs catch-up (fix A); renumber on merge if needed.
+Numbered 7.57 (first drafted as 7.50 to leave 7.48-7.49 to the docs catch-up; the catch-up took 7.48-7.56, and this section now sits at 7.57).
 
 **Owner order.** `Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md`, fix E: "expand the deterministic dictionary on the 99 dev rows" and score the existing small English model on the sealed 98.
 
@@ -1984,6 +1984,101 @@ Numbered 7.50 to leave 7.48-7.49 to the same evening's docs catch-up (fix A); re
 - **Small English model (Scribe L4, commit `84812689`).** Scoring PREPARED, **`NOT_RUN`** pending the owner's word: `docs/working/scribe_l4_eval/SCORE_SCRIBE_L4_PLAN.md` + `score_scribe_l4.py` (AWS t3.medium CPU, about 0.01 USD, cap 0.10 USD). Read from the code: it can only say one unweighted clause (subject / verb / object / domain / register / drive), its vocabulary is 108 words, input cut at 32 tokens, and its shim parser fills missing slots with defaults and cannot read `Above/Cause` / `Below/Effect`. Exact match against the recipe gold is **0 of 98 by construction**, written before any run.
 - **Status words.** v2 reader `ENGINEERED-NOT-VALIDATED` (FORM check, not meaning); the sealed count is a `REAL` laptop measurement on LLM-written SDG English. `NOT LICENSED`: reading open English in general; any meaning claim; the Scribe on real English (not run).
 - **Artifacts:** `docs/working/noetic_council/language_v3/RESULTS_LEXICON_V2_20261018.md`, `lexicon_v2.py`, `test_lexicon_v2.py`, `FROZEN_LEXICON_V2.json`, `SEALED_98_SCORE_RECEIPT_LEXICON_V2.json`; `tabulate_v2.py`; `docs/working/SDG_TABULATION_V1_V2_20261018.json`; `docs/working/scribe_l4_eval/`.
+
+### 7.58 HELM DWP-T1 (Purpose / Wisdom / Power per reagent): the frozen rule's word is `TRIAD_EARNED_KEEP`; claim status `ENGINEERED-NOT-VALIDATED`, ceiling `SYNTHETIC_ONLY` — the answer keys use the same rules as the arms, so this shows the wiring works on planted data, **not** that real reagents carry a triad (2026-10-18 PDT, laptop MSI, 0 USD)
+
+**Said plainly first.** The test checks whether a three-part label on each ingredient (Purpose, Wisdom, Power) can be wired into the recipe brain and read back correctly. It can. But the "right answers" were planted using the same definitions the arms use. So a pass was close to certain from the start (the builder wrote down about 85% before any code). It says the wiring works. It does **not** say any real ingredient, mind or model has such a triad. Nothing here is a HELM claim.
+
+**Ordered by:** the owner's ruling "DWP-T1" (§7.59, item 3). Question source: `Documents/Codex/2026-10-18/EXPLORATION_PURPOSE_WISDOM_POWER_PER_REAGENT_v0.1.md` §4 (sha256 `729789d7350b502cb1e8713f2860001900aca130624df88c416e30fc6aa23cbe`).
+
+**What was tested.** Each ingredient carries three faces. Each face has one of four stages on one scale: Rising `1/4`, Peak `1`, Waning `1/2`, Absent `0`. **Option A** shrinks each ingredient's amount by its triad. **Option B** puts one Purpose stage on the whole recipe (a door: Absent means the recipe may not run). Combining rules: `MIN` (`c = min(P, W, Pw)`, Balance Reading rule 1, `MANUSCRIPT.md:13600`) and `PRODUCT_BOOK` (`c = P × W × Pw × (1 − imbalance)`, `:13580`).
+
+**Run facts.**
+
+| Item | Value |
+|---|---|
+| Run id / place | `DWP_T1_MSI_ONCE`, `LOCAL_CPU_ONCE` on MSI, status `COMPLETED`, worker exit code 0 |
+| Sign line | `APPROVE dwp_t1, source 1fc46d69, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.` — composed by the run operator from the owner's words under the dispatch coordinator's delegation; `OWNER_APPROVAL_EVIDENCE.md` states it is **not a separate owner signature** |
+| Manifest sha256 | `1fc46d697b3a057bebdfd541b3f4f1861276ad1d66c30b8d42106a579a68af16` |
+| Time | 2.0822454 s wall (supervisor), 1.796875 s CPU; start `2026-10-19T02:17:35Z` (= 2026-10-18 19:17:35 PDT) |
+| Memory | peak 42,098,688 bytes (about 40 MiB) of the 314,572,800-byte (300 MiB) cap; recorded as `PARTIAL_OBSERVED_PEAK_200MS_POLL` (a 200 ms poll, so a lower bound) |
+| Free RAM at launch | 1,259,176 KB |
+| Spend / network | 0 USD; sockets blocked in the worker |
+| Tests | 13 / 13 passed inside the worker before the run (`TEST_RESULTS.json`) |
+| Frozen first | all rules, marks and predictions in `FROZEN.json` before any code |
+| Data | S2v2 sha256 `6092fdcc1ba3d8f8a35e7269b5ff8d7620e5c9e50d0023cb770027be13d87a61`; S3v2 `7d60a3f43121b152a38015aab6bd9a34b330da854488d61b4f126e5402662757`; a2 `a83c29d3a23f5109caaa0d74f7e5694e0ac7e5b2a349bab64cb40450b35044fb` |
+
+**Family × arm table** (3-valued: RIGHT / WRONG / UNDETERMINED; each cell is the RIGHT count; 🟩 cells have 0 WRONG; each 🟥 cell's remaining rows are WRONG, 0 UNDETERMINED).
+
+| Family (rows) | CONTROL | A_MIN | A_PROD | B_ONLY | A_MIN+B (primary) | RANDOM_FACE |
+|---|---|---|---|---|---|---|
+| S2v2 clean (1,792) | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 |
+| S3v2 clean (1,792) | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 |
+| a2 best-of-two (1,792) | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 | 🟩 1792 |
+| starved: right ingredient and right face (512) | 🟥 0 | 🟩 512 | 🟩 512 | 🟥 0 | 🟩 512 | 🟥 175 |
+| recipe_purpose_absent (2,560) | 🟥 640 | 🟥 640 | 🟥 640 | 🟩 2560 | 🟩 2560 | 🟩 2560 |
+| mixed_triads (256, report only) | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+
+- **Clean families.** The 1,792 RIGHT rows in each include 64 held-out rows with a zero input. The engine's gate answers UNDETERMINED there, and CONTROL does too, so "same as CONTROL" counts as RIGHT. Sanity check: CONTROL's exact yield matches the families' stored decimal `y` within 1e-9 on 1,728 / 1,728 answered rows in each clean family.
+- **RANDOM_FACE.** It always names the right ingredient (512 / 512), because that part is copied from A_MIN+B. It names the right face on 175 of 512 rows. On recipe_purpose_absent it is 🟩 only because its yield is A_MIN+B's yield by design.
+
+**Marks** (frozen before code; the status word was read from them by the program).
+
+| Mark | Reading | Result |
+|---|---|---|
+| M1 clean data unchanged | every arm equals CONTROL on **5,376 / 5,376** rows (3 × 1,792) | `PASS` |
+| M2 starved: right ingredient AND right face, per Omega | A_MIN **32/32**, A_PROD **32/32**, A_MIN+B **32/32**; CONTROL **0/32**, B_ONLY **0/32**, RANDOM_FACE **0/32**. The RPM-order face reading and the smallest-value face reading both gave 32/32 and disagreed on 0 of 512 rows (only one face is planted per Omega, so they cannot disagree here). Planted stages: Absent 11, Rising 11, Waning 10 | `PASS` (primary arm) |
+| M3 Purpose Absent on the whole recipe | B_ONLY and A_MIN+B answered UNDETERMINED on **640 / 640** Absent-recipe rows and on **0 / 640** Peak-recipe rows. CONTROL, A_MIN, A_PROD answered UNDETERMINED on **0 / 640** Absent rows (they gave a number, which scores WRONG) | `PASS` |
+| M4 MIN vs PRODUCT_BOOK (report only) | see next table | report only |
+| M5 face reading vs a coin | A_MIN+B face right **512 / 512**; RANDOM_FACE **175 / 512** (34.18%); margin `8425/128` = **65.8203** points against a bar of 5 points | `PASS` |
+
+**M4 detail (report only).**
+
+| Family | Rows compared | Yields differ | Largest yield gap | Different limiting ingredient | Different limiting face (RPM-order reading) |
+|---|---|---|---|---|---|
+| S2v2 / S3v2 / a2 | 1,728 each | 0 | `0/1` | 0 | 0 |
+| recipe_purpose_absent | 2,560 | 0 | `0/1` | 0 | 0 |
+| starved | 512 | **336** | `2198009623370515/2251799813685248` (about 0.9761) | 0 | 0 |
+| mixed_triads | 256 | **255** | `10462695275249013/4503599627370496` (about 2.3232) | **52 / 256** | **27 / 256** |
+
+The 336 starved rows are the Rising and Waning rows (Waning gives exactly half under PRODUCT_BOOK); the Absent rows give 0 under both.
+
+**Where the two face readings part ways (mixed_triads, report only).** Two rules can name the limiting face. *RPM-order reading:* the earliest face that is not at Peak, in the order Purpose, Wisdom, Power. *Smallest-value reading:* the face with the lowest stage value. They name a different face on **94 / 256** rows under A_MIN (36.7%) and on **105 / 256** rows under A_PROD (41.0%). The builder predicted 15–35% before code; the real share is higher. This test has no answer key for which reading is right.
+
+**Imbalance factor.** The book's imbalance factor is underspecified (`MANUSCRIPT.md:13582`). The frozen reading is the range, `max − min`. It reproduces both worked examples in the book (`MANUSCRIPT.md:13585-13586`: (0.8, 0.8, 0.8) gives 0.512; (1.0, 0.6, 0.5) gives 0.15). Mean-absolute-deviation and max-minus-mean readings do not give 0.5 on the second example.
+
+**What each option showed (one sentence each).** Option A found the hidden bottleneck: an ingredient with plenty of raw amount but one starved face, which today's single recipe and Option B both missed (they named the wrong ingredient on 512 / 512 starved rows). Option B is a door gate: it refused every recipe whose Purpose is Absent and scaled the whole yield for Rising and Waning, but it cannot say which ingredient or face is short.
+
+**OPEN (not decided here; owner decisions).**
+1. **Which face gets the blame:** the earliest face not at Peak in RPM order (Purpose, then Wisdom, then Power), or the face with the lowest value. On mixed_triads they disagree on 94 / 256 (A_MIN) and 105 / 256 (A_PROD) rows. `OPEN`.
+2. **Which combining rule:** `MIN` or `PRODUCT_BOOK`. They give the same limiting ingredient and face on clean and starved data but different yields (336 / 512 starved rows, 255 / 256 mixed rows) and a different limiting ingredient on 52 / 256 mixed rows. `OPEN`.
+
+**Disclosures.**
+- Dev runs before the official run: one probe before `FROZEN.json` built S2v2, S3v2 and a2 to read their shapes (0.17 s) and computed no arm or mark; three local test runs on tiny fixtures (12/12; then 13 tests with 1 error because a fixture had no `y`, fixed with a guard; then 13/13). No full run on the real families happened before `DWP_T1_MSI_ONCE`.
+- Frozen choice: an Absent face inside Option A gives a determined 0, not UNDETERMINED. The other reading was **not tested**.
+- Not used: the lacunarity machine (nothing is learned or charged) and family S1.
+- Foundation labels: Purpose = F7, Wisdom = F2, Power = F5 is only a label on each face (`PROPOSED_NOT_RULED`). Nothing reads the triad from those cells.
+- The books' separate Power and Wisdom ladders are set aside by the owner's one-scale ruling (§7.59, item 2).
+
+**Status words.** The frozen rule's output `TRIAD_EARNED_KEEP` means only "kept in the synthetic design for the next step". It is not a legend word, not `VALIDATED`, not `LICENSED`, and not a promotion. Claim status: `ENGINEERED-NOT-VALIDATED` (ceiling `SYNTHETIC_ONLY`). The run itself is a `REAL` laptop execution of the wiring. `NOT LICENSED`: that real reagents, minds or models carry a Purpose / Wisdom / Power triad; any HELM claim from this run; reading the triad from Foundations F7 / F2 / F5.
+
+**Artifacts** (all under `C:\Users\wakil\Documents\Codex\2026-10-18\dwp_t1\`): `RESULTS.md` (sha256 `00871a28325eeb9233b75fd8583ca1b65a64381988dc2bb034a70b86f9b49a4d`); `FROZEN.json` (`dc7b9d1d24ec7003c0551d2d64c3a2a18d5005160c72e7dfadec7da6196968e1`); `SOURCE_MANIFEST.json` (`1fc46d697b3a057bebdfd541b3f4f1861276ad1d66c30b8d42106a579a68af16`); `runs\DWP_T1_MSI_ONCE\RESULTS_DWP_T1.json` (`b662dd757600bd02d7ea25e1137256899a54d1e3e8abd58798296481df3912c4`); `runs\DWP_T1_MSI_ONCE\SUMMARY.json` (`13eac26455a74fae9642e66f6d6a39c91118f44b37657643800b661e456e718e`); `runs\DWP_T1_MSI_ONCE\END.json` (`663a258c2eba36ffde630eae5d28a70d03e1b83dd79b773743c8c946501d1ef5`); also `triad.py`, `run_dwp.py`, `test_dwp.py`, `worker.py`, `supervisor.ps1`, `static_check.py`, `OWNER_APPROVAL_EVIDENCE.md`.
+
+### 7.59 Owner rulings, 2026-10-18 (evening): "Desire is Purpose" becomes HELM canon; one stage scale for all three faces; DWP-T1 ordered; the stopped 300 GB machine deleted; the 2.06 USD accepted after the fact — each `IN FORCE`, none a result
+
+This section records **who decided what**. A ruling is not evidence. Nothing here changes a result. Source: `C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, block "Rulings (later evening, verbatim, one message)" (file sha256 now `8aa8314916c5b49a16ad59bd660c99505eb2f27cfe726ac5acdf59b9166afe37`; §7.55 recorded the earlier, shorter version of the same file as `db94154a…`, before the Rulings block was added). The owner's words, one message: *"Desire is Purpose" (make your reading HELM canon); same 4 stage values for all three faces; DWP-T1" (build the free test); delete the 300 GB disk; accept the 2.06.*
+
+| # | Ruling | What it means | Status |
+|---|---|---|---|
+| 1 | "Desire is Purpose" | In HELM, Desire means Purpose: what a reagent is for, toward the outcome. A secular reading, recorded the way the 4 Worlds became 4 Registers in v7.5. **No book says this**: the exploration memo's table row reads "NOT in any book. This is the owner's new secular reading" (`EXPLORATION_PURPOSE_WISDOM_POWER_PER_REAGENT_v0.1.md` §2). HELM code and docs say Purpose; "Desire" stays only as the book's name. Not ruled in this message: any rename of the chain label `Dn` in `A0 → Dn → Wn → Pn` | `IN FORCE` |
+| 2 | One scale for all three faces | Rising `0.25` / Peak `1.00` / Waning `0.50` / Absent `0.00` apply to Purpose, Wisdom and Power. The books' separate ladders are the source and are set aside: Power Birth 10% / Adolescent 40% / Mature 100% / Declining 20% (`book/superiority_of_tks/MANUSCRIPT.md:13380-13448`); Wisdom Learning 25% / Knowing 50% / Understanding 75% / Mastered 100%+ (`:13478-13546`); Desire Rising 25% / Peak 100% / Waning 50% / Absent 0% (`:13276-13352`). Two other stage-name sets exist in the same book (`:7287-7305`, `:20288-20300`) and a fourth in `FULL_MANUSCRIPT_v2.md:6452-6458` (memo §2). A simplification for HELM, not a claim about the books | `IN FORCE` |
+| 3 | "DWP-T1" | Build and run the free laptop test of memo §4 | `IN FORCE` as an order; carried out, result in §7.58 |
+| 4 | "delete the 300 GB disk" | The stopped g6e machine `cas-bridge-control-20260822` and its 300 GB volume may be terminated. **Done:** instance `i-0c3028734c8885542` (g6e.xlarge, us-west-2) read `stopped` at `2026-10-19T02:08:38Z` and `terminated` at `2026-10-19T02:08:49Z` (2026-10-18 19:08:38 to 19:08:49 PDT); volume `vol-01cc880a770c10854` (300 GB gp3, `DeleteOnTermination` true) answered `InvalidVolume.NotFound` at `02:08:49Z` and `02:09:18Z`. Termination protection was ON (`OperationNotPermitted`); dispatch disabled it on the owner's word and terminated the machine. The operator's own AWS calls were read-only. Saving: about **24.00 USD a month** (300 GB × 0.08 USD per GB-month, gp3 list price; an estimate, not a bill). Never part of the HELM ledger. The two running `t3.small` app servers and the leftover S3 files were not touched. Record: `Documents\Codex\2026-10-01\task-2\helm_operator_preparation\ledger_reconciliation_20261018\disk_deletion_20261018\verification.json` (sha256 `a06a38c037e05a7ad349ce6a3f7bdb4a4fd03ae54a5981a1d40b134ef18b99ff`) | `IN FORCE` as an order; carried out |
+| 5 | "accept the 2.06" | The 2.06 USD spent without a prior owner word is accepted after the fact: 0.20 for the two GPU jobs (Scribe L4 and the v0.7 proposer, §7.53) plus 1.86 for Codex machine time (1.66 for seven M1/H8 runs plus 0.20 for twelve audit machines). **No money moved:** the ledger reads 110.35 of the 200.00 ceiling used or held, 89.65 unreserved, before and after. The original flags stay: these jobs were unapproved when they ran, and this acceptance does not rewrite that. Addendum `BUDGET_RECONCILIATION_ADDENDUM_OWNER_ACCEPT_206_AFTER_THE_FACT_20261019T020911Z.json` (sha256 `4994bfada781d3284b62fbac02dedeb2467036d86dfe76fde896fdfb18d156a6`), HISTORY line 91, 2026-10-18 19:09:11 PDT. Reconciliation source: `ledger_reconciliation_20261018\RECONCILIATION_SUMMARY_20261018.md` (sha256 `06722ba918eac6b6ab31c8d32b17e919e4ab8bd2081ce61fbac21e4d2b6d6c4d`) | `IN FORCE` |
+
+**A pointer for §7.53.** §7.53 said the two GPU jobs were "in no ledger". That was true when written. The reconciliation of 2026-10-18 recorded them (0.10 USD each, HISTORY lines 80 and 81, flag `FLAG_FOR_HUMAN_REVIEW`), and the owner then accepted the spend (item 5). §7.53's text is left as written; the owner's acceptance is an addition to it, not a replacement.
+
+- **What this does not show.** That Purpose is the better word, or that one scale is the better scale, or that any triad exists in any reagent, mind or model.
 
 ## 8. THE TWO CLAIMS
 
@@ -2277,6 +2372,8 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-18 | **OWNER RULINGS, EVENING (new §7.59), each `IN FORCE`, none a result.** "Desire is Purpose" = HELM canon (secular reading; no book says it; memo §2 row "NOT in any book"); one scale Rising 0.25 / Peak 1.00 / Waning 0.50 / Absent 0.00 for Purpose, Wisdom and Power (the books' separate Power 10/40/100/20 and Wisdom 25/50/75/100 ladders cited and set aside); "DWP-T1" ordered; the stopped 300 GB machine `i-0c3028734c8885542` terminated 2026-10-19T02:08:49Z at the latest and its volume `vol-01cc880a770c10854` gone (about 24.00 USD a month saved, a list-price estimate; termination protection disabled on the owner's word); 2.06 USD accepted after the fact (ledger 110.35 / 200.00, no money moved; original flags kept). Also: §7.57's stale "numbered 7.50" note corrected. | `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md` (sha256 `8aa83149…`); `disk_deletion_20261018\verification.json` (sha256 `a06a38c0…`); `BUDGET_RECONCILIATION_ADDENDUM_OWNER_ACCEPT_206_AFTER_THE_FACT_20261019T020911Z.json` (sha256 `4994bfad…`); this commit |
+| 2026-10-18 | **DWP-T1 RAN AND RECORDED (new §7.58) — frozen-rule word `TRIAD_EARNED_KEEP`; claim status `ENGINEERED-NOT-VALIDATED`, ceiling `SYNTHETIC_ONLY`.** Laptop MSI, run `DWP_T1_MSI_ONCE`, 2.0822454 s wall, peak 42,098,688 bytes, 0 USD, 13 / 13 tests. M1 5,376 / 5,376; M2 32/32 (A_MIN, A_PROD, A_MIN+B) vs 0/32 (CONTROL, B_ONLY, RANDOM_FACE); M3 640 / 640 and 0 / 640; M5 512 / 512 vs 175 / 512, margin 65.8203 points. M4: MIN vs PRODUCT yields differ on 336 / 512 starved and 255 / 256 mixed rows; different limiting ingredient on 52 / 256 mixed rows; the two face readings disagree on 94 / 256 (A_MIN) and 105 / 256 (A_PROD) mixed rows (predicted 15-35%). Builder's caveat kept: the answer keys use the same rules as the arms, so this shows the wiring, not that real reagents carry a triad. Face-blame rule (RPM order vs lowest value) and MIN vs PRODUCT stay `OPEN`. | `Documents\Codex\2026-10-18\dwp_t1\RESULTS.md` (sha256 `00871a28…`); `runs\DWP_T1_MSI_ONCE\RESULTS_DWP_T1.json` (sha256 `b662dd75…`); manifest sha256 `1fc46d69…`; this commit |
 | 2026-10-18 | **FIXES C AND D (owner approvals 2026-10-18): the licensed HELM-R1 wave-1 recipe brain is wired into HELM's live loop as Station S0 (`ENGINEERED-NOT-VALIDATED` wiring; the brain's own license stays synthetic-only). Fill-with-ten removed; round trip actually checked; missing checker = NOT_VERIFIED; absent ingredient -> real rpm_gate REPAIR -> repair child -> UNDETERMINED/CLARIFY with zero writes; first REAL detected failure (the brain's own writer: `refused_conflict`, old `2/1`, new `5/2`) opens a repair child; valve is a written two-table rule (`ENGINEERED-NOT-VALIDATED`), learned weights never loaded.** Tests (Windows, Python 3.14.0): loop 18 OK, chat 5 passed, valve 3 PASS, repair_performer ALL PASS. No section number taken (fix A owns §7.48+). | `docs/working/traces/RESULTS_WIRE_RECIPE_BRAIN_20261018.md`; `docs/working/traces/HELM_LIVE_TRACE_20261018.jsonl` sha256 `4f94ccee22ea9829072ebfd59fe7690f56d3f28f49527cf2f39b140283fe6fba`; this commit |
 | 2026-10-18 | **CANONICAL BRAIN POINTER (new §7.56).** HELM has one licensed brain: the HELM-R1 wave-1 recipe brain (c34-g `PASS`, `R1_BEATS_GB3`, `SYNTHETIC_ONLY`), with §7.47's claim sentence verbatim. Every other brain (GB3, RB1g2, RB2b/c, RB-W, RB-G1…G6, RB-I1/I1b, RB-P1, RB-OH1, `helm_brain_22x40.py`, `helm_brain_tks28.py`, Scribe L4, the valve aperture) listed in one line each as a comparison, candidate or stand-in. Owner ruling "recipe brain is canonical" cited. The licensed brain is **not** yet in HELM's live loop. | `Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3\PACKAGE_FREEZE.json` (sha256 `8c55c413…`); `R1_W1_READING.json` (sha256 `9b1dfdd8…`); `OWNER_APPROVALS_20261018.md`; this commit |
 | 2026-10-18 | **OWNER RULINGS AND COUNCIL DECISIONS 2026-10-16 to 2026-10-18 (new §7.55), each `IN FORCE` as a rule, none a result.** Depth `HORIZON = 12` and `DESIRE_BOUND = 12` with the owner's three messages verbatim and canon's 5 kept beside it; two records still saying 5 named (one self-corrected, one not). C15 = owner; C4 (by time), C5 (1/20 unpinned, 0 pinned), Q13 (`p/q` in CCE) attributed to the **council**, not the owner. The 2026-10-18 approvals: recipe brain canonical, no more GPU for now, plain-rule valve, fixes A–G. | `OWNER_RULING_DEPTH_12_20261016.md` (sha256 `b22cae04…`); `OWNER_ORDERS_AND_DECISIONS_20261016.md` (sha256 `3ee1004c…`); `OWNER_APPROVALS_20261018.md` (sha256 `db94154a…`); this commit |
