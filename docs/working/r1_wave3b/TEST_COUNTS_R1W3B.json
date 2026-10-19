@@ -1,0 +1,315 @@
+{
+ "python": "3.14.0",
+ "suites": {
+  "cube_store/test_all.py": {
+   "all_pass_line": true,
+   "exit": 0,
+   "pytest": [],
+   "ran": [],
+   "script_total": [
+    [
+     "21",
+     "21"
+    ]
+   ],
+   "seconds": 0.23,
+   "verdict": []
+  },
+  "helm.test_helm_chat_nuance (pytest)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [
+    [
+     "",
+     "5",
+     "",
+     "0.33"
+    ]
+   ],
+   "ran": [],
+   "script_total": [],
+   "seconds": 2.01,
+   "verdict": []
+  },
+  "helm.test_helm_end_to_end_loop": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    18
+   ],
+   "script_total": [],
+   "seconds": 1.08,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "helm.test_helm_english_in": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    31
+   ],
+   "script_total": [],
+   "seconds": 0.69,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "helm.test_helm_faces_in": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    16
+   ],
+   "script_total": [],
+   "seconds": 0.17,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "helm.test_helm_triad": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    15
+   ],
+   "script_total": [],
+   "seconds": 0.5,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "helm.test_helm_voice": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    22
+   ],
+   "script_total": [],
+   "seconds": 0.8,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "language_v3.test_lexicon_v2": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    19
+   ],
+   "script_total": [],
+   "seconds": 0.51,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "language_v3.test_lm_t1": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    26
+   ],
+   "script_total": [],
+   "seconds": 0.51,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "language_v3.test_lm_t1b": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    11
+   ],
+   "script_total": [],
+   "seconds": 0.31,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "language_v3.test_lm_t1c": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    5
+   ],
+   "script_total": [],
+   "seconds": 0.22,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "language_v3.test_lm_t1v3": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    26
+   ],
+   "script_total": [],
+   "seconds": 0.89,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3.test_kit_r1w3 (wave-3 zip)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    5
+   ],
+   "script_total": [],
+   "seconds": 0.33,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3.test_run_r1w3 (AWS only)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    4
+   ],
+   "script_total": [],
+   "seconds": 0.18,
+   "verdict": [
+    "OK (skipped=4)"
+   ]
+  },
+  "r1w3.test_units_w3 (wave-3 zip)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    36
+   ],
+   "script_total": [],
+   "seconds": 3.17,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3b.test_kit_w3b": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    5
+   ],
+   "script_total": [],
+   "seconds": 0.43,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3b.test_run_w3b (AWS only)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    3
+   ],
+   "script_total": [],
+   "seconds": 0.2,
+   "verdict": [
+    "OK (skipped=3)"
+   ]
+  },
+  "r1w3b.test_units_w3b": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    18
+   ],
+   "script_total": [],
+   "seconds": 17.54,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "repair_performer/test_all.py": {
+   "all_pass_line": true,
+   "exit": 0,
+   "pytest": [],
+   "ran": [],
+   "script_total": [
+    [
+     "16",
+     "16"
+    ]
+   ],
+   "seconds": 1.62,
+   "verdict": []
+  },
+  "return_address/test_all.py": {
+   "all_pass_line": true,
+   "exit": 0,
+   "pytest": [],
+   "ran": [],
+   "script_total": [
+    [
+     "27",
+     "27"
+    ]
+   ],
+   "seconds": 0.22,
+   "verdict": []
+  },
+  "the_loop_v3/test_all.py": {
+   "all_pass_line": true,
+   "exit": 0,
+   "pytest": [],
+   "ran": [],
+   "script_total": [
+    [
+     "35",
+     "35"
+    ]
+   ],
+   "seconds": 0.72,
+   "verdict": []
+  },
+  "wave1 carried (v3 folder)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    128
+   ],
+   "script_total": [],
+   "seconds": 75.5,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "wave2 carried units (wave-2 folder)": {
+   "all_pass_line": false,
+   "exit": 0,
+   "pytest": [],
+   "ran": [
+    34
+   ],
+   "script_total": [],
+   "seconds": 3.74,
+   "verdict": [
+    "OK"
+   ]
+  }
+ },
+ "w3_extracted_to": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\\4c449f9b-0ce1-4a65-8176-1db6509485b5\\scratchpad\\seal3b\\w3_extract\\HELM_R1_W3_20261019",
+ "w3_zip": "HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip",
+ "zip": "HELM_R1_W3B_20261019_SOURCE_R1W3B.zip",
+ "zip_extracted_to": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\\4c449f9b-0ce1-4a65-8176-1db6509485b5\\scratchpad\\seal3b\\sealed_extract\\HELM_R1_W3B_20261019"
+}

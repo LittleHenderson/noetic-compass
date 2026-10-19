@@ -1,0 +1,447 @@
+{
+ "alt_unit": {
+  "Butter": "pounds of butter",
+  "Flour": "pounds of flour",
+  "Milk": "quarts of milk",
+  "Salt": "tablespoons of salt",
+  "Sugar": "pounds of sugar",
+  "Water": "liters of water",
+  "Yeast": "grams of yeast"
+ },
+ "arms": {
+  "X3_E64": {
+   "-CUBE_STORE": [
+    "CUBE_STORE"
+   ],
+   "-ENGLISH_IN": [
+    "ENGLISH_IN"
+   ],
+   "-ENGLISH_IN-CUBE_STORE": [
+    "ENGLISH_IN",
+    "CUBE_STORE"
+   ],
+   "-ENGLISH_IN-VOICE": [
+    "ENGLISH_IN",
+    "VOICE"
+   ],
+   "-VOICE": [
+    "VOICE"
+   ],
+   "FULL": [],
+   "FULL_REPLAY": []
+  },
+  "X3_F64": {
+   "-ENGLISH_IN": [
+    "ENGLISH_IN"
+   ],
+   "-ENGLISH_IN-TRIAD": [
+    "ENGLISH_IN",
+    "TRIAD"
+   ],
+   "-ENGLISH_IN-VOICE": [
+    "ENGLISH_IN",
+    "VOICE"
+   ],
+   "-TRIAD": [
+    "TRIAD"
+   ],
+   "-TRIAD-VOICE": [
+    "TRIAD",
+    "VOICE"
+   ],
+   "-VOICE": [
+    "VOICE"
+   ],
+   "FULL": [],
+   "FULL_REPLAY": []
+  }
+ },
+ "attempts": {
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X3 pins; any package change is a reseal and a new sign line",
+  "scored": 1
+ },
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "claim_template": "On synthetic worlds only, the same licensed recipe brain and live English path as wave 3 (c37) were scored on two roomier exams, English-64 and Faces-64, with the two parts of each of four pairs switched off alone and together and everything else held equal; each read pair's word says whether losing both parts cost more than the two losses added (SYNERGY), about the same (ADDITIVE) or less (INTERFERENCE), or that the exam still had no room to tell (CEILING_NOT_READABLE).",
+ "exams": {
+  "X3_E64": {
+   "composition": [
+    [
+     "G1_STOCK_THEN_ASK",
+     "PLAIN",
+     "ANSWER",
+     4
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "TWO_INGREDIENT",
+     "ANSWER",
+     4
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "G2_ABSENT_THEN_ASK",
+     "PLAIN",
+     "ASK",
+     8
+    ],
+    [
+     "G3_QUESTION_FORMS",
+     "PLAIN",
+     "ANSWER",
+     4
+    ],
+    [
+     "G4_WITNESS_IN_ENGLISH",
+     "PLAIN",
+     "LEARN",
+     8
+    ],
+    [
+     "G5_MUST_ASK",
+     "PLAIN",
+     "ASK",
+     8
+    ],
+    [
+     "G6_STORE_READ",
+     "PLAIN",
+     "READ",
+     8
+    ],
+    [
+     "G7_NEXT_SESSION",
+     "PLAIN",
+     "ANSWER",
+     4
+    ]
+   ],
+   "items": 64
+  },
+  "X3_F64": {
+   "composition": [
+    [
+     "H1_WISDOM_STATED",
+     "FACE_STATED",
+     "ANSWER",
+     6
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "FACE_IMPLIED",
+     "ANSWER",
+     2
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "H2_POWER_STATED",
+     "FACE_STATED",
+     "ANSWER",
+     6
+    ],
+    [
+     "H2_POWER_STATED",
+     "FACE_IMPLIED",
+     "ANSWER",
+     2
+    ],
+    [
+     "H2_POWER_STATED",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "H2_POWER_STATED",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "H3_RECIPE_PURPOSE_ABSENT",
+     "PLAIN",
+     "ASK",
+     4
+    ],
+    [
+     "H4_INGREDIENT_PURPOSE_ABSENT",
+     "PLAIN",
+     "ASK",
+     4
+    ],
+    [
+     "H5_PEAK_STATED",
+     "PLAIN",
+     "ANSWER",
+     2
+    ],
+    [
+     "H6_TWO_FACES",
+     "TWO_INGREDIENT",
+     "ANSWER",
+     4
+    ],
+    [
+     "H7_NOT_A_FACE",
+     "PLAIN",
+     "ANSWER",
+     2
+    ]
+   ],
+   "items": 64
+  }
+ },
+ "fixture_seeds": {
+  "E64": 646464,
+  "F64": 747474
+ },
+ "hard_gates": [
+  "H1_receipts (English part)",
+  "H8_wrappers_change_nothing (voice; English-64 and Faces-64)",
+  "H11_replay_new_exams (English-64, Faces-64)"
+ ],
+ "instrument_rows": [
+  "I1_data_identity",
+  "I3_same_brain_as_c37",
+  "I4_parameter_counts",
+  "I6_completeness",
+  "I7_laptop_reading",
+  "I9_governance",
+  "I10_x3_band_rule"
+ ],
+ "label": "R1W3B",
+ "ladder_rungs": [
+  "PLAIN",
+  "TWO_INGREDIENT",
+  "UNKNOWN_INGREDIENT",
+  "UNIT_CHANGE",
+  "FACE_STATED",
+  "FACE_IMPLIED"
+ ],
+ "marks_PROPOSED": {
+  "FULL_ENGLISH64": {
+   "right_at_least": 56,
+   "wrong_at_most": 2
+  },
+  "FULL_FACES64": {
+   "right_at_least": 48,
+   "wrong_at_most": 4
+  },
+  "status": "reported; a miss is a finding, never a gate"
+ },
+ "not_licensed": "anything outside synthetic worlds; that the voice sounds natural to people; that real reagents carry a triad; that the faces reader understands English beyond its lexicon; any word for a part (the part words stay c37's); any pair other than the four; statistical superiority (one run); operation in real kitchens or on real data",
+ "not_on_path": {
+  "H2-H7, H9, H10, H12, H13, H14": "Gate B, Task B, depth, skin, cascade, eye, atlas and idle are not on wave 3b's path; they held in c37 (spec sheet 7.69)",
+  "H8 part triad_at_peak_is_identity": "no -TRIAD arm on English-64 (switches_w3b.NOT_RUN)",
+  "I2_T_frozen_identity, I5_encoder_fairness, I8_proven_floors": "no T, no Gate B and no Task B on wave 3b's path"
+ },
+ "not_run": {
+  "-TRIAD on English-64": "no triad pair is read on English-64 and English-64 states no face; wave 2's H8 part 'triad at Peak is identity' is therefore not on wave 3b's path (it held in c35 and c37)",
+  "every other wave-3 arm and exam": "carried as c37 scored them; wave 3b re-reads only the four CEILING_NOT_READABLE pairs"
+ },
+ "owner_order": "roomier exam so the 4 CEILING_NOT_READABLE pairs can be read [yes, cheap] (OWNER_APPROVALS_20261018.md, 2026-10-19 morning)",
+ "pair_rule": {
+  "c37_reading_sha256": "1cc7dba8236abbfae2ea2b03a7d62ad79134a3f38e6ec244e2131764dc31b336",
+  "margin": "1/8 of 64 = 8",
+  "metric": "RIGHT_AND_PLAIN (items RIGHT with a PLAIN reply), of 64",
+  "read_only_if": "both parts EARNED_KEEP in c37's reading",
+  "readability": "CEILING_NOT_READABLE iff L(a) + L(b) > M(FULL) - 8",
+  "source": "r1w3/merge_r1w3.py pair_word_exam and pair_word (sealed wave-3 package), imported",
+  "words": "SYNERGY if L(ab) >= E + 8; INTERFERENCE if L(ab) <= E - 8; else ADDITIVE; across exams INTERFERENCE, then SYNERGY, then ADDITIVE, then CEILING (wave 3's pair_word, verbatim)"
+ },
+ "pair_runs": [
+  [
+   "X3_E64",
+   [
+    "ENGLISH_IN",
+    "VOICE"
+   ]
+  ],
+  [
+   "X3_E64",
+   [
+    "ENGLISH_IN",
+    "CUBE_STORE"
+   ]
+  ],
+  [
+   "X3_F64",
+   [
+    "ENGLISH_IN",
+    "TRIAD"
+   ]
+  ],
+  [
+   "X3_F64",
+   [
+    "ENGLISH_IN",
+    "VOICE"
+   ]
+  ],
+  [
+   "X3_F64",
+   [
+    "TRIAD",
+    "VOICE"
+   ]
+  ]
+ ],
+ "pairs": [
+  [
+   "CUBE_STORE",
+   "ENGLISH_IN"
+  ],
+  [
+   "ENGLISH_IN",
+   "TRIAD"
+  ],
+  [
+   "ENGLISH_IN",
+   "VOICE"
+  ],
+  [
+   "TRIAD",
+   "VOICE"
+  ]
+ ],
+ "repro_units": [
+  [
+   "X2_E16",
+   "E16",
+   "ENGLISH16_ITEMS"
+  ],
+  [
+   "X2_F16",
+   "F16",
+   "FACES16_ITEMS"
+  ]
+ ],
+ "same_brain": {
+  "how": "every item is run by wave 3's own live_w3.run_item with wave 3's own live_settings, imported from the sealed wave-3 package after its freeze check; the dispatcher is wave 2's pool_w2",
+  "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+  "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+  "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+  "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+  "wave3_freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+  "wave3_zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362"
+ },
+ "schema": "helm.r1w3b.frozen/1",
+ "text_rule": {
+  "followups_sha256": "14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5",
+  "rule": "R1W3-A1 carried + T3b (r1w3b/text_rule_w3b.py)",
+  "templates": [
+   "Can you list what we have?",
+   "Could you tell me how much bread that makes?",
+   "Could you tell me how much frosting that makes?",
+   "Could you tell me how much meringue that makes?",
+   "Could you tell me how much starter that makes?",
+   "Hi again.",
+   "How much bread do we have the makings of?",
+   "How much frosting do we have the makings of?",
+   "How much meringue do we have the makings of?",
+   "How much starter do we have the makings of?",
+   "What do we have in stock?",
+   "What do we have on hand?",
+   "What have we got on hand?",
+   "What's in stock right now?",
+   "what've we got on hand then"
+  ],
+  "templates_sha256": "2a63936d25648c76b82831f888d6cbdad58ce58fcbff6551e9ade1af3bc4f3a3"
+ },
+ "unknown_pool": [
+  [
+   "jars",
+   "honey"
+  ],
+  [
+   "teaspoons",
+   "cinnamon"
+  ],
+  [
+   "cups",
+   "oats"
+  ],
+  [
+   "cups",
+   "rice"
+  ],
+  [
+   "tablespoons",
+   "cocoa"
+  ],
+  [
+   "teaspoons",
+   "vanilla"
+  ],
+  [
+   "cups",
+   "raisins"
+  ],
+  [
+   "teaspoons",
+   "nutmeg"
+  ]
+ ],
+ "x2_lang_files": {
+  "ENGLISH16_ITEMS": {
+   "file": "ENGLISH16_X2.json",
+   "sha256": "205054b2bdac47e639e24cbf46042ce33763b980d5381305d3c59191b4589f7f"
+  },
+  "FACES16_ITEMS": {
+   "file": "FACES16_X2.json",
+   "sha256": "69202c0b1d11f880306acfec692efe664247d5717ffd8ec62912859d09483741"
+  }
+ },
+ "x3_seed_rule": {
+  "bands": {
+   "E64": {
+    "hi": 1839000000,
+    "k": "k4",
+    "lo": 1838000001,
+    "rule": "X2-v2 E16 band (1,818,000,001-1,819,000,000) + 20,000,000",
+    "slots": 1000000
+   },
+   "F64": {
+    "hi": 1841000000,
+    "k": "k1",
+    "lo": 1840000001,
+    "rule": "X2-v2 F16 band (1,820,000,001-1,821,000,000) + 20,000,000",
+    "slots": 1000000
+   }
+  },
+  "gap": 1000000,
+  "seed_source": "sha256 of the owner's exact R1W3b sign-line bytes",
+  "shift_from_x2v2": 20000000,
+  "used_derivations_sha256": {
+   "X0": "641b246a5db9eefc185191d62fbcae99065b38eb019dd6da536904cedab3f7f7",
+   "X1": "a18ddd969b0920512bcb1488dcb3323ec76c6e1c74ee735db33b1b3166d3b991",
+   "X2V1": "841a0b20c3f5575224eab69efcc8b4c8b493fbce536c29467c0ac1502bb5f205",
+   "X2V1_ATTEMPT1": "6aaffe6fe2e6a837650614150cb5d0641c92c7128e2aab1a45d3f8032c547c99",
+   "X2V2": "8731da9c25db898825779c8d9d94338eb61cfd8746581eccb7893588335d764c",
+   "X2V2_PRE_TEXT_STEP": "1818a81330f00c15148a5a4efb97ac29d3ff662e456a88fe58a7b4012764821b"
+  },
+  "x0_seed_rule_sha256": "09956c6b8f16b014d35e9b5770e0e08909ff8cc756a108930bdccd0a0ae6c89f"
+ }
+}
