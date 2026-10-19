@@ -1,0 +1,144 @@
+{
+ "frozen_r1w4_sha256": "1828dc76d0350255b04a5129f062cc0f2e37fe126d64e697d4e01407a03304a0",
+ "label": "R1W4",
+ "member_count_excluding_freeze": 31,
+ "members": {
+  "FROZEN_R1W4.json": {
+   "bytes": 14984,
+   "sha256": "1828dc76d0350255b04a5129f062cc0f2e37fe126d64e697d4e01407a03304a0"
+  },
+  "README_R1W4.md": {
+   "bytes": 4797,
+   "sha256": "3aea89bc68d8bace833ccd0128a282286b56e74cec720c2ce235c4076cae334b"
+  },
+  "RUN_LIMITS_R1W4.json": {
+   "bytes": 3318,
+   "sha256": "d2edd0976e44fecab54066a6c0cfa157f32c2e7916f640eb7aff89704688076a"
+  },
+  "SOURCE_CUT.json": {
+   "bytes": 929,
+   "sha256": "e85adb449db4139c87b08cbe0f166047d99401f49d135164c2c2331743dac6bf"
+  },
+  "kit/STAGE_R1W4.json": {
+   "bytes": 1598,
+   "sha256": "211736d5533c2f6c522ec935eb163442593fb5efac5e10e50aa73eb7fa759aa2"
+  },
+  "kit/job_supervisor.py": {
+   "bytes": 19550,
+   "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+  },
+  "kit/plan_check.py": {
+   "bytes": 3464,
+   "sha256": "84257a23545bfe87d7d4ef4565feae12adc9c325fa0fff06fefcb626c3301035"
+  },
+  "kit/run_r1w4.py": {
+   "bytes": 15476,
+   "sha256": "37dc4755a043aed8def6cd37dc2dd95d0e1af76632c444802f7fef925048ed95"
+  },
+  "r1w4/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "r1w4/check_x4_format.py": {
+   "bytes": 5797,
+   "sha256": "c85d4d1f3f11c4758a5603643c0c34a531048d81159a453c4d8b6867f50993aa"
+  },
+  "r1w4/common_w4.py": {
+   "bytes": 14156,
+   "sha256": "e0086d1de31f553a17cb61c2bae4089ec6001e7386d49ba56b80ad448e13fe52"
+  },
+  "r1w4/custody_x4.py": {
+   "bytes": 10310,
+   "sha256": "53aa0cc9a967b21ccbdf4d829239482b843b6dda3dc215f658ab28733090ed46"
+  },
+  "r1w4/eye_live.py": {
+   "bytes": 40278,
+   "sha256": "63277134fe36672e56e155cae99a292228b6740e644e0f700516f592c44043ed"
+  },
+  "r1w4/eye_sidecar.py": {
+   "bytes": 3965,
+   "sha256": "cca333f5fbb8bfb66c43e35c35de4f6df9227a88dc20370b6588e43a234ed245"
+  },
+  "r1w4/formats_w4.py": {
+   "bytes": 5603,
+   "sha256": "b99597503f3b6b284e9301262e67350f20d962ba531938417df19a8ccd45969d"
+  },
+  "r1w4/gen_self.py": {
+   "bytes": 7141,
+   "sha256": "72c1911e8617e81ce13891d3e5fc9766332c88190b472177d7360432a97d96e2"
+  },
+  "r1w4/merge_r1w4.py": {
+   "bytes": 38167,
+   "sha256": "8928d166146e37104f300b693a9cfa23d3686b025b52ac17eb390b0e29d8b40e"
+  },
+  "r1w4/planter_w4.py": {
+   "bytes": 6077,
+   "sha256": "ce52ec14e878c206b4e45c56ed1adbc90d7be8eac763c9c4fc23e78ab41a51cc"
+  },
+  "r1w4/pool_w4.py": {
+   "bytes": 7700,
+   "sha256": "5c540ca1c41f3e5aebfe02715b861fd00228e230ecc4c86138a02f3db892d950"
+  },
+  "r1w4/seed_rule_x4.py": {
+   "bytes": 7398,
+   "sha256": "c6d43dff379b4ba629bbdec8db4220d1d0a847362095665f736af14bd848b70b"
+  },
+  "r1w4/session_w4.py": {
+   "bytes": 25496,
+   "sha256": "a88dc1b2765212a6a033629ab09bee2daf6e3ffc9624188d31c612b770d21732"
+  },
+  "r1w4/summary_w4.py": {
+   "bytes": 3936,
+   "sha256": "5be4506db6cf08bff6c4786c3103700c94d61211760a9f9a71316214e18b1a15"
+  },
+  "r1w4/switches_w4.py": {
+   "bytes": 5001,
+   "sha256": "99fb3037bbfaada240fa45dda360db60658cc961afdf38e6f0ffa7a80edff930"
+  },
+  "r1w4/voice_live.py": {
+   "bytes": 12362,
+   "sha256": "5e94b152426544bdb5af925552433b764144238fd67c6ee129b943e44d83e530"
+  },
+  "tests_r1w4/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_r1w4/fixtures/SELF_FIXTURE.json": {
+   "bytes": 133890,
+   "sha256": "91e0186202b5648f46f0f53f0c7e5770ef70adb060ec54b99583d11e0ed8bfe0"
+  },
+  "tests_r1w4/test_kit_w4.py": {
+   "bytes": 4701,
+   "sha256": "9b0913fa2ca50c8f9f239bd7947104549a6ed2b0437f7704f7e1254382bd8a86"
+  },
+  "tests_r1w4/test_run_w4.py": {
+   "bytes": 8859,
+   "sha256": "9aea4f5fe6ee18eae1873fe6f30fe543269be4728e1300b710dc10a4d7e6c300"
+  },
+  "tests_r1w4/test_units_w4.py": {
+   "bytes": 24011,
+   "sha256": "9604d32f0c4f1c63ef76e61846a08e5913e9ac452c572f387c2209cc94494c57"
+  },
+  "x4_contract/SEED_RULE_X4.md": {
+   "bytes": 3406,
+   "sha256": "92d655f603de54ab92cdf8ffb48592c41b3b69954966072d06cfbe0c7620440e"
+  },
+  "x4_contract/X4_CUSTODIAN_CONTRACT.md": {
+   "bytes": 4722,
+   "sha256": "1a69f908fcd7143fbf64e0a1e38e887a01673498ceca4092cb04a85310d785c7"
+  }
+ },
+ "not_inside": "the wave-3b, wave-3, wave-2 and wave-1 zips (shipped beside it, checked by freeze), X4 (by its pins), the seven spent files (by their pinned hashes)",
+ "package": "HELM_R1_W4_20261019",
+ "schema": "helm.r1w4.package-freeze/1",
+ "sealed_on": "2026-10-19 (Pacific)",
+ "source_cut_commit": "2be55b608cbffc88e38aefab258e81aee9f0ba3d",
+ "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+ "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+ "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+ "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+ "wave3_freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+ "wave3_zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362",
+ "wave3b_freeze_sha256": "a6d9dbc78d3f720941c5a358be9a4d514617f8de226811c55938f807833dfbba",
+ "wave3b_zip_sha256": "a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26"
+}

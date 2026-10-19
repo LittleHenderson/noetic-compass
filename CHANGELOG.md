@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 wave 4 "EYE_SCAN wave" PACKET SEALED, NOT LAUNCHED: the U3 self-scan as one switch on the wave-3b brain, its whisper delivered to the real presentation path; nothing scored, no claim (spec sheet 7.75; laptop, 0 USD)
+
+Owner order (2026-10-19): "“EYE_SCAN wave”". Builder: Claude Code sub-agent. Build and seal only; nothing launched; no ledger hold.
+
+- Built in Documents/Codex/2026-10-19/r1_wave4/. PREREGISTRATION_R1W4.precode.md 411b31e2... written before any code; FROZEN_R1W4.json 1828dc76... from the code's own constants (a test checks code == file).
+- Sealed zip HELM_R1_W4_20261019_SOURCE_R1W4.zip 4bd0d740a70852c8d59091494ad88c69ac472f3a0f207a33fc44789b8e3df14c (121,173 bytes, 31 members + freeze); PACKAGE_FREEZE 0d45017c...; resealed byte-identical. Neighbours by reference after freeze checks: wave 3b a4f82556, wave 3 v3 152bca2a, wave 2 21ad185d, wave 1 v3 31f97d67. U3-T1's rules copied with each source file's sha256 pinned.
+- New thing tested: the whisper receiver (r1w4/eye_live.py WhisperReceiver) between ExamLoop3.process_turn and helm_chat._speak; when the next answer would use a faulted record it holds the answer back and the real voice (_say_plain) says why; it writes nothing.
+- Exams: fresh X4 by a custodian from the owner's sign line (English-64, Faces-64, X3-SELF 152 = 88 planted faults K1-K5 + 64 clean, U3-T1's 11:8); carried Gate B / Task B / CCE / Cascade / Idle on exposed or spent data (no-harm only, Eye as a sidecar); FULL on the spent X3 files (same brain as c38). Depth NOT_IN_WAVE (laptop stage with Windows-pinned sources).
+- Marks: no harm <= 2 items on every wave-3b exam; found 88/88; acted 88/88; false alarms 0; whisper writes 0; traceable 100%; self-only reported. Words: EYE_SCAN_EARNED_KEEP / EYE_SCAN_HARMED / EYE_SCAN_NO_EFFECT / INCONCLUSIVE.
+- Tests from the sealed extract: 449, every suite OK (3 AWS-only skipped). Practice dry run: 56 units exit 0 (137.8 s; peak 46.9 MiB per unit, 139.5 MiB reader); reader INSTRUMENT_ERROR as designed; practice found 88/88, acted 88/88, 0 false alarms (practice numbers, not a result).
+- Failed approaches logged (practice data, before the seal): the wave-2 unit builder needs only the exams whose data it is given (KeyError in the first dry run); an empty lesson count broke a report sentence; a 42 MB host reading was slimmed to 17 MB (compact JSON, full reports for the candidate only, H11 compares without the kept reports).
+- Sign line for the owner: APPROVE R1W4: EYE_SCAN wave, sealed package 4bd0d740, one attempt + one plumbing retry, cap $1.00. Cap PROPOSED 1.00 USD (expected about 0.05-0.12). Backup D:/tksCAS-archive/r1_wave4_20261019/ (61 files, three hash passes equal).
+
 ## 2026-10-19 PDT - HELM RB-I3 RAN: the Unity Eye pairs and rotates the 7 desires with the 7 faculties; EYE_PAIRING_EARNED_KEEP by the frozen rule, HARD_GATES_PASS; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.74; 103 laptop parts + reader, 0 USD)
 
 Owner order (2026-10-19): ""RB-I3" t". Builder-operator: Claude Code sub-agent. Sign line (operator-composed): APPROVE rb_i3, source 9ecfb7e7, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.
