@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-G10 "harder world" RAN: INCONCLUSIVE (TOO_FEW_VALID_MULTI_KIND_WORLDS), growth claim stays NOT LICENSED (spec sheet 7.71; laptop MSI, 14 parts, 0 USD)
+
+Owner ruling: "harder world" (one more growth run where gaps come in several kinds at once; stop the line if it fails). Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json f77176e7...).
+
+- Worlds: three new two-kind worlds (route + leak twice, slot + leak), budget N = planted kinds + 1; regression a2_g8; reported three-kind MASKED; controls `a` and three shuffled. Engine limits recorded before the freeze: vertices cannot share an Omega, eta cannot bind, slots and routes mask each other.
+- Arms: CURIOSITY (RB-G9 reader), REFUSAL_COUNT, the new REFUSAL_COUNT_WITH_KIND_GUESS (residual pattern + the same real-rows check), KIND_GUESS_NO_CHECK, RANDOM_KIND x3, NO_GROWTH, ORACLE, leave-one-out answer-key stages.
+- Result: the ORACLE equalled the start brain on all three new worlds (4.69, 21.29, 7.03), so no world was valid and the comparison did not happen (VACUOUS). Cause in the stored units: routes and the leak mask each other inside the fitter. Regression reproduced RB-G9; curiosity fired 0 on controls; guardrails all 0. Reported only: the kind-guessing rival grew the leak on RLJ (33.20 vs ORACLE 21.29) where curiosity named nothing.
+- Run: manifest e98af208..., MERGED.json 16524cff..., tests 69/69, replay 4/4, 18 of 18 units shared with RB-G9 digest-equal, backup D:/tksCAS-archive/rb_g10_20261019/ (194 files, three hash passes, 0 mismatches). Next step is the owner's decision (verdict INCONCLUSIVE, not FAIL).
+
 ## 2026-10-19 PDT - ERRATUM to spec sheet 7.69: the wave-3 idle arm called "round-robin" (107 good) is round-robin plus a fixed table; true round-robin scored 31
 
 Records only. No run, no spend. Checked against `r1w3/drive_w3.py` (sha256 79def344...), `R1_W3_READING.json` (1cc7dba8...) and the sealed `IDLE_X2.json` (f883f8b0...).
