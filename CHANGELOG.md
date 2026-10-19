@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - ERRATUM to spec sheet 7.69: the wave-3 idle arm called "round-robin" (107 good) is round-robin plus a fixed table; true round-robin scored 31
+
+Records only. No run, no spend. Checked against `r1w3/drive_w3.py` (sha256 79def344...), `R1_W3_READING.json` (1cc7dba8...) and the sealed `IDLE_X2.json` (f883f8b0...).
+
+- The arm labelled "round-robin" with 107 good is `FIXED_TABLE_RR`: round-robin Foundations plus RB-I's fixed table that gives each kind's home Foundation the one faculty that can solve it (drive_w3.py lines 18-20, 49-52, 159). 137 of the 180 items sit at that home Foundation.
+- TRUE round-robin (no table) is the `-DRIVE_LOOP` arm: 31 good, 149 open, 0 wrong. The drive loop (FULL) is also 31 good. Corrected reading: `DRIVE_LOOP` is NEUTRAL against true round-robin; it did not lose to round-robin 107.
+- Unchanged: the `DRIVE_LOOP` word NEUTRAL, every number, every gate, every claim status. Only the baseline label is corrected. Originals (spec sheet 7.69 text, RUN_RESULT_R1W3_C37.md, the earlier Change Log row) are kept; the erratum stands beside them (spec sheet 7.69 erratum + Change Log row; `ERRATUM_20261019.md` in the run folder).
+- Open questions only (from the DeepSeek-brief compiler; not conclusions): only 4 of 7 faculties can act in drive_w3.py; the "cut in conversation" gate H14 cannot fail for any arm (awake ticks never carry a foundation key, lines 135-137, 175); `DESIGN_R1W3.md`, cited by the code, is missing from disk and from the source zip.
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3 SCORED (job c37): reader PASS, words licensed, SYNTHETIC_ONLY (spec sheet 7.69; three m6i.xlarge jobs, 0.08 USD)
 
 Owner v3 sign line (sha256 1606306a...), package v3 152bca2a... (freeze bd06f324...). Launch operator: Claude Code sub-agent. Amendments R1W3-A1 and R1W3-A2 (incl. A2.1-c); coordinator option B after the operator's held note (the reader reads one owner line for I9 and I10, so X2 was rebuilt from the v3 line; X2-v1 VOID_UNUSED).
