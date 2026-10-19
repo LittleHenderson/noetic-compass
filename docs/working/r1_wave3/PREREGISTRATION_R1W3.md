@@ -4,9 +4,9 @@ Written 2026-10-19 (Pacific) by the wave-3 builder session (Claude) on the owner
 sealed (`HELM_R1_W3_20261019/FROZEN_R1W3.json`); one scored attempt plus at most one plumbing retry; a FAIL on any row is
 a finding. NOT LAUNCHED. No ledger hold placed. No spend.
 
-Sealed package: `HELM_R1_W3_20261019_SOURCE_R1W3.zip`, sha256
-`2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7` (928,151 bytes); `PACKAGE_FREEZE.json` sha256
-`be1b321de2ef2545832b7281e7b53b7f263e6e381fd2b011783a550a447d3c65` (205 members + the freeze; resealed byte-identical).
+Sealed package: `HELM_R1_W3_20261019_SOURCE_R1W3_v2.zip`, sha256
+`26b0ef7ed25c8431334d98ddf3a566704b105e53feab15103494cea9893f7bf3` (929,130 bytes; v2, see the amendment log); `PACKAGE_FREEZE.json` sha256
+`a72063f5223b04f01a428dfa55bfeb3fb9f45bec847286c41a5160f5761da1f3` (205 members + the freeze; resealed byte-identical).
 Design freeze (before any code): `docs/working/r1_wave3/DESIGN_R1W3.md`, sha256 `27eab7e8...` (first) and `2715bebe...`
 (after amendment D1). `FROZEN_R1W3.json` sha256 `e9777c2b21825f2505c7559b53c0d3a6b08388900c3982a5be222f7a4efa8476`.
 
@@ -131,7 +131,7 @@ three packages by freeze at host and reader); I2 T's frozen references; I3 repro
 c26 RB-det, depth D00); I4 parameter counts (RB-A 68, RB-B 32, MLP-B 99, T 97 / T+ 385 printed; 0 learned for triad,
 faces reader, cascade, drive loop); I5 X2 Gate B regeneration equal (torch); I6 completeness (every unit exit 0, no
 deadline, wave 1's 128 and wave 2's unit tests OK on the host, every new-exam arm complete); I7 laptop reading; I8
-proven floors on X2-TB; I9 governance (the approval names this zip and freeze, the sign line carries `2d5b4f0e`, the
+proven floors on X2-TB; I9 governance (the approval names this zip and freeze, the sign line carries `26b0ef7e`, the
 controller shipped this zip and the wave-2 zip, no reseal, supervisor PASS and found `r1w3_out/R1_W3_HOST.json`); **I10
 X2 band rule**: every part seeded, every seed inside its band, overlap PASS, used table includes X0 and X1, seed source
 = the owner's R1W3 line hash. Any row false: INSTRUMENT_ERROR.
@@ -178,8 +178,8 @@ DRIVE_LOOP has no pair (nothing else is exercised on X2-IDLE).
 - D5 builder disclosure: before writing the English-16 store-read phrasing pool the builder ran three phrasings on the
   live loop ("What do we have in stock?", "what've we got on hand then" — right; "What do we have on hand?" — a wrong
   operation); all three are kept in the pool. The builder's fixture runs (section 7) showed the cube store listing an
-  absent item as "None Water" and the drive loop's seeded swap undoing pairings that already worked; neither part was
-  changed after these observations (they are what wave 3 measures).
+  absent item as "None Water" and the drive loop's seeded swap undoing pairings that already worked; the drive loop was
+  not changed. The two cube-store read-path faults were repaired before signing by the coordinator's decision (amendment log, v2).
 
 ## 7. Builder dry run (fixtures and exposed data only; facts, not claims) — `TEST_RECORD_R1W3.md`
 
@@ -190,9 +190,8 @@ Depth D00 on exposed X1 files through the X2 adapter: COMPLETED in 37.35 s.
 ## 8. Builder predictions (stated before the run; not used by the reader)
 
 DECOUPLING_EARNED likely (fixture: 209 vs 752 descents, every C2 fault found). CASCADE, ATLAS, EYE, TRIAD may earn
-on the Cascade exam (each removes the defence its family plants). CUBE_STORE may read HARMFUL on English-16 (the store's
-LIST_PARTS lists absent items; "on hand" goes to the wrong operation) while winning on the Cascade exam — HARMFUL is
-checked first. ENGLISH_IN may read NEUTRAL on the new exams under wave 2's strict WRONG rule. DRIVE_LOOP likely NEUTRAL
+on the Cascade exam (each removes the defence its family plants). After the v2 repair the store-read family no longer carries the two plumbing faults; CUBE_STORE's word on English-16
+now measures the store itself. ENGLISH_IN may read NEUTRAL on the new exams under wave 2's strict WRONG rule. DRIVE_LOOP likely NEUTRAL
 or HARMFUL against round-robin; the reported FIXED_TABLE_RR baseline may beat both (fixture 103 vs 52 vs 37 of 173).
 
 ## 9. Cost and limits (PROPOSED) — `RUN_LIMITS_R1W3.json`
@@ -227,4 +226,9 @@ pair not run or not read; operation in real kitchens or on real data.
 
 - D1 (before any exam code, design level): DRIVE_LOOP switch and growth line, from the owner's 2026-10-19 rulings
   (`DESIGN_R1W3.md` amendment D1).
-- (empty at sealing beyond D1)
+- v2 RESEAL (2026-10-19, before the owner signed; coordinator's decision: an instrument / plumbing defect): the cube
+  store's read path had two faults found by the builder's dry run — "What do we have on hand?" reached FIND_SHARED_PART
+  because 'and' matched inside 'hand', and LIST_PARTS listed an absent part as "None Water". Both fixed in
+  `cube_store/turn.py` and `operations.py` (thread commit `554fce5c`), two tests added (fail before, pass after).
+  The v1 zip `2d5b4f0e...` is VOID_UNSIGNED. Exactly 4 members changed (TEST_RECORD_R1W3.md section 4). No rule,
+  mark, arm, exam, margin or the drive-loop rule changed; `FROZEN_R1W3.json` is byte-identical (`e9777c2b...`).

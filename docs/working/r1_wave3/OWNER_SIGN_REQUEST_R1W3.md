@@ -13,13 +13,13 @@ laptop, $0.
 **A PASS would mean.** One word per part, one word for your stopping rule, one word per earned pair. Synthetic worlds
 only.
 
-**Known before running.** On practice data the cube store gave wrong answers to some "what do we have?" questions. It may
-be marked harmful. Nothing was changed to hide that.
+**Resealed (v2).** Two plumbing faults in the cube store's answers to "what do we have?" were fixed before you sign;
+the first package (2d5b4f0e) is void.
 
 **It would not mean.** Anything about real kitchens or real data. Growth is not in this test (it runs as RB-G8).
 
 **Sign line (copy exactly):**
 
 ```
-APPROVE R1W3: wave 3 ablations + pairs, switches RECIPE_MATH/RPM_GATE/LACUNA_CADENCE/RESTART_FALLBACK/CCE_SKIN/TRIAD/ENGLISH_IN/VOICE/CUBE_STORE/ATLAS/EYE/CASCADE/DRIVE_LOOP, exams GateB+TaskB+X2+English16+Faces16+Cascade, marks as W2 + PROPOSED rows, sealed package 2d5b4f0e, one attempt + one plumbing retry, cap $3.
+APPROVE R1W3: wave 3 ablations + pairs, switches RECIPE_MATH/RPM_GATE/LACUNA_CADENCE/RESTART_FALLBACK/CCE_SKIN/TRIAD/ENGLISH_IN/VOICE/CUBE_STORE/ATLAS/EYE/CASCADE/DRIVE_LOOP, exams GateB+TaskB+X2+English16+Faces16+Cascade, marks as W2 + PROPOSED rows, sealed package 26b0ef7e, one attempt + one plumbing retry, cap $3.
 ```
