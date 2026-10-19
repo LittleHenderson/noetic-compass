@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 wave 4 SCORED (job c39, AWS): frozen reader PASS, EYE_SCAN_EARNED_KEEP; found 88/88, acted 88/88, 0 items lost, 0 false alarms, 0 Eye writes, 100% traceable; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.77; one m6i.xlarge, 0.04 USD)
+
+Owner sign line (verbatim, sha256 c23e0aa7...): "APPROVE R1W4: EYE_SCAN wave, sealed package 4bd0d740, one attempt + one plumbing retry, cap $1.00." Launch operator: Claude Code sub-agent.
+
+- Job helm-claude-r1w4-20261019-c39: one m6i.xlarge i-0928ef496d024573b (us-west-2, 2-CPU slice, 14 GiB), launched 12:28 PM, terminated 12:37 PM Pacific; host 530.5 s, stage 226.5 s; 70 of 70 units exit 0; one scored attempt, 0 plumbing retries; no torch. Kit claude_jobkit/r1w4kit/ (derived from c38's by exact substitution; diff vs c38 problems []).
+- Reading R1_W4_READING.json 2792f55e... (frozen reader from the sealed zip): test_verdict PASS; every instrument row (I1, I3, I4, I6, I7, I9, I10 incl. seed source = owner line) and every hard gate held.
+- Marks all met: no harm (0 lost on all 12 exam parts), found 88/88, acted 88/88, false alarms 0, whisper writes 0, traceable 8,723/8,723 fact sentences + 88/88 notices. Checklist found 0; report-only acted 0. Self-trigger only found 0 of 88 (negative kept).
+- Pair words: CUBE_STORE x EYE_SCAN INTERFERENCE, ENGLISH_IN x EYE_SCAN ADDITIVE, EYE_SCAN x TRIAD INTERFERENCE, EYE_SCAN x VOICE ADDITIVE.
+- Money: charge 0.04 USD (cautious 0.07); ledger hold 1.00 placed (111.22 -> 112.22), closed 112.22 -> 111.26 of 200. Cleanup VERIFIED three ways (controller, independent check, direct read-only look); slot released.
+- Run folder Documents/Codex/2026-10-19/r1_wave4/run_c39_r1w4_20261019/ (RUN_RESULT_R1W4_C39.md). Backup D:/tksCAS-archive/r1_wave4_c39_20261019/ (890 files, three sha256 confirms).
+
 ## 2026-10-19 PDT - HELM-R1 wave 5 "EYE_PAIRING wave" PACKET SEALED, NOT LAUNCHED: RB-I3's Unity Eye pairing as one idle drive-loop switch on the wave-3b brain, on a custodian-sealed exam; nothing scored, no claim (spec sheet 7.76; laptop, 0 USD)
 
 Owner order (2026-10-19): "“EYE_PAIRING wave”". Builder: Claude Code sub-agent. Build and seal only; nothing launched; no ledger hold.
