@@ -1,0 +1,28 @@
+{
+  "job": "SCORE_SCRIBE_L4_SEALED_98",
+  "source_commit": "84812689b6fb6de4250dc9bf2e400df88a95944c",
+  "scored_utc": "2026-10-19T23:41:27Z",
+  "seconds": 0.168,
+  "torch_version": "2.14.1+cpu",
+  "rows": 98,
+  "weights_sha256": "e36cf3cb50fe8ae168b2986a97000a47e7632b058b34b44629f4f17f99af9dc1",
+  "vocab_sha256": "6746e5dbd77dc6ddaa7bd7270b21ca2558c4da2e439522a2fbcffc66ce4dbc1a",
+  "sealed_sha256_before": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+  "sealed_sha256_after": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+  "sealed_unchanged": true,
+  "input_word_coverage": {
+    "words": 4899,
+    "known_to_vocab": 1571
+  },
+  "counts": {
+    "answer": 21,
+    "answered_round_trip_ok_but_not_gold": 21,
+    "cce_round_trip_ok": 21,
+    "clarify": 77,
+    "exact_match_gold": 0,
+    "exact_match_gold_and_cce_round_trip": 0,
+    "shim_round_trip_ok": 16,
+    "truncated_over_30_words": 97
+  },
+  "policy": "counts only; no row text, seed id or per-row prediction recorded; scored once"
+}
