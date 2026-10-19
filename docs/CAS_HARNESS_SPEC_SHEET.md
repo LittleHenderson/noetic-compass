@@ -2270,6 +2270,46 @@ This section records **who decided what**. A ruling is not evidence. Nothing her
 - **Open:** the owner's sign line; X2 (custodian); the depth families on the laptop.
 - **Artifacts:** `Documents\Codex\2026-10-19\r1_wave3\` (`PREREGISTRATION_R1W3.md`, `LAUNCH_BRIEF_R1W3_20261019.md`, `RUN_LIMITS_R1W3.json`, `PACKAGE_FREEZE_R1W3.json`, `TEST_RECORD_R1W3.md`, `OWNER_SIGN_REQUEST_R1W3.md`, `EXAMPLES_GROUND_AND_DECOUPLED.md`, the zip); design copies in `docs/working/r1_wave3/`; `helm_faces_in.py`, `helm_faces_lexicon.json`, `test_helm_faces_in.py` (this branch).
 
+### 7.67 HELM RB-G8 (growth at the point of curiosity, the owner's F2 trigger; 9 laptop parts, $0): status word `GREW_WRONG_KIND` → FAIL; the growth claim stays `NOT LICENSED` after seven runs. Curiosity named the right gap and the right kind on 85 of 85 namings and grew where the G1–G6 ledger froze, but it fired once on the `a` control, missed the pre-sized brain on two families, and beat both dumb baselines on only one family (2026-10-19 PDT, laptop MSI, 0 USD)
+
+**Said plainly first.** The owner unparked growth and named its trigger: curiosity, the second Foundation (F2 Wisdom). RB-G8 built curiosity as a reader. It looks at one gap at a time, reads the five old "signs it is time to grow" plus the out-of-sample probes on that gap, names the kind of capacity the gap needs, checks that the new parameters would have a job, grows one unit, checks it, and reads again. On fresh synthetic worlds with one planted missing capacity of each kind, curiosity always named the planted kind on a real gap, and it grew where the old ledger got stuck. But it tried one unit on the `a` control (a world where nothing should grow), so the frozen rule reads `GREW_WRONG_KIND`. It also did not reach the pre-sized brain on two of five families, and the plain refusal counter or the random-kind arm matched it on four of five.
+
+**Owner's words (verbatim, 2026-10-19 early, Pacific; `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md` lines 66 and 75):** "Unpark growth; …" and "… WE ADD MORE AT THE POINT OF CURIOSITY THE SECOND FOUNDATION IN THE 7 FOUNDATIONS …"; standing "Run it locally as long as it Quick if long use aws". Sign line composed by the operator, not an owner signature: `APPROVE rb_g8, source 2346ddfe, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.`
+
+**RB-G7 (owner word "RB-G7", 2026-10-15 about 7:20 PM): `NEVER_RAN`.** No `rb_g7` folder, freeze or result exists anywhere searched (Documents\Codex, D:\, this sheet). It is not a negative result. Its Fix F (a size check before growth) is folded into RB-G8 as the job check; its Fix G (the refusal counter breaks ties) is not used.
+
+| Item | Value |
+|---|---|
+| Freeze | `FROZEN.precode.json` sha256 `53ab45087a420f9d9e9540a5ab3fa95d3378a40284665722f9a90e7015efbd1d` (before any code); A0 dataset hashes, A1 smoke on ORIGINAL data only, A2 tests |
+| Manifest | `2346ddfed94bb0e7cfe4280c134715987f30be2b38b3e0aba230b65c00efaa2c` (253 files) |
+| Run | parts G01–G09, 08:17:40 → 08:39:02 UTC (01:17–01:39 PDT); tests 36/36 in G01; peak working set 73,564,160 B; spend 0 |
+| Arms | CURIOSITY (under test); NO_GROWTH; ORACLE (pre-sized, reported); REFUSAL_COUNT (= RB-G6's REFUSAL_ONLY, unchanged); RANDOM_KIND × 3 seeds at curiosity's cadence; LEDGER_G6 (RB-G6's operator, reported) |
+| Worlds (G8, fresh seeds 20261019xx, F1 draws 3000–3019, depth base 5,400,000) | planted: F1 (K1 slots), a_approx (K3 corners), a2 (K2 route), scale_leak (K4 term), TaskB_d3 (K5 depth); controls: S2v2, S3v2, `a`, three shuffled LSR families, F1 shuffled |
+| Reading | `runs\MERGED.json` sha256 `901e145945843154ce5d58aaaef74b4486d0db912f59b3092ab10ecd01090a22`; every instrument row holds; replay 4/4 equal |
+
+| Mark (3-valued) | Reading | Counts |
+|---|---|---|
+| M1 right gap AND right kind | 🟩 TRUE | 85 of 85 (F1 80/80, a_approx 2/2, a2 1/1, scale_leak 1/1, TaskB_d3 1/1); wrong kind 0, wrong gap 0 |
+| M2 within 5 points of the ORACLE on all 5 families | 🟥 FALSE | a_approx 81.25 vs 87.50; TaskB_d3 39.06 vs 73.05 (F1, a2, scale_leak pass) |
+| M3 no wrong-kind growth (strict: a fired unit counts) | 🟥 FALSE | 0 on planted worlds; 1 on controls (`a_g8`, K3, rolled back by V8) |
+| M4 beats REFUSAL_COUNT and RANDOM_KIND by ≥ 5 on ≥ 2 families | 🟥 FALSE | only scale_leak |
+| M5 guardrails | 🟩 TRUE | all six violation counts 0 |
+
+| Held-out points | CURIOSITY | ORACLE | NO_GROWTH | REFUSAL_COUNT | RANDOM_KIND (median) | LEDGER_G6 |
+|---|---|---|---|---|---|---|
+| F1 (K1) | 100.00 | 100.00 | 62.50 | 100.00 | 62.50 | 100.00 |
+| a_approx (K3) | 81.25 (325/4) | 87.50 | 9.18 | 81.25 | 56.25 | 9.18 |
+| a2 (K2) | 72.46 (9275/128) | 75.39 | 47.07 | 47.07 | 72.46 | 47.07 |
+| scale_leak (K4) | 90.04 (11525/128) | 90.04 | 12.50 | 12.50 | 12.50 | 90.04 |
+| TaskB_d3 (K5) | 39.06 (625/16) | 73.05 | 39.06 | 39.06 | 39.06 | 39.06 |
+
+- **Kind attribution (curiosity):** fired K1 80 (kept 80), K3 2 on a_approx (kept 2: 4 → 8 → 12 corners), K2 1 on a2 (kept), K4 leak 1 on scale_leak (kept), K5 1 on TaskB_d3 (rolled back by V5 and V6, 375 new rows), K3 1 on `a_g8` (rolled back by V8: 22 new rows for 320 parameters, ratio 11/160). REFUSAL_COUNT fired on 4 controls (K3 on `a_g8`, a_approx_shuffled and a2_shuffled; K4 eta on scale_leak_shuffled), all rolled back; on a2 it tried K3 and stopped; on scale_leak it grew eta and stalled.
+- **What differs from G1–G6, measured:** the two-key ledger (LEDGER_G6) froze again with `KNOWLEDGE_MISSING` on a_approx (9.18) and a2 (47.07); curiosity, which lets the probe decide and uses the residual sign only to rank, grew both (81.25 and 72.46). The probe and the sign disagreed on 4 namings (a_approx 2, a2 1, `a` 1); the probe was right on the three planted ones.
+- **Why `a` fired:** the curiosity job check read the probes' promise (J = 199 rows across the stage, 4 × 199 ≥ 320) and passed; the grown stage delivered 22. Per-cell shadow probes over-promise on `a`. A pre-growth size check built on the same probes (RB-G7's Fix F) does not stop it.
+- **Status words:** `REAL` laptop run, `SYNTHETIC_ONLY`, no HELM claim. Verdict FAIL, status word `GREW_WRONG_KIND`. The frozen claim "the brain grew at the point of curiosity: it named the gap and the kind, and grew only that kind" is **`NOT LICENSED`**. May be quoted as measured: 85 of 85 right namings; 0 wrong-kind units on planted worlds; curiosity grew a_approx and a2 where the G1–G6 operator froze. **Negative results kept:** the `a` control fired; the K5 unit failed V5/V6 in every arm (no arm reached depth 3); a_approx stopped 6.25 points short of the pre-sized brain at the same 12 corners; the refusal counter tied on a_approx and the random-kind median tied on a2.
+- **Open (owner decision, not taken here):** whether the job check should read a re-read of the grown stage rather than the per-cell probes; whether the depth family's V5/V6 refusal is a capacity question at all.
+- **Artifacts (off-repo):** `Documents\Codex\2026-10-19\rb_g8\` (RESULTS.md sha256 `3dd129e702e980e38d5185d3956087048fbfcefddfac70d36493cd2b964a0dc1`, FROZEN.json, FROZEN.precode.json, OWNER_APPROVAL_EVIDENCE.md, SOURCE_MANIFEST.json, runs\MERGED.json, runs\DRIVER_LOG.txt); backup `D:\tksCAS-archive\rb_g8_20261019\` (132 files, every sha256 equal).
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -2562,6 +2602,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-19 | **RB-G8 GROWTH AT THE POINT OF CURIOSITY RAN (new §7.67) — `GREW_WRONG_KIND`, FAIL; growth claim stays `NOT LICENSED`.** Curiosity reader on F2 (one gap at a time; probe decides, sign ranks; job check before growth). M1 TRUE 85/85; M2 FALSE (a_approx 81.25 vs 87.50, TaskB_d3 39.06 vs 73.05); M3 FALSE (1 fired K3 on the `a` control, rolled back by V8, 22 rows for 320 parameters); M4 FALSE (only scale_leak beats both baselines); M5 TRUE. LEDGER_G6 froze again on a_approx (9.18) and a2 (47.07); curiosity grew both (81.25, 72.46). RB-G7 recorded `NEVER_RAN`. 9 laptop parts, $0. | `Documents\Codex\2026-10-19\rb_g8\runs\MERGED.json` (sha256 `901e1459…`); FROZEN.precode `53ab4508…`; manifest `2346ddfe…`; this commit |
 | 2026-10-19 | **§7.66 amended — wave 3 RESEALED as v2 before signing.** The cube store's read path had two plumbing faults found by the builder's dry run (an absent item listed as "None Water"; "What do we have on hand?" sent to FIND_SHARED_PART). Fixed with two new tests (fail before, pass after; cube_store 21/21). v1 zip `2d5b4f0e…` `VOID_UNSIGNED`; v2 zip `26b0ef7e…`, freeze `a72063f5…`; 4 members changed; tests from the v2 seal 493 passed, 4 AWS-only skipped, 0 failed. Nothing else changed. | thread commit `554fce5c`; `docs/working/r1_wave3/TEST_RECORD_R1W3.md` §4 |
 | 2026-10-19 | **HELM-R1 WAVE 3 PACKET SEALED, NOT LAUNCHED (new §7.66) — nothing scored, no claim.** 13 switches (wave 2's eight + CUBE_STORE, ATLAS, EYE, CASCADE, DRIVE_LOOP RB-I2), swap arm CASCADE_FIXED_CAP, 16 earned-part pairs (18 runs); exams E1, E2 and fresh X2 (Gate B, Task B, depth, CCE, English-16 v3, Faces-16, Cascade 64 chains, Idle 16 sessions); X2 band rule written in advance. Decoupling-stop primary with HORIZON 12 as fuse; canon's 5 only in the swap arm. NOT_IN_WAVE: the RB-I1 faculties design (§7.65 clean negative), growth (RB-G8). Tests from the sealed zip 491 passed, 4 AWS-only skipped, 0 failed. Proposed cap 3 USD. | zip `2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7`, freeze `be1b321de2ef2545832b7281e7b53b7f263e6e381fd2b011783a550a447d3c65`, `docs/working/r1_wave3/` |
 | 2026-10-19 | **HELM RB-I1c FACULTIES RETEST RAN (new §7.65) — `HARD_GATES_PASS`, status word `INCONCLUSIVE`, `SYNTHETIC_ONLY`.** Job c36, one m6i.8xlarge, 1,617.8 s host, 146 of 146 parts, 0 retries. Instrument-only changes vs RB-I1: receipt check before the write (RB-I1's own level rule; 2 empty-receipt candidates refused before the write, 179 written all passing); data shipped not regenerated (Windows-vs-Linux libm last-bit drift in families a and c reproduced under WSL); fresh seeds 312/579/868 with H7's rb_c4 reference recomputed on the host (30/30 equal). No faculty or drive word earned: A3 beat A6 on 0 families; STARVED A1 41/42/45, A2 76/83/66 vs greedy 36/35/38. Charge 0.70 USD; ledger 111.11 of 200; cleanup VERIFIED. §7.34 and §7.37 stay as recorded. | `MERGED_MARKS.json` (sha256 `cb700275…`); zip `ab4549f0…`; `Documents\Codex\2026-10-19\rb_i1c\run_c36\RUN_RESULT_RB_I1C.md`; this commit |

@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-G8 growth at the point of curiosity RAN: GREW_WRONG_KIND, FAIL (spec sheet 7.67; laptop MSI, 9 parts, 0 USD)
+
+Owner words: "Unpark growth; ..." and "WE ADD MORE AT THE POINT OF CURIOSITY THE SECOND FOUNDATION ..." (2026-10-19 early). Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json 53ab4508...).
+
+- Design: a CURIOSITY reader on F2 Wisdom points at one gap at a time, reads the five signs and the out-of-sample probes there, names the kind (probe decides, sign ranks), job-checks the new parameters, grows one unit, verifies V1-V8, re-reads. Arms NO_GROWTH, ORACLE, CURIOSITY, REFUSAL_COUNT (RB-G6 REFUSAL_ONLY), RANDOM_KIND x3, LEDGER_G6 (reported).
+- Fresh G8 worlds: F1 draws 3000-3019 (K1), a_approx (K3), a2 (K2, new planted route family), scale_leak (K4), TaskB_d3 (K5); controls S2v2, S3v2, a, three shuffled LSR, F1 shuffled.
+- Marks: M1 TRUE (85/85), M2 FALSE (a_approx 81.25 vs 87.50; TaskB_d3 39.06 vs 73.05), M3 FALSE (one K3 fired on the `a` control, rolled back by V8), M4 FALSE (scale_leak only), M5 TRUE. Status GREW_WRONG_KIND; claim NOT LICENSED.
+- Measured difference from G1-G6: the G6 ledger froze (KNOWLEDGE_MISSING) on a_approx and a2; curiosity grew both. The job check trusted per-cell probes (J 199) that over-promised on `a` (22 rows delivered).
+- RB-G7 (approved 2026-10-15 7:20 PM) found NEVER_RAN: no folder, freeze or result.
+- Run: manifest 2346ddfe..., MERGED.json 901e1459..., tests 36/36, replay 4/4, backup D:/tksCAS-archive/rb_g8_20261019/ (132 files, sha256 equal).
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3 RESEALED v2 before signing: cube store read path repaired (spec sheet 7.66 amended)
 
 Coordinator's decision (plumbing defect, owner not yet signed). Builder: Claude Code sub-agent.
