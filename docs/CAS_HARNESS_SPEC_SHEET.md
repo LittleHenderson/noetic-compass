@@ -1688,6 +1688,273 @@ This is the answer to §7.44's open question. §7.44 built and sealed the fresh 
 - **The reader was amended twice on 2026-10-16, both before this reading, both disclosed.** `AMENDMENT_I1F_20261016.md` corrects a Gate B instrument that compared all 112 world records and so reported 56 in every run whatever the custodian built; `AMENDMENT_DRAW_LOOKUP_20261016.md` treats `--draw` as the index it is and records the resolved label as `draw_label`. Both are in the sealed v3 package's freeze list. Neither changed a mark, a floor, an arm or a world.
 - **Artifacts** — reader and verdict (on the laptop): `Documents\Codex\2026-10-16\r1w1_reader\HELM_R1_W1_20261015\` (`R1_W1_READING.json` sha256 `9b1dfdd88568012cabbcfa6d00e97c15dee07d445dfa5daff8be185975f4cf3a`, `MERGE_INPUT.json`, `README_R1W1.md`, `PACKAGE_FREEZE.json`, the two amendments). Run and receipts: `Documents\Codex\2026-10-01\task-2\helm_operator_preparation\controller_claude_r1w1_c34g\` (`DELIVERABLE_EXTRACT\…\out\r1w1_out\R1_W1_HOST.json` sha256 `c7e73fc1c186c0bc2562067e5800805c785a422aa6b7ef80b96049d80b365d37`, `RUN_RECORD.json` sha256 `da1c43d1b564c30b03757e2f8791edd7bad0e32c3e74e17271b94c68dcee8f3c`, `results\supervisor_receipt.json` sha256 `b561d67b30e881dc802d4c1eb851cf0f686b8d8df498f2c9f13324616cdc87e6`, `DOWNLOADED_transport-result.json`, `ALLOCATION.json`). Ledger: `Documents\Codex\AWS_COMBINED_ALLOCATION_CURRENT.json` sha256 `72191045151eb19f2b7974a517a50d5f1e24fb6a10f416536d78e01b1468f280`, history `AWS_COMBINED_ALLOCATION_HISTORY.jsonl`. The fresh exam it was scored on is §7.44's, unchanged.
 
+### 7.48 HELM noetic_council mechanisms — nine packages on the canonical branch (cube store, prerequisite planner, continuity v4, D/W/P engine v2, the loop v3, return address, faculties v2, language v3, repair performer): `ENGINEERED-NOT-VALIDATED`; 308 tests written; only a few outputs recorded on disk (2026-10-16 to 2026-10-18, laptop, $0)
+
+**What this is, plainly.** Nine small Python packages. Each builds one piece of HELM's thinking loop: where a thought is anchored, how deep a repair may go, who may refuse, where a finished thought returns, how the faculties propose, how CAS content is said in English and read back, and how a refused step opens a child repair. Each is a **mechanism**. None of them has run inside HELM. None of them is joined to the others as one running path. Codex's audit verdict of 2026-10-17 still stands, as recorded in `SESSION_CLOSE_20261017.md`: *"mechanisms built; brain integration missing."*
+
+**Status: `ENGINEERED-NOT-VALIDATED`** for all nine. The machinery is built. No result about HELM's behaviour comes out of it yet.
+
+**Test counts, counted in the files on 2026-10-18 (not copied from a summary).** The count is the number of test functions written. A written test is not a passed test. Where a pass is on disk, the file is named. Where only a commit message or a handoff says "pass", the row says **authored, output not recorded**.
+
+| Package (`docs/working/noetic_council/…`) | Tests written | Output recorded on disk | Claim ceiling (verbatim, from the package) |
+|---|---|---|---|
+| `cube_store/` | 19 | `RESULTS_20261018.md` (sha256 `60bb9ec7c38e5313f39e1e43a4e56560b96001bee80412c34940484566e14bec`): "TOTAL: 19 cases \| PASSED: 19 \| FAILED: 0", Python 3.14, Windows | `MECHANISM ONLY. KNOWLEDGE IS STORED AS CUBES; ANSWERS COME FROM THREE OPERATIONS OVER THAT STORE. AN UNKNOWN FACE IS REPORTED AS UNKNOWN AND IS NEVER FILLED. NO UNDERSTANDING OF THE REQUEST IS CLAIMED.` |
+| `prereq_planner/` | 11 | authored, output not recorded. One worked plan is on disk: `PLAN_EXAMPLE.txt` (sha256 `c40dd5465f5149d8c2295a75d407a584c40d6e71746aef86ee85c10816e43e13`) | `MECHANISM ONLY. ORDERING IS DERIVED FROM STATED PREREQUISITES. NO UNDERSTANDING OF THE REQUEST IS CLAIMED.` |
+| `continuity_build_v4/` | 50 | `TEST_OUTPUT.txt` (sha256 `ec83493fd65bf60fa8af40e9c4c69bd9185c9ac39297796706e98cabfeaf6ad5`): "TOTAL 50 cases: 50 passed, 0 failed", Python 3.14.0, Windows | `MECHANISM ONLY. S0 ANCHORS TO THE REAL ATLAS MODEL AT COMMIT eb998556; THIS BUILD ADDS NO ATLAS OF ITS OWN. NO LANGUAGE PASSED ACROSS IT.` |
+| `dwp_engine_v2/` | 33 | authored, output not recorded (README states depth 13 unreachable over 67,108,864 policies; no output file) | `MECHANISM ONLY. THIS IS NOT THE HELM BRAIN. NOTHING HERE HAS RUN INSIDE HELM.` |
+| `the_loop_v3/` | 35 | authored, output not recorded. `PROVENANCE.md` records the **false green**: Codex ran it on Linux at `4cdcdbd5` and it failed 1 of 35; PR #337 normalised line endings; the after-fix 35/35 on CRLF and LF exports is stated in prose only | `MECHANISM ONLY. THE GATE IS REAL; NOTHING HAS RUN INSIDE HELM.` |
+| `return_address/` | 27 | authored, output not recorded | `MECHANISM ONLY. NO CIRCUIT USES THIS YET.` |
+| `faculties_v2/` | 49 | the test suite: authored, output not recorded. One real run is on disk: `REAL_FIT_RESULT.txt` (sha256 `05ca6d6fe019751ddf9557b00a26e332760b455b5f0cd63c00170d6f075ce8e8`) — rb_c4's own fitter under the restart fallback, TaskB_d3 outcome 0: start 0 explained 0 of 64 and refused; the fallback fired 8 extra starts; start 1 kept, 64 of 64 train, held-out 32 of 32 (and the same on TaskB_d4) | `MECHANISM ONLY. NOTHING HERE THINKS. NO FACULTY HAS RUN INSIDE HELM.` |
+| `language_v3/` | 68 (26 + 11 + 5 + 26) | `MEASUREMENTS.md` (sha256 `173ca6eef56d04d9472dda5a14871ed39241f074cb1b63b1e5355fadf63096d2`) and `MEASURE_AFTER.json` (sha256 `9ff265e30236bc1cc3f76f39b33af5b4e757e4ffd7fb2aa21eac3931c51de1b1`): M1 576 of 576, M3 64 of 64, M4 233 of 439, M6 2,600 COVERED before and after; U-TURN COVERED 4 / LACUNA 2 → COVERED 6 / LACUNA 0. `RESULTS.md`, `RESULTS_T1B.md`, `RESULTS_T1C.md` are the frozen 2026-10-14 LM-T1 records already in §7.31, not new runs | `ENGINEERED-NOT-VALIDATED` (the translator's own ceiling in `RESULTS.md`) |
+| `repair_performer/` | 16 | the test suite: authored, output not recorded. One actor run is on disk: `ACTOR_RESULT.txt` (sha256 `fbc9cc15e007ef7ea2939c02c1352878416796fb1b61f98d8250ba4951321002`) — parent gate `REPAIR` → child runs the real rb_c4 fitter (start_kept 1, held-out 32/32) → glue → parent gate `PROCEED` / `NOTHING_BLOCKED` | `MECHANISM ONLY. THE FAILURE IS PLANTED, NOT DETECTED. THE GLUE IS MODELLED, NOT CANON. NO REAL FAILURE HAS YET STARTED A REPAIR.` |
+| **Total** | **308** | 3 suites have a recorded pass (19 + 50 + the language marks); 6 do not | |
+
+**The count has drifted in the record, so the history is written here.** Six packages, 229 tests (`THE_BUILD_RESTART_PLAN_20261016.md` §9). Seven packages, 245 tests (`SESSION_CLOSE_20261017.md`). "Seven canonical packages (`288/288` tests)" in the roadmap (`docs/working/HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §2.1 item 9 and §3 row v0.2) — no source on disk produces 288. Nine packages, 308 tests (`MASTER_HANDOFF_20261018_CLAUDE.md` §3.1, and counted here). The handoff's "308 tests — 0 failures" is a statement, not a recorded output.
+
+**What is still not done, from the queue itself** (`EXECUTION_QUEUE.md`): row 15, **one live end-to-end trace** (Atlas anchor → proposal under Bias → ASOM readout → RPM repair → D/W/P child → validated return → parent re-check), is TODO. Row 17, **make the failure real**, is TODO: the repair performer's failure is planted by the test, not detected in a running loop.
+
+- **Commits:** `05210ae3` (#343, consolidate onto the canonical branch), `180249a0` (#339 repair performer), `6cabe709` (#340 language_v3), `e5dd806d` (#338 real fitter), `2d9c66e0` (#337 false-green fix), `0e48ec2f` (#329 depth ruling), and the 2026-10-16 council PRs #312–#341.
+- **What this does not show.** Nothing about HELM's behaviour. Nothing about a real, undetected failure being repaired. No language has passed across the loop.
+
+### 7.49 HELM end-to-end pipeline harness (`helm_end_to_end_loop.py`) and the conversational layer (`helm_chat.py`, `helm_memory.py`): `ENGINEERED-NOT-VALIDATED`; the round-trip check is computed and never used, missing ingredients are filled with an invented 10, and the pipeline does not go through the gate, the repair loop or the D/W/P engine (2026-10-18, laptop, $0)
+
+**What this is, plainly.** One Python file that takes a user's sentence and walks it through several parts in order: an English check, the valve, a recipe calculator, the cube store and a voice that answers in everyday English. A second layer (`helm_chat.py` with `helm_memory.py`) holds a conversation: it remembers facts the user states, tracks an inventory across turns, and tells statements apart from commands.
+
+**Status: `ENGINEERED-NOT-VALIDATED`.** It is built and it runs on its own tests. No frozen test with a control has scored it. The handoff calls it "WIRED & VERIFIED LIVE" (`MASTER_HANDOFF_20261018_CLAUDE.md` §0). This sheet does not, for the four reasons below, each read from the file.
+
+**Four defects, each with its line (file `helm_end_to_end_loop.py`, committed blob sha256 `059b5a59b55bd654053bcb8c70253ebd390b61b08d29bfd37b3df9b0f9e4b17d`, last commit `a7dcc6b6`):**
+
+1. **The round-trip check is computed and then ignored.** Lines 295-296 run `verify_cce_round_trip(user_english)` and store the answer in `result["cce_round_trip"]`. No later line reads it. A sentence that fails the round trip goes on exactly as one that passes. The project's own rule — a proposal must survive `parse(render(C)) == C` before it counts — is therefore not enforced here.
+2. **Missing ingredients are filled with an invented number.** Line 421: `full_inputs = {ing: effective_inputs.get(ing, Decimal("10")) for ing in self.brain.ingredients}`. Every one of the 22 ingredients the user did not mention is set to 10 before the recipe is computed. Line 168 also sets any ingredient that is named without an amount to 10. That is an input the user never gave. It breaks the rule "an unknown face is reported as unknown and is never filled".
+3. **The pipeline does not use the circuit that was built.** The file imports `helm_brain_22x40`, `tks_meta_valve_controller`, `helm_agentic_executor`, `cce` and the cube store. It imports none of `the_loop_v3/rpm_gate.py`, `repair_performer/`, `dwp_engine_v2/`, ASOM or Bias (searched in the file; the only "bias" is a valve feature named `operating_mode_bias`). So a turn never meets the real RPM gate, never opens a repair, and never descends. This contradicts the owner's direction that language rides the circuit path, and it is why queue row 15 (one live end-to-end trace) is still TODO.
+4. **The recipe knowledge is hard-coded.** Flour and Water are the only "essential" reagents (lines 372-373, 408, 410), and the default limiting reagent is `"Flour"` (line 428). The "ungrounded" refusal is a list of four words (line 284: "quantum", "tuesday", "electron sandwich", "superstring").
+
+**A safety note on the tool executor it calls** (`helm_agentic_executor.py`, sha256 `d4548b43b5af530d1e7c3d5f10ba1bd2b92dd90d7d3123086981cde270da9812`): `_execute_command` runs `subprocess.run(cmd, shell=True, …)` (line 384) behind a pattern filter. The cloud-dispatch tool is a dry-run receipt (line 412 comment "Simulation / dry-run dispatch receipt"); the file contains no `boto3`. The roadmap's "dispatch AWS cloud jobs" (§3.1) is therefore not what the code does.
+
+**Tests.**
+
+| File | Tests written | Output recorded |
+|---|---|---|
+| `test_helm_end_to_end_loop.py` (sha256 `c129c6b779da5079d1446386ad2488be0e5007f6a591a1aa54ea38497f5db597`) | 11 | authored, output not recorded (the handoff says "11/11 PASS in 0.11s"; no output file) |
+| `test_helm_chat_nuance.py` (sha256 `2061588cdf440cc7696a12679b7addb2303035930350aa776788bc020de13b4e`) | 5 test functions | authored, output not recorded (the handoff says "10 tests … 10/10 PASS"; the file holds 5 test functions, each with several printed turns) |
+| `test_helm_memory.py` | 6 test functions | on branch `helm/creativity-rpa-valve-v1` only; its commit `5a7d02f3` says "5/5"; output not recorded |
+
+`helm_chat.py` sha256 `19984cf19e7f24ef6067e8988562a5aa6287d2784011758660df410d1521782e`; `helm_memory.py` sha256 `afedb280dae960f54e48f4e55b458cc7490c75f57131901336c6d7448913b6a5`. Both were written on the side branch `helm/creativity-rpa-valve-v1` (commits `5a7d02f3`, `38c92821`, `eefff221`) and carried onto the canonical branch by `05210ae3` (#343).
+
+- **The owner's fix order** (2026-10-18, `OWNER_APPROVALS_20261018.md` item 4, fix C) is: put the recipe brain into this loop in place of the cookie brain; remove the fill-with-10 shortcut; actually check the round-trip result; route through the gate, the repair loop and the stations; run one live end-to-end trace; make the detected failure real. None of that is done in this commit.
+- **What this does not show.** That HELM understands a request. That a turn is grounded. That the licensed brain (§7.56) is inside HELM.
+
+### 7.50 HELM Phase 3 valve (`tks_meta_valve_controller.py`): `ENGINEERED-NOT-VALIDATED`; a learned 5-weight logistic rule trained on the laptop (`LOCAL_CPU_DRYRUN_FAST`), **not** on AWS, sits in the deciding path; the owner ruled on 2026-10-18 that it be replaced by a plain written rule (2026-10-17/18, laptop, $0)
+
+**What this is, plainly.** A gate in front of recipe execution. It does two things. First, if an essential ingredient is missing it shuts (`G-ABSENT`). That part is a plain rule. Second, it computes an "aperture" between 0 and 1 from five numbers about the request, and lets the request through only if its novelty score is at or below that aperture (`G-LIMIT` otherwise). That second part is **learned**: `sigmoid(w·x + b)` with five weights and one bias read from `tks_meta_valve_weights_v0_4.json` (`predict_dynamic_aperture`, used at `evaluate_proposal_flow` lines 121-124 and the admit/drop test at "Rule 2").
+
+**Status: `ENGINEERED-NOT-VALIDATED`.** The rule runs. No frozen test with a control has scored it.
+
+**Where the weights came from — read from the weights file itself** (`tks_meta_valve_weights_v0_4.json`, committed blob sha256 `511ebe94360b108d1f6d90c897be0d061da3205b0ce1ef48c67caf5e67ff3ba5`):
+- `"training_environment": "LOCAL_CPU_DRYRUN_FAST"`, `"training_samples": 2000`, `"final_mse": 0.09699948`.
+- weights `-3.1026082`, `1.51951134`, `3.33129631`, `-1.06332357`, `0.52153234` on `novelty_entropy`, `source_credibility`, `prerequisite_ratio`, `normalized_radius`, `operating_mode_bias`; bias `-1.55750237`.
+- validation: `"ungated_statistical_leaks": 83` of `"total_missing_prereq_rows": 250` (`33.2` %); `"gated_rpm_interlock_leaks": 0`.
+
+**What the numbers mean.** Without the plain `G-ABSENT` rule, the learned part lets **83 of 250** requests with a missing ingredient through. With the plain rule, 0. So the safety comes from the written rule, not from the learning. The receipt `VALVE_ZERO_LEAK_VERIFICATION_RECEIPT.json` (side branch `helm/creativity-rpa-valve-v1`, commit `db39e8d6`) says the same: `"claim_ceiling": "ENGINEERED-NOT-VALIDATED"`.
+
+**A false claim, corrected here.** The roadmap's v0.4 row says "AWS GPU trained dynamic aperture weights" with status `SYNTHETIC_TRAINED` ✅ (`HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §3). The weights file says `LOCAL_CPU_DRYRUN_FAST`. No AWS job for the valve exists in the ledger (`AWS_COMBINED_ALLOCATION_HISTORY.jsonl`, searched). The trainer `train_tks_meta_valve.py` exists only on the side branch `helm/creativity-rpa-valve-v1`, not on the canonical branch.
+
+**The "MUST REMEMBER valve" order.** The handoff, the L4 specification and the roadmap all quote *"MUST REMEMBER: Add, train, and test the VALVE SYSTEM (tks_meta_valve_controller) in Phase 3. This is CRITICAL."* No owner date and no owner source file for that sentence was found. Search scope: the canonical branch, `Documents\Codex\2026-10-16\` and `Documents\Codex\2026-10-18\` (`.md`, `.txt`, `.json`), and the project memory folder; the sentence appears only in the handoff, the L4 specification, the roadmap and a review note quoting them. Its owner source is recorded here as `unavailable`.
+
+**The owner's ruling, 2026-10-18** (`C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, item 3, "plain-rule valve"): *"the trained 5-weight logistic aperture in `tks_meta_valve_controller.py` is replaced by a written deterministic rule; learned parts stay out of the deciding path until they pass a frozen test."* That replacement (fix D) is **not done** in this commit; this section records the state before it.
+
+- **Artifacts:** `tks_meta_valve_controller.py` (committed blob sha256 `7028b447efa82cfb4fe2edb87e94a520e47ceea85b3787d5e476c3ec1f2351c0`, last commit `7eb3511a`); weights file above; side-branch commits `fa924e17`, `db39e8d6`.
+- **What this does not show.** That a learned valve helps. That anything was trained on AWS.
+
+### 7.51 HELM stand-in brains `helm_brain_22x40.py` and `helm_brain_tks28.py`: `ENGINEERED-NOT-VALIDATED`; demonstration brains, **not** the licensed brain; "22" is 22 baking ingredients and "40" is a parameter count, not CAS's 22 pathways or 40 states; no run id (2026-10-17, laptop, $0)
+
+**What these are, plainly.** Two small recipe calculators. Each takes named amounts, applies one formula (a weighted power mean, the CES law `Y = [Σ cᵢ · max(0, xᵢ − aᵢ)^ρ]^(1/ρ)` in 40-digit Decimal), and names the ingredient that limits the output. They can also solve their weights exactly from example rows.
+
+**Status: `ENGINEERED-NOT-VALIDATED`** for both. Code runs. No run id, no frozen exam, no control, no recorded result.
+
+**What the names mean, read from the code** (`helm_brain_22x40.py`, committed blob sha256 `ef8ccf6cd0242482e4b3b71bcd5d0e0ca286e96c7cad439b04f9a8418e4bb1b6`):
+- **22** = 22 kitchen ingredients: `"Flour", "Water", "Sugar", "Egg", "Salt", "Yeast", "Milk", "Butter", "Cocoa", "Vanilla", "Honey", "Oil", "Oats", "Almonds", "Cinnamon", "Nutmeg", "Ginger", "BakingPowder", "BakingSoda", "Cornstarch", "LemonZest", "Molasses"`.
+- **40** = 40 parameters: 22 weights + 1 curvature `ρ` + 17 thresholds (the file's own docstring: "Total = 22 + 1 + 17 = 40 parameters"). The 17 thresholds default to `0.0`.
+- It is **not** CAS's 22 Capability Pathways and **not** CAS's 40 Cognitive States. No code in either file uses the real 22 pathways, 28 drives or 40 states.
+- The file calls itself "Canonical". That word is the file's, not a status. It has no memory, no composition rule and no CAS structure.
+
+`helm_brain_tks28.py` (side branch `helm/creativity-rpa-valve-v1` only, commits `d12e4078`, `347e03ef`; blob sha256 `fb1287f2adb24512e63e827da35af30ecf62869a2deaafa7dbd5430404d79d19`) is the same kind of CES calculator (`d40`, `d_pow`, `evaluate_recipe`, `solve_witness_weights`) over 28 inputs labelled as the 28 Foundations (4 planes × 7 archetypes). It is not on the canonical branch.
+
+**Where the 22x40 brain is used.** It is the "Station S0" calculator inside `helm_end_to_end_loop.py` (§7.49), where the user's missing ingredients are filled with 10 before it runs.
+
+**A misattribution, corrected here.** The roadmap (`HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §2.1 item 2) places "87.50% (448/512) … outperforming the AWS GPU Neural Net (60.74% / 311/512)" under the 22x40 brain. Those numbers are **RB-OH1's** (§7.52), a different program, and RB-OH1's own reading is `licensed: false`. The 22x40 brain has no score of its own.
+
+**The owner's ruling, 2026-10-18** (`OWNER_APPROVALS_20261018.md` item 1): *"`helm_brain_22x40.py` / `helm_brain_tks28.py` are labeled demos / stand-ins."* The licensed brain is in §7.56. Fix G ("redeem 22x40": design the ledger universes on the real 40 states / 28 drives / 22 pathways) is approved and not started.
+
+- **What this does not show.** Any score. Any link to CAS's real pathways, drives or states. That either file is HELM's brain.
+
+### 7.52 HELM RB-OH1 (the substitution recipe head, five laptop parts plus AWS GPU job c32 for the tiny neural model): merged reading `HYBRID_ROUTING_EARNED` on the fresh worlds, `HYBRID_NO_BETTER` on the original worlds, sweep `SWEEP_CALIBRATION_FAILED`, `licensed: false` → `NOT LICENSED`; the "87.5% against 60.74%" numbers belong **here** (2026-10-17 PDT; c32 Tesla T4, RUN stage 36.817 s; charge `unavailable`)
+
+**What this is, plainly.** RB-OH1 asked whether a "substitution" recipe law (a CES power mean on an 11-rung exponent ladder, `sub_oh1.py`) can be added to the recipe brain as one more head, behind the RPM gate, and close the gap the brain had on smooth families — and whether a small neural model does better. The recipe side ran on the laptop in five parts. The tiny neural model (arm A7, "MLP (the tiny model)") ran once on an AWS GPU on the fresh worlds.
+
+**Status: `NOT LICENSED`.** The merged reading itself says `"claim": {"ceiling": "SYNTHETIC_ONLY; no HELM claim; not adoption of SUB into CAS", "licensed": false}`. The words below are the frozen reader's own words, quoted, not status words of this sheet.
+
+| | Reading (from `runs\MERGED.json`) | Value |
+|---|---|---|
+| 🟩 | status word, FRESH worlds | `HYBRID_ROUTING_EARNED` |
+| 🟥 | status word, ORIGINAL worlds | `HYBRID_NO_BETTER` |
+| 🟥 | sweep word | `SWEEP_CALIBRATION_FAILED` (`calibrated: false`; e.g. `scale_leak` named 11 of 16, want `MIN_RECIPE+LEAK`); every A2 sweep cell reads `NOT_SCORED_SWEEP_CALIBRATION_FAILED` |
+| ⬜ | headline words | FRESH `SUB_CLOSED_GAP_NO_NEURAL`; ORIGINAL `SUB_CLOSED_GAP_VS_RBW_UNGATED` |
+| 🟥 | claim | `licensed: false` |
+| 🟩 | instrument rows | all true (`tests_pass_every_part`, `merge_rerun_equal`, `unit_digests_verify`, `core_units_equal_rb_g5_rb_g6`, 174 core units compared, …); GPU stage `VERIFIED`, 7 of 7 GPU stages pass |
+
+**The two numbers the roadmap quotes, at their true source.** On the fresh family `a_fresh` (512 rows):
+
+| Arm (frozen names) | Right, gated | Points | Right, ungated |
+|---|---|---|---|
+| A2 `RECIPE_PLUS_SUB` (the headline arm, 0 neural parameters) | **448** | `175/2` = 87.500000 | 512 |
+| A7 the tiny MLP, AWS GPU | **311** | `7775/128` = 60.742188 | 421 |
+| A4m, A4s, A5 (other hybrid arms) | 448 each | `175/2` | — / 512 / 512 |
+| best non-neural head-only arm A3 | — | `525/8` = 65.625000 | — |
+
+The gap is `175/2 − 7775/128` = `3425/128` = 26.7578125 points. The frozen bar the A2 arm had to clear was "A7 gated GPU MLP on a_fresh − 2" = `7519/128` = 58.742188, and it cleared it. **Three cautions belong with these numbers.** (1) Three other arms also scored 448, so 448 is not unique to the substitution head. (2) The MLP's ungated score is 421, not 311; the roadmap quotes A2's ungated 512 beside the MLP's gated 311. (3) The reading as a whole is not licensed. These numbers are RB-OH1's. They are **not** the 22x40 brain's (§7.51), and they are not the licensed brain's (§7.56).
+
+**The GPU job c32.**
+- Owner words bound in the approval record (`gpu\launch\RB_OH1_MLP_FRESH_APPROVAL_RECORD_20261015.md`, sha256 `ec1f9a590faccaa6e84255a2aae9e1d9c40d2e1c846c6a2731240ff068aec22d`): *"RB-OH1; U2 defaults; U2 on AWS, cap $3, after U1; HELM-R1 plan"* (2026-10-15 about 4:47 PM Pacific), bound to sealed package `d3876582f2c73e7fcae27776dbb21233a460c1d1486b30ee1e73c2c77fca03af`, g4dn.xlarge, us-west-2, one attempt, **cap 2.00 USD**.
+- Ran on instance `i-0c7d803fdb5f4bbac` (`gpu\launch\launch_record.json`), device `Tesla T4`, torch `2.5.1+cu121`; stages DATA_IDENTITY, GPU_REQUIRED, PACKAGE_IDENTITY, PARITY, RUN (**36.817** s), SMOKE, TESTS all pass (`gpu_results\out\RUN_SUMMARY.json`, sha256 `6301f9c3ce29032f49ce51b00681c2d9170c6ab67fd8fd985821ffb728cd1205`); monitor elapsed 11.4 min (`gpu\launch\monitor_record.json`).
+- **Money:** the ledger shows a hold of **2.00** USD placed 2026-10-17T11:16:49Z (`162.45` → `164.45` of `200.0`). **No closeout and no charge record exists** for c32. The charge is `unavailable` until the ledger reconciliation (owner's fix B) is done.
+- Laptop parts: 5 (`RB_OH1_MSI_R01`–`R05`), each `tests_passed: 16`, sign line `APPROVE rb_oh1, source c40a2bb8, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.`
+
+- **Artifacts:** `C:\Users\wakil\Documents\Codex\2026-10-15\rb_oh1\runs\MERGED.json` (sha256 `f50cc983ff45fbe1880c958d95649a3ccd6c3ccb67b72b0068ec5b8064733e5f`, `written_utc` 2026-10-17T11:29:19Z, `version` rb-oh1-merge-v1); `FROZEN.precode.json` (sha256 `8dbf5da83311929115c3ae34b132c9088854992323968da85593a3bd3da40e3d`, frozen 2026-10-16 00:22 UTC before any code); `FROZEN.json` (sha256 `bfd945d94e690b17d11304d141026fbc6cdedeab4254eb59a59a982708abf5cc`). Single-copy: these live only under `Documents\Codex\2026-10-15\rb_oh1\`; no backup manifest for c32 was found there or under `D:\tksCAS-archive\`.
+- **What this does not show.** That recipes beat neural networks in general. That the substitution head belongs in CAS. Anything about HELM.
+
+### 7.53 Two GPU jobs on the side branch `helm/creativity-rpa-valve-v1` that are in no ledger and have no owner sign line: the "Scribe L4" English proposer (commit `84812689`, Tesla T4, 30.95 s; `ENGINEERED-NOT-VALIDATED`) and a "Stage v0.7 Lexicon Expansion" proposer (commit `5a7d02f3`, no artifact at all) — both `FLAG_FOR_HUMAN_REVIEW` (2026-10-17/18 PDT)
+
+**Said plainly first.** Two rented-GPU training jobs are claimed on a side branch. **Neither appears in the AWS ledger. Neither has an owner sign line.** One left real outputs. The other left only a sentence in a commit message. This breaks the standing rule that every cloud job records its source, purpose, instance, limits, approval and cleanup. Both are `FLAG_FOR_HUMAN_REVIEW`. That is the verdict, not a holding pattern.
+
+**Job 1 — "HELM v0.5 Scribe", commit `84812689`** (2026-10-17 23:00 PDT, "Trained Level L4 open-domain English neural proposer on Tesla T4; verified 90.0% exact match, 100% CLARIFY refusal").
+
+| What | Value (read from the files in the commit) |
+|---|---|
+| job id | `SCRIBE-L4-AWS-GPU-RUN-v0.5` (`outputs/RUN_SUMMARY.json`) |
+| when | `2026-10-18T05:58:46Z` |
+| machine | `g4dn.xlarge`, us-west-2 (`JOB_SPEC.json`); the console log's `nvidia-smi` shows `Tesla T4`; instance id `unavailable` (not in any committed file) |
+| time | `elapsed_seconds` **30.95** |
+| model | `CASNativeScribeTransformer`, from scratch, vocab 108, 4,000 train / 800 validation samples, 25 epochs |
+| exact content match | **90.0** % |
+| round trip (`parse(render(C)) == C`) | **64.0** % — about one in three predictions does **not** survive the round trip |
+| CLARIFY refusal accuracy | 100.0 % |
+| weights | `scribe_l4_weights.pt`, **326,230** bytes, sha256 `e36cf3cb50fe8ae168b2986a97000a47e7632b058b34b44629f4f17f99af9dc1` (matches `outputs/OUTPUTS_SHA256.json`) |
+| the run's own ceiling | `"claim_status": "SYNTHETIC_ONLY"`, `"claim_ceiling": "ENGINEERED-NOT-VALIDATED"` |
+| cap written in the package | 1.50 USD (`JOB_SPEC.json`, `PACKAGE_FREEZE.json`); the launcher's own `HARD_CAP_USD = 1.00` — the two disagree |
+| staging | `s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_l4/scribe-l4-1792302916/` |
+| ledger line | **none** — `AWS_COMBINED_ALLOCATION_HISTORY.jsonl` has 0 lines containing "scribe" |
+| owner sign line | **none found** in the package or the commit |
+| cleanup verification | **none recorded**; the console log ends "ALL OUTPUTS STAGED TO S3. SHUTTING DOWN." and the launcher sets terminate-on-shutdown, but no independent check that the instance and volume are gone is on disk |
+| charge | `unavailable` |
+
+Status of the model: **`ENGINEERED-NOT-VALIDATED`**. The 90.0 % is on synthetic validation rows from its own generator. It has never been scored on the sealed 98 rows (§7.54). Its own output says "zero_hallucination_guarantee: VERIFIED_BY_CCE_ROUND_TRIP_INTERLOCK" while the round trip held on 64.0 %; and the end-to-end loop that would use it does not check the round trip at all (§7.49). The roadmap row v0.5 calls this `BOUNDED_ENGLISH_PROPOSER` ✅, which is not a status word of this sheet.
+
+**Job 2 — "Stage v0.7 Lexicon Expansion", commit `5a7d02f3`** (2026-10-18 03:17 PDT). The commit message says: "trained Stage v0.7 Lexicon Expansion neural proposer on AWS GPU (Tesla T4, 100% exact DAG match, 100% cycle refusal)". **The commit contains no training artifact** — it adds `helm_chat.py`, `helm_memory.py`, `test_helm_memory.py` and a re-sealed distribution zip. A file-name search of the side-branch tree (for weights, lexicon, v0.7, stage and proposer files) and of the zip inside that commit found no weights, run summary, console log or receipt for a v0.7 job; the only weights in that zip are the Scribe weights of Job 1 and the valve weights of §7.50. Whether a second GPU job actually ran **cannot be established from the record**; if it did, it has no ledger line, no owner sign line, no instance, no cost and no cleanup record. Its numbers ("100% exact DAG match, 100% cycle refusal") may not be cited.
+
+**What the owner has ruled since** (`OWNER_APPROVALS_20261018.md` item 2, "no more GPU for now"): *"no rented-GPU training until the free fixes A–G are done and the existing small English model (`scribe_l4_weights.pt`, helm branch, commit 84812689) has been scored on the sealed 98 behind a working round-trip check."* Fix B (ledger reconciliation) names "the two unrecorded GPU jobs".
+
+- **Single-copy / off-repo:** both exist only on the side branch `helm/creativity-rpa-valve-v1` (not reachable from the canonical branch) and, for Job 1, in the S3 prefix above. No backup under `D:\tksCAS-archive\` was found.
+- **What this does not show.** That the Scribe model understands open English. That any v0.7 model exists.
+
+### 7.54 The L4 split and the 439-sentence tabulation (commit `ec780a34`): `REAL` — 197 unreadable sentences split into 98 sealed and 99 for development, with hashes; but the rows are generator English, not human English, and the baseline line of the tabulation is typed in, not computed → that line is `FLAG_FOR_HUMAN_REVIEW` (2026-10-18, laptop, $0)
+
+**What this is, plainly.** The translator (§7.31, §7.48 `language_v3`) reads 233 of the 439 headline English sentences and cannot read 197. Those 197 were split into two files. One is locked away for a final test. The other is for building and studying.
+
+| File (`cas-synthetic/data/l4_split/`) | Rows | sha256 (of the committed file) | Use |
+|---|---|---|---|
+| `real_heldout_unparseables_98.jsonl` | 98 | `e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe` | sealed; no training exposure |
+| `real_dev_unparseables_99.jsonl` | 99 | `17cd198321d242bd74ff789a4b7f8032d499a7ff8534e5b07545b6221930fde0` | development and error study only |
+
+Both hashes were recomputed for this section and match the tabulation record and the handoff. Status of the split: **`REAL`**.
+
+**"Real" in the file names does not mean human English.** Each row comes from the synthetic generator's English renderings (for example `"file": "wave3_step2_5_english_descriptions_20260508T203848Z.jsonl"`, `"grammar_version": "sdg-recipe-v7.7-bridge-v2.0"`). A model that does well on the 98 has read the generator's English well. It has not been shown to read people.
+
+**The tabulation** (`docs/working/SDG_439_HEADLINE_TABULATION_20261018.json`, sha256 `8b23905efc8f16e45f32099d8ce1baae932bbea52f0a34e0772fec3d52f7bc50`; script `tabulate_439_sdg_baseline.py`, sha256 `d6b37fd2d34f0e1a6eef4b28c3d690fb8157cd7b30326ddcdacbab3794429091`):
+- computed: on all 481 accepted rows, CCE + ALIAS-WIDE MATCH **265**, UNPARSEABLE **199**, MISMATCH **17**; on the 439 headline rows MATCH **233**, UNPARSEABLE **197**, MISMATCH **9**; second number agrees 196 and 174.
+- computed reasons for the 197 (one sentence can have more than one): `NO_STATE_IN_SEGMENT` **148**, `NO_DOMAIN_IN_SEGMENT` **56**, `AMBIGUOUS_STATE_IN_SEGMENT` **27**, `AMBIGUOUS_DOMAIN_IN_SEGMENT` **16**. The handoff (§4.1) calls the last one "16 `PARSE_FRAME_ERR`"; the record's own code is `AMBIGUOUS_DOMAIN_IN_SEGMENT`.
+
+**The typed-in literals.** Lines 170-173 of the script write `"bridge_v2_481_mismatches": 42`, `"cce_aliaswide_481_mismatches": 17`, `"misread_reduction": 25`, `round(25 / 42 * 100, 2)` as numbers in the source. Line 209 prints the baseline row `| **Bridge v2 Baseline** | 118 | 321 | **42** |` as text; line 210 prints `265 | 199 | 17`. So:
+- 42 and 17 agree with the computed reconciliation on 481 rows (`bridge_mismatch` 42, `cce_mismatch` 17). They are consistent, but they are not read from it.
+- **118 and 321 have no computed source in this record.** 118 is recorded elsewhere (`language_v3/RESULTS.md` M4) as the bridge v2 baseline on the **439** headline rows; the script prints it under "all 481 rows". 321 equals 481 − 118 − 42 by arithmetic. The same computed record gives `bridge_mismatch` **0** on the 439 headline rows.
+- Status of the baseline row (118 / 321 / 42) and of "+147 matches" and "−59.5 %": **`FLAG_FOR_HUMAN_REVIEW`** until a program computes them from the rows.
+
+**What the 197 are, by the record's own reasons.** Most are vocabulary gaps (no state word, no domain word found), which a larger deterministic dictionary may close. The owner's fix E (`OWNER_APPROVALS_20261018.md` item 4) orders exactly that: expand the deterministic dictionary on the 99 development rows, then score the existing small English model (§7.53 Job 1) on the sealed 98 behind a wired round-trip check — before any new GPU training.
+
+**Plan conflict, recorded.** The L4 specification (`docs/working/LEVEL_L4_OPEN_ENGLISH_PROPOSER_SPECIFICATION_20261018.md`) heads itself "OPTION 3"; the handoff calls the same work "Option 2" (§0, §7). The handoff's plan is a new sequence model of up to 35 million parameters trained on AWS (§7 Step 2B). `LANGUAGE_LINE_TRUE_STATE_20261017.md` quotes `LADDER.md`: L4 "is months away". The owner's 2026-10-18 ruling "no more GPU for now" holds this plan.
+
+- **What this does not show.** Any score on the 98. That the 98 are human English.
+
+### 7.55 Owner rulings and council decisions, 2026-10-16 to 2026-10-18: depth `HORIZON = 12` and `DESIRE_BOUND = 12` with canon's 5 kept on the record; C4 / C5 / Q13 decided **by the council** at the owner's order; the 2026-10-18 approvals (recipe brain canonical, no more GPU for now, plain-rule valve, fixes A–G) — each `IN FORCE` as a rule, none of them a result
+
+This section records **who decided what**. A ruling is not evidence. Nothing here changes a result.
+
+**1. Depth and the Desire loop — the owner's ruling, 2026-10-16.** Record: `C:\Users\wakil\Documents\Codex\2026-10-16\noetic_loop\OWNER_RULING_DEPTH_12_20261016.md` (sha256 `b22cae0437025eb65f80b484f5e6cec7e3b52ebe04ac9242902e07795f949820`; byte-identical copy in the repo at `docs/working/noetic_council/OWNER_RULING_DEPTH_12_20261016.md`). The owner's words, verbatim and in order:
+1. *"NO LETS MAKE THE HORIZON 12. BUT WHAT'S THE DIFFERENCE BETWEEN CEILING AND HORIZON?"*
+2. *"MAKE DESIRE LOOP 5."*
+3. *"SORRY I MEANT TO SAY MAKE DESIRE LOOP 12 AS WELL"* — supersedes the second.
+
+| Constant | Value | Where | Status |
+|---|---|---|---|
+| `HORIZON` (depth at which a further block is Structural Deadlock) | **12** | `dwp_engine_v2/depth.py:103` | `IN FORCE` (owner's ruling) |
+| `DESIRE_BOUND` (how many times a Desire loop may cycle) | **12** | `dwp_engine_v2/dwp.py:180` (canon gives no bound) | `IN FORCE` (owner's ruling) |
+
+**Canon's own number stays 5, and both sentences are kept:** *"12 is the limit in force. 5 remains canon's own number."* (the ruling file). Canon says 5 at `Chapter_27:59`, `Chapter_05:87`, `FULL_MANUSCRIPT_v2:6412`. The 12 is the owner's choice, **not canon**. Records that still say 5: `THE_BUILD_RESTART_PLAN_20261016.md` §2 (line 47) and §6 (line 121) — corrected by that file's own §9 of 2026-10-17; `CONTINUITY_AND_DISENGAGE_20261016.md` §1c (line 46, "depth at most 5") — **not yet corrected**. The council's open question U3 (does a Desire block at 12 also raise Structural Deadlock?) is still open (`EXECUTION_QUEUE.md` row 6).
+
+**2. The 2026-10-16 orders** (`OWNER_ORDERS_AND_DECISIONS_20261016.md`, sha256 `3ee1004c236e8828647def69abebe1b0f3ed610da418a118ea6b6ec95dd8acbd`).
+
+| Item | Decided by | Decision |
+|---|---|---|
+| C15 — may the M1 memory test run | **the owner**: "YES" | the memory lane is open |
+| C4 — what drives fading | **the council**, under the owner's order to "find the answer in the files and establish which option is better" | by time, in logged day-ticks; recall a separate, named v0.2 switch |
+| C5 — how fast | **the council**, same order | `fade_rate = 1/20` per day-tick unpinned, `0` pinned |
+| Q13 — exact fractions in the English layer | **the council**, under the owner's "do whatever unblocks English actually working" | admit a `p/q` number form to CCE |
+| work order | **the owner** | W1 first, then build v0.2; the run authorised |
+
+C4, C5 and Q13 are **council decisions**, not owner rulings and not canon. `EXECUTION_QUEUE.md` §1b lists them in a table headed "the owner's word"; this sheet attributes them to the council, which is what `OWNER_ORDERS_AND_DECISIONS_20261016.md` itself says. The same §1b records "the canonical word is the INSIDE; the English outside it must VARY" as the owner's word; no verbatim owner source for that sentence was found in the files read for this section.
+
+**3. The 2026-10-18 approvals** (`C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, sha256 `db94154a1127cbe59bc12e7799b162e554e3aded0975eb7f7e33590f97cda006`). The owner's words: *"I agree with all of them....please proceed."* The four sentences he agreed to, as put to him:
+
+| # | Sentence | Meaning | Status |
+|---|---|---|---|
+| 1 | "recipe brain is canonical" | the licensed HELM-R1 wave-1 recipe brain is HELM's one official brain; `helm_brain_22x40.py` / `helm_brain_tks28.py` are demos / stand-ins (§7.51, §7.56) | `IN FORCE` |
+| 2 | "no more GPU for now" | no rented-GPU training until fixes A–G are done and `scribe_l4_weights.pt` has been scored on the sealed 98 behind a working round-trip check (§7.53, §7.54) | `IN FORCE` |
+| 3 | "plain-rule valve" | the learned 5-weight aperture is replaced by a written deterministic rule; learned parts stay out of the deciding path until they pass a frozen test (§7.50) | `IN FORCE`; replacement not yet done |
+| 4 | "start the fixes" | A docs catch-up (this commit); B ledger reconciliation; C recipe brain into the live loop, round trip checked, no fill-with-10, through gate / repair / stations, one live trace, a real failure; D plain-rule valve; E score the small English model on the sealed 98 and grow the dictionary on the 99; F everyday-English writer and a 50-situation fluency test; G ledger universes on the real 40 states / 28 drives / 22 pathways | `IN FORCE`; A in progress, B–G not started |
+
+Also in that record: the owner's direction that HELM's speech be fluid, everyday English, "NOT SPEAKING IN … CAS TO NORMAL PEOPLE AND NOT SOUND LIKE A … ROBOT", and his opening to attaching another model *or* another way to the same end; and the standing reply format (🎁 / 🚀 / 🎉 headings). The "Purpose and recipe integration (v0.2)" addendum in the same message is an **exploration request, not an implementation order** (the record's own words).
+
+- **What this does not show.** That 12 is better than 5. That any council decision is canon.
+
+### 7.56 CANONICAL BRAIN POINTER — HELM has one licensed brain: the HELM-R1 wave-1 recipe brain (c34-g, `PASS`, `R1_BEATS_GB3`, `SYNTHETIC_ONLY`); every other brain on disk is a candidate or a stand-in (owner ruling 2026-10-18, "recipe brain is canonical")
+
+**Read this before calling anything "HELM's brain".** The owner ruled on 2026-10-18 (`C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, item 1) that the licensed HELM-R1 wave-1 recipe brain is HELM's one official brain. Status of the ruling: `IN FORCE`. Status of the brain's claim: **`LICENSED`, in the exact words below and no wider**.
+
+**The licensed brain.**
+- Package: `C:\Users\wakil\Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3\` (`PACKAGE_FREEZE.json` sha256 `8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b`, re-checked for this section; 132 tests on the host).
+- Run: job c34-g, AWS `m6i.8xlarge`, 2026-10-16. Reading `R1_W1_READING.json` sha256 `9b1dfdd88568012cabbcfa6d00e97c15dee07d445dfa5daff8be185975f4cf3a`: `PASS`, `R1_BEATS_GB3`, 7 of 7 hard gates, 8 of 8 instrument rows; Task B recipe brain **32** against GB3 **9** and widened GB3 **17/2**. Full record: §7.47 and its two errata.
+- **The licensed sentence, verbatim from §7.47 (from the reading):** "On synthetic worlds only: placed in GB3's slot, at GB3's interface and marks, a CAS recipe brain (programmed carry and composition, learned requirements, the RPM Gate, the Lacunarity cadence, the restart fallback and a form-only language skin, each on its own switch) held GB3's continuity marks on fresh worlds and named the Limiting Reagent of fresh held-out compositions at least 4 of 32 above GB3, both as built (97 parameters) and widened (385 parameters), with every write receipted; each part is credited only where switching it off lost."
+- **Not licensed** (from §7.47): recipes beating transformers in general; learned carry; learned composition; statistical superiority; **operation inside HELM's runtime**; anything on real data; growth, the eye, the atlas, heads or memory fading. As of this commit the licensed brain is **not** inside HELM's live loop: `helm_end_to_end_loop.py` uses the 22x40 stand-in (§7.49). Putting it there is the owner's fix C.
+
+**Every other brain, one line each.**
+
+| Brain | What it is | Where recorded | Standing |
+|---|---|---|---|
+| GB3 transformer (T, 97 parameters; T+ 385) | the brain to be replaced; the bar | §7.24, §7.28, §7.29, §7.47 | the comparison, not a candidate |
+| RB1g2 | recipe brain on GB3's 16-world exam | §7.24 | `PASS`; lookup table tied it, so no recipe-math claim |
+| RB2b / RB2c | recipe brain on the harder exams | §7.25, §7.26 | RB2b overall `NOT_PASS` (Task B `INSTRUMENT_ERROR`); RB2c `PASS`, `RECIPE_COMPOSITION_EARNED`; steps on the way to R1 |
+| RB-W (capacity rules) | which parameter kind binds which law family | §7.27 | rules recorded; smooth/noisy laws need an ordinary head |
+| RB-G1 … RB-G6 (self-growth) | the brain growing its own capacity | §7.30, §7.32, §7.36, §7.39 | `GREW_WRONG_KIND` six times; growth `NOT LICENSED` |
+| RB-I1 / RB-I1b (faculties + drive loop) | faculties on the recipe brain | §7.34, §7.37 | `INCONCLUSIVE`; `INSTRUMENT_ERROR` |
+| RB-P1 (eye trim and pruner) | pruning the brain | §7.42 | `FAIL` |
+| RB-OH1 (substitution head) | a CES head added to the recipe brain | §7.52 | `NOT LICENSED` (`licensed: false`) |
+| `helm_brain_22x40.py` | 22 baking ingredients, 40 parameters, one CES formula; used by the live loop | §7.51 | stand-in / demo; `ENGINEERED-NOT-VALIDATED`; no score |
+| `helm_brain_tks28.py` | the same kind of CES calculator over 28 labelled inputs; side branch only | §7.51 | stand-in / demo; `ENGINEERED-NOT-VALIDATED`; no score |
+| Scribe L4 (`scribe_l4_weights.pt`) | an English proposer, not a brain; no authority | §7.53 | `ENGINEERED-NOT-VALIDATED`; job `FLAG_FOR_HUMAN_REVIEW` |
+| valve aperture (`tks_meta_valve_weights_v0_4.json`) | a gate setting, not a brain | §7.50 | `ENGINEERED-NOT-VALIDATED`; to be replaced by a plain rule |
+
+**The rule this section sets for the record.** A file, a commit message or a roadmap that calls something "the canonical brain", "Station S0 brain" or "the 22x40 brain" does not make it the brain. Only a change to this section, with a new licensed reading and its artifact path, may change the pointer.
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -1980,6 +2247,15 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-18 | **CANONICAL BRAIN POINTER (new §7.56).** HELM has one licensed brain: the HELM-R1 wave-1 recipe brain (c34-g `PASS`, `R1_BEATS_GB3`, `SYNTHETIC_ONLY`), with §7.47's claim sentence verbatim. Every other brain (GB3, RB1g2, RB2b/c, RB-W, RB-G1…G6, RB-I1/I1b, RB-P1, RB-OH1, `helm_brain_22x40.py`, `helm_brain_tks28.py`, Scribe L4, the valve aperture) listed in one line each as a comparison, candidate or stand-in. Owner ruling "recipe brain is canonical" cited. The licensed brain is **not** yet in HELM's live loop. | `Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3\PACKAGE_FREEZE.json` (sha256 `8c55c413…`); `R1_W1_READING.json` (sha256 `9b1dfdd8…`); `OWNER_APPROVALS_20261018.md`; this commit |
+| 2026-10-18 | **OWNER RULINGS AND COUNCIL DECISIONS 2026-10-16 to 2026-10-18 (new §7.55), each `IN FORCE` as a rule, none a result.** Depth `HORIZON = 12` and `DESIRE_BOUND = 12` with the owner's three messages verbatim and canon's 5 kept beside it; two records still saying 5 named (one self-corrected, one not). C15 = owner; C4 (by time), C5 (1/20 unpinned, 0 pinned), Q13 (`p/q` in CCE) attributed to the **council**, not the owner. The 2026-10-18 approvals: recipe brain canonical, no more GPU for now, plain-rule valve, fixes A–G. | `OWNER_RULING_DEPTH_12_20261016.md` (sha256 `b22cae04…`); `OWNER_ORDERS_AND_DECISIONS_20261016.md` (sha256 `3ee1004c…`); `OWNER_APPROVALS_20261018.md` (sha256 `db94154a…`); this commit |
+| 2026-10-18 | **L4 SPLIT AND 439 TABULATION RECORDED (new §7.54).** 98 sealed rows (sha256 `e269a448…`) and 99 development rows (sha256 `17cd1983…`), both re-hashed and matching: `REAL`. The rows are synthetic-generator English, not human English. Computed: 265 / 199 / 17 on 481 rows, 233 / 197 / 9 on 439; reasons 148 / 56 / 27 / 16. The baseline row 118 / 321 / 42 and the "+147" and "−59.5 %" lines are typed into `tabulate_439_sdg_baseline.py` (lines 170-173, 209), not computed; 118 is a 439-row figure printed as a 481-row one → `FLAG_FOR_HUMAN_REVIEW`. Option 2 / Option 3 naming conflict recorded. | `cas-synthetic/data/l4_split/`; `docs/working/SDG_439_HEADLINE_TABULATION_20261018.json` (sha256 `8b23905e…`); commit `ec780a34`; this commit |
+| 2026-10-18 | **TWO UNRECORDED GPU JOBS ON THE SIDE BRANCH (new §7.53) — `FLAG_FOR_HUMAN_REVIEW`.** Scribe L4 (commit `84812689`): Tesla T4, 30.95 s, exact match 90.0 %, round trip **64.0 %**, weights 326,230 bytes (sha256 `e36cf3cb…`), model `ENGINEERED-NOT-VALIDATED`; **no ledger line, no owner sign line, no cleanup check, charge `unavailable`**. "Stage v0.7 Lexicon Expansion" (commit `5a7d02f3`): claimed only in a commit message; **no artifact of any kind**; its numbers may not be cited. | `helm/creativity-rpa-valve-v1:scribe_l4_aws_gpu_training/outputs/`; `AWS_COMBINED_ALLOCATION_HISTORY.jsonl` (0 "scribe" lines); this commit |
+| 2026-10-18 | **RB-OH1 MERGED READING RECORDED (new §7.52) — `NOT LICENSED`.** Reader words: FRESH `HYBRID_ROUTING_EARNED`, ORIGINAL `HYBRID_NO_BETTER`, sweep `SWEEP_CALIBRATION_FAILED`, `licensed: false`. On `a_fresh`: A2 448/512 (`175/2`) gated against the GPU MLP's 311/512 (`7775/128`) gated, 421 ungated; three other arms also scored 448. These are the "87.5 % vs 60.74 %" numbers the roadmap credits to the 22x40 brain. GPU job c32: Tesla T4, RUN stage 36.817 s, cap 2.00, hold 2.00 placed, **no closeout**. | `Documents\Codex\2026-10-15\rb_oh1\runs\MERGED.json` (sha256 `f50cc983…`); `gpu_results\out\RUN_SUMMARY.json` (sha256 `6301f9c3…`); this commit |
+| 2026-10-18 | **STAND-IN BRAINS RECORDED (new §7.51) — `ENGINEERED-NOT-VALIDATED`, demos, not the licensed brain.** `helm_brain_22x40.py`: "22" = 22 baking ingredients, "40" = 22 weights + 1 ρ + 17 thresholds; no run id, no score, no use of CAS's real 22 pathways / 28 drives / 40 states. `helm_brain_tks28.py`: same kind of calculator over 28 labelled inputs, side branch only. The roadmap's 87.5 % / 60.74 % attribution to 22x40 is corrected to RB-OH1. | `helm_brain_22x40.py` (sha256 `ef8ccf6c…`); `helm/creativity-rpa-valve-v1:helm_brain_tks28.py` (sha256 `fb1287f2…`); this commit |
+| 2026-10-18 | **PHASE 3 VALVE RECORDED (new §7.50) — `ENGINEERED-NOT-VALIDATED`.** A learned 5-weight logistic aperture sits in the deciding path; its own weights file says `LOCAL_CPU_DRYRUN_FAST`, 2,000 samples — **not** AWS-trained, so the roadmap's v0.4 "AWS GPU trained" is false. The learned part alone leaks 83 of 250 missing-ingredient requests; the plain `G-ABSENT` rule stops all 250. "MUST REMEMBER valve" has no owner source found. Owner ruled a plain-rule valve on 2026-10-18; not yet done. | `tks_meta_valve_weights_v0_4.json` (sha256 `511ebe94…`); `tks_meta_valve_controller.py` (sha256 `7028b447…`); this commit |
+| 2026-10-18 | **END-TO-END PIPELINE AND CONVERSATIONAL LAYER RECORDED (new §7.49) — `ENGINEERED-NOT-VALIDATED`, not "verified live".** `helm_end_to_end_loop.py` computes the round trip at lines 295-296 and never checks it; fills every unmentioned ingredient with `Decimal("10")` at line 421 (and line 168); imports none of the RPM gate, repair performer, D/W/P engine, ASOM or Bias; hard-codes Flour and Water. The tool executor runs `shell=True`; cloud dispatch is a dry-run receipt. Tests written 11 and 5; outputs not recorded. | `helm_end_to_end_loop.py` (sha256 `059b5a59…`, commits `7eb3511a`, `a7dcc6b6`); `helm_agentic_executor.py:384`; this commit |
+| 2026-10-18 | **NINE noetic_council PACKAGES RECORDED (new §7.48) — `ENGINEERED-NOT-VALIDATED`.** cube store 19, prerequisite planner 11, continuity v4 50, D/W/P v2 33, the loop v3 35, return address 27, faculties v2 49, language v3 68, repair performer 16 = **308 tests written** (counted in the files). Recorded outputs only: `cube_store/RESULTS_20261018.md` (19/19), `continuity_build_v4/TEST_OUTPUT.txt` (50/50), `language_v3/MEASUREMENTS.md` + `MEASURE_AFTER.json`, `faculties_v2/REAL_FIT_RESULT.txt`, `repair_performer/ACTOR_RESULT.txt`; the other suites are "authored, output not recorded". Count drift 229 → 245 → "288" (no source) → 308 recorded. Queue rows 15 and 17 still TODO. | `docs/working/noetic_council/`; commits `05210ae3`, `180249a0`, `6cabe709`; this commit |
 | 2026-10-16 | **SECOND ERRATUM to §7.47, correcting the erratum itself: the version gap was recorded but its consequence was left too dark. The three packages were hashed file by file. `FROZEN.precode.json` (the marks and hard gates), `FROZEN.json`, and `r1/merge_r1w1.py` (the only program allowed to emit the verdict) are **byte-identical across v1, v2 and v3**; the only changes are `tests_r1/test_run_r1w1.py` (v1→v2, a Gate B instrument that could never pass) and `t_on_b/t_b.py` (v2→v3, a draw-label guard), plus the version marker and one amendment file each step. **No mark, threshold, floor, gate, arm, world or seed moved, and the scorer never changed.** The re-seals were necessary — an instrument that can never pass burns the attempt, as it did on c34-c — and every change is a repair of a defect in the instrument or the harness, which falls under the owner's standing rule that a test broken by its own instrument gets a retest without asking. So the true finding is narrower than "no authority exists": the coordinator re-sealed correctly and never advanced the approval record to name v2 or v3. Two clean ways forward, owner's pick, with **no new run and no new money** on either: amend the approval record to name each re-seal as it is cut, or keep the current binding and let the retest rule cover instrument repairs. | file-by-file sha256 of `r1_wave1\HELM_R1_W1_20261015`, `…_v2`, `…_v3`; `W1_APPROVAL_RECORD_20261016.md`; `AMENDMENT_I1F_20261016.md`; `AMENDMENT_DRAW_LOOKUP_20261016.md`; this commit |
 | 2026-10-16 | **ERRATUM to §7.47, on the section's own first commit (`60321a14`): four claims in it were falsified by the council's adversarial verification seat, CO-8, against the files the section itself names. (1) "108 members" was **v1's** member count printed beside **v3's** freeze hash; v3's own `PACKAGE_FREEZE.json` reads `member_count_excluding_freeze` **110** with 110 members listed. (2) `3,624fc29` is the **v1** freeze hash and was presented in v3's parenthesis. (3) The money paragraph priced the run at the control record's published `1.536` USD/h; the rate the **package freezes for itself** is **1.5529** USD/h (`RUN_LIMITS_R1W1.json`, window maximum `6.2116`, expected "about 1.9 to 2.4"). Both arithmetic results are now given, each naming its rate: `1.83684790085348` at the frozen rate and `1.816857734375` at the published one. (4) The section's heading said "beat it" without naming synthetic worlds; it now does. CO-8 also found a **governance gap the first draft missed**, now on the page: the owner's approval record binds **v1's bytes** (`limits_of_this_record` names `b7cee315…`/`3624fc29…`, `members_checked_against_freeze` **108**) while **the run executed v3** (`8c55c413…`), so no fresh owner line bound to v3's hash is established. That does not change the reading, which the frozen reader computes from the run's raw output, and it widens no claim. No negative was deleted and no other number in §7.47 changed. | CO-8's report `Documents\Codex\2026-10-16\noetic_loop\seats\CO8_ABOVE_CAUSE.md`; `HELM_R1_W1_20261015_v3\PACKAGE_FREEZE.json`; `RUN_LIMITS_R1W1.json`; `OWNER_APPROVAL_R1_W1_C34_20261016T132012Z.json`; this commit |
 | 2026-10-16 | **HELM-R1 WAVE 1 SCORED (§7.47, job c34-g, AWS): the recipe brain in GB3's slot beat GB3 on the freshly sealed exam — `32` against `9`, and `32` against `17/2` widened; frozen reader `PASS`, headline `R1_BEATS_GB3`, 7 of 7 hard gates and 8 of 8 instrument rows holding, licence `SYNTHETIC_ONLY`, 79 of 79 units exit 0, 132 tests ok. The run's own completion markup reads `COMPLETED_WITH_FAILURES` / exit 1 because the supervisor checked declared outputs at the stage root while the runner keeps them one level down; that receipt and its measured cause are kept, and the defect is on the record for wave 2. Seven attempts, seven 9.50 holds, one reconciliation (0.14); no closeout for c34-g.** Also carries the four results that existed only as staged edits — §7.40 U1b ✅, §7.41 LM-T6 🟧, §7.42 RB-P1 🟥, §7.43 M1 🟥 — three of which the live record already cites. | `Documents\Codex\2026-10-16\r1w1_reader\HELM_R1_W1_20261015\R1_W1_READING.json` (sha256 `9b1dfdd88568012cabbcfa6d00e97c15dee07d445dfa5daff8be185975f4cf3a`); `…\controller_claude_r1w1_c34g\DELIVERABLE_EXTRACT\…\RUN_RECORD.json`; this commit |
