@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3 PACKET SEALED, NOT LAUNCHED (spec sheet 7.66; laptop, 0 USD)
+
+Owner order "wave 3 plan" plus the 2026-10-19 rulings (decoupling-stop adopted, drive loop design, growth unparked). Builder: Claude Code sub-agent.
+
+- Design frozen before code: docs/working/r1_wave3/DESIGN_R1W3.md (27eab7e8, then 2715bebe after amendment D1).
+- 13 switches (wave 2's eight + CUBE_STORE, ATLAS, EYE, CASCADE, DRIVE_LOOP RB-I2), swap arm CASCADE_FIXED_CAP; 16 pairs / 18 pair runs; exams E1, E2, X2 (GB, TB, D34 laptop, CCE, English-16 v3, Faces-16, Cascade, Idle).
+- New live module helm_faces_in.py + helm_faces_lexicon.json (31 rows, each sourced; 0 learned parameters; 16/16 tests).
+- Sealed zip Documents/Codex/2026-10-19/r1_wave3/HELM_R1_W3_20261019_SOURCE_R1W3.zip sha256 2d5b4f0e...; freeze be1b321d...
+- Tests from the sealed zip: 491 passed, 4 AWS-only skipped, 0 failed. Dry run on fixtures: 62 units exit 0; reader INSTRUMENT_ERROR as designed.
+- Found on fixtures, not fixed: the cube store's read path lists absent items and misroutes "on hand" questions (CUBE_STORE may read HARMFUL).
+- NOT_IN_WAVE: RB-I1 faculties design (7.65 clean negative), growth (RB-G8). Proposed cap 3 USD. No hold, no launch.
+
 ## 2026-10-19 PDT - HELM RB-I1c FACULTIES RETEST RAN: all hard gates held, status word INCONCLUSIVE (spec sheet 7.65; job c36 on AWS, 0.70 USD)
 
 Owner order "rerun faculties" (cap 2.00 USD set by the coordinator). Builder-operator: Claude Code sub-agent.

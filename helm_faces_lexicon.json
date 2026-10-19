@@ -1,0 +1,50 @@
+{
+ "schema": "helm.faces-lexicon/1",
+ "scale": {"RISING": "1/4", "PEAK": "1", "WANING": "1/2", "ABSENT": "0", "source": "owner ruling 2026-10-18 (one scale for all three faces), OWNER_APPROVALS_20261018.md"},
+ "sources": {
+  "WISDOM_LADDER": "Reality Engineering, Wisdom ladder Learning 25% -> Knowing 50% -> Understanding 75% -> Mastered 100% (book/superiority_of_tks/MANUSCRIPT.md:13478-13546), placed on the owner's one scale by the coordinator's choice 'Wisdom climbs 0 -> 1/4 -> 1/2 -> 1' (spec sheet 7.62); the English of each row is everyday wording written by the builder (OUR_CONVENTION)",
+  "POWER_EVERYDAY": "everyday kitchen English for an ingredient's strength to do its job, written by the builder (OUR_CONVENTION); stage per the owner's one scale",
+  "PURPOSE_EVERYDAY": "everyday English for what an ingredient or a recipe is FOR (owner ruling 'Desire is Purpose'), written by the builder (OUR_CONVENTION)"
+ },
+ "placeholders": {
+  "{OBJ}": "it | them | this | that | an ingredient word",
+  "{SUBJ}": "optional the/our/my + (an ingredient word | it | they)",
+  "{PROD}": "a product word"
+ },
+ "rows": [
+  {"id": "W1", "face": "WISDOM", "stage": "RISING", "scope": "ingredient", "pattern": "i (?:barely|hardly) know how to use {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W2", "face": "WISDOM", "stage": "RISING", "scope": "ingredient", "pattern": "i(?:'m| am) still learning (?:how )?to use {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W3", "face": "WISDOM", "stage": "RISING", "scope": "ingredient", "pattern": "i(?:'m| am) (?:just|only just) learning (?:how )?to use {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W4", "face": "WISDOM", "stage": "RISING", "scope": "ingredient", "pattern": "i(?:'m| am) new to using {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W5", "face": "WISDOM", "stage": "RISING", "scope": "ingredient", "pattern": "i(?:'m| am) not sure how to use {OBJ}", "negation_ok": true, "source": "WISDOM_LADDER"},
+  {"id": "W6", "face": "WISDOM", "stage": "WANING", "scope": "ingredient", "pattern": "i(?:'m| am) (?:a bit |a little )?rusty with {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W7", "face": "WISDOM", "stage": "WANING", "scope": "ingredient", "pattern": "i(?:'m| am) out of practice with {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W8", "face": "WISDOM", "stage": "PEAK", "scope": "ingredient", "pattern": "i know (?:how to use )?{OBJ} inside out", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W9", "face": "WISDOM", "stage": "PEAK", "scope": "ingredient", "pattern": "i know exactly how to use {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W10", "face": "WISDOM", "stage": "PEAK", "scope": "ingredient", "pattern": "i(?:'ve| have) mastered {OBJ}", "negation_ok": false, "source": "WISDOM_LADDER"},
+  {"id": "W11", "face": "WISDOM", "stage": "ABSENT", "scope": "ingredient", "pattern": "i have no idea how to use {OBJ}", "negation_ok": true, "source": "WISDOM_LADDER"},
+  {"id": "W12", "face": "WISDOM", "stage": "ABSENT", "scope": "ingredient", "pattern": "i (?:don't|do not) know how to use {OBJ}", "negation_ok": true, "source": "WISDOM_LADDER"},
+  {"id": "P1", "face": "POWER", "stage": "WANING", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) getting (?:old|weak|stale)", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P2", "face": "POWER", "stage": "WANING", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) losing (?:its|their) strength", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P3", "face": "POWER", "stage": "WANING", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) past (?:its|their) best", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P4", "face": "POWER", "stage": "RISING", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) (?:only )?just starting to work", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P5", "face": "POWER", "stage": "RISING", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) still waking up", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P6", "face": "POWER", "stage": "ABSENT", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) dead", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P7", "face": "POWER", "stage": "ABSENT", "scope": "ingredient", "pattern": "{SUBJ} (?:has|have|'s) gone bad", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P8", "face": "POWER", "stage": "ABSENT", "scope": "ingredient", "pattern": "{SUBJ} (?:has|have|'s) spoiled", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P9", "face": "POWER", "stage": "PEAK", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) (?:nice and )?fresh", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "P10", "face": "POWER", "stage": "PEAK", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are|'s) (?:still )?at full strength", "negation_ok": false, "source": "POWER_EVERYDAY"},
+  {"id": "U1", "face": "PURPOSE", "stage": "ABSENT", "scope": "ingredient", "pattern": "{SUBJ} (?:isn't|is not|aren't|are not) for (?:the )?{PROD}", "negation_ok": true, "source": "PURPOSE_EVERYDAY"},
+  {"id": "U2", "face": "PURPOSE", "stage": "ABSENT", "scope": "ingredient", "pattern": "i(?:'m| am) saving {OBJ} for something else", "negation_ok": false, "source": "PURPOSE_EVERYDAY"},
+  {"id": "U3", "face": "PURPOSE", "stage": "RISING", "scope": "ingredient", "pattern": "i might use {OBJ} for (?:the )?{PROD}", "negation_ok": false, "source": "PURPOSE_EVERYDAY"},
+  {"id": "U4", "face": "PURPOSE", "stage": "PEAK", "scope": "ingredient", "pattern": "{SUBJ} (?:is|are) (?:meant )?for (?:the )?{PROD}", "negation_ok": false, "source": "PURPOSE_EVERYDAY"},
+  {"id": "R1", "face": "PURPOSE", "stage": "ABSENT", "scope": "recipe", "pattern": "(?:there's|there is) no reason to (?:make|bake) (?:any )?{PROD}", "negation_ok": true, "source": "PURPOSE_EVERYDAY"},
+  {"id": "R2", "face": "PURPOSE", "stage": "ABSENT", "scope": "recipe", "pattern": "nobody (?:needs|wants) (?:any )?{PROD}", "negation_ok": true, "source": "PURPOSE_EVERYDAY"},
+  {"id": "R3", "face": "PURPOSE", "stage": "ABSENT", "scope": "recipe", "pattern": "we (?:don't|do not) need (?:any )?{PROD}", "negation_ok": true, "source": "PURPOSE_EVERYDAY"},
+  {"id": "R4", "face": "PURPOSE", "stage": "RISING", "scope": "recipe", "pattern": "we might (?:make|bake) (?:some )?{PROD}", "negation_ok": false, "source": "PURPOSE_EVERYDAY"},
+  {"id": "R5", "face": "PURPOSE", "stage": "PEAK", "scope": "recipe", "pattern": "we need (?:the |some )?{PROD} for", "negation_ok": false, "source": "PURPOSE_EVERYDAY"}
+ ],
+ "cue_words": ["know", "learning", "learn", "rusty", "practice", "mastered", "expert", "idea", "old", "weak", "stale", "strength", "best", "starting", "waking", "dead", "bad", "spoiled", "fresh", "saving", "reason", "need", "needs", "wants", "meant", "might"],
+ "cue_rule": "a statement clause that names an ingredient, a product or a pronoun AND holds a cue word, but matches no row, is NOT guessed: the reader asks (CLARIFY FACE_UNREAD) and nothing is written",
+ "negation_rule": "a clause holding not / n't / never that matches a row whose negation_ok is false is NOT taken: the reader asks (CLARIFY FACE_NEGATED)"
+}
