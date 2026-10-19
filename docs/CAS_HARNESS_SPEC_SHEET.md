@@ -2352,6 +2352,68 @@ This section records **who decided what**. A ruling is not evidence. Nothing her
 
 **v3 reseal — amendment R1W3-A1 (coordinator, 2026-10-19).** The X2 custodian found the English-16 / Faces-16 text rule unsatisfiable on every seed: the generator's last turn is one of 15 templated follow-up questions, 14 of them in the builder's practice files, and the sealed checker and host stage compared every turn whole. Now the rule checks each item's STATEMENT only (exactly one enumerated follow-up stripped from the end of the last turn; list sha256 `14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5`; every stripped tail recorded). Three new tests (a repeated statement still fails; a tail-only overlap passes; the list hash). Exactly 4 members changed (`r1w3/gen_live.py`, `r1w3/check_x2_format.py`, `tests_r1w3/test_run_r1w3.py`, `tests_r1w3/test_units_w3.py`; `TEST_RECORD_R1W3.md` §5). The generator's item code, `FROZEN_R1W3.json`, the seed rule and every mark are unchanged. Custodian notice: `RESEAL_NOTICE_V3.md`.
 
+### 7.69 HELM-R1 wave 3 SCORED (job c37, AWS, v3 package): the frozen reader returns PASS and licenses its words — 11 parts `EARNED_KEEP`, CCE skin and DRIVE_LOOP `NEUTRAL`, the owner's decoupling stop `DECOUPLING_EARNED`, pairs 7 `ADDITIVE` / 5 `INTERFERENCE` / 0 `SYNERGY` / 4 `CEILING_NOT_READABLE`; claim status `LICENSED` only within `SYNTHETIC_ONLY` and only for the reader's own claim sentence (2026-10-19 PDT, three m6i.xlarge jobs, 0.08 USD)
+
+**Said plainly first.** The licensed recipe brain ran on HELM's own exams. It ran whole, then with one part switched off at a time (13 parts), then with two earned parts off together (16 pairs). The frozen reader says the run is valid: every instrument row and every hard gate held. Eleven parts lost something when switched off (`EARNED_KEEP`). The CCE skin changed nothing, by construction. The drive loop changed nothing on the idle exam (`NEUTRAL`). Plain round-robin did much better there: 107 good items against 31. The owner's decoupling stop beat the old fixed cap on the cascade exam. It used 203 descents against 609, had 64 good chains against 60, and blew no fuse on a solvable chain (the cap blew 4). No pair was `SYNERGY`. Synthetic worlds only.
+
+**Owner's words (v3 sign line, verbatim, sha256 `1606306afcf4351d056aa62df67fe37a158dea1e840c26348e6f1de7f2291d8d`; it is also X2's seed source):** "APPROVE R1W3 v3: wave 3 ablations + pairs, switches RECIPE_MATH/RPM_GATE/LACUNA_CADENCE/RESTART_FALLBACK/CCE_SKIN/TRIAD/ENGLISH_IN/VOICE/CUBE_STORE/ATLAS/EYE/CASCADE/DRIVE_LOOP, exams GateB+TaskB+X2+English16+Faces16+Cascade, marks as W2 + PROPOSED rows, sealed package 152bca2a, one attempt + one plumbing retry, cap $3."
+
+| Item | Value |
+|---|---|
+| Package | `HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip` sha256 `152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362`, freeze `bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310` (205 members, 0 bad); v2 `26b0ef7e…` `VOID_SUPERSEDED_BY_A1` |
+| Governance | amendments R1W3-A1 (`061c5362…`, statement-only text rule) and R1W3-A2 incl. A2.1-c (`e5fcf1c0…`, X2-v2 bands); the operator held the launch because the reader's I9 and I10 read ONE owner line (held note `R1W3_C37_LAUNCH_HELD_READER_SEED_SOURCE_20261019T1020Z.md`); coordinator option B rebuilt X2 from the v3 line; X2-v1 `VOID_UNUSED` (never shipped or scored) |
+| Fresh exam X2-v2 | sealed by a separate custodian (`MANIFEST_X2.json` `a31793f7c5da94a75772979c3b0b11f38b76bb6ab689bf9ea21619218c7d2c51`, `X2_PINS.json` `38b0171f…`); v3 receiver check `all_pass: true` 9 of 9 |
+| Helpers | c37a `i-079f8d9c8f5adbd0d` 267.8 s (X2-v1, void); c37b `i-0e368078bc5d15c49` 289.5 s, step 1 `PASS`, I5 `OK`, receipt `a2278311…` |
+| Host c37 | `i-09b4e033606bbfe96`, m6i.xlarge, 2-CPU slice, 14 GiB; 15:29:00Z–15:39:47Z; host 646.8 s; stage 387.8 s; one scored attempt, 0 plumbing retries |
+| Tests on host | wave 1 carried 128 OK; wave 2 units 34 OK (9 skipped); wave 3 45 OK (1 skipped, laptop-only); units 106 of 106 exit 0; instrument problems 0 |
+| Readings | host `R1_W3_HOST.json` `e2bf6d4c…`; depth (custodian, laptop) `D34_READING.json` `0753030e…`; reading `R1_W3_READING.json` `1cc7dba8236abbfae2ea2b03a7d62ad79134a3f38e6ec244e2131764dc31b336`: `test_verdict` PASS, `words_licensed` true, I1–I10 all hold, H1–H14 all hold |
+| Charge | 0.08 USD (c37 0.04 + c37b 0.02 + c37a 0.02, list price rounded up per job; conservative 0.46 USD/h rate 0.17, shown not charged); ledger 114.11 → 111.19 of 200.00 |
+| Cleanup | all three jobs `VERIFIED` (controller, independent check, direct read-only observation) |
+
+**The 13 words (as computed):**
+- RECIPE_MATH `EARNED_KEEP`: Task B c25 and X2, sum 32 vs 8.
+- RPM_GATE `EARNED_KEEP`: WIN on E1, X2 Gate B, c25 and X2 Task B; TIE on depth. Pooled wrong 32 vs 56 on Gate B, 0 vs 709 on Task B.
+- LACUNA_CADENCE `EARNED_KEEP`: WIN on both Gate B exams; TIE on both Task B exams.
+- RESTART_FALLBACK `EARNED_KEEP`: depth X2 D median 184 on d3 and 248 on d4. With it off: 88 and 0 right of 512.
+- CCE_SKIN `NEUTRAL`: by construction.
+- TRIAD `EARNED_KEEP`: Faces-16 FULL 12 / 1 / 3 (right / wrong / undetermined) vs −TRIAD 4 / 8 / 4; cascade WIN.
+- ENGLISH_IN `EARNED_KEEP`: English-16 16 / 0 / 0 vs 4 / 0 / 12.
+- VOICE `EARNED_KEEP`: plain replies 16 vs 9 on English-16, 16 vs 7 on Faces-16.
+- CUBE_STORE `EARNED_KEEP`: cascade 64 vs 56 good; English-16 16 vs 13 right.
+- ATLAS `EARNED_KEEP`: cascade 64 vs 56.
+- EYE `EARNED_KEEP`: cascade 64 vs 56.
+- CASCADE `EARNED_KEEP`: cascade 64 vs 36 good (28 wrong when flat).
+- DRIVE_LOOP `NEUTRAL`: idle 31 good both ways; round-robin 107.
+
+**Pairs (L = loss; E_sum = L_a + L_b):**
+- `INTERFERENCE`: ATLAS×CASCADE, CASCADE×CUBE_STORE, CASCADE×EYE, CASCADE×TRIAD (28 + 8 = 36 expected, 28 lost); CUBE_STORE×EYE (8 + 8 = 16 expected, 8 lost).
+- `ADDITIVE`: ATLAS×CUBE_STORE, ATLAS×EYE, ATLAS×TRIAD, CUBE_STORE×TRIAD, EYE×TRIAD (8 + 8 = 16, 16 lost); CUBE_STORE×VOICE (7 + 3 = 10, 10 lost); LACUNA_CADENCE×RPM_GATE (0 + 0 = 0, 0 lost, on E1 and X2 Gate B).
+- `CEILING_NOT_READABLE` (the two losses exceed the exam's room): CUBE_STORE×ENGLISH_IN, ENGLISH_IN×TRIAD, ENGLISH_IN×VOICE, TRIAD×VOICE.
+
+**Cascade stop reasons (counted by the operator from the host records; not reader words):**
+- FULL: stops `DECOUPLED` 238 and `GROUND` 217. Descents 203 (BINDING 177, ABSORBED_NOT_CONSOLIDATED 18, FACE_NOT_PEAK 8). `FUSE` 4 (CYCLE). `BLOCK_UNRESOLVED` 0.
+- CASCADE_FIXED_CAP: `GROUND` 943. Descents 609. `FUSE` 8 (4 CYCLE, 4 DEPTH on solvable C8_DEEP6 chains).
+
+**FULL against T (frozen, not rerun):** Gate B c21 32 vs 30; Task B c25 sum 32 vs 7 (T+ 19/2). X2: Gate B 16 + 16, Task B 32 (T not rerun).
+
+**Reported apart:**
+- The PROPOSED mark FULL_FACES16 reads false: 12 right, 1 wrong, 3 undetermined; the mark needs 0 wrong.
+- `skin_form` reads `SKIN_FORM_BROKEN`: 0 questions, 0 outputs said.
+
+- **Claim sentence (the reading's own, verbatim):** "On synthetic worlds only, with one part switched off at a time (and, for earned parts, two at a time) and everything else held equal, HELM's licensed recipe brain and its live English path were scored on HELM's own exams; each part's word says whether switching it off lost (EARNED_KEEP), changed nothing (NEUTRAL), helped (HARMFUL) or was never on the exam's path (NOT_EXERCISED); the DECOUPLING word compares the owner's decoupling-stop rule with the old fixed cap on the cascade exam; each read pair's word says whether losing both parts cost more than the two losses added (SYNERGY), about the same (ADDITIVE) or less (INTERFERENCE)."
+- **`NOT LICENSED`:** anything outside synthetic worlds; that the voice sounds natural to people; that real reagents carry a triad; that the faces reader understands English beyond its lexicon; that the cascade worlds are the licensed brain's learned book; growth (RB-G8 line); statistical superiority (one run); any claim about T beyond its frozen c21 and c27 numbers; cooperation for any pair not run or not read; real kitchens or real data.
+- **Open:**
+  - The drive loop lost to plain round-robin on idle (31 vs 107).
+  - Faces-16 has 1 wrong.
+  - The CCE skin's form (`SKIN_FORM_BROKEN`).
+  - The 4 `CEILING_NOT_READABLE` pairs need an exam with more room.
+- **Operations note:** the windowing script's stale-number check matched "3000" inside the sources-manifest sha256 (a false positive). The first widen refused with nothing changed; the folder was rebuilt; the check now ignores 64-hex digests.
+- **Artifacts:**
+  - Results: `Documents\Codex\2026-10-19\r1_wave3\run_c37_r1w3_20261019\` (`RUN_RESULT_R1W3_C37.md`, `R1_W3_READING.json`, `MERGE_INPUT_R1W3.json` `f094d40e…`, host reading, run record, logs, `job_record\`).
+  - Controllers: `controller_claude_r1w3_c37\`, `controller_claude_r1w3x2v2w_c37b\`, `controller_claude_r1w3x2w_c37a\`.
+  - Ledger addenda: `BUDGET_RECONCILIATION_ADDENDUM_CLAUDE_R1W3_C37_20261019T154235Z.json` (`465bd9b0…`); hold rebind `BUDGET_RESERVATION_REBIND_V3_R1_W3_C37.json` (`4f5e8440…`).
+  - Backup: `D:\tksCAS-archive\helm_r1w3_c37_20261019\` (1,268 files, three sha256 confirmations, 0 mismatches; manifest `e4a83148…`).
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -2644,6 +2706,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-19 | **HELM-R1 WAVE 3 SCORED (new §7.69) — reader PASS, words licensed, `SYNTHETIC_ONLY`.** Job c37 on the v3 package (`152bca2a…`, freeze `bd06f324…`), one m6i.xlarge, host 646.8 s, 106 of 106 units, 0 retries; helpers c37a (X2-v1, void) and c37b (X2-v2). 11 `EARNED_KEEP` (RECIPE_MATH, RPM_GATE, LACUNA_CADENCE, RESTART_FALLBACK, TRIAD, ENGLISH_IN, VOICE, CUBE_STORE, ATLAS, EYE, CASCADE); CCE_SKIN and DRIVE_LOOP `NEUTRAL` (idle 31 good both ways; round-robin 107); `DECOUPLING_EARNED` (descents 203 vs 609, good 64 vs 60, fuses on solvable 0 vs 4); pairs 7 `ADDITIVE`, 5 `INTERFERENCE`, 0 `SYNERGY`, 4 `CEILING_NOT_READABLE`. PROPOSED mark FULL_FACES16 false (12 / 1 / 3). Governance: amendments R1W3-A1, R1W3-A2; the reader reads one owner line for I9 and I10, so X2 was rebuilt from the owner's v3 line (option B). Charge 0.08 USD; ledger 111.19 of 200; cleanup VERIFIED. | `R1_W3_READING.json` (sha256 `1cc7dba8…`); `Documents\Codex\2026-10-19\r1_wave3\run_c37_r1w3_20261019\RUN_RESULT_R1W3_C37.md`; backup `D:\tksCAS-archive\helm_r1w3_c37_20261019\`; this commit |
 | 2026-10-19 | **§7.66 amended — wave 3 RESEALED as v3 (amendment R1W3-A1).** The English-16 / Faces-16 text rule now checks each item's statement only (one of 15 enumerated follow-up questions stripped; list sha256 `14f5cb49…`; tails recorded); it was unsatisfiable on every seed. v2 `26b0ef7e…` (signed) `VOID_SUPERSEDED_BY_A1`, the owner must re-sign; v3 zip `152bca2a…`, freeze `bd06f324…`; 4 members changed; tests from the v3 seal 496 passed, 4 AWS-only skipped, 0 failed. | `docs/working/r1_wave3/TEST_RECORD_R1W3.md` §5, `RESEAL_NOTICE_V3.md` |
 | 2026-10-19 | **RB-G9 CURIOSITY GROWTH, INSTRUMENT RETEST RAN (new §7.68) — `CURIOSITY_DID_NOT_EARN_KEEP`, FAIL; growth claim stays `NOT LICENSED`.** Only the instrument changed: IC1 the job check fits the unit on a copy and counts its real rows (never the test fits' promise); IC2 depth family dropped. On `a` the promise was 199, the copy 22 rows for +320 parameters → refused; no control fired (M3 TRUE). M1 TRUE 84/84; M2 FALSE (a_approx 81.25 vs 87.50); M4 FALSE (only scale_leak); M5 TRUE. Planted scores identical to RB-G8. 8 laptop parts, $0. | `Documents\Codex\2026-10-19\rb_g9\runs\MERGED.json` (sha256 `8f471a95…`); FROZEN.precode `69d97e99…`; manifest `ecbea9e6…`; this commit |
 | 2026-10-19 | **RB-G8 GROWTH AT THE POINT OF CURIOSITY RAN (new §7.67) — `GREW_WRONG_KIND`, FAIL; growth claim stays `NOT LICENSED`.** Curiosity reader on F2 (one gap at a time; probe decides, sign ranks; job check before growth). M1 TRUE 85/85; M2 FALSE (a_approx 81.25 vs 87.50, TaskB_d3 39.06 vs 73.05); M3 FALSE (1 fired K3 on the `a` control, rolled back by V8, 22 rows for 320 parameters); M4 FALSE (only scale_leak beats both baselines); M5 TRUE. LEDGER_G6 froze again on a_approx (9.18) and a2 (47.07); curiosity grew both (81.25, 72.46). RB-G7 recorded `NEVER_RAN`. 9 laptop parts, $0. | `Documents\Codex\2026-10-19\rb_g8\runs\MERGED.json` (sha256 `901e1459…`); FROZEN.precode `53ab4508…`; manifest `2346ddfe…`; this commit |

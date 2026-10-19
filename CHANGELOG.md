@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3 SCORED (job c37): reader PASS, words licensed, SYNTHETIC_ONLY (spec sheet 7.69; three m6i.xlarge jobs, 0.08 USD)
+
+Owner v3 sign line (sha256 1606306a...), package v3 152bca2a... (freeze bd06f324...). Launch operator: Claude Code sub-agent. Amendments R1W3-A1 and R1W3-A2 (incl. A2.1-c); coordinator option B after the operator's held note (the reader reads one owner line for I9 and I10, so X2 was rebuilt from the v3 line; X2-v1 VOID_UNUSED).
+
+- Jobs: helper c37a (X2-v1, void, 267.8 s), helper c37b (X2-v2, 289.5 s, I5 OK), scored c37 (i-09b4e033606bbfe96, host 646.8 s, stage 387.8 s, 106 of 106 units, 0 plumbing retries).
+- Reading R1_W3_READING.json 1cc7dba8...: PASS; I1-I10 and H1-H14 all hold. Words: 11 EARNED_KEEP; CCE_SKIN NEUTRAL; DRIVE_LOOP NEUTRAL (idle 31 good both ways; round-robin 107). DECOUPLING_EARNED (descents 203 vs 609; good 64 vs 60; fuses on solvable 0 vs 4).
+- Pairs: 7 ADDITIVE, 5 INTERFERENCE (every CASCADE pair plus CUBE_STORE x EYE), 0 SYNERGY, 4 CEILING_NOT_READABLE (the English pairs).
+- Reported apart: PROPOSED mark FULL_FACES16 false (12 right, 1 wrong, 3 undetermined); skin_form SKIN_FORM_BROKEN.
+- Charge 0.08 USD; ledger 111.19 of 200; cleanup VERIFIED for all three jobs; backup D:/tksCAS-archive/helm_r1w3_c37_20261019/ (1,268 files, three hash passes, 0 mismatches).
+- Failed approach logged: the windowing script's stale-number check matched "3000" inside a sha256 (false positive); fixed to ignore 64-hex digests.
+
 ## 2026-10-19 PDT - RB-G9 curiosity growth, instrument retest RAN: CURIOSITY_DID_NOT_EARN_KEEP, FAIL (spec sheet 7.68; laptop MSI, 8 parts, 0 USD)
 
 Coordinator decisions (instrument fixes): (1) the job check measures a grown copy's real rows; (2) drop the depth family; (3) everything else frozen as RB-G8. Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json 69d97e99...).
