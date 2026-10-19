@@ -1,0 +1,663 @@
+{
+ "attempts": {
+  "plumbing_retry": 1,
+  "scored": 1
+ },
+ "cascade_rule": {
+  "decoupling_margin": "1/20 (LM-T6 frozen)",
+  "fixed_cap_arm_cap": 5,
+  "fuse_horizon": 12,
+  "stop_only_if": [
+   "ABSORBED: stored(c)/a_c >= (1 + 1/20) * Y_T",
+   "CONSOLIDATED: COVERED cube with a passing receipt",
+   "TRIAD on: every face of every ground cell under it is Peak"
+  ],
+  "where_each_number_applies": "HORIZON 12 = the fuse of the live rule (FULL and every one-off arm); canon 5 = the cap of the CASCADE_FIXED_CAP comparison arm only; DESIRE_BOUND 12 untouched"
+ },
+ "cascade_settings": {
+  "-ATLAS": {
+   "atlas": false,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-ATLAS-CUBE_STORE": {
+   "atlas": false,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "PLAIN",
+   "triad": true
+  },
+  "-ATLAS-TRIAD": {
+   "atlas": false,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "CUBE",
+   "triad": false
+  },
+  "-CASCADE": {
+   "atlas": true,
+   "cascade": "NONE",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-CASCADE-ATLAS": {
+   "atlas": false,
+   "cascade": "NONE",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-CASCADE-CUBE_STORE": {
+   "atlas": true,
+   "cascade": "NONE",
+   "eye": true,
+   "store": "PLAIN",
+   "triad": true
+  },
+  "-CASCADE-EYE": {
+   "atlas": true,
+   "cascade": "NONE",
+   "eye": false,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-CASCADE-TRIAD": {
+   "atlas": true,
+   "cascade": "NONE",
+   "eye": true,
+   "store": "CUBE",
+   "triad": false
+  },
+  "-CUBE_STORE": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "PLAIN",
+   "triad": true
+  },
+  "-CUBE_STORE-TRIAD": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "PLAIN",
+   "triad": false
+  },
+  "-EYE": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": false,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-EYE-ATLAS": {
+   "atlas": false,
+   "cascade": "DECOUPLING",
+   "eye": false,
+   "store": "CUBE",
+   "triad": true
+  },
+  "-EYE-CUBE_STORE": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": false,
+   "store": "PLAIN",
+   "triad": true
+  },
+  "-EYE-TRIAD": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": false,
+   "store": "CUBE",
+   "triad": false
+  },
+  "-TRIAD": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "CUBE",
+   "triad": false
+  },
+  "CASCADE_FIXED_CAP": {
+   "atlas": true,
+   "cascade": "FIXED_CAP",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  },
+  "FULL": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  },
+  "FULL_REPLAY": {
+   "atlas": true,
+   "cascade": "DECOUPLING",
+   "eye": true,
+   "store": "CUBE",
+   "triad": true
+  }
+ },
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "comparisons": {
+  "ATLAS": {
+   "X2_CASC": "GOOD/WRONG rule, margin 8"
+  },
+  "CASCADE": {
+   "X2_CASC": "GOOD/WRONG rule, margin 8"
+  },
+  "CUBE_STORE": {
+   "X2_CASC": "GOOD/WRONG rule, margin 8",
+   "X2_E16": "RIGHT/WRONG rule, margin 2"
+  },
+  "DRIVE_LOOP": {
+   "X2_IDLE": "GOOD/WRONG rule, margin 1/8 of the item total"
+  },
+  "ENGLISH_IN": {
+   "X2_F16": "RIGHT/WRONG rule, margin 2"
+  },
+  "EYE": {
+   "X2_CASC": "GOOD/WRONG rule, margin 8"
+  },
+  "TRIAD": {
+   "X2_CASC": "GOOD/WRONG rule, margin 8",
+   "X2_E16": "TIE when H8's triad-at-Peak identity holds",
+   "X2_F16": "RIGHT/WRONG rule, margin 2"
+  },
+  "VOICE": {
+   "X2_F16": "PLAIN / FACT_KEPT rule, margin 2"
+  },
+  "carried": "wave 2's own r1w2/merge_r1w2.comparisons on the carried view (E1, E2, X2-GB, X2-TB, X2-D34, X2-CCE, and ENGLISH_IN / VOICE on X2-E16), verbatim",
+  "rule_shape": "WIN if FULL >= off + margin and WRONG(FULL) <= WRONG(off); LOSS if off >= FULL + margin or WRONG(FULL) >= WRONG(off) + margin; else TIE (wave 2's ENGLISH_IN rule shape)"
+ },
+ "decoupling_rule": {
+  "CASC_1": "FULL fires the fuse on no solvable chain (C1-C6, C8)",
+  "CASC_2": "FULL finds and repairs every C2 planted fault (LM-T6's frozen A8 rule, carried)",
+  "CASC_3": "on C1 + C3, FULL RIGHT with strictly fewer descents than FIXED_CAP on >= 1/2, and never more descents on any solvable chain except C8",
+  "word": "FUSE_MISFIRE if not CASC_1; DECOUPLING_STOPPED_EARLY if not CASC_2 or a FULL stop turned a FIXED_CAP-RIGHT chain WRONG; DECOUPLING_NO_SAVING if not CASC_3; else DECOUPLING_EARNED"
+ },
+ "design": {
+  "file": "docs/working/r1_wave3/DESIGN_R1W3.md",
+  "sha256": {
+   "after_amendment_D1": "2715bebeb4a8af1e9e836aa3c3aea083dff21ab8f68f1d9c6d8f500829b4f5f6",
+   "first_freeze": "27eab7e87448d6b303c1a3364c2d219edffe7475ab5d0b82cd4ea3cdeda9df77"
+  }
+ },
+ "hard_gates": [
+  "H1-H8 wave 2 verbatim (H8 adds: the voice changes no Faces-16 answer)",
+  "H9 cascade clean answers",
+  "H10 cascade no invention",
+  "H11 replay of Cascade, Faces-16, Idle",
+  "H12 the eye never writes knowledge",
+  "H13 atlas: every return checked, no attack accepted",
+  "H14 drive loop cut in conversation (no tick in an awake window)"
+ ],
+ "instrument_rows": [
+  "I1 data identity (X2 pins, seal record, receiver check, packages)",
+  "I2 T frozen identity",
+  "I3 reproduction (c23, c26, depth D00)",
+  "I4 parameter counts (incl. 0 learned for triad, faces reader, cascade, drive loop)",
+  "I5 X2 Gate B regeneration (torch)",
+  "I6 completeness",
+  "I7 laptop reading",
+  "I8 proven floors",
+  "I9 governance (R1W3 approval binds this zip)",
+  "I10 X2 band rule (PROPOSED)"
+ ],
+ "label": "R1W3",
+ "live_settings": {
+  "E16": {
+   "-CUBE_STORE": {
+    "CUBE_STORE": false,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "-ENGLISH_IN": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": false,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "-ENGLISH_IN-CUBE_STORE": {
+    "CUBE_STORE": false,
+    "ENGLISH_IN": false,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "-ENGLISH_IN-VOICE": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": false,
+    "TRIAD": true,
+    "VOICE": false
+   },
+   "-TRIAD": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": false,
+    "VOICE": true
+   },
+   "-VOICE": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": false
+   },
+   "-VOICE-CUBE_STORE": {
+    "CUBE_STORE": false,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": false
+   },
+   "FULL": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "FULL_REPLAY": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": true
+   }
+  },
+  "F16": {
+   "-ENGLISH_IN": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": false,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "-ENGLISH_IN-TRIAD": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": false,
+    "TRIAD": false,
+    "VOICE": true
+   },
+   "-ENGLISH_IN-VOICE": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": false,
+    "TRIAD": true,
+    "VOICE": false
+   },
+   "-TRIAD": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": false,
+    "VOICE": true
+   },
+   "-TRIAD-VOICE": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": false,
+    "VOICE": false
+   },
+   "-VOICE": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": false
+   },
+   "FULL": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": true
+   },
+   "FULL_REPLAY": {
+    "CUBE_STORE": true,
+    "ENGLISH_IN": true,
+    "TRIAD": true,
+    "VOICE": true
+   }
+  }
+ },
+ "margins": {
+  "carried": {
+   "BAND": 6,
+   "DEPTH_MARGIN": 16,
+   "MARGIN_E16": 2,
+   "MARGIN_GB_HOLD": 1,
+   "MARGIN_GB_PANEL": 2,
+   "MARGIN_PLAIN": 2,
+   "MARGIN_TB": 4
+  },
+  "proposed_w3": {
+   "CASC3_FRACTION": "1/2 of C1 + C3",
+   "IDLE_MARGIN_RATIO": "1/8 of the X2-IDLE item total",
+   "MARGIN_CASC": 8,
+   "MARGIN_F16": 2,
+   "PAIR_MARGIN_RATIO": "1/8 of the pair metric's denominator"
+  }
+ },
+ "marks_reported": [
+  "wave 2's FULL marks (Gate B c21 hold, Task B beats T's frozen c27 sums, X2 rows, English-16 RIGHT >= 10 and WRONG = 0)",
+  "FULL_FACES16: RIGHT >= 10 and WRONG = 0 (PROPOSED)",
+  "DECOUPLING (CASC-1/2/3)"
+ ],
+ "neighbours": {
+  "gb3_zip_sha256": "ff4de17269ba6fc9a6c4db1c6638ee4a973226bd2cda16c05723cf42606d7c50",
+  "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+  "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+  "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+  "wave2_reading_sha256": "27f2f504f92e66ebd1b3eb968d5eb4495d6fe9420514ebaf159eec2b361e770c",
+  "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5"
+ },
+ "not_in_wave": {
+  "CCE_SKIN pairs": "the skin is identical by construction (H5)",
+  "FACULTIES / RB-I1 drive design (as its own switch)": "RB-I1c (spec sheet 7.65) ran cleanly and earned no word (INCONCLUSIVE; a clean negative): the old design gets no switch. The owner's new drive loop (RB-I2) is a different design and has its own switch, DRIVE_LOOP",
+  "GROWTH": "unparked by the owner but kept OUT of wave 3 (it changes parameter counts and would confound the ablations); separate line RB-G8 on the laptop first",
+  "RECIPE_MATH x any": "with recipe math off there is no recipe yield for the gate or the cadence to act on: the pair is not defined",
+  "Task B pairs, depth pairs": "wave 1's Task B gate-off and the depth arms are marked copies of sealed wave-1 code; a combined arm needs a new copy of sealed code (a later build)"
+ },
+ "owner_words": {
+  "order": "wave 3 plan",
+  "rulings_2026_10_19_drive_loop_growth": "Unpark growth; and I think we the drive loop was HELM'S point of attention within a geodesic simplex of the 7 foundations which are only categories of correlated subject matters whether unresolved cascades of DWP, And or ASOM of a misaligned BIAS the 7 foundation were to be randomly mixed matched and pair amongst the 7 cas faculties",
+  "rulings_2026_10_19_early": "OH YEAH YES I DO LIKE THE DECOUPLING-STOP RULE YES YES VERY GOOD. NO NO PLEASE KEEP \"BUILT TOGETHER\" I LIKE THOSE IDEAS",
+  "source": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md (sha256 at last reading 40e944f576ca148d821163632a7b3dd4d9a2dbb96193c8b8eff8bd4f4050fffc)"
+ },
+ "pair_rule": {
+  "across_exams": "INTERFERENCE if any; else SYNERGY if any; else ADDITIVE if any; else CEILING_NOT_READABLE",
+  "losses": "L(a) = M(FULL) - M(-a); L(ab) = M(FULL) - M(-a-b); E = L(a) + L(b); room R = M(FULL)",
+  "metric": {
+   "Cascade": "GOOD (of 64)",
+   "E16 / F16": "RIGHT with a PLAIN reply (of 16)",
+   "Gate B": "panel-1 plain right + new right (of 32)"
+  },
+  "read_only_if": "both parts' wave-3 words are EARNED_KEEP; otherwise PAIR_NOT_READ (numbers kept)",
+  "word_per_exam": "CEILING_NOT_READABLE if E > R - margin; SYNERGY if L(ab) >= E + margin; INTERFERENCE if L(ab) <= E - margin; else ADDITIVE"
+ },
+ "plan": {
+  "exams": [
+   "E1_GB_C21",
+   "E2_TB_C25",
+   "X2_GB",
+   "X2_TB",
+   "X2_D34",
+   "X2_CCE",
+   "X2_E16",
+   "X2_F16",
+   "X2_CASC",
+   "X2_IDLE"
+  ],
+  "exercised": {
+   "E1_GB_C21": [
+    "RECIPE_MATH",
+    "RPM_GATE",
+    "LACUNA_CADENCE"
+   ],
+   "E2_TB_C25": [
+    "RECIPE_MATH",
+    "RPM_GATE",
+    "LACUNA_CADENCE"
+   ],
+   "X2_CASC": [
+    "CASCADE",
+    "EYE",
+    "ATLAS",
+    "CUBE_STORE",
+    "TRIAD"
+   ],
+   "X2_CCE": [
+    "CCE_SKIN"
+   ],
+   "X2_D34": [
+    "RPM_GATE",
+    "RESTART_FALLBACK"
+   ],
+   "X2_E16": [
+    "ENGLISH_IN",
+    "VOICE",
+    "TRIAD",
+    "CUBE_STORE"
+   ],
+   "X2_F16": [
+    "TRIAD",
+    "ENGLISH_IN",
+    "VOICE"
+   ],
+   "X2_GB": [
+    "RECIPE_MATH",
+    "RPM_GATE",
+    "LACUNA_CADENCE"
+   ],
+   "X2_IDLE": [
+    "DRIVE_LOOP"
+   ],
+   "X2_TB": [
+    "RECIPE_MATH",
+    "RPM_GATE",
+    "LACUNA_CADENCE"
+   ]
+  },
+  "not_exercised_notes": {
+   "DRIVE_LOOP": "only X2-IDLE has idle sessions with a backlog; no other switch is exercised there, so no pair",
+   "EYE": "AWAKE on English-16 and Faces-16 (a user turn): the eye is off there in every arm (U2 default); it acts only while IDLE (Cascade chains)",
+   "TRIAD": "on English-16 no face is stated: the triad at Peak must be the identity (H8); the comparison is TIE by construction"
+  },
+  "not_in_wave": {
+   "CCE_SKIN pairs": "the skin is identical by construction (H5)",
+   "FACULTIES / RB-I1 drive design (as its own switch)": "RB-I1c (spec sheet 7.65) ran cleanly and earned no word (INCONCLUSIVE; a clean negative): the old design gets no switch. The owner's new drive loop (RB-I2) is a different design and has its own switch, DRIVE_LOOP",
+   "GROWTH": "unparked by the owner but kept OUT of wave 3 (it changes parameter counts and would confound the ablations); separate line RB-G8 on the laptop first",
+   "RECIPE_MATH x any": "with recipe math off there is no recipe yield for the gate or the cadence to act on: the pair is not defined",
+   "Task B pairs, depth pairs": "wave 1's Task B gate-off and the depth arms are marked copies of sealed wave-1 code; a combined arm needs a new copy of sealed code (a later build)"
+  },
+  "pair_count": 16,
+  "pair_runs": 18,
+  "pairs": [
+   [
+    "ATLAS",
+    "CASCADE"
+   ],
+   [
+    "ATLAS",
+    "CUBE_STORE"
+   ],
+   [
+    "ATLAS",
+    "EYE"
+   ],
+   [
+    "ATLAS",
+    "TRIAD"
+   ],
+   [
+    "CASCADE",
+    "CUBE_STORE"
+   ],
+   [
+    "CASCADE",
+    "EYE"
+   ],
+   [
+    "CASCADE",
+    "TRIAD"
+   ],
+   [
+    "CUBE_STORE",
+    "ENGLISH_IN"
+   ],
+   [
+    "CUBE_STORE",
+    "EYE"
+   ],
+   [
+    "CUBE_STORE",
+    "TRIAD"
+   ],
+   [
+    "CUBE_STORE",
+    "VOICE"
+   ],
+   [
+    "ENGLISH_IN",
+    "TRIAD"
+   ],
+   [
+    "ENGLISH_IN",
+    "VOICE"
+   ],
+   [
+    "EYE",
+    "TRIAD"
+   ],
+   [
+    "LACUNA_CADENCE",
+    "RPM_GATE"
+   ],
+   [
+    "TRIAD",
+    "VOICE"
+   ]
+  ],
+  "single_off_arms": 13,
+  "swap_arms": [
+   "CASCADE_FIXED_CAP"
+  ],
+  "switches": [
+   "RECIPE_MATH",
+   "RPM_GATE",
+   "LACUNA_CADENCE",
+   "RESTART_FALLBACK",
+   "CCE_SKIN",
+   "TRIAD",
+   "ENGLISH_IN",
+   "VOICE",
+   "CUBE_STORE",
+   "ATLAS",
+   "EYE",
+   "CASCADE",
+   "DRIVE_LOOP"
+  ],
+  "units_new_exams": {
+   "X2_CASC": [
+    "-ATLAS",
+    "-ATLAS-CUBE_STORE",
+    "-ATLAS-TRIAD",
+    "-CASCADE",
+    "-CASCADE-ATLAS",
+    "-CASCADE-CUBE_STORE",
+    "-CASCADE-EYE",
+    "-CASCADE-TRIAD",
+    "-CUBE_STORE",
+    "-CUBE_STORE-TRIAD",
+    "-EYE",
+    "-EYE-ATLAS",
+    "-EYE-CUBE_STORE",
+    "-EYE-TRIAD",
+    "-TRIAD",
+    "CASCADE_FIXED_CAP",
+    "FULL",
+    "FULL_REPLAY"
+   ],
+   "X2_E16": [
+    "-CUBE_STORE",
+    "-ENGLISH_IN",
+    "-ENGLISH_IN-CUBE_STORE",
+    "-ENGLISH_IN-VOICE",
+    "-TRIAD",
+    "-VOICE",
+    "-VOICE-CUBE_STORE",
+    "FULL",
+    "FULL_REPLAY"
+   ],
+   "X2_F16": [
+    "-ENGLISH_IN",
+    "-ENGLISH_IN-TRIAD",
+    "-ENGLISH_IN-VOICE",
+    "-TRIAD",
+    "-TRIAD-VOICE",
+    "-VOICE",
+    "FULL",
+    "FULL_REPLAY"
+   ],
+   "X2_IDLE": [
+    "-DRIVE_LOOP",
+    "FULL",
+    "FULL_REPLAY"
+   ]
+  }
+ },
+ "rb_i1c_at_freeze": {
+  "consequence": "the OLD faculties / drive design (RB-I1) gets NO switch: NOT_IN_WAVE, reason = RB-I1c clean negative (A3 beat A6 on 0 of 6 families; pull-sampling and geodesic starved drives more than plain greedy). DRIVE_LOOP (RB-I2) is a DIFFERENT design (owner 2026-10-19: unresolved items filed per Foundation, seeded Foundation x faculty pairing, cut in conversation) and gets its switch, with mechanism-free baselines and RB-I1c cited as the prior negative it must beat.",
+  "merged_marks_sha256": "cb7002756c8a7b0318d9a456f855f220dd12ede5d59ca045b702d9c62d192947",
+  "reported": true,
+  "run_result": "Documents/Codex/2026-10-19/rb_i1c/run_c36/RUN_RESULT_RB_I1C.md",
+  "run_result_sha256": "f717223d6babd5b743c3d0d455dfa05a7611827b49f133ffdb326bd790d24c44",
+  "spec_sheet": "7.65 (PR #353 merged)",
+  "status_words": [
+   "INCONCLUSIVE"
+  ],
+  "test_verdict": "HARD_GATES_PASS"
+ },
+ "schema": "helm.r1w3.frozen/1",
+ "seed_bands": {
+  "CASC": {
+   "hi": 1813000000,
+   "k": "k2",
+   "lo": 1812000001,
+   "slots": 1000000
+  },
+  "D34": {
+   "hi": 1743999999,
+   "k": "k3",
+   "lo": 1654000000,
+   "rule": "X0 depth band + 4,000,000",
+   "slot": 2000000,
+   "slots": 45
+  },
+  "E16": {
+   "hi": 1809000000,
+   "k": "k4",
+   "lo": 1808000001,
+   "slots": 1000000
+  },
+  "F16": {
+   "hi": 1811000000,
+   "k": "k1",
+   "lo": 1810000001,
+   "slots": 1000000
+  },
+  "GB": {
+   "hi": 1104000000,
+   "k": "k1",
+   "lo": 1004000001,
+   "rule": "X0 Gate B band + 4,000,000",
+   "slot": 100000,
+   "slots": 1000
+  },
+  "IDLE": {
+   "hi": 1815000000,
+   "k": "k3",
+   "lo": 1814000001,
+   "slots": 1000000
+  },
+  "LANG": {
+   "hi": 1807000000,
+   "k": "k4",
+   "lo": 1806000001,
+   "slots": 1000000
+  },
+  "TB": {
+   "d_lo": 5970,
+   "k": "k2",
+   "rule": "X0 draw band + 20 draws",
+   "slots": 33,
+   "window": 60
+  }
+ },
+ "seed_gap": 1000000,
+ "status": "FROZEN before sealing; NOT LAUNCHED",
+ "verdicts": {
+  "FAILURE": "a hard gate failed (named)",
+  "INSTRUMENT_ERROR": "an instrument row failed; nothing about the brain is read",
+  "PASS": "every instrument row and hard gate held"
+ },
+ "word_rule": "wave 2 verbatim: HARMFUL if any LOSS (first); INCOMPLETE if a needed comparison is missing (never a pass); EARNED_KEEP if a WIN; NEUTRAL if exercised and all TIE; NOT_EXERCISED if no exam has a path",
+ "written": "2026-10-19 (Pacific)"
+}
