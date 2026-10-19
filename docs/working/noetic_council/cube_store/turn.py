@@ -508,7 +508,7 @@ class TurnProcessor:
         # =====================================================================
         elif outcome == "READ":
             # Check S6: "Do we have 50 Flour and 30 Sugar or not"
-            if re.search(r"\bdo we have\b", lower) and ("or not" in lower or "and" in lower):
+            if re.search(r"\bdo we have\b", lower) and ("or not" in lower or re.search(r"\band\b", lower)):
                 op_name = "FIND_SHARED_PART"
                 query_items = re.findall(r"(?:\d+\s+)?([A-Za-z]+)", text)
                 clean_items = [i for i in query_items if i.lower() not in ("do", "we", "have", "and", "or", "not")]

@@ -518,6 +518,41 @@ def test_answer_trace_rate_equals_one():
 
 
 @case
+def test_r1w3_on_hand_question_reaches_list_parts():
+    """Read-path fault 1 (found by the HELM-R1 wave-3 builder dry run, 2026-10-19): 'What do we have on hand?' was
+    sent to FIND_SHARED_PART because the substring 'and' sits inside 'hand'. It must reach LIST_PARTS; the S6 form
+    'Do we have 50 Flour and 30 Sugar or not' must still reach FIND_SHARED_PART."""
+    tp = TurnProcessor()
+    tp.process_turn("We have 50 Flour, 30 Sugar")
+    rec = tp.process_turn("What do we have on hand?")
+    equal(rec.operation, "LIST_PARTS", "an 'on hand' question must run LIST_PARTS")
+    ok("50 Flour" in rec.response_text and "30 Sugar" in rec.response_text)
+    equal(tp.process_turn("Do we have 50 Flour and 30 Sugar or not").operation, "FIND_SHARED_PART")
+    equal(tp.process_turn("Do we have Flour and Sugar?").operation, "FIND_SHARED_PART")
+
+
+@case
+def test_r1w3_absent_part_is_not_listed():
+    """Read-path fault 2 (found by the HELM-R1 wave-3 builder dry run, 2026-10-19): a part whose LATEST branch says it
+    is absent was listed as 'None <name>'. The latest branch to a part is its current word; an absent part is not
+    on hand and is not listed."""
+    tp = TurnProcessor()
+    tp.process_turn("We have 50 Flour, 30 Sugar")
+    store = tp.store
+    sugar = [b.target_node_id for b in store.get_outgoing_branches(INVENTORY_NODE_ID) if "sugar" in b.target_node_id]
+    ok(len(sugar) == 1, "the inventory must hold one sugar branch")
+    store.write_branch(Branch(branch_id="branch_absent_sugar", context_id=store.context_id,
+                              source_node_id=INVENTORY_NODE_ID, predicate="contains", target_node_id=sugar[0],
+                              commonality={"absent": True, "unit": "Sugar"}))
+    rec = list_parts(store, INVENTORY_NODE_ID)
+    labels = [p["label"].lower() for p in rec.output]
+    ok("sugar" not in labels, "an absent part must not be listed")
+    ok(any("flour" in x for x in labels), "a present part is still listed")
+    reply = tp.process_turn("What do we have in stock?").response_text
+    ok("None" not in reply and "Sugar" not in reply and "50 Flour" in reply, reply)
+
+
+@case
 def test_readme_claim_ceiling():
     """Verifies that README.md exists and contains the claim ceiling verbatim."""
     readme_path = os.path.join(HERE, "README.md")

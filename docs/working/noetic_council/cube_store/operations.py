@@ -54,10 +54,16 @@ def list_parts(store: CubeStore, whole_id: str, view_profile: str = "LearnerView
     parts: List[Dict[str, Any]] = []
     seen: Set[str] = set()
 
-    # 1. Inspect outgoing branches
+    # 1. Inspect outgoing branches. The LATEST branch to a part is its current word: a part whose latest branch
+    #    says it is absent ({"absent": True}) is not on hand and is not listed.
+    latest: Dict[str, Any] = {}
+    for b in direct_branches:
+        latest[b.target_node_id] = b
     for b in direct_branches:
         target_id = b.target_node_id
         cubes_read.append(target_id)
+        if latest[target_id] is not b or (b.commonality or {}).get("absent"):
+            continue
         target_node = store.get_cube(target_id, view_profile=view_profile)
         label = target_node.core.label if target_node else target_id
         amount = b.commonality.get("amount") if b.commonality else None
