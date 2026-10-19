@@ -109,9 +109,12 @@ def test_sequence_b():
     with redirect_stdout(f):
         session.handle_turn("Can we bake a batch without Water?")
     t3_out = f.getvalue()
-    assert "missing" in t3_out.lower()
-    assert "water" in t3_out.lower()
-    print("  [PASS] Turn 3: Recipe pre-flight gate halted on missing Water prerequisite.")
+    # Fix C (2026-10-18): free English no longer reaches the recipe brain. It is not in the checked form, so the
+    # live loop answers with a CLARIFY, writes nothing, and invents no quantity (no "All set", no number).
+    assert "nothing was saved" in t3_out.lower()
+    assert "all set" not in t3_out.lower()
+    assert "units" not in t3_out.lower()
+    print("  [PASS] Turn 3: Free-English recipe request gets a CLARIFY with zero writes and no invented amount.")
 
 
 def test_deepseek_7turn_offpath():

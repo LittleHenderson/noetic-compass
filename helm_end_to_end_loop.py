@@ -1,464 +1,768 @@
-"""helm_end_to_end_loop.py -- Complete End-to-End Execution Loop for HELM.
+"""helm_end_to_end_loop.py -- HELM's live loop, wired to the ONE canonical brain (fix C, 2026-10-18).
 
-Canonical End-to-End Execution Pipeline:
-1. User Turn (Everyday American English Dialogue / Recipe Request / Cognitive Query).
-2. Level L4 Proposer & CCE Round-Trip Verification Gate (cce.parse / cce.render, eps o eta == id).
-3. Intent Separation:
-   - Reads (LIST_PARTS / pantry queries): Consume nothing, query CubeStore directly (0 cubes written).
-   - Declarations (inventory / facts): Write knowledge cubes into CubeStore with USER_SAID provenance.
-   - Directives / Affect / CCE statements: Round-trip verified & stored as cubes.
-   - Physical Recipe Execution (has run verb): Gated by Phase 3 Meta Valve Controller (G-ABSENT clamp).
-4. Phase 3 Meta Valve Controller (tks_meta_valve_controller.py):
-   - Dynamic aperture sigma prediction from learned weights.
-   - G-ABSENT clamp halting physical batch execution if essential base reagents (Flour, Water) are missing.
-5. Station S0 22x40 Recipe Brain (helm_brain_22x40.py with 40-digit Decimal CES math).
-6. Everyday American English Voice Adapter (Honest, warm read-back citing cryptographic 16-char receipt).
+THE CIRCUIT (one user turn)
+---------------------------
+    user text
+      -> CCE skin      language_v3/cce.py: parse, then the round trip parse(render(C)) == C.
+                       Parse fails or the round trip differs -> typed CLARIFY, ZERO writes.
+                       No checker loaded -> NOT_VERIFIED, refuse. (The old shim that said "verified" when the
+                       checker was missing is gone.)
+      -> S0 atlas head the topic is looked up in the canonical brain's address map (helm_brain_canonical.py)
+      -> S1 trigger ^8 the product brings its own prerequisite list to mind (the brain's recipe support)
+      -> S2 Bias ^5    the stock on hand (this session's verified stock, with a version and digest)
+      -> S3 arrival ^9 what is present, what is ABSENT, which requirements are still unlearned
+      -> S4 operating point   the valve (a written rule, ENGINEERED-NOT-VALIDATED; G-ABSENT kept)
+      -> S5 RPM link   the_loop_v3 rpm_gate with a real GateRequest (no label field). On REPAIR,
+                       repair_performer/actor.perform_repair opens the child goal, runs it, glues the child's
+                       ACTUAL result back, and asks the parent's own gate again.
+      -> brain         only after PROCEED: the canonical brain answers, with its eta/epsilon read-back
+      -> store         cube store write ONLY after the gate passed and the read-back receipt passed;
+                       the written cube is then read back from the store and compared.
+      -> S6 next       what the turn waits for (nothing, or the user's answer to a CLARIFY)
+
+A missing ingredient is ABSENT. It goes to the RPM gate and the turn ends UNDETERMINED with a CLARIFY question
+unless a repair child finds the real amount. No quantity is ever invented (the old fill-with-ten shortcut is gone).
+
+TEACHING
+--------
+`witness_batch(...)` is the teaching channel: one batch the user actually made (stock before, amount made,
+which ingredient ran out first). It passes the CCE form receipt, the gate, and the brain's OWN writer
+(candidate, eta/epsilon receipt, memory check). When the brain's writer refuses -- for example because the new
+batch contradicts a requirement it already holds -- that refusal IS the detected failure: it is turned into an
+RpmCause, the gate answers REPAIR, and the repair performer opens a real child (a replay of every witnessed
+batch on a fresh brain). Nothing in this path is a planted flag.
+
+OUTSIDE THE CIRCUIT (unchanged, stated so nobody assumes otherwise): the agentic-goal path (helm_agentic_executor)
+and read-only cube-store queries in free English. Both write nothing through this loop's recipe path.
+
+Station names S0..S6 follow the LM-T6 circuit names given in the owner's fix-C order. "CCE skin", "brain" and
+"store" are not LM-T6 stations; they are labeled as what they are.
 """
 from __future__ import annotations
 
+import datetime
 import hashlib
 import json
-import math
 import os
 import re
 import sys
 from decimal import Decimal
-from typing import Dict, List, Any, Optional, Tuple
+from fractions import Fraction
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+COUNCIL = os.path.join(HERE, "docs", "working", "noetic_council")
 for sub in [
     HERE,
-    os.path.join(HERE, "brains"),
-    os.path.join(HERE, "core_engine"),
-    os.path.join(HERE, "real_atlas"),
-    os.path.join(HERE, "docs", "working", "noetic_council", "language_v3"),
-    os.path.join(HERE, "docs", "working", "noetic_council", "cube_store")
+    os.path.join(COUNCIL, "language_v3"),
+    os.path.join(COUNCIL, "cube_store"),
+    os.path.join(COUNCIL, "repair_performer"),
 ]:
     if os.path.exists(sub) and sub not in sys.path:
         sys.path.insert(0, sub)
 
-# Import Core Subsystems
-from helm_brain_22x40 import HELMRecipeBrain22x40, d40
-from tks_meta_valve_controller import TKSMetaValveController, ValveTelemetry
+from helm_brain_canonical import (CanonicalRecipeBrain, CanonicalBrainRefused, exact_amount, frac_text,
+                                  EVALUATED)
+from tks_meta_valve_controller import TKSMetaValveController
 from helm_agentic_executor import AgenticExecutionEngine
 
-# Canonical CCE Translator (language_v3)
+# Canonical CCE translator (language_v3). Missing -> every turn is NOT_VERIFIED and refused.
 try:
     import cce
 except ImportError:
     cce = None
 
-# Unified Cube Store
+# The real gate, the real GateRequest and the real repair performer (repair_performer/actor.py loads them).
+import actor as repair_actor          # noqa: E402
+RPM = repair_actor.G                  # the_loop_v3/rpm_gate.py
+GateRequest = repair_actor.L.GateRequest
+
+# Unified cube store
 try:
     from store import CubeStore
     from cube import CubeNode, Core, Face, Branch, Provenance
-    from turn import TurnProcessor, TurnReceipt
-    from operations import list_parts, find_shared_part, reached_via
+    from turn import TurnProcessor, INVENTORY_NODE_ID
 except ImportError:
     CubeStore = None
     TurnProcessor = None
+    INVENTORY_NODE_ID = "cube_inventory_on_hand"
+
+DEFAULT_TRACE_PATH = os.path.join(HERE, "docs", "working", "traces", "HELM_LIVE_TRACE_20261018.jsonl")
 
 
 # -----------------------------------------------------------------------------
-# 1. Natural Everyday American English Voice Adapter
+# 1. Everyday English voice (what a person reads). No CAS words, no invented numbers.
 # -----------------------------------------------------------------------------
+def _amount_words(text: Optional[str]) -> str:
+    if text is None:
+        return "?"
+    v = Fraction(text)
+    if v.denominator == 1:
+        return str(v.numerator)
+    as_dec = Decimal(v.numerator) / Decimal(v.denominator)
+    if Fraction(str(as_dec)) == v:
+        return str(as_dec.normalize())
+    return f"{v.numerator}/{v.denominator}"
+
+
 class HELMVoiceAdapter:
-    """Translates internal algebraic receipts and decisions into warm,
-    clear, everyday American English without robotic CAS jargon.
-    """
+    @staticmethod
+    def format_success(product: str, yield_text: str, limiting: str, receipt_hash: Optional[str] = None) -> str:
+        tail = f" [receipt: {receipt_hash}]" if receipt_hash else ""
+        return (f"Good news: with what's on hand we can make {_amount_words(yield_text)} {product}. "
+                f"{limiting} runs out first, so it sets the limit.{tail}")
 
     @staticmethod
-    def format_success(output_val: Decimal,
-                       limiting_reagent: str,
-                       inputs: Dict[str, Any],
-                       entropy: float,
-                       aperture: Decimal,
-                       receipt_hash: Optional[str] = None) -> str:
-        rounded_val = round(float(output_val), 3)
-        limiting_qty = inputs.get(limiting_reagent, 0)
-        h_str = f" [receipt: {receipt_hash}]" if receipt_hash else ""
-        return (
-            f"All set! Based on your ingredients, we can produce exactly {rounded_val:,.3f} units.\n"
-            f"Your bottleneck (limiting ingredient) is {limiting_reagent} with {limiting_qty} on hand, "
-            f"which sets the ceiling for this batch.\n"
-            f"(Verified with exact 40-digit Decimal precision; novelty entropy: {entropy:.2f}, "
-            f"valve aperture: {aperture}){h_str}"
-        )
+    def format_missing(product: str, missing: List[str]) -> str:
+        names = " and ".join(missing)
+        ask = f"How much {missing[0]} is there?" if len(missing) == 1 else f"How much {names} is there?"
+        return (f"I can't say how much {product} we can make yet, because I don't know how much {names} we have. "
+                f"{ask} I didn't guess, and nothing was saved.")
 
     @staticmethod
-    def format_missing_prerequisite(missing_items: List[str], reason: str) -> str:
-        missing_str = ", ".join(missing_items)
-        return (
-            f"I can't run this batch just yet because we're missing essential ingredients: {missing_str}.\n"
-            f"The system automatically halted to prevent guessing, errors, or wasting materials."
-        )
+    def format_unlearned(product: str, unlearned: List[str]) -> str:
+        names = " or ".join(unlearned)
+        return (f"I don't know yet how much {names} goes into {product}: I haven't seen a batch where that ran "
+                f"out first. Tell me about one batch like that. I didn't guess, and nothing was saved.")
+
+    @staticmethod
+    def format_clarify_not_checked() -> str:
+        return ("I can't check that one yet. Right now I can only work with stock and recipe requests written in "
+                "the checked form, for example \"There is 12 of Ω_Flour.\" or \"Topic: Ω_Bread.\" "
+                "Nothing was saved.")
+
+    @staticmethod
+    def format_round_trip_failed() -> str:
+        return ("I couldn't read that back exactly the way you wrote it, so I didn't act on it. "
+                "Nothing was saved. Could you say it again?")
+
+    @staticmethod
+    def format_not_verified() -> str:
+        return "My checker for written statements isn't loaded, so I won't act on anything. Nothing was saved."
 
     @staticmethod
     def format_clarify(missing_slot: str = "information") -> str:
-        return (
-            f"I can't answer that question because it doesn't match any verified facts or physical recipes in my system. "
-            f"What specific materials, tools, or goals would you like to work with?"
-        )
+        return ("I can't answer that question because it doesn't match any verified facts or recipes I have. "
+                "What materials or goals would you like to work with?")
 
     @staticmethod
-    def format_throttled(entropy: Decimal, aperture: Decimal) -> str:
-        return (
-            f"That proposal involves too much uncertainty for our current safety settings "
-            f"(entropy {entropy} exceeds allowed limit {aperture}). "
-            f"Try refining the details or loosening the creativity dial."
-        )
+    def format_stock_recorded(stocks: Dict[str, str]) -> str:
+        items = ", ".join(f"{_amount_words(v)} {k}" for k, v in stocks.items())
+        return f"Got it: {items} on hand."
+
+    @staticmethod
+    def format_conflict(product: str, ingredient: str, old: str, new: str) -> str:
+        return (f"Two batches disagree about how much {ingredient} goes into one {product}: an earlier batch says "
+                f"{_amount_words(old)}, this one says {_amount_words(new)}. I didn't change anything. "
+                f"Which batch is right?")
+
+    @staticmethod
+    def format_teach_refused(product: str, reason: str) -> str:
+        return (f"I couldn't learn from that {product} batch ({reason.replace('_', ' ').lower()}). "
+                f"I didn't change anything.")
+
+    @staticmethod
+    def format_learned(product: str, ingredient: str, value: str) -> str:
+        return f"Learned: one {product} needs {_amount_words(value)} {ingredient}."
+
+    @staticmethod
+    def format_brain_undetermined(product: str, gate: Optional[str]) -> str:
+        why = {"G1": "I'm missing part of its recipe", "G2": "there's no usable stock",
+               "G3": "two ingredients tie for running out first", "G4": "its recipe is marked unreliable",
+               "G5": "two recipes overlap"}.get(gate or "", "the brain couldn't settle it")
+        return f"I can't give a sure answer for {product} with this stock: {why}. I didn't guess."
+
+    @staticmethod
+    def format_stated_recipe() -> str:
+        return ("I can't take a recipe as stated. I learn how much each ingredient needs from batches you actually "
+                "made: what you started with, how much you made, and what ran out first. Nothing was saved.")
 
 
 # -----------------------------------------------------------------------------
-# 2. Complete End-to-End HELM Loop Coordinator
+# 2. The loop
 # -----------------------------------------------------------------------------
+def _canon(obj: Any) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+
+
+def _h16(obj: Any) -> str:
+    return hashlib.sha256(_canon(obj).encode("utf-8")).hexdigest()[:16]
+
+
+def _strip_omega(name: str) -> str:
+    return name[2:] if name.startswith("Ω_") else name
+
+
 class HELMEndToEndLoop:
-    """Coordinates the full cognitive pipeline from open natural English
-    to verified algebraic execution and conversational American English output.
-    """
+    """One running loop. `brain` and `cube_store` may be shared between loops (a later session on the same store)."""
 
-    def __init__(self,
-                 weights_path: Optional[str] = None,
-                 vocab_path: Optional[str] = None,
-                 valve_weights_path: Optional[str] = None,
-                 default_aperture: Any = "0.75",
-                 cube_store: Optional[Any] = None):
-        # 1. Initialize Station S0 22x40 Recipe Brain (40-digit Decimal)
-        self.brain = HELMRecipeBrain22x40()
-
-        # 2. Initialize Phase 3 Meta Valve Controller with calibrated weights
-        v_path = valve_weights_path or os.path.join(HERE, "tks_meta_valve_weights_v0_4.json")
-        self.valve = TKSMetaValveController(default_aperture=Decimal(str(default_aperture)), weights_path=v_path)
-
-        # 3. Initialize Phase 4 Agentic Execution Engine (Level A1/A2)
+    def __init__(self, cube_store: Optional[Any] = None, brain: Optional[CanonicalRecipeBrain] = None,
+                 default_aperture: Any = "0.75", trace_path: Optional[str] = None,
+                 brain_dir: Optional[str] = None, **_ignored: Any):
+        # Station S0's brain: the canonical recipe brain. The 22x40 cookie brain is never constructed here.
+        self.brain = brain if brain is not None else CanonicalRecipeBrain(brain_dir=brain_dir)
+        self.valve = TKSMetaValveController(default_aperture=Decimal(str(default_aperture)))
         self.agentic_engine = AgenticExecutionEngine(workspace_root=HERE)
-
-        # 4. Initialize Unified Cube Store & Turn Processor
         if cube_store is not None:
             self.cube_store = cube_store
         elif CubeStore is not None:
             self.cube_store = CubeStore(context_id="helm_e2e_unified")
         else:
             self.cube_store = None
+        self.turn_processor = TurnProcessor(self.cube_store) if (self.cube_store and TurnProcessor) else None
+        self.stock: Dict[str, Fraction] = {}       # S2 Bias ^5: this session's verified stock
+        self.bias_version = 1
+        self.trace: List[Dict[str, Any]] = []
+        self.trace_path = trace_path
+        self.ignored_constructor_args = sorted(_ignored)   # e.g. old valve_weights_path: never loaded
 
-        if self.cube_store and TurnProcessor is not None:
-            self.turn_processor = TurnProcessor(self.cube_store)
-        else:
-            self.turn_processor = None
+    # ------------------------------------------------------------------ trace
+    def _emit(self, tick: int, station: str, **fields: Any) -> Dict[str, Any]:
+        rec = {"tick": tick, "station": station}
+        rec.update(fields)
+        rec = json.loads(_canon(rec))
+        self.trace.append(rec)
+        if self.trace_path:
+            os.makedirs(os.path.dirname(os.path.abspath(self.trace_path)), exist_ok=True)
+            with open(self.trace_path, "a", encoding="utf-8", newline="\n") as fh:
+                fh.write(_canon(rec) + "\n")
+        return rec
 
-        # 5. Working inventory on hand
-        self.current_inventory: Dict[str, Decimal] = {}
+    def _store_writes(self) -> int:
+        return len(self.cube_store.write_history) if self.cube_store is not None else 0
 
+    def _bias_digest(self) -> str:
+        return hashlib.sha256(_canon({"stock": {k: frac_text(v) for k, v in sorted(self.stock.items())},
+                                      "brain": self.brain.brain.learned_digest(),
+                                      "version": self.bias_version}).encode("utf-8")).hexdigest()
+
+    # ------------------------------------------------------------------ English helper (kept for helm_chat)
     def extract_ingredient_quantities(self, text: str) -> Dict[str, Decimal]:
-        """Extract ingredient amounts from natural English text (e.g. '10 Flour and 8 Water')."""
+        """Explicit amounts only ('10 Flour', 'Flour: 10'). A mention WITHOUT an amount is NOT filled in."""
         inputs: Dict[str, Decimal] = {}
         for ing in self.brain.ingredients:
-            # Check if explicitly negated/excluded (e.g. 'without Water', 'no Water', '0 Water')
-            neg_pat = rf"\b(?:without|no|zero|0)\s+(?:units?\s+of\s+)?{ing}\b"
-            if re.search(neg_pat, text, re.IGNORECASE):
+            if re.search(rf"\b(?:without|no|zero)\s+(?:units?\s+of\s+)?{ing}\b", text, re.IGNORECASE):
                 continue
-            # Match patterns like '10 Flour', '10 units of Flour', 'Flour: 10'
-            pat = rf"(\d+(?:\.\d+)?)\s*(?:units? of\s*)?{ing}|{ing}[:\s]+(\d+(?:\.\d+)?)"
-            m = re.search(pat, text, re.IGNORECASE)
+            m = re.search(rf"(\d+(?:\.\d+)?)\s*(?:units? of\s*)?{ing}\b|\b{ing}[:\s]+(\d+(?:\.\d+)?)", text,
+                          re.IGNORECASE)
             if m:
-                val_str = m.group(1) or m.group(2)
-                inputs[ing] = Decimal(val_str)
-            elif re.search(rf"\b{ing}\b", text, re.IGNORECASE):
-                # Mentioned positively without explicit amount, default to 10
-                inputs[ing] = Decimal("10")
+                inputs[ing] = Decimal(m.group(1) or m.group(2))
         return inputs
 
+    # ------------------------------------------------------------------ CCE skin
     def verify_cce_round_trip(self, content_or_text: Any) -> Dict[str, Any]:
-        """Verify CCE round-trip equality: eps o eta == id.
-        
-        Guarantees 0 invented facts and 0 hallucinated structures.
-        """
+        """Parse (when given text), then check parse(render(C)) == C exactly. Missing checker = NOT_VERIFIED."""
         if cce is None:
-            return {"verified": True, "rejection": None, "receipt_id": "cce_native_shim"}
-
+            return {"verified": False, "rejection": "NOT_VERIFIED_NO_CHECKER", "receipt_id": None, "content": None}
+        content = content_or_text
         if isinstance(content_or_text, str):
             try:
-                parsed = cce.parse(content_or_text)
-                rt = cce.round_trip(parsed)
-                return {
-                    "verified": rt.get("ok", False),
-                    "content_hash_in": rt.get("content_hash_in"),
-                    "content_hash_out": rt.get("content_hash_out"),
-                    "sentence": rt.get("sentence"),
-                    "receipt_id": rt.get("receipt_id"),
-                    "rejection": rt.get("rejection")
-                }
-            except Exception as e:
-                h = hashlib.sha256(content_or_text.encode("utf-8")).hexdigest()[:16]
-                return {
-                    "verified": False,
-                    "content_hash_in": None,
-                    "content_hash_out": None,
-                    "sentence": None,
-                    "receipt_id": h,
-                    "rejection": f"CCE_PARSE_EXCEPTION: {type(e).__name__}"
-                }
-        elif isinstance(content_or_text, dict):
+                content = cce.parse(content_or_text)
+            except cce.Refusal as exc:
+                return {"verified": False, "rejection": f"CCE_PARSE_REFUSED:{exc.code}", "content": None,
+                        "receipt_id": hashlib.sha256(content_or_text.encode("utf-8")).hexdigest()[:16]}
+            except Exception as exc:     # a crash in the parser is a refusal, never a pass
+                return {"verified": False, "rejection": f"CCE_PARSE_EXCEPTION:{type(exc).__name__}",
+                        "content": None,
+                        "receipt_id": hashlib.sha256(content_or_text.encode("utf-8")).hexdigest()[:16]}
+        if not isinstance(content, dict):
+            return {"verified": False, "rejection": "UNSUPPORTED_TYPE", "receipt_id": None, "content": None}
+        rt = cce.round_trip(content)
+        explicit_equal = False
+        if rt.get("ok"):
             try:
-                rt = cce.round_trip(content_or_text)
-                return {
-                    "verified": rt.get("ok", False),
-                    "content_hash_in": rt.get("content_hash_in"),
-                    "content_hash_out": rt.get("content_hash_out"),
-                    "sentence": rt.get("sentence"),
-                    "receipt_id": rt.get("receipt_id"),
-                    "rejection": rt.get("rejection")
-                }
-            except Exception as e:
-                h = hashlib.sha256(json.dumps(content_or_text, sort_keys=True).encode("utf-8")).hexdigest()[:16]
-                return {
-                    "verified": False,
-                    "content_hash_in": None,
-                    "content_hash_out": None,
-                    "sentence": None,
-                    "receipt_id": h,
-                    "rejection": f"CCE_ROUNDTRIP_EXCEPTION: {type(e).__name__}"
-                }
-        return {"verified": False, "rejection": "UNSUPPORTED_TYPE", "receipt_id": "none"}
+                back = cce.parse(cce.render(content))
+                explicit_equal = cce.normalize(back) == cce.normalize(content)
+            except Exception:
+                explicit_equal = False
+        verified = bool(rt.get("ok")) and explicit_equal
+        return {"verified": verified, "content_hash_in": rt.get("content_hash_in"),
+                "content_hash_out": rt.get("content_hash_out"), "sentence": rt.get("sentence"),
+                "receipt_id": rt.get("receipt_id"), "parse_render_parse_equal": explicit_equal,
+                "rejection": rt.get("rejection") if not verified else None, "content": content}
 
-    def process_turn(self,
-                     user_english: str,
-                     tick: int = 1,
-                     current_inventory: Optional[Dict[str, Decimal]] = None) -> Dict[str, Any]:
-        """Execute one complete turn through the HELM cognitive pipeline.
-        
-        Returns:
-            Structured ledger document containing:
-            - user_prompt
-            - tick
-            - cce_round_trip
-            - valve_telemetry
-            - recipe_receipt
-            - cube_receipt
-            - everyday_english_response
-            - response / text (top-level aliases)
-            - output_value / total_output / limiting_reagent (top-level aliases)
-            - loop_status
-            - receipt_hash
-        """
-        result: Dict[str, Any] = {
-            "user_prompt": user_english,
-            "tick": tick,
-            "cce_round_trip": None,
-            "valve_telemetry": None,
-            "recipe_receipt": None,
-            "cube_receipt": None,
-            "output_value": None,
-            "total_output": None,
-            "output": None,
-            "limiting_reagent": None,
-            "everyday_english_response": "",
-            "response": "",
-            "text": "",
-            "loop_status": "INITIATED",
-            "receipt_hash": None
-        }
+    # ------------------------------------------------------------------ gate
+    def _gate_request(self, tick: int, proposal: str, prerequisites: List[str], unsatisfied: List[str],
+                      state_label: str) -> Any:
+        cause = RPM.RpmCause(blocked_node="P" if unsatisfied else None, depth=0,
+                             unsatisfied=tuple(unsatisfied), state_label=state_label)
+        return GateRequest(turn=tick, coordinator="helm-live-loop", bias_version=self.bias_version,
+                           bias_digest=self._bias_digest(), proposal_text=proposal,
+                           prerequisites=tuple(prerequisites), cause=cause)
 
-        # Step 1: Ingredient Extraction
-        extracted = self.extract_ingredient_quantities(user_english)
-        has_extracted_ingredients = len(extracted) > 0
-        user_lower = user_english.lower()
+    def _run_gate_with_repair(self, tick: int, request: Any,
+                              open_child: Callable[..., Dict[str, Any]]) -> Tuple[Any, List[Dict[str, Any]], str]:
+        """Ask the gate. On REPAIR hand the request to the real repair performer, once per named gap, until the
+        parent's own gate passes or a child cannot realize its gap. Returns (final verdict, ledger, outcome)."""
+        verdict = RPM.rpm_gate(request)
+        self._emit(tick, "S5 RPM link", what="gate", request=request.as_dict(), verdict=verdict.as_dict())
+        if verdict.verdict != RPM.REPAIR:
+            return verdict, [], "NO_REPAIR_NEEDED" if verdict.verdict == RPM.PROCEED else "REFUSED"
+        ledger: List[Dict[str, Any]] = []
+        current = request
+        for _ in range(len(request.cause.unsatisfied)):
+            out = repair_actor.perform_repair(current, open_child, ledger)
+            self._emit(tick, "S5 RPM link", what="repair_performer", outcome=out["outcome"],
+                       child_run=out.get("child_run"), ledger=ledger[-6:],
+                       after=out["after"].as_dict() if out.get("after") is not None else None)
+            if out["outcome"] == repair_actor.REPAIRED:
+                return out["after"], ledger, repair_actor.REPAIRED
+            after = out.get("after")
+            if after is None or after.verdict != RPM.REPAIR:
+                return (after or out["parent_verdict"]), ledger, out["outcome"]
+            gap = out["parent_verdict"].gap
+            remaining = tuple(u for u in current.cause.unsatisfied if u != gap)
+            current = GateRequest(turn=current.turn, coordinator=current.coordinator,
+                                  bias_version=current.bias_version + 1, bias_digest=current.bias_digest,
+                                  proposal_text=current.proposal_text, prerequisites=current.prerequisites,
+                                  cause=RPM.RpmCause(blocked_node=None, depth=0, unsatisfied=remaining,
+                                                     state_label=current.cause.state_label))
+        return RPM.rpm_gate(current), ledger, repair_actor.NOT_REPAIRED
 
-        # Step 1a: Check for Phase 4 Agentic Goals
-        agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file", "read file"]
-        is_agentic_request = (not has_extracted_ingredients) and any(kw in user_lower for kw in agentic_keywords)
-        if is_agentic_request:
-            dag = self.agentic_engine.decompose_goal(user_english)
-            plan_res = self.agentic_engine.execute_dag(dag)
-            result["loop_status"] = "AGENTIC_PLAN_EXECUTED" if plan_res["all_steps_completed"] else "AGENTIC_PLAN_CLAMPED"
-            result["agentic_plan_result"] = plan_res
-            spk = AgenticExecutionEngine.speak_plan_result(plan_res)
-            result["everyday_english_response"] = spk
-            result["response"] = spk
-            result["text"] = spk
-            log_str = json.dumps(plan_res.get("execution_log", []), sort_keys=True)
-            result["receipt_hash"] = plan_res.get("dag_sha256") or hashlib.sha256(f"AGENTIC_{user_english}_{log_str}".encode("utf-8")).hexdigest()[:16]
-            return result
+    # ------------------------------------------------------------------ store
+    def _face(self, text: str, populated: bool) -> Any:
+        return Face(availability="populated" if populated else "unknown", human_text=text)
 
-        # Step 1b: Adversarial / Ungrounded Refusal Filter
-        is_adversarial = any(w in user_lower for w in ["quantum", "tuesday", "electron sandwich", "superstring"])
-        if is_adversarial and not has_extracted_ingredients:
-            result["loop_status"] = "CLARIFY_REFUSAL"
-            msg = HELMVoiceAdapter.format_clarify("physical recipe")
-            result["everyday_english_response"] = msg
-            result["response"] = msg
-            result["text"] = msg
-            result["receipt_hash"] = hashlib.sha256(f"CLARIFY_REFUSAL_{user_english}_{tick}".encode("utf-8")).hexdigest()[:16]
-            return result
+    def _write_stock_cubes(self, stocks: Dict[str, Fraction], tick: int) -> Dict[str, Any]:
+        if self.cube_store is None or CubeStore is None:
+            return {"written": [], "read_back_ok": False, "note": "NO_STORE"}
+        written = []
+        inv = self.cube_store.nodes.get(INVENTORY_NODE_ID)
+        names = sorted(set(([] if inv is None else inv.faces["face_5"].structured.get("items", []))) | set(stocks))
+        inv_faces = {f"face_{i}": Face(availability="populated", human_text="Verified stock on hand.",
+                                       structured={"items": names} if i == 5 else {}) for i in range(1, 7)}
+        node = CubeNode(node_id=INVENTORY_NODE_ID,
+                        core=Core(label="Current Inventory", kind="instance",
+                                  identity_statement="Verified session inventory (CCE round trip + RPM gate)."),
+                        faces=inv_faces, revision=(inv.revision + 1) if inv else 1, turn_index=tick,
+                        provenance=Provenance(source="USER_SAID"))
+        self.cube_store.write_cube(node)
+        written.append(INVENTORY_NODE_ID)
+        for name, amount in stocks.items():
+            item_id = f"item_{name.lower()}"
+            prev = self.cube_store.nodes.get(item_id)
+            amt = frac_text(amount)
+            faces = {f"face_{i}": self._face(f"{amt} {name}" if i == 1 else "Constituent of inventory.", i == 1)
+                     for i in range(1, 7)}
+            self.cube_store.write_cube(CubeNode(
+                node_id=item_id, core=Core(label=name, kind="instance",
+                                           identity_statement=f"Stock constituent: {amt} units of {name}."),
+                faces=faces, revision=(prev.revision + 1) if prev else 1, turn_index=tick,
+                provenance=Provenance(source="USER_SAID")))
+            written.append(item_id)
+            self.cube_store.write_branch(Branch(
+                branch_id=f"branch_inv_{name.lower()}_{tick}_{len(self.cube_store.branches)}",
+                context_id=self.cube_store.context_id, source_node_id=INVENTORY_NODE_ID, predicate="contains",
+                target_node_id=item_id, commonality={"amount": amt, "unit": name}))
+        read_back = {name: self._stored_amount(name) for name in stocks}
+        ok = all(read_back[n] == frac_text(stocks[n]) for n in stocks)
+        return {"written": written, "read_back": read_back, "read_back_ok": ok}
 
-        # Step 2: CCE Round-Trip Verification Gate (eps o eta == id)
-        cce_rt = self.verify_cce_round_trip(user_english)
-        result["cce_round_trip"] = cce_rt
+    def _stored_amount(self, name: str) -> Optional[str]:
+        """The latest verified amount of `name` in the cube store (USER_SAID or CHECKED), or None."""
+        if self.cube_store is None:
+            return None
+        node = self.cube_store.nodes.get(f"item_{name.lower()}")
+        if node is None or node.provenance.source not in ("USER_SAID", "CHECKED"):
+            return None
+        amounts = [b.commonality.get("amount") for b in self.cube_store.branches
+                   if b.source_node_id == INVENTORY_NODE_ID and b.target_node_id == node.node_id
+                   and b.predicate == "contains" and b.commonality]
+        return amounts[-1] if amounts else None
 
-        # Step 3: Intent Discrimination: Physical Recipe Execution vs. Store Operations
-        # Physical recipe execution is requested when run/execution verbs are present:
-        # e.g. "how much can we make", "can we produce", "bake a batch", "produce a batch", etc.
-        run_verb_patterns = [
-            r"\bhow much can (?:we|i)\b",
-            r"\bhow much could (?:we|i)\b",
-            r"\bhow much can be made\b",
-            r"\bbake\b",
-            r"\bproduce\b",
-            r"\bcalculate a batch\b",
-            r"\bstart the batch\b",
-            r"\bexecute recipe\b",
-            r"\brun recipe\b",
-            r"\brun the recipe\b",
-            r"\brun batch\b",
-            r"\bcan we produce\b",
-            r"\bcan we make\b",
-            r"\bcan we bake\b",
-            r"\bmake a (?:fresh )?batch\b",
-            r"\bproduce a (?:fresh )?batch\b",
-            r"\bbake a (?:fresh )?batch\b"
-        ]
-        has_run_verb = any(re.search(pat, user_lower) for pat in run_verb_patterns)
+    def _write_event_cube(self, node_id: str, label: str, statement: str, source: str, tick: int,
+                          kind: str = "event") -> Dict[str, Any]:
+        if self.cube_store is None or CubeStore is None:
+            return {"written": [], "read_back_ok": False, "note": "NO_STORE"}
+        faces = {f"face_{i}": self._face(statement if i == 1 else "No further decomposition recorded.", i == 1)
+                 for i in range(1, 7)}
+        prev = self.cube_store.nodes.get(node_id)
+        self.cube_store.write_cube(CubeNode(node_id=node_id, core=Core(label=label, kind=kind,
+                                                                         identity_statement=statement),
+                                            faces=faces, revision=(prev.revision + 1) if prev else 1,
+                                            turn_index=tick, provenance=Provenance(source=source)))
+        back = self.cube_store.get_cube(node_id, view_profile="Authoring")
+        ok = back is not None and back.core.identity_statement == statement and back.provenance.source == source
+        return {"written": [node_id], "read_back_ok": bool(ok)}
 
-        # =========================================================================
-        # PATH A: STORE OPERATIONS (Read Queries, Declarations, Directives, Affect)
-        # =========================================================================
-        # Architectural Invariant: The valve gates EXECUTION, not READS.
-        # A LIST_PARTS or inventory declaration consumes nothing and is never clamped by G-ABSENT.
-        if not has_run_verb:
-            if self.turn_processor is not None:
-                rec = self.turn_processor.process_turn(user_english)
-                result["cube_receipt"] = rec.to_dict()
-                result["receipt_hash"] = rec.receipt_hash
-                result["everyday_english_response"] = rec.response_text
-                result["response"] = rec.response_text
-                result["text"] = rec.response_text
-                result["operation"] = rec.operation
-                result["cubes_read"] = rec.cubes_read
-                result["cubes_written"] = rec.cubes_written
-                result["assertion"] = rec.assertion
-                result["valence"] = rec.valence
+    # ------------------------------------------------------------------ results
+    def _new_result(self, text: str, tick: int) -> Dict[str, Any]:
+        return {"user_prompt": text, "tick": tick, "cce_round_trip": None, "valve_telemetry": None,
+                "gate_verdict": None, "repair": None, "recipe_receipt": None, "cube_receipt": None,
+                "output_value": None, "total_output": None, "output": None, "limiting_reagent": None,
+                "everyday_english_response": "", "response": "", "text": "", "loop_status": "INITIATED",
+                "receipt_hash": None, "cubes_written": [], "cubes_read": []}
 
-                if rec.operation == "LIST_PARTS" or rec.outcome == "READ":
-                    result["loop_status"] = "READ_COMPLETED"
-                elif rec.outcome == "WRITE":
-                    if has_extracted_ingredients:
-                        self.current_inventory.update(extracted)
-                        result["loop_status"] = "INVENTORY_RECORDED"
-                    else:
-                        result["loop_status"] = "CUBE_STORE_PROCESSED"
-                elif rec.outcome == "REFUSE":
-                    result["loop_status"] = "STORE_REFUSAL"
-                elif rec.outcome == "CLARIFY":
-                    result["loop_status"] = "STORE_CLARIFY"
-                else:
-                    result["loop_status"] = f"STORE_{rec.outcome}"
-
-                return result
-
-        # =========================================================================
-        # PATH B: PHYSICAL RECIPE EXECUTION (Gated by Phase 3 Meta Valve & Brain)
-        # =========================================================================
-        # Merge all available ingredients:
-        # 1. Ingredients previously declared and retained in working memory
-        # 2. Ingredients explicitly passed via current_inventory parameter
-        # 3. Ingredients extracted from the immediate user prompt
-        effective_inputs: Dict[str, Decimal] = dict(self.current_inventory)
-        if current_inventory:
-            for k, v in current_inventory.items():
-                effective_inputs[k] = Decimal(str(v))
-        effective_inputs.update(extracted)
-
-        # Prerequisite check: Flour and Water are essential base reagents for recipe execution
-        has_flour = "Flour" in effective_inputs and effective_inputs["Flour"] > Decimal("0")
-        has_water = "Water" in effective_inputs and effective_inputs["Water"] > Decimal("0")
-        prereqs_ok = bool(has_flour and has_water)
-
-        entropy = 0.20 if prereqs_ok else 0.75
-        credibility = 0.95 if prereqs_ok else 0.30
-        prereq_ratio = 1.0 if prereqs_ok else (0.5 if (has_flour or has_water) else 0.0)
-
-        proposal_features = {
-            "novelty_entropy": entropy,
-            "source_credibility": credibility,
-            "prerequisite_ratio": prereq_ratio,
-            "normalized_radius": 0.25,
-            "operating_mode_bias": 0.0
-        }
-
-        allowed, telem = self.valve.evaluate_proposal_flow(
-            tick=tick,
-            proposal_name=f"USER_RECIPE_EXECUTION_TICK_{tick}",
-            prerequisites_present=prereqs_ok,
-            novelty_entropy=Decimal(str(entropy)),
-            proposal_features=proposal_features
-        )
-        result["valve_telemetry"] = {
-            "allowed": allowed,
-            "status": telem.status,
-            "gate_interlock": telem.gate_interlock,
-            "aperture_sigma": str(telem.aperture_sigma),
-            "reason": telem.reason
-        }
-
-        # If valve clamped shut (G-ABSENT), halt physical execution immediately
-        if not allowed:
-            result["loop_status"] = f"VALVE_HALT_{telem.gate_interlock}"
-            missing_items = []
-            if not has_flour:
-                missing_items.append("Flour")
-            if not has_water:
-                missing_items.append("Water")
-            msg = HELMVoiceAdapter.format_missing_prerequisite(
-                missing_items, telem.reason
-            )
-            result["everyday_english_response"] = msg
-            result["response"] = msg
-            result["text"] = msg
-            result["receipt_hash"] = hashlib.sha256(f"VALVE_HALT_{telem.gate_interlock}_{tick}".encode("utf-8")).hexdigest()[:16]
-            return result
-
-        # If allowed, execute Station S0 22x40 Recipe Brain in 40-digit Decimal arithmetic
-        full_inputs = {ing: effective_inputs.get(ing, Decimal("10")) for ing in self.brain.ingredients}
-        full_inputs.update(effective_inputs)
-
-        brain_receipt = self.brain.evaluate_recipe(full_inputs)
-        result["recipe_receipt"] = brain_receipt
-
-        out_val_str = str(brain_receipt.get("output_value", "0"))
-        lim_reagent = brain_receipt.get("limiting_reagent", "Flour")
-
-        result["output_value"] = out_val_str
-        result["total_output"] = out_val_str
-        result["output"] = out_val_str
-        result["limiting_reagent"] = lim_reagent
-
-        # Compute receipt hash from 40-digit brain execution
-        receipt_raw = f"{out_val_str}_{lim_reagent}_{tick}"
-        rec_hash = hashlib.sha256(receipt_raw.encode("utf-8")).hexdigest()[:16]
-        result["receipt_hash"] = rec_hash
-
-        # Conversational Everyday American English Voice Read-Back
-        if brain_receipt.get("status") == "EVALUATED":
-            result["loop_status"] = "SUCCESS_EVALUATED"
-            msg = HELMVoiceAdapter.format_success(
-                output_val=Decimal(out_val_str),
-                limiting_reagent=lim_reagent,
-                inputs=effective_inputs,
-                entropy=entropy,
-                aperture=telem.aperture_sigma,
-                receipt_hash=rec_hash
-            )
-            result["everyday_english_response"] = msg
-            result["response"] = msg
-            result["text"] = msg
-        else:
-            result["loop_status"] = "RECIPE_BRAIN_REFUSAL"
-            msg = HELMVoiceAdapter.format_missing_prerequisite(
-                [lim_reagent],
-                brain_receipt.get("refusal_reason", "Missing input")
-            )
-            result["everyday_english_response"] = msg
-            result["response"] = msg
-            result["text"] = msg
-
+    def _finish(self, result: Dict[str, Any], tick: int, status: str, message: str, writes_before: int,
+                next_step: str) -> Dict[str, Any]:
+        result["loop_status"] = status
+        for k in ("everyday_english_response", "response", "text"):
+            result[k] = message
+        if self.cube_store is not None:
+            result["cubes_written"] = list(self.cube_store.write_history[writes_before:])
+        turn_records = [r for r in self.trace if r.get("tick") == tick]
+        result["receipt_hash"] = _h16({"status": status, "records": turn_records, "message": message})
+        self._emit(tick, "S6 next", loop_status=status, next=next_step,
+                   cubes_written=result["cubes_written"], receipt_hash=result["receipt_hash"], said=message)
         return result
+
+    # ------------------------------------------------------------------ the turn
+    def process_turn(self, user_english: str, tick: int = 1,
+                     current_inventory: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """One user turn through the circuit. `current_inventory`, if given, is rendered as checked-form stock
+        sentences and goes through the same parse and round trip as the text; it is never trusted on its own."""
+        result = self._new_result(user_english, tick)
+        writes_before = self._store_writes()
+        text = user_english.strip()
+        if current_inventory:
+            extra = " ".join(f"There is {Decimal(str(v)).normalize():f} of Ω_{k}." for k, v in
+                             current_inventory.items())
+            text = (text + " " + extra).strip()
+        self._emit(tick, "user", text=text)
+
+        if cce is None:
+            self._emit(tick, "CCE skin", verified=False, rejection="NOT_VERIFIED_NO_CHECKER")
+            return self._finish(result, tick, "REFUSE_NOT_VERIFIED", HELMVoiceAdapter.format_not_verified(),
+                                writes_before, "STOP")
+
+        rt = self.verify_cce_round_trip(text)
+        result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
+        self._emit(tick, "CCE skin", **result["cce_round_trip"])
+        if rt["content"] is None:
+            return self._not_checked_turn(text, tick, result, writes_before)
+        if not rt["verified"]:
+            return self._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED",
+                                HELMVoiceAdapter.format_round_trip_failed(), writes_before, "WAIT_FOR_USER")
+        content = rt["content"]
+
+        if content.get("recipe") is not None:
+            return self._finish(result, tick, "STATED_RECIPE_NOT_TAKEN", HELMVoiceAdapter.format_stated_recipe(),
+                                writes_before, "WAIT_FOR_USER: a witnessed batch")
+
+        said: List[str] = []
+        # Absences: "There is no Ω_X." removes X from the working stock (it is ABSENT, not zero).
+        for rel in content.get("relations", []):
+            if rel and rel[0] == "absent" and isinstance(rel[1], str):
+                name = _strip_omega(rel[1])
+                self.stock.pop(name, None)
+                self._emit(tick, "S2 Bias ^5", what="declared_absent", name=name)
+
+        stocks: Dict[str, Fraction] = {}
+        for s in content.get("stocks", []):
+            ref = s.get("ref", {})
+            if "outcome" not in ref:
+                return self._finish(result, tick, "CLARIFY_NOT_A_STOCK", HELMVoiceAdapter.format_clarify_not_checked(),
+                                    writes_before, "WAIT_FOR_USER")
+            stocks[_strip_omega(ref["outcome"])] = exact_amount(s["amount"])
+        if stocks:
+            ok, msg = self._declare_stocks(stocks, tick, result)
+            if not ok:
+                return self._finish(result, tick, "CLARIFY_STOCK_NOT_RECORDED", msg, writes_before, "WAIT_FOR_USER")
+            said.append(msg)
+
+        topic = content.get("topic")
+        if topic:
+            return self._run_request(topic, tick, result, writes_before, said)
+        if stocks or any(r and r[0] == "absent" for r in content.get("relations", [])):
+            msg = " ".join(said) if said else "Noted: that's marked as not on hand."
+            return self._finish(result, tick, "INVENTORY_RECORDED", msg, writes_before, "DONE")
+        return self._finish(result, tick, "VERIFIED_NO_RECIPE_CONTENT", HELMVoiceAdapter.format_clarify_not_checked(),
+                            writes_before, "WAIT_FOR_USER")
+
+    def _not_checked_turn(self, text: str, tick: int, result: Dict[str, Any], writes_before: int) -> Dict[str, Any]:
+        lower = text.lower()
+        agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file",
+                            "read file"]
+        if any(kw in lower for kw in agentic_keywords):
+            dag = self.agentic_engine.decompose_goal(text)
+            plan_res = self.agentic_engine.execute_dag(dag)
+            result["agentic_plan_result"] = plan_res
+            self._emit(tick, "outside circuit", what="agentic_executor", completed=plan_res["all_steps_completed"])
+            status = "AGENTIC_PLAN_EXECUTED" if plan_res["all_steps_completed"] else "AGENTIC_PLAN_CLAMPED"
+            return self._finish(result, tick, status, AgenticExecutionEngine.speak_plan_result(plan_res),
+                                writes_before, "DONE")
+        if any(w in lower for w in ["quantum", "tuesday", "electron sandwich", "superstring"]):
+            return self._finish(result, tick, "CLARIFY_REFUSAL", HELMVoiceAdapter.format_clarify("physical recipe"),
+                                writes_before, "WAIT_FOR_USER")
+        if self.turn_processor is not None and self.turn_processor.classify_turn(text)[0] == "READ":
+            rec = self.turn_processor.process_turn(text)
+            result.update({"cube_receipt": rec.to_dict(), "operation": rec.operation, "cubes_read": rec.cubes_read})
+            self._emit(tick, "outside circuit", what="cube_store_read", operation=rec.operation,
+                       cubes_read=rec.cubes_read)
+            if self._store_writes() != writes_before:
+                return self._finish(result, tick, "READ_WROTE_REFUSED", "A read tried to write; refused.",
+                                    writes_before, "STOP")
+            if rec.cubes_read:
+                return self._finish(result, tick, "READ_COMPLETED", rec.response_text, writes_before, "DONE")
+            # A "read" that touched no cube answered nothing: it is a question the circuit cannot check.
+        return self._finish(result, tick, "CLARIFY_NOT_CCE", HELMVoiceAdapter.format_clarify_not_checked(),
+                            writes_before, "WAIT_FOR_USER")
+
+    def _declare_stocks(self, stocks: Dict[str, Fraction], tick: int, result: Dict[str, Any]) -> Tuple[bool, str]:
+        for name, amount in stocks.items():
+            if amount <= 0:
+                return False, f"An amount of {name} has to be more than zero. Nothing was saved."
+            if Fraction(float(amount)) != amount:
+                return False, f"I can't hold {frac_text(amount)} of {name} exactly. Nothing was saved."
+        names = {k: frac_text(v) for k, v in stocks.items()}
+        self._emit(tick, "S2 Bias ^5", what="stock_proposed", stocks=names, bias_version=self.bias_version)
+        request = self._gate_request(tick, "record the stated stock", sorted(stocks), [], "Ω_stock")
+        verdict = RPM.rpm_gate(request)
+        self._emit(tick, "S5 RPM link", what="gate", request=request.as_dict(), verdict=verdict.as_dict())
+        if verdict.verdict != RPM.PROCEED:
+            return False, "I couldn't record that stock. Nothing was saved."
+        content = cce.empty_content()
+        content["stocks"] = [{"amount": frac_text(v), "ref": {"outcome": f"Ω_{k}"}} for k, v in stocks.items()]
+        receipt = self.verify_cce_round_trip(content)
+        receipt.pop("content", None)
+        self._emit(tick, "store", what="eta_eps_receipt", kind="cce_round_trip_of_stored_content", receipt=receipt)
+        if not receipt["verified"]:
+            return False, HELMVoiceAdapter.format_round_trip_failed()
+        write = self._write_stock_cubes(stocks, tick)
+        self._emit(tick, "store", what="cube_write", **write)
+        self.stock.update(stocks)
+        self.bias_version += 1
+        result["cube_receipt"] = write
+        return True, HELMVoiceAdapter.format_stock_recorded(names)
+
+    def _stock_child(self, glued: Dict[str, Fraction], product: str) -> Callable[..., Dict[str, Any]]:
+        def open_child(sub_goal, gap, kind, depth):
+            m = re.fullmatch(r"the stock of Ω_(\w+)", gap or "")
+            if m:
+                name = m.group(1)
+                found = self._stored_amount(name)
+                if found is None:
+                    return {"ok": False, "detail": f"no verified amount of {name} in the cube store",
+                            "clarify": f"the stock of Ω_{name}"}
+                glued[name] = Fraction(found)
+                return {"ok": True, "detail": f"cube store holds {found} of {name} (verified earlier)"}
+            m = re.fullmatch(r"the requirement of Ω_(\w+) for Ω_(\w+)", gap or "")
+            if m:
+                name = m.group(1)
+                rows = [r for r in self.brain.witness_log if r["product"] == product]
+                replay = self.brain.replay(rows)
+                learned_on_replay = any(r["admitted"] and row["ran_out"] == name for r, row in zip(replay, rows))
+                return {"ok": False, "detail": f"replayed {len(rows)} witnessed batch(es) of {product}; "
+                        f"{name} was {'learned' if learned_on_replay else 'never witnessed as running out first'}"
+                        "; a requirement cannot be made up", "clarify": gap}
+            return {"ok": False, "detail": f"no child knows how to realize {gap!r}"}
+        return open_child
+
+    def _run_request(self, topic: str, tick: int, result: Dict[str, Any], writes_before: int,
+                     said: List[str]) -> Dict[str, Any]:
+        product = self.brain.product_of(topic)
+        self._emit(tick, "S0 atlas head", topic=topic, product=product, brain=self.brain.provenance())
+        if product is None:
+            msg = (f"I don't know a recipe for {_strip_omega(topic)}. I know {', '.join(self.brain.products)}. "
+                   f"Nothing was saved.")
+            return self._finish(result, tick, "CLARIFY_UNKNOWN_PRODUCT", msg, writes_before, "WAIT_FOR_USER")
+        support = self.brain.support_of(product)
+        self._emit(tick, "S1 trigger ^8", product=product, prerequisites=support,
+                   requirements=self.brain.requirements(product))
+        self._emit(tick, "S2 Bias ^5", what="stock_on_hand", bias_version=self.bias_version,
+                   bias_digest=self._bias_digest(), stock={k: frac_text(v) for k, v in self.stock.items()})
+        absent = [c for c in support if c not in self.stock]
+        unlearned = self.brain.unlearned(product)
+        self._emit(tick, "S3 arrival ^9", present=[c for c in support if c in self.stock], absent=absent,
+                   unlearned_requirements=unlearned)
+        allowed, telem = self.valve.evaluate_reagents(tick, product, support, list(self.stock), "EXACT")
+        result["valve_telemetry"] = telem.as_dict()
+        self._emit(tick, "S4 operating point", valve=telem.as_dict())
+
+        unsatisfied = [f"the stock of Ω_{c}" for c in absent] + \
+                      [f"the requirement of Ω_{c} for Ω_{product}" for c in unlearned]
+        request = self._gate_request(tick, f"compute Ω_{product} from the stock on hand", support, unsatisfied,
+                                     f"Ω_{product}")
+        glued: Dict[str, Fraction] = {}
+        verdict, ledger, outcome = self._run_gate_with_repair(tick, request, self._stock_child(glued, product))
+        result["gate_verdict"] = verdict.as_dict()
+        result["repair"] = {"outcome": outcome, "ledger": ledger, "glued": {k: frac_text(v) for k, v in glued.items()}}
+
+        if verdict.verdict != RPM.PROCEED:
+            still_absent = [c for c in absent if c not in glued]
+            if still_absent:
+                msg = HELMVoiceAdapter.format_missing(product, still_absent)
+            elif unlearned:
+                msg = HELMVoiceAdapter.format_unlearned(product, unlearned)
+            else:
+                msg = f"I can't work out {product} right now. I didn't guess, and nothing was saved."
+            clarify = cce.empty_content()
+            clarify.update(turn="CLARIFY", topic=f"Ω_{product}", lacunae=[verdict.gap or unsatisfied[0]])
+            rt = self.verify_cce_round_trip(clarify)
+            self._emit(tick, "CCE skin", what="clarify_said", sentence=rt.get("sentence"), verified=rt["verified"])
+            return self._finish(result, tick, "UNDETERMINED_CLARIFY", msg, writes_before,
+                                f"WAIT_FOR_USER: {verdict.gap}")
+
+        if glued:
+            # The child's ACTUAL result is inserted into the working stock, then S3 and S4 are read again.
+            self.stock.update(glued)
+            self.bias_version += 1
+            self._emit(tick, "S2 Bias ^5", what="glued_from_child", glued={k: frac_text(v) for k, v in glued.items()},
+                       bias_version=self.bias_version)
+            allowed, telem = self.valve.evaluate_reagents(tick, product, support, list(self.stock), "EXACT")
+            result["valve_telemetry"] = telem.as_dict()
+            self._emit(tick, "S4 operating point", valve=telem.as_dict())
+        if not allowed:
+            return self._finish(result, tick, f"VALVE_HALT_{telem.gate_interlock}",
+                                HELMVoiceAdapter.format_missing(product, telem.missing_reagents or ["an ingredient"]),
+                                writes_before, "WAIT_FOR_USER")
+
+        receipt = self.brain.evaluate(product, {c: self.stock[c] for c in self.brain.ingredients if c in self.stock})
+        result["recipe_receipt"] = receipt
+        self._emit(tick, "brain", **receipt)
+        if receipt["status"] != EVALUATED:
+            return self._finish(result, tick, "BRAIN_UNDETERMINED",
+                                HELMVoiceAdapter.format_brain_undetermined(product, receipt.get("gate")),
+                                writes_before, "WAIT_FOR_USER")
+        y, lim = receipt["yield"], receipt["limiting_reagent"]
+        result.update({"output_value": y, "total_output": y, "output": y, "limiting_reagent": lim})
+        statement = (f"Theoretical yield {y} of {product} from stock "
+                     f"{', '.join(f'{frac_text(self.stock[c])} {c}' for c in support)}; limiting reagent {lim}; "
+                     f"brain {receipt['learned_digest'][:16]}")
+        write = self._write_event_cube(f"yield_{product.lower()}_t{tick}", f"{product} yield", statement,
+                                       "CHECKED", tick, kind="instance")
+        self._emit(tick, "store", what="cube_write", **write)
+        result["cube_receipt"] = write
+        msg = HELMVoiceAdapter.format_success(product, y, lim, _h16(receipt))
+        if said:
+            msg = " ".join(said) + " " + msg
+        return self._finish(result, tick, "SUCCESS_EVALUATED", msg, writes_before, "DONE")
+
+    # ------------------------------------------------------------------ teaching channel
+    def witness_batch(self, product: str, stock_before: Dict[str, Any], made: Any, ran_out: str,
+                      tick: int = 1) -> Dict[str, Any]:
+        """One batch the user actually made. Through: CCE form receipt -> gate -> the brain's own writer ->
+        (admitted) store write with read-back, or (refused) a DETECTED failure -> gate REPAIR -> repair child."""
+        result = self._new_result(f"[witnessed batch] {product}", tick)
+        writes_before = self._store_writes()
+        prod = self.brain.product_of(product)
+        stock = {self.brain.ingredient_of(k) or k: exact_amount(v) for k, v in stock_before.items()}
+        made_f = exact_amount(made)
+        self._emit(tick, "user", what="witnessed_batch", product=product,
+                   stock_before={k: frac_text(v) for k, v in stock.items()}, made=frac_text(made_f), ran_out=ran_out)
+        if prod is None:
+            return self._finish(result, tick, "CLARIFY_UNKNOWN_PRODUCT",
+                                f"I don't know a recipe called {product}. Nothing was saved.", writes_before,
+                                "WAIT_FOR_USER")
+        form = cce.empty_content() if cce is not None else None
+        if form is None:
+            return self._finish(result, tick, "REFUSE_NOT_VERIFIED", HELMVoiceAdapter.format_not_verified(),
+                                writes_before, "STOP")
+        form.update(topic=f"Ω_{prod}", stocks=[{"amount": frac_text(v), "ref": {"outcome": f"Ω_{k}"}}
+                                               for k, v in stock.items()] +
+                    [{"amount": frac_text(made_f), "ref": {"outcome": f"Ω_{prod}"}}])
+        rt = self.verify_cce_round_trip(form)
+        result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
+        self._emit(tick, "CCE skin", **result["cce_round_trip"])
+        if not rt["verified"]:
+            return self._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED",
+                                HELMVoiceAdapter.format_round_trip_failed(), writes_before, "WAIT_FOR_USER")
+        support = self.brain.support_of(prod)
+        absent = [c for c in support if c not in stock]
+        self._emit(tick, "S1 trigger ^8", product=prod, prerequisites=support)
+        self._emit(tick, "S3 arrival ^9", present=[c for c in support if c in stock], absent=absent)
+        request = self._gate_request(tick, f"teach Ω_{prod} from a witnessed batch", support,
+                                     [f"the stock of Ω_{c}" for c in absent], f"Ω_{prod}")
+        verdict = RPM.rpm_gate(request)
+        self._emit(tick, "S5 RPM link", what="gate", request=request.as_dict(), verdict=verdict.as_dict())
+        result["gate_verdict"] = verdict.as_dict()
+        if verdict.verdict != RPM.PROCEED:
+            return self._finish(result, tick, "UNDETERMINED_CLARIFY",
+                                f"That batch report is missing how much {', '.join(absent)} you started with. "
+                                f"I didn't guess, and nothing was saved.", writes_before, f"WAIT_FOR_USER: {verdict.gap}")
+
+        try:
+            record = self.brain.witness(prod, stock, made_f, self.brain.ingredient_of(ran_out) or ran_out)
+        except CanonicalBrainRefused as exc:
+            self._emit(tick, "brain", what="witness_refused_by_adapter", code=exc.code, detail=exc.detail)
+            return self._finish(result, tick, "CLARIFY_BATCH_NOT_USABLE",
+                                HELMVoiceAdapter.format_teach_refused(prod, exc.code), writes_before,
+                                "WAIT_FOR_USER")
+        result["recipe_receipt"] = record
+        self._emit(tick, "brain", what="writer", record=record)
+
+        if record["admitted"]:
+            eta = record.get("eta_eps", {})
+            if not (eta.get("pass") and record.get("memory_check_ok")):
+                return self._finish(result, tick, "REFUSE_RECEIPT_INCONSISTENT",
+                                    "The brain's own check did not hold, so nothing was saved.", writes_before, "STOP")
+            cell_name = record["ran_out"]
+            value = self.brain.requirements(prod)[cell_name]
+            statement = (f"Witnessed batch {record['made']} of {prod}; {cell_name} ran out first; "
+                         f"requirement {value} {cell_name} per {prod}; receipt pass")
+            write = self._write_event_cube(f"batch_{prod.lower()}_{self.brain._seed}", f"{prod} batch", statement,
+                                           "USER_SAID", tick)
+            self._emit(tick, "store", what="cube_write", **write)
+            return self._finish(result, tick, "WITNESS_ADMITTED",
+                                HELMVoiceAdapter.format_learned(prod, cell_name, value), writes_before, "DONE")
+
+        # ---- A REAL, DETECTED FAILURE: the brain's own writer refused the batch.
+        detected = {"detected_by": "rb2.writer_b.teach_step_b (the canonical brain's own writer)",
+                    "reason": record["reason"], "candidate": record["candidate"], "detail": record.get("detail")}
+        self._emit(tick, "S3 arrival ^9", what="failure_detected", **detected)
+        ing = record["ran_out"]
+        gap = f"a requirement of Ω_{ing} for Ω_{prod} that agrees with every witnessed batch"
+        request = self._gate_request(tick, f"teach Ω_{prod} from a witnessed batch", support, [gap], f"Ω_{prod}")
+        rows = [r for r in self.brain.witness_log if r["product"] == prod]
+
+        def replay_child(sub_goal, gap, kind, depth):
+            replay = self.brain.replay(rows)
+            ok = all(r["admitted"] for r in replay)
+            return {"ok": ok, "detail": json.dumps(replay, default=str)}
+
+        verdict, ledger, outcome = self._run_gate_with_repair(tick, request, replay_child)
+        result["gate_verdict"] = verdict.as_dict()
+        result["repair"] = {"outcome": outcome, "ledger": ledger, "detected": detected}
+        if outcome == repair_actor.REPAIRED:
+            msg = "The batches agree on a second look, but I haven't changed anything. Please tell me the batch again."
+            return self._finish(result, tick, "REPAIRED_RETEACH_NEEDED", msg, writes_before, "WAIT_FOR_USER")
+        detail = record.get("detail") or {}
+        if record["reason"] == "REFUSED_CONFLICT":
+            msg = HELMVoiceAdapter.format_conflict(prod, ing, detail.get("old"), detail.get("new"))
+        else:
+            msg = HELMVoiceAdapter.format_teach_refused(prod, record["reason"])
+        return self._finish(result, tick, "CONFLICT_UNDETERMINED" if record["reason"] == "REFUSED_CONFLICT"
+                            else f"TEACH_REFUSED_{record['reason']}", msg, writes_before, f"WAIT_FOR_USER: {gap}")
+
+
+# -----------------------------------------------------------------------------
+# 3. The live end-to-end trace (EXECUTION_QUEUE row 15)
+# -----------------------------------------------------------------------------
+def run_live_trace(trace_path: str = DEFAULT_TRACE_PATH) -> Dict[str, Any]:
+    """A real sequence of turns through the whole path, every receipt written to a JSONL file."""
+    if os.path.exists(trace_path):
+        os.remove(trace_path)
+    os.makedirs(os.path.dirname(os.path.abspath(trace_path)), exist_ok=True)
+    loop = HELMEndToEndLoop(trace_path=trace_path)
+    loop._emit(0, "header", what="HELM live end-to-end trace", date="2026-10-18",
+               run_at_utc=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+               python=sys.version.split()[0], platform=sys.platform, brain=loop.brain.provenance(),
+               valve=loop.valve.status_summary(), gate_claim_ceiling=RPM.CLAIM_CEILING,
+               repair_claim_ceiling=repair_actor.CLAIM_CEILING)
+    outcomes = []
+    outcomes.append(loop.witness_batch("Bread", {"Flour": 10, "Water": 8}, 5, "Flour", tick=1))
+    outcomes.append(loop.witness_batch("Bread", {"Flour": 10, "Water": 2}, 2, "Water", tick=2))
+    outcomes.append(loop.process_turn("There is 12 of Ω_Flour.", tick=3))
+    outcomes.append(loop.process_turn("Topic: Ω_Bread.", tick=4))                       # must be UNDETERMINED
+    outcomes.append(loop.process_turn("How much bread could we bake with whatever is around?", tick=5))  # CLARIFY
+    outcomes.append(loop.process_turn("There is 9 of Ω_Water.", tick=6))
+    outcomes.append(loop.process_turn("Topic: Ω_Bread.", tick=7))                       # SUCCESS
+    outcomes.append(loop.witness_batch("Bread", {"Flour": 10, "Water": 8}, 4, "Flour", tick=8))  # real conflict
+    # A later session on the same cube store and brain: its working stock is empty, so the repair child
+    # must fetch Water from the store and glue the real amount back.
+    later = HELMEndToEndLoop(cube_store=loop.cube_store, brain=loop.brain, trace_path=trace_path)
+    outcomes.append(later.process_turn("There is 20 of Ω_Flour.", tick=9))
+    outcomes.append(later.process_turn("Topic: Ω_Bread.", tick=10))                     # REPAIRED -> SUCCESS
+    summary = [{"tick": o["tick"], "loop_status": o["loop_status"], "said": o["response"],
+                "cubes_written": o["cubes_written"]} for o in outcomes]
+    with open(trace_path, "rb") as fh:
+        digest = hashlib.sha256(fh.read()).hexdigest()
+    return {"trace_path": trace_path, "sha256": digest, "turns": summary}
+
+
+if __name__ == "__main__":
+    out = run_live_trace(sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TRACE_PATH)
+    for row in out["turns"]:
+        print(f"tick {row['tick']:>2}  {row['loop_status']:<28} writes={len(row['cubes_written'])}  {row['said']}")
+    print("trace:", out["trace_path"])
+    print("sha256:", out["sha256"])
