@@ -14,6 +14,15 @@ Coordinator decision (operational, not the owner's): do not ship a part known to
 - Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." APPROVAL_RECORD_XREAL.md binds it to zip a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249 (freeze 67b48541...), cap 1.00 USD. Seed source = sha256(line + ":" + full zip sha256).
 - Slips recorded in the preregistration: the first download's User-Agent held the owner's e-mail (inline curl helper; later requests neutral; the sealed fetch script is test-checked); a git worktree prune was refused by Windows (nothing deleted).
 - Tests from the final seal: 359 OK. Backup D:/tksCAS-archive/x_real_20261019/v2/.
+## 2026-10-19 PDT - Scribe L4 (old small English model) SCORED on the sealed 98 (job c41, AWS, spec sheet 7.80): exact 0 of 98 as predicted, CLARIFY 77, and 21 confident answers that pass the real CCE round trip and are all wrong; ENGINEERED-NOT-VALIDATED stays
+
+Owner words (verbatim): "SCORE L4" — mapped by the coordinator to the plan line APPROVE SCORE_SCRIBE_L4_SEALED_98 (approval record 5a35f3ba...). Launch operator: Claude Code sub-agent.
+
+- Plan docs/working/scribe_l4_eval/SCORE_SCRIBE_L4_PLAN.md (18e350f5...) followed as written; sealed package SCRIBE_L4_AWS_GPU_PACKAGE.zip 7179250c... = its PACKAGE_FREEZE.json; laptop adapter tests 6/6 OK.
+- Job helm-claude-scribe-l4-score-20261019-c41: one t3.medium i-085092855ef75f1b8 (AL2023, CPU torch 2.14.1+cpu), 4:39-4:41 PM Pacific, host 149.6 s, one attempt, 0 plumbing retries.
+- Counts (receipt f283d383...): rows 98; exact_match_gold 0; clarify 77; answer 21; cce_round_trip_ok 21; answered_round_trip_ok_but_not_gold 21; shim_round_trip_ok 16; truncated_over_30_words 97; words 4,899, known 1,571; sealed sha256 unchanged.
+- Charge 0.01 USD (cautious 0.01; cap 0.10). Ledger 111.29 -> 111.39 (hold) -> 111.30 of 200. Cleanup VERIFIED three ways (proof 1eec80c6...).
+- Failed approaches: none this run. Lesson recorded: a round-trip check alone is not a correctness gate.
 
 ## 2026-10-19 PDT - HELM-R1 X-REAL packet SEALED, NOT LAUNCHED (spec sheet 7.79): the first exam from other people's text (real food sentences, real cookbook recipes, real kinds of file damage); nothing scored, no claim
 
