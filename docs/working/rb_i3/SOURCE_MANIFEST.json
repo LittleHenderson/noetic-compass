@@ -1,0 +1,247 @@
+{
+ "schema": "rb_i3.source_manifest/1",
+ "label": "RB_I3",
+ "files": [
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\__init__.py",
+   "sha256": "afc84e3c4dbc266ae92958a71232e0f40414a3d06c488ee87bf5f76335ef7c1a",
+   "bytes": 1391,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\consts.py",
+   "sha256": "23e3e1ed011f2a8e70400c46be60f44235feea9c358c56521c534b208d4d1503",
+   "bytes": 2917,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\world.py",
+   "sha256": "f821d55e46b33149ecc6504c39618a2598566cc01a46f2b8a27dd1299bd7f289",
+   "bytes": 9479,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\eye.py",
+   "sha256": "c0b191e27b9d2839c4a5b3532937ca9b430ebdb2b49c37397eab9fcf7a32dfad",
+   "bytes": 5063,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\attention.py",
+   "sha256": "fd98d92a23b661d96cbb4f9c99d06c3e6fae9453af259be7e73eddb2a4615df4",
+   "bytes": 3996,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\arms.py",
+   "sha256": "ef14948e2e304a9ceb3e4dbc06ef4bd32984a1746dc9cd2843835b1471c69c7a",
+   "bytes": 9130,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\recheck.py",
+   "sha256": "c18dfd0d6699527d93712a20d9bc0837d867f4b31e9ac7777d20c2efbcd387df",
+   "bytes": 2920,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\reader.py",
+   "sha256": "bdf44faf89295e67e9859f5b27d6e585e4ec1d767740fc3ad973b2387bf964fc",
+   "bytes": 27437,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\test_rbi3.py",
+   "sha256": "39802f24d877ae0fa93976354b668f268341c3eb38f8525cfb82046da11d9048",
+   "bytes": 21032,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\worker.py",
+   "sha256": "cdad08fbc2bb62c1cdc797c04c86470ad41b00abed2d0fbf3f7aaa88ce1cefd2",
+   "bytes": 6404,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\supervisor.ps1",
+   "sha256": "0f5fd30d2f65030f98cf501822532a338fb0dabc668b9e48e6b79c073162db90",
+   "bytes": 7720,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\run_all_parts.ps1",
+   "sha256": "a952093f41cd2f27732e0a1563e9634ccffb9f9c06ff9005a7ae62703ad6ef16",
+   "bytes": 3688,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\make_manifest.py",
+   "sha256": "881436754a725ab35d79a0c3925d4ce7ded6a2fbb3c9fbddfcf6afee6d9ed735",
+   "bytes": 3525,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\OWNER_APPROVAL_EVIDENCE.template.md",
+   "sha256": "8175cda0a53fd44f297d186e41dfc7281dd5c2ae5f587541b4349f3d6a17a3eb",
+   "bytes": 1581,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\FROZEN.precode.json",
+   "sha256": "06d95bdbb15ce37fd48d47bf204806880604ec963954fdb0a4ff93170eee9440",
+   "bytes": 17085,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\FROZEN.precode.sha256.txt",
+   "sha256": "2c25f06f2a4fb4f1992b48ef1c0826b1d0052b4ec6bd4f7721eacbd8b7b41953",
+   "bytes": 86,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\FROZEN.json",
+   "sha256": "945a1bd3a195bdbb22b82ff1fb1c2da210e667b562c394d7879652f05e9e6566",
+   "bytes": 19555,
+   "role": "RB_I3"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\__init__.py",
+   "sha256": "f2c1d437f4d01160f08693928d096164a3b0512a00ba11cd8fe20323866b03a5",
+   "bytes": 89,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\universe.py",
+   "sha256": "93cf1223a7f61858f23abe8a5212e3d6ea3fe5462b5a64f2b717302481b5265b",
+   "bytes": 1797,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\lm_t4\\__init__.py",
+   "sha256": "c6095cdfaf1ddd9bf9fab258547dedea27084ec35464a2ac752483d0126f8afb",
+   "bytes": 1266,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\__init__.py",
+   "sha256": "32dba1fad4cd9e1b056a0ef1179df8e8288a9141e218254439bde5f86a8aaec6",
+   "bytes": 423,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\common.py",
+   "sha256": "490d3db581fba24ba01267be5982df252b97bc1ef90882966156465ce50095a5",
+   "bytes": 2393,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\no_torch.py",
+   "sha256": "973276d037c23ff22bbbe2ad6c913dec283bd1b67f792d02e7f9025bc213850b",
+   "bytes": 1482,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\writer.py",
+   "sha256": "7167400e118c3d214febc021e65c616776f75ed817a23859741ccb06ae9fcaa8",
+   "bytes": 4856,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb2\\__init__.py",
+   "sha256": "fcdf6e5fdd6fef2aea3bda908e4ba0cffd5d1f3bee4ae23d7cd73c6d50368207",
+   "bytes": 804,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_i1\\__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_i1\\drives.py",
+   "sha256": "c45c0ef9f3d6d603ee9e300927799947108de5a695fdcdaeddf51d0eef4a863f",
+   "bytes": 10281,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\__init__.py",
+   "sha256": "8108f83c6f46b9d7579c9f007e1b6b68081f2719d4fe55f454e98b720956742e",
+   "bytes": 921,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\consts.py",
+   "sha256": "d53578a269bb2d7a125106c46ea698ac0f9ce63c0fb0b8e03aafeadb11ce29a1",
+   "bytes": 3334,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\eye.py",
+   "sha256": "9897e7da0a8e7a8ddfaf801ee3d9e17499da1e34f817f9f4831ae77218a105ea",
+   "bytes": 46916,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\cascade_w3.py",
+   "sha256": "82f8165089eb7b7593626a12ddba86eb4a3573b2625374d155f90ebb598dbc70",
+   "bytes": 33466,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\common_w3.py",
+   "sha256": "6d091ae5952b41f644d132578f583c50969c744321442d6a4b75d38070b5ac27",
+   "bytes": 9785,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\drive_w3.py",
+   "sha256": "79def344e677cef8718aa0418c167827f87dc154921a3c1ecd57ad0b5fb5f9c1",
+   "bytes": 16432,
+   "role": "REUSED_IMPORT"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\CAS_MAPPING_RB_I3.md",
+   "sha256": "e99025cd492c7be27a02a576ecc9c1d13ae4d0308fe2f08db67facb5cfc2a103",
+   "bytes": 7290,
+   "role": "DESIGN"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\DESIGN_RB_I3.md",
+   "sha256": "a2399241fe5da2afcb81f6b5187c28b425ea8e1b1adfbfabda7a0d5255c24980",
+   "bytes": 19092,
+   "role": "DESIGN"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\OPEN_QUESTIONS.md",
+   "sha256": "f97463b08a17535ecbd853011053556596ec85cacc9fb58f91dad18ff51d7c4d",
+   "bytes": 3356,
+   "role": "DESIGN"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\rb_i3_sketch.py",
+   "sha256": "51f32b0ba12e2af9e84403077f5c788cbb478c43183b6437b724e5ee63121cc8",
+   "bytes": 29174,
+   "role": "DESIGN"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\TEST_PLAN_RB_I3.md",
+   "sha256": "e74e8be64c1f8bf652081e8c068ae0d97bd321d3f04884fd1a16a9685859964d",
+   "bytes": 11345,
+   "role": "DESIGN"
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3_design_v1\\VERIFICATION_OF_DEEPSEEK_CLAIMS.md",
+   "sha256": "2415d66140f68a0c718a0353fc3e7cb2f2e6dabd0469dc929ccb119e3833abd2",
+   "bytes": 13728,
+   "role": "DESIGN"
+  }
+ ],
+ "note": "REUSED_IMPORT rows = every non-standard-library module file loaded when the RB-I3 code and tests are imported (wave 1 rb/rb2, wave 3 r1w3, u1b_unity_eye, lm_t4 and what they pull in); none of them is edited."
+}

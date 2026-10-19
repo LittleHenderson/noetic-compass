@@ -1,0 +1,147 @@
+{
+ "schema": "helm.rb_i3.frozen/1",
+ "run": "RB-I3",
+ "title": "The Unity Eye pairs and rotates the 7 desires (F1..F7) with the 7 CAS faculties, learning from verified tries",
+ "written": "2026-10-19 (Pacific day), before any RB-I3 code",
+ "stage": "PRECODE",
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "no_creativity_claim": true,
+ "owner_word": {
+  "verbatim": "\"RB-I3\" t",
+  "source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md, block 'Order (2026-10-19, verbatim)'",
+  "source_sha256_at_freeze": "88b7635b7d46f34272a1446dbd55c9c63d1764cb6bd153d42c6a52c1c9dff2f4",
+  "coordinator_reading": "run RB-I3 as designed in 2026-10-19\\rb_i3_design_v1 (laptop, 0 USD, 103 small parts; exam numbers and mark thresholds as PROPOSED by the designer, adopted by the coordinator)",
+  "rulings_carried": [
+   "Eye = REPORT AND WHISPER (2026-10-19 morning): 'WHY CAN'T THE EYE REPORT AND WHISPER BUT IF IT CAN'T DO BOTH THEN DEFINITELY WHISPER'",
+   "Eye 'INCHARGE OF PAIRING AND ROTATING THE BRAINS 7 DESIRES OR GRAVITIONAL WELLS WITH CAS FACULTIES MIXING AND MATCHING THEM' (2026-10-15)",
+   "drive loop = HELM's point of attention within a geodesic simplex of the 7 foundations ... randomly mixed matched and pair amongst the 7 cas faculties (2026-10-19)",
+   "GRAVITY PULL CUT OF COURSE WHEN ENGAGING IN CONVERSATION (2026-10-19)"
+  ],
+  "q1_reading_used": "the Eye STARTS random (no key: every cell 1/2) and then rotates and learns from verified outcomes (OPEN_QUESTIONS Q1 PROPOSED default)",
+  "sign_line_form": "APPROVE rb_i3, source <SOURCE_MANIFEST.json sha256 first 8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "sign_line_note": "operator-composed from the owner's word under the relayed delegation; not a separate owner signature"
+ },
+ "design_sha256": {
+  "DESIGN_RB_I3.md": "a2399241fe5da2afcb81f6b5187c28b425ea8e1b1adfbfabda7a0d5255c24980",
+  "TEST_PLAN_RB_I3.md": "e74e8be64c1f8bf652081e8c068ae0d97bd321d3f04884fd1a16a9685859964d",
+  "CAS_MAPPING_RB_I3.md": "e99025cd492c7be27a02a576ecc9c1d13ae4d0308fe2f08db67facb5cfc2a103",
+  "OPEN_QUESTIONS.md": "f97463b08a17535ecbd853011053556596ec85cacc9fb58f91dad18ff51d7c4d",
+  "VERIFICATION_OF_DEEPSEEK_CLAIMS.md": "2415d66140f68a0c718a0353fc3e7cb2f2e6dabd0469dc929ccb119e3833abd2",
+  "rb_i3_sketch.py": "51f32b0ba12e2af9e84403077f5c788cbb478c43183b6437b724e5ee63121cc8"
+ },
+ "reused_by_import_unmodified": {
+  "wave3_drive_w3.py": {"path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\drive_w3.py", "sha256": "79def344e677cef8718aa0418c167827f87dc154921a3c1ecd57ad0b5fb5f9c1", "used_for": "fr_distance and slerp_step (the Fisher-Rao geometry, the comparison code path; tau passed explicitly = 1/4)"},
+  "wave3_common_w3.py": {"path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave3\\HELM_R1_W3_20261019\\r1w3\\common_w3.py", "sha256": "6d091ae5952b41f644d132578f583c50969c744321442d6a4b75d38070b5ac27", "used_for": "write_json (LF, sorted, .partial + rename), sha256_obj, canonical"},
+  "u1b_eye.py": {"path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\eye.py", "sha256": "9897e7da0a8e7a8ddfaf801ee3d9e17499da1e34f817f9f4831ae77218a105ea", "used_for": "ConcertLedger: the Eye's one whisper channel (append-only; WHISPER entries by the Eye, RESPONSE entries by the brain); the Eye holds no handle to the brain's store"},
+  "wave1_rb_writer.py": {"path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\writer.py", "sha256": "7167400e118c3d214febc021e65c616776f75ed817a23859741ccb06ae9fcaa8", "used_for": "receipt(kind='lut_write', ...): the recipe brain's read-back receipt; the label read back must equal the re-derived answer exactly"},
+  "wave1_rb_common.py": {"path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3\\rb\\common.py", "sha256": "490d3db581fba24ba01267be5982df252b97bc1ef90882966156465ce50095a5", "used_for": "outcome() and UNDETERMINED: 3-valued scoring words"}
+ },
+ "exam_X3_IDLE": {
+  "foundations": ["F1", "F2", "F3", "F4", "F5", "F6", "F7"],
+  "foundation_names": {"F1": "Unity", "F2": "Wisdom", "F3": "Vitality", "F4": "Connection", "F5": "Agency", "F6": "Structure", "F7": "Purpose"},
+  "faculties": ["CURIOSITY", "PONDERING", "IMAGINATION", "VERIFY", "ASKING", "INTEGRATION", "CONSOLIDATE"],
+  "kinds": ["K1", "K2", "K3", "K4", "K5", "K6", "K7"],
+  "hidden_maps": "kind -> home Foundation (bijection); kind -> primary faculty (bijection, all 7 faculties act); kind -> secondary faculty (bijection, never the primary); re-drawn per world seed",
+  "sessions_per_life": 32,
+  "items_per_session": [12, 20],
+  "idle_ticks_per_item": 2,
+  "misfile": "1/4 (filed under a uniformly chosen other Foundation)",
+  "easy": "1/3 (the kind's secondary faculty also resolves the item)",
+  "noisy_wells": 2,
+  "dead_in_noisy": "1/2 (no faculty can resolve it while idle)",
+  "conversation_windows_per_session": [1, 3],
+  "conversation_turns_per_window": [2, 6],
+  "conversation_windows_placed": "inside the first half of the idle time (insert position uniform in 1..budget//2)",
+  "conversation_turn_pool": ["What do we have in stock?", "Can you remind me what we did yesterday?", "How long will the next batch take?", "Thanks, that is all for now."],
+  "max_tries_per_item": 7,
+  "after_cap": "CLOSED_NO_FIX (UNDETERMINED; never retried)",
+  "items_carry_over_sessions": false,
+  "good_action": "an item RESOLVED with a passing receipt: the verifier re-derives the answer Fraction(min(a,b), max(a,b)) from the item's own payload; the wave-1 rb.writer.receipt read-back must pass; an independent re-checker repeats it in the reader",
+  "three_valued_item_outcome": ["RESOLVED", "WRONG", "UNDETERMINED"],
+  "families": {
+   "A_STATIONARY": "scored (M1-M4)",
+   "B_DRIFT": "as A; hidden primary/secondary re-drawn at session index 16 (filing unchanged); FIXED_TABLE told the new key; reported (R3)",
+   "C_NULL": "as A, but each faculty solves each live item with chance 1/3 independently; control (I1)"
+  },
+  "world_seeds": [11, 29, 47],
+  "world_seed_rule": "the coordinator's brief fixes the scored world seeds at 11 / 29 / 47 for each family; every draw is random.Random(int(sha256('RB-I3:' + ':'.join(parts))[:16], 16)) with parts naming (role, family, seed, ...)",
+  "custody_note": "the brief replaced the design's custodian-from-sign-line seeds with fixed seeds 11/29/47; the builder tests only on fixture seeds 101/202/303 and runs no arm on 11/29/47 before the sign line; recorded as a deviation from DESIGN 4.6 (custody weaker than wave 3's X2)"
+ },
+ "arms": {
+  "NO_DRIVE": {"attention": "none (oldest open item PONDERING has not tried)", "pairing": "PONDERING only (RB today's re-fit)", "role": "floor; RB today"},
+  "EYE_PAIRING": {"attention": "learns (Fisher-Rao, tau 1/4)", "pairing": "Eye table learns and rotates", "role": "the design"},
+  "FIXED_TABLE": {"attention": "learns (Fisher-Rao)", "pairing": "answer key first (home kind's primary), then seeded uniform rotation among untried", "role": "ceiling / leak; reported only; the only arm allowed to read the key"},
+  "RANDOM_PAIRING": {"attention": "uniform random live Foundation", "pairing": "uniform random untried faculty", "role": "mechanism-free baseline"},
+  "ROUND_ROBIN_PAIRING": {"attention": "round-robin over live Foundations", "pairing": "cyclic faculty order per Foundation, skipping ones tried on the item", "role": "mechanism-free baseline"},
+  "EYE_PAIRING_NO_LEARN": {"attention": "count-only (y_F = 1)", "pairing": "Eye table frozen at uniform (fixed seeded order first, then uniform rotation)", "role": "isolates learning"},
+  "ATTENTION_ONLY": {"attention": "learns", "pairing": "frozen uniform table", "role": "attention learning alone"},
+  "PAIRING_ONLY": {"attention": "count-only", "pairing": "Eye table learns", "role": "pairing learning alone (reported)"},
+  "EYE_RATIO": {"attention": "plain count ratio: focus = live F with largest q_F; no point kept", "pairing": "Eye table learns", "role": "baseline for the geometry (reported R1)"},
+  "EYE_SHUFFLED_FEEDBACK": {"attention": "learns (true verdicts)", "pairing": "Eye cell fed a seeded-random EARLIER true verdict of this life instead of this one; no earlier verdict -> the cell is not moved", "role": "evidence-link control (M3b)"},
+  "CUT_VIOLATOR": {"attention": "learns", "pairing": "Eye table learns; cut removed (acts and steps in conversation slots too)", "role": "instrument control for M5 only; never scored"}
+ },
+ "arms_note": "the brief's list names 8 arms; the design (section 5) and the 103-part count need all 11; all 11 run",
+ "shared_rules": ["same worlds", "same idle and conversation slots", "item rule: fewest failed tries, then oldest (except NO_DRIVE: oldest open item PONDERING has not tried)", "never retry a failed faculty on the same item", "7-try cap then CLOSED_NO_FIX", "every faculty call goes through World.attempt (the only call), which counts calls made in conversation", "every attention step goes through Attention.step_and_focus, which counts steps made in conversation"],
+ "eye": {
+  "table": "7 x 7 exact counts (T tries, S successes) per (Foundation, faculty); score (S+1)/(T+2) as a Fraction; start all 0/0 (score 1/2): no answer key",
+  "learning_rule": "verified PASS at (F,f): T+1, S+1; FAIL: T+1; nothing else moves a cell; Eye.learn accepts only a Verdict object made by the verifier",
+  "choice_rule": "first try on an item: exact best cell at its Foundation, ties by a frozen seeded order per Foundation; after a failure: seeded draw among faculties NOT yet tried on this item, weighted by cell score (exact Fraction draw, 32 bits)",
+  "table_scope": "carries across the 32 sessions of one life; resets per world seed",
+  "whisper": "an entry {by: eye, foundation, faculty, item, cell, reason} appended to the u1b ConcertLedger; the brain reads it, the gate admits or refuses (refuses in conversation; refuses a faculty already tried on the item)",
+  "report": "the Eye's own log: a table snapshot at life start and after each session, plus each choice's reason",
+  "never_writes": "the Eye holds no handle to BrainStore; BrainStore accepts writes only from author 'brain' and counts any other author; canary: a planted Eye write must be refused and counted, run in the test stage and at the start of every part",
+  "brain_follows_every_admitted_whisper": true
+ },
+ "attention": {
+  "space": "open 7-simplex over F1..F7 (Correction 4: every coordinate > 0)",
+  "start": "uniform 1/7",
+  "pull_target": "q_F = (n_F * y_F + 1/64) / sum, exact Fractions; n_F = open items filed at F; y_F = (s_F + 1)/(t_F + 2) over all tries at F (learn) or 1 (count-only)",
+  "step": "one Fisher-Rao geodesic step (slerp on sqrt(a)) of size tau = 1/4 toward q per idle tick; focus = live F (n_F > 0) with the largest a_F, ties to the lower index",
+  "ratio_alternative": "EYE_RATIO: focus = live F with the largest q_F; no point kept, no step",
+  "floats": "binary64 only for the attention point; it only chooses; never written into a receipt, a record or the gate"
+ },
+ "parts": {
+  "count": 103,
+  "plan": "T00 = test stage; A01..A99 = 11 arms x 3 families x 3 seeds (order: family, seed, arm); R01..R03 = EYE_PAIRING on A_STATIONARY seeds 11/29/47 again (replay); then M00 = the reader (merge; reads results, rebuilds worlds, re-checks; run under the same supervisor, outside the 103 count)",
+  "limits": "one worker process per part, hard wall 300 s, 300 MiB working set, sockets blocked, no spend; wait while free RAM < 300 MB (brief) and while another laptop driver's worker is mid-part; one process at a time"
+ },
+ "hard_gates": {
+  "H1_receipts": "independent re-checker re-derives every resolution from the item's own data: 0 mismatches (answer, receipt record, faculty is a true solver)",
+  "H2_no_invention": "WRONG = 0 in every arm",
+  "H3_replay": "the 3 replay parts' RESULT.json bytes equal the originals (sha256)",
+  "H4_equal_budgets": "slot-list digests identical across arms per (family, seed); idle-slot actions <= idle budget per session",
+  "H5_cut": "(a) every non-violator part: calls_in_conversation = 0 and attention_steps_in_conversation = 0; AND (b) every CUT_VIOLATOR part: both > 0; if (b) fails the check could not fire and the gate FAILS",
+  "H6_whisper_never_writes": "non_brain_write_attempts = 0 in every part; AND the canary (planted Eye write) refused and counted in the test stage and in every part",
+  "H7_no_key_leak": "refused key reads = 0 in every part; a static check finds true_key calls only in the FIXED_TABLE branch and the reader",
+  "H8_no_key_at_start": "every Eye table at life start is all 0/0, from the Eye's own report",
+  "H9_learning_audit": "replaying each part's attempt log (Foundation, faculty, fed verdict) rebuilds the final Eye table exactly; for learning arms other than EYE_SHUFFLED_FEEDBACK fed verdict = true verdict on every row; for frozen arms the final table is all 0/0",
+  "H10_open_simplex": "every attention point has all 7 coordinates > 0; every pull target is an exact Fraction vector summing to 1",
+  "I1_null_control": "on C_NULL, |EYE_PAIRING - ATTENTION_ONLY| < 5 points pooled",
+  "H11_completeness": "test stage passes; 103 of 103 parts COMPLETED; none over 300 s"
+ },
+ "marks_family_A": {
+  "points": "percentage points of all items in the family; all rates exact Fractions",
+  "M1": "EYE_PAIRING - RANDOM_PAIRING >= 5 points pooled over seeds 11/29/47 AND EYE > RANDOM on each seed; the same against ROUND_ROBIN_PAIRING",
+  "M2": "EYE_PAIRING resolved >= 4/5 x FIXED_TABLE resolved (pooled)",
+  "M3": "M3a: EYE_PAIRING - EYE_PAIRING_NO_LEARN >= 5 points pooled AND > 0 on each seed; M3b (the PROPOSED addition, adopted): the same against EYE_SHUFFLED_FEEDBACK; M3 = M3a and M3b",
+  "M4": "at life end, the Eye's highest-scoring faculty per Foundation (frozen tiebreak) equals the true best faculty (home kind's primary) on >= 5 of 7 Foundations, on each of the 3 seeds",
+  "M5": "= H5",
+  "M6": "= H6",
+  "key_room": "FIXED_TABLE - RANDOM_PAIRING >= 5 points AND FIXED_TABLE - ROUND_ROBIN_PAIRING >= 5 points (pooled, family A)"
+ },
+ "status_words": ["EYE_PAIRING_EARNED_KEEP", "LEARNING_DID_NOT_EARN_KEEP", "PAIRING_NOT_THE_VARIABLE", "INCONCLUSIVE"],
+ "status_rule_in_order": [
+  "1. any hard gate fails -> test verdict FAILURE, word INCONCLUSIVE",
+  "2. no key room -> PAIRING_NOT_THE_VARIABLE",
+  "3. M3 fails -> LEARNING_DID_NOT_EARN_KEEP",
+  "4. M1, M2 and M4 all pass -> EYE_PAIRING_EARNED_KEEP",
+  "5. otherwise -> INCONCLUSIVE"
+ ],
+ "reported_rows": ["R1 geometry: EYE_PAIRING vs EYE_RATIO", "R2 decomposition: EYE - ATTENTION_ONLY; EYE - PAIRING_ONLY", "R3 drift (family B): resolved in sessions 1-16 and 17-32 per arm; first session after the drift where the Eye's best cells match the new key on >= 5 of 7", "R4 learning curve: per-session resolved, EYE_PAIRING and FIXED_TABLE", "R5 blocking: sessions with 0 resolved; most tries on one item in a session", "R6 pair spread: pull gap between F1-F7, F2-F6, F3-F5 (reported only)", "R7 restlessness: mean and max Fisher-Rao step length", "R8 3-valued table", "R9 NO_DRIVE floor", "the learned 7 x 7 table vs the true table per seed (family A)", "cut counts incl. the violator", "whisper write count (must be 0)"],
+ "predictions": {
+  "designer_TEST_PLAN_7": {"word": "EYE_PAIRING_EARNED_KEEP", "likelihood": "about 70%", "family_A_resolved_pct": {"NO_DRIVE": "15-17", "RANDOM_PAIRING": "26-36", "ROUND_ROBIN_PAIRING": "26-36", "EYE_PAIRING_NO_LEARN": "25-36", "ATTENTION_ONLY": "27-38", "EYE_SHUFFLED_FEEDBACK": "25-38", "PAIRING_ONLY": "68-83", "EYE_PAIRING": "72-84", "EYE_RATIO": "within 3 points of EYE_PAIRING", "FIXED_TABLE": "82-86"}, "I1": "all pairing arms within 3 points on C_NULL, 50-60% resolved", "R1": "tie within 3 points", "R3": "Eye 17-32 at 35-55%; best cells do NOT recover on >= 5 of 7 by session 32 (about 70%)"},
+  "builder": {"word_odds": {"EYE_PAIRING_EARNED_KEEP": "60%", "INCONCLUSIVE (a mark short, most likely M4 on a noisy-well seed or M2)": "25%", "LEARNING_DID_NOT_EARN_KEEP": "10%", "PAIRING_NOT_THE_VARIABLE": "5%"}, "hard_gate_failure_risk": "about 10% (most likely H3 replay or an I1 gap from attention interplay)", "written_before": "any RB-I3 code"}
+ },
+ "would_license_if_EYE_PAIRING_EARNED_KEEP": "On synthetic idle worlds where the fit between item kinds and faculties is hidden and filing is noisy, an Eye that counts verified tries per (desire, faculty) pair, starting with no key, resolves at least 5 points more items than random or round-robin pairing, reaches at least 80% of the answer-key arm, recovers the hidden best pairing on at least 5 of 7 desires, and never acts or writes during conversation.",
+ "would_not_license": ["anything outside synthetic worlds", "that HELM's faculties are creative, curious or imaginative in any human sense", "meaning for the Foundations beyond category labels", "that the Fisher-Rao geometry helps (R1 is a row, not a word)", "that the Eye should act outside tests", "anything about U2", "any change to wave 3's DRIVE_LOOP = NEUTRAL"]
+}
