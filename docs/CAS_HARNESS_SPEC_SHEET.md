@@ -2310,6 +2310,46 @@ This section records **who decided what**. A ruling is not evidence. Nothing her
 - **Open (owner decision, not taken here):** whether the job check should read a re-read of the grown stage rather than the per-cell probes; whether the depth family's V5/V6 refusal is a capacity question at all.
 - **Artifacts (off-repo):** `Documents\Codex\2026-10-19\rb_g8\` (RESULTS.md sha256 `3dd129e702e980e38d5185d3956087048fbfcefddfac70d36493cd2b964a0dc1`, FROZEN.json, FROZEN.precode.json, OWNER_APPROVAL_EVIDENCE.md, SOURCE_MANIFEST.json, runs\MERGED.json, runs\DRIVER_LOG.txt); backup `D:\tksCAS-archive\rb_g8_20261019\` (132 files, every sha256 equal).
 
+### 7.68 HELM RB-G9 (RB-G8 re-run with ONLY the instrument fixed; 8 laptop parts, $0): status word `CURIOSITY_DID_NOT_EARN_KEEP` → FAIL; the growth claim stays `NOT LICENSED` after eight runs. The fixed job check stopped the false growth on the `a` control (promised 199 rows, real 22 → refused; M3 now TRUE), but curiosity still beats both dumb baselines on only one family and a_approx still stops 6.25 points under the pre-sized brain (2026-10-19 PDT, laptop MSI, 0 USD)
+
+**Said plainly first.** RB-G8 (§7.67) failed because its job check trusted a promise. Small test fits said a new unit would explain 199 rows on the `a` control; the real grown unit explained 22. RB-G9 changes only that check: before growing, it fits the unit on a copy of the brain and counts the rows the copy really explains. On `a` the copy explained 22 rows for 320 new parameters, so the check refused it and nothing grew. No control fired. Everything else came out exactly as in RB-G8. The frozen rule now reads `CURIOSITY_DID_NOT_EARN_KEEP`: curiosity grows the right kind, but the plain refusal counter or the random-kind arm ties it on three of four families.
+
+**Coordinator decisions (instrument fixes, not research changes; verbatim in FROZEN.json):** (1) the job check must measure a grown copy's real explained rows, never the test fits' promise, keeping the ≥ 8-row rule and all guardrails; (2) drop the depth family (no arm reached depth 3 in RB-G8; depth growth is measured by wave 3's cascade exam, §7.66); (3) everything else frozen as RB-G8. Sign line composed by the operator, not an owner signature: `APPROVE rb_g9, source ecbea9e6, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.`
+
+**Which rows the fix counts (operator's reading, disclosed):** training rows newly explained by the grown copy, minus the same-capacity re-read — the count RB-G8's V8 read as 22. Not the scoring held-out panel: deciding growth on the panel that scores the arm would leak the score. The copy's validation and held-out changes are logged, reported only.
+
+| Item | Value |
+|---|---|
+| Freeze | `FROZEN.precode.json` sha256 `69d97e99a86e5cf0700ee87374a76567b0b68aef938c3bb8c51f13203a810169` (RB-G8's FROZEN with IC1 / IC2 edits labeled; before any code); amendments A1 tests 48/48, A2 before/after, A3 real-unit fixture, A4 no smoke |
+| Fix test | `TEST_BEFORE_AFTER.json`: the 3 IC1 test bodies FAIL against the RB-G8 reader (K3 named / fired on the promise 199) and PASS against the RB-G9 reader (refused: 22 rows, +320 parameters, ratio 11/160); one uses the real RB-G8 `a_g8` units, digest-checked |
+| Manifest | `ecbea9e6494deef45505a5fc98e0c90f0f16394071ba9c2d13478bd12f570867` (269 files) |
+| Run | parts G01–G08, 08:54:40 → 09:12:46 UTC (01:54–02:12 PDT); tests 48/48 in G01; peak working set 70,119,424 B; spend 0 |
+| Worlds | the G8 worlds REUSED unchanged (instrument retest); planted F1 ×20 (K1), a_approx (K3), a2 (K2), scale_leak (K4); controls S2v2, S3v2, `a`, three shuffled LSR, F1 shuffled ×20; TaskB_d3 dropped (IC2) |
+| Reading | `runs\MERGED.json` sha256 `8f471a95f360d96845b4dd10d9151356a067653d7dc4da821bc1e9e6798c8451`; all 9 instrument rows hold; replay 4/4 equal; 330 of 332 units digest-equal to RB-G8's, 2 new (the scale_leak_shuffled K3 copy) |
+
+| Mark (3-valued) | RB-G9 | Counts | RB-G8 |
+|---|---|---|---|
+| M1 right gap AND right kind | 🟩 TRUE | 84 of 84 (F1 80/80, a_approx 2/2, a2 1/1, scale_leak 1/1) | 🟩 TRUE (85/85) |
+| M2 within 5 points of the ORACLE on all 4 families | 🟥 FALSE | a_approx 81.25 vs 87.50 | 🟥 FALSE |
+| M3 no wrong-kind growth (strict) | 🟩 TRUE | 0 on planted worlds, 0 on controls | 🟥 FALSE (1 on `a`) |
+| M4 beats REFUSAL_COUNT and RANDOM_KIND by ≥ 5 on ≥ 2 of 4 families | 🟥 FALSE | only scale_leak | 🟥 FALSE |
+| M5 guardrails | 🟩 TRUE | all six violation counts 0 | 🟩 TRUE |
+
+| Held-out points | CURIOSITY | ORACLE | NO_GROWTH | REFUSAL_COUNT | RANDOM_KIND (median) | LEDGER_G6 |
+|---|---|---|---|---|---|---|
+| F1 (K1) | 100.00 | 100.00 | 62.50 | 100.00 | 62.50 | 100.00 |
+| a_approx (K3) | 81.25 (325/4) | 87.50 | 9.18 | 81.25 | 56.25 | 9.18 |
+| a2 (K2) | 72.46 (9275/128) | 75.39 | 47.07 | 47.07 | 72.46 | 47.07 |
+| scale_leak (K4) | 90.04 (11525/128) | 90.04 | 12.50 | 12.50 | 12.50 | 90.04 |
+| TaskB_d3 (K5) | dropped (IC2) | | | | | |
+
+- **Promised vs real (87 job checks):** one flip only — `a_g8` K3, promised 199, real 22, +320 parameters → refused. Planted units: a_approx K3 promised 173 / real 482 and 284 / 257, a2 K2 233 / 223, scale_leak leak 537 / 762, F1 80 checks all passed (real ≥ 9). Shuffled controls: a_approx_shuffled K3 real 18, scale_leak_shuffled K3 real 0 — refused (the promise had refused them too).
+- **Kept units:** identical to RB-G8 on every planted world. REFUSAL_COUNT and LEDGER_G6 are unchanged arms and still fire on controls (REFUSAL_COUNT 4, LEDGER_G6 1, all rolled back); RANDOM_KIND, which follows curiosity's cadence, no longer fires on `a`.
+- **Honest limit:** the real-rows check is V8's rule moved before growth and measured on a copy. So for units that add parameters, M3 can no longer fail through V8. The run shows the fix stops false growth; it does not show curiosity out-earns the cheap baselines.
+- **Status words:** `REAL` laptop run, `SYNTHETIC_ONLY`, no HELM claim. Verdict FAIL, status word `CURIOSITY_DID_NOT_EARN_KEEP`. The frozen claim "the brain grew at the point of curiosity: it named the gap and the kind, and grew only that kind" stays **`NOT LICENSED`** (the word rule needs M1–M5 all TRUE). May be quoted as measured: 84 of 84 right namings; 0 units fired on any control or with a wrong kind; the copy-based job check refused the one unit RB-G8's promise let through. **Negative results kept:** M4 FALSE (refusal counter ties on F1 and a_approx, random-kind median ties on a2); M2 FALSE (a_approx 6.25 short at the 12-corner ceiling, no further K3 probe there).
+- **Open (owner decision, not taken here):** whether to stop the growth line or design a world where curiosity's reading should beat the refusal counter.
+- **Artifacts (off-repo):** `Documents\Codex\2026-10-19\rb_g9\` (RESULTS.md sha256 `b57ca45fab6ee27139ab3273ecb0d855a69531445048f8798b33ee2a96849528`, FROZEN.json, FROZEN.precode.json, TEST_BEFORE_AFTER.json, SOURCE_MANIFEST.json, runs\MERGED.json, runs\DRIVER_LOG.txt); backup `D:\tksCAS-archive\rb_g9_20261019\` (124 files, three sha256 passes, 0 mismatches).
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -2602,6 +2642,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-19 | **RB-G9 CURIOSITY GROWTH, INSTRUMENT RETEST RAN (new §7.68) — `CURIOSITY_DID_NOT_EARN_KEEP`, FAIL; growth claim stays `NOT LICENSED`.** Only the instrument changed: IC1 the job check fits the unit on a copy and counts its real rows (never the test fits' promise); IC2 depth family dropped. On `a` the promise was 199, the copy 22 rows for +320 parameters → refused; no control fired (M3 TRUE). M1 TRUE 84/84; M2 FALSE (a_approx 81.25 vs 87.50); M4 FALSE (only scale_leak); M5 TRUE. Planted scores identical to RB-G8. 8 laptop parts, $0. | `Documents\Codex\2026-10-19\rb_g9\runs\MERGED.json` (sha256 `8f471a95…`); FROZEN.precode `69d97e99…`; manifest `ecbea9e6…`; this commit |
 | 2026-10-19 | **RB-G8 GROWTH AT THE POINT OF CURIOSITY RAN (new §7.67) — `GREW_WRONG_KIND`, FAIL; growth claim stays `NOT LICENSED`.** Curiosity reader on F2 (one gap at a time; probe decides, sign ranks; job check before growth). M1 TRUE 85/85; M2 FALSE (a_approx 81.25 vs 87.50, TaskB_d3 39.06 vs 73.05); M3 FALSE (1 fired K3 on the `a` control, rolled back by V8, 22 rows for 320 parameters); M4 FALSE (only scale_leak beats both baselines); M5 TRUE. LEDGER_G6 froze again on a_approx (9.18) and a2 (47.07); curiosity grew both (81.25, 72.46). RB-G7 recorded `NEVER_RAN`. 9 laptop parts, $0. | `Documents\Codex\2026-10-19\rb_g8\runs\MERGED.json` (sha256 `901e1459…`); FROZEN.precode `53ab4508…`; manifest `2346ddfe…`; this commit |
 | 2026-10-19 | **§7.66 amended — wave 3 RESEALED as v2 before signing.** The cube store's read path had two plumbing faults found by the builder's dry run (an absent item listed as "None Water"; "What do we have on hand?" sent to FIND_SHARED_PART). Fixed with two new tests (fail before, pass after; cube_store 21/21). v1 zip `2d5b4f0e…` `VOID_UNSIGNED`; v2 zip `26b0ef7e…`, freeze `a72063f5…`; 4 members changed; tests from the v2 seal 493 passed, 4 AWS-only skipped, 0 failed. Nothing else changed. | thread commit `554fce5c`; `docs/working/r1_wave3/TEST_RECORD_R1W3.md` §4 |
 | 2026-10-19 | **HELM-R1 WAVE 3 PACKET SEALED, NOT LAUNCHED (new §7.66) — nothing scored, no claim.** 13 switches (wave 2's eight + CUBE_STORE, ATLAS, EYE, CASCADE, DRIVE_LOOP RB-I2), swap arm CASCADE_FIXED_CAP, 16 earned-part pairs (18 runs); exams E1, E2 and fresh X2 (Gate B, Task B, depth, CCE, English-16 v3, Faces-16, Cascade 64 chains, Idle 16 sessions); X2 band rule written in advance. Decoupling-stop primary with HORIZON 12 as fuse; canon's 5 only in the swap arm. NOT_IN_WAVE: the RB-I1 faculties design (§7.65 clean negative), growth (RB-G8). Tests from the sealed zip 491 passed, 4 AWS-only skipped, 0 failed. Proposed cap 3 USD. | zip `2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7`, freeze `be1b321de2ef2545832b7281e7b53b7f263e6e381fd2b011783a550a447d3c65`, `docs/working/r1_wave3/` |

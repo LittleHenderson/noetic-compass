@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-G9 curiosity growth, instrument retest RAN: CURIOSITY_DID_NOT_EARN_KEEP, FAIL (spec sheet 7.68; laptop MSI, 8 parts, 0 USD)
+
+Coordinator decisions (instrument fixes): (1) the job check measures a grown copy's real rows; (2) drop the depth family; (3) everything else frozen as RB-G8. Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json 69d97e99...).
+
+- IC1: before growing, the unit is fitted on a copy of the brain; it may grow only if the copy newly explains >= 8 rows and 4 x rows >= parameters added (exact Fractions). The old promise J is logged only.
+- Fix test: the IC1 tests fail against the RB-G8 reader (K3 named on the promise 199) and pass against the RB-G9 reader (real 22 rows, +320 parameters, refused). One test uses the real RB-G8 a_g8 units.
+- IC2: TaskB_d3 not run (no arm reached depth 3 in RB-G8; depth goes to wave 3's cascade exam).
+- Marks: M1 TRUE (84/84), M2 FALSE (a_approx 81.25 vs 87.50), M3 TRUE (0 fired on controls; RB-G8: 1), M4 FALSE (scale_leak only), M5 TRUE. Status CURIOSITY_DID_NOT_EARN_KEEP; claim NOT LICENSED.
+- Run: manifest ecbea9e6..., MERGED.json 8f471a95..., tests 48/48, replay 4/4, 330 of 332 units digest-equal to RB-G8, backup D:/tksCAS-archive/rb_g9_20261019/ (124 files, three hash passes, 0 mismatches).
+
 ## 2026-10-19 PDT - RB-G8 growth at the point of curiosity RAN: GREW_WRONG_KIND, FAIL (spec sheet 7.67; laptop MSI, 9 parts, 0 USD)
 
 Owner words: "Unpark growth; ..." and "WE ADD MORE AT THE POINT OF CURIOSITY THE SECOND FOUNDATION ..." (2026-10-19 early). Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json 53ab4508...).
