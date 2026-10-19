@@ -4,6 +4,47 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - RECORDS CATCH-UP (owner's fix A): spec sheet sections 7.48-7.56 written for the work of 2026-10-16 to 2026-10-18; a roadmap status correction added; nothing upgraded, no negative removed
+
+Owner's approval: "I agree with all of them....please proceed." (2026-10-18, recorded at
+C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md, item 4, fix A). Laptop only, $0.
+Every count below was read from the files, not copied from a summary. Where only a commit message or a
+handoff claims a pass, the record says "authored, output not recorded".
+
+- **7.48 - nine noetic_council packages: ENGINEERED-NOT-VALIDATED.** 308 tests written (19 + 11 + 50 + 33 + 35
+  + 27 + 49 + 68 + 16). Recorded outputs: cube store 19/19, continuity v4 50/50, the language marks, one real
+  fitter run and one repair-actor run. Six suites have no recorded output. Codex: "mechanisms built; brain
+  integration missing". Queue rows 15 (one live trace) and 17 (a real failure) still TODO.
+- **7.49 - end-to-end pipeline and chat layer: ENGINEERED-NOT-VALIDATED, not "verified live".** The round trip is
+  computed at helm_end_to_end_loop.py:295-296 and never checked; missing ingredients are filled with
+  Decimal("10") at :421; the loop bypasses the RPM gate, repair performer, D/W/P engine, ASOM and Bias.
+- **7.50 - Phase 3 valve: ENGINEERED-NOT-VALIDATED.** A learned 5-weight logistic aperture, trained
+  LOCAL_CPU_DRYRUN_FAST (not on AWS) on 2,000 samples, sits in the deciding path; alone it leaks 83 of 250. The
+  owner ruled a plain-rule valve on 2026-10-18 (not yet done).
+- **7.51 - helm_brain_22x40.py and helm_brain_tks28.py: stand-in demos, ENGINEERED-NOT-VALIDATED.** "22" = 22
+  baking ingredients; "40" = 22 weights + 1 rho + 17 thresholds. No run id, no score.
+- **7.52 - RB-OH1 merged reading: NOT LICENSED.** FRESH HYBRID_ROUTING_EARNED, ORIGINAL HYBRID_NO_BETTER,
+  SWEEP_CALIBRATION_FAILED, licensed false. The roadmap's "87.50% (448/512) vs 60.74% (311/512)" are RB-OH1's
+  numbers, not 22x40's. GPU job c32: Tesla T4, RUN stage 36.817 s, hold 2.00, no closeout.
+- **7.53 - two unrecorded GPU jobs on helm/creativity-rpa-valve-v1: FLAG_FOR_HUMAN_REVIEW.** Scribe L4 (commit
+  84812689): Tesla T4, 30.95 s, exact 90.0 %, round trip 64.0 %, weights 326,230 bytes; no ledger line, no owner
+  sign line, no cleanup check. "Stage v0.7" (commit 5a7d02f3): a commit-message claim with no artifact at all.
+- **7.54 - L4 split: REAL.** 98 sealed (e269a448...) and 99 development (17cd1983...) rows, hashes re-checked;
+  they are generator English, not human English. The tabulation's baseline row (118 / 321 / 42) is typed into
+  tabulate_439_sdg_baseline.py (lines 170-173, 209), not computed: FLAG_FOR_HUMAN_REVIEW.
+- **7.55 - owner rulings and council decisions, 2026-10-16 to 2026-10-18: IN FORCE as rules.** HORIZON 12 and
+  DESIRE_BOUND 12 (owner, verbatim), canon's 5 kept beside it; C4 / C5 / Q13 decided by the council, not the
+  owner; the four 2026-10-18 approvals.
+- **7.56 - CANONICAL BRAIN POINTER.** The one licensed brain is the HELM-R1 wave-1 recipe brain (c34-g PASS,
+  R1_BEATS_GB3, SYNTHETIC_ONLY), package Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3; every
+  other brain is a candidate or a stand-in. It is not yet inside HELM's live loop.
+- **New file** docs/working/HELM_CAPABILITIES_ROADMAP_STATUS_CORRECTION_20261018.md: the roadmap's milestone
+  table with an honest status column. v0.4 "AWS GPU trained" is a FALSE claim; v0.5 is unrecorded spend; v0.1,
+  v0.6, v0.8 and v0.8.1 are authored only. The roadmap file itself is not edited.
+
+Not done here (later fixes): ledger reconciliation (B), recipe brain into the live loop (C), plain-rule valve
+(D), scoring the Scribe model on the sealed 98 (E), the everyday-English writer (F), the real 40 / 28 / 22
+ledger universes (G).
 ## 2026-10-18 PDT - HELM language line, fix E (dictionary half): alias-wide lexicon v2; DEV 99 read 0 -> 41, sealed 98 (once) 0 -> 34; Scribe L4 scoring prepared, NOT_RUN
 
 Laptop, stdlib, 0 USD. FROZEN_LEXICON_V2.json pushed first (0b7cde89). lexicon_v2.py (dd60f490) = v1 unchanged
@@ -15,7 +56,7 @@ NO_STATE 148 -> 21 (vocabulary gaps, closed); NO_DOMAIN 56 -> 69 (mostly English
 word can fix it). Tests: language_v3 26+11+5+26 OK, new 19 + 6 OK. Scribe L4 (84812689) scoring plan +
 script written, NOT_RUN pending owner word: needs torch on an AWS CPU t3.medium (~0.01 USD); its one-clause output
 cannot hold a recipe, so exact match is 0/98 by construction. Failed approach logged: adding `behavior` as an O word
-(refused by the frozen rule; the SDG writer used "operational behavior" for two P cells). Spec sheet §7.50.
+(refused by the frozen rule; the SDG writer used "operational behavior" for two P cells). Spec sheet §7.57.
 
 ## 2026-10-16 PDT - HELM-R1 WAVE 1 SCORED (job c34-g, AWS): the recipe brain in GB3's slot beat GB3 on the freshly sealed exam - 32 against 9, and 32 against 17/2 widened; frozen reader PASS, R1_BEATS_GB3, all seven hard gates and all eight instrument rows holding
 
