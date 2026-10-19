@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - DWP-T2 RAN (Wisdom rule C kept: C_EARNED_KEEP) AND THE TRIAD ADAPTER helm_triad.py BUILT; spec sheet sections 7.61 and 7.62; laptop MSI, 0 USD, ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY
+
+Owner words: "drops only by a named event with evidence [C]."; "min; earliest ..."; "Desire is Purpose"; one scale
+(Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md). Build order relayed by the dispatch coordinator.
+
+- DWP-T2 (Documents/Codex/2026-10-18/dwp_t2/, FROZEN.json sha256 6fbd4f02... written before code): Wisdom rules
+  A never drops / B drops like the others / C drops only by a named event with evidence, plus a random drop/no-drop
+  baseline, on three planted world families (64 worlds x 16 steps each). Run DWP_T2_MSI_ONCE, sign line
+  "APPROVE dwp_t2, source 15e2c4ea, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.", 2.9442369 s, peak 40,861,696 bytes,
+  17/17 tests. Status word C_EARNED_KEEP.
+  - (i) rises only: A, B, C identical on every row; 0 false drops.
+  - (ii) 192 real decays: avoidable wrong yields A 439, B 0, C 0; A called 0 of 192 drops; C 192/192 with
+    UNEXPLAINED_YIELD evidence, 0 rows late. 238 surprise rows (B, C) cannot be avoided by any rule.
+  - (iii) 128 tampered reloads: C caught 128/128 (STORAGE_FAULT), 0 wrong, 391 UNDETERMINED; A and B 153 avoidable
+    wrong each, 0 caught. 0 false faults on 256 clean reloads.
+  - Costs: 4,608 stored face values for every rule; C adds 3,315 receipts and 320 events; 0 learned parameters.
+  - Limits: by construction; noise-free worlds; rule A had no reload check (coordinator spec). Says nothing about
+    whether real know-how decays.
+- Triad adapter: new helm_triad.py (TriadBrain wraps CanonicalRecipeBrain.evaluate/witness; TriadTable stores faces
+  with sources, evidence and an append-only receipt log). Default OFF. Sealed package, helm_brain_canonical.py,
+  helm_end_to_end_loop.py and helm_chat.py untouched. test_helm_triad.py 15/15 OK: OFF identical 100/100; Peak
+  identical 400/400; planted starved ingredient 120/120 and face 120/120; receipts 52/52; Wisdom drop without event
+  refused; STORAGE_FAULT / UNEXPLAINED_YIELD / CORRECTION evidence paths pass; reload tamper caught. 0 learned
+  parameters; stored-value ceiling 28 (8 x 3 + 4). Existing suites unchanged: loop 18 OK, English-in 31 OK, voice 22
+  OK, chat nuance 5 passed. Not wired into the live loop yet (that file belongs to the English-in builder today).
+- Spec sheet: 7.60 was taken by the English-in builder (fix H), so these are 7.61 (DWP-T2) and 7.62 (adapter), the
+  numbers the task named.
+- Failed approaches: none abandoned. Two ResourceWarnings (unclosed file handles in test_14/test_15) fixed before the
+  recorded run; no assertion changed.
+
 ## 2026-10-18 PDT - FIX H: EVERYDAY ENGLISH IN. Plain stock and recipe sentences now reach the licensed brain through the same checked route (laptop, 0 USD, ENGINEERED-NOT-VALIDATED)
 
 New `helm_english_in.py`: a deterministic reader that restates everyday stock/recipe English in the checked form

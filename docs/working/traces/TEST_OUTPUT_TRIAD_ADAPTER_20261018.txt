@@ -1,0 +1,51 @@
+=== python test_helm_triad.py (2026-10-18 PDT, Python 3.14.0, Windows 11, MSI) ===
+test_01_default_off_passes_through (__main__.TestTriadAdapter.test_01_default_off_passes_through) ... ok
+test_02_peak_reproduces_brain_exactly (__main__.TestTriadAdapter.test_02_peak_reproduces_brain_exactly) ... ok
+test_03_starved_face_worked_example (__main__.TestTriadAdapter.test_03_starved_face_worked_example) ... ok
+test_04_planted_starved_faces_counted (__main__.TestTriadAdapter.test_04_planted_starved_faces_counted)
+Decoy rows: the starved ingredient has the MOST raw stock (by ratio), so only the faces can name it. ... ok
+test_05_recipe_purpose_door (__main__.TestTriadAdapter.test_05_recipe_purpose_door) ... ok
+test_06_wisdom_drop_without_event_refused (__main__.TestTriadAdapter.test_06_wisdom_drop_without_event_refused) ... ok
+test_07_wisdom_drop_with_storage_fault_evidence (__main__.TestTriadAdapter.test_07_wisdom_drop_with_storage_fault_evidence) ... ok
+test_08_unexplained_yield_and_correction (__main__.TestTriadAdapter.test_08_unexplained_yield_and_correction) ... ok
+test_09_receipt_on_every_write (__main__.TestTriadAdapter.test_09_receipt_on_every_write) ... ok
+test_10_reload_catches_tamper (__main__.TestTriadAdapter.test_10_reload_catches_tamper) ... ok
+test_11_absent_face_goes_to_brain_g2 (__main__.TestTriadAdapter.test_11_absent_face_goes_to_brain_g2) ... ok
+test_12_witness_converted_and_replayed (__main__.TestTriadAdapter.test_12_witness_converted_and_replayed) ... ok
+test_13_three_valued_sums (__main__.TestTriadAdapter.test_13_three_valued_sums) ... ok
+test_14_zero_learned_parameters (__main__.TestTriadAdapter.test_14_zero_learned_parameters) ... ok
+test_15_sealed_package_untouched (__main__.TestTriadAdapter.test_15_sealed_package_untouched) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.291s
+
+OK
+
+[helm_triad] parameter_count: {"learned_parameters": 0, "stored_values": 3, "stored_value_ceiling": 28, "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"}
+[helm_triad] COUNTS: {"off_identical": [100, 100], "peak_identical": [400, 400, 8], "starved": [120, 120, 120], "receipts": [52, 52, 28], "three_valued": [{"RIGHT": 80, "WRONG": 1, "UNDETERMINED": 1}, 82], "parameter_count": {"learned_parameters": 0, "stored_values": 3, "stored_value_ceiling": 28, "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"}}
+
+=== existing suites, same worktree, unchanged files (2026-10-18 PDT, Python 3.14.0, Windows 11, MSI) ===
+--- python -m unittest test_helm_end_to_end_loop.py
+Ran 18 tests in 0.267s
+
+OK
+--- python -m unittest test_helm_english_in.py
+Ran 31 tests in 0.170s
+
+OK
+--- python -m unittest test_helm_voice.py
+Ran 22 tests in 0.511s
+
+OK
+--- python -m pytest -q test_helm_chat_nuance.py
+5 passed in 0.29s
+--- python helm_triad.py
+{
+ "claim_ceiling": "ENGINEERED-NOT-VALIDATED; SYNTHETIC_ONLY; zero learned parameters; faces are stated inputs",
+ "parameter_count": {
+  "learned_parameters": 0,
+  "stored_values": 0,
+  "stored_value_ceiling": 28,
+  "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"
+ }
+}
