@@ -1,0 +1,305 @@
+{
+ "arms": {
+  "F": {
+   "CHECKLIST": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "CHECKLIST",
+     "trigger": "AFTER_EACH_WRITE"
+    },
+    "off": []
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "eye": {
+     "delivery": "REPORT_ONLY",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "WATCHDOG": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "WATCHDOG",
+     "trigger": "AT_RELOAD"
+    },
+    "off": []
+   }
+  },
+  "RA": {
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  },
+  "RB": {
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  },
+  "S": {
+   "-ENGLISH_IN": {
+    "eye": null,
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  }
+ },
+ "candidate": "FULL+EYE_SCAN",
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY",
+ "claim_ceiling_now": "SYNTHETIC_ONLY",
+ "constants": {
+  "MR_STOCK": "We have {L}.",
+  "MR_TEACH": "We made 1 {N} from {L} and ran out of {H}.",
+  "P0": "Hi again.",
+  "P1": "What do we have on hand?",
+  "P2": "How much {N} can we make?"
+ },
+ "fault_table": {
+  "benign": [
+   "E2b",
+   "C1"
+  ],
+  "code_pages": [
+   "cp1252",
+   "latin-1",
+   "mac-roman"
+  ],
+  "harmful": [
+   "T1",
+   "T2",
+   "E1",
+   "E2a",
+   "D1",
+   "S1"
+  ],
+  "kinds": [
+   "T1",
+   "T2",
+   "E1",
+   "E2a",
+   "E2b",
+   "D1",
+   "S1",
+   "C1"
+  ],
+  "names": {
+   "C1": "CLOCK_RESET",
+   "D1": "DUPLICATE_LINE",
+   "E1": "MOJIBAKE",
+   "E2a": "BOM_ADDED",
+   "E2b": "CRLF_ENDINGS",
+   "S1": "STALE_ROLLBACK",
+   "T1": "TAIL_LOST_CONSISTENT",
+   "T2": "TORN_RECORD"
+  },
+  "object_prefixes": {
+   "store.json": [
+    "cube:",
+    "READ@"
+   ],
+   "trace.jsonl": [
+    "trace:"
+   ],
+   "triad_receipts.json": [
+    "triad:"
+   ],
+   "triad_records.json": [
+    "triad:"
+   ],
+   "witness.jsonl": [
+    "witness:",
+    "learned_digest"
+   ]
+  }
+ },
+ "forbidden_content_sha256": "e7948ae8cc564efc706f2637b54c84c3efafad67ed0b4f96aa00bce043f5bb18",
+ "i11": {
+  "considered": 16,
+  "criterion": "design: the M-R frame reaches a learned requirement in FULL on >= 12 of 16 practice recipes whose lines the reader can read (A-XR-6: two readable lines per Beeton recipe)",
+  "every_line_learned": 0,
+  "learned_right": 15,
+  "need": 12,
+  "pass": true,
+  "reached_a_learned_requirement": 15,
+  "structural_finding": "every_line_learned counts recipes whose every teaching turn was admitted; an exact-amount batch runs out of every ingredient at once (a tie), and the brain's receipt needs ONE limiting ingredient, so only the first teaching can be admitted"
+ },
+ "i11_sha256": "3d522ed04258ef02ca0c72566b840c5779c34820945cdf638be2146b9a20970a",
+ "label": "XREAL",
+ "marks": {
+  "F-a": "candidate 0 FALSE_ALARM on clean worlds",
+  "F-b": "candidate: every CAUGHT world whose caught object the probe touches is held",
+  "I11": "practice frame acceptance >= 12 of 16",
+  "I2": "two-key agreement >= 9/10",
+  "R-a": "WRONG(FULL) <= 2",
+  "R-b": "ANSWER-key items >= 16 and RIGHT >= 3/4 of them (A-XR-5)",
+  "R-c": "WRONG(FULL) < WRONG(B-KEYCALC) or both 0",
+  "R-e": "as S-e on R items",
+  "S-a": "WRONG(FULL) <= 2",
+  "S-b": "RIGHT(FULL) >= RIGHT(B-ASK) + 4",
+  "S-c": "WRONG(FULL) < WRONG(B-KEYCALC) or both 0",
+  "S-d": "PLAIN(FULL) >= n - 2",
+  "S-e": "EYE: 0 Body findings, 0 held; RIGHT >= FULL - 2"
+ },
+ "pins": {
+  "FORBIDDEN_LIST_XREAL.json": "2c04977ee72c44156a801b7db919751f5980393232f7a386a251b832e4b617a9",
+  "FRAMES_PINNED.json": "0b99ffe21f8532e5a39a2bc03d87e4d7f2106722d0936971af8b679cfcb677a4",
+  "SOURCES_PINNED.json": "24cfb0d17c0cea0602a907e5b4537fbace8fd01e4d1ebddbb4530b5da659fbdd"
+ },
+ "practice_seed_text": "XREAL-PRACTICE-20261019-builder",
+ "prereg": {
+  "file": "PREREGISTRATION_X_REAL.md",
+  "precode_sha256": "14b17eb1759902224478f424a64ae1ac0da018fc9f8db7c7bb48a656f0fb0313",
+  "sha256": "ca23381881f24e77cf16ef08a2526d03cf7625e40c396c5ac464fda3a90f9490"
+ },
+ "replay": "FULL+EYE_SCAN_REPLAY",
+ "schema": "helm.xreal.frozen/1",
+ "seed_bands": {
+  "XA": {
+   "hi": 1901000000,
+   "k": "k1",
+   "lo": 1900000001,
+   "slots": 1000000,
+   "what": "Part R-ASIS sample"
+  },
+  "XB": {
+   "hi": 1903000000,
+   "k": "k2",
+   "lo": 1902000001,
+   "slots": 1000000,
+   "what": "Part R-REBOUND sample"
+  },
+  "XF": {
+   "hi": 1905000000,
+   "k": "k3",
+   "lo": 1904000001,
+   "slots": 1000000,
+   "what": "Part F worlds/choices"
+  },
+  "XS": {
+   "hi": 1899000000,
+   "k": "k4",
+   "lo": 1898000001,
+   "slots": 1000000,
+   "what": "Part S sample"
+  }
+ },
+ "seed_gap": 1000000,
+ "sizes": {
+  "F_clean": 64,
+  "F_per_kind": 16,
+  "R_ASIS": 64,
+  "R_REBOUND": 64,
+  "S_per_stratum": 32,
+  "strata": [
+   "S1_QUANTITY",
+   "S2_ABSENCE",
+   "S3_QUESTION",
+   "S4_OTHER"
+  ],
+  "vacuity_min_scored": 16
+ },
+ "used_derivations": {
+  "X0": "641b246a5db9eefc185191d62fbcae99065b38eb019dd6da536904cedab3f7f7",
+  "X1": "a18ddd969b0920512bcb1488dcb3323ec76c6e1c74ee735db33b1b3166d3b991",
+  "X2V1": "841a0b20c3f5575224eab69efcc8b4c8b493fbce536c29467c0ac1502bb5f205",
+  "X2V1_ATTEMPT1": "6aaffe6fe2e6a837650614150cb5d0641c92c7128e2aab1a45d3f8032c547c99",
+  "X2V2": "8731da9c25db898825779c8d9d94338eb61cfd8746581eccb7893588335d764c",
+  "X2V2_PRE_TEXT_STEP": "1818a81330f00c15148a5a4efb97ac29d3ff662e456a88fe58a7b4012764821b",
+  "X3": "40fd6276709154a2c8cbffba5f16bd0b2ea7626ab7c2896ee854794b04c5ac7f",
+  "X4": "77efc1aceb0a86012f415b3f4a285844437374196c25df8cb8303b94e8ff1da7",
+  "X5": "100354cf0991b03ec509a1a6e6661021d052ffe7e150081c0ff9bab0c35889ba"
+ }
+}

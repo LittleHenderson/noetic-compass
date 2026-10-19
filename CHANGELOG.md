@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 X-REAL packet SEALED, NOT LAUNCHED (spec sheet 7.79): the first exam from other people's text (real food sentences, real cookbook recipes, real kinds of file damage); nothing scored, no claim
+
+Owner word (verbatim): " "FETCH X-REAL"" (design picks Q1-Q8 accepted; the SOURCES.md downloads allowed). Builder: Claude (X-REAL builder session). 0 USD, laptop only; downloads were the only network use.
+
+- Fetched and pinned (SOURCES_PINNED.json 24cfb0d1...): PG catalog + 281 English "Cooking" eBooks (the LoC heading "Cookery" is now "Cooking"; eBook 1979 excluded, header says COPYRIGHTED); English Wikibooks dump 20261001 (Wikimedia sha1 matched); Tatoeba English export; Google Taskmaster at commit d92cb6af (13 files). SKIPPED with reason: USDA SR Legacy list, ftfy release, Tatoeba CC0 list (no exact URL in SOURCES.md).
+- Frames (FRAMES_PINNED.json 0b99ffe2...): 15,672 sentences (S1 1,545 / S2 267 / S3 1,661 / S4 12,199); 10,368 PG + 3,318 Wikibooks recipes (1,728 REBOUND-eligible); practice partitions Beeton (PG 10136), Tatoeba ids ending in 7, Taskmaster TM-1 dev.
+- Package HELM_XREAL_20261019_SOURCE_XREAL.zip c275daed5ed26c6759543e8e89ebe2d54d7d750fe8b8f9bc957efe82ffa7bb6e (freeze 7c92a589...): parts S 128 / R-ASIS 64 / R-REBOUND 64 / F 192 restart worlds; key A + key B (separate session, never saw HELM code; practice agreement 204/205); rivals B-ASK, B-KEYCALC, B-ECHO, -ENGLISH_IN, -VOICE, Eye report-only, checklist, WATCHDOG checksum; custodian contract, seed rule (bands XS/XA/XB/XF 1,898-1,905 million; nine pinned derivations), receiver's checker, frozen reader.
+- Measured at build (practice and public frames only, not results): the M-R frame teaches only ONE ingredient per real recipe (I11 15/16 reach a lesson, 0/16 every line; exact-amount batches tie and the brain's receipt needs one limiting ingredient), so recipe arithmetic is unreachable with true statements; the designed recipe pairing gives ~0 answerable items (4/400, 0/400), guard A-XR-5 prints R_VACUOUS; census 1 of 13,686 recipes fits a brain shape; practice dry run: FULL wrote 7 wrong facts on 128 practice sentences ("no water on hand" for "Tom pulled Mary out of the water").
+- Tests from the sealed extract: 354 OK (X-REAL 97, w1 128, w2 34, w3 41, w3b 23, w4 31). Dry pool 21/21 units exit 0 in 48.66 s; peak memory 32.7-164.0 MiB.
+- Proposed cap 1.00 USD; no hold. Sign line: "APPROVE X-REAL: outside-generator exam, sealed package c275daed, one attempt + one plumbing retry, cap $1.00."
+- Slip recorded: the first request (PG robots.txt) carried the owner's e-mail in its User-Agent; later requests did not.
+
 ## 2026-10-19 PDT - Dictionary expansions from the owner: ASOM = Aligned / Starved / Oversaturated / Misaligned (owner gave three words; Starved is the spec sheet's fourth), SDG = CAS Synthetic Data Generator, CES = Constant Elasticity of Substitution (borrowed economics term, entered via Gemini); docs only, no status changed
 
 ## 2026-10-19 PDT - CAS and HELM dictionary: docs/reference/CAS_HELM_DICTIONARY.md, 449 A-Z entries plus a symbols table and a how-to-read-a-result box; canonical Noetic and Clarification text quoted verbatim; no new definition, no status changed
