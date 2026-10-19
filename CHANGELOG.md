@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3b SCORED (job c38, AWS): reader PASS; ENGLISH_IN x VOICE SYNERGY, the other three pairs INTERFERENCE; no pair left unreadable (spec sheet 7.72; 0.03 USD)
+
+Owner line (sha256 b5fc50dc...): "APPROVE R1W3b: roomier English-64 + Faces-64, pairs CUBE_STORExENGLISH_IN/ENGLISH_INxTRIAD/ENGLISH_INxVOICE/TRIADxVOICE, marks PROPOSED as sealed, sealed package a4f82556, one attempt + one plumbing retry, cap $1." Operator: Claude Code sub-agent.
+
+- Ran: one m6i.xlarge (i-0990ebc5ffb9f80ce), 17:29-17:34 UTC, host 353.7 s, stage 119.2 s; 17 of 17 units exit 0; one scored attempt, 0 retries; no torch helper (X3 laptop-only, sealed by a custodian).
+- Reading (frozen r1w3b/merge_r1w3b.py, R1_W3B_READING.json 384f3038...): PASS, words licensed, SYNTHETIC_ONLY. I1, I3 (same brain as c37), I4, I6, I7, I9, I10 hold; H1, H8, H11 hold.
+- Pair words (M = right and plain, of 64; readable iff L(a)+L(b) <= M(FULL)-8): CUBE_STORE x ENGLISH_IN INTERFERENCE (8 + 27 = 35, both 27); ENGLISH_IN x TRIAD INTERFERENCE (20 + 24 = 44, both 20); ENGLISH_IN x VOICE SYNERGY on both exams (E64 27 + 16 = 43, both 59; F64 20 + 20 = 40, both 60); TRIAD x VOICE INTERFERENCE (24 + 20 = 44, both 28). All readable. The builder's predictions all held.
+- FULL: English-64 59 right / 0 wrong / 5 undetermined; Faces-64 60 / 2 / 2. PROPOSED marks both met.
+- Charge 0.03 USD (conservative 0.05 shown); ledger 112.19 -> 111.22 of 200. Cleanup VERIFIED (controller, independent, direct). Backup D:/tksCAS-archive/helm_r1w3b_c38_20261019/ (712 files, three confirms).
+- Not licensed: anything outside synthetic worlds; any word for a single part; any pair other than the four; statistical superiority (one run). c37's four CEILING_NOT_READABLE words stay on record.
+
 ## 2026-10-19 PDT - RB-G10 "harder world" RAN: INCONCLUSIVE (TOO_FEW_VALID_MULTI_KIND_WORLDS), growth claim stays NOT LICENSED (spec sheet 7.71; laptop MSI, 14 parts, 0 USD)
 
 Owner ruling: "harder world" (one more growth run where gaps come in several kinds at once; stop the line if it fails). Builder-operator: Claude Code sub-agent. Frozen before code (FROZEN.precode.json f77176e7...).
