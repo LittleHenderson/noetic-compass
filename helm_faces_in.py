@@ -45,7 +45,8 @@ LEXICON_PATH = os.path.join(HERE, "helm_faces_lexicon.json")
 READER_VERSION = "helm_faces_in v1 (2026-10-19)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
-_LEX_BYTES = open(LEXICON_PATH, "rb").read()
+with open(LEXICON_PATH, "rb") as _h:
+    _LEX_BYTES = _h.read()
 LEXICON: Dict[str, Any] = json.loads(_LEX_BYTES.decode("utf-8"))
 LEXICON_SHA256 = hashlib.sha256(_LEX_BYTES).hexdigest()
 
