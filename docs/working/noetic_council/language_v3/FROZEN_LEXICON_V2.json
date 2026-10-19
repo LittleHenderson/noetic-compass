@@ -3,7 +3,7 @@
   "written_utc": "2026-10-19T01:50:00Z",
   "written_pacific": "2026-10-18 about 6:50 PM",
   "written_before": "lexicon_v2.py, tabulate_v2.py, any v2 alias, and any scoring of the sealed 98. The only rows the builder has read are the 99 DEV rows (read in full, with their gold CAS, to find the gaps).",
-  "owner_order": "C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md, fix E: 'expand the deterministic dictionary on the 99 dev rows'",
+  "owner_order": "C:/Users/wakil/Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md, fix E: 'expand the deterministic dictionary on the 99 dev rows'",
   "v1_kept_intact": {
     "file": "ALIAS_WIDE_LEXICON_v0_1.json",
     "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0",
