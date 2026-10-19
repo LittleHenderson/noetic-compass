@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - DWP-T1 RECORDED (Purpose / Wisdom / Power per reagent) AND THE EVENING OWNER RULINGS; spec sheet sections 7.58 and 7.59; laptop, 0 USD, ENGINEERED-NOT-VALIDATED
+
+Text only; no tests to run. Source: Documents/Codex/2026-10-18/dwp_t1/RESULTS.md (sha256 00871a28325eeb9233b75fd8583ca1b65a64381988dc2bb034a70b86f9b49a4d).
+Run DWP_T1_MSI_ONCE (manifest sha256 1fc46d697b3a057bebdfd541b3f4f1861276ad1d66c30b8d42106a579a68af16), 2.0822454 s,
+peak 42,098,688 bytes, 13/13 tests. The frozen rule's word is TRIAD_EARNED_KEEP. Claim status: ENGINEERED-NOT-VALIDATED,
+ceiling SYNTHETIC_ONLY. The builder's own caveat, kept: the answer keys use the same rules as the arms, so this shows the
+wiring works on planted data, NOT that real reagents carry a triad.
+
+- M1 5,376/5,376 (all six arms). M2 32/32 for A_MIN, A_PROD, A_MIN+B; 0/32 for CONTROL, B_ONLY, RANDOM_FACE.
+  M3 640/640 UNDETERMINED on Absent recipes and 0/640 on Peak (B arms); CONTROL/A_MIN/A_PROD 0/640.
+  M5 512/512 vs 175/512, margin 65.8203 points (bar 5).
+- M4 (report only): MIN vs PRODUCT_BOOK yields differ on 336/512 starved rows and 255/256 mixed rows; a different
+  limiting ingredient on 52/256 mixed rows. The two face readings (RPM order vs lowest value) disagree on 94/256
+  (A_MIN) and 105/256 (A_PROD) mixed rows; predicted 15-35%. Imbalance factor = max - min (reproduces
+  MANUSCRIPT.md:13585-13586).
+- OPEN, not decided: attribution by RPM order vs lowest value; MIN vs PRODUCT.
+- Owner rulings 2026-10-18 evening (new 7.59), each IN FORCE: Desire is Purpose (HELM canon, secular reading, no book
+  says it); one scale 0.25/1.00/0.50/0.00 for all three faces (the books' separate ladders set aside); DWP-T1 ordered;
+  the stopped 300 GB machine i-0c3028734c8885542 terminated and volume vol-01cc880a770c10854 gone (about 24 USD a
+  month, list-price estimate); the 2.06 USD accepted after the fact (ledger 110.35 of 200.00, no money moved).
+- Also fixed: the stale 'numbered 7.50' note under 7.57 (fix E is 7.57).
+
 ## 2026-10-18 PDT - FIXES C AND D: the licensed recipe brain is wired into HELM's live loop; the valve is a written rule (laptop, 0 USD, ENGINEERED-NOT-VALIDATED)
 
 `helm_brain_canonical.py` loads the HELM-R1 wave-1 recipe book by path (freeze
