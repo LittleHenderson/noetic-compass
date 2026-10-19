@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - Dictionary expansions from the owner: ASOM = Aligned / Starved / Oversaturated / Misaligned (owner gave three words; Starved is the spec sheet's fourth), SDG = CAS Synthetic Data Generator, CES = Constant Elasticity of Substitution (borrowed economics term, entered via Gemini); docs only, no status changed
+
 ## 2026-10-19 PDT - CAS and HELM dictionary: docs/reference/CAS_HELM_DICTIONARY.md, 449 A-Z entries plus a symbols table and a how-to-read-a-result box; canonical Noetic and Clarification text quoted verbatim; no new definition, no status changed
 
 ## 2026-10-19 PDT - HELM UI v0 (`helm_ui/`): local page over helm_chat's own turn (record per reply, planner dry run, Eye self-check on a test copy, RB-I3 attention/pairing from the run record, search dials); tools off in the window; 10/10 tests, about 2 s; demo `helm_ui/demo/index.html`; not wired to the live session: Eye, drive loop; Phase A radial display not built
