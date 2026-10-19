@@ -25,6 +25,15 @@ Owner words: "Unpark growth; ..." and "WE ADD MORE AT THE POINT OF CURIOSITY THE
 - RB-G7 (approved 2026-10-15 7:20 PM) found NEVER_RAN: no folder, freeze or result.
 - Run: manifest 2346ddfe..., MERGED.json 901e1459..., tests 36/36, replay 4/4, backup D:/tksCAS-archive/rb_g8_20261019/ (132 files, sha256 equal).
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3 RESEALED v3: text rule checks the statement only (amendment R1W3-A1; spec sheet 7.66 amended)
+
+Coordinator amendment R1W3-A1 after the X2 custodian's block (text rule unsatisfiable on every seed). Builder: Claude Code sub-agent.
+
+- r1w3/gen_live.py: FOLLOWUPS (the generator's 15 follow-up questions, sha256 14f5cb49...), statement_turns, text_rule_hits on the statement only, followup_tails receipt; check_x2_format.py and the host stage record every stripped tail.
+- Three new tests: a repeated statement still fails; a tail-only overlap passes; the list hash. Generator item code unchanged.
+- v2 zip 26b0ef7e... (signed) VOID_SUPERSEDED_BY_A1: the owner must re-sign. v3 zip 152bca2a..., freeze bd06f324...; 4 members changed.
+- Tests from the v3 seal: 496 passed, 4 AWS-only skipped, 0 failed. Custodian notice RESEAL_NOTICE_V3.md.
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3 RESEALED v2 before signing: cube store read path repaired (spec sheet 7.66 amended)
 
 Coordinator's decision (plumbing defect, owner not yet signed). Builder: Claude Code sub-agent.
