@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM RB-I1c FACULTIES RETEST RAN: all hard gates held, status word INCONCLUSIVE (spec sheet 7.65; job c36 on AWS, 0.70 USD)
+
+Owner order "rerun faculties" (cap 2.00 USD set by the coordinator). Builder-operator: Claude Code sub-agent.
+
+- Instrument-only fixes vs RB-I1: level-receipt check before the write with RB-I1's own rule (empty fitter receipt = refusal, nothing written); the ten LSR datasets shipped as hash-checked data (Windows-vs-Linux libm last-bit drift in families a and c reproduced under WSL glibc 2.39 / Python 3.12.3); fresh seeds 312/579/868 with H7's rb_c4 reference recomputed on the host.
+- Package Documents/Codex/2026-10-19/rb_i1c/RB_I1C_FACULTIES_20261019_SOURCE.zip sha256 ab4549f0...; FROZEN.json fcaf12c3 written before code.
+- Run: one m6i.8xlarge, host 1,617.8 s, r 1.2427, 146 of 146 parts COMPLETED, tests 18/18 and 15/15 per part, data identical to the laptop.
+- Reading (MERGED_MARKS.json cb700275...): test_verdict HARD_GATES_PASS; status_words INCONCLUSIVE. H1: 179 nested writes all passing, 2 empty-receipt candidates refused before the write. H7 30/30. H3 109/109.
+- No faculty or drive word earned: A3 beat A6 on 0 families; STARVED A1 41/42/45 and A2 76/83/66 vs greedy 36/35/38.
+- Ledger: hold 2.00 (110.41 -> 112.41), closed at 0.70 USD (-> 111.11 of 200). Cleanup VERIFIED twice. Backup D:/tksCAS-archive/helm_rb_i1c_c36_20261019/ (1,622 files, three sha256 confirms).
+- Disclosure: amendment 'when' times inside the sealed package are wrong by up to ~45 min; content unaffected.
+
 ## 2026-10-18 PDT - HELM-R1 WAVE 2 SCORED: reader PASS, one word per part (spec sheet 7.64; jobs c35 + helper c35a on AWS, 0.06 USD)
 
 Owner sign line sha256 6f32266d (package 21ad185d, one attempt + one plumbing retry, cap 5 USD). Launch operator: Claude Code sub-agent.
