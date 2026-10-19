@@ -1,0 +1,139 @@
+{
+ "schema": "helm.r1w2.frozen/1",
+ "label": "HELM-R1 wave 2 (R1W2): the licensed recipe brain in GB3's slot, every earned part behind its own switch, ONE part switched off at a time, on HELM's own exams",
+ "status": "FROZEN_AT_SEAL_NOT_LAUNCHED",
+ "written": "2026-10-18 (Pacific), builder session (Claude), before any X1 file exists and before any scored number",
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "owner_words": {
+  "order_verbatim": "wave 2 plan",
+  "standing_rulings": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md (recipe brain is canonical; no more GPU for now; plain-rule valve; Desire is Purpose; one scale; min; earliest; Wisdom rule C; use my GitHub email)",
+  "sign_line_template": "APPROVE R1W2: wave 2 ablations, arms FULL/\u2212RECIPE_MATH/\u2212RPM_GATE/\u2212LACUNA_CADENCE/\u2212RESTART_FALLBACK/\u2212CCE_SKIN/\u2212TRIAD/\u2212ENGLISH_IN/\u2212VOICE/T/LUT, exams GateB+TaskB+fresh+English16, marks as W1 + PROPOSED rows, sealed package <hash8>, one attempt + one plumbing retry, cap $5."
+ },
+ "governance": [
+  "Claude is not the research governor: this freeze, the marks and the words are fixed before the run; only r1w2/merge_r1w2.py writes a verdict or a word, from raw numbers.",
+  "A failed hard gate is a FAILURE, never 'PASS with caveats'.",
+  "The approval record must bind the EXACT sealed zip that runs (instrument row I9). Any reseal after the owner signs is a new package and needs a new sign line; the old line does not carry over (fixes the wave-1 gap 'approval bound v1, v3 ran', spec sheet 7.47).",
+  "One scored attempt plus at most one PLUMBING retry. A plumbing retry is allowed only when no unit of the scored pool started (the stage refused before package code ran, or the host never reached test 02); it reuses the SAME sealed zip and the SAME X1 pins. Any change to the package is a reseal (new sign line).",
+  "X1 is sealed by a separate custodian session; the builder sees only its hashes."
+ ],
+ "wave1_package": {
+  "zip": "HELM_R1_W1_20261015_V3_SOURCE_R1W1.zip",
+  "zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+  "freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+  "frozen_precode_sha256": "bbde22c78a3866e9eb56fcc84f72c4ac090dffa1c0563f4daba188156aae609d",
+  "c34g_reading_sha256": "9b1dfdd88568012cabbcfa6d00e97c15dee07d445dfa5daff8be185975f4cf3a",
+  "how_used": "shipped BESIDE this package unchanged (the same archive c34-g shipped); every recipe unit runs through its own CLIs (r1.gb_arms, r1.tb_arms, r1.cce_stage); the canonical brain adapter loads from it; never copied into this zip"
+ },
+ "switches": {
+  "RECIPE_MATH": {"source": "wave 1, verbatim", "off": "the lookup table with the same memory, gate, policy, memory check and receipts (wave-1 arm A1_RM)"},
+  "RPM_GATE": {"source": "wave 1, verbatim", "off": "wave-1 gate_off_rules (arms A1_GATE, A1_GATE_LS, A1_GATE_D)"},
+  "LACUNA_CADENCE": {"source": "wave 1, verbatim", "off": "round-robin (A1_LC); wave 1's rule also needs the random-order control A1_LC_R, carried"},
+  "RESTART_FALLBACK": {"source": "wave 1, verbatim", "off": "rb_c4 GRAMMAR_K1 (A1_RF), depth families only"},
+  "CCE_SKIN": {"source": "wave 1, verbatim", "off": "structured input and output only (A1_SK)"},
+  "TRIAD": {"source": "helm_triad.py (spec sheet 7.62), 0 learned parameters", "on": "TriadBrain(enabled=True) with every face unstated (= PEAK, neutral)", "off": "the canonical brain unwrapped"},
+  "ENGLISH_IN": {"source": "helm_english_in.py (spec sheet 7.60)", "off": "checked form only: the loop's English reader returns NOT_MINE (harness subclass; no file edited)"},
+  "VOICE": {"source": "helm_voice.py through helm_chat's own _speak (spec sheet 7.59/7.60)", "off": "the loop's old adapter text (HELMVoiceAdapter, result everyday_english_response)"}
+ },
+ "arms": {
+  "list": ["FULL", "-RECIPE_MATH", "-RPM_GATE", "-LACUNA_CADENCE", "-RESTART_FALLBACK", "-CCE_SKIN", "-TRIAD", "-ENGLISH_IN", "-VOICE", "T", "LUT"],
+  "table": "r1w2/arms_w2.py ARMS (per arm, per exam: the wave-1 arm id run, or NOT_EXERCISED / NOT_RUN_NO_CODE_PATH, stated now)",
+  "carried_controls": ["A1_REPLAY", "A1_LC_R", "A1_LS", "A1_GATE_LS", "MLP_B (99 parameters, neural: AWS only)", "untaught twins", "FULL_REPLAY on English-16"],
+  "T": "NOT RERUN. Gate B c21: panel-1 15 of 16, new 15 of 16 (frozen_refs/REF_C21_T.json 856c548d...). Task B c25: SUM 7 (T, 97 parameters), 19/2 (T+, 385) (frozen_refs/REF_C27_T.json b0dcae5e...). No T number exists for X1 or English-16.",
+  "LUT": "the no-recipe baselines, reported: LUT_ARGMAX (Gate B), EXACT_KEY / DIV_TOTAL / SMALLEST_INPUT (Task B, derived in the A1_RM process), SMALLEST_LEAF (depth)",
+  "torch": "no arm's answering code imports torch; torch is needed only to regenerate X1's Gate B worlds with GB3's own world() (instrument I5, host)"
+ },
+ "exams": {
+  "E1_GB_C21": {"what": "Gate B continuity on c21's sealed worlds (SAME_WORLDS_AS_C21): wave-1 frozen_exposed/worlds_sealed_c23.json 1fb7a1c7..., set 'sealed'", "exposure": "EXPOSED (c21, c23 were scored on it)", "mark": "12 of 16 per panel (wave 1 rows); T = 15 / 15 (c21)"},
+  "E2_TB_C25": {"what": "Task B composition on RB2c's worlds (= c25's 20 draws): wave-1 frozen_c26/worlds_rb2c.json 807cecdb...", "exposure": "EXPOSED (c25, c26, c27 were scored on it)", "mark": "as frozen there: SUM = median b_chain + median b_alt (of 32); T = 7, T+ = 19/2 (c27)"},
+  "E3_X1": {"what": "the fresh exam X1: GB-X1, TB-X1, D34-X1 (two depth families), CCE-X1 (rendered from TB-X1 + 64 planted items)", "exposure": "FRESH (custodian-sealed after the owner signs; builder blind)", "depth": "LAPTOP, LOCAL_CPU_ONCE, wave 1's own d34 code through r1w2/d34_x1.py (each part <= 300 s, <= 300 MiB, >= 300 MB free to start)"},
+  "E4_ENGLISH16": {"what": "16 plain-English turns through HELM's live loop (helm_end_to_end_loop + helm_english_in + helm_voice + helm_triad + the canonical brain), sealed inside X1", "families": {"F1_STOCK_THEN_ASK": 4, "F2_ABSENT_THEN_ASK": 2, "F3_QUESTION_FORMS": 3, "F4_BAKE_A_BATCH": 2, "F5_WITNESS_IN_ENGLISH": 2, "F6_MUST_ASK": 3}, "score": "3-valued per r1w2/english16.py score_turn; UNDETERMINED is never WRONG", "mark": "PROPOSED: FULL RIGHT >= 10 of 16 and WRONG = 0"}
+ },
+ "x0_decision": {
+  "word": "X1_REQUIRED",
+  "why": [
+   "Wave 1's own frozen rule (FROZEN.precode.json exams.one_fresh_exam_per_wave): 'FRESH-W1 is scored once here; afterwards it is EXPOSED and serves only as a regression exam (Q13)'. c34-g scored it.",
+   "Re-checked 2026-10-18 with the receiver's checker (wave-1 r1/check_fresh_format.py): the custodian's ORIGINAL X0 files still fail 3 of 5 (CCE_PLANTED_W1.json 1 problem; D34 d3 and d4 TypeError); the 5 that pass are the coordinator's conversions, not custodian-sealed files.",
+   "The coordinator who converted them handled their contents; the builder-blind wall no longer holds for X0."
+  ],
+  "x0_role_in_wave2": "exposure control only: no X1 seed may occur in X0 (instrument I1f)"
+ },
+ "instrument_rows": {
+  "I1_data_identity": "X1 pins (helm.r1w2.pins/1) given = host = depth; every pinned file by hash; the X1 seal record lists exactly the pinned hashes and carries the receiver check with all_pass true; exposed files and the wave-1 package by hash (host and reader); GB3 zip ff4de172...; X1 data validity by wave 1's loaders and label audit; no X1 seed in c23, c26 or X0; no English-16 turn equal to a string in the packaged English tests",
+  "I2_T_frozen_identity": "T's frozen reference files match their sha256 on the host and at the reader (T is not rerun)",
+  "I3_reproduction": "wave 1's I3 verbatim: FULL on E1 = c23 RB-det, FULL on E2 = c26 RB-det on all 20 draws, depth part D00 identity",
+  "I4_parameter_counts": "RB-A 68, RB-B 32, MLP-B 99, TRIAD 0 learned, T 97 / T+ 385 printed (frozen)",
+  "I5_encoder_fairness": "X1's Gate B worlds regenerated by GB3's world() equal the file (torch, host); Task B fairness NOT_APPLICABLE (no T rerun)",
+  "I6_completeness": "every planned unit exit 0, no deadline, host tests OK, wave 1's 128 carried tests OK, every brief complete, CCE OK, English-16 complete in all five units, every depth part COMPLETED with tests passing",
+  "I7_laptop_reading": "depth and host readings by sha256; the reader runs from the sealed zip; the host and the run record name its freeze; the depth parts ran under wave 1's d34 SOURCE_MANIFEST 59f1be24...",
+  "I8_proven_floors": "wave 1's I8 verbatim on TB-X1",
+  "I9_governance": "PROPOSED (owner order): the approval record names this zip and this freeze, its sign line carries this zip's first 8 hex, the controller shipped exactly this zip, no reseal after signing; the supervisor's stage is PASS with no missing outputs and found R1_W2_HOST.json at the declared path r1w2_out/ with the host reading's sha256",
+  "rule": "any instrument row false -> INSTRUMENT_ERROR; no word is licensed"
+ },
+ "hard_gates": {
+  "H1_receipts": "every admitted write receipted: every Gate B and Task B recipe arm on E1, E2, E3; depth; no English-16 turn REFUSE_RECEIPT_INCONSISTENT",
+  "H2_no_invention": "wave 1's H2 on E1 and E3 Gate B, depth, the skin",
+  "H3_replay": "A1 = A1_REPLAY on E1, E2, E3 (Gate B and Task B); depth replay; FULL = FULL_REPLAY on English-16 record for record",
+  "H4_restart": "Gate B A1 restart 16 of 16 same with same state (E1, E3); Task B A1 restart repeats all 16 b_chain answers on every draw (E2, E3)",
+  "H5_skin_neutral": "wave 1 verbatim (1,280 identical inputs)",
+  "H6_controls": "wave 1's H6 (i)-(iv) on the fresh exam, without T's twins",
+  "H7_budgets": "512 ticks / 512 keyed episodes for every recipe arm on every Gate B and Task B exam; MLP-B 512 steps per draw; depth equal budget",
+  "H8_wrappers_change_nothing": "PROPOSED: on English-16, FULL and -TRIAD (triad at Peak) and FULL and -VOICE give identical structured results (statuses, yields, limiting ingredients, writes, learned digests, scores)",
+  "rule": "any hard gate false -> FAILURE, the gates named; no word is licensed"
+ },
+ "margins": {
+  "MARGIN_TB": {"value": 4, "of": 32, "source": "wave 1 (R1_BEATS_T_TB, RECIPE_MATH_EARNED_R1)"},
+  "MARGIN_GB_PANEL": {"value": 2, "of": 16, "source": "wave 1 (CADENCE_HARMFUL)"},
+  "MARGIN_GB_HOLD": {"value": 1, "of": 32, "source": "wave 1 (R1_HOLDS_GB: A1 >= T - 1)"},
+  "DEPTH_MARGIN": {"value": 16, "of": 512, "source": "wave 1 (RESTART_FALLBACK)"},
+  "BAND": {"value": 6, "of": 16, "source": "wave 1 (controls)"},
+  "MARGIN_E16": {"value": 2, "of": 16, "source": "PROPOSED: wave 1's 4 of 32 carried as a ratio"},
+  "MARGIN_PLAIN": {"value": 2, "of": 16, "source": "PROPOSED: the same ratio for plain replies"},
+  "gate": "no margin: wave 1's RPM_GATE rule (a) RIGHT(FULL) >= RIGHT(gate off) on every scored panel, (b) pooled WRONG strictly fewer"
+ },
+ "per_exam_comparisons": {
+  "RECIPE_MATH": "Task B exams E2, E3: WIN = SUM(A1) >= SUM(A1_RM) + 4 and every no-recipe baseline (DIV_TOTAL, SMALLEST_INPUT, MLP_B) median < 12 on b_chain and b_alt; LOSS = SUM(A1_RM) >= SUM(A1) + 4; else TIE. Gate B: reported only (wave 1: Gate B cannot separate recipe math from a table)",
+  "RPM_GATE": "per Gate B / Task B exam: LOSS if (a) fails; WIN if (a) and (b); TIE if (a) only. Depth: TIE if (a) holds on every family and seed, LOSS if not (no rule (b) on depth in wave 1)",
+  "LACUNA_CADENCE": "per teaching exam, wave 1's rule: Gate B LOSS if A1_LC beats A1 by >= 2 on panel-1 or new; WIN if A1's four-key mark is strictly fewer than A1_LC's and A1_LC_R's and panel-1 RIGHT >= both. Task B LOSS if SUM(A1_LC) >= SUM(A1) + 4; WIN if A1's median four-order mark is strictly fewer than both and SUM(A1) >= both",
+  "RESTART_FALLBACK": "per depth family: WIN if D >= 16 with clean controls; LOSS if D <= -16; else TIE",
+  "CCE_SKIN": "TIE by construction (H5 makes the answers identical); wave 1's SKIN_FORM word reported apart",
+  "TRIAD": "no exam carries a face statement: NOT_EXERCISED; H8 requires it to change nothing",
+  "ENGLISH_IN": "PROPOSED, E4: WIN if RIGHT(FULL) >= RIGHT(off) + 2 and WRONG(FULL) <= WRONG(off); LOSS if RIGHT(off) >= RIGHT(FULL) + 2 or WRONG(FULL) >= WRONG(off) + 2",
+  "VOICE": "PROPOSED, E4: WIN if PLAIN(FULL) >= PLAIN(off) + 2 and FACT_KEPT(FULL) >= FACT_KEPT(off); LOSS if PLAIN(off) >= PLAIN(FULL) + 2 or FACT_KEPT(off) >= FACT_KEPT(FULL) + 2"
+ },
+ "word_rule": {
+  "EARNED_KEEP": "at least one WIN and no LOSS",
+  "NEUTRAL": "exercised, every comparison TIE",
+  "HARMFUL": "any LOSS (checked first)",
+  "NOT_EXERCISED": "no exam has a comparison for the switch (stated now: TRIAD)",
+  "INCOMPLETE": "a needed comparison is missing (never a pass)",
+  "licensed_only_if": "test verdict PASS and no word INCOMPLETE"
+ },
+ "marks_reported_beside_the_words": {
+  "FULL_HOLDS_GB_C21": "wave 1 R1_HOLDS_GB rows (12 of 16) and A1 panel-1 + new >= 30 - 1",
+  "FULL_HOLDS_GB_X1": "wave 1 rows only (12 of 16)",
+  "FULL_BEATS_T_FROZEN_TB_C25": "SUM(A1) >= 7 + 4 and >= 19/2 + 4 (T and T+ frozen c27)",
+  "FULL_SUM_TB_X1": "reported",
+  "FULL_ENGLISH16": "PROPOSED: RIGHT >= 10 of 16 and WRONG = 0",
+  "note": "a missed mark is a finding about FULL, not a gate"
+ },
+ "verdicts": {
+  "PASS": "every instrument row and every hard gate holds; each switch's word then stands as written, inside the claim ceiling",
+  "FAILURE": "a hard gate failed (named); the run measured something but a part broke a rule it must keep; no word is licensed",
+  "INSTRUMENT_ERROR": "the measuring went wrong (data, completeness, governance); nothing about the brain is read; the attempt is consumed"
+ },
+ "may_license": "On synthetic worlds only: which of the eight parts lost when switched off (EARNED_KEEP), changed nothing (NEUTRAL), helped when off (HARMFUL) or were not on the exam's path (NOT_EXERCISED), each on the named exams.",
+ "never_licensed": "any cooperation or interaction claim between parts (one part off at a time cannot show it); anything outside synthetic worlds; that the voice sounds natural to people; that real reagents carry a triad; statistical superiority (one run); any claim about T beyond its frozen c21 and c27 numbers; operation in real kitchens or on real data",
+ "predictions_builder": {
+  "written": "2026-10-18, before X1 exists; from wave 1's c34-g reading and the laptop dry run on exposed data",
+  "PASS": 0.6,
+  "RECIPE_MATH": "EARNED_KEEP (0.8)",
+  "RPM_GATE": "EARNED_KEEP (0.65; the depth comparison can only TIE or LOSE)",
+  "LACUNA_CADENCE": "EARNED_KEEP (0.6; wave 1 earned it on Gate B only)",
+  "RESTART_FALLBACK": "EARNED_KEEP (0.6)",
+  "CCE_SKIN": "NEUTRAL (by construction)",
+  "TRIAD": "NOT_EXERCISED (by construction)",
+  "ENGLISH_IN": "EARNED_KEEP (0.85)",
+  "VOICE": "EARNED_KEEP (0.8; the old adapter text says 'receipt' and the checked-form example sentence)",
+  "main_risks": ["the laptop depth panel (RAM)", "a custodian English-16 item outside the reader's shapes lowers FULL's RIGHT (UNDETERMINED, not WRONG)", "plumbing on the host (one retry budgeted)"]
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "schema": "helm.run-limits/1",
+ "package": "HELM_R1_W2_20261018",
+ "label": "R1W2",
+ "status": "PROPOSED (the owner signs the cap; nothing is held or launched before that)",
+ "host": {
+  "instance_type": "m6i.xlarge",
+  "cpu_slice": "2 CPUs (cgroup slice, the c19-c21 kit precedent)",
+  "memory_slice_gib": 14,
+  "region": "us-west-2",
+  "image": "ami-0dddfa1ffa6b87af7 (the c21 image: Python 3.12.3, torch 2.9.1)",
+  "hosts": 1,
+  "automatic_retry": false
+ },
+ "deadline_seconds_whole_command": 5400,
+ "enforced_by_package": [
+  "deadline_seconds_whole_command: kit/run_r1w2.py gives the wave-2 tests the time left of 5,400 s; every unit's timeout is the time left; a unit still running at the deadline is killed and the reading is INSTRUMENT_ERROR (I6)",
+  "workers: R1W2_WORKERS = 2 (two units at a time on the 2-CPU slice); no torch unit in the pool",
+  "refusals before any package code runs: this package's freeze and members, the wave-1 v3 package, the GB3 zip, every X1 host file, X0's two exposure files, disk free >= 5 GiB"
+ ],
+ "enforced_by_launch_controller": [
+  "cost_cap_usd: the owner's wave cap (proposed 5.00) covers the X1 custodian job (its own cap 0.50), the scored attempt and at most one plumbing retry",
+  "host_window_minutes: 120 (force cut-off 116, work cut-off 111 = kit/job_supervisor.py LAUNCH_WINDOW_SECONDS 6,660 s)",
+  "stage_limit_seconds: 6600",
+  "cleanup: the host and every volume terminated, the shared launch slot released, the temporary role/profile/bucket removed, and the proof recorded in the job record; independent cleanup check within an hour",
+  "backup: the deliverable copied to D:\\tksCAS-archive\\ with three sha256 confirmations"
+ ],
+ "measured_basis": {
+  "c34g_unit_cpu_seconds_one_exam_each": {"gate_b_recipe_units": 25.6, "task_b_recipe_units_incl_mlp_and_restart": 413.9, "cce": 6.23},
+  "c34g_host": "m6i.8xlarge, 32 vCPU, 4,258.26 s wall, conservative charge 1.96 USD (ledger history line 78); 95 percent of its compute was T and T+ (40 jobs of 1,685-2,482 s), which wave 2 does NOT rerun",
+  "laptop_dry_run": "see TEST_RECORD_R1W2.md (exposed data, one unit at a time)"
+ },
+ "estimate": {
+  "pure_python_cpu_seconds": "about 1,100-1,300 (Gate B 2 x 26, Task B 2 x 414, CCE 6, English-16 5 x 5, wave-1 carried tests and the host's own tests)",
+  "torch_seconds": "about 60-300 (X1 Gate B world regeneration, one subprocess)",
+  "command_wall_seconds_two_workers": "about 900-1,500",
+  "host_wall_minutes_with_setup_and_copy_back": "about 30-45",
+  "price_usd_per_host_hour": {"list": 0.192, "conservative_charge": 0.46, "note": "m6i.xlarge on-demand list price recorded earlier (not a live quote); conservative = c20's 0.39 USD charged for 3,047 host seconds"},
+  "expected_usd_per_attempt": "about 0.25-0.35 (conservative)",
+  "max_usd_per_attempt_at_the_120_minute_window": 0.92,
+  "x1_custodian_job_cap_usd": 0.5,
+  "worst_case_usd": "0.50 (X1) + 0.92 (scored) + 0.92 (one plumbing retry) = 2.34",
+  "naive_scaling_shown_because_asked": "c34-g 1.96 USD x (11 arms x 3 exams / about 10 arms x 2 fresh exams) = about 3.2 USD on c34-g's 32-vCPU host; not used, because c34-g's cost was the transformer reruns wave 2 drops"
+ },
+ "cost_cap_usd": 5.0,
+ "cost_cap_status": "PROPOSED",
+ "attempts": {"scored": 1, "plumbing_retry": 1, "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X1 pins; any package change is a reseal and a new sign line"},
+ "laptop": {
+  "depth_parts": "20 parts D00-D19, LOCAL_CPU_ONCE, each <= 300 s wall (stops itself at 280 s) and <= 300 MiB, start only with >= 300 MB free RAM, one at a time, sockets blocked, 0 USD; D00 measured 35.1 s on 2026-10-18",
+  "neural_work": "none"
+ },
+ "ledger": "C:\\Users\\wakil\\Documents\\Codex\\AWS_COMBINED_ALLOCATION_CURRENT.json read 2026-10-18: 110.35 of 200.00 used, 89.65 unreserved. NO hold placed by the builder; the coordinator places it after the owner signs."
+}
