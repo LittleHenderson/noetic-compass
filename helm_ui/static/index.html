@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM</title>
+<meta name="description" content="Talk with HELM in everyday English. Every answer can be opened to the record it rests on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="/static/styles.css">
+<!--HELM_DEMO_DATA-->
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="16" r="3" fill="currentColor"/><path d="M16 2.5v6M16 23.5v6M2.5 16h6M23.5 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div>
+        <div class="wordmark">HELM</div>
+        <div class="tagline">Everyday English. Every answer on the record.</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <button class="toggle" id="recToggle" type="button" aria-pressed="false">Show records</button>
+      <span class="pill" id="modePill">Connecting</span>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch color theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="convo" aria-label="Conversation and planning">
+      <div class="tabs" role="tablist" aria-label="View">
+        <button type="button" role="tab" class="tab on" aria-selected="true" data-view="chat">Conversation</button>
+        <button type="button" role="tab" class="tab" aria-selected="false" data-view="plan">Plan a task</button>
+      </div>
+      <div class="view" id="viewChat">
+      <div class="log" id="log" aria-live="polite">
+        <div class="intro" id="intro">
+          <h1>Talk with HELM.</h1>
+          <p>Tell it what you have on hand, ask what you can make, or tell it about yourself. Under every reply there is a quiet link to the record that reply rests on.</p>
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
+      <form class="composer" id="composer" autocomplete="off">
+        <label class="sr-only" for="input">Message to HELM</label>
+        <textarea id="input" rows="1" placeholder="Say something to HELM" maxlength="2000"></textarea>
+        <button class="send" type="submit" id="sendBtn">Send</button>
+      </form>
+      <div class="composer-note" id="composerNote">Enter to send. Shift + Enter for a new line.</div>
+      </div>
+      <div class="view" id="viewPlan" hidden>
+        <div class="log plan">
+          <div class="plan-intro">
+            <h1>Plan a task.</h1>
+            <p>Write the steps in plain words, such as "first ..., then ...". HELM's planner puts them in the order their prerequisites require, and the safety gate checks each step. Nothing is run.</p>
+          </div>
+          <form class="plan-form" id="planForm" autocomplete="off">
+            <label class="sr-only" for="planInput">Task to plan</label>
+            <textarea id="planInput" rows="2" placeholder="Write the code for auth.py, verify the tests pass, then commit it to git." maxlength="2000"></textarea>
+            <button class="send" type="submit" id="planBtn">Make the plan</button>
+          </form>
+          <div class="chips" id="planChips"></div>
+          <div id="planOut" class="plan-out" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side" aria-label="HELM state">
+      <article class="card" id="knowsCard">
+        <header class="card-h"><h2>What HELM knows</h2><span class="card-sub" id="knowsSub"></span></header>
+        <div class="card-b" id="knowsBody"><div class="muted">Loading</div></div>
+      </article>
+
+      <article class="card" id="eyeCard">
+        <header class="card-h"><h2>Self-check</h2><span class="card-sub">The Unity Eye looks HELM over. It reports; it never writes.</span></header>
+        <div class="card-b">
+          <div class="eye-controls">
+            <div class="seg" role="radiogroup" aria-label="Which test copy to check">
+              <button type="button" role="radio" aria-checked="true" data-world="clean" class="seg-on">Clean copy</button>
+              <button type="button" role="radio" aria-checked="false" data-world="fault">Copy with a planted fault</button>
+            </div>
+            <button type="button" class="btn" id="eyeRun">Run self-check</button>
+          </div>
+          <div id="eyeBody" class="eye-body"><p class="muted">No self-check yet. Press Run. It only reads.</p></div>
+        </div>
+      </article>
+
+      <article class="card" id="attnCard">
+        <header class="card-h"><h2>Attention</h2><span class="card-sub">Where idle attention went, and which brain job worked for which desire.</span></header>
+        <div class="card-b" id="attnBody"><div class="muted">Loading</div></div>
+      </article>
+
+      <article class="card" id="dialCard">
+        <header class="card-h"><h2>Search dials</h2><span class="card-sub">How widely HELM's tool planner looks for options. Recipe answers do not use these.</span></header>
+        <div class="card-b" id="dialBody"><div class="muted">Loading</div></div>
+      </article>
+    </aside>
+  </main>
+
+  <footer class="strip">
+    <details class="claims" id="claims">
+      <summary><span class="strip-label">On screen</span><span class="strip-chips" id="stripChips"></span><span class="strip-more">Details</span></summary>
+      <div class="claims-body" id="claimsBody"></div>
+    </details>
+  </footer>
+</div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
