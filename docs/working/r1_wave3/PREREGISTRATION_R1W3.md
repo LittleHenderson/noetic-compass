@@ -4,9 +4,9 @@ Written 2026-10-19 (Pacific) by the wave-3 builder session (Claude) on the owner
 sealed (`HELM_R1_W3_20261019/FROZEN_R1W3.json`); one scored attempt plus at most one plumbing retry; a FAIL on any row is
 a finding. NOT LAUNCHED. No ledger hold placed. No spend.
 
-Sealed package: `HELM_R1_W3_20261019_SOURCE_R1W3_v2.zip`, sha256
-`26b0ef7ed25c8431334d98ddf3a566704b105e53feab15103494cea9893f7bf3` (929,130 bytes; v2, see the amendment log); `PACKAGE_FREEZE.json` sha256
-`a72063f5223b04f01a428dfa55bfeb3fb9f45bec847286c41a5160f5761da1f3` (205 members + the freeze; resealed byte-identical).
+Sealed package: `HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip`, sha256
+`152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362` (930,756 bytes; v3, see the amendment log); `PACKAGE_FREEZE.json` sha256
+`bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310` (205 members + the freeze; resealed byte-identical).
 Design freeze (before any code): `docs/working/r1_wave3/DESIGN_R1W3.md`, sha256 `27eab7e8...` (first) and `2715bebe...`
 (after amendment D1). `FROZEN_R1W3.json` sha256 `e9777c2b21825f2505c7559b53c0d3a6b08388900c3982a5be222f7a4efa8476`.
 
@@ -84,7 +84,9 @@ slots, k2); D34 = X0's depth band + 4,000,000 (1,654,000,000 to 1,743,999,999, 4
 X1's nine ranges; X0's and X1's Task B windows used. Gap 1,000,000 each side; below 2^31 - 1; step s <- s + 1 inside the
 band; no free slot = STOP. Checked by the builder with the program: the five 1,000,000-wide bands are free in full;
 GB 954 / 1,000, TB 23 / 33, D34 31 / 45 slots free; a dry derivation on a dummy line printed `overlap_check: PASS`.
-Text rule (E16, F16): no turn equal (normalised) to a packaged English string, the faces lexicon, the builder's
+Text rule (E16, F16; amendment R1W3-A1, v3): no STATEMENT (each item's turns with exactly one of the generator's 15
+enumerated follow-up questions stripped from the end of the last turn; list sha256 `14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5`)
+equal (normalised) to a packaged English string, the faces lexicon, the builder's
 fixtures or any X1 English-16 turn; a hit steps that file's seed.
 
 The builder never sees X2. A separate custodian session builds it (`x2_contract/X2_CUSTODIAN_CONTRACT.md`): the five
@@ -131,7 +133,7 @@ three packages by freeze at host and reader); I2 T's frozen references; I3 repro
 c26 RB-det, depth D00); I4 parameter counts (RB-A 68, RB-B 32, MLP-B 99, T 97 / T+ 385 printed; 0 learned for triad,
 faces reader, cascade, drive loop); I5 X2 Gate B regeneration equal (torch); I6 completeness (every unit exit 0, no
 deadline, wave 1's 128 and wave 2's unit tests OK on the host, every new-exam arm complete); I7 laptop reading; I8
-proven floors on X2-TB; I9 governance (the approval names this zip and freeze, the sign line carries `26b0ef7e`, the
+proven floors on X2-TB; I9 governance (the approval names this zip and freeze, the sign line carries `152bca2a`, the
 controller shipped this zip and the wave-2 zip, no reseal, supervisor PASS and found `r1w3_out/R1_W3_HOST.json`); **I10
 X2 band rule**: every part seeded, every seed inside its band, overlap PASS, used table includes X0 and X1, seed source
 = the owner's R1W3 line hash. Any row false: INSTRUMENT_ERROR.
@@ -232,3 +234,10 @@ pair not run or not read; operation in real kitchens or on real data.
   `cube_store/turn.py` and `operations.py` (thread commit `554fce5c`), two tests added (fail before, pass after).
   The v1 zip `2d5b4f0e...` is VOID_UNSIGNED. Exactly 4 members changed (TEST_RECORD_R1W3.md section 4). No rule,
   mark, arm, exam, margin or the drive-loop rule changed; `FROZEN_R1W3.json` is byte-identical (`e9777c2b...`).
+- v3 RESEAL (2026-10-19, coordinator amendment R1W3-A1, `x2_custody\X2_TEXT_RULE_AMENDMENT_R1W3-A1_20261019.md`):
+  the X2 custodian found the English-16 / Faces-16 text rule unsatisfiable on every seed, because the generator's
+  last turn is one of 15 templated follow-up questions, 14 of which occur in the builder's practice files. The
+  receiver's checker and the host's first stage now apply the overlap rule to the STATEMENT portion only
+  (`gen_live.statement_turns`, `FOLLOWUPS` sha256 `14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5`), and record every stripped tail.
+  The generator's item code is unchanged. v2 zip `26b0ef7e...` (it WAS signed) is VOID_SUPERSEDED_BY_A1:
+  the owner's approval must be renewed on the v3 hash. Exactly 4 members changed (TEST_RECORD_R1W3.md section 5).

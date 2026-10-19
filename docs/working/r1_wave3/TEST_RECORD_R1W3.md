@@ -87,3 +87,30 @@ the owner had not signed, so a reseal carries no governance drift.
 - Fixture check after the fix (not a result): the three English-16 store-read fixture items now read RIGHT under FULL
   (e.g. "Currently on hand: 15 Egg, 20 Sugar, 21 Salt." with the absent item no longer listed).
 - The drive-loop rule and everything else are unchanged.
+
+## 5. v3 reseal: amendment R1W3-A1, the text rule checks each item's statement only (2026-10-19)
+
+Cause (`x2_custody\X2_BLOCKED_20261019T093121Z.json`): the receiver's checker and the host's first stage tested every
+English-16 / Faces-16 turn whole, but the generator's last turn is one of 15 templated follow-up questions, 14 of which are
+in the builder's practice files, so no seed could pass (the custodian's statement-only check: 0 statement hits).
+
+- v2 `HELM_R1_W3_20261019_SOURCE_R1W3_v2.zip` `26b0ef7ed25c8431334d98ddf3a566704b105e53feab15103494cea9893f7bf3` (freeze `a72063f5223b04f01a428dfa55bfeb3fb9f45bec847286c41a5160f5761da1f3`): **VOID_SUPERSEDED_BY_A1**. It WAS signed by the
+  owner; that approval does not carry over: the owner must sign again on the v3 hash.
+- v3 `HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip` `152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362` (930,756 bytes), freeze `bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310`, 205 members + the freeze,
+  resealed byte-identical.
+- Change: `gen_live.FOLLOWUPS` (the 15 sentences, sha256 `14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5`, tested equal to what the generator can produce),
+  `statement_turns` (strips exactly one follow-up, only from the end of the last turn), `text_rule_hits` (statement only),
+  `followup_tails` (the receipt); `check_x2_format` and `test_run_r1w3` record every stripped tail and the list hash. The
+  generator's item code is unchanged (fixture determinism tests still pass). Three new tests: a statement repeating a
+  forbidden sentence still FAILS; a file whose only overlap is a tail PASSES and its tails are recorded; the list hash.
+- Diff between the seals (exactly 4 members; everything else byte-identical, incl. `FROZEN_R1W3.json` and `helm/`):
+
+| Member | v2 sha256 | v3 sha256 |
+|---|---|---|
+| `r1w3/check_x2_format.py` | `2d7c21ccebeceb39a38d844b632db4e1d58e312c12a050bc7501fd3d6e8e49ab` | `56616457c5ad6d269f2c88024bfe792241d241a7b4971c67d11c7fb599cb8201` |
+| `r1w3/gen_live.py` | `0809076a8ff92761a446a43c0572ff20074d8bdb480ef239b440e0b0b539d7c0` | `e296e003d8f6cf1cf8029afba85fdb114380cc2c930aace27455ab54b0a16038` |
+| `tests_r1w3/test_run_r1w3.py` | `aeabeb78d056e4ee2db65eaf8bcf5b2253729e34985953a62b4bd09dd69df30b` | `3371789c62b54f19b1d10248337f0769588a08eb30707e95f11919d87fc1f17b` |
+| `tests_r1w3/test_units_w3.py` | `0148245645e50de18fa882839ff1d709204aafb27c4df2bddbf76d971c3ec4a7` | `c43dee902a47a9bde10d05310c8c4a415321d72c49b4e0ee7190e8490fbe91b1` |
+
+- Full suite from the v3 sealed zip (`TEST_COUNTS_R1W3_v3.json`): 500 run, **496 passed, 4 skipped (AWS-only), 0 failed**
+  (wave 3 units now 36).
