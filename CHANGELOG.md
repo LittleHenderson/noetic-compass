@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - HELM-R1 WAVE 2 SCORED: reader PASS, one word per part (spec sheet 7.64; jobs c35 + helper c35a on AWS, 0.06 USD)
+
+Owner sign line sha256 6f32266d (package 21ad185d, one attempt + one plumbing retry, cap 5 USD). Launch operator: Claude Code sub-agent.
+
+- Helper c35a (coordinator amendment R1W2-A1): GB3 world() on AWS for the X1 custodian, 236.3 s, identity row 1fb7a1c7 equal, I5 OK; files shipped by path and sha256 only.
+- Scored c35: one m6i.xlarge, 2-CPU slice; host 630.7 s, stage 370.6 s; wave 1 carried tests 128 OK, wave 2 tests 38 OK (2 laptop-only skips); 68 of 68 units exit 0; 0 plumbing retries.
+- Reader (r1w2/merge_r1w2.py, laptop): R1_W2_READING.json sha256 27f2f504...; test_verdict PASS; I1-I9 and H1-H8 hold.
+- Words: RECIPE_MATH, RPM_GATE, LACUNA_CADENCE, RESTART_FALLBACK, ENGLISH_IN, VOICE = EARNED_KEEP; CCE_SKIN = NEUTRAL; TRIAD = NOT_EXERCISED.
+- Reported apart: skin_form SKIN_FORM_BROKEN; on X1 Gate B the lookup arm (-RECIPE_MATH) scored 16+16 vs FULL 15+15 (the frozen RECIPE_MATH rule reads Task B only); on depth d3 seed 47 FULL 75 right vs 119 for -RESTART_FALLBACK (median rule still WIN).
+- Ledger: hold 5.00 USD placed (110.35 -> 115.35), closed at 0.06 USD (-> 110.41 of 200). Cleanup VERIFIED for both jobs. Backup D:/tksCAS-archive/helm_r1w2_c35_20261018/ (913 files, three sha256 confirms).
+- Ops: the c34-g job had left 4 objects in the shared S3 slot and no cleanup record; verified byte-identical to local + archive copies, purged, retroactive record written and labelled.
+
 ## 2026-10-18 PDT - HELM-R1 WAVE 2 PACKET SEALED, NOT LAUNCHED: the licensed recipe brain with one part switched off at a time (spec sheet 7.63; laptop, 0 USD; no ledger hold)
 
 Owner words: "wave 2 plan". Builder session (Claude). Nothing ran on AWS; nothing is scored; the owner has not signed.
