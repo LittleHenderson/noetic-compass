@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM RB-I3 RAN: the Unity Eye pairs and rotates the 7 desires with the 7 faculties; EYE_PAIRING_EARNED_KEEP by the frozen rule, HARD_GATES_PASS; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.74; 103 laptop parts + reader, 0 USD)
+
+Owner order (2026-10-19): ""RB-I3" t". Builder-operator: Claude Code sub-agent. Sign line (operator-composed): APPROVE rb_i3, source 9ecfb7e7, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.
+
+- Built in Documents/Codex/2026-10-19/rb_i3/ from rb_i3_design_v1; FROZEN.precode 06d95bdb... (incl. designer 70% and builder 60% predictions) written before any code; the 33 tests written before the code they test. Reuse by import, unmodified: wave-3 drive_w3 fr_distance/slerp_step (79def344...) and common_w3; u1b ConcertLedger; wave-1 rb.writer.receipt and rb.common.outcome.
+- Exam X3-IDLE: 7 hidden kinds (every faculty is one kind's primary and another's secondary), 1 in 4 mis-filed, 1 in 3 easy, 2 of 7 wells half dead, 32 sessions of 12-20 items, 2 idle ticks per item, 1-3 planted conversation windows per session. Families A (scored), B drift, C null.
+- Result (family A, pooled): EYE_PAIRING 1180/1527 = 77.28%; FIXED_TABLE 80.94% (answer key, reported only); RANDOM 37.33%; ROUND_ROBIN 34.64%; NO_LEARN 36.67%; SHUFFLED_FEEDBACK 41.72%; EYE_RATIO 76.56%; NO_DRIVE 17.29%. M1-M6 all pass; M2 95.47%; M4 7/7/7.
+- Hard gates all hold: receipts re-derived, 0 mismatches; WRONG 0; replay 3/3 byte-identical; cut 0 in every non-violator part and CUT_VIOLATOR 765/749/708 calls in conversation (the check can now fail); 0 whisper writes, canary caught; I1 null gap 2.81 points.
+- Negatives and caveats kept: the Fisher-Rao step ties the plain ratio (+0.72 points; no geometry word); on the null family the Eye is 4.45 points over random (attention learning); designer misses (FIXED 80.94 below 82-86; drift recovered at sessions 22/28/21). Custody deviation: seeds fixed at 11/29/47 by the brief. The brief listed 8 arms; all 11 ran.
+- Reading READING.json 71172e80...; RESULTS.md f1129652...; max part 5.94 s, peak 32.5 MiB; backup D:/tksCAS-archive/rb_i3_20261019/ (961 files, three hash passes, 0 mismatches).
+
 ## 2026-10-19 PDT - HELM U3-T1 self-scan by the Unity Eye RAN: SELF_SCAN_EARNED_KEEP and WHISPER_EARNED_KEEP by the frozen rule; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.73; 6 laptop parts, 0 USD)
 
 Owner ruling (2026-10-19 morning): the Eye REPORTS AND WHISPERS; "run U3-T1". Builder-operator: Claude Code sub-agent. Sign line (operator-composed): APPROVE u3_t1, source a39c9bd8, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.
