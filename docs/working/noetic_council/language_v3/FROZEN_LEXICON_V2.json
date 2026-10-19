@@ -1,0 +1,49 @@
+{
+  "name": "FROZEN_LEXICON_V2",
+  "written_utc": "2026-10-19T01:50:00Z",
+  "written_pacific": "2026-10-18 about 6:50 PM",
+  "written_before": "lexicon_v2.py, tabulate_v2.py, any v2 alias, and any scoring of the sealed 98. The only rows the builder has read are the 99 DEV rows (read in full, with their gold CAS, to find the gaps).",
+  "owner_order": "C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md, fix E: 'expand the deterministic dictionary on the 99 dev rows'",
+  "v1_kept_intact": {
+    "file": "ALIAS_WIDE_LEXICON_v0_1.json",
+    "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0",
+    "rule": "v1 is never edited. v2 = v1 plus a list of additions held in lexicon_v2.py. A switch picks v1 or v2."
+  },
+  "admission_rule": {
+    "allowed_sources": {
+      "a": "the canonical colloquialism map in CLAUDE.md (Clarification 6), including closed surface variants of those phrases: tense/person/-ing inflection, hyphenation ('practice-makes-perfect'), and the plain noun of the phrase's key word ('attention' from 'Paying attention')",
+      "b": "the verbs of the ten authoritative Noetic definitions: 'affinity for', 'attracted toward', 'adverse to', 'repelled by', 'resonates with', 'impregnated with', 'triggers', 'brought to Mind', and their closed inflections ('resonant' from 'resonates')",
+      "c": "domain words for P/C/E/O found in docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+      "d": "words observed in the 99 DEV rows (cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl)"
+    },
+    "forbidden_source": "the sealed 98 (real_heldout_unparseables_98.jsonl). Never opened to pick, test, or tune a word. It is scored exactly once, at the end, count only, with its sha256 checked before and after.",
+    "every_alias_carries": "a source tag (one or more of a/b/c/d), the target (Noetic number or domain letter), the tier, and for a Noetic alias a written colloquialism-test line: the natural colloquialism for the phrase and the canonical map entry it matches.",
+    "noetic_alias_test": "Colloquialism test (Clarification 6): the natural colloquialism must match the canonical map entry of exactly one Noetic. Anti-drift: no analytical / audit / scrutinize / find-flaws word may map to ^3 (that is ^6); no reasoning / inference / deduction / causal-analysis word may map to ^8 (that is ^6 + ^9); a landing word ('realization') maps to ^9, never ^8. A source-d Noetic alias is NOT filtered by DEV gold labels: the canonical definition governs, and a DEV row whose writer used the word against its canon meaning is reported as a MISMATCH, not hidden.",
+    "domain_word_test": "Clarifications names the four domains only as Principled / Cognitive / Evaluative / Operational, so source c adds nothing beyond v1. A source-d domain word is admitted only if (i) it is a plain-English gloss of exactly one domain name, and (ii) in every DEV row where it appears inside a numbered segment, that segment's gold cell has that same domain. A word that fails (ii) in even one DEV row is refused.",
+    "bare_noun_tier": "A bare noun alias (not a verb frame) goes in the lowest tier (noun_tier), so any verb-frame hit in the same segment decides. Two different bare-noun Noetics in one segment stay AMBIGUOUS; v2 does not break ties.",
+    "no_rule_changes": "v2 changes only word lists. Segmentation, hedges, polarity, leakage, number words, the verb-frame-first rule and the MATCH/MISMATCH comparison are v1's, unchanged."
+  },
+  "dev_baseline_v1": {
+    "dev_file_sha256": "17cd198321d242bd74ff789a4b7f8032d499a7ff8534e5b07545b6221930fde0",
+    "rows": 99,
+    "parsed": 0,
+    "match": 0,
+    "mismatch": 0,
+    "unparseable": 99,
+    "reason_counts_first_orientation": {"NO_STATE_IN_SEGMENT": 77, "NO_DOMAIN_IN_SEGMENT": 21, "AMBIGUOUS_STATE_IN_SEGMENT": 16, "AMBIGUOUS_DOMAIN_IN_SEGMENT": 10},
+    "note": "0 of 99 parse under v1 by construction: the DEV rows are half of the 197 v1-unparseable headline rows."
+  },
+  "builder_reading_of_the_gaps": "Most NO_STATE gaps are surface variants of canon phrases the v1 regexes miss: 'practice-makes-perfect' (hyphenated), 'practice making perfect', bare 'practice/practiced/practice-based', 'attention' without 'paying', 'drawn toward' / 'draws you toward', 'resonant', 'realization', 'thought' without 'a', 'pushed-away'. Many NO_DOMAIN rows are NOT vocabulary gaps: the English simply never names a domain ('a thought about wisdom and insight'); no admissible word can fix those. AMBIGUOUS rows mostly carry two canon phrases in one segment ('an aversion that struck a chord'); a word list cannot fix those either.",
+  "predicted_lift_dev_99": {
+    "parsed_range": [30, 50],
+    "match_range": [22, 40],
+    "new_mismatch_range": [3, 12],
+    "honesty_note": "A range, written before the v2 code exists. Every row that becomes parseable becomes either MATCH or MISMATCH; some DEV English contradicts its own gold (e.g. 'drawn to you in cognitive thinking' with gold ^2^O), so v2 WILL create new MISMATCH rows. Both numbers are reported."
+  },
+  "sealed_98": {
+    "file": "cas-synthetic/data/l4_split/real_heldout_unparseables_98.jsonl",
+    "sha256_expected": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+    "sha256_observed_at_freeze": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+    "plan": "one scoring pass after lexicon_v2.py is committed; counts only (MATCH / MISMATCH / UNPARSEABLE); no row text printed or stored; sha256 checked before and after the pass. The 481/439 tabulation also covers these 98 rows; it runs once, after the lexicon is frozen, and is not used to change any word."
+  }
+}
