@@ -1,0 +1,72 @@
+{
+ "checker_dry_on_practice": {
+  "exam_practice_mode": true,
+  "frames": true,
+  "sources": true
+ },
+ "dry_pool_practice": {
+  "elapsed_seconds": 48.66,
+  "exit0": 21,
+  "units": 21,
+  "workers": 1
+ },
+ "freeze_sha256": "7c92a5891ae25d318245743c9310cba58fc4f42468b597a188eeb04c51e3506b",
+ "i11": true,
+ "peak_memory_mib": {
+  "checker exam (practice)": 107.2,
+  "exam frames loaded and ranked (no item selected)": 164.0,
+  "frames build-pg": 44.6,
+  "frames build-s": 52.3,
+  "frames build-wb": 34.6,
+  "unit S FULL+EYE_SCAN (practice)": 32.7
+ },
+ "python": "3.14.0",
+ "ran_from": "a fresh extract of the sealed zip (members re-hashed: 51 of 51 equal) + extracted copies of the sealed neighbour zips",
+ "schema": "helm.xreal.test-counts/1",
+ "seed_rule_dummy_line_with_nine_real_derivations": "PASS",
+ "suites": {
+  "wave1 carried (v3 zip 31f97d67)": {
+   "ran": 128,
+   "seconds": 66.51,
+   "verdict": "OK"
+  },
+  "wave2 units+kit (zip 21ad185d)": {
+   "ran": 34,
+   "seconds": 4.465,
+   "verdict": "OK"
+  },
+  "wave3 units+kit (v3 zip 152bca2a)": {
+   "ran": 41,
+   "seconds": 2.843,
+   "verdict": "OK"
+  },
+  "wave3b units+kit (zip a4f82556)": {
+   "ran": 23,
+   "seconds": 14.058,
+   "verdict": "OK"
+  },
+  "wave4 units+kit (zip 4bd0d740)": {
+   "ran": 31,
+   "seconds": 4.857,
+   "verdict": "OK"
+  },
+  "xreal.test_keys_b (sealed zip; written by the separate key-B session)": {
+   "ran": 60,
+   "seconds": 0.004,
+   "verdict": "OK"
+  },
+  "xreal.test_kit_xr (sealed zip)": {
+   "ran": 5,
+   "seconds": 0.066,
+   "verdict": "OK"
+  },
+  "xreal.test_units_xr (sealed zip)": {
+   "ran": 32,
+   "seconds": 4.108,
+   "verdict": "OK"
+  }
+ },
+ "total_tests": 354,
+ "zip": "HELM_XREAL_20261019_SOURCE_XREAL.zip",
+ "zip_sha256": "c275daed5ed26c6759543e8e89ebe2d54d7d750fe8b8f9bc957efe82ffa7bb6e"
+}
