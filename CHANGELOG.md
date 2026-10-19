@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 wave 5 SCORED (job c40, AWS): frozen reader HARD_GATES_PASS, EYE_PAIRING_EARNED_KEEP; Eye-paired idle loop 70.18% vs random 35.32% / round-robin 33.93% / frozen 38.83%; 0 items lost, 0 calls in conversation, 0 Eye writes; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.78; one m6i.xlarge, 0.03 USD)
+
+Owner sign line (verbatim, sha256 a9dd6ff2...): "APPROVE R1W5: EYE_PAIRING wave, sealed package b6598687, one attempt + one plumbing retry, cap $1.00." Launch operator: Claude Code sub-agent.
+
+- Job helm-claude-r1w5-20261019-c40: one m6i.xlarge i-0a0a23d11e2a94442 (us-west-2, 2-CPU slice, 14 GiB), launched 12:40 PM, terminated 12:48 PM Pacific; host 489.9 s, runner 205.98 s; 41 of 41 units exit 0; tests w1 128, w2 34, w3 41, w3b 23, w5 40, all OK; one scored attempt, 0 plumbing retries; no torch work.
+- Ran in parallel with wave 4 (c39): the c40 hold was placed only after c39's ledger closeout, and the shared S3 prefix taken only after c39's independent cleanup VERIFIED.
+- Reading R1_W5_READING.json c61dd0c0... (frozen reader from the sealed zip): HARD_GATES_PASS, word EYE_PAIRING_EARNED_KEEP; every instrument row (I1, I3, I4, I6, I7, I9, I10 incl. seed source = owner line, I11-I14) and every hard gate held.
+- Family A pooled (1,509 items): candidate 1,059 = 70.18%; random 35.32%; round-robin 33.93%; frozen table 38.83%; wave 3's loop 35.19%. Marks: (a) 0 items lost on both live exams; (b1) +34.8575 and +36.2492 points (mark 20), per life at least +29.0061 (mark 10); (b2) frozen 38.8337 <= 40.3214 and candidate - frozen +31.3453.
+- Faculty calls in conversation 0 (violator 206-258 per life); Eye writes 0 (canary refused every life); guard trips 0 (violator 986-1,026). Pair words: EYE_PAIRING x CASCADE / CUBE_STORE / ENGLISH_IN / TRIAD all ADDITIVE.
+- Limits kept: drift recovered on 1 of 3 lives (12 sessions); Q5 declines cost 60 items vs no-decline (reported); the Fisher-Rao variant is 2.9158 points below the default.
+- Charge 0.03 USD (cautious 0.07); ledger 111.26 -> 112.26 (hold) -> 111.29 of 200. Cleanup VERIFIED three ways (controller, independent check, direct read-only look); proof b3379824.... Backup D:/tksCAS-archive/r1_wave5_c40_20261019/ (three hash passes).
+- Small deviation: the X5 custodian's transcription JSON has unescaped Windows backslashes; read tolerantly, never edited.
+
 ## 2026-10-19 PDT - HELM-R1 wave 4 SCORED (job c39, AWS): frozen reader PASS, EYE_SCAN_EARNED_KEEP; found 88/88, acted 88/88, 0 items lost, 0 false alarms, 0 Eye writes, 100% traceable; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.77; one m6i.xlarge, 0.04 USD)
 
 Owner sign line (verbatim, sha256 c23e0aa7...): "APPROVE R1W4: EYE_SCAN wave, sealed package 4bd0d740, one attempt + one plumbing retry, cap $1.00." Launch operator: Claude Code sub-agent.
