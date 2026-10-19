@@ -1,0 +1,169 @@
+{
+ "frozen_r1w5_sha256": "0cf16b388ce03df1208ffd705fbb686cc122923d5356d22af994c154a0efcb7c",
+ "label": "R1W5",
+ "member_count_excluding_freeze": 37,
+ "members": {
+  "FROZEN_R1W5.json": {
+   "bytes": 19797,
+   "sha256": "0cf16b388ce03df1208ffd705fbb686cc122923d5356d22af994c154a0efcb7c"
+  },
+  "README_R1W5.md": {
+   "bytes": 4772,
+   "sha256": "65127cc95b00111c1e9563e6263f70772200f6a9402752a1186c989a66fe2d28"
+  },
+  "RUN_LIMITS_R1W5.json": {
+   "bytes": 3546,
+   "sha256": "f5e5f6bf97137112c09837a18674752421f238dbf160d3cdbce2023373a6a899"
+  },
+  "SOURCE_CUT.json": {
+   "bytes": 980,
+   "sha256": "36b2aed7819d75aef367b704d713424252e2abca4f0004d5c2bbffa7ead0f46a"
+  },
+  "kit/STAGE_R1W5.json": {
+   "bytes": 1542,
+   "sha256": "3db0c33498520632f3b090a50022a102b049fb936fcd299ff50db667d5f1e02a"
+  },
+  "kit/job_supervisor.py": {
+   "bytes": 19550,
+   "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+  },
+  "kit/plan_check.py": {
+   "bytes": 3464,
+   "sha256": "84257a23545bfe87d7d4ef4565feae12adc9c325fa0fff06fefcb626c3301035"
+  },
+  "kit/run_r1w5.py": {
+   "bytes": 14966,
+   "sha256": "95457bdc23caaab8494d71bc120fde4adf79ce73877f10ad843d04e1f7c67f2e"
+  },
+  "r1w5/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "r1w5/check_x5_format.py": {
+   "bytes": 6747,
+   "sha256": "bfbec353e5571f0ec99628ac990382de471f194602d54ecc6ded1ecfe6adf577"
+  },
+  "r1w5/common_w5.py": {
+   "bytes": 19572,
+   "sha256": "bb564b9fcc60cae76de641fac7d5f9ed55a71862d1340a4de421348eb33f7bc4"
+  },
+  "r1w5/custody_x5.py": {
+   "bytes": 2965,
+   "sha256": "e89ecf451a11b8854bcf85efe9f0c1c1b991d052b73a44cec2faf5f1676af249"
+  },
+  "r1w5/drive_x5.py": {
+   "bytes": 23019,
+   "sha256": "1c919ded2f66ab16bc86509c4dc5e60a4256bebe8b5f70d62ad89924ca09965e"
+  },
+  "r1w5/gen_x5pair.py": {
+   "bytes": 7647,
+   "sha256": "ec86862785f09063eac765fef55fa9c62571dcf186d7cb95250388cb1c3dc48a"
+  },
+  "r1w5/jobs_x5.py": {
+   "bytes": 16512,
+   "sha256": "bbaf7402c5c2782a5e39b92e5b4b4e4b831e1c8529a91b99ceb91dd54d0593fd"
+  },
+  "r1w5/live_w5.py": {
+   "bytes": 8310,
+   "sha256": "e046b52158fd869188d83d23b00581fedd08b8133ba653100472a15957cacc9c"
+  },
+  "r1w5/merge_r1w5.py": {
+   "bytes": 36743,
+   "sha256": "c043afff18a244eec230782e2f4059c13644f49a2c77d76a1b08111b53a39987"
+  },
+  "r1w5/pool_w5.py": {
+   "bytes": 3509,
+   "sha256": "5fb63fabbe5503858f7801d9369960fd6548760e81ed6bae5e06c97319e20bd1"
+  },
+  "r1w5/seal_x5.py": {
+   "bytes": 3617,
+   "sha256": "a36b53b4d6fdb1e665eb66bbb6cb8a114e8a3882dab10f315d5b4ec5a55d99a9"
+  },
+  "r1w5/seed_rule_x5.py": {
+   "bytes": 9781,
+   "sha256": "cf443baa32aa42653c89753cb423987038b8b3d708dd29661ebc5ec8bb6bfbf1"
+  },
+  "r1w5/summary_w5.py": {
+   "bytes": 2892,
+   "sha256": "874c357ac8f4cb8418dfb202419bec920fa90b8a28102792e14a8d373eda9a64"
+  },
+  "r1w5/switches_w5.py": {
+   "bytes": 2505,
+   "sha256": "4a6b61b9f16d29720fc3f2b0a4d2aeaa18d7abcc724f6dae2957bf015ac4eb91"
+  },
+  "tests_r1w5/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_r1w5/fixtures/E64_PRACTICE_W5.json": {
+   "bytes": 47753,
+   "sha256": "43ddd755398e5fc6fc7eb65ccdda0e9b826d4e77aa5ecb07324dbcde10077001"
+  },
+  "tests_r1w5/fixtures/F64_PRACTICE_W5.json": {
+   "bytes": 67272,
+   "sha256": "358df49675b94b22edd811382112a893e3830e8c3300dc4c6890b6a94d20f055"
+  },
+  "tests_r1w5/test_kit_w5.py": {
+   "bytes": 4901,
+   "sha256": "e25db639a6a141cf1ae997d557cf902a7878f37d8d195de3cebca1bfa7a7158b"
+  },
+  "tests_r1w5/test_run_w5.py": {
+   "bytes": 8626,
+   "sha256": "0fda4c98d947a5bdf034006f14718f564dd081166e45d1fca5fe602edf6d1867"
+  },
+  "tests_r1w5/test_units_w5.py": {
+   "bytes": 21264,
+   "sha256": "a0987b1a68ac7750cfb70c8923dd330f4ee9de8627daab79dca4ba0d29800cdc"
+  },
+  "vendor/rb_i3/__init__.py": {
+   "bytes": 1391,
+   "sha256": "afc84e3c4dbc266ae92958a71232e0f40414a3d06c488ee87bf5f76335ef7c1a"
+  },
+  "vendor/rb_i3/attention.py": {
+   "bytes": 3996,
+   "sha256": "fd98d92a23b661d96cbb4f9c99d06c3e6fae9453af259be7e73eddb2a4615df4"
+  },
+  "vendor/rb_i3/consts.py": {
+   "bytes": 2917,
+   "sha256": "23e3e1ed011f2a8e70400c46be60f44235feea9c358c56521c534b208d4d1503"
+  },
+  "vendor/rb_i3/eye.py": {
+   "bytes": 5063,
+   "sha256": "c0b191e27b9d2839c4a5b3532937ca9b430ebdb2b49c37397eab9fcf7a32dfad"
+  },
+  "vendor/rb_i3/world.py": {
+   "bytes": 9479,
+   "sha256": "f821d55e46b33149ecc6504c39618a2598566cc01a46f2b8a27dd1299bd7f289"
+  },
+  "vendor/u1b_unity_eye/__init__.py": {
+   "bytes": 598,
+   "sha256": "9a2eb07ba7b02b76ba8c7c7a438b122d58973715835d5b18085c3d554e6c87aa"
+  },
+  "vendor/u1b_unity_eye/eye.py": {
+   "bytes": 1037,
+   "sha256": "ac34a474a2542610b2045fef491cf967cafa2079d7ceb5c1a69d3207bc9fa922"
+  },
+  "x5_contract/SEED_RULE_X5.md": {
+   "bytes": 2706,
+   "sha256": "b73532223ac28b1f22f8a180acfa93e217822e1e856fe36bd6edad799bc6e8a5"
+  },
+  "x5_contract/X5_CUSTODIAN_CONTRACT.md": {
+   "bytes": 5873,
+   "sha256": "4b54fbabd4d603cc14279f91cdd19e208721699e5f83f1127def40204e5c8c49"
+  }
+ },
+ "not_inside": "the wave-3b, wave-3, wave-2 and wave-1 zips (shipped beside it, checked by freeze), X5 (by its pins), the spent X3 files (by their pinned hashes)",
+ "package": "HELM_R1_W5_20261019",
+ "rb_i3_manifest_sha256": "9ecfb7e7e486b148d82ca2d4f5d4fe263b1d6c27578ce0248c8eff3e1d198ff1",
+ "schema": "helm.r1w5.package-freeze/1",
+ "sealed_on": "2026-10-19 (Pacific)",
+ "source_cut_commit": "4898b268b3c0ae89e1f49f9054fc1f2d59818fed",
+ "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+ "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+ "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+ "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+ "wave3_freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+ "wave3_zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362",
+ "wave3b_freeze_sha256": "a6d9dbc78d3f720941c5a358be9a4d514617f8de226811c55938f807833dfbba",
+ "wave3b_zip_sha256": "a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26"
+}
