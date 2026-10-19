@@ -267,7 +267,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 **ASOM** — [CAS core]
 - *Plain:* a four-word display of how a CJT is running; it never decides anything.
 - *Definition:* "ASOM is a display of how the CJT is operating, in four words": `STARVED` ("the CJT is in cutoff"), `ALIGNED` ("active, and the result is the intended one"), `OVERSATURATED` ("saturated, and the result is still the intended one"), `MISALIGNED` ("the result is opposite or off-axis"). "What it must never do: gate anything." — LOOP3 §2.
-- *Gap:* the acronym is never expanded in any file read; "ASOM still needs its own ruling located. Do not invent it." — CONT §1b.
+- *Expansion (owner, 2026-10-19):* the four operating words themselves: **A**ligned / **S**tarved / **O**versaturated / **M**isaligned. The owner gave "aligned, misaligned, oversaturated" and placed the term in the CAS PCBA Engineer book; the fourth word, Starved, is the spec sheet's and LOOP3's fourth word. Recorded as owner-given plus spec-sheet usage, not as a book quotation. Source: `Documents\Codex6-10-18\OWNER_APPROVALS_20261018.md` (2026-10-19 block).
 
 **Authoritative verbs** — [CAS core]
 - *Plain:* the exact verbs the definitions use, which must not be swapped for emotional words.
@@ -432,7 +432,8 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 **CES law** (weighted power mean) — [HELM part]
 - *Plain:* a smooth "substitution" formula where ingredients can partly stand in for each other.
-- *Definition:* "a weighted power mean... `Y = [Σ cᵢ · max(0, xᵢ − aᵢ)^ρ]^(1/ρ)` in 40-digit Decimal" — SPEC §7.51. (CES is never expanded in the files read.)
+- *Definition:* "a weighted power mean... `Y = [Σ cᵢ · max(0, xᵢ − aᵢ)^ρ]^(1/ρ)` in 40-digit Decimal" — SPEC §7.51.
+- *Expansion:* CES = Constant Elasticity of Substitution, the economics term for this family of formulas; spelled out in the stand-in brain code ("Constant Elasticity of Substitution (CES) with curvature rho" — `HELM_DISTRIBUTION_PACKAGE/brains`). The owner notes (2026-10-19) that the term entered the project through Gemini's usage; it is a technical borrowing, not a CAS primitive.
 - *In HELM:* the stand-in brains and RB-OH1's `RECIPE_SUB` head — SPEC §7.51, §7.52.
 
 **CHANGELOG** — [Infrastructure]
@@ -1735,7 +1736,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 **SDG** — [HELM part]
 - *Plain:* the project's English-from-CAS generator and its seed set; used as a source of test sentences.
-- *Definition:* "SDG: Native Free-Form English Generation — Canonical Spec" (title of `docs/working/phase3_free_form_spec_2026_05_04.md`). In HELM: "coverage 51 → 576 of 576 SDG seeds" — SPEC §7.24; "LLM-written SDG English" — SPEC §7.57. (The acronym is never expanded in the files read; "SDG" alone has no canonical definition.)
+- *Definition:* "SDG: Native Free-Form English Generation — Canonical Spec" (title of `docs/working/phase3_free_form_spec_2026_05_04.md`). In HELM: "coverage 51 → 576 of 576 SDG seeds" — SPEC §7.24; "LLM-written SDG English" — SPEC §7.57. *Expansion (owner, 2026-10-19):* SDG = CAS **S**ynthetic **D**ata **G**enerator (`cas-synthetic/`). Owner-given; the files themselves never spell it out.
 
 **Seam rule** (seams) — [HELM part]
 - *Plain:* a new topic starts only when both the subject changes and the step is big enough; never blend across a seam.
