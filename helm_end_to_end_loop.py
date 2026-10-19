@@ -32,6 +32,14 @@ batch contradicts a requirement it already holds -- that refusal IS the detected
 RpmCause, the gate answers REPAIR, and the repair performer opens a real child (a replay of every witnessed
 batch on a fresh brain). Nothing in this path is a planted flag.
 
+EVERYDAY ENGLISH IN (fix H, 2026-10-18)
+---------------------------------------
+Text that is not in the checked form first goes to `helm_english_in.read` (a deterministic reader). If the reader
+restates it as checked-form content, that content is rendered to a checked-form sentence, parsed back, and the turn
+continues EXACTLY as a checked-form turn (same CCE round trip, gate, brain, store, receipts). A witnessed-batch
+report goes to `witness_batch`. A reader question ("how much flour?", "I don't know an ingredient called X")
+ends the turn as CLARIFY_ENGLISH_<code> with zero writes. Text the reader does not claim takes the old paths below.
+
 OUTSIDE THE CIRCUIT (unchanged, stated so nobody assumes otherwise): the agentic-goal path (helm_agentic_executor)
 and read-only cube-store queries in free English. Both write nothing through this loop's recipe path.
 
@@ -65,6 +73,8 @@ from helm_brain_canonical import (CanonicalRecipeBrain, CanonicalBrainRefused, e
                                   EVALUATED)
 from tks_meta_valve_controller import TKSMetaValveController
 from helm_agentic_executor import AgenticExecutionEngine
+import helm_english_in
+from helm_voice import reader_question_text
 
 # Canonical CCE translator (language_v3). Missing -> every turn is NOT_VERIFIED and refused.
 try:
@@ -87,7 +97,9 @@ except ImportError:
     TurnProcessor = None
     INVENTORY_NODE_ID = "cube_inventory_on_hand"
 
-DEFAULT_TRACE_PATH = os.path.join(HERE, "docs", "working", "traces", "HELM_LIVE_TRACE_20261018.jsonl")
+#: The fix-C trace (HELM_LIVE_TRACE_20261018.jsonl) is kept as it was; fix H writes its own file beside it.
+FIX_C_TRACE_PATH = os.path.join(HERE, "docs", "working", "traces", "HELM_LIVE_TRACE_20261018.jsonl")
+DEFAULT_TRACE_PATH = os.path.join(HERE, "docs", "working", "traces", "HELM_LIVE_TRACE_ENGLISH_IN_20261018.jsonl")
 
 
 # -----------------------------------------------------------------------------
@@ -113,17 +125,23 @@ class HELMVoiceAdapter:
                 f"{limiting} runs out first, so it sets the limit.{tail}")
 
     @staticmethod
-    def format_missing(product: str, missing: List[str]) -> str:
+    def format_missing(product: str, missing: List[str], saved: bool = False,
+                       said_gone: Optional[List[str]] = None) -> str:
         names = " and ".join(missing)
+        tail = "I didn't guess." if saved else "I didn't guess, and nothing was saved."
+        if said_gone and set(missing) <= set(said_gone):     # the user told us it is gone: say that, not "unknown"
+            return (f"I can't make {product} right now: there's no {names} on hand. When there is, tell me how much. "
+                    f"{tail}")
         ask = f"How much {missing[0]} is there?" if len(missing) == 1 else f"How much {names} is there?"
         return (f"I can't say how much {product} we can make yet, because I don't know how much {names} we have. "
-                f"{ask} I didn't guess, and nothing was saved.")
+                f"{ask} {tail}")
 
     @staticmethod
-    def format_unlearned(product: str, unlearned: List[str]) -> str:
+    def format_unlearned(product: str, unlearned: List[str], saved: bool = False) -> str:
         names = " or ".join(unlearned)
+        tail = "I didn't guess." if saved else "I didn't guess, and nothing was saved."
         return (f"I don't know yet how much {names} goes into {product}: I haven't seen a batch where that ran "
-                f"out first. Tell me about one batch like that. I didn't guess, and nothing was saved.")
+                f"out first. Tell me about one batch like that. {tail}")
 
     @staticmethod
     def format_clarify_not_checked() -> str:
@@ -146,9 +164,14 @@ class HELMVoiceAdapter:
                 "What materials or goals would you like to work with?")
 
     @staticmethod
-    def format_stock_recorded(stocks: Dict[str, str]) -> str:
-        items = ", ".join(f"{_amount_words(v)} {k}" for k, v in stocks.items())
+    def format_stock_recorded(stocks: Dict[str, str], words: Optional[Dict[str, str]] = None) -> str:
+        words = words or {}
+        items = ", ".join(words.get(k) or f"{_amount_words(v)} {k}" for k, v in stocks.items())
         return f"Got it: {items} on hand."
+
+    @staticmethod
+    def format_absent_recorded(names: List[str]) -> str:
+        return f"Noted: no {' or '.join(n.lower() for n in names)} on hand."
 
     @staticmethod
     def format_conflict(product: str, ingredient: str, old: str, new: str) -> str:
@@ -215,6 +238,11 @@ class HELMEndToEndLoop:
         self.trace: List[Dict[str, Any]] = []
         self.trace_path = trace_path
         self.ignored_constructor_args = sorted(_ignored)   # e.g. old valve_weights_path: never loaded
+        # fix H: what the English reader needs from the conversation, all of it the user's own words
+        self.declared_absent: set = set()               # ingredients the user said are gone (never re-glued)
+        self.units: Dict[str, str] = {}                 # unit words the user gave per ingredient ("cups")
+        self.last_topic: Optional[str] = None           # the product the conversation is on ("bake a batch")
+        self._pending_words: Dict[str, Dict[str, str]] = {}
 
     # ------------------------------------------------------------------ trace
     def _emit(self, tick: int, station: str, **fields: Any) -> Dict[str, Any]:
@@ -365,10 +393,14 @@ class HELMEndToEndLoop:
         node = self.cube_store.nodes.get(f"item_{name.lower()}")
         if node is None or node.provenance.source not in ("USER_SAID", "CHECKED"):
             return None
-        amounts = [b.commonality.get("amount") for b in self.cube_store.branches
-                   if b.source_node_id == INVENTORY_NODE_ID and b.target_node_id == node.node_id
-                   and b.predicate == "contains" and b.commonality]
-        return amounts[-1] if amounts else None
+        latest = None
+        for b in self.cube_store.branches:
+            if (b.source_node_id == INVENTORY_NODE_ID and b.target_node_id == node.node_id
+                    and b.predicate == "contains" and b.commonality):
+                latest = b.commonality
+        if latest is None or latest.get("absent"):      # the latest word on it is "none on hand"
+            return None
+        return latest.get("amount")
 
     def _write_event_cube(self, node_id: str, label: str, statement: str, source: str, tick: int,
                           kind: str = "event") -> Dict[str, Any]:
@@ -430,6 +462,11 @@ class HELMEndToEndLoop:
         self._emit(tick, "CCE skin", **result["cce_round_trip"])
         if rt["content"] is None:
             return self._not_checked_turn(text, tick, result, writes_before)
+        return self._checked_turn(rt, tick, result, writes_before)
+
+    def _checked_turn(self, rt: Dict[str, Any], tick: int, result: Dict[str, Any],
+                      writes_before: int) -> Dict[str, Any]:
+        """Everything after the CCE parse. Checked-form text and English restated by the reader both run this."""
         if not rt["verified"]:
             return self._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED",
                                 HELMVoiceAdapter.format_round_trip_failed(), writes_before, "WAIT_FOR_USER")
@@ -440,12 +477,19 @@ class HELMEndToEndLoop:
                                 writes_before, "WAIT_FOR_USER: a witnessed batch")
 
         said: List[str] = []
-        # Absences: "There is no Ω_X." removes X from the working stock (it is ABSENT, not zero).
+        # Absences: "There is no Ω_X." -> X is ABSENT (not zero): out of the working stock, recorded in the store,
+        # and never glued back from an older stored amount.
+        absent_names = []
         for rel in content.get("relations", []):
             if rel and rel[0] == "absent" and isinstance(rel[1], str):
                 name = _strip_omega(rel[1])
-                self.stock.pop(name, None)
-                self._emit(tick, "S2 Bias ^5", what="declared_absent", name=name)
+                if name not in absent_names:
+                    absent_names.append(name)
+        if absent_names:
+            ok, msg = self._declare_absent(absent_names, tick, result)
+            if not ok:
+                return self._finish(result, tick, "CLARIFY_STOCK_NOT_RECORDED", msg, writes_before, "WAIT_FOR_USER")
+            said.append(msg)
 
         stocks: Dict[str, Fraction] = {}
         for s in content.get("stocks", []):
@@ -463,13 +507,75 @@ class HELMEndToEndLoop:
         topic = content.get("topic")
         if topic:
             return self._run_request(topic, tick, result, writes_before, said)
-        if stocks or any(r and r[0] == "absent" for r in content.get("relations", [])):
+        if stocks or absent_names:
             msg = " ".join(said) if said else "Noted: that's marked as not on hand."
             return self._finish(result, tick, "INVENTORY_RECORDED", msg, writes_before, "DONE")
         return self._finish(result, tick, "VERIFIED_NO_RECIPE_CONTENT", HELMVoiceAdapter.format_clarify_not_checked(),
                             writes_before, "WAIT_FOR_USER")
 
+    # ------------------------------------------------------------------ everyday English in (fix H)
+    def read_english(self, text: str) -> Dict[str, Any]:
+        """The English reader's reading of `text`, using this conversation's own words (last topic, units)."""
+        return helm_english_in.read(text, self.brain.ingredients, list(self.brain.products),
+                                    last_topic=self.last_topic, known_units=self.units)
+
+    def wants_turn(self, text: str) -> bool:
+        """True when this loop would act on `text`: checked form, or English the reader claims."""
+        if cce is not None:
+            try:
+                cce.parse(text.strip())
+                return True
+            except Exception:
+                pass
+        return self.read_english(text)["status"] != "NOT_MINE"
+
+    def _english_turn(self, text: str, reading: Dict[str, Any], tick: int, result: Dict[str, Any],
+                      writes_before: int) -> Dict[str, Any]:
+        result["english_in"] = reading
+        self._emit(tick, "English in", what="helm_english_in.read", reader=reading["reader"],
+                   status=reading["status"], rules=reading["rules"], stocks=reading["stocks"],
+                   absent=reading["absent"], topic=reading["topic"], witness=reading["witness"],
+                   ignored=reading["ignored"], clarify=reading["clarify"], checked_form=reading["checked_form"],
+                   round_trip_ok=reading["round_trip_ok"], lexicon_sha256=reading["lexicon"]["sha256"])
+        if reading["status"] == "CLARIFY":
+            code = reading["clarify"]["code"]
+            return self._finish(result, tick, f"CLARIFY_ENGLISH_{code}",
+                                reader_question_text(code, reading["clarify"].get("slots") or {}), writes_before,
+                                f"WAIT_FOR_USER: {code}")
+        if reading["status"] == "WITNESS":
+            w = reading["witness"]
+            res = self.witness_batch(w["product"], w["stock_before"], w["made"], w["ran_out"], tick=tick)
+            res["user_prompt"] = text
+            res["english_in"] = reading
+            if res["loop_status"] == "WITNESS_ADMITTED":
+                for name, v in w["stock_words"].items():
+                    if v.get("unit") and name not in self.units:
+                        self.units[name] = v["unit"]
+                if w.get("made_unit") and w["product"] not in self.units:
+                    self.units[w["product"]] = w["made_unit"]      # "loaves": the word the yield is counted in
+                self.last_topic = w["product"]
+            return res
+        # CONTENT: the reader's checked-form sentence goes through the SAME parse + round trip as typed checked form.
+        checked = reading["checked_form"]
+        rt = self.verify_cce_round_trip(checked)
+        result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
+        result["checked_form"] = checked
+        same = (rt["content"] is not None and cce.normalize(rt["content"]) == cce.normalize(reading["content"]))
+        self._emit(tick, "CCE skin", what="english_in_restated", checked_form=checked, same_as_reading=same,
+                   **result["cce_round_trip"])
+        if not same:
+            return self._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED",
+                                HELMVoiceAdapter.format_round_trip_failed(), writes_before, "WAIT_FOR_USER")
+        self._pending_words = {s["name"]: s for s in reading["stocks"]}
+        try:
+            return self._checked_turn(rt, tick, result, writes_before)
+        finally:
+            self._pending_words = {}
+
     def _not_checked_turn(self, text: str, tick: int, result: Dict[str, Any], writes_before: int) -> Dict[str, Any]:
+        reading = self.read_english(text)
+        if reading["status"] != "NOT_MINE":
+            return self._english_turn(text, reading, tick, result, writes_before)
         lower = text.lower()
         agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file",
                             "read file"]
@@ -523,13 +629,83 @@ class HELMEndToEndLoop:
         self.stock.update(stocks)
         self.bias_version += 1
         result["cube_receipt"] = write
-        return True, HELMVoiceAdapter.format_stock_recorded(names)
+        words = {}
+        for name in stocks:
+            self.declared_absent.discard(name)
+            said = self._pending_words.get(name)
+            if said:
+                words[name] = said["words"]
+                if said.get("unit") and name not in self.units:
+                    self.units[name] = said["unit"]
+        result["stock_recorded"] = [{"name": k, "amount": v, "words": words.get(k), "unit":
+                                     (self._pending_words.get(k) or {}).get("unit", "")} for k, v in names.items()]
+        return True, HELMVoiceAdapter.format_stock_recorded(names, words)
+
+    def _declare_absent(self, names: List[str], tick: int, result: Dict[str, Any]) -> Tuple[bool, str]:
+        """The user said these are gone. Gate, round trip, then the store records the absence (read back)."""
+        self._emit(tick, "S2 Bias ^5", what="absent_proposed", names=names, bias_version=self.bias_version)
+        request = self._gate_request(tick, "record the stated absence", sorted(names), [], "Ω_stock")
+        verdict = RPM.rpm_gate(request)
+        self._emit(tick, "S5 RPM link", what="gate", request=request.as_dict(), verdict=verdict.as_dict())
+        if verdict.verdict != RPM.PROCEED:
+            return False, "I couldn't record that. Nothing was saved."
+        content = cce.empty_content()
+        content["relations"] = [["absent", f"Ω_{n}"] for n in names]
+        receipt = self.verify_cce_round_trip(content)
+        receipt.pop("content", None)
+        self._emit(tick, "store", what="eta_eps_receipt", kind="cce_round_trip_of_stored_absence", receipt=receipt)
+        if not receipt["verified"]:
+            return False, HELMVoiceAdapter.format_round_trip_failed()
+        write = self._write_absent_cubes(names, tick)
+        self._emit(tick, "store", what="cube_write", **write)
+        for n in names:
+            self.stock.pop(n, None)
+            self.declared_absent.add(n)
+            self._emit(tick, "S2 Bias ^5", what="declared_absent", name=n)
+        self.bias_version += 1
+        result["absent_recorded"] = list(names)
+        return True, HELMVoiceAdapter.format_absent_recorded(names)
+
+    def _write_absent_cubes(self, names: List[str], tick: int) -> Dict[str, Any]:
+        if self.cube_store is None or CubeStore is None:
+            return {"written": [], "read_back_ok": False, "note": "NO_STORE"}
+        written = []
+        if INVENTORY_NODE_ID not in self.cube_store.nodes:       # a branch needs its inventory node to exist
+            inv_faces = {f"face_{i}": Face(availability="populated", human_text="Verified stock on hand.",
+                                           structured={"items": sorted(names)} if i == 5 else {})
+                         for i in range(1, 7)}
+            self.cube_store.write_cube(CubeNode(
+                node_id=INVENTORY_NODE_ID, core=Core(label="Current Inventory", kind="instance",
+                                                     identity_statement="Verified session inventory (CCE round trip "
+                                                                        "+ RPM gate)."),
+                faces=inv_faces, revision=1, turn_index=tick, provenance=Provenance(source="USER_SAID")))
+            written.append(INVENTORY_NODE_ID)
+        for name in names:
+            item_id = f"item_{name.lower()}"
+            prev = self.cube_store.nodes.get(item_id)
+            faces = {f"face_{i}": self._face(f"no {name} on hand" if i == 1 else "Constituent of inventory.", i == 1)
+                     for i in range(1, 7)}
+            self.cube_store.write_cube(CubeNode(
+                node_id=item_id, core=Core(label=name, kind="instance",
+                                           identity_statement=f"Stock constituent: no {name} on hand (user said)."),
+                faces=faces, revision=(prev.revision + 1) if prev else 1, turn_index=tick,
+                provenance=Provenance(source="USER_SAID")))
+            written.append(item_id)
+            self.cube_store.write_branch(Branch(
+                branch_id=f"branch_inv_{name.lower()}_{tick}_{len(self.cube_store.branches)}",
+                context_id=self.cube_store.context_id, source_node_id=INVENTORY_NODE_ID, predicate="contains",
+                target_node_id=item_id, commonality={"absent": True, "unit": name}))
+        read_back = {n: self._stored_amount(n) for n in names}
+        return {"written": written, "read_back": read_back, "read_back_ok": all(v is None for v in read_back.values())}
 
     def _stock_child(self, glued: Dict[str, Fraction], product: str) -> Callable[..., Dict[str, Any]]:
         def open_child(sub_goal, gap, kind, depth):
             m = re.fullmatch(r"the stock of Ω_(\w+)", gap or "")
             if m:
                 name = m.group(1)
+                if name in self.declared_absent:
+                    return {"ok": False, "detail": f"the user said there is no {name}; nothing is glued back",
+                            "clarify": f"the stock of Ω_{name}"}
                 found = self._stored_amount(name)
                 if found is None:
                     return {"ok": False, "detail": f"no verified amount of {name} in the cube store",
@@ -556,6 +732,7 @@ class HELMEndToEndLoop:
             msg = (f"I don't know a recipe for {_strip_omega(topic)}. I know {', '.join(self.brain.products)}. "
                    f"Nothing was saved.")
             return self._finish(result, tick, "CLARIFY_UNKNOWN_PRODUCT", msg, writes_before, "WAIT_FOR_USER")
+        self.last_topic = product
         support = self.brain.support_of(product)
         self._emit(tick, "S1 trigger ^8", product=product, prerequisites=support,
                    requirements=self.brain.requirements(product))
@@ -580,12 +757,16 @@ class HELMEndToEndLoop:
 
         if verdict.verdict != RPM.PROCEED:
             still_absent = [c for c in absent if c not in glued]
+            saved = bool(said)          # stock said in this same turn WAS recorded; say so honestly
             if still_absent:
-                msg = HELMVoiceAdapter.format_missing(product, still_absent)
+                msg = HELMVoiceAdapter.format_missing(product, still_absent, saved=saved,
+                                                      said_gone=sorted(self.declared_absent))
             elif unlearned:
-                msg = HELMVoiceAdapter.format_unlearned(product, unlearned)
+                msg = HELMVoiceAdapter.format_unlearned(product, unlearned, saved=saved)
             else:
                 msg = f"I can't work out {product} right now. I didn't guess, and nothing was saved."
+            if said:
+                msg = " ".join(said) + " " + msg
             clarify = cce.empty_content()
             clarify.update(turn="CLARIFY", topic=f"Ω_{product}", lacunae=[verdict.gap or unsatisfied[0]])
             rt = self.verify_cce_round_trip(clarify)
@@ -611,8 +792,8 @@ class HELMEndToEndLoop:
         result["recipe_receipt"] = receipt
         self._emit(tick, "brain", **receipt)
         if receipt["status"] != EVALUATED:
-            return self._finish(result, tick, "BRAIN_UNDETERMINED",
-                                HELMVoiceAdapter.format_brain_undetermined(product, receipt.get("gate")),
+            msg = HELMVoiceAdapter.format_brain_undetermined(product, receipt.get("gate"))
+            return self._finish(result, tick, "BRAIN_UNDETERMINED", (" ".join(said) + " " + msg) if said else msg,
                                 writes_before, "WAIT_FOR_USER")
         y, lim = receipt["yield"], receipt["limiting_reagent"]
         result.update({"output_value": y, "total_output": y, "output": y, "limiting_reagent": lim})
@@ -734,11 +915,14 @@ def run_live_trace(trace_path: str = DEFAULT_TRACE_PATH) -> Dict[str, Any]:
         os.remove(trace_path)
     os.makedirs(os.path.dirname(os.path.abspath(trace_path)), exist_ok=True)
     loop = HELMEndToEndLoop(trace_path=trace_path)
-    loop._emit(0, "header", what="HELM live end-to-end trace", date="2026-10-18",
+    loop._emit(0, "header", what="HELM live end-to-end trace (fix H: everyday English in; two free-English turns "
+                                 "added at ticks 11-12)", date="2026-10-18",
                run_at_utc=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                python=sys.version.split()[0], platform=sys.platform, brain=loop.brain.provenance(),
                valve=loop.valve.status_summary(), gate_claim_ceiling=RPM.CLAIM_CEILING,
-               repair_claim_ceiling=repair_actor.CLAIM_CEILING)
+               repair_claim_ceiling=repair_actor.CLAIM_CEILING, english_reader=helm_english_in.READER_VERSION,
+               english_reader_claim_status=helm_english_in.CLAIM_STATUS,
+               english_reader_lexicon_sha256=helm_english_in.LEXICON_SHA256)
     outcomes = []
     outcomes.append(loop.witness_batch("Bread", {"Flour": 10, "Water": 8}, 5, "Flour", tick=1))
     outcomes.append(loop.witness_batch("Bread", {"Flour": 10, "Water": 2}, 2, "Water", tick=2))
@@ -753,6 +937,11 @@ def run_live_trace(trace_path: str = DEFAULT_TRACE_PATH) -> Dict[str, Any]:
     later = HELMEndToEndLoop(cube_store=loop.cube_store, brain=loop.brain, trace_path=trace_path)
     outcomes.append(later.process_turn("There is 20 of Ω_Flour.", tick=9))
     outcomes.append(later.process_turn("Topic: Ω_Bread.", tick=10))                     # REPAIRED -> SUCCESS
+    # Fix H: a third session on the same store and brain, in everyday English only. The same receipts as the
+    # checked-form ticks 3-4 and 6-7 must come back: UNDETERMINED for missing water, then SUCCESS after water.
+    third = HELMEndToEndLoop(cube_store=loop.cube_store, brain=loop.brain, trace_path=trace_path)
+    outcomes.append(third.process_turn("We have 12 cups of flour and no water. Can we bake bread?", tick=11))
+    outcomes.append(third.process_turn("Now we've got 9 cups of water — how much bread can we make?", tick=12))
     summary = [{"tick": o["tick"], "loop_status": o["loop_status"], "said": o["response"],
                 "cubes_written": o["cubes_written"]} for o in outcomes]
     with open(trace_path, "rb") as fh:

@@ -273,17 +273,16 @@ class AnaphoraResolver:
             context.update_files(file_matches)
             entities_found["explicit_files"] = file_matches
 
-        # 3. Resolve relative quantities ('add 10 more', 'add 25 units of Flour and 10 Water')
+        # 3. Relative quantities ('add 10 more', 'add 25 units of Flour and 10 Water') are NOT applied here any more
+        #    (fix H, 2026-10-18). This used to add amounts to context.inventory outside the checked route. Stock
+        #    now changes only through helm_end_to_end_loop (helm_english_in asks "in total, or on top?").
+        #    The mention is still reported as an entity, for the record only.
         if re.search(r'\b(add|plus|include|with)\b', text, re.IGNORECASE):
             items_found = re.findall(r'(\d+(?:\.\d+)?)\s*(?:units?\s+of\s+)?([A-Za-z]+)', text)
             for qty_str, ing_name in items_found:
                 if ing_name.lower() in ["steps", "files", "minutes", "seconds", "times", "attempts", "units", "more"]:
                     continue
-                cap_ing = ing_name.capitalize()
-                qty = Decimal(qty_str)
-                curr = context.inventory.get(cap_ing, Decimal("0"))
-                context.inventory[cap_ing] = curr + qty
-                entities_found[f"inventory_added_{cap_ing}"] = str(qty)
+                entities_found[f"relative_quantity_mentioned_{ing_name.capitalize()}"] = qty_str
 
         # 4. Resolve 'what did we just do?' / 'what was the previous result?'
         if re.search(r'\b(what did we just do|previous result|last result|what was accomplished|summary)\b', text, re.IGNORECASE):

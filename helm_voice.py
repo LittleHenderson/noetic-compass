@@ -662,8 +662,69 @@ class HELMVoice:
         tr.update(kept=None, tried=tried)
         return None, None, tr
 
+    # ---- fix H (2026-10-18): the English reader's questions and stock notes, said through the same guard
+    def _say_plain(self, kind: str, variants: List[str], user_text: Optional[str], slot_values: List[str],
+                   salt: str) -> VoiceResult:
+        """Pick one of several equally-correct plain sentences (seeded, never the last sentence again) and check it:
+        no CAS words, and every number and food name must come from the user's words or the reader's slots."""
+        st = self.state
+        st.turn += 1
+        if user_text:
+            st.note_user_words(user_text)
+        source = " ".join([user_text or ""] + [str(v) for v in slot_values])
+        allowed_nums, allowed_names = set(_numbers_in(source)), _names_in(source)
+
+        def problems(text: str) -> List[str]:
+            out = ["CAS_TOKENS:%s" % ",".join(cas_tokens(text))] if cas_tokens(text) else []
+            out += ["INVENTED_NUMBER:%s" % n for n in _numbers_in(text) if n not in allowed_nums]
+            out += ["INVENTED_NAME:%s" % n for n in _names_in(text) if n not in allowed_names]
+            return out
+
+        first = derive_seed("PLAIN", kind, salt) % len(variants)
+        order = [first] + [i for i in range(len(variants)) if i != first]
+        chosen, text, tried = None, None, []
+        for i in order:
+            cand = variants[i]
+            probs = problems(cand)
+            tried.append({"variant": i, "problems": probs})
+            if not probs and cand != st.last_text:
+                chosen, text = i, cand
+                break
+        if text is None:
+            ok = [variants[t["variant"]] for t in tried if not t["problems"]]
+            text = ok[0] if ok else "Could you say that another way? I didn't act on it."
+        trace = {"turn": st.turn, "situation": kind, "plain": True, "variant": chosen, "tried": tried,
+                 "guard": "PASS" if chosen is not None else "FALLBACK"}
+        st.last_main = st.last_text = text
+        st.last_situation = kind
+        st.traces.append(trace)
+        return VoiceResult(text=text, situation=kind, register="f", act="question" if text.endswith("?")
+                           else "statement", trace=trace)
+
+    def say_reader_question(self, clarify: Dict[str, Any], user_text: Optional[str] = None) -> VoiceResult:
+        """Say the English reader's question (helm_english_in) in plain words."""
+        code = (clarify or {}).get("code") or "ROUND_TRIP_FAILED"
+        slots = dict((clarify or {}).get("slots") or {})
+        variants = reader_question_variants(code, slots)
+        return self._say_plain("reader:" + code, variants, user_text, [v for v in slots.values()
+                                                                       if isinstance(v, str)], code + "|" +
+                               json.dumps(slots, sort_keys=True))
+
+    def say_stock_noted(self, stocks: List[Dict[str, Any]], absent: List[str],
+                        user_text: Optional[str] = None) -> VoiceResult:
+        """'Got it: I've recorded 12 cups of flour and no water on hand.' Quotes the user's own words for amounts."""
+        items = [s.get("words") or "%s %s" % (s["amount"], say_name(s["name"])) for s in stocks]
+        items += ["no %s" % say_name(a) for a in absent]
+        lst = items[0] if len(items) == 1 else (" and ".join(items) if len(items) == 2
+                                                 else ", ".join(items[:-1]) + ", and " + items[-1])
+        variants = ["Got it: I've recorded %s on hand." % lst, "Okay, recorded: %s on hand." % lst,
+                    "Noted and recorded: %s." % lst]
+        return self._say_plain("stock_noted", variants, user_text, items, lst)
+
     def render(self, r: Dict[str, Any], register: Optional[str] = None, act: Optional[str] = None,
                user_text: Optional[str] = None, technical: Optional[bool] = None, concise: bool = False) -> VoiceResult:
+        if r.get("reader_question"):
+            return self.say_reader_question(r["reader_question"], user_text)
         st = self.state
         st.turn += 1
         situation = validate_receipt(r)
@@ -732,12 +793,15 @@ class HELMVoice:
             plains = [fill(t, slots) for t in self.book["plain"][key]]
             text = plains[1] if plains[0] == st.last_text else plains[0]
             plain_used, act = True, "statement"
+        clash = mood_fact_clash(user_text, r, situation)
+        if clash.get("asked"):
+            text = text + " " + clash["question"]
         if technical:
             text = text + "\n" + self.technical_line(r, situation)
         trace = {"turn": st.turn, "receipt_sha256": rh, "situation": situation, "register_asked": register,
                  "register_used": reg_used, "act": act, "main": tr_main, "tail": tr_tail, "plain_used": plain_used,
                  "guard": "PASS" if not final_problems else "FAIL->PLAIN:" + ";".join(final_problems),
-                 "memory_flags": flags, "technical": bool(technical)}
+                 "memory_flags": flags, "technical": bool(technical), "mood_fact_clash": clash}
         if chosen is not None:
             recent_main.append(chosen["id"])
         st.last_main = main
@@ -767,22 +831,177 @@ class HELMVoice:
         return "Technical view: " + "; ".join(parts)
 
 
+# --------------------------------------------------------------------------------------------- reader questions
+# Fix H (2026-10-18). The plain questions HELM asks when the English reader (helm_english_in.py) cannot restate a
+# sentence without guessing. Two or more equally-correct wordings each; slots come only from the reader.
+READER_QUESTIONS: Dict[str, List[str]] = {
+    "NO_NUMBER": ["How much {item} is there?",
+                  "How much {item} do we have? I need the number before I can use it."],
+    "NO_NUMBER_COUNTABLE": ["How many {item} are there?",
+                            "How many {item} do we have? I need the number before I can use it."],
+    "NEGATED_AMOUNT": ["You said we don't have {words}. How much {item} is there?",
+                       "So not {words}. How much {item} do we have, then?"],
+    "APPROXIMATE": ["You said {hedge} {words}. I only work with exact amounts, so how much {item} is there exactly?",
+                    "I need an exact number, not {hedge} {words}. How much {item} is there?"],
+    "WHAT_IF": ["Is {words} what we have right now? If it is, say \"we have {words}\" and I'll work from it.",
+                "Do we really have {words} on hand, or is that a what-if? I only work from what's actually here."],
+    "WHAT_IF_ABSENT": ["Are you telling me we're out of {item} right now? If so, say \"we're out of {item}\" and "
+                       "I'll note it.",
+                       "Is the {item} really gone, or is that a what-if? I only work from what's actually here."],
+    "RELATIVE_AMOUNT": ["Do you mean {words} in total, or {words} on top of what's there? I don't want to guess.",
+                        "Is that {words} all together, or on top of what we had? I'd rather ask than guess."],
+    "UNKNOWN_INGREDIENT": ["I don't know an ingredient called {name}. I only keep track of {known}.",
+                           "{Name} isn't one of the ingredients I know. I can work with {known}."],
+    "UNKNOWN_PRODUCT": ["I don't know a recipe for {name}. I know {known}.",
+                        "{Name} isn't something I have a recipe for. I can work out {known}."],
+    "PRODUCT_AS_STOCK": ["I only keep track of ingredients ({known}), not finished {name}.",
+                         "I count ingredients, not finished {name}. Which ingredients do you have, and how much?"],
+    "NO_INGREDIENT_NAMED": ["{Words} of what?", "{Words} of which ingredient?"],
+    "UNIT_MISMATCH": ["Earlier you gave {item} in {old_unit}, and now in {new_unit}. I won't convert between them, "
+                      "so which one should I use?",
+                      "You switched {item} from {old_unit} to {new_unit}. I don't convert units, so which should "
+                      "I go with?"],
+    "CONVERSION_REFUSED": ["I don't convert between {units}. That would be a guess on my part. Tell me the amount "
+                           "in the unit you're actually using.",
+                           "Switching between {units} would mean guessing, so I won't. Which amount should I use, "
+                           "in one unit?"],
+    "CONVERSION_REFUSED_PLAIN": ["I don't convert between units. That would be a guess on my part. Tell me the "
+                                 "amount in the unit you're actually using.",
+                                 "Converting units would mean guessing, so I won't. Which amount should I use, in "
+                                 "one unit?"],
+    "CONTRADICTION": ["You gave me two different things for {item}: {a} and {b}. Which one is right?",
+                      "I heard both {a} and {b} for {item}. Which is it?"],
+    "MULTIPLE_PRODUCTS": ["Let's take one at a time: {a} or {b} first?",
+                          "One at a time is easier. Should I start with {a} or {b}?"],
+    "WHICH_PRODUCT": ["Which one do you want me to work out: {known}?", "Sure. Which one: {known}?"],
+    "STATED_RECIPE": ["I can't take a recipe as stated. I learn how much each ingredient needs from batches you "
+                      "actually made: what you started with, how much you made, and what ran out first.",
+                      "I don't take recipes on word alone. Tell me about a batch you actually made: what you started "
+                      "with, how much it made, and what ran out first."],
+    "BATCH_NEEDS_RAN_OUT": ["Which ingredient ran out first in that batch?", "In that batch, what ran out first?"],
+    "BATCH_TWO_RAN_OUT": ["Which one ran out first: {a} or {b}?",
+                          "Only one can run out first. Was it the {a} or the {b}?"],
+    "BATCH_NEEDS_MADE": ["How much {product} did that batch make?", "And how much {product} came out of it?"],
+    "BATCH_NEEDS_MADE_PLAIN": ["What did that batch make, and how much of it?",
+                               "What came out of that batch, and how much?"],
+    "BATCH_NEEDS_PRODUCT": ["What did that batch make: {words} of what?", "{Words} of what, in that batch?"],
+    "BATCH_NEEDS_STOCK": ["How much of each ingredient did you start that batch with?",
+                          "What did that batch start with? I need the amount of each ingredient."],
+    "ROUND_TRIP_FAILED": ["I couldn't read that back exactly the way you said it, so I didn't act on it. Could you "
+                          "say it another way?",
+                          "I couldn't restate that exactly, so I left it alone. Could you put it another way?"],
+}
+
+
+def reader_question_variants(code: str, slots: Dict[str, Any]) -> List[str]:
+    """The filled wordings for one reader question. Unknown codes fall back to the round-trip question."""
+    key = code
+    if code == "NO_NUMBER" and slots.get("countable"):
+        key = "NO_NUMBER_COUNTABLE"
+    if code == "CONVERSION_REFUSED" and not slots.get("units"):
+        key = "CONVERSION_REFUSED_PLAIN"
+    if code == "BATCH_NEEDS_MADE" and not slots.get("product"):
+        key = "BATCH_NEEDS_MADE_PLAIN"
+    if code == "APPROXIMATE" and not slots.get("hedge"):
+        slots = dict(slots, hedge="roughly")
+    filled = {k: str(v) for k, v in slots.items() if v is not None and not isinstance(v, bool)}
+    for k in list(filled):
+        filled[k[:1].upper() + k[1:]] = cap(filled[k])
+    out = []
+    for tpl in READER_QUESTIONS.get(key, READER_QUESTIONS["ROUND_TRIP_FAILED"]):
+        if slots.get("countable"):                    # countable things: "how many eggs are there"
+            tpl = (tpl.replace("how much {item} is there", "how many {item} are there")
+                   .replace("How much {item} is there", "How many {item} are there")
+                   .replace("how much {item} do we have", "how many {item} do we have")
+                   .replace("How much {item} do we have", "How many {item} do we have"))
+        try:
+            out.append(fill(tpl, filled))
+        except KeyError:
+            continue
+    return out or list(READER_QUESTIONS["ROUND_TRIP_FAILED"])
+
+
+def reader_question_text(code: str, slots: Dict[str, Any]) -> str:
+    """The first wording (used by the loop for its own message and the trace)."""
+    return reader_question_variants(code, dict(slots or {}))[0]
+
+
+# --------------------------------------------------------------------------------------------- mood vs facts
+# MOOD_FACT_CLASH_CHECK -- ENGINEERED-NOT-VALIDATED. HELM does NOT understand sarcasm. This is one written rule:
+# when the user's words carry a clearly positive mood word and the brain's receipt is a refusal, a missing
+# ingredient or an "I can't tell", the voice adds ONE plain question. It never changes the facts.
+MOOD_FACT_CLASH_LABEL = "MOOD_FACT_CLASH_CHECK"
+MOOD_FACT_CLASH_STATUS = "ENGINEERED-NOT-VALIDATED"
+MOOD_WORDS = ("great", "perfect", "love it", "wonderful", "awesome", "fantastic", "excellent", "amazing",
+              "brilliant", "lovely")                                       # the 10-word list
+CLASH_SITUATIONS = ("blocked_missing", "refused", "cant_determine", "never_learned", "faded")
+
+
+def mood_word(user_text: Optional[str]) -> Optional[str]:
+    """The first positive mood word in the user's text that is not negated ('not great' does not count)."""
+    t = (user_text or "").lower().replace("’", "'")
+    best = None
+    for w in MOOD_WORDS:
+        for m in re.finditer(r"(?<![\w'])%s(?![\w'])" % re.escape(w), t):
+            before = t[max(0, m.start() - 16):m.start()]
+            if re.search(r"(?:\bnot|n't|\bnever|\bno)\s+(?:so\s+|very\s+|that\s+|too\s+)?$", before):
+                continue
+            if best is None or m.start() < best[0]:
+                best = (m.start(), w)
+    return best[1] if best else None
+
+
+def mood_fact_clash(user_text: Optional[str], r: Dict[str, Any], situation: str) -> Dict[str, Any]:
+    word = mood_word(user_text)
+    rec: Dict[str, Any] = {"label": MOOD_FACT_CLASH_LABEL, "status": MOOD_FACT_CLASH_STATUS, "word": word,
+                           "situation": situation, "asked": False}
+    if word is None or situation not in CLASH_SITUATIONS:
+        return rec
+    if situation == "blocked_missing" and r.get("missing"):
+        but = "there's no %s on hand that I know of" % say_list(list(r["missing"]))
+    elif situation == "never_learned":
+        but = "I haven't been taught that part yet"
+    elif situation == "refused":
+        but = "I couldn't use that"
+    else:
+        but = "I couldn't give a sure answer"
+    question = "You said '%s', but %s. Did you mean that?" % (word, but)
+    names_ok = _names_in(question) <= ({_norm_name(n) for n in r.get("missing") or []} |
+                                       _names_in(" ".join(r.get("missing") or [])))
+    if cas_tokens(question) or _numbers_in(question) or not names_ok:
+        rec["refused_by_guard"] = True
+        return rec
+    rec.update(asked=True, question=question)
+    return rec
+
+
 # --------------------------------------------------------------------------------------------- loop adapter
 _MISSING_MSG_RX = re.compile(r"missing essential ingredients: (.+?)\.", re.I)
 
 
-def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-    """Turn a helm_end_to_end_loop.process_turn result into a voice receipt. None = not a recipe receipt."""
+def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dict[str, Any]] = None,
+                             units: Optional[Dict[str, str]] = None) -> Optional[Dict[str, Any]]:
+    """Turn a helm_end_to_end_loop.process_turn result into a voice receipt. None = not a recipe receipt.
+    `units` (fix H): the unit words the user gave per ingredient, so the voice can say '12 cups'."""
     status = str(res.get("loop_status") or "")
     rid = res.get("receipt_hash")
     inputs = effective_inputs or {}
     if status == "SUCCESS_EVALUATED":
         lim = res.get("limiting_reagent")
+        product = (res.get("recipe_receipt") or {}).get("product")
+        # the yield's unit: the word the user counted this product in when teaching it ("loaves"), else "units"
+        unit = (units or {}).get(product) if product else None
         r: Dict[str, Any] = {"kind": "ANSWER", "situation": "success", "yield_value": str(res.get("output_value")),
-                             "limiting": lim, "unit": "units", "receipt_id": rid}
+                             "limiting": lim, "unit": unit or "units", "receipt_id": rid}
         if lim in inputs:
             r["limiting_qty"] = str(inputs[lim])
+            if units and units.get(lim):
+                r["limiting_unit"] = units[lim]
         return r
+    if status.startswith("CLARIFY_ENGLISH_"):
+        clarify = (res.get("english_in") or {}).get("clarify") or {"code": status[len("CLARIFY_ENGLISH_"):],
+                                                                    "slots": {}}
+        return {"kind": "CLARIFY", "situation": "dont_know", "reader_question": clarify, "receipt_id": rid}
     said = str(res.get("everyday_english_response") or res.get("response") or res.get("text") or "")
     if status.startswith("VALVE_HALT") or status == "RECIPE_BRAIN_REFUSAL":
         if status == "RECIPE_BRAIN_REFUSAL":
@@ -799,6 +1018,7 @@ def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dic
     # --- statuses of the wired loop (fix C, 2026-10-18): the gate / brain said "can't tell yet" ---
     if status == "UNDETERMINED_CLARIFY":
         m = (re.search(r"don't know how much (.+?) we have", said)
+             or re.search(r"there's no (.+?) on hand\. When there is", said)
              or re.search(r"missing how much (.+?) you started with", said)
              or re.search(r"missing (?:essential )?ingredients?: (.+?)[.\n]", said))
         if m:
@@ -815,6 +1035,10 @@ def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dic
     if status == "WITNESS_ADMITTED":
         rec = res.get("recipe_receipt") or {}
         learned = f"{rec.get('ran_out', 'one ingredient')} per batch of {rec.get('product') or 'that'}"
+        # fix H: the loop's own line says the learned requirement exactly ("Learned: one Bread needs 2 Flour.")
+        m = re.search(r"Learned: one (\w+) needs (\S+) (\w+)\.", said)
+        if m:
+            learned = "one %s needs %s %s" % (say_name(m.group(1)), m.group(2), say_name(m.group(3)))
         return {"kind": "ANSWER", "situation": "learned", "learned": learned, "receipt_id": rid}
     if status == "REPAIRED_RETEACH_NEEDED":
         return {"kind": "ANSWER", "situation": "repaired", "repair": "the batches agree on a second look",
