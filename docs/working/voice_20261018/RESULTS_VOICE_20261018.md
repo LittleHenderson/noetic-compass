@@ -111,3 +111,23 @@ Situation 5 (the same "no water" receipt, second time in a row):
   - Learned, repaired, faded and never-taught receipts do not reach the chat yet: the live loop does not produce them. The writer and the harness handle them.
 - **The live loop still fills unknown amounts with 10.** "5 lbs of flour" is read by the loop as 10 Flour; removing that is Fix C. Because of the guard, the writer will not say "you said 5 lbs" when the brain used 10. It just says what the receipt says.
 - **The outcome-word guard is a word list.** It is checked against every phrasing in the book, but a new phrasing needs the self-test (`test_every_phrasing_and_tail_passes_the_guard_when_eligible`) to pass before use.
+
+## Addendum after merging fix C (2026-10-18, dispatch session)
+
+Fix C (PR #346) rewired the live loop and renamed the old renderer's functions, which broke one voice test and
+the fluency harness. Changes made in this PR branch after merging the thread branch in:
+- `helm_voice.receipt_from_loop_result` now maps the wired loop's status words (`UNDETERMINED_CLARIFY`,
+  `BRAIN_UNDETERMINED`, `WITNESS_ADMITTED`, `REPAIRED_RETEACH_NEEDED`, `CONFLICT_UNDETERMINED`, `TEACH_REFUSED_*`,
+  `REFUSE_RECEIPT_INCONSISTENT`, every `CLARIFY_*`) to voice situations; the missing-ingredient names are read from
+  the valve telemetry or the loop's own sentence.
+- `helm_chat.py`: every non-answer spoken by the voice keeps the plain promise "Nothing was saved."
+- `test_helm_voice.py`: the chat test now expects the honest post-fix-C behaviour (free English -> a plain
+  clarify with zero CAS tokens); a new test drives the real loop with checked-form turns after two witnessed
+  batches and checks "blocked by Water" then "success" come out in everyday words. 22 of 22 pass.
+- `fluency_test_50.py`: the OLD-renderer baseline text is frozen verbatim inside the harness (from
+  `b322a0ac^ helm_end_to_end_loop.py:71-94`), because the live module no longer carries it.
+- Rerun of the 50 situations after the merge (old baseline / new voice): CAS tokens 109 / 0; repeats 9 / 0; facts
+  preserved 22 / 50; grade mean 5.49 / 3.06 (the old baseline's grade changed from 6.25 because the live
+  `format_clarify` text differs after fix C); sentence-length variance 45.81 / 14.31; guard_pass 50; fallback fired
+  17; distinct phrasings 45; registers f 46 / A 1 / E 2 / T 1. `FLUENCY_50_OUTPUT.json` and `RATING_SHEET.md` are
+  regenerated from this rerun. Status unchanged: ENGINEERED-NOT-VALIDATED until people rate it.

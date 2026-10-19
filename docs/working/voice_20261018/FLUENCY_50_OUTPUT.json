@@ -16,10 +16,10 @@
    "facts_preserved_pass_on_34_with_old_form": 22,
    "facts_preserved_pass_if_40_digit_boilerplate_ignored": 32,
    "outcome_words_right": 34,
-   "grade_mean": 6.25,
-   "grade_median": 7.17,
-   "sentence_words_mean": 12.7,
-   "sentence_words_variance": 47.57,
+   "grade_mean": 5.49,
+   "grade_median": 4.91,
+   "sentence_words_mean": 12.14,
+   "sentence_words_variance": 45.81,
    "sentences_total": 122,
    "outputs_with_1_to_3_sentences": 35
   },
@@ -186,14 +186,14 @@
   {
    "n": 7,
    "situation": "dont_know",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": true,
    "fact_problems": [],
    "outcome_words_right": true,
    "outcome_problems": [],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": false
   },
@@ -255,7 +255,7 @@
   {
    "n": 11,
    "situation": "learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -267,7 +267,7 @@
     "WRONG_OUTCOME_WORD:nodata"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
@@ -317,7 +317,7 @@
   {
    "n": 14,
    "situation": "never_learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -328,14 +328,14 @@
     "NO_OUTCOME_WORD:never"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
   {
    "n": 15,
    "situation": "faded",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -346,7 +346,7 @@
     "NO_OUTCOME_WORD:faded"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": true,
    "no_old_form": true
   },
@@ -405,14 +405,14 @@
   {
    "n": 19,
    "situation": "dont_know",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": true,
    "fact_problems": [],
    "outcome_words_right": true,
    "outcome_problems": [],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": false
   },
@@ -460,7 +460,7 @@
   {
    "n": 22,
    "situation": "learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -472,14 +472,14 @@
     "WRONG_OUTCOME_WORD:nodata"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
   {
    "n": 23,
    "situation": "repaired",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -491,7 +491,7 @@
     "WRONG_OUTCOME_WORD:nodata"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": true,
    "no_old_form": true
   },
@@ -512,7 +512,7 @@
   {
    "n": 25,
    "situation": "faded",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -524,14 +524,14 @@
     "NO_OUTCOME_WORD:faded"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
   {
    "n": 26,
    "situation": "never_learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -542,7 +542,7 @@
     "NO_OUTCOME_WORD:never"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": true,
    "no_old_form": true
   },
@@ -587,14 +587,14 @@
   {
    "n": 29,
    "situation": "dont_know",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": true,
    "fact_problems": [],
    "outcome_words_right": true,
    "outcome_problems": [],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": false
   },
@@ -679,7 +679,7 @@
   {
    "n": 34,
    "situation": "learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -691,7 +691,7 @@
     "WRONG_OUTCOME_WORD:nodata"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
@@ -741,7 +741,7 @@
   {
    "n": 37,
    "situation": "never_learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -753,14 +753,14 @@
     "NO_OUTCOME_WORD:never"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
   {
    "n": 38,
    "situation": "faded",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -771,7 +771,7 @@
     "NO_OUTCOME_WORD:faded"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": true,
    "no_old_form": true
   },
@@ -816,14 +816,14 @@
   {
    "n": 41,
    "situation": "dont_know",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": true,
    "fact_problems": [],
    "outcome_words_right": true,
    "outcome_problems": [],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": false
   },
@@ -884,7 +884,7 @@
   {
    "n": 45,
    "situation": "learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -896,7 +896,7 @@
     "WRONG_OUTCOME_WORD:nodata"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
@@ -960,7 +960,7 @@
   {
    "n": 49,
    "situation": "never_learned",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -971,14 +971,14 @@
     "NO_OUTCOME_WORD:never"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": false,
    "no_old_form": true
   },
   {
    "n": 50,
    "situation": "faded",
-   "text": "I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?",
+   "text": "I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?",
    "cas_tokens": [],
    "facts_preserved": false,
    "fact_problems": [
@@ -989,7 +989,7 @@
     "NO_OUTCOME_WORD:faded"
    ],
    "sentences": 2,
-   "grade": 7.17,
+   "grade": 4.91,
    "repeat_of_previous": true,
    "no_old_form": true
   }

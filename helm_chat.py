@@ -487,6 +487,9 @@ class HELMConversationalSession:
             if voice_receipt is not None and self.mode == "everyday":
                 is_concise = self.memory.context.user_preferences.get("concise", False)
                 speech = self.voice.render(voice_receipt, user_text=prompt, concise=is_concise).text
+                # Every non-answer keeps the honesty promise in plain words: nothing was written to memory.
+                if voice_receipt.get("kind") != "ANSWER" and "nothing was saved" not in speech.lower():
+                    speech = speech.rstrip() + " Nothing was saved."
             print(f"\nHELM: {speech}")
 
             self.memory.context.last_goal = resolved_prompt

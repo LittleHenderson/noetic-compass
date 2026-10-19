@@ -41,8 +41,32 @@ OLD_FORM = {"success", "blocked_missing", "dont_know", "cant_determine", "clarif
 
 
 def _old_adapter():
-    from helm_end_to_end_loop import HELMVoiceAdapter  # the pre-Fix-F renderer, unchanged
+    from helm_end_to_end_loop import HELMVoiceAdapter  # still used for format_clarify (unchanged by Fix C)
     return HELMVoiceAdapter
+
+
+# The pre-Fix-C renderer text, frozen here verbatim (commit b322a0ac^ helm_end_to_end_loop.py:71-94) so the
+# 50-situation baseline stays the same text the recorded results were measured against. Fix C (2026-10-18,
+# PR #346) rewrote the live adapter's signatures, so the live module no longer carries these strings.
+def _old_format_success(output_val, limiting_reagent, inputs, entropy, aperture, receipt_hash=None):
+    rounded_val = round(float(output_val), 3)
+    limiting_qty = inputs.get(limiting_reagent, 0)
+    h_str = f" [receipt: {receipt_hash}]" if receipt_hash else ""
+    return (
+        f"All set! Based on your ingredients, we can produce exactly {rounded_val:,.3f} units.\n"
+        f"Your bottleneck (limiting ingredient) is {limiting_reagent} with {limiting_qty} on hand, "
+        f"which sets the ceiling for this batch.\n"
+        f"(Verified with exact 40-digit Decimal precision; novelty entropy: {entropy:.2f}, "
+        f"valve aperture: {aperture}){h_str}"
+    )
+
+
+def _old_format_missing_prerequisite(missing_items, reason):
+    missing_str = ", ".join(missing_items)
+    return (
+        f"I can't run this batch just yet because we're missing essential ingredients: {missing_str}.\n"
+        f"The system automatically halted to prevent guessing, errors, or wasting materials."
+    )
 
 
 def _cce_forms():
@@ -60,11 +84,11 @@ def old_render(r, adapter, cce):
         y = Decimal(fr.numerator) / Decimal(fr.denominator)
         lim = r.get("limiting") or "Flour"
         inputs = {lim: Decimal(r["limiting_qty"])} if r.get("limiting_qty") else {}
-        return adapter.format_success(output_val=y, limiting_reagent=lim, inputs=inputs,
-                                      entropy=float(tel.get("entropy", "0")), aperture=Decimal(tel.get("aperture", "0.5")),
-                                      receipt_hash=r.get("receipt_id"))
+        return _old_format_success(output_val=y, limiting_reagent=lim, inputs=inputs,
+                                   entropy=float(tel.get("entropy", "0")), aperture=Decimal(tel.get("aperture", "0.5")),
+                                   receipt_hash=r.get("receipt_id"))
     if sit == "blocked_missing":
-        return adapter.format_missing_prerequisite(list(r["missing"]), "G-ABSENT")
+        return _old_format_missing_prerequisite(list(r["missing"]), "G-ABSENT")
     if sit == "cant_determine":
         return cce.FIXED_UNDETERMINED
     if sit == "clarify":

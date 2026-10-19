@@ -245,6 +245,8 @@ class LoopAndChatTests(unittest.TestCase):
         self.assertIsNone(hv.receipt_from_loop_result({"loop_status": "AGENTIC_PLAN_EXECUTED"}))
 
     def test_chat_speaks_recipe_receipts_through_the_voice(self):
+        # Since fix C (2026-10-18) the wired loop refuses free English with a CLARIFY until the English-in
+        # path lands (fixes E/F). The voice must still speak that refusal in everyday words, with no CAS tokens.
         import helm_chat as hc
         s = hc.HELMConversationalSession(mode="everyday", session_id="test_voice_chat")
         for t in ["We have 50 Flour, 30 Sugar, and 20 Butter.", "Can we bake a batch without Water?"]:
@@ -252,9 +254,9 @@ class LoopAndChatTests(unittest.TestCase):
             with redirect_stdout(f):
                 s.handle_turn(t)
         out = f.getvalue().replace("HELM:", "").strip()
-        self.assertIn("water", out.lower())
-        self.assertIn("blocked", hv.outcome_classes(out))
-        self.assertEqual(hv.cas_tokens(out), [])
+        self.assertEqual(hv.cas_tokens(out), [], out)
+        self.assertTrue({"nodata", "clarify", "blocked", "uncertain"} & set(hv.outcome_classes(out)), out)
+        self.assertNotIn("checked form", out.lower())
         self.assertEqual(len(s.voice.state.traces), 1)
         f = io.StringIO()
         with redirect_stdout(f):
@@ -262,6 +264,34 @@ class LoopAndChatTests(unittest.TestCase):
         out2 = f.getvalue()
         self.assertEqual(hv.cas_tokens(out2), [], out2)
         self.assertNotIn("valve aperture", out2.lower())
+
+    def test_voice_speaks_the_wired_loop_receipts(self):
+        # Checked-form turns through the real loop (fix C): a missing ingredient must come out as "blocked by
+        # water" in everyday words; a complete stock must come out as a success with the limiting ingredient.
+        import helm_end_to_end_loop as loop_mod
+        loop = loop_mod.HELMEndToEndLoop(cube_store=None)
+        voice = hv.HELMVoice()
+        # Teach the brain from two witnessed batches first (the live trace does the same at ticks 1-2).
+        loop.witness_batch("Bread", {"Flour": 10, "Water": 8}, 5, "Flour", tick=0)
+        loop.witness_batch("Bread", {"Flour": 10, "Water": 2}, 2, "Water", tick=0)
+        loop.process_turn("There is 12 of Ω_Flour.", tick=1)
+        res = loop.process_turn("Topic: Ω_Bread.", tick=2)
+        self.assertEqual(res["loop_status"], "UNDETERMINED_CLARIFY")
+        r = hv.receipt_from_loop_result(res)
+        self.assertIsNotNone(r, res.get("everyday_english_response"))
+        self.assertEqual(r["situation"], "blocked_missing")
+        self.assertIn("Water", r["missing"])
+        said = voice.render(r, user_text="Topic: Ω_Bread.").text
+        self.assertIn("water", said.lower())
+        self.assertEqual(hv.cas_tokens(said), [], said)
+        loop.process_turn("There is 9 of Ω_Water.", tick=3)
+        res2 = loop.process_turn("Topic: Ω_Bread.", tick=4)
+        self.assertEqual(res2["loop_status"], "SUCCESS_EVALUATED", res2.get("everyday_english_response"))
+        r2 = hv.receipt_from_loop_result(res2, {"Flour": 12, "Water": 9})
+        self.assertEqual(r2["situation"], "success")
+        said2 = voice.render(r2, user_text="Topic: Ω_Bread.").text
+        self.assertEqual(hv.cas_tokens(said2), [], said2)
+        self.assertIn("success", hv.outcome_classes(said2))
 
 
 if __name__ == "__main__":

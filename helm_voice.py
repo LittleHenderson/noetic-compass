@@ -783,15 +783,47 @@ def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dic
         if lim in inputs:
             r["limiting_qty"] = str(inputs[lim])
         return r
+    said = str(res.get("everyday_english_response") or res.get("response") or res.get("text") or "")
     if status.startswith("VALVE_HALT") or status == "RECIPE_BRAIN_REFUSAL":
         if status == "RECIPE_BRAIN_REFUSAL":
             missing = [res.get("limiting_reagent")] if res.get("limiting_reagent") else []
         else:
-            m = _MISSING_MSG_RX.search(str(res.get("everyday_english_response") or ""))
-            missing = [x.strip() for x in m.group(1).split(",") if x.strip()] if m else []
+            telem = res.get("valve_telemetry") or {}
+            missing = list(telem.get("missing_reagents") or [])
+            if not missing:
+                m = _MISSING_MSG_RX.search(said)
+                missing = [x.strip() for x in m.group(1).split(",") if x.strip()] if m else []
         if not missing:
             return None
         return {"kind": "REFUSE", "situation": "blocked_missing", "missing": missing, "receipt_id": rid}
-    if status == "CLARIFY_REFUSAL":
+    # --- statuses of the wired loop (fix C, 2026-10-18): the gate / brain said "can't tell yet" ---
+    if status == "UNDETERMINED_CLARIFY":
+        m = (re.search(r"don't know how much (.+?) we have", said)
+             or re.search(r"missing how much (.+?) you started with", said)
+             or re.search(r"missing (?:essential )?ingredients?: (.+?)[.\n]", said))
+        if m:
+            names = [x.strip() for x in re.split(r",| and | or ", m.group(1)) if x.strip()]
+            if names:
+                return {"kind": "REFUSE", "situation": "blocked_missing", "missing": names, "receipt_id": rid}
+        m = re.search(r"how much (.+?) goes into", said)
+        if m:
+            names = [x.strip() for x in re.split(r",| and | or ", m.group(1)) if x.strip()]
+            return {"kind": "UNDETERMINED", "situation": "never_learned", "lacunae": names, "receipt_id": rid}
+        return {"kind": "UNDETERMINED", "situation": "cant_determine", "receipt_id": rid}
+    if status == "BRAIN_UNDETERMINED":
+        return {"kind": "UNDETERMINED", "situation": "cant_determine", "receipt_id": rid}
+    if status == "WITNESS_ADMITTED":
+        rec = res.get("recipe_receipt") or {}
+        learned = f"{rec.get('ran_out', 'one ingredient')} per batch of {rec.get('product') or 'that'}"
+        return {"kind": "ANSWER", "situation": "learned", "learned": learned, "receipt_id": rid}
+    if status == "REPAIRED_RETEACH_NEEDED":
+        return {"kind": "ANSWER", "situation": "repaired", "repair": "the batches agree on a second look",
+                "receipt_id": rid}
+    if status in ("CONFLICT_UNDETERMINED", "REFUSE_RECEIPT_INCONSISTENT") or status.startswith("TEACH_REFUSED_"):
+        reason = ("that batch contradicts what I already know" if status == "CONFLICT_UNDETERMINED"
+                  else "my own check did not hold")
+        return {"kind": "REFUSE", "situation": "refused", "reason": reason, "receipt_id": rid}
+    if (status.startswith("CLARIFY") or status in ("VERIFIED_NO_RECIPE_CONTENT", "STATED_RECIPE_NOT_TAKEN",
+                                                   "REFUSE_NOT_VERIFIED")):
         return {"kind": "CLARIFY", "situation": "dont_know", "receipt_id": rid}
     return None

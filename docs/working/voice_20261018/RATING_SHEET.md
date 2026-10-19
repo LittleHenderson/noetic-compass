@@ -111,7 +111,7 @@ Facts: `{"topic": "the capital of Portugal"}`
 
 **A:** I don't know the capital of Portugal, and I won't guess without real information. If you share the facts, I'll work with them.
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -169,7 +169,7 @@ User: Actually a batch of rye needs 3 eggs, not 2.
 
 Facts: `{"learned": "a batch of rye needs 3 eggs, not 2"}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** Thanks, that taught me something: a batch of rye needs 3 eggs, not 2. Did I get that right?
 
@@ -214,7 +214,7 @@ User: How do I keep a sourdough starter alive?
 
 Facts: `{"lacunae": ["sourdough starter"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** I haven't been taught sourdough starter yet, so I can't walk you through it. If you teach me, I'll add it to what I know.
 
@@ -229,7 +229,7 @@ User: How much baking soda goes in the quick bread?
 
 Facts: `{"faded": ["BakingSoda"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** I learned baking soda before, but it's slipped, and I'd want a refresher. If you remind me, I'll go over it again.
 
@@ -291,7 +291,7 @@ Facts: `{"topic": "tomorrow's weather"}`
 
 **A:** That's outside what I know, so I'd rather not make something up. I'm happy to help with something I do have facts for.
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -334,7 +334,7 @@ User: FYI the oven runs hot.
 
 Facts: `{"learned": "this oven runs hot, so bake 5 minutes less"}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** Got it, now I know this oven runs hot, so bake 5 minutes less. Is there anything else I should know?
 
@@ -349,7 +349,7 @@ User: Check the sugar again.
 
 Facts: `{"repair": "the sugar count"}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** I fixed the sugar count; it checks out now. Want me to walk through the fix?
 
@@ -379,7 +379,7 @@ User: How much salt and yeast for the rolls?
 
 Facts: `{"faded": ["Salt", "Yeast"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** I used to know salt and yeast, but that's faded, so I don't trust my answer anymore.
 
@@ -394,7 +394,7 @@ User: Can you do gluten-free?
 
 Facts: `{"lacunae": ["gluten-free flour"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** I haven't been taught gluten-free flour, so I won't guess. Want to teach me?
 
@@ -441,7 +441,7 @@ Facts: `{}`
 
 **A:** I can't answer that because there are no verified facts connecting those ideas in what I know. Is there something related I can help with?
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -514,7 +514,7 @@ User: Honey can replace the sugar one-to-one here.
 
 Facts: `{"learned": "honey can stand in for sugar one-to-one in this recipe"}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** Noted. I've updated my notes: honey can stand in for sugar one-to-one in this recipe.
 
@@ -561,7 +561,7 @@ Facts: `{"lacunae": ["Molasses", "Ginger"]}`
 
 **A:** I've never been taught molasses and ginger, so I can't speak to them. Do you have an example I could study?
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -574,7 +574,7 @@ User: How much yeast does rye bread need?
 
 Facts: `{"faded": ["how much yeast rye bread needs"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** How much yeast rye bread needs used to be solid for me, but I can't rely on that anymore.
 
@@ -621,7 +621,7 @@ Facts: `{"topic": "the stock market"}`
 
 **A:** I don't have reliable information on the stock market. I'd only be guessing.
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -681,7 +681,7 @@ Facts: `{"learned": "the starter needs feeding every 12 hours"}`
 
 **A:** I learned something new: the starter needs feeding every 12 hours. Want me to use that on the next batch?
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
@@ -739,7 +739,7 @@ User: Can you thicken the sauce with cornstarch?
 
 Facts: `{"lacunae": ["Cornstarch"]}`
 
-**A:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**A:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 **B:** That's a gap for me: nobody's taught me cornstarch yet. I can help with what I do know in the meantime.
 
@@ -756,7 +756,7 @@ Facts: `{"faded": ["Vanilla"]}`
 
 **A:** My grip on vanilla has faded. I'd rather check than rely on it. Could you refresh me on it?
 
-**B:** I can't answer that question because it doesn't match any verified facts or physical recipes in my system. What specific materials, tools, or goals would you like to work with?
+**B:** I can't answer that question because it doesn't match any verified facts or recipes I have. What materials or goals would you like to work with?
 
 | | Q1 person | Q2 no jargon | Q3 only true |
 |---|---|---|---|
