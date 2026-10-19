@@ -70,6 +70,26 @@ word can fix it). Tests: language_v3 26+11+5+26 OK, new 19 + 6 OK. Scribe L4 (84
 script written, NOT_RUN pending owner word: needs torch on an AWS CPU t3.medium (~0.01 USD); its one-clause output
 cannot hold a recipe, so exact match is 0/98 by construction. Failed approach logged: adding `behavior` as an O word
 (refused by the frozen rule; the SDG writer used "operational behavior" for two P cells). Spec sheet §7.57.
+## 2026-10-18 PDT - FIX F (everyday-English writer) BUILT + FIX G (ledger universes on 40 / 28 / 22) DESIGNED; laptop, 0 USD
+
+Fix F: `helm_voice.py` turns brain receipts into 1-3 plain English sentences
+with no second model. Phrasings come from `phrasebook.json`: 113 phrasings over
+10 situations, each tagged with a Register, plus 60 question-back / offer tails.
+The first pick is fixed by the receipt hash. A seeded alternative is drawn only
+when that pick was used lately (rb_c4 restart-fallback rule; seed in the trace).
+A guard reads every sentence back against the receipt and refuses invented
+numbers, invented names, dropped facts, wrong outcome words and a false "exactly".
+Chat recipe turns now speak through it. On 50 frozen situations, old vs new:
+CAS tokens 109 vs 0; back-to-back repeats 9 vs 0; facts preserved 22/50 vs 50/50;
+reading grade 6.25 vs 3.06; sentence-length variance 47.57 vs 14.31 (not better;
+more even). Tests: test_helm_voice 21 OK; test_helm_chat_nuance all PASS;
+test_helm_end_to_end_loop 11 passed. Claim status ENGINEERED-NOT-VALIDATED.
+Human rating is open; `RATING_SHEET.md` is ready.
+Results: `docs/working/voice_20261018/RESULTS_VOICE_20261018.md`.
+Fix G: `docs/working/LEDGER_UNIVERSES_40_28_22_DESIGN_20261018.md` plus a frozen
+schema. It is design only. From c34, U22, U28 and both grids get 0 charges,
+because receipts carry no pathway, no domain, no register and no operating point.
+So "22x40" and "28x40" are not yet true statements.
 
 ## 2026-10-16 PDT - HELM-R1 WAVE 1 SCORED (job c34-g, AWS): the recipe brain in GB3's slot beat GB3 on the freshly sealed exam - 32 against 9, and 32 against 17/2 widened; frozen reader PASS, R1_BEATS_GB3, all seven hard gates and all eight instrument rows holding
 

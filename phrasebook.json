@@ -1,0 +1,1753 @@
+{
+ "schema": "helm.voice.phrasebook/1",
+ "built_by": "docs/working/voice_20261018/build_phrasebook.py",
+ "sources": {
+  "roadmap": "HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md section 2.6 (lines 230-266), right-hand column",
+  "how_it_talks": "docs/working/noetic_council/language_v3/HOW_IT_TALKS.txt (15 examples)",
+  "cce": "docs/working/noetic_council/language_v3/cce.py fixed surface forms",
+  "sdg": {
+   "mining_file": "docs/working/voice_20261018/SDG_PHRASE_MINING.json",
+   "mining_sha256": "026dd9c011423cd6ce86b6815059e18ada8332dbc8441d47e8fbf956244c549a",
+   "corpus_files_sha256": {
+    "wave3_step2_5_english_descriptions_20260508T203848Z.jsonl": "b825b67a3029657f40d128d382448b5f0b55580fc7451bfce8b4a35687a46817",
+    "wave3_step2_5_english_descriptions_20260509T002355Z.jsonl": "d814397c4957ce89e6721cfcb2ec3852773976ad7176e25247d98d7d7ef6893e",
+    "wave3_step2_5_english_descriptions_20260509T002541Z.jsonl": "23ac1e36021bec455309bf7ff02d759a7766838eda03faba01cc3b069bec1028"
+   },
+   "rows_streamed": 5268,
+   "seed_ids_cited": [
+    "seed_recipe_00060",
+    "seed_recipe_00081",
+    "seed_recipe_00150",
+    "seed_recipe_00163",
+    "seed_recipe_00229",
+    "seed_recipe_00441",
+    "seed_recipe_00459"
+   ]
+  }
+ },
+ "registers": {
+  "f": "warm (default for a normal user)",
+  "A": "analytical (when the user asks for detail)",
+  "E": "hands-on",
+  "T": "big-picture"
+ },
+ "situations": [
+  "success",
+  "blocked_missing",
+  "cant_determine",
+  "dont_know",
+  "clarify",
+  "refused",
+  "learned",
+  "repaired",
+  "never_learned",
+  "faded"
+ ],
+ "counts": {
+  "phrasings": 113,
+  "per_situation": {
+   "success": 18,
+   "blocked_missing": 12,
+   "cant_determine": 10,
+   "dont_know": 10,
+   "clarify": 10,
+   "refused": 10,
+   "learned": 10,
+   "repaired": 13,
+   "never_learned": 10,
+   "faded": 10
+  },
+  "tails": 60
+ },
+ "entries": [
+  {
+   "id": "success.f.01",
+   "situation": "success",
+   "register": "f",
+   "text": "Good news: you can make {yield_q} {unit} of {product}. {Limiting} is what runs out first, so that's what caps this batch.",
+   "sources": [
+    "roadmap:recipe_production"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.f.02",
+   "situation": "success",
+   "register": "f",
+   "text": "You're good to go! That works out to {yield_q} {unit}, and {limiting} sets the ceiling.",
+   "sources": [
+    "roadmap:recipe_production"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.f.03",
+   "situation": "success",
+   "register": "f",
+   "text": "We can get {yield_q} {unit} out of what you have. The {limiting} will run out before anything else does.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.f.04",
+   "situation": "success",
+   "register": "f",
+   "text": "Looks like {yield_q} {unit} of {product} is doable. {Limiting} is the bottleneck here, with {lim_have} on hand.",
+   "sources": [
+    "roadmap:recipe_production"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.f.05",
+   "situation": "success",
+   "register": "f",
+   "text": "You'll get {yield_q} {unit} this way. If you want more, {limiting} is the thing to pick up.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.A.01",
+   "situation": "success",
+   "register": "A",
+   "text": "The batch comes to {yield_q} {unit}. {Limiting} is the limiting ingredient: it runs out first, so it sets the maximum.",
+   "sources": [
+    "roadmap:recipe_production"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.A.02",
+   "situation": "success",
+   "register": "A",
+   "text": "With the amounts given, the most you can make is {yield_q} {unit}. The cap comes from {limiting}, with {lim_have} on hand.",
+   "sources": [
+    "roadmap:recipe_production"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.A.03",
+   "situation": "success",
+   "register": "A",
+   "text": "These inputs together yield {yield_q} {unit}. {Limiting} is the first to run out, so it decides the total.",
+   "sources": [
+    "sdg:these_inputs_together_yield"
+   ],
+   "sdg_seed_ids": [
+    "seed_recipe_00163",
+    "seed_recipe_00081",
+    "seed_recipe_00150"
+   ],
+   "needs": []
+  },
+  {
+   "id": "success.E.01",
+   "situation": "success",
+   "register": "E",
+   "text": "To produce {product}, combine what you have and you'll get {yield_q} {unit}. The {limiting} is the first thing to run out.",
+   "sources": [
+    "sdg:open_to_produce",
+    "sdg:combine_with"
+   ],
+   "sdg_seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00229",
+    "seed_recipe_00060",
+    "seed_recipe_00459",
+    "seed_recipe_00163",
+    "seed_recipe_00081"
+   ],
+   "needs": []
+  },
+  {
+   "id": "success.E.02",
+   "situation": "success",
+   "register": "E",
+   "text": "Get the {limiting} out first; it's the part that runs out, and it'll carry you to {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.T.01",
+   "situation": "success",
+   "register": "T",
+   "text": "Overall, what you have adds up to {yield_q} {unit} of {product}. Together these ingredients produce that much, and {limiting} is what holds the total back.",
+   "sources": [
+    "sdg:together_these_produce"
+   ],
+   "sdg_seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00060",
+    "seed_recipe_00441"
+   ],
+   "needs": []
+  },
+  {
+   "id": "success.T.02",
+   "situation": "success",
+   "register": "T",
+   "text": "Big picture: {limiting} decides how far this goes, and right now that comes to {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "success.f.06",
+   "situation": "success",
+   "register": "f",
+   "text": "You said you had {user_have}, and that's what runs out first. It's enough for {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "user_said"
+   ]
+  },
+  {
+   "id": "success.f.07",
+   "situation": "success",
+   "register": "f",
+   "text": "Going by the {user_have} you mentioned, you can make {yield_q} {unit}. That's the part that runs out first.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "user_said"
+   ]
+  },
+  {
+   "id": "success.A.04",
+   "situation": "success",
+   "register": "A",
+   "text": "You said you had {user_have}; that is the limiting amount, and it gives {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "user_said"
+   ]
+  },
+  {
+   "id": "success.f.08",
+   "situation": "success",
+   "register": "f",
+   "text": "{Limiting} is the bottleneck again. This time you can make {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "same_limiting"
+   ]
+  },
+  {
+   "id": "success.f.09",
+   "situation": "success",
+   "register": "f",
+   "text": "Same story with the {limiting}: it runs out first, and it caps you at {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "same_limiting"
+   ]
+  },
+  {
+   "id": "success.A.05",
+   "situation": "success",
+   "register": "A",
+   "text": "{Limiting} is still the limiting ingredient; it caps this run at {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "same_limiting"
+   ]
+  },
+  {
+   "id": "blocked_missing.f.01",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "I can't run this batch just yet because we're missing {missing}. {Missing} {missing_verb} essential here, so I stopped before anything got wasted.",
+   "sources": [
+    "roadmap:missing_prerequisite"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.f.02",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "Hold on, there's no {missing} on hand, and this recipe can't go ahead without {missing_pron}.",
+   "sources": [
+    "how_it_talks:#11",
+    "roadmap:missing_prerequisite"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.f.03",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "We're out of {missing}, so I held off on the batch rather than guess.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.f.04",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "I stopped here: the recipe needs {missing}, and we don't have any right now.",
+   "sources": [
+    "how_it_talks:#10"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.A.01",
+   "situation": "blocked_missing",
+   "register": "A",
+   "text": "The batch is blocked: {missing} {missing_verb} required, and the amount on hand is zero. I halted instead of filling in a guess.",
+   "sources": [
+    "how_it_talks:#11"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.A.02",
+   "situation": "blocked_missing",
+   "register": "A",
+   "text": "I can't work out an amount yet. {Missing} {missing_verb} a required input, and none is recorded.",
+   "sources": [
+    "roadmap:missing_prerequisite"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.E.01",
+   "situation": "blocked_missing",
+   "register": "E",
+   "text": "Before we start, you'll need {missing}; without {missing_pron} this recipe won't come together.",
+   "sources": [
+    "how_it_talks:#10"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.E.02",
+   "situation": "blocked_missing",
+   "register": "E",
+   "text": "Grab some {missing} first. I can't make this batch without {missing_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.T.01",
+   "situation": "blocked_missing",
+   "register": "T",
+   "text": "{Missing} {missing_verb} a must-have for this recipe, and right now we don't have {missing_pron}. I'd rather wait than fake it.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.T.02",
+   "situation": "blocked_missing",
+   "register": "T",
+   "text": "Everything else can wait: the batch depends on {missing}, and we're missing {missing_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "blocked_missing.f.05",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "Still no {missing}, so I'm holding off again.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "same_missing"
+   ]
+  },
+  {
+   "id": "blocked_missing.f.06",
+   "situation": "blocked_missing",
+   "register": "f",
+   "text": "We're still missing {missing}, so the batch has to wait.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": [
+    "same_missing"
+   ]
+  },
+  {
+   "id": "cant_determine.f.01",
+   "situation": "cant_determine",
+   "register": "f",
+   "text": "Honestly, I can't tell from what I have.",
+   "sources": [
+    "how_it_talks:#13",
+    "cce:FIXED_UNDETERMINED"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.f.02",
+   "situation": "cant_determine",
+   "register": "f",
+   "text": "I'm not sure, and I'd rather say so than guess.",
+   "sources": [
+    "how_it_talks:#13"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.f.03",
+   "situation": "cant_determine",
+   "register": "f",
+   "text": "I can't call this one yet; with what I know, it could go either way.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.f.04",
+   "situation": "cant_determine",
+   "register": "f",
+   "text": "I don't have enough to settle {topic}, so I won't pretend I do.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.A.01",
+   "situation": "cant_determine",
+   "register": "A",
+   "text": "This comes out undecided: the facts I have fit more than one answer, so I can't pick one.",
+   "sources": [
+    "cce:FIXED_UNDETERMINED"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.A.02",
+   "situation": "cant_determine",
+   "register": "A",
+   "text": "I can't tell {topic} from the recorded facts; more than one answer is still possible.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.E.01",
+   "situation": "cant_determine",
+   "register": "E",
+   "text": "I can't tell yet. Give me one more measurement and I'll try again.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.E.02",
+   "situation": "cant_determine",
+   "register": "E",
+   "text": "Not sure on this one. Let's check it again once we know a bit more.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.T.01",
+   "situation": "cant_determine",
+   "register": "T",
+   "text": "Stepping back, {topic} isn't settled by what I know, so I'll leave it open.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "cant_determine.T.02",
+   "situation": "cant_determine",
+   "register": "T",
+   "text": "The bigger picture isn't clear enough yet for me to say.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.f.01",
+   "situation": "dont_know",
+   "register": "f",
+   "text": "I can't answer that because there are no verified facts connecting those ideas in what I know.",
+   "sources": [
+    "roadmap:ungrounded_question"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.f.02",
+   "situation": "dont_know",
+   "register": "f",
+   "text": "I don't know {topic}, and I won't guess without real information.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.f.03",
+   "situation": "dont_know",
+   "register": "f",
+   "text": "That's outside what I know, so I'd rather not make something up.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.f.04",
+   "situation": "dont_know",
+   "register": "f",
+   "text": "I don't have reliable information on {topic}. I'd only be guessing.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.A.01",
+   "situation": "dont_know",
+   "register": "A",
+   "text": "There are no verified facts on {topic} in my records, so any answer would be invented.",
+   "sources": [
+    "roadmap:ungrounded_question"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.A.02",
+   "situation": "dont_know",
+   "register": "A",
+   "text": "Nothing I have covers this, so I can't support an answer.",
+   "sources": [
+    "how_it_talks:#8",
+    "cce:REFUSE_CLAIM"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.E.01",
+   "situation": "dont_know",
+   "register": "E",
+   "text": "I don't know that one. If you can show me where the facts come from, I'll work with them.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.E.02",
+   "situation": "dont_know",
+   "register": "E",
+   "text": "No solid facts on that here, so I can't give you a real answer.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.T.01",
+   "situation": "dont_know",
+   "register": "T",
+   "text": "That's beyond what I've got facts for, so I'll stay quiet rather than guess.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "dont_know.T.02",
+   "situation": "dont_know",
+   "register": "T",
+   "text": "I don't have any grounding for {topic}, and I don't fill gaps with made-up answers.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.f.01",
+   "situation": "clarify",
+   "register": "f",
+   "text": "How much {item} do you have? I need that before I can work this out.",
+   "sources": [
+    "how_it_talks:#9",
+    "cce:CLARIFY"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.f.02",
+   "situation": "clarify",
+   "register": "f",
+   "text": "Quick question: how much {item} is on hand?",
+   "sources": [
+    "how_it_talks:#9"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.f.03",
+   "situation": "clarify",
+   "register": "f",
+   "text": "I just need one number: how much {item} do we have?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.f.04",
+   "situation": "clarify",
+   "register": "f",
+   "text": "Can you tell me how much {item} there is? Then I can figure out the rest.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.A.01",
+   "situation": "clarify",
+   "register": "A",
+   "text": "I need the amount of {item} to finish the calculation. What is it?",
+   "sources": [
+    "how_it_talks:#9",
+    "cce:CLARIFY"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.A.02",
+   "situation": "clarify",
+   "register": "A",
+   "text": "One input is unknown: the amount of {item}. How much is there?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.E.01",
+   "situation": "clarify",
+   "register": "E",
+   "text": "Check your {item} for me: how much is there?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.E.02",
+   "situation": "clarify",
+   "register": "E",
+   "text": "Could you measure the {item} and tell me how much you've got?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.T.01",
+   "situation": "clarify",
+   "register": "T",
+   "text": "Before I go further, I need to know how much {item} we're working with. How much is it?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "clarify.T.02",
+   "situation": "clarify",
+   "register": "T",
+   "text": "Everything hinges on the {item}. How much do you have?",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.f.01",
+   "situation": "refused",
+   "register": "f",
+   "text": "I won't do that, because {reason}.",
+   "sources": [
+    "how_it_talks:#6",
+    "cce:REFUSE"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.f.02",
+   "situation": "refused",
+   "register": "f",
+   "text": "I'm not going to do that one: {reason}.",
+   "sources": [
+    "how_it_talks:#6"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.f.03",
+   "situation": "refused",
+   "register": "f",
+   "text": "Sorry, I won't help with that, since {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.f.04",
+   "situation": "refused",
+   "register": "f",
+   "text": "I'd rather not do that, since {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.A.01",
+   "situation": "refused",
+   "register": "A",
+   "text": "I'm declining this request because {reason}.",
+   "sources": [
+    "cce:REFUSE"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.A.02",
+   "situation": "refused",
+   "register": "A",
+   "text": "I won't proceed, since {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.E.01",
+   "situation": "refused",
+   "register": "E",
+   "text": "I'm going to stop here and not do that, because {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.E.02",
+   "situation": "refused",
+   "register": "E",
+   "text": "Not doing that one: {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.T.01",
+   "situation": "refused",
+   "register": "T",
+   "text": "That goes against how I work: {reason}. So I won't do it.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "refused.T.02",
+   "situation": "refused",
+   "register": "T",
+   "text": "Some things I won't do, and this is one of them, because {reason}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.f.01",
+   "situation": "learned",
+   "register": "f",
+   "text": "I learned something new: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.f.02",
+   "situation": "learned",
+   "register": "f",
+   "text": "Got it, now I know {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.f.03",
+   "situation": "learned",
+   "register": "f",
+   "text": "Thanks, that taught me something: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.f.04",
+   "situation": "learned",
+   "register": "f",
+   "text": "Noted. I've updated my notes: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.A.01",
+   "situation": "learned",
+   "register": "A",
+   "text": "I've updated what I know: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.A.02",
+   "situation": "learned",
+   "register": "A",
+   "text": "New fact stored: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.E.01",
+   "situation": "learned",
+   "register": "E",
+   "text": "Okay, got it: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.E.02",
+   "situation": "learned",
+   "register": "E",
+   "text": "Lesson learned: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.T.01",
+   "situation": "learned",
+   "register": "T",
+   "text": "That's a useful lesson, and I've learned it: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "learned.T.02",
+   "situation": "learned",
+   "register": "T",
+   "text": "I learned something that matters here: {learned}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.01",
+   "situation": "repaired",
+   "register": "f",
+   "text": "I caught a mistake in {repair} and fixed it.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.02",
+   "situation": "repaired",
+   "register": "f",
+   "text": "Quick correction: I had {repair} wrong, and I've put it right.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.03",
+   "situation": "repaired",
+   "register": "f",
+   "text": "I fixed {repair}; it checks out now.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.04",
+   "situation": "repaired",
+   "register": "f",
+   "text": "{Repair} was off, and I've corrected it.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.A.01",
+   "situation": "repaired",
+   "register": "A",
+   "text": "Repair done: {repair} was wrong; I corrected it and checked it again.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.A.02",
+   "situation": "repaired",
+   "register": "A",
+   "text": "I found an error in {repair}, corrected it, and re-checked the result.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.E.01",
+   "situation": "repaired",
+   "register": "E",
+   "text": "I went back over {repair}, found the slip, and fixed it.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.T.01",
+   "situation": "repaired",
+   "register": "T",
+   "text": "One thing was off, {repair}, and it's been put right.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.05",
+   "situation": "repaired",
+   "register": "f",
+   "text": "I fixed {repair}, and now it comes out to {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.f.06",
+   "situation": "repaired",
+   "register": "f",
+   "text": "After correcting {repair}, the answer is {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.A.03",
+   "situation": "repaired",
+   "register": "A",
+   "text": "I corrected {repair}. With that fixed, the result comes to {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.E.02",
+   "situation": "repaired",
+   "register": "E",
+   "text": "I fixed {repair}, and that gets you {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "repaired.T.02",
+   "situation": "repaired",
+   "register": "T",
+   "text": "With {repair} put right, the total comes to {yield_q} {unit}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.f.01",
+   "situation": "never_learned",
+   "register": "f",
+   "text": "I've never been taught {gaps}, so I can't speak to {gaps_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.f.02",
+   "situation": "never_learned",
+   "register": "f",
+   "text": "That's a gap for me: nobody's taught me {gaps} yet.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.f.03",
+   "situation": "never_learned",
+   "register": "f",
+   "text": "I haven't been taught {gaps}, so I won't guess.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.f.04",
+   "situation": "never_learned",
+   "register": "f",
+   "text": "{Gaps} {gaps_verb} new to me; I've never been taught {gaps_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.A.01",
+   "situation": "never_learned",
+   "register": "A",
+   "text": "No record: {gaps} {gaps_verb} something I was never taught, so there's nothing to draw on.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.A.02",
+   "situation": "never_learned",
+   "register": "A",
+   "text": "I was never taught {gaps}. This is a true gap, not something I forgot.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.E.01",
+   "situation": "never_learned",
+   "register": "E",
+   "text": "I've never been taught {gaps}. Show me once and I'll have something to go on.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.E.02",
+   "situation": "never_learned",
+   "register": "E",
+   "text": "I haven't been taught {gaps} yet, so I can't walk you through {gaps_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.T.01",
+   "situation": "never_learned",
+   "register": "T",
+   "text": "{Gaps} {gaps_verb} outside anything I've been taught so far.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "never_learned.T.02",
+   "situation": "never_learned",
+   "register": "T",
+   "text": "There's a hole in what I know: I was never taught {gaps}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.f.01",
+   "situation": "faded",
+   "register": "f",
+   "text": "I used to know {gaps}, but that's faded, so I don't trust my answer anymore.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.f.02",
+   "situation": "faded",
+   "register": "f",
+   "text": "I learned {gaps} before, but it's slipped, and I'd want a refresher.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.f.03",
+   "situation": "faded",
+   "register": "f",
+   "text": "My grip on {gaps} has faded. I'd rather check than rely on {gaps_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.f.04",
+   "situation": "faded",
+   "register": "f",
+   "text": "{Gaps} used to be solid for me, but I can't rely on that anymore.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.A.01",
+   "situation": "faded",
+   "register": "A",
+   "text": "I was taught {gaps} earlier, but it no longer checks out. That's knowledge that faded, not something I lacked.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.A.02",
+   "situation": "faded",
+   "register": "A",
+   "text": "Earlier I had {gaps} right; now I don't, so that knowledge has faded.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.E.01",
+   "situation": "faded",
+   "register": "E",
+   "text": "I'm rusty on {gaps}. Walk me through {gaps_pron} once more and I'll get back on track.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.E.02",
+   "situation": "faded",
+   "register": "E",
+   "text": "I used to have {gaps} down, but I've lost my grip on {gaps_pron}.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.T.01",
+   "situation": "faded",
+   "register": "T",
+   "text": "Something I once knew, {gaps}, has faded over time.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  },
+  {
+   "id": "faded.T.02",
+   "situation": "faded",
+   "register": "T",
+   "text": "{Gaps} slipped away from me, so I'd treat my old answer with care.",
+   "sources": [
+    "new"
+   ],
+   "sdg_seed_ids": [],
+   "needs": []
+  }
+ ],
+ "tails": [
+  {
+   "id": "success.question.01",
+   "situation": "success",
+   "act": "question",
+   "text": "Is that enough for what you need?"
+  },
+  {
+   "id": "success.question.02",
+   "situation": "success",
+   "act": "question",
+   "text": "Is that the batch size you were hoping for?"
+  },
+  {
+   "id": "success.question.03",
+   "situation": "success",
+   "act": "question",
+   "text": "Do you have any more {limiting} around?"
+  },
+  {
+   "id": "success.offer.01",
+   "situation": "success",
+   "act": "offer",
+   "text": "I can work out how much more {limiting} you'd need for a bigger batch, if you like."
+  },
+  {
+   "id": "success.offer.02",
+   "situation": "success",
+   "act": "offer",
+   "text": "Want me to show you the numbers behind this?"
+  },
+  {
+   "id": "success.offer.03",
+   "situation": "success",
+   "act": "offer",
+   "text": "I can check other ingredient amounts too, if that helps."
+  },
+  {
+   "id": "blocked_missing.question.01",
+   "situation": "blocked_missing",
+   "act": "question",
+   "text": "Do you have any {missing} somewhere?"
+  },
+  {
+   "id": "blocked_missing.question.02",
+   "situation": "blocked_missing",
+   "act": "question",
+   "text": "Can you pick up some {missing}?"
+  },
+  {
+   "id": "blocked_missing.question.03",
+   "situation": "blocked_missing",
+   "act": "question",
+   "text": "Is there any {missing} tucked away somewhere?"
+  },
+  {
+   "id": "blocked_missing.offer.01",
+   "situation": "blocked_missing",
+   "act": "offer",
+   "text": "Once you have {missing}, I'll run it again."
+  },
+  {
+   "id": "blocked_missing.offer.02",
+   "situation": "blocked_missing",
+   "act": "offer",
+   "text": "I can tell you how much {missing} the recipe calls for, if you want."
+  },
+  {
+   "id": "blocked_missing.offer.03",
+   "situation": "blocked_missing",
+   "act": "offer",
+   "text": "Tell me when you've got {missing_pron} and I'll take it from there."
+  },
+  {
+   "id": "cant_determine.question.01",
+   "situation": "cant_determine",
+   "act": "question",
+   "text": "Can you tell me a bit more?"
+  },
+  {
+   "id": "cant_determine.question.02",
+   "situation": "cant_determine",
+   "act": "question",
+   "text": "Do you have another measurement I could use?"
+  },
+  {
+   "id": "cant_determine.question.03",
+   "situation": "cant_determine",
+   "act": "question",
+   "text": "What else do you know about it?"
+  },
+  {
+   "id": "cant_determine.offer.01",
+   "situation": "cant_determine",
+   "act": "offer",
+   "text": "If you give me one more fact, I'll take another look."
+  },
+  {
+   "id": "cant_determine.offer.02",
+   "situation": "cant_determine",
+   "act": "offer",
+   "text": "I can show you what I do know, if that helps."
+  },
+  {
+   "id": "cant_determine.offer.03",
+   "situation": "cant_determine",
+   "act": "offer",
+   "text": "I can list what's still unclear, if you want."
+  },
+  {
+   "id": "dont_know.question.01",
+   "situation": "dont_know",
+   "act": "question",
+   "text": "Is there something related I can help with?"
+  },
+  {
+   "id": "dont_know.question.02",
+   "situation": "dont_know",
+   "act": "question",
+   "text": "What problem are you trying to solve?"
+  },
+  {
+   "id": "dont_know.question.03",
+   "situation": "dont_know",
+   "act": "question",
+   "text": "Do you have a source you'd like me to work from?"
+  },
+  {
+   "id": "dont_know.offer.01",
+   "situation": "dont_know",
+   "act": "offer",
+   "text": "If you share the facts, I'll work with them."
+  },
+  {
+   "id": "dont_know.offer.02",
+   "situation": "dont_know",
+   "act": "offer",
+   "text": "I'm happy to help with something I do have facts for."
+  },
+  {
+   "id": "dont_know.offer.03",
+   "situation": "dont_know",
+   "act": "offer",
+   "text": "Give me the details and I'll take a look."
+  },
+  {
+   "id": "clarify.question.01",
+   "situation": "clarify",
+   "act": "question",
+   "text": "Do you know it offhand?"
+  },
+  {
+   "id": "clarify.question.02",
+   "situation": "clarify",
+   "act": "question",
+   "text": "Is it handy?"
+  },
+  {
+   "id": "clarify.question.03",
+   "situation": "clarify",
+   "act": "question",
+   "text": "Can you check?"
+  },
+  {
+   "id": "clarify.offer.01",
+   "situation": "clarify",
+   "act": "offer",
+   "text": "Then I'll do the math."
+  },
+  {
+   "id": "clarify.offer.02",
+   "situation": "clarify",
+   "act": "offer",
+   "text": "Once I have it, the rest is quick."
+  },
+  {
+   "id": "clarify.offer.03",
+   "situation": "clarify",
+   "act": "offer",
+   "text": "After that I can finish the calculation."
+  },
+  {
+   "id": "refused.question.01",
+   "situation": "refused",
+   "act": "question",
+   "text": "Is there another way I can help?"
+  },
+  {
+   "id": "refused.question.02",
+   "situation": "refused",
+   "act": "question",
+   "text": "Want to try a different approach?"
+  },
+  {
+   "id": "refused.question.03",
+   "situation": "refused",
+   "act": "question",
+   "text": "What were you hoping to get done?"
+  },
+  {
+   "id": "refused.offer.01",
+   "situation": "refused",
+   "act": "offer",
+   "text": "I'm glad to help with something else."
+  },
+  {
+   "id": "refused.offer.02",
+   "situation": "refused",
+   "act": "offer",
+   "text": "I can explain my reasons, if that's useful."
+  },
+  {
+   "id": "refused.offer.03",
+   "situation": "refused",
+   "act": "offer",
+   "text": "Let me know what else you need."
+  },
+  {
+   "id": "learned.question.01",
+   "situation": "learned",
+   "act": "question",
+   "text": "Is there anything else I should know?"
+  },
+  {
+   "id": "learned.question.02",
+   "situation": "learned",
+   "act": "question",
+   "text": "Did I get that right?"
+  },
+  {
+   "id": "learned.question.03",
+   "situation": "learned",
+   "act": "question",
+   "text": "Want me to use that on the next batch?"
+  },
+  {
+   "id": "learned.offer.01",
+   "situation": "learned",
+   "act": "offer",
+   "text": "I can redo the last calculation with it, if you want."
+  },
+  {
+   "id": "learned.offer.02",
+   "situation": "learned",
+   "act": "offer",
+   "text": "I can show you what changed."
+  },
+  {
+   "id": "learned.offer.03",
+   "situation": "learned",
+   "act": "offer",
+   "text": "Tell me if there's more to it."
+  },
+  {
+   "id": "repaired.question.01",
+   "situation": "repaired",
+   "act": "question",
+   "text": "Does that match what you expected?"
+  },
+  {
+   "id": "repaired.question.02",
+   "situation": "repaired",
+   "act": "question",
+   "text": "Want me to walk through the fix?"
+  },
+  {
+   "id": "repaired.question.03",
+   "situation": "repaired",
+   "act": "question",
+   "text": "Should I double-check anything else?"
+  },
+  {
+   "id": "repaired.offer.01",
+   "situation": "repaired",
+   "act": "offer",
+   "text": "I can show you exactly what changed."
+  },
+  {
+   "id": "repaired.offer.02",
+   "situation": "repaired",
+   "act": "offer",
+   "text": "I can run the check again if you'd like."
+  },
+  {
+   "id": "repaired.offer.03",
+   "situation": "repaired",
+   "act": "offer",
+   "text": "Happy to walk through it step by step."
+  },
+  {
+   "id": "never_learned.question.01",
+   "situation": "never_learned",
+   "act": "question",
+   "text": "Could you show me how it works?"
+  },
+  {
+   "id": "never_learned.question.02",
+   "situation": "never_learned",
+   "act": "question",
+   "text": "Do you have an example I could study?"
+  },
+  {
+   "id": "never_learned.question.03",
+   "situation": "never_learned",
+   "act": "question",
+   "text": "Want to teach me?"
+  },
+  {
+   "id": "never_learned.offer.01",
+   "situation": "never_learned",
+   "act": "offer",
+   "text": "If you teach me, I'll add it to what I know."
+  },
+  {
+   "id": "never_learned.offer.02",
+   "situation": "never_learned",
+   "act": "offer",
+   "text": "Give me an example and I'll study it."
+  },
+  {
+   "id": "never_learned.offer.03",
+   "situation": "never_learned",
+   "act": "offer",
+   "text": "I can help with what I do know in the meantime."
+  },
+  {
+   "id": "faded.question.01",
+   "situation": "faded",
+   "act": "question",
+   "text": "Could you refresh me on it?"
+  },
+  {
+   "id": "faded.question.02",
+   "situation": "faded",
+   "act": "question",
+   "text": "Want to go over it together?"
+  },
+  {
+   "id": "faded.question.03",
+   "situation": "faded",
+   "act": "question",
+   "text": "Do you have the details handy?"
+  },
+  {
+   "id": "faded.offer.01",
+   "situation": "faded",
+   "act": "offer",
+   "text": "If you remind me, I'll go over it again."
+  },
+  {
+   "id": "faded.offer.02",
+   "situation": "faded",
+   "act": "offer",
+   "text": "I can check what I still have on it."
+  },
+  {
+   "id": "faded.offer.03",
+   "situation": "faded",
+   "act": "offer",
+   "text": "Let's go over it again and I'll get it back."
+  }
+ ],
+ "plain": {
+  "success": [
+   "You can make {yield_q} {unit}. {Limiting} runs out first.",
+   "The total is {yield_q} {unit}, and {limiting} runs out first."
+  ],
+  "blocked_missing": [
+   "I can't make this yet because {missing} {missing_verb} missing.",
+   "This has to wait: {missing} {missing_verb} missing."
+  ],
+  "cant_determine": [
+   "I can't tell.",
+   "I can't tell yet from what I have."
+  ],
+  "dont_know": [
+   "I don't have verified facts on that, so I won't guess.",
+   "I don't know that, and I won't guess."
+  ],
+  "clarify": [
+   "How much {item} is there?",
+   "What is the amount of {item}?"
+  ],
+  "refused": [
+   "I won't do that, because {reason}.",
+   "I'm not going to do that, because {reason}."
+  ],
+  "learned": [
+   "I learned that {learned}.",
+   "I've learned this: {learned}."
+  ],
+  "repaired": [
+   "I fixed {repair}.",
+   "I corrected {repair}."
+  ],
+  "repaired+yield": [
+   "I fixed {repair}, and the result is {yield_q} {unit}.",
+   "I corrected {repair}; the result is {yield_q} {unit}."
+  ],
+  "never_learned": [
+   "I was never taught {gaps}.",
+   "I've never been taught {gaps}."
+  ],
+  "faded": [
+   "I used to know {gaps}, but it has faded.",
+   "My knowledge of {gaps} has faded."
+  ]
+ }
+}

@@ -31,6 +31,7 @@ for sub in [HERE, os.path.join(HERE, "brains"), os.path.join(HERE, "core_engine"
 import helm_end_to_end_loop as e2e
 import helm_agentic_executor as ax
 from helm_memory import HELMConversationalMemory, AnaphoraResolver
+from helm_voice import HELMVoice, receipt_from_loop_result
 
 
 class HELMConversationalSession:
@@ -39,6 +40,7 @@ class HELMConversationalSession:
         self.loop = e2e.HELMEndToEndLoop()
         self.engine = ax.AgenticExecutionEngine(workspace_root=HERE)
         self.memory = HELMConversationalMemory(session_id=session_id)
+        self.voice = HELMVoice()  # Fix F: deterministic everyday-English writer over brain receipts
         self.turn_count = 0
 
     def print_banner(self):
@@ -370,6 +372,7 @@ class HELMConversationalSession:
         if current_inputs and not has_run_verb:
             cube_rec = self.memory.process_turn_with_cube_store(prompt)
             self.memory.context.update_inventory(current_inputs, turn_index=self.turn_count)
+            self.voice.state.note_user_words(prompt)  # keep the user's own words ("5 lbs of flour")
             inv_items = ", ".join(f"{v} {k}" for k, v in self.memory.context.inventory.items())
             speech = f"Got it! I've recorded {inv_items} in our session inventory on hand. Let me know when you'd like to calculate a recipe batch, see what we can produce, or modify these amounts."
             print(f"\nHELM: {speech}\n")
@@ -478,16 +481,25 @@ class HELMConversationalSession:
             if res.get("recipe_receipt") and res["recipe_receipt"].get("status") == "EVALUATED":
                 self.memory.context.inventory.update(effective_inputs)
 
-            print(f"\nHELM: {res['everyday_english_response']}")
+            # Fix F: speak the brain's receipt in everyday English; the old adapter text stays for the diagnostic view
+            speech = res["everyday_english_response"]
+            voice_receipt = receipt_from_loop_result(res, effective_inputs)
+            if voice_receipt is not None and self.mode == "everyday":
+                is_concise = self.memory.context.user_preferences.get("concise", False)
+                speech = self.voice.render(voice_receipt, user_text=prompt, concise=is_concise).text
+                # Every non-answer keeps the honesty promise in plain words: nothing was written to memory.
+                if voice_receipt.get("kind") != "ANSWER" and "nothing was saved" not in speech.lower():
+                    speech = speech.rstrip() + " Nothing was saved."
+            print(f"\nHELM: {speech}")
 
             self.memory.context.last_goal = resolved_prompt
-            self.memory.context.last_result_summary = res["everyday_english_response"]
+            self.memory.context.last_result_summary = speech
             self.memory.record_turn(
                 user_raw_text=prompt,
                 resolved_text=resolved_prompt,
                 intent="RECIPE_FOUNDATION_LOOP",
                 entities=entities,
-                helm_response=res["everyday_english_response"],
+                helm_response=speech,
                 receipt_hash=res.get("recipe_receipt", {}).get("receipt_hash") if res.get("recipe_receipt") else None,
                 gate_code=res.get("recipe_receipt", {}).get("limiting_reagent", "GATE_PASS") if res.get("recipe_receipt") else "GATE_PASS",
                 duration=elapsed
@@ -504,6 +516,8 @@ class HELMConversationalSession:
                 if res.get("valve_telemetry"):
                     vt = res["valve_telemetry"]
                     print(f"  Valve Telemetry : Aperture={vt.get('aperture_sigma')}, Admitted={vt.get('admitted')}")
+                if voice_receipt is not None:
+                    print(f"  Voice Receipt   : {voice_receipt}")
                 print(f"  Elapsed Time    : {elapsed:.3f}s")
                 print("-" * 40)
             print()
